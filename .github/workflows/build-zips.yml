@@ -65,7 +65,15 @@ jobs:
             git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
             echo "push rejected; rebasing and retrying in $((2 ** i))s"
             sleep $((2 ** i))
-            git pull --rebase origin "${GITHUB_REF_NAME}"
+            # -X theirs: when the other run touched the SAME file, keep this
+            # run's copy — both are seconds old, and a conflict on a generated
+            # file is not a conflict. Seen on the first scheduled run here, which
+            # raced a manual dispatch and died in the rebase.
+            if ! git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              echo "another run refreshed it seconds ago; nothing left to do"
+              exit 0
+            fi
           done
           echo "could not push after 4 attempts" >&2
           exit 1
