@@ -82,6 +82,38 @@ branch is inert however correct it is. Merge to `main` before expecting a run.
 load, and a newly added schedule often skips its first slot. Say "about hourly",
 never "at 7 past".
 
+**Triggering a workflow by hand proves the job, not the schedule.** They are
+different things, and a manual run is misleading precisely because it exercises
+every line of the workflow and goes green. The only evidence the *schedule*
+works is a run whose trigger reads `schedule`:
+
+    gh run list --repo <owner>/<repo>            # look at the trigger column
+    gh api "repos/<owner>/<repo>/actions/runs?event=schedule" --jq .total_count
+
+If that count is zero, your schedule has never run, however many green ticks the
+Actions tab shows. Check it once, on the day you set this up — otherwise you
+find out from a dashboard quietly showing yesterday's numbers.
+
+**And if it stays zero, it may not be you.** On 2026-09-08 this template's own
+author had three repositories — two created that day, one nine days old, one
+private and two public — where `workflow_dispatch` and `push` ran perfectly and
+`schedule` had never fired once in six hours. Correct cron, on the default
+branch, workflows active, Actions enabled, 9 of 2000 minutes used, no GitHub
+incident, re-registration applied. It is a known complaint with no official
+cause: search *"scheduled workflows never trigger, although workflow_dispatch
+works"*.
+
+Two ways out, neither of which needs GitHub's scheduler:
+
+- **A scheduled agent session** that fetches and commits — nothing on the phone
+  changes, and no new token goes anywhere near the Shortcut. Simplest if you
+  already have an agent that can run on a schedule.
+- **Let the phone trigger it.** Before the loop, POST to
+  `https://api.github.com/repos/<owner>/<repo>/actions/workflows/<file>/dispatches`
+  with body `{"ref":"main"}`, then *Wait* 60 seconds. Self-contained, but the
+  token then needs **Actions: Write** as well as Contents: Read — a stronger
+  credential in the one place a token is most likely to leak from. Weigh that.
+
 **The Shortcut's app name is `miniapp.json`'s `name`, not the folder name.**
 `hello-live/` is installed as **Hello Live**. Using the folder name in the
 Dictionary is the single commonest way to break the loop.
