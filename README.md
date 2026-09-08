@@ -94,53 +94,19 @@ If that count is zero, your schedule has never run, however many green ticks the
 Actions tab shows. Check it once, on the day you set this up — otherwise you
 find out from a dashboard quietly showing yesterday's numbers.
 
-**And if it stays zero, it may not be you.** On 2026-09-08 this template's own
-author had three repositories — two created that day, one nine days old, one
-private and two public — where `workflow_dispatch` and `push` ran perfectly and
-`schedule` had never fired once in six hours. Correct cron, on the default
-branch, workflows active, Actions enabled, 9 of 2000 minutes used, no GitHub
-incident, re-registration applied. It is a known complaint with no official
-cause: search *"scheduled workflows never trigger, although workflow_dispatch
-works"*.
+**And if it stays zero, it may not be you.** On 2026-09-08 this template's own author had
+three repositories — two created that day, one nine days old, one private and two public — where
+`workflow_dispatch` and `push` ran perfectly and `schedule` had never fired once, while other
+accounts' schedules were firing normally the same hour. Correct cron, on the default branch,
+workflows active, Actions enabled, 9 of 2000 minutes used, no GitHub incident, re-registration
+applied. It is a GitHub-side registration failure, it is silent, and it is known: search *"scheduled
+workflows never trigger, although workflow_dispatch works"*.
 
-Two ways out, neither of which needs GitHub's scheduler:
-
-- **A scheduled agent session** that fetches and commits — nothing on the phone
-  changes, and no new token goes anywhere near the Shortcut. Simplest if you
-  already have an agent that can run on a schedule.
-- **Let the phone trigger it.** Before the loop, POST to
-  `https://api.github.com/repos/<owner>/<repo>/actions/workflows/<file>/dispatches`
-  with body `{"ref":"main"}`, then *Wait* 60 seconds. Self-contained, but the
-  token then needs **Actions: Write** as well as Contents: Read — a stronger
-  credential in the one place a token is most likely to leak from. Weigh that.
-
-**The Shortcut's app name is `miniapp.json`'s `name`, not the folder name.**
-`hello-live/` is installed as **Hello Live**. Using the folder name in the
-Dictionary is the single commonest way to break the loop.
-
-**A private repository answers `404 Not Found`, not `401`, when the token is
-wrong or expired.** It hides the repository's existence rather than admitting
-the credential failed — so *Not Found* means check the token before you check
-the address. That reply is valid JSON, so the Shortcut writes it straight over
-your app's good data. Replace an expiring token **before** the next scheduled
-run, not after.
-
-**Never share a shortcut that holds a token.** Sharing publishes everything
-inside it, headers included, at a public link that needs no sign-in to open.
-Take the token out first.
-
-**Two workflows that both commit will race each other.** A refresh job and the ZIP builder
-triggered by the same push will both `git push` to `main`, and whichever is second is rejected as
-non-fast-forward — so a job that did its work correctly is marked red and its snapshot is thrown
-away. This repository's workflows rebase and retry instead of failing. Copy that loop into every
-job you add that commits, because with one refresh workflow per app they will all fire on the same
-cron and land within seconds of each other.
-
-**Your agent may not be able to reach your data source, and it does not matter.**
-Cloud agent sessions often sit behind an egress proxy. GitHub's runners do not —
-so push the workflow, trigger it with `gh workflow run <file>`, and pull the
-result. That also proves the scheduled path works on day one rather than leaving
-it to be discovered at 07:00.
+The way out does not touch the workflow or the phone: an external clock sends the same
+`workflow_dispatch` GitHub would have sent itself. **`scheduler/README.md`** has two set-up paths —
+a web form that needs no code (cron-job.org) and a Cloudflare Worker for people who want something
+they control — plus the token recipe (*Actions: write* only; it can trigger a refresh and read
+nothing) and the options that were checked and rejected.
 
 ---
 
