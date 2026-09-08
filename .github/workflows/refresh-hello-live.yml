@@ -55,10 +55,11 @@ jobs:
           # and now — the ZIP builder, or another app's refresh on the same
           # cron. They never touch the same file, so rebase and retry rather
           # than failing: a lost refresh is a stale dashboard nobody notices.
-          for attempt in 1 2 3 4 5; do
-            if git push; then exit 0; fi
-            echo "push rejected; rebasing (attempt $attempt)"
-            git pull --rebase --autostash origin main
+          for i in 1 2 3 4; do
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push rejected; rebasing and retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+            git pull --rebase origin "${GITHUB_REF_NAME}"
           done
-          echo "could not push after 5 attempts" >&2
+          echo "could not push after 4 attempts" >&2
           exit 1
