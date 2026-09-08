@@ -97,6 +97,13 @@ run, not after.
 inside it, headers included, at a public link that needs no sign-in to open.
 Take the token out first.
 
+**Two workflows that both commit will race each other.** A refresh job and the ZIP builder
+triggered by the same push will both `git push` to `main`, and whichever is second is rejected as
+non-fast-forward — so a job that did its work correctly is marked red and its snapshot is thrown
+away. This repository's workflows rebase and retry instead of failing. Copy that loop into every
+job you add that commits, because with one refresh workflow per app they will all fire on the same
+cron and land within seconds of each other.
+
 **Your agent may not be able to reach your data source, and it does not matter.**
 Cloud agent sessions often sit behind an egress proxy. GitHub's runners do not —
 so push the workflow, trigger it with `gh workflow run <file>`, and pull the
