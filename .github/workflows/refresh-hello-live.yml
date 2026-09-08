@@ -1,0 +1,54 @@
+name: Refresh hello-live
+
+# One of these per app. Copy it, change the name, the script and the paths.
+#
+# TWO THINGS THAT WILL WASTE AN AFTERNOON IF YOU DO NOT KNOW THEM:
+#
+# 1. `schedule:` only ever runs from the repository's DEFAULT branch. A workflow
+#    sitting on a pull request branch is inert no matter how correct it is, so
+#    land this on main before expecting a single scheduled run.
+# 2. GitHub treats cron as best-effort, not a promise. Runs are commonly late by
+#    5-20 minutes, longer under load, and a newly added schedule often skips its
+#    first slot entirely. Tell people "about hourly", never "at 7 past".
+
+on:
+  schedule:
+    - cron: '7 * * * *'          # hourly-ish, at 7 past — off the top-of-hour stampede
+  workflow_dispatch:              # so you can prove it works without waiting an hour
+  push:
+    paths:                        # deliberately NOT the snapshot, or this job
+      - 'scripts/refresh_hello_live.py'   # would retrigger on its own commit,
+      - '.github/workflows/refresh-hello-live.yml'   # forever
+
+permissions:
+  contents: write                 # least privilege: it commits one file
+
+concurrency:
+  group: refresh-hello-live
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # GitHub's runners have unrestricted network. If the agent session that
+      # built this app could not reach your data source, that does not matter —
+      # this job can, and triggering it once proves the whole scheduled path
+      # works on day one instead of leaving it to be discovered at 07:00.
+      - name: Write a new snapshot
+        run: python3 scripts/refresh_hello_live.py
+
+      - name: Commit it, only if it changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hello-live/data/snapshot.json
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "hello-live: refresh snapshot"
+          git push

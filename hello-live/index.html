@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hello Live</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f6f4; --card: #fff; --ink: #16161a; --dim: #6b6b73;
+    --line: #e3e3df; --accent: #2f6f4f; --warn: #8a3324;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #131316; --card: #1d1d21; --ink: #f2f2f0; --dim: #9a9aa2;
+      --line: #2e2e34; --accent: #7ec79b; --warn: #e5907f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  h1 { font-size: 1.05rem; margin: 0 0 14px; letter-spacing: .01em; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 12px;
+  }
+  .headline { font-size: 2.6rem; font-weight: 640; letter-spacing: -.02em; line-height: 1.05; }
+  .caption { color: var(--dim); font-size: .9rem; margin-top: 6px; }
+  .rows { display: grid; gap: 1px; background: var(--line); border-radius: 10px; overflow: hidden; }
+  .row {
+    background: var(--card); display: flex; justify-content: space-between;
+    align-items: baseline; padding: 12px 14px; gap: 12px;
+  }
+  .row span:first-child { color: var(--dim); font-size: .9rem; }
+  .row span:last-child { font-variant-numeric: tabular-nums; font-weight: 560; }
+  footer { color: var(--dim); font-size: .8rem; text-align: center; margin-top: 18px; }
+  .age { color: var(--accent); font-weight: 560; }
+  .stale { color: var(--warn); }
+  .problem { border-color: var(--warn); }
+  .problem h2 { color: var(--warn); font-size: 1rem; margin: 0 0 6px; }
+  .problem p { margin: 0 0 8px; font-size: .9rem; }
+  .problem code {
+    font: .82rem ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--bg); padding: 1px 5px; border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<h1>Hello Live</h1>
+<main id="app" aria-live="polite"></main>
+<footer id="foot"></footer>
+
+<script>
+// ---------------------------------------------------------------------------
+// data/snapshot.json — the ONLY file that changes. Whatever rewrites it
+// tomorrow will not have read this conversation, so the shape is documented
+// here rather than left to be inferred:
+//
+//   {
+//     "generatedAt": "2026-09-08T12:31:42Z",   ISO 8601, UTC. Required.
+//     "headline":    "12:31 UTC",              the big number. Required.
+//     "caption":     "…",                      one line under it. Optional.
+//     "runs": [ { "label": "…", "value": "…" } ]   zero or more rows.
+//   }
+//
+// Everything else — layout, colours, copy — lives in this file and should not
+// need to change for months while the data is replaced daily.
+// ---------------------------------------------------------------------------
+
+const app = document.getElementById('app');
+const foot = document.getElementById('foot');
+
+function problem(title, detail, hint) {
+  // Never draw a plausible-looking empty state. A dashboard showing zeroes is
+  // indistinguishable from a dashboard showing real zeroes, and the person
+  // trusts it either way — which is exactly the failure worth avoiding.
+  app.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'card problem';
+  const h = document.createElement('h2');
+  h.textContent = title;
+  const p = document.createElement('p');
+  p.textContent = detail;
+  box.append(h, p);
+  if (hint) {
+    const q = document.createElement('p');
+    q.innerHTML = hint;
+    box.append(q);
+  }
+  app.append(box);
+  foot.textContent = '';
+}
+
+function ageOf(iso) {
+  const then = Date.parse(iso);
+  if (Number.isNaN(then)) return null;
+  const mins = Math.round((Date.now() - then) / 60000);
+  if (mins < 2) return { text: 'just now', stale: false };
+  if (mins < 60) return { text: `${mins} min ago`, stale: false };
+  const hrs = Math.round(mins / 60);
+  if (hrs < 48) return { text: `${hrs} h ago`, stale: hrs >= 6 };
+  return { text: `${Math.round(hrs / 24)} days ago`, stale: true };
+}
+
+function render(data) {
+  app.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  const head = document.createElement('div');
+  head.className = 'headline';
+  head.textContent = data.headline;
+  card.append(head);
+  if (data.caption) {
+    const cap = document.createElement('div');
+    cap.className = 'caption';
+    cap.textContent = data.caption;
+    card.append(cap);
+  }
+  app.append(card);
+
+  if (Array.isArray(data.runs) && data.runs.length) {
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    for (const r of data.runs) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      const l = document.createElement('span');
+      l.textContent = r.label ?? '';
+      const v = document.createElement('span');
+      v.textContent = r.value ?? '';
+      row.append(l, v);
+      rows.append(row);
+    }
+    app.append(rows);
+  }
+
+  const age = ageOf(data.generatedAt);
+  foot.innerHTML = '';
+  foot.append(document.createTextNode('Updated '));
+  const span = document.createElement('span');
+  span.className = 'age' + (age && age.stale ? ' stale' : '');
+  span.textContent = age ? age.text : data.generatedAt;
+  foot.append(span);
+}
+
+async function load() {
+  let response;
+  try {
+    response = await fetch('./data/snapshot.json', { cache: 'no-store' });
+  } catch (e) {
+    return problem(
+      'Could not read data/snapshot.json',
+      'The file is missing, or this page was opened directly from the filesystem.',
+      'Serve it with <code>python3 -m http.server</code> — opening index.html in a browser blocks fetch() of its own data.'
+    );
+  }
+  if (!response.ok) {
+    return problem('Could not read data/snapshot.json', `The file returned ${response.status}.`);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    // The commonest cause by far, and worth naming: a fetch that failed
+    // upstream still returns valid JSON — an API error envelope — and the
+    // Shortcut writes it here without complaint.
+    return problem(
+      'data/snapshot.json is not valid JSON',
+      'Something replaced it with text this app cannot read.',
+      'If a Shortcut writes this file, check what its web address actually returned — an expired token often answers with an error page, not data.'
+    );
+  }
+
+  if (!data || typeof data.headline !== 'string' || typeof data.generatedAt !== 'string') {
+    return problem(
+      'data/snapshot.json is not the shape this app expects',
+      'It parsed, but has no headline or no generatedAt.',
+      'An API error reply is valid JSON too. Open the file in Snuggery — Options ⋯ → App Files — and look at what is actually in it.'
+    );
+  }
+
+  render(data);
+}
+
+load();
+// Reads are always fresh from disk, so re-reading when the page comes back
+// into view is what makes an app opened this morning show this morning's data.
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+</script>
+</body>
+</html>

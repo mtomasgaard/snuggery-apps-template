@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Hello Live",
+  "entryPoint": "index.html",
+  "description": "Proves the refresh loop end to end, before you build anything real",
+  "version": "1.0"
+}

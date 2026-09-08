@@ -1,0 +1,58 @@
+name: Build app ZIPs
+
+# Snuggery imports an app as one ZIP, so every app folder here gets one at
+# zips/<folder>.zip with a stable raw URL. Getting the app onto a phone is then
+# a matter of opening that address in Safari and sharing it to Snuggery.
+#
+# The path filter deliberately EXCLUDES every data file. Without the exclusion
+# this job rebuilds all the ZIPs every time a refresh commits a snapshot —
+# hourly, forever, for no reason, and the app inside them never changed.
+
+on:
+  push:
+    paths:
+      - '*/**'
+      - '!*/data/**'
+      - '!.github/**'
+      - '!scripts/**'
+      - '!zips/**'
+      - '!README.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-zips
+  cancel-in-progress: true
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      # Any top-level directory holding an index.html is an app. Adding app
+      # number two therefore needs no edit to this file.
+      - name: Zip every app folder
+        run: |
+          mkdir -p zips
+          for dir in */; do
+            name="${dir%/}"
+            case "$name" in .github|scripts|zips) continue ;; esac
+            [ -f "$name/index.html" ] || continue
+            rm -f "zips/$name.zip"
+            # -x excludes nothing here by default; the folder is shipped whole,
+            # data file included, so a freshly imported app is not blank.
+            (cd "$name" && zip -q -r -X "../zips/$name.zip" .)
+            echo "packed $name"
+          done
+
+      - name: Commit the ZIPs, only if they changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add zips
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "Rebuild app ZIPs"
+          git push

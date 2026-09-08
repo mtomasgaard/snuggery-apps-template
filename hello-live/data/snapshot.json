@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-09-08T12:31:42Z",
+  "headline": "12:31 UTC",
+  "caption": "Written by a GitHub Action, copied here by a Shortcut.",
+  "runs": [
+    {
+      "label": "Day of year",
+      "value": "251"
+    },
+    {
+      "label": "Week",
+      "value": "37"
+    },
+    {
+      "label": "Minute of day",
+      "value": "751"
+    }
+  ]
+}
