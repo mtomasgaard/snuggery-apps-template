@@ -13,12 +13,7 @@ name: Refresh hello-live
 
 on:
   schedule:
-    # TEMPORARY, 2026-09-08: every 15 minutes, as the public half of a
-    # controlled test. Its private sibling has had no scheduled run at all in
-    # five hours while dispatch and push both work. Same account, same cron,
-    # different visibility — so if this one fires and that one does not, the
-    # difference is the repository, not the configuration. Back to hourly after.
-    - cron: '*/15 * * * *'
+    - cron: '7 * * * *'          # hourly, at 7 past — off the top-of-hour stampede
   workflow_dispatch:              # so you can prove it works without waiting an hour
   push:
     paths:                        # deliberately NOT the snapshot, or this job
