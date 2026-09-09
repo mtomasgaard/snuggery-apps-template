@@ -94,19 +94,13 @@ If that count is zero, your schedule has never run, however many green ticks the
 Actions tab shows. Check it once, on the day you set this up — otherwise you
 find out from a dashboard quietly showing yesterday's numbers.
 
-**And if it stays zero, it may not be you.** On 2026-09-08 this template's own author had
-three repositories — two created that day, one nine days old, one private and two public — where
-`workflow_dispatch` and `push` ran perfectly and `schedule` had never fired once, while other
-accounts' schedules were firing normally the same hour. Correct cron, on the default branch,
-workflows active, Actions enabled, 9 of 2000 minutes used, no GitHub incident, re-registration
-applied. It is a GitHub-side registration failure, it is silent, and it is known: search *"scheduled
-workflows never trigger, although workflow_dispatch works"*.
-
-The way out does not touch the workflow or the phone: an external clock sends the same
-`workflow_dispatch` GitHub would have sent itself. **`scheduler/README.md`** has two set-up paths —
-a web form that needs no code (cron-job.org) and a Cloudflare Worker for people who want something
-they control — plus the token recipe (*Actions: write* only; it can trigger a refresh and read
-nothing) and the options that were checked and rejected.
+**Which clock you use is a choice, and it is yours.** GitHub's own schedule costs nothing extra and,
+measured on one account, delivered a few runs a day in batches with hours-long gaps and a nine-hour
+wait for the first. An external trigger — a free web form or a small Cloudflare Worker sending the
+same `workflow_dispatch` — delivers on the hour for one more account and a token scoped to
+*Actions: write* only. A scheduled agent session can reach connectors a bare cron cannot. Each is
+right for somebody. **`scheduler/README.md`** lays them out with what each is for and what it costs;
+plan it with your agent.
 
 ---
 

@@ -1,15 +1,21 @@
-# When GitHub's schedule does not fire
+# Choosing the clock
 
-`schedule:` in a GitHub Actions workflow is best-effort by GitHub's own documentation, and for one
-account on 2026-09-08 it was worse than that: three repositories, thirty-odd scheduled
-opportunities, **zero runs** — while `workflow_dispatch` and `push` ran every time, and other
-accounts' schedules were firing normally the same hour. Nothing in the configuration was wrong. It
-is a registration failure on GitHub's side, it is silent, and the only way to see it is to look:
+Which of these fits is the person's decision — how fresh, which accounts, where a token may live,
+whether an agent may be in the loop. Each option below says what it is for and what it costs, with
+what was actually measured. Plan it with your agent; nothing here is the one right answer.
+
+## What GitHub's own `schedule:` delivered, measured
+
+On one account, 2026-09-08→09: nine hours before the first scheduled run, then three runs about
+2 h 40 m apart with the slots between them dropped, then six hours of nothing — while other
+accounts' schedules ran hourly through the same night. Nothing in the configuration was wrong.
+*For:* nothing to set up, no other account, no other token. *Against:* a few times a day, when
+GitHub chooses; never a time you can promise. The only way to see what you are getting is to look:
 
     gh api "repos/OWNER/REPO/actions/runs?event=schedule" --jq .total_count
 
-If that is still `0` a day after you set the schedule up, stop waiting. The fix is not to change
-the workflow. It is to move the alarm clock somewhere else and keep the workflow exactly as it is.
+If that is `0` a day later, or the gaps are longer than you can live with, the options below move the
+alarm clock somewhere else and keep the workflow exactly as it is.
 
 ## The idea
 
