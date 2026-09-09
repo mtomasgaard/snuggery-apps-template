@@ -44,7 +44,13 @@ Shortcut.
 
 github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens →
 Generate new token → Repository access: *Only select repositories* → Permissions → Repository →
-Actions: *Read and write* → Generate. It is shown once. Give it an expiry and write the date in
+Actions: *Read and write* → Generate. It is shown once.
+
+**The trap, seen once already:** on the token's summary page GitHub describes permissions in prose,
+and *Contents* appears as **"Read and Write access to code"** — which reads like the right thing and
+is not. A token whose page shows *metadata* and *code* but not *actions* gets **403** on the dispatch
+endpoint. The page must say **"access to actions"**. And take Contents back to *No access*: this job
+never touches code, and a leaked copy of a Contents-write token can rewrite the repository. Give it an expiry and write the date in
 the table at the bottom of the main README.
 
 There is no way to avoid storing *some* durable secret somewhere — deploy keys cannot call the
