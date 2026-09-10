@@ -113,13 +113,18 @@ One shortcut refreshes every app here.
 
 1. **Dictionary** — one row per app: key = the app's display name, value = the
    raw address of its `data/snapshot.json`.
-2. **Repeat with Each**, over that dictionary. Inside it, two actions:
-   - **Get Contents of URL** → `Repeat Item ▸ Value`.
+2. **Repeat with Each**, over the Dictionary's **Keys** — tap the Dictionary pill in
+   the Repeat and choose *Keys*. Not over the Dictionary itself: Shortcuts treats a
+   dictionary as one item, runs once, and joins every name into a single string.
+   That works with one row and breaks with two. Inside the loop, three actions:
+   - **Get Dictionary Value** → key `Repeat Item`, in the Dictionary.
+   - **Get Contents of URL** → the *Dictionary Value* from the step above.
      If the repo is private, add a header: `Authorization` = `Bearer <token>`,
      and `Accept` = `application/vnd.github.raw`.
    - **Update a File in a Snuggery App** → leave **App** empty, set
-     **App name** to `Repeat Item ▸ Key`, set **Text instead of a file** to the
+     **App name** to `Repeat Item`, set **Text instead of a file** to the
      output of *Get Contents of URL*, leave **Path in the app** empty.
+3. **Test it with two rows.** One row cannot show the difference.
 
 Two field traps, both of which everyone hits once:
 
