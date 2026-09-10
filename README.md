@@ -1,5 +1,8 @@
 # Snuggery live apps
 
+**This is a template. Nothing of yours goes here** — tap *Use this template* on GitHub to make
+your own copy, and work in that. What follows describes the copy you will have.
+
 One repository holding every mini-app whose data refreshes on a schedule, and the
 jobs that refresh them.
 
