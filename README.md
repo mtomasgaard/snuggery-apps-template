@@ -70,6 +70,9 @@ the setup.
   created it.
 - **Carry a `generatedAt` timestamp and show it.** A dashboard that cannot tell
   you how old it is will quietly show you last week.
+- **Keep `data/snapshot.json` small.** Hundreds of kilobytes is typical, a few megabytes is fine;
+  the Shortcut refuses over 32 MB, and a phone parses 20 MB of JSON in seconds on every open.
+  Aggregate on the job side — a dashboard shows what a person can read, not everything measured.
 - **Fail loudly.** If the file is missing, unparseable, or the wrong shape, say
   so on screen. Never draw an empty chart as though it were data — a plausible
   blank dashboard is worse than an error, because it gets believed.
