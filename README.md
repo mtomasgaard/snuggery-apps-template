@@ -140,6 +140,13 @@ Two field traps, both of which everyone hits once:
 Shortcuts stops at the first action that fails, so a deleted app halts the rest
 of the chain.
 
+**Data and code are two different hops.** The loop above refreshes `data/snapshot.json` and
+nothing else. When an app's *code* changes, `zips/<app>.zip` is rebuilt automatically; to get it
+onto the phone, either open the ZIP's address in Safari → Share → Snuggery → **Replace the app**
+(it reloads in place, even while open), or keep a second, one-tap shortcut: **Get Contents of URL**
+(the ZIP's address, with the same header if the repo is private) → **Update a Mini-App** → pick the
+app. Do not put that in the hourly loop — it would replace and restart the app every hour.
+
 ---
 
 ## Token expiry
