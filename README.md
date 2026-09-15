@@ -140,6 +140,14 @@ Two field traps, both of which everyone hits once:
 Shortcuts stops at the first action that fails, so a deleted app halts the rest
 of the chain.
 
+**Refreshing on demand.** *Keep This Up To Date* in Snuggery has a **Run now** row: type a shortcut's
+name, tap, and Snuggery opens it in Shortcuts — that is all Snuggery does; it never goes online. To
+make one tap rebuild an app's data in this repository *and* pull it, build a shortcut named for the
+app — **Get Contents of URL** as a POST to
+`https://api.github.com/repos/OWNER/REPO/actions/workflows/<file>/dispatches`, body `{"ref":"main"}`,
+header `Authorization: Bearer <token with Actions: write>` — then **Wait** about a minute, then
+**Run Shortcut** → your refresh loop. Put its name in the *Run now* field once.
+
 **Data and code are two different hops.** The loop above refreshes `data/snapshot.json` and
 nothing else. When an app's *code* changes, `zips/<app>.zip` is rebuilt automatically; to get it
 onto the phone, either open the ZIP's address in Safari → Share → Snuggery → **Replace the app**
