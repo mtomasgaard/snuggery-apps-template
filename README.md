@@ -140,13 +140,18 @@ Two field traps, both of which everyone hits once:
 Shortcuts stops at the first action that fails, so a deleted app halts the rest
 of the chain.
 
-**Refreshing on demand.** *Keep This Up To Date* in Snuggery has a **Run now** row: type a shortcut's
-name, tap, and Snuggery opens it in Shortcuts — that is all Snuggery does; it never goes online. To
-make one tap rebuild an app's data in this repository *and* pull it, build a shortcut named for the
-app — **Get Contents of URL** as a POST to
-`https://api.github.com/repos/OWNER/REPO/actions/workflows/<file>/dispatches`, body `{"ref":"main"}`,
-header `Authorization: Bearer <token with Actions: write>` — then **Wait** about a minute, then
-**Run Shortcut** → your refresh loop. Put its name in the *Run now* field once.
+**Refreshing on demand.** Separate from the schedule, *Keep This Up To Date* in Snuggery ends with
+a **Run now** row: the name of **one rebuild shortcut** (suggested `Rebuild a Snuggery App`) and a
+button — and the app's ⋯ menu has **Rebuild Data Now**, the same thing one tap away; the dashboard
+reloads by itself when the new file lands. Snuggery opens it with the app's name as the shortcut's input — that is all Snuggery does; it
+never goes online. The shortcut is built once (Snuggery offers a ready-made one) and holds a
+Dictionary with one row per app: key = the app's exact name; value = a Dictionary with `job` =
+`https://api.github.com/repos/OWNER/REPO/actions/workflows/<file>/dispatches` and `data` = the
+published data address. It runs the row it was named: **Get Contents of URL** as a POST to `job`
+(body `{"ref":"main"}`, header `Authorization: Bearer <token with Actions: write>`); **Open App** →
+Snuggery, so you land back in the app while the rest runs behind it; **Wait** about a minute and a
+half; **Get Contents of URL** of `data`; **Update a File in a Snuggery App** with *App name* =
+the input and *Text* = that contents. Adding an app is adding its row.
 
 **Data and code are two different hops.** The loop above refreshes `data/snapshot.json` and
 nothing else. When an app's *code* changes, `zips/<app>.zip` is rebuilt automatically; to get it
