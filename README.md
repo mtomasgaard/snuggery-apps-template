@@ -25,7 +25,7 @@ one, delete both, or ignore them.
 | App | What it is | Try it | Make it yours |
 | --- | --- | --- | --- |
 | **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
-| **Running Dashboard** | Eight panes of running from a Garmin watch: weekly volume, training load, heart-rate zones, sleep and HRV, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — a half-marathon block in progress, its runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
+| **Running Dashboard** | Eight panes of running from a Garmin watch: weekly volume, training load, heart-rate zones, sleep and HRV, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
 
 ![Running Dashboard](screenshots/running-dashboard.png)
 

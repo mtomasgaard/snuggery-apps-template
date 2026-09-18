@@ -16,12 +16,15 @@ runs a week (easy, tempo or intervals, recovery, steady, a long run growing
 from 16 to 24 km, and one more easy run), strength once a week, one walk with
 the stroller, two tune-up races (a 10 km and a 15 km) on the way.
 
-The demo stops in the middle of the block: "today" is the Wednesday of the
-tune-up week, eleven weeks in, so the sessions end there and the plan pane
-runs forward — this week's 15 km tune-up, the second peak week, the taper and
-the race — the way a live copy's does. The calendar is the generator's own:
-today is the last Wednesday before the build and the race the Sunday 32 days
-on, so regenerate before publishing and the plan is ahead of the reader.
+Before the block, six months of ordinary running: a winter base at 36–48 km a
+week, two weeks off with a cold in March, a spring 10 km, a lighter holiday
+week — so the plan reads as one chapter of a longer history. The demo stops in
+the middle of the block: "today" is a day in the tune-up week, eleven weeks
+in, so the sessions end there and the plan pane runs forward — this week's
+15 km tune-up, the last big week, the taper and the race — the way a live
+copy's does. The calendar is the generator's own: today is the day it runs and
+the race the Sunday of week 16, so regenerate before publishing and the data
+ends today with the plan ahead of the reader.
 
 The routes: six sessions carry a per-second record stream drawn on the
 Sessions pane. Each follows a segment of a famous marathon course — Boston,
@@ -57,20 +60,19 @@ APP = "running-dashboard"
 SEED = 20260918
 COURSES_FILE = os.path.join(HERE, "demo_courses.json")
 
-# The demo's calendar: "today" is the Wednesday of week 12 — by default the
-# last Wednesday on or before the day the generator runs, so a fresh build's
+# The demo's calendar: "today" is the day the generator runs (any weekday),
+# placed in week 12 of the block, so a fresh build's data ends today and its
 # plan lies ahead of the viewer's clock (the app marks a planned day that has
-# passed without a session as missed) — and the race is the Sunday 32 days
-# later. --check and --verify read the committed snapshot's own date, so they
-# hold on any day.
-DAYS_TO_RACE = 32
+# passed without a session as missed); the race is the Sunday of week 16,
+# four weeks after this week's Sunday. --check and --verify read the committed
+# snapshot's own date, so they hold on any day.
 
 
 def demo_dates(today=None):
     if today is None:
-        t = date.today()
-        today = t - timedelta(days=(t.weekday() - 2) % 7)
-    return today, today + timedelta(days=DAYS_TO_RACE)
+        today = date.today()
+    this_sunday = today + timedelta(days=6 - today.weekday())
+    return today, this_sunday + timedelta(days=28)
 
 
 def committed_today(snapshot_path):
@@ -90,12 +92,13 @@ ATHLETE = {
     "heightCm": 180,
 }
 
-# code, name, type, since (weeks before today), km already on it before the block, maxKm
+# code, name, type, since (weeks before today), km already on it before the history starts, maxKm
 GEAR = [
-    ("RSA", "Road shoes A", "Shoes", 30, 210.0, 800),
-    ("RSB", "Road shoes B", "Shoes", 12, 40.0, 800),
+    ("RSO", "Road shoes, old pair", "Shoes", 70, 520.0, 800),
+    ("RSA", "Road shoes A", "Shoes", 30, 0.0, 800),
+    ("RSB", "Road shoes B", "Shoes", 30, 0.0, 800),
     ("RAC", "Race shoes", "Shoes", 20, 31.0, 400),
-    ("TRL", "Trail shoes", "Shoes", 40, 180.0, 700),
+    ("TRL", "Trail shoes", "Shoes", 40, 60.0, 700),
     ("STROLLER", "Running stroller", "Other", 60, 95.0, None),
 ]
 
@@ -112,6 +115,15 @@ WEEK_KIND = ["base"] * 3 + ["build", "build", "build", "down", "build", "build",
 TUNE_UPS = {8: ("10 km tune-up", 10.0), 12: ("15 km tune-up", 15.0)}
 RACE = ("Copenhagen Half Marathon", 21.1)
 GOAL_HALF = "1:37:30"
+
+# Six months before week 1, oldest first: running kilometres per week and the
+# kind of week. "off" is the cold (nothing logged but a walk), "back" the
+# first week after it, "race" the spring 10 km, "holiday" three hikes and two
+# short runs.
+PRE_KM = [36, 38, 40, 40, 42, 30, 44, 44, 46, 32, 46, 48,
+          0, 0, 24, 36, 42, 44, 34, 46, 48, 40, 28, 44, 46, 40]
+PRE_KIND = ["base"] * 12 + ["off", "off", "back"] + ["base"] * 3 + ["race"] + ["base"] * 3 + ["holiday"] + ["base"] * 3
+SPRING_RACE = ("Spring 10 km", 10.0)
 
 # Pace in min/km and mean heart rate by session kind; the HR series is walked
 # per minute and the zone seconds are counted from it, so the zones a session
@@ -259,10 +271,84 @@ class Session:
         self.week = None         # 0-based week of the block
 
 
-def plan_block(race_sunday, rng):
-    """Every session of the sixteen weeks, ending on the race Sunday."""
+def shoes(day, today, kind):
+    """The shoe by date and session: the old pair until the two new pairs
+    arrive in February, then A for the easy days and B for the faster and
+    longer ones, so neither pair runs past its life."""
+    new_since = today - timedelta(days=7 * 30)
+    if day < new_since:
+        return ("RSO",)
+    return ("RSB",) if kind in ("tempo", "steady", "long") else ("RSA",)
+
+
+def tidy(plan, km, floor=4.0):
+    """No run under 4 km: fold it into Tuesday's easy run, then nudge Tuesday
+    and Thursday so the week lands on its number."""
+    for wd in sorted(plan):
+        k, v = plan[wd]
+        if wd != 1 and k not in ("race", "long") and v < floor:
+            plan[1] = ("easy", round(plan[1][1] + v, 1))
+            del plan[wd]
+    total = sum(v for _, v in plan.values())
+    gap = round(km - total, 1)
+    plan[1] = ("easy", round(plan[1][1] + gap / 2, 1))
+    thu = 3 if 3 in plan else 1
+    plan[thu] = (plan[thu][0], round(plan[thu][1] + gap - gap / 2, 1))
+
+
+def compass(deg):
+    return ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][int(((deg + 22.5) % 360) // 45)]
+
+
+def pre_block(first_monday, today, rng):
+    """Six months of ordinary weeks before the block, oldest first."""
     sessions = []
+    for i, km in enumerate(PRE_KM):
+        monday = first_monday - timedelta(days=7 * (len(PRE_KM) - i))
+        kind = PRE_KIND[i]
+        week = []
+        if kind != "off":
+            week.append(Session(monday, "strength", 0.0, "Strength", sport="strength_training", gear=(), indoor=True, minutes=40))
+        week.append(Session(monday, "walk", round(rng.uniform(3.2, 4.8), 1), "Walk with the stroller", sport="walking", gear=("STROLLER",)))
+        plan = {}
+        if kind == "base":
+            long_km = 12 + i // 4
+            rest = km - long_km
+            quality = "tempo" if i % 2 == 0 else "intervals"
+            plan = {1: ("easy", round(rest * 0.26, 1)), 2: (quality, round(rest * 0.30, 1)), 3: ("recovery", round(rest * 0.18, 1)),
+                    4: ("easy", round(rest * 0.10, 1)), 5: ("steady", round(rest * 0.16, 1)), 6: ("long", float(long_km))}
+        elif kind == "race":
+            rest = km - SPRING_RACE[1] - 4.0
+            plan = {1: ("easy", round(rest * 0.30, 1)), 2: ("tempo", round(rest * 0.26, 1)), 3: ("recovery", round(rest * 0.22, 1)),
+                    4: ("easy", round(rest * 0.22, 1)), 5: ("easy", 4.0), 6: ("race", SPRING_RACE[1])}
+        elif kind == "back":
+            plan = {1: ("easy", 6.0), 3: ("easy", 6.0), 5: ("easy", 6.0), 6: ("easy", 6.0)}
+        elif kind == "holiday":
+            plan = {1: ("easy", 8.0), 3: ("easy", 8.0), 5: ("easy", 12.0)}
+            for wd, hk in ((2, 9.5), (4, 12.0), (6, 7.5)):
+                week.append(Session(monday + timedelta(days=wd), "walk", hk, "Hike", sport="hiking", gear=()))
+        if plan and kind in ("base", "race"):
+            tidy(plan, km)
+        for wd, (k, dist) in sorted(plan.items()):
+            day = monday + timedelta(days=wd)
+            if dist <= 0:
+                continue
+            if k == "race":
+                week.append(Session(day, "race", dist, SPRING_RACE[0], race=True, gear=("RAC",)))
+                continue
+            gear = ("TRL",) if (k == "long" and i < 8) else shoes(day, today, k)
+            week.append(Session(day, k, dist, gear=gear))
+        for s in week:
+            s.week = i - len(PRE_KM)
+        sessions.extend(week)
+    return sessions
+
+
+def plan_block(race_sunday, today, rng):
+    """Every session of the six months before and the sixteen weeks of the
+    block, ending on the race Sunday."""
     first_monday = race_sunday - timedelta(days=6 + 7 * 15)
+    sessions = pre_block(first_monday, today, rng)
     for w, km in enumerate(WEEK_KM):
         monday = first_monday + timedelta(days=7 * w)
         week_no = w + 1
@@ -299,11 +385,7 @@ def plan_block(race_sunday, rng):
                 6: ("long", float(long_km)),
             }
         if not race_week:
-            # Nudge Tuesday and Thursday so the week lands on its number.
-            total = sum(v for _, v in weekday_km.values())
-            gap = round(km - total, 1)
-            weekday_km[1] = ("easy", round(weekday_km[1][1] + gap / 2, 1))
-            weekday_km[3] = (weekday_km[3][0], round(weekday_km[3][1] + gap - gap / 2, 1))
+            tidy(weekday_km, km)
         week_sessions = []
         for wd in range(7):
             day = monday + timedelta(days=wd)
@@ -320,9 +402,7 @@ def plan_block(race_sunday, rng):
                     continue
                 name = None
                 race = k == "race"
-                gear = ("RSA",)
-                if k == "tempo":
-                    gear = ("RSB",)
+                gear = shoes(day, today, k)
                 if race:
                     name = tune[0]
                     gear = ("RAC",)
@@ -335,9 +415,11 @@ def plan_block(race_sunday, rng):
         for s in week_sessions:
             s.week = w
         sessions.extend(week_sessions)
-    # A treadmill run when the weather turns: two of the recovery runs.
+    # A treadmill run when the weather turns: most recovery runs in January and
+    # February, one in five the rest of the year.
     for s in sessions:
-        if s.kind == "recovery" and s.day.isocalendar()[1] % 5 == 0:
+        winter = s.day.month in (1, 2)
+        if s.kind == "recovery" and (s.day.isocalendar()[1] % 5 == 0 or (winter and s.day.isocalendar()[1] % 3 != 0)):
             s.sport, s.indoor, s.name = "treadmill_running", True, "Treadmill recovery"
     return sessions
 
@@ -378,6 +460,8 @@ def session_minutes(session):
         return session.minutes
     if session.kind == "walk":
         return int(round(session.km * 11.5))
+    if session.name == SPRING_RACE[0]:
+        return int(round(session.km * pace_of(session) * 1.038))
     return int(round(session.km * pace_of(session)))
 
 
@@ -450,15 +534,19 @@ def stream_rows(session, courses, rng):
 
 def daily_series(sessions, end, rng):
     """Garmin-style acute/chronic load per day and a night's sleep per day,
-    both driven by the block's load so the curves tell the same story."""
+    both driven by the training so the curves tell the same story."""
     by_day = {}
+    kind_of_week = {}
     for s in sessions:
         z = zone_seconds(s.hr_series)
         trimp = sum(z[i] / 60 * (i + 1) for i in range(5))
         by_day[s.day] = by_day.get(s.day, 0) + trimp
+        monday = s.day - timedelta(days=s.day.weekday())
+        kind_of_week[monday] = PRE_KIND[s.week + len(PRE_KM)] if s.week < 0 else WEEK_KIND[s.week]
     first = min(by_day)
+    first = first - timedelta(days=first.weekday())
     days = (end - first).days + 1
-    atl = ctl = 180.0
+    atl = ctl = 150.0
     load_rows, sleep_rows = [], []
     for i in range(days):
         d = first + timedelta(days=i)
@@ -466,8 +554,12 @@ def daily_series(sessions, end, rng):
         atl += (t - atl) / 7 * 2.4
         ctl += (t - ctl) / 28 * 2.4
         ratio = atl / max(ctl, 1)
-        w = min(15, (d - first).days // 7)
-        if WEEK_KIND[w] == "down":
+        monday = d - timedelta(days=d.weekday())
+        kind = kind_of_week.get(monday, "base")
+        w = (monday - (end - timedelta(days=end.weekday()))).days // 7 + 11   # block week index; 11 is this week
+        if kind == "off":
+            status = "DETRAINING"
+        elif kind in ("down", "back", "holiday"):
             status = "RECOVERY"
         elif ratio > 1.25:
             status = "PRODUCTIVE_2"
@@ -475,7 +567,7 @@ def daily_series(sessions, end, rng):
             status = "PRODUCTIVE"
         else:
             status = "MAINTAINING"
-        vo2 = round(52.0 + 2.0 * i / max(days - 1, 1), 1)
+        vo2 = round(51.0 + 3.0 * i / max(days - 1, 1), 1)
         load_rows.append([iso(d), int(round(atl)), int(round(ctl)), status, vo2])
         # Sleep: HRV dips a little as the peak weeks begin.
         peak = 1.0 if w >= 11 else 0.0
@@ -489,16 +581,17 @@ def daily_series(sessions, end, rng):
     return load_rows, sleep_rows
 
 
-def intraday(end, rng):
-    """36 hours of heart rate, body battery and stress ending this evening,
-    with this morning's intervals in them; the builder keeps the last 24."""
-    t_end = int(datetime(end.year, end.month, end.day, 18, 0, tzinfo=timezone.utc).timestamp())
+def intraday(end, rng, morning_run):
+    """36 hours of heart rate, body battery and stress ending early this
+    afternoon (before generatedAt), with this morning's run in them if there
+    was one; the builder keeps the last 24."""
+    t_end = int(datetime(end.year, end.month, end.day, 13, 0, tzinfo=timezone.utc).timestamp())
     t0 = t_end - 36 * 3600
     hr, bb, stress = [], [], []
 
     def running(t):
         d = datetime.fromtimestamp(t, tz=timezone.utc)
-        return d.date() == end and 6 <= d.hour < 8
+        return morning_run and d.date() == end and 6 <= d.hour < 8
     for t in range(t0, t_end + 1, 120):
         h = datetime.fromtimestamp(t, tz=timezone.utc).hour
         base = 52 if 0 <= h < 6 else 66
@@ -544,7 +637,7 @@ def plan_week(sessions, label, target_km, intensity):
     for s in sorted(sessions, key=lambda s: (s.day, s.kind)):
         if s.kind == "walk":
             continue
-        pace = KINDS[s.kind]["pace"] if s.kind in KINDS else None
+        pace = pace_of(s) if s.kind in KINDS else None
         what = {"strength": "Strength, 40 min", "race": f"{s.name}, {s.km:g} km"}.get(
             s.kind, f"{s.km:g} km {KINDS[s.kind]['name'].lower()}" if s.kind in KINDS else s.name)
         items.append({"date": iso(s.day), "kind": PLAN_KIND.get(s.kind, "easy"), "what": what,
@@ -561,13 +654,16 @@ def plan_week(sessions, label, target_km, intensity):
 def coaching(done, planned, today, race, weekly):
     """assessment.json, plan.json and racecast.json as the optional routine
     would write them on this Wednesday, eleven weeks into the block."""
-    tune_10k = next(s for s in done if s.race and s.km == 10.0)
+    tune_10k = next(s for s in done if s.race and s.km == 10.0 and s.week >= 0)
+    spring = next(s for s in done if s.race and s.name == SPRING_RACE[0])
     tune_15k = next(s for s in planned if s.race and s.km == 15.0)
-    t10 = tune_10k.km * race_pace(10.0) * 60
+    t10 = session_minutes(tune_10k) * 60
+    t_spring = session_minutes(spring) * 60
     this_week = [s for s in planned if s.week == 11]
     next_week = [s for s in planned if s.week == 12]
     biggest = max(weekly, key=lambda w: w["km"])
     weeks_done = 11
+    history_weeks = len(PRE_KM) + weeks_done
     assessment = {
         "updated": iso(today),
         "verdict": "Example text",
@@ -584,11 +680,15 @@ def coaching(done, planned, today, race, weekly):
             {"label": "Goal", "value": GOAL_HALF, "note": f"{RACE[0]}, {iso(race)}"},
         ],
         "sections": [
+            {"title": "Before the block", "tone": "neutral",
+             "body": ["Six months of ordinary weeks at 30–48 km before the block started: a winter base, two weeks "
+                      "off with a cold in March, a spring 10 km in May, a lighter week on holiday in June. The block "
+                      "is built on that, not on nothing.", EXAMPLE],
+             "bullets": []},
             {"title": "Volume", "tone": "good",
-             "body": ["Eleven weeks from 50 to 78 km with a down week every fourth, and the down weeks were "
-                      "respected: the two lowest weeks sit at 40 and 46 km, which is what let the weeks after "
-                      "them go higher. This week sharpens around Sunday's 15 km; next week is the last big one at "
-                      "76 km, then a three-week taper.", EXAMPLE],
+             "body": ["Eleven weeks starting at 50 km and peaking at 78, with a down week every fourth — 40 and "
+                      "46 km — which is what let the weeks after them go higher. This week sharpens around Sunday's "
+                      "15 km; next week is the last big one at 76 km, then a three-week taper.", EXAMPLE],
              "bullets": ["Six runs a week, one strength session, one walk.", "Long run up to 24 km, last three at goal pace."]},
             {"title": "Intensity", "tone": "neutral",
              "body": ["About four fifths of the time is easy or steady, one fifth is hard. The tempo runs have held "
@@ -598,7 +698,8 @@ def coaching(done, planned, today, race, weekly):
             {"title": "Signals", "tone": "good",
              "body": ["HRV has dipped a little this week, which is what the first peak week does; sleep holds near "
                       f"seven and a half hours and resting heart rate has not moved. The 10 km tune-up in week 8 "
-                      f"({hms(t10)}) landed where a {GOAL_HALF} half would put it.", EXAMPLE],
+                      f"({hms(t10)}) landed where a {GOAL_HALF} half would put it, and {hms(t_spring - t10)} faster "
+                      f"than the spring 10 km.", EXAMPLE],
              "bullets": []},
             {"title": "Next", "tone": "neutral",
              "body": [f"Sunday's 15 km tune-up is the last check before the last big week. Then the taper: "
@@ -606,15 +707,15 @@ def coaching(done, planned, today, race, weekly):
              "bullets": []},
         ],
     }
-    horizon_km = WEEK_KM[11:] + [22, 34, 44, 50, 54, 58, 40, 62, 66, 70, 46, 72, 76, 80, 50, 82, 84, 60, 86, 70, 52]
-    horizon_kind = WEEK_KIND[11:] + ["down", "down", "build", "build", "build", "build", "down", "build", "build",
-                                     "build", "down", "build", "build", "build", "down", "build", "build", "down",
-                                     "build", "hold", "down"]
+    # The plan ends at the race: the horizon is this week to race week and
+    # nothing after it — what follows the half is written after the half.
+    horizon_km = WEEK_KM[11:]
+    horizon_kind = WEEK_KIND[11:]
     this_monday = today - timedelta(days=today.weekday())
     plan = {
         "updated": iso(today),
         "tone": "good",
-        "headline": "Example plan — a 16-week half-marathon block, illustrative, not coaching.",
+        "headline": "Example text: a 16-week half-marathon block, illustrative, not coaching.",
         "why": ("The block is textbook: base, build with a down week every fourth, two peak weeks, a three-week "
                 "taper. In a real copy the routine writes this pane from your own load, recovery and calendar; "
                 "the demo's version is fixed. " + EXAMPLE),
@@ -638,18 +739,20 @@ def coaching(done, planned, today, race, weekly):
              "mix": {"peak": [78, 12, 10], "taper": [85, 10, 5], "race": [70, 10, 20], "down": [92, 8, 0],
                      "build": [80, 12, 8], "hold": [82, 12, 6]}[horizon_kind[i]],
              "kind": horizon_kind[i],
-             "note": {0: "Tune-up Sunday.", 1: "The last big week.", 4: f"{RACE[0]}.", 5: "Recovery, then a base for the spring."}.get(i, "")}
-            for i in range(26)
+             "note": {0: "Tune-up Sunday.", 1: "The last big week.", 2: "Taper.", 4: f"{RACE[0]}."}.get(i, "")}
+            for i in range(len(horizon_km))
         ],
-        "after": "After the race, two recovery weeks and a longer base block; the next race is a spring marathon, if the winter allows. " + EXAMPLE,
+        "after": f"The plan ends at {RACE[0]}. What comes after it is written after it. " + EXAMPLE,
         "guardrails": ["Nothing new on race day.", "Easy means easy: under 150 on the easy days, every time.",
                        "A down week every fourth week, no exceptions.", EXAMPLE],
     }
     racecast = {
         "updated": iso(today),
         "kind": "full",
-        "basis": {"vo2": ATHLETE["vo2maxRunning"], "weeksOfData": weeks_done, "races": 1},
+        "basis": {"vo2": ATHLETE["vo2maxRunning"], "weeksOfData": history_weeks, "races": 2},
         "anchors": [
+            {"date": iso(spring.day), "event": SPRING_RACE[0], "time": hms(t_spring), "pace": pace_str(t_spring / 60 / 10),
+             "note": "Flat and windy; the first race after the two weeks off in March."},
             {"date": iso(tune_10k.day), "event": "10 km tune-up", "time": hms(t10), "pace": pace_str(t10 / 60 / 10),
              "note": "Flat road race, cool morning; the Blackheath start of the London course."},
         ],
@@ -657,13 +760,13 @@ def coaching(done, planned, today, race, weekly):
             {"key": "5K", "label": "5 km", "mine": "21:05", "low": "20:45", "high": "21:30", "confidence": "moderate",
              "why": "Extrapolated down from the tune-up; no 5 km raced in the block."},
             {"key": "10K", "label": "10 km", "mine": hms(t10 - 25), "low": hms(t10 - 50), "high": hms(t10 + 10), "confidence": "moderate",
-             "why": "Raced in week 8; the four weeks since were the biggest of the block."},
+             "why": f"Raced in week 8, {hms(t_spring - t10)} faster than the spring 10 km; the four weeks since were the biggest of the block."},
             {"key": "half", "label": "Half marathon", "mine": "1:37:10", "low": "1:35:45", "high": "1:38:40", "confidence": "moderate",
              "why": f"One tune-up and the long runs' goal-pace finishes point here; Sunday's 15 km ({iso(tune_15k.day)}) will narrow it."},
             {"key": "marathon", "label": "Marathon", "mine": None, "low": None, "high": None, "confidence": "none",
              "why": "No long run past 24 km; nothing to anchor a marathon on."},
         ],
-        "summary": "Example text. " + "One tune-up anchors the half so far; the long runs' goal-pace finishes agree with it, and Sunday's 15 km is the next fix.",
+        "summary": "Example text. " + "Two 10 km races a spring apart anchor the half so far; the long runs' goal-pace finishes agree with them, and Sunday's 15 km is the next fix.",
         "outlook": {"horizon": "race day", "condition": "on plan, not yet rested", "5K": "21:05", "10K": hms(t10 - 25), "half": "1:37:10"},
         "method": ["Riegel from the tune-up, shaded by the block's volume and the taper still to come.", EXAMPLE],
         "analysed": iso(today),
@@ -683,8 +786,11 @@ def session_note(session, courses):
     bodies = {
         "long": [f"{session.km:.0f} km with the last three at goal pace.{where}",
                  "Heart rate drifted up through the run and stayed under threshold in the fast finish, which is the point of the session."],
-        "race": [f"{session.name}: even splits, {hms(session.km * race_pace(session.km) * 60)}.{where}",
-                 "A fair check on the goal with eight weeks to go; the half prediction moved by nothing."],
+        "race": ([f"{session.name}: {hms(session_minutes(session) * 60)}, into the wind on the way back.",
+                  "The first race after the two weeks off in March; a marker for the block to beat, not a target."]
+                 if session.name == SPRING_RACE[0] else
+                 [f"{session.name}: even splits, {hms(session_minutes(session) * 60)}.{where}",
+                  "A fair check on the goal with eight weeks to go; the half prediction moved by nothing."]),
         "intervals": [f"Three-minute reps at 5 km effort with two-minute floats; the last rep as fast as the first.{where}",
                       "Cadence stayed up through the reps."],
         "tempo": [f"Twenty minutes at goal-half pace inside an easy run. Heart rate settled just under threshold.{where}",
@@ -748,14 +854,16 @@ def write_raw(raw, done, planned, today, race, courses, rng, tiles_dir):
         z = zone_seconds(s.hr_series)
         zones.append([s.id] + z)
         gearcsv.append([s.id, "|".join(s.gear) if s.gear else "-"])
-        if s.sport == "running":
-            walk_s = int(rng.uniform(0, 40))
-            splits.append([s.id, moving - walk_s, int(round(s.km * 1000)) - walk_s * 1, hr_avg, walk_s, walk_s, 120, 0])
+        if s.sport in ("running", "treadmill_running"):
+            if s.sport == "running":
+                walk_s = int(rng.uniform(0, 40))
+                splits.append([s.id, moving - walk_s, int(round(s.km * 1000)) - walk_s * 1, hr_avg, walk_s, walk_s, 120, 0])
+                t_air = round(rng.uniform(-2, 16) + (8 if s.day.month in (6, 7, 8) else 0), 1)
+                wind_deg = int(rng.uniform(0, 359))
+                weather.append([s.id, t_air, round(t_air - rng.uniform(0, 4), 1), round(t_air - rng.uniform(1, 6), 1),
+                                int(rng.uniform(55, 92)), round(rng.uniform(2, 18), 1), wind_deg, compass(wind_deg),
+                                rng.choice(["Clear", "Partly cloudy", "Overcast", "Light rain", "Fog"]), "demo station"])
             zonekm.append([s.id] + zone_km(s.hr_series, s.km))
-            weather.append([s.id, round(rng.uniform(6, 15), 1), round(rng.uniform(5, 14), 1), round(rng.uniform(2, 10), 1),
-                            int(rng.uniform(55, 92)), round(rng.uniform(2, 18), 1), int(rng.uniform(0, 359)),
-                            rng.choice(["N", "NE", "E", "SE", "S", "SW", "W", "NW"]),
-                            rng.choice(["Clear", "Partly cloudy", "Overcast", "Light rain", "Fog"]), "demo station"])
             te = round(min(5.0, 1.5 + (z[2] + 2 * z[3] + 3 * z[4]) / max(1, moving) * 2.6), 1)
             details.append([s.id, moving, min(s.hr_series), 176, 188, 118, 246, 8.4, "", "", "",
                             te, round(min(4.0, te * 0.6), 1),
@@ -789,7 +897,7 @@ def write_raw(raw, done, planned, today, race, courses, rng, tiles_dir):
     with open(os.path.join(raw, "sleep.csv"), "w", newline="") as fh:
         csv.writer(fh).writerows(sleep_rows)
     with open(os.path.join(raw, "intraday.json"), "w") as fh:
-        json.dump(intraday(today, rng), fh)
+        json.dump(intraday(today, rng, any(s.day == today and s.sport in ("running", "treadmill_running") for s in done)), fh)
     with open(os.path.join(raw, "notes.json"), "w") as fh:
         json.dump(notes, fh, indent=1)
     weekly = weekly_summary(done)
@@ -811,7 +919,7 @@ def write_raw(raw, done, planned, today, race, courses, rng, tiles_dir):
             "vo2max": ATHLETE["vo2maxRunning"],
             "monthlyLoadAerobicLow": 1180, "monthlyLoadAerobicHigh": 420, "monthlyLoadAnaerobic": 160,
             "balanceFeedback": "BALANCED",
-            "readiness": {"score": 74, "level": "MODERATE", "feedback": "Recovered from this morning's reps; keep tomorrow easy.",
+            "readiness": {"score": 74, "level": "MODERATE", "feedback": "Recovering well inside a big week; keep the easy days easy.",
                           "sleepScore": sleep_rows[-1][1], "recoveryHours": 14, "hrvWeeklyAvg": 63,
                           "hrvFeedback": "BALANCED", "stressHistoryPercent": 22, "sleepHistoryPercent": 82},
             "racePredictions": {"5K": "21:10", "10K": "43:50", "half": "1:36:50", "marathon": "3:25:30"},
@@ -1017,7 +1125,7 @@ def generate(out_root, today, race, seed, courses, keep_raw=None, tiles=False, t
     data_dir = os.path.join(app_dir, "data")
     tiles_dir = os.path.join(data_dir, "tiles")
     os.makedirs(data_dir, exist_ok=True)
-    planned = plan_block(race, rng)
+    planned = plan_block(race, today, rng)
     done = [s for s in planned if s.day <= today]
     assign_streams(done, courses)
     if tiles:
@@ -1043,7 +1151,7 @@ def generate(out_root, today, race, seed, courses, keep_raw=None, tiles=False, t
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--today", help="the demo's last day of data, a Wednesday (default: the last one on or before today)")
+    ap.add_argument("--today", help="the demo's last day of data, in week 12 (default: today)")
     ap.add_argument("--seed", type=int, default=SEED)
     ap.add_argument("--out-root", default=ROOT, help="the repository root to write under")
     ap.add_argument("--keep-raw", help="write the synthetic raw store here and keep it")
@@ -1063,8 +1171,6 @@ def main():
         today, race = demo_dates(committed_today(os.path.join(data_dir, "snapshot.json")))
     else:
         today, race = demo_dates(date.fromisoformat(args.today) if args.today else None)
-    if today.weekday() != 2:
-        raise SystemExit("--today must be a Wednesday, the demo's day in week 12")
     if args.verify:
         problems = verify(os.path.join(data_dir, "snapshot.json"), os.path.join(data_dir, "streams"),
                           os.path.join(data_dir, "tiles"), courses, today, race)
