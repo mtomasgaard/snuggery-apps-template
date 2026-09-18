@@ -93,7 +93,7 @@ Set up entirely in the dashboard; no CLI.
    it → **Deploy**.
 2. **Edit code** → replace everything with `cloudflare-worker.js` from this folder → **Deploy**.
 3. **Settings** → **Variables and Secrets**: add `GITHUB_REPO` (text, `owner/repo`),
-   `WORKFLOWS` (text, `pull-training-load.yml` — comma-separate for more), and `GITHUB_TOKEN`
+   `WORKFLOWS` (text, `pull-running-dashboard.yml` — comma-separate for more), and `GITHUB_TOKEN`
    (**Secret**, the token above).
 4. **Settings** → **Triggers** → **Cron Triggers** → add `7 * * * *`.
 5. After the next `:07`, **Logs** shows `… → 204`, and the repository's Actions tab shows the run.

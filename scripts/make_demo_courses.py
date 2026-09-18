@@ -3,7 +3,7 @@
 
 Writes scripts/demo_courses.json: each course as a polyline resampled every ~50 m,
 with a terrain elevation at every point. A demo-data generator (e.g.
-make_demo_training_load.py) cuts short synthetic training-run segments out of these
+make_demo_running_dashboard.py) cuts short synthetic training-run segments out of these
 so a demo run sits somewhere recognisable -- never anyone's actual GPS trace.
 
 Boston (OSM relation 11680552) exists in OpenStreetMap as a route relation
@@ -55,7 +55,7 @@ from datetime import datetime, timezone
 
 import requests
 
-USER_AGENT = "snuggery-training-load demo helper (github.com/mtomasgaard/snuggery-apps-template)"
+USER_AGENT = "snuggery-running-dashboard demo helper (github.com/mtomasgaard/snuggery-apps-template)"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 OSRM_URL = "https://router.project-osrm.org/route/v1/driving/{}"
 ELEVATION_URL = "https://api.opentopodata.org/v1/mapzen"

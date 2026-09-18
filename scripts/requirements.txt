@@ -1,5 +1,5 @@
 # For scripts/garmin_pull.py — the direct pull from Garmin Connect — and for
-# scripts/make_demo_training_load.py --tiles (requests only).
+# scripts/make_demo_running_dashboard.py --tiles (requests only).
 #
 # Floors, not pins, on purpose: Garmin changes its sign-in flow a few times a
 # year and the fix arrives as a new garminconnect release, so a pinned version

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pull everything the Training Load app needs straight from Garmin Connect.
+"""Pull everything the Running Dashboard app needs straight from Garmin Connect.
 
 Runs on a plain cron, no agent involved, and leaves the reasoning (assessment,
 session notes, race forecast, plan) to the optional daily agent routine, which then finds the
@@ -20,7 +20,7 @@ the GARMINTOKENS variable directly. Needs `pip install -r scripts/requirements.t
 What it writes, all through garmin_append.py so the rows are keyed and
 idempotent: activities.json, zones.csv, gear.csv, splits.csv, details.csv,
 laps.csv, weather.csv, zonekm.csv, streams/<id>.csv, maps.json (with the
-street tiles under training-load/data/tiles), garmin_load.csv, sleep.csv, the
+street tiles under running-dashboard/data/tiles), garmin_load.csv, sleep.csv, the
 garminNow block of context.json, intraday.json (heart rate, body battery and
 stress through the last 36 hours, replaced each pull), calendar.json
 (upcoming events, once a day), and pull.json — a receipt with the time and the outcome of every step, which the
@@ -388,8 +388,8 @@ TILE_SOURCES = [
 # OpenStreetMap's tile usage policy asks for a User-Agent that identifies the
 # application and gives a way to reach its operator: put your repository's
 # address here before the first pull.
-TILE_AGENT = "snuggery-training-load/1.0 (personal dashboard; put your own repository URL here)"
-TILES_DIR = os.path.join(os.path.dirname(HERE), "training-load", "data", "tiles")
+TILE_AGENT = "snuggery-running-dashboard/1.0 (personal dashboard; put your own repository URL here)"
+TILES_DIR = os.path.join(os.path.dirname(HERE), "running-dashboard", "data", "tiles")
 TILE_TIMEOUT = 15
 KARTVERKET_EMPTY_TILE_MD5 = "41ad1e3d34ec92311b20acb1a37ccef7"   # the tile Kartverket's cache returns outside its coverage
 _unreachable = set()                                           # tile sources that failed to connect this run
@@ -798,7 +798,7 @@ def git(*args, check=True):
 
 
 def push():
-    git("add", "garmin-raw", "training-load/data")
+    git("add", "garmin-raw", "running-dashboard/data")
     if not git("diff", "--staged", "--quiet", check=False).returncode:
         log("nothing changed — nothing to commit")
         return

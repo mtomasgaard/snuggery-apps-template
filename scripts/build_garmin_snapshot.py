@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Build training-load/data/snapshot.json from the raw Garmin dumps.
+"""Build running-dashboard/data/snapshot.json from the raw Garmin dumps.
 
 scripts/garmin_pull.py pulls what is new from Garmin Connect into garmin-raw/
 (append-only) and then runs this script. Keeping the aggregation here rather than
 in whatever pulled the data means the numbers are reproducible: re-running on
 unchanged raw files produces an identical snapshot apart from `generatedAt`.
 The demo data shipped with the template is built the same way, by
-scripts/make_demo_training_load.py, so it can never drift from this shape.
+scripts/make_demo_running_dashboard.py, so it can never drift from this shape.
 
 The snapshot also carries a top-level `ask` array — flat rows Snuggery's Ask reads
 as a table (see ask_rows below); nothing in the app draws from it.
@@ -34,12 +34,12 @@ Raw inputs (all in garmin-raw/, all append-only):
                     part of the condition-adjusted pace.
   streams/<id>.csv  sec,distM,hr,spdMps,cad,altM,pwr,lat,lon   one row per second,
                     from the same record stream. Downsampled to at most 360
-                    points and written to training-load/data/streams/<id>.json
+                    points and written to running-dashboard/data/streams/<id>.json
                     for the Sessions pane (and embedded under `streams` in the
                     snapshot for the last three weeks of sessions, since the
                     Shortcut replaces only the snapshot), with `lat`/`lon` for the route map
                     (and `map`, the zoom and tile range bundled under
-                    training-load/data/tiles from garmin-raw/maps.json),
+                    running-dashboard/data/tiles from garmin-raw/maps.json),
                     `gap` (grade-adjusted pace, runs
                     with altitude) and `cap` (condition-adjusted pace: grade,
                     wind along the heading and heat, runs with position and
@@ -85,7 +85,7 @@ SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")  # an activity id becomes a file name; n
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "garmin-raw")
-OUT = os.path.join(ROOT, "training-load", "data", "snapshot.json")
+OUT = os.path.join(ROOT, "running-dashboard", "data", "snapshot.json")
 
 # Garmin's activity types collapse to the handful of sports that actually get
 # trained here. Anything unrecognised lands in "other" rather than vanishing.
@@ -509,9 +509,9 @@ def ask_rows(activities, load, sleep, context):
 
 def main(argv=None):
     global RAW, OUT
-    ap = argparse.ArgumentParser(description="Build the Training Load snapshot from a raw Garmin store.")
+    ap = argparse.ArgumentParser(description="Build the Running Dashboard snapshot from a raw Garmin store.")
     ap.add_argument("--raw", default=RAW, help="the raw store to read (default garmin-raw/)")
-    ap.add_argument("--out", default=OUT, help="the snapshot to write (default training-load/data/snapshot.json)")
+    ap.add_argument("--out", default=OUT, help="the snapshot to write (default running-dashboard/data/snapshot.json)")
     args = ap.parse_args(argv)
     RAW, OUT = os.path.abspath(args.raw), os.path.abspath(args.out)
 

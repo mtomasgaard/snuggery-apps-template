@@ -1,4 +1,4 @@
-/* Training Load — Snuggery mini-app.
+/* Running Dashboard — Snuggery mini-app.
  *
  * ---------------------------------------------------------------------------
  * SHAPE OF ./data/snapshot.json
@@ -281,7 +281,7 @@ const hasSplit = (a) => a.runKm != null;
 // Per-device conveniences only: which pane and filters were open last time.
 // The slider position is deliberately not stored — it is an index into a
 // week list that grows every refresh.
-const STORE_KEY = 'training-load.ui.v2';
+const STORE_KEY = 'running-dashboard.ui.v2';
 function recall() {
   try {
     const s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');

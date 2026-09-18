@@ -25,9 +25,9 @@ one, delete both, or ignore them.
 | App | What it is | Try it | Make it yours |
 | --- | --- | --- | --- |
 | **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
-| **Training Load** | Eight panes of running from a Garmin watch: weekly volume, training load, heart-rate zones, sleep and HRV, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — a half-marathon block in progress, its runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/training-load.zip`](zips/training-load.zip) | [`training-load/PROMPT.md`](training-load/PROMPT.md) |
+| **Running Dashboard** | Eight panes of running from a Garmin watch: weekly volume, training load, heart-rate zones, sleep and HRV, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — a half-marathon block in progress, its runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
 
-![Training Load](screenshots/training-load.png)
+![Running Dashboard](screenshots/running-dashboard.png)
 
 Deleting an example is deleting its folder, its workflow in
 `.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
@@ -70,27 +70,27 @@ That is the whole per-app cost. Nothing else changes, ever.
   miniapp.json           display name and entry point
   data/snapshot.json     THE ONLY FILE THAT CHANGES
 scripts/                 one refresh script per app
-garmin-raw/              Training Load's append-only raw store
+garmin-raw/              Running Dashboard's append-only raw store
 .github/workflows/       one refresh workflow per app, plus the ZIP builder
 zips/<app-folder>.zip    built automatically; this is what you install from
 screenshots/             pictures for this README; not zipped, not part of any app
 ```
 
-Both `hello-live/` and `training-load/` are complete working examples. Install
+Both `hello-live/` and `running-dashboard/` are complete working examples. Install
 Hello Live first and run your shortcut against it before building anything
 real — if it updates, your loop works, and any later problem is in the new app
 rather than in the setup. Either folder can be deleted once you no longer need
 it as a reference.
 
 **An app is not always one file.** Hello Live is a single `index.html` with its
-CSS and JS inline. Training Load is `index.html` plus `app.js`, `style.css`,
+CSS and JS inline. Running Dashboard is `index.html` plus `app.js`, `style.css`,
 and a `data/` folder holding a snapshot, six session streams, and about a
 megabyte of map tiles. The ZIP takes the app's folder whole either way — still
 no build step.
 
-`garmin-raw/` is Training Load's raw store, separate from its app folder: the
+`garmin-raw/` is Running Dashboard's raw store, separate from its app folder: the
 files its pull script merges new activity into, plus the four files the
-optional coaching routine writes. Delete it along with `training-load/` if you
+optional coaching routine writes. Delete it along with `running-dashboard/` if you
 remove the app.
 
 ## Conventions worth keeping
@@ -128,7 +128,7 @@ Garmin can change it without notice. The library usually catches up within
 days, and the app's stale-data warning shows the gap in the meantime. You sign
 in with your own account; the session tokens live in your repository's
 `GARMINTOKENS` secret and nowhere else. Nothing passes through anybody else's
-server. See `training-load/PROMPT.md` for setup.
+server. See `running-dashboard/PROMPT.md` for setup.
 
 ## The map under the route
 
@@ -162,15 +162,15 @@ Your own copy fetches its own. The demo's *routes* are another matter: they are
 segments of six famous marathon courses whose shapes were derived from
 OpenStreetMap data, so `scripts/demo_courses.json` and the demo streams made
 from it are published under the ODbL with the attribution in
-`training-load/TILES.md`. Your own pull replaces them with your runs.
+`running-dashboard/TILES.md`. Your own pull replaces them with your runs.
 
-Do not want a basemap? Delete `training-load/data/tiles/` — the route card
+Do not want a basemap? Delete `running-dashboard/data/tiles/` — the route card
 draws the coloured track on its own background, as the demo's Berlin, London
 and Tokyo sessions do.
 
 ## The coaching text is optional, and the refresh does not write it
 
-Training Load's Now, Plan and Sessions panes can show an evaluation, a plan,
+Running Dashboard's Now, Plan and Sessions panes can show an evaluation, a plan,
 race predictions, and per-session notes. Those come from four files in
 `garmin-raw/` — `assessment.json`, `plan.json`, `racecast.json`, `notes.json`
 — written by a separate scheduled agent session, once a day, that reads what
@@ -178,7 +178,7 @@ the pull committed. The pull never writes them. Absent, the panes say so and
 every number still works.
 
 The demo's text is example text, and is labelled as such on screen. The
-shapes are in the header comment of `training-load/app.js`.
+shapes are in the header comment of `running-dashboard/app.js`.
 
 ## Things that will cost you an afternoon if nobody says them
 
@@ -275,6 +275,6 @@ the same run. This table is the cheapest possible defence against that.
 ---
 
 MIT licensed — see [LICENSE](LICENSE). Two exceptions travel with the demo data and are spelled
-out in [TILES.md](training-load/TILES.md): the map tiles under `training-load/data/tiles/` are US
+out in [TILES.md](running-dashboard/TILES.md): the map tiles under `running-dashboard/data/tiles/` are US
 Geological Survey work in the public domain, and the demo's route shapes derive from OpenStreetMap
 under the ODbL. Copy it, change it, ship it.

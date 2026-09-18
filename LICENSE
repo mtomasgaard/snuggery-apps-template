@@ -23,11 +23,11 @@ SOFTWARE.
 ---
 
 Two parts of the demo data are not the authors' to license and are not covered
-by the licence above; both are described in training-load/TILES.md:
+by the licence above; both are described in running-dashboard/TILES.md:
 
-- The map tiles under training-load/data/tiles/ are from USGS The National Map,
+- The map tiles under running-dashboard/data/tiles/ are from USGS The National Map,
   a work of the United States government in the public domain.
 - The route shapes in scripts/demo_courses.json, and the demo session streams
-  derived from them under training-load/data/, are derived from OpenStreetMap
+  derived from them under running-dashboard/data/, are derived from OpenStreetMap
   data, © OpenStreetMap contributors, and are made available under the Open
   Database License (ODbL) 1.0.

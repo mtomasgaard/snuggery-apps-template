@@ -1,7 +1,7 @@
 # Map tiles and routes in this demo
 
 Two parts of the demo data are not ours to license, and the MIT licence at the root of this
-repository does not cover them. Both travel inside `zips/training-load.zip`.
+repository does not cover them. Both travel inside `zips/running-dashboard.zip`.
 
 ## The tiles: USGS The National Map (public domain)
 

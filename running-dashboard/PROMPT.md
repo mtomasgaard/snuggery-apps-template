@@ -1,4 +1,4 @@
-# Setting up Training Load
+# Setting up Running Dashboard
 
 Paste this whole file into a coding-agent session that has this repository open — **your own
 copy**, made with *Use this template*, never the template itself. The agent does the typing; the
@@ -7,7 +7,7 @@ Read it together before starting.
 
 ## What this app is
 
-Training Load is eight panes — Now, Today, Plan, Running, Load, Heart, Recovery, Sessions — built
+Running Dashboard is eight panes — Now, Today, Plan, Running, Load, Heart, Recovery, Sessions — built
 from your Garmin Connect data. The copy you just installed still holds made-up demo data (the app
 says so on screen, in a visible "example text" label). This guide replaces that with your own.
 
@@ -66,12 +66,12 @@ start at someone's front door), resting heart rate, sleep and HRV, and a public 
 history cannot be unpublished.
 
 ```
-gh workflow run pull-training-load.yml --repo "$REPO" -f streams=20
+gh workflow run pull-running-dashboard.yml --repo "$REPO" -f streams=20
 gh run watch
 ```
 
 This run replaces the demo data: it deletes the `demo-*.json` stream files and rewrites
-`training-load/data/snapshot.json` from your own activities. It takes a few minutes — the record
+`running-dashboard/data/snapshot.json` from your own activities. It takes a few minutes — the record
 streams are the slow part. Success is every step reading `ok` (and `"ok": true` at the end) in the
 receipt the last workflow step prints. If a step is not `ok`, stop and report its exact text
 rather than re-running blind.
@@ -83,19 +83,19 @@ on a schedule by itself. Read `scheduler/README.md` and pick a clock — it lays
 what each costs, and what was actually measured. Whichever you choose sends a `POST` to:
 
 ```
-https://api.github.com/repos/OWNER/REPO/actions/workflows/pull-training-load.yml/dispatches
+https://api.github.com/repos/OWNER/REPO/actions/workflows/pull-running-dashboard.yml/dispatches
 ```
 
 with a token scoped to **Actions: Read and write** on this repository only, nothing more.
 
 ## Step 6 — onto the phone
 
-1. Open the raw address of `zips/training-load.zip` in Safari → Share → Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `Training Load`, value the raw address of
-   `training-load/data/snapshot.json`. If the repository is private, the shortcut's fetch needs
+1. Open the raw address of `zips/running-dashboard.zip` in Safari → Share → Snuggery, to install it.
+2. In your loop shortcut's Dictionary, add one row: key `Running Dashboard`, value the raw address of
+   `running-dashboard/data/snapshot.json`. If the repository is private, the shortcut's fetch needs
    headers `Authorization: Bearer <your read token>` and `Accept: application/vnd.github.raw`.
 3. In your rebuild shortcut's Dictionary, add the matching row: `job` =
-   `https://api.github.com/repos/$REPO/actions/workflows/pull-training-load.yml/dispatches`,
+   `https://api.github.com/repos/$REPO/actions/workflows/pull-running-dashboard.yml/dispatches`,
    `data` = the same snapshot address as above.
 
 ## Step 7 — the map and your tile agent
@@ -107,7 +107,7 @@ its coverage and the script falls through to the next. Before your first real pu
 tile usage policy asks for an identifying User-Agent, and a generic one is a bad neighbour to the
 people who run those servers for free.
 
-Tiles only reach your phone when `zips/training-load.zip` is rebuilt (a code change, not a data
+Tiles only reach your phone when `zips/running-dashboard.zip` is rebuilt (a code change, not a data
 pull), so a very recent run may draw its route with no basemap underneath until the next rebuild —
 that is expected, not a bug. If you pull a lot of routes, consider pointing `TILE_SOURCES` at your
 own tile provider instead.
@@ -120,12 +120,12 @@ a race forecast, notes per session. **The pull above never writes these.** They 
 separate, optional daily agent session reads what the pull just pushed and writes them itself —
 that is a different job from this one, and you set it up separately if you want it. Until you do,
 the panes that would show this text say so plainly instead of showing nothing. The shape each file
-should take is documented in the header comment at the top of `training-load/app.js`.
+should take is documented in the header comment at the top of `running-dashboard/app.js`.
 
 ## Do not touch
 
 - The four coaching files above — they belong to the optional daily session, not to this pull.
-- `training-load/app.js`, `style.css`, `index.html` — the app itself. Change the data, not the code.
+- `running-dashboard/app.js`, `style.css`, `index.html` — the app itself. Change the data, not the code.
 - The `GARMINTOKENS` secret's value, once set, except by running Step 3 again.
 
 ## If something fails

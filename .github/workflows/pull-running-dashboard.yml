@@ -1,17 +1,17 @@
-name: Pull Garmin data for Training Load
+name: Pull Garmin data for Running Dashboard
 
 # Pulls what is new from Garmin Connect through scripts/garmin_pull.py,
-# rebuilds training-load/data/snapshot.json, and pushes the result to main.
+# rebuilds running-dashboard/data/snapshot.json, and pushes the result to main.
 #
 # The coaching text (assessment, plan, race forecast, session notes) is NOT
 # written here. That is a separate, optional daily agent session that reads
 # what this workflow pushed and writes garmin-raw/assessment.json, plan.json,
-# racecast.json and notes.json — see training-load/PROMPT.md.
+# racecast.json and notes.json — see running-dashboard/PROMPT.md.
 #
 # Needs one secret, GARMINTOKENS: the one-line output of
 #   python3 scripts/garmin_pull.py --login          (once, on your machine; handles MFA)
 #   python3 scripts/garmin_pull.py --export-tokens   (pipe straight into `gh secret set`)
-# training-load/PROMPT.md walks through this, and everything before and after it,
+# running-dashboard/PROMPT.md walks through this, and everything before and after it,
 # in order, the first time.
 #
 # No schedule here. In the template repository there is no GARMINTOKENS secret,
@@ -35,7 +35,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: pull-training-load
+  group: pull-running-dashboard
   cancel-in-progress: false
 
 jobs:

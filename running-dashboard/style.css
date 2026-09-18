@@ -1,4 +1,4 @@
-/* Training Load — Snuggery mini-app.
+/* Running Dashboard — Snuggery mini-app.
    Every chart colour is declared here once as a token so the light/dark pair
    swaps in one place. Categorical slots 1–8 come from the validated data-viz
    palette; the heart-rate zones deliberately use Garmin Connect's own zone

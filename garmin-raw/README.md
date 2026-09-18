@@ -1,8 +1,8 @@
-# garmin-raw — Training Load's raw store
+# garmin-raw — Running Dashboard's raw store
 
 Append-only. `scripts/garmin_pull.py` merges what it pulls from Garmin Connect into the files
 here (activities, zones, gear, load, sleep, splits, streams, weather, laps, details, intraday),
-and `scripts/build_garmin_snapshot.py` builds `training-load/data/snapshot.json` from them.
+and `scripts/build_garmin_snapshot.py` builds `running-dashboard/data/snapshot.json` from them.
 
 `context.json` is the one file you edit by hand: put **your** heart-rate zones and physiology in
 `athlete` before the first pull (nothing pulls them, and every zone chart depends on them).

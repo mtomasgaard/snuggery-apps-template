@@ -12,7 +12,7 @@
 //
 //   Variables
 //     GITHUB_REPO   OWNER/REPO
-//     WORKFLOWS     pull-training-load.yml        (comma-separated for more)
+//     WORKFLOWS     pull-running-dashboard.yml        (comma-separated for more)
 //   Secrets
 //     GITHUB_TOKEN  a fine-grained token, THIS REPOSITORY ONLY, permission
 //                   "Actions: Write" and nothing else. It cannot read the

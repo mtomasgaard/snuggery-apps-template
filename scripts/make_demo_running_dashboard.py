@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Make the demo data for the Training Load example — nobody's real training.
+"""Make the demo data for the Running Dashboard example — nobody's real training.
 
 Writes a synthetic Garmin raw store (the same files garmin_pull.py writes)
 into a temporary directory and then runs build_garmin_snapshot.py over it, so
@@ -28,12 +28,12 @@ Sessions pane. Each follows a segment of a famous marathon course — Boston,
 Chicago and New York City (with USGS map tiles, public domain), Berlin, London
 and Tokyo (no basemap) — read from scripts/demo_courses.json, which
 make_demo_courses.py derives from OpenStreetMap (ODbL) with bare-earth
-terrain elevations; see training-load/TILES.md. A session runs its segment once, from
+terrain elevations; see running-dashboard/TILES.md. A session runs its segment once, from
 a chosen kilometre of the course. None is a GPS trace of anyone's run.
 
-    python3 scripts/make_demo_training_load.py            # rebuild training-load/data/
-    python3 scripts/make_demo_training_load.py --tiles    # ...and fetch the basemap tiles
-    python3 scripts/make_demo_training_load.py --check    # regenerate to a temp dir; exit 1 on drift
+    python3 scripts/make_demo_running_dashboard.py            # rebuild running-dashboard/data/
+    python3 scripts/make_demo_running_dashboard.py --tiles    # ...and fetch the basemap tiles
+    python3 scripts/make_demo_running_dashboard.py --check    # regenerate to a temp dir; exit 1 on drift
 
 Stdlib only. `requests` is needed only under --tiles and --probe-osm, and only
 because garmin_pull.fetch_tile imports it.
@@ -53,7 +53,7 @@ from datetime import date, datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-APP = "training-load"
+APP = "running-dashboard"
 SEED = 20260918
 COURSES_FILE = os.path.join(HERE, "demo_courses.json")
 

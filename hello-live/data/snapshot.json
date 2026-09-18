@@ -1,33 +1,24 @@
 {
-  "generatedAt": "2026-09-18T10:37:19Z",
-  "headline": "10:37 UTC",
+  "generatedAt": "2026-09-08T12:31:42Z",
+  "headline": "12:31 UTC",
   "caption": "Written by a GitHub Action, copied here by a Shortcut.",
   "runs": [
     {
       "label": "Day of year",
-      "value": "261"
+      "value": "251"
     },
     {
       "label": "Week",
-      "value": "38"
+      "value": "37"
     },
     {
       "label": "Minute of day",
-      "value": "637"
+      "value": "751"
     }
   ],
   "ask": [
-    {
-      "measure": "Day of year",
-      "value": 261
-    },
-    {
-      "measure": "Week",
-      "value": 38
-    },
-    {
-      "measure": "Minute of day",
-      "value": 637
-    }
+    { "measure": "Day of year", "value": 251 },
+    { "measure": "Week", "value": 37 },
+    { "measure": "Minute of day", "value": 751 }
   ]
 }
