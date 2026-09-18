@@ -17,6 +17,24 @@ start private than to remember to switch before the wrong commit.
 
 ---
 
+## What is in here
+
+Two complete apps. Both are examples — neither holds anybody's real data. Copy
+one, delete both, or ignore them.
+
+| App | What it is | Try it | Make it yours |
+| --- | --- | --- | --- |
+| **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
+| **Training Load** | Eight panes of running from a Garmin watch: weekly volume, training load, heart-rate zones, sleep and HRV, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — a half-marathon block in progress, its runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/training-load.zip`](zips/training-load.zip) | [`training-load/PROMPT.md`](training-load/PROMPT.md) |
+
+![Training Load](screenshots/training-load.png)
+
+Deleting an example is deleting its folder, its workflow in
+`.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
+them.
+
+---
+
 ## Setting up: once ever, then once per app
 
 Most of the work happens exactly once. Keeping the two lists apart is the whole
@@ -47,19 +65,33 @@ That is the whole per-app cost. Nothing else changes, ever.
 ## Layout
 
 ```
-<app-folder>/            one folder per app, named however you like
+<app-folder>/            one folder per app, named however you like — may hold several files
   index.html             the whole app: inline CSS and JS, no build step
   miniapp.json           display name and entry point
   data/snapshot.json     THE ONLY FILE THAT CHANGES
 scripts/                 one refresh script per app
+garmin-raw/              Training Load's append-only raw store
 .github/workflows/       one refresh workflow per app, plus the ZIP builder
 zips/<app-folder>.zip    built automatically; this is what you install from
+screenshots/             pictures for this README; not zipped, not part of any app
 ```
 
-`hello-live/` is a complete working example that depends on no external service.
-Install it and run your shortcut against it before building anything real — if it
-updates, your loop works, and any later problem is in the new app rather than in
-the setup.
+Both `hello-live/` and `training-load/` are complete working examples. Install
+Hello Live first and run your shortcut against it before building anything
+real — if it updates, your loop works, and any later problem is in the new app
+rather than in the setup. Either folder can be deleted once you no longer need
+it as a reference.
+
+**An app is not always one file.** Hello Live is a single `index.html` with its
+CSS and JS inline. Training Load is `index.html` plus `app.js`, `style.css`,
+and a `data/` folder holding a snapshot, six session streams, and about a
+megabyte of map tiles. The ZIP takes the app's folder whole either way — still
+no build step.
+
+`garmin-raw/` is Training Load's raw store, separate from its app folder: the
+files its pull script merges new activity into, plus the four files the
+optional coaching routine writes. Delete it along with `training-load/` if you
+remove the app.
 
 ## Conventions worth keeping
 
@@ -70,6 +102,13 @@ the setup.
   created it.
 - **Carry a `generatedAt` timestamp and show it.** A dashboard that cannot tell
   you how old it is will quietly show you last week.
+- **Add a top-level `ask` array — flat rows, plain keys, at most a couple of hundred.**
+  Snuggery's *Ask* reads exactly that key when someone asks a question about the app's
+  data (counts, totals and extremes are worked out by the app, not guessed), and shows
+  `generatedAt` beside the answer as *Data from 13:09*. Without it, a question about the
+  data has only the raw JSON to go on. It is for reading, not for drawing: one row per
+  city with today's numbers, one per activity for the last two months — whatever a person
+  would ask about in words.
 - **Keep `data/snapshot.json` small.** Hundreds of kilobytes is typical, a few megabytes is fine;
   the Shortcut refuses over 32 MB, and a phone parses 20 MB of JSON in seconds on every open.
   Aggregate on the job side — a dashboard shows what a person can read, not everything measured.
@@ -77,7 +116,69 @@ the setup.
   so on screen. Never draw an empty chart as though it were data — a plausible
   blank dashboard is worse than an error, because it gets believed.
 - **Re-read on `visibilitychange`.** Reads are fresh from disk, so this one line
-  is what makes an app opened this morning show this morning's numbers.
+  is what makes an app opened this morning show this morning's numbers. Snuggery fires the
+  same event when new data lands while the app is open — so re-render in place, keeping the
+  selected tab and scroll position, rather than rebuilding the page.
+
+## About the Garmin connection
+
+`scripts/garmin_pull.py` uses the open-source `garminconnect` library, which
+reaches the same web API Garmin's own apps use. It is not an official API —
+Garmin can change it without notice. The library usually catches up within
+days, and the app's stale-data warning shows the gap in the meantime. You sign
+in with your own account; the session tokens live in your repository's
+`GARMINTOKENS` secret and nowhere else. Nothing passes through anybody else's
+server. See `training-load/PROMPT.md` for setup.
+
+## The map under the route
+
+The Sessions pane draws each run over a topographic basemap. The tiles
+travel inside the app's ZIP, so the phone fetches nothing — mini-apps in
+Snuggery cannot reach the network.
+
+`scripts/garmin_pull.py` fetches the tiles once per session, trying three
+sources in order; each answers only inside its own coverage, so a route falls
+through to the first that has it, and the app credits whichever drew:
+
+- **Kartverket** (the Norwegian Mapping Authority), Norway — open data under
+  **CC BY 4.0**, credited "© Kartverket". Its terms add that the detail at
+  zoom 12–20 comes from the Geovekst partnership and may be used as is in a
+  service, while *copying* it needs the rights holders' permission — which is
+  why the demo ships no Kartverket tiles, although your own private copy
+  fetching them for your own runs is exactly the use the terms describe.
+- **USGS The National Map**, the United States — **public domain**, no
+  restrictions; the USGS asks for the acknowledgment the app prints. The
+  demo's tiles come from here, for the three US courses.
+- **OpenStreetMap**, everywhere else — credited "© OpenStreetMap
+  contributors". Under OSM's tile usage policy, put your own repository URL in
+  `TILE_AGENT` (`scripts/garmin_pull.py`) so requests are identifiable, and
+  the script's own limits — at most 300 tiles a run, one run an hour, nothing
+  re-fetched — keep a personal dashboard inside fair use. If you run a lot of
+  routes, point `TILE_SOURCES` at a provider of your own.
+
+**No OpenStreetMap tiles ship in this repository**, deliberately: the OSM tile
+policy covers live fetching, not redistribution inside a downloadable archive.
+Your own copy fetches its own. The demo's *routes* are another matter: they are
+segments of six famous marathon courses whose shapes were derived from
+OpenStreetMap data, so `scripts/demo_courses.json` and the demo streams made
+from it are published under the ODbL with the attribution in
+`training-load/TILES.md`. Your own pull replaces them with your runs.
+
+Do not want a basemap? Delete `training-load/data/tiles/` — the route card
+draws the coloured track on its own background, as the demo's Berlin, London
+and Tokyo sessions do.
+
+## The coaching text is optional, and the refresh does not write it
+
+Training Load's Now, Plan and Sessions panes can show an evaluation, a plan,
+race predictions, and per-session notes. Those come from four files in
+`garmin-raw/` — `assessment.json`, `plan.json`, `racecast.json`, `notes.json`
+— written by a separate scheduled agent session, once a day, that reads what
+the pull committed. The pull never writes them. Absent, the panes say so and
+every number still works.
+
+The demo's text is example text, and is labelled as such on screen. The
+shapes are in the header comment of `training-load/app.js`.
 
 ## Things that will cost you an afternoon if nobody says them
 
@@ -170,3 +271,10 @@ app. Do not put that in the hourly loop — it would replace and restart the app
 
 When it lapses, every app in this repository takes a 404 body over its data on
 the same run. This table is the cheapest possible defence against that.
+
+---
+
+MIT licensed — see [LICENSE](LICENSE). Two exceptions travel with the demo data and are spelled
+out in [TILES.md](training-load/TILES.md): the map tiles under `training-load/data/tiles/` are US
+Geological Survey work in the public domain, and the demo's route shapes derive from OpenStreetMap
+under the ODbL. Copy it, change it, ship it.

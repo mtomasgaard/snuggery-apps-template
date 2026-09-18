@@ -1,0 +1,70 @@
+name: Pull Garmin data for Training Load
+
+# Pulls what is new from Garmin Connect through scripts/garmin_pull.py,
+# rebuilds training-load/data/snapshot.json, and pushes the result to main.
+#
+# The coaching text (assessment, plan, race forecast, session notes) is NOT
+# written here. That is a separate, optional daily agent session that reads
+# what this workflow pushed and writes garmin-raw/assessment.json, plan.json,
+# racecast.json and notes.json — see training-load/PROMPT.md.
+#
+# Needs one secret, GARMINTOKENS: the one-line output of
+#   python3 scripts/garmin_pull.py --login          (once, on your machine; handles MFA)
+#   python3 scripts/garmin_pull.py --export-tokens   (pipe straight into `gh secret set`)
+# training-load/PROMPT.md walks through this, and everything before and after it,
+# in order, the first time.
+#
+# No schedule here. In the template repository there is no GARMINTOKENS secret,
+# so a schedule would fail every hour and mail you about it; and GitHub's cron
+# was measured at 5 of 24 slots (scheduler/README.md). In your copy, point an
+# external clock at this workflow's dispatches endpoint — both recipes are in
+# scheduler/README.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      streams:
+        description: 'record streams to pull this run (newest first)'
+        default: '4'
+      full:
+        description: 're-pull the full two-week load and sleep window'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pull-training-load
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install the Garmin client
+        run: pip install -q -r scripts/requirements.txt
+
+      - name: Pull, rebuild, push
+        env:
+          GARMINTOKENS: ${{ secrets.GARMINTOKENS }}
+          # Inputs reach the shell through the environment, never spliced into
+          # the command line, so a crafted input cannot become a command.
+          STREAMS: ${{ github.event.inputs.streams || '4' }}
+          FULL: ${{ github.event.inputs.full }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 scripts/garmin_pull.py --push --streams "$STREAMS" \
+            $([ "$FULL" = "true" ] && echo --full)
+
+      - name: Show the receipt
+        if: always()
+        run: cat garmin-raw/pull.json || true

@@ -15,6 +15,7 @@ on:
       - '!*/data/**'
       - '!.github/**'
       - '!scripts/**'
+      - '!garmin-raw/**'             # the Garmin pull commits here hourly; that is data, not app code
       - '!zips/**'
       - '!README.md'
   workflow_dispatch:

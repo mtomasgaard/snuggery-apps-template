@@ -1,0 +1,12 @@
+# For scripts/garmin_pull.py — the direct pull from Garmin Connect — and for
+# scripts/make_demo_training_load.py --tiles (requests only).
+#
+# Floors, not pins, on purpose: Garmin changes its sign-in flow a few times a
+# year and the fix arrives as a new garminconnect release, so a pinned version
+# would keep failing until someone edited this file. The trade is that every
+# pull installs whatever is newest, in a job holding a live Garmin session. If
+# you would rather review updates before they run, pin each line with == and
+# let Dependabot open the bumps.
+garminconnect>=0.3
+fitdecode>=0.10
+requests>=2.31

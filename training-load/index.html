@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Training Load</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- One sticky block: title, pane tabs and the filters lock together, so the
+     filters can never slide under the tabs on the way to being pinned. -->
+<header class="topbar">
+  <div class="titles">
+    <h1>Training Load</h1>
+    <p class="stamp" id="stamp">Loading…</p>
+  </div>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Panes"></nav>
+
+  <div class="filters" id="filters" hidden>
+    <div class="frow" id="timeRow">
+      <div class="presets" id="presets" role="group" aria-label="Time range presets"></div>
+      <span class="range-label"><b id="fromLabel">—</b> – <b id="toLabel">—</b></span>
+    </div>
+    <div class="dual" id="dual">
+      <div class="dual-track"><div class="dual-fill" id="dualFill"></div></div>
+      <input type="range" id="fromRange" min="0" max="1" value="0" step="1" aria-label="Start of window">
+      <input type="range" id="toRange" min="0" max="1" value="1" step="1" aria-label="End of window">
+    </div>
+    <div class="picks" id="picksRow">
+      <select class="pick" id="sportSelect" aria-label="Activity type"></select>
+      <select class="pick" id="gearSelect" aria-label="Equipment"></select>
+    </div>
+  </div>
+</header>
+
+<main id="main" aria-live="polite"></main>
+
+<footer class="foot">
+  <p>Running distance, pace and heart rate use the watch's run/walk detection, so walk breaks inside a session are not counted as running. Heart-rate zone load is computed in this app from time in zone (Edwards TRIMP: minutes in Z1–Z5 weighted&nbsp;1–5). Garmin's own acute/chronic load is shown separately on the Load pane and only exists from the day Garmin started recording it for your account.</p>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

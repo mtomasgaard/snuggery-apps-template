@@ -1,0 +1,22 @@
+# Python
+.venv/
+__pycache__/
+.DS_Store
+
+# Garmin session tokens. They live in ~/.garminconnect or in the GARMINTOKENS
+# repository secret and nowhere else; these patterns catch a stray
+# --export-tokens redirect before it becomes a commit that cannot be
+# un-published.
+.garminconnect/
+garmin_tokens.json
+*token*.json
+.env
+.env.*
+*.pem
+*.key
+
+# The pull's receipt. It changes on every run whether or not any data did, so
+# committing it would put an hourly commit in a repository whose convention is
+# "commit only if it changed". The workflow prints it in its last step; the
+# builder reads it in the same job, so `pulledAt` still lands in the snapshot.
+garmin-raw/pull.json

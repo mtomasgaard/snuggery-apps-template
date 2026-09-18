@@ -28,6 +28,15 @@ OUT.write_text(
                 {"label": "Week", "value": now.strftime("%V")},
                 {"label": "Minute of day", "value": str(now.hour * 60 + now.minute)},
             ],
+            # The table Snuggery reads when someone asks a question about this
+            # app's data: flat rows, plain keys, at most a couple of hundred.
+            # The app draws from the keys above; a question is answered from
+            # this one, counted and totalled by the app, never guessed.
+            "ask": [
+                {"measure": "Day of year", "value": int(now.strftime("%j"))},
+                {"measure": "Week", "value": int(now.strftime("%V"))},
+                {"measure": "Minute of day", "value": now.hour * 60 + now.minute},
+            ],
         },
         indent=2,
     )

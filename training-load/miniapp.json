@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Training Load",
+  "entryPoint": "index.html",
+  "description": "Weekly running volume, training load, heart-rate zones and a coaching evaluation, from Garmin",
+  "version": "1.0"
+}
