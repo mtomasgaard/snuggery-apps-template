@@ -25,7 +25,7 @@ one, delete both, or ignore them.
 | App | What it is | Try it | Make it yours |
 | --- | --- | --- | --- |
 | **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
-| **Running Dashboard** | Eight panes of running from a Garmin watch: weekly volume, training load, heart-rate zones, sleep and HRV, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
+| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
 
 ![Running Dashboard](screenshots/running-dashboard.png)
 
@@ -274,7 +274,8 @@ the same run. This table is the cheapest possible defence against that.
 
 ---
 
-MIT licensed — see [LICENSE](LICENSE). Two exceptions travel with the demo data and are spelled
-out in [TILES.md](running-dashboard/TILES.md): the map tiles under `running-dashboard/data/tiles/` are US
-Geological Survey work in the public domain, and the demo's route shapes derive from OpenStreetMap
-under the ODbL. Copy it, change it, ship it.
+MIT licensed — see [LICENSE](LICENSE). Three things travel with the app under their own terms and
+are spelled out in [TILES.md](running-dashboard/TILES.md): the map tiles under
+`running-dashboard/data/tiles/` are US Geological Survey work in the public domain, the demo's route
+shapes derive from OpenStreetMap under the ODbL, and the Geist typeface in `running-dashboard/fonts/`
+is under the SIL Open Font License. Copy it, change it, ship it.

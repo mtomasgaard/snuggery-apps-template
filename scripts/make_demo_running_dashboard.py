@@ -581,30 +581,101 @@ def daily_series(sessions, end, rng):
     return load_rows, sleep_rows
 
 
+def wellness(sessions, load_rows, sleep_rows, rng):
+    """The Health pane's inputs, shaped by each day's training: one daily
+    wellness summary per day (steps, floors, calories, active and sedentary
+    minutes, intensity minutes, heart-rate floor and ceiling, stress, body
+    battery, blood oxygen, respiration), a weigh-in most Monday mornings, and
+    the days Garmin recomputed the VO2 max estimate (after the harder runs)."""
+    by_day = {}
+    for s in sessions:
+        by_day.setdefault(s.day, []).append(s)
+    stress_of = {r[0]: r[6] for r in sleep_rows}
+    kind_of = {}
+    for s in sessions:
+        monday = s.day - timedelta(days=s.day.weekday())
+        kind_of[monday] = PRE_KIND[s.week + len(PRE_KM)] if s.week < 0 else WEEK_KIND[s.week]
+    daily, weight, vo2 = [], [], []
+    first = date.fromisoformat(load_rows[0][0])
+    kg = 71.8
+    for i, row in enumerate(load_rows):
+        d = date.fromisoformat(row[0])
+        todays = by_day.get(d, [])
+        kind = kind_of.get(d - timedelta(days=d.weekday()), "base")
+        ill = kind == "off"
+        peak = 1.0 if kind in ("peak", "build") else 0.0
+        run_km = sum(s.km for s in todays if s.sport in ("running", "treadmill_running"))
+        walk_km = sum(s.km for s in todays if s.sport in ("walking", "hiking"))
+        run_min = sum(session_minutes(s) for s in todays if s.sport in ("running", "treadmill_running"))
+        walk_min = sum(session_minutes(s) for s in todays if s.sport in ("walking", "hiking"))
+        strength = any(s.sport == "strength_training" for s in todays)
+        z = [0] * 5
+        for s in todays:
+            zs = zone_seconds(s.hr_series)
+            z = [a + b for a, b in zip(z, zs)]
+        steps = int(max(1500, (2800 if ill else 5500) + run_km * 900 + walk_km * 1300 + rng.gauss(0, 800)))
+        goal = 8000
+        floors_up = round(max(0, rng.uniform(4, 14) + run_km * 0.6 + (0 if not ill else -3)), 1)
+        floors_down = round(max(0, floors_up * rng.uniform(0.7, 1.1)), 1)
+        active_kcal = int(run_km * 68 + walk_km * 46 + (190 if strength else 0) + rng.uniform(80, 220) * (0.4 if ill else 1))
+        kcal = int(1650 + active_kcal + rng.gauss(0, 60))
+        active_min = int(run_min + walk_min + (40 if strength else 0) + rng.uniform(25, 70) * (0.5 if ill else 1))
+        sedentary_min = int(max(420, min(800, 720 - active_min * 0.6 + rng.gauss(0, 40))))
+        mod_min, vig_min = int(round((z[1] + z[2]) / 60)), int(round((z[3] + z[4]) / 60))
+        rhr = int(round(ATHLETE["restingHr"] + (6 if ill else 0) + 2 * peak + rng.gauss(0, 1.3)))
+        min_hr = rhr - int(rng.uniform(2, 6))
+        max_hr = max([max(s.hr_series) for s in todays if s.hr_series] + [int(rng.uniform(96, 118))])
+        stress = int(stress_of.get(row[0], 22) + (10 if ill else 0))
+        bb_high = int(max(30, min(100, (78 if ill else 92) - 8 * peak + rng.gauss(0, 6))))
+        bb_low = int(max(5, min(bb_high - 20, (30 if ill else 22) - run_km * 0.8 + rng.gauss(0, 7))))
+        spo2 = round(min(99, max(93, (95.5 if ill else 97.2) + rng.gauss(0, 0.6))), 0)
+        spo2_low = int(spo2 - rng.uniform(2, 5))
+        resp = round((15.5 if ill else 14.0) + rng.gauss(0, 0.5), 1)
+        daily.append([row[0], steps, goal, floors_up, floors_down, kcal, active_kcal, active_min, sedentary_min,
+                      mod_min, vig_min, rhr, min_hr, max_hr, stress, bb_high, bb_low, int(spo2), spo2_low, resp])
+        # A weigh-in most Monday mornings: a slow drift down through the year.
+        if d.weekday() == 0 and rng.random() < 0.85:
+            kg = kg - 0.055 + rng.gauss(0, 0.25) if not ill else kg - 0.3
+            kg = max(68.5, min(72.5, kg))
+            bmi = kg / (ATHLETE["heightCm"] / 100) ** 2
+            fat = 15.4 - (i / max(1, len(load_rows) - 1)) * 1.8 + rng.gauss(0, 0.3)
+            weight.append([row[0], round(kg, 1), round(bmi, 1), round(fat, 1)])
+        # Garmin re-estimates VO2 max after a hard or long outdoor run.
+        if any(s.kind in ("tempo", "intervals", "long", "race", "steady") and s.sport == "running" for s in todays):
+            vo2.append([row[0], round(row[4] + rng.gauss(0, 0.25), 1)])
+    return daily, weight, vo2
+
+
 def intraday(end, rng, morning_run):
     """36 hours of heart rate, body battery and stress ending early this
     afternoon (before generatedAt), with this morning's run in them if there
-    was one; the builder keeps the last 24."""
-    t_end = int(datetime(end.year, end.month, end.day, 13, 0, tzinfo=timezone.utc).timestamp())
+    was one; the builder keeps the last 24. The runner lives on the US East
+    Coast (the courses are Boston, Chicago and New York), so the night is
+    00:00–07:00 Eastern, which is 04:00–11:00 UTC in September."""
+    local = timezone(timedelta(hours=-4))
+    t_end = int(datetime(end.year, end.month, end.day, 13, 0, tzinfo=local).timestamp())
     t0 = t_end - 36 * 3600
     hr, bb, stress = [], [], []
 
+    def hour(t):
+        return datetime.fromtimestamp(t, tz=local).hour
+
     def running(t):
-        d = datetime.fromtimestamp(t, tz=timezone.utc)
+        d = datetime.fromtimestamp(t, tz=local)
         return morning_run and d.date() == end and 6 <= d.hour < 8
     for t in range(t0, t_end + 1, 120):
-        h = datetime.fromtimestamp(t, tz=timezone.utc).hour
+        h = hour(t)
         base = 52 if 0 <= h < 6 else 66
         v = 160 + rng.gauss(0, 12) if running(t) else base + rng.gauss(0, 5)
         hr.append([t, int(round(max(45, min(185, v))))])
     level = 40.0
     for t in range(t0, t_end + 1, 180):
-        h = datetime.fromtimestamp(t, tz=timezone.utc).hour
-        level += (1.1 if 0 <= h < 7 else -0.35) - (2.0 if running(t) else 0)
+        h = hour(t)
+        level += (1.1 if 0 <= h < 7 else -0.25) - (0.5 if running(t) else 0)   # a run costs about 20 over an hour
         level = max(5, min(100, level))
         bb.append([t, int(round(level))])
     for t in range(t0, t_end + 1, 222):
-        h = datetime.fromtimestamp(t, tz=timezone.utc).hour
+        h = hour(t)
         if 0 <= h < 6 and rng.random() < 0.5:
             continue
         stress.append([t, int(round(max(3, min(80, (14 if h < 7 else 26) + rng.gauss(0, 9)))))])
@@ -749,7 +820,11 @@ def coaching(done, planned, today, race, weekly):
     racecast = {
         "updated": iso(today),
         "kind": "full",
-        "basis": {"vo2": ATHLETE["vo2maxRunning"], "weeksOfData": history_weeks, "races": 2},
+        "basis": {"vo2": ATHLETE["vo2maxRunning"], "weeksOfData": history_weeks, "races": 2,
+                  "runKm28": round(sum(s.km for s in done if s.sport in ("running", "treadmill_running") and s.day > today - timedelta(days=28)), 1),
+                  "longestRunKm90": max(s.km for s in done if s.sport == "running" and s.day > today - timedelta(days=90)),
+                  "lastRace": iso(tune_10k.day),
+                  "lastQuality": iso(max(s.day for s in done if s.kind in ("tempo", "intervals")))},
         "anchors": [
             {"date": iso(spring.day), "event": SPRING_RACE[0], "time": hms(t_spring), "pace": pace_str(t_spring / 60 / 10),
              "note": "Flat and windy; the first race after the two weeks off in March."},
@@ -896,6 +971,10 @@ def write_raw(raw, done, planned, today, race, courses, rng, tiles_dir):
         csv.writer(fh).writerows(load_rows)
     with open(os.path.join(raw, "sleep.csv"), "w", newline="") as fh:
         csv.writer(fh).writerows(sleep_rows)
+    daily_rows, weight_rows, vo2_rows = wellness(done, load_rows, sleep_rows, rng)
+    for name, rows in [("daily.csv", daily_rows), ("weight.csv", weight_rows), ("vo2.csv", vo2_rows)]:
+        with open(os.path.join(raw, name), "w", newline="") as fh:
+            csv.writer(fh).writerows(rows)
     with open(os.path.join(raw, "intraday.json"), "w") as fh:
         json.dump(intraday(today, rng, any(s.day == today and s.sport in ("running", "treadmill_running") for s in done)), fh)
     with open(os.path.join(raw, "notes.json"), "w") as fh:
@@ -923,6 +1002,7 @@ def write_raw(raw, done, planned, today, race, courses, rng, tiles_dir):
                           "sleepScore": sleep_rows[-1][1], "recoveryHours": 14, "hrvWeeklyAvg": 63,
                           "hrvFeedback": "BALANCED", "stressHistoryPercent": 22, "sleepHistoryPercent": 82},
             "racePredictions": {"5K": "21:10", "10K": "43:50", "half": "1:36:50", "marathon": "3:25:30"},
+            "fitnessAge": {"age": 34.0, "chronological": 39},
             "lthr": ATHLETE["lthr"],
         },
     }
@@ -1139,7 +1219,7 @@ def generate(out_root, today, race, seed, courses, keep_raw=None, tiles=False, t
     # a pure function of this file and --check can compare whole files.
     with open(snapshot) as fh:
         j = json.load(fh)
-    j["generatedAt"] = f"{iso(today)}T14:20:00Z"
+    j["generatedAt"] = f"{iso(today)}T18:20:00Z"   # 14:20 on the US East Coast, after the 13:00 intraday pull
     with open(snapshot, "w") as fh:
         json.dump(j, fh, separators=(",", ":"))
         fh.write("\n")

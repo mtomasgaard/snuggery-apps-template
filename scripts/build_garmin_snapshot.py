@@ -651,6 +651,46 @@ def main(argv=None):
             )
     sleep.sort(key=lambda r: r["d"])
 
+    # Daily wellness summaries and weigh-ins, for the Health pane.
+    DAILY_KEYS = ["steps", "goal", "up", "down", "kcal", "active", "activeMin", "sedMin", "mod", "vig",
+                  "rhr", "minHr", "maxHr", "stress", "bbHigh", "bbLow", "spo2", "spo2Low", "resp"]
+    daily = []
+    daily_path = os.path.join(RAW, "daily.csv")
+    if os.path.exists(daily_path):
+        with open(daily_path, newline="") as fh:
+            for r in csv.reader(fh):
+                if not r or not r[0].strip():
+                    continue
+                row = {"d": r[0]}
+                for i, k in enumerate(DAILY_KEYS):
+                    v = num(r[i + 1]) if len(r) > i + 1 else None
+                    if v is not None:
+                        row[k] = v
+                daily.append(row)
+    daily.sort(key=lambda r: r["d"])
+    weight = []
+    weight_path = os.path.join(RAW, "weight.csv")
+    if os.path.exists(weight_path):
+        with open(weight_path, newline="") as fh:
+            for r in csv.reader(fh):
+                if not r or not r[0].strip() or len(r) < 2 or num(r[1]) is None:
+                    continue
+                w = {"d": r[0], "kg": num(r[1])}
+                if len(r) > 2 and num(r[2]) is not None:
+                    w["bmi"] = num(r[2])
+                if len(r) > 3 and num(r[3]) is not None:
+                    w["fat"] = num(r[3])
+                weight.append(w)
+    weight.sort(key=lambda r: r["d"])
+    vo2 = []
+    vo2_path = os.path.join(RAW, "vo2.csv")
+    if os.path.exists(vo2_path):
+        with open(vo2_path, newline="") as fh:
+            for r in csv.reader(fh):
+                if r and r[0].strip() and len(r) > 1 and num(r[1]) is not None:
+                    vo2.append({"d": r[0], "v": num(r[1])})
+    vo2.sort(key=lambda r: r["d"])
+
     racecast_path = os.path.join(RAW, "racecast.json")
     racecast = json.load(open(racecast_path)) if os.path.exists(racecast_path) else None
     plan_path = os.path.join(RAW, "plan.json")
@@ -697,6 +737,9 @@ def main(argv=None):
         "activities": activities,
         "garminLoad": load,
         "sleep": sleep,
+        "daily": daily,
+        "weight": weight,
+        "vo2": vo2,
         "ask": ask_rows(activities, load, sleep, context),
         "assessment": assessment,
         "racecast": racecast,
@@ -718,7 +761,7 @@ def main(argv=None):
         f"{sum(1 for a in activities if 'dt' in a)} with detail, {sum(1 for a in activities if 'laps' in a)} with laps, "
         f"{sum(1 for a in activities if 'note' in a)} with notes, "
         f"{len(snapshot['ask'])} ask rows, "
-        f"{len(stream_ids)} with streams, {len(load)} load days, {len(sleep)} sleep nights, "
+        f"{len(stream_ids)} with streams, {len(load)} load days, {len(sleep)} sleep nights, {len(daily)} daily summaries, {len(weight)} weigh-ins, "
         f"assessment={'yes' if assessment else 'MISSING'}"
     )
     return 0

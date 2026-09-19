@@ -74,6 +74,16 @@
  *      "hrv":72,"stress":25}
  *   ],
  *
+ *   "daily": [                            // one wellness summary per day, for Health
+ *     {"d":"2026-09-13","steps":11669,"goal":8000,"up":12.9,"down":14.1,
+ *      "kcal":2125,"active":416,"activeMin":75,"sedMin":719,"mod":14,"vig":0,
+ *      "rhr":49,"minHr":46,"maxHr":147,"stress":26,"bbHigh":69,"bbLow":19,
+ *      "spo2":98,"spo2Low":93,"resp":14.6}   // any key may be missing on a day
+ *   ],
+ *   "weight": [{"d":"2026-09-14","kg":70.2,"bmi":21.7,"fat":14.0}],   // weigh-ins, oldest first
+ *   "vo2": [{"d":"2026-09-16","v":54.3}],   // the days Garmin recomputed the estimate;
+ *                                           // garminLoad[].vo2 is the fallback when absent
+ *
  *   "ask": [                              // flat rows for Snuggery's Ask: never drawn
  *     {"row":"session","date":"2026-09-08","weekday":"Tue","sport":"run","type":"running",
  *      "name":"Easy run","km":9.0,"minutes":51.6,"avgHr":136,"maxHr":152,"pace":"5:44",
@@ -175,12 +185,9 @@ const SHOE_SLOTS = 8; // categorical colour slots in style.css
 // so a control never sits above charts it does not scope.
 const PANE_FILTERS = {
   now: [],
-  today: [],
   plan: [],
-  running: ['time', 'gear'],
-  load: ['time', 'sport'],
-  heart: ['time', 'sport', 'gear'],
-  recovery: ['time'],
+  training: ['time', 'sport', 'gear'],
+  health: ['time'],
   sessions: ['time', 'sport', 'gear'],
 };
 
@@ -192,7 +199,7 @@ const state = {
   to: 0,
   sport: 'all',       // 'all' or one SPORTS key
   gear: 'all',
-  preset: 'all',      // null while the slider is somewhere custom
+  preset: '1y',       // null while the slider is somewhere custom
   tables: new Set(),
   zoneUnit: 'pct',
   scatterBy: 'stroller',
@@ -281,7 +288,7 @@ const hasSplit = (a) => a.runKm != null;
 // Per-device conveniences only: which pane and filters were open last time.
 // The slider position is deliberately not stored — it is an index into a
 // week list that grows every refresh.
-const STORE_KEY = 'running-dashboard.ui.v2';
+const STORE_KEY = 'running-dashboard.ui.v3';  // v3: the default window became one year
 function recall() {
   try {
     const s = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
@@ -474,12 +481,9 @@ function stamp() {
 
 const TABS = [
   ['now', 'Now'],
-  ['today', 'Today'],
   ['plan', 'Plan'],
-  ['running', 'Running'],
-  ['load', 'Load'],
-  ['heart', 'Heart'],
-  ['recovery', 'Recovery'],
+  ['training', 'Training'],
+  ['health', 'Health'],
   ['sessions', 'Sessions'],
 ];
 
@@ -701,6 +705,13 @@ function niceTicks(max, count = 4) {
   }
   return out;
 }
+/** The y-axis caption: a small unit label set above the axis, left-aligned to the plot. */
+function yCaption(svg, text, padL) {
+  if (!text) return;
+  svg.append(Object.assign(svgEl('text', {
+    x: padL, y: 9, 'text-anchor': 'start', fill: 'var(--text-muted)', 'font-size': 9.5, 'font-weight': 560, class: 'ycap',
+  }), { textContent: text }));
+}
 /** Ticks that sit inside an arbitrary [lo, hi] window rather than starting at 0. */
 function ticksIn(lo, hi, count = 4) {
   const step = niceStep(hi - lo, count);
@@ -720,7 +731,7 @@ function columnChart(host, spec) {
     const W = Math.max(260, wrap.clientWidth || host.clientWidth || 320);
     const H = spec.height || 190;
     const padL = spec.padL != null ? spec.padL : 36;
-    const padR = 8, padT = 10, padB = 26;
+    const padR = 8, padT = spec.yLabel ? 20 : 10, padB = 26;
     const iw = W - padL - padR;
     const ih = H - padT - padB;
     const rows = spec.rows;
@@ -771,6 +782,7 @@ function columnChart(host, spec) {
 
     const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' });
     svg.setAttribute('aria-label', spec.aria || 'chart');
+    yCaption(svg, spec.yLabel, padL);
 
     for (const t of ticks) {
       svg.append(svgEl('line', {
@@ -784,10 +796,19 @@ function columnChart(host, spec) {
     }
 
     if (spec.band) {
-      let d = '';
-      for (let i = 0; i < n; i++) d += `${i ? 'L' : 'M'}${(x(i) + bw / 2).toFixed(1)},${y(spec.band.hi[i] ?? 0).toFixed(1)}`;
-      for (let i = n - 1; i >= 0; i--) d += `L${(x(i) + bw / 2).toFixed(1)},${y(spec.band.lo[i] ?? 0).toFixed(1)}`;
-      svg.append(svgEl('path', { d: d + 'Z', fill: spec.band.color, opacity: 0.16 }));
+      // one closed shape per run of days that have both edges; gaps stay empty
+      let d = '', run = [];
+      const flush = () => {
+        if (run.length) {
+          d += run.map((i, k) => `${k ? 'L' : 'M'}${(x(i) + bw / 2).toFixed(1)},${y(spec.band.hi[i]).toFixed(1)}`).join('');
+          for (let k = run.length - 1; k >= 0; k--) d += `L${(x(run[k]) + bw / 2).toFixed(1)},${y(spec.band.lo[run[k]]).toFixed(1)}`;
+          d += 'Z';
+        }
+        run = [];
+      };
+      for (let i = 0; i < n; i++) { if (spec.band.hi[i] == null || spec.band.lo[i] == null) flush(); else run.push(i); }
+      flush();
+      if (d) svg.append(svgEl('path', { d, fill: spec.band.color, opacity: 0.16 }));
     }
 
     if (div) {
@@ -942,7 +963,7 @@ function scatterChart(host, spec) {
   function draw() {
     const W = Math.max(260, wrap.clientWidth || 320);
     const H = spec.height || 220;
-    const padL = 42, padR = 10, padT = 10, padB = 34;
+    const padL = 42, padR = 10, padT = spec.yLabel ? 20 : 10, padB = 34;
     const iw = W - padL - padR, ih = H - padT - padB;
     wrap.querySelectorAll('svg, .empty').forEach((s) => s.remove());
     const pts = spec.points;
@@ -959,6 +980,7 @@ function scatterChart(host, spec) {
 
     const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' });
     svg.setAttribute('aria-label', spec.aria || 'scatter chart');
+    yCaption(svg, spec.yLabel, padL);
 
     for (const t of ticksIn(y0 - yPad, y1 + yPad, 5)) {
       svg.append(svgEl('line', { x1: padL, x2: W - padR, y1: sy(t), y2: sy(t), stroke: 'var(--hairline)', 'stroke-width': 1 }));
@@ -1020,7 +1042,7 @@ function lapChart(host, laps, spec) {
   function draw() {
     const W = Math.max(260, wrap.clientWidth || 320);
     const H = spec.height || 170;
-    const padL = spec.padL != null ? spec.padL : 40, padR = 8, padT = 10, padB = 24;
+    const padL = spec.padL != null ? spec.padL : 40, padR = 8, padT = spec.yLabel ? 20 : 10, padB = 24;
     const iw = W - padL - padR, ih = H - padT - padB;
     wrap.querySelectorAll('svg, .empty').forEach((s) => s.remove());
     const total = laps.reduce((s, l) => s + (l.dur || 0), 0);
@@ -1039,6 +1061,7 @@ function lapChart(host, laps, spec) {
 
     const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' });
     svg.setAttribute('aria-label', spec.aria || 'lap chart');
+    yCaption(svg, spec.yLabel, padL);
     for (const t of ticks) {
       svg.append(svgEl('line', { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: 'var(--hairline)', 'stroke-width': 1 }));
       svg.append(Object.assign(svgEl('text', {
@@ -1175,18 +1198,52 @@ function table(headers, rows) {
 function tile(label, value, note, unit) {
   const t = el('div', 'tile');
   t.append(el('div', 'label', esc(label)));
-  t.append(el('div', 'value', esc(value) + (unit ? ` <small>${esc(unit)}</small>` : '')));
+  // A word (a Garmin status, a verdict) is set smaller than a number so it fits the cell.
+  const wordy = /^[^\d]{7,}/.test(String(value));
+  t.append(el('div', wordy ? 'value word' : 'value', esc(value) + (unit ? ` <small>${esc(unit)}</small>` : '')));
   if (note) t.append(el('div', 'note', esc(note)));
   return t;
 }
 
 /* ------------------------------------------------------------------ panes */
 
+let shownTab = null;
 function render() {
   const main = document.getElementById('main');
+  // A filter or chip re-renders the whole pane; emptying it briefly shortens
+  // the page and the browser clamps the scroll to the top. Keep the reader's
+  // place on a same-pane re-render (tab switches scroll to the top themselves).
+  const samePane = shownTab === state.tab;
+  const keepY = samePane ? window.scrollY : 0;
+  main.style.minHeight = samePane ? `${main.offsetHeight}px` : '';
   main.innerHTML = '';
+  // The entrance animation (style.css) only plays when the pane changes, not
+  // on every chip or filter re-render of the same pane.
+  main.classList.toggle('enter', !samePane);
+  shownTab = state.tab;
   syncFilterVisibility();
-  ({ now: paneNow, today: paneToday, plan: panePlan, running: paneRunning, load: paneLoad, heart: paneHeart, recovery: paneRecovery, sessions: paneSessions }[state.tab])(main);
+  ({ now: paneNow, plan: panePlan, training: paneTraining, health: paneHealth, sessions: paneSessions }[state.tab])(main);
+  if (samePane) {
+    window.scrollTo(0, keepY);
+    main.style.minHeight = '';
+    if (window.scrollY !== keepY) window.scrollTo(0, Math.min(keepY, document.documentElement.scrollHeight - window.innerHeight));
+  }
+}
+
+/** A small heading between the groups of a long pane. */
+function groupHead(main, text) {
+  main.append(el('h2', 'group', esc(text)));
+}
+
+/* --- Training: running volume, load and the heart-rate picture, one pane ---- */
+
+function paneTraining(main) {
+  groupHead(main, 'Running');
+  paneRunning(main);
+  groupHead(main, 'Load');
+  paneLoad(main);
+  groupHead(main, 'Heart');
+  paneHeart(main);
 }
 
 /* --- Now ---------------------------------------------------------------- */
@@ -1228,7 +1285,6 @@ function paneNow(main) {
     main.append(c);
     planPointer(main);
     raceCard(main, gn);
-    vo2Card(main);
     return;
   }
 
@@ -1269,7 +1325,6 @@ function paneNow(main) {
     `Written ${a.updated ? longDate(a.updated) : 'with this snapshot'}, from the full history, and regenerated on every refresh so it moves with the training rather than describing one good week.`));
   main.append(ev);
 
-  vo2Card(main);
 }
 
 const KIND_WORD = { rest: 'rest', easy: 'easy', long: 'long', quality: 'hard', race: 'race', strength: 'strength', done: 'done', missed: 'missed' };
@@ -1383,7 +1438,7 @@ function paneToday(main) {
       height: 200, xMode: 'time', value: (i) => sHr.v[i], color: (i, v) => zoneLineColor(v), width: 1.4,
       yMin: Math.max(35, (it.restingHr || 50) - 10),
       rules: floors.slice(0, 4).map((f, k) => ({ at: f, color: 'var(--hairline-strong)', label: `Z${k + 1}` })),
-      xTicks: hourTicks, aria: 'Heart rate over the last 24 hours',
+      xTicks: hourTicks, aria: 'Heart rate over the last 24 hours', yLabel: 'bpm',
       tip: (i) => `<b>${clock(t0 + sHr.t[i])}</b>${sHr.v[i] != null ? `<br><span class="k">HR</span> ${Math.round(sHr.v[i])} · zone ${zoneOf(sHr.v[i]) || 'below 1'}${todaySmooth ? ' · 10-min mean' : ''}` : ''}`,
     });
   };
@@ -1396,7 +1451,7 @@ function paneToday(main) {
     const sBb = daySeries(bb, t0, 30 * 60);
     streamChart(c2, sBb, {
       height: 150, xMode: 'time', value: (i) => sBb.v[i], color: 'var(--series-3)', area: true, yMin: 0, yMax: 100, width: 1.6,
-      xTicks: hourTicks, aria: 'Body battery over the last 24 hours',
+      xTicks: hourTicks, aria: 'Body battery over the last 24 hours', yLabel: 'body battery, 0–100',
       tip: (i) => `<b>${clock(t0 + sBb.t[i])}</b>${sBb.v[i] != null ? `<br><span class="k">body battery</span> ${sBb.v[i]}` : ''}`,
     });
     main.append(c2);
@@ -1412,7 +1467,7 @@ function paneToday(main) {
       const sSt = todaySmooth ? smoothed(sStRaw, 5) : sStRaw;
       streamChart(area3, sSt, {
         height: 130, xMode: 'time', value: (i) => sSt.v[i], color: (i, v) => (v < 26 ? 'var(--zone-2)' : v < 51 ? 'var(--zone-3)' : v < 76 ? 'var(--zone-4)' : 'var(--zone-5)'), yMin: 0, yMax: 100, width: 1.4,
-        xTicks: hourTicks, aria: 'Stress over the last 24 hours',
+        xTicks: hourTicks, aria: 'Stress over the last 24 hours', yLabel: 'stress, 0–100',
         tip: (i) => `<b>${clock(t0 + sSt.t[i])}</b>${sSt.v[i] != null ? `<br><span class="k">stress</span> ${Math.round(sSt.v[i])}${todaySmooth ? ' · 15-min mean' : ''}` : ''}`,
       });
     };
@@ -1653,6 +1708,7 @@ const isMuscle = () => loadUnit === 'muscle';
 const isSport = () => loadUnit === 'sport';
 const unitWord = () => (loadUnit === 'time' || loadUnit === 'sport' ? 'min' : loadUnit === 'muscle' ? 'kJ/kg' : 'load');
 const unitName = () => UNIT_LONG[loadUnit];
+const unitAxis = (per) => `${loadUnit === 'load' ? 'aerobic load' : unitWord()} per ${per}`;  // y-axis caption for the load charts
 const mixDef = () => (isSport() ? SPORTS : isMuscle() ? MUSCLE_MIX : MIX);
 function unitChips() {
   const chips = el('div', 'chips');
@@ -1765,6 +1821,7 @@ function horizonCard(main, p, today) {
     lines: avgLines(kms, backWeeks.length - 1),
     marks,
     aria: 'Weekly running volume, actual and planned',
+    yLabel: 'km per week',
     tip: (r) => r.h
       ? `<b>Week of ${esc(longDate(r.key))}</b> · planned<br>${fmt0(r.h.km)} km · ${esc(r.h.kind)}${r.h.mix ? ` · ${r.h.mix.map((v, i) => `${fmt0(v)}% ${['easy', 'mod', 'hard'][i]}`).join(', ')}` : ''}${r.h.note ? `<br>${esc(r.h.note)}` : ''}`
       : `<b>Week of ${esc(longDate(r.key))}</b>${r.target != null ? ' · so far' : ''}<br>${fmt1(r.w.km)} km run · ${r.w.runs} run${r.w.runs === 1 ? '' : 's'} · longest ${fmt1(r.w.long)} km${r.w.zk[5] >= 0.05 ? ` · ${fmt1(r.w.zk[5])} km below Z1` : ''}${r.planned ? `<br>target ${esc(String(r.planned.targetKm || ''))}` : ''}`,
@@ -1823,6 +1880,7 @@ function horizonCard(main, p, today) {
     lines: avgLines(loadRows.map((r) => r.total), backWeeks.length - 1),
     marks,
     aria: `Weekly ${unitName()}, actual and planned`,
+    yLabel: unitAxis('week'),
     tip: (r) => r.h
       ? `<b>Week of ${esc(longDate(r.key))}</b> · planned<br>≈ ${fmt0(r.est)} ${unitWord()}: ${fmt0(r.est - (r.gym || 0))} from ${fmt0(r.h.km)} km${r.gym ? ` + ${fmt0(r.gym)} strength` : ''} · ${esc(r.h.kind)}`
       : `<b>Week of ${esc(longDate(r.key))}</b>${r.est != null ? ' · so far' : ''}<br>${fmt0(r.done)} ${unitWord()} · ${r.w.sessions} session${r.w.sessions === 1 ? '' : 's'}${r.w.other > 0 && !isSport() ? ` · ${fmt0(r.w.other)} from other sports` : ''}<br>${MX.map((m, i) => (r.w.load[i] > 0.5 ? `${fmt0(r.w.load[i])} ${isSport() ? m.label.toLowerCase() : isMuscle() ? ['concentric', 'eccentric'][i] : ['easy', 'mod', 'hard'][i]}` : null)).filter(Boolean).join(' · ')}${r.est != null ? `<br>plan ≈ ${fmt0(r.est)}` : ''}`,
@@ -1918,6 +1976,7 @@ function dayChart(main, p, today, mode = 'km') {
     minMax: asLoad ? (loadUnit === 'time' ? 30 : 40) : 5,
     xLabel: (r) => `${DOW[parse(r.key).getUTCDay()]} ${parse(r.key).getUTCDate()}`,
     aria: asLoad ? `${unitName()} per day, planned and done` : 'Kilometres per day by heart-rate zone, planned and run',
+    yLabel: asLoad ? unitAxis('day') : 'km per day',
     tip: (r) => {
       const head = `<b>${esc(DOW[parse(r.key).getUTCDay()])} ${esc(longDate(r.key))}</b>`;
       if (r.acts.length && asLoad) {
@@ -2086,6 +2145,7 @@ function paneRunning(main) {
     lines: [{ values: avg4, color: 'var(--series-2)', label: '4-week average' }],
     tickFmt: (t) => fmt0(t),
     aria: 'Weekly running kilometres with a four-week average line',
+    yLabel: 'km per week',
     tip: (r, i) => `<b>${esc(longDate(r.key))}</b><br>${fmt1(r.runKm)} km run · ${r.runs} session${r.runs === 1 ? '' : 's'}` +
       (r.walkKm > 0.05 ? `<br><span class="k">plus walking</span> ${fmt1(r.walkKm)} km` : '') +
       `<br><span class="k">4-week avg</span> ${fmt1(avg4[i])} km` +
@@ -2117,6 +2177,7 @@ function paneRunning(main) {
     rules: [{ at: 1.5, color: 'var(--serious)', label: '1.5 — spike' }],
     minMax: 2,
     aria: 'Weekly running distance as a ratio of its four-week base',
+    yLabel: 'week ÷ 4-week base',
     tip: (r, i) => `<b>${esc(longDate(r.key))}</b><br>${fmt1(r.runKm)} km on a ${fmt1(avg4[i])} km base` +
       `<br><span class="k">ratio</span> ${ratio[i] == null ? 'no base yet' : fmt1(ratio[i])}` +
       (pctChange[i] == null ? '' : `<br><span class="k">vs last week</span> ${pctChange[i] >= 0 ? '+' : ''}${fmt0(pctChange[i])}%`),
@@ -2141,6 +2202,7 @@ function paneRunning(main) {
     height: 140,
     rows: rows.map((r) => ({ ...r, total: r.runs, seg: [{ v: r.runs, color: 'var(--series-3)' }] })),
     aria: 'Runs per week',
+    yLabel: 'runs per week',
     tip: (r) => `<b>${esc(longDate(r.key))}</b><br>${r.runs} session${r.runs === 1 ? '' : 's'}` +
       `<br><span class="k">with 5 min in Z4+</span> ${r.quality}`,
   });
@@ -2149,6 +2211,7 @@ function paneRunning(main) {
     height: 140,
     rows: rows.map((r) => ({ ...r, total: r.longRun, seg: [{ v: r.longRun, color: 'var(--series-2)' }] })),
     aria: 'Longest run each week',
+    yLabel: 'longest run, km',
     tip: (r) => `<b>${esc(longDate(r.key))}</b><br>longest ${fmt1(r.longRun)} km` +
       (r.runKm > 0 ? `<br><span class="k">share of the week</span> ${fmt0((r.longRun / r.runKm) * 100)}%` : ''),
   });
@@ -2193,6 +2256,7 @@ function paneLoad(main) {
     })),
     lines: [{ values: avg4, color: 'var(--text-primary)' }],
     aria: `Weekly ${unitName()} stacked by sport`,
+    yLabel: unitAxis('week'),
     tip: (r, i) => `<b>${esc(longDate(r.key))}</b><br>${fmt0(val(r))} ${unitWord()} · ${hhmm(r.min)} in total` +
       shown.filter((s) => (bySport(r)[s.key] || 0) > 0).map((s) => `<br><span class="k">${esc(s.label)}</span> ${fmt0(bySport(r)[s.key])}`).join('') +
       `<br><span class="k">4-week avg</span> ${fmt0(avg4[i])}`,
@@ -2215,21 +2279,27 @@ function paneLoad(main) {
   if (gl.length < 2) {
     c2.append(el('div', 'empty', 'Garmin publishes this series only from the day it started recording it for your account. Widen the window to see it.'));
   } else {
+    // every day of the window on the axis, so this chart lines up with the others
+    const byDay = new Map(gl.map((d) => [d.d, d]));
+    const days = dayGrid(start, end);
+    const at = (d, k) => (d ? d[k] : null);
     columnChart(c2, {
       height: 200,
-      rows: gl.map((d) => ({ key: d.d, label: shortDate(d.d), total: 0, seg: [] })),
+      rows: days.map((k) => ({ key: k, label: shortDate(k), total: 0, seg: [] })),
       lines: [
-        { values: gl.map((d) => d.atl), color: 'var(--series-2)' },
-        { values: gl.map((d) => d.ctl), color: 'var(--series-1)' },
+        { values: days.map((k) => at(byDay.get(k), 'atl')), color: 'var(--series-2)' },
+        { values: days.map((k) => at(byDay.get(k), 'ctl')), color: 'var(--series-1)' },
       ],
       band: {
-        lo: gl.map((d) => d.ctl * 0.8),
-        hi: gl.map((d) => d.ctl * 1.5),
+        lo: days.map((k) => (byDay.get(k) ? byDay.get(k).ctl * 0.8 : null)),
+        hi: days.map((k) => (byDay.get(k) ? byDay.get(k).ctl * 1.5 : null)),
         color: 'var(--series-1)',
       },
       aria: 'Garmin acute load against its optimal range',
+      yLabel: 'Garmin load',
       tip: (r, i) => {
-        const d = gl[i];
+        const d = byDay.get(days[i]);
+        if (!d) return `<b>${esc(longDate(days[i]))}</b><br>no Garmin load that day`;
         return `<b>${esc(longDate(d.d))}</b><br><span class="k">acute</span> ${fmt0(d.atl)}` +
           `<br><span class="k">chronic</span> ${fmt0(d.ctl)}` +
           `<br><span class="k">optimal</span> ${fmt0(d.ctl * 0.8)}–${fmt0(d.ctl * 1.5)}` +
@@ -2248,23 +2318,114 @@ function paneLoad(main) {
   }
   main.append(c2);
 
-  // status days
-  const counts = {};
-  for (const d of gl) {
-    const fam = (d.status || 'UNKNOWN').replace(/_\d+$/, '').replace(/_/g, ' ');
-    counts[fam] = (counts[fam] || 0) + 1;
-  }
-  const famRows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  if (famRows.length) {
-    const c3 = card('Days in each Garmin training status',
-      'The same window, counted rather than plotted. Garmin flips status frequently, so the useful reading is which state it spent most of its time in.');
-    const wrap = el('div', 'tableview');
-    wrap.hidden = false;
-    wrap.append(table(['Status', 'Days', 'Share'], famRows.map(([k, v]) =>
-      [k.charAt(0) + k.slice(1).toLowerCase(), String(v), `${fmt0((v / gl.length) * 100)}%`])));
-    c3.append(wrap);
+  // status through time: one strip, a colour per day
+  if (gl.length >= 2) {
+    const c3 = card('Garmin training status through time',
+      'Each day coloured by the status Garmin gave it, over the same window as the chart above. Garmin flips status often, so the useful reading is the colour that dominates a month, not the one it shows this morning.');
+    statusStrip(c3, gl, start, end);
     main.append(c3);
   }
+}
+
+/* Garmin's status families, in the order of its own scale from too little to too much. */
+const STATUS_COLOR = {
+  DETRAINING: { label: 'Detraining', color: 'var(--series-2)' },
+  RECOVERY: { label: 'Recovery', color: 'var(--series-7)' },
+  MAINTAINING: { label: 'Maintaining', color: 'var(--series-1)' },
+  PRODUCTIVE: { label: 'Productive', color: 'var(--zone-3)' },
+  PEAKING: { label: 'Peaking', color: 'var(--series-6)' },
+  UNPRODUCTIVE: { label: 'Unproductive', color: 'var(--zone-4)' },
+  STRAINED: { label: 'Strained', color: 'var(--zone-5)' },
+  OVERREACHING: { label: 'Overreaching', color: 'var(--critical)' },
+  PAUSED: { label: 'Paused', color: 'var(--zone-1)' },
+  NO_STATUS: { label: 'No status', color: 'var(--zone-0)' },
+};
+const statusFamily = (d) => (d.status || 'NO_STATUS').replace(/_\d+$/, '');
+const statusInfo = (fam) => STATUS_COLOR[fam] || { label: fam.charAt(0) + fam.slice(1).toLowerCase().replace(/_/g, ' '), color: 'var(--zone-1)' };
+
+/** One horizontal strip across the window, each day a block of its status colour. */
+function statusStrip(host, gl, start, end) {
+  const wrap = el('div', 'chartwrap');
+  const tip = el('div', 'tip');
+  wrap.append(tip);
+  host.append(wrap);
+  const byDay = new Map(gl.map((d) => [d.d, d]));
+  const t0 = parse(start).getTime();
+  const n = Math.round((parse(end).getTime() - t0) / DAY) + 1;
+  const dayAt = (i) => iso(new Date(t0 + i * DAY));
+
+  function draw() {
+    const W = Math.max(260, wrap.clientWidth || 320);
+    const padL = 8, padR = 8, top = 8, barH = 26, H = top + barH + 26;
+    const iw = W - padL - padR;
+    const x = (i) => padL + (i / n) * iw;
+    wrap.querySelectorAll('svg').forEach((e) => e.remove());
+    const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img', 'aria-label': 'Garmin training status per day' });
+    const clipId = `strip${Math.random().toString(36).slice(2, 8)}`;
+    const defs = svgEl('defs', {});
+    const clip = svgEl('clipPath', { id: clipId });
+    clip.append(svgEl('rect', { x: padL, y: top, width: iw, height: barH, rx: 6, ry: 6 }));
+    defs.append(clip);
+    svg.append(defs);
+    const g = svgEl('g', { 'clip-path': `url(#${clipId})` });
+    g.append(svgEl('rect', { x: padL, y: top, width: iw, height: barH, fill: 'var(--surface-2)' }));
+    // one rect per run of equal status, so the strip stays crisp at any width
+    let i = 0;
+    while (i < n) {
+      const d = byDay.get(dayAt(i));
+      if (!d) { i++; continue; }
+      const fam = statusFamily(d);
+      let j = i + 1;
+      while (j < n && byDay.get(dayAt(j)) && statusFamily(byDay.get(dayAt(j))) === fam) j++;
+      g.append(svgEl('rect', { x: x(i).toFixed(2), y: top, width: (x(j) - x(i)).toFixed(2), height: barH, fill: statusInfo(fam).color }));
+      i = j;
+    }
+    svg.append(g);
+    // month labels, thinned so they never collide
+    let lastPx = -Infinity;
+    for (let k = 0; k < n; k++) {
+      const d = parse(dayAt(k));
+      if (d.getUTCDate() !== 1) continue;
+      const px = x(k);
+      if (px - lastPx < 44 || px > W - padR - 20) continue;
+      svg.append(svgEl('line', { x1: px, x2: px, y1: top + barH, y2: top + barH + 4, stroke: 'var(--hairline-strong)', 'stroke-width': 1 }));
+      svg.append(Object.assign(svgEl('text', { x: px, y: H - 6, 'text-anchor': k === 0 ? 'start' : 'middle', fill: 'var(--text-muted)', 'font-size': 9.5 }), { textContent: shortDate(dayAt(k)).replace(/^\d+ /, '') }));
+      lastPx = px;
+    }
+    const cursor = svgEl('rect', { x: 0, y: top - 3, width: 2, height: barH + 6, fill: 'var(--text-primary)', opacity: 0, rx: 1 });
+    svg.append(cursor);
+    const hit = svgEl('rect', { x: padL, y: 0, width: iw, height: H, fill: 'transparent' });
+    svg.append(hit);
+    wrap.append(svg);
+
+    const move = (ev) => {
+      const box = svg.getBoundingClientRect();
+      const scale = W / box.width;
+      const k = Math.max(0, Math.min(n - 1, Math.floor(((ev.clientX - box.left) * scale - padL) / (iw / n))));
+      const d = byDay.get(dayAt(k));
+      cursor.setAttribute('x', (x(k) + (iw / n) / 2 - 1).toFixed(1));
+      cursor.setAttribute('opacity', 0.8);
+      tip.innerHTML = `<b>${esc(longDate(dayAt(k)))}</b><br>${d ? esc(statusInfo(statusFamily(d)).label) : 'no data'}` +
+        (d ? `<br><span class="k">acute</span> ${fmt0(d.atl)} <span class="k">chronic</span> ${fmt0(d.ctl)}` : '');
+      tip.classList.add('on');
+      const tw = tip.offsetWidth;
+      tip.style.left = Math.max(2, Math.min(box.width - tw - 2, x(k) / scale - tw / 2)) + 'px';
+      tip.style.top = (top + barH + 4) + 'px';
+    };
+    const leave = () => { tip.classList.remove('on'); cursor.setAttribute('opacity', 0); };
+    readout(hit, wrap, move, leave);
+  }
+  draw();
+  new ResizeObserver(() => draw()).observe(wrap);
+
+  // legend with the day count of each status, most common first
+  const counts = {};
+  for (const d of gl) counts[statusFamily(d)] = (counts[statusFamily(d)] || 0) + 1;
+  const order = Object.keys(STATUS_COLOR);
+  host.append(legend(Object.entries(counts)
+    .sort((a, b) => b[1] - a[1] || order.indexOf(a[0]) - order.indexOf(b[0]))
+    .map(([fam, v]) => ({ color: statusInfo(fam).color, label: `${statusInfo(fam).label} · ${v} d` }))));
+  return wrap;
 }
 
 /* --- Heart rate --------------------------------------------------------- */
@@ -2301,6 +2462,7 @@ function paneHeart(main) {
     minMax: state.zoneUnit === 'pct' ? 100 : 0,
     tickFmt: (t) => (state.zoneUnit === 'pct' ? `${fmt0(t)}%` : fmt0(t)),
     aria: 'Weekly time in heart-rate zone',
+    yLabel: state.zoneUnit === 'pct' ? '% of recorded time' : 'min per week',
     tip: (r) => `<b>${esc(longDate(r.key))}</b><br>${hhmm(r._tot / 60)} recorded` +
       ZONES.map((z, i) => `<br><span class="k">${esc(z.label)}</span> ${hhmm(r.z[i] / 60)}` +
         (r._tot ? ` (${fmt0((r.z[i] / r._tot) * 100)}%)` : '')).join(''),
@@ -2353,6 +2515,7 @@ function paneHeart(main) {
   scatterChart(c2, {
     points, height: 230,
     xLabel: 'Average heart rate while running (bpm)',
+    yLabel: 'pace, min/km',
     yFmt: (v) => pace(v),
     xFmt: (v) => fmt0(v),
     aria: 'Scatter of running heart rate against running pace for outdoor runs',
@@ -2400,6 +2563,7 @@ function paneHeart(main) {
       yMin: Math.floor((lo - padv) / 10) * 10,
       yMax: Math.ceil((hi + padv) / 10) * 10,
       aria: 'Monthly aerobic efficiency index',
+      yLabel: 'heartbeats per km, lower is better',
       tip: (r) => `<b>${esc(longDate(r.key)).replace(/^\d+ /, '')}</b><br>index ${fmt0(r.total)}<br><span class="k">from</span> ${r.n} easy run${r.n === 1 ? '' : 's'}`,
     });
     c3.append(legend([
@@ -2458,25 +2622,35 @@ function scatterCategories(runs) {
 // (Garmin publishes it from the day it started recording it for the account) and the whole of it is the
 // context a reader wants next to today's number.
 function vo2Card(main) {
-  const gl = DATA.garminLoad || [];
-  const vo2 = gl.filter((d) => d.vo2 != null);
-  if (vo2.length >= 2) {
-    const c3 = card('VO₂ max estimate', 'Garmin recomputes this after runs and smooths it hard, so it lags real change by weeks. Direction over a month or two is the only part worth reading.');
-    const vals = vo2.map((d) => d.vo2);
-    const lo = Math.min(...vals), hi = Math.max(...vals);
-    columnChart(c3, {
-      height: 165,
-      rows: vo2.map((d) => ({ key: d.d, label: shortDate(d.d), total: 0, seg: [] })),
-      lines: [{ values: vals, color: 'var(--series-1)' }],
-      yMin: Math.floor(lo - 1),
-      yMax: Math.ceil(hi + 1),
-      aria: 'VO2 max estimate over time',
-      tip: (r, i) => `<b>${esc(longDate(vo2[i].d))}</b><br>VO₂ max ${fmt1(vo2[i].vo2)}`,
-    });
-    c3.append(el('p', 'sub', `Whole series, ${longDate(vo2[0].d)} to ${longDate(vo2[vo2.length - 1].d)}: ${fmt1(lo)} to ${fmt1(hi)}. The axis starts below the lowest reading rather than at zero, which is legitimate for a line and would not be for bars.`));
-    tableToggle(c3, 'vo2', () => table(['Date', 'VO₂ max'], vo2.slice().reverse().map((d) => [longDate(d.d), fmt1(d.vo2)])));
-    main.append(c3);
-  }
+  const [start, end] = windowRange();
+  const weekly = windowIsWeekly(start, end);
+  // The history series lists the days Garmin recomputed the estimate; the
+  // daily load series carries a value too and covers the days before the
+  // history was first pulled.
+  const src = (DATA.vo2 && DATA.vo2.length ? DATA.vo2 : (DATA.garminLoad || []).filter((d) => d.vo2 != null).map((d) => ({ d: d.d, v: d.vo2 })))
+    .filter((d) => d.d >= start && d.d <= end);
+  if (src.length < 2) return;
+  const buckets = healthBuckets(src, weekly, start, end);
+  // carried forward between recomputes, as Garmin's own trend chart does
+  let last = null;
+  const measured = buckets.map((b) => (b.days.length ? meanOf(b.days, 'v') : null));
+  const vals = measured.map((v) => { if (v != null) last = v; return last; });
+  const [lo, hi] = minMax(vals);
+  const c3 = card('VO₂ max estimate', 'Garmin recomputes this after runs and smooths it hard, so it lags real change by weeks. Between recomputes the last value is carried forward, as in Garmin Connect. Direction over a month or two is the only part worth reading.');
+  columnChart(c3, {
+    height: 165,
+    rows: buckets.map((b) => ({ key: b.key, label: b.label, total: 0, seg: [] })),
+    lines: [{ values: vals, color: 'var(--series-1)' }],
+    yMin: Math.floor(lo - 1),
+    yMax: Math.ceil(hi + 1),
+    tickFmt: (t) => fmt1(t),
+    aria: 'VO2 max estimate over time',
+    yLabel: 'VO₂ max, ml/kg/min',
+    tip: (r, i) => `<b>${weekly ? `Week of ${esc(longDate(buckets[i].key))}` : esc(longDate(buckets[i].key))}</b><br>${vals[i] == null ? 'no estimate yet' : `VO₂ max ${fmt1(vals[i])}${measured[i] == null ? ' <span class="k">carried forward</span>' : ''}`}`,
+  });
+  c3.append(el('p', 'sub', `${src.length} recomputes, ${longDate(src[0].d)} to ${longDate(src[src.length - 1].d)}: ${fmt1(lo)} to ${fmt1(hi)}. The axis starts below the lowest reading rather than at zero, which is legitimate for a line and would not be for bars.`));
+  tableToggle(c3, 'vo2', () => table(['Date', 'VO₂ max'], src.slice().reverse().map((d) => [longDate(d.d), fmt1(d.v)])));
+  main.append(c3);
 }
 
 function toSec(t) {
@@ -2752,7 +2926,7 @@ function streamChart(host, s, spec) {
   function draw() {
     const W = Math.max(200, wrap.clientWidth || 320);
     const H = spec.height || 150;
-    const padL = mini ? 2 : 40, padR = mini ? 2 : 8, padT = mini ? 3 : 10, padB = mini ? 3 : 22;
+    const padL = mini ? 2 : 40, padR = mini ? 2 : 8, padT = mini ? 3 : spec.yLabel ? 20 : 10, padB = mini ? 3 : 22;
     const iw = W - padL - padR, ih = H - padT - padB;
     wrap.querySelectorAll('svg, .empty').forEach((e) => e.remove());
     const n = s.t.length;
@@ -2774,6 +2948,7 @@ function streamChart(host, s, spec) {
     const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' });
     svg.setAttribute('aria-label', spec.aria || 'session curve');
     if (!mini) {
+      yCaption(svg, spec.yLabel, padL);
       for (const t of ticks) {
         svg.append(svgEl('line', { x1: padL, x2: W - padR, y1: y(t), y2: y(t), stroke: 'var(--hairline)', 'stroke-width': 1 }));
         svg.append(Object.assign(svgEl('text', { x: padL - 5, y: y(t) + 3.5, 'text-anchor': 'end', fill: 'var(--text-muted)', 'font-size': 9.5 }),
@@ -3254,12 +3429,12 @@ function streamCard(a, tilesHost) {
         yMin: Math.max(60, floors[0] - 15),
         rules: [...floors.slice(1).map((f, k) => ({ at: f, color: 'var(--hairline-strong)', label: `Z${k + 2}` })),
           { at: DATA.athlete.lthr, color: 'var(--text-muted)', label: `threshold ${DATA.athlete.lthr}` }],
-        aria: 'Heart rate through the session', tip: tipAt,
+        aria: 'Heart rate through the session', yLabel: 'bpm', tip: tipAt,
       });
       area.append(help('Heart rate, coloured by zone. Dashed lines are the zone floors and the lactate threshold.'));
       if (bike) {
         if (has(s.v)) {
-          streamChart(area, s, { height: 150, xMode: streamX, value: (i) => (s.v ? s.v[i] : null), color: paceColor, yMin: 0, aria: 'Speed through the ride', tip: tipAt });
+          streamChart(area, s, { height: 150, xMode: streamX, value: (i) => (s.v ? s.v[i] : null), color: paceColor, yMin: 0, aria: 'Speed through the ride', yLabel: 'km/h', tip: tipAt });
           area.append(help(`Speed in km/h${paceByZone ? ', coloured by the heart-rate zone at that moment' : ''}. Stops are left as gaps.`));
         }
       } else {
@@ -3268,27 +3443,27 @@ function streamCard(a, tilesHost) {
         const paceCap = a.sport === 'walk' ? 25 : 8.5;
         const paceOf = (arr) => (i) => (arr[i] && arr[i] <= paceCap ? arr[i] : null);
         const zoneNote = paceByZone ? ', coloured by the heart-rate zone at that moment' : '';
-        streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.p), color: paceColor, invert: true, yFmt: pace, aria: 'Pace through the session', tip: tipAt, emptyText: 'No running pace recorded.' });
+        streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.p), color: paceColor, invert: true, yFmt: pace, aria: 'Pace through the session', yLabel: 'min/km, faster is higher', tip: tipAt, emptyText: 'No running pace recorded.' });
         area.append(help(`Pace in min/km, faster is higher${zoneNote}. ${a.sport === 'walk' ? 'Standstills' : 'Walk breaks'} are left as gaps.`));
         if (has(s.gap)) {
-          streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.gap), color: paceColor, invert: true, yFmt: pace, aria: 'Grade-adjusted pace through the session', tip: tipAt });
+          streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.gap), color: paceColor, invert: true, yFmt: pace, aria: 'Grade-adjusted pace through the session', yLabel: 'grade-adjusted min/km', tip: tipAt });
           area.append(help(`Grade-adjusted pace: the flat-ground pace that would cost the same effort, from the slope of the smoothed altitude and the running-cost curve${zoneNote}.`));
         }
         if (has(s.cap)) {
-          streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.cap), color: paceColor, invert: true, yFmt: pace, aria: 'Condition-adjusted pace through the session', tip: tipAt });
+          streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.cap), color: paceColor, invert: true, yFmt: pace, aria: 'Condition-adjusted pace through the session', yLabel: 'condition-adjusted min/km', tip: tipAt });
           area.append(help(`Condition-adjusted pace: the same, then corrected for the wind along your direction of travel (one station reading at the start, ${wxLine(a.wx)}) and the day's heat${zoneNote}. Read it as the flat, still-air, cool-day pace this effort would have bought.`));
         }
       }
       if (has(s.cad)) {
-        streamChart(area, s, { height: 110, xMode: streamX, value: (i) => (s.cad[i] && (bike ? s.v && s.v[i] : s.p[i]) ? s.cad[i] : null), color: 'var(--series-3)', aria: 'Cadence', tip: tipAt });
+        streamChart(area, s, { height: 110, xMode: streamX, value: (i) => (s.cad[i] && (bike ? s.v && s.v[i] : s.p[i]) ? s.cad[i] : null), color: 'var(--series-3)', aria: 'Cadence', yLabel: bike ? 'rpm' : 'steps per minute', tip: tipAt });
         area.append(help(bike ? 'Cadence in rpm, while moving.' : 'Cadence in steps per minute, running only.'));
       }
       if (has(s.pw)) {
-        streamChart(area, s, { height: 120, xMode: streamX, value: (i) => s.pw[i] || null, color: 'var(--series-4)', yMin: 0, aria: 'Power', tip: tipAt });
+        streamChart(area, s, { height: 120, xMode: streamX, value: (i) => s.pw[i] || null, color: 'var(--series-4)', yMin: 0, aria: 'Power', yLabel: 'watts', tip: tipAt });
         area.append(help(bike ? 'Power in watts.' : 'Running power in watts, as the watch estimates it.'));
       }
       if (has(s.alt)) {
-        streamChart(area, s, { height: 100, xMode: streamX, value: (i) => s.alt[i], color: 'var(--series-8)', area: true, aria: 'Elevation', tip: tipAt });
+        streamChart(area, s, { height: 100, xMode: streamX, value: (i) => s.alt[i], color: 'var(--series-8)', area: true, aria: 'Elevation', yLabel: 'metres above sea level', tip: tipAt });
         area.append(help('Elevation, metres.'));
       }
     };
@@ -3332,10 +3507,10 @@ function lapCard(a) {
       color: colorKind,
       tickFmt: isBike ? (t) => fmt0(t) : (t) => pace(t),
       aria: isBike ? 'Speed per lap' : 'Pace per lap',
+      yLabel: isBike ? 'km/h' : 'min/km, taller is slower',
       tip: tipOf,
       emptyText: 'No lap long enough to have a pace.',
     });
-    c.append(el('p', 'sub', isBike ? 'Speed per lap (km/h)' : 'Pace per lap (min/km, taller is slower)'));
   }
   lapChart(c, L, {
     height: 150,
@@ -3343,6 +3518,7 @@ function lapCard(a) {
     color: (l) => (l.hr ? zoneColor(l.hr) : 'var(--surface-2)'),
     rules: [{ at: DATA.athlete.lthr, color: 'var(--text-muted)', label: `threshold ${DATA.athlete.lthr}` }],
     aria: 'Average heart rate per lap',
+    yLabel: 'bpm',
     tip: tipOf,
     emptyText: 'No heart rate on these laps.',
   });
@@ -3386,69 +3562,370 @@ function zoneCard(a) {
   return c;
 }
 
-/* --- Recovery ----------------------------------------------------------- */
+/* --- Health ------------------------------------------------------------- */
 
-function paneRecovery(main) {
+// Every history chart on the pane shares one x axis: each day of the window
+// for windows up to sixteen weeks, each week beyond that (so a two-year window
+// is a hundred bars rather than seven hundred). A bucket with no data leaves a
+// gap rather than moving its neighbours closer together.
+const windowIsWeekly = (start, end) => Math.round((parse(end) - parse(start)) / DAY) + 1 > 112;
+function dayGrid(start, end) {
+  const out = [];
+  for (let t = parse(start).getTime(); t <= parse(end).getTime(); t += DAY) out.push(iso(new Date(t)));
+  return out;
+}
+function healthBuckets(rows, weekly, start, end) {
+  const byKey = new Map();
+  for (const r of rows) {
+    const k = weekly ? mondayOf(r.d) : r.d;
+    if (!byKey.has(k)) byKey.set(k, []);
+    byKey.get(k).push(r);
+  }
+  const out = [];
+  const step = weekly ? 7 * DAY : DAY;
+  for (let t = parse(weekly ? mondayOf(start) : start).getTime(); t <= parse(end).getTime(); t += step) {
+    const k = iso(new Date(t));
+    out.push({ key: k, label: shortDate(k), days: byKey.get(k) || [] });
+  }
+  return out;
+}
+const meanOf = (days, k) => {
+  const v = days.map((d) => d[k]).filter((x) => x != null);
+  return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+};
+const sumOf = (days, k) => {
+  const v = days.map((d) => d[k]).filter((x) => x != null);
+  return v.length ? v.reduce((a, b) => a + b, 0) : null;
+};
+const have = (vals) => vals.filter((v) => v != null).length;
+const minMax = (vals) => { const v = vals.filter((x) => x != null); return [Math.min(...v), Math.max(...v)]; };
+/** Rolling mean over the last n buckets that have a value; null where none do. */
+function rollingSparse(vals, n) {
+  return vals.map((_, i) => {
+    const w = vals.slice(Math.max(0, i - n + 1), i + 1).filter((v) => v != null);
+    return w.length ? w.reduce((a, b) => a + b, 0) / w.length : null;
+  });
+}
+const fmtK = (n) => (n >= 10000 ? `${fmt1(n / 1000)}k` : fmt0(n));
+
+function paneHealth(main) {
+  groupHead(main, 'Today');
+  paneToday(main);
+  groupHead(main, 'Recovery and trends');
   const [start, end] = windowRange();
-  const sleep = (DATA.sleep || []).filter((s) => s.d >= start && s.d <= end);
-  const gl = (DATA.garminLoad || []).filter((d) => d.d >= start && d.d <= end);
+  const daily = (DATA.daily || []).filter((r) => r.d >= start && r.d <= end);
+  const weight = (DATA.weight || []).filter((w) => w.d >= start && w.d <= end);
+  const allWeight = DATA.weight || [];
   const gn = DATA.garminNow || {};
+  const weekly = windowIsWeekly(start, end);
+  const per = weekly ? 'week' : 'day';
+  const avgWord = weekly ? '4-week average' : '7-day average';
+  const smooth = (vals) => rollingSparse(vals, weekly ? 4 : 7);
+  const spanNote = weekly ? 'Each bar is one week, shown as its average day. ' : '';
 
+  // Tiles: Garmin's readiness readouts, the last seven days, and the newest weigh-in.
+  const last7 = (DATA.daily || []).slice(-7);
+  const sleepAll = DATA.sleep || [];
+  const recent = sleepAll.slice(-7);
+  const rd = gn.readiness || {};
   const tiles = el('div', 'tiles');
-  const r = gn.readiness || {};
-  tiles.append(tile('Readiness', fmt0(r.score || 0), (r.level || '').toLowerCase()));
-  tiles.append(tile('HRV, 7-night', fmt0(r.hrvWeeklyAvg || 0), (r.hrvFeedback || '').replace(/_/g, ' ').toLowerCase(), 'ms'));
-  const recent = sleep.slice(-7);
-  tiles.append(tile('Sleep, last 7', recent.length ? fmt1(recent.reduce((s, x) => s + (x.h || 0), 0) / recent.length) : '—',
-    recent.length ? `score ${fmt0(recent.reduce((s, x) => s + (x.score || 0), 0) / recent.length)}` : '', 'h'));
-  tiles.append(tile('Resting HR', fmt0(DATA.athlete.restingHr || 0), `threshold HR ${DATA.athlete.lthr}`, 'bpm'));
+  tiles.append(tile('Readiness', rd.score != null ? fmt0(rd.score) : '—', (rd.level || '').toLowerCase().replace(/_/g, ' ')));
+  tiles.append(tile('Sleep, last 7', recent.length ? fmt1(recent.reduce((t, x) => t + (x.h || 0), 0) / recent.length) : '—',
+    recent.length ? `per night · score ${fmt0(recent.reduce((t, x) => t + (x.score || 0), 0) / recent.length)}` : '', 'h'));
+  tiles.append(tile('HRV, 7-night', rd.hrvWeeklyAvg != null ? fmt0(rd.hrvWeeklyAvg) : '—', (rd.hrvFeedback || '').replace(/_/g, ' ').toLowerCase(), 'ms'));
+  const stepsAvg = meanOf(last7, 'steps');
+  const goalAvg = meanOf(last7, 'goal');
+  const met = last7.filter((d) => d.steps != null && d.goal != null && d.steps >= d.goal).length;
+  tiles.append(tile('Steps, last 7 days', stepsAvg != null ? fmtK(stepsAvg) : '—',
+    stepsAvg != null ? `per day · goal met ${met} of ${last7.length}${goalAvg ? ` (≈ ${fmtK(goalAvg)})` : ''}` : 'no daily summaries yet'));
+  const lastW = allWeight[allWeight.length - 1];
+  const firstW = weight[0];
+  const wNote = lastW
+    ? (firstW && firstW.d !== lastW.d ? `${lastW.kg - firstW.kg >= 0 ? '+' : '−'}${fmt1(Math.abs(lastW.kg - firstW.kg))} kg since ${shortDate(firstW.d)}` : `weighed ${shortDate(lastW.d)}`)
+    : 'no weigh-ins';
+  tiles.append(tile('Weight', lastW ? fmt1(lastW.kg) : '—', wNote, lastW ? 'kg' : undefined));
+  const rhrAvg = meanOf(last7, 'rhr');
+  const fa = gn.fitnessAge;
+  if (fa && fa.age != null) {
+    tiles.append(tile('Fitness age', fmt1(fa.age), `${fa.chronological != null ? `against ${fmt0(fa.chronological)} · ` : ''}resting HR ${rhrAvg != null ? fmt0(rhrAvg) : '—'}`, 'yrs'));
+  } else {
+    const rhrs = last7.map((d) => d.rhr).filter((v) => v != null);
+    tiles.append(tile('Resting HR, 7 days', rhrAvg != null ? fmt0(rhrAvg) : '—',
+      rhrs.length ? `${fmt0(Math.min(...rhrs))}–${fmt0(Math.max(...rhrs))} bpm across the week` : '', 'bpm'));
+  }
   main.append(tiles);
 
-  if (sleep.length >= 2) {
-    const c1 = card('Sleep', 'Hours per night, with the seven-night average on top. Sleep is the cheapest recovery there is and the first thing that quietly disappears when life gets busy.');
-    const hrs = sleep.map((s) => s.h || 0);
-    columnChart(c1, {
-      height: 180,
-      rows: sleep.map((s) => ({ key: s.d, label: shortDate(s.d), total: s.h || 0, seg: [{ v: s.h || 0, color: 'var(--series-1)' }] })),
-      lines: [{ values: rolling(hrs, 7), color: 'var(--series-2)' }],
-      rules: [{ at: 7, color: 'var(--hairline-strong)', label: '7 h' }],
-      tickFmt: (t) => fmt1(t),
-      aria: 'Sleep hours per night',
-      tip: (s, i) => `<b>${esc(longDate(sleep[i].d))}</b><br>${fmt1(sleep[i].h)} h · score ${fmt0(sleep[i].score)}` +
-        `<br><span class="k">deep</span> ${fmt0(sleep[i].deep)}% <span class="k">rem</span> ${fmt0(sleep[i].rem)}%` +
-        (sleep[i].hrv ? `<br><span class="k">overnight HRV</span> ${fmt0(sleep[i].hrv)} ms` : ''),
-    });
-    c1.append(legend([
-      { color: 'var(--series-1)', label: 'Hours slept' },
-      { color: 'var(--series-2)', label: '7-night average', line: true },
-    ]));
-    tableToggle(c1, 'sleep', () => table(['Night', 'Hours', 'Score', 'Deep %', 'REM %', 'HRV'],
-      sleep.slice().reverse().map((s) => [longDate(s.d), fmt1(s.h), fmt0(s.score), fmt0(s.deep), fmt0(s.rem), s.hrv ? fmt0(s.hrv) : '—'])));
-    main.append(c1);
+  // The shared axis and the helpers every chart below uses.
+  const sleep = sleepAll.filter((x) => x.d >= start && x.d <= end);
+  const sb = healthBuckets(sleep, weekly, start, end);
+  const db = healthBuckets(daily, weekly, start, end);
+  const grid = db.map((b) => ({ key: b.key, label: b.label }));
+  const head = (i) => `<b>${weekly ? `Week of ${esc(longDate(grid[i].key))}` : esc(longDate(grid[i].key))}</b>`;
+  const flat = grid.map((g) => ({ ...g, total: 0, seg: [] }));
+  const bars = (vals, color) => grid.map((g, i) => ({ ...g, total: vals[i] || 0, seg: vals[i] == null ? [] : [{ v: vals[i], color }] }));
+  const sVal = (k) => sb.map((b) => (b.days.length ? meanOf(b.days, k) : null));
+  const dVal = (k) => db.map((b) => (b.days.length ? meanOf(b.days, k) : null));
+  const gap = (i) => `${head(i)}<br>no data`;
 
-    const withHrv = sleep.filter((s) => s.hrv);
-    if (withHrv.length >= 3) {
+  // Sleep and overnight HRV come from the sleep record, which has its own history.
+  {
+    const hrs = sVal('h');
+    if (have(hrs) >= 2) {
+      const c1 = card('Sleep', `${spanNote}Hours per night, with the ${weekly ? 'four-week' : 'seven-night'} average on top. Sleep is the cheapest recovery there is and the first thing that quietly disappears when life gets busy.`);
+      columnChart(c1, {
+        height: 180,
+        rows: bars(hrs, 'var(--series-1)'),
+        lines: [{ values: smooth(hrs), color: 'var(--series-2)' }],
+        rules: [{ at: 7, color: 'var(--hairline-strong)', label: '7 h' }],
+        tickFmt: (t) => fmt1(t),
+        aria: 'Sleep hours per night',
+        yLabel: 'hours per night',
+        tip: (r, i) => (hrs[i] == null ? gap(i) : `${head(i)}<br>${fmt1(hrs[i])} h · score ${fmt0(meanOf(sb[i].days, 'score') || 0)}` +
+          `<br><span class="k">deep</span> ${fmt0(meanOf(sb[i].days, 'deep') || 0)}% <span class="k">rem</span> ${fmt0(meanOf(sb[i].days, 'rem') || 0)}%` +
+          (meanOf(sb[i].days, 'hrv') ? `<br><span class="k">overnight HRV</span> ${fmt0(meanOf(sb[i].days, 'hrv'))} ms` : '')),
+      });
+      c1.append(legend([
+        { color: 'var(--series-1)', label: 'Hours slept' },
+        { color: 'var(--series-2)', label: avgWord, line: true },
+      ]));
+      tableToggle(c1, 'sleep', () => table(['Night', 'Hours', 'Score', 'Deep %', 'REM %', 'HRV'],
+        sleep.slice().reverse().map((x) => [longDate(x.d), fmt1(x.h), fmt0(x.score), fmt0(x.deep), fmt0(x.rem), x.hrv ? fmt0(x.hrv) : '—'])));
+      main.append(c1);
+    }
+    const hv = sVal('hrv');
+    if (have(hv) >= 3) {
       const c2 = card('Overnight heart-rate variability',
-        'A single night says almost nothing; a baseline that slides down over a fortnight is the signal worth acting on.');
+        `${spanNote}A single night says almost nothing; a baseline that slides down over a fortnight is the signal worth acting on.`);
+      const sm = smooth(hv);
       columnChart(c2, {
         height: 165,
-        rows: withHrv.map((s) => ({ key: s.d, label: shortDate(s.d), total: s.hrv, seg: [{ v: s.hrv, color: 'var(--series-3)' }] })),
-        lines: [{ values: rolling(withHrv.map((s) => s.hrv), 7), color: 'var(--text-primary)' }],
+        rows: bars(hv, 'var(--series-3)'),
+        lines: [{ values: sm, color: 'var(--text-primary)' }],
         tickFmt: (t) => fmt0(t),
         aria: 'Overnight heart-rate variability',
-        tip: (s, i) => `<b>${esc(longDate(withHrv[i].d))}</b><br>${fmt0(withHrv[i].hrv)} ms` +
-          `<br><span class="k">7-night</span> ${fmt0(rolling(withHrv.map((x) => x.hrv), 7)[i])} ms`,
+        yLabel: 'HRV, ms',
+        tip: (r, i) => (hv[i] == null ? gap(i) : `${head(i)}<br>${fmt0(hv[i])} ms<br><span class="k">${avgWord}</span> ${fmt0(sm[i])} ms`),
       });
       c2.append(legend([
         { color: 'var(--series-3)', label: 'Nightly HRV' },
-        { color: 'var(--text-primary)', label: '7-night average', line: true },
+        { color: 'var(--text-primary)', label: avgWord, line: true },
       ]));
-      tableToggle(c2, 'hrv', () => table(['Night', 'HRV ms'],
-        withHrv.slice().reverse().map((s) => [longDate(s.d), fmt0(s.hrv)])));
       main.append(c2);
     }
   }
 
+  if (daily.length < 2) {
+    const c = card('Daily summaries');
+    c.append(el('p', 'sub', (DATA.daily || []).length
+      ? 'No daily summaries inside this window yet. The hourly data pull fills the history in, sixty days at a time, so widen the window later.'
+      : 'No daily summaries in this snapshot yet. The hourly data pull adds them: the last two days every hour, and sixty days of history per run until the record is complete.'));
+    main.append(c);
+    vo2Card(main);
+    weightCard(main, weight, grid, weekly);
+    return;
+  }
+
+  // Steps
+  {
+    const vals = dVal('steps');
+    const goal = meanOf(daily, 'goal');
+    const c = card('Steps', `${spanNote}Steps per day with the ${avgWord} on top. The dashed line is the watch's own step goal, which it moves with what you have been doing lately, so it is a floor to keep, not a target to chase.`);
+    columnChart(c, {
+      height: 190,
+      rows: bars(vals, 'var(--series-1)'),
+      lines: [{ values: smooth(vals), color: 'var(--series-2)' }],
+      rules: goal ? [{ at: goal, color: 'var(--hairline-strong)', label: `goal ≈ ${fmtK(goal)}` }] : [],
+      tickFmt: (t) => fmtK(t),
+      aria: `Steps per ${per}`,
+      yLabel: 'steps per day',
+      tip: (r, i) => (vals[i] == null ? gap(i) : `${head(i)}<br>${fmt0(vals[i])} steps${weekly ? ' per day' : ''}` +
+        (weekly ? `<br><span class="k">week total</span> ${fmtK(sumOf(db[i].days, 'steps'))} · ${db[i].days.length} days` : `<br><span class="k">goal</span> ${fmt0(db[i].days[0].goal || 0)}`)),
+    });
+    c.append(legend([{ color: 'var(--series-1)', label: `Steps per ${per}` }, { color: 'var(--series-2)', label: avgWord, line: true }]));
+    tableToggle(c, 'steps', () => table([weekly ? 'Week' : 'Day', 'Steps', 'Goal', 'Floors up', 'Active min'],
+      db.filter((b) => b.days.length).reverse().map((b) => [longDate(b.key), fmt0(meanOf(b.days, 'steps') || 0), fmt0(meanOf(b.days, 'goal') || 0), fmt0(meanOf(b.days, 'up') || 0), fmt0(meanOf(b.days, 'activeMin') || 0)])));
+    main.append(c);
+  }
+
+  // Floors
+  {
+    const vals = dVal('up');
+    const c = card('Floors climbed', `${spanNote}Floors ascended per day as the watch counts them from its barometer, one floor being about three metres. Stairs, hills and hikes all land here; a lift does not.`);
+    columnChart(c, {
+      height: 170,
+      rows: bars(vals, 'var(--series-4)'),
+      lines: [{ values: smooth(vals), color: 'var(--text-primary)' }],
+      tickFmt: (t) => fmt0(t),
+      aria: `Floors climbed per ${per}`,
+      yLabel: 'floors up per day',
+      tip: (r, i) => (vals[i] == null ? gap(i) : `${head(i)}<br>${fmt1(vals[i])} floors up${weekly ? ' per day' : ''}<br><span class="k">down</span> ${fmt1(meanOf(db[i].days, 'down') || 0)}`),
+    });
+    c.append(legend([{ color: 'var(--series-4)', label: 'Floors up' }, { color: 'var(--text-primary)', label: avgWord, line: true }]));
+    main.append(c);
+  }
+
+  // Intensity minutes, always per week: that is how the guideline is written.
+  {
+    const wk = healthBuckets(daily, true, start, end);
+    const mod = wk.map((b) => (b.days.length ? sumOf(b.days, 'mod') : null));
+    const vig = wk.map((b) => (b.days.length ? sumOf(b.days, 'vig') : null));
+    const c = card('Intensity minutes', 'Minutes per week in Garmin\'s moderate and vigorous heart-rate bands, counted from all-day heart rate rather than from sessions. The WHO guideline is 150 moderate minutes a week, with a vigorous minute worth two; Garmin\'s own weekly goal counts the same way.');
+    columnChart(c, {
+      height: 180,
+      rows: wk.map((b, i) => ({ key: b.key, label: b.label, total: (mod[i] || 0) + (vig[i] || 0), seg: mod[i] == null ? [] : [{ v: mod[i], color: 'var(--series-3)' }, { v: vig[i] || 0, color: 'var(--series-2)' }] })),
+      rules: [{ at: 150, color: 'var(--hairline-strong)', label: '150 min' }],
+      minMax: 160,
+      tickFmt: (t) => fmt0(t),
+      aria: 'Intensity minutes per week',
+      yLabel: 'min per week',
+      tip: (r, i) => (mod[i] == null ? `<b>Week of ${esc(longDate(wk[i].key))}</b><br>no data` : `<b>Week of ${esc(longDate(wk[i].key))}</b><br>${fmt0(mod[i] + vig[i])} min · ${fmt0(mod[i] + 2 * vig[i])} moderate-equivalent` +
+        `<br><span class="k">moderate</span> ${fmt0(mod[i])} <span class="k">vigorous</span> ${fmt0(vig[i])}`),
+    });
+    c.append(legend([{ color: 'var(--series-3)', label: 'Moderate' }, { color: 'var(--series-2)', label: 'Vigorous' }]));
+    main.append(c);
+  }
+
+  // Resting heart rate
+  {
+    const vals = dVal('rhr');
+    if (have(vals) >= 3) {
+      const [lo, hi] = minMax(vals);
+      const c = card('Resting heart rate', `${spanNote}The watch's overnight resting heart rate, with the ${avgWord}. It drifts down as fitness builds and jumps up a few beats when you are ill, short on sleep or carrying a hard block; a single high morning means little.`);
+      columnChart(c, {
+        height: 170,
+        rows: flat,
+        lines: [{ values: vals, color: 'var(--series-5)' }, { values: smooth(vals), color: 'var(--text-primary)' }],
+        yMin: Math.floor(lo - 2), yMax: Math.ceil(hi + 2),
+        tickFmt: (t) => fmt0(t),
+        aria: 'Resting heart rate per day',
+        yLabel: 'bpm',
+        tip: (r, i) => (vals[i] == null ? gap(i) : `${head(i)}<br>${fmt0(vals[i])} bpm resting` +
+          (weekly ? '' : `<br><span class="k">day range</span> ${fmt0(db[i].days[0].minHr || 0)}–${fmt0(db[i].days[0].maxHr || 0)}`)),
+      });
+      c.append(legend([{ color: 'var(--series-5)', label: 'Resting HR', line: true }, { color: 'var(--text-primary)', label: avgWord, line: true }]));
+      main.append(c);
+    }
+  }
+
+  vo2Card(main);
+
+  // Stress and body battery share a 0–100 scale, so they sit on one chart.
+  {
+    const st = dVal('stress');
+    const lo = dVal('bbLow'), hi = dVal('bbHigh');
+    if (have(st) >= 3 || have(hi) >= 3) {
+      const c = card('Stress and body battery', `${spanNote}Garmin's all-day stress (0–100, from heart-rate variability) as a line, and the day's body-battery range as a band: where it charged to overnight and where it drained to by evening. A band that no longer reaches the top is the earliest sign of not recovering.`);
+      columnChart(c, {
+        height: 190,
+        rows: flat,
+        band: { lo, hi, color: 'var(--series-3)' },
+        lines: [{ values: st, color: 'var(--series-4)' }],
+        yMin: 0, yMax: 100,
+        tickFmt: (t) => fmt0(t),
+        aria: 'Average stress and body-battery range per day',
+        yLabel: '0–100',
+        tip: (r, i) => (st[i] == null && hi[i] == null ? gap(i) : `${head(i)}<br>stress ${fmt0(st[i] || 0)}<br><span class="k">body battery</span> ${fmt0(lo[i] || 0)}–${fmt0(hi[i] || 0)}`),
+      });
+      c.append(legend([{ color: 'var(--series-3)', label: 'Body battery, low to high' }, { color: 'var(--series-4)', label: 'Average stress', line: true }]));
+      main.append(c);
+    }
+  }
+
+  weightCard(main, weight, grid, weekly);
+
+  // Blood oxygen
+  {
+    const vals = dVal('spo2');
+    if (have(vals) >= 3) {
+      const [lo] = minMax(vals);
+      const c = card('Blood oxygen', `${spanNote}Average overnight pulse oximetry. Healthy sleep sits at 95 % and above; the watch reads a little low, so a night or two at 93–94 is noise, a run of them is worth noticing.`);
+      columnChart(c, {
+        height: 150,
+        rows: flat,
+        lines: [{ values: vals, color: 'var(--series-7)' }],
+        rules: [{ at: 95, color: 'var(--hairline-strong)', label: '95 %' }],
+        yMin: Math.min(88, Math.floor(lo - 1)), yMax: 100,
+        tickFmt: (t) => fmt0(t),
+        aria: 'Average blood oxygen per day',
+        yLabel: 'SpO₂, %',
+        tip: (r, i) => (vals[i] == null ? gap(i) : `${head(i)}<br>${fmt0(vals[i])} % average` +
+          (weekly ? '' : `<br><span class="k">lowest</span> ${fmt0(db[i].days[0].spo2Low || 0)} %`)),
+      });
+      main.append(c);
+    }
+  }
+
+  // Active energy
+  {
+    const vals = dVal('active');
+    if (have(vals) >= 2) {
+      const c = card('Active calories', `${spanNote}Calories above the resting metabolism, per day: everything from the walk to the shop to the long run. It is the watch's estimate, good for the shape of the week, not for a food plan.`);
+      columnChart(c, {
+        height: 160,
+        rows: bars(vals, 'var(--series-8)'),
+        lines: [{ values: smooth(vals), color: 'var(--text-primary)' }],
+        tickFmt: (t) => fmt0(t),
+        aria: `Active calories per ${per}`,
+        yLabel: 'kcal per day',
+        tip: (r, i) => (vals[i] == null ? gap(i) : `${head(i)}<br>${fmt0(vals[i])} active kcal${weekly ? ' per day' : ''}` +
+          `<br><span class="k">total</span> ${fmt0(meanOf(db[i].days, 'kcal') || 0)} <span class="k">active time</span> ${hhmm(meanOf(db[i].days, 'activeMin') || 0)}`),
+      });
+      c.append(legend([{ color: 'var(--series-8)', label: 'Active kcal' }, { color: 'var(--text-primary)', label: avgWord, line: true }]));
+      main.append(c);
+    }
+  }
+}
+
+/** Weigh-ins on the shared axis: a line interpolated between measurements, so a
+ *  monthly habit still reads as a trend. With fewer than two in the window, the
+ *  last twelve are shown on their own axis instead, and the card says so. */
+function weightCard(main, weight, grid, weekly) {
+  const all = DATA.weight || [];
+  const inWindow = weight.length >= 2;
+  const rows = inWindow ? weight : all.slice(-12);
+  if (rows.length < 2) return;
+  const kg = rows.map((w) => w.kg);
+  const lo = Math.min(...kg), hi = Math.max(...kg);
+  const c = card('Weight',
+    'Every weigh-in Garmin Connect holds, manual or from a scale, joined by a line. Weight swings a kilo or two with water and glycogen from one day to the next, so read the direction over months, not the last point.');
+  let chartRows, values, tip;
+  if (inWindow) {
+    const ts = rows.map((w) => parse(w.d).getTime());
+    const byKey = new Map(rows.map((w) => [weekly ? mondayOf(w.d) : w.d, w]));
+    values = grid.map((g) => {
+      const t = parse(g.key).getTime() + (weekly ? 3 * DAY : 0);
+      if (t < ts[0] || t > ts[ts.length - 1]) return null;
+      let j = 0;
+      while (j < ts.length - 1 && ts[j + 1] < t) j++;
+      if (j >= ts.length - 1) return kg[ts.length - 1];
+      const f = (t - ts[j]) / (ts[j + 1] - ts[j] || 1);
+      return kg[j] + f * (kg[j + 1] - kg[j]);
+    });
+    chartRows = grid.map((g) => ({ ...g, total: 0, seg: [] }));
+    tip = (r, i) => {
+      const w = byKey.get(grid[i].key);
+      const h = `<b>${weekly ? `Week of ${esc(longDate(grid[i].key))}` : esc(longDate(grid[i].key))}</b>`;
+      if (w) return `${h}<br>${fmt1(w.kg)} kg weighed ${esc(shortDate(w.d))}${w.bmi ? `<br><span class="k">BMI</span> ${fmt1(w.bmi)}` : ''}`;
+      return values[i] == null ? `${h}<br>no weigh-in` : `${h}<br>≈ ${fmt1(values[i])} kg <span class="k">between weigh-ins</span>`;
+    };
+  } else {
+    chartRows = rows.map((w) => ({ key: w.d, label: shortDate(w.d), total: 0, seg: [] }));
+    values = kg;
+    tip = (r, i) => `<b>${esc(longDate(rows[i].d))}</b><br>${fmt1(rows[i].kg)} kg${rows[i].bmi ? `<br><span class="k">BMI</span> ${fmt1(rows[i].bmi)}` : ''}`;
+  }
+  columnChart(c, {
+    height: 170,
+    rows: chartRows,
+    lines: [{ values, color: 'var(--series-6)' }],
+    yMin: Math.floor(lo - 1), yMax: Math.ceil(hi + 1),
+    tickFmt: (t) => fmt1(t),
+    aria: 'Body weight per weigh-in',
+    yLabel: 'kg',
+    tip,
+  });
+  c.append(el('p', 'sub', `${inWindow ? '' : 'Fewer than two weigh-ins in this window, so the last '}${rows.length} weigh-ins, ${shortDate(rows[0].d)} to ${shortDate(rows[rows.length - 1].d)}: ${fmt1(kg[0])} kg to ${fmt1(kg[kg.length - 1])} kg.`));
+  tableToggle(c, 'weight', () => table(['Date', 'kg', 'BMI'], rows.slice().reverse().map((w) => [longDate(w.d), fmt1(w.kg), w.bmi ? fmt1(w.bmi) : '—'])));
+  main.append(c);
 }
 
 load();

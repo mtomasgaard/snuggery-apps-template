@@ -1,7 +1,7 @@
-# Map tiles and routes in this demo
+# Map tiles, routes and the typeface in this demo
 
-Two parts of the demo data are not ours to license, and the MIT licence at the root of this
-repository does not cover them. Both travel inside `zips/running-dashboard.zip`.
+Three parts of the app are not ours to license, and the MIT licence at the root of this
+repository does not cover them. All three travel inside `zips/running-dashboard.zip`.
 
 ## The tiles: USGS The National Map (public domain)
 
@@ -49,3 +49,9 @@ demo streams made from it (`data/streams/demo-*.json` and the `streams` embedded
 under the [Open Database License 1.0](https://opendatacommons.org/licenses/odbl/1-0/). Nothing
 else in this repository is affected, and the first real pull of your own runs replaces every one
 of these files.
+
+## The typeface: Geist (SIL Open Font License)
+
+`fonts/Geist.woff2` is the Geist typeface, © Vercel, under the SIL Open Font License 1.1; the
+licence text is `fonts/LICENSE-Geist.txt` and travels with the file. It may be used, redistributed
+and modified under that licence, and may not be sold on its own.

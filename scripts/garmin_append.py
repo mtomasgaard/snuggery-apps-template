@@ -23,6 +23,11 @@ day you already have is a no-op rather than a duplicate.
     python3 scripts/garmin_append.py gear   < rows.csv     # id,CODE|CODE  or  id,-
     python3 scripts/garmin_append.py load   < rows.csv     # date,atl,ctl,status,vo2
     python3 scripts/garmin_append.py sleep  < rows.csv     # date,score,hours,deep%,rem%,hrv,stress
+    python3 scripts/garmin_append.py daily  < rows.csv     # date,steps,stepGoal,floorsUp,floorsDown,kcal,activeKcal,activeMin,
+                                                           # sedentaryMin,modMin,vigMin,rhr,minHr,maxHr,stressAvg,bbHigh,bbLow,
+                                                           # spo2Avg,spo2Low,respAvg  (one daily wellness summary per day)
+    python3 scripts/garmin_append.py weight < rows.csv     # date,kg,bmi,bodyFat%
+    python3 scripts/garmin_append.py vo2    < rows.csv     # date,vo2max  (days Garmin recomputed the estimate)
     python3 scripts/garmin_append.py splits < rows.csv     # id,runSec,runM,runHr,walkSec,walkM,walkHr,standSec
                                                            # (run/walk detection from get_activity_split_summaries;
                                                            #  outdoor runs only, walkHr blank when no walking)
@@ -56,16 +61,20 @@ SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")  # an activity id becomes a file name; n
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "garmin-raw")
 
-# Sleep and load are rolling windows — the app only ever plots the recent end of
-# them, and an unbounded file makes every refresh push a bigger diff.
-KEEP_SLEEP_NIGHTS = 180
+# Rolling windows: an unbounded file makes every refresh push a bigger diff, and
+# the app's longest window is the history of activities, about two years.
+KEEP_SLEEP_NIGHTS = 900
 KEEP_LOAD_DAYS = 900
+KEEP_DAILY_DAYS = 900
 
 CSV_FILES = {
     "zones": ("zones.csv", 6, None),
     "gear": ("gear.csv", 2, None),
     "load": ("garmin_load.csv", 5, KEEP_LOAD_DAYS),
     "sleep": ("sleep.csv", 7, KEEP_SLEEP_NIGHTS),
+    "daily": ("daily.csv", 20, KEEP_DAILY_DAYS),
+    "weight": ("weight.csv", 4, None),
+    "vo2": ("vo2.csv", 2, None),
     "splits": ("splits.csv", 8, None),
     "details": ("details.csv", 26, None),
     "laps": ("laps.csv", 13, None),
@@ -265,7 +274,7 @@ def missing():
 
     return {
         "activities": len(acts), "newest_activity": acts[-1]["start_time"][:10],
-        "newest_load": newest("load"), "newest_sleep": newest("sleep"),
+        "newest_load": newest("load"), "newest_sleep": newest("sleep"), "newest_daily": newest("daily"),
         "zones": missing_zones, "gear": missing_gear, "splits": missing_splits,
         "details": missing_details, "laps": missing_laps, "zonekm": missing_zonekm,
         "notes": missing_notes, "first_note_day": first_note_day, "weather": missing_weather, "maps": missing_maps,
@@ -282,6 +291,7 @@ def status():
     first_note_day = m["first_note_day"]
     print(f"activities : {acts} stored, newest {newest}")
     print(f"garmin_load: newest {m['newest_load']}")
+    print(f"daily      : newest {m['newest_daily']}")
     print(f"sleep      : newest {m['newest_sleep']}")
     print(f"missing zone rows ({len(missing_zones)}): {' '.join(missing_zones) or '-'}")
     print(f"missing gear rows ({len(missing_gear)}): {' '.join(missing_gear) or '-'}")

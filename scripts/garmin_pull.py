@@ -20,7 +20,7 @@ the GARMINTOKENS variable directly. Needs `pip install -r scripts/requirements.t
 What it writes, all through garmin_append.py so the rows are keyed and
 idempotent: activities.json, zones.csv, gear.csv, splits.csv, details.csv,
 laps.csv, weather.csv, zonekm.csv, streams/<id>.csv, maps.json (with the
-street tiles under running-dashboard/data/tiles), garmin_load.csv, sleep.csv, the
+street tiles under running-dashboard/data/tiles), garmin_load.csv, sleep.csv, daily.csv, weight.csv, vo2.csv, the
 garminNow block of context.json, intraday.json (heart rate, body battery and
 stress through the last 36 hours, replaced each pull), calendar.json
 (upcoming events, once a day), and pull.json — a receipt with the time and the outcome of every step, which the
@@ -54,6 +54,7 @@ import fit_records as fr  # noqa: E402
 LOAD_DAYS = 14          # full rolling window, once a day; the merge is keyed on date
 SLEEP_DAYS = 14
 QUICK_DAYS = 2          # the window on the other hourly runs
+HISTORY_BACKFILL = 60   # every run also fetches this many days of sleep and daily summaries older than what is stored, until the history is complete
 FULL_HOUR_UTC = 5       # the run in this UTC hour (or --full) re-pulls the full window
 STREAMS_PER_RUN = 4     # record streams per run unless --streams says otherwise
 CALENDAR_MONTHS = 7     # this month plus six ahead, for races
@@ -614,10 +615,9 @@ def pull_load(api, today, days):
 
 
 @step("sleep")
-def pull_sleep(api, today, days):
+def pull_sleep(api, ctx, today, days):
     lines = []
-    for back in range(days, -1, -1):
-        d = (today - dt.timedelta(days=back)).isoformat()
+    for d in backfill_days(ctx, "sleep", [(today - dt.timedelta(days=back)).isoformat() for back in range(days, -1, -1)]):
         j = api.get_sleep_data(d) or {}
         s = j.get("dailySleepDTO") or {}
         secs = s.get("sleepTimeSeconds")
@@ -631,6 +631,115 @@ def pull_sleep(api, today, days):
         time.sleep(0.3)
     if lines:
         ga.merge_csv("sleep", "\n".join(lines))
+    return len(lines)
+
+
+def history_start():
+    """The first day the dashboard knows about: the oldest activity's date."""
+    try:
+        acts = json.load(open(os.path.join(RAW, "activities.json")))
+        return min(a["start_time"][:10] for a in acts)
+    except Exception:
+        return (dt.date.today() - dt.timedelta(days=730)).isoformat()
+
+
+def oldest_row(kind):
+    path = os.path.join(RAW, ga.CSV_FILES[kind][0])
+    if not os.path.exists(path):
+        return None
+    rows = ga.read_lines(open(path).read())
+    return min(r[0] for r in rows) if rows else None
+
+
+def backfill_days(ctx, kind, newest_window):
+    """The days to fetch this run: the recent window, plus HISTORY_BACKFILL days
+    older than the oldest day fetched so far. Progress is kept in context.json
+    (not read off the CSV, since days without watch data leave no row and
+    would otherwise be re-asked forever) and stops at the first activity."""
+    floor = history_start()
+    done = (ctx.setdefault("backfill", {})).get(kind) or oldest_row(kind) or newest_window[0]
+    days = list(newest_window)
+    if done > floor:
+        first = max(dt.date.fromisoformat(floor), dt.date.fromisoformat(done) - dt.timedelta(days=HISTORY_BACKFILL))
+        d = first
+        while d.isoformat() < done:
+            days.append(d.isoformat())
+            d += dt.timedelta(days=1)
+        ctx["backfill"][kind] = first.isoformat()
+    return days
+
+
+@step("daily")
+def pull_daily(api, ctx, today, days):
+    """One daily wellness summary per day: steps, floors, calories, active and
+    sedentary time, intensity minutes, heart-rate floor and ceiling, stress,
+    body battery, blood oxygen and respiration. The last `days` days are
+    refreshed (a day keeps filling in until midnight), and each run also
+    reaches HISTORY_BACKFILL days further back than the oldest day fetched, so
+    the history completes itself over a day or two of hourly runs."""
+    wanted = backfill_days(ctx, "daily", [(today - dt.timedelta(days=back)).isoformat() for back in range(days, -1, -1)])
+    lines = []
+    for d in wanted:
+        j = api.get_stats(d) or {}
+        if j.get("totalSteps") is None and j.get("restingHeartRate") is None:
+            continue  # no watch data that day
+        active_min = (float(j.get("activeSeconds") or 0) + float(j.get("highlyActiveSeconds") or 0)) / 60
+        lines.append(csv_line(
+            d, num(j.get("totalSteps"), 0), num(j.get("dailyStepGoal"), 0),
+            num(j.get("floorsAscended"), 1), num(j.get("floorsDescended"), 1),
+            num(j.get("totalKilocalories"), 0), num(j.get("activeKilocalories"), 0),
+            num(active_min, 0), num(float(j.get("sedentarySeconds") or 0) / 60, 0),
+            num(j.get("moderateIntensityMinutes"), 0), num(j.get("vigorousIntensityMinutes"), 0),
+            num(j.get("restingHeartRate"), 0), num(j.get("minHeartRate"), 0), num(j.get("maxHeartRate"), 0),
+            num(j.get("averageStressLevel"), 0),
+            num(j.get("bodyBatteryHighestValue"), 0), num(j.get("bodyBatteryLowestValue"), 0),
+            num(j.get("averageSpo2"), 0), num(j.get("lowestSpo2"), 0),
+            num(j.get("avgWakingRespirationValue"), 0),
+        ))
+        time.sleep(0.3)
+    if lines:
+        ga.merge_csv("daily", "\n".join(lines))
+    return len(lines)
+
+
+@step("vo2")
+def pull_vo2(api, today, full):
+    """VO₂ max history from the max-metrics endpoint, which takes a date range:
+    the last two months each hour, the whole history on the daily full run,
+    in 90-day pieces. Garmin only lists the days it recomputed the estimate."""
+    start = dt.date.fromisoformat(history_start()) if full else today - dt.timedelta(days=60)
+    lines = []
+    s = start
+    while s <= today:
+        e = min(s + dt.timedelta(days=89), today)
+        j = api.connectapi(f"/metrics-service/metrics/maxmet/daily/{s.isoformat()}/{e.isoformat()}") or []
+        if isinstance(j, dict):
+            j = [j]
+        for it in j:
+            g = (it.get("generic") if isinstance(it, dict) else None) or {}
+            d, v = g.get("calendarDate"), g.get("vo2MaxPreciseValue") or g.get("vo2MaxValue")
+            if d and v:
+                lines.append(csv_line(d[:10], num(v, 1)))
+        s = e + dt.timedelta(days=1)
+        time.sleep(0.3)
+    if lines:
+        ga.merge_csv("vo2", "\n".join(lines))
+    return len(lines)
+
+
+@step("weight")
+def pull_weight(api, today, full):
+    """Weigh-ins (manual or from a scale) as one range call: the whole history
+    on the daily full run, the last two months otherwise."""
+    start = history_start() if full else (today - dt.timedelta(days=60)).isoformat()
+    j = api.get_body_composition(start, today.isoformat()) or {}
+    lines = []
+    for w in j.get("dateWeightList") or []:
+        if not w.get("weight"):
+            continue
+        lines.append(csv_line(w.get("calendarDate"), num(float(w["weight"]) / 1000, 1), num(w.get("bmi"), 1), num(w.get("bodyFat"), 1)))
+    if lines:
+        ga.merge_csv("weight", "\n".join(lines))
     return len(lines)
 
 
@@ -684,6 +793,12 @@ def pull_now(api, ctx, today):
             "5K": hms(preds.get("time5K")), "10K": hms(preds.get("time10K")),
             "half": hms(preds.get("timeHalfMarathon")), "marathon": hms(preds.get("timeMarathon")),
         }
+    try:
+        fa = api.get_fitnessage_data(d) or {}
+        if fa.get("fitnessAge") is not None:
+            g["fitnessAge"] = {"age": fa.get("fitnessAge"), "chronological": fa.get("chronologicalAge"), "achievable": fa.get("achievableFitnessAge")}
+    except Exception as err:
+        report["warnings"].append(f"fitness age: {err}")
     try:
         lt = api.get_lactate_threshold() or {}
 
@@ -809,22 +924,74 @@ def push():
             log("pushed to main")
             return
         time.sleep(2 ** i)
-        if git("pull", "--rebase", "-X", "theirs", "origin", "main", check=False).returncode != 0:
-            git("rebase", "--abort", check=False)
-            raise RuntimeError("push rejected and the rebase failed; left the commit local")
+        remerge(stamp)
     raise RuntimeError("push failed four times")
 
 
+def remerge(stamp):
+    """Another run pushed first (the hourly run and a manual one overlapped).
+    Merge main into our commit and settle every conflicted data file by
+    content: row-keyed files take the union of both sides, context keeps our
+    readouts but the furthest backfill, and the snapshot is rebuilt. A plain
+    rebase with one side winning threw away the other run's rows."""
+    git("fetch", "-q", "origin", "main")
+    git("merge", "--no-commit", "--no-ff", "origin/main", check=False)
+    conflicted = git("diff", "--name-only", "--diff-filter=U").stdout.split()
+    csv_kinds = {os.path.join("garmin-raw", name): kind for kind, (name, _, _) in ga.CSV_FILES.items()}
+    for path in conflicted:
+        ours = git("show", f"HEAD:{path}", check=False).stdout
+        theirs = git("show", f"origin/main:{path}", check=False).stdout
+        full = os.path.join(ROOT, path)
+        if path in csv_kinds:
+            with open(full, "w") as fh:
+                fh.write(theirs)
+            ga.merge_csv(csv_kinds[path], ours)
+        elif path == "garmin-raw/activities.json":
+            with open(full, "w") as fh:
+                fh.write(theirs)
+            ga.merge_activities(ours)
+        elif path == "garmin-raw/context.json":
+            mine, other = json.loads(ours), json.loads(theirs)
+            merged = dict(other)
+            merged.update(mine)
+            back = dict(other.get("backfill") or {})
+            for k, v in (mine.get("backfill") or {}).items():
+                back[k] = min(v, back[k]) if k in back else v
+            if back:
+                merged["backfill"] = back
+            with open(full, "w") as fh:
+                json.dump(merged, fh, indent=2, ensure_ascii=False)
+                fh.write("\n")
+        elif path == "garmin-raw/maps.json":
+            mine, other = json.loads(ours), json.loads(theirs)
+            merged = dict(other)
+            merged.update({k: v for k, v in mine.items() if k != "_tiles"})
+            merged["_tiles"] = sorted(set(other.get("_tiles") or []) | set(mine.get("_tiles") or []))
+            with open(full, "w") as fh:
+                json.dump(merged, fh, indent=1)
+                fh.write("\n")
+        else:
+            git("checkout", "--ours", "--", path)  # this run's copy: the receipt, intraday, the snapshot (rebuilt below)
+        git("add", "--", path)
+    build()
+    git("add", "garmin-raw", "running-dashboard/data")
+    git("commit", "-q", "--no-edit", "-m", f"training: data pull {stamp}, merged with a concurrent run", check=False)
+    log(f"merged with a concurrent run ({len(conflicted)} files settled by content)")
+
+
 def main():
+    global HISTORY_BACKFILL
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--login", action="store_true", help="interactive first sign-in (handles MFA) and store the tokens")
     ap.add_argument("--export-tokens", action="store_true", help="print the stored tokens as one line, to paste into a GARMINTOKENS secret")
     ap.add_argument("--push", action="store_true", help="commit garmin-raw and the snapshot and push to main")
     ap.add_argument("--streams", type=int, default=STREAMS_PER_RUN, help="record streams to pull this run (newest first)")
     ap.add_argument("--full", action="store_true", help="re-pull the full two-week load and sleep window (otherwise only in the %d:00 UTC hour)" % FULL_HOUR_UTC)
+    ap.add_argument("--backfill", type=int, default=HISTORY_BACKFILL, help="days of sleep and daily-summary history to add this run, older than what is stored (default %d; a one-off of a few hundred completes the history in one run)" % HISTORY_BACKFILL)
     ap.add_argument("--no-build", action="store_true")
     args = ap.parse_args()
 
+    HISTORY_BACKFILL = max(0, args.backfill)
     api = connect(interactive=args.login)
     if args.login:
         log("login stored; run again without --login to pull, or --export-tokens for a GitHub secret")
@@ -853,7 +1020,10 @@ def main():
     full = args.full or dt.datetime.now(dt.timezone.utc).hour == FULL_HOUR_UTC
     report["window"] = "full" if full else "quick"
     pull_load(api, today, LOAD_DAYS if full else QUICK_DAYS)
-    pull_sleep(api, today, SLEEP_DAYS if full else QUICK_DAYS)
+    pull_sleep(api, ctx, today, SLEEP_DAYS if full else QUICK_DAYS)
+    pull_daily(api, ctx, today, LOAD_DAYS if full else QUICK_DAYS)
+    pull_weight(api, today, full)
+    pull_vo2(api, today, full)
     pull_now(api, ctx, today)
     pull_intraday(api, today)
     if full or not os.path.exists(os.path.join(RAW, "calendar.json")):

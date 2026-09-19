@@ -30,6 +30,9 @@ on:
         description: 're-pull the full two-week load and sleep window'
         type: boolean
         default: false
+      backfill:
+        description: 'days of sleep and daily-summary history to add this run (default 60)'
+        default: '60'
 
 permissions:
   contents: write
@@ -58,11 +61,12 @@ jobs:
           # the command line, so a crafted input cannot become a command.
           STREAMS: ${{ github.event.inputs.streams || '4' }}
           FULL: ${{ github.event.inputs.full }}
+          BACKFILL: ${{ github.event.inputs.backfill || '60' }}
         run: |
           set -euo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          python3 scripts/garmin_pull.py --push --streams "$STREAMS" \
+          python3 scripts/garmin_pull.py --push --streams "$STREAMS" --backfill "$BACKFILL" \
             $([ "$FULL" = "true" ] && echo --full)
 
       - name: Show the receipt

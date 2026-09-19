@@ -7,7 +7,7 @@ Read it together before starting.
 
 ## What this app is
 
-Running Dashboard is eight panes — Now, Today, Plan, Running, Load, Heart, Recovery, Sessions — built
+Running Dashboard is five panes — Now, Plan, Training, Health, Sessions — built
 from your Garmin Connect data. The copy you just installed still holds made-up demo data (the app
 says so on screen, in a visible "example text" label). This guide replaces that with your own.
 

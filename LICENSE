@@ -22,8 +22,8 @@ SOFTWARE.
 
 ---
 
-Two parts of the demo data are not the authors' to license and are not covered
-by the licence above; both are described in running-dashboard/TILES.md:
+Three parts of the app are not the authors' to license and are not covered by
+the licence above; all three are described in running-dashboard/TILES.md:
 
 - The map tiles under running-dashboard/data/tiles/ are from USGS The National Map,
   a work of the United States government in the public domain.
@@ -31,3 +31,5 @@ by the licence above; both are described in running-dashboard/TILES.md:
   derived from them under running-dashboard/data/, are derived from OpenStreetMap
   data, © OpenStreetMap contributors, and are made available under the Open
   Database License (ODbL) 1.0.
+- The Geist typeface in running-dashboard/fonts/ is © Vercel, licensed under the
+  SIL Open Font License 1.1 (running-dashboard/fonts/LICENSE-Geist.txt).
