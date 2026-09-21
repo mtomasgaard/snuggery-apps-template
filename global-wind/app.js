@@ -1327,7 +1327,6 @@ $('btn-units').addEventListener('click', () => {
   updateLegend();
   updateReadout();
 });
-$('btn-reload').addEventListener('click', () => loadSnapshot());
 $('stamp').addEventListener('click', showAbout);
 $('about-close').addEventListener('click', () => { $('about').hidden = true; });
 $('about').addEventListener('click', (e) => { if (e.target === $('about')) $('about').hidden = true; });

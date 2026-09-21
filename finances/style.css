@@ -106,15 +106,6 @@ body {
 /* The header goes the colour of a warning when the daily job has missed a
    day, so a stale dashboard cannot look like a fresh one. */
 .freshness.stale { color: var(--warn-ink); font-weight: 600; }
-.reload {
-  flex: none; width: 36px; height: 36px; display: grid; place-items: center;
-  border: 1px solid var(--line); border-radius: 12px;
-  background: var(--card); color: var(--ink-dim); cursor: pointer;
-}
-.reload:active { transform: scale(.94); }
-.reload.spin svg { animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
 .tabs {
   position: sticky; top: calc(56px + env(safe-area-inset-top)); z-index: 29;
   display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;

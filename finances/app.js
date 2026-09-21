@@ -1769,13 +1769,6 @@ $('tx-search').addEventListener('input', e => {
   renderTxns();
 });
 
-$('reload').addEventListener('click', async () => {
-  const b = $('reload');
-  b.classList.add('spin');
-  await load();
-  setTimeout(() => b.classList.remove('spin'), 400);
-});
-
 /* Reads are always fresh from disk, so re-reading when the app comes back to
    the front is what makes an app opened this morning show this morning's data. */
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
