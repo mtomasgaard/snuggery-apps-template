@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-21T10:22:21Z",
+ "generatedAt": "2026-09-21T09:57:16Z",
  "regions": [
   {
    "key": "europe",
@@ -177,16 +177,6 @@
    "stale": false,
    "items": [
     {
-     "title": "Les opérations de maintien de la paix de l’Union africaine se multiplient : une étude fait état de résultats mitigés",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/les-operations-de-maintien-de-la-paix-de-lunion-africaine-se-multiplient-une-etude-fait-etat-de-resultats-mitiges-292242",
-     "published": "2026-09-21T09:25:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Richard Fosu, Lecturer in International Relations, Monash University"
-    },
-    {
      "title": "Demolishing Lagos informal settlements also destroys the city’s best defences against climate change",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -195,6 +185,16 @@
      "summary": "",
      "stale": false,
      "author": "Brianna Castro, Assistant Professor of Urban Sustainability, Yale University"
+    },
+    {
+     "title": "Teenage girls may know how to prevent pregnancy – that doesn’t mean they have the power to do it",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/teenage-girls-may-know-how-to-prevent-pregnancy-that-doesnt-mean-they-have-the-power-to-do-it-290007",
+     "published": "2026-09-20T05:03:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Deevia Bhana, Professor Gender and Childhood Sexuality, University of KwaZulu-Natal"
     },
     {
      "title": "How Togolese people are reinventing political protest amid civil society crackdown",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Les opérations de maintien de la paix de l’Union africaine se multiplient : une étude fait état de résultats mitigés",
-   "published": "2026-09-21 09:25 UTC"
+   "title": "Demolishing Lagos informal settlements also destroys the city’s best defences against climate change",
+   "published": "2026-09-20 05:03 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Demolishing Lagos informal settlements also destroys the city’s best defences against climate change",
+   "title": "Teenage girls may know how to prevent pregnancy – that doesn’t mean they have the power to do it",
    "published": "2026-09-20 05:03 UTC"
   },
   {

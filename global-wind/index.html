@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Global Wind</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Every address in this app is relative. There is no external script, font,
+     image or map tile anywhere in index.html, app.js or style.css: a mini-app
+     cannot reach the network, and this one does not try. The coastlines, the
+     city labels and the wind all travel inside the folder. -->
+
+<header class="topbar">
+  <div class="titles">
+    <h1>Global Wind</h1>
+    <button class="stamp" id="stamp" type="button" title="About this data">Loading&hellip;</button>
+  </div>
+  <div class="actions">
+    <button class="iconbtn" id="btn-heat" type="button" aria-pressed="true" title="Colour by wind speed" aria-label="Toggle the colour layer">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M3 15c3-4 6-4 9 0s6 4 9 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="iconbtn unitbtn" id="btn-units" type="button" title="Change units" aria-label="Change wind speed units">m/s</button>
+    <button class="iconbtn" id="btn-reload" type="button" title="Reload data" aria-label="Reload data">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M20 3.5V9h-5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="map-wrap" id="map-wrap">
+  <canvas id="map" aria-label="World map of wind"></canvas>
+
+  <div class="error" id="error" hidden></div>
+
+  <div class="zoombtns">
+    <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+    <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
+    <button type="button" id="zoom-home" aria-label="Whole world">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="legend" id="legend" aria-label="Wind speed scale">
+    <div class="legend-head"><span>Wind</span><span id="legend-unit">m/s</span></div>
+    <div class="legend-bar" id="legend-bar"></div>
+    <div class="legend-ticks" id="legend-ticks"></div>
+  </div>
+
+  <!-- The credits the sources ask for, on screen rather than buried: the city
+       labels are CC BY 4.0 and attribution is a condition of using them. -->
+  <p class="credits" id="credits"></p>
+
+  <div class="readout" id="readout" hidden>
+    <button class="readout-close" id="readout-close" type="button" aria-label="Close">&times;</button>
+    <div class="readout-where" id="readout-where"></div>
+    <div class="readout-main">
+      <span class="readout-arrow" id="readout-arrow" aria-hidden="true">&#10148;</span>
+      <span class="readout-speed"><span id="readout-speed"></span><small id="readout-unit"></small></span>
+    </div>
+    <div class="readout-sub" id="readout-sub"></div>
+  </div>
+
+  <div class="about" id="about" hidden>
+    <div class="about-card" role="dialog" aria-modal="true" aria-label="About this data">
+      <h2>About this data</h2>
+      <dl id="about-list"></dl>
+      <p class="about-note">The map re-reads <code>data/snapshot.json</code> every time it is
+        opened, and again whenever new data lands while it is open. A scheduled job rewrites
+        that file and a Shortcut carries it in; the app itself never goes online.</p>
+      <p class="about-note" id="about-credits"></p>
+      <button type="button" class="about-close" id="about-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer class="player">
+  <div class="time-row">
+    <div class="valid" id="valid-time">&mdash;</div>
+    <div class="lead" id="lead">&nbsp;</div>
+  </div>
+  <div class="controls">
+    <button type="button" class="pbtn" id="btn-prev" aria-label="Previous step">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 5v14M18 5l-9 7 9 7z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="pbtn play" id="btn-play" aria-label="Play">
+      <svg id="ico-play" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg id="ico-pause" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" hidden><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
+    </button>
+    <button type="button" class="pbtn" id="btn-next" aria-label="Next step">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M18 5v14M6 5l9 7-9 7z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="slider-wrap">
+      <input type="range" id="slider" min="0" max="0" step="1" value="0" aria-label="Forecast time">
+      <div class="ticks" id="ticks"></div>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

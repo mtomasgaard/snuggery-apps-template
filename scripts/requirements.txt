@@ -10,3 +10,13 @@
 garminconnect>=0.3
 fitdecode>=0.10
 requests>=2.31
+
+# Global Wind needs two more — `eccodes` (the GRIB decoder, wheel included, so
+# nothing to apt-get) and `numpy` — but they are deliberately NOT listed above.
+# This file is installed by the Running Dashboard's pull workflow, which has no
+# use for a GRIB decoder, so refresh-global-wind.yml installs its own two
+# directly:
+#
+#     python3 -m pip install eccodes numpy
+#
+# Every other script in this folder is standard library only.

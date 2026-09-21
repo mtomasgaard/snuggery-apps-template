@@ -1,0 +1,187 @@
+name: Refresh global-wind
+
+# Rewrites the Global Wind app's data twice a day from NOAA's GFS forecast. The
+# bucket is a plain public HTTPS endpoint: no account, no key, no secret, so
+# this job needs nothing set up before it works.
+#
+# ============================================================================
+# WHY THIS ONE PUBLISHES TO ITS OWN BRANCH, AND NO OTHER APP HERE DOES
+# ============================================================================
+# A global wind field is megabytes, and every byte of it is different every
+# run — it is base64 of compressed data, so git can neither delta it nor
+# compress it. Committing it to `main` twice a day would add roughly a
+# gigabyte a year to this repository and to every clone of it, for a file
+# nobody ever wants the history of.
+#
+# So it goes on an orphan branch, `data-global-wind`, force-pushed as a single
+# parentless commit each time. The branch is a mailbox, not a log: it only ever
+# holds the newest snapshot, and history never accumulates. `main` keeps the
+# committed demo, which is what `zips/global-wind.zip` ships with.
+#
+# The only thing that changes for you is the address the Shortcut fetches — the
+# branch name in place of `main`, same path:
+#
+#   public repo   https://raw.githubusercontent.com/OWNER/REPO/data-global-wind/global-wind/data/snapshot.json
+#   private repo  https://api.github.com/repos/OWNER/REPO/contents/global-wind/data/snapshot.json?ref=data-global-wind
+#                 with Accept: application/vnd.github.raw and your read token
+#
+# global-wind/PROMPT.md walks through it. If you would rather have everything on
+# `main` like the other apps, turn the size dials in scripts/global_wind.py down
+# first and read global-wind/NOTES.md: it has the measured table.
+#
+# ============================================================================
+# TWO THINGS THAT WILL WASTE AN AFTERNOON IF NOBODY SAYS THEM
+# ============================================================================
+# 1. `schedule:` only ever runs from the repository's DEFAULT branch. A workflow
+#    sitting on a pull request branch is inert no matter how correct it is, so
+#    land this on main before expecting a single scheduled run.
+# 2. GitHub treats cron as best-effort, not a promise. Runs are commonly late by
+#    5-20 minutes, longer under load, and a newly added schedule often skips its
+#    first slot entirely. Say "twice a day", never "at 04:23".
+
+on:
+  schedule:
+    # GFS runs four times a day; this takes the two that finish in the European
+    # morning. A run appears file by file over about four hours, so what matters
+    # is not when the cycle starts but when its LAST step lands: the 00Z run's
+    # +120 h file is in the bucket at about 04:10 UTC, the 06Z run's at about
+    # 10:10. Each slot is twenty-odd minutes after that, which still works when
+    # GitHub fires late — and it does.
+    - cron: '23 4 * * *'
+    - cron: '23 10 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Publish even if the newest GFS run is already on the data branch'
+        type: boolean
+        default: false
+  push:
+    branches: [main]                        # a push to any other branch must not
+                                            # force-publish over the shared data
+                                            # branch; only the default one may
+    paths:                                  # deliberately NOT the committed demo,
+      - 'scripts/global_wind.py'            # or this job would retrigger on its
+      - '.github/workflows/refresh-global-wind.yml'   # own commit, forever
+
+permissions:
+  contents: write                           # least privilege: it writes one branch
+
+concurrency:
+  group: refresh-global-wind
+  cancel-in-progress: false
+
+env:
+  DATA_BRANCH: data-global-wind
+  DATA_PATH: global-wind/data/snapshot.json
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # The eccodes wheel carries the GRIB decoder, so there is nothing to
+      # apt-get. These two are the only packages any job in this repository
+      # installs for Global Wind.
+      # Floors, not pins: 2.38 is the eccodes the GRIB2 templates here were
+      # read with, and the code is written against numpy 2. An unbounded
+      # `pip install eccodes numpy` is whatever happened to be current the
+      # morning it ran, which is not a thing to find out from a broken job.
+      - name: Install the GRIB decoder
+        run: python3 -m pip install --quiet 'eccodes>=2.38' 'numpy>=2'
+
+      - name: What is published already
+        id: current
+        run: |
+          set -euo pipefail
+          run=""
+          if git fetch --quiet --depth=1 origin "$DATA_BRANCH" 2>/dev/null; then
+            run=$(git show "FETCH_HEAD:$DATA_PATH" \
+                  | python3 -c 'import json,sys; print(json.load(sys.stdin).get("run",""))' || true)
+          fi
+          # $GITHUB_OUTPUT is a line-based file, so a value with a newline in
+          # it writes whatever follows as another key. `run` came out of a JSON
+          # file on a branch this job force-pushes, which is not a place to
+          # start trusting strings: flatten it before it is written.
+          run=${run//[$'\n\r']/}
+          echo "published run: ${run:-none}"
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+      # About 65 MB of GRIB per run at the committed settings — the job asks the
+      # .idx sidecars for the byte ranges of the two 10 m wind fields and range-
+      # -requests just those, six at a time, instead of pulling half a gigabyte
+      # per forecast hour. --skip-run makes the second slot cost one HEAD request
+      # when it lands on a model cycle that is already published, which is the
+      # whole "commit only if it changed" test for this app: a new GFS run is the
+      # only thing that can change the file.
+      - name: Fetch the newest complete GFS run
+        id: fetch
+        # The two values arrive as environment variables rather than being
+        # pasted into the script text by ${{ }}. Nothing here comes from a
+        # stranger, but a workflow that interpolates a value into shell source
+        # is one bad input away from running it, and this file is copied.
+        env:
+          SKIP_RUN: ${{ steps.current.outputs.run }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          set -euo pipefail
+          skip="$SKIP_RUN"
+          if [ "$FORCE" = "true" ]; then skip=""; fi
+          python3 scripts/global_wind.py --out "out/$DATA_PATH" --skip-run "$skip"
+          if [ -f "out/$DATA_PATH" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # One commit, no parent, force-pushed. Nothing to rebase against, so none
+      # of the retry-and-rebase dance the other refresh jobs need — but the push
+      # itself is retried, because a transient failure here means a day-old
+      # forecast on somebody's phone.
+      - name: Publish to the data branch
+        if: steps.fetch.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          # A force-push is unrecoverable, so the refspec is checked before
+          # anything is built: an edited env block, a copy of this file with
+          # DATA_BRANCH left empty, or a branch renamed to match the one being
+          # pushed FROM would otherwise overwrite the repository's own history.
+          case "$DATA_BRANCH" in
+            ''|main|master|"${GITHUB_REF_NAME:-}")
+              echo "refusing to force-push $DATA_BRANCH" >&2; exit 1 ;;
+          esac
+          cd out
+          # The path reaches Python through the environment rather than being
+          # pasted into its source by the shell. It is a constant today; it is
+          # one edit away from being something with a quote in it.
+          run=$(DATA_PATH="$DATA_PATH" python3 -c 'import json,os;print(json.load(open(os.environ["DATA_PATH"]))["run"])')
+          git init -q -b "$DATA_BRANCH"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "global-wind: GFS run $run, published $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4; do
+            git push --force \
+              "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+              "HEAD:refs/heads/$DATA_BRANCH" && exit 0
+            echo "push failed, retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Say what happened
+        env:
+          CHANGED: ${{ steps.fetch.outputs.changed }}
+        run: |
+          if [ "$CHANGED" = "true" ]; then
+            echo "published a new snapshot to $DATA_BRANCH"
+          else
+            echo "the newest complete GFS run is already published; nothing to do"
+          fi
