@@ -1,0 +1,29 @@
+{
+  "_comment": "Rules that turn a bank transaction's text into a spending category. First match wins, top to bottom, so put the specific rules above the general ones. `match` entries are case-insensitive, accent-stripped substrings of the transaction text. Editing this file changes how the next refresh categorises everything, including past transactions — nothing is baked in. WHAT SHIPS HERE matches the plain-English texts the example data uses, plus a few of the generic words European card terminals actually send. YOUR bank writes something else: open the Transactions pane after your first real run, read what is landing in Uncategorised, and paste those strings in here. That one pass is most of the setup.",
+
+  "_income": "Checked before the categories below, and only for money coming IN, so a refund from a shop is income rather than shopping.",
+  "income": ["SALARY", "WAGES", "PAYROLL", "PENSION PAYMENT", "CHILD BENEFIT", "TAX REFUND", "REFUND", "DIVIDEND", "INTEREST PAID"],
+
+  "categories": [
+    { "id": "savings",       "label": "Savings",        "match": ["FUND PURCHASE", "INVESTMENT PURCHASE", "SAVINGS PLAN", "BROKERAGE"] },
+    { "id": "debt",          "label": "Loan payments",  "match": ["MORTGAGE PAYMENT", "LOAN PAYMENT", "LOAN INSTALMENT", "REPAYMENT"] },
+    { "id": "housing",       "label": "Housing",        "match": ["HOUSING COSTS", "SERVICE CHARGE", "RENT ", "GROUND RENT", "PROPERTY TAX"] },
+    { "id": "utilities",     "label": "Power & water",  "match": ["ELECTRICITY", "WATER UTILITY", "DISTRICT HEATING", "GRID CHARGE", "ENERGY"] },
+    { "id": "telecom",       "label": "Phone & net",    "match": ["MOBILE PHONE", "BROADBAND", "FIBRE", "TELECOM"] },
+    { "id": "insurance",     "label": "Insurance",      "match": ["INSURANCE", "ASSURANCE"] },
+    { "id": "groceries",     "label": "Groceries",      "match": ["GROCERY", "SUPERMARKET", "CORNER SHOP", "BAKERY", "MARKET HALL", "GREENGROCER"] },
+    { "id": "diningout",     "label": "Eating out",     "match": ["COFFEE SHOP", "CAFE", "TAKEAWAY", "RESTAURANT", "PIZZA", "LUNCH BAR", "CANTEEN", "BAR "] },
+    { "id": "transport",     "label": "Transport",      "match": ["PUBLIC TRANSPORT", "TRAIN TICKET", "BUS TICKET", "TOLL ROAD", "PARKING", "TAXI"] },
+    { "id": "fuel",          "label": "Fuel & charging","match": ["PETROL STATION", "FUEL STATION", "CHARGING POINT", "CHARGING NETWORK"] },
+    { "id": "travel",        "label": "Travel",         "match": ["AIRLINE", "AIR TICKET", "HOTEL", "FERRY", "HOSTEL", "CAR HIRE"] },
+    { "id": "health",        "label": "Health",         "match": ["PHARMACY", "DENTIST", "OPTICIAN", "DOCTOR", "PHYSIO", "CLINIC", "HOSPITAL"] },
+    { "id": "fitness",       "label": "Fitness",        "match": ["GYM MEMBERSHIP", "SWIMMING POOL", "SPORTS CLUB"] },
+    { "id": "subscriptions", "label": "Subscriptions",  "match": ["STREAMING", "APP STORE SUBSCRIPTION", "CLOUD STORAGE", "NEWSPAPER", "MAGAZINE", "SUBSCRIPTION"] },
+    { "id": "shopping",      "label": "Shopping",       "match": ["CLOTHING SHOP", "ELECTRONICS SHOP", "HOME GOODS", "SPORTS SHOP", "BOOKSHOP", "HARDWARE STORE", "GARDEN CENTRE", "TOY SHOP", "ONLINE MARKETPLACE"] },
+    { "id": "cash",          "label": "Cash",           "match": ["CASH WITHDRAWAL", "ATM "] },
+    { "id": "fees",          "label": "Fees & interest","match": ["ACCOUNT FEE", "CARD FEE", "INTEREST CHARGED", "LATE FEE", "ANNUAL FEE"] },
+    { "id": "transfers",     "label": "Transfers",      "match": ["TRANSFER", "CARD BILL", "OWN ACCOUNT", "INSTANT PAYMENT"] }
+  ],
+
+  "fallback": { "id": "other", "label": "Uncategorised" }
+}

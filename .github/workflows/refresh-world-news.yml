@@ -1,0 +1,77 @@
+name: Refresh world-news
+
+# Daily top headlines by region, from the RSS feeds of newsrooms whose terms
+# allow a headline to be taken out of a feed and republished with credit
+# (world-news/NOTES.md names each one, and the ones ruled out). No key, no
+# account, no secret — so this job needs nothing set up before it works.
+#
+# TWO THINGS THAT WILL WASTE AN AFTERNOON IF YOU DO NOT KNOW THEM:
+#
+# 1. `schedule:` only ever runs from the repository's DEFAULT branch. A workflow
+#    sitting on a pull request branch is inert no matter how correct it is, so
+#    land this on main before expecting a single scheduled run.
+# 2. GitHub treats cron as best-effort, not a promise. Runs are commonly late by
+#    5-20 minutes, longer under load, and a newly added schedule often skips its
+#    first slot entirely. Tell people "each morning", never "at 05:20".
+
+on:
+  schedule:
+    - cron: '20 5 * * *'          # once a day, 05:20 UTC — off the top of the hour
+  workflow_dispatch:              # so you can prove it works without waiting a day
+  push:
+    paths:                        # deliberately NOT the snapshot, or this job
+      - 'scripts/world_news.py'   # would retrigger on its own commit, forever
+      - '.github/workflows/refresh-world-news.yml'
+
+permissions:
+  contents: write                 # least privilege: it commits one file
+
+concurrency:
+  group: refresh-world-news
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # Standard library only, so there is nothing to install. The script
+      # fetches seventeen feeds with a 20-second timeout each and reads at
+      # most 8 MB from any one of them; a feed that fails, or is refused for
+      # being oversized or for declaring XML entities, keeps its last
+      # headlines from the committed snapshot and marks them stale. Only a run
+      # where EVERY feed failed refuses to write.
+      - name: Write a new snapshot
+        run: python3 scripts/world_news.py
+
+      - name: Commit it, only if it changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add world-news/data/snapshot.json
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "world-news: refresh snapshot"
+          # Another workflow may have pushed to main between this job's checkout
+          # and now — the ZIP builder, or another app's refresh on the same
+          # cron. They never touch the same file, so rebase and retry rather
+          # than failing: a lost refresh is a stale dashboard nobody notices.
+          for i in 1 2 3 4; do
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push rejected; rebasing and retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+            # -X theirs: when the other run touched the SAME file, keep this
+            # run's copy — both are seconds old, and a conflict on a generated
+            # file is not a conflict.
+            if ! git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              echo "another run refreshed it seconds ago; nothing left to do"
+              exit 0
+            fi
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>World News</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Title, stamp and region tabs lock together in one sticky block, so the
+     tabs cannot slide under the title on the way to being pinned. -->
+<header class="topbar">
+  <div class="titles">
+    <h1>World News</h1>
+    <p class="stamp" id="stamp">Loading…</p>
+  </div>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Regions"></nav>
+</header>
+
+<main id="main" aria-live="polite"></main>
+
+<footer class="foot" id="foot" hidden>
+  <h2>Sources</h2>
+  <ul id="sources"></ul>
+  <p id="feednote" class="feednote" hidden></p>
+  <p>Headlines, the publishers' own summary lines, and links — nothing else is
+  copied. Every story opens on the publisher's own site, in your browser:
+  this app has no way to fetch one.</p>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

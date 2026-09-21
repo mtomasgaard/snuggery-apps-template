@@ -1,0 +1,79 @@
+name: Refresh power-hours
+
+# Day-ahead electricity prices for one bidding zone. Two runs a day, both after
+# the auction that sets tomorrow's curve.
+#
+# WHY TWICE, AND WHY THESE TIMES
+#   Tomorrow's prices are set in a single auction each day and published early
+#   in the afternoon, about 13:00 CET. Before that, the API answers 404 for
+#   tomorrow and the app shows today only — which is correct, not broken. 13:30
+#   UTC is comfortably after publication in either CET or CEST; 16:30 UTC is the
+#   second chance, because the service had outages in August and September 2026
+#   and one missed run should not cost a whole day.
+#
+# TWO THINGS THAT WILL WASTE AN AFTERNOON IF YOU DO NOT KNOW THEM
+#   1. `schedule:` only ever runs from the repository's DEFAULT branch. A
+#      workflow sitting on a pull-request branch is inert however correct it is.
+#   2. GitHub treats cron as best-effort. Runs are commonly late by 5-20
+#      minutes, longer under load, and a newly added schedule often skips its
+#      first slot. Say "each afternoon", never "at 13:30".
+
+on:
+  schedule:
+    - cron: '30 13 * * *'         # after the day-ahead auction publishes
+    - cron: '30 16 * * *'         # a second attempt, for the days it did not
+  workflow_dispatch:              # so you can prove it works without waiting
+  push:
+    paths:                        # deliberately NOT the snapshot, or this job
+      - 'scripts/power_hours.py'  # would retrigger on its own commit, forever
+      - '.github/workflows/refresh-power-hours.yml'
+
+permissions:
+  contents: write                 # least privilege: it commits one file
+
+concurrency:
+  group: refresh-power-hours
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # No pip install: the script is standard library only, on purpose. A job
+      # that fetches one small JSON file should not also install a dependency
+      # tree it has to keep patched.
+      - name: Write a new snapshot
+        run: python3 scripts/power_hours.py
+
+      - name: Commit it, only if it changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add power-hours/data/snapshot.json
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "power-hours: refresh snapshot"
+          # Another workflow may have pushed between this job's checkout and
+          # now — the ZIP builder, or another app's refresh on a nearby cron.
+          # They never touch the same file, so rebase and retry rather than
+          # failing: a lost refresh is a stale dashboard nobody notices.
+          for i in 1 2 3 4; do
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push rejected; rebasing and retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+            # -X theirs: when another run touched the SAME file, keep this
+            # run's copy. Both are seconds old, and a conflict on a generated
+            # file is not a conflict.
+            if ! git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              echo "another run refreshed it seconds ago; nothing left to do"
+              exit 0
+            fi
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1

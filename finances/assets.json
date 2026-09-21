@@ -1,0 +1,105 @@
+{
+  "_comment": "Everything you own that no bank reports: the home, the cars — and the loans against them. The refresh job reads this file; the app never does. Each item is anchored to a value you know on a date you know, and then moved forward by a method you choose. Nothing here is guessed for you: an item with no usable method holds its anchor value and the app says so. WHAT SHIPS HERE IS AN EXAMPLE HOUSEHOLD, invented by scripts/make_demo_finances.py — round anchor figures, no address, nobody's car. Replace every line with your own before the first real run.",
+
+  "_methods": {
+    "ssb-bolig": "Indexed by Statistics Norway's used-dwelling price index (table 07221, quarterly, open API, no key). Needs `region` and `dwellingType`, matched by name against what the table offers — run `python3 scripts/finances.py --probe-assets` to list them. This is the honest one where it applies: it moves with the market that actually sets the price, and its history goes back to 1992, so past net worth is real rather than a flat line. It is a NORWEGIAN index. Outside Norway either point `method` at `rate` with an assumption you can defend, or swap in your own country's published index — the shape the code needs is a date-to-level series, and `ssb_series()` in scripts/finances.py is the one function to replace.",
+    "rate": "A fixed annual percentage, compounded daily. For anything with no published index — a holiday property in a thin market, a boat, or a home anywhere the index above does not cover. Say what the rate is based on in `note`; it is your assumption, not a measurement.",
+    "depreciation": "A retention curve by age, for vehicles. `curve` is a list of [years, share of value remaining]; beyond the last point it continues at `tailRate` per year, with `floor` as the scrap value it never goes below. Value = anchorValue x curve(age now) / curve(age at anchor), so anchoring at what you actually paid keeps the model honest about your particular car.",
+    "fixed": "Holds the anchor value. For things that do not drift, or where you would rather type a number now and then than model it."
+  },
+
+  "assets": [
+    {
+      "id": "home",
+      "name": "Home",
+      "kind": "property",
+      "_anchor": "What it was worth on anchorDate — a valuation, a purchase price, or the tax assessment. Everything after this is indexed off it, so a bad anchor is a bad line.",
+      "anchorValue": 4500000,
+      "anchorDate": "2022-03-15",
+      "method": "ssb-bolig",
+      "region": "Hele landet",
+      "dwellingType": "Alle boligtyper",
+      "_variants": "The valuation bases the app offers behind a switch. THE FIRST ONE IS WHAT NET WORTH IS BUILT FROM — the `region` and `dwellingType` above are only used when this list is empty — and the rest ride along so the app can redraw without fetching anything. They exist because more than one cut of the index is defensible for the same home: the whole market, or your own dwelling type, or your own town. Which one you believe is yours to pick. Anything you add here is fetched too: region and dwellingType take the same names as `--probe-assets` lists.",
+      "variants": [
+        {
+          "id": "all",
+          "label": "All dwellings",
+          "region": "Hele landet",
+          "dwellingType": "Alle boligtyper"
+        },
+        {
+          "id": "detached",
+          "label": "Detached houses",
+          "region": "Hele landet",
+          "dwellingType": "Eneboliger"
+        },
+        {
+          "id": "flats",
+          "label": "Flats",
+          "region": "Hele landet",
+          "dwellingType": "Blokkleiligheter"
+        }
+      ],
+      "note": "Example text — a round figure on a round date, not a valuation of anything"
+    },
+    {
+      "id": "car-estate",
+      "name": "Estate car",
+      "kind": "vehicle",
+      "_anchorValue": "Not a purchase price: a round figure for a three-year-old estate. Replace it with what you actually paid, set anchorDate to when you bought it, and the curve becomes honest about your car rather than about the model.",
+      "anchorValue": 340000,
+      "anchorDate": "2023-02-01",
+      "firstRegistered": "2023-01-01",
+      "method": "depreciation",
+      "_curve": "Roughly 20 % gone after a year, 30 % after two, 40 % after three, then settling to about 10 % a year from age six. Replace with your own points if you know the model holds its value differently.",
+      "curve": [[0, 1.0], [1, 0.80], [2, 0.70], [3, 0.60], [4, 0.53], [5, 0.47], [6, 0.42]],
+      "tailRate": 0.10,
+      "floor": 25000,
+      "note": "Example text — a round figure, not a purchase price"
+    },
+    {
+      "id": "car-hatchback",
+      "name": "Small hatchback",
+      "kind": "vehicle",
+      "anchorValue": 120000,
+      "anchorDate": "2023-02-01",
+      "firstRegistered": "2017-01-01",
+      "method": "depreciation",
+      "curve": [[0, 1.0], [1, 0.80], [2, 0.70], [3, 0.60], [4, 0.53], [5, 0.47], [6, 0.42]],
+      "tailRate": 0.10,
+      "floor": 15000,
+      "note": "Example text — a round figure, not a purchase price"
+    }
+  ],
+
+  "_loans": "Modelled from the terms, because PSD2 covers payment accounts and a mortgage usually is not one. If your bank DOES expose the loan, it turns up as an ordinary account with a negative balance and that real figure wins — set `preferBankBalance` to the account name and the model is only used until it appears. `kind` is \"annuity\" (equal total payment) or \"serial\" (equal principal).",
+
+  "_floatingRate": "If these are floating-rate loans, `nominalRate` is only true until the bank changes it, and the modelled balance drifts away from the real one. The cure is to update `nominalRate` when the bank writes to you, and to re-anchor `principal` and `startDate` to a balance you have read off yourself if the drift gets wide.",
+
+  "loans": [
+    {
+      "id": "home-loan",
+      "name": "Home loan",
+      "against": "home",
+      "principal": 3200000,
+      "startDate": "2022-03-20",
+      "termMonths": 300,
+      "nominalRate": 0.049,
+      "kind": "annuity",
+      "preferBankBalance": null,
+      "note": "Example text — 25 years, floating rate; update the rate when the bank changes it"
+    },
+    {
+      "id": "car-loan",
+      "name": "Car loan",
+      "against": "car-estate",
+      "principal": 250000,
+      "startDate": "2023-02-01",
+      "termMonths": 84,
+      "nominalRate": 0.064,
+      "kind": "annuity",
+      "preferBankBalance": null,
+      "note": "Example text — 7 years, fixed rate"
+    }
+  ]
+}

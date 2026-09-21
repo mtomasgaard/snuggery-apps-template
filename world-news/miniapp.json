@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "World News",
+  "entryPoint": "index.html",
+  "description": "Today's headlines by region, from freely licensed newsrooms' RSS feeds",
+  "version": "1.0"
+}

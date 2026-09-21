@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finances</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="titles">
+    <h1>Finances</h1>
+    <p class="freshness" id="freshness">Loading&hellip;</p>
+  </div>
+  <button class="reload" id="reload" title="Reload data" aria-label="Reload data">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor"
+            stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M20 3.5V9h-5.5" fill="none" stroke="currentColor"
+            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</header>
+
+<nav class="tabs" role="tablist" id="tabs">
+  <button role="tab" class="tab is-active" data-pane="overview"  aria-selected="true">Overview</button>
+  <button role="tab" class="tab"           data-pane="owned"     aria-selected="false">Owned</button>
+  <button role="tab" class="tab"           data-pane="spending"  aria-selected="false">Spending</button>
+  <button role="tab" class="tab"           data-pane="flow"      aria-selected="false">Cash flow</button>
+  <button role="tab" class="tab"           data-pane="savings"   aria-selected="false">Savings</button>
+  <button role="tab" class="tab"           data-pane="txns"      aria-selected="false">Transactions</button>
+</nav>
+
+<div id="error" class="error" hidden></div>
+
+<main id="main" hidden>
+
+  <!-- ── Overview ──────────────────────────────────────────────────── -->
+  <section id="pane-overview" class="pane is-active">
+    <div id="sourcebanners"></div>
+
+    <div class="card hero">
+      <span class="label">Net worth</span>
+      <span class="value num" id="nw-value">—</span>
+      <span class="delta" id="nw-delta"></span>
+      <div class="chartwrap" style="margin-top:18px">
+        <svg class="chart" id="nw-mix" viewBox="0 0 320 34"
+             role="img" aria-label="What net worth is made of"></svg>
+      </div>
+      <div class="legend" id="nw-mixlegend"></div>
+      <div class="rows" id="nw-debtrow"></div>
+    </div>
+
+    <div class="card">
+      <h2>Net worth over time</h2>
+      <div class="rangebar" id="nw-range" role="group" aria-label="Time range">
+        <button data-days="30">30d</button>
+        <button data-days="90" class="is-active">90d</button>
+        <button data-days="365">1y</button>
+        <button data-days="0">All</button>
+      </div>
+      <div class="chartwrap">
+        <svg class="chart" id="nw-chart" viewBox="0 0 320 150"
+             role="img" aria-label="Net worth over time"></svg>
+        <div class="tip" id="nw-tip"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Accounts</h2>
+      <div class="rows" id="accounts"></div>
+    </div>
+
+    <div class="card" id="card-bill-card" hidden>
+      <h2>Card</h2>
+      <div class="rows" id="card-bill"></div>
+    </div>
+  </section>
+
+  <!-- ── Owned ─────────────────────────────────────────────────────── -->
+  <section id="pane-owned" class="pane">
+    <div class="card hero">
+      <span class="label">Own less owe</span>
+      <span class="value num" id="own-value">—</span>
+      <span class="delta" id="own-delta"></span>
+      <div class="splits">
+        <div class="split"><div class="k">Worth</div><div class="v num" id="own-assets">—</div></div>
+        <div class="split"><div class="k">Owed on it</div><div class="v num" id="own-loans">—</div></div>
+      </div>
+    </div>
+
+    <div class="card" id="own-chart-card">
+      <h2>Value against what is owed</h2>
+      <p class="sub" id="own-sub"></p>
+      <div class="chartwrap">
+        <svg class="chart" id="own-chart" viewBox="0 0 320 150"
+             role="img" aria-label="Value of what you own against the debt on it"></svg>
+        <div class="tip" id="own-tip"></div>
+      </div>
+      <div class="legend" id="own-legend"></div>
+    </div>
+
+    <div class="card" id="own-items-card">
+      <h2>What you own</h2>
+      <p class="sub">Each moved from a value you set, by the method named under it.</p>
+      <div class="rows" id="own-items"></div>
+    </div>
+
+    <div class="card" id="own-loans-card">
+      <h2>Loans</h2>
+      <div class="catlist" id="own-loanlist"></div>
+    </div>
+  </section>
+
+  <!-- ── Spending ──────────────────────────────────────────────────── -->
+  <section id="pane-spending" class="pane">
+    <div class="card hero">
+      <span class="label" id="sp-label">Spent</span>
+      <span class="value num" id="sp-value">—</span>
+      <span class="delta" id="sp-delta"></span>
+    </div>
+
+    <div class="card">
+      <h2>By category</h2>
+      <p class="sub" id="sp-sub"></p>
+      <div class="catlist" id="sp-cats"></div>
+    </div>
+
+    <div class="card" id="sp-merch-card">
+      <h2>Where it went</h2>
+      <p class="sub">Largest counterparties in the window.</p>
+      <div class="rows" id="sp-merchants"></div>
+    </div>
+  </section>
+
+  <!-- ── Cash flow ─────────────────────────────────────────────────── -->
+  <section id="pane-flow" class="pane">
+    <div class="card">
+      <h2>In and out by month</h2>
+      <p class="sub" id="cf-sub"></p>
+      <div class="chartwrap">
+        <svg class="chart" id="cf-chart" viewBox="0 0 320 180"
+             role="img" aria-label="Money in and out per month"></svg>
+        <div class="tip" id="cf-tip"></div>
+      </div>
+      <div class="legend" id="cf-legend"></div>
+      <details class="tableview">
+        <summary>Show as a table</summary>
+        <table id="cf-table"></table>
+      </details>
+    </div>
+
+    <div class="card" id="rec-card">
+      <h2>Repeating</h2>
+      <p class="sub">Charges that landed on a regular rhythm.</p>
+      <div class="rows" id="recurring"></div>
+    </div>
+  </section>
+
+  <!-- ── Savings ───────────────────────────────────────────────────── -->
+  <section id="pane-savings" class="pane">
+    <div class="card hero">
+      <span class="label">Invested</span>
+      <span class="value num" id="inv-value">—</span>
+      <span class="delta" id="inv-delta"></span>
+      <div class="splits">
+        <div class="split"><div class="k">Funds</div><div class="v num" id="inv-funds-tot">—</div></div>
+        <div class="split"><div class="k">Pension</div><div class="v num" id="inv-pension-tot">—</div></div>
+        <div class="split"><div class="k">Shares</div><div class="v num" id="inv-equity-tot">—</div></div>
+        <div class="split"><div class="k">Paid in</div><div class="v num" id="inv-cost">—</div></div>
+      </div>
+    </div>
+
+    <h3 class="sectionhead" id="pen-head">Pension</h3>
+    <div class="card" id="pen-card">
+      <h2>Locked until retirement</h2>
+      <p class="sub" id="pen-sub"></p>
+      <div class="rows" id="pen-accounts"></div>
+      <div class="rows" id="pen-funds"></div>
+    </div>
+
+    <h3 class="sectionhead" id="funds-head">Funds</h3>
+    <div id="inv-drift"></div>
+
+    <div class="card" id="inv-alloc-card">
+      <h2>Allocation</h2>
+      <div class="chartwrap">
+        <svg class="chart" id="inv-alloc" viewBox="0 0 320 34"
+             role="img" aria-label="Share of the portfolio held in each fund"></svg>
+      </div>
+      <div class="legend" id="inv-legend"></div>
+    </div>
+
+    <div class="card">
+      <h2>Funds</h2>
+      <p class="sub" id="inv-sub"></p>
+      <div class="rows" id="inv-funds"></div>
+    </div>
+
+    <div class="card" id="inv-growth-card">
+      <h2>Value against money paid in</h2>
+      <div class="chartwrap">
+        <svg class="chart" id="inv-chart" viewBox="0 0 320 150"
+             role="img" aria-label="Portfolio value compared with contributions"></svg>
+        <div class="tip" id="inv-tip"></div>
+      </div>
+      <div class="legend" id="inv-glegend"></div>
+    </div>
+
+    <h3 class="sectionhead" id="eq-head">Employee shares</h3>
+
+    <div class="card" id="eq-card">
+      <h2 id="eq-title">Shares</h2>
+      <p class="sub" id="eq-sub"></p>
+      <div class="rows" id="eq-summary"></div>
+    </div>
+
+    <div class="card" id="eq-grants-card">
+      <h2>Grants</h2>
+      <div class="rows" id="eq-grants"></div>
+    </div>
+
+    <div class="card" id="eq-vest-card">
+      <h2>Still to vest</h2>
+      <p class="sub" id="eq-vest-sub"></p>
+      <div class="rows" id="eq-vest"></div>
+    </div>
+  </section>
+
+  <!-- ── Transactions ──────────────────────────────────────────────── -->
+  <section id="pane-txns" class="pane">
+    <input class="search" id="tx-search" type="search" inputmode="search"
+           placeholder="Search text, account or category" autocomplete="off"
+           aria-label="Search transactions">
+    <div class="card">
+      <div id="tx-list"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="footer" hidden>
+  <p id="foot-sources"></p>
+  <p>Balances and transactions come from your banks over PSD2 account information.
+     Fund units are accrued from the transfers that bought them and priced at published NAV.
+     Property, vehicles and loans are not reported by anyone — they are valued from
+     <code>assets.json</code>, indexed and amortised by date. Both are estimates, and each
+     one says on screen what it is based on.</p>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

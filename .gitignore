@@ -15,6 +15,14 @@ garmin_tokens.json
 *.pem
 *.key
 
+# Enable Banking session ids (finances). A PSD2 session id is a credential: it
+# is the standing consent to read your accounts. --connect writes one per bank
+# as `<id> = <session id>`, and finances/PROMPT.md keeps them under
+# ~/.enablebanking and in a repository secret — these patterns are the
+# belt-and-braces for a redirect that landed in the working tree instead.
+*.sid
+sessions.json
+
 # The pull's receipt. It changes on every run whether or not any data did, so
 # committing it would put an hourly commit in a repository whose convention is
 # "commit only if it changed". The workflow prints it in its last step; the

@@ -1,0 +1,116 @@
+name: Refresh Finances
+
+# Rebuilds finances/data/snapshot.json from your banks through
+# scripts/finances.py, and pushes the result.
+#
+# NO SCHEDULE HERE, on purpose, and two separate reasons:
+#
+# 1. In the template repository there are no Enable Banking credentials, so a
+#    schedule would fail every day and mail somebody about it. Your copy is
+#    the place to give this a clock.
+# 2. PSD2 guarantees an unattended reader only FOUR accesses per account per
+#    24 hours. Once a day is the right rhythm — balances move daily, and once
+#    leaves the allowance nowhere near its limit. Do not make this hourly.
+#
+# So in your own copy, point a clock at this workflow's `dispatches` endpoint:
+# scheduler/README.md lays out the options and what each costs. Add
+# `schedule: - cron: '40 4 * * *'` below if you would rather use GitHub's own
+# cron and can live with it being best-effort (late by 5-20 minutes is normal,
+# and a newly added schedule often skips its first slot).
+#
+# Three secrets, all from the Enable Banking control panel and your own
+# one-off consent — finances/PROMPT.md walks through getting each:
+#
+#   ENABLEBANKING_APP_ID        the application UUID
+#   ENABLEBANKING_PRIVATE_KEY   the PEM key downloaded with it
+#   ENABLEBANKING_SESSIONS      {"bank": "<session-id>", "card": "<session-id>"}
+#
+# Until they exist, run it with `mode: no-banks` — everything except the bank
+# half is real and needs no credential at all.
+#
+# THE FIRST RUN IN A FRESH COPY REFUSES, on purpose. finances/data/snapshot.json
+# still holds the invented example household at that point, and it is also what
+# the ZIP build packs, so a dispatch that quietly replaced it would hand an
+# empty app to everyone who imported it afterwards. Run it once with
+# `replace_example: true` (or run finances/PROMPT.md's Step 1 locally and commit
+# the result); every run after that needs nothing, because the file is no longer
+# the example. To put the example back: python3 scripts/make_demo_finances.py
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'what to pull'
+        type: choice
+        options:
+          - banks
+          - no-banks
+        default: banks
+      replace_example:
+        description: 'overwrite the example data (needed once, in a fresh copy)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write                 # least privilege: it commits one file
+
+concurrency:
+  group: refresh-finances
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # One dependency, and only on the bank path: Enable Banking authenticates
+      # with an RS256-signed JWT, and hand-rolling RSA would be far worse than
+      # depending on the library everyone else uses. It is imported lazily, so
+      # `mode: no-banks` and the demo generator run on the standard library
+      # alone. A floor rather than a pin, so a security release arrives without
+      # anyone editing this file.
+      - name: Install the one dependency the bank path needs
+        if: ${{ (github.event.inputs.mode || 'banks') == 'banks' }}
+        run: pip install -q 'cryptography>=42'
+
+      - name: Rebuild the snapshot and push it
+        env:
+          ENABLEBANKING_APP_ID: ${{ secrets.ENABLEBANKING_APP_ID }}
+          ENABLEBANKING_PRIVATE_KEY: ${{ secrets.ENABLEBANKING_PRIVATE_KEY }}
+          ENABLEBANKING_SESSIONS: ${{ secrets.ENABLEBANKING_SESSIONS }}
+          # The input reaches the shell through the environment, never spliced
+          # into the command line, so a crafted input cannot become a command.
+          MODE: ${{ github.event.inputs.mode || 'banks' }}
+          REPLACE: ${{ github.event.inputs.replace_example || 'false' }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # set -e would abort on a bare `[ … ] && …` that tests false, so these
+          # are if-blocks. Each appends a FIXED string, never the input text.
+          ARGS=""
+          if [ "$MODE" = "no-banks" ]; then ARGS="$ARGS --no-banks"; fi
+          if [ "$REPLACE" = "true" ]; then ARGS="$ARGS --replace-example"; fi
+          python3 scripts/finances.py $ARGS --push
+
+      - name: Say what landed
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          p = pathlib.Path("finances/data/snapshot.json")
+          if not p.exists():
+              print("no snapshot was written"); raise SystemExit(0)
+          d = json.loads(p.read_text(encoding="utf-8"))
+          print("generatedAt", d.get("generatedAt"), "| synthetic", d.get("synthetic"))
+          # Every source, whether it worked or not — a half-failed refresh that
+          # dropped an account would otherwise look like money going missing.
+          for s in d.get("sources") or []:
+              print(f"  {s.get('id'):8} {s.get('status'):8} {s.get('message') or ''}")
+          print("  ask rows:", len(d.get("ask") or []))
+          PY

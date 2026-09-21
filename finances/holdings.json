@@ -1,0 +1,59 @@
+{
+  "_comment": "What you hold with a fund provider, in three pots that behave differently. The refresh job reads this file; the app never does. `investments` is an ordinary fund account: its purchases leave your bank account, so units are ACCRUED from the bank feed on top of the anchor below. `pension` and `equity` are switched off in this example — turn one on when you have real numbers for it, never before, because an invented holding goes straight into net worth. See PROMPT.md.",
+
+  "investments": {
+    "enabled": true,
+    "_account": "Example text — one fund, bought by a standing monthly transfer. Nobody's account.",
+    "_match": "Substrings identifying a purchase in your bank's transaction text. If your provider takes more than one standing amount out of the same account and writes the same text for both, `matchAmounts` is what tells them apart.",
+    "match": [
+      "MONTHLY FUND PURCHASE"
+    ],
+    "matchAmounts": [
+      3000
+    ],
+    "_anchorDate": "The day the unit counts below were true. Purchases dated AFTER this are accrued on top; anything on or before is already inside the counts. Re-anchor every few months and the accumulated drift resets to zero.",
+    "anchorDate": "2025-09-01",
+    "_units": "Read off your provider on anchorDate and typed in here. Do NOT sum them from a transaction export if your provider ever moved money between share classes without recording units — that understates the receiving class badly.",
+    "_settlementDays": "Business days between the money leaving the bank and the provider striking the NAV the purchase bought at.",
+    "settlementDays": 2,
+    "funds": [
+      {
+        "name": "Global index fund",
+        "isin": "XX0000000000",
+        "_allocation": "Share of each purchase that goes into this fund. One fund here, so all of it.",
+        "allocation": 1.0,
+        "units": 318.4162,
+        "costBasis": 62000.0,
+        "_navSource": "\"manual\" holds the price below and the app labels it as held rather than fetched. Replace it with \"yahoo:<symbol>\" for a symbol that resolves — the price and five years of history then arrive on every run, and the growth chart becomes real. A third option, `\"isin\"`, tries the open fund-data endpoints listed as ISIN_NAV in scripts/finances.py — it is not the default because it answered 404 for every ISIN tried when that list was written. Run `python3 scripts/finances.py --probe-nav` to see what any of them actually answers before trusting it.",
+        "navSource": "manual",
+        "nav": 232.51
+      }
+    ]
+  },
+
+  "pension": {
+    "_comment": "Kept apart from everything else on purpose: money locked until retirement should not quietly flatter net worth. When enabled it is counted in the total and broken out as its own line; set includeInNetWorth to false and it is shown but not counted. Two shapes, because money reaches a pension two ways. A personal pension is paid from your own bank account, so its purchases are in the bank feed and accrue exactly like a fund account's do. An employer's account never touches your bank at all — no transaction anywhere says it happened — so it is anchored to a value you read off once, and moved by a proxy fund until you re-anchor it. The app says which of the two any figure is, and how old the anchor is.",
+    "enabled": false,
+    "provider": "Pension",
+    "includeInNetWorth": true,
+    "_disabled": "Off in the example, because a pension nobody has is a number nobody should see. Turn it on with your own accounts.",
+    "accounts": []
+  },
+
+  "equity": {
+    "_comment": "Employee shares held through a share-plan administrator. The administrator itself usually cannot be read: its API is a partner integration sold to your employer's HR system, not something a participant can call, and share plans are not payment accounts so PSD2 does not reach them either. What IS public is the share price and the exchange rate — and vesting dates are known in advance. So you copy the grants out once, and everything after that is automatic, including tranches turning from unvested into vested as their dates pass.",
+    "enabled": false,
+    "provider": "Share plan",
+    "_disabled": "Switched off until real grants are copied in — an empty or example grant list would put invented shares into net worth. Set enabled to true once quote.symbol and the grants below are yours.",
+    "quote": {
+      "symbol": null,
+      "source": "yahoo:<ticker>",
+      "currency": "USD",
+      "price": null
+    },
+    "includeUnvested": false,
+    "unvestedTaxRate": 0.47,
+    "_grants": "One entry per grant, with its tranches. `shares` is what you actually receive — if your plan sells to cover tax at vest, put the NET number here. `kind` is rsu, psu, espp, option or share. An option also needs `strike`, in the quote currency; it is worth max(0, price - strike) a share and the app says when it is under water.",
+    "grants": []
+  }
+}

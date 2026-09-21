@@ -1,0 +1,392 @@
+/* Outdoor Window — Snuggery mini-app.
+   Phone first: everything is laid out for a 390 pt screen and grows from
+   there. Compact type throughout — 13 px body, 11 px labels — because the
+   point of the app is a lot of small numbers you can take in at a glance.
+   Every colour is a token declared once so the light/dark pair swaps in one
+   place, and nothing is loaded from the network: the type is the system's. */
+
+:root {
+  color-scheme: light;
+
+  --surface-0: #f2f4f6;        /* page ground */
+  --surface-1: #ffffff;        /* cards */
+  --surface-2: #eaeef2;        /* tracks, chips, recessive fills */
+  --hairline:  #e0e5ea;
+  --hairline-strong: #c9d1da;
+
+  --text-primary:   #101520;
+  --text-secondary: #49505e;
+  --text-muted:     #69707e;   /* 4.6:1 on the ground, so 11 px labels still pass */
+
+  --accent:      #0f7a5a;      /* the one accent: a good hour, the open tab */
+  --accent-soft: #dcefe7;      /* the tint behind a good hour */
+  --on-accent:   #ffffff;
+
+  --bar-good:    #17916c;
+  --bar-near:    #b9c2cc;      /* a failing hour that was close */
+  --bar-bad:     #d7dde3;      /* a failing hour that was not */
+  --warn:        #a35a12;      /* a stale stamp */
+  --alarm:       #b3322a;      /* a file the app cannot read */
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --pad: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --surface-0: #0c0f13;
+    --surface-1: #161b21;
+    --surface-2: #1f262e;
+    --hairline:  #252d36;
+    --hairline-strong: #3a444f;
+
+    --text-primary:   #f2f5f8;
+    --text-secondary: #b3bbc6;
+    --text-muted:     #8a939f;
+
+    --accent:      #4fc79b;
+    --accent-soft: #14312a;
+    --on-accent:   #08130f;
+
+    --bar-good:    #3fbd92;
+    --bar-near:    #4a545f;
+    --bar-bad:     #2a323b;
+    --warn:        #e0a35f;
+    --alarm:       #ef8478;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 0 calc(24px + env(safe-area-inset-bottom));
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font: 13px/1.42 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ header */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: color-mix(in srgb, var(--surface-0) 88%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--hairline);
+  padding: calc(10px + env(safe-area-inset-top)) var(--pad) 0;
+}
+
+.titles { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+
+h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
+
+.stamp { margin: 0; font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+.stamp.stale { color: var(--warn); font-weight: 600; }
+
+.place {
+  margin: 1px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabs { display: flex; gap: 18px; margin-top: 8px; }
+
+.tab {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 6px 0 7px;
+  margin: 0;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 560;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.tab[aria-selected="true"] { color: var(--text-primary); border-bottom-color: var(--accent); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/* ------------------------------------------------------------------- shell */
+
+main { padding: 12px var(--pad) 0; display: grid; gap: 10px; }
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--pad);
+}
+
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 620;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.card.table { padding: 8px 6px 10px; }
+
+.card p { margin: 0 0 6px; color: var(--text-secondary); }
+
+.activity { font-size: 15px; font-weight: 640; color: var(--text-primary); margin: -2px 0 10px; }
+.card p:last-child { margin-bottom: 0; }
+
+.muted { color: var(--text-muted); }
+.small { font-size: 11px; }
+
+/* ------------------------------------------------------------- the 48 bars */
+
+.strip-wrap { display: grid; gap: 6px; }
+
+.strip {
+  display: flex;
+  gap: 1px;
+  height: 56px;
+  align-items: flex-end;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.bar {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.bar .fill {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  background: var(--bar-bad);
+  min-height: 3px;
+}
+
+.bar.near .fill { background: var(--bar-near); }
+.bar.good .fill { background: var(--bar-good); }
+.bar.daybreak::before {
+  content: "";
+  position: absolute;
+  inset: -2px auto -12px -1px;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+.bar[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 1px; }
+.bar:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: baseline;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--hairline);
+  padding-top: 8px;
+}
+
+.readout b { font-size: 13px; color: var(--text-primary); font-weight: 620; }
+.readout .verdict.good { color: var(--accent); font-weight: 620; }
+.readout .verdict.bad { color: var(--text-muted); }
+
+/* ---------------------------------------------------------- the hero window */
+
+.hero .when { font-size: 22px; font-weight: 660; letter-spacing: -0.02em; line-height: 1.12; }
+.hero .day { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.hero .length {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 620;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: 12px;
+  background: var(--hairline);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.stat { background: var(--surface-1); padding: 8px 6px; text-align: center; }
+.stat .k { display: block; font-size: 10px; color: var(--text-muted); letter-spacing: 0.02em; }
+.stat .v { display: block; font-size: 14px; font-weight: 620; margin-top: 1px; }
+
+/* -------------------------------------------------------------- plain lists */
+
+.rows { list-style: none; margin: 0; padding: 0; }
+
+.rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  padding: 7px 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.rows li:first-child { border-top: 0; }
+.rows .lead { color: var(--text-primary); font-weight: 560; }
+.rows .trail { color: var(--text-muted); font-size: 11px; text-align: right; }
+
+/* ------------------------------------------------------------- hourly table */
+
+.hours { list-style: none; margin: 0; padding: 0; }
+
+.hours .head,
+.hours .hour {
+  display: grid;
+  grid-template-columns: 3.1rem 1fr 2.9rem 2.6rem 2.6rem 2.6rem;
+  gap: 6px;
+  align-items: baseline;
+  padding: 6px 8px 6px 6px;
+  border-left: 2px solid transparent;
+}
+
+/* Deliberately not sticky: the page already has a sticky header, and a second
+   sticky strip lands underneath it where nobody can read it. */
+.hours .head {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-bottom: 4px;
+}
+
+.hours .hour { border-top: 1px solid var(--hairline); font-size: 12px; }
+.hours .hour.good { background: var(--accent-soft); border-left-color: var(--accent); }
+.hours .hour.daybreak { border-top: 1px solid var(--hairline-strong); }
+
+.hours .t { color: var(--text-secondary); }
+.hours .hour.good .t { color: var(--text-primary); font-weight: 600; }
+.hours .n { text-align: right; }
+.hours .light { font-size: 11px; color: var(--text-muted); }
+.hours .why {
+  grid-column: 3 / -1;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-align: right;
+}
+.hours .daylabel {
+  padding: 10px 6px 4px;
+  font-size: 11px;
+  font-weight: 620;
+  color: var(--text-muted);
+  border-top: 1px solid var(--hairline-strong);
+}
+.hours .daylabel:first-child { border-top: 0; padding-top: 2px; }
+
+/* ------------------------------------------------------------------- rules */
+
+.dl { display: grid; gap: 0; }
+
+.dl .item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.dl .item:first-child { border-top: 0; }
+.dl .name { font-weight: 560; }
+.dl .val { font-variant-numeric: tabular-nums; font-weight: 620; white-space: nowrap; }
+.dl .note { grid-column: 1 / -1; font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+code {
+  font: 11.5px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------- problem card */
+
+.problem { border-color: var(--alarm); }
+.problem h2 { color: var(--alarm); text-transform: none; letter-spacing: 0; font-size: 13px; }
+.problem ul { margin: 6px 0 0; padding-left: 18px; color: var(--text-secondary); }
+.problem li { margin-bottom: 3px; }
+
+.notice {
+  border-left: 3px solid var(--warn);
+  background: var(--surface-1);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+/* ------------------------------------------------------------------ footer */
+
+.foot {
+  margin: 16px var(--pad) 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.foot p { margin: 0 0 4px; }
+.foot p:last-child { margin-bottom: 0; }
+
+/* The two attribution links. The default user-agent blue is unreadable on the
+   dark ground, so they take the app's own accent, and keep the underline —
+   these are the only things in the app that leave it, and they should look
+   like it. */
+.foot a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.foot a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/* Wider than a phone: the page stops growing and centres, because a 48-hour
+   strip stretched across an iPad is harder to read, not easier. */
+@media (min-width: 600px) {
+  main, .foot, .topbar { max-width: 560px; margin-left: auto; margin-right: auto; }
+  .topbar { border-radius: 0 0 var(--radius) var(--radius); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bar .fill { transition: height .18s ease; }
+}

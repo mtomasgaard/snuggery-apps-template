@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Power Hours</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Title, stamp and the day tabs lock together in one sticky block, so the
+     tabs cannot slide under the title on the way to being pinned. -->
+<header class="topbar">
+  <div class="titles">
+    <h1>Power Hours</h1>
+    <p class="stamp" id="stamp">Loading…</p>
+  </div>
+  <p class="zone" id="zone"></p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Day"></nav>
+</header>
+
+<main id="main" aria-live="polite"></main>
+
+<footer class="foot" id="foot"></footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

@@ -19,13 +19,20 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Two complete apps. Both are examples — neither holds anybody's real data. Copy
-one, delete both, or ignore them.
+Six complete apps. All are examples — none holds anybody's real data. Copy
+one, delete them all, or ignore them. Two are **static examples** (generated
+data, nothing refreshes until you build your own pull); the rest are **live**:
+this repository's own workflows refresh their snapshots, or, for Outdoor
+Window, your Shortcut fetches the data itself.
 
 | App | What it is | Try it | Make it yours |
 | --- | --- | --- | --- |
 | **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
 | **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
+| **Finances** | Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such. | [`zips/finances.zip`](zips/finances.zip) | [`finances/PROMPT.md`](finances/PROMPT.md) |
+| **World News** | Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here. | [`zips/world-news.zip`](zips/world-news.zip) | [`world-news/PROMPT.md`](world-news/PROMPT.md) |
+| **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | [`zips/outdoor-window.zip`](zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
+| **Power Hours** | Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo). | [`zips/power-hours.zip`](zips/power-hours.zip) | [`power-hours/PROMPT.md`](power-hours/PROMPT.md) |
 
 ![Running Dashboard](screenshots/running-dashboard.png)
 
@@ -34,6 +41,23 @@ Deleting an example is deleting its folder, its workflow in
 them.
 
 ---
+
+## How the data flows
+
+Running Dashboard is the fullest example, so it is the picture; every live app here is the same
+shape with a different pull. Two hops, deliberately separate: the **code hop** happens once (the
+ZIP, imported into Snuggery), the **data hop** happens on a schedule (one small JSON file, copied
+by a Shortcut). The optional agent session writes text into the raw store and the next build
+carries it into the snapshot.
+
+![How the data flows](data-flow.svg)
+
+The same picture with the data moving along the lines: [`data-flow.html`](data-flow.html) — open it
+in a browser, or keep it in Snuggery beside the apps; it needs no script.
+
+What never happens: Snuggery itself makes no network request, and the mini-app cannot reach the
+network or start a shortcut by itself. Every fetch above runs inside GitHub or inside the Shortcuts
+app with your own accounts; the one thing Snuggery starts is the shortcut you named.
 
 ## Setting up: once ever, then once per app
 
@@ -71,16 +95,17 @@ That is the whole per-app cost. Nothing else changes, ever.
   data/snapshot.json     THE ONLY FILE THAT CHANGES
 scripts/                 one refresh script per app
 garmin-raw/              Running Dashboard's append-only raw store
+data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
 .github/workflows/       one refresh workflow per app, plus the ZIP builder
 zips/<app-folder>.zip    built automatically; this is what you install from
 screenshots/             pictures for this README; not zipped, not part of any app
 ```
 
-Both `hello-live/` and `running-dashboard/` are complete working examples. Install
-Hello Live first and run your shortcut against it before building anything
-real — if it updates, your loop works, and any later problem is in the new app
-rather than in the setup. Either folder can be deleted once you no longer need
-it as a reference.
+All six app folders are complete working examples. Install Hello Live first and
+run your shortcut against it before building anything real — if it updates, your
+loop works, and any later problem is in the new app rather than in the setup.
+Any folder can be deleted once you no longer need it as a reference, together
+with its script and its workflow.
 
 **An app is not always one file.** Hello Live is a single `index.html` with its
 CSS and JS inline. Running Dashboard is `index.html` plus `app.js`, `style.css`,

@@ -1,0 +1,290 @@
+/* World News — Snuggery mini-app.
+   Phone first: one 390-pt column, compact type, hairline separators instead of
+   card chrome, one accent. Every colour is a token declared once so the
+   light/dark pair swaps in one place. No web font: the system stack only, and
+   nothing at all is loaded from outside this folder. */
+
+:root {
+  color-scheme: light;
+
+  --surface-0: #eef0f4;       /* page ground */
+  --surface-1: #ffffff;       /* section surface */
+  --surface-2: #f2f4f8;       /* chips, recessive fills */
+  --hairline:  #e2e6ee;
+  --hairline-strong: #ced5e0;
+
+  --text-primary:   #0f1420;
+  --text-secondary: #4a5162;
+  --text-muted:     #687080;   /* 4.6:1 on the ground, so 11 px labels pass */
+  --accent:         #2f6df6;
+  --on-accent:      #ffffff;
+
+  --stale:     #a87400;        /* the "this is old" colour, both themes */
+  --stale-bg:  #fdf3dc;
+  --critical:  #c23b34;
+
+  --radius: 14px;
+  --radius-sm: 9px;
+  --pad: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --surface-0: #0b0e13;
+    --surface-1: #151a22;
+    --surface-2: #1d232d;
+    --hairline:  #262d38;
+    --hairline-strong: #3b4453;
+
+    --text-primary:   #f3f5f8;
+    --text-secondary: #b4bbc7;
+    --text-muted:     #8d95a3;
+    --accent:         #6f9bff;
+    --on-accent:      #0b0e13;
+
+    --stale:     #f2b322;
+    --stale-bg:  #2e2617;
+    --critical:  #f07a72;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font: 15px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+        "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  font-variant-numeric: tabular-nums;          /* times and counts line up */
+}
+
+body {
+  padding: 0 0 calc(28px + env(safe-area-inset-bottom));
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ---------------------------------------------------------------- topbar */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--surface-0);
+  padding: calc(10px + env(safe-area-inset-top)) var(--pad) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.titles {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+h1 {
+  font-size: 1.0625rem;
+  font-weight: 640;
+  letter-spacing: -.01em;
+  margin: 0;
+}
+
+.stamp {
+  margin: 0;
+  font-size: .75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.stamp.is-stale {
+  color: var(--stale);
+  font-weight: 600;
+}
+
+/* Region tabs. They scroll sideways rather than wrapping, because a wrapped
+   second row moves the headlines down on every phone that shows it. */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin: 8px calc(var(--pad) * -1) 0;
+  padding: 0 var(--pad) 7px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex: 0 0 auto;
+  appearance: none;
+  border: 0;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: .8125rem;
+  font-weight: 560;
+  padding: 5px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tab .dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: var(--stale);
+  vertical-align: middle;
+}
+
+/* ---------------------------------------------------------------- regions */
+
+main { padding: 0 var(--pad); }
+
+.region {
+  margin: 16px 0 0;
+  background: var(--surface-1);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.region > h2 {
+  margin: 0;
+  padding: 10px var(--pad) 8px;
+  font-size: .75rem;
+  font-weight: 640;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  font-size: .625rem;
+  font-weight: 640;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--stale-bg);
+  color: var(--stale);
+}
+
+.story {
+  display: block;
+  padding: 11px var(--pad) 12px;
+  border-top: 1px solid var(--hairline);
+  text-decoration: none;
+  color: inherit;
+}
+
+.story:first-of-type { border-top: 1px solid var(--hairline); }
+
+.story:active { background: var(--surface-2); }
+
+.story .headline {
+  font-size: .9375rem;
+  font-weight: 560;
+  line-height: 1.32;
+  color: var(--text-primary);
+}
+
+.story:hover .headline { color: var(--accent); }
+
+.story .meta {
+  margin-top: 4px;
+  font-size: .75rem;
+  color: var(--text-muted);
+}
+
+.story .meta .src { font-weight: 600; color: var(--text-secondary); }
+.story .meta .old { color: var(--stale); }
+
+.story .summary {
+  margin-top: 5px;
+  font-size: .8125rem;
+  line-height: 1.38;
+  color: var(--text-secondary);
+}
+
+.empty {
+  padding: 12px var(--pad) 14px;
+  border-top: 1px solid var(--hairline);
+  font-size: .8125rem;
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------- problem */
+
+.problem {
+  margin: 16px var(--pad) 0;
+  background: var(--surface-1);
+  border: 1px solid var(--critical);
+  border-radius: var(--radius);
+  padding: var(--pad);
+}
+
+.problem h2 {
+  margin: 0 0 6px;
+  font-size: .9375rem;
+  color: var(--critical);
+}
+
+.problem p { margin: 0 0 8px; font-size: .8125rem; color: var(--text-secondary); }
+.problem p:last-child { margin-bottom: 0; }
+
+.problem code {
+  font: .75rem ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.foot {
+  margin: 22px var(--pad) 0;
+  font-size: .75rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.foot h2 {
+  font-size: .6875rem;
+  font-weight: 640;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+
+.foot ul { margin: 0 0 8px; padding: 0; list-style: none; }
+.foot li { margin-bottom: 5px; }
+.foot li b { color: var(--text-secondary); font-weight: 600; }
+.foot p { margin: 8px 0 0; }
+.foot a { color: var(--accent); }
+
+.feednote { color: var(--stale); }
+
+/* The layout is fluid; the type scale is not. Every size here is a rem
+   against the fixed 15px root set above, so the phone's larger text settings
+   do NOT move this app's type - the same as the running dashboard, and a
+   pack-wide thing to change rather than a per-app one. What does adapt is the
+   column: nothing is pinned to a pixel height, so longer headlines and wrapped
+   summaries simply make each story taller. */
+@media (min-width: 430px) {
+  :root { --pad: 18px; }
+}

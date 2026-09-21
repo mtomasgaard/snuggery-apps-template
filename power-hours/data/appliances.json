@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "_comment": "Edit this in Snuggery: the app's ⋯ menu → App Files. Each row is a name and how many hours the appliance runs for; the app finds the cheapest run of that length in each day's prices. Fractions are fine (1.5 is ninety minutes). Editing it on the phone changes the app at once; the ask table catches up the next time the refresh job runs, so change it in the repository too if you want both to agree.",
+  "appliances": [
+    { "name": "Dishwasher", "hours": 2 },
+    { "name": "Washing machine", "hours": 1.5 },
+    { "name": "Car charging", "hours": 4 },
+    { "name": "Tumble dryer", "hours": 2 }
+  ]
+}

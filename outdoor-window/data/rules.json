@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "activity": "A walk outside",
+
+  "maxRainChancePct": 30,
+  "maxPrecipMm": 0.2,
+  "maxGustKmh": 35,
+  "temperatureC": { "min": 2, "max": 26 },
+  "dewPointC": { "min": -10, "max": 17 },
+
+  "daylight": "daylight",
+  "goldenHourMinutes": 75,
+
+  "minWindowHours": 2
+}

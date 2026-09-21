@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Finances",
+  "entryPoint": "index.html",
+  "description": "Net worth, accounts, spending and savings — bank data over PSD2, plus the house, cars and loans no bank reports",
+  "version": "1.0"
+}

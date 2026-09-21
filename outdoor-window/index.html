@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Outdoor Window</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="titles">
+    <h1>Outdoor Window</h1>
+    <p class="stamp" id="stamp">Loading…</p>
+  </div>
+  <p class="place" id="place"></p>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Panes"></nav>
+</header>
+
+<main id="main" aria-live="polite"></main>
+
+<footer class="foot">
+  <!-- Open-Meteo's licence asks for this credit next to any place their data is
+       shown, as a link, with a link to the licence beside it, and for changes to
+       be indicated. It is static markup rather than something the JavaScript
+       draws: a broken snapshot must not be able to take the attribution down
+       with it.
+       These two anchors are the only external addresses anywhere in the app, and
+       nothing is ever fetched from them. A tap on one is a link activation,
+       which Snuggery hands to Safari after asking — the same thing world-news
+       does with its headlines. The app itself still loads nothing but ./data/. -->
+  <p><a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>, under
+     <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>.
+     The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified;
+     the scores and the ask table beside it are this app's.</p>
+  <p>Hours are local to the forecast's own place. Forecasts are forecasts: the app scores what was predicted, not what happened.</p>
+</footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
