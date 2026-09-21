@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-21T20:56:49Z",
-  "headline": "20:56 UTC",
+  "generatedAt": "2026-09-21T23:59:34Z",
+  "headline": "23:59 UTC",
   "caption": "Written by a GitHub Action, copied here by a Shortcut.",
   "runs": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "label": "Minute of day",
-      "value": "1256"
+      "value": "1439"
     }
   ],
   "ask": [
@@ -27,7 +27,7 @@
     },
     {
       "measure": "Minute of day",
-      "value": 1256
+      "value": 1439
     }
   ]
 }
