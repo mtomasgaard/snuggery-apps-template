@@ -36,6 +36,11 @@ Window, your Shortcut fetches the data itself.
 | **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer you can pan and zoom, with a five-day time player and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | [`zips/global-wind.zip`](zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
 
 ![Running Dashboard](screenshots/running-dashboard.png)
+![Finances](screenshots/finances.png)
+![World News](screenshots/world-news.png)
+![Outdoor Window](screenshots/outdoor-window.png)
+![Power Hours](screenshots/power-hours.png)
+![Global Wind](screenshots/global-wind.png)
 
 Deleting an example is deleting its folder, its workflow in
 `.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
