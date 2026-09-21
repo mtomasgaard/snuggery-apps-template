@@ -28,7 +28,7 @@ Window, your Shortcut fetches the data itself.
 | App | What it is | Try it | Make it yours |
 | --- | --- | --- | --- |
 | **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
-| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and says so on screen.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
+| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
 | **Finances** | Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such. | [`zips/finances.zip`](zips/finances.zip) | [`finances/PROMPT.md`](finances/PROMPT.md) |
 | **World News** | Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here. | [`zips/world-news.zip`](zips/world-news.zip) | [`world-news/PROMPT.md`](world-news/PROMPT.md) |
 | **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | [`zips/outdoor-window.zip`](zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
@@ -208,7 +208,11 @@ race predictions, and per-session notes. Those come from four files in
 the pull committed. The pull never writes them. Absent, the panes say so and
 every number still works.
 
-The demo's text is example text, and is labelled as such on screen. The
+The demo's evaluation, plan, race forecast and session notes were written for
+the demo runner from the demo's own numbers, to show what the routine's output
+looks like when it is there. Nothing on screen calls it an example, because the
+demo's job is to look like a real copy; this README, `PROMPT.md` and the
+*Static examples* folder Snuggery installs it into are where that is said. The
 shapes are in the header comment of `running-dashboard/app.js`.
 
 ## Things that will cost you an afternoon if nobody says them

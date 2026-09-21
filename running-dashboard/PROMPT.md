@@ -8,8 +8,9 @@ Read it together before starting.
 ## What this app is
 
 Running Dashboard is five panes — Now, Plan, Training, Health, Sessions — built
-from your Garmin Connect data. The copy you just installed still holds made-up demo data (the app
-says so on screen, in a visible "example text" label). This guide replaces that with your own.
+from your Garmin Connect data. The copy you just installed still holds made-up demo data — a made-up runner's nine months,
+with a coaching evaluation written for that runner; nothing on screen says so, because the demo is
+built to look like a real copy. This guide replaces all of it with your own.
 
 ## Before you start
 
