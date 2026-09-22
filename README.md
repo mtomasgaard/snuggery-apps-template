@@ -33,21 +33,32 @@ sign-in and a bank connection — and until you add them, both ship as static
 examples with made-up data. **Anatomy** and **Norne Reservoir** are the two big
 ones: a human body and an oil field, each in 3D, 21 and 15 MB as ZIPs. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
-pack precisely because of that size — install either by opening its ZIP and
-sharing it to Snuggery, the same way as any app on this page.
+pack precisely because of that size — install either the same way as any app on this page:
+three taps, just below.
 
-| App | What it is | Needs | Try it | Make it yours |
+## Install any of them on your phone — three taps
+
+1. **On the iPhone, in Safari**, tap an app's **Get the ZIP** link below. Safari downloads it and
+   shows a small arrow at the top of the screen.
+2. Tap that arrow (or open **Files → Downloads**), tap the ZIP, then the **Share** button.
+3. Choose **Snuggery**. It appears in your Library and opens with one tap. Nothing else to set up.
+
+The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
+Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
+back to this page.
+
+| App | What it is | Needs | Install | Make it yours |
 | --- | --- | --- | --- | --- |
-| **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | nothing | [`zips/hello-live.zip`](zips/hello-live.zip) | it is the loop's proof, not a thing to personalise |
-| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.** | a Garmin sign-in | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
-| **Finances** | Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such. | a bank connection | [`zips/finances.zip`](zips/finances.zip) | [`finances/PROMPT.md`](finances/PROMPT.md) |
-| **World News** | Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here. | nothing | [`zips/world-news.zip`](zips/world-news.zip) | [`world-news/PROMPT.md`](world-news/PROMPT.md) |
-| **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | your own Shortcut | [`zips/outdoor-window.zip`](zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
-| **Power Hours** | Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo). | nothing | [`zips/power-hours.zip`](zips/power-hours.zip) | [`power-hours/PROMPT.md`](power-hours/PROMPT.md) |
-| **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer — on a map you pan and zoom, or a globe you turn — with a five-day time player, a moving night side and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | nothing | [`zips/global-wind.zip`](zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
-| **Global Weather** | Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, and a tap anywhere giving all five numbers at that point. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here twice a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size. | nothing | [`zips/global-weather.zip`](zips/global-weather.zip) | [`global-weather/PROMPT.md`](global-weather/PROMPT.md) |
-| **Anatomy** | A full human body in 3D: 934 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, nerves, brain, cartilage, bone — that you peel, fade, isolate, search and explode. Three.js is vendored; nothing is fetched. **Static**, 30 MB unpacked. | nothing | [`zips/anatomy.zip`](zips/anatomy.zip) | [`anatomy/NOTES.md`](anatomy/NOTES.md) |
-| **Norne Reservoir** | The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked. | nothing | [`zips/norne-reservoir.zip`](zips/norne-reservoir.zip) | [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md) |
+| **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) | it is the loop's proof, not a thing to personalise |
+| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.** | a Garmin sign-in | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
+| **Finances** | Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such. | a bank connection | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) | [`finances/PROMPT.md`](finances/PROMPT.md) |
+| **World News** | Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) | [`world-news/PROMPT.md`](world-news/PROMPT.md) |
+| **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | your own Shortcut | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
+| **Power Hours** | Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo). | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | [`power-hours/PROMPT.md`](power-hours/PROMPT.md) |
+| **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer — on a map you pan and zoom, or a globe you turn — with a five-day time player, a moving night side and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
+| **Global Weather** | Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, and a tap anywhere giving all five numbers at that point. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here twice a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | [`global-weather/PROMPT.md`](global-weather/PROMPT.md) |
+| **Anatomy** | A full human body in 3D: 934 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, nerves, brain, cartilage, bone — that you peel, fade, isolate, search and explode. Three.js is vendored; nothing is fetched. **Static**, 30 MB unpacked. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | [`anatomy/NOTES.md`](anatomy/NOTES.md) |
+| **Norne Reservoir** | The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md) |
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
 ![Finances](finances/screenshots/app.png)
@@ -103,7 +114,7 @@ is genuinely one line.
 ### Every new app
 
 1. **Ask an agent to build it**, in a session attached to this repository.
-2. **Install it once** — open its `zips/<app>.zip` address in Safari → Share → Snuggery.
+2. **Install it once** — in Safari on the phone, open `github.com/<you>/<repo>/raw/main/zips/<app>.zip` (the raw address downloads; the normal page only shows it), then Share → Snuggery.
 3. **Add one row** to the Dictionary in your shortcut: display name → data address.
 
 That is the whole per-app cost. Nothing else changes, ever.
