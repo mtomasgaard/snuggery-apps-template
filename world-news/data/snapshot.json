@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-22T16:01:17Z",
+ "generatedAt": "2026-09-22T17:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/lulas-un-address-points-to-two-starkly-different-visions-of-brazilian-nationalism-ahead-of-crucial-election-290470",
+     "published": "2026-09-22T15:24:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andre Pagliarini, Assistant Professor of History and International Studies, Louisiana State University"
+    },
+    {
      "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Anahi Collado, Assistant Research Professor of Psychology, University of Colorado Boulder"
-    },
-    {
-     "title": "The SAT has changed since it debuted 100 years ago – but questions remain about its relevance",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/the-sat-has-changed-since-it-debuted-100-years-ago-but-questions-remain-about-its-relevance-287551",
-     "published": "2026-09-22T12:48:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Beth Kania-Gosche, Professor of Education, Missouri University of Science and Technology"
     },
     {
      "title": "The commodification of Indigenous cultures and traditions",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
-   "published": "2026-09-22 12:49 UTC"
+   "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
+   "published": "2026-09-22 15:24 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "The SAT has changed since it debuted 100 years ago – but questions remain about its relevance",
-   "published": "2026-09-22 12:48 UTC"
+   "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
+   "published": "2026-09-22 12:49 UTC"
   },
   {
    "region": "Americas",
