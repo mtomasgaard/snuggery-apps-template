@@ -1,12 +1,31 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-21T09:57:16Z",
+ "generatedAt": "2026-09-22T18:01:12Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin's farce elections did not allow that.",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/09/21/russian-tiktokers-wanted-to-vote-for-an-anti-war-agenda-putins-farce-elections-did-not-allow-that/",
+     "published": "2026-09-21T13:15:19Z",
+     "summary": "Elections in Russia are a sham. Yet when someone appears genuinely committed to an anti-war agenda, many had seize that hope as a chance to change, including young TikTokers",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
+    {
+     "title": "‘Nowhere is safe’: UN experts detail Ukraine war’s toll and Russia’s reach beyond its borders",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168386",
+     "published": "2026-09-21T12:00:00Z",
+     "summary": "UN Human Rights Council-appointed experts on Monday laid out a grim picture of the human cost of Russia’s invasion of Ukraine, with a spotlight on civilians facing a third wartime winter as well as the intimidation of…",
+     "stale": false
+    },
     {
      "title": "From the streets to the ballot box: What Hungary can teach Serbia",
      "source": "Global Voices",
@@ -28,7 +47,7 @@
      "author": "Omid Memarian"
     },
     {
-     "title": "Sexual violence against civilians and POW’s in Ukraine widespread and ‘abhorrent’",
+     "title": "Sexual violence against civilians and POWs in Ukraine widespread and ‘abhorrent’",
      "source": "UN News",
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168374",
@@ -45,15 +64,6 @@
      "summary": "At first, artists who emigrated still dealt with themes of war and their departure from Russia. Later, these broadened to include loss of home, identity, displacement and loneliness.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Ukraine: Attacks on education threaten an entire generation, UNICEF warns",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168336",
-     "published": "2026-09-15T12:00:00Z",
-     "summary": "In an underground classroom in Sumy, Ukraine, children sit quietly at their desks, busy with the day’s lessons. For the moment they are shielded from the horrors of nearly five years of war, but just barely.",
-     "stale": false
     },
     {
      "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
@@ -74,16 +84,6 @@
      "summary": "As I read through the pieces Global Voices’ authors contributed to the August 2026 Spotlight series, “Indigenous Rights,” one common question stands out for me: Who gets to decide?",
      "stale": false,
      "author": "Subhashish Panigrahi"
-    },
-    {
-     "title": "North Macedonia’s independence should not be commemorated by glorifying war criminals",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/09/06/north-macedonias-independence-should-not-be-commemorated-by-glorifying-war-criminals/",
-     "published": "2026-09-06T11:11:21Z",
-     "summary": "Ahead of North Macedonia’s 35th independence anniversary, an examination of how government-linked praise for Ratko Mladić affects victims, interethnic trust, the rule of law and the country’s European aspirations.",
-     "stale": false,
-     "author": "Bardhyl Jashari"
     }
    ]
   },
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/lulas-un-address-points-to-two-starkly-different-visions-of-brazilian-nationalism-ahead-of-crucial-election-290470",
+     "published": "2026-09-22T15:24:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andre Pagliarini, Assistant Professor of History and International Studies, Louisiana State University"
+    },
+    {
+     "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/when-your-child-asks-if-theyll-be-harmed-like-the-people-on-the-news-what-do-you-say-psychologists-provide-tips-on-how-to-talk-about-identity-290768",
+     "published": "2026-09-22T12:49:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anahi Collado, Assistant Research Professor of Psychology, University of Colorado Boulder"
+    },
+    {
      "title": "The commodification of Indigenous cultures and traditions",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -101,26 +121,6 @@
      "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
      "stale": false,
      "author": "Marco Martínez"
-    },
-    {
-     "title": "Annie Dillard brought poetry into prose, pioneering a mystical form of creative nonfiction that critics both admired and misunderstood",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/annie-dillard-brought-poetry-into-prose-pioneering-a-mystical-form-of-creative-nonfiction-that-critics-both-admired-and-misunderstood-290676",
-     "published": "2026-09-18T17:40:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Amy Cannon, Associate Professor of Writing, USC Dornsife College of Letters, Arts and Sciences"
-    },
-    {
-     "title": "At-home drug disposal products can play an important role in keeping rural Coloradans safe",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/at-home-drug-disposal-products-can-play-an-important-role-in-keeping-rural-coloradans-safe-285554",
-     "published": "2026-09-18T12:55:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sunny Linnebur, Professor of Geriatric Pharmacy, University of Colorado Anschutz"
     },
     {
      "title": "Haiti: Child malnutrition crisis worsens amid escalating violence",
@@ -177,24 +177,42 @@
    "stale": false,
    "items": [
     {
-     "title": "Demolishing Lagos informal settlements also destroys the city’s best defences against climate change",
+     "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/demolishing-lagos-informal-settlements-also-destroys-the-citys-best-defences-against-climate-change-291071",
-     "published": "2026-09-20T05:03:56Z",
+     "link": "https://theconversation.com/south-africas-minibus-taxi-industry-has-lessons-for-policymakers-on-how-informal-systems-work-291033",
+     "published": "2026-09-22T14:50:20Z",
      "summary": "",
      "stale": false,
-     "author": "Brianna Castro, Assistant Professor of Urban Sustainability, Yale University"
+     "author": "Siyabulela Christopher Fobosi, Senior Researcher, UNESCO 'Oliver Tambo' Chair of Human Rights, University of Fort Hare, University of Fort Hare"
     },
     {
-     "title": "Teenage girls may know how to prevent pregnancy – that doesn’t mean they have the power to do it",
+     "title": "Climate change is fuelling African conflict – governments are developing a shared response",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/teenage-girls-may-know-how-to-prevent-pregnancy-that-doesnt-mean-they-have-the-power-to-do-it-290007",
-     "published": "2026-09-20T05:03:05Z",
+     "link": "https://theconversation.com/climate-change-is-fuelling-african-conflict-governments-are-developing-a-shared-response-289088",
+     "published": "2026-09-22T14:46:22Z",
      "summary": "",
      "stale": false,
-     "author": "Deevia Bhana, Professor Gender and Childhood Sexuality, University of KwaZulu-Natal"
+     "author": "Katongo Seyuba, Researcher, Stockholm International Peace Research Institute"
+    },
+    {
+     "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168389",
+     "published": "2026-09-21T12:00:00Z",
+     "summary": "Along the coast of Tanzania, in East Africa, the Indian Ocean is pushing saltwater ever farther inland, shrinking coconut harvests, driving fish away and leaving some residents wondering how much longer they can stay.",
+     "stale": false
+    },
+    {
+     "title": "Ebola vaccine trial begins in DR Congo",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168381",
+     "published": "2026-09-21T12:00:00Z",
+     "summary": "An Ebola vaccine trial is underway in the Democratic Republic of the Congo (DRC), involving frontline health workers and others involved in the response.",
+     "stale": false
     },
     {
      "title": "How Togolese people are reinventing political protest amid civil society crackdown",
@@ -226,24 +244,6 @@
      "author": "Tirso Sitoe"
     },
     {
-     "title": "Ebola responders grapple with widening outbreak in DR Congo",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168338",
-     "published": "2026-09-15T12:00:00Z",
-     "summary": "The deadly Ebola virus outbreak in DR Congo continues to spread across the vast country despite some success in containing it, aid officials said on Tuesday, in a renewed call for international support to help…",
-     "stale": false
-    },
-    {
-     "title": "‘Super El Niño’ deepens hunger crisis in South Sudan – WFP",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168334",
-     "published": "2026-09-15T12:00:00Z",
-     "summary": "The already dire hunger crisis in South Sudan is becoming increasingly critical as violence, extreme weather and dwindling aid leave millions without enough food, the UN World Food Programme (WFP) warned on Tuesday.",
-     "stale": false
-    },
-    {
      "title": "Who is responsible for protecting and preserving Indigenous cultures?",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -260,6 +260,24 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Displacement on the rise in Yemen as fighting continues",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168390",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "As hostilities worsen in Yemen, more people have been fleeing their homes, further intensifying the humanitarian crisis within the region, the UN Refugee Agency (UNHCR) warned on Tuesday.",
+     "stale": false
+    },
+    {
+     "title": "UN condemns attempted Houthi strike on Riyadh as Yemen displacement surges past 130,000",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168387",
+     "published": "2026-09-21T12:00:00Z",
+     "summary": "The UN has condemned continued cross‑border attacks by Houthi forces against Saudi Arabia, including an attempted strike on the capital Riyadh, as fighting inside Yemen drives one of the country’s fastest displacement…",
+     "stale": false
+    },
     {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
      "source": "Global Voices",
@@ -286,24 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168355",
      "published": "2026-09-17T12:00:00Z",
      "summary": "While Syria is making progress in its political transition, the Security Council is meeting to hear briefings and discuss the situation on the ground, including recent reports of deadly armed clashes with an…",
-     "stale": false
-    },
-    {
-     "title": "Yemen escalation displaces more than 57,000 children: UNICEF",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168354",
-     "published": "2026-09-17T12:00:00Z",
-     "summary": "Renewed fighting in Yemen is deepening an already severe humanitarian crisis in a country where more than 12 million children depend on aid, after more than a decade of conflict.",
-     "stale": false
-    },
-    {
-     "title": "Gaza: At least 20 killed in deadly building collapse, search for survivors continues",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168346",
-     "published": "2026-09-16T12:00:00Z",
-     "summary": "Search and rescue operations continued in Gaza City on Wednesday following the collapse of a bombed-out building that killed at least 20 people, according to reports.",
      "stale": false
     },
     {
@@ -343,6 +343,16 @@
    "name": "Asia",
    "stale": false,
    "items": [
+    {
+     "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/22/technology-facilitated-trafficking-how-bangladeshi-migrants-become-victims-of-recruitment-in-cambodia/",
+     "published": "2026-09-22T08:12:06Z",
+     "summary": "Thousands of Bangladeshis travelled to Cambodia for promised jobs, only to encounter Technology-facilitated trafficking and cyber-scamming networks, with 98 percent reportedly failing to receive the work they were…",
+     "stale": false,
+     "author": "Zulker Naeen"
+    },
     {
      "title": "How two elections reshaped the India–Bangladesh border",
      "source": "Global Voices",
@@ -402,16 +412,6 @@
      "author": "Guest Contributor"
     },
     {
-     "title": "Who is responsible for protecting and preserving Indigenous cultures?",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/09/14/who-is-responsible-for-protecting-and-preserving-indigenous-cultures/",
-     "published": "2026-09-14T09:19:57Z",
-     "summary": "As I read through the pieces Global Voices’ authors contributed to the August 2026 Spotlight series, “Indigenous Rights,” one common question stands out for me: Who gets to decide?",
-     "stale": false,
-     "author": "Subhashish Panigrahi"
-    },
-    {
      "title": "What remains after Nepal’s Gen Z protests? Survivors reflect one year later",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "View from The Hill: Albanese seeks to advance Australia’s middle power diplomacy via UN Security Council seat",
+     "title": "Politics with Michelle Grattan: Jim Chalmers warns rising debt bills are set to hit the budget",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-albanese-seeks-to-advance-australias-middle-power-diplomacy-via-un-security-council-seat-291995",
-     "published": "2026-09-21T08:24:00Z",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-jim-chalmers-warns-rising-debt-bills-are-set-to-hit-the-budget-292589",
+     "published": "2026-09-22T08:31:08Z",
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
-     "title": "As war in the Middle East widens, Saudi Arabia’s new defence pact could face a major test",
+     "title": "What kind of a person am I? How fear and rejection can underpin OCD",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/as-war-in-the-middle-east-widens-saudi-arabias-new-defence-pact-could-face-a-major-test-292357",
-     "published": "2026-09-21T06:18:43Z",
+     "link": "https://theconversation.com/what-kind-of-a-person-am-i-how-fear-and-rejection-can-underpin-ocd-290243",
+     "published": "2026-09-22T04:06:34Z",
      "summary": "",
      "stale": false,
-     "author": "Amin Saikal, Emeritus Professor of Middle Eastern Studies, Australian National University; The University of Western Australia; Victoria University"
+     "author": "Kelvin (Shiu Fung) Wong, Senior Lecturer in Clinical Psychology, Swinburne University of Technology"
     },
     {
-     "title": "As renewed chaos grips the oil market, one country is keeping global prices down – by reducing demand",
+     "title": "Two native turtles are vying to survive in a coastal Australian river. One doesn’t belong there",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/as-renewed-chaos-grips-the-oil-market-one-country-is-keeping-global-prices-down-by-reducing-demand-292218",
-     "published": "2026-09-21T05:55:16Z",
+     "link": "https://theconversation.com/two-native-turtles-are-vying-to-survive-in-a-coastal-australian-river-one-doesnt-belong-there-292111",
+     "published": "2026-09-22T02:32:56Z",
      "summary": "",
      "stale": false,
-     "author": "Lurion De Mello, Senior Lecturer in Finance, Macquarie University"
+     "author": "Jessica Tout-Lyon, Lecturer and Researcher, Marine, Molecular and Microbial Ecology, Charles Sturt University"
     },
     {
-     "title": "Opportunity’s ‘tax reset’ could benefit many households – but does little for the poorest",
+     "title": "‘Spring queening’ time will be crucial for finding any surviving yellow-legged hornets",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/opportunitys-tax-reset-could-benefit-many-households-but-does-little-for-the-poorest-291537",
-     "published": "2026-09-20T22:25:36Z",
+     "link": "https://theconversation.com/spring-queening-time-will-be-crucial-for-finding-any-surviving-yellow-legged-hornets-292113",
+     "published": "2026-09-22T01:02:47Z",
      "summary": "",
      "stale": false,
-     "author": "Michael Fletcher, Adjunct Research Fellow, School of Government, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Phil Lester, Professor of Ecology and Entomology, Te Herenga Waka — Victoria University of Wellington"
     },
     {
-     "title": "Are girls getting their periods earlier? And can parents do anything about it?",
+     "title": "Calls for global regulation of AI are growing. What exactly could it look like?",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/are-girls-getting-their-periods-earlier-and-can-parents-do-anything-about-it-289619",
-     "published": "2026-09-20T20:13:34Z",
+     "link": "https://theconversation.com/calls-for-global-regulation-of-ai-are-growing-what-exactly-could-it-look-like-292243",
+     "published": "2026-09-21T20:09:34Z",
      "summary": "",
      "stale": false,
-     "author": "Jodie Avery, Research Co-Lead, Chronic Reproductive Health Conditions, Robinson Research Institute, Adelaide University"
+     "author": "Stan Karanasios, Professor in Information Systems, The University of Queensland"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -673,6 +673,18 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin's farce elections did not allow that.",
+   "published": "2026-09-21 13:15 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "UN News",
+   "title": "‘Nowhere is safe’: UN experts detail Ukraine war’s toll and Russia’s reach beyond its borders",
+   "published": "2026-09-21 12:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "From the streets to the ballot box: What Hungary can teach Serbia",
    "published": "2026-09-20 06:35 UTC"
   },
@@ -685,7 +697,7 @@
   {
    "region": "Europe",
    "source": "UN News",
-   "title": "Sexual violence against civilians and POW’s in Ukraine widespread and ‘abhorrent’",
+   "title": "Sexual violence against civilians and POWs in Ukraine widespread and ‘abhorrent’",
    "published": "2026-09-18 12:00 UTC"
   },
   {
@@ -693,12 +705,6 @@
    "source": "Global Voices",
    "title": "Street art in Russia is dead and the country is full of monumental war art",
    "published": "2026-09-17 18:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Ukraine: Attacks on education threaten an entire generation, UNICEF warns",
-   "published": "2026-09-15 12:00 UTC"
   },
   {
    "region": "Europe",
@@ -713,28 +719,22 @@
    "published": "2026-09-14 09:19 UTC"
   },
   {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "North Macedonia’s independence should not be commemorated by glorifying war criminals",
-   "published": "2026-09-06 11:11 UTC"
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
+   "published": "2026-09-22 15:24 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
+   "published": "2026-09-22 12:49 UTC"
   },
   {
    "region": "Americas",
    "source": "Global Voices",
    "title": "The commodification of Indigenous cultures and traditions",
    "published": "2026-09-21 06:21 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Annie Dillard brought poetry into prose, pioneering a mystical form of creative nonfiction that critics both admired and misunderstood",
-   "published": "2026-09-18 17:40 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "At-home drug disposal products can play an important role in keeping rural Coloradans safe",
-   "published": "2026-09-18 12:55 UTC"
   },
   {
    "region": "Americas",
@@ -769,14 +769,26 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Demolishing Lagos informal settlements also destroys the city’s best defences against climate change",
-   "published": "2026-09-20 05:03 UTC"
+   "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
+   "published": "2026-09-22 14:50 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Teenage girls may know how to prevent pregnancy – that doesn’t mean they have the power to do it",
-   "published": "2026-09-20 05:03 UTC"
+   "title": "Climate change is fuelling African conflict – governments are developing a shared response",
+   "published": "2026-09-22 14:46 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
+   "published": "2026-09-21 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Ebola vaccine trial begins in DR Congo",
+   "published": "2026-09-21 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -798,21 +810,21 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Ebola responders grapple with widening outbreak in DR Congo",
-   "published": "2026-09-15 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘Super El Niño’ deepens hunger crisis in South Sudan – WFP",
-   "published": "2026-09-15 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "Who is responsible for protecting and preserving Indigenous cultures?",
    "published": "2026-09-14 09:19 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Displacement on the rise in Yemen as fighting continues",
+   "published": "2026-09-22 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "UN condemns attempted Houthi strike on Riyadh as Yemen displacement surges past 130,000",
+   "published": "2026-09-21 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -834,18 +846,6 @@
   },
   {
    "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen escalation displaces more than 57,000 children: UNICEF",
-   "published": "2026-09-17 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Gaza: At least 20 killed in deadly building collapse, search for survivors continues",
-   "published": "2026-09-16 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
    "source": "Global Voices",
    "title": "As Casablanca’s music scene grows, its musicians struggle",
    "published": "2026-09-13 12:00 UTC"
@@ -861,6 +861,12 @@
    "source": "Global Voices",
    "title": "South Korean civil society says no to military deployment in Straight of Hormuz",
    "published": "2026-09-10 03:26 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
+   "published": "2026-09-22 08:12 UTC"
   },
   {
    "region": "Asia",
@@ -901,44 +907,38 @@
   {
    "region": "Asia",
    "source": "Global Voices",
-   "title": "Who is responsible for protecting and preserving Indigenous cultures?",
-   "published": "2026-09-14 09:19 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
    "title": "What remains after Nepal’s Gen Z protests? Survivors reflect one year later",
    "published": "2026-09-08 04:48 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: Albanese seeks to advance Australia’s middle power diplomacy via UN Security Council seat",
-   "published": "2026-09-21 08:24 UTC"
+   "title": "Politics with Michelle Grattan: Jim Chalmers warns rising debt bills are set to hit the budget",
+   "published": "2026-09-22 08:31 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "As war in the Middle East widens, Saudi Arabia’s new defence pact could face a major test",
-   "published": "2026-09-21 06:18 UTC"
+   "title": "What kind of a person am I? How fear and rejection can underpin OCD",
+   "published": "2026-09-22 04:06 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "As renewed chaos grips the oil market, one country is keeping global prices down – by reducing demand",
-   "published": "2026-09-21 05:55 UTC"
+   "title": "Two native turtles are vying to survive in a coastal Australian river. One doesn’t belong there",
+   "published": "2026-09-22 02:32 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Opportunity’s ‘tax reset’ could benefit many households – but does little for the poorest",
-   "published": "2026-09-20 22:25 UTC"
+   "title": "‘Spring queening’ time will be crucial for finding any surviving yellow-legged hornets",
+   "published": "2026-09-22 01:02 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Are girls getting their periods earlier? And can parents do anything about it?",
-   "published": "2026-09-20 20:13 UTC"
+   "title": "Calls for global regulation of AI are growing. What exactly could it look like?",
+   "published": "2026-09-21 20:09 UTC"
   },
   {
    "region": "Oceania",
