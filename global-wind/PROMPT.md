@@ -6,11 +6,18 @@ The agent does the typing.
 
 ## What this app is
 
-Global Wind is the whole planet's wind, five days ahead, on a map you can pan,
-pinch and zoom. A colour layer for speed, arrows for direction, a player along
-the bottom that walks the forecast forward hour by hour, and a tap anywhere for
-the exact wind at that point. The data is NOAA's Global Forecast System, read
-from a public bucket that needs no key and no account.
+Global Wind is the whole planet's wind, five days ahead, two ways: on a **map**
+you can pan, pinch and zoom, and on a **globe** you can turn. A colour layer for
+speed, arrows for direction, a player along the bottom that walks the forecast
+forward hour by hour with the night side moving across it, and a tap anywhere
+for the exact wind at that point. The data is NOAA's Global Forecast System,
+read from a public bucket that needs no key and no account.
+
+The same shape carries more fields if you want them — temperature, rain, cloud
+and pressure alongside the wind, on the same map and globe. That is a separate
+app with its own folder, workflow, data branch and ZIP rather than a setting in
+this one, because a mini-app ships as one folder, and because it costs 2.9 MB a
+refresh where this one costs 1.2.
 
 It ships working, with a real pull of a real forecast in it. If the default
 resolution suits you there is nothing to set up but the Shortcut row.
@@ -138,7 +145,7 @@ gh run watch
 
 ## Step 3 — the branch this one publishes to, and why
 
-**Global Wind is the only app here that does not commit its snapshot to
+**Global Wind is the one app here that does not commit its snapshot to
 `main`.** The file is megabytes and every byte of it is different every run, so
 git can neither delta it nor compress it; twice a day that is most of a gigabyte
 a year in a repository you clone.
@@ -205,9 +212,14 @@ In rough order of how often people want them:
   with no hue cycling: on a map, "further along the scale" has to mean
   "stronger", and speed is also drawn as arrow length so nothing depends on
   colour alone.
-- **Where it opens.** The first launch fits 70°S to 70°N to the screen, centred
-  on the prime meridian; after that it remembers where you left it. The `view`
-  object near the top of `app.js` is where the default lives.
+- **Where it opens.** The map fits 70°S to 70°N on first launch, centred on the
+  prime meridian; the globe opens on your own longitude, worked out from the
+  clock's offset from UTC. After that each remembers where you left it.
+  `MAP_VIEW.fit()` and `GLOBE_VIEW.fit()` in `app.js` are where the defaults
+  live.
+- **The night wash.** `nightRgb` and `nightMax` in `buildPalette()`. Set
+  `nightMax` to 0 in both palettes if you would rather it never shaded at all,
+  or just leave the moon button off — the app remembers.
 - **A different level or field.** The script asks for `UGRD`/`VGRD` at
   `10 m above ground`. The same files hold gusts, pressure, temperature and
   winds aloft, all listed in the same `.idx` sidecar — `LEVEL` and the two field

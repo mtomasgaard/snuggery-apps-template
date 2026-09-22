@@ -93,7 +93,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 8px 12px 8px 16px;
+  padding: 8px 12px 6px 16px;
   flex: 0 0 auto;
 }
 .titles { min-width: 0; }
@@ -140,6 +140,38 @@ button {
 .iconbtn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
 .unitbtn { font-size: 12px; font-weight: 700; width: auto; min-width: 44px; padding: 0 8px; color: var(--ink); }
 
+/* ── the view tabs ───────────────────────────────────────────────────────── */
+
+.switcher {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 8px 16px;
+}
+/* A two-button segmented control. It is a tablist, and it says so. */
+.viewtabs {
+  display: flex;
+  padding: 2px;
+  gap: 2px;
+  border-radius: 10px;
+  background: var(--chip);
+}
+.viewtabs button {
+  border: 0;
+  background: none;
+  color: var(--ink-dim);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.viewtabs button[aria-selected="true"] {
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .12);
+}
+
 /* ── map ─────────────────────────────────────────────────────────────────── */
 
 .map-wrap {
@@ -176,19 +208,27 @@ button {
   line-height: 1.4;
 }
 
-.zoombtns {
+/* Two groups, because they answer two questions: where am I looking, and what
+   is drawn over it. The night toggle lives here rather than in the header so
+   the stamp keeps room to print the model run in full on a phone. */
+.mapbtns {
   position: absolute;
   right: 10px;
   top: 10px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.btngroup {
   display: flex;
   flex-direction: column;
   gap: 1px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: var(--shadow);
-  z-index: 3;
 }
-.zoombtns button {
+.btngroup button {
   width: 34px;
   height: 34px;
   border: 0;
@@ -204,6 +244,8 @@ button {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
+.btngroup button[aria-pressed="true"] { color: var(--accent); }
+.btngroup button[aria-pressed="false"] { color: var(--ink-faint); }
 
 .legend {
   position: absolute;
@@ -410,6 +452,7 @@ button {
    own — only the chrome needs this. */
 @media (min-width: 700px) {
   .topbar { padding: 10px 20px; }
+  .switcher { padding-left: 20px; padding-right: 20px; }
   .player { padding-left: 20px; padding-right: 20px; }
 }
 

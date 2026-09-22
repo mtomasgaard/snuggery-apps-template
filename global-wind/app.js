@@ -60,6 +60,28 @@
  * screen rather than drawing an empty map.
  *
  * -----------------------------------------------------------------------------
+ * TWO VIEWS OF THE SAME FIELD. The Map tab is Web Mercator, panned and pinched,
+ * the world repeating sideways — what every slippy map is. The Globe tab is
+ * orthographic: the planet as a sphere, dragged to turn it, which is the view a
+ * jet stream or a Southern Ocean storm belt is actually shaped like. Both draw
+ * from the same snapshot and share the time player, the units, the marker and
+ * the legend; switching carries the middle of the world across.
+ *
+ * The globe uses no library. Its surface is a per-pixel raster: each pixel of
+ * the disc is turned back into a longitude and latitude, the wind is sampled
+ * there, and the land under it comes from a mask rasterised once from the same
+ * world.json the flat map draws. Coastlines are drawn as vectors on top, broken
+ * wherever they go over the horizon. Everything that only changes when the
+ * world is turned is cached, so playing the forecast is a sample and a lookup
+ * per pixel.
+ *
+ * THE GLOBE HALF OF THIS FILE IS SELF-CONTAINED and meant to be lifted: the
+ * sphere, the land mask and the terminator know nothing about wind. Copy them
+ * into an app carrying other fields and they work unchanged — which is how the
+ * author's own variant with temperature, rain, cloud and pressure draws its
+ * globe. A fix to the sphere belongs in every copy.
+ *
+ * -----------------------------------------------------------------------------
  * STATIC COMPANIONS in ./assets, never rewritten by the schedule:
  *   world.json    coastlines and country borders. Natural Earth, public domain.
  *   places.json   [{ "n": "London", "lon": -0.13, "lat": 51.51, "r": 1 }, …] where
@@ -77,17 +99,25 @@
  * is what CC BY asks for; nothing requests them.
  * ========================================================================== */
 
-const STORE = { view: 'gw.view', units: 'gw.units', heat: 'gw.heat', marker: 'gw.marker' };
+const STORE = {
+  view: 'gw.view', units: 'gw.units', heat: 'gw.heat', marker: 'gw.marker',
+  tab: 'gw.tab', globe: 'gw.globe', night: 'gw.night',
+};
 const MAX_LAT = 85.05112878;   // where Web Mercator stops being finite
 const DEG = Math.PI / 180;
 const ARROW_SPACING = 30;      // CSS px between arrows, roughly
-const HEAT_PX = 3;             // CSS px per colour sample
+const HEAT_PX = 3;             // CSS px per colour sample, flat map
+const GLOBE_PX = 3;            // CSS px per colour sample, globe
+const NIGHT_PX = 6;            // and for the night wash, which is a smooth curve
 const PLAY_HOURS_PER_SEC = 5;  // playback speed: a day of forecast every ~5 s
 const FLOAT_CACHE = 8;         // decoded u/v planes kept in memory
 const PATH_K = 4096;           // land paths are built in world units × PATH_K
 const MAX_SCALE = 360 * 80;    // 80 px per degree of longitude
 const LEGEND_MAX = 36;         // m/s at the right-hand end of the legend
 const STALE_HOURS = 30;        // a forecast older than this is stamped stale
+const MASK_NX = 2048;          // the globe's land mask, in plate carrée
+const MASK_NY = 1024;
+const ANTARCTIC_EDGE = -84.6;  // Natural Earth stops here; see buildLandMask()
 
 const UNITS = {
   ms:  { label: 'm/s',  f: 1,        d: 1 },
@@ -137,6 +167,7 @@ const CREDITS = 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0';
 const $ = (id) => document.getElementById(id);
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 const pad2 = (n) => String(n).padStart(2, '0');
+const wrapLon = (lon) => ((lon + 180) % 360 + 360) % 360 - 180;
 
 /* ── colour lookup: index = speed / 0.25 m/s ─────────────────────────────── */
 
@@ -535,8 +566,11 @@ function validate(d) {
   if (!Number.isFinite(Date.parse(d.generatedAt))) return 'generatedAt is missing';
   return null;
 }
-
-/* ── projection (Web Mercator on a unit square) ──────────────────────────── */
+/* ── projections ─────────────────────────────────────────────────────────── *
+ * Two of them, one per tab. Web Mercator on a unit square for the Map, which is
+ * what every slippy map is and what makes panning and zooming cheap; and
+ * orthographic for the Globe — the view from far enough away that the sphere
+ * reads as a sphere — centred on wherever it has been turned to.              */
 
 const lonToX = (lon) => (lon + 180) / 360;
 const xToLon = (x) => x * 360 - 180;
@@ -552,14 +586,20 @@ function yToLat(y) {
 
 let snap = null;
 let field = null;
-let worldPaths = null;
+let world = null;              // the raw assets/world.json, kept for the globe
+let worldPaths = null;         // Mercator Path2Ds, for the Map tab
+let sphere = null;             // per-point sines and cosines, for the Globe tab
+let landMask = null;           // plate carrée land/sea, for the Globe tab
 let places = [];
 let t = 0;                     // step index, fractional while playing
 let playing = false;
+let tab = 'map';
 let units = 'ms';
 let heat = true;
+let night = true;
 let marker = null;             // { lon, lat }
 const view = { cx: lonToX(0), cy: 0.5, scale: 0 };   // world units; scale = world width in CSS px
+const globe = { lon: 0, lat: 20, r: 0 };             // degrees, degrees, radius in CSS px
 let W = 0, H = 0, dpr = 1;
 let pal = null;
 let renderPending = false;
@@ -580,11 +620,17 @@ function buildPalette() {
     outside: '#0b0e13', ocean: '#141b26', land: '#242d3a', coast: '#5c6c86', border: '#3a4656',
     grat: 'rgba(255,255,255,0.07)', arrow: 'rgba(255,255,255,0.93)', arrowHalo: 'rgba(0,0,0,0.5)',
     label: '#eef2f7', labelHalo: 'rgba(11,14,19,0.9)', marker: '#ffffff', markerRing: 'rgba(0,0,0,0.6)',
+    limb: 'rgba(255,255,255,0.22)',
+    oceanRgb: [20, 27, 38], landRgb: [36, 45, 58],
+    nightRgb: [2, 4, 10], nightMax: 0.4,
     heatAlpha: [0.42, 0.82],
   } : {
     outside: '#eef0f4', ocean: '#d9e2ec', land: '#f4f1e9', coast: '#7f8c9c', border: '#b3bcc8',
     grat: 'rgba(0,0,0,0.07)', arrow: 'rgba(20,24,31,0.92)', arrowHalo: 'rgba(255,255,255,0.75)',
     label: '#14181f', labelHalo: 'rgba(255,255,255,0.9)', marker: '#14181f', markerRing: 'rgba(255,255,255,0.9)',
+    limb: 'rgba(20,24,31,0.25)',
+    oceanRgb: [217, 226, 236], landRgb: [244, 241, 233],
+    nightRgb: [24, 34, 58], nightMax: 0.3,
     heatAlpha: [0.3, 0.74],
   };
   for (let i = 0; i < 256; i++) {
@@ -593,43 +639,38 @@ function buildPalette() {
   }
 }
 buildPalette();
-darkMq.addEventListener('change', () => { buildPalette(); requestRender(); });
-
-/* ── view helpers ────────────────────────────────────────────────────────── */
-
-const minScale = () => Math.max(160, W);
-
-function clampView() {
-  view.scale = clamp(view.scale, minScale(), MAX_SCALE);
-  view.cx -= Math.floor(view.cx);
-  const half = H / (2 * view.scale);
-  view.cy = view.scale <= H ? 0.5 : clamp(view.cy, half, 1 - half);
-}
-function screenToWorld(sx, sy) {
-  return [view.cx + (sx - W / 2) / view.scale, view.cy + (sy - H / 2) / view.scale];
-}
-function worldToScreen(wx, wy) {           // the nearest copy of the world
-  let dx = wx - view.cx;
-  dx -= Math.round(dx);
-  return [dx * view.scale + W / 2, (wy - view.cy) * view.scale + H / 2];
-}
-function zoomAt(sx, sy, factor) {
-  const [wx, wy] = screenToWorld(sx, sy);
-  view.scale = clamp(view.scale * factor, minScale(), MAX_SCALE);
-  view.cx = wx - (sx - W / 2) / view.scale;
-  view.cy = wy - (sy - H / 2) / view.scale;
-  clampView();
-  saveView();
+darkMq.addEventListener('change', () => {
+  buildPalette();
+  gcache = null;
   requestRender();
+});
+
+/* ── where the sun is ────────────────────────────────────────────────────── *
+ * The night side is not decoration: half the planet's weather happens in the
+ * dark, and a forecast player that walks a day forward is much easier to read
+ * when you can see the terminator crossing it. This is the usual low-precision
+ * solar position — good to a fraction of a degree, which is a pixel or two of
+ * terminator, and it costs no data because the time is already in hand.       */
+
+function sunAt(ms) {
+  const n = ms / 86400000 - 10957.5;                 // days from J2000.0
+  const L = (280.460 + 0.9856474 * n) % 360;
+  const g = ((357.528 + 0.9856003 * n) % 360) * DEG;
+  const lambda = (L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * DEG;
+  const eps = (23.439 - 0.0000004 * n) * DEG;
+  const dec = Math.asin(Math.sin(eps) * Math.sin(lambda));
+  const ra = Math.atan2(Math.cos(eps) * Math.sin(lambda), Math.cos(lambda)) / DEG;
+  const gmst = (18.697374558 + 24.06570982441908 * n) % 24;
+  return { dec, lon: wrapLon(ra - gmst * 15) * DEG };
 }
-function saveView() {
-  try { localStorage.setItem(STORE.view, JSON.stringify(view)); } catch { /* fine */ }
-}
-function restoreView() {
-  try {
-    const v = JSON.parse(localStorage.getItem(STORE.view) || 'null');
-    if (v && [v.cx, v.cy, v.scale].every(Number.isFinite) && v.scale > 0) Object.assign(view, v);
-  } catch { /* fine */ }
+
+/* Daylight above, full night below, civil twilight in between — so the edge is
+ * a band a few hundred kilometres wide rather than a hard line, which is what
+ * it is. */
+function nightFade(cosZenith) {
+  if (cosZenith > 0.02) return 0;
+  if (cosZenith < -0.12) return 1;
+  return (0.02 - cosZenith) / 0.14;
 }
 
 /* ── world geometry ──────────────────────────────────────────────────────── */
@@ -650,14 +691,120 @@ function buildWorldPaths(w) {
   return { land, borders };
 }
 
-/* ── drawing ─────────────────────────────────────────────────────────────── */
-
-function requestRender() {
-  if (renderPending) return;
-  renderPending = true;
-  requestAnimationFrame(render);
+/* The globe draws the same coastlines, but a sphere needs each point's sine
+ * and cosine rather than its projected position, and it needs them every time
+ * the world is turned. They are worked out once, here, and the rotation is
+ * then eight multiplications a point. */
+function encodeRing(enc) {
+  const n = enc.length / 2;
+  const trig = new Float32Array(n * 4);
+  const edge = new Uint8Array(n);
+  let x = 0, y = 0;
+  for (let i = 0; i < n; i++) {
+    x += enc[i * 2]; y += enc[i * 2 + 1];
+    const lon = (x / 100) * DEG, lat = (y / 100) * DEG;
+    trig[i * 4] = Math.sin(lat); trig[i * 4 + 1] = Math.cos(lat);
+    trig[i * 4 + 2] = Math.sin(lon); trig[i * 4 + 3] = Math.cos(lon);
+    // Natural Earth's Antarctica is cut off straight across the bottom, which
+    // is invisible on a Mercator map and a fake coastline on a globe.
+    edge[i] = y / 100 < ANTARCTIC_EDGE ? 1 : 0;
+  }
+  return { trig, edge, n };
+}
+function buildSphere(w) {
+  const coast = [];
+  for (const poly of w.land) for (const ring of poly) coast.push(encodeRing(ring));
+  return { coast, borders: w.borders.map(encodeRing) };
 }
 
+/* Land or sea, in plate carrée, so the globe can ask one question per pixel
+ * instead of clipping polygons against the horizon. Drawing the continents
+ * into an off-screen grid once is both simpler and more robust than the
+ * fold-the-far-side-outwards trick: a polygon that wraps round the back of the
+ * world cannot turn the whole disc into land.
+ *
+ * Built the first time the Globe tab is opened, and not before — somebody who
+ * only ever looks at the flat map never pays for it. */
+function buildLandMask(w) {
+  let cv;
+  try {
+    cv = document.createElement('canvas');
+    cv.width = MASK_NX; cv.height = MASK_NY;
+  } catch { return null; }
+  const c = cv.getContext('2d', { willReadFrequently: true });
+  if (!c) return null;
+  c.fillStyle = '#000';
+  c.fillRect(0, 0, MASK_NX, MASK_NY);
+  const path = new Path2D();
+  for (const poly of w.land) {
+    for (const ring of poly) {
+      let x = 0, y = 0;
+      for (let i = 0; i < ring.length; i += 2) {
+        x += ring[i]; y += ring[i + 1];
+        const px = (x / 100 + 180) / 360 * MASK_NX;
+        const py = (90 - y / 100) / 180 * MASK_NY;
+        if (i === 0) path.moveTo(px, py); else path.lineTo(px, py);
+      }
+      path.closePath();
+    }
+  }
+  c.fillStyle = '#fff';
+  // Some rings run past ±180° rather than being cut at the date line, so the
+  // same path is drawn a world to either side and the seam closes itself.
+  for (const shift of [-MASK_NX, 0, MASK_NX]) {
+    c.save();
+    c.translate(shift, 0);
+    c.fill(path, 'evenodd');
+    c.restore();
+  }
+  let pixels;
+  try {
+    pixels = c.getImageData(0, 0, MASK_NX, MASK_NY).data;
+  } catch { return null; }
+  const mask = new Uint8Array(MASK_NX * MASK_NY);
+  for (let i = 0; i < mask.length; i++) mask[i] = pixels[i * 4] > 127 ? 1 : 0;
+  // The source stops at 85.19°S, which would leave a hole at the south pole
+  // exactly where Antarctica is. The last row that is inside the ice sheet is
+  // copied down to the pole; nothing else lives there to be got wrong.
+  const solid = Math.floor((90 - ANTARCTIC_EDGE + 0.4) / 180 * MASK_NY);
+  for (let row = solid + 1; row < MASK_NY; row++) {
+    mask.copyWithin(row * MASK_NX, solid * MASK_NX, (solid + 1) * MASK_NX);
+  }
+  return mask;
+}
+function needGlobeGeometry() {
+  if (!world) return;
+  if (!sphere) sphere = buildSphere(world);
+  if (!landMask) { landMask = buildLandMask(world); gcache = null; }
+}
+
+/* ── the two views ───────────────────────────────────────────────────────── *
+ * Each knows how to put a longitude and latitude on the screen, how to get one
+ * back, what a drag and a pinch mean on it, and how to draw itself. Everything
+ * else — the time player, the units, the marker, the readout — is shared, and
+ * switching tabs carries the centre of the world across so the globe opens
+ * looking at whatever the map was looking at.                                 */
+
+const V = () => VIEWS[tab];
+
+/* — the flat map — */
+
+const minScale = () => Math.max(160, W);
+
+function clampView() {
+  view.scale = clamp(view.scale, minScale(), MAX_SCALE);
+  view.cx -= Math.floor(view.cx);
+  const half = H / (2 * view.scale);
+  view.cy = view.scale <= H ? 0.5 : clamp(view.cy, half, 1 - half);
+}
+function screenToWorld(sx, sy) {
+  return [view.cx + (sx - W / 2) / view.scale, view.cy + (sy - H / 2) / view.scale];
+}
+function worldToScreen(wx, wy) {           // the nearest copy of the world
+  let dx = wx - view.cx;
+  dx -= Math.round(dx);
+  return [dx * view.scale + W / 2, (wy - view.cy) * view.scale + H / 2];
+}
 function worldCopies() {
   const xmin = view.cx - W / (2 * view.scale), xmax = view.cx + W / (2 * view.scale);
   const ks = [];
@@ -672,12 +819,192 @@ function withWorldTransform(k, fn) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
+const MAP_VIEW = {
+  fit() {
+    if (view.scale) { clampView(); return; }
+    // First launch: fit 70°S–70°N to the height, which on a phone shows a
+    // hemisphere of longitude. The globe button zooms out to the whole world.
+    view.scale = H / (latToY(-70) - latToY(70));
+    clampView();
+  },
+  home() { view.scale = minScale(); view.cx = lonToX(0); view.cy = 0.5; clampView(); },
+  centre() { return { lon: xToLon(view.cx - Math.floor(view.cx)), lat: yToLat(view.cy) }; },
+  adopt(c) {
+    view.cx = lonToX(c.lon);
+    view.cy = latToY(clamp(c.lat, -MAX_LAT, MAX_LAT));
+    clampView();
+  },
+  panBy(dx, dy) { view.cx -= dx / view.scale; view.cy -= dy / view.scale; clampView(); },
+  zoomBy(factor, sx, sy) {
+    const [wx, wy] = screenToWorld(sx, sy);
+    view.scale = clamp(view.scale * factor, minScale(), MAX_SCALE);
+    view.cx = wx - (sx - W / 2) / view.scale;
+    view.cy = wy - (sy - H / 2) / view.scale;
+    clampView();
+  },
+  pinchStart(g) { g.scale0 = view.scale; g.world0 = screenToWorld(g.mx, g.my); },
+  pinchMove(g, ratio) {
+    view.scale = clamp(g.scale0 * ratio, minScale(), MAX_SCALE);
+    view.cx = g.world0[0] - (g.mx - W / 2) / view.scale;
+    view.cy = g.world0[1] - (g.my - H / 2) / view.scale;
+    clampView();
+  },
+  project(lon, lat, out) {
+    const p = worldToScreen(lonToX(lon), latToY(lat));
+    out[0] = p[0]; out[1] = p[1]; out[2] = 1;
+    return out;
+  },
+  unproject(sx, sy) {
+    const [wx, wy] = screenToWorld(sx, sy);
+    if (wy < 0 || wy > 1) return null;
+    return [xToLon(wx - Math.floor(wx)), yToLat(wy)];
+  },
+  save() { try { localStorage.setItem(STORE.view, JSON.stringify(view)); } catch { /* fine */ } },
+  restore() {
+    try {
+      const v = JSON.parse(localStorage.getItem(STORE.view) || 'null');
+      if (v && [v.cx, v.cy, v.scale].every(Number.isFinite) && v.scale > 0) Object.assign(view, v);
+    } catch { /* fine */ }
+  },
+  draw: drawMap,
+};
+
+/* — the globe — */
+
+const gp = { lon: 0, sinLat: 0, cosLat: 1, sinLon: 0, cosLon: 1, r: 0, cx: 0, cy: 0 };
+let gcache = null;
+
+function syncGlobe() {
+  globe.lat = clamp(globe.lat, -89.5, 89.5);
+  globe.lon = wrapLon(globe.lon);
+  globe.r = clamp(globe.r, Math.min(W, H) * 0.3, Math.min(W, H) * 12);
+  gp.lon = globe.lon * DEG;
+  gp.sinLat = Math.sin(globe.lat * DEG); gp.cosLat = Math.cos(globe.lat * DEG);
+  gp.sinLon = Math.sin(gp.lon); gp.cosLon = Math.cos(gp.lon);
+  gp.r = globe.r; gp.cx = W / 2; gp.cy = H / 2;
+}
+
+const GLOBE_VIEW = {
+  fit() {
+    if (!globe.r) {
+      globe.r = Math.min(W, H) * 0.48;
+      // Open looking at the reader's own side of the planet: the clock's offset
+      // from UTC is fifteen degrees an hour, which is close enough to put their
+      // continent on the disc. Nothing is asked of the device but the time.
+      globe.lon = wrapLon(-new Date().getTimezoneOffset() / 4);
+      globe.lat = 20;
+    }
+    syncGlobe();
+  },
+  home() { globe.r = Math.min(W, H) * 0.48; globe.lat = 20; syncGlobe(); },
+  centre() { return { lon: globe.lon, lat: globe.lat }; },
+  adopt(c) { globe.lon = c.lon; globe.lat = clamp(c.lat, -80, 80); syncGlobe(); },
+  /* A drag turns the world under the finger: one pixel at the middle of the
+   * disc is one radius-worth of angle, so the same gesture turns it less when
+   * it has been zoomed into. */
+  panBy(dx, dy) {
+    const perPixel = 57.29578 / globe.r;
+    globe.lon -= dx * perPixel;
+    globe.lat += dy * perPixel;
+    syncGlobe();
+  },
+  zoomBy(factor) { globe.r *= factor; syncGlobe(); },
+  pinchStart(g) { g.r0 = globe.r; g.lon0 = globe.lon; g.lat0 = globe.lat; g.mx0 = g.mx; g.my0 = g.my; },
+  pinchMove(g, ratio) {
+    globe.r = g.r0 * ratio;
+    const perPixel = 57.29578 / g.r0;
+    globe.lon = g.lon0 - (g.mx - g.mx0) * perPixel;
+    globe.lat = g.lat0 + (g.my - g.my0) * perPixel;
+    syncGlobe();
+  },
+  project(lon, lat, out) {
+    const rlat = lat * DEG, dlon = lon * DEG - gp.lon;
+    const sinLat = Math.sin(rlat), cosLat = Math.cos(rlat);
+    const cosD = Math.cos(dlon), sinD = Math.sin(dlon);
+    const z = gp.sinLat * sinLat + gp.cosLat * cosLat * cosD;
+    out[0] = gp.cx + gp.r * (cosLat * sinD);
+    out[1] = gp.cy - gp.r * (gp.cosLat * sinLat - gp.sinLat * cosLat * cosD);
+    out[2] = z >= 0 ? 1 : 0;
+    return out;
+  },
+  unproject(sx, sy) {
+    const X = (sx - gp.cx) / gp.r, Y = (gp.cy - sy) / gp.r;
+    const r2 = X * X + Y * Y;
+    if (r2 > 1) return null;
+    const Z = Math.sqrt(1 - r2);
+    const lat = Math.asin(clamp(Z * gp.sinLat + Y * gp.cosLat, -1, 1)) / DEG;
+    const lon = wrapLon(globe.lon + Math.atan2(X, Z * gp.cosLat - Y * gp.sinLat) / DEG);
+    return [lon, lat];
+  },
+  save() { try { localStorage.setItem(STORE.globe, JSON.stringify(globe)); } catch { /* fine */ } },
+  restore() {
+    try {
+      const v = JSON.parse(localStorage.getItem(STORE.globe) || 'null');
+      if (v && [v.lon, v.lat, v.r].every(Number.isFinite) && v.r > 0) Object.assign(globe, v);
+    } catch { /* fine */ }
+  },
+  draw: drawGlobe,
+};
+
+const VIEWS = { map: MAP_VIEW, globe: GLOBE_VIEW };
+
+/* ── drawing ─────────────────────────────────────────────────────────────── */
+
+function requestRender() {
+  if (renderPending) return;
+  renderPending = true;
+  requestAnimationFrame(render);
+}
+
 function render() {
   renderPending = false;
   if (!W || !H) return;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = pal.outside;
   ctx.fillRect(0, 0, W, H);
+  V().draw();
+}
+
+/* The two steps either side of where the player is, and how far between them.
+ * Everything that samples the wind asks this first. */
+function frame() {
+  const last = field.steps.length - 1;
+  const k0 = clamp(Math.floor(t), 0, last);
+  const k1 = Math.min(k0 + 1, last);
+  return { k0, k1, f: k1 === k0 ? 0 : clamp(t - k0, 0, 1) };
+}
+
+/* Two off-screen grids, kept between frames: one for the colour layer and one
+ * for the night wash. They are different sizes, so sharing a single canvas
+ * would reallocate both of them on every frame. */
+const scratches = new Map();
+function scratch(name, cols, rows) {
+  let s = scratches.get(name);
+  if (!s || s.cv.width !== cols || s.cv.height !== rows) {
+    const cv = document.createElement('canvas');
+    cv.width = cols; cv.height = rows;
+    const c = cv.getContext('2d');
+    s = { cv, ctx: c, img: c.createImageData(cols, rows) };
+    scratches.set(name, s);
+  }
+  return s;
+}
+function paintScratch(s, x, y, w, h) {
+  s.ctx.putImageData(s.img, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'medium';
+  ctx.drawImage(s.cv, 0, 0, s.cv.width, s.cv.height, x, y, w, h);
+}
+
+function interp(arr, a0, a1, b0, b1, tx, ty) {
+  const top = arr[a0] + (arr[a1] - arr[a0]) * tx;
+  const bottom = arr[b0] + (arr[b1] - arr[b0]) * tx;
+  return top + (bottom - top) * ty;
+}
+
+/* — the flat map — */
+
+function drawMap() {
   const top = Math.max(0, (0 - view.cy) * view.scale + H / 2);
   const bottom = Math.min(H, (1 - view.cy) * view.scale + H / 2);
   ctx.fillStyle = pal.ocean;
@@ -690,6 +1017,7 @@ function render() {
     });
   }
   if (field && heat) drawHeat();
+  if (night) drawMapNight();
   drawGraticule();
   if (worldPaths) {
     for (const k of worldCopies()) withWorldTransform(k, (s) => {
@@ -703,19 +1031,11 @@ function render() {
   drawMarker();
 }
 
-let heatCv = null, heatCtx = null, heatImg = null;
 function drawHeat() {
   const cols = Math.ceil(W / HEAT_PX), rows = Math.ceil(H / HEAT_PX);
-  if (!heatCv || heatCv.width !== cols || heatCv.height !== rows) {
-    heatCv = document.createElement('canvas');
-    heatCv.width = cols; heatCv.height = rows;
-    heatCtx = heatCv.getContext('2d');
-    heatImg = heatCtx.createImageData(cols, rows);
-  }
-  const data = heatImg.data;
-  const last = field.steps.length - 1;
-  const k0 = clamp(Math.floor(t), 0, last), k1 = Math.min(k0 + 1, last);
-  const f = clamp(t - k0, 0, 1);
+  const sheet = scratch('layer', cols, rows);
+  const data = sheet.img.data;
+  const { k0, k1, f } = frame();
   const s0 = field.floats(k0), s1 = field.floats(k1);
   const blend = f > 0 && k1 !== k0;
   const nx = field.nx, ny = field.ny;
@@ -742,12 +1062,11 @@ function drawHeat() {
     for (let c = 0; c < cols; c++) {
       const i0 = ci0[c], i1 = ci1[c], tx = cfx[c];
       const a0 = a + i0, a1 = a + i1, b0 = b + i0, b1 = b + i1;
-      let u = (U0[a0] + (U0[a1] - U0[a0]) * tx) * (1 - ty) + (U0[b0] + (U0[b1] - U0[b0]) * tx) * ty;
-      let v = (V0[a0] + (V0[a1] - V0[a0]) * tx) * (1 - ty) + (V0[b0] + (V0[b1] - V0[b0]) * tx) * ty;
+      let u = interp(U0, a0, a1, b0, b1, tx, ty);
+      let v = interp(V0, a0, a1, b0, b1, tx, ty);
       if (blend) {
-        const u1 = (U1[a0] + (U1[a1] - U1[a0]) * tx) * (1 - ty) + (U1[b0] + (U1[b1] - U1[b0]) * tx) * ty;
-        const v1 = (V1[a0] + (V1[a1] - V1[a0]) * tx) * (1 - ty) + (V1[b0] + (V1[b1] - V1[b0]) * tx) * ty;
-        u += (u1 - u) * f; v += (v1 - v) * f;
+        u += (interp(U1, a0, a1, b0, b1, tx, ty) - u) * f;
+        v += (interp(V1, a0, a1, b0, b1, tx, ty) - v) * f;
       }
       const idx = Math.min(255, (Math.sqrt(u * u + v * v) * 4 + 0.5) | 0);
       const li = idx * 3;
@@ -755,10 +1074,42 @@ function drawHeat() {
       o += 4;
     }
   }
-  heatCtx.putImageData(heatImg, 0, 0);
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'medium';
-  ctx.drawImage(heatCv, 0, 0, cols, rows, 0, 0, cols * HEAT_PX, rows * HEAT_PX);
+  paintScratch(sheet, 0, 0, cols * HEAT_PX, rows * HEAT_PX);
+}
+
+/* Night on the flat map is its own wash rather than part of the colour pass,
+ * because the map's ground is drawn as shapes, not as pixels. It is coarse on
+ * purpose: a terminator is a smooth curve, and a six-pixel grid scaled up is
+ * smoother than a fine one. */
+function drawMapNight() {
+  const sun = sunAt(field ? currentValidMs() : Date.now());
+  const cols = Math.ceil(W / NIGHT_PX), rows = Math.ceil(H / NIGHT_PX);
+  const sheet = scratch('night', cols, rows);
+  const data = sheet.img.data;
+  const sinDec = Math.sin(sun.dec), cosDec = Math.cos(sun.dec);
+  const cosD = new Float32Array(cols);
+  for (let c = 0; c < cols; c++) {
+    let wx = view.cx + ((c + 0.5) * NIGHT_PX - W / 2) / view.scale;
+    wx -= Math.floor(wx);
+    cosD[c] = Math.cos(xToLon(wx) * DEG - sun.lon);
+  }
+  const rgb = pal.nightRgb;
+  let o = 0;
+  for (let r = 0; r < rows; r++) {
+    const wy = view.cy + ((r + 0.5) * NIGHT_PX - H / 2) / view.scale;
+    if (wy < 0 || wy > 1) {
+      for (let c = 0; c < cols; c++) { data[o + 3] = 0; o += 4; }
+      continue;
+    }
+    const lat = yToLat(wy) * DEG;
+    const p = Math.sin(lat) * sinDec, q = Math.cos(lat) * cosDec;
+    for (let c = 0; c < cols; c++) {
+      data[o] = rgb[0]; data[o + 1] = rgb[1]; data[o + 2] = rgb[2];
+      data[o + 3] = 255 * nightFade(p + q * cosD[c]) * pal.nightMax;
+      o += 4;
+    }
+  }
+  paintScratch(sheet, 0, 0, cols * NIGHT_PX, rows * NIGHT_PX);
 }
 
 function drawGraticule() {
@@ -780,6 +1131,8 @@ function drawGraticule() {
   ctx.stroke();
 }
 
+/* Arrows on the flat map sit at fixed places in the WORLD, so they stay put
+ * under a pan instead of swimming across the wind. */
 const uvTmp = [0, 0];
 function drawArrows() {
   const n = Math.max(2, Math.round(Math.log2(view.scale / ARROW_SPACING)));
@@ -800,12 +1153,239 @@ function drawArrows() {
       const wx = (i + 0.5) * d;
       const sx = (wx - view.cx) * view.scale + W / 2;
       field.sample(t, xToLon(wx - Math.floor(wx)), lat, uvTmp);
-      drawArrow(sx, sy, uvTmp[0], uvTmp[1], cell);
+      const u = uvTmp[0], v = uvTmp[1];
+      drawArrow(sx, sy, Math.atan2(-v, u), Math.hypot(u, v), cell);
     }
   }
 }
-function drawArrow(x, y, u, v, cell) {
-  const spd = Math.hypot(u, v);
+
+/* — the globe — */
+
+function drawGlobe() {
+  syncGlobe();
+  needGlobeGeometry();
+  drawGlobeSurface();
+  drawGlobeGraticule();
+  if (sphere) {
+    const paths = globePaths();
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = pal.border; ctx.lineWidth = 0.7; ctx.stroke(paths.borders);
+    ctx.strokeStyle = pal.coast; ctx.lineWidth = 0.9; ctx.stroke(paths.coast);
+  }
+  ctx.beginPath();
+  ctx.arc(gp.cx, gp.cy, gp.r, 0, Math.PI * 2);
+  ctx.strokeStyle = pal.limb; ctx.lineWidth = 1; ctx.stroke();
+  if (field) drawGlobeArrows();
+  drawPlaces();
+  drawMarker();
+}
+
+/* Everything that only changes when the world is turned: which cells of the
+ * raster are on the disc at all, where each one is on Earth, and whether it is
+ * land. Playing the forecast never touches any of it, so a frame is then a
+ * bilinear sample and a lookup per cell. */
+function globeCells() {
+  const key = `${globe.lon.toFixed(3)}|${globe.lat.toFixed(3)}|${globe.r.toFixed(2)}`
+            + `|${W}|${H}|${landMask ? 1 : 0}`;
+  if (gcache && gcache.key === key) return gcache;
+  const x0 = Math.max(0, Math.floor(gp.cx - gp.r));
+  const y0 = Math.max(0, Math.floor(gp.cy - gp.r));
+  const x1 = Math.min(W, Math.ceil(gp.cx + gp.r));
+  const y1 = Math.min(H, Math.ceil(gp.cy + gp.r));
+  const cols = Math.max(1, Math.ceil((x1 - x0) / GLOBE_PX));
+  const rows = Math.max(1, Math.ceil((y1 - y0) / GLOBE_PX));
+  const n = cols * rows;
+  const cell = {
+    key, x0, y0, cols, rows,
+    inside: new Uint8Array(n), land: new Uint8Array(n),
+    lon: new Float32Array(n), lat: new Float32Array(n),
+    X: new Float32Array(n), Y: new Float32Array(n), Z: new Float32Array(n),
+  };
+  let i = 0;
+  for (let r = 0; r < rows; r++) {
+    const Y = (gp.cy - (y0 + (r + 0.5) * GLOBE_PX)) / gp.r;
+    for (let c = 0; c < cols; c++, i++) {
+      const X = (x0 + (c + 0.5) * GLOBE_PX - gp.cx) / gp.r;
+      const r2 = X * X + Y * Y;
+      if (r2 > 1) continue;
+      const Z = Math.sqrt(1 - r2);
+      const lat = Math.asin(clamp(Z * gp.sinLat + Y * gp.cosLat, -1, 1)) / DEG;
+      const lon = wrapLon(globe.lon + Math.atan2(X, Z * gp.cosLat - Y * gp.sinLat) / DEG);
+      cell.inside[i] = 1;
+      cell.lon[i] = lon; cell.lat[i] = lat;
+      cell.X[i] = X; cell.Y[i] = Y; cell.Z[i] = Z;
+      if (landMask) {
+        const mx = clamp(Math.floor((lon + 180) / 360 * MASK_NX), 0, MASK_NX - 1);
+        const my = clamp(Math.floor((90 - lat) / 180 * MASK_NY), 0, MASK_NY - 1);
+        cell.land[i] = landMask[my * MASK_NX + mx];
+      }
+    }
+  }
+  gcache = cell;
+  return cell;
+}
+
+function drawGlobeSurface() {
+  const cell = globeCells();
+  const { cols, rows } = cell;
+  const sheet = scratch('layer', cols, rows);
+  const data = sheet.img.data;
+  const colour = field && heat;
+  let U0 = null, V0 = null, U1 = null, V1 = null, f = 0, blend = false;
+  if (colour) {
+    const fr = frame();
+    f = fr.f;
+    const s0 = field.floats(fr.k0), s1 = field.floats(fr.k1);
+    U0 = s0.u; V0 = s0.v; U1 = s1.u; V1 = s1.v;
+    blend = f > 0 && fr.k1 !== fr.k0;
+  }
+  const nx = field ? field.nx : 0, ny = field ? field.ny : 0;
+  const lon0 = field ? field.lon0 : 0, dlon = field ? field.dlon : 1;
+  const lat0 = field ? field.lat0 : 0, dlat = field ? field.dlat : 1;
+
+  // The sun, turned into the same frame the disc is drawn in, so the night
+  // shade is three multiplications a pixel instead of two more trig calls.
+  const sun = sunAt(field ? currentValidMs() : Date.now());
+  const cosDec = Math.cos(sun.dec), sinDec = Math.sin(sun.dec);
+  const sv = [cosDec * Math.cos(sun.lon), cosDec * Math.sin(sun.lon), sinDec];
+  const sunX = -gp.sinLon * sv[0] + gp.cosLon * sv[1];
+  const sunY = -gp.sinLat * gp.cosLon * sv[0] - gp.sinLat * gp.sinLon * sv[1] + gp.cosLat * sv[2];
+  const sunZ = gp.cosLat * gp.cosLon * sv[0] + gp.cosLat * gp.sinLon * sv[1] + gp.sinLat * sv[2];
+  const nightRgb = pal.nightRgb, nightMax = pal.nightMax;
+  const ocean = pal.oceanRgb, land = pal.landRgb;
+
+  const n = cols * rows;
+  for (let i = 0, o = 0; i < n; i++, o += 4) {
+    if (!cell.inside[i]) { data[o + 3] = 0; continue; }
+    const base = cell.land[i] ? land : ocean;
+    let red = base[0], green = base[1], blue = base[2];
+    if (colour) {
+      const lon = cell.lon[i], lat = cell.lat[i];
+      let fi = (lon - lon0) / dlon;
+      fi -= Math.floor(fi / nx) * nx;
+      const fj = clamp((lat - lat0) / dlat, 0, ny - 1);
+      const i0 = Math.floor(fi), tx = fi - i0, i1 = (i0 + 1) % nx;
+      const j0 = Math.floor(fj), ty = fj - j0, j1 = Math.min(j0 + 1, ny - 1);
+      const a0 = j0 * nx + i0, a1 = j0 * nx + i1, b0 = j1 * nx + i0, b1 = j1 * nx + i1;
+      let u = interp(U0, a0, a1, b0, b1, tx, ty);
+      let v = interp(V0, a0, a1, b0, b1, tx, ty);
+      if (blend) {
+        u += (interp(U1, a0, a1, b0, b1, tx, ty) - u) * f;
+        v += (interp(V1, a0, a1, b0, b1, tx, ty) - v) * f;
+      }
+      const idx = Math.min(255, (Math.sqrt(u * u + v * v) * 4 + 0.5) | 0);
+      const li = idx * 3;
+      const a = ALPHA[idx] / 255;
+      red += (LUT[li] - red) * a;
+      green += (LUT[li + 1] - green) * a;
+      blue += (LUT[li + 2] - blue) * a;
+    }
+    if (night) {
+      const shade = nightFade(cell.X[i] * sunX + cell.Y[i] * sunY + cell.Z[i] * sunZ) * nightMax;
+      if (shade > 0) {
+        red += (nightRgb[0] - red) * shade;
+        green += (nightRgb[1] - green) * shade;
+        blue += (nightRgb[2] - blue) * shade;
+      }
+    }
+    data[o] = red; data[o + 1] = green; data[o + 2] = blue; data[o + 3] = 255;
+  }
+  paintScratch(sheet, cell.x0, cell.y0, cols * GLOBE_PX, rows * GLOBE_PX);
+}
+
+/* Coastlines and borders on the sphere. A line is broken wherever it goes over
+ * the horizon and picked up again where it comes back, which is all the
+ * clipping a stroke needs — and the whole path is cached until the world is
+ * turned, so playing the forecast never rebuilds it. */
+let pathCache = null;
+function globePaths() {
+  const key = `${globe.lon.toFixed(3)}|${globe.lat.toFixed(3)}|${globe.r.toFixed(2)}|${W}|${H}`;
+  if (pathCache && pathCache.key === key) return pathCache;
+  pathCache = { key, coast: sphereRings(sphere.coast), borders: sphereRings(sphere.borders) };
+  return pathCache;
+}
+function sphereRings(rings) {
+  const path = new Path2D();
+  const { sinLat, cosLat, sinLon, cosLon, r, cx, cy } = gp;
+  for (const ring of rings) {
+    const trig = ring.trig, edge = ring.edge;
+    let pen = false;
+    for (let i = 0, o = 0; i < ring.n; i++, o += 4) {
+      if (edge[i]) { pen = false; continue; }
+      const sLat = trig[o], cLat = trig[o + 1], sLon = trig[o + 2], cLon = trig[o + 3];
+      const cosD = cLon * cosLon + sLon * sinLon;       // cos(lon − centre)
+      const z = sinLat * sLat + cosLat * cLat * cosD;
+      if (z < 0) { pen = false; continue; }
+      const sinD = sLon * cosLon - cLon * sinLon;       // sin(lon − centre)
+      const sx = cx + r * (cLat * sinD);
+      const sy = cy - r * (cosLat * sLat - sinLat * cLat * cosD);
+      if (pen) path.lineTo(sx, sy); else { path.moveTo(sx, sy); pen = true; }
+    }
+  }
+  return path;
+}
+
+function drawGlobeGraticule() {
+  ctx.strokeStyle = pal.grat;
+  ctx.lineWidth = 1;
+  const path = new Path2D();
+  const out = [0, 0, 0];
+  const line = (points) => {
+    let pen = false;
+    for (const [lon, lat] of points) {
+      GLOBE_VIEW.project(lon, lat, out);
+      if (!out[2]) { pen = false; continue; }
+      if (pen) path.lineTo(out[0], out[1]); else { path.moveTo(out[0], out[1]); pen = true; }
+    }
+  };
+  for (let lon = -180; lon < 180; lon += 30) {
+    const points = [];
+    for (let lat = -90; lat <= 90; lat += 3) points.push([lon, lat]);
+    line(points);
+  }
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const points = [];
+    for (let lon = -180; lon <= 180; lon += 3) points.push([lon, lat]);
+    line(points);
+  }
+  ctx.stroke(path);
+}
+
+/* Arrows on the globe sit on a screen grid rather than a world one: a grid of
+ * meridians would crowd into a knot at the poles, and turning the world is a
+ * deliberate gesture rather than something you do while reading. */
+function drawGlobeArrows() {
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  const step = ARROW_SPACING;
+  const { sinLat: sinLat0, cosLat: cosLat0, r, cx, cy } = gp;
+  for (let sy = cy - Math.ceil(cy / step) * step; sy < H + step; sy += step) {
+    if (sy < -step) continue;
+    for (let sx = cx - Math.ceil(cx / step) * step; sx < W + step; sx += step) {
+      const X = (sx - cx) / r, Y = (cy - sy) / r;
+      const r2 = X * X + Y * Y;
+      if (r2 > 0.988) continue;                  // the rim is too foreshortened to read
+      const Z = Math.sqrt(1 - r2);
+      const sinLat = clamp(Z * sinLat0 + Y * cosLat0, -1, 1);
+      const lat = Math.asin(sinLat) / DEG;
+      const dlon = Math.atan2(X, Z * cosLat0 - Y * sinLat0);
+      const lon = wrapLon(globe.lon + dlon / DEG);
+      field.sample(t, lon, lat, uvTmp);
+      const u = uvTmp[0], v = uvTmp[1];
+      // The wind blows along the ground, so its arrow has to be turned into
+      // the screen with the local east and north, which tilt as the world does.
+      const cosLat = Math.cos(lat * DEG);
+      const sinD = Math.sin(dlon), cosD = Math.cos(dlon);
+      const ex = cosD, ey = sinLat0 * sinD;
+      const nxx = -sinLat * sinD, nyy = cosLat0 * cosLat + sinLat0 * sinLat * cosD;
+      drawArrow(sx, sy, Math.atan2(-(u * ey + v * nyy), u * ex + v * nxx), Math.hypot(u, v), step);
+    }
+  }
+}
+
+/* — shared — */
+
+function drawArrow(x, y, angle, spd, cell) {
   const color = heat ? pal.arrow : lutCss(spd);
   if (spd < 0.5) {                      // calm: a dot, because there is no direction to show
     ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2);
@@ -818,7 +1398,7 @@ function drawArrow(x, y, u, v, cell) {
   const h = len / 2;
   ctx.save();
   ctx.translate(x, y);
-  ctx.rotate(Math.atan2(-v, u));
+  ctx.rotate(angle);
   ctx.beginPath();
   ctx.moveTo(-h, 0); ctx.lineTo(h, 0);
   ctx.moveTo(h - head, -head * 0.55); ctx.lineTo(h, 0); ctx.lineTo(h - head, head * 0.55);
@@ -827,17 +1407,22 @@ function drawArrow(x, y, u, v, cell) {
   ctx.restore();
 }
 
+const projTmp = [0, 0, 0];
 function drawPlaces() {
   if (!places.length) return;
-  const maxTier = view.scale < 1100 ? 1 : view.scale < 2800 ? 2 : view.scale < 7500 ? 3 : 4;
+  const zoom = tab === 'map' ? view.scale : globe.r * 4;
+  const maxTier = zoom < 1100 ? 1 : zoom < 2800 ? 2 : zoom < 7500 ? 3 : 4;
   ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
   ctx.lineJoin = 'round';
   const boxes = [];
+  const v = V();
   for (const p of places) {
     if (p.r > maxTier) break;           // sorted by tier
-    const [sx, sy] = worldToScreen(lonToX(p.lon), latToY(p.lat));
+    v.project(p.lon, p.lat, projTmp);
+    if (!projTmp[2]) continue;
+    const sx = projTmp[0], sy = projTmp[1];
     if (sx < -80 || sx > W + 80 || sy < -12 || sy > H + 12) continue;
     const tw = ctx.measureText(p.n).width;
     if (sx + 8 + tw > W - 2) continue;  // a label clipped by the edge is worse than none
@@ -854,7 +1439,9 @@ function drawPlaces() {
 
 function drawMarker() {
   if (!marker) return;
-  const [sx, sy] = worldToScreen(lonToX(marker.lon), latToY(marker.lat));
+  V().project(marker.lon, marker.lat, projTmp);
+  if (!projTmp[2]) return;
+  const sx = projTmp[0], sy = projTmp[1];
   ctx.beginPath(); ctx.arc(sx, sy, 6, 0, Math.PI * 2);
   ctx.strokeStyle = pal.markerRing; ctx.lineWidth = 5; ctx.stroke();
   ctx.strokeStyle = pal.marker; ctx.lineWidth = 2; ctx.stroke();
@@ -966,7 +1553,7 @@ function updateLegend() {
   const ticks = $('legend-ticks');
   ticks.innerHTML = '';                      // empty it; the spans below are DOM nodes
   const values = legendTicks(LEGEND_MAX * u.f);
-  values.forEach((value, n) => {
+  values.forEach((value) => {
     const span = document.createElement('span');
     span.style.left = `${(value / (LEGEND_MAX * u.f) * 100).toFixed(1)}%`;
     span.textContent = String(Math.round(value));
@@ -1081,6 +1668,11 @@ function buildTicks() {
   if (last < 1) return;
   let prevDay = null;
   let placed = -Infinity;                       // per cent along, of the last label drawn
+  let partDay = false;                          // …and whether that label was the first
+  // Three letters want about thirty points of track, which is a fifth of it on
+  // a phone and a twentieth on a tablet, so the gap is measured rather than
+  // guessed at.
+  const room = Math.min(22, 3200 / Math.max(120, el.clientWidth));
   s.forEach((st, k) => {
     const d = new Date(st.valid);
     const day = d.toDateString();
@@ -1088,15 +1680,19 @@ function buildTicks() {
     prevDay = day;
     const at = k / last * 100;
     if (k > 0 && at > 94) return;               // no room for a label at the very end
+    if (at - placed < room) {
+      // Too close to read. The first label is whatever was left of the day the
+      // run started in — an hour of it, if the run was late in the evening — so
+      // it gives way to the first whole day; any other pair just waits, and the
+      // next day along gets the label.
+      if (!partDay) return;
+      el.lastChild.remove();
+    }
     const span = document.createElement('span');
     span.style.left = `${at.toFixed(2)}%`;
     span.textContent = fmtDay.format(d);
-    // A forecast that starts late in the evening puts its first two day labels
-    // a single step apart, which draws them on top of each other. Three letters
-    // need about seven per cent of the track, and when two are that close the
-    // LATER day wins: it is the one that owns the stretch of track after it.
-    if (at - placed < 7 && el.lastChild) el.lastChild.remove();
     placed = at;
+    partDay = k === 0;
     el.append(span);
   });
 }
@@ -1140,6 +1736,24 @@ function setPlaying(on) {
   $('btn-play').setAttribute('aria-label', on ? 'Pause' : 'Play');
   if (on) { lastFrame = 0; requestAnimationFrame(tick); }
   else setTime(Math.round(t));
+}
+
+/* ── tabs ────────────────────────────────────────────────────────────────── */
+
+function setTab(next) {
+  if (next === tab) return;
+  // Carry the middle of the world across, so the globe opens looking at
+  // whatever the map was looking at, and the other way round.
+  const centre = V().centre();
+  tab = next;
+  try { localStorage.setItem(STORE.tab, tab); } catch { /* fine */ }
+  $('tab-map').setAttribute('aria-selected', String(tab === 'map'));
+  $('tab-globe').setAttribute('aria-selected', String(tab === 'globe'));
+  wrap.setAttribute('aria-labelledby', tab === 'map' ? 'tab-map' : 'tab-globe');
+  V().fit();
+  V().adopt(centre);
+  V().save();
+  requestRender();
 }
 
 /* ── loading ─────────────────────────────────────────────────────────────── */
@@ -1199,6 +1813,7 @@ async function loadStatic() {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const w = await r.json();
     if (!Array.isArray(w.land) || !Array.isArray(w.borders)) throw new Error('unexpected shape');
+    world = w;
     worldPaths = buildWorldPaths(w);
     setProblem('world', null);
   } catch (e) {
@@ -1230,9 +1845,9 @@ function startGesture() {
                 moved: gesture ? gesture.moved : false, t0: performance.now() };
   } else if (pts.length >= 2) {
     const [a, b] = pts;
-    const mx = (a.x + b.x) / 2 - rect.left, my = (a.y + b.y) / 2 - rect.top;
-    gesture = { type: 'pinch', d0: Math.hypot(a.x - b.x, a.y - b.y),
-                w0: screenToWorld(mx, my), scale0: view.scale, moved: true };
+    gesture = { type: 'pinch', d0: Math.hypot(a.x - b.x, a.y - b.y), moved: true,
+                mx: (a.x + b.x) / 2 - rect.left, my: (a.y + b.y) / 2 - rect.top };
+    V().pinchStart(gesture);
   }
 }
 canvas.addEventListener('pointerdown', (e) => {
@@ -1250,18 +1865,13 @@ canvas.addEventListener('pointermove', (e) => {
     const dx = e.clientX - gesture.x, dy = e.clientY - gesture.y;
     gesture.x = e.clientX; gesture.y = e.clientY;
     if (Math.hypot(e.clientX - gesture.sx, e.clientY - gesture.sy) > 6) gesture.moved = true;
-    view.cx -= dx / view.scale;
-    view.cy -= dy / view.scale;
-    clampView();
+    V().panBy(dx, dy);
     requestRender();
   } else if (gesture.type === 'pinch' && pointers.size >= 2) {
     const [a, b] = [...pointers.values()];
-    const d = Math.hypot(a.x - b.x, a.y - b.y);
-    const mx = (a.x + b.x) / 2 - rect.left, my = (a.y + b.y) / 2 - rect.top;
-    view.scale = clamp(gesture.scale0 * (d / Math.max(1, gesture.d0)), minScale(), MAX_SCALE);
-    view.cx = gesture.w0[0] - (mx - W / 2) / view.scale;
-    view.cy = gesture.w0[1] - (my - H / 2) / view.scale;
-    clampView();
+    gesture.mx = (a.x + b.x) / 2 - rect.left;
+    gesture.my = (a.y + b.y) / 2 - rect.top;
+    V().pinchMove(gesture, Math.hypot(a.x - b.x, a.y - b.y) / Math.max(1, gesture.d0));
     requestRender();
   }
 });
@@ -1273,7 +1883,7 @@ function endPointer(e) {
   if (pointers.size > 0) { startGesture(); return; }
   if (wasTap) onTap(e.clientX - rect.left, e.clientY - rect.top);
   gesture = null;
-  saveView();
+  V().save();
 }
 canvas.addEventListener('pointerup', endPointer);
 canvas.addEventListener('pointercancel', endPointer);
@@ -1284,6 +1894,12 @@ canvas.addEventListener('wheel', (e) => {
 }, { passive: false });
 for (const ev of ['gesturestart', 'gesturechange']) {
   wrap.addEventListener(ev, (e) => e.preventDefault());     // no page zoom on iOS
+}
+
+function zoomAt(sx, sy, factor) {
+  V().zoomBy(factor, sx, sy);
+  V().save();
+  requestRender();
 }
 
 let lastTap = null, tapTimer = null;
@@ -1297,10 +1913,8 @@ function onTap(sx, sy) {
   lastTap = { x: sx, y: sy, t: now };
   tapTimer = setTimeout(() => {
     tapTimer = null;
-    const [wx, wy] = screenToWorld(sx, sy);
-    if (wy < 0 || wy > 1) marker = null;
-    else marker = { lon: Math.round(xToLon(wx - Math.floor(wx)) * 100) / 100,
-                    lat: Math.round(yToLat(wy) * 100) / 100 };
+    const p = V().unproject(sx, sy);
+    marker = p ? { lon: Math.round(p[0] * 100) / 100, lat: Math.round(p[1] * 100) / 100 } : null;
     try { localStorage.setItem(STORE.marker, JSON.stringify(marker)); } catch { /* fine */ }
     updateReadout();
     requestRender();
@@ -1309,16 +1923,21 @@ function onTap(sx, sy) {
 
 /* ── controls ────────────────────────────────────────────────────────────── */
 
+$('tab-map').addEventListener('click', () => setTab('map'));
+$('tab-globe').addEventListener('click', () => setTab('globe'));
 $('zoom-in').addEventListener('click', () => zoomAt(W / 2, H / 2, 2));
 $('zoom-out').addEventListener('click', () => zoomAt(W / 2, H / 2, 0.5));
-$('zoom-home').addEventListener('click', () => {
-  view.scale = minScale(); view.cx = lonToX(0); view.cy = 0.5;
-  clampView(); saveView(); requestRender();
-});
+$('zoom-home').addEventListener('click', () => { V().home(); V().save(); requestRender(); });
 $('btn-heat').addEventListener('click', () => {
   heat = !heat;
   $('btn-heat').setAttribute('aria-pressed', String(heat));
   try { localStorage.setItem(STORE.heat, heat ? '1' : '0'); } catch { /* fine */ }
+  requestRender();
+});
+$('btn-night').addEventListener('click', () => {
+  night = !night;
+  $('btn-night').setAttribute('aria-pressed', String(night));
+  try { localStorage.setItem(STORE.night, night ? '1' : '0'); } catch { /* fine */ }
   requestRender();
 });
 $('btn-units').addEventListener('click', () => {
@@ -1360,15 +1979,11 @@ function resize() {
   dpr = Math.min(3, window.devicePixelRatio || 1);
   canvas.width = Math.round(W * dpr);
   canvas.height = Math.round(H * dpr);
-  if (!view.scale) {
-    restoreView();
-    if (!view.scale) {
-      // First launch: fit 70°S–70°N to the height, which on a phone shows a
-      // hemisphere of longitude. The globe button zooms out to the whole world.
-      view.scale = H / (latToY(-70) - latToY(70));
-    }
-  }
-  clampView();
+  gcache = null;
+  pathCache = null;
+  MAP_VIEW.fit();
+  GLOBE_VIEW.fit();
+  syncGlobe();
   render();
 }
 
@@ -1376,10 +1991,18 @@ try {
   const u = localStorage.getItem(STORE.units);
   if (u && UNITS[u]) units = u;
   heat = localStorage.getItem(STORE.heat) !== '0';
+  night = localStorage.getItem(STORE.night) !== '0';
+  if (localStorage.getItem(STORE.tab) === 'globe') tab = 'globe';
   const m = JSON.parse(localStorage.getItem(STORE.marker) || 'null');
   if (m && Number.isFinite(m.lon) && Number.isFinite(m.lat)) marker = m;
 } catch { /* fine */ }
+MAP_VIEW.restore();
+GLOBE_VIEW.restore();
 $('btn-heat').setAttribute('aria-pressed', String(heat));
+$('btn-night').setAttribute('aria-pressed', String(night));
+$('tab-map').setAttribute('aria-selected', String(tab === 'map'));
+$('tab-globe').setAttribute('aria-selected', String(tab === 'globe'));
+wrap.setAttribute('aria-labelledby', tab === 'map' ? 'tab-map' : 'tab-globe');
 updateLegend();
 updateCredits();
 new ResizeObserver(resize).observe(wrap);
@@ -1391,9 +2014,12 @@ loadSnapshot();
 window.__gw = {
   render() { const t0 = performance.now(); render(); return performance.now() - t0; },
   get state() {
-    return { t, playing, units, heat, marker, view: { ...view },
+    return { t, playing, tab, units, heat, night, marker,
+             view: { ...view }, globe: { ...globe },
              steps: field ? field.steps.length : 0, schema: snap ? snap.schema : null };
   },
+  setTab,
+  setTime(tt) { if (field) setTime(tt); },
   sample(lon, lat) { return field ? field.sample(t, lon, lat, [0, 0]) : null; },
   unzlib,
 };

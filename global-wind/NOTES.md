@@ -19,6 +19,34 @@ a step into about 1.6 MB, and the whole five-day pull into about 65 MB.
 
 ---
 
+## The two views
+
+**Map** is Web Mercator, pan and pinch, the world repeating sideways — the
+projection every slippy map uses, and the one to read a coastline on.
+
+**Globe** is orthographic: the planet as a sphere, dragged to turn it. It is
+not a gimmick. A jet stream and the Southern Ocean's storm belt are *global*
+shapes, and a flat map cuts them at the date line and stretches them at the
+poles; the globe shows the belt as the single unbroken ring it is. Switching
+tabs carries the middle of the world across, so the globe opens looking at
+whatever the map was looking at.
+
+Both views can shade the **night side**, worked out from the sun's position at
+the forecast time — so playing the forecast forward walks the terminator across
+the planet. It is the moon button over the map, and it is worth knowing what it
+costs: a colour under the wash is a slightly darker colour, so if you are
+reading speeds off the scale on the night side, turn it off. The tapped readout
+is never shaded — it prints the number.
+
+**No third-party JavaScript draws the globe.** The sphere is the browser's own
+2D canvas, a few lines of trigonometry and a land mask rasterised once from the
+same `assets/world.json` the flat map uses — no WebGL library, no map engine,
+no tiles. The globe, the land mask and the terminator are about three hundred
+lines you can lift wholesale into another app — the author keeps a private
+variant carrying four more fields that does exactly that.
+
+---
+
 ## The terms
 
 **The forecast is public domain.** GFS output is a work of the United States
@@ -130,8 +158,8 @@ least 3.
 
 ## Why the refresh publishes to its own branch
 
-Every other app here commits its snapshot to `main`. Global Wind does not, and
-the reason is arithmetic: the file is megabytes, and every byte of it is
+Most apps here commit their snapshot to `main`. Global Wind does not, and the
+reason is arithmetic: the file is megabytes, and every byte of it is
 different every run — it is base64 of compressed data, so git can neither delta
 it nor compress it. Twice a day at 1.2 MB is most of a gigabyte a year, in a
 repository people clone.
@@ -139,7 +167,9 @@ repository people clone.
 So `.github/workflows/refresh-global-wind.yml` force-pushes a single parentless
 commit to an orphan branch, **`data-global-wind`**. The branch is a mailbox, not
 a log: it only ever holds the newest snapshot, and nothing accumulates. `main`
-keeps the committed demo, which is what `zips/global-wind.zip` ships with.
+keeps the committed demo, which is what `zips/global-wind.zip` ships with. Any
+other app of yours that outgrows `main` wants its own branch on the same
+pattern; two such jobs never touch.
 
 The only thing that changes for you is the branch name in the address your
 Shortcut fetches — the path is the same. `PROMPT.md` has both forms.
