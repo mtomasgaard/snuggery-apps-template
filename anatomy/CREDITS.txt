@@ -1,0 +1,17 @@
+Anatomy viewer — credits and licences
+
+Geometry: BodyParts3D, (c) The Database Center for Life Science (DBCLS), release 3.0.
+Licensed under Creative Commons Attribution-ShareAlike 2.1 Japan (CC BY-SA 2.1 JP);
+DBCLS now publishes BodyParts3D under CC BY 4.0.
+https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html
+Mitsuhashi N. et al. BodyParts3D: 3D structure database for anatomical concepts.
+Nucleic Acids Research 37 (2009) D782-D785. doi:10.1093/nar/gkn613
+Adaptations: millimetres Z-up converted to metres Y-up, vertices welded; bones simplified with
+meshoptimizer (about 0.1% maximum error per structure), soft tissue simplified with quadric
+decimation (fast-simplification) to a per-layer triangle budget; positions quantised to 16 bits.
+The adapted geometry in data/geometry*.bin is shared under the same licence.
+
+Rendering: three.js r186, MIT licence (vendor/three-LICENSE.txt).
+Fonts: Atkinson Hyperlegible and Newsreader, SIL Open Font Licence 1.1.
+
+For learning and reference. Not for diagnosis or clinical use.

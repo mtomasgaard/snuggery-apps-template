@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Anatomy</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="stage"><canvas id="view" aria-label="3D human body. Drag to rotate, pinch to zoom, two fingers to pan, tap a structure to select it."></canvas></div>
+
+<header class="bar">
+  <button id="btn-list" class="pill" aria-controls="list">Search</button>
+  <h1>Anatomy</h1>
+  <button id="btn-about" class="round" aria-controls="about" aria-label="About this model">i</button>
+</header>
+
+<nav class="views" aria-label="Camera">
+  <button data-view="front">Front</button>
+  <button data-view="side">Side</button>
+  <button data-view="back">Back</button>
+  <button data-view="top">Top</button>
+  <button data-view="fit">Fit</button>
+</nav>
+
+<div id="status" class="status" hidden>
+  <span id="status-text"></span>
+  <button id="status-reset">Show all</button>
+</div>
+
+<section id="card" class="card" hidden aria-live="polite">
+  <div class="card-head">
+    <div class="card-title">
+      <h2 id="c-name"></h2>
+      <p id="c-latin" class="latin"></p>
+    </div>
+    <button id="c-close" class="round" aria-label="Clear selection">×</button>
+  </div>
+  <p id="c-where" class="where"></p>
+  <p id="c-desc" class="desc"></p>
+  <p id="c-note" class="note" hidden></p>
+  <div class="actions">
+    <button id="c-focus">Focus</button>
+    <button id="c-isolate">Isolate</button>
+    <button id="c-ghost" aria-pressed="false">X-ray</button>
+    <button id="c-hide">Hide</button>
+  </div>
+</section>
+
+<section id="dock" class="dock">
+  <div class="dock-row">
+    <button id="btn-peel" class="step">Peel skin</button>
+    <button id="btn-add" class="step">Add</button>
+    <button id="btn-layers" class="step outline" aria-controls="layers" aria-expanded="false">Layers</button>
+  </div>
+  <div class="dock-row">
+    <button id="btn-explode" class="primary">Explode</button>
+    <input id="explode" type="range" min="0" max="100" step="1" value="0" aria-label="Explode amount">
+    <select id="level" class="level" aria-label="Explode by">
+      <option value="bones">By part</option>
+      <option value="groups">By group</option>
+      <option value="regions">By region</option>
+    </select>
+  </div>
+</section>
+
+<section id="layers" class="panel" hidden aria-label="Layers">
+  <div class="panel-head">
+    <div><h2>Layers</h2><p class="panel-sub">Listed from the outside in. Peel removes from the top, Add brings back from the bottom.</p></div>
+    <button id="layers-close" class="round" aria-label="Close layers">×</button>
+  </div>
+  <div id="layer-rows" class="layer-rows"></div>
+  <div class="panel-foot-row">
+    <button id="panel-peel" class="panel-foot step-btn">Peel skin</button>
+    <button id="panel-add" class="panel-foot step-btn">Add</button>
+  </div>
+  <button id="layers-all" class="panel-link">Turn every layer on</button>
+</section>
+
+<aside id="list" class="sheet sheet-left" hidden aria-label="Structures">
+  <div class="sheet-head">
+    <h2>Find a structure</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search: femur, liver, biceps, C5, tooth 36">
+  <div id="tree" class="tree"></div>
+</aside>
+
+<aside id="about" class="sheet sheet-right" hidden aria-label="About this model">
+  <div class="sheet-head">
+    <h2>About this model</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <div id="about-body" class="prose"></div>
+</aside>
+
+<div id="loader" class="loader">
+  <p class="loader-title">Anatomy</p>
+  <div class="bar-track"><div id="load-bar" class="bar-fill"></div></div>
+  <p id="load-text" class="loader-text">Reading anatomy</p>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

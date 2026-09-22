@@ -19,18 +19,22 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Seven complete apps. All are examples — none holds anybody's real data. Copy
+Ten complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
-**Four of them cost you nothing to run.** Hello Live, World News, Power Hours
-and Global Wind are refreshed by this repository's own workflows, from sources
-that need no key and no account, so they work from the moment you install them
+**Five of them cost you nothing to run.** Hello Live, World News, Power Hours,
+Global Wind and Global Weather are refreshed by this repository's own workflows,
+from sources that need no key and no account, so they work from the moment you install them
 and keep working whether or not you ever copy this template. **Outdoor Window**
 is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both ship as static
-examples with made-up data.
+examples with made-up data. **Anatomy** and **Norne Reservoir** are the two big
+ones: a human body and an oil field, each in 3D, 21 and 15 MB as ZIPs. They need
+nothing at all, and they live here rather than in Snuggery's built-in starter
+pack precisely because of that size — install either by opening its ZIP and
+sharing it to Snuggery, the same way as any app on this page.
 
 | App | What it is | Needs | Try it | Make it yours |
 | --- | --- | --- | --- | --- |
@@ -41,6 +45,9 @@ examples with made-up data.
 | **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | your own Shortcut | [`zips/outdoor-window.zip`](zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
 | **Power Hours** | Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo). | nothing | [`zips/power-hours.zip`](zips/power-hours.zip) | [`power-hours/PROMPT.md`](power-hours/PROMPT.md) |
 | **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer — on a map you pan and zoom, or a globe you turn — with a five-day time player, a moving night side and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | nothing | [`zips/global-wind.zip`](zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
+| **Global Weather** | Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, and a tap anywhere giving all five numbers at that point. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here twice a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size. | nothing | [`zips/global-weather.zip`](zips/global-weather.zip) | [`global-weather/PROMPT.md`](global-weather/PROMPT.md) |
+| **Anatomy** | A full human body in 3D: 934 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, nerves, brain, cartilage, bone — that you peel, fade, isolate, search and explode. Three.js is vendored; nothing is fetched. **Static**, 30 MB unpacked. | nothing | [`zips/anatomy.zip`](zips/anatomy.zip) | [`anatomy/NOTES.md`](anatomy/NOTES.md) |
+| **Norne Reservoir** | The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked. | nothing | [`zips/norne-reservoir.zip`](zips/norne-reservoir.zip) | [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md) |
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
 ![Finances](finances/screenshots/app.png)
@@ -48,6 +55,9 @@ examples with made-up data.
 ![Outdoor Window](outdoor-window/screenshots/app.png)
 ![Power Hours](power-hours/screenshots/app.png)
 ![Global Wind](global-wind/screenshots/app.png)
+![Global Weather](global-weather/screenshots/app.png)
+![Anatomy](anatomy/screenshots/app.png)
+![Norne Reservoir](norne-reservoir/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in
 `.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
@@ -109,6 +119,8 @@ That is the whole per-app cost. Nothing else changes, ever.
   data/snapshot.json     THE ONLY FILE THAT CHANGES
   screenshots/           pictures for this README; left out of the ZIP, so they
                          cost the phone nothing
+  tools/ or pipeline/    how an app's data was built (Anatomy, Norne Reservoir);
+                         left out of the ZIP in the same way
 scripts/                 one refresh script per app
 garmin-raw/              Running Dashboard's append-only raw store
 data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
@@ -318,8 +330,12 @@ the same run. This table is the cheapest possible defence against that.
 
 ---
 
-MIT licensed — see [LICENSE](LICENSE). Three things travel with the app under their own terms and
-are spelled out in [TILES.md](running-dashboard/TILES.md): the map tiles under
-`running-dashboard/data/tiles/` are US Geological Survey work in the public domain, the demo's route
-shapes derive from OpenStreetMap under the ODbL, and the Geist typeface in `running-dashboard/fonts/`
-is under the SIL Open Font License. Copy it, change it, ship it.
+MIT licensed — see [LICENSE](LICENSE), whose carve-outs name everything that travels under its own
+terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-derived route shapes
+(ODbL) and the Geist typeface (SIL OFL) in Running Dashboard, spelled out in
+[TILES.md](running-dashboard/TILES.md); the BodyParts3D geometry in Anatomy (CC BY-SA 2.1 JP, also
+CC BY 4.0 at source — [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and two
+SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL —
+[ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); and, in Global Wind and Global Weather,
+NOAA's forecast (public domain), Natural Earth coastlines (public domain) and GeoNames city labels
+(CC BY 4.0, attribution required — [LICENSES.md](global-wind/assets/LICENSES.md)).

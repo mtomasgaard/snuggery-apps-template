@@ -1,0 +1,17 @@
+{
+  "name": "anatomy-build-tools",
+  "private": true,
+  "description": "Rebuilds the Anatomy miniapp's geometry and vendored libraries. Not needed to run the app.",
+  "type": "module",
+  "scripts": {
+    "build": "sh build_all.sh",
+    "vendor": "sh update_vendor.sh",
+    "package": "python3 package_snuggery.py"
+  },
+  "dependencies": {
+    "@fontsource/atkinson-hyperlegible": "5.3.0",
+    "@fontsource/newsreader": "5.3.0",
+    "meshoptimizer": "1.2.0",
+    "three": "0.186.0"
+  }
+}

@@ -1,0 +1,4 @@
+# Linux x86_64 only: OPM publishes manylinux_2_28 x86_64 wheels, none for macOS.
+opm==2026.4
+opm-simulators==2026.4
+numpy>=1.26

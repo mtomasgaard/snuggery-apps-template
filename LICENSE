@@ -22,8 +22,8 @@ SOFTWARE.
 
 ---
 
-Three parts of the app are not the authors' to license and are not covered by
-the licence above; all three are described in running-dashboard/TILES.md:
+Some parts of these apps are not the authors' to license and are not covered by
+the licence above; the first three are described in running-dashboard/TILES.md:
 
 - The map tiles under running-dashboard/data/tiles/ are from USGS The National Map,
   a work of the United States government in the public domain.
@@ -33,3 +33,21 @@ the licence above; all three are described in running-dashboard/TILES.md:
   Database License (ODbL) 1.0.
 - The Geist typeface in running-dashboard/fonts/ is © Vercel, licensed under the
   SIL Open Font License 1.1 (running-dashboard/fonts/LICENSE-Geist.txt).
+- The anatomical geometry under anatomy/data/ is derived from BodyParts3D,
+  © The Database Center for Life Science (DBCLS), licensed CC BY-SA 2.1 Japan
+  (the source is now also published under CC BY 4.0), and the adapted geometry is
+  shared under the same licence — see anatomy/CREDITS.txt. anatomy/vendor/ is
+  three.js under the MIT licence (anatomy/vendor/three-LICENSE.txt); the fonts
+  under anatomy/fonts/ are Atkinson Hyperlegible and Newsreader under the SIL
+  Open Font License 1.1.
+- The reservoir model under norne-reservoir/data/ is derived from the Norne
+  benchmark case published through the Open Porous Media initiative, and is a
+  derived database under the Open Database License (ODbL) 1.0 — see
+  norne-reservoir/data/ATTRIBUTION.txt.
+- The wind and weather fields under global-wind/data/ and global-weather/data/
+  are NOAA Global Forecast System output, a work of the United States government
+  in the public domain. The coastlines in both apps' assets/world.json are
+  Natural Earth, public domain; the city labels in assets/places.json are
+  © GeoNames under CC BY 4.0, whose attribution is a condition of use; and
+  assets/fflate.min.js is fflate under the MIT licence — see
+  global-wind/assets/LICENSES.md and global-weather/assets/LICENSES.md.

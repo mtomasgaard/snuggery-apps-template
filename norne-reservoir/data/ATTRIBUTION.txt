@@ -1,0 +1,30 @@
+Norne benchmark case
+
+Source: the Norne field simulation model published by Equinor and the Norne
+licence partners through NTNU and the Open Porous Media (OPM) initiative,
+https://github.com/OPM/opm-data (folder "norne", deck NORNE_ATW2013.DATA).
+
+Licence: Open Database License (ODbL) 1.0, https://opendatacommons.org/licenses/odbl/1-0/
+
+This folder is a derived database. Grid geometry, cell connections and static
+properties come from the model's EGRID/INIT output. Saturations and pressures
+come from running the public deck with OPM Flow 2026.04 (Python bindings) from
+6 Nov 1997 to 1 Dec 2006. The only change to the deck was removing RPTSCHED
+report settings from the schedule so that restart output is written monthly.
+
+Check against published results: OPM's opm-tests repository carries Eclipse
+2014.2 summary results for the same deck (norne/ECL.2014.2). At 1 Dec 2006:
+  cumulative oil    -0.2%
+  cumulative water  +0.4%
+  cumulative gas    -0.1%
+  water injected    +0.1%
+  average field pressure within 0.1 bar over the run
+Published results contain field and well summaries only, no 3D cell data.
+
+Files
+  model.json       dimensions, frame dates, wells (path, completions, role per frame), rates (Sm3/day, averages between frames)
+  geometry.bin     float32, 8 corners x (x, y, depth) per active cell, metres, relative to model.center
+  neighbours.bin   int32, 6 face neighbours per active cell (-I, +I, -J, +J, up, down), -1 = open face
+  ijk.bin          uint8, 0-based I, J, K per active cell
+  static.bin       float32 blocks of PORO, PERMX, PERMZ, NTG, FIPNUM, DEPTH
+  dynamic.bin      per frame: SWAT uint8 (/255), SGAS uint8 (/255), PRESSURE uint16 scaled to dynamic.pressureRange

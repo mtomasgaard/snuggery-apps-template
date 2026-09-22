@@ -1,0 +1,3 @@
+# Model data is binary; never diff, normalise line endings or merge it.
+data/*.bin binary
+data/model.json -diff linguist-generated

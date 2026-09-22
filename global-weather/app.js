@@ -1,33 +1,31 @@
-/* Global Wind — Snuggery mini-app.
+/* Global Weather — Snuggery mini-app.
  *
  * =============================================================================
  * SHAPE OF ./data/snapshot.json — the ONLY file that changes between updates.
- * Written by scripts/global_wind.py (see .github/workflows/refresh-global-wind.yml).
+ * Written by scripts/global_weather.py (see .github/workflows/refresh-global-weather.yml).
  * Whatever rewrites that file next year will not have read the conversation
  * that built it, so the contract lives here. Nothing in this file, index.html
- * or style.css needs to move when the data is replaced.
+ * or style.css needs to move when the data is replaced — including when a
+ * LAYER is added or removed, which is the point of the `layers` block.
  *
  * {
- *   "schema": 1,                                 // bumped only on a breaking change
- *   "generatedAt": "2026-09-21T04:40:12Z",       // ISO 8601 UTC — when the job ran
+ *   "schema": 2,                                 // bumped only on a breaking change
+ *   "generatedAt": "2026-09-22T11:12:03Z",       // ISO 8601 UTC — when the job ran
  *   "source": {
  *     "name":        "NOAA Global Forecast System (GFS)",
- *     "detail":      "10 m wind from the 0.25° product, sampled to 2°, …",
+ *     "detail":      "5 fields from the 0.25° product, sampled to 2°, …",
  *     "licence":     "Public domain — a work of the United States Government",
- *     "attribution": "Wind forecast: NOAA/NWS Global Forecast System"
+ *     "attribution": "Weather: NOAA Global Forecast System, sampled to 2°"
  *   },                                           //   printed on screen, see NOTES.md
  *   "model": "GFS",
- *   "run":   "2026-09-21T00:00:00Z",             // the model cycle the forecast comes from
- *   "level": "10 m above ground",
+ *   "run":   "2026-09-22T06:00:00Z",             // the model cycle the forecast comes from
  *   "grid": {                                    // a regular lat/lon grid, row-major
  *     "nx": 180, "ny": 91,                       //   180 columns × 91 rows
  *     "lon0": 0,  "dlon": 2,                     //   first column at 0°E, dlon EAST per column
  *     "lat0": 90, "dlat": -2                     //   first row at 90°N, |dlat| SOUTH per row
  *   },
  *   "encoding": {
- *     "speedStep": 0.25, "speedUnit": "m/s",     // speed byte × 0.25 = m/s (0 … 63.75)
- *     "dirStep": 1.40625,                        // direction byte × 1.40625 = degrees
- *     "dirConvention": "degrees the wind blows FROM, clockwise from north",
+ *     "value": "offset + step * byte ** power, per plane, as `layers` says",
  *     "order": "row-major from lat0 southwards, lon0 eastwards, one byte per point",
  *     "compression": "deflate",                  // each plane is zlib-compressed (RFC 1950)
  *                                                //   before base64; absent or "none" = raw bytes
@@ -35,50 +33,60 @@
  *                                                //   (value − the previous step's value) mod 256;
  *                                                //   absent or "none" = absolute values
  *   },
- *   "maxSpeed": 41.2,                            // informational; shown in About
- *   "localTimesFrom": "tzdata",                  // informational; how `ask` found noon
+ *   "layers": [{                                 // what the map can colour, in menu order
+ *     "key": "wind", "label": "Wind",            //   `key` is the identity, `label` the chip
+ *     "kind": "vector",                          //   "vector" = speed + dir, "scalar" = one plane
+ *     "unit": "m/s", "level": "10 m above ground",
+ *     "field": "UGRD/VGRD",                      //   the GRIB field(s) behind it
+ *     "range": [0.04, 41.2],                     //   what it actually reached, before rounding
+ *     "planes": {                                //   one byte a grid point, each
+ *       "speed": { "offset": 0, "step": 0.25, "power": 1, "unit": "m/s" },
+ *       "dir":   { "offset": 0, "step": 1.40625, "power": 1, "wrap": true,
+ *                  "unit": "degrees the wind blows FROM, clockwise from north" }
+ *     }
+ *   }, …],                                       // a scalar layer has exactly one plane, "v"
  *   "steps": [{                                  // ascending in time, any count ≥ 1, any spacing
  *     "hours":     0,                            //   lead time in hours from `run`
- *     "validTime": "2026-09-21T00:00:00Z",       //   run + hours
- *     "speed":     "<base64 of nx*ny bytes, packed as `encoding` says>",
- *     "dir":       "<base64 of nx*ny bytes, packed as `encoding` says>"
+ *     "validTime": "2026-09-22T06:00:00Z",       //   run + hours
+ *     "planes": {                                //   keyed "<layer>.<plane>", every one declared
+ *       "wind.speed": "<base64 of nx*ny bytes, packed as `encoding` says>",
+ *       "wind.dir":   "…", "temp.v": "…", "rain.v": "…", …
+ *     }
  *   }, …],
  *   "ask": [{                                    // flat rows for Snuggery's Ask About This Data.
  *     "place": "London", "country": "United Kingdom",
  *     "day": "Mon 21 Sep", "localNoon": "2026-09-21T12:00:00+01:00",
- *     "leadHours": 12, "speedMs": 5.4, "speedKmh": 19,
- *     "fromDirection": "SW", "fromDegrees": 233,
- *     "beaufort": 3, "description": "Gentle breeze"
+ *     "leadHours": 12, "speedMs": 5.4, "speedKmh": 19, "fromDirection": "SW",
+ *     "fromDegrees": 233, "beaufort": 3, "wind": "Gentle breeze",
+ *     "tempC": 14.2, "tempF": 58, "rainMmPerHour": 0.4, "rainfall": "Light rain",
+ *     "cloudPercent": 88, "sky": "Overcast", "pressureHPa": 1004
  *   }, …]                                        // NEVER read by this app: it is a table for
  * }                                              // questions in words, not for drawing.
  *
- * The delta-plus-deflate pair is what makes a global wind field fit in a file
- * a phone can open. Hour to hour the wind barely moves, so the differences are
+ * A VALUE IS ONE BYTE: `offset + step * byte ** power`, with the numbers coming
+ * from the plane's own entry in `layers`. `power` is 1 for everything except
+ * rain, where 2 spends the bytes where the weather is — drizzle resolved to
+ * hundredths of a millimetre an hour, and 65 mm/h still at the top of the byte.
+ * `wrap: true` marks an angle, which goes round rather than clipping at 255.
+ *
+ * The delta-plus-deflate pair is what makes five global fields fit in a file a
+ * phone can open. Hour to hour the weather barely moves, so the differences are
  * mostly zero and deflate packs them to roughly a third of the raw bytes. The
  * app refuses anything that fails the shape — a missing step, the wrong byte
  * count after unpacking, an error page written over the file — and says so on
  * screen rather than drawing an empty map.
  *
- * -----------------------------------------------------------------------------
- * TWO VIEWS OF THE SAME FIELD. The Map tab is Web Mercator, panned and pinched,
- * the world repeating sideways — what every slippy map is. The Globe tab is
- * orthographic: the planet as a sphere, dragged to turn it, which is the view a
- * jet stream or a Southern Ocean storm belt is actually shaped like. Both draw
- * from the same snapshot and share the time player, the units, the marker and
- * the legend; switching carries the middle of the world across.
+ * THE GLOBE HALF OF THIS FILE IS SHARED WITH THE GLOBAL WIND APP in
+ * ../global-wind/app.js, which is this app with one field instead of five. They
+ * are separate apps and separate ZIPs on purpose — a mini-app ships as one
+ * folder — so a fix to the sphere, the land mask or the terminator belongs in
+ * both. The data half is what differs: schema 1 there, schema 2 here.
  *
- * The globe uses no library. Its surface is a per-pixel raster: each pixel of
- * the disc is turned back into a longitude and latitude, the wind is sampled
- * there, and the land under it comes from a mask rasterised once from the same
- * world.json the flat map draws. Coastlines are drawn as vectors on top, broken
- * wherever they go over the horizon. Everything that only changes when the
- * world is turned is cached, so playing the forecast is a sample and a lookup
- * per pixel.
- *
- * THE GLOBE HALF OF THIS FILE IS SHARED WITH THE GLOBAL WEATHER APP in
- * ../global-weather/app.js, which is this app with four more fields. They are
- * separate apps and separate ZIPs on purpose — a mini-app ships as one folder —
- * so a fix to the sphere, the land mask or the terminator belongs in both.
+ * THE APP READS THE LAYERS, IT DOES NOT KNOW THEM. The chips, the legend, the
+ * units button and the tapped readout are all built from `layers`. LOOKS below
+ * gives the five shipped layers their colour scales and their units; a layer
+ * that is not in it still draws, on a plain scale over its own `range`, which
+ * is what makes "add a sixth field to the puller" a one-file change.
  *
  * -----------------------------------------------------------------------------
  * STATIC COMPANIONS in ./assets, never rewritten by the schedule:
@@ -87,7 +95,7 @@
  *                 r is the label tier, 1 shown first. GeoNames, CC BY 4.0 — the
  *                 credit line under the map is a condition of using it. Edit the
  *                 file freely; the app reads it as it finds it.
- * Both licences are in assets/LICENSES.md, and NOTES.md has the wind's.
+ * Both licences are in assets/LICENSES.md, and NOTES.md has the weather's.
  *
  * -----------------------------------------------------------------------------
  * NO VALUE EVER REACHES innerHTML. The only `.innerHTML` below is `= ''`, used
@@ -99,54 +107,137 @@
  * ========================================================================== */
 
 const STORE = {
-  view: 'gw.view', units: 'gw.units', heat: 'gw.heat', marker: 'gw.marker',
-  tab: 'gw.tab', globe: 'gw.globe', night: 'gw.night',
+  map: 'gwe.map', globe: 'gwe.globe', tab: 'gwe.tab', layer: 'gwe.layer',
+  units: 'gwe.units', arrows: 'gwe.arrows', night: 'gwe.night', marker: 'gwe.marker',
 };
 const MAX_LAT = 85.05112878;   // where Web Mercator stops being finite
 const DEG = Math.PI / 180;
 const ARROW_SPACING = 30;      // CSS px between arrows, roughly
 const HEAT_PX = 3;             // CSS px per colour sample, flat map
 const GLOBE_PX = 3;            // CSS px per colour sample, globe
-const NIGHT_PX = 6;            // and for the night wash, which is a smooth curve
 const PLAY_HOURS_PER_SEC = 5;  // playback speed: a day of forecast every ~5 s
-const FLOAT_CACHE = 8;         // decoded u/v planes kept in memory
+const FLOAT_CACHE = 16;        // decoded planes kept in memory
 const PATH_K = 4096;           // land paths are built in world units × PATH_K
 const MAX_SCALE = 360 * 80;    // 80 px per degree of longitude
-const LEGEND_MAX = 36;         // m/s at the right-hand end of the legend
 const STALE_HOURS = 30;        // a forecast older than this is stamped stale
 const MASK_NX = 2048;          // the globe's land mask, in plate carrée
 const MASK_NY = 1024;
 const ANTARCTIC_EDGE = -84.6;  // Natural Earth stops here; see buildLandMask()
 
-const UNITS = {
-  ms:  { label: 'm/s',  f: 1,        d: 1 },
-  kmh: { label: 'km/h', f: 3.6,      d: 0 },
-  kt:  { label: 'kt',   f: 1.943844, d: 0 },
-  mph: { label: 'mph',  f: 2.236936, d: 0 },
-};
-const UNIT_ORDER = ['ms', 'kmh', 'kt', 'mph'];
+/* ── what each layer looks like ──────────────────────────────────────────── *
+ * One entry per layer key the puller can write. `stops` is value → colour and
+ * `alpha` is value → opacity, both in the layer's own unit; the legend, the
+ * chips and the map are painted from these same numbers, so the scale under
+ * the map is by construction the scale on it.
+ *
+ * Every scale is a single progression with no hue cycling: further along
+ * always means more. And nothing is encoded by colour alone — wind is drawn as
+ * arrow length and thickness too, and a tap gives the number in figures.
+ *
+ * A layer with no entry here (one you added to the puller) still draws, on the
+ * plain scale at the bottom of this block, over the range the snapshot says it
+ * reached.                                                                    */
 
-/* Wind speed (m/s) → colour. Cool → warm → violet with no hue cycling, so
- * stronger always reads as "further along" the legend rather than "a different
- * kind of thing". Speed is also drawn as arrow length and thickness, so the
- * map never encodes a value by colour alone. */
-const STOPS = [
-  [0,  [86, 115, 190]],
-  [2,  [70, 140, 205]],
-  [4,  [60, 175, 195]],
-  [6,  [70, 195, 150]],
-  [8,  [100, 205, 95]],
-  [10, [165, 212, 60]],
-  [12, [232, 210, 45]],
-  [15, [250, 172, 45]],
-  [18, [250, 125, 45]],
-  [21, [240, 78, 55]],
-  [25, [222, 45, 95]],
-  [30, [195, 45, 165]],
-  [36, [145, 45, 205]],
-  [45, [100, 40, 190]],
-  [60, [245, 225, 255]],
-];
+const LOOKS = {
+  wind: {
+    /* Cool → warm → violet: stronger always reads as further along. */
+    short: 'Wind',
+    stops: [
+      [0, [86, 115, 190]], [2, [70, 140, 205]], [4, [60, 175, 195]], [6, [70, 195, 150]],
+      [8, [100, 205, 95]], [10, [165, 212, 60]], [12, [232, 210, 45]], [15, [250, 172, 45]],
+      [18, [250, 125, 45]], [21, [240, 78, 55]], [25, [222, 45, 95]], [30, [195, 45, 165]],
+      [36, [145, 45, 205]], [45, [100, 40, 190]], [60, [245, 225, 255]],
+    ],
+    /* Calm is nearly transparent so the map shows through where nothing is
+     * happening; a gale is solid. */
+    alpha: { at: [0, 10], from: 0.42, to: 0.82 },
+    legend: [0, 36],
+  },
+  temp: {
+    short: 'Temp',
+    /* Violet through blue, green, yellow and orange to a dark red. Pale at
+     * 0 °C, because freezing is the one boundary everybody reads off a map. */
+    stops: [
+      [-60, [40, 20, 70]], [-45, [68, 34, 128]], [-35, [62, 70, 170]], [-25, [58, 110, 200]],
+      [-15, [78, 155, 218]], [-8, [126, 194, 232]], [0, [196, 226, 238]], [4, [168, 214, 178]],
+      [10, [140, 200, 106]], [16, [206, 214, 78]], [22, [240, 196, 66]], [28, [240, 150, 54]],
+      [34, [226, 100, 46]], [40, [200, 52, 48]], [50, [140, 20, 40]],
+    ],
+    alpha: { at: [0, 1], from: 0.78, to: 0.78 },
+    legend: [-40, 45],
+  },
+  rain: {
+    short: 'Rain',
+    /* The radar progression, which is the one people have already learnt:
+     * blue, green, yellow, red, magenta. */
+    stops: [
+      [0, [140, 190, 230]], [0.1, [120, 175, 225]], [0.4, [70, 140, 215]], [1, [45, 100, 200]],
+      [2, [40, 165, 120]], [4, [90, 195, 70]], [7, [225, 205, 60]], [12, [240, 150, 45]],
+      [20, [225, 70, 50]], [32, [190, 40, 120]], [50, [150, 40, 170]],
+    ],
+    /* Nothing at all below a fiftieth of a millimetre an hour: a dry world has
+     * to look dry, or the layer says nothing. */
+    alpha: { at: [0.02, 1.2], from: 0, to: 0.88 },
+    legend: [0, 40],
+  },
+  cloud: {
+    short: 'Cloud',
+    /* One hue, opacity doing the work — the clearest scale there is. Grey on
+     * the light map and white on the dark one, because a white veil over a
+     * cream continent is not a veil. */
+    stops: (dark) => (dark
+      ? [[0, [232, 238, 246]], [100, [252, 253, 255]]]
+      : [[0, [150, 162, 178]], [100, [88, 102, 122]]]),
+    alpha: { at: [0, 100], from: 0, to: 0.75 },
+    legend: [0, 100],
+  },
+  pressure: {
+    short: 'Press.',
+    /* Deep lows violet, the 1013 hPa middle near-neutral, highs warm. */
+    stops: [
+      [950, [70, 30, 120]], [975, [62, 80, 180]], [995, [95, 160, 215]], [1008, [186, 214, 226]],
+      [1013, [238, 238, 234]], [1020, [236, 206, 140]], [1032, [232, 160, 70]],
+      [1045, [200, 100, 40]], [1060, [150, 60, 30]],
+    ],
+    alpha: { at: [0, 1], from: 0.62, to: 0.62 },
+    legend: [955, 1050],
+  },
+};
+
+/* The scale a layer nobody wrote a look for is drawn on. */
+const PLAIN = {
+  stops: [[0, [60, 90, 170]], [0.5, [120, 190, 170]], [0.75, [235, 200, 80]], [1, [200, 60, 60]]],
+  alpha: { at: [0, 1], from: 0.7, to: 0.7 },
+};
+
+/* Units, per layer key. The header button cycles the ACTIVE layer's list, so
+ * it offers knots on the wind and °F on the temperature, and each layer
+ * remembers its own choice. `f` multiplies, `o` is added after: °F is the only
+ * one that needs both. `d` is how many decimals to print.
+ *
+ * A layer not named here is printed in whatever unit the snapshot says it is
+ * in, unconverted — which is right, because nothing here knows what it means. */
+const UNITS = {
+  wind: [
+    { id: 'ms', label: 'm/s', f: 1, d: 1 },
+    { id: 'kmh', label: 'km/h', f: 3.6, d: 0 },
+    { id: 'kt', label: 'kt', f: 1.943844, d: 0 },
+    { id: 'mph', label: 'mph', f: 2.236936, d: 0 },
+  ],
+  temp: [
+    { id: 'c', label: '°C', f: 1, d: 1 },
+    { id: 'f', label: '°F', f: 1.8, o: 32, d: 0 },
+  ],
+  rain: [
+    { id: 'mm', label: 'mm/h', f: 1, d: 2 },
+    { id: 'in', label: 'in/h', f: 0.0393701, d: 3 },
+  ],
+  cloud: [{ id: 'pct', label: '%', f: 1, d: 0 }],
+  pressure: [
+    { id: 'hpa', label: 'hPa', f: 1, d: 0 },
+    { id: 'inhg', label: 'inHg', f: 0.02952998, d: 2 },
+  ],
+};
 
 const BEAUFORT = [
   [0.3, 'Calm'], [1.6, 'Light air'], [3.4, 'Light breeze'], [5.5, 'Gentle breeze'],
@@ -168,27 +259,23 @@ const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 const pad2 = (n) => String(n).padStart(2, '0');
 const wrapLon = (lon) => ((lon + 180) % 360 + 360) % 360 - 180;
 
-/* ── colour lookup: index = speed / 0.25 m/s ─────────────────────────────── */
+/* ── colour and alpha from a stop table ──────────────────────────────────── */
 
-const LUT = new Uint8ClampedArray(256 * 3);
-(function buildLut() {
-  for (let i = 0; i < 256; i++) {
-    const s = i * 0.25;
-    let k = 0;
-    while (k < STOPS.length - 2 && STOPS[k + 1][0] <= s) k++;
-    const [s0, c0] = STOPS[k];
-    const [s1, c1] = STOPS[k + 1];
-    const f = clamp((s - s0) / (s1 - s0), 0, 1);
-    for (let c = 0; c < 3; c++) LUT[i * 3 + c] = c0[c] + (c1[c] - c0[c]) * f;
-  }
-})();
-const ALPHA = new Uint8ClampedArray(256);   // rebuilt per colour scheme
-
-function lutCss(spd) {
-  const i = Math.min(255, Math.round(spd * 4)) * 3;
-  return `rgb(${LUT[i]},${LUT[i + 1]},${LUT[i + 2]})`;
+function rampAt(stops, value) {
+  let k = 0;
+  while (k < stops.length - 2 && stops[k + 1][0] <= value) k++;
+  const [v0, c0] = stops[k];
+  const [v1, c1] = stops[k + 1];
+  const f = clamp((value - v0) / (v1 - v0), 0, 1);
+  return [c0[0] + (c1[0] - c0[0]) * f,
+          c0[1] + (c1[1] - c0[1]) * f,
+          c0[2] + (c1[2] - c0[2]) * f];
 }
-
+function alphaAt(spec, value) {
+  const [v0, v1] = spec.at;
+  const f = v1 === v0 ? 1 : clamp((value - v0) / (v1 - v0), 0, 1);
+  return spec.from + (spec.to - spec.from) * f;
+}
 /* ── inflate ─────────────────────────────────────────────────────────────── *
  * Every browser shipped since 2023 has DecompressionStream, and that native
  * path is the one that runs. The rest of this section is a small, complete
@@ -393,7 +480,7 @@ async function inflate(bytes, expected) {
   return unzlib(bytes, expected);
 }
 
-/* ── the wind field ──────────────────────────────────────────────────────── */
+/* ── the weather field ───────────────────────────────────────────────────── */
 
 function b64ToBytes(s) {
   const bin = atob(s);
@@ -402,26 +489,105 @@ function b64ToBytes(s) {
   return out;
 }
 
-class WindField {
+/* One entry of the snapshot's `layers`, with the app's half of it attached:
+ * the colour scale, the units, and the byte↔value pair that both ends share. */
+class Layer {
+  constructor(described) {
+    this.key = described.key;
+    this.label = described.label || described.key;
+    this.kind = described.kind === 'vector' ? 'vector' : 'scalar';
+    this.unit = described.unit || '';
+    this.level = described.level || '';
+    this.field = described.field || '';
+    this.range = Array.isArray(described.range) && described.range.length === 2
+      ? described.range : null;
+    this.planes = described.planes;
+    // A vector layer is speed and direction, by contract; a scalar layer is one
+    // plane, whatever it is called. Either way `main` is the plane the colour
+    // scale, the legend and the tapped number are all about.
+    this.main = this.kind === 'vector' ? 'speed' : Object.keys(this.planes)[0];
+    this.spec = this.planes[this.main];
+    this.units = UNITS[this.key] || [{ id: 'raw', label: this.unit, f: 1, d: 1 }];
+    this.lut = null;
+  }
+
+  /* value → the byte that would hold it, fractionally. This is the index the
+   * colour lookup is built on, so a scale that is coarse in storage is coarse
+   * in colour too — and a quadratic plane like rain gets its resolution where
+   * the weather is. */
+  toByte(value) {
+    const t = (value - this.spec.offset) / this.spec.step;
+    const p = this.spec.power || 1;
+    return p === 1 ? t : Math.pow(Math.max(t, 0), 1 / p);
+  }
+  fromByte(b) {
+    const p = this.spec.power || 1;
+    return this.spec.offset + this.spec.step * (p === 1 ? b : Math.pow(b, p));
+  }
+
+  /* The colour scale, resolved for this colour scheme. A layer nobody wrote a
+   * look for gets the plain ramp, stretched over whatever the snapshot says it
+   * reached — which is not pretty, but it is honest and it draws. */
+  look(dark) {
+    const found = LOOKS[this.key];
+    if (found) {
+      return {
+        stops: typeof found.stops === 'function' ? found.stops(dark) : found.stops,
+        alpha: found.alpha,
+        legend: found.legend,
+        short: found.short || this.label,
+      };
+    }
+    const lo = this.range ? this.range[0] : this.fromByte(0);
+    const hi = this.range ? this.range[1] : this.fromByte(255);
+    return {
+      stops: PLAIN.stops.map(([f, c]) => [lo + (hi - lo) * f, c]),
+      alpha: PLAIN.alpha,
+      legend: [lo, hi],
+      short: this.label,
+    };
+  }
+}
+
+class WeatherField {
   constructor(snap) {
     const g = snap.grid;
     this.nx = g.nx; this.ny = g.ny; this.n = g.nx * g.ny;
     this.lon0 = g.lon0; this.dlon = g.dlon; this.lat0 = g.lat0; this.dlat = g.dlat;
-    this.speedStep = snap.encoding.speedStep;
-    this.dirStep = snap.encoding.dirStep;
-    this.compression = snap.encoding.compression || 'none';
-    this.delta = snap.encoding.delta || 'none';
-    this.steps = snap.steps.map((s) => ({
-      hours: s.hours, valid: Date.parse(s.validTime),
-      sB64: s.speed, dB64: s.dir, s: null, d: null,
-    }));
-    this.SIN = new Float32Array(256);
-    this.COS = new Float32Array(256);
-    for (let d = 0; d < 256; d++) {
-      this.SIN[d] = Math.sin(d * this.dirStep * DEG);
-      this.COS[d] = Math.cos(d * this.dirStep * DEG);
+    this.compression = (snap.encoding && snap.encoding.compression) || 'none';
+    this.delta = (snap.encoding && snap.encoding.delta) || 'none';
+
+    this.layers = snap.layers.map((d) => new Layer(d));
+    this.byKey = new Map(this.layers.map((l) => [l.key, l]));
+    this.planeKeys = [];
+    this.tables = new Map();              // plane key → 256 values, one per byte
+    for (const layer of this.layers) {
+      for (const [name, spec] of Object.entries(layer.planes)) {
+        const key = `${layer.key}.${name}`;
+        this.planeKeys.push(key);
+        const table = new Float32Array(256);
+        const p = spec.power || 1;
+        for (let b = 0; b < 256; b++) {
+          table[b] = spec.offset + spec.step * (p === 1 ? b : Math.pow(b, p));
+        }
+        this.tables.set(key, table);
+      }
     }
-    this.cache = new Map();          // step index → { u, v } in m/s
+    // The wind's direction byte is only ever wanted as a sine and a cosine, so
+    // it is turned into one once rather than 16,000 times a step.
+    const dir = this.tables.get('wind.dir');
+    if (dir) {
+      this.SIN = new Float32Array(256);
+      this.COS = new Float32Array(256);
+      for (let b = 0; b < 256; b++) {
+        this.SIN[b] = Math.sin(dir[b] * DEG);
+        this.COS[b] = Math.cos(dir[b] * DEG);
+      }
+    }
+    this.steps = snap.steps.map((s) => ({
+      hours: s.hours, valid: Date.parse(s.validTime), packed: s.planes, planes: null,
+    }));
+    this.cache = new Map();               // "layer:step" → decoded values
   }
 
   async unpack(b64) {
@@ -431,83 +597,119 @@ class WindField {
     return inflate(bytes, this.n);
   }
 
-  /* Unpack every step's byte planes. Deltas chain, so this runs in order; it
+  /* Unpack every plane of every step. Deltas chain, so this runs in order; it
    * yields to the page every few steps so a long forecast does not freeze it. */
-  async load() {
+  async load(onProgress) {
     const n = this.n;
-    let prevS = null, prevD = null;
+    const previous = new Map();
     for (let k = 0; k < this.steps.length; k++) {
-      const st = this.steps[k];
-      const s = await this.unpack(st.sB64);
-      const d = await this.unpack(st.dB64);
-      if (s.length !== n || d.length !== n) {
-        throw new Error(`step ${k} unpacks to ${s.length} points, the grid has ${n}`);
-      }
-      if (this.delta === 'previous-step' && prevS) {
-        for (let i = 0; i < n; i++) {
-          s[i] = (s[i] + prevS[i]) & 255;
-          d[i] = (d[i] + prevD[i]) & 255;
+      const step = this.steps[k];
+      const planes = {};
+      for (const key of this.planeKeys) {
+        const bytes = await this.unpack(step.packed[key]);
+        if (bytes.length !== n) {
+          throw new Error(`step ${k} ${key} unpacks to ${bytes.length} points, `
+                        + `the grid has ${n}`);
         }
-      } else if (this.delta !== 'none' && this.delta !== 'previous-step') {
-        throw new Error(`unknown delta scheme "${this.delta}"`);
+        const before = previous.get(key);
+        if (this.delta === 'previous-step' && before) {
+          for (let i = 0; i < n; i++) bytes[i] = (bytes[i] + before[i]) & 255;
+        } else if (this.delta !== 'none' && this.delta !== 'previous-step') {
+          throw new Error(`unknown delta scheme "${this.delta}"`);
+        }
+        previous.set(key, bytes);
+        planes[key] = bytes;
       }
-      st.s = s; st.d = d; st.sB64 = st.dB64 = null;
-      prevS = s; prevD = d;
-      if (k % 8 === 7) await new Promise((r) => setTimeout(r, 0));
+      step.planes = planes;
+      step.packed = null;
+      if (k % 4 === 3) {
+        if (onProgress) onProgress(k + 1, this.steps.length);
+        await new Promise((r) => setTimeout(r, 0));
+      }
     }
   }
 
-  /* Byte planes → u/v in m/s for one step, kept in a small FIFO cache. */
-  floats(k) {
-    let e = this.cache.get(k);
-    if (e) return e;
-    const st = this.steps[k];
-    const n = this.n, u = new Float32Array(n), v = new Float32Array(n);
-    const S = st.s, D = st.d, SIN = this.SIN, COS = this.COS, step = this.speedStep;
-    for (let i = 0; i < n; i++) {
-      const spd = S[i] * step;
-      u[i] = -spd * SIN[D[i]];       // the "from" direction → the vector it blows TO
-      v[i] = -spd * COS[D[i]];
+  /* One layer's bytes at one step, as values: { u, v } for the wind, { v } for
+   * everything else. Kept in a small FIFO cache, because a frame wants two
+   * steps of the coloured layer and two of the wind. */
+  values(layerKey, k) {
+    const cacheKey = `${layerKey}:${k}`;
+    let found = this.cache.get(cacheKey);
+    if (found) return found;
+    const layer = this.byKey.get(layerKey);
+    const step = this.steps[k];
+    const n = this.n;
+    if (layer.kind === 'vector') {
+      const S = step.planes[`${layerKey}.speed`];
+      const D = step.planes[`${layerKey}.dir`];
+      const speed = this.tables.get(`${layerKey}.speed`);
+      const u = new Float32Array(n), v = new Float32Array(n);
+      const SIN = this.SIN, COS = this.COS;
+      for (let i = 0; i < n; i++) {
+        const s = speed[S[i]];
+        u[i] = -s * SIN[D[i]];           // the "from" direction → the vector it blows TO
+        v[i] = -s * COS[D[i]];
+      }
+      found = { u, v };
+    } else {
+      const B = step.planes[`${layerKey}.${layer.main}`];
+      const table = this.tables.get(`${layerKey}.${layer.main}`);
+      const v = new Float32Array(n);
+      for (let i = 0; i < n; i++) v[i] = table[B[i]];
+      found = { v };
     }
-    e = { u, v };
-    this.cache.set(k, e);
+    this.cache.set(cacheKey, found);
     if (this.cache.size > FLOAT_CACHE) this.cache.delete(this.cache.keys().next().value);
-    return e;
+    return found;
   }
 
-  /* Bilinear sample of one step; out = [u, v]. Longitude wraps, latitude clamps. */
-  sampleStep(k, lon, lat, out) {
-    const { u, v } = this.floats(k);
+  /* The two arrays a raster pass reads: [values, null] for a scalar layer,
+   * [u, v] for a vector one, whose magnitude is what gets coloured. */
+  pair(layerKey, k) {
+    const e = this.values(layerKey, k);
+    return e.u ? [e.u, e.v] : [e.v, null];
+  }
+
+  /* Bilinear corners for one point. Longitude wraps, latitude clamps. */
+  locate(lon, lat, out) {
     const nx = this.nx;
     let fi = (lon - this.lon0) / this.dlon;
     fi -= Math.floor(fi / nx) * nx;
     const fj = clamp((lat - this.lat0) / this.dlat, 0, this.ny - 1);
-    const i0 = Math.floor(fi), i1 = (i0 + 1) % nx, tx = fi - i0;
-    const j0 = Math.floor(fj), j1 = Math.min(j0 + 1, this.ny - 1), ty = fj - j0;
-    const a = j0 * nx, b = j1 * nx;
-    const u0 = u[a + i0] + (u[a + i1] - u[a + i0]) * tx;
-    const u1 = u[b + i0] + (u[b + i1] - u[b + i0]) * tx;
-    const v0 = v[a + i0] + (v[a + i1] - v[a + i0]) * tx;
-    const v1 = v[b + i0] + (v[b + i1] - v[b + i0]) * tx;
-    out[0] = u0 + (u1 - u0) * ty;
-    out[1] = v0 + (v1 - v0) * ty;
+    const i0 = Math.floor(fi), j0 = Math.floor(fj);
+    const i1 = (i0 + 1) % nx, j1 = Math.min(j0 + 1, this.ny - 1);
+    out[0] = j0 * nx + i0; out[1] = j0 * nx + i1;
+    out[2] = j1 * nx + i0; out[3] = j1 * nx + i1;
+    out[4] = fi - i0; out[5] = fj - j0;
     return out;
   }
 
-  /* Sample at a fractional step index: linear in time between two steps. */
-  sample(tt, lon, lat, out) {
+  /* Bilinear across the grid and linear in time between two steps — the same
+   * two interpolations the puller does for the ask table, on the same bytes. */
+  sample(layerKey, tt, lon, lat, out) {
     const last = this.steps.length - 1;
     const k0 = clamp(Math.floor(tt), 0, last);
     const k1 = Math.min(k0 + 1, last);
     const f = clamp(tt - k0, 0, 1);
-    this.sampleStep(k0, lon, lat, out);
-    if (f <= 0 || k1 === k0) return out;
-    const u0 = out[0], v0 = out[1];
-    this.sampleStep(k1, lon, lat, out);
-    out[0] = u0 + (out[0] - u0) * f;
-    out[1] = v0 + (out[1] - v0) * f;
+    const L = this.locate(lon, lat, LOC);
+    const a = this.pair(layerKey, k0);
+    out[0] = mix(a[0], L);
+    out[1] = a[1] ? mix(a[1], L) : 0;
+    if (f > 0 && k1 !== k0) {
+      const b = this.pair(layerKey, k1);
+      out[0] += (mix(b[0], L) - out[0]) * f;
+      if (a[1]) out[1] += (mix(b[1], L) - out[1]) * f;
+    }
     return out;
   }
+}
+
+const LOC = new Float64Array(6);
+function mix(arr, L) {
+  const tx = L[4], ty = L[5];
+  const top = arr[L[0]] + (arr[L[1]] - arr[L[0]]) * tx;
+  const bottom = arr[L[2]] + (arr[L[3]] - arr[L[2]]) * tx;
+  return top + (bottom - top) * ty;
 }
 
 /* ── snapshot validation ─────────────────────────────────────────────────── *
@@ -517,23 +719,58 @@ class WindField {
 
 function validate(d) {
   if (!d || typeof d !== 'object' || Array.isArray(d)) return 'the file is not a JSON object';
-  if (d.schema !== 1) {
+  if (d.schema !== 2) {
     if (typeof d.message === 'string') {
-      return `the file holds a service's reply (“${d.message.slice(0, 200)}”) instead of wind data — `
-           + 'check the token in the Shortcut';
+      return `the file holds a service's reply (“${d.message.slice(0, 200)}”) instead of weather `
+           + 'data — check the token in the Shortcut';
     }
-    return `unexpected schema ${JSON.stringify(d.schema ?? null)}, wanted 1`;
+    if (d.schema === 1) {
+      return 'it is a schema 1 snapshot — that is Global Wind\u2019s file, which holds wind '
+           + 'and nothing else. This app\u2019s Shortcut row wants the data-global-weather '
+           + 'branch; Global Wind keeps its own';
+    }
+    return `unexpected schema ${JSON.stringify(d.schema ?? null)}, wanted 2`;
   }
   const g = d.grid;
   if (!g || !Number.isInteger(g.nx) || !Number.isInteger(g.ny) || g.nx < 2 || g.ny < 2
       || ![g.lon0, g.lat0, g.dlon, g.dlat].every(Number.isFinite) || !g.dlon || !g.dlat) {
     return 'the grid description is missing or malformed';
   }
-  const e = d.encoding;
-  if (!e || !(e.speedStep > 0) || !(e.dirStep > 0)) return 'the encoding description is missing';
+  const e = d.encoding || {};
   const compression = e.compression || 'none';
   if (compression !== 'none' && compression !== 'deflate') return `unknown compression "${compression}"`;
   if ((e.delta || 'none') !== 'none' && e.delta !== 'previous-step') return `unknown delta scheme "${e.delta}"`;
+
+  if (!Array.isArray(d.layers) || !d.layers.length) return 'it declares no layers';
+  if (d.layers.length > 16) return 'it declares more layers than a phone should draw';
+  const planeKeys = [];
+  const seen = new Set();
+  for (const layer of d.layers) {
+    if (!layer || typeof layer.key !== 'string' || !layer.key || layer.key.length > 40) {
+      return 'a layer has no usable key';
+    }
+    if (seen.has(layer.key)) return `two layers are both called "${layer.key}"`;
+    seen.add(layer.key);
+    const planes = layer.planes;
+    if (!planes || typeof planes !== 'object' || Array.isArray(planes)) {
+      return `layer "${layer.key}" declares no planes`;
+    }
+    const names = Object.keys(planes);
+    if (!names.length || names.length > 4) return `layer "${layer.key}" declares ${names.length} planes`;
+    for (const name of names) {
+      const spec = planes[name];
+      if (!spec || !Number.isFinite(spec.offset) || !Number.isFinite(spec.step) || !spec.step
+          || !(Number(spec.power || 1) > 0)) {
+        return `layer "${layer.key}" plane "${name}" has no usable scale`;
+      }
+      planeKeys.push(`${layer.key}.${name}`);
+    }
+    if (layer.kind === 'vector' && !(names.includes('speed') && names.includes('dir'))) {
+      return `layer "${layer.key}" says it is a vector but has no speed and dir`;
+    }
+  }
+  if (planeKeys.length > 24) return 'it holds more planes than a phone should unpack';
+
   if (!Array.isArray(d.steps) || d.steps.length === 0) return 'it holds no forecast steps';
   const n = g.nx * g.ny;
   /* Two ceilings before anything is decoded. A grid or a step count big enough
@@ -553,11 +790,15 @@ function validate(d) {
     if (!s || !Number.isFinite(s.hours) || !Number.isFinite(Date.parse(s.validTime))) {
       return `step ${k} has no valid time`;
     }
-    if (typeof s.speed !== 'string' || typeof s.dir !== 'string' || !s.speed.length || !s.dir.length
-        || (want > 0 && (s.speed.length !== want || s.dir.length !== want))) {
-      return `step ${k} does not hold ${n} grid points`;
+    if (!s.planes || typeof s.planes !== 'object') return `step ${k} holds no planes`;
+    for (const key of planeKeys) {
+      const packed = s.planes[key];
+      if (typeof packed !== 'string' || !packed.length
+          || (want > 0 && packed.length !== want)) {
+        return `step ${k} does not hold ${n} grid points of ${key}`;
+      }
+      if (packed.length > cap64) return `step ${k} ${key} is not a packed plane`;
     }
-    if (s.speed.length > cap64 || s.dir.length > cap64) return `step ${k} is not a packed plane`;
     if (k && !(Date.parse(s.validTime) > Date.parse(d.steps[k - 1].validTime))) {
       return 'the steps are not in time order';
     }
@@ -565,11 +806,12 @@ function validate(d) {
   if (!Number.isFinite(Date.parse(d.generatedAt))) return 'generatedAt is missing';
   return null;
 }
+
 /* ── projections ─────────────────────────────────────────────────────────── *
- * Two of them, one per tab. Web Mercator on a unit square for the Map, which is
- * what every slippy map is and what makes panning and zooming cheap; and
- * orthographic for the Globe — the view from far enough away that the sphere
- * reads as a sphere — centred on wherever it has been turned to.              */
+ * Two of them. The Map tab is Web Mercator on a unit square, which is what
+ * every slippy map is and what makes panning and zooming cheap. The Globe tab
+ * is orthographic — the view from far enough away that the sphere reads as a
+ * sphere — centred on wherever it has been turned to.                         */
 
 const lonToX = (lon) => (lon + 180) / 360;
 const xToLon = (x) => x * 360 - 180;
@@ -593,12 +835,13 @@ let places = [];
 let t = 0;                     // step index, fractional while playing
 let playing = false;
 let tab = 'map';
-let units = 'ms';
-let heat = true;
+let layerKey = '';
+let unitChoice = {};           // layer key → unit id
+let arrows = true;
 let night = true;
 let marker = null;             // { lon, lat }
-const view = { cx: lonToX(0), cy: 0.5, scale: 0 };   // world units; scale = world width in CSS px
-const globe = { lon: 0, lat: 20, r: 0 };             // degrees, degrees, radius in CSS px
+const map = { cx: lonToX(0), cy: 0.5, scale: 0 };   // world units; scale = world width in CSS px
+const globe = { lon: 0, lat: 20, r: 0 };            // degrees, degrees, radius in CSS px
 let W = 0, H = 0, dpr = 1;
 let pal = null;
 let renderPending = false;
@@ -609,6 +852,8 @@ const canvas = $('map');
 const ctx = canvas.getContext('2d');
 const wrap = $('map-wrap');
 const slider = $('slider');
+
+const activeLayer = () => (field ? field.byKey.get(layerKey) || field.layers[0] : null);
 
 /* ── palette ─────────────────────────────────────────────────────────────── */
 
@@ -622,7 +867,7 @@ function buildPalette() {
     limb: 'rgba(255,255,255,0.22)',
     oceanRgb: [20, 27, 38], landRgb: [36, 45, 58],
     nightRgb: [2, 4, 10], nightMax: 0.4,
-    heatAlpha: [0.42, 0.82],
+    alphaScale: 1,
   } : {
     outside: '#eef0f4', ocean: '#d9e2ec', land: '#f4f1e9', coast: '#7f8c9c', border: '#b3bcc8',
     grat: 'rgba(0,0,0,0.07)', arrow: 'rgba(20,24,31,0.92)', arrowHalo: 'rgba(255,255,255,0.75)',
@@ -630,17 +875,36 @@ function buildPalette() {
     limb: 'rgba(20,24,31,0.25)',
     oceanRgb: [217, 226, 236], landRgb: [244, 241, 233],
     nightRgb: [24, 34, 58], nightMax: 0.3,
-    heatAlpha: [0.3, 0.74],
+    alphaScale: 0.92,
   };
-  for (let i = 0; i < 256; i++) {
-    const f = Math.min(1, (i * 0.25) / 10);
-    ALPHA[i] = 255 * (pal.heatAlpha[0] + (pal.heatAlpha[1] - pal.heatAlpha[0]) * f);
-  }
 }
 buildPalette();
+
+/* A colour lookup per layer, indexed by the byte the value is stored in, so
+ * the map, the legend and the chips are all painted from one table. Rebuilt
+ * when the colour scheme changes, because two of the scales answer to it. */
+function buildLuts() {
+  if (!field) return;
+  const dark = darkMq.matches;
+  for (const layer of field.layers) {
+    const look = layer.look(dark);
+    const lut = new Uint8ClampedArray(256 * 4);
+    for (let b = 0; b < 256; b++) {
+      const value = layer.fromByte(b);
+      const rgb = rampAt(look.stops, value);
+      const o = b * 4;
+      lut[o] = rgb[0]; lut[o + 1] = rgb[1]; lut[o + 2] = rgb[2];
+      lut[o + 3] = 255 * clamp(alphaAt(look.alpha, value) * pal.alphaScale, 0, 1);
+    }
+    layer.lut = lut;
+  }
+}
 darkMq.addEventListener('change', () => {
   buildPalette();
+  buildLuts();
   gcache = null;
+  updateLegend();
+  buildChips();
   requestRender();
 });
 
@@ -780,7 +1044,7 @@ function needGlobeGeometry() {
 /* ── the two views ───────────────────────────────────────────────────────── *
  * Each knows how to put a longitude and latitude on the screen, how to get one
  * back, what a drag and a pinch mean on it, and how to draw itself. Everything
- * else — the time player, the units, the marker, the readout — is shared, and
+ * else — the time player, the layers, the marker, the readout — is shared, and
  * switching tabs carries the centre of the world across so the globe opens
  * looking at whatever the map was looking at.                                 */
 
@@ -790,63 +1054,63 @@ const V = () => VIEWS[tab];
 
 const minScale = () => Math.max(160, W);
 
-function clampView() {
-  view.scale = clamp(view.scale, minScale(), MAX_SCALE);
-  view.cx -= Math.floor(view.cx);
-  const half = H / (2 * view.scale);
-  view.cy = view.scale <= H ? 0.5 : clamp(view.cy, half, 1 - half);
+function clampMap() {
+  map.scale = clamp(map.scale, minScale(), MAX_SCALE);
+  map.cx -= Math.floor(map.cx);
+  const half = H / (2 * map.scale);
+  map.cy = map.scale <= H ? 0.5 : clamp(map.cy, half, 1 - half);
 }
 function screenToWorld(sx, sy) {
-  return [view.cx + (sx - W / 2) / view.scale, view.cy + (sy - H / 2) / view.scale];
+  return [map.cx + (sx - W / 2) / map.scale, map.cy + (sy - H / 2) / map.scale];
 }
 function worldToScreen(wx, wy) {           // the nearest copy of the world
-  let dx = wx - view.cx;
+  let dx = wx - map.cx;
   dx -= Math.round(dx);
-  return [dx * view.scale + W / 2, (wy - view.cy) * view.scale + H / 2];
+  return [dx * map.scale + W / 2, (wy - map.cy) * map.scale + H / 2];
 }
 function worldCopies() {
-  const xmin = view.cx - W / (2 * view.scale), xmax = view.cx + W / (2 * view.scale);
+  const xmin = map.cx - W / (2 * map.scale), xmax = map.cx + W / (2 * map.scale);
   const ks = [];
   for (let k = Math.floor(xmin); k < xmax; k++) ks.push(k);
   return ks;
 }
 function withWorldTransform(k, fn) {
-  const s = view.scale / PATH_K;
+  const s = map.scale / PATH_K;
   ctx.setTransform(dpr * s, 0, 0, dpr * s,
-                   dpr * (W / 2 - (view.cx - k) * view.scale), dpr * (H / 2 - view.cy * view.scale));
+                   dpr * (W / 2 - (map.cx - k) * map.scale), dpr * (H / 2 - map.cy * map.scale));
   fn(s);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 const MAP_VIEW = {
   fit() {
-    if (view.scale) { clampView(); return; }
+    if (map.scale) { clampMap(); return; }
     // First launch: fit 70°S–70°N to the height, which on a phone shows a
     // hemisphere of longitude. The globe button zooms out to the whole world.
-    view.scale = H / (latToY(-70) - latToY(70));
-    clampView();
+    map.scale = H / (latToY(-70) - latToY(70));
+    clampMap();
   },
-  home() { view.scale = minScale(); view.cx = lonToX(0); view.cy = 0.5; clampView(); },
-  centre() { return { lon: xToLon(view.cx - Math.floor(view.cx)), lat: yToLat(view.cy) }; },
+  home() { map.scale = minScale(); map.cx = lonToX(0); map.cy = 0.5; clampMap(); },
+  centre() { return { lon: xToLon(map.cx - Math.floor(map.cx)), lat: yToLat(map.cy) }; },
   adopt(c) {
-    view.cx = lonToX(c.lon);
-    view.cy = latToY(clamp(c.lat, -MAX_LAT, MAX_LAT));
-    clampView();
+    map.cx = lonToX(c.lon);
+    map.cy = latToY(clamp(c.lat, -MAX_LAT, MAX_LAT));
+    clampMap();
   },
-  panBy(dx, dy) { view.cx -= dx / view.scale; view.cy -= dy / view.scale; clampView(); },
+  panBy(dx, dy) { map.cx -= dx / map.scale; map.cy -= dy / map.scale; clampMap(); },
   zoomBy(factor, sx, sy) {
     const [wx, wy] = screenToWorld(sx, sy);
-    view.scale = clamp(view.scale * factor, minScale(), MAX_SCALE);
-    view.cx = wx - (sx - W / 2) / view.scale;
-    view.cy = wy - (sy - H / 2) / view.scale;
-    clampView();
+    map.scale = clamp(map.scale * factor, minScale(), MAX_SCALE);
+    map.cx = wx - (sx - W / 2) / map.scale;
+    map.cy = wy - (sy - H / 2) / map.scale;
+    clampMap();
   },
-  pinchStart(g) { g.scale0 = view.scale; g.world0 = screenToWorld(g.mx, g.my); },
+  pinchStart(g) { g.scale0 = map.scale; g.world0 = screenToWorld(g.mx, g.my); },
   pinchMove(g, ratio) {
-    view.scale = clamp(g.scale0 * ratio, minScale(), MAX_SCALE);
-    view.cx = g.world0[0] - (g.mx - W / 2) / view.scale;
-    view.cy = g.world0[1] - (g.my - H / 2) / view.scale;
-    clampView();
+    map.scale = clamp(g.scale0 * ratio, minScale(), MAX_SCALE);
+    map.cx = g.world0[0] - (g.mx - W / 2) / map.scale;
+    map.cy = g.world0[1] - (g.my - H / 2) / map.scale;
+    clampMap();
   },
   project(lon, lat, out) {
     const p = worldToScreen(lonToX(lon), latToY(lat));
@@ -858,11 +1122,11 @@ const MAP_VIEW = {
     if (wy < 0 || wy > 1) return null;
     return [xToLon(wx - Math.floor(wx)), yToLat(wy)];
   },
-  save() { try { localStorage.setItem(STORE.view, JSON.stringify(view)); } catch { /* fine */ } },
+  save() { try { localStorage.setItem(STORE.map, JSON.stringify(map)); } catch { /* fine */ } },
   restore() {
     try {
-      const v = JSON.parse(localStorage.getItem(STORE.view) || 'null');
-      if (v && [v.cx, v.cy, v.scale].every(Number.isFinite) && v.scale > 0) Object.assign(view, v);
+      const v = JSON.parse(localStorage.getItem(STORE.map) || 'null');
+      if (v && [v.cx, v.cy, v.scale].every(Number.isFinite) && v.scale > 0) Object.assign(map, v);
     } catch { /* fine */ }
   },
   draw: drawMap,
@@ -965,12 +1229,41 @@ function render() {
 }
 
 /* The two steps either side of where the player is, and how far between them.
- * Everything that samples the wind asks this first. */
+ * Everything that samples the weather asks this first. */
 function frame() {
   const last = field.steps.length - 1;
   const k0 = clamp(Math.floor(t), 0, last);
   const k1 = Math.min(k0 + 1, last);
   return { k0, k1, f: k1 === k0 ? 0 : clamp(t - k0, 0, 1) };
+}
+
+/* — the flat map — */
+
+function drawMap() {
+  const top = Math.max(0, (0 - map.cy) * map.scale + H / 2);
+  const bottom = Math.min(H, (1 - map.cy) * map.scale + H / 2);
+  ctx.fillStyle = pal.ocean;
+  ctx.fillRect(0, top, W, bottom - top);
+
+  if (worldPaths) {
+    for (const k of worldCopies()) withWorldTransform(k, () => {
+      ctx.fillStyle = pal.land;
+      ctx.fill(worldPaths.land, 'evenodd');
+    });
+  }
+  if (field) drawMapLayer();
+  if (night) drawMapNight();
+  drawMapGraticule();
+  if (worldPaths) {
+    for (const k of worldCopies()) withWorldTransform(k, (s) => {
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = pal.border; ctx.lineWidth = 0.7 / s; ctx.stroke(worldPaths.borders);
+      ctx.strokeStyle = pal.coast;  ctx.lineWidth = 0.9 / s; ctx.stroke(worldPaths.land);
+    });
+  }
+  if (field && arrows) drawMapArrows();
+  drawPlaces();
+  drawMarker();
 }
 
 /* Two off-screen grids, kept between frames: one for the colour layer and one
@@ -995,62 +1288,32 @@ function paintScratch(s, x, y, w, h) {
   ctx.drawImage(s.cv, 0, 0, s.cv.width, s.cv.height, x, y, w, h);
 }
 
-function interp(arr, a0, a1, b0, b1, tx, ty) {
-  const top = arr[a0] + (arr[a1] - arr[a0]) * tx;
-  const bottom = arr[b0] + (arr[b1] - arr[b0]) * tx;
-  return top + (bottom - top) * ty;
-}
-
-/* — the flat map — */
-
-function drawMap() {
-  const top = Math.max(0, (0 - view.cy) * view.scale + H / 2);
-  const bottom = Math.min(H, (1 - view.cy) * view.scale + H / 2);
-  ctx.fillStyle = pal.ocean;
-  ctx.fillRect(0, top, W, bottom - top);
-
-  if (worldPaths) {
-    for (const k of worldCopies()) withWorldTransform(k, () => {
-      ctx.fillStyle = pal.land;
-      ctx.fill(worldPaths.land, 'evenodd');
-    });
-  }
-  if (field && heat) drawHeat();
-  if (night) drawMapNight();
-  drawGraticule();
-  if (worldPaths) {
-    for (const k of worldCopies()) withWorldTransform(k, (s) => {
-      ctx.lineJoin = 'round';
-      ctx.strokeStyle = pal.border; ctx.lineWidth = 0.7 / s; ctx.stroke(worldPaths.borders);
-      ctx.strokeStyle = pal.coast;  ctx.lineWidth = 0.9 / s; ctx.stroke(worldPaths.land);
-    });
-  }
-  if (field) drawArrows();
-  drawPlaces();
-  drawMarker();
-}
-
-function drawHeat() {
+function drawMapLayer() {
+  const layer = activeLayer();
+  if (!layer || !layer.lut) return;
   const cols = Math.ceil(W / HEAT_PX), rows = Math.ceil(H / HEAT_PX);
   const sheet = scratch('layer', cols, rows);
   const data = sheet.img.data;
   const { k0, k1, f } = frame();
-  const s0 = field.floats(k0), s1 = field.floats(k1);
-  const blend = f > 0 && k1 !== k0;
+  const A = field.pair(layer.key, k0);
+  const B = f > 0 ? field.pair(layer.key, k1) : null;
+  const vector = A[1] !== null;
   const nx = field.nx, ny = field.ny;
+  const lut = layer.lut;
+  const off = layer.spec.offset, invStep = 1 / layer.spec.step, power = layer.spec.power || 1;
+
   const ci0 = new Int32Array(cols), ci1 = new Int32Array(cols), cfx = new Float32Array(cols);
   for (let c = 0; c < cols; c++) {
-    let wx = view.cx + ((c + 0.5) * HEAT_PX - W / 2) / view.scale;
+    let wx = map.cx + ((c + 0.5) * HEAT_PX - W / 2) / map.scale;
     wx -= Math.floor(wx);
     let fi = (xToLon(wx) - field.lon0) / field.dlon;
     fi -= Math.floor(fi / nx) * nx;
     const i0 = Math.floor(fi);
     ci0[c] = i0; ci1[c] = (i0 + 1) % nx; cfx[c] = fi - i0;
   }
-  const U0 = s0.u, V0 = s0.v, U1 = s1.u, V1 = s1.v;
   let o = 0;
   for (let r = 0; r < rows; r++) {
-    const wy = view.cy + ((r + 0.5) * HEAT_PX - H / 2) / view.scale;
+    const wy = map.cy + ((r + 0.5) * HEAT_PX - H / 2) / map.scale;
     if (wy < 0 || wy > 1) {
       for (let c = 0; c < cols; c++) { data[o + 3] = 0; o += 4; }
       continue;
@@ -1061,25 +1324,35 @@ function drawHeat() {
     for (let c = 0; c < cols; c++) {
       const i0 = ci0[c], i1 = ci1[c], tx = cfx[c];
       const a0 = a + i0, a1 = a + i1, b0 = b + i0, b1 = b + i1;
-      let u = interp(U0, a0, a1, b0, b1, tx, ty);
-      let v = interp(V0, a0, a1, b0, b1, tx, ty);
-      if (blend) {
-        u += (interp(U1, a0, a1, b0, b1, tx, ty) - u) * f;
-        v += (interp(V1, a0, a1, b0, b1, tx, ty) - v) * f;
+      let value = interp(A[0], a0, a1, b0, b1, tx, ty);
+      if (B) value += (interp(B[0], a0, a1, b0, b1, tx, ty) - value) * f;
+      if (vector) {
+        let second = interp(A[1], a0, a1, b0, b1, tx, ty);
+        if (B) second += (interp(B[1], a0, a1, b0, b1, tx, ty) - second) * f;
+        value = Math.sqrt(value * value + second * second);
       }
-      const idx = Math.min(255, (Math.sqrt(u * u + v * v) * 4 + 0.5) | 0);
-      const li = idx * 3;
-      data[o] = LUT[li]; data[o + 1] = LUT[li + 1]; data[o + 2] = LUT[li + 2]; data[o + 3] = ALPHA[idx];
+      let scaled = (value - off) * invStep;
+      if (power !== 1) scaled = Math.pow(scaled > 0 ? scaled : 0, 1 / power);
+      const index = (scaled < 0 ? 0 : scaled > 255 ? 255 : scaled + 0.5) | 0;
+      const li = index * 4;
+      data[o] = lut[li]; data[o + 1] = lut[li + 1]; data[o + 2] = lut[li + 2]; data[o + 3] = lut[li + 3];
       o += 4;
     }
   }
   paintScratch(sheet, 0, 0, cols * HEAT_PX, rows * HEAT_PX);
 }
 
+function interp(arr, a0, a1, b0, b1, tx, ty) {
+  const top = arr[a0] + (arr[a1] - arr[a0]) * tx;
+  const bottom = arr[b0] + (arr[b1] - arr[b0]) * tx;
+  return top + (bottom - top) * ty;
+}
+
 /* Night on the flat map is its own wash rather than part of the colour pass,
  * because the map's ground is drawn as shapes, not as pixels. It is coarse on
  * purpose: a terminator is a smooth curve, and a six-pixel grid scaled up is
  * smoother than a fine one. */
+const NIGHT_PX = 6;
 function drawMapNight() {
   const sun = sunAt(field ? currentValidMs() : Date.now());
   const cols = Math.ceil(W / NIGHT_PX), rows = Math.ceil(H / NIGHT_PX);
@@ -1088,14 +1361,14 @@ function drawMapNight() {
   const sinDec = Math.sin(sun.dec), cosDec = Math.cos(sun.dec);
   const cosD = new Float32Array(cols);
   for (let c = 0; c < cols; c++) {
-    let wx = view.cx + ((c + 0.5) * NIGHT_PX - W / 2) / view.scale;
+    let wx = map.cx + ((c + 0.5) * NIGHT_PX - W / 2) / map.scale;
     wx -= Math.floor(wx);
     cosD[c] = Math.cos(xToLon(wx) * DEG - sun.lon);
   }
   const rgb = pal.nightRgb;
   let o = 0;
   for (let r = 0; r < rows; r++) {
-    const wy = view.cy + ((r + 0.5) * NIGHT_PX - H / 2) / view.scale;
+    const wy = map.cy + ((r + 0.5) * NIGHT_PX - H / 2) / map.scale;
     if (wy < 0 || wy > 1) {
       for (let c = 0; c < cols; c++) { data[o + 3] = 0; o += 4; }
       continue;
@@ -1103,27 +1376,28 @@ function drawMapNight() {
     const lat = yToLat(wy) * DEG;
     const p = Math.sin(lat) * sinDec, q = Math.cos(lat) * cosDec;
     for (let c = 0; c < cols; c++) {
+      const shade = nightFade(p + q * cosD[c]) * pal.nightMax;
       data[o] = rgb[0]; data[o + 1] = rgb[1]; data[o + 2] = rgb[2];
-      data[o + 3] = 255 * nightFade(p + q * cosD[c]) * pal.nightMax;
+      data[o + 3] = 255 * shade;
       o += 4;
     }
   }
   paintScratch(sheet, 0, 0, cols * NIGHT_PX, rows * NIGHT_PX);
 }
 
-function drawGraticule() {
-  const pxPerDeg = view.scale / 360;
+function drawMapGraticule() {
+  const pxPerDeg = map.scale / 360;
   const g = pxPerDeg < 3 ? 30 : pxPerDeg < 12 ? 10 : pxPerDeg < 40 ? 5 : 2;
   ctx.strokeStyle = pal.grat;
   ctx.lineWidth = 1;
   ctx.beginPath();
-  const xmin = view.cx - W / (2 * view.scale), xmax = view.cx + W / (2 * view.scale);
+  const xmin = map.cx - W / (2 * map.scale), xmax = map.cx + W / (2 * map.scale);
   for (let lon = Math.floor(xToLon(xmin) / g) * g; lon <= xToLon(xmax); lon += g) {
-    const sx = Math.round((lonToX(lon) - view.cx) * view.scale + W / 2) + 0.5;
+    const sx = Math.round((lonToX(lon) - map.cx) * map.scale + W / 2) + 0.5;
     ctx.moveTo(sx, 0); ctx.lineTo(sx, H);
   }
   for (let lat = -80; lat <= 80; lat += g) {
-    const sy = Math.round((latToY(lat) - view.cy) * view.scale + H / 2) + 0.5;
+    const sy = Math.round((latToY(lat) - map.cy) * map.scale + H / 2) + 0.5;
     if (sy < 0 || sy > H) continue;
     ctx.moveTo(0, sy); ctx.lineTo(W, sy);
   }
@@ -1131,15 +1405,16 @@ function drawGraticule() {
 }
 
 /* Arrows on the flat map sit at fixed places in the WORLD, so they stay put
- * under a pan instead of swimming across the wind. */
+ * under a pan instead of swimming across the weather. */
 const uvTmp = [0, 0];
-function drawArrows() {
-  const n = Math.max(2, Math.round(Math.log2(view.scale / ARROW_SPACING)));
+function drawMapArrows() {
+  if (!field.byKey.has('wind')) return;
+  const n = Math.max(2, Math.round(Math.log2(map.scale / ARROW_SPACING)));
   const d = 1 / 2 ** n;                 // world units between arrows
-  const cell = d * view.scale;          // CSS px between arrows
-  const xmin = view.cx - W / (2 * view.scale) - d, xmax = view.cx + W / (2 * view.scale) + d;
-  const ymin = Math.max(0, view.cy - H / (2 * view.scale) - d);
-  const ymax = Math.min(1, view.cy + H / (2 * view.scale) + d);
+  const cell = d * map.scale;           // CSS px between arrows
+  const xmin = map.cx - W / (2 * map.scale) - d, xmax = map.cx + W / (2 * map.scale) + d;
+  const ymin = Math.max(0, map.cy - H / (2 * map.scale) - d);
+  const ymax = Math.min(1, map.cy + H / (2 * map.scale) + d);
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   for (let j = Math.floor(ymin / d); (j + 0.5) * d <= ymax; j++) {
@@ -1147,11 +1422,11 @@ function drawArrows() {
     if (wy < 0 || wy > 1) continue;
     const lat = yToLat(wy);
     if (Math.abs(lat) > MAX_LAT - 0.3) continue;
-    const sy = (wy - view.cy) * view.scale + H / 2;
+    const sy = (wy - map.cy) * map.scale + H / 2;
     for (let i = Math.floor(xmin / d); (i + 0.5) * d <= xmax; i++) {
       const wx = (i + 0.5) * d;
-      const sx = (wx - view.cx) * view.scale + W / 2;
-      field.sample(t, xToLon(wx - Math.floor(wx)), lat, uvTmp);
+      const sx = (wx - map.cx) * map.scale + W / 2;
+      field.sample('wind', t, xToLon(wx - Math.floor(wx)), lat, uvTmp);
       const u = uvTmp[0], v = uvTmp[1];
       drawArrow(sx, sy, Math.atan2(-v, u), Math.hypot(u, v), cell);
     }
@@ -1174,7 +1449,7 @@ function drawGlobe() {
   ctx.beginPath();
   ctx.arc(gp.cx, gp.cy, gp.r, 0, Math.PI * 2);
   ctx.strokeStyle = pal.limb; ctx.lineWidth = 1; ctx.stroke();
-  if (field) drawGlobeArrows();
+  if (field && arrows) drawGlobeArrows();
   drawPlaces();
   drawMarker();
 }
@@ -1229,14 +1504,17 @@ function drawGlobeSurface() {
   const { cols, rows } = cell;
   const sheet = scratch('layer', cols, rows);
   const data = sheet.img.data;
-  const colour = field && heat;
-  let U0 = null, V0 = null, U1 = null, V1 = null, f = 0, blend = false;
-  if (colour) {
+  const layer = field ? activeLayer() : null;
+  const lut = layer && layer.lut;
+  let A = null, B = null, f = 0, vector = false;
+  let off = 0, invStep = 1, power = 1;
+  if (lut) {
     const fr = frame();
     f = fr.f;
-    const s0 = field.floats(fr.k0), s1 = field.floats(fr.k1);
-    U0 = s0.u; V0 = s0.v; U1 = s1.u; V1 = s1.v;
-    blend = f > 0 && fr.k1 !== fr.k0;
+    A = field.pair(layer.key, fr.k0);
+    B = f > 0 ? field.pair(layer.key, fr.k1) : null;
+    vector = A[1] !== null;
+    off = layer.spec.offset; invStep = 1 / layer.spec.step; power = layer.spec.power || 1;
   }
   const nx = field ? field.nx : 0, ny = field ? field.ny : 0;
   const lon0 = field ? field.lon0 : 0, dlon = field ? field.dlon : 1;
@@ -1258,7 +1536,7 @@ function drawGlobeSurface() {
     if (!cell.inside[i]) { data[o + 3] = 0; continue; }
     const base = cell.land[i] ? land : ocean;
     let red = base[0], green = base[1], blue = base[2];
-    if (colour) {
+    if (lut) {
       const lon = cell.lon[i], lat = cell.lat[i];
       let fi = (lon - lon0) / dlon;
       fi -= Math.floor(fi / nx) * nx;
@@ -1266,18 +1544,22 @@ function drawGlobeSurface() {
       const i0 = Math.floor(fi), tx = fi - i0, i1 = (i0 + 1) % nx;
       const j0 = Math.floor(fj), ty = fj - j0, j1 = Math.min(j0 + 1, ny - 1);
       const a0 = j0 * nx + i0, a1 = j0 * nx + i1, b0 = j1 * nx + i0, b1 = j1 * nx + i1;
-      let u = interp(U0, a0, a1, b0, b1, tx, ty);
-      let v = interp(V0, a0, a1, b0, b1, tx, ty);
-      if (blend) {
-        u += (interp(U1, a0, a1, b0, b1, tx, ty) - u) * f;
-        v += (interp(V1, a0, a1, b0, b1, tx, ty) - v) * f;
+      let value = interp(A[0], a0, a1, b0, b1, tx, ty);
+      if (B) value += (interp(B[0], a0, a1, b0, b1, tx, ty) - value) * f;
+      if (vector) {
+        let second = interp(A[1], a0, a1, b0, b1, tx, ty);
+        if (B) second += (interp(B[1], a0, a1, b0, b1, tx, ty) - second) * f;
+        value = Math.sqrt(value * value + second * second);
       }
-      const idx = Math.min(255, (Math.sqrt(u * u + v * v) * 4 + 0.5) | 0);
-      const li = idx * 3;
-      const a = ALPHA[idx] / 255;
-      red += (LUT[li] - red) * a;
-      green += (LUT[li + 1] - green) * a;
-      blue += (LUT[li + 2] - blue) * a;
+      let scaled = (value - off) * invStep;
+      if (power !== 1) scaled = Math.pow(scaled > 0 ? scaled : 0, 1 / power);
+      const li = ((scaled < 0 ? 0 : scaled > 255 ? 255 : scaled + 0.5) | 0) * 4;
+      const a = lut[li + 3] / 255;
+      if (a > 0) {
+        red += (lut[li] - red) * a;
+        green += (lut[li + 1] - green) * a;
+        blue += (lut[li + 2] - blue) * a;
+      }
     }
     if (night) {
       const shade = nightFade(cell.X[i] * sunX + cell.Y[i] * sunY + cell.Z[i] * sunZ) * nightMax;
@@ -1354,13 +1636,14 @@ function drawGlobeGraticule() {
  * meridians would crowd into a knot at the poles, and turning the world is a
  * deliberate gesture rather than something you do while reading. */
 function drawGlobeArrows() {
+  if (!field.byKey.has('wind')) return;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   const step = ARROW_SPACING;
   const { sinLat: sinLat0, cosLat: cosLat0, r, cx, cy } = gp;
-  for (let sy = cy - Math.ceil(cy / step) * step; sy < H + step; sy += step) {
-    if (sy < -step) continue;
-    for (let sx = cx - Math.ceil(cx / step) * step; sx < W + step; sx += step) {
+  for (let sy = cy - Math.ceil((cy - 0) / step) * step; sy < H + step; sy += step) {
+    if (sy < -step || sy > H + step) continue;
+    for (let sx = cx - Math.ceil((cx - 0) / step) * step; sx < W + step; sx += step) {
       const X = (sx - cx) / r, Y = (cy - sy) / r;
       const r2 = X * X + Y * Y;
       if (r2 > 0.988) continue;                  // the rim is too foreshortened to read
@@ -1369,15 +1652,16 @@ function drawGlobeArrows() {
       const lat = Math.asin(sinLat) / DEG;
       const dlon = Math.atan2(X, Z * cosLat0 - Y * sinLat0);
       const lon = wrapLon(globe.lon + dlon / DEG);
-      field.sample(t, lon, lat, uvTmp);
+      field.sample('wind', t, lon, lat, uvTmp);
       const u = uvTmp[0], v = uvTmp[1];
+      const speed = Math.hypot(u, v);
       // The wind blows along the ground, so its arrow has to be turned into
       // the screen with the local east and north, which tilt as the world does.
       const cosLat = Math.cos(lat * DEG);
       const sinD = Math.sin(dlon), cosD = Math.cos(dlon);
       const ex = cosD, ey = sinLat0 * sinD;
       const nxx = -sinLat * sinD, nyy = cosLat0 * cosLat + sinLat0 * sinLat * cosD;
-      drawArrow(sx, sy, Math.atan2(-(u * ey + v * nyy), u * ex + v * nxx), Math.hypot(u, v), step);
+      drawArrow(sx, sy, Math.atan2(-(u * ey + v * nyy), u * ex + v * nxx), speed, step);
     }
   }
 }
@@ -1385,10 +1669,9 @@ function drawGlobeArrows() {
 /* — shared — */
 
 function drawArrow(x, y, angle, spd, cell) {
-  const color = heat ? pal.arrow : lutCss(spd);
   if (spd < 0.5) {                      // calm: a dot, because there is no direction to show
     ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2);
-    ctx.fillStyle = color; ctx.fill();
+    ctx.fillStyle = pal.arrow; ctx.fill();
     return;
   }
   const len = cell * clamp(0.28 + spd / 25 * 0.67, 0.28, 0.95);
@@ -1402,24 +1685,24 @@ function drawArrow(x, y, angle, spd, cell) {
   ctx.moveTo(-h, 0); ctx.lineTo(h, 0);
   ctx.moveTo(h - head, -head * 0.55); ctx.lineTo(h, 0); ctx.lineTo(h - head, head * 0.55);
   ctx.strokeStyle = pal.arrowHalo; ctx.lineWidth = lw + 2; ctx.stroke();
-  ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.stroke();
+  ctx.strokeStyle = pal.arrow; ctx.lineWidth = lw; ctx.stroke();
   ctx.restore();
 }
 
 const projTmp = [0, 0, 0];
 function drawPlaces() {
   if (!places.length) return;
-  const zoom = tab === 'map' ? view.scale : globe.r * 4;
+  const zoom = tab === 'map' ? map.scale : globe.r * 4;
   const maxTier = zoom < 1100 ? 1 : zoom < 2800 ? 2 : zoom < 7500 ? 3 : 4;
   ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
   ctx.lineJoin = 'round';
   const boxes = [];
-  const v = V();
+  const view = V();
   for (const p of places) {
     if (p.r > maxTier) break;           // sorted by tier
-    v.project(p.lon, p.lat, projTmp);
+    view.project(p.lon, p.lat, projTmp);
     if (!projTmp[2]) continue;
     const sx = projTmp[0], sy = projTmp[1];
     if (sx < -80 || sx > W + 80 || sy < -12 || sy > H + 12) continue;
@@ -1471,9 +1754,17 @@ function fmtAgo(ms) {
   if (h < 36) return `${h} h ago`;
   return `${Math.round(h / 24)} d ago`;
 }
-function fmtSpeed(ms) {
-  const u = UNITS[units];
-  return (ms * u.f).toFixed(u.d);
+function unitFor(layer) {
+  const list = layer.units;
+  return list.find((u) => u.id === unitChoice[layer.key]) || list[0];
+}
+function convert(layer, value) {
+  const u = unitFor(layer);
+  return value * u.f + (u.o || 0);
+}
+function fmtValue(layer, value) {
+  const u = unitFor(layer);
+  return (value * u.f + (u.o || 0)).toFixed(u.d);
 }
 function fmtCoord(lat, lon) {
   return `${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'W'}`;
@@ -1482,8 +1773,28 @@ function beaufort(spd) {
   for (let i = 0; i < BEAUFORT.length; i++) if (spd < BEAUFORT[i][0]) return `${BEAUFORT[i][1]} · Bf ${i}`;
   return 'Hurricane force · Bf 12';
 }
+/* A number in words, for the line under the tapped value. The bands are the
+ * ones the puller writes into the ask table, so the map and a question in
+ * words agree about what "overcast" means. */
+function describe(layer, value, second) {
+  if (layer.kind === 'vector') {
+    const from = (Math.atan2(-second[0], -second[1]) / DEG + 360) % 360;
+    const where = value < 0.5 ? 'No direction'
+      : `From ${COMPASS[Math.round(from / 22.5) % 16]} (${Math.round(from)}°)`;
+    return `${where} · ${beaufort(value)}`;
+  }
+  if (layer.key === 'rain') {
+    return value < 0.05 ? 'Dry' : value < 0.3 ? 'Drizzle' : value < 1.5 ? 'Light rain'
+      : value < 5 ? 'Rain' : value < 12 ? 'Heavy rain' : 'Downpour';
+  }
+  if (layer.key === 'cloud') {
+    return value < 10 ? 'Clear' : value < 30 ? 'Mostly clear' : value < 60 ? 'Partly cloudy'
+      : value < 85 ? 'Cloudy' : 'Overcast';
+  }
+  return layer.level || layer.label;
+}
 
-/* ── header, legend, readout ─────────────────────────────────────────────── */
+/* ── header, chips, legend, readout ──────────────────────────────────────── */
 
 function setProblem(key, msg) {
   if (msg) problems.set(key, msg); else problems.delete(key);
@@ -1503,8 +1814,8 @@ function setProblem(key, msg) {
  * number on it can be trusted. */
 function updateStamp() {
   const el = $('stamp');
-  if (!snap) {
-    el.textContent = 'No wind data';
+  if (!snap || !field) {
+    el.textContent = 'No weather data';
     el.className = 'stamp stale';
     return;
   }
@@ -1527,39 +1838,120 @@ function updateStamp() {
   el.title = when.toLocaleString();
 }
 
-/* Tick values are chosen in whatever unit is on screen, not converted from a
- * fixed list of m/s: 0 5 10 … reads well in metres a second and turns into
- * 0 18 36 54 … in km/h, which is seven wide labels in 220 points and collides.
- * Round numbers, at most six of them, and the unit rides on the last one so
- * there is no separate label to run into. */
-function legendTicks(maxInUnit) {
-  const steps = [1, 2, 5, 10, 20, 25, 50, 100];
-  const step = steps.find((v) => maxInUnit / v <= 6) ?? 200;
-  const out = [];
-  // Round numbers below the top of the bar, then the bar's own maximum. A
-  // round tick sitting almost on top of the maximum is dropped rather than
-  // drawn into it; the unit is in the legend's head, not on a tick.
-  for (let v = 0; v < maxInUnit * 0.92; v += step) out.push(v);
-  out.push(maxInUnit);
+/* The chips, built from the snapshot rather than from a list in here: a sixth
+ * field added to scripts/global_weather.py turns up as a sixth chip. */
+function buildChips() {
+  const row = $('layerchips');
+  row.innerHTML = '';                        // empty it; the buttons below are DOM nodes
+  if (!field) return;
+  const dark = darkMq.matches;
+  for (const layer of field.layers) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.setAttribute('aria-pressed', String(layer.key === layerKey));
+    const dot = document.createElement('span');
+    dot.className = 'chipdot';
+    const look = layer.look(dark);
+    const [lo, hi] = look.legend;
+    const parts = [];
+    for (let s = 0; s <= 3; s++) {
+      const value = lo + (hi - lo) * (s / 3);
+      const rgb = rampAt(look.stops, value).map(Math.round);
+      parts.push(`rgb(${rgb[0]},${rgb[1]},${rgb[2]}) ${(s / 3 * 100).toFixed(0)}%`);
+    }
+    dot.style.background = `linear-gradient(135deg, ${parts.join(', ')})`;
+    const text = document.createElement('span');
+    text.textContent = look.short || layer.label;
+    button.append(dot, text);
+    button.addEventListener('click', () => setLayer(layer.key));
+    row.append(button);
+  }
+}
+
+/* Round numbers, at most a handful, chosen in WHATEVER UNIT IS ON SCREEN
+ * rather than converted from a fixed list: 0 5 10 … reads well in metres a
+ * second and turns into 0 18 36 54 … in km/h, which is seven wide labels in
+ * 220 points and collides. A layer stored on a curve — rain — gets the 1-2-5
+ * ladder instead, so the drizzle end of the bar is labelled at all.
+ *
+ * `lo` and `hi` are the ends of the bar in the displayed unit, and so is what
+ * comes back; the caller turns each one back into the layer's own unit to find
+ * out where along the bar it goes. */
+function legendTicks(layer, lo, hi) {
+  const out = [lo];
+  if ((layer.spec.power || 1) !== 1) {
+    for (let e = -4; e <= 4; e++) {
+      for (const m of [1, 2, 5]) {
+        const v = m * 10 ** e;
+        if (v > lo && v < hi) out.push(v);
+      }
+    }
+    out.push(hi);
+    return out;
+  }
+  const steps = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 500];
+  const step = steps.find((v) => (hi - lo) / v <= 6) ?? 1000;
+  for (let v = Math.ceil(lo / step) * step; v < hi - step * 0.45; v += step) {
+    if (v > lo + step * 0.45) out.push(v);
+  }
+  out.push(hi);
   return out;
 }
 
 function updateLegend() {
-  const u = UNITS[units];
-  const parts = STOPS.filter(([s]) => s <= LEGEND_MAX)
-    .map(([s, c]) => `rgb(${c[0]},${c[1]},${c[2]}) ${(s / LEGEND_MAX * 100).toFixed(1)}%`);
+  const layer = activeLayer();
+  if (!layer) return;
+  const look = layer.look(darkMq.matches);
+  const [lo, hi] = look.legend;
+  const b0 = layer.toByte(lo), b1 = layer.toByte(hi);
+  const pos = (v) => clamp((layer.toByte(v) - b0) / (b1 - b0), 0, 1);
+
+  /* The bar is painted from the same stops and the same opacity as the map, so
+   * a scale that fades out where nothing is happening fades out here too. */
+  const parts = [];
+  const seen = new Set();
+  const addStop = (v) => {
+    const at = pos(v);
+    const keyed = at.toFixed(3);
+    if (seen.has(keyed)) return;
+    seen.add(keyed);
+    const rgb = rampAt(look.stops, v).map(Math.round);
+    const a = clamp(alphaAt(look.alpha, v) * pal.alphaScale, 0, 1);
+    parts.push(`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a.toFixed(2)}) ${(at * 100).toFixed(1)}%`);
+  };
+  addStop(lo);
+  for (const [v] of look.stops) if (v > lo && v < hi) addStop(v);
+  // A curved scale needs stops of its own, or the gradient straightens it out.
+  if ((layer.spec.power || 1) !== 1) for (let s = 1; s < 12; s++) addStop(lo + (hi - lo) * (s / 12));
+  addStop(hi);
+  parts.sort((a, b) => parseFloat(a.split(' ').pop()) - parseFloat(b.split(' ').pop()));
   $('legend-bar').style.background = `linear-gradient(90deg, ${parts.join(', ')})`;
+
   const ticks = $('legend-ticks');
   ticks.innerHTML = '';                      // empty it; the spans below are DOM nodes
-  const values = legendTicks(LEGEND_MAX * u.f);
-  values.forEach((value) => {
+  const u = unitFor(layer);
+  const shown = (v) => v * u.f + (u.o || 0);
+  const back = (v) => (v - (u.o || 0)) / u.f;
+  let placed = -1;
+  const values = legendTicks(layer, shown(lo), shown(hi));
+  values.forEach((value, n) => {
+    const at = pos(back(value));
+    const last = n === values.length - 1;
+    if (n && !last && at - placed < 0.13) return;
+    if (last && at - placed < 0.16 && ticks.lastChild) ticks.lastChild.remove();
+    placed = at;
     const span = document.createElement('span');
-    span.style.left = `${(value / (LEGEND_MAX * u.f) * 100).toFixed(1)}%`;
-    span.textContent = String(Math.round(value));
+    span.style.left = `${(at * 100).toFixed(1)}%`;
+    if (at < 0.02) span.className = 'first';
+    if (at > 0.98) span.className = 'last';
+    span.textContent = Math.abs(value) >= 10 || Number.isInteger(value)
+      ? String(Math.round(value)) : String(Number(value.toFixed(2)));
     ticks.append(span);
   });
+  $('legend-name').textContent = layer.label;
   $('legend-unit').textContent = u.label;
   $('btn-units').textContent = u.label;
+  $('btn-units').disabled = layer.units.length < 2;
 }
 
 /* The three sources' credits. The short line stays on screen because CC BY 4.0
@@ -1572,7 +1964,7 @@ function updateCredits() {
   const source = (snap && snap.source) || {};
   $('credits').textContent = CREDITS;
   $('about-credits').textContent =
-    `${source.attribution || 'Wind: NOAA Global Forecast System'}. `
+    `${source.attribution || 'Weather: NOAA Global Forecast System'}. `
     + `${source.licence || 'Public domain — a work of the United States Government'}. `
     + 'It is sampled and rounded here, so it is not unaltered NOAA data, and nothing on this '
     + 'screen is endorsed by NOAA. Coastlines: made with Natural Earth, public domain. '
@@ -1581,21 +1973,42 @@ function updateCredits() {
     + 'no-warranty sentence that comes with them, are in assets/LICENSES.md inside the app.';
 }
 
+/* A tap gives the whole weather at that point, not just the layer on screen —
+ * which is the difference between a map of one field and a weather app. */
+const readTmp = [0, 0];
 function updateReadout() {
   const box = $('readout');
   if (!marker || !field) { box.hidden = true; return; }
-  field.sample(t, marker.lon, marker.lat, uvTmp);
-  const [u, v] = uvTmp;
-  const spd = Math.hypot(u, v);
-  const from = (Math.atan2(-u, -v) / DEG + 360) % 360;
+  const layer = activeLayer();
+  field.sample(layer.key, t, marker.lon, marker.lat, readTmp);
+  const vector = layer.kind === 'vector';
+  const value = vector ? Math.hypot(readTmp[0], readTmp[1]) : readTmp[0];
+
   $('readout-where').textContent = fmtCoord(marker.lat, marker.lon);
-  $('readout-speed').textContent = fmtSpeed(spd);
-  $('readout-unit').textContent = UNITS[units].label;
+  $('readout-number').textContent = fmtValue(layer, value);
+  $('readout-unit').textContent = unitFor(layer).label;
   const arrow = $('readout-arrow');
-  arrow.style.transform = `rotate(${(Math.atan2(-v, u) / DEG).toFixed(0)}deg)`;
-  arrow.style.visibility = spd < 0.5 ? 'hidden' : 'visible';
-  const dir = spd < 0.5 ? 'No direction' : `From ${COMPASS[Math.round(from / 22.5) % 16]} (${Math.round(from)}°)`;
-  $('readout-sub').textContent = `${dir} · ${beaufort(spd)}`;
+  arrow.hidden = !vector;
+  if (vector) {
+    arrow.style.transform = `rotate(${(Math.atan2(-readTmp[1], readTmp[0]) / DEG).toFixed(0)}deg)`;
+    // Calm has no direction to point in, but the gap it leaves keeps the
+    // number from jumping sideways as the forecast plays.
+    arrow.style.visibility = value < 0.5 ? 'hidden' : 'visible';
+  }
+  $('readout-sub').textContent = describe(layer, value, readTmp);
+
+  const list = $('readout-all');
+  list.innerHTML = '';                       // empty it; the rows below are DOM nodes
+  for (const other of field.layers) {
+    if (other.key === layer.key) continue;
+    field.sample(other.key, t, marker.lon, marker.lat, readTmp);
+    const v = other.kind === 'vector' ? Math.hypot(readTmp[0], readTmp[1]) : readTmp[0];
+    const term = document.createElement('dt');
+    term.textContent = other.label;
+    const def = document.createElement('dd');
+    def.textContent = `${fmtValue(other, v)} ${unitFor(other).label}`;
+    list.append(term, def);
+  }
   box.hidden = false;
 }
 
@@ -1619,9 +2032,17 @@ function showAbout() {
     ['Updated', fmtFull.format(new Date(snap.generatedAt))],
     ['Forecast', `${field.steps.length} steps${stepSpacing()}, +${field.steps[0].hours} h to `
                  + `+${field.steps[field.steps.length - 1].hours} h`],
-    ['Grid', `${field.nx} × ${field.ny} points, ${Math.abs(field.dlon)}° apart, ${snap.level || ''}`],
-    ['Strongest', `${fmtSpeed(snap.maxSpeed || 0)} ${UNITS[units].label} somewhere in this forecast`],
+    ['Grid', `${field.nx} × ${field.ny} points, ${Math.abs(field.dlon)}° apart`],
   ] : [['Data', 'No snapshot could be read']];
+  if (field) {
+    for (const layer of field.layers) {
+      const u = unitFor(layer);
+      const reached = layer.range
+        ? `${fmtValue(layer, layer.range[0])} to ${fmtValue(layer, layer.range[1])} ${u.label}`
+        : 'in this forecast';
+      rows.push([layer.label, `${layer.level || layer.field} · ${reached}`]);
+    }
+  }
   for (const [key, value] of rows) {
     const term = document.createElement('dt'); term.textContent = key;
     const def = document.createElement('dd'); def.textContent = value;
@@ -1737,7 +2158,19 @@ function setPlaying(on) {
   else setTime(Math.round(t));
 }
 
-/* ── tabs ────────────────────────────────────────────────────────────────── */
+/* ── layers and tabs ─────────────────────────────────────────────────────── */
+
+function setLayer(key) {
+  if (!field || !field.byKey.has(key)) return;
+  layerKey = key;
+  try { localStorage.setItem(STORE.layer, key); } catch { /* fine */ }
+  for (const [n, button] of [...$('layerchips').children].entries()) {
+    button.setAttribute('aria-pressed', String(field.layers[n].key === key));
+  }
+  updateLegend();
+  updateReadout();
+  requestRender();
+}
 
 function setTab(next) {
   if (next === tab) return;
@@ -1769,7 +2202,7 @@ async function loadSnapshot() {
         + (html ? ' — it looks like a web page was written over it' : ''));
     }
     const why = validate(data);
-    if (why) throw new Error(`data/snapshot.json is not a Global Wind snapshot: ${why}`);
+    if (why) throw new Error(`data/snapshot.json is not a Global Weather snapshot: ${why}`);
   } catch (e) {
     setProblem('snapshot', e.message);
     updateStamp();
@@ -1781,14 +2214,17 @@ async function loadSnapshot() {
     return;
   }
   const gen = ++loadGeneration;
-  const fresh = new WindField(data);
+  const fresh = new WeatherField(data);
   data.steps = null;                            // the field holds the planes now
-  $('stamp').textContent = `Unpacking ${fresh.steps.length} steps…`;
+  const stamp = $('stamp');
+  stamp.textContent = `Unpacking ${fresh.steps.length} steps…`;
   try {
-    await fresh.load();
+    await fresh.load((done, total) => {
+      if (gen === loadGeneration) stamp.textContent = `Unpacking ${done} of ${total} steps…`;
+    });
   } catch (e) {
     if (gen !== loadGeneration) return;
-    setProblem('snapshot', `data/snapshot.json is not a Global Wind snapshot: ${e.message}`);
+    setProblem('snapshot', `data/snapshot.json is not a Global Weather snapshot: ${e.message}`);
     updateStamp();
     return;
   }
@@ -1798,9 +2234,13 @@ async function loadSnapshot() {
   playing = false;
   snap = data;
   field = fresh;
+  if (!field.byKey.has(layerKey)) layerKey = field.layers[0].key;
+  buildLuts();
+  buildChips();
   slider.max = String(field.steps.length - 1);
   buildTicks();
   setTime(nearestStep(keepValid ?? Date.now()));
+  setLayer(layerKey);
   updateStamp();
   updateCredits();
   if (wasPlaying) setPlaying(true);
@@ -1816,7 +2256,7 @@ async function loadStatic() {
     worldPaths = buildWorldPaths(w);
     setProblem('world', null);
   } catch (e) {
-    setProblem('world', `Coastlines could not be loaded (assets/world.json: ${e.message}) — the wind still shows.`);
+    setProblem('world', `Coastlines could not be loaded (assets/world.json: ${e.message}) — the weather still shows.`);
   }
   try {
     const r = await fetch('./assets/places.json');
@@ -1927,10 +2367,10 @@ $('tab-globe').addEventListener('click', () => setTab('globe'));
 $('zoom-in').addEventListener('click', () => zoomAt(W / 2, H / 2, 2));
 $('zoom-out').addEventListener('click', () => zoomAt(W / 2, H / 2, 0.5));
 $('zoom-home').addEventListener('click', () => { V().home(); V().save(); requestRender(); });
-$('btn-heat').addEventListener('click', () => {
-  heat = !heat;
-  $('btn-heat').setAttribute('aria-pressed', String(heat));
-  try { localStorage.setItem(STORE.heat, heat ? '1' : '0'); } catch { /* fine */ }
+$('btn-arrows').addEventListener('click', () => {
+  arrows = !arrows;
+  $('btn-arrows').setAttribute('aria-pressed', String(arrows));
+  try { localStorage.setItem(STORE.arrows, arrows ? '1' : '0'); } catch { /* fine */ }
   requestRender();
 });
 $('btn-night').addEventListener('click', () => {
@@ -1940,8 +2380,11 @@ $('btn-night').addEventListener('click', () => {
   requestRender();
 });
 $('btn-units').addEventListener('click', () => {
-  units = UNIT_ORDER[(UNIT_ORDER.indexOf(units) + 1) % UNIT_ORDER.length];
-  try { localStorage.setItem(STORE.units, units); } catch { /* fine */ }
+  const layer = activeLayer();
+  if (!layer || layer.units.length < 2) return;
+  const at = layer.units.findIndex((u) => u.id === unitChoice[layer.key]);
+  unitChoice[layer.key] = layer.units[(at + 1) % layer.units.length].id;
+  try { localStorage.setItem(STORE.units, JSON.stringify(unitChoice)); } catch { /* fine */ }
   updateLegend();
   updateReadout();
 });
@@ -1987,22 +2430,23 @@ function resize() {
 }
 
 try {
-  const u = localStorage.getItem(STORE.units);
-  if (u && UNITS[u]) units = u;
-  heat = localStorage.getItem(STORE.heat) !== '0';
-  night = localStorage.getItem(STORE.night) !== '0';
+  const stored = JSON.parse(localStorage.getItem(STORE.units) || '{}');
+  if (stored && typeof stored === 'object') unitChoice = stored;
+  const savedLayer = localStorage.getItem(STORE.layer);
+  if (typeof savedLayer === 'string' && savedLayer) layerKey = savedLayer;
   if (localStorage.getItem(STORE.tab) === 'globe') tab = 'globe';
+  arrows = localStorage.getItem(STORE.arrows) !== '0';
+  night = localStorage.getItem(STORE.night) !== '0';
   const m = JSON.parse(localStorage.getItem(STORE.marker) || 'null');
   if (m && Number.isFinite(m.lon) && Number.isFinite(m.lat)) marker = m;
 } catch { /* fine */ }
 MAP_VIEW.restore();
 GLOBE_VIEW.restore();
-$('btn-heat').setAttribute('aria-pressed', String(heat));
+$('btn-arrows').setAttribute('aria-pressed', String(arrows));
 $('btn-night').setAttribute('aria-pressed', String(night));
 $('tab-map').setAttribute('aria-selected', String(tab === 'map'));
 $('tab-globe').setAttribute('aria-selected', String(tab === 'globe'));
 wrap.setAttribute('aria-labelledby', tab === 'map' ? 'tab-map' : 'tab-globe');
-updateLegend();
 updateCredits();
 new ResizeObserver(resize).observe(wrap);
 resize();
@@ -2010,15 +2454,17 @@ loadStatic();
 loadSnapshot();
 
 /* For a browser console and for tests, never for the app itself. */
-window.__gw = {
+window.__weather = {
   render() { const t0 = performance.now(); render(); return performance.now() - t0; },
   get state() {
-    return { t, playing, tab, units, heat, night, marker,
-             view: { ...view }, globe: { ...globe },
-             steps: field ? field.steps.length : 0, schema: snap ? snap.schema : null };
+    return { t, playing, tab, layer: layerKey, units: { ...unitChoice }, arrows, night, marker,
+             map: { ...map }, globe: { ...globe },
+             steps: field ? field.steps.length : 0,
+             layers: field ? field.layers.map((l) => l.key) : [],
+             schema: snap ? snap.schema : null };
   },
-  setTab,
+  setTab, setLayer,
+  sample(key, lon, lat) { return field ? field.sample(key, t, lon, lat, [0, 0]) : null; },
   setTime(tt) { if (field) setTime(tt); },
-  sample(lon, lat) { return field ? field.sample(t, lon, lat, [0, 0]) : null; },
   unzlib,
 };

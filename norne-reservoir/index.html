@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<title>Norne reservoir viewer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="stage">
+  <canvas id="gl" aria-label="3D reservoir model. Drag to rotate, pinch to zoom, two fingers to pan, tap a cell to inspect it, double-tap to zoom in on it."></canvas>
+  <div id="labels" aria-hidden="true"></div>
+
+  <header id="head">
+    <div class="title">
+      <h1 id="field-name">Norne</h1>
+      <p id="field-sub">Norwegian Sea</p>
+      <p id="well-key" aria-label="Well colours"></p>
+    </div>
+    <div class="when">
+      <p id="date" aria-live="polite">—</p>
+      <p id="prop-name">—</p>
+    </div>
+  </header>
+
+  <aside id="legend" aria-label="Colour scale">
+    <span id="leg-max">—</span>
+    <canvas id="leg-bar" width="12" height="160"></canvas>
+    <span id="leg-min">—</span>
+    <span id="leg-unit"></span>
+    <div id="leg-cats" hidden></div>
+  </aside>
+
+  <section id="inspect" hidden aria-live="polite">
+    <div class="inspect-head">
+      <h2 id="ins-title">Cell</h2>
+      <button id="ins-close" class="icon" aria-label="Close cell details">×</button>
+    </div>
+    <dl id="ins-list"></dl>
+    <button id="ins-focus" class="btn small">Zoom to cell</button>
+  </section>
+
+  <button id="fit" class="fab" aria-label="Show the whole field" title="Show the whole field">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+  </button>
+  <p id="hint" hidden>Double-tap a spot to zoom in. Double-tap empty space to zoom out.</p>
+
+  <div id="gauge">
+    <svg id="compass" viewBox="0 0 48 48" role="img" aria-label="North arrow">
+      <g id="needle">
+        <path class="n" d="M24 11.5 L29 24 L19 24 Z"/>
+        <path class="s" d="M24 34.5 L29 24 L19 24 Z"/>
+      </g>
+      <text id="compass-n" x="24" y="6" dy="0.34em" text-anchor="middle">N</text>
+    </svg>
+    <div id="scale" role="img" aria-label="Scale bar">
+      <p id="scale-len">—</p>
+      <div id="scale-bar"></div>
+      <p id="scale-sub">vertical ×5</p>
+    </div>
+  </div>
+
+  <div id="loading" role="status">
+    <p id="load-msg">Loading the Norne model…</p>
+    <div class="bar"><div id="load-bar"></div></div>
+  </div>
+</main>
+
+<section id="sheet" class="s0" aria-label="Controls">
+  <button id="grip" type="button" aria-label="Show more controls" title="Show more controls">
+    <span class="bar" aria-hidden="true"></span>
+    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+  </button>
+
+  <div id="props" class="chips" role="radiogroup" aria-label="Property"></div>
+
+  <div class="timeline">
+    <button id="play" class="play" aria-label="Play production history">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M7 5l12 7-12 7z"/></svg>
+    </button>
+    <input id="time" type="range" min="0" max="0" value="0" step="1" aria-label="Date">
+  </div>
+
+  <div class="explode">
+    <label for="explode">Explode</label>
+    <input id="explode" type="range" min="0" max="100" value="0">
+    <select id="ex-mode" class="pick" aria-label="Explode by">
+      <option value="formations">Formations</option>
+      <option value="layers">Layers</option>
+      <option value="segments">Segments</option>
+    </select>
+  </div>
+
+  <div id="chart-wrap">
+    <div class="chart-head">
+      <p id="chart-title">Field rates</p>
+      <select id="well-pick" class="pick" aria-label="Show rates for"></select>
+    </div>
+    <svg id="chart" preserveAspectRatio="none" role="img" aria-label="Production and injection rates over time"></svg>
+    <div id="chart-key" class="key"></div>
+  </div>
+
+  <section id="more" aria-label="Section and view">
+    <h2 class="more-title">Section and view</h2>
+    <div class="rows">
+      <div class="row"><label>Columns I</label><div class="pair"><input id="i0" type="range" min="1" max="46" value="1" aria-label="First I column"><input id="i1" type="range" min="1" max="46" value="46" aria-label="Last I column"></div><output id="iv">1–46</output></div>
+      <div class="row"><label>Rows J</label><div class="pair"><input id="j0" type="range" min="1" max="112" value="1" aria-label="First J row"><input id="j1" type="range" min="1" max="112" value="112" aria-label="Last J row"></div><output id="jv">1–112</output></div>
+      <div class="row"><label>Layers K</label><div class="pair"><input id="k0" type="range" min="1" max="22" value="1" aria-label="First K layer"><input id="k1" type="range" min="1" max="22" value="22" aria-label="Last K layer"></div><output id="kv">1–22</output></div>
+      <div class="row"><label>Value range</label><div class="pair"><input id="v0" type="range" min="0" max="100" value="0" aria-label="Hide values below"><input id="v1" type="range" min="0" max="100" value="100" aria-label="Hide values above"></div><output id="vv">all</output></div>
+      <div class="row"><label>Vertical scale</label><input id="exag" type="range" min="1" max="15" step="0.5" value="5"><output id="exv">5×</output></div>
+      <div class="toggles">
+        <label><input id="t-wells" type="checkbox" checked> Wells</label>
+        <label><input id="t-labels" type="checkbox" checked> Well names</label>
+        <label><input id="t-edges" type="checkbox" checked> Cell edges</label>
+      </div>
+      <div class="actions">
+        <button id="reset-cut" class="btn">Show all cells</button>
+        <button id="reset-view" class="btn">Reset view</button>
+      </div>
+      <p id="credit" class="credit"></p>
+    </div>
+  </section>
+</section>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

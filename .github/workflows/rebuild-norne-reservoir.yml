@@ -1,0 +1,30 @@
+name: Rebuild Norne reservoir data
+
+# Manual only. Reruns the Norne simulation and rebuilds norne-reservoir/data,
+# then uploads the new data folder and the Snuggery ZIP as an artifact.
+# It does not commit anything; review the artifact and commit it yourself.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04   # OPM wheels are Linux x86_64 only
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: norne-reservoir
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild data (download deck, simulate, validate, extract)
+        run: pipeline/build_data.sh
+      - name: Build Snuggery archive
+        run: scripts/package.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: norne-reservoir-data
+          path: |
+            norne-reservoir/data
+            norne-reservoir/dist/norne-reservoir.zip

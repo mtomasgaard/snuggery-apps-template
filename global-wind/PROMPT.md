@@ -13,11 +13,10 @@ forward hour by hour with the night side moving across it, and a tap anywhere
 for the exact wind at that point. The data is NOAA's Global Forecast System,
 read from a public bucket that needs no key and no account.
 
-The same shape carries more fields if you want them — temperature, rain, cloud
-and pressure alongside the wind, on the same map and globe. That is a separate
-app with its own folder, workflow, data branch and ZIP rather than a setting in
-this one, because a mini-app ships as one folder, and because it costs 2.9 MB a
-refresh where this one costs 1.2.
+**Global Weather** in this same repository is this app with four more fields —
+temperature, rain, cloud and pressure — and the same map and globe. It is a
+separate app with its own folder, workflow, data branch and ZIP; installing one
+does nothing to the other. This one stays small: 1.2 MB a refresh against 2.9.
 
 It ships working, with a real pull of a real forecast in it. If the default
 resolution suits you there is nothing to set up but the Shortcut row.
@@ -145,8 +144,8 @@ gh run watch
 
 ## Step 3 — the branch this one publishes to, and why
 
-**Global Wind is the one app here that does not commit its snapshot to
-`main`.** The file is megabytes and every byte of it is different every run, so
+**Global Wind and Global Weather are the two apps here that do not commit their
+snapshots to `main`.** The file is megabytes and every byte of it is different every run, so
 git can neither delta it nor compress it; twice a day that is most of a gigabyte
 a year in a repository you clone.
 

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Anatomy",
+  "entryPoint": "index.html",
+  "description": "A full human body in 3D: 934 real anatomical models in layers you can peel, fade, isolate and explode.",
+  "version": "2.0"
+}

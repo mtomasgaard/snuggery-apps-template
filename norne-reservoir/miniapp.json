@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Norne Reservoir",
+  "entryPoint": "index.html",
+  "description": "3D viewer for the open Norne field simulation model: rock properties, saturations and pressure through the production history, with wells and rates.",
+  "version": "1.3"
+}

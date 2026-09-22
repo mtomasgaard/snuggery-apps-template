@@ -1,0 +1,275 @@
+{
+  "defaultProperty": "SOIL",
+  "verticalExaggeration": 5,
+  "playbackFramesPerSecond": 6,
+  "wellWidthPixels": 3.5,
+  "wellColors": {
+    "producer": "#2E9E5B",
+    "waterInjector": "#2F74D0",
+    "gasInjector": "#D0493A",
+    "shut": "#8A969C",
+    "outline": "#0E1A20"
+  },
+  "properties": [
+    {
+      "key": "SOIL",
+      "label": "Oil saturation",
+      "short": "Oil",
+      "unit": "",
+      "range": [
+        0,
+        1
+      ],
+      "decimals": 2,
+      "colormap": "oil",
+      "dynamic": true
+    },
+    {
+      "key": "SWAT",
+      "label": "Water saturation",
+      "short": "Water",
+      "unit": "",
+      "range": [
+        0,
+        1
+      ],
+      "decimals": 2,
+      "colormap": "water",
+      "dynamic": true
+    },
+    {
+      "key": "SGAS",
+      "label": "Gas saturation",
+      "short": "Gas",
+      "unit": "",
+      "range": [
+        0,
+        0.9
+      ],
+      "decimals": 2,
+      "colormap": "gas",
+      "dynamic": true
+    },
+    {
+      "key": "PRESSURE",
+      "label": "Pressure",
+      "short": "Pressure",
+      "unit": "bar",
+      "range": [
+        200,
+        450
+      ],
+      "decimals": 0,
+      "colormap": "magma",
+      "dynamic": true
+    },
+    {
+      "key": "PORO",
+      "label": "Porosity",
+      "short": "Porosity",
+      "unit": "",
+      "range": [
+        0.13,
+        0.35
+      ],
+      "decimals": 3,
+      "colormap": "viridis"
+    },
+    {
+      "key": "PERMX",
+      "label": "Horizontal permeability",
+      "short": "Perm X",
+      "unit": "mD",
+      "range": [
+        1,
+        4000
+      ],
+      "scale": "log",
+      "decimals": 0,
+      "colormap": "viridis"
+    },
+    {
+      "key": "PERMZ",
+      "label": "Vertical permeability",
+      "short": "Perm Z",
+      "unit": "mD",
+      "range": [
+        0.1,
+        2000
+      ],
+      "scale": "log",
+      "decimals": 1,
+      "colormap": "viridis"
+    },
+    {
+      "key": "NTG",
+      "label": "Net-to-gross",
+      "short": "NTG",
+      "unit": "",
+      "range": [
+        0,
+        1
+      ],
+      "decimals": 2,
+      "colormap": "cividis"
+    },
+    {
+      "key": "DEPTH",
+      "label": "Depth",
+      "short": "Depth",
+      "unit": "m",
+      "range": "auto",
+      "decimals": 0,
+      "colormap": "depth"
+    },
+    {
+      "key": "ZONE",
+      "label": "Formation",
+      "short": "Formations",
+      "unit": "",
+      "type": "category",
+      "colormap": "formations"
+    },
+    {
+      "key": "FIPNUM",
+      "label": "Fluid-in-place region",
+      "short": "Regions",
+      "unit": "",
+      "type": "category",
+      "colormap": "regions"
+    },
+    {
+      "key": "LAYER",
+      "label": "Layer (K)",
+      "short": "Layers",
+      "unit": "",
+      "type": "category",
+      "colormap": "regions"
+    }
+  ],
+  "colormaps": {
+    "oil": [
+      "#F1F4EA",
+      "#C6DEA9",
+      "#7DB86F",
+      "#3B8A4D",
+      "#123F2A"
+    ],
+    "water": [
+      "#EFF4F7",
+      "#A9CDE6",
+      "#4F95CC",
+      "#1F5AA6",
+      "#0C2A5C"
+    ],
+    "gas": [
+      "#F5F0F1",
+      "#F0B9A8",
+      "#E0735A",
+      "#B83A33",
+      "#6B1420"
+    ],
+    "magma": [
+      "#10061F",
+      "#3B0F70",
+      "#8C2981",
+      "#DE4968",
+      "#FE9F6D",
+      "#FCFDBF"
+    ],
+    "viridis": [
+      "#440154",
+      "#3B528B",
+      "#21918C",
+      "#5EC962",
+      "#FDE725"
+    ],
+    "cividis": [
+      "#00224E",
+      "#3D4D6C",
+      "#7B7B78",
+      "#BCAF6F",
+      "#FEE838"
+    ],
+    "depth": [
+      "#FFF3B0",
+      "#9CCB86",
+      "#3E9C8F",
+      "#2A5F8F",
+      "#241F5C"
+    ],
+    "regions": [
+      "#4E79A7",
+      "#F28E2B",
+      "#E15759",
+      "#76B7B2",
+      "#59A14F",
+      "#EDC948",
+      "#B07AA1",
+      "#FF9DA7",
+      "#9C755F",
+      "#BAB0AC",
+      "#1F77B4",
+      "#AEC7E8",
+      "#FFBB78",
+      "#98DF8A",
+      "#C5B0D5",
+      "#C49C94",
+      "#17BECF",
+      "#DBDB8D",
+      "#8C564B",
+      "#E377C2",
+      "#7F7F7F",
+      "#BCBD22"
+    ],
+    "formations": [
+      "#E3B448",
+      "#8E8C86",
+      "#4C9A8C",
+      "#C4634A",
+      "#5C6FB5"
+    ]
+  },
+  "zones": [
+    {
+      "name": "Garn",
+      "k": [
+        1,
+        3
+      ]
+    },
+    {
+      "name": "Not",
+      "k": [
+        4,
+        4
+      ]
+    },
+    {
+      "name": "Ile",
+      "k": [
+        5,
+        11
+      ]
+    },
+    {
+      "name": "Tofte",
+      "k": [
+        12,
+        18
+      ]
+    },
+    {
+      "name": "Tilje",
+      "k": [
+        19,
+        22
+      ]
+    }
+  ],
+  "explode": {
+    "formationGapMetres": 110,
+    "layerGapMetres": 22,
+    "segmentSpread": 0.4
+  }
+}
