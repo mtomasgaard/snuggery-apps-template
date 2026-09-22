@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-22T18:01:12Z",
+ "generatedAt": "2026-09-22T19:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Russia-Ukraine war is accelerating the dangerous race toward fully autonomous drones",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/russia-ukraine-war-is-accelerating-the-dangerous-race-toward-fully-autonomous-drones-290877",
+     "published": "2026-09-22T18:29:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amy McAuliffe, Visiting Distinguished Professor of the Practice, University of Notre Dame"
+    },
+    {
      "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -103,14 +113,22 @@
      "author": "Andre Pagliarini, Assistant Professor of History and International Studies, Louisiana State University"
     },
     {
-     "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/when-your-child-asks-if-theyll-be-harmed-like-the-people-on-the-news-what-do-you-say-psychologists-provide-tips-on-how-to-talk-about-identity-290768",
-     "published": "2026-09-22T12:49:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anahi Collado, Assistant Research Professor of Psychology, University of Colorado Boulder"
+     "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168397",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "US President Donald Trump used his address to the UN General Assembly on Tuesday to defend recent military action against Iran, urging countries to maintain economic pressure on Tehran – and declaring that he now faces…",
+     "stale": false
+    },
+    {
+     "title": "Diplomacy is the way to address global challenges, Brazil tells General Assembly",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168395",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "Brazilian President Luiz Inácio Lula da Silva told the General Assembly on Tuesday that the UN needs to become a “temple of peace” once again, as it confronts one of the most critical periods in its 80-year history.",
+     "stale": false
     },
     {
      "title": "The commodification of Indigenous cultures and traditions",
@@ -150,24 +168,6 @@
      "summary": "An Indigenous-led campaign denounces the impacts of a mega railway project and demands respect for territory, self-determination, and the right to live and dream.",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Repression continues in Venezuela in the face of ‘appalling’ human rights violations",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168351",
-     "published": "2026-09-16T12:00:00Z",
-     "summary": "In Venezuela’s El Rodeo maximum security prison, some of those detained for political reasons are subject to forced intubation – and prolonged confinement in a sealed underground cistern.",
-     "stale": false
-    },
-    {
-     "title": "Back to school in Haiti: ‘Madame, can you stop what the gangs are doing to us?’",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168337",
-     "published": "2026-09-15T12:00:00Z",
-     "summary": "When UNICEF’s Representative in Haiti Geetanjali Narayan stepped into a classroom in Port-au-Prince at the start of the new school year, she asked the children a simple question: What did they most need from the UN…",
-     "stale": false
     }
    ]
   },
@@ -721,14 +721,26 @@
   {
    "region": "Americas",
    "source": "The Conversation",
+   "title": "Russia-Ukraine war is accelerating the dangerous race toward fully autonomous drones",
+   "published": "2026-09-22 18:29 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
    "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
    "published": "2026-09-22 15:24 UTC"
   },
   {
    "region": "Americas",
-   "source": "The Conversation",
-   "title": "When your child asks if they’ll be harmed like the people on the news, what do you say? Psychologists provide tips on how to talk about identity",
-   "published": "2026-09-22 12:49 UTC"
+   "source": "UN News",
+   "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
+   "published": "2026-09-22 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
+   "title": "Diplomacy is the way to address global challenges, Brazil tells General Assembly",
+   "published": "2026-09-22 12:00 UTC"
   },
   {
    "region": "Americas",
@@ -753,18 +765,6 @@
    "source": "Global Voices",
    "title": "The A’uwẽ-Xavante people's denunciation of megaprojects in Brazil",
    "published": "2026-09-16 18:03 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Repression continues in Venezuela in the face of ‘appalling’ human rights violations",
-   "published": "2026-09-16 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Back to school in Haiti: ‘Madame, can you stop what the gangs are doing to us?’",
-   "published": "2026-09-15 12:00 UTC"
   },
   {
    "region": "Africa",
