@@ -20,31 +20,39 @@ start private than to remember to switch before the wrong commit.
 ## What is in here
 
 Seven complete apps. All are examples — none holds anybody's real data. Copy
-one, delete them all, or ignore them. Two are **static examples** (generated
-data, nothing refreshes until you build your own pull); the rest are **live**:
-this repository's own workflows refresh their snapshots, or, for Outdoor
-Window, your Shortcut fetches the data itself.
+one, delete them all, or ignore them.
 
-| App | What it is | Try it | Make it yours |
-| --- | --- | --- | --- |
-| **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | [`zips/hello-live.zip`](zips/hello-live.zip) | nothing to set up — it already runs |
-| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.** | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
-| **Finances** | Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such. | [`zips/finances.zip`](zips/finances.zip) | [`finances/PROMPT.md`](finances/PROMPT.md) |
-| **World News** | Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here. | [`zips/world-news.zip`](zips/world-news.zip) | [`world-news/PROMPT.md`](world-news/PROMPT.md) |
-| **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | [`zips/outdoor-window.zip`](zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
-| **Power Hours** | Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo). | [`zips/power-hours.zip`](zips/power-hours.zip) | [`power-hours/PROMPT.md`](power-hours/PROMPT.md) |
-| **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer you can pan and zoom, with a five-day time player and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | [`zips/global-wind.zip`](zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
+**Four of them cost you nothing to run.** Hello Live, World News, Power Hours
+and Global Wind are refreshed by this repository's own workflows, from sources
+that need no key and no account, so they work from the moment you install them
+and keep working whether or not you ever copy this template. **Outdoor Window**
+is free in the same way but cannot run on its own: the forecast is for wherever
+*you* are, so your own Shortcut asks the phone and fetches it. **Running
+Dashboard** and **Finances** are the two that need credentials — a Garmin
+sign-in and a bank connection — and until you add them, both ship as static
+examples with made-up data.
 
-![Running Dashboard](screenshots/running-dashboard.png)
-![Finances](screenshots/finances.png)
-![World News](screenshots/world-news.png)
-![Outdoor Window](screenshots/outdoor-window.png)
-![Power Hours](screenshots/power-hours.png)
-![Global Wind](screenshots/global-wind.png)
+| App | What it is | Needs | Try it | Make it yours |
+| --- | --- | --- | --- | --- |
+| **Hello Live** | A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. | nothing | [`zips/hello-live.zip`](zips/hello-live.zip) | it is the loop's proof, not a thing to personalise |
+| **Running Dashboard** | Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.** | a Garmin sign-in | [`zips/running-dashboard.zip`](zips/running-dashboard.zip) | [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) |
+| **Finances** | Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such. | a bank connection | [`zips/finances.zip`](zips/finances.zip) | [`finances/PROMPT.md`](finances/PROMPT.md) |
+| **World News** | Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here. | nothing | [`zips/world-news.zip`](zips/world-news.zip) | [`world-news/PROMPT.md`](world-news/PROMPT.md) |
+| **Outdoor Window** | Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server. | your own Shortcut | [`zips/outdoor-window.zip`](zips/outdoor-window.zip) | [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md) |
+| **Power Hours** | Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo). | nothing | [`zips/power-hours.zip`](zips/power-hours.zip) | [`power-hours/PROMPT.md`](power-hours/PROMPT.md) |
+| **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer you can pan and zoom, with a five-day time player and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | nothing | [`zips/global-wind.zip`](zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
+
+![Running Dashboard](running-dashboard/screenshots/app.png)
+![Finances](finances/screenshots/app.png)
+![World News](world-news/screenshots/app.png)
+![Outdoor Window](outdoor-window/screenshots/app.png)
+![Power Hours](power-hours/screenshots/app.png)
+![Global Wind](global-wind/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in
 `.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
-them.
+them — the pictures above live inside the app folders they show, so they go
+with them.
 
 ---
 
@@ -99,12 +107,13 @@ That is the whole per-app cost. Nothing else changes, ever.
   index.html             the whole app: inline CSS and JS, no build step
   miniapp.json           display name and entry point
   data/snapshot.json     THE ONLY FILE THAT CHANGES
+  screenshots/           pictures for this README; left out of the ZIP, so they
+                         cost the phone nothing
 scripts/                 one refresh script per app
 garmin-raw/              Running Dashboard's append-only raw store
 data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
 .github/workflows/       one refresh workflow per app, plus the ZIP builder
 zips/<app-folder>.zip    built automatically; this is what you install from
-screenshots/             pictures for this README; not zipped, not part of any app
 ```
 
 All seven app folders are complete working examples. Install Hello Live first and

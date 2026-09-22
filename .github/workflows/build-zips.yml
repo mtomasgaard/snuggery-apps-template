@@ -47,7 +47,7 @@ jobs:
             # imported app is not blank — but not the dotfiles. A .gitkeep is
             # scaffolding for this repository and has no business inside an
             # app somebody installs.
-            (cd "$name" && zip -q -r -X "../zips/$name.zip" . -x '.*' '*/.*')
+            (cd "$name" && zip -q -r -X "../zips/$name.zip" . -x '.*' '*/.*' 'screenshots/*')
             echo "packed $name"
           done
 
