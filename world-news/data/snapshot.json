@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-22T19:01:11Z",
+ "generatedAt": "2026-09-22T20:01:08Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/09/22/from-north-to-south-protests-sweep-across-tunisia-is-change-at-hand/",
+     "published": "2026-09-22T19:36:26Z",
+     "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
+     "stale": false,
+     "author": "The New Arab"
+    },
+    {
      "title": "Displacement on the rise in Yemen as fighting continues",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "“[W]hen we can see the human stories behind that statistic, we can begin to talk about human rights violations and solutions.”",
      "stale": false,
      "author": "GV Central Asia and Caucasus"
-    },
-    {
-     "title": "South Korean civil society says no to military deployment in Straight of Hormuz",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/09/10/south-korean-civil-society-says-no-to-military-deployment-to-hormuz/",
-     "published": "2026-09-10T03:26:54Z",
-     "summary": "As the Lee administration said that it would seek public consensus, the anti-war network will continue roaring to stop the country from being dragged into the Iran war.",
-     "stale": false,
-     "author": "Oiwan Lam"
     }
    ]
   },
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
+   "published": "2026-09-22 19:36 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Displacement on the rise in Yemen as fighting continues",
    "published": "2026-09-22 12:00 UTC"
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "The people behind the numbers: Bringing the reality of Turkish prisons to light",
    "published": "2026-09-12 02:58 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "South Korean civil society says no to military deployment in Straight of Hormuz",
-   "published": "2026-09-10 03:26 UTC"
   },
   {
    "region": "Asia",
