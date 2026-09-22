@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-22T15:01:12Z",
+ "generatedAt": "2026-09-22T16:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Ethiopia’s armed opposition unites against Abiy Ahmed: 5 reads on the country’s political struggles",
+     "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/ethiopias-armed-opposition-unites-against-abiy-ahmed-5-reads-on-the-countrys-political-struggles-292619",
-     "published": "2026-09-22T13:19:33Z",
+     "link": "https://theconversation.com/south-africas-minibus-taxi-industry-has-lessons-for-policymakers-on-how-informal-systems-work-291033",
+     "published": "2026-09-22T14:50:20Z",
      "summary": "",
      "stale": false,
-     "author": "Julius Maina, Regional Editor East Africa, The Conversation"
+     "author": "Siyabulela Christopher Fobosi, Senior Researcher, UNESCO 'Oliver Tambo' Chair of Human Rights, University of Fort Hare, University of Fort Hare"
     },
     {
-     "title": "Fabien Eboussi Boulaga, le philosophe qui interrogeait la liberté de penser pour l'Afrique",
+     "title": "Climate change is fuelling African conflict – governments are developing a shared response",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/fabien-eboussi-boulaga-le-philosophe-qui-interrogeait-la-liberte-de-penser-pour-lafrique-292012",
-     "published": "2026-09-22T08:33:55Z",
+     "link": "https://theconversation.com/climate-change-is-fuelling-african-conflict-governments-are-developing-a-shared-response-289088",
+     "published": "2026-09-22T14:46:22Z",
      "summary": "",
      "stale": false,
-     "author": "Christophe Premat, Professor, Canadian and Cultural Studies, Stockholm University"
+     "author": "Katongo Seyuba, Researcher, Stockholm International Peace Research Institute"
     },
     {
      "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Ethiopia’s armed opposition unites against Abiy Ahmed: 5 reads on the country’s political struggles",
-   "published": "2026-09-22 13:19 UTC"
+   "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
+   "published": "2026-09-22 14:50 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Fabien Eboussi Boulaga, le philosophe qui interrogeait la liberté de penser pour l'Afrique",
-   "published": "2026-09-22 08:33 UTC"
+   "title": "Climate change is fuelling African conflict – governments are developing a shared response",
+   "published": "2026-09-22 14:46 UTC"
   },
   {
    "region": "Africa",
