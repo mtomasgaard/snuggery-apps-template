@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-22T13:01:11Z",
+ "generatedAt": "2026-09-22T14:01:10Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Ethiopia’s armed opposition unites against Abiy Ahmed: 5 reads on the country’s political struggles",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/ethiopias-armed-opposition-unites-against-abiy-ahmed-5-reads-on-the-countrys-political-struggles-292619",
+     "published": "2026-09-22T13:19:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Julius Maina, Regional Editor East Africa, The Conversation"
+    },
+    {
      "title": "Fabien Eboussi Boulaga, le philosophe qui interrogeait la liberté de penser pour l'Afrique",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Christophe Premat, Professor, Canadian and Cultural Studies, Stockholm University"
-    },
-    {
-     "title": "Les populations africaines veulent des services climatiques qui répondent à leurs besoins locaux",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/les-populations-africaines-veulent-des-services-climatiques-qui-repondent-a-leurs-besoins-locaux-292373",
-     "published": "2026-09-22T08:33:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Petra Holden, Senior Researcher, University of Cape Town"
     },
     {
      "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Displacement on the rise in Yemen as fighting continues",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168390",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "As hostilities worsen in Yemen, more people have been fleeing their homes, further intensifying the humanitarian crisis within the region, the UN Refugee Agency (UNHCR) warned on Tuesday.",
+     "stale": false
+    },
+    {
      "title": "UN condemns attempted Houthi strike on Riyadh as Yemen displacement surges past 130,000",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168355",
      "published": "2026-09-17T12:00:00Z",
      "summary": "While Syria is making progress in its political transition, the Security Council is meeting to hear briefings and discuss the situation on the ground, including recent reports of deadly armed clashes with an…",
-     "stale": false
-    },
-    {
-     "title": "Yemen escalation displaces more than 57,000 children: UNICEF",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168354",
-     "published": "2026-09-17T12:00:00Z",
-     "summary": "Renewed fighting in Yemen is deepening an already severe humanitarian crisis in a country where more than 12 million children depend on aid, after more than a decade of conflict.",
      "stale": false
     },
     {
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Fabien Eboussi Boulaga, le philosophe qui interrogeait la liberté de penser pour l'Afrique",
-   "published": "2026-09-22 08:33 UTC"
+   "title": "Ethiopia’s armed opposition unites against Abiy Ahmed: 5 reads on the country’s political struggles",
+   "published": "2026-09-22 13:19 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Les populations africaines veulent des services climatiques qui répondent à leurs besoins locaux",
+   "title": "Fabien Eboussi Boulaga, le philosophe qui interrogeait la liberté de penser pour l'Afrique",
    "published": "2026-09-22 08:33 UTC"
   },
   {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Displacement on the rise in Yemen as fighting continues",
+   "published": "2026-09-22 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "UN condemns attempted Houthi strike on Riyadh as Yemen displacement surges past 130,000",
    "published": "2026-09-21 12:00 UTC"
   },
@@ -836,12 +842,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "Security Council LIVE: Syria’s transition in the spotlight",
-   "published": "2026-09-17 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen escalation displaces more than 57,000 children: UNICEF",
    "published": "2026-09-17 12:00 UTC"
   },
   {
