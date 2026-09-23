@@ -21,9 +21,9 @@ const LOGF = /* glsl */`
 // ------------------------------------------------------------------ glow points
 // Per-point colour and size in CSS pixels; a soft round sprite. Used for markers, asteroids,
 // clusters and anything that should stay visible however small it is.
-export function glowPointsMaterial({ opacity = 1, sharp = 0.0 } = {}) {
+export function glowPointsMaterial({ opacity = 1, sharp = 0.0, ring = false } = {}) {
   return new THREE.ShaderMaterial({
-    uniforms: { uPx: { value: 1 }, uOpacity: { value: opacity }, uSharp: { value: sharp } },
+    uniforms: { uPx: { value: 1 }, uOpacity: { value: opacity }, uSharp: { value: sharp }, uRing: { value: ring ? 1 : 0 } },
     vertexShader: LOGV + /* glsl */`
       attribute vec3 acolor;
       attribute float asize;
@@ -39,6 +39,7 @@ export function glowPointsMaterial({ opacity = 1, sharp = 0.0 } = {}) {
     fragmentShader: LOGF + /* glsl */`
       uniform float uOpacity;
       uniform float uSharp;
+      uniform float uRing;
       varying vec3 vC;
       void main() {
         vec2 d = gl_PointCoord * 2.0 - 1.0;
@@ -47,6 +48,7 @@ export function glowPointsMaterial({ opacity = 1, sharp = 0.0 } = {}) {
         float core = smoothstep(0.42, 0.18, r2);
         float halo = exp(-r2 * 5.0) * (1.0 - r2);
         float a = mix(halo * 0.75 + core * 0.55, core, uSharp);
+        if (uRing > 0.5) { float r = sqrt(r2); a = smoothstep(0.62, 0.74, r) * (1.0 - smoothstep(0.86, 0.98, r)); }
         gl_FragColor = vec4(vC * a * uOpacity, 1.0);
         #include <logdepthbuf_fragment>
       }`,
@@ -370,4 +372,99 @@ export function loadTexture(url, { srgb = false } = {}) {
       resolve(t);
     }, undefined, () => reject(new Error(`${url}: could not be loaded`)));
   });
+}
+
+// ------------------------------------------------------------------ thick lines
+// WebGL draws lines one pixel wide whatever you ask, which reads as hairlines on a phone. A
+// ThickLine is a polyline drawn as screen-space quads: each segment is one instance of a four-vertex
+// quad, expanded perpendicular to the segment on screen by `width` CSS pixels, with anti-aliased
+// edges and a colour (RGBA) per point, so trails can fade. Segments reaching behind the camera are
+// clipped in clip space before the divide, so an orbit around the camera stays whole.
+export const lineUniforms = { uRes: { value: new THREE.Vector2(1, 1) }, uPx: { value: 1 } };
+
+export function thickLineMaterial({ width = 1.5, opacity = 1, depthTest = true, additive = true } = {}) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uRes: lineUniforms.uRes, uPx: lineUniforms.uPx, uWidth: { value: width }, uOpacity: { value: opacity } },
+    vertexShader: LOGV + /* glsl */`
+      attribute vec3 iA;
+      attribute vec3 iB;
+      attribute vec4 iCA;
+      attribute vec4 iCB;
+      uniform vec2 uRes;
+      uniform float uPx, uWidth;
+      varying vec4 vC;
+      varying float vEdge;
+      void main() {
+        vec4 a = projectionMatrix * modelViewMatrix * vec4(iA, 1.0);
+        vec4 b = projectionMatrix * modelViewMatrix * vec4(iB, 1.0);
+        const float EPS = 1e-6;
+        if (a.w < EPS && b.w < EPS) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vC = vec4(0.0); vEdge = 0.0; return; }
+        if (a.w < EPS) a = mix(a, b, (EPS - a.w) / (b.w - a.w));
+        if (b.w < EPS) b = mix(b, a, (EPS - b.w) / (a.w - b.w));
+        vec2 sa = a.xy / a.w * uRes, sb = b.xy / b.w * uRes;
+        vec2 d = sb - sa;
+        float len = length(d);
+        vec2 dir = len > 1e-6 ? d / len : vec2(1.0, 0.0);
+        vec2 nrm = vec2(-dir.y, dir.x);
+        float w = uWidth * uPx + 1.0;                  // one extra pixel for the soft edge
+        vec4 p = position.x < 0.5 ? a : b;
+        p.xy += nrm * position.y * w / uRes * p.w;
+        gl_Position = p;
+        vC = position.x < 0.5 ? iCA : iCB;
+        vEdge = position.y * w;
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform float uOpacity, uPx, uWidth;
+      varying vec4 vC;
+      varying float vEdge;
+      void main() {
+        float half_w = uWidth * uPx * 0.5;
+        float a = 1.0 - smoothstep(half_w - 0.5, half_w + 0.5, abs(vEdge) * 0.5);
+        float alpha = vC.a * a * uOpacity;
+        if (alpha < 0.002) discard;
+        gl_FragColor = vec4(vC.rgb * alpha, alpha);
+        #include <logdepthbuf_fragment>
+      }`,
+    // The fragment writes premultiplied colour, so both modes are custom blends starting from One.
+    transparent: true, depthWrite: false, depthTest, blending: THREE.CustomBlending,
+    blendSrc: THREE.OneFactor, blendDst: additive ? THREE.OneFactor : THREE.OneMinusSrcAlphaFactor,
+  });
+}
+
+// A polyline of up to `maxPoints` points. `pos` (xyz) and `col` (rgba) are the live arrays; call
+// update(count) after writing them.
+export class ThickLine {
+  constructor(maxPoints, material) {
+    this.max = maxPoints;
+    this.pos = new Float32Array(maxPoints * 3);
+    this.col = new Float32Array(maxPoints * 4);
+    const g = new THREE.InstancedBufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute([0, -1, 0, 0, 1, 0, 1, -1, 0, 1, 1, 0], 3));
+    g.setIndex([0, 2, 1, 2, 3, 1]);
+    this.pb = new THREE.InstancedInterleavedBuffer(this.pos, 3, 1);
+    this.cb = new THREE.InstancedInterleavedBuffer(this.col, 4, 1);
+    g.setAttribute('iA', new THREE.InterleavedBufferAttribute(this.pb, 3, 0));
+    g.setAttribute('iB', new THREE.InterleavedBufferAttribute(this.pb, 3, 3));
+    g.setAttribute('iCA', new THREE.InterleavedBufferAttribute(this.cb, 4, 0));
+    g.setAttribute('iCB', new THREE.InterleavedBufferAttribute(this.cb, 4, 4));
+    g.instanceCount = 0;
+    this.geo = g;
+    this.mesh = new THREE.Mesh(g, material);
+    this.mesh.frustumCulled = false;
+  }
+  update(count = this.max, colours = false) {
+    this.count = Math.min(count, this.max);
+    this.geo.instanceCount = Math.max(0, this.count - 1);
+    this.pb.needsUpdate = true;
+    if (colours) this.cb.needsUpdate = true;
+  }
+  static from(points /* [[x,y,z],…] or Float32Array */, rgba, material) {
+    const n = points.length / (Array.isArray(points) ? 1 : 3);
+    const l = new ThickLine(n, material);
+    if (Array.isArray(points)) points.forEach((p, i) => l.pos.set(p, i * 3)); else l.pos.set(points);
+    for (let i = 0; i < n; i++) l.col.set(typeof rgba === 'function' ? rgba(i, n) : rgba, i * 4);
+    l.update(n, true);
+    return l;
+  }
 }

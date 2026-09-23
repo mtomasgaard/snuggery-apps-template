@@ -23,8 +23,10 @@ export class Stars {
     this.named = named;
     this.exo = (exoplanets && exoplanets.hosts) || {};
     this.skyMeta = sky;
-    const lut = colour.rgb || colour.colours || colour.entries || colour;
-    const rgbAt = (i) => { const e = lut[Math.max(0, Math.min(lut.length - 1, i))]; return Array.isArray(e) ? e : [e.r, e.g, e.b]; };
+    // colour.json: 256 sRGB triples (0–1) by effective temperature; the last entry is neutral white
+    // for stars with no colour measurement.
+    const lut = colour.srgb;
+    const rgbAt = (i) => lut[Math.max(0, Math.min(lut.length - 1, i))];
 
     // ---- the Gaia sky, centred on the camera
     this.sky = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 32), skyMaterial(skyTex));
@@ -35,7 +37,7 @@ export class Stars {
     const n = Math.floor(deepBuf.byteLength / 8);
     const i16 = new Int16Array(deepBuf, 0, n * 4), u8 = new Uint8Array(deepBuf, 0, n * 8);
     const pos = new Float32Array(n * 3), mag = new Float32Array(n), col = new Float32Array(n * 3);
-    const scale = (deepMeta && deepMeta.scale) ? 1 / deepMeta.scale : 1 / 64;
+    const scale = deepMeta.quantisation_pc;           // pc per int16 step (1/64)
     for (let k = 0; k < n; k++) {
       pos[k * 3] = i16[k * 4] * scale; pos[k * 3 + 1] = i16[k * 4 + 1] * scale; pos[k * 3 + 2] = i16[k * 4 + 2] * scale;
       mag[k] = u8[k * 8 + 6] / 10 - 8;
@@ -73,7 +75,7 @@ export class Stars {
     // ---- constellation figures, in 3D
     const segs = [];
     this.constellations = [];
-    for (const [abbr, c] of Object.entries(constellations || {})) {
+    for (const [abbr, c] of Object.entries(constellations)) {
       const members = new Set();
       for (const [i, j] of c.lines) {
         if ((named.flags[i] & 16) || (named.flags[j] & 16)) continue;
@@ -94,12 +96,12 @@ export class Stars {
     const hosts = Object.keys(this.exo).map(Number).filter((k) => !(named.flags[k] & 16));
     this.hostIdx = hosts;
     const hp = new Float32Array(hosts.length * 3), hc = new Float32Array(hosts.length * 3), hs = new Float32Array(hosts.length);
-    hosts.forEach((k, i) => { hp.set([np[k * 3], np[k * 3 + 1], np[k * 3 + 2]], i * 3); hc.set([0.45, 0.95, 0.75], i * 3); hs[i] = 7; });
+    hosts.forEach((k, i) => { hp.set([np[k * 3], np[k * 3 + 1], np[k * 3 + 2]], i * 3); hc.set([0.45, 0.95, 0.75], i * 3); hs[i] = 11; });
     const hg = new THREE.BufferGeometry();
     hg.setAttribute('position', new THREE.BufferAttribute(hp, 3));
     hg.setAttribute('acolor', new THREE.BufferAttribute(hc, 3));
     hg.setAttribute('asize', new THREE.BufferAttribute(hs, 1));
-    const hm = glowPointsMaterial({ opacity: 0.55, sharp: 0.0 });
+    const hm = glowPointsMaterial({ opacity: 0.5, ring: true });
     hm.depthTest = false;
     this.hosts = new THREE.Points(hg, hm);
     this.hosts.frustumCulled = false; this.hosts.renderOrder = 4;
@@ -130,10 +132,14 @@ export class Stars {
     this.sky.visible = skyA > 0.01;
     this.sky.material.uniforms.uOpacity.value = 0.62 * skyA;
     this.sky.position.set(camPc[0], camPc[1], camPc[2]);
-    const la = layers.constellations ? Math.max(0, 1 - Math.log10(Math.max(1, dSunPc / 30)) / 1.3) : 0;
+    // Constellation figures: faint from inside the Solar System, where they are the sky behind the
+    // planets; clearer out among the stars, where their third dimension shows; gone far away.
+    const inside = Math.min(1, Math.max(0, (Math.log10(Math.max(dSunPc, 1e-9)) + 3) / 2));   // 0.001 pc → 0.1 pc
+    const la = layers.constellations ? (0.35 + 0.65 * inside) * Math.max(0, 1 - Math.log10(Math.max(1, dSunPc / 30)) / 1.3) : 0;
     this.lines.visible = la > 0.02;
-    this.lines.material.opacity = 0.55 * la;
-    this.hosts.visible = !!layers.exoplanets && dSunPc < 3000;
+    this.lines.material.opacity = 0.5 * la;
+    // Exoplanet hosts are marked once the view is about the stars, not from among the planets.
+    this.hosts.visible = !!layers.exoplanets && dSunPc > 0.3 && dSunPc < 3000;
     this.hosts.material.uniforms.uPx.value = pxRatio;
   }
 
@@ -148,4 +154,6 @@ export class Stars {
     const n = this.named;
     return n.name[k] || n.desig[k] || n.id[k];
   }
+
+  distSource(k) { return this.named.dist_src_labels[this.named.dist_src[k]] || '—'; }
 }

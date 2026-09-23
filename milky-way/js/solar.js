@@ -12,7 +12,7 @@
 // last part of each orbit, fading behind the body, which is what shows the motion when time plays.
 
 import * as THREE from '../vendor/three.module.js';
-import { glowPointsMaterial, globeMaterial, ringMaterial, lineMaterial, makeLine } from './gfx.js';
+import { glowPointsMaterial, globeMaterial, ringMaterial, thickLineMaterial, ThickLine } from './gfx.js';
 import { AU_KM, vsub, vlen, vcross, vdot, vnorm } from './util.js';
 
 const PLANETS = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
@@ -40,6 +40,8 @@ export class SolarSystem {
     this.layers = {};
     this._orbitJd = NaN;
     this._tmp = [0, 0, 0];
+    this._tmp2 = [0, 0, 0];
+    this.hasMoons = new Set(['mars', 'jupiter', 'saturn', 'uranus', 'neptune'].filter((k) => eph.moons(k).length));
     const sphere = new THREE.SphereGeometry(1, 128, 64);
     sphere.rotateX(Math.PI / 2);          // three's sphere has its pole on y; the body frame has it on z
     this.sphere = sphere;
@@ -98,7 +100,7 @@ export class SolarSystem {
           const N = 256, pts = new Float32Array((N + 1) * 3), col = new Float32Array((N + 1) * 4);
           const rad = r.a_km || (r.inner_km + r.outer_km) / 2;
           for (let i = 0; i <= N; i++) { const t = (i / N) * 2 * Math.PI; pts.set([rad * Math.cos(t), rad * Math.sin(t), 0], i * 3); col.set([0.75, 0.8, 0.85, r.name === 'epsilon' ? 0.55 : 0.28], i * 4); }
-          const line = makeLine(pts, col, lineMaterial({ opacity: 1, additive: true }));
+          const line = ThickLine.from(pts, (i) => col.subarray(i * 4, i * 4 + 4), thickLineMaterial({ width: 1 })).mesh;
           line.visible = false; line.renderOrder = 2;
           this.root.add(line);
           this.ringLines.push({ planet, host, line, rMax: rad });
@@ -143,8 +145,9 @@ export class SolarSystem {
     this.root.add(this.sunGlow);
 
     // ---- orbits (osculating ellipses) and trails (the true path), planets and the Moon
-    this.orbitMat = lineMaterial({ opacity: 1 });
-    this.trailMat = lineMaterial({ opacity: 1 });
+    this.orbitMat = thickLineMaterial({ width: 1.2 });
+    this.trailMat = thickLineMaterial({ width: 2.4 });
+    this.moonOrbitMat = thickLineMaterial({ width: 1.3 });
     this.orbits = new Map();
     const ORBIT_N = 360, TRAIL_N = 120;
     for (const k of [...PLANETS, 'moon']) {
@@ -155,10 +158,11 @@ export class SolarSystem {
       const trailCol = new Float32Array(TRAIL_N * 4);
       for (let i = 0; i <= ORBIT_N; i++) orbitCol.set([col[0], col[1], col[2], 0.16], i * 4);
       for (let i = 0; i < TRAIL_N; i++) { const a = Math.pow(i / (TRAIL_N - 1), 1.6); trailCol.set([col[0], col[1], col[2], 0.9 * a], i * 4); }
-      const orbit = makeLine(new Float32Array((ORBIT_N + 1) * 3), orbitCol, this.orbitMat);
-      const trail = makeLine(new Float32Array(TRAIL_N * 3), trailCol, this.trailMat);
-      orbit.renderOrder = 1; trail.renderOrder = 1;
-      this.root.add(orbit, trail);
+      const orbit = ThickLine.from(new Float32Array((ORBIT_N + 1) * 3), (i) => orbitCol.subarray(i * 4, i * 4 + 4), this.orbitMat);
+      const trail = ThickLine.from(new Float32Array(TRAIL_N * 3), (i) => trailCol.subarray(i * 4, i * 4 + 4), this.trailMat);
+      orbit.mesh.renderOrder = 1; trail.mesh.renderOrder = 1;
+      orbit.mesh.visible = trail.mesh.visible = false;
+      this.root.add(orbit.mesh, trail.mesh);
       this.orbits.set(k, { orbit, trail, n: ORBIT_N, tn: TRAIL_N, centre: [0, 0, 0], ok: false });
     }
     // Moon orbits of the giant planets: the fitted JPL path over one revolution, fading.
@@ -168,9 +172,9 @@ export class SolarSystem {
       const N = 160, col = hex3('#9aa6b8');
       const c = new Float32Array(N * 4);
       for (let i = 0; i < N; i++) c.set([col[0], col[1], col[2], 0.08 + 0.55 * Math.pow(i / (N - 1), 2)], i * 4);
-      const line = makeLine(new Float32Array(N * 3), c, this.trailMat);
-      line.visible = false; line.renderOrder = 1;
-      this.root.add(line);
+      const line = ThickLine.from(new Float32Array(N * 3), (i) => c.subarray(i * 4, i * 4 + 4), this.moonOrbitMat);
+      line.mesh.visible = false; line.mesh.renderOrder = 1;
+      this.root.add(line.mesh);
       this.moonOrbits.set(b.key, { line, n: N });
     }
 
@@ -194,9 +198,8 @@ export class SolarSystem {
       this.smallPts.frustumCulled = false; this.smallPts.renderOrder = 3;
       this.root.add(this.smallPts);
       this._smallJd = NaN;
-      this.smallOrbit = makeLine(new Float32Array(513 * 3), (() => {
-        const c = new Float32Array(513 * 4); for (let i = 0; i < 513; i++) c.set([0.55, 0.95, 1.0, 0.45], i * 4); return c;
-      })(), this.orbitMat);
+      this.smallOrbitLine = ThickLine.from(new Float32Array(513 * 3), [0.55, 0.95, 1.0, 0.55], thickLineMaterial({ width: 1.6 }));
+      this.smallOrbit = this.smallOrbitLine.mesh;
       this.smallOrbit.visible = false; this.smallOrbit.renderOrder = 1;
       this.root.add(this.smallOrbit);
       this.smallOrbitIdx = -1;
@@ -208,14 +211,21 @@ export class SolarSystem {
     if (key === 'sun') { out[0] = out[1] = out[2] = 0; return out; }
     const b = this.bodies.get(key);
     if (b && b.kind === 'moon' && key !== 'moon') {
-      const par = this.positionOf(b.parent, jd, out);
+      const par = this.positionOf(b.parent, jd, out);     // the planet's centre (see below)
       const m = this._tmp;
-      if (!this.eph.moon(b.moonName, jd, m)) return null;
+      if (!this.eph.moonFromCentre(b.moonName, jd, m)) return null;
       out[0] = par[0] + m[0] / AU_KM; out[1] = par[1] + m[1] / AU_KM; out[2] = par[2] + m[2] / AU_KM;
       return out;
     }
     const p = this.eph.helio(key, jd, this._tmp);
     out[0] = p[0] / AU_KM; out[1] = p[1] / AU_KM; out[2] = p[2] / AU_KM;
+    // DE430 gives the giant planets' system barycentres; within the satellite range the planet's
+    // own centre is rebuilt from its moons (up to ~300 km away for Saturn), which is where the globe
+    // belongs and what the moons circle.
+    if (this.hasMoons.has(key) && jd >= this.moonRange.jdStart && jd <= this.moonRange.jdEnd) {
+      const c = this.eph.planetCentre(key, jd, this._tmp2);
+      out[0] += c[0] / AU_KM; out[1] += c[1] / AU_KM; out[2] += c[2] / AU_KM;
+    }
     return out;
   }
   // Osculating heliocentric (or geocentric, for the Moon) ellipse from position and velocity.
@@ -338,44 +348,45 @@ export class SolarSystem {
     for (const [k, o] of this.orbits) {
       const b = this.bodies.get(k);
       const centreKey = k === 'moon' ? 'earth' : null;
-      o.orbit.visible = layers.orbits && b.valid;
-      o.trail.visible = layers.trails && b.valid;
+      // Close to a planet its own orbit is a line straight through the globe: hide it.
+      const near = b.px > 14;
+      o.orbit.mesh.visible = layers.orbits && b.valid && !near;
+      o.trail.mesh.visible = layers.trails && b.valid && !near;
       if (k === 'moon') {
         const e = this.bodies.get('earth');
         const sep = 384400 / AU_KM / Math.max(e.camDist || 1, 1e-12) * pxPerRad;
-        if (sep < 14) { o.orbit.visible = false; o.trail.visible = false; }
+        if (sep < 14) { o.orbit.mesh.visible = false; o.trail.mesh.visible = false; }
       }
-      if (!o.orbit.visible && !o.trail.visible) continue;
+      if (!o.orbit.mesh.visible && !o.trail.mesh.visible) continue;
       if (refreshOrbits || !o.ok) {
         const gmSun = k2, gmP = this._gmAu(k === 'moon' ? 'earth' : k), gmM = k === 'moon' ? this._gmAu('moon') : 0;
         const el = this._osculating(k, jd, centreKey, k === 'moon' ? gmP + gmM : gmSun + gmP);
         o.el = el; o.ok = !!el; o.period = el ? el.period : 365;
         if (el) {
-          const arr = o.orbit.geometry.attributes.position.array;
+          const arr = o.orbit.pos;
           for (let i = 0; i <= o.n; i++) {
             const E = (i / o.n) * 2 * Math.PI;
             const x = el.a * (Math.cos(E) - el.e), y = el.a * Math.sqrt(1 - el.e * el.e) * Math.sin(E);
             arr[i * 3] = x * el.P[0] + y * el.Q[0]; arr[i * 3 + 1] = x * el.P[1] + y * el.Q[1]; arr[i * 3 + 2] = x * el.P[2] + y * el.Q[2];
           }
-          o.orbit.geometry.attributes.position.needsUpdate = true;
-          o.orbit.geometry.computeBoundingSphere();
+          o.orbit.update(o.n + 1);
         }
       }
       // Orbit and trail are stored relative to their centre (the Sun, or the Earth for the Moon).
       const c = centreKey ? this.bodies.get(centreKey).pos : [0, 0, 0];
-      o.orbit.position.set(c[0] - origin[0], c[1] - origin[1], c[2] - origin[2]);
-      o.trail.position.copy(o.orbit.position);
-      if (o.trail.visible && o.trailJd !== jd) {
+      o.orbit.mesh.position.set(c[0] - origin[0], c[1] - origin[1], c[2] - origin[2]);
+      o.trail.mesh.position.copy(o.orbit.mesh.position);
+      if (o.trail.mesh.visible && o.trailJd !== jd) {
         o.trailJd = jd;
         const span = Math.min((o.period || 365) * (k === 'moon' ? 0.85 : 0.22), jd - this.eph.range.jdStart);
-        const arr = o.trail.geometry.attributes.position.array, tmp = [0, 0, 0], ct = [0, 0, 0];
+        const arr = o.trail.pos, tmp = [0, 0, 0], ct = [0, 0, 0];
         for (let i = 0; i < o.tn; i++) {
           const t = jd - span * (1 - i / (o.tn - 1));
           this.positionOf(k, t, tmp);
           if (centreKey) this.positionOf(centreKey, t, ct); else { ct[0] = ct[1] = ct[2] = 0; }
           arr[i * 3] = tmp[0] - ct[0]; arr[i * 3 + 1] = tmp[1] - ct[1]; arr[i * 3 + 2] = tmp[2] - ct[2];
         }
-        o.trail.geometry.attributes.position.needsUpdate = true;
+        o.trail.update(o.tn);
       }
     }
     if (refreshOrbits) this._orbitJd = jd;
@@ -384,17 +395,17 @@ export class SolarSystem {
     for (const [k, mo] of this.moonOrbits) {
       const b = this.bodies.get(k), par = this.bodies.get(b.parent);
       const show = layers.moons && layers.orbits && b.valid && (b.sepPx || 0) > 18;
-      mo.line.visible = show;
+      mo.line.mesh.visible = show;
       if (!show) continue;
       const P = 2 * Math.PI * Math.sqrt(((b.aKm || 1e5) / AU_KM) ** 3 / this._gmAu(b.parent));
-      const arr = mo.line.geometry.attributes.position.array, m = [0, 0, 0];
+      const arr = mo.line.pos, m = [0, 0, 0];
       for (let i = 0; i < mo.n; i++) {
         const t = jd - P * 0.97 * (1 - i / (mo.n - 1));
-        if (!this.eph.moon(b.moonName, t, m)) { m[0] = m[1] = m[2] = 0; }
+        if (!this.eph.moonFromCentre(b.moonName, t, m)) { m[0] = m[1] = m[2] = 0; }
         arr[i * 3] = m[0] / AU_KM; arr[i * 3 + 1] = m[1] / AU_KM; arr[i * 3 + 2] = m[2] / AU_KM;
       }
-      mo.line.geometry.attributes.position.needsUpdate = true;
-      mo.line.position.set(par.rel[0], par.rel[1], par.rel[2]);
+      mo.line.update(mo.n);
+      mo.line.mesh.position.set(par.rel[0], par.rel[1], par.rel[2]);
     }
 
     // Small bodies: propagate when the date moves.
@@ -416,12 +427,12 @@ export class SolarSystem {
   showSmallOrbit(i, jd) {
     if (!this.small || i < 0) { this.smallOrbit.visible = false; this.smallOrbitIdx = -1; return; }
     const path = this.small.orbitPath(i, jd, 512);
-    const arr = this.smallOrbit.geometry.attributes.position.array;
+    const arr = this.smallOrbitLine.pos;
     arr.fill(0); arr.set(path.subarray(0, Math.min(path.length, arr.length)));
     // Pad an open path by repeating its last point so no stray segment is drawn to the origin.
     const nPts = Math.min(path.length / 3, 513);
     for (let j = nPts; j < 513; j++) arr.set(path.subarray((nPts - 1) * 3, nPts * 3), j * 3);
-    this.smallOrbit.geometry.attributes.position.needsUpdate = true;
+    this.smallOrbitLine.update(513);
     this.smallOrbit.visible = true; this.smallOrbitIdx = i;
   }
 

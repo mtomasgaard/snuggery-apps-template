@@ -40,9 +40,21 @@ export class Labels {
       if (!(c.x > -40 && c.x < W + 40 && c.y > -20 && c.y < Hh + 20)) continue;
       const minor = c.cls === 'minor' || c.cls === 'faint';
       const w = this.width(c.text, minor);
-      const x0 = c.x - 8, y0 = c.y - H / 2;
-      const box = [x0, y0, x0 + w, y0 + H];
-      if (c.id !== this.selected && boxes.some((b) => box[0] < b[2] + GAP && box[2] + GAP > b[0] && box[1] < b[3] + GAP && box[3] + GAP > b[1])) continue;
+      const y0 = c.y - H / 2;
+      // Two places to try: the label's dot on the point with the name to the right (the usual one),
+      // or the name to the left with the dot at its right end. Skip the label if neither is free.
+      const hits = (bx) => boxes.some((b) => bx[0] < b[2] + GAP && bx[2] + GAP > b[0] && bx[1] < b[3] + GAP && bx[3] + GAP > b[1]);
+      // Then, for important labels, the same two nudged just above or below the point.
+      let left = false;
+      let box = [c.x - 8, y0, c.x - 8 + w, y0 + H];
+      if (hits(box) && c.id !== this.selected) {
+        const alts = [[c.x + 8 - w, 0, true]];
+        if (c.pri >= 80) alts.push([c.x - 8, -H + 2, false], [c.x - 8, H - 2, false], [c.x + 8 - w, -H + 2, true], [c.x + 8 - w, H - 2, true]);
+        let found = null;
+        for (const [x, dy, l] of alts) { const bx = [x, y0 + dy, x + w, y0 + dy + H]; if (!hits(bx)) { found = bx; left = l; break; } }
+        if (!found) continue;
+        box = found;
+      }
       boxes.push(box);
       seen.add(c.id);
       count++;
@@ -56,12 +68,12 @@ export class Labels {
         this.pool.set(c.id, el);
       }
       el._id = c.id;
-      const cls = 'lbl' + (c.cls ? ' ' + c.cls : '') + (c.id === this.selected ? ' sel' : '');
+      const cls = 'lbl' + (c.cls ? ' ' + c.cls : '') + (c.id === this.selected ? ' sel' : '') + (left ? ' left' : '');
       if (el.className !== cls) el.className = cls;
       const span = el.lastChild;
       if (span.textContent !== c.text) span.textContent = c.text;
       if (el._c !== c.colour) { el.style.setProperty('--c', c.colour || '#dde3ea'); el._c = c.colour; }
-      el.style.transform = `translate3d(${(c.x - 8).toFixed(1)}px, ${(c.y - H / 2).toFixed(1)}px, 0)`;
+      el.style.transform = `translate3d(${box[0].toFixed(1)}px, ${box[1].toFixed(1)}px, 0)`;
       el.style.opacity = c.alpha == null ? '' : String(c.alpha);
       el.hidden = false;
       this.placed.push({ id: c.id, box });

@@ -107,7 +107,7 @@ def main():
                  'moon is geocentric. Earth = emb - moon/(1+emrat).'),
     }
     common.write_bin('ephem.bin', bytes(blob))
-    common.write_json('ephem.json', manifest, ndigits=10)
+    common.write_json('ephem.json', manifest, ndigits=30)
     print(f'ephem.bin {len(blob)} bytes')
 
     # Reference positions for the node test (not shipped): DE430 straight from the SPK.

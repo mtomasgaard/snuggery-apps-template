@@ -19,7 +19,8 @@
 //
 // Accuracy is measured by the pipeline and carried in the manifests (max_error_km); the worst
 // planet is Pluto at about 290 km (the float32 floor at 40 AU), the Moon 2.6 km, and every moon is
-// within 0.2 % of its orbit radius. All times are Julian Dates in TDB; jdFromDate() converts a
+// within 0.25 % of its orbit radius (Titania is the worst; most are within 0.06 %). All times are
+// Julian Dates in TDB; jdFromDate() converts a
 // JavaScript Date (UTC) with ERFA's leap seconds. TT is used for TDB: they differ by < 2 ms.
 //
 // Outside its range a table is not extrapolated: the time is clamped to the nearest end, and

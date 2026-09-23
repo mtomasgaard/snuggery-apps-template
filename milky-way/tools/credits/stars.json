@@ -1,0 +1,98 @@
+[
+ {
+  "accuracy": "Distances are 1/parallax with no prior (Gaia DR3 for 98% of rows). Positions are J2000.0, J1991.25 for a few Hipparcos-only stars. The Gaia parallaxes inside AT-HYG come from ESA/Gaia/DPAC, whose own licence could not be read from this network: a downloaded third-party package states CC BY-SA 3.0 IGO, Celestia and celestia-gaia-stardb files state CC BY-NC 3.0 IGO, and the AWS registry says \"Attribution required\". Treat the Gaia-derived values as non-commercial until confirmed. AT-HYG's ACKNOWLEDGMENTS omit SIMBAD and Tycho-2 although its build notes use both; they are credited here.",
+  "adaptations": "Positions converted to ICRS Cartesian parsecs from ra/dec/dist; V derived from Tycho VT as V = VT - 0.090 (BT-VT) (the formula in AT-HYG's own build notes) for 209908 rows; absolute magnitudes recomputed as V + 5 - 5 log10 d without extinction correction; colours turned into display temperatures; 209156 stars within 500 pc with parallax/error > 10 packed into deep.bin (pc x 64 in int16, M_V in 0.1 mag steps). The shipped files stay under CC BY-SA 4.0.",
+  "id": "athyg",
+  "licence": "CC BY-SA 4.0",
+  "licence_quote": "\"This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].\" (LICENSE)",
+  "owner": "David Nash (astronexus)",
+  "retrieved": "2026-09-23",
+  "source": "Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA 1997; van Leeuwen 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, through gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, the Gliese & Jahreiss 1991 nearby-star catalogue, the Tycho-2 Spectral Type Catalog (Wright et al. 2003) and SIMBAD cross-identifications.",
+  "title": "AT-HYG v3.2 (Augmented Tycho-HYG), subsets athyg_32_reduced_m10 and athyg_32_hyg_ids",
+  "url": "https://github.com/astronexus/ATHYG-Database/tree/650346e2bc57f664eb411bc5f44ffd94b8006af2"
+ },
+ {
+  "accuracy": "Gliese 1991 distances are often photometric: for Gliese-only stars within 20 pc that AT-HYG matched to Gaia DR3, 72% agree within 20% and 5% are off by more than a factor of two (measured on these files).",
+  "adaptations": "Used for the 661 HYG rows AT-HYG does not carry: Gliese companions (placed at their primary's AT-HYG distance along their own direction, flag bit 2) and Gliese-only stars (at their Gliese 1991 distance, flag bit 6); spectral types filled for 971 and B-V for 0 AT-HYG rows that had none; HIP 55203 (xi UMa, deleted in HYG v3.5) mapped to HYG's xi UMa A.",
+  "id": "hyg",
+  "licence": "CC BY-SA 4.0",
+  "licence_quote": "\"The licensing for HYG v4.0 is Creative Commons CC BY-SA 4.0, unlike previous versions of the HYG catalog.\" (hyg/version-info.md)",
+  "owner": "David Nash (astronexus)",
+  "retrieved": "2026-09-23",
+  "source": "Hipparcos (ESA 1997, 2007 new reduction), Yale Bright Star Catalog 5th ed. (Hoffleit 1991), Gliese & Jahreiss 1991 (CNS3 preliminary); IAU WGSN names.",
+  "title": "HYG database v4.1 (hygdata_v41.csv)",
+  "url": "https://github.com/astronexus/HYG-Database/tree/c7f7f883fe678cc7680169a50ccd7dcc49b060ce"
+ },
+ {
+  "accuracy": "Parallax quantised to 0.02 mas; the catalogue author calls the files experimental.",
+  "adaptations": "Nothing shipped. Each AT-HYG star was joined by Gaia DR3 id or HIP number to read its parallax error. The error qualifies AT-HYG's distance only when both come from the same Gaia DR3 source (332286 rows) or when Stellarium's parallax agrees with it within 3 sigma (1733 rows).",
+  "id": "stellarium-hipgaia3",
+  "licence": "No data licence stated; the files ship in a GPL-2.0-or-later source tree",
+  "licence_quote": "COPYING: \"GNU GENERAL PUBLIC LICENSE Version 2, June 1991\"; no data-specific notice.",
+  "owner": "Stellarium team; catalogues built by Henry Leung (henrysky/stellarium_star_catalogs)",
+  "retrieved": "2026-09-23",
+  "source": "Gaia DR3 (ESA/Gaia/DPAC) and Hipparcos/XHIP values via SIMBAD",
+  "title": "Stellarium v26.2 hip_gaia3 star catalogues 0-3 (build-time filter only)",
+  "url": "https://github.com/Stellarium/stellarium/tree/2b10b1a3bb534eb4e7586751054bf67b36c22e53/stars/hip_gaia3"
+ },
+ {
+  "accuracy": "Figures are a drawing convention, not a measurement; IAU constellations are defined by their boundaries.",
+  "adaptations": "752 unique figure segments resolved to named rows (30 touch a star with no usable parallax and are kept only for the sky view); 525 IAU names attached.",
+  "id": "stellarium-modern-iau",
+  "licence": "CC BY-SA 4.0",
+  "licence_quote": "description.md, \"## License\": \"CC BY-SA 4.0\"",
+  "owner": "Stellarium's team",
+  "retrieved": "2026-09-23",
+  "source": "Constellation figures from the IAU \"The Constellations\" pages (Sky & Telescope: Roger Sinnott, Rick Fienberg, Alan MacRobert); star names from the IAU Catalog of Star Names (IAU WGSN).",
+  "title": "Stellarium v26.2 sky culture \"modern_iau\"",
+  "url": "https://github.com/Stellarium/stellarium/tree/2b10b1a3bb534eb4e7586751054bf67b36c22e53/skycultures/modern_iau"
+ },
+ {
+  "accuracy": "Catalogue as of the pinned commit; not complete (e.g. no planet listed for Barnard's Star; eps Eridani b is \"Controversial\" and so not shown).",
+  "adaptations": "Planets with list \"Confirmed planets\" only (1255 planets on 889 named rows); hosts joined to AT-HYG/HYG by identifier (828) or position (36); 167 hosts placed from the catalogue's own coordinates and distance.",
+  "id": "oec",
+  "licence": "MIT",
+  "licence_quote": "\"The database is licensed under an MIT license (see below), which basically says you can do everything with it.\" (README.md)",
+  "owner": "Hanno Rein and contributors",
+  "retrieved": "2026-09-23",
+  "source": "Community-curated compilation (Rein 2012, arXiv:1211.7121); recent entries imported from the NASA Exoplanet Archive.",
+  "title": "Open Exoplanet Catalogue",
+  "url": "https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue/tree/77ab86906b5b9cade8ebff60bef6aff3dfee3206"
+ },
+ {
+  "accuracy": "Dwarf sequence applied to all luminosity classes; display use only.",
+  "adaptations": "Bt-Vt and spectral-type columns interpolated to effective temperature for display colours; only the derived colour table ships.",
+  "id": "mamajek",
+  "licence": "No licence stated on the table (MeanStars code: BSD-3-Clause)",
+  "licence_quote": "\"that reference should be cited until an updated version of the table is published\" (file header)",
+  "owner": "Eric Mamajek",
+  "retrieved": "2026-09-23",
+  "source": "Pecaut & Mamajek 2013, ApJS 208, 9 (Table 5); copy bundled in the MeanStars 3.6.1 wheel (PyPI)",
+  "title": "A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence, v2022.04.16",
+  "url": "https://pypi.org/project/MeanStars/3.6.1/"
+ },
+ {
+  "accuracy": "Blackbody-based model; underestimates hot stars (B-V -0.2 gives ~13,600 K).",
+  "adaptations": "T = T0 (1/(a BV + b) + 1/(a BV + c)) with {'a': 0.92, 'b': 1.7, 'c': 0.62, 'T0': 4600.0}; a model, labelled as one.",
+  "id": "ballesteros",
+  "licence": "MIT (PyAstronomy)",
+  "licence_quote": "PyAstronomy 0.25.0 METADATA: \"License: MIT\"",
+  "owner": "F. J. Ballesteros; coefficients as coded in PyAstronomy 0.25.0 (MIT)",
+  "retrieved": "2026-09-23",
+  "source": "PyAstronomy/pyasl/asl/aslExt_1/ballesterosBV_T.py",
+  "title": "B-V to effective temperature relation (Ballesteros 2012, EPL 97, 34008)",
+  "url": "https://pypi.org/project/PyAstronomy/0.25.0/"
+ },
+ {
+  "accuracy": "Chromaticity of an ideal blackbody; real stellar spectra differ, especially for M stars.",
+  "adaptations": "Planck spectra integrated against the CMFs, converted with the IEC 61966-2-1 sRGB matrix, normalised to the largest channel.",
+  "id": "cie1931",
+  "licence": "Standard reference data; colour-science BSD-3-Clause",
+  "licence_quote": "colour-science LICENSE: \"Redistribution and use in source and binary forms, with or without modification, are permitted...\"",
+  "owner": "CIE (tabulated by CVRL), via colour-science 0.4.6 (BSD-3-Clause)",
+  "retrieved": "2026-09-23",
+  "source": "colour/colorimetry/datasets/cmfs.py",
+  "title": "CIE 1931 2-degree standard observer colour-matching functions",
+  "url": "https://pypi.org/project/colour-science/0.4.6/"
+ }
+]

@@ -267,7 +267,7 @@ def main():
                  'JPL ephemeris, not the ephemeris itself.'),
     }
     common.write_bin('moons.bin', bytes(blob))
-    common.write_json('moons.json', manifest, ndigits=12)
+    common.write_json('moons.json', manifest, ndigits=30)
     with open(os.path.join(CACHE, 'solar', 'ref_moons.json'), 'w') as fh:
         json.dump(ref, fh)
     print(f'moons.bin {len(blob)} bytes, {sum(m["nwin"] for m in moons)} windows, '

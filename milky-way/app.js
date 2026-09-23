@@ -33,7 +33,7 @@ import { SolarSystem } from './js/solar.js';
 import { Stars } from './js/stars.js';
 import { Galaxy } from './js/galaxy.js';
 import { Labels } from './js/labels.js';
-import { loadTexture } from './js/gfx.js';
+import { loadTexture, lineUniforms } from './js/gfx.js';
 
 const DATA = 'data/';
 
@@ -74,6 +74,9 @@ const labels = new Labels($('labels'), (id) => select(id, true));
 
 let eph, rotation, phys, small, solar, stars, galaxy, textures, about, skyMeta;
 let pose = null, pxPerRad = 1, W = 1, H = 1;
+// While the info card covers the bottom of a phone screen, the view is shifted up so the selected
+// object stays in sight (a camera view offset; labels and taps use the same shift).
+let shiftY = 0;
 
 // ---------------------------------------------------------------- loading
 const progress = (f, msg) => { $('load-bar').style.width = `${Math.round(f * 100)}%`; if (msg) $('load-msg').textContent = msg; };
@@ -88,7 +91,7 @@ async function load() {
   progress(0.02, 'Reading the ephemeris…');
   phys = await getJSON(DATA + 'physical.json');
   if (Math.abs(phys.constants.au_km - AU_KM) > 1e-3) throw new Error('physical.json: astronomical unit does not match the app');
-  eph = await EPH.loadEphemeris(DATA);
+  eph = await EPH.loadEphemeris(DATA, phys);
   rotation = await ROT.loadRotation(DATA, phys);
   progress(0.14, 'Reading asteroid and comet orbits…');
   small = await SB.loadSmallBodies(DATA);
@@ -181,9 +184,9 @@ function arrivalDist(id) {
   if (solar.bodies.has(id)) {
     const b = solar.bodies.get(id);
     const r = b.radiusKm / AU_KM;
-    if (id === 'sun') return r * 9;
-    if (id === 'saturn') return r * 7;
-    return r * (b.kind === 'moon' ? 5 : 5.5);
+    if (id === 'sun') return r * 12;
+    if (id === 'saturn') return r * 9;
+    return r * 9;
   }
   const kind = id.split(':')[0];
   if (kind === 'sb') return 0.04;
@@ -216,7 +219,7 @@ function elevated(upVec, elevDeg, refDir) {
   return vnorm([], vadd([], vscale([], h, Math.cos(elevDeg * DEG)), vscale([], upVec, Math.sin(elevDeg * DEG))));
 }
 function goScale(scale) {
-  if (scale === 'solar') flyTo('sun', 16, elevated(rig.eclUp, 34, rig.dir));
+  if (scale === 'solar') flyTo('sun', 7.5, elevated(rig.eclUp, 48, rig.dir));
   else if (scale === 'stars') flyTo('sun', 14 * PC_AU, elevated(rig.galUp, 24, rig.dir));
   else if (scale === 'galaxy') {
     const sunG = galaxy.toAU(galaxy.sun), gc = galaxy.toAU([0, 0, 0]);
@@ -277,7 +280,7 @@ function project(p, out) {
   if (z <= 0) return null;
   const x = v0 * pose.right[0] + v1 * pose.right[1] + v2 * pose.right[2];
   const y = v0 * pose.up[0] + v1 * pose.up[1] + v2 * pose.up[2];
-  out.x = W / 2 + (x / z) * pxPerRad; out.y = H / 2 - (y / z) * pxPerRad; out.z = z;
+  out.x = W / 2 + (x / z) * pxPerRad; out.y = H / 2 - shiftY - (y / z) * pxPerRad; out.z = z;
   return out;
 }
 
@@ -290,6 +293,8 @@ function resize() {
   renderer.setSize(W, H, false);
   for (const c of Object.values(cams)) { c.aspect = W / Math.max(H, 1); c.fov = rig.fov / DEG; c.updateProjectionMatrix(); }
   pxPerRad = (H / 2) / Math.tan(rig.fov / 2);
+  const pr = renderer.getPixelRatio();
+  lineUniforms.uRes.value.set(W * pr, H * pr); lineUniforms.uPx.value = pr;
   document.documentElement.style.setProperty('--dock-h', `${$('dock').offsetHeight}px`);
   invalidate();
 }
@@ -299,6 +304,9 @@ function frameLoop(t) {
   queued = false;
   const dt = lastT ? Math.min(t - lastT, 100) : 16; lastT = t;
   let moving = rig.step(dt);
+  const card = $('card');
+  const wantShift = !card.hidden && W < 760 ? Math.min(card.offsetHeight / 2 + 8, H * 0.24) : 0;
+  if (Math.abs(wantShift - shiftY) > 0.5) { shiftY += (wantShift - shiftY) * Math.min(1, dt / 90); moving = true; } else shiftY = wantShift;
   if (S.playing) {
     const next = S.jd + SPEEDS[S.speed].days * dt / 1000;
     if (next >= eph.range.jdEnd - 0.5) { S.playing = false; }
@@ -339,6 +347,10 @@ function draw() {
   cs.position.set((pose.pos[0] - origin[0]) * s, (pose.pos[1] - origin[1]) * s, (pose.pos[2] - origin[2]) * s);
   cs.up.set(pose.up[0], pose.up[1], pose.up[2]); cs.lookAt(0, 0, 0); cs.updateMatrixWorld(true);
 
+  for (const c of Object.values(cams)) {
+    if (shiftY > 0.5) c.setViewOffset(W, H, 0, shiftY, W, H); else if (c.view && c.view.enabled) c.clearViewOffset();
+  }
+
   // --- stars (pc) and galaxy (kpc)
   placeCamera(cams.stars, pose.pos, pose.target, pose.up, PC_AU);
   placeCamera(cams.galaxy, pose.pos, pose.target, pose.up, KPC_AU);
@@ -362,10 +374,10 @@ function draw() {
 const _p = { x: 0, y: 0, z: 0 };
 function gatherLabels(jd, dSun) {
   candidates = [];
-  const push = (id, text, p, pri, colour, cls, extra) => {
+  const push = (id, text, p, pri, colour, cls, dy = 0, dx = 0) => {
     const q = project(p, { x: 0, y: 0, z: 0 });
     if (!q) return;
-    candidates.push({ id, text, x: q.x, y: q.y, pri: id === S.selected ? 1000 : pri, colour, cls, ...extra });
+    candidates.push({ id, text, x: q.x + dx, y: q.y + dy, pri: id === S.selected ? 1000 : pri, colour, cls });
   };
   const L = S.layers;
   const solarPx = pxPerRad * 40 / Math.max(dSun, 1e-9);        // how big 40 AU looks from here
@@ -375,8 +387,11 @@ function gatherLabels(jd, dSun) {
     if (b.kind === 'moon' && (!L.moons || (b.sepPx || 0) < 16)) continue;       // would sit on its planet
     if (b.key === 'sun' && galaxy.fade > 0.25) continue;                        // the galaxy layer labels it
     if (b.key !== 'sun' && solarPx < (b.kind === 'planet' || b.kind === 'dwarf' ? 18 : 60)) continue;
-    const pri = b.key === 'sun' ? 100 : b.kind === 'planet' ? 90 : b.kind === 'dwarf' ? 70 : 55;
-    push(b.key, b.name, b.pos, pri, b.ui, b.kind === 'moon' ? 'minor' : '');
+    const pri = b.key === 'sun' ? 100 : b.key === 'earth' ? 96 : b.kind === 'planet' ? 90 : b.kind === 'dwarf' ? 70 : 55;
+    // A globe more than a few pixels across gets its label above the disc, not across it.
+    // The Sun's label steps aside so its glow shows.
+    const dx = b.key === 'sun' && b.px <= 10 ? 16 : 0;
+    push(b.key, b.name, b.pos, pri, b.ui, b.kind === 'moon' ? 'minor' : '', b.px > 10 ? -(b.px + 14) : 0, dx);
   }
   if (L.small && small && solarPx > 40) {
     for (const i of small.labelled || []) {
@@ -390,17 +405,20 @@ function gatherLabels(jd, dSun) {
     const maxN = dSun < 2e4 ? 10 : dSun < 1e8 ? 26 : 0;
     let n = 0;
     if (maxN) {
-      const best = [];
+      // The brightest stars as seen from the camera, among those actually on screen.
+      const best = [], q = { x: 0, y: 0, z: 0 }, p = [0, 0, 0];
+      const inSolar = dSun < 2e4;
       for (const k of stars.labelOrder) {
-        if (!stars.named.name[k] && dSun < 2e4) continue;
-        const m = stars.apparentMag(k, camPc);
-        best.push([m, k]);
+        if (inSolar && (!stars.named.name[k] || stars.named.vmag[k] > 1.5)) continue;   // from among the planets, only the brightest
+        p[0] = stars.namedAU[k * 3]; p[1] = stars.namedAU[k * 3 + 1]; p[2] = stars.namedAU[k * 3 + 2];
+        if (!project(p, q) || q.x < 0 || q.x > W || q.y < 0 || q.y > H) continue;
+        best.push([stars.apparentMag(k, camPc), k]);
       }
       best.sort((a, b) => a[0] - b[0]);
       for (const [m, k] of best) {
         if (n >= maxN) break;
-        const p = [stars.namedAU[k * 3], stars.namedAU[k * 3 + 1], stars.namedAU[k * 3 + 2]];
-        push(`star:${k}`, stars.label(k), p, 30 - m, '#bcd4ff', m < 1.5 ? '' : 'minor');
+        const pp = [stars.namedAU[k * 3], stars.namedAU[k * 3 + 1], stars.namedAU[k * 3 + 2]];
+        push(`star:${k}`, stars.label(k), pp, 30 - m, '#bcd4ff', inSolar ? 'faint' : m < 1.5 ? '' : 'minor');
         n++;
       }
     }
@@ -417,7 +435,11 @@ function gatherLabels(jd, dSun) {
     const fn = positionFn(S.selected);
     if (fn) push(S.selected, nameOf(S.selected), fn(jd), 1000, '#f2c56f', '');
   }
+  // Keep labels off the title, the round buttons, the dock and the card.
   const reserved = [];
+  const box = (el) => { if (!el || el.hidden) return; const r = el.getBoundingClientRect(); if (r.width) reserved.push([r.left, r.top, r.right, r.bottom]); };
+  box(document.querySelector('#head .title')); box(document.querySelector('#head .head-actions'));
+  box($('dock')); box($('card')); box($('hud'));
   labels.selected = S.selected;
   labels.update(L.labels ? candidates : candidates.filter((c) => c.id === S.selected), W, H, reserved);
 }
@@ -508,7 +530,7 @@ function facts(id) {
       if (Number.isFinite(n.vmag[i])) add('Brightness from Earth', `V ${fmt(n.vmag[i], 2)}`);
       if (Number.isFinite(n.absmag[i])) add('Absolute magnitude', `${fmt(n.absmag[i], 2)}`);
       if (n.spect[i]) add('Spectral type', n.spect[i]);
-      add('Distance from', n.dist_src[i]);
+      add('Distance from', stars.distSource(i));
       const pl = stars.exo[i];
       if (pl && pl.length) out.planets = pl;
       if (n.flags[i] & 4) out.note = 'A companion placed at its primary star’s distance.';
@@ -718,7 +740,7 @@ function restoreCamera() {
     const p = c.point.slice(); rig.setTarget('point', () => p); rig.dist = c.dist; rig.dir = vnorm([], c.dir);
   } else {
     rig.setTarget('sun', positionFn('sun'), minDistOf('sun'));
-    rig.dist = 11; rig.dir = elevated(rig.eclUp, 32, [0.35, -0.9, 0.2]);
+    rig.dist = 7.5; rig.dir = elevated(rig.eclUp, 48, [0.35, -0.9, 0.2]);
   }
 }
 
@@ -738,6 +760,8 @@ function restoreCamera() {
   window.__mw = {
     rig, S, select, flyTo, goScale, setJd, invalidate,
     edgeDir: () => elevated(rig.galUp, 5, vnorm([], vsub([], galaxy.toAU([0, 10, 0]), galaxy.toAU([0, 0, 0])))),
+    candidates: () => candidates.map((c) => ({ id: c.id, x: Math.round(c.x), y: Math.round(c.y), pri: c.pri })),
+    placed: () => labels.placed.map((p) => p.id),
     stats: () => ({ ...renderer.info.render, programs: renderer.info.programs.length, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }),
   };
 })();

@@ -1,0 +1,85 @@
+{
+ "absmag": {
+  "M_V": "code / 10 - 8",
+  "max": 17.5,
+  "min": -8.0,
+  "note": "V + 5 - 5 log10(d_pc); no extinction correction"
+ },
+ "colour": "index into stars/colour.json (255 = no colour measurement)",
+ "colour_src_counts": {
+  "B-V via Ballesteros 2012 (model)": 78936,
+  "BT-VT beyond the Mamajek table, clamped to its reddest entry": 421,
+  "BT-VT via Mamajek table": 120776,
+  "Open Exoplanet Catalogue Teff": 0,
+  "none": 906,
+  "spectral type via Mamajek table": 8117
+ },
+ "count": 209156,
+ "dist_src_counts": {
+  "Gaia DR2": 9,
+  "Gaia DR3": 208759,
+  "Gliese 1991": 0,
+  "Hipparcos 2007": 388
+ },
+ "fields": [
+  {
+   "name": "x",
+   "offset": 0,
+   "type": "int16"
+  },
+  {
+   "name": "y",
+   "offset": 2,
+   "type": "int16"
+  },
+  {
+   "name": "z",
+   "offset": 4,
+   "type": "int16"
+  },
+  {
+   "name": "absmag_code",
+   "offset": 6,
+   "type": "uint8"
+  },
+  {
+   "name": "colour_code",
+   "offset": 7,
+   "type": "uint8"
+  }
+ ],
+ "frame": "ICRS, heliocentric; x -> RA 0 Dec 0, z -> north celestial pole",
+ "mv_prefix": {
+  "-1": 1015,
+  "-2": 0,
+  "-3": 0,
+  "-4": 0,
+  "-5": 0,
+  "-6": 0,
+  "-7": 0,
+  "-8": 0,
+  "0": 8746,
+  "1": 47759,
+  "10": 209118,
+  "11": 209155,
+  "12": 209156,
+  "13": 209156,
+  "14": 209156,
+  "15": 209156,
+  "16": 209156,
+  "17": 209156,
+  "2": 102117,
+  "3": 149419,
+  "4": 186899,
+  "5": 202473,
+  "6": 207293,
+  "7": 208490,
+  "8": 208795,
+  "9": 208993
+ },
+ "order": "absmag_code ascending (intrinsically brightest first), then distance, then AT-HYG id; the first mv_prefix[k] records are every star with M_V <= k",
+ "quantisation_pc": 0.015625,
+ "record_bytes": 8,
+ "selection": "AT-HYG v3.2 m10 subset, distance <= 500 pc, parallax/error > 10 where a Stellarium per-star error applies to the shipped distance; every star in named.json removed",
+ "units_per_pc": 64
+}

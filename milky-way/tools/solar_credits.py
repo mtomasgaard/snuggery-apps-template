@@ -68,8 +68,9 @@ def write():
     blocks = [{
         'id': 'jpl-de430',
         'title': 'JPL DE430 planetary and lunar ephemeris (de430.bsp)',
-        'owner': 'NASA Jet Propulsion Laboratory, Solar System Dynamics (W. M. Folkner, J. G. '
-                 'Williams, D. H. Boggs, R. S. Park, P. Kuchynka; IPN Progress Report 42-196, 2014)',
+        'owner': 'NASA Jet Propulsion Laboratory, Solar System Dynamics (W. M. Folkner et al., '
+                 'IPN Progress Report 42-196, 2014); the SPK\'s comment block is by C. Acton '
+                 '(NAIF), 2013-09-03',
         'source': 'de430.bsp, ' + MIRROR + '; sha256 ' + S.SPK['de430'][2],
         'url': S.SPK['de430'][0],
         'licence': NAIF_TERMS,
@@ -125,8 +126,10 @@ def write():
                         'N0067 (spiceypy 8.2.0). Derived: obliquity against the osculating J2000 '
                         'orbit and the sidereal period from the prime-meridian rate. Also used for '
                         'the moons\' fit frames (planet spin axes at J2000).'),
-        'accuracy': 'Constants copied exactly. js/rotation.js matches CSPICE pxform to the figures '
-                    'printed by tools/test_rotation.mjs.',
+        'accuracy': 'Constants copied exactly (compared with the CSPICE kernel pool by '
+                    'verify_solar.py). The body-fixed frames built from physical.json by '
+                    'js/rotation.js are checked against CSPICE pxform(\'J2000\', \'IAU_<BODY>\') for '
+                    '30 bodies at 7 epochs 1950-2100 (tools/test_rotation.mjs, limit 0.001 arcsec).',
     }, {
         'id': 'naif-gm-de440',
         'title': 'gm_de440.tpc (GM of the Sun, planets and satellites)',
@@ -172,9 +175,8 @@ def write():
     }, {
         'id': 'pds-rms-uranus-rings',
         'title': 'Uranian ring elements (PDS Ring-Moon Systems Node constants, French et al. 1991)',
-        'owner': 'PDS Ring-Moon Systems Node, SETI Institute (rms-oops); values adapted from French, '
-                 'R. G. et al. 1991, "Dynamics and structure of the Uranian rings", in Uranus '
-                 '(University of Arizona Press)',
+        'owner': 'PDS Ring-Moon Systems Node, SETI Institute (rms-oops); values adapted, per the '
+                 'source, from the tabulated elements of French et al. 1991',
         'source': 'SETI/rms-oops src/oops/body.py at commit ' + S.RMS_OOPS[1] + ', sha256 '
                   + S.RMS_OOPS_BODY[2],
         'url': f'https://raw.githubusercontent.com/SETI/rms-oops/{S.RMS_OOPS[1]}/{S.RMS_OOPS_BODY[0]}',

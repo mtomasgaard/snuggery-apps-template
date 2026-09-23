@@ -264,7 +264,7 @@ def main():
         'sources': ['pck00011.tpc', 'gm_de440.tpc', 'sat425.bsp', 'rms-oops body.py',
                     'pyerfa-2.0.1.5 (ERFA)', 'astropy 7.1.0 iau2012.py', 'de430.bsp'],
     }
-    common.write_json('physical.json', out, ndigits=12)
+    common.write_json('physical.json', out, ndigits=30)
     size = os.path.getsize(os.path.join(DATA, 'physical.json'))
     print(f'physical.json {size} bytes, {len(bodies)} bodies, {len(leaps)} leap-second rows '
           f'(of {n_dat_rows} in dat.c), au {au_km} km, k {k_gauss:.13f}, eps0 {eps0}"')

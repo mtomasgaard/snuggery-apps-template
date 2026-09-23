@@ -22,9 +22,21 @@ const only = new Set(process.argv.slice(3));
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
   '.jpg': 'image/jpeg', '.png': 'image/png', '.bin': 'application/octet-stream', '.woff2': 'font/woff2', '.txt': 'text/plain' };
+// STUB=1 serves empty stand-ins for files a pipeline step has not written yet, so the parts that do
+// exist can be tested early. Test-only: nothing here is ever written into data/.
+const PNG_1PX = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAAAAADRSSBWAAAAC0lEQVR4nGNgYAAAAAMAAbitOmMAAAAASUVORK5CYII=', 'base64');
+const STUBS = {
+  '/js/smallbodies.js': ['text/javascript', "export async function loadSmallBodies() { return { count: 0, labelled: [], kind: () => 'other', name: () => '', positionsAt() {}, orbitPath: () => new Float32Array(3) }; }"],
+  '/data/tex/textures.json': ['application/json', '{"bodies":{},"colours":{}}'],
+  '/data/sky/sky.json': ['application/json', '{"file":"stub.png"}'],
+  '/data/sky/stub.png': ['image/png', PNG_1PX],
+  '/data/galaxy/galaxy.json': ['application/json', '{"frame":{"to_icrs":[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]],"sun_kpc":[-8,0,0],"r0_kpc":8,"refs":[]},"arms_reid2019":[],"arms_drimmel2024":[],"globulars":[],"satellites":[],"streams":[]}'],
+};
+const stubbed = new Set();
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   let f = path.join(APP, u === '/' ? 'index.html' : u);
+  if (process.env.STUB && STUBS[u] && !fs.existsSync(f)) { stubbed.add(u); res.writeHead(200, { 'content-type': STUBS[u][0] }); res.end(STUBS[u][1]); return; }
   if (!f.startsWith(APP) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(res);
@@ -43,6 +55,7 @@ const errors = [];
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text()}`); });
 page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
 page.on('requestfailed', (r) => errors.push(`requestfailed: ${r.url()}`));
+page.on('response', (r) => { if (r.status() >= 400 && !(process.env.STUB && r.url().endsWith('/about.json'))) errors.push(`HTTP ${r.status()}: ${r.url()}`); });
 page.on('request', (r) => { if (!r.url().startsWith(`http://127.0.0.1:${port}/`) && !r.url().startsWith('data:') && !r.url().startsWith('blob:')) errors.push(`EXTERNAL REQUEST: ${r.url()}`); });
 
 const t0 = Date.now();
@@ -79,6 +92,7 @@ const scenes = {
   orion: async () => { await page.evaluate(() => window.__mw.flyTo('sun', 206265 * 60)); await settle(); await shot('stars-60pc'); },
   galaxy: async () => { await page.evaluate(() => window.__mw.goScale('galaxy')); await settle(); await shot('galaxy'); },
   edge: async () => { await page.evaluate(() => { const m = window.__mw; m.flyTo('gal:centre', 206265e3 * 30, m.edgeDir()); }); await settle(); await shot('galaxy-edge'); },
+  debug: async () => { await page.evaluate(() => window.__mw.goScale('solar')); await settle(); console.log(JSON.stringify(await page.evaluate(() => ({ c: window.__mw.candidates().filter((c) => c.pri > 50), placed: window.__mw.placed() })))); },
   search: async () => { await page.evaluate(() => { document.getElementById('btn-search').click(); }); await page.fill('#search-q', 'sirius'); await page.waitForTimeout(300); await shot('search'); await page.evaluate(() => document.querySelector('[data-close]').click()); },
 };
 for (const [name, fn] of Object.entries(scenes)) {
@@ -91,5 +105,6 @@ const stats = await page.evaluate(() => window.__mw && window.__mw.stats ? windo
 if (stats) console.log('render stats:', JSON.stringify(stats));
 await browser.close();
 server.close();
+if (stubbed.size) console.log('STUBBED (not yet built):', [...stubbed].join(', '));
 if (errors.length) { console.log('ERRORS:\n' + errors.join('\n')); process.exit(2); }
 console.log('no console errors');

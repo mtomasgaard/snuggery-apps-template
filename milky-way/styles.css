@@ -60,6 +60,7 @@ h1, h2, p { margin: 0; }
 .lbl i { width: 6px; height: 6px; border-radius: 50%; background: var(--c, var(--ink)); flex: 0 0 auto; box-shadow: 0 0 6px var(--c, transparent); }
 .lbl.minor { font-weight: 400; font-size: 10.5px; color: #cdd4dd; background: rgba(8, 11, 17, .42); }
 .lbl.faint { font-weight: 400; font-size: 10px; color: var(--muted); background: transparent; border-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; text-shadow: 0 0 4px #000, 0 0 8px #000; }
+.lbl.left { flex-direction: row-reverse; padding: 3px 5px 3px 6px; }
 .lbl.sel { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .lbl.sel i { background: var(--accent-ink); box-shadow: none; }
 

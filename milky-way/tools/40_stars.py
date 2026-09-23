@@ -58,7 +58,7 @@ import numpy as np
 import pyarrow as pa
 import pyarrow.csv as pacsv
 
-from common import RETRIEVED, fetch, git_file, sha256_of, write_bin, write_json
+from common import RETRIEVED, fetch, sha256_of, write_bin, write_json
 from paths import CACHE, DATA, SEED, TOOLS
 
 # --------------------------------------------------------------------------------------------
@@ -76,61 +76,61 @@ OEC_SYSTEMS_TREE = 'bf4eae34598b941edbdc77396eb028bb83d6d293'      # git tree id
 OEC_SYSTEMS_SHA256 = '370ce48f2851f2dff7556ed7ee8a4c9c9064f56d969471c2b868e4d5b436e44a'
 OEC_README_SHA256 = 'a7470a832cad51bc98a2fc9bd6935284e097d345bb9eec038975ad32484be6b0'
 
-GIT_FILES = {   # key: (repo, commit, path, cache name, sha256)
+GIT_FILES = {   # key: (repo, commit, path, cache name, sha256, bytes)
     'athyg_m10': (ATHYG_REPO, ATHYG_COMMIT, 'data/subsets/athyg_32_reduced_m10.csv.gz',
                   'stars/athyg_32_reduced_m10.csv.gz',
-                  '1047d395fcd6a2298ededaf5815fbd53448d178fd3d4fcb1f98f95072f63ea4f'),
+                  '1047d395fcd6a2298ededaf5815fbd53448d178fd3d4fcb1f98f95072f63ea4f', 27940364),
     'athyg_hygids': (ATHYG_REPO, ATHYG_COMMIT, 'data/subsets/athyg_32_hyg_ids.csv.gz',
                      'stars/athyg_32_hyg_ids.csv.gz',
-                     'd1dd88f8dd46efffc4ee8a971313ae660f70f876ca54de1c58b9e21878dde372'),
+                     'd1dd88f8dd46efffc4ee8a971313ae660f70f876ca54de1c58b9e21878dde372', 10673502),
     'athyg_license': (ATHYG_REPO, ATHYG_COMMIT, 'LICENSE', 'stars/athyg_LICENSE',
-                      'f404190403d31e0ce7223f4cb7af954485ad88077358330754dc5c892a856627'),
+                      'f404190403d31e0ce7223f4cb7af954485ad88077358330754dc5c892a856627', 422),
     'athyg_ack': (ATHYG_REPO, ATHYG_COMMIT, 'ACKNOWLEDGMENTS.md', 'stars/athyg_ACKNOWLEDGMENTS.md',
-                  '595d3f36dec582247b237448035e8aa4c9c8ab7b022912831338990846e84abb'),
+                  '595d3f36dec582247b237448035e8aa4c9c8ab7b022912831338990846e84abb', 1124),
     'athyg_v1builds': (ATHYG_REPO, ATHYG_COMMIT, 'data/details/v1_builds.md',
                        'stars/athyg_v1_builds.md',
-                       '51ff6109cf4e71fd3a7447d2ff8acbd66af435a6c2a43b2aea890d77b297dab2'),
+                       '51ff6109cf4e71fd3a7447d2ff8acbd66af435a6c2a43b2aea890d77b297dab2', 15910),
     'hyg': (HYG_REPO, HYG_COMMIT, 'hyg/CURRENT/hygdata_v41.csv', 'stars/hygdata_v41.csv',
-            'd9f69fd86bbf90a4e4d52b4c5c53eacfa6dfc0bfdef85bfd94f095e0bebe4ebd'),
+            'd9f69fd86bbf90a4e4d52b4c5c53eacfa6dfc0bfdef85bfd94f095e0bebe4ebd', 33932548),
     'hyg_license': (HYG_REPO, HYG_COMMIT, 'hyg/CURRENT/LICENSE', 'stars/hyg_LICENSE',
-                    'f404190403d31e0ce7223f4cb7af954485ad88077358330754dc5c892a856627'),
+                    'f404190403d31e0ce7223f4cb7af954485ad88077358330754dc5c892a856627', 422),
     'hyg_versioninfo': (HYG_REPO, HYG_COMMIT, 'hyg/version-info.md', 'stars/hyg_version-info.md',
-                        'b7c87b3730b2f225793f5835e9afab8e548ae9dc04969a671eb43b1ef90bb394'),
+                        'b7c87b3730b2f225793f5835e9afab8e548ae9dc04969a671eb43b1ef90bb394', 19933),
     'stel0': (STEL_REPO, STEL_COMMIT, 'stars/hip_gaia3/stars_0_0v0_21.cat',
               'stars/stellarium/stars_0_0v0_21.cat',
-              '2c9c1f9362ccdced4ed69fcbba2b5bfa175ffd51fda712ad18541724f9f34b69'),
+              '2c9c1f9362ccdced4ed69fcbba2b5bfa175ffd51fda712ad18541724f9f34b69', 242320),
     'stel1': (STEL_REPO, STEL_COMMIT, 'stars/hip_gaia3/stars_1_0v0_16.cat',
               'stars/stellarium/stars_1_0v0_16.cat',
-              '61c906d7cf9f012f039d9cd8ff781522d353ca9610a2830ada5e3e811ee0a8bb'),
+              '61c906d7cf9f012f039d9cd8ff781522d353ca9610a2830ada5e3e811ee0a8bb', 1037728),
     'stel2': (STEL_REPO, STEL_COMMIT, 'stars/hip_gaia3/stars_2_0v0_17.cat',
               'stars/stellarium/stars_2_0v0_17.cat',
-              'c1f417eebb535781fac60fa065c91857c87bb17599f92ed623dd52afcc0aecac'),
+              'c1f417eebb535781fac60fa065c91857c87bb17599f92ed623dd52afcc0aecac', 6804736),
     'stel3': (STEL_REPO, STEL_COMMIT, 'stars/hip_gaia3/stars_3_0v0_10.cat',
               'stars/stellarium/stars_3_0v0_10.cat',
-              '8c4c969e081f3e454e4f0245d2d7d9cdcfa0211c87a87fe26cd57c186fc93fe5'),
+              '8c4c969e081f3e454e4f0245d2d7d9cdcfa0211c87a87fe26cd57c186fc93fe5', 20075344),
     'stel_copying': (STEL_REPO, STEL_COMMIT, 'COPYING', 'stars/stellarium/COPYING',
-                     '3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259'),
+                     '3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259', 17992),
     'iau_index': (STEL_REPO, STEL_COMMIT, 'skycultures/modern_iau/index.json',
                   'stars/stellarium/modern_iau_index.json',
-                  '2b7aa4fa2860566ea68aca0c0b087ba815aea38a92d1bb9b3c04b6c0758f726b'),
+                  '2b7aa4fa2860566ea68aca0c0b087ba815aea38a92d1bb9b3c04b6c0758f726b', 134936),
     'iau_description': (STEL_REPO, STEL_COMMIT, 'skycultures/modern_iau/description.md',
                         'stars/stellarium/modern_iau_description.md',
-                        '0f762dca0920fc84e35433b21c3c91b5a19a46579ca48ed362e0ba4f5804897c'),
+                        '0f762dca0920fc84e35433b21c3c91b5a19a46579ca48ed362e0ba4f5804897c', 8236),
 }
 
-WHEELS = {   # key: (url, cache name, sha256, member, member sha256)
+WHEELS = {   # key: (url, cache name, sha256, member, member sha256, bytes)
     'pyastronomy': (
         'https://files.pythonhosted.org/packages/f8/3b/6ab024c988306bc86523dfd02cfa53e1f364abd100054d5954eae23c45fe/pyastronomy-0.25.0-py3-none-any.whl',
         'stars/pyastronomy-0.25.0-py3-none-any.whl',
         '8763000b240fdb55d5f61df9551fd1476f7c8fde5a811bdfd30ed9c9fbe6fbbe',
         'PyAstronomy/pyasl/asl/aslExt_1/ballesterosBV_T.py',
-        '262a9bda39417bf2d6007e0e21d549efcc43d73f60634cdad972d8bd14dbd12a'),
+        '262a9bda39417bf2d6007e0e21d549efcc43d73f60634cdad972d8bd14dbd12a', 582994),
     'meanstars': (
         'https://files.pythonhosted.org/packages/f2/0e/abdbf1733e84ad7a3afe53fbfd52d3cf001982f1c129e8ba601876d99b17/meanstars-3.6.1-py3-none-any.whl',
         'stars/meanstars-3.6.1-py3-none-any.whl',
         'ed740c346dcb522742d16eed00c8cd3a14df9157b0d6f7d5cf2bb9ef9538ff67',
         'MeanStars/EEM_dwarf_UBVIJHK_colors_Teff.txt',
-        '5a6e5baa6e1e5bca570cb73e5ffdb8c6b2b28158908d13729cd3fec00b99b510'),
+        '5a6e5baa6e1e5bca570cb73e5ffdb8c6b2b28158908d13729cd3fec00b99b510', 32811),
 }
 
 # colour-science (pinned in requirements.txt) supplies the CIE 1931 2-degree CMFs. Both the source
@@ -189,13 +189,16 @@ def log(*a):
 # Loading
 # --------------------------------------------------------------------------------------------
 def src_path(key):
-    repo, commit, path, name, sha = GIT_FILES[key]
-    return git_file(repo, commit, path, name, sha)
+    """A pinned file from a GitHub repository at a pinned commit. Same URL git_file() builds, but
+    through fetch() with the byte size, so the MILKYWAY_SEED lookup only hashes same-size files."""
+    repo, commit, path, name, sha, size = GIT_FILES[key]
+    slug = repo[len('https://github.com/'):]
+    return fetch(f'https://raw.githubusercontent.com/{slug}/{commit}/{path}', name, sha, size)
 
 
 def wheel_member(key):
-    url, name, sha, member, msha = WHEELS[key]
-    p = fetch(url, name, sha)
+    url, name, sha, member, msha, size = WHEELS[key]
+    p = fetch(url, name, sha, size)
     with zipfile.ZipFile(p) as z:
         b = z.read(member)
     got = hashlib.sha256(b).hexdigest()
@@ -534,7 +537,8 @@ def sig(v, n=4):
 
 
 def round_pos(v, dist):
-    dec = int(max(1, min(5, 5 - math.floor(math.log10(max(dist, 1e-3))))))
+    """Four significant digits of the distance (1e-4 relative, finer than any parallax here)."""
+    dec = int(max(1, min(5, 3 - math.floor(math.log10(max(dist, 1e-3))))))
     return [round(float(x), dec) for x in v]
 
 
@@ -594,149 +598,163 @@ def quality(u, st, j, how):
 
 
 # --------------------------------------------------------------------------------------------
-# Main
+# Stage 1: AT-HYG with the derived columns every later stage uses
 # --------------------------------------------------------------------------------------------
-def main():
-    log('step 40 — stars')
-    u = load_athyg()
-    hyg = load_hyg()
-    st = load_stellarium()
-    oec = oec_systems()
-    iau = json.load(open(src_path('iau_index'), encoding='utf-8'))
-    for k in ('athyg_license', 'athyg_ack', 'athyg_v1builds', 'hyg_license', 'hyg_versioninfo',
-              'stel_copying', 'iau_description'):
-        src_path(k)                            # pinned licence/provenance texts for the credits
-    temps, srgb, lin, M = colour_lut()
-    tm = TeffModel()
+class Catalogue:
+    """AT-HYG rows (m10 plus the HYG-linked rows outside it) with direction, distance quality,
+    V magnitude, spectral type and display temperature."""
 
-    nU = len(u['id'])
-    ra_u = u['ra'] * 15.0
-    dec_u = u['dec']
-    dir_u = unit(ra_u, dec_u)
-    j, how = join_stellarium(u, st)
-    q, poe = quality(u, st, j, how)
-    ds_u = np.array([ATHYG_DS[s] for s in u['dist_src']], np.int8)
+    def __init__(self, u, hyg, st, tm):
+        self.u = u
+        self.n = len(u['id'])
+        self.ra = u['ra'] * 15.0
+        self.dec = u['dec']
+        self.dir = unit(self.ra, self.dec)
+        j, how = join_stellarium(u, st)
+        self.q, self.poe = quality(u, st, j, how)
+        self.ds = np.array([ATHYG_DS[s] for s in u['dist_src']], np.int8)
 
-    # HYG links for spectral types and B-V that AT-HYG lost on Gliese-linked rows
+        # AT-HYG dropped the spectral type of Gliese-linked rows; HYG still has it.
+        hyg_row = {int(x): i for i, x in enumerate(hyg['id'].tolist())}
+        uh = np.array([hyg_row.get(as_int(x), -1) for x in u['hyg']], np.int64)
+        self.spect = u['spect'].copy()
+        fill = (self.spect == '') & (uh >= 0)
+        self.spect[fill] = hyg['spect'][uh[fill]]
+        report['spect_filled_from_hyg'] = int((fill & (self.spect != '')).sum())
+        ci = u['ci'].copy()
+        ci_is_bv = u['mag_src'] != 'T'            # 'ci' is BT-VT for Tycho-2 rows, else B-V
+        fillc = ~np.isfinite(ci) & (uh >= 0)
+        ci[fillc] = hyg['ci'][uh[fillc]]
+        ci_is_bv = ci_is_bv | fillc               # HYG colour indices are Johnson B-V
+        report['ci_filled_from_hyg'] = int((fillc & np.isfinite(ci)).sum())
+
+        # V: AT-HYG 'mag' is VT for Tycho-2 rows; V = VT - 0.090 (BT-VT) (AT-HYG v1 build notes)
+        self.vmag = u['mag'].copy()
+        tyc = (u['mag_src'] == 'T') & np.isfinite(u['ci'])
+        self.vmag[tyc] = u['mag'][tyc] - 0.090 * u['ci'][tyc]
+        report['vt_to_v_converted'] = int(tyc.sum())
+        report['vt_kept_no_btvt'] = int(((u['mag_src'] == 'T') & ~np.isfinite(u['ci'])).sum())
+
+        self.teff, self.tsrc = tm.teff(ci, ci_is_bv, self.spect)
+
+        self.by_hyg, self.by_hip, self.by_gaia = {}, {}, {}
+        for i in range(self.n):
+            if u['hyg'][i]:
+                self.by_hyg.setdefault(int(u['hyg'][i]), i)
+            if u['hip'][i]:
+                self.by_hip.setdefault(int(u['hip'][i]), i)
+            if u['gaia'][i]:
+                self.by_gaia.setdefault(int(u['gaia'][i]), i)
+
+    def row(self, i):
+        u = self.u
+        return dict(kind='u', ui=i, ra=float(self.ra[i]), dec=float(self.dec[i]),
+                    dist=float(u['dist'][i]), ds=int(self.ds[i]), q=int(self.q[i]),
+                    vmag=float(self.vmag[i]), spect=self.spect[i], teff=float(self.teff[i]),
+                    tsrc=int(self.tsrc[i]), flags=0, hip=as_int(u['hip'][i]), gl=u['gl'][i],
+                    gaia=as_int(u['gaia'][i]), hd=as_int(u['hd'][i]), tyc=u['tyc'][i],
+                    bayer=u['bayer'][i], flam=u['flam'][i], con=u['con'][i],
+                    proper=u['proper'][i])
+
+
+# --------------------------------------------------------------------------------------------
+# Stage 2: HYG rows AT-HYG does not carry (Gliese companions, Gliese-only stars)
+# --------------------------------------------------------------------------------------------
+def hyg_extra_rows(cat, hyg):
+    u = cat.u
+    in_u = set(cat.by_hyg)
     hyg_row = {int(x): i for i, x in enumerate(hyg['id'].tolist())}
-    u_hyg = np.array([hyg_row.get(as_int(x), -1) for x in u['hyg']], np.int64)
-    spect_u = u['spect'].copy()
-    fill = (spect_u == '') & (u_hyg >= 0)
-    spect_u[fill] = hyg['spect'][u_hyg[fill]]
-    report['spect_filled_from_hyg'] = int((fill & (spect_u != '')).sum())
-    ci_u = u['ci'].copy()
-    ci_is_bv = u['mag_src'] != 'T'
-    fillc = ~np.isfinite(ci_u) & (u_hyg >= 0)
-    ci_u[fillc] = hyg['ci'][u_hyg[fillc]]
-    ci_is_bv = ci_is_bv | fillc                 # HYG colour indices are Johnson B-V
-    report['ci_filled_from_hyg'] = int((fillc & np.isfinite(ci_u)).sum())
 
-    # V magnitude: AT-HYG 'mag' is VT for Tycho-2 rows; V = VT - 0.090 (BT-VT) (AT-HYG notes)
-    vmag_u = u['mag'].copy()
-    tyc = (u['mag_src'] == 'T') & np.isfinite(u['ci'])
-    vmag_u[tyc] = u['mag'][tyc] - 0.090 * u['ci'][tyc]
-    report['vt_to_v_converted'] = int(tyc.sum())
-    report['vt_kept_no_btvt'] = int(((u['mag_src'] == 'T') & ~np.isfinite(u['ci'])).sum())
+    def hdist(i):
+        return float(hyg['dist'][i]) if hyg['dist'][i] < 99999 else math.nan   # 100000 = none
 
-    teff_u, tsrc_u = tm.teff(ci_u, ci_is_bv, spect_u)
-
-    # ---------------- HYG rows AT-HYG lacks (companions, Gliese-only stars) -----------------
-    in_u_hyg = set(as_int(x) for x in u['hyg'] if x)
-    u_by_hyg = {}
-    for i, x in enumerate(u['hyg']):
-        if x:
-            u_by_hyg.setdefault(int(x), i)
-    hx = [i for i in range(len(hyg['id'])) if int(hyg['id'][i]) not in in_u_hyg]
-    report['hyg_rows_not_in_athyg'] = len(hx)
-    extra = []          # dicts
-    for i in hx:
+    extra = []
+    for i in range(len(hyg['id'])):
         hid = int(hyg['id'][i])
+        if hid in in_u:
+            continue
         prim = int(hyg['comp_primary'][i])
-        d_h = float(hyg['dist'][i]) if hyg['dist'][i] < 99999 else math.nan
-        row = dict(kind='hyg', hyg=i, hid=hid, ra=float(hyg['ra'][i]) * 15, dec=float(hyg['dec'][i]),
-                   vmag=float(hyg['mag'][i]), spect=hyg['spect'][i], ci=float(hyg['ci'][i]),
-                   hip=as_int(hyg['hip'][i]), gl=hyg['gl'][i], hd=as_int(hyg['hd'][i]),
-                   hr=as_int(hyg['hr'][i]), bayer=hyg['bayer'][i], flam=hyg['flam'][i],
-                   con=hyg['con'][i], proper=hyg['proper'][i], flags=0)
-        pu = u_by_hyg.get(prim) if prim != hid else None
-        if pu is not None:
-            # companion: placed at its primary's AT-HYG distance, along its own HYG direction
-            row.update(dist=float(u['dist'][pu]), ds=int(ds_u[pu]), q=int(q[pu]),
-                       flags=F_COMPANION, primary_u=pu)
-        elif prim != hid and prim in hyg_row and prim not in in_u_hyg:
+        r = dict(kind='x', hyg=i, hid=hid, ra=float(hyg['ra'][i]) * 15, dec=float(hyg['dec'][i]),
+                 vmag=float(hyg['mag'][i]), spect=hyg['spect'][i], ci=float(hyg['ci'][i]),
+                 hip=as_int(hyg['hip'][i]), gl=hyg['gl'][i], hd=as_int(hyg['hd'][i]),
+                 hr=as_int(hyg['hr'][i]), bayer=hyg['bayer'][i], flam=hyg['flam'][i],
+                 con=hyg['con'][i], proper=hyg['proper'][i], flags=0, primary_hyg=prim)
+        if prim != hid and prim in cat.by_hyg:
+            # a companion: at its primary's AT-HYG distance, along its own HYG direction
+            pu = cat.by_hyg[prim]
+            r.update(dist=float(u['dist'][pu]), ds=int(cat.ds[pu]), q=int(cat.q[pu]),
+                     flags=F_COMPANION)
+        elif prim != hid and prim in hyg_row:
+            # a companion of another HYG-only row: at that primary's HYG distance
             pj = hyg_row[prim]
-            dp = float(hyg['dist'][pj]) if hyg['dist'][pj] < 99999 else math.nan
-            row.update(dist=dp, ds=DS_HIP if as_int(hyg['hip'][pj]) else DS_GJ,
-                       q=Q_UNKNOWN if math.isfinite(dp) else Q_NONE, flags=F_COMPANION)
+            r.update(dist=hdist(pj), ds=DS_HIP if as_int(hyg['hip'][pj]) else DS_GJ, q=Q_UNKNOWN,
+                     flags=F_COMPANION)
         else:
-            row.update(dist=d_h, ds=DS_HIP if row['hip'] else DS_GJ,
-                       q=Q_UNKNOWN if math.isfinite(d_h) else Q_NONE)
-        if not math.isfinite(row['dist']):
-            row['ds'] = DS_NONE
-            row['q'] = Q_NONE
-        extra.append(row)
+            r.update(dist=hdist(i), ds=DS_HIP if r['hip'] else DS_GJ, q=Q_UNKNOWN)
+        if not math.isfinite(r['dist']):
+            r.update(ds=DS_NONE, q=Q_NONE)
+        extra.append(r)
+    report['hyg_rows_not_in_athyg'] = len(extra)
+    return extra
 
-    # ---------------- IAU names and constellation figures (Stellarium modern_iau) ------------
-    hip_u = {}
-    for i, h in enumerate(u['hip'].tolist()):
-        h = as_int(h)
-        if h and h not in hip_u:
-            hip_u[h] = i
-    gaia_u = {}
-    for i, g in enumerate(u['gaia'].tolist()):
-        g = as_int(g)
-        if g and g not in gaia_u:
-            gaia_u[g] = i
-    # HIP 55203 = xi UMa: deleted from HYG (version-info v3.5), still used by the UMa figure.
+
+def extra_row(r, tm):
+    T, s = tm.teff(np.array([r['ci']]), np.array([True]), np.array([r['spect']], object))
+    return dict(r, teff=float(T[0]), tsrc=int(s[0]))
+
+
+# --------------------------------------------------------------------------------------------
+# Stage 3: IAU names and constellation figures (Stellarium modern_iau)
+# --------------------------------------------------------------------------------------------
+def iau_names_and_figures(iau, cat, hyg, extra):
+    xhip = {}
+    for k, r in enumerate(extra):
+        if r['hip']:
+            xhip.setdefault(r['hip'], k)
+    # HIP 55203 = xi UMa: deleted from HYG (version-info, v3.5), still used by the UMa figure.
     xi = [i for i in range(len(hyg['id'])) if hyg['bayer'][i] == 'Xi' and hyg['con'][i] == 'UMa'
           and int(hyg['comp'][i]) == 1]
-    assert len(xi) == 1 and int(hyg['id'][xi[0]]) in u_by_hyg, 'xi UMa A not found'
-    hip_alias = {55203: ('u', u_by_hyg[int(hyg['id'][xi[0]])])}
+    assert len(xi) == 1 and int(hyg['id'][xi[0]]) in cat.by_hyg, 'xi UMa A not found'
+    alias = {55203: ('u', cat.by_hyg[int(hyg['id'][xi[0]])])}
 
     def resolve_hip(h):
-        if h in hip_alias:
-            return hip_alias[h]
-        if h in hip_u:
-            return ('u', hip_u[h])
-        for k, r in enumerate(extra):
-            if r['hip'] == h:
-                return ('x', k)
+        if h in alias:
+            return alias[h]
+        if h in cat.by_hip:
+            return ('u', cat.by_hip[h])
+        if h in xhip:
+            return ('x', xhip[h])
         return None
 
-    iau_name = {}        # ('u'|'x', index) -> name
-    iau_unplaced = []
+    names, unplaced = {}, []
     for key, entries in sorted(iau['common_names'].items()):
-        k = key.strip()
+        k = key.strip()                        # one Gaia key carries a trailing space
         eng = next((e.get('english') for e in entries if 2 in (e.get('references') or [])), None)
-        if not eng:
-            continue
         m = re.match(r'^HIP\s*(\d+)\s*([A-Z]?)$', k)
         g = re.match(r'^Gaia DR3\s*(\d+)$', k)
+        if not eng or not (m or g):
+            continue                           # deep-sky names, or not from the IAU-CSN list
         ref = None
-        if m and m.group(2) in ('', 'A'):
+        if m and m.group(2) in ('', 'A'):      # 'HIP 88267A', 'HIP 73695 A': the primary's row
             ref = resolve_hip(int(m.group(1)))
-        elif m:                                   # a B/C component: its own HYG row, if any
+        elif m:                                # 'HIP 72105 B': only the B component's own row
             base = resolve_hip(int(m.group(1)))
             if base and base[0] == 'u':
-                hid = as_int(u['hyg'][base[1]])
-                comps = [x for x, r in enumerate(extra) if int(hyg['comp_primary'][r['hyg']]) == hid
-                         and r['gl'].strip().endswith(m.group(2))]
-                if len(comps) == 1:
-                    ref = ('x', comps[0])
-        elif g:
-            gg = int(g.group(1))
-            ref = ('u', gaia_u[gg]) if gg in gaia_u else None
+                hid = as_int(cat.u['hyg'][base[1]])
+                c = [x for x, r in enumerate(extra) if r['primary_hyg'] == hid
+                     and r['gl'].strip().endswith(m.group(2))]
+                ref = ('x', c[0]) if len(c) == 1 else None
         else:
-            continue
+            gg = int(g.group(1))
+            ref = ('u', cat.by_gaia[gg]) if gg in cat.by_gaia else None
         if ref is None:
-            iau_unplaced.append(f'{k} ({eng})')
-        elif ref not in iau_name:
-            iau_name[ref] = eng
-    report['iau_names_used'] = len(iau_name)
-    report['iau_names_without_catalogue_row'] = iau_unplaced
+            unplaced.append(f'{k} ({eng})')
+        else:
+            names.setdefault(ref, eng)
+    report['iau_names_used'] = len(names)
+    report['iau_names_without_catalogue_row'] = unplaced
 
-    line_refs = {}
-    cons = []
+    cons, line_refs = [], {}
     for c in iau['constellations']:
         abbr = c['id'].split()[-1]
         cons.append((abbr, c['common_name']['english'], c['lines']))
@@ -746,122 +764,108 @@ def main():
                 if r is None:
                     sys.exit(f'constellation {abbr}: HIP {h} has no catalogue row')
                 line_refs[int(h)] = r
+    return names, cons, line_refs
 
-    # ---------------- Open Exoplanet Catalogue: confirmed planets and their hosts ------------
+
+# --------------------------------------------------------------------------------------------
+# Stage 4: Open Exoplanet Catalogue — confirmed planets, their hosts, and the join
+# --------------------------------------------------------------------------------------------
+def parse_oec(files):
     def confirmed(p):
-        return any((l.text or '').strip() == 'Confirmed planets' for l in p.findall('list'))
+        return any((x.text or '').strip() == 'Confirmed planets' for x in p.findall('list'))
 
-    def planet_dict(p, circum):
+    def planet(p, circum):
         yr = fnum(p, 'discoveryyear')
-        d = dict(name=(p.findtext('name') or '').strip(), period_d=sig(fnum(p, 'period')),
-                 a_au=sig(fnum(p, 'semimajoraxis')), mass_mj=sig(fnum(p, 'mass')),
-                 radius_rj=sig(fnum(p, 'radius')), year=int(yr) if yr else None,
-                 method=(p.findtext('discoverymethod') or '').strip() or None)
-        if circum:
-            d['circumbinary'] = True
-        return d
+        return dict(name=(p.findtext('name') or '').strip(), period_d=sig(fnum(p, 'period')),
+                    a_au=sig(fnum(p, 'semimajoraxis')), mass_mj=sig(fnum(p, 'mass')),
+                    radius_rj=sig(fnum(p, 'radius')), year=int(yr) if yr else None,
+                    method=(p.findtext('discoverymethod') or '').strip() or None,
+                    circumbinary=circum)
 
-    hosts = []            # one per host star (or per binary for circumbinary planets)
-    oec_stats = dict(planets_confirmed=0, planets_other_lists=0, free_floating_skipped=0,
-                     circumbinary=0)
-    for fn in sorted(oec):
-        root = ET.fromstring(oec[fn])
-        sysd = root.find('distance')
+    hosts = []
+    stats = dict(planets_confirmed=0, planets_other_lists=0, free_floating_skipped=0,
+                 circumbinary=0)
+    for fn in sorted(files):
+        root = ET.fromstring(files[fn])
         sysdist = fnum(root, 'distance')
-        sys_err = None
-        if sysd is not None and sysdist:
-            em, ep = sysd.get('errorminus'), sysd.get('errorplus')
+        err = None
+        de = root.find('distance')
+        if de is not None and sysdist:
             try:
-                sys_err = 0.5 * (float(em) + float(ep))
+                err = 0.5 * (float(de.get('errorminus')) + float(de.get('errorplus')))
             except (TypeError, ValueError):
-                sys_err = None
+                err = None
         ra_s, de_s = root.findtext('rightascension'), root.findtext('declination')
-        sysinfo = dict(file=fn, sysdist=sysdist, sys_err=sys_err, ra_s=ra_s, de_s=de_s)
-
-        def visit(e):
-            for c in e:
-                if c.tag == 'planet':
-                    if confirmed(c):
-                        oec_stats['planets_confirmed'] += 1
-                    else:
-                        oec_stats['planets_other_lists'] += 1
-                visit(c)
-        visit(root)
-        for p in root.findall('planet'):
-            if confirmed(p):
-                oec_stats['free_floating_skipped'] += 1
+        base = dict(file=fn, sysdist=sysdist, sys_err=err,
+                    ra=sexa(ra_s, True) if ra_s else None, dec=sexa(de_s, False) if de_s else None)
+        for p in root.iter('planet'):
+            stats['planets_confirmed' if confirmed(p) else 'planets_other_lists'] += 1
+        stats['free_floating_skipped'] += sum(1 for p in root.findall('planet') if confirmed(p))
         for star in root.iter('star'):
-            pl = [planet_dict(p, False) for p in star.findall('planet') if confirmed(p)]
+            pl = [planet(p, False) for p in star.findall('planet') if confirmed(p)]
             if pl:
-                hosts.append(dict(sysinfo, names=[(n.text or '').strip() for n in star.findall('name')],
-                                  star=star, planets=pl))
+                hosts.append(dict(base, names=[(n.text or '').strip() for n in star.findall('name')],
+                                  bnames=[], star=star, planets=pl))
         for b in root.iter('binary'):
-            pl = [planet_dict(p, True) for p in b.findall('planet') if confirmed(p)]
+            pl = [planet(p, True) for p in b.findall('planet') if confirmed(p)]
             if pl:
-                oec_stats['circumbinary'] += len(pl)
-                stars = [s for s in b.iter('star')]
-                names = [(n.text or '').strip() for s in stars for n in s.findall('name')]
-                bnames = [(n.text or '').strip() for n in b.findall('name')]
-                hosts.append(dict(sysinfo, names=names, bnames=bnames,
-                                  star=stars[0] if stars else None, planets=pl, binary=True))
-    report['oec'] = oec_stats
+                stats['circumbinary'] += len(pl)
+                stars = list(b.iter('star'))
+                hosts.append(dict(base, names=[(n.text or '').strip() for s in stars
+                                               for n in s.findall('name')],
+                                  bnames=[(n.text or '').strip() for n in b.findall('name')],
+                                  star=stars[0] if stars else None, planets=pl))
+    report['oec'] = stats
     report['oec_host_entries'] = len(hosts)
+    return hosts
 
-    # identifier index over AT-HYG rows (m10 + HYG-linked) and HYG extra rows
-    idx = {}
 
-    def add(key, ref):
-        if key not in idx:
-            idx[key] = ref
-    for i in range(nU):
-        if u['gaia'][i]:
-            add(('gaia', int(u['gaia'][i])), ('u', i))
-        if u['hip'][i]:
-            add(('hip', int(u['hip'][i])), ('u', i))
-        if u['tyc'][i]:
-            add(('tyc', u['tyc'][i]), ('u', i))
-        if u['hd'][i]:
-            add(('hd', int(u['hd'][i])), ('u', i))
-        g = norm_gl(u['gl'][i]) if u['gl'][i] else None
+def oec_keys(names):
+    """Identifier keys in an OEC name list, most reliable first. A B/C component suffix on a HIP
+    or HD number means a different star than the catalogue row with that number, so those are
+    not used; Gliese names keep their component letter."""
+    out = []
+    for n in names:
+        m = re.match(r'^Gaia DR3\s*(\d+)$', n)
+        if m:
+            out.append((0, ('gaia', int(m.group(1)))))
+            continue
+        m = re.match(r'^HIP\s*(\d+)\s*([A-Z]?)$', n)
+        if m and m.group(2) in ('', 'A'):
+            out.append((1, ('hip', int(m.group(1)))))
+            continue
+        m = re.match(r'^TYC\s*(\d+-\d+-\d+)$', n)
+        if m:
+            out.append((2, ('tyc', m.group(1))))
+            continue
+        m = re.match(r'^HD\s*(\d+)\s*([A-Z]?)$', n)
+        if m and m.group(2) in ('', 'A'):
+            out.append((3, ('hd', int(m.group(1)))))
+            continue
+        g = norm_gl(n)
         if g:
-            add(('gl', g), ('u', i))
-    for k, r in enumerate(extra):
-        if r['hip']:
-            add(('hip', r['hip']), ('x', k))
-        if r['hd']:
-            add(('hd', r['hd']), ('x', k))
-        g = norm_gl(r['gl']) if r['gl'] else None
-        if g:
-            add(('gl', g), ('x', k))
+            out.append((4, ('gl', g)))
+    return [k for _, k in sorted(out, key=lambda t: t[0])]
 
-    def oec_keys(names):
-        out = []
-        for n in names:
-            m = re.match(r'^Gaia DR3\s*(\d+)$', n)
-            if m:
-                out.append((0, ('gaia', int(m.group(1)))))
-                continue
-            m = re.match(r'^HIP\s*(\d+)\s*([A-Z]?)$', n)
-            if m and m.group(2) in ('', 'A'):
-                out.append((1, ('hip', int(m.group(1)))))
-                continue
-            m = re.match(r'^TYC\s*(\d+-\d+-\d+)$', n)
-            if m:
-                out.append((2, ('tyc', m.group(1))))
-                continue
-            m = re.match(r'^HD\s*(\d+)\s*([A-Z]?)$', n)
-            if m and m.group(2) in ('', 'A'):
-                out.append((3, ('hd', int(m.group(1)))))
-                continue
-            g = norm_gl(n)
-            if g:
-                out.append((4, ('gl', g)))
-        return [k for _, k in sorted(out, key=lambda t: t[0])]
 
-    # positional fallback over rows with a distance
+def join_oec(hosts, cat, extra):
+    """h['ref'] = ('u', i) | ('x', k) | None, by identifier, else by position and distance."""
     from scipy.spatial import cKDTree
-    pos_dir = np.concatenate([dir_u, unit(np.array([r['ra'] for r in extra]),
-                                          np.array([r['dec'] for r in extra]))])
+    u = cat.u
+    idx = {}
+    for i in range(cat.n):
+        for key in (('gaia', as_int(u['gaia'][i])), ('hip', as_int(u['hip'][i])),
+                    ('tyc', u['tyc'][i]), ('hd', as_int(u['hd'][i])),
+                    ('gl', norm_gl(u['gl'][i]) if u['gl'][i] else None)):
+            if key[1]:
+                idx.setdefault(key, ('u', i))
+    for k, r in enumerate(extra):
+        for key in (('hip', r['hip']), ('hd', r['hd']), ('gl', norm_gl(r['gl']) if r['gl'] else None)):
+            if key[1]:
+                idx.setdefault(key, ('x', k))
+
+    pos_dir = np.concatenate([cat.dir, unit(np.array([r['ra'] for r in extra]),
+                                            np.array([r['dec'] for r in extra]))])
     pos_dist = np.concatenate([u['dist'], np.array([r['dist'] for r in extra])])
     pos_gl = list(u['gl']) + [r['gl'] for r in extra]
     tree = cKDTree(pos_dir)
@@ -875,133 +879,116 @@ def main():
         m = re.search(r'\d([A-D])$', g) if g else None
         return m.group(1) if m else ''
 
-    join_stats = dict(by_id=0, by_position=0, oec_only=0)
+    stats = dict(by_id=0, by_position=0, oec_only=0)
     for h in hosts:
-        ref = None
-        for k in oec_keys(h['names'] + h.get('bnames', [])):
-            if k in idx:
-                ref = idx[k]
-                break
-        h['ra'] = sexa(h['ra_s'], True) if h['ra_s'] else None
-        h['dec'] = sexa(h['de_s'], False) if h['de_s'] else None
-        h['how'] = 'id' if ref else None
+        ref = next((idx[k] for k in oec_keys(h['names'] + h['bnames']) if k in idx), None)
+        how = 'id' if ref else None
         if ref is None and h['ra'] is not None and h['sysdist']:
             v = unit(h['ra'], h['dec'])
+            hc = comp_letter(h['names'][0] if h['names'] else '')
             best = None
-            for c in tree.query_ball_point(v, math.radians(POS_MATCH_ARCSEC / 3600)):
+            for c in sorted(tree.query_ball_point(v, math.radians(POS_MATCH_ARCSEC / 3600))):
                 dd = pos_dist[c]
                 if not (np.isfinite(dd) and abs(dd / h['sysdist'] - 1) <= POS_MATCH_DIST_FRAC):
                     continue
-                hc, rc = comp_letter(h['names'][0] if h['names'] else ''), gl_comp(pos_gl[c])
-                if hc and rc and hc != rc:
+                rc = gl_comp(pos_gl[c])
+                if hc and rc and hc != rc:     # e.g. OEC 'Gliese 667 C' is not Gl 667A
                     continue
                 sep = math.degrees(math.acos(min(1.0, float(pos_dir[c] @ v)))) * 3600
                 if best is None or sep < best[0]:
                     best = (sep, c)
             if best:
-                c = best[1]
-                ref = ('u', c) if c < nU else ('x', c - nU)
-                h['how'] = 'position'
-                h['sep_arcsec'] = best[0]
+                ref = ('u', best[1]) if best[1] < cat.n else ('x', best[1] - cat.n)
+                how = 'position'
         h['ref'] = ref
-        join_stats['by_id' if h['how'] == 'id' else 'by_position' if h['how'] else 'oec_only'] += 1
-    report['oec_join'] = join_stats
+        stats['by_id' if how == 'id' else 'by_position' if how else 'oec_only'] += 1
+    report['oec_join'] = stats
 
-    # ---------------- assemble named rows ---------------------------------------------------
-    named = {}           # ref -> row dict ; ref = ('u', i) | ('x', k) | ('o', n)
 
-    def u_row(i):
-        return dict(kind='u', ui=i, ra=float(ra_u[i]), dec=float(dec_u[i]), dist=float(u['dist'][i]),
-                    ds=int(ds_u[i]), q=int(q[i]), vmag=float(vmag_u[i]), spect=spect_u[i],
-                    teff=float(teff_u[i]), tsrc=int(tsrc_u[i]), flags=0,
-                    hip=as_int(u['hip'][i]), gl=u['gl'][i], gaia=as_int(u['gaia'][i]),
-                    hd=as_int(u['hd'][i]), tyc=u['tyc'][i], bayer=u['bayer'][i],
-                    flam=u['flam'][i], con=u['con'][i], proper=u['proper'][i])
+def oec_quality(h):
+    """Distance quality for a host placed from OEC's own distance, from its quoted error."""
+    if not h['sys_err']:
+        return Q_UNKNOWN
+    poe = h['sysdist'] / h['sys_err']
+    return Q_GOOD if poe > DEEP_MIN_POE else Q_FAIR if poe > POE_FAIR else Q_BAD
 
-    def x_row(k):
-        r = dict(extra[k])
-        T, s = tm.teff(np.array([r['ci']]), np.array([True]), np.array([r['spect']], object))
-        r.update(kind='x', teff=float(T[0]), tsrc=int(s[0]))
-        return r
+
+# --------------------------------------------------------------------------------------------
+# Stage 5: which stars are named, and their rows
+# --------------------------------------------------------------------------------------------
+def select_named(cat, extra, tm, iau_names, line_refs, hosts):
+    named = {}                 # ref -> row dict; ref = ('u', i) | ('x', k) | ('o', n)
 
     def get(ref):
         if ref not in named:
-            named[ref] = u_row(ref[1]) if ref[0] == 'u' else x_row(ref[1])
+            named[ref] = cat.row(ref[1]) if ref[0] == 'u' else extra_row(extra[ref[1]], tm)
             named[ref]['why'] = set()
         return named[ref]
 
-    placed_u = (q != Q_NONE) & (q != Q_BAD)
-    why_counts = {}
-    # 1. naked eye
-    for i in np.where(vmag_u < NAMED_VMAG)[0]:
+    for i in np.where(cat.vmag < NAMED_VMAG)[0]:
         get(('u', int(i)))['why'].add('V<6.5')
+    for i in np.where(np.isfinite(cat.u['dist']) & (cat.u['dist'] <= NEAR_PC))[0]:
+        get(('u', int(i)))['why'].add('<=20pc')
     for k, r in enumerate(extra):
         if r['vmag'] < NAMED_VMAG:
             get(('x', k))['why'].add('V<6.5')
-    # 2. within 20 pc (by the distance that is shipped)
-    for i in np.where(np.isfinite(u['dist']) & (u['dist'] <= NEAR_PC))[0]:
-        get(('u', int(i)))['why'].add('<=20pc')
-    for k, r in enumerate(extra):
         if math.isfinite(r['dist']) and r['dist'] <= NEAR_PC:
             get(('x', k))['why'].add('<=20pc')
-    # 3. IAU-named stars and 4. constellation-figure stars
-    for ref in iau_name:
+    for ref in iau_names:
         get(ref)['why'].add('IAU name')
     for ref in line_refs.values():
-        get(ref)['why'].add('figure')
-    # 5. exoplanet hosts within 100 pc (or any host already named)
-    oec_rows = 0
+        get(ref)['why'].add('constellation figure')
+
     host_of = {}
+    n_oec = n_bad = n_switched = 0
     for n, h in enumerate(hosts):
         ref = h['ref']
-        row = named.get(ref) if ref else None
-        if ref:
-            base = row or (u_row(ref[1]) if ref[0] == 'u' else x_row(ref[1]))
-            usable = base['q'] not in (Q_NONE, Q_BAD)
-            best = base['dist'] if usable else h['sysdist']
+        if ref is not None:
+            row = named.get(ref) or (cat.row(ref[1]) if ref[0] == 'u' else extra_row(extra[ref[1]], tm))
+            usable = row['q'] not in (Q_NONE, Q_BAD)
+            best = row['dist'] if usable else h['sysdist']
+            if ref not in named and not (best is not None and best <= HOST_PC):
+                continue
+            r = get(ref)
+            if not usable and h['sysdist'] and oec_quality(h) != Q_BAD:
+                r.update(dist=h['sysdist'], ds=DS_OEC, q=oec_quality(h))
+                n_switched += 1
         else:
-            best = h['sysdist']
-        if not (row is not None or (best is not None and best <= HOST_PC)):
-            continue
-        if ref is None:
-            if h['ra'] is None or not h['sysdist']:
+            if h['ra'] is None or not h['sysdist'] or h['sysdist'] > HOST_PC:
+                continue
+            if oec_quality(h) == Q_BAD:        # OEC's own distance is too uncertain to place
+                n_bad += 1
                 continue
             star = h['star']
-            poe_o = h['sysdist'] / h['sys_err'] if h['sys_err'] else None
-            qq = (Q_UNKNOWN if poe_o is None else Q_GOOD if poe_o > DEEP_MIN_POE
-                  else Q_FAIR if poe_o > POE_FAIR else Q_BAD)
-            oname = (h['bnames'][0] if h.get('binary') and h.get('bnames') else
-                     h['names'][0] if h['names'] else h['file'][len('systems/'):-4])
+            spt = (star.findtext('spectraltype') or '').strip() if star is not None else ''
             ot = fnum(star, 'temperature')
-            ospt = ((star.findtext('spectraltype') or '').strip() if star is not None else '')
-            T, s = tm.teff(np.array([np.nan]), np.array([False]), np.array([ospt], object),
+            T, s = tm.teff(np.array([np.nan]), np.array([False]), np.array([spt], object),
                            oec_teff=np.array([ot if ot else np.nan]))
             vm = fnum(star, 'magV')
             ref = ('o', n)
-            named[ref] = dict(kind='o', ra=h['ra'], dec=h['dec'], dist=h['sysdist'], ds=DS_OEC,
-                              q=qq, vmag=vm if vm is not None else math.nan, spect=ospt,
-                              teff=float(T[0]), tsrc=int(s[0]), flags=0, oec_name=oname,
-                              bayer='', flam='', con='', proper='', why=set())
-            oec_rows += 1
-        else:
-            r = get(ref)
-            if r['q'] in (Q_NONE, Q_BAD) and h['sysdist']:
-                poe_o = h['sysdist'] / h['sys_err'] if h['sys_err'] else None
-                r.update(dist=h['sysdist'], ds=DS_OEC,
-                         q=(Q_UNKNOWN if poe_o is None else Q_GOOD if poe_o > DEEP_MIN_POE
-                            else Q_FAIR if poe_o > POE_FAIR else Q_BAD), oec_distance=True)
-        named[ref]['why'].add('exoplanet host')
+            named[ref] = dict(
+                kind='o', ra=h['ra'], dec=h['dec'], dist=h['sysdist'], ds=DS_OEC, q=oec_quality(h),
+                vmag=vm if vm is not None else math.nan, spect=spt, teff=float(T[0]),
+                tsrc=int(s[0]), flags=0, bayer='', flam='', con='', why=set(),
+                oec_name=(h['bnames'] or h['names'] or [h['file'][len('systems/'):-4]])[0],
+                # a proper name the catalogue itself gives, e.g. "Teegarden's Star"
+                proper=next((x for x in h['names'] if re.search(r"\S\s+Star$", x)), ''))
+            r = named[ref]
+            n_oec += 1
+        r['why'].add('exoplanet host')
         host_of.setdefault(ref, []).extend(h['planets'])
-    report['oec_only_rows'] = oec_rows
-    report['hosts_rows_upgraded_to_oec_distance'] = sum(1 for r in named.values()
-                                                       if r.get('oec_distance'))
-
+    report['oec_only_rows'] = n_oec
+    report['oec_only_hosts_skipped_distance_error'] = n_bad
+    report['host_rows_placed_at_oec_distance'] = n_switched
+    why = {}
     for r in named.values():
         for w in r['why']:
-            why_counts[w] = why_counts.get(w, 0) + 1
-    report['named_reasons'] = dict(sorted(why_counts.items()))
+            why[w] = why.get(w, 0) + 1
+    report['named_reasons'] = dict(sorted(why.items()))
+    return named, host_of
 
-    # ---------------- per-row fields ---------------------------------------------------------
+
+def named_rows(named, host_of, iau_names, cat):
     rows = []
     for ref, r in named.items():
         f = r['flags']
@@ -1009,22 +996,16 @@ def main():
             f |= F_HOST
         if WD_RE.match(r['spect'] or ''):
             f |= F_WD
-        if r['q'] == Q_FAIR:
-            f |= F_POE_FAIR
-        if r['q'] in (Q_NONE, Q_BAD):
-            f |= F_UNPLACED
-        if r['q'] == Q_UNKNOWN:
-            f |= F_ERR_UNKNOWN
-        name = ''
-        if ref in iau_name:
-            name, f = iau_name[ref], f | F_IAU
-        elif r.get('proper'):
-            name = r['proper']
+        f |= {Q_FAIR: F_POE_FAIR, Q_BAD: F_UNPLACED, Q_NONE: F_UNPLACED,
+              Q_UNKNOWN: F_ERR_UNKNOWN}.get(r['q'], 0)
+        if ref in iau_names:
+            name, f = iau_names[ref], f | F_IAU
+        else:
+            name = r.get('proper') or ''
         if r['kind'] == 'u':
-            i = r['ui']
             ident = (f'HIP {r["hip"]}' if r['hip'] else r['gl'] if r['gl'] else
                      f'Gaia DR3 {r["gaia"]}' if r['gaia'] else f'HD {r["hd"]}' if r['hd'] else
-                     f'TYC {r["tyc"]}' if r['tyc'] else f'AT-HYG {int(u["id"][i])}')
+                     f'TYC {r["tyc"]}' if r['tyc'] else f'AT-HYG {int(cat.u["id"][r["ui"]])}')
         elif r['kind'] == 'x':
             ident = (f'HIP {r["hip"]}' if r['hip'] else r['gl'] if r['gl'] else
                      f'HD {r["hd"]}' if r['hd'] else f'HR {r["hr"]}' if r['hr'] else
@@ -1032,194 +1013,254 @@ def main():
         else:
             ident = r['oec_name']
         placed = not (f & F_UNPLACED)
-        d = r['dist'] if placed else 1.0
-        v = unit(r['ra'], r['dec']) * d
+        if placed:
+            xyz = round_pos(unit(r['ra'], r['dec']) * r['dist'], r['dist'])
+        else:
+            xyz = [round(float(c), 5) for c in unit(r['ra'], r['dec'])]
         vm = r['vmag'] if math.isfinite(r['vmag']) else None
-        am = (vm + 5 - 5 * math.log10(r['dist'])) if (vm is not None and placed) else None
+        am = vm + 5 - 5 * math.log10(r['dist']) if (vm is not None and placed) else None
         rows.append(dict(ref=ref, id=ident, name=name, desig=desig(r['bayer'], r['flam'], r['con']),
-                         con=r['con'], xyz=round_pos(v, d), vmag=None if vm is None else round(vm, 2),
-                         absmag=None if am is None else round(am, 2),
+                         con=r['con'], xyz=xyz, vmag=None if vm is None else round(vm, 2),
+                         absmag=None if am is None else round(am, 1),
                          colour=int(teff_code([r['teff']])[0]), spect=r['spect'] or '',
-                         ds=int(r['ds']), flags=int(f), tsrc=r['tsrc'], dist=r['dist'],
-                         placed=placed,
-                         why=sorted(r['why'])))
-    ids = [r['id'] for r in rows]
-    dup = sorted({x for x in ids if ids.count(x) > 1}) if len(set(ids)) != len(ids) else []
-    for r in rows:                              # disambiguate the rare duplicated designation
-        if r['id'] in dup:
-            r['id'] = f'{r["id"]} ({"AT-HYG " + str(int(u["id"][r["ref"][1]])) if r["ref"][0] == "u" else "HYG " + str(named[r["ref"]].get("hid", "")) if r["ref"][0] == "x" else "OEC"})'
-    assert len({r['id'] for r in rows}) == len(rows), 'named ids not unique'
-    report['named_duplicate_ids_disambiguated'] = dup
+                         ds=int(r['ds']), flags=int(f), tsrc=r['tsrc'], why=r['why']))
+
+    # A HYG proper name that the IAU list gives to another row (e.g. HYG's "Alrakis" on
+    # GJ 9584A while the IAU name belongs to HIP 83608) is dropped from the non-IAU row.
+    iau_set = set(iau_names.values())
+    dropped = [r['id'] for r in rows if r['name'] in iau_set and not r['flags'] & F_IAU]
+    for r in rows:
+        if r['name'] in iau_set and not r['flags'] & F_IAU:
+            r['name'] = ''
+    report['proper_names_dropped_as_iau_duplicates'] = sorted(dropped)
+
+    seen = {}
+    for r in rows:
+        seen[r['id']] = seen.get(r['id'], 0) + 1
+    report['named_duplicate_ids'] = sorted(k for k, v in seen.items() if v > 1)
+    assert not report['named_duplicate_ids'], report['named_duplicate_ids']
     rows.sort(key=lambda r: (r['vmag'] is None, r['vmag'] if r['vmag'] is not None else 0, r['id']))
+    return rows
+
+
+# --------------------------------------------------------------------------------------------
+# Stage 6: writers
+# --------------------------------------------------------------------------------------------
+FLAG_BITS = {'0': 'exoplanet host (confirmed planets in exoplanets.json)',
+             '1': 'white dwarf (spectral type ^D[ABCOQZX])',
+             '2': "companion placed at its primary's distance",
+             '3': 'parallax/error between 5 and 10',
+             '4': 'no usable parallax: x,y,z is the unit direction, not a position',
+             '5': 'name is from the IAU Catalog of Star Names',
+             '6': 'no per-star parallax error available for the shipped distance'}
+
+
+def write_named(rows):
+    out = {'count': len(rows)}
+    for c in ('id', 'name', 'desig', 'con', 'vmag', 'absmag', 'colour', 'spect', 'flags'):
+        out[c] = [r[c] for r in rows]
+    out['x'] = [r['xyz'][0] for r in rows]
+    out['y'] = [r['xyz'][1] for r in rows]
+    out['z'] = [r['xyz'][2] for r in rows]
+    out['dist_src'] = [r['ds'] for r in rows]
+    out['dist_src_labels'] = DIST_SRC_LABELS
+    out['flag_bits'] = FLAG_BITS
+    out['frame'] = 'ICRS, heliocentric, parsecs; J2000.0 positions; no extinction correction'
+    write_json('stars/named.json', out, ndigits=6)
+    return out
+
+
+def write_constellations(cons, line_refs, rows):
     row_of = {r['ref']: k for k, r in enumerate(rows)}
-
-    named_json = {
-        'count': len(rows),
-        'id': [r['id'] for r in rows], 'name': [r['name'] for r in rows],
-        'desig': [r['desig'] for r in rows], 'con': [r['con'] for r in rows],
-        'x': [r['xyz'][0] for r in rows], 'y': [r['xyz'][1] for r in rows],
-        'z': [r['xyz'][2] for r in rows],
-        'vmag': [r['vmag'] for r in rows], 'absmag': [r['absmag'] for r in rows],
-        'colour': [r['colour'] for r in rows], 'spect': [r['spect'] for r in rows],
-        'dist_src': [r['ds'] for r in rows], 'flags': [r['flags'] for r in rows],
-        'dist_src_labels': DIST_SRC_LABELS,
-        'flag_bits': {'0': 'exoplanet host (confirmed planets in exoplanets.json)',
-                      '1': 'white dwarf (spectral type ^D[ABCOQZX])',
-                      '2': "companion placed at its primary's distance",
-                      '3': 'parallax/error between 5 and 10',
-                      '4': 'no usable parallax: x,y,z is the unit direction, not a position',
-                      '5': 'name is from the IAU Catalog of Star Names',
-                      '6': 'no per-star parallax error available for the shipped distance'},
-        'frame': 'ICRS, heliocentric, parsecs; J2000.0 positions; no extinction correction',
-    }
-
-    # ---------------- constellations --------------------------------------------------------
-    con_json = {}
-    seg_total = seg_unique = seg_sky = 0
+    out = {}
+    total = unique = sky_n = 0
     for abbr, cname, lines in cons:
-        seen = set()
-        lines3, sky = [], []
+        seen, lines3, sky = set(), [], []
         for pl in lines:
             for a, b in zip(pl[:-1], pl[1:]):
-                seg_total += 1
+                total += 1
                 ia, ib = row_of[line_refs[int(a)]], row_of[line_refs[int(b)]]
                 key = (min(ia, ib), max(ia, ib))
-                if key in seen or ia == ib:
+                if key in seen or ia == ib:    # polylines retrace some segments
                     continue
                 seen.add(key)
-                seg_unique += 1
+                unique += 1
                 if (rows[ia]['flags'] | rows[ib]['flags']) & F_UNPLACED:
                     sky.append([ia, ib])
-                    seg_sky += 1
+                    sky_n += 1
                 else:
                     lines3.append([ia, ib])
-        con_json[abbr] = {'name': cname, 'lines': lines3, 'lines_sky_only': sky}
-    report['constellations'] = dict(count=len(con_json), polyline_segments=seg_total,
-                                    unique_segments=seg_unique, dropped_from_3d=seg_sky)
+        out[abbr] = {'name': cname, 'lines': lines3, 'lines_sky_only': sky}
+    write_json('stars/constellations.json', out)
+    report['constellations'] = dict(count=len(out), polyline_segments=total,
+                                    unique_segments=unique, dropped_from_3d=sky_n)
 
-    # ---------------- exoplanets ------------------------------------------------------------
-    exo = {'hosts': {}}
-    n_pl = 0
+
+def write_exoplanets(host_of, rows):
+    row_of = {r['ref']: k for k, r in enumerate(rows)}
+    methods = sorted({p['method'] for pls in host_of.values() for p in pls if p['method']})
+    out = {'fields': ['name', 'period_d', 'a_au', 'mass_mj', 'radius_rj', 'year', 'method',
+                      'circumbinary'],
+           'methods': methods, 'hosts': {},
+           'source': f'Open Exoplanet Catalogue, git commit {OEC_COMMIT}; list = Confirmed planets',
+           'units': {'period_d': 'days', 'a_au': 'AU',
+                     'mass_mj': 'Jupiter masses, as the catalogue gives it (for radial-velocity '
+                                'planets usually the minimum mass)',
+                     'radius_rj': 'Jupiter radii', 'year': 'discovery year',
+                     'method': 'index into methods', 'circumbinary': '1 if it orbits a binary'},
+           'note': 'null = not given by the catalogue; values rounded to 4 significant digits'}
+    n = 0
     for ref, pls in host_of.items():
-        seen = set()
-        out = []
+        seen, lst = set(), []
         for p in pls:
             if p['name'] in seen:
                 continue
             seen.add(p['name'])
-            out.append(p)
-        out.sort(key=lambda p: p['name'])
-        exo['hosts'][str(row_of[ref])] = out
-        n_pl += len(out)
-    exo['source'] = f'Open Exoplanet Catalogue, git commit {OEC_COMMIT}; list = Confirmed planets'
-    report['exoplanets'] = dict(hosts=len(exo['hosts']), planets=n_pl)
+            lst.append([p['name'], p['period_d'], p['a_au'], p['mass_mj'], p['radius_rj'],
+                        p['year'], methods.index(p['method']) if p['method'] else None,
+                        1 if p['circumbinary'] else 0])
+        lst.sort(key=lambda p: p[0])
+        out['hosts'][str(row_of[ref])] = lst
+        n += len(lst)
+    write_json('stars/exoplanets.json', out, ndigits=6)
+    report['exoplanets'] = dict(hosts=len(out['hosts']), planets=n)
 
-    # ---------------- deep cloud -------------------------------------------------------------
-    in_named = np.zeros(nU, bool)
+
+def write_deep(cat, named):
+    u = cat.u
+    in_named = np.zeros(cat.n, bool)
     for ref in named:
         if ref[0] == 'u':
             in_named[ref[1]] = True
     base = (u['in_m10'] & np.isin(u['dist_src'], ['G_R3', 'HIP', 'G_R2', 'GJ'])
             & (u['dist'] <= DEEP_MAX_PC))
-    sel = base & (q == Q_GOOD) & ~in_named
+    good = base & (cat.q == Q_GOOD)
+    sel = good & ~in_named
     report['deep_selection'] = {
         'm10_within_500pc_with_distance': int(base.sum()),
-        'error_applies_and_poe_gt_10': int((base & (q == Q_GOOD)).sum()),
-        'dropped_poe_le_10': int((base & ((q == Q_FAIR) | (q == Q_BAD))).sum()),
-        'dropped_no_applicable_error': int((base & (q == Q_UNKNOWN)).sum()),
-        'moved_to_named': int((base & (q == Q_GOOD) & in_named).sum()),
+        'error_applies_and_poe_gt_10': int(good.sum()),
+        'dropped_poe_le_10': int((base & ((cat.q == Q_FAIR) | (cat.q == Q_BAD))).sum()),
+        'dropped_no_applicable_error': int((base & (cat.q == Q_UNKNOWN)).sum()),
+        'moved_to_named': int((good & in_named).sum()),
         'shipped': int(sel.sum())}
     di = np.where(sel)[0]
-    xyz = dir_u[di] * u['dist'][di][:, None]
-    qx = np.rint(xyz * POS_SCALE)
-    assert np.abs(qx).max() <= 32767
-    Mv = vmag_u[di] + 5 - 5 * np.log10(u['dist'][di])
-    mcode_f = np.rint((Mv + 8.0) * 10)
-    report['deep_absmag_clamped'] = int(((mcode_f < 0) | (mcode_f > 255)).sum())
-    mcode = np.clip(mcode_f, 0, 255).astype(np.uint8)
-    ccode = teff_code(teff_u[di])
-    order = np.lexsort((u['id'][di], np.rint(u['dist'][di] * 1000), mcode))
-    rec = np.zeros(len(di), dtype=[('x', '<i2'), ('y', '<i2'), ('z', '<i2'), ('m', 'u1'),
-                                   ('c', 'u1')])
-    rec['x'], rec['y'], rec['z'] = qx[order, 0], qx[order, 1], qx[order, 2]
+    d = u['dist'][di]
+    q = np.rint(cat.dir[di] * d[:, None] * POS_SCALE)
+    assert np.abs(q).max() <= 32767
+    mv = cat.vmag[di] + 5 - 5 * np.log10(d)
+    mf = np.rint((mv + 8.0) * 10)
+    report['deep_absmag_clamped'] = int(((mf < 0) | (mf > 255)).sum())
+    mcode = np.clip(mf, 0, 255).astype(np.uint8)
+    ccode = teff_code(cat.teff[di])
+    order = np.lexsort((u['id'][di], np.rint(d * 1000), mcode))
+    rec = np.zeros(len(di), dtype=[('x', '<i2'), ('y', '<i2'), ('z', '<i2'), ('m', 'u1'), ('c', 'u1')])
+    rec['x'], rec['y'], rec['z'] = q[order, 0], q[order, 1], q[order, 2]
     rec['m'], rec['c'] = mcode[order], ccode[order]
     write_bin('stars/deep.bin', rec.tobytes())
-    ms = np.sort(rec['m'])
-    mv_prefix = {str(t): int(np.searchsorted(ms, (t + 8) * 10, side='right'))
-                 for t in range(-8, 18)}
-    tsd = tsrc_u[di]
-    dsd = u['dist_src'][di]
-    deep_json = {
+    ms = rec['m']
+    ts, ds = cat.tsrc[di], u['dist_src'][di]
+    write_json('stars/deep.json', {
         'count': int(len(di)), 'record_bytes': 8,
         'fields': [{'name': 'x', 'type': 'int16', 'offset': 0},
                    {'name': 'y', 'type': 'int16', 'offset': 2},
                    {'name': 'z', 'type': 'int16', 'offset': 4},
                    {'name': 'absmag_code', 'type': 'uint8', 'offset': 6},
                    {'name': 'colour_code', 'type': 'uint8', 'offset': 7}],
-        'units_per_pc': POS_SCALE,
-        'absmag': {'M_V': 'code / 10 - 8', 'min': -8.0, 'max': 17.5,
-                   'note': 'V + 5 - 5 log10(d_pc); no extinction correction'},
-        'colour': 'index into stars/colour.json (255 = no colour measurement)',
-        'frame': 'ICRS, heliocentric; x -> RA 0 Dec 0, z -> north celestial pole',
-        'order': 'absmag_code ascending (intrinsically brightest first), then distance, then '
-                 'AT-HYG id; the first mv_prefix[k] records are every star with M_V <= k',
-        'mv_prefix': mv_prefix,
+        'units_per_pc': POS_SCALE, 'quantisation_pc': 1 / POS_SCALE,
+        'absmag': {'M_V': 'absmag_code / 10 - 8', 'min': -8.0, 'max': 17.5,
+                   'note': 'V + 5 - 5 log10(d / pc); no extinction correction'},
+        'colour': 'colour_code indexes stars/colour.json (255 = no colour measurement)',
+        'frame': 'ICRS, heliocentric; x -> RA 0 Dec 0, z -> north celestial pole; little-endian',
+        'order': ('absmag_code ascending (intrinsically brightest first), then distance, then '
+                  'AT-HYG id; the first mv_prefix[k] records are the stars whose absmag_code / '
+                  '10 - 8 <= k'),
+        'mv_prefix': {str(t): int(np.searchsorted(ms, (t + 8) * 10, side='right'))
+                      for t in range(-8, 18)},
         'selection': ('AT-HYG v3.2 m10 subset, distance <= 500 pc, parallax/error > 10 where a '
-                      'Stellarium per-star error applies to the shipped distance; every star in '
-                      'named.json removed'),
-        'dist_src_counts': {DIST_SRC_LABELS[ATHYG_DS[k]]: int((dsd == k).sum())
+                      'per-star error applies to the shipped distance; every star in named.json '
+                      'removed'),
+        'dist_src_counts': {DIST_SRC_LABELS[ATHYG_DS[k]]: int((ds == k).sum())
                             for k in ('G_R3', 'G_R2', 'HIP', 'GJ')},
-        'colour_src_counts': {TEFF_SRC_LABELS[k]: int((tsd == k).sum()) for k in range(6)},
-        'quantisation_pc': 1 / POS_SCALE,
-    }
-    write_json('stars/deep.json', deep_json, pretty=True)
+        'colour_src_counts': {TEFF_SRC_LABELS[k]: int((ts == k).sum()) for k in range(6)},
+    }, pretty=True)
+    report['deep_count'] = int(len(di))
 
-    # ---------------- colour table ------------------------------------------------------------
-    colour_json = {
+
+def write_colour(temps, srgb, lin, M):
+    write_json('stars/colour.json', {
         'count': 256, 'unknown_index': UNKNOWN_COLOUR,
         'teff_k': [int(round(t)) for t in temps] + [None],
         'srgb': srgb, 'linear': lin,
         'index_from_teff': (f'round(254 * ln(T / {LUT_TMIN:g}) / ln({LUT_TMAX:g} / {LUT_TMIN:g})), '
-                            f'clamped to 0..254'),
-        'method': ('Planck spectrum at T integrated at 1 nm over 360-830 nm against the CIE 1931 '
+                            'clamped to 0..254'),
+        'method': ('Planck spectrum at T, integrated at 1 nm over 360-830 nm against the CIE 1931 '
                    '2-degree colour-matching functions -> XYZ -> linear sRGB with the IEC '
                    '61966-2-1 matrix (D65 white) -> negative components set to 0 -> divided by the '
-                   'largest component (chromaticity only; brightness comes from the magnitude) '
-                   '-> "srgb" is sRGB-encoded (IEC 61966-2-1 transfer curve), "linear" is not.'),
+                   'largest component (chromaticity only; brightness comes from the magnitude). '
+                   '"srgb" is encoded with the sRGB transfer curve, "linear" is not.'),
         'xyz_to_linear_srgb': [[float(v) for v in row] for row in M],
         'teff_note': ('Display temperatures, not measurements: from B-V by the Ballesteros (2012) '
-                      'blackbody model, from BT-VT or spectral type through Mamajek\'s dwarf '
+                      "blackbody model, from BT-VT or spectral type through Mamajek's dwarf "
                       'sequence (v2022.04.16), or from the Open Exoplanet Catalogue. Observed '
                       'colours: interstellar reddening is not removed. Entry 255 is neutral white '
                       'for stars with no colour index, spectral type or catalogue Teff.'),
-    }
-    write_json('stars/colour.json', colour_json, ndigits=6)
+    }, ndigits=6)
 
-    write_json('stars/named.json', named_json, ndigits=6)
-    write_json('stars/constellations.json', con_json)
-    write_json('stars/exoplanets.json', exo, ndigits=6)
 
-    # ---------------- summary ----------------------------------------------------------------
-    flags = np.array(named_json['flags'])
-    dsn = np.array(named_json['dist_src'])
-    near = np.array(['<=20pc' in r['why'] for r in rows])
+# --------------------------------------------------------------------------------------------
+# Main
+# --------------------------------------------------------------------------------------------
+def main():
+    log('step 40 — stars')
+    u = load_athyg()
+    hyg = load_hyg()
+    st = load_stellarium()
+    oec = oec_systems()
+    with open(src_path('iau_index'), encoding='utf-8') as f:
+        iau = json.load(f)
+    for k in ('athyg_license', 'athyg_ack', 'athyg_v1builds', 'hyg_license', 'hyg_versioninfo',
+              'stel_copying', 'iau_description'):
+        src_path(k)                            # the pinned licence/provenance texts quoted in credits
+    temps, srgb, lin, M = colour_lut()
+    tm = TeffModel()
+
+    cat = Catalogue(u, hyg, st, tm)
+    extra = hyg_extra_rows(cat, hyg)
+    iau_names, cons, line_refs = iau_names_and_figures(iau, cat, hyg, extra)
+    hosts = parse_oec(oec)
+    join_oec(hosts, cat, extra)
+    named, host_of = select_named(cat, extra, tm, iau_names, line_refs, hosts)
+    rows = named_rows(named, host_of, iau_names, cat)
+
+    nj = write_named(rows)
+    write_constellations(cons, line_refs, rows)
+    write_exoplanets(host_of, rows)
+    write_deep(cat, named)
+    write_colour(temps, srgb, lin, M)
+
+    flags = np.array(nj['flags'])
+    dsn = np.array(nj['dist_src'])
+    near = np.array(['<=20pc' in r['why'] or (not r['flags'] & F_UNPLACED and
+                                              math.dist(r['xyz'], (0, 0, 0)) <= NEAR_PC)
+                     for r in rows])
     report['named'] = dict(
         rows=len(rows),
-        flag_counts={named_json['flag_bits'][str(b)]: int(((flags >> b) & 1).sum()) for b in range(7)},
+        flag_counts={FLAG_BITS[str(b)]: int(((flags >> b) & 1).sum()) for b in range(7)},
         within_20pc=int(near.sum()),
         within_20pc_dist_src={DIST_SRC_LABELS[k]: int(((dsn == k) & near).sum())
                               for k in range(len(DIST_SRC_LABELS))},
         colour_src={TEFF_SRC_LABELS[k]: int(sum(1 for r in rows if r['tsrc'] == k)) for k in range(6)})
-    report['deep_count'] = int(len(di))
-    sizes = {}
-    for f in ('deep.bin', 'deep.json', 'colour.json', 'named.json', 'constellations.json',
-              'exoplanets.json'):
-        sizes[f] = os.path.getsize(os.path.join(DATA, 'stars', f))
+    sizes = {f: os.path.getsize(os.path.join(DATA, 'stars', f))
+             for f in ('deep.bin', 'deep.json', 'colour.json', 'named.json', 'constellations.json',
+                       'exoplanets.json')}
     report['sizes'] = sizes
-    assert sizes['deep.bin'] <= 1_900_000, sizes
-    assert sizes['named.json'] + sizes['constellations.json'] + sizes['exoplanets.json'] <= 900_000
     write_credits()
     log(json.dumps(report, indent=1, ensure_ascii=False, sort_keys=True))
+    if sizes['deep.bin'] > 1_900_000:
+        sys.exit(f'deep.bin is {sizes["deep.bin"]} B, over the 1.9 MB budget')
+    small = sizes['named.json'] + sizes['constellations.json'] + sizes['exoplanets.json']
+    if small > 900_000:
+        sys.exit(f'named + constellations + exoplanets = {small} B, over the 0.9 MB budget')
 
 
 # --------------------------------------------------------------------------------------------
