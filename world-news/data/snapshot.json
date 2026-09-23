@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T09:01:18Z",
+ "generatedAt": "2026-09-23T10:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Dette du Sénégal : pourquoi l’accord avec le FMI ne règle pas encore la crise",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/dette-du-senegal-pourquoi-laccord-avec-le-fmi-ne-regle-pas-encore-la-crise-292527",
+     "published": "2026-09-23T08:56:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Florent Kanga Gbongue, Enseignant-Chercheur, Université Félix Houphouët-Boigny. Cocody, Côte-d'Ivoire"
+    },
+    {
      "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Siyabulela Christopher Fobosi, Senior Researcher, UNESCO 'Oliver Tambo' Chair of Human Rights, University of Fort Hare, University of Fort Hare"
-    },
-    {
-     "title": "Climate change is fuelling African conflict – governments are developing a shared response",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/climate-change-is-fuelling-african-conflict-governments-are-developing-a-shared-response-289088",
-     "published": "2026-09-22T14:46:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Katongo Seyuba, Researcher, Stockholm International Peace Research Institute"
     },
     {
      "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Danielle Wood’s blunt message to politicians: don’t undermine public trust by attacking institutions",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/danielle-woods-blunt-message-to-politicians-dont-undermine-public-trust-by-attacking-institutions-292587",
+     "published": "2026-09-23T09:03:36Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "As Australia’s rock ‘n’ roll outlaw, Angry Anderson embodied the appeal and limitations of Oz Rock",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "William Partlett, Associate Professor of Public Law, The University of Melbourne"
-    },
-    {
-     "title": "Trump has banned more media and started his own TV channel. In the process, he risks further eroding American democracy",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/trump-has-banned-more-media-and-started-his-own-tv-channel-in-the-process-he-risks-further-eroding-american-democracy-292461",
-     "published": "2026-09-23T06:00:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Ricketson, Professor of Communication, Deakin University"
     },
     {
      "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
-   "published": "2026-09-22 14:50 UTC"
+   "title": "Dette du Sénégal : pourquoi l’accord avec le FMI ne règle pas encore la crise",
+   "published": "2026-09-23 08:56 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Climate change is fuelling African conflict – governments are developing a shared response",
-   "published": "2026-09-22 14:46 UTC"
+   "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
+   "published": "2026-09-22 14:50 UTC"
   },
   {
    "region": "Africa",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Danielle Wood’s blunt message to politicians: don’t undermine public trust by attacking institutions",
+   "published": "2026-09-23 09:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "As Australia’s rock ‘n’ roll outlaw, Angry Anderson embodied the appeal and limitations of Oz Rock",
    "published": "2026-09-23 06:46 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
    "published": "2026-09-23 06:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Trump has banned more media and started his own TV channel. In the process, he risks further eroding American democracy",
-   "published": "2026-09-23 06:00 UTC"
   },
   {
    "region": "Oceania",
