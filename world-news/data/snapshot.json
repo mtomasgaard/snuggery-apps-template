@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T04:01:07Z",
+ "generatedAt": "2026-09-23T05:01:12Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Western Australia is experiencing a child safety crisis. Here’s what would help",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/western-australia-is-experiencing-a-child-safety-crisis-heres-what-would-help-292356",
+     "published": "2026-09-23T04:40:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jacynta Krakouer, Aboriginal Enterprise Fellow, Australian Centre for Child Protection, Adelaide University"
+    },
+    {
+     "title": "Worried about your car being hacked? You should be – no matter where it was made",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/worried-about-your-car-being-hacked-you-should-be-no-matter-where-it-was-made-292607",
+     "published": "2026-09-23T03:55:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dennis B. Desmond, Lecturer, Cyberintelligence and Cybercrime Investigations, University of the Sunshine Coast"
+    },
+    {
      "title": "We asked people with dementia about voluntary assisted dying. Here’s what they said",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -436,27 +456,7 @@
      "published": "2026-09-23T03:09:11Z",
      "summary": "",
      "stale": false,
-     "author": "Adrienne Matthys, Casual Academic (Gerontology and Human Services) and Research Assistant, Charles Sturt University"
-    },
-    {
-     "title": "WA Police’s facial recognition trial delivered strong results. But was it an ethical success?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/wa-polices-facial-recognition-trial-delivered-strong-results-but-was-it-an-ethical-success-292599",
-     "published": "2026-09-23T02:25:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adam Andreotta, Lecturer, School of Management and Marketing, Curtin University"
-    },
-    {
-     "title": "Rape myths shape how we respond to sexual violence. What are they and what impact do they have?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/rape-myths-shape-how-we-respond-to-sexual-violence-what-are-they-and-what-impact-do-they-have-292594",
-     "published": "2026-09-23T01:24:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jane Gilmore, PhD candidate, Monash Gender and Family Violence Prevention Hub, Monash University"
+     "author": "Dr Adrienne Matthys, Casual Academic (Gerontology and Human Services) and Research Assistant, Charles Sturt University"
     },
     {
      "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Western Australia is experiencing a child safety crisis. Here’s what would help",
+   "published": "2026-09-23 04:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Worried about your car being hacked? You should be – no matter where it was made",
+   "published": "2026-09-23 03:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "We asked people with dementia about voluntary assisted dying. Here’s what they said",
    "published": "2026-09-23 03:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "WA Police’s facial recognition trial delivered strong results. But was it an ethical success?",
-   "published": "2026-09-23 02:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Rape myths shape how we respond to sexual violence. What are they and what impact do they have?",
-   "published": "2026-09-23 01:24 UTC"
   },
   {
    "region": "Oceania",
