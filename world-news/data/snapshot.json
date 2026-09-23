@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T02:01:08Z",
+ "generatedAt": "2026-09-23T03:01:13Z",
  "regions": [
   {
    "key": "europe",
@@ -8,7 +8,7 @@
    "stale": false,
    "items": [
     {
-     "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin's farce elections did not allow that.",
+     "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
      "source": "Global Voices",
      "feed": "gv-eastern-europe",
      "link": "https://globalvoices.org/2026/09/21/russian-tiktokers-wanted-to-vote-for-an-anti-war-agenda-putins-farce-elections-did-not-allow-that/",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "WA Police’s facial recognition trial delivered strong results. But was it an ethical success?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/wa-polices-facial-recognition-trial-delivered-strong-results-but-was-it-an-ethical-success-292599",
+     "published": "2026-09-23T02:25:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adam Andreotta, Lecturer, School of Management and Marketing, Curtin University"
+    },
+    {
      "title": "Rape myths shape how we respond to sexual violence. What are they and what impact do they have?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Francesca Kurghan, PhD Candidate, University of Waikato"
-    },
-    {
-     "title": "Women’s work – and office fashion – has changed radically over the last 60 years. Cue couldn’t keep up",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/womens-work-and-office-fashion-has-changed-radically-over-the-last-60-years-cue-couldnt-keep-up-292241",
-     "published": "2026-09-22T20:17:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Toby Slade, Associate Professor of Fashion, University of Technology Sydney"
     },
     {
      "title": "New rules finally put a ceiling on money in politics – but the cap is double what it should be",
@@ -673,7 +673,7 @@
   {
    "region": "Europe",
    "source": "Global Voices",
-   "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin's farce elections did not allow that.",
+   "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
    "published": "2026-09-21 13:15 UTC"
   },
   {
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "WA Police’s facial recognition trial delivered strong results. But was it an ethical success?",
+   "published": "2026-09-23 02:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Rape myths shape how we respond to sexual violence. What are they and what impact do they have?",
    "published": "2026-09-23 01:24 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
    "published": "2026-09-22 23:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Women’s work – and office fashion – has changed radically over the last 60 years. Cue couldn’t keep up",
-   "published": "2026-09-22 20:17 UTC"
   },
   {
    "region": "Oceania",
