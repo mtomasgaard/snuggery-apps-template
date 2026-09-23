@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T14:01:14Z",
+ "generatedAt": "2026-09-23T15:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Fiber is both diet fad and fixture for good health – a doctor explains why there is no one-size-fits-all way to increase your intake",
+     "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/fiber-is-both-diet-fad-and-fixture-for-good-health-a-doctor-explains-why-there-is-no-one-size-fits-all-way-to-increase-your-intake-290023",
-     "published": "2026-09-23T12:45:06Z",
+     "link": "https://theconversation.com/trump-speculates-on-diesel-fuel-export-ban-as-high-prices-ripple-across-us-economy-292323",
+     "published": "2026-09-23T14:30:14Z",
      "summary": "",
      "stale": false,
-     "author": "Jean Liew, Assistant Professor of Medicine, Boston University"
+     "author": "Vidya Mani, Associate Professor, Darden School of Business; Research Associate Professor, Biocomplexity Institute, University of Virginia; Cornell University"
     },
     {
-     "title": "Dementia caregiving can expose hidden family tensions – but early planning can ease the strain",
+     "title": "¿Por qué los hispanos en Estados Unidos están perdiendo la fe en el sueño americano?",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/dementia-caregiving-can-expose-hidden-family-tensions-but-early-planning-can-ease-the-strain-280415",
-     "published": "2026-09-23T12:44:55Z",
+     "link": "https://theconversation.com/por-que-los-hispanos-en-estados-unidos-estan-perdiendo-la-fe-en-el-sueno-americano-292206",
+     "published": "2026-09-23T13:56:25Z",
      "summary": "",
      "stale": false,
-     "author": "Sarah E. Patterson, Research Assistant Professor of Demography, University of Michigan"
+     "author": "Diana Orcés, Adjunct Professor of Government, School of Public Affairs, American University"
     },
     {
      "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "South Africa’s green building upgrades are rising – but major cities still dominate, study finds",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-green-building-upgrades-are-rising-but-major-cities-still-dominate-study-finds-288878",
+     "published": "2026-09-23T13:50:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jonathan Oladeji, Postdoctoral Research Fellow, University of Johannesburg"
+    },
+    {
+     "title": "Street names carry stories with them. What they tell us about Gauteng in South Africa",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/street-names-carry-stories-with-them-what-they-tell-us-about-gauteng-in-south-africa-292281",
+     "published": "2026-09-23T13:50:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "Yolandi Burger, Postdoctoral Research Fellow, Gauteng City-Region Observatory"
+    },
+    {
      "title": "DR Congo Ebola outbreak toll exceeds 3,700 deaths",
      "source": "UN News",
      "feed": "un-africa",
@@ -184,26 +204,6 @@
      "published": "2026-09-23T12:00:00Z",
      "summary": "More than 130 days into the latest Ebola outbreak in the Democratic Republic of the Congo (DRC), health experts said on Wednesday that response efforts have been scaled up significantly and “the first encouraging signs…",
      "stale": false
-    },
-    {
-     "title": "Dette du Sénégal : pourquoi l’accord avec le FMI ne règle pas encore la crise",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/dette-du-senegal-pourquoi-laccord-avec-le-fmi-ne-regle-pas-encore-la-crise-292527",
-     "published": "2026-09-23T08:56:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Florent Kanga Gbongue, Enseignant-Chercheur, Université Félix Houphouët-Boigny. Cocody, Côte-d'Ivoire"
-    },
-    {
-     "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-minibus-taxi-industry-has-lessons-for-policymakers-on-how-informal-systems-work-291033",
-     "published": "2026-09-22T14:50:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Siyabulela Christopher Fobosi, Senior Researcher, UNESCO 'Oliver Tambo' Chair of Human Rights, University of Fort Hare, University of Fort Hare"
     },
     {
      "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Fiber is both diet fad and fixture for good health – a doctor explains why there is no one-size-fits-all way to increase your intake",
-   "published": "2026-09-23 12:45 UTC"
+   "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
+   "published": "2026-09-23 14:30 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Dementia caregiving can expose hidden family tensions – but early planning can ease the strain",
-   "published": "2026-09-23 12:44 UTC"
+   "title": "¿Por qué los hispanos en Estados Unidos están perdiendo la fe en el sueño americano?",
+   "published": "2026-09-23 13:56 UTC"
   },
   {
    "region": "Americas",
@@ -768,21 +768,21 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s green building upgrades are rising – but major cities still dominate, study finds",
+   "published": "2026-09-23 13:50 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Street names carry stories with them. What they tell us about Gauteng in South Africa",
+   "published": "2026-09-23 13:50 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "DR Congo Ebola outbreak toll exceeds 3,700 deaths",
    "published": "2026-09-23 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Dette du Sénégal : pourquoi l’accord avec le FMI ne règle pas encore la crise",
-   "published": "2026-09-23 08:56 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "South Africa’s minibus taxi industry has lessons for policymakers on how informal systems work",
-   "published": "2026-09-22 14:50 UTC"
   },
   {
    "region": "Africa",
