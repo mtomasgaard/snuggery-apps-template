@@ -416,7 +416,9 @@ export class SolarSystem {
     // Moon orbits around the giant planets, only when their system is large on screen.
     for (const [k, mo] of this.moonOrbits) {
       const b = this.bodies.get(k), par = this.bodies.get(b.parent);
-      const show = layers.moons && layers.orbits && b.valid && (b.sepPx || 0) > 18;
+      // Shown once the orbit is a readable size on screen, and hidden again once it is so much larger
+      // than the screen that only near-straight lines would cross it.
+      const show = layers.moons && layers.orbits && b.valid && (b.sepPx || 0) > 18 && (b.sepPx || 0) < 1600;
       mo.line.mesh.visible = show;
       if (!show) continue;
       const P = 2 * Math.PI * Math.sqrt(((b.aKm || 1e5) / AU_KM) ** 3 / this._gmAu(b.parent));

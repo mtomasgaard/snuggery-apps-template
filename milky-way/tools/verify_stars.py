@@ -192,6 +192,13 @@ def main():
     joined = {tuple(sorted(s)) for s in ori['lines'] + ori['lines_sky_only']}
     check(tuple(sorted(belt[:2])) in joined and tuple(sorted(belt[1:])) in joined,
           'the belt runs Mintaka - Alnilam - Alnitak')
+    xi = row(name='Alula Australis')
+    uma = {x for s in cons['UMa']['lines'] + cons['UMa']['lines_sky_only'] for x in s}
+    check(xi is not None and xi in uma and nm['desig'][xi] == 'ξ UMa',
+          f'HIP 55203 in the UMa figure resolves to xi UMa: {desc(xi) if xi is not None else "missing"}')
+    for ident, name in (('HIP 88267', 'Bodu'), ('HIP 73695', 'Quadrans')):
+        j = row(ident=ident)
+        check(j is not None and nm['name'][j] == name, f'IAU key with a component suffix: {ident} is {name}')
     print(f'    Orion sky-only segments (a star with no usable parallax): '
           f'{[(nm["name"][a] or nm["id"][a], nm["name"][b] or nm["id"][b]) for a, b in ori["lines_sky_only"]]}')
 

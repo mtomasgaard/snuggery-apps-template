@@ -118,7 +118,7 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
       uEmissive: { value: emissive ? 1 : 0 }, uSun: { value: new THREE.Vector3() },
       uRingN: { value: new THREE.Vector3(0, 0, 1) }, uCenter: { value: new THREE.Vector3() }, uKm: { value: 1 },
       uRingCount: { value: 0 }, uRingBands: { value: Array.from({ length: 6 }, () => new THREE.Vector3()) },
-      uAmbient: { value: 0.02 },
+      uAmbient: { value: 0.004 },
     },
     vertexShader: LOGV + /* glsl */`
       varying vec3 vBody;
@@ -181,8 +181,12 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
         vec3 col = lin * (lit + uAmbient);
         if (uHasNight > 0.5) {
           float dark = 1.0 - smoothstep(-0.12, 0.04, ndl);
-          vec3 n = pow(textureGrad(uNight, uv, gx, gy).rgb, vec3(2.2));
-          col += n * dark * 1.1;
+          vec3 nd = textureGrad(uNight, uv, gx, gy).rgb;
+          // The city-lights map is composited over a blue-grey land base (red and green about 0.15)
+          // and black oceans; the lights are white. Keying on red and green keeps the lights and
+          // drops the base, which would otherwise tint the whole night side.
+          float lamp = smoothstep(0.2, 0.5, min(nd.r, nd.g));
+          col += pow(nd, vec3(2.2)) * lamp * dark * 1.5;
         }
         gl_FragColor = vec4(pow(col, vec3(1.0 / 2.2)), 1.0);
         #include <logdepthbuf_fragment>
@@ -278,7 +282,10 @@ export function skyMaterial(tex) {
         vec2 gx = dFdx(uv), gy = dFdy(uv);
         gx.x -= floor(gx.x + 0.5); gy.x -= floor(gy.x + 0.5);
         float v = textureGrad(uMap, uv, gx, gy).r;
-        vec3 c = pow(vec3(v), vec3(1.25)) * uTint;
+        // A darker black point than the file's own stretch: from among the planets the sky should
+        // read as black with the Milky Way band in it, not as grey.
+        v = max(v - 0.13, 0.0) / 0.87;
+        vec3 c = pow(vec3(v), vec3(1.7)) * uTint;
         gl_FragColor = vec4(c * uOpacity, 1.0);
       }`,
     side: THREE.BackSide, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, transparent: true,

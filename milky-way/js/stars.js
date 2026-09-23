@@ -21,7 +21,9 @@ export class Stars {
     this.root = new THREE.Group();
     this.root.name = 'stars';
     this.named = named;
-    this.exo = (exoplanets && exoplanets.hosts) || {};
+    this.exo = exoplanets.hosts;            // row -> [[name, period_d, a_au, …], …] in exoplanets.fields order
+    this.exoFields = exoplanets.fields;
+    this.exoMethods = exoplanets.methods;
     this.skyMeta = sky;
     // colour.json: 256 sRGB triples (0–1) by effective temperature; the last entry is neutral white
     // for stars with no colour measurement.
@@ -61,7 +63,9 @@ export class Stars {
       const placed = !(named.flags[k] & 16);
       np[k * 3] = placed ? named.x[k] : 0; np[k * 3 + 1] = placed ? named.y[k] : 0; np[k * 3 + 2] = placed ? named.z[k] : 0;
       this.namedAU[k * 3] = named.x[k] * PC_AU; this.namedAU[k * 3 + 1] = named.y[k] * PC_AU; this.namedAU[k * 3 + 2] = named.z[k] * PC_AU;
-      nm[k] = placed ? named.absmag[k] : 99;
+      // Rows with no measured magnitude (a few exoplanet hosts known only from the Open Exoplanet
+      // Catalogue) are placed but not drawn as stars: a null would read as magnitude 0, a bright star.
+      nm[k] = placed && named.absmag[k] != null ? named.absmag[k] : 99;
       nc.set(rgbAt(named.colour[k]), k * 3);
     }
     const ng = new THREE.BufferGeometry();
@@ -130,7 +134,7 @@ export class Stars {
     // a camera a few hundred parsecs out, and fades as the camera leaves.
     const skyA = layers.sky ? (1 - Math.min(1, Math.max(0, (Math.log10(Math.max(dSunPc, 1e-9)) - 2) / 1.1))) : 0;
     this.sky.visible = skyA > 0.01;
-    this.sky.material.uniforms.uOpacity.value = 0.62 * skyA;
+    this.sky.material.uniforms.uOpacity.value = 0.8 * skyA;
     this.sky.position.set(camPc[0], camPc[1], camPc[2]);
     // Constellation figures: faint from inside the Solar System, where they are the sky behind the
     // planets; clearer out among the stars, where their third dimension shows; gone far away.
@@ -156,4 +160,16 @@ export class Stars {
   }
 
   distSource(k) { return this.named.dist_src_labels[this.named.dist_src[k]] || '—'; }
+
+  // The confirmed planets of named star k, as objects.
+  planets(k) {
+    const rows = this.exo[k];
+    if (!rows) return null;
+    return rows.map((r) => {
+      const o = {};
+      this.exoFields.forEach((f, i) => { o[f] = r[i]; });
+      if (o.method != null) o.method = this.exoMethods[o.method];
+      return o;
+    });
+  }
 }

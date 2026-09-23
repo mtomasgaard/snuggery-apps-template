@@ -431,6 +431,10 @@ class TeffModel:
         self._spt_cache = {}
         report['mamajek'] = {'rows': self.table_rows, 'btvt_range': [float(self.btvt_x[0]),
                                                                     float(self.btvt_x[-1])]}
+        spt = {r['SpT']: t for r, t in zip(rows, teff, strict=True)}
+        report['ballesteros_check'] = {
+            'bv_-0.215_K': int(round(float(self.ballesteros(-0.215)))), 'mamajek_B2V_K': int(spt['B2V']),
+            'bv_0.65_K': int(round(float(self.ballesteros(0.65)))), 'mamajek_G2V_K': int(spt['G2V'])}
 
     def ballesteros(self, bv):
         a, b, c, T0 = self.bal['a'], self.bal['b'], self.bal['c'], self.bal['T0']
@@ -1210,6 +1214,7 @@ def write_deep(cat, named):
                             for k in ('G_R3', 'G_R2', 'HIP', 'GJ')},
         'colour_src_counts': {TEFF_SRC_LABELS[k]: int((ts == k).sum()) for k in range(6)},
     }, pretty=True)
+    report['deep_colour_src'] = {TEFF_SRC_LABELS[k]: int((ts == k).sum()) for k in range(6)}
     report['deep_count'] = int(len(di))
 
 
@@ -1342,8 +1347,9 @@ def write_credits():
                             '(AT-HYG ACKNOWLEDGMENTS.md)'),
              retrieved=RETRIEVED,
              adaptations='Used only as the distances AT-HYG already carries; no Gaia file is read directly.',
-             accuracy=(f'Parallax errors of the Gaia DR3 stars in deep.bin (read from Stellarium\'s copy at '
-                       f'build time): median {r["deep_gaia_parallax_error_mas"]["p50"]} mas, 90th percentile '
+             accuracy=(f'Parallax errors of the Gaia DR3 stars in deep.bin, read from Stellarium\'s copy '
+                       f'(stored in 0.01 mas steps) at build time: median '
+                       f'{r["deep_gaia_parallax_error_mas"]["p50"]} mas, 90th percentile '
                        f'{r["deep_gaia_parallax_error_mas"]["p90"]} mas. No zero-point correction.')),
         dict(id='hyg', title='HYG database v4.1 (hygdata_v41.csv)', owner='David Nash (astronexus)',
              source=('Hipparcos (ESA 1997; 2007 new reduction), Yale Bright Star Catalog 5th ed. '
@@ -1425,8 +1431,14 @@ def write_credits():
              url='https://pypi.org/project/PyAstronomy/0.25.0/', licence='MIT (PyAstronomy)',
              licence_quote='PyAstronomy 0.25.0 METADATA: "License: MIT"', retrieved=RETRIEVED,
              adaptations=('T = T0 (1/(a BV + b) + 1/(a BV + c)) with the coefficients read from the pinned '
-                          f'source: {r["ballesteros_coefficients"]}.'),
-             accuracy='A blackbody-based model; it underestimates hot stars (B-V = -0.2 gives about 13,600 K).'),
+                          'source: ' + ', '.join(f'{k} = {v:g}' for k, v in r['ballesteros_coefficients'].items())
+                          + f'; used for {r["named"]["colour_src"][TEFF_SRC_LABELS[1]]:,} named and '
+                          f'{r["deep_colour_src"][TEFF_SRC_LABELS[1]]:,} deep stars.'),
+             accuracy=(f'A blackbody-based model. It underestimates hot stars: B-V = -0.215 gives '
+                       f'{r["ballesteros_check"]["bv_-0.215_K"]:,} K where Mamajek\'s B2V row has '
+                       f'{r["ballesteros_check"]["mamajek_B2V_K"]:,} K; at the Sun\'s B-V of 0.65 it gives '
+                       f'{r["ballesteros_check"]["bv_0.65_K"]:,} K (Mamajek G2V: '
+                       f'{r["ballesteros_check"]["mamajek_G2V_K"]:,} K).')),
         dict(id='cie1931', title='CIE 1931 2-degree standard observer colour-matching functions',
              owner='CIE (tabulated by CVRL), via colour-science 0.4.6 (BSD-3-Clause)',
              source='colour/colorimetry/datasets/cmfs.py', url='https://pypi.org/project/colour-science/0.4.6/',

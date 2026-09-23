@@ -1,0 +1,78 @@
+{
+ "caption": "Density of stars measured by Gaia (ESA), from Gaia DR3. The view from the Sun.",
+ "credit": "ESA/Gaia/DPAC",
+ "dedup": {
+  "note": "Two partitions of the MAST HATS copy repeat rows (same source_id up to 3 times); their order-8 pixels are recounted from distinct source_id.",
+  "partitions": [
+   {
+    "columns_sha256": "665d323b373d7d8c678548afd8b1f1421f14969aa051c31526343713c8754687",
+    "distinct_source_id": 1418703,
+    "multiplicity_counts": {
+     "1": 1319992,
+     "3": 98711
+    },
+    "order8_pixels_changed": 45,
+    "partition": "Norder=3/Npix=29",
+    "rows": 1616125,
+    "s3_version_id": "9Bk2iLxZNbMZtoQJ5YctSN7y1L5I_W8U"
+   },
+   {
+    "columns_sha256": "8bf3d388a5db027db2e36cefb3c59364fbf6b84ddf4d9bcf482c67fd87436985",
+    "distinct_source_id": 543481,
+    "multiplicity_counts": {
+     "1": 131165,
+     "3": 412316
+    },
+    "order8_pixels_changed": 212,
+    "partition": "Norder=4/Npix=115",
+    "rows": 1368113,
+    "s3_version_id": "L0_wu7pZqGRQJdOV4A5QTiGz2h166kh_"
+   }
+  ],
+  "total_after_fix": 1811709793
+ },
+ "file": "gaia-dr3-counts.jpg",
+ "frame": "ICRS",
+ "grayscale": true,
+ "height": 1024,
+ "jpeg_quality": 85,
+ "licence": "CC BY-NC 3.0 IGO",
+ "pixel_to_sky": {
+  "dec_deg": "Dec = 90 - 180 * (y + 0.5) / height",
+  "note": "x = column from the left, y = row from the top; RA increases to the right",
+  "ra_deg": "RA = 360 * (x + 0.5) / width"
+ },
+ "projection": "equirectangular",
+ "quantity": "Gaia DR3 sources per square degree (catalogue counts, not surface brightness)",
+ "resampling": "bilinear interpolation of the NSIDE 256 map (per deg^2) at each pixel centre, astropy-healpix 1.1.2",
+ "source": {
+  "catalogue": "Gaia DR3 gaia_source",
+  "coordsys": "CEL (ICRS)",
+  "hats_builder": "hats-import v0.6.0",
+  "hats_creation_date": "2025-06-13T19\\:56UTC",
+  "nside": 256,
+  "ordering": "NESTED",
+  "product": "HATS point_map.fits (STScI/MAST, AWS Open Data bucket stpubdata, gaia/gaia_dr3/public/hats/gaia)",
+  "rows_raw": 1812731847,
+  "s3_version_id": "ap2bO438Iyoss8CsAujiN7K4GnPVyjVV",
+  "sha256": "3bec7fbb3140c3bbfb5437aa1e1d56a923c1cc89b97f7f42ea03ad3e938c4629"
+ },
+ "stats_per_deg2": {
+  "fraction_of_sky_above_white": 0.000915527,
+  "fraction_of_sky_below_black": 0.013248444,
+  "max": 1413302.729942102,
+  "median": 9779.652266919,
+  "min": 266.891095004
+ },
+ "stretch": {
+  "black_per_deg2": 2500.0,
+  "black_per_pixel": 131.139632064,
+  "formula": "v = asinh(max(D - black, 0) / soft) / asinh((white - black) / soft), clipped to [0, 1]; pixel = round(255 v)",
+  "inverse": "D = black + soft * sinh(v * asinh((white - black) / soft)) (for v > 0)",
+  "soft_per_deg2": 20000.0,
+  "type": "asinh",
+  "white_per_deg2": 1200000.0,
+  "white_per_pixel": 62947.023390838
+ },
+ "width": 2048
+}

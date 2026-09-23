@@ -534,10 +534,11 @@ function facts(id) {
       if (Number.isFinite(n.absmag[i])) add('Absolute magnitude', `${fmt(n.absmag[i], 2)}`);
       if (n.spect[i]) add('Spectral type', n.spect[i]);
       add('Distance from', stars.distSource(i));
-      const pl = stars.exo[i];
+      const pl = stars.planets(i);
       if (pl && pl.length) out.planets = pl;
       if (n.flags[i] & 4) out.note = 'A companion placed at its primary star’s distance.';
       if (n.flags[i] & 8) out.note = 'Parallax only 5–10× its error: the distance is uncertain.';
+      else if (n.flags[i] & 64) out.note = 'No independent parallax error was available to check this distance against.';
     } else if (kind === 'gc' || kind === 'sat') {
       const o = kind === 'gc' ? galaxy.globulars[i] : galaxy.satellites[i];
       out.kind = kind === 'gc' ? 'Globular cluster' : 'Satellite galaxy';
@@ -576,7 +577,7 @@ function select(id, fromLabel = false) {
   $('card-facts').innerHTML = f.rows.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('');
   const pl = $('card-planets');
   pl.hidden = !f.planets;
-  pl.innerHTML = f.planets ? f.planets.map((p) => `<li><span>${escapeHtml(p.name)}</span><span class="d">${[p.period_d ? `orbit ${fmtDays(p.period_d)}` : '', p.year ? `found ${p.year}` : ''].filter(Boolean).join(' · ')}</span></li>`).join('') : '';
+  pl.innerHTML = f.planets ? f.planets.map((p) => `<li><span>${escapeHtml(p.name)}</span><span class="d">${[p.period_d ? `orbit ${fmtDays(p.period_d)}` : '', p.method || '', p.year ? `found ${p.year}` : ''].filter(Boolean).join(' · ')}</span></li>`).join('') : '';
   $('card-note').textContent = f.note || '';
   $('card-src').textContent = f.src || '';
   $('card-orbit').hidden = !f.orbit;
