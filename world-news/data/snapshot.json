@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T10:06:34Z",
+ "generatedAt": "2026-09-23T11:01:21Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "United Kingdom announces action on disinformation and global AI standards",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168406",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "The United Kingdom will fight disinformation at home and abroad, and work to ensure global safety standards for artificial intelligence (AI), new Prime Minister Andy Burnham said on Monday evening in his first address…",
+     "stale": false
+    },
     {
      "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
      "source": "Global Voices",
@@ -55,15 +64,6 @@
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
      "stale": false,
      "author": "Omid Memarian"
-    },
-    {
-     "title": "Sexual violence against civilians and POWs in Ukraine widespread and ‘abhorrent’",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168374",
-     "published": "2026-09-18T12:00:00Z",
-     "summary": "Over 1,000 cases of sexual violence against civilians and prisoners of war (POWs) in Ukraine have been documented from the start of Russia’s invasion to the end of July this year.",
-     "stale": false
     },
     {
      "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "United Kingdom announces action on disinformation and global AI standards",
+   "published": "2026-09-23 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
    "published": "2026-09-23 06:04 UTC"
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
    "published": "2026-09-19 08:01 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Sexual violence against civilians and POWs in Ukraine widespread and ‘abhorrent’",
-   "published": "2026-09-18 12:00 UTC"
   },
   {
    "region": "Europe",
