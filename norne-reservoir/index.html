@@ -61,6 +61,8 @@
     </div>
   </div>
 
+  <section id="net" hidden aria-label="Export network map"></section><!-- topside: the stage-2 network panel, filled by topside-network.js -->
+
   <div id="loading" role="status">
     <p id="load-msg">Loading the Norne model…</p>
     <div class="bar"><div id="load-bar"></div></div>
@@ -114,6 +116,8 @@
         <label><input id="t-labels" type="checkbox" checked> Well names</label>
         <label><input id="t-edges" type="checkbox" checked> Cell edges</label>
       </div>
+      <div id="views" class="chips" role="radiogroup" aria-label="Saved viewpoints" hidden></div><!-- topside: saved viewpoints -->
+      <div id="topside" class="rows" aria-label="Topside"></div><!-- topside: the Topside group, built by topside.js -->
       <div class="actions">
         <button id="reset-cut" class="btn">Show all cells</button>
         <button id="reset-view" class="btn">Reset view</button>

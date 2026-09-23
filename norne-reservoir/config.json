@@ -10,6 +10,49 @@
     "shut": "#8A969C",
     "outline": "#0E1A20"
   },
+  "views": [
+    {
+      "id": "along-field",
+      "label": "Along the field",
+      "theta": -52,
+      "phi": 14,
+      "dist": 7000,
+      "target": [
+        -60,
+        100,
+        -120
+      ],
+      "exag": 1,
+      "frame": 0,
+      "prop": "SOIL",
+      "edges": false,
+      "topside": []
+    },
+    {
+      "id": "overview",
+      "label": "Overview"
+    },
+    {
+      "id": "show-field",
+      "label": "Show the field",
+      "theta": 62,
+      "phi": 18,
+      "distFactor": 0.66,
+      "target": [
+        0,
+        1150,
+        0
+      ],
+      "exag": 1,
+      "topside": [
+        "sea",
+        "fpso",
+        "templates",
+        "flowlines",
+        "exportline"
+      ]
+    }
+  ],
   "properties": [
     {
       "key": "SOIL",

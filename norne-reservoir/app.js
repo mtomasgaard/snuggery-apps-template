@@ -1,4 +1,5 @@
 // Norne reservoir viewer — vanilla WebGL2, no dependencies, runs offline.
+import { topside } from './topside.js';   // topside: the optional platform, pipeline and flow layer
 const $ = (id) => document.getElementById(id);
 const LS_KEY = 'norne-viewer:v1';
 const TEX_W = 1024;
@@ -98,6 +99,7 @@ async function main() {
   buildZones();
   computeExplode();
   initGL();
+  await topside.start({ gl, model, cfg, S, R, G, api: { flyTo, defaultCam, project, projectWorld, row, sep, fmt, fmtRate, fmtDate, save, setCardMode: (m) => { cardMode = m; } } });   // topside: load and build the topside layer
   initUI();
   initCamera();
   $('field-name').textContent = model.name;
@@ -123,6 +125,7 @@ function restore() {
     if (s.cam && Number.isFinite(s.cam.dist)) S.cam = s.cam;
     if (s.explode && ['formations', 'layers', 'segments'].includes(s.explode.mode) && Number.isFinite(s.explode.t)) S.explode = s.explode;
     if (S.well && !model.wells.some((w) => w.name === S.well)) S.well = null;
+    topside.restoreState(s);   // topside: its own toggles and the saved viewpoint, from the same blob
   } catch { /* ignore a broken saved state */ }
 }
 let saveTimer = 0;
@@ -471,6 +474,7 @@ function eye() {
 
 // ---------------------------------------------------------------- render loop
 function loop(now) {
+  topside.tick(now || performance.now());   // topside: the flow animation's clock, idle when it is off
   if (G.anim) stepAnim(now || performance.now());
   if (R.colors) { updateColors(); R.colors = false; R.draw = true; if (valueFilterOn()) R.faces = true; }
   if (R.faces) { rebuildFaces(); R.faces = false; R.draw = true; }
@@ -513,13 +517,17 @@ function wellColor(code) {
   return hex([wc.shut, wc.producer, wc.waterInjector, wc.gasInjector][code] || wc.shut);
 }
 function draw() {
+  topside.frameStart();   // topside: starts the frame timer the debug readout reports
   const [w, h] = matrices();
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.viewport(0, 0, w, h);
   gl.clearColor(...G.clear, 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.disable(gl.BLEND);
   drawGrid(0);
-  if (!S.wells || !G.wellVerts) return;
+  if (S.wells && G.wellVerts) drawWells(w, h);
+  topside.draw(w, h);   // topside: sea, seabed, facilities, pipelines and flow marks
+}
+function drawWells(w, h) {
   const wp = G.wellP, sel = model.wells.findIndex((x) => x.name === S.well);
   model.wells.forEach((wl, i) => {
     const code = wl.state[S.frame] || 0, c = wellColor(code);
@@ -638,6 +646,7 @@ function placeLabels() {
     placed.push({ x, y, w: wdt, h: hgt });
     it.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(Math.max(y, top))}px)`;
   }
+  topside.placeLabels();   // topside: the facility and pipeline labels
 }
 
 function buildWellKey() {
@@ -837,6 +846,7 @@ function initUI() {
   };
   exs.addEventListener('input', onEx); exm.addEventListener('change', onEx);
 
+  topside.initUI();   // topside: the saved-viewpoint chips and the Topside group
   initSheet();
   initPointer();
   initChartSeek();
@@ -856,6 +866,7 @@ async function refreshConfig() {
     if (!propDef(S.prop)) S.prop = cfg.properties[0].key;
     buildZones(); computeExplode(); buildLabels(); buildWellKey();
     buildChips(); applyProp(); R.draw = true; R.wells = true;
+    topside.onConfig(cfg);   // topside: re-read its saved viewpoints and colours
   } catch { /* keep the settings already loaded */ }
 }
 
@@ -1051,6 +1062,7 @@ function pan(dx, dy) {
 }
 function tap(x, y) {
   G.hl = -1;
+  if (topside.tap(x, y)) { R.draw = true; return; }   // topside: a facility or pipeline wins the tap
   const a = pickAt(x, y);
   if (a >= 0 && a < G.NA) { pick = a; cardMode = 'cell'; refreshCard(); placeCard(y); }
   else closeCard();
@@ -1067,10 +1079,12 @@ function placeCard(y) {
 }
 
 // ---------------------------------------------------------------- details card
-function closeCard() { cardMode = null; pick = -1; $('inspect').hidden = true; R.draw = true; }
+function closeCard() { cardMode = null; pick = -1; $('inspect').hidden = true; R.draw = true; topside.deselect(); }   // topside: clear its selection too
 function row(dl, k, v) { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); }
 function sep(dl, text) { const d = document.createElement('div'); d.className = 'sep'; dl.appendChild(d); if (text) { const dt = document.createElement('dt'); dt.textContent = text; dt.style.gridColumn = '1 / -1'; dt.style.color = 'var(--ink)'; dl.appendChild(dt); } }
 function refreshCard() {
+  if (cardMode === 'topside') return topside.card();   // topside: facility and pipeline cards
+  $('ins-focus').hidden = false;                       // topside: its card hides this button
   const dl = $('ins-list'); dl.innerHTML = '';
   const date = fmtDate(model.frames[S.frame], true);
   if (cardMode === 'cell' && pick >= 0) {
@@ -1117,9 +1131,13 @@ function selectWell(name) {
 }
 
 // ---------------------------------------------------------------- chart
+// The fifth element marks a reported series: it is drawn only while the topside layer's
+// "Reported production" row is on, and it puts "(simulated)" on the simulated ones.
 const SERIES = {
-  liquid: [['oil', 'Oil produced', 'var(--c-oil)', false], ['water', 'Water produced', 'var(--c-water)', false], ['winj', 'Water injected', 'var(--c-water)', true]],
-  gas: [['gas', 'Gas produced', 'var(--c-gas)', false], ['ginj', 'Gas injected', 'var(--c-gas)', true]],
+  liquid: [['oil', 'Oil produced', 'var(--c-oil)', false], ['water', 'Water produced', 'var(--c-water)', false], ['winj', 'Water injected', 'var(--c-water)', true],
+    ['repOil', 'Oil (reported, NOD)', 'var(--c-oil)', '1 3', true], ['repWater', 'Water (reported, NOD)', 'var(--c-water)', '1 3', true]],
+  gas: [['gas', 'Gas produced', 'var(--c-gas)', false], ['ginj', 'Gas injected', 'var(--c-gas)', true],
+    ['repGasSold', 'Gas sold (reported, NOD)', 'var(--c-gas)', '1 3', true]],
 };
 function frameT(f) {
   if (!G.days) { G.days = model.frames.map((iso) => Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10)) / 864e5); }
@@ -1137,14 +1155,14 @@ function drawChart() {
   const panels = [{ key: 'liquid', y0: H * 0.1, y1: H * 0.56 }, { key: 'gas', y0: H * 0.68, y1: H * 0.86 }];
   let html = '', keyHtml = '';
   for (const pn of panels) {
-    const list = SERIES[pn.key].filter(([k]) => src[k] && src[k].some((v) => v > 0));
+    const list = SERIES[pn.key].filter(([k, , , , rep]) => (!rep || topside.reported()) && src[k] && src[k].some((v) => v > 0));   // topside: the reported rows
     const max = niceCeil(Math.max(0, ...list.flatMap(([k]) => src[k])));
     html += `<line class="grid" x1="0" x2="${W}" y1="${pn.y1}" y2="${pn.y1}"/><line class="grid" x1="0" x2="${W}" y1="${pn.y0}" y2="${pn.y0}" stroke-dasharray="2 3"/>`;
     html += `<text x="2" y="${pn.y0 - 3}">${list.length ? fmtRate(max) : (pn.key === 'gas' ? 'No gas flow' : 'No liquid flow')}</text>`;
-    for (const [k, label, color, dashed] of list) {
+    for (const [k, label, color, dashed, rep] of list) {
       const d = src[k].map((v, f) => `${f ? 'L' : 'M'}${X(f).toFixed(1)} ${(pn.y1 - (v / max) * (pn.y1 - pn.y0)).toFixed(1)}`).join('');
-      html += `<path class="ln" d="${d}" stroke="${color}"${dashed ? ' stroke-dasharray="4 3"' : ''}/>`;
-      keyHtml += `<span><i class="${dashed ? 'd' : ''}" style="--c:${color}"></i>${label}</span>`;
+      html += `<path class="ln" d="${d}" stroke="${color}"${dashed ? ` stroke-dasharray="${dashed === true ? '4 3' : dashed}"` : ''}/>`;   // topside: a string dash pattern for the reported rows
+      keyHtml += `<span><i class="${dashed === '1 3' ? 'dot' : dashed ? 'd' : ''}" style="--c:${color}"></i>${topside.label(label, rep)}</span>`;   // topside: "(simulated)" beside a reported row, and its own dot pattern
     }
   }
   const d0 = frameT.days0(), d1 = frameT.days1();

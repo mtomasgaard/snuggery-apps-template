@@ -43,7 +43,12 @@ the licence above; the first three are described in running-dashboard/TILES.md:
 - The reservoir model under norne-reservoir/data/ is derived from the Norne
   benchmark case published through the Open Porous Media initiative, and is a
   derived database under the Open Database License (ODbL) 1.0 — see
-  norne-reservoir/data/ATTRIBUTION.txt.
+  norne-reservoir/data/ATTRIBUTION.txt. The topside layer in
+  norne-reservoir/data/topside.json and topside-network.json contains data
+  under the Norwegian licence for Open Government data (NLOD) distributed by
+  the Norwegian Offshore Directorate (Sokkeldirektoratet) — FactMaps and
+  FactPages — re-centred, rounded and re-projected as ATTRIBUTION.txt states;
+  its coastline is Natural Earth, public domain.
 - The terrain under besseggen/data/ is derived from Kartverket's Nasjonal
   høydemodell (DTM1), © Kartverket, under NLOD 2.0 and CC BY 4.0; the trail from
   Kartverket's Turrutebasen (open data, no conditions); the lakes, rivers and

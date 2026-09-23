@@ -28,3 +28,128 @@ Files
   ijk.bin          uint8, 0-based I, J, K per active cell
   static.bin       float32 blocks of PORO, PERMX, PERMZ, NTG, FIPNUM, DEPTH
   dynamic.bin      per frame: SWAT uint8 (/255), SGAS uint8 (/255), PRESSURE uint16 scaled to dynamic.pressureRange
+
+
+================================================================================
+Topside layers (data/topside.json, data/topside-network.json)
+================================================================================
+
+These two files are optional layers drawn above and beyond the reservoir: the
+sea surface and seabed, the Norne FPSO and its riser base, the subsea templates,
+the gas export line, the transport network, the onshore terminals, the
+neighbouring field outlines, a coastline, and the field's reported monthly
+production. They are separate files under separate licences, and the licences
+are NOT merged with the reservoir's.
+
+--------------------------------------------------------------------------------
+1. Facilities, pipelines, field outlines and reported production
+--------------------------------------------------------------------------------
+
+Contains data under the Norwegian Licence for Open Government Data (NLOD)
+distributed by the Norwegian Offshore Directorate (Sokkeldirektoratet),
+https://factpages.sodir.no/ and https://factmaps.sodir.no/, retrieved
+2026-09-22 and 2026-09-23.
+
+  Licence: NLOD 2.0, https://data.norge.no/nlod/en/2.0
+  Layers:  FactMaps 307 (all facilities), 311 (pipelines), 502 (field by status)
+  Report:  FactPages field_production_monthly (monthly volumes per field)
+
+Changes made, as NLOD section 5 requires them to be clearly indicated:
+  - positions re-centred on the simulation model's origin (E 459,130.28 /
+    N 7,323,122.19, centre depth 2,764.62 m) and rounded to 1 m;
+  - longitude/latitude requested from the same service in EPSG:4326 for the flat
+    network panel, and rounded to 4 or 5 decimals;
+  - start-up dates converted from the published epoch values to calendar dates
+    in Europe/Oslo (reading them as UTC moves every winter date back one day);
+  - monthly production volumes divided by the days in each month to give a daily
+    rate, and aligned to the viewer's 110 frames;
+  - multi-part pipelines rejoined, and detached parts shorter than 5 km that do
+    not touch the main line dropped (one of them is a 1.7 km stub at the north
+    end of the Asgard Transport trunk);
+  - the coastline simplified to about 1 km, and the neighbouring field outlines
+    to about 400 m on the flat map and 25 m in the 3D copy;
+  - facilities with no published position (two virtual gas sale points) left out.
+
+What is drawn from published geometry and what is not:
+  - PUBLISHED: the FPSO, the riser base, the seven templates, the 16-inch gas
+    export line (128.1 km), the Asgard Transport trunk (688.1 km from the
+    Norne/Heidrun tee to the Kalsto landfall), the other trunk lines, the
+    terminals, and the field outlines.
+  - NOT PUBLISHED, drawn as schematic and labelled as such in the app itself
+    (in the toggle's own row, not only here): the flowlines and risers between
+    the templates and the FPSO, the first 500 m of the export line from the
+    riser base, the legs from the drawn well paths up to their templates, the
+    shape and heading of the FPSO hull, the depth profile of the export line,
+    and the oil leg after the FPSO.
+    The Directorate states that its pipeline dataset has a detail level of
+    +/- 50 m and that "tracks nearer than 500 meter from facilities is not
+    included", which is why the in-field flowlines do not exist anywhere.
+  - NOT DRAWN AT ALL: any route from Norne to a refinery. Oil leaves Norne by
+    shuttle tanker and no open dataset records where a cargo goes. Mongstad and
+    Slagentangen appear as terminals on the map with no line to Norne, because
+    drawing one would be the misleading presentation NLOD section 6 forbids.
+
+Coordinate frame: the simulation deck names no datum (its MAPAXES is the
+identity transform), so the frame the reservoir is drawn in is an assumption.
+Every Directorate record for Norne carries the datum ED50, and the service
+stores this data natively in EPSG:23032 (ED50 / UTM 32N), so ED50 is what is
+assumed here. The difference to WGS84 at Norne is 80 m east and 209 m north,
+which is smaller than the 139-861 m scatter between a well and its own template;
+no claim drawn in the app depends on it, and the app never says that a well sits
+directly under a particular template.
+
+--------------------------------------------------------------------------------
+2. Coastline
+--------------------------------------------------------------------------------
+
+Natural Earth, 1:50m physical coastline, version 4.1.0, from
+https://naciscdn.org/naturalearth/50m/physical/ne_50m_coastline.zip
+retrieved 2026-09-22. Made with Natural Earth.
+
+  Licence: public domain. "All versions of Natural Earth raster + vector map
+  data found on this website are in the public domain." No attribution is
+  required; this note is here because the change below should be stated.
+
+Changes: clipped to north-west Europe (6 W - 16 E, 48 N - 68 N) and simplified
+to a 1 km tolerance.
+
+--------------------------------------------------------------------------------
+3. Where Norwegian gas and oil go
+--------------------------------------------------------------------------------
+
+Source: Eurostat, Imports of natural gas by partner country (nrg_ti_gas) and
+Imports of oil and petroleum products by partner country (nrg_ti_oil), partner
+Norway, 2023,
+https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nrg_ti_gas
+https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nrg_ti_oil
+accessed 2026-09-22.
+
+  Reuse of Eurostat data is authorised provided the source is acknowledged.
+
+These are published statistics for Norway as a whole. They are shown instead of
+a drawn destination for Norne's oil, which is not published.
+
+--------------------------------------------------------------------------------
+4. Which well belongs to which template
+--------------------------------------------------------------------------------
+
+From the simulation deck itself: the WELSPECS group of each of the 36 wells, and
+the GRUPTREE parent where that group is one of the deck's two dummy groups. The
+deck is the same ODbL-licensed Norne benchmark case described at the top of this
+file, at commit eaa2261683a97027e057c2bc49612ad1c86390b3 of
+https://github.com/OPM/opm-data (file norne/INCLUDE/BC0407_HIST01122006.SCH).
+The manifolds are MANI-B1, MANI-B2, MANI-C, MANI-D1, MANI-D2, MANI-E1, MANI-E2,
+MANI-F and MANI-K2, so the assignment is the deck's own and not a guess: a
+nearest-template guess would disagree with it for 23 of the 36 wells.
+
+Files
+  topside.json          stage 1: sea, seabed, 9 facilities, 10 lines, the
+                        well-to-template map, the flow reference rates and the
+                        110-frame reported production series
+  topside-network.json  stage 2: the trunk lines, terminals, offshore nodes,
+                        field outlines and coastline in longitude/latitude for
+                        the flat network panel, plus the tie-back satellites and
+                        neighbouring outlines in model-relative metres. This
+                        version draws only the flat network panel; the satellites
+                        and the model-relative outlines are carried in the file
+                        and are not drawn anywhere in the app.

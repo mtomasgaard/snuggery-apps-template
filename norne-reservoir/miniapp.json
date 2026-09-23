@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Norne Reservoir",
   "entryPoint": "index.html",
-  "description": "3D viewer for the open Norne field simulation model: rock properties, saturations and pressure through the production history, with wells and rates.",
-  "version": "1.3"
+  "description": "3D viewer for the open Norne field simulation model: rock properties, saturations and pressure through the production history, with wells and rates, and optional topside layers — the sea and seabed, the FPSO, the subsea templates, the pipelines, the export network map and animated flow.",
+  "version": "1.4"
 }

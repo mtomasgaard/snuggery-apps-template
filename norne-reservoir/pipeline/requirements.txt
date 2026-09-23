@@ -2,3 +2,7 @@
 opm==2026.4
 opm-simulators==2026.4
 numpy>=1.26
+
+# build_topside.py (data/topside.json and data/topside-network.json) needs NOTHING from this file:
+# it uses only the Python standard library, on any platform, so the topside layers can be rebuilt
+# on a machine that cannot run the simulation. validate.py --topside-only is the same.
