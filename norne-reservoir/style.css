@@ -163,7 +163,7 @@ button, input { font: inherit; color: inherit; }
   fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
 }
 #sheet.s2 #grip .chev { transform: rotate(180deg); }
-#sheet.s0 .explode, #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more { display: none; }
+#sheet.s0 .explode, #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more, #sheet.s0 #topside-early { display: none; }
 
 .chips { display: flex; gap: 2px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
@@ -237,7 +237,7 @@ button:focus-visible, input:focus-visible, .wl:focus-visible { outline: 2px soli
   .chips { flex-wrap: wrap; overflow: visible; }
   #grip { display: none; }
   #sheet.s0 .explode { display: grid; }
-  #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more { display: block; }
+  #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more, #sheet.s0 #topside-early { display: block; }
 }
 @media (orientation: landscape) and (max-height: 479px) {
   body { flex-direction: row; }
@@ -246,7 +246,7 @@ button:focus-visible, input:focus-visible, .wl:focus-visible { outline: 2px soli
   #chart { height: 96px; }
   #grip { display: none; }
   #sheet.s0 .explode { display: grid; }
-  #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more { display: block; }
+  #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more, #sheet.s0 #topside-early { display: block; }
 }
 @media (prefers-reduced-motion: reduce) { #load-bar { transition: none; } }
 

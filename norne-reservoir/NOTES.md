@@ -71,7 +71,7 @@ The run was checked against the Eclipse 2014.2 results OPM publishes for the sam
 
 Everything topside is optional and **off by default**: with every row off the app draws, behaves and
 persists exactly as it did before, and the render loop is as idle as ever. Open the control sheet to
-its third stop and use the **Topside** group.
+its second stop and use the **Topside** group.
 
 | Row | What it draws | Honesty |
 | --- | --- | --- |

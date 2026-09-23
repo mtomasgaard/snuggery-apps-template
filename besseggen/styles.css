@@ -133,6 +133,41 @@ h1, h2, p { margin: 0; }
 #load-bar { width: 0; height: 100%; background: var(--accent); transition: width .18s; }
 #load-msg { color: var(--muted); font-size: 12.5px; }
 
+/* ---------------------------------------------------------------- focus mode */
+/* The 3D view on its own. The sheet is taken out of the flow — so the stage grows to the whole
+   height in the same frame — and slid out under the bottom edge; `visibility` follows it down a
+   beat later so its controls leave the tab order once they are gone. Everything the eye needs on
+   the map stays: compass, scale bar, readout, and the two round buttons at the top right. */
+#sheet { transition: transform .28s ease, visibility 0s 0s; }
+body.focus #sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 4;
+  transform: translateY(102%); visibility: hidden; pointer-events: none;
+  transition: transform .28s ease, visibility 0s .28s;
+}
+body.focus #head h1 { font-size: 15px; }
+body.focus #sub { display: none; }
+
+#focus-kit {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%); z-index: 5;
+  display: flex; flex-direction: column; gap: 6px;
+}
+#focus-kit .round { width: 34px; height: 34px; }
+#btn-unfocus { margin-bottom: 8px; }
+
+#hint {
+  position: absolute; left: 50%; bottom: 74px; transform: translateX(-50%); z-index: 6;
+  width: min(292px, calc(100vw - 96px));
+  background: var(--glass); border: 1px solid var(--rule); border-radius: var(--r);
+  padding: 9px 12px 10px; font-size: 12.5px;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px -18px rgba(0, 0, 0, .7);
+}
+#hint h2 { font: 700 11px/1 var(--face); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 6px; }
+#hint ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+#hint li { color: var(--muted); }
+#hint b { color: var(--ink); font-weight: 700; }
+#hint .pill { margin-top: 8px; padding: 4px 12px; font-size: 12.5px; }
+
 /* ---------------------------------------------------------------- sheet */
 #sheet {
   flex: 0 0 auto; max-height: 62%; overflow-y: auto; -webkit-overflow-scrolling: touch;
@@ -248,6 +283,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, .sw:focus-visib
   #grip { display: none; }
   #sheet.s0 #more1, #sheet.s0 #more2, #sheet.s1 #more2 { display: block; }
   .sheet-right { width: min(420px, 46vw); }
+  /* Side by side, the sheet is a column rather than a drawer: there is nothing below the screen
+     for it to slide into, so focus mode simply takes it away. */
+  body.focus #sheet { display: none; }
 }
 @media (orientation: landscape) and (max-height: 520px) {
   body { flex-direction: row; }
@@ -256,5 +294,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, .sw:focus-visib
   #grip { display: none; }
   #sheet.s0 #more1, #sheet.s0 #more2, #sheet.s1 #more2 { display: block; }
   #profile { height: 104px; }
+  body.focus #sheet { display: none; }
 }
-@media (prefers-reduced-motion: reduce) { #load-bar { transition: none; } .layer-row .sw::after { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  #load-bar { transition: none; }
+  .layer-row .sw::after { transition: none; }
+  /* The sheet covers half the screen; sliding it is exactly the motion this setting is about. */
+  #sheet, body.focus #sheet { transition: none; }
+}

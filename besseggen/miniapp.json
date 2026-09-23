@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Besseggen",
   "entryPoint": "index.html",
-  "description": "The Besseggen ridge in 3D from Kartverket's elevation data, with the marked trail, real sun and shadows, viewsheds and a walking-time profile, entirely offline.",
-  "version": "1.0"
+  "description": "The Besseggen ridge in 3D from Kartverket's elevation data, with the marked trail, real sun and shadows, viewsheds, a walking-time profile and a focus mode that leaves only the view, entirely offline.",
+  "version": "1.1"
 }

@@ -5,7 +5,7 @@
 // position and cast shadows (sun.js), viewshed and line of sight (analysis.js), the walk and the
 // walking-time models (route.js), the profile strip (profile.js), the camera modes (camera.js),
 // the trail, lakes and masks (overlays.js), loading and re-reading (data.js), coordinates
-// (geo.js) and the small shared helpers (util.js).
+// (geo.js), focus mode (focus.js) and the small shared helpers (util.js).
 //
 // Nothing here draws on a loop. A frame is scheduled when something changed and the scheduler
 // stops as soon as nothing is animating.
@@ -21,6 +21,7 @@ import { viewshed, lineOfSight, visiblePeaks, visibleFrom, measure, benchGrid } 
 import { Route, timeForSegments, paceLabel, langmuirNote } from './js/route.js';
 import { Profile } from './js/profile.js';
 import { CameraRig, reduceMotion } from './js/camera.js';
+import { setupFocus } from './js/focus.js';
 import { makeLineMaterial, buildLine, buildLines, lineFeatureToPoints, buildWater, makeWaterMaterial, buildMask, colorOf } from './js/overlays.js';
 
 // ---------------------------------------------------------------- state
@@ -64,7 +65,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(55, 1, 4, 140000);
 const raycaster = new THREE.Raycaster();
 
-let data, frame, terrain, mat, route, profile, rig, waterMesh, waterMat, lineMat, routeLine,
+let data, frame, terrain, mat, route, profile, rig, focus, waterMesh, waterMat, lineMat, routeLine,
   altLine, connLine, riverLine, toolLine, markerLine, shadowCore, shadowShell, viewshedTex,
   shadowBuf, shellBuf, viewshedInfo = null, sunInfo = null, events = null;
 let scheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -162,6 +163,13 @@ async function boot() {
   buildAbout(projErr);
   wireUI();
 
+  focus = setupFocus({
+    onLayoutChange: onResize,
+    zoom: (f) => { rig.zoomBy(f); save(); },
+    wholeWalk: () => { frameRoute(); save(); },
+    toolActive: () => !!S.tool,
+  });
+
   if (!rig.restore(savedCam)) frameRoute();
   setCursor(S.cursor, false);
   updateSun(true);
@@ -221,6 +229,13 @@ async function boot() {
       return { sunrise: e.sunrise, sunset: e.sunset, dawn: e.dawn, dusk: e.dusk, maxAlt: e.maxAlt, minAlt: e.minAlt, polarDay: e.polarDay };
     },
     heightAt: (x, y) => terrain.heightAt(x, y),
+    camera: () => ({
+      mode: rig.mode,
+      pos: camera.position.toArray().map((v) => +v.toFixed(3)),
+      target: rig.controls.target.toArray().map((v) => +v.toFixed(3)),
+      fovDeg: +camera.fov.toFixed(3),
+      distM: +camera.position.distanceTo(rig.controls.target).toFixed(3),
+    }),
     bench: () => {
       const g = benchGrid(1281, 1025);
       const buf = new Uint8Array(g.nx * g.ny);
@@ -621,18 +636,41 @@ function effectivePace() {
 }
 
 // ---------------------------------------------------------------- picking
-let tap = null;
+// One finger down and up again without moving is a tap, and a tap picks. Two of those inside
+// 300 ms and within a thumb's width of each other is a double-tap, which toggles focus mode.
+//
+// The first tap of a pair is never held back: it picks straight away, so nothing a single tap
+// does is slowed down waiting to find out whether a second one is coming. The second tap only
+// toggles — it does not pick again, which would otherwise spend a tool's second point or nudge
+// the marker twice on the way into focus mode.
+const DOUBLE_MS = 300;         // the window between the two lifts
+const DOUBLE_SLOP = 32;        // how far the second may land from the first, in CSS pixels
+let tap = null, lastTap = null;
+const down = new Set();
 canvas.addEventListener('pointerdown', (e) => {
+  down.add(e.pointerId);
+  // A second finger means a pinch or a two-finger pan, and neither is a tap of any kind.
+  if (down.size > 1) { tap = null; lastTap = null; return; }
   tap = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
 });
 canvas.addEventListener('pointerup', (e) => {
+  down.delete(e.pointerId);
   if (!tap || e.pointerId !== tap.id) { tap = null; return; }
   const moved = Math.hypot(e.clientX - tap.x, e.clientY - tap.y);
   const dt = performance.now() - tap.t;
   tap = null;
-  if (moved < 10 && dt < 600) onTap(e.clientX, e.clientY);
+  if (!(moved < 10 && dt < 600)) { lastTap = null; return; }
+  const now = performance.now();
+  if (lastTap && now - lastTap.t < DOUBLE_MS
+      && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < DOUBLE_SLOP
+      && focus && focus.toggle('tap')) {
+    lastTap = null;
+    return;
+  }
+  lastTap = { x: e.clientX, y: e.clientY, t: now };
+  onTap(e.clientX, e.clientY);
 });
-canvas.addEventListener('pointercancel', () => { tap = null; });
+canvas.addEventListener('pointercancel', (e) => { down.delete(e.pointerId); tap = null; lastTap = null; });
 
 function pickTerrain(clientX, clientY) {
   const r = canvas.getBoundingClientRect();
@@ -1167,6 +1205,13 @@ function buildAbout(projErr) {
       + row('Coordinates', a.app.crs || '—')
       + row('Built', a.app.built || '—')
       + `</dl>${a.app.offline ? `<p class="dim">${escapeHtml(a.app.offline)}</p>` : ''}` : '')
+    + `<h3>Moving around</h3>`
+    + `<p>One finger turns the view, two fingers move it, and a pinch zooms. Tap the ground to `
+    + `put the marker there. A double-tap on the view — or the F key — hides the controls and `
+    + `leaves the mountain on its own, with zoom, the whole walk and the same gesture help on a `
+    + `slim column at the right; double-tap again, or press the button at the top of that column, `
+    + `to bring the controls back. While a tool is picking points the double-tap stands down, so `
+    + `a second try at a pick is not mistaken for it.</p>`
     + `<h3>Honest limits</h3>`
     + `<p>The elevation model has real error and the trail geometry is generalised and largely `
     + `contributed, so its position on the ground is approximate. There is no position fix, no `

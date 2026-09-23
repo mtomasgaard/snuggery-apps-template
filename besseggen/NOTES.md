@@ -46,11 +46,37 @@ something changed, and the scheduler stops as soon as nothing is animating. Ever
 | `analysis.js` | viewshed, line of sight, visible peaks, measurement |
 | `route.js` | the walk, both directions, and the walking-time models |
 | `profile.js` | the elevation strip along the bottom, and the label layout that keeps it legible |
-| `camera.js` | orbit, saved viewpoints, first person, the fly-through, `prefers-reduced-motion` |
+| `camera.js` | orbit, saved viewpoints, first person, the fly-through, the zoom step, `prefers-reduced-motion` |
+| `focus.js` | focus mode: the sheet out of the way, the key controls and the gesture hint |
 | `overlays.js` | the trail, lakes, glaciers, rivers and the masks they are drawn with |
 | `data.js` | loading, and re-reading the editable files when the app regains focus |
 | `geo.js` | coordinates: the UTM inverse and the scene frame |
 | `util.js` | formatting and the `localStorage` wrapper |
+
+---
+
+## Focus mode
+
+On a phone the controls sheet takes the bottom half of the screen, and most of the time the thing
+worth looking at is the mountain. A **double-tap on the view** — or the **F key** — slides the
+sheet out from under the stage, shrinks the title to a line and leaves the 3D view the whole
+height. The compass, the scale bar, the readout and the two round buttons at the top right stay,
+because they are all still worth reading or reaching; a slim column of round buttons appears at
+the right with zoom in, zoom out, back to the whole walk, and a **?** that shows the gestures.
+That hint card also shows itself for four seconds the first time focus mode is entered, once per
+install (`besseggen:focusHintSeen` in `localStorage`), and any touch takes it away.
+
+The double-tap is detected by two lifts inside 300 ms within 32 px of each other, with the first
+tap doing its ordinary job immediately — nothing a single tap does waits to find out whether a
+second one is coming — and the second one toggling rather than picking again. **While an analysis
+tool is armed the double-tap stands down**: two quick taps near one spot is somebody correcting a
+pick that missed, not a request to hide the panel the tool writes its answer into. The F key and
+the button at the top of the column are never refused, so focus mode is never out of reach and
+never a trap. Focus mode itself is not remembered — every launch starts with the controls
+showing. Under `prefers-reduced-motion` the sheet does not slide, it is just gone.
+
+Side by side (a wide screen, or landscape on a phone) the sheet is a column rather than a drawer,
+so there is nothing below the screen to slide into and focus mode simply takes it away.
 
 ---
 

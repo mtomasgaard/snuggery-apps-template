@@ -84,6 +84,11 @@
     <input id="time" type="range" min="0" max="0" value="0" step="1" aria-label="Date">
   </div>
 
+  <div id="topside-early"><!-- topside: the saved viewpoints and the Topside group, one drag up from the player so they can be found -->
+    <div id="views" class="chips" role="radiogroup" aria-label="Saved viewpoints" hidden></div>
+    <div id="topside" class="rows" aria-label="Topside"></div>
+  </div>
+
   <div class="explode">
     <label for="explode">Explode</label>
     <input id="explode" type="range" min="0" max="100" value="0">
@@ -116,8 +121,6 @@
         <label><input id="t-labels" type="checkbox" checked> Well names</label>
         <label><input id="t-edges" type="checkbox" checked> Cell edges</label>
       </div>
-      <div id="views" class="chips" role="radiogroup" aria-label="Saved viewpoints" hidden></div><!-- topside: saved viewpoints -->
-      <div id="topside" class="rows" aria-label="Topside"></div><!-- topside: the Topside group, built by topside.js -->
       <div class="actions">
         <button id="reset-cut" class="btn">Show all cells</button>
         <button id="reset-view" class="btn">Reset view</button>

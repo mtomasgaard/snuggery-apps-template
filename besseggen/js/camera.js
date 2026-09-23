@@ -124,6 +124,25 @@ export class CameraRig {
     this.invalidate();
   }
 
+  // One step of the zoom keys in focus mode, where there is no pinch to reach for. A factor
+  // below 1 comes closer. Orbiting, that is a dolly along the view ray between the same limits
+  // the pinch obeys; standing on the ground there is nothing to dolly towards without walking
+  // into the hillside, so it becomes a lens — the same thing binoculars do.
+  zoomBy(factor) {
+    if (this.mode === 'orbit') {
+      const v = this.camera.position.clone().sub(this.controls.target);
+      const d = clamp(v.length() * factor, this.controls.minDistance, this.controls.maxDistance);
+      this.camera.position.copy(this.controls.target).add(v.setLength(d));
+      this.clamp();
+      this.controls.update();
+    } else {
+      this.camera.fov = clamp(this.camera.fov * factor, 18, 75);
+      this.camera.updateProjectionMatrix();
+      this.applyFirstPerson();
+    }
+    this.invalidate();
+  }
+
   // ---------- viewpoints and first person ----------
   applyViewpoint(vp) {
     const sx = this.frame.sx(vp.x), sz = this.frame.sz(vp.y);

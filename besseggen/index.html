@@ -9,7 +9,7 @@
 </head>
 <body>
 <main id="stage">
-  <canvas id="gl" aria-label="The Besseggen ridge in 3D. Drag to turn, pinch to zoom, two fingers to pan, tap the ground to move the marker."></canvas>
+  <canvas id="gl" aria-label="The Besseggen ridge in 3D. Drag to turn, pinch to zoom, two fingers to pan, tap the ground to move the marker, double-tap to show or hide the controls."></canvas>
   <div id="labels" aria-hidden="true"></div>
 
   <header id="head">
@@ -47,6 +47,36 @@
       <div id="scale-bar"></div>
       <p id="scale-sub">vertical ×1.0</p>
     </div>
+  </div>
+
+  <!-- Focus mode's own controls. Hidden until focus mode is on, and kept clear of the band along
+       the top right where Snuggery draws its own full-screen exit control. -->
+  <div id="focus-kit" hidden>
+    <button id="btn-unfocus" class="round" type="button" aria-label="Show the controls" title="Show the controls">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 13l6-6 6 6"/><path d="M5 18h14"/></svg>
+    </button>
+    <button id="btn-zoom-in" class="round" type="button" aria-label="Zoom in" title="Zoom in">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12"/><path d="M6 12h12"/></svg>
+    </button>
+    <button id="btn-zoom-out" class="round" type="button" aria-label="Zoom out" title="Zoom out">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>
+    </button>
+    <button id="btn-whole" class="round" type="button" aria-label="The whole walk" title="The whole walk">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5"/><path d="M15 4h5v5"/><path d="M20 15v5h-5"/><path d="M9 20H4v-5"/></svg>
+    </button>
+    <button id="btn-hint" class="round" type="button" aria-controls="hint" aria-expanded="false" aria-label="How to move around" title="How to move around">?</button>
+  </div>
+
+  <div id="hint" hidden role="group" aria-label="How to move around">
+    <h2>Moving around</h2>
+    <ul>
+      <li><b>One finger</b> turns the view</li>
+      <li><b>Two fingers</b> move it</li>
+      <li><b>Pinch</b> zooms</li>
+      <li><b>Tap the ground</b> to move the marker</li>
+      <li><b>Double-tap</b> to bring the controls back</li>
+    </ul>
+    <button id="hint-ok" class="pill" type="button">Got it</button>
   </div>
 
   <div id="debug" hidden>
