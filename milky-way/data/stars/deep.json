@@ -1,14 +1,14 @@
 {
  "absmag": {
-  "M_V": "code / 10 - 8",
+  "M_V": "absmag_code / 10 - 8",
   "max": 17.5,
   "min": -8.0,
-  "note": "V + 5 - 5 log10(d_pc); no extinction correction"
+  "note": "V + 5 - 5 log10(d / pc); no extinction correction"
  },
- "colour": "index into stars/colour.json (255 = no colour measurement)",
+ "colour": "colour_code indexes stars/colour.json (255 = no colour measurement)",
  "colour_src_counts": {
   "B-V via Ballesteros 2012 (model)": 78936,
-  "BT-VT beyond the Mamajek table, clamped to its reddest entry": 421,
+  "BT-VT outside the Mamajek table, clamped to its nearest end": 421,
   "BT-VT via Mamajek table": 120776,
   "Open Exoplanet Catalogue Teff": 0,
   "none": 906,
@@ -48,7 +48,7 @@
    "type": "uint8"
   }
  ],
- "frame": "ICRS, heliocentric; x -> RA 0 Dec 0, z -> north celestial pole",
+ "frame": "ICRS, heliocentric; x -> RA 0 Dec 0, z -> north celestial pole; little-endian",
  "mv_prefix": {
   "-1": 1015,
   "-2": 0,
@@ -77,9 +77,9 @@
   "8": 208795,
   "9": 208993
  },
- "order": "absmag_code ascending (intrinsically brightest first), then distance, then AT-HYG id; the first mv_prefix[k] records are every star with M_V <= k",
+ "order": "absmag_code ascending (intrinsically brightest first), then distance, then AT-HYG id; the first mv_prefix[k] records are the stars whose absmag_code / 10 - 8 <= k",
  "quantisation_pc": 0.015625,
  "record_bytes": 8,
- "selection": "AT-HYG v3.2 m10 subset, distance <= 500 pc, parallax/error > 10 where a Stellarium per-star error applies to the shipped distance; every star in named.json removed",
+ "selection": "AT-HYG v3.2 m10 subset, distance <= 500 pc, parallax/error > 10 where a per-star error applies to the shipped distance; every star in named.json removed",
  "units_per_pc": 64
 }

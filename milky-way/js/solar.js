@@ -254,6 +254,10 @@ export class SolarSystem {
   // `S` = root.scale (world units per AU). Shader uniforms live in world units, so they carry S.
   update(jd, origin, cam, pxPerRad, pxRatio, layers, S = 1) {
     this.layers = layers;
+    // Far out (beyond ~0.1 light-year) the whole Solar System is one pixel: everything but the
+    // Sun's glow is hidden, and the Sun stays marked until the galaxy layer's own marker takes over.
+    const dSun = Math.hypot(cam[0], cam[1], cam[2]);
+    this.far = dSun > 2e4;
     const k2 = this.phys.constants.k_gauss_au15_day ** 2;
     const inMoonRange = jd >= this.moonRange.jdStart && jd <= this.moonRange.jdEnd;
     this.inMoonRange = inMoonRange;
@@ -284,6 +288,24 @@ export class SolarSystem {
         b.mat.uniforms.uSun.value.set(sunRel[0], sunRel[1], sunRel[2]);
       }
     }
+
+    if (this.far) {
+      for (const b of this.bodies.values()) if (b.key !== 'sun') b.mesh.visible = false;
+      for (const r of this.rings) r.mesh.visible = false;
+      for (const r of this.ringLines) r.line.visible = false;
+      this.markers.visible = false;
+      for (const o of this.orbits.values()) { o.orbit.mesh.visible = false; o.trail.mesh.visible = false; }
+      for (const mo of this.moonOrbits.values()) mo.line.mesh.visible = false;
+      if (this.smallPts) { this.smallPts.visible = false; this.smallOrbit.visible = false; }
+      const sun = this.bodies.get('sun');
+      this.sunGlow.geometry.attributes.position.array.set(sun.rel);
+      this.sunGlow.geometry.attributes.position.needsUpdate = true;
+      this.sunGlow.geometry.attributes.asize.array[0] = 14;
+      this.sunGlow.geometry.attributes.asize.needsUpdate = true;
+      this.sunGlow.material.uniforms.uPx.value = pxRatio;
+      return;
+    }
+    this.markers.visible = true;
 
     // Rings follow their planet's equator.
     for (const r of this.rings) {

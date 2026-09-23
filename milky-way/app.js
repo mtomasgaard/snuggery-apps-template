@@ -356,8 +356,8 @@ function draw() {
   placeCamera(cams.galaxy, pose.pos, pose.target, pose.up, KPC_AU);
   stars.update([pose.pos[0] / PC_AU, pose.pos[1] / PC_AU, pose.pos[2] / PC_AU], dSun / PC_AU, pxRatio, S.layers);
   galaxy.update(dSun / KPC_AU, pxRatio, S.layers);
-  // The Solar System's small bodies and orbits would be a smudge on the Sun from far out: fade them.
-  solar.root.visible = dSun < 5e6;
+  // Past the galaxy layer's own Sun marker the Solar System pass has nothing left to add.
+  solar.root.visible = galaxy.fade < 0.6;
 
   renderer.info.reset();
   renderer.clear(true, true, true);
@@ -383,7 +383,7 @@ function gatherLabels(jd, dSun) {
   const solarPx = pxPerRad * 40 / Math.max(dSun, 1e-9);        // how big 40 AU looks from here
   // Solar System
   for (const b of solar.bodies.values()) {
-    if (!b.valid || !solar.root.visible) continue;
+    if (!b.valid || !solar.root.visible || (solar.far && b.key !== 'sun')) continue;
     if (b.kind === 'moon' && (!L.moons || (b.sepPx || 0) < 16)) continue;       // would sit on its planet
     if (b.key === 'sun' && galaxy.fade > 0.25) continue;                        // the galaxy layer labels it
     if (b.key !== 'sun' && solarPx < (b.kind === 'planet' || b.kind === 'dwarf' ? 18 : 60)) continue;
@@ -402,7 +402,7 @@ function gatherLabels(jd, dSun) {
   // Stars: the brightest as seen from here, more of them the farther out the camera is.
   if (L.stars) {
     const camPc = [pose.pos[0] / PC_AU, pose.pos[1] / PC_AU, pose.pos[2] / PC_AU];
-    const maxN = dSun < 2e4 ? 10 : dSun < 1e8 ? 26 : 0;
+    const maxN = dSun < 2e4 ? 10 : dSun < 1e8 ? 16 : 0;
     let n = 0;
     if (maxN) {
       // The brightest stars as seen from the camera, among those actually on screen.
@@ -455,7 +455,10 @@ function pick(x, y) {
     if (d < 30 && score < bestScore) { bestScore = score; best = id; }
   };
   for (const c of candidates) { const d = Math.hypot(c.x - x, c.y - y); const sc = d - c.pri * 0.04; if (d < 30 && sc < bestScore) { bestScore = sc; best = c.id; } }
-  for (const b of solar.bodies.values()) if (b.valid && (b.kind !== 'moon' || S.layers.moons)) consider(b.key, b.pos, 20, b.px || 0);
+  for (const b of solar.bodies.values()) {
+    if (!b.valid || (b.kind === 'moon' && !S.layers.moons) || (solar.far && b.key !== 'sun')) continue;
+    consider(b.key, b.pos, 20, b.px || 0);
+  }
   const dSun = vlen(pose.pos);
   if (S.layers.small && dSun < 2e4) {
     const buf = new Float32Array(small.count * 3); small.positionsAt(jd, buf);

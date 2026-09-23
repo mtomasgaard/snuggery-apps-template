@@ -268,27 +268,95 @@ with the counts at black and white points. Licence: CC BY-NC 3.0 IGO, ESA/Gaia/D
 
 ## 7. Stars — `stars/…`   (step `40_stars.py`)
 
-- `stars/deep.bin` + `stars/deep.json`: AT-HYG v3.2 stars within 500 pc with parallax/error > 10
-  (per-star errors from Stellarium's hip_gaia3 catalogues, used at build time only), **excluding**
-  every star that is in `named.json`. 8 bytes per star: `int16 x, y, z` (ICRS heliocentric,
-  pc × 64), `uint8 absmag_code` (M_V = code/10 − 8), `uint8 colour_code` (index into
-  `stars/colour.json`). Sorted deterministically.
-- `stars/colour.json`: 256 sRGB entries (0–1) for effective temperatures, log-spaced, with the
-  temperature of each entry; Teff from B−V (Ballesteros 2012 — a model, say so) or from the
-  Mamajek table (Bp−Rp, spectral type) when B−V is missing; Teff → sRGB by integrating a Planck
-  spectrum against the CIE 1931 2° observer.
-- `stars/named.json`: every star with V < 6.5, every object within 20 pc (AT-HYG + HYG companions
-  and white dwarfs placed at their primary's distance, flagged), and exoplanet hosts within 100 pc.
-  Columns (arrays of equal length): `id` (e.g. "HIP 32349", "Gaia DR3 …", "Gl 244B"), `name`
-  (IAU name, or common name for nearby stars, or ""), `desig` (Bayer/Flamsteed, Greek letters,
-  e.g. "α CMa"), `con`, `x, y, z` (pc, ICRS), `vmag`, `absmag`, `colour`, `spect`, `dist_src`
-  ("Gaia DR3", "Hipparcos 2007", "Gliese 1991", …), `flags` (bit 0 exoplanet host, 1 white dwarf,
-  2 companion at primary's distance, 3 parallax/error 5–10, 4 no usable parallax — not placed in
-  3D, 5 IAU name).
-- `stars/constellations.json`: `{ "<abbr>": { name, lines: [[i, j], ...] } }` with `i, j` row
-  indices into `named.json`; segments touching a flag-4 star are dropped and counted.
-- `stars/exoplanets.json`: `{ hosts: { "<named row>": [ { name, period_d, a_au, mass_mj,
-  radius_rj, year, method } ] } }`, confirmed planets only (Open Exoplanet Catalogue).
+Sources: AT-HYG v3.2 (subset `athyg_32_reduced_m10` for the stars, `athyg_32_hyg_ids` for joins
+only), HYG v4.1, Stellarium v26.2 `hip_gaia3` catalogues 0–3 (build-time parallax errors only —
+**no Stellarium value is shipped**), Stellarium v26.2 `modern_iau` sky culture, Open Exoplanet
+Catalogue at commit 77ab8690, Mamajek's dwarf table v2022.04.16, Ballesteros (2012), CIE 1931 2°.
+All positions are ICRS heliocentric in parsecs (x → RA 0 Dec 0, z → north celestial pole),
+equinox and (almost always) epoch J2000.0. Absolute magnitudes are `V + 5 − 5 log10(d/pc)` with
+**no extinction correction**. V is AT-HYG's V, or `V = VT − 0.090 (BT − VT)` for Tycho-2 rows
+(the formula in AT-HYG's build notes; VT is kept when BT − VT is missing).
+
+**Which distances count as good.** The shipped distance is always AT-HYG's (Gaia DR3, Gaia DR2,
+Hipparcos 2007 or Gliese 1991, recorded per star), HYG's for rows AT-HYG lacks, or OEC's for hosts
+found nowhere else. A per-star parallax error from Stellarium applies to it only when it belongs
+to the same measurement: the star joined Stellarium by its Gaia DR3 id and AT-HYG's distance is
+Gaia DR3, or Stellarium's parallax agrees with 1000/d within 3σ (σ = its error ⊕ 0.01 mas, half
+its storage step). Otherwise the error is *unknown*. There is no RUWE cut.
+
+- **`stars/deep.bin` + `stars/deep.json`** — AT-HYG m10 stars with d ≤ 500 pc and an applicable
+  parallax/error > 10, **minus every star in `named.json`** (~209k). Little-endian, no header,
+  8 bytes per star: `int16 x, y, z` (pc × 64; `deep.json.units_per_pc` = 64,
+  `quantisation_pc` = 1/64), `uint8 absmag_code` (M_V = code/10 − 8), `uint8 colour_code`
+  (index into `colour.json`; 255 = no colour measurement). Sorted by `absmag_code` ascending
+  (intrinsically brightest first), then distance, then AT-HYG id, so `deep.json.mv_prefix["k"]`
+  (k = −8…17) is the number of leading records with code/10 − 8 ≤ k: every prefix is a complete
+  absolute-magnitude-limited subset. `deep.json` also carries `count`, `record_bytes`, `fields`
+  (name/type/offset), `selection`, `dist_src_counts` and `colour_src_counts`.
+- **`stars/colour.json`** — `teff_k[256]` (entries 0–254 log-spaced 500–50 000 K, entry 255 =
+  `null` = no colour measurement), `srgb[256][3]` (sRGB-encoded, 0–1), `linear[256][3]`
+  (linear-light sRGB — what a three.js vertex-colour attribute wants), `unknown_index` (255),
+  `index_from_teff`, `method`, `xyz_to_linear_srgb`, `teff_note`. Entry 255 is neutral white.
+  Temperature per star, first that applies: OEC's catalogue Teff (hosts placed from OEC only) →
+  B−V (HIP, Gliese, HYG) through **Ballesteros 2012, a blackbody model** → BT−VT (Tycho-2) through
+  Mamajek's Bt−Vt column → spectral type through Mamajek's SpT column (a class letter alone takes
+  the class median) → BT−VT outside the table (−0.274 … 1.623) clamped to its nearest end →
+  none (255). Bp−Rp is not used: no star here has a Gaia colour in these sources. Teff → colour:
+  Planck spectrum × CIE 1931 2° CMFs, 360–830 nm at 1 nm → XYZ → IEC 61966-2-1 matrix → negatives
+  set to 0 → divided by the largest channel (chromaticity only; brightness comes from the
+  magnitude) → sRGB transfer curve for `srgb`. Observed colours: reddening is not removed.
+- **`stars/named.json`** — the stars you can tap. Rows: every star with V < 6.5; everything within
+  20 pc (AT-HYG; plus the HYG v4.1 rows AT-HYG lacks — Gliese companions at their primary's
+  AT-HYG distance along their own direction, Gliese-only stars at their Gliese 1991 distance);
+  every exoplanet host within 100 pc; every star with an IAU-CSN name; every constellation-figure
+  star. Sorted by V (nulls last), then `id`. Columns, arrays of length `count`:
+  - `id`: "HIP n", else the Gliese designation ("Gl 244B", "GJ 1061"), else "Gaia DR3 n", "HD n",
+    "TYC a-b-c", "HR n"; for hosts found only in OEC, the catalogue's first name ("TRAPPIST-1").
+  - `name`: the IAU-CSN name (flag 5); else HYG's proper name unless the IAU list gives that name
+    to another row; else, for OEC-only hosts, a "… Star" name OEC gives ("Teegarden's Star"); or "".
+  - `desig`: Bayer letter in Greek with superscript index ("α¹ Cen"), else Flamsteed ("61 Cyg"),
+    each followed by the constellation; or "". `con`: IAU abbreviation from AT-HYG/HYG, or "".
+  - `x, y, z`: pc, four significant digits of the distance. **For flag-4 rows they are the unit
+    direction, not a position.**
+  - `vmag` (2 decimals) and `absmag` (1 decimal); `null` when unknown; `absmag` is `null` for
+    flag-4 rows.
+  - `colour`: index into `colour.json`. `spect`: spectral type as catalogued, or "".
+  - `dist_src`: integer index into `dist_src_labels` = ["none", "Gaia DR3", "Gaia DR2",
+    "Hipparcos 2007", "Gliese 1991", "Open Exoplanet Catalogue"]; a companion shows its primary's.
+  - `flags`: bit 0 exoplanet host (planets in `exoplanets.json`); 1 white dwarf (spectral type
+    `^D[ABCOQZX]`); 2 companion placed at its primary's distance; 3 parallax/error in (5, 10];
+    4 no usable parallax (no distance, or parallax/error ≤ 5) — not placed in 3D; 5 name from the
+    IAU Catalog of Star Names; 6 no per-star parallax error applies to the shipped distance
+    (Gliese 1991 distances, Hipparcos distances that disagree with Gaia by > 3σ, Gaia stars fainter
+    than Stellarium's V ≈ 10.5 limit, OEC distances quoted without an error). `flag_bits` says
+    the same in the file.
+  - OEC hosts join AT-HYG/HYG by Gaia DR3, HIP, TYC, HD or Gliese id (a B/C suffix on HIP or HD
+    never joins the primary's row), else by position (≤ 30″, distance within 5 %, same component
+    letter), else become their own row from OEC's RA, Dec and distance (`dist_src` 5) — unless
+    OEC's quoted distance error makes parallax/error ≤ 5, in which case they are left out.
+    HIP 55203 (xi UMa, deleted from HYG) is HYG's xi UMa A row.
+- **`stars/constellations.json`** — `{ "<abbr>": { name, lines: [[i, j], ...], lines_sky_only:
+  [[i, j], ...] } }` for the 88 IAU / Sky & Telescope figures, `i, j` row indices into
+  `named.json`, segments that the polylines retrace removed. `lines` join placed stars only;
+  `lines_sky_only` (30) touch a flag-4 star: leave them out in 3D, draw them on the sky from the
+  Sun using the unit directions.
+- **`stars/exoplanets.json`** — `{ fields: ["name", "period_d", "a_au", "mass_mj", "radius_rj",
+  "year", "method", "circumbinary"], methods: ["RV", "astrometry", …], hosts: { "<named row>":
+  [[…one array per planet, in `fields` order…], …] }, units, source, note }`. Confirmed planets
+  only (OEC list "Confirmed planets"), sorted by name within a host; `null` where OEC gives no
+  value; four significant digits; `method` indexes `methods`; `circumbinary` is 1 for a planet
+  orbiting a binary (attached to the component that joined). `mass_mj` is as catalogued (for
+  radial-velocity planets usually the minimum mass).
+
+Measured on the current build (`verify_stars.py` prints these): deep.bin 209,156 stars,
+1,673,248 B (Gaia DR3 208,759, Hipparcos 2007 388, Gaia DR2 9; 0.43 % without colour).
+named.json 11,048 rows, 770,787 B: 76 unplaced (flag 4), 176 with parallax/error 5–10, 942 with no
+applicable error, 98 white dwarfs, 210 companions, 525 IAU names, 889 hosts; within 20 pc 1,830
+placed rows (Gaia DR3 1,503, Hipparcos 2007 145, Gliese 1991 152, Gaia DR2 12, OEC 18). 31 placed
+rows (mostly hosts found only in OEC) have no V, so `vmag` and `absmag` are `null` — draw them
+as markers, not as stars of magnitude 0. constellations.json 722 + 30 segments, 12,340 B;
+exoplanets.json 1,255 planets on 889 rows, 68,766 B; named + constellations + exoplanets
+851,893 B of the 900,000 B budget.
 
 ## 8. Galaxy — `galaxy/…`   (step `50_galaxy.py`)
 

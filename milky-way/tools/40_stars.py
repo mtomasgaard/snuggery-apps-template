@@ -15,8 +15,8 @@ Sources (every one pinned by sha256, or for the OEC git tree by its tree id plus
 canonical file listing):
     AT-HYG v3.2 (astronexus, CC BY-SA 4.0): the m10 subset (V/VT <= 10 plus everything within
         100 ly) and the hyg_ids subset (every AT-HYG star linked to HYG, for joins only).
-    HYG v4.1 (astronexus, CC BY-SA 4.0): Gliese companions and white dwarfs AT-HYG drops, spectral
-        types and B-V that AT-HYG lost for Gliese-linked rows.
+    HYG v4.1 (astronexus, CC BY-SA 4.0): Gliese companions and white dwarfs AT-HYG drops, and the
+        spectral types AT-HYG lost on its Gliese-linked rows.
     Stellarium v26.2 hip_gaia3 catalogues 0-3: per-star parallax and parallax error, used at build
         time only to decide whether a star's shipped distance is good. No Stellarium value is
         shipped (the files carry no data licence of their own; see credits).
@@ -38,7 +38,12 @@ Decisions that change what ships (all counted and printed; see CONTRACT.md secti
   * HIP 55203 (xi UMa, deleted from HYG in v3.5 but still used by Stellarium's figure for UMa) is
     mapped to HYG's xi UMa A row.
   * OEC hosts that no identifier joins are matched by position (<= 30 arcsec, distance within 5 %,
-    same component letter) or else placed from OEC's own coordinates and distance.
+    same component letter) or else placed from OEC's own coordinates and distance, unless OEC's
+    quoted distance error leaves parallax/error <= 5. eps Eri b is 'Controversial' in OEC, so
+    eps Eri is not a host here; OEC lists no planet for Barnard's Star.
+  * Colours are display temperatures: B-V through Ballesteros 2012 (a model), BT-VT and spectral
+    type through Mamajek's dwarf table, OEC's Teff for OEC-only hosts; Teff -> sRGB by a Planck
+    spectrum against the CIE 1931 2-degree observer.
   * No extinction correction anywhere: absolute magnitudes are V + 5 - 5 log10(d).
 """
 import hashlib
@@ -169,7 +174,7 @@ Q_NONE, Q_BAD, Q_FAIR, Q_GOOD, Q_UNKNOWN = range(5)
 
 TEFF_SRC_LABELS = ['none', 'B-V via Ballesteros 2012 (model)', 'BT-VT via Mamajek table',
                    'spectral type via Mamajek table', 'Open Exoplanet Catalogue Teff',
-                   'BT-VT beyond the Mamajek table, clamped to its reddest entry']
+                   'BT-VT outside the Mamajek table, clamped to its nearest end']
 
 WD_RE = re.compile(r'^D[ABCOQZX]')
 GREEK = {'Alp': 'α', 'Bet': 'β', 'Gam': 'γ', 'Del': 'δ', 'Eps': 'ε', 'Zet': 'ζ', 'Eta': 'η',
@@ -264,7 +269,8 @@ def load_stellarium():
     assert STEL_DT.itemsize == 48
     parts = []
     for k in ('stel0', 'stel1', 'stel2', 'stel3'):
-        b = open(src_path(k), 'rb').read()
+        with open(src_path(k), 'rb') as f:
+            b = f.read()
         magic, typ, _maj, _min, level, _mag = np.frombuffer(b[:24], '<u4')
         assert magic == 0x835f040a and typ == 0, (k, hex(magic), typ)
         nz = 20 * 4 ** int(level) + 1
@@ -301,8 +307,8 @@ def oec_systems():
         subprocess.run(['git', 'init', '--bare', '-q', gitdir], check=True)
         src = OEC_REPO
         if SEED and os.path.isdir(SEED):
-            for dp, dn, _fn in sorted(os.walk(SEED)):
-                dn.sort()
+            for dp, dn, _fn in os.walk(SEED):
+                dn.sort()                      # deterministic walk; the tree id is checked anyway
                 if '.git' in dn and has_commit(os.path.join(dp, '.git')):
                     src = dp
                     break
@@ -333,9 +339,10 @@ def oec_systems():
 # Colour: Teff -> sRGB table, and colour index / spectral type -> Teff
 # --------------------------------------------------------------------------------------------
 def colour_lut():
-    warnings.filterwarnings('ignore')          # colour-science warns about missing matplotlib
-    import colour
-    import colour.colorimetry.datasets.cmfs as cmfs_mod
+    with warnings.catch_warnings():            # colour-science warns that matplotlib is absent
+        warnings.simplefilter('ignore')
+        import colour
+        import colour.colorimetry.datasets.cmfs as cmfs_mod
     import scipy.constants as sc
     if sha256_of(cmfs_mod.__file__) != CMFS_SOURCE_SHA256:
         sys.exit('colour-science cmfs.py differs from the pinned file')
@@ -397,7 +404,7 @@ class TeffModel:
                 if rows:
                     break
                 continue
-            rows.append(dict(zip(cols, line.split())))
+            rows.append(dict(zip(cols, line.split(), strict=True)))
         self.table_rows = len(rows)
 
         def num(s):
@@ -414,7 +421,7 @@ class TeffModel:
         assert np.all(np.diff(self.btvt_x) > 0), 'Bt-Vt column not strictly increasing'
         assert np.all(np.diff(self.btvt_logt) <= 0), 'Teff not falling with Bt-Vt'
         self.spt = {}
-        for r, t in zip(rows, teff):
+        for r, t in zip(rows, teff, strict=True):
             m = re.match(r'^([OBAFGKMLTY])(\d+(?:\.\d+)?)V$', r['SpT'])
             if m and np.isfinite(t):
                 self.spt.setdefault(m.group(1), []).append((float(m.group(2)), t))
@@ -552,7 +559,7 @@ def join_stellarium(u, st):
         if g > 0 and g not in gi:
             gi[g] = i
     hi = {}
-    for i, (h, c) in enumerate(zip(st['hip'].tolist(), st['comp'].tolist())):
+    for i, (h, c) in enumerate(zip(st["hip"].tolist(), st["comp"].tolist(), strict=True)):
         if h > 0 and c <= 1 and h not in hi:
             hi[h] = i
     n = len(u['id'])
@@ -594,7 +601,7 @@ def quality(u, st, j, how):
         'error_applies_same_gaia_source': int((has & np.isfinite(poe) & same).sum()),
         'error_applies_by_3sigma_agreement': int((applies & ~same).sum()),
         'disagree_or_no_error': int((has & ~applies).sum())}
-    return q, poe
+    return q, poe, pe
 
 
 # --------------------------------------------------------------------------------------------
@@ -611,7 +618,7 @@ class Catalogue:
         self.dec = u['dec']
         self.dir = unit(self.ra, self.dec)
         j, how = join_stellarium(u, st)
-        self.q, self.poe = quality(u, st, j, how)
+        self.q, self.poe, self.pe = quality(u, st, j, how)
         self.ds = np.array([ATHYG_DS[s] for s in u['dist_src']], np.int8)
 
         # AT-HYG dropped the spectral type of Gliese-linked rows; HYG still has it.
@@ -696,6 +703,23 @@ def hyg_extra_rows(cat, hyg):
         extra.append(r)
     report['hyg_rows_not_in_athyg'] = len(extra)
     return extra
+
+
+def gliese_vs_gaia(cat, hyg):
+    """How Gliese 1991 distances compare with Gaia DR3, measured on the Gliese-only (no HIP) HYG
+    stars within 20 pc that AT-HYG did match to a Gaia DR3 parallax."""
+    r = []
+    for i in range(len(hyg['id'])):
+        if hyg['hip'][i] or not hyg['dist'][i] <= NEAR_PC:
+            continue
+        j = cat.by_hyg.get(int(hyg['id'][i]))
+        if j is not None and cat.u['dist_src'][j] == 'G_R3':
+            r.append(cat.u['dist'][j] / hyg['dist'][i])
+    r = np.array(r)
+    report['gliese_vs_gaia_within_20pc'] = dict(
+        stars=int(len(r)), median_ratio=round(float(np.median(r)), 3),
+        within_20pct=round(float(np.mean(np.abs(r - 1) < 0.2)), 3),
+        off_by_factor_2=round(float(np.mean((r > 2) | (r < 0.5))), 3))
 
 
 def extra_row(r, tm):
@@ -1077,7 +1101,7 @@ def write_constellations(cons, line_refs, rows):
     for abbr, cname, lines in cons:
         seen, lines3, sky = set(), [], []
         for pl in lines:
-            for a, b in zip(pl[:-1], pl[1:]):
+            for a, b in zip(pl[:-1], pl[1:], strict=True):
                 total += 1
                 ia, ib = row_of[line_refs[int(a)]], row_of[line_refs[int(b)]]
                 key = (min(ia, ib), max(ia, ib))
@@ -1144,6 +1168,9 @@ def write_deep(cat, named):
         'moved_to_named': int((good & in_named).sum()),
         'shipped': int(sel.sum())}
     di = np.where(sel)[0]
+    g3 = di[u['dist_src'][di] == 'G_R3']
+    report['deep_gaia_parallax_error_mas'] = {
+        f'p{p}': round(float(np.percentile(cat.pe[g3], p)), 3) for p in (10, 50, 90, 99)}
     d = u['dist'][di]
     q = np.rint(cat.dir[di] * d[:, None] * POS_SCALE)
     assert np.abs(q).max() <= 32767
@@ -1225,6 +1252,8 @@ def main():
     tm = TeffModel()
 
     cat = Catalogue(u, hyg, st, tm)
+    report['athyg_gaia_dr3_share'] = round(float((u['dist_src'][u['in_m10']] == 'G_R3').mean()), 4)
+    gliese_vs_gaia(cat, hyg)
     extra = hyg_extra_rows(cat, hyg)
     iau_names, cons, line_refs = iau_names_and_figures(iau, cat, hyg, extra)
     hosts = parse_oec(oec)
@@ -1269,111 +1298,145 @@ def main():
 def write_credits():
     r = report
     dq = r['deep_selection']
-    nm = r['named']
+    qa = r['quality_athyg']
+    gv = r['gliese_vs_gaia_within_20pc']
     blocks = [
-        dict(id='athyg', title='AT-HYG v3.2 (Augmented Tycho-HYG), subsets athyg_32_reduced_m10 and athyg_32_hyg_ids',
+        dict(id='athyg',
+             title='AT-HYG v3.2 (Augmented Tycho-HYG), subsets athyg_32_reduced_m10 and athyg_32_hyg_ids',
              owner='David Nash (astronexus)',
-             source=('Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA 1997; '
-                     'van Leeuwen 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, '
-                     'through gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, '
-                     'the Gliese & Jahreiss 1991 nearby-star catalogue, the Tycho-2 Spectral Type Catalog '
-                     '(Wright et al. 2003) and SIMBAD cross-identifications.'),
+             source=('Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA '
+                     '1997, 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, from '
+                     'gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, the '
+                     'Gliese & Jahreiss 1991 nearby-star catalogue, the Tycho-2 Spectral Type Catalog '
+                     '(Wright et al. 2003) and SIMBAD cross-identifications (CDS, Strasbourg).'),
              url=f'https://github.com/astronexus/ATHYG-Database/tree/{ATHYG_COMMIT}',
              licence='CC BY-SA 4.0',
              licence_quote=('"This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 '
                             'International License][cc-by-sa]." (LICENSE)'),
              retrieved=RETRIEVED,
-             adaptations=(f'Positions converted to ICRS Cartesian parsecs from ra/dec/dist; V derived from '
-                          f'Tycho VT as V = VT - 0.090 (BT-VT) (the formula in AT-HYG\'s own build notes) for '
-                          f'{r["vt_to_v_converted"]} rows; absolute magnitudes recomputed as V + 5 - 5 log10 d '
-                          f'without extinction correction; colours turned into display temperatures; '
-                          f'{dq["shipped"]} stars within 500 pc with parallax/error > 10 packed into deep.bin '
-                          f'(pc x 64 in int16, M_V in 0.1 mag steps). The shipped files stay under CC BY-SA 4.0.'),
-             accuracy=('Distances are 1/parallax with no prior (Gaia DR3 for 98% of rows). Positions are '
-                       'J2000.0, J1991.25 for a few Hipparcos-only stars. The Gaia parallaxes inside AT-HYG '
-                       'come from ESA/Gaia/DPAC, whose own licence could not be read from this network: a '
-                       'downloaded third-party package states CC BY-SA 3.0 IGO, Celestia and '
-                       'celestia-gaia-stardb files state CC BY-NC 3.0 IGO, and the AWS registry says '
-                       '"Attribution required". Treat the Gaia-derived values as non-commercial until '
-                       'confirmed. AT-HYG\'s ACKNOWLEDGMENTS omit SIMBAD and Tycho-2 although its build notes '
-                       'use both; they are credited here.')),
+             adaptations=(f'Positions turned into ICRS Cartesian parsecs from ra, dec and dist; V derived '
+                          f'from Tycho VT as V = VT - 0.090 (BT-VT), the formula in AT-HYG\'s own build '
+                          f'notes, for {r["vt_to_v_converted"]:,} rows; absolute magnitudes recomputed as '
+                          f'V + 5 - 5 log10 d with no extinction correction; colour indices and spectral '
+                          f'types turned into display temperatures; {dq["shipped"]:,} stars within 500 pc '
+                          f'with parallax/error > 10 packed into deep.bin (pc x 64 in int16, M_V in 0.1 mag '
+                          f'steps). The shipped star files are shared under CC BY-SA 4.0.'),
+             accuracy=(f'Distances are 1/parallax with no prior; {r["athyg_gaia_dr3_share"]:.1%} of m10 rows '
+                       f'use Gaia DR3. Equinox J2000.0; epoch J2000.0 except Tycho-2 stars with pflag X '
+                       f'and no Hipparcos match (epoch J1991.5, per the build notes). AT-HYG\'s '
+                       f'ACKNOWLEDGMENTS list neither SIMBAD nor Høg et al. 2000 although its build notes '
+                       f'use both; both are credited here.')),
+        dict(id='gaia-dr3', title='Gaia Data Release 3 (inside AT-HYG distances)',
+             owner='European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC)',
+             source='Gaia Collaboration, Vallenari et al. 2023; parallaxes as carried by AT-HYG v3.2',
+             url='https://www.cosmos.esa.int/gaia',
+             licence=('Unresolved: ESA\'s licence page could not be read from the build network. Celestia '
+                      'and celestia-gaia-stardb files state CC BY-NC 3.0 IGO, a third-party PyPI package '
+                      'states CC BY-SA 3.0 IGO, the AWS Open Data registry says "Attribution required". '
+                      'Treat Gaia-derived values as non-commercial until confirmed.'),
+             licence_quote=('"This work has made use of data from the European Space Agency (ESA) mission Gaia '
+                            '(https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and '
+                            'Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). '
+                            'Funding for the DPAC has been provided by national institutions, in particular '
+                            'the institutions participating in the Gaia Multilateral Agreement." '
+                            '(AT-HYG ACKNOWLEDGMENTS.md)'),
+             retrieved=RETRIEVED,
+             adaptations='Used only as the distances AT-HYG already carries; no Gaia file is read directly.',
+             accuracy=(f'Parallax errors of the Gaia DR3 stars in deep.bin (read from Stellarium\'s copy at '
+                       f'build time): median {r["deep_gaia_parallax_error_mas"]["p50"]} mas, 90th percentile '
+                       f'{r["deep_gaia_parallax_error_mas"]["p90"]} mas. No zero-point correction.')),
         dict(id='hyg', title='HYG database v4.1 (hygdata_v41.csv)', owner='David Nash (astronexus)',
-             source=('Hipparcos (ESA 1997, 2007 new reduction), Yale Bright Star Catalog 5th ed. (Hoffleit '
-                     '1991), Gliese & Jahreiss 1991 (CNS3 preliminary); IAU WGSN names.'),
+             source=('Hipparcos (ESA 1997; 2007 new reduction), Yale Bright Star Catalog 5th ed. '
+                     '(Hoffleit 1991), Gliese & Jahreiss 1991 (CNS3 preliminary); IAU WGSN names.'),
              url=f'https://github.com/astronexus/HYG-Database/tree/{HYG_COMMIT}',
              licence='CC BY-SA 4.0',
              licence_quote=('"The licensing for HYG v4.0 is Creative Commons CC BY-SA 4.0, unlike previous '
                             'versions of the HYG catalog." (hyg/version-info.md)'),
              retrieved=RETRIEVED,
              adaptations=(f'Used for the {r["hyg_rows_not_in_athyg"]} HYG rows AT-HYG does not carry: '
-                          f'Gliese companions (placed at their primary\'s AT-HYG distance along their own '
-                          f'direction, flag bit 2) and Gliese-only stars (at their Gliese 1991 distance, '
-                          f'flag bit 6); spectral types filled for {r["spect_filled_from_hyg"]} and B-V for '
-                          f'{r["ci_filled_from_hyg"]} AT-HYG rows that had none; HIP 55203 (xi UMa, deleted '
-                          f'in HYG v3.5) mapped to HYG\'s xi UMa A.'),
-             accuracy=('Gliese 1991 distances are often photometric: for Gliese-only stars within 20 pc '
-                       'that AT-HYG matched to Gaia DR3, 72% agree within 20% and 5% are off by more than a '
-                       'factor of two (measured on these files).')),
-        dict(id='stellarium-hipgaia3', title='Stellarium v26.2 hip_gaia3 star catalogues 0-3 (build-time filter only)',
+                          f'Gliese companions (at their primary\'s AT-HYG distance along their own '
+                          f'direction, flag bit 2) and Gliese-only stars (at their Gliese 1991 distance, flag '
+                          f'bit 6); spectral types filled in for {r["spect_filled_from_hyg"]} AT-HYG rows that '
+                          f'had none; HIP 55203 (xi UMa, deleted in HYG v3.5) mapped to HYG\'s xi UMa A.'),
+             accuracy=(f'Gliese 1991 distances are often photometric: of the {gv["stars"]} Gliese-only stars '
+                       f'within 20 pc that AT-HYG matched to Gaia DR3, {gv["within_20pct"]:.0%} agree within '
+                       f'20% and {gv["off_by_factor_2"]:.0%} are off by more than a factor of two '
+                       f'(measured on these files).')),
+        dict(id='stellarium-hipgaia3',
+             title='Stellarium v26.2 hip_gaia3 star catalogues 0-3 (build-time check only, not shipped)',
              owner='Stellarium team; catalogues built by Henry Leung (henrysky/stellarium_star_catalogs)',
-             source='Gaia DR3 (ESA/Gaia/DPAC) and Hipparcos/XHIP values via SIMBAD',
+             source='Gaia DR3 (ESA/Gaia/DPAC) and Hipparcos values via SIMBAD',
              url=f'https://github.com/Stellarium/stellarium/tree/{STEL_COMMIT}/stars/hip_gaia3',
-             licence='No data licence stated; the files ship in a GPL-2.0-or-later source tree',
+             licence='No data licence stated; the files sit in a GPL-2.0-or-later source tree',
              licence_quote='COPYING: "GNU GENERAL PUBLIC LICENSE Version 2, June 1991"; no data-specific notice.',
              retrieved=RETRIEVED,
-             adaptations=(f'Nothing shipped. Each AT-HYG star was joined by Gaia DR3 id or HIP number to read '
-                          f'its parallax error. The error qualifies AT-HYG\'s distance only when both come from '
-                          f'the same Gaia DR3 source ({r["quality_athyg"]["error_applies_same_gaia_source"]} '
-                          f'rows) or when Stellarium\'s parallax agrees with it within 3 sigma '
-                          f'({r["quality_athyg"]["error_applies_by_3sigma_agreement"]} rows).'),
-             accuracy='Parallax quantised to 0.02 mas; the catalogue author calls the files experimental.'),
+             adaptations=(f'Nothing shipped. Each AT-HYG star was joined by Gaia DR3 id or HIP number to '
+                          f'read a parallax error. The error qualifies AT-HYG\'s distance only when both '
+                          f'come from the same Gaia DR3 source ({qa["error_applies_same_gaia_source"]:,} rows) '
+                          f'or when the two parallaxes agree within 3 sigma '
+                          f'({qa["error_applies_by_3sigma_agreement"]:,} rows); {qa["disagree_or_no_error"]:,} '
+                          f'rows with a distance have no applicable error.'),
+             accuracy='Parallax stored in 0.02 mas steps; the catalogue author calls the files experimental.'),
         dict(id='stellarium-modern-iau', title='Stellarium v26.2 sky culture "modern_iau"',
              owner="Stellarium's team",
              source=('Constellation figures from the IAU "The Constellations" pages (Sky & Telescope: Roger '
-                     'Sinnott, Rick Fienberg, Alan MacRobert); star names from the IAU Catalog of Star Names '
-                     '(IAU WGSN).'),
+                     'Sinnott, Rick Fienberg, Alan MacRobert); star names from the IAU Catalog of Star '
+                     'Names (IAU WGSN).'),
              url=f'https://github.com/Stellarium/stellarium/tree/{STEL_COMMIT}/skycultures/modern_iau',
              licence='CC BY-SA 4.0', licence_quote='description.md, "## License": "CC BY-SA 4.0"',
              retrieved=RETRIEVED,
-             adaptations=(f'{r["constellations"]["unique_segments"]} unique figure segments resolved to named '
-                          f'rows ({r["constellations"]["dropped_from_3d"]} touch a star with no usable parallax '
-                          f'and are kept only for the sky view); {r["iau_names_used"]} IAU names attached.'),
-             accuracy='Figures are a drawing convention, not a measurement; IAU constellations are defined by their boundaries.'),
+             adaptations=(f'{r["constellations"]["unique_segments"]} unique figure segments resolved to '
+                          f'named rows, {r["constellations"]["dropped_from_3d"]} of them kept for the sky '
+                          f'view only because a star has no usable parallax; {r["iau_names_used"]} IAU names '
+                          f'attached, {len(r["iau_names_without_catalogue_row"])} have no row in AT-HYG/HYG.'),
+             accuracy=('Figures are a drawing convention, not a measurement; IAU constellations are defined '
+                       'by their boundaries.')),
         dict(id='oec', title='Open Exoplanet Catalogue', owner='Hanno Rein and contributors',
-             source='Community-curated compilation (Rein 2012, arXiv:1211.7121); recent entries imported from the NASA Exoplanet Archive.',
+             source=('Community-curated compilation (Rein 2012, arXiv:1211.7121); most recent entries '
+                     'imported from the NASA Exoplanet Archive.'),
              url=f'https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue/tree/{OEC_COMMIT}',
              licence='MIT',
              licence_quote=('"The database is licensed under an MIT license (see below), which basically says '
                             'you can do everything with it." (README.md)'),
              retrieved=RETRIEVED,
-             adaptations=(f'Planets with list "Confirmed planets" only ({r["exoplanets"]["planets"]} planets on '
-                          f'{r["exoplanets"]["hosts"]} named rows); hosts joined to AT-HYG/HYG by identifier '
-                          f'({r["oec_join"]["by_id"]}) or position ({r["oec_join"]["by_position"]}); '
-                          f'{r["oec_only_rows"]} hosts placed from the catalogue\'s own coordinates and distance.'),
-             accuracy=('Catalogue as of the pinned commit; not complete (e.g. no planet listed for Barnard\'s '
-                       'Star; eps Eridani b is "Controversial" and so not shown).')),
-        dict(id='mamajek', title='A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence, v2022.04.16',
-             owner='Eric Mamajek', source='Pecaut & Mamajek 2013, ApJS 208, 9 (Table 5); copy bundled in the MeanStars 3.6.1 wheel (PyPI)',
-             url='https://pypi.org/project/MeanStars/3.6.1/', licence='No licence stated on the table (MeanStars code: BSD-3-Clause)',
-             licence_quote='"that reference should be cited until an updated version of the table is published" (file header)',
+             adaptations=(f'Planets listed as "Confirmed planets" only: {r["exoplanets"]["planets"]:,} planets '
+                          f'on {r["exoplanets"]["hosts"]} named rows. Hosts joined to AT-HYG/HYG by '
+                          f'identifier or by position (<= 30 arcsec, distance within 5%); '
+                          f'{r["oec_only_rows"]} hosts within 100 pc placed from the catalogue\'s own '
+                          f'coordinates and distance; values rounded to 4 significant digits.'),
+             accuracy=('As of the pinned commit, and not complete: no planet is listed for Barnard\'s Star, '
+                       'and eps Eridani b is "Controversial", so it is not shown.')),
+        dict(id='mamajek',
+             title='A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence, v2022.04.16',
+             owner='Eric Mamajek',
+             source=('Pecaut & Mamajek 2013, ApJS 208, 9 (Table 5); the copy bundled in the MeanStars '
+                     '3.6.1 wheel on PyPI'),
+             url='https://pypi.org/project/MeanStars/3.6.1/',
+             licence='No licence stated on the table (the MeanStars code is BSD-3-Clause)',
+             licence_quote=('"that reference should be cited until an updated version of the table is '
+                            'published" (file header)'),
              retrieved=RETRIEVED,
-             adaptations='Bt-Vt and spectral-type columns interpolated to effective temperature for display colours; only the derived colour table ships.',
-             accuracy='Dwarf sequence applied to all luminosity classes; display use only.'),
-        dict(id='ballesteros', title='B-V to effective temperature relation (Ballesteros 2012, EPL 97, 34008)',
+             adaptations=('Bt-Vt and spectral-type columns interpolated to effective temperature for display '
+                          'colours; only the derived colour table ships.'),
+             accuracy='A dwarf sequence applied to every luminosity class; display use only.'),
+        dict(id='ballesteros', title='B-V to effective temperature (Ballesteros 2012, EPL 97, 34008) — a model',
              owner='F. J. Ballesteros; coefficients as coded in PyAstronomy 0.25.0 (MIT)',
              source='PyAstronomy/pyasl/asl/aslExt_1/ballesterosBV_T.py',
              url='https://pypi.org/project/PyAstronomy/0.25.0/', licence='MIT (PyAstronomy)',
              licence_quote='PyAstronomy 0.25.0 METADATA: "License: MIT"', retrieved=RETRIEVED,
-             adaptations=f'T = T0 (1/(a BV + b) + 1/(a BV + c)) with {r["ballesteros_coefficients"]}; a model, labelled as one.',
-             accuracy='Blackbody-based model; underestimates hot stars (B-V -0.2 gives ~13,600 K).'),
+             adaptations=('T = T0 (1/(a BV + b) + 1/(a BV + c)) with the coefficients read from the pinned '
+                          f'source: {r["ballesteros_coefficients"]}.'),
+             accuracy='A blackbody-based model; it underestimates hot stars (B-V = -0.2 gives about 13,600 K).'),
         dict(id='cie1931', title='CIE 1931 2-degree standard observer colour-matching functions',
              owner='CIE (tabulated by CVRL), via colour-science 0.4.6 (BSD-3-Clause)',
              source='colour/colorimetry/datasets/cmfs.py', url='https://pypi.org/project/colour-science/0.4.6/',
-             licence='Standard reference data; colour-science BSD-3-Clause',
-             licence_quote='colour-science LICENSE: "Redistribution and use in source and binary forms, with or without modification, are permitted..."',
+             licence='Standard reference data; colour-science is BSD-3-Clause',
+             licence_quote=('colour-science LICENSE: "Redistribution and use in source and binary forms, with or '
+                            'without modification, are permitted..."'),
              retrieved=RETRIEVED,
-             adaptations='Planck spectra integrated against the CMFs, converted with the IEC 61966-2-1 sRGB matrix, normalised to the largest channel.',
-             accuracy='Chromaticity of an ideal blackbody; real stellar spectra differ, especially for M stars.'),
+             adaptations=('Planck spectra integrated against the CMFs at 1 nm, converted with the IEC '
+                          '61966-2-1 sRGB matrix and normalised to the largest channel.'),
+             accuracy='The chromaticity of an ideal blackbody; real stellar spectra differ, most for M stars.'),
     ]
     os.makedirs(os.path.join(TOOLS, 'credits'), exist_ok=True)
     with open(os.path.join(TOOLS, 'credits', 'stars.json'), 'w', encoding='utf-8', newline='\n') as f:

@@ -101,7 +101,7 @@ export class Stars {
     hg.setAttribute('position', new THREE.BufferAttribute(hp, 3));
     hg.setAttribute('acolor', new THREE.BufferAttribute(hc, 3));
     hg.setAttribute('asize', new THREE.BufferAttribute(hs, 1));
-    const hm = glowPointsMaterial({ opacity: 0.5, ring: true });
+    const hm = glowPointsMaterial({ opacity: 0.32, ring: true });
     hm.depthTest = false;
     this.hosts = new THREE.Points(hg, hm);
     this.hosts.frustumCulled = false; this.hosts.renderOrder = 4;
@@ -117,7 +117,7 @@ export class Stars {
     // Deeper exposure the farther the camera is from the Sun, so the structure of the neighbourhood
     // stays readable from outside it. From the Sun the limit is the naked eye's 6.5.
     const far = Math.max(1, dSunPc / 3);
-    const mLim = 6.5 + 4.2 * Math.log10(far);
+    const mLim = 6.5 + 2.6 * Math.log10(far);
     for (const p of [this.deep, this.namedPts]) {
       const u = p.material.uniforms;
       u.uPx.value = pxRatio; u.uMLim.value = mLim;
@@ -135,11 +135,11 @@ export class Stars {
     // Constellation figures: faint from inside the Solar System, where they are the sky behind the
     // planets; clearer out among the stars, where their third dimension shows; gone far away.
     const inside = Math.min(1, Math.max(0, (Math.log10(Math.max(dSunPc, 1e-9)) + 3) / 2));   // 0.001 pc → 0.1 pc
-    const la = layers.constellations ? (0.35 + 0.65 * inside) * Math.max(0, 1 - Math.log10(Math.max(1, dSunPc / 30)) / 1.3) : 0;
+    const la = layers.constellations ? (0.35 + 0.65 * inside) * Math.max(0, 1 - Math.log10(Math.max(1, dSunPc / 12)) / 0.7) : 0;
     this.lines.visible = la > 0.02;
     this.lines.material.opacity = 0.5 * la;
     // Exoplanet hosts are marked once the view is about the stars, not from among the planets.
-    this.hosts.visible = !!layers.exoplanets && dSunPc > 0.3 && dSunPc < 3000;
+    this.hosts.visible = !!layers.exoplanets && dSunPc > 0.3 && dSunPc < 40;
     this.hosts.material.uniforms.uPx.value = pxRatio;
   }
 

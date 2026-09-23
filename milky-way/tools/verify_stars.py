@@ -135,10 +135,10 @@ def main():
         i = row(ident=ident)
         check(i is not None and nm['name'][i] == name and abs(R[i] - dist) <= tol,
               f'{name}: {desc(i) if i is not None else "missing"}')
-    i = row(ident='HIP 32349')
-    check(nm['desig'][i] == 'α CMa' and F[i] & 32, 'Sirius is α CMa with an IAU name')
+    si = row(ident='HIP 32349')
+    check(nm['desig'][si] == 'α CMa' and F[si] & 32, 'Sirius is α CMa with an IAU name')
     b = row(ident='Gl 244B')
-    check(b is not None and F[b] & 2 and F[b] & 4 and abs(R[b] - R[i]) < 1e-3,
+    check(b is not None and F[b] & 2 and F[b] & 4 and abs(R[b] - R[si]) < 1e-3,
           f'Sirius B as a white-dwarf companion at Sirius\'s distance: {desc(b)}')
     p = row(ident='HIP 70890')
     check(F[p] & 1 and {'Proxima Centauri b', 'Proxima Centauri d'} <= set(planets.get(p, [])),
@@ -214,14 +214,15 @@ def main():
         for j in tree.query_ball_point(X[i], 0.02):
             if abs(int(rec['m'][j]) - code_named[i]) <= 1:
                 rep += 1
-    check(rep <= 5, f'named stars repeated in deep.bin (within 0.02 pc and 0.1 mag): {rep}')
+    check(rep <= 5, f'deep stars within 0.02 pc and 0.1 mag of a named star: {rep} (a wide binary pair '
+          'such as HD 80606/80607 can do this; a repeated star would show up as many)')
 
     # ---------------- fixture for the node test
     pick = [0, 1, len(rec) // 2, len(rec) - 1]
     fx = {'deep': [{'index': int(k), 'x': int(rec['x'][k]), 'y': int(rec['y'][k]), 'z': int(rec['z'][k]),
                     'absmag_code': int(rec['m'][k]), 'colour_code': int(rec['c'][k])} for k in pick],
-          'deep_count': int(len(rec)), 'named_count': n, 'sirius_row': int(i),
-          'sirius_r_pc': float(R[i])}
+          'deep_count': int(len(rec)), 'named_count': n, 'sirius_row': int(si),
+          'sirius_r_pc': float(R[si])}
     os.makedirs(WORK, exist_ok=True)
     with open(os.path.join(WORK, 'stars_fixture.json'), 'w') as f:
         json.dump(fx, f, indent=1)
