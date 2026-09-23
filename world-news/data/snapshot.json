@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T03:01:13Z",
+ "generatedAt": "2026-09-23T04:01:07Z",
  "regions": [
   {
    "key": "europe",
@@ -271,6 +271,15 @@
      "author": "The New Arab"
     },
     {
+     "title": "‘Time is running out’ for Israel-Palestine two-State solution",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168401",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "The UN chief warned on Tuesday that the two-State solution for the Israel-Palestine conflict is at risk of collapse amid illegal Israeli settlement expansion and annexation.",
+     "stale": false
+    },
+    {
      "title": "Displacement on the rise in Yemen as fighting continues",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168364",
      "published": "2026-09-18T12:00:00Z",
      "summary": "People displaced by the renewed fighting in Yemen have described fleeing for their lives amid shelling and gunfire, aid agencies reported on Friday, while highlighting the dramatic increase in humanitarian needs in the…",
-     "stale": false
-    },
-    {
-     "title": "Security Council LIVE: Syria’s transition in the spotlight",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168355",
-     "published": "2026-09-17T12:00:00Z",
-     "summary": "While Syria is making progress in its political transition, the Security Council is meeting to hear briefings and discuss the situation on the ground, including recent reports of deadly armed clashes with an…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "We asked people with dementia about voluntary assisted dying. Here’s what they said",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/we-asked-people-with-dementia-about-voluntary-assisted-dying-heres-what-they-said-289029",
+     "published": "2026-09-23T03:09:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrienne Matthys, Casual Academic (Gerontology and Human Services) and Research Assistant, Charles Sturt University"
+    },
+    {
      "title": "WA Police’s facial recognition trial delivered strong results. But was it an ethical success?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jane Gilmore, PhD candidate, Monash Gender and Family Violence Prevention Hub, Monash University"
-    },
-    {
-     "title": "In a culture obsessed with staying young, we ignore the many benefits of ageing",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/in-a-culture-obsessed-with-staying-young-we-ignore-the-many-benefits-of-ageing-289506",
-     "published": "2026-09-22T23:55:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Olivia Maurice, Cognitive Neuroscientist, Western Sydney University; University of Sydney"
     },
     {
      "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
@@ -823,6 +823,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "‘Time is running out’ for Israel-Palestine two-State solution",
+   "published": "2026-09-22 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Displacement on the rise in Yemen as fighting continues",
    "published": "2026-09-22 12:00 UTC"
   },
@@ -843,12 +849,6 @@
    "source": "UN News",
    "title": "Yemen’s humanitarian crisis growing by the hour amid spike in displacement",
    "published": "2026-09-18 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Security Council LIVE: Syria’s transition in the spotlight",
-   "published": "2026-09-17 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "We asked people with dementia about voluntary assisted dying. Here’s what they said",
+   "published": "2026-09-23 03:09 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "WA Police’s facial recognition trial delivered strong results. But was it an ethical success?",
    "published": "2026-09-23 02:25 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Rape myths shape how we respond to sexual violence. What are they and what impact do they have?",
    "published": "2026-09-23 01:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "In a culture obsessed with staying young, we ignore the many benefits of ageing",
-   "published": "2026-09-22 23:55 UTC"
   },
   {
    "region": "Oceania",
