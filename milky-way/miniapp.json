@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Milky Way",
   "entryPoint": "index.html",
-  "description": "The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, from real data only: JPL planets and moons for any date from 1900 to 2100 with time playback, Gaia's stars in 3D, and the galaxy's measured clusters, streams and satellite galaxies, entirely offline.",
+  "description": "The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, from real data only: JPL's planets and the Moon for any date from 1900 to 2100, and 21 moons from 1950 to 2050, with time playback; stars in 3D, mostly at Gaia distances; and the galaxy's measured clusters, streams and satellite galaxies, entirely offline.",
   "version": "1.0"
 }

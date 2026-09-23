@@ -1,14 +1,18 @@
-"""Builds dist/milky-way.zip for importing into Snuggery: the app files inside one wrapping folder,
-without tools/, docs or git files. Checks Snuggery's import rules, and the app's own offline rule,
-before writing anything. (The repository's own workflow builds zips/milky-way.zip the same way.)"""
+"""Builds dist/milky-way.zip for importing into Snuggery the way the repository's workflow
+(.github/workflows/build-zips.yml) builds zips/milky-way.zip: the app folder's git-tracked files at
+the root of the ZIP, with no wrapping folder, leaving out tools/, screenshots/, dist/ and dotfiles;
+NOTES.md goes in, as it does there. Tracked files are read from the working tree, so uncommitted
+edits are included. Checks Snuggery's import rules, and the app's own offline rule, before writing
+anything."""
 import os
 import re
+import subprocess
 import zipfile
 
 from paths import APP
 
-SKIP_DIRS = {'tools', 'dist', '.git', 'screenshots'}
-SKIP_FILES = {'README.md', 'NOTES.md', '.gitignore', '.gitattributes', '.DS_Store'}
+# The workflow's exclusions: zip -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*'
+SKIP_DIRS = {'screenshots', 'tools', 'pipeline', 'scripts', 'dist'}
 
 # No network, ever: Snuggery runs mini-apps in an offline sandboxed web view, and a URL in the app's
 # own code is a request that will be blocked rather than merely discouraged. vendor/ is exempt —
@@ -21,16 +25,20 @@ out_dir = os.path.join(APP, 'dist')
 os.makedirs(out_dir, exist_ok=True)
 out = os.path.join(out_dir, 'milky-way.zip')
 
+# CI zips a fresh checkout, so only what git tracks: an untracked scratch file stays out here too.
+try:
+    tracked = subprocess.run(['git', 'ls-files', '-z'], cwd=APP, check=True, capture_output=True).stdout
+except (OSError, subprocess.CalledProcessError) as e:
+    raise SystemExit(f'git ls-files failed ({e}); this packs what git tracks, so run it in a git checkout')
 files = []
-for dp, dn, fn in os.walk(APP):
-    dn[:] = [d for d in dn
-             if os.path.relpath(os.path.join(dp, d), APP).split(os.sep)[0] not in SKIP_DIRS
-             and not d.startswith('.')]
-    for f in fn:
-        rel = os.path.relpath(os.path.join(dp, f), APP)
-        if rel in SKIP_FILES or f.startswith('.') or os.path.islink(os.path.join(dp, f)):
-            continue
-        files.append(rel)
+for rel in tracked.decode('utf-8').split('\0'):
+    parts = rel.split('/')
+    if not rel or parts[0] in SKIP_DIRS or any(x.startswith('.') for x in parts):
+        continue
+    p = os.path.join(APP, *parts)
+    if os.path.islink(p) or not os.path.isfile(p):      # deleted in the working tree, or a link
+        continue
+    files.append(os.path.join(*parts))
 files.sort()
 
 assert 'index.html' in files, 'index.html missing'
@@ -60,7 +68,7 @@ assert max(f.count(os.sep) for f in files) < 15, 'nested more than 15 deep'
 
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     for f in files:
-        z.write(os.path.join(APP, f), 'milky-way/' + f.replace(os.sep, '/'))
+        z.write(os.path.join(APP, f), f.replace(os.sep, '/'))
 
 print(f'{out}: {len(files)} files, {sum(sizes.values())/2**20:.2f} MB unpacked, '
       f'{os.path.getsize(out)/2**20:.2f} MB zipped')

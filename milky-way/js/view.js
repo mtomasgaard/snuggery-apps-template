@@ -19,6 +19,7 @@ const MIN_DIST = 2e-7;         // AU, ~30 km
 const MAX_DIST = 1.2e11;       // AU, ~580 kpc: past the farthest satellite galaxy in the data
 const UP_BLEND = [Math.log10(3e3), Math.log10(3e5)];   // AU: ecliptic → galactic "up"
 const POLE_GAP = 4 * DEG;      // how close the view may get to looking straight along "up"
+const START_DIST = 12, START_DIR = [0.3, -0.75, 0.6];
 
 export const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -31,10 +32,11 @@ export class Rig {
     this.targetFn = () => [0, 0, 0];
     this.targetId = 'sun';
     this.minDist = MIN_DIST;
-    this.dist = 12;
-    this.dir = vnorm([], [0.3, -0.75, 0.6]);
+    this.dist = START_DIST;
+    this.dir = vnorm([], START_DIR);
     this.anim = null;
     this.vel = { yaw: 0, pitch: 0, zoom: 0 };
+    this.touching = false;
     this.listeners = {};
     // Basis vectors in ICRF. Placeholders until setFrames() is called with the ecliptic pole (from
     // the J2000 obliquity in physical.json) and the galactic pole (from galaxy.json's frame).
@@ -111,13 +113,23 @@ export class Rig {
   // Fly to a new target. `to` = { id, fn, dist, dir?, minDist? }. The path zooms out far enough to
   // see both ends when they are far apart, then in again: log-distance follows an arch.
   flyTo(to, jd, duration) {
-    const fromPos = this.target(jd).slice();
+    const finite = (v) => !!v && v.every(Number.isFinite);
     const toPos = to.fn(jd);
+    if (!finite(toPos)) return;                  // nowhere to go: stay put rather than become NaN
+    // A start that is not a number (a lost target, say) would keep the whole flight NaN: start from
+    // the destination instead, so the flight always lands.
+    let fromPos = this.target(jd).slice();
+    if (!finite(fromPos)) fromPos = toPos.slice();
+    const toDir = finite(to.dir) && vlen(to.dir) > 0 ? vnorm([], to.dir) : null;
+    if (!finite(this.dir) || !(vlen(this.dir) > 0)) this.dir = toDir ? toDir.slice() : vnorm([], START_DIR);
+    if (!finite(this.lastUp)) this.lastUp = this.eclUp.slice();
+    const want = Number.isFinite(to.dist) ? to.dist : Number.isFinite(this.dist) ? this.dist : START_DIST;
+    const dist = clamp(want, Math.max(to.minDist || MIN_DIST, MIN_DIST), MAX_DIST);
+    if (!Number.isFinite(this.dist)) this.dist = dist;
     const sep = Math.hypot(toPos[0] - fromPos[0], toPos[1] - fromPos[1], toPos[2] - fromPos[2]);
-    const dist = clamp(to.dist, Math.max(to.minDist || MIN_DIST, MIN_DIST), MAX_DIST);
     const l0 = Math.log(this.dist), l1 = Math.log(dist);
     const bump = Math.max(0, Math.log(Math.max(sep, 1e-12) * 1.4) - Math.max(l0, l1));
-    const dir = to.dir ? vnorm([], to.dir) : this.dir.slice();
+    const dir = toDir || this.dir.slice();
     if (!duration) duration = clamp(900 + 180 * (Math.abs(l1 - l0) + bump), 900, 3200);
     this.vel.yaw = this.vel.pitch = this.vel.zoom = 0;
     if (reduceMotion()) {
@@ -158,6 +170,8 @@ export class Rig {
       }
       moving = true;
     }
+    // Inertia runs only once the fingers are off the glass; while they are down they drive the view.
+    if (this.touching) return moving;
     const k = Math.exp(-dtMs / 260);      // inertia decay
     if (Math.abs(this.vel.yaw) + Math.abs(this.vel.pitch) > 1e-5) {
       this.rotate(this.vel.yaw * dtMs, this.vel.pitch * dtMs);
@@ -176,8 +190,13 @@ export class Rig {
   _bindGestures() {
     const el = this.canvas;
     const pts = new Map();
-    let mode = null, last = null, lastT = 0, downAt = null, moved = 0, lastTap = null;
+    let mode = null, last = null, lastT = 0, downAt = null, moved = 0, lastTap = null, mid0 = null, span0 = 0, pinchPan = false;
+    let zAcc = 0, zT = 0;
     const ROT = 0.0055;       // radians per pixel
+    // A pinch only zooms, keeping its target, until its midpoint has moved this far from where it
+    // began — beyond the half of the span change that a pinch with one finger held still moves it
+    // by. Each pointermove brings one finger, so even a steady pinch jitters the midpoint.
+    const PINCH_PAN_PX = 12;
 
     const span = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
     const mid = () => { const [a, b] = [...pts.values()]; return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; };
@@ -185,6 +204,7 @@ export class Rig {
     el.addEventListener('pointerdown', (e) => {
       el.setPointerCapture(e.pointerId);
       pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      this.touching = true;
       this.vel.yaw = this.vel.pitch = this.vel.zoom = 0;
       if (this.anim && pts.size === 1) { /* a touch during a flight lets it finish */ }
       if (pts.size === 1) {
@@ -192,6 +212,8 @@ export class Rig {
         last = { x: e.clientX, y: e.clientY }; downAt = { x: e.clientX, y: e.clientY, t: performance.now() }; moved = 0;
       } else if (pts.size === 2) {
         mode = 'pinch'; last = { span: span(), ...mid() }; moved = 99;
+        mid0 = mid(); span0 = last.span; pinchPan = false;
+        zAcc = 0; zT = performance.now();
       }
       lastT = performance.now();
       this.emit('interact');
@@ -220,16 +242,26 @@ export class Rig {
         const s = span(), m = mid();
         const f = last.span / Math.max(s, 1);
         this.zoom(f);
-        this.vel.zoom = lerp(this.vel.zoom, Math.log(f) / dt, 0.5);
+        // The two fingers' events arrive a millisecond apart, so the zoom speed for the fling is
+        // measured over at least a frame's worth of them, not per event.
+        zAcc += Math.log(f);
+        if (now - zT >= 16) { this.vel.zoom = lerp(this.vel.zoom, zAcc / (now - zT), 0.5); zAcc = 0; zT = now; }
+        const drift = Math.hypot(m.x - mid0.x, m.y - mid0.y) - 0.5 * Math.abs(s - span0);
+        if (!pinchPan && drift > PINCH_PAN_PX) pinchPan = true;
+        // While panning, a sub-pixel step is kept for the next move rather than dropped.
         const dx = m.x - last.x, dy = m.y - last.y;
-        if (Math.abs(dx) + Math.abs(dy) > 0.5) this.pan(dx, dy, this.jdNow ? this.jdNow() : 0);
-        last = { span: s, ...m };
+        if (!pinchPan || Math.abs(dx) + Math.abs(dy) > 0.5) {
+          if (pinchPan) this.pan(dx, dy, this.jdNow ? this.jdNow() : 0);
+          last.x = m.x; last.y = m.y;
+        }
+        last.span = s;
         this.emit('change');
       }
     });
     const up = (e) => {
       if (!pts.has(e.pointerId)) return;
       pts.delete(e.pointerId);
+      this.touching = pts.size > 0;
       const now = performance.now();
       if (now - lastT > 80) { this.vel.yaw = this.vel.pitch = 0; this.vel.zoom = 0; }
       if (mode === 'pinch') { if (Math.abs(this.vel.zoom) < 2e-4) this.vel.zoom = 0; }

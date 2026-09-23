@@ -28,9 +28,13 @@ changes this file in the same commit.
 - Every step writes a **credits fragment** to `tools/credits/<step>.json` (not shipped): a list of
   `{id, title, owner, source, url, licence, licence_quote, retrieved, adaptations, accuracy}`
   blocks. `90_about.py` assembles them into `data/about.json`; `CREDITS.txt` is written from the
-  same fragments.
+  same fragments, and ends with the full texts of the galstreams, SpiralMap and Agama licences,
+  read from their pinned files.
 - Every step ships a **`verify_<step>.py`** that asserts the properties the app relies on, run by
   `verify_data.py`. Print measured numbers, not just "ok".
+- **`data/` holds only claimed files**: the fixed names in the sections below, plus the files the
+  metadata points at (`tex/textures.json` bodies, `sky/sky.json` file, `galaxy/galaxy.json` model
+  and young files). `verify_data.py` fails on anything else, and on a claimed file that is missing.
 
 Environment for every step: `tools/venv/bin/python`, working directory `tools/`. Downloads are cached
 in `tools/.cache/` (gitignored). Set `MILKYWAY_SEED` to a folder of earlier downloads to reuse them.

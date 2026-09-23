@@ -128,7 +128,9 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
         vBody = position;
         vec4 w = modelMatrix * vec4(position, 1.0);
         vW = w.xyz;
-        vN = normalize(mat3(modelMatrix) * normal);
+        // The mesh is scaled by the body's radii, unequal on an oblate or triaxial body: normals take
+        // the inverse transpose, or the terminator would sit several degrees off on Saturn.
+        vN = normalize(transpose(inverse(mat3(modelMatrix))) * normal);
         gl_Position = projectionMatrix * viewMatrix * w;
         #include <logdepthbuf_vertex>
       }`,
@@ -196,8 +198,9 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
 
 // ------------------------------------------------------------------ rings
 // A flat annulus in the planet's equatorial plane, radii in km. Only the ring edges and gaps are
-// data (JPL's sat425 radii); the brightness is drawn uniform because no ring brightness profile
-// with a clean licence could be sourced. The planet's shadow falls on the rings.
+// data (JPL's sat425 radii); the brightness is drawn uniform, in a neutral grey, because no ring
+// brightness or colour profile with a clean licence could be sourced. The planet's shadow falls on
+// the rings.
 export function ringMaterial() {
   return new THREE.ShaderMaterial({
     uniforms: {
@@ -326,7 +329,7 @@ export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap
 // and a soft band of that width is the honest way to draw it.
 export function ribbonMaterial(color, opacity = 0.5) {
   return new THREE.ShaderMaterial({
-    uniforms: { uColor: { value: new THREE.Color(color) }, uOpacity: { value: opacity } },
+    uniforms: { uColor: { value: new THREE.Vector3(...hexToRgb01(color)) }, uOpacity: { value: opacity } },
     vertexShader: LOGV + /* glsl */`
       varying vec2 vUv;
       void main() {
@@ -366,9 +369,11 @@ export function makeLine(points /* Float32Array xyz */, colors /* Float32Array r
   return l;
 }
 
+// A CSS hex colour as the display (sRGB) values the custom shaders write out. THREE.Color would
+// convert it to linear, which draws a marker darker and more saturated than its label.
 export function hexToRgb01(hex) {
-  const c = new THREE.Color(hex);
-  return [c.r, c.g, c.b].map((v) => Math.pow(v, 1 / 2.2));   // three stores linear; we want display values
+  const c = new THREE.Color().setStyle(hex, THREE.NoColorSpace);
+  return [c.r, c.g, c.b];
 }
 
 // A texture from an image URL, with the settings every map here wants.

@@ -58,33 +58,42 @@ const S = {
 
 // ---------------------------------------------------------------- renderer
 const canvas = $('gl');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, logarithmicDepthBuffer: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-renderer.autoClear = false;
-renderer.info.autoReset = false;      // three passes per frame: count them all
-renderer.setClearColor(0x020308, 1);
 const scenes = { solar: new THREE.Scene(), stars: new THREE.Scene(), galaxy: new THREE.Scene() };
 const cams = {
   solar: new THREE.PerspectiveCamera(50, 1, 1e-3, 1e10),
   stars: new THREE.PerspectiveCamera(50, 1, 1e-9, 1e8),
   galaxy: new THREE.PerspectiveCamera(50, 1, 1e-9, 1e6),
 };
-const rig = new Rig(canvas);
-const labels = new Labels($('labels'), (id) => select(id, true));
+// Made in main(), inside its try: a WebView that refuses a WebGL context (memory pressure, too
+// many contexts) then gets a message instead of a loading screen that never ends.
+let renderer, rig, labels;
+function createRenderer() {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, logarithmicDepthBuffer: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.autoClear = false;
+  renderer.info.autoReset = false;      // three passes per frame: count them all
+  renderer.setClearColor(0x020308, 1);
+  // Rendering is on demand: after the system drops and restores the context (iOS does for a
+  // backgrounded WebView) nothing would redraw until the next touch.
+  canvas.addEventListener('webglcontextrestored', () => { resize(); invalidate(); });
+  rig = new Rig(canvas);
+  labels = new Labels($('labels'));
+}
 
 let eph, rotation, phys, small, solar, stars, galaxy, textures, about, skyMeta;
 let pose = null, pxPerRad = 1, W = 1, H = 1;
-// While the info card covers the bottom of a phone screen, the view is shifted up so the selected
-// object stays in sight (a camera view offset; labels and taps use the same shift).
-let shiftY = 0;
+// While the info card covers part of the screen, the view is shifted so the selected object stays
+// in sight: up while the card covers the bottom of a phone screen, left while it sits on the right
+// of a wide one (a camera view offset; labels and taps use the same shift).
+let shiftX = 0, shiftY = 0;
 
 // ---------------------------------------------------------------- loading
 const progress = (f, msg) => { $('load-bar').style.width = `${Math.round(f * 100)}%`; if (msg) $('load-msg').textContent = msg; };
-function fail(err) {
+function fail(err, msg) {
   console.error(err);
   const l = $('loading');
   l.classList.remove('done'); l.classList.add('error');
-  $('load-msg').textContent = `Could not start: ${err.message || err}. The app's data files are missing or damaged — reinstall the app.`;
+  $('load-msg').textContent = msg || `Could not start: ${err.message || err}. The app's data files are missing or damaged — reinstall the app.`;
 }
 
 async function load() {
@@ -138,14 +147,27 @@ async function load() {
 
 // ---------------------------------------------------------------- objects: ids, positions, descriptions
 // Object ids: 'sun', 'earth', 'io' …; 'sb:<index>'; 'star:<row>'; 'gc:<i>', 'sat:<i>', 'stream:<i>',
-// 'arm:<i>', 'gal:sun', 'gal:centre'.
+// 'arm:<i>', 'gal:sun', 'gal:centre', 'gal:model'.
 const smallPos = (i, jd) => Array.from(small.position(i, jd));
+// A fitted moon of a giant planet outside its 1950–2050 range has no position: it is not drawn, and
+// anything that would follow it goes to its planet instead.
+function moonMissing(id, jd = S.jd) {
+  const b = solar.bodies.get(id);
+  return !!b && b.kind === 'moon' && id !== 'moon' && !solar.positionOf(id, jd, [0, 0, 0]);
+}
+const isSkyStar = (id) => id.startsWith('star:') && stars.skyOnly(+id.split(':')[1]);
+// A sky-only star (no usable parallax) as a point for labels and taps: its direction from the Sun,
+// at an effectively infinite distance from the camera.
+const skyPoint = (k) => vadd([], pose.pos, vscale([], stars.direction(k), 1e12));
 function positionFn(id) {
   if (id === 'point') return rig.targetFn;
   if (solar.bodies.has(id)) return (jd) => solar.positionOf(id, jd, [0, 0, 0]) || solar.positionOf(solar.bodies.get(id).parent, jd, [0, 0, 0]);
   const [kind, raw] = id.split(':'); const i = +raw;
   if (kind === 'sb') return (jd) => smallPos(i, jd);
-  if (kind === 'star') { const p = [stars.namedAU[i * 3], stars.namedAU[i * 3 + 1], stars.namedAU[i * 3 + 2]]; return () => p; }
+  if (kind === 'star') {
+    if (stars.skyOnly(i)) return null;          // a direction, not a place: nowhere to fly to
+    const p = [stars.namedAU[i * 3], stars.namedAU[i * 3 + 1], stars.namedAU[i * 3 + 2]]; return () => p;
+  }
   const gp = galaxyPoint(id);
   if (gp) { const p = galaxy.toAU(gp); return () => p; }
   return null;
@@ -158,7 +180,15 @@ function galaxyPoint(id) {
   if (kind === 'arm') { const a = galaxy.armLabels[i]; return a && a.p; }
   if (id === 'gal:sun') return galaxy.sun;
   if (id === 'gal:centre') return [0, 0, 0];
+  if (id === 'gal:model') return modelLabelPoint();
   return null;
+}
+// Where the disc-and-bar model's label sits: 4.5 kpc out along the far end of the model's bar.
+function modelLabelPoint() {
+  const m = galaxy.g.model;
+  if (!m || !Number.isFinite(m.bar_angle_deg)) return null;
+  const a = m.bar_angle_deg * DEG;
+  return [4.5 * Math.cos(a), 4.5 * Math.sin(a), 0];
 }
 function nameOf(id) {
   if (solar.bodies.has(id)) return solar.bodies.get(id).name;
@@ -171,11 +201,15 @@ function nameOf(id) {
   if (kind === 'arm') return galaxy.armLabels[i].name;
   if (id === 'gal:sun') return 'Sun';
   if (id === 'gal:centre') return 'Galactic centre';
+  if (id === 'gal:model') return 'Disc & bar model';
   return id;
 }
+// The name on screen: an arm is a fit, and its label says so (the card says which fit).
+const labelOf = (id) => (id.startsWith('arm:') ? `${nameOf(id)} · fit` : nameOf(id));
 // A sensible viewing distance (AU) when flying to an object.
 function arrivalDist(id) {
   if (solar.bodies.has(id)) {
+    if (moonMissing(id)) return arrivalDist(solar.bodies.get(id).parent);
     const b = solar.bodies.get(id);
     const r = b.radiusKm / AU_KM;
     if (id === 'sun') return r * 12;
@@ -190,19 +224,56 @@ function arrivalDist(id) {
   if (kind === 'stream') return 18 * KPC_AU;
   if (kind === 'arm') return 9 * KPC_AU;
   if (id === 'gal:sun') return 2.5 * KPC_AU;
-  if (id === 'gal:centre') return 16 * KPC_AU;
+  if (id === 'gal:centre' || id === 'gal:model') return 16 * KPC_AU;
   return rig.dist;
 }
+// How close the camera may come. Points get a floor where their float32 positions and the render
+// passes' near planes still hold: a star is drawn from parsecs (a float32 step is ~0.05 AU at
+// Sirius), an asteroid from AU, a galaxy object from kiloparsecs.
 function minDistOf(id) {
-  if (solar.bodies.has(id)) return solar.bodies.get(id).radiusKm / AU_KM * 1.12;
+  if (solar.bodies.has(id)) {
+    if (moonMissing(id)) return minDistOf(solar.bodies.get(id).parent);
+    return solar.bodies.get(id).radiusKm / AU_KM * 1.12;
+  }
+  const kind = id.split(':')[0];
+  if (kind === 'star') return 100;
+  if (kind === 'sb') return 1e-4;
+  if (id === 'gal:sun') return minDistOf('sun');     // the galaxy's Sun is the Sun: zoom on in
+  if (['gc', 'sat', 'stream', 'arm', 'gal'].includes(kind)) return PC_AU;
   return 2e-7;
 }
 
 function flyTo(id, dist, dir) {
+  // A moon with no position at this date: fly to its planet (the card says why).
+  if (moonMissing(id)) id = solar.bodies.get(id).parent;
   const fn = positionFn(id);
   if (!fn) return;
   rig.flyTo({ id, fn, dist: dist || arrivalDist(id), dir, minDist: minDistOf(id) }, S.jd);
   invalidate();
+}
+// Turn the view, keeping its target and distance, until a sky-only star is in sight a little to
+// the left of the target (it is a direction, so there is nowhere to fly to).
+// Far from the Sun, or mid-flight, it flies back to the Sun first, looking past it at the star.
+function faceSkyStar(k) {
+  const s = stars.direction(k);
+  const near = !rig.animating && stars.skyVisible;
+  const side = vnorm([], vcross([], s, rig.upAt(near ? rig.dist : 40)));
+  const fwd = vnorm([], vadd([], s, vscale([], side, 0.12)));
+  if (!near) { flyTo('sun', 40, vscale([], fwd, -1)); return; }
+  rig.flyTo({ id: rig.targetId, fn: rig.targetFn, dist: rig.dist, dir: vscale([], fwd, -1), minDist: rig.minDist }, S.jd);
+  invalidate();
+}
+// When the date leaves a followed moon's range (play, scrub, year step), follow its planet from no
+// closer than four planet radii, so the camera is not left inside the globe.
+function keepMoonTarget() {
+  const a = rig.anim;
+  if (a && solar.bodies.has(a.to.id) && moonMissing(a.to.id)) { flyTo(solar.bodies.get(a.to.id).parent); return; }
+  const id = rig.targetId;
+  if (!solar.bodies.has(id) || !moonMissing(id)) return;
+  const par = solar.bodies.get(id).parent;
+  const d = Math.max(rig.dist, 4 * solar.bodies.get(par).radiusKm / AU_KM);
+  rig.setTarget(par, positionFn(par), minDistOf(par));
+  rig.dist = d;
 }
 
 // ---------------------------------------------------------------- scale presets
@@ -243,8 +314,10 @@ function updateTimebar() {
   const f = clamp((S.jd - a) / (b - a), 0, 1);
   if (!scrubbing) $('t-scrub').value = String(Math.round(f * 1000));
   $('t-scrub').style.setProperty('--p', `${(f * 100).toFixed(2)}%`);
-  const r0 = EPH.dateFromJd(eph.range.jdStart).getUTCFullYear(), r1 = EPH.dateFromJd(eph.range.jdEnd).getUTCFullYear();
-  $('t-yprev').disabled = y <= r0; $('t-ynext').disabled = y >= r1 - 1;
+  // The first and last years that can be shown (the range's ends are midnight TDB, which is the
+  // evening before in UTC, so take the years a day inside them).
+  const r0 = EPH.dateFromJd(eph.range.jdStart + 1).getUTCFullYear(), r1 = EPH.dateFromJd(eph.range.jdEnd - 1).getUTCFullYear();
+  $('t-yprev').disabled = y <= r0; $('t-ynext').disabled = y >= r1;
   $('t-speed').textContent = SPEEDS[S.speed].label;
   document.body.classList.toggle('playing', S.playing);
   $('t-play').setAttribute('aria-label', S.playing ? 'Pause' : 'Play');
@@ -274,7 +347,7 @@ function project(p, out) {
   if (z <= 0) return null;
   const x = v0 * pose.right[0] + v1 * pose.right[1] + v2 * pose.right[2];
   const y = v0 * pose.up[0] + v1 * pose.up[1] + v2 * pose.up[2];
-  out.x = W / 2 + (x / z) * pxPerRad; out.y = H / 2 - shiftY - (y / z) * pxPerRad; out.z = z;
+  out.x = W / 2 - shiftX + (x / z) * pxPerRad; out.y = H / 2 - shiftY - (y / z) * pxPerRad; out.z = z;
   return out;
 }
 
@@ -293,14 +366,31 @@ function resize() {
   invalidate();
 }
 
+// The view shift that keeps the selected object clear of the card: with the card on the right of a
+// wide screen, the middle of the free area to its left, above the dock; with the card along the
+// bottom, the middle of the free area between the title and the card (within a limit, for very
+// short screens).
+function wantedShift() {
+  const card = $('card');
+  if (card.hidden) return [0, 0];
+  const r = card.getBoundingClientRect();
+  const top = $('head').getBoundingClientRect().bottom;
+  if (r.left > W * 0.4) return [Math.max(0, W / 2 - r.left / 2), clamp(H / 2 - (top + $('dock').getBoundingClientRect().top) / 2, 0, H * 0.36)];
+  return [0, clamp(H / 2 - (top + r.top) / 2, 0, H * 0.36)];
+}
+
 let candidates = [];
+let cardJd = NaN, cardAt = 0;       // the date the open card's figures are for, and when they were written
+let cardShownAt = 0;               // when the card last appeared
 function frameLoop(t) {
   queued = false;
   const dt = lastT ? Math.min(t - lastT, 100) : 16; lastT = t;
   let moving = rig.step(dt);
-  const card = $('card');
-  const wantShift = !card.hidden && W < 760 ? Math.min(card.offsetHeight / 2 + 8, H * 0.24) : 0;
-  if (Math.abs(wantShift - shiftY) > 0.5) { shiftY += (wantShift - shiftY) * Math.min(1, dt / 90); moving = true; } else shiftY = wantShift;
+  const [wx, wy] = wantedShift();
+  if (Math.abs(wx - shiftX) + Math.abs(wy - shiftY) > 0.5) {
+    const k = Math.min(1, dt / 90);
+    shiftX += (wx - shiftX) * k; shiftY += (wy - shiftY) * k; moving = true;
+  } else { shiftX = wx; shiftY = wy; }
   if (S.playing) {
     const next = S.jd + SPEEDS[S.speed].days * dt / 1000;
     if (next >= eph.range.jdEnd - 0.5) { S.playing = false; }
@@ -308,6 +398,10 @@ function frameLoop(t) {
     updateTimebar();
     moving = true;
   }
+  keepMoonTarget();
+  // The open card's distances follow the date: at once after a scrub or a step, four times a second
+  // while time plays.
+  if (S.selected && !$('card').hidden && S.jd !== cardJd && (!S.playing || performance.now() - cardAt > 250)) refreshCard();
   draw();
   if (moving) invalidate(); else { lastT = 0; saveSoon(); }
 }
@@ -344,7 +438,7 @@ function draw() {
   cs.up.set(pose.up[0], pose.up[1], pose.up[2]); cs.lookAt(0, 0, 0); cs.updateMatrixWorld(true);
 
   for (const c of Object.values(cams)) {
-    if (shiftY > 0.5) c.setViewOffset(W, H, 0, shiftY, W, H); else if (c.view && c.view.enabled) c.clearViewOffset();
+    if (shiftX > 0.5 || shiftY > 0.5) c.setViewOffset(W, H, shiftX, shiftY, W, H); else if (c.view && c.view.enabled) c.clearViewOffset();
   }
 
   // --- stars (pc) and galaxy (kpc)
@@ -376,6 +470,12 @@ function draw() {
 
 // ---------------------------------------------------------------- labels and picking
 const _p = { x: 0, y: 0, z: 0 };
+// Named star k as a point in AU: its place, or for a sky-only star its direction from the camera.
+function starPoint(k, out) {
+  if (stars.skyOnly(k)) return skyPoint(k);
+  out[0] = stars.namedAU[k * 3]; out[1] = stars.namedAU[k * 3 + 1]; out[2] = stars.namedAU[k * 3 + 2];
+  return out;
+}
 function gatherLabels(jd, dSun) {
   candidates = [];
   // Globes big enough to hide things: a label whose point is behind one of them is not shown.
@@ -427,16 +527,16 @@ function gatherLabels(jd, dSun) {
       const best = [], q = { x: 0, y: 0, z: 0 }, p = [0, 0, 0];
       const inSolar = dSun < 2e4;
       for (const k of stars.labelOrder) {
-        if (inSolar && (!stars.named.name[k] || stars.named.vmag[k] > 1.5)) continue;   // from among the planets, only the brightest
-        p[0] = stars.namedAU[k * 3]; p[1] = stars.namedAU[k * 3 + 1]; p[2] = stars.namedAU[k * 3 + 2];
-        if (!project(p, q) || q.x < 0 || q.x > W || q.y < 0 || q.y > H) continue;
-        best.push([stars.apparentMag(k, camPc), k]);
+        if (stars.skyOnly(k) && !stars.skyVisible) continue;
+        if (inSolar && (!stars.named.name[k] || !(stars.named.vmag[k] <= 1.5))) continue;   // from among the planets, only the brightest
+        if (!project(starPoint(k, p), q) || q.x < 0 || q.x > W || q.y < 0 || q.y > H) continue;
+        const m = stars.apparentMag(k, camPc);
+        if (Number.isFinite(m)) best.push([m, k]);        // no magnitude: not drawn as a star
       }
       best.sort((a, b) => a[0] - b[0]);
       for (const [m, k] of best) {
         if (n >= maxN) break;
-        const pp = [stars.namedAU[k * 3], stars.namedAU[k * 3 + 1], stars.namedAU[k * 3 + 2]];
-        push(`star:${k}`, stars.label(k), pp, 30 - m, '#bcd4ff', inSolar ? 'faint' : m < 1.5 ? '' : 'minor');
+        push(`star:${k}`, stars.label(k), starPoint(k, [0, 0, 0]), 30 - m, '#bcd4ff', inSolar ? 'faint' : m < 1.5 ? '' : 'minor');
         n++;
       }
     }
@@ -445,13 +545,17 @@ function gatherLabels(jd, dSun) {
   if (galaxy.fade > 0.25) {
     push('gal:sun', 'Sun', galaxy.toAU(galaxy.sun), 95, '#ffe2a8', '');
     push('gal:centre', 'Galactic centre', galaxy.toAU([0, 0, 0]), 80, '#ffffff', '');
-    if (L.reid || L.drimmel) galaxy.armLabels.forEach((a, i) => { if (L[a.layer]) push(`arm:${i}`, a.name, galaxy.toAU(a.p), 45, a.colour, 'faint'); });
+    if (L.reid || L.drimmel) galaxy.armLabels.forEach((a, i) => { if (L[a.layer]) push(`arm:${i}`, labelOf(`arm:${i}`), galaxy.toAU(a.p), 45, a.colour, 'faint'); });
+    // The disc-and-bar glow is a model, and the brightest thing here: it is labelled as one.
+    const mp = L.model && modelLabelPoint();
+    if (mp) push('gal:model', nameOf('gal:model'), galaxy.toAU(mp), 42, '#e6cfa8', 'faint');
     if (L.satellites) galaxy.satellites.forEach((o, i) => { if (Number.isFinite(o.mv) && o.mv < -8.5) push(`sat:${i}`, o.name, galaxy.toAU(o.xyz), 40 - o.mv * 0.5, '#ff8fa3', 'minor'); });
     if (L.globulars) galaxy.globulars.forEach((o, i) => { if (Number.isFinite(o.mv) && o.mv < -9.3) push(`gc:${i}`, o.name, galaxy.toAU(o.xyz), 30 - o.mv * 0.3, '#ffd27a', 'minor'); });
   }
   if (S.selected && !candidates.some((c) => c.id === S.selected)) {
-    const fn = positionFn(S.selected);
-    if (fn) push(S.selected, nameOf(S.selected), fn(jd), 1000, '#f2c56f', '');
+    const sel = S.selected;
+    if (isSkyStar(sel)) { if (stars.skyVisible) push(sel, nameOf(sel), skyPoint(+sel.split(':')[1]), 1000, '#f2c56f', ''); }
+    else if (!moonMissing(sel, jd)) { const fn = positionFn(sel); if (fn) push(sel, labelOf(sel), fn(jd), 1000, '#f2c56f', ''); }
   }
   // Keep labels off the title, the round buttons, the dock and the card.
   const reserved = [];
@@ -484,11 +588,22 @@ function pick(x, y) {
   }
   if (S.layers.stars) {
     const camPc = [pose.pos[0] / PC_AU, pose.pos[1] / PC_AU, pose.pos[2] / PC_AU];
+    const mMax = 8 + Math.log10(Math.max(1, dSun / PC_AU)) * 3;
     for (let k = 0; k < stars.namedCount; k++) {
-      if (stars.named.flags[k] & 16) continue;
       const m = stars.apparentMag(k, camPc);
-      if (m > 8 + Math.log10(Math.max(1, dSun / PC_AU)) * 3) continue;
-      consider(`star:${k}`, [stars.namedAU[k * 3], stars.namedAU[k * 3 + 1], stars.namedAU[k * 3 + 2]], 4 - m * 0.5);
+      if (stars.skyOnly(k)) {
+        if (stars.skyVisible && m <= mMax) consider(`star:${k}`, skyPoint(k), 4 - m * 0.5);
+        continue;
+      }
+      // Faded out once the camera leaves the catalogue behind: nothing to tap where nothing is drawn.
+      if (!stars.namedPts.visible || stars.namedPts.material.uniforms.uOpacity.value < 0.15) continue;
+      if (!Number.isFinite(m)) {
+        // No magnitude, so not drawn as a star: only an exoplanet host's ring marker, while shown.
+        if (stars.hosts.visible && stars.exo[k]) consider(`star:${k}`, starPoint(k, [0, 0, 0]), 2);
+        continue;
+      }
+      if (m > mMax) continue;
+      consider(`star:${k}`, starPoint(k, [0, 0, 0]), 4 - m * 0.5);
     }
   }
   if (galaxy.fade > 0.05) {
@@ -506,22 +621,36 @@ function facts(id) {
   const earth = solar.positionOf('earth', jd, [0, 0, 0]);
   const add = (k, v) => out.rows.push([k, v]);
   if (solar.bodies.has(id)) {
-    const b = solar.bodies.get(id), p = b.phys;
+    const b = solar.bodies.get(id), p = b.phys, notes = [];
+    // Null for a fitted moon outside 1950–2050: then no distances, only what does not change.
     const pos = solar.positionOf(id, jd, [0, 0, 0]);
     out.kind = b.kind === 'star' ? 'Star' : b.kind === 'planet' ? 'Planet' : b.kind === 'dwarf' ? 'Dwarf planet' : `Moon of ${solar.bodies.get(b.parent).name}`;
-    if (id !== 'sun') add('From the Sun', `${fmtAU(vlen(pos))}`);
-    if (id !== 'earth') add('From the Earth', `${fmtAU(Math.hypot(pos[0] - earth[0], pos[1] - earth[1], pos[2] - earth[2]))} · ${fmtLightTime(Math.hypot(pos[0] - earth[0], pos[1] - earth[1], pos[2] - earth[2]))}`);
-    if (b.kind === 'moon') { const par = solar.positionOf(b.parent, jd, [0, 0, 0]); add(`From ${solar.bodies.get(b.parent).name}`, `${fmt(Math.hypot(pos[0] - par[0], pos[1] - par[1], pos[2] - par[2]) * AU_KM)} km`); }
-    const r = b.radii; add('Radius', r[0] === r[2] ? `${sig(r[0], 4)} km` : `${sig(r[0], 5)} km equator, ${sig(r[2], 5)} km pole`);
-    if (p.sidereal_rotation_h) add('Rotation', `${fmtDays(Math.abs(p.sidereal_rotation_h) / 24)}${p.sidereal_rotation_h < 0 ? ', retrograde' : ''}`);
+    if (pos) {
+      const dE = Math.hypot(pos[0] - earth[0], pos[1] - earth[1], pos[2] - earth[2]);
+      if (id !== 'sun') add('From the Sun', `${fmtAU(vlen(pos))}`);
+      if (id !== 'earth') add('From the Earth', `${fmtAU(dE)} · ${fmtLightTime(dE)}`);
+      // (The Moon's planet is the Earth, given just above.)
+      if (b.kind === 'moon' && b.parent !== 'earth') { const par = solar.positionOf(b.parent, jd, [0, 0, 0]); add(`From ${solar.bodies.get(b.parent).name}`, `${fmt(Math.hypot(pos[0] - par[0], pos[1] - par[1], pos[2] - par[2]) * AU_KM)} km`); }
+    }
+    const r = b.radii, triaxial = r[0] !== r[1];
+    const dp = r.slice(0, 3).some((v) => !Number.isInteger(v)) ? 1 : 0;
+    const km = (v) => fmt(v, dp);      // the three semi-axes, as catalogued, at one precision
+    add(triaxial ? 'Radii' : 'Radius', r[0] === r[2] ? `${sig(r[0], 4)} km` : triaxial ? `${km(r[0])} × ${km(r[1])} × ${km(r[2])} km` : `${sig(r[0], 5)} km equator, ${sig(r[2], 5)} km pole`);
+    // Retrograde relative to its own orbit: the tilt already carries the sense of rotation.
+    if (p.sidereal_rotation_h) add('Rotation', `${fmtDays(Math.abs(p.sidereal_rotation_h) / 24)}${p.obliquity_deg > 90 ? ', retrograde' : ''}`);
     if (Number.isFinite(p.obliquity_deg)) add('Axial tilt', `${fmt(p.obliquity_deg, 2)}°`);
     const o = solar.orbits.get(id);
     if (o && o.el && id !== 'moon') add('Orbital period', fmtDays(o.el.period));
-    if (b.meta) out.src = `Surface: ${b.meta.note || b.meta.source_id}`;
-    else if (textures.colours && textures.colours[id]) out.src = `Colour: ${textures.colours[id].note || textures.colours[id].source}`;
-    if (id === 'venus') out.note = S.layers.venusRadar ? 'Shown with the Magellan radar map of the surface, which no eye can see through the clouds.' : 'Drawn as a plain disc: no colour data for Venus could be sourced, and its visible face is a featureless cloud deck. Layers → Venus radar surface shows the Magellan map.';
-    if (id === 'pluto') out.note = 'Drawn at the Pluto–Charon barycentre from JPL DE430. Pluto itself circles that point every 6.39 days, about 2,100 km away; Charon is not shown because no long-term ephemeris for it could be sourced.';
-    if (b.kind === 'moon' && id !== 'moon') out.note = solar.inMoonRange ? 'Position from JPL satellite ephemerides, fitted in windows of a few weeks (see About).' : 'Moon positions are available from 1950 to 2050 only.';
+    const colour = textures.colours && textures.colours[id];
+    if (id === 'venus' && !S.layers.venusRadar) out.src = 'Surface: none drawn — a plain disc, as no colour data could be sourced; the Magellan radar map is an optional layer.';
+    else if (b.meta) out.src = `Surface: ${b.meta.note || b.meta.source_id}`;
+    else if (colour) out.src = `Colour: ${colour.note || colour.source}`;
+    else if (b.kind === 'moon') out.src = 'Surface: no map or colour could be sourced; drawn neutral grey';
+    if (id === 'venus') notes.push(S.layers.venusRadar ? 'Shown with the Magellan radar map of the surface, which no eye can see through the clouds.' : 'Its visible face is a featureless cloud deck.');
+    if (id === 'pluto') notes.push('Drawn at the Pluto–Charon barycentre from JPL DE430. Pluto itself circles that point every 6.39 days, about 2,100 km away; Charon is not shown because no long-term ephemeris for it could be sourced.');
+    if (b.kind === 'moon' && id !== 'moon') notes.push(pos ? 'Position from JPL satellite ephemerides, fitted in windows of weeks to months (see About).' : `${b.name}’s position is available from 1950 to 2050 only, so it is not shown at this date.`);
+    if (triaxial && !rotation.has(id)) notes.push('It has no rotation model in the data (pck00011), so its orientation is not modelled: it is drawn as a sphere of its mean radius.');
+    out.note = notes.join(' ');
     out.orbit = false;
   } else {
     const [kind, raw] = id.split(':'); const i = +raw;
@@ -543,28 +672,33 @@ function facts(id) {
       out.note = (info.note || '').replace(small.meta.dwarf_note || '\u0000', '').trim();
       out.orbit = true;
     } else if (kind === 'star') {
-      const n = stars.named;
+      const n = stars.named, notes = [];
+      const sky = stars.skyOnly(i);           // no usable parallax: a direction only
       out.kind = n.flags[i] & 2 ? 'White dwarf' : 'Star';
-      const dpc = Math.hypot(n.x[i], n.y[i], n.z[i]);
-      add('Distance', `${sig(dpc * PC_AU / LY_AU)} light-years (${sig(dpc)} pc)`);
+      if (sky) { add('Distance', 'unknown (no usable parallax)'); out.go = false; }
+      else { const dpc = Math.hypot(n.x[i], n.y[i], n.z[i]); add('Distance', `${sig(dpc * PC_AU / LY_AU)} light-years (${sig(dpc)} pc)`); }
       if (n.desig[i] && n.name[i]) add('Designation', n.desig[i]);
       add('Catalogue', n.id[i]);
       if (Number.isFinite(n.vmag[i])) add('Brightness from Earth', `V ${fmt(n.vmag[i], 2)}`);
       if (Number.isFinite(n.absmag[i])) add('Absolute magnitude', `${fmt(n.absmag[i], 2)}`);
       if (n.spect[i]) add('Spectral type', n.spect[i]);
-      add('Distance from', stars.distSource(i));
+      if (!sky) add('Distance from', stars.distSource(i));
       const pl = stars.planets(i);
       if (pl && pl.length) out.planets = pl;
-      if (n.flags[i] & 4) out.note = 'A companion placed at its primary star’s distance.';
-      if (n.flags[i] & 8) out.note = 'Parallax only 5–10× its error: the distance is uncertain.';
-      else if (n.flags[i] & 64) out.note = 'No independent parallax error was available to check this distance against.';
+      if (n.flags[i] & 4) notes.push('A companion placed at its primary star’s distance.');
+      if (sky) notes.push('Not placed in 3D: with no usable parallax it is drawn only on the sky as seen from near the Sun, with the figure lines that join it.');
+      else if (n.flags[i] & 8) notes.push('Parallax only 5–10× its error: the distance is uncertain.');
+      else if (n.flags[i] & 64) notes.push('No independent parallax error was available to check this distance against.');
+      out.note = notes.join(' ');
     } else if (kind === 'gc' || kind === 'sat') {
       const o = kind === 'gc' ? galaxy.globulars[i] : galaxy.satellites[i];
-      out.kind = kind === 'gc' ? 'Globular cluster' : 'Satellite galaxy';
+      const candidate = kind === 'sat' && o.galaxy_confirmed === false;
+      out.kind = kind === 'gc' ? 'Globular cluster' : candidate ? 'Satellite · galaxy candidate' : 'Satellite galaxy';
       add('Distance', `${sig(o.dist_kpc * 1000 * PC_AU / LY_AU / 1000)} thousand light-years (${sig(o.dist_kpc)} kpc)`);
       add('From the Galactic centre', `${sig(Math.hypot(...o.xyz))} kpc`);
       if (Number.isFinite(o.mv)) add('Absolute magnitude', `M_V ${fmt(o.mv, 1)}`);
       if (Number.isFinite(o.rhalf_pc)) add('Half-light radius', `${sig(o.rhalf_pc)} pc`);
+      if (candidate) out.note = 'The Local Volume Database has not confirmed it as a galaxy: it could still be a star cluster.';
       out.src = o.ref ? `Distance: ${o.ref}` : '';
     } else if (kind === 'stream') {
       const s = galaxy.streams[i];
@@ -581,27 +715,42 @@ function facts(id) {
     } else if (id === 'gal:sun') {
       out.kind = 'Our star'; add('From the Galactic centre', `${fmt(Math.hypot(...galaxy.sun), 3)} kpc`); out.src = (galaxy.g.frame.refs || []).join('; ');
     } else if (id === 'gal:centre') {
-      out.kind = 'Sagittarius A*'; add('From the Sun', `${fmt(galaxy.g.frame.r0_kpc, 3)} kpc`); out.src = (galaxy.g.frame.refs || []).join('; ');
+      // The frame's origin, in the direction of Galactic l = b = 0: not the radio source Sgr A*,
+      // which the data does not place (tools/CONTRACT.md, Frame).
+      out.kind = 'Origin of the galaxy frame'; add('From the Sun', `${fmt(galaxy.g.frame.r0_kpc, 3)} kpc`); out.src = (galaxy.g.frame.refs || []).join('; ');
+      out.note = `The centre of the frame this view is drawn in (${galaxy.g.frame.name || 'Galactocentric'}), in the direction of Galactic longitude and latitude 0.`;
+    } else if (id === 'gal:model') {
+      const m = galaxy.g.model;
+      out.kind = 'Mass model · not a picture'; out.note = m.what || ''; out.src = (m.refs || []).join('; ');
     }
   }
   return out;
 }
 
-function select(id, fromLabel = false) {
+// The card's date-dependent parts: the figures, the note and the source line.
+function fillCard(f) {
+  $('card-facts').innerHTML = f.rows.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('');
+  $('card-note').textContent = f.note || '';
+  $('card-src').textContent = f.src || '';
+  cardJd = S.jd; cardAt = performance.now();
+}
+function refreshCard() { if (S.selected) fillCard(facts(S.selected)); }
+
+function select(id) {
   S.selected = id;
   const card = $('card');
   if (!id) { card.hidden = true; if (solar) solar.showSmallOrbit(-1); invalidate(); return; }
   const f = facts(id);
   $('card-kind').textContent = f.kind;
   $('card-name').textContent = f.name;
-  $('card-facts').innerHTML = f.rows.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('');
+  fillCard(f);
   const pl = $('card-planets');
   pl.hidden = !f.planets;
   pl.innerHTML = f.planets ? f.planets.map((p) => `<li><span>${escapeHtml(p.name)}</span><span class="d">${[p.period_d ? `orbit ${fmtDays(p.period_d)}` : '', p.method || '', p.year ? `found ${p.year}` : ''].filter(Boolean).join(' · ')}</span></li>`).join('') : '';
-  $('card-note').textContent = f.note || '';
-  $('card-src').textContent = f.src || '';
-  $('card-orbit').hidden = !f.orbit;
+  $('card-go').hidden = f.go === false;
+  $('card-orbit').hidden = !f.orbit || !S.layers.small;      // no orbit to draw while the layer is off
   $('card-orbit').textContent = solar.smallOrbitIdx === +id.split(':')[1] && id.startsWith('sb:') ? 'Hide orbit' : 'Show orbit';
+  if (card.hidden) cardShownAt = performance.now();
   card.hidden = false;
   invalidate();
 }
@@ -626,31 +775,35 @@ function hud(dSun) {
   const tb = $('timebar');
   const showTime = sc === 'solar';
   if (tb.classList.contains('off') === showTime) { tb.classList.toggle('off', !showTime); requestAnimationFrame(() => document.documentElement.style.setProperty('--dock-h', `${$('dock').offsetHeight}px`)); }
+  // Nothing out among the stars depends on the date, and the pause button goes with the time bar:
+  // playing on would only move the date unseen and keep redrawing the galaxy.
+  if (!showTime && S.playing) { S.playing = false; updateTimebar(); }
   const tid = rig.targetId;
   const name = tid === 'flight' ? '' : tid === 'point' ? '' : nameOf(tid);
   $('sub').textContent = sc === 'solar' ? (name && tid !== 'sun' ? `${name} · ${$('t-date').textContent}` : `Solar System · ${$('t-date').textContent}`)
-    : sc === 'stars' ? (name && tid !== 'sun' ? `${name} · the Sun's neighbourhood` : 'The Sun’s neighbourhood') : (name && tid !== 'gal:centre' ? `${name} · our galaxy` : 'Our galaxy, measured');
+    : sc === 'stars' ? (name && tid !== 'sun' ? `${name} · the Sun's neighbourhood` : 'The Sun’s neighbourhood') : (name && tid !== 'gal:centre' ? `${name} · our galaxy` : 'Our galaxy: measurements and models');
 }
 
 // ---------------------------------------------------------------- sheets: layers, search, about
+const count = (list, f) => [...list].filter(f).length;
 const LAYER_DOC = () => [
   ['Solar System', [
     ['orbits', 'Orbits', 'Each planet’s orbit at the current date'],
     ['trails', 'Trails', 'The real path over the last part of each orbit'],
-    ['moons', 'Moons', `${[...solar.bodies.values()].filter((b) => b.kind === 'moon').length} major moons · JPL ephemerides, 1950–2050`],
+    ['moons', 'Moons', `The Moon (1900–2100) and ${count(solar.bodies.values(), (b) => b.kind === 'moon' && b.parent !== 'earth')} moons fitted to JPL ephemerides (1950–2050)`],
     ['small', 'Asteroids and comets', `${fmt(small.count)} objects · JPL and Minor Planet Center orbits`],
     ['venusRadar', 'Venus radar surface', 'Magellan radar instead of a plain disc'],
   ]],
   ['Stars', [
-    ['stars', 'Stars', `${fmt(stars.deepCount + stars.namedCount)} stars within 500 pc, in 3D`],
+    ['stars', 'Stars', `${fmt(stars.drawnCount)} stars in 3D, most within 500 pc`],
     ['constellations', 'Constellation figures', `${stars.constellations.length} IAU constellations, drawn in 3D`],
     ['exoplanets', 'Exoplanet hosts', `${fmt(Object.keys(stars.exo).length)} stars with confirmed planets`],
     ['sky', 'The Milky Way sky', 'Gaia DR3 star counts, as seen from the Sun'],
   ]],
   ['Milky Way', [
     ['globulars', 'Globular clusters', `${galaxy.globulars.length} clusters at measured distances`],
-    ['satellites', 'Satellite galaxies', `${galaxy.satellites.length} galaxies at measured distances`],
-    ['streams', 'Stellar streams', `${galaxy.streams.length} streams traced through the halo`],
+    ['satellites', 'Satellite galaxies', `${count(galaxy.satellites, (o) => o.galaxy_confirmed !== false)} confirmed galaxies and ${count(galaxy.satellites, (o) => o.galaxy_confirmed === false)} candidates at measured distances`],
+    ['streams', 'Stellar streams', `${galaxy.streams.length} streams (${count(galaxy.streams, (o, i) => !galaxy.data.streamApproximate(i))} measured tracks, ${count(galaxy.streams, (o, i) => galaxy.data.streamApproximate(i))} approximate)`],
     ['young', 'Young stars · Gaia EDR3', 'Poggio et al. 2021 — where young stars crowd, within ~4 kpc'],
     ['youngOB', 'OB stars · Gaia DR3', 'Drimmel et al. 2023 — streaked by distance errors'],
     ['reid', 'Arm fits · masers', 'Reid et al. 2019 — a fit to maser parallaxes'],
@@ -667,7 +820,9 @@ function buildLayers() {
     + `<span class="switch"><input type="checkbox" data-layer="${k}" ${S.layers[k] ? 'checked' : ''}><span></span></span></label>`).join('')).join('');
   root.addEventListener('change', (e) => {
     const k = e.target.dataset.layer; if (!k) return;
-    S.layers[k] = e.target.checked; store.set('layers', S.layers); invalidate();
+    S.layers[k] = e.target.checked; store.set('layers', S.layers);
+    if (S.selected && !$('card').hidden) refreshCard();      // the Venus card says which surface is on
+    invalidate();
   });
 }
 function buildAbout() {
@@ -682,34 +837,69 @@ function buildAbout() {
     + (b.licence ? `<p class="lic">${escapeHtml(b.owner ? b.owner + ' · ' : '')}${escapeHtml(b.licence)}${b.retrieved ? ' · retrieved ' + escapeHtml(b.retrieved) : ''}</p>` : '')).join('');
 }
 let searchIndex = null;
+// Bayer letters spelled out, as a phone keyboard types them: 'α¹ Cen' is also 'alpha1', 'alpha'.
+const GREEK = {
+  α: 'alpha', β: 'beta', γ: 'gamma', δ: 'delta', ε: 'epsilon', ζ: 'zeta', η: 'eta', θ: 'theta', ι: 'iota', κ: 'kappa', λ: 'lambda', μ: 'mu',
+  ν: 'nu', ξ: 'xi', ο: 'omicron', π: 'pi', ρ: 'rho', σ: 'sigma', τ: 'tau', υ: 'upsilon', φ: 'phi', χ: 'chi', ψ: 'psi', ω: 'omega',
+};
+const SUPERSCRIPT = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+function spellBayer(desig) {
+  const m = /^([α-ω])([⁰¹²³⁴-⁹]*)\s/.exec(desig || '');
+  const w = m && GREEK[m[1]];
+  if (!w) return '';
+  const d = [...m[2]].map((c) => SUPERSCRIPT.indexOf(c)).join('');
+  return d ? `${w}${d} ${w}` : w;
+}
 function buildSearch() {
   const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const tokens = (s) => fold(s).split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  const names = (v) => (Array.isArray(v) ? v.join(' ') : v || '');      // LVDB other names, where given
+  const conName = Object.fromEntries(stars.constellations.map((c) => [c.abbr, c.name]));
   searchIndex = [];
   for (const b of solar.bodies.values()) searchIndex.push({ id: b.key, text: b.name, kind: b.kind === 'moon' ? `Moon of ${solar.bodies.get(b.parent).name}` : b.kind === 'star' ? 'Star' : b.kind === 'dwarf' ? 'Dwarf planet' : 'Planet', pri: 3 });
   for (let i = 0; i < small.count; i++) searchIndex.push({ id: `sb:${i}`, text: small.name(i), kind: small.kindLabel ? small.kindLabel(i) : small.kind(i), pri: (small.labelled || []).includes(i) ? 2 : 0 });
   const n = stars.named;
   for (let k = 0; k < stars.namedCount; k++) {
-    if (n.flags[k] & 16) continue;
     const t = [n.name[k], n.desig[k], n.id[k]].filter(Boolean);
-    searchIndex.push({ id: `star:${k}`, text: t[0], alt: t.slice(1).join(' · '), kind: 'Star', pri: n.name[k] ? 2 : 1, extra: t.join(' ') });
+    const con = n.con ? n.con[k] : '';
+    searchIndex.push({ id: `star:${k}`, text: t[0], alt: t.slice(1).join(' · '), kind: 'Star', pri: n.name[k] ? 2 : 1, extra: [spellBayer(n.desig[k]), con, conName[con]].filter(Boolean).join(' '), abbr: con });
   }
-  galaxy.globulars.forEach((o, i) => searchIndex.push({ id: `gc:${i}`, text: o.name, kind: 'Globular cluster', pri: 1, extra: o.key }));
-  galaxy.satellites.forEach((o, i) => searchIndex.push({ id: `sat:${i}`, text: o.name, kind: 'Satellite galaxy', pri: 2, extra: o.key }));
+  galaxy.globulars.forEach((o, i) => searchIndex.push({ id: `gc:${i}`, text: o.name, kind: 'Globular cluster', pri: 1, extra: `${o.key} ${names(o.other_names)}` }));
+  galaxy.satellites.forEach((o, i) => searchIndex.push({ id: `sat:${i}`, text: o.name, kind: o.galaxy_confirmed === false ? 'Satellite · galaxy candidate' : 'Satellite galaxy', pri: 2, extra: `${o.key} ${names(o.other_names)}` }));
   galaxy.streams.forEach((o, i) => searchIndex.push({ id: `stream:${i}`, text: o.name, kind: 'Stellar stream', pri: 1 }));
-  for (const e of searchIndex) e.f = fold([e.text, e.alt, e.extra].filter(Boolean).join(' '));
+  galaxy.armLabels.forEach((a, i) => searchIndex.push({ id: `arm:${i}`, text: a.name, kind: a.layer === 'reid' ? 'Spiral-arm fit · masers' : 'Spiral-arm fit · Cepheids', pri: 1, extra: a.layer === 'reid' ? 'fit masers Reid' : 'fit Cepheids Drimmel' }));
+  searchIndex.push({ id: 'gal:centre', text: 'Galactic centre', kind: 'Milky Way', pri: 2, extra: 'center' });
+  if (modelLabelPoint()) searchIndex.push({ id: 'gal:model', text: nameOf('gal:model'), kind: 'Mass model', pri: 1, extra: 'disk McMillan Portail' });
+  for (const e of searchIndex) { e.f = fold(e.text); e.toks = tokens([e.text, e.alt, e.extra].filter(Boolean).join(' ')); e.abbr = e.abbr ? tokens(e.abbr)[0] : ''; }
   const q = $('search-q'), res = $('search-res');
+  // Every word typed must match a word of the entry: the start of it ('sir' → Sirius), or — for the
+  // Latin genitives no index holds — a star's constellation abbreviation may start the word typed
+  // ('centauri' ← 'Cen', 'ceti' ← 'Cet').
+  // Ranked: the name itself starts with what was typed; every word matched forward; the rest.
   const run = () => {
-    const s = fold(q.value.trim());
-    if (!s) { res.innerHTML = ''; return; }
+    const s = fold(q.value.trim()), qt = tokens(q.value);
+    if (!qt.length) { res.innerHTML = ''; return; }
     const hits = [];
-    for (const e of searchIndex) { const at = e.f.indexOf(s); if (at >= 0) hits.push([at === 0 ? 0 : 1, -e.pri, e.text.length, e]); }
+    for (const e of searchIndex) {
+      let rank = e.f.startsWith(s) ? 0 : 1;
+      for (const t of qt) {
+        let m = 0;
+        for (const u of e.toks) { if (u.startsWith(t)) { m = 2; break; } }
+        if (!m && e.abbr && t.startsWith(e.abbr)) m = 1;
+        if (!m) { rank = -1; break; }
+        if (m === 1 && rank) rank = 2;
+      }
+      if (rank >= 0) hits.push([rank, -e.pri, e.text.length, e]);
+    }
     hits.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
-    res.innerHTML = hits.length ? hits.slice(0, 40).map(([, , , e]) => `<li data-id="${escapeHtml(e.id)}"><span>${escapeHtml(e.text)}${e.alt ? ` <span class="k">${escapeHtml(e.alt)}</span>` : ''}</span><span class="k">${escapeHtml(e.kind)}</span></li>`).join('') : '<li class="empty">Nothing by that name in this app’s data.</li>';
+    res.innerHTML = hits.length ? hits.slice(0, 40).map(([, , , e]) => `<li data-id="${escapeHtml(e.id)}"><span>${escapeHtml(e.text)}${e.alt ? ` <span class="k">${escapeHtml(e.alt)}</span>` : ''}</span><span class="k">${escapeHtml(e.kind)}</span></li>`).join('') : '<li class="empty">No match. Names here are the catalogues’ own, such as “LMC” or “NGC 5139”.</li>';
   };
   q.addEventListener('input', run);
   res.addEventListener('click', (e) => {
     const li = e.target.closest('li[data-id]'); if (!li) return;
-    closeSheets(); select(li.dataset.id); flyTo(li.dataset.id);
+    const id = li.dataset.id;
+    closeSheets(); select(id);
+    if (isSkyStar(id)) faceSkyStar(+id.split(':')[1]); else flyTo(id);
   });
 }
 function openSheet(id) {
@@ -734,7 +924,9 @@ function bindUi() {
   $('btn-about').addEventListener('click', () => ($('about').hidden ? openSheet('about') : closeSheets()));
   for (const b of $$('[data-close]')) b.addEventListener('click', closeSheets);
   for (const b of $$('#scales button')) b.addEventListener('click', () => { select(null); goScale(b.dataset.scale); });
-  $('card-close').addEventListener('click', () => select(null));
+  // The tap that opened the card is followed by a synthesized click at the same spot, which can land
+  // on the close button's enlarged hit area as the card appears: ignore clicks that early.
+  $('card-close').addEventListener('click', () => { if (performance.now() - cardShownAt > 450) select(null); });
   $('card-go').addEventListener('click', () => { if (S.selected) flyTo(S.selected); });
   $('card-orbit').addEventListener('click', () => {
     if (!S.selected || !S.selected.startsWith('sb:')) return;
@@ -742,8 +934,11 @@ function bindUi() {
     if (solar.smallOrbitIdx === i) solar.showSmallOrbit(-1); else solar.showSmallOrbit(i, S.jd);
     select(S.selected);
   });
-  rig.on('tap', (x, y) => { const id = pick(x, y); select(id); });
-  rig.on('doubletap', (x, y) => { const id = pick(x, y); if (id) { select(id); flyTo(id); } else { rig.vel.zoom = -0.004; invalidate(); } });
+  // Labels take no pointer events (a drag or pinch that starts on one must still turn the view):
+  // a tap on a label's box selects its object, before anything near the point is considered.
+  const labelAt = (x, y) => { const p = labels.placed.find(({ box: b }) => x >= b[0] - 2 && x <= b[2] + 2 && y >= b[1] - 2 && y <= b[3] + 2); return p ? p.id : null; };
+  rig.on('tap', (x, y) => { const id = labelAt(x, y) || pick(x, y); select(id); });
+  rig.on('doubletap', (x, y) => { const id = labelAt(x, y) || pick(x, y); if (id) { select(id); flyTo(id); } else { rig.vel.zoom = -0.004; invalidate(); } });
   rig.on('change', invalidate); rig.on('interact', invalidate); rig.on('settle', saveSoon);
   rig.on('arrive', () => { invalidate(); saveSoon(); });
   window.addEventListener('resize', resize);
@@ -758,10 +953,20 @@ function bindUi() {
 
 function restoreCamera() {
   const c = store.get('camera', null);
-  const valid = (id) => id && (solar.bodies.has(id) || /^(sb|star|gc|sat|stream|arm):\d+$/.test(id) || id === 'gal:sun' || id === 'gal:centre') && positionFn(id);
-  if (c && valid(c.id) && Number.isFinite(c.dist) && Array.isArray(c.dir)) {
-    rig.setTarget(c.id, positionFn(c.id), minDistOf(c.id)); rig.dist = c.dist; rig.dir = vnorm([], c.dir);
-  } else if (c && Array.isArray(c.point) && Number.isFinite(c.dist)) {
+  const finite = (v, n) => Array.isArray(v) && v.length === n && v.every(Number.isFinite);
+  // The saved target must still exist in this build's data (a row index past the end of a rebuilt
+  // catalogue would leave the camera at NaN) and have a position.
+  const valid = (id) => {
+    if (!id || !(solar.bodies.has(id) || /^(sb|star|gc|sat|stream|arm):\d+$/.test(id) || id === 'gal:sun' || id === 'gal:centre' || id === 'gal:model')) return false;
+    const [kind, raw] = id.split(':'); const i = +raw;
+    if ((kind === 'sb' && !(i < small.count)) || (kind === 'star' && !(i < stars.namedCount))) return false;
+    const fn = positionFn(id);
+    return !!fn && finite(fn(S.jd), 3);
+  };
+  const dirOk = c && finite(c.dir, 3) && vlen(c.dir) > 0 && c.dist > 0 && Number.isFinite(c.dist);
+  if (dirOk && valid(c.id)) {
+    rig.setTarget(c.id, positionFn(c.id), minDistOf(c.id)); rig.dist = Math.max(c.dist, rig.minDist); rig.dir = vnorm([], c.dir);
+  } else if (dirOk && finite(c.point, 3)) {
     const p = c.point.slice(); rig.setTarget('point', () => p); rig.dist = c.dist; rig.dir = vnorm([], c.dir);
   } else {
     rig.setTarget('sun', positionFn('sun'), minDistOf('sun'));
@@ -770,6 +975,9 @@ function restoreCamera() {
 }
 
 (async function main() {
+  try {
+    createRenderer();
+  } catch (e) { fail(e, 'Could not start: this device did not provide 3D graphics (WebGL 2) just now. Close other apps and open Milky Way again.'); return; }
   try {
     await load();
   } catch (e) { fail(e); return; }

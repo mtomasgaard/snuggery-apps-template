@@ -41,8 +41,9 @@ python3 -m http.server 8000          # then open http://localhost:8000/
 
 - **Drag** to turn, **pinch** to zoom, **two fingers** to move. One pinch goes from a moon's surface
   to the Local Group; nothing switches modes on the way.
-- **Tap** a planet, moon, asteroid, star, cluster, satellite galaxy or stream for a card with what
-  is known about it and where the numbers come from; **double-tap** to fly to it.
+- **Tap** a planet, moon, asteroid, star, cluster, satellite galaxy, stream or any label (the arm
+  fits and the disc-and-bar model too) for a card with what is known about it and where the
+  numbers come from; **double-tap** to fly to it.
 - The three buttons at the bottom — **Solar System**, **Neighbourhood**, **Milky Way** — fly to a
   good view of each scale.
 - In the Solar System the **time bar** plays the planets and moons through the year: play/pause,
@@ -67,6 +68,7 @@ it running). Everything else is in `js/`:
 | `solar.js` | the Sun, planets, moons, rings, orbits, trails and small bodies, at true size |
 | `stars.js` | the stars in 3D by absolute magnitude, constellation figures, exoplanet hosts, the Gaia sky |
 | `galaxy.js` | the galaxy's measured tracers and fitted models, in the Galactocentric frame |
+| `galaxydata.js` | decodes `galaxy.json` and the young-star and model PNGs: the frame matrix, pixel ↔ kpc, map values |
 | `ephem.js` | decodes the DE430 Chebyshev table and the satellite fits; UTC ↔ TDB |
 | `rotation.js` | the IAU rotation model of every globe (pole, prime meridian, periodic terms) |
 | `smallbodies.js` | asteroid and comet orbits, propagated on the CPU in float64 |
@@ -118,12 +120,12 @@ the app, the credits file and this table all name the same sources.
 | `smallbodies.bin`, `.json` | 9,989 asteroids, trans-Neptunian objects and comets | JPL Small-Body Database (every body with H < 12, plus named near-Earth asteroids), MPC CometEls, JPL Horizons, ESA NEOCC | 693 KB |
 | `tex/` | global maps of the Sun, Mercury, Venus (radar), Earth by day and night, the Moon, Mars, Jupiter, Pluto, Io, Ganymede and Triton; disc colours of the gas giants | NASA, USGS Astrogeology, Cassini (JPL/SSI), SDO via Stellarium, LROC via Stellarium; Karkoschka (1998) spectra | 1.69 MB |
 | `sky/` | the Milky Way as seen from the Sun, 2048 × 1024 | Gaia DR3 source counts (1.8 billion stars), STScI/MAST HATS | 109 KB |
-| `stars/deep.bin` | 209,156 stars between 20 and 500 pc, positions and absolute magnitudes | AT-HYG v3.2, whose distances are Gaia DR3's | 1.67 MB |
+| `stars/deep.bin` | 209,156 stars between 20 and 500 pc, positions and absolute magnitudes | AT-HYG v3.2; distances mostly Gaia DR3's (388 from Hipparcos 2007, 9 from Gaia DR2) | 1.67 MB |
 | `stars/named.json` | 11,049 stars: all naked-eye stars, everything within 20 pc, every exoplanet host within 100 pc | AT-HYG v3.2 and HYG v4.1; IAU star names | 771 KB |
 | `stars/exoplanets.json` | 1,259 confirmed planets of 892 stars | Open Exoplanet Catalogue | 69 KB |
 | `stars/constellations.json` | 88 IAU constellation figures | Stellarium's `modern_iau` sky culture | 12 KB |
 | `stars/colour.json` | star colour by temperature | Planck spectra × CIE 1931 observer; Mamajek's dwarf sequence | 12 KB |
-| `galaxy/galaxy.json` | 194 globular clusters and 65 satellite galaxies at measured distances; 100 stellar streams; 7 + 4 spiral-arm fits; the frame | Local Volume Database; galstreams; SpiralMap (Reid+2019, Drimmel+2024); astropy | 402 KB |
+| `galaxy/galaxy.json` | 194 globular clusters, 54 confirmed satellite galaxies and 11 candidates (LVDB has not confirmed them as galaxies; they could still be star clusters), at measured distances; 100 stellar streams; 7 + 4 spiral-arm fits; the frame | Local Volume Database; galstreams; SpiralMap (Reid+2019, Drimmel+2024); astropy | 402 KB |
 | `galaxy/young-*.png` | where young stars crowd, within about 4 kpc of the Sun | Poggio+2021 (Gaia EDR3) and Gaia Collaboration, Drimmel+2023 (Gaia DR3), via SpiralMap | 16 KB |
 | `galaxy/model.png` | the disc and bar glow: a *model* | McMillan 2017 discs + Portail 2017 bar (Sormani 2022 form), integrated with Agama | 17 KB |
 | `about.json` | the About panel | the credits fragments | 75 KB |
@@ -141,13 +143,19 @@ Total 7.00 MiB. The ZIP is 6.2 MB, and 9.4 MB unpacked, of which three.js is 2.1
   ruled out. ESA's own licence page could not be read from the build network; the licence is
   quoted from a web-search summary and from other projects' licence files, and `CREDITS.txt`
   says so.
+- **The young-star maps** (`galaxy/young-gaiadr3-ob.png`, `galaxy/young-poggio2021-ums.png`) come
+  from SpiralMap, which includes them with their authors' permission. That permission was given to
+  SpiralMap; no separate grant to downstream redistributors was found. On top of that they are
+  Gaia-derived, so non-commercial, as above.
 - **CC BY-SA 4.0 files.** `tex/sun.jpg` and `tex/moon.jpg` (Stellarium's copies of the SDO HMI
   and LROC maps) and `stars/constellations.json` (Stellarium's `modern_iau`) are adapted under
   CC BY-SA 4.0 and shared under the same licence.
 
 A few sources state no licence that could be read from here: the JPL Small-Body Database, ESA's
 NEO Coordination Centre, and the New Horizons Pluto map. `CREDITS.txt` quotes what could be
-found for each, and the root `LICENSE` lists every carve-out.
+found for each, and the root `LICENSE` lists every carve-out. The BSD and MIT licences of the
+galaxy sources whose numbers ship (galstreams, SpiralMap, Agama) are quoted in full at the end of
+`CREDITS.txt`.
 
 ---
 
@@ -159,11 +167,14 @@ found for each, and the root `LICENSE` lists every carve-out.
 
 This creates `tools/venv` from `tools/requirements.txt` if it is missing. It then runs the steps in
 order (10 ephemeris, 11 moons, 12 physical, 20 small bodies, 30 textures, 31 sky, 40 stars,
-50 galaxy, 90 about) and finishes with `tools/verify_data.py`, which runs every `verify_*.py`.
+50 galaxy, 90 about) and finishes with `tools/verify_data.py`, which runs every `verify_*.py` and
+fails on any file in `data/` that no step claims.
 The first run downloads a few gigabytes into `tools/.cache/`, which is gitignored: about 2.3 GB of
 JPL satellite ephemerides and a USGS Mars mosaic that decodes to several more. After that the
 build does not touch the network. `MILKYWAY_SEED=<folder>` hard-links earlier downloads instead of
-fetching them again, and `OUT_DATA=<folder>` writes somewhere other than `data/`.
+fetching them again, and `OUT_DATA=<folder>` writes the `data/` files somewhere else. It redirects
+`data/` only: `CREDITS.txt` and `tools/credits/*.json` are always rewritten in place, so check
+`git status` after a trial rebuild.
 
 The build is deterministic. From a warm cache a full rebuild takes about five minutes, and a
 rebuild into a separate folder (`OUT_DATA`) produced every file byte-identical to the committed
@@ -173,16 +184,32 @@ date in the credits is a constant in `tools/common.py`. One known limit: `galaxy
 the frame round-trip error, about 2 × 10⁻¹³ kpc. That value is floating-point noise, so a build on
 a different CPU could differ in those few bytes.
 
+After `verify_data.py`, run `for t in tools/test_*.mjs; do node "$t" || break; done`. The node
+tests check that the JavaScript decoders (`ephem.js`, `rotation.js`, `smallbodies.js`,
+`galaxydata.js` and the star decoding) reproduce the reference values that `verify_*.py` and the
+build steps export into `tools/.cache/` (not shipped); each exits non-zero on a mismatch.
+
 `node tools/shoot.mjs [outdir] [scene …]` loads the app in headless Chromium at 390 × 844 CSS px,
-DPR 2. It fails on any console error, failed request or request outside the app, and saves a
-screenshot of each scene (solar, inner, earth, moon, jupiter, saturn, mars, play, stars, orion,
-galaxy, edge, search). `TIMING=1` also reports the JavaScript time per frame while time plays.
-`python3 tools/package_snuggery.py` builds `dist/milky-way.zip` the same way the repository's
-workflow does, and refuses it if any app file contains a URL.
+DPR 2. It needs Playwright with its Chromium: it imports it from
+`/opt/node22/lib/node_modules/playwright`, or from the path in `PLAYWRIGHT_MODULE`. It fails on
+any console error, failed request or request outside the app, and saves a screenshot of each scene
+(solar, inner, earth, moon, jupiter, saturn, mars, play, stars, orion, galaxy, edge, search).
+`TIMING=1` also reports the JavaScript time per frame while time plays.
+
+`python3 tools/package_snuggery.py` builds `dist/milky-way.zip` the way the repository's workflow
+builds `zips/milky-way.zip`: the git-tracked files at the root of the ZIP, NOTES.md included,
+without `tools/`, `screenshots/`, `dist/` or dotfiles. It reads tracked files from the working
+tree, so uncommitted edits go in, and it refuses the ZIP if any app file contains a URL.
+
+The workflow ("Build app ZIPs") runs on a push that changes app code, but its path filter leaves
+out every `*/data/**` file, so that the hourly snapshot refreshes of the other apps do not rebuild
+every ZIP. A commit that changes only `milky-way/data/` (a data rebuild, say) therefore does not
+rebuild `zips/milky-way.zip`, and neither does a commit whose message says `[skip ci]`. After one,
+run "Build app ZIPs" by hand (Actions → Build app ZIPs → Run workflow).
 
 Measured in headless Chromium with software WebGL, the JavaScript work per frame while time plays
-is about 7 ms: about 4 ms updating positions, under 1 ms submitting draws and about 2 ms placing
-labels. A phone GPU draws the frame itself far faster than the software renderer does. Loading
+is about 6 ms: about 3.5 ms updating positions, under 1 ms submitting draws and under 2 ms
+placing labels. A phone GPU draws the frame itself far faster than the software renderer does. Loading
 takes under a second from local disk.
 
 ---
@@ -224,8 +251,8 @@ AT-HYG within 500 pc; that is AT-HYG's own duplication, left as it is. `named.js
 positions to four significant digits. That moves a star's direction by up to 149″ (median 26″),
 which cannot be seen at phone field of view. A very close pair, such as α Centauri A and B,
 does land on one point. 76 named stars have no usable parallax (Alnilam, for example). They are
-kept for the constellation figures seen from the Sun, but they are not placed in 3D, and their
-figure lines are drawn only on the sky.
+not placed in 3D: they are drawn on the sky as seen from near the Sun, at their V magnitudes, with
+the 30 figure lines that join them, and fade out as the camera leaves the Solar System.
 
 **Maps.** Each map was checked against known features and against its own mirror image and 180°
 shift, to catch flipped or rotated maps: Olympus Mons, Tycho, Maxwell Montes, Sputnik Planitia,
@@ -246,5 +273,12 @@ They are drawn dashed and fainter, and their cards say "approximate".
 
 **What is left out on purpose** is listed in the About panel under "What this app does not
 show". In short: there is no picture of the galaxy from outside, only measurements and models.
-Venus has no true colour, and Saturn, Uranus and Neptune have no surface maps. Charon, Neptune's
-rings and single stars beyond 500 pc are not shown. The asteroid list is limited by brightness.
+Venus has no true colour, and Saturn, Uranus and Neptune have no surface maps. 17 moons have no
+sourced map or colour and are drawn neutral grey; Saturn's rings are a uniform neutral grey; and
+Hyperion, which has no rotation model, is drawn as a sphere of its mean radius. The colours of the
+galaxy model, the young-star maps and the Gaia sky are display tints. Charon and Neptune's rings
+are not shown, and Uranus's rings (about 2 to 96 km wide) are lines. The deep star catalogue stops
+at 500 pc, though the named naked-eye stars reach about 3.6 kpc; the 76 with no usable parallax are
+drawn only on the sky from near the Sun. The 21 moons are shown only from
+1950 to 2050. No body casts a shadow on another (only Saturn and its rings shadow each other), so
+eclipses are not drawn. The asteroid list is limited by brightness.

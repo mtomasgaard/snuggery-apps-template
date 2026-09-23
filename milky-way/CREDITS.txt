@@ -937,11 +937,12 @@ your research please cite the overview paper and include a link to the github re
 (https://github.com/apace7/local_volume_database)." (README.md)
 Retrieved: 2026-09-23
 Adaptations: 194 Milky Way globular clusters (gc_harris 155 + gc_mw_new 39 with confirmed_real =
-1) and 65 satellite galaxies (dwarf_mw with confirmed_real = 1, including the LMC and SMC)
-converted from RA, Dec and distance to Galactocentric kpc. Left out: the 19 unconfirmed cluster
-candidates, the 22 systems LVDB classes as ambiguous (cluster or dwarf), and 3 unconfirmed dwarfs.
-Distance, half-light radius (LVDB rhalf_physical, major axis), ellipticity, position angle, M_V
-and the distance reference are shipped as catalogued.
+1) and 65 satellites (dwarf_mw with confirmed_real = 1, including the LMC and SMC: LVDB confirms
+54 as galaxies, and the other 11 could still be star clusters) converted from RA, Dec and distance
+to Galactocentric kpc. Left out: the 19 unconfirmed cluster candidates, the 22 systems LVDB
+classes as ambiguous (cluster or dwarf), and 3 unconfirmed dwarfs. Distance, half-light radius
+(LVDB rhalf_physical, major axis), ellipticity, position angle, M_V and the distance reference are
+shipped as catalogued.
 Accuracy: Recomputing each object's Galactocentric distance reproduces LVDB's own distance_gc to
 8.7 pc at most (median 2.7 pc, 259 objects), so LVDB used the same frame. Distances equal 10^(DM/5
 + 1) pc to 0.15 %; the shipped distance errors come from the catalogued distance-modulus errors
@@ -1081,18 +1082,30 @@ NOT SHOWN
 There is no picture of the Milky Way from outside: no such photograph exists, and every face-on
 image of our galaxy is an artist's impression. The galaxy view is built from the tracers that have
 been measured and the models fitted to them, each labelled. The far side of the disc is shown only
-where a fit extends there. Single stars are drawn only within about 500 pc of the Sun, where
-Gaia's parallaxes are good enough to place them. Venus has no colour: no measured Venus colour or
-cloud map could be sourced, so it is a plain disc, with Magellan's radar map of the surface as an
-option. Saturn, Uranus and Neptune are uniform colours computed from measured spectra, because the
-only global maps of them are paintings or have no clear licence. Saturn's ring edges and gaps are
-JPL data; their brightness is drawn uniform, because no ring brightness profile with a clean
-licence was reachable. Uranus's rings are thin lines at their measured radii: a few kilometres
-wide, they are far too narrow to draw to scale. Neptune's rings are not shown. Pluto is placed at
-the Pluto–Charon barycentre and Charon is not shown: no long-term ephemeris for either centre
-could be sourced. Only asteroids brighter than absolute magnitude 12 are included — 9,028 of them,
-a small fraction of those known — so the main belt is sparse and near-Earth asteroids are almost
-absent apart from a few named ones.
+where a fit extends there. The deep star catalogue stops at 500 pc, where Gaia's parallaxes are
+still good enough to place single stars; the named naked-eye stars are placed at their catalogue
+distances, some as far as 3.6 kpc. 76 named stars have no usable parallax (Alnilam among them), so
+they are not placed in 3D: they are drawn only on the sky as seen from near the Sun, with the 30
+figure lines that join them. Venus has no colour: no measured Venus colour or cloud map could be
+sourced, so it is a plain disc, with Magellan's radar map of the surface as an option. Saturn,
+Uranus and Neptune are uniform colours computed from measured spectra, because the only global
+maps of them are paintings or have no clear licence. 17 moons have neither a sourced map nor a
+measured colour and are drawn a neutral grey: Phobos, Deimos, Europa, Callisto, Mimas, Enceladus,
+Tethys, Dione, Rhea, Hyperion, Iapetus, Ariel, Umbriel, Titania, Oberon, Miranda and Nereid.
+Hyperion has no rotation model in pck00011, so its orientation is not modelled: its 180 × 133 ×
+103 km shape is drawn as a sphere of its mean radius, 135 km. Saturn's ring edges and gaps are JPL
+data; their brightness is drawn uniform and their colour a neutral grey, because no ring
+brightness or colour profile with a clean licence was reachable. Uranus's rings are thin lines at
+their measured radii: about 2 to 96 km wide, they are far too narrow to draw to scale. Neptune's
+rings are not shown. Pluto is placed at the Pluto–Charon barycentre and Charon is not shown: no
+long-term ephemeris for either centre could be sourced. The 21 moons of Mars and the giant planets
+are shown only from 1950 to 2050, the span of their fitted JPL ephemerides; outside it they are
+hidden, not extrapolated, and a view that follows one moves to its planet. The planets and the
+Moon cover 1900 to 2100. Bodies cast no shadows on each other, so eclipses and the shadows of
+moons on their planets are not drawn; only Saturn and its rings shadow each other. Only asteroids
+brighter than absolute magnitude 12 are included — 9,028 of them, a small fraction of those known
+— so the main belt is sparse and near-Earth asteroids are almost absent apart from a few named
+ones.
 
 
 SOFTWARE AND FONTS
@@ -1103,3 +1116,89 @@ three.js r186: MIT. Atkinson Hyperlegible and Newsreader: SIL Open Font License 
 The fonts carry their copyright in their own metadata: "Copyright 2020 Braille Institute of
 America, Inc." (Atkinson Hyperlegible) and "Copyright 2020 The Newsreader Project Authors
 (http://github.com/productiontype/Newsreader)" (Newsreader).
+
+
+FULL LICENCE TEXTS
+The licences below ask that their full text accompany copies of the work. Each is reproduced
+verbatim from the sha256-pinned file the credit block above quotes.
+
+--- galstreams 1.2.1, for the stellar-stream tracks in galaxy/galaxy.json
+(galstreams-1.2.1/LICENSE)
+
+BSD 3-Clause License
+
+Copyright (c) 2017, Cecilia Mateu
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+--- SpiralMap 0.27, the package the spiral-arm fits in galaxy/galaxy.json and the young-star maps
+galaxy/young-*.png were taken from; the maps also carry the Gaia terms quoted above
+(spiralmap-0.27.dist-info/licenses/LICENSE.md)
+
+MIT License
+
+Copyright (c) [2025] [Prusty & Khanna]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+--- Agama @ f302756b, for the disc and bar model in galaxy/model.png (LICENSE)
+
+The Agama library uses routines from GSL and is therefore available
+under the GNU GPL license.
+However, the original source code of Agama itself is not subject to GPL
+and is provided under the less restrictive BSD or MIT licenses.
+The library also includes fragments of the following third-party codes:
+a somewhat modified version of TorusMapper by P. McMillan, distributed
+under MIT license (we do not include the GalPot part of the original code);
+a heavily modified version of DOP853 by E. Hairer, which is available under
+the following free license: http://www.unige.ch/~hairer/prog/licence.txt
+
+This software is provided 'as-is', without any express or implied
+warranty. In no event will the author be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+and to alter it and redistribute it freely. Acknowledgement of the
+original author is appreciated.

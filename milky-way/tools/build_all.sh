@@ -7,7 +7,8 @@
 #   PYTHON           the interpreter to use (default: tools/venv, created if missing)
 #   MILKYWAY_CACHE   where downloads live   (default: tools/.cache)
 #   MILKYWAY_SEED    a folder of earlier downloads to hard-link from instead of downloading
-#   OUT_DATA         where the shipped files go (default: ../data)
+#   OUT_DATA         where the data/ files go (default: ../data). It redirects data/ only:
+#                    ../CREDITS.txt and credits/*.json are always rewritten in place
 set -eu
 cd "$(dirname "$0")"
 

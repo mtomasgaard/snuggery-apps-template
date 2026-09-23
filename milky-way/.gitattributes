@@ -5,4 +5,4 @@
 vendor/three.core.js    linguist-vendored -diff
 vendor/three.module.js  linguist-vendored -diff
 vendor/*.js             linguist-vendored
-data/*.json             -diff
+data/**/*.json          -diff

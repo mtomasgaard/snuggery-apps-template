@@ -115,7 +115,7 @@ The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, w
 
 ### Milky Way
 
-The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and 21 moons come from JPL's ephemerides for any date from 1900 to 2100. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.4 MB unpacked. The Gaia-derived star and sky files may be used only non-commercially.
+The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.4 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
 
@@ -192,8 +192,8 @@ That is the whole per-app cost. Nothing else changes, ever.
   data/snapshot.json     THE ONLY FILE THAT CHANGES
   screenshots/           pictures for this README; left out of the ZIP, so they
                          cost the phone nothing
-  tools/ or pipeline/    how an app's data was built (Anatomy, Norne Reservoir, Milky Way);
-                         left out of the ZIP in the same way
+  tools/ or pipeline/    how an app's data was built (Anatomy, Norne Reservoir,
+                         Besseggen, Milky Way); left out of the ZIP in the same way
 scripts/                 one refresh script per app
 garmin-raw/              Running Dashboard's append-only raw store
 data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
@@ -201,7 +201,7 @@ data-flow.html           the picture of the loop above, animated; data-flow.svg 
 zips/<app-folder>.zip    built automatically; this is what you install from
 ```
 
-All seven app folders are complete working examples. Install Hello Live first and
+Every app folder is a complete working example. Install Hello Live first and
 run your shortcut against it before building anything real — if it updates, your
 loop works, and any later problem is in the new app rather than in the setup.
 Any folder can be deleted once you no longer need it as a reference, together
@@ -411,6 +411,10 @@ CC BY 4.0 at source — [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored th
 SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL) with its topside layer from the
 Norwegian Offshore Directorate's FactMaps and FactPages (NLOD) and a Natural Earth coastline (public domain —
 [ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
-(open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); and, in Global Wind and Global Weather,
+(open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); in Milky Way, the
+Gaia-derived star, sky and young-star map files (`deep.bin`, `named.json`, the sky JPEG and `young-*.png`; CC BY-NC
+3.0 IGO, so non-commercial use only), the Stellarium files (`sun.jpg`, `moon.jpg`, `constellations.json`) and the
+AT-HYG/HYG-derived star files (CC BY-SA 4.0), with its vendored three.js (MIT) and two SIL OFL fonts
+([CREDITS.txt](milky-way/CREDITS.txt)); and, in Global Wind and Global Weather,
 NOAA's forecast (public domain), Natural Earth coastlines (public domain) and GeoNames city labels
 (CC BY 4.0, attribution required — [LICENSES.md](global-wind/assets/LICENSES.md)).

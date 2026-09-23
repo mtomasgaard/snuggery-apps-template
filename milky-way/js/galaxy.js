@@ -14,7 +14,7 @@
 //     so the disc has a shape to hang the measurements on.
 
 import * as THREE from '../vendor/three.module.js';
-import { glowPointsMaterial, planeMaterial, ribbonMaterial, thickLineMaterial, ThickLine } from './gfx.js';
+import { glowPointsMaterial, planeMaterial, ribbonMaterial, thickLineMaterial, ThickLine, hexToRgb01 } from './gfx.js';
 import { KPC_AU } from './util.js';
 import { buildGalaxyData } from './galaxydata.js';
 
@@ -47,7 +47,7 @@ export class Galaxy {
         const mat = planeMaterial(tex.model, { tint: [1.0, 0.86, 0.66], opacity: a });
         const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
         p.position.set((e[0] + e[1]) / 2, (e[2] + e[3]) / 2, k * hz);
-        p.frustumCulled = false; p.renderOrder = 0; p.userData.base = a;
+        p.frustumCulled = false; p.renderOrder = 0;
         this.L.model.add(p);
       }
     }
@@ -95,8 +95,8 @@ export class Galaxy {
       return mesh;
     };
     const centreline = (pts, colour, alpha, dashed, width = 1.6) => {
-      const c = new THREE.Color(colour);
-      const l = ThickLine.from(pts, (i) => [c.r, c.g, c.b, dashed ? (i % 6 < 3 ? alpha : 0) : alpha],
+      const c = hexToRgb01(colour);
+      const l = ThickLine.from(pts, (i) => [c[0], c[1], c[2], dashed ? (i % 6 < 3 ? alpha : 0) : alpha],
         thickLineMaterial({ width, depthTest: false })).mesh;
       l.renderOrder = 3;
       return l;
@@ -104,7 +104,7 @@ export class Galaxy {
     this.armLabels = [];
     for (const a of g.arms_reid2019 || []) {
       this.L.reid.add(ribbon(a.points, a.width_kpc, a.r_kink_kpc, REID_COLOUR, 0.34));
-      this.L.reid.add(centreline(a.points, REID_COLOUR, 0.7, false));
+      this.L.reid.add(centreline(a.points, REID_COLOUR, 0.42, false));   // over its own band and the glow: kept low so it stays orange
       this.armLabels.push({ layer: 'reid', name: a.name, p: a.points[Math.floor(a.points.length * 0.55)], colour: REID_COLOUR, src: a });
     }
     for (const a of g.arms_drimmel2024 || []) {
@@ -133,8 +133,8 @@ export class Galaxy {
     // ---- globular clusters and satellite galaxies
     const points = (list, colour, sizeOf, layerGroup) => {
       const n = list.length, p = new Float32Array(n * 3), c = new Float32Array(n * 3), s = new Float32Array(n);
-      const cc = new THREE.Color(colour);
-      list.forEach((o, i) => { p.set(o.xyz, i * 3); c.set([cc.r, cc.g, cc.b], i * 3); s[i] = sizeOf(o); });
+      const cc = hexToRgb01(colour);
+      list.forEach((o, i) => { p.set(o.xyz, i * 3); c.set(cc, i * 3); s[i] = sizeOf(o); });
       const geo = new THREE.BufferGeometry();
       geo.setAttribute('position', new THREE.BufferAttribute(p, 3));
       geo.setAttribute('acolor', new THREE.BufferAttribute(c, 3));
@@ -155,7 +155,7 @@ export class Galaxy {
     const marks = [{ xyz: this.sun, c: '#ffe2a8', s: 7 }, { xyz: [0, 0, 0], c: '#ffffff', s: 6 }];
     this.markPts = points(marks.map((m) => ({ xyz: m.xyz, mv: NaN })), '#ffe2a8', () => 7, this.L.marks);
     const mc = this.markPts.geometry.attributes.acolor.array;
-    marks.forEach((m, i) => { const c = new THREE.Color(m.c); mc.set([c.r, c.g, c.b], i * 3); });
+    marks.forEach((m, i) => mc.set(hexToRgb01(m.c), i * 3));
   }
 
   // Galactocentric kpc → ICRS heliocentric AU (float64), for labels and picking.
@@ -174,13 +174,17 @@ export class Galaxy {
     const set = (grp, on, alpha) => {
       grp.visible = on && alpha > 0.01;
       grp.traverse((o) => {
-        const u = o.material && o.material.uniforms;
-        if (u && u.uOpacity) { if (o.userData.base == null) o.userData.base = u.uOpacity.value; u.uOpacity.value = o.userData.base * alpha; }
-        else if (o.material && o.material.isLineBasicMaterial) { o.material.opacity = alpha; }
+        const m = o.material, u = m && m.uniforms;
+        // The base opacity is kept on the material, which several objects may share (the grid rings).
+        if (u && u.uOpacity) { if (m.userData.base == null) m.userData.base = u.uOpacity.value; u.uOpacity.value = m.userData.base * alpha; }
+        else if (m && m.isLineBasicMaterial) { m.opacity = alpha; }
         if (u && u.uPx) u.uPx.value = pxRatio;
       });
     };
-    set(this.L.model, layers.model, a);
+    // The model glow is a face-on density map: from a few kpc of the Sun it fills the whole view with
+    // the model's local disc and washes out the measured young-star maps, so it gives way close in.
+    const near = Math.min(1, Math.max(0, (Math.log10(Math.max(dSunKpc, 1e-9)) - 0.3) / 0.9));   // 2 kpc → 16 kpc
+    set(this.L.model, layers.model, a * (0.15 + 0.85 * near));
     set(this.L.young, layers.young || layers.youngOB, a);
     for (const p of this.L.young.children) p.visible = p.userData.key === 'gaiadr3_ob' ? !!layers.youngOB : !!layers.young;
     set(this.L.reid, layers.reid, a);

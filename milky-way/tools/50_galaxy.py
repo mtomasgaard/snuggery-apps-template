@@ -385,6 +385,7 @@ def build_lvdb(GC):
     everyone = out['globulars'] + out['satellites']
     report['lvdb'] = dict(counts=counts, distance_gc_max_diff_kpc=max(dgc_diff), dm_distance_max_rel=max(dm_dist),
                           no_ref=sorted(o['name'] for o in everyone if not o['ref']),
+                          n_galaxy_confirmed=sum(1 for o in out['satellites'] if o['galaxy_confirmed']),
                           n_baumgardt=sum(1 for o in out['globulars'] if (o['ref'] or '').endswith('(2021MNRAS.505.5957B)')),
                           distance_gc_median_diff_kpc=float(np.median(dgc_diff)), n_compared=len(dgc_diff))
     log(f"LVDB: {len(out['globulars'])} globular clusters, {len(out['satellites'])} satellites; "
@@ -1055,9 +1056,11 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
              licence_quote=q(lic_lvdb, 'LICENSE') + '; ' + q(ack_lvdb, 'README.md'),
              retrieved=common.RETRIEVED,
              adaptations=(f'{n_gc} Milky Way globular clusters (gc_harris {counts["gc_harris"][1]} + gc_mw_new '
-                          f'{counts["gc_mw_new"][1]} with confirmed_real = 1) and {counts["dwarf_mw"][1]} satellite '
-                          'galaxies (dwarf_mw with confirmed_real = 1, including the LMC and SMC) converted from '
-                          'RA, Dec and distance to Galactocentric kpc. Left out: the '
+                          f'{counts["gc_mw_new"][1]} with confirmed_real = 1) and {counts["dwarf_mw"][1]} satellites '
+                          '(dwarf_mw with confirmed_real = 1, including the LMC and SMC: LVDB confirms '
+                          f'{L["n_galaxy_confirmed"]} as galaxies, and the other '
+                          f'{counts["dwarf_mw"][1] - L["n_galaxy_confirmed"]} could still be star clusters) converted '
+                          'from RA, Dec and distance to Galactocentric kpc. Left out: the '
                           f'{len(left_out["gc_mw_new_candidates"])} unconfirmed cluster candidates, the '
                           f'{len(left_out["gc_ambiguous"])} systems LVDB classes as ambiguous (cluster or dwarf), '
                           f'and {len(left_out["dwarf_mw_unconfirmed"])} unconfirmed dwarfs. Distance, half-light '

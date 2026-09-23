@@ -1,7 +1,8 @@
 """Shared paths for the Milky Way pipeline. Override any of them with an environment variable.
 
     MILKYWAY_CACHE    downloaded sources (gitignored; never committed)
-    OUT_DATA          where the shipped files are written   (default ../data)
+    OUT_DATA          where the data/ files are written     (default ../data); data/ only: CREDITS.txt
+                      and credits/*.json are always rewritten in place
     WORK_DIR          large intermediates                   (default <cache>/work)
     MILKYWAY_SEED     an optional folder of earlier downloads; fetch() hard-links a file from there
                       instead of downloading it again when its sha256 matches the pin

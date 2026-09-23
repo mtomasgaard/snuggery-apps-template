@@ -56,13 +56,14 @@
       <button id="card-orbit" class="btn">Show orbit</button>
     </div>
   </section>
-
-  <div id="loading" role="status">
-    <p class="load-title">Milky Way</p>
-    <div class="track"><div id="load-bar"></div></div>
-    <p id="load-msg">Reading the sky…</p>
-  </div>
 </main>
+
+<!-- Before the dock and above it: the dock's controls work only once the app has loaded. -->
+<div id="loading" role="status">
+  <p class="load-title">Milky Way</p>
+  <div class="track"><div id="load-bar"></div></div>
+  <p id="load-msg">Reading the sky…</p>
+</div>
 
 <footer id="dock">
   <div id="timebar" aria-label="Time">
@@ -117,7 +118,7 @@
     <h2>Find</h2>
     <button class="pill" data-close>Done</button>
   </div>
-  <input id="search-q" type="search" placeholder="Jupiter, Sirius, Omega Centauri…" autocomplete="off" spellcheck="false" aria-label="Search">
+  <input id="search-q" type="search" placeholder="Jupiter, Sirius, NGC 5139…" autocomplete="off" spellcheck="false" aria-label="Search">
   <ul id="search-res" class="results"></ul>
 </aside>
 

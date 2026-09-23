@@ -12,7 +12,7 @@
 // last part of each orbit, fading behind the body, which is what shows the motion when time plays.
 
 import * as THREE from '../vendor/three.module.js';
-import { glowPointsMaterial, globeMaterial, ringMaterial, thickLineMaterial, ThickLine } from './gfx.js';
+import { glowPointsMaterial, globeMaterial, ringMaterial, thickLineMaterial, ThickLine, hexToRgb01 } from './gfx.js';
 import { AU_KM, vsub, vlen, vcross, vdot, vnorm } from './util.js';
 
 const PLANETS = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
@@ -28,8 +28,6 @@ const KIND_COLOUR = {
   interstellar: [1.0, 0.45, 0.55], dwarf: [1.0, 0.92, 0.75], other: [0.6, 0.6, 0.6],
 };
 
-const hex3 = (h) => { const c = new THREE.Color(h); return [c.r, c.g, c.b]; };
-
 export class SolarSystem {
   constructor({ eph, rotation, phys, tex, textures, small }) {
     this.eph = eph; this.rotation = rotation; this.phys = phys; this.small = small;
@@ -38,7 +36,6 @@ export class SolarSystem {
     this.root.name = 'solar';
     this.bodies = new Map();
     this.layers = {};
-    this._orbitJd = NaN;
     this._tmp = [0, 0, 0];
     this._tmp2 = [0, 0, 0];
     this.hasMoons = new Set(['mars', 'jupiter', 'saturn', 'uranus', 'neptune'].filter((k) => eph.moons(k).length));
@@ -55,7 +52,12 @@ export class SolarSystem {
       const p = phys.bodies[key];
       if (!p) return null;
       const radii = p.radii_km || [p.radius_km, p.radius_km, p.radius_km];
+      // With no rotation model (Hyperion, Nereid) the body's orientation is unknown, so its shape
+      // cannot be placed: it is drawn as a sphere of its mean (equal-volume) radius.
+      const rMean = Math.cbrt(radii[0] * radii[1] * radii[2]);
+      const drawRadii = rotation.has(key) ? radii : [rMean, rMean, rMean];
       const meta = texMeta(key);
+      // With neither a map nor a measured colour, a neutral grey: a stand-in, not data.
       let color = [0.72, 0.72, 0.72], map = null, gray = false, lonLeft = -180;
       if (meta && texFor(key)) { map = texFor(key); gray = !!meta.grayscale; lonLeft = meta.lon_left_deg; }
       if (colours[key] && colours[key].srgb) color = colours[key].srgb.map((v) => v / 255);
@@ -68,7 +70,7 @@ export class SolarSystem {
       mesh.visible = false;
       this.root.add(mesh);
       const b = {
-        key, name: name || p.name || key, kind, parent, radii, radiusKm: radii[0], mesh, mat,
+        key, name: name || p.name || key, kind, parent, radii, drawRadii, radiusKm: drawRadii[0], mesh, mat,
         pos: [0, 0, 0], rel: [0, 0, 0], ui: UI_COLOUR[key] || (kind === 'moon' ? '#c9ccd2' : '#dddddd'),
         naif: p.naif, meta, phys: p,
       };
@@ -130,7 +132,7 @@ export class SolarSystem {
     mg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(keys.length * 3), 3));
     mg.setAttribute('acolor', new THREE.BufferAttribute(new Float32Array(keys.length * 3), 3));
     mg.setAttribute('asize', new THREE.BufferAttribute(new Float32Array(keys.length), 1));
-    keys.forEach((k, i) => mg.attributes.acolor.array.set(hex3(this.bodies.get(k).ui), i * 3));
+    keys.forEach((k, i) => mg.attributes.acolor.array.set(hexToRgb01(this.bodies.get(k).ui), i * 3));
     this.markers = new THREE.Points(mg, glowPointsMaterial({ sharp: 0.35 }));
     this.markers.frustumCulled = false; this.markers.renderOrder = 5;
     this.root.add(this.markers);
@@ -138,7 +140,7 @@ export class SolarSystem {
     // The Sun's glow: a display effect so the Sun reads as a light source, not data.
     const gg = new THREE.BufferGeometry();
     gg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3));
-    gg.setAttribute('acolor', new THREE.BufferAttribute(new Float32Array(hex3('#ffd9a0')), 3));
+    gg.setAttribute('acolor', new THREE.BufferAttribute(new Float32Array(hexToRgb01('#ffd9a0')), 3));
     gg.setAttribute('asize', new THREE.BufferAttribute(new Float32Array([40]), 1));
     this.sunGlow = new THREE.Points(gg, glowPointsMaterial({ opacity: 0.9 }));
     this.sunGlow.frustumCulled = false; this.sunGlow.renderOrder = 6;
@@ -153,7 +155,7 @@ export class SolarSystem {
     for (const k of [...PLANETS, 'moon']) {
       const b = this.bodies.get(k);
       if (!b) continue;
-      const col = hex3(b.ui);
+      const col = hexToRgb01(b.ui);
       const orbitCol = new Float32Array((ORBIT_N + 1) * 4);
       const trailCol = new Float32Array(TRAIL_N * 4);
       for (let i = 0; i <= ORBIT_N; i++) orbitCol.set([col[0], col[1], col[2], 0.16], i * 4);
@@ -163,13 +165,13 @@ export class SolarSystem {
       orbit.mesh.renderOrder = 1; trail.mesh.renderOrder = 1;
       orbit.mesh.visible = trail.mesh.visible = false;
       this.root.add(orbit.mesh, trail.mesh);
-      this.orbits.set(k, { orbit, trail, n: ORBIT_N, tn: TRAIL_N, centre: [0, 0, 0], ok: false });
+      this.orbits.set(k, { orbit, trail, n: ORBIT_N, tn: TRAIL_N, centre: [0, 0, 0], ok: false, jd: NaN });
     }
     // Moon orbits of the giant planets: the fitted JPL path over one revolution, fading.
     this.moonOrbits = new Map();
     for (const b of this.bodies.values()) {
       if (b.kind !== 'moon' || b.key === 'moon') continue;
-      const N = 160, col = hex3('#9aa6b8');
+      const N = 160, col = hexToRgb01('#9aa6b8');
       const c = new Float32Array(N * 4);
       for (let i = 0; i < N; i++) c.set([col[0], col[1], col[2], 0.08 + 0.55 * Math.pow(i / (N - 1), 2)], i * 4);
       const line = ThickLine.from(new Float32Array(N * 3), (i) => c.subarray(i * 4, i * 4 + 4), this.moonOrbitMat);
@@ -280,7 +282,7 @@ export class SolarSystem {
       if (b.mesh.visible) {
         b.mesh.position.set(b.rel[0], b.rel[1], b.rel[2]);
         const s = 1 / AU_KM;
-        b.mesh.scale.set(b.radii[0] * s, b.radii[1] * s, b.radii[2] * s);
+        b.mesh.scale.set(b.drawRadii[0] * s, b.drawRadii[1] * s, b.drawRadii[2] * s);
         const R = this.rotation.bodyFrame(b.key, jd);       // ICRF → body-fixed, row-major
         if (R) {
           // Mesh rotation = body-fixed → ICRF = Rᵀ; three's Matrix4.set takes row-major input.
@@ -368,8 +370,8 @@ export class SolarSystem {
     this.sunGlow.geometry.attributes.asize.needsUpdate = true;
     this.sunGlow.material.uniforms.uPx.value = pxRatio;
 
-    // Orbits: refresh the osculating ellipses when the date has moved; trails every frame.
-    const refreshOrbits = !(Math.abs(jd - this._orbitJd) < 2);
+    // Orbits: refresh an osculating ellipse when the date has moved two days from the one it was
+    // drawn for (kept per orbit, as a hidden orbit is not refreshed); trails every frame.
     for (const [k, o] of this.orbits) {
       const b = this.bodies.get(k);
       const centreKey = k === 'moon' ? 'earth' : null;
@@ -383,7 +385,8 @@ export class SolarSystem {
         if (sep < 14) { o.orbit.mesh.visible = false; o.trail.mesh.visible = false; }
       }
       if (!o.orbit.mesh.visible && !o.trail.mesh.visible) continue;
-      if (refreshOrbits || !o.ok) {
+      if (!o.ok || !(Math.abs(jd - o.jd) < 2)) {
+        o.jd = jd;
         const gmSun = k2, gmP = this._gmAu(k === 'moon' ? 'earth' : k), gmM = k === 'moon' ? this._gmAu('moon') : 0;
         const el = this._osculating(k, jd, centreKey, k === 'moon' ? gmP + gmM : gmSun + gmP);
         o.el = el; o.ok = !!el; o.period = el ? el.period : 365;
@@ -414,7 +417,6 @@ export class SolarSystem {
         o.trail.update(o.tn);
       }
     }
-    if (refreshOrbits) this._orbitJd = jd;
 
     // Moon orbits around the giant planets, only when their system is large on screen.
     for (const [k, mo] of this.moonOrbits) {
@@ -449,6 +451,8 @@ export class SolarSystem {
         this.smallPts.position.set(-origin[0], -origin[1], -origin[2]);
         this.smallPts.material.uniforms.uPx.value = pxRatio;
       }
+      // The orbit asked for on the card, hidden with its layer and while far out.
+      this.smallOrbit.visible = this.smallOrbitIdx >= 0 && !!layers.small;
       if (this.smallOrbit.visible) this.smallOrbit.position.set(-origin[0], -origin[1], -origin[2]);
     }
   }
