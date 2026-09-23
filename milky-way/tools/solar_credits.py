@@ -11,6 +11,10 @@ the NAIF kernels mirrored in its data area. Each block says exactly that.
 """
 import json
 import os
+import re
+import tarfile
+
+from jplephem.spk import SPK
 
 import common
 import solar_sources as S
@@ -23,6 +27,23 @@ NAIF_TERMS = ('NAIF/JPL SPICE data, freely available. NAIF\'s rules page states 
               'public-domain claim.')
 MIRROR = ('USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in '
           'DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4)')
+
+
+def release_to(f):
+    """The 'Release to:' field of a satellite SPK's release form, read verbatim from its comments
+    (jup310's reads Horizons/NAIF/Juno, the others Horizons/NAIF)."""
+    k = SPK.open(S.spk_path(f))
+    try:
+        return re.search(r'Release to:\s*(\S+)', k.comments()).group(1)
+    finally:
+        k.close()
+
+
+def erfa_copyright():
+    """The copyright notice at the top of liberfa/erfa/LICENSE, which BSD-3 asks us to reproduce."""
+    with tarfile.open(S.pyerfa_path()) as tf:
+        txt = tf.extractfile('pyerfa-2.0.1.5/liberfa/erfa/LICENSE').read().decode()
+    return ' '.join(txt.strip().splitlines()[:2])
 
 
 def write():
@@ -94,7 +115,7 @@ def write():
             'source': f'{f}.bsp, ' + MIRROR + '; sha256 ' + S.SPK[f][2], 'url': url,
             'licence': NAIF_TERMS,
             'licence_quote': 'No licence text in the file; its release form reads "Release to: '
-                             'Horizons/NAIF" (NAIF terms as above).',
+                             f'{release_to(f)}" (NAIF terms as above).',
             'retrieved': common.RETRIEVED,
             'adaptations': moon_adapt,
             'accuracy': ('Max error of the position relative to the system barycentre against the '
@@ -153,8 +174,9 @@ def write():
                   'obliquity at J2000), src/erfam.h (TT - TAI)',
         'url': S.PYERFA_SDIST[0],
         'licence': 'BSD 3-clause (liberfa/erfa/LICENSE)',
-        'licence_quote': '"Redistribution and use in source and binary forms, with or without '
-                         'modification, are permitted provided that the following conditions are met"',
+        'licence_quote': f'"{erfa_copyright()}" ... "Redistribution and use in source and binary '
+                         'forms, with or without modification, are permitted provided that the '
+                         'following conditions are met"',
         'retrieved': common.RETRIEVED,
         'adaptations': 'TAI-UTC steps from 1972 on as [JD UTC, seconds]; eps0 = 84381.406 arcsec; '
                        'TT - TAI = 32.184 s. The 1960-1971 drift rows are not used (the app takes '

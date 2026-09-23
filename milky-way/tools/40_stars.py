@@ -37,6 +37,8 @@ Decisions that change what ships (all counted and printed; see CONTRACT.md secti
   * White dwarfs: spectral type matching ^D[ABCOQZX] (a bare ^D also catches 'DELTA DEL').
   * HIP 55203 (xi UMa, deleted from HYG in v3.5 but still used by Stellarium's figure for UMa) is
     mapped to HYG's xi UMa A row.
+  * An OEC identifier whose row lies > 1 degree from OEC's own coordinates and > 50 % off OEC's
+    distance is a slip in the catalogue ('HIP 904' for HD 11964 A) and is skipped for the next one.
   * OEC hosts that no identifier joins are matched by position (<= 30 arcsec, distance within 5 %,
     same component letter) or else placed from OEC's own coordinates and distance, unless OEC's
     quoted distance error leaves parallax/error <= 5. eps Eri b is 'Controversial' in OEC, so
@@ -157,6 +159,8 @@ AGREE_SIGMA = 3.0              # Stellarium parallax must agree with the shipped
 STEL_PLX_QUANT = 0.02          # Stellarium stores parallax in 0.02 mas steps (half a step: 0.01)
 POS_MATCH_ARCSEC = 30.0        # OEC positional fallback
 POS_MATCH_DIST_FRAC = 0.05
+ID_JOIN_MAX_DEG = 1.0          # an OEC identifier join this far from OEC's coordinates ...
+ID_JOIN_MAX_DIST_FRAC = 0.5    # ... and this far off OEC's distance is a wrong identifier
 POS_SCALE = 64                 # deep.bin: int16 = pc * 64
 LUT_TMIN, LUT_TMAX, LUT_N = 500.0, 50000.0, 255   # entries 0..254; 255 = no colour measurement
 UNKNOWN_COLOUR = 255
@@ -184,6 +188,7 @@ GREEK = {'Alp': 'α', 'Bet': 'β', 'Gam': 'γ', 'Del': 'δ', 'Eps': 'ε', 'Zet':
 SUPERSCRIPT = str.maketrans('0123456789', '⁰¹²³⁴⁵⁶⁷⁸⁹')
 
 report = {}          # measured numbers, printed at the end and reused in the credits
+OEC_LICENCE_TEXT = []    # the OEC README's MIT notice, read from the pinned file by oec_systems()
 
 
 def log(*a):
@@ -331,6 +336,11 @@ def oec_systems():
     readme = git('show', f'{OEC_COMMIT}:README.md')
     if hashlib.sha256(readme).hexdigest() != OEC_README_SHA256:
         sys.exit('OEC README.md does not match its pin')
+    # The MIT terms ask for the copyright and permission notice to go with every copy, so the
+    # credits quote it verbatim from the pinned README ("License" section, to the end of the file).
+    txt = readme.decode('utf-8')
+    lic = txt[txt.index('Copyright (C) 2012 Hanno Rein'):]
+    OEC_LICENCE_TEXT.append(' '.join(' '.join(p.split()) for p in lic.split('\n\n') if p.strip()))
     report['oec_files'] = len(files)
     return files
 
@@ -907,9 +917,30 @@ def join_oec(hosts, cat, extra):
         m = re.search(r'\d([A-D])$', g) if g else None
         return m.group(1) if m else ''
 
+    def plausible(ref, h):
+        """Keep an identifier join unless the row is more than ID_JOIN_MAX_DEG from OEC's own
+        coordinates AND disagrees with OEC's distance by more than ID_JOIN_MAX_DIST_FRAC (or OEC
+        gives none). Both at once mean OEC's identifier is wrong: 'HIP 904' for HD 11964 A (HIP
+        9094), 'HIP 1291 A' for Gliese 3021 A (HIP 1292). One alone is usually an OEC coordinate
+        slip (HIP 3206) or a system position for a wide member (Proxima in 'Alpha Centauri')."""
+        if h['ra'] is None:
+            return True
+        k = ref[1] if ref[0] == 'u' else cat.n + ref[1]
+        sep = math.degrees(math.acos(min(1.0, float(pos_dir[k] @ unit(h['ra'], h['dec'])))))
+        if sep <= ID_JOIN_MAX_DEG:
+            return True
+        dd = pos_dist[k]
+        return bool(h['sysdist'] and np.isfinite(dd)
+                    and abs(dd / h['sysdist'] - 1) <= ID_JOIN_MAX_DIST_FRAC)
+
     stats = dict(by_id=0, by_position=0, oec_only=0)
+    rejected = []
     for h in hosts:
-        ref = next((idx[k] for k in oec_keys(h['names'] + h['bnames']) if k in idx), None)
+        cands = [idx[k] for k in oec_keys(h['names'] + h['bnames']) if k in idx]
+        ok = [c for c in cands if plausible(c, h)]
+        ref = ok[0] if ok else None
+        if cands and ref != cands[0]:
+            rejected.append(h['names'][0] if h['names'] else h['file'])
         how = 'id' if ref else None
         if ref is None and h['ra'] is not None and h['sysdist']:
             v = unit(h['ra'], h['dec'])
@@ -931,6 +962,7 @@ def join_oec(hosts, cat, extra):
         h['ref'] = ref
         stats['by_id' if how == 'id' else 'by_position' if how else 'oec_only'] += 1
     report['oec_join'] = stats
+    report['oec_id_joins_rejected'] = sorted(rejected)
 
 
 def oec_quality(h):
@@ -1335,10 +1367,12 @@ def write_credits():
              owner='European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC)',
              source='Gaia Collaboration, Vallenari et al. 2023; parallaxes as carried by AT-HYG v3.2',
              url='https://www.cosmos.esa.int/gaia',
-             licence=('Unresolved: ESA\'s licence page could not be read from the build network. Celestia '
-                      'and celestia-gaia-stardb files state CC BY-NC 3.0 IGO, a third-party PyPI package '
-                      'states CC BY-SA 3.0 IGO, the AWS Open Data registry says "Attribution required". '
-                      'Treat Gaia-derived values as non-commercial until confirmed.'),
+             licence=('CC BY-NC 3.0 IGO (non-commercial). ESA\'s Gaia licence page '
+                      '(cosmos.esa.int/web/gaia-users/license) could not be read from the build network; a '
+                      'web-search summary of it gives CC BY-NC 3.0 IGO, as do the Celestia and '
+                      'celestia-gaia-stardb licence files. A third-party PyPI package states CC BY-SA 3.0 IGO '
+                      '(ESA\'s licence for images), and the AWS Open Data registry "Attribution required". '
+                      'This app uses the Gaia-derived values non-commercially, as that licence requires.'),
              licence_quote=('"This work has made use of data from the European Space Agency (ESA) mission Gaia '
                             '(https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and '
                             'Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). '
@@ -1403,11 +1437,16 @@ def write_credits():
              url=f'https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue/tree/{OEC_COMMIT}',
              licence='MIT',
              licence_quote=('"The database is licensed under an MIT license (see below), which basically says '
-                            'you can do everything with it." (README.md)'),
+                            'you can do everything with it." (README.md) The licence, verbatim from the '
+                            'README: "' + OEC_LICENCE_TEXT[0] + '"'),
              retrieved=RETRIEVED,
              adaptations=(f'Planets listed as "Confirmed planets" only: {r["exoplanets"]["planets"]:,} planets '
                           f'on {r["exoplanets"]["hosts"]} named rows. Hosts joined to AT-HYG/HYG by '
-                          f'identifier or by position (<= 30 arcsec, distance within 5%); '
+                          f'identifier or by position (<= 30 arcsec, distance within 5%); an identifier '
+                          f'that points more than 1 degree from the catalogue\'s own coordinates and more '
+                          f'than 50% off its distance is treated as a catalogue slip and not used '
+                          f'({len(r["oec_id_joins_rejected"])} hosts: '
+                          f'{", ".join(r["oec_id_joins_rejected"])}); '
                           f'{r["oec_only_rows"]} hosts within 100 pc placed from the catalogue\'s own '
                           f'coordinates and distance; values rounded to 4 significant digits.'),
              accuracy=('As of the pinned commit, and not complete: no planet is listed for Barnard\'s Star, '

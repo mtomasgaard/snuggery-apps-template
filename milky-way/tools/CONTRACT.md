@@ -115,7 +115,7 @@ in the file (`mass_ratio = GM_moon / GM_system` from gm_de440; 0 for Nereid, whi
 then `r_bary = r_c + centre`. This rebuilds JPL's own planet-centre segment to ≤ 0.23 km (Saturn;
 the centre moves up to 312 km about the barycentre).
 
-`moons.json` (floats unrounded except the error figures):
+`moons.json` (floats unrounded except the error figures and `a_km`, which is rounded to 0.1 km):
 ```
 { "source": [...5 SPKs], "jd_start": ..., "jd_end": ..., "time_scale": "TDB", "units": "km, rad, rad/day",
   "frames": { "mars": [[...],[...],[...]], "jupiter": ..., "saturn": ..., "uranus": ..., "neptune": ... },
@@ -190,7 +190,8 @@ are copied exactly (floats written unrounded).
        "pole": { "ra": [a0, a1, a2], "dec": [d0, d1, d2], "pm": [W0, W1, W2],
                  "nut_ra": [...], "nut_dec": [...], "nut_pm": [...], "system": "4" | null }
                | null (Hyperion, Nereid: no model in pck00011),
-       "obliquity_deg": <derived> | null, "obliquity_ref": "<which orbit/plane it is measured to>",
+       "obliquity_deg": <derived> | null, "obliquity_ref": "<which orbit/plane it is measured to>"
+                        (key absent when obliquity_deg is null),
        "sidereal_rotation_h": <derived from W1, negative = retrograde> | null } },
   "rings": { "saturn": [ { "name": "C", "inner_km": ..., "outer_km": ..., "source": "..." }, ... ],
              "uranus": [ { "name": "epsilon", "a_km": ..., "e": ..., "width_km": ...,
@@ -223,48 +224,187 @@ null for bodies without a model. Node test (`tools/test_rotation.mjs`) against C
 
 ## 4. Small bodies — `smallbodies.json` + `smallbodies.bin`   (step `20_smallbodies.py`)
 
-Sources: JPL SBDB (all asteroids/TNOs with H < 12, the KStars snapshot), MPC CometEls (KStars
-snapshot), JPL SBDB comet export (KStars, for famous historic comets), JPL SBDB lookup fixtures in
-adam_core (named NEOs). Pluto is **not** here (it comes from DE430).
+Sources (all pinned in `tools/smallbodies_sources.py`; JPL, the MPC and ESA are not reachable from
+the build machine, so each is a verbatim copy of their output in a public repository):
+JPL SBDB Query API response for every asteroid/TNO with **H < 12** (KStars `asteroids.dat`,
+2026-04-04; 9,032 rows), the MPC's CometEls (KStars `cometels.json.gz`, epoch 2026-04-03; 947
+rows), JPL SBDB comet export (KStars `comets.dat`, 2021) for six famous comets the MPC list lacks
+(109P, 55P, C/1996 B2 Hyakutake, C/2020 F3 NEOWISE, C/2006 P1 McNaught, C/1965 S1-A Ikeya-Seki;
+an editorial pick, not Shoemaker-Levy 9, whose fragments orbited Jupiter), JPL SBDB lookup-API
+responses in adam_core for named NEOs (Apophis, 2024 YR4, 2022 AP7, Itokawa, YORP) and for cited
+sizes, a recorded JPL Horizons response in adam_core for Bennu (osculating at 2024-01-01; the SBDB
+fixture is a 2011 epoch), ESA NEOCC orbit files in adam_core for Ryugu and Didymos (names from
+Stellarium's `ssystem_minor.ini` and Celestia's `asteroids.ssc`). Drift checks (not shipped):
+Stellarium's JPL Horizons yearly elements of Ceres, Pallas, Juno, Vesta; DE430.
 
-`smallbodies.bin`: column arrays, each contiguous, in the order and with the types given by
-`smallbodies.json.columns`: `q` (AU, f32), `e` (f32), `tp` (days from J2000 TDB, **f64**),
-`P` (3×f32, unit vector to perihelion, ICRF), `Q` (3×f32, unit vector 90° ahead in the orbital
-plane, ICRF), `H` (f32, NaN if unknown), `kind` (u8).
+Dropped (listed in `json.dropped`): 134340 Pluto (drawn from DE430), (2002 PD153) (`e = 0`, no mean
+anomaly), and the SBDB rows of A/2024 U2 and A/2018 W3, which the MPC comet list carries at a newer
+epoch (kept from there; A/2024 U2 is hyperbolic, e = 1.00326). Nothing else. **Weak orbits are
+kept and flagged** (flag bit 0: `e < 0.001` or SBDB orbit solution `JPL 1`/`JPL 2` — a proxy, the
+snapshot has no arc length or condition code; 2,351 rows, all TNOs and centaurs).
 
-Position at `jd`: `a = q/(1−e)`, `n = k_gauss / |a|^1.5`, `M = n·(jd − J2000 − tp)`;
-elliptic: `E − e sin E = M`, `x = a(cos E − e)`, `y = a·sqrt(1−e²)·sin E`; hyperbolic
-(`e > 1`): `e sinh F − F = M`, `x = |a|(e − cosh F)`, `y = |a|·sqrt(e²−1)·sinh F`; parabolic
-(`e == 1`): Barker's equation. `r = x·P + y·Q` (AU, ICRF, heliocentric).
+**Frame and constants.** ICRF heliocentric. The sources' J2000-ecliptic elements are rotated with
+the IAU 1976/1980 J2000 obliquity **84381.448″** (ERFA `obl80.c` in the pinned pyerfa sdist) — the
+value JPL's output states for its ecliptic frame ("IAU76 obliquity of 84381.448 arcseconds wrt ICRF
+X-Y plane", pinned Horizons response), identical to CSPICE's ECLIPJ2000 (verify checks it). This is
+deliberately **not** `physical.json`'s `obliquity_j2000_arcsec` (IAU 2006, 84381.406″), which would
+tilt every orbit by 0.042″ against the frame its elements were computed in. `k_gauss_au15_day` =
+√GM☉ (gm_de440) · 86400 / au^1.5 (IAU 2012 au) — the same number as `physical.json`'s.
 
-`smallbodies.json`: `{ count, columns: [{name, type, offset, length}], kinds: {code: label},
-names: [...], sources: [...] per row index as a code, labelled: [indices shown with a label by
-default], info: { "<index>": { diameter_km, albedo, rot_per_h, class, orbit_id, epoch, ref } },
-epoch_note }`. Kinds at least: `dwarf, mba, hungaria, hilda, trojan, centaur, tno, neo, comet,
-interstellar, other`. Rows with unusable orbits (e.g. `e = 0` placeholders with null M, hyperbolic
-asteroid rows mis-typed) are dropped and counted in the report.
+`smallbodies.bin` (459,494 B): column arrays, each contiguous, at `json.columns[].offset` (bytes;
+every column aligned to its type), `length` = number of values (count × `per_row`):
+`q` (au, f32), `e` (f32), `tp` (time of perihelion, days from J2000.0 TDB, **f64**), `P` (3×f32,
+unit vector to perihelion, ICRF, `[row][x,y,z]`), `Q` (3×f32, unit vector 90° ahead in the orbital
+plane), `H` (f32; comets: the total-magnitude parameter, not comparable; NaN if unknown), `kind`
+(u8, index into `kinds`), `flags` (u8: bit 0 weak orbit, bit 1 no epoch given).
 
-`js/smallbodies.js` (this step) exports `loadSmallBodies(base)` returning an object with
-`count`, `kind(i)`, `name(i)`, `positionsAt(jd, outFloat32 /*3×count, AU*/)`,
-`orbitPath(i, jdCentre, segments) -> Float32Array` (one closed ellipse or a ±N-year arc for open
-orbits), and a node test against an independent Python propagation.
+Position at `jd` (TDB): `dt = jd − J2000 − tp`; elliptic (`e < 1`): `a = q/(1−e)`,
+`M = k/a^1.5 · dt` reduced to [−π, π] as `M − 2π·round(M/2π)`, `E − e sin E = M`,
+`x = q − 2a sin²(E/2)` (= a(cos E − e)), `y = √(a q (1+e)) sin E` (= a√(1−e²) sin E); hyperbolic
+(`e > 1`): `a = q/(e−1)`, `e sinh F − F = M`, `x = q − 2a sinh²(F/2)`, `y = √(a q (1+e)) sinh F`;
+parabolic (`e == 1`): `w = 1.5 k √(1/(2q³)) |dt|`, `Y = ∛(w + √(w²+1))`, `s = ±(Y − 1/Y)`,
+`x = q(1 − s²)`, `y = 2qs`. `r = x·P + y·Q` (au). The equations are solved in the cancellation-free
+form `(1−e)E + e(E − sin E) − M` (series for E − sin E below 0.5), which keeps nearly parabolic
+comets exact.
+
+`smallbodies.json` (233,745 B; floats written unrounded except the measured `accuracy` figures, 9 decimals):
+```
+{ format, count: 9989, asteroid_count: 9028 (the H < 12 rows),
+  columns: [{name, type, offset, length, per_row, bytes}],
+  kinds: {"0": "dwarf", ...}, kind_labels: {"dwarf": "Dwarf planet", ...},
+  names: [...],                  // every row; named numbered asteroids without their provisional
+                                 // designation ("1 Ceres"), unnamed ones with it ("(2014 UU277)")
+  sources: [{id, label, credit, first, count, epoch_jd}],   // rows are grouped by source, in order
+  epochs: {"<JD TDB>": [rows]},  // rows whose epoch differs from their source's epoch_jd
+  labelled: [rows],              // 52: dwarf planets, big asteroids, mission targets, famous comets, 1I-3I
+  info: {"<row>": {class, orbit_id, desig, diameter_km, albedo, rot_per_h, extent_km,
+                   phys_ref, phys_from, orbit_ref}},        // labelled rows only; keys as available
+  diameter_km: {"<row>": D},     // every other row with a diameter: SBDB asteroids, and comets
+                                 // joined by designation to JPL's 2021 comet export (2,899 rows)
+  flag_bits, units, frame, k_gauss_au15_day, gm_sun_km3_s2, au_km, obliquity_arcsec,
+  h_note, epoch_note, dwarf_note, names_note, selection, dropped,
+  accuracy: { horizons_big4: {<name>: {bins: {"0-1 yr": {max_au, max_deg, n}, ...},
+                                       nearest_epoch_err_au, nearest_epoch_dt_days, epochs}},
+              pluto_vs_de430: {bins, ...}, halley: {...} } }
+```
+Kinds: `dwarf` (the eight bodies Celestia's `dwarfplanets.ssc` groups as dwarf planets: Ceres,
+Orcus, Haumea, Quaoar, Makemake, Gonggong, Eris, Sedna — Celestia's grouping, stated in
+`dwarf_note`; Stellarium types only Eris, Haumea and Makemake so), `mba` (SBDB MBA, IMB, OMB),
+`trojan` (TJN), `centaur` (CEN), `tno` (TNO), `neo` (AMO/APO/ATE), `marscrosser` (MCA), `comet`,
+`interstellar` (1I, 2I, 3I), `other` (the MPC's A/ objects, SBDB AST). There is **no `hungaria` or
+`hilda`**: SBDB's orbit classes have no such group and no pinned source defines one, so the
+contract's earlier placeholder kinds are not used. Counts: dwarf 8, mba 2,317, trojan 528,
+centaur 276, tno 5,890, neo 10, marscrosser 6, comet 938, interstellar 3, other 13; 117 open orbits.
+
+Accuracy (measured by the step, written into `accuracy`/`epoch_note` and the credits): every orbit is
+two-body, so positions drift from the epoch. Ceres, Pallas, Juno, Vesta against JPL Horizons' own
+osculating elements: 8.2e-6 au 49 days from the epoch; worst of the four ≤ 0.017 au within 5 years,
+0.054 au at 5–10, 0.12 au at 10–25, 0.29 au at 25–50, 0.32 au at 50–75, 0.54 au at 75–125 years.
+Pluto's SBDB elements against DE430: 0.037 au at 5–10 years, 0.45 au at 75–125. Halley's 2026 MPC
+elements put its 1986 perihelion 13 days late. Float32 storage adds at most 1.3e-4 of the distance
+(1900–2100), and the JS agrees with an independent universal-variable propagation to 5e-13.
+
+`js/smallbodies.js` (this step) exports `loadSmallBodies(base = 'data/')`,
+`buildSmallBodies(json, buffer)` (node tests), `keplerElliptic(M, e)`, `keplerHyperbolic(M, e)` and
+the class they return:
+```
+SmallBodies {
+  count, labelled: [rows], meta (the json), k
+  kind(i) -> 'dwarf' | 'mba' | ...     kindCode(i)     kindLabel(i) -> 'Dwarf planet'
+  name(i)   H(i)   flags(i)   weakOrbit(i) -> bool   source(i) -> sources[] entry
+  epoch(i) -> JD TDB | null
+  elements(i) -> { q, e, a, tp (JD), epoch, P: [3], Q: [3], period (days, elliptic) | null }
+  info(i) -> json.info[i] merged with { H, diameter_km, kind, kindLabel, epoch,
+                                         source: 'text for the card', note: 'accuracy caveats' }
+  position(i, jd, out = Float64Array(3)) -> out           // au, ICRF, heliocentric, float64
+  positionsAt(jd, out = Float32Array(3·count)) -> out     // every row; ~2 ms for 9,989 in node
+  orbitPath(i, jdCentre, segments = 256) -> Float32Array(3·(segments+1))
+      // ellipse: closed, first = last = the body at jdCentre, even steps in E;
+      // open orbit: from max(10 yr, |jdCentre − tp| + 1 yr) before perihelion to as long after
+}
+```
+Node test `tools/test_smallbodies.mjs` (run after `verify_smallbodies.py`, which exports the
+references into `tools/.cache/smallbodies/`): every row at eight epochs 1900–2100 against the
+universal-variable propagation, synthetic orbits for every branch (e == 1 exactly included),
+orbit paths, and the drift table against Horizons.
 
 ## 5. Planet imagery and colours — `tex/*.jpg` + `tex/textures.json`   (step `30_textures.py`)
 
-Equirectangular maps, **east-positive longitude increasing to the right**, row 0 = +90° latitude.
-`textures.json` per body: `{ file, width, height, lon_left_deg, grayscale, kind: "visible" |
-"radar" | "albedo", nodata_fill: "...", source_id, note }`. Bodies: sun, mercury, venus (Magellan
-radar, labelled), earth (Blue Marble NG), earth_night (city lights), moon, mars, jupiter, pluto
-(0..360 domain!), charon. And `colours`: measured disk colours in sRGB (0–255) with their source
-for jupiter, saturn, uranus, neptune (Karkoschka 1998 spectra) and the sun (TSIS-1), plus how
-they were computed. No painted or artist textures, ever.
+Equirectangular JPEGs (quality 85), **east-positive longitude increasing to the right**, row 0 =
++90° latitude. Column `x` covers longitudes `lon_left_deg + 360·x/width … + 360·(x+1)/width`; row
+`y` covers latitudes `90 − 180·y/height … 90 − 180·(y+1)/height`. So the texture coordinate of a
+body-fixed direction is `u = fract((lon − lon_left_deg)/360)`, `v = 0.5 + lat/180` (v = 1 at the top
+row, three.js `flipY`). Grayscale maps are single-channel JPEGs (sample `.r`).
+
+| key | file | size | lon_left_deg | kind | source |
+|---|---|---|---|---|---|
+| `sun` | sun.jpg | 1024×512 RGB | −180 | visible | SDO HMI (Stellarium map), tinted with the TSIS-1 colour |
+| `mercury` | mercury.jpg | 1024×512 gray | −180 | visible | MESSENGER MDIS 750 nm mosaic, May 2013 (USGS) |
+| `venus` | venus.jpg | 1024×512 gray | −180 | **radar** | Magellan C3-MIDR (USGS); 7 % swath gaps filled flat |
+| `earth` | earth.jpg | 2048×1024 RGB | −180 | visible | Blue Marble NG May 2004, byte for byte |
+| `earth_night` | earth_night.jpg | 2048×1024 RGB | −180 | visible | DMSP city lights over a dark base (KDE Marble) |
+| `moon` | moon.jpg | 2048×1024 RGB | −180 | albedo | LROC WAC Hapke-normalised albedo (Stellarium map) |
+| `mars` | mars.jpg | 2048×1024 RGB | −180 | albedo | Viking colour mosaic 925 m (USGS) |
+| `jupiter` | jupiter.jpg | 2048×1024 RGB | −180 (= 180 W) | visible | Cassini PIA07782, Dec 2000 (not flipped); 4.3 % (south of 82.3 S) flat in the source |
+| `pluto` | pluto.jpg | 1024×512 gray | **0** | visible | New Horizons 2017 (label: centre 180 E); 32 % not imaged |
+| `charon` | charon.jpg | 1024×512 gray | −180 | visible | New Horizons 2017; 34 % not imaged |
+| `io` | io.jpg | 512×256 gray | −180 | visible | Galileo + Voyager 1 km (label PositiveWest) |
+| `ganymede` | ganymede.jpg | 512×256 gray | **0** | visible | Voyager + Galileo 1 km (label PositiveWest, centre 180) |
+| `triton` | triton.jpg | 512×256 gray | −180 | visible | Voyager 2, orange filter only; 38 % (the north) not imaged |
+
+Europa (FGDC access constraint "None"), Callisto (no FGDC record) and Titan (access constraint
+"None") are left out: only moon maps whose USGS FGDC record says "public domain" ship. Charon has no
+body in the app yet (no ephemeris, section 1); its map is shipped because it was asked for.
+
+`textures.json`:
+```
+{ "convention": "...", "resampling": "...", "total_bytes": <sum of the JPEGs>,
+  "bodies": { "<key>": { "file", "width", "height", "lon_left_deg", "grayscale": bool,
+               "kind": "visible" | "radar" | "albedo", "source_id" (= a credits block id),
+               "note" (one line for the UI), "lon_evidence" (which metadata fixed the longitudes),
+               "lat_type", "nodata_fraction" (0–1), "nodata_fill" (text),
+               "fill_value" (DN, or [R,G,B]; only when nodata_fraction > 0) } },
+  "colours": { "jupiter" | "saturn" | "uranus" | "neptune" | "titan": {
+                 "srgb": [R,G,B] 0–255, "linear": [r,g,b] 0–1, "albedo_Y", "xy": [x,y],
+                 "srgb_illuminant_E" (cross-check), "out_of_gamut": bool, "spectrum", "source", "note" },
+               "sun": { "srgb", "linear" (largest channel 1), "xy", "cct_k_mccamy", "out_of_gamut",
+                        "spectrum", "source", "note" } },
+  "colour_method": "..." }
+```
+Where a map had no data the pixels hold one flat value (`fill_value`, the mean of the imaged
+pixels; for Jupiter the source map's own flat south-polar fill, detected and recorded) — "not imaged",
+never invented terrain. Longitude conventions are read from each product's
+metadata (ISIS label and GeoTIFF CRS; WebWorldWind's `Sector.FULL_SPHERE`; the axis labels of the
+annotated Jupiter original — west longitude decreasing to the right, so no flip; its web copy's world
+file says the left edge is 0 instead, 180° away, and is not followed) and proved in
+`verify_textures_sky.py` (PROJ check against the source GeoTIFFs, and features against their mirror
+images: Olympus Mons, Syrtis Major, Hellas, Tycho, Mare Humorum, Maxwell Montes, Beta Regio,
+Sputnik Planitia, Loki Patera, Galileo Regio, Greenwich/Africa, city lights, the Great Red Spot).
+
+Colours (disk-averaged, measured): Karkoschka's 1995 ESO full-disk albedo spectra (PDS 1995LOW.TAB)
+× the TSIS-1 solar spectrum, CIE 1931 2° on 1 nm steps 360–830 nm, Y = 1 for a white reflector,
+Bradford from the Sun's white to D65, IEC 61966-2-1 sRGB: Jupiter (193,193,178), Saturn
+(197,185,156), Uranus (157,195,202), Neptune (137,183,202), Titan (145,126,95). Sun (TSIS-1, no
+adaptation, largest channel 255): (255,244,241), xy (0.3216, 0.3321). No painted or artist
+textures, ever. 1,748,691 bytes of JPEG + ~12.9 KB JSON.
 
 ## 6. Sky backdrop — `sky/gaia-dr3-counts.jpg` + `sky/sky.json`   (step `31_sky.py`)
 
-Gaia DR3 source counts (MAST HATS point map, NSIDE 256, duplicated partitions corrected),
-resampled to **2048 × 1024 equirectangular in ICRS**: column `x` ↔ RA = 360·(x + 0.5)/2048 deg,
-row `y` ↔ Dec = 90 − 180·(y + 0.5)/1024 deg. Grayscale JPEG, asinh stretch recorded in `sky.json`
-with the counts at black and white points. Licence: CC BY-NC 3.0 IGO, ESA/Gaia/DPAC.
+Gaia DR3 source counts (MAST HATS point map, NSIDE 256, NESTED; the two partitions with triplicated
+rows, Norder=4/Npix=115 and Norder=3/Npix=29, recounted from distinct `source_id`: 257 pixels,
+1,811,709,793 sources), as sources per square degree interpolated bilinearly onto **2048 × 1024
+equirectangular in ICRS**: column `x` ↔ RA = 360·(x + 0.5)/2048 deg, row `y` ↔ Dec =
+90 − 180·(y + 0.5)/1024 deg (RA increases to the right; u = RA/360, v = 0.5 + Dec/180). Grayscale
+JPEG quality 85, 106,041 bytes. Stretch, recorded in `sky.json.stretch`:
+`v = asinh(max(D − black, 0)/soft) / asinh((white − black)/soft)`, clipped to [0, 1], pixel =
+round(255 v); black 2,500, soft 20,000, white 1,200,000 sources/deg²; inverse
+`D = black + soft·sinh(v·asinh((white − black)/soft))`.
+`sky.json`: `{ file, width, height, grayscale, jpeg_quality, frame: "ICRS", projection,
+pixel_to_sky, quantity, stretch: { type, black_per_deg2, soft_per_deg2, white_per_deg2, formula,
+inverse, black_per_pixel, white_per_pixel }, resampling, source: {...}, dedup: { partitions: [...],
+total_after_fix }, stats_per_deg2, caption, credit: "ESA/Gaia/DPAC", licence: "CC BY-NC 3.0 IGO" }`.
+It is star counts, not brightness (caption it "density of stars measured by Gaia"), and it is the
+sky seen from the Sun. Licence: CC BY-NC 3.0 IGO, ESA/Gaia/DPAC.
 
 ## 7. Stars — `stars/…`   (step `40_stars.py`)
 
@@ -317,7 +457,9 @@ its storage step). Otherwise the error is *unknown*. There is no RUWE cut.
   - `desig`: Bayer letter in Greek with superscript index ("α¹ Cen"), else Flamsteed ("61 Cyg"),
     each followed by the constellation; or "". `con`: IAU abbreviation from AT-HYG/HYG, or "".
   - `x, y, z`: pc, four significant digits of the distance. **For flag-4 rows they are the unit
-    direction, not a position.**
+    direction, not a position** (5 decimals). The rounding moves a placed star's direction by up
+    to 149″ (median 26″) from AT-HYG's RA/Dec — invisible at phone scale, but companions and close
+    pairs can coincide.
   - `vmag` (2 decimals) and `absmag` (1 decimal); `null` when unknown; `absmag` is `null` for
     flag-4 rows.
   - `colour`: index into `colour.json`. `spect`: spectral type as catalogued, or "".
@@ -331,9 +473,12 @@ its storage step). Otherwise the error is *unknown*. There is no RUWE cut.
     than Stellarium's V ≈ 10.5 limit, OEC distances quoted without an error). `flag_bits` says
     the same in the file.
   - OEC hosts join AT-HYG/HYG by Gaia DR3, HIP, TYC, HD or Gliese id (a B/C suffix on HIP or HD
-    never joins the primary's row), else by position (≤ 30″, distance within 5 %, same component
-    letter), else become their own row from OEC's RA, Dec and distance (`dist_src` 5) — unless
-    OEC's quoted distance error makes parallax/error ≤ 5, in which case they are left out.
+    never joins the primary's row; an id whose row is > 1° from OEC's coordinates **and** > 50 %
+    off OEC's distance is an OEC slip and the next id is tried — 3 hosts: 'HIP 904' for HD 11964 A,
+    'HIP 1291 A' for Gliese 3021 A, 'HIP 7642' for TOI-1411), else by position (≤ 30″, distance
+    within 5 %, same component letter), else become their own row from OEC's RA, Dec and distance
+    (`dist_src` 5) — unless OEC's quoted distance error makes parallax/error ≤ 5, in which case
+    they are left out.
     HIP 55203 (xi UMa, deleted from HYG) is HYG's xi UMa A row.
 - **`stars/constellations.json`** — `{ "<abbr>": { name, lines: [[i, j], ...], lines_sky_only:
   [[i, j], ...] } }` for the 88 IAU / Sky & Telescope figures, `i, j` row indices into
@@ -350,31 +495,140 @@ its storage step). Otherwise the error is *unknown*. There is no RUWE cut.
 
 Measured on the current build (`verify_stars.py` prints these): deep.bin 209,156 stars,
 1,673,248 B (Gaia DR3 208,759, Hipparcos 2007 388, Gaia DR2 9; 0.43 % without colour).
-named.json 11,048 rows, 770,787 B: 76 unplaced (flag 4), 176 with parallax/error 5–10, 942 with no
-applicable error, 98 white dwarfs, 210 companions, 525 IAU names, 889 hosts; within 20 pc 1,830
+named.json 11,049 rows, 770,854 B: 76 unplaced (flag 4), 176 with parallax/error 5–10, 942 with no
+applicable error, 98 white dwarfs, 210 companions, 525 IAU names, 892 hosts; within 20 pc 1,830
 placed rows (Gaia DR3 1,503, Hipparcos 2007 145, Gliese 1991 152, Gaia DR2 12, OEC 18). 31 placed
 rows (mostly hosts found only in OEC) have no V, so `vmag` and `absmag` are `null` — draw them
 as markers, not as stars of magnitude 0. constellations.json 722 + 30 segments, 12,340 B;
-exoplanets.json 1,255 planets on 889 rows, 68,766 B; named + constellations + exoplanets
-851,893 B of the 900,000 B budget.
+exoplanets.json 1,259 planets on 892 rows, 68,987 B; named + constellations + exoplanets
+852,181 B of the 900,000 B budget.
 
 ## 8. Galaxy — `galaxy/…`   (step `50_galaxy.py`)
 
-`galaxy/galaxy.json`:
+Sources (pinned in `tools/galaxy_sources.py`): astropy 7.1.0's Galactocentric frame (module file
+hashed), LVDB v1.1.1 (CC0; tag commit 72dabf78), galstreams 1.2.1 (BSD-3, PyPI sdist), SpiralMap 0.27
+(MIT wheel: Reid+2019 Table 2, Drimmel+2024 Cepheid fits, Poggio+2021 and Gaia DR3 overdensity grids
+— Gaia-derived, **non-commercial**), Agama @f302756b (`data/McMillan17.ini`,
+`py/example_mw_bar_potential.py`). Build-time checks only, nothing shipped: galkin's Reid+2014
+masers, galpy 1.12.0 `named_objects.json`, UCC clusters (GPL-3), Skowron+2019 Cepheids. **Not
+shipped:** Skowron Cepheids (no licence), UCC (GPL-3), masers (no licence).
+
+**Frame.** Everything is in kpc in astropy's Galactocentric frame, parameter set "v4.0" (R0 8.122 kpc,
+z_sun 20.8 pc, Galactic-centre direction `galcen_coord` at ICRS 266.4051, −28.936175 — Galactic
+l = b = 0, not the radio source Sgr A* — roll 0): +x from the Sun towards the Galactic
+centre, +y towards l = 90° (the Sun's direction of motion), +z to the North Galactic Pole; the disc
+turns clockwise seen from +z. The Sun is at `sun_kpc` = (−8.121973366122, 0, 0.0208).
+`to_icrs` (nested rows, 4×4, column vectors) maps `[x, y, z, 1]` to ICRS kpc centred on the Sun;
+its 3×3 part is a rotation, so the inverse is `Rᵀ (q − t)`. It is computed by transforming the origin
+and three points 1000 kpc along the axes with astropy; it reproduces astropy to 1e-12 kpc out to
+300 kpc (verify). Published fits keep their own Galactocentric radii: Reid+2019 used R0 = 8.15 kpc,
+Drimmel+2024 appears to use ≈ 8.28 kpc.
+
+`galaxy/galaxy.json` (floats rounded: positions of clusters/satellites 0.1 pc, streams and arms 1 pc):
 ```
-{ "frame": { "name": "astropy Galactocentric v4.0", "r0_kpc": 8.122, "z_sun_kpc": 0.0208,
-             "sun_kpc": [x, y, z], "to_icrs": 4x4 row-major (galactocentric kpc -> ICRS
-             heliocentric kpc), "refs": [...] },
-  "arms_reid2019":   [ { name, width_kpc, points: [[x,y,z], ...], note } ],
-  "arms_drimmel2024":[ { name, points: [...], note } ],
-  "globulars":  [ { name, key, xyz: [..], dist_kpc, rhalf_pc, mv, ref } ],
-  "satellites": [ { name, key, xyz, dist_kpc, rhalf_pc, ellipticity, pa_deg, mv, ref, host } ],
-  "streams":    [ { name, ref, quality: "track" | "constant-distance", points: [...] } ],
-  "young":  { "files": {...}, "extent_kpc": ..., "orientation": "...", "refs": [...] },
-  "model":  { "file": "galaxy/model.png", "extent_kpc": ..., "scale_heights_kpc": {...},
-              "components": [...], "refs": [...] } }
+{ "format", "units",
+  "frame": { name, r0_kpc: 8.122, z_sun_kpc: 0.0208, roll_deg, galcen_icrs_deg: [ra, dec],
+             sun_kpc: [x, y, z], to_icrs: [[4], [4], [4], [0, 0, 0, 1]], to_icrs_note, axes,
+             refs: ["R0 = 8.122 kpc: 2018A&A...615L..15G", ...], checks },
+  "arms_reid2019": [ { name ("Local arm"), key (SpiralMap: "3-kpc", "Norma", "Sct-Cen", "Sgr-Car",
+                       "Local", "Perseus", "Outer"), ref, width_kpc, beta_range_deg, beta_kink_deg,
+                       r_kink_kpc, pitch_deg: [below, above kink], r0_fit_kpc: 8.15,
+                       points: [[x, y, 0], ...], note } ],               // 7 arms, 525 points
+  "arms_drimmel2024": [ { name, key ("Scutum", "Sag-Car", "Orion", "Perseus"), ref, pitch_deg,
+                       ln_r0, r_at_phi0_kpc, phi_range_deg: [-90, 0], points, note, r0_fit_note } ],
+  "arms_note", "drimmel_variants": { "<0..8>": { phi_range_deg, n_cepheids, arms_fitted } },
+  "globulars":  [ { name, key (LVDB), table ("gc_harris" | "gc_mw_new"), host ("mw" |
+                    "sagittarius_1"), xyz, dist_kpc, dist_err_kpc: [minus, plus] | null, rhalf_pc,
+                    mv, ref: "Baumgardt 2021 (2021MNRAS.505.5957B)" } ],   // 194, sorted by key
+  "satellites": [ { ...the same, table "dwarf_mw", host ("mw" | "lmc"), ellipticity, pa_deg,
+                    galaxy_confirmed: bool } ],                              // 65, sorted by key
+  "lvdb_selection": { globulars, satellites, left_out: { gc_mw_new_candidates: [...],
+                      gc_ambiguous: [...], dwarf_mw_unconfirmed: [...] }, fields: {...} },
+  "streams": [ { name, track (galstreams TrackName), ref ("Ibata et al. 2021, ApJ 914, 123"),
+                 quality: "track" | "constant-distance" | "approximate-distance",
+                 great_circle: bool, approximate: bool, info_flags ("1111"), dist_range_kpc,
+                 n_source_points, points: [[x, y, z], ...] (<= 120), note } ],   // 100, by name
+  "streams_note", "streams_dropped": [41 track names],
+  "young": { files: { "<key>": {...} }, extent_kpc, what, orientation, plane, orientation_source,
+             licence_note, refs },
+  "model": { file, width, height, bytes, extent_kpc: [-20, 20, -20, 20], z_kpc: 0, what, quantity,
+             orientation, stretch: {...}, scale_heights_kpc: { thin: 0.3, thick: 0.9, bar_x_shaped,
+             long_bar_1, long_bar_2 }, vertical_profiles, components: [...], bar_angle_deg: -25,
+             not_included, refs } }
 ```
-Textures: `galaxy/young-*.png` (Gaia young-star overdensity, masked beyond coverage, alpha 0
-outside), `galaxy/model.png` (face-on surface density of the McMillan 2017 disc + Portail/Sormani
-bar, labelled a model). Every coordinate in galactocentric kpc; the file says how image rows and
-columns map to x and y.
+- `mv` absolute V; `rhalf_pc` LVDB `rhalf_physical` (major-axis half-light radius); `pa_deg` on the
+  sky, east of north; `dist_err_kpc` from the catalogued distance-modulus errors (LVDB leaves the
+  Harris clusters' kpc errors at 0). `null` where LVDB has no value (e.g. the SMC's ellipticity).
+  Left out: gc_ambiguous (22), unconfirmed cluster candidates (19) and dwarfs (3).
+- Streams: galstreams default tracks minus the 41 Ibata+2024 tracks whose distance is 1.000 kpc
+  everywhere (a placeholder). `quality` "track" = the distance varies and InfoFlags bit 1 = 1 (52);
+  "constant-distance" = one published value along the whole track (39); "approximate-distance" =
+  it varies but galstreams has no observed distance track (bit 1 = 0: end-point interpolation, a
+  mean Galactocentric distance, M5's orbit prediction; bit 1 = 2: M68's reciprocal parallaxes "with
+  caution") (9). `great_circle` = InfoFlags bit 0 = 0, a sky path constructed between published
+  end points (23). **Draw `approximate` streams (quality ≠ track or great_circle; 48) fainter or
+  dashed and show `note`**, which says what is approximate (from galstreams' own track docs).
+- Arms are **fits**, only over the azimuths fitted: Reid β = atan2(y, −x) in [β_min, β_max], sampled
+  every 1° plus the kink, R = R_kink·exp(−(β − β_kink)·tan ψ), x = −R cos β, y = +R sin β (the sign is
+  proved on the Reid+2014 masers: median offset 0.20–0.32 kpc, mirrored 0.79–1.23). `width_kpc` is
+  Table 2's arm width as SpiralMap transcribes it; SpiralMap draws the band edges at
+  (R_kink ± width/2)·exp(−(β − β_kink)·tan ψ), i.e. a full width of `width_kpc`·R/R_kink. Drimmel:
+  variant '1' (φ −90…0°, 1,331 Cepheids; what SpiralMap draws and labels its "best phi range"),
+  pitch and ln R0 the mean of the 'strength' and 'prom' estimates, ln R = ln R0 − tan(pitch)·φ,
+  x = −R cos φ, y = R sin φ, every 1°. At the Sun's azimuth Drimmel's Orion arm is at R = 9.46 kpc,
+  Reid's Local arm at 8.53 kpc (0.93 kpc apart): two models, label both.
+
+**Textures** — all face-on from the North Galactic Pole. Column c (0 = left), row r (0 = top) of a
+W × H image with `extent_kpc` = [x0, x1, y0, y1] covers x = x0 + (c + 0.5)(x1 − x0)/W,
+y = y1 − (r + 0.5)(y1 − y0)/H (+x right, +y up). In three.js a `PlaneGeometry(x1 − x0, y1 − y0)`
+centred on the extent in the x-y plane, default UVs, `texture.flipY = true` (the default), at
+z = `z_kpc`, is the right way round.
+- `galaxy/young-gaiadr3-ob.png` (8,780 B; Gaia DR3 OB stars, Gaia Collaboration, Drimmel+2023) and
+  `galaxy/young-poggio2021-ums.png` (7,369 B; Gaia EDR3 upper main sequence, Poggio+2021): 121 × 121
+  RGBA, one pixel per published grid node (0.1 kpc, heliocentric −6…6 kpc), extent
+  [−14.171973, −2.071973, −6.05, 6.05], z_kpc 0.0208 (the maps are projections onto b = 0 through
+  the Sun). R = G = B = code, overdensity = lo + code/255·(hi − lo) with lo = −1, hi = 1.5 (step
+  0.0098); A = 0 where the published grid is exactly 0.0 (no data: 8,130 and 7,981 of 14,641
+  cells; coverage 100 % within 3 kpc, about half at 4–5 kpc), else 255. Keys `gaiadr3_ob`,
+  `poggio2021_ums`; each `files` entry has file, width, height, bytes, title, ref, tracer,
+  extent_kpc, z_kpc, cell_kpc, encoding, value_range, cells_with_data, coverage_by_distance_from_sun,
+  cells_at_max (the Gaia DR3 grid is clipped at 1.30 by its producers). Orientation (grid[ix, iy],
+  x towards the centre, y towards l = 90°, from SpiralMap's plotting code) is proved on the shipped
+  PNGs: 1,930 UCC open clusters younger than 50 Myr sit on mean overdensity 0.243 / 0.146 as
+  shipped against at most 0.123 / 0.062 for the other 7 flips and transposes. **Licence: Gaia-derived,
+  non-commercial (CC BY-NC 3.0 IGO taken to apply).**
+- `galaxy/model.png` (16,990 B): a **model**, 512 × 512 gray over ±20 kpc: McMillan (2017) thin +
+  thick stellar discs, Σ = Σ0·exp(−R/Rd), plus the Portail+2017 bar (Sormani+2022 analytic fit,
+  Agama `makeBarDensity()`, 33 parameters) integrated over z, rotated to −25° (major axis −25°/155°,
+  near end at l > 0: a point 3 kpc out lies at l = +13.2°). McMillan's bulge and gas discs, the
+  Sormani disc and all haloes are not included. Stretch: code = round(255·clip((log10 Σ − log10
+  black)/(log10 white − log10 black), 0, 1)), inverse Σ = black·(white/black)^(code/255) Msun/kpc²,
+  black 5.5e5 (the discs at R = 20 kpc, so the model fades out inside the square), white 5.8e9
+  (the maximum); decodes to an independent integration within half a code step (1.83 %). Thickness:
+  `scale_heights_kpc` (thin 0.3, thick 0.9, exponential in |z|; bar z0 0.229, long bars sech² with
+  0.61 and 0.25).
+
+Budget ≤ 600,000 B: galaxy.json 401,548 + PNGs 33,139 = 434,687 B.
+
+`js/galaxydata.js` (this step; ES module, no dependencies) decodes these files:
+```
+export async function loadGalaxyData(base = 'data/')   // fetches galaxy/galaxy.json
+export function buildGalaxyData(json)                   // the same from parsed JSON (node tests)
+class GalaxyData {
+  meta (the json), toIcrsMatrix (Float64Array(16), row-major), sun (Float64Array(3)), r0,
+  globulars, satellites, streams, armsReid, armsDrimmel, young (json.young.files), model
+  toIcrs(p, out?) -> ICRS kpc from the Sun       fromIcrs(q, out?) -> Galactocentric kpc
+  raDecDist(p) -> { ra, dec (deg, ICRS), dist (kpc) }
+  image(key) -> { file, width, height, extent, z, meta }     // key 'model' | 'gaiadr3_ob' | 'poggio2021_ums'
+  pixelCentre(key, col, row, out?) -> [x, y]     pixelAt(key, x, y) -> { col, row } | null
+  uv(key, x, y, out?) -> [u, v]                  // three.js, flipY: v = 1 at row 0
+  youngValue(key, code, alpha = 255) -> overdensity | null (alpha 0)
+  modelSigma(code) -> Msun/kpc^2 (0 for code 0)
+  streamApproximate(i) -> bool
+}
+```
+`tools/verify_galaxy.py` checks the above (and writes `tools/.cache/work/galaxy_fixture.json`);
+`tools/test_galaxy.mjs` runs the module against it: toIcrs/fromIcrs vs astropy 5.7e-13 kpc, all 259
+clusters and satellites back to their LVDB RA/Dec within the 0.1-pc rounding (max 4.4″), every
+young-map pixel within half a step of the published grid, the no-data mask exact, model pixels
+within 1.83 %.

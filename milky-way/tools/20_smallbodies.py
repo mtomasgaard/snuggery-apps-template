@@ -56,7 +56,6 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import common
 import smallbodies_sources as SB
 import solar_sources as S
 from common import J2000, RETRIEVED, write_bin, write_json
@@ -200,6 +199,19 @@ def load_sbdb_lookup(key):
     return d, o, el
 
 
+def parse_oef(key):
+    """An ESA NEOCC OEF 2.0 orbit file: Keplerian elements (ECLM J2000), epoch, H, orbit type."""
+    txt = SB.text(key)
+    assert "format  = 'OEF2.0'" in txt and 'refsys  = ECLM J2000' in txt, key
+    return {
+        'number': re.search(r'END_OF_HEADER\s*\n(\S+)', txt).group(1),
+        'kep': [float(v) for v in re.search(r'^ KEP\s+(.*)$', txt, re.M).group(1).split()],
+        'epoch': float(re.search(r'^ MJD\s+([\d.]+) TDT', txt, re.M).group(1)) + 2400000.5,
+        'mag': float(re.search(r'^ MAG\s+([\d.]+)', txt, re.M).group(1)),
+        'type': re.search(r'^! ORB_TYPE (\w+)', txt, re.M).group(1),
+    }
+
+
 def stellarium_minor():
     """Sections of Stellarium's ssystem_minor.ini as dicts."""
     secs, cur = [], None
@@ -215,28 +227,41 @@ def stellarium_minor():
 
 
 # ---------------------------------------------------------------------------------------- model
+def _series(x, sign):
+    """x - sin x (sign -1) or sinh x - x (sign +1) without cancellation: series to x^17 for |x| <= 0.5."""
+    x2 = x * x
+    t = 1.0
+    for d in (272, 210, 156, 110, 72, 42, 20):
+        t = 1 + sign * x2 / d * t
+    ser = x * x2 / 6 * t
+    direct = (np.sinh(x) - x) if sign > 0 else (x - np.sin(x))
+    return np.where(np.abs(x) > 0.5, direct, ser)
+
+
 def kepler_e(m, e):
     """Solve E - e sin E = M for arrays, M in [0, pi] (use symmetry for negative M). Newton from
     E0 = min(M + e, pi), which lies at or above the root where f is convex: monotone convergence
-    for every e < 1."""
+    for every e < 1. f = (1-e) E + e (E - sin E) - M, cancellation-free near e = 1."""
+    w = 1 - e
     E = np.minimum(m + e, np.pi)
-    for _ in range(60):
-        f = E - e * np.sin(E) - m
-        d = f / (1 - e * np.cos(E))
+    for _ in range(100):
+        h = np.sin(E / 2)
+        d = (w * E + e * _series(E, -1) - m) / (w + 2 * e * h * h)
         E = E - d
-        if np.all(np.abs(d) < 1e-15 * np.maximum(1.0, np.abs(E))):
+        if np.all(np.abs(d) <= 1e-15 * np.maximum(1.0, np.abs(E))):
             break
     return E
 
 
 def kepler_h(m, e):
-    """Solve e sinh F - F = M for M >= 0: Newton from F0 = ln(2M/e + 1.8), above the root."""
+    """Solve e sinh F - F = M for M >= 0: Newton from F0 = ln(2M/e + 1.8), in the same form."""
+    w = e - 1
     F = np.log(2 * m / e + 1.8)
-    for _ in range(80):
-        f = e * np.sinh(F) - F - m
-        d = f / (e * np.cosh(F) - 1)
+    for _ in range(100):
+        h = np.sinh(F / 2)
+        d = (w * F + e * _series(F, 1) - m) / (w + 2 * e * h * h)
         F = F - d
-        if np.all(np.abs(d) < 1e-15 * np.maximum(1.0, np.abs(F))):
+        if np.all(np.abs(d) <= 1e-15 * np.maximum(1.0, np.abs(F))):
             break
     return F
 
@@ -244,15 +269,20 @@ def kepler_h(m, e):
 def model_positions(q, e, tp, P, Q, jd, k):
     """Heliocentric ICRF positions (AU) of the shipped model at one epoch — exactly what
     js/smallbodies.js does, in float64. q, e, tp: (N,); P, Q: (N, 3); tp in days from J2000."""
-    q = np.asarray(q, np.float64); e = np.asarray(e, np.float64); tp = np.asarray(tp, np.float64)
+    q = np.asarray(q, np.float64)
+    e = np.asarray(e, np.float64)
+    tp = np.asarray(tp, np.float64)
     dt = jd - J2000 - tp
-    x = np.zeros_like(q); y = np.zeros_like(q)
-    ell = e < 1; hyp = e > 1; par = e == 1
+    x = np.zeros_like(q)
+    y = np.zeros_like(q)
+    ell = e < 1
+    hyp = e > 1
+    par = e == 1
     if ell.any():
         qq, ee = q[ell], e[ell]
         a = qq / (1 - ee)
         m = (k / a ** 1.5) * dt[ell]
-        m = np.remainder(m + np.pi, 2 * np.pi) - np.pi
+        m = m - 2 * np.pi * np.round(m / (2 * np.pi))    # into [-pi, pi]; exact when |m| < pi
         E = kepler_e(np.abs(m), ee) * np.sign(m)
         s = np.sin(E / 2)
         x[ell] = qq - 2 * a * s * s
@@ -390,21 +420,25 @@ def build():
         q=qr, e=ec, tp=tp_hz, epoch=jd_hz, P=P, Q=Q, H=Hb, info=info,
         el=dict(q=qr, e=ec, i=inc, om=om, w=w, tp=tp_hz))
 
-    # --- Ryugu and Didymos: ESA NEOCC orbit files; names from Stellarium / Celestia
+    # --- Ryugu and Didymos: ESA NEOCC orbit files; names from Stellarium / Celestia. First, NEOCC's
+    # Eros against JPL's Eros at the same epoch: the two ecliptic frames and element sets agree.
+    ne = parse_oef('neocc_433')
+    d433, o433, el433 = load_sbdb_lookup('sbdb_433')
+    assert ne['epoch'] == float(o433['epoch'])
+    pos = []
+    for a, e, inc, om, w, ma in ([*ne['kep']], [float(el433[x]) for x in ('a', 'e', 'i', 'om', 'w', 'ma')]):
+        P, Q = elements_to_pq(inc, om, w, rot)
+        tp = tp_from_mean_anomaly(ne['epoch'], ma, a, e, k)
+        pos.append(model_positions([a * (1 - e)], [e], [tp - J2000], [P], [Q], ne['epoch'], k)[0])
+    report['neocc_vs_sbdb_eros_au'] = float(np.linalg.norm(pos[0] - pos[1]))
     ryugu = next(s for s in minor if s.get('minor_planet_number') == '162173')
     didy = re.search(r'^"65803 (\w+):\1:([^"]+)" "Sol"', SB.text('celestia_asteroids'), re.M)
     names = {'162173': (f"162173 {ryugu['name']}", ryugu['iau_designation']),
              '65803': (f'65803 {didy.group(1)}', didy.group(2))}
     for key in ('neocc_162173', 'neocc_65803'):
-        txt = SB.text(key)
-        assert "format  = 'OEF2.0'" in txt and 'refsys  = ECLM J2000' in txt
-        number = re.search(r'END_OF_HEADER\s*\n(\S+)', txt).group(1)
-        kep = [float(v) for v in re.search(r'^ KEP\s+(.*)$', txt, re.M).group(1).split()]
-        mjd = re.search(r'^ MJD\s+([\d.]+) TDT', txt, re.M).group(1)
-        mag = float(re.search(r'^ MAG\s+([\d.]+)', txt, re.M).group(1))
-        otype = re.search(r'^! ORB_TYPE (\w+)', txt, re.M).group(1)
-        a, e, inc, om, w, ma = kep
-        epoch = float(mjd) + 2400000.5
+        oef = parse_oef(key)
+        number, mag, otype, epoch = oef['number'], oef['mag'], oef['type'], oef['epoch']
+        a, e, inc, om, w, ma = oef['kep']
         assert number not in known
         P, Q = elements_to_pq(inc, om, w, rot)
         name, desig = names[number]
@@ -572,6 +606,17 @@ def measure_drift(rows, C, stored):
 
 
 # ---------------------------------------------------------------------------------------- output
+def rounded(o, nd):
+    """Measured figures (floats, nested in dicts and lists) rounded to nd decimals for the file."""
+    if isinstance(o, float):
+        return round(o, nd)
+    if isinstance(o, dict):
+        return {k_: rounded(v, nd) for k_, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [rounded(v, nd) for v in o]
+    return o
+
+
 def main():
     rows, C = build()
     n = len(rows)
@@ -658,8 +703,8 @@ def main():
         'Every orbit is a two-body (Kepler) ellipse, hyperbola or parabola of the body\'s osculating '
         'elements at their epoch (most asteroids 2025-11-21, most comets 2026-04-03; per row in '
         'epochs / sources). Planetary perturbations are ignored, so positions drift away from the '
-        f'epoch. Measured: Ceres, Pallas, Juno and Vesta against JPL Horizons\' own osculating '
-        f'elements are within {near:.1e} AU of it near the epoch, {worst("5-10 yr"):.3f} AU at most '
+        f'epoch. Measured: Ceres, Pallas, Juno and Vesta agree with JPL Horizons\' own osculating '
+        f'elements to {near:.1e} AU 49 days from the epoch and drift by up to {worst("5-10 yr"):.3f} AU '
         f'5-10 years away, {worst("10-25 yr"):.3f} AU at 10-25 years and {worst("50-75 yr"):.2f} AU at '
         f'50-75 years. Pluto from its SBDB elements against DE430: {pl["5-10 yr"]["max_au"]:.3f} AU at '
         f'5-10 years, {pl["50-75 yr"]["max_au"]:.2f} AU at 50-75 years. Halley\'s 2026 elements put its '
@@ -694,7 +739,7 @@ def main():
                    'and interstellar objects it is the comet total-magnitude parameter (the MPC\'s H, '
                    'the SBDB export\'s M1), which is not comparable. NaN when unknown.'),
         'epoch_note': epoch_note,
-        'accuracy': drift,
+        'accuracy': rounded(drift, 9),
         'dropped': {k_: v for k_, v in sorted(report['dropped'].items())},
         'dwarf_note': ('kind "dwarf" is the grouping of Celestia\'s dwarfplanets.ssc (Ceres, Orcus, '
                        'Haumea, Quaoar, Makemake, Gonggong, Eris, Sedna here; Pluto comes from DE430). '
@@ -711,7 +756,10 @@ def main():
     for c in columns:
         c['bytes'] = c['length'] * {'f32': 4, 'f64': 8, 'u8': 1}[c['type']]
     write_bin('smallbodies.bin', bytes(blob))
-    write_json('smallbodies.json', meta)
+    # ndigits=30: every float is written as it is (k above all: the JS propagates with it, and
+    # write_json's default 9 decimals would cut it to 0.017202099, 2.9e-9 off the tp computed
+    # here); only the measured accuracy figures are rounded, above.
+    write_json('smallbodies.json', meta, ndigits=30)
     jb = os.path.getsize(os.path.join(DATA, 'smallbodies.json'))
     bb = len(blob)
     report['bytes'] = (jb, bb)
@@ -719,7 +767,7 @@ def main():
 
     kinds_count = {kk: int((kind == i).sum()) for i, kk in enumerate(KINDS)}
     print(f'  rows {n}: ' + ', '.join(f'{kk} {v}' for kk, v in kinds_count.items()))
-    print(f'  sources: ' + ', '.join(f"{s['id']} {s['count']}" for s in sources))
+    print('  sources: ' + ', '.join(f"{s['id']} {s['count']}" for s in sources))
     print(f"  dropped: {report['dropped']}")
     print(f"  weak-orbit flag: {int((flags & FLAG_WEAK).astype(bool).sum())} rows; no epoch: "
           f"{int((flags & FLAG_NO_EPOCH).astype(bool).sum())}")
@@ -735,6 +783,22 @@ def main():
 
 
 # ---------------------------------------------------------------------------------------- credits
+def ymd_of(jd):
+    """'YYYY-MM-DD' of a JD (Gregorian; Meeus ch. 7), for credit text."""
+    z = math.floor(jd + 0.5)
+    f = jd + 0.5 - z
+    al = math.floor((z - 1867216.25) / 36524.25)
+    a = z + 1 + al - math.floor(al / 4) if z >= 2299161 else z
+    b = a + 1524
+    c = math.floor((b - 122.1) / 365.25)
+    d = math.floor(365.25 * c)
+    e = math.floor((b - d) / 30.6001)
+    day = math.floor(b - d - math.floor(30.6001 * e) + f)
+    month = e - 1 if e < 14 else e - 13
+    year = c - 4716 if month > 2 else c - 4715
+    return f'{year:04d}-{month:02d}-{day:02d}'
+
+
 def write_credits(rows, C, drift, meta):
     src = {s['id']: s for s in meta['sources']}
     kst = f'KDE KStars repository at commit {SB.KSTARS[1]}'
@@ -753,6 +817,7 @@ def write_credits(rows, C, drift, meta):
     hz_readme = SB.quote('horizons_readme', 'These verbatim service responses gate deterministic Rust parsing')
     stel_gpl = SB.quote('stellarium_copying', 'GNU GENERAL PUBLIC LICENSE Version 2, June 1991')
     celestia_spdx = SB.quote('celestia_asteroids', 'SPDX-License-Identifier: GPL-2.0-or-later')
+    SB.quote('celestia_dwarfs', celestia_spdx)
     jpl_terms = ('No licence could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and '
                  'the research pass found only a web-search summary of catalog.data.gov ("No license '
                  'information was provided"). JPL is operated by Caltech, so this is not claimed to be a '
@@ -762,11 +827,14 @@ def write_credits(rows, C, drift, meta):
     hz = drift['horizons_big4']
     pl = drift['pluto_vs_de430']['bins']
     ha = drift['halley']
-    acc_h = '; '.join(
-        f"{name.split('(')[0].strip()}: " + ', '.join(f"{lab} {v['max_au']:.1e} AU" for lab, v in b['bins'].items())
-        for name, b in hz.items())
+    labs = list(next(iter(hz.values()))['bins'])
+    acc_h = ', '.join(f"{lab} {max(b['bins'][lab]['max_au'] for b in hz.values()):.2g} AU" for lab in labs)
+    vesta = next(b for name, b in hz.items() if 'Vesta' in name)
+    near = max(b['nearest_epoch_err_au'] for b in hz.values())
     s0 = src['sbdb-h12']
     n_weak = sum(1 for r in rows if r['flags'] & FLAG_WEAK)
+    n_main_epoch = sum(1 for r in rows if r['src'] == 'sbdb-h12' and r['epoch'] == src['sbdb-h12']['epoch_jd'])
+    hist_years = sorted(int(ymd_of(r['epoch'])[:4]) for r in rows if r['src'] == 'sbdb-comets')
     blocks = [
         {
             'id': 'jpl-sbdb-h12',
@@ -781,7 +849,7 @@ def write_credits(rows, C, drift, meta):
             'licence_quote': f'KStars README.md: "{gpl}" The data file itself carries no licence.',
             'retrieved': RETRIEVED,
             'adaptations': (f'{report["sbdb_rows"]:,} rows read; {s0["count"]:,} kept. Dropped: '
-                            + '; '.join(f'{", ".join(v)} ({k_})' for k_, v in sorted(report['dropped'].items()))
+                            + '; '.join(f'{", ".join(v)} — {k_}' for k_, v in sorted(report['dropped'].items()))
                             + '. Heliocentric ecliptic J2000 elements (a, e, i, node, peri, M at the epoch) '
                             'turned into perihelion distance, time of perihelion (from M and the mean motion '
                             'k/a^1.5) and two ICRF unit vectors; stored as float32 (time as float64). Kinds '
@@ -792,9 +860,13 @@ def write_credits(rows, C, drift, meta):
                             f'{n_weak:,} orbits are flagged weak (e < 0.001, or orbit solution '
                             'JPL 1/JPL 2 — a proxy, the snapshot has no arc length or condition code) and '
                             'kept. Diameters, albedos and rotation periods as given.'),
-            'accuracy': ('Two-body propagation of osculating elements, epoch 2025-11-21 for 7,500 rows, '
+            'accuracy': (f'Two-body propagation of osculating elements, epoch {ymd_of(src["sbdb-h12"]["epoch_jd"])} '
+                         f'for {n_main_epoch:,} rows, '
                          'older for the rest (per row in the file). Against JPL Horizons\' own osculating '
-                         f'elements 1900-2100 — {acc_h}. Pluto\'s SBDB elements against DE430: '
+                         f'elements of Ceres, Pallas, Juno and Vesta, 1900-2100: {near:.1e} AU 49 days from '
+                         f'the epoch; worst of the four by years from the epoch: {acc_h} (Vesta, the least '
+                         f'perturbed, within {max(v["max_au"] for v in vesta["bins"].values()):.2g} AU). '
+                         'Pluto\'s SBDB elements against DE430: '
                          + ', '.join(f'{lab} {v["max_au"]:.3f} AU' for lab, v in pl.items()) + '.'),
         },
         {
@@ -816,14 +888,17 @@ def write_credits(rows, C, drift, meta):
                             'each response\'s epoch, converted as above. Diameter, albedo and rotation period '
                             'with SBDB\'s per-value references for those and for Ceres, Pallas, Juno, Vesta, '
                             'Eros and Bennu (replacing the snapshot\'s uncited values for those six).'),
-            'accuracy': 'Elements copied at full precision; the tp each response gives agrees with the '
-                        'one computed from M to ' + f"{max(abs(v) for v in report['lookup_tp_check_days'].values()) * 86400:.2f} s.",
+            'accuracy': 'Elements copied at full precision; the time of perihelion each response gives '
+                        'and the one computed here from its mean anomaly and k '
+                        + ('are the same float64 number for all five.'
+                           if max(abs(v) for v in report['lookup_tp_check_days'].values()) == 0 else
+                           f"agree to {max(abs(v) for v in report['lookup_tp_check_days'].values()) * 86400:.1e} s."),
         },
         {
             'id': 'jpl-horizons-bennu',
             'title': 'JPL Horizons: osculating elements of 101955 Bennu at 2024-01-01 TDB',
             'owner': 'NASA Jet Propulsion Laboratory, Solar System Dynamics group (Horizons); trajectory '
-                     'sb-101955-118_long, Farnocchia et al. 2021, Icarus 369, 114594',
+                     'sb-101955-118_long, Farnocchia et al. (2021), doi:10.1016/j.icarus.2021.114594 (as the response cites it)',
             'source': (f'A recorded Horizons API response in the {adam} '
                        '(src/adam_core/orbits/query/tests/data/horizons/elements_bennu_20240101.txt, sha256 '
                        f'{SB.FILES["horizons_bennu"][3]}). Its README: "{hz_readme}". The response states '
@@ -851,8 +926,9 @@ def write_credits(rows, C, drift, meta):
             'licence_quote': f'adam_core LICENSE.md: "{mit}"',
             'retrieved': RETRIEVED,
             'adaptations': 'Elements at MJD 61000 TDT converted as above; H is NEOCC\'s MAG value.',
-            'accuracy': ('Same frame as JPL\'s to the precision checked by the research pass (NEOCC and SBDB '
-                         'Eros elements at the same epoch agree to 1.4e-7 AU).'),
+            'accuracy': ('NEOCC\'s own 433 Eros file (433.ke1, same fixtures) and JPL\'s Eros response at the '
+                         f'same epoch put Eros {report["neocc_vs_sbdb_eros_au"]:.1e} AU apart: the same '
+                         'ecliptic frame. Two-body propagation from MJD 61000 (2025-11-21).'),
         },
         {
             'id': 'mpc-cometels',
@@ -871,8 +947,8 @@ def write_credits(rows, C, drift, meta):
             'adaptations': (f'All {src["mpc"]["count"]} comets, A/ objects and interstellar objects; perihelion '
                             'time and epoch from calendar dates (TT); the backtick the MPC uses for the '
                             'okina in 1I/ʻOumuamua shown as ʻ. H is the MPC\'s comet magnitude '
-                            'parameter. Sizes of labelled comets joined from JPL\'s 2021 comet export by '
-                            'designation.'),
+                            'parameter. Diameters (and albedo, rotation, extent where given) joined from '
+                            'JPL\'s 2021 comet export by designation, for the comets it lists them for.'),
             'accuracy': (f'Two-body propagation from epoch 2026-04-03. Halley\'s elements propagated back to '
                          f'JPL\'s 1994 solution are {ha["err_au"]:.2f} AU off at r = {ha["r_au"]:.1f} AU and '
                          f'put the 1986 perihelion {ha["perihelion_shift_days"]:+.0f} days from JPL\'s.'),
@@ -890,9 +966,10 @@ def write_credits(rows, C, drift, meta):
             'adaptations': ('Orbits of ' + ', '.join(HISTORIC) + ' — famous comets the MPC list no longer '
                             'carries (an editorial choice; the numbers are the file\'s). Shoemaker-Levy 9 is '
                             'left out: its fragments orbited Jupiter, so heliocentric elements do not '
-                            'describe their path. Diameter, extent, albedo and rotation period of labelled '
-                            'MPC comets by designation.'),
-            'accuracy': 'Two-body propagation from each comet\'s own epoch (1995-2021); far from it they are approximate.',
+                            'describe their path. Also the diameter, extent, albedo and rotation period of '
+                            'MPC comets, joined by designation.'),
+            'accuracy': (f'Two-body propagation from each comet\'s own epoch ({hist_years[0]}-{hist_years[-1]}); far '
+                         'from it they are approximate.'),
         },
         {
             'id': 'planetarium-catalogues',
@@ -906,14 +983,15 @@ def write_credits(rows, C, drift, meta):
                        '(which bodies are grouped as dwarf planets) and data/asteroids.ssc (the name of '
                        f'65803 Didymos) at commit {SB.CELESTIA[1]}.'),
             'url': SB.url('stellarium_minor'),
-            'licence': ('GPL-2.0-or-later (Stellarium COPYING: "' + stel_gpl + '", "or any later version" '
-                        'in its source headers; Celestia asteroids.ssc: "' + celestia_spdx + '"). Only '
-                        'facts are taken (a grouping and two names); no file is redistributed.'),
+            'licence': ('GNU GPL (Stellarium\'s COPYING is "' + stel_gpl + '"; Celestia\'s dwarfplanets.ssc '
+                        'and asteroids.ssc: "' + celestia_spdx + '"). Only facts are taken (a grouping '
+                        'and two names); no file is redistributed.'),
             'licence_quote': f'"{stel_gpl}"; "{celestia_spdx}"',
             'retrieved': RETRIEVED,
             'adaptations': ('Nothing shipped beyond the kind of eight rows and two names. Stellarium types only '
                             + ', '.join(report['stellarium_dwarf_type']) + ' as "dwarf planet" and Ceres as '
-                            '"asteroid"; Celestia\'s grouping is the one used, and the app labels it.'),
+                            '"asteroid"; Celestia\'s grouping is the one used, and the file says so '
+                            '(dwarf_note).'),
             'accuracy': 'Horizons elements used as the reference for the drift figures in the JPL SBDB block.',
         },
     ]

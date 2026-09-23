@@ -91,6 +91,8 @@ FILES = {
                      'c0cc7f55425a9a9ce90ef2048f717ff031d2275b54660bc1f54968413332331d'),
     'neocc_65803': (ADAM, _T + 'testdata/neocc/65803.ke1', 'smallbodies/neocc-65803.ke1',
                     '8b835a025f475a0367ea258bbf2755e199b14d42597b0919ccda66e4787165cd'),
+    'neocc_433': (ADAM, _T + 'testdata/neocc/433.ke1', 'smallbodies/neocc-433.ke1',
+                  'b339b3f4bc5586b2a8a35767855c6999e132d56708f2bad9237d3e552ef3c92a'),
     'neocc_readme': (ADAM, _T + 'testdata/neocc/README.md', 'smallbodies/adam-neocc-README.md',
                      'c0777e0cef9dde008aa2a739bf40e2eb5cefe6397ab19b7debd1e556a5e5b335'),
     'adam_license': (ADAM, 'LICENSE.md', 'smallbodies/adam-LICENSE.md',

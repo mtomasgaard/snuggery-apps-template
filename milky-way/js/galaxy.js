@@ -14,7 +14,7 @@
 //     so the disc has a shape to hang the measurements on.
 
 import * as THREE from '../vendor/three.module.js';
-import { glowPointsMaterial, planeMaterial, ribbonMaterial, lineMaterial, makeLine } from './gfx.js';
+import { glowPointsMaterial, planeMaterial, ribbonMaterial, thickLineMaterial, ThickLine } from './gfx.js';
 import { KPC_AU } from './util.js';
 
 const REID_COLOUR = '#f1b36b';
@@ -59,7 +59,8 @@ export class Galaxy {
       for (const [key, t] of Object.entries(tex.young)) {
         const meta = g.young.files[key];
         const e = meta.extent_kpc || g.young.extent_kpc;
-        const mat = planeMaterial(t, { tint: [0.55, 0.78, 1.0], opacity: 0.9, alphaFromMap: true });
+        const enc = meta.encoding;           // overdensity = lo + code/255·(hi − lo); light only above 0
+        const mat = planeMaterial(t, { tint: [0.55, 0.78, 1.0], opacity: 1.1, alphaFromMap: true, zero: -enc.lo / (enc.hi - enc.lo) });
         const p = new THREE.Mesh(new THREE.PlaneGeometry(e[1] - e[0], e[3] - e[2]), mat);
         p.position.set((e[0] + e[1]) / 2, (e[2] + e[3]) / 2, meta.z_kpc || 0);
         p.frustumCulled = false; p.renderOrder = 1; p.userData.base = 0.9; p.userData.key = key;
@@ -69,7 +70,9 @@ export class Galaxy {
     }
 
     // ---- spiral-arm fits
-    const ribbon = (pts, widthKpc, colour, opacity) => {
+    // The Reid fits' band: SpiralMap draws its edges at (R_kink ± width/2)·exp(…), so at radius R the
+    // band is width·R/R_kink across. Drawn with a soft falloff to its edges.
+    const ribbon = (pts, widthKpc, rKink, colour, opacity) => {
       const n = pts.length;
       const pos = new Float32Array(n * 2 * 3), uv = new Float32Array(n * 2 * 2), idx = [];
       let len = 0; const cum = [0];
@@ -77,7 +80,8 @@ export class Galaxy {
       for (let i = 0; i < n; i++) {
         const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)];
         let tx = b[0] - a[0], ty = b[1] - a[1]; const tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
-        const nx = -ty * 2 * widthKpc, ny = tx * 2 * widthKpc;
+        const half = 0.5 * widthKpc * Math.hypot(pts[i][0], pts[i][1]) / rKink;
+        const nx = -ty * half, ny = tx * half;
         pos.set([pts[i][0] + nx, pts[i][1] + ny, pts[i][2]], i * 6);
         pos.set([pts[i][0] - nx, pts[i][1] - ny, pts[i][2]], i * 6 + 3);
         uv.set([cum[i] / (len || 1), 1, cum[i] / (len || 1), 0], i * 4);
@@ -91,17 +95,16 @@ export class Galaxy {
       mesh.frustumCulled = false; mesh.renderOrder = 2;
       return mesh;
     };
-    const centreline = (pts, colour, alpha, dashed) => {
+    const centreline = (pts, colour, alpha, dashed, width = 1.6) => {
       const c = new THREE.Color(colour);
-      const p = new Float32Array(pts.length * 3), col = new Float32Array(pts.length * 4);
-      pts.forEach((q, i) => { p.set(q, i * 3); col.set([c.r, c.g, c.b, dashed ? (i % 6 < 3 ? alpha : 0) : alpha], i * 4); });
-      const l = makeLine(p, col, lineMaterial({ depthTest: false }));
+      const l = ThickLine.from(pts, (i) => [c.r, c.g, c.b, dashed ? (i % 6 < 3 ? alpha : 0) : alpha],
+        thickLineMaterial({ width, depthTest: false })).mesh;
       l.renderOrder = 3;
       return l;
     };
     this.armLabels = [];
     for (const a of g.arms_reid2019 || []) {
-      this.L.reid.add(ribbon(a.points, a.width_kpc || 0.3, REID_COLOUR, 0.28));
+      this.L.reid.add(ribbon(a.points, a.width_kpc, a.r_kink_kpc, REID_COLOUR, 0.34));
       this.L.reid.add(centreline(a.points, REID_COLOUR, 0.7, false));
       this.armLabels.push({ layer: 'reid', name: a.name, p: a.points[Math.floor(a.points.length * 0.55)], colour: REID_COLOUR, src: a });
     }
@@ -111,18 +114,19 @@ export class Galaxy {
     }
 
     // ---- a reference grid: rings every 5 kpc around the centre (an aid, not data)
+    const ringMat = thickLineMaterial({ width: 1, depthTest: false });
     for (let r = 5; r <= 25; r += 5) {
-      const N = 256, p = new Float32Array((N + 1) * 3), col = new Float32Array((N + 1) * 4);
-      for (let i = 0; i <= N; i++) { const t = (i / N) * 2 * Math.PI; p.set([r * Math.cos(t), r * Math.sin(t), 0], i * 3); col.set([0.55, 0.62, 0.72, 0.16], i * 4); }
-      const l = makeLine(p, col, lineMaterial({ depthTest: false })); l.renderOrder = 1;
+      const N = 256, p = new Float32Array((N + 1) * 3);
+      for (let i = 0; i <= N; i++) { const t = (i / N) * 2 * Math.PI; p.set([r * Math.cos(t), r * Math.sin(t), 0], i * 3); }
+      const l = ThickLine.from(p, [0.55, 0.62, 0.72, 0.18], ringMat).mesh; l.renderOrder = 1;
       this.L.grid.add(l);
     }
 
     // ---- stellar streams
     this.streams = g.streams || [];
     for (const s of this.streams) {
-      const approx = s.quality !== 'track';
-      const l = centreline(s.points, '#7fe0ff', approx ? 0.22 : 0.42, approx);
+      const approx = s.approximate;          // not a measured distance track, or a constructed great circle
+      const l = centreline(s.points, '#7fe0ff', approx ? 0.3 : 0.6, approx, 1.3);
       this.L.streams.add(l);
     }
 

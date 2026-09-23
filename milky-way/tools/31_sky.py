@@ -36,7 +36,6 @@ and its dust lanes from saturating.
 
 Licence of the data: ESA/Gaia/DPAC, CC BY-NC 3.0 IGO (see tools/credits/textures-sky.json).
 """
-import json
 import os
 import sys
 
@@ -175,6 +174,8 @@ def main():
     print(f'  sources/deg^2: min {per_deg2.min():,.0f}, median {np.median(per_deg2):,.0f}, max {per_deg2.max():,.0f}; '
           f'{100 * np.mean(per_deg2 < BLACK):.2f} % of the sky below black, '
           f'{100 * np.mean(per_deg2 > WHITE):.4f} % above white')
+    import texsky_credits
+    texsky_credits.write()
 
 
 if __name__ == '__main__':

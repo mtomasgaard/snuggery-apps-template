@@ -98,7 +98,8 @@ async function load() {
   progress(0.22, 'Reading the planets’ maps…');
   textures = await getJSON(DATA + 'tex/textures.json');
   const tex = {};
-  const entries = Object.entries(textures.bodies || {});
+  // Only the maps something draws: a globe in physical.json, or the Earth's night side.
+  const entries = Object.entries(textures.bodies).filter(([k]) => phys.bodies[k] || k === 'earth_night');
   let done = 0;
   await Promise.all(entries.map(async ([k, t]) => {
     tex[k] = await loadTexture(DATA + 'tex/' + t.file);
@@ -528,7 +529,8 @@ function facts(id) {
       if (Number.isFinite(info.diameter_km)) add('Diameter', `${sig(info.diameter_km)} km`);
       if (Number.isFinite(info.H)) add('Absolute magnitude', `H ${fmt(info.H, 1)}`);
       out.src = info.source || '';
-      out.note = info.note || '';
+      // The dwarf-planet grouping note is long and belongs in About, not on a phone card.
+      out.note = (info.note || '').replace(small.meta.dwarf_note || '\u0000', '').trim();
       out.orbit = true;
     } else if (kind === 'star') {
       const n = stars.named;
@@ -559,7 +561,8 @@ function facts(id) {
       out.kind = 'Stellar stream';
       const ds = s.points.map((p) => Math.hypot(...p));
       add('From the Galactic centre', `${sig(Math.min(...ds))}–${sig(Math.max(...ds))} kpc`);
-      add('Track', s.quality === 'track' ? 'measured path and distances' : 'approximate: constant published distance');
+      add('Track', s.approximate ? 'approximate' : 'measured path and distances');
+      out.note = s.note || '';
       out.src = s.ref || '';
     } else if (kind === 'arm') {
       const a = galaxy.armLabels[i];

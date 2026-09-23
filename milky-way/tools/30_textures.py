@@ -184,10 +184,10 @@ def fill_nodata(mean, N):
     empty = N == 0
     frac = float(empty.mean())
     if mean.ndim == 2:
-        fill = float(np.floor(np.nanmean(mean) + 0.5)) if frac else None
+        fill = int(np.floor(np.nanmean(mean) + 0.5)) if frac else None
         out = np.where(empty, fill if fill is not None else 0, mean)
     else:
-        fill = [float(np.floor(v + 0.5)) for v in np.nanmean(mean.reshape(-1, mean.shape[2]), axis=0)] if frac else None
+        fill = [int(np.floor(v + 0.5)) for v in np.nanmean(mean.reshape(-1, mean.shape[2]), axis=0)] if frac else None
         out = np.where(empty[..., None], np.array(fill if fill else [0, 0, 0]), mean)
     return rint(out), fill, frac
 
@@ -328,7 +328,19 @@ def jupiter_map():
     assert best['plain'][0] == 0 and best['plain'][1] > 0.99 and best['mirrored'][1] < best['plain'][1] - 0.1, best
     report['jupiter'] = {'annotated_vs_web': {k: {'shift_px_of_720': v[0], 'correlation': round(v[1], 4)}
                                               for k, v in best.items()}}
-    return rint(box(np.asarray(web), 2))
+    # The source map is itself filled flat around the south pole (Cassini did not see it; the annotated
+    # original shows the same uniform band): find the source rows, counted up from the bottom edge, that are
+    # one colour across all longitudes (JPEG noise < 0.6 DN), and record them as not imaged.
+    rgb = np.asarray(web)
+    flat = rgb.astype(np.float64).std(axis=1).max(axis=1) < 0.6
+    n_src = int(np.argmin(flat[::-1])) if not flat.all() else len(flat)
+    out = rint(box(rgb, 2))
+    n_out = n_src // 2
+    fill = [int(v) for v in np.floor(out[out.shape[0] - n_out:].reshape(-1, 3).mean(0) + 0.5)] if n_out else None
+    assert n_out == 0 or np.abs(out[out.shape[0] - n_out:].astype(np.int64) - np.array(fill)).max() <= 2
+    south_edge = -90.0 + 180.0 * n_src / rgb.shape[0]
+    report['jupiter'].update({'flat_south_rows_source': n_src, 'flat_south_edge_deg': round(south_edge, 2), 'fill': fill})
+    return out, fill, n_out / out.shape[0], south_edge
 
 
 def night_map():
@@ -446,12 +458,17 @@ def main():
         m['LatitudeType'], fill, frac, f'flat RGB {fill} (mean) where the mosaic has no data')
 
     print('Jupiter')
-    put('jupiter', jupiter_map(), 2048, 1024, -180.0, False, 'visible', 'cassini-pia07782',
+    img, fill, frac, south_edge = jupiter_map()
+    put('jupiter', img, 2048, 1024, -180.0, False, 'visible', 'cassini-pia07782',
         'Cassini ISS colour map PIA07782, Dec 2000 (NASA/JPL/Space Science Institute)',
         'annotated original (USGS jupiter_from_cassini.tif) labels 180 ... 0 ... 180 decreasing to the right, i.e. '
         'west longitudes: east increases to the right, left edge 180 W; the web copy is the same picture '
-        '(correlation 0.999 at zero shift, not mirrored); no flip applied. Longitude system not stated in '
-        'the file (the Great Red Spot drifts, so its position is a Dec 2000 snapshot)', 'not stated')
+        '(correlation 0.999 at zero shift, not mirrored); no flip applied. The web copy\'s world file '
+        '(jupiter_rgb_cyl_www.jgw) instead puts the left edge at longitude 0, 180 deg from the annotation; the '
+        'annotation, made with the map, is followed. Longitude system not stated in the file (the Great Red Spot '
+        'drifts, so its position is a Dec 2000 snapshot)', 'not stated', fill, frac,
+        f'flat RGB {fill} south of {-south_edge:.1f} S, already in the source map (the south polar region was not '
+        'observed; the map maker\'s fill, not the mean of the imaged pixels): not imaged, not terrain')
 
     print('Pluto')
     img, fill, frac, m = usgs_map('pluto', 1024, 512, 0.0, True)
@@ -523,6 +540,8 @@ def main():
     zf = zipfile.ZipFile(T.usgs('usgs_mapfiles'))
     jmap = zf.read('maps/jupiter/jupiter_simp_cyl.map').decode('latin-1')
     assert 'PIA07782' in jmap and 'Image credit by NASA/JPL/Space Science Institute.' in jmap
+    import texsky_credits
+    texsky_credits.write()
 
 
 if __name__ == '__main__':

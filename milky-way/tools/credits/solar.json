@@ -30,7 +30,7 @@
   "source": "jup310.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 ed64f05431a7da5486f9d00ecff3490213f871c247a293138a798d560fcfdebb",
   "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/jup310.bsp",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
+  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF/Juno\" (NAIF terms as above).",
   "retrieved": "2026-09-23",
   "adaptations": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
   "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Io max 61 km (0.015 % of a), 400 windows of 91.3125 d; Europa max 356 km (0.053 % of a), 600 windows of 60.875 d; Ganymede max 875 km (0.082 % of a), 600 windows of 60.875 d; Callisto max 306 km (0.016 % of a), 250 windows of 146.1 d."
@@ -102,7 +102,7 @@
   "source": "pyerfa-2.0.1.5.tar.gz from PyPI, sha256 17d6b24fe4846c65d5e7d8c362dcb08199dc63b30a236aedd73875cc83e1f6c0: liberfa/erfa/src/dat.c (leap seconds), src/obl06.c (IAU 2006 mean obliquity at J2000), src/erfam.h (TT - TAI)",
   "url": "https://files.pythonhosted.org/packages/71/39/63cc8291b0cf324ae710df41527faf7d331bce573899199d926b3e492260/pyerfa-2.0.1.5.tar.gz",
   "licence": "BSD 3-clause (liberfa/erfa/LICENSE)",
-  "licence_quote": "\"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met\"",
+  "licence_quote": "\"Copyright (C) 2013-2021, NumFOCUS Foundation. All rights reserved.\" ... \"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met\"",
   "retrieved": "2026-09-23",
   "adaptations": "TAI-UTC steps from 1972 on as [JD UTC, seconds]; eps0 = 84381.406 arcsec; TT - TAI = 32.184 s. The 1960-1971 drift rows are not used (the app takes 10 s before 1972).",
   "accuracy": "Copied exactly. dat.c release year 2023; last step 2017-01-01 (37 s)."

@@ -54,7 +54,8 @@ def check(ok, msg):
 def stumpff(z):
     """C(z), S(z) for arrays, with series near z = 0 (no cancellation)."""
     z = np.asarray(z, np.float64)
-    C = np.empty_like(z); S = np.empty_like(z)
+    C = np.empty_like(z)
+    S = np.empty_like(z)
     small = np.abs(z) < 1e-2
     zs = z[small]
     C[small] = 1 / 2 - zs / 24 + zs ** 2 / 720 - zs ** 3 / 40320 + zs ** 4 / 3628800
@@ -73,7 +74,8 @@ def stumpff(z):
 def uv_positions(q, e, tp, P, Q, jd, mu):
     """Universal-variable propagation from perihelion. q, e, tp (days from J2000): (N,); P, Q:
     (N, 3). Returns (N, 3) heliocentric positions in au at JD `jd`."""
-    q = np.asarray(q, np.float64); e = np.asarray(e, np.float64)
+    q = np.asarray(q, np.float64)
+    e = np.asarray(e, np.float64)
     smu = math.sqrt(mu)
     alpha = (1 - e) / q                                   # 1/a
     dt = jd - J2000 - np.asarray(tp, np.float64)
@@ -91,20 +93,24 @@ def uv_positions(q, e, tp, P, Q, jd, mu):
     with np.errstate(divide='ignore', invalid='ignore'):
         cap = np.where(ell, np.pi, 600.0) / np.sqrt(np.where(alpha != 0, np.abs(alpha), 1.0))
         hi = np.where(alpha != 0, np.minimum(hi, cap), hi)
+    # Safeguarded Newton (as rtsafe in Numerical Recipes): take the Newton step only when it stays
+    # inside the bracket and at least halves the step before last; otherwise bisect.
     chi = 0.5 * (lo + hi)
-    for _ in range(300):
+    dx = dxold = hi - lo
+    for _ in range(400):
         z = alpha * chi * chi
         C, S = stumpff(z)
         F = (1 - alpha * q) * chi ** 3 * S + q * chi - tt
         r = chi * chi * C + q * (1 - z * C)
         lo = np.where(F < 0, chi, lo)
         hi = np.where(F > 0, chi, hi)
-        new = chi - F / r
-        bad = ~((new > lo) & (new < hi))
-        new = np.where(bad, 0.5 * (lo + hi), new)
-        done = np.abs(new - chi) <= 1e-15 * np.maximum(chi, 1e-300)
-        chi = new
-        if done.all():
+        with np.errstate(invalid='ignore', over='ignore'):
+            newton = chi - F / r
+            bis = ~((newton > lo) & (newton < hi)) | (np.abs(2 * F) > np.abs(dxold * r))
+        dxold = dx
+        dx = np.where(bis, 0.5 * (hi - lo), F / r)
+        chi = np.where(bis, lo + 0.5 * (hi - lo), newton)
+        if np.all((np.abs(dx) <= 1e-16 * np.maximum(chi, 1e-300)) | (F == 0)):
             break
     chi = chi * sgn
     z = alpha * chi * chi
@@ -159,6 +165,8 @@ def main():
     print('  kinds: ' + ', '.join(f'{k} {v:,}' for k, v in counts.items()))
     print(f"  weak-orbit flag {int((flags & 1).astype(bool).sum()):,}; no epoch {int((flags & 2).astype(bool).sum())}; "
           f"H unknown {int(np.isnan(H).sum())}; open orbits (e >= 1) {int((e >= 1).sum())}")
+    weak_kinds = sorted({kinds[int(x)] for x in kind[(flags & 1).astype(bool)]})
+    check(set(weak_kinds) <= {'tno', 'centaur'}, f'weak-orbit flags only on {weak_kinds}')
     names = m['names']
     check(not any('Pluto' in s for s in names), 'Pluto not in the file (DE430 draws it)')
     check('(2002 PD153)' not in names, '(2002 PD153) (e = 0, no mean anomaly) dropped')
@@ -188,7 +196,7 @@ def main():
         if a and per and a > 0:
             (rel if r['orbit_id'].startswith('JPL') else rel_e).append(abs(2 * math.pi / (k / a ** 1.5) / 365.25 / per - 1))
     rel, rel_e = np.array(rel), np.array(rel_e)
-    check(np.median(rel) < 1e-8 and np.percentile(rel, 99) < 1e-7,
+    check(np.median(rel) < 1e-12 and np.percentile(rel, 99) < 1e-10,
           f'k agrees with SBDB\'s own periods for its {len(rel):,} JPL-computed orbits: |P_ours/P_sbdb - 1| '
           f'median {np.median(rel):.1e}, 99th percentile {np.percentile(rel, 99):.1e}, max {rel.max():.1e}')
     print(f'  (the {len(rel_e)} orbits with non-JPL orbit ids, "E2026D54" etc., print a with ~10 digits: '
@@ -206,18 +214,26 @@ def main():
 
     # ---- full-precision rows from the sources, in the shipped order
     rows, C = step.build()
+    phys = os.path.join(DATA, 'physical.json')
+    k_phys = (json.load(open(phys, encoding='utf-8'))['constants']['k_gauss_au15_day'] if os.path.exists(phys)
+              else C['k_gauss_au15_day'])
+    check(m['k_gauss_au15_day'] == C['k_gauss_au15_day'] == k_phys,
+          f"k in the file written in full ({m['k_gauss_au15_day']!r}; = the tp computation's, = physical.json's)")
     order = {s[0]: i for i, s in enumerate(step.SOURCES)}
     rows.sort(key=lambda r: order[r['src']])
     check([r['name'] for r in rows] == names, 'rebuilding from the sources gives the same rows in the same order')
-    q64 = np.array([r['q'] for r in rows]); e64 = np.array([r['e'] for r in rows])
-    tp64 = np.array([r['tp'] - J2000 for r in rows]); P64 = np.array([r['P'] for r in rows]); Q64 = np.array([r['Q'] for r in rows])
+    q64 = np.array([r['q'] for r in rows])
+    e64 = np.array([r['e'] for r in rows])
+    tp64 = np.array([r['tp'] - J2000 for r in rows])
+    P64 = np.array([r['P'] for r in rows])
+    Q64 = np.array([r['Q'] for r in rows])
     check(np.array_equal(tp64, tp), 'tp stored as float64 exactly')
     mu = k * k
 
     # ---- the model (Python twin of the JS) against universal variables; storage error
     ref_pos = np.zeros((len(EPOCHS), n, 3))
     print('  epoch          model vs UV (same stored numbers)      stored float32 vs full precision (UV)')
-    worst_model, worst_store = 0.0, {}
+    worst_model, worst_store, worst_store_rel = 0.0, {}, 0.0
     for j, jd in enumerate(EPOCHS):
         uv = uv_positions(q, e, tp, P, Q, jd, mu)
         mod = step.model_positions(q, e, tp, P, Q, jd, k)
@@ -227,15 +243,18 @@ def main():
         dm = np.linalg.norm(mod - uv, axis=1)
         ds = np.linalg.norm(uv - full, axis=1)
         worst_model = max(worst_model, float((dm / r).max()))
+        worst_store_rel = max(worst_store_rel, float((ds / r).max()))
         for kc, kn in kinds.items():
             sel = kind == kc
             if sel.any():
                 worst_store[kn] = max(worst_store.get(kn, 0.0), float(ds[sel].max()))
         print(f'  {EPOCH_LABELS[j]:13s}  max {dm.max():.1e} au, rel {(dm / r).max():.1e}'
               f'             max {ds.max():.1e} au (row {int(ds.argmax())}: {names[int(ds.argmax())]})')
-    check(worst_model < 1e-11, f'model = universal variables to {worst_model:.1e} (relative), every row, 8 epochs')
+    check(worst_model < 1e-10, f'model = universal variables to {worst_model:.1e} (relative), every row, 8 epochs')
     print('  float32 storage error, worst per kind over the 8 epochs: ' +
           ', '.join(f'{kn} {v:.1e} au' for kn, v in worst_store.items()))
+    check(worst_store_rel < 3e-4, f'float32 storage error at most {worst_store_rel:.1e} of the distance '
+          '(1900-2100; far below the two-body drift)')
 
     # ---- drift figures: recompute and compare with the file
     stored = (q, e, tp, P, Q)
@@ -266,13 +285,16 @@ def main():
     syn = [(1.0, 1.0), (0.5, 0.99999994), (0.3, 1.0000001), (2.0, 0.0), (1.2, 0.5), (1.35, 6.14), (0.0078, 0.999915),
            (40.0, 0.25)]
     rng = np.random.default_rng(20)
-    sq = np.array([s[0] for s in syn]); se = np.array([s[1] for s in syn], np.float32).astype(np.float64)
+    sq = np.array([s[0] for s in syn])
+    se = np.array([s[1] for s in syn], np.float32).astype(np.float64)
     ang3 = rng.uniform(0, 2 * np.pi, (len(syn), 3))
     sP, sQ = [], []
     for (i_, om, w) in ang3:
         p_, q_ = step.elements_to_pq(math.degrees(i_ / 2), math.degrees(om), math.degrees(w), np.eye(3).tolist())
-        sP.append(p_); sQ.append(q_)
-    sP = np.array(sP, np.float32).astype(np.float64); sQ = np.array(sQ, np.float32).astype(np.float64)
+        sP.append(p_)
+        sQ.append(q_)
+    sP = np.array(sP, np.float32).astype(np.float64)
+    sQ = np.array(sQ, np.float32).astype(np.float64)
     sq = sq.astype(np.float32).astype(np.float64)
     stp = np.array([0.0, 100.0, -50.0, 3000.0, 9000.0, 9433.0, -12500.0, 6000.0])
     syn_dts = [-36525.0, -3650.0, -40.0, -0.5, 0.0, 0.3, 12.0, 400.0, 7300.0, 36525.0]

@@ -47,13 +47,28 @@ function column(buf, col) {
   return out;
 }
 
+// x - sin x and sinh x - x without cancellation for small x (series to x^17; |x| <= 0.5).
+function xMinusSin(x) {
+  if (Math.abs(x) > 0.5) return x - Math.sin(x);
+  const x2 = x * x;
+  return x * x2 / 6 * (1 - x2 / 20 * (1 - x2 / 42 * (1 - x2 / 72 * (1 - x2 / 110 * (1 - x2 / 156 * (1 - x2 / 210 * (1 - x2 / 272)))))));
+}
+function sinhMinusX(x) {
+  if (Math.abs(x) > 0.5) return Math.sinh(x) - x;
+  const x2 = x * x;
+  return x * x2 / 6 * (1 + x2 / 20 * (1 + x2 / 42 * (1 + x2 / 72 * (1 + x2 / 110 * (1 + x2 / 156 * (1 + x2 / 210 * (1 + x2 / 272)))))));
+}
+
 // E - e sin E = M for 0 <= M <= pi, e < 1. Newton from E0 = min(M + e, pi): that start is never
 // below the root and f is convex there, so the iteration falls monotonically onto the root for
-// every e < 1, including nearly parabolic orbits.
+// every e < 1. f is evaluated as (1-e) E + e (E - sin E) - M, so a nearly parabolic orbit (e
+// within 1e-7 of 1, E - e sin E many orders below E) keeps its digits.
 export function keplerElliptic(M, e) {
+  const w = 1 - e;
   let E = Math.min(M + e, Math.PI);
   for (let k = 0; k < 100; k++) {
-    const d = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    const h = Math.sin(E / 2);
+    const d = (w * E + e * xMinusSin(E) - M) / (w + 2 * e * h * h);
     E -= d;
     if (!(Math.abs(d) > 1e-15 * Math.max(1, E))) break;
   }
@@ -61,11 +76,13 @@ export function keplerElliptic(M, e) {
 }
 
 // e sinh F - F = M for M >= 0, e > 1: Newton from ln(2M/e + 1.8); f is convex for F > 0, so after
-// at most one step the iteration is above the root and falls onto it.
+// at most one step the iteration is above the root and falls onto it. Same cancellation-free form.
 export function keplerHyperbolic(M, e) {
+  const w = e - 1;
   let F = Math.log(2 * M / e + 1.8);
   for (let k = 0; k < 100; k++) {
-    const d = (e * Math.sinh(F) - F - M) / (e * Math.cosh(F) - 1);
+    const h = Math.sinh(F / 2);
+    const d = (w * F + e * sinhMinusX(F) - M) / (w + 2 * e * h * h);
     F -= d;
     if (!(Math.abs(d) > 1e-15 * Math.max(1, F))) break;
   }

@@ -17,7 +17,6 @@ What the app relies on, measured on the shipped files:
   * the sky: the stretch inverts to the recomputed Gaia densities, the duplicated patch is gone, and
     the LMC, SMC, M31 and the Galactic centre are where the contract's pixel formula puts them.
 """
-import io
 import json
 import os
 import sys
@@ -68,6 +67,26 @@ check(total + tex_json <= 2_300_000, f'planet textures {total + tex_json:,} B (m
 sky_bytes = sum(os.path.getsize(os.path.join(SKY, f)) for f in os.listdir(SKY))
 check(sky_bytes <= 250_000, f'sky {sky_bytes:,} B <= 250,000')
 check(J['bodies']['pluto']['lon_left_deg'] == 0.0, 'Pluto map starts at 0 E (its label: CenterLongitude 180, 0..360)')
+credit_ids = [b['id'] for b in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'credits',
+                                                           'textures-sky.json'), encoding='utf-8'))]
+missing = sorted(k for k, m in J['bodies'].items() if m['source_id'] not in credit_ids)
+check(not missing and len(set(credit_ids)) == len(credit_ids),
+      f'every source_id names a block of credits/textures-sky.json ({len(credit_ids)} blocks); missing: {missing}')
+# Where a map records no data, those pixels must be the recorded flat value; where it records none, no
+# large flat band may be hiding at a pole (Jupiter's source is itself filled flat around the south pole).
+for k, m in sorted(J['bodies'].items()):
+    a = imgs[k] if imgs[k].ndim == 3 else imgs[k][..., None]
+    rows_flat = a.std(axis=1).max(axis=1) < 1.0
+    south = int(np.argmin(rows_flat[::-1])) if not rows_flat.all() else len(rows_flat)
+    if k == 'jupiter':
+        want = round(m['nodata_fraction'] * m['height'])
+        dev = float(np.abs(a[-want:] - np.atleast_1d(m['fill_value'])).mean()) if want else 99.0
+        # JPEG's 8-row blocks straddle the edge of the fill, so up to half a block next to it rings
+        check(want > 0 and 0 <= want - south <= 4 and dev <= 1.0,
+              f'jupiter: {want} rows recorded as not imaged ({100 * m["nodata_fraction"]:.2f} %, fill {m.get("fill_value")}): '
+              f'{south} of them flat to < 1 DN, mean |pixel - fill| {dev:.2f} DN')
+    elif m['nodata_fraction'] == 0:
+        check(south <= 0.01 * m['height'], f'{k}: no flat band at the south edge ({south} rows)')
 
 
 def pix(k, lon, lat):

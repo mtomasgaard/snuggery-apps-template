@@ -189,7 +189,10 @@ export class SolarSystem {
         const kind = small.kind(i);
         col.set(KIND_COLOUR[kind] || KIND_COLOUR.other, i * 3);
         const H = small.H ? small.H(i) : NaN;
-        size[i] = Number.isFinite(H) ? Math.max(2.4, Math.min(5, 5.4 - 0.25 * H)) : (kind === 'comet' ? 2.6 : 2.4);
+        // Asteroid H sets the size; a comet's H is a different quantity (its total-magnitude
+        // parameter) and is not comparable, so comets are one size.
+        const comet = kind === 'comet' || kind === 'interstellar';
+        size[i] = comet ? 2.8 : Number.isFinite(H) ? Math.max(2.4, Math.min(5, 5.4 - 0.25 * H)) : 2.4;
         if (kind === 'dwarf') size[i] = 4.2;
       }
       g.setAttribute('acolor', new THREE.BufferAttribute(col, 3));
