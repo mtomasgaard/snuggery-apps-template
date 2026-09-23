@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T00:01:13Z",
+ "generatedAt": "2026-09-23T01:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
+     "title": "In a culture obsessed with staying young, we ignore the many benefits of ageing",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/in-a-culture-obsessed-with-staying-young-we-ignore-the-many-benefits-of-ageing-289506",
+     "published": "2026-09-22T23:55:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Olivia Maurice, Cognitive Neuroscientist, Western Sydney University; University of Sydney"
+    },
+    {
+     "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/fit-thin-curvy-and-toned-the-contradictory-body-ideals-young-nz-women-face-online-292230",
      "published": "2026-09-22T23:26:07Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Kate Griffiths, Democracy Deputy Program Director, Grattan Institute"
-    },
-    {
-     "title": "How would AI actually kill all humans? Here are the top 5 scenarios",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-would-ai-actually-kill-all-humans-here-are-the-top-5-scenarios-292220",
-     "published": "2026-09-22T20:16:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Toby Walsh, Professor of AI, Research Group Leader, UNSW"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "In a culture obsessed with staying young, we ignore the many benefits of ageing",
+   "published": "2026-09-22 23:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
    "published": "2026-09-22 23:26 UTC"
   },
@@ -932,12 +938,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "New rules finally put a ceiling on money in politics – but the cap is double what it should be",
-   "published": "2026-09-22 20:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How would AI actually kill all humans? Here are the top 5 scenarios",
    "published": "2026-09-22 20:16 UTC"
   },
   {
