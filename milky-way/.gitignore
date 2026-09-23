@@ -1,0 +1,7 @@
+tools/venv/
+tools/.cache/
+tools/.work/
+tools/__pycache__/
+tools/node_modules/
+dist/
+.DS_Store

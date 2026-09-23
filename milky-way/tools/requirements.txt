@@ -1,0 +1,17 @@
+# The pipeline's Python dependencies, pinned. Python 3.11 or newer.
+#
+#   python3 -m venv tools/venv
+#   tools/venv/bin/pip install -r tools/requirements.txt
+#
+# build_all.sh does this for you if no venv is present.
+numpy==2.3.3
+scipy==1.16.2
+jplephem==2.24
+spiceypy==8.2.0
+astropy==7.1.0
+pyerfa==2.0.1.5
+astropy-healpix==1.1.2
+pillow==11.3.0
+rasterio==1.4.3
+colour-science==0.4.6
+pyarrow==21.0.0

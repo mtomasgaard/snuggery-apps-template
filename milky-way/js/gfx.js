@@ -1,0 +1,373 @@
+// Shaders and small three.js helpers shared by the three scales.
+//
+// Colour handling is deliberately simple: textures are sampled as the sRGB values they were saved
+// as, converted to linear only where light is multiplied in (the planet globes), and written back
+// as display values. The point and line layers are additive and never write depth.
+//
+// Every custom shader carries three.js's logarithmic-depth chunks, because the renderer is created
+// with a logarithmic depth buffer: the near side of a moon and a planet a billion kilometres behind
+// it share one frame.
+
+import * as THREE from '../vendor/three.module.js';
+
+const LOGV = /* glsl */`
+#include <common>
+#include <logdepthbuf_pars_vertex>
+`;
+const LOGF = /* glsl */`
+#include <logdepthbuf_pars_fragment>
+`;
+
+// ------------------------------------------------------------------ glow points
+// Per-point colour and size in CSS pixels; a soft round sprite. Used for markers, asteroids,
+// clusters and anything that should stay visible however small it is.
+export function glowPointsMaterial({ opacity = 1, sharp = 0.0 } = {}) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uPx: { value: 1 }, uOpacity: { value: opacity }, uSharp: { value: sharp } },
+    vertexShader: LOGV + /* glsl */`
+      attribute vec3 acolor;
+      attribute float asize;
+      uniform float uPx;
+      varying vec3 vC;
+      void main() {
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = max(asize * uPx, 1.0);
+        vC = acolor;
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform float uOpacity;
+      uniform float uSharp;
+      varying vec3 vC;
+      void main() {
+        vec2 d = gl_PointCoord * 2.0 - 1.0;
+        float r2 = dot(d, d);
+        if (r2 > 1.0) discard;
+        float core = smoothstep(0.42, 0.18, r2);
+        float halo = exp(-r2 * 5.0) * (1.0 - r2);
+        float a = mix(halo * 0.75 + core * 0.55, core, uSharp);
+        gl_FragColor = vec4(vC * a * uOpacity, 1.0);
+        #include <logdepthbuf_fragment>
+      }`,
+    transparent: true, depthWrite: false, depthTest: true, blending: THREE.AdditiveBlending,
+  });
+}
+
+// ------------------------------------------------------------------ stars by magnitude
+// Each star carries its absolute magnitude. The shader works out the apparent magnitude from the
+// camera's actual distance to it — m = M + 5·log10(d/10 pc) — so the sky seen from the Sun has the
+// real magnitudes, and flying towards a star brightens it by the inverse-square law. `uMLim` is
+// the magnitude at which a star fades out; `uUnitPc` converts pass units to parsecs.
+export function starMaterial() {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uPx: { value: 1 }, uMLim: { value: 6.5 }, uUnitPc: { value: 1 }, uGain: { value: 1 },
+      uMaxSize: { value: 22 }, uOpacity: { value: 1 },
+    },
+    vertexShader: LOGV + /* glsl */`
+      attribute float absmag;
+      attribute vec3 acolor;
+      uniform float uPx, uMLim, uUnitPc, uGain, uMaxSize;
+      varying vec3 vC;
+      varying float vA;
+      void main() {
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mv;
+        float d = max(length(mv.xyz) * uUnitPc, 1e-7);
+        float m = absmag + 5.0 * log(d) / log(10.0) - 5.0;
+        float f = pow(10.0, -0.4 * (m - uMLim)) * uGain;     // 1 at the limiting magnitude
+        float s = clamp(2.1 * pow(max(f, 0.0), 0.21), 1.4, uMaxSize);
+        gl_PointSize = s * uPx;
+        vA = clamp(f * 1.6, 0.0, 1.0);
+        vC = acolor;
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform float uOpacity;
+      varying vec3 vC;
+      varying float vA;
+      void main() {
+        if (vA < 0.004) discard;
+        vec2 d = gl_PointCoord * 2.0 - 1.0;
+        float r2 = dot(d, d);
+        if (r2 > 1.0) discard;
+        float core = exp(-r2 * 14.0);
+        float halo = exp(-r2 * 4.0) * (1.0 - r2) * 0.35;
+        vec3 c = mix(vC, vec3(1.0), core * 0.55);
+        gl_FragColor = vec4(c * (core + halo) * vA * uOpacity, 1.0);
+        #include <logdepthbuf_fragment>
+      }`,
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+  });
+}
+
+// ------------------------------------------------------------------ planet globes
+// The geometry is a unit sphere in the body-fixed frame (z = north pole, x = prime meridian), so the
+// texture is looked up from the fragment's body-fixed direction rather than from UVs: longitude
+// east-positive from the prime meridian, latitude planetocentric. `uLonLeft` is the longitude at
+// the texture's left edge. Light comes from the Sun's position; `uNight` adds the city-lights map on
+// the dark side of the Earth; `uRings` casts Saturn's ring shadows onto the globe.
+export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7], emissive = false, lonLeft = -180, gray = false } = {}) {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uMap: { value: map }, uHasMap: { value: map ? 1 : 0 }, uNight: { value: night }, uHasNight: { value: night ? 1 : 0 },
+      uColor: { value: new THREE.Vector3(...color) }, uLonLeft: { value: lonLeft }, uGray: { value: gray ? 1 : 0 },
+      uEmissive: { value: emissive ? 1 : 0 }, uSun: { value: new THREE.Vector3() },
+      uRingN: { value: new THREE.Vector3(0, 0, 1) }, uCenter: { value: new THREE.Vector3() }, uKm: { value: 1 },
+      uRingCount: { value: 0 }, uRingBands: { value: Array.from({ length: 6 }, () => new THREE.Vector3()) },
+      uAmbient: { value: 0.02 },
+    },
+    vertexShader: LOGV + /* glsl */`
+      varying vec3 vBody;
+      varying vec3 vN;
+      varying vec3 vW;
+      void main() {
+        vBody = position;
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        vN = normalize(mat3(modelMatrix) * normal);
+        gl_Position = projectionMatrix * viewMatrix * w;
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform sampler2D uMap, uNight;
+      uniform float uHasMap, uHasNight, uLonLeft, uGray, uEmissive, uKm, uAmbient;
+      uniform vec3 uColor, uSun, uRingN, uCenter;
+      uniform int uRingCount;
+      uniform vec3 uRingBands[6];
+      varying vec3 vBody;
+      varying vec3 vN;
+      varying vec3 vW;
+      const float PI = 3.141592653589793;
+      void main() {
+        vec3 b = normalize(vBody);
+        float lon = degrees(atan(b.y, b.x));
+        float lat = asin(clamp(b.z, -1.0, 1.0));
+        vec2 uv = vec2(fract((lon - uLonLeft) / 360.0), 0.5 + lat / PI);
+        vec3 base = uColor;
+        // Gradients taken across the longitude wrap would pick the smallest mipmap and draw a seam.
+        vec2 gx = dFdx(uv), gy = dFdy(uv);
+        gx.x -= floor(gx.x + 0.5); gy.x -= floor(gy.x + 0.5);
+        if (uHasMap > 0.5) {
+          vec3 t = textureGrad(uMap, uv, gx, gy).rgb;
+          base = uGray > 0.5 ? vec3(t.r) : t;
+        }
+        if (uEmissive > 0.5) { gl_FragColor = vec4(base, 1.0);
+          #include <logdepthbuf_fragment>
+          return; }
+        vec3 lin = pow(base, vec3(2.2));
+        vec3 L = normalize(uSun - vW);
+        vec3 N = normalize(vN);
+        float ndl = dot(N, L);
+        float lit = smoothstep(-0.015, 0.06, ndl) * max(ndl, 0.0) + smoothstep(-0.015, 0.06, ndl) * 0.02;
+        // Ring shadow: where the ray towards the Sun crosses the ring plane inside a ring band.
+        if (uRingCount > 0) {
+          float dn = dot(L, uRingN);
+          if (abs(dn) > 1e-5) {
+            float t = dot(uCenter - vW, uRingN) / dn;
+            if (t > 0.0) {
+              float r = length(vW + L * t - uCenter) / uKm;
+              for (int i = 0; i < 6; i++) {
+                if (i >= uRingCount) break;
+                vec3 bnd = uRingBands[i];
+                if (r > bnd.x && r < bnd.y) lit *= (1.0 - bnd.z * 0.85);
+              }
+            }
+          }
+        }
+        vec3 col = lin * (lit + uAmbient);
+        if (uHasNight > 0.5) {
+          float dark = 1.0 - smoothstep(-0.12, 0.04, ndl);
+          vec3 n = pow(textureGrad(uNight, uv, gx, gy).rgb, vec3(2.2));
+          col += n * dark * 1.1;
+        }
+        gl_FragColor = vec4(pow(col, vec3(1.0 / 2.2)), 1.0);
+        #include <logdepthbuf_fragment>
+      }`,
+  });
+}
+
+// ------------------------------------------------------------------ rings
+// A flat annulus in the planet's equatorial plane, radii in km. Only the ring edges and gaps are
+// data (JPL's sat425 radii); the brightness is drawn uniform because no ring brightness profile
+// with a clean licence could be sourced. The planet's shadow falls on the rings.
+export function ringMaterial() {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uSun: { value: new THREE.Vector3() }, uCenter: { value: new THREE.Vector3() }, uN: { value: new THREE.Vector3(0, 0, 1) },
+      uR: { value: 1 }, uKm: { value: 1 }, uCount: { value: 0 },
+      uBands: { value: Array.from({ length: 6 }, () => new THREE.Vector3()) },
+      uCam: { value: new THREE.Vector3() }, uColor: { value: new THREE.Vector3(0.8, 0.8, 0.8) },
+    },
+    vertexShader: LOGV + /* glsl */`
+      varying vec3 vL;
+      varying vec3 vW;
+      void main() {
+        vL = position;
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform vec3 uSun, uCenter, uN, uCam, uColor;
+      uniform float uR, uKm;
+      uniform int uCount;
+      uniform vec3 uBands[6];
+      varying vec3 vL;
+      varying vec3 vW;
+      void main() {
+        float r = length(vL.xy);         // km, in the ring plane
+        float a = 0.0;
+        for (int i = 0; i < 6; i++) {
+          if (i >= uCount) break;
+          vec3 b = uBands[i];
+          float edge = max(b.y - b.x, 1.0) * 0.004;
+          a = max(a, b.z * smoothstep(b.x - edge, b.x + edge, r) * (1.0 - smoothstep(b.y - edge, b.y + edge, r)));
+        }
+        if (a < 0.003) discard;
+        vec3 L = normalize(uSun - vW);
+        // Planet shadow: does the ray towards the Sun hit the globe?
+        vec3 oc = vW - uCenter;
+        float bq = dot(oc, L);
+        float cq = dot(oc, oc) - uR * uR;
+        float h = bq * bq - cq;
+        float shade = (h > 0.0 && -bq - sqrt(h) > 0.0) ? 0.06 : 1.0;
+        // The unlit face (camera and Sun on opposite sides of the plane) shows only light that
+        // passes through; it is drawn dimmer.
+        float sSun = dot(uSun - uCenter, uN), sCam = dot(uCam - uCenter, uN);
+        float face = sSun * sCam > 0.0 ? 1.0 : 0.35;
+        float tilt = abs(dot(L, uN));
+        float light = shade * face * (0.35 + 0.65 * smoothstep(0.0, 0.25, tilt));
+        gl_FragColor = vec4(uColor * light, a);
+        #include <logdepthbuf_fragment>
+      }`,
+    transparent: true, depthWrite: false, side: THREE.DoubleSide,
+  });
+}
+
+// ------------------------------------------------------------------ sky sphere
+// The Gaia DR3 source-count map on the inside of a sphere centred on the camera. The texture is
+// equirectangular in ICRS (RA increasing to the right from 0 at the left edge, Dec +90 at the top),
+// looked up from the view direction, so no UV seam or mirroring can creep in.
+export function skyMaterial(tex) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uMap: { value: tex }, uOpacity: { value: 1 }, uTint: { value: new THREE.Vector3(0.82, 0.86, 1.0) } },
+    vertexShader: /* glsl */`
+      varying vec3 vD;
+      void main() {
+        vD = position;
+        vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        gl_Position = p.xyww;            // on the far plane
+      }`,
+    fragmentShader: /* glsl */`
+      uniform sampler2D uMap;
+      uniform float uOpacity;
+      uniform vec3 uTint;
+      varying vec3 vD;
+      const float PI = 3.141592653589793;
+      void main() {
+        vec3 d = normalize(vD);
+        float ra = atan(d.y, d.x);
+        if (ra < 0.0) ra += 2.0 * PI;
+        float dec = asin(clamp(d.z, -1.0, 1.0));
+        vec2 uv = vec2(ra / (2.0 * PI), 0.5 + dec / PI);
+        vec2 gx = dFdx(uv), gy = dFdy(uv);
+        gx.x -= floor(gx.x + 0.5); gy.x -= floor(gy.x + 0.5);
+        float v = textureGrad(uMap, uv, gx, gy).r;
+        vec3 c = pow(vec3(v), vec3(1.25)) * uTint;
+        gl_FragColor = vec4(c * uOpacity, 1.0);
+      }`,
+    side: THREE.BackSide, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, transparent: true,
+  });
+}
+
+// ------------------------------------------------------------------ textured plane (galaxy layers)
+export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap = false } = {}) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uMap: { value: tex }, uTint: { value: new THREE.Vector3(...tint) }, uOpacity: { value: opacity }, uAlpha: { value: alphaFromMap ? 1 : 0 } },
+    vertexShader: LOGV + /* glsl */`
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform sampler2D uMap;
+      uniform vec3 uTint;
+      uniform float uOpacity, uAlpha;
+      varying vec2 vUv;
+      void main() {
+        vec4 t = texture2D(uMap, vUv);
+        float v = uAlpha > 0.5 ? t.r * t.a : t.r;
+        gl_FragColor = vec4(uTint * v * uOpacity, 1.0);
+        #include <logdepthbuf_fragment>
+      }`,
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+  });
+}
+
+// ------------------------------------------------------------------ ribbons (spiral-arm fits)
+// A strip whose alpha falls off across its width as a Gaussian: the arm fits carry a fitted width,
+// and a soft band of that width is the honest way to draw it.
+export function ribbonMaterial(color, opacity = 0.5) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color(color) }, uOpacity: { value: opacity } },
+    vertexShader: LOGV + /* glsl */`
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: LOGF + /* glsl */`
+      uniform vec3 uColor;
+      uniform float uOpacity;
+      varying vec2 vUv;
+      void main() {
+        float x = vUv.y * 2.0 - 1.0;
+        float a = exp(-x * x * 2.0) * uOpacity * smoothstep(0.0, 0.04, vUv.x) * smoothstep(1.0, 0.96, vUv.x);
+        gl_FragColor = vec4(uColor * a, 1.0);
+        #include <logdepthbuf_fragment>
+      }`,
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+  });
+}
+
+// ------------------------------------------------------------------ lines
+// Polylines with per-vertex RGBA, for orbits, trails, arms, streams and constellation figures.
+export function lineMaterial({ opacity = 1, depthTest = true, additive = true } = {}) {
+  return new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity, depthWrite: false, depthTest,
+    blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending,
+  });
+}
+
+export function makeLine(points /* Float32Array xyz */, colors /* Float32Array rgba */, material, loop = false) {
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(points, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(colors, 4));
+  const l = loop ? new THREE.LineLoop(g, material) : new THREE.Line(g, material);
+  l.frustumCulled = false;
+  return l;
+}
+
+export function hexToRgb01(hex) {
+  const c = new THREE.Color(hex);
+  return [c.r, c.g, c.b].map((v) => Math.pow(v, 1 / 2.2));   // three stores linear; we want display values
+}
+
+// A texture from an image URL, with the settings every map here wants.
+export function loadTexture(url, { srgb = false } = {}) {
+  return new Promise((resolve, reject) => {
+    new THREE.TextureLoader().load(url, (t) => {
+      t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.ClampToEdgeWrapping;
+      t.anisotropy = 4; t.generateMipmaps = true;
+      t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
+      resolve(t);
+    }, undefined, () => reject(new Error(`${url}: could not be loaded`)));
+  });
+}

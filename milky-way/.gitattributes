@@ -1,0 +1,8 @@
+*.bin    binary
+*.jpg    binary
+*.png    binary
+*.woff2  binary
+vendor/three.core.js    linguist-vendored -diff
+vendor/three.module.js  linguist-vendored -diff
+vendor/*.js             linguist-vendored
+data/*.json             -diff

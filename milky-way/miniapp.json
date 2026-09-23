@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Milky Way",
+  "entryPoint": "index.html",
+  "description": "The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, from real data only: JPL planets and moons for any date from 1900 to 2100 with time playback, Gaia's stars in 3D, and the galaxy's measured clusters, streams and satellite galaxies, entirely offline.",
+  "version": "1.0"
+}
