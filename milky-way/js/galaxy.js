@@ -16,6 +16,7 @@
 import * as THREE from '../vendor/three.module.js';
 import { glowPointsMaterial, planeMaterial, ribbonMaterial, thickLineMaterial, ThickLine } from './gfx.js';
 import { KPC_AU } from './util.js';
+import { buildGalaxyData } from './galaxydata.js';
 
 const REID_COLOUR = '#f1b36b';
 const DRIMMEL_COLOUR = '#b58cff';
@@ -23,15 +24,11 @@ const DRIMMEL_COLOUR = '#b58cff';
 export class Galaxy {
   constructor({ g, tex }) {
     this.g = g;
+    this.data = buildGalaxyData(g);           // the frame and the flags, as tools/test_galaxy.mjs checks them
     this.root = new THREE.Group();
     this.root.name = 'galaxy';
-    const M = g.frame.to_icrs;
-    const m = new THREE.Matrix4();
-    const flat = Array.isArray(M[0]) ? M.flat() : M;
-    m.set(...flat);
     this.root.matrixAutoUpdate = false;
-    this.root.matrix.copy(m);
-    this.toIcrs = flat;
+    this.root.matrix.set(...this.data.toIcrsMatrix);
     this.sun = g.frame.sun_kpc;
 
     const layer = (name) => { const o = new THREE.Group(); o.name = name; this.root.add(o); return o; };
@@ -60,13 +57,15 @@ export class Galaxy {
         const meta = g.young.files[key];
         const e = meta.extent_kpc || g.young.extent_kpc;
         const enc = meta.encoding;           // overdensity = lo + code/255·(hi − lo); light only above 0
-        const mat = planeMaterial(t, { tint: [0.55, 0.78, 1.0], opacity: 1.1, alphaFromMap: true, zero: -enc.lo / (enc.hi - enc.lo) });
+        t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; t.needsUpdate = true;
+        const mat = planeMaterial(t, { tint: [0.32, 0.58, 1.0], opacity: 0.8, alphaFromMap: true, zero: -enc.lo / (enc.hi - enc.lo), gamma: 1.4 });
         const p = new THREE.Mesh(new THREE.PlaneGeometry(e[1] - e[0], e[3] - e[2]), mat);
         p.position.set((e[0] + e[1]) / 2, (e[2] + e[3]) / 2, meta.z_kpc || 0);
-        p.frustumCulled = false; p.renderOrder = 1; p.userData.base = 0.9; p.userData.key = key;
+        p.frustumCulled = false; p.renderOrder = 1; p.userData.key = key;
         this.L.young.add(p);
       }
-      this.youngKey = Object.keys(tex.young)[0];
+      // Two maps, two layers. On by default: Poggio+2021's upper-main-sequence map, the smoother one.
+      // The Gaia DR3 OB map reaches as far but is streaked along lines of sight by distance errors.
     }
 
     // ---- spiral-arm fits
@@ -124,11 +123,12 @@ export class Galaxy {
 
     // ---- stellar streams
     this.streams = g.streams || [];
-    for (const s of this.streams) {
-      const approx = s.approximate;          // not a measured distance track, or a constructed great circle
-      const l = centreline(s.points, '#7fe0ff', approx ? 0.3 : 0.6, approx, 1.3);
+    this.streams.forEach((s, i) => {
+      const approx = this.data.streamApproximate(i);   // not a measured distance track, or a constructed great circle
+      // Faint: a hundred of them cross the whole view, and they are the least certain thing here.
+      const l = centreline(s.points, '#7fe0ff', approx ? 0.07 : 0.16, approx, 1.1);
       this.L.streams.add(l);
-    }
+    });
 
     // ---- globular clusters and satellite galaxies
     const points = (list, colour, sizeOf, layerGroup) => {
@@ -160,11 +160,8 @@ export class Galaxy {
 
   // Galactocentric kpc → ICRS heliocentric AU (float64), for labels and picking.
   toAU(p, out = [0, 0, 0]) {
-    const M = this.toIcrs;
-    const x = M[0] * p[0] + M[1] * p[1] + M[2] * p[2] + M[3];
-    const y = M[4] * p[0] + M[5] * p[1] + M[6] * p[2] + M[7];
-    const z = M[8] * p[0] + M[9] * p[1] + M[10] * p[2] + M[11];
-    out[0] = x * KPC_AU; out[1] = y * KPC_AU; out[2] = z * KPC_AU;
+    const q = this.data.toIcrs(p, this._q || (this._q = new Float64Array(3)));
+    out[0] = q[0] * KPC_AU; out[1] = q[1] * KPC_AU; out[2] = q[2] * KPC_AU;
     return out;
   }
 
@@ -184,8 +181,8 @@ export class Galaxy {
       });
     };
     set(this.L.model, layers.model, a);
-    set(this.L.young, layers.young, a);
-    for (const p of this.L.young.children) p.visible = p.userData.key === this.youngKey;
+    set(this.L.young, layers.young || layers.youngOB, a);
+    for (const p of this.L.young.children) p.visible = p.userData.key === 'gaiadr3_ob' ? !!layers.youngOB : !!layers.young;
     set(this.L.reid, layers.reid, a);
     set(this.L.drimmel, layers.drimmel, a);
     set(this.L.grid, layers.grid, a);

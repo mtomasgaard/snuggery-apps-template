@@ -51,6 +51,7 @@ const browser = await chromium.launch({
 const W = +(process.env.W || 390), H = +(process.env.H || 844), DPR = +(process.env.DPR || 2);
 const ctx = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: DPR, isMobile: true, hasTouch: true });
 const page = await ctx.newPage();
+await page.addInitScript((on) => { window.__ON = on; }, (process.env.ON || '').split(',').filter(Boolean));
 const errors = [];
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text()}`); });
 page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
@@ -76,7 +77,7 @@ const scenes = {
   solar: async () => { await page.evaluate(() => window.__mw.goScale('solar')); await settle(); await shot('solar'); },
   inner: async () => { await page.evaluate(() => window.__mw.flyTo('sun', 3.2)); await settle(); await shot('inner'); },
   earth: async () => { await page.evaluate(() => { window.__mw.select('earth'); window.__mw.flyTo('earth'); }); await settle(); await shot('earth'); },
-  moon: async () => { await page.evaluate(() => window.__mw.flyTo('earth', 0.006)); await settle(); await shot('earth-moon'); },
+  moon: async () => { await page.evaluate(() => { window.__mw.select(null); window.__mw.flyTo('earth', 0.011); }); await settle(); await shot('earth-moon'); },
   jupiter: async () => { await page.evaluate(() => { window.__mw.select(null); window.__mw.flyTo('jupiter', 0.02); }); await settle(); await shot('jupiter-moons'); },
   saturn: async () => { await page.evaluate(() => window.__mw.flyTo('saturn')); await settle(); await shot('saturn'); },
   mars: async () => { await page.evaluate(() => window.__mw.flyTo('mars')); await settle(); await shot('mars'); },
@@ -92,6 +93,8 @@ const scenes = {
   orion: async () => { await page.evaluate(() => window.__mw.flyTo('sun', 206265 * 60)); await settle(); await shot('stars-60pc'); },
   galaxy: async () => { await page.evaluate(() => window.__mw.goScale('galaxy')); await settle(); await shot('galaxy'); },
   edge: async () => { await page.evaluate(() => { const m = window.__mw; m.flyTo('gal:centre', 206265e3 * 30, m.edgeDir()); }); await settle(); await shot('galaxy-edge'); },
+  edge20: async () => { await page.evaluate(() => { const m = window.__mw; for (const k of ['young','reid','drimmel','streams','globulars','satellites','grid']) m.S.layers[k] = (window.__ON || []).includes(k); m.flyTo('gal:centre', 206265e3 * 30, m.edgeDir()); }); await settle(); await shot('galaxy-edge-model'); },
+  moonpos: async () => { await page.evaluate(() => { window.__mw.select(null); window.__mw.flyTo('earth', 0.006); }); await settle(); console.log(JSON.stringify(await page.evaluate(() => window.__mw.candidates().filter((c) => c.id === 'moon' || c.id === 'earth')))); },
   debug: async () => { await page.evaluate(() => window.__mw.goScale('solar')); await settle(); console.log(JSON.stringify(await page.evaluate(() => ({ c: window.__mw.candidates().filter((c) => c.pri > 50), placed: window.__mw.placed() })))); },
   search: async () => { await page.evaluate(() => { document.getElementById('btn-search').click(); }); await page.fill('#search-q', 'sirius'); await page.waitForTimeout(300); await shot('search'); await page.evaluate(() => document.querySelector('[data-close]').click()); },
 };

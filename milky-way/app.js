@@ -41,7 +41,7 @@ const DATA = 'data/';
 const DEFAULT_LAYERS = {
   orbits: true, trails: true, moons: true, small: true, venusRadar: false,
   stars: true, constellations: true, exoplanets: true, sky: true,
-  model: true, young: true, reid: true, drimmel: true, globulars: true, satellites: true, streams: true, grid: true,
+  model: true, young: true, youngOB: false, reid: true, drimmel: true, globulars: true, satellites: true, streams: true, grid: true,
   labels: true,
 };
 const SPEEDS = [
@@ -131,7 +131,7 @@ async function load() {
 
   // The ecliptic pole from the J2000 obliquity; the galactic pole from the galaxy frame's z axis.
   const eps = phys.constants.obliquity_j2000_arcsec / 3600 * DEG;
-  const M = galaxy.toIcrs;
+  const M = galaxy.data.toIcrsMatrix;
   rig.setFrames([0, -Math.sin(eps), Math.cos(eps)], [M[2], M[6], M[10]]);
   rig.jdNow = () => S.jd;
 }
@@ -378,9 +378,19 @@ function draw() {
 const _p = { x: 0, y: 0, z: 0 };
 function gatherLabels(jd, dSun) {
   candidates = [];
+  // Globes big enough to hide things: a label whose point is behind one of them is not shown.
+  const discs = [];
+  if (solar.root.visible && !solar.far) {
+    for (const b of solar.bodies.values()) {
+      if (!b.valid || !b.mesh || !b.mesh.visible || !(b.px > 2)) continue;
+      const q = project(b.pos, { x: 0, y: 0, z: 0 });
+      if (q) discs.push({ key: b.key, x: q.x, y: q.y, z: q.z, r: b.px });
+    }
+  }
+  const hidden = (id, q) => discs.some((d) => d.key !== id && q.z > d.z && (q.x - d.x) ** 2 + (q.y - d.y) ** 2 < d.r * d.r);
   const push = (id, text, p, pri, colour, cls, dy = 0, dx = 0) => {
     const q = project(p, { x: 0, y: 0, z: 0 });
-    if (!q) return;
+    if (!q || (id !== S.selected && hidden(id, q))) return;
     candidates.push({ id, text, x: q.x + dx, y: q.y + dy, pri: id === S.selected ? 1000 : pri, colour, cls });
   };
   const L = S.layers;
@@ -561,7 +571,7 @@ function facts(id) {
       out.kind = 'Stellar stream';
       const ds = s.points.map((p) => Math.hypot(...p));
       add('From the Galactic centre', `${sig(Math.min(...ds))}–${sig(Math.max(...ds))} kpc`);
-      add('Track', s.approximate ? 'approximate' : 'measured path and distances');
+      add('Track', galaxy.data.streamApproximate(i) ? 'approximate' : 'measured path and distances');
       out.note = s.note || '';
       out.src = s.ref || '';
     } else if (kind === 'arm') {
@@ -619,7 +629,7 @@ function hud(dSun) {
   const tid = rig.targetId;
   const name = tid === 'flight' ? '' : tid === 'point' ? '' : nameOf(tid);
   $('sub').textContent = sc === 'solar' ? (name && tid !== 'sun' ? `${name} · ${$('t-date').textContent}` : `Solar System · ${$('t-date').textContent}`)
-    : sc === 'stars' ? (name && tid !== 'sun' ? `${name} · the Sun's neighbourhood` : 'The Sun’s neighbourhood') : (name && tid !== 'gal:centre' ? `${name} · the Milky Way` : 'The Milky Way');
+    : sc === 'stars' ? (name && tid !== 'sun' ? `${name} · the Sun's neighbourhood` : 'The Sun’s neighbourhood') : (name && tid !== 'gal:centre' ? `${name} · our galaxy` : 'Our galaxy, measured');
 }
 
 // ---------------------------------------------------------------- sheets: layers, search, about
@@ -641,7 +651,8 @@ const LAYER_DOC = () => [
     ['globulars', 'Globular clusters', `${galaxy.globulars.length} clusters at measured distances`],
     ['satellites', 'Satellite galaxies', `${galaxy.satellites.length} galaxies at measured distances`],
     ['streams', 'Stellar streams', `${galaxy.streams.length} streams traced through the halo`],
-    ['young', 'Young stars (Gaia)', 'Where young stars crowd, measured within ~4 kpc'],
+    ['young', 'Young stars · Gaia EDR3', 'Poggio et al. 2021 — where young stars crowd, within ~4 kpc'],
+    ['youngOB', 'OB stars · Gaia DR3', 'Drimmel et al. 2023 — streaked by distance errors'],
     ['reid', 'Arm fits · masers', 'Reid et al. 2019 — a fit to maser parallaxes'],
     ['drimmel', 'Arm fits · Cepheids', 'Drimmel et al. 2024 — a fit to Cepheids'],
     ['model', 'Disc and bar model', 'McMillan 2017 disc, Portail 2017 bar — models'],

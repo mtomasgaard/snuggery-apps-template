@@ -295,9 +295,9 @@ export function skyMaterial(tex) {
 // ------------------------------------------------------------------ textured plane (galaxy layers)
 // `zero` (0–1): the code value that means "nothing"; only what lies above it is lit (the young-star
 // maps encode overdensity from −1 to +1.5, so their zero sits at 0.4).
-export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap = false, zero = 0 } = {}) {
+export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap = false, zero = 0, gamma = 1 } = {}) {
   return new THREE.ShaderMaterial({
-    uniforms: { uMap: { value: tex }, uTint: { value: new THREE.Vector3(...tint) }, uOpacity: { value: opacity }, uAlpha: { value: alphaFromMap ? 1 : 0 }, uZero: { value: zero } },
+    uniforms: { uMap: { value: tex }, uTint: { value: new THREE.Vector3(...tint) }, uOpacity: { value: opacity }, uAlpha: { value: alphaFromMap ? 1 : 0 }, uZero: { value: zero }, uGamma: { value: gamma } },
     vertexShader: LOGV + /* glsl */`
       varying vec2 vUv;
       void main() {
@@ -308,11 +308,11 @@ export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap
     fragmentShader: LOGF + /* glsl */`
       uniform sampler2D uMap;
       uniform vec3 uTint;
-      uniform float uOpacity, uAlpha, uZero;
+      uniform float uOpacity, uAlpha, uZero, uGamma;
       varying vec2 vUv;
       void main() {
         vec4 t = texture2D(uMap, vUv);
-        float v = clamp((t.r - uZero) / (1.0 - uZero), 0.0, 1.0);
+        float v = pow(clamp((t.r - uZero) / (1.0 - uZero), 0.0, 1.0), uGamma);
         if (uAlpha > 0.5) v *= t.a;
         gl_FragColor = vec4(uTint * v * uOpacity, 1.0);
         #include <logdepthbuf_fragment>
