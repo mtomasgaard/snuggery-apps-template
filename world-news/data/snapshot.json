@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T05:01:12Z",
+ "generatedAt": "2026-09-23T06:01:12Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "When a country goes underwater: Island States fight for their future",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168398",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "Rising sea levels and ever-more-powerful storms are eroding shorelines, submerging land and threatening to evict millions of people from their homes worldwide.",
+     "stale": false
+    },
+    {
      "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -380,15 +389,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168365",
      "published": "2026-09-18T12:00:00Z",
      "summary": "The catastrophic flooding that swept away entire villages in northern Nepal could occur again in the country or elsewhere in the Himalayas due to climate change.",
-     "stale": false
-    },
-    {
-     "title": "UN fact-finding mission on Iran focuses on plight of civilians",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168358",
-     "published": "2026-09-17T12:00:00Z",
-     "summary": "The Independent International Fact-Finding Mission on Iran confirmed that civilians in the country suffered serious human rights violations and “crimes against humanity committed by their government,” while finding…",
      "stale": false
     },
     {
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Western Australia is experiencing a child safety crisis. Here’s what would help",
+     "title": "Why do politicians often want to change the school curriculum? What happens when you do?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/western-australia-is-experiencing-a-child-safety-crisis-heres-what-would-help-292356",
-     "published": "2026-09-23T04:40:35Z",
+     "link": "https://theconversation.com/why-do-politicians-often-want-to-change-the-school-curriculum-what-happens-when-you-do-292609",
+     "published": "2026-09-23T05:27:36Z",
      "summary": "",
      "stale": false,
-     "author": "Jacynta Krakouer, Aboriginal Enterprise Fellow, Australian Centre for Child Protection, Adelaide University"
+     "author": "Emily Ross, Senior Lecturer, School of Education, The University of Queensland"
     },
     {
-     "title": "Worried about your car being hacked? You should be – no matter where it was made",
+     "title": "Coyote vs. Acme follows a 100-year-old tradition of placing animated characters in our ‘real’ world",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/worried-about-your-car-being-hacked-you-should-be-no-matter-where-it-was-made-292607",
-     "published": "2026-09-23T03:55:30Z",
+     "link": "https://theconversation.com/coyote-vs-acme-follows-a-100-year-old-tradition-of-placing-animated-characters-in-our-real-world-292122",
+     "published": "2026-09-23T05:12:19Z",
      "summary": "",
      "stale": false,
-     "author": "Dennis B. Desmond, Lecturer, Cyberintelligence and Cybercrime Investigations, University of the Sunshine Coast"
+     "author": "Ruth Richards, Lecturer (Media), RMIT University"
     },
     {
-     "title": "We asked people with dementia about voluntary assisted dying. Here’s what they said",
+     "title": "The dingo debate is heating up. How we manage these animals will determine their future",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/we-asked-people-with-dementia-about-voluntary-assisted-dying-heres-what-they-said-289029",
-     "published": "2026-09-23T03:09:11Z",
+     "link": "https://theconversation.com/the-dingo-debate-is-heating-up-how-we-manage-these-animals-will-determine-their-future-292216",
+     "published": "2026-09-23T05:09:21Z",
      "summary": "",
      "stale": false,
-     "author": "Dr Adrienne Matthys, Casual Academic (Gerontology and Human Services) and Research Assistant, Charles Sturt University"
+     "author": "Niraj Meisuria, PhD Candidate, Disease Ecology Lab and Global Ecology Lab, University of Sydney"
     },
     {
      "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "When a country goes underwater: Island States fight for their future",
+   "published": "2026-09-22 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
    "published": "2026-09-22 08:12 UTC"
@@ -888,12 +894,6 @@
   },
   {
    "region": "Asia",
-   "source": "UN News",
-   "title": "UN fact-finding mission on Iran focuses on plight of civilians",
-   "published": "2026-09-17 12:00 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "Global Voices",
    "title": "Singapore’s ‘permit regime’ undermines the citizens’ right to protest",
    "published": "2026-09-16 08:44 UTC"
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Western Australia is experiencing a child safety crisis. Here’s what would help",
-   "published": "2026-09-23 04:40 UTC"
+   "title": "Why do politicians often want to change the school curriculum? What happens when you do?",
+   "published": "2026-09-23 05:27 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Worried about your car being hacked? You should be – no matter where it was made",
-   "published": "2026-09-23 03:55 UTC"
+   "title": "Coyote vs. Acme follows a 100-year-old tradition of placing animated characters in our ‘real’ world",
+   "published": "2026-09-23 05:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "We asked people with dementia about voluntary assisted dying. Here’s what they said",
-   "published": "2026-09-23 03:09 UTC"
+   "title": "The dingo debate is heating up. How we manage these animals will determine their future",
+   "published": "2026-09-23 05:09 UTC"
   },
   {
    "region": "Oceania",
