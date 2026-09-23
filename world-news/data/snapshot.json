@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T07:01:15Z",
+ "generatedAt": "2026-09-23T08:01:12Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "As Australia’s rock ‘n’ roll outlaw, Angry Anderson embodied the appeal and limitations of Oz Rock",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/as-australias-rock-n-roll-outlaw-angry-anderson-embodied-the-appeal-and-limitations-of-oz-rock-290938",
+     "published": "2026-09-23T06:46:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Charlotte Markowitsch, PhD Candidate in Popular Music Studies, RMIT University"
+    },
+    {
      "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Matthew Ricketson, Professor of Communication, Deakin University"
-    },
-    {
-     "title": "The Elevator is a smart commentary on corporate culture and a thrilling piece of theatre",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-elevator-is-a-smart-commentary-on-corporate-culture-and-a-thrilling-piece-of-theatre-292604",
-     "published": "2026-09-23T05:56:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Charlotte Farrell, Lecturer, Theatre and Performance Studies, UNSW"
     },
     {
      "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "As Australia’s rock ‘n’ roll outlaw, Angry Anderson embodied the appeal and limitations of Oz Rock",
+   "published": "2026-09-23 06:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
    "published": "2026-09-23 06:37 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Trump has banned more media and started his own TV channel. In the process, he risks further eroding American democracy",
    "published": "2026-09-23 06:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Elevator is a smart commentary on corporate culture and a thrilling piece of theatre",
-   "published": "2026-09-23 05:56 UTC"
   },
   {
    "region": "Oceania",
