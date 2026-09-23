@@ -29,8 +29,8 @@ and keep working whether or not you ever copy this template. **Outdoor Window**
 is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
-sign-in and a bank connection — and until you add them, both ship as static
-examples with made-up data. **Anatomy**, **Norne Reservoir** and **Besseggen** are the big
+sign-in and a bank connection — and until you add them, both show made-up
+data, labelled as such. **Anatomy**, **Norne Reservoir** and **Besseggen** are the big
 ones: a human body, an oil field and a mountain ridge, each in 3D, 21, 15 and 17 MB as ZIPs. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
 pack precisely because of that size — install any of them the same way as every app on this page:
@@ -299,7 +299,7 @@ The demo's evaluation, plan, race forecast and session notes were written for
 the demo runner from the demo's own numbers, to show what the routine's output
 looks like when it is there. Nothing on screen calls it an example, because the
 demo's job is to look like a real copy; this README, `PROMPT.md` and the
-*Static examples* folder Snuggery installs it into are where that is said. The
+caption under Snuggery's *Install the live examples* button are where that is said. The
 shapes are in the header comment of `running-dashboard/app.js`.
 
 ## Things that will cost you an afternoon if nobody says them
