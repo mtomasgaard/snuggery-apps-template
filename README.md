@@ -19,7 +19,7 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Eleven complete apps. All are examples — none holds anybody's real data. Copy
+Twelve complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
 **Five of them cost you nothing to run.** Hello Live, World News, Power Hours,
@@ -30,8 +30,8 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
-data, labelled as such. **Anatomy**, **Norne Reservoir** and **Besseggen** are the big
-ones: a human body, an oil field and a mountain ridge, each in 3D, 21, 15 and 17 MB as ZIPs. They need
+data, labelled as such. **Anatomy**, **Norne Reservoir**, **Besseggen** and **Milky Way** are the big
+ones: a human body, an oil field, a mountain ridge and our galaxy, each in 3D, 21, 15, 17 and 6 MB as ZIPs. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
 pack precisely because of that size — install any of them the same way as every app on this page:
 three taps, just below.
@@ -113,6 +113,12 @@ The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, w
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
 
+### Milky Way
+
+The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and 21 moons come from JPL's ephemerides for any date from 1900 to 2100. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.4 MB unpacked. The Gaia-derived star and sky files may be used only non-commercially.
+
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
+
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
 ![Finances](finances/screenshots/app.png)
@@ -124,6 +130,7 @@ The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, w
 ![Anatomy](anatomy/screenshots/app.png)
 ![Norne Reservoir](norne-reservoir/screenshots/app.png)
 ![Besseggen](besseggen/screenshots/app.png)
+![Milky Way](milky-way/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in
 `.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
@@ -185,7 +192,7 @@ That is the whole per-app cost. Nothing else changes, ever.
   data/snapshot.json     THE ONLY FILE THAT CHANGES
   screenshots/           pictures for this README; left out of the ZIP, so they
                          cost the phone nothing
-  tools/ or pipeline/    how an app's data was built (Anatomy, Norne Reservoir);
+  tools/ or pipeline/    how an app's data was built (Anatomy, Norne Reservoir, Milky Way);
                          left out of the ZIP in the same way
 scripts/                 one refresh script per app
 garmin-raw/              Running Dashboard's append-only raw store
