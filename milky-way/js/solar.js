@@ -436,7 +436,9 @@ export class SolarSystem {
     if (this.smallPts) {
       this.smallPts.visible = !!layers.small;
       if (this.smallPts.visible) {
-        if (!(Math.abs(jd - this._smallJd) < 0.05)) {
+        // A fifth of a day moves a main-belt asteroid about 0.1 px at the overview zoom; refreshing
+        // no more often than that halves the cost of playing at a week per second.
+        if (!(Math.abs(jd - this._smallJd) < 0.2)) {
           this.small.positionsAt(jd, this.smallPos);
           this.smallPts.geometry.attributes.position.needsUpdate = true;
           this._smallJd = jd;

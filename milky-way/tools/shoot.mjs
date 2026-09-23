@@ -103,6 +103,18 @@ for (const [name, fn] of Object.entries(scenes)) {
 }
 const stats = await page.evaluate(() => window.__mw && window.__mw.stats ? window.__mw.stats() : null);
 if (stats) console.log('render stats:', JSON.stringify(stats));
+if (process.env.TIMING) {
+  // Per-frame JS cost while time plays in the default view: 120 frames driven one by one.
+  const t = await page.evaluate(async () => {
+    const m = window.__mw; m.goScale('solar');
+    await new Promise((r) => { const f = () => (m.rig.animating ? requestAnimationFrame(f) : r()); f(); });
+    m.S.playing = true; m.invalidate();
+    await new Promise((r) => setTimeout(r, 6000));
+    m.S.playing = false;
+    return m.timing();
+  });
+  console.log('JS ms per frame (smoothed):', JSON.stringify(Object.fromEntries(Object.entries(t).map(([k, v]) => [k, +v.toFixed(2)]))));
+}
 await browser.close();
 server.close();
 if (stubbed.size) console.log('STUBBED (not yet built):', [...stubbed].join(', '));

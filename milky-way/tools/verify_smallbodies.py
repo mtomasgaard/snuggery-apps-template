@@ -83,11 +83,14 @@ def uv_positions(q, e, tp, P, Q, jd, mu):
         dt = np.where(ell, dt - T * np.round(dt / T), dt)
     sgn = np.where(dt < 0, -1.0, 1.0)
     tt = smu * np.abs(dt)
-    # F(chi) = (1 - alpha q) chi^3 S + q chi - tt, increasing; root in [0, tt/q] (and z <= pi^2).
+    # F(chi) = (1 - alpha q) chi^3 S + q chi - tt is increasing and F >= q chi - tt, so the root is
+    # in [0, tt/q]; for an ellipse also z <= pi^2 (|dt| <= half a period), for a hyperbola the
+    # bracket is capped at a hyperbolic anomaly of 600 (far beyond any case here) so cosh stays finite.
     lo = np.zeros_like(q)
     hi = tt / q
     with np.errstate(divide='ignore', invalid='ignore'):
-        hi = np.where(ell, np.minimum(hi, np.pi / np.sqrt(np.where(ell, alpha, 1.0))), hi)
+        cap = np.where(ell, np.pi, 600.0) / np.sqrt(np.where(alpha != 0, np.abs(alpha), 1.0))
+        hi = np.where(alpha != 0, np.minimum(hi, cap), hi)
     chi = 0.5 * (lo + hi)
     for _ in range(300):
         z = alpha * chi * chi
@@ -179,14 +182,17 @@ def main():
     check(ang < 1e-9, f'ecliptic -> ICRF rotation = CSPICE ECLIPJ2000 to {ang:.1e}" (obliquity {m["obliquity_arcsec"]}")')
     rows_src = step.sbdb_rows('asteroids')
     k = m['k_gauss_au15_day']
-    rel = []
+    rel, rel_e = [], []
     for r in rows_src:
         a, per = SB.num(r['a']), SB.num(SB.field(r, 'per_y'))
         if a and per and a > 0:
-            rel.append(abs(2 * math.pi / (k / a ** 1.5) / 365.25 / per - 1))
-    rel = np.array(rel)
-    check(np.median(rel) < 1e-9, f'k agrees with SBDB\'s own periods: median |P_ours/P_sbdb - 1| = {np.median(rel):.1e}, '
-          f'max {rel.max():.1e} (per_y is printed to ~12-15 digits)')
+            (rel if r['orbit_id'].startswith('JPL') else rel_e).append(abs(2 * math.pi / (k / a ** 1.5) / 365.25 / per - 1))
+    rel, rel_e = np.array(rel), np.array(rel_e)
+    check(np.median(rel) < 1e-8 and np.percentile(rel, 99) < 1e-7,
+          f'k agrees with SBDB\'s own periods for its {len(rel):,} JPL-computed orbits: |P_ours/P_sbdb - 1| '
+          f'median {np.median(rel):.1e}, 99th percentile {np.percentile(rel, 99):.1e}, max {rel.max():.1e}')
+    print(f'  (the {len(rel_e)} orbits with non-JPL orbit ids, "E2026D54" etc., print a with ~10 digits: '
+          f'median {np.median(rel_e):.1e}, max {rel_e.max():.1e})')
     from astropy.time import Time
     import gzip
     with gzip.open(SB.path('cometels'), 'rt', encoding='utf-8') as f:

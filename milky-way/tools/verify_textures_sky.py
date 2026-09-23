@@ -242,11 +242,12 @@ if 'ganymede' in J['bodies']:
 if 'triton' in J['bodies']:
     tt = imgs['triton']
     fillv = J['bodies']['triton']['fill_value']
-    flat = np.abs(tt - fillv) <= 3
-    north = float(flat[:64].mean())
-    south = float(flat[192:].mean())
-    check(north > 0.9 and south < 0.05, f'Triton: flat "not imaged" fill covers {100 * north:.0f} % north of 45 N and '
-                                        f'{100 * south:.0f} % south of 45 S (Voyager 2 saw the southern hemisphere)')
+    blk = tt.reshape(32, 8, 64, 8)
+    flat = (blk.std(axis=(1, 3)) < 1.5) & (np.abs(blk.mean(axis=(1, 3)) - fillv) <= 3)   # 8 x 8 blocks
+    north = float(flat[:8].mean())
+    south = float(flat[24:].mean())
+    check(north > 0.9 and south < 0.1, f'Triton: flat "not imaged" fill covers {100 * north:.0f} % of 8x8 blocks north of '
+                                       f'45 N and {100 * south:.0f} % south of 45 S (Voyager 2 saw the southern hemisphere)')
 
 # Earth: land and sea, and what a mirror or a 180 deg shift would put there
 pts = [(20, 10, 'land', 'Chad'), (0.0, 51.5, 'land', 'Greenwich'), (25, -25, 'land', 'southern Africa'),

@@ -318,7 +318,9 @@ function placeCamera(cam, pos, target, up, unit) {
   cam.updateMatrixWorld(true);
 }
 
+const timing = { update: 0, render: 0, labels: 0 };
 function draw() {
+  const t0 = performance.now();
   const jd = S.jd;
   pose = rig.pose(jd);
   pose.right = vnorm([], vcross([], pose.fwd, pose.up));
@@ -352,6 +354,7 @@ function draw() {
   // Past the galaxy layer's own Sun marker the Solar System pass has nothing left to add.
   solar.root.visible = galaxy.fade < 0.6;
 
+  const t1 = performance.now();
   renderer.info.reset();
   renderer.clear(true, true, true);
   renderer.render(scenes.stars, cams.stars);
@@ -359,8 +362,15 @@ function draw() {
   renderer.clearDepth();
   if (solar.root.visible) renderer.render(scenes.solar, cams.solar);
 
+  const t2 = performance.now();
   gatherLabels(jd, dSun);
   hud(dSun);
+  const t3 = performance.now();
+  // Smoothed per-frame costs in ms, for the debug hook (the render figure is only the CPU side of
+  // issuing the draw calls; the GPU works asynchronously).
+  timing.update += (t1 - t0 - timing.update) * 0.1;
+  timing.render += (t2 - t1 - timing.render) * 0.1;
+  timing.labels += (t3 - t2 - timing.labels) * 0.1;
 }
 
 // ---------------------------------------------------------------- labels and picking
@@ -763,6 +773,7 @@ function restoreCamera() {
     edgeDir: () => elevated(rig.galUp, 5, vnorm([], vsub([], galaxy.toAU([0, 10, 0]), galaxy.toAU([0, 0, 0])))),
     candidates: () => candidates.map((c) => ({ id: c.id, x: Math.round(c.x), y: Math.round(c.y), pri: c.pri })),
     placed: () => labels.placed.map((p) => p.id),
+    timing: () => ({ ...timing }),
     stats: () => ({ ...renderer.info.render, programs: renderer.info.programs.length, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }),
   };
 })();
