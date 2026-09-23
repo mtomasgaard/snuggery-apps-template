@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T19:01:18Z",
+ "generatedAt": "2026-09-23T20:01:10Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Mosque attack highlights evolving extremism landscape that has brought Pakistan-Afghanistan ties to crisis point",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/mosque-attack-highlights-evolving-extremism-landscape-that-has-brought-pakistan-afghanistan-ties-to-crisis-point-292416",
+     "published": "2026-09-23T19:19:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Saif Tahir, Research Assistant and Doctoral Student, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
      "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Vidya Mani, Associate Professor, Darden School of Business; Research Associate Professor, Biocomplexity Institute, University of Virginia; Cornell University"
-    },
-    {
-     "title": "¿Por qué los hispanos en Estados Unidos están perdiendo la fe en el sueño americano?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/por-que-los-hispanos-en-estados-unidos-estan-perdiendo-la-fe-en-el-sueno-americano-292206",
-     "published": "2026-09-23T13:56:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Diana Orcés, Adjunct Professor of Government, School of Public Affairs, American University"
     },
     {
      "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Where should NZ stand on global AI risk? 3 principles to guide a stronger strategy",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/where-should-nz-stand-on-global-ai-risk-3-principles-to-guide-a-stronger-strategy-292355",
+     "published": "2026-09-23T19:48:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alexander Gillespie, Professor of Law, University of Waikato"
+    },
+    {
      "title": "Danielle Wood’s blunt message to politicians: don’t undermine public trust by attacking institutions",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Francesca Kurghan, PhD Candidate, University of Waikato"
-    },
-    {
-     "title": "New rules finally put a ceiling on money in politics – but the cap is double what it should be",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/new-rules-finally-put-a-ceiling-on-money-in-politics-but-the-cap-is-double-what-it-should-be-292452",
-     "published": "2026-09-22T20:16:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kate Griffiths, Democracy Deputy Program Director, Grattan Institute"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
-   "published": "2026-09-23 14:30 UTC"
+   "title": "Mosque attack highlights evolving extremism landscape that has brought Pakistan-Afghanistan ties to crisis point",
+   "published": "2026-09-23 19:19 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "¿Por qué los hispanos en Estados Unidos están perdiendo la fe en el sueño americano?",
-   "published": "2026-09-23 13:56 UTC"
+   "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
+   "published": "2026-09-23 14:30 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Where should NZ stand on global AI risk? 3 principles to guide a stronger strategy",
+   "published": "2026-09-23 19:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Danielle Wood’s blunt message to politicians: don’t undermine public trust by attacking institutions",
    "published": "2026-09-23 09:03 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
    "published": "2026-09-22 23:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "New rules finally put a ceiling on money in politics – but the cap is double what it should be",
-   "published": "2026-09-22 20:16 UTC"
   },
   {
    "region": "Oceania",
