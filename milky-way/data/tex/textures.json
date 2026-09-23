@@ -1,20 +1,5 @@
 {
  "bodies": {
-  "charon": {
-   "file": "charon.jpg",
-   "fill_value": 115,
-   "grayscale": true,
-   "height": 512,
-   "kind": "visible",
-   "lat_type": "Planetographic",
-   "lon_evidence": "ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0",
-   "lon_left_deg": -180.0,
-   "nodata_fill": "flat DN 115 (mean of the imaged pixels) where New Horizons saw nothing (mostly south of ~30 S): not imaged, not terrain",
-   "nodata_fraction": 0.33896,
-   "note": "New Horizons LORRI/MVIC global mosaic, 2017 (NASA/JHUAPL/SwRI/LPI, USGS); the south was in darkness",
-   "source_id": "usgs-charon-new-horizons-2017",
-   "width": 1024
-  },
   "earth": {
    "file": "earth.jpg",
    "grayscale": false,
@@ -349,5 +334,5 @@
  },
  "convention": "Equirectangular; row 0 = +90 deg latitude; longitude east-positive and increasing to the right; column x covers longitudes lon_left_deg + 360 x / width .. + 360 (x + 1) / width.",
  "resampling": "USGS GeoTIFFs: exact area average of the source pixels whose centres fall in each output pixel, nodata (0) excluded. Stellarium and Cassini maps: exact 2x2 (Moon, Jupiter) or 8x8 (Sun, in linear light) box average. City lights: PIL BOX filter 2700 -> 2048. Blue Marble: shipped byte for byte. JPEG quality 85 (Pillow 11.3.0).",
- "total_bytes": 1748691
+ "total_bytes": 1678374
 }

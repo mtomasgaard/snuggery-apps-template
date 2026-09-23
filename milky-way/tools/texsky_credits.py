@@ -231,8 +231,7 @@ def write():
     })
     for k, title, extra in (
             ('pluto', 'Pluto: New Horizons LORRI/MVIC global mosaic 300 m (July 2017)',
-             'Its label puts the map\'s centre at 180 E (0..360); Sputnik Planitia checked at 175 E, 20 N. '),
-            ('charon', 'Charon: New Horizons LORRI/MVIC global mosaic 300 m (July 2017)', '')):
+             'Its label puts the map\'s centre at 180 E (0..360); Sputnik Planitia checked at 175 E, 20 N. '),):
         f, q = fg(f'{k}_fgdc')
         blocks.append({
             'id': f'usgs-{k}-new-horizons-2017', 'title': title,

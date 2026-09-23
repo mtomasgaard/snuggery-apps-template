@@ -11,7 +11,7 @@ What the app relies on, measured on the shipped files:
     Olympus Mons found by its scarp ring near 226.2 E / 18.65 N, Syrtis Major dark and Hellas bright;
     Tycho bright at 348.8 E / -43.3, Mare Humorum dark; Maxwell Montes and Beta Regio bright in the
     radar; Sputnik Planitia bright near 175 E / +20 with the dark equatorial belt west of it;
-    Charon's dark north pole; Earth's land and sea around Greenwich and Africa; city lights on the
+    Earth's land and sea around Greenwich and Africa; city lights on the
     right cities and the night map registered to the Blue Marble; the Great Red Spot at ~22 S;
   * the colours (Karkoschka / TSIS-1) against the illuminant-E computation and the research values;
   * the sky: the stretch inverts to the recomputed Gaia densities, the duplicated patch is gone, and
@@ -45,7 +45,7 @@ S = json.load(open(os.path.join(SKY, 'sky.json'), encoding='utf-8'))
 
 # ------------------------------------------------------------------ files, fields, budgets
 print('textures: files and fields')
-need = ['sun', 'mercury', 'venus', 'earth', 'earth_night', 'moon', 'mars', 'jupiter', 'pluto', 'charon']  # + optional moons
+need = ['sun', 'mercury', 'venus', 'earth', 'earth_night', 'moon', 'mars', 'jupiter', 'pluto']  # + optional moons
 check(all(k in J['bodies'] for k in need), f'bodies present: {sorted(J["bodies"])}')
 imgs = {}
 total = 0
@@ -170,7 +170,7 @@ def proj_check(k, tif_key):
               f'{max(diffs["as shipped"]):.1f}); if mirrored {med["mirrored"]:.1f}, if shifted 180 deg {med["shifted 180"]:.1f}')
 
 
-for k in ('mercury', 'venus', 'mars', 'pluto', 'charon', 'io', 'ganymede', 'triton'):
+for k in ('mercury', 'venus', 'mars', 'pluto', 'io', 'ganymede', 'triton'):
     if k in J['bodies']:
         proj_check(k, f'{k}_tif')
 
@@ -230,11 +230,6 @@ sp_rot = lum(val('pluto', 355.0, 20.0, 2))
 check(sp > 140 and sp > sp_rot + 15 and west < east,
       f'Pluto: Sputnik Planitia (175 E, 20 N) {sp:.0f}, 180 deg away {sp_rot:.0f}; equatorial belt 5-15 S: '
       f'90-150 E (west of Sputnik, Cthulhu) {west:.0f} < 210-270 E {east:.0f}')
-
-# Charon: the dark north polar spot (Mordor Macula) against mid-latitudes
-npole = float(imgs['charon'][:pix('charon', 0, 78)[1]].mean())
-mid = float(imgs['charon'][pix('charon', 0, 45)[1]:pix('charon', 0, 15)[1]].mean())
-check(npole < 0.5 * mid, f'Charon: north of 78 N mean {npole:.0f} (dark polar spot) vs 15-45 N {mid:.0f}')
 
 # Optional moons. Io and Ganymede are labelled PositiveWest: features at west longitude W must sit
 # at east longitude -W.

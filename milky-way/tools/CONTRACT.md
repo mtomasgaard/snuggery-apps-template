@@ -347,14 +347,13 @@ row, three.js `flipY`). Grayscale maps are single-channel JPEGs (sample `.r`).
 | `mars` | mars.jpg | 2048×1024 RGB | −180 | albedo | Viking colour mosaic 925 m (USGS) |
 | `jupiter` | jupiter.jpg | 2048×1024 RGB | −180 (= 180 W) | visible | Cassini PIA07782, Dec 2000 (not flipped); 4.3 % (south of 82.3 S) flat in the source |
 | `pluto` | pluto.jpg | 1024×512 gray | **0** | visible | New Horizons 2017 (label: centre 180 E); 32 % not imaged |
-| `charon` | charon.jpg | 1024×512 gray | −180 | visible | New Horizons 2017; 34 % not imaged |
 | `io` | io.jpg | 512×256 gray | −180 | visible | Galileo + Voyager 1 km (label PositiveWest) |
 | `ganymede` | ganymede.jpg | 512×256 gray | **0** | visible | Voyager + Galileo 1 km (label PositiveWest, centre 180) |
 | `triton` | triton.jpg | 512×256 gray | −180 | visible | Voyager 2, orange filter only; 38 % (the north) not imaged |
 
 Europa (FGDC access constraint "None"), Callisto (no FGDC record) and Titan (access constraint
-"None") are left out: only moon maps whose USGS FGDC record says "public domain" ship. Charon has no
-body in the app yet (no ephemeris, section 1); its map is shipped because it was asked for.
+"None") are left out: only moon maps whose USGS FGDC record says "public domain" ship. Charon's
+New Horizons map is not shipped: Charon has no body in the app (no ephemeris, section 1).
 
 `textures.json`:
 ```
@@ -386,7 +385,7 @@ Colours (disk-averaged, measured): Karkoschka's 1995 ESO full-disk albedo spectr
 Bradford from the Sun's white to D65, IEC 61966-2-1 sRGB: Jupiter (193,193,178), Saturn
 (197,185,156), Uranus (157,195,202), Neptune (137,183,202), Titan (145,126,95). Sun (TSIS-1, no
 adaptation, largest channel 255): (255,244,241), xy (0.3216, 0.3321). No painted or artist
-textures, ever. 1,748,691 bytes of JPEG + ~12.9 KB JSON.
+textures, ever. 1,678,374 bytes of JPEG + ~12.3 KB JSON.
 
 ## 6. Sky backdrop — `sky/gaia-dr3-counts.jpg` + `sky/sky.json`   (step `31_sky.py`)
 

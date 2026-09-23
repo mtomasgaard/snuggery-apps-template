@@ -313,17 +313,6 @@
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Pluto_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif"
   },
   {
-   "accuracy": "Resolution is very uneven (sharp on the encounter hemisphere). The flat grey area is where New Horizons saw nothing (southern polar night); it is not terrain. Longitudes are in the frame the mosaic was made in (nh_targets_v001 / pck00010 per its ISIS label).",
-   "id": "usgs-charon-new-horizons-2017",
-   "licence": "No licence stated: FGDC access constraint \"None\", use constraint \"Please cite authors\"; a NASA mission product distributed by USGS. Credited as asked.",
-   "owner": "NASA, Johns Hopkins University Applied Physics Laboratory, Southwest Research Institute, Lunar and Planetary Institute (FGDC originators); distributed by USGS Astrogeology",
-   "retrieved": "2026-09-23",
-   "source": "USGS Astrogeology public bucket asc-pds-services, mosaic/Charon_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif (80,613,890 bytes, sha256 4a874809e0a33a85..., md5 fe2e0831fe603d62925a40ddbd537ddf = the USGS sidecar), with its ISIS label Charon_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.lbl",
-   "text": "Panchromatic LORRI and MVIC images of the 2015 flyby. Area-averaged (every source pixel counted once, nodata excluded) to 1024x512, east-positive, left edge -180 deg (ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0); JPEG quality 85. 33.9 % of the pixels had no data: flat DN 115 (mean of the imaged pixels) where New Horizons saw nothing (mostly south of ~30 S): not imaged, not terrain.",
-   "title": "Charon: New Horizons LORRI/MVIC global mosaic 300 m (July 2017)",
-   "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Charon_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif"
-  },
-  {
    "accuracy": "Labelled PositiveWest; drawn east-positive (Loki Patera checked at 308.8 W). Grayscale only; 512x256.",
    "id": "usgs-io-galileo-voyager-1km",
    "licence": "Public domain (USGS FGDC access constraint)",

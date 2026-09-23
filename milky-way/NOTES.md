@@ -116,7 +116,7 @@ the app, the credits file and this table all name the same sources.
 | `moons.bin`, `moons.json` | 21 major moons of Mars, Jupiter, Saturn, Uranus and Neptune, 1950–2050 | JPL MAR097, JUP310, SAT425, URA111, NEP081, fitted as precessing ellipses | 454 KB |
 | `physical.json` | radii, shapes, poles and rotation of 32 bodies; masses; Saturn's and Uranus's rings | NAIF `pck00011.tpc` and `gm_de440.tpc`; SAT425's ring radii; PDS Ring-Moon Systems Node | 23 KB |
 | `smallbodies.bin`, `.json` | 9,989 asteroids, trans-Neptunian objects and comets | JPL Small-Body Database (every body with H < 12, plus named near-Earth asteroids), MPC CometEls, JPL Horizons, ESA NEOCC | 693 KB |
-| `tex/` | global maps of the Sun, Mercury, Venus (radar), Earth by day and night, the Moon, Mars, Jupiter, Pluto, Io, Ganymede and Triton; disc colours of the gas giants | NASA, USGS Astrogeology, Cassini (JPL/SSI), SDO via Stellarium, LROC via Stellarium; Karkoschka (1998) spectra | 1.76 MB |
+| `tex/` | global maps of the Sun, Mercury, Venus (radar), Earth by day and night, the Moon, Mars, Jupiter, Pluto, Io, Ganymede and Triton; disc colours of the gas giants | NASA, USGS Astrogeology, Cassini (JPL/SSI), SDO via Stellarium, LROC via Stellarium; Karkoschka (1998) spectra | 1.69 MB |
 | `sky/` | the Milky Way as seen from the Sun, 2048 × 1024 | Gaia DR3 source counts (1.8 billion stars), STScI/MAST HATS | 109 KB |
 | `stars/deep.bin` | 209,156 stars between 20 and 500 pc, positions and absolute magnitudes | AT-HYG v3.2, whose distances are Gaia DR3's | 1.67 MB |
 | `stars/named.json` | 11,049 stars: all naked-eye stars, everything within 20 pc, every exoplanet host within 100 pc | AT-HYG v3.2 and HYG v4.1; IAU star names | 771 KB |
@@ -128,7 +128,7 @@ the app, the credits file and this table all name the same sources.
 | `galaxy/model.png` | the disc and bar glow: a *model* | McMillan 2017 discs + Portail 2017 bar (Sormani 2022 form), integrated with Agama | 17 KB |
 | `about.json` | the About panel | the credits fragments | 75 KB |
 
-Total 7.07 MiB. The ZIP is 6.3 MB, and 9.4 MB unpacked, of which three.js is 2.1 MB.
+Total 7.00 MiB. The ZIP is 6.2 MB, and 9.4 MB unpacked, of which three.js is 2.1 MB.
 
 **Licences.** Most of this is public domain (NASA, USGS, JPL/NAIF) or under open licences
 (CC0, MIT, BSD, CC BY-SA 4.0). Two groups carry conditions of their own:
@@ -165,8 +165,9 @@ JPL satellite ephemerides and a USGS Mars mosaic that decodes to several more. A
 build does not touch the network. `MILKYWAY_SEED=<folder>` hard-links earlier downloads instead of
 fetching them again, and `OUT_DATA=<folder>` writes somewhere other than `data/`.
 
-The build is deterministic. From a warm cache, a rebuild into a separate folder produces files
-byte-identical to the committed `data/`: JSON is written with fixed key order and rounding, PNGs
+The build is deterministic. From a warm cache a full rebuild takes about five minutes, and a
+rebuild into a separate folder (`OUT_DATA`) produced all 34 files byte-identical to the committed
+`data/`, with `CREDITS.txt` and the credits fragments unchanged: JSON is written with fixed key order and rounding, PNGs
 and JPEGs with fixed encoder settings, and nothing records the time of the build. The retrieval
 date in the credits is a constant in `tools/common.py`. One known limit: `galaxy.json` records
 the frame round-trip error, about 2 × 10⁻¹³ kpc. That value is floating-point noise, so a build on

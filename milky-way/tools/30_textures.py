@@ -383,7 +383,7 @@ def main():
         assert 'if (m_longitudeDirection == PositiveWest) m_centerLongitude *= -1.0;' in src
         assert 'if (m_longitudeDirection == PositiveWest) lonRadians *= -1.0;' in src
         assert 'double deltaLon = (lonRadians - m_centerLongitude);' in src
-    lic = {k: T.fgdc(k) for k in ('mercury_fgdc', 'venus_fgdc', 'mars_fgdc', 'pluto_fgdc', 'charon_fgdc',
+    lic = {k: T.fgdc(k) for k in ('mercury_fgdc', 'venus_fgdc', 'mars_fgdc', 'pluto_fgdc',
                                   'io_fgdc', 'ganymede_fgdc', 'triton_fgdc')}
     for k in ('io_fgdc', 'ganymede_fgdc', 'triton_fgdc'):       # optional moons: public domain only
         assert [v.lower() for v in lic[k]['accconst']] == ['public domain'], (k, lic[k]['accconst'])
@@ -479,16 +479,6 @@ def main():
         m['LatitudeType'], fill, frac,
         f'flat DN {fill} (mean of the imaged pixels) where New Horizons saw nothing (mostly south of ~30 S, '
         'in polar night during the 2015 flyby): not imaged, not terrain')
-
-    print('Charon')
-    img, fill, frac, m = usgs_map('charon', 1024, 512, -180.0, True)
-    assert m['LongitudeDirection'] == 'PositiveEast' and m['CenterLongitude'] == 0.0
-    put('charon', img, 1024, 512, -180.0, True, 'visible', 'usgs-charon-new-horizons-2017',
-        'New Horizons LORRI/MVIC global mosaic, 2017 (NASA/JHUAPL/SwRI/LPI, USGS); the south was in darkness',
-        'ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0',
-        m['LatitudeType'], fill, frac,
-        f'flat DN {fill} (mean of the imaged pixels) where New Horizons saw nothing (mostly south of ~30 S): '
-        'not imaged, not terrain')
 
     # ---- optional: grayscale maps of three major moons whose USGS FGDC record says "public domain"
     # (Europa: accconst None; Callisto: no FGDC record; Titan: accconst None — left out).

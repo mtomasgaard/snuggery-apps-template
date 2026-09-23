@@ -74,14 +74,6 @@ USGS_FILES = {
                   'ad926dbb6a0e9504d8312342c6d40a6e99cb3b7b7017f246b4216e4900b54451', 88),
     'pluto_fgdc': ('mosaic/FGDC_metadata/pluto_new_horizons_lorri_mvic_global_mosaic_300m.xml',
                    'dcfa8dfcc0c17ea63b9daa41677ea9646bc4038654f84376f6508812ddf47d92', 12062),
-    'charon_tif': ('mosaic/Charon_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif',
-                   '4a874809e0a33a851cd026b8e4647f5875ed15807e677d413812367509564b00', 80613890),
-    'charon_lbl': ('mosaic/Charon_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.lbl',
-                   '705a4ddf4ab096a6cc56a29d92d581826ab0d9eb7608e8762795c270c25972ea', 4779),
-    'charon_md5': ('mosaic/Charon_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif.md5',
-                   '8ab70a45170768cf1a5923d938f6a61715e2b751a867d1669e9a496fc0edca4b', 89),
-    'charon_fgdc': ('mosaic/FGDC_metadata/charon_new_horizons_lorri_mvic_global_mosaic_300m.xml',
-                    '8a9b9fccbd3b694ef3687fe1d9f02e5e6fe506f4b91d5b0c610002e9b2c78a4b', 11636),
     # Jupiter: Cassini ISS colour map PIA07782 as USGS holds it, plus the annotated original whose
     # axis labels state the longitude convention (the world file of the web copy does not).
     'jupiter_jpg': ('wms_basemaps/Jupiter/Jupiter/originals/jupiter_rgb_cyl_www.jpg',
@@ -123,7 +115,7 @@ USGS_FILES = {
 
 # md5 sidecars published by USGS next to each mosaic: (tif key, md5 key).
 MD5 = [('mercury_tif', 'mercury_md5'), ('venus_tif', 'venus_md5'), ('mars_tif', 'mars_md5'),
-       ('pluto_tif', 'pluto_md5'), ('charon_tif', 'charon_md5'), ('io_tif', 'io_md5'),
+       ('pluto_tif', 'pluto_md5'), ('io_tif', 'io_md5'),
        ('ganymede_tif', 'ganymede_md5'), ('triton_tif', 'triton_md5')]
 
 # key -> (repo, commit, path, sha256)
