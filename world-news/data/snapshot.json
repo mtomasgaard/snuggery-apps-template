@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T06:01:12Z",
+ "generatedAt": "2026-09-23T07:01:15Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/09/23/pskovs-medieval-religious-art-is-being-appropriated-by-the-russian-state-to-support-the-invasion-of-ukraine/",
+     "published": "2026-09-23T06:04:03Z",
+     "summary": "In Russia, authorities are leveraging traditional medieval religious art of the once-independent city-state of Pskov to justify its invasion of Ukraine.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
      "source": "Global Voices",
@@ -54,16 +64,6 @@
      "published": "2026-09-18T12:00:00Z",
      "summary": "Over 1,000 cases of sexual violence against civilians and prisoners of war (POWs) in Ukraine have been documented from the start of Russia’s invasion to the end of July this year.",
      "stale": false
-    },
-    {
-     "title": "Street art in Russia is dead and the country is full of monumental war art",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/09/17/street-art-in-russia-is-dead-and-the-country-is-full-of-monumental-war-art/",
-     "published": "2026-09-17T18:00:07Z",
-     "summary": "At first, artists who emigrated still dealt with themes of war and their departure from Russia. Later, these broadened to include loss of home, identity, displacement and loneliness.",
-     "stale": false,
-     "author": "Daria Dergacheva"
     },
     {
      "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Thai student movement forms ‘Hope Theatre,’ making the stage its new battleground",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/23/thai-student-movement-forms-hope-theatre-making-the-stage-its-new-battleground/",
+     "published": "2026-09-23T06:42:41Z",
+     "summary": "“If you’re a bad student in your school, maybe it’s because you’re rebellious. Maybe it’s because you’re brave enough to question your teacher or challenge their power.“",
+     "stale": false,
+     "author": "Prachatai"
+    },
+    {
      "title": "When a country goes underwater: Island States fight for their future",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -355,7 +365,7 @@
     {
      "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/09/22/technology-facilitated-trafficking-how-bangladeshi-migrants-become-victims-of-recruitment-in-cambodia/",
      "published": "2026-09-22T08:12:06Z",
      "summary": "Thousands of Bangladeshis travelled to Cambodia for promised jobs, only to encounter Technology-facilitated trafficking and cyber-scamming networks, with 98 percent reportedly failing to receive the work they were…",
@@ -410,16 +420,6 @@
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "What remains after Nepal’s Gen Z protests? Survivors reflect one year later",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/08/what-remains-after-nepals-gen-z-protests-survivors-reflect-one-year-later/",
-     "published": "2026-09-08T04:48:25Z",
-     "summary": "Nepal's Gen Z protesters, a year on, still carry the physical, emotional, and financial scars of that uprising, while questions about justice and accountability remain unresolved.",
-     "stale": false,
-     "author": "Susmita Aryal"
     }
    ]
   },
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Why do politicians often want to change the school curriculum? What happens when you do?",
+     "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-do-politicians-often-want-to-change-the-school-curriculum-what-happens-when-you-do-292609",
-     "published": "2026-09-23T05:27:36Z",
+     "link": "https://theconversation.com/what-we-learnt-on-the-first-day-of-victorias-big-build-royal-commission-292673",
+     "published": "2026-09-23T06:37:35Z",
      "summary": "",
      "stale": false,
-     "author": "Emily Ross, Senior Lecturer, School of Education, The University of Queensland"
+     "author": "William Partlett, Associate Professor of Public Law, The University of Melbourne"
     },
     {
-     "title": "Coyote vs. Acme follows a 100-year-old tradition of placing animated characters in our ‘real’ world",
+     "title": "Trump has banned more media and started his own TV channel. In the process, he risks further eroding American democracy",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/coyote-vs-acme-follows-a-100-year-old-tradition-of-placing-animated-characters-in-our-real-world-292122",
-     "published": "2026-09-23T05:12:19Z",
+     "link": "https://theconversation.com/trump-has-banned-more-media-and-started-his-own-tv-channel-in-the-process-he-risks-further-eroding-american-democracy-292461",
+     "published": "2026-09-23T06:00:53Z",
      "summary": "",
      "stale": false,
-     "author": "Ruth Richards, Lecturer (Media), RMIT University"
+     "author": "Matthew Ricketson, Professor of Communication, Deakin University"
     },
     {
-     "title": "The dingo debate is heating up. How we manage these animals will determine their future",
+     "title": "The Elevator is a smart commentary on corporate culture and a thrilling piece of theatre",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-dingo-debate-is-heating-up-how-we-manage-these-animals-will-determine-their-future-292216",
-     "published": "2026-09-23T05:09:21Z",
+     "link": "https://theconversation.com/the-elevator-is-a-smart-commentary-on-corporate-culture-and-a-thrilling-piece-of-theatre-292604",
+     "published": "2026-09-23T05:56:54Z",
      "summary": "",
      "stale": false,
-     "author": "Niraj Meisuria, PhD Candidate, Disease Ecology Lab and Global Ecology Lab, University of Sydney"
+     "author": "Charlotte Farrell, Lecturer, Theatre and Performance Studies, UNSW"
     },
     {
      "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
+   "published": "2026-09-23 06:04 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
    "published": "2026-09-21 13:15 UTC"
   },
@@ -699,12 +705,6 @@
    "source": "UN News",
    "title": "Sexual violence against civilians and POWs in Ukraine widespread and ‘abhorrent’",
    "published": "2026-09-18 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Street art in Russia is dead and the country is full of monumental war art",
-   "published": "2026-09-17 18:00 UTC"
   },
   {
    "region": "Europe",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Thai student movement forms ‘Hope Theatre,’ making the stage its new battleground",
+   "published": "2026-09-23 06:42 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "When a country goes underwater: Island States fight for their future",
    "published": "2026-09-22 12:00 UTC"
@@ -905,28 +911,22 @@
    "published": "2026-09-15 08:33 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "What remains after Nepal’s Gen Z protests? Survivors reflect one year later",
-   "published": "2026-09-08 04:48 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
+   "published": "2026-09-23 06:37 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why do politicians often want to change the school curriculum? What happens when you do?",
-   "published": "2026-09-23 05:27 UTC"
+   "title": "Trump has banned more media and started his own TV channel. In the process, he risks further eroding American democracy",
+   "published": "2026-09-23 06:00 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Coyote vs. Acme follows a 100-year-old tradition of placing animated characters in our ‘real’ world",
-   "published": "2026-09-23 05:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The dingo debate is heating up. How we manage these animals will determine their future",
-   "published": "2026-09-23 05:09 UTC"
+   "title": "The Elevator is a smart commentary on corporate culture and a thrilling piece of theatre",
+   "published": "2026-09-23 05:56 UTC"
   },
   {
    "region": "Oceania",
