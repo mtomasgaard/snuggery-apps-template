@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T20:01:10Z",
+ "generatedAt": "2026-09-23T21:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "At UN, Pezeshkian turns terrorism accusation back on Iran’s critics",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168412",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "President Masoud Pezeshkian opened his General Assembly address with a direct rebuttal to US President Donald Trump, who a day earlier had branded Iran the “number one sponsor of terror.”",
+     "stale": false
+    },
+    {
      "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -306,15 +315,6 @@
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
      "stale": false,
      "author": "Omid Memarian"
-    },
-    {
-     "title": "Yemen’s humanitarian crisis growing by the hour amid spike in displacement",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168364",
-     "published": "2026-09-18T12:00:00Z",
-     "summary": "People displaced by the renewed fighting in Yemen have described fleeing for their lives amid shelling and gunfire, aid agencies reported on Friday, while highlighting the dramatic increase in humanitarian needs in the…",
-     "stale": false
     },
     {
      "title": "As Casablanca’s music scene grows, its musicians struggle",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "Where should NZ stand on global AI risk? 3 principles to guide a stronger strategy",
+     "title": "How has evolution shaped men’s and women’s minds? A new book tells an outdated story",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-has-evolution-shaped-mens-and-womens-minds-a-new-book-tells-an-outdated-story-286759",
+     "published": "2026-09-23T20:11:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cordelia Fine, Professor, History & Philosophy of Science program, School of Historical & Philosophical Studies, The University of Melbourne"
+    },
+    {
+     "title": "Earth’s tides are shaped by more than the Moon. And they’re changing as the planet warms",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/where-should-nz-stand-on-global-ai-risk-3-principles-to-guide-a-stronger-strategy-292355",
-     "published": "2026-09-23T19:48:29Z",
+     "link": "https://theconversation.com/earths-tides-are-shaped-by-more-than-the-moon-and-theyre-changing-as-the-planet-warms-289805",
+     "published": "2026-09-23T20:11:22Z",
      "summary": "",
      "stale": false,
-     "author": "Alexander Gillespie, Professor of Law, University of Waikato"
+     "author": "Luwei Yang, Postdoctoral Research Fellow in Oceanography, Australian National University"
     },
     {
-     "title": "Danielle Wood’s blunt message to politicians: don’t undermine public trust by attacking institutions",
+     "title": "CMV infection can pass from mother to baby during pregnancy. Here’s how to prevent it",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/danielle-woods-blunt-message-to-politicians-dont-undermine-public-trust-by-attacking-institutions-292587",
-     "published": "2026-09-23T09:03:36Z",
+     "link": "https://theconversation.com/cmv-infection-can-pass-from-mother-to-baby-during-pregnancy-heres-how-to-prevent-it-285595",
+     "published": "2026-09-23T20:11:10Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Hayley Smithers-Sheedy, Adjunct Associate Professor, Faculty of Medicine and Health, The University of Sydney, Principal Research Fellow Cerebral Palsy…"
     },
     {
-     "title": "As Australia’s rock ‘n’ roll outlaw, Angry Anderson embodied the appeal and limitations of Oz Rock",
+     "title": "Personal locator beacons save lives. But they can’t make hiking safe",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/as-australias-rock-n-roll-outlaw-angry-anderson-embodied-the-appeal-and-limitations-of-oz-rock-290938",
-     "published": "2026-09-23T06:46:47Z",
+     "link": "https://theconversation.com/personal-locator-beacons-save-lives-but-they-cant-make-hiking-safe-292235",
+     "published": "2026-09-23T20:10:58Z",
      "summary": "",
      "stale": false,
-     "author": "Charlotte Markowitsch, PhD Candidate in Popular Music Studies, RMIT University"
+     "author": "Samantha Murdy, Associate Professor in Marketing, Australian Catholic University"
     },
     {
-     "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-we-learnt-on-the-first-day-of-victorias-big-build-royal-commission-292673",
-     "published": "2026-09-23T06:37:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "William Partlett, Associate Professor of Public Law, The University of Melbourne"
-    },
-    {
-     "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
+     "title": "The UN is facing a crisis of trust and possible bankruptcy. Its new leader will have an enormous challenge",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/fit-thin-curvy-and-toned-the-contradictory-body-ideals-young-nz-women-face-online-292230",
-     "published": "2026-09-22T23:26:07Z",
+     "link": "https://theconversation.com/the-un-is-facing-a-crisis-of-trust-and-possible-bankruptcy-its-new-leader-will-have-an-enormous-challenge-290728",
+     "published": "2026-09-23T20:10:33Z",
      "summary": "",
      "stale": false,
-     "author": "Francesca Kurghan, PhD Candidate, University of Waikato"
+     "author": "Erika Feller, Professorial Fellow, School of Government, The University of Melbourne"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "At UN, Pezeshkian turns terrorism accusation back on Iran’s critics",
+   "published": "2026-09-23 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
    "published": "2026-09-22 19:36 UTC"
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
    "published": "2026-09-19 08:01 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen’s humanitarian crisis growing by the hour amid spike in displacement",
-   "published": "2026-09-18 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Where should NZ stand on global AI risk? 3 principles to guide a stronger strategy",
-   "published": "2026-09-23 19:48 UTC"
+   "title": "How has evolution shaped men’s and women’s minds? A new book tells an outdated story",
+   "published": "2026-09-23 20:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Danielle Wood’s blunt message to politicians: don’t undermine public trust by attacking institutions",
-   "published": "2026-09-23 09:03 UTC"
+   "title": "Earth’s tides are shaped by more than the Moon. And they’re changing as the planet warms",
+   "published": "2026-09-23 20:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "As Australia’s rock ‘n’ roll outlaw, Angry Anderson embodied the appeal and limitations of Oz Rock",
-   "published": "2026-09-23 06:46 UTC"
+   "title": "CMV infection can pass from mother to baby during pregnancy. Here’s how to prevent it",
+   "published": "2026-09-23 20:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What we learnt on the first day of Victoria’s Big Build royal commission",
-   "published": "2026-09-23 06:37 UTC"
+   "title": "Personal locator beacons save lives. But they can’t make hiking safe",
+   "published": "2026-09-23 20:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
-   "published": "2026-09-22 23:26 UTC"
+   "title": "The UN is facing a crisis of trust and possible bankruptcy. Its new leader will have an enormous challenge",
+   "published": "2026-09-23 20:10 UTC"
   },
   {
    "region": "Oceania",
