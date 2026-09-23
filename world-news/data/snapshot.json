@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-22T23:01:09Z",
+ "generatedAt": "2026-09-23T00:01:13Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/fit-thin-curvy-and-toned-the-contradictory-body-ideals-young-nz-women-face-online-292230",
+     "published": "2026-09-22T23:26:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Francesca Kurghan, PhD Candidate, University of Waikato"
+    },
+    {
      "title": "Women’s work – and office fashion – has changed radically over the last 60 years. Cue couldn’t keep up",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Robbie Eres, Lecturer in Psychology, Deakin University"
-    },
-    {
-     "title": "Should you get a PSA test for prostate cancer?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/should-you-get-a-psa-test-for-prostate-cancer-290161",
-     "published": "2026-09-22T20:16:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jyotsna Batra, Professor of Genetics, Bond University"
     },
     {
      "title": "New rules finally put a ceiling on money in politics – but the cap is double what it should be",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Fit, thin, curvy and toned: the contradictory body ideals young NZ women face online",
+   "published": "2026-09-22 23:26 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Women’s work – and office fashion – has changed radically over the last 60 years. Cue couldn’t keep up",
    "published": "2026-09-22 20:17 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Year 12 students can feel lonely after graduating. Here’s how to stay connected",
    "published": "2026-09-22 20:17 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Should you get a PSA test for prostate cancer?",
-   "published": "2026-09-22 20:16 UTC"
   },
   {
    "region": "Oceania",
