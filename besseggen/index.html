@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<title>Besseggen</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="stage">
+  <canvas id="gl" aria-label="The Besseggen ridge in 3D. Drag to turn, pinch to zoom, two fingers to pan, tap the ground to move the marker."></canvas>
+  <div id="labels" aria-hidden="true"></div>
+
+  <header id="head">
+    <div class="title">
+      <h1>Besseggen</h1>
+      <p id="sub">Jotunheimen</p>
+    </div>
+    <div class="head-actions">
+      <button id="btn-layers" class="round" aria-controls="layers" aria-expanded="false" aria-label="Shading layers" title="Shading layers">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="M3 13l9 5 9-5"/></svg>
+      </button>
+      <button id="btn-about" class="round" aria-controls="about" aria-expanded="false" aria-label="About the data">i</button>
+    </div>
+  </header>
+
+  <p id="pickbar" hidden role="status"></p>
+
+  <div id="readout" class="readout" hidden aria-live="polite">
+    <span id="r-main">—</span>
+    <span id="r-sub" class="dim">—</span>
+  </div>
+
+  <div id="gauge">
+    <svg id="compass" viewBox="0 0 52 52" role="img" aria-label="Compass rose">
+      <circle class="ring" cx="26" cy="26" r="22"/>
+      <g id="needle">
+        <path class="n" d="M26 7 L31.5 26 L20.5 26 Z"/>
+        <path class="s" d="M26 45 L31.5 26 L20.5 26 Z"/>
+      </g>
+      <line id="gridn" class="gridn" x1="26" y1="26" x2="26" y2="6"/>
+      <text id="cn" x="26" y="4" dy="0.34em" text-anchor="middle">N</text>
+    </svg>
+    <div id="scale" role="img" aria-label="Scale bar">
+      <p id="scale-len">—</p>
+      <div id="scale-bar"></div>
+      <p id="scale-sub">vertical ×1.0</p>
+    </div>
+  </div>
+
+  <div id="debug" hidden>
+    <p id="dbg-body"></p>
+    <button id="dbg-bench" class="mini">Benchmark sweeps</button>
+  </div>
+
+  <div id="loading" role="status">
+    <p class="load-title">Besseggen</p>
+    <div class="track"><div id="load-bar"></div></div>
+    <p id="load-msg">Reading the mountain…</p>
+  </div>
+</main>
+
+<section id="sheet" class="s0" aria-label="Controls">
+  <button id="grip" type="button" aria-label="Show more controls" title="Show more controls">
+    <span class="bar" aria-hidden="true"></span>
+    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+  </button>
+
+  <!-- stop 0: the walk -->
+  <div class="prof-head">
+    <div class="stat"><b id="s-dist">—</b><span>distance</span></div>
+    <div class="stat"><b id="s-elev">—</b><span>elevation</span></div>
+    <div class="stat"><b id="s-grad">—</b><span>gradient</span></div>
+    <div class="stat"><b id="s-time">—</b><span id="s-time-label">time left</span></div>
+  </div>
+  <svg id="profile" preserveAspectRatio="none" role="slider" tabindex="0"
+       aria-label="Elevation profile. Drag to move the marker on the terrain." aria-valuemin="0" aria-valuenow="0"></svg>
+  <div class="prof-foot">
+    <p id="s-updown" class="dim">—</p>
+    <button id="btn-dir" class="chip">Gjendesheim → Memurubu</button>
+  </div>
+
+  <!-- stop 1: sun and camera -->
+  <section id="more1">
+    <div class="rowline">
+      <h2>Sun and shadow</h2>
+      <output id="sun-when">—</output>
+    </div>
+    <div class="row"><label for="date-d">Date</label>
+      <input id="date-d" type="range" min="1" max="365" step="1" value="165" aria-label="Day of year">
+      <output id="date-out">—</output>
+    </div>
+    <div class="row"><label for="time-t">Time</label>
+      <input id="time-t" type="range" min="0" max="1439" step="5" value="420" aria-label="Time of day">
+      <output id="time-out">—</output>
+    </div>
+    <p id="sun-events" class="dim small">—</p>
+    <div class="chips" id="cam-chips" role="group" aria-label="Camera"></div>
+    <div class="row"><label for="fp-t">Walk</label>
+      <input id="fp-t" type="range" min="0" max="1000" step="1" value="0" aria-label="Position along the route">
+      <output id="fp-out">—</output>
+    </div>
+    <div class="actions">
+      <button id="btn-fly" class="btn">Fly the route</button>
+      <button id="btn-orbit" class="btn">Free orbit</button>
+    </div>
+  </section>
+
+  <!-- stop 2: everything else -->
+  <section id="more2">
+    <div class="rowline"><h2>Terrain</h2></div>
+    <div class="row"><label for="exag">Vertical</label>
+      <input id="exag" type="range" min="1" max="3" step="0.1" value="1" aria-label="Vertical exaggeration">
+      <output id="exag-out">×1.0 (true)</output>
+    </div>
+
+    <div class="rowline"><h2>Tools</h2></div>
+    <div class="chips" id="tool-chips" role="group" aria-label="Tools"></div>
+    <div class="row"><label for="eye-h">Eye height</label>
+      <input id="eye-h" type="range" min="1.7" max="60" step="0.3" value="1.7" aria-label="Eye height above the ground for the visibility tools">
+      <output id="eye-out">1.7 m</output>
+    </div>
+    <div id="tool-body" class="tool-body" hidden></div>
+
+    <div class="rowline"><h2>Walking pace</h2></div>
+    <div class="row note"><label for="pace-model">Model</label>
+      <select id="pace-model" class="pick">
+        <option value="tobler">Tobler</option>
+        <option value="naismith">Naismith + Langmuir</option>
+      </select>
+      <output id="pace-out">—</output>
+    </div>
+    <div class="row"><label for="pace-fit">Pace</label>
+      <input id="pace-fit" type="range" min="0.7" max="1.6" step="0.05" value="1" aria-label="Pace factor">
+      <output id="fit-out">×1.00</output>
+    </div>
+    <p id="pace-note" class="dim small"></p>
+
+    <div class="rowline"><h2>Saved viewpoints</h2></div>
+    <div class="chips" id="vp-chips" role="group" aria-label="Saved viewpoints"></div>
+    <div class="actions">
+      <button id="btn-save-vp" class="btn">Save this view</button>
+      <button id="btn-clear-vp" class="btn">Clear mine</button>
+    </div>
+
+    <div class="rowline"><h2>Display</h2></div>
+    <div class="toggles">
+      <label><input id="t-debug" type="checkbox"> Debug readout</label>
+      <label><input id="t-labels" type="checkbox" checked> Place names</label>
+    </div>
+    <p id="notices" class="notice" hidden></p>
+  </section>
+</section>
+
+<aside id="layers" class="sheet-right" hidden aria-label="Shading layers">
+  <div class="sheet-head">
+    <h2>Layers</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <div id="layer-rows" class="layer-rows"></div>
+  <p id="layer-note" class="dim small"></p>
+</aside>
+
+<aside id="about" class="sheet-right" hidden aria-label="About the data">
+  <div class="sheet-head">
+    <h2>About</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <div id="about-body" class="prose"></div>
+</aside>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

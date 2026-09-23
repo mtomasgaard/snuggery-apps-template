@@ -1,0 +1,84 @@
+Besseggen — credits and licences
+
+All four datasets are Norwegian public open data, downloaded without an account or a Norge
+digitalt login. Each licence below was read from a live Geonorge record on 2026-09-22; the exact
+records, statements and URLs are quoted in the pipeline's source notes.
+
+
+TERRAIN
+Nasjonal høydemodell, Digital terrengmodell DTM1 (1 m), © Kartverket.
+Open data — NLOD 2.0 (https://data.norge.no/nlod/no/2.0/) and Creative Commons BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+Retrieved 2026-09-22 from the hoyde-dtm-nhm-25833 WCS / NHM_DTM_25833 ImageServer.
+Capture projects covering this area: NDH Jotunheimen 4pkt 2017, NDH Jotunheimen 2pkt 2022,
+NDH Vågå-Lom-Skjåk 5pkt 2018, NDH Vågå-Lom-Skjåk 2pkt 2019, Jotunheimen isbre 2009.
+Adaptations: subset to two boxes in EPSG:25833; the detailed box fetched as a single 2 m grid and
+decimated locally with a separable [1,2,1]/4 binomial low-pass to 4, 8, 16, 32 and 64 m; the
+64 m horizon ring reconciled with the detailed box by a difference ramped to zero over 512 m;
+heights rounded to decimetres and quantised to 16 bits per 64 x 64 cell tile. The adapted heights
+in data/terrain-L*.bin are shared under the same licence.
+
+TRAILS
+Turrutebasen (Tur- og friluftsruter), © Kartverket.
+Open data — no conditions apply to access and use
+(http://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/noConditionsApply).
+Retrieved 2026-09-22 from the wfs.turogfriluftsruter WFS; feature versions to 2026-09-02.
+Kartverket's own note on quality, which applies to the route drawn here: "Åpne data.
+Datafangsten baserer seg stort sett på innmeldinger fra lag, foreninger og privatpersoner …
+Kvaliteten på turrutene avhenger av de målemetodene eller registreringsmetodene som er brukt for
+den enkelte turrute."
+Adaptations: the Besseggen walk assembled as the shortest marked foot path from Gjendesheim to
+Memurubu across the route graph, resampled every 25 m, heights sampled from the terrain above and
+smoothed with a three-sample box; the four named connecting routes clipped to the detailed box.
+
+LAKES, RIVERS AND GLACIERS
+N50 Kartdata, © Kartverket, Creative Commons BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+Kommunes 3434 Lom and 3435 Vågå, downloaded 2026-09-22 through the Geonorge download API;
+dataset updated 2026-09-19.
+Adaptations: Innsjø and InnsjøRegulert rejoined across the kommune border on their lake number,
+ElvBekk, Elv and SnøIsbre taken as they are; everything simplified to a 5 m tolerance and clipped
+to the detailed box. Lake and glacier names joined from SSR, which is where the names live.
+
+PLACE NAMES
+Sentralt stedsnavnregister (SSR), © Kartverket, Creative Commons BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+Retrieved 2026-09-22 from ws.geonorge.no/stedsnavn/v1.
+Adaptations: names inside the detailed box only; elevations sampled from the terrain, because SSR
+carries none; SSR's navneobjekttype mapped to a small display vocabulary, with the original kept
+in each feature's kindNo so the mapping can be checked.
+Veslfjellet, the high point of the walk, is registered under the spelling Veslefjell (Fjell,
+stedsnummer 71966), 28 m from the point the trail crosses. The app shows the common spelling and
+credits the register's own; the marker sits on the trail, not on the register's point.
+
+NOT USED
+Kartverket's topographic raster map tiles. Nothing in the licence records read on 2026-09-22 says
+in terms that the tiles may be pre-cached for offline use, so they were left out rather than
+shipped on a guess. The hillshade, slope shading, elevation banding and contours are all generated
+from the elevation data instead.
+DTM10, because DTM1 covers the whole area and using the coarser model would have been a silent
+downgrade. The wcs.hoyde-dtm_somlos service, because it is Norge digitalt begrenset, not open.
+
+
+RENDERING
+three.js r186, MIT licence (vendor/three-LICENSE.txt). The copy in vendor/ is byte for byte the
+one vendored in the Anatomy mini-app in this repository; nothing in it reaches the network.
+vendor/RoomEnvironment.js came with that copy and is not imported by this app.
+
+FONTS
+Atkinson Hyperlegible and Newsreader, both under the SIL Open Font Licence 1.1. The full licence
+text is bundled at fonts/OFL.txt, as OFL 1.1 clause 2 requires; its body is byte for byte the text
+served from https://openfontlicense.org/documents/OFL.txt on 2026-09-22.
+The copyright notices below are quoted verbatim from the fonts' own metadata (OpenType name ID 0),
+not paraphrased:
+"Copyright 2020 Braille Institute of America, Inc."
+    — atkinson-hyperlegible-latin-400-normal.woff2, atkinson-hyperlegible-latin-700-normal.woff2
+"Copyright 2020 The Newsreader Project Authors (http://github.com/productiontype/Newsreader)"
+    — newsreader-latin-400-italic.woff2, newsreader-latin-500-normal.woff2
+Neither family declares a Reserved Font Name in its metadata. The four .woff2 files are byte for
+byte the copies vendored in the Anatomy mini-app in this repository.
+
+
+This is a planning and orientation tool. It has no position fix, no compass and no live weather,
+and it is not a navigation aid. Besseggen is exposed and the weather turns fast — carry a map and
+compass and check conditions before you go.

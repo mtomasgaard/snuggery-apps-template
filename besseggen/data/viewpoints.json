@@ -1,0 +1,103 @@
+{
+ "note": "headingDeg is degrees clockwise from true north; pitchDeg is degrees above the horizon, so a negative value looks down. aboveGround true means eyeM is added to the terrain height at x, y; false means eyeM is an absolute elevation. The six entries marked \"anchor\" are also the points the fine levels of terrain are built around (manifest.corridor.anchors) — move one and it will be outside its own high-resolution patch.",
+ "viewpoints": [
+  {
+   "id": "from-the-boat",
+   "name": "From the boat on Gjende",
+   "x": 165500,
+   "y": 6833900,
+   "eyeM": 2.0,
+   "aboveGround": true,
+   "headingDeg": 48,
+   "pitchDeg": 21,
+   "fovDeg": 55,
+   "groundM": 984.4,
+   "anchor": true,
+   "looksAt": "besseggen"
+  },
+  {
+   "id": "from-the-col",
+   "name": "From Bandet",
+   "x": 165545,
+   "y": 6834977,
+   "eyeM": 1.7,
+   "aboveGround": true,
+   "headingDeg": 88,
+   "pitchDeg": 9,
+   "fovDeg": 55,
+   "groundM": 1391.0,
+   "anchor": true,
+   "looksAt": "high-point"
+  },
+  {
+   "id": "on-the-ridge",
+   "name": "On top of Veslfjellet",
+   "x": 167885,
+   "y": 6835038,
+   "eyeM": 1.7,
+   "aboveGround": true,
+   "headingDeg": 268,
+   "pitchDeg": -9,
+   "fovDeg": 65,
+   "groundM": 1740.0,
+   "anchor": true,
+   "looksAt": "bandet"
+  },
+  {
+   "id": "at-gjendesheim",
+   "name": "At Gjendesheim",
+   "x": 170941,
+   "y": 6833494,
+   "eyeM": 1.7,
+   "aboveGround": true,
+   "headingDeg": 274,
+   "pitchDeg": 0,
+   "fovDeg": 55,
+   "groundM": 998.1,
+   "anchor": true,
+   "looksAt": "boat"
+  },
+  {
+   "id": "at-memurubu",
+   "name": "At Memurubu",
+   "x": 161241,
+   "y": 6834048,
+   "eyeM": 1.7,
+   "aboveGround": true,
+   "headingDeg": 80,
+   "pitchDeg": 6,
+   "fovDeg": 55,
+   "groundM": 1010.9,
+   "anchor": true,
+   "looksAt": "besseggen"
+  },
+  {
+   "id": "over-bessvatnet",
+   "name": "Over Bessvatnet",
+   "x": 168392,
+   "y": 6836871,
+   "eyeM": 1900.0,
+   "aboveGround": false,
+   "headingDeg": 268,
+   "pitchDeg": 5,
+   "fovDeg": 50,
+   "groundM": 1373.0,
+   "anchor": true,
+   "looksAt": "besshoe"
+  },
+  {
+   "id": "overview",
+   "name": "Overview from the south",
+   "x": 166144,
+   "y": 6827392,
+   "eyeM": 5200.0,
+   "aboveGround": false,
+   "headingDeg": 0,
+   "pitchDeg": -22,
+   "fovDeg": 50,
+   "groundM": 1399.4,
+   "anchor": false,
+   "looksAt": "the whole model"
+  }
+ ]
+}

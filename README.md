@@ -19,7 +19,7 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Ten complete apps. All are examples — none holds anybody's real data. Copy
+Eleven complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
 **Five of them cost you nothing to run.** Hello Live, World News, Power Hours,
@@ -30,8 +30,8 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both ship as static
-examples with made-up data. **Anatomy** and **Norne Reservoir** are the two big
-ones: a human body and an oil field, each in 3D, 21 and 15 MB as ZIPs. They need
+examples with made-up data. **Anatomy**, **Norne Reservoir** and **Besseggen** are the big
+ones: a human body, an oil field and a mountain ridge, each in 3D, 21, 15 and 17 MB as ZIPs. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
 pack precisely because of that size — install either the same way as any app on this page:
 three taps, just below.
@@ -58,6 +58,7 @@ back to this page.
 | **Global Wind** | Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer — on a map you pan and zoom, or a globe you turn — with a five-day time player, a moving night side and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | [`global-wind/PROMPT.md`](global-wind/PROMPT.md) |
 | **Global Weather** | Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, and a tap anywhere giving all five numbers at that point. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here twice a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | [`global-weather/PROMPT.md`](global-weather/PROMPT.md) |
 | **Anatomy** | A full human body in 3D: 934 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, nerves, brain, cartilage, bone — that you peel, fade, isolate, search and explode. Three.js is vendored; nothing is fetched. **Static**, 30 MB unpacked. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | [`anatomy/NOTES.md`](anatomy/NOTES.md) |
+| **Besseggen** | The Besseggen ridge in Jotunheimen in 3D, from Kartverket's 1 m elevation data: the marked trail from Gjendesheim over Veslfjellet to Memurubu draped on the terrain with a walking-time profile, real sun position and cast shadows for any date and hour, viewsheds and lines of sight with the visible peaks named, saved viewpoints and a fly-through. A planning tool, not a navigation aid — it has no position fix. **Static**, 27 MB unpacked. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | [`besseggen/NOTES.md`](besseggen/NOTES.md) |
 | **Norne Reservoir** | The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked. | nothing | [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md) |
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
@@ -69,6 +70,7 @@ back to this page.
 ![Global Weather](global-weather/screenshots/app.png)
 ![Anatomy](anatomy/screenshots/app.png)
 ![Norne Reservoir](norne-reservoir/screenshots/app.png)
+![Besseggen](besseggen/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in
 `.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
@@ -347,6 +349,7 @@ terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-der
 [TILES.md](running-dashboard/TILES.md); the BodyParts3D geometry in Anatomy (CC BY-SA 2.1 JP, also
 CC BY 4.0 at source — [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and two
 SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL —
-[ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); and, in Global Wind and Global Weather,
+[ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
+(open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); and, in Global Wind and Global Weather,
 NOAA's forecast (public domain), Natural Earth coastlines (public domain) and GeoNames city labels
 (CC BY 4.0, attribution required — [LICENSES.md](global-wind/assets/LICENSES.md)).

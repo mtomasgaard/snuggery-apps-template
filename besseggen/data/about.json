@@ -1,0 +1,61 @@
+{
+ "boat": "Most people take the MS Gjende boat one way along the lake. The timetable changes every season and is deliberately not in this app — check the current one with the operator before you plan the day.",
+ "notNavigation": "This is a planning tool. It has no position fix, no compass and no live weather. Besseggen is exposed, the scramble is real, and the weather turns fast — carry a map and compass and check conditions before you go.",
+ "fixtureWarning": null,
+ "terrain": {
+  "name": "Nasjonal høydemodell DTM1",
+  "owner": "Kartverket",
+  "resolutionM": 1,
+  "modelResolutionM": 2,
+  "licence": "Open data — NLOD 2.0 / CC BY 4.0",
+  "retrieved": "2026-09-22",
+  "projects": [
+   "NDH Jotunheimen 4pkt 2017",
+   "NDH Jotunheimen 2pkt 2022",
+   "NDH Vågå-Lom-Skjåk 5pkt 2018",
+   "NDH Vågå-Lom-Skjåk 2pkt 2019",
+   "Jotunheimen isbre 2009"
+  ],
+  "accuracy": "The source is a 1 m lidar terrain model. This app holds it resampled to 2 m along the route, 4 m for 800 m either side, 8 m out to 4 km, 16 m across the rest of the detailed box and 64 m for the horizon ring. Heights carry the source's own error, which on open mountain is a few decimetres and on a cliff or under water is worse: lidar reads the water surface, so the ground under Gjende sits at the lake's own level.",
+  "elevationRangeM": [
+   953.4,
+   2363.3
+  ]
+ },
+ "trails": {
+  "name": "Turrutebasen (Tur- og friluftsruter)",
+  "owner": "Kartverket",
+  "licence": "Open data — no conditions apply to access and use",
+  "retrieved": "2026-09-22",
+  "sourceUpdated": "2026-09-02",
+  "accuracy": "Route geometry is generalised and largely contributed by clubs, associations and individuals, so quality varies by route. The Besseggen line is not labelled \"Besseggen\" in the source; it was assembled as the shortest marked path from Gjendesheim to Memurubu."
+ },
+ "route": {
+  "lengthKm": 13.68,
+  "pathLengthKm": 13.69,
+  "ascentM": 1083,
+  "descentM": 1072,
+  "highPointM": 1741,
+  "sampleStepM": 25.0,
+  "howMeasured": "The line is resampled every 25 m and its heights are read off the 2 m terrain, then smoothed with a three-sample box. Without that smoothing the same line gives 1154 m of ascent, and read at the source's own vertex spacing it gives 1196 m — a 1 m model counts boulders as climbing. The figure shown is the smoothed one."
+ },
+ "mapData": {
+  "name": "N50 Kartdata",
+  "owner": "Kartverket",
+  "licence": "CC BY 4.0",
+  "retrieved": "2026-09-22",
+  "note": "Lakes, rivers and glaciers, for kommunes 3434 Lom and 3435 Vågå. Gjende arrives cut at the kommune border and is rejoined here. N50 states a lake's height as a whole metre; the surface drawn in the app is the water level the lidar reads, floored at that integer and lifted a decimetre, and each lake carries both figures."
+ },
+ "placeNames": {
+  "name": "Sentralt stedsnavnregister (SSR)",
+  "owner": "Kartverket",
+  "licence": "CC BY 4.0",
+  "retrieved": "2026-09-22",
+  "note": "Heights are sampled from the terrain: SSR carries none."
+ },
+ "app": {
+  "crs": "EPSG:25833 (ETRS89 / UTM zone 33N)",
+  "built": "2026-09-22",
+  "offline": "Everything is bundled. The app makes no network requests of any kind and reads no device sensor."
+ }
+}

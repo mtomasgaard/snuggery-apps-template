@@ -1,0 +1,13 @@
+# The pipeline's Python dependencies. Python 3.12 or newer: /usr/bin/python3 on macOS 26 is 3.9
+# and too old for the rasterio and pyproj wheels.
+#
+#   python3.12 -m venv tools/venv
+#   tools/venv/bin/pip install -r tools/requirements.txt
+#
+# build_all.sh does this for you if no venv is present.
+numpy>=2.0
+rasterio>=1.4
+pyproj>=3.7
+shapely>=2.0
+pyogrio>=0.10
+requests>=2.32

@@ -1,0 +1,6 @@
+tools/venv/
+tools/.cache/
+tools/.work/
+tools/__pycache__/
+dist/
+.DS_Store

@@ -39,11 +39,19 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   shared under the same licence — see anatomy/CREDITS.txt. anatomy/vendor/ is
   three.js under the MIT licence (anatomy/vendor/three-LICENSE.txt); the fonts
   under anatomy/fonts/ are Atkinson Hyperlegible and Newsreader under the SIL
-  Open Font License 1.1.
+  Open Font License 1.1 (anatomy/fonts/OFL.txt).
 - The reservoir model under norne-reservoir/data/ is derived from the Norne
   benchmark case published through the Open Porous Media initiative, and is a
   derived database under the Open Database License (ODbL) 1.0 — see
   norne-reservoir/data/ATTRIBUTION.txt.
+- The terrain under besseggen/data/ is derived from Kartverket's Nasjonal
+  høydemodell (DTM1), © Kartverket, under NLOD 2.0 and CC BY 4.0; the trail from
+  Kartverket's Turrutebasen (open data, no conditions); the lakes, rivers and
+  glaciers from N50 Kartdata, © Kartverket, CC BY 4.0; the place names from the
+  Sentralt stedsnavnregister (SSR), © Kartverket, CC BY 4.0 — each with its
+  adaptations described in besseggen/CREDITS.txt. besseggen/vendor/ is three.js
+  under the MIT licence and besseggen/fonts/ are Atkinson Hyperlegible and
+  Newsreader under the SIL Open Font License 1.1 (besseggen/fonts/OFL.txt).
 - The wind and weather fields under global-wind/data/ and global-weather/data/
   are NOAA Global Forecast System output, a work of the United States government
   in the public domain. The coastlines in both apps' assets/world.json are

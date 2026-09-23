@@ -12,6 +12,8 @@ decimation (fast-simplification) to a per-layer triangle budget; positions quant
 The adapted geometry in data/geometry*.bin is shared under the same licence.
 
 Rendering: three.js r186, MIT licence (vendor/three-LICENSE.txt).
-Fonts: Atkinson Hyperlegible and Newsreader, SIL Open Font Licence 1.1.
+Fonts: Atkinson Hyperlegible, Copyright 2020 Braille Institute of America, Inc.; Newsreader,
+Copyright 2020 The Newsreader Project Authors (github.com/productiontype/Newsreader). Both under the
+SIL Open Font Licence 1.1, whose text is fonts/OFL.txt, as clause 2 of that licence requires.
 
 For learning and reference. Not for diagnosis or clinical use.
