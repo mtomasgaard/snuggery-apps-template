@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T22:01:17Z",
+ "generatedAt": "2026-09-23T23:01:07Z",
  "regions": [
   {
    "key": "europe",
@@ -8,21 +8,21 @@
    "stale": false,
    "items": [
     {
+     "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168416",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "Ukrainian President Volodymyr Zelenskyy on Wednesday called for intensified pressure on Russia to end its war against Ukraine, arguing that Moscow continues to incur massive losses while prolonging a conflict whose…",
+     "stale": false
+    },
+    {
      "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
      "source": "UN News",
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168410",
      "published": "2026-09-23T12:00:00Z",
      "summary": "Five years of war. Another winter closing in. Today, the Security Council once again debates a path to peace – though any resolution still runs up against the veto of Russia, one of its own permanent members, whose…",
-     "stale": false
-    },
-    {
-     "title": "United Kingdom announces action on disinformation and global AI standards",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168406",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "The United Kingdom will fight disinformation at home and abroad, and work to ensure global safety standards for artificial intelligence (AI), new Prime Minister Andy Burnham said on Monday evening in his first address…",
      "stale": false
     },
     {
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Rohingya refugees deserve a future beyond survival, not endless displacement",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168417",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "Nine years after the mass displacement of the Rohingya from Myanmar, their situation remains one of the world's most protracted and complex refugee crises, marked by years of persecution and uncertainty over the…",
+     "stale": false
+    },
+    {
      "title": "Thai student movement forms ‘Hope Theatre,’ making the stage its new battleground",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -391,15 +400,6 @@
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
      "stale": false,
      "author": "Omid Memarian"
-    },
-    {
-     "title": "Nepal floods: ‘Apocalyptic’ destruction signals wider climate threat across Himalayas",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168365",
-     "published": "2026-09-18T12:00:00Z",
-     "summary": "The catastrophic flooding that swept away entire villages in northern Nepal could occur again in the country or elsewhere in the Himalayas due to climate change.",
-     "stale": false
     },
     {
      "title": "Singapore’s ‘permit regime’ undermines the citizens’ right to protest",
@@ -673,13 +673,13 @@
   {
    "region": "Europe",
    "source": "UN News",
-   "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
+   "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
    "published": "2026-09-23 12:00 UTC"
   },
   {
    "region": "Europe",
    "source": "UN News",
-   "title": "United Kingdom announces action on disinformation and global AI standards",
+   "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
    "published": "2026-09-23 12:00 UTC"
   },
   {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Rohingya refugees deserve a future beyond survival, not endless displacement",
+   "published": "2026-09-23 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Thai student movement forms ‘Hope Theatre,’ making the stage its new battleground",
    "published": "2026-09-23 06:42 UTC"
@@ -891,12 +897,6 @@
    "source": "Global Voices",
    "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
    "published": "2026-09-19 08:01 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Nepal floods: ‘Apocalyptic’ destruction signals wider climate threat across Himalayas",
-   "published": "2026-09-18 12:00 UTC"
   },
   {
    "region": "Asia",
