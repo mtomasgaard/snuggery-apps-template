@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T12:01:14Z",
+ "generatedAt": "2026-09-23T13:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Russia-Ukraine war is accelerating the dangerous race toward fully autonomous drones",
+     "title": "Fiber is both diet fad and fixture for good health – a doctor explains why there is no one-size-fits-all way to increase your intake",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/russia-ukraine-war-is-accelerating-the-dangerous-race-toward-fully-autonomous-drones-290877",
-     "published": "2026-09-22T18:29:41Z",
+     "link": "https://theconversation.com/fiber-is-both-diet-fad-and-fixture-for-good-health-a-doctor-explains-why-there-is-no-one-size-fits-all-way-to-increase-your-intake-290023",
+     "published": "2026-09-23T12:45:06Z",
      "summary": "",
      "stale": false,
-     "author": "Amy McAuliffe, Visiting Distinguished Professor of the Practice, University of Notre Dame"
+     "author": "Jean Liew, Assistant Professor of Medicine, Boston University"
     },
     {
-     "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
+     "title": "Dementia caregiving can expose hidden family tensions – but early planning can ease the strain",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/lulas-un-address-points-to-two-starkly-different-visions-of-brazilian-nationalism-ahead-of-crucial-election-290470",
-     "published": "2026-09-22T15:24:10Z",
+     "link": "https://theconversation.com/dementia-caregiving-can-expose-hidden-family-tensions-but-early-planning-can-ease-the-strain-280415",
+     "published": "2026-09-23T12:44:55Z",
      "summary": "",
      "stale": false,
-     "author": "Andre Pagliarini, Assistant Professor of History and International Studies, Louisiana State University"
+     "author": "Sarah E. Patterson, Research Assistant Professor of Demography, University of Michigan"
     },
     {
      "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Russia-Ukraine war is accelerating the dangerous race toward fully autonomous drones",
-   "published": "2026-09-22 18:29 UTC"
+   "title": "Fiber is both diet fad and fixture for good health – a doctor explains why there is no one-size-fits-all way to increase your intake",
+   "published": "2026-09-23 12:45 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Lula’s UN address points to two starkly different visions of Brazilian nationalism ahead of crucial election",
-   "published": "2026-09-22 15:24 UTC"
+   "title": "Dementia caregiving can expose hidden family tensions – but early planning can ease the strain",
+   "published": "2026-09-23 12:44 UTC"
   },
   {
    "region": "Americas",
