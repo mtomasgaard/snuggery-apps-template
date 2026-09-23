@@ -23,7 +23,7 @@ const UI_COLOUR = {
   jupiter: '#dccaa6', saturn: '#e6d39c', uranus: '#a6dde4', neptune: '#8aa5f5', pluto: '#cbb9a6',
 };
 const KIND_COLOUR = {
-  mba: [0.62, 0.58, 0.52], hungaria: [0.62, 0.58, 0.52], hilda: [0.75, 0.62, 0.45], trojan: [0.55, 0.78, 0.55],
+  mba: [0.92, 0.74, 0.48], marscrosser: [0.95, 0.6, 0.45], trojan: [0.6, 0.85, 0.55],
   centaur: [0.85, 0.6, 0.85], tno: [0.55, 0.7, 0.95], neo: [1.0, 0.62, 0.35], comet: [0.55, 0.95, 1.0],
   interstellar: [1.0, 0.45, 0.55], dwarf: [1.0, 0.92, 0.75], other: [0.6, 0.6, 0.6],
 };
@@ -189,12 +189,12 @@ export class SolarSystem {
         const kind = small.kind(i);
         col.set(KIND_COLOUR[kind] || KIND_COLOUR.other, i * 3);
         const H = small.H ? small.H(i) : NaN;
-        size[i] = Number.isFinite(H) ? Math.max(1.6, Math.min(4.2, 4.6 - 0.24 * H)) : (kind === 'comet' ? 2.2 : 1.8);
+        size[i] = Number.isFinite(H) ? Math.max(2.4, Math.min(5, 5.4 - 0.25 * H)) : (kind === 'comet' ? 2.6 : 2.4);
         if (kind === 'dwarf') size[i] = 4.2;
       }
       g.setAttribute('acolor', new THREE.BufferAttribute(col, 3));
       g.setAttribute('asize', new THREE.BufferAttribute(size, 1));
-      this.smallPts = new THREE.Points(g, glowPointsMaterial({ opacity: 0.85 }));
+      this.smallPts = new THREE.Points(g, glowPointsMaterial({ opacity: 1.0, sharp: 0.3 }));
       this.smallPts.frustumCulled = false; this.smallPts.renderOrder = 3;
       this.root.add(this.smallPts);
       this._smallJd = NaN;

@@ -138,14 +138,7 @@ async function load() {
 // ---------------------------------------------------------------- objects: ids, positions, descriptions
 // Object ids: 'sun', 'earth', 'io' …; 'sb:<index>'; 'star:<row>'; 'gc:<i>', 'sat:<i>', 'stream:<i>',
 // 'arm:<i>', 'gal:sun', 'gal:centre'.
-const smallCache = { jd: NaN, buf: null };
-function smallPos(i, jd) {
-  if (!(smallCache.jd === jd)) {
-    smallCache.buf ||= new Float32Array(small.count * 3);
-    small.positionsAt(jd, smallCache.buf); smallCache.jd = jd;
-  }
-  return [smallCache.buf[i * 3], smallCache.buf[i * 3 + 1], smallCache.buf[i * 3 + 2]];
-}
+const smallPos = (i, jd) => Array.from(small.position(i, jd));
 function positionFn(id) {
   if (id === 'point') return rig.targetFn;
   if (solar.bodies.has(id)) return (jd) => solar.positionOf(id, jd, [0, 0, 0]) || solar.positionOf(solar.bodies.get(id).parent, jd, [0, 0, 0]);
@@ -393,10 +386,14 @@ function gatherLabels(jd, dSun) {
     const dx = b.key === 'sun' && b.px <= 10 ? 16 : 0;
     push(b.key, b.name, b.pos, pri, b.ui, b.kind === 'moon' ? 'minor' : '', b.px > 10 ? -(b.px + 14) : 0, dx);
   }
+  // Small bodies: dwarf planets and comets in the overview; the named near-Earth asteroids and the
+  // rest once the view is down to the inner system.
   if (L.small && small && solarPx > 40) {
-    for (const i of small.labelled || []) {
-      const p = smallPos(i, jd);
-      push(`sb:${i}`, small.name(i), p, small.kind(i) === 'dwarf' ? 62 : 35, '#cfd7e2', 'minor');
+    const inner = pose.dist < 4;
+    for (const i of small.labelled) {
+      const k = small.kind(i);
+      if (!(k === 'dwarf' || k === 'comet' || k === 'interstellar' || inner || `sb:${i}` === S.selected)) continue;
+      push(`sb:${i}`, small.name(i), smallPos(i, jd), k === 'dwarf' ? 62 : 34, '#cfd7e2', k === 'dwarf' ? 'minor' : 'faint');
     }
   }
   // Stars: the brightest as seen from here, more of them the farther out the camera is.
@@ -509,15 +506,15 @@ function facts(id) {
     const [kind, raw] = id.split(':'); const i = +raw;
     if (kind === 'sb') {
       const info = (small.info && small.info(i)) || {};
-      out.kind = small.kindLabel ? small.kindLabel(i) : small.kind(i);
+      out.kind = small.kindLabel(i);
       const p = smallPos(i, jd);
       add('From the Sun', fmtAU(vlen(p)));
       add('From the Earth', fmtAU(Math.hypot(p[0] - earth[0], p[1] - earth[1], p[2] - earth[2])));
-      const el = small.elements ? small.elements(i) : null;
-      if (el) {
-        if (el.e < 1) add('Orbit', `${sig(el.q / (1 - el.e))} AU across, e ${fmt(el.e, 3)}`); else add('Orbit', `open, e ${fmt(el.e, 3)}`);
-        if (el.e < 1) add('Period', fmtDays(2 * Math.PI * Math.sqrt((el.q / (1 - el.e)) ** 3) / phys.constants.k_gauss_au15_day));
-      }
+      const el = small.elements(i);
+      if (el.e < 1) {
+        add('Orbit', `${sig(el.q)}–${sig(el.a * (1 + el.e))} AU from the Sun`);
+        add('Period', fmtDays(el.period));
+      } else add('Orbit', `open (e ${fmt(el.e, 3)}): passes the Sun once`);
       if (Number.isFinite(info.diameter_km)) add('Diameter', `${sig(info.diameter_km)} km`);
       if (Number.isFinite(info.H)) add('Absolute magnitude', `H ${fmt(info.H, 1)}`);
       out.src = info.source || '';

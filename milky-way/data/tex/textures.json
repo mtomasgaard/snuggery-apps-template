@@ -43,6 +43,35 @@
    "source_id": "nasa-noaa-citylights-dmsp",
    "width": 2048
   },
+  "ganymede": {
+   "file": "ganymede.jpg",
+   "fill_value": 78.0,
+   "grayscale": true,
+   "height": 256,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveWest, CenterLongitude 180 W (= 180 E); ISIS x grows eastward, so the map runs 0..360 E left to right (360 W .. 0 W); checked against Galileo Regio in verify_textures_sky.py",
+   "lon_left_deg": 0.0,
+   "nodata_fill": "flat DN 78.0 (mean of the imaged pixels) at the unmapped poles",
+   "nodata_fraction": 0.0312,
+   "note": "Voyager and Galileo SSI global mosaic (NASA/JPL, USGS)",
+   "source_id": "usgs-ganymede-voyager-galileo-1km",
+   "width": 512
+  },
+  "io": {
+   "file": "io.jpg",
+   "grayscale": true,
+   "height": 256,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveWest, CenterLongitude 0 W; ISIS x grows eastward, so east longitude runs -180..180 left to right; checked against Loki Patera in verify_textures_sky.py",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "Galileo SSI and Voyager 1 global mosaic (NASA/JPL, USGS)",
+   "source_id": "usgs-io-galileo-voyager-1km",
+   "width": 512
+  },
   "jupiter": {
    "file": "jupiter.jpg",
    "grayscale": false,
@@ -127,6 +156,21 @@
    "note": "SDO HMI continuum (Stellarium map by R. Kabatsayev), coloured by the TSIS-1 spectrum",
    "source_id": "stellarium-sun-hmi",
    "width": 1024
+  },
+  "triton": {
+   "file": "triton.jpg",
+   "fill_value": 153.0,
+   "grayscale": true,
+   "height": 256,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "flat DN 153.0 (mean of the imaged pixels) where Voyager 2 saw nothing (the north, in winter darkness in 1989): not imaged, not terrain",
+   "nodata_fraction": 0.38352,
+   "note": "Voyager 2 mosaic, orange filter only (NASA/JPL, P. Schenk; USGS); the north was in darkness in 1989",
+   "source_id": "usgs-triton-voyager2-600m",
+   "width": 512
   },
   "venus": {
    "file": "venus.jpg",
@@ -300,5 +344,5 @@
  },
  "convention": "Equirectangular; row 0 = +90 deg latitude; longitude east-positive and increasing to the right; column x covers longitudes lon_left_deg + 360 x / width .. + 360 (x + 1) / width.",
  "resampling": "USGS GeoTIFFs: exact area average of the source pixels whose centres fall in each output pixel, nodata (0) excluded. Stellarium and Cassini maps: exact 2x2 (Moon, Jupiter) or 8x8 (Sun, in linear light) box average. City lights: PIL BOX filter 2700 -> 2048. Blue Marble: shipped byte for byte. JPEG quality 85 (Pillow 11.3.0).",
- "total_bytes": 1690402
+ "total_bytes": 1748691
 }

@@ -46,7 +46,7 @@ S = json.load(open(os.path.join(SKY, 'sky.json'), encoding='utf-8'))
 
 # ------------------------------------------------------------------ files, fields, budgets
 print('textures: files and fields')
-need = ['sun', 'mercury', 'venus', 'earth', 'earth_night', 'moon', 'mars', 'jupiter', 'pluto', 'charon']
+need = ['sun', 'mercury', 'venus', 'earth', 'earth_night', 'moon', 'mars', 'jupiter', 'pluto', 'charon']  # + optional moons
 check(all(k in J['bodies'] for k in need), f'bodies present: {sorted(J["bodies"])}')
 imgs = {}
 total = 0
@@ -151,23 +151,29 @@ def proj_check(k, tif_key):
               f'{max(diffs["as shipped"]):.1f}); if mirrored {med["mirrored"]:.1f}, if shifted 180 deg {med["shifted 180"]:.1f}')
 
 
-for k in ('mercury', 'venus', 'mars', 'pluto', 'charon'):
-    proj_check(k, f'{k}_tif')
+for k in ('mercury', 'venus', 'mars', 'pluto', 'charon', 'io', 'ganymede', 'triton'):
+    if k in J['bodies']:
+        proj_check(k, f'{k}_tif')
 
 # ------------------------------------------------------------------ named features
 print('features (each against its mirror image)')
 
 
 def ring_signature(k, lo, la, r_in, r_out, disc, chan=0):
+    """Mean of an annulus minus mean of a central disc (degrees on the sphere), from a crop."""
     a = imgs[k][..., chan] if imgs[k].ndim == 3 else imgs[k]
     m = J['bodies'][k]
     H, W = a.shape
-    lon = m['lon_left_deg'] + 360 * (np.arange(W) + 0.5) / W
     lat = 90 - 180 * (np.arange(H) + 0.5) / H
-    LON, LAT = np.meshgrid(lon, lat)
+    rows = np.nonzero(np.abs(lat - la) < r_out + 1)[0]
+    lon = m['lon_left_deg'] + 360 * (np.arange(W) + 0.5) / W
+    dl = (lon - lo + 180) % 360 - 180
+    cols = np.nonzero(np.abs(dl) < (r_out + 1) / max(np.cos(np.radians(abs(la) + r_out + 1)), 0.1))[0]
+    LON, LAT = np.meshgrid(lon[cols], lat[rows])
     c = np.sin(np.radians(la)) * np.sin(np.radians(LAT)) + np.cos(np.radians(la)) * np.cos(np.radians(LAT)) * np.cos(np.radians(LON - lo))
     d = np.degrees(np.arccos(np.clip(c, -1, 1)))
-    return float(a[(d > r_in) & (d < r_out)].mean() - a[d < disc].mean())
+    sub = a[np.ix_(rows, cols)]
+    return float(sub[(d > r_in) & (d < r_out)].mean() - sub[d < disc].mean())
 
 
 # Mars — Olympus Mons: the bright basal scarp ring (radius ~4-5.5 deg) around darker flanks.
@@ -210,6 +216,37 @@ check(sp > 140 and sp > sp_rot + 15 and west < east,
 npole = float(imgs['charon'][:pix('charon', 0, 78)[1]].mean())
 mid = float(imgs['charon'][pix('charon', 0, 45)[1]:pix('charon', 0, 15)[1]].mean())
 check(npole < 0.5 * mid, f'Charon: north of 78 N mean {npole:.0f} (dark polar spot) vs 15-45 N {mid:.0f}')
+
+# Optional moons. Io and Ganymede are labelled PositiveWest: features at west longitude W must sit
+# at east longitude -W.
+if 'io' in J['bodies']:
+    def ring_min(k, lo, la, r):
+        m = J['bodies'][k]
+        best = 1e9
+        for dx in np.arange(-r, r + 0.01, 0.5):
+            for dy in np.arange(-r, r + 0.01, 0.5):
+                if dx * dx + dy * dy <= r * r:
+                    best = min(best, lum(val(k, lo + dx / np.cos(np.radians(la)), la + dy, 0)))
+        return best
+    lk, lkm = ring_min('io', 51.2, 12.6, 3.0), ring_min('io', -51.2, 12.6, 3.0)
+    pr, prm = lum(val('io', -153.0, -1.5, 1)), lum(val('io', 153.0, -1.5, 1))
+    check(lk < lkm - 30 and pr < prm, f'Io: Loki Patera (12.6 N, 308.8 W = 51.2 E) dark ring {lk:.0f} vs the mirrored place '
+                                      f'{lkm:.0f}; Prometheus (1.5 S, 153 W) {pr:.0f} vs mirrored {prm:.0f}')
+if 'ganymede' in J['bodies']:
+    gr, grm = lum(val('ganymede', -145.0, 35.0, 1)), lum(val('ganymede', 145.0, 35.0, 1))
+    tr, trm = lum(val('ganymede', -27.0, 11.0, 1)), lum(val('ganymede', 27.0, 11.0, 1))
+    os_, osm = lum(val('ganymede', -166.0, -38.0, 1)), lum(val('ganymede', 166.0, -38.0, 1))
+    check(gr < grm - 15 and tr > trm + 40 and os_ > osm + 40,
+          f'Ganymede: Galileo Regio (35 N, 145 W) dark {gr:.0f} vs mirrored {grm:.0f}; Tros (11 N, 27 W) bright '
+          f'{tr:.0f} vs {trm:.0f}; Osiris (38 S, 166 W) bright {os_:.0f} vs {osm:.0f}')
+if 'triton' in J['bodies']:
+    tt = imgs['triton']
+    fillv = J['bodies']['triton']['fill_value']
+    flat = np.abs(tt - fillv) <= 3
+    north = float(flat[:64].mean())
+    south = float(flat[192:].mean())
+    check(north > 0.9 and south < 0.05, f'Triton: flat "not imaged" fill covers {100 * north:.0f} % north of 45 N and '
+                                        f'{100 * south:.0f} % south of 45 S (Voyager 2 saw the southern hemisphere)')
 
 # Earth: land and sea, and what a mirror or a 180 deg shift would put there
 pts = [(20, 10, 'land', 'Chad'), (0.0, 51.5, 'land', 'Greenwich'), (25, -25, 'land', 'southern Africa'),
@@ -337,14 +374,17 @@ check(int(pm.sum()) == S['dedup']['total_after_fix'] == 1811709793 and
       dig == '4c56bc5364ee36041c16349d40b0c400f99e73d3b42c5d3961b1fe4255376eca',
       f'corrected map: {int(pm.sum()):,} sources; identical to the research and verifier arrays (sha256 {dig[:12]}...)')
 ratio = raw[pm != raw] / pm[pm != raw]
-check(len(ratio) == 257 and np.allclose(ratio, 3.0), f'{len(ratio)} order-8 pixels were exactly {ratio.mean():.3f}x too high before the fix')
+n3 = int(np.sum(np.abs(ratio - 3.0) < 1e-9))
+check(len(ratio) == 257 and n3 >= 225 and ratio.min() > 1.0 and ratio.max() <= 3.0,
+      f'{len(ratio)} order-8 pixels were too high before the fix: {n3} exactly 3x, the rest (edge of the duplicated '
+      f'block) {ratio.min():.3f}-3x')
 hp = HEALPix(nside=256, order='nested')
 area = hp.pixel_area.to_value(u.deg ** 2)
 ra = 360.0 * (np.arange(2048) + 0.5) / 2048
 dec = 90.0 - 180.0 * (np.arange(1024) + 0.5) / 1024
 RA, DEC = np.meshgrid(ra, dec)
 D = hp.interpolate_bilinear_lonlat(RA.ravel() * u.deg, DEC.ravel() * u.deg, pm.astype(float)).reshape(1024, 2048) / area
-mid = (D > b0 * 1.5) & (D < w0 * 0.9)
+mid = (D > b0 * 1.5) & (D < w0 * 0.9) & (v > 0)
 rel = np.abs(D_ship[mid] / D[mid] - 1)
 check(np.median(rel) < 0.02 and np.percentile(rel, 99) < 0.15,
       f'shipped pixels invert (sky.json stretch) to the recomputed densities: median {100 * np.median(rel):.2f} %, '

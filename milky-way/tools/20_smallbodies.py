@@ -27,9 +27,14 @@ each is a verbatim copy of JPL / MPC / ESA output committed to a public reposito
         from JPL's OSIRIS-REx trajectory. The SBDB fixture for Bennu is a 2011 epoch.
     ESA NEOCC orbit files (adam_core fixtures): 162173 Ryugu and 65803 Didymos (no JPL fixture);
         their names come from Stellarium's and Celestia's catalogues, the files carry numbers only.
-    Stellarium's ssystem_minor.ini: which bodies are typed "dwarf planet" (Ceres, Pluto, Eris,
-        Haumea, Makemake — the five the IAU recognises). Gonggong, Quaoar, Orcus, Sedna and the
-        other large TNOs stay kind "tno" and are labelled by name.
+    Celestia's dwarfplanets.ssc: which bodies are kind "dwarf" — the nine it groups as dwarf planets
+        (Pluto, Ceres, Orcus, Haumea, Quaoar, Makemake, Gonggong, Eris, Sedna; Pluto is not here).
+        That is Celestia's grouping; Stellarium's ssystem_minor.ini types only Haumea, Eris and
+        Makemake as "dwarf planet" (and Ceres as "asteroid"). The file says so.
+
+Names: SBDB's full name, without the provisional designation for numbered asteroids that have a
+name ("1 Ceres", not "1 Ceres (A801 AA)"; labelled rows keep it in info.desig) — that saves 26 KB
+of the budget. Unnamed ones keep it: "32615 (2001 QU277)", "(2014 UU277)".
 
 Frames and constants: ecliptic J2000 elements are turned into ICRF unit vectors with ERFA's
 IAU 1976/1980 J2000 obliquity (obl80.c, 84381.448"), which is what JPL's own output states for
@@ -181,7 +186,7 @@ def phys_block(d):
             if p.get('ref'):
                 refs.append(f"{p['title']}: {p['ref']}")
     if refs:
-        out['ref'] = '; '.join(refs)
+        out['phys_ref'] = '; '.join(refs)
     return out
 
 
@@ -262,9 +267,9 @@ def model_positions(q, e, tp, P, Q, jd, k):
         y[hyp] = np.sqrt(a * qq * (1 + ee)) * np.sinh(F)
     if par.any():
         qq = q[par]
-        w = 1.5 * k * np.sqrt(1 / (2 * qq ** 3)) * dt[par]
+        w = 1.5 * k * np.sqrt(1 / (2 * qq ** 3)) * np.abs(dt[par])
         yy = np.cbrt(w + np.sqrt(w * w + 1))
-        s = yy - 1 / yy
+        s = (yy - 1 / yy) * np.where(dt[par] < 0, -1.0, 1.0)
         x[par] = qq * (1 - s * s)
         y[par] = 2 * qq * s
     return x[:, None] * np.asarray(P, np.float64) + y[:, None] * np.asarray(Q, np.float64)
@@ -282,6 +287,9 @@ def build():
     rows = []
     dropped = {}
 
+    def drop(reason, name):
+        dropped.setdefault(reason, []).append(name)
+
     def add(**r):
         r.setdefault('flags', 0)
         r.setdefault('info', {})
@@ -296,25 +304,29 @@ def build():
     ast = sbdb_rows('asteroids')
     report['sbdb_rows'] = len(ast)
     minor = stellarium_minor()
-    dwarf_numbers = sorted({s.get('minor_planet_number') for s in minor
-                            if s.get('type') == 'dwarf planet' and s.get('minor_planet_number')}, key=int)
+    dwarf_numbers = sorted({m.group(1) for m in re.finditer(r'^"[^"]*?:(\d+) [^":]+[^"]*" "Sol"',
+                                                             SB.text('celestia_dwarfs'), re.M)}, key=int)
     report['dwarf_numbers'] = dwarf_numbers
+    report['stellarium_dwarf_type'] = sorted(s['name'] for s in minor if s.get('type') == 'dwarf planet')
     class_counts = {}
     for r in ast:
         name = r['full_name'].strip()
         number, desig = ast_number(r['full_name']), ast_desig(r['full_name'])
         e, a, ma = SB.num(r['e']), SB.num(r['a']), SB.num(r['ma'])
         if number == '134340':
-            dropped['Pluto (drawn from DE430 instead)'] = name
+            drop('Pluto (drawn from DE430 instead)', name)
             report['pluto_sbdb'] = r
             continue
         if ma is None:
             assert e == 0.0, name
-            dropped['e = 0 placeholder orbit with no mean anomaly'] = name
+            drop('e = 0 placeholder orbit with no mean anomaly', name)
             continue
         if desig and desig in mpc_keys:
-            dropped['in the MPC comet list at a newer epoch (kept from there)'] = name
+            drop('in the MPC comet list at a newer epoch (kept from there)', name)
             continue
+        m = re.match(r'^(\d+) ([^(].*) \(([^()]+)\)$', name)
+        if m:                                   # numbered and named: "1 Ceres (A801 AA)" -> "1 Ceres"
+            name = f'{m.group(1)} {m.group(2)}'
         epoch = float(SB.field(r, 'epoch_mjd')) + 2400000.5
         tp = tp_from_mean_anomaly(epoch, ma, a, e, k)
         P, Q = elements_to_pq(SB.num(r['i']), SB.num(r['om']), SB.num(r['w']), rot)
@@ -343,6 +355,9 @@ def build():
         ob = d['object']
         name = ob['fullname'].strip()
         number, desig = ast_number(name), ast_desig(name) or ob['des']
+        m = re.match(r'^(\d+) ([^(].*) \(([^()]+)\)$', name)
+        if m:
+            name = f'{m.group(1)} {m.group(2)}'
         assert number not in known and desig not in known, name
         e, a, ma = float(el['e']), float(el['a']), float(el['ma'])
         epoch = float(o['epoch'])
@@ -371,15 +386,15 @@ def build():
     info.update(phys_block(bennu_d))
     Hb = next(float(p['value']) for p in bennu_d['phys_par'] if p['name'] == 'H')
     assert '101955' not in known
-    add(src='horizons', name=bennu_d['object']['fullname'], number='101955', desig='1999 RQ36', kind='neo',
+    add(src='horizons', name='101955 Bennu', number='101955', desig='1999 RQ36', kind='neo',
         q=qr, e=ec, tp=tp_hz, epoch=jd_hz, P=P, Q=Q, H=Hb, info=info,
         el=dict(q=qr, e=ec, i=inc, om=om, w=w, tp=tp_hz))
 
     # --- Ryugu and Didymos: ESA NEOCC orbit files; names from Stellarium / Celestia
     ryugu = next(s for s in minor if s.get('minor_planet_number') == '162173')
     didy = re.search(r'^"65803 (\w+):\1:([^"]+)" "Sol"', SB.text('celestia_asteroids'), re.M)
-    names = {'162173': (f"162173 {ryugu['name']} ({ryugu['iau_designation']})", ryugu['iau_designation']),
-             '65803': (f'65803 {didy.group(1)} ({didy.group(2)})', didy.group(2))}
+    names = {'162173': (f"162173 {ryugu['name']}", ryugu['iau_designation']),
+             '65803': (f'65803 {didy.group(1)}', didy.group(2))}
     for key in ('neocc_162173', 'neocc_65803'):
         txt = SB.text(key)
         assert "format  = 'OEF2.0'" in txt and 'refsys  = ECLM J2000' in txt
@@ -412,7 +427,7 @@ def build():
             epoch, flags = None, FLAG_NO_EPOCH
         P, Q = elements_to_pq(c['i'], c['Node'], c['Peri'], rot)
         kind = {'I': 'interstellar', 'A': 'other'}.get(c['Orbit_type'], 'comet')
-        info = {'ref': c['Ref']}
+        info = {'orbit_ref': c['Ref']}
         ckey = comet_key(c['Designation_and_name'])
         add(src='mpc', name=name, ckey=ckey, kind=kind, q=float(c['Perihelion_dist']), e=float(c['e']),
             tp=tpk, epoch=epoch, P=P, Q=Q, H=float(c['H']) if c.get('H') is not None else math.nan,
@@ -588,8 +603,9 @@ def main():
     stored = (q.astype(np.float32).astype(np.float64), e.astype(np.float32).astype(np.float64), tp,
               P.astype(np.float32).astype(np.float64), Q.astype(np.float32).astype(np.float64))
 
-    # Row indices per source, and epochs (sparse: only where a row differs from its source's).
-    sources, epochs = [], {}
+    # Row indices per source, and epochs: each source's most common epoch, and the rows that differ
+    # grouped by their epoch (JD TDB as the key). Rows without an epoch carry flag bit 1.
+    sources, by_epoch = [], {}
     for sid, label, credit in SOURCES:
         idx = [i for i, r in enumerate(rows) if r['src'] == sid]
         assert idx == list(range(idx[0], idx[-1] + 1)), sid
@@ -598,8 +614,12 @@ def main():
         sources.append({'id': sid, 'label': label, 'credit': credit, 'first': idx[0], 'count': len(idx),
                         'epoch_jd': common_epoch})
         for i in idx:
-            if rows[i]['epoch'] != common_epoch:
-                epochs[str(i)] = rows[i]['epoch']
+            ep = rows[i]['epoch']
+            if ep is None:
+                assert rows[i]['flags'] & FLAG_NO_EPOCH
+            elif ep != common_epoch:
+                by_epoch.setdefault(ep, []).append(i)
+    epochs = {repr(float(ep)): by_epoch[ep] for ep in sorted(by_epoch)}
 
     # Labelled rows.
     labelled = []
@@ -676,6 +696,13 @@ def main():
         'epoch_note': epoch_note,
         'accuracy': drift,
         'dropped': {k_: v for k_, v in sorted(report['dropped'].items())},
+        'dwarf_note': ('kind "dwarf" is the grouping of Celestia\'s dwarfplanets.ssc (Ceres, Orcus, '
+                       'Haumea, Quaoar, Makemake, Gonggong, Eris, Sedna here; Pluto comes from DE430). '
+                       'Stellarium\'s ssystem_minor.ini types only '
+                       + ', '.join(report['stellarium_dwarf_type']) + ' as "dwarf planet" and Ceres as '
+                       '"asteroid".'),
+        'names_note': ('SBDB full names; numbered asteroids that have a name are written without their '
+                       'provisional designation ("1 Ceres"); labelled rows keep it in info.desig.'),
         'selection': ('JPL SBDB asteroids and TNOs with H < 12 (a brightness-limited sample: the main '
                       'belt is sparse and near-Earth asteroids are absent apart from named ones), '
                       'named near-Earth asteroids, every comet in the MPC\'s CometEls list and six '
@@ -754,13 +781,15 @@ def write_credits(rows, C, drift, meta):
             'licence_quote': f'KStars README.md: "{gpl}" The data file itself carries no licence.',
             'retrieved': RETRIEVED,
             'adaptations': (f'{report["sbdb_rows"]:,} rows read; {s0["count"]:,} kept. Dropped: '
-                            + '; '.join(f'{v} ({k_})' for k_, v in sorted(report['dropped'].items()))
+                            + '; '.join(f'{", ".join(v)} ({k_})' for k_, v in sorted(report['dropped'].items()))
                             + '. Heliocentric ecliptic J2000 elements (a, e, i, node, peri, M at the epoch) '
                             'turned into perihelion distance, time of perihelion (from M and the mean motion '
                             'k/a^1.5) and two ICRF unit vectors; stored as float32 (time as float64). Kinds '
-                            'from SBDB\'s orbit class (MBA/IMB/OMB shown as main belt); Ceres, Eris, Haumea '
-                            'and Makemake as dwarf planets (Stellarium\'s typing, which matches the IAU\'s '
-                            f'five). {n_weak:,} orbits are flagged weak (e < 0.001, or orbit solution '
+                            'from SBDB\'s orbit class (MBA/IMB/OMB shown as main belt; SBDB has no Hungaria '
+                            'or Hilda group); the bodies Celestia\'s dwarfplanets.ssc groups as dwarf planets '
+                            '(Ceres, Orcus, Haumea, Quaoar, Makemake, Gonggong, Eris, Sedna) as kind dwarf. '
+                            'Names without the provisional designation for named numbered asteroids. '
+                            f'{n_weak:,} orbits are flagged weak (e < 0.001, or orbit solution '
                             'JPL 1/JPL 2 — a proxy, the snapshot has no arc length or condition code) and '
                             'kept. Diameters, albedos and rotation periods as given.'),
             'accuracy': ('Two-body propagation of osculating elements, epoch 2025-11-21 for 7,500 rows, '
@@ -867,21 +896,24 @@ def write_credits(rows, C, drift, meta):
         },
         {
             'id': 'planetarium-catalogues',
-            'title': 'Stellarium and Celestia catalogues (dwarf-planet typing, two names; accuracy checks)',
+            'title': 'Stellarium and Celestia catalogues (dwarf-planet grouping, two names; accuracy checks)',
             'owner': 'The Stellarium developers; the Celestia project (CelestiaContent contributors)',
-            'source': (f'Stellarium data/ssystem_minor.ini at commit {SB.STELLARIUM[1]} (which bodies are '
-                       'typed "dwarf planet"; the name of 162173 Ryugu) and data/asteroid_elements.json '
+            'source': (f'Stellarium data/ssystem_minor.ini at commit {SB.STELLARIUM[1]} (the name of 162173 '
+                       'Ryugu) and data/asteroid_elements.json '
                        '(JPL Horizons yearly osculating elements of Ceres, Pallas, Juno and Vesta, '
                        '1800-2100, generated by Stellarium\'s fetch_asteroid_elements.py — used only to '
-                       'measure the accuracy above, not shipped); CelestiaContent data/asteroids.ssc at '
-                       f'commit {SB.CELESTIA[1]} (the name of 65803 Didymos).'),
+                       'measure the accuracy above, not shipped); CelestiaContent data/dwarfplanets.ssc '
+                       '(which bodies are grouped as dwarf planets) and data/asteroids.ssc (the name of '
+                       f'65803 Didymos) at commit {SB.CELESTIA[1]}.'),
             'url': SB.url('stellarium_minor'),
             'licence': ('GPL-2.0-or-later (Stellarium COPYING: "' + stel_gpl + '", "or any later version" '
                         'in its source headers; Celestia asteroids.ssc: "' + celestia_spdx + '"). Only '
-                        'facts are taken (a classification and two names); no file is redistributed.'),
+                        'facts are taken (a grouping and two names); no file is redistributed.'),
             'licence_quote': f'"{stel_gpl}"; "{celestia_spdx}"',
             'retrieved': RETRIEVED,
-            'adaptations': 'None shipped beyond the kind of four rows and two names.',
+            'adaptations': ('Nothing shipped beyond the kind of eight rows and two names. Stellarium types only '
+                            + ', '.join(report['stellarium_dwarf_type']) + ' as "dwarf planet" and Ceres as '
+                            '"asteroid"; Celestia\'s grouping is the one used, and the app labels it.'),
             'accuracy': 'Horizons elements used as the reference for the drift figures in the JPL SBDB block.',
         },
     ]

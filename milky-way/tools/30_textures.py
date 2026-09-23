@@ -12,11 +12,15 @@ verifier) picked the products; the pins are in texsky_sources.py.
 Geometry. Every output is equirectangular with row 0 at +90 deg latitude and EAST-POSITIVE longitude
 increasing to the right; `lon_left_deg` is the longitude of the left edge of column 0. The
 longitude convention of each source is read from the product's own metadata, never assumed:
-  * USGS mosaics (Mercury, Venus, Mars, Pluto, Charon): the ISIS label shipped next to each GeoTIFF
-    (LongitudeDirection, CenterLongitude, UpperLeftCornerX/Y, PixelResolution, EquatorialRadius),
-    cross-checked against the GeoTIFF's own CRS (central_meridian) and geotransform. Pluto is the
-    odd one: its label says CenterLongitude = 180, MinimumLongitude 0, MaximumLongitude 360, so its
-    left edge is 0 deg E (the research report's "-180..180" was wrong; its verifier caught it).
+  * USGS mosaics (Mercury, Venus, Mars, Pluto, Charon; optional Io, Ganymede, Triton): the ISIS
+    label shipped next to each GeoTIFF (LongitudeDirection, CenterLongitude, UpperLeftCornerX/Y,
+    PixelResolution, EquatorialRadius), cross-checked against the GeoTIFF's own CRS
+    (central_meridian) and geotransform. Pluto: CenterLongitude = 180, MinimumLongitude 0,
+    MaximumLongitude 360, so its left edge is 0 deg E (the research report's "-180..180" was wrong;
+    its verifier caught it). Io and Ganymede are labelled PositiveWest; ISIS's own projection code
+    (SimpleCylindrical.cpp, pinned and checked here) negates both the centre longitude and the
+    longitude before forming x = R (lon - centre), so x still grows EASTWARD and no flip is needed —
+    only the centre longitude changes sign (Ganymede's map therefore runs 0..360 E).
   * Earth (Blue Marble NG, 2048 x 1024 in NASA WebWorldWind): the layer that uses this very file,
     BMNGOneImageLayer.js, places it on Sector.FULL_SPHERE, which Sector.js defines as
     (-90, 90, -180, 180): left edge -180.
@@ -115,23 +119,26 @@ def geo_grid(lbl, ds):
     t = ds.transform
     assert abs(t.a - res) < 1e-6 * res and abs(t.e + res) < 1e-6 * res, (t, res)
     assert abs(t.c - m['UpperLeftCornerX']) < 1e-3 * res and abs(t.f - m['UpperLeftCornerY']) < 1e-3 * res, t
-    cm = ds.crs.to_dict().get('lon_0', None)
     wkt = ds.crs.to_wkt()
     cm_wkt = float(wkt.split('"central_meridian",')[1].split(']')[0])
-    assert cm_wkt == m['CenterLongitude'], (cm_wkt, m['CenterLongitude'], cm)
+    sgn = {'PositiveEast': 1.0, 'PositiveWest': -1.0}[m['LongitudeDirection']]
+    assert (cm_wkt - sgn * m['CenterLongitude']) % 360.0 == 0.0, (cm_wkt, m['CenterLongitude'], m['LongitudeDirection'])
     scale = res / R * 180 / np.pi                      # degrees per pixel
     if 'Scale' in m:
         assert abs(1 / scale - m['Scale']) < 1e-4 * m['Scale'], (1 / scale, m['Scale'])
+    # ISIS (SimpleCylindrical.cpp / Equirectangular.cpp, pinned): for PositiveWest both the centre
+    # longitude and the longitude are negated before x = R (lon - centre) is formed, so x always
+    # grows eastward and east longitude = sign * CenterLongitude + x / R.
     sign = {'PositiveEast': 1.0, 'PositiveWest': -1.0}[m['LongitudeDirection']]
     x = m['UpperLeftCornerX'] + (np.arange(ds.width) + 0.5) * res
     y = m['UpperLeftCornerY'] - (np.arange(ds.height) + 0.5) * res
-    lon = m['CenterLongitude'] + sign * np.degrees(x / R)
+    lon = sign * m['CenterLongitude'] + np.degrees(x / R)
     lat = np.degrees(y / R)
-    left = m['CenterLongitude'] + sign * np.degrees(m['UpperLeftCornerX'] / R)
+    left = sign * m['CenterLongitude'] + np.degrees(m['UpperLeftCornerX'] / R)
     return lon, lat, m, left
 
 
-def bin_average(tif_key, lbl_key, W, H, lon_left, gray):
+def bin_average(tif_key, lbl_key, W, H, lon_left, gray, bands=None):
     """Area-average a USGS GeoTIFF into a W x H east-positive equirectangular grid starting at
     lon_left. Returns (float mean array, valid-count array, mapping info)."""
     import rasterio
@@ -139,7 +146,8 @@ def bin_average(tif_key, lbl_key, W, H, lon_left, gray):
     path, lbl = T.usgs(tif_key), T.usgs(lbl_key)
     with rasterio.open(path) as ds:
         lon, lat, m, left = geo_grid(lbl, ds)
-        nb = ds.count
+        bands = bands or list(range(1, ds.count + 1))
+        nb = len(bands)
         assert (nb == 1) == gray
         nodata = ds.nodata
         assert nodata in (0, 0.0), nodata
@@ -156,7 +164,7 @@ def bin_average(tif_key, lbl_key, W, H, lon_left, gray):
         step = 256
         for r0 in range(0, ds.height, step):
             h = min(step, ds.height - r0)
-            a = ds.read(window=Window(0, r0, ds.width, h))          # (bands, h, width) uint8
+            a = ds.read(bands, window=Window(0, r0, ds.width, h))   # (bands, h, width) uint8
             if not identity:
                 a = a[:, :, order]
             valid = (a != 0).any(axis=0) if nb > 1 else (a[0] != 0)
@@ -342,8 +350,8 @@ def earth_bytes():
     return open(p, 'rb').read()
 
 
-def usgs_map(body, W, H, lon_left, gray):
-    mean, N, info = bin_average(f'{body}_tif', f'{body}_lbl', W, H, lon_left, gray)
+def usgs_map(body, W, H, lon_left, gray, bands=None):
+    mean, N, info = bin_average(f'{body}_tif', f'{body}_lbl', W, H, lon_left, gray, bands)
     img, fill, frac = fill_nodata(mean, N)
     m = info['mapping']
     report[body] = {'source_pixels_per_output_pixel': round(float(N[N > 0].mean()), 1),
@@ -358,7 +366,15 @@ def usgs_map(body, W, H, lon_left, gray):
 def main():
     for tif, side in T.MD5:
         print(f'  md5 {tif}: {T.md5_check(tif, side)} (matches the USGS sidecar)')
-    lic = {k: T.fgdc(k) for k in ('mercury_fgdc', 'venus_fgdc', 'mars_fgdc', 'pluto_fgdc', 'charon_fgdc')}
+    for key in ('isis_simplecyl', 'isis_equirect'):
+        src = open(T.git(key), encoding='utf-8').read()
+        assert 'if (m_longitudeDirection == PositiveWest) m_centerLongitude *= -1.0;' in src
+        assert 'if (m_longitudeDirection == PositiveWest) lonRadians *= -1.0;' in src
+        assert 'double deltaLon = (lonRadians - m_centerLongitude);' in src
+    lic = {k: T.fgdc(k) for k in ('mercury_fgdc', 'venus_fgdc', 'mars_fgdc', 'pluto_fgdc', 'charon_fgdc',
+                                  'io_fgdc', 'ganymede_fgdc', 'triton_fgdc')}
+    for k in ('io_fgdc', 'ganymede_fgdc', 'triton_fgdc'):       # optional moons: public domain only
+        assert [v.lower() for v in lic[k]['accconst']] == ['public domain'], (k, lic[k]['accconst'])
     assert lic['mercury_fgdc']['accconst'] == ['Public domain'] and lic['mercury_fgdc']['edition'] == ['May 2013']
     assert lic['venus_fgdc']['accconst'] == ['public domain'] and lic['mars_fgdc']['accconst'] == ['public domain']
     assert lic['pluto_fgdc']['useconst'] == ['Please cite authors']
@@ -456,6 +472,34 @@ def main():
         m['LatitudeType'], fill, frac,
         f'flat DN {fill} (mean of the imaged pixels) where New Horizons saw nothing (mostly south of ~30 S): '
         'not imaged, not terrain')
+
+    # ---- optional: grayscale maps of three major moons whose USGS FGDC record says "public domain"
+    # (Europa: accconst None; Callisto: no FGDC record; Titan: accconst None — left out).
+    print('Io')
+    img, fill, frac, m = usgs_map('io', 512, 256, -180.0, True)
+    assert m['LongitudeDirection'] == 'PositiveWest' and m['CenterLongitude'] == 0.0
+    put('io', img, 512, 256, -180.0, True, 'visible', 'usgs-io-galileo-voyager-1km',
+        'Galileo SSI and Voyager 1 global mosaic (NASA/JPL, USGS)',
+        'ISIS label: PositiveWest, CenterLongitude 0 W; ISIS x grows eastward, so east longitude runs '
+        '-180..180 left to right; checked against Loki Patera in verify_textures_sky.py',
+        m['LatitudeType'], fill, frac, f'flat DN {fill} (mean) where the mosaic has no data')
+    print('Ganymede')
+    img, fill, frac, m = usgs_map('ganymede', 512, 256, 0.0, True)
+    assert m['LongitudeDirection'] == 'PositiveWest' and m['CenterLongitude'] == 180.0
+    put('ganymede', img, 512, 256, 0.0, True, 'visible', 'usgs-ganymede-voyager-galileo-1km',
+        'Voyager and Galileo SSI global mosaic (NASA/JPL, USGS)',
+        'ISIS label: PositiveWest, CenterLongitude 180 W (= 180 E); ISIS x grows eastward, so the map runs '
+        '0..360 E left to right (360 W .. 0 W); checked against Galileo Regio in verify_textures_sky.py',
+        m['LatitudeType'], fill, frac, f'flat DN {fill} (mean of the imaged pixels) at the unmapped poles')
+    print('Triton')
+    img, fill, frac, m = usgs_map('triton', 512, 256, -180.0, True, bands=[1])
+    assert m['LongitudeDirection'] == 'PositiveEast' and m['CenterLongitude'] == 0.0
+    put('triton', img, 512, 256, -180.0, True, 'visible', 'usgs-triton-voyager2-600m',
+        'Voyager 2 mosaic, orange filter only (NASA/JPL, P. Schenk; USGS); the north was in darkness in 1989',
+        'ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0',
+        m['LatitudeType'], fill, frac,
+        f'flat DN {fill} (mean of the imaged pixels) where Voyager 2 saw nothing (the north, in winter '
+        'darkness in 1989): not imaged, not terrain')
 
     total = sum(os.path.getsize(os.path.join(common.DATA, 'tex', b['file'])) for b in bodies.values())
     out = {

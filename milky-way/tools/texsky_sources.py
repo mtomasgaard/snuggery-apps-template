@@ -33,6 +33,7 @@ STARFIELD = ('https://github.com/OrbitalCommons/starfield', '5cbc6620e74bb2139fb
 CELESTIA = ('https://github.com/CelestiaProject/CelestiaContent', 'eab93932c85fa315f370477ee8c6b7e15f12c327')
 AWS_ODR = ('https://github.com/awslabs/open-data-registry', '00eb38722ad0a2d9ac0bd50d23f3ba0f11b10dfb')
 ATHYG = ('https://github.com/astronexus/ATHYG-Database', '650346e2bc57f664eb411bc5f44ffd94b8006af2')
+ISIS = ('https://github.com/DOI-USGS/ISIS3', '51b99bd4d3acf5d7c5a86f515444a4f3ab96f137')
 
 # key -> (url, cache name, sha256, bytes)
 USGS_FILES = {
@@ -89,13 +90,41 @@ USGS_FILES = {
                     '8e2c6fd8e058fd5613051e4355d7b473c07f1b6135867241af66450b287c8a8b', 54),
     'jupiter_annotated': ('wms_basemaps/Jupiter/Jupiter/originals/jupiter_from_cassini.tif',
                           'cff70454cfaec5f1a76c017372af7303032ac0ade5297291930b4ed95fef574a', 13097916),
+    # Optional moons (grayscale only; FGDC <accconst> "public domain"): Io and Ganymede are
+    # PositiveWest in their ISIS labels, Triton is a Voyager 2 colour composite of which only the
+    # orange-filter band is used.
+    'io_tif': ('mosaic/Io_GalileoSSI-Voyager_Global_Mosaic_1km.tif',
+               'cf65a0323aac9c4c9eb582aa7b7ce0d36be8e445316fa6dba49ab5647b63584c', 65546342),
+    'io_lbl': ('mosaic/Io_GalileoSSI-Voyager_Global_Mosaic_1km.lbl',
+               '3f03c958018a808de1bedde5f6304771cba05b35eddaa570d19af013dbc7b2fb', 1278),
+    'io_md5': ('mosaic/Io_GalileoSSI-Voyager_Global_Mosaic_1km.tif.md5',
+               'e9ff518ec034bb8b60efdee754d765294ccbf80b4761040f1d6a4da1e689566a', 78),
+    'io_fgdc': ('mosaic/FGDC_metadata/io_voyager_galileo_ssi_global_mosaic_1km.xml',
+                'c90e12f84f43d94a3460c4ea8f0de5e4ff4737e39716fcbefcaf9e500cb87183', 15834),
+    'ganymede_tif': ('mosaic/Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif',
+                     'c2c8d9506b8cf8f7a0a90d823d9052e91c8d9885cf7267fdce8de8216f4df888', 136844537),
+    'ganymede_lbl': ('mosaic/Ganymede_Voyager_GalileoSSI_global_mosaic_1km.lbl',
+                     '4a9a2acc66ab9e5586ba97e8f8fa828c216333eea8ac910c8bf68b0afb96a599', 1390),
+    'ganymede_md5': ('mosaic/Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif.md5',
+                     '40f85ba453d66778acd7247e32e36c54727114175c36702678a7ab7686083418', 84),
+    'ganymede_fgdc': ('mosaic/FGDC_metadata/ganymede_voyager_galileo_ssi_global_mosaic_1km.xml',
+                      '012e1911179fb787a3d5995b8fb8c5c2304bdef021b132e3ac3f3f3a424db4e8', 17768),
+    'triton_tif': ('mosaic/Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif',
+                   'f20ed332e85df469725629b81d3a73ad026897fe561ec59d6245d249a09507db', 299994887),
+    'triton_lbl': ('mosaic/Triton_Voyager2_ClrMosaic_GlobalFill_600m.lbl',
+                   '9e2af81852a87c1e7d09a44dd61c56edaad6305bbbfaf02ca10c411c3fb1a4b8', 1632),
+    'triton_md5': ('mosaic/Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif.md5',
+                   '08222adc5d173e595345e037932f1b9e873bea32b5c388bed7b99e69a8df53a1', 80),
+    'triton_fgdc': ('mosaic/FGDC_metadata/triton_voyager_2_global_color_mosaic_600m.xml',
+                    '03e7c6626b52c357a6422d2bb8c7c47dfae5afc3dca55920b541b0eabbfb8dc9', 12855),
     'usgs_mapfiles': ('wms_basemaps/mapfiles_back_Jan24_2023.zip',
                       '716c9355efe19b8a1a1ec309dc0e84a99303fcd338b62acd991d909d17f4b8b7', 1677556),
 }
 
 # md5 sidecars published by USGS next to each mosaic: (tif key, md5 key).
 MD5 = [('mercury_tif', 'mercury_md5'), ('venus_tif', 'venus_md5'), ('mars_tif', 'mars_md5'),
-       ('pluto_tif', 'pluto_md5'), ('charon_tif', 'charon_md5')]
+       ('pluto_tif', 'pluto_md5'), ('charon_tif', 'charon_md5'), ('io_tif', 'io_md5'),
+       ('ganymede_tif', 'ganymede_md5'), ('triton_tif', 'triton_md5')]
 
 # key -> (repo, commit, path, sha256)
 GIT_FILES = {
@@ -126,6 +155,13 @@ GIT_FILES = {
                               '5831138c0da9ddc5517d8bf9412e88dfe9fbf4b0a9866468d23ed1939a28df5d'),
     'aws_gaia_yaml': (AWS_ODR, 'datasets/mast-gaia-dr3.yaml',
                       '0b13c4494b6b98251ccbbd005ddd50d2ddbea3765900ee1c84c71526874107d2'),
+    # ISIS's own projection code: how a label's LongitudeDirection turns into image x (x grows
+    # eastward in both conventions; the centre longitude and the longitude are both negated for
+    # PositiveWest before x = R (lon - centre) is formed).
+    'isis_simplecyl': (ISIS, 'isis/src/base/objs/SimpleCylindrical/SimpleCylindrical.cpp',
+                       '3d4d2e304428b316637244218e4eaa1e724d815f0ec1a7ac9aedd7ee0f5c0a3e'),
+    'isis_equirect': (ISIS, 'isis/src/base/objs/Equirectangular/Equirectangular.cpp',
+                      'ae7f42ab565ff42cabd925050a9ceacfa83f7655e45fa20e16c558e8abe30be0'),
     'athyg_ack': (ATHYG, 'ACKNOWLEDGMENTS.md', '595d3f36dec582247b237448035e8aa4c9c8ab7b022912831338990846e84abb'),
 }
 

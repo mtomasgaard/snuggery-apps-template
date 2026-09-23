@@ -12,9 +12,9 @@ read through raw.githubusercontent.com at a pinned commit and checked against it
                               ESA NEOCC orbit files (test fixtures; MIT-licensed repository)
   Stellarium @ 450dbc0f   data/asteroid_elements.json   JPL Horizons yearly osculating elements of
                                                         Ceres, Pallas, Juno, Vesta (checks only)
-                          data/ssystem_minor.ini        which objects Stellarium types "dwarf
-                                                        planet"; the name of 162173 Ryugu
-  CelestiaContent @ eab93932  data/asteroids.ssc        the name of 65803 Didymos
+                          data/ssystem_minor.ini        the name of 162173 Ryugu
+  CelestiaContent @ eab93932  data/dwarfplanets.ssc     which bodies are grouped as dwarf planets
+                          data/asteroids.ssc            the name of 65803 Didymos
   Smithsonian/mpc-public @ af7756cf   the MPC's own statements on data use (quoted in credits)
 
 The constants come from the same pinned files the solar-system steps use (solar_sources.py):
@@ -105,6 +105,8 @@ FILES = {
     # Celestia
     'celestia_asteroids': (CELESTIA, 'data/asteroids.ssc', 'smallbodies/celestia-asteroids.ssc',
                            '2de46624c6fb91a011bf9f2826717f4dff2f0206045d241d721711d8f206d69e'),
+    'celestia_dwarfs': (CELESTIA, 'data/dwarfplanets.ssc', 'smallbodies/celestia-dwarfplanets.ssc',
+                        'bac1fc58d355867e2a1d87ce27fd80bb5b028679798b8e0131a079eca9b4e347'),
     # the MPC's statements on data use
     'mpc_faqs': (MPC_PUBLIC, 'docs-public/docs/mpc-ops-docs/faqs.md', 'smallbodies/mpc-faqs.md',
                  '3ab51cb9e03c96a1574dbf3f748ea8f52c614a0e6c4efc86deaf5cebbcce4c12'),
