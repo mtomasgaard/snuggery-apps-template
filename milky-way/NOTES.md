@@ -166,7 +166,7 @@ build does not touch the network. `MILKYWAY_SEED=<folder>` hard-links earlier do
 fetching them again, and `OUT_DATA=<folder>` writes somewhere other than `data/`.
 
 The build is deterministic. From a warm cache a full rebuild takes about five minutes, and a
-rebuild into a separate folder (`OUT_DATA`) produced all 34 files byte-identical to the committed
+rebuild into a separate folder (`OUT_DATA`) produced every file byte-identical to the committed
 `data/`, with `CREDITS.txt` and the credits fragments unchanged: JSON is written with fixed key order and rounding, PNGs
 and JPEGs with fixed encoder settings, and nothing records the time of the build. The retrieval
 date in the credits is a constant in `tools/common.py`. One known limit: `galaxy.json` records
