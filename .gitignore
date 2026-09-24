@@ -28,3 +28,7 @@ sessions.json
 # "commit only if it changed". The workflow prints it in its last step; the
 # builder reads it in the same job, so `pulledAt` still lands in the snapshot.
 running-dashboard/raw/pull.json
+
+# The browser copy scripts/build_web.py assembles for GitHub Pages. It is built
+# fresh by publish-web.yml on every run and never committed.
+_site/

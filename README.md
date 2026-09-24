@@ -174,6 +174,46 @@ lists everything that belongs to it.
 
 ---
 
+## Open them in a web browser
+
+Every app also runs straight in a browser: no phone, no Snuggery, nothing to install. It is the
+same app from the same folder, and it shows the data last published here. Open the
+[**index of every app**](https://mtomasgaard.github.io/snuggery-apps-template/), or one directly:
+
+| App | Open in a browser |
+| --- | --- |
+| Milky Way | [**Open Milky Way**](https://mtomasgaard.github.io/snuggery-apps-template/milky-way/) |
+| Hello Live | [**Open Hello Live**](https://mtomasgaard.github.io/snuggery-apps-template/hello-live/) |
+| Running Dashboard | [**Open Running Dashboard**](https://mtomasgaard.github.io/snuggery-apps-template/running-dashboard/) |
+| Finances | [**Open Finances**](https://mtomasgaard.github.io/snuggery-apps-template/finances/) |
+| World News | [**Open World News**](https://mtomasgaard.github.io/snuggery-apps-template/world-news/) |
+| Outdoor Window | [**Open Outdoor Window**](https://mtomasgaard.github.io/snuggery-apps-template/outdoor-window/) |
+| Power Hours | [**Open Power Hours**](https://mtomasgaard.github.io/snuggery-apps-template/power-hours/) |
+| Global Wind | [**Open Global Wind**](https://mtomasgaard.github.io/snuggery-apps-template/global-wind/) |
+| Global Weather | [**Open Global Weather**](https://mtomasgaard.github.io/snuggery-apps-template/global-weather/) |
+| Anatomy | [**Open Anatomy**](https://mtomasgaard.github.io/snuggery-apps-template/anatomy/) |
+| Besseggen | [**Open Besseggen**](https://mtomasgaard.github.io/snuggery-apps-template/besseggen/) |
+| Norne Reservoir | [**Open Norne Reservoir**](https://mtomasgaard.github.io/snuggery-apps-template/norne-reservoir/) |
+
+The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
+has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)
+is not in the browser copy.
+
+**This changes nothing about the ZIPs.** [`publish-web.yml`](.github/workflows/publish-web.yml)
+copies each app folder, leaving out what the ZIP leaves out (screenshots, build tools, `raw/`), and
+publishes it with GitHub Pages. It commits nothing and runs again after every refresh, so the web
+copy follows the data. Global Wind and Global Weather take their live forecast from their data
+branches.
+
+**In your own copy it is off until you turn it on:** Settings → Pages → *Build and deployment* →
+Source: **GitHub Actions**, then run *Publish apps to the web* once from the Actions tab. Your
+addresses are `https://<you>.github.io/<repo>/<app-folder>/`. **A Pages site is public even when the
+repository is private** (except on Enterprise plans), so leave it off in a copy that holds real
+data. To try it without publishing anything: `python3 scripts/build_web.py`, then
+`python3 -m http.server -d _site` and open `localhost:8000`.
+
+---
+
 ## How the data flows
 
 Every live app here is the same shape with a different pull, and the picture shows the fullest
@@ -235,7 +275,8 @@ That is the whole per-app cost. Nothing else changes, ever.
                          Dashboard); left out of the ZIP, and no ZIP is rebuilt for it
 scripts/                 one or more refresh scripts per app
 data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
-.github/workflows/       one refresh workflow per app, plus the ZIP builder
+.github/workflows/       one refresh workflow per app, plus the ZIP builder and the
+                         web publisher (publish-web.yml, with scripts/build_web.py)
 zips/<app-folder>.zip    built automatically; this is what you install from
 ```
 
