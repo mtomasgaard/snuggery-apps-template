@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T14:01:23Z",
+ "generatedAt": "2026-09-24T15:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Infrastructures sportives au Sénégal : quel modèle de financement après les Jeux olympiques de la jeunesse ?",
+     "title": "South Africans and migrants: study tracks the barriers to being good neighbours",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/infrastructures-sportives-au-senegal-quel-modele-de-financement-apres-les-jeux-olympiques-de-la-jeunesse-292141",
-     "published": "2026-09-24T09:01:38Z",
+     "link": "https://theconversation.com/south-africans-and-migrants-study-tracks-the-barriers-to-being-good-neighbours-292191",
+     "published": "2026-09-24T13:59:32Z",
      "summary": "",
      "stale": false,
-     "author": "Djibril Diouf, enseignant-chercheur, Université Cheikh Anta Diop de Dakar"
+     "author": "Mathias Alubafi Fubah, Senior Research Specialist, Human Sciences Research Council"
     },
     {
-     "title": "South Africa’s green building upgrades are rising – but major cities still dominate, study finds",
+     "title": "Billing culture: Nigerian rapper eLDee takes on modern dating in I Wish You Well",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-green-building-upgrades-are-rising-but-major-cities-still-dominate-study-finds-288878",
-     "published": "2026-09-23T13:50:40Z",
+     "link": "https://theconversation.com/billing-culture-nigerian-rapper-eldee-takes-on-modern-dating-in-i-wish-you-well-291914",
+     "published": "2026-09-24T13:58:36Z",
      "summary": "",
      "stale": false,
-     "author": "Jonathan Oladeji, Postdoctoral Research Fellow, University of Johannesburg"
+     "author": "Garhe Osiebe, Research Fellow, Rhodes University"
     },
     {
      "title": "DR Congo Ebola outbreak toll exceeds 3,700 deaths",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Infrastructures sportives au Sénégal : quel modèle de financement après les Jeux olympiques de la jeunesse ?",
-   "published": "2026-09-24 09:01 UTC"
+   "title": "South Africans and migrants: study tracks the barriers to being good neighbours",
+   "published": "2026-09-24 13:59 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa’s green building upgrades are rising – but major cities still dominate, study finds",
-   "published": "2026-09-23 13:50 UTC"
+   "title": "Billing culture: Nigerian rapper eLDee takes on modern dating in I Wish You Well",
+   "published": "2026-09-24 13:58 UTC"
   },
   {
    "region": "Africa",
