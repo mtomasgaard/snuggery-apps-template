@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T16:01:19Z",
+ "generatedAt": "2026-09-24T17:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How due process, not the First Amendment, got the White House ban on reporters blocked in court",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/how-due-process-not-the-first-amendment-got-the-white-house-ban-on-reporters-blocked-in-court-292737",
+     "published": "2026-09-24T16:03:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Wayne Unger, Associate Professor of Law, Quinnipiac University"
+    },
+    {
      "title": "21 years after disaster helped bring peace to Aceh – has botched Indonesian response to floods reignited calls for independence?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Azifah Astrina, Ph.D. candidate in Political Science, University of Illinois Urbana-Champaign; Universitas Gadjah Mada"
-    },
-    {
-     "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/cholesterol-control-gets-personalized-a-cardiologist-explains-how-new-guidelines-tailor-treatment-to-your-unique-risk-profile-279080",
-     "published": "2026-09-24T12:48:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "William Cornwell, Associate Professor of Cardiology, University of Colorado Anschutz"
     },
     {
      "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "21 years after disaster helped bring peace to Aceh – has botched Indonesian response to floods reignited calls for independence?",
-   "published": "2026-09-24 12:53 UTC"
+   "title": "How due process, not the First Amendment, got the White House ban on reporters blocked in court",
+   "published": "2026-09-24 16:03 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
-   "published": "2026-09-24 12:48 UTC"
+   "title": "21 years after disaster helped bring peace to Aceh – has botched Indonesian response to floods reignited calls for independence?",
+   "published": "2026-09-24 12:53 UTC"
   },
   {
    "region": "Americas",
