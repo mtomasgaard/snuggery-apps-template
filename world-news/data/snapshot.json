@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-23T23:01:07Z",
+ "generatedAt": "2026-09-24T00:01:10Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/83-000-new-zealanders-live-with-dementia-heres-how-simple-design-changes-can-help-291985",
+     "published": "2026-09-23T23:28:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ngaire Kerse, Joyce Cook Chair in Ageing Well; Director, Centre for Co-Created Ageing Research, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
      "title": "How has evolution shaped men’s and women’s minds? A new book tells an outdated story",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Hayley Smithers-Sheedy, Adjunct Associate Professor, Faculty of Medicine and Health, The University of Sydney, Principal Research Fellow Cerebral Palsy…"
-    },
-    {
-     "title": "Personal locator beacons save lives. But they can’t make hiking safe",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/personal-locator-beacons-save-lives-but-they-cant-make-hiking-safe-292235",
-     "published": "2026-09-23T20:10:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Samantha Murdy, Associate Professor in Marketing, Australian Catholic University"
     },
     {
      "title": "The UN is facing a crisis of trust and possible bankruptcy. Its new leader will have an enormous challenge",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
+   "published": "2026-09-23 23:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How has evolution shaped men’s and women’s minds? A new book tells an outdated story",
    "published": "2026-09-23 20:11 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "CMV infection can pass from mother to baby during pregnancy. Here’s how to prevent it",
    "published": "2026-09-23 20:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Personal locator beacons save lives. But they can’t make hiking safe",
-   "published": "2026-09-23 20:10 UTC"
   },
   {
    "region": "Oceania",
