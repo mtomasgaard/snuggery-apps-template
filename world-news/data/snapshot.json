@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T02:01:03Z",
+ "generatedAt": "2026-09-24T03:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Sharks often swim across national borders. Our conservation efforts must travel with them",
+     "title": "An OpenAI agent hacked Medicare. Will anyone be held responsible?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/sharks-often-swim-across-national-borders-our-conservation-efforts-must-travel-with-them-291978",
-     "published": "2026-09-24T01:58:22Z",
+     "link": "https://theconversation.com/an-openai-agent-hacked-medicare-will-anyone-be-held-responsible-292763",
+     "published": "2026-09-24T02:56:14Z",
      "summary": "",
      "stale": false,
-     "author": "Diego Bezerra, PhD Candidate, The University of Queensland"
+     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
     },
     {
-     "title": "Gentle larrikin Terry Denton, famous for his anarchy with Andy Griffiths, made reading fun",
+     "title": "Are older Australians really safer from crime? The evidence says the harms are just harder to see",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/gentle-larrikin-terry-denton-famous-for-his-anarchy-with-andy-griffiths-made-reading-fun-292675",
-     "published": "2026-09-24T01:44:01Z",
+     "link": "https://theconversation.com/are-older-australians-really-safer-from-crime-the-evidence-says-the-harms-are-just-harder-to-see-292460",
+     "published": "2026-09-24T02:27:09Z",
      "summary": "",
      "stale": false,
-     "author": "Mark Macleod, Adjunct Senior Lecturer, Children's Literature, Charles Sturt University"
+     "author": "Xanthe Weston, Associate Professor of Domestic and Family Violence, Queensland Centre for Domestic and Family Violence Research, CQUniversity Australia"
+    },
+    {
+     "title": "Looking for #womenshealth information on Instagram? 4 out of 10 posts are ads",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/looking-for-womenshealth-information-on-instagram-4-out-of-10-posts-are-ads-291464",
+     "published": "2026-09-24T02:23:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Brooke Nickel, NHMRC Emerging Leader Research Fellow, School of Public Health, University of Sydney"
     },
     {
      "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Ngaire Kerse, Joyce Cook Chair in Ageing Well; Director, Centre for Co-Created Ageing Research, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "How has evolution shaped men’s and women’s minds? A new book tells an outdated story",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-has-evolution-shaped-mens-and-womens-minds-a-new-book-tells-an-outdated-story-286759",
-     "published": "2026-09-23T20:11:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Cordelia Fine, Professor, History & Philosophy of Science program, School of Historical & Philosophical Studies, The University of Melbourne"
     },
     {
      "title": "Earth’s tides are shaped by more than the Moon. And they’re changing as the planet warms",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Sharks often swim across national borders. Our conservation efforts must travel with them",
-   "published": "2026-09-24 01:58 UTC"
+   "title": "An OpenAI agent hacked Medicare. Will anyone be held responsible?",
+   "published": "2026-09-24 02:56 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Gentle larrikin Terry Denton, famous for his anarchy with Andy Griffiths, made reading fun",
-   "published": "2026-09-24 01:44 UTC"
+   "title": "Are older Australians really safer from crime? The evidence says the harms are just harder to see",
+   "published": "2026-09-24 02:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Looking for #womenshealth information on Instagram? 4 out of 10 posts are ads",
+   "published": "2026-09-24 02:23 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
    "published": "2026-09-23 23:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How has evolution shaped men’s and women’s minds? A new book tells an outdated story",
-   "published": "2026-09-23 20:11 UTC"
   },
   {
    "region": "Oceania",
