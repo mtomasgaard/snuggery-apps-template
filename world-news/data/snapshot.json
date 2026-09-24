@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T08:01:31Z",
+ "generatedAt": "2026-09-24T09:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: when rogue AI agent ‘scaled a fence’, it reinforced Albanese’s case for tough guardrails",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-when-rogue-ai-agent-scaled-a-fence-it-reinforced-albaneses-case-for-tough-guardrails-292588",
+     "published": "2026-09-24T08:03:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "An AI model has found a new ‘CRISPR-like’ biological system. Here’s what it means for science",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kate Cantrell, Senior Lecturer in Humanities, University of Southern Queensland"
-    },
-    {
-     "title": "Why David Brat, the new US ambassador to Australia, has a big in-tray",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-david-brat-the-new-us-ambassador-to-australia-has-a-big-in-tray-292370",
-     "published": "2026-09-24T05:39:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
     },
     {
      "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: when rogue AI agent ‘scaled a fence’, it reinforced Albanese’s case for tough guardrails",
+   "published": "2026-09-24 08:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "An AI model has found a new ‘CRISPR-like’ biological system. Here’s what it means for science",
    "published": "2026-09-24 06:19 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Swan Song: Diana’s brother flips the royal family the bird in his scathing new book",
    "published": "2026-09-24 06:07 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why David Brat, the new US ambassador to Australia, has a big in-tray",
-   "published": "2026-09-24 05:39 UTC"
   },
   {
    "region": "Oceania",
