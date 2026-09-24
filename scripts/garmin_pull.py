@@ -23,8 +23,15 @@ laps.csv, weather.csv, zonekm.csv, streams/<id>.csv, maps.json (with the
 street tiles under running-dashboard/data/tiles), garmin_load.csv, sleep.csv, daily.csv, weight.csv, vo2.csv, the
 garminNow block of context.json, intraday.json (heart rate, body battery and
 stress through the last 36 hours, replaced each pull), calendar.json
-(upcoming events, once a day), and pull.json — a receipt with the time and the outcome of every step, which the
-Routine reads to decide whether the data is fresh.
+(upcoming events, once a day), and pull.json — a receipt with the time and the
+outcome of every step. The receipt is gitignored: the workflow prints it, and
+the builder carries its time into the snapshot as `pulledAt`, which is what the
+optional routine reads to decide whether the data is fresh.
+
+Everything lands in running-dashboard/raw/, which holds only README.md and
+context.json until the first pull; that run creates the rest, reaching back
+two years of activities. context.json has to be there before it: nothing pulls
+the zones and physiology in `athlete`, so the pull stops without it.
 
 This talks to Garmin's web API through the open-source garminconnect library.
 It is not an official API; when Garmin changes something the library catches
@@ -46,7 +53,12 @@ SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")  # an activity id becomes a file name; n
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-RAW = os.path.join(ROOT, "garmin-raw")
+# The raw store sits in the app folder but never ships: build-zips.yml leaves
+# every app's raw/ out of the ZIP, and a push that touches only raw/ and data/
+# rebuilds no ZIP. RAW_GIT is the same folder as git names it, for push() and
+# remerge().
+RAW_GIT = "running-dashboard/raw"
+RAW = os.path.join(ROOT, *RAW_GIT.split("/"))
 sys.path.insert(0, HERE)
 import garmin_append as ga  # noqa: E402
 import fit_records as fr  # noqa: E402
@@ -179,7 +191,10 @@ def shape_activity(a):
 @step("activities")
 def pull_activities(api, today):
     m = ga.missing()
-    start = m["newest_activity"]  # re-fetching the newest stored day is deliberate: a late upload still lands
+    # Re-fetching the newest stored day is deliberate: a late upload still
+    # lands. A fresh store has no newest day, so the first pull reaches back to
+    # history_start(), two years.
+    start = m["newest_activity"] or history_start()
     raw = api.get_activities_by_date(start, today.isoformat()) or []
     rows = [shape_activity(a) for a in raw]
     before = m["activities"]
@@ -379,7 +394,7 @@ def pull_streams(api, ids, limit):
 # OpenStreetMap fills in everywhere else. Name, URL, deepest zoom.
 #   kartverket  Norway, CC BY 4.0 ("© Kartverket"), grey topographic
 #   usgs        United States, public domain (USGS The National Map), topographic
-#   osm         everywhere, live use only — see README "Maps"
+#   osm         everywhere, live use only — see running-dashboard/NOTES.md, "The map under the route"
 TILE_SOURCES = [
     ("kartverket", "https://cache.kartverket.no/v1/wmts/1.0.0/topograatone/default/webmercator/{z}/{y}/{x}.png", 18),
     ("kartverket", "https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4graatone&zoom={z}&x={x}&y={y}", 18),
@@ -400,9 +415,9 @@ MAP_PAD = 0.12                                  # extra map around the visible b
 # area has a map before any ZIP is rebuilt: (zoom, buffer in km). The app
 # scales a coarser zoom up when the exact one is not on the phone.
 COVERAGE = [(13, 2.0), (14, 1.0), (15, 0.5)]
-COVERAGE_PER_RUN = 300
+COVERAGE_PER_RUN = 300       # tiles per run at most; the rest follow next hour
 COVERAGE_MAX_SPAN = 0.5      # degrees; a stream wider than this is not a run, it is a broken file
-COVERAGE_MAX_WANTED = 5000   # tiles; the census stops here rather than enumerate a continent                          # tiles per run at most; the rest follow next hour
+COVERAGE_MAX_WANTED = 5000   # tiles; the census stops here rather than enumerate a continent
 
 
 def map_extent(lat, lon):
@@ -474,7 +489,7 @@ def fetch_tile(z, x, y, fetch=None):
 def pull_maps(ids, fetch=None):
     """Street tiles for each session's Route card, bundled into the app's data
     folder so the map needs no network on the phone. Fetched once per
-    session; the extent is remembered in garmin-raw/maps.json and the builder
+    session; the extent is remembered in running-dashboard/raw/maps.json and the builder
     prunes tiles no stream refers to any more."""
     maps_path = os.path.join(RAW, "maps.json")
     maps = json.load(open(maps_path)) if os.path.exists(maps_path) else {}
@@ -617,7 +632,8 @@ def pull_load(api, today, days):
 @step("sleep")
 def pull_sleep(api, ctx, today, days):
     lines = []
-    for d in backfill_days(ctx, "sleep", [(today - dt.timedelta(days=back)).isoformat() for back in range(days, -1, -1)]):
+    wanted, mark = backfill_days(ctx, "sleep", [(today - dt.timedelta(days=back)).isoformat() for back in range(days, -1, -1)])
+    for d in wanted:
         j = api.get_sleep_data(d) or {}
         s = j.get("dailySleepDTO") or {}
         secs = s.get("sleepTimeSeconds")
@@ -631,11 +647,15 @@ def pull_sleep(api, ctx, today, days):
         time.sleep(0.3)
     if lines:
         ga.merge_csv("sleep", "\n".join(lines))
+    if mark:
+        ctx.setdefault("backfill", {})["sleep"] = mark
     return len(lines)
 
 
 def history_start():
-    """The first day the dashboard knows about: the oldest activity's date."""
+    """The first day the dashboard knows about: the oldest activity's date, or,
+    while the store holds none, two years back, which is where the first pull
+    starts."""
     try:
         acts = json.load(open(os.path.join(RAW, "activities.json")))
         return min(a["start_time"][:10] for a in acts)
@@ -653,20 +673,23 @@ def oldest_row(kind):
 
 def backfill_days(ctx, kind, newest_window):
     """The days to fetch this run: the recent window, plus HISTORY_BACKFILL days
-    older than the oldest day fetched so far. Progress is kept in context.json
-    (not read off the CSV, since days without watch data leave no row and
-    would otherwise be re-asked forever) and stops at the first activity."""
+    older than the oldest day fetched so far, and the progress mark to record
+    for them. Progress is kept in context.json (not read off the CSV, since days
+    without watch data leave no row and would otherwise be re-asked forever)
+    and stops at the first activity. The caller records the mark only once its
+    step has stored what it fetched, so a run that Garmin cuts short asks for
+    the same slice again next time instead of skipping it."""
     floor = history_start()
-    done = (ctx.setdefault("backfill", {})).get(kind) or oldest_row(kind) or newest_window[0]
-    days = list(newest_window)
+    done = (ctx.get("backfill") or {}).get(kind) or oldest_row(kind) or newest_window[0]
+    days, mark = list(newest_window), None
     if done > floor:
         first = max(dt.date.fromisoformat(floor), dt.date.fromisoformat(done) - dt.timedelta(days=HISTORY_BACKFILL))
         d = first
         while d.isoformat() < done:
             days.append(d.isoformat())
             d += dt.timedelta(days=1)
-        ctx["backfill"][kind] = first.isoformat()
-    return days
+        mark = first.isoformat()
+    return days, mark
 
 
 @step("daily")
@@ -677,7 +700,7 @@ def pull_daily(api, ctx, today, days):
     refreshed (a day keeps filling in until midnight), and each run also
     reaches HISTORY_BACKFILL days further back than the oldest day fetched, so
     the history completes itself over a day or two of hourly runs."""
-    wanted = backfill_days(ctx, "daily", [(today - dt.timedelta(days=back)).isoformat() for back in range(days, -1, -1)])
+    wanted, mark = backfill_days(ctx, "daily", [(today - dt.timedelta(days=back)).isoformat() for back in range(days, -1, -1)])
     lines = []
     for d in wanted:
         j = api.get_stats(d) or {}
@@ -699,6 +722,8 @@ def pull_daily(api, ctx, today, days):
         time.sleep(0.3)
     if lines:
         ga.merge_csv("daily", "\n".join(lines))
+    if mark:
+        ctx.setdefault("backfill", {})["daily"] = mark
     return len(lines)
 
 
@@ -858,7 +883,7 @@ INTRADAY_HOURS = 36     # what is kept; the app shows the last 24
 @step("intraday")
 def pull_intraday(api, today):
     """Heart rate, body battery and stress through the day, every few minutes.
-    Kept as a rolling window in garmin-raw/intraday.json — replaced on every
+    Kept as a rolling window in running-dashboard/raw/intraday.json — replaced on every
     pull, never appended — because it is a live readout, not history."""
     now = dt.datetime.now(dt.timezone.utc)
     keep_from = int((now - dt.timedelta(hours=INTRADAY_HOURS)).timestamp())
@@ -913,7 +938,7 @@ def git(*args, check=True):
 
 
 def push():
-    git("add", "garmin-raw", "running-dashboard/data")
+    git("add", RAW_GIT, "running-dashboard/data")
     if not git("diff", "--staged", "--quiet", check=False).returncode:
         log("nothing changed — nothing to commit")
         return
@@ -937,7 +962,7 @@ def remerge(stamp):
     git("fetch", "-q", "origin", "main")
     git("merge", "--no-commit", "--no-ff", "origin/main", check=False)
     conflicted = git("diff", "--name-only", "--diff-filter=U").stdout.split()
-    csv_kinds = {os.path.join("garmin-raw", name): kind for kind, (name, _, _) in ga.CSV_FILES.items()}
+    csv_kinds = {f"{RAW_GIT}/{name}": kind for kind, (name, _, _) in ga.CSV_FILES.items()}
     for path in conflicted:
         ours = git("show", f"HEAD:{path}", check=False).stdout
         theirs = git("show", f"origin/main:{path}", check=False).stdout
@@ -946,11 +971,11 @@ def remerge(stamp):
             with open(full, "w") as fh:
                 fh.write(theirs)
             ga.merge_csv(csv_kinds[path], ours)
-        elif path == "garmin-raw/activities.json":
+        elif path == f"{RAW_GIT}/activities.json":
             with open(full, "w") as fh:
                 fh.write(theirs)
             ga.merge_activities(ours)
-        elif path == "garmin-raw/context.json":
+        elif path == f"{RAW_GIT}/context.json":
             mine, other = json.loads(ours), json.loads(theirs)
             merged = dict(other)
             merged.update(mine)
@@ -962,21 +987,50 @@ def remerge(stamp):
             with open(full, "w") as fh:
                 json.dump(merged, fh, indent=2, ensure_ascii=False)
                 fh.write("\n")
-        elif path == "garmin-raw/maps.json":
+        elif path == f"{RAW_GIT}/maps.json":
             mine, other = json.loads(ours), json.loads(theirs)
             merged = dict(other)
             merged.update({k: v for k, v in mine.items() if k != "_tiles"})
-            merged["_tiles"] = sorted(set(other.get("_tiles") or []) | set(mine.get("_tiles") or []))
+            # "_tiles" maps "z/x/y" to the source the tile came from, and
+            # pull_maps and pull_coverage write into it as a dict: the union
+            # has to stay one, or the next run's map steps fail.
+            merged["_tiles"] = {**(other.get("_tiles") or {}), **(mine.get("_tiles") or {})}
             with open(full, "w") as fh:
-                json.dump(merged, fh, indent=1)
+                json.dump(merged, fh, indent=0, sort_keys=True)
                 fh.write("\n")
         else:
             git("checkout", "--ours", "--", path)  # this run's copy: the receipt, intraday, the snapshot (rebuilt below)
         git("add", "--", path)
     build()
-    git("add", "garmin-raw", "running-dashboard/data")
+    git("add", RAW_GIT, "running-dashboard/data")
     git("commit", "-q", "--no-edit", "-m", f"training: data pull {stamp}, merged with a concurrent run", check=False)
     log(f"merged with a concurrent run ({len(conflicted)} files settled by content)")
+
+
+def check_layout(pushing):
+    """Refuse to run on a half-updated copy. The raw store used to be garmin-raw/
+    at the repository root; it is now raw/ inside the app folder, which ships
+    whole in the app's ZIP, and only two lines of build-zips.yml (and one of
+    .gitignore) keep it out of the ZIP and out of the ZIP rebuilds. So before a
+    pull that will push, those lines must be there: without them the next ZIP
+    would carry the store (GPS traces, heart rate, sleep, weight) to the phone."""
+    if os.path.isdir(os.path.join(ROOT, "garmin-raw")):
+        raise SystemExit(f"the raw store moved from garmin-raw/ to {RAW_GIT}/. Move yours with "
+                         f"`git mv garmin-raw {RAW_GIT}` (it keeps your history and context.json), and take "
+                         ".github/workflows/build-zips.yml and .gitignore from the template in the same commit "
+                         "(see running-dashboard/NOTES.md, \"The raw store\").")
+    if not pushing:
+        return
+    zips = open(os.path.join(ROOT, ".github", "workflows", "build-zips.yml")).read()
+    ignore = open(os.path.join(ROOT, ".gitignore")).read()
+    missing = [what for what, ok in (
+        ("the zip exclusion 'raw/*' in .github/workflows/build-zips.yml", "'raw/*'" in zips),
+        ("the trigger exclusion '!*/raw/**' in .github/workflows/build-zips.yml", "'!*/raw/**'" in zips),
+        (f"the line {RAW_GIT}/pull.json in .gitignore", f"{RAW_GIT}/pull.json" in ignore),
+    ) if not ok]
+    if missing:
+        raise SystemExit("not pushing: this copy does not keep raw/ out of the ZIP and its receipt out of git. "
+                         "Missing: " + "; ".join(missing) + ". Take both files from the template.")
 
 
 def main():
@@ -984,7 +1038,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--login", action="store_true", help="interactive first sign-in (handles MFA) and store the tokens")
     ap.add_argument("--export-tokens", action="store_true", help="print the stored tokens as one line, to paste into a GARMINTOKENS secret")
-    ap.add_argument("--push", action="store_true", help="commit garmin-raw and the snapshot and push to main")
+    ap.add_argument("--push", action="store_true", help="commit running-dashboard/raw and the snapshot and push to main")
     ap.add_argument("--streams", type=int, default=STREAMS_PER_RUN, help="record streams to pull this run (newest first)")
     ap.add_argument("--full", action="store_true", help="re-pull the full two-week load and sleep window (otherwise only in the %d:00 UTC hour)" % FULL_HOUR_UTC)
     ap.add_argument("--backfill", type=int, default=HISTORY_BACKFILL, help="days of sleep and daily-summary history to add this run, older than what is stored (default %d; a one-off of a few hundred completes the history in one run)" % HISTORY_BACKFILL)
@@ -992,6 +1046,17 @@ def main():
     args = ap.parse_args()
 
     HISTORY_BACKFILL = max(0, args.backfill)
+    if not (args.login or args.export_tokens):
+        check_layout(args.push)
+    ctx_path = os.path.join(RAW, "context.json")
+    if not (args.login or args.export_tokens) and not os.path.exists(ctx_path):
+        # The pull creates every other file in the store, the first time it
+        # runs, but not this one: nothing pulls the heart-rate zones and
+        # physiology in `athlete`. Checked before signing in, so a copy without
+        # it costs no Garmin session and fails with a sentence, not a traceback.
+        raise SystemExit(f"{RAW_GIT}/context.json is missing: it holds your zones and physiology, which "
+                         "nothing pulls. Restore it from the template, put your own numbers in `athlete`, "
+                         "commit and push it, then run the pull again (see running-dashboard/PROMPT.md).")
     api = connect(interactive=args.login)
     if args.login:
         log("login stored; run again without --login to pull, or --export-tokens for a GitHub secret")
@@ -1002,7 +1067,6 @@ def main():
 
     today = dt.date.today()
     report["pulledAt"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-    ctx_path = os.path.join(RAW, "context.json")
     ctx = json.load(open(ctx_path))
 
     pull_activities(api, today)
@@ -1034,12 +1098,20 @@ def main():
         fh.write("\n")
 
     report["ok"] = all(v == "ok" for k, v in report["steps"].items() if k in ("activities", "load", "sleep", "garminNow"))
+    # The app turns away a snapshot without a single activity (validate() in
+    # app.js), so until the store holds one, the snapshot keeps what it had (in
+    # a fresh copy, the demo) rather than becoming an error screen on the phone.
+    # That is the first pull on an account with no activities in two years, or
+    # one whose activities step failed.
+    has_activities = bool(ga.load_activities())
+    if not has_activities:
+        report["warnings"].append("no activities stored yet, so the snapshot was not rebuilt")
     with open(os.path.join(RAW, "pull.json"), "w") as fh:
         json.dump(report, fh, indent=1, ensure_ascii=False)
         fh.write("\n")
     log("steps: " + ", ".join(f"{k}={v if v == 'ok' else 'ERROR'}" for k, v in report["steps"].items()))
 
-    if not args.no_build:
+    if not args.no_build and has_activities:
         build()
     if args.push:
         push()

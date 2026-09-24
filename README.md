@@ -35,7 +35,8 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
-data, labelled as such. **Anatomy** (21 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
+data. Finances says so on screen; Running Dashboard is built to look like a
+real copy, so its entry below and its own docs say so instead. **Anatomy** (21 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
 **Milky Way** (6.5 MB) are the big ones: a human body, an oil field, a mountain ridge and our galaxy,
 each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
@@ -85,7 +86,7 @@ A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends
 
 Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.**
 
-**Needs:** a Garmin sign-in · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) · Make it yours: [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md)
+**Needs:** a Garmin sign-in · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) · Make it yours: [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) · How it works: [`running-dashboard/NOTES.md`](running-dashboard/NOTES.md)
 
 ### Finances
 
@@ -160,20 +161,28 @@ The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D
 ![Besseggen](besseggen/screenshots/app.png)
 ![Milky Way](milky-way/screenshots/app.png)
 
-Deleting an example is deleting its folder, its workflow in
-`.github/workflows/` and its script(s) in `scripts/`. Nothing else refers to
-them — the pictures above live inside the app folders they show, so they go
-with them.
+Deleting an example is deleting its folder, its workflow in `.github/workflows/`
+and its scripts in `scripts/`, where it has them. Then take out its row, entry
+and picture on this page, and its carve-out in `LICENSE` and in the licence line
+at the foot of this page, if it has one, and any lines of its own in
+`.gitignore`. Global Wind and Global Weather also keep their data on a branch of
+their own (`data-global-wind`, `data-global-weather`), which goes too. The
+pictures above, and whatever an app's pull keeps, live inside the app's folder
+and go with it. Most live apps have one or two scripts; Running Dashboard has
+several, and its [`NOTES.md`](running-dashboard/NOTES.md#what-belongs-to-this-app)
+lists everything that belongs to it.
 
 ---
 
 ## How the data flows
 
-Running Dashboard is the fullest example, so it is the picture; every live app here is the same
-shape with a different pull. Two hops, deliberately separate: the **code hop** happens once (the
-ZIP, imported into Snuggery), the **data hop** happens on a schedule (one small JSON file, copied
-by a Shortcut). The optional agent session writes text into the raw store and the next build
-carries it into the snapshot.
+Every live app here is the same shape with a different pull, and the picture shows the fullest
+form of it: a pull script merges what is new into raw files, a build turns them into
+`data/snapshot.json`, and an optional agent session writes text back that the next build carries
+into the snapshot. Running Dashboard uses all of it; most apps skip the raw files and the agent
+and write the snapshot straight from the source. Two hops, deliberately separate: the **code hop**
+happens once (the ZIP, imported into Snuggery), the **data hop** happens on a schedule (one small
+JSON file, copied by a Shortcut).
 
 ![How the data flows](data-flow.svg)
 
@@ -217,13 +226,14 @@ That is the whole per-app cost. Nothing else changes, ever.
 <app-folder>/            one folder per app, named however you like — may hold several files
   index.html             the whole app: inline CSS and JS, no build step
   miniapp.json           display name and entry point
-  data/snapshot.json     THE ONLY FILE THAT CHANGES
+  data/snapshot.json     THE ONLY FILE THAT CHANGES ON THE PHONE
   screenshots/           pictures for this README; left out of the ZIP, so they
                          cost the phone nothing
   tools/ or pipeline/    how an app's data was built (Anatomy, Norne Reservoir,
                          Besseggen, Milky Way); left out of the ZIP in the same way
-scripts/                 one refresh script per app
-garmin-raw/              Running Dashboard's append-only raw store
+  raw/                   what a pull keeps that the phone does not need (Running
+                         Dashboard); left out of the ZIP, and no ZIP is rebuilt for it
+scripts/                 one or more refresh scripts per app
 data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
 .github/workflows/       one refresh workflow per app, plus the ZIP builder
 zips/<app-folder>.zip    built automatically; this is what you install from
@@ -233,22 +243,17 @@ Every app folder is a complete working example. Install Hello Live first and
 run your shortcut against it before building anything real — if it updates, your
 loop works, and any later problem is in the new app rather than in the setup.
 Any folder can be deleted once you no longer need it as a reference, together
-with its script and its workflow.
+with its scripts and its workflow.
 
 **An app is not always one file.** Hello Live is a single `index.html` with its
 CSS and JS inline. Running Dashboard is `index.html` plus `app.js`, `style.css`,
 and a `data/` folder holding a snapshot, six session streams, and about a
-megabyte of map tiles. The ZIP takes the app's folder whole either way — still
-no build step.
-
-`garmin-raw/` is Running Dashboard's raw store, separate from its app folder: the
-files its pull script merges new activity into, plus the four files the
-optional coaching routine writes. Delete it along with `running-dashboard/` if you
-remove the app.
+megabyte of map tiles. The ZIP takes the app's folder whole either way, less
+the folders marked above as left out — still no build step.
 
 ## Conventions worth keeping
 
-- **Everything that changes lives in `data/snapshot.json`.** The HTML and JS
+- **Everything the app shows that changes lives in `data/snapshot.json`.** The HTML and JS
   should go untouched for months while the data is replaced daily.
 - **Document the JSON's shape in a comment at the top of the app's script.**
   Whatever rewrites that file next year will not have read the conversation that
@@ -272,70 +277,26 @@ remove the app.
   is what makes an app opened this morning show this morning's numbers. Snuggery fires the
   same event when new data lands while the app is open — so re-render in place, keeping the
   selected tab and scroll position, rather than rebuilding the page.
-
-## About the Garmin connection
-
-`scripts/garmin_pull.py` uses the open-source `garminconnect` library, which
-reaches the same web API Garmin's own apps use. It is not an official API —
-Garmin can change it without notice. The library usually catches up within
-days, and the app's stale-data warning shows the gap in the meantime. You sign
-in with your own account; the session tokens live in your repository's
-`GARMINTOKENS` secret and nowhere else. Nothing passes through anybody else's
-server. See `running-dashboard/PROMPT.md` for setup.
-
-## The map under the route
-
-The Sessions pane draws each run over a topographic basemap. The tiles
-travel inside the app's ZIP, so the phone fetches nothing — mini-apps in
-Snuggery cannot reach the network.
-
-`scripts/garmin_pull.py` fetches the tiles once per session, trying three
-sources in order; each answers only inside its own coverage, so a route falls
-through to the first that has it, and the app credits whichever drew:
-
-- **Kartverket** (the Norwegian Mapping Authority), Norway — open data under
-  **CC BY 4.0**, credited "© Kartverket". Its terms add that the detail at
-  zoom 12–20 comes from the Geovekst partnership and may be used as is in a
-  service, while *copying* it needs the rights holders' permission — which is
-  why the demo ships no Kartverket tiles, although your own private copy
-  fetching them for your own runs is exactly the use the terms describe.
-- **USGS The National Map**, the United States — **public domain**, no
-  restrictions; the USGS asks for the acknowledgment the app prints. The
-  demo's tiles come from here, for the three US courses.
-- **OpenStreetMap**, everywhere else — credited "© OpenStreetMap
-  contributors". Under OSM's tile usage policy, put your own repository URL in
-  `TILE_AGENT` (`scripts/garmin_pull.py`) so requests are identifiable, and
-  the script's own limits — at most 300 tiles a run, one run an hour, nothing
-  re-fetched — keep a personal dashboard inside fair use. If you run a lot of
-  routes, point `TILE_SOURCES` at a provider of your own.
-
-**No OpenStreetMap tiles ship in this repository**, deliberately: the OSM tile
-policy covers live fetching, not redistribution inside a downloadable archive.
-Your own copy fetches its own. The demo's *routes* are another matter: they are
-segments of six famous marathon courses whose shapes were derived from
-OpenStreetMap data, so `scripts/demo_courses.json` and the demo streams made
-from it are published under the ODbL with the attribution in
-`running-dashboard/TILES.md`. Your own pull replaces them with your runs.
-
-Do not want a basemap? Delete `running-dashboard/data/tiles/` — the route card
-draws the coloured track on its own background, as the demo's Berlin, London
-and Tokyo sessions do.
-
-## The coaching text is optional, and the refresh does not write it
-
-Running Dashboard's Now, Plan and Sessions panes can show an evaluation, a plan,
-race predictions, and per-session notes. Those come from four files in
-`garmin-raw/` — `assessment.json`, `plan.json`, `racecast.json`, `notes.json`
-— written by a separate scheduled agent session, once a day, that reads what
-the pull committed. The pull never writes them. Absent, the panes say so and
-every number still works.
-
-The demo's evaluation, plan, race forecast and session notes were written for
-the demo runner from the demo's own numbers, to show what the routine's output
-looks like when it is there. Nothing on screen calls it an example, because the
-demo's job is to look like a real copy; this README, `PROMPT.md` and the
-caption under Snuggery's *Install the live examples* button are where that is said. The
-shapes are in the header comment of `running-dashboard/app.js`.
+- **No network from the app.** A mini-app cannot reach the network, so
+  everything it draws — map tiles, fonts, textures — travels inside its ZIP, and
+  it fetches nothing but files in its own folder.
+- **A licence to fetch live is not a licence to redistribute.** A tile server or
+  feed that lets your copy fetch from it may still forbid shipping what it
+  returned inside a downloadable archive, or republishing it in a public
+  repository. Whatever travels under terms of its own is named as a carve-out in
+  `LICENSE` and in the app's own docs.
+- **Credentials live in the repository's Actions secrets** — never in a file in
+  the repository, the snapshot, a log or a commit message. A job reads them from
+  its environment.
+- **One writer per file.** The scheduled pull never writes a file an agent
+  session writes, and the other way round, so neither can overwrite the other's
+  work. When an optional file is missing, the app says it is not there yet;
+  it never draws a blank that passes for data.
+- **A store the pull keeps between runs goes in the app's `raw/`** (Running
+  Dashboard's does). It
+  never ships: the ZIP builder leaves it out, and a commit to it rebuilds no ZIP.
+  Everything else in the folder, bar the screenshots and build tools, goes into
+  the ZIP and onto every phone that installs it.
 
 ## Things that will cost you an afternoon if nobody says them
 

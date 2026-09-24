@@ -725,7 +725,7 @@ def coaching(done, planned, today, race, weekly):
     would write them on the day the generator runs, eleven weeks into the
     block. Written as a coach writes — for this runner, from these numbers —
     because the demo's job is to show what the routine's output looks like.
-    The README and the app's PROMPT.md say the runner is made up."""
+    The README and the app's PROMPT.md and NOTES.md say the runner is made up."""
     tune_10k = next(s for s in done if s.race and s.km == 10.0 and s.week >= 0)
     spring = next(s for s in done if s.race and s.name == SPRING_RACE[0])
     tune_15k = next(s for s in planned if s.race and s.km == 15.0)

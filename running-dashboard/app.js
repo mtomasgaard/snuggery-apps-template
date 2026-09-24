@@ -1281,7 +1281,7 @@ function paneNow(main) {
   const a = DATA.assessment;
   if (!a) {
     const c = card('Evaluation');
-    c.append(el('p', 'sub', 'No assessment in this snapshot. The refresh writes one on every run — if this stays empty, the scheduled job is not completing.'));
+    c.append(el('p', 'sub', 'No assessment in this snapshot. The data pull does not write one; the optional daily coaching routine does — if that is set up and this stays empty, the routine is not completing.'));
     main.append(c);
     planPointer(main);
     raceCard(main, gn);
@@ -1322,7 +1322,7 @@ function paneNow(main) {
     ev.append(d);
   }
   ev.append(el('p', 'sub wrote',
-    `Written ${a.updated ? longDate(a.updated) : 'with this snapshot'}, from the full history, and regenerated on every refresh so it moves with the training rather than describing one good week.`));
+    `Written ${a.updated ? longDate(a.updated) : 'with this snapshot'}, from the full history, and rewritten by each run of the coaching routine so it moves with the training rather than describing one good week.`));
   main.append(ev);
 
 }
@@ -1484,7 +1484,7 @@ function panePlan(main) {
   const p = DATA.plan;
   if (!p) {
     const c = card('Plan');
-    c.append(el('p', 'sub', 'No plan in this snapshot. The refresh writes one on every run — if this stays empty, the scheduled job is not completing.'));
+    c.append(el('p', 'sub', 'No plan in this snapshot. The data pull does not write one; the optional daily coaching routine does — if that is set up and this stays empty, the routine is not completing.'));
     main.append(c);
     return;
   }
@@ -1541,7 +1541,7 @@ function panePlan(main) {
   }
   main.append(about);
   const foot = el('div', 'card');
-  foot.append(el('p', 'sub', `Plan written ${p.updated ? longDate(p.updated) : 'with this snapshot'} from the load, recovery, session notes and history, and the Garmin calendar. It is rewritten on every refresh; a race added to Garmin Connect reshapes it on the next one.`));
+  foot.append(el('p', 'sub', `Plan written ${p.updated ? longDate(p.updated) : 'with this snapshot'} from the load, recovery, session notes and history, and the Garmin calendar. The coaching routine rewrites it each time it runs; a race added to Garmin Connect reshapes it on the routine's next run.`));
   main.append(foot);
 }
 

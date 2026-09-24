@@ -15,7 +15,7 @@ on:
       - '!*/data/**'
       - '!.github/**'
       - '!scripts/**'
-      - '!garmin-raw/**'             # the Garmin pull commits here hourly; that is data, not app code
+      - '!*/raw/**'                  # an app's raw store: a pull commits there hourly, and none of it is in the ZIP
       - '!zips/**'
       - '!README.md'
   workflow_dispatch:
@@ -46,8 +46,12 @@ jobs:
             # The folder ships whole, data file included, so a freshly
             # imported app is not blank — but not the dotfiles. A .gitkeep is
             # scaffolding for this repository and has no business inside an
-            # app somebody installs.
-            (cd "$name" && zip -q -r -X "../zips/$name.zip" . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*')
+            # app somebody installs. Nor raw/: in any app, raw/ is the store
+            # its pull merges into and builds data/ from, and in a private copy
+            # that is personal history (Running Dashboard's: per-second GPS,
+            # heart rate, sleep, weight). It stays in the repository, never
+            # in the ZIP.
+            (cd "$name" && zip -q -r -X "../zips/$name.zip" . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*')
             echo "packed $name"
           done
 

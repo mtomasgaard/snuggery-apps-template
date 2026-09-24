@@ -1,12 +1,16 @@
 name: Pull Garmin data for Running Dashboard
 
-# Pulls what is new from Garmin Connect through scripts/garmin_pull.py,
-# rebuilds running-dashboard/data/snapshot.json, and pushes the result to main.
+# Pulls what is new from Garmin Connect through scripts/garmin_pull.py into
+# running-dashboard/raw/, rebuilds running-dashboard/data/snapshot.json, and
+# pushes the result to main. raw/ is the app's raw store: it sits in the app
+# folder but never ships, because build-zips.yml leaves every app's raw/ out of
+# the ZIP, and a push that touches only raw/ and data/ rebuilds no ZIP.
 #
 # The coaching text (assessment, plan, race forecast, session notes) is NOT
 # written here. That is a separate, optional daily agent session that reads
-# what this workflow pushed and writes garmin-raw/assessment.json, plan.json,
-# racecast.json and notes.json — see running-dashboard/PROMPT.md.
+# what this workflow pushed and writes running-dashboard/raw/assessment.json,
+# plan.json, racecast.json and notes.json — see running-dashboard/NOTES.md,
+# "The coaching text".
 #
 # Needs one secret, GARMINTOKENS: the one-line output of
 #   python3 scripts/garmin_pull.py --login          (once, on your machine; handles MFA)
@@ -71,4 +75,4 @@ jobs:
 
       - name: Show the receipt
         if: always()
-        run: cat garmin-raw/pull.json || true
+        run: cat running-dashboard/raw/pull.json || true

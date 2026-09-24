@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Merge newly-fetched Garmin rows into the append-only files in garmin-raw/.
+"""Merge newly-fetched Garmin rows into the append-only files in running-dashboard/raw/.
 
 Two things feed this: scripts/garmin_pull.py, which talks to Garmin Connect
 directly on a cron and imports the merge functions below, and — as a fallback —
@@ -43,7 +43,7 @@ day you already have is a no-op rather than a duplicate.
     python3 scripts/garmin_append.py notes < notes.json    # per-session evaluations, a JSON object keyed by
         # activity id: {"<id>": {"written": "YYYY-MM-DD", "verdict": "2-3 words",
         #   "tone": "good|warning|serious|critical|neutral", "body": ["para", ...]}}
-        # Merged into garmin-raw/notes.json; re-sending an id replaces its note.
+        # Merged into running-dashboard/raw/notes.json; re-sending an id replaces its note.
 
 Blank lines and lines starting with # are ignored, so you can paste a block with
 a comment at the top.
@@ -59,7 +59,7 @@ import sys
 SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")  # an activity id becomes a file name; nothing else may
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RAW = os.path.join(ROOT, "garmin-raw")
+RAW = os.path.join(ROOT, "running-dashboard", "raw")
 
 # Rolling windows: an unbounded file makes every refresh push a bigger diff, and
 # the app's longest window is the history of activities, about two years.
@@ -82,15 +82,15 @@ CSV_FILES = {
     "weather": ("weather.csv", 10, None),
 }
 
-# The stream CSV grew from seven to nine columns (latitude and longitude for
-# the wind adjustment) in September 2026; streams still in the old shape are
-# re-pulled, newest first, a few per hour.
+# A stream CSV has nine columns, the last two latitude and longitude, for the
+# wind adjustment and the route map. A stream in the older seven-column shape,
+# without them, is re-pulled, newest first, a few per hour.
 STREAM_COLUMNS = 9
 OUTDOOR_TYPES = {"running", "trail_running", "cycling", "walking", "hiking", "rucking", "road_biking", "mountain_biking", "gravel_cycling"}
 
 # Kilometres per zone and the per-second stream come from the FIT record
-# stream, one large call per thousand seconds; asked for across the whole
-# detail window (the backfill of March–September 2026 was done by hand).
+# stream, one large call per thousand seconds, asked for across the whole
+# detail window, a few sessions per run.
 STREAM_TYPES = {"running", "treadmill_running", "trail_running", "cycling", "indoor_cycling", "virtual_ride", "walking", "hiking", "rucking"}
 
 # Files whose rows are keyed on more than the first field.
@@ -140,15 +140,26 @@ def merge_csv(kind, incoming_text):
     print(f"{name}: {added} new, {updated} changed, {len(keys)} rows total")
 
 
+def load_activities():
+    """activities.json, oldest first; [] until the first pull has written one.
+    The template ships the store with context.json only, so a first pull
+    starts here with nothing, and an empty file counts as nothing too."""
+    path = os.path.join(RAW, "activities.json")
+    if not os.path.exists(path):
+        return []
+    with open(path) as fh:
+        text = fh.read()
+    return json.loads(text) if text.strip() else []
+
+
 def merge_activities(incoming_text):
     path = os.path.join(RAW, "activities.json")
     keep = ["id", "name", "type", "event_type", "start_time", "distance_meters",
             "duration_seconds", "moving_duration_seconds", "calories",
             "avg_hr_bpm", "max_hr_bpm", "steps", "elevation_gain_meters"]
     store = {}
-    if os.path.exists(path):
-        for a in json.load(open(path)):
-            store[str(a["id"])] = a
+    for a in load_activities():
+        store[str(a["id"])] = a
 
     payload = json.loads(incoming_text)
     if isinstance(payload, dict):                      # a whole tool response
@@ -175,7 +186,7 @@ def merge_activities(incoming_text):
     with open(path, "w") as fh:
         json.dump(out, fh, indent=0)
         fh.write("\n")
-    print(f"activities.json: {added} new, {len(out)} total, newest {out[-1]['start_time'][:10]}")
+    print(f"activities.json: {added} new, {len(out)} total, newest {out[-1]['start_time'][:10] if out else 'none'}")
 
 
 def merge_notes(incoming_text):
@@ -205,8 +216,10 @@ def merge_notes(incoming_text):
 
 def missing():
     """What the store still lacks, as lists of ids, plus the newest stored dates.
-    Used by status() for printing and by garmin_pull.py to decide what to fetch."""
-    acts = json.load(open(os.path.join(RAW, "activities.json")))
+    Used by status() for printing and by garmin_pull.py to decide what to fetch.
+    On a store with no activities yet every list is empty and newest_activity
+    is None, which garmin_pull.py reads as "start from the history's floor"."""
+    acts = load_activities()
     ids = [str(a["id"]) for a in acts]
     have = {}
     for kind in ("zones", "gear", "splits", "details", "laps", "zonekm", "weather"):
@@ -225,9 +238,11 @@ def missing():
                       if a.get("type") in outdoor_runs and str(a["id"]) not in have["splits"]]
 
     import datetime as dt
-    newest_day = dt.date.fromisoformat(acts[-1]["start_time"][:10])
-    cutoff = (newest_day - dt.timedelta(days=DETAIL_DAYS)).isoformat()
-    recent = [a for a in acts if a["start_time"][:10] >= cutoff]
+    newest_activity = acts[-1]["start_time"][:10] if acts else None
+    recent = []
+    if newest_activity:
+        cutoff = (dt.date.fromisoformat(newest_activity) - dt.timedelta(days=DETAIL_DAYS)).isoformat()
+        recent = [a for a in acts if a["start_time"][:10] >= cutoff]
     missing_details = [str(a["id"]) for a in recent if str(a["id"]) not in have["details"]]
     missing_laps = [str(a["id"]) for a in recent
                     if a.get("type") in LAP_TYPES and str(a["id"]) not in have["laps"]]
@@ -273,7 +288,7 @@ def missing():
         return rows[-1][0] if rows else "none"
 
     return {
-        "activities": len(acts), "newest_activity": acts[-1]["start_time"][:10],
+        "activities": len(acts), "newest_activity": newest_activity,
         "newest_load": newest("load"), "newest_sleep": newest("sleep"), "newest_daily": newest("daily"),
         "zones": missing_zones, "gear": missing_gear, "splits": missing_splits,
         "details": missing_details, "laps": missing_laps, "zonekm": missing_zonekm,
@@ -289,7 +304,7 @@ def status():
     missing_zones, missing_gear, missing_splits = m["zones"], m["gear"], m["splits"]
     missing_details, missing_laps, missing_zonekm, missing_notes = m["details"], m["laps"], m["zonekm"], m["notes"]
     first_note_day = m["first_note_day"]
-    print(f"activities : {acts} stored, newest {newest}")
+    print(f"activities : {acts} stored, newest {newest or 'none'}")
     print(f"garmin_load: newest {m['newest_load']}")
     print(f"daily      : newest {m['newest_daily']}")
     print(f"sleep      : newest {m['newest_sleep']}")
