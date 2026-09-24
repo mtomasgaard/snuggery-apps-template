@@ -51,6 +51,9 @@ three taps, just below.
    open **Files → Downloads**, touch and hold the ZIP, and tap **Share**.
 3. Choose **Snuggery**. It appears in your Library and opens with one tap. Nothing else to set up.
 
+Don't have Snuggery yet? [**Get it on the App Store**](https://apps.apple.com/app/id6805883209) — for
+iPhone (iOS 18 and later), one purchase after a free week.
+
 **Just want the galaxy?** On your iPhone, open [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) in Safari
 (a 6.5 MB download), then steps 2 and 3. That's it — it needs no account, no key and no network
 once installed.

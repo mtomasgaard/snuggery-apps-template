@@ -25,6 +25,21 @@ import shutil
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 NOT_APPS = {".github", "scripts", "zips", "scheduler"}
+
+# ── The app this index belongs to ────────────────────────────────────────────
+# The index links the phone app these examples are made for, and borrows its
+# site's colours. A copy of this template is your repository, not ours: put
+# your own name and links here, or set the three strings to "" and the header
+# line, the sentence about the phone version and the palette below all go —
+# the index then names nothing but itself.
+SITE_NAME = "Snuggery"
+SITE_URL = "https://mtomasgaard.github.io/snuggery/"
+APP_STORE_URL = "https://apps.apple.com/app/id6805883209"
+# Light, then dark: canvas, card, ink, muted ink, hairline, accent.
+PALETTE = {
+    "light": ("#f5f5fa", "#ffffff", "#131320", "#55556b", "#e6e6f0", "#5b5bd6"),
+    "dark":  ("#131320", "#1d1d2b", "#f2f2f7", "#a3a3b8", "#2c2c3d", "#818cf8"),
+}
 # Kept in step with the zip -x list in .github/workflows/build-zips.yml.
 LEFT_OUT = {"screenshots", "tools", "pipeline", "scripts", "dist", "raw"}
 
@@ -64,6 +79,13 @@ def page(cards, repo):
         </div>
       </li>""")
     source = f"https://github.com/{repo}" if repo else ".."
+    branded = bool(SITE_NAME and SITE_URL and APP_STORE_URL)
+    header = (f'  <p class="site"><a href="{html.escape(APP_STORE_URL)}">{html.escape(SITE_NAME)} on the App Store</a>'
+              f' · <a href="{html.escape(SITE_URL)}">About {html.escape(SITE_NAME)}</a></p>\n') if branded else ""
+    phone = (f" Only the phone version, <a href=\"{html.escape(APP_STORE_URL)}\">{html.escape(SITE_NAME)}</a>, has"
+             " your own files beside the apps, editing an app's data, Ask about a file, the Shortcut that"
+             " refreshes an app every morning, and a sandbox that runs it all offline.") if branded else ""
+    light, dark = PALETTE["light"], PALETTE["dark"]
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -71,15 +93,16 @@ def page(cards, repo):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Snuggery live apps</title>
 <style>
-  :root {{ --bg:#f6f5f2; --card:#fff; --ink:#1d1d1f; --muted:#5f5f66; --line:#e3e1dc; --accent:#0a66c2; }}
+  :root {{ --bg:{light[0]}; --card:{light[1]}; --ink:{light[2]}; --muted:{light[3]}; --line:{light[4]}; --accent:{light[5]}; }}
   @media (prefers-color-scheme: dark) {{
-    :root {{ --bg:#141416; --card:#1f1f23; --ink:#f2f2f4; --muted:#a3a3ab; --line:#2e2e34; --accent:#6aa9ff; }}
+    :root {{ --bg:{dark[0]}; --card:{dark[1]}; --ink:{dark[2]}; --muted:{dark[3]}; --line:{dark[4]}; --accent:{dark[5]}; }}
   }}
   * {{ box-sizing: border-box; }}
   body {{ margin:0; background:var(--bg); color:var(--ink);
          font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }}
   main {{ max-width:1100px; margin:0 auto; padding:32px 16px 48px; }}
-  h1 {{ margin:0 0 8px; font-size:28px; }}
+  h1 {{ margin:0 0 8px; font-size:28px; letter-spacing:-0.02em; }}
+  .site {{ margin:0 0 12px; font-size:15px; }}
   .lede {{ color:var(--muted); margin:0 0 28px; max-width:70ch; }}
   a {{ color:var(--accent); }}
   ul {{ list-style:none; padding:0; margin:0; display:grid; gap:16px;
@@ -101,9 +124,9 @@ def page(cards, repo):
 <body>
 <main>
   <h1>Snuggery live apps</h1>
-  <p class="lede">Every app in <a href="{source}">the repository</a>, running in the browser. Each shows the
+{header}  <p class="lede">Every app in <a href="{source}">the repository</a>, running in the browser. Each shows the
   data last published here; on a phone, <strong>Get the ZIP</strong> in Safari and share it to Snuggery to
-  install it instead. The big 3D apps download tens of megabytes on first open.</p>
+  install it instead. The big 3D apps download tens of megabytes on first open.{phone}</p>
   <ul>{"".join(items)}
   </ul>
   <footer>How the data reaches the apps: <a href="data-flow.html">the loop, animated</a>.</footer>
