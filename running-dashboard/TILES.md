@@ -8,10 +8,12 @@ repository does not cover them. All three travel inside `zips/running-dashboard.
 The tiles under `data/tiles/` — 30 of them, 0.8 MB, at zoom 12–13 — are from the US
 Geological Survey's *USGS Topo* basemap, downloaded unmodified from
 `basemap.nationalmap.gov`. They are a work of the United States government and in the public
-domain, with no restrictions on use or redistribution. The USGS asks for this acknowledgment,
-which the app prints under every map it draws with them:
+domain, with no restrictions on use or redistribution. The USGS asks for this acknowledgment:
 
 > Map services and data available from U.S. Geological Survey, National Geospatial Program.
+
+The app credits them as *USGS The National Map* under every map it draws with them, and this file
+carries the acknowledgment in full.
 
 They cover the three US course segments below. The other three sessions draw their route on a
 plain background: no free basemap outside the United States and Norway may be redistributed
@@ -19,7 +21,8 @@ inside a downloadable archive (OpenStreetMap's tile policy covers live fetching 
 Kartverket's cache at these zooms shows partner data that needs permission to copy), and the demo
 would rather show the app drawing without one than ship a tile it has no right to. Your own
 copy fetches its own tiles for your own runs — Kartverket in Norway, USGS in the US,
-OpenStreetMap elsewhere — and the app credits whichever drew.
+OpenStreetMap elsewhere — and the app credits whichever drew; `NOTES.md` says what each source's
+terms allow there.
 
 ## The routes: segments of six marathon courses (OpenStreetMap, ODbL)
 

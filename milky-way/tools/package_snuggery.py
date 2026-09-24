@@ -11,8 +11,8 @@ import zipfile
 
 from paths import APP
 
-# The workflow's exclusions: zip -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*'
-SKIP_DIRS = {'screenshots', 'tools', 'pipeline', 'scripts', 'dist'}
+# The workflow's exclusions: zip -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'
+SKIP_DIRS = {'screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw'}
 
 # No network, ever: Snuggery runs mini-apps in an offline sandboxed web view, and a URL in the app's
 # own code is a request that will be blocked rather than merely discouraged. vendor/ is exempt —

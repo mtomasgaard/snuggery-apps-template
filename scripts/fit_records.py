@@ -6,7 +6,7 @@ message_types=["record"], include_records=True, message_limit=1000) returns
 one page of per-second records; the harness saves each page to a file because
 it is far too large for the conversation. Point this script at every page file
 for one or more activities (any order; pages are grouped by the id inside). It writes the stream itself to
-garmin-raw/streams/<id>.csv (one row per second: sec,distM,hr,spdMps,cad,altM,
+running-dashboard/raw/streams/<id>.csv (one row per second: sec,distM,hr,spdMps,cad,altM,
 pwr,lat,lon; the Sessions pane draws its curves from it and the builder takes
 the heading for the wind adjustment from the positions) and prints one CSV line for
 `garmin_append.py zonekm`:
@@ -14,7 +14,7 @@ the heading for the wind adjustment from the positions) and prints one CSV line 
     id,z1,z2,z3,z4,z5,z0       kilometres, running records only
 
 Each metre is credited to the zone of the heart rate at that second, using the
-zone floors in garmin-raw/context.json — so a fast kilometre at 173 is a
+zone floors in running-dashboard/raw/context.json — so a fast kilometre at 173 is a
 zone 3 kilometre, however the laps were cut. Metres run with the heart rate
 still under the zone 1 floor (the first minutes of a run, mostly) go in the
 last column rather than being counted as zone 1. Seconds slower than 1.6 m/s
@@ -29,7 +29,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RAW = os.path.join(os.path.dirname(HERE), "garmin-raw")
+RAW = os.path.join(os.path.dirname(HERE), "running-dashboard", "raw")
 WALK_MPS = 1.6      # running: slower than this is a walk break
 STILL_MPS = 0.5     # cycling: slower than this is a standstill
 BIKE_TYPES = {"cycling", "indoor_cycling", "virtual_ride", "road_biking", "mountain_biking", "gravel_cycling"}

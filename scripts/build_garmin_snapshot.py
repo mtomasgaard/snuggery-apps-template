@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 """Build running-dashboard/data/snapshot.json from the raw Garmin dumps.
 
-scripts/garmin_pull.py pulls what is new from Garmin Connect into garmin-raw/
-(append-only) and then runs this script. Keeping the aggregation here rather than
-in whatever pulled the data means the numbers are reproducible: re-running on
-unchanged raw files produces an identical snapshot apart from `generatedAt`.
+scripts/garmin_pull.py pulls what is new from Garmin Connect into
+running-dashboard/raw/ (append-only) and then runs this script. Keeping the
+aggregation here rather than in whatever pulled the data means the numbers are
+reproducible: re-running on unchanged raw files produces an identical snapshot
+apart from `generatedAt`.
 The demo data shipped with the template is built the same way, by
 scripts/make_demo_running_dashboard.py, so it can never drift from this shape.
 
 The snapshot also carries a top-level `ask` array — flat rows Snuggery's Ask reads
 as a table (see ask_rows below); nothing in the app draws from it.
 
-Raw inputs (all in garmin-raw/, all append-only):
+Raw inputs (all in running-dashboard/raw/, all append-only). Only context.json
+has to exist, and every other file reads as empty until a pull writes it. But
+while no activity is stored (the store as the template ships it), nothing is
+written: the app turns away a snapshot without activities, so the snapshot,
+its streams and its tiles stay as they are.
 
   activities.json   list of activity summaries, oldest first. Fields come
                     straight from Garmin's activity list endpoint.
@@ -19,6 +24,13 @@ Raw inputs (all in garmin-raw/, all append-only):
   gear.csv          id,codes            "|"-separated gear codes, or "-" for none
   garmin_load.csv   date,atl,ctl,status,vo2   Garmin's own acute/chronic load
   sleep.csv         date,score,hours,deep%,rem%,hrv,stress
+  daily.csv         date,steps,stepGoal,floorsUp,floorsDown,kcal,activeKcal,activeMin,
+                    sedentaryMin,modMin,vigMin,rhr,minHr,maxHr,stressAvg,bbHigh,bbLow,
+                    spo2Avg,spo2Low,respAvg   — one wellness summary per day,
+                    attached as `daily` for the Health pane
+  weight.csv        date,kg,bmi,bodyFat%   weigh-ins, attached as `weight`
+  vo2.csv           date,vo2max   the days Garmin recomputed its estimate,
+                    attached as `vo2`
   splits.csv        id,runSec,runM,runHr,walkSec,walkM,walkHr,standSec
                     Garmin's run/walk detection for outdoor runs: the seconds,
                     metres and average HR spent actually running versus walking
@@ -39,7 +51,7 @@ Raw inputs (all in garmin-raw/, all append-only):
                     snapshot for the last three weeks of sessions, since the
                     Shortcut replaces only the snapshot), with `lat`/`lon` for the route map
                     (and `map`, the zoom and tile range bundled under
-                    running-dashboard/data/tiles from garmin-raw/maps.json),
+                    running-dashboard/data/tiles from maps.json),
                     `gap` (grade-adjusted pace, runs
                     with altitude) and `cap` (condition-adjusted pace: grade,
                     wind along the heading and heat, runs with position and
@@ -65,8 +77,17 @@ Raw inputs (all in garmin-raw/, all append-only):
                     36 hours, from the hourly pull; the last 24 h attached as
                     `intraday` {pulledAt, restingHr, hr:[[sec,bpm]], bb:[[sec,level]],
                     stress:[[sec,level]]}
+  maps.json         {"<id>": {z,x0,x1,y0,y1,src} or null, "_tiles": {"z/x/y": source}}
+                    the tile range of each session's route map and every tile
+                    under running-dashboard/data/tiles with the source it came
+                    from; the range is attached to the stream as `map`, the
+                    tile list as `tiles`
   context.json      profile, gear catalogue, and today's Garmin readouts
   assessment.json   the coaching evaluation, rewritten by the agent each run
+  pull.json         the pull's receipt (gitignored), for the snapshot's `pulledAt`
+
+calendar.json, the upcoming races the pull keeps for the coaching routine, is
+not read here.
 
 Everything the app plots is derived from `activities`, so a filter in the app
 (date window, sport, gear) re-aggregates rather than asking for a new file.
@@ -84,7 +105,7 @@ from datetime import datetime, timedelta, timezone
 SAFE_ID = re.compile(r"[A-Za-z0-9_-]+")  # an activity id becomes a file name; nothing else may
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-RAW = os.path.join(ROOT, "garmin-raw")
+RAW = os.path.join(ROOT, "running-dashboard", "raw")
 OUT = os.path.join(ROOT, "running-dashboard", "data", "snapshot.json")
 
 # Garmin's activity types collapse to the handful of sports that actually get
@@ -510,13 +531,19 @@ def ask_rows(activities, load, sleep, context):
 def main(argv=None):
     global RAW, OUT
     ap = argparse.ArgumentParser(description="Build the Running Dashboard snapshot from a raw Garmin store.")
-    ap.add_argument("--raw", default=RAW, help="the raw store to read (default garmin-raw/)")
+    ap.add_argument("--raw", default=RAW, help="the raw store to read (default running-dashboard/raw/)")
     ap.add_argument("--out", default=OUT, help="the snapshot to write (default running-dashboard/data/snapshot.json)")
     args = ap.parse_args(argv)
     RAW, OUT = os.path.abspath(args.raw), os.path.abspath(args.out)
 
-    with open(os.path.join(RAW, "activities.json")) as fh:
-        raw_activities = json.load(fh)
+    # Before the first pull the store holds context.json and nothing else, so
+    # every other file here reads as empty when it is not there yet.
+    raw_activities = []
+    activities_path = os.path.join(RAW, "activities.json")
+    if os.path.exists(activities_path):
+        with open(activities_path) as fh:
+            text = fh.read()
+        raw_activities = json.loads(text) if text.strip() else []
     with open(os.path.join(RAW, "context.json")) as fh:
         context = json.load(fh)
 
@@ -540,8 +567,8 @@ def main(argv=None):
                 laps.setdefault(r[0], []).append((int(r[1]), r[2:13]))
     notes_path = os.path.join(RAW, "notes.json")
     notes = json.load(open(notes_path)) if os.path.exists(notes_path) else {}
-    newest_day = max((a.get("start_time") or "")[:10] for a in raw_activities)
-    detail_cutoff = (datetime.fromisoformat(newest_day) - timedelta(days=DETAIL_DAYS)).date().isoformat()
+    newest_day = max(((a.get("start_time") or "")[:10] for a in raw_activities), default=None)
+    detail_cutoff = (datetime.fromisoformat(newest_day) - timedelta(days=DETAIL_DAYS)).date().isoformat() if newest_day else None
 
     stream_ids = []
     activities = []
@@ -615,40 +642,56 @@ def main(argv=None):
                 row["laps"] = out
         activities.append(row)
     activities.sort(key=lambda r: (r["d"], r["id"]))
+    if not activities:
+        # The app turns away a snapshot without a single activity (validate() in
+        # app.js), so with none stored the snapshot, its streams and its tiles
+        # stay exactly as they are (in a fresh copy, the demo) rather than
+        # becoming an error screen on the phone.
+        print(f"no activities in {RAW} yet: {OUT}, its streams and its tiles left as they are")
+        return 0
     tile_inventory = write_streams(stream_ids, {r["id"]: r["sport"] for r in activities}, weather, athlete_mass())
 
     load = []
-    with open(os.path.join(RAW, "garmin_load.csv"), newline="") as fh:
-        for r in csv.reader(fh):
-            if not r or not r[0].strip():
-                continue
-            load.append(
-                {
-                    "d": r[0],
-                    "atl": int(float(r[1])),
-                    "ctl": int(float(r[2])),
-                    "status": r[3],
-                    "vo2": num(r[4]) if len(r) > 4 else None,
-                }
-            )
+    load_path = os.path.join(RAW, "garmin_load.csv")
+    if os.path.exists(load_path):
+        with open(load_path, newline="") as fh:
+            for r in csv.reader(fh):
+                if not r or not r[0].strip():
+                    continue
+                # A day Garmin gave without the acute or the chronic figure
+                # (a new account has no chronic load yet) is left out: the row
+                # stays in the store, and one bad row must not stop every build.
+                if len(r) < 3 or not r[1].strip() or not r[2].strip():
+                    continue
+                load.append(
+                    {
+                        "d": r[0],
+                        "atl": int(float(r[1])),
+                        "ctl": int(float(r[2])),
+                        "status": r[3],
+                        "vo2": num(r[4]) if len(r) > 4 else None,
+                    }
+                )
     load.sort(key=lambda r: r["d"])
 
     sleep = []
-    with open(os.path.join(RAW, "sleep.csv"), newline="") as fh:
-        for r in csv.reader(fh):
-            if not r or not r[0].strip():
-                continue
-            sleep.append(
-                {
-                    "d": r[0],
-                    "score": num(r[1]),
-                    "h": num(r[2]),
-                    "deep": num(r[3]),
-                    "rem": num(r[4]),
-                    "hrv": num(r[5]),
-                    "stress": num(r[6]),
-                }
-            )
+    sleep_path = os.path.join(RAW, "sleep.csv")
+    if os.path.exists(sleep_path):
+        with open(sleep_path, newline="") as fh:
+            for r in csv.reader(fh):
+                if not r or not r[0].strip():
+                    continue
+                sleep.append(
+                    {
+                        "d": r[0],
+                        "score": num(r[1]),
+                        "h": num(r[2]),
+                        "deep": num(r[3]),
+                        "rem": num(r[4]),
+                        "hrv": num(r[5]),
+                        "stress": num(r[6]),
+                    }
+                )
     sleep.sort(key=lambda r: r["d"])
 
     # Daily wellness summaries and weigh-ins, for the Health pane.
@@ -732,8 +775,8 @@ def main(argv=None):
         "dataThrough": activities[-1]["d"] if activities else None,
         "detailSince": detail_cutoff,
         "athlete": context["athlete"],
-        "gear": context["gear"],
-        "garminNow": context["garminNow"],
+        "gear": context.get("gear") or [],
+        "garminNow": context.get("garminNow") or {},
         "activities": activities,
         "garminLoad": load,
         "sleep": sleep,
@@ -757,7 +800,7 @@ def main(argv=None):
     size = os.path.getsize(OUT)
     print(
         f"wrote {OUT} ({size / 1024:.0f} kB): "
-        f"{len(activities)} activities {activities[0]['d']}..{activities[-1]['d']}, "
+        f"{len(activities)} activities {activities[0]['d'] + '..' + activities[-1]['d'] if activities else '(none yet)'}, "
         f"{sum(1 for a in activities if 'dt' in a)} with detail, {sum(1 for a in activities if 'laps' in a)} with laps, "
         f"{sum(1 for a in activities if 'note' in a)} with notes, "
         f"{len(snapshot['ask'])} ask rows, "

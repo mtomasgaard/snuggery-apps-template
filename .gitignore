@@ -27,4 +27,4 @@ sessions.json
 # committing it would put an hourly commit in a repository whose convention is
 # "commit only if it changed". The workflow prints it in its last step; the
 # builder reads it in the same job, so `pulledAt` still lands in the snapshot.
-garmin-raw/pull.json
+running-dashboard/raw/pull.json
