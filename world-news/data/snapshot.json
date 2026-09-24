@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T13:01:11Z",
+ "generatedAt": "2026-09-24T14:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "21 years after disaster helped bring peace to Aceh – has botched Indonesian response to floods reignited calls for independence?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/21-years-after-disaster-helped-bring-peace-to-aceh-has-botched-indonesian-response-to-floods-reignited-calls-for-independence-290480",
+     "published": "2026-09-24T12:53:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Azifah Astrina, Ph.D. candidate in Political Science, University of Illinois Urbana-Champaign; Universitas Gadjah Mada"
+    },
+    {
      "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "William Cornwell, Associate Professor of Cardiology, University of Colorado Anschutz"
-    },
-    {
-     "title": "AI tools can help Americans meet their civil legal needs",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/ai-tools-can-help-americans-meet-their-civil-legal-needs-290772",
-     "published": "2026-09-24T12:47:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ellen Murphy, Professor of Practice, Wake Forest University"
     },
     {
      "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
-   "published": "2026-09-24 12:48 UTC"
+   "title": "21 years after disaster helped bring peace to Aceh – has botched Indonesian response to floods reignited calls for independence?",
+   "published": "2026-09-24 12:53 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "AI tools can help Americans meet their civil legal needs",
-   "published": "2026-09-24 12:47 UTC"
+   "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
+   "published": "2026-09-24 12:48 UTC"
   },
   {
    "region": "Americas",
