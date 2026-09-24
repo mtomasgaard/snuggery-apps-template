@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T06:01:06Z",
+ "generatedAt": "2026-09-24T07:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "An AI model has found a new ‘CRISPR-like’ biological system. Here’s what it means for science",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/an-ai-model-has-found-a-new-crispr-like-biological-system-heres-what-it-means-for-science-292777",
+     "published": "2026-09-24T06:19:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dimitri Perrin, Head of School (Computer Science) and Co-Director (Centre for Data Science), Queensland University of Technology"
+    },
+    {
+     "title": "Swan Song: Diana’s brother flips the royal family the bird in his scathing new book",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/swan-song-dianas-brother-flips-the-royal-family-the-bird-in-his-scathing-new-book-292678",
+     "published": "2026-09-24T06:07:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kate Cantrell, Senior Lecturer in Humanities, University of Southern Queensland"
+    },
+    {
      "title": "Why David Brat, the new US ambassador to Australia, has a big in-tray",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
-    },
-    {
-     "title": "The Intergenerational Report says we need more vocational skills – but federal funding for them is set to drop",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-intergenerational-report-says-we-need-more-vocational-skills-but-federal-funding-for-them-is-set-to-drop-292694",
-     "published": "2026-09-24T05:33:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lizzie Knight, Program Director, Education and Skills, Grattan Institute"
-    },
-    {
-     "title": "Unemployment rises to 4.6%, but a September interest rate hike still looks likely",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/unemployment-rises-to-4-6-but-a-september-interest-rate-hike-still-looks-likely-290154",
-     "published": "2026-09-24T04:53:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jeff Borland, Professor of Economics, The University of Melbourne"
     },
     {
      "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "An AI model has found a new ‘CRISPR-like’ biological system. Here’s what it means for science",
+   "published": "2026-09-24 06:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Swan Song: Diana’s brother flips the royal family the bird in his scathing new book",
+   "published": "2026-09-24 06:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Why David Brat, the new US ambassador to Australia, has a big in-tray",
    "published": "2026-09-24 05:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Intergenerational Report says we need more vocational skills – but federal funding for them is set to drop",
-   "published": "2026-09-24 05:33 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Unemployment rises to 4.6%, but a September interest rate hike still looks likely",
-   "published": "2026-09-24 04:53 UTC"
   },
   {
    "region": "Oceania",
