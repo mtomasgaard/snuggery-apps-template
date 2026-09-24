@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T20:01:11Z",
+ "generatedAt": "2026-09-24T21:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
+     "title": "The English paid off the Vikings for almost a century. But was the Danegeld such a bad idea?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/the-english-paid-off-the-vikings-for-almost-a-century-but-was-the-danegeld-such-a-bad-idea-288280",
+     "published": "2026-09-24T20:13:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew Firth, Research Fellow in Medieval History, Flinders University"
+    },
+    {
+     "title": "Are AFL grand finals really the hardest game of the year? We checked the data",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/are-afl-grand-finals-really-the-hardest-game-of-the-year-we-checked-the-data-291452",
+     "published": "2026-09-24T20:13:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joel Garrett, Lecturer in Exercise Science and Physiology, Griffith University"
+    },
+    {
+     "title": "Heroin used more often, cocaine use up. What new data says about drug use today",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/heroin-used-more-often-cocaine-use-up-what-new-data-says-about-drug-use-today-292125",
+     "published": "2026-09-24T20:12:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rachel Sutherland, Research Fellow, National Drug and Alcohol Research Centre, UNSW"
+    },
+    {
+     "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-supply-chains-are-highly-exposed-could-new-ai-agents-make-them-more-resilient-292773",
      "published": "2026-09-24T18:10:27Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Eef Hogervorst, Professor of Biological Psychology, Loughborough University"
-    },
-    {
-     "title": "Trump and Xi face an AI security dilemma – but face-to-face diplomacy could be a start in mitigating it",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/trump-and-xi-face-an-ai-security-dilemma-but-face-to-face-diplomacy-could-be-a-start-in-mitigating-it-292644",
-     "published": "2026-09-24T13:27:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nicholas John Wheeler, Professor of International Relations Department of Political Science and International Studies, University of Birmingham; BASIC"
-    },
-    {
-     "title": "Grattan on Friday: when rogue AI agent ‘scaled a fence’, it reinforced Albanese’s case for tough guardrails",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-when-rogue-ai-agent-scaled-a-fence-it-reinforced-albaneses-case-for-tough-guardrails-292588",
-     "published": "2026-09-24T08:03:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "An AI model has found a new ‘CRISPR-like’ biological system. Here’s what it means for science",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/an-ai-model-has-found-a-new-crispr-like-biological-system-heres-what-it-means-for-science-292777",
-     "published": "2026-09-24T06:19:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dimitri Perrin, Head of School (Computer Science) and Co-Director (Centre for Data Science), Queensland University of Technology"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The English paid off the Vikings for almost a century. But was the Danegeld such a bad idea?",
+   "published": "2026-09-24 20:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Are AFL grand finals really the hardest game of the year? We checked the data",
+   "published": "2026-09-24 20:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Heroin used more often, cocaine use up. What new data says about drug use today",
+   "published": "2026-09-24 20:12 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
    "published": "2026-09-24 18:10 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Can HRT prevent dementia? What the latest research tells us",
    "published": "2026-09-24 15:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Trump and Xi face an AI security dilemma – but face-to-face diplomacy could be a start in mitigating it",
-   "published": "2026-09-24 13:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Grattan on Friday: when rogue AI agent ‘scaled a fence’, it reinforced Albanese’s case for tough guardrails",
-   "published": "2026-09-24 08:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "An AI model has found a new ‘CRISPR-like’ biological system. Here’s what it means for science",
-   "published": "2026-09-24 06:19 UTC"
   },
   {
    "region": "Oceania",
