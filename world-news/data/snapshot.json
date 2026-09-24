@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T12:01:16Z",
+ "generatedAt": "2026-09-24T13:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Mosque attack highlights evolving extremism landscape that has brought Pakistan-Afghanistan ties to crisis point",
+     "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/mosque-attack-highlights-evolving-extremism-landscape-that-has-brought-pakistan-afghanistan-ties-to-crisis-point-292416",
-     "published": "2026-09-23T19:19:30Z",
+     "link": "https://theconversation.com/cholesterol-control-gets-personalized-a-cardiologist-explains-how-new-guidelines-tailor-treatment-to-your-unique-risk-profile-279080",
+     "published": "2026-09-24T12:48:02Z",
      "summary": "",
      "stale": false,
-     "author": "Saif Tahir, Research Assistant and Doctoral Student, Te Herenga Waka — Victoria University of Wellington"
+     "author": "William Cornwell, Associate Professor of Cardiology, University of Colorado Anschutz"
     },
     {
-     "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
+     "title": "AI tools can help Americans meet their civil legal needs",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/trump-speculates-on-diesel-fuel-export-ban-as-high-prices-ripple-across-us-economy-292323",
-     "published": "2026-09-23T14:30:14Z",
+     "link": "https://theconversation.com/ai-tools-can-help-americans-meet-their-civil-legal-needs-290772",
+     "published": "2026-09-24T12:47:45Z",
      "summary": "",
      "stale": false,
-     "author": "Vidya Mani, Associate Professor, Darden School of Business; Research Associate Professor, Biocomplexity Institute, University of Virginia; Cornell University"
+     "author": "Ellen Murphy, Professor of Practice, Wake Forest University"
     },
     {
      "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Mosque attack highlights evolving extremism landscape that has brought Pakistan-Afghanistan ties to crisis point",
-   "published": "2026-09-23 19:19 UTC"
+   "title": "Cholesterol control gets personalized – a cardiologist explains how new guidelines tailor treatment to your unique risk profile",
+   "published": "2026-09-24 12:48 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Trump speculates on diesel fuel export ban as high prices ripple across US economy",
-   "published": "2026-09-23 14:30 UTC"
+   "title": "AI tools can help Americans meet their civil legal needs",
+   "published": "2026-09-24 12:47 UTC"
   },
   {
    "region": "Americas",
