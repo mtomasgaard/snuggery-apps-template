@@ -1,0 +1,110 @@
+[
+ {
+  "accuracy": "Distances are 1/parallax with no prior; 98.3% of m10 rows use Gaia DR3. Equinox J2000.0; epoch J2000.0 except Tycho-2 stars with pflag X and no Hipparcos match (epoch J1991.5, per the build notes). AT-HYG's ACKNOWLEDGMENTS list neither SIMBAD nor Høg et al. 2000 although its build notes use both; both are credited here.",
+  "adaptations": "Positions turned into ICRS Cartesian parsecs from ra, dec and dist; V derived from Tycho VT as V = VT - 0.090 (BT-VT), the formula in AT-HYG's own build notes, for 209,908 rows; absolute magnitudes recomputed as V + 5 - 5 log10 d with no extinction correction; colour indices and spectral types turned into display temperatures; 209,156 stars within 500 pc with parallax/error > 10 packed into deep.bin (pc x 64 in int16, M_V in 0.1 mag steps). The shipped star files are shared under CC BY-SA 4.0.",
+  "id": "athyg",
+  "licence": "CC BY-SA 4.0",
+  "licence_quote": "\"This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License][cc-by-sa].\" (LICENSE)",
+  "owner": "David Nash (astronexus)",
+  "retrieved": "2026-09-23",
+  "source": "Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA 1997, 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, from gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, the Gliese & Jahreiss 1991 nearby-star catalogue, the Tycho-2 Spectral Type Catalog (Wright et al. 2003) and SIMBAD cross-identifications (CDS, Strasbourg).",
+  "title": "AT-HYG v3.2 (Augmented Tycho-HYG), subsets athyg_32_reduced_m10 and athyg_32_hyg_ids",
+  "url": "https://github.com/astronexus/ATHYG-Database/tree/650346e2bc57f664eb411bc5f44ffd94b8006af2"
+ },
+ {
+  "accuracy": "Parallax errors of the Gaia DR3 stars in deep.bin, read from Stellarium's copy (stored in 0.01 mas steps) at build time: median 0.02 mas, 90th percentile 0.07 mas. No zero-point correction.",
+  "adaptations": "Used only as the distances AT-HYG already carries; no Gaia file is read directly.",
+  "id": "gaia-dr3",
+  "licence": "CC BY-NC 3.0 IGO (non-commercial). ESA's Gaia licence page (cosmos.esa.int/web/gaia-users/license) could not be read from the build network; a web-search summary of it gives CC BY-NC 3.0 IGO, as do the Celestia and celestia-gaia-stardb licence files. A third-party PyPI package states CC BY-SA 3.0 IGO (ESA's licence for images), and the AWS Open Data registry \"Attribution required\". This app uses the Gaia-derived values non-commercially, as that licence requires.",
+  "licence_quote": "\"This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement.\" (AT-HYG ACKNOWLEDGMENTS.md)",
+  "owner": "European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC)",
+  "retrieved": "2026-09-23",
+  "source": "Gaia Collaboration, Vallenari et al. 2023; parallaxes as carried by AT-HYG v3.2",
+  "title": "Gaia Data Release 3 (inside AT-HYG distances)",
+  "url": "https://www.cosmos.esa.int/gaia"
+ },
+ {
+  "accuracy": "Gliese 1991 distances are often photometric: of the 574 Gliese-only stars within 20 pc that AT-HYG matched to Gaia DR3, 72% agree within 20% and 5% are off by more than a factor of two (measured on these files).",
+  "adaptations": "Used for the 661 HYG rows AT-HYG does not carry: Gliese companions (at their primary's AT-HYG distance along their own direction, flag bit 2) and Gliese-only stars (at their Gliese 1991 distance, flag bit 6); spectral types filled in for 971 AT-HYG rows that had none; HIP 55203 (xi UMa, deleted in HYG v3.5) mapped to HYG's xi UMa A.",
+  "id": "hyg",
+  "licence": "CC BY-SA 4.0",
+  "licence_quote": "\"The licensing for HYG v4.0 is Creative Commons CC BY-SA 4.0, unlike previous versions of the HYG catalog.\" (hyg/version-info.md)",
+  "owner": "David Nash (astronexus)",
+  "retrieved": "2026-09-23",
+  "source": "Hipparcos (ESA 1997; 2007 new reduction), Yale Bright Star Catalog 5th ed. (Hoffleit 1991), Gliese & Jahreiss 1991 (CNS3 preliminary); IAU WGSN names.",
+  "title": "HYG database v4.1 (hygdata_v41.csv)",
+  "url": "https://github.com/astronexus/HYG-Database/tree/c7f7f883fe678cc7680169a50ccd7dcc49b060ce"
+ },
+ {
+  "accuracy": "Parallax stored in 0.02 mas steps; the catalogue author calls the files experimental.",
+  "adaptations": "Nothing shipped. Each AT-HYG star was joined by Gaia DR3 id or HIP number to read a parallax error. The error qualifies AT-HYG's distance only when both come from the same Gaia DR3 source (332,286 rows) or when the two parallaxes agree within 3 sigma (1,733 rows); 2,951 rows with a distance have no applicable error.",
+  "id": "stellarium-hipgaia3",
+  "licence": "No data licence stated; the files sit in a GPL-2.0-or-later source tree",
+  "licence_quote": "COPYING: \"GNU GENERAL PUBLIC LICENSE Version 2, June 1991\"; no data-specific notice.",
+  "owner": "Stellarium team; catalogues built by Henry Leung (henrysky/stellarium_star_catalogs)",
+  "retrieved": "2026-09-23",
+  "source": "Gaia DR3 (ESA/Gaia/DPAC) and Hipparcos values via SIMBAD",
+  "title": "Stellarium v26.2 hip_gaia3 star catalogues 0-3 (build-time check only, not shipped)",
+  "url": "https://github.com/Stellarium/stellarium/tree/2b10b1a3bb534eb4e7586751054bf67b36c22e53/stars/hip_gaia3"
+ },
+ {
+  "accuracy": "Figures are a drawing convention, not a measurement; IAU constellations are defined by their boundaries.",
+  "adaptations": "752 unique figure segments resolved to named rows, 30 of them kept for the sky view only because a star has no usable parallax; 525 IAU names attached, 9 have no row in AT-HYG/HYG.",
+  "id": "stellarium-modern-iau",
+  "licence": "CC BY-SA 4.0",
+  "licence_quote": "description.md, \"## License\": \"CC BY-SA 4.0\"",
+  "owner": "Stellarium's team",
+  "retrieved": "2026-09-23",
+  "source": "Constellation figures from the IAU \"The Constellations\" pages (Sky & Telescope: Roger Sinnott, Rick Fienberg, Alan MacRobert); star names from the IAU Catalog of Star Names (IAU WGSN).",
+  "title": "Stellarium v26.2 sky culture \"modern_iau\"",
+  "url": "https://github.com/Stellarium/stellarium/tree/2b10b1a3bb534eb4e7586751054bf67b36c22e53/skycultures/modern_iau"
+ },
+ {
+  "accuracy": "As of the pinned commit, and not complete: no planet is listed for Barnard's Star, and eps Eridani b is \"Controversial\", so it is not shown.",
+  "adaptations": "Planets listed as \"Confirmed planets\" only: 1,259 planets on 892 named rows. Hosts joined to AT-HYG/HYG by identifier or by position (<= 30 arcsec, distance within 5%); an identifier that points more than 1 degree from the catalogue's own coordinates and more than 50% off its distance is treated as a catalogue slip and not used (3 hosts: Gliese 3021 A, HD 11964 A, TOI-1411); 167 hosts within 100 pc placed from the catalogue's own coordinates and distance; values rounded to 4 significant digits.",
+  "id": "oec",
+  "licence": "MIT",
+  "licence_quote": "\"The database is licensed under an MIT license (see below), which basically says you can do everything with it.\" (README.md) The licence, verbatim from the README: \"Copyright (C) 2012 Hanno Rein Permission is hereby granted, free of charge, to any person obtaining a copy of this database and associated scripts (the \"Database\"), to deal in the Database without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Database, and to permit persons to whom the Database is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Database. A reference to the Database shall be included in all scientific publications that make use of the Database. THE DATABASE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE DATABASE OR THE USE OR OTHER DEALINGS IN THE DATABASE.\"",
+  "owner": "Hanno Rein and contributors",
+  "retrieved": "2026-09-23",
+  "source": "Community-curated compilation (Rein 2012, arXiv:1211.7121); most recent entries imported from the NASA Exoplanet Archive.",
+  "title": "Open Exoplanet Catalogue",
+  "url": "https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue/tree/77ab86906b5b9cade8ebff60bef6aff3dfee3206"
+ },
+ {
+  "accuracy": "A dwarf sequence applied to every luminosity class; display use only.",
+  "adaptations": "Bt-Vt and spectral-type columns interpolated to effective temperature for display colours; only the derived colour table ships.",
+  "id": "mamajek",
+  "licence": "No licence stated on the table (the MeanStars code is BSD-3-Clause)",
+  "licence_quote": "\"that reference should be cited until an updated version of the table is published\" (file header)",
+  "owner": "Eric Mamajek",
+  "retrieved": "2026-09-23",
+  "source": "Pecaut & Mamajek 2013, ApJS 208, 9 (Table 5); the copy bundled in the MeanStars 3.6.1 wheel on PyPI",
+  "title": "A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence, v2022.04.16",
+  "url": "https://pypi.org/project/MeanStars/3.6.1/"
+ },
+ {
+  "accuracy": "A blackbody-based model. It underestimates hot stars: B-V = -0.215 gives 13,957 K where Mamajek's B2V row has 20,600 K; at the Sun's B-V of 0.65 it gives 5,778 K (Mamajek G2V: 5,770 K).",
+  "adaptations": "T = T0 (1/(a BV + b) + 1/(a BV + c)) with the coefficients read from the pinned source: a = 0.92, b = 1.7, c = 0.62, T0 = 4600; used for 10,400 named and 78,936 deep stars.",
+  "id": "ballesteros",
+  "licence": "MIT (PyAstronomy)",
+  "licence_quote": "PyAstronomy 0.25.0 METADATA: \"License: MIT\"",
+  "owner": "F. J. Ballesteros; coefficients as coded in PyAstronomy 0.25.0 (MIT)",
+  "retrieved": "2026-09-23",
+  "source": "PyAstronomy/pyasl/asl/aslExt_1/ballesterosBV_T.py",
+  "title": "B-V to effective temperature (Ballesteros 2012, EPL 97, 34008) — a model",
+  "url": "https://pypi.org/project/PyAstronomy/0.25.0/"
+ },
+ {
+  "accuracy": "The chromaticity of an ideal blackbody; real stellar spectra differ, most for M stars.",
+  "adaptations": "Planck spectra integrated against the CMFs at 1 nm, converted with the IEC 61966-2-1 sRGB matrix and normalised to the largest channel.",
+  "id": "cie1931",
+  "licence": "Standard reference data; colour-science is BSD-3-Clause",
+  "licence_quote": "colour-science LICENSE: \"Redistribution and use in source and binary forms, with or without modification, are permitted...\"",
+  "owner": "CIE (tabulated by CVRL), via colour-science 0.4.6 (BSD-3-Clause)",
+  "retrieved": "2026-09-23",
+  "source": "colour/colorimetry/datasets/cmfs.py",
+  "title": "CIE 1931 2-degree standard observer colour-matching functions",
+  "url": "https://pypi.org/project/colour-science/0.4.6/"
+ }
+]

@@ -64,3 +64,33 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   © GeoNames under CC BY 4.0, whose attribution is a condition of use; and
   assets/fflate.min.js is fflate under the MIT licence — see
   global-wind/assets/LICENSES.md and global-weather/assets/LICENSES.md.
+- The data under milky-way/data/ is adapted from the sources listed, with their
+  licences and adaptations, in milky-way/CREDITS.txt. The planet, moon and
+  rotation data are from JPL/NAIF (freely available SPICE data). The asteroid
+  and comet orbits are from the JPL Small-Body Database, the Minor Planet
+  Center and ESA's NEO Coordination Centre, under their terms as quoted there.
+  The planet and moon maps are NASA and USGS products: public domain, except
+  that the New Horizons Pluto map states no licence and the Cassini Jupiter map
+  is under JPL's image use policy. The galaxy layer uses the
+  Local Volume Database (CC0 1.0), galstreams (BSD 3-Clause), SpiralMap (MIT)
+  and Agama (BSD/MIT), whose full licence texts close milky-way/CREDITS.txt.
+  The exoplanets are from the Open Exoplanet Catalogue (MIT).
+  - milky-way/data/tex/sun.jpg, milky-way/data/tex/moon.jpg and
+    milky-way/data/stars/constellations.json are adapted from Stellarium under
+    CC BY-SA 4.0 and are shared under the same licence.
+  - milky-way/data/stars/deep.bin and milky-way/data/stars/named.json are
+    adapted from AT-HYG and HYG (CC BY-SA 4.0).
+  - Those two files, milky-way/data/sky/gaia-dr3-counts.jpg and
+    milky-way/data/galaxy/young-*.png contain data from the European Space
+    Agency mission Gaia, processed by the Gaia Data Processing and Analysis
+    Consortium (DPAC). That data is licensed under CC BY-NC 3.0 IGO, so these
+    files may be used for non-commercial purposes only.
+  - The young-star maps, milky-way/data/galaxy/young-gaiadr3-ob.png and
+    milky-way/data/galaxy/young-poggio2021-ums.png, are taken from SpiralMap,
+    which includes them with their authors' permission. That permission was
+    given to SpiralMap; no separate grant to downstream redistributors was
+    found.
+  - milky-way/vendor/ is three.js under the MIT licence
+    (milky-way/vendor/three-LICENSE.txt), and milky-way/fonts/ are Atkinson
+    Hyperlegible and Newsreader under the SIL Open Font License 1.1
+    (milky-way/fonts/OFL.txt).

@@ -1,0 +1,338 @@
+{
+ "bodies": {
+  "earth": {
+   "file": "earth.jpg",
+   "grayscale": false,
+   "height": 1024,
+   "kind": "visible",
+   "lat_type": "geodetic (WGS84 geographic)",
+   "lon_evidence": "WebWorldWind BMNGOneImageLayer.js drapes this file on Sector.FULL_SPHERE = (-90, 90, -180, 180)",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "NASA Blue Marble Next Generation, May 2004 (topography and bathymetry shading)",
+   "source_id": "nasa-bmng-200405",
+   "width": 2048
+  },
+  "earth_night": {
+   "file": "earth_night.jpg",
+   "grayscale": false,
+   "height": 1024,
+   "kind": "visible",
+   "lat_type": "geodetic (WGS84 geographic)",
+   "lon_evidence": "no bounds in the Marble dgml; registered against the Blue Marble (land/ocean base, best shift 0, not mirrored) and city positions in verify_textures_sky.py",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "City lights from DMSP-OLS (NASA GSFC / NOAA NGDC), over a dark land and ocean base",
+   "source_id": "nasa-noaa-citylights-dmsp",
+   "width": 2048
+  },
+  "ganymede": {
+   "file": "ganymede.jpg",
+   "fill_value": 78,
+   "grayscale": true,
+   "height": 256,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveWest, CenterLongitude 180 W (= 180 E); ISIS x grows eastward, so the map runs 0..360 E left to right (360 W .. 0 W); checked against Galileo Regio in verify_textures_sky.py",
+   "lon_left_deg": 0.0,
+   "nodata_fill": "flat DN 78 (mean of the imaged pixels) at the unmapped poles",
+   "nodata_fraction": 0.0312,
+   "note": "Voyager and Galileo SSI global mosaic (NASA/JPL, USGS)",
+   "source_id": "usgs-ganymede-voyager-galileo-1km",
+   "width": 512
+  },
+  "io": {
+   "file": "io.jpg",
+   "grayscale": true,
+   "height": 256,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveWest, CenterLongitude 0 W; ISIS x grows eastward, so east longitude runs -180..180 left to right; checked against Loki Patera in verify_textures_sky.py",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "Galileo SSI and Voyager 1 global mosaic (NASA/JPL, USGS)",
+   "source_id": "usgs-io-galileo-voyager-1km",
+   "width": 512
+  },
+  "jupiter": {
+   "file": "jupiter.jpg",
+   "fill_value": [
+    169,
+    173,
+    156
+   ],
+   "grayscale": false,
+   "height": 1024,
+   "kind": "visible",
+   "lat_type": "not stated",
+   "lon_evidence": "annotated original (USGS jupiter_from_cassini.tif) labels 180 ... 0 ... 180 decreasing to the right, i.e. west longitudes: east increases to the right, left edge 180 W; the web copy is the same picture (correlation 0.999 at zero shift, not mirrored); no flip applied. The web copy's world file (jupiter_rgb_cyl_www.jgw) instead puts the left edge at longitude 0, 180 deg from the annotation; the annotation, made with the map, is followed. Longitude system not stated in the file (the Great Red Spot drifts, so its position is a Dec 2000 snapshot)",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "flat RGB [169, 173, 156] south of 82.3 S, already in the source map (the south polar region was not observed; the map maker's fill, not the mean of the imaged pixels): not imaged, not terrain",
+   "nodata_fraction": 0.04297,
+   "note": "Cassini ISS colour map PIA07782, Dec 2000 (NASA/JPL/Space Science Institute)",
+   "source_id": "cassini-pia07782",
+   "width": 2048
+  },
+  "mars": {
+   "file": "mars.jpg",
+   "grayscale": false,
+   "height": 1024,
+   "kind": "albedo",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveEast, planetocentric, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "Viking Orbiter colour mosaic, red and violet filters (NASA, PDS, USGS)",
+   "source_id": "usgs-mars-viking-color-925m",
+   "width": 2048
+  },
+  "mercury": {
+   "file": "mercury.jpg",
+   "grayscale": true,
+   "height": 512,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "MESSENGER MDIS 750 nm global mosaic, May 2013 (NASA/JHUAPL/ASU, USGS)",
+   "source_id": "usgs-mercury-messenger-2013",
+   "width": 1024
+  },
+  "moon": {
+   "file": "moon.jpg",
+   "grayscale": false,
+   "height": 1024,
+   "kind": "albedo",
+   "lat_type": "not stated (sphere)",
+   "lon_evidence": "Stellarium sphere-texture convention (prime meridian at the centre); proved by maria and craters (Tycho, Mare Crisium, Mare Humorum) in verify_textures_sky.py",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "LRO LROC WAC Hapke-normalised albedo (Stellarium map by R. Kabatsayev)",
+   "source_id": "stellarium-moon-lroc-albedo",
+   "width": 2048
+  },
+  "pluto": {
+   "file": "pluto.jpg",
+   "fill_value": 109,
+   "grayscale": true,
+   "height": 512,
+   "kind": "visible",
+   "lat_type": "Planetographic",
+   "lon_evidence": "ISIS label: PositiveEast, CenterLongitude 180, 0..360 (left edge 0 E); GeoTIFF central_meridian 180",
+   "lon_left_deg": 0.0,
+   "nodata_fill": "flat DN 109 (mean of the imaged pixels) where New Horizons saw nothing (mostly south of ~30 S, in polar night during the 2015 flyby): not imaged, not terrain",
+   "nodata_fraction": 0.31816,
+   "note": "New Horizons LORRI/MVIC global mosaic, 2017 (NASA/JHUAPL/SwRI/LPI, USGS); the south was in darkness",
+   "source_id": "usgs-pluto-new-horizons-2017",
+   "width": 1024
+  },
+  "sun": {
+   "file": "sun.jpg",
+   "grayscale": false,
+   "height": 512,
+   "kind": "visible",
+   "lat_type": "not stated (sphere)",
+   "lon_evidence": "Stellarium sphere-texture convention (prime meridian at the centre); a generic texture of HMI data from Aug 2025 and Dec 2019 with no Carrington registration",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "none: every pixel imaged",
+   "nodata_fraction": 0.0,
+   "note": "SDO HMI continuum (Stellarium map by R. Kabatsayev), coloured by the TSIS-1 spectrum",
+   "source_id": "stellarium-sun-hmi",
+   "width": 1024
+  },
+  "triton": {
+   "file": "triton.jpg",
+   "fill_value": 153,
+   "grayscale": true,
+   "height": 256,
+   "kind": "visible",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "flat DN 153 (mean of the imaged pixels) where Voyager 2 saw nothing (the north, in winter darkness in 1989): not imaged, not terrain",
+   "nodata_fraction": 0.38352,
+   "note": "Voyager 2 mosaic, orange filter only (NASA/JPL, P. Schenk; USGS); the north was in darkness in 1989",
+   "source_id": "usgs-triton-voyager2-600m",
+   "width": 512
+  },
+  "venus": {
+   "file": "venus.jpg",
+   "fill_value": 129,
+   "grayscale": true,
+   "height": 512,
+   "kind": "radar",
+   "lat_type": "Planetocentric",
+   "lon_evidence": "ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0",
+   "lon_left_deg": -180.0,
+   "nodata_fill": "flat DN 129 (mean of the imaged pixels) in Magellan's swath gaps and polar holes",
+   "nodata_fraction": 0.06998,
+   "note": "Magellan radar (C3-MIDR mosaic, NASA/JPL, USGS) — radar brightness under the clouds, not what an eye sees",
+   "source_id": "usgs-venus-magellan-c3mdir",
+   "width": 1024
+  }
+ },
+ "colour_method": "CIE 1931 2-degree observer (colour-science 0.4.6 table), 1 nm grid 360-830 nm, linear interpolation of each spectrum (Karkoschka air wavelengths; TSIS 1 nm bins at their centres). Planets and Titan: XYZ of albedo x TSIS-1 sunlight, normalised so a perfect white reflector has Y = 1, Bradford-adapted from the Sun's white to D65, IEC 61966-2-1 sRGB matrix and transfer curve, x 255, rounded; srgb_illuminant_E is the same with an equal-energy illuminant, as a cross-check. Sun: XYZ of the TSIS-1 spectrum through the same matrix without adaptation, largest channel scaled to 1. Disk-averaged colours of July 1995 (Uranus changes with season); no limb darkening or banding.",
+ "colours": {
+  "jupiter": {
+   "albedo_Y": 0.5276,
+   "linear": [
+    0.5353,
+    0.5333,
+    0.44603
+   ],
+   "note": "Karkoschka 1998: measured disk spectrum, ESO 1995",
+   "out_of_gamut": false,
+   "source": "Karkoschka 1998, Icarus 133, ESO spectrophotometry 1995-07-06..10 (PDS ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0)",
+   "spectrum": "Karkoschka (1998) 1995LOW.TAB column \"JUPITER ALBEDO\": full-disk albedo at 6.8 deg phase",
+   "srgb": [
+    193,
+    193,
+    178
+   ],
+   "srgb_illuminant_E": [
+    193,
+    193,
+    178
+   ],
+   "xy": [
+    0.3333,
+    0.3502
+   ]
+  },
+  "neptune": {
+   "albedo_Y": 0.4343,
+   "linear": [
+    0.25035,
+    0.47451,
+    0.59375
+   ],
+   "note": "Karkoschka 1998: measured disk spectrum (ESO, July 1995) — no real map exists",
+   "out_of_gamut": false,
+   "source": "Karkoschka 1998, Icarus 133, ESO spectrophotometry 1995-07-06..10 (PDS ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0)",
+   "spectrum": "Karkoschka (1998) 1995LOW.TAB column \"NEPTUNE ALBEDO\": geometric albedo",
+   "srgb": [
+    137,
+    183,
+    202
+   ],
+   "srgb_illuminant_E": [
+    135,
+    183,
+    203
+   ],
+   "xy": [
+    0.2717,
+    0.306
+   ]
+  },
+  "saturn": {
+   "albedo_Y": 0.4892,
+   "linear": [
+    0.56009,
+    0.48336,
+    0.33055
+   ],
+   "note": "Karkoschka 1998: measured disk spectrum, ESO 1995 (globe; rings edge-on)",
+   "out_of_gamut": false,
+   "source": "Karkoschka 1998, Icarus 133, ESO spectrophotometry 1995-07-06..10 (PDS ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0)",
+   "spectrum": "Karkoschka (1998) 1995LOW.TAB column \"SATURN ALBEDO\": full-disk albedo at 5.7 deg phase, rings edge-on (zero tilt)",
+   "srgb": [
+    197,
+    185,
+    156
+   ],
+   "srgb_illuminant_E": [
+    197,
+    185,
+    155
+   ],
+   "xy": [
+    0.3564,
+    0.368
+   ]
+  },
+  "sun": {
+   "cct_k_mccamy": 6022,
+   "linear": [
+    1.0,
+    0.90685,
+    0.8805
+   ],
+   "note": "TSIS-1 solar spectrum (sunlight above the atmosphere)",
+   "out_of_gamut": false,
+   "source": "TSIS-1 HSRS v2, Coddington et al. 2023 (LASP), as resampled in OrbitalCommons/starfield",
+   "spectrum": "TSIS-1 Hybrid Solar Reference Spectrum v2, 1 nm box means (solar irradiance at 1 AU)",
+   "srgb": [
+    255,
+    244,
+    241
+   ],
+   "xy": [
+    0.3216,
+    0.3321
+   ]
+  },
+  "titan": {
+   "albedo_Y": 0.2182,
+   "linear": [
+    0.28138,
+    0.20918,
+    0.11488
+   ],
+   "note": "Karkoschka 1998: measured disk spectrum of the haze, ESO 1995",
+   "out_of_gamut": false,
+   "source": "Karkoschka 1998, Icarus 133, ESO spectrophotometry 1995-07-06..10 (PDS ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0)",
+   "spectrum": "Karkoschka (1998) 1995LOW.TAB column \"TITAN ALBEDO\": full-disk albedo at 5.7 deg phase",
+   "srgb": [
+    145,
+    126,
+    95
+   ],
+   "srgb_illuminant_E": [
+    145,
+    126,
+    95
+   ],
+   "xy": [
+    0.3811,
+    0.3838
+   ]
+  },
+  "uranus": {
+   "albedo_Y": 0.5029,
+   "linear": [
+    0.33539,
+    0.54495,
+    0.59296
+   ],
+   "note": "Karkoschka 1998: measured disk spectrum (ESO, July 1995) — no real map exists",
+   "out_of_gamut": false,
+   "source": "Karkoschka 1998, Icarus 133, ESO spectrophotometry 1995-07-06..10 (PDS ESO-J/S/N/U-SPECTROPHOTOMETER-4-V2.0)",
+   "spectrum": "Karkoschka (1998) 1995LOW.TAB column \"URANUS ALBEDO\": geometric albedo",
+   "srgb": [
+    157,
+    195,
+    202
+   ],
+   "srgb_illuminant_E": [
+    154,
+    195,
+    202
+   ],
+   "xy": [
+    0.2872,
+    0.3227
+   ]
+  }
+ },
+ "convention": "Equirectangular; row 0 = +90 deg latitude; longitude east-positive and increasing to the right; column x covers longitudes lon_left_deg + 360 x / width .. + 360 (x + 1) / width.",
+ "resampling": "USGS GeoTIFFs: exact area average of the source pixels whose centres fall in each output pixel, nodata (0) excluded. Stellarium and Cassini maps: exact 2x2 (Moon, Jupiter) or 8x8 (Sun, in linear light) box average. City lights: PIL BOX filter 2700 -> 2048. Blue Marble: shipped byte for byte. JPEG quality 85 (Pillow 11.3.0).",
+ "total_bytes": 1678374
+}

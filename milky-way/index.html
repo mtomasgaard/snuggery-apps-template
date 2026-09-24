@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#03050a">
+<title>Milky Way</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="stage">
+  <canvas id="gl" aria-label="The Solar System, the Sun's neighbourhood and the Milky Way in 3D. Drag to turn, pinch to zoom from a planet out to the whole galaxy, two fingers to move, tap anything to learn about it, double-tap to fly to it."></canvas>
+  <div id="labels" aria-hidden="true"></div>
+
+  <header id="head">
+    <div class="title">
+      <h1>Milky Way</h1>
+      <p id="sub">—</p>
+    </div>
+    <div class="head-actions">
+      <button id="btn-search" class="round" aria-controls="search" aria-expanded="false" aria-label="Find a planet, moon, star or cluster" title="Find">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
+      </button>
+      <button id="btn-layers" class="round" aria-controls="layers" aria-expanded="false" aria-label="Layers" title="Layers">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="M3 13l9 5 9-5"/></svg>
+      </button>
+      <button id="btn-about" class="round" aria-controls="about" aria-expanded="false" aria-label="About the data" title="About the data">i</button>
+    </div>
+  </header>
+
+  <div id="hud" aria-live="polite">
+    <div id="ruler" role="img" aria-label="Scale">
+      <div id="ruler-bar"></div>
+      <p id="ruler-len">—</p>
+    </div>
+    <p id="hud-dist" class="dim">—</p>
+  </div>
+
+  <section id="card" hidden aria-live="polite" aria-label="Selected object">
+    <div class="card-head">
+      <div>
+        <p id="card-kind" class="kicker">—</p>
+        <h2 id="card-name">—</h2>
+      </div>
+      <button id="card-close" class="round small" aria-label="Close" title="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <dl id="card-facts"></dl>
+    <ul id="card-planets" class="planets" hidden></ul>
+    <p id="card-note" class="note"></p>
+    <p id="card-src" class="src"></p>
+    <div class="card-actions">
+      <button id="card-go" class="btn primary">Fly there</button>
+      <button id="card-orbit" class="btn">Show orbit</button>
+    </div>
+  </section>
+</main>
+
+<!-- Before the dock and above it: the dock's controls work only once the app has loaded. -->
+<div id="loading" role="status">
+  <p class="load-title">Milky Way</p>
+  <div class="track"><div id="load-bar"></div></div>
+  <p id="load-msg">Reading the sky…</p>
+</div>
+
+<footer id="dock">
+  <div id="timebar" aria-label="Time">
+    <div class="trow">
+      <button id="t-play" class="round play" aria-label="Play" title="Play">
+        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5Z"/></svg>
+        <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13M16 5.5v13"/></svg>
+      </button>
+      <div class="tdate">
+        <output id="t-date">—</output>
+        <output id="t-time" class="dim">—</output>
+      </div>
+      <button id="t-speed" class="chip" aria-label="Playback speed" title="Playback speed">1 week / s</button>
+      <button id="t-now" class="chip" title="Back to the present moment">Now</button>
+    </div>
+    <div class="trow scrub">
+      <button id="t-yprev" class="yr" aria-label="Previous year">‹</button>
+      <output id="t-year">—</output>
+      <button id="t-ynext" class="yr" aria-label="Next year">›</button>
+      <div class="scrubwrap">
+        <input id="t-scrub" type="range" min="0" max="1000" step="1" value="0" aria-label="Day of the year">
+        <div class="months" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
+      </div>
+    </div>
+  </div>
+  <nav id="scales" aria-label="Scale">
+    <button data-scale="solar" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="9.5" ry="4.2"/></svg>
+      <span>Solar System</span>
+    </button>
+    <button data-scale="stars" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.6 5.1 5.1 1.6-5.1 1.6L12 17l-1.6-5.2-5.1-1.6 5.1-1.6Z"/><circle cx="5" cy="18.5" r="1"/><circle cx="19" cy="17" r="1.2"/><circle cx="18.5" cy="4.5" r=".9"/></svg>
+      <span>Neighbourhood</span>
+    </button>
+    <button data-scale="galaxy" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c3-3.5 8-2 8.5 1.5M12 12c-3 3.5-8 2-8.5-1.5M12 12c3.5 3 2 8-1.5 8.5M12 12c-3.5-3-2-8 1.5-8.5"/><circle cx="12" cy="12" r="1.3"/></svg>
+      <span>Milky Way</span>
+    </button>
+  </nav>
+</footer>
+
+<aside id="layers" class="sheet-right" hidden aria-label="Layers">
+  <div class="sheet-head">
+    <h2>Layers</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <div id="layer-rows" class="layer-rows"></div>
+</aside>
+
+<aside id="search" class="sheet-right" hidden aria-label="Find">
+  <div class="sheet-head">
+    <h2>Find</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <input id="search-q" type="search" placeholder="Jupiter, Sirius, NGC 5139…" autocomplete="off" spellcheck="false" aria-label="Search">
+  <ul id="search-res" class="results"></ul>
+</aside>
+
+<aside id="about" class="sheet-right" hidden aria-label="About the data">
+  <div class="sheet-head">
+    <h2>About</h2>
+    <button class="pill" data-close>Done</button>
+  </div>
+  <div id="about-body" class="prose"></div>
+</aside>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

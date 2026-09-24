@@ -1,0 +1,86 @@
+[
+ {
+  "id": "jpl-sbdb-h12",
+  "title": "JPL Small-Body Database: every asteroid and TNO with H < 12",
+  "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics group (Small-Body Database)",
+  "source": "kstars/data/asteroids.dat in the KDE KStars repository at commit 182b27aba4726a79f75fd1ffcd3e5d52d09f2450 (2026-04-04), sha256 dc39954ecc89f1062f07665ac3b6d10eb5a43a4a4b578947f60c2f161fdc45c2: a verbatim response of JPL's SBDB Query API (\"NASA/JPL SBDB (Small-Body DataBase) Query API\" v1.0) to KStars' query for H < 12 with full-precision elements. KStars' README.ephemerides: \"KStars keeps track of thousands of comets and asteroids. It uses orbital data published by NASA's Jet Propulsion Laboratory (JPL); these data are known as \"orbital elements\".\"",
+  "url": "https://raw.githubusercontent.com/KDE/kstars/182b27aba4726a79f75fd1ffcd3e5d52d09f2450/kstars/data/asteroids.dat",
+  "licence": "No licence could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and the research pass found only a web-search summary of catalog.data.gov (\"No license information was provided\"). JPL is operated by Caltech, so this is not claimed to be a US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; kstars/data/ has no file-level licence); only the numbers are used, in a new format.",
+  "licence_quote": "KStars README.md: \"KStars is Free Software, released under the GNU Public License.\" The data file itself carries no licence.",
+  "retrieved": "2026-09-23",
+  "adaptations": "9,032 rows read; 9,028 kept. Dropped: 134340 Pluto (1930 BM) — Pluto (drawn from DE430 instead); (2002 PD153) — e = 0 placeholder orbit with no mean anomaly; (A/2018 W3), (A/2024 U2) — in the MPC comet list at a newer epoch (kept from there). Heliocentric ecliptic J2000 elements (a, e, i, node, peri, M at the epoch) turned into perihelion distance, time of perihelion (from M and the mean motion k/a^1.5) and two ICRF unit vectors; stored as float32 (time as float64). Kinds from SBDB's orbit class (MBA/IMB/OMB shown as main belt; SBDB has no Hungaria or Hilda group); the bodies Celestia's dwarfplanets.ssc groups as dwarf planets (Ceres, Orcus, Haumea, Quaoar, Makemake, Gonggong, Eris, Sedna) as kind dwarf. Names without the provisional designation for named numbered asteroids. 2,351 orbits are flagged weak (e < 0.001, or orbit solution JPL 1/JPL 2 — a proxy, the snapshot has no arc length or condition code) and kept. Diameters, albedos and rotation periods as given.",
+  "accuracy": "Two-body propagation of osculating elements, epoch 2025-11-21 for 7,501 rows, older for the rest (per row in the file). Against JPL Horizons' own osculating elements of Ceres, Pallas, Juno and Vesta, 1900-2100: 8.2e-06 AU 49 days from the epoch; worst of the four by years from the epoch: 0-1 yr 0.00034 AU, 1-5 yr 0.017 AU, 5-10 yr 0.054 AU, 10-25 yr 0.12 AU, 25-50 yr 0.29 AU, 50-75 yr 0.32 AU, 75-125 yr 0.54 AU (Vesta, the least perturbed, within 0.075 AU). Pluto's SBDB elements against DE430: 0-1 yr 0.001 AU, 1-5 yr 0.015 AU, 5-10 yr 0.037 AU, 10-25 yr 0.088 AU, 25-50 yr 0.220 AU, 50-75 yr 0.381 AU, 75-125 yr 0.449 AU."
+ },
+ {
+  "id": "jpl-sbdb-lookup",
+  "title": "JPL Small-Body Database lookup responses: named near-Earth asteroids and cited sizes",
+  "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics group (SBDB); physical values as referenced per value in each response",
+  "source": "JSON responses of the SBDB lookup API (\"NASA/JPL Small-Body Database (SBDB) API\" v1.3) kept as test fixtures in the B612 Asteroid Institute adam_core repository at commit 8fb48119f2c3e99d4bfe7165387c9affe0f829f4 (src/adam_core/orbits/query/tests/testdata/sbdb/). Their README: \"Sample JSON responses from the JPL SBDB lookup API.\" Files: 99942_phys.json a686afe50ca3f749…, 2024YR4_phys.json 25d385e30fafb44f…, 2022AP7_phys.json e30d58592cb248b0…, 25143_phys.json 2f637f340566685b…, 54509.json ee60f48e635d9387…, 1_phys.json cd5dc3161c6a2042…, 101955_phys.json 19c0771a7be54f83…, 2_phys.json adcebf75edbfc28d…, 3_phys.json 8f3e9bbab92afb8a…, 4_phys.json 9fd4648840b1c951…, 433_phys.json 772ce4499ff24ad5…",
+  "url": "https://raw.githubusercontent.com/B612-Asteroid-Institute/adam_core/8fb48119f2c3e99d4bfe7165387c9affe0f829f4/src/adam_core/orbits/query/tests/testdata/sbdb/99942_phys.json",
+  "licence": "JPL terms as above (not readable from here). The container repository is MIT: \"Permission is hereby granted, free of charge, to any person obtaining a copy\"",
+  "licence_quote": "adam_core LICENSE.md: \"The MIT License (MIT) … Permission is hereby granted, free of charge, to any person obtaining a copy …\"",
+  "retrieved": "2026-09-23",
+  "adaptations": "Orbits of 99942 Apophis, 2024 YR4, 2022 AP7, 25143 Itokawa and 54509 YORP at each response's epoch, converted as above. Diameter, albedo and rotation period with SBDB's per-value references for those and for Ceres, Pallas, Juno, Vesta, Eros and Bennu (replacing the snapshot's uncited values for those six).",
+  "accuracy": "Elements copied at full precision; the time of perihelion each response gives and the one computed here from its mean anomaly and k are the same float64 number for all five."
+ },
+ {
+  "id": "jpl-horizons-bennu",
+  "title": "JPL Horizons: osculating elements of 101955 Bennu at 2024-01-01 TDB",
+  "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics group (Horizons); trajectory sb-101955-118_long, Farnocchia et al. (2021), doi:10.1016/j.icarus.2021.114594 (as the response cites it)",
+  "source": "A recorded Horizons API response in the B612 Asteroid Institute adam_core repository at commit 8fb48119f2c3e99d4bfe7165387c9affe0f829f4 (src/adam_core/orbits/query/tests/data/horizons/elements_bennu_20240101.txt, sha256 46de73ce09f2a8ec0e7c625d40a537339d185dce92db85bca39ebd33f9ecd870). Its README: \"These verbatim service responses gate deterministic Rust parsing\". The response states its frame: \"IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane\".",
+  "url": "https://raw.githubusercontent.com/B612-Asteroid-Institute/adam_core/8fb48119f2c3e99d4bfe7165387c9affe0f829f4/src/adam_core/orbits/query/tests/data/horizons/elements_bennu_20240101.txt",
+  "licence": "JPL terms as above (not readable from here); container repository MIT.",
+  "licence_quote": "adam_core LICENSE.md: \"Permission is hereby granted, free of charge, to any person obtaining a copy\"",
+  "retrieved": "2026-09-23",
+  "adaptations": "Used instead of the SBDB lookup fixture for Bennu, whose elements are at a 2011 epoch. Also the source of the obliquity used for every row.",
+  "accuracy": "Elements copied at full precision (osculating at 2024-01-01)."
+ },
+ {
+  "id": "esa-neocc",
+  "title": "ESA NEO Coordination Centre orbits of 162173 Ryugu and 65803 Didymos",
+  "owner": "European Space Agency, NEO Coordination Centre (Planetary Defence Office)",
+  "source": "OEF 2.0 orbit files 162173.ke1 and 65803.ke1 (present-day epoch, ECLM J2000) kept as test fixtures in the B612 Asteroid Institute adam_core repository at commit 8fb48119f2c3e99d4bfe7165387c9affe0f829f4. Their README: \"Sample OEF files from ESA NEOCC (per-object orbit download).\" The files give numbers only; the names are from Stellarium's ssystem_minor.ini (Ryugu, 1999 JU3) and Celestia's asteroids.ssc (Didymos, 1996 GT) — see the planetarium block.",
+  "url": "https://raw.githubusercontent.com/B612-Asteroid-Institute/adam_core/8fb48119f2c3e99d4bfe7165387c9affe0f829f4/src/adam_core/orbits/query/tests/testdata/neocc/162173.ke1",
+  "licence": "ESA NEOCC's data-use terms could not be read (neo.ssa.esa.int is not reachable from the build machine; a web-search summary said the NEOCC \"encourages you to make use of these data\"). Credited as ESA NEOCC. Container repository MIT.",
+  "licence_quote": "adam_core LICENSE.md: \"Permission is hereby granted, free of charge, to any person obtaining a copy\"",
+  "retrieved": "2026-09-23",
+  "adaptations": "Elements at MJD 61000 TDT converted as above; H is NEOCC's MAG value.",
+  "accuracy": "NEOCC's own 433 Eros file (433.ke1, same fixtures) and JPL's Eros response at the same epoch put Eros 1.4e-07 AU apart: the same ecliptic frame. Two-body propagation from MJD 61000 (2025-11-21)."
+ },
+ {
+  "id": "mpc-cometels",
+  "title": "Minor Planet Center comet orbits (CometEls.json)",
+  "owner": "Minor Planet Center, Smithsonian Astrophysical Observatory (IAU)",
+  "source": "kstars/data/cometels.json.gz in the KDE KStars repository at commit 182b27aba4726a79f75fd1ffcd3e5d52d09f2450, sha256 cbebd1097b244455c7ff8dcd702ff73ffeb45f9f2cdfb0eb218886385f8fab11: the MPC's Extended_Files/cometels.json.gz as downloaded by KStars (cometscomponent.cpp). Each row carries its MPC reference (MPC/MPEC).",
+  "url": "https://www.minorplanetcenter.net/Extended_Files/cometels.json.gz",
+  "licence": "\"Data from the MPC's database is made freely available to the public.\" (MPC FAQ). Citation policy: \"Users of any of these lists are reminded that the source of the data is the Minor Planet Center. The relevant URL should be cited, along with a reference to the MPC itself.\" (MPC Lists and Plots page; stated for those lists, applied here to the comet file too). Both read from the MPC's own documentation repository Smithsonian/mpc-public at commit af7756cf072339846be18516eae8f03488132b8e. The copy read here sits in KStars (GPL-2.0-or-later at project level).",
+  "licence_quote": "\"Data from the MPC's database is made freely available to the public.\"",
+  "retrieved": "2026-09-23",
+  "adaptations": "All 947 comets, A/ objects and interstellar objects; perihelion time and epoch from calendar dates (TT); the backtick the MPC uses for the okina in 1I/ʻOumuamua shown as ʻ. H is the MPC's comet magnitude parameter. Diameters (and albedo, rotation, extent where given) joined from JPL's 2021 comet export by designation, for the comets it lists them for.",
+  "accuracy": "Two-body propagation from epoch 2026-04-03. Halley's elements propagated back to JPL's 1994 solution are 0.07 AU off at r = 18.9 AU and put the 1986 perihelion +13 days from JPL's."
+ },
+ {
+  "id": "jpl-sbdb-comets",
+  "title": "JPL Small-Body Database comet export (six famous comets and comet sizes)",
+  "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics group (Small-Body Database)",
+  "source": "kstars/data/comets.dat in the KDE KStars repository at commit 182b27aba4726a79f75fd1ffcd3e5d52d09f2450, sha256 e856704306967d9c8f8dcaed7cbf4039f8209f3d07bc15a263fd4217cd937e4c: an SBDB Query API response last updated in KStars in October 2021.",
+  "url": "https://raw.githubusercontent.com/KDE/kstars/182b27aba4726a79f75fd1ffcd3e5d52d09f2450/kstars/data/comets.dat",
+  "licence": "No licence could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and the research pass found only a web-search summary of catalog.data.gov (\"No license information was provided\"). JPL is operated by Caltech, so this is not claimed to be a US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; kstars/data/ has no file-level licence); only the numbers are used, in a new format.",
+  "licence_quote": "KStars README.md: \"KStars is Free Software, released under the GNU Public License.\" The data file itself carries no licence.",
+  "retrieved": "2026-09-23",
+  "adaptations": "Orbits of 109P/Swift-Tuttle, 55P/Tempel-Tuttle, C/1996 B2 (Hyakutake), C/2020 F3 (NEOWISE), C/2006 P1 (McNaught), C/1965 S1-A (Ikeya-Seki) — famous comets the MPC list no longer carries (an editorial choice; the numbers are the file's). Shoemaker-Levy 9 is left out: its fragments orbited Jupiter, so heliocentric elements do not describe their path. Also the diameter, extent, albedo and rotation period of MPC comets, joined by designation.",
+  "accuracy": "Two-body propagation from each comet's own epoch (1965-2020); far from it they are approximate."
+ },
+ {
+  "id": "planetarium-catalogues",
+  "title": "Stellarium and Celestia catalogues (dwarf-planet grouping, two names; accuracy checks)",
+  "owner": "The Stellarium developers; the Celestia project (CelestiaContent contributors)",
+  "source": "Stellarium data/ssystem_minor.ini at commit 450dbc0fcb81593f930371a165013f2a1b255f4f (the name of 162173 Ryugu) and data/asteroid_elements.json (JPL Horizons yearly osculating elements of Ceres, Pallas, Juno and Vesta, 1800-2100, generated by Stellarium's fetch_asteroid_elements.py — used only to measure the accuracy above, not shipped); CelestiaContent data/dwarfplanets.ssc (which bodies are grouped as dwarf planets) and data/asteroids.ssc (the name of 65803 Didymos) at commit eab93932c85fa315f370477ee8c6b7e15f12c327.",
+  "url": "https://raw.githubusercontent.com/Stellarium/stellarium/450dbc0fcb81593f930371a165013f2a1b255f4f/data/ssystem_minor.ini",
+  "licence": "GNU GPL (Stellarium's COPYING is \"GNU GENERAL PUBLIC LICENSE Version 2, June 1991\"; Celestia's dwarfplanets.ssc and asteroids.ssc: \"SPDX-License-Identifier: GPL-2.0-or-later\"). Only facts are taken (a grouping and two names); no file is redistributed.",
+  "licence_quote": "\"GNU GENERAL PUBLIC LICENSE Version 2, June 1991\"; \"SPDX-License-Identifier: GPL-2.0-or-later\"",
+  "retrieved": "2026-09-23",
+  "adaptations": "Nothing shipped beyond the kind of eight rows and two names. Stellarium types only Eris, Haumea, Makemake as \"dwarf planet\" and Ceres as \"asteroid\"; Celestia's grouping is the one used, and the file says so (dwarf_note).",
+  "accuracy": "Horizons elements used as the reference for the drift figures in the JPL SBDB block."
+ }
+]

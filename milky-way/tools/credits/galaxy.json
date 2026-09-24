@@ -1,0 +1,98 @@
+[
+ {
+  "accuracy": "The shipped matrix reproduces astropy's own transformation to 2.3e-13 kpc for 20,000 points out to 300 kpc. R0 = 8.122 kpc is GRAVITY 2018, the value the pinned astropy cites; other pinned sources use other values: the Reid+2019 arms were fitted with R0 = 8.15 kpc and the Drimmel+2024 arms appear to use about 8.28 kpc (SpiralMap's default Rsun is 8.277 kpc); both are placed with their own Galactocentric radii.",
+  "adaptations": "Every galaxy layer is converted into this frame at build time; the 4x4 matrix to ICRS is computed with astropy from transformed points and shipped in galaxy.json.",
+  "id": "galaxy-frame",
+  "licence": "BSD-3-Clause",
+  "licence_quote": "\"Copyright (c) 2011-2024, Astropy Developers\" / \"Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:\" (astropy-7.1.0.dist-info/licenses/LICENSE.rst)",
+  "owner": "The Astropy Developers (astropy 7.1.0); parameters from the papers cited in the frame",
+  "retrieved": "2026-09-23",
+  "source": "astropy.coordinates.Galactocentric, galactocentric_frame_defaults \"v4.0\", read from the pinned astropy 7.1.0 installed from PyPI (module file sha256 dfc1b53d...): R0 = 8.122 kpc (2018A&A...615L..15G), z_sun = 20.8 pc (2019MNRAS.482.1417B), the Galactic-centre direction galcen_coord at ICRS (266.4051, -28.936175) deg, i.e. Galactic l = b = 0 (2004ApJ...616..872R), roll 0.",
+  "title": "Galactocentric frame: astropy parameter set \"v4.0\"",
+  "url": "https://pypi.org/project/astropy/7.1.0/"
+ },
+ {
+  "accuracy": "Recomputing each object's Galactocentric distance reproduces LVDB's own distance_gc to 8.7 pc at most (median 2.7 pc, 259 objects), so LVDB used the same frame. Distances equal 10^(DM/5 + 1) pc to 0.15 %; the shipped distance errors come from the catalogued distance-modulus errors (LVDB leaves the kpc errors of the Harris clusters at 0). verify_galaxy.py cross-checks the cluster distances against galpy 1.12.0.",
+  "adaptations": "194 Milky Way globular clusters (gc_harris 155 + gc_mw_new 39 with confirmed_real = 1) and 65 satellites (dwarf_mw with confirmed_real = 1, including the LMC and SMC: LVDB confirms 54 as galaxies, and the other 11 could still be star clusters) converted from RA, Dec and distance to Galactocentric kpc. Left out: the 19 unconfirmed cluster candidates, the 22 systems LVDB classes as ambiguous (cluster or dwarf), and 3 unconfirmed dwarfs. Distance, half-light radius (LVDB rhalf_physical, major axis), ellipticity, position angle, M_V and the distance reference are shipped as catalogued.",
+  "id": "lvdb",
+  "licence": "CC0 1.0 Universal (public domain dedication); the README asks for a citation and a link",
+  "licence_quote": "\"Creative Commons Legal Code\" / \"CC0 1.0 Universal\" (LICENSE); \"If you use this in your research please cite the overview paper and include a link to the github repository (https://github.com/apace7/local_volume_database).\" (README.md)",
+  "owner": "Andrew B. Pace and contributors (Pace 2025, The Open Journal of Astrophysics 8, 142); every distance is from the paper cited on its row (LVDB cites none for ESO 93-SC08)",
+  "retrieved": "2026-09-23",
+  "source": "Tables gc_harris, gc_mw_new and dwarf_mw at tag v1.1.1 (commit 72dabf78), sha256-pinned. Globular-cluster distances are mostly Baumgardt & Vasiliev 2021 (153 of 194); the other clusters and the satellites each cite the paper their distance comes from.",
+  "title": "Local Volume Database v1.1.1 (globular clusters and satellite galaxies)",
+  "url": "https://github.com/apace7/local_volume_database/tree/72dabf7862bf9e9f1cbf6846e8c1a684fdec904c"
+ },
+ {
+  "accuracy": "These are smoothed tracks fitted to member stars by each paper, not the stars. Stream widths (typically a fraction of a degree) are not drawn.",
+  "adaptations": "100 of the 141 default tracks. Dropped: the 41 Ibata et al. 2024 tracks whose distance is 1.000 kpc everywhere - a placeholder, not a measurement. Kept but marked approximate: 39 tracks with one published distance for the whole track, 9 whose distance varies but is not a measured track (interpolated between published end-point distances, one mean Galactocentric distance, an orbit prediction, or reciprocal parallaxes galstreams flags \"with caution\"), and the 23 tracks whose sky path is a great circle by construction (InfoFlags bit 0 = 0; they overlap the others). 52 tracks have both a traced path and a measured distance track. Each track decimated to at most 120 evenly indexed points (11,940 in all) and converted to Galactocentric kpc; each carries a note saying what is approximate about it.",
+  "id": "galstreams",
+  "licence": "BSD-3-Clause",
+  "licence_quote": "\"BSD 3-Clause License\" / \"Copyright (c) 2017, Cecilia Mateu\" (LICENSE)",
+  "owner": "Cecilia Mateu (Mateu 2023, MNRAS 520, 5225) and the authors of each track, named per stream",
+  "retrieved": "2026-09-23",
+  "source": "PyPI sdist galstreams-1.2.1.tar.gz (sha256 bb98b85f...): lib/master_log.txt, the default (\"On\") track of each stream and its summary file with InfoFlags.",
+  "title": "galstreams 1.2.1: Milky Way stellar-stream tracks",
+  "url": "https://files.pythonhosted.org/packages/b8/0b/5c897212bb8d075fd86cb395f69684aab06ad1a6761eab66bc4ecee5a7ca/galstreams-1.2.1.tar.gz"
+ },
+ {
+  "accuracy": "A fit, labelled as one. The sign of y was checked at build time against the Reid et al. 2014 maser parallaxes (galkin; not shipped): median |R - R_fit| Local 0.20 kpc (n=25), Perseus 0.23 kpc (n=24), Sgr-Car 0.23 kpc (n=18), Sct-Cen 0.32 kpc (n=17); the mirrored convention gives 0.79, 0.80, 1.23, 1.08 kpc. Fitted with R0 = 8.15 kpc, drawn in a frame with 8.122 kpc.",
+  "adaptations": "Seven kinked log-spirals R = R_kink exp(-(beta - beta_kink) tan psi) sampled every 1 deg only over each arm's fitted beta range, x = -R cos beta, y = +R sin beta, z = 0; the table's arm widths are shipped as they are.",
+  "id": "reid2019-arms",
+  "licence": "MIT (SpiralMap)",
+  "licence_quote": "\"MIT License\" / \"Copyright (c) [2025] [Prusty & Khanna]\" / \"Permission is hereby granted, free of charge, to any person obtaining a copy\" (LICENSE.md)",
+  "owner": "M. J. Reid, K. M. Menten, A. Brunthaler et al. (ApJ 885, 131); transcribed in SpiralMap by A. Prusty and S. Khanna",
+  "retrieved": "2026-09-23",
+  "source": "SpiralMap 0.27 wheel (sha256 1688e0b0...), SpiralMap/models_.py reid_spiral.getparams",
+  "title": "Spiral-arm fit to maser parallaxes (Reid et al. 2019, Table 2) - a model",
+  "url": "https://pypi.org/project/SpiralMap/0.27/"
+ },
+ {
+  "accuracy": "A fit, labelled as one. It disagrees with the maser fit: at the Sun's azimuth the Orion arm lies at R = 9.46 kpc, the Reid Local arm at 8.53 kpc (+0.93 kpc). The fits appear to assume R0 near 8.28 kpc: SpiralMap's default Rsun is 8.277, and in this frame the young Cepheids of Skowron et al. 2019 peak about ln(8.122/8.277) = -0.019 in ln R inside the Scutum and Sagittarius-Carina fits (verify_galaxy.py; Perseus -0.055, Orion shows no clear peak).",
+  "adaptations": "Variant '1' of the nine azimuth-range fits in the file (phi -90 to 0 deg, 1,331 Cepheids) - the one SpiralMap draws and labels its best phi range, and one of the two variants that fit all four arms. Pitch angle and ln R0 are the mean of the \"strength\" and \"prom\" estimates, as SpiralMap does; ln R = ln R0 - tan(pitch) phi, x = -R cos phi, y = R sin phi, sampled every 1 deg only over the fitted range. The paper itself could not be read from the build network, so which variant it calls primary was not checked there.",
+  "id": "drimmel2024-arms",
+  "licence": "MIT (SpiralMap); the fit parameters are included with the authors' permission",
+  "licence_quote": "\"MIT License\" / \"Copyright (c) [2025] [Prusty & Khanna]\" (LICENSE.md); \"Model is publicly available but also included in the package as a userfriendly pickle file, with their permission.\" (SpiralMap docs models_available.rst.txt @3f0c3aa0)",
+  "owner": "R. Drimmel, S. Khanna, E. Poggio and D. M. Skowron (arXiv:2406.09127)",
+  "retrieved": "2026-09-23",
+  "source": "SpiralMap 0.27 wheel, SpiralMap/datafiles/Drimmel2024_cepheids/ArmAttributes_dyoungW1_bw025.pkl (sha256 178a547d...), read with a numpy-only unpickler",
+  "title": "Spiral-arm fit to classical Cepheids (Drimmel et al. 2024) - a model",
+  "url": "https://pypi.org/project/SpiralMap/0.27/"
+ },
+ {
+  "accuracy": "Kernel-smoothed overdensity maps, not star lists. Coverage falls off beyond about 4 kpc (cells with data at 4-5 kpc: gaiadr3_ob 49%, poggio2021_ums 55%). The Gaia DR3 map is clipped at 1.30 by its producers. 8-bit storage: +-0.005.",
+  "adaptations": "Each 121 x 121 grid (0.1 kpc cells, 6 kpc around the Sun) written as an RGBA PNG at its native resolution: overdensity encoded linearly (-1 to 1.5 -> 0-255) in R = G = B, alpha 0 on the cells that hold exactly 0.0 (no data). Placed around the Sun in the Galactocentric frame; orientation checked against young open clusters (UCC, build-time only).",
+  "id": "gaia-young-maps",
+  "licence": "Non-commercial: included in SpiralMap (MIT) with the authors' permission; derived from Gaia, so the ESA/Gaia/DPAC terms (CC BY-NC 3.0 IGO) are taken to apply. The permission was given to SpiralMap; no separate grant to downstream redistributors was found.",
+  "licence_quote": "\"Data is available publicly, and also included in the package with their permission.\" (SpiralMap docs models_available.rst.txt @3f0c3aa0); ESA/Gaia/DPAC data terms: CC BY-NC 3.0 IGO (non-commercial). ESA's licence page could not be read from the build network; a web-search summary of cosmos.esa.int/web/gaia-users/license gives CC BY-NC 3.0 IGO, and CelestiaContent's Gaia-derived data/stars.dat.license states the same (see the sky backdrop block).",
+  "owner": "E. Poggio, R. Drimmel, T. Cantat-Gaudin et al. (A&A 651, A104) and Gaia Collaboration, R. Drimmel et al. (A&A 674, A37); Gaia data ESA/Gaia/DPAC",
+  "retrieved": "2026-09-23",
+  "source": "SpiralMap 0.27 wheel: datafiles/Poggio_cont_2021/overdens_grid_locscale03.npy (sha256 a5e3388f...) and datafiles/GaiaPVP_cont_2022/over_dens_grid_threshold_0_003_dens.npy (65a9b05d...) with their axis arrays",
+  "title": "Where young stars crowd: Gaia overdensity maps (Poggio et al. 2021; Gaia Collaboration, Drimmel et al. 2023)",
+  "url": "https://pypi.org/project/SpiralMap/0.27/"
+ },
+ {
+  "accuracy": "A model, not an observation, and labelled so: it shows where the fitted mass models put the stars, with no spiral arms. The bar model is fitted to the central ~5 kpc; the measured major axis of the drawn bar is -25.00 deg.",
+  "adaptations": "Face-on surface density on 512 x 512 pixels over +-20 kpc: the thin and thick stellar discs (Sigma0 exp(-R/Rd)) plus the bar density integrated over z, the bar turned to -25 deg as in the script; log10 stretch (black 5.5e+05, white 5.8e+09 Msun/kpc^2) into an 8-bit grayscale PNG. McMillan's bulge and gas discs are not added. The scale heights are shipped for giving the glow its thickness.",
+  "id": "mw-disc-bar-model",
+  "licence": "Agama licence: BSD or MIT for Agama's own source (GPL only when linked with GSL)",
+  "licence_quote": "\"the original source code of Agama itself is not subject to GPL and is provided under the less restrictive BSD or MIT licenses.\" / \"Permission is granted to anyone to use this software for any purpose, and to alter it and redistribute it freely. Acknowledgement of the original author is appreciated.\" (Agama LICENSE)",
+  "owner": "P. J. McMillan (2017 best-fit Milky Way mass model); M. Portail et al. (2017) bar, analytic fit by M. C. Sormani et al. (2022); both as distributed with Agama by E. Vasiliev",
+  "retrieved": "2026-09-23",
+  "source": "Agama commit f302756b: data/McMillan17.ini (sha256 2fa000f9...) and py/example_mw_bar_potential.py (sha256 a1c3f49e...), makeBarDensity() evaluated in numpy",
+  "title": "Disc and bar glow: McMillan (2017) discs + Portail (2017) / Sormani (2022) bar - a model",
+  "url": "https://github.com/GalacticDynamics-Oxford/Agama/tree/f302756b8af2b763db58e278e30478517dc8eea3"
+ },
+ {
+  "accuracy": "The numbers these checks measure (galpy distance agreement, maser offsets from the Reid arms, the orientation test of the young-star maps, the Cepheid offsets from the Drimmel arms) are printed by verify_galaxy.py and quoted in the blocks above.",
+  "adaptations": "None: read at build time for the checks in 50_galaxy.py and verify_galaxy.py only.",
+  "id": "galaxy-checks",
+  "licence": "Not shipped. galpy BSD-3; galkin no licence; UCC GPL-3.0; Skowron data explicitly not licensed",
+  "licence_quote": "\"Copyright (c) 2010, Jo Bovy\" (galpy LICENSE); \"License: UNKNOWN\" (galkin PKG-INFO); \"GNU GENERAL PUBLIC LICENSE\" / \"Version 3, 29 June 2007\" (UCC LICENSE); \"This data is NOT licenced under the MIT or CC licenses.\" (galactic_cepheids data/LICENSE)",
+  "owner": "galpy 1.12.0 (Jo Bovy; BSD-3); galkin (M. Pato & F. Iocco) Reid et al. 2014 maser table; Unified Cluster Catalogue (Perren et al. 2023); Skowron et al. 2019 Cepheids (J. Skowron)",
+  "retrieved": "2026-09-23",
+  "source": "galpy named_objects.json (globular-cluster distances), galkin data_Reid14.dat @ef9c4eab (sign convention of the Reid arms), UCC clusters_26061511.csv.gz @20ce90ee (orientation of the young-star maps), galactic_cepheids data/Data_Table_1.dat @e72dc56a (geometry of the Drimmel arms). All sha256-pinned.",
+  "title": "Used only to check the galaxy layer (build time, not shipped)",
+  "url": "https://files.pythonhosted.org/packages/1e/dc/424e5ee8999af057d804471f6f598df8cd757370ce087a07ad3215a14c34/galpy-1.12.0.tar.gz"
+ }
+]
