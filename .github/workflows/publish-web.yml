@@ -1,0 +1,104 @@
+name: Publish apps to the web
+
+# Every app here, openable in any browser at
+#   https://<owner>.github.io/<repo>/<app-folder>/
+# with an index of them all at https://<owner>.github.io/<repo>/.
+#
+# This sits BESIDE the ZIPs and changes nothing about them: it commits nothing,
+# writes no branch, and the ZIP builder and every refresh job run exactly as
+# before. It copies each app folder less what the ZIP leaves out (see
+# scripts/build_web.py) and hands the result to GitHub Pages.
+#
+# OFF UNTIL YOU TURN IT ON. Settings → Pages → Build and deployment → Source:
+# "GitHub Actions". Until then every run says so in one line and stops, green.
+# A Pages site is PUBLIC even when the repository is private (bar Enterprise
+# plans), so in a private copy holding real data — Running Dashboard, Finances —
+# leave it off, or delete this file.
+#
+# Why it listens to other workflows: a refresh commits with the job's own
+# token, and a push made with that token starts no workflow. `workflow_run` is
+# the one event that does fire after them, so the site follows the data.
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows:
+      - Refresh hello-live
+      - Refresh world-news
+      - Refresh power-hours
+      - Refresh Finances
+      - Refresh global-wind
+      - Refresh global-weather
+      - Pull Garmin data for Running Dashboard
+      - Rebuild Norne reservoir data
+      - Build app ZIPs
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write                    # deploy the site, and ask whether Pages is on
+  id-token: write                 # deploy-pages proves who is deploying with it
+
+concurrency:
+  group: publish-web
+  cancel-in-progress: true        # a newer run carries newer data; the older is moot
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Is Pages turned on, from Actions?
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          build=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq .build_type 2>/dev/null || true)
+          if [ "$build" = "workflow" ]; then
+            echo "on=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "on=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Browser copies are off. To publish them, Settings → Pages → Source: GitHub Actions, then re-run this workflow."
+          fi
+
+      - uses: actions/checkout@v5
+        if: steps.pages.outputs.on == 'true'
+        with:
+          ref: main               # the newest data, whichever event started this
+
+      - name: Build the site
+        if: steps.pages.outputs.on == 'true'
+        run: python3 scripts/build_web.py --out _site
+
+      # Global Wind and Global Weather publish their live forecast to a branch
+      # of their own; `main` holds only the demo the ZIP ships with. The browser
+      # copy takes the live one when there is one, the demo when there is not.
+      - name: Take the live forecasts from their data branches
+        if: steps.pages.outputs.on == 'true'
+        run: |
+          for app in global-wind global-weather; do
+            [ -d "_site/$app" ] || continue
+            path="$app/data/snapshot.json"
+            if git fetch --quiet --depth=1 origin "data-$app" 2>/dev/null \
+               && git show "FETCH_HEAD:$path" > "_site/$path.new" 2>/dev/null; then
+              mv "_site/$path.new" "_site/$path"
+              echo "$app: live snapshot from data-$app"
+            else
+              rm -f "_site/$path.new"
+              echo "$app: no data branch yet, keeping the demo"
+            fi
+          done
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.pages.outputs.on == 'true'
+        with:
+          path: _site
+
+      - id: deploy
+        if: steps.pages.outputs.on == 'true'
+        uses: actions/deploy-pages@v4
