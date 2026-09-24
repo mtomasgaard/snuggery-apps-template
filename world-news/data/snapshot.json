@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T01:01:07Z",
+ "generatedAt": "2026-09-24T02:01:03Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Vidya Mani, Associate Professor, Darden School of Business; Research Associate Professor, Biocomplexity Institute, University of Virginia; Cornell University"
     },
     {
+     "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168420",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "Venezuela is seeking to rebuild after a period of political upheaval and the destruction caused by twin earthquakes earlier this year, Acting President Delcy Rodríguez told world leaders at the United Nations on…",
+     "stale": false
+    },
+    {
      "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
      "source": "UN News",
      "feed": "un-americas",
@@ -139,15 +148,6 @@
      "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
      "stale": false,
      "author": "Marco Martínez"
-    },
-    {
-     "title": "Haiti: Child malnutrition crisis worsens amid escalating violence",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168366",
-     "published": "2026-09-18T12:00:00Z",
-     "summary": "Haiti is facing a worsening child malnutrition crisis, with an estimated 253,725 children aged 6 to 59 months projected to suffer from acute malnutrition between June 2026 and May 2027, new UN-backed analysis has…",
-     "stale": false
     },
     {
      "title": "Ecuador detains former minister José Serrano after U.S. deportation",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
+     "title": "Sharks often swim across national borders. Our conservation efforts must travel with them",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/sharks-often-swim-across-national-borders-our-conservation-efforts-must-travel-with-them-291978",
+     "published": "2026-09-24T01:58:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Diego Bezerra, PhD Candidate, The University of Queensland"
+    },
+    {
+     "title": "Gentle larrikin Terry Denton, famous for his anarchy with Andy Griffiths, made reading fun",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/gentle-larrikin-terry-denton-famous-for-his-anarchy-with-andy-griffiths-made-reading-fun-292675",
+     "published": "2026-09-24T01:44:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mark Macleod, Adjunct Senior Lecturer, Children's Literature, Charles Sturt University"
+    },
+    {
+     "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/83-000-new-zealanders-live-with-dementia-heres-how-simple-design-changes-can-help-291985",
      "published": "2026-09-23T23:28:55Z",
      "summary": "",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Luwei Yang, Postdoctoral Research Fellow in Oceanography, Australian National University"
-    },
-    {
-     "title": "CMV infection can pass from mother to baby during pregnancy. Here’s how to prevent it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/cmv-infection-can-pass-from-mother-to-baby-during-pregnancy-heres-how-to-prevent-it-285595",
-     "published": "2026-09-23T20:11:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hayley Smithers-Sheedy, Adjunct Associate Professor, Faculty of Medicine and Health, The University of Sydney, Principal Research Fellow Cerebral Palsy…"
-    },
-    {
-     "title": "The UN is facing a crisis of trust and possible bankruptcy. Its new leader will have an enormous challenge",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-un-is-facing-a-crisis-of-trust-and-possible-bankruptcy-its-new-leader-will-have-an-enormous-challenge-290728",
-     "published": "2026-09-23T20:10:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Erika Feller, Professorial Fellow, School of Government, The University of Melbourne"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -733,6 +733,12 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
+   "published": "2026-09-23 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
    "published": "2026-09-22 12:00 UTC"
   },
@@ -747,12 +753,6 @@
    "source": "Global Voices",
    "title": "The commodification of Indigenous cultures and traditions",
    "published": "2026-09-21 06:21 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Haiti: Child malnutrition crisis worsens amid escalating violence",
-   "published": "2026-09-18 12:00 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Sharks often swim across national borders. Our conservation efforts must travel with them",
+   "published": "2026-09-24 01:58 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Gentle larrikin Terry Denton, famous for his anarchy with Andy Griffiths, made reading fun",
+   "published": "2026-09-24 01:44 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
    "published": "2026-09-23 23:28 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Earth’s tides are shaped by more than the Moon. And they’re changing as the planet warms",
    "published": "2026-09-23 20:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "CMV infection can pass from mother to baby during pregnancy. Here’s how to prevent it",
-   "published": "2026-09-23 20:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The UN is facing a crisis of trust and possible bankruptcy. Its new leader will have an enormous challenge",
-   "published": "2026-09-23 20:10 UTC"
   },
   {
    "region": "Oceania",
