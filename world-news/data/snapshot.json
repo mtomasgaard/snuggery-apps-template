@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T05:01:11Z",
+ "generatedAt": "2026-09-24T06:01:06Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "The space race should not endanger Australian wildlife",
+     "title": "Why David Brat, the new US ambassador to Australia, has a big in-tray",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-space-race-should-not-endanger-australian-wildlife-289594",
-     "published": "2026-09-24T04:21:11Z",
+     "link": "https://theconversation.com/why-david-brat-the-new-us-ambassador-to-australia-has-a-big-in-tray-292370",
+     "published": "2026-09-24T05:39:10Z",
      "summary": "",
      "stale": false,
-     "author": "Kirsten Parris, Professor, Urban Ecology, The University of Melbourne"
+     "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
     },
     {
-     "title": "What does the OpenAI Medicare hack reveal about Australia’s cyber security?",
+     "title": "The Intergenerational Report says we need more vocational skills – but federal funding for them is set to drop",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/what-does-the-openai-medicare-hack-reveal-about-australias-cyber-security-292774",
-     "published": "2026-09-24T04:00:05Z",
+     "link": "https://theconversation.com/the-intergenerational-report-says-we-need-more-vocational-skills-but-federal-funding-for-them-is-set-to-drop-292694",
+     "published": "2026-09-24T05:33:18Z",
      "summary": "",
      "stale": false,
-     "author": "Meena Jha, Associate Professor, College of Information & Communication Technology, School of Engineering and Technology, CQUniversity Australia"
+     "author": "Lizzie Knight, Program Director, Education and Skills, Grattan Institute"
     },
     {
-     "title": "An OpenAI agent hacked Medicare. Will anyone be held responsible?",
+     "title": "Unemployment rises to 4.6%, but a September interest rate hike still looks likely",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/an-openai-agent-hacked-medicare-will-anyone-be-held-responsible-292763",
-     "published": "2026-09-24T02:56:14Z",
+     "link": "https://theconversation.com/unemployment-rises-to-4-6-but-a-september-interest-rate-hike-still-looks-likely-290154",
+     "published": "2026-09-24T04:53:26Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
+     "author": "Jeff Borland, Professor of Economics, The University of Melbourne"
     },
     {
      "title": "83,000 New Zealanders live with dementia. Here’s how simple design changes can help",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The space race should not endanger Australian wildlife",
-   "published": "2026-09-24 04:21 UTC"
+   "title": "Why David Brat, the new US ambassador to Australia, has a big in-tray",
+   "published": "2026-09-24 05:39 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What does the OpenAI Medicare hack reveal about Australia’s cyber security?",
-   "published": "2026-09-24 04:00 UTC"
+   "title": "The Intergenerational Report says we need more vocational skills – but federal funding for them is set to drop",
+   "published": "2026-09-24 05:33 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "An OpenAI agent hacked Medicare. Will anyone be held responsible?",
-   "published": "2026-09-24 02:56 UTC"
+   "title": "Unemployment rises to 4.6%, but a September interest rate hike still looks likely",
+   "published": "2026-09-24 04:53 UTC"
   },
   {
    "region": "Oceania",
