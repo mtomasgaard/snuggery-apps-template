@@ -1,5 +1,10 @@
 # Snuggery live apps
 
+**Just want an app on your iPhone? There is nothing to copy or set up.** In Safari on the iPhone,
+tap [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) (6.5 MB) — or any app in
+[the install table](#install-any-of-them-on-your-phone--three-taps) — tap **Download** if Safari
+asks, then open the download and choose **Share → Snuggery**.
+
 **This is a template. Nothing of yours goes here** — tap *Use this template* on GitHub to make
 your own copy, and work in that. What follows describes the copy you will have.
 
@@ -30,31 +35,33 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
-data, labelled as such. **Anatomy**, **Norne Reservoir**, **Besseggen** and **Milky Way** are the big
-ones: a human body, an oil field, a mountain ridge and our galaxy, each in 3D, 21, 15, 17 and 6.5 MB as ZIPs. They need
+data, labelled as such. **Anatomy** (21 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
+**Milky Way** (6.5 MB) are the big ones: a human body, an oil field, a mountain ridge and our galaxy,
+each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
 pack precisely because of that size — install any of them the same way as every app on this page:
 three taps, just below.
 
 ## Install any of them on your phone — three taps
 
-1. **On the iPhone, in Safari**, tap an app's install link in the table below (or its **Get the ZIP**
-   link further down). Safari downloads it and shows a small arrow at the top of the screen.
-2. Tap that arrow (or open **Files → Downloads**), tap the ZIP, then the **Share** button.
+1. **On the iPhone, in Safari**, tap an app's **Install …** link in the table below (or its
+   **Get the ZIP** link further down). If Safari asks whether to download it, tap **Download**.
+2. Tap the download arrow in Safari's address bar and tap the ZIP, then the **Share** button — or
+   open **Files → Downloads**, touch and hold the ZIP, and tap **Share**.
 3. Choose **Snuggery**. It appears in your Library and opens with one tap. Nothing else to set up.
 
 **Just want the galaxy?** On your iPhone, open [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) in Safari
-(a 6.5 MB download), tap the arrow, tap the ZIP, **Share → Snuggery**. That's it — it needs no account,
-no key and no network once installed.
+(a 6.5 MB download), then steps 2 and 3. That's it — it needs no account, no key and no network
+once installed.
 
 Every app, one link each — open the link in Safari on the iPhone, then steps 2 and 3 above:
 
-| App | Link | Download | Needs |
+| App | Link | Size | Needs |
 | --- | --- | --- | --- |
 | Milky Way | [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) | 6.5 MB | nothing |
 | Hello Live | [**Install Hello Live**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) | tiny | nothing |
 | Running Dashboard | [**Install Running Dashboard**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) | 1.1 MB | a Garmin sign-in |
-| Finances | [**Install Finances**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) | 0.1 MB | a bank connection |
+| Finances | [**Install Finances**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) | tiny | a bank connection |
 | World News | [**Install World News**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) | tiny | nothing |
 | Outdoor Window | [**Install Outdoor Window**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) | tiny | your own Shortcut |
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
@@ -136,9 +143,9 @@ The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, w
 
 ### Milky Way
 
-The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.4 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
+The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.9 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) (6.5 MB — open it in Safari on the iPhone, then Share → Snuggery) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) (6.5 MB) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
 
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
