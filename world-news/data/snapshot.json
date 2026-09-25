@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T21:01:15Z",
+ "generatedAt": "2026-09-25T22:01:16Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "In ‘NAZA,’ Israeli whistleblowers’ revelations about civilian deaths in Gaza reflect a longer history of Palestinian isolation",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/in-naza-israeli-whistleblowers-revelations-about-civilian-deaths-in-gaza-reflect-a-longer-history-of-palestinian-isolation-292348",
+     "published": "2026-09-25T21:22:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Drew Paul, Professor of Arabic, University of Tennessee"
+    },
+    {
      "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "E. Andrew Taylor, Associate Professor and Director of Arts Management, American University"
-    },
-    {
-     "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/trump-frames-unregulated-ai-as-a-way-to-keep-ahead-of-china-but-in-fact-it-harms-us-national-security-292642",
-     "published": "2026-09-25T18:21:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stephen Collins, Professor of Government and International Affairs, Kennesaw State University"
     },
     {
      "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘No one speaks on behalf of Lebanon’: PM Salam asserts State authority at UN",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168444",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Lebanon’s Prime Minister, Nawaf Salam, has stressed that decisions over war and peace, and control of weapons, must rest solely with the State and its constitutional institutions.",
+     "stale": false
+    },
+    {
      "title": "Yemen violence deepens concerns over child hunger crisis",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168426",
      "published": "2026-09-24T12:00:00Z",
      "summary": "Israeli policies now threaten “the very life and existence of the Palestinian people on their homeland”, Palestinian President Mahmoud Abbas told the UN General Assembly on Thursday, urging the world not to allow…",
-     "stale": false
-    },
-    {
-     "title": "At UN, Pezeshkian turns terrorism accusation back on Iran’s critics",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168412",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "President Masoud Pezeshkian opened his General Assembly address with a direct rebuttal to US President Donald Trump, who a day earlier had branded Iran the “number one sponsor of terror.”",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
-   "published": "2026-09-25 19:15 UTC"
+   "title": "In ‘NAZA,’ Israeli whistleblowers’ revelations about civilian deaths in Gaza reflect a longer history of Palestinian isolation",
+   "published": "2026-09-25 21:22 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
-   "published": "2026-09-25 18:21 UTC"
+   "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
+   "published": "2026-09-25 19:15 UTC"
   },
   {
    "region": "Americas",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "‘No one speaks on behalf of Lebanon’: PM Salam asserts State authority at UN",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Yemen violence deepens concerns over child hunger crisis",
    "published": "2026-09-25 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "Palestinian existence under threat, Abbas tells UN, warning of ‘another Nakba’",
    "published": "2026-09-24 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "At UN, Pezeshkian turns terrorism accusation back on Iran’s critics",
-   "published": "2026-09-23 12:00 UTC"
   },
   {
    "region": "Middle East",
