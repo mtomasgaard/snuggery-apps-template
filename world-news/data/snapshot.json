@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-24T23:01:12Z",
+ "generatedAt": "2026-09-25T00:01:13Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Australian poetry classics: Les Murray’s The Broad Bean Sermon is inexhaustible food for contemplation",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australian-poetry-classics-les-murrays-the-broad-bean-sermon-is-inexhaustible-food-for-contemplation-288071",
+     "published": "2026-09-24T23:10:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "David McCooey, Professor of Writing and Literature, Deakin University"
+    },
+    {
      "title": "The English paid off the Vikings for almost a century. But was the Danegeld such a bad idea?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Joel Garrett, Lecturer in Exercise Science and Physiology, Griffith University"
-    },
-    {
-     "title": "Heroin used more often, cocaine use up. What new data says about drug use today",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/heroin-used-more-often-cocaine-use-up-what-new-data-says-about-drug-use-today-292125",
-     "published": "2026-09-24T20:12:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rachel Sutherland, Research Fellow, National Drug and Alcohol Research Centre, UNSW"
     },
     {
      "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australian poetry classics: Les Murray’s The Broad Bean Sermon is inexhaustible food for contemplation",
+   "published": "2026-09-24 23:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The English paid off the Vikings for almost a century. But was the Danegeld such a bad idea?",
    "published": "2026-09-24 20:13 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Are AFL grand finals really the hardest game of the year? We checked the data",
    "published": "2026-09-24 20:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Heroin used more often, cocaine use up. What new data says about drug use today",
-   "published": "2026-09-24 20:12 UTC"
   },
   {
    "region": "Oceania",
