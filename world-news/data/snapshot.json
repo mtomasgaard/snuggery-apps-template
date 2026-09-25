@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T03:01:52Z",
+ "generatedAt": "2026-09-25T04:01:09Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Trump’s US ratings drop to new record low as Democrats become clear favourites in both chambers of Congress",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/trumps-us-ratings-drop-to-new-record-low-as-democrats-become-clear-favourites-in-both-chambers-of-congress-292769",
+     "published": "2026-09-25T03:08:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
+     "title": "Could an ‘Australian AI’ protect us from being hacked? Cybersecurity isn’t that simple",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/could-an-australian-ai-protect-us-from-being-hacked-cybersecurity-isnt-that-simple-292888",
+     "published": "2026-09-25T03:04:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Niusha Shafiabady, Professor in Computational Intelligence, Australian Catholic University"
+    },
+    {
      "title": "Curious Kids: does music affect how plants grow?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Hannah E. Kessenich, Postdoctoral Fellow in Physics, University of Otago"
-    },
-    {
-     "title": "Australian poetry classics: Les Murray’s The Broad Bean Sermon is inexhaustible food for contemplation",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australian-poetry-classics-les-murrays-the-broad-bean-sermon-is-inexhaustible-food-for-contemplation-288071",
-     "published": "2026-09-24T23:10:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "David McCooey, Professor of Writing and Literature, Deakin University"
-    },
-    {
-     "title": "The English paid off the Vikings for almost a century. But was the Danegeld such a bad idea?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-english-paid-off-the-vikings-for-almost-a-century-but-was-the-danegeld-such-a-bad-idea-288280",
-     "published": "2026-09-24T20:13:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Firth, Research Fellow in Medieval History, Flinders University"
     },
     {
      "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Trump’s US ratings drop to new record low as Democrats become clear favourites in both chambers of Congress",
+   "published": "2026-09-25 03:08 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Could an ‘Australian AI’ protect us from being hacked? Cybersecurity isn’t that simple",
+   "published": "2026-09-25 03:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Curious Kids: does music affect how plants grow?",
    "published": "2026-09-25 00:35 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
    "published": "2026-09-25 00:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australian poetry classics: Les Murray’s The Broad Bean Sermon is inexhaustible food for contemplation",
-   "published": "2026-09-24 23:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The English paid off the Vikings for almost a century. But was the Danegeld such a bad idea?",
-   "published": "2026-09-24 20:13 UTC"
   },
   {
    "region": "Oceania",
