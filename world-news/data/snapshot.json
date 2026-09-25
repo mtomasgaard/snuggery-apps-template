@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T19:01:15Z",
+ "generatedAt": "2026-09-25T20:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/trump-has-gotten-rid-of-many-of-the-checks-and-balances-that-could-stop-him-from-demolishing-the-kennedy-center-292436",
+     "published": "2026-09-25T19:15:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "E. Andrew Taylor, Associate Professor and Director of Arts Management, American University"
+    },
+    {
      "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Stephen Collins, Professor of Government and International Affairs, Kennesaw State University"
-    },
-    {
-     "title": "Gen Z communicates differently in the workplace, but older colleagues can still decode them",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/gen-z-communicates-differently-in-the-workplace-but-older-colleagues-can-still-decode-them-292108",
-     "published": "2026-09-25T12:42:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jeff LeBlanc, Learning Facilitator for Online Master of Business Administration, Boston University"
     },
     {
      "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
-   "published": "2026-09-25 18:21 UTC"
+   "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
+   "published": "2026-09-25 19:15 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Gen Z communicates differently in the workplace, but older colleagues can still decode them",
-   "published": "2026-09-25 12:42 UTC"
+   "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
+   "published": "2026-09-25 18:21 UTC"
   },
   {
    "region": "Americas",
