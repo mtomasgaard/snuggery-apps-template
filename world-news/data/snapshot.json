@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T11:01:23Z",
+ "generatedAt": "2026-09-25T12:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Les exportations de cobalt de la RDC contiennent de l'uranium non déclaré : notre étude évalue le risque nucléaire mondial",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/les-exportations-de-cobalt-de-la-rdc-contiennent-de-luranium-non-declare-notre-etude-evalue-le-risque-nucleaire-mondial-292497",
+     "published": "2026-09-25T11:53:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ryan A. Manzuk, Research Fellow, University of Wisconsin-Madison"
+    },
+    {
      "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Michael Greenstone, Professor in Economics; Director, Energy Policy Institute, University of Chicago"
-    },
-    {
-     "title": "Ian Berry’s Sharpeville images exposed apartheid violence to the world",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/ian-berrys-sharpeville-images-exposed-apartheid-violence-to-the-world-292479",
-     "published": "2026-09-25T08:37:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kylie Thomas, Senior Lecturer (Radical Humanities Laboratory, University College Cork), University College Cork"
     },
     {
      "title": "‘Peace remains only a promise’ for millions in eastern DR Congo, General Assembly hears",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
-   "published": "2026-09-25 09:50 UTC"
+   "title": "Les exportations de cobalt de la RDC contiennent de l'uranium non déclaré : notre étude évalue le risque nucléaire mondial",
+   "published": "2026-09-25 11:53 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Ian Berry’s Sharpeville images exposed apartheid violence to the world",
-   "published": "2026-09-25 08:37 UTC"
+   "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
+   "published": "2026-09-25 09:50 UTC"
   },
   {
    "region": "Africa",
