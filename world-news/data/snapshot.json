@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T09:01:13Z",
+ "generatedAt": "2026-09-25T10:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "South Africans and migrants: study tracks the barriers to being good neighbours",
+     "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africans-and-migrants-study-tracks-the-barriers-to-being-good-neighbours-292191",
-     "published": "2026-09-24T13:59:32Z",
+     "link": "https://theconversation.com/nigeria-faces-the-worlds-highest-projected-death-toll-from-super-el-nino-heat-what-could-save-lives-292786",
+     "published": "2026-09-25T09:50:36Z",
      "summary": "",
      "stale": false,
-     "author": "Mathias Alubafi Fubah, Senior Research Specialist, Human Sciences Research Council"
+     "author": "Michael Greenstone, Professor in Economics; Director, Energy Policy Institute, University of Chicago"
     },
     {
-     "title": "Billing culture: Nigerian rapper eLDee takes on modern dating in I Wish You Well",
+     "title": "Ian Berry’s Sharpeville images exposed apartheid violence to the world",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/billing-culture-nigerian-rapper-eldee-takes-on-modern-dating-in-i-wish-you-well-291914",
-     "published": "2026-09-24T13:58:36Z",
+     "link": "https://theconversation.com/ian-berrys-sharpeville-images-exposed-apartheid-violence-to-the-world-292479",
+     "published": "2026-09-25T08:37:45Z",
      "summary": "",
      "stale": false,
-     "author": "Garhe Osiebe, Research Fellow, Rhodes University"
+     "author": "Kylie Thomas, Senior Lecturer (Radical Humanities Laboratory, University College Cork), University College Cork"
     },
     {
      "title": "‘Peace remains only a promise’ for millions in eastern DR Congo, General Assembly hears",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africans and migrants: study tracks the barriers to being good neighbours",
-   "published": "2026-09-24 13:59 UTC"
+   "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
+   "published": "2026-09-25 09:50 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Billing culture: Nigerian rapper eLDee takes on modern dating in I Wish You Well",
-   "published": "2026-09-24 13:58 UTC"
+   "title": "Ian Berry’s Sharpeville images exposed apartheid violence to the world",
+   "published": "2026-09-25 08:37 UTC"
   },
   {
    "region": "Africa",
