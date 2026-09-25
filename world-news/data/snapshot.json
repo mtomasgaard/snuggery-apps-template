@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T18:01:19Z",
+ "generatedAt": "2026-09-25T19:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/trump-frames-unregulated-ai-as-a-way-to-keep-ahead-of-china-but-in-fact-it-harms-us-national-security-292642",
+     "published": "2026-09-25T18:21:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Stephen Collins, Professor of Government and International Affairs, Kennesaw State University"
+    },
+    {
      "title": "Gen Z communicates differently in the workplace, but older colleagues can still decode them",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Jeff LeBlanc, Learning Facilitator for Online Master of Business Administration, Boston University"
-    },
-    {
-     "title": "What civil rights enforcement cuts mean for students with disabilities – fewer staff, closed offices, longer waits",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-civil-rights-enforcement-cuts-mean-for-students-with-disabilities-fewer-staff-closed-offices-longer-waits-285208",
-     "published": "2026-09-25T12:42:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Edward DeMatthews, Professor of Educational Leadership and Policy, The University of Texas at Austin"
     },
     {
      "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Movement from behind your gadget",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/25/movement-from-behind-your-gadget/",
+     "published": "2026-09-25T18:58:21Z",
+     "summary": "The growth of online activism has given different colors in the movement agendas. There is a debate on how effective it is, and how it could complement each other.",
+     "stale": false,
+     "author": "Juliana Harsianti"
+    },
+    {
      "title": "Australia urges global cooperation on climate, AI checks and international law",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "Since Bangladesh’s 2024 political transition, India-Bangladesh border “push-ins” have intensified, with thousands deported to Bangladesh outside agreed verification and repatriation procedures and ignoring disputed…",
      "stale": false,
      "author": "Zulker Naeen"
-    },
-    {
-     "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
-     "published": "2026-09-19T08:01:45Z",
-     "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": false,
-     "author": "Omid Memarian"
     }
    ]
   },
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Gen Z communicates differently in the workplace, but older colleagues can still decode them",
-   "published": "2026-09-25 12:42 UTC"
+   "title": "Trump frames unregulated AI as a way to keep ahead of China – but in fact, it harms US national security",
+   "published": "2026-09-25 18:21 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What civil rights enforcement cuts mean for students with disabilities – fewer staff, closed offices, longer waits",
+   "title": "Gen Z communicates differently in the workplace, but older colleagues can still decode them",
    "published": "2026-09-25 12:42 UTC"
   },
   {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Movement from behind your gadget",
+   "published": "2026-09-25 18:58 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Australia urges global cooperation on climate, AI checks and international law",
    "published": "2026-09-25 12:00 UTC"
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "How two elections reshaped the India–Bangladesh border",
    "published": "2026-09-20 14:30 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
-   "published": "2026-09-19 08:01 UTC"
   },
   {
    "region": "Oceania",
