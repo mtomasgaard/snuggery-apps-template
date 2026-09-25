@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T06:01:08Z",
+ "generatedAt": "2026-09-25T07:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": false,
+     "stale": true,
      "author": "Omid Memarian"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
      "published": "2026-09-15T08:33:09Z",
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/14/who-is-responsible-for-protecting-and-preserving-indigenous-cultures/",
      "published": "2026-09-14T09:19:57Z",
      "summary": "As I read through the pieces Global Voices’ authors contributed to the August 2026 Spotlight series, “Indigenous Rights,” one common question stands out for me: Who gets to decide?",
-     "stale": false,
+     "stale": true,
      "author": "Subhashish Panigrahi"
     }
    ]
@@ -146,7 +146,7 @@
      "link": "https://globalvoices.org/2026/09/21/the-commodification-of-indigenous-cultures-and-traditions/",
      "published": "2026-09-21T06:21:22Z",
      "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
-     "stale": false,
+     "stale": true,
      "author": "Marco Martínez"
     },
     {
@@ -156,7 +156,7 @@
      "link": "https://globalvoices.org/2026/09/18/ecuador-detains-former-minister-jose-serrano-after-u-s-deportation/",
      "published": "2026-09-18T02:00:10Z",
      "summary": "Deported from the United States, Ecuador’s former “superminister” now faces grave criminal investigations and political accusations in a justice system facing questions over due process.",
-     "stale": false,
+     "stale": true,
      "author": "Gina Yauri"
     },
     {
@@ -166,7 +166,7 @@
      "link": "https://globalvoices.org/2026/09/16/the-auwe-xavante-peoples-denunciation-of-megaprojects-in-brazil/",
      "published": "2026-09-16T18:03:47Z",
      "summary": "An Indigenous-led campaign denounces the impacts of a mega railway project and demands respect for territory, self-determination, and the right to live and dream.",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     }
    ]
@@ -294,7 +294,7 @@
      "link": "https://globalvoices.org/2026/09/22/from-north-to-south-protests-sweep-across-tunisia-is-change-at-hand/",
      "published": "2026-09-22T19:36:26Z",
      "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
-     "stale": false,
+     "stale": true,
      "author": "The New Arab"
     },
     {
@@ -313,7 +313,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": false,
+     "stale": true,
      "author": "Omid Memarian"
     },
     {
@@ -323,7 +323,7 @@
      "link": "https://globalvoices.org/2026/09/13/as-casablancas-music-scene-grows-its-musicians-struggle/",
      "published": "2026-09-13T12:00:57Z",
      "summary": "As live music becomes central to Casablanca’s cultural brand, musicians remain caught between expanding opportunities and deteriorating working conditions.",
-     "stale": false,
+     "stale": true,
      "author": "Badr Sellak"
     },
     {
@@ -333,7 +333,7 @@
      "link": "https://globalvoices.org/2026/09/12/the-people-behind-the-numbers-bringing-the-reality-of-turkish-prisons-to-light/",
      "published": "2026-09-12T02:58:47Z",
      "summary": "“[W]hen we can see the human stories behind that statistic, we can begin to talk about human rights violations and solutions.”",
-     "stale": false,
+     "stale": true,
      "author": "GV Central Asia and Caucasus"
     }
    ]
@@ -343,6 +343,16 @@
    "name": "Asia",
    "stale": false,
    "items": [
+    {
+     "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/25/young-japanese-find-new-outlets-for-peace-activism-amid-rising-tensions-in-the-pacific/",
+     "published": "2026-09-25T06:52:28Z",
+     "summary": "GV observed Japanese peace activism shifting from an ideological, often confrontational and hierarchical approach among the older generation to a more individualised, accessible, pop-style approach among young people.",
+     "stale": false,
+     "author": "Jo Carter"
+    },
     {
      "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
      "source": "Global Voices",
@@ -384,7 +394,7 @@
     {
      "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/09/22/technology-facilitated-trafficking-how-bangladeshi-migrants-become-victims-of-recruitment-in-cambodia/",
      "published": "2026-09-22T08:12:06Z",
      "summary": "Thousands of Bangladeshis travelled to Cambodia for promised jobs, only to encounter Technology-facilitated trafficking and cyber-scamming networks, with 98 percent reportedly failing to receive the work they were…",
@@ -410,16 +420,6 @@
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
      "stale": false,
      "author": "Omid Memarian"
-    },
-    {
-     "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
-     "published": "2026-09-15T08:33:09Z",
-     "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": false,
-     "author": "Guest Contributor"
     }
    ]
   },
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "HTTP 502; kept 3 cached"
   },
   {
    "id": "gv-eastern-europe",
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "HTTP 502; kept 3 cached"
   },
   {
    "id": "un-americas",
@@ -608,9 +608,9 @@
    "id": "gv-west-asia",
    "source": "Global Voices",
    "region": "Middle East",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 4,
+   "note": "TimeoutError: The read operation timed out; kept 4 cached"
   },
   {
    "id": "un-middle-east",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
+   "published": "2026-09-25 06:52 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
    "published": "2026-09-24 10:41 UTC"
   },
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
    "published": "2026-09-19 08:01 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
-   "published": "2026-09-15 08:33 UTC"
   },
   {
    "region": "Oceania",
