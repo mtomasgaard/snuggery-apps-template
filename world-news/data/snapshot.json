@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T00:01:13Z",
+ "generatedAt": "2026-09-25T01:01:13Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Azifah Astrina, Ph.D. candidate in Political Science, University of Illinois Urbana-Champaign; Universitas Gadjah Mada"
     },
     {
+     "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168429",
+     "published": "2026-09-24T12:00:00Z",
+     "summary": "“There is a people. A people who can wait no longer. A people waiting to regain security, to return home to work, to send their children to school, and to freely choose their leaders.” Those are the words of the Haitian…",
+     "stale": false
+    },
+    {
      "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
      "source": "UN News",
      "feed": "un-americas",
@@ -128,15 +137,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168397",
      "published": "2026-09-22T12:00:00Z",
      "summary": "US President Donald Trump used his address to the UN General Assembly on Tuesday to defend recent military action against Iran, urging countries to maintain economic pressure on Tehran – and declaring that he now faces…",
-     "stale": false
-    },
-    {
-     "title": "Diplomacy is the way to address global challenges, Brazil tells General Assembly",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168395",
-     "published": "2026-09-22T12:00:00Z",
-     "summary": "Brazilian President Luiz Inácio Lula da Silva told the General Assembly on Tuesday that the UN needs to become a “temple of peace” once again, as it confronts one of the most critical periods in its 80-year history.",
      "stale": false
     },
     {
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Curious Kids: does music affect how plants grow?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/curious-kids-does-music-affect-how-plants-grow-288107",
+     "published": "2026-09-25T00:35:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lily Whelehan, Postdoctoral Research Fellow, Queensland Alliance for Agriculture and Food Innovation, The University of Queensland"
+    },
+    {
+     "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/septembers-ozone-hole-was-the-biggest-in-20-years-the-warning-signs-appeared-months-ago-292457",
+     "published": "2026-09-25T00:13:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Hannah E. Kessenich, Postdoctoral Fellow in Physics, University of Otago"
+    },
+    {
      "title": "Australian poetry classics: Les Murray’s The Broad Bean Sermon is inexhaustible food for contemplation",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,16 +469,6 @@
      "author": "Matthew Firth, Research Fellow in Medieval History, Flinders University"
     },
     {
-     "title": "Are AFL grand finals really the hardest game of the year? We checked the data",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/are-afl-grand-finals-really-the-hardest-game-of-the-year-we-checked-the-data-291452",
-     "published": "2026-09-24T20:13:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Joel Garrett, Lecturer in Exercise Science and Physiology, Griffith University"
-    },
-    {
      "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ilan Oshri, Professor of Information Systems, Auckland Business School, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Can HRT prevent dementia? What the latest research tells us",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/can-hrt-prevent-dementia-what-the-latest-research-tells-us-292168",
-     "published": "2026-09-24T15:11:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Eef Hogervorst, Professor of Biological Psychology, Loughborough University"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -733,6 +733,12 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
+   "published": "2026-09-24 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
    "published": "2026-09-23 12:00 UTC"
   },
@@ -740,12 +746,6 @@
    "region": "Americas",
    "source": "UN News",
    "title": "Trump defends military action against Iran, Venezuela, and calls for rebrand of AI",
-   "published": "2026-09-22 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Diplomacy is the way to address global challenges, Brazil tells General Assembly",
    "published": "2026-09-22 12:00 UTC"
   },
   {
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Curious Kids: does music affect how plants grow?",
+   "published": "2026-09-25 00:35 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
+   "published": "2026-09-25 00:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australian poetry classics: Les Murray’s The Broad Bean Sermon is inexhaustible food for contemplation",
    "published": "2026-09-24 23:10 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Are AFL grand finals really the hardest game of the year? We checked the data",
-   "published": "2026-09-24 20:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
    "published": "2026-09-24 18:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Can HRT prevent dementia? What the latest research tells us",
-   "published": "2026-09-24 15:11 UTC"
   },
   {
    "region": "Oceania",
