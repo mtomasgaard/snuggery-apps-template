@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T15:01:21Z",
+ "generatedAt": "2026-09-25T16:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -261,15 +261,6 @@
    "stale": false,
    "items": [
     {
-     "title": "Yemen violence deepens concerns over child hunger crisis",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168436",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Aid agencies in Yemen highlighted the growing hunger emergency sparked by renewed fighting between Houthi opposition forces and Government troops, after mobile health clinics reported that hundreds of children displaced…",
-     "stale": false
-    },
-    {
      "title": "UNRWA work and mandate in ‘jeopardy’, Guterres warns",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -305,6 +296,15 @@
      "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
      "stale": false,
      "author": "The New Arab"
+    },
+    {
+     "title": "‘Time is running out’ for Israel-Palestine two-State solution",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168401",
+     "published": "2026-09-22T12:00:00Z",
+     "summary": "The UN chief warned on Tuesday that the two-State solution for the Israel-Palestine conflict is at risk of collapse amid illegal Israeli settlement expansion and annexation.",
+     "stale": false
     },
     {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
@@ -817,12 +817,6 @@
   {
    "region": "Middle East",
    "source": "UN News",
-   "title": "Yemen violence deepens concerns over child hunger crisis",
-   "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
    "title": "UNRWA work and mandate in ‘jeopardy’, Guterres warns",
    "published": "2026-09-24 12:00 UTC"
   },
@@ -843,6 +837,12 @@
    "source": "Global Voices",
    "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
    "published": "2026-09-22 19:36 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "‘Time is running out’ for Israel-Palestine two-State solution",
+   "published": "2026-09-22 12:00 UTC"
   },
   {
    "region": "Middle East",
