@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T22:01:16Z",
+ "generatedAt": "2026-09-25T23:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,33 @@
    "stale": false,
    "items": [
     {
+     "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168450",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "The UN said on Friday it remains gravely concerned by the continued deterioration of the security situation across northern Ethiopia, as fighting spreads across multiple fronts and increasingly disrupts humanitarian…",
+     "stale": false
+    },
+    {
+     "title": "Africa needs its own AI solutions, not borrowed ones, says expert",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168440",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Africa should focus its use of technology on solving its own real challenges rather than copying the systems and priorities of other parts of the world.",
+     "stale": false
+    },
+    {
+     "title": "Sudan’s farmers are ready to return – private investment could get them there",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168439",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "The war in Sudan has devastated the economy and agricultural production, but a UN-backed plan aims to mobilise private sector investment to help farmers return to their fields.",
+     "stale": false
+    },
+    {
      "title": "Les exportations de cobalt de la RDC contiennent de l'uranium non déclaré : notre étude évalue le risque nucléaire mondial",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -195,33 +222,6 @@
      "summary": "",
      "stale": false,
      "author": "Michael Greenstone, Professor in Economics; Director, Energy Policy Institute, University of Chicago"
-    },
-    {
-     "title": "‘Peace remains only a promise’ for millions in eastern DR Congo, General Assembly hears",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168422",
-     "published": "2026-09-24T12:00:00Z",
-     "summary": "The Prime Minister of the Democratic Republic of the Congo (DRC) cautioned against growing global demand for “blood-stained minerals” in the rush to net-zero, in her speech to the UN General Assembly.",
-     "stale": false
-    },
-    {
-     "title": "DR Congo Ebola outbreak toll exceeds 3,700 deaths",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168407",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "More than 130 days into the latest Ebola outbreak in the Democratic Republic of the Congo (DRC), health experts said on Wednesday that response efforts have been scaled up significantly and “the first encouraging signs…",
-     "stale": false
-    },
-    {
-     "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168389",
-     "published": "2026-09-21T12:00:00Z",
-     "summary": "Along the coast of Tanzania, in East Africa, the Indian Ocean is pushing saltwater ever farther inland, shrinking coconut harvests, driving fish away and leaving some residents wondering how much longer they can stay.",
-     "stale": false
     },
     {
      "title": "How Togolese people are reinventing political protest amid civil society crackdown",
@@ -354,12 +354,21 @@
      "author": "Juliana Harsianti"
     },
     {
-     "title": "Australia urges global cooperation on climate, AI checks and international law",
+     "title": "Tuvalu urges decisive global action as rising seas threaten its future",
      "source": "UN News",
      "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168435",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168449",
      "published": "2026-09-25T12:00:00Z",
-     "summary": "Australian Prime Minister Anthony Albanese underlined the need for countries to work together to address the climate crisis, emerging technologies such as AI, and the breakdown of international rules, at the United…",
+     "summary": "Climate change remains the greatest existential threat to Tuvalu, Prime Minister Feleti Teo told the UN General Assembly on Friday, warning that the pace and scale of international action are still falling far short of…",
+     "stale": false
+    },
+    {
+     "title": "Nepal PM urges climate justice after ‘Himalayan tsunami’ devastates country",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168441",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Nepal’s Prime Minister Balendra Shah brought a stark warning from the Himalayas to the UN General Assembly on Thursday, saying catastrophic floods that killed at least 1,400 people in his country laid bare the human…",
      "stale": false
     },
     {
@@ -381,15 +390,6 @@
      "summary": "Bangladesh’s 2024 uprising toppled a government, but two years later, reforms to police, judiciary, cyber laws, and state institutions remain contested, incomplete, and debated, leaving citizens asking whether real…",
      "stale": false,
      "author": "Rezwan"
-    },
-    {
-     "title": "Rohingya refugees deserve a future beyond survival, not endless displacement",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168417",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "Nine years after the mass displacement of the Rohingya from Myanmar, their situation remains one of the world's most protracted and complex refugee crises, marked by years of persecution and uncertainty over the…",
-     "stale": false
     },
     {
      "title": "Thai student movement forms ‘Hope Theatre,’ making the stage its new battleground",
@@ -768,6 +768,24 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Africa needs its own AI solutions, not borrowed ones, says expert",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan’s farmers are ready to return – private investment could get them there",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Les exportations de cobalt de la RDC contiennent de l'uranium non déclaré : notre étude évalue le risque nucléaire mondial",
    "published": "2026-09-25 11:53 UTC"
@@ -777,24 +795,6 @@
    "source": "The Conversation",
    "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
    "published": "2026-09-25 09:50 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘Peace remains only a promise’ for millions in eastern DR Congo, General Assembly hears",
-   "published": "2026-09-24 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo Ebola outbreak toll exceeds 3,700 deaths",
-   "published": "2026-09-23 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "In Tanzania, the sea is moving inland – and taking livelihoods with it",
-   "published": "2026-09-21 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -871,7 +871,13 @@
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "Australia urges global cooperation on climate, AI checks and international law",
+   "title": "Tuvalu urges decisive global action as rising seas threaten its future",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "Nepal PM urges climate justice after ‘Himalayan tsunami’ devastates country",
    "published": "2026-09-25 12:00 UTC"
   },
   {
@@ -885,12 +891,6 @@
    "source": "Global Voices",
    "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
    "published": "2026-09-24 10:41 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Rohingya refugees deserve a future beyond survival, not endless displacement",
-   "published": "2026-09-23 12:00 UTC"
   },
   {
    "region": "Asia",
