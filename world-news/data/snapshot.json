@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T13:01:21Z",
+ "generatedAt": "2026-09-25T14:01:13Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Yemen violence deepens concerns over child hunger crisis",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168436",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Aid agencies in Yemen highlighted the growing hunger emergency sparked by renewed fighting between Houthi opposition forces and Government troops, after mobile health clinics reported that hundreds of children displaced…",
+     "stale": false
+    },
+    {
      "title": "UNRWA work and mandate in ‘jeopardy’, Guterres warns",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -296,15 +305,6 @@
      "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
      "stale": false,
      "author": "The New Arab"
-    },
-    {
-     "title": "‘Time is running out’ for Israel-Palestine two-State solution",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168401",
-     "published": "2026-09-22T12:00:00Z",
-     "summary": "The UN chief warned on Tuesday that the two-State solution for the Israel-Palestine conflict is at risk of collapse amid illegal Israeli settlement expansion and annexation.",
-     "stale": false
     },
     {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Australia urges global cooperation on climate, AI checks and international law",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168435",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Australian Prime Minister Anthony Albanese underlined the need for countries to work together to address the climate crisis, emerging technologies such as AI, and the breakdown of international rules, at the United…",
+     "stale": false
+    },
+    {
      "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -381,15 +390,6 @@
      "summary": "“If you’re a bad student in your school, maybe it’s because you’re rebellious. Maybe it’s because you’re brave enough to question your teacher or challenge their power.“",
      "stale": false,
      "author": "Prachatai"
-    },
-    {
-     "title": "When a country goes underwater: Island States fight for their future",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168398",
-     "published": "2026-09-22T12:00:00Z",
-     "summary": "Rising sea levels and ever-more-powerful storms are eroding shorelines, submerging land and threatening to evict millions of people from their homes worldwide.",
-     "stale": false
     },
     {
      "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Yemen violence deepens concerns over child hunger crisis",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "UNRWA work and mandate in ‘jeopardy’, Guterres warns",
    "published": "2026-09-24 12:00 UTC"
   },
@@ -840,12 +846,6 @@
   },
   {
    "region": "Middle East",
-   "source": "UN News",
-   "title": "‘Time is running out’ for Israel-Palestine two-State solution",
-   "published": "2026-09-22 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
    "source": "Global Voices",
    "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
    "published": "2026-09-19 08:01 UTC"
@@ -861,6 +861,12 @@
    "source": "Global Voices",
    "title": "The people behind the numbers: Bringing the reality of Turkish prisons to light",
    "published": "2026-09-12 02:58 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "Australia urges global cooperation on climate, AI checks and international law",
+   "published": "2026-09-25 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -885,12 +891,6 @@
    "source": "Global Voices",
    "title": "Thai student movement forms ‘Hope Theatre,’ making the stage its new battleground",
    "published": "2026-09-23 06:42 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "When a country goes underwater: Island States fight for their future",
-   "published": "2026-09-22 12:00 UTC"
   },
   {
    "region": "Asia",
