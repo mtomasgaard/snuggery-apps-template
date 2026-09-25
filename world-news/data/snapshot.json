@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-25T07:01:32Z",
+ "generatedAt": "2026-09-25T08:01:44Z",
  "regions": [
   {
    "key": "europe",
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Omid Memarian"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
      "published": "2026-09-15T08:33:09Z",
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/14/who-is-responsible-for-protecting-and-preserving-indigenous-cultures/",
      "published": "2026-09-14T09:19:57Z",
      "summary": "As I read through the pieces Global Voices’ authors contributed to the August 2026 Spotlight series, “Indigenous Rights,” one common question stands out for me: Who gets to decide?",
-     "stale": true,
+     "stale": false,
      "author": "Subhashish Panigrahi"
     }
    ]
@@ -146,7 +146,7 @@
      "link": "https://globalvoices.org/2026/09/21/the-commodification-of-indigenous-cultures-and-traditions/",
      "published": "2026-09-21T06:21:22Z",
      "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
-     "stale": true,
+     "stale": false,
      "author": "Marco Martínez"
     },
     {
@@ -156,7 +156,7 @@
      "link": "https://globalvoices.org/2026/09/18/ecuador-detains-former-minister-jose-serrano-after-u-s-deportation/",
      "published": "2026-09-18T02:00:10Z",
      "summary": "Deported from the United States, Ecuador’s former “superminister” now faces grave criminal investigations and political accusations in a justice system facing questions over due process.",
-     "stale": true,
+     "stale": false,
      "author": "Gina Yauri"
     },
     {
@@ -166,7 +166,7 @@
      "link": "https://globalvoices.org/2026/09/16/the-auwe-xavante-peoples-denunciation-of-megaprojects-in-brazil/",
      "published": "2026-09-16T18:03:47Z",
      "summary": "An Indigenous-led campaign denounces the impacts of a mega railway project and demands respect for territory, self-determination, and the right to live and dream.",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     }
    ]
@@ -294,7 +294,7 @@
      "link": "https://globalvoices.org/2026/09/22/from-north-to-south-protests-sweep-across-tunisia-is-change-at-hand/",
      "published": "2026-09-22T19:36:26Z",
      "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
-     "stale": true,
+     "stale": false,
      "author": "The New Arab"
     },
     {
@@ -313,7 +313,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Omid Memarian"
     },
     {
@@ -323,7 +323,7 @@
      "link": "https://globalvoices.org/2026/09/13/as-casablancas-music-scene-grows-its-musicians-struggle/",
      "published": "2026-09-13T12:00:57Z",
      "summary": "As live music becomes central to Casablanca’s cultural brand, musicians remain caught between expanding opportunities and deteriorating working conditions.",
-     "stale": true,
+     "stale": false,
      "author": "Badr Sellak"
     },
     {
@@ -333,7 +333,7 @@
      "link": "https://globalvoices.org/2026/09/12/the-people-behind-the-numbers-bringing-the-reality-of-turkish-prisons-to-light/",
      "published": "2026-09-12T02:58:47Z",
      "summary": "“[W]hen we can see the human stories behind that statistic, we can begin to talk about human rights violations and solutions.”",
-     "stale": true,
+     "stale": false,
      "author": "GV Central Asia and Caucasus"
     }
    ]
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "HTTP 502; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "HTTP 502; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-americas",
@@ -608,9 +608,9 @@
    "id": "gv-west-asia",
    "source": "Global Voices",
    "region": "Middle East",
-   "ok": false,
-   "items": 4,
-   "note": "TimeoutError: The read operation timed out; kept 4 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-middle-east",
