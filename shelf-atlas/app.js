@@ -120,7 +120,6 @@ const THEMES = {
     label: '#14181f', halo: 'rgba(247,245,240,.92)', sel: '#2f6df6', grid: '#dfe4ec', ink: '#14181f', dim: '#4a5162',
     // depth ramp for the bathymetry raster, keyed by its grey value (√depth): pale shallows to mid blue
     depth: [[1, '#e4eef6'], [40, '#d2e2ef'], [80, '#bcd2e6'], [150, '#9cbbd9'], [255, '#7ea2c7']],
-    bathyLine: 'rgba(90,120,150,.35)',
   },
   dark: {
     ramp: ['#5e2a12', '#9a3e16', '#d95926', '#f49a60', '#ffdcbd'],
@@ -130,7 +129,6 @@ const THEMES = {
     pipes: ['#2fae4a', '#9085e9', '#8a95a3'], fac: '#e8ecf2', facStroke: '#0f1a26', sub: '#9aa6b5',
     label: '#e8ecf2', halo: 'rgba(12,17,24,.9)', sel: '#5b8eff', grid: '#262e39', ink: '#e8ecf2', dim: '#9aa6b5',
     depth: [[1, '#182a3d'], [40, '#132336'], [80, '#0e1c2d'], [150, '#0a1523'], [255, '#060d17']],
-    bathyLine: 'rgba(120,150,180,.25)',
   },
 };
 
@@ -153,11 +151,13 @@ const monthShort = (mi) => `${MON3[mi % 12]} ${monthYear(mi)}`;
 function daysIn(mi) { return new Date(Date.UTC(monthYear(mi), (mi % 12) + 1, 0)).getUTCDate(); }
 
 /* Names arrive in the regulators' capitals. Title-case words of letters; a
- * word with a digit in it is a licence-block name (K15-FA, 35/11) and stays. */
+ * name with a digit in it is a licence-block name (K15-FA, L10-CDA) and stays
+ * as it is, as do one- and two-letter words (Ekofisk VB, Tommeliten A). */
 function titleCase(s) {
   if (!s) return '';
+  if (/\d/.test(s)) return String(s);
   return String(s).split(/(\s+|-|\/)/).map((w) => {
-    if (/\d/.test(w) || w.length <= 1) return w;
+    if (w.length <= 2) return w;
     if (/^[IVX]+$/.test(w)) return w;          // roman numerals: Brent II, Gyda III
     return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
   }).join('');
@@ -523,6 +523,8 @@ function buildModel(s, B) {
   // months are marked as partial rather than shown as a collapse.
   M.ccLast = {};
   for (const F of M.fields) if (F.end != null) M.ccLast[F.cc] = Math.max(M.ccLast[F.cc] ?? -1, F.end - 1);
+  M.ccFirst = {};
+  for (const F of M.fields) if (F.first != null) M.ccFirst[F.cc] = Math.min(M.ccFirst[F.cc] ?? 1e9, F.first);
   const lasts = Object.values(M.ccLast);
   M.defaultMonth = lasts.length ? clamp(Math.min(...lasts), 0, s.lastMonth) : s.lastMonth;
   for (const g of s.groups || []) {
@@ -797,10 +799,9 @@ function drawStatic(c) {
   if (bc) {
     // Rows are already uniform in Mercator y, so one stretch places it.
     c.imageSmoothingEnabled = true;
+    // (the 200 m polygons are not outlined over it: Natural Earth splits
+    // them at tile seams, and those seams would show as straight lines)
     c.drawImage(bc, bathy.X0, bathy.Y0, bathy.X1 - bathy.X0, bathy.Y1 - bathy.Y0);
-    c.strokeStyle = P.bathyLine;
-    c.lineWidth = 0.7 / k;
-    c.stroke(base.bathy);
   } else {
     c.fillStyle = P.bathy;
     c.fill(base.bathy, 'evenodd');
@@ -818,7 +819,7 @@ function drawStatic(c) {
   c.stroke(base.borderPath);
   c.setLineDash([]);
   if (pipesOn()) {
-    const grow = clamp(Math.sqrt(zoomRel() / Z_PIPES), 1, 2.4);
+    const grow = clamp(Math.sqrt(zoomRel() / Z_PIPES), 1, 1.8);
     c.globalAlpha = 0.9;
     for (let ci = 0; ci < CC.length; ci++) {
       if (!ccOn[CC[ci]]) continue;
@@ -1190,6 +1191,9 @@ function setProblem(key, msg) {
 }
 
 function updateLegend() {
+  // no production figures, no colour scale: a legend over an empty map would
+  // read as "everything is zero"
+  $('legend').hidden = !(model && model.fields.length);
   $('legend-q').textContent = UNITS[qty].name;
   $('legend-unit').textContent = U_().rate;
   $('btn-units').textContent = U_().rate;
@@ -1202,9 +1206,19 @@ function updateLegend() {
   const L0 = Math.log10(D.lo), span = Math.log10(D.hi) - L0;
   const ticks = [];
   for (let e = Math.ceil(Math.log10(D.lo * f)); e <= Math.floor(Math.log10(D.hi * f)); e++) ticks.push(Math.pow(10, e));
-  const step = ticks.length > 4 ? 2 : 1;
-  const keep = ticks.filter((_, i) => (ticks.length - 1 - i) % step === 0);
-  const labels = [['≤' + fmt3(D.lo * f), 0], ...keep.map((v) => [fmt3(v), (Math.log10(v / f) - L0) / span]).filter((x) => x[1] > 0.14 && x[1] < 0.86), [fmt3(D.hi * f) + '+', 1]];
+  // Keep the two end labels; add decade ticks only where they clear their
+  // neighbours by a label's width, measured on the bar as drawn.
+  const bw = Math.max(120, ($('legend-bar').clientWidth || 190));
+  const first = ['≤' + fmt3(D.lo * f), 0], last = [fmt3(D.hi * f) + '+', 1];
+  const labels = [first];
+  const room = (t) => 3.4 * Math.max(3, t.length) + 4;     // half-width guess in px at 10 px type
+  let edge = room(first[0]) * 2;
+  const endEdge = bw - room(last[0]) * 2;
+  for (const v of ticks) {
+    const t = fmt3(v), p = (Math.log10(v / f) - L0) / span, x = p * bw;
+    if (x - room(t) > edge && x + room(t) < endEdge) { labels.push([t, p]); edge = x + room(t); }
+  }
+  labels.push(last);
   for (const [t, p] of labels) {
     const s = el('span', null, t);
     s.style.left = `${(p * 100).toFixed(1)}%`;
@@ -1222,13 +1236,14 @@ function updateStamp() {
   const pad = (n) => String(n).padStart(2, '0');
   let t = `Updated ${d.getDate()} ${MON3[d.getMonth()]} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   if (model && model.fields.length) t = `Data to ${monthShort(model.lastMonth)} · ${t}`;
+  else t = `Map only, no production · ${t}`;
   const stale = age > STALE_DAYS;
   st.textContent = stale ? `Stale · ${t}` : t;
   st.className = 'stamp' + (stale ? ' stale' : '');
 }
 
 const SHORT = { naturalearth: 'Natural Earth', marineregions: 'Marine Regions', emodnet: 'EMODnet',
-  'emodnet-bathymetry': 'EMODnet Bathymetry', sodir: 'Sodir', nsta: 'NSTA', dea: 'Danish Energy Agency', nlog: 'NLOG' };
+  'emodnet-bathymetry': 'EMODnet', sodir: 'Sodir', nsta: 'NSTA', dea: 'Danish Energy Agency', nlog: 'NLOG' };
 function shortSource(s) {
   const lic = String(s.licence || '').match(/CC BY(?:-SA)?|NLOD|OGL/);
   if (SHORT[s.id]) return lic ? `${SHORT[s.id]} ${lic[0]}` : SHORT[s.id];
@@ -1279,6 +1294,8 @@ function showAbout() {
     for (const [cc, e] of spread) {
       p(`${(snap.countries && snap.countries[cc]) || cc}: annual figures spread evenly over the months before ${monthLabel(e.from)} (${e.n} field${e.n === 1 ? '' : 's'}). Month-to-month changes before then are not real.`);
     }
+    const starts = CC.filter((c) => model.ccFirst[c] != null).map((c) => `${c} from ${monthLabel(model.ccFirst[c])} to ${monthLabel(model.ccLast[c])}`);
+    if (starts.length) p(`Monthly figures cover ${starts.join('; ')}. Outside those months a country's fields are drawn as outlines without a value, and the line under the map says why.`);
     if (model.groups.length) {
       p(`Cross-border units, each side reported by its own regulator and drawn with its own share (never counted twice): ${model.groups.map((G) => `${G.name} (${G.members.map((F) => F.cc + (isNum(F.raw.share) ? ' ' + F.raw.share + '%' : '')).join(', ')})`).join('; ')}.`);
     }
@@ -1340,8 +1357,14 @@ function updateTimeUI() {
   const on = CC.filter((c) => ccOn[c]);
   const who = on.length === CC.length ? '' : on.length ? on.join('+') + ': ' : 'No country selected';
   if (!on.length) { tot.textContent = who; return; }
+  // Say so when a country has no figures for this month, rather than let its
+  // fields read as idle: the Dutch series start in 2003, and every regulator
+  // reports the newest months on its own lag.
   const late = on.filter((c) => model.ccLast[c] != null && month > model.ccLast[c]);
-  tot.append(late.length ? `${who}${late.join(', ')} not reported yet · ` : `${who}${monthCount} producing · `);
+  const early = on.filter((c) => model.ccFirst[c] != null && month < model.ccFirst[c]);
+  const note = [late.length ? `${late.join(', ')} not reported yet` : '',
+    ...early.map((c) => `${c} figures from ${monthYear(model.ccFirst[c])}`)].filter(Boolean).join(' · ');
+  tot.append(note ? `${who}${note} · ` : `${who}${monthCount} producing · `);
   tot.append(el('b', null, fmt3(monthTotal * U_().f)));
   tot.append(` ${U_().rate}`);
 }
@@ -1606,8 +1629,11 @@ function renderUnitSheet(b, U) {
     const u = U_(), dd = daysIn(month);
     const v = U.members.reduce((a, F) => a + fieldVal[F.i], 0);
     const anyVis = U.members.some((F) => fieldState[F.i]);
-    nowV.textContent = anyVis ? fmt3(v * u.f) : '—';
-    nowT.textContent = anyVis ? `${u.rate} ${UNITS[qty].name.toLowerCase()} · ${monthLabel(month)}` : `not yet discovered in ${monthLabel(month)}`;
+    const noData = U.members.filter((F) => (model.ccFirst[F.cc] != null && month < model.ccFirst[F.cc]) || (model.ccLast[F.cc] != null && month > model.ccLast[F.cc]));
+    nowV.textContent = anyVis && noData.length < U.members.length ? fmt3(v * u.f) : '—';
+    nowT.textContent = !anyVis ? `not yet discovered in ${monthLabel(month)}`
+      : noData.length === U.members.length ? `no ${noData.map((F) => CC_ADJ[F.cc]).filter((x, i, a) => a.indexOf(x) === i).join(' or ')} figures for ${monthLabel(month)}`
+        : `${u.rate} ${UNITS[qty].name.toLowerCase()} · ${monthLabel(month)}${noData.length ? ` (no ${CC_ADJ[noData[0].cc]} figures)` : ''}`;
     if (S) {
       drawSpark(cv, S);
       const j = month - S.x0, inR = j >= 0 && j < S.liq.length;
@@ -1675,7 +1701,8 @@ function unitByName(name, cc) {
 
 function renderPipeSheet(b, p) {
   const r = p.raw;
-  sheetHead(b, r.name ? titleCase(r.name) : 'Unnamed pipeline', [p.cc], null);
+  const title = r.name ? titleCase(r.name) : r.from && r.to ? `${titleCase(r.from)} → ${titleCase(r.to)}` : 'Unnamed pipeline';
+  sheetHead(b, title, [p.cc], null);
   b.append(el('p', 'sh-sub', [r.medium ? sentenceCase(r.medium) : 'Medium not reported', isNum(r.dimIn) ? `${r.dimIn}″` : null].filter(Boolean).join(' · ')));
   const dl = el('dl', 'sh-dl');
   dlRow(dl, 'Medium', r.medium ? sentenceCase(r.medium) : 'not reported');
