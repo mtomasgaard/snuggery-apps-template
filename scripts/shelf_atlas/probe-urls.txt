@@ -1,22 +1,44 @@
-# --- UK: every service in NSTA's ArcGIS Online organisation, with licence text ---
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services?f=pjson
-https://www.arcgis.com/sharing/rest/search?q=orgid%3AOZMfUznmLTnWccBc&f=json&num=100&start=1
-https://www.arcgis.com/sharing/rest/search?q=orgid%3AOZMfUznmLTnWccBc&f=json&num=100&start=101
-https://www.arcgis.com/sharing/rest/search?q=orgid%3AOZMfUznmLTnWccBc&f=json&num=100&start=201
-https://www.arcgis.com/sharing/rest/search?q=orgid%3AOZMfUznmLTnWccBc&f=json&num=100&start=301
-https://www.nstauthority.co.uk/footer/terms-and-conditions/
-# --- Denmark: link texts, and GEUS's WFS with the ens_* layers ---
-https://ens.dk/en/energy-sources/monthly-and-yearly-production
-https://ens.dk/en/energy-sources/oil-and-gas-related-data/shape-files-oil-and-gas-maps
-https://data.geus.dk/geusmap/ows/4326.jsp?nocache=nocache&whoami=ul@geus.dk&SERVICE=WFS&VERSION=1.0.0&REQUEST=GetCapabilities
-https://data.geus.dk/geusmap/ows/4326.jsp?nocache=nocache&whoami=ul@geus.dk&SERVICE=WFS&VERSION=1.0.0&REQUEST=GetFeature&TYPENAME=ens_platform&outputformat=geojson&maxfeatures=2
-https://ens.dk/en/about-us
-# --- Netherlands: link texts ---
-https://www.nlog.nl/en/production-and-injection-data
-https://www.nlog.nl/en/oil-and-gas-maps-netherlands
-https://www.nlog.nl/en/files-interactive-map
-https://www.nlog.nl/en/fields
-https://www.nlog.nl/en/oil-and-gas-fields-overview
-https://www.nlog.nl/en/disclaimer
-https://www.nlog.nl/datacenter
-https://www.nlog.nl/en/datacenter
+# --- UK: schemas and counts of the layers the build will read ---
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_points_(WGS84)/FeatureServer?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_points_(WGS84)/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_points_(WGS84)/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_points_(WGS84)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=3&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_points_(WGS84)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=3&resultOffset=50000&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_polygons_WGS84/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_polygons_WGS84/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_polygons_WGS84/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=2&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/Offshore_petroleum_fields_daily_production_(WGS84)/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/Offshore_petroleum_fields_daily_production_(WGS84)/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/Offshore_petroleum_fields_daily_production_(WGS84)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=3&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_petroleum_production_data_by_field_(ED50)/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_petroleum_production_data_by_field_(ED50)/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_petroleum_production_data_by_field_(ED50)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=3&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/Offshore_hydrocarbon_fields_(WGS84)/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_pipeline_linear_(WGS84)/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_pipeline_linear_(WGS84)/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_pipeline_linear_(WGS84)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=2&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=3&f=geojson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_subsea_points_(WGS84)/FeatureServer/0/query?where=1%3D1&returnCountOnly=true&f=json
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_subsea_points_(WGS84)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=2&f=geojson
+https://www.nstauthority.co.uk/media/u51lhvio/nsta-user-agreeement-june-2023.pdf
+# --- Denmark: the spreadsheets and shapefiles ---
+https://ens.dk/media/7167/download
+https://ens.dk/media/8759/download
+https://ens.dk/media/8760/download
+https://ens.dk/media/7707/download
+https://ens.dk/sites/default/files/OlieGas/mp202312si.htm
+https://ens.dk/media/7661/download
+https://ens.dk/media/4907/download
+https://data.geus.dk/geusmap/ows/4326.jsp?nocache=nocache&whoami=ul@geus.dk&SERVICE=WFS&VERSION=1.0.0&REQUEST=GetFeature&TYPENAME=ens_platform&outputformat=geojson
+# --- Netherlands: the WFS and the datacenter ---
+https://www.gdngeoservices.nl/geoserver/nlog/ows?service=WFS&version=1.1.0&request=GetCapabilities
+https://www.gdngeoservices.nl/geoserver/nlog/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=nlog:gdw_ng_field_utm&outputFormat=json&count=2&srsName=EPSG:4326
+https://www.gdngeoservices.nl/geoserver/nlog/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=nlog:GDW_NG_FACILITY_UTM&outputFormat=json&count=2&srsName=EPSG:4326
+https://www.nlog.nl/datacenter/
+https://www.nlog.nl/datacenter/?lang=en
+https://www.nlog.nl/datacenter/production
+https://www.nlog.nl/datacenter/api/production
+https://www.nlog.nl/datacenter/api/fields
+https://www.nlog.nl/datacenter/api/config

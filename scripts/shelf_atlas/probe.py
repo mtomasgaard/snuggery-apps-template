@@ -26,6 +26,22 @@ def fetch(url, timeout=90, method="GET", data=None, headers=None):
 def peek(url, ctype, body):
     out = []
     head = body[:4]
+    if head[:2] == b"PK" and b"xl/workbook.xml" in body[:200000] or (head[:2] == b"PK" and b"[Content_Types].xml" in body[:3000] and b"xl/" in body[:20000]):
+        try:
+            import openpyxl
+            wb = openpyxl.load_workbook(io.BytesIO(body), read_only=True, data_only=True)
+            out.append(f"    xlsx sheets: {wb.sheetnames}")
+            for name in wb.sheetnames[:6]:
+                ws = wb[name]
+                out.append(f"    -- sheet {name!r} dims={ws.calculate_dimension() if hasattr(ws,'calculate_dimension') else '?'}")
+                for i, row in enumerate(ws.iter_rows(values_only=True)):
+                    if i >= 14: break
+                    cells = [str(c)[:22] for c in row[:16]]
+                    if any(c not in ("None", "") for c in cells):
+                        out.append("      " + " | ".join(cells))
+        except Exception as e:
+            out.append(f"    xlsx error {e}")
+        return out
     if head[:2] == b"PK":
         try:
             z = zipfile.ZipFile(io.BytesIO(body))
@@ -51,6 +67,17 @@ def peek(url, ctype, body):
                     break
         except Exception as e:
             out.append(f"    zip error {e}")
+        return out
+    if head[:2] == b"PK" and False:
+        pass
+    if body[:4] == b"%PDF":
+        try:
+            import pypdf
+            r = pypdf.PdfReader(io.BytesIO(body))
+            t = " ".join((pg.extract_text() or "") for pg in r.pages[:4])
+            out.append("    pdf: " + re.sub(r"\s+", " ", t)[:3000])
+        except Exception as e:
+            out.append(f"    pdf error {e}")
         return out
     txt = body.decode("utf-8-sig", "replace")
     st = txt.lstrip()[:1]
@@ -104,6 +131,10 @@ def peek(url, ctype, body):
             seen.add(h)
             out.append("    href: " + h[:200])
             if len(seen) > 120: break
+        for sc in re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', txt, re.I)[:20]:
+            out.append("    script: " + sc[:200])
+        for api in sorted(set(re.findall(r'["\'](/?(?:api|datacenter)[^"\'\s<>]{3,120})["\']', txt)))[:40]:
+            out.append("    apiref: " + api)
         m = re.search(r'<title>(.*?)</title>', txt, re.I | re.S)
         out.append(f"    title: {m.group(1).strip()[:120] if m else '?'}")
         for kw in ("Open Government Licence", "NLOD", "CC BY", "Creative Commons", "licen", "Licen", "vilkår", "terms"):
