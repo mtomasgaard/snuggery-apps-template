@@ -100,6 +100,17 @@ def _epoch_year(v):
 SUBSEA_KEEP = ("MANIFOLD", "TEMPLATE", "SUBSEA PRODUCTION", "SSIV", "PLEM", "PLET", "TIE-IN", "RISER BASE")
 
 
+def pprs_parent(name: str) -> str:
+    """PPRS reports per unit: 'BRAE-CENTRAL [Part of BRAE]', 'LEMAN [SHELL][pt. of LEMAN]',
+    'INDEFATIGABLE [PERENCO]', 'CURLEW B + D'. The outline layer knows only the field. So:
+    a '[Part of X]' / '[pt. of X]' tag names the parent; any other bracket (an operator) is
+    dropped; what is left is the field name."""
+    m = re.search(r"\[\s*(?:part|pt\.?)\s+of\s+([^\]]+)\]", name, re.I)
+    if m:
+        return m.group(1).strip()
+    return re.sub(r"\s*[\[(][^\])]*[\])]", "", name).strip()
+
+
 def _year_month(s: str):
     m = re.match(r"\s*(\d{4})[/-](\d{1,2})", s or "")
     return (int(m.group(1)), int(m.group(2))) if m else None
@@ -168,13 +179,17 @@ def load(cache: Cache):
             mi = month_index(int(a["PERIODYR"]), int(a["PERIODMNTH"]))
         except (TypeError, ValueError, KeyError):
             continue
-        key = norm_name(name)
+        parent = pprs_parent(name)
+        key = norm_name(parent)
         rec = fields.get(key)
         if rec is None:
+            rec = fields.get(norm_name(name))
+        if rec is None:
+            key = norm_name(name) if norm_name(name) in no_outline else key
             rec = no_outline.get(key)
             if rec is None:
                 rec = no_outline[key] = {
-                    "id": f"UK-{key}", "country": "UK", "name": name, "key": key, "hc": None,
+                    "id": f"UK-{key}", "country": "UK", "name": parent.upper(), "key": key, "hc": None,
                     "status": None, "operator": (a.get("ORGGRPNM") or "").strip().title() or None,
                     "discYear": None, "prodStart": None, "url": None, "statusHist": [], "operatorHist": [],
                     "series": {}, "rings": [], "point": None, "source": "nsta",
@@ -206,7 +221,10 @@ def load(cache: Cache):
     if need:
         pts = _all_features(cache, PPRS_SVC, "pprs.points", lid, "FIELDNAME,PERIODYRMN", True)
         for f in pts:
-            key = norm_name((f.get("properties") or {}).get("FIELDNAME") or "")
+            raw_name = (f.get("properties") or {}).get("FIELDNAME") or ""
+            key = norm_name(pprs_parent(raw_name))
+            if key not in need:
+                key = norm_name(raw_name)
             if key in need and fields[key]["point"] is None and f.get("geometry"):
                 c = f["geometry"]["coordinates"]
                 fields[key]["point"] = (float(c[0]), float(c[1]))

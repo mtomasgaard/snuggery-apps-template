@@ -82,9 +82,39 @@ def build_world_geometry(cache: Cache):
         "schema": 1,
         "factor": WORLD_FACTOR,
         "encoding": "Google polyline, lon then lat, 3 decimals; rings closed",
-        "source": "Natural Earth 1:110m admin-0 countries (public domain), simplified",
+        "source": "Natural Earth 1:110m admin-0 countries and 1:10m bathymetry (public domain), simplified",
         "countries": countries,
+        "bathymetry": build_world_bathymetry(cache),
     }
+
+
+NE_BATHY = [("A", 10000), ("B", 9000), ("C", 8000), ("D", 7000), ("E", 6000), ("F", 5000),
+            ("G", 4000), ("H", 3000), ("I", 2000), ("J", 1000), ("K", 200), ("L", 0)]
+BATHY_MIN_AREA_M2 = 4.0e8      # 400 km² triangles: the ocean floor at world scale, not a coastline
+
+
+def build_world_bathymetry(cache: Cache):
+    """Natural Earth 1:10m bathymetry: one layer per depth step, deepest first, so the app paints
+    them in order and the deepest tint wins. The 0 m layer (the whole ocean) is skipped: the sea
+    is the background."""
+    layers = []
+    for letter, depth in NE_BATHY:
+        if depth == 0:
+            continue
+        name = f"ne_10m_bathymetry_{letter}_{depth}"
+        raw = cache.get(f"global/{name}.geojson", NE.replace("ne_110m_admin_0_countries.geojson", "") + name + ".geojson"
+                        if False else f"https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/{name}.geojson")
+        gj = json.loads(raw.decode("utf-8"))
+        rings = []
+        for f in gj["features"]:
+            g = f["geometry"]
+            polys = [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
+            for poly in polys:
+                outer = simplify([tuple(c) for c in poly[0]], BATHY_MIN_AREA_M2, closed=True)
+                if len(outer) >= 4 and ring_area_m2(outer) > BATHY_MIN_AREA_M2:
+                    rings.append(encode_line(outer, WORLD_FACTOR))
+        layers.append({"depth": depth, "rings": rings})
+    return layers
 
 
 def read_owid(cache: Cache):
@@ -103,16 +133,24 @@ def read_owid(cache: Cache):
     return rows, book
 
 
+HISTORICAL = {"World": "OWID_WRL", "USSR": "OWID_USS", "Czechoslovakia": "OWID_CZS", "Yugoslavia": "OWID_YGS"}
+
+
 def build_countries(rows, book):
     """Per ISO3 country: yearly oil and gas production in GWh (integers), dense from the
     first year with data to the last. Aggregates (World, Europe, OPEC...) have no ISO
     code in OWID except 'OWID_WRL' and friends; the world total is kept, the rest dropped."""
     by = {}
+    patched = []
     for r in rows:
         iso = r["iso_code"]
         if not iso:
-            continue
-        if iso.startswith("OWID_") and iso != "OWID_WRL":
+            # OWID leaves the code empty for aggregates; the world total and the three
+            # dissolved states are kept under codes of our own so sums are complete
+            iso = HISTORICAL.get(r["country"], "")
+            if not iso:
+                continue
+        if iso.startswith("OWID_") and iso not in HISTORICAL.values():
             continue
         try:
             y = int(r["year"])
@@ -136,12 +174,22 @@ def build_countries(rows, book):
         for y, (o, g) in d["years"].items():
             oil[y - y0] = round(o * 1000) if o is not None else None   # TWh -> GWh, integer
             gas[y - y0] = round(g * 1000) if g is not None else None
+        # An isolated zero between two large values (Norway gas 1998 in the 2025 file) is a
+        # hole in the source, not a year without production: it becomes "no data" and is listed.
+        for kind, arr in (("oil", oil), ("gas", gas)):
+            for k in range(1, len(arr) - 1):
+                if arr[k] == 0 and arr[k - 1] and arr[k + 1] and min(arr[k - 1], arr[k + 1]) > 20000:
+                    arr[k] = None
+                    patched.append({"iso3": iso, "country": d["name"], "year": y0 + k, "series": kind,
+                                    "note": "isolated zero between two large values set to no data"})
         countries.append({"iso3": iso, "name": d["name"], "y0": y0, "oil": oil, "gas": gas})
         y_min, y_max = min(y_min, y0), max(y_max, y1)
     src = ""
     if "oil_production" in book:
         src = book["oil_production"].get("source", "")
-    return countries, y_min, y_max, src
+    if patched:
+        log(f"  owid: {len(patched)} isolated zeros set to no data: {[(p['country'], p['year'], p['series']) for p in patched]}")
+    return countries, y_min, y_max, src, patched
 
 
 # --------------------------------------------------------------------------------------------
@@ -329,14 +377,14 @@ def main():
 
     log("world: countries")
     rows, book = read_owid(cache)
-    countries, y0, y1, src = build_countries(rows, book)
+    countries, y0, y1, src, patched = build_countries(rows, book)
     if len(countries) < 150 or y1 < 2020:
         raise BuildError(f"OWID looks wrong: {len(countries)} countries, last year {y1}")
     wrl = next((c for c in countries if c["iso3"] == "OWID_WRL"), None)
     # ask rows: latest year, top producers, in kboe/d
     latest = []
     for c in countries:
-        if c["iso3"] == "OWID_WRL":
+        if c["iso3"].startswith("OWID_"):
             continue
         yy = c["y0"] + len(c["oil"]) - 1
         for k in range(len(c["oil"]) - 1, -1, -1):
@@ -372,6 +420,9 @@ def main():
         ],
         "world": wrl,
         "countries": [c for c in countries if c["iso3"] != "OWID_WRL"],
+        "historical": {"OWID_USS": "USSR (to 1991; no outline)", "OWID_CZS": "Czechoslovakia (no outline)",
+                       "OWID_YGS": "Yugoslavia (no outline)"},
+        "patched": patched,
         "ask": latest[:200],
     }
     write_json(os.path.join(args.out, "snapshot.json"), snapshot)

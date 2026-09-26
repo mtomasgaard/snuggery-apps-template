@@ -160,16 +160,22 @@ function sentenceCase(s) {
   if (t !== t.toUpperCase()) return t;         // already mixed case: keep the source's words
   return t.charAt(0) + t.slice(1).toLowerCase();
 }
-/* The same buckets the build uses for its `ask` rows, so "shut down" means
- * one thing whether it came from Sodir's history or a UK "Ceased". */
+/* Status words differ by regulator ("Shut down", "Production Ceased",
+ * "Post-Cop", "Abandoned"); this folds them into the few the map acts on.
+ * Ceased is tested before producing: "Production ceased" contains both. */
 function normStatus(s) {
   if (!s) return null;
   const t = String(s).trim().toLowerCase();
-  if (t.includes('produc') && !t.includes('unlikely') && !t.includes('not') && !t.includes('approved')) return 'Producing';
-  if (/shut|abandon|ceased|decommission|removed/.test(t)) return 'Shut down';
-  if (/approved|development|under/.test(t)) return 'Approved for production';
+  if (/shut|abandon|ceased|decommission|removed|post-cop|\bcop\b/.test(t)) return 'Shut down';
+  if (t.includes('suspend')) return 'Suspended';
+  if (/undeveloped|apprai|shelved|approved|construction|development|fdp/.test(t)) return 'Not yet producing';
+  if (t.startsWith('produc')) return 'Producing';
   return sentenceCase(s);
 }
+/* Hydrocarbon types arrive in three languages of abbreviation. */
+const HC_WORDS = { OLIE: 'Oil', 'OLIE EN GAS': 'Oil and gas', COND: 'Condensate', GAS: 'Gas', OIL: 'Oil',
+  'OIL/GAS': 'Oil and gas', 'GAS/CONDENSATE': 'Gas and condensate', 'OIL/CONDENSATE': 'Oil and condensate' };
+function hcLabel(h) { return h ? HC_WORDS[String(h).toUpperCase()] || sentenceCase(h) : null; }
 function fold(s) {
   return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
     .replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/å/g, 'a');
@@ -388,7 +394,7 @@ function buildBase(g) {
   g.facilities.forEach((fa, i) => {
     B.fac.X[i] = fa.lon;
     B.fac.Y[i] = mercY(fa.lat);
-    B.fac.shape[i] = fa.surface === false ? 2 : FLOATING.test(fa.kind || '') ? 1 : 0;
+    B.fac.shape[i] = fa.surface === false || /subsea/i.test(fa.kind || '') ? 2 : FLOATING.test(fa.kind || '') ? 1 : 0;
     B.fac.cc[i] = Math.max(0, CC.indexOf(fa.country));
     B.fac.y0[i] = isInt(fa.startYear) ? fa.startYear : 0;
     B.fac.y1[i] = isInt(fa.endYear) ? fa.endYear : 9999;
@@ -458,23 +464,25 @@ function buildModel(s, B) {
     G.members.forEach((F) => { F.unit = G.unit; });
     M.units.push({ kind: 'group', g: G, members: G.members, X: sx / sw, Y: sy / sw, name: G.name });
   }
-  // Colour and circle domains: the largest daily rate any unit ever reached.
+  // Colour and circle domains: the largest daily rate any unit reached, taken
+  // as each unit's SECOND-highest month so that a single mis-keyed month in a
+  // source (they exist) cannot squash the whole scale. Above it colours and
+  // circles saturate.
   M.hi = { liq: 0, gas: 0, oe: 0 };
   for (const U of M.units) {
     let m0 = Infinity, m1 = -Infinity;
     for (const F of U.members) if (F.first != null) { m0 = Math.min(m0, F.first); m1 = Math.max(m1, F.end); }
-    U.peak = 0;
+    const top = { liq: [0, 0], gas: [0, 0], oe: [0, 0] };
+    const push = (t, v) => { if (v > t[0]) { t[1] = t[0]; t[0] = v; } else if (v > t[1]) t[1] = v; };
     for (let m = m0; m < m1; m++) {
       const d = daysIn(m);
       let l = 0, gg = 0;
       for (const F of U.members) { l += monthly(F, 'liq', m); gg += monthly(F, 'gas', m); }
       l /= d; gg /= d;
-      if (l > M.hi.liq) M.hi.liq = l;
-      if (gg > M.hi.gas) M.hi.gas = gg;
-      const oe = l + gg / 1000;
-      if (oe > M.hi.oe) M.hi.oe = oe;
-      if (oe > U.peak) U.peak = oe;
+      push(top.liq, l); push(top.gas, gg); push(top.oe, l + gg / 1000);
     }
+    for (const q of ['liq', 'gas', 'oe']) if (top[q][1] > M.hi[q]) M.hi[q] = top[q][1];
+    U.peak = top.oe[1];
     U.area = U.members.reduce((a, F) => a + F.area, 0);
   }
   // Labels are placed biggest first: the fields that made the North Sea.
@@ -582,4 +590,430 @@ function computeMonth() {
     if (v > 0) unitOrder.push(u);
   }
   unitOrder.sort((a, b) => unitVal[b] - unitVal[a]);
+}
+
+/* ── view: Web Mercator, k CSS px per degree, t the screen offset ────────── */
+
+function computeFit() {
+  if (!base) { fitK = 1; return; }
+  fitK = Math.min(W / (base.X1 - base.X0), H / (base.Y1 - base.Y0)) * 0.98;
+}
+function zoomRel() { return view.k / fitK; }
+function centerOn(X, Y, k) {
+  view.k = k;
+  view.tx = W / 2 - X * k;
+  view.ty = H / 2 - Y * k;
+}
+function home() {
+  if (!base) return;
+  centerOn((base.X0 + base.X1) / 2, (base.Y0 + base.Y1) / 2, fitK);
+}
+function clampView() {
+  if (!base) return;
+  const k = clamp(view.k, fitK * Z_MIN, fitK * Z_MAX);
+  const cx = clamp((W / 2 - view.tx) / view.k, base.X0, base.X1);
+  const cy = clamp((H / 2 - view.ty) / view.k, base.Y0, base.Y1);
+  centerOn(cx, cy, k);
+}
+function saveView() {
+  if (!base) return;
+  store(STORE.view, { x: (W / 2 - view.tx) / view.k, y: (H / 2 - view.ty) / view.k, z: zoomRel() });
+}
+function restoreView() {
+  const v = recallJSON(STORE.view);
+  if (v && isNum(v.x) && isNum(v.y) && isNum(v.z)) { centerOn(v.x, v.y, v.z * fitK); clampView(); } else home();
+}
+function zoomAt(sx, sy, f) {
+  const X = (sx - view.tx) / view.k, Y = (sy - view.ty) / view.k;
+  const k = clamp(view.k * f, fitK * Z_MIN, fitK * Z_MAX);
+  view.k = k;
+  view.tx = sx - X * k;
+  view.ty = sy - Y * k;
+  clampView();
+}
+function viewBounds(marginPx) {
+  const m = (marginPx || 0) / view.k;
+  return [-view.tx / view.k - m, -view.ty / view.k - m, (W - view.tx) / view.k + m, (H - view.ty) / view.k + m];
+}
+const inView = (b, v) => b[2] >= v[0] && b[0] <= v[2] && b[3] >= v[1] && b[1] <= v[3];
+
+/* Fly-to: zoom in log space, centre linearly, 550 ms. The target leaves room
+ * for the bottom sheet, so the field lands in the part of the map still seen. */
+let fly = null;
+function flyTo(bbox, maxZ) {
+  if (!base) return;
+  const sheetH = $('sheet').hidden ? 0 : Math.min(H * 0.55, $('sheet').getBoundingClientRect().height || H * 0.5);
+  const availH = Math.max(80, H - sheetH - 20);
+  const bw = Math.max(bbox[2] - bbox[0], 1e-4), bh = Math.max(bbox[3] - bbox[1], 1e-4);
+  let k = Math.min((W - 80) / bw, (availH - 60) / bh);
+  k = clamp(k, fitK * 1.2, fitK * (maxZ || 60));
+  const X = (bbox[0] + bbox[2]) / 2, Y = (bbox[1] + bbox[3]) / 2;
+  // centre of the visible part: shift the target down by half the sheet
+  const Yc = Y + (sheetH / 2) / k;
+  fly = { t0: performance.now(), from: { x: (W / 2 - view.tx) / view.k, y: (H / 2 - view.ty) / view.k, k: view.k },
+    to: { x: X, y: Yc, k } };
+  requestRender();
+}
+function tickFly(now) {
+  if (!fly) return;
+  const u = Math.min(1, (now - fly.t0) / 550);
+  const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+  const k = Math.exp(Math.log(fly.from.k) + (Math.log(fly.to.k) - Math.log(fly.from.k)) * e);
+  centerOn(fly.from.x + (fly.to.x - fly.from.x) * e, fly.from.y + (fly.to.y - fly.from.y) * e, k);
+  if (u >= 1) { fly = null; clampView(); saveView(); }
+}
+
+/* ── drawing ─────────────────────────────────────────────────────────────── */
+
+let rafId = 0;
+let gesture = null;
+function requestRender() { if (!rafId) rafId = requestAnimationFrame(frame); }
+function frame(now) {
+  rafId = 0;
+  tickPlay(now);
+  tickFly(now);
+  render();
+  if (playing || fly) requestRender();
+}
+
+const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
+const pipesOn = () => zoomRel() >= Z_PIPES;
+const facsOn = () => zoomRel() >= Z_FACS;
+const worldTf = (c) => c.setTransform(dpr * view.k, 0, 0, dpr * view.k, dpr * view.tx, dpr * view.ty);
+const screenTf = (c) => c.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+/* The basemap and the pipelines do not change with the month, so they are
+ * painted once per view into an offscreen canvas and blitted while scrubbing.
+ * During a pan or pinch the view changes every frame anyway, so they are drawn
+ * straight onto the map instead of twice. */
+let cache = null;
+function staticKey() {
+  return [view.k, view.tx, view.ty, W, H, dpr, P.name, pipesOn(), CC.map((c) => (ccOn[c] ? 1 : 0)).join('')].join('|');
+}
+function drawStatic(c) {
+  const k = view.k;
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.fillStyle = P.bg;
+  c.fillRect(0, 0, canvas.width, canvas.height);
+  worldTf(c);
+  c.fillStyle = P.sea;
+  c.fillRect(base.X0, base.Y0, base.X1 - base.X0, base.Y1 - base.Y0);
+  c.fillStyle = P.bathy;
+  c.fill(base.bathy, 'evenodd');
+  c.fillStyle = P.land;
+  c.fill(base.land, 'evenodd');
+  c.lineJoin = 'round';
+  c.lineCap = 'round';
+  c.strokeStyle = P.coast;
+  c.lineWidth = 0.8 / k;
+  c.stroke(base.coast);
+  c.strokeStyle = P.border;
+  c.lineWidth = 1.2 / k;
+  c.setLineDash([5 / k, 4 / k]);
+  c.stroke(base.borderPath);
+  c.setLineDash([]);
+  if (pipesOn()) {
+    const grow = clamp(Math.sqrt(zoomRel() / Z_PIPES), 1, 2.4);
+    c.globalAlpha = 0.9;
+    for (let ci = 0; ci < CC.length; ci++) {
+      if (!ccOn[CC[ci]]) continue;
+      for (let mc = 2; mc >= 0; mc--) {
+        c.strokeStyle = P.pipes[mc];
+        for (let wc = 0; wc < 3; wc++) {
+          c.lineWidth = (PIPE_W[wc] * grow) / k;
+          c.stroke(base.pipeBuckets[ci][mc][wc]);
+        }
+      }
+    }
+    c.globalAlpha = 1;
+  }
+}
+
+function render() {
+  const c = ctx;
+  if (!P) buildPalette();
+  if (!base) {
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.fillStyle = P.bg;
+    c.fillRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  const key = staticKey();
+  if (cache && cache.key === key) {
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.drawImage(cache.canvas, 0, 0);
+  } else if (gesture || fly) {
+    drawStatic(c);
+  } else {
+    if (!cache || cache.canvas.width !== canvas.width || cache.canvas.height !== canvas.height) {
+      const cv = document.createElement('canvas');
+      cv.width = canvas.width;
+      cv.height = canvas.height;
+      cache = { canvas: cv, ctx: cv.getContext('2d'), key: null };
+    }
+    drawStatic(cache.ctx);
+    cache.key = key;
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.drawImage(cache.canvas, 0, 0);
+  }
+  if (model) {
+    drawFields(c);
+    drawCircles(c);
+    if (facsOn()) drawFacilities(c);
+    if (zoomRel() >= Z_LABELS) drawLabels(c);
+  }
+  drawSelection(c);
+}
+
+function drawFields(c) {
+  const k = view.k, vb = viewBounds(2);
+  worldTf(c);
+  c.lineJoin = 'round';
+  const lw = 0.8 / k;
+  const fs = model.fields;
+  for (let i = 0; i < fs.length; i++) {
+    const F = fs[i];
+    const st = fieldState[i];
+    if (!st || !F.path || !inView(F.bbox, vb)) continue;
+    c.lineWidth = lw;
+    if (st === 3) {
+      c.globalAlpha = 0.85;
+      c.fillStyle = P.lut[fieldCol[i]];
+      c.fill(F.path, 'evenodd');
+      c.globalAlpha = 1;
+      c.strokeStyle = P.prodStroke;
+    } else if (st === 2) {
+      c.fillStyle = P.shutFill;
+      c.fill(F.path, 'evenodd');
+      c.strokeStyle = P.shutStroke;
+    } else {
+      c.strokeStyle = P.idle;
+    }
+    c.stroke(F.path);
+  }
+}
+
+function circleR(v, hi) { return v > 0 ? Math.max(1.6, R_MAX * Math.sqrt(Math.min(1, v / hi))) : 0; }
+
+function drawCircles(c) {
+  screenTf(c);
+  const hi = domain().hi, U = model.units;
+  // Fields with no outline still exist when they are not producing: a small
+  // hollow dot, so a tap can find them and the map does not pretend they are not there.
+  c.lineWidth = 1;
+  for (let u = 0; u < U.length; u++) {
+    if (unitVal[u] > 0 || !unitVis[u] || U[u].members.some((F) => F.path)) continue;
+    const sx = U[u].X * view.k + view.tx, sy = U[u].Y * view.k + view.ty;
+    if (sx < -5 || sy < -5 || sx > W + 5 || sy > H + 5) continue;
+    c.beginPath();
+    c.arc(sx, sy, 2.6, 0, Math.PI * 2);
+    if (unitVis[u] === 2) { c.fillStyle = P.shutFill; c.fill(); c.strokeStyle = P.shutStroke; } else c.strokeStyle = P.idle;
+    c.stroke();
+  }
+  c.lineWidth = 1.2;
+  c.strokeStyle = P.ring;
+  for (const u of unitOrder) {
+    const r = circleR(unitVal[u], hi);
+    const sx = U[u].X * view.k + view.tx, sy = U[u].Y * view.k + view.ty;
+    if (sx < -r || sy < -r || sx > W + r || sy > H + r) continue;
+    c.beginPath();
+    c.arc(sx, sy, r, 0, Math.PI * 2);
+    c.globalAlpha = 0.82;
+    c.fillStyle = P.lut[unitCol[u]];
+    c.fill();
+    c.globalAlpha = 1;
+    c.stroke();
+  }
+}
+
+function facilityVisible(i, y) {
+  const fa = base.fac;
+  return ccOn[CC[fa.cc[i]]] && y >= fa.y0[i] && y <= fa.y1[i];
+}
+function drawFacilities(c) {
+  screenTf(c);
+  const fa = base.fac, y = monthYear(month);
+  const s = clamp(2.4 + (zoomRel() - Z_FACS) * 0.12, 2.4, 4.2);
+  const sq = new Path2D(), tri = new Path2D(), dot = new Path2D();
+  for (let i = 0; i < fa.n; i++) {
+    if (!facilityVisible(i, y)) continue;
+    const sx = fa.X[i] * view.k + view.tx, sy = fa.Y[i] * view.k + view.ty;
+    if (sx < -8 || sy < -8 || sx > W + 8 || sy > H + 8) continue;
+    const sh = fa.shape[i];
+    if (sh === 0) sq.rect(sx - s, sy - s, 2 * s, 2 * s);
+    else if (sh === 1) { tri.moveTo(sx, sy - s * 1.25); tri.lineTo(sx + s * 1.15, sy + s * 0.9); tri.lineTo(sx - s * 1.15, sy + s * 0.9); tri.closePath(); } else { dot.moveTo(sx + s * 0.7, sy); dot.arc(sx, sy, s * 0.7, 0, Math.PI * 2); }
+  }
+  c.fillStyle = P.sub;
+  c.fill(dot);
+  c.fillStyle = P.fac;
+  c.strokeStyle = P.facStroke;
+  c.lineWidth = 1;
+  c.stroke(sq); c.fill(sq);
+  c.stroke(tri); c.fill(tri);
+}
+
+/* Labels: biggest fields first, each placed only where it collides with no
+ * label already placed. Width is measured once per name and remembered. */
+function drawLabels(c) {
+  screenTf(c);
+  c.font = `600 11px ${FONT}`;
+  c.textAlign = 'center';
+  c.textBaseline = 'top';
+  c.lineJoin = 'round';
+  c.lineWidth = 3;
+  c.strokeStyle = P.halo;
+  c.fillStyle = P.label;
+  const hi = domain().hi, U = model.units, placed = [];
+  const maxLabels = Math.round(clamp(W * H / 2600, 20, 160));
+  for (const u of model.rank) {
+    if (!unitVis[u]) continue;
+    const Un = U[u];
+    const sx = Un.X * view.k + view.tx, sy = Un.Y * view.k + view.ty;
+    if (sx < -40 || sy < -20 || sx > W + 40 || sy > H + 20) continue;
+    if (Un.lw == null) Un.lw = c.measureText(Un.name).width;
+    const r = circleR(unitVal[u], hi);
+    const y0 = sy + Math.max(r, 3) + 2;
+    const x0 = sx - Un.lw / 2 - 2, x1 = sx + Un.lw / 2 + 2, y1 = y0 + 13;
+    if (x0 < 2 || x1 > W - 2 || y1 > H - 2) continue;
+    let hit = false;
+    for (let j = 0; j < placed.length; j += 4) {
+      if (x0 < placed[j + 2] && x1 > placed[j] && y0 < placed[j + 3] && y1 > placed[j + 1]) { hit = true; break; }
+    }
+    if (hit) continue;
+    placed.push(x0, y0, x1, y1);
+    c.strokeText(Un.name, sx, y0);
+    c.fillText(Un.name, sx, y0);
+    if (placed.length / 4 >= maxLabels) break;
+  }
+}
+
+function drawSelection(c) {
+  if (!sel || !base) return;
+  const k = view.k;
+  c.strokeStyle = P.sel;
+  c.lineJoin = 'round';
+  c.lineCap = 'round';
+  if (sel.type === 'unit' && model) {
+    const U = model.units[sel.u];
+    if (!U) return;
+    worldTf(c);
+    c.lineWidth = 2.6 / k;
+    for (const F of U.members) if (F.path) c.stroke(F.path);
+    screenTf(c);
+    const sx = U.X * k + view.tx, sy = U.Y * k + view.ty;
+    const r = circleR(unitVal[sel.u], domain().hi);
+    c.lineWidth = 2;
+    c.beginPath();
+    c.arc(sx, sy, Math.max(r, 3) + 3, 0, Math.PI * 2);
+    c.stroke();
+  } else if (sel.type === 'fac') {
+    screenTf(c);
+    const sx = base.fac.X[sel.i] * k + view.tx, sy = base.fac.Y[sel.i] * k + view.ty;
+    c.lineWidth = 2.2;
+    c.beginPath();
+    c.arc(sx, sy, 9, 0, Math.PI * 2);
+    c.stroke();
+  } else if (sel.type === 'pipe' || sel.type === 'border') {
+    const lines = sel.type === 'pipe' ? base.pipes[sel.i].lines : base.borders[sel.i].lines;
+    worldTf(c);
+    c.lineWidth = 3.2 / k;
+    c.globalAlpha = 0.85;
+    for (const a of lines) {
+      c.beginPath();
+      c.moveTo(a[0], a[1]);
+      for (let j = 2; j < a.length; j += 2) c.lineTo(a[j], a[j + 1]);
+      c.stroke();
+    }
+    c.globalAlpha = 1;
+  }
+}
+
+/* ── hit-testing: cheap prefilters, then exact tests on the few left ────── */
+
+function pointInRings(rings, x, y) {
+  let inside = false;
+  for (const a of rings) {
+    for (let i = 0, j = a.length - 2; i < a.length; j = i, i += 2) {
+      const xi = a[i], yi = a[i + 1], xj = a[j], yj = a[j + 1];
+      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+  }
+  return inside;
+}
+function distToLines(lines, bbox, sx, sy, tol) {
+  const k = view.k;
+  if (sx < bbox[0] * k + view.tx - tol || sx > bbox[2] * k + view.tx + tol
+    || sy < bbox[1] * k + view.ty - tol || sy > bbox[3] * k + view.ty + tol) return Infinity;
+  let best = Infinity;
+  for (const a of lines) {
+    let px = a[0] * k + view.tx, py = a[1] * k + view.ty;
+    for (let i = 2; i < a.length; i += 2) {
+      const qx = a[i] * k + view.tx, qy = a[i + 1] * k + view.ty;
+      const dx = qx - px, dy = qy - py, L = dx * dx + dy * dy;
+      const t = L > 0 ? clamp(((sx - px) * dx + (sy - py) * dy) / L, 0, 1) : 0;
+      const d = Math.hypot(sx - (px + t * dx), sy - (py + t * dy));
+      if (d < best) best = d;
+      px = qx; py = qy;
+    }
+  }
+  return best;
+}
+function nearestPipe(sx, sy, tol) {
+  let best = null, bd = tol;
+  base.pipes.forEach((p, i) => {
+    if (!ccOn[p.cc]) return;
+    const d = distToLines(p.lines, p.bbox, sx, sy, tol);
+    if (d < bd) { bd = d; best = i; }
+  });
+  return best;
+}
+function hitTest(sx, sy) {
+  if (!base) return null;
+  const k = view.k, X = (sx - view.tx) / k, Y = (sy - view.ty) / k;
+  if (model && facsOn()) {
+    const fa = base.fac, y = monthYear(month);
+    let best = -1, bd = 13;
+    for (let i = 0; i < fa.n; i++) {
+      if (!facilityVisible(i, y)) continue;
+      const d = Math.hypot(fa.X[i] * k + view.tx - sx, fa.Y[i] * k + view.ty - sy);
+      if (d < bd) { bd = d; best = i; }
+    }
+    if (best >= 0) return { type: 'fac', i: best };
+  }
+  if (pipesOn()) {
+    const p = nearestPipe(sx, sy, 5);
+    if (p != null) return { type: 'pipe', i: p };
+  }
+  if (model) {
+    // circles first, smallest on top; then outlines, smallest area wins
+    const hi = domain().hi, U = model.units;
+    let bu = -1, br = Infinity;
+    for (let u = 0; u < U.length; u++) {
+      if (!unitVis[u]) continue;
+      const r = unitVal[u] > 0 ? circleR(unitVal[u], hi) : U[u].members.some((F) => F.path) ? 0 : 3;
+      if (!r) continue;
+      const d = Math.hypot(U[u].X * k + view.tx - sx, U[u].Y * k + view.ty - sy);
+      if (d <= Math.max(r + 3, 9) && r < br) { br = r; bu = u; }
+    }
+    if (bu >= 0) return { type: 'unit', u: bu };
+    let bf = null;
+    for (const F of model.fields) {
+      if (!fieldState[F.i] || !F.rings) continue;
+      const b = F.bbox;
+      if (X < b[0] || X > b[2] || Y < b[1] || Y > b[3]) continue;
+      if (pointInRings(F.rings, X, Y) && (!bf || F.area < bf.area)) bf = F;
+    }
+    if (bf) return { type: 'unit', u: bf.unit };
+  }
+  if (pipesOn()) {
+    const p = nearestPipe(sx, sy, 12);
+    if (p != null) return { type: 'pipe', i: p };
+  }
+  let bb = -1, bd = 12;
+  base.borders.forEach((b, i) => {
+    const d = distToLines(b.lines, b.bbox, sx, sy, bd);
+    if (d < bd) { bd = d; bb = i; }
+  });
+  if (bb >= 0) return { type: 'border', i: bb };
+  return null;
 }

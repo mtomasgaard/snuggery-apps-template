@@ -28,7 +28,7 @@ from scripts.shelf_atlas.common import (BBL_PER_SM3, BuildError, Cache, EPOCH_YE
                                         simplify, write_json)
 from scripts.shelf_atlas import fetch_basemap, fetch_denmark, fetch_netherlands, fetch_norway, fetch_uk
 
-BBOX = [-6.0, 50.5, 12.0, 63.0]
+BBOX = [-6.0, 50.5, 32.0, 73.0]      # North Sea plus the whole Norwegian shelf (Norwegian Sea, Barents Sea)
 FACTOR = 10000
 BASE_MIN_AREA = 8000.0        # m², Visvalingam threshold for coast/land/bathymetry/borders
 FIELD_MIN_AREA = 2500.0       # m², field outlines (a 50 m wiggle is noise at any phone zoom)
@@ -49,8 +49,14 @@ CROSS_BORDER = {
     "PLAYFAIR": {"name": "Playfair", "members": {"NO": None, "UK": None}},
     "BLANE": {"name": "Blane", "members": {"NO": 18.0, "UK": 82.0}},
     "ENOCH": {"name": "Enoch", "members": {"NO": 21.8, "UK": 78.2}},
-    "ORMEN LANGE": None,   # a name that could collide with nothing; listed to show the shape
+    "FLYNDRE": {"name": "Flyndre", "members": {"NO": None, "UK": None}},
+    "ISLAY": {"name": "Islay", "members": {"NO": None, "UK": None}},
+    "TOMMELITENA": {"name": "Tommeliten A", "members": {"NO": None, "UK": None}},
+    "UTGARD": {"name": "Utgard", "members": {"NO": None, "UK": None}},
+    # Same name, different fields — listed so they are never grouped: FRAM (NO Fram / UK Fram),
+    # ORION (NL / UK).
 }
+NOT_CROSS_BORDER = {"FRAM", "ORION"}
 
 
 def _norm_status(s):
@@ -178,6 +184,10 @@ def build(args):
         if len(countries) < 2:
             continue
         rule = CROSS_BORDER.get(key)
+        if key in NOT_CROSS_BORDER:
+            excluded.append({"name": recs[0]["name"], "countries": countries,
+                             "note": "same name, different fields; kept separate"})
+            continue
         if rule and rule.get("members") and set(countries) <= set(rule["members"]):
             gid = key
             for r in recs:

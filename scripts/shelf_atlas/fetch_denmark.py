@@ -168,6 +168,17 @@ def _read_monthly(cache: Cache, ym, url: str, names: list[str]):
     return _monthly_values(text, names)
 
 
+# Names as the Agency's shapefile writes them -> as its production tables write them.
+OUTLINE_ALIASES = {"SOUTHARNE": "SYDARNE", "TYRASOUTHEAST": "TYRASE", "TYRASOEST": "TYRASE",
+                   "TYRASO": "TYRASE", "TYRASE": "TYRASE", "HALFDANNORDOST": "HALFDAN"}
+
+
+def _outline_key(name: str) -> str:
+    base = re.sub(r"\s*[-–]\s*.*\bpart\b.*$", "", name, flags=re.I)   # 'South Arne - western part'
+    k = norm_name(base)
+    return OUTLINE_ALIASES.get(k, k)
+
+
 def load(cache: Cache):
     yearly_url, monthly_links = _page_links(cache)
     blocks = _read_yearly(cache, yearly_url)
@@ -239,14 +250,11 @@ def load(cache: Cache):
         href = "https://ens.dk" + href
     n_geom = 0
     unmatched = []
+    seen_names = []
     for rec, shape in shapefile_records(cache.get("denmark/fields.zip", href)):
         name = str(rec.get("Field") or rec.get("Label") or "").strip()
-        key = norm_name(name)
-        f = fields.get(key)
-        if f is None:
-            # e.g. 'Tyra SE' vs 'Tyra Se', 'Dan West'... try a prefix match on the first word
-            cands = [k for k in fields if k == key or key.startswith(k) and len(k) >= 4]
-            f = fields[cands[0]] if len(cands) == 1 else None
+        seen_names.append(name)
+        f = fields.get(_outline_key(name))
         if f is None:
             unmatched.append(name)
             continue
@@ -258,7 +266,9 @@ def load(cache: Cache):
                 pts.append((lon, lat))
             f["rings"].append(pts)
         n_geom += 1
-    log(f"  dea: {n_geom} outlines matched; unmatched outline names: {unmatched}")
+    log(f"  dea: outline names: {seen_names}")
+    log(f"  dea: {n_geom} outlines matched; unmatched outline names: {unmatched}; "
+        f"fields without outline: {[f['name'] for f in fields.values() if not f['rings']]}")
 
     # --- platforms (GEUS WFS) ---
     facilities = []
@@ -285,5 +295,23 @@ def load(cache: Cache):
         })
     if len(facilities) < 30:
         raise BuildError(f"GEUS platforms: only {len(facilities)}")
+    # operator and status: the Agency's tables carry neither, so the operator comes from the
+    # nearest operational platform (within 12 km of the outline's centroid) and the status from
+    # whether the field produced in the last three reported months.
+    from .common import centroid as _centroid
+    last_mi = max((mi for f in fields.values() for mi in f["series"]), default=None)
+    for f in fields.values():
+        if f["rings"]:
+            cx, cy = _centroid(f["rings"])
+            best = None
+            for fa in facilities:
+                d = math.hypot((fa["lon"] - cx) * 111.32 * math.cos(math.radians(cy)), (fa["lat"] - cy) * 110.57)
+                if d < 12 and fa["operator"] and (best is None or d < best[0]):
+                    best = (d, fa["operator"])
+            if best:
+                f["operator"] = best[1]
+        if last_mi is not None and f["series"]:
+            recent = any(mi >= last_mi - 2 for mi in f["series"])
+            f["status"] = "Producing" if recent else "Not producing"
     log(f"  dea: {len(facilities)} platforms")
     return {"fields": list(fields.values()), "facilities": facilities, "pipelines": []}
