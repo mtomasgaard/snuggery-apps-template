@@ -60,8 +60,8 @@ def _png_grey(width: int, height: int, rows) -> bytes:
             + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
 
 
-TILE_X, TILE_Y = 6.0, 3.0     # degrees; the server reads the source at full resolution per
-                              # request and refuses more than ~98 MB, which a 6°×3° tile stays under
+TILE_X, TILE_Y = 3.0, 3.0     # degrees; the server reads the source at full resolution per request
+                              # and refuses more than ~98 MB; a 6°×3° tile reads 126 MB, a 3°×3° one half that
 
 
 def _tile(cache: Cache, x0, y0, x1, y1):

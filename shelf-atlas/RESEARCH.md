@@ -55,7 +55,7 @@ polyline encoding at four decimals (~6–11 m). Budgets enforced by the build: `
 - **North Sea app: EMODnet Bathymetry DTM** (CC BY 4.0) through its WCS
   (`https://ows.emodnet-bathymetry.eu/wcs`, coverage `emodnet:mean`, GeoTIFF float32 of mean
   depth). The server reads the source grid at full resolution for every request and refuses more
-  than ~98 MB, so the box is fetched as 56 tiles of 6°×3° at 0.03°×0.015° (about 2 km) and
+  than ~98 MB, so the box is fetched as 104 tiles of 3°×3° at 0.03°×0.015° (about 2 km) and
   mosaicked. The pipeline resamples the rows to Web Mercator and writes an **8-bit greyscale PNG**
   (`shelf-atlas/data/bathy.png`, v = 255·√(depth/3000), 0 = land) that the app tints per theme
   with a lookup table and draws with one `drawImage`. Budget 1.2 MB. Natural Earth's 200 m
