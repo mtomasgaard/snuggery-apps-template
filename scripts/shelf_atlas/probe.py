@@ -62,6 +62,11 @@ def peek(url, ctype, body):
                 # ArcGIS REST service listing
                 for lyr in (j.get("layers") or [])[:400]:
                     out.append(f"    layer {lyr.get('id')}: {lyr.get('name')} ({lyr.get('geometryType', lyr.get('type'))})")
+                for sv in (j.get("services") or [])[:400]:
+                    out.append(f"    service: {sv.get('name')} ({sv.get('type')}) {sv.get('url','')}")
+                for r in (j.get("results") or [])[:200]:
+                    if isinstance(r, dict):
+                        out.append(f"    item: {r.get('title')!r} type={r.get('type')} url={r.get('url')} lic={re.sub(r'<[^>]+>', ' ', str(r.get('licenseInfo') or ''))[:160]!r} access={r.get('accessInformation')}")
                 # ArcGIS Hub v3
                 for d in (j.get("data") or [])[:80]:
                     a = d.get("attributes", {}) if isinstance(d, dict) else {}
@@ -87,6 +92,10 @@ def peek(url, ctype, body):
         return out
     if "<html" in txt[:3000].lower() or "<!doctype" in txt[:200].lower() or ctype.startswith("text/html"):
         hrefs = re.findall(r'href=["\']([^"\']+)["\']', txt, re.I)
+        for m in re.finditer(r'<a\s[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', txt, re.I | re.S):
+            h, t = m.group(1), re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', m.group(2))).strip()
+            if re.search(r'\.(zip|xlsx|xls|csv|geojson|gpkg|json)(\?|$)|/media/|download|wfs|wms|arcgis|datacenter|data-center|productie|production|file', h, re.I):
+                out.append(f"    a: {t[:80]!r} -> {h[:160]}")
         srcs = re.findall(r'(https?://[^\s"\'<>]+?\.(?:zip|xlsx|xls|csv|geojson|json|gpkg))', txt, re.I)
         keep = [h for h in hrefs if re.search(r'\.(zip|xlsx|xls|csv|geojson|gpkg|json)(\?|$)|wfs|wms|arcgis|download|produktion|production|felt|field|shape|kort|map', h, re.I)]
         seen = set()
