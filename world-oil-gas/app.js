@@ -554,22 +554,24 @@ function fieldRadius(p) {
 function fieldVisible(p) { return statusFilter === 'all' || p.operating; }
 function fieldsDrawn() { return showFields && fields && fields.available && fields.points.length > 0; }
 
-/* The topmost point under the finger, or failing that the nearest one within
- * a finger's width — the small ones are smaller than any fingertip. */
+/* Of the circles under the finger, the one whose centre is nearest relative
+ * to its size — so a tap on the middle of a big field that a small one
+ * overlaps still finds the big one. Failing that, the nearest within a
+ * finger's width: the small ones are smaller than any fingertip. */
 function fieldAt(sx, sy) {
   if (!fieldsDrawn()) return null;
-  let best = null, bestD = Infinity;
-  const pts = fields.points;
-  for (let i = pts.length - 1; i >= 0; i--) {
-    const p = pts[i];
+  let hit = null, hitScore = Infinity, near = null, nearD = Infinity;
+  for (const p of fields.points) {
     if (!fieldVisible(p)) continue;
     const x = worldToScreenX(p.x), y = worldToScreenY(p.y);
     const d = Math.hypot(x - sx, y - sy);
     const r = fieldRadius(p);
-    if (d <= r + 2) return p;
-    if (d < 16 && d - r < bestD) { best = p; bestD = d - r; }
+    if (d <= r + 2) {
+      const score = d / (r + 2);
+      if (score < hitScore) { hit = p; hitScore = score; }
+    } else if (d - r < 14 && d - r < nearD) { near = p; nearD = d - r; }
   }
-  return best;
+  return hit || near;
 }
 
 /* ── drawing ─────────────────────────────────────────────────────────────── */
@@ -1091,7 +1093,7 @@ function sparkline(c) {
 function fieldSheet(body, p) {
   const f = p.f;
   body.append(el('h2', null, f.name || 'Unnamed field'));
-  body.append(el('p', 'sub', [f.country, f.status].filter(isStr).join(' · ')));
+  body.append(el('p', 'sub', isStr(f.country) ? f.country : 'Country not stated'));
   const dl = el('dl');
   const row = (k, v) => {
     if (v == null || v === '') return;
@@ -1111,7 +1113,7 @@ function fieldSheet(body, p) {
   else {
     if (oil != null) row(`Oil${yr}`, `${nf0.format(oil)} bbl/d`);
     if (gas != null) row(`Gas${yr}`, `${nf0.format(gas)} boe/d`);
-    row('Together', `${nf0.format((oil || 0) + (gas || 0))} boe/d`);
+    if (oil != null && gas != null) row('Together', `${nf0.format(oil + gas)} boe/d`);
   }
   body.append(dl);
   if (isStr(f.wiki)) {
@@ -1208,7 +1210,8 @@ function showAbout() {
     + 'lands while it is open. A scheduled job rewrites them and a Shortcut carries them in; the app '
     + 'itself never goes online.', 'muted');
   $('about').hidden = false;
-  $('about-close').focus();
+  document.querySelector('.about-card').scrollTop = 0;
+  $('about-close').focus({ preventScroll: true });
 }
 
 /* Facts about this particular file that change how a year should be read —
@@ -1229,7 +1232,13 @@ function dataNotes() {
     if (first != null && first > prod.Y0 + 5) late.push(`${c.name} (${first})`);
     if (last != null && last < prod.Y1) early.push(`${c.name} (${last})`);
   }
-  if (late.length) notes.push(`Major producers whose series start late — earlier years are hatched, and the states they were part of have no series of their own: ${late.join(', ')}.`);
+  if (late.length) notes.push(`Major producers whose series start late (first year in brackets); earlier years are hatched and left out of the sums: ${late.join(', ')}.`);
+  // The successor states' series start in 1985; if the file has no series
+  // for the Soviet Union itself, its production before then is simply absent.
+  const rus = prod.byIso.get('RUS');
+  if (rus && rus.y0 > prod.Y0 && !prod.byIso.has('SUN') && !s.countries.some((c) => /soviet|ussr/i.test(c.name))) {
+    notes.push(`There is no series for the Soviet Union, so before ${rus.y0} its production is missing from the map and from every share and sum.`);
+  }
   if (early.length) notes.push(`Major producers whose series stop before ${prod.Y1}: ${early.join(', ')}.`);
   let partial = 0;
   for (const c of s.countries) {
