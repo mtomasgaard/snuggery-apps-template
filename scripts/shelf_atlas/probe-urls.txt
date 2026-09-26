@@ -1,25 +1,6 @@
-# --- Netherlands: the datacenter's JavaScript, for its API ---
-https://www.nlog.nl/datacenter/main-MZQNFKLT.js#js
-https://www.nlog.nl/en/disclaimer#raw
-# --- EMODnet: terms, counts per country ---
-https://emodnet.ec.europa.eu/en/terms-use#raw
-https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&typeName=emodnet:pipelines&outputFormat=json&maxFeatures=1&CQL_FILTER=country_co%20IN%20(%27DK%27,%27NL%27,%27NO%27,%27GB%27,%27UK%27,%27DE%27)&resultType=hits
-https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&typeName=emodnet:pipelines&outputFormat=json&maxFeatures=3&CQL_FILTER=country_co%3D%27DK%27
-https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&typeName=emodnet:pipelines&outputFormat=json&maxFeatures=3&CQL_FILTER=country_co%3D%27NL%27
-https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&typeName=emodnet:pipelines&outputFormat=json&maxFeatures=3&CQL_FILTER=country_co%3D%27NO%27
-https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&typeName=emodnet:pipelines&outputFormat=json&maxFeatures=3&CQL_FILTER=country_co%3D%27GB%27
-https://ows.emodnet-humanactivities.eu/wfs?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&typeName=emodnet:pipelines&outputFormat=json&propertyName=country_co&maxFeatures=5000
-# --- UK: period range of PPRS, layer ids of the infrastructure services ---
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_hydrocarbon_field_production_reports_PPRS_points_(WGS84)/FeatureServer/0/query?where=1%3D1&outStatistics=%5B%7B%22statisticType%22%3A%22min%22%2C%22onStatisticField%22%3A%22PERIODYRMN%22%2C%22outStatisticFieldName%22%3A%22minp%22%7D%2C%7B%22statisticType%22%3A%22max%22%2C%22onStatisticField%22%3A%22PERIODYRMN%22%2C%22outStatisticFieldName%22%3A%22maxp%22%7D%2C%7B%22statisticType%22%3A%22count%22%2C%22onStatisticField%22%3A%22OBJECTID%22%2C%22outStatisticFieldName%22%3A%22n%22%7D%5D&f=json
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_pipeline_linear_(WGS84)/FeatureServer/1?f=pjson
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_pipeline_linear_(WGS84)/FeatureServer/1/query?where=1%3D1&returnCountOnly=true&f=json
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_pipeline_linear_(WGS84)/FeatureServer/1/query?where=1%3D1&outFields=*&resultRecordCount=2&f=geojson
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer?f=pjson
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer/1?f=pjson
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer/1/query?where=1%3D1&returnCountOnly=true&f=json
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS%20offshore%20infrastructure%20surface%20points%20WGS84/FeatureServer/1/query?where=1%3D1&outFields=*&resultRecordCount=3&f=geojson
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_subsea_points_(WGS84)/FeatureServer?f=pjson
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_subsea_points_(WGS84)/FeatureServer/1/query?where=1%3D1&returnCountOnly=true&f=json
-https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/UKCS_offshore_infrastructure_subsea_points_(WGS84)/FeatureServer/1/query?where=1%3D1&outFields=*&resultRecordCount=2&f=geojson
-# --- Denmark: one 2018 monthly HTML page ---
-https://ens.dk/sites/default/files/OlieGas/HTM_GIF/mp201801si.htm#raw
+# --- Netherlands: the datacenter API base and the production request body ---
+https://www.nlog.nl/datacenter/main-MZQNFKLT.js#js:URL_PREFIX=,URL_PREFIX:,prodfigures/field,getFieldProdfigures(,DEFAULT_GAS_UNIT=,HTTP_HEADERS=,yearStart:,prodFigureProduct
+POSTJSON https://www.nlog.nl/datacenter/api/rest/prodfigures/field {}
+POSTJSON https://www.nlog.nl/datacenter/rest/prodfigures/field {}
+POSTJSON https://www.nlog.nl/api/rest/prodfigures/field {}
+https://www.nlog.nl/datacenter/api/rest/field/licenses

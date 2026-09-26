@@ -32,3 +32,7 @@ running-dashboard/raw/pull.json
 # The browser copy scripts/build_web.py assembles for GitHub Pages. It is built
 # fresh by publish-web.yml on every run and never committed.
 _site/
+
+# The Shelf Atlas pipeline's download cache (scripts/shelf_atlas/cache): tens of megabytes of
+# the regulators' files, refetched by the build and kept between runs by actions/cache.
+scripts/shelf_atlas/cache/

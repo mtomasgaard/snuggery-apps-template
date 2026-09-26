@@ -32,16 +32,17 @@ def peek(url, ctype, body):
         t = re.sub(r"<[^>]+>", " ", t)
         out.append("    raw: " + re.sub(r"\s+", " ", t)[:6000])
         return out
-    if url.endswith("#js"):
+    if "#js" in url:
         t = body.decode("utf-8", "replace")
         hits = sorted(set(re.findall(r'["\'`]((?:https?:)?/?[^"\'`\s]{0,80}(?:api|Api|API)[^"\'`\s]{0,120})["\'`]', t)))
         out.append(f"    js size {len(t)}; api-ish strings ({len(hits)}):")
         for h in hits[:150]:
             out.append("      " + h[:200])
-        for kw in ("production", "Production", "export", "download", "xlsx", "csv"):
-            idx = [m.start() for m in re.finditer(kw, t)][:6]
+        kws = url.split("#js:")[1].split(",") if "#js:" in url else ["production", "export", "xlsx"]
+        for kw in kws:
+            idx = [m.start() for m in re.finditer(re.escape(kw), t)][:8]
             for i in idx:
-                out.append(f"    {kw}@{i}: " + t[max(0, i - 120): i + 160].replace("\n", " "))
+                out.append(f"    {kw}@{i}: " + t[max(0, i - 700): i + 900].replace("\n", " "))
         return out
     if url.endswith("#rawhtml"):
         out.append("    rawhtml: " + body.decode("utf-8", "replace")[:7000])
@@ -186,7 +187,11 @@ def main():
     urls = [l.strip() for l in open(sys.argv[1]) if l.strip() and not l.startswith("#")]
     for u in urls:
         method, data, headers = "GET", None, None
-        if u.startswith("POST "):
+        if u.startswith("POSTJSON "):
+            _, u, body = u.split(" ", 2)
+            data, method = body.encode(), "POST"
+            headers = {"Content-Type": "application/json", "Accept": "application/json, text/plain, */*"}
+        elif u.startswith("POST "):
             u = u[5:]
             base, _, q = u.partition("?")
             u, data = base, q.encode()
