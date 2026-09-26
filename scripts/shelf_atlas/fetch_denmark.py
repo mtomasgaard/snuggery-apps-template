@@ -134,6 +134,25 @@ def _read_yearly(cache: Cache, url: str):
     return blocks
 
 
+def _num_dk(v: str) -> float:
+    """'66.0', '1 249.2', '2345,1', '1.249,2' -> float. The 2018–2019 pages use a comma
+    decimal (and a dot for thousands, as their footer says); later pages a dot decimal and a
+    space for thousands. The LAST separator is the decimal one, unless it is followed by
+    exactly three digits and the other separator also appears (then it is a grouping dot)."""
+    v = v.strip().replace(" ", "")
+    if v == "-":
+        return 0.0
+    if "," in v and "." in v:
+        if v.rfind(",") > v.rfind("."):
+            return float(v.replace(".", "").replace(",", "."))
+        return float(v.replace(",", ""))
+    if "," in v:
+        return float(v.replace(",", "."))
+    if v.count(".") > 1:
+        return float(v.replace(".", ""))
+    return float(v)
+
+
 def _monthly_values(text: str, names: list[str]):
     """Parse 'Oil, M m³ ... Field Monthly ... Dan 66.0 2.1 ...' into {field: monthly} for oil and gas."""
     t = re.sub(r"\s+", " ", text)
@@ -147,9 +166,8 @@ def _monthly_values(text: str, names: list[str]):
         end = re.search(r"\bTotal\b", seg)
         seg = seg[: end.start()] if end else seg
         vals = {}
-        for mm in re.finditer(r"(?<![A-Za-z])(" + alt + r")\s+(-|\d[\d,]*\.?\d*)", seg):
-            v = mm.group(2)
-            vals[mm.group(1)] = 0.0 if v == "-" else float(v.replace(",", ""))
+        for mm in re.finditer(r"(?<![A-Za-z])(" + alt + r")\s+(-|\d[\d.,]*)", seg):
+            vals[mm.group(1)] = _num_dk(mm.group(2))
         out[kind] = vals
     return out
 
@@ -236,6 +254,10 @@ def load(cache: Cache):
         for cell in f["series"].values():
             cell[2] = cell[0] + cell[1] / 1000.0
         f["series"] = {mi: c for mi, c in f["series"].items() if c[0] > 0 or c[1] > 0}
+    worst = max(((c[0], c[1], f["name"], mi) for f in fields.values() for mi, c in f["series"].items()),
+                default=(0, 0, "", 0))
+    if worst[0] > 3e6 or worst[1] > 2e9:
+        raise BuildError(f"DEA: implausible month {worst}; a number format changed")
     log(f"  dea: {len(fields)} fields, {n_ok}/{len(monthly_links)} monthly reports parsed, "
         f"annual spread before {first_monthly}")
     if n_ok < len(monthly_links) * 0.8:

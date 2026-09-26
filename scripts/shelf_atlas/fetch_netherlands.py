@@ -91,12 +91,16 @@ def load_geometry(cache: Cache):
         if g.get("type") != "Point":
             continue
         lon, lat = g["coordinates"][:2]
+        kind = (p.get("FACILITY_TYPE_DESCRIPTION") or p.get("FACILITY_TYPE_CODE") or "").strip()
+        kl = kind.lower()
+        if any(k in kl for k in ("wind", "geotherm", "aardwarmte", "zout", "salt")):
+            continue
         facilities.append({
             "id": f"NL-F{(p.get('FACILITY_CODE') or '').strip() or len(facilities)}",
             "country": "NL",
             "name": (p.get("FACILITY_NAME") or "").strip(),
-            "kind": (p.get("FACILITY_TYPE_DESCRIPTION") or p.get("FACILITY_TYPE_CODE") or "").strip(),
-            "surface": True,
+            "kind": kind,
+            "surface": not any(k in kl for k in ("subsea", "onderwater", "wellhead")),
             "phase": (p.get("STATUS_DESCRIPTION") or p.get("STATUS_CODE") or "").strip(),
             "startYear": None, "endYear": None,
             "field": None,

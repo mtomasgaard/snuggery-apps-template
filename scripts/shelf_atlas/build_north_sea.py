@@ -64,12 +64,14 @@ def _norm_status(s):
     if not s:
         return None
     t = s.strip().lower()
-    if "produc" in t and "unlikely" not in t and "not" not in t and "approved" not in t:
-        return "Producing"
-    if "shut" in t or "abandon" in t or "ceased" in t or "decommission" in t or "removed" in t:
+    if any(k in t for k in ("shut", "abandon", "ceased", "decommission", "removed", "not producing")):
         return "Shut down"
-    if "approved" in t or "development" in t or "under" in t:
+    if any(k in t for k in ("undeveloped", "unlikely", "unknown", "not developed")):
+        return "Not developed"
+    if "approved" in t or "development" in t or "under " in t:
         return "Approved for production"
+    if "produc" in t:
+        return "Producing"
     return s.strip()
 
 
@@ -124,7 +126,13 @@ def build(args):
             sources.append(mod.SOURCE)
         need_emodnet = [c for c in ("DK", "NL") if c in wanted]
         if need_emodnet:
-            pipelines.extend(fetch_basemap.emodnet_pipelines(cache, need_emodnet, BBOX))
+            for p in fetch_basemap.emodnet_pipelines(cache, need_emodnet, BBOX):
+                # EMODnet tags a line by the country that reported it, and the Netherlands
+                # reported lines that run entirely in the Norwegian sector (Ula–Ekofisk);
+                # those duplicate Sodir's. The Dutch sector ends at 55.9°N.
+                if p["country"] == "NL" and not any(y < 56.0 for l in p["lines"] for _, y in l):
+                    continue
+                pipelines.append(p)
 
     # ---- fields: centroid, status, series, cross-border ----
     out_fields = []
