@@ -84,6 +84,9 @@ and the world app shows only the country choropleth, with the reason on its laye
 | All | the newest month is uneven: Denmark reports about a month earlier than Norway, and the UK and Netherlands about two months later; the app opens on the newest month every country has reported and says which countries are missing beyond it | source cadence |
 | All | 23 UK production units and one Danish field (Ravn) have no outline and are drawn as a point at the regulator's field centre | source geometry |
 | World fields | 618 GOGET units have no coordinates and are left out; 1,021 are marked approximate | source; the sheet says so |
+| World fields | 110 tracker outlines (all of Poland's) are in a projected grid, not degrees, and 4 rings sit a degree or more from their unit; the build drops them (`goget_units_to_file`) | source geometry |
+| World fields | one production figure per unit, so "fields follow the year" shows discovery and start, sized by the latest rate; undated units (1,748) are always drawn | GOGET has no per-field series |
+| World countries | the tracker's units can sum above the country's own figure (Norway ≈ 127 %): tracker barrels are volumetric, country barrels energy-equivalent | the country sheet says the share is indicative |
 | World fields | one production year per unit (mostly 2024, some 2022–2023, a few older); no series | GOGET ships one figure per unit |
 | World countries | data year lags one year (EI June edition → OWID) | source cadence |
 
@@ -96,6 +99,10 @@ and the world app shows only the country choropleth, with the reason on its laye
   `visibilitychange`, fail loudly on missing or malformed data, show `generatedAt`, carry an `ask` array.
 - Data comes from a build pipeline in this repository (GitHub Actions), committed as files in
   `<app>/data/`; the ZIP builder packs the folder (minus `raw/`, `tools/`, `screenshots/`).
+- World app: Annual | Cumulative for the countries (Gboe / PWh); fields follow the year (ring =
+  discovered, filled = producing); filters (status, onshore/offshore, conventional/unconventional);
+  search for fields, companies, basins, countries with a highlight chip; size by production or
+  reserves; tracker outlines at high zoom; country sheet lists the tracker's units.
 - Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
   producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
   boundaries, depth shading, names) can be switched off from the map's layers button.

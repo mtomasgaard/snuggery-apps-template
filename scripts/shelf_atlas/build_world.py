@@ -25,6 +25,7 @@ import datetime as dt
 import glob
 import io
 import json
+import math
 import os
 import re
 import sys
@@ -495,7 +496,7 @@ def goget_units_to_file(units, hdr, src_name, outline_min_tri_m2=6e4, outline_mi
     Visvalingam at `outline_min_tri_m2` (a 350 m × 350 m triangle) and dropped when the ring
     is smaller than `outline_min_m2`."""
     out = []
-    n_out = 0
+    n_out = bad_crs = far = 0
     for u in units:
         rec = {k: u[k] for k in ("id", "name", "country", "lat", "lon", "status") if k in u and u[k] != ""}
         for k in ("fuel", "type", "operator", "disc", "fid", "start", "prodYear", "basin",
@@ -522,6 +523,17 @@ def goget_units_to_file(units, hdr, src_name, outline_min_tri_m2=6e4, outline_mi
         if u.get("wkt"):
             rings = []
             for ring in _wkt_rings(u["wkt"]):
+                # The tracker's WKT is not always lon/lat: Poland's outlines are in a
+                # projected grid (values in the hundreds of thousands), and a few rings sit
+                # degrees away from their own unit. Both are dropped rather than drawn wrong.
+                if any(abs(x) > 180 or abs(y) > 90 for x, y in ring):
+                    bad_crs += 1
+                    break
+                cx = sum(x for x, _ in ring) / len(ring)
+                cy = sum(y for _, y in ring) / len(ring)
+                if abs(cy - u["lat"]) > 1.0 or abs(cx - u["lon"]) > 1.0 / max(0.2, math.cos(math.radians(u["lat"]))):
+                    far += 1
+                    continue
                 if ring_area_m2(ring) < outline_min_m2:
                     continue
                 s = simplify(ring, outline_min_tri_m2, closed=True)
@@ -532,7 +544,7 @@ def goget_units_to_file(units, hdr, src_name, outline_min_tri_m2=6e4, outline_mi
                 n_out += 1
         out.append(rec)
     out.sort(key=lambda r: (r["country"], r["name"], r["id"]))
-    log(f"  goget: {len(out)} records, {n_out} with outlines")
+    log(f"  goget: {len(out)} records, {n_out} with outlines; dropped {bad_crs} outlines not in degrees, {far} rings far from their unit")
     return out
 
 

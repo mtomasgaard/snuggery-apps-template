@@ -135,5 +135,5 @@ gas and lands in `gasBoepd` at 159 Sm³ per boe; the few rows in million boe/y c
 the description names gas alone. A side is absent when the tracker has no row for it. Reserves keep
 one figure per side: the "most remaining" class the unit has (remaining → 2P → 1P → reserves/recoverable
 → EUR), summed over its fuel descriptions, in-place volumes ignored. `rings` are the tracker's own
-outlines (1,064 units, mostly Mexico, Argentina, the Netherlands, Brazil, Poland and Norway), outer
-rings only, simplified. Missing keys mean the tracker does not say.
+outlines (951 units, mostly Mexico, Argentina, the Netherlands, Brazil and Norway), outer rings only,
+simplified; rings not in degrees (Poland's are projected) or more than a degree from their unit are dropped. Missing keys mean the tracker does not say.

@@ -74,6 +74,29 @@
  * and ~180 fills a frame. Projection, hit-testing and drawing are separate
  * sections below.
  *
+ * FIELDS AND TIME. The tracker gives ONE production figure per unit (for its
+ * prodYear) and no series, so a circle is always the latest reported rate, or
+ * with "Size fields by: Reserves" resOilMbbl + resGasMboe. What the year moves
+ * is whether a unit is there: with "Fields follow the year" on, it appears at
+ * `disc` as a ring and fills in at `start` (the rules for missing keys are in
+ * fieldYears). disc/start are resolved once per load into p.appear / p.fill,
+ * the filters into p.pass and the company/basin highlight into p.hl, so a frame
+ * is comparisons. Outlines (`rings`) are decoded on first need when zoomed in
+ * (outlineOf), one Path2D per field; a ring that falls off the globe or far
+ * from its unit's point is skipped rather than drawn across the map.
+ *
+ * STATE, persisted in localStorage (keys in STORE) as UI state only: mode
+ * oil|gas|total · accum annual|cumulative (cumulative = the running sum of a
+ * series up to the year, a null year adding nothing, "no data" until its first
+ * value; shown in Gboe or PWh with its own breaks and its own class cache) ·
+ * units · year · sel · showFields · followYear · statusFilter · settingFilter
+ * all|onshore|offshore · typeFilter all|conventional|unconventional · sizeBy
+ * prod|res · highlight {kind: company|basin, name} · showLabels. Search covers
+ * field names, parent companies, basins and snapshot countries, folded to
+ * lower case without diacritics, matching the start of the name or of a word.
+ * A country sheet lists the tracker units whose `country` matches its name
+ * (through COUNTRY_ALIAS where the two files spell it differently).
+ *
  * NO VALUE EVER REACHES innerHTML. Every piece of text from a data file is set
  * with textContent or built as a DOM node; the only `.innerHTML` is `= ''`.
  * Nothing is fetched but ./data/*.json.
@@ -84,6 +107,8 @@
 const STORE = {
   view: 'wog.view', units: 'wog.units', mode: 'wog.mode', year: 'wog.year', sel: 'wog.sel',
   fields: 'wog.fields', status: 'wog.status', labels: 'wog.labels',
+  follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype',
+  size: 'wog.size', hl: 'wog.hl',
 };
 const FILES = { world: 'data/world.json', snapshot: 'data/snapshot.json', fields: 'data/fields.json' };
 const MAX_LAT = 85;
@@ -107,12 +132,26 @@ const UNITS = {
 };
 const UNIT_ORDER = ['kboe', 'twh'];
 const MODES = { oil: 'Oil', gas: 'Gas', total: 'Oil + Gas' };
+/* Cumulative production is a volume, not a rate: billion boe (same boePerTWh)
+ * or thousand TWh. World to date is ~2,400 Gboe and the largest producer ~500,
+ * so the breaks span 0.1 to 100 Gboe (0.2 to 200 PWh; 1 Gboe ≈ 1.7 PWh). */
+const CUM_UNITS = {
+  kboe: { label: 'Gboe', long: 'billion barrels of oil equivalent produced to date',
+          breaks: [0.1, 0.3, 1, 3, 10, 30, 100] },
+  twh:  { label: 'PWh', long: 'thousand terawatt-hours produced to date',
+          breaks: [0.2, 0.5, 2, 5, 20, 50, 200] },
+};
+const ACCUM = { annual: 'Annual', cumulative: 'Cumulative' };
 
 /* Field point size: area ∝ production, so radius ∝ √(boe/d). */
 const FIELD_VREF = 100000;      // boe/d that gets FIELD_RREF px
 const FIELD_RREF = 4;
 const FIELD_RMIN = 2;
 const FIELD_RMAX = 24;
+const RES_VREF = 1000;          // million boe of reserves that get the radius 100,000 boe/d gets
+const OUTLINE_SCALE = 360 * 16; // outlines only from 16 px a degree of longitude…
+const OUTLINE_MIN_PX = 12;      // …and each only once it is 12 px across on screen
+const FLY_SCALE = 360 * 40;     // how far a search result zooms in
 
 const $ = (id) => document.getElementById(id);
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
@@ -341,6 +380,12 @@ let showFields = true;
 let statusFilter = 'operating';
 let showLabels = true;
 let playing = false;
+let accum = 'annual';
+let followYear = true;
+let settingFilter = 'all';     // all | onshore | offshore
+let typeFilter = 'all';        // all | conventional | unconventional
+let sizeBy = 'prod';           // prod | res
+let highlight = null;          // { kind: 'company' | 'basin', name }
 
 const view = { cx: lonToX(40), cy: latToY(25), scale: 0 };   // scale = world width in CSS px
 let W = 0, H = 0, dpr = 1;
@@ -453,8 +498,37 @@ function buildProd(s) {
       if (g != null) { sum.gas[yi] += g; sum.total[yi] += g; }
     }
   }
-  return { s, byIso, Y0, Y1, kboePerGWh: k, sum, classCache: new Map() };
+  const cumSum = {};
+  for (const m of ['oil', 'gas', 'total']) {
+    const a = new Float64Array(n);
+    let t = 0;
+    for (let i = 0; i < n; i++) { t += sum[m][i]; a[i] = t; }
+    cumSum[m] = a;
+  }
+  return { s, byIso, Y0, Y1, kboePerGWh: k, gboePerGWh: s.units.boePerTWh / 1e12, sum, cumSum,
+           classCache: new Map(), cumClassCache: new Map(), cum: new Map() };
 }
+
+/* A series' running total, same shape as the series: null until its first
+ * value, then the sum so far with null years adding nothing. Built on first
+ * use per series and kept for the life of this snapshot. */
+function cumOf(c) {
+  let h = prod.cum.get(c);
+  if (h) return h;
+  const n = c.oil.length, oil = new Array(n), gas = new Array(n);
+  let so = 0, sg = 0, ho = false, hg = false;
+  for (let i = 0; i < n; i++) {
+    if (c.oil[i] != null) { so += c.oil[i]; ho = true; }
+    if (c.gas[i] != null) { sg += c.gas[i]; hg = true; }
+    oil[i] = ho ? so : null;
+    gas[i] = hg ? sg : null;
+  }
+  h = { iso3: c.iso3, name: c.name, y0: c.y0, oil, gas };
+  prod.cum.set(c, h);
+  return h;
+}
+const isCum = () => accum === 'cumulative';
+const unitSpec = (u = units) => (isCum() ? CUM_UNITS : UNITS)[u];
 
 /* The same series as a value in GWh for one year and mode: null for "no data",
  * with `partial` set when a total adds a number to a null. */
@@ -473,18 +547,24 @@ function seriesAt(c, m, y, out = valTmp) {
   }
   return out;
 }
+/* The value the map shows: the year's figure, or the total to that year. */
+function valueAt(c, m, y, out = valTmp) {
+  return seriesAt(c && isCum() ? cumOf(c) : c, m, y, out);
+}
 function toUnit(gwh, u = units) {
   if (gwh == null) return null;
+  if (isCum()) return u === 'twh' ? gwh / 1e6 : gwh * prod.gboePerGWh;
   return u === 'twh' ? gwh / 1000 : gwh * prod.kboePerGWh;
 }
 function worldAt(m, y) {
   const w = prod.s.world;
   if (w) {
-    const r = seriesAt(w, m, y, { v: null, partial: false });
+    const r = valueAt(w, m, y, { v: null, partial: false });
     return { v: r.v, label: 'world' };
   }
   const yi = y - prod.Y0;
-  return { v: yi >= 0 && yi < prod.sum[m].length ? prod.sum[m][yi] : null, label: 'countries listed' };
+  const arr = (isCum() ? prod.cumSum : prod.sum)[m];
+  return { v: yi >= 0 && yi < arr.length ? arr[yi] : null, label: 'countries listed' };
 }
 
 /* Former states (USSR, Czechoslovakia, Yugoslavia) have series and no
@@ -506,12 +586,12 @@ function formerStateNote(iso3) {
   if (!state || !prod) return '';
   const h = prod.byIso.get(state);
   if (!h) return '';
-  const r = seriesAt(h, mode, year, { v: null, partial: false });
+  const r = valueAt(h, mode, year, { v: null, partial: false });
   if (r.v == null) return '';
   const label = (historicalLabels()[state] || '').replace(/\s*\(.*\)$/, '') || h.name;
   const the = /^USSR$/.test(label) ? 'the ' : '';
-  return `No ${year} figure of its own: it was part of ${the}${label} then, which has no outline on this map. `
-    + `${label}, ${MODES[mode].toLowerCase()}: ${fmtNum(toUnit(r.v))} ${UNITS[units].label}.`;
+  return `No ${isCum() ? `figure of its own up to ${year}` : `${year} figure of its own`}: it was part of ${the}${label} then, which has no outline on this map. `
+    + `${label}, ${MODES[mode].toLowerCase()}${isCum() ? ' to date' : ''}: ${fmtNum(toUnit(r.v))} ${unitSpec().label}.`;
 }
 
 function historicalLabels() {
@@ -536,13 +616,15 @@ function buildLink() {
  * step, NODATA. Cached, so scrubbing back over a year costs nothing. */
 function classesFor(m, u, y) {
   const key = `${m}|${u}|${y}`;
-  let hit = prod.classCache.get(key);
+  // Cumulative values are classed on their own breaks, in their own cache.
+  const cache = isCum() ? prod.cumClassCache : prod.classCache;
+  let hit = cache.get(key);
   if (hit) return hit;
-  const breaks = UNITS[u].breaks;
+  const breaks = unitSpec(u).breaks;
   const n = geo.countries.length;
   const cls = new Uint8Array(n), partial = new Uint8Array(n);
   for (let i = 0; i < n; i++) {
-    const r = seriesAt(link.series[i], m, y);
+    const r = valueAt(link.series[i], m, y);
     const v = toUnit(r.v, u);
     if (v == null) { cls[i] = NODATA; continue; }
     partial[i] = r.partial ? 1 : 0;
@@ -552,35 +634,187 @@ function classesFor(m, u, y) {
     cls[i] = c;
   }
   hit = { cls, partial };
-  if (prod.classCache.size > 600) prod.classCache.clear();
-  prod.classCache.set(key, hit);
+  if (cache.size > 600) cache.clear();
+  cache.set(key, hit);
   return hit;
 }
 
+/* Folded for search and name matching: lower case, no diacritics, and the
+ * few Latin letters that do not decompose (ø, æ, ß, ł …) spelled out. */
+const FOLD = { 'ø': 'o', 'æ': 'ae', 'œ': 'oe', 'ß': 'ss', 'ł': 'l', 'đ': 'd', 'ð': 'd', 'þ': 'th', 'ı': 'i', '’': "'", '‘': "'" };
+function fold(v) {
+  return String(v).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[øæœßłđðþı’‘]/g, (ch) => FOLD[ch]).replace(/\s+/g, ' ').trim();
+}
+/* The tracker's `country` against the snapshot's `name`, after folding. The
+ * 2026 files differ only in the first three; the rest are the usual long
+ * forms, here so a rebuilt file that spells them officially still matches. */
+const COUNTRY_ALIAS = {
+  'republic of the congo': 'congo', 'congo-brazzaville': 'congo', 'congo (brazzaville)': 'congo',
+  'turkiye': 'turkey',
+  'united states of america': 'united states', 'usa': 'united states',
+  'russian federation': 'russia', 'iran (islamic republic of)': 'iran', 'islamic republic of iran': 'iran',
+  'venezuela (bolivarian republic of)': 'venezuela', 'syrian arab republic': 'syria',
+  "lao people's democratic republic": 'laos', 'lao pdr': 'laos', 'viet nam': 'vietnam',
+  'bolivia (plurinational state of)': 'bolivia', 'united republic of tanzania': 'tanzania',
+  'czech republic': 'czechia', 'democratic republic of the congo': 'democratic republic of congo',
+  'dr congo': 'democratic republic of congo', 'congo (kinshasa)': 'democratic republic of congo',
+  'timor-leste': 'east timor', 'brunei darussalam': 'brunei', 'republic of korea': 'south korea',
+  'cabo verde': 'cape verde', 'the gambia': 'gambia', 'the bahamas': 'bahamas', 'myanmar (burma)': 'myanmar',
+};
+const countryKey = (name) => { const k = fold(name); return COUNTRY_ALIAS[k] || k; };
+
 function buildFields(f) {
-  if (!f.available) return { raw: f, available: false, points: [], skipped: 0 };
-  const points = [];
-  let skipped = 0;
+  const out = { raw: f, available: !!f.available, points: [], byRes: [], byId: new Map(), byCountry: new Map(),
+                companies: [], basins: [], skipped: 0,
+                factor: Number.isFinite(f.factor) && f.factor > 0 ? f.factor : 1000 };
+  if (!f.available) return out;
+  const points = out.points;
+  const int = (v) => (Number.isInteger(v) ? v : null);
+  const pos = (v) => (Number.isFinite(v) && v >= 0 ? v : null);
   for (const x of f.fields) {
     if (!x || !Number.isFinite(x.lat) || !Number.isFinite(x.lon) || Math.abs(x.lat) > 90 || Math.abs(x.lon) > 180) {
-      skipped++;
+      out.skipped++;
       continue;
     }
     const oil = Number.isFinite(x.oilBpd) ? x.oilBpd : null;
     const gas = Number.isFinite(x.gasBoepd) ? x.gasBoepd : null;
+    const rOil = pos(x.resOilMbbl), rGas = pos(x.resGasMboe);
     const fuel = String(x.fuel || '').toLowerCase().trim();
+    const status = String(x.status || '').toLowerCase().trim();
     points.push({
       f: x,
       id: String(x.id ?? `${x.name}|${x.lat}|${x.lon}`),
       x: lonToX(x.lon), y: latToY(x.lat),
       v: oil == null && gas == null ? null : (oil || 0) + (gas || 0),
+      rv: rOil == null && rGas == null ? null : (rOil || 0) + (rGas || 0),
       fuel: fuel === 'oil' ? 'oil' : fuel === 'gas' ? 'gas' : fuel === 'oil and gas' ? 'both' : 'other',
-      operating: String(x.status || '').toLowerCase().trim() === 'operating',
+      status, operating: status === 'operating',
+      off: x.offshore === 1 ? 1 : x.offshore === 0 ? 0 : -1,
+      type: String(x.type || '').toLowerCase().trim(),
+      disc: int(x.disc), start: int(x.start), prodYear: int(x.prodYear),
+      parents: Array.isArray(x.parents) ? [...new Set(x.parents.filter(isStr))] : [],
+      basin: isStr(x.basin) ? x.basin.trim() : null,
+      rings: Array.isArray(x.rings) && x.rings.length ? x.rings : null,
+      norm: fold(isStr(x.name) ? x.name : ''),
+      appear: -Infinity, fill: -Infinity, undated: true, pass: 1, hl: 1, outline: undefined,
     });
   }
   // Biggest first, so the small ones are drawn last and stay tappable on top.
   points.sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
-  return { raw: f, available: true, points, skipped };
+  out.byRes = points.slice().sort((a, b) => (b.rv ?? -1) - (a.rv ?? -1));
+  const comp = new Map(), bas = new Map();
+  const add = (m, k, p) => { const a = m.get(k); if (a) a.push(p); else m.set(k, [p]); };
+  for (const p of points) {
+    out.byId.set(p.id, p);
+    if (isStr(p.f.country)) add(out.byCountry, countryKey(p.f.country), p);
+    for (const c of p.parents) add(comp, c, p);
+    if (p.basin) add(bas, p.basin, p);
+  }
+  const group = (m) => [...m].map(([name, pts]) => ({ name, norm: fold(name), pts }));
+  out.companies = group(comp);
+  out.basins = group(bas);
+  return out;
+}
+
+/* When each unit is on the map (appear) and filled (fill), as years:
+ *   disc and start   → a ring from disc, filled from start;
+ *   start only       → appears at start, filled;
+ *   disc only        → a ring from disc; if it is operating, filled from its
+ *                      prodYear, or from the newest year when that is later or
+ *                      missing (the file has production, not its start);
+ *   neither          → always drawn, filled ("undated").
+ * No end year exists, so mothballed or abandoned units stay as they were. */
+function fieldYears() {
+  if (!fields || !fields.available) return;
+  const newest = prod ? prod.Y1 : Infinity;
+  for (const p of fields.points) {
+    const d = p.disc, st = p.start;
+    p.undated = d == null && st == null;
+    if (p.undated) { p.appear = -Infinity; p.fill = -Infinity; continue; }
+    if (st != null) { p.appear = d == null ? st : Math.min(d, st); p.fill = st; continue; }
+    p.appear = d;
+    p.fill = p.operating ? Math.max(d, Math.min(p.prodYear ?? newest, newest)) : Infinity;
+  }
+}
+
+/* The layer filters, resolved into p.pass once per change. A unit whose
+ * setting or type the tracker leaves blank passes only "All". */
+function applyFilters() {
+  if (!fields || !fields.available) return;
+  for (const p of fields.points) {
+    p.pass = (statusFilter === 'all' || p.operating)
+      && (settingFilter === 'all' || p.off === (settingFilter === 'offshore' ? 1 : 0))
+      && (typeFilter === 'all' || p.type === typeFilter) ? 1 : 0;
+  }
+  applyHighlight();
+}
+function applyHighlight() {
+  if (!fields || !fields.available) return;
+  const h = highlight;
+  for (const p of fields.points) {
+    p.hl = !h ? 1 : (h.kind === 'company' ? p.parents.includes(h.name) : p.basin === h.name) ? 1 : 0;
+  }
+}
+
+/* Counts for the year row and the layers note; one object, refilled. */
+const fieldCounts = { pass: 0, drawn: 0, discovered: 0, producing: 0, undated: 0 };
+function countFields() {
+  const c = fieldCounts;
+  c.pass = c.drawn = c.discovered = c.producing = c.undated = 0;
+  if (!fields || !fields.available) return c;
+  const fy = followOn();
+  for (const p of fields.points) {
+    if (!p.pass) continue;
+    c.pass++;
+    if (p.undated) { c.undated++; c.drawn++; continue; }
+    if (fy && p.appear > year) continue;
+    c.drawn++;
+    c.discovered++;
+    if (!fy || p.fill <= year) c.producing++;
+  }
+  return c;
+}
+
+/* A field's outline, decoded on first need: one Path2D in world units
+ * × PATH_K, and its bbox in world units. `null` when it has none that can be
+ * drawn. A ring is dropped when a point is off the globe (one country's rings
+ * in the 2026 file are in a projected grid, not degrees), when it is wider
+ * than 10°, or when it lies more than 2° from its own unit's point. */
+const outlineStats = { decoded: 0, paths: 0, dropped: 0, drawn: 0 };
+function outlineOf(p) {
+  if (p.outline !== undefined) return p.outline;
+  p.outline = null;
+  if (!p.rings) return null;
+  outlineStats.decoded++;
+  const path = new Path2D();
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity, n = 0;
+  const lon0 = p.f.lon, lat0 = p.f.lat;
+  for (const enc of p.rings) {
+    let ll;
+    try { ll = isStr(enc) ? decodePolyline(enc, fields.factor) : []; } catch { ll = []; }
+    if (ll.length < 6) { outlineStats.dropped++; continue; }
+    let a0 = Infinity, a1 = -Infinity, b0 = Infinity, b1 = -Infinity, ok = true;
+    for (let i = 0; i < ll.length; i += 2) {
+      const lo = ll[i], la = ll[i + 1];
+      if (!(Math.abs(lo) <= 180 && Math.abs(la) <= 90)) { ok = false; break; }
+      if (lo < a0) a0 = lo; if (lo > a1) a1 = lo; if (la < b0) b0 = la; if (la > b1) b1 = la;
+    }
+    if (!ok || a1 - a0 > 10 || lon0 < a0 - 2 || lon0 > a1 + 2 || lat0 < b0 - 2 || lat0 > b1 + 2) {
+      outlineStats.dropped++;
+      continue;
+    }
+    const xy = new Float32Array(ll.length);
+    for (let i = 0; i < ll.length; i += 2) {
+      const x = lonToX(ll[i]), y = latToY(ll[i + 1]);
+      xy[i] = x; xy[i + 1] = y;
+      if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+    }
+    addRing(path, xy);
+    n++;
+  }
+  if (n) { p.outline = { path, bbox: [x0, y0, x1, y1] }; outlineStats.paths++; }
+  return p.outline;
 }
 
 // The file carries `wiki` only when GEM's page is not simply the unit name with underscores.
@@ -670,12 +904,15 @@ function countryAt(sx, sy) {
   return -1;
 }
 
+let zfScale = -1, zfVal = 1;
 function fieldRadius(p) {
-  if (p.v == null || p.v <= 0) return FIELD_RMIN + 0.5;
-  const zf = clamp(Math.pow(view.scale / 1500, 0.4), 0.7, 2.2);
-  return clamp(FIELD_RREF * Math.sqrt(p.v / FIELD_VREF) * zf, FIELD_RMIN, FIELD_RMAX);
+  const res = sizeBy === 'res', v = res ? p.rv : p.v;
+  if (v == null || v <= 0) return FIELD_RMIN + 0.5;
+  if (view.scale !== zfScale) { zfScale = view.scale; zfVal = clamp(Math.pow(view.scale / 1500, 0.4), 0.7, 2.2); }
+  return clamp(FIELD_RREF * Math.sqrt(v / (res ? RES_VREF : FIELD_VREF)) * zfVal, FIELD_RMIN, FIELD_RMAX);
 }
-function fieldVisible(p) { return statusFilter === 'all' || p.operating; }
+const followOn = () => followYear && year != null;
+function fieldVisible(p) { return p.pass === 1 && (!followOn() || p.appear <= year); }
 function fieldsDrawn() { return showFields && fields && fields.available && fields.points.length > 0; }
 
 /* Of the circles under the finger, the one whose centre is nearest relative
@@ -713,6 +950,8 @@ function render() {
   drawSea();
   if (!geo) return;
   drawCountries();
+  if (fieldsDrawn()) drawOutlines();
+  else outlineStats.drawn = 0;
   if (showLabels) drawLabels();
   if (fieldsDrawn()) drawFields();
   drawFieldSelection();
@@ -833,33 +1072,86 @@ function labelOrder() {
   return order;
 }
 
+/* Tracker outlines under the circles, once zoomed in. Only units whose point
+ * is near the view are even looked at, and only outlines whose bbox meets the
+ * view and spans OUTLINE_MIN_PX are drawn, so the country layer pays nothing. */
+function drawOutlines() {
+  outlineStats.drawn = 0;
+  if (view.scale < OUTLINE_SCALE) return;
+  const pts = fields.points, fy = followOn(), dim = !!highlight;
+  const hw = W / (2 * view.scale), hh = H / (2 * view.scale);
+  const mx = 2 / 360, my = 0.02;                  // outlines lie within ~2° of their point
+  const vy0 = view.cy - hh, vy1 = view.cy + hh;
+  const minW = OUTLINE_MIN_PX / view.scale;
+  for (const k of worldCopies()) withWorldTransform(k, (s) => {
+    const vx0 = view.cx - hw - k, vx1 = view.cx + hw - k;
+    ctx.lineWidth = 1 / s;
+    ctx.lineJoin = 'round';
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      if (!p.rings || !p.pass || (fy && p.appear > year)) continue;
+      if (p.x < vx0 - mx || p.x > vx1 + mx || p.y < vy0 - my || p.y > vy1 + my) continue;
+      const o = outlineOf(p);
+      if (!o) continue;
+      const b = o.bbox;
+      if (b[2] < vx0 || b[0] > vx1 || b[3] < vy0 || b[1] > vy1) continue;
+      if (b[2] - b[0] < minW && b[3] - b[1] < minW) continue;
+      const a = dim && !p.hl ? 0.15 : 1;
+      const col = pal.fuel[p.fuel];
+      ctx.fillStyle = col; ctx.globalAlpha = 0.16 * a; ctx.fill(o.path);
+      ctx.strokeStyle = col; ctx.globalAlpha = 0.85 * a; ctx.stroke(o.path);
+      outlineStats.drawn++;
+    }
+    ctx.globalAlpha = 1;
+  });
+}
+
+/* Filled: producing (or undated). Ring: discovered, not yet producing in the
+ * chosen year (only while the fields follow the year). No size figure: pale
+ * and smallest while following the year, an open ring otherwise (as before).
+ * With a highlight, the others go first at 15% and the highlighted on top. */
 function drawFields() {
-  const pts = fields.points;
+  const res = sizeBy === 'res';
+  const pts = res ? fields.byRes : fields.points;
+  const fy = followOn(), dim = !!highlight;
   ctx.lineWidth = 1;
   ctx.strokeStyle = pal.ring;
-  for (let i = 0; i < pts.length; i++) {
-    const p = pts[i];
-    if (!fieldVisible(p)) continue;
-    const r = fieldRadius(p);
-    const x = worldToScreenX(p.x), y = worldToScreenY(p.y);
-    if (x < -r || x > W + r || y < -r || y > H + r) continue;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-    if (p.v == null) {
-      // No production figure: an open ring, so it is not read as a small field.
-      ctx.strokeStyle = pal.fuel[p.fuel]; ctx.lineWidth = 1.5; ctx.stroke();
-      ctx.strokeStyle = pal.ring; ctx.lineWidth = 1;
-    } else {
-      ctx.fillStyle = pal.fuel[p.fuel];
-      ctx.fill();
-      ctx.stroke();
+  for (let pass = dim ? 0 : 1; pass < 2; pass++) {
+    const alpha = pass ? 1 : 0.15;
+    ctx.globalAlpha = alpha;
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      if (!p.pass || (dim && p.hl !== pass) || (fy && p.appear > year)) continue;
+      const r = fieldRadius(p);
+      const x = worldToScreenX(p.x), y = worldToScreenY(p.y);
+      if (x < -r || x > W + r || y < -r || y > H + r) continue;
+      const col = pal.fuel[p.fuel];
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      if (fy && p.fill > year) {
+        ctx.strokeStyle = col; ctx.lineWidth = 1.75; ctx.stroke();
+        ctx.strokeStyle = pal.ring; ctx.lineWidth = 1;
+      } else if ((res ? p.rv : p.v) == null) {
+        if (fy) {
+          ctx.globalAlpha = alpha * 0.45; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = alpha;
+        } else {
+          // No figure: an open ring, so it is not read as a small field.
+          ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
+          ctx.strokeStyle = pal.ring; ctx.lineWidth = 1;
+        }
+      } else {
+        ctx.fillStyle = col;
+        ctx.fill();
+        ctx.stroke();
+      }
     }
   }
+  ctx.globalAlpha = 1;
 }
 
 function drawFieldSelection() {
   if (!sel || sel.kind !== 'field' || !fieldsDrawn()) return;
-  const p = fields.points.find((q) => q.id === sel.id);
+  const p = fields.byId.get(sel.id);
   if (!p) return;
   const r = fieldRadius(p) + 4;
   const x = worldToScreenX(p.x), y = worldToScreenY(p.y);
@@ -914,8 +1206,8 @@ function updateLegend() {
   const lg = $('legend');
   lg.hidden = !(prod && geo);
   if (lg.hidden) return;
-  const u = UNITS[units];
-  $('legend-title').textContent = `${MODES[mode]}, ${year}`;
+  const u = unitSpec();
+  $('legend-title').textContent = `${MODES[mode]}, ${isCum() ? `to ${year}` : year}`;
   $('legend-unit').textContent = u.label;
   const bar = $('legend-bar'), ticks = $('legend-ticks');
   bar.innerHTML = ''; ticks.innerHTML = '';
@@ -944,16 +1236,30 @@ function updateLegend() {
       k.append(d, document.createTextNode(label));
       lf.append(k);
     }
+    const res = sizeBy === 'res';
     const sz = el('span', 'key');
     const circles = el('span', 'sizes');
-    for (const v of [1e4, 1e5, 1e6]) {
-      const r = clamp(FIELD_RREF * Math.sqrt(v / FIELD_VREF), FIELD_RMIN, FIELD_RMAX);
+    for (const v of res ? [100, 1000, 10000] : [1e4, 1e5, 1e6]) {
+      const r = clamp(FIELD_RREF * Math.sqrt(v / (res ? RES_VREF : FIELD_VREF)), FIELD_RMIN, FIELD_RMAX);
       const i = el('i'); i.style.width = i.style.height = `${(2 * r).toFixed(1)}px`;
       circles.append(i);
     }
-    sz.append(circles, document.createTextNode('10k · 100k · 1M boe/d'));
+    sz.append(circles, document.createTextNode(res ? '100 · 1k · 10k Mboe' : '10k · 100k · 1M boe/d'));
     lf.append(sz);
+    const what = res ? 'size = remaining reserves, million boe' : 'size = latest reported rate';
+    const miss = res ? 'no reserves reported' : 'no rate reported';
+    lf.append(el('span', 'legend-note', followOn()
+      ? `${what}; ring = discovered, not yet producing; pale = ${miss}`
+      : `${what}; hollow = ${miss}`));
+    const fs = filterSummary();
+    if (fs) lf.append(el('span', 'legend-note', fs));
   }
+}
+function filterSummary() {
+  const bits = [];
+  if (settingFilter !== 'all') bits.push(settingFilter);
+  if (typeFilter !== 'all') bits.push(typeFilter);
+  return bits.length ? `Fields: ${bits.join(', ')} only` : '';
 }
 
 function updateBanner() {
@@ -984,17 +1290,51 @@ function updateLayersPanel() {
     note.textContent = `Not available: ${fieldsReason()}`;
     note.classList.add('warn');
   } else {
-    const shown = fields.points.filter(fieldVisible).length;
+    const c = countFields();
     const src = fields.raw.source || {};
-    note.textContent = `${nf0.format(shown)} of ${nf0.format(fields.points.length)} shown`
+    const total = nf0.format(fields.points.length);
+    note.textContent = (followOn()
+      ? `${nf0.format(c.discovered)} fields discovered by ${year} · ${nf0.format(c.producing)} producing`
+        + (c.undated ? `, plus ${nf0.format(c.undated)} undated (always drawn)` : '')
+        + `. ${nf0.format(c.pass)} of ${total} pass the filters`
+      : `${nf0.format(c.drawn)} of ${total} shown`)
       + (fields.skipped ? ` (${fields.skipped} without coordinates left out)` : '')
       + `. ${src.name || 'GOGET'}${src.release ? `, ${src.release}` : ''}.`;
   }
-  $('status-row').hidden = !usable;
-  for (const b of document.querySelectorAll('#status-seg button')) {
-    b.setAttribute('aria-pressed', String(b.dataset.status === statusFilter));
-  }
+  for (const id of ['status-row', 'follow-row', 'setting-row', 'type-row', 'size-row']) $(id).hidden = !usable;
+  $('chk-follow').checked = followYear;
+  const press = (sel, key, val) => {
+    for (const b of document.querySelectorAll(sel)) b.setAttribute('aria-pressed', String(b.dataset[key] === val));
+  };
+  press('#status-seg button', 'status', statusFilter);
+  press('#setting-seg button', 'setting', settingFilter);
+  press('#type-seg button', 'ftype', typeFilter);
+  press('#size-seg button', 'size', sizeBy);
   $('chk-labels').checked = showLabels;
+}
+
+/* The chip over the legend while a company or basin is highlighted: its
+ * units that pass the filters, and their summed latest rates. */
+function fmtRate(v) {
+  if (v >= 1e6) return `${nf1.format(v / 1e6)} Mboe/d`;
+  if (v >= 1e3) return `${nf0.format(v / 1e3)} kboe/d`;
+  return `${nf0.format(v)} boe/d`;
+}
+function updateChip() {
+  const chip = $('hlchip');
+  chip.hidden = !(highlight && fieldsDrawn());
+  if (chip.hidden) return;
+  let n = 0, sum = 0;
+  for (const p of fields.points) if (p.hl && p.pass) { n++; if (p.v != null) sum += p.v; }
+  const name = highlight.kind === 'basin' && !/basin$/i.test(highlight.name) ? `${highlight.name} basin` : highlight.name;
+  $('hlchip-text').textContent = `${name} · ${nf0.format(n)} ${n === 1 ? 'field' : 'fields'} · ${fmtRate(sum)} (latest reported)`;
+}
+function setHighlight(h) {
+  highlight = h && isStr(h.name) && (h.kind === 'company' || h.kind === 'basin') ? { kind: h.kind, name: h.name } : null;
+  store.set(STORE.hl, JSON.stringify(highlight));
+  applyHighlight();
+  updateChip();
+  requestRender();
 }
 
 /* ── the year player ─────────────────────────────────────────────────────── */
@@ -1029,10 +1369,19 @@ function syncYearUI() {
   slider.setAttribute('aria-valuetext', String(year));
   $('year-label').textContent = String(year);
   const w = worldAt(mode, year);
-  const u = UNITS[units].label;
+  const u = unitSpec().label;
+  const to = isCum() ? ` to ${year}` : '';
   $('year-sum').textContent = w.v == null
-    ? `${MODES[mode]}: no world total`
-    : `${MODES[mode]}, ${w.label === 'world' ? 'world' : 'all listed'}: ${fmtNum(toUnit(w.v))} ${u}`;
+    ? `${MODES[mode]}: no world total${to}`
+    : `${MODES[mode]}, ${w.label === 'world' ? 'world' : 'all listed'}${to}: ${fmtNum(toUnit(w.v))} ${u}`;
+  const yf = $('year-fields');
+  yf.hidden = !fieldsDrawn();
+  if (!yf.hidden) {
+    const c = countFields();
+    yf.textContent = followOn()
+      ? `${nf0.format(c.discovered)} fields discovered by ${year} · ${nf0.format(c.producing)} producing`
+      : `${nf0.format(c.drawn)} fields shown, all years`;
+  }
 }
 
 function setYear(y, persist = true) {
@@ -1041,6 +1390,7 @@ function setYear(y, persist = true) {
   syncYearUI();
   updateLegend();
   updateSheet();
+  if (!$('layers').hidden) updateLayersPanel();
   if (persist) store.set(STORE.year, String(year));
   requestRender();
 }
@@ -1100,7 +1450,7 @@ function updateSheet() {
     body.innerHTML = '';
     countrySheet(body, gi >= 0 ? geo.countries[gi].name : series.name, series, sel.iso3);
   } else {
-    const p = fieldsDrawn() ? fields.points.find((q) => q.id === sel.id) : null;
+    const p = fieldsDrawn() ? fields.byId.get(sel.id) : null;
     if (!p) { sheet.hidden = true; return; }
     body.innerHTML = '';
     fieldSheet(body, p);
@@ -1109,7 +1459,8 @@ function updateSheet() {
 }
 
 function countrySheet(body, name, c, iso3) {
-  const u = UNITS[units].label;
+  const u = unitSpec().label;
+  const cum = isCum();
   body.append(el('h2', null, name));
   if (!c) {
     body.append(el('p', 'sub', 'No production series'));
@@ -1118,14 +1469,15 @@ function countrySheet(body, name, c, iso3) {
       + 'The About screen lists every polygon without data and every series without a polygon.'));
     const fs = formerStateNote(iso3);
     if (fs) body.append(el('p', 'sheet-note', fs));
+    trackerSection(body, null, name);
     return;
   }
-  body.append(el('p', 'sub', `${year} · ${u}`));
+  body.append(el('p', 'sub', cum ? `To date, up to ${year} · ${u}` : `${year} · ${u}`));
 
   const parts = {
-    oil: seriesAt(c, 'oil', year, { v: null, partial: false }),
-    gas: seriesAt(c, 'gas', year, { v: null, partial: false }),
-    total: seriesAt(c, 'total', year, { v: null, partial: false }),
+    oil: valueAt(c, 'oil', year, { v: null, partial: false }),
+    gas: valueAt(c, 'gas', year, { v: null, partial: false }),
+    total: valueAt(c, 'total', year, { v: null, partial: false }),
   };
   const stats = el('div', 'stats');
   for (const m of ['oil', 'gas', 'total']) {
@@ -1141,7 +1493,8 @@ function countrySheet(body, name, c, iso3) {
     const v = el('div', 'stat-v' + (r.v == null ? ' nd' : ''), r.v == null ? 'no data' : fmtNum(toUnit(r.v)));
     const w = worldAt(m, year);
     const share = r.v != null && w.v ? (r.v / w.v) * 100 : null;
-    const s = el('div', 'stat-s', share == null ? ' ' : `${fmtPct(share)} of ${w.label === 'world' ? 'world' : 'listed'}`);
+    const s = el('div', 'stat-s', share == null ? ' '
+      : `${fmtPct(share)} of ${w.label === 'world' ? 'world' : 'listed'}${cum ? ' to date' : ''}`);
     box.append(k, v, s);
     stats.append(box);
   }
@@ -1149,11 +1502,19 @@ function countrySheet(body, name, c, iso3) {
 
   const notes = [];
   const rank = rankOf(c.iso3);
-  if (rank) notes.push(`${ordinal(rank.r)} of ${rank.n} producers of ${MODES[mode].toLowerCase()} in ${year}.`);
+  if (rank) {
+    notes.push(cum
+      ? `${ordinal(rank.r)} of ${rank.n} producers of ${MODES[mode].toLowerCase()} to date (1900 or first data to ${year}).`
+      : `${ordinal(rank.r)} of ${rank.n} producers of ${MODES[mode].toLowerCase()} in ${year}.`);
+  }
   if (parts.total.partial) {
     const missing = parts.oil.v == null ? 'Oil' : 'Gas';
-    notes.push(`${missing} has no data for ${year}, so the total counts ${missing === 'Oil' ? 'gas' : 'oil'} only (hatched over its colour on the map).`);
+    const other = missing === 'Oil' ? 'gas' : 'oil';
+    notes.push(cum
+      ? `${missing} has no data up to ${year}, so the total to date counts ${other} only (hatched over its colour on the map).`
+      : `${missing} has no data for ${year}, so the total counts ${other} only (hatched over its colour on the map).`);
   }
+  if (cum) notes.push('To date: every year from the first with data up to the chosen one, added up; a year with no data adds nothing.');
   if (!prod.s.world) notes.push('Shares are of the sum of every country listed that year: the file has no world total.');
   if (parts[mode].v == null) {
     const fs = formerStateNote(c.iso3);
@@ -1164,12 +1525,75 @@ function countrySheet(body, name, c, iso3) {
 
   body.append(sparkline(c));
   for (const n of notes) body.append(el('p', 'sheet-note', n));
+  trackerSection(body, c, name);
+}
+
+/* "In the tracker": the GOGET units filed under this country (by the
+ * snapshot's name, then the outline's), the five with the highest latest
+ * rate, and their sum against the country's own figure for their year. */
+function trackerSection(body, c, name) {
+  if (!fields || !fields.available) return;
+  let list = null;
+  for (const n of [c && c.name, name]) {
+    if (isStr(n) && (list = fields.byCountry.get(countryKey(n)))) break;
+  }
+  const sec = el('div', 'tracker');
+  sec.append(el('h3', null, 'In the tracker'));
+  body.append(sec);
+  if (!list) {
+    sec.append(el('p', 'sheet-note', 'No extraction units under this country name.'));
+    return;
+  }
+  const shown = list.filter((p) => p.pass);
+  const rated = shown.filter((p) => p.v != null).sort((a, b) => b.v - a.v);
+  const filtered = shown.length !== list.length;
+  sec.append(el('p', 'sheet-note', `${nf0.format(shown.length)} ${shown.length === 1 ? 'unit' : 'units'}`
+    + (filtered ? ` of ${nf0.format(list.length)} (the layer filters apply)` : '')
+    + `, ${nf0.format(rated.length)} with a reported rate.`));
+  if (!rated.length) return;
+  const ul = el('ul', 'tlist');
+  for (const p of rated.slice(0, 5)) {
+    const b = el('button', 'tl');
+    b.type = 'button';
+    b.append(el('span', 'tl-name', p.f.name || 'Unnamed field'),
+             el('span', 'tl-v', `${fmtRate(p.v)}${p.prodYear ? ` (${p.prodYear})` : ''}`));
+    b.addEventListener('click', () => chooseField(p));
+    const li = el('li');
+    li.append(b);
+    ul.append(li);
+  }
+  sec.append(ul);
+  if (!c || !prod) return;
+  // The comparison follows the Oil / Gas / Oil + Gas switch.
+  let sum = 0, n = 0;
+  const years = new Map();
+  for (const p of rated) {
+    const o = Number.isFinite(p.f.oilBpd) ? p.f.oilBpd : null;
+    const g = Number.isFinite(p.f.gasBoepd) ? p.f.gasBoepd : null;
+    const v = mode === 'oil' ? o : mode === 'gas' ? g : p.v;
+    if (v == null) continue;
+    sum += v; n++;
+    if (p.prodYear != null) years.set(p.prodYear, (years.get(p.prodYear) || 0) + 1);
+  }
+  if (!n) return;
+  let py = null, pyN = 0;
+  for (const [y, k] of years) if (k > pyN) { py = y; pyN = k; }
+  const cy = clamp(py ?? prod.Y1, prod.Y0, prod.Y1);
+  const r = seriesAt(c, mode, cy, { v: null, partial: false });
+  const ck = r.v == null ? null : r.v * prod.kboePerGWh;
+  const what = MODES[mode].toLowerCase();
+  const when = py == null ? '' : pyN === n ? ` (for ${py})` : ` (mostly for ${py})`;
+  let t = `Summed latest rates, ${what}: ${fmtNum(sum / 1000)} kboe/d${when}. `;
+  t += ck ? `The country's ${cy} figure is ${fmtNum(ck)} kboe/d, so the tracker's units come to about ${fmtPct((sum / 1000 / ck) * 100)} of it. `
+          : `The country has no ${what} figure for ${cy} to compare with. `;
+  t += "Indicative only: the tracker's barrels are volumes, the country figure is energy-equivalent.";
+  sec.append(el('p', 'sheet-note', t));
 }
 
 function rankOf(iso3) {
   const vals = [];
   for (const c of prod.s.countries) {
-    const r = seriesAt(c, mode, year);
+    const r = valueAt(c, mode, year);
     if (r.v != null && r.v > 0) vals.push([c.iso3, r.v]);
   }
   vals.sort((a, b) => b[1] - a[1]);
@@ -1198,7 +1622,8 @@ function svgEl(tag, attrs) {
   for (const k in attrs) n.setAttribute(k, attrs[k]);
   return n;
 }
-function sparkline(c) {
+function sparkline(c0) {
+  const c = isCum() ? cumOf(c0) : c0;
   const cw = $('sheet').clientWidth;
   const w = cw > 100 ? cw - 30 : 330, h = 96;
   const padL = 4, padR = 4, padT = 14, padB = 16;
@@ -1210,13 +1635,14 @@ function sparkline(c) {
   const maxU = toUnit(max) || 1;
   const yOf = (gwh) => padT + (1 - toUnit(gwh) / maxU) * (h - padT - padB);
   const svg = svgEl('svg', { class: 'spark', viewBox: `0 0 ${w} ${h}`, width: w, height: h, role: 'img',
-    'aria-label': `Oil and gas production ${prod.Y0}–${prod.Y1}, peak ${fmtNum(maxU)} ${UNITS[units].label}` });
+    'aria-label': `${isCum() ? 'Cumulative oil and gas production' : 'Oil and gas production'} ${prod.Y0}–${prod.Y1}, `
+      + `${isCum() ? 'to date' : 'peak'} ${fmtNum(maxU)} ${unitSpec().label}` });
   const ink = getComputedStyle(document.body).getPropertyValue('--ink-dim').trim() || '#888';
   const faint = getComputedStyle(document.body).getPropertyValue('--line').trim() || '#ddd';
   svg.append(svgEl('line', { x1: padL, x2: w - padR, y1: h - padB, y2: h - padB, stroke: faint, 'stroke-width': 1 }));
   svg.append(svgEl('line', { x1: padL, x2: w - padR, y1: padT, y2: padT, stroke: faint, 'stroke-width': 1, 'stroke-dasharray': '2 3' }));
   const top = svgEl('text', { x: padL, y: padT - 4, fill: ink });
-  top.textContent = `${fmtNum(maxU)} ${UNITS[units].label}`;
+  top.textContent = `${fmtNum(maxU)} ${unitSpec().label}${isCum() ? ' to date' : ''}`;
   svg.append(top);
   for (const [txt, yr, anchor] of [[String(prod.Y0), prod.Y0, 'start'], [String(prod.Y1), prod.Y1, 'end']]) {
     const t = svgEl('text', { x: x(yr), y: h - 3, fill: ink, 'text-anchor': anchor });
@@ -1288,6 +1714,10 @@ function fieldSheet(body, p) {
   row('Discovered', f.disc);
   row('Investment decision', f.fid);
   row('Production start', f.start);
+  if (followOn()) {
+    row(`On the map in ${year}`, p.undated ? 'no dates: always drawn'
+      : p.appear > year ? 'not yet discovered' : p.fill > year ? 'discovered, not yet producing' : 'producing');
+  }
   const yr = Number.isFinite(f.prodYear) ? ` (${f.prodYear})` : '';
   if (oil == null && gas == null) row('Production', 'not reported');
   else {
@@ -1302,6 +1732,11 @@ function fieldSheet(body, p) {
     const ry = Number.isFinite(f.resYear) ? ` (${f.resYear})` : '';
     if (rOil != null) row(`Liquids ${cls}${ry}`, `${nf1.format(rOil)} million bbl`);
     if (rGas != null) row(`Gas ${cls}${ry}`, `${nf1.format(rGas)} million boe`);
+    const rate = (oil || 0) + (gas || 0);
+    if (rate > 0) {
+      const yrs = ((rOil || 0) + (rGas || 0)) * 1e6 / (rate * 365);
+      row('Years of reserves at latest rate', yrs > 500 ? '> 500' : nf0.format(Math.round(yrs)));
+    }
   }
   if (f.approx === 1) row('Location', 'approximate (per the tracker)');
   body.append(dl);
@@ -1312,7 +1747,8 @@ function fieldSheet(body, p) {
     body.append(pEl);
   }
   body.append(el('p', 'sheet-note', "Field volumes are the tracker's own, for its newest data year: liquids (oil, condensate, NGL) "
-    + 'in barrels a day, gas as barrels of oil equivalent a day at 159 Sm³ per boe. Reserves are the class the tracker gives.'));
+    + 'in barrels a day, gas as barrels of oil equivalent a day at 159 Sm³ per boe. Reserves are the class the tracker gives. '
+    + 'The tracker has one rate per unit, not a series, so the circle is this latest rate in every year.'));
 }
 
 /* ── About ───────────────────────────────────────────────────────────────── */
@@ -1344,6 +1780,8 @@ function showAbout() {
     p(`kboe/d is thousands of barrels of oil equivalent a day: GWh ÷ 1000 × ${nf0.format(prod.s.units.boePerTWh)} boe per TWh ÷ 365 ÷ 1000. `
       + 'TWh/yr is GWh ÷ 1000.');
     if (isStr(prod.s.units.note)) p(prod.s.units.note, 'muted');
+    p('Cumulative adds up every year from the first with data to the chosen one (a year with no data adds nothing) '
+      + 'and is shown in Gboe, billion boe at the same factor, or PWh, thousand TWh.', 'muted');
   }
 
   h3('Sources');
@@ -1371,6 +1809,10 @@ function showAbout() {
   if (fields && fields.available && fields.raw.source) {
     const s = fields.raw.source;
     src(s.name || 'Field points', [['Release', s.release], ['File', s.file], ['Licence', s.licence], ['Attribution', s.attribution], ['Address', s.url]]);
+    p('With "Fields follow the year" on, a unit appears in its discovery year as a ring and fills in from its production '
+      + 'start; units with neither date are always drawn. The tracker gives one rate per unit, for its latest year, and no '
+      + 'series, so a circle keeps that size in every year. Outlines are drawn when zoomed in; any ring that does not '
+      + 'fall near its own unit in longitude and latitude is left out.', 'muted');
   } else {
     src('Field points', [['Status', !fields ? 'data/fields.json could not be read' : `not available — ${fieldsReason()}`]]);
   }
@@ -1536,6 +1978,9 @@ async function loadAll() {
     }
     if (!changed) return;
     link = buildLink();
+    fieldYears();
+    applyFilters();
+    if (highlight && fields && fields.available && !fields.points.some((p) => p.hl)) setHighlight(null);
     if (prod) {
       const stored = Number(store.get(STORE.year));
       const want = year ?? (Number.isInteger(stored) && stored ? stored : prod.Y1);
@@ -1552,8 +1997,10 @@ async function loadAll() {
     updateLegend();
     updateBanner();
     updateLayersPanel();
+    updateChip();
     updateSheet();
     if (!$('about').hidden) showAbout();
+    if (!$('search').hidden) runSearch();
     requestRender();
   })();
   try { await loading; } finally { loading = null; }
@@ -1583,7 +2030,9 @@ canvas.addEventListener('pointerdown', (e) => {
   try { canvas.setPointerCapture(e.pointerId); } catch { /* fine */ }
   pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
   startGesture();
+  if (flyRaf) { cancelAnimationFrame(flyRaf); flyRaf = 0; }
   if (!$('layers').hidden) setLayersOpen(false);
+  if (!$('search').hidden) setSearchOpen(false);
 });
 canvas.addEventListener('pointermove', (e) => {
   const p = pointers.get(e.pointerId);
@@ -1662,12 +2111,26 @@ function setMode(m) {
   updateSheet();
   requestRender();
 }
+function syncUnitsBtn() {
+  $('btn-units').textContent = unitSpec().label;
+  $('btn-units').setAttribute('aria-label', `Units: ${unitSpec().long}. Tap to change.`);
+}
 function setUnits(u) {
   if (!UNITS[u]) return;
   units = u;
   store.set(STORE.units, u);
-  $('btn-units').textContent = UNITS[u].label;
-  $('btn-units').setAttribute('aria-label', `Units: ${UNITS[u].long}. Tap to change.`);
+  syncUnitsBtn();
+  syncYearUI();
+  updateLegend();
+  updateSheet();
+  requestRender();
+}
+function setAccum(a) {
+  if (!ACCUM[a]) return;
+  accum = a;
+  store.set(STORE.accum, a);
+  for (const b of document.querySelectorAll('#accum button')) b.setAttribute('aria-pressed', String(b.dataset.accum === a));
+  syncUnitsBtn();
   syncYearUI();
   updateLegend();
   updateSheet();
@@ -1676,10 +2139,195 @@ function setUnits(u) {
 function setLayersOpen(open) {
   $('layers').hidden = !open;
   $('btn-layers').setAttribute('aria-expanded', String(open));
-  if (open) updateLayersPanel();
+  if (open) { setSearchOpen(false); updateLayersPanel(); }
+}
+/* Anything that changes which fields are drawn or how. */
+function fieldsChanged() {
+  applyFilters();
+  syncYearUI();
+  updateLegend();
+  updateLayersPanel();
+  updateChip();
+  if (sel && sel.kind === 'country') updateSheet();
+  if (!$('search').hidden) runSearch();
+  requestRender();
+}
+function setFieldOpt(key, val) {
+  if (key === 'status' && (val === 'all' || val === 'operating')) { statusFilter = val; store.set(STORE.status, val); }
+  else if (key === 'setting' && ['all', 'onshore', 'offshore'].includes(val)) { settingFilter = val; store.set(STORE.setting, val); }
+  else if (key === 'ftype' && ['all', 'conventional', 'unconventional'].includes(val)) { typeFilter = val; store.set(STORE.ftype, val); }
+  else if (key === 'size' && (val === 'prod' || val === 'res')) { sizeBy = val; store.set(STORE.size, val); }
+  else if (key === 'follow') { followYear = !!val; store.set(STORE.follow, followYear ? '1' : '0'); if (sel && sel.kind === 'field') updateSheet(); }
+  else return;
+  fieldsChanged();
+}
+
+/* ── flying to a search result ───────────────────────────────────────────── *
+ * The target ends where the sheet will not cover it: above it on a phone,
+ * left of it on a tablet. Zoom is interpolated in log scale.                */
+let flyRaf = 0;
+function flyTo(wx, wy, scale, instant = false) {
+  if (flyRaf) cancelAnimationFrame(flyRaf);
+  flyRaf = 0;
+  const s1 = clamp(scale, minScale(), MAX_SCALE), s0 = view.scale;
+  let dx = wx - view.cx;
+  dx -= Math.round(dx);
+  const tx = view.cx + dx;
+  const endX = W >= 700 ? Math.max(W / 2 - 208, W * 0.25) : W / 2, endY = W >= 700 ? H / 2 : H * 0.2;
+  const sx0 = dx * s0 + W / 2, sy0 = (wy - view.cy) * s0 + H / 2;
+  const T = instant || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 600;
+  const t0 = performance.now();
+  const step = (now) => {
+    const t = T ? clamp((now - t0) / T, 0, 1) : 1;
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const sc = Math.exp(Math.log(s0) + (Math.log(s1) - Math.log(s0)) * e);
+    const sx = sx0 + (endX - sx0) * e, sy = sy0 + (endY - sy0) * e;
+    view.scale = sc;
+    view.cx = tx - (sx - W / 2) / sc;
+    view.cy = wy - (sy - H / 2) / sc;
+    clampView();
+    render();
+    if (t < 1) flyRaf = requestAnimationFrame(step);
+    else { flyRaf = 0; saveView(); }
+  };
+  if (!T) step(t0); else flyRaf = requestAnimationFrame(step);
+}
+function chooseField(p) {
+  setSearchOpen(false);
+  if (!showFields) { showFields = true; store.set(STORE.fields, '1'); updateBanner(); updateLegend(); updateCredits(); updateLayersPanel(); updateChip(); syncYearUI(); }
+  select({ kind: 'field', id: p.id });
+  flyTo(p.x, p.y, Math.max(view.scale, FLY_SCALE));
+}
+function chooseCountry(iso3) {
+  setSearchOpen(false);
+  select({ kind: 'country', iso3 });
+  const g = geo && geo.countries.find((c) => c.iso3 === iso3);
+  if (!g) return;
+  const [x0, y0, x1, y1] = g.bbox;
+  if (x1 - x0 > 0.45) { flyTo(g.lx, g.ly, view.scale); return; }     // split at the antimeridian
+  const fit = Math.min((W * 0.8) / Math.max(1e-6, x1 - x0), (H * 0.45) / Math.max(1e-6, y1 - y0));
+  flyTo((x0 + x1) / 2, (y0 + y1) / 2, clamp(fit, minScale(), 360 * 30));
+}
+
+/* ── search ──────────────────────────────────────────────────────────────── *
+ * Folded prefix matching: the start of the name ranks first, then the start
+ * of any word in it. Fields, companies and basins respect the layer filters;
+ * every string lands in the list as textContent.                             */
+function matchRank(norm, q) {
+  let i = norm.indexOf(q);
+  while (i >= 0) {
+    if (i === 0) return 0;
+    const ch = norm.charCodeAt(i - 1);
+    if (!((ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57))) return 1;
+    i = norm.indexOf(q, i + 1);
+  }
+  return -1;
+}
+let countryNorms = null;
+function searchResults(raw) {
+  const q = fold(raw);
+  const groups = [];
+  if (!q) return groups;
+  if (fields && fields.available) {
+    const fl = [];
+    for (const p of fields.points) {
+      if (!p.pass) continue;
+      const r = matchRank(p.norm, q);
+      if (r >= 0) fl.push([r, p]);
+    }
+    fl.sort((a, b) => a[0] - b[0] || (b[1].v ?? -1) - (a[1].v ?? -1));
+    groups.push({ title: 'Fields', items: fl.slice(0, 8).map(([, p]) => ({
+      main: p.f.name || 'Unnamed field',
+      sub: [isStr(p.f.country) ? p.f.country : '', p.v != null ? `${fmtRate(p.v)} (latest)` : p.status].filter(Boolean).join(' · '),
+      pick: () => chooseField(p) })) });
+    for (const [title, list, kind] of [['Companies', fields.companies, 'company'], ['Basins', fields.basins, 'basin']]) {
+      const hits = [];
+      for (const g of list) {
+        const r = matchRank(g.norm, q);
+        if (r < 0) continue;
+        let n = 0;
+        for (const p of g.pts) n += p.pass;
+        if (n) hits.push([r, g, n]);
+      }
+      hits.sort((a, b) => a[0] - b[0] || b[2] - a[2]);
+      groups.push({ title, items: hits.slice(0, 6).map(([, g, n]) => ({
+        main: g.name, sub: `${nf0.format(n)} ${n === 1 ? 'field' : 'fields'} · highlight on the map`,
+        pick: () => { setSearchOpen(false); setHighlight({ kind, name: g.name }); } })) });
+    }
+  }
+  if (prod) {
+    if (!countryNorms || countryNorms.s !== prod.s) {
+      countryNorms = { s: prod.s, list: prod.s.countries.map((c) => ({ c, norm: fold(c.name) })) };
+    }
+    const hist = historicalLabels();
+    const hits = [];
+    for (const x of countryNorms.list) {
+      const r = matchRank(x.norm, q);
+      if (r >= 0) hits.push([r, x.c]);
+    }
+    hits.sort((a, b) => a[0] - b[0] || a[1].name.localeCompare(b[1].name));
+    groups.push({ title: 'Countries', items: hits.slice(0, 6).map(([, c]) => ({
+      main: c.name, sub: hist[c.iso3] || c.iso3, pick: () => chooseCountry(c.iso3) })) });
+  }
+  return groups.filter((g) => g.items.length);
+}
+let searchPicks = [];
+function runSearch() {
+  const box = $('search-results');
+  box.innerHTML = '';
+  const q = $('search-input').value;
+  const groups = searchResults(q);
+  searchPicks = [];
+  if (!groups.length) {
+    box.append(el('p', 'search-hint', fold(q)
+      ? 'Nothing matches' + (fields && fields.available && applyingFilters() ? ' with the current field filters.' : '.')
+      : 'Type a field, a company, a basin or a country.'));
+    return;
+  }
+  for (const g of groups) {
+    box.append(el('h3', null, g.title));
+    const ul = el('ul');
+    for (const it of g.items) {
+      const b = el('button', 'res');
+      b.type = 'button';
+      b.append(el('span', 'res-main', it.main));
+      if (it.sub) b.append(el('span', 'res-sub', it.sub));
+      b.addEventListener('click', it.pick);
+      searchPicks.push(it.pick);
+      const li = el('li');
+      li.append(b);
+      ul.append(li);
+    }
+    box.append(ul);
+  }
+}
+const applyingFilters = () => statusFilter !== 'all' || settingFilter !== 'all' || typeFilter !== 'all';
+function setSearchOpen(open) {
+  const was = !$('search').hidden;
+  $('search').hidden = !open;
+  $('btn-search').setAttribute('aria-expanded', String(open));
+  if (open && !was) {
+    if (!$('layers').hidden) setLayersOpen(false);
+    runSearch();
+    $('search-input').focus({ preventScroll: true });
+  } else if (!open && was) {
+    $('search-input').blur();
+  }
 }
 
 for (const b of document.querySelectorAll('#modes button')) b.addEventListener('click', () => setMode(b.dataset.mode));
+for (const b of document.querySelectorAll('#accum button')) b.addEventListener('click', () => setAccum(b.dataset.accum));
+for (const [seg, key] of [['#setting-seg', 'setting'], ['#type-seg', 'ftype'], ['#size-seg', 'size']]) {
+  for (const b of document.querySelectorAll(`${seg} button`)) b.addEventListener('click', () => setFieldOpt(key, b.dataset[key]));
+}
+$('chk-follow').addEventListener('change', (e) => setFieldOpt('follow', e.target.checked));
+$('btn-search').addEventListener('click', () => setSearchOpen($('search').hidden));
+$('search-close').addEventListener('click', () => setSearchOpen(false));
+$('search-input').addEventListener('input', runSearch);
+$('search-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && searchPicks.length) { e.preventDefault(); searchPicks[0](); }
+});
+$('hlchip-x').addEventListener('click', () => setHighlight(null));
 $('btn-units').addEventListener('click', () => setUnits(UNIT_ORDER[(UNIT_ORDER.indexOf(units) + 1) % UNIT_ORDER.length]));
 $('zoom-in').addEventListener('click', () => zoomAt(W / 2, H / 2, 2));
 $('zoom-out').addEventListener('click', () => zoomAt(W / 2, H / 2, 0.5));
@@ -1692,7 +2340,7 @@ $('chk-fields').addEventListener('change', (e) => {
   showFields = e.target.checked;
   store.set(STORE.fields, showFields ? '1' : '0');
   if (!showFields && sel && sel.kind === 'field') closeSheet();
-  updateBanner(); updateLegend(); updateCredits(); updateLayersPanel(); requestRender();
+  updateBanner(); updateLegend(); updateCredits(); updateLayersPanel(); updateChip(); syncYearUI(); requestRender();
 });
 $('chk-labels').addEventListener('change', (e) => {
   showLabels = e.target.checked;
@@ -1700,12 +2348,7 @@ $('chk-labels').addEventListener('change', (e) => {
   requestRender();
 });
 for (const b of document.querySelectorAll('#status-seg button')) {
-  b.addEventListener('click', () => {
-    statusFilter = b.dataset.status;
-    store.set(STORE.status, statusFilter);
-    updateLayersPanel();
-    requestRender();
-  });
+  b.addEventListener('click', () => setFieldOpt('status', b.dataset.status));
 }
 $('stamp').addEventListener('click', showAbout);
 $('about-close').addEventListener('click', () => { $('about').hidden = true; });
@@ -1718,6 +2361,7 @@ slider.addEventListener('input', () => { if (playing) setPlaying(false); setYear
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (!$('about').hidden) $('about').hidden = true;
+    else if (!$('search').hidden) setSearchOpen(false);
     else if (!$('layers').hidden) setLayersOpen(false);
     else if (sel) closeSheet();
   }
@@ -1759,6 +2403,15 @@ function resize() {
   showFields = store.get(STORE.fields) !== '0';
   showLabels = store.get(STORE.labels) !== '0';
   const st = store.get(STORE.status); if (st === 'all' || st === 'operating') statusFilter = st;
+  const ac = store.get(STORE.accum); if (ACCUM[ac]) accum = ac;
+  followYear = store.get(STORE.follow) !== '0';
+  const se = store.get(STORE.setting); if (['all', 'onshore', 'offshore'].includes(se)) settingFilter = se;
+  const ty = store.get(STORE.ftype); if (['all', 'conventional', 'unconventional'].includes(ty)) typeFilter = ty;
+  const sz = store.get(STORE.size); if (sz === 'prod' || sz === 'res') sizeBy = sz;
+  try {
+    const h = JSON.parse(store.get(STORE.hl) || 'null');
+    if (h && isStr(h.name) && (h.kind === 'company' || h.kind === 'basin')) highlight = { kind: h.kind, name: h.name };
+  } catch { /* fine */ }
   try {
     const s = JSON.parse(store.get(STORE.sel) || 'null');
     if (s && ((s.kind === 'country' && isStr(s.iso3)) || (s.kind === 'field' && isStr(s.id)))) sel = s;
@@ -1767,6 +2420,7 @@ function resize() {
 })();
 setMode(mode);
 setUnits(units);
+setAccum(accum);
 new ResizeObserver(resize).observe(wrap);
 resize();
 loadAll();
@@ -1775,12 +2429,18 @@ loadAll();
 window.__wog = {
   render() { const t0 = performance.now(); render(); return performance.now() - t0; },
   get state() {
-    return { mode, units, year, sel, showFields, statusFilter, playing, view: { ...view },
+    return { mode, accum, units, unitLabel: unitSpec().label, year, sel, showFields, statusFilter, playing, view: { ...view },
+             followYear, settingFilter, typeFilter, sizeBy, highlight,
              countries: geo ? geo.countries.length : 0, series: prod ? prod.s.countries.length : 0,
              fields: fields ? { available: fields.available, points: fields.points.length } : null,
+             fieldCounts: { ...countFields() },
+             outlines: { ...outlineStats },
+             worldSum: prod && year != null ? toUnit(worldAt(mode, year).v) : null,
              problems: [...problems.values()].map((p) => p.file + p.msg) };
   },
-  setYear, setMode, setUnits, loadAll, selectAt,
+  setYear, setMode, setUnits, setAccum, setFieldOpt, setHighlight, loadAll, selectAt,
+  search(q) { return searchResults(q).map((g) => ({ title: g.title, items: g.items.map((i) => i.main) })); },
+  flyTo(lon, lat, scale, instant = true) { flyTo(lonToX(lon), latToY(lat), scale ?? MAX_SCALE, instant); },
   project(lon, lat) { return [worldToScreenX(lonToX(lon)), worldToScreenY(latToY(lat))]; },
   decodePolyline,
   get bathy() { return geo && geo.bathy ? geo.bathy.map((b) => ({ depth: b.depth, points: b.points })) : null; },
