@@ -14,8 +14,8 @@ shelf-atlas/                    the North Sea app (index.html, app.js, style.css
 world-oil-gas/                  the world app
   data/world.json               Natural Earth 110m countries (rarely changes)
   data/snapshot.json            annual oil and gas by country, 1900 →                        (rebuilt yearly)
-  data/fields.json              GOGET field points, or available:false                        (manual)
-  raw/manual/                   drop the GOGET workbook here (never shipped in the ZIP)
+  data/fields.json              GOGET units: points, production, reserves, outlines            (manual)
+  raw/manual/                   the GOGET workbook lives here (never shipped in the ZIP)
 scripts/shelf_atlas/            the pipeline: common.py, fetch_*.py, nlog_production.py,
                                 build_north_sea.py, build_world.py, probe.py, SCHEMA.md
 .github/workflows/build-shelf-atlas.yml     weekly (Mondays) + on demand
@@ -64,8 +64,8 @@ the source serves now, then fix the fetcher.
 4. If the build stops with "GOGET main sheet lacks …", GEM renamed a column: add the new header to
    `GOGET_COLS` in `build_world.py`.
 
-Until this is done `fields.json` carries `available: false` and the world app shows only the
-country choropleth, with the reason on its layer menu and About screen.
+The March 2026 release is committed. Without a workbook `fields.json` carries `available: false`
+and the world app shows only the country choropleth, with the reason on its layer menu and About screen.
 
 ## Known data gaps
 
@@ -82,7 +82,8 @@ country choropleth, with the reason on its layer menu and About screen.
 | UK | one-month outliers exist in PPRS (Tern gas, September 2000, ~50× its usual level); the app's colour scale uses each field's second-highest month so one bad month cannot flatten it | source data, left as reported |
 | All | the newest month is uneven: Denmark reports about a month earlier than Norway, and the UK and Netherlands about two months later; the app opens on the newest month every country has reported and says which countries are missing beyond it | source cadence |
 | All | 23 UK production units and one Danish field (Ravn) have no outline and are drawn as a point at the regulator's field centre | source geometry |
-| World fields | none until GOGET is dropped in | GOGET is behind a form |
+| World fields | 618 GOGET units have no coordinates and are left out; 1,021 are marked approximate | source; the sheet says so |
+| World fields | one production year per unit (mostly 2024, some 2022–2023, a few older); no series | GOGET ships one figure per unit |
 | World countries | data year lags one year (EI June edition → OWID) | source cadence |
 
 ## Constraints summary (reuse in future prompts)

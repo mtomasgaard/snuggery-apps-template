@@ -14,6 +14,7 @@ fetch it. To add or refresh the world field points:
 
 Licence: CC BY 4.0. The app's attribution screen names GEM and the release; keep it that way.
 
-The parser (`scripts/shelf_atlas/build_world.py`, `GOGET_COLS`) finds columns by name with
-aliases. If GEM renames a column the build stops and prints the headers it found; add the new
+The current file is the March 2026 release. The parser (`scripts/shelf_atlas/build_world.py`,
+`GOGET_COLS`) finds columns by name with aliases and reads the long-format production and reserves
+sheets (one row per unit × fuel description). If GEM renames a column the build stops and prints the headers it found; add the new
 name to the alias list rather than guessing.
