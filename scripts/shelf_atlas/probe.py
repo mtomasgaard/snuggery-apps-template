@@ -25,6 +25,18 @@ def fetch(url, timeout=90, method="GET", data=None, headers=None):
 
 def peek(url, ctype, body):
     out = []
+    if url.endswith("#raw"):
+        t = body.decode("utf-8", "replace")
+        t = re.sub(r"<script.*?</script>", " ", t, flags=re.S | re.I)
+        t = re.sub(r"<style.*?</style>", " ", t, flags=re.S | re.I)
+        t = re.sub(r"<[^>]+>", " ", t)
+        out.append("    raw: " + re.sub(r"\s+", " ", t)[:6000])
+        return out
+    if url.endswith("#rawhtml"):
+        out.append("    rawhtml: " + body.decode("utf-8", "replace")[:7000])
+        return out
+    if len(body) < 400 and not body[:1] in (b"{", b"["):
+        out.append("    body: " + body.decode("utf-8", "replace")[:400])
     head = body[:4]
     if head[:2] == b"PK" and b"xl/workbook.xml" in body[:200000] or (head[:2] == b"PK" and b"[Content_Types].xml" in body[:3000] and b"xl/" in body[:20000]):
         try:
@@ -39,6 +51,8 @@ def peek(url, ctype, body):
                     cells = [str(c)[:22] for c in row[:16]]
                     if any(c not in ("None", "") for c in cells):
                         out.append("      " + " | ".join(cells))
+                cola = [str(r[0])[:28] for r in ws.iter_rows(values_only=True) if r and r[0] not in (None, "")]
+                out.append("    colA: " + " / ".join(cola[:220]))
         except Exception as e:
             out.append(f"    xlsx error {e}")
         return out
@@ -75,7 +89,7 @@ def peek(url, ctype, body):
             import pypdf
             r = pypdf.PdfReader(io.BytesIO(body))
             t = " ".join((pg.extract_text() or "") for pg in r.pages[:4])
-            out.append("    pdf: " + re.sub(r"\s+", " ", t)[:3000])
+            out.append("    pdf: " + re.sub(r"\s+", " ", t)[:7000])
         except Exception as e:
             out.append(f"    pdf error {e}")
         return out
@@ -162,7 +176,7 @@ def main():
             base, _, q = u.partition("?")
             u, data = base, q.encode()
             method, headers = "POST", {"Content-Type": "application/x-www-form-urlencoded"}
-        status, ctype, body, final = fetch(u, method=method, data=data, headers=headers)
+        status, ctype, body, final = fetch(u.split("#")[0], method=method, data=data, headers=headers)
         print(f"\n=== {u}\n    -> {status} {ctype} {len(body)} bytes" + (f" (final {final})" if final != u else ""))
         if status == 0:
             continue
