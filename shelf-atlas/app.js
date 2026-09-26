@@ -90,7 +90,7 @@ const BBL = 6.2898;             // barrels per Sm³ (also used for boe per Sm³ 
 const SCF = 35.3147;            // standard cubic feet per Sm³
 const Z_LABELS = 1.35;          // zoom (× the whole-sea view) at which field names appear
 const Z_PIPES = 1.6;            // … pipelines
-const Z_FACS = 2.4;             // … platforms and subsea structures
+const Z_FACS = 3.2;             // … platforms and subsea structures
 const Z_MIN = 0.7, Z_MAX = 400;
 /* The home view is the North Sea proper, not the whole bbox: the bbox may
  * reach the Norwegian and Barents Seas, which stay a pan away. */
@@ -369,6 +369,9 @@ function mediumClass(m) {
 const PIPE_W = [0.8, 1.4, 2.2];           // CSS px at the zoom where pipelines appear
 function widthClass(d) { return !isNum(d) || d < 14 ? 0 : d < 26 ? 1 : 2; }
 const FLOATING = /FPSO|FSO|FSU|FLOAT|SEMI|SHIP|TLP|SPAR|VESSEL|BUOY|MOPU/i;
+/* The regulators' installation layers also carry wind turbines and geothermal
+ * plants. This is an oil and gas map: those are counted in About, not drawn. */
+const NOT_OIL_GAS = /WIND|GEOTHERM/i;
 
 function buildBase(g) {
   const f = g.factor;
@@ -398,7 +401,7 @@ function buildBase(g) {
     return { raw: p, cc: CC[cci], mc, wc, lines, bbox: bboxOf(lines) };
   });
   const n = g.facilities.length;
-  B.fac = { n, X: new Float32Array(n), Y: new Float32Array(n), shape: new Uint8Array(n),
+  B.fac = { n, skipped: 0, X: new Float32Array(n), Y: new Float32Array(n), shape: new Uint8Array(n),
     cc: new Uint8Array(n), y0: new Int16Array(n), y1: new Int16Array(n), raw: g.facilities };
   g.facilities.forEach((fa, i) => {
     B.fac.X[i] = fa.lon;
@@ -407,6 +410,7 @@ function buildBase(g) {
     B.fac.cc[i] = Math.max(0, CC.indexOf(fa.country));
     B.fac.y0[i] = isInt(fa.startYear) ? fa.startYear : 0;
     B.fac.y1[i] = isInt(fa.endYear) ? fa.endYear : 9999;
+    if (NOT_OIL_GAS.test(fa.kind || '')) { B.fac.y0[i] = 9999; B.fac.y1[i] = -1; B.fac.skipped++; }
   });
   B.outlines = new Map();
   g.fields.forEach((o, i) => {
@@ -989,7 +993,7 @@ function facilityVisible(i, y) {
 function drawFacilities(c) {
   screenTf(c);
   const fa = base.fac, y = monthYear(month);
-  const s = clamp(2.4 + (zoomRel() - Z_FACS) * 0.12, 2.4, 4.2);
+  const s = clamp(1.8 + (zoomRel() - Z_FACS) * 0.08, 1.8, 3.6);
   const sq = new Path2D(), tri = new Path2D(), dot = new Path2D();
   for (let i = 0; i < fa.n; i++) {
     if (!facilityVisible(i, y)) continue;
@@ -1003,7 +1007,7 @@ function drawFacilities(c) {
   c.fill(dot);
   c.fillStyle = P.fac;
   c.strokeStyle = P.facStroke;
-  c.lineWidth = 1;
+  c.lineWidth = 0.8;
   c.stroke(sq); c.fill(sq);
   c.stroke(tri); c.fill(tri);
 }
@@ -1283,7 +1287,7 @@ function showAbout() {
       p(`Same name on both sides of a border but not confirmed as one field, so shown separately: ${m.crossBorderCandidates.map((c) => titleCase(c.name)).join(', ')}.`);
     }
     const withSeries = model.fields.filter((F) => F.liq || F.gas).length;
-    p(`${model.fields.length} fields (${withSeries} with production figures, ${model.noOutline} without an outline, drawn as a circle or dot), ${base ? base.counts.facilities : 0} installations, ${base ? base.counts.pipelines : 0} pipelines, ${base ? base.counts.borders : 0} maritime boundary lines.`);
+    p(`${model.fields.length} fields (${withSeries} with production figures, ${model.noOutline} without an outline, drawn as a circle or dot), ${base ? base.counts.facilities : 0} installations${base && base.fac.skipped ? ` (${base.fac.skipped} wind turbines and geothermal plants among them are not drawn)` : ''}, ${base ? base.counts.pipelines : 0} pipelines, ${base ? base.counts.borders : 0} maritime boundary lines.`);
   }
   p('Conversions: 1 Sm³ = 6.2898 bbl; 1 Sm³ of gas = 35.3147 scf; oil equivalent counts 1 Sm³ of liquids or 1000 Sm³ of gas as 1 Sm³ o.e. (6.2898 boe).');
   p('The map re-reads data/geo.json and data/snapshot.json every time it is opened and whenever new data lands while it is open. The app itself never goes online.');
