@@ -19,6 +19,7 @@ with the columns that were found, so a silent renaming upstream cannot ship an e
 from __future__ import annotations
 
 import argparse
+import collections
 import csv
 import datetime as dt
 import glob
@@ -90,6 +91,7 @@ def build_world_geometry(cache: Cache):
 
 NE_BATHY = [("A", 10000), ("B", 9000), ("C", 8000), ("D", 7000), ("E", 6000), ("F", 5000),
             ("G", 4000), ("H", 3000), ("I", 2000), ("J", 1000), ("K", 200), ("L", 0)]
+FIELDS_BUDGET = 2_600_000     # fields.json: 7,000 units with production, reserves and outlines
 BATHY_MIN_AREA_M2 = 4.0e8      # 400 km² triangles: the ocean floor at world scale, not a coastline
 
 
@@ -200,22 +202,49 @@ GOGET_COLS = {
     # key: regexes tried in order against the lower-cased header. The tracker renames
     # columns between releases; every alias seen so far is listed, and a miss stops the
     # build with the headers that were found so the list can be extended, not guessed at.
+    # Main sheet ("Field-level main data" since the 2025 releases; one row per unit):
     "id": [r"^unit id$", r"^goget id$", r"^id$"],
     "name": [r"^unit name$", r"^name$", r"^unit$"],
-    "country": [r"^country$", r"^country/area$", r"^country \(area\)$"],
+    "country": [r"^country/area$", r"^country$", r"^country \(area\)$"],
     "lat": [r"^latitude$", r"^lat$"],
     "lon": [r"^longitude$", r"^lon$", r"^lng$"],
     "status": [r"^status$", r"^unit status$"],
     "fuel": [r"^fuel type$", r"^fuel$", r"^hydrocarbon type$"],
-    "type": [r"^unit type$", r"^type$"],
+    "type": [r"^production type$", r"^unit type$", r"^type$"],
     "operator": [r"^operator$", r"^operator\(s\)$"],
+    "parents": [r"^parent\(s\)$", r"^parent$", r"^parent company$"],
     "disc": [r"^discovery year$", r"^discovery$"],
+    "fid": [r"^fid year$", r"^final investment decision.*"],
     "start": [r"^production start year$", r"^start year$", r"^first production year$"],
-    "wiki": [r"^wiki url$", r"^wiki$", r"^gem wiki$"],
-    "oil": [r"^production - oil.*", r"^oil production.*", r"^production.*oil.*"],
-    "gas": [r"^production - gas.*", r"^gas production.*", r"^production.*gas.*"],
-    "prod_year": [r"^production year$", r"^year of production.*", r"^data year$"],
+    "wiki": [r"^wiki url \(field\)$", r"^wiki url \(project\)$", r"^wiki url$", r"^wiki$", r"^gem wiki$"],
+    "shore": [r"^onshore/offshore$", r"^onshore or offshore$"],
+    "basin": [r"^basin$"],
+    "accuracy": [r"^location accuracy$"],
+    "wkt": [r"^field outline \(wkt\)$", r"^outline \(wkt\)$"],
+    # Long-format production and reserves sheets (one row per unit × fuel description):
+    "fuel_desc": [r"^fuel description$", r"^fuel$"],
+    "qty": [r"^quantity \(converted\)$", r"^quantity$"],
+    "unit": [r"^units \(converted\)$", r"^units$", r"^unit$"],
+    "data_year": [r"^data year$", r"^production year$", r"^year$"],
+    "res_class": [r"^reserves classification$", r"^reserves class$", r"^classification$"],
 }
+
+# GOGET's "Fuel description" values are free text from each regulator. They are folded into
+# liquids or gas by their converted unit (million bbl/y is a liquid, million m³/y is gas); the
+# handful reported as million boe/y are hydrocarbons mixed and go to whichever side the
+# description names, else to liquids. Anything else stops the build.
+GEM_WIKI = "https://www.gem.wiki/"
+GOGET_BBL_PER_BOE_GAS = 159.0     # Sm³ gas per boe (Sodir: 1000 Sm³ gas = 1 Sm³ o.e., 6.29 bbl/Sm³)
+
+# Reserves: many classifications, and a unit carries at most a few of them. The file keeps one
+# figure per unit and fuel, the "most remaining" class it has, in this order of preference.
+GOGET_RESERVE_CLASSES = [
+    (r"^remaining", "remaining"),
+    (r"^2p\b|^proved and probable|^proven and probable", "2P"),
+    (r"^1p\b|^proved\b|^proven\b", "1P"),
+    (r"^reserves$|^recoverable|^economic|^a \+ b1 \+ c1|^estimated|^confirmed", "reserves"),
+    (r"^eur\b|ultimate", "EUR"),
+]
 
 
 def _pick(headers, key):
@@ -242,113 +271,268 @@ def _year(v):
     return int(m.group(0)) if m else None
 
 
+def _sheet_rows(wb, want):
+    """Rows of the first sheet whose lower-cased name contains every word in `want`, as
+    (headers, rows) with the header row detected as the first one holding 'Unit ID'."""
+    for name in wb.sheetnames:
+        n = name.lower()
+        if all(w in n for w in want):
+            rows = list(wb[name].iter_rows(values_only=True))
+            hi = next((i for i, r in enumerate(rows[:10])
+                       if any(re.match(r"^unit (id|name)$", str(c or "").strip().lower()) for c in r)), None)
+            if hi is None:
+                raise BuildError(f"GOGET sheet {name!r}: no header row with 'Unit ID' in the first 10 rows")
+            return name, rows[hi], rows[hi + 1:]
+    return None, None, None
+
+
+def _fuel_side(desc: str, unit: str):
+    """'liquid' or 'gas' for a long-format production/reserves row, or None to skip it."""
+    u = (unit or "").strip().lower().replace("m3", "m³")
+    d = (desc or "").strip().lower()
+    if "bbl" in u:
+        return "liquid"
+    if "m³" in u or "cubic met" in u or "cf" in u or "cubic feet" in u:
+        return "gas"
+    if "boe" in u:
+        # mixed hydrocarbons; count as liquid unless the description is gas only
+        return "gas" if re.fullmatch(r".*\bgas\b.*", d) and "oil" not in d and "liquid" not in d and "condensate" not in d else "liquid"
+    return None
+
+
+def _per_day(qty: float, unit: str, side: str):
+    """Annual volume in GOGET's converted units -> bbl/d (liquids) or boe/d (gas)."""
+    u = (unit or "").strip().lower().replace("m3", "m³")
+    if not u.startswith("million"):
+        raise BuildError(f"GOGET production unit not understood: {unit!r}")
+    if "/y" not in u and "per year" not in u and "/yr" not in u:
+        raise BuildError(f"GOGET production unit is not annual: {unit!r}")
+    v = qty * 1e6 / 365.0
+    if "bbl" in u or "boe" in u:
+        return v
+    if "m³" in u:
+        return v / GOGET_BBL_PER_BOE_GAS
+    if "cf" in u or "cubic feet" in u:
+        return v / 35.3147 / GOGET_BBL_PER_BOE_GAS
+    raise BuildError(f"GOGET production unit not understood: {unit!r}")
+
+
+def _to_mboe(qty: float, unit: str):
+    """Reserves in GOGET's converted units -> million boe."""
+    u = (unit or "").strip().lower().replace("m3", "m³")
+    if "bbl" in u or "boe" in u:
+        return qty
+    if "m³" in u:
+        return qty / GOGET_BBL_PER_BOE_GAS
+    if "cf" in u or "cubic feet" in u:
+        return qty / 35.3147 / GOGET_BBL_PER_BOE_GAS
+    raise BuildError(f"GOGET reserves unit not understood: {unit!r}")
+
+
 def read_goget(path: str):
+    """Parse the tracker into one record per located field-level unit.
+
+    Since 2025 the workbook has a main sheet (one row per unit) and long-format production and
+    reserves sheets (one row per unit × fuel description × data year). Production is summed
+    per unit for its newest data year: everything in barrels is a liquid (oil, condensate,
+    NGL, LPG …), everything in cubic metres is gas. Reserves keep one class per side."""
     import openpyxl
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
     log(f"  GOGET workbook {os.path.basename(path)}: sheets {wb.sheetnames}")
-    main = prod = None
-    for name in wb.sheetnames:
-        n = name.lower()
-        if main is None and ("main" in n or "unit" in n or "data" in n) and "production" not in n:
-            main = wb[name]
-        if prod is None and "production" in n:
-            prod = wb[name]
-    if main is None:
-        main = wb[wb.sheetnames[0]]
-    rows = list(main.iter_rows(values_only=True))
-    # header is the first row holding 'Unit ID' or 'Unit name'
-    hi = next((i for i, r in enumerate(rows[:10]) if any(re.match(r"^unit (id|name)$", str(c or "").strip().lower()) for c in r)), 0)
-    headers = rows[hi]
+    mname, headers, rows = _sheet_rows(wb, ("main",))
+    if mname is None:
+        mname, headers, rows = _sheet_rows(wb, ("unit",))
+    if mname is None:
+        raise BuildError(f"GOGET: no main sheet among {wb.sheetnames}")
     col = {k: _pick(headers, k) for k in GOGET_COLS}
     missing = [k for k in ("id", "name", "country", "lat", "lon", "status") if col[k] is None]
     if missing:
-        raise BuildError(f"GOGET main sheet lacks {missing}; headers: {[str(h) for h in headers]}")
-    units = {}
-    for r in rows[hi + 1:]:
-        if r is None or col["id"] >= len(r):
+        raise BuildError(f"GOGET main sheet {mname!r} lacks {missing}; headers: {[str(h) for h in headers]}")
+    units, unlocated, outlines = {}, 0, 0
+    for r in rows:
+        if r is None or col["id"] >= len(r) or not r[col["id"]]:
             continue
-        uid = r[col["id"]]
-        if not uid:
-            continue
+        uid = str(r[col["id"]]).strip()
         lat, lon = _num(r[col["lat"]]), _num(r[col["lon"]])
-        if lat is None or lon is None:
+        if lat is None or lon is None or abs(lat) > 90 or abs(lon) > 180:
+            unlocated += 1
             continue
-        u = {"id": str(uid), "name": str(r[col["name"]] or "").strip(), "country": str(r[col["country"]] or "").strip(),
-             "lat": round(lat, 3), "lon": round(lon, 3), "status": str(r[col["status"]] or "").strip()}
-        for k in ("fuel", "type", "operator", "wiki"):
+        u = {"id": uid, "name": str(r[col["name"]] or "").strip(), "country": str(r[col["country"]] or "").strip(),
+             "lat": round(lat, 3), "lon": round(lon, 3), "status": str(r[col["status"]] or "").strip().lower()}
+        for k in ("fuel", "type", "operator", "shore", "basin", "accuracy"):
             if col[k] is not None and r[col[k]] not in (None, ""):
                 u[k] = str(r[col[k]]).strip()
-        for k in ("disc", "start"):
+        if col["wiki"] is not None and r[col["wiki"]] not in (None, ""):
+            u["wiki"] = str(r[col["wiki"]]).strip()
+        elif col["wiki"] is not None:
+            # the field wiki column is preferred; fall back to the project one
+            j = _pick(headers, "wiki")
+            alt = next((i for i, h in enumerate(headers) if i != j and re.match(r"^wiki url", str(h or "").strip().lower())), None)
+            if alt is not None and r[alt] not in (None, ""):
+                u["wiki"] = str(r[alt]).strip()
+        if col["parents"] is not None and r[col["parents"]] not in (None, ""):
+            # "Equinor ASA [60.0%]; DNO ASA [20.0%]" -> ["Equinor ASA", "DNO ASA"]
+            u["parents"] = [re.sub(r"\s*\[.*?\]\s*", "", x).strip() for x in str(r[col["parents"]]).split(";") if x.strip()]
+        for k in ("disc", "fid", "start"):
             if col[k] is not None:
                 y = _year(r[col[k]])
                 if y:
                     u[k] = y
-        if col["oil"] is not None:
-            u["oil"] = _num(r[col["oil"]])
-        if col["gas"] is not None:
-            u["gas"] = _num(r[col["gas"]])
-        if col["prod_year"] is not None:
-            u["prodYear"] = _year(r[col["prod_year"]])
-        units[u["id"]] = u
-    # a separate production sheet, if the main one has no production columns
-    if prod is not None and (col["oil"] is None or col["gas"] is None):
-        prow = list(prod.iter_rows(values_only=True))
-        phi = next((i for i, r in enumerate(prow[:10]) if any(re.match(r"^unit id$", str(c or "").strip().lower()) for c in r)), 0)
-        ph = prow[phi]
-        pc = {k: _pick(ph, k) for k in ("id", "oil", "gas", "prod_year")}
-        if pc["id"] is None or (pc["oil"] is None and pc["gas"] is None):
-            raise BuildError(f"GOGET production sheet lacks id/oil/gas; headers: {[str(h) for h in ph]}")
-        latest = {}
-        for r in prow[phi + 1:]:
-            uid = str(r[pc["id"]] or "")
-            if uid not in units:
-                continue
-            y = _year(r[pc["prod_year"]]) if pc["prod_year"] is not None else None
-            o = _num(r[pc["oil"]]) if pc["oil"] is not None else None
-            g = _num(r[pc["gas"]]) if pc["gas"] is not None else None
-            if o is None and g is None:
-                continue
-            if uid not in latest or (y or 0) >= (latest[uid][0] or 0):
-                latest[uid] = (y, o, g)
-        for uid, (y, o, g) in latest.items():
-            units[uid]["oil"], units[uid]["gas"], units[uid]["prodYear"] = o, g, y
-    oil_hdr = str(headers[col["oil"]]) if col["oil"] is not None else ""
-    gas_hdr = str(headers[col["gas"]]) if col["gas"] is not None else ""
-    return list(units.values()), {"oil": oil_hdr, "gas": gas_hdr}
+        if col["wkt"] is not None and r[col["wkt"]] not in (None, ""):
+            u["wkt"] = str(r[col["wkt"]])
+            outlines += 1
+        units[uid] = u
+    log(f"  goget main: {len(units)} located units, {unlocated} without coordinates, {outlines} with outlines")
+
+    # production, long format
+    pname, ph, prows = _sheet_rows(wb, ("production",))
+    if pname is None:
+        raise BuildError(f"GOGET: no production sheet among {wb.sheetnames}")
+    pc = {k: _pick(ph, k) for k in ("id", "fuel_desc", "qty", "unit", "data_year")}
+    if any(pc[k] is None for k in ("id", "qty", "unit")):
+        raise BuildError(f"GOGET production sheet {pname!r} lacks id/quantity/units; headers: {[str(h) for h in ph]}")
+    acc = {}      # uid -> {year: {"liquid": bbl/d, "gas": boe/d, "descs": [...]}}
+    skipped_desc = collections.Counter()
+    for r in prows:
+        if r is None or pc["id"] >= len(r) or not r[pc["id"]]:
+            continue
+        uid = str(r[pc["id"]]).strip()
+        if uid not in units:
+            continue
+        q = _num(r[pc["qty"]])
+        if q is None:
+            continue
+        unit = str(r[pc["unit"]] or "")
+        desc = str(r[pc["fuel_desc"]] or "") if pc["fuel_desc"] is not None else ""
+        side = _fuel_side(desc, unit)
+        if side is None:
+            skipped_desc[(desc, unit)] += 1
+            continue
+        y = _year(r[pc["data_year"]]) if pc["data_year"] is not None else None
+        d = acc.setdefault(uid, {}).setdefault(y or 0, {"liquid": None, "gas": None})
+        d[side] = (d[side] or 0.0) + _per_day(q, unit, side)
+    if skipped_desc:
+        log(f"  goget production: skipped rows with unknown units: {dict(skipped_desc)}")
+    with_prod = 0
+    for uid, years in acc.items():
+        y = max(years)
+        d = years[y]
+        u = units[uid]
+        u["prodYear"] = y or None
+        # a side is kept only when a row reported it, so a gas field with no oil row has no oilBpd
+        if d["liquid"] is not None:
+            u["oil"] = d["liquid"]
+        if d["gas"] is not None:
+            u["gas"] = d["gas"]
+        with_prod += 1
+    log(f"  goget production: {with_prod} units with a figure; data years {collections.Counter(u.get('prodYear') for u in units.values() if u.get('prodYear')).most_common(4)}")
+
+    # reserves, long format (optional sheet)
+    rname, rh, rrows = _sheet_rows(wb, ("reserves",))
+    if rname is not None:
+        rc = {k: _pick(rh, k) for k in ("id", "fuel_desc", "qty", "unit", "data_year", "res_class")}
+        if any(rc[k] is None for k in ("id", "qty", "unit", "res_class")):
+            log(f"  goget reserves: sheet {rname!r} lacks id/quantity/units/class, skipped; headers: {[str(h) for h in rh]}")
+        else:
+            best = {}   # (uid, side) -> (rank, -year, mboe, label)
+            for r in rrows:
+                if r is None or rc["id"] >= len(r) or not r[rc["id"]]:
+                    continue
+                uid = str(r[rc["id"]]).strip()
+                if uid not in units:
+                    continue
+                q = _num(r[rc["qty"]])
+                if q is None:
+                    continue
+                unit = str(r[rc["unit"]] or "")
+                desc = str(r[rc["fuel_desc"]] or "") if rc["fuel_desc"] is not None else ""
+                side = _fuel_side(desc, unit)
+                if side is None:
+                    continue
+                cls = str(r[rc["res_class"]] or "").strip()
+                rank = next((i for i, (rx, _) in enumerate(GOGET_RESERVE_CLASSES) if re.search(rx, cls.lower())), None)
+                if rank is None:
+                    continue    # in-place volumes and unnamed classes are not reserves
+                label = GOGET_RESERVE_CLASSES[rank][1]
+                y = _year(r[rc["data_year"]]) if rc["data_year"] is not None else 0
+                key = (uid, side)
+                cur = best.get(key)
+                if cur is None or (rank, -(y or 0)) < (cur[0], cur[1]):
+                    best[key] = [rank, -(y or 0), 0.0, label]
+                if (best[key][0], best[key][1]) == (rank, -(y or 0)):
+                    best[key][2] += _to_mboe(q, unit)
+            n = 0
+            for (uid, side), (rank, ny, mboe, label) in best.items():
+                u = units[uid]
+                u["resOilMbbl" if side == "liquid" else "resGasMboe"] = round(mboe, 1)
+                u.setdefault("resClass", label)
+                u.setdefault("resYear", -ny or None)
+                n += 1
+            log(f"  goget reserves: {len({k[0] for k in best})} units with a reserves figure ({n} sides)")
+    return list(units.values()), {"main": mname, "production": pname, "reserves": rname}
 
 
-def goget_units_to_file(units, hdr, src_name):
-    """Normalise GOGET production to boe/day. GOGET reports oil in million bbl/y and gas in
-    million m³/y; the header text is checked so a unit change upstream is caught."""
-    def per_day_oil(v):
-        if v is None:
-            return None
-        if re.search(r"million\s*bbl.*\/?\s*y", hdr["oil"], re.I) or "bbl" in hdr["oil"].lower():
-            return v * 1e6 / 365.0
-        raise BuildError(f"GOGET oil unit not understood: {hdr['oil']!r}")
-    def per_day_gas_boe(v):
-        if v is None:
-            return None
-        h = hdr["gas"].lower()
-        if "million" in h and ("m³" in h or "m3" in h or "cubic met" in h):
-            return v * 1e6 / 365.0 / 159.0      # Sm³ gas -> boe at 1 boe = 159 Sm³ (Sodir's 1000 Sm³ = 1 Sm³ o.e.)
-        if "bcf" in h or "billion cubic feet" in h:
-            return v * 1e9 / 35.3147 / 365.0 / 159.0
-        raise BuildError(f"GOGET gas unit not understood: {hdr['gas']!r}")
+def _wkt_rings(wkt: str):
+    """Outer rings of a WKT POLYGON / MULTIPOLYGON as [(lon, lat), …] lists; holes dropped."""
+    rings = []
+    for m in re.finditer(r"\(\(([^()]+)\)", wkt):
+        pts = []
+        for pair in m.group(1).split(","):
+            xy = pair.split()
+            if len(xy) >= 2:
+                try:
+                    pts.append((float(xy[0]), float(xy[1])))
+                except ValueError:
+                    pass
+        if len(pts) >= 4:
+            rings.append(pts)
+    return rings
+
+
+def goget_units_to_file(units, hdr, src_name, outline_min_tri_m2=6e4, outline_min_m2=2e5):
+    """Flatten parsed units to the app's records. Production is already in bbl/d and boe/d.
+    Outlines come along as packed polylines (3 decimals) when the unit has one, simplified with
+    Visvalingam at `outline_min_tri_m2` (a 350 m × 350 m triangle) and dropped when the ring
+    is smaller than `outline_min_m2`."""
     out = []
+    n_out = 0
     for u in units:
-        o = per_day_oil(u.get("oil"))
-        g = per_day_gas_boe(u.get("gas"))
-        rec = {k: u[k] for k in ("id", "name", "country", "lat", "lon", "status") if k in u}
-        for k in ("fuel", "type", "operator", "disc", "start", "wiki", "prodYear"):
-            if u.get(k) is not None:
+        rec = {k: u[k] for k in ("id", "name", "country", "lat", "lon", "status") if k in u and u[k] != ""}
+        for k in ("fuel", "type", "operator", "disc", "fid", "start", "prodYear", "basin",
+                  "parents", "resOilMbbl", "resGasMboe", "resClass", "resYear"):
+            if u.get(k) not in (None, "", []):
                 rec[k] = u[k]
-        if o is not None:
-            rec["oilBpd"] = round(o)
-        if g is not None:
-            rec["gasBoepd"] = round(g)
+        # Bytes matter (7,000 records): the wiki URL is carried only when it is not simply the
+        # name with underscores under gem.wiki, offshore is a flag, and only approximate
+        # locations are marked.
+        wiki = u.get("wiki")
+        if wiki and wiki != GEM_WIKI + u["name"].replace(" ", "_"):
+            rec["wiki"] = wiki
+        shore = (u.get("shore") or "").lower()
+        if shore == "offshore":
+            rec["offshore"] = 1
+        elif shore == "onshore":
+            rec["offshore"] = 0
+        if (u.get("accuracy") or "").lower().startswith("approx"):
+            rec["approx"] = 1
+        if u.get("oil") is not None:
+            rec["oilBpd"] = round(u["oil"])
+        if u.get("gas") is not None:
+            rec["gasBoepd"] = round(u["gas"])
+        if u.get("wkt"):
+            rings = []
+            for ring in _wkt_rings(u["wkt"]):
+                if ring_area_m2(ring) < outline_min_m2:
+                    continue
+                s = simplify(ring, outline_min_tri_m2, closed=True)
+                if len(s) >= 4:
+                    rings.append(encode_line(s, WORLD_FACTOR))
+            if rings:
+                rec["rings"] = rings
+                n_out += 1
         out.append(rec)
     out.sort(key=lambda r: (r["country"], r["name"], r["id"]))
+    log(f"  goget: {len(out)} records, {n_out} with outlines")
     return out
 
 
@@ -443,7 +627,11 @@ def main():
     units, hdr = read_goget(path)
     if len(units) < 1000:
         raise BuildError(f"GOGET parsed only {len(units)} located units from {path}; not writing")
+    if sum(1 for u in units if u.get("oil") is not None or u.get("gas") is not None) < 500:
+        raise BuildError("GOGET parsed fewer than 500 units with production; the production sheet changed shape")
     recs = goget_units_to_file(units, hdr, os.path.basename(path))
+    if len(json.dumps(recs, ensure_ascii=False, separators=(",", ":")).encode()) > FIELDS_BUDGET:
+        raise BuildError(f"fields.json would exceed its budget of {FIELDS_BUDGET/1e6:.1f} MB; thin the records")
     rel = re.search(r"(20\d\d)[-_ ]?(\d\d|[A-Za-z]+)?", os.path.basename(path))
     write_json(fields_path, {
         "schema": 1, "available": True, "generatedAt": generated,
@@ -452,9 +640,19 @@ def main():
                    "url": "https://globalenergymonitor.org/projects/global-oil-gas-extraction-tracker/",
                    "licence": "CC BY 4.0",
                    "attribution": "Fields: Global Energy Monitor, Global Oil and Gas Extraction Tracker (CC BY 4.0)",
-                   "columns": hdr},
-        "units": {"oilBpd": "barrels of oil per day (annual volume / 365)",
-                  "gasBoepd": "gas as barrels of oil equivalent per day, 159 Sm³ per boe"},
+                   "sheets": hdr},
+        "units": {"oilBpd": "liquids (oil, condensate, NGL, LPG) in barrels per day (annual volume / 365)",
+                  "gasBoepd": "gas as barrels of oil equivalent per day, 159 Sm³ per boe",
+                  "resOilMbbl": "liquids reserves, million barrels (class in resClass, year in resYear)",
+                  "resGasMboe": "gas reserves, million boe at 159 Sm³ per boe",
+                  "rings": "outline rings as Google polylines, 3 decimals, lon first, holes dropped",
+                  "wiki": "GEM wiki page; when absent it is " + GEM_WIKI + " + name with spaces as underscores",
+                  "offshore": "1 offshore, 0 onshore, absent when the tracker does not say",
+                  "approx": "1 when the tracker marks the location approximate"},
+        "counts": {"units": len(recs),
+                   "withProduction": sum(1 for r in recs if "oilBpd" in r or "gasBoepd" in r),
+                   "withReserves": sum(1 for r in recs if "resOilMbbl" in r or "resGasMboe" in r),
+                   "withOutline": sum(1 for r in recs if "rings" in r)},
         "fields": recs,
     })
 

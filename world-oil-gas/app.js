@@ -46,12 +46,16 @@
  * { "schema": 1, "available": true|false, "generatedAt": "…",
  *   "reason": "…",                                    // only when available is false
  *   "source": { "name", "file", "release", "url", "licence": "CC BY 4.0", "attribution" },
- *   "units": { "oilBpd": "barrels per day", "gasBoepd": "boe per day at 159 Sm³ per boe" },
- *   "fields": [{ "id": "G…", "name": "…", "country": "…", "lat": 56.1, "lon": 2.3,
+ *   "units": { "oilBpd": "…", "gasBoepd": "…", "resOilMbbl": "…", "resGasMboe": "…", "rings": "…", "wiki": "…" },
+ *   "counts": { "units", "withProduction", "withReserves", "withOutline" },
+ *   "fields": [{ "id": "L…", "name": "…", "country": "…", "lat": 56.1, "lon": 2.3,
  *                "status": "operating", "fuel": "oil and gas", "type": "conventional",
- *                "operator": "…", "disc": 1974, "start": 1979,
- *                "wiki": "https://www.gem.wiki/…", "prodYear": 2023,
- *                "oilBpd": 12000, "gasBoepd": 30000 }, …] }
+ *                "operator": "…", "parents": ["…"], "disc": 1974, "fid": 1976, "start": 1979,
+ *                "basin": "…", "offshore": 1|0, "approx": 1,
+ *                "wiki": "https://www.gem.wiki/…",     // only when not name-with-underscores
+ *                "prodYear": 2023, "oilBpd": 12000, "gasBoepd": 30000,
+ *                "resOilMbbl": 120.5, "resGasMboe": 30.1, "resClass": "remaining", "resYear": 2023,
+ *                "rings": ["<polyline, 3 decimals>", …] }, …] }
  * When `available` is false the fields layer prints `reason` and draws nothing.
  *
  * -----------------------------------------------------------------------------
@@ -577,6 +581,12 @@ function buildFields(f) {
   // Biggest first, so the small ones are drawn last and stay tappable on top.
   points.sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
   return { raw: f, available: true, points, skipped };
+}
+
+// The file carries `wiki` only when GEM's page is not simply the unit name with underscores.
+function fieldWiki(f) {
+  if (isStr(f.wiki)) return f.wiki;
+  return isStr(f.name) ? 'https://www.gem.wiki/' + f.name.trim().replace(/ /g, '_') : null;
 }
 
 /* ── view ────────────────────────────────────────────────────────────────── */
@@ -1271,8 +1281,12 @@ function fieldSheet(body, p) {
   row('Fuel', fuelNames[p.fuel]);
   row('Type', f.type);
   row('Status', f.status);
+  row('Setting', f.offshore === 1 ? 'Offshore' : f.offshore === 0 ? 'Onshore' : null);
+  row('Basin', f.basin);
   row('Operator', f.operator);
+  if (Array.isArray(f.parents) && f.parents.length) row('Parents', f.parents.filter(isStr).join(', '));
   row('Discovered', f.disc);
+  row('Investment decision', f.fid);
   row('Production start', f.start);
   const yr = Number.isFinite(f.prodYear) ? ` (${f.prodYear})` : '';
   if (oil == null && gas == null) row('Production', 'not reported');
@@ -1281,14 +1295,24 @@ function fieldSheet(body, p) {
     if (gas != null) row(`Gas${yr}`, `${nf0.format(gas)} boe/d`);
     if (oil != null && gas != null) row('Together', `${nf0.format(oil + gas)} boe/d`);
   }
+  const rOil = Number.isFinite(f.resOilMbbl) ? f.resOilMbbl : null;
+  const rGas = Number.isFinite(f.resGasMboe) ? f.resGasMboe : null;
+  if (rOil != null || rGas != null) {
+    const cls = isStr(f.resClass) ? f.resClass : 'reserves';
+    const ry = Number.isFinite(f.resYear) ? ` (${f.resYear})` : '';
+    if (rOil != null) row(`Liquids ${cls}${ry}`, `${nf1.format(rOil)} million bbl`);
+    if (rGas != null) row(`Gas ${cls}${ry}`, `${nf1.format(rGas)} million boe`);
+  }
+  if (f.approx === 1) row('Location', 'approximate (per the tracker)');
   body.append(dl);
-  if (isStr(f.wiki)) {
+  const wiki = fieldWiki(f);
+  if (wiki) {
     const pEl = el('p', 'sheet-note url');
-    pEl.append(document.createTextNode('GEM wiki: '), el('span', null, f.wiki));
+    pEl.append(document.createTextNode('GEM wiki: '), el('span', null, wiki));
     body.append(pEl);
   }
-  const units_ = (fields.raw.units && fields.raw.units.gasBoepd) || 'boe per day at 159 Sm³ per boe';
-  body.append(el('p', 'sheet-note', `Field volumes are the tracker's own: oil in barrels a day, gas in ${units_}.`));
+  body.append(el('p', 'sheet-note', "Field volumes are the tracker's own, for its newest data year: liquids (oil, condensate, NGL) "
+    + 'in barrels a day, gas as barrels of oil equivalent a day at 159 Sm³ per boe. Reserves are the class the tracker gives.'));
 }
 
 /* ── About ───────────────────────────────────────────────────────────────── */

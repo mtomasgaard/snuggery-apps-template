@@ -108,7 +108,7 @@ would be worse than two honest layers.
 | --- | --- | --- |
 | Shelf Atlas (all four regulators + basemap) | weekly, Monday morning | Sodir syncs daily but monthly production lands once a month; NSTA PPRS monthly; the Danish report monthly; NLOG monthly — a week is the shortest interval at which any of them can have changed |
 | World countries (OWID) | yearly, plus manual dispatch | the Energy Institute publishes once a year (June); OWID follows within weeks |
-| GOGET | manual | behind a form; see HANDOFF.md |
+| GOGET | manual | behind a form; March 2026 release is committed in `world-oil-gas/raw/manual/` |
 
 ### Map box: the North Sea, plus the whole Norwegian shelf
 The first build used a North Sea box (lon −6…12, lat 50.5…63) and dropped 38 Norwegian fields north
@@ -274,14 +274,24 @@ or produced before 2003. The national gas total for 2024 comes out at 8.9 bcm, a
   mirror; ISO_A3 is `-99` for France, Norway, Kosovo and a few others, mapped explicitly.
 
 ### 2.6 World — fields: Global Energy Monitor, GOGET
-- `https://globalenergymonitor.org/projects/global-oil-gas-extraction-tracker/` — newest release
-  **March 2026** (per GEM's recommended citation). Download is an `.xlsx` behind a form; **CC BY 4.0**.
-  It cannot be fetched by a job, so `world-oil-gas/raw/manual/` is the drop-in folder and the
-  yearly build reads whatever GOGET workbook is there. The parser matches columns by name with
-  aliases (Unit ID, Unit name, Country, Latitude, Longitude, Status, Fuel type, Unit type, Operator,
-  Discovery year, Production start year, Wiki URL, Production - Oil (million bbl/y), Production -
-  Gas (million m³/y), Production year) and **fails with the headers it found** rather than guessing.
-  Until a workbook is dropped in, `fields.json` says `available: false` and the app says why.
+- `https://globalenergymonitor.org/projects/global-oil-gas-extraction-tracker/` — release
+  **March 2026** (per GEM's recommended citation), dropped into `world-oil-gas/raw/manual/` and
+  committed there. Download is an `.xlsx` behind a form; **CC BY 4.0**. It cannot be fetched by a
+  job, so the build reads whatever GOGET workbook is in the folder.
+- Workbook shape (March 2026): `Field-level main data` (7,673 units, one row each: Unit ID, Unit
+  Name, Fuel type, Country/Area, Subnational unit, Production Type, Status, Status detail/year,
+  Discovery year, FID Year, Production start year, Operator, Owner(s), Parent(s), Wiki URL
+  (project/field), Latitude, Longitude, Location accuracy, Onshore/Offshore, Field outline (WKT),
+  Basin, Block(s)); `Field-level production data` (11,834 rows, **long format**: one row per unit ×
+  fuel description, `Quantity (converted)` in million bbl/y, million m³/y or million boe/y, `Data
+  Year`; one year per unit); `Field-level reserves data` (7,060 rows, same shape with a `Reserves
+  classification`); and three project-level sheets (359 projects that group units) which the build
+  does not use. 7,055 units have coordinates (1,021 marked approximate), 1,110 carry a WKT outline,
+  5,677 report production, 3,279 reserves. The parser matches columns by name with aliases and
+  **fails with the headers it found** rather than guessing; the folding of fuel descriptions and
+  reserve classes is in `SCHEMA.md`.
+- North Sea coverage in GOGET: Norway 139, UK 317, Netherlands 165, Denmark 24 located units. Not
+  matched to the regulators' fields (see 1.5).
 
 ### 2.7 Basemap and boundaries
 - **Natural Earth 1:10m** coastline, admin-0 countries, bathymetry 200 m — public domain.

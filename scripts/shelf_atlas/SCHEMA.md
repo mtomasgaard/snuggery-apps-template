@@ -116,8 +116,24 @@ dissolved states `OWID_USS`, `OWID_CZS`, `OWID_YGS` (no outline; listed in `hist
 { "schema": 1, "available": true|false, "generatedAt": "…",
   "reason": "…",                                    // only when available is false
   "source": { "name": "…", "file": "…", "release": "…", "url": "…", "licence": "CC BY 4.0", "attribution": "…" },
-  "units": { "oilBpd": "barrels per day", "gasBoepd": "boe per day at 159 Sm³ per boe" },
-  "fields": [{ "id": "G…", "name": "…", "country": "…", "lat": 56.1, "lon": 2.3, "status": "operating",
-               "fuel": "oil and gas", "type": "conventional", "operator": "…", "disc": 1974, "start": 1979,
-               "wiki": "https://www.gem.wiki/…", "prodYear": 2023, "oilBpd": 12000, "gasBoepd": 30000 }, …] }
+  "units": { "oilBpd": "…", "gasBoepd": "…", "resOilMbbl": "…", "resGasMboe": "…", "rings": "…", "wiki": "…",
+             "offshore": "…", "approx": "…" },
+  "counts": { "units": 7055, "withProduction": 5677, "withReserves": 3279, "withOutline": 1064 },
+  "fields": [{ "id": "L…", "name": "…", "country": "…", "lat": 56.1, "lon": 2.3, "status": "operating",
+               "fuel": "oil and gas", "type": "conventional", "operator": "…", "parents": ["Equinor ASA", …],
+               "disc": 1974, "fid": 1976, "start": 1979, "basin": "…", "offshore": 1|0, "approx": 1,
+               "wiki": "https://www.gem.wiki/…",            // only when it is not name-with-underscores
+               "prodYear": 2024, "oilBpd": 12000, "gasBoepd": 30000,
+               "resOilMbbl": 120.5, "resGasMboe": 30.1, "resClass": "remaining", "resYear": 2023,
+               "rings": ["<polyline, 3 decimals>", …] }, …] }
 ```
+
+Production is the unit's newest data year in the tracker's long-format production sheet, summed per
+side: every row in barrels (oil, condensate, NGL, LPG, "oil and condensate" …) is a liquid and lands
+in `oilBpd`; every row in cubic metres (gas, associated gas, dry gas, sales gas, coal seam gas …) is
+gas and lands in `gasBoepd` at 159 Sm³ per boe; the few rows in million boe/y count as liquids unless
+the description names gas alone. A side is absent when the tracker has no row for it. Reserves keep
+one figure per side: the "most remaining" class the unit has (remaining → 2P → 1P → reserves/recoverable
+→ EUR), summed over its fuel descriptions, in-place volumes ignored. `rings` are the tracker's own
+outlines (1,064 units, mostly Mexico, Argentina, the Netherlands, Brazil, Poland and Norway), outer
+rings only, simplified. Missing keys mean the tracker does not say.
