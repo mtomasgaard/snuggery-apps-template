@@ -57,7 +57,7 @@ CROSS_BORDER = {
     # Same name, different fields — listed so they are never grouped: FRAM (NO Fram / UK Fram),
     # ORION (NL / UK).
 }
-NOT_CROSS_BORDER = {"FRAM", "ORION"}
+NOT_CROSS_BORDER = {"FRAM", "ORION", "MARIA"}   # Norwegian Maria (Halten) and UK Maria are different fields
 
 
 def _norm_status(s):

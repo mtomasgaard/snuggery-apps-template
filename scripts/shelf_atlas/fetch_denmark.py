@@ -175,6 +175,7 @@ OUTLINE_ALIASES = {"SOUTHARNE": "SYDARNE", "TYRASOUTHEAST": "TYRASE", "TYRASOEST
 
 def _outline_key(name: str) -> str:
     base = re.sub(r"\s*[-–]\s*.*\bpart\b.*$", "", name, flags=re.I)   # 'South Arne - western part'
+    base = re.sub(r"\s*\([^)]*\barea\b[^)]*\)\s*$", "", base, flags=re.I)  # 'Halfdan (Sif area)'
     k = norm_name(base)
     return OUTLINE_ALIASES.get(k, k)
 
@@ -295,6 +296,13 @@ def load(cache: Cache):
         })
     if len(facilities) < 30:
         raise BuildError(f"GEUS platforms: only {len(facilities)}")
+    # a field with production but no outline (Ravn) gets the point of the platform of its name
+    for f in fields.values():
+        if not f["rings"] and not f["point"]:
+            for fa in facilities:
+                if norm_name(fa["name"]).startswith(f["key"]):
+                    f["point"] = (fa["lon"], fa["lat"])
+                    break
     # operator and status: the Agency's tables carry neither, so the operator comes from the
     # nearest operational platform (within 12 km of the outline's centroid) and the status from
     # whether the field produced in the last three reported months.
