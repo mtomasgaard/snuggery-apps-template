@@ -60,21 +60,49 @@ def _png_grey(width: int, height: int, rows) -> bytes:
             + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
 
 
-def build(cache: Cache, bbox, out_png: str):
+TILE_X, TILE_Y = 6.0, 3.0     # degrees; the server reads the source at full resolution per
+                              # request and refuses more than ~98 MB, which a 6°×3° tile stays under
+
+
+def _tile(cache: Cache, x0, y0, x1, y1):
     import numpy as np
     import tifffile
-    x0, y0, x1, y1 = bbox
     url = WCS + "?" + urllib.parse.urlencode({
         "service": "WCS", "version": "1.0.0", "request": "GetCoverage", "coverage": "emodnet:mean",
         "crs": "EPSG:4326", "BBOX": f"{x0},{y0},{x1},{y1}", "format": "image/tiff",
         "interpolation": "nearest", "resx": RES_X, "resy": RES_Y})
-    raw = cache.get(f"global/emodnet_mean_{x0}_{y0}_{x1}_{y1}_{RES_X}_{RES_Y}.tif", url, timeout=600)
+    raw = cache.get(f"global/emodnet/mean_{x0}_{y0}_{x1}_{y1}_{RES_X}_{RES_Y}.tif", url, timeout=600)
     if raw[:4] not in (b"II*\x00", b"MM\x00*"):
-        raise BuildError(f"EMODnet WCS did not return a TIFF: {raw[:200]!r}")
+        raise BuildError(f"EMODnet WCS tile {x0},{y0},{x1},{y1} is not a TIFF: {raw[:300]!r}")
     a = tifffile.imread(io.BytesIO(raw)).astype("float32")
     if a.ndim == 3:
         a = a[..., 0]
-    h, w = a.shape
+    return a
+
+
+def build(cache: Cache, bbox, out_png: str):
+    import numpy as np
+    x0, y0, x1, y1 = bbox
+    w = int(round((x1 - x0) / RES_X))
+    h = int(round((y1 - y0) / RES_Y))
+    a = np.full((h, w), np.nan, dtype="float32")
+    ty = y1
+    n_tiles = 0
+    while ty > y0 + 1e-9:
+        by0 = max(y0, ty - TILE_Y)
+        tx = x0
+        while tx < x1 - 1e-9:
+            bx1 = min(x1, tx + TILE_X)
+            t = _tile(cache, tx, by0, bx1, ty)
+            r0 = int(round((y1 - ty) / RES_Y))
+            c0 = int(round((tx - x0) / RES_X))
+            th = min(t.shape[0], h - r0)
+            tw = min(t.shape[1], w - c0)
+            a[r0:r0 + th, c0:c0 + tw] = t[:th, :tw]
+            n_tiles += 1
+            tx = bx1
+        ty = by0
+    log(f"  emodnet bathymetry: {n_tiles} tiles mosaicked into {w}x{h}")
     if h < 100 or w < 100:
         raise BuildError(f"EMODnet grid is only {w}x{h}")
     depth = -a
