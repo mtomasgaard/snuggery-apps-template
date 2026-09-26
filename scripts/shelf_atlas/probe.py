@@ -32,6 +32,17 @@ def peek(url, ctype, body):
         t = re.sub(r"<[^>]+>", " ", t)
         out.append("    raw: " + re.sub(r"\s+", " ", t)[:6000])
         return out
+    if url.endswith("#js"):
+        t = body.decode("utf-8", "replace")
+        hits = sorted(set(re.findall(r'["\'`]((?:https?:)?/?[^"\'`\s]{0,80}(?:api|Api|API)[^"\'`\s]{0,120})["\'`]', t)))
+        out.append(f"    js size {len(t)}; api-ish strings ({len(hits)}):")
+        for h in hits[:150]:
+            out.append("      " + h[:200])
+        for kw in ("production", "Production", "export", "download", "xlsx", "csv"):
+            idx = [m.start() for m in re.finditer(kw, t)][:6]
+            for i in idx:
+                out.append(f"    {kw}@{i}: " + t[max(0, i - 120): i + 160].replace("\n", " "))
+        return out
     if url.endswith("#rawhtml"):
         out.append("    rawhtml: " + body.decode("utf-8", "replace")[:7000])
         return out
@@ -113,8 +124,12 @@ def peek(url, ctype, body):
                     a = d.get("attributes", {}) if isinstance(d, dict) else {}
                     out.append(f"    dataset: {a.get('name')!r} id={d.get('id')} url={a.get('url')} lic={str(a.get('licenseInfo') or a.get('license'))[:80]!r} recs={a.get('recordCount')}")
                 # WFS/GeoJSON
+                if url.endswith("#js"):
+                    pass
                 if "features" in j:
                     fs = j["features"]
+                    if fs and isinstance(fs[0], dict) and "attributes" in fs[0]:
+                        out.append("    attributes: " + json.dumps(fs[0]["attributes"])[:900])
                     out.append(f"    features: {len(fs)} numberMatched={j.get('numberMatched')} totalFeatures={j.get('totalFeatures')}")
                     if fs:
                         p = fs[0].get("properties", {})
