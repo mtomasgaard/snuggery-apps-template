@@ -9,6 +9,7 @@ run and maintain them.
 shelf-atlas/                    the North Sea app (index.html, app.js, style.css, miniapp.json)
   data/geo.json                 basemap, boundaries, field outlines, pipelines, facilities   (rebuilt weekly)
   data/snapshot.json            fields with monthly production series, sources, ask rows      (rebuilt weekly)
+  data/bathy.png                EMODnet depth raster, 8-bit grey in Web Mercator rows          (rebuilt weekly, rarely changes)
   RESEARCH.md  HANDOFF.md       these documents
 world-oil-gas/                  the world app
   data/world.json               Natural Earth 110m countries (rarely changes)
@@ -36,10 +37,10 @@ Schedules only fire from `main`.
 **Locally.**
 
 ```bash
-python3 -m pip install 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4'
+python3 -m pip install 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4' 'numpy>=2' 'tifffile>=2024'
 python3 -m scripts.shelf_atlas.build_north_sea --out shelf-atlas/data            # all four countries
 python3 -m scripts.shelf_atlas.build_north_sea --countries NO --out /tmp/ns      # one country, elsewhere
-python3 -m scripts.shelf_atlas.build_north_sea --basemap-only --offline           # coast/land/bathymetry only
+python3 -m scripts.shelf_atlas.build_north_sea --basemap-only --offline --no-bathymetry   # coast/land only, no fetch
 python3 -m scripts.shelf_atlas.build_world --out world-oil-gas/data
 ```
 

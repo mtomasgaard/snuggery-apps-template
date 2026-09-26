@@ -51,9 +51,20 @@ pipelines whose fluid is not a hydrocarbon (seawater, chemicals). Coordinates ar
 polyline encoding at four decimals (~6–11 m). Budgets enforced by the build: `geo.json` ≤ 2.0 MB,
 `snapshot.json` ≤ 2.5 MB. The basemap alone (10 m Natural Earth clipped to the box) is 109 KB.
 
-Bathymetry: Natural Earth's 200 m polygons (public domain, 2.5 KB packed) rather than EMODnet or
-GEBCO. They show the one feature that matters at this scale, the Norwegian Trench; a real DEM would
-cost megabytes for shading nobody can read on a phone.
+### Bathymetry
+- **North Sea app: EMODnet Bathymetry DTM** (CC BY 4.0) through its WCS
+  (`https://ows.emodnet-bathymetry.eu/wcs`, coverage `emodnet:mean`, GeoTIFF float32 of mean
+  depth). The server reads the source grid at full resolution for every request and refuses more
+  than ~98 MB, so the box is fetched as 56 tiles of 6°×3° at 0.03°×0.015° (about 2 km) and
+  mosaicked. The pipeline resamples the rows to Web Mercator and writes an **8-bit greyscale PNG**
+  (`shelf-atlas/data/bathy.png`, v = 255·√(depth/3000), 0 = land) that the app tints per theme
+  with a lookup table and draws with one `drawImage`. Budget 1.2 MB. Natural Earth's 200 m
+  polygons are kept as a fallback when the raster is absent.
+- **World app: Natural Earth 1:10m bathymetry** polygons at every depth step from 200 m to
+  10,000 m (public domain), simplified to 400 km² triangles and packed into `world.json`
+  (~250 KB). GEBCO 2026 (public domain, 15 arc-second, 4 GB) was considered and rejected for the
+  world app: a tint at phone scale does not need it, and even a 4-minute downsample is over a
+  megabyte. GEBCO's subset download is a web application, not a stable URL.
 
 ### Units
 Internal: **Sm³ per month** for liquids (oil + condensate + NGL) and for gas, plus Sodir's
