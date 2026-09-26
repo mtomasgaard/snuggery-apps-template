@@ -79,6 +79,9 @@ country choropleth, with the reason on its layer menu and About screen.
 | UK | licence forbids commercial exploitation (NSTA Open User Licence) | see LICENSE |
 | Norway | fields north of 73°N would fall outside the box (none today) | `BBOX` in `build_north_sea.py` |
 | Cross-border | only the units listed in `CROSS_BORDER` (`build_north_sea.py`) are grouped; other same-name matches are listed in `snapshot.matching` and drawn separately | avoid silent bad merges |
+| UK | one-month outliers exist in PPRS (Tern gas, September 2000, ~50× its usual level); the app's colour scale uses each field's second-highest month so one bad month cannot flatten it | source data, left as reported |
+| All | the newest month is uneven: Denmark reports about a month earlier than Norway, and the UK and Netherlands about two months later; the app opens on the newest month every country has reported and says which countries are missing beyond it | source cadence |
+| All | 23 UK production units and one Danish field (Ravn) have no outline and are drawn as a point at the regulator's field centre | source geometry |
 | World fields | none until GOGET is dropped in | GOGET is behind a form |
 | World countries | data year lags one year (EI June edition → OWID) | source cadence |
 

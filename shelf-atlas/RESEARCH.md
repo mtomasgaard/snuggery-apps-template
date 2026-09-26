@@ -209,6 +209,11 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   The Agency's tables carry no operator or status: the operator is taken from the nearest
   operational platform within 12 km (GEUS list), the status from whether the field produced in the
   last three reported months. Discovery years are not published in either source and are left empty.
+- **Number formats differ between years of the monthly report**: the 2018–2019 pages use a comma
+  decimal and a dot for thousands (as their own footer says), later pages a dot decimal and a space
+  for thousands. The first build read `2345,1` as 23451 and put Denmark ten times too high for two
+  years; `_num_dk()` now takes the last separator as the decimal one, and the build refuses any
+  Danish field-month above 3 million m³ or 2 bcm.
 - **Before 2018 there is no monthly per-field series**; the pipeline spreads each year's total
   evenly over its twelve months and sets `monthlyFrom` on every Danish field so the app can say so.
 - **Pipelines: none.** The Agency publishes no pipeline geometry, GEUS has none, and EMODnet's
@@ -237,7 +242,10 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   national gas total for the last full year against 2–120 bcm and stops if the unit assumption is
   wrong. `/rest/field/fields` (608 rows) is the datacenter's own field list, not needed.
 - **Pipelines:** NLOG's WFS has none; **EMODnet Human Activities** `emodnet:pipelines` filtered
-  `country_co='NL'` gives 461 lines with `medium, status, operator, size_in, from_loc, to_loc`.
+  `country_co='NL'` gives 461 lines — including lines the Netherlands *reported* that run entirely
+  in the Norwegian sector (Ula–Ekofisk), which would duplicate Sodir's; the build keeps only lines
+  that touch the Dutch sector (a vertex south of 56°N). The facility layer includes wind farms
+  and geothermal sites, which are dropped, and subsea structures, which are flagged` with `medium, status, operator, size_in, from_loc, to_loc`.
 - **Licence:** NLOG's disclaimer: *"NLOG.NL does not claim any rights (except domain names,
   trademark rights, patents and other intellectual property rights) in respect of information
   provided on or through this site"* — public information under the Mining Act. No formal open
