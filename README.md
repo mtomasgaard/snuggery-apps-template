@@ -75,7 +75,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
-| World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | tiny | nothing (GOGET by hand) |
+| World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 0.7 MB | nothing (GOGET by hand) |
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
 Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
@@ -155,7 +155,7 @@ The North Sea's oil and gas on a map you pan and pinch: every field outline in t
 
 ### World Oil & Gas
 
-Every country's oil and gas production from 1900 to the latest Energy Institute year, as a choropleth with a year scrubber, and — once you drop Global Energy Monitor's extraction tracker into `world-oil-gas/raw/manual/` — every known field as a point sized by production. **Live**: countries rebuilt here after each Statistical Review; fields by hand (the tracker sits behind a form).
+Every country's oil and gas production from 1900 to the latest Energy Institute year, annual or cumulative, as a choropleth with a year scrubber; and 7,055 fields from Global Energy Monitor's extraction tracker (March 2026) that follow the same scrubber: a ring from discovery, filled from first production, sized by the latest rate or by remaining reserves. Filter by status, onshore/offshore and conventional/unconventional; search fields, companies, basins and countries and light up a company's or basin's fields; the tracker's own outlines appear at high zoom, and a country's sheet lists its units against the national figure. **Live**: countries rebuilt here after each Statistical Review; fields by hand (the tracker sits behind a form).
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 

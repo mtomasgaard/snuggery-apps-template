@@ -21,6 +21,9 @@
     <button class="stamp" id="stamp" type="button" aria-label="About this data">Loading&hellip;</button>
   </div>
   <div class="actions">
+    <button class="iconbtn searchbtn" id="btn-search" type="button" aria-label="Search fields, companies, basins and countries" aria-expanded="false" aria-controls="search">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
     <button class="iconbtn unitbtn" id="btn-units" type="button" aria-label="Change units">kboe/d</button>
   </div>
 </header>
@@ -30,6 +33,10 @@
     <button type="button" data-mode="oil" aria-pressed="false">Oil</button>
     <button type="button" data-mode="gas" aria-pressed="false">Gas</button>
     <button type="button" data-mode="total" aria-pressed="true">Oil + Gas</button>
+  </div>
+  <div class="seg small" id="accum" role="group" aria-label="Each year or the total to date">
+    <button type="button" data-accum="annual" aria-pressed="true">Annual</button>
+    <button type="button" data-accum="cumulative" aria-pressed="false">Cumulative</button>
   </div>
 </div>
 
@@ -65,6 +72,16 @@
     </div>
   </div>
 
+  <!-- Search over the map. Results are built as DOM nodes with textContent. -->
+  <div class="search" id="search" role="search" hidden>
+    <div class="search-bar">
+      <input type="search" id="search-input" placeholder="Field, company, basin, country" autocomplete="off"
+             autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="search" aria-controls="search-results" aria-label="Search">
+      <button type="button" class="search-close" id="search-close" aria-label="Close search">&times;</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
   <div class="layers" id="layers" hidden>
     <div class="layers-row">
       <label class="switch" for="chk-fields">
@@ -73,11 +90,40 @@
       </label>
     </div>
     <p class="layers-note" id="fields-note"></p>
+    <div class="layers-row" id="follow-row">
+      <label class="switch" for="chk-follow">
+        <input type="checkbox" id="chk-follow" role="switch" checked>
+        <span>Fields follow the year</span>
+      </label>
+    </div>
     <div class="layers-row" id="status-row">
       <span class="layers-label" id="status-label">Show</span>
       <div class="seg small" id="status-seg" role="group" aria-labelledby="status-label">
         <button type="button" data-status="operating" aria-pressed="true">Operating</button>
         <button type="button" data-status="all" aria-pressed="false">All</button>
+      </div>
+    </div>
+    <div class="layers-row" id="setting-row">
+      <span class="layers-label" id="setting-label">Setting</span>
+      <div class="seg small" id="setting-seg" role="group" aria-labelledby="setting-label">
+        <button type="button" data-setting="all" aria-pressed="true">All</button>
+        <button type="button" data-setting="onshore" aria-pressed="false">Onshore</button>
+        <button type="button" data-setting="offshore" aria-pressed="false">Offshore</button>
+      </div>
+    </div>
+    <div class="layers-row col" id="type-row">
+      <span class="layers-label" id="type-label">Type</span>
+      <div class="seg small" id="type-seg" role="group" aria-labelledby="type-label">
+        <button type="button" data-ftype="all" aria-pressed="true">All</button>
+        <button type="button" data-ftype="conventional" aria-pressed="false">Conventional</button>
+        <button type="button" data-ftype="unconventional" aria-pressed="false">Unconventional</button>
+      </div>
+    </div>
+    <div class="layers-row col" id="size-row">
+      <span class="layers-label" id="size-label">Size fields by</span>
+      <div class="seg small" id="size-seg" role="group" aria-labelledby="size-label">
+        <button type="button" data-size="prod" aria-pressed="true">Production</button>
+        <button type="button" data-size="res" aria-pressed="false">Reserves</button>
       </div>
     </div>
     <div class="layers-row">
@@ -89,6 +135,11 @@
   </div>
 
   <div class="bottomstack">
+  <!-- A company or basin picked in search: only its fields at full strength. -->
+  <div class="hlchip" id="hlchip" hidden>
+    <span class="hlchip-text" id="hlchip-text"></span>
+    <button type="button" id="hlchip-x" aria-label="Clear highlight">&times;</button>
+  </div>
   <div class="legend" id="legend" aria-label="Map key" hidden>
     <div class="legend-head"><span id="legend-title"></span><span id="legend-unit"></span></div>
     <div class="legend-bar" id="legend-bar"></div>
@@ -121,7 +172,10 @@
 <footer class="player">
   <div class="time-row">
     <div class="valid" id="year-label">&mdash;</div>
-    <div class="lead" id="year-sum">&nbsp;</div>
+    <div class="leads">
+      <div class="lead" id="year-sum">&nbsp;</div>
+      <div class="lead" id="year-fields" hidden></div>
+    </div>
   </div>
   <div class="controls">
     <button type="button" class="pbtn" id="btn-prev" aria-label="Previous year">
