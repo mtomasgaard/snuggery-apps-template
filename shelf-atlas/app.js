@@ -150,14 +150,14 @@ const monthLabel = (mi) => `${MONTHS[mi % 12]} ${monthYear(mi)}`;
 const monthShort = (mi) => `${MON3[mi % 12]} ${monthYear(mi)}`;
 function daysIn(mi) { return new Date(Date.UTC(monthYear(mi), (mi % 12) + 1, 0)).getUTCDate(); }
 
-/* Names arrive in the regulators' capitals. Title-case words of letters; a
- * name with a digit in it is a licence-block name (K15-FA, L10-CDA) and stays
- * as it is, as do one- and two-letter words (Ekofisk VB, Tommeliten A). */
+/* Names arrive in the regulators' capitals. Title-case words of letters. A
+ * name that starts with a licence block (K15-FA, L10-CDA) stays as it is, as
+ * do words with digits and one- and two-letter words (Ekofisk VB, Nuggets N4). */
 function titleCase(s) {
   if (!s) return '';
-  if (/\d/.test(s)) return String(s);
+  if (/^\S*\d/.test(s)) return String(s);
   return String(s).split(/(\s+|-|\/)/).map((w) => {
-    if (w.length <= 2) return w;
+    if (w.length <= 2 || /\d/.test(w)) return w;
     if (/^[IVX]+$/.test(w)) return w;          // roman numerals: Brent II, Gyda III
     return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
   }).join('');
@@ -366,7 +366,7 @@ function mediumClass(m) {
   if (gas && !oil) return 1;
   return 2;
 }
-const PIPE_W = [0.8, 1.4, 2.2];           // CSS px at the zoom where pipelines appear
+const PIPE_W = [0.7, 1.2, 1.9];           // CSS px at the zoom where pipelines appear
 function widthClass(d) { return !isNum(d) || d < 14 ? 0 : d < 26 ? 1 : 2; }
 const FLOATING = /FPSO|FSO|FSU|FLOAT|SEMI|SHIP|TLP|SPAR|VESSEL|BUOY|MOPU/i;
 /* The regulators' installation layers also carry wind turbines and geothermal
@@ -820,7 +820,7 @@ function drawStatic(c) {
   c.setLineDash([]);
   if (pipesOn()) {
     const grow = clamp(Math.sqrt(zoomRel() / Z_PIPES), 1, 1.8);
-    c.globalAlpha = 0.9;
+    c.globalAlpha = 0.75;
     for (let ci = 0; ci < CC.length; ci++) {
       if (!ccOn[CC[ci]]) continue;
       for (let mc = 2; mc >= 0; mc--) {
@@ -1141,10 +1141,9 @@ function hitTest(sx, sy) {
     }
     if (best >= 0) return { type: 'fac', i: best };
   }
-  if (pipesOn()) {
-    const p = nearestPipe(sx, sy, 5);
-    if (p != null) return { type: 'pipe', i: p };
-  }
+  // Fields come before pipelines: pipelines converge on the platforms inside
+  // fields, and a tap there means the field. A pipeline is picked along its
+  // run between fields, which is most of its length.
   if (model) {
     // circles first, smallest on top; then outlines, smallest area wins
     const hi = domain().hi, U = model.units;
@@ -1351,6 +1350,7 @@ function setMonth(m, fromPlay) {
 function updateTimeUI() {
   $('month-label').textContent = model ? monthLabel(month) : '—';
   slider.value = String(month);
+  slider.setAttribute('aria-valuetext', model ? monthLabel(month) : 'no data');
   const tot = $('total');
   tot.textContent = '';
   if (!model) return;
@@ -1364,7 +1364,8 @@ function updateTimeUI() {
   const early = on.filter((c) => model.ccFirst[c] != null && month < model.ccFirst[c]);
   const note = [late.length ? `${late.join(', ')} not reported yet` : '',
     ...early.map((c) => `${c} figures from ${monthYear(model.ccFirst[c])}`)].filter(Boolean).join(' · ');
-  tot.append(note ? `${who}${note} · ` : `${who}${monthCount} producing · `);
+  if (note && late.length + early.length === on.length) { tot.textContent = note; return; }
+  tot.append(note ? `${note} · ` : `${who}${monthCount} producing · `);
   tot.append(el('b', null, fmt3(monthTotal * U_().f)));
   tot.append(` ${U_().rate}`);
 }
