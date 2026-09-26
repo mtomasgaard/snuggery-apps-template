@@ -593,3 +593,10 @@ button {
   .player { padding-left: 20px; padding-right: 20px; }
   .sheet { left: auto; width: 400px; right: 10px; }
 }
+
+/* The sheet's three heights: a field opens at half so the map above it and
+   the player below stay in use; the grip takes it to full or closes it. A
+   platform, pipeline or border opens only as tall as its few lines. */
+.sheet[data-mode="half"] { height: 50%; }
+.sheet[data-mode="full"] { height: calc(100% - 6px); }
+.sheet[data-mode="peek"] { max-height: 52%; }

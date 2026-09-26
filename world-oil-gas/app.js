@@ -16,8 +16,12 @@
  * { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
  *   "countries": [{ "iso3": "NOR", "name": "Norway", "adm0": "NOR",
  *                   "c": [17.8, 68.5],               // label point, lon/lat
- *                   "rings": ["<ring>", …] }, …] }   // all rings of the country;
+ *                   "rings": ["<ring>", …] }, …],    // all rings of the country;
  *                                                     // filled even-odd
+ *   "bathymetry": [{ "depth": 10000, "rings": ["<ring>", …] }, …,   // optional; Natural
+ *                  { "depth": 200,   "rings": [ … ] }] }            // Earth 1:10m depth bands,
+ *   // deepest first in the file. Each band is the area DEEPER than `depth`, so
+ *   // they nest; the app paints them shallowest first so the deepest tint wins.
  *
  * ── data/snapshot.json — annual production by country (rebuilt yearly) ─────
  * { "schema": 1, "generatedAt": "…", "app": "World Oil & Gas",
@@ -27,11 +31,16 @@
  *   "world": { "iso3": "OWID_WRL", "name": "World", "y0": 1900, "oil": [ … ], "gas": [ … ] },
  *   "countries": [{ "iso3": "NOR", "name": "Norway", "y0": 1900,
  *                   "oil": [GWh|null, …], "gas": [GWh|null, …] }, …],
+ *                                                     // includes former states with no
+ *                                                     // outline: OWID_USS, OWID_CZS, OWID_YGS
+ *   "historical": { "OWID_USS": "USSR (to 1991; no outline)", … },   // optional labels
+ *   "patched": [{ "iso3": "NOR", "country": "Norway", "year": 1998, "series": "gas",
+ *                 "note": "…" }, …],                  // optional: source holes set to null
  *   "ask": [ … ] }                                   // NEVER read by this app
  * `oil[k]` is the value for year `y0 + k`; `null` is "no data", not zero.
- * `world` may be null (it is in the 2026-09 build); the app then measures a
- * country's share against the sum of every country that has a value that
- * year, and says so wherever a share is printed.
+ * `world` is the OWID_WRL series and is what shares are measured against. Should
+ * a future build write null there, the app falls back to the sum of every
+ * series that has a value that year and says so wherever a share is printed.
  *
  * ── data/fields.json — GOGET extraction units (manual drop-in) ─────────────
  * { "schema": 1, "available": true|false, "generatedAt": "…",
@@ -126,14 +135,18 @@ let pal = null;
 let hatch = null;               // CanvasPattern for "no data"
 function buildPalette() {
   pal = darkMq.matches ? {
-    outside: '#0b0e13', ocean: '#0e131a', none: '#333841', border: '#0b0e13',
+    outside: '#0b0e13', ocean: '#16202c', none: '#333841', border: '#0b0e13',
+    // Sea: the shelf (0–200 m) is the ocean fill; deeper bands step down to
+    // near-black navy. Kept low in chroma so the violet ramp stays the loudest thing.
+    deep: [[22, 32, 44], [8, 12, 19]],
     nodata: '#22262e', hatchInk: 'rgba(150,162,178,0.40)', sel: '#ffffff',
     label: '#eef2f7', halo: 'rgba(11,14,19,0.85)',
     ramp: ['#3e366c', '#4f448c', '#5f53ab', '#7065c5', '#8279db', '#948eeb', '#a7a5f9', '#bcbcff'],
     fuel: { oil: '#d95926', gas: '#3987e5', both: '#199e70', other: '#8a94a1' },
     ring: 'rgba(11,14,19,0.9)', grid: 'rgba(255,255,255,0.10)',
   } : {
-    outside: '#eef0f4', ocean: '#d6dee8', none: '#f4f2ed', border: '#ffffff',
+    outside: '#eef0f4', ocean: '#e2e9f1', none: '#f4f2ed', border: '#ffffff',
+    deep: [[217, 226, 236], [170, 188, 209]],
     nodata: '#e9e7e2', hatchInk: 'rgba(84,92,108,0.45)', sel: '#14181f',
     label: '#14181f', halo: 'rgba(255,255,255,0.85)',
     ramp: ['#e5e0ff', '#c8c0f5', '#aba0e9', '#8f81da', '#7464c5', '#5a4aab', '#42328a', '#2b1e66'],
@@ -141,8 +154,19 @@ function buildPalette() {
     ring: 'rgba(255,255,255,0.95)', grid: 'rgba(0,0,0,0.10)',
   };
   hatch = null;
+  bathyStyles = null;
 }
+let bathyStyles = null;
 buildPalette();
+
+/* One fill per depth band: 200 m is the first step below the shelf colour,
+ * 6000 m and deeper the last, linear in depth between them. */
+function bathyStyle(depth) {
+  const t = clamp((depth - 200) / 5800, 0, 1);
+  const [a, b] = pal.deep;
+  const c = a.map((v, i) => Math.round(v + (b[i] - v) * t));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
 
 function hatchPattern() {
   if (hatch) return hatch;
@@ -232,6 +256,15 @@ function checkWorld(w) {
     if (!c || !isStr(c.iso3) || typeof c.name !== 'string') return `countries[${k}] has no iso3 or name`;
     if (!Array.isArray(c.rings) || !c.rings.every(isStr)) return `countries[${k}] (${c.iso3}) has no rings`;
   }
+  if (w.bathymetry != null) {
+    if (!Array.isArray(w.bathymetry)) return '"bathymetry" is not a list';
+    for (let k = 0; k < w.bathymetry.length; k++) {
+      const b = w.bathymetry[k];
+      if (!b || !(Number.isFinite(b.depth) && b.depth > 0) || !Array.isArray(b.rings) || !b.rings.every(isStr)) {
+        return `bathymetry[${k}] has no positive depth or no rings`;
+      }
+    }
+  }
   return '';
 }
 
@@ -261,6 +294,8 @@ function checkSnapshot(s) {
     const why = series(s.world, 'world');
     if (why) return why;
   }
+  if (s.historical != null && (typeof s.historical !== 'object' || Array.isArray(s.historical))) return '"historical" is not an object';
+  if (s.patched != null && !Array.isArray(s.patched)) return '"patched" is not a list';
   return '';
 }
 
@@ -308,7 +343,7 @@ let W = 0, H = 0, dpr = 1;
 let renderPending = false;
 
 const canvas = $('map');
-const ctx = canvas.getContext('2d');
+let ctx = canvas.getContext('2d');   // swapped briefly while the sea cache is painted
 const wrap = $('map-wrap');
 const slider = $('slider');
 
@@ -356,7 +391,44 @@ function buildGeo(w) {
       ly: hasC ? latToY(c.c[1]) : (y0 + y1) / 2,
     };
   });
-  return { countries, borders, source: typeof w.source === 'string' ? w.source : '' };
+  // The sea floor is decoration under the data: if it is broken, say so and
+  // draw the countries anyway rather than refusing the whole file.
+  let bathy = null, bathyError = '';
+  try { bathy = buildBathy(w); } catch (e) { bathyError = e.message; }
+  return { countries, borders, bathy, bathyError, source: typeof w.source === 'string' ? w.source : '' };
+}
+
+/* Depth bands, each the area DEEPER than its depth (Natural Earth's bands
+ * nest: the 200 m band contains all the others). So they are painted
+ * shallowest first and the deepest tint lands on top, whatever order the file
+ * lists them in. One Path2D per band, built once. The file's bands are
+ * already simplified (~53k points in all), and the painted sea is cached
+ * between frames (see drawSea), so no level-of-detail step is needed. */
+function buildBathy(w) {
+  if (!Array.isArray(w.bathymetry) || !w.bathymetry.length) return null;
+  const bands = [...w.bathymetry].sort((a, b) => a.depth - b.depth).map((b) => {
+    const path = new Path2D();
+    let points = 0;
+    for (const enc of b.rings) {
+      const ll = decodePolyline(enc, w.factor);
+      if (ll.length < 8) continue;
+      const xy = new Float32Array(ll.length);
+      for (let i = 0; i < ll.length; i += 2) { xy[i] = lonToX(ll[i]); xy[i + 1] = latToY(ll[i + 1]); }
+      points += addRing(path, xy);
+    }
+    return { depth: b.depth, path, points };
+  });
+  return bands;
+}
+function addRing(path, xy) {
+  const sub = new Path2D();
+  for (let i = 0; i < xy.length; i += 2) {
+    const px = xy[i] * PATH_K, py = xy[i + 1] * PATH_K;
+    if (i === 0) sub.moveTo(px, py); else sub.lineTo(px, py);
+  }
+  sub.closePath();
+  path.addPath(sub);
+  return xy.length / 2;
 }
 
 function buildProd(s) {
@@ -411,13 +483,25 @@ function worldAt(m, y) {
   return { v: yi >= 0 && yi < prod.sum[m].length ? prod.sum[m][yi] : null, label: 'countries listed' };
 }
 
+/* Former states (USSR, Czechoslovakia, Yugoslavia) have series and no
+ * outline. They count in sums and ranks like any other series; About lists
+ * them under their own heading rather than as matching failures. */
+function historicalLabels() {
+  const h = prod && prod.s.historical;
+  const out = {};
+  if (h && typeof h === 'object') for (const k in h) if (isStr(h[k])) out[k] = h[k];
+  return out;
+}
+
 function buildLink() {
   if (!geo || !prod) return null;
   const series = geo.countries.map((c) => prod.byIso.get(c.iso3) || null);
   const polys = new Set(geo.countries.map((c) => c.iso3));
-  const noPolygon = prod.s.countries.filter((c) => !polys.has(c.iso3));
+  const hist = historicalLabels();
+  const historical = prod.s.countries.filter((c) => !polys.has(c.iso3) && hist[c.iso3]);
+  const noPolygon = prod.s.countries.filter((c) => !polys.has(c.iso3) && !hist[c.iso3]);
   const noData = geo.countries.filter((c, i) => !series[i]);
-  return { series, noPolygon, noData };
+  return { series, noPolygon, noData, historical };
 }
 
 /* The class of every polygon for one (mode, unit, year): 0 none, 1–8 a ramp
@@ -592,16 +676,60 @@ function render() {
   renderPending = false;
   if (!W || !H) return;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.fillStyle = pal.outside;
-  ctx.fillRect(0, 0, W, H);
-  const top = Math.max(0, worldToScreenY(0)), bottom = Math.min(H, worldToScreenY(1));
-  ctx.fillStyle = pal.ocean;
-  ctx.fillRect(0, top, W, bottom - top);
+  drawSea();
   if (!geo) return;
   drawCountries();
   if (showLabels) drawLabels();
   if (fieldsDrawn()) drawFields();
   drawFieldSelection();
+}
+
+/* The sea (background, ocean, depth bands) depends only on the view and the
+ * theme, so it is painted into an offscreen canvas and reused while the year,
+ * mode or unit changes: scrubbing then costs one blit plus the country fills. */
+let seaCache = null;
+function drawSea() {
+  const key = [view.cx, view.cy, view.scale, W, H, dpr, darkMq.matches, geo ? geo.countries.length : 0,
+               geo && geo.bathy ? geo.bathy.length : 0].join('|');
+  if (!seaCache || seaCache.cv.width !== canvas.width || seaCache.cv.height !== canvas.height) {
+    const cv = document.createElement('canvas');
+    cv.width = canvas.width; cv.height = canvas.height;
+    seaCache = { cv, c: cv.getContext('2d'), key: '' };
+  }
+  if (seaCache.key !== key || seaCache.geo !== geo) {
+    const main = ctx;
+    ctx = seaCache.c;                         // the drawing helpers all paint into `ctx`
+    try {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = pal.outside;
+      ctx.fillRect(0, 0, W, H);
+      const top = Math.max(0, worldToScreenY(0)), bottom = Math.min(H, worldToScreenY(1));
+      ctx.fillStyle = pal.ocean;
+      ctx.fillRect(0, top, W, bottom - top);
+      if (geo && geo.bathy) drawBathy();
+    } finally { ctx = main; }
+    seaCache.key = key;
+    seaCache.geo = geo;
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(seaCache.cv, 0, 0);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawBathy() {
+  if (!bathyStyles) {
+    bathyStyles = geo.bathy.map((b) => bathyStyle(b.depth));
+  }
+  for (const k of worldCopies()) withWorldTransform(k, () => {
+    let last = pal.ocean;
+    for (let i = 0; i < geo.bathy.length; i++) {
+      const style = bathyStyles[i];
+      if (style === last) continue;          // 7000 m+ share the 6000 m tint: nothing to add
+      ctx.fillStyle = style;
+      ctx.fill(geo.bathy[i].path, 'evenodd');
+      last = style;
+    }
+  });
 }
 
 function drawCountries() {
@@ -738,6 +866,7 @@ function creditsList() {
   const out = [];
   if (prod) for (const s of prod.s.sources) if (s && isStr(s.attribution)) out.push(s.attribution);
   if (!out.some((a) => /natural earth/i.test(a)) && geo && geo.source) out.push(geo.source);
+  if (geo && geo.bathy && !out.some((a) => /bathymetry/i.test(a))) out.push('Bathymetry: Natural Earth');
   if (fieldsDrawn() && fields.raw.source && isStr(fields.raw.source.attribution)) out.push(fields.raw.source.attribution);
   return out;
 }
@@ -990,6 +1119,16 @@ function countrySheet(body, name, c) {
     notes.push(`${missing} has no data for ${year}, so the total counts ${missing === 'Oil' ? 'gas' : 'oil'} only (hatched over its colour on the map).`);
   }
   if (!prod.s.world) notes.push('Shares are of the sum of every country listed that year: the file has no world total.');
+  // Hatched in a year when a former state (USSR, Yugoslavia…) carries the
+  // production instead: say which, since those have no outline to tap.
+  if (parts[mode].v == null && link && link.historical.length) {
+    const hist = historicalLabels();
+    const with_ = link.historical
+      .map((h) => ({ h, r: seriesAt(h, mode, year, { v: null, partial: false }) }))
+      .filter((x) => x.r.v != null && x.r.v > 0)
+      .map((x) => `${hist[x.h.iso3].replace(/\s*\(.*\)$/, '') || x.h.name} ${fmtNum(toUnit(x.r.v))} ${u}`);
+    if (with_.length) notes.push(`No ${year} figure of its own. Former states with no outline did produce that year: ${with_.join('; ')}.`);
+  }
   const span = seriesSpan(c);
   if (span) notes.push(span);
 
@@ -1155,7 +1294,7 @@ function showAbout() {
       ['Updated', fmtFull.format(new Date(prod.s.generatedAt))],
       ['Years', `${prod.Y0}–${prod.Y1}`],
       ['Series', `${prod.s.countries.length} countries, in ${prod.s.units.series || 'GWh per year'}`],
-      ['World total', prod.s.world ? 'from the file' : 'not in the file; shares use the sum of listed countries'],
+      ['World total', prod.s.world ? `${prod.s.world.name || 'World'} series (${prod.s.world.iso3 || 'world'})` : 'not in the file; shares use the sum of listed countries'],
     ]);
     h3('Units');
     p(`kboe/d is thousands of barrels of oil equivalent a day: GWh ÷ 1000 × ${nf0.format(prod.s.units.boePerTWh)} boe per TWh ÷ 365 ÷ 1000. `
@@ -1179,7 +1318,11 @@ function showAbout() {
   if (geo && geo.source && !(prod && prod.s.sources.some((s) => s && /natural earth/i.test(s.name || '')))) {
     src('Country outlines', [['Source', geo.source]]);
   } else if (geo && geo.source) {
-    p(`Outlines in data/world.json: ${geo.source}.`, 'muted');
+    p(`Outlines${geo.bathy ? ' and sea-floor depth bands' : ''} in data/world.json: ${geo.source}.`, 'muted');
+  }
+  if (geo && geo.bathy) {
+    p(`Bathymetry: Natural Earth. ${geo.bathy.length} depth bands from ${geo.bathy[0].depth} m to ${geo.bathy[geo.bathy.length - 1].depth} m, `
+      + 'shaded under the countries for orientation only.', 'muted');
   }
   if (fields && fields.available && fields.raw.source) {
     const s = fields.raw.source;
@@ -1190,8 +1333,15 @@ function showAbout() {
 
   if (link) {
     h3('Matching countries to outlines');
+    const withOutline = prod.s.countries.length - link.noPolygon.length - link.historical.length;
     p(`Series are matched to Natural Earth outlines by ISO 3166 alpha-3 code. `
-      + `${prod.s.countries.length - link.noPolygon.length} of ${prod.s.countries.length} series have an outline.`);
+      + `${withOutline} of ${prod.s.countries.length} series have an outline.`);
+    if (link.historical.length) {
+      const hist = historicalLabels();
+      p(`Former states (${link.historical.length}) — no outline; counted in the world total and in ranks, `
+        + 'while their successor states are hatched before their own series begin:', 'muted');
+      p(link.historical.map((c) => `${hist[c.iso3]} (${c.iso3})`).join(', '));
+    }
     if (link.noPolygon.length) {
       p(`Series with no outline at this scale (${link.noPolygon.length}) — in the data, but not on the map:`, 'muted');
       p(link.noPolygon.map((c) => `${c.name} (${c.iso3})`).join(', '));
@@ -1200,6 +1350,18 @@ function showAbout() {
       p(`Outlines with no series (${link.noData.length}) — always hatched:`, 'muted');
       p(link.noData.map((c) => `${c.name} (${c.iso3})`).join(', '));
     }
+  }
+
+  if (prod && Array.isArray(prod.s.patched) && prod.s.patched.length) {
+    const ps = prod.s.patched.filter((x) => x && typeof x === 'object');
+    h3('Corrections');
+    p(`${ps.length} source ${ps.length === 1 ? 'hole' : 'holes'} set to no data by the pipeline:`, 'muted');
+    const ul = el('ul');
+    for (const x of ps) {
+      ul.append(el('li', null, [x.country || x.iso3, x.series, x.year].filter((v) => v != null && v !== '').join(' ')
+        + (isStr(x.note) ? ` — ${x.note}` : '')));
+    }
+    b.append(ul);
   }
 
   if (prod) {
@@ -1228,7 +1390,9 @@ function dataNotes() {
   const s = prod.s;
   if (!s.world) notes.push('The file carries no world series (world is null), so shares and the total under the map are the sum of the countries listed for that year.');
   const late = [], early = [];
+  const hist = historicalLabels();
   for (const c of s.countries) {
+    if (hist[c.iso3]) continue;
     let peak = 0, first = null, last = null;
     for (let i = 0; i < c.oil.length; i++) {
       const t = (c.oil[i] || 0) + (c.gas[i] || 0);
@@ -1239,7 +1403,7 @@ function dataNotes() {
     if (first != null && first > prod.Y0 + 5) late.push(`${c.name} (${first})`);
     if (last != null && last < prod.Y1) early.push(`${c.name} (${last})`);
   }
-  if (late.length) notes.push(`Major producers whose series start late (first year in brackets); earlier years are hatched and left out of the sums: ${late.join(', ')}.`);
+  if (late.length) notes.push(`Major producers whose series start late (first year in brackets); earlier years are hatched on the map: ${late.join(', ')}.`);
   // The successor states' series start in 1985; if the file has no series
   // for the Soviet Union itself, its production before then is simply absent.
   const rus = prod.byIso.get('RUS');
@@ -1288,7 +1452,9 @@ async function loadAll() {
         if (why) throw new Error(` is not a world outline file: ${why}.`);
         try { geo = buildGeo(w); } catch (e) { throw new Error(` could not be decoded: ${e.message}.`); }
         labelOrderCache = null;
-        setProblem('world', FILES.world, null);
+        bathyStyles = null;
+        setProblem('world', FILES.world, geo.bathyError
+          ? ` has depth bands that could not be decoded (${geo.bathyError}); the sea is drawn flat.` : null);
       } catch (e) {
         geo = null;
         setProblem('world', FILES.world, `${e.message} No country outlines, so nothing can be coloured.`);
@@ -1573,4 +1739,5 @@ window.__wog = {
   setYear, setMode, setUnits, loadAll, selectAt,
   project(lon, lat) { return [worldToScreenX(lonToX(lon)), worldToScreenY(latToY(lat))]; },
   decodePolyline,
+  get bathy() { return geo && geo.bathy ? geo.bathy.map((b) => ({ depth: b.depth, points: b.points })) : null; },
 };

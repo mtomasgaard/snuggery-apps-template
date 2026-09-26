@@ -92,6 +92,9 @@ const Z_LABELS = 1.35;          // zoom (× the whole-sea view) at which field n
 const Z_PIPES = 1.6;            // … pipelines
 const Z_FACS = 2.4;             // … platforms and subsea structures
 const Z_MIN = 0.7, Z_MAX = 400;
+/* The home view is the North Sea proper, not the whole bbox: the bbox may
+ * reach the Norwegian and Barents Seas, which stay a pan away. */
+const HOME = [-4, 51, 10, 62];
 const R_MAX = 17;               // CSS px radius of the circle for the largest rate on the scale
 const DOMAIN_DECADES = 3.5;     // the colour scale covers this many powers of ten below the peak
 const SPEEDS = [3, 6, 12, 24, 48];    // months per second
@@ -115,6 +118,9 @@ const THEMES = {
     shutFill: 'rgba(150,157,168,.6)', shutStroke: 'rgba(90,98,110,.75)', ring: 'rgba(255,255,255,.95)',
     pipes: ['#008300', '#4a3aa7', '#7d8794'], fac: '#14181f', facStroke: '#f7f5f0', sub: '#4a5162',
     label: '#14181f', halo: 'rgba(247,245,240,.92)', sel: '#2f6df6', grid: '#dfe4ec', ink: '#14181f', dim: '#4a5162',
+    // depth ramp for the bathymetry raster, keyed by its grey value (√depth): pale shallows to mid blue
+    depth: [[1, '#e4eef6'], [40, '#d2e2ef'], [80, '#bcd2e6'], [150, '#9cbbd9'], [255, '#7ea2c7']],
+    bathyLine: 'rgba(90,120,150,.35)',
   },
   dark: {
     ramp: ['#5e2a12', '#9a3e16', '#d95926', '#f49a60', '#ffdcbd'],
@@ -123,6 +129,8 @@ const THEMES = {
     shutFill: 'rgba(95,104,118,.65)', shutStroke: 'rgba(150,160,175,.75)', ring: 'rgba(8,12,18,.9)',
     pipes: ['#2fae4a', '#9085e9', '#8a95a3'], fac: '#e8ecf2', facStroke: '#0f1a26', sub: '#9aa6b5',
     label: '#e8ecf2', halo: 'rgba(12,17,24,.9)', sel: '#5b8eff', grid: '#262e39', ink: '#e8ecf2', dim: '#9aa6b5',
+    depth: [[1, '#182a3d'], [40, '#132336'], [80, '#0e1c2d'], [150, '#0a1523'], [255, '#060d17']],
+    bathyLine: 'rgba(120,150,180,.25)',
   },
 };
 
@@ -193,6 +201,7 @@ function fmt3(v) {
   let t;
   if (d === 1) t = ax >= 10 ? String(Math.round(x)) : ax >= 1 ? x.toFixed(1) : x.toFixed(2);
   else t = ax >= 100 ? String(Math.round(x)) : ax >= 10 ? x.toFixed(1) : x.toFixed(2);
+  if (t.includes('.')) t = t.replace(/\.?0+$/, '');     // 1.00k reads as 1k
   return t + s;
 }
 /* Volumes in words, for cumulative totals: "720 million Sm³". */
@@ -410,6 +419,69 @@ function buildBase(g) {
   return B;
 }
 
+/* The optional bathymetry raster (geo.bathymetry): an 8-bit grey PNG beside
+ * geo.json, 0 = land or no data, grey = 255 × √(depth / 3000 m). It is read
+ * once per geo.json, kept as grey bytes, and tinted into a canvas once per
+ * theme. Absent key or file: the map draws the 200 m polygons instead, and
+ * says nothing, because the raster is decoration, not data. */
+let bathy = null;
+async function loadBathy(meta) {
+  if (!meta || typeof meta !== 'object') { bathy = null; return; }
+  const b = meta.bounds;
+  if (!isStr(meta.file) || !/^[\w.-]+\.png$/i.test(meta.file) || !Array.isArray(b) || b.length !== 4 || !b.every(isNum)) {
+    console.warn('geo.json bathymetry entry is not usable; drawing without it');
+    bathy = null;
+    return;
+  }
+  try {
+    const r = await fetch(`./data/${meta.file}`, { cache: 'no-store' });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const blob = await r.blob();
+    let src;
+    if (window.createImageBitmap) src = await createImageBitmap(blob);
+    else {
+      src = new Image();
+      const url = URL.createObjectURL(blob);
+      await new Promise((ok, no) => { src.onload = ok; src.onerror = () => no(new Error('not a PNG')); src.src = url; });
+      URL.revokeObjectURL(url);
+    }
+    const w = src.width, h = src.height;
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    const c = cv.getContext('2d');
+    c.drawImage(src, 0, 0);
+    const d = c.getImageData(0, 0, w, h).data;
+    const grey = new Uint8Array(w * h);
+    for (let i = 0; i < grey.length; i++) grey[i] = d[i * 4];
+    bathy = { w, h, grey, tinted: {}, X0: b[0], X1: b[2], Y0: mercY(b[3]), Y1: mercY(b[1]) };
+  } catch (e) {
+    console.warn(`data/${meta.file} could not be drawn (${e.message}); drawing without it`);
+    bathy = null;
+  }
+}
+function bathyCanvas() {
+  if (!bathy) return null;
+  if (bathy.tinted[P.name]) return bathy.tinted[P.name];
+  const stops = P.depth.map(([v, h]) => [v, parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]);
+  const lut = new Uint32Array(256);            // little-endian RGBA packed
+  for (let v = 1; v < 256; v++) {
+    let j = 0;
+    while (j < stops.length - 2 && v > stops[j + 1][0]) j++;
+    const a = stops[j], z = stops[j + 1], t = clamp((v - a[0]) / (z[0] - a[0]), 0, 1);
+    const ch = (i) => Math.round(a[i] + (z[i] - a[i]) * t);
+    lut[v] = (255 << 24) | (ch(3) << 16) | (ch(2) << 8) | ch(1);
+  }
+  const cv = document.createElement('canvas');
+  cv.width = bathy.w; cv.height = bathy.h;
+  const c = cv.getContext('2d');
+  const img = c.createImageData(bathy.w, bathy.h);
+  const px = new Uint32Array(img.data.buffer);
+  for (let i = 0; i < px.length; i++) px[i] = lut[bathy.grey[i]];
+  c.putImageData(img, 0, 0);
+  bathy.tinted[P.name] = cv;
+  return cv;
+}
+
 function monthly(F, q, m) {
   if (q === 'oe') return monthly(F, 'liq', m) + monthly(F, 'gas', m) / 1000;
   const a = q === 'liq' ? F.liq : F.gas;
@@ -442,6 +514,13 @@ function buildModel(s, B) {
     M.byId.set(F.id, F);
   });
   for (const id of B.outlines.keys()) if (!M.byId.has(id)) M.orphanOutlines++;
+  // Each regulator reports on its own lag. The newest month that every
+  // country with figures has reported is where the slider starts; later
+  // months are marked as partial rather than shown as a collapse.
+  M.ccLast = {};
+  for (const F of M.fields) if (F.end != null) M.ccLast[F.cc] = Math.max(M.ccLast[F.cc] ?? -1, F.end - 1);
+  const lasts = Object.values(M.ccLast);
+  M.defaultMonth = lasts.length ? clamp(Math.min(...lasts), 0, s.lastMonth) : s.lastMonth;
   for (const g of s.groups || []) {
     const members = g.members.map((id) => M.byId.get(id));
     const G = { id: g.id, name: g.name || titleCase(g.id), note: g.note, members };
@@ -594,9 +673,20 @@ function computeMonth() {
 
 /* ── view: Web Mercator, k CSS px per degree, t the screen offset ────────── */
 
+let kMin = 0.5;
+function homeBox() {
+  // the North Sea proper, cut to the data's own bbox should it ever be smaller
+  const b = base.bbox;
+  const lon0 = Math.max(HOME[0], b[0]), lat0 = Math.max(HOME[1], b[1]);
+  const lon1 = Math.min(HOME[2], b[2]), lat1 = Math.min(HOME[3], b[3]);
+  return lon1 > lon0 && lat1 > lat0 ? [lon0, mercY(lat1), lon1, mercY(lat0)] : [base.X0, base.Y0, base.X1, base.Y1];
+}
 function computeFit() {
   if (!base) { fitK = 1; return; }
-  fitK = Math.min(W / (base.X1 - base.X0), H / (base.Y1 - base.Y0)) * 0.98;
+  const h = homeBox();
+  fitK = Math.min(W / (h[2] - h[0]), H / (h[3] - h[1])) * 0.98;
+  // zoomed right out, the whole bbox fits, however far north it reaches
+  kMin = Math.min(fitK * Z_MIN, Math.min(W / (base.X1 - base.X0), H / (base.Y1 - base.Y0)) * 0.95);
 }
 function zoomRel() { return view.k / fitK; }
 function centerOn(X, Y, k) {
@@ -606,11 +696,12 @@ function centerOn(X, Y, k) {
 }
 function home() {
   if (!base) return;
-  centerOn((base.X0 + base.X1) / 2, (base.Y0 + base.Y1) / 2, fitK);
+  const h = homeBox();
+  centerOn((h[0] + h[2]) / 2, (h[1] + h[3]) / 2, fitK);
 }
 function clampView() {
   if (!base) return;
-  const k = clamp(view.k, fitK * Z_MIN, fitK * Z_MAX);
+  const k = clamp(view.k, kMin, fitK * Z_MAX);
   const cx = clamp((W / 2 - view.tx) / view.k, base.X0, base.X1);
   const cy = clamp((H / 2 - view.ty) / view.k, base.Y0, base.Y1);
   centerOn(cx, cy, k);
@@ -625,7 +716,7 @@ function restoreView() {
 }
 function zoomAt(sx, sy, f) {
   const X = (sx - view.tx) / view.k, Y = (sy - view.ty) / view.k;
-  const k = clamp(view.k * f, fitK * Z_MIN, fitK * Z_MAX);
+  const k = clamp(view.k * f, kMin, fitK * Z_MAX);
   view.k = k;
   view.tx = sx - X * k;
   view.ty = sy - Y * k;
@@ -698,8 +789,18 @@ function drawStatic(c) {
   worldTf(c);
   c.fillStyle = P.sea;
   c.fillRect(base.X0, base.Y0, base.X1 - base.X0, base.Y1 - base.Y0);
-  c.fillStyle = P.bathy;
-  c.fill(base.bathy, 'evenodd');
+  const bc = bathyCanvas();
+  if (bc) {
+    // Rows are already uniform in Mercator y, so one stretch places it.
+    c.imageSmoothingEnabled = true;
+    c.drawImage(bc, bathy.X0, bathy.Y0, bathy.X1 - bathy.X0, bathy.Y1 - bathy.Y0);
+    c.strokeStyle = P.bathyLine;
+    c.lineWidth = 0.7 / k;
+    c.stroke(base.bathy);
+  } else {
+    c.fillStyle = P.bathy;
+    c.fill(base.bathy, 'evenodd');
+  }
   c.fillStyle = P.land;
   c.fill(base.land, 'evenodd');
   c.lineJoin = 'round';
@@ -729,6 +830,24 @@ function drawStatic(c) {
   }
 }
 
+/* While a finger is on the map, the last full frame is moved and scaled as
+ * a picture instead of being redrawn: pan and pinch stay at display rate
+ * however many outlines there are, and the map is drawn crisp again the
+ * moment the gesture ends. */
+let snapFrame = null;
+function takeSnapshot() {
+  if (!snapFrame || snapFrame.canvas.width !== canvas.width || snapFrame.canvas.height !== canvas.height) {
+    const cv = document.createElement('canvas');
+    cv.width = canvas.width;
+    cv.height = canvas.height;
+    snapFrame = { canvas: cv, ctx: cv.getContext('2d') };
+  }
+  snapFrame.ctx.setTransform(1, 0, 0, 1, 0, 0);
+  snapFrame.ctx.clearRect(0, 0, canvas.width, canvas.height);
+  snapFrame.ctx.drawImage(canvas, 0, 0);
+  snapFrame.view = { ...view };
+  snapFrame.P = P.name;
+}
 function render() {
   const c = ctx;
   if (!P) buildPalette();
@@ -738,26 +857,32 @@ function render() {
     c.fillRect(0, 0, canvas.width, canvas.height);
     return;
   }
-  const key = staticKey();
-  if (cache && cache.key === key) {
+  if (gesture && snapFrame && snapFrame.view && snapFrame.P === P.name) {
+    const v0 = snapFrame.view, sc = view.k / v0.k;
     c.setTransform(1, 0, 0, 1, 0, 0);
-    c.drawImage(cache.canvas, 0, 0);
-  } else if (gesture || fly) {
-    drawStatic(c);
-  } else {
-    if (!cache || cache.canvas.width !== canvas.width || cache.canvas.height !== canvas.height) {
-      const cv = document.createElement('canvas');
-      cv.width = canvas.width;
-      cv.height = canvas.height;
-      cache = { canvas: cv, ctx: cv.getContext('2d'), key: null };
-    }
+    c.fillStyle = P.bg;
+    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.setTransform(sc, 0, 0, sc, (view.tx - sc * v0.tx) * dpr, (view.ty - sc * v0.ty) * dpr);
+    c.drawImage(snapFrame.canvas, 0, 0);
+    return;
+  }
+  const key = staticKey();
+  if (!cache || cache.canvas.width !== canvas.width || cache.canvas.height !== canvas.height) {
+    const cv = document.createElement('canvas');
+    cv.width = canvas.width;
+    cv.height = canvas.height;
+    cache = { canvas: cv, ctx: cv.getContext('2d'), key: null };
+  }
+  if (cache.key !== key) {
     drawStatic(cache.ctx);
     cache.key = key;
-    c.setTransform(1, 0, 0, 1, 0, 0);
-    c.drawImage(cache.canvas, 0, 0);
   }
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.drawImage(cache.canvas, 0, 0);
   if (model) {
     drawFields(c);
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.drawImage(outlineLayer(), 0, 0);
     drawCircles(c);
     if (facsOn()) drawFacilities(c);
     if (zoomRel() >= Z_LABELS) drawLabels(c);
@@ -765,32 +890,63 @@ function render() {
   drawSelection(c);
 }
 
+/* Fills change every month and are cheap; outline strokes are what costs
+ * (stroking is several times the price of filling), and they barely change:
+ * a field's outline is drawn from its discovery on, whatever it produces. So
+ * the strokes live in their own offscreen layer, rebuilt when the view moves
+ * and otherwise only added to as fields are discovered. Scrubbing backwards
+ * past a discovery rebuilds it once. */
 function drawFields(c) {
-  const k = view.k, vb = viewBounds(2);
+  const vb = viewBounds(2);
   worldTf(c);
-  c.lineJoin = 'round';
-  const lw = 0.8 / k;
   const fs = model.fields;
   for (let i = 0; i < fs.length; i++) {
-    const F = fs[i];
     const st = fieldState[i];
-    if (!st || !F.path || !inView(F.bbox, vb)) continue;
-    c.lineWidth = lw;
+    if (st < 2) continue;
+    const F = fs[i];
+    if (!F.path || !inView(F.bbox, vb)) continue;
     if (st === 3) {
       c.globalAlpha = 0.85;
       c.fillStyle = P.lut[fieldCol[i]];
-      c.fill(F.path, 'evenodd');
-      c.globalAlpha = 1;
-      c.strokeStyle = P.prodStroke;
-    } else if (st === 2) {
-      c.fillStyle = P.shutFill;
-      c.fill(F.path, 'evenodd');
-      c.strokeStyle = P.shutStroke;
     } else {
-      c.strokeStyle = P.idle;
+      c.globalAlpha = 1;
+      c.fillStyle = P.shutFill;
     }
-    c.stroke(F.path);
+    c.fill(F.path, 'evenodd');
   }
+  c.globalAlpha = 1;
+}
+let ol = null;
+function outlineLayer() {
+  const key = [view.k, view.tx, view.ty, W, H, dpr, P.name].join('|');
+  const n = model.fields.length;
+  if (!ol || ol.canvas.width !== canvas.width || ol.canvas.height !== canvas.height) {
+    const cv = document.createElement('canvas');
+    cv.width = canvas.width;
+    cv.height = canvas.height;
+    ol = { canvas: cv, ctx: cv.getContext('2d'), key: null, vis: null };
+  }
+  let full = ol.key !== key || !ol.vis || ol.vis.length !== n;
+  if (!full) for (let i = 0; i < n; i++) if (ol.vis[i] && !fieldState[i]) { full = true; break; }
+  const c = ol.ctx;
+  if (full) {
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.clearRect(0, 0, ol.canvas.width, ol.canvas.height);
+    ol.vis = new Uint8Array(n);
+  }
+  worldTf(c);
+  c.lineJoin = 'round';
+  c.lineWidth = 0.8 / view.k;
+  c.strokeStyle = P.idle;
+  const vb = viewBounds(2);
+  for (let i = 0; i < n; i++) {
+    if (!fieldState[i] || ol.vis[i]) continue;
+    ol.vis[i] = 1;
+    const F = model.fields[i];
+    if (F.path && inView(F.bbox, vb)) c.stroke(F.path);
+  }
+  ol.key = key;
+  return ol.canvas;
 }
 
 function circleR(v, hi) { return v > 0 ? Math.max(1.6, R_MAX * Math.sqrt(Math.min(1, v / hi))) : 0; }
@@ -1017,3 +1173,928 @@ function hitTest(sx, sy) {
   if (bb >= 0) return { type: 'border', i: bb };
   return null;
 }
+
+/* ── units, legend, stamp, credits ───────────────────────────────────────── */
+
+const U_ = (q) => UNITS[q || qty][sys];
+function setProblem(key, msg) {
+  if (msg) problems.set(key, msg); else problems.delete(key);
+  const box = $('error');
+  box.textContent = '';
+  for (const m of problems.values()) box.append(el('div', null, m));
+  box.hidden = !problems.size;
+}
+
+function updateLegend() {
+  $('legend-q').textContent = UNITS[qty].name;
+  $('legend-unit').textContent = U_().rate;
+  $('btn-units').textContent = U_().rate;
+  $('btn-units').setAttribute('aria-label', `Units: ${U_().rate}. Switch to ${UNITS[qty][sys === 'si' ? 'field' : 'si'].rate}`);
+  const ramp = P.ramp;
+  $('legend-bar').style.background = `linear-gradient(to right, ${ramp.map((c, i) => `${c} ${Math.round((i / (ramp.length - 1)) * 100)}%`).join(', ')})`;
+  const box = $('legend-ticks');
+  box.textContent = '';
+  const D = domain(), f = U_().f;
+  const L0 = Math.log10(D.lo), span = Math.log10(D.hi) - L0;
+  const ticks = [];
+  for (let e = Math.ceil(Math.log10(D.lo * f)); e <= Math.floor(Math.log10(D.hi * f)); e++) ticks.push(Math.pow(10, e));
+  const step = ticks.length > 4 ? 2 : 1;
+  const keep = ticks.filter((_, i) => (ticks.length - 1 - i) % step === 0);
+  const labels = [['≤' + fmt3(D.lo * f), 0], ...keep.map((v) => [fmt3(v), (Math.log10(v / f) - L0) / span]).filter((x) => x[1] > 0.14 && x[1] < 0.86), [fmt3(D.hi * f) + '+', 1]];
+  for (const [t, p] of labels) {
+    const s = el('span', null, t);
+    s.style.left = `${(p * 100).toFixed(1)}%`;
+    box.append(s);
+  }
+  $('legend').setAttribute('aria-label', `Map key: ${UNITS[qty].name} in ${U_().rate}, from ${labels[0][0]} to ${labels[labels.length - 1][0]}; circle area is the rate. Tap for more.`);
+}
+
+function updateStamp() {
+  const st = $('stamp');
+  const gen = model ? model.generatedAt : base ? base.generatedAt : null;
+  if (!gen) { st.textContent = problems.size ? 'No data' : 'Loading…'; st.className = 'stamp stale'; return; }
+  const d = new Date(gen);
+  const age = (Date.now() - d.getTime()) / 864e5;
+  const pad = (n) => String(n).padStart(2, '0');
+  let t = `Updated ${d.getDate()} ${MON3[d.getMonth()]} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  if (model && model.fields.length) t = `Data to ${monthShort(model.lastMonth)} · ${t}`;
+  const stale = age > STALE_DAYS;
+  st.textContent = stale ? `Stale · ${t}` : t;
+  st.className = 'stamp' + (stale ? ' stale' : '');
+}
+
+const SHORT = { naturalearth: 'Natural Earth', marineregions: 'Marine Regions', emodnet: 'EMODnet',
+  'emodnet-bathymetry': 'EMODnet Bathymetry', sodir: 'Sodir', nsta: 'NSTA', dea: 'Danish Energy Agency', nlog: 'NLOG' };
+function shortSource(s) {
+  const lic = String(s.licence || '').match(/CC BY(?:-SA)?|NLOD|OGL/);
+  if (SHORT[s.id]) return lic ? `${SHORT[s.id]} ${lic[0]}` : SHORT[s.id];
+  let name = String(s.name || s.id || '').split(' — ')[0];
+  const par = name.match(/\(([^)]{2,8})\)/);
+  name = par ? par[1] : name.replace(/\s*\(.*\)$/, '');
+  const full = String(s.licence || '').match(/CC BY(?:-SA)? [\d.]+|NLOD [\d.]+|OGL/);
+  return full ? `${name} (${full[0]})` : name;
+}
+function allSources() {
+  const list = snap && Array.isArray(snap.sources) ? snap.sources.slice() : [];
+  const have = new Set(list.map((s) => s.id));
+  // The basemap is credited whether or not the snapshot lists it.
+  if (!have.has('naturalearth')) list.unshift({ id: 'naturalearth', name: 'Natural Earth 1:10m — coastline, countries, bathymetry', url: 'https://www.naturalearthdata.com/', licence: 'Public domain', attribution: 'Basemap: Natural Earth' });
+  if (!have.has('marineregions')) list.splice(1, 0, { id: 'marineregions', name: 'Marine Regions — Maritime Boundaries (Flanders Marine Institute)', url: 'https://www.marineregions.org/', licence: 'CC BY 4.0', attribution: 'Maritime boundaries: Flanders Marine Institute, marineregions.org (CC BY 4.0)' });
+  return list;
+}
+function updateCredits() {
+  // EMODnet appears twice when both its pipelines and its bathymetry are used
+  $('credits').textContent = [...new Set(allSources().map(shortSource))].join(' · ');
+}
+
+function showAbout() {
+  const b = $('about-body');
+  b.textContent = '';
+  const p = (t) => b.append(el('p', null, t));
+  p('Oil and gas fields of the Norwegian, UK, Danish and Dutch shelves, coloured and sized by what they produced in the month on the slider. Rates are the month\'s volume divided by its days.');
+  if (base) p(`Map geometry (data/geo.json) built ${new Date(base.generatedAt).toLocaleString()}.`);
+  if (model) p(`Production (data/snapshot.json) built ${new Date(model.generatedAt).toLocaleString()}, reaching ${monthLabel(model.lastMonth)}.`);
+  b.append(el('h3', null, 'Sources'));
+  for (const s of allSources()) {
+    const d = el('div', 'src');
+    d.append(el('b', null, s.name || s.id));
+    if (s.licence) d.append(el('span', null, `Licence: ${s.licence}`));
+    if (s.attribution) d.append(el('span', null, s.attribution));
+    if (s.url) d.append(el('span', null, s.url));
+    if (s.cadence) d.append(el('span', null, `Updated: ${s.cadence}`));
+    b.append(d);
+  }
+  if (model) {
+    b.append(el('h3', null, 'Notes on the numbers'));
+    const spread = new Map();
+    for (const F of model.fields) if (isInt(F.raw.monthlyFrom)) {
+      const e = spread.get(F.cc) || { n: 0, from: F.raw.monthlyFrom };
+      e.n++; e.from = Math.min(e.from, F.raw.monthlyFrom);
+      spread.set(F.cc, e);
+    }
+    for (const [cc, e] of spread) {
+      p(`${(snap.countries && snap.countries[cc]) || cc}: annual figures spread evenly over the months before ${monthLabel(e.from)} (${e.n} field${e.n === 1 ? '' : 's'}). Month-to-month changes before then are not real.`);
+    }
+    if (model.groups.length) {
+      p(`Cross-border units, each side reported by its own regulator and drawn with its own share (never counted twice): ${model.groups.map((G) => `${G.name} (${G.members.map((F) => F.cc + (isNum(F.raw.share) ? ' ' + F.raw.share + '%' : '')).join(', ')})`).join('; ')}.`);
+    }
+    const m = snap.matching || {};
+    if (Array.isArray(m.crossBorderCandidates) && m.crossBorderCandidates.length) {
+      p(`Same name on both sides of a border but not confirmed as one field, so shown separately: ${m.crossBorderCandidates.map((c) => titleCase(c.name)).join(', ')}.`);
+    }
+    const withSeries = model.fields.filter((F) => F.liq || F.gas).length;
+    p(`${model.fields.length} fields (${withSeries} with production figures, ${model.noOutline} without an outline, drawn as a circle or dot), ${base ? base.counts.facilities : 0} installations, ${base ? base.counts.pipelines : 0} pipelines, ${base ? base.counts.borders : 0} maritime boundary lines.`);
+  }
+  p('Conversions: 1 Sm³ = 6.2898 bbl; 1 Sm³ of gas = 35.3147 scf; oil equivalent counts 1 Sm³ of liquids or 1000 Sm³ of gas as 1 Sm³ o.e. (6.2898 boe).');
+  p('The map re-reads data/geo.json and data/snapshot.json every time it is opened and whenever new data lands while it is open. The app itself never goes online.');
+  $('about').hidden = false;
+  $('about-close').focus();
+}
+
+/* ── the month player ────────────────────────────────────────────────────── */
+
+let playAcc = 0, lastTick = 0;
+function tickPlay(now) {
+  if (!playing || !model) { lastTick = 0; return; }
+  if (!lastTick) lastTick = now;
+  const dt = Math.min(0.1, (now - lastTick) / 1000);
+  lastTick = now;
+  playAcc += dt * SPEEDS[speedIdx];
+  if (playAcc >= 1) {
+    const n = Math.floor(playAcc);
+    playAcc -= n;
+    if (month + n >= model.lastMonth) { setMonth(model.lastMonth); setPlaying(false); } else setMonth(month + n, true);
+  }
+}
+function setPlaying(on) {
+  if (on && !model) return;
+  playing = on;
+  if (on && month >= model.lastMonth) setMonth(0);
+  $('ico-play').hidden = on;
+  $('ico-pause').hidden = !on;
+  $('btn-play').setAttribute('aria-label', on ? 'Pause' : 'Play');
+  playAcc = 0;
+  lastTick = 0;
+  if (!on) store(STORE.month, String(month));
+  requestRender();
+}
+function setMonth(m, fromPlay) {
+  if (!model) return;
+  month = clamp(Math.round(m), 0, model.lastMonth);
+  computeMonth();
+  updateTimeUI();
+  if (sheetDyn) sheetDyn();
+  if (!fromPlay) store(STORE.month, String(month));
+  requestRender();
+}
+function updateTimeUI() {
+  $('month-label').textContent = model ? monthLabel(month) : '—';
+  slider.value = String(month);
+  const tot = $('total');
+  tot.textContent = '';
+  if (!model) return;
+  const on = CC.filter((c) => ccOn[c]);
+  const who = on.length === CC.length ? '' : on.length ? on.join('+') + ': ' : 'No country selected';
+  if (!on.length) { tot.textContent = who; return; }
+  const late = on.filter((c) => model.ccLast[c] != null && month > model.ccLast[c]);
+  tot.append(late.length ? `${who}${late.join(', ')} not reported yet · ` : `${who}${monthCount} producing · `);
+  tot.append(el('b', null, fmt3(monthTotal * U_().f)));
+  tot.append(` ${U_().rate}`);
+}
+function buildTicks() {
+  const box = $('ticks');
+  box.textContent = '';
+  if (!model) return;
+  slider.max = String(model.lastMonth);
+  for (let y = 1980; (y - EPOCH) * 12 <= model.lastMonth; y += 10) {
+    const s = el('span', null, String(y));
+    s.style.left = `${(((y - EPOCH) * 12) / model.lastMonth) * 100}%`;
+    box.append(s);
+  }
+}
+function updateSpeed() {
+  const sp = SPEEDS[speedIdx];
+  $('btn-speed').textContent = sp === 12 ? '1×' : sp < 12 ? `${sp / 12}×`.replace('0.', '.') : `${sp / 12}×`;
+  $('btn-speed').setAttribute('aria-label', `Playback speed: ${sp} months per second`);
+}
+
+/* ── the bottom sheet ────────────────────────────────────────────────────── */
+
+let sheetDyn = null;        // refreshes the month-dependent parts in place
+function selKey(s) {
+  if (!s) return null;
+  if (s.type === 'unit') { const U = model.units[s.u]; return U.kind === 'group' ? `g:${U.g.id}` : `f:${U.f.id}`; }
+  if (s.type === 'fac') return `fac:${base.fac.raw[s.i].id}`;
+  if (s.type === 'pipe') return `pipe:${base.pipes[s.i].raw.id}`;
+  return `border:${s.i}:${base.borders[s.i].name}`;
+}
+function resolveSel(key) {
+  if (!key || !base) return null;
+  const at = key.indexOf(':'), t = key.slice(0, at), id = key.slice(at + 1);
+  if (t === 'f' && model && model.byId.has(id)) return { type: 'unit', u: model.byId.get(id).unit };
+  if (t === 'g' && model && model.groupById.has(id)) return { type: 'unit', u: model.groupById.get(id).unit };
+  if (t === 'fac') { const i = base.fac.raw.findIndex((f) => f.id === id); return i >= 0 ? { type: 'fac', i } : null; }
+  if (t === 'pipe') { const i = base.pipes.findIndex((p) => p.raw.id === id); return i >= 0 ? { type: 'pipe', i } : null; }
+  if (t === 'border') {
+    const j = id.indexOf(':'), i = Number(id.slice(0, j));
+    return base.borders[i] && base.borders[i].name === id.slice(j + 1) ? { type: 'border', i } : null;
+  }
+  return null;
+}
+
+function select(s, keepMode) {
+  sel = s;
+  store(STORE.sel, selKey(s) || '');
+  const sh = $('sheet');
+  if (!s) {
+    sh.hidden = true;
+    sheetDyn = null;
+  } else {
+    const wasOpen = !sh.hidden;
+    if (!keepMode || !wasOpen) sh.dataset.mode = s.type === 'unit' ? 'half' : 'peek';
+    sh.hidden = false;
+    renderSheet();
+    if (!keepMode) $('sheet-body').scrollTop = 0;
+  }
+  requestRender();
+}
+
+function dlRow(dl, k, v) {
+  if (v == null || v === '') return null;
+  dl.append(el('dt', null, k));
+  const dd = el('dd', null, String(v));
+  dl.append(dd);
+  return dd;
+}
+function ccChip(cc) {
+  const s = el('span', 'cc', cc);
+  s.setAttribute('aria-label', (snap && snap.countries && snap.countries[cc]) || cc);
+  s.title = s.getAttribute('aria-label');
+  return s;
+}
+
+function renderSheet() {
+  const b = $('sheet-body');
+  b.textContent = '';
+  sheetDyn = null;
+  if (!sel) return;
+  if (sel.type === 'unit') renderUnitSheet(b, model.units[sel.u]);
+  else if (sel.type === 'fac') renderFacSheet(b, base.fac.raw[sel.i]);
+  else if (sel.type === 'pipe') renderPipeSheet(b, base.pipes[sel.i]);
+  else renderBorderSheet(b, base.borders[sel.i]);
+}
+
+function sheetHead(b, title, ccs, badge) {
+  const h = el('div', 'sh-head');
+  h.append(el('h2', null, title));
+  for (const c of ccs) h.append(ccChip(c));
+  if (badge) h.append(el('span', 'badge', badge));
+  b.append(h);
+}
+
+function unitSeries(U) {
+  // Per-day liquids and gas over the unit's whole life, in the chosen units:
+  // liquids as Sm³ (or bbl), gas as oil equivalent on the same axis, so the
+  // two lines share one scale honestly.
+  let x0 = Infinity;
+  for (const F of U.members) if (F.first != null) x0 = Math.min(x0, F.first);
+  if (!Number.isFinite(x0)) return null;
+  const x1 = model.lastMonth, n = x1 - x0 + 1;
+  const liq = new Float32Array(n), gas = new Float32Array(n);
+  for (let j = 0; j < n; j++) {
+    const m = x0 + j, d = daysIn(m);
+    let l = 0, g = 0;
+    for (const F of U.members) { l += monthly(F, 'liq', m); g += monthly(F, 'gas', m); }
+    liq[j] = l / d; gas[j] = g / d;
+  }
+  return { x0, x1, liq, gas };
+}
+
+function drawSpark(cv, S) {
+  const w = Math.max(10, cv.clientWidth), h = Math.max(10, cv.clientHeight);
+  const r = Math.min(3, window.devicePixelRatio || 1);
+  if (cv.width !== Math.round(w * r)) cv.width = Math.round(w * r);
+  if (cv.height !== Math.round(h * r)) cv.height = Math.round(h * r);
+  const c = cv.getContext('2d');
+  c.setTransform(r, 0, 0, r, 0, 0);
+  c.clearRect(0, 0, w, h);
+  const f = UNITS.oe[sys].f, unit = UNITS.oe[sys].rate;
+  const pl = 2, pr = 2, pt = 16, pb = 14, iw = w - pl - pr, ih = h - pt - pb;
+  let ymax = 0;
+  for (let j = 0; j < S.liq.length; j++) ymax = Math.max(ymax, S.liq[j], S.gas[j] / 1000);
+  ymax = ymax * f || 1;
+  const n = S.x1 - S.x0;
+  const X = (m) => pl + (n > 0 ? ((m - S.x0) / n) * iw : iw / 2);
+  const Y = (v) => pt + ih - (v * f / ymax) * ih;
+  c.font = `10px ${FONT}`;
+  c.fillStyle = P.dim;
+  c.strokeStyle = P.grid;
+  c.lineWidth = 1;
+  c.beginPath(); c.moveTo(pl, pt + 0.5); c.lineTo(w - pr, pt + 0.5); c.moveTo(pl, pt + ih + 0.5); c.lineTo(w - pr, pt + ih + 0.5); c.stroke();
+  c.textBaseline = 'bottom';
+  c.textAlign = 'left';
+  const maxLab = `${fmt3(ymax)} ${unit}`;
+  c.fillText(maxLab, pl, pt - 2);
+  const maxW = c.measureText(maxLab).width;
+  c.textBaseline = 'top';
+  const y0 = monthYear(S.x0), y1 = monthYear(S.x1);
+  c.fillText(String(y0), pl, pt + ih + 2);
+  c.textAlign = 'right';
+  c.fillText(String(y1), w - pr, pt + ih + 2);
+  c.textAlign = 'center';
+  for (let y = Math.ceil((y0 + 1) / 10) * 10; y < y1 - 3; y += 10) {
+    const x = X((y - EPOCH) * 12);
+    if (x > pl + 30 && x < w - pr - 30) c.fillText(String(y), x, pt + ih + 2);
+  }
+  c.lineJoin = 'round';
+  c.lineWidth = 1.6;
+  const line = (arr, div, col) => {
+    c.strokeStyle = col;
+    c.beginPath();
+    for (let j = 0; j < arr.length; j++) { const x = X(S.x0 + j), y = Y(arr[j] / div); if (j) c.lineTo(x, y); else c.moveTo(x, y); }
+    c.stroke();
+  };
+  line(S.gas, 1000, P.pipes[1]);
+  line(S.liq, 1, P.pipes[0]);
+  if (month >= S.x0 && month <= S.x1) {
+    const x = Math.round(X(month)) + 0.5, j = month - S.x0;
+    c.strokeStyle = P.ink;
+    c.globalAlpha = 0.7;
+    c.lineWidth = 1;
+    c.beginPath(); c.moveTo(x, pt); c.lineTo(x, pt + ih); c.stroke();
+    c.globalAlpha = 1;
+    for (const [v, col] of [[S.gas[j] / 1000, P.pipes[1]], [S.liq[j], P.pipes[0]]]) {
+      c.fillStyle = col;
+      c.beginPath(); c.arc(x, Y(v), 3, 0, Math.PI * 2); c.fill();
+    }
+    c.fillStyle = P.ink;
+    c.font = `600 10px ${FONT}`;
+    c.textBaseline = 'bottom';
+    const lab = monthShort(month), tw = c.measureText(lab).width;
+    c.textAlign = 'left';
+    c.fillText(lab, clamp(x - tw / 2, pl + maxW + 10, w - pr - tw), pt - 2);
+  }
+}
+
+function renderUnitSheet(b, U) {
+  const isG = U.kind === 'group';
+  const ccs = [...new Set(U.members.map((F) => F.cc))];
+  sheetHead(b, U.name, ccs, isG ? 'Cross-border unit' : null);
+  const F0 = U.members[0];
+  const statuses = [...new Set(U.members.map((F) => F.raw.status).filter(Boolean))];
+  b.append(el('p', 'sh-sub', [hcLabel(F0.hc), statuses.map(sentenceCase).join(' / ')].filter(Boolean).join(' · ') || ' '));
+  const now = el('div', 'sh-now');
+  const nowV = el('b'), nowT = el('span');
+  now.append(nowV, nowT);
+  b.append(now);
+  const S = unitSeries(U);
+  let cv = null, keyL = null, keyG = null;
+  if (S) {
+    cv = el('canvas', 'spark');
+    cv.setAttribute('role', 'img');
+    b.append(cv);
+    const key = el('div', 'spark-key');
+    keyL = el('span'); keyG = el('span');
+    key.append(keyL, keyG);
+    b.append(key);
+    // drag across the sparkline to scrub the month
+    const scrub = (e) => {
+      const r = cv.getBoundingClientRect();
+      const t = clamp((e.clientX - r.left - 2) / Math.max(1, r.width - 4), 0, 1);
+      if (playing) setPlaying(false);
+      setMonth(S.x0 + t * (S.x1 - S.x0));
+    };
+    cv.addEventListener('pointerdown', (e) => { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch { /* fine */ } scrub(e); cv._drag = true; });
+    cv.addEventListener('pointermove', (e) => { if (cv._drag) scrub(e); });
+    const end = () => { cv._drag = false; };
+    cv.addEventListener('pointerup', end);
+    cv.addEventListener('pointercancel', end);
+  } else {
+    b.append(el('p', 'sh-note', 'No production is reported for this field.'));
+  }
+  let memberCells = [];
+  let sumCell = null;
+  if (isG) {
+    b.append(el('div', 'sh-h3', 'Cross-border unit'));
+    const tbl = el('table', 'members');
+    for (const F of U.members) {
+      const tr = el('tr');
+      const td0 = el('td');
+      td0.append(ccChip(F.cc), ` ${CC_ADJ[F.cc]} side`);
+      const td1 = el('td', 'num', isNum(F.raw.share) ? `${F.raw.share}% share` : 'share not published');
+      const td2 = el('td', 'num');
+      tr.append(td0, td1, td2);
+      tbl.append(tr);
+      memberCells.push([F, td2]);
+    }
+    const tr = el('tr', 'sum');
+    tr.append(el('td', null, 'Unit total'), el('td'), (sumCell = el('td', 'num')));
+    tbl.append(tr);
+    b.append(tbl);
+    if (U.g.note) b.append(el('p', 'sh-note', U.g.note + '.'));
+  }
+  const statusCells = [];
+  for (const F of U.members) {
+    b.append(el('div', 'sh-h3', isG ? `${CC_ADJ[F.cc]} side · ${F.id}` : 'Details'));
+    const dl = el('dl', 'sh-dl');
+    dlRow(dl, 'Operator', F.raw.operator);
+    dlRow(dl, 'Hydrocarbon', hcLabel(F.hc));
+    dlRow(dl, 'Status now', F.raw.status ? sentenceCase(F.raw.status) : 'not reported');
+    if (F.hist) statusCells.push([F, dlRow(dl, 'Status then', '—'), dl.lastChild.previousSibling]);
+    dlRow(dl, 'Discovered', F.raw.discYear);
+    if (F.first != null) {
+      dlRow(dl, 'First production', monthLabel(F.first));
+      if (F.end - 1 < (model.ccLast[F.cc] ?? model.lastMonth)) dlRow(dl, 'Last production', monthLabel(F.end - 1));
+    }
+    const pk = peakOf(F);
+    if (pk) dlRow(dl, `Peak (${UNITS[qty].name.toLowerCase()})`, `${fmt3(pk.v * U_().f)} ${U_().rate} in ${monthLabel(pk.m)}`);
+    const cumL = isNum(F.raw.cumLiq) ? F.raw.cumLiq : null, cumG = isNum(F.raw.cumGas) ? F.raw.cumGas : null;
+    if (cumL) dlRow(dl, 'Liquids to date', `${fmtVol(cumL * UNITS.liq[sys].f)} ${UNITS.liq[sys].vol}`);
+    if (cumG) dlRow(dl, 'Gas to date', `${fmtVol(cumG * UNITS.gas[sys].f)} ${UNITS.gas[sys].vol}`);
+    if (isNum(F.raw.share) && !isG) dlRow(dl, 'National share', `${F.raw.share}%`);
+    dlRow(dl, 'Regulator id', F.id);
+    b.append(dl);
+    if (isInt(F.raw.monthlyFrom)) {
+      b.append(el('p', 'sh-note', `Before ${monthLabel(F.raw.monthlyFrom)} the ${(snap.countries && snap.countries[F.cc]) || F.cc} figures are annual totals spread evenly over the months, so month-to-month changes before then are not real.`));
+    }
+  }
+  sheetDyn = () => {
+    const u = U_(), dd = daysIn(month);
+    const v = U.members.reduce((a, F) => a + fieldVal[F.i], 0);
+    const anyVis = U.members.some((F) => fieldState[F.i]);
+    nowV.textContent = anyVis ? fmt3(v * u.f) : '—';
+    nowT.textContent = anyVis ? `${u.rate} ${UNITS[qty].name.toLowerCase()} · ${monthLabel(month)}` : `not yet discovered in ${monthLabel(month)}`;
+    if (S) {
+      drawSpark(cv, S);
+      const j = month - S.x0, inR = j >= 0 && j < S.liq.length;
+      keyL.textContent = '';
+      keyG.textContent = '';
+      const lI = el('i'); lI.style.background = P.pipes[0];
+      const gI = el('i'); gI.style.background = P.pipes[1];
+      keyL.append(lI, `Liquids ${inR ? fmt3(S.liq[j] * UNITS.liq[sys].f) : '0'} `, el('small', null, UNITS.liq[sys].rate));
+      keyG.append(gI, `Gas ${inR ? fmt3(S.gas[j] * UNITS.gas[sys].f) : '0'} `, el('small', null, UNITS.gas[sys].rate));
+      cv.setAttribute('aria-label', `Production history ${monthYear(S.x0)}–${monthYear(S.x1)}; liquids and gas as oil equivalent on one scale. ${monthLabel(month)}: ${keyL.textContent}, ${keyG.textContent}.`);
+    }
+    for (const [F, td] of memberCells) {
+      const l = monthly(F, qty, month) / dd;
+      td.textContent = `${fmt3(l * u.f)} ${u.rate}`;
+    }
+    if (sumCell) sumCell.textContent = `${fmt3(U.members.reduce((a, F) => a + monthly(F, qty, month) / dd, 0) * u.f)} ${u.rate}`;
+    for (const [F, dd2, dt] of statusCells) {
+      const h = statusAt(F, month);
+      dt.textContent = `Status in ${monthShort(month)}`;
+      dd2.textContent = h ? sentenceCase(h[2]) : 'not yet in the register';
+    }
+  };
+  sheetDyn();
+}
+
+function peakOf(F) {
+  const d = F.first;
+  if (d == null) return null;
+  let best = 0, bm = -1;
+  for (let m = F.first; m < F.end; m++) {
+    const v = monthly(F, qty, m) / daysIn(m);
+    if (v > best) { best = v; bm = m; }
+  }
+  return bm >= 0 ? { v: best, m: bm } : null;
+}
+
+function renderFacSheet(b, fa) {
+  sheetHead(b, titleCase(fa.name) || 'Unnamed installation', [fa.country], null);
+  b.append(el('p', 'sh-sub', [sentenceCase(fa.kind), fa.surface === false ? 'subsea' : 'surface'].filter(Boolean).join(' · ')));
+  const dl = el('dl', 'sh-dl');
+  dlRow(dl, 'Phase', fa.phase ? sentenceCase(fa.phase) : null);
+  dlRow(dl, 'In place from', fa.startYear);
+  dlRow(dl, 'Until', fa.endYear);
+  dlRow(dl, 'Field', fa.field ? titleCase(fa.field) : null);
+  dlRow(dl, 'Operator', fa.operator);
+  dlRow(dl, 'Position', `${fa.lat.toFixed(3)}° N, ${Math.abs(fa.lon).toFixed(3)}° ${fa.lon < 0 ? 'W' : 'E'}`);
+  dlRow(dl, 'Id', fa.id);
+  b.append(dl);
+  const U = fa.field && model ? unitByName(fa.field, fa.country) : null;
+  if (U != null) {
+    const btn = el('button', 'about-close', `Show ${model.units[U].name}`);
+    btn.type = 'button';
+    btn.addEventListener('click', () => pickUnit(U));
+    b.append(btn);
+  }
+}
+function unitByName(name, cc) {
+  const key = fold(name).replace(/[^a-z0-9]/g, '');
+  let hit = null;
+  for (const F of model.fields) {
+    if (fold(F.raw.name).replace(/[^a-z0-9]/g, '') === key) { if (F.cc === cc) return F.unit; hit = hit == null ? F.unit : hit; }
+  }
+  return hit;
+}
+
+function renderPipeSheet(b, p) {
+  const r = p.raw;
+  sheetHead(b, r.name ? titleCase(r.name) : 'Unnamed pipeline', [p.cc], null);
+  b.append(el('p', 'sh-sub', [r.medium ? sentenceCase(r.medium) : 'Medium not reported', isNum(r.dimIn) ? `${r.dimIn}″` : null].filter(Boolean).join(' · ')));
+  const dl = el('dl', 'sh-dl');
+  dlRow(dl, 'Medium', r.medium ? sentenceCase(r.medium) : 'not reported');
+  dlRow(dl, 'Diameter', isNum(r.dimIn) ? `${r.dimIn} in (${Math.round(r.dimIn * 25.4)} mm)` : 'not reported');
+  dlRow(dl, 'From', r.from ? titleCase(r.from) : null);
+  dlRow(dl, 'To', r.to ? titleCase(r.to) : null);
+  dlRow(dl, 'Phase', r.phase ? sentenceCase(r.phase) : null);
+  dlRow(dl, 'Length', isNum(r.km) ? `${r.km} km` : null);
+  dlRow(dl, 'Id', r.id);
+  b.append(dl);
+}
+
+function renderBorderSheet(b, br) {
+  sheetHead(b, br.name || 'Maritime boundary', [], null);
+  b.append(el('p', 'sh-sub', br.type ? `Maritime boundary · ${br.type}` : 'Maritime boundary'));
+  const dl = el('dl', 'sh-dl');
+  dlRow(dl, 'Between', [br.a, br.b].filter(Boolean).join(' and '));
+  dlRow(dl, 'Type', br.type);
+  b.append(dl);
+  b.append(el('p', 'sh-note', 'Maritime boundaries: Flanders Marine Institute, Maritime Boundaries Geodatabase, marineregions.org (CC BY 4.0).'));
+}
+
+/* Drag the grip: up to full, down to half, further down to close. A tap on
+ * the grip toggles half and full. */
+(function sheetDrag() {
+  const sh = $('sheet'), grip = $('sheet-grip');
+  let d = null;
+  grip.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('button')) return;
+    e.preventDefault();
+    try { grip.setPointerCapture(e.pointerId); } catch { /* fine */ }
+    d = { y: e.clientY, h: sh.getBoundingClientRect().height, moved: false };
+    sh.classList.add('dragging');
+  });
+  grip.addEventListener('pointermove', (e) => {
+    if (!d) return;
+    const dy = e.clientY - d.y;
+    if (Math.abs(dy) > 5) d.moved = true;
+    if (d.moved) sh.style.height = `${clamp(d.h - dy, 60, wrap.clientHeight)}px`;
+  });
+  const end = () => {
+    if (!d) return;
+    const h = sh.getBoundingClientRect().height, Hw = wrap.clientHeight;
+    sh.classList.remove('dragging');
+    sh.style.height = '';
+    const unit = sel && sel.type === 'unit';
+    if (!d.moved) sh.dataset.mode = sh.dataset.mode === 'full' ? (unit ? 'half' : 'peek') : 'full';
+    else if (h < Math.min(d.h, Hw * 0.5) - 50 && h < Hw * 0.3) select(null);
+    else if (h > Hw * 0.68) sh.dataset.mode = 'full';
+    else sh.dataset.mode = unit ? 'half' : 'peek';
+    d = null;
+    if (sheetDyn) sheetDyn();
+  };
+  grip.addEventListener('pointerup', end);
+  grip.addEventListener('pointercancel', end);
+})();
+
+/* ── search ──────────────────────────────────────────────────────────────── */
+
+function openSearch(on) {
+  $('search').hidden = !on;
+  $('btn-search').setAttribute('aria-expanded', String(on));
+  if (on) { $('search-input').value = ''; runSearch(); $('search-input').focus(); } else $('search-input').blur();
+}
+function runSearch() {
+  const list = $('search-list');
+  list.textContent = '';
+  const q = fold($('search-input').value).trim();
+  if (!q || !model) return;
+  const starts = [], within = [];
+  for (const e of model.searchIndex) {
+    if (e.key.startsWith(q) || e.key.split(/[\s-]/).some((w) => w.startsWith(q))) starts.push(e);
+    else if (e.key.includes(q)) within.push(e);
+  }
+  const hits = starts.concat(within).slice(0, 12);
+  if (!hits.length) { list.append(el('li', 'none', 'No field by that name')); return; }
+  for (const e of hits) {
+    const U = model.units[e.u];
+    const li = el('li');
+    li.setAttribute('role', 'option');
+    const btn = el('button');
+    btn.type = 'button';
+    btn.append(el('span', null, U.name));
+    for (const c of e.cc) btn.append(ccChip(c));
+    const st = U.kind === 'group' ? 'cross-border' : sentenceCase(U.f.raw.status || '') || '';
+    btn.append(el('span', 'sub', st));
+    btn.addEventListener('click', () => pickUnit(e.u));
+    li.append(btn);
+    list.append(li);
+  }
+}
+function pickUnit(u) {
+  openSearch(false);
+  const U = model.units[u];
+  let changed = false;
+  for (const F of U.members) if (!ccOn[F.cc]) { ccOn[F.cc] = true; changed = true; }
+  if (changed) { syncChips(); computeMonth(); updateTimeUI(); }
+  // A field not yet discovered at the slider's month would be invisible:
+  // move the slider to its first production (or its discovery).
+  if (!unitVis[u]) {
+    const F = U.members[0];
+    const m = F.first != null ? F.first : F.disc != null ? (F.disc - EPOCH) * 12 : month;
+    setMonth(clamp(m, 0, model.lastMonth));
+  }
+  select({ type: 'unit', u });
+  let bb = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const F of U.members) bb = [Math.min(bb[0], F.bbox[0]), Math.min(bb[1], F.bbox[1]), Math.max(bb[2], F.bbox[2]), Math.max(bb[3], F.bbox[3])];
+  flyTo(bb, 40);
+}
+
+/* ── map gestures ────────────────────────────────────────────────────────── */
+
+const pointers = new Map();
+let rect = canvas.getBoundingClientRect();
+function startGesture() {
+  const pts = [...pointers.values()];
+  if (pts.length === 1) {
+    gesture = { type: 'pan', x: pts[0].x, y: pts[0].y, sx: pts[0].x, sy: pts[0].y, moved: gesture ? gesture.moved : false, t0: performance.now() };
+  } else if (pts.length >= 2) {
+    const [a, b] = pts;
+    const mx = (a.x + b.x) / 2 - rect.left, my = (a.y + b.y) / 2 - rect.top;
+    gesture = { type: 'pinch', moved: true, d0: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), k0: view.k,
+      X: (mx - view.tx) / view.k, Y: (my - view.ty) / view.k };
+  }
+}
+canvas.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  fly = null;
+  rect = canvas.getBoundingClientRect();
+  try { canvas.setPointerCapture(e.pointerId); } catch { /* fine */ }
+  if (!pointers.size) { if (rafId) { cancelAnimationFrame(rafId); rafId = 0; render(); } takeSnapshot(); }
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  startGesture();
+});
+canvas.addEventListener('pointermove', (e) => {
+  const p = pointers.get(e.pointerId);
+  if (!p || !gesture) return;
+  p.x = e.clientX; p.y = e.clientY;
+  if (gesture.type === 'pan' && pointers.size === 1) {
+    const dx = e.clientX - gesture.x, dy = e.clientY - gesture.y;
+    gesture.x = e.clientX; gesture.y = e.clientY;
+    if (Math.hypot(e.clientX - gesture.sx, e.clientY - gesture.sy) > 6) gesture.moved = true;
+    if (gesture.moved) { view.tx += dx; view.ty += dy; clampView(); requestRender(); }
+  } else if (gesture.type === 'pinch' && pointers.size >= 2) {
+    const [a, b] = [...pointers.values()];
+    const mx = (a.x + b.x) / 2 - rect.left, my = (a.y + b.y) / 2 - rect.top;
+    const k = clamp(gesture.k0 * Math.hypot(a.x - b.x, a.y - b.y) / gesture.d0, kMin, fitK * Z_MAX);
+    view.k = k;
+    view.tx = mx - gesture.X * k;
+    view.ty = my - gesture.Y * k;
+    clampView();
+    requestRender();
+  }
+});
+let lastTap = null;
+function endPointer(e) {
+  if (!pointers.has(e.pointerId)) return;
+  const wasTap = gesture && gesture.type === 'pan' && !gesture.moved && pointers.size === 1
+    && performance.now() - gesture.t0 < 450 && e.type === 'pointerup';
+  pointers.delete(e.pointerId);
+  if (pointers.size > 0) { startGesture(); return; }
+  gesture = null;
+  if (wasTap) onTap(e.clientX - rect.left, e.clientY - rect.top);
+  saveView();
+  requestRender();            // redraw once more so the static cache is rebuilt
+}
+canvas.addEventListener('pointerup', endPointer);
+canvas.addEventListener('pointercancel', endPointer);
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const r = canvas.getBoundingClientRect();
+  zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(-e.deltaY * 0.0015));
+  saveView();
+  requestRender();
+}, { passive: false });
+for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) {
+  document.addEventListener(ev, (e) => e.preventDefault());   // no page zoom in Safari
+}
+
+/* A tap selects at once; a second tap in the same place soon after zooms in,
+ * so the selection never waits on a double-tap timer. */
+function onTap(sx, sy) {
+  const now = performance.now();
+  if (!$('search').hidden) { openSearch(false); return; }
+  if (lastTap && now - lastTap.t < 300 && Math.hypot(sx - lastTap.x, sy - lastTap.y) < 24) {
+    lastTap = null;
+    zoomAt(sx, sy, 2);
+    saveView();
+    requestRender();
+    return;
+  }
+  lastTap = { x: sx, y: sy, t: now };
+  select(hitTest(sx, sy));
+}
+
+/* ── controls ────────────────────────────────────────────────────────────── */
+
+function syncChips() {
+  for (const b of $('chips').children) b.setAttribute('aria-pressed', String(ccOn[b.dataset.cc]));
+  store(STORE.cc, ccOn);
+}
+function onFilterChange() {
+  computeMonth();
+  updateTimeUI();
+  updateLegend();
+  if (sel) {
+    if (sel.type === 'unit' && !unitVis[sel.u]) select(null);
+    else if (sheetDyn) sheetDyn();
+  }
+  requestRender();
+}
+for (const c of CC) {
+  const b = el('button', null, c);
+  b.type = 'button';
+  b.dataset.cc = c;
+  b.setAttribute('aria-label', { NO: 'Norway', UK: 'United Kingdom', DK: 'Denmark', NL: 'Netherlands' }[c]);
+  b.addEventListener('click', () => { ccOn[c] = !ccOn[c]; syncChips(); onFilterChange(); });
+  $('chips').append(b);
+}
+function setQty(q) {
+  qty = q;
+  store(STORE.qty, q);
+  for (const b of $('qty').children) b.setAttribute('aria-checked', String(b.dataset.q === q));
+  computeMonth();
+  updateLegend();
+  updateTimeUI();
+  if (sel && sel.type === 'unit') renderSheet();
+  requestRender();
+}
+for (const b of $('qty').children) b.addEventListener('click', () => setQty(b.dataset.q));
+$('btn-units').addEventListener('click', () => {
+  sys = sys === 'si' ? 'field' : 'si';
+  store(STORE.sys, sys);
+  updateLegend();
+  updateTimeUI();
+  if (sel && sel.type === 'unit') renderSheet();
+});
+$('btn-search').addEventListener('click', () => openSearch($('search').hidden));
+$('search-input').addEventListener('input', runSearch);
+$('search-input').addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') openSearch(false);
+  if (e.key === 'Enter') { const b = $('search-list').querySelector('button'); if (b) b.click(); }
+});
+$('zoom-in').addEventListener('click', () => { fly = null; zoomAt(W / 2, H / 2, 2); saveView(); requestRender(); });
+$('zoom-out').addEventListener('click', () => { fly = null; zoomAt(W / 2, H / 2, 0.5); saveView(); requestRender(); });
+$('zoom-home').addEventListener('click', () => {
+  if (!base) return;
+  const h = homeBox();
+  flyTo(h, 1);
+  fly.to = { x: (h[0] + h[2]) / 2, y: (h[1] + h[3]) / 2, k: fitK };
+});
+$('legend').addEventListener('click', () => {
+  const open = $('legend-key').hidden;
+  $('legend-key').hidden = !open;
+  $('legend').setAttribute('aria-expanded', String(open));
+  store(STORE.key, open ? '1' : '0');
+});
+$('credits').addEventListener('click', showAbout);
+$('stamp').addEventListener('click', showAbout);
+$('about-close').addEventListener('click', () => { $('about').hidden = true; });
+$('about').addEventListener('click', (e) => { if (e.target === $('about')) $('about').hidden = true; });
+$('sheet-close').addEventListener('click', () => select(null));
+$('btn-play').addEventListener('click', () => setPlaying(!playing));
+$('btn-back').addEventListener('click', () => { setPlaying(false); setMonth(month - 12); });
+$('btn-fwd').addEventListener('click', () => { setPlaying(false); setMonth(month + 12); });
+$('btn-speed').addEventListener('click', () => {
+  speedIdx = (speedIdx + 1) % SPEEDS.length;
+  store(STORE.speed, String(speedIdx));
+  updateSpeed();
+});
+slider.addEventListener('input', () => { if (playing) setPlaying(false); setMonth(Number(slider.value)); });
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (!$('about').hidden) $('about').hidden = true;
+  else if (!$('search').hidden) openSearch(false);
+  else if (sel) select(null);
+});
+darkMq.addEventListener('change', () => {
+  buildPalette();
+  updateLegend();
+  if (sheetDyn) sheetDyn();
+  requestRender();
+});
+
+/* ── loading ─────────────────────────────────────────────────────────────── */
+
+async function fetchJSON(name) {
+  const r = await fetch(`./data/${name}`, { cache: 'no-store' });
+  if (!r.ok) throw new Error(`data/${name} could not be read (HTTP ${r.status}).`);
+  const text = await r.text();
+  let data;
+  try { data = JSON.parse(text); } catch {
+    throw new Error(`data/${name} is not valid JSON${text.trim().startsWith('<') ? ' — it looks like a web page was written over it' : ''}.`);
+  }
+  return { data, sig: `${data && data.generatedAt}|${text.length}` };
+}
+
+let loadGen = 0;
+async function loadAll() {
+  const gen = ++loadGen;
+  const [gr, sr] = await Promise.allSettled([fetchJSON('geo.json'), fetchJSON('snapshot.json')]);
+  if (gen !== loadGen) return;
+  let baseChanged = false;
+  if (gr.status === 'rejected') {
+    setProblem('geo', gr.reason.message + (base ? ' Showing the map as last read.' : ''));
+  } else if (!base || base.sig !== gr.value.sig) {
+    const why = validateGeo(gr.value.data);
+    if (why) setProblem('geo', `data/geo.json is not a Shelf Atlas map: ${why}.`);
+    else {
+      try {
+        const B = buildBase(gr.value.data);
+        B.sig = gr.value.sig;
+        base = B;
+        baseChanged = true;
+        cache = null;
+        loadBathy(gr.value.data.bathymetry).then(() => { cache = null; requestRender(); });
+        setProblem('geo', null);
+      } catch (e) { setProblem('geo', `data/geo.json is not a Shelf Atlas map: ${e.message}.`); }
+    }
+  } else setProblem('geo', null);
+
+  if (sr.status === 'rejected') {
+    setProblem('snapshot', sr.reason.message + (model ? ' Showing production as last read.' : ''));
+  } else if (base && (baseChanged || !model || model.sig !== sr.value.sig)) {
+    const s = sr.value.data;
+    const why = validateSnap(s);
+    if (why) setProblem('snapshot', `data/snapshot.json is not a Shelf Atlas snapshot: ${why}.`);
+    else {
+      try {
+        const keep = sel ? selKey(sel) : recall(STORE.sel);
+        const M = buildModel(s, base);
+        M.sig = sr.value.sig;
+        model = M;
+        snap = s;
+        setProblem('snapshot', M.fields.length ? null
+          : 'data/snapshot.json holds no fields yet: only the basemap has been built. Production appears when the next build lands.');
+        buildTicks();
+        const stored = recall(STORE.month);
+        const first = !loadAll.done;
+        month = clamp(first && stored != null && isInt(Number(stored)) ? Number(stored) : first ? M.defaultMonth : month, 0, M.lastMonth);
+        computeMonth();
+        sel = null;
+        const r = resolveSel(keep);
+        if (r) select(r, true); else if (!$('sheet').hidden) select(null);
+      } catch (e) { setProblem('snapshot', `data/snapshot.json is not a Shelf Atlas snapshot: ${e.message}.`); }
+    }
+  } else if (sr.status === 'fulfilled' && model) {
+    if (problems.get('snapshot') && model.fields.length) setProblem('snapshot', null);
+  }
+  if (baseChanged && !loadAll.done) { computeFit(); restoreView(); }
+  loadAll.done = true;
+  if (!model) { month = 0; }
+  updateStamp();
+  updateCredits();
+  updateLegend();
+  updateTimeUI();
+  requestRender();
+}
+
+document.addEventListener('visibilitychange', () => { if (!document.hidden) loadAll(); });
+
+/* ── boot ────────────────────────────────────────────────────────────────── */
+
+function resize() {
+  const r = wrap.getBoundingClientRect();
+  const oldCenter = base ? { x: (W / 2 - view.tx) / view.k, y: (H / 2 - view.ty) / view.k, z: zoomRel() } : null;
+  W = Math.max(1, Math.round(r.width));
+  H = Math.max(1, Math.round(r.height));
+  dpr = Math.min(3, window.devicePixelRatio || 1);
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  computeFit();
+  if (oldCenter && loadAll.done) { centerOn(oldCenter.x, oldCenter.y, oldCenter.z * fitK); clampView(); }
+  cache = null;
+  if (sheetDyn) sheetDyn();
+  render();
+}
+
+(function restoreUI() {
+  const q = recall(STORE.qty);
+  if (q && UNITS[q]) qty = q;
+  if (recall(STORE.sys) === 'field') sys = 'field';
+  const cc = recallJSON(STORE.cc);
+  if (cc && typeof cc === 'object') for (const c of CC) if (typeof cc[c] === 'boolean') ccOn[c] = cc[c];
+  const sp = recall(STORE.speed) == null ? NaN : Number(recall(STORE.speed));
+  if (isInt(sp) && sp >= 0 && sp < SPEEDS.length) speedIdx = sp;
+  if (recall(STORE.key) === '1') { $('legend-key').hidden = false; $('legend').setAttribute('aria-expanded', 'true'); }
+})();
+buildPalette();
+for (const b of $('qty').children) b.setAttribute('aria-checked', String(b.dataset.q === qty));
+syncChips();
+updateSpeed();
+updateLegend();
+updateStamp();
+new ResizeObserver(resize).observe(wrap);
+resize();
+loadAll();
+
+/* For tests and a browser console, never for the app itself. */
+window.__sa = {
+  render() { const t0 = performance.now(); render(); return performance.now() - t0; },
+  renderCold() { cache = null; const t0 = performance.now(); render(); return performance.now() - t0; },
+  get state() {
+    return { month, qty, sys, ccOn: { ...ccOn }, playing, zoom: zoomRel(), sel: sel ? selKey(sel) : null,
+      fields: model ? model.fields.length : 0, units: model ? model.units.length : 0, problems: [...problems.values()],
+      total: monthTotal, producing: monthCount, hi: model ? model.hi : null };
+  },
+  setMonth(m) { setMonth(m); },
+  pick(name) { const e = model.searchIndex.find((x) => x.key === fold(name)); if (e) pickUnit(e.u); return !!e; },
+  project(lon, lat) { return [lon * view.k + view.tx, mercY(lat) * view.k + view.ty]; },
+  zoomTo(lon, lat, z) { fly = null; centerOn(lon, mercY(lat), z * fitK); clampView(); requestRender(); },
+  hit(sx, sy) { const h = hitTest(sx, sy); return h ? selKey(h) : null; },
+  reload: loadAll,
+  anchor(type, i) {
+    const k = view.k, sc = (x, y) => [x * k + view.tx, y * k + view.ty];
+    if (type === 'fac') return sc(base.fac.X[i], base.fac.Y[i]);
+    const a = (type === 'pipe' ? base.pipes[i] : base.borders[i]).lines[0], j = (a.length / 4 | 0) * 2;
+    return sc(a[j], a[j + 1]);
+  },
+  find(type, re) {
+    const r = new RegExp(re, 'i');
+    if (type === 'fac') return base.fac.raw.findIndex((f) => r.test(f.name));
+    if (type === 'pipe') return base.pipes.findIndex((p) => r.test(p.raw.name || ''));
+    return base.borders.findIndex((b) => r.test(b.name || ''));
+  },
+};
