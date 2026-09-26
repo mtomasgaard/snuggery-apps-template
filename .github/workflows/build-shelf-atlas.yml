@@ -47,10 +47,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      # Pure-Python readers only: pyshp for the shapefiles, openpyxl for the Danish workbook,
-      # pypdf for the Danish monthly reports. No GDAL, no node, nothing to apt-get.
+      # Pure-Python readers: pyshp for the shapefiles, openpyxl for the Danish workbook, pypdf
+      # for the Danish monthly reports, numpy + tifffile for the EMODnet bathymetry grid. No GDAL,
+      # no node, nothing to apt-get.
       - name: Install the readers
-        run: python3 -m pip install --quiet 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4'
+        run: python3 -m pip install --quiet 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4' 'numpy>=2' 'tifffile>=2024'
 
       # The download cache is keyed by week so each run refetches the sources once and the
       # retries within a week cost the regulators nothing. `refresh` bypasses it.

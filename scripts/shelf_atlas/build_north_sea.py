@@ -26,7 +26,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 from scripts.shelf_atlas.common import (BBL_PER_SM3, BuildError, Cache, EPOCH_YEAR, b64, bbox_of, centroid,
                                         encode_line, log, month_label, norm_name, pack_u16, ring_area_m2,
                                         simplify, write_json)
-from scripts.shelf_atlas import fetch_basemap, fetch_denmark, fetch_netherlands, fetch_norway, fetch_uk
+from scripts.shelf_atlas import (fetch_basemap, fetch_bathymetry, fetch_denmark, fetch_netherlands,
+                                 fetch_norway, fetch_uk)
 
 BBOX = [-6.0, 50.5, 32.0, 73.0]      # North Sea plus the whole Norwegian shelf (Norwegian Sea, Barents Sea)
 FACTOR = 10000
@@ -34,7 +35,7 @@ BASE_MIN_AREA = 8000.0        # m², Visvalingam threshold for coast/land/bathym
 FIELD_MIN_AREA = 2500.0       # m², field outlines (a 50 m wiggle is noise at any phone zoom)
 PIPE_MIN_AREA = 6000.0        # m², pipelines
 PIPE_MIN_LENGTH_M = 3000.0    # shorter pieces (risers, spools, jumpers) are dropped
-BUDGET_GEO = 2_000_000        # bytes
+BUDGET_GEO = 2_500_000        # bytes (the bathymetry PNG is separate, budget 1.2 MB)
 BUDGET_SNAPSHOT = 2_500_000
 
 # Cross-border units. Name matching across regulators finds the candidates automatically; this
@@ -104,6 +105,10 @@ def build(args):
         "fields": [], "pipelines": [], "facilities": [],
     }
     sources = list(fetch_basemap.SOURCES)
+    if not args.no_bathymetry:
+        os.makedirs(args.out, exist_ok=True)
+        geo["bathymetry"] = fetch_bathymetry.build(cache, BBOX, os.path.join(args.out, "bathy.png"))
+        sources.append(fetch_bathymetry.SOURCE)
     fields, facilities, pipelines = [], [], []
 
     if not args.basemap_only:
@@ -294,6 +299,10 @@ def build(args):
     snap_path = os.path.join(args.out, "snapshot.json")
     write_json(geo_path, geo)
     write_json(snap_path, snapshot)
+    if "bathymetry" in geo:
+        bp = os.path.join(args.out, "bathy.png")
+        if os.path.getsize(bp) > 1_200_000:
+            raise BuildError(f"{bp} is {os.path.getsize(bp):,} B, over its 1,200,000 B budget")
     for p, budget in ((geo_path, BUDGET_GEO), (snap_path, BUDGET_SNAPSHOT)):
         sz = os.path.getsize(p)
         if sz > budget:
@@ -313,6 +322,7 @@ def main():
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--refresh", action="store_true")
     ap.add_argument("--basemap-only", action="store_true")
+    ap.add_argument("--no-bathymetry", action="store_true", help="skip the EMODnet raster (needs numpy + tifffile)")
     ap.add_argument("--generated-at", default=None)
     args = ap.parse_args()
     try:

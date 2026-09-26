@@ -20,6 +20,12 @@ Month index `mi` counts months from January 1971: `mi = (year − 1971) × 12 + 
   "coast":    ["<polyline>", …],               // Natural Earth 1:10m coastline, clipped to bbox
   "land":     [["<ring>", …], …],              // Natural Earth 1:10m countries, clipped; one array of rings per polygon, outer first
   "bathy200": [["<ring>", …], …],              // Natural Earth 1:10m bathymetry, the 200 m polygons (the Norwegian Trench shows)
+  "bathymetry": { "file": "bathy.png",         // EMODnet DTM as an 8-bit grey PNG beside geo.json (optional key)
+                  "bounds": [-6, 50.5, 32, 73], "width": 1267, "height": 1725,
+                  "rows": "uniform in Web Mercator y between bounds[1] and bounds[3]; columns uniform in longitude",
+                  "encoding": "8-bit grey; 0 = land or no data; depth_m = 3000 × (v/255)²",
+                  "maxDepth": 3000, "source": "emodnet-bathymetry" },
+                                                // draw: project the four corners, one drawImage; tint via a per-theme LUT
   "borders":  [{ "name": "Norway - United Kingdom", "type": "Treaty", "a": "Norway", "b": "United Kingdom",
                  "lines": ["<polyline>", …] }, …],                     // Marine Regions maritime boundaries (median lines)
   "fields":   [{ "id": "NO-43658", "rings": ["<ring>", …] }, …],      // field outlines; a field without one is absent here
@@ -77,12 +83,15 @@ Month index `mi` counts months from January 1971: `mi = (year − 1971) × 12 + 
 A series is decoded as: `codes = Uint16Array(atob(b64) bytes)`, `value[mi] = codes[mi − start] × scale`
 for `start ≤ mi < start + codes.length`, else 0.
 
-## world-oil-gas/data/world.json — Natural Earth 1:110m countries (static)
+## world-oil-gas/data/world.json — Natural Earth 1:110m countries and 1:10m bathymetry (static)
 
 ```
 { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
-  "countries": [{ "iso3": "NOR", "name": "Norway", "adm0": "NOR", "c": [17.8, 68.5], "rings": ["<ring>", …] }, …] }
+  "countries": [{ "iso3": "NOR", "name": "Norway", "adm0": "NOR", "c": [17.8, 68.5], "rings": ["<ring>", …] }, …],
+  "bathymetry": [{ "depth": 10000, "rings": ["<ring>", …] }, …, { "depth": 200, "rings": [ … ] }] }
 ```
+
+Bathymetry layers are deepest first; paint each as a filled band over the sea background in that order.
 
 ## world-oil-gas/data/snapshot.json — annual production by country (rebuilt yearly)
 
@@ -97,7 +106,9 @@ for `start ≤ mi < start + codes.length`, else 0.
             "oilKboePerDay": 16085.2, "gasKboePerDay": 16653.8 }, …] }
 ```
 
-`oil[k]` is the value for year `y0 + k`; `null` is "no data", not zero.
+`oil[k]` is the value for year `y0 + k`; `null` is "no data", not zero. `countries` includes the
+dissolved states `OWID_USS`, `OWID_CZS`, `OWID_YGS` (no outline; listed in `historical`), and
+`patched` lists source holes set to null.
 
 ## world-oil-gas/data/fields.json — GOGET extraction units (manual drop-in)
 
