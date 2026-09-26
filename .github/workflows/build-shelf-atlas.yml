@@ -27,6 +27,7 @@ on:
     paths:
       - 'scripts/shelf_atlas/**'
       - '!scripts/shelf_atlas/probe*'
+      - '!scripts/shelf_atlas/*.md'
       - '.github/workflows/build-shelf-atlas.yml'
 
 permissions:

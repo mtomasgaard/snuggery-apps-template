@@ -7,12 +7,6 @@ name: Probe Shelf Atlas sources
 # source moves.
 
 on:
-  push:
-    branches-ignore: [main]          # a probe on a working branch; never on main
-    paths:
-      - 'scripts/shelf_atlas/probe.py'
-      - 'scripts/shelf_atlas/probe-urls.txt'
-      - '.github/workflows/probe-shelf-atlas.yml'
   workflow_dispatch:
     inputs:
       urls:

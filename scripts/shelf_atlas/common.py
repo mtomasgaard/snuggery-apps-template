@@ -431,7 +431,22 @@ def sha256_short(b: bytes) -> str:
 
 
 def write_json(path: str, obj, indent=None):
+    """Writes obj as compact JSON. If the file already exists and differs ONLY in its
+    `generatedAt`, the old stamp is kept and the bytes stay identical, so a weekly build
+    whose sources did not move commits nothing (the repository's rule)."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
+    if isinstance(obj, dict) and "generatedAt" in obj and os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                old = json.load(f)
+            if isinstance(old, dict) and "generatedAt" in old:
+                a = dict(old); b = dict(obj)
+                a.pop("generatedAt"); b.pop("generatedAt")
+                if json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True):
+                    obj = dict(obj, generatedAt=old["generatedAt"])
+                    log(f"  unchanged apart from the stamp; keeping {old['generatedAt']}  {path}")
+        except (ValueError, OSError):
+            pass
     s = json.dumps(obj, ensure_ascii=False, separators=(",", ":"), indent=indent, sort_keys=False)
     tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as f:
