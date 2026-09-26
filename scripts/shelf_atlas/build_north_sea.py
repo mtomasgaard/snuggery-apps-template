@@ -64,11 +64,11 @@ def _norm_status(s):
     if not s:
         return None
     t = s.strip().lower()
-    if any(k in t for k in ("shut", "abandon", "ceased", "decommission", "removed", "not producing")):
+    if any(k in t for k in ("shut", "abandon", "ceased", "decommission", "removed", "not producing", "post-cop", "post cop")):
         return "Shut down"
     if any(k in t for k in ("undeveloped", "unlikely", "unknown", "not developed")):
         return "Not developed"
-    if "approved" in t or "development" in t or "under " in t:
+    if "approved" in t or "approv" in t or "development" in t or "under " in t or "construction" in t:
         return "Approved for production"
     if "produc" in t:
         return "Producing"
