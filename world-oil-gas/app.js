@@ -486,6 +486,30 @@ function worldAt(m, y) {
 /* Former states (USSR, Czechoslovakia, Yugoslavia) have series and no
  * outline. They count in sums and ranks like any other series; About lists
  * them under their own heading rather than as matching failures. */
+/* Which former state each outline was part of. Fixed here because the data
+ * carries no successor mapping; a country not listed gets no note. */
+const FORMER_STATE = {};
+for (const [state, members] of Object.entries({
+  OWID_USS: ['RUS', 'UKR', 'BLR', 'KAZ', 'UZB', 'TKM', 'AZE', 'GEO', 'ARM', 'KGZ', 'TJK', 'MDA', 'LTU', 'LVA', 'EST'],
+  OWID_CZS: ['CZE', 'SVK'],
+  OWID_YGS: ['SRB', 'HRV', 'SVN', 'BIH', 'MKD', 'MNE', 'OWID_KOS', 'KOS'],
+})) for (const m of members) FORMER_STATE[m] = state;
+
+/* For a country hatched in the chosen year: the former state it was part of,
+ * if that state has a figure then. Those states have no outline to tap. */
+function formerStateNote(iso3) {
+  const state = FORMER_STATE[iso3];
+  if (!state || !prod) return '';
+  const h = prod.byIso.get(state);
+  if (!h) return '';
+  const r = seriesAt(h, mode, year, { v: null, partial: false });
+  if (r.v == null) return '';
+  const label = (historicalLabels()[state] || '').replace(/\s*\(.*\)$/, '') || h.name;
+  const the = /^USSR$/.test(label) ? 'the ' : '';
+  return `No ${year} figure of its own: it was part of ${the}${label} then, which has no outline on this map. `
+    + `${label}, ${MODES[mode].toLowerCase()}: ${fmtNum(toUnit(r.v))} ${UNITS[units].label}.`;
+}
+
 function historicalLabels() {
   const h = prod && prod.s.historical;
   const out = {};
@@ -1064,7 +1088,7 @@ function updateSheet() {
     if (gi < 0 && !series) { sheet.hidden = true; return; }
     sheet.hidden = false;                   // shown first: the sparkline measures it
     body.innerHTML = '';
-    countrySheet(body, gi >= 0 ? geo.countries[gi].name : series.name, series);
+    countrySheet(body, gi >= 0 ? geo.countries[gi].name : series.name, series, sel.iso3);
   } else {
     const p = fieldsDrawn() ? fields.points.find((q) => q.id === sel.id) : null;
     if (!p) { sheet.hidden = true; return; }
@@ -1074,7 +1098,7 @@ function updateSheet() {
   sheet.hidden = false;
 }
 
-function countrySheet(body, name, c) {
+function countrySheet(body, name, c, iso3) {
   const u = UNITS[units].label;
   body.append(el('h2', null, name));
   if (!c) {
@@ -1082,6 +1106,8 @@ function countrySheet(body, name, c) {
     body.append(el('p', 'sheet-note',
       'data/snapshot.json has no series for this country, so it is hatched in every year. '
       + 'The About screen lists every polygon without data and every series without a polygon.'));
+    const fs = formerStateNote(iso3);
+    if (fs) body.append(el('p', 'sheet-note', fs));
     return;
   }
   body.append(el('p', 'sub', `${year} · ${u}`));
@@ -1119,15 +1145,9 @@ function countrySheet(body, name, c) {
     notes.push(`${missing} has no data for ${year}, so the total counts ${missing === 'Oil' ? 'gas' : 'oil'} only (hatched over its colour on the map).`);
   }
   if (!prod.s.world) notes.push('Shares are of the sum of every country listed that year: the file has no world total.');
-  // Hatched in a year when a former state (USSR, Yugoslavia…) carries the
-  // production instead: say which, since those have no outline to tap.
-  if (parts[mode].v == null && link && link.historical.length) {
-    const hist = historicalLabels();
-    const with_ = link.historical
-      .map((h) => ({ h, r: seriesAt(h, mode, year, { v: null, partial: false }) }))
-      .filter((x) => x.r.v != null && x.r.v > 0)
-      .map((x) => `${hist[x.h.iso3].replace(/\s*\(.*\)$/, '') || x.h.name} ${fmtNum(toUnit(x.r.v))} ${u}`);
-    if (with_.length) notes.push(`No ${year} figure of its own. Former states with no outline did produce that year: ${with_.join('; ')}.`);
+  if (parts[mode].v == null) {
+    const fs = formerStateNote(c.iso3);
+    if (fs) notes.push(fs);
   }
   const span = seriesSpan(c);
   if (span) notes.push(span);
