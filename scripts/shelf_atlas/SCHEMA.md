@@ -91,7 +91,7 @@ for `start ≤ mi < start + codes.length`, else 0.
   "bathymetry": [{ "depth": 10000, "rings": ["<ring>", …] }, …, { "depth": 200, "rings": [ … ] }] }
 ```
 
-Bathymetry layers are deepest first; paint each as a filled band over the sea background in that order.
+Bathymetry layers are listed deepest first, but the bands NEST (the 200 m band contains everything deeper), so paint them shallowest first and let the deeper tints land on top.
 
 ## world-oil-gas/data/snapshot.json — annual production by country (rebuilt yearly)
 
