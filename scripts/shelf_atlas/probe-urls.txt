@@ -1,6 +1,7 @@
-# --- Netherlands: the datacenter API base and the production request body ---
-https://www.nlog.nl/datacenter/main-MZQNFKLT.js#js:URL_PREFIX=,URL_PREFIX:,prodfigures/field,getFieldProdfigures(,DEFAULT_GAS_UNIT=,HTTP_HEADERS=,yearStart:,prodFigureProduct
-POSTJSON https://www.nlog.nl/datacenter/api/rest/prodfigures/field {}
-POSTJSON https://www.nlog.nl/datacenter/rest/prodfigures/field {}
-POSTJSON https://www.nlog.nl/api/rest/prodfigures/field {}
-https://www.nlog.nl/datacenter/api/rest/field/licenses
+# --- Netherlands: the request body the datacenter sends, and the API answering ---
+https://www.nlog.nl/datacenter/main-MZQNFKLT.js#js:setFilterValues(e){,getProdfigures(){,initialize(){super.initialize(),this.setLandSea(),prodFigureUnit.code,unit.codes.
+https://www.nlog.nl/nlog-mapviewer/rest/config
+POSTJSON https://www.nlog.nl/nlog-mapviewer/rest/prodfigures/field {}
+POSTJSON https://www.nlog.nl/nlog-mapviewer/rest/prodfigures/field {"yearStart":2024,"yearEnd":2024,"product":"Gas","productionType":"Produced","unit":"Sm3"}
+POSTJSON https://www.nlog.nl/nlog-mapviewer/rest/prodfigures/field {"selectedProdFigureProduct":{"code":"Gas"},"selectedProdFigureProductionType":{"code":"Produced"},"selectedProdFigureUnit":{"code":"Sm3"},"yearStart":2024,"yearEnd":2024}
+POSTJSON https://www.nlog.nl/nlog-mapviewer/rest/field/fields ""

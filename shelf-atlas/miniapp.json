@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Shelf Atlas",
+  "entryPoint": "index.html",
+  "description": "Oil and gas fields, pipelines and platforms of the North Sea, with every month of production since 1971",
+  "version": "1.0"
+}
