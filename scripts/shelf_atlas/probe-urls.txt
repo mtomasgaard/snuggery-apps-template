@@ -1,0 +1,10 @@
+# --- Bathymetry: EMODnet WCS (North Sea + Norwegian shelf box) and GEBCO ---
+https://ows.emodnet-bathymetry.eu/wcs?service=WCS&version=1.0.0&request=GetCapabilities
+https://ows.emodnet-bathymetry.eu/wcs?service=WCS&version=1.0.0&request=DescribeCoverage&coverage=emodnet:mean
+https://ows.emodnet-bathymetry.eu/wcs?service=WCS&version=1.0.0&request=GetCoverage&coverage=emodnet:mean&crs=EPSG:4326&BBOX=0,55,4,58&format=image/tiff&interpolation=nearest&resx=0.05&resy=0.025
+https://ows.emodnet-bathymetry.eu/wcs?service=WCS&version=1.0.0&request=GetCoverage&coverage=emodnet:mean&crs=EPSG:4326&BBOX=0,55,4,58&format=ArcGrid&interpolation=nearest&resx=0.05&resy=0.025
+https://ows.emodnet-bathymetry.eu/wcs?service=WCS&version=2.0.1&request=GetCapabilities
+https://emodnet.ec.europa.eu/en/bathymetry#raw
+https://www.gebco.net/data-products/gridded-bathymetry-data#raw
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_bathymetry_A_10000.geojson
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_bathymetry_J_1000.geojson

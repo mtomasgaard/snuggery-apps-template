@@ -30,6 +30,8 @@ on:
       - Refresh Finances
       - Refresh global-wind
       - Refresh global-weather
+      - Build Shelf Atlas data
+      - Build World Oil & Gas data
       - Pull Garmin data for Running Dashboard
       - Rebuild Norne reservoir data
       - Build app ZIPs

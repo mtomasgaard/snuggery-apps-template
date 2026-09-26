@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "World Oil & Gas",
+  "entryPoint": "index.html",
+  "description": "Oil and gas production by country, 1900 to today, on a world map with a year player",
+  "version": "1.0"
+}

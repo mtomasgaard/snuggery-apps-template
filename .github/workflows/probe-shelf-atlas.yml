@@ -1,0 +1,38 @@
+name: Probe Shelf Atlas sources
+
+# A diagnostic, not a refresh. Fetches every URL in scripts/shelf_atlas/probe-urls.txt
+# from a GitHub runner and prints what each one returns (columns, layers, hrefs,
+# licence text) so the pipeline can be written against what the sources really
+# serve. It commits nothing. Run it by hand from the Actions tab whenever a
+# source moves.
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Extra URLs to probe, one per line (optional)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Readers for spreadsheets and PDFs
+        run: python3 -m pip install --quiet openpyxl pypdf numpy tifffile
+      - name: Probe
+        env:
+          EXTRA: ${{ inputs.urls }}
+        run: |
+          set -uo pipefail
+          cp scripts/shelf_atlas/probe-urls.txt /tmp/urls.txt
+          if [ -n "$EXTRA" ]; then printf '%s\n' "$EXTRA" >> /tmp/urls.txt; fi
+          python3 scripts/shelf_atlas/probe.py /tmp/urls.txt

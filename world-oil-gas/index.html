@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>World Oil &amp; Gas</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Every address in this app is relative. There is no external script, font,
+     image or map tile anywhere in index.html, app.js or style.css: a mini-app
+     cannot reach the network, and this one does not try. The country outlines,
+     the production series and the field points all travel in ./data. -->
+
+<header class="topbar">
+  <div class="titles">
+    <h1>World Oil &amp; Gas</h1>
+    <button class="stamp" id="stamp" type="button" aria-label="About this data">Loading&hellip;</button>
+  </div>
+  <div class="actions">
+    <button class="iconbtn unitbtn" id="btn-units" type="button" aria-label="Change units">kboe/d</button>
+  </div>
+</header>
+
+<div class="switcher">
+  <div class="seg" id="modes" role="group" aria-label="Colour countries by">
+    <button type="button" data-mode="oil" aria-pressed="false">Oil</button>
+    <button type="button" data-mode="gas" aria-pressed="false">Gas</button>
+    <button type="button" data-mode="total" aria-pressed="true">Oil + Gas</button>
+  </div>
+</div>
+
+<div class="map-wrap" id="map-wrap">
+  <canvas id="map" role="img" aria-label="World map of oil and gas production by country"></canvas>
+
+  <div class="topstack">
+  <div class="error" id="error" role="alert" hidden></div>
+
+  <!-- Shown whenever the fields layer is switched on but fields.json says it
+       has nothing to draw. It prints the file's own reason, word for word. -->
+  <button type="button" class="banner" id="banner" aria-controls="layers" hidden></button>
+  </div>
+
+  <div class="mapbtns">
+    <div class="btngroup">
+      <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
+      <button type="button" id="zoom-home" aria-label="Whole world">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </button>
+    </div>
+    <div class="btngroup">
+      <button type="button" id="btn-layers" aria-expanded="false" aria-controls="layers" aria-label="Layers">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M12 3l9 5-9 5-9-5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M3 13l9 5 9-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="layers" id="layers" hidden>
+    <div class="layers-row">
+      <label class="switch" for="chk-fields">
+        <input type="checkbox" id="chk-fields" role="switch">
+        <span>Oil and gas fields</span>
+      </label>
+    </div>
+    <p class="layers-note" id="fields-note"></p>
+    <div class="layers-row" id="status-row">
+      <span class="layers-label" id="status-label">Show</span>
+      <div class="seg small" id="status-seg" role="group" aria-labelledby="status-label">
+        <button type="button" data-status="operating" aria-pressed="true">Operating</button>
+        <button type="button" data-status="all" aria-pressed="false">All</button>
+      </div>
+    </div>
+    <div class="layers-row">
+      <label class="switch" for="chk-labels">
+        <input type="checkbox" id="chk-labels" role="switch" checked>
+        <span>Country names</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="bottomstack">
+  <div class="legend" id="legend" aria-label="Map key" hidden>
+    <div class="legend-head"><span id="legend-title"></span><span id="legend-unit"></span></div>
+    <div class="legend-bar" id="legend-bar"></div>
+    <div class="legend-ticks" id="legend-ticks"></div>
+    <div class="legend-extra">
+      <span class="key"><i class="sw none" aria-hidden="true"></i>None</span>
+      <span class="key"><i class="sw nodata" aria-hidden="true"></i>No data</span>
+    </div>
+    <div class="legend-fields" id="legend-fields" hidden></div>
+  </div>
+
+  <!-- Attribution the licences ask for, on screen rather than only in About. -->
+  <p class="credits" id="credits"></p>
+  </div>
+
+  <section class="sheet" id="sheet" aria-live="polite" hidden>
+    <button class="sheet-close" id="sheet-close" type="button" aria-label="Close">&times;</button>
+    <div id="sheet-body"></div>
+  </section>
+
+  <div class="about" id="about" hidden>
+    <div class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <h2 id="about-title">About this data</h2>
+      <div id="about-body"></div>
+      <button type="button" class="about-close" id="about-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer class="player">
+  <div class="time-row">
+    <div class="valid" id="year-label">&mdash;</div>
+    <div class="lead" id="year-sum">&nbsp;</div>
+  </div>
+  <div class="controls">
+    <button type="button" class="pbtn" id="btn-prev" aria-label="Previous year">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 5v14M18 5l-9 7 9 7z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="pbtn play" id="btn-play" aria-label="Play">
+      <svg id="ico-play" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg id="ico-pause" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" hidden><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
+    </button>
+    <button type="button" class="pbtn" id="btn-next" aria-label="Next year">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M18 5v14M6 5l9 7-9 7z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="slider-wrap">
+      <input type="range" id="slider" min="1900" max="2024" step="1" value="2024" aria-label="Year">
+      <div class="ticks" id="ticks"></div>
+    </div>
+  </div>
+</footer>
+
+<script src="./app.js" defer></script>
+</body>
+</html>

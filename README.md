@@ -74,6 +74,8 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 21 MB | nothing |
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
+| Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
+| World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | tiny | nothing (GOGET by hand) |
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
 Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
@@ -145,6 +147,18 @@ The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, w
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
 
+### Shelf Atlas
+
+The North Sea's oil and gas on a map you pan and pinch: every field outline in the Norwegian, UK, Danish and Dutch sectors, the platforms and the pipelines, the median lines between the four shelves, and a month scrubber from January 1971 to the newest report that colours and sizes each field by what it produced that month. Tap a field for its operator, discovery year, status and a production sparkline; cross-border units (Statfjord, Frigg, Murchison…) show each side's share and the sum. **Live**: rebuilt weekly here from the four regulators' open data — Sodir, NSTA, the Danish Energy Agency and NLOG — plus Natural Earth and Marine Regions.
+
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) · How it was built and where the data comes from: [`shelf-atlas/RESEARCH.md`](shelf-atlas/RESEARCH.md) · Running it: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
+
+### World Oil & Gas
+
+Every country's oil and gas production from 1900 to the latest Energy Institute year, as a choropleth with a year scrubber, and — once you drop Global Energy Monitor's extraction tracker into `world-oil-gas/raw/manual/` — every known field as a point sized by production. **Live**: countries rebuilt here after each Statistical Review; fields by hand (the tracker sits behind a form).
+
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
+
 ### Milky Way
 
 The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.9 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
@@ -163,6 +177,8 @@ The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D
 ![Norne Reservoir](norne-reservoir/screenshots/app.png)
 ![Besseggen](besseggen/screenshots/app.png)
 ![Milky Way](milky-way/screenshots/app.png)
+![Shelf Atlas](shelf-atlas/screenshots/app.png)
+![World Oil & Gas](world-oil-gas/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in `.github/workflows/`
 and its scripts in `scripts/`, where it has them. Then take out its row, entry
@@ -197,6 +213,8 @@ same app from the same folder, and it shows the data last published here. Open t
 | Anatomy | [**Open Anatomy**](https://mtomasgaard.github.io/snuggery-apps-template/anatomy/) |
 | Besseggen | [**Open Besseggen**](https://mtomasgaard.github.io/snuggery-apps-template/besseggen/) |
 | Norne Reservoir | [**Open Norne Reservoir**](https://mtomasgaard.github.io/snuggery-apps-template/norne-reservoir/) |
+| Shelf Atlas | [**Open Shelf Atlas**](https://mtomasgaard.github.io/snuggery-apps-template/shelf-atlas/) |
+| World Oil & Gas | [**Open World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/world-oil-gas/) |
 
 The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
 has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)
@@ -450,4 +468,7 @@ Gaia-derived star, sky and young-star map files (`deep.bin`, `named.json`, the s
 AT-HYG/HYG-derived star files (CC BY-SA 4.0), with its vendored three.js (MIT) and two SIL OFL fonts
 ([CREDITS.txt](milky-way/CREDITS.txt)); and, in Global Wind and Global Weather,
 NOAA's forecast (public domain), Natural Earth coastlines (public domain) and GeoNames city labels
-(CC BY 4.0, attribution required — [LICENSES.md](global-wind/assets/LICENSES.md)).
+(CC BY 4.0, attribution required — [LICENSES.md](global-wind/assets/LICENSES.md)); and, in Shelf Atlas and World Oil & Gas,
+the four North Sea regulators' open data (Sodir under NLOD; NSTA under its Open User Licence, non-commercial; the Danish
+Energy Agency; NLOG), Marine Regions and EMODnet (CC BY 4.0), Our World in Data's energy dataset (CC BY 4.0), Global Energy
+Monitor's extraction tracker (CC BY 4.0) and Natural Earth (public domain) — [RESEARCH.md](shelf-atlas/RESEARCH.md).

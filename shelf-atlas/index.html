@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Shelf Atlas</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Every address here is relative. There is no external script, font, image
+     or map tile in index.html, app.js or style.css: a mini-app cannot reach the
+     network. The coastline, the fields and every month of production travel
+     inside the folder as data/geo.json and data/snapshot.json. -->
+
+<header class="topbar">
+  <div class="titles">
+    <h1>Shelf Atlas</h1>
+    <button class="stamp" id="stamp" type="button" aria-label="About this data">Loading&hellip;</button>
+  </div>
+  <div class="actions">
+    <button class="iconbtn" id="btn-search" type="button" aria-label="Search fields" aria-expanded="false" aria-controls="search">
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <button class="iconbtn unitbtn" id="btn-units" type="button" aria-label="Units">Sm³/d</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="seg" id="qty" role="radiogroup" aria-label="Quantity">
+    <button type="button" role="radio" data-q="liq" aria-checked="true">Liquids</button>
+    <button type="button" role="radio" data-q="gas" aria-checked="false">Gas</button>
+    <button type="button" role="radio" data-q="oe" aria-checked="false" aria-label="Oil equivalent">O.E.</button>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Countries shown"></div>
+</div>
+
+<div class="map-wrap" id="map-wrap">
+  <canvas id="map" role="img" aria-label="Map of North Sea oil and gas fields"></canvas>
+
+  <div class="search" id="search" hidden>
+    <input id="search-input" type="search" placeholder="Find a field" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Field name" aria-controls="search-list">
+    <ul id="search-list" class="search-list" role="listbox" aria-label="Matching fields"></ul>
+  </div>
+
+  <div class="error" id="error" role="alert" hidden></div>
+
+  <div class="mapbtns">
+    <div class="btngroup">
+      <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+      <button type="button" id="zoom-out" aria-label="Zoom out">&minus;</button>
+      <button type="button" id="zoom-home" aria-label="Whole North Sea">
+        <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button type="button" class="legend" id="legend" aria-expanded="false" aria-label="Map key">
+    <span class="legend-head"><span id="legend-q">Liquids</span><span id="legend-unit">Sm³/d</span></span>
+    <span class="legend-bar" id="legend-bar"></span>
+    <span class="legend-ticks" id="legend-ticks"></span>
+    <span class="legend-key" id="legend-key" hidden>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><circle cx="5" cy="7" r="3" class="k-circle"/><circle cx="18" cy="7" r="6" class="k-circle"/></svg>Circle area = rate that month</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-none"/></svg>Outline only: no production</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-shut"/></svg>Grey: shut down</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="1" y="3" width="8" height="8" class="k-fac"/><path d="M14 2l4.5 9h-9z" class="k-fac"/><circle cx="24" cy="7" r="2.6" class="k-sub"/></svg>Fixed · floating · subsea</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-oil"/></svg>Oil pipeline</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-gas"/></svg>Gas pipeline</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-other"/></svg>Other / unknown pipeline</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-border"/></svg>Maritime boundary</span>
+      <span class="krow faint">Platforms and pipelines appear as you zoom in.</span>
+    </span>
+  </button>
+
+  <!-- The credits the sources ask for, on the map rather than buried. Tapping
+       it opens the full list with licences. -->
+  <button type="button" class="credits" id="credits" aria-label="Sources and licences"></button>
+
+  <section class="sheet" id="sheet" hidden aria-label="Details" data-mode="half">
+    <div class="sheet-grip" id="sheet-grip">
+      <span class="grip-bar" aria-hidden="true"></span>
+      <button type="button" class="sheet-close" id="sheet-close" aria-label="Close details">&times;</button>
+    </div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </section>
+
+  <div class="about" id="about" hidden>
+    <div class="about-card" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <h2 id="about-title">About this data</h2>
+      <div id="about-body"></div>
+      <button type="button" class="about-close" id="about-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer class="player">
+  <div class="time-row">
+    <div class="month" id="month-label" aria-live="polite">&mdash;</div>
+    <div class="total" id="total">&nbsp;</div>
+  </div>
+  <div class="controls">
+    <button type="button" class="pbtn yr" id="btn-back" aria-label="Back one year">&minus;1y</button>
+    <button type="button" class="pbtn play" id="btn-play" aria-label="Play">
+      <svg id="ico-play" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg id="ico-pause" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" hidden><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
+    </button>
+    <button type="button" class="pbtn yr" id="btn-fwd" aria-label="Forward one year">+1y</button>
+    <div class="slider-wrap">
+      <input type="range" id="slider" min="0" max="0" step="1" value="0" aria-label="Month">
+      <div class="ticks" id="ticks" aria-hidden="true"></div>
+    </div>
+    <button type="button" class="pbtn speed" id="btn-speed" aria-label="Playback speed">1&times;</button>
+  </div>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>

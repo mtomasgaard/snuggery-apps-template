@@ -1,0 +1,98 @@
+name: Build Shelf Atlas data
+
+# Rebuilds the North Sea app's two data files from the four regulators' open data — Sodir
+# (Norway), NSTA (UK), the Danish Energy Agency with GEUS (Denmark), NLOG (Netherlands) — plus
+# Natural Earth, Marine Regions and EMODnet, and commits them if they changed. Everything it
+# reads is public and needs no key. Weekly: the monthly production reports land at different
+# times in the four countries, and a week is the shortest interval at which any of them can
+# have changed. See RESEARCH.md for the sources and scripts/shelf_atlas/ for the code.
+#
+# schedule: only runs from the default branch; a cron on any other branch is inert.
+
+on:
+  schedule:
+    - cron: '41 5 * * 1'                      # Mondays, early European morning
+  workflow_dispatch:
+    inputs:
+      countries:
+        description: 'Countries to build (comma-separated of NO,UK,DK,NL)'
+        type: string
+        default: 'NO,UK,DK,NL'
+      refresh:
+        description: 'Ignore the download cache and refetch every source'
+        type: boolean
+        default: false
+  push:
+    branches-ignore: [main]                  # on a working branch: build on every change to the pipeline
+    paths:
+      - 'scripts/shelf_atlas/**'
+      - '!scripts/shelf_atlas/probe*'
+      - '!scripts/shelf_atlas/*.md'
+      - '.github/workflows/build-shelf-atlas.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-shelf-atlas
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # Pure-Python readers: pyshp for the shapefiles, openpyxl for the Danish workbook, pypdf
+      # for the Danish monthly reports, numpy + tifffile for the EMODnet bathymetry grid. No GDAL,
+      # no node, nothing to apt-get.
+      - name: Install the readers
+        run: python3 -m pip install --quiet 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4' 'numpy>=2' 'tifffile>=2024'
+
+      # The download cache is keyed by week so each run refetches the sources once and the
+      # retries within a week cost the regulators nothing. `refresh` bypasses it.
+      - name: Download cache
+        if: ${{ !inputs.refresh }}
+        uses: actions/cache@v4
+        with:
+          path: scripts/shelf_atlas/cache
+          key: shelf-atlas-sources-${{ github.run_id }}
+          restore-keys: |
+            shelf-atlas-sources-
+
+      - name: Build
+        env:
+          COUNTRIES: ${{ inputs.countries || 'NO,UK,DK,NL' }}
+          REFRESH: ${{ inputs.refresh }}
+        run: |
+          set -euo pipefail
+          extra=""
+          if [ "$REFRESH" = "true" ]; then extra="--refresh"; fi
+          python3 -m scripts.shelf_atlas.build_north_sea --out shelf-atlas/data --countries "$COUNTRIES" $extra
+          ls -la shelf-atlas/data
+
+      - name: Commit the data, only if it changed
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add shelf-atlas/data
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "shelf-atlas: data refresh $(date -u +%Y-%m-%d)"
+          for i in 1 2 3 4; do
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push rejected; rebasing and retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+            if ! git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"; then
+              git rebase --abort || true
+              echo "another run refreshed it seconds ago; nothing left to do"
+              exit 0
+            fi
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1

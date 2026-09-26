@@ -94,3 +94,27 @@ the licence above; the first three are described in running-dashboard/TILES.md:
     (milky-way/vendor/three-LICENSE.txt), and milky-way/fonts/ are Atkinson
     Hyperlegible and Newsreader under the SIL Open Font License 1.1
     (milky-way/fonts/OFL.txt).
+- The North Sea data under shelf-atlas/data/ and the world data under
+  world-oil-gas/data/ are adapted (datum-shifted, simplified, unit-converted,
+  packed) from the sources listed with their licences in shelf-atlas/RESEARCH.md
+  and on each app's attribution screen:
+  - Norway: contains data under the Norwegian licence for Open Government data
+    (NLOD) distributed by the Norwegian Offshore Directorate (FactPages,
+    FactMaps shapefiles).
+  - United Kingdom: contains information provided by the North Sea Transition
+    Authority and/or other third parties, under the NSTA Open User Licence
+    (June 2023), which permits copying, publishing, adapting and
+    non-commercial exploitation only.
+  - Denmark: Danish Energy Agency production reports and field delineations,
+    and the Agency's installations list via GEUS; no licence is stated at the
+    source, and reuse here rests on the Danish PSI Act with attribution.
+  - Netherlands: NLOG (TNO) field, facility and production data; NLOG claims
+    no intellectual property rights in the data it provides.
+  - Marine Regions Maritime Boundaries v12, Flanders Marine Institute (2023),
+    CC BY 4.0; EMODnet Human Activities pipelines, CC BY 4.0; Natural Earth
+    coastline, countries and bathymetry, public domain.
+  - Our World in Data's energy dataset (Energy Institute Statistical Review of
+    World Energy and The Shift Data Portal), CC BY 4.0.
+  - Global Energy Monitor's Global Oil and Gas Extraction Tracker, when
+    dropped into world-oil-gas/raw/manual/ and built into
+    world-oil-gas/data/fields.json, CC BY 4.0.
