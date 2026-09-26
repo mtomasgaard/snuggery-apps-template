@@ -33,6 +33,14 @@ def peek(url, ctype, body):
                 out.append(f"    zip: {i.filename} {i.file_size}")
             # peek a .csv/.dbf/.prj inside
             for i in z.infolist():
+                if i.filename.lower().endswith(".dbf"):
+                    d = z.read(i)
+                    nf = (int.from_bytes(d[8:10], "little") - 33) // 32
+                    names = []
+                    for k in range(nf):
+                        rec = d[32 + 32 * k: 64 + 32 * k]
+                        names.append(rec[:11].split(b"\0")[0].decode("latin1") + ":" + chr(rec[11]) + str(rec[16]))
+                    out.append(f"    dbf: {int.from_bytes(d[4:8], 'little')} records; " + ", ".join(names))
                 if i.filename.lower().endswith(".prj"):
                     out.append("    prj: " + z.read(i).decode("latin1")[:300])
                 if i.filename.lower().endswith(".csv"):

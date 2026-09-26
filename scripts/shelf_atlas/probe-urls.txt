@@ -1,65 +1,33 @@
-# --- Norway: Sodir FactPages CSV exports (SSRS endpoint) ---
-https://factpages.sodir.no/public?/Factpages/external/tableview/field&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/field_production_monthly&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/field_operator_hst&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/field_activity_status_hst&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/field_description&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/field_reserves&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/discovery&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/facility_fixed&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/tuf_petroleum_pipeline&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-https://factpages.sodir.no/public?/Factpages/external/tableview/pipeline&rs:Command=Render&rc:Toolbar=false&rc:Parameters=f&IpAddress=not_used&CultureCode=en&rs:Format=CSV&Top100=false
-# --- Norway: Sodir shapefiles ---
-https://factpages.sodir.no/downloads/shape/
+# --- Norway: dbf columns of the shapefiles ---
 https://factpages.sodir.no/downloads/shape/fldArea.zip
 https://factpages.sodir.no/downloads/shape/fclPoint.zip
 https://factpages.sodir.no/downloads/shape/pipLine.zip
-https://factpages.sodir.no/downloads/shape/dscArea.zip
-https://factpages.sodir.no/downloads/shape/blkArea.zip
-https://factpages.sodir.no/downloads/shape/prlArea.zip
-# --- Norway: FactMaps REST + WFS ---
-https://factmaps.sodir.no/api/rest/services/Factmaps/FactMapsWGS84/MapServer?f=pjson
-https://factmaps.sodir.no/api/services/Factmaps/FactMapsWGS84/MapServer/WFSServer?request=GetCapabilities&service=WFS
-https://www.sodir.no/en/facts/data-and-analyses/open-data/
-# --- UK: NSTA ArcGIS Hub ---
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=field&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=production&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=pipeline&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=infrastructure&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=median&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=boundary&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/v3/datasets?q=UKCS&page[size]=50
-https://opendata-nstauthority.hub.arcgis.com/api/search/v1?q=fields&limit=50
-https://www.nstauthority.co.uk/data-centre/nsta-open-data/faqs/
-https://www.nstauthority.co.uk/data-and-insights/data/themes/production/
-https://ckan.publishing.service.gov.uk/dataset/nsta-field-production-pprs-wgs843
-https://www.data.gov.uk/dataset/12e8231f-0c6b-4a41-bfbf-f2f1886e88ad/nsta-field-production-points-pprs-wgs845
-# --- Denmark: Danish Energy Agency + GEUS ---
-https://ens.dk/en/our-services/oil-and-gas-related-data/monthly-and-yearly-production
-https://ens.dk/en/our-services/oil-and-gas-related-data
-https://ens.dk/en/our-services/oil-and-gas-related-data/danish-fields-and-licences
-https://ens.dk/en/our-responsibilities/oil-gas
-https://ens.dk/da/vores-services/olie-og-gasrelaterede-data/maanedlig-og-aarlig-produktion
-https://ens.dk/da/vores-services/olie-og-gasrelaterede-data
-https://data.geus.dk/geusmap/?mapname=oil_gas
-https://data.geus.dk/geusmap/ows/25832.jsp?whoami=data.geus.dk&nocache=nocache&SERVICE=WFS&REQUEST=GetCapabilities
+# --- UK: NSTA's ArcGIS Online organisation ---
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services?f=pjson
+https://www.arcgis.com/sharing/rest/search?q=orgid%3AOZMfUznmLTnWccBc%20type%3A%22Feature%20Service%22&f=json&num=100&start=1
+https://www.arcgis.com/sharing/rest/search?q=orgid%3AOZMfUznmLTnWccBc%20type%3A%22Feature%20Service%22&f=json&num=100&start=101
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/Offshore_hydrocarbon_fields_(WGS84)/FeatureServer/0?f=pjson
+https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services/Offshore_hydrocarbon_fields_(WGS84)/FeatureServer/0/query?where=1%3D1&outFields=*&resultRecordCount=2&f=geojson
+https://www.arcgis.com/sharing/rest/content/items/ba711a4be08449329a871d37ae910735?f=json
+https://data.nstauthority.co.uk/arcgis/rest/services/Public_WGS84?f=pjson
+https://data.nstauthority.co.uk/arcgis/rest/services/Public_WGS84/UKCS_Offshore_Infrastructure_WGS84/FeatureServer?f=pjson
+https://www.nstauthority.co.uk/footer/access-to-information/
+https://open-data-ukcs-transition.hub.arcgis.com/search?q=pprs
+https://open-data-ukcs-transition.hub.arcgis.com/api/v3/datasets?q=pprs&page[size]=50&filter[source]=NSTA
+# --- Denmark: current ens.dk addresses ---
+https://ens.dk/en/energy-sources/monthly-and-yearly-production
+https://ens.dk/en/energy-sources/oil-and-gas-related-data/shape-files-oil-and-gas-maps
+https://ens.dk/en/energy-sources/oil-and-gas-related-data
+https://ens.dk/en/energy-sources/about-oil-and-gas
+https://ens.dk/en/about-us/copyright
+https://ens.dk/en/about-us/terms-use
 # --- Netherlands: NLOG ---
-https://www.nlog.nl/en/data
-https://www.nlog.nl/en/production-and-consumption-data
-https://www.nlog.nl/en/oil-and-gas-production
-https://www.nlog.nl/en/open-data
-https://www.nlog.nl/data
-https://www.nlog.nl/nlog-open-data
-https://www.nlog.nl/en/nlog-open-data
-https://www.nlog.nl/en/data-centre
-https://www.nlog.nl/en/wms-services
-https://www.nlog.nl/en/gis-data
-https://www.nlog.nl/en/maps
-# --- Median lines: Marine Regions (VLIZ) ---
-https://geo.vliz.be/geoserver/MarineRegions/wfs?service=WFS&version=1.1.0&request=GetCapabilities
-https://geo.vliz.be/geoserver/MarineRegions/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=MarineRegions:eez_boundaries&outputFormat=json&maxFeatures=2
-https://geo.vliz.be/geoserver/MarineRegions/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=MarineRegions:eez_boundaries&outputFormat=json&CQL_FILTER=(TERRITORY1%20IN%20(%27Norway%27,%27United%20Kingdom%27,%27Denmark%27,%27Netherlands%27,%27Germany%27)%20AND%20TERRITORY2%20IN%20(%27Norway%27,%27United%20Kingdom%27,%27Denmark%27,%27Netherlands%27,%27Germany%27))
-https://www.marineregions.org/disclaimer.php
-# --- Basemap checks from a runner ---
-https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_bathymetry_K_200.geojson
-https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson
+https://www.nlog.nl/en/production-and-injection-data
+https://www.nlog.nl/en/fields
+https://www.nlog.nl/en/models-maps-and-datasets
+https://www.nlog.nl/en/interactive-map
+https://www.nlog.nl/en/disclaimer
+https://www.nlog.nl/en/copyright
+https://www.nlog.nl/en/terms-use
+# --- Median lines: VLIZ with the right property names ---
+https://geo.vliz.be/geoserver/MarineRegions/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=MarineRegions:eez_boundaries&outputFormat=json&CQL_FILTER=(territory1%20IN%20(%27Norway%27,%27United%20Kingdom%27,%27Denmark%27,%27Netherlands%27,%27Germany%27,%27Faroe%27,%27Sweden%27,%27Belgium%27)%20AND%20territory2%20IN%20(%27Norway%27,%27United%20Kingdom%27,%27Denmark%27,%27Netherlands%27,%27Germany%27,%27Faroe%27,%27Sweden%27,%27Belgium%27))&propertyName=line_id,line_name,line_type,territory1,territory2
