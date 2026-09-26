@@ -77,8 +77,15 @@
 
 const STORE = {
   view: 'sa.view', month: 'sa.month', qty: 'sa.qty', sys: 'sa.units', cc: 'sa.countries',
-  sel: 'sa.sel', speed: 'sa.speed', key: 'sa.key',
+  sel: 'sa.sel', speed: 'sa.speed', key: 'sa.key', layers: 'sa.layers',
 };
+/* Map layers the user can switch off. Fields, their circles and the coast are
+ * always drawn; everything else is a choice. */
+const LAYERS = {
+  outlines: 'Field outlines', facs: 'Platforms and subsea', pipes: 'Pipelines',
+  borders: 'Maritime boundaries', bathy: 'Depth shading', labels: 'Field names',
+};
+const layerOn = Object.fromEntries(Object.keys(LAYERS).map((k) => [k, true]));
 const EPOCH = 1971;
 const DEG = Math.PI / 180;
 const CC = ['NO', 'UK', 'DK', 'NL'];
@@ -108,14 +115,17 @@ const UNITS = {
 
 /* Production is one quantity, so one hue light→dark (dark→light on the dark
  * map, where brighter must still mean more). Orange, because the sea under it
- * is blue. The pipelines are categorical and borrow green/violet so the two
- * encodings never share a hue. Circle area carries the same number as colour. */
+ * is blue. Only the circles carry it: circle area and colour are the rate, and
+ * an outline is just where the field is (a faint tint while it produces, grey
+ * once shut). The pipelines are categorical and borrow green/violet so the two
+ * encodings never share a hue. */
 const THEMES = {
   light: {
     ramp: ['#fbe1c9', '#f5b183', '#eb6834', '#b8431a', '#6e2408'],
     bg: '#e3e7ec', sea: '#d6e4ef', bathy: '#c4d7e8', land: '#f7f5f0', coast: '#8d99a6',
     border: '#5d6878', idle: 'rgba(60,70,85,.55)', prodStroke: 'rgba(80,35,10,.55)',
     shutFill: 'rgba(150,157,168,.6)', shutStroke: 'rgba(90,98,110,.75)', ring: 'rgba(255,255,255,.95)',
+    prodFill: 'rgba(235,104,52,.20)',
     pipes: ['#008300', '#4a3aa7', '#7d8794'], fac: '#14181f', facStroke: '#f7f5f0', sub: '#4a5162',
     label: '#14181f', halo: 'rgba(247,245,240,.92)', sel: '#2f6df6', grid: '#dfe4ec', ink: '#14181f', dim: '#4a5162',
     // depth ramp for the bathymetry raster, keyed by its grey value (√depth): pale shallows to mid blue
@@ -126,6 +136,7 @@ const THEMES = {
     bg: '#07090d', sea: '#0f1a26', bathy: '#0a121c', land: '#1c2129', coast: '#465363',
     border: '#8793a3', idle: 'rgba(170,182,198,.55)', prodStroke: 'rgba(255,220,190,.35)',
     shutFill: 'rgba(95,104,118,.65)', shutStroke: 'rgba(150,160,175,.75)', ring: 'rgba(8,12,18,.9)',
+    prodFill: 'rgba(244,154,96,.26)',
     pipes: ['#2fae4a', '#9085e9', '#8a95a3'], fac: '#e8ecf2', facStroke: '#0f1a26', sub: '#9aa6b5',
     label: '#e8ecf2', halo: 'rgba(12,17,24,.9)', sel: '#5b8eff', grid: '#262e39', ink: '#e8ecf2', dim: '#9aa6b5',
     depth: [[1, '#182a3d'], [40, '#132336'], [80, '#0e1c2d'], [150, '#0a1523'], [255, '#060d17']],
@@ -509,7 +520,7 @@ function buildModel(s, B) {
     if (r.liq) { F.liq = decodeSeries(r.liq, `fields[${i}] (${r.id}).liq`); F.liqS = r.liq.start; }
     if (r.gas) { F.gas = decodeSeries(r.gas, `fields[${i}] (${r.id}).gas`); F.gasS = r.gas.start; }
     const o = B.outlines.get(r.id);
-    if (o) { F.path = o.path; F.rings = o.rings; F.bbox = o.bbox; F.area = o.area; } else {
+    if (o) { F.path = o.path; F.rings = o.rings; F.bbox = o.bbox; F.area = o.area; F.delineation = r.country === 'DK'; } else {
       F.path = null; F.rings = null; F.bbox = [F.X, F.Y, F.X, F.Y]; F.area = 0; M.noOutline++;
     }
     F.first = F.liq || F.gas ? Math.min(F.liq ? F.liqS : 1e9, F.gas ? F.gasS : 1e9) : null;
@@ -774,8 +785,9 @@ function frame(now) {
 }
 
 const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
-const pipesOn = () => zoomRel() >= Z_PIPES;
-const facsOn = () => zoomRel() >= Z_FACS;
+const pipesOn = () => layerOn.pipes && zoomRel() >= Z_PIPES;
+const facsOn = () => layerOn.facs && zoomRel() >= Z_FACS;
+const labelsOn = () => layerOn.labels && zoomRel() >= Z_LABELS;
 const worldTf = (c) => c.setTransform(dpr * view.k, 0, 0, dpr * view.k, dpr * view.tx, dpr * view.ty);
 const screenTf = (c) => c.setTransform(dpr, 0, 0, dpr, 0, 0);
 
@@ -785,7 +797,8 @@ const screenTf = (c) => c.setTransform(dpr, 0, 0, dpr, 0, 0);
  * straight onto the map instead of twice. */
 let cache = null;
 function staticKey() {
-  return [view.k, view.tx, view.ty, W, H, dpr, P.name, pipesOn(), CC.map((c) => (ccOn[c] ? 1 : 0)).join('')].join('|');
+  return [view.k, view.tx, view.ty, W, H, dpr, P.name, pipesOn(), layerOn.borders, layerOn.bathy,
+    CC.map((c) => (ccOn[c] ? 1 : 0)).join('')].join('|');
 }
 function drawStatic(c) {
   const k = view.k;
@@ -795,14 +808,14 @@ function drawStatic(c) {
   worldTf(c);
   c.fillStyle = P.sea;
   c.fillRect(base.X0, base.Y0, base.X1 - base.X0, base.Y1 - base.Y0);
-  const bc = bathyCanvas();
+  const bc = layerOn.bathy ? bathyCanvas() : null;
   if (bc) {
     // Rows are already uniform in Mercator y, so one stretch places it.
     c.imageSmoothingEnabled = true;
     // (the 200 m polygons are not outlined over it: Natural Earth splits
     // them at tile seams, and those seams would show as straight lines)
     c.drawImage(bc, bathy.X0, bathy.Y0, bathy.X1 - bathy.X0, bathy.Y1 - bathy.Y0);
-  } else {
+  } else if (layerOn.bathy) {
     c.fillStyle = P.bathy;
     c.fill(base.bathy, 'evenodd');
   }
@@ -813,11 +826,13 @@ function drawStatic(c) {
   c.strokeStyle = P.coast;
   c.lineWidth = 0.8 / k;
   c.stroke(base.coast);
-  c.strokeStyle = P.border;
-  c.lineWidth = 1.2 / k;
-  c.setLineDash([5 / k, 4 / k]);
-  c.stroke(base.borderPath);
-  c.setLineDash([]);
+  if (layerOn.borders) {
+    c.strokeStyle = P.border;
+    c.lineWidth = 1.2 / k;
+    c.setLineDash([5 / k, 4 / k]);
+    c.stroke(base.borderPath);
+    c.setLineDash([]);
+  }
   if (pipesOn()) {
     const grow = clamp(Math.sqrt(zoomRel() / Z_PIPES), 1, 1.8);
     c.globalAlpha = 0.75;
@@ -890,7 +905,7 @@ function render() {
     c.drawImage(outlineLayer(), 0, 0);
     drawCircles(c);
     if (facsOn()) drawFacilities(c);
-    if (zoomRel() >= Z_LABELS) drawLabels(c);
+    if (labelsOn()) drawLabels(c);
   }
   drawSelection(c);
 }
@@ -902,6 +917,7 @@ function render() {
  * and otherwise only added to as fields are discovered. Scrubbing backwards
  * past a discovery rebuilds it once. */
 function drawFields(c) {
+  if (!layerOn.outlines) return;
   const vb = viewBounds(2);
   worldTf(c);
   const fs = model.fields;
@@ -909,21 +925,17 @@ function drawFields(c) {
     const st = fieldState[i];
     if (st < 2) continue;
     const F = fs[i];
-    if (!F.path || !inView(F.bbox, vb)) continue;
-    if (st === 3) {
-      c.globalAlpha = 0.85;
-      c.fillStyle = P.lut[fieldCol[i]];
-    } else {
-      c.globalAlpha = 1;
-      c.fillStyle = P.shutFill;
-    }
+    if (!F.path || F.delineation || !inView(F.bbox, vb)) continue;
+    // Status only: the rate is on the circle, not the polygon, so a big
+    // field is not louder than a big producer. Danish delineations are
+    // administrative areas and get no fill at all.
+    c.fillStyle = st === 3 ? P.prodFill : P.shutFill;
     c.fill(F.path, 'evenodd');
   }
-  c.globalAlpha = 1;
 }
 let ol = null;
 function outlineLayer() {
-  const key = [view.k, view.tx, view.ty, W, H, dpr, P.name].join('|');
+  const key = [view.k, view.tx, view.ty, W, H, dpr, P.name, layerOn.outlines].join('|');
   const n = model.fields.length;
   if (!ol || ol.canvas.width !== canvas.width || ol.canvas.height !== canvas.height) {
     const cv = document.createElement('canvas');
@@ -939,16 +951,27 @@ function outlineLayer() {
     c.clearRect(0, 0, ol.canvas.width, ol.canvas.height);
     ol.vis = new Uint8Array(n);
   }
-  worldTf(c);
-  c.lineJoin = 'round';
-  c.lineWidth = 0.8 / view.k;
-  c.strokeStyle = P.idle;
-  const vb = viewBounds(2);
-  for (let i = 0; i < n; i++) {
-    if (!fieldState[i] || ol.vis[i]) continue;
-    ol.vis[i] = 1;
-    const F = model.fields[i];
-    if (F.path && inView(F.bbox, vb)) c.stroke(F.path);
+  if (layerOn.outlines) {
+    worldTf(c);
+    c.lineJoin = 'round';
+    c.lineWidth = 0.8 / view.k;
+    c.strokeStyle = P.idle;
+    const vb = viewBounds(2);
+    const dashed = [];
+    for (let i = 0; i < n; i++) {
+      if (!fieldState[i] || ol.vis[i]) continue;
+      ol.vis[i] = 1;
+      const F = model.fields[i];
+      if (!F.path || !inView(F.bbox, vb)) continue;
+      if (F.delineation) dashed.push(F); else c.stroke(F.path);
+    }
+    // Danish "outlines" are the Agency's legal field delineations, drawn on
+    // block corners; dashed so they do not read as reservoirs.
+    if (dashed.length) {
+      c.setLineDash([4 / view.k, 3 / view.k]);
+      for (const F of dashed) c.stroke(F.path);
+      c.setLineDash([]);
+    }
   }
   ol.key = key;
   return ol.canvas;
@@ -1157,7 +1180,7 @@ function hitTest(sx, sy) {
     }
     if (bu >= 0) return { type: 'unit', u: bu };
     let bf = null;
-    for (const F of model.fields) {
+    if (layerOn.outlines) for (const F of model.fields) {
       if (!fieldState[F.i] || !F.rings) continue;
       const b = F.bbox;
       if (X < b[0] || X > b[2] || Y < b[1] || Y > b[3]) continue;
@@ -1170,7 +1193,7 @@ function hitTest(sx, sy) {
     if (p != null) return { type: 'pipe', i: p };
   }
   let bb = -1, bd = 12;
-  base.borders.forEach((b, i) => {
+  if (layerOn.borders) base.borders.forEach((b, i) => {
     const d = distToLines(b.lines, b.bbox, sx, sy, bd);
     if (d < bd) { bd = d; bb = i; }
   });
@@ -1622,6 +1645,9 @@ function renderUnitSheet(b, U) {
     if (isNum(F.raw.share) && !isG) dlRow(dl, 'National share', `${F.raw.share}%`);
     dlRow(dl, 'Regulator id', F.id);
     b.append(dl);
+    if (F.delineation) {
+      b.append(el('p', 'sh-note', 'The outline is the Danish Energy Agency\'s field delineation: an administrative area drawn on block corners, not the shape of the reservoir. Denmark publishes no reservoir outlines.'));
+    }
     if (isInt(F.raw.monthlyFrom)) {
       b.append(el('p', 'sh-note', `Before ${monthLabel(F.raw.monthlyFrom)} the ${(snap.countries && snap.countries[F.cc]) || F.cc} figures are annual totals spread evenly over the months, so month-to-month changes before then are not real.`));
     }
@@ -1888,6 +1914,7 @@ for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) {
 function onTap(sx, sy) {
   const now = performance.now();
   if (!$('search').hidden) { openSearch(false); return; }
+  if (!$('layers').hidden) { openLayers(false); return; }
   if (lastTap && now - lastTap.t < 300 && Math.hypot(sx - lastTap.x, sy - lastTap.y) < 24) {
     lastTap = null;
     zoomAt(sx, sy, 2);
@@ -1955,6 +1982,30 @@ $('zoom-home').addEventListener('click', () => {
   flyTo(h, 1);
   fly.to = { x: (h[0] + h[2]) / 2, y: (h[1] + h[3]) / 2, k: fitK };
 });
+function syncLayers() {
+  for (const inp of $('layers').querySelectorAll('input')) inp.checked = !!layerOn[inp.dataset.layer];
+  store(STORE.layers, layerOn);
+}
+function openLayers(on) {
+  $('layers').hidden = !on;
+  $('btn-layers').setAttribute('aria-expanded', String(on));
+}
+for (const [k, name] of Object.entries(LAYERS)) {
+  const lab = el('label', 'lrow');
+  const inp = document.createElement('input');
+  inp.type = 'checkbox';
+  inp.dataset.layer = k;
+  inp.addEventListener('change', () => {
+    layerOn[k] = inp.checked;
+    syncLayers();
+    if (sel && ((sel.type === 'fac' && !layerOn.facs) || (sel.type === 'pipe' && !layerOn.pipes) || (sel.type === 'border' && !layerOn.borders))) select(null);
+    requestRender();
+  });
+  lab.append(inp, el('span', null, name));
+  $('layers-list').append(lab);
+}
+$('btn-layers').addEventListener('click', () => openLayers($('layers').hidden));
+$('layers-close').addEventListener('click', () => openLayers(false));
 $('legend').addEventListener('click', () => {
   const open = $('legend-key').hidden;
   $('legend-key').hidden = !open;
@@ -2091,10 +2142,13 @@ function resize() {
   const sp = recall(STORE.speed) == null ? NaN : Number(recall(STORE.speed));
   if (isInt(sp) && sp >= 0 && sp < SPEEDS.length) speedIdx = sp;
   if (recall(STORE.key) === '1') { $('legend-key').hidden = false; $('legend').setAttribute('aria-expanded', 'true'); }
+  const ly = recallJSON(STORE.layers);
+  if (ly && typeof ly === 'object') for (const k of Object.keys(LAYERS)) if (typeof ly[k] === 'boolean') layerOn[k] = ly[k];
 })();
 buildPalette();
 for (const b of $('qty').children) b.setAttribute('aria-checked', String(b.dataset.q === qty));
 syncChips();
+syncLayers();
 updateSpeed();
 updateLegend();
 updateStamp();
@@ -2107,11 +2161,12 @@ window.__sa = {
   render() { const t0 = performance.now(); render(); return performance.now() - t0; },
   renderCold() { cache = null; const t0 = performance.now(); render(); return performance.now() - t0; },
   get state() {
-    return { month, qty, sys, ccOn: { ...ccOn }, playing, zoom: zoomRel(), sel: sel ? selKey(sel) : null,
+    return { month, qty, sys, ccOn: { ...ccOn }, layers: { ...layerOn }, playing, zoom: zoomRel(), sel: sel ? selKey(sel) : null,
       fields: model ? model.fields.length : 0, units: model ? model.units.length : 0, problems: [...problems.values()],
       total: monthTotal, producing: monthCount, hi: model ? model.hi : null };
   },
   setMonth(m) { setMonth(m); },
+  setLayer(k, on) { layerOn[k] = !!on; syncLayers(); requestRender(); },
   pick(name) { const e = model.searchIndex.find((x) => x.key === fold(name)); if (e) pickUnit(e.u); return !!e; },
   project(lon, lat) { return [lon * view.k + view.tx, mercY(lat) * view.k + view.ty]; },
   zoomTo(lon, lat, z) { fly = null; centerOn(lon, mercY(lat), z * fitK); clampView(); requestRender(); },

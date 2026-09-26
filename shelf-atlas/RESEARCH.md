@@ -203,6 +203,10 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
     — 66 platforms in WGS84 with `platform_name, operator_name, platform_type_name, category_name,
     function_name, start_using_year, primary_production, status_name, water_depth` (the Agency's own
     installations list, richer than the shapefile). `ens_flight_safety` is the only other `ens_` layer.
+- The shapefile's polygons are the Agency's **legal field delineations**: administrative areas
+  drawn on block corners (Tyra, Halfdan and Dan are rectangles and L-shapes), not reservoir
+  outlines, which Denmark does not publish (GOGET carries none for Denmark either). The app draws
+  them dashed and unfilled and says so on the field sheet.
 - The workbook's names and the shapefile's differ (`Syd Arne` vs `South Arne - western part` /
   `- eastern part`; `Tyra SE`); `OUTLINE_ALIASES` in `fetch_denmark.py` maps them and merges the
   parts. Fields with production but no outline are dropped by name in `snapshot.matching.dropped`.

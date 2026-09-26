@@ -71,6 +71,7 @@ and the world app shows only the country choropleth, with the reason on its laye
 
 | where | gap | why |
 | --- | --- | --- |
+| Denmark | field outlines are the Energy Agency's legal field delineations (drawn on block corners), not reservoir shapes; the app draws them dashed and unfilled and says so on the sheet | the Agency publishes no reservoir outlines; GEUS has none; GOGET has no Danish outlines |
 | Denmark | no pipelines | the Energy Agency publishes none; GEUS has none; EMODnet's Danish lines are onshore heating pipes |
 | Denmark | monthly per-field series only from January 2018; earlier years are the annual total spread evenly (flagged `monthlyFrom`) | the Agency's monthly reports start in 2018; before that only the yearly workbook |
 | Netherlands | series start in 2003 | the NLOG datacenter holds 2003 → |
@@ -95,6 +96,9 @@ and the world app shows only the country choropleth, with the reason on its laye
   `visibilitychange`, fail loudly on missing or malformed data, show `generatedAt`, carry an `ask` array.
 - Data comes from a build pipeline in this repository (GitHub Actions), committed as files in
   `<app>/data/`; the ZIP builder packs the folder (minus `raw/`, `tools/`, `screenshots/`).
+- Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
+  producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
+  boundaries, depth shading, names) can be switched off from the map's layers button.
 - Canvas 2D map, own Web Mercator, geometry packed as Google polylines (4 decimals North Sea,
   3 world), monthly series as base64 uint16 with a per-series scale; contract in
   `scripts/shelf_atlas/SCHEMA.md`.
