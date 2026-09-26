@@ -203,12 +203,22 @@ button {
   cursor: grab;
 }
 
-.error {
+/* Errors and the fields notice stack down the top-left, clear of the map
+   buttons, so one never hides the other. */
+.topstack {
   position: absolute;
-  left: 12px;
-  right: 58px;
-  top: 12px;
+  left: 10px;
+  right: 60px;
+  top: 10px;
   z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+.topstack > * { pointer-events: auto; }
+.error {
   padding: 12px 14px;
   border-radius: var(--radius);
   background: var(--warn-bg);
@@ -224,11 +234,7 @@ button {
 .error strong { display: block; margin-bottom: 2px; }
 
 .banner {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  z-index: 4;
-  max-width: calc(100% - 66px);
+  max-width: 100%;
   min-height: 34px;
   padding: 6px 10px;
   text-align: left;
@@ -341,7 +347,7 @@ button {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--card);
+  background: #ffffff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
   transition: transform .15s;
 }
@@ -580,6 +586,7 @@ button {
   padding: 0;
 }
 .pbtn.play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.pbtn:disabled, #slider:disabled { opacity: .4; cursor: not-allowed; }
 
 .slider-wrap { flex: 1 1 auto; min-width: 0; padding-top: 2px; }
 #slider {

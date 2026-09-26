@@ -36,11 +36,13 @@
 <div class="map-wrap" id="map-wrap">
   <canvas id="map" role="img" aria-label="World map of oil and gas production by country"></canvas>
 
+  <div class="topstack">
   <div class="error" id="error" role="alert" hidden></div>
 
   <!-- Shown whenever the fields layer is switched on but fields.json says it
        has nothing to draw. It prints the file's own reason, word for word. -->
   <button type="button" class="banner" id="banner" aria-controls="layers" hidden></button>
+  </div>
 
   <div class="mapbtns">
     <div class="btngroup">

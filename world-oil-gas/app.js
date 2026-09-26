@@ -320,6 +320,7 @@ function buildGeo(w) {
     const path = new Path2D();
     const rings = [];
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    let lw = 0;                          // widest single ring: what a label must fit in
     for (const enc of c.rings) {
       const ll = decodePolyline(enc, w.factor);
       if (ll.length < 6) continue;                       // fewer than three points
@@ -334,6 +335,9 @@ function buildGeo(w) {
         if (y < y0) y0 = y; if (y > y1) y1 = y;
       }
       rings.push(xy);
+      let rx0 = Infinity, rx1 = -Infinity;
+      for (let i = 0; i < xy.length; i += 2) { if (xy[i] < rx0) rx0 = xy[i]; if (xy[i] > rx1) rx1 = xy[i]; }
+      if (rx1 - rx0 > lw) lw = rx1 - rx0;
       const sub = new Path2D();
       for (let i = 0; i < xy.length; i += 2) {
         const px = xy[i] * PATH_K, py = xy[i + 1] * PATH_K;
@@ -345,7 +349,9 @@ function buildGeo(w) {
     }
     const hasC = Array.isArray(c.c) && Number.isFinite(c.c[0]) && Number.isFinite(c.c[1]);
     return {
-      iso3: c.iso3, name: c.name, rings, path, bbox: [x0, y0, x1, y1],
+      // A country split at the antimeridian (Fiji, Russia) has a bbox the
+      // width of the world, so labels go by the widest ring instead.
+      iso3: c.iso3, name: c.name, rings, path, bbox: [x0, y0, x1, y1], lw,
       lx: hasC ? lonToX(c.c[0]) : (x0 + x1) / 2,
       ly: hasC ? latToY(c.c[1]) : (y0 + y1) / 2,
     };
@@ -642,7 +648,7 @@ function drawLabels() {
   ctx.lineJoin = 'round';
   for (const i of order) {
     const c = cs[i];
-    const bw = (c.bbox[2] - c.bbox[0]) * view.scale;
+    const bw = c.lw * view.scale;
     if (bw < 44) break;                                   // sorted: all the rest are smaller
     let tw = textWidths.get(c.name);
     if (tw == null) { tw = ctx.measureText(c.name).width; textWidths.set(c.name, tw); }
@@ -660,7 +666,7 @@ let labelOrderCache = null;
 function labelOrder() {
   if (labelOrderCache && labelOrderCache.geo === geo) return labelOrderCache.order;
   const order = geo.countries.map((c, i) => i)
-    .sort((a, b) => (geo.countries[b].bbox[2] - geo.countries[b].bbox[0]) - (geo.countries[a].bbox[2] - geo.countries[a].bbox[0]));
+    .sort((a, b) => geo.countries[b].lw - geo.countries[a].lw);
   labelOrderCache = { geo, order };
   return order;
 }
@@ -850,6 +856,7 @@ function buildTicks() {
 }
 
 function syncYearUI() {
+  for (const id of ['btn-prev', 'btn-play', 'btn-next', 'slider']) $(id).disabled = !prod;
   if (!prod) {
     $('year-label').textContent = '—';
     $('year-sum').textContent = '';
