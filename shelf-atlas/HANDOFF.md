@@ -76,6 +76,7 @@ country choropleth, with the reason on its layer menu and About screen.
 | Netherlands | production comes from an undocumented API | documented in `nlog_production.py`; if it moves, Dutch fields keep outlines and lose series, and the build fails loudly |
 | UK | PPRS starts June 1975; subsea points thinned to manifolds/templates; pipelines limited to hydrocarbon fluids and ≥ 3 km | volume |
 | UK | licence forbids commercial exploitation (NSTA Open User Licence) | see LICENSE |
+| Norway | fields north of 73°N would fall outside the box (none today) | `BBOX` in `build_north_sea.py` |
 | Cross-border | only the units listed in `CROSS_BORDER` (`build_north_sea.py`) are grouped; other same-name matches are listed in `snapshot.matching` and drawn separately | avoid silent bad merges |
 | World fields | none until GOGET is dropped in | GOGET is behind a form |
 | World countries | data year lags one year (EI June edition → OWID) | source cadence |

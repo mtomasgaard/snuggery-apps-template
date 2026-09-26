@@ -99,6 +99,20 @@ would be worse than two honest layers.
 | World countries (OWID) | yearly, plus manual dispatch | the Energy Institute publishes once a year (June); OWID follows within weeks |
 | GOGET | manual | behind a form; see HANDOFF.md |
 
+### Map box: the North Sea, plus the whole Norwegian shelf
+The first build used a North Sea box (lon −6…12, lat 50.5…63) and dropped 38 Norwegian fields north
+of it — Draugen, Heidrun, Åsgard's neighbours, Ormen Lange, Snøhvit, Goliat, Johan Castberg. They
+come free with Sodir's data and a user tapping "Norway" expects them, so the box is now
+lon −6…32, lat 50.5…73 (`BBOX` in `build_north_sea.py`); the app opens on the North Sea proper and
+pans north. The Natural Earth basemap for the larger box costs ~150 KB more.
+
+### PPRS reporting units (UK)
+PPRS reports per *unit*, not per field: `BRAE-CENTRAL [Part of BRAE]`, `LEMAN [SHELL][pt. of LEMAN]`,
+`INDEFATIGABLE [PERENCO]`. NSTA's outline layer knows only `BRAE`, `LEMAN`, `INDEFATIGABLE`. The
+build folds a unit into its field: a `[Part of X]`/`[pt. of X]` tag names the parent, any other
+bracket (an operator) is dropped, and the units' months are summed. 45 PPRS names had no outline
+before this; most now do, and the rest get their point from the PPRS field-centre geometry.
+
 ### Cross-border median lines
 From Marine Regions (VLIZ) v12, filtered to lines whose two territories are both among Norway, UK,
 Denmark, Netherlands, Germany, Belgium, Sweden, Faroe (43 lines, with `line_type` — Treaty, median
@@ -178,6 +192,12 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
     — 66 platforms in WGS84 with `platform_name, operator_name, platform_type_name, category_name,
     function_name, start_using_year, primary_production, status_name, water_depth` (the Agency's own
     installations list, richer than the shapefile). `ens_flight_safety` is the only other `ens_` layer.
+- The workbook's names and the shapefile's differ (`Syd Arne` vs `South Arne - western part` /
+  `- eastern part`; `Tyra SE`); `OUTLINE_ALIASES` in `fetch_denmark.py` maps them and merges the
+  parts. Fields with production but no outline are dropped by name in `snapshot.matching.dropped`.
+  The Agency's tables carry no operator or status: the operator is taken from the nearest
+  operational platform within 12 km (GEUS list), the status from whether the field produced in the
+  last three reported months. Discovery years are not published in either source and are left empty.
 - **Before 2018 there is no monthly per-field series**; the pipeline spreads each year's total
   evenly over its twelve months and sets `monthlyFrom` on every Danish field so the app can say so.
 - **Pipelines: none.** The Agency publishes no pipeline geometry, GEUS has none, and EMODnet's
@@ -213,6 +233,12 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   licence; attribution given.
 - **Cadence:** monthly figures published within about two months.
 
+### 2.4a Netherlands — result of the first build
+375 of 567 Dutch fields carry a series (110,913 field-months since 2003); the rest never produced
+or produced before 2003. The national gas total for 2024 comes out at 8.9 bcm, against the
+~9–10 bcm the Netherlands reported, which confirms the 1000 Nm³ unit. Groningen (onshore) peaks at
+7.8 bcm/month in the winter of 2013, as it should.
+
 ### 2.5 World — countries
 - **Our World in Data, energy dataset**: `https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv`
   (9.2 MB; `country, year, iso_code, oil_production, gas_production` in TWh; 1900 → 2024 for 216
@@ -220,6 +246,11 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   Institute Statistical Review of World Energy (2025 edition) and The Shift Data Portal for years
   before 1965. **CC BY 4.0.** Chosen over the EI's own CSV (URL changes every edition, terms are the
   EI's own) and over the EIA API (needs a key). Refreshed yearly.
+- OWID leaves `iso_code` empty for aggregates and for dissolved states. The build keeps the world
+  total and the USSR, Czechoslovakia and Yugoslavia under codes of its own (`OWID_WRL`, `OWID_USS`,
+  `OWID_CZS`, `OWID_YGS`) so sums before 1992 are complete; they have no outline and are listed in
+  the app's About. One source hole is patched to "no data" and listed under `snapshot.patched`:
+  Norway's gas for 1998 is `0` in the 2025 file between 426 and 481 TWh.
 - **Natural Earth 1:110m countries** (public domain) from the `nvkelso/natural-earth-vector` GitHub
   mirror; ISO_A3 is `-99` for France, Norway, Kosovo and a few others, mapped explicitly.
 
