@@ -194,11 +194,17 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   STATUS, STATUS_DESCRIPTION, OPERATOR, DISCOVERY_WELL, DISCOVERY_YEAR, PRODUCTION_START, LANDSEA, URL`),
   `nlog:GDW_NG_FACILITY_UTM` — 655 facilities (`FACILITY_NAME, FACILITY_CODE, FACILITY_TYPE_DESCRIPTION,
   OPERATOR, STATUS_DESCRIPTION`). Requested with `srsName=EPSG:4326`.
-- **Production** is only in the **datacenter**, an Angular app (`https://www.nlog.nl/datacenter/`)
-  whose bundle calls `POST {URL_PREFIX}/rest/prodfigures/field` with a filter object and
-  `POST {URL_PREFIX}/rest/prodfigures/field-export?lang=en` for an Excel export. The pipeline's
-  `nlog_production.py` calls that API; the request shape and base URL are documented there. If the
-  API moves, Dutch fields keep their outlines and lose their series, and the build says so.
+- **Production** is only in the **datacenter**, an Angular app (`https://www.nlog.nl/datacenter/`).
+  Its bundle (`main-*.js`, `URL_PREFIX="/nlog-mapviewer"`) calls
+  `POST https://www.nlog.nl/nlog-mapviewer/rest/prodfigures/field` with a JSON body
+  `{"yearStart": 2024, "yearEnd": 2024, "product": "Gas"|"Oil"|"Condensate", "production": "Produced"}`
+  (optional `name`, `location`), and gets one row per field and year with the twelve months and a
+  total; an unknown key is rejected with HTTP 400 naming it. `.../field-export?lang=en` returns the
+  same as an Excel file. **The year picker starts at 2003**, so Dutch series start in 2003; the
+  "Release annual report" workbooks on `/en/fields` cover 2003–2016 only and add nothing. Gas is in
+  1000 Nm³ (converted ×1.0549 to Sm³), oil and condensate in Sm³. `nlog_production.py` checks the
+  national gas total for the last full year against 2–120 bcm and stops if the unit assumption is
+  wrong. `/rest/field/fields` (608 rows) is the datacenter's own field list, not needed.
 - **Pipelines:** NLOG's WFS has none; **EMODnet Human Activities** `emodnet:pipelines` filtered
   `country_co='NL'` gives 461 lines with `medium, status, operator, size_in, from_loc, to_loc`.
 - **Licence:** NLOG's disclaimer: *"NLOG.NL does not claim any rights (except domain names,
@@ -220,7 +226,7 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
 ### 2.6 World — fields: Global Energy Monitor, GOGET
 - `https://globalenergymonitor.org/projects/global-oil-gas-extraction-tracker/` — newest release
   **March 2026** (per GEM's recommended citation). Download is an `.xlsx` behind a form; **CC BY 4.0**.
-  It cannot be fetched by a job, so `world-oil-gas/data-src/manual/` is the drop-in folder and the
+  It cannot be fetched by a job, so `world-oil-gas/raw/manual/` is the drop-in folder and the
   yearly build reads whatever GOGET workbook is there. The parser matches columns by name with
   aliases (Unit ID, Unit name, Country, Latitude, Longitude, Status, Fuel type, Unit type, Operator,
   Discovery year, Production start year, Wiki URL, Production - Oil (million bbl/y), Production -

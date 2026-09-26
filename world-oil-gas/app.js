@@ -126,10 +126,10 @@ let pal = null;
 let hatch = null;               // CanvasPattern for "no data"
 function buildPalette() {
   pal = darkMq.matches ? {
-    outside: '#0b0e13', ocean: '#121821', none: '#2a2f37', border: '#0b0e13',
-    nodata: '#1c2027', hatchInk: 'rgba(150,162,178,0.42)', sel: '#ffffff',
+    outside: '#0b0e13', ocean: '#0e131a', none: '#333841', border: '#0b0e13',
+    nodata: '#22262e', hatchInk: 'rgba(150,162,178,0.40)', sel: '#ffffff',
     label: '#eef2f7', halo: 'rgba(11,14,19,0.85)',
-    ramp: ['#37305f', '#4b4185', '#6054a9', '#756acb', '#8b83e3', '#a39ff3', '#bdbdfd', '#d8d9ff'],
+    ramp: ['#3e366c', '#4f448c', '#5f53ab', '#7065c5', '#8279db', '#948eeb', '#a7a5f9', '#bcbcff'],
     fuel: { oil: '#d95926', gas: '#3987e5', both: '#199e70', other: '#8a94a1' },
     ring: 'rgba(11,14,19,0.9)', grid: 'rgba(255,255,255,0.10)',
   } : {
@@ -646,7 +646,7 @@ function drawLabels() {
     if (tw == null) { tw = ctx.measureText(c.name).width; textWidths.set(c.name, tw); }
     if (tw > bw * 1.25) continue;
     const x = worldToScreenX(c.lx), y = worldToScreenY(c.ly);
-    if (x < -tw || x > W + tw || y < 0 || y > H) continue;
+    if (x - tw / 2 < 4 || x + tw / 2 > W - 4 || y < 10 || y > H - 10) continue;
     const box = [x - tw / 2 - 3, y - 8, x + tw / 2 + 3, y + 8];
     if (placed.some((b) => b[0] < box[2] && b[2] > box[0] && b[1] < box[3] && b[3] > box[1])) continue;
     placed.push(box);
@@ -789,9 +789,11 @@ function updateBanner() {
   const b = $('banner');
   const unavailable = showFields && fields && !fields.available;
   b.hidden = !unavailable;
+  // Short on the map; the file's reason, word for word, is in the Layers
+  // panel the banner opens and in About.
   if (unavailable) {
     b.innerHTML = '';
-    b.append(el('b', null, 'No field points. '), document.createTextNode(fieldsReason()));
+    b.append(el('b', null, 'No field points'), document.createTextNode(' — fields.json is not available. Details'));
   }
 }
 function fieldsReason() {
@@ -836,6 +838,11 @@ function buildTicks() {
     if (prod.Y1 - y < step * 0.4 && y !== prod.Y1) continue;
     const s = el('span', null, String(y));
     s.style.left = `${((y - prod.Y0) / Math.max(1, span)) * 100}%`;
+    t.append(s);
+  }
+  if (prod.Y1 % step && (prod.Y1 % step) >= step * 0.6) {
+    const s = el('span', null, String(prod.Y1));
+    s.style.left = '100%';
     t.append(s);
   }
 }
@@ -1454,6 +1461,7 @@ $('zoom-home').addEventListener('click', () => {
   view.scale = minScale(); view.cx = lonToX(0); view.cy = 0.5; clampView(); saveView(); requestRender();
 });
 $('btn-layers').addEventListener('click', () => setLayersOpen($('layers').hidden));
+$('banner').addEventListener('click', () => setLayersOpen(true));
 $('chk-fields').addEventListener('change', (e) => {
   showFields = e.target.checked;
   store.set(STORE.fields, showFields ? '1' : '0');

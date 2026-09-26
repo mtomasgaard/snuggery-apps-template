@@ -9,7 +9,7 @@ Writes
                  Data's energy dataset (which carries the Energy Institute Statistical Review),
                  plus `ask` rows and the source list the app prints on its attribution screen
   fields.json    oil and gas extraction units from Global Energy Monitor's GOGET, IF the
-                 spreadsheet has been dropped into world-oil-gas/data-src/manual/ (it sits
+                 spreadsheet has been dropped into world-oil-gas/raw/manual/ (it sits
                  behind a form, so no job can fetch it); otherwise the file is written with
                  `available: false` and the reason, and the app says so on screen
 
@@ -314,7 +314,7 @@ def find_goget(manual_dir: str):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="world-oil-gas/data")
-    ap.add_argument("--manual", default="world-oil-gas/data-src/manual")
+    ap.add_argument("--manual", default="world-oil-gas/raw/manual")
     ap.add_argument("--cache", default=os.environ.get("SHELF_ATLAS_CACHE", "scripts/shelf_atlas/cache"))
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--refresh", action="store_true", help="refetch sources even if cached")
@@ -382,7 +382,7 @@ def main():
     if path is None:
         write_json(fields_path, {
             "schema": 1, "available": False, "generatedAt": generated,
-            "reason": "No Global Oil and Gas Extraction Tracker spreadsheet in world-oil-gas/data-src/manual/. "
+            "reason": "No Global Oil and Gas Extraction Tracker spreadsheet in world-oil-gas/raw/manual/. "
                       "Download it from Global Energy Monitor (it sits behind a form) and rerun the build; "
                       "see HANDOFF.md.",
             "fields": [],
