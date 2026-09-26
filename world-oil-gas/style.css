@@ -625,7 +625,7 @@ button {
   .topbar { padding: 10px 20px; }
   .switcher { padding-left: 20px; padding-right: 20px; }
   .player { padding-left: 20px; padding-right: 20px; }
-  .sheet { left: auto; width: 400px; }
+  .sheet { left: auto; width: 400px; max-height: calc(100% - 200px); }   /* clear of the map buttons */
 }
 
 @media (prefers-reduced-motion: reduce) {

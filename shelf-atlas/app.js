@@ -316,3 +316,270 @@ function validateSnap(s) {
   }
   return null;
 }
+
+/* ── the model: decoded once per data load ───────────────────────────────── */
+
+function addLine(path, a, close) {
+  if (a.length < 4) return;
+  path.moveTo(a[0], a[1]);
+  for (let i = 2; i < a.length; i += 2) path.lineTo(a[i], a[i + 1]);
+  if (close) path.closePath();
+}
+function bboxOf(arrs) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const a of arrs) {
+    for (let i = 0; i < a.length; i += 2) {
+      if (a[i] < x0) x0 = a[i];
+      if (a[i] > x1) x1 = a[i];
+      if (a[i + 1] < y0) y0 = a[i + 1];
+      if (a[i + 1] > y1) y1 = a[i + 1];
+    }
+  }
+  return [x0, y0, x1, y1];
+}
+/* Twice the shoelace area in world units², for ranking and for choosing the
+ * smaller of two overlapping outlines on a tap. */
+function ringArea(a) {
+  let s = 0;
+  for (let i = 0, j = a.length - 2; i < a.length; j = i, i += 2) s += (a[j] + a[i]) * (a[j + 1] - a[i + 1]);
+  return Math.abs(s / 2);
+}
+function mediumClass(m) {
+  const t = String(m || '').toLowerCase();
+  const oil = /oil|crude/.test(t), gas = /gas/.test(t);
+  if (oil && !gas) return 0;
+  if (gas && !oil) return 1;
+  return 2;
+}
+const PIPE_W = [0.8, 1.4, 2.2];           // CSS px at the zoom where pipelines appear
+function widthClass(d) { return !isNum(d) || d < 14 ? 0 : d < 26 ? 1 : 2; }
+const FLOATING = /FPSO|FSO|FSU|FLOAT|SEMI|SHIP|TLP|SPAR|VESSEL|BUOY|MOPU/i;
+
+function buildBase(g) {
+  const f = g.factor;
+  const B = {
+    generatedAt: g.generatedAt, bbox: g.bbox,
+    X0: g.bbox[0], X1: g.bbox[2], Y0: mercY(g.bbox[3]), Y1: mercY(g.bbox[1]),
+    land: new Path2D(), bathy: new Path2D(), coast: new Path2D(), borderPath: new Path2D(),
+    counts: { outlines: g.fields.length, pipelines: g.pipelines.length, facilities: g.facilities.length, borders: g.borders.length },
+  };
+  g.land.forEach((poly, i) => poly.forEach((r, j) => addLine(B.land, decodeLine(r, f, `land[${i}][${j}]`), true)));
+  g.bathy200.forEach((poly, i) => poly.forEach((r, j) => addLine(B.bathy, decodeLine(r, f, `bathy200[${i}][${j}]`), true)));
+  g.coast.forEach((l, i) => addLine(B.coast, decodeLine(l, f, `coast[${i}]`), false));
+  B.borders = g.borders.map((b, i) => {
+    const lines = b.lines.map((l, j) => decodeLine(l, f, `borders[${i}].lines[${j}]`));
+    lines.forEach((a) => addLine(B.borderPath, a, false));
+    return { name: b.name, type: b.type, a: b.a, b: b.b, lines, bbox: bboxOf(lines) };
+  });
+  // Pipelines go into one Path2D per country × medium × width, so a frame
+  // strokes at most 36 paths however many hundred pipelines there are.
+  B.pipeBuckets = CC.map(() => [0, 1, 2].map(() => [0, 1, 2].map(() => new Path2D())));
+  B.pipes = g.pipelines.map((p, i) => {
+    const lines = p.lines.map((l, j) => decodeLine(l, f, `pipelines[${i}].lines[${j}]`));
+    const cci = Math.max(0, CC.indexOf(p.country));
+    const mc = mediumClass(p.medium), wc = widthClass(p.dimIn);
+    const bucket = B.pipeBuckets[cci][mc][wc];
+    lines.forEach((a) => addLine(bucket, a, false));
+    return { raw: p, cc: CC[cci], mc, wc, lines, bbox: bboxOf(lines) };
+  });
+  const n = g.facilities.length;
+  B.fac = { n, X: new Float32Array(n), Y: new Float32Array(n), shape: new Uint8Array(n),
+    cc: new Uint8Array(n), y0: new Int16Array(n), y1: new Int16Array(n), raw: g.facilities };
+  g.facilities.forEach((fa, i) => {
+    B.fac.X[i] = fa.lon;
+    B.fac.Y[i] = mercY(fa.lat);
+    B.fac.shape[i] = fa.surface === false ? 2 : FLOATING.test(fa.kind || '') ? 1 : 0;
+    B.fac.cc[i] = Math.max(0, CC.indexOf(fa.country));
+    B.fac.y0[i] = isInt(fa.startYear) ? fa.startYear : 0;
+    B.fac.y1[i] = isInt(fa.endYear) ? fa.endYear : 9999;
+  });
+  B.outlines = new Map();
+  g.fields.forEach((o, i) => {
+    const rings = o.rings.map((r, j) => decodeLine(r, f, `fields[${i}].rings[${j}]`)).filter((a) => a.length >= 6);
+    if (!rings.length) return;
+    const path = new Path2D();
+    rings.forEach((a) => addLine(path, a, true));
+    B.outlines.set(o.id, { rings, path, bbox: bboxOf(rings), area: rings.reduce((s, a) => s + ringArea(a), 0) });
+  });
+  return B;
+}
+
+function monthly(F, q, m) {
+  if (q === 'oe') return monthly(F, 'liq', m) + monthly(F, 'gas', m) / 1000;
+  const a = q === 'liq' ? F.liq : F.gas;
+  if (!a) return 0;
+  const j = m - (q === 'liq' ? F.liqS : F.gasS);
+  return j >= 0 && j < a.length ? a[j] : 0;
+}
+
+function buildModel(s, B) {
+  const M = { lastMonth: s.lastMonth, fields: [], byId: new Map(), groups: [], groupById: new Map(),
+    units: [], generatedAt: s.generatedAt, noOutline: 0, orphanOutlines: 0 };
+  s.fields.forEach((r, i) => {
+    const F = {
+      i, raw: r, id: r.id, cc: r.country, name: titleCase(r.name), hc: r.hc,
+      statusNorm: normStatus(r.status),
+      hist: Array.isArray(r.statusHist) && r.statusHist.length
+        ? r.statusHist.map((h) => [h[0], normStatus(h[1]), h[1]]).sort((a, b) => a[0] - b[0]) : null,
+      disc: isInt(r.discYear) ? r.discYear : isInt(r.firstMonth) ? monthYear(r.firstMonth) : null,
+      X: r.c[0], Y: mercY(r.c[1]), liq: null, liqS: 0, gas: null, gasS: 0, group: null, unit: -1,
+    };
+    if (r.liq) { F.liq = decodeSeries(r.liq, `fields[${i}] (${r.id}).liq`); F.liqS = r.liq.start; }
+    if (r.gas) { F.gas = decodeSeries(r.gas, `fields[${i}] (${r.id}).gas`); F.gasS = r.gas.start; }
+    const o = B.outlines.get(r.id);
+    if (o) { F.path = o.path; F.rings = o.rings; F.bbox = o.bbox; F.area = o.area; } else {
+      F.path = null; F.rings = null; F.bbox = [F.X, F.Y, F.X, F.Y]; F.area = 0; M.noOutline++;
+    }
+    F.first = F.liq || F.gas ? Math.min(F.liq ? F.liqS : 1e9, F.gas ? F.gasS : 1e9) : null;
+    F.end = F.liq || F.gas ? Math.max(F.liq ? F.liqS + F.liq.length : 0, F.gas ? F.gasS + F.gas.length : 0) : null;
+    M.fields.push(F);
+    M.byId.set(F.id, F);
+  });
+  for (const id of B.outlines.keys()) if (!M.byId.has(id)) M.orphanOutlines++;
+  for (const g of s.groups || []) {
+    const members = g.members.map((id) => M.byId.get(id));
+    const G = { id: g.id, name: g.name || titleCase(g.id), note: g.note, members };
+    members.forEach((F) => { F.group = G; });
+    M.groups.push(G);
+    M.groupById.set(G.id, G);
+  }
+  // A unit is what gets one circle and one label: a field, or a whole
+  // cross-border group, so a shared field is never counted twice.
+  for (const F of M.fields) {
+    if (F.group) continue;
+    F.unit = M.units.length;
+    M.units.push({ kind: 'field', f: F, members: [F], X: F.X, Y: F.Y, name: F.name });
+  }
+  for (const G of M.groups) {
+    // The circle goes at the area-weighted middle of the members' outlines.
+    let sx = 0, sy = 0, sw = 0;
+    for (const F of G.members) { const w = F.area || 1e-9; sx += F.X * w; sy += F.Y * w; sw += w; }
+    G.unit = M.units.length;
+    G.members.forEach((F) => { F.unit = G.unit; });
+    M.units.push({ kind: 'group', g: G, members: G.members, X: sx / sw, Y: sy / sw, name: G.name });
+  }
+  // Colour and circle domains: the largest daily rate any unit ever reached.
+  M.hi = { liq: 0, gas: 0, oe: 0 };
+  for (const U of M.units) {
+    let m0 = Infinity, m1 = -Infinity;
+    for (const F of U.members) if (F.first != null) { m0 = Math.min(m0, F.first); m1 = Math.max(m1, F.end); }
+    U.peak = 0;
+    for (let m = m0; m < m1; m++) {
+      const d = daysIn(m);
+      let l = 0, gg = 0;
+      for (const F of U.members) { l += monthly(F, 'liq', m); gg += monthly(F, 'gas', m); }
+      l /= d; gg /= d;
+      if (l > M.hi.liq) M.hi.liq = l;
+      if (gg > M.hi.gas) M.hi.gas = gg;
+      const oe = l + gg / 1000;
+      if (oe > M.hi.oe) M.hi.oe = oe;
+      if (oe > U.peak) U.peak = oe;
+    }
+    U.area = U.members.reduce((a, F) => a + F.area, 0);
+  }
+  // Labels are placed biggest first: the fields that made the North Sea.
+  M.rank = M.units.map((_, i) => i).sort((a, b) => (M.units[b].peak - M.units[a].peak) || (M.units[b].area - M.units[a].area));
+  M.searchIndex = M.units.map((U, u) => ({ u, key: fold(U.name), cc: [...new Set(U.members.map((F) => F.cc))] }))
+    .sort((a, b) => a.key.localeCompare(b.key));
+  return M;
+}
+
+/* ── state ───────────────────────────────────────────────────────────────── */
+
+const canvas = $('map');
+const ctx = canvas.getContext('2d');
+const wrap = $('map-wrap');
+const slider = $('slider');
+const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
+
+let base = null;            // geometry, from geo.json
+let model = null;           // fields and series, from snapshot.json
+let snap = null;            // the raw snapshot, for sources and notes
+let P = null;               // the current theme's paint
+let W = 1, H = 1, dpr = 1;
+const view = { k: 1, tx: 0, ty: 0 };
+let fitK = 1;
+let month = 0;
+let qty = 'liq';
+let sys = 'si';
+const ccOn = { NO: true, UK: true, DK: true, NL: true };
+let sel = null;             // { type: 'unit'|'fac'|'pipe'|'border', … }
+let playing = false;
+let speedIdx = 2;
+let problems = new Map();
+let fieldVal = new Float32Array(0), fieldState = new Uint8Array(0), fieldCol = new Uint8Array(0);
+let unitVal = new Float32Array(0), unitVis = new Uint8Array(0), unitCol = new Uint8Array(0);
+let unitOrder = [];         // producing units, largest first, so small circles land on top
+let monthTotal = 0, monthCount = 0;
+
+function buildPalette() {
+  const T = darkMq.matches ? THEMES.dark : THEMES.light;
+  const stops = T.ramp.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]);
+  const lut = [];
+  for (let i = 0; i < 256; i++) {
+    const t = (i / 255) * (stops.length - 1);
+    const j = Math.min(stops.length - 2, Math.floor(t)), f = t - j;
+    const c = [0, 1, 2].map((k) => Math.round(stops[j][k] + (stops[j + 1][k] - stops[j][k]) * f));
+    lut.push(`rgb(${c[0]},${c[1]},${c[2]})`);
+  }
+  P = { ...T, name: darkMq.matches ? 'dark' : 'light', lut };
+}
+
+/* ── the month ───────────────────────────────────────────────────────────── */
+
+function domain() {
+  const hi = model ? model.hi[qty] : 0;
+  return hi > 0 ? { lo: hi / Math.pow(10, DOMAIN_DECADES), hi } : { lo: 1, hi: 10 };
+}
+function isShut(F, m) {
+  if (F.hist) {
+    let s = null;
+    for (const h of F.hist) { if (h[0] <= m) s = h[1]; else break; }
+    return s === 'Shut down';
+  }
+  return F.statusNorm === 'Shut down' && isInt(F.raw.lastMonth) && m > F.raw.lastMonth;
+}
+function statusAt(F, m) {
+  if (!F.hist) return null;
+  let s = null;
+  for (const h of F.hist) { if (h[0] <= m) s = h; else break; }
+  return s;
+}
+
+function computeMonth() {
+  if (!model) return;
+  const nf = model.fields.length, nu = model.units.length;
+  if (fieldVal.length !== nf) {
+    fieldVal = new Float32Array(nf); fieldState = new Uint8Array(nf); fieldCol = new Uint8Array(nf);
+  }
+  if (unitVal.length !== nu) { unitVal = new Float32Array(nu); unitVis = new Uint8Array(nu); unitCol = new Uint8Array(nu); }
+  const m = month, y = monthYear(m), dd = daysIn(m);
+  const D = domain(), L0 = Math.log10(D.lo), span = Math.log10(D.hi) - L0;
+  const col = (v) => (v > 0 ? Math.round(clamp((Math.log10(v) - L0) / span, 0, 1) * 255) : 0);
+  monthTotal = 0; monthCount = 0;
+  for (let i = 0; i < nf; i++) {
+    const F = model.fields[i];
+    let st = 0, v = 0;
+    if (ccOn[F.cc]) {
+      const l = monthly(F, 'liq', m), g = monthly(F, 'gas', m);
+      v = (qty === 'liq' ? l : qty === 'gas' ? g : l + g / 1000) / dd;
+      // Hidden until discovered — unless the source reports production
+      // before its own discovery year, in which case the numbers win.
+      if (l <= 0 && g <= 0 && F.disc != null && F.disc > y) st = 0;
+      else if (v > 0) st = 3;
+      else st = isShut(F, m) ? 2 : 1;
+    }
+    if (st !== 3) v = 0;
+    fieldVal[i] = v; fieldState[i] = st; fieldCol[i] = col(v);
+    if (v > 0) { monthTotal += v; monthCount++; }
+  }
+  unitOrder = [];
+  for (let u = 0; u < nu; u++) {
+    const U = model.units[u];
+    let v = 0, vis = 0;
+    for (const F of U.members) { v += fieldVal[F.i]; vis = Math.max(vis, fieldState[F.i]); }
+    unitVal[u] = v; unitVis[u] = vis; unitCol[u] = col(v);
+    if (v > 0) unitOrder.push(u);
+  }
+  unitOrder.sort((a, b) => unitVal[b] - unitVal[a]);
+}

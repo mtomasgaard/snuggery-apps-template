@@ -96,6 +96,15 @@ def peek(url, ctype, body):
         return out
     if head[:2] == b"PK" and False:
         pass
+    if body[:4] in (b"II*\x00", b"MM\x00*"):
+        out.append(f"    tiff: {len(body)} bytes, header {body[:4]!r}")
+        try:
+            import numpy as np, tifffile
+            a = tifffile.imread(io.BytesIO(body))
+            out.append(f"    tiff shape {a.shape} dtype {a.dtype} min {float(np.nanmin(a)):.1f} max {float(np.nanmax(a)):.1f}")
+        except Exception as e:
+            out.append(f"    tiff read error {e}")
+        return out
     if body[:4] == b"%PDF":
         try:
             import pypdf

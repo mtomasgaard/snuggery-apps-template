@@ -33,7 +33,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Readers for spreadsheets and PDFs
-        run: python3 -m pip install --quiet openpyxl pypdf
+        run: python3 -m pip install --quiet openpyxl pypdf numpy tifffile
       - name: Probe
         env:
           EXTRA: ${{ inputs.urls }}
