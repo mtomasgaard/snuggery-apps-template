@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T00:01:16Z",
+ "generatedAt": "2026-09-27T01:01:08Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/stripped-titles-compensating-rivals-how-the-manchester-city-cheating-scandal-could-play-out-292970",
+     "published": "2026-09-26T23:49:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
+    },
+    {
      "title": "Trump’s US ratings drop to new record low as Democrats become clear favourites in both chambers of Congress",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Niusha Shafiabady, Professor in Computational Intelligence, Australian Catholic University"
-    },
-    {
-     "title": "Curious Kids: does music affect how plants grow?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/curious-kids-does-music-affect-how-plants-grow-288107",
-     "published": "2026-09-25T00:35:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lily Whelehan, Postdoctoral Research Fellow, Queensland Alliance for Agriculture and Food Innovation, The University of Queensland"
     },
     {
      "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
+   "published": "2026-09-26 23:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Trump’s US ratings drop to new record low as Democrats become clear favourites in both chambers of Congress",
    "published": "2026-09-25 03:08 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Could an ‘Australian AI’ protect us from being hacked? Cybersecurity isn’t that simple",
    "published": "2026-09-25 03:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Curious Kids: does music affect how plants grow?",
-   "published": "2026-09-25 00:35 UTC"
   },
   {
    "region": "Oceania",
