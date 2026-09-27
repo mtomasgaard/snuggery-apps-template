@@ -41,14 +41,19 @@ name: Refresh global-wind
 
 on:
   schedule:
-    # GFS runs four times a day; this takes the two that finish in the European
-    # morning. A run appears file by file over about four hours, so what matters
-    # is not when the cycle starts but when its LAST step lands: the 00Z run's
-    # +120 h file is in the bucket at about 04:10 UTC, the 06Z run's at about
-    # 10:10. Each slot is twenty-odd minutes after that, which still works when
-    # GitHub fires late — and it does.
+    # All four GFS cycles (their +120 h file lands at about 04:10, 10:10, 16:10
+    # and 22:10 UTC) plus a fallback slot three hours after each, because
+    # GitHub fires these late or not at all; a slot that finds nothing new
+    # costs one HEAD request. An external clock (scheduler/README.md) can
+    # dispatch this file as well; these are the fallback.
     - cron: '23 4 * * *'
+    - cron: '23 7 * * *'
     - cron: '23 10 * * *'
+    - cron: '23 13 * * *'
+    - cron: '23 16 * * *'
+    - cron: '23 19 * * *'
+    - cron: '23 22 * * *'
+    - cron: '23 1 * * *'
   workflow_dispatch:
     inputs:
       force:

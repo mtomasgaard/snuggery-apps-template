@@ -36,6 +36,23 @@ check for hourly instead of the count above.
 
 No AI agent is involved anywhere in this. It is a clock and a POST.
 
+## Which workflows to put in the clock
+
+Every refresh workflow, not only the one you were thinking about when you set it up. A clock
+that dispatches `refresh-global-wind.yml` but not `refresh-global-weather.yml` leaves the second
+app on GitHub's own schedule, which is exactly the thing the clock was meant to replace — and it
+was seen: the wind branch refreshed at 10:00 and 22:00 to the minute while the weather branch
+waited for GitHub to get round to it five hours late. The list, as `WORKFLOWS`:
+
+    refresh-hello-live.yml,refresh-world-news.yml,refresh-power-hours.yml,refresh-finances.yml,refresh-global-wind.yml,refresh-global-weather.yml,build-shelf-atlas.yml,build-world-oil-gas.yml
+
+Each job decides for itself whether there is anything new (the weather and wind jobs cost one
+HEAD request when the published GFS run is current; the Shelf Atlas build commits only when a
+regulator's figures changed; the world build is a yearly file), so an hourly dispatch of the lot
+is cheap. The fingerprint to check per app is a run whose trigger reads `workflow_dispatch` at the
+hour you set, in that workflow's own run list — a green run of another app's workflow says
+nothing about this one.
+
 ## The token
 
 Fine-grained, **this repository only**, one permission: **Actions → Read and write**. Nothing

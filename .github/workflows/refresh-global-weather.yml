@@ -41,19 +41,29 @@ name: Refresh global-weather
 
 on:
   schedule:
-    # GFS runs four times a day; this takes the two that finish in the European
-    # morning. A run appears file by file over about four hours, so what matters
-    # is not when the cycle starts but when its LAST step lands: the 00Z run's
-    # +120 h file is in the bucket at about 04:10 UTC, the 06Z run's at about
-    # 10:10. Each slot is half an hour after that, which still works when
-    # GitHub fires late — and it does.
+    # GFS runs four times a day and a run appears file by file over about four
+    # hours: the +120 h file of the 00Z run lands at about 04:10 UTC, 06Z at
+    # 10:10, 12Z at 16:10, 18Z at 22:10. One slot sits half an hour after each,
+    # and a second slot three hours later catches the ones GitHub drops or
+    # fires late (measured here: the 04:33 slot fired at 09:28 one day and not
+    # at all the next). A slot that finds nothing new costs one HEAD request.
     #
     # Ten minutes behind refresh-global-wind.yml, which reads the same bucket
     # for the same runs: two jobs pulling a couple of hundred megabytes of GRIB
-    # through the same endpoint at the same minute is not neighbourly, and
-    # nothing here is in a hurry.
+    # through the same endpoint at the same minute is not neighbourly.
+    #
+    # If you run an external clock (scheduler/README.md), put THIS file in its
+    # workflow list as well as the wind one: a dispatch from it is what the
+    # runs marked workflow_dispatch are, and GitHub's own slots below are the
+    # fallback.
     - cron: '33 4 * * *'
+    - cron: '33 7 * * *'
     - cron: '33 10 * * *'
+    - cron: '33 13 * * *'
+    - cron: '33 16 * * *'
+    - cron: '33 19 * * *'
+    - cron: '33 22 * * *'
+    - cron: '33 1 * * *'
   workflow_dispatch:
     inputs:
       force:
