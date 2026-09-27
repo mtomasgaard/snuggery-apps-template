@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T09:01:14Z",
+ "generatedAt": "2026-09-27T10:01:06Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Countries far from conflict paying the price for wars not their own, India tells UN",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168460",
+     "published": "2026-09-26T12:00:00Z",
+     "summary": "India’s External Affairs Minister Subrahmanyam Jaishankar warned on Saturday that violent conflicts continue to undermine international peace and security, while countries far removed from the battlefield are being…",
+     "stale": false
+    },
+    {
      "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -370,15 +379,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168449",
      "published": "2026-09-25T12:00:00Z",
      "summary": "Climate change remains the greatest existential threat to Tuvalu, Prime Minister Feleti Teo told the UN General Assembly on Friday, warning that the pace and scale of international action are still falling far short of…",
-     "stale": false
-    },
-    {
-     "title": "Nepal PM urges climate justice after ‘Himalayan tsunami’ devastates country",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168441",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Nepal’s Prime Minister Balendra Shah brought a stark warning from the Himalayas to the UN General Assembly on Thursday, saying catastrophic floods that killed at least 1,400 people in his country laid bare the human…",
      "stale": false
     },
     {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Countries far from conflict paying the price for wars not their own, India tells UN",
+   "published": "2026-09-26 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
    "published": "2026-09-26 00:00 UTC"
@@ -878,12 +884,6 @@
    "region": "Asia",
    "source": "UN News",
    "title": "Tuvalu urges decisive global action as rising seas threaten its future",
-   "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Nepal PM urges climate justice after ‘Himalayan tsunami’ devastates country",
    "published": "2026-09-25 12:00 UTC"
   },
   {
