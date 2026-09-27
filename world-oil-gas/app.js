@@ -190,7 +190,7 @@ let pal = null, lut = null;     // lut: 256 CSS colours across pal.ramp
 let hatch = null;               // CanvasPattern for "no data"
 function buildPalette() {
   pal = darkMq.matches ? {
-    outside: '#0b0e13', ocean: '#16202c', none: '#2b3038', border: 'rgba(235,240,247,0.30)',
+    outside: '#0b0e13', ocean: '#0f1a26', none: '#1c2129', border: 'rgba(235,240,247,0.30)',
     // Over the relief: countries go on with 'screen' here ('multiply' in the
     // light scheme) so the ramp still runs dark → light over a dimmed relief.
     comp: 'screen', dim: 'rgba(8,11,16,0.45)', wash: 'rgba(120,126,138,0.22)', rborder: 'rgba(235,240,247,0.30)',
@@ -198,17 +198,17 @@ function buildPalette() {
     // Sea: the shelf (0–200 m) is the ocean fill; deeper bands step down to
     // near-black navy. Kept low in chroma so the violet ramp stays the loudest thing.
     deep: [[22, 32, 44], [8, 12, 19]],
-    nodata: '#2b3038', hatchInk: 'rgba(150,162,178,0.40)', sel: '#ffffff',
+    nodata: '#1c2129', hatchInk: 'rgba(150,162,178,0.40)', sel: '#ffffff',
     label: '#eef2f7', halo: 'rgba(11,14,19,0.85)',
     ramp: ['#3e366c', '#4f448c', '#5f53ab', '#7065c5', '#8279db', '#948eeb', '#a7a5f9', '#bcbcff'],
     fuel: { oil: '#d95926', gas: '#3987e5', both: '#199e70', other: '#8a94a1' },
     ring: 'rgba(11,14,19,0.9)', grid: 'rgba(255,255,255,0.10)',
   } : {
-    outside: '#eef0f4', ocean: '#dfe7f0', none: '#ffffff', border: 'rgba(20,24,31,0.35)',
+    outside: '#eef0f4', ocean: '#d6e4ef', none: '#f7f5f0', border: 'rgba(20,24,31,0.35)',
     comp: 'multiply', dim: null, wash: 'rgba(250,249,246,0.45)', rborder: 'rgba(20,24,31,0.35)',
     relief: 'linear-gradient(135deg,#a9bf8e,#dccfa8)',
     deep: [[217, 226, 236], [170, 188, 209]],
-    nodata: '#ffffff', hatchInk: 'rgba(84,92,108,0.45)', sel: '#14181f',
+    nodata: '#f7f5f0', hatchInk: 'rgba(84,92,108,0.45)', sel: '#14181f',
     label: '#14181f', halo: 'rgba(255,255,255,0.85)',
     ramp: ['#e5e0ff', '#c8c0f5', '#aba0e9', '#8f81da', '#7464c5', '#5a4aab', '#42328a', '#2b1e66'],
     fuel: { oil: '#eb6834', gas: '#2a78d6', both: '#1baf7a', other: '#6b7787' },
