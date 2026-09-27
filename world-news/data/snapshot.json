@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T19:01:10Z",
+ "generatedAt": "2026-09-27T20:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
+     "title": "What role does high school play in mental health? Feeling connected to other students and staff is key",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/stripped-titles-compensating-rivals-how-the-manchester-city-cheating-scandal-could-play-out-292970",
-     "published": "2026-09-26T23:49:46Z",
+     "link": "https://theconversation.com/what-role-does-high-school-play-in-mental-health-feeling-connected-to-other-students-and-staff-is-key-292464",
+     "published": "2026-09-27T19:21:23Z",
      "summary": "",
      "stale": false,
-     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
+     "author": "Sarah Stevens, Postdoctoral Research Fellow in Adolescent Mental Health at the Black Dog Institute, UNSW"
     },
     {
-     "title": "Trump’s US ratings drop to new record low as Democrats become clear favourites in both chambers of Congress",
+     "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/trumps-us-ratings-drop-to-new-record-low-as-democrats-become-clear-favourites-in-both-chambers-of-congress-292769",
-     "published": "2026-09-25T03:08:14Z",
+     "link": "https://theconversation.com/floating-power-plants-could-offer-coastal-communities-a-reliable-energy-source-heres-how-289134",
+     "published": "2026-09-27T19:21:06Z",
      "summary": "",
      "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+     "author": "Tina Soliman-Hunter, Professor of Energy and Natural Resources Law, Macquarie University"
     },
     {
-     "title": "Could an ‘Australian AI’ protect us from being hacked? Cybersecurity isn’t that simple",
+     "title": "From ‘disgrace and pollution’ to ‘pride’: how Australians came to embrace their convict family ties",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/could-an-australian-ai-protect-us-from-being-hacked-cybersecurity-isnt-that-simple-292888",
-     "published": "2026-09-25T03:04:18Z",
+     "link": "https://theconversation.com/from-disgrace-and-pollution-to-pride-how-australians-came-to-embrace-their-convict-family-ties-290067",
+     "published": "2026-09-27T19:20:53Z",
      "summary": "",
      "stale": false,
-     "author": "Niusha Shafiabady, Professor in Computational Intelligence, Australian Catholic University"
+     "author": "Kristyn Harman, Professor in History, University of Tasmania"
     },
     {
      "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
-   "published": "2026-09-26 23:49 UTC"
+   "title": "What role does high school play in mental health? Feeling connected to other students and staff is key",
+   "published": "2026-09-27 19:21 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Trump’s US ratings drop to new record low as Democrats become clear favourites in both chambers of Congress",
-   "published": "2026-09-25 03:08 UTC"
+   "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
+   "published": "2026-09-27 19:21 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Could an ‘Australian AI’ protect us from being hacked? Cybersecurity isn’t that simple",
-   "published": "2026-09-25 03:04 UTC"
+   "title": "From ‘disgrace and pollution’ to ‘pride’: how Australians came to embrace their convict family ties",
+   "published": "2026-09-27 19:20 UTC"
   },
   {
    "region": "Oceania",
