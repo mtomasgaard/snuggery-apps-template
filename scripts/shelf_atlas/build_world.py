@@ -4,7 +4,8 @@
     python3 -m scripts.shelf_atlas.build_world --out world-oil-gas/data [--cache DIR] [--offline]
 
 Writes
-  world.json     Natural Earth 1:110m countries, packed polylines keyed by ISO 3166-1 alpha-3
+  world.json     Natural Earth 1:50m countries, packed polylines keyed by ISO 3166-1 alpha-3, plus
+                 the relief block for data/relief.jpg (Natural Earth I, plate carrée)
   snapshot.json  annual oil and gas production by country, 1900 -> latest, from Our World in
                  Data's energy dataset (which carries the Energy Institute Statistical Review),
                  plus `ask` rows and the source list the app prints on its attribution screen
@@ -682,7 +683,7 @@ def main():
              "licence": "CC BY 4.0",
              "detail": src or "Energy Institute Statistical Review of World Energy; The Shift Data Portal for years before 1965",
              "attribution": "Country production: Energy Institute Statistical Review of World Energy, via Our World in Data (CC BY 4.0)"},
-            {"name": "Natural Earth 1:110m admin-0 countries", "url": "https://www.naturalearthdata.com/",
+            {"name": "Natural Earth 1:50m admin-0 countries, 1:10m bathymetry and Natural Earth I shaded relief", "url": "https://www.naturalearthdata.com/",
              "licence": "Public domain", "attribution": "Basemap: Natural Earth"},
         ],
         "world": wrl,
