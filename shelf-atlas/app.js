@@ -70,6 +70,13 @@
  * reused until the view moves, so scrubbing costs the fields, the circles, the
  * platforms and the labels only.
  *
+ * RATE OR CUMULATIVE. The circles show either each unit's rate in the month
+ * (the month's volume over its days) or its cumulative volume: the sum of its
+ * monthly volumes from the first month of its series up to and including the
+ * month on the slider. Each series carries a Float64Array prefix sum built
+ * when it is decoded, so a cumulative is one lookup, never an estimate, and
+ * sums start where each regulator's series starts.
+ *
  * NO VALUE EVER REACHES innerHTML: every piece of text is set with textContent.
  * Nothing is fetched but ./data/geo.json and ./data/snapshot.json.
  * ========================================================================== */
@@ -77,7 +84,7 @@
 
 const STORE = {
   view: 'sa.view', month: 'sa.month', qty: 'sa.qty', sys: 'sa.units', cc: 'sa.countries',
-  sel: 'sa.sel', speed: 'sa.speed', key: 'sa.key', layers: 'sa.layers',
+  sel: 'sa.sel', speed: 'sa.speed', key: 'sa.key', layers: 'sa.layers', mode: 'sa.mode',
 };
 /* Map layers the user can switch off. Fields, their circles and the coast are
  * always drawn; everything else is a choice. */
@@ -200,13 +207,13 @@ function fold(s) {
     .replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/å/g, 'a');
 }
 
-/* 3 significant figures with k / M / bn: rates and map totals. */
+/* 3 significant figures with k / M / bn / tn: rates, map totals, volumes on the scale. */
 function fmt3(v) {
   if (!Number.isFinite(v)) return '—';
   const a = Math.abs(v);
   if (a === 0) return '0';
   let d = 1, s = '';
-  if (a >= 1e9) { d = 1e9; s = 'bn'; } else if (a >= 1e6) { d = 1e6; s = 'M'; } else if (a >= 1e3) { d = 1e3; s = 'k'; }
+  if (a >= 1e12) { d = 1e12; s = 'tn'; } else if (a >= 1e9) { d = 1e9; s = 'bn'; } else if (a >= 1e6) { d = 1e6; s = 'M'; } else if (a >= 1e3) { d = 1e3; s = 'k'; }
   const x = v / d;
   const ax = Math.abs(x);
   let t;
@@ -265,9 +272,14 @@ function decodeSeries(s, where) {
   try { bin = atob(s.b64); } catch { throw new Error(`${where}.b64 is not base64`); }
   if (bin.length % 2) throw new Error(`${where}.b64 holds an odd number of bytes`);
   const n = bin.length / 2;
-  const out = new Float32Array(n);
-  for (let i = 0; i < n; i++) out[i] = (bin.charCodeAt(2 * i) | (bin.charCodeAt(2 * i + 1) << 8)) * s.scale;
-  return out;
+  // the values, and their running sum in doubles: pre[j] = value[0] + … + value[j − 1]
+  const out = new Float32Array(n), pre = new Float64Array(n + 1);
+  for (let i = 0; i < n; i++) {
+    const v = (bin.charCodeAt(2 * i) | (bin.charCodeAt(2 * i + 1) << 8)) * s.scale;
+    out[i] = v;
+    pre[i + 1] = pre[i] + v;
+  }
+  return [out, pre];
 }
 
 /* ── shape checks: say which file and what is wrong ──────────────────────── */
@@ -504,6 +516,15 @@ function monthly(F, q, m) {
   const j = m - (q === 'liq' ? F.liqS : F.gasS);
   return j >= 0 && j < a.length ? a[j] : 0;
 }
+/* The volume produced from the first month of the series up to and including
+ * month m: a lookup in the prefix sum, exact to the packed series. */
+function cumAt(F, q, m) {
+  if (q === 'oe') return cumAt(F, 'liq', m) + cumAt(F, 'gas', m) / 1000;
+  const p = q === 'liq' ? F.liqC : F.gasC;
+  if (!p) return 0;
+  const j = m - (q === 'liq' ? F.liqS : F.gasS) + 1;
+  return j <= 0 ? 0 : p[j < p.length ? j : p.length - 1];
+}
 
 function buildModel(s, B) {
   const M = { lastMonth: s.lastMonth, fields: [], byId: new Map(), groups: [], groupById: new Map(),
@@ -515,10 +536,10 @@ function buildModel(s, B) {
       hist: Array.isArray(r.statusHist) && r.statusHist.length
         ? r.statusHist.map((h) => [h[0], normStatus(h[1]), h[1]]).sort((a, b) => a[0] - b[0]) : null,
       disc: isInt(r.discYear) ? r.discYear : isInt(r.firstMonth) ? monthYear(r.firstMonth) : null,
-      X: r.c[0], Y: mercY(r.c[1]), liq: null, liqS: 0, gas: null, gasS: 0, group: null, unit: -1,
+      X: r.c[0], Y: mercY(r.c[1]), liq: null, liqC: null, liqS: 0, gas: null, gasC: null, gasS: 0, group: null, unit: -1,
     };
-    if (r.liq) { F.liq = decodeSeries(r.liq, `fields[${i}] (${r.id}).liq`); F.liqS = r.liq.start; }
-    if (r.gas) { F.gas = decodeSeries(r.gas, `fields[${i}] (${r.id}).gas`); F.gasS = r.gas.start; }
+    if (r.liq) { [F.liq, F.liqC] = decodeSeries(r.liq, `fields[${i}] (${r.id}).liq`); F.liqS = r.liq.start; }
+    if (r.gas) { [F.gas, F.gasC] = decodeSeries(r.gas, `fields[${i}] (${r.id}).gas`); F.gasS = r.gas.start; }
     const o = B.outlines.get(r.id);
     if (o) { F.path = o.path; F.rings = o.rings; F.bbox = o.bbox; F.area = o.area; F.delineation = r.country === 'DK'; } else {
       F.path = null; F.rings = null; F.bbox = [F.X, F.Y, F.X, F.Y]; F.area = 0; M.noOutline++;
@@ -581,6 +602,31 @@ function buildModel(s, B) {
     U.peak = top.oe[1];
     U.area = U.members.reduce((a, F) => a + F.area, 0);
   }
+  // The cumulative scale has its own top: the most any unit has produced by
+  // the last month. The rate scale above is left as it is.
+  M.hiCum = { liq: 0, gas: 0, oe: 0 };
+  for (const U of M.units) {
+    for (const q of ['liq', 'gas', 'oe']) {
+      let v = 0;
+      for (const F of U.members) v += cumAt(F, q, M.lastMonth);
+      if (v > M.hiCum[q]) M.hiCum[q] = v;
+    }
+  }
+  // Where a sum may miss production from before its series: the field's
+  // first month is its country's first month and other fields share it (a
+  // series that opens on many producing fields at once, like the Dutch one in
+  // January 2003), or the field was found before its country's series starts
+  // and appears in it ten or more years after its discovery (the UK's 1960s
+  // gas fields). A country's lone first producer is its real start.
+  const atFirst = {};
+  for (const F of M.fields) if (F.first != null && F.first === M.ccFirst[F.cc]) atFirst[F.cc] = (atFirst[F.cc] || 0) + 1;
+  for (const F of M.fields) {
+    F.lateStart = null;
+    if (F.first == null) continue;
+    const c0 = M.ccFirst[F.cc], d = F.raw.discYear;
+    if (F.first === c0 && atFirst[F.cc] >= 2) F.lateStart = 'series';
+    else if (c0 >= 12 && isInt(d) && d < monthYear(c0) && monthYear(F.first) - d >= 10) F.lateStart = 'field';
+  }
   // Labels are placed biggest first: the fields that made the North Sea.
   M.rank = M.units.map((_, i) => i).sort((a, b) => (M.units[b].peak - M.units[a].peak) || (M.units[b].area - M.units[a].area));
   M.searchIndex = M.units.map((U, u) => ({ u, key: fold(U.name), cc: [...new Set(U.members.map((F) => F.cc))] }))
@@ -606,14 +652,15 @@ let fitK = 1;
 let month = 0;
 let qty = 'liq';
 let sys = 'si';
+let mode = 'rate';          // 'rate': each month's rate; 'cum': volume produced to date
 const ccOn = { NO: true, UK: true, DK: true, NL: true };
 let sel = null;             // { type: 'unit'|'fac'|'pipe'|'border', … }
 let playing = false;
 let speedIdx = 2;
 let problems = new Map();
-let fieldVal = new Float32Array(0), fieldState = new Uint8Array(0), fieldCol = new Uint8Array(0);
-let unitVal = new Float32Array(0), unitVis = new Uint8Array(0), unitCol = new Uint8Array(0);
-let unitOrder = [];         // producing units, largest first, so small circles land on top
+let fieldVal = new Float64Array(0), fieldState = new Uint8Array(0), fieldCol = new Uint8Array(0);
+let unitVal = new Float64Array(0), unitVis = new Uint8Array(0), unitCol = new Uint8Array(0);
+const unitOrder = [];       // units with a circle, largest first, so small circles land on top
 let monthTotal = 0, monthCount = 0;
 
 function buildPalette() {
@@ -632,7 +679,7 @@ function buildPalette() {
 /* ── the month ───────────────────────────────────────────────────────────── */
 
 function domain() {
-  const hi = model ? model.hi[qty] : 0;
+  const hi = model ? (mode === 'cum' ? model.hiCum : model.hi)[qty] : 0;
   return hi > 0 ? { lo: hi / Math.pow(10, DOMAIN_DECADES), hi } : { lo: 1, hi: 10 };
 }
 function isShut(F, m) {
@@ -650,42 +697,53 @@ function statusAt(F, m) {
   return s;
 }
 
+/* The colour index of a value on the current scale; module state rather than
+ * a closure so that a month change allocates nothing. */
+let colL0 = 0, colSpan = 1;
+function colOf(v) { return v > 0 ? Math.round(clamp((Math.log10(v) - colL0) / colSpan, 0, 1) * 255) : 0; }
+const byUnitVal = (a, b) => unitVal[b] - unitVal[a];
+
 function computeMonth() {
   if (!model) return;
   const nf = model.fields.length, nu = model.units.length;
   if (fieldVal.length !== nf) {
-    fieldVal = new Float32Array(nf); fieldState = new Uint8Array(nf); fieldCol = new Uint8Array(nf);
+    fieldVal = new Float64Array(nf); fieldState = new Uint8Array(nf); fieldCol = new Uint8Array(nf);
   }
-  if (unitVal.length !== nu) { unitVal = new Float32Array(nu); unitVis = new Uint8Array(nu); unitCol = new Uint8Array(nu); }
-  const m = month, y = monthYear(m), dd = daysIn(m);
-  const D = domain(), L0 = Math.log10(D.lo), span = Math.log10(D.hi) - L0;
-  const col = (v) => (v > 0 ? Math.round(clamp((Math.log10(v) - L0) / span, 0, 1) * 255) : 0);
+  if (unitVal.length !== nu) { unitVal = new Float64Array(nu); unitVis = new Uint8Array(nu); unitCol = new Uint8Array(nu); }
+  const m = month, y = monthYear(m), dd = daysIn(m), cum = mode === 'cum';
+  const D = domain();
+  colL0 = Math.log10(D.lo);
+  colSpan = Math.log10(D.hi) - colL0;
   monthTotal = 0; monthCount = 0;
   for (let i = 0; i < nf; i++) {
     const F = model.fields[i];
     let st = 0, v = 0;
     if (ccOn[F.cc]) {
       const l = monthly(F, 'liq', m), g = monthly(F, 'gas', m);
-      v = (qty === 'liq' ? l : qty === 'gas' ? g : l + g / 1000) / dd;
+      const cl = cum ? cumAt(F, 'liq', m) : 0, cg = cum ? cumAt(F, 'gas', m) : 0;
+      const r = (qty === 'liq' ? l : qty === 'gas' ? g : l + g / 1000) / dd;
       // Hidden until discovered — unless the source reports production
       // before its own discovery year, in which case the numbers win.
-      if (l <= 0 && g <= 0 && F.disc != null && F.disc > y) st = 0;
-      else if (v > 0) st = 3;
+      if (l <= 0 && g <= 0 && cl <= 0 && cg <= 0 && F.disc != null && F.disc > y) st = 0;
+      else if (r > 0) st = 3;
       else st = isShut(F, m) ? 2 : 1;
+      // A rate belongs to a producing month only; a cumulative stays with the
+      // field for good, shut or idle.
+      if (cum) v = qty === 'liq' ? cl : qty === 'gas' ? cg : cl + cg / 1000;
+      else if (st === 3) v = r;
     }
-    if (st !== 3) v = 0;
-    fieldVal[i] = v; fieldState[i] = st; fieldCol[i] = col(v);
+    fieldVal[i] = v; fieldState[i] = st; fieldCol[i] = colOf(v);
     if (v > 0) { monthTotal += v; monthCount++; }
   }
-  unitOrder = [];
+  unitOrder.length = 0;
   for (let u = 0; u < nu; u++) {
-    const U = model.units[u];
+    const mem = model.units[u].members;
     let v = 0, vis = 0;
-    for (const F of U.members) { v += fieldVal[F.i]; vis = Math.max(vis, fieldState[F.i]); }
-    unitVal[u] = v; unitVis[u] = vis; unitCol[u] = col(v);
+    for (let k = 0; k < mem.length; k++) { const fi = mem[k].i; v += fieldVal[fi]; if (fieldState[fi] > vis) vis = fieldState[fi]; }
+    unitVal[u] = v; unitVis[u] = vis; unitCol[u] = colOf(v);
     if (v > 0) unitOrder.push(u);
   }
-  unitOrder.sort((a, b) => unitVal[b] - unitVal[a]);
+  unitOrder.sort(byUnitVal);
 }
 
 /* ── view: Web Mercator, k CSS px per degree, t the screen offset ────────── */
@@ -996,14 +1054,17 @@ function drawCircles(c) {
   }
   c.lineWidth = 1.2;
   c.strokeStyle = P.ring;
-  for (const u of unitOrder) {
+  // In cumulative mode a shut unit keeps its circle, sized by what it
+  // produced, filled grey instead of by the colour scale.
+  const greyShut = mode === 'cum';
+  for (let o = 0; o < unitOrder.length; o++) {
+    const u = unitOrder[o];
     const r = circleR(unitVal[u], hi);
     const sx = U[u].X * view.k + view.tx, sy = U[u].Y * view.k + view.ty;
     if (sx < -r || sy < -r || sx > W + r || sy > H + r) continue;
     c.beginPath();
     c.arc(sx, sy, r, 0, Math.PI * 2);
-    c.globalAlpha = 0.82;
-    c.fillStyle = P.lut[unitCol[u]];
+    if (greyShut && unitVis[u] === 2) { c.globalAlpha = 1; c.fillStyle = P.shutFill; } else { c.globalAlpha = 0.82; c.fillStyle = P.lut[unitCol[u]]; }
     c.fill();
     c.globalAlpha = 1;
     c.stroke();
@@ -1204,6 +1265,7 @@ function hitTest(sx, sy) {
 /* ── units, legend, stamp, credits ───────────────────────────────────────── */
 
 const U_ = (q) => UNITS[q || qty][sys];
+const uLab = (q) => (mode === 'cum' ? U_(q).vol : U_(q).rate);     // the scale's unit: a volume or a rate
 function setProblem(key, msg) {
   if (msg) problems.set(key, msg); else problems.delete(key);
   const box = $('error');
@@ -1216,10 +1278,12 @@ function updateLegend() {
   // no production figures, no colour scale: a legend over an empty map would
   // read as "everything is zero"
   $('legend').hidden = !(model && model.fields.length);
-  $('legend-q').textContent = UNITS[qty].name;
-  $('legend-unit').textContent = U_().rate;
-  $('btn-units').textContent = U_().rate;
-  $('btn-units').setAttribute('aria-label', `Units: ${U_().rate}. Switch to ${UNITS[qty][sys === 'si' ? 'field' : 'si'].rate}`);
+  const cum = mode === 'cum', ul = uLab();
+  $('legend').classList.toggle('cum', cum);
+  $('legend-q').textContent = cum ? `${UNITS[qty].name} to date` : UNITS[qty].name;
+  $('legend-unit').textContent = ul;
+  $('btn-units').textContent = ul;
+  $('btn-units').setAttribute('aria-label', `Units: ${ul}. Switch to ${UNITS[qty][sys === 'si' ? 'field' : 'si'][cum ? 'vol' : 'rate']}`);
   const ramp = P.ramp;
   $('legend-bar').style.background = `linear-gradient(to right, ${ramp.map((c, i) => `${c} ${Math.round((i / (ramp.length - 1)) * 100)}%`).join(', ')})`;
   const box = $('legend-ticks');
@@ -1246,7 +1310,7 @@ function updateLegend() {
     s.style.left = `${(p * 100).toFixed(1)}%`;
     box.append(s);
   }
-  $('legend').setAttribute('aria-label', `Map key: ${UNITS[qty].name} in ${U_().rate}, from ${labels[0][0]} to ${labels[labels.length - 1][0]}; circle area is the rate. Tap for more.`);
+  $('legend').setAttribute('aria-label', `Map key: ${UNITS[qty].name}${cum ? ' produced to date' : ''} in ${ul}, from ${labels[0][0]} to ${labels[labels.length - 1][0]}; circle area is the ${cum ? 'volume to date; grey circles are shut fields' : 'rate'}. Tap for more.`);
 }
 
 function updateStamp() {
@@ -1292,7 +1356,8 @@ function showAbout() {
   const b = $('about-body');
   b.textContent = '';
   const p = (t) => b.append(el('p', null, t));
-  p('Oil and gas fields of the Norwegian, UK, Danish and Dutch shelves, coloured and sized by what they produced in the month on the slider. Rates are the month\'s volume divided by its days.');
+  if (mode === 'cum') p('Oil and gas fields of the Norwegian, UK, Danish and Dutch shelves, coloured and sized by the volume each has produced up to the month on the slider (Cumulative). Each sum adds up the monthly volumes from the first month of the regulator\'s series; production before a series starts is not included. Grey circles are fields that have shut down, sized by what they produced.');
+  else p('Oil and gas fields of the Norwegian, UK, Danish and Dutch shelves, coloured and sized by what they produced in the month on the slider. Rates are the month\'s volume divided by its days.');
   if (base) p(`Map geometry (data/geo.json) built ${new Date(base.generatedAt).toLocaleString()}.`);
   if (model) p(`Production (data/snapshot.json) built ${new Date(model.generatedAt).toLocaleString()}, reaching ${monthLabel(model.lastMonth)}.`);
   b.append(el('h3', null, 'Sources'));
@@ -1318,6 +1383,9 @@ function showAbout() {
     }
     const starts = CC.filter((c) => model.ccFirst[c] != null).map((c) => `${c} from ${monthLabel(model.ccFirst[c])} to ${monthLabel(model.ccLast[c])}`);
     if (starts.length) p(`Monthly figures cover ${starts.join('; ')}. Outside those months a country's fields are drawn as outlines without a value, and the line under the map says why.`);
+    const nS = model.fields.filter((F) => F.lateStart === 'series').length, nF = model.fields.filter((F) => F.lateStart === 'field').length;
+    const firsts = CC.filter((c) => model.ccFirst[c] != null).map((c) => `${c} ${monthShort(model.ccFirst[c])}`);
+    if (firsts.length) p(`Cumulative sums start where each regulator's series starts (${firsts.join(', ')}; a field's own series may start later), and production before then is not included. ${nS} field${nS === 1 ? ' was' : 's were'} already producing when ${nS === 1 ? 'its' : 'their'} series began; ${nF} more ${nF === 1 ? 'was' : 'were'} discovered ten or more years before ${nF === 1 ? 'its' : 'their'} series starts, so ${nF === 1 ? 'its sum' : 'their sums'} may miss earlier years. Each field's sheet says which.`);
     if (model.groups.length) {
       p(`Cross-border units, each side reported by its own regulator and drawn with its own share (never counted twice): ${model.groups.map((G) => `${G.name} (${G.members.map((F) => F.cc + (isNum(F.raw.share) ? ' ' + F.raw.share + '%' : '')).join(', ')})`).join('; ')}.`);
     }
@@ -1387,10 +1455,13 @@ function updateTimeUI() {
   const early = on.filter((c) => model.ccFirst[c] != null && month < model.ccFirst[c]);
   const note = [late.length ? `${late.join(', ')} not reported yet` : '',
     ...early.map((c) => `${c} figures from ${monthYear(model.ccFirst[c])}`)].filter(Boolean).join(' · ');
-  if (note && late.length + early.length === on.length) { tot.textContent = note; return; }
-  tot.append(note ? `${note} · ` : `${who}${monthCount} producing · `);
+  // A late country still has its volume to date; only one whose series has
+  // not started yet has nothing to add up.
+  const cum = mode === 'cum';
+  if (note && (cum ? early.length : late.length + early.length) === on.length) { tot.textContent = note; return; }
+  tot.append(note ? `${note} · ` : cum ? `${who}${monthCount} field${monthCount === 1 ? '' : 's'} · ` : `${who}${monthCount} producing · `);
   tot.append(el('b', null, fmt3(monthTotal * U_().f)));
-  tot.append(` ${U_().rate}`);
+  tot.append(cum ? ` ${U_().vol} to date` : ` ${U_().rate}`);
 }
 function buildTicks() {
   const box = $('ticks');
@@ -1491,14 +1562,15 @@ function unitSeries(U) {
   for (const F of U.members) if (F.first != null) x0 = Math.min(x0, F.first);
   if (!Number.isFinite(x0)) return null;
   const x1 = model.lastMonth, n = x1 - x0 + 1;
-  const liq = new Float32Array(n), gas = new Float32Array(n);
+  const liq = new Float32Array(n), gas = new Float32Array(n), cl = new Float64Array(n), cg = new Float64Array(n);
   for (let j = 0; j < n; j++) {
     const m = x0 + j, d = daysIn(m);
-    let l = 0, g = 0;
-    for (const F of U.members) { l += monthly(F, 'liq', m); g += monthly(F, 'gas', m); }
-    liq[j] = l / d; gas[j] = g / d;
+    let l = 0, g = 0, a = 0, b = 0;
+    for (const F of U.members) { l += monthly(F, 'liq', m); g += monthly(F, 'gas', m); a += cumAt(F, 'liq', m); b += cumAt(F, 'gas', m); }
+    liq[j] = l / d; gas[j] = g / d; cl[j] = a; cg[j] = b;
   }
-  return { x0, x1, liq, gas };
+  // rates per day, and volumes to date (cl, cg), Sm³
+  return { x0, x1, liq, gas, cl, cg };
 }
 
 function drawSpark(cv, S) {
@@ -1509,10 +1581,12 @@ function drawSpark(cv, S) {
   const c = cv.getContext('2d');
   c.setTransform(r, 0, 0, r, 0, 0);
   c.clearRect(0, 0, w, h);
-  const f = UNITS.oe[sys].f, unit = UNITS.oe[sys].rate;
+  // Rate mode draws the rates; cumulative mode the rising volumes to date.
+  const cum = mode === 'cum', LQ = cum ? S.cl : S.liq, GS = cum ? S.cg : S.gas;
+  const f = UNITS.oe[sys].f, unit = cum ? UNITS.oe[sys].vol : UNITS.oe[sys].rate;
   const pl = 2, pr = 2, pt = 16, pb = 14, iw = w - pl - pr, ih = h - pt - pb;
   let ymax = 0;
-  for (let j = 0; j < S.liq.length; j++) ymax = Math.max(ymax, S.liq[j], S.gas[j] / 1000);
+  for (let j = 0; j < LQ.length; j++) ymax = Math.max(ymax, LQ[j], GS[j] / 1000);
   ymax = ymax * f || 1;
   const n = S.x1 - S.x0;
   const X = (m) => pl + (n > 0 ? ((m - S.x0) / n) * iw : iw / 2);
@@ -1545,8 +1619,8 @@ function drawSpark(cv, S) {
     for (let j = 0; j < arr.length; j++) { const x = X(S.x0 + j), y = Y(arr[j] / div); if (j) c.lineTo(x, y); else c.moveTo(x, y); }
     c.stroke();
   };
-  line(S.gas, 1000, P.pipes[1]);
-  line(S.liq, 1, P.pipes[0]);
+  line(GS, 1000, P.pipes[1]);
+  line(LQ, 1, P.pipes[0]);
   if (month >= S.x0 && month <= S.x1) {
     const x = Math.round(X(month)) + 0.5, j = month - S.x0;
     c.strokeStyle = P.ink;
@@ -1554,7 +1628,7 @@ function drawSpark(cv, S) {
     c.lineWidth = 1;
     c.beginPath(); c.moveTo(x, pt); c.lineTo(x, pt + ih); c.stroke();
     c.globalAlpha = 1;
-    for (const [v, col] of [[S.gas[j] / 1000, P.pipes[1]], [S.liq[j], P.pipes[0]]]) {
+    for (const [v, col] of [[GS[j] / 1000, P.pipes[1]], [LQ[j], P.pipes[0]]]) {
       c.fillStyle = col;
       c.beginPath(); c.arc(x, Y(v), 3, 0, Math.PI * 2); c.fill();
     }
@@ -1638,7 +1712,7 @@ function renderUnitSheet(b, U) {
       if (F.end - 1 < (model.ccLast[F.cc] ?? model.lastMonth)) dlRow(dl, 'Last production', monthLabel(F.end - 1));
     }
     const pk = peakOf(F);
-    if (pk) dlRow(dl, `Peak (${UNITS[qty].name.toLowerCase()})`, `${fmt3(pk.v * U_().f)} ${U_().rate} in ${monthLabel(pk.m)}`);
+    if (pk) dlRow(dl, `Peak rate (${UNITS[qty].name.toLowerCase()})`, `${fmt3(pk.v * U_().f)} ${U_().rate} in ${monthLabel(pk.m)}`);
     const cumL = isNum(F.raw.cumLiq) ? F.raw.cumLiq : null, cumG = isNum(F.raw.cumGas) ? F.raw.cumGas : null;
     if (cumL) dlRow(dl, 'Liquids to date', `${fmtVol(cumL * UNITS.liq[sys].f)} ${UNITS.liq[sys].vol}`);
     if (cumG) dlRow(dl, 'Gas to date', `${fmtVol(cumG * UNITS.gas[sys].f)} ${UNITS.gas[sys].vol}`);
@@ -1651,32 +1725,47 @@ function renderUnitSheet(b, U) {
     if (isInt(F.raw.monthlyFrom)) {
       b.append(el('p', 'sh-note', `Before ${monthLabel(F.raw.monthlyFrom)} the ${(snap.countries && snap.countries[F.cc]) || F.cc} figures are annual totals spread evenly over the months, so month-to-month changes before then are not real.`));
     }
+    if (mode === 'cum') for (const t of cumNotes(F)) b.append(el('p', 'sh-note', t));
   }
   sheetDyn = () => {
-    const u = U_(), dd = daysIn(month);
+    const u = U_(), dd = daysIn(month), cum = mode === 'cum';
     const v = U.members.reduce((a, F) => a + fieldVal[F.i], 0);
     const anyVis = U.members.some((F) => fieldState[F.i]);
-    const noData = U.members.filter((F) => (model.ccFirst[F.cc] != null && month < model.ccFirst[F.cc]) || (model.ccLast[F.cc] != null && month > model.ccLast[F.cc]));
-    nowV.textContent = anyVis && noData.length < U.members.length ? fmt3(v * u.f) : '—';
-    nowT.textContent = !anyVis ? `not yet discovered in ${monthLabel(month)}`
-      : noData.length === U.members.length ? `no ${noData.map((F) => CC_ADJ[F.cc]).filter((x, i, a) => a.indexOf(x) === i).join(' or ')} figures for ${monthLabel(month)}`
-        : `${u.rate} ${UNITS[qty].name.toLowerCase()} · ${monthLabel(month)}${noData.length ? ` (no ${CC_ADJ[noData[0].cc]} figures)` : ''}`;
+    const adj = (fs) => fs.map((F) => CC_ADJ[F.cc]).filter((x, i, a) => a.indexOf(x) === i).join(' or ');
+    if (cum) {
+      // a volume to date needs only that the series has begun; a country
+      // that has not reported the newest months still has its sum so far
+      const before = U.members.filter((F) => model.ccFirst[F.cc] != null && month < model.ccFirst[F.cc]);
+      nowV.textContent = anyVis && before.length < U.members.length ? fmtVol(v * u.f) : '—';
+      nowT.textContent = !anyVis ? `not yet discovered in ${monthLabel(month)}`
+        : before.length === U.members.length ? `no ${adj(before)} figures before ${monthLabel(model.ccFirst[before[0].cc])}`
+          : `${u.vol} ${UNITS[qty].name.toLowerCase()} to ${monthLabel(month)}${before.length ? ` (no ${adj(before)} figures yet)` : ''}`;
+    } else {
+      const noData = U.members.filter((F) => (model.ccFirst[F.cc] != null && month < model.ccFirst[F.cc]) || (model.ccLast[F.cc] != null && month > model.ccLast[F.cc]));
+      nowV.textContent = anyVis && noData.length < U.members.length ? fmt3(v * u.f) : '—';
+      nowT.textContent = !anyVis ? `not yet discovered in ${monthLabel(month)}`
+        : noData.length === U.members.length ? `no ${adj(noData)} figures for ${monthLabel(month)}`
+          : `${u.rate} ${UNITS[qty].name.toLowerCase()} · ${monthLabel(month)}${noData.length ? ` (no ${CC_ADJ[noData[0].cc]} figures)` : ''}`;
+    }
     if (S) {
       drawSpark(cv, S);
-      const j = month - S.x0, inR = j >= 0 && j < S.liq.length;
+      const n = S.liq.length, j = month - S.x0, inR = j >= 0 && j < n;
+      const lv = cum ? (j >= 0 ? S.cl[Math.min(j, n - 1)] : 0) : inR ? S.liq[j] : 0;
+      const gv = cum ? (j >= 0 ? S.cg[Math.min(j, n - 1)] : 0) : inR ? S.gas[j] : 0;
+      const k = cum ? 'vol' : 'rate';
       keyL.textContent = '';
       keyG.textContent = '';
       const lI = el('i'); lI.style.background = P.pipes[0];
       const gI = el('i'); gI.style.background = P.pipes[1];
-      keyL.append(lI, `Liquids ${inR ? fmt3(S.liq[j] * UNITS.liq[sys].f) : '0'} `, el('small', null, UNITS.liq[sys].rate));
-      keyG.append(gI, `Gas ${inR ? fmt3(S.gas[j] * UNITS.gas[sys].f) : '0'} `, el('small', null, UNITS.gas[sys].rate));
-      cv.setAttribute('aria-label', `Production history ${monthYear(S.x0)}–${monthYear(S.x1)}; liquids and gas as oil equivalent on one scale. ${monthLabel(month)}: ${keyL.textContent}, ${keyG.textContent}.`);
+      keyL.append(lI, `Liquids ${fmt3(lv * UNITS.liq[sys].f)} `, el('small', null, UNITS.liq[sys][k]));
+      keyG.append(gI, `Gas ${fmt3(gv * UNITS.gas[sys].f)} `, el('small', null, UNITS.gas[sys][k]));
+      cv.setAttribute('aria-label', cum
+        ? `Cumulative production ${monthYear(S.x0)}–${monthYear(S.x1)}; liquids and gas as oil equivalent on one scale. To ${monthLabel(month)}: ${keyL.textContent}, ${keyG.textContent}.`
+        : `Production history ${monthYear(S.x0)}–${monthYear(S.x1)}; liquids and gas as oil equivalent on one scale. ${monthLabel(month)}: ${keyL.textContent}, ${keyG.textContent}.`);
     }
-    for (const [F, td] of memberCells) {
-      const l = monthly(F, qty, month) / dd;
-      td.textContent = `${fmt3(l * u.f)} ${u.rate}`;
-    }
-    if (sumCell) sumCell.textContent = `${fmt3(U.members.reduce((a, F) => a + monthly(F, qty, month) / dd, 0) * u.f)} ${u.rate}`;
+    const cellOf = (F) => (cum ? cumAt(F, qty, month) : monthly(F, qty, month) / dd);
+    for (const [F, td] of memberCells) td.textContent = `${fmt3(cellOf(F) * u.f)} ${cum ? u.vol : u.rate}`;
+    if (sumCell) sumCell.textContent = `${fmt3(U.members.reduce((a, F) => a + cellOf(F), 0) * u.f)} ${cum ? u.vol : u.rate}`;
     for (const [F, dd2, dt] of statusCells) {
       const h = statusAt(F, month);
       dt.textContent = `Status in ${monthShort(month)}`;
@@ -1684,6 +1773,28 @@ function renderUnitSheet(b, U) {
     }
   };
   sheetDyn();
+}
+
+/* Cumulative mode: how the sum compares with the regulator's own total, and
+ * where it starts. */
+function cumNotes(F) {
+  const out = [];
+  if (F.first == null) return out;
+  const q = qty, u = UNITS[q][sys];
+  const rl = isNum(F.raw.cumLiq) ? F.raw.cumLiq : null, rg = isNum(F.raw.cumGas) ? F.raw.cumGas : null;
+  const reg = q === 'liq' ? rl : q === 'gas' ? rg
+    : (rl != null || rg != null) && (rl != null || !F.liq) && (rg != null || !F.gas) ? (rl || 0) + (rg || 0) / 1000 : null;
+  const s0 = q === 'liq' ? (F.liq ? F.liqS : null) : q === 'gas' ? (F.gas ? F.gasS : null) : F.first;
+  if (reg != null && s0 != null) {
+    out.push(`Regulator's total to date: ${fmtVol(reg * u.f)} ${u.vol} (this series sums to ${fmtVol(cumAt(F, q, 1e9) * u.f)} ${u.vol} from ${monthLabel(s0)}).`);
+  }
+  const ctry = (snap.countries && snap.countries[F.cc]) || F.cc;
+  let t = `The sum starts in ${monthLabel(F.first)}, the first month of this field's ${ctry} series.`;
+  if (F.lateStart === 'series') t += ` The ${ctry} series itself begins then, so production before ${monthLabel(F.first)} is not included.`;
+  else if (F.lateStart === 'field') t += ` The field was discovered in ${F.raw.discYear}, long before; if it produced before ${monthLabel(F.first)}, that is not in the series and not included.`;
+  if (isInt(F.raw.monthlyFrom) && F.first < F.raw.monthlyFrom) t += ` Before ${monthLabel(F.raw.monthlyFrom)} it grows in equal monthly steps, because each year's total is spread evenly over its months.`;
+  out.push(t);
+  return out;
 }
 
 function peakOf(F) {
@@ -1961,6 +2072,17 @@ function setQty(q) {
   requestRender();
 }
 for (const b of $('qty').children) b.addEventListener('click', () => setQty(b.dataset.q));
+function setMode(m) {
+  mode = m === 'cum' ? 'cum' : 'rate';
+  store(STORE.mode, mode);
+  for (const b of $('mode').children) b.setAttribute('aria-checked', String(b.dataset.m === mode));
+  computeMonth();
+  updateLegend();
+  updateTimeUI();
+  if (sel && sel.type === 'unit') renderSheet();
+  requestRender();
+}
+for (const b of $('mode').children) b.addEventListener('click', () => setMode(b.dataset.m));
 $('btn-units').addEventListener('click', () => {
   sys = sys === 'si' ? 'field' : 'si';
   store(STORE.sys, sys);
@@ -2137,6 +2259,7 @@ function resize() {
   const q = recall(STORE.qty);
   if (q && UNITS[q]) qty = q;
   if (recall(STORE.sys) === 'field') sys = 'field';
+  if (recall(STORE.mode) === 'cum') mode = 'cum';
   const cc = recallJSON(STORE.cc);
   if (cc && typeof cc === 'object') for (const c of CC) if (typeof cc[c] === 'boolean') ccOn[c] = cc[c];
   const sp = recall(STORE.speed) == null ? NaN : Number(recall(STORE.speed));
@@ -2147,6 +2270,7 @@ function resize() {
 })();
 buildPalette();
 for (const b of $('qty').children) b.setAttribute('aria-checked', String(b.dataset.q === qty));
+for (const b of $('mode').children) b.setAttribute('aria-checked', String(b.dataset.m === mode));
 syncChips();
 syncLayers();
 updateSpeed();
@@ -2161,11 +2285,14 @@ window.__sa = {
   render() { const t0 = performance.now(); render(); return performance.now() - t0; },
   renderCold() { cache = null; const t0 = performance.now(); render(); return performance.now() - t0; },
   get state() {
-    return { month, qty, sys, ccOn: { ...ccOn }, layers: { ...layerOn }, playing, zoom: zoomRel(), sel: sel ? selKey(sel) : null,
+    return { month, qty, sys, mode, ccOn: { ...ccOn }, layers: { ...layerOn }, playing, zoom: zoomRel(), sel: sel ? selKey(sel) : null,
       fields: model ? model.fields.length : 0, units: model ? model.units.length : 0, problems: [...problems.values()],
-      total: monthTotal, producing: monthCount, hi: model ? model.hi : null };
+      total: monthTotal, producing: monthCount, hi: model ? model.hi : null, hiCum: model ? model.hiCum : null };
   },
   setMonth(m) { setMonth(m); },
+  setMode(m) { setMode(m); },
+  setQty(q) { setQty(q); },
+  val(name) { const e = model.searchIndex.find((x) => x.key === fold(name)); return e ? unitVal[e.u] : null; },
   setLayer(k, on) { layerOn[k] = !!on; syncLayers(); requestRender(); },
   pick(name) { const e = model.searchIndex.find((x) => x.key === fold(name)); if (e) pickUnit(e.u); return !!e; },
   project(lon, lat) { return [lon * view.k + view.tx, mercY(lat) * view.k + view.ty]; },

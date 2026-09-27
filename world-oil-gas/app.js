@@ -12,8 +12,10 @@
  * algorithm, LON FIRST, then lat, at the file's `factor` (1000 = three
  * decimals). Rings are closed (the last point repeats the first).
  *
- * ── data/world.json — Natural Earth 1:110m countries (static) ──────────────
+ * ── data/world.json — Natural Earth 1:50m countries (static) ───────────────
  * { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
+ *   "relief": { "file": "relief.jpg", "width": 4096, "height": 2048,   // optional
+ *               "bounds": [-180, -90, 180, 90], "projection": "plate carrée…", "source": "…" },
  *   "countries": [{ "iso3": "NOR", "name": "Norway", "adm0": "NOR",
  *                   "c": [17.8, 68.5],               // label point, lon/lat
  *                   "rings": ["<ring>", …] }, …],    // all rings of the country;
@@ -22,6 +24,10 @@
  *                  { "depth": 200,   "rings": [ … ] }] }            // Earth 1:10m depth bands,
  *   // deepest first in the file. Each band is the area DEEPER than `depth`, so
  *   // they nest; the app paints them shallowest first so the deepest tint wins.
+ * `relief` names an image in ./data (plate carrée: x = (lon+180)/360 × width,
+ * y = (90−lat)/180 × height) that is the basemap when present; it is read with
+ * an <img>, reprojected to Mercator row by row (see reliefCanvas) and the depth
+ * bands are then off unless switched on. No relief block: flat sea + bands.
  *
  * ── data/snapshot.json — annual production by country (rebuilt yearly) ─────
  * { "schema": 1, "generatedAt": "…", "app": "World Oil & Gas",
@@ -69,16 +75,23 @@
  *
  * DRAWING. Web Mercator, repeating sideways, clamped at ±85°. Every country
  * is one Path2D built once per load of world.json; scrubbing the year only
- * changes which fill each path gets — the per-year class of every country is
- * worked out on first use and cached, so playing the century back is a lookup
- * and ~180 fills a frame. Projection, hit-testing and drawing are separate
+ * changes which fill each path gets — the per-year colour index of every
+ * country is worked out on first use and cached, so playing the century back
+ * is a lookup and ~240 fills a frame; the sea and the borders are cached
+ * canvases redrawn only when the view moves. Projection, hit-testing and drawing are separate
  * sections below.
  *
  * FIELDS AND TIME. The tracker gives ONE production figure per unit (for its
- * prodYear) and no series, so a circle is always the latest reported rate, or
- * with "Size fields by: Reserves" resOilMbbl + resGasMboe. What the year moves
- * is whether a unit is there: with "Fields follow the year" on, it appears at
- * `disc` as a ring and fills in at `start` (the rules for missing keys are in
+ * prodYear) and no series. With "Fields follow the year" on, the circle is an
+ * ESTIMATE (buildEst): from es = start ?? disc ?? prodYear−1 on, rate(y) =
+ * latest × clamp(C(y) / C(prodYear), 0, 3), C being the field's country series
+ * for the Oil/Gas/Oil+Gas switch (the world's when the country is unmatched;
+ * before a series' first value it is chained to its former state's or the
+ * world's; gaps hold the last value); C(prodYear) null or 0 → the latest rate
+ * unchanged. Cumulative sizes the circle by Σ rate × 365 from es (Mboe, prefix
+ * sums per field). Reserves sizing and "follow" off are static as before.
+ * What the year also moves is whether a unit is there: it appears at
+ * `disc` as a ring and fills in at `es` (the rules for missing keys are in
  * fieldYears). disc/start are resolved once per load into p.appear / p.fill,
  * the filters into p.pass and the company/basin highlight into p.hl, so a frame
  * is comparisons. Outlines (`rings`) are decoded on first need when zoomed in
@@ -88,10 +101,11 @@
  * STATE, persisted in localStorage (keys in STORE) as UI state only: mode
  * oil|gas|total · accum annual|cumulative (cumulative = the running sum of a
  * series up to the year, a null year adding nothing, "no data" until its first
- * value; shown in Gboe or PWh with its own breaks and its own class cache) ·
+ * value; shown in Gboe or PWh on its own log domain and colour cache) ·
  * units · year · sel · showFields · followYear · statusFilter · settingFilter
  * all|onshore|offshore · typeFilter all|conventional|unconventional · sizeBy
- * prod|res · highlight {kind: company|basin, name} · showLabels. Search covers
+ * prod|res · highlight {kind: company|basin, name} · showLabels · depthBands
+ * (unset = on only without relief) · legendOpen. Search covers
  * field names, parent companies, basins and snapshot countries, folded to
  * lower case without diacritics, matching the start of the name or of a word.
  * A country sheet lists the tracker units whose `country` matches its name
@@ -99,7 +113,7 @@
  *
  * NO VALUE EVER REACHES innerHTML. Every piece of text from a data file is set
  * with textContent or built as a DOM node; the only `.innerHTML` is `= ''`.
- * Nothing is fetched but ./data/*.json.
+ * Nothing is fetched but ./data/*.json; the relief is an <img> from ./data.
  * ========================================================================== */
 
 'use strict';
@@ -108,7 +122,7 @@ const STORE = {
   view: 'wog.view', units: 'wog.units', mode: 'wog.mode', year: 'wog.year', sel: 'wog.sel',
   fields: 'wog.fields', status: 'wog.status', labels: 'wog.labels',
   follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype',
-  size: 'wog.size', hl: 'wog.hl',
+  size: 'wog.size', hl: 'wog.hl', depth: 'wog.depth', legend: 'wog.legend',
 };
 const FILES = { world: 'data/world.json', snapshot: 'data/snapshot.json', fields: 'data/fields.json' };
 const MAX_LAT = 85;
@@ -117,29 +131,23 @@ const PATH_K = 4096;            // paths are built in world units × PATH_K
 const MAX_SCALE = 360 * 120;    // 120 px per degree of longitude
 const YEARS_PER_SEC = 8;        // playback: the century in about 15 s
 const STALE_DAYS = 400;         // the snapshot is rebuilt yearly
-const NODATA = 255;             // class index for "null that year"
-
-/* Class breaks in the unit on screen. Each unit gets its own round numbers
- * rather than converted ones (10 kboe/d is 6.2 TWh/yr, which nobody wants on a
- * legend); the two sets sit close enough that toggling units barely repaints
- * the map. Steps of ×3 / ×2.5–4 because production spans five orders of
- * magnitude and a linear scale would colour one country and leave the rest pale. */
+/* Country colour: log10(value) between the unit's domain [lo, hi] → one of
+ * 256 steps across the ramp (a LUT). The domains are the old class breaks
+ * (10…10,000 kboe/d; 5…5,000 TWh/yr) widened by one step each end and
+ * rounded, so the colour spans what the eight classes spanned. Production
+ * spans five orders of magnitude: a linear scale would colour one country. */
 const UNITS = {
-  kboe: { label: 'kboe/d', long: 'thousand barrels of oil equivalent a day',
-          breaks: [10, 30, 100, 300, 1000, 3000, 10000] },
-  twh:  { label: 'TWh/yr', long: 'terawatt-hours a year',
-          breaks: [5, 20, 50, 200, 500, 2000, 5000] },
+  kboe: { label: 'kboe/d', long: 'thousand barrels of oil equivalent a day', dom: [3, 30000] },
+  twh:  { label: 'TWh/yr', long: 'terawatt-hours a year', dom: [2, 20000] },
 };
 const UNIT_ORDER = ['kboe', 'twh'];
 const MODES = { oil: 'Oil', gas: 'Gas', total: 'Oil + Gas' };
 /* Cumulative production is a volume, not a rate: billion boe (same boePerTWh)
  * or thousand TWh. World to date is ~2,400 Gboe and the largest producer ~500,
- * so the breaks span 0.1 to 100 Gboe (0.2 to 200 PWh; 1 Gboe ≈ 1.7 PWh). */
+ * so the domain is 0.03 to 300 Gboe (0.05 to 500 PWh; 1 Gboe ≈ 1.7 PWh). */
 const CUM_UNITS = {
-  kboe: { label: 'Gboe', long: 'billion barrels of oil equivalent produced to date',
-          breaks: [0.1, 0.3, 1, 3, 10, 30, 100] },
-  twh:  { label: 'PWh', long: 'thousand terawatt-hours produced to date',
-          breaks: [0.2, 0.5, 2, 5, 20, 50, 200] },
+  kboe: { label: 'Gboe', long: 'billion barrels of oil equivalent produced to date', dom: [0.03, 300] },
+  twh:  { label: 'PWh', long: 'thousand terawatt-hours produced to date', dom: [0.05, 500] },
 };
 const ACCUM = { annual: 'Annual', cumulative: 'Cumulative' };
 
@@ -149,6 +157,9 @@ const FIELD_RREF = 4;
 const FIELD_RMIN = 2;
 const FIELD_RMAX = 24;
 const RES_VREF = 1000;          // million boe of reserves that get the radius 100,000 boe/d gets
+const CUM_VREF = 2000;          // million boe produced to date that get it: the largest estimate
+                                // by 2024 (Burgan, ~33,000 Mboe) then matches its 1.7 Mboe/d rate
+const RING_R = 3.5;             // a not-yet-producing ring while sizes are estimated
 const OUTLINE_SCALE = 360 * 16; // outlines only from 16 px a degree of longitude…
 const OUTLINE_MIN_PX = 12;      // …and each only once it is 12 px across on screen
 const FLY_SCALE = 360 * 40;     // how far a search result zooms in
@@ -174,11 +185,15 @@ const store = {
  * with low values receding into the dark ground rather than glowing.          */
 
 const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
-let pal = null;
+let pal = null, lut = null;     // lut: 256 CSS colours across pal.ramp
 let hatch = null;               // CanvasPattern for "no data"
 function buildPalette() {
   pal = darkMq.matches ? {
     outside: '#0b0e13', ocean: '#16202c', none: '#333841', border: '#0b0e13',
+    // Over the relief: countries go on with 'screen' here ('multiply' in the
+    // light scheme) so the ramp still runs dark → light over a dimmed relief.
+    comp: 'screen', dim: 'rgba(8,11,16,0.45)', wash: 'rgba(120,126,138,0.22)', rborder: 'rgba(235,240,247,0.30)',
+    relief: 'linear-gradient(135deg,#34402f,#4a4436)',
     // Sea: the shelf (0–200 m) is the ocean fill; deeper bands step down to
     // near-black navy. Kept low in chroma so the violet ramp stays the loudest thing.
     deep: [[22, 32, 44], [8, 12, 19]],
@@ -189,6 +204,8 @@ function buildPalette() {
     ring: 'rgba(11,14,19,0.9)', grid: 'rgba(255,255,255,0.10)',
   } : {
     outside: '#eef0f4', ocean: '#e2e9f1', none: '#f4f2ed', border: '#ffffff',
+    comp: 'multiply', dim: null, wash: 'rgba(250,249,246,0.45)', rborder: 'rgba(20,24,31,0.35)',
+    relief: 'linear-gradient(135deg,#a9bf8e,#dccfa8)',
     deep: [[217, 226, 236], [170, 188, 209]],
     nodata: '#e9e7e2', hatchInk: 'rgba(84,92,108,0.45)', sel: '#14181f',
     label: '#14181f', halo: 'rgba(255,255,255,0.85)',
@@ -198,6 +215,17 @@ function buildPalette() {
   };
   hatch = null;
   bathyStyles = null;
+  const st = pal.ramp.map((h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)));
+  lut = [];
+  for (let i = 0; i < 256; i++) {
+    const t = (i / 255) * (st.length - 1), k = Math.min(st.length - 2, Math.floor(t)), f = t - k;
+    lut.push(`rgb(${st[k].map((v, j) => Math.round(v + (st[k + 1][j] - v) * f)).join(',')})`);
+  }
+}
+/* 0–255 on the log scale of the unit's domain. */
+function lutIndex(v, u = units) {
+  const [lo, hi] = unitSpec(u).dom;
+  return Math.round(clamp(Math.log(v / lo) / Math.log(hi / lo), 0, 1) * 255);
 }
 let bathyStyles = null;
 buildPalette();
@@ -386,6 +414,8 @@ let settingFilter = 'all';     // all | onshore | offshore
 let typeFilter = 'all';        // all | conventional | unconventional
 let sizeBy = 'prod';           // prod | res
 let highlight = null;          // { kind: 'company' | 'basin', name }
+let depthPref = null;          // depth bands: null = on only when there is no relief
+let legendOpen = false;
 
 const view = { cx: lonToX(40), cy: latToY(25), scale: 0 };   // scale = world width in CSS px
 let W = 0, H = 0, dpr = 1;
@@ -444,7 +474,15 @@ function buildGeo(w) {
   // draw the countries anyway rather than refusing the whole file.
   let bathy = null, bathyError = '';
   try { bathy = buildBathy(w); } catch (e) { bathyError = e.message; }
-  return { countries, borders, bathy, bathyError, source: typeof w.source === 'string' ? w.source : '' };
+  // The relief likewise: a block it cannot use is reported and skipped.
+  const r = w.relief;
+  let rel = null, reliefError = '';
+  if (r != null) {
+    if (r && isStr(r.file) && /^[\w-]+(\.[\w-]+)*\.(jpe?g|png|webp)$/i.test(r.file)
+        && Array.isArray(r.bounds) && String(r.bounds) === '-180,-90,180,90') rel = r;
+    else reliefError = ' has a "relief" block that is not a whole-world image in ./data; it is left out.';
+  }
+  return { countries, borders, bathy, bathyError, relief: rel, reliefError, source: typeof w.source === 'string' ? w.source : '' };
 }
 
 /* Depth bands, each the area DEEPER than its depth (Natural Earth's bands
@@ -612,28 +650,25 @@ function buildLink() {
   return { series, noPolygon, noData, historical };
 }
 
-/* The class of every polygon for one (mode, unit, year): 0 none, 1–8 a ramp
- * step, NODATA. Cached, so scrubbing back over a year costs nothing. */
-function classesFor(m, u, y) {
+/* The colour of every polygon for one (mode, unit, year): idx, a LUT index
+ * 0–255, and st: 0 a value, 1 zero, 2 no data, +4 partial (a total missing
+ * oil or gas). Cached per year, so playing the century back is a lookup. */
+function coloursFor(m, u, y) {
   const key = `${m}|${u}|${y}`;
-  // Cumulative values are classed on their own breaks, in their own cache.
+  // Cumulative values sit on their own domain, in their own cache.
   const cache = isCum() ? prod.cumClassCache : prod.classCache;
   let hit = cache.get(key);
   if (hit) return hit;
-  const breaks = unitSpec(u).breaks;
   const n = geo.countries.length;
-  const cls = new Uint8Array(n), partial = new Uint8Array(n);
+  const idx = new Uint8Array(n), st = new Uint8Array(n);
   for (let i = 0; i < n; i++) {
     const r = valueAt(link.series[i], m, y);
     const v = toUnit(r.v, u);
-    if (v == null) { cls[i] = NODATA; continue; }
-    partial[i] = r.partial ? 1 : 0;
-    if (v <= 0) { cls[i] = 0; continue; }
-    let c = 1;
-    while (c <= breaks.length && v >= breaks[c - 1]) c++;
-    cls[i] = c;
+    if (v == null) { st[i] = 2; continue; }
+    if (r.partial) st[i] = 4;
+    if (v <= 0) st[i] |= 1; else idx[i] = lutIndex(v, u);
   }
-  hit = { cls, partial };
+  hit = { idx, st };
   if (cache.size > 600) cache.clear();
   cache.set(key, hit);
   return hit;
@@ -720,9 +755,10 @@ function buildFields(f) {
 /* When each unit is on the map (appear) and filled (fill), as years:
  *   disc and start   → a ring from disc, filled from start;
  *   start only       → appears at start, filled;
- *   disc only        → a ring from disc; if it is operating, filled from its
- *                      prodYear, or from the newest year when that is later or
- *                      missing (the file has production, not its start);
+ *   disc only        → a ring from disc; if it is operating and has a rate,
+ *                      filled from disc too (the estimate's start, see
+ *                      buildEst); operating without a rate, filled from its
+ *                      prodYear, or the newest year when later or missing;
  *   neither          → always drawn, filled ("undated").
  * No end year exists, so mothballed or abandoned units stay as they were. */
 function fieldYears() {
@@ -734,9 +770,67 @@ function fieldYears() {
     if (p.undated) { p.appear = -Infinity; p.fill = -Infinity; continue; }
     if (st != null) { p.appear = d == null ? st : Math.min(d, st); p.fill = st; continue; }
     p.appear = d;
-    p.fill = p.operating ? Math.max(d, Math.min(p.prodYear ?? newest, newest)) : Infinity;
+    p.fill = !p.operating ? Infinity : p.v != null ? d : Math.max(d, Math.min(p.prodYear ?? newest, newest));
   }
 }
+
+/* ── field sizes through time (an estimate) ──────────────────────────────── *
+ * One series per country for the current mode, Y0…Y1 in GWh: gaps after the
+ * first value hold the last one; years before it follow the former state
+ * (USSR for Russia…) or else the world, chained at that first year. Per
+ * field: es (first year), ca (that array), k = 1 / C(prodYear) or 0 for "use
+ * the latest rate unchanged", and cum, Float32 prefix sums in Mboe from es.
+ * Rebuilt when the mode or a file changes: ~7k fields × their years.       */
+let est = null;
+function refArr(c, base) {
+  const { Y0 } = prod, n = prod.Y1 - Y0 + 1, a = new Float64Array(n);
+  let first = -1;
+  for (let i = 0; i < n; i++) {
+    const v = seriesAt(c, mode, Y0 + i).v;
+    if (v != null) { a[i] = v; if (first < 0) first = i; } else if (first >= 0) a[i] = a[i - 1];
+  }
+  if (first < 0) return null;
+  if (base && base[first] > 0) for (let i = 0; i < first; i++) a[i] = base[i] * a[first] / base[first];
+  return a;
+}
+function buildEst() {
+  if (!prod || !fields || !fields.available) { est = null; return; }
+  if (est && est.mode === mode && est.prod === prod && est.fields === fields) return;
+  const { Y0, Y1 } = prod, world = prod.s.world;
+  const wa = world ? refArr(world, null) : Float64Array.from(prod.sum[mode]);
+  const byName = new Map(), arrs = new Map();
+  for (const c of prod.s.countries) byName.set(countryKey(c.name), c);
+  const arrOf = (c) => {
+    if (!arrs.has(c)) {
+      const fs = prod.byIso.get(FORMER_STATE[c.iso3]);
+      arrs.set(c, refArr(c, fs ? refArr(fs, wa) || wa : wa));
+    }
+    return arrs.get(c);
+  };
+  let n = 0;
+  for (const p of fields.points) {
+    p.es = null;
+    const es = p.start ?? p.disc ?? (p.prodYear != null ? p.prodYear - 1 : null);
+    if (p.v == null || es == null) continue;
+    const c = isStr(p.f.country) ? byName.get(countryKey(p.f.country)) : null;
+    const py = clamp(p.prodYear ?? Y1, Y0, Y1);
+    const raw = c ? seriesAt(c, mode, py).v : wa[py - Y0];
+    p.ca = c ? arrOf(c) : wa;
+    p.k = p.ca && raw > 0 ? 1 / raw : 0;
+    p.ref = c ? c.name : 'the world';
+    p.es = clamp(es, Y0, Y1 + 1);
+    const cum = p.cum = new Float32Array(Math.max(0, Y1 - p.es + 1));
+    let t = 0;
+    for (let y = p.es; y <= Y1; y++) cum[y - p.es] = t += p.v * ratioAt(p, y) * 365e-6;
+    n++;
+  }
+  est = { mode, prod, fields, n };
+}
+const ratioAt = (p, y) => (p.k ? clamp(p.ca[y - prod.Y0] * p.k, 0, 3) : 1);
+const estOn = () => followOn() && est != null && sizeBy !== 'res';
+/* Estimated boe/d in year y, and Mboe produced up to y; 0 before es. */
+const estRate = (p, y) => (y < p.es ? 0 : p.v * ratioAt(p, y));
+const estCum = (p, y) => (y < p.es ? 0 : p.cum[Math.min(y, prod.Y1) - p.es]);
 
 /* The layer filters, resolved into p.pass once per change. A unit whose
  * setting or type the tracker leaves blank passes only "All". */
@@ -905,11 +999,23 @@ function countryAt(sx, sy) {
 }
 
 let zfScale = -1, zfVal = 1;
-function fieldRadius(p) {
-  const res = sizeBy === 'res', v = res ? p.rv : p.v;
-  if (v == null || v <= 0) return FIELD_RMIN + 0.5;
+function zoomF() {
   if (view.scale !== zfScale) { zfScale = view.scale; zfVal = clamp(Math.pow(view.scale / 1500, 0.4), 0.7, 2.2); }
-  return clamp(FIELD_RREF * Math.sqrt(v / (res ? RES_VREF : FIELD_VREF)) * zfVal, FIELD_RMIN, FIELD_RMAX);
+  return zfVal;
+}
+const sizeR = (v, ref) => clamp(FIELD_RREF * Math.sqrt(v / ref) * zoomF(), FIELD_RMIN, FIELD_RMAX);
+/* While sizes are estimated: a small ring before production starts, the
+ * smallest dot in a year the estimate is 0, else the estimate at its scale. */
+function fieldRadius(p) {
+  let v = p.v, ref = FIELD_VREF;
+  if (sizeBy === 'res') { v = p.rv; ref = RES_VREF; }
+  else if (p.es != null && estOn()) {
+    if (p.fill > year) return RING_R;
+    if (isCum()) { v = estCum(p, year); ref = CUM_VREF; } else v = estRate(p, year);
+    if (!(v > 0)) return FIELD_RMIN;
+  }
+  if (v == null || v <= 0) return FIELD_RMIN + 0.5;
+  return sizeR(v, ref);
 }
 const followOn = () => followYear && year != null;
 function fieldVisible(p) { return p.pass === 1 && (!followOn() || p.appear <= year); }
@@ -953,40 +1059,142 @@ function render() {
   if (fieldsDrawn()) drawOutlines();
   else outlineStats.drawn = 0;
   if (showLabels) drawLabels();
-  if (fieldsDrawn()) drawFields();
+  if (fieldsDrawn()) {
+    buildEst();
+    drawFields();
+    if (legendOpen && Math.abs(zoomF() - legendZf) > 0.05) updateLegend();
+  }
   drawFieldSelection();
 }
 
-/* The sea (background, ocean, depth bands) depends only on the view and the
- * theme, so it is painted into an offscreen canvas and reused while the year,
- * mode or unit changes: scrubbing then costs one blit plus the country fills. */
-let seaCache = null;
-function drawSea() {
-  const key = [view.cx, view.cy, view.scale, W, H, dpr, darkMq.matches, geo ? geo.countries.length : 0,
-               geo && geo.bathy ? geo.bathy.length : 0].join('|');
-  if (!seaCache || seaCache.cv.width !== canvas.width || seaCache.cv.height !== canvas.height) {
+/* ── the relief basemap ──────────────────────────────────────────────────── *
+ * The plate carrée image is reprojected to Mercator into an offscreen canvas,
+ * one destination row at a time: each row's latitude picks a (fractional)
+ * band of source rows, drawn stretched across the row. The canvas is built at
+ * a power-of-two world width in device pixels (lw, 512…4096, the nearest to
+ * the view's; the source is 4096 wide, so beyond that it is only magnified),
+ * for the whole world up to lw 2048, else for the visible window plus a
+ * quarter each side, so it stays near screen size. Longitudes wrap into as
+ * many pieces as the window crosses the antimeridian. Rebuilt when the zoom
+ * level changes or the view leaves the window; blitted per world copy.    */
+const relief = { spec: null, img: null, status: 'none', cache: null, builds: 0, ms: 0 };
+function loadRelief(spec) {
+  if (!spec) { Object.assign(relief, { spec: null, img: null, status: 'none', cache: null }); setProblem('relief', '', null); return; }
+  if (relief.spec && relief.spec.file === spec.file && relief.status !== 'error') { relief.spec = spec; return; }
+  const img = new Image();
+  Object.assign(relief, { spec, img, status: 'loading', cache: null });
+  const done = (ok) => {
+    if (relief.img !== img) return;
+    relief.status = ok && img.naturalWidth > 0 ? 'ok' : 'error';
+    setProblem('relief', `data/${spec.file}`, ok ? null : ' could not be read; the sea is drawn flat.');
+    updateCredits(); updateLegend(); updateLayersPanel(); requestRender();
+  };
+  img.onload = () => done(true);
+  img.onerror = () => done(false);
+  img.decoding = 'async';
+  img.src = `./data/${spec.file}`;
+}
+const reliefOn = () => relief.status === 'ok';
+const depthOn = () => !!(geo && geo.bathy) && (depthPref ?? !(geo.relief && relief.status !== 'error'));
+
+function reliefCanvas() {
+  const lw = clamp(2 ** Math.round(Math.log2(view.scale * dpr)), 512, 4096);
+  const hw = W / (2 * view.scale), hh = H / (2 * view.scale);
+  const u0 = (view.cx - hw) * lw, u1 = (view.cx + hw) * lw;
+  const v0 = Math.max(0, (view.cy - hh) * lw), v1 = Math.min(lw, (view.cy + hh) * lw);
+  const c = relief.cache;
+  if (c && c.lw === lw && c.img === relief.img) {
+    const k = Math.round((c.X0 + c.w / 2 - (u0 + u1) / 2) / lw) * lw;
+    if ((c.w >= lw || (c.X0 <= u0 + k && u1 + k <= c.X0 + c.w)) && c.Y0 <= v0 && v1 <= c.Y0 + c.h) return c;
+  }
+  let X0 = 0, Y0 = 0, w = lw, h = lw;
+  if (lw > 2048) {
+    const mx = (u1 - u0) / 4, my = (v1 - v0) / 4;
+    X0 = Math.floor(u0 - mx); w = Math.min(lw, Math.ceil(u1 + mx) - X0);
+    Y0 = Math.max(0, Math.floor(v0 - my)); h = Math.min(lw, Math.ceil(v1 + my)) - Y0;
+  }
+  const t0 = performance.now();
+  const cv = c && c.cv.width === w && c.cv.height === h ? c.cv : document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  const g = cv.getContext('2d'), img = relief.img, iw = img.naturalWidth, ih = img.naturalHeight;
+  g.imageSmoothingQuality = 'high';
+  const pieces = [], a0 = X0 / lw, a1 = (X0 + w) / lw;
+  for (let k = Math.floor(a0); k < a1; k++) {
+    const a = Math.max(a0, k), b = Math.min(a1, k + 1);
+    if (b > a) pieces.push([(a - k) * iw, (b - a) * iw, a * lw - X0, (b - a) * lw]);
+  }
+  const srow = (py) => ((90 - yToLat(clamp(py / lw, 0, 1))) / 180) * ih;
+  let s0 = srow(Y0);
+  for (let j = 0; j < h; j++) {
+    const s1 = srow(Y0 + j + 1), sh = Math.max(0.01, s1 - s0);
+    const sy = clamp(s0, 0, ih - sh);
+    for (const [sx, sw, dx, dw] of pieces) g.drawImage(img, sx, sy, sw, sh, dx, j, dw, 1);
+    s0 = s1;
+  }
+  relief.builds++;
+  relief.ms = performance.now() - t0;
+  return (relief.cache = { cv, lw, X0, Y0, w, h, img });
+}
+function drawRelief() {
+  const c = reliefCanvas(), f = view.scale * dpr;
+  const xmin = view.cx - W / (2 * view.scale), xmax = view.cx + W / (2 * view.scale);
+  const ox = c.X0 / c.lw, ow = c.w / c.lw;
+  const dy = (c.Y0 / c.lw - view.cy) * f + (H * dpr) / 2;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.imageSmoothingQuality = 'high';
+  for (let k = Math.floor(xmin - ox - ow); k <= Math.ceil(xmax - ox); k++) {
+    const wx = ox + k;
+    if (wx + ow < xmin || wx > xmax) continue;
+    ctx.drawImage(c.cv, (wx - view.cx) * f + (W * dpr) / 2, dy, ow * f + 0.5, (c.h / c.lw) * f);
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+/* What depends only on the view and the theme is painted into offscreen
+ * canvases and reused while the year, mode or unit changes, so scrubbing
+ * costs two blits plus the country fills: 'sea' (background, relief or
+ * ocean, depth bands) under the countries, 'borders' over them (stroking
+ * ~240 detailed outlines is the costliest thing on the map). */
+const caches = {};
+function cached(slot, key, paint) {
+  let c = caches[slot];
+  if (!c || c.cv.width !== canvas.width || c.cv.height !== canvas.height) {
     const cv = document.createElement('canvas');
     cv.width = canvas.width; cv.height = canvas.height;
-    seaCache = { cv, c: cv.getContext('2d'), key: '' };
+    c = caches[slot] = { cv, c: cv.getContext('2d'), key: '' };
   }
-  if (seaCache.key !== key || seaCache.geo !== geo) {
+  key = [key, view.cx, view.cy, view.scale, W, H, dpr, darkMq.matches].join('|');
+  if (c.key !== key || c.geo !== geo) {
     const main = ctx;
-    ctx = seaCache.c;                         // the drawing helpers all paint into `ctx`
+    ctx = c.c;                                // the drawing helpers all paint into `ctx`
     try {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, c.cv.width, c.cv.height);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.fillStyle = pal.outside;
-      ctx.fillRect(0, 0, W, H);
-      const top = Math.max(0, worldToScreenY(0)), bottom = Math.min(H, worldToScreenY(1));
-      ctx.fillStyle = pal.ocean;
-      ctx.fillRect(0, top, W, bottom - top);
-      if (geo && geo.bathy) drawBathy();
+      paint();
     } finally { ctx = main; }
-    seaCache.key = key;
-    seaCache.geo = geo;
+    c.key = key;
+    c.geo = geo;
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.drawImage(seaCache.cv, 0, 0);
+  ctx.drawImage(c.cv, 0, 0);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function drawSea() {
+  cached('sea', [geo && geo.bathy ? geo.bathy.length : 0, relief.status, depthOn()], () => {
+    ctx.fillStyle = pal.outside;
+    ctx.fillRect(0, 0, W, H);
+    const top = Math.max(0, worldToScreenY(0)), bottom = Math.min(H, worldToScreenY(1));
+    ctx.fillStyle = pal.ocean;
+    ctx.fillRect(0, top, W, bottom - top);
+    if (reliefOn()) {
+      drawRelief();
+      if (pal.dim) { ctx.fillStyle = pal.dim; ctx.fillRect(0, top, W, bottom - top); }
+      ctx.globalAlpha = 0.5;
+    }
+    if (depthOn()) drawBathy();
+    ctx.globalAlpha = 1;
+  });
 }
 
 function drawBathy() {
@@ -1005,34 +1213,47 @@ function drawBathy() {
   });
 }
 
+/* Over the relief: values go on with pal.comp at 80% so the terrain shows
+ * through, zero gets a faint wash, no data nothing (plain relief). Without
+ * it, as before: flat fills, and "no data" pale and hatched. */
 function drawCountries() {
   const colour = prod && link && year != null;
-  const cl = colour ? classesFor(mode, units, year) : null;
-  const pat = hatchPattern();
+  const cl = colour ? coloursFor(mode, units, year) : null;
+  const pat = hatchPattern(), rel = reliefOn();
   const selIdx = sel && sel.kind === 'country' ? geo.countries.findIndex((c) => c.iso3 === sel.iso3) : -1;
   for (const k of worldCopies()) withWorldTransform(k, (s) => {
     // The hatch is kept a fixed size on screen whatever the zoom.
     if (pat.setTransform) pat.setTransform(new DOMMatrix([1 / (dpr * s), 0, 0, 1 / (dpr * s), 0, 0]));
     const cs = geo.countries;
+    if (rel) { ctx.globalCompositeOperation = pal.comp; ctx.globalAlpha = 0.8; }
     for (let i = 0; i < cs.length; i++) {
-      const c = cl ? cl.cls[i] : 0;
-      if (c === NODATA) {
-        ctx.fillStyle = pal.nodata; ctx.fill(cs[i].path, 'evenodd');
-        ctx.fillStyle = pat; ctx.fill(cs[i].path, 'evenodd');
-        continue;
-      }
-      ctx.fillStyle = c === 0 ? pal.none : pal.ramp[c - 1];
+      const st = cl ? cl.st[i] & 3 : 1;
+      if (st === 0) ctx.fillStyle = lut[cl.idx[i]];
+      else if (rel) continue;
+      else ctx.fillStyle = st === 1 ? pal.none : pal.nodata;
       ctx.fill(cs[i].path, 'evenodd');
-      if (cl && cl.partial[i]) { ctx.fillStyle = pat; ctx.fill(cs[i].path, 'evenodd'); }
     }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    for (let i = 0; i < cs.length; i++) {
+      const st = cl ? cl.st[i] : 1;
+      if (rel && (st & 3) === 1) { ctx.fillStyle = pal.wash; ctx.fill(cs[i].path, 'evenodd'); }
+      if (st & 4 || (!rel && st === 2)) { ctx.fillStyle = pat; ctx.fill(cs[i].path, 'evenodd'); }
+    }
+  });
+  cached('borders', rel, () => {
+    for (const k of worldCopies()) withWorldTransform(k, (s) => {
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = rel ? pal.rborder : pal.border;
+      ctx.lineWidth = (rel ? 0.6 : 0.8) / s;
+      ctx.stroke(geo.borders);
+    });
+  });
+  if (selIdx >= 0) for (const k of worldCopies()) withWorldTransform(k, (s) => {
+    const path = geo.countries[selIdx].path;
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = pal.border;
-    ctx.lineWidth = 0.8 / s;
-    ctx.stroke(geo.borders);
-    if (selIdx >= 0) {
-      ctx.strokeStyle = pal.halo; ctx.lineWidth = 4 / s; ctx.stroke(cs[selIdx].path);
-      ctx.strokeStyle = pal.sel; ctx.lineWidth = 2 / s; ctx.stroke(cs[selIdx].path);
-    }
+    ctx.strokeStyle = pal.halo; ctx.lineWidth = 4 / s; ctx.stroke(path);
+    ctx.strokeStyle = pal.sel; ctx.lineWidth = 2 / s; ctx.stroke(path);
   });
 }
 
@@ -1192,68 +1413,95 @@ function creditsList() {
   const out = [];
   if (prod) for (const s of prod.s.sources) if (s && isStr(s.attribution)) out.push(s.attribution);
   if (!out.some((a) => /natural earth/i.test(a)) && geo && geo.source) out.push(geo.source);
-  if (geo && geo.bathy && !out.some((a) => /bathymetry/i.test(a))) out.push('Bathymetry: Natural Earth');
+  if (geo && geo.bathy && depthOn() && !out.some((a) => /bathymetry/i.test(a))) out.push('Bathymetry: Natural Earth');
+  if (reliefOn()) out.push('Relief: Natural Earth I (public domain)');
   if (fieldsDrawn() && fields.raw.source && isStr(fields.raw.source.attribution)) out.push(fields.raw.source.attribution);
   return out;
 }
+/* The on-map line is short (one line, ellipsised) and opens About, where
+ * each source is given in full with its licence. */
+function shortSource(a) {
+  if (/energy institute/i.test(a)) return /our world in data/i.test(a) ? 'Energy Institute via Our World in Data' : 'Energy Institute';
+  for (const n of ['Our World in Data', 'Natural Earth', 'Global Energy Monitor']) if (a.toLowerCase().includes(n.toLowerCase())) return n;
+  return a.replace(/^[^:]{1,30}:\s*/, '').replace(/\s*\([^)]*\)\s*$/, '');
+}
 function updateCredits() {
-  const c = $('credits');
-  c.textContent = creditsList().join(' · ');
-  c.hidden = !c.textContent;
+  const c = $('credits'), full = creditsList();
+  c.hidden = !full.length;
+  $('credits-text').textContent = `Sources: ${[...new Set(full.map(shortSource))].join(' · ')}`;
+  c.setAttribute('aria-label', `Sources: ${full.join('; ')}. Opens About this data.`);
 }
 
+/* Collapsed: "Oil + Gas, 2010 · kboe/d ▸" over the gradient. Open: decade
+ * ticks at their log positions and the domain's ends, None / no data, the
+ * fuel colours, three size circles at the current scale, the notes. */
+let legendZf = 0;
+function setLegendOpen(open) {
+  if (legendOpen === open) return;
+  legendOpen = open;
+  store.set(STORE.legend, open ? '1' : '0');
+  updateLegend();
+}
 function updateLegend() {
   const lg = $('legend');
   lg.hidden = !(prod && geo);
   if (lg.hidden) return;
-  const u = unitSpec();
+  const u = unitSpec(), [lo, hi] = u.dom, L = Math.log(hi / lo);
+  lg.setAttribute('aria-expanded', String(legendOpen));
+  $('legend-more').hidden = !legendOpen;
   $('legend-title').textContent = `${MODES[mode]}, ${isCum() ? `to ${year}` : year}`;
   $('legend-unit').textContent = u.label;
-  const bar = $('legend-bar'), ticks = $('legend-ticks');
-  bar.innerHTML = ''; ticks.innerHTML = '';
-  for (const c of pal.ramp) {
-    const i = el('i');
-    i.style.background = c;
-    bar.append(i);
-  }
-  u.breaks.forEach((b, k) => {
-    const s = el('span', null, fmtTick(b));
-    s.style.left = `${((k + 1) / pal.ramp.length) * 100}%`;
+  $('legend-bar').style.background = `linear-gradient(90deg, ${pal.ramp.join(', ')})`;
+  const ticks = $('legend-ticks'), tk = [];
+  ticks.innerHTML = '';
+  const tick = (v, t, cls) => {
+    const s = el('span', cls, fmtTick(v));
+    s.style.left = `${t * 100}%`;
     ticks.append(s);
-  });
-  lg.setAttribute('aria-label', `Map key: ${MODES[mode]} ${year} in ${u.long}; steps at ${u.breaks.join(', ')}`);
-  const none = lg.querySelector('.sw.none'), nd = lg.querySelector('.sw.nodata');
-  none.style.background = pal.none;
-  nd.style.background = `repeating-linear-gradient(135deg, ${pal.hatchInk} 0 1px, ${pal.nodata} 1px 4px)`;
+    tk.push(fmtTick(v));
+  };
+  tick(lo, 0, 'lo');
+  for (let d = 10 ** Math.ceil(Math.log10(lo) - 1e-9); d < hi; d *= 10) {
+    const t = Math.log(d / lo) / L;
+    if (t > 0.1 && t < 0.9) tick(+d.toPrecision(1), t);
+  }
+  tick(hi, 1, 'hi');
+  lg.setAttribute('aria-label', `Map key: ${MODES[mode]} ${year} in ${u.long}, a log scale from ${tk.join(', ')}. `
+    + `Tap to ${legendOpen ? 'fold' : 'open'} the key.`);
+  const rel = reliefOn();
+  lg.querySelector('.sw.none').style.background = rel ? `linear-gradient(${pal.wash}, ${pal.wash}), ${pal.relief}` : pal.none;
+  lg.querySelector('.sw.nodata').style.background = rel ? pal.relief
+    : `repeating-linear-gradient(135deg, ${pal.hatchInk} 0 1px, ${pal.nodata} 1px 4px)`;
+  $('legend-nodata').textContent = rel ? 'No data: plain relief' : 'No data';
 
   const lf = $('legend-fields');
   lf.innerHTML = '';
-  lf.hidden = !fieldsDrawn();
-  if (!lf.hidden) {
-    for (const [key, label] of [['oil', 'Oil'], ['gas', 'Gas'], ['both', 'Oil and gas']]) {
-      const k = el('span', 'key');
-      const d = el('i', 'dot'); d.style.background = pal.fuel[key];
-      k.append(d, document.createTextNode(label));
-      lf.append(k);
-    }
-    const res = sizeBy === 'res';
-    const sz = el('span', 'key');
-    const circles = el('span', 'sizes');
-    for (const v of res ? [100, 1000, 10000] : [1e4, 1e5, 1e6]) {
-      const r = clamp(FIELD_RREF * Math.sqrt(v / (res ? RES_VREF : FIELD_VREF)), FIELD_RMIN, FIELD_RMAX);
-      const i = el('i'); i.style.width = i.style.height = `${(2 * r).toFixed(1)}px`;
-      circles.append(i);
-    }
-    sz.append(circles, document.createTextNode(res ? '100 · 1k · 10k Mboe' : '10k · 100k · 1M boe/d'));
-    lf.append(sz);
-    const what = res ? 'size = remaining reserves, million boe' : 'size = latest reported rate';
-    const miss = res ? 'no reserves reported' : 'no rate reported';
-    lf.append(el('span', 'legend-note', followOn()
-      ? `${what}; ring = discovered, not yet producing; pale = ${miss}`
-      : `${what}; hollow = ${miss}`));
-    const fs = filterSummary();
-    if (fs) lf.append(el('span', 'legend-note', fs));
+  lf.hidden = !fieldsDrawn() || !legendOpen;
+  if (lf.hidden) return;
+  for (const [key, label] of [['oil', 'Oil'], ['gas', 'Gas'], ['both', 'Oil and gas']]) {
+    const k = el('span', 'key');
+    const d = el('i', 'dot'); d.style.background = pal.fuel[key];
+    k.append(d, document.createTextNode(label));
+    lf.append(k);
   }
+  const res = sizeBy === 'res', e = estOn(), cum = e && isCum();
+  const sz = el('span', 'key sizes');
+  legendZf = zoomF();
+  for (const [v, t] of res || cum ? [[100, '100'], [1000, '1,000'], [10000, '10,000 Mboe']] : [[1e4, '10k'], [1e5, '100k'], [1e6, '1M boe/d']]) {
+    const i = el('i'), d = 2 * sizeR(v, res ? RES_VREF : cum ? CUM_VREF : FIELD_VREF);
+    i.style.width = i.style.height = `${d.toFixed(1)}px`;
+    sz.append(i, el('span', null, t));
+  }
+  lf.append(sz);
+  const what = res ? 'size = remaining reserves, million boe'
+    : cum ? "size = estimated cumulative since first production (latest rate scaled by the country's series)"
+      : e ? "size = latest rate scaled by the country's output that year (estimate)" : 'size = latest reported rate';
+  const miss = res ? 'no reserves reported' : 'no rate reported';
+  lf.append(el('span', 'legend-note', followOn()
+    ? `${what}; ring = discovered, not yet producing; pale = ${miss}`
+    : `${what}; hollow = ${miss}`));
+  const fs = filterSummary();
+  if (fs) lf.append(el('span', 'legend-note', fs));
 }
 function filterSummary() {
   const bits = [];
@@ -1302,6 +1550,8 @@ function updateLayersPanel() {
       + `. ${src.name || 'GOGET'}${src.release ? `, ${src.release}` : ''}.`;
   }
   for (const id of ['status-row', 'follow-row', 'setting-row', 'type-row', 'size-row']) $(id).hidden = !usable;
+  $('depth-row').hidden = !(geo && geo.bathy);
+  $('chk-depth').checked = depthOn();
   $('chk-follow').checked = followYear;
   const press = (sel, key, val) => {
     for (const b of document.querySelectorAll(sel)) b.setAttribute('aria-pressed', String(b.dataset[key] === val));
@@ -1718,6 +1968,12 @@ function fieldSheet(body, p) {
     row(`On the map in ${year}`, p.undated ? 'no dates: always drawn'
       : p.appear > year ? 'not yet discovered' : p.fill > year ? 'discovered, not yet producing' : 'producing');
   }
+  buildEst();
+  const esNote = followOn() && est && p.es != null;
+  if (esNote) {
+    if (isCum()) row(`Estimated cumulative to ${year}`, `${fmtNum(estCum(p, year))} million boe`);
+    else row(`Estimated rate in ${year}`, fmtRate(estRate(p, year)));
+  }
   const yr = Number.isFinite(f.prodYear) ? ` (${f.prodYear})` : '';
   if (oil == null && gas == null) row('Production', 'not reported');
   else {
@@ -1740,6 +1996,12 @@ function fieldSheet(body, p) {
   }
   if (f.approx === 1) row('Location', 'approximate (per the tracker)');
   body.append(dl);
+  if (esNote) {
+    const from = p.start != null ? 'its production start' : p.disc != null ? 'its discovery (no start given)' : 'the year before its data year';
+    body.append(el('p', 'sheet-note', `Estimate, not reported: the latest rate × ${p.ref}'s ${MODES[mode].toLowerCase()} output `
+      + `that year ÷ its output in ${clamp(p.prodYear ?? prod.Y1, prod.Y0, prod.Y1)}${p.k ? ' (at most 3×)' : ' (no figure then, so unscaled)'}, `
+      + `from ${from}, ${p.es}${isCum() ? ', summed year by year' : ''}.`));
+  }
   const wiki = fieldWiki(f);
   if (wiki) {
     const pEl = el('p', 'sheet-note url');
@@ -1748,7 +2010,8 @@ function fieldSheet(body, p) {
   }
   body.append(el('p', 'sheet-note', "Field volumes are the tracker's own, for its newest data year: liquids (oil, condensate, NGL) "
     + 'in barrels a day, gas as barrels of oil equivalent a day at 159 Sm³ per boe. Reserves are the class the tracker gives. '
-    + 'The tracker has one rate per unit, not a series, so the circle is this latest rate in every year.'));
+    + (followOn() ? 'The tracker has one rate per unit, not a series, so the size through time is the estimate above.'
+      : 'The tracker has one rate per unit, not a series, so the circle is this latest rate in every year.')));
 }
 
 /* ── About ───────────────────────────────────────────────────────────────── */
@@ -1764,8 +2027,8 @@ function showAbout() {
     b.append(d);
   };
 
-  p('Each country is coloured by its production in the chosen year, in the chosen unit. '
-    + 'Hatching means the file has no figure for that country and year — which is not the same as zero. '
+  p('Each country is coloured by its production in the chosen year, in the chosen unit, on a continuous log scale. '
+    + (reliefOn() ? 'A country left as plain relief' : 'Hatching') + ' means the file has no figure for that country and year — which is not the same as zero. '
     + 'Tap a country for its numbers and its whole series.');
 
   if (prod) {
@@ -1785,17 +2048,29 @@ function showAbout() {
   }
 
   h3('Sources');
-  const src = (name, rows) => {
+  // CC BY 4.0 asks for the creator, the licence with its address, a link to
+  // the material and whether it was changed: all four, for each CC BY source.
+  const CCBY = 'https://creativecommons.org/licenses/by/4.0/';
+  const src = (name, rows, changes) => {
     const d = el('div', 'src');
     d.append(el('b', null, name));
-    for (const [k, v] of rows) if (isStr(v)) d.append(el('p', 'muted', `${k}: ${v}`));
+    const by = rows.some(([k, v]) => k === 'Licence' && /cc by/i.test(v || ''));
+    for (const [k, v] of rows) if (isStr(v)) d.append(el('p', 'muted', `${k}: ${v}${k === 'Licence' && by ? ` (${CCBY})` : ''}`));
+    if (by) d.append(el('p', 'muted', `Changes: ${changes}. Used under the licence; the creators do not endorse this app, and the material comes with no warranty.`));
     b.append(d);
   };
   if (prod) {
     for (const s of prod.s.sources) {
       if (!s) continue;
-      src(s.name || 'Source', [['Licence', s.licence], ['Attribution', s.attribution], ['Detail', s.detail], ['Address', s.url]]);
+      src(s.name || 'Source', [['Licence', s.licence], ['Attribution', s.attribution], ['Detail', s.detail], ['Address', s.url]],
+        'oil and gas series converted from GWh to kboe/d, TWh/yr, Gboe and PWh, added into Oil + Gas and running totals; the holes listed under Corrections set to no data');
     }
+  }
+  if (geo && geo.relief) {
+    src('Relief basemap', [['Source', geo.relief.source || 'Natural Earth I, shaded relief'], ['Licence', 'public domain (Natural Earth)'],
+      ['Address', 'https://www.naturalearthdata.com/'],
+      ['Status', relief.status === 'ok' ? `data/${geo.relief.file}, reprojected to Web Mercator on the phone; darkened in the dark scheme`
+        : relief.status === 'error' ? `data/${geo.relief.file} could not be read; the sea is drawn flat` : 'loading']]);
   }
   if (geo && geo.source && !(prod && prod.s.sources.some((s) => s && /natural earth/i.test(s.name || '')))) {
     src('Country outlines', [['Source', geo.source]]);
@@ -1804,15 +2079,19 @@ function showAbout() {
   }
   if (geo && geo.bathy) {
     p(`Bathymetry: Natural Earth. ${geo.bathy.length} depth bands from ${geo.bathy[0].depth} m to ${geo.bathy[geo.bathy.length - 1].depth} m, `
-      + 'shaded under the countries for orientation only.', 'muted');
+      + `for orientation only (Layers › Depth bands; ${depthOn() ? 'on' : 'off'}).`, 'muted');
   }
   if (fields && fields.available && fields.raw.source) {
     const s = fields.raw.source;
-    src(s.name || 'Field points', [['Release', s.release], ['File', s.file], ['Licence', s.licence], ['Attribution', s.attribution], ['Address', s.url]]);
+    src(s.name || 'Field points', [['Release', s.release], ['File', s.file], ['Licence', s.licence], ['Attribution', s.attribution], ['Address', s.url]],
+      'units placed by their coordinates, oil and gas rates added, outlines simplified and drawn only near their own unit; the sizes through time are this app\'s estimate, not the tracker\'s');
     p('With "Fields follow the year" on, a unit appears in its discovery year as a ring and fills in from its production '
-      + 'start; units with neither date are always drawn. The tracker gives one rate per unit, for its latest year, and no '
-      + 'series, so a circle keeps that size in every year. Outlines are drawn when zoomed in; any ring that does not '
-      + 'fall near its own unit in longitude and latitude is left out.', 'muted');
+      + 'start (its discovery when no start is given); units with neither date are always drawn. The tracker gives one rate '
+      + 'per unit, for its latest year, and no series, so the size through time is an ESTIMATE: the latest rate × the '
+      + "country's output that year ÷ its output in the rate's year (Oil, Gas or Oil + Gas as switched; at most 3×; the "
+      + 'world when the country is not matched; unscaled when that year has no figure). Cumulative adds the estimate up '
+      + 'year by year, in million boe. Switch "follow" off for the reported rate in every year. Outlines are drawn when '
+      + 'zoomed in; any ring that does not fall near its own unit in longitude and latitude is left out.', 'muted');
   } else {
     src('Field points', [['Status', !fields ? 'data/fields.json could not be read' : `not available — ${fieldsReason()}`]]);
   }
@@ -1833,7 +2112,7 @@ function showAbout() {
       p(link.noPolygon.map((c) => `${c.name} (${c.iso3})`).join(', '));
     }
     if (link.noData.length) {
-      p(`Outlines with no series (${link.noData.length}) — always hatched:`, 'muted');
+      p(`Outlines with no series (${link.noData.length}) — always ${reliefOn() ? 'plain relief' : 'hatched'}:`, 'muted');
       p(link.noData.map((c) => `${c.name} (${c.iso3})`).join(', '));
     }
   }
@@ -1940,9 +2219,11 @@ async function loadAll() {
         labelOrderCache = null;
         bathyStyles = null;
         setProblem('world', FILES.world, geo.bathyError
-          ? ` has depth bands that could not be decoded (${geo.bathyError}); the sea is drawn flat.` : null);
+          ? ` has depth bands that could not be decoded (${geo.bathyError}); the sea is drawn flat.` : geo.reliefError || null);
+        loadRelief(geo.relief);
       } catch (e) {
         geo = null;
+        loadRelief(null);
         setProblem('world', FILES.world, `${e.message} No country outlines, so nothing can be coloured.`);
       }
     }
@@ -2082,6 +2363,7 @@ function zoomAt(sx, sy, factor) {
 let lastTap = null, tapTimer = null;
 function onTap(sx, sy) {
   const now = performance.now();
+  setLegendOpen(false);
   if (lastTap && now - lastTap.t < 300 && Math.hypot(sx - lastTap.x, sy - lastTap.y) < 24) {
     clearTimeout(tapTimer); tapTimer = null; lastTap = null;
     zoomAt(sx, sy, 2);
@@ -2342,6 +2624,17 @@ $('chk-fields').addEventListener('change', (e) => {
   if (!showFields && sel && sel.kind === 'field') closeSheet();
   updateBanner(); updateLegend(); updateCredits(); updateLayersPanel(); updateChip(); syncYearUI(); requestRender();
 });
+$('chk-depth').addEventListener('change', (e) => {
+  depthPref = e.target.checked;
+  store.set(STORE.depth, depthPref ? '1' : '0');
+  updateCredits();
+  requestRender();
+});
+$('legend').addEventListener('click', () => setLegendOpen(!legendOpen));
+$('legend').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setLegendOpen(!legendOpen); }
+});
+$('credits').addEventListener('click', showAbout);
 $('chk-labels').addEventListener('change', (e) => {
   showLabels = e.target.checked;
   store.set(STORE.labels, showLabels ? '1' : '0');
@@ -2408,6 +2701,8 @@ function resize() {
   const se = store.get(STORE.setting); if (['all', 'onshore', 'offshore'].includes(se)) settingFilter = se;
   const ty = store.get(STORE.ftype); if (['all', 'conventional', 'unconventional'].includes(ty)) typeFilter = ty;
   const sz = store.get(STORE.size); if (sz === 'prod' || sz === 'res') sizeBy = sz;
+  const dp = store.get(STORE.depth); if (dp === '1' || dp === '0') depthPref = dp === '1';
+  legendOpen = store.get(STORE.legend) === '1';
   try {
     const h = JSON.parse(store.get(STORE.hl) || 'null');
     if (h && isStr(h.name) && (h.kind === 'company' || h.kind === 'basin')) highlight = { kind: h.kind, name: h.name };
@@ -2435,10 +2730,33 @@ window.__wog = {
              fields: fields ? { available: fields.available, points: fields.points.length } : null,
              fieldCounts: { ...countFields() },
              outlines: { ...outlineStats },
+             depthBands: depthOn(), legendOpen,
+             relief: { status: relief.status, file: relief.spec ? relief.spec.file : null, builds: relief.builds, ms: +relief.ms.toFixed(1),
+                       cache: relief.cache ? { lw: relief.cache.lw, w: relief.cache.w, h: relief.cache.h, px: relief.cache.w * relief.cache.h } : null },
+             estimate: est ? { mode: est.mode, fields: est.n, on: estOn() } : null,
              worldSum: prod && year != null ? toUnit(worldAt(mode, year).v) : null,
              problems: [...problems.values()].map((p) => p.file + p.msg) };
   },
-  setYear, setMode, setUnits, setAccum, setFieldOpt, setHighlight, loadAll, selectAt,
+  setYear, setMode, setUnits, setAccum, setFieldOpt, setHighlight, loadAll, selectAt, setLegendOpen,
+  /* A field's estimate in year y for the current mode (by id or start of name). */
+  estimate(q, y = year) {
+    buildEst();
+    const p = fields && (fields.byId.get(q) || fields.points.find((x) => x.norm.startsWith(fold(q))));
+    return p && p.es != null ? { id: p.id, es: p.es, ref: p.ref, rate: estRate(p, y), cum: estCum(p, y), latest: p.v, prodYear: p.prodYear, radius: fieldRadius(p) } : null;
+  },
+  lut(v, u) { const i = lutIndex(v, u); return { i, colour: lut[i] }; },
+  countryColour(iso3) {
+    const i = geo ? geo.countries.findIndex((c) => c.iso3 === iso3) : -1;
+    if (i < 0 || !prod) return null;
+    const c = coloursFor(mode, units, year);
+    return { st: c.st[i], i: c.idx[i], colour: c.st[i] & 3 ? null : lut[c.idx[i]] };
+  },
+  /* The painted map and the cached sea under it (device pixels) at a lon/lat. */
+  pixel(lon, lat) {
+    const x = Math.round(worldToScreenX(lonToX(lon)) * dpr), y = Math.round(worldToScreenY(latToY(lat)) * dpr);
+    const at = (c) => [...c.getImageData(x, y, 1, 1).data];
+    return { map: at(ctx), sea: caches.sea ? at(caches.sea.c) : null, comp: reliefOn() ? pal.comp : 'source-over' };
+  },
   search(q) { return searchResults(q).map((g) => ({ title: g.title, items: g.items.map((i) => i.main) })); },
   flyTo(lon, lat, scale, instant = true) { flyTo(lonToX(lon), latToY(lat), scale ?? MAX_SCALE, instant); },
   project(lon, lat) { return [worldToScreenX(lonToX(lon)), worldToScreenY(latToY(lat))]; },

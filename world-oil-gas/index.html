@@ -126,6 +126,12 @@
         <button type="button" data-size="res" aria-pressed="false">Reserves</button>
       </div>
     </div>
+    <div class="layers-row" id="depth-row" hidden>
+      <label class="switch" for="chk-depth">
+        <input type="checkbox" id="chk-depth" role="switch">
+        <span>Depth bands</span>
+      </label>
+    </div>
     <div class="layers-row">
       <label class="switch" for="chk-labels">
         <input type="checkbox" id="chk-labels" role="switch" checked>
@@ -140,19 +146,24 @@
     <span class="hlchip-text" id="hlchip-text"></span>
     <button type="button" id="hlchip-x" aria-label="Clear highlight">&times;</button>
   </div>
-  <div class="legend" id="legend" aria-label="Map key" hidden>
-    <div class="legend-head"><span id="legend-title"></span><span id="legend-unit"></span></div>
+  <!-- Folded to one row and the colour bar by default; a tap opens the full
+       key, a tap on the map folds it again. -->
+  <div class="legend" id="legend" role="button" tabindex="0" aria-expanded="false" aria-label="Map key" hidden>
+    <div class="legend-head"><span id="legend-title"></span><span class="legend-u"><span id="legend-unit"></span><i class="chev" aria-hidden="true">&#x25B8;</i></span></div>
     <div class="legend-bar" id="legend-bar"></div>
-    <div class="legend-ticks" id="legend-ticks"></div>
-    <div class="legend-extra">
-      <span class="key"><i class="sw none" aria-hidden="true"></i>None</span>
-      <span class="key"><i class="sw nodata" aria-hidden="true"></i>No data</span>
+    <div id="legend-more" hidden>
+      <div class="legend-ticks" id="legend-ticks"></div>
+      <div class="legend-extra">
+        <span class="key"><i class="sw none" aria-hidden="true"></i>None</span>
+        <span class="key"><i class="sw nodata" aria-hidden="true"></i><span id="legend-nodata">No data</span></span>
+      </div>
+      <div class="legend-fields" id="legend-fields" hidden></div>
     </div>
-    <div class="legend-fields" id="legend-fields" hidden></div>
   </div>
 
-  <!-- Attribution the licences ask for, on screen rather than only in About. -->
-  <p class="credits" id="credits"></p>
+  <!-- Attribution on one line; it opens About, which gives every source in
+       full with its licence. -->
+  <button type="button" class="credits" id="credits" hidden><span id="credits-text"></span><span class="credits-i" aria-hidden="true">&#x24D8;</span></button>
   </div>
 
   <section class="sheet" id="sheet" aria-live="polite" hidden>

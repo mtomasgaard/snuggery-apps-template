@@ -29,10 +29,17 @@
 </header>
 
 <div class="toolbar">
-  <div class="seg" id="qty" role="radiogroup" aria-label="Quantity">
-    <button type="button" role="radio" data-q="liq" aria-checked="true">Liquids</button>
-    <button type="button" role="radio" data-q="gas" aria-checked="false">Gas</button>
-    <button type="button" role="radio" data-q="oe" aria-checked="false" aria-label="Oil equivalent">O.E.</button>
+  <div class="segs">
+    <div class="seg" id="qty" role="radiogroup" aria-label="Quantity">
+      <button type="button" role="radio" data-q="liq" aria-checked="true">Liquids</button>
+      <button type="button" role="radio" data-q="gas" aria-checked="false">Gas</button>
+      <button type="button" role="radio" data-q="oe" aria-checked="false" aria-label="Oil equivalent">O.E.</button>
+    </div>
+    <!-- what the circles carry: the month's rate, or the volume produced to date -->
+    <div class="seg seg-sm" id="mode" role="radiogroup" aria-label="Circles show">
+      <button type="button" role="radio" data-m="rate" aria-checked="true">Rate</button>
+      <button type="button" role="radio" data-m="cum" aria-checked="false">Cumulative</button>
+    </div>
   </div>
   <div class="chips" id="chips" role="group" aria-label="Countries shown"></div>
 </div>
@@ -70,16 +77,17 @@
     <span class="legend-bar" id="legend-bar"></span>
     <span class="legend-ticks" id="legend-ticks"></span>
     <span class="legend-key" id="legend-key" hidden>
-      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><circle cx="5" cy="7" r="3" class="k-circle"/><circle cx="18" cy="7" r="6" class="k-circle"/></svg>Circle area and colour = rate that month</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><circle cx="5" cy="7" r="3" class="k-circle"/><circle cx="18" cy="7" r="6" class="k-circle"/></svg><span class="rate-only">Circle area and colour = rate that month</span><span class="cum-only">Circle area and colour = volume to date</span></span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-prod"/></svg>Tinted outline: producing</span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-none"/></svg>Outline only: no production</span>
-      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-shut"/></svg>Grey: shut down</span>
+      <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-shut rate-only"/><rect x="1" y="3" width="11" height="8" rx="2" class="k-shut cum-only"/><circle cx="21" cy="7" r="5.5" class="k-shutc cum-only"/></svg><span class="rate-only">Grey: shut down</span><span class="cum-only">Grey: shut down, size = total produced</span></span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="2" y="2" width="22" height="10" rx="2" class="k-none" stroke-dasharray="3 2"/></svg>Dashed: Danish field delineation, not the reservoir</span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><rect x="1" y="3" width="8" height="8" class="k-fac"/><path d="M14 2l4.5 9h-9z" class="k-fac"/><circle cx="24" cy="7" r="2.6" class="k-sub"/></svg>Fixed · floating · subsea</span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-oil"/></svg>Oil pipeline</span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-gas"/></svg>Gas pipeline</span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-other"/></svg>Other / unknown pipeline</span>
       <span class="krow"><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M1 7h26" class="k-border"/></svg>Maritime boundary</span>
+      <span class="krow faint cum-only">Sums start where each regulator's series starts; earlier production is not included.</span>
       <span class="krow faint">Platforms and pipelines appear as you zoom in.</span>
     </span>
   </button>

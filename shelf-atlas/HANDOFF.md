@@ -12,7 +12,8 @@ shelf-atlas/                    the North Sea app (index.html, app.js, style.css
   data/bathy.png                EMODnet depth raster, 8-bit grey in Web Mercator rows          (rebuilt weekly, rarely changes)
   RESEARCH.md  HANDOFF.md       these documents
 world-oil-gas/                  the world app
-  data/world.json               Natural Earth 110m countries (rarely changes)
+  data/world.json               Natural Earth 1:50m countries, bathymetry bands (rarely changes)
+  data/relief.jpg               Natural Earth I shaded relief, 4096×2048 plate carrée (rarely changes)
   data/snapshot.json            annual oil and gas by country, 1900 →                        (rebuilt yearly)
   data/fields.json              GOGET units: points, production, reserves, outlines            (manual)
   raw/manual/                   the GOGET workbook lives here (never shipped in the ZIP)
@@ -37,11 +38,12 @@ Schedules only fire from `main`.
 **Locally.**
 
 ```bash
-python3 -m pip install 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4' 'numpy>=2' 'tifffile>=2024'
+python3 -m pip install 'pyshp>=2.3' 'openpyxl>=3.1' 'pypdf>=4' 'numpy>=2' 'tifffile>=2024' 'pillow>=10'
 python3 -m scripts.shelf_atlas.build_north_sea --out shelf-atlas/data            # all four countries
 python3 -m scripts.shelf_atlas.build_north_sea --countries NO --out /tmp/ns      # one country, elsewhere
 python3 -m scripts.shelf_atlas.build_north_sea --basemap-only --offline --no-bathymetry   # coast/land only, no fetch
 python3 -m scripts.shelf_atlas.build_world --out world-oil-gas/data
+python3 -m scripts.shelf_atlas.build_world --out /tmp/w --no-relief         # skip the 90 MB relief download
 ```
 
 Downloads go to `scripts/shelf_atlas/cache/` (git-ignored) and are **never refetched** unless you
@@ -103,6 +105,9 @@ and the world app shows only the country choropleth, with the reason on its laye
   discovered, filled = producing); filters (status, onshore/offshore, conventional/unconventional);
   search for fields, companies, basins, countries with a highlight chip; size by production or
   reserves; tracker outlines at high zoom; country sheet lists the tracker's units.
+- Shelf Atlas: Rate | Cumulative under the quantity segment; cumulative is the exact prefix sum of
+  each field's monthly series from where its regulator's series starts (NL 2003, UK June 1975), and
+  the field sheet says when earlier production may be missing.
 - Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
   producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
   boundaries, depth shading, names) can be switched off from the map's layers button.
