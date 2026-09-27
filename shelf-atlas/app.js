@@ -90,7 +90,7 @@ const STORE = {
  * always drawn; everything else is a choice. */
 const LAYERS = {
   outlines: 'Field outlines', facs: 'Platforms and subsea', pipes: 'Pipelines',
-  borders: 'Maritime boundaries', bathy: 'Depth shading', labels: 'Field names',
+  borders: 'Maritime boundaries', bathy: 'Depth shading', labels: 'Field names', rings: 'Circle edges',
 };
 const layerOn = Object.fromEntries(Object.keys(LAYERS).map((k) => [k, true]));
 const EPOCH = 1971;
@@ -1067,7 +1067,7 @@ function drawCircles(c) {
     if (greyShut && unitVis[u] === 2) { c.globalAlpha = 1; c.fillStyle = P.shutFill; } else { c.globalAlpha = 0.82; c.fillStyle = P.lut[unitCol[u]]; }
     c.fill();
     c.globalAlpha = 1;
-    c.stroke();
+    if (layerOn.rings) c.stroke();
   }
 }
 

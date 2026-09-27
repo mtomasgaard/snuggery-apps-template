@@ -123,6 +123,7 @@ const STORE = {
   fields: 'wog.fields', status: 'wog.status', labels: 'wog.labels',
   follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype',
   size: 'wog.size', hl: 'wog.hl', depth: 'wog.depth', legend: 'wog.legend',
+  terrain: 'wog.terrain', rings: 'wog.rings',
 };
 const FILES = { world: 'data/world.json', snapshot: 'data/snapshot.json', fields: 'data/fields.json' };
 const MAX_LAT = 85;
@@ -189,7 +190,7 @@ let pal = null, lut = null;     // lut: 256 CSS colours across pal.ramp
 let hatch = null;               // CanvasPattern for "no data"
 function buildPalette() {
   pal = darkMq.matches ? {
-    outside: '#0b0e13', ocean: '#16202c', none: '#333841', border: '#0b0e13',
+    outside: '#0b0e13', ocean: '#0f1a26', none: '#1c2129', border: 'rgba(235,240,247,0.30)',
     // Over the relief: countries go on with 'screen' here ('multiply' in the
     // light scheme) so the ramp still runs dark → light over a dimmed relief.
     comp: 'screen', dim: 'rgba(8,11,16,0.45)', wash: 'rgba(120,126,138,0.22)', rborder: 'rgba(235,240,247,0.30)',
@@ -197,17 +198,17 @@ function buildPalette() {
     // Sea: the shelf (0–200 m) is the ocean fill; deeper bands step down to
     // near-black navy. Kept low in chroma so the violet ramp stays the loudest thing.
     deep: [[22, 32, 44], [8, 12, 19]],
-    nodata: '#22262e', hatchInk: 'rgba(150,162,178,0.40)', sel: '#ffffff',
+    nodata: '#1c2129', hatchInk: 'rgba(150,162,178,0.40)', sel: '#ffffff',
     label: '#eef2f7', halo: 'rgba(11,14,19,0.85)',
     ramp: ['#3e366c', '#4f448c', '#5f53ab', '#7065c5', '#8279db', '#948eeb', '#a7a5f9', '#bcbcff'],
     fuel: { oil: '#d95926', gas: '#3987e5', both: '#199e70', other: '#8a94a1' },
     ring: 'rgba(11,14,19,0.9)', grid: 'rgba(255,255,255,0.10)',
   } : {
-    outside: '#eef0f4', ocean: '#e2e9f1', none: '#f4f2ed', border: '#ffffff',
+    outside: '#eef0f4', ocean: '#d6e4ef', none: '#f7f5f0', border: 'rgba(20,24,31,0.35)',
     comp: 'multiply', dim: null, wash: 'rgba(250,249,246,0.45)', rborder: 'rgba(20,24,31,0.35)',
     relief: 'linear-gradient(135deg,#a9bf8e,#dccfa8)',
     deep: [[217, 226, 236], [170, 188, 209]],
-    nodata: '#e9e7e2', hatchInk: 'rgba(84,92,108,0.45)', sel: '#14181f',
+    nodata: '#f7f5f0', hatchInk: 'rgba(84,92,108,0.45)', sel: '#14181f',
     label: '#14181f', halo: 'rgba(255,255,255,0.85)',
     ramp: ['#e5e0ff', '#c8c0f5', '#aba0e9', '#8f81da', '#7464c5', '#5a4aab', '#42328a', '#2b1e66'],
     fuel: { oil: '#eb6834', gas: '#2a78d6', both: '#1baf7a', other: '#6b7787' },
@@ -414,7 +415,9 @@ let settingFilter = 'all';     // all | onshore | offshore
 let typeFilter = 'all';        // all | conventional | unconventional
 let sizeBy = 'prod';           // prod | res
 let highlight = null;          // { kind: 'company' | 'basin', name }
-let depthPref = null;          // depth bands: null = on only when there is no relief
+let depthPref = null;          // depth bands: off unless switched on
+let terrainPref = false;       // shaded relief under the countries: off unless switched on
+let showRings = true;          // the light edge around each field circle
 let legendOpen = false;
 
 const view = { cx: lonToX(40), cy: latToY(25), scale: 0 };   // scale = world width in CSS px
@@ -1094,8 +1097,8 @@ function loadRelief(spec) {
   img.decoding = 'async';
   img.src = `./data/${spec.file}`;
 }
-const reliefOn = () => relief.status === 'ok';
-const depthOn = () => !!(geo && geo.bathy) && (depthPref ?? !(geo.relief && relief.status !== 'error'));
+const reliefOn = () => terrainPref && relief.status === 'ok';
+const depthOn = () => !!(geo && geo.bathy) && (depthPref ?? false);
 
 function reliefCanvas() {
   const lw = clamp(2 ** Math.round(Math.log2(view.scale * dpr)), 512, 4096);
@@ -1213,39 +1216,34 @@ function drawBathy() {
   });
 }
 
-/* Over the relief: values go on with pal.comp at 80% so the terrain shows
- * through, zero gets a faint wash, no data nothing (plain relief). Without
- * it, as before: flat fills, and "no data" pale and hatched. */
+/* Values go on in the LUT colour (over the relief with pal.comp at 80% when
+ * terrain shading is on). Zero and "no data" are both plain land: the legend
+ * and the sheet say which is which, the map does not hatch or shade them. */
 function drawCountries() {
   const colour = prod && link && year != null;
   const cl = colour ? coloursFor(mode, units, year) : null;
-  const pat = hatchPattern(), rel = reliefOn();
+  const rel = reliefOn();
   const selIdx = sel && sel.kind === 'country' ? geo.countries.findIndex((c) => c.iso3 === sel.iso3) : -1;
-  for (const k of worldCopies()) withWorldTransform(k, (s) => {
-    // The hatch is kept a fixed size on screen whatever the zoom.
-    if (pat.setTransform) pat.setTransform(new DOMMatrix([1 / (dpr * s), 0, 0, 1 / (dpr * s), 0, 0]));
+  for (const k of worldCopies()) withWorldTransform(k, () => {
     const cs = geo.countries;
+    if (!rel) {
+      ctx.fillStyle = pal.none;
+      for (let i = 0; i < cs.length; i++) ctx.fill(cs[i].path, 'evenodd');
+    }
     if (rel) { ctx.globalCompositeOperation = pal.comp; ctx.globalAlpha = 0.8; }
     for (let i = 0; i < cs.length; i++) {
-      const st = cl ? cl.st[i] & 3 : 1;
-      if (st === 0) ctx.fillStyle = lut[cl.idx[i]];
-      else if (rel) continue;
-      else ctx.fillStyle = st === 1 ? pal.none : pal.nodata;
+      if (!cl || (cl.st[i] & 3) !== 0) continue;
+      ctx.fillStyle = lut[cl.idx[i]];
       ctx.fill(cs[i].path, 'evenodd');
     }
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
-    for (let i = 0; i < cs.length; i++) {
-      const st = cl ? cl.st[i] : 1;
-      if (rel && (st & 3) === 1) { ctx.fillStyle = pal.wash; ctx.fill(cs[i].path, 'evenodd'); }
-      if (st & 4 || (!rel && st === 2)) { ctx.fillStyle = pat; ctx.fill(cs[i].path, 'evenodd'); }
-    }
   });
   cached('borders', rel, () => {
     for (const k of worldCopies()) withWorldTransform(k, (s) => {
       ctx.lineJoin = 'round';
       ctx.strokeStyle = rel ? pal.rborder : pal.border;
-      ctx.lineWidth = (rel ? 0.6 : 0.8) / s;
+      ctx.lineWidth = 0.6 / s;
       ctx.stroke(geo.borders);
     });
   });
@@ -1363,7 +1361,7 @@ function drawFields() {
       } else {
         ctx.fillStyle = col;
         ctx.fill();
-        ctx.stroke();
+        if (showRings) ctx.stroke();
       }
     }
   }
@@ -1472,7 +1470,7 @@ function updateLegend() {
   lg.querySelector('.sw.none').style.background = rel ? `linear-gradient(${pal.wash}, ${pal.wash}), ${pal.relief}` : pal.none;
   lg.querySelector('.sw.nodata').style.background = rel ? pal.relief
     : `repeating-linear-gradient(135deg, ${pal.hatchInk} 0 1px, ${pal.nodata} 1px 4px)`;
-  $('legend-nodata').textContent = rel ? 'No data: plain relief' : 'No data';
+  $('legend-nodata').textContent = 'No data (plain)';
 
   const lf = $('legend-fields');
   lf.innerHTML = '';
@@ -1552,6 +1550,9 @@ function updateLayersPanel() {
   for (const id of ['status-row', 'follow-row', 'setting-row', 'type-row', 'size-row']) $(id).hidden = !usable;
   $('depth-row').hidden = !(geo && geo.bathy);
   $('chk-depth').checked = depthOn();
+  $('terrain-row').hidden = !(geo && geo.relief);
+  $('chk-terrain').checked = terrainPref;
+  $('chk-rings').checked = showRings;
   $('chk-follow').checked = followYear;
   const press = (sel, key, val) => {
     for (const b of document.querySelectorAll(sel)) b.setAttribute('aria-pressed', String(b.dataset[key] === val));
@@ -1761,8 +1762,8 @@ function countrySheet(body, name, c, iso3) {
     const missing = parts.oil.v == null ? 'Oil' : 'Gas';
     const other = missing === 'Oil' ? 'gas' : 'oil';
     notes.push(cum
-      ? `${missing} has no data up to ${year}, so the total to date counts ${other} only (hatched over its colour on the map).`
-      : `${missing} has no data for ${year}, so the total counts ${other} only (hatched over its colour on the map).`);
+      ? `${missing} has no data up to ${year}, so the total to date counts ${other} only .`
+      : `${missing} has no data for ${year}, so the total counts ${other} only .`);
   }
   if (cum) notes.push('To date: every year from the first with data up to the chosen one, added up; a year with no data adds nothing.');
   if (!prod.s.world) notes.push('Shares are of the sum of every country listed that year: the file has no world total.');
@@ -2028,7 +2029,7 @@ function showAbout() {
   };
 
   p('Each country is coloured by its production in the chosen year, in the chosen unit, on a continuous log scale. '
-    + (reliefOn() ? 'A country left as plain relief' : 'Hatching') + ' means the file has no figure for that country and year — which is not the same as zero. '
+    + 'A country left plain means the file has no figure for that country and year — which is not the same as zero — or that it produced nothing; the sheet says which. '
     + 'Tap a country for its numbers and its whole series.');
 
   if (prod) {
@@ -2112,7 +2113,7 @@ function showAbout() {
       p(link.noPolygon.map((c) => `${c.name} (${c.iso3})`).join(', '));
     }
     if (link.noData.length) {
-      p(`Outlines with no series (${link.noData.length}) — always ${reliefOn() ? 'plain relief' : 'hatched'}:`, 'muted');
+      p(`Outlines with no series (${link.noData.length}) — always plain:`, 'muted');
       p(link.noData.map((c) => `${c.name} (${c.iso3})`).join(', '));
     }
   }
@@ -2624,6 +2625,17 @@ $('chk-fields').addEventListener('change', (e) => {
   if (!showFields && sel && sel.kind === 'field') closeSheet();
   updateBanner(); updateLegend(); updateCredits(); updateLayersPanel(); updateChip(); syncYearUI(); requestRender();
 });
+$('chk-terrain').addEventListener('change', (e) => {
+  terrainPref = e.target.checked;
+  store.set(STORE.terrain, terrainPref ? '1' : '0');
+  caches.sea = null; caches.borders = null;
+  updateCredits(); updateLegend(); requestRender();
+});
+$('chk-rings').addEventListener('change', (e) => {
+  showRings = e.target.checked;
+  store.set(STORE.rings, showRings ? '1' : '0');
+  requestRender();
+});
 $('chk-depth').addEventListener('change', (e) => {
   depthPref = e.target.checked;
   store.set(STORE.depth, depthPref ? '1' : '0');
@@ -2702,6 +2714,8 @@ function resize() {
   const ty = store.get(STORE.ftype); if (['all', 'conventional', 'unconventional'].includes(ty)) typeFilter = ty;
   const sz = store.get(STORE.size); if (sz === 'prod' || sz === 'res') sizeBy = sz;
   const dp = store.get(STORE.depth); if (dp === '1' || dp === '0') depthPref = dp === '1';
+  terrainPref = store.get(STORE.terrain) === '1';
+  showRings = store.get(STORE.rings) !== '0';
   legendOpen = store.get(STORE.legend) === '1';
   try {
     const h = JSON.parse(store.get(STORE.hl) || 'null');
@@ -2730,7 +2744,7 @@ window.__wog = {
              fields: fields ? { available: fields.available, points: fields.points.length } : null,
              fieldCounts: { ...countFields() },
              outlines: { ...outlineStats },
-             depthBands: depthOn(), legendOpen,
+             depthBands: depthOn(), terrain: terrainPref, rings: showRings, legendOpen,
              relief: { status: relief.status, file: relief.spec ? relief.spec.file : null, builds: relief.builds, ms: +relief.ms.toFixed(1),
                        cache: relief.cache ? { lw: relief.cache.lw, w: relief.cache.w, h: relief.cache.h, px: relief.cache.w * relief.cache.h } : null },
              estimate: est ? { mode: est.mode, fields: est.n, on: estOn() } : null,
