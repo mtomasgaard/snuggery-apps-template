@@ -143,7 +143,7 @@ The Besseggen ridge in Jotunheimen in 3D, from Kartverket's 1 m elevation data: 
 
 ### Norne Reservoir
 
-The open Norne oil-field simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. Optional topside layers from the Norwegian Offshore Directorate's open data — the sea surface and seabed, the FPSO, the seven subsea templates on their real in-service dates, the gas export line and a map of where the gas goes, reported production beside the simulation, and animated flow through wells and pipes, every one a toggle that is off until you switch it on; three saved viewpoints. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked.
+The open Norne oil-field reservoir simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. A pure reservoir view: nothing above the seabed is drawn. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
 
@@ -459,8 +459,7 @@ terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-der
 (ODbL) and the Geist typeface (SIL OFL) in Running Dashboard, spelled out in
 [TILES.md](running-dashboard/TILES.md); the BodyParts3D geometry in Anatomy (CC BY-SA 2.1 JP, also
 CC BY 4.0 at source — [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and two
-SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL) with its topside layer from the
-Norwegian Offshore Directorate's FactMaps and FactPages (NLOD) and a Natural Earth coastline (public domain —
+SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL —
 [ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
 (open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); in Milky Way, the
 Gaia-derived star, sky and young-star map files (`deep.bin`, `named.json`, the sky JPEG and `young-*.png`; CC BY-NC
