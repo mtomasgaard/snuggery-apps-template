@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T22:01:06Z",
+ "generatedAt": "2026-09-27T23:01:07Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/09/27/beyond-protest-mob-violence-and-the-struggle-for-institutional-response-in-bangladesh/",
+     "published": "2026-09-27T22:36:38Z",
+     "summary": "Mob violence is rising in Bangladesh as unchecked impunity, weak law enforcement, and social media instigations drive lethal crowd attacks, challenging institutional responses, justice delivery, and overall state…",
+     "stale": false,
+     "author": "Maksuda Akter"
+    },
+    {
      "title": "Countries far from conflict paying the price for wars not their own, India tells UN",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "Thousands of Bangladeshis travelled to Cambodia for promised jobs, only to encounter Technology-facilitated trafficking and cyber-scamming networks, with 98 percent reportedly failing to receive the work they were…",
      "stale": false,
      "author": "Zulker Naeen"
-    },
-    {
-     "title": "How two elections reshaped the India–Bangladesh border",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/20/how-two-elections-reshaped-the-india-bangladesh-border/",
-     "published": "2026-09-20T14:30:33Z",
-     "summary": "Since Bangladesh’s 2024 political transition, India-Bangladesh border “push-ins” have intensified, with thousands deported to Bangladesh outside agreed verification and repatriation procedures and ignoring disputed…",
-     "stale": false,
-     "author": "Zulker Naeen"
     }
    ]
   },
@@ -441,7 +441,7 @@
     {
      "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/floating-power-plants-could-offer-coastal-communities-a-reliable-energy-source-heres-how-289134",
      "published": "2026-09-27T19:21:06Z",
      "summary": "",
@@ -459,24 +459,24 @@
      "author": "Kristyn Harman, Professor in History, University of Tasmania"
     },
     {
-     "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
+     "title": "How smoking makes Australians poorer – and what we can do about it",
      "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/septembers-ozone-hole-was-the-biggest-in-20-years-the-warning-signs-appeared-months-ago-292457",
-     "published": "2026-09-25T00:13:47Z",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-smoking-makes-australians-poorer-and-what-we-can-do-about-it-290345",
+     "published": "2026-09-27T19:20:39Z",
      "summary": "",
      "stale": false,
-     "author": "Hannah E. Kessenich, Postdoctoral Fellow in Physics, University of Otago"
+     "author": "Coral Gartner, Director, NHMRC Centre of Research Excellence on Achieving the Tobacco Endgame and ARC Future Fellow, The University of Queensland"
     },
     {
-     "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
+     "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-supply-chains-are-highly-exposed-could-new-ai-agents-make-them-more-resilient-292773",
-     "published": "2026-09-24T18:10:27Z",
+     "link": "https://theconversation.com/stripped-titles-compensating-rivals-how-the-manchester-city-cheating-scandal-could-play-out-292970",
+     "published": "2026-09-26T23:49:46Z",
      "summary": "",
      "stale": false,
-     "author": "Ilan Oshri, Professor of Information Systems, Auckland Business School, University of Auckland, Waipapa Taumata Rau"
+     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
+   "published": "2026-09-27 22:36 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Countries far from conflict paying the price for wars not their own, India tells UN",
    "published": "2026-09-26 12:00 UTC"
@@ -905,12 +911,6 @@
    "published": "2026-09-22 08:12 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "How two elections reshaped the India–Bangladesh border",
-   "published": "2026-09-20 14:30 UTC"
-  },
-  {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "What role does high school play in mental health? Feeling connected to other students and staff is key",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "September’s ozone hole was the biggest in 20 years. The warning signs appeared months ago",
-   "published": "2026-09-25 00:13 UTC"
+   "title": "How smoking makes Australians poorer – and what we can do about it",
+   "published": "2026-09-27 19:20 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NZ’s supply chains are highly exposed. Could new AI agents make them more resilient?",
-   "published": "2026-09-24 18:10 UTC"
+   "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
+   "published": "2026-09-26 23:49 UTC"
   },
   {
    "region": "Oceania",
