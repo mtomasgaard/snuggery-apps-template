@@ -36,6 +36,34 @@ check for hourly instead of the count above.
 
 No AI agent is involved anywhere in this. It is a clock and a POST.
 
+## Which workflows to put in the clock
+
+Every refresh workflow, not only the one you were thinking about when you set it up. On
+cron-job.org that is **one cronjob per workflow file**, each with its own `dispatches` URL; a
+Worker takes the list in one variable. A clock that dispatches `refresh-global-wind.yml` but not
+`refresh-global-weather.yml` leaves the second app on GitHub's own schedule, which is exactly the
+thing the clock was meant to replace — and it was seen: the wind branch refreshed at 10:00 and
+22:00 to the minute while the weather branch waited for GitHub to get round to it five hours
+late. The full set today, with a sensible cadence for each:
+
+| cronjob URL ends in | how often | why |
+| --- | --- | --- |
+| `refresh-hello-live.yml/dispatches` | hourly | the demo of the loop |
+| `refresh-world-news.yml/dispatches` | hourly | feeds move all day |
+| `refresh-power-hours.yml/dispatches` | 13:30 and 16:30 UTC | after the day-ahead auction |
+| `refresh-finances.yml/dispatches` | daily | |
+| `refresh-global-wind.yml/dispatches` | 04:30, 10:30, 16:30, 22:30 UTC | one per GFS cycle, half an hour after its last file lands |
+| `refresh-global-weather.yml/dispatches` | 04:40, 10:40, 16:40, 22:40 UTC | the same four cycles, ten minutes behind wind so the two do not pull from the bucket together |
+| `build-shelf-atlas.yml/dispatches` | daily | the regulators publish monthly; the job commits only when a figure changed |
+| `build-world-oil-gas.yml/dispatches` | weekly | a yearly file; the job stops early when nothing changed |
+
+Every job decides for itself whether there is anything new (the weather and wind jobs cost one
+HEAD request when the published GFS run is current), so dispatching more often than the table
+is harmless, just wasteful. The fingerprint to check per app is a run whose trigger reads
+`workflow_dispatch` at the minute you set, in that workflow's own run list — a green run of
+another app's workflow says nothing about this one, and GitHub's own `schedule` runs in the same
+list are the fallback, not the clock.
+
 ## The token
 
 Fine-grained, **this repository only**, one permission: **Actions → Read and write**. Nothing

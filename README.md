@@ -151,13 +151,13 @@ The open Norne oil-field reservoir simulation model in 3D: 44,431 cells coloured
 
 The North Sea's oil and gas on a map you pan and pinch: every field outline in the Norwegian, UK, Danish and Dutch sectors, the platforms and the pipelines, the median lines between the four shelves, and a month scrubber from January 1971 to the newest report that colours and sizes each field by what it produced that month. Tap a field for its operator, discovery year, status and a production sparkline; cross-border units (Statfjord, Frigg, Murchison…) show each side's share and the sum. **Live**: rebuilt weekly here from the four regulators' open data — Sodir, NSTA, the Danish Energy Agency and NLOG — plus Natural Earth and Marine Regions.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) · How it was built and where the data comes from: [`shelf-atlas/RESEARCH.md`](shelf-atlas/RESEARCH.md) · Running it: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) · Set it up: [`shelf-atlas/PROMPT.md`](shelf-atlas/PROMPT.md) · Make it yours: [`shelf-atlas/NOTES.md`](shelf-atlas/NOTES.md) · How it was built: [`shelf-atlas/RESEARCH.md`](shelf-atlas/RESEARCH.md) · Running it: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 
 ### World Oil & Gas
 
 Every country's oil and gas production from 1900 to the latest Energy Institute year, annual or cumulative, as a choropleth with a year scrubber; and 7,055 fields from Global Energy Monitor's extraction tracker (March 2026) that follow the same scrubber: a ring from discovery, filled from first production, sized by the latest rate or by remaining reserves. Filter by status, onshore/offshore and conventional/unconventional; search fields, companies, basins and countries and light up a company's or basin's fields; the tracker's own outlines appear at high zoom, and a country's sheet lists its units against the national figure. **Live**: countries rebuilt here after each Statistical Review; fields by hand (the tracker sits behind a form).
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) · Set it up: [`world-oil-gas/PROMPT.md`](world-oil-gas/PROMPT.md) · Make it yours: [`world-oil-gas/NOTES.md`](world-oil-gas/NOTES.md) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 
 ### Milky Way
 
