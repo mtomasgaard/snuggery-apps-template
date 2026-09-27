@@ -110,7 +110,10 @@ and the world app shows only the country choropleth, with the reason on its laye
   the field sheet says when earlier production may be missing.
 - Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
   producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
-  boundaries, depth shading, names) can be switched off from the map's layers button.
+  boundaries, depth shading, names, circle edges) can be switched off from the map's layers button.
+- World app basemap: white land with Natural Earth 1:50m boundaries by default; the shaded relief
+  (`data/relief.jpg`) and the depth bands are optional layers; countries with no figure are plain,
+  never hatched.
 - Canvas 2D map, own Web Mercator, geometry packed as Google polylines (4 decimals North Sea,
   3 world), monthly series as base64 uint16 with a per-series scale; contract in
   `scripts/shelf_atlas/SCHEMA.md`.
