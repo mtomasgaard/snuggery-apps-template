@@ -38,8 +38,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install the spreadsheet reader
-        run: python3 -m pip install --quiet 'openpyxl>=3.1'
+      - name: Install the spreadsheet reader and the image library
+        run: python3 -m pip install --quiet 'openpyxl>=3.1' 'pillow>=10'
 
       - name: Build
         run: |

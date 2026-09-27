@@ -45,8 +45,15 @@ NE_COUNTRIES_50 = ("https://raw.githubusercontent.com/nvkelso/natural-earth-vect
 # equivalent. EI's own conversion factor: 1 boe = 5.8 million Btu = 6.1178632 GJ.
 # So 1 TWh = 3.6e6 GJ / 6.1178632 GJ = 588,441 boe. See RESEARCH.md, "Units".
 BOE_PER_TWH = 3.6e6 / 6.1178632
-WORLD_FACTOR = 1000          # world.json packed at 3 decimals (~110 m); 1:110m has nothing finer
-WORLD_MIN_AREA_M2 = 2.0e7    # Visvalingam threshold: 20 km² triangles, invisible below zoom 6
+WORLD_FACTOR = 1000          # world.json packed at 3 decimals (~110 m)
+WORLD_MIN_AREA_M2 = 2.5e6    # Visvalingam threshold on the 1:50m countries: 2.5 km² triangles
+WORLD_BUDGET = 1_400_000     # world.json: 1:50m countries plus the bathymetry bands
+# Natural Earth I: shaded relief with hypsometric tints and water, 1:50m, public domain. The
+# NACIS CDN is the canonical host; the GitHub mirror is tried when it is down.
+NE_RELIEF_URLS = ("https://naciscdn.org/naturalearth/50m/raster/NE1_50M_SR_W.zip",
+                  "https://github.com/nvkelso/natural-earth-raster/raw/master/50m_rasters/NE1_50M_SR_W/NE1_50M_SR_W.tif")
+RELIEF_W, RELIEF_H = 4096, 2048     # equirectangular, 0.088° per pixel; ~0.6 MB as JPEG
+RELIEF_QUALITY = 72
 
 # Natural Earth's ISO_A3 is -99 for a handful of countries (France, Norway, Kosovo,
 # Somaliland, N. Cyprus...) because of a disputed-territory convention. ADM0_A3 is
@@ -56,7 +63,7 @@ NE_TO_ISO3_FIXES = {"NOR": "NOR", "FRA": "FRA", "KOS": "OWID_KOS", "SOL": "OWID_
 
 
 def build_world_geometry(cache: Cache):
-    raw = cache.get("global/ne_110m_admin_0_countries.geojson", NE_COUNTRIES)
+    raw = cache.get("global/ne_50m_admin_0_countries.geojson", NE_COUNTRIES_50)
     gj = json.loads(raw.decode("utf-8"))
     countries = []
     for f in gj["features"]:
@@ -79,12 +86,23 @@ def build_world_geometry(cache: Cache):
             "c": [round(cx, 3), round(cy, 3)],
             "rings": [encode_line(r, WORLD_FACTOR) for r in rings],
         })
+    # 1:50m carries dependencies that share their parent's ISO code (Ashmore and Cartier and
+    # the Indian Ocean Territories are "AUS"): the biggest feature keeps the code, the others
+    # fall back to their own ADM0 code so no country is painted twice.
+    by = {}
+    for c in countries:
+        by.setdefault(c["iso3"], []).append(c)
+    for iso, group in by.items():
+        if len(group) > 1:
+            group.sort(key=lambda c: -sum(len(r) for r in c["rings"]))
+            for c in group[1:]:
+                c["iso3"] = c["adm0"] if c["adm0"] != iso else f"{iso}-{c['name']}"
     countries.sort(key=lambda c: (c["iso3"], c["name"]))
     return {
         "schema": 1,
         "factor": WORLD_FACTOR,
         "encoding": "Google polyline, lon then lat, 3 decimals; rings closed",
-        "source": "Natural Earth 1:110m admin-0 countries and 1:10m bathymetry (public domain), simplified",
+        "source": "Natural Earth 1:50m admin-0 countries and 1:10m bathymetry (public domain), simplified",
         "countries": countries,
         "bathymetry": build_world_bathymetry(cache),
     }
@@ -93,6 +111,51 @@ def build_world_geometry(cache: Cache):
 NE_BATHY = [("A", 10000), ("B", 9000), ("C", 8000), ("D", 7000), ("E", 6000), ("F", 5000),
             ("G", 4000), ("H", 3000), ("I", 2000), ("J", 1000), ("K", 200), ("L", 0)]
 FIELDS_BUDGET = 2_600_000     # fields.json: 7,000 units with production, reserves and outlines
+
+
+def build_world_relief(cache: Cache, out_dir: str):
+    """Natural Earth I (shaded relief, hypsometric tints, water) resampled to RELIEF_W × RELIEF_H
+    in plate carrée and written as data/relief.jpg. The app drapes it under the country fills and
+    reprojects it to Mercator row by row. Returns the metadata block for world.json."""
+    import io
+    import zipfile
+    from PIL import Image
+    Image.MAX_IMAGE_PIXELS = None
+    raw = None
+    errors = []
+    for url in NE_RELIEF_URLS:
+        key = "global/NE1_50M_SR_W." + ("zip" if url.endswith(".zip") else "tif")
+        try:
+            raw = cache.get(key, url)
+            break
+        except BuildError as e:
+            errors.append(f"{url}: {e}")
+    if raw is None:
+        raise BuildError("relief raster: " + " | ".join(errors))
+    if raw[:2] == b"PK":
+        with zipfile.ZipFile(io.BytesIO(raw)) as z:
+            tifs = [n for n in z.namelist() if n.lower().endswith(".tif")]
+            if not tifs:
+                raise BuildError(f"relief zip has no .tif: {z.namelist()[:10]}")
+            raw = z.read(tifs[0])
+    im = Image.open(io.BytesIO(raw))
+    im.load()
+    w0, h0 = im.size
+    if abs(w0 / h0 - 2.0) > 0.01:
+        raise BuildError(f"relief raster is not 2:1 (plate carrée): {w0}×{h0}")
+    im = im.convert("RGB").resize((RELIEF_W, RELIEF_H), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, "JPEG", quality=RELIEF_QUALITY, optimize=True)
+    data = buf.getvalue()
+    path = os.path.join(out_dir, "relief.jpg")
+    os.makedirs(out_dir, exist_ok=True)
+    if not (os.path.exists(path) and open(path, "rb").read() == data):
+        with open(path, "wb") as f:
+            f.write(data)
+    log(f"  relief: {w0}×{h0} -> {RELIEF_W}×{RELIEF_H}, {len(data):,} B  {path}")
+    return {"file": "relief.jpg", "width": RELIEF_W, "height": RELIEF_H,
+            "bounds": [-180, -90, 180, 90], "projection": "plate carrée (equirectangular), WGS84",
+            "source": "Natural Earth I with shaded relief, hypsometric tints and water, 1:50m (public domain)"}
 BATHY_MIN_AREA_M2 = 4.0e8      # 400 km² triangles: the ocean floor at world scale, not a coastline
 
 
@@ -537,7 +600,9 @@ def goget_units_to_file(units, hdr, src_name, outline_min_tri_m2=6e4, outline_mi
                 if ring_area_m2(ring) < outline_min_m2:
                     continue
                 s = simplify(ring, outline_min_tri_m2, closed=True)
-                if len(s) >= 4:
+                # a ring down to its floor of 4 points is a sliver whose surviving corner
+                # depends on floating-point ties, which differ between machines; drop it
+                if len(s) >= 6:
                     rings.append(encode_line(s, WORLD_FACTOR))
             if rings:
                 rec["rings"] = rings
@@ -563,12 +628,18 @@ def main():
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--refresh", action="store_true", help="refetch sources even if cached")
     ap.add_argument("--generated-at", default=None, help="ISO timestamp to stamp (default: now)")
+    ap.add_argument("--no-relief", action="store_true", help="skip the shaded-relief raster (needs Pillow and ~90 MB)")
     args = ap.parse_args()
     cache = Cache(args.cache, refresh=args.refresh, offline=args.offline)
     generated = args.generated_at or dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     log("world: geometry")
     world = build_world_geometry(cache)
+    if not args.no_relief:
+        world["relief"] = build_world_relief(cache, args.out)
+    n = len(json.dumps(world, ensure_ascii=False, separators=(",", ":")).encode())
+    if n > WORLD_BUDGET:
+        raise BuildError(f"world.json would be {n:,} B, over its budget of {WORLD_BUDGET:,}; raise WORLD_MIN_AREA_M2")
     write_json(os.path.join(args.out, "world.json"), world)
 
     log("world: countries")
