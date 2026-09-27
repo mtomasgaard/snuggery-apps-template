@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T10:01:06Z",
+ "generatedAt": "2026-09-27T10:36:58Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Maroc : quels enseignements tirer des élections législatives ?",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/maroc-quels-enseignements-tirer-des-elections-legislatives-292849",
+     "published": "2026-09-27T09:14:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mustapha El Mnasfi, Enseignant-chercheur, University Moulay Ismail Meknes"
+    },
+    {
      "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Gideon Ndubuisi, Assistant Professor of Economics, Delft University of Technology"
-    },
-    {
-     "title": "Online attacks on Kenyan journalists: what makes audiences join in, push back or stay silent",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/online-attacks-on-kenyan-journalists-what-makes-audiences-join-in-push-back-or-stay-silent-291471",
-     "published": "2026-09-27T07:42:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kevin Mudavadi, Assistant Professor, Georgia State University"
     },
     {
      "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Maroc : quels enseignements tirer des élections législatives ?",
+   "published": "2026-09-27 09:14 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
    "published": "2026-09-27 08:20 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "Africa’s mineral strength is wasted if countries don’t work together – new report",
    "published": "2026-09-27 07:43 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Online attacks on Kenyan journalists: what makes audiences join in, push back or stay silent",
-   "published": "2026-09-27 07:42 UTC"
   },
   {
    "region": "Africa",
