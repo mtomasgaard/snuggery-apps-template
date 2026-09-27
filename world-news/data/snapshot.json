@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T06:01:10Z",
+ "generatedAt": "2026-09-27T07:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,24 @@
    "stale": false,
    "items": [
     {
+     "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168461",
+     "published": "2026-09-26T12:00:00Z",
+     "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
+     "stale": false
+    },
+    {
+     "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168458",
+     "published": "2026-09-26T12:00:00Z",
+     "summary": "Cuba’s Foreign Minister warned the UN General Assembly on Saturday that escalating military and economic pressure in Latin America and the Caribbean was threatening international law, while accusing the United States of…",
+     "stale": false
+    },
+    {
      "title": "In ‘NAZA,’ Israeli whistleblowers’ revelations about civilian deaths in Gaza reflect a longer history of Palestinian isolation",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -119,24 +137,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168453",
      "published": "2026-09-25T12:00:00Z",
      "summary": "Haiti is at a “watershed moment” in its struggle against gang violence and needs sustained international support alongside stronger national security institutions, Prime Minister Alix Didier Fils-Aimé told the UN…",
-     "stale": false
-    },
-    {
-     "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168429",
-     "published": "2026-09-24T12:00:00Z",
-     "summary": "“There is a people. A people who can wait no longer. A people waiting to regain security, to return home to work, to send their children to school, and to freely choose their leaders.” Those are the words of the Haitian…",
-     "stale": false
-    },
-    {
-     "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168420",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "Venezuela is seeking to rebuild after a period of political upheaval and the destruction caused by twin earthquakes earlier this year, Acting President Delcy Rodríguez told world leaders at the United Nations on…",
      "stale": false
     },
     {
@@ -720,6 +720,18 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
+   "published": "2026-09-26 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
+   "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
+   "published": "2026-09-26 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "In ‘NAZA,’ Israeli whistleblowers’ revelations about civilian deaths in Gaza reflect a longer history of Palestinian isolation",
    "published": "2026-09-25 21:22 UTC"
@@ -735,18 +747,6 @@
    "source": "UN News",
    "title": "Haiti at ‘watershed moment’, Prime Minister tells UN, urging full backing for security force",
    "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Haitians can’t wait to return home and vote in elections says Prime Minister",
-   "published": "2026-09-24 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Venezuela seeking rebirth after political crisis and devastating earthquakes, President tells UN",
-   "published": "2026-09-23 12:00 UTC"
   },
   {
    "region": "Americas",
