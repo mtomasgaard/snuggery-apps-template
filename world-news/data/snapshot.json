@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T07:01:15Z",
+ "generatedAt": "2026-09-27T08:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Africa’s mineral strength is wasted if countries don’t work together – new report",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/africas-mineral-strength-is-wasted-if-countries-dont-work-together-new-report-290306",
+     "published": "2026-09-27T07:43:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Gideon Ndubuisi, Assistant Professor of Economics, Delft University of Technology"
+    },
+    {
+     "title": "Online attacks on Kenyan journalists: what makes audiences join in, push back or stay silent",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/online-attacks-on-kenyan-journalists-what-makes-audiences-join-in-push-back-or-stay-silent-291471",
+     "published": "2026-09-27T07:42:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kevin Mudavadi, Assistant Professor, Georgia State University"
+    },
+    {
      "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
      "source": "UN News",
      "feed": "un-africa",
@@ -202,26 +222,6 @@
      "published": "2026-09-25T12:00:00Z",
      "summary": "The war in Sudan has devastated the economy and agricultural production, but a UN-backed plan aims to mobilise private sector investment to help farmers return to their fields.",
      "stale": false
-    },
-    {
-     "title": "Les exportations de cobalt de la RDC contiennent de l'uranium non déclaré : notre étude évalue le risque nucléaire mondial",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/les-exportations-de-cobalt-de-la-rdc-contiennent-de-luranium-non-declare-notre-etude-evalue-le-risque-nucleaire-mondial-292497",
-     "published": "2026-09-25T11:53:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ryan A. Manzuk, Research Fellow, University of Wisconsin-Madison"
-    },
-    {
-     "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/nigeria-faces-the-worlds-highest-projected-death-toll-from-super-el-nino-heat-what-could-save-lives-292786",
-     "published": "2026-09-25T09:50:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michael Greenstone, Professor in Economics; Director, Energy Policy Institute, University of Chicago"
     },
     {
      "title": "How Togolese people are reinventing political protest amid civil society crackdown",
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Africa’s mineral strength is wasted if countries don’t work together – new report",
+   "published": "2026-09-27 07:43 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Online attacks on Kenyan journalists: what makes audiences join in, push back or stay silent",
+   "published": "2026-09-27 07:42 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
    "published": "2026-09-25 12:00 UTC"
@@ -783,18 +795,6 @@
    "source": "UN News",
    "title": "Sudan’s farmers are ready to return – private investment could get them there",
    "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Les exportations de cobalt de la RDC contiennent de l'uranium non déclaré : notre étude évalue le risque nucléaire mondial",
-   "published": "2026-09-25 11:53 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Nigeria faces the world’s highest projected death toll from super El Niño heat: what could save lives",
-   "published": "2026-09-25 09:50 UTC"
   },
   {
    "region": "Africa",
