@@ -274,8 +274,17 @@ or produced before 2003. The national gas total for 2024 comes out at 8.9 bcm, a
   `OWID_CZS`, `OWID_YGS`) so sums before 1992 are complete; they have no outline and are listed in
   the app's About. One source hole is patched to "no data" and listed under `snapshot.patched`:
   Norway's gas for 1998 is `0` in the 2025 file between 426 and 481 TWh.
-- **Natural Earth 1:110m countries** (public domain) from the `nvkelso/natural-earth-vector` GitHub
-  mirror; ISO_A3 is `-99` for France, Norway, Kosovo and a few others, mapped explicitly.
+- **Natural Earth 1:50m countries** (public domain) from the `nvkelso/natural-earth-vector` GitHub
+  mirror (`ne_50m_admin_0_countries.geojson`, 4.5 MB; 242 features, 615 KB packed after 2.5 km²
+  simplification); ISO_A3 is `-99` for France, Norway, Kosovo and a few others, mapped explicitly,
+  and dependencies sharing a parent's ISO code (Ashmore and Cartier, the Indian Ocean Territories,
+  both `AUS`) get their ADM0 code so no country is painted twice. 1:110m was used first and looked
+  like a sketch on a phone.
+- **Natural Earth I with shaded relief, hypsometric tints and water, 1:50m** (`NE1_50M_SR_W.zip`,
+  ~90 MB from `naciscdn.org`; public domain): the basemap raster. The build resamples the
+  10,800 × 5,400 TIFF to 4,096 × 2,048 plate carrée with Pillow and writes `data/relief.jpg`
+  (~0.8 MB at quality 72). Chosen over the grey `SR_50M` (relief only) because the hypsometric
+  tints and ocean shading are what make the map read as a map under a translucent choropleth.
 
 ### 2.6 World — fields: Global Energy Monitor, GOGET
 - `https://globalenergymonitor.org/projects/global-oil-gas-extraction-tracker/` — release

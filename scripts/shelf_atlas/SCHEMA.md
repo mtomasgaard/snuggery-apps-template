@@ -83,15 +83,23 @@ Month index `mi` counts months from January 1971: `mi = (year − 1971) × 12 + 
 A series is decoded as: `codes = Uint16Array(atob(b64) bytes)`, `value[mi] = codes[mi − start] × scale`
 for `start ≤ mi < start + codes.length`, else 0.
 
-## world-oil-gas/data/world.json — Natural Earth 1:110m countries and 1:10m bathymetry (static)
+## world-oil-gas/data/world.json — Natural Earth 1:50m countries, 1:10m bathymetry, relief raster (static)
 
 ```
 { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
   "countries": [{ "iso3": "NOR", "name": "Norway", "adm0": "NOR", "c": [17.8, 68.5], "rings": ["<ring>", …] }, …],
-  "bathymetry": [{ "depth": 10000, "rings": ["<ring>", …] }, …, { "depth": 200, "rings": [ … ] }] }
+  "bathymetry": [{ "depth": 10000, "rings": ["<ring>", …] }, …, { "depth": 200, "rings": [ … ] }],
+  "relief": { "file": "relief.jpg", "width": 4096, "height": 2048, "bounds": [-180, -90, 180, 90],
+              "projection": "plate carrée (equirectangular), WGS84", "source": "…" } }     // optional
 ```
 
-Bathymetry layers are listed deepest first, but the bands NEST (the 200 m band contains everything deeper), so paint them shallowest first and let the deeper tints land on top.
+Countries are 1:50m simplified at 2.5 km² triangles (242 features; dependencies that share their
+parent's ISO code, such as Ashmore and Cartier under AUS, carry their own ADM0 code instead so nothing
+is painted twice). Bathymetry layers are listed deepest first, but the bands NEST (the 200 m band
+contains everything deeper), so paint them shallowest first and let the deeper tints land on top.
+`relief` describes `data/relief.jpg`, Natural Earth I (shaded relief, hypsometric tints, water) in
+plate carrée: x = (lon + 180) / 360 × width, y = (90 − lat) / 180 × height; the app reprojects it to
+Mercator row by row and drapes it under the country fills. Absent when the build ran `--no-relief`.
 
 ## world-oil-gas/data/snapshot.json — annual production by country (rebuilt yearly)
 
