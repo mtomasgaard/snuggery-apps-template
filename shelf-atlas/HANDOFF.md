@@ -105,6 +105,9 @@ and the world app shows only the country choropleth, with the reason on its laye
   discovered, filled = producing); filters (status, onshore/offshore, conventional/unconventional);
   search for fields, companies, basins, countries with a highlight chip; size by production or
   reserves; tracker outlines at high zoom; country sheet lists the tracker's units.
+- Shelf Atlas: Rate | Cumulative under the quantity segment; cumulative is the exact prefix sum of
+  each field's monthly series from where its regulator's series starts (NL 2003, UK June 1975), and
+  the field sheet says when earlier production may be missing.
 - Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
   producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
   boundaries, depth shading, names) can be switched off from the map's layers button.

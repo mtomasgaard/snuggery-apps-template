@@ -157,8 +157,13 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 2px 12px 8px 16px;
+  padding: 2px 12px 6px 16px;
+  align-items: flex-start;
 }
+/* Quantity on top, and under it, as wide, the smaller Rate | Cumulative
+   switch: the row beside the country chips has no room for a third control
+   on a 390 px phone. */
+.segs { display: flex; flex-direction: column; gap: 4px; flex: 0 0 auto; }
 .seg {
   display: flex;
   padding: 2px;
@@ -178,6 +183,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
+.seg-sm button { flex: 1 1 0; min-height: 28px; padding: 0 6px; font-size: 12px; }
 .seg button[aria-checked="true"] {
   background: var(--card);
   color: var(--ink);
@@ -339,6 +345,9 @@ button {
 .k-none { fill: none; stroke: var(--k-none); stroke-width: 1; }
 .k-prod { fill: rgba(235, 104, 52, .18); stroke: var(--k-none); stroke-width: 1; }
 .k-shut { fill: var(--k-shut); stroke: var(--k-none); stroke-width: .8; }
+.k-shutc { fill: var(--k-shut); stroke: var(--k-surface); stroke-width: 1.2; }
+/* the key follows the mode: app.js puts .cum on the legend in cumulative mode */
+.legend:not(.cum) .cum-only, .legend.cum .rate-only { display: none; }
 .k-fac { fill: var(--k-fac); stroke: var(--k-surface); stroke-width: 1; }
 .k-sub { fill: var(--k-sub); }
 .k-oil, .k-gas, .k-other, .k-border { fill: none; stroke-width: 2; }
