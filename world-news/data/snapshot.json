@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T22:01:13Z",
+ "generatedAt": "2026-09-28T23:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -207,6 +207,24 @@
      "author": "Gabriel Kanuti Ndimbo, Lecturer in Development Studies, University of Dar es Salaam"
     },
     {
+     "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168475",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "South Sudan remains committed to holding general elections in December to conclude its transition period, the country’s Permanent Representative to the United Nations Cecilia Adout Majok Adeng, told the General Assembly…",
+     "stale": false
+    },
+    {
+     "title": "Sudan tells UN: No imposed solutions to country’s conflict",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168474",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "Sudan’s Foreign Minister addressed the UN General Assembly on Monday in place of de facto head of state General Abdel Fattah al-Burhan, whose visa application was rejected by Washington.",
+     "stale": false
+    },
+    {
      "title": "DR Congo Ebola emergency: Calls grow for urgent humanitarian access",
      "source": "UN News",
      "feed": "un-africa",
@@ -224,24 +242,6 @@
      "summary": "The protests strengthened the political consciousness of some young Nigerians and encouraged greater participation in elections, governance and activism. For others, the experience produced fear, distrust and…",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168450",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "The UN said on Friday it remains gravely concerned by the continued deterioration of the security situation across northern Ethiopia, as fighting spreads across multiple fronts and increasingly disrupts humanitarian…",
-     "stale": false
-    },
-    {
-     "title": "Africa needs its own AI solutions, not borrowed ones, says expert",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168440",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Africa should focus its use of technology on solving its own real challenges rather than copying the systems and priorities of other parts of the world.",
-     "stale": false
     },
     {
      "title": "How Togolese people are reinventing political protest amid civil society crackdown",
@@ -787,6 +787,18 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan tells UN: No imposed solutions to country’s conflict",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "DR Congo Ebola emergency: Calls grow for urgent humanitarian access",
    "published": "2026-09-28 12:00 UTC"
   },
@@ -795,18 +807,6 @@
    "source": "Global Voices",
    "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
    "published": "2026-09-27 08:20 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
-   "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Africa needs its own AI solutions, not borrowed ones, says expert",
-   "published": "2026-09-25 12:00 UTC"
   },
   {
    "region": "Africa",
