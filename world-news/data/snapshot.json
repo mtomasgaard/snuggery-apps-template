@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T12:01:15Z",
+ "generatedAt": "2026-09-28T13:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Why fuel prices may go higher still",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/why-fuel-prices-may-go-higher-still-292853",
+     "published": "2026-09-28T12:43:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joshua Busby, Professor of Public Affairs, The University of Texas at Austin"
+    },
+    {
+     "title": "Are there toxic chemicals in your grocery store receipt?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/are-there-toxic-chemicals-in-your-grocery-store-receipt-291246",
+     "published": "2026-09-28T12:41:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sean McCann, Assistant Professor of Emergency Medicine, University of Illinois Chicago"
+    },
+    {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
      "source": "UN News",
      "feed": "un-americas",
@@ -109,26 +129,6 @@
      "published": "2026-09-26T12:00:00Z",
      "summary": "Cuba’s Foreign Minister warned the UN General Assembly on Saturday that escalating military and economic pressure in Latin America and the Caribbean was threatening international law, while accusing the United States of…",
      "stale": false
-    },
-    {
-     "title": "In ‘NAZA,’ Israeli whistleblowers’ revelations about civilian deaths in Gaza reflect a longer history of Palestinian isolation",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/in-naza-israeli-whistleblowers-revelations-about-civilian-deaths-in-gaza-reflect-a-longer-history-of-palestinian-isolation-292348",
-     "published": "2026-09-25T21:22:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Drew Paul, Professor of Arabic, University of Tennessee"
-    },
-    {
-     "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/trump-has-gotten-rid-of-many-of-the-checks-and-balances-that-could-stop-him-from-demolishing-the-kennedy-center-292436",
-     "published": "2026-09-25T19:15:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "E. Andrew Taylor, Associate Professor and Director of Arts Management, American University"
     },
     {
      "title": "Haiti at ‘watershed moment’, Prime Minister tells UN, urging full backing for security force",
@@ -720,6 +720,18 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Why fuel prices may go higher still",
+   "published": "2026-09-28 12:43 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Are there toxic chemicals in your grocery store receipt?",
+   "published": "2026-09-28 12:41 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "UN News",
    "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
    "published": "2026-09-26 12:00 UTC"
@@ -729,18 +741,6 @@
    "source": "UN News",
    "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
    "published": "2026-09-26 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "In ‘NAZA,’ Israeli whistleblowers’ revelations about civilian deaths in Gaza reflect a longer history of Palestinian isolation",
-   "published": "2026-09-25 21:22 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Trump has gotten rid of many of the checks and balances that could stop him from demolishing the Kennedy Center",
-   "published": "2026-09-25 19:15 UTC"
   },
   {
    "region": "Americas",
