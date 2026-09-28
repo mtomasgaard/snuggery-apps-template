@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T07:01:17Z",
+ "generatedAt": "2026-09-28T08:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Jim Chalmers blames likely interest rate rise on Middle East war",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/jim-chalmers-blames-likely-interest-rate-rise-on-middle-east-war-292585",
+     "published": "2026-09-28T07:03:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australia’s legacy systems were already a cyber risk. AI agents are raising the stakes",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Anthony Cordingley, Senior Lecturer in English Literature, University of Sydney"
-    },
-    {
-     "title": "Meet ‘platypus man’ Harry Burrell. He transformed Australian science – and put on quite a show",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/meet-platypus-man-harry-burrell-he-transformed-australian-science-and-put-on-quite-a-show-291142",
-     "published": "2026-09-28T05:47:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Meg Foster, Chancellor's Research Fellow, School of Communication and Social Sciences, University of Technology Sydney"
     },
     {
      "title": "What do NZ voters really care about? A global comparison reveals some surprises",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Jim Chalmers blames likely interest rate rise on Middle East war",
+   "published": "2026-09-28 07:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia’s legacy systems were already a cyber risk. AI agents are raising the stakes",
    "published": "2026-09-28 06:18 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "A bestselling novel was pulled from a French literary prize after AI accusations – what next?",
    "published": "2026-09-28 06:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Meet ‘platypus man’ Harry Burrell. He transformed Australian science – and put on quite a show",
-   "published": "2026-09-28 05:47 UTC"
   },
   {
    "region": "Oceania",
