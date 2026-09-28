@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T18:01:14Z",
+ "generatedAt": "2026-09-28T19:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "When telcos shut down the internet, they shut down protests for the government",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/09/28/when-telcos-shut-down-the-internet-they-shut-down-protests-for-the-government/",
+     "published": "2026-09-28T18:11:19Z",
+     "summary": "Room to protest is narrowing in Africa, as governments lean on arrests, curfews, and internet blackouts to blunt dissent. When the streets become too dangerous, dissent often migrates online.",
+     "stale": false,
+     "author": "Ranking Digital Rights"
+    },
+    {
      "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "As in-person gatherings have become difficult to organize or too risky for citizens, online protest has become an increasingly common form of political dissent in Togo.",
      "stale": false,
      "author": "Jean Sovon"
-    },
-    {
-     "title": "The long journey from ‘Indigenous’ to citizen in Mozambique",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/09/17/the-long-journey-from-indigenous-to-citizens-in-mozambique/",
-     "published": "2026-09-17T05:49:57Z",
-     "summary": "The word Indigenous today belongs, above all, to history. “Mozambican” is the word that was born of the new sovereignty. But understanding the meaning of this citizenship requires remembering the journey that came…",
-     "stale": false,
-     "author": "Tirso Sitoe"
     }
    ]
   },
@@ -431,7 +431,7 @@
     {
      "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nzs-next-new-mps-face-a-brutal-learning-curve-does-it-have-to-be-that-way-292344",
      "published": "2026-09-28T17:45:47Z",
      "summary": "",
@@ -447,6 +447,16 @@
      "summary": "",
      "stale": false,
      "author": "Chloe S. Gordon, Senior Research Fellow, Institute for Positive Psychology and Education, Australian Catholic University"
+    },
+    {
+     "title": "Why fuel prices may go higher still",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/why-fuel-prices-may-go-higher-still-292853",
+     "published": "2026-09-28T12:43:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joshua Busby, Professor of Public Affairs, The University of Texas at Austin"
     },
     {
      "title": "Larissa Waters steps down as Greens leader due to health reasons",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Australia’s legacy systems were already a cyber risk. AI agents are raising the stakes",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australias-legacy-systems-were-already-a-cyber-risk-ai-agents-are-raising-the-stakes-292981",
-     "published": "2026-09-28T06:18:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Abu Barkat ullah (Barkat), Associate Professor of Cyber Security, University of Canberra"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "When telcos shut down the internet, they shut down protests for the government",
+   "published": "2026-09-28 18:11 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
    "published": "2026-09-28 13:47 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "How Togolese people are reinventing political protest amid civil society crackdown",
    "published": "2026-09-18 20:34 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "The long journey from ‘Indigenous’ to citizen in Mozambique",
-   "published": "2026-09-17 05:49 UTC"
   },
   {
    "region": "Middle East",
@@ -925,6 +925,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why fuel prices may go higher still",
+   "published": "2026-09-28 12:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Larissa Waters steps down as Greens leader due to health reasons",
    "published": "2026-09-28 10:46 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Jim Chalmers blames likely interest rate rise on Middle East war",
    "published": "2026-09-28 07:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australia’s legacy systems were already a cyber risk. AI agents are raising the stakes",
-   "published": "2026-09-28 06:18 UTC"
   },
   {
    "region": "Oceania",
