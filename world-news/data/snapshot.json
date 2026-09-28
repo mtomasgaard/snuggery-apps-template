@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T13:01:23Z",
+ "generatedAt": "2026-09-28T14:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Les pays africains riverains de la mer Rouge face à des risques croissants avec l'expansion des Houthis",
+     "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/les-pays-africains-riverains-de-la-mer-rouge-face-a-des-risques-croissants-avec-lexpansion-des-houthis-292492",
-     "published": "2026-09-28T10:59:02Z",
+     "link": "https://theconversation.com/senegals-youth-olympics-legacy-who-pays-after-the-games-292703",
+     "published": "2026-09-28T13:47:42Z",
      "summary": "",
      "stale": false,
-     "author": "Burak Şakir Şeker, Associate Professor, Department of International Relations, Ankara Hacı Bayram Veli University"
+     "author": "Djibril Diouf, enseignant-chercheur, Université Cheikh Anta Diop de Dakar"
     },
     {
-     "title": "Pollen season: new map of South Africa’s allergy hotspots gives you time to prepare",
+     "title": "Child malnutrition is one of Africa’s biggest health challenges: food aid is only part of the solution",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/pollen-season-new-map-of-south-africas-allergy-hotspots-gives-you-time-to-prepare-291171",
-     "published": "2026-09-28T09:30:42Z",
+     "link": "https://theconversation.com/child-malnutrition-is-one-of-africas-biggest-health-challenges-food-aid-is-only-part-of-the-solution-291163",
+     "published": "2026-09-28T13:47:25Z",
      "summary": "",
      "stale": false,
-     "author": "Trevor Hill, Professor, Department of Geography, University of KwaZulu-Natal"
+     "author": "Gabriel Kanuti Ndimbo, Lecturer in Development Studies, University of Dar es Salaam"
     },
     {
      "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Les pays africains riverains de la mer Rouge face à des risques croissants avec l'expansion des Houthis",
-   "published": "2026-09-28 10:59 UTC"
+   "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
+   "published": "2026-09-28 13:47 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Pollen season: new map of South Africa’s allergy hotspots gives you time to prepare",
-   "published": "2026-09-28 09:30 UTC"
+   "title": "Child malnutrition is one of Africa’s biggest health challenges: food aid is only part of the solution",
+   "published": "2026-09-28 13:47 UTC"
   },
   {
    "region": "Africa",
