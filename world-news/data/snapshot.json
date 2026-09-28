@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T19:01:19Z",
+ "generatedAt": "2026-09-28T20:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
+     "title": "The exhibition Rome: Empire, Power, People is a tour through our history of looking at ancient Rome",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/the-exhibition-rome-empire-power-people-is-a-tour-through-our-history-of-looking-at-ancient-rome-292232",
+     "published": "2026-09-28T19:42:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alina Kozlovski, Senior Lecturer in Digital Innovation (Ancient History and Archaeology), University of New England"
+    },
+    {
+     "title": "Can we predict genocide by listening to what leaders say? Research finds common threads",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/can-we-predict-genocide-by-listening-to-what-leaders-say-research-finds-common-threads-289042",
+     "published": "2026-09-28T19:42:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Svitlana Chernykh, Senior Lecturer, School of Politics & International Relations, Australian National University"
+    },
+    {
+     "title": "Year 12 students might feel anxious as exams approach. Here’s what can help",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/year-12-students-might-feel-anxious-as-exams-approach-heres-what-can-help-292776",
+     "published": "2026-09-28T19:41:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cher McGillivray, Assistant Professor in Psychology, Bond University"
+    },
+    {
+     "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-next-new-mps-face-a-brutal-learning-curve-does-it-have-to-be-that-way-292344",
      "published": "2026-09-28T17:45:47Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Chloe S. Gordon, Senior Research Fellow, Institute for Positive Psychology and Education, Australian Catholic University"
-    },
-    {
-     "title": "Why fuel prices may go higher still",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/why-fuel-prices-may-go-higher-still-292853",
-     "published": "2026-09-28T12:43:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Joshua Busby, Professor of Public Affairs, The University of Texas at Austin"
-    },
-    {
-     "title": "Larissa Waters steps down as Greens leader due to health reasons",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/larissa-waters-steps-down-as-greens-leader-due-to-health-reasons-291993",
-     "published": "2026-09-28T10:46:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Jim Chalmers blames likely interest rate rise on Middle East war",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/jim-chalmers-blames-likely-interest-rate-rise-on-middle-east-war-292585",
-     "published": "2026-09-28T07:03:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The exhibition Rome: Empire, Power, People is a tour through our history of looking at ancient Rome",
+   "published": "2026-09-28 19:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Can we predict genocide by listening to what leaders say? Research finds common threads",
+   "published": "2026-09-28 19:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Year 12 students might feel anxious as exams approach. Here’s what can help",
+   "published": "2026-09-28 19:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
    "published": "2026-09-28 17:45 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Social media bans are an attempt to manage harm – but young people can flourish online",
    "published": "2026-09-28 16:07 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why fuel prices may go higher still",
-   "published": "2026-09-28 12:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Larissa Waters steps down as Greens leader due to health reasons",
-   "published": "2026-09-28 10:46 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Jim Chalmers blames likely interest rate rise on Middle East war",
-   "published": "2026-09-28 07:03 UTC"
   },
   {
    "region": "Oceania",
