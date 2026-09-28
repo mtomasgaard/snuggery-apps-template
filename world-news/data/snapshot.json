@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T09:01:23Z",
+ "generatedAt": "2026-09-28T10:01:16Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pollen season: new map of South Africa’s allergy hotspots gives you time to prepare",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/pollen-season-new-map-of-south-africas-allergy-hotspots-gives-you-time-to-prepare-291171",
+     "published": "2026-09-28T09:30:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Trevor Hill, Professor, Department of Geography, University of KwaZulu-Natal"
+    },
+    {
      "title": "Maroc : quels enseignements tirer des élections législatives ?",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -195,16 +205,6 @@
      "summary": "The protests strengthened the political consciousness of some young Nigerians and encouraged greater participation in elections, governance and activism. For others, the experience produced fear, distrust and…",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Africa’s mineral strength is wasted if countries don’t work together – new report",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/africas-mineral-strength-is-wasted-if-countries-dont-work-together-new-report-290306",
-     "published": "2026-09-27T07:43:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gideon Ndubuisi, Assistant Professor of Economics, Delft University of Technology"
     },
     {
      "title": "UN voices grave concern as fighting spreads across northern Ethiopia",
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "The Conversation",
+   "title": "Pollen season: new map of South Africa’s allergy hotspots gives you time to prepare",
+   "published": "2026-09-28 09:30 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
    "title": "Maroc : quels enseignements tirer des élections législatives ?",
    "published": "2026-09-27 09:14 UTC"
   },
@@ -777,12 +783,6 @@
    "source": "Global Voices",
    "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
    "published": "2026-09-27 08:20 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Africa’s mineral strength is wasted if countries don’t work together – new report",
-   "published": "2026-09-27 07:43 UTC"
   },
   {
    "region": "Africa",
