@@ -24,7 +24,7 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Twelve complete apps. All are examples — none holds anybody's real data. Copy
+Fourteen complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
 **Five of them cost you nothing to run.** Hello Live, World News, Power Hours,
