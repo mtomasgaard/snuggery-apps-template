@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T05:01:44Z",
+ "generatedAt": "2026-09-28T06:01:21Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "After five years of war, how do Ukrainian small businesses survive?",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/09/28/after-five-years-of-war-how-do-ukrainian-small-businesses-survive/",
+     "published": "2026-09-28T06:00:15Z",
+     "summary": "In this interview, writer and journalist Victoria Belim-Frolova shares her observations about Russia’s war on Ukraine and how it forces “a constant process of adaptation,” especially in women-led small businesses.",
+     "stale": false,
+     "author": "Nevena Borisova"
+    },
     {
      "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
      "source": "UN News",
@@ -44,16 +54,6 @@
      "summary": "Elections in Russia are a sham. Yet when someone appears genuinely committed to an anti-war agenda, many had seize that hope as a chance to change, including young TikTokers",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "From the streets to the ballot box: What Hungary can teach Serbia",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/09/20/from-the-streets-to-the-ballot-box-what-hungary-can-teach-serbia/",
-     "published": "2026-09-20T06:35:09Z",
-     "summary": "The challenge is not simply whether an entrenched authoritarian government can be defeated, but whether almost two years of a student-led mobilisation can be translated into electoral power.",
-     "stale": false,
-     "author": "Istinomer"
     },
     {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "What do NZ voters really care about? A global comparison reveals some surprises",
+     "title": "84 cents for every $1: why Indigenous workers earn less in Australia – and what to do about it",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/84-cents-for-every-1-why-indigenous-workers-earn-less-in-australia-and-what-to-do-about-it-292899",
+     "published": "2026-09-28T05:23:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nareen Young, Associate Dean of Business (Indigenous Leadership & Engagement); Director, UTS Centre for Indigenous People and Work, University of Technology…"
+    },
+    {
+     "title": "The joy of song: where songbirds came from and why we should listen to them",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-joy-of-song-where-songbirds-came-from-and-why-we-should-listen-to-them-290708",
+     "published": "2026-09-28T04:46:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Hollis Taylor, Research Affiliate, Sydney Conservatorium of Music, University of Sydney"
+    },
+    {
+     "title": "What do NZ voters really care about? A global comparison reveals some surprises",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/what-do-nz-voters-really-care-about-a-global-comparison-reveals-some-surprises-292760",
      "published": "2026-09-28T00:38:43Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Tania Ahmed, Honorary Postdoctoral Associate, Macquarie University"
     },
     {
-     "title": "Neoliberalism is in retreat. Viktor Shvets blames the boomers – but it’s not that simple",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/neoliberalism-is-in-retreat-viktor-shvets-blames-the-boomers-but-its-not-that-simple-285943",
-     "published": "2026-09-27T23:59:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Quiggin, Professor, School of Economics, The University of Queensland"
-    },
-    {
      "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Tina Soliman-Hunter, Professor of Energy and Natural Resources Law, Macquarie University"
-    },
-    {
-     "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/stripped-titles-compensating-rivals-how-the-manchester-city-cheating-scandal-could-play-out-292970",
-     "published": "2026-09-26T23:49:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "After five years of war, how do Ukrainian small businesses survive?",
+   "published": "2026-09-28 06:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
    "published": "2026-09-23 12:00 UTC"
@@ -693,12 +699,6 @@
    "source": "Global Voices",
    "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
    "published": "2026-09-21 13:15 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "From the streets to the ballot box: What Hungary can teach Serbia",
-   "published": "2026-09-20 06:35 UTC"
   },
   {
    "region": "Europe",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "84 cents for every $1: why Indigenous workers earn less in Australia – and what to do about it",
+   "published": "2026-09-28 05:23 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The joy of song: where songbirds came from and why we should listen to them",
+   "published": "2026-09-28 04:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What do NZ voters really care about? A global comparison reveals some surprises",
    "published": "2026-09-28 00:38 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Neoliberalism is in retreat. Viktor Shvets blames the boomers – but it’s not that simple",
-   "published": "2026-09-27 23:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
    "published": "2026-09-27 19:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
-   "published": "2026-09-26 23:49 UTC"
   },
   {
    "region": "Oceania",
