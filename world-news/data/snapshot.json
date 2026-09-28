@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-27T23:01:07Z",
+ "generatedAt": "2026-09-28T00:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Neoliberalism is in retreat. Viktor Shvets blames the boomers – but it’s not that simple",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/neoliberalism-is-in-retreat-viktor-shvets-blames-the-boomers-but-its-not-that-simple-285943",
+     "published": "2026-09-27T23:59:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Quiggin, Professor, School of Economics, The University of Queensland"
+    },
+    {
+     "title": "Your say: week beginning September 28",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-september-28-292980",
+     "published": "2026-09-27T23:26:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
+    },
+    {
      "title": "What role does high school play in mental health? Feeling connected to other students and staff is key",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,32 +471,12 @@
     {
      "title": "From ‘disgrace and pollution’ to ‘pride’: how Australians came to embrace their convict family ties",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/from-disgrace-and-pollution-to-pride-how-australians-came-to-embrace-their-convict-family-ties-290067",
      "published": "2026-09-27T19:20:53Z",
      "summary": "",
      "stale": false,
      "author": "Kristyn Harman, Professor in History, University of Tasmania"
-    },
-    {
-     "title": "How smoking makes Australians poorer – and what we can do about it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-smoking-makes-australians-poorer-and-what-we-can-do-about-it-290345",
-     "published": "2026-09-27T19:20:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Coral Gartner, Director, NHMRC Centre of Research Excellence on Achieving the Tobacco Endgame and ARC Future Fellow, The University of Queensland"
-    },
-    {
-     "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/stripped-titles-compensating-rivals-how-the-manchester-city-cheating-scandal-could-play-out-292970",
-     "published": "2026-09-26T23:49:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Neoliberalism is in retreat. Viktor Shvets blames the boomers – but it’s not that simple",
+   "published": "2026-09-27 23:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Your say: week beginning September 28",
+   "published": "2026-09-27 23:26 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What role does high school play in mental health? Feeling connected to other students and staff is key",
    "published": "2026-09-27 19:21 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "From ‘disgrace and pollution’ to ‘pride’: how Australians came to embrace their convict family ties",
    "published": "2026-09-27 19:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How smoking makes Australians poorer – and what we can do about it",
-   "published": "2026-09-27 19:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Stripped titles? Compensating rivals? How the Manchester City cheating scandal could play out",
-   "published": "2026-09-26 23:49 UTC"
   },
   {
    "region": "Oceania",
