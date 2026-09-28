@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T21:01:26Z",
+ "generatedAt": "2026-09-28T22:01:13Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ election poll watch: minor parties gain as Labour and National slide",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nz-election-poll-watch-minor-parties-gain-as-labour-and-national-slide-292993",
+     "published": "2026-09-28T21:30:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "The exhibition Rome: Empire, Power, People is a tour through our history of looking at ancient Rome",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Svitlana Chernykh, Senior Lecturer, School of Politics & International Relations, Australian National University"
-    },
-    {
-     "title": "Year 12 students might feel anxious as exams approach. Here’s what can help",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/year-12-students-might-feel-anxious-as-exams-approach-heres-what-can-help-292776",
-     "published": "2026-09-28T19:41:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Cher McGillivray, Assistant Professor in Psychology, Bond University"
     },
     {
      "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ election poll watch: minor parties gain as Labour and National slide",
+   "published": "2026-09-28 21:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The exhibition Rome: Empire, Power, People is a tour through our history of looking at ancient Rome",
    "published": "2026-09-28 19:42 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Can we predict genocide by listening to what leaders say? Research finds common threads",
    "published": "2026-09-28 19:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Year 12 students might feel anxious as exams approach. Here’s what can help",
-   "published": "2026-09-28 19:41 UTC"
   },
   {
    "region": "Oceania",
