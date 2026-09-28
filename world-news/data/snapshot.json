@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-28T17:01:19Z",
+ "generatedAt": "2026-09-28T18:01:14Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Originalism: What it is, what it isn’t and why it’s the most democratic option for the Supreme Court",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/originalism-what-it-is-what-it-isnt-and-why-its-the-most-democratic-option-for-the-supreme-court-291115",
+     "published": "2026-09-28T17:30:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Brian Fitzpatrick, Professor of Law, Vanderbilt University"
+    },
+    {
      "title": "Why fuel prices may go higher still",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Joshua Busby, Professor of Public Affairs, The University of Texas at Austin"
-    },
-    {
-     "title": "Are there toxic chemicals in your grocery store receipt?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/are-there-toxic-chemicals-in-your-grocery-store-receipt-291246",
-     "published": "2026-09-28T12:41:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sean McCann, Assistant Professor of Emergency Medicine, University of Illinois Chicago"
     },
     {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168464",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "The Security Council met Monday morning with prospects for peace in the Middle East under strain on two fronts. In the West Bank, settler violence and settlement expansion are raising fears for a two-State solution. In…",
+     "stale": false
+    },
+    {
      "title": "Saudi Arabia warns Gulf security inseparable from global stability amid regional tensions",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -285,15 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168436",
      "published": "2026-09-25T12:00:00Z",
      "summary": "Aid agencies in Yemen highlighted the growing hunger emergency sparked by renewed fighting between Houthi opposition forces and Government troops, after mobile health clinics reported that hundreds of children displaced…",
-     "stale": false
-    },
-    {
-     "title": "UNRWA work and mandate in ‘jeopardy’, Guterres warns",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168428",
-     "published": "2026-09-24T12:00:00Z",
-     "summary": "The UN Relief and Works Agency for Palestine refugees (UNRWA) continues to operate under “extraordinary pressure”, UN Secretary-General António Guterres said on Thursday.",
      "stale": false
     },
     {
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nzs-next-new-mps-face-a-brutal-learning-curve-does-it-have-to-be-that-way-292344",
+     "published": "2026-09-28T17:45:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Helena Cooper-Thomas, Professor of Organisational Behaviour, Faculty of Business, Auckland University of Technology"
+    },
+    {
+     "title": "Social media bans are an attempt to manage harm – but young people can flourish online",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/social-media-bans-are-an-attempt-to-manage-harm-but-young-people-can-flourish-online-291425",
+     "published": "2026-09-28T16:07:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Chloe S. Gordon, Senior Research Fellow, Institute for Positive Psychology and Education, Australian Catholic University"
+    },
+    {
      "title": "Larissa Waters steps down as Greens leader due to health reasons",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Abu Barkat ullah (Barkat), Associate Professor of Cyber Security, University of Canberra"
-    },
-    {
-     "title": "What do NZ voters really care about? A global comparison reveals some surprises",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/what-do-nz-voters-really-care-about-a-global-comparison-reveals-some-surprises-292760",
-     "published": "2026-09-28T00:38:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dennis Wesselbaum, Associate Professor, Department of Economics, University of Otago"
-    },
-    {
-     "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/floating-power-plants-could-offer-coastal-communities-a-reliable-energy-source-heres-how-289134",
-     "published": "2026-09-27T19:21:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tina Soliman-Hunter, Professor of Energy and Natural Resources Law, Macquarie University"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why fuel prices may go higher still",
-   "published": "2026-09-28 12:43 UTC"
+   "title": "Originalism: What it is, what it isn’t and why it’s the most democratic option for the Supreme Court",
+   "published": "2026-09-28 17:30 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Are there toxic chemicals in your grocery store receipt?",
-   "published": "2026-09-28 12:41 UTC"
+   "title": "Why fuel prices may go higher still",
+   "published": "2026-09-28 12:43 UTC"
   },
   {
    "region": "Americas",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Saudi Arabia warns Gulf security inseparable from global stability amid regional tensions",
    "published": "2026-09-26 12:00 UTC"
   },
@@ -831,12 +837,6 @@
    "source": "UN News",
    "title": "Yemen violence deepens concerns over child hunger crisis",
    "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "UNRWA work and mandate in ‘jeopardy’, Guterres warns",
-   "published": "2026-09-24 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
+   "published": "2026-09-28 17:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Social media bans are an attempt to manage harm – but young people can flourish online",
+   "published": "2026-09-28 16:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Larissa Waters steps down as Greens leader due to health reasons",
    "published": "2026-09-28 10:46 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Australia’s legacy systems were already a cyber risk. AI agents are raising the stakes",
    "published": "2026-09-28 06:18 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What do NZ voters really care about? A global comparison reveals some surprises",
-   "published": "2026-09-28 00:38 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Floating power plants could offer coastal communities a reliable energy source. Here’s how",
-   "published": "2026-09-27 19:21 UTC"
   },
   {
    "region": "Oceania",
