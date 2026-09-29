@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T19:01:24Z",
+ "generatedAt": "2026-09-29T20:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -354,6 +354,15 @@
      "author": "Civic Media Observatory"
     },
     {
+     "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168476",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "The Democratic People’s Republic of Korea (DPRK) told the UN General Assembly on Monday that its status as a nuclear-armed State was irreversible, arguing that its military capabilities were necessary to safeguard the…",
+     "stale": false
+    },
+    {
      "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -393,15 +402,6 @@
      "author": "Juliana Harsianti"
     },
     {
-     "title": "Tuvalu urges decisive global action as rising seas threaten its future",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168449",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Climate change remains the greatest existential threat to Tuvalu, Prime Minister Feleti Teo told the UN General Assembly on Friday, warning that the pace and scale of international action are still falling far short of…",
-     "stale": false
-    },
-    {
      "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
+     "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/stage-manager-is-arguably-the-most-stressful-job-in-live-performance-heres-why-291869",
+     "published": "2026-09-29T19:53:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Catherine Campbell, Lecturer, Performing Arts, Adelaide University"
+    },
+    {
+     "title": "Here are five of Australia’s top library influencers. One is a 72-year-old rare books librarian",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/here-are-five-of-australias-top-library-influencers-one-is-a-72-year-old-rare-books-librarian-291875",
+     "published": "2026-09-29T19:53:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Krystal Gagen-Spriggs, Lecturer, Charles Sturt University"
+    },
+    {
+     "title": "How sugar from outer space became one of the backbones of life on Earth",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-sugar-from-outer-space-became-one-of-the-backbones-of-life-on-earth-293089",
+     "published": "2026-09-29T19:53:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Luke Steller, Associate Researcher, Australian Centre for Astrobiology, UNSW"
+    },
+    {
+     "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/low-productivity-is-nzs-economic-elephant-in-the-room-election-pledges-mostly-avoid-it-292595",
      "published": "2026-09-29T16:52:22Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ligin Joseph, PhD Candidate, Oceanography, University of Southampton"
-    },
-    {
-     "title": "Taylor Swift: my database of her 123,553 lyrics reveals hidden patterns",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/taylor-swift-my-database-of-her-123-553-lyrics-reveals-hidden-patterns-293046",
-     "published": "2026-09-29T13:19:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Naomi Adam, Postdoctoral Research Associate, Literature, University of Liverpool"
-    },
-    {
-     "title": "RBA lifts rates to highest level in 15 years – risking a sharper slowdown of the economy",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/rba-lifts-rates-to-highest-level-in-15-years-risking-a-sharper-slowdown-of-the-economy-292779",
-     "published": "2026-09-29T06:17:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
-    },
-    {
-     "title": "OpenAI promises to ‘do better’ and ‘rebuild trust with Australians’",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/openai-promises-to-do-better-and-rebuild-trust-with-australians-292580",
-     "published": "2026-09-29T05:20:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -870,6 +870,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
    "published": "2026-09-27 22:36 UTC"
@@ -894,12 +900,6 @@
   },
   {
    "region": "Asia",
-   "source": "UN News",
-   "title": "Tuvalu urges decisive global action as rising seas threaten its future",
-   "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "Global Voices",
    "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
    "published": "2026-09-25 06:52 UTC"
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
+   "published": "2026-09-29 19:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Here are five of Australia’s top library influencers. One is a 72-year-old rare books librarian",
+   "published": "2026-09-29 19:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How sugar from outer space became one of the backbones of life on Earth",
+   "published": "2026-09-29 19:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
    "published": "2026-09-29 16:52 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "How can the same El Niño cause drought in one part of the world and floods in another?",
    "published": "2026-09-29 14:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Taylor Swift: my database of her 123,553 lyrics reveals hidden patterns",
-   "published": "2026-09-29 13:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "RBA lifts rates to highest level in 15 years – risking a sharper slowdown of the economy",
-   "published": "2026-09-29 06:17 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "OpenAI promises to ‘do better’ and ‘rebuild trust with Australians’",
-   "published": "2026-09-29 05:20 UTC"
   },
   {
    "region": "Oceania",
