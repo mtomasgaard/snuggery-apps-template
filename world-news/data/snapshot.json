@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T06:01:12Z",
+ "generatedAt": "2026-09-29T07:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Equating protest with terrorism: A narrative against dissent",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
+     "stale": false,
+     "author": "Civic Media Observatory"
+    },
+    {
      "title": "Originalism: What it is, what it isn’t and why it’s the most democratic option for the Supreme Court",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -158,16 +168,6 @@
      "summary": "Deported from the United States, Ecuador’s former “superminister” now faces grave criminal investigations and political accusations in a justice system facing questions over due process.",
      "stale": false,
      "author": "Gina Yauri"
-    },
-    {
-     "title": "The A’uwẽ-Xavante people's denunciation of megaprojects in Brazil",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/09/16/the-auwe-xavante-peoples-denunciation-of-megaprojects-in-brazil/",
-     "published": "2026-09-16T18:03:47Z",
-     "summary": "An Indigenous-led campaign denounces the impacts of a mega railway project and demands respect for territory, self-determination, and the right to live and dream.",
-     "stale": false,
-     "author": "Guest Contributor"
     }
    ]
   },
@@ -176,6 +176,16 @@
    "name": "Africa",
    "stale": false,
    "items": [
+    {
+     "title": "Johannesburg and Medellín: what South Africa can learn from Colombia about fixing a broken city",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/johannesburg-and-medellin-what-south-africa-can-learn-from-colombia-about-fixing-a-broken-city-292092",
+     "published": "2026-09-29T06:17:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ivor Chipkin, Associate lecturer, University of Pretoria"
+    },
     {
      "title": "When telcos shut down the internet, they shut down protests for the government",
      "source": "Global Voices",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Djibril Diouf, enseignant-chercheur, Université Cheikh Anta Diop de Dakar"
-    },
-    {
-     "title": "Child malnutrition is one of Africa’s biggest health challenges: food aid is only part of the solution",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/child-malnutrition-is-one-of-africas-biggest-health-challenges-food-aid-is-only-part-of-the-solution-291163",
-     "published": "2026-09-28T13:47:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gabriel Kanuti Ndimbo, Lecturer in Development Studies, University of Dar es Salaam"
     },
     {
      "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
@@ -260,6 +260,16 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Equating protest with terrorism: A narrative against dissent",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
+     "stale": false,
+     "author": "Civic Media Observatory"
+    },
     {
      "title": "When the right to protest remains, but demonstrating comes at a price",
      "source": "Global Voices",
@@ -325,16 +335,6 @@
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
      "stale": false,
      "author": "Omid Memarian"
-    },
-    {
-     "title": "As Casablanca’s music scene grows, its musicians struggle",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/09/13/as-casablancas-music-scene-grows-its-musicians-struggle/",
-     "published": "2026-09-13T12:00:57Z",
-     "summary": "As live music becomes central to Casablanca’s cultural brand, musicians remain caught between expanding opportunities and deteriorating working conditions.",
-     "stale": false,
-     "author": "Badr Sellak"
     }
    ]
   },
@@ -344,13 +344,14 @@
    "stale": false,
    "items": [
     {
-     "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168476",
-     "published": "2026-09-28T12:00:00Z",
-     "summary": "The Democratic People’s Republic of Korea (DPRK) told the UN General Assembly on Monday that its status as a nuclear-armed State was irreversible, arguing that its military capabilities were necessary to safeguard the…",
-     "stale": false
+     "title": "Equating protest with terrorism: A narrative against dissent",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
+     "stale": false,
+     "author": "Civic Media Observatory"
     },
     {
      "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
@@ -392,6 +393,15 @@
      "author": "Juliana Harsianti"
     },
     {
+     "title": "Tuvalu urges decisive global action as rising seas threaten its future",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168449",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Climate change remains the greatest existential threat to Tuvalu, Prime Minister Feleti Teo told the UN General Assembly on Friday, warning that the pace and scale of international action are still falling far short of…",
+     "stale": false
+    },
+    {
      "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -410,16 +420,6 @@
      "summary": "Bangladesh’s 2024 uprising toppled a government, but two years later, reforms to police, judiciary, cyber laws, and state institutions remain contested, incomplete, and debated, leaving citizens asking whether real…",
      "stale": false,
      "author": "Rezwan"
-    },
-    {
-     "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/22/technology-facilitated-trafficking-how-bangladeshi-migrants-become-victims-of-recruitment-in-cambodia/",
-     "published": "2026-09-22T08:12:06Z",
-     "summary": "Thousands of Bangladeshis travelled to Cambodia for promised jobs, only to encounter Technology-facilitated trafficking and cyber-scamming networks, with 98 percent reportedly failing to receive the work they were…",
-     "stale": false,
-     "author": "Zulker Naeen"
     }
    ]
   },
@@ -428,6 +428,16 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "RBA lifts rates to highest level in 15 years – risking a sharper slowdown of the economy",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/rba-lifts-rates-to-highest-level-in-15-years-risking-a-sharper-slowdown-of-the-economy-292779",
+     "published": "2026-09-29T06:17:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
+    },
     {
      "title": "OpenAI promises to ‘do better’ and ‘rebuild trust with Australians’",
      "source": "The Conversation",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Cameron Parsell, Professor, School of Social Science, The University of Queensland"
-    },
-    {
-     "title": "One in eight cancers are likely caused by an infection worldwide – new study",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/one-in-eight-cancers-are-likely-caused-by-an-infection-worldwide-new-study-292996",
-     "published": "2026-09-29T02:50:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "John (Eddie) La Marca, Senior Research Officer, Blood Cells and Blood Cancer, WEHI (Walter and Eliza Hall Institute of Medical Research)"
     },
     {
      "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Equating protest with terrorism: A narrative against dissent",
+   "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Originalism: What it is, what it isn’t and why it’s the most democratic option for the Supreme Court",
    "published": "2026-09-28 17:30 UTC"
@@ -761,10 +767,10 @@
    "published": "2026-09-18 02:00 UTC"
   },
   {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "The A’uwẽ-Xavante people's denunciation of megaprojects in Brazil",
-   "published": "2026-09-16 18:03 UTC"
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Johannesburg and Medellín: what South Africa can learn from Colombia about fixing a broken city",
+   "published": "2026-09-29 06:17 UTC"
   },
   {
    "region": "Africa",
@@ -776,12 +782,6 @@
    "region": "Africa",
    "source": "The Conversation",
    "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
-   "published": "2026-09-28 13:47 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Child malnutrition is one of Africa’s biggest health challenges: food aid is only part of the solution",
    "published": "2026-09-28 13:47 UTC"
   },
   {
@@ -813,6 +813,12 @@
    "source": "Global Voices",
    "title": "How Togolese people are reinventing political protest amid civil society crackdown",
    "published": "2026-09-18 20:34 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Equating protest with terrorism: A narrative against dissent",
+   "published": "2026-09-29 00:00 UTC"
   },
   {
    "region": "Middle East",
@@ -857,16 +863,10 @@
    "published": "2026-09-19 08:01 UTC"
   },
   {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "As Casablanca’s music scene grows, its musicians struggle",
-   "published": "2026-09-13 12:00 UTC"
-  },
-  {
    "region": "Asia",
-   "source": "UN News",
-   "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
-   "published": "2026-09-28 12:00 UTC"
+   "source": "Global Voices",
+   "title": "Equating protest with terrorism: A narrative against dissent",
+   "published": "2026-09-29 00:00 UTC"
   },
   {
    "region": "Asia",
@@ -894,6 +894,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Tuvalu urges decisive global action as rising seas threaten its future",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
    "published": "2026-09-25 06:52 UTC"
@@ -905,10 +911,10 @@
    "published": "2026-09-24 10:41 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Technology-facilitated trafficking: How Bangladeshi migrants become victims of recruitment in Cambodia",
-   "published": "2026-09-22 08:12 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "RBA lifts rates to highest level in 15 years – risking a sharper slowdown of the economy",
+   "published": "2026-09-29 06:17 UTC"
   },
   {
    "region": "Oceania",
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Five reasons why Victoria’s new proactive homelessness plan is worth trying",
    "published": "2026-09-29 03:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "One in eight cancers are likely caused by an infection worldwide – new study",
-   "published": "2026-09-29 02:50 UTC"
   },
   {
    "region": "Oceania",
