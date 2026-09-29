@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T04:01:18Z",
+ "generatedAt": "2026-09-29T05:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Five reasons why Victoria’s new proactive homelessness plan is worth trying",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/five-reasons-why-victorias-new-proactive-homelessness-plan-is-worth-trying-293092",
+     "published": "2026-09-29T03:42:36Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cameron Parsell, Professor, School of Social Science, The University of Queensland"
+    },
+    {
      "title": "One in eight cancers are likely caused by an infection worldwide – new study",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Privatised aid failed the people of Gaza. The world should learn not to repeat it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/privatised-aid-failed-the-people-of-gaza-the-world-should-learn-not-to-repeat-it-291155",
-     "published": "2026-09-29T01:31:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shannon Bosch, Associate Professor (Law), Edith Cowan University"
     },
     {
      "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Five reasons why Victoria’s new proactive homelessness plan is worth trying",
+   "published": "2026-09-29 03:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "One in eight cancers are likely caused by an infection worldwide – new study",
    "published": "2026-09-29 02:50 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Victorian DemosAU poll has Coalition’s two-party lead narrowing, but they remain ahead",
    "published": "2026-09-29 01:50 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Privatised aid failed the people of Gaza. The world should learn not to repeat it",
-   "published": "2026-09-29 01:31 UTC"
   },
   {
    "region": "Oceania",
