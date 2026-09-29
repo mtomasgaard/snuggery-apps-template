@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "racers": [
+    { "id": "pip",   "name": "Pip Marlow",  "body": "#F28C28", "trim": "#FFF1D6", "line": "A bike courier who has never once touched the brakes.",
+      "face": { "skin": "#E9B48A", "hair": "#2B1B12", "style": "fringe", "expression": "grin" },
+      "ai": { "lane": -0.15, "skill": 1.00, "drift": 0.70, "aggression": 0.60, "awareness": 0.70 } },
+    { "id": "juno",  "name": "Juno Vale",   "body": "#17A3A0", "trim": "#E8F6F5", "line": "A lighthouse keeper: patient, precise, always on the clean line.",
+      "face": { "skin": "#8D5A3B", "hair": "#1A1A1A", "style": "bun", "expression": "calm" },
+      "ai": { "lane": 0.00, "skill": 1.02, "drift": 0.50, "aggression": 0.30, "awareness": 0.90 } },
+    { "id": "otto",  "name": "Otto Brisk",  "body": "#7D3C98", "trim": "#F0D9F7", "line": "A retired bus driver, unhurried and impossible to shove.",
+      "face": { "skin": "#F1C8A8", "hair": "#D8D8D8", "style": "bald", "expression": "flat" },
+      "ai": { "lane": 0.25, "skill": 0.97, "drift": 0.30, "aggression": 0.40, "awareness": 0.80 } },
+    { "id": "wren",  "name": "Wren Tully",  "body": "#D9A21B", "trim": "#3B2F1E", "line": "A teenage inventor who drifts every bend, needed or not.",
+      "face": { "skin": "#F3D0B0", "hair": "#C8552B", "style": "goggles", "expression": "whee" },
+      "ai": { "lane": -0.30, "skill": 0.99, "drift": 0.90, "aggression": 0.50, "awareness": 0.60 } },
+    { "id": "soren", "name": "Soren Hale",  "body": "#4A6FA5", "trim": "#DDE6F3", "line": "A ferry pilot who takes the wide line and waves as you pass.",
+      "face": { "skin": "#C68A62", "hair": "#3A2A1E", "style": "cap", "expression": "smile" },
+      "ai": { "lane": 0.30, "skill": 0.98, "drift": 0.40, "aggression": 0.30, "awareness": 0.80 } },
+    { "id": "mabel", "name": "Mabel Quist", "body": "#E0607E", "trim": "#FFE3EA", "line": "A knitting champion who drops yarn with real glee.",
+      "face": { "skin": "#F6D5C0", "hair": "#9A9AA5", "style": "curls", "expression": "smirk" },
+      "ai": { "lane": -0.05, "skill": 1.00, "drift": 0.60, "aggression": 0.90, "awareness": 0.70 } },
+    { "id": "tuck",  "name": "Tuck Rowan",  "body": "#5B8C3A", "trim": "#EAF2DF", "line": "A gardener who takes every patch of grass personally.",
+      "face": { "skin": "#B77B55", "hair": "#5A3A1C", "style": "sunhat", "expression": "bigsmile" },
+      "ai": { "lane": 0.12, "skill": 0.99, "drift": 0.50, "aggression": 0.50, "awareness": 0.75 } },
+    { "id": "ines",  "name": "Ines Carvo",  "body": "#3A3F47", "trim": "#F2EBDD", "line": "A night-shift nurse: calm, exact, fastest on the final lap.",
+      "face": { "skin": "#6E452C", "hair": "#111111", "style": "crop", "expression": "focused" },
+      "ai": { "lane": -0.22, "skill": 1.01, "finalLapSkill": 0.01, "drift": 0.60, "aggression": 0.45, "awareness": 0.85 } }
+  ]
+}

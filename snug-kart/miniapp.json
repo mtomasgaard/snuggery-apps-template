@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Snug Kart",
+  "entryPoint": "index.html",
+  "description": "An original kart racer for your phone: eight racers, three tracks, drifting and household items, all offline.",
+  "version": "1.0"
+}

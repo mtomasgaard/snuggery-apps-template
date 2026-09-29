@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "tracks": [
+    {
+      "id": "harbour",
+      "name": "Harbour Loop",
+      "blurb": "Flat and friendly, with one tight gate.",
+      "verge": 4,
+      "points": [
+        [0,0,0,18,0], [120,0,0,18,0], [185,-20,0,18,5], [205,-80,0,17,6], [180,-140,1,16,4],
+        [120,-160,3,15,0], [60,-160,4,15,0], [0,-160,1,15,0], [-50,-190,0,13,0], [-100,-170,0,13,0],
+        [-150,-190,0,16,3], [-200,-150,0,18,8], [-190,-90,0,18,8], [-140,-70,0,17,2], [-110,-30,0,18,0],
+        [-70,0,0,18,0]
+      ],
+      "parcels": [70, 80, 450, 800],
+      "sections": [],
+      "ground": "harbour",
+      "palette": {
+        "skyTop": "#6FB3E0", "skyHorizon": "#E9F2F5", "fog": "#E9F2F5", "fogNear": 60, "fogFar": 260,
+        "asphalt": "#5A5E66", "verge": "#E3D3A6", "ground": "#E3D3A6", "stone": "#B8B2A7", "water": "#2E6F95",
+        "wall": "#D9D3C7", "accent": "#2E6F95",
+        "houses": ["#F2C6A0", "#A8D5BA", "#F6E3A1", "#C9D7F2", "#E7B7C8"], "roof": "#B5543C",
+        "sun": "#FFF4E0", "hemiSky": "#DDEBF5", "hemiGround": "#C8B88E"
+      },
+      "props": { "houses": 60, "lampEvery": 24, "bollardEvery": 6, "boats": 8, "crates": 14 }
+    },
+    {
+      "id": "pinewood",
+      "name": "Pinewood Pass",
+      "blurb": "Climb to the summit hairpins, then a long fast descent.",
+      "verge": 4,
+      "points": [
+        [0,0,0,18,0], [110,0,0,18,0], [180,-30,3,17,6], [210,-100,8,16,8], [190,-170,13,15,10],
+        [130,-200,17,14,4], [60,-190,20,12,0], [0,-210,22,11,0], [-50,-250,24,12,6], [-40,-310,26,14,14],
+        [-100,-330,26,15,14], [-140,-290,24,16,8], [-150,-220,19,20,4], [-160,-140,12,22,4],
+        [-200,-80,7,20,8], [-170,-20,3,18,6], [-100,10,0,18,0]
+      ],
+      "parcels": [60, 70, 440, 900],
+      "sections": [ { "from": 480, "to": 609, "kind": "rockcut", "verge": 1.5 } ],
+      "ground": "terrain",
+      "palette": {
+        "skyTop": "#5B7FA8", "skyHorizon": "#F4B97A", "fog": "#E8B98E", "fogNear": 50, "fogFar": 240,
+        "asphalt": "#54565C", "verge": "#6B5A3C", "ground": "#6E8F4E", "rock": "#8A8D91", "snow": "#F2F4F5",
+        "stone": "#8A8D91", "wall": "#9A8F80", "accent": "#C8552B",
+        "pines": ["#2F5D3A", "#3F7A4A"], "timber": "#8A5A34", "roof": "#5A3A24",
+        "sun": "#FFD9B0", "hemiSky": "#C9D6E8", "hemiGround": "#6A5A40"
+      },
+      "props": { "pines": 700, "rocks": 120 }
+    },
+    {
+      "id": "lantern",
+      "name": "Lantern Night",
+      "blurb": "Fast banked sweepers, and a bridge over your own start.",
+      "verge": 4,
+      "points": [
+        [-60,60,0,15,0], [0,0,0,15,0], [60,-60,0,15,0], [130,-100,1,16,8], [200,-80,2,17,10],
+        [230,-10,3,16,10], [200,60,5,16,8], [130,90,7,15,4], [60,60,8.5,14,0], [0,0,9,14,0],
+        [-60,-60,8.5,14,0], [-130,-100,7,16,6], [-210,-90,5,18,10], [-250,-20,3,18,12],
+        [-220,60,1.5,17,8], [-150,90,0.5,16,4]
+      ],
+      "parcels": [60, 70, 520, 1000],
+      "sections": [ { "from": 640, "to": 810, "kind": "bridge", "verge": 0 } ],
+      "ground": "lantern",
+      "palette": {
+        "skyTop": "#0E1433", "skyHorizon": "#26305E", "fog": "#1B2248", "fogNear": 40, "fogFar": 220,
+        "asphalt": "#3A3D4A", "verge": "#2C4A3E", "ground": "#2C4A3E", "stone": "#5A5E73", "water": "#141C3A",
+        "wall": "#5A5E73", "accent": "#FF7A59",
+        "lanterns": ["#FFB347", "#FF7A59", "#FFD27A"], "windows": "#FFD9A0", "trees": "#1F4E4A",
+        "sun": "#8FA2D8", "hemiSky": "#6A7BB8", "hemiGround": "#141A33", "night": true
+      },
+      "props": { "lanternEvery": 18, "strings": 6, "buildings": 70, "trees": 160 }
+    }
+  ]
+}
