@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T17:01:27Z",
+ "generatedAt": "2026-09-29T18:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/low-productivity-is-nzs-economic-elephant-in-the-room-election-pledges-mostly-avoid-it-292595",
+     "published": "2026-09-29T16:52:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dennis Wesselbaum, Associate Professor, Department of Economics, University of Otago"
+    },
+    {
+     "title": "How can the same El Niño cause drought in one part of the world and floods in another?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/how-can-the-same-el-nino-cause-drought-in-one-part-of-the-world-and-floods-in-another-293013",
+     "published": "2026-09-29T14:53:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ligin Joseph, PhD Candidate, Oceanography, University of Southampton"
+    },
+    {
+     "title": "Taylor Swift: my database of her 123,553 lyrics reveals hidden patterns",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/taylor-swift-my-database-of-her-123-553-lyrics-reveals-hidden-patterns-293046",
+     "published": "2026-09-29T13:19:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Naomi Adam, Postdoctoral Research Associate, Literature, University of Liverpool"
+    },
+    {
      "title": "RBA lifts rates to highest level in 15 years – risking a sharper slowdown of the economy",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Five reasons why Victoria’s new proactive homelessness plan is worth trying",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/five-reasons-why-victorias-new-proactive-homelessness-plan-is-worth-trying-293092",
-     "published": "2026-09-29T03:42:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Cameron Parsell, Professor, School of Social Science, The University of Queensland"
-    },
-    {
-     "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/exercise-before-surgery-improves-outcomes-and-shortens-recovery-time-new-research-292597",
-     "published": "2026-09-29T00:10:52Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kari Clifford, Senior Research Fellow in Surgical Science, University of Otago"
-    },
-    {
-     "title": "NZ election poll watch: minor parties gain as Labour and National slide",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-election-poll-watch-minor-parties-gain-as-labour-and-national-slide-292993",
-     "published": "2026-09-28T21:30:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
+   "published": "2026-09-29 16:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How can the same El Niño cause drought in one part of the world and floods in another?",
+   "published": "2026-09-29 14:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Taylor Swift: my database of her 123,553 lyrics reveals hidden patterns",
+   "published": "2026-09-29 13:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "RBA lifts rates to highest level in 15 years – risking a sharper slowdown of the economy",
    "published": "2026-09-29 06:17 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "OpenAI promises to ‘do better’ and ‘rebuild trust with Australians’",
    "published": "2026-09-29 05:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Five reasons why Victoria’s new proactive homelessness plan is worth trying",
-   "published": "2026-09-29 03:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
-   "published": "2026-09-29 00:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ election poll watch: minor parties gain as Labour and National slide",
-   "published": "2026-09-28 21:30 UTC"
   },
   {
    "region": "Oceania",
