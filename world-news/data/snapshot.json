@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T09:01:14Z",
+ "generatedAt": "2026-09-29T10:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -177,14 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Johannesburg and Medellín: what South Africa can learn from Colombia about fixing a broken city",
+     "title": "Certification des minerais dans la région des Grands Lacs : remède ou placebo ?",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/johannesburg-and-medellin-what-south-africa-can-learn-from-colombia-about-fixing-a-broken-city-292092",
-     "published": "2026-09-29T06:17:12Z",
+     "link": "https://theconversation.com/certification-des-minerais-dans-la-region-des-grands-lacs-remede-ou-placebo-292470",
+     "published": "2026-09-29T09:48:25Z",
      "summary": "",
      "stale": false,
-     "author": "Ivor Chipkin, Associate lecturer, University of Pretoria"
+     "author": "Thierry Vircoulon, Chercheur associé au Centre Afrique de l'Institut Français des Relations Internationales, membre du Groupe de Recherche sur l'Eugénisme et…"
+    },
+    {
+     "title": "Ethiopia’s peace deal is unravelling – what went wrong with the Tigray agreement",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/ethiopias-peace-deal-is-unravelling-what-went-wrong-with-the-tigray-agreement-293005",
+     "published": "2026-09-29T08:37:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alemayehu Fentaw Weldemariam, Ph.D. Fellow, Center for Constitutional Democracy, Indiana University"
     },
     {
      "title": "When telcos shut down the internet, they shut down protests for the government",
@@ -195,16 +205,6 @@
      "summary": "Room to protest is narrowing in Africa, as governments lean on arrests, curfews, and internet blackouts to blunt dissent. When the streets become too dangerous, dissent often migrates online.",
      "stale": false,
      "author": "Ranking Digital Rights"
-    },
-    {
-     "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/senegals-youth-olympics-legacy-who-pays-after-the-games-292703",
-     "published": "2026-09-28T13:47:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Djibril Diouf, enseignant-chercheur, Université Cheikh Anta Diop de Dakar"
     },
     {
      "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
@@ -354,6 +354,15 @@
      "author": "Civic Media Observatory"
     },
     {
+     "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168476",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "The Democratic People’s Republic of Korea (DPRK) told the UN General Assembly on Monday that its status as a nuclear-armed State was irreversible, arguing that its military capabilities were necessary to safeguard the…",
+     "stale": false
+    },
+    {
      "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -391,15 +400,6 @@
      "summary": "The growth of online activism has given different colors in the movement agendas. There is a debate on how effective it is, and how it could complement each other.",
      "stale": false,
      "author": "Juliana Harsianti"
-    },
-    {
-     "title": "Tuvalu urges decisive global action as rising seas threaten its future",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168449",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Climate change remains the greatest existential threat to Tuvalu, Prime Minister Feleti Teo told the UN General Assembly on Friday, warning that the pace and scale of international action are still falling far short of…",
-     "stale": false
     },
     {
      "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
@@ -769,20 +769,20 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Johannesburg and Medellín: what South Africa can learn from Colombia about fixing a broken city",
-   "published": "2026-09-29 06:17 UTC"
+   "title": "Certification des minerais dans la région des Grands Lacs : remède ou placebo ?",
+   "published": "2026-09-29 09:48 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Ethiopia’s peace deal is unravelling – what went wrong with the Tigray agreement",
+   "published": "2026-09-29 08:37 UTC"
   },
   {
    "region": "Africa",
    "source": "Global Voices",
    "title": "When telcos shut down the internet, they shut down protests for the government",
    "published": "2026-09-28 18:11 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Senegal’s Youth Olympics legacy: who pays after the Games?",
-   "published": "2026-09-28 13:47 UTC"
   },
   {
    "region": "Africa",
@@ -870,6 +870,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
    "published": "2026-09-27 22:36 UTC"
@@ -891,12 +897,6 @@
    "source": "Global Voices",
    "title": "Movement from behind your gadget",
    "published": "2026-09-25 18:58 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Tuvalu urges decisive global action as rising seas threaten its future",
-   "published": "2026-09-25 12:00 UTC"
   },
   {
    "region": "Asia",
