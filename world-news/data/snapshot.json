@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T21:01:21Z",
+ "generatedAt": "2026-09-29T22:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The ‘War Games’ problem: Computer science has long understood what it takes to keep AI under control",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/the-war-games-problem-computer-science-has-long-understood-what-it-takes-to-keep-ai-under-control-292884",
+     "published": "2026-09-29T21:11:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Deven Desai, Professor of Business Law and Ethics; Associate Director for Law, Policy, and Ethics at the Machine Learning Center, Georgia Institute of…"
+    },
+    {
      "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Sven Bilén, Professor of Engineering Design, Electrical Engineering and Aerospace Engineering, Penn State"
-    },
-    {
-     "title": "Ethiopia is sliding back toward war – a look at what is driving the fighting and why it matters",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/ethiopia-is-sliding-back-toward-war-a-look-at-what-is-driving-the-fighting-and-why-it-matters-293073",
-     "published": "2026-09-29T17:59:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alemayehu Fentaw Weldemariam, Ph.D. Fellow, Center for Constitutional Democracy, Indiana University"
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Government takes early action to protect ‘legacy’ technology systems against AI breaches",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/government-takes-early-action-to-protect-legacy-technology-systems-against-ai-breaches-292583",
+     "published": "2026-09-29T21:12:36Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Krystal Gagen-Spriggs, Lecturer, Charles Sturt University"
-    },
-    {
-     "title": "How sugar from outer space became one of the backbones of life on Earth",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-sugar-from-outer-space-became-one-of-the-backbones-of-life-on-earth-293089",
-     "published": "2026-09-29T19:53:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Luke Steller, Associate Researcher, Australian Centre for Astrobiology, UNSW"
     },
     {
      "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
-   "published": "2026-09-29 20:20 UTC"
+   "title": "The ‘War Games’ problem: Computer science has long understood what it takes to keep AI under control",
+   "published": "2026-09-29 21:11 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Ethiopia is sliding back toward war – a look at what is driving the fighting and why it matters",
-   "published": "2026-09-29 17:59 UTC"
+   "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
+   "published": "2026-09-29 20:20 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Government takes early action to protect ‘legacy’ technology systems against AI breaches",
+   "published": "2026-09-29 21:12 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
    "published": "2026-09-29 19:53 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Here are five of Australia’s top library influencers. One is a 72-year-old rare books librarian",
-   "published": "2026-09-29 19:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How sugar from outer space became one of the backbones of life on Earth",
    "published": "2026-09-29 19:53 UTC"
   },
   {
