@@ -52,6 +52,10 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   adaptations described in besseggen/CREDITS.txt. besseggen/vendor/ is three.js
   under the MIT licence and besseggen/fonts/ are Atkinson Hyperlegible and
   Newsreader under the SIL Open Font License 1.1 (besseggen/fonts/OFL.txt).
+- snug-kart/vendor/ is three.js under the MIT licence
+  (snug-kart/vendor/three-LICENSE.txt). Everything else in snug-kart/ — the
+  karts, the faces, the tracks, the props and the sounds — is generated in code
+  and shares the licence above.
 - The wind and weather fields under global-wind/data/ and global-weather/data/
   are NOAA Global Forecast System output, a work of the United States government
   in the public domain. The coastlines in both apps' assets/world.json are

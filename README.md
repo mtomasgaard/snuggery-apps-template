@@ -24,7 +24,7 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Fourteen complete apps. All are examples — none holds anybody's real data. Copy
+Fifteen complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
 **Five of them cost you nothing to run.** Hello Live, World News, Power Hours,
@@ -76,6 +76,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
 | World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 0.7 MB | nothing (GOGET by hand) |
+| Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.5 MB | nothing |
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
 Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
@@ -159,6 +160,12 @@ Every country's oil and gas production from 1900 to the latest Energy Institute 
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) · Set it up: [`world-oil-gas/PROMPT.md`](world-oil-gas/PROMPT.md) · Make it yours: [`world-oil-gas/NOTES.md`](world-oil-gas/NOTES.md) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 
+### Snug Kart
+
+An original arcade kart racer for a phone held upright: eight racers from an imaginary seaside-and-mountain town, three tracks (a flat harbour loop, a 26 m climb through banked sweepers to summit hairpins, a figure of eight at night that crosses its own start straight), three laps against seven rubber-banded rivals that drift, pass and use items. Throttle is automatic; one thumb steers, the other drifts and throws household items — a kettle, a quilt, a yarn snare, a paper plane, a honey puddle. Every kart, face, track, tree, lantern and sound is generated in code at start-up; the only third-party code is three.js. Sound and tilt steering are off until you switch them on. **Static**, 0.5 MB.
+
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) · Make it yours: [`snug-kart/NOTES.md`](snug-kart/NOTES.md) · The design it was built from: [`snug-kart/DESIGN.md`](snug-kart/DESIGN.md)
+
 ### Milky Way
 
 The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.9 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
@@ -179,6 +186,7 @@ The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D
 ![Milky Way](milky-way/screenshots/app.png)
 ![Shelf Atlas](shelf-atlas/screenshots/app.png)
 ![World Oil & Gas](world-oil-gas/screenshots/app.png)
+![Snug Kart](snug-kart/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in `.github/workflows/`
 and its scripts in `scripts/`, where it has them. Then take out its row, entry
@@ -215,6 +223,7 @@ same app from the same folder, and it shows the data last published here. Open t
 | Norne Reservoir | [**Open Norne Reservoir**](https://mtomasgaard.github.io/snuggery-apps-template/norne-reservoir/) |
 | Shelf Atlas | [**Open Shelf Atlas**](https://mtomasgaard.github.io/snuggery-apps-template/shelf-atlas/) |
 | World Oil & Gas | [**Open World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/world-oil-gas/) |
+| Snug Kart | [**Open Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/snug-kart/) |
 
 The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
 has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)
