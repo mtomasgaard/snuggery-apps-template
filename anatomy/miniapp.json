@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Anatomy",
   "entryPoint": "index.html",
-  "description": "A full human body in 3D: 934 real anatomical models in layers you can peel, fade, isolate and explode.",
-  "version": "2.0"
+  "description": "Two human bodies in 3D, male and female: about 2,700 real anatomical models in layers you can peel, fade, isolate and explode, down to the vessels of the hands, feet and brain.",
+  "version": "3.0"
 }
