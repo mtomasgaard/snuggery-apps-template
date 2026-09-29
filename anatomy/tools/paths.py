@@ -5,6 +5,7 @@ APP = os.path.dirname(TOOLS)
 DATA = os.environ.get('OUT_DATA', os.path.join(APP, 'data'))
 WORK = os.environ.get('WORK_DIR', os.path.join(TOOLS, '.work'))
 STL = os.environ.get('BP3D_STL_DIR', os.path.join(TOOLS, '.cache', 'stl'))
+ATLAS = os.environ.get('ATLAS_DIR', os.path.join(TOOLS, '.cache', 'human-atlas'))
 SOURCE = os.path.join(TOOLS, 'source')
-for d in (DATA, WORK, STL):
+for d in (DATA, WORK, STL, ATLAS):
     os.makedirs(d, exist_ok=True)
