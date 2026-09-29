@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T01:01:16Z",
+ "generatedAt": "2026-09-29T02:01:09Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
+     "title": "Privatised aid failed the people of Gaza. The world should learn not to repeat it",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/privatised-aid-failed-the-people-of-gaza-the-world-should-learn-not-to-repeat-it-291155",
+     "published": "2026-09-29T01:31:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shannon Bosch, Associate Professor (Law), Edith Cowan University"
+    },
+    {
+     "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/exercise-before-surgery-improves-outcomes-and-shortens-recovery-time-new-research-292597",
      "published": "2026-09-29T00:10:52Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-next-new-mps-face-a-brutal-learning-curve-does-it-have-to-be-that-way-292344",
-     "published": "2026-09-28T17:45:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Helena Cooper-Thomas, Professor of Organisational Behaviour, Faculty of Business, Auckland University of Technology"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Privatised aid failed the people of Gaza. The world should learn not to repeat it",
+   "published": "2026-09-29 01:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
    "published": "2026-09-29 00:10 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "NZ election poll watch: minor parties gain as Labour and National slide",
    "published": "2026-09-28 21:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
-   "published": "2026-09-28 17:45 UTC"
   },
   {
    "region": "Oceania",
