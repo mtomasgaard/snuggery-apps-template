@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T13:01:26Z",
+ "generatedAt": "2026-09-29T14:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Chatbots as oracles: How AI is giving new life to the ancient practice of seeking answers from inscrutable sources",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/chatbots-as-oracles-how-ai-is-giving-new-life-to-the-ancient-practice-of-seeking-answers-from-inscrutable-sources-289279",
+     "published": "2026-09-29T12:45:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Webb Keane, George Herbert Mead Distinguished University Professor of Anthropology, University of Michigan"
+    },
+    {
+     "title": "Oil and gas industry expected surplus – but war brought shortage instead",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/oil-and-gas-industry-expected-surplus-but-war-brought-shortage-instead-292406",
+     "published": "2026-09-29T12:45:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Patrick Schoeneman Jr., Assistant Professor of International Political Economics, Oklahoma State University"
+    },
+    {
      "title": "Equating protest with terrorism: A narrative against dissent",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -101,26 +121,6 @@
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
      "stale": false,
      "author": "Civic Media Observatory"
-    },
-    {
-     "title": "Originalism: What it is, what it isn’t and why it’s the most democratic option for the Supreme Court",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/originalism-what-it-is-what-it-isnt-and-why-its-the-most-democratic-option-for-the-supreme-court-291115",
-     "published": "2026-09-28T17:30:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Brian Fitzpatrick, Professor of Law, Vanderbilt University"
-    },
-    {
-     "title": "Why fuel prices may go higher still",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-fuel-prices-may-go-higher-still-292853",
-     "published": "2026-09-28T12:43:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Joshua Busby, Professor of Public Affairs, The University of Texas at Austin"
     },
     {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168481",
+     "published": "2026-09-29T12:00:00Z",
+     "summary": "In the Democratic Republic of the Congo (DRC), health workers fighting the country’s largest-ever Ebola outbreak are struggling to overcome critical challenges to patient care, the UN World Health Organization (WHO)…",
+     "stale": false
+    },
+    {
      "title": "Certification des minerais dans la région des Grands Lacs : remède ou placebo ?",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -225,15 +234,6 @@
      "stale": false
     },
     {
-     "title": "DR Congo Ebola emergency: Calls grow for urgent humanitarian access",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168465",
-     "published": "2026-09-28T12:00:00Z",
-     "summary": "Aid teams trying to keep deadly Ebola disease from spreading in the Democratic Republic of the Congo (DRC) are increasingly concerned about ongoing fighting and violence that has forced thousands of people to flee a…",
-     "stale": false
-    },
-    {
      "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Yemen escalation fuels fears of further cholera, measles spread",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168480",
+     "published": "2026-09-29T12:00:00Z",
+     "summary": "Heavy fighting in Yemen is fuelling concerns of an uptick in cholera, measles and other preventable diseases, as overcrowding at displacement sites threatens to overwhelm the limited healthcare services still open.",
+     "stale": false
+    },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
      "source": "Global Voices",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168444",
      "published": "2026-09-25T12:00:00Z",
      "summary": "Lebanon’s Prime Minister, Nawaf Salam, has stressed that decisions over war and peace, and control of weapons, must rest solely with the State and its constitutional institutions.",
-     "stale": false
-    },
-    {
-     "title": "Yemen violence deepens concerns over child hunger crisis",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168436",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Aid agencies in Yemen highlighted the growing hunger emergency sparked by renewed fighting between Houthi opposition forces and Government troops, after mobile health clinics reported that hundreds of children displaced…",
      "stale": false
     },
     {
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Chatbots as oracles: How AI is giving new life to the ancient practice of seeking answers from inscrutable sources",
+   "published": "2026-09-29 12:45 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Oil and gas industry expected surplus – but war brought shortage instead",
+   "published": "2026-09-29 12:45 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Equating protest with terrorism: A narrative against dissent",
    "published": "2026-09-29 00:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Originalism: What it is, what it isn’t and why it’s the most democratic option for the Supreme Court",
-   "published": "2026-09-28 17:30 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Why fuel prices may go higher still",
-   "published": "2026-09-28 12:43 UTC"
   },
   {
    "region": "Americas",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
+   "published": "2026-09-29 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Certification des minerais dans la région des Grands Lacs : remède ou placebo ?",
    "published": "2026-09-29 09:48 UTC"
@@ -798,12 +804,6 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo Ebola emergency: Calls grow for urgent humanitarian access",
-   "published": "2026-09-28 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
    "published": "2026-09-27 08:20 UTC"
@@ -813,6 +813,12 @@
    "source": "Global Voices",
    "title": "How Togolese people are reinventing political protest amid civil society crackdown",
    "published": "2026-09-18 20:34 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Yemen escalation fuels fears of further cholera, measles spread",
+   "published": "2026-09-29 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -842,12 +848,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "‘No one speaks on behalf of Lebanon’: PM Salam asserts State authority at UN",
-   "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen violence deepens concerns over child hunger crisis",
    "published": "2026-09-25 12:00 UTC"
   },
   {
