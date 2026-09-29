@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Anatomy",
   "entryPoint": "index.html",
-  "description": "Two human bodies in 3D, male and female: about 2,900 real anatomical models in layers you can peel, fade, isolate and explode, down to the vessels of the hands and feet, the parts of the eye and each cusp of the heart valves.",
-  "version": "3.1"
+  "description": "A full human body in 3D: about 1,750 real anatomical models in layers you can peel, fade, isolate and explode, down to the vessels of the hands and feet, the parts of the eye and each cusp of the heart valves.",
+  "version": "3.2"
 }

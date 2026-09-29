@@ -33,20 +33,12 @@ const SPREAD = {
   G: new THREE.Vector3(1.7, 0.8, 1.1),
   P: new THREE.Vector3(1.05, 1.05, 1.05),
 };
-// Two reference bodies, each with its own data folder. Keys that name structures (hidden, isolate,
-// layer modes, camera) are stored per body; the explode setting and view preferences are shared.
-const BODIES = { male: { root: 'data/', name: 'Male', hint: 'Search: femur, liver, biceps, C5, tooth 36' },
-                 female: { root: 'data/female/', name: 'Female', hint: 'Search: femur, uterus, retina, C5, gluteus' } };
-let body = store.get('body', 'male');
-if (!BODIES[body]) body = 'male';
-const bkey = k => body === 'male' ? k : `${body}:${k}`;
-const bstore = { get: (k, d) => store.get(bkey(k), d), set: (k, v) => store.set(bkey(k), v) };
 const S = {
   explode: store.get('explode', 0),
   level: store.get('level', 'bones'),
-  layers: bstore.get('layerModes', {}),   // layer id -> 'on' | 'fade' | 'off'
-  hidden: new Set(bstore.get('hidden', [])),
-  isolate: bstore.get('isolate', null),
+  layers: store.get('layerModes', {}),   // layer id -> 'on' | 'fade' | 'off'
+  hidden: new Set(store.get('hidden', [])),
+  isolate: store.get('isolate', null),
   ghost: store.get('ghost', false),
   sel: null,
 };
@@ -59,7 +51,7 @@ const LAYER_DEFAULT = { skin: 'fade' };
 const CORE = ['bone', 'tooth'];   // never peeled
 const mode = l => S.layers[l] || LAYER_DEFAULT[l] || 'on';
 const layerFactor = {};
-let prevMode = bstore.get('layerPrev', {});
+const prevMode = store.get('layerPrev', {});
 let stepping = null;
 let layersById = new Map();
 const parts = new Map();          // id -> { meta, mesh, dR, dG, dP }
@@ -101,7 +93,7 @@ controls.screenSpacePanning = true;
 let needsRender = true;
 const requestRender = () => { needsRender = true; };
 controls.addEventListener('change', requestRender);
-controls.addEventListener('end', () => bstore.set('camera', { p: camera.position.toArray(), t: controls.target.toArray() }));
+controls.addEventListener('end', () => store.set('camera', { p: camera.position.toArray(), t: controls.target.toArray() }));
 
 function resize() {
   const w = canvas.clientWidth, hgt = canvas.clientHeight;
@@ -191,25 +183,11 @@ const materialFor = layer => new THREE.MeshStandardMaterial({
   side: layer === 'bone' || layer === 'tooth' ? THREE.FrontSide : THREE.DoubleSide,
 });
 
-const dataRoot = () => BODIES[body].root;
-let loading = false;
-function clearBody() {
-  for (const m of meshes) { root.remove(m); m.geometry.dispose(); m.material.dispose(); }
-  meshes = []; parts.clear();
-  S.sel = null; S.isolate = null; S.hidden = new Set(); S.layers = {}; prevMode = {};
-  regionsById = new Map(); groupsById = new Map(); layersById = new Map();
-  anat = null; geoMeta = null;
-}
 async function load() {
-  const first = meshes.length === 0 && !anat;
-  loading = true; syncBodyUI();
   try {
-    if (!first) { clearBody(); renderCard(); updateStatus(); }
-    loadBar.style.width = '0%';
-    loadText.textContent = `Reading ${BODIES[body].name.toLowerCase()} anatomy`;
-    [geoMeta, anat] = await Promise.all([fetchJSON(dataRoot() + 'geometry.json'), fetchJSON(dataRoot() + 'anatomy.json')]);
+    [geoMeta, anat] = await Promise.all([fetchJSON('data/geometry.json'), fetchJSON('data/anatomy.json')]);
     loadBar.style.width = '4%';
-    const files = geoMeta.files || [{ url: dataRoot() + 'geometry.bin', bytes: geoMeta.bytes }];
+    const files = geoMeta.files || [{ url: 'data/geometry.bin', bytes: geoMeta.bytes }];
     const total = files.reduce((n, f) => n + f.bytes, 0);
     loadText.textContent = `Loading ${(total / 1048576).toFixed(0)} MB of anatomy`;
     const bufs = [];
@@ -236,55 +214,25 @@ async function load() {
         await new Promise(r => setTimeout(r, 0));
       }
     }
-    // Per-body state, read once the parts are known. A body's first visit hides what its data says to hide.
-    S.layers = bstore.get('layerModes', {});
-    prevMode = bstore.get('layerPrev', {});
     // Parts the data hides by default start hidden the first time this device sees them, including
     // parts added to the data later; after that the user's own choice is kept.
-    S.hidden = new Set(bstore.get('hidden', []));
     const defaults = anat.parts.filter(p => p.defaultHidden && parts.has(p.id)).map(p => p.id);
-    const applied = new Set(bstore.get('defaultsApplied', []));
+    const applied = new Set(store.get('defaultsApplied', []));
     const fresh = defaults.filter(id => !applied.has(id));
     if (fresh.length) {
       for (const id of fresh) S.hidden.add(id);
-      bstore.set('hidden', [...S.hidden]);
-      bstore.set('defaultsApplied', [...new Set([...applied, ...defaults])]);
+      store.set('hidden', [...S.hidden]);
+      store.set('defaultsApplied', [...new Set([...applied, ...defaults])]);
     }
-    S.isolate = bstore.get('isolate', null);
-    if (S.isolate && !idsOf(S.isolate).length) S.isolate = null;
-    search.placeholder = BODIES[body].hint;
     applyAnatomy(anat);
-    loading = false; syncBodyUI();
-    start(first);
+    start();
   } catch (err) {
     console.error(err);
-    loading = false; syncBodyUI();
     const L = $('#loader');
     L.classList.add('error');
     loadText.textContent = 'The model files could not be read. Open this app from Snuggery or a local web server; browsers block data files when index.html is opened directly. Detail: ' + err.message;
   }
 }
-
-/* ---------- body switch ---------- */
-const bodyButtons = [...document.querySelectorAll('.body-switch button')];
-function syncBodyUI() {
-  for (const b of bodyButtons) {
-    b.setAttribute('aria-checked', String(b.dataset.body === body));
-    b.disabled = loading;
-  }
-}
-function setBody(id) {
-  if (!BODIES[id] || id === body || loading) return;
-  closeSheets();
-  layerPanel.hidden = true; document.body.classList.remove('has-panel'); $('#btn-layers').setAttribute('aria-expanded', 'false');
-  body = id; store.set('body', id);
-  const L = $('#loader');
-  L.hidden = false; L.classList.remove('done', 'error');
-  requestRender();
-  load();
-}
-for (const b of bodyButtons) b.addEventListener('click', () => setBody(b.dataset.body));
-syncBodyUI();
 
 /* ---------- anatomy (editable data) ---------- */
 function applyAnatomy(a) {
@@ -468,7 +416,7 @@ function moveCamera(pos, target, ms = 750) {
     controls.target.lerpVectors(t0, target, k);
     camera.lookAt(controls.target);
     requestRender();
-  }, () => bstore.set('camera', { p: camera.position.toArray(), t: controls.target.toArray() }));
+  }, () => store.set('camera', { p: camera.position.toArray(), t: controls.target.toArray() }));
 }
 let sideFlip = false;
 const VIEW_DIRS = {
@@ -528,7 +476,7 @@ const layerPanel = $('#layers'), layerRows = $('#layer-rows'), btnPeel = $('#btn
 const layerCount = id => anat.parts.filter(p => p.layer === id && parts.has(p.id)).length;
 function setMode(L, m, persist = true) {
   S.layers[L] = m;
-  if (persist) bstore.set('layerModes', S.layers);
+  if (persist) store.set('layerModes', S.layers);
   applyVisibility(); syncLayerUI(); buildTreeState();
 }
 function buildLayerRows() {
@@ -569,7 +517,7 @@ function syncLayerUI() {
 function peel() {
   const L = nextPeel();
   if (!L || stepping) return;
-  prevMode[L] = mode(L); bstore.set('layerPrev', prevMode);
+  prevMode[L] = mode(L); store.set('layerPrev', prevMode);
   stepping = L; syncLayerUI();
   tween(reduceMotion ? 0 : 320, k => { layerFactor[L] = 1 - k; applyLook(L); },
     () => { layerFactor[L] = 1; stepping = null; setMode(L, 'off'); });
@@ -596,7 +544,7 @@ $('#btn-layers').addEventListener('click', () => {
   $('#btn-layers').setAttribute('aria-expanded', String(!layerPanel.hidden));
 });
 $('#layers-close').addEventListener('click', () => { layerPanel.hidden = true; document.body.classList.remove('has-panel'); $('#btn-layers').setAttribute('aria-expanded', 'false'); });
-$('#layers-all').addEventListener('click', () => { for (const l of anat.layers) S.layers[l.id] = 'on'; bstore.set('layerModes', S.layers); applyVisibility(); syncLayerUI(); buildTreeState(); });
+$('#layers-all').addEventListener('click', () => { for (const l of anat.layers) S.layers[l.id] = 'on'; store.set('layerModes', S.layers); applyVisibility(); syncLayerUI(); buildTreeState(); });
 
 /* ---------- status (hidden / isolated) ---------- */
 function updateStatus() {
@@ -617,9 +565,9 @@ $('#status-reset').addEventListener('click', () => {
   if (S.sel) renderCard();
 });
 function persistVis() {
-  bstore.set('hidden', [...S.hidden]);
-  bstore.set('isolate', S.isolate);
-  bstore.set('layerModes', S.layers);
+  store.set('hidden', [...S.hidden]);
+  store.set('isolate', S.isolate);
+  store.set('layerModes', S.layers);
 }
 
 /* ---------- selection card ---------- */
@@ -827,10 +775,8 @@ function buildAbout() {
   const tris = geoMeta.triangles.toLocaleString('en-GB');
   const rows = anat.layers.filter(l => layerCount(l.id)).flatMap(l => [h('dt', { text: String(layerCount(l.id)) }), h('dd', { text: l.name })]);
   const ab = anat.about || {};
-  const other = body === 'male' ? 'female' : 'male';
   $('#about-body').replaceChildren(
     h('p', { text: ab.intro || 'A human body built from real anatomical surface models. Each structure is a separate object you can select, fade, hide, isolate and pull apart.' }),
-    h('p', {}, `This is the ${BODIES[body].name.toLowerCase()} body. `, h('button', { class: 'link', text: `Switch to the ${other} body`, onclick: () => { closeSheets(); setBody(other); } }), '. The two come from different projects and differ in what they cover; each says so here.'),
     h('dl', {}, rows, h('dt', { text: tris }), h('dd', { text: 'triangles in total, simplified from the source data' })),
     h('h3', { text: 'Using the viewer' }),
     h('ul', {},
@@ -841,12 +787,11 @@ function buildAbout() {
       h('li', { text: 'Tap a structure to select it, tap it twice quickly to zoom in on it, and tap empty space to clear the selection.' }),
       h('li', { text: 'Explode pulls the body apart. The picker next to it chooses how: by region (head, chest, limbs), by group (such as the wrist bones or the muscles of the thigh), or every part on its own. The skin fades away as the body comes apart.' }),
       h('li', { text: 'Isolate shows only the selection. X-ray fades everything else so you can see the selection inside the body.' }),
-      h('li', { text: 'Male and Female at the top switch between the two reference bodies. Each keeps its own camera, layers and hidden structures.' }),
       h('li', { text: 'Your camera, layers, explode setting and hidden structures are kept between launches.' })),
     h('h3', { text: 'What is not included' }),
     h('ul', {}, (ab.gaps || []).map(t => h('li', { text: t }))),
     h('h3', { text: 'Editing names and descriptions' }),
-    h('p', { text: `Names, Latin terms, descriptions, groupings, layers and colours come from ${dataRoot()}anatomy.json. Edit it in Snuggery and the viewer picks up the changes when you return to it.` }),
+    h('p', { text: 'Names, Latin terms, descriptions, groupings, layers and colours come from data/anatomy.json. Edit it in Snuggery and the viewer picks up the changes when you return to it.' }),
     h('h3', { text: 'Sources and credits' }),
     (ab.sources || []).map((t, i) => h('p', {}, i === 0 ? t : h('small', { text: t }))),
     h('p', {}, h('small', { text: 'For learning and reference. Not for diagnosis or clinical use.' })),
@@ -858,21 +803,20 @@ darkQuery.addEventListener('change', () => anat && applyMaterials());
 async function refreshAnatomy() {
   if (!anat) return;
   try {
-    if (loading) return;
-    const a = await fetchJSON(dataRoot() + 'anatomy.json');
-    if (anat && !loading && JSON.stringify(a) !== JSON.stringify(anat)) applyAnatomy(a);
+    const a = await fetchJSON('data/anatomy.json');
+    if (JSON.stringify(a) !== JSON.stringify(anat)) applyAnatomy(a);
   } catch { /* keep the last good copy */ }
 }
 addEventListener('focus', refreshAnatomy);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshAnatomy(); });
 
 /* ---------- start ---------- */
-function start(first = true) {
+function start() {
   resize();
   $('#level').value = S.level;
   if (S.isolate && !idsOf(S.isolate).length) S.isolate = null;
   applyVisibility();
-  const saved = bstore.get('camera', null);
+  const saved = store.get('camera', null);
   const target = S.explode;
   if (saved) {
     camera.position.fromArray(saved.p);
@@ -891,7 +835,7 @@ function start(first = true) {
   } else {
     S.explode = target; applyExplode(); syncExplodeUI();
   }
-  if (first) requestAnimationFrame(loop);
+  requestAnimationFrame(loop);
   $('#loader').classList.add('done');
   setTimeout(() => $('#loader').hidden = true, 600);
 }

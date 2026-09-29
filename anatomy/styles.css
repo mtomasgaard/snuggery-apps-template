@@ -68,14 +68,10 @@ button, input, button { cursor: pointer; -webkit-user-select: none; user-select:
   pointer-events: none;
 }
 .bar > * { pointer-events: auto; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.bar .body-switch {
-  grid-column: 2; background: var(--surface); box-shadow: var(--shadow);
-  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+.bar h1 {
+  margin: 0; font: 500 21px/1 "Newsreader", Georgia, serif; letter-spacing: .01em;
+  grid-column: 2; pointer-events: none;
 }
-.bar .body-switch button { height: 34px; padding: 0 14px; font-size: 14px; font-weight: 700; color: var(--ink); }
-.bar .body-switch button:disabled { opacity: .55; }
-button.link { border: 0; background: none; padding: 0; color: var(--cobalt); font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
 #btn-list { justify-self: start; }
 #btn-about { justify-self: end; font: italic 400 19px/1 "Newsreader", Georgia, serif; }
 

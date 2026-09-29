@@ -36,7 +36,7 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
 data. Finances says so on screen; Running Dashboard is built to look like a
-real copy, so its entry below and its own docs say so instead. **Anatomy** (35 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
+real copy, so its entry below and its own docs say so instead. **Anatomy** (25 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
 **Milky Way** (6.5 MB) are the big ones: a human body, an oil field, a mountain ridge and our galaxy,
 each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
@@ -71,7 +71,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
 | Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.1 MB | nothing |
 | Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.4 MB | nothing |
-| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 35 MB | nothing |
+| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 25 MB | nothing |
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
@@ -131,7 +131,7 @@ Global Wind with four more fields — temperature, rain, cloud and pressure besi
 
 ### Anatomy
 
-Two human bodies in 3D, a male and a female, with a switch between them. The male is 1,752 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain and nerves, cartilage, bone, teeth — with release 4.0's arteries and veins down to the fingers, toes and brain, and its finer eyes, larynx, heart valves and bronchial tree. The female is 1,135 structures from the HuBMAP Human Reference Atlas, with hip and leg muscles from the Visible Human Female and, where the source models no bone, the male model's skull, ribs, arms and feet fitted to it and labelled as borrowed. Peel, fade, isolate, search and explode either. Three.js is vendored; nothing is fetched. **Static**, 49 MB unpacked.
+A full human body in 3D: 1,752 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain and nerves, cartilage, bone, teeth — with release 4.0's arteries and veins down to the fingers, toes and brain, and its finer eyes, larynx, heart valves and bronchial tree. Peel, fade, isolate, search and explode it. Three.js is vendored; nothing is fetched. **Static**, 35 MB unpacked.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) · Make it yours: [`anatomy/NOTES.md`](anatomy/NOTES.md)
 
@@ -458,8 +458,8 @@ MIT licensed — see [LICENSE](LICENSE), whose carve-outs name everything that t
 terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-derived route shapes
 (ODbL) and the Geist typeface (SIL OFL) in Running Dashboard, spelled out in
 [TILES.md](running-dashboard/TILES.md); the BodyParts3D geometry in Anatomy (CC BY-SA 2.1 JP, also
-CC BY 4.0 at source) with its BodyParts3D 4.0 vessels and its Human Reference Atlas and Visible Human Female
-body (all CC BY 4.0 — [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and two
+CC BY 4.0 at source) with its BodyParts3D 4.0 structures (CC BY 4.0 —
+[CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and two
 SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL —
 [ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
 (open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); in Milky Way, the

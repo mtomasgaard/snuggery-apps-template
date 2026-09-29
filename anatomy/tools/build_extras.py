@@ -215,7 +215,7 @@ A['about'] = {
           'Vessels: the arteries and veins stop at the fingers and toes. In the head the arteries of the brain are modelled, but not its veins or the vessels of the face and scalp.',
           'Organs: the liver, the colon and the small intestine are single structures without their segments.',
           'Bones: the coccyx, the six ear ossicles and the third molars are missing from the dataset.',
-          'The lymphatic system is not part of this model. Bones are outer surfaces only, without marrow.'],
+          'The lymphatic system and female anatomy are not part of this model. Bones are outer surfaces only, without marrow.'],
  'sources': ['Geometry: BodyParts3D, © The Database Center for Life Science (DBCLS). The skin, muscles, organs, brain, cartilage and bones are release 3.0 (CC BY-SA 2.1 Japan). The arteries and veins, and the finer structures of the eyes, larynx, pharynx, tongue, heart, airways, bile ducts and orbital nerves, are release 4.0 (CC BY 4.0), by way of the Human-Atlas package by slorksmo, fitted onto the release 3.0 body. Mitsuhashi N. et al., BodyParts3D: 3D structure database for anatomical concepts, Nucleic Acids Research 37 (2009), doi:10.1093/nar/gkn613.',
              'Adapted: converted from millimetres Z-up to metres Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), release 4.0 structures moved onto release 3.0 by a correction measured from the 591 structures both releases share, segments of each named structure merged into one, positions quantised to 16 bits.',
              'Rendering: three.js (MIT licence). Type: Atkinson Hyperlegible and Newsreader (SIL Open Font Licence).'],

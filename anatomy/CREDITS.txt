@@ -1,7 +1,5 @@
 Anatomy viewer — credits and licences
 
-MALE BODY (data/geometry*.bin, data/anatomy.json)
-
 Geometry: BodyParts3D, (c) The Database Center for Life Science (DBCLS).
 - Skin, muscles, organs, brain, cartilage, bones and teeth: release 3.0, licensed under Creative
   Commons Attribution-ShareAlike 2.1 Japan (CC BY-SA 2.1 JP); DBCLS now publishes BodyParts3D under
@@ -18,22 +16,6 @@ decimation (fast-simplification) to a per-layer triangle budget; the release 4.0
 onto the release 3.0 body by a correction measured from the structures both releases share, and the
 segments of each named structure merged into one;
 positions quantised to 16 bits. The adapted geometry is shared under the same licences.
-
-FEMALE BODY (data/female/)
-
-Female reference anatomy: Kristen Browne and Heidi Schlehlein, Human Reference Atlas / HuBMAP,
-3D Reference Organ Set for Female v1.10 (2026), with the ischium and pubis of v1.5. CC BY 4.0.
-https://humanatlas.io/3d-reference-library  Built on the Visible Human Dataset of the U.S. National
-Library of Medicine (Spitzer V.M., Whitlock D.G., The Anatomical Record 253 (2002) 49-57).
-Hip and leg muscles: Andreassen T.E., Hume D.R., Hamilton L.D., Walker K.E., Higinbotham S.E.,
-Shelburne K.B. Three Dimensional Lower Extremity Musculoskeletal Geometry of the Visible Human
-Female and Male. Scientific Data 10, 34 (2023). doi:10.1038/s41597-022-01905-2. CC BY 4.0.
-Borrowed skull, rib, shoulder, arm and foot bones: BodyParts3D 4.0, (c) DBCLS, CC BY 4.0 (above).
-All three were assembled, fitted to one body and simplified (meshoptimizer, 0.2% relative error) in
-the Human-Atlas package by slorksmo (https://github.com/slorksmo/Human-Atlas, commit 5bb5713); its
-ATTRIBUTION.md records every fitting step. Adaptations here: enumerated pieces merged into one
-structure, quadric decimation to a per-layer triangle budget, positions quantised to 16 bits.
-The adapted geometry in data/female/ is shared under CC BY 4.0.
 
 Rendering: three.js r186, MIT licence (vendor/three-LICENSE.txt).
 Fonts: Atkinson Hyperlegible, Copyright 2020 Braille Institute of America, Inc.; Newsreader,

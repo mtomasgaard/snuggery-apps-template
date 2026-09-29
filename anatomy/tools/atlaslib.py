@@ -1,4 +1,4 @@
-"""Shared code for build_vessels.py and build_female.py: reads the Human-Atlas chunk format
+"""Shared code for build_vessels.py and build_extras.py: reads the Human-Atlas chunk format
 (float32 positions, int16 normals, uint32 indices, offsets per part), welds, decimates, quantises
 and writes this app's per-layer .bin files (see NOTES.md, "geometry.json and the .bin files")."""
 import json, os, re
