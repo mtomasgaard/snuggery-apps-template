@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T16:01:25Z",
+ "generatedAt": "2026-09-29T17:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168482",
+     "published": "2026-09-29T12:00:00Z",
+     "summary": "The Security Council is meeting in New York on the Democratic Republic of the Congo (DRC) Tuesday, where clashes between Government forces and M23 rebels continue in the east despite a series of peace agreements…",
+     "stale": false
+    },
+    {
      "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
      "source": "UN News",
      "feed": "un-africa",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168475",
      "published": "2026-09-28T12:00:00Z",
      "summary": "South Sudan remains committed to holding general elections in December to conclude its transition period, the country’s Permanent Representative to the United Nations Cecilia Adout Majok Adeng, told the General Assembly…",
-     "stale": false
-    },
-    {
-     "title": "Sudan tells UN: No imposed solutions to country’s conflict",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168474",
-     "published": "2026-09-28T12:00:00Z",
-     "summary": "Sudan’s Foreign Minister addressed the UN General Assembly on Monday in place of de facto head of state General Abdel Fattah al-Burhan, whose visa application was rejected by Washington.",
      "stale": false
     },
     {
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
+   "published": "2026-09-29 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
    "published": "2026-09-29 12:00 UTC"
   },
@@ -794,12 +800,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
-   "published": "2026-09-28 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan tells UN: No imposed solutions to country’s conflict",
    "published": "2026-09-28 12:00 UTC"
   },
   {
