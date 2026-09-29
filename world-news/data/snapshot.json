@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T03:01:10Z",
+ "generatedAt": "2026-09-29T04:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "One in eight cancers are likely caused by an infection worldwide – new study",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/one-in-eight-cancers-are-likely-caused-by-an-infection-worldwide-new-study-292996",
+     "published": "2026-09-29T02:50:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "John (Eddie) La Marca, Senior Research Officer, Blood Cells and Blood Cancer, WEHI (Walter and Eliza Hall Institute of Medical Research)"
+    },
+    {
      "title": "Victorian DemosAU poll has Coalition’s two-party lead narrowing, but they remain ahead",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Kari Clifford, Senior Research Fellow in Surgical Science, University of Otago"
-    },
-    {
-     "title": "AI often leaves out minority languages – but some communities are turning it into a lifeline",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/ai-often-leaves-out-minority-languages-but-some-communities-are-turning-it-into-a-lifeline-290626",
-     "published": "2026-09-28T23:51:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ekaterina Vylomova, Senior Lecturer, Computing and Information Systems, The University of Melbourne"
     },
     {
      "title": "NZ election poll watch: minor parties gain as Labour and National slide",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "One in eight cancers are likely caused by an infection worldwide – new study",
+   "published": "2026-09-29 02:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Victorian DemosAU poll has Coalition’s two-party lead narrowing, but they remain ahead",
    "published": "2026-09-29 01:50 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
    "published": "2026-09-29 00:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "AI often leaves out minority languages – but some communities are turning it into a lifeline",
-   "published": "2026-09-28 23:51 UTC"
   },
   {
    "region": "Oceania",
