@@ -36,7 +36,7 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
 data. Finances says so on screen; Running Dashboard is built to look like a
-real copy, so its entry below and its own docs say so instead. **Anatomy** (36 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
+real copy, so its entry below and its own docs say so instead. **Anatomy** (35 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
 **Milky Way** (6.5 MB) are the big ones: a human body, an oil field, a mountain ridge and our galaxy,
 each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
@@ -71,7 +71,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
 | Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.1 MB | nothing |
 | Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.4 MB | nothing |
-| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 36 MB | nothing |
+| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 35 MB | nothing |
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
