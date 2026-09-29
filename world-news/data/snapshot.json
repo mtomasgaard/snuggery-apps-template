@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T00:01:13Z",
+ "generatedAt": "2026-09-29T01:01:16Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ election poll watch: minor parties gain as Labour and National slide",
+     "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/exercise-before-surgery-improves-outcomes-and-shortens-recovery-time-new-research-292597",
+     "published": "2026-09-29T00:10:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kari Clifford, Senior Research Fellow in Surgical Science, University of Otago"
+    },
+    {
+     "title": "AI often leaves out minority languages – but some communities are turning it into a lifeline",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/ai-often-leaves-out-minority-languages-but-some-communities-are-turning-it-into-a-lifeline-290626",
+     "published": "2026-09-28T23:51:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ekaterina Vylomova, Senior Lecturer, Computing and Information Systems, The University of Melbourne"
+    },
+    {
+     "title": "One giant clam contains a month-by-month diary of the Great Barrier Reef’s climate 200 years ago",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/one-giant-clam-contains-a-month-by-month-diary-of-the-great-barrier-reefs-climate-200-years-ago-290169",
+     "published": "2026-09-28T23:49:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bohao Dong, Research Assistant, ARC Centre of Excellence for Indigenous and Environmental Histories and Futures, The University of Melbourne"
+    },
+    {
+     "title": "NZ election poll watch: minor parties gain as Labour and National slide",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-election-poll-watch-minor-parties-gain-as-labour-and-national-slide-292993",
      "published": "2026-09-28T21:30:42Z",
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "The exhibition Rome: Empire, Power, People is a tour through our history of looking at ancient Rome",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-exhibition-rome-empire-power-people-is-a-tour-through-our-history-of-looking-at-ancient-rome-292232",
-     "published": "2026-09-28T19:42:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alina Kozlovski, Senior Lecturer in Digital Innovation (Ancient History and Archaeology), University of New England"
-    },
-    {
-     "title": "Can we predict genocide by listening to what leaders say? Research finds common threads",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/can-we-predict-genocide-by-listening-to-what-leaders-say-research-finds-common-threads-289042",
-     "published": "2026-09-28T19:42:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Svitlana Chernykh, Senior Lecturer, School of Politics & International Relations, Australian National University"
     },
     {
      "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Helena Cooper-Thomas, Professor of Organisational Behaviour, Faculty of Business, Auckland University of Technology"
-    },
-    {
-     "title": "Social media bans are an attempt to manage harm – but young people can flourish online",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/social-media-bans-are-an-attempt-to-manage-harm-but-young-people-can-flourish-online-291425",
-     "published": "2026-09-28T16:07:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Chloe S. Gordon, Senior Research Fellow, Institute for Positive Psychology and Education, Australian Catholic University"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Exercise before surgery improves outcomes and shortens recovery time – new research",
+   "published": "2026-09-29 00:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "AI often leaves out minority languages – but some communities are turning it into a lifeline",
+   "published": "2026-09-28 23:51 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "One giant clam contains a month-by-month diary of the Great Barrier Reef’s climate 200 years ago",
+   "published": "2026-09-28 23:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ election poll watch: minor parties gain as Labour and National slide",
    "published": "2026-09-28 21:30 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The exhibition Rome: Empire, Power, People is a tour through our history of looking at ancient Rome",
-   "published": "2026-09-28 19:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Can we predict genocide by listening to what leaders say? Research finds common threads",
-   "published": "2026-09-28 19:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "NZ’s next new MPs face a brutal learning curve. Does it have to be that way?",
    "published": "2026-09-28 17:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Social media bans are an attempt to manage harm – but young people can flourish online",
-   "published": "2026-09-28 16:07 UTC"
   },
   {
    "region": "Oceania",
