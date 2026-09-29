@@ -1,4 +1,4 @@
-"""Step 7: the female body -> data/female/ (anatomy.json, geometry.json, geometry-<layer>.bin).
+"""Step 8: the female body -> data/female/ (anatomy.json, geometry.json, geometry-<layer>.bin).
 
 Source: the HuBMAP Human Reference Atlas, 3D Reference Organ Set for Female v1.10 (with the ischium and
 pubis of v1.5), as packaged by Human-Atlas (fetch_atlas.py): a whole-body surface with the organs, brain,

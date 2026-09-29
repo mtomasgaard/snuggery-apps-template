@@ -36,7 +36,7 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
 data. Finances says so on screen; Running Dashboard is built to look like a
-real copy, so its entry below and its own docs say so instead. **Anatomy** (34 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
+real copy, so its entry below and its own docs say so instead. **Anatomy** (36 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
 **Milky Way** (6.5 MB) are the big ones: a human body, an oil field, a mountain ridge and our galaxy,
 each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
@@ -71,7 +71,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
 | Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.1 MB | nothing |
 | Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.4 MB | nothing |
-| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 34 MB | nothing |
+| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 36 MB | nothing |
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
@@ -131,7 +131,7 @@ Global Wind with four more fields — temperature, rain, cloud and pressure besi
 
 ### Anatomy
 
-Two human bodies in 3D, a male and a female, with a switch between them. The male is 1,548 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain, cartilage, bone, teeth — with the arteries and veins of release 4.0 down to the fingers, toes and brain. The female is 1,135 structures from the HuBMAP Human Reference Atlas, with hip and leg muscles from the Visible Human Female and, where the source models no bone, the male model's skull, ribs, arms and feet fitted to it and labelled as borrowed. Peel, fade, isolate, search and explode either. Three.js is vendored; nothing is fetched. **Static**, 48 MB unpacked.
+Two human bodies in 3D, a male and a female, with a switch between them. The male is 1,752 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain and nerves, cartilage, bone, teeth — with release 4.0's arteries and veins down to the fingers, toes and brain, and its finer eyes, larynx, heart valves and bronchial tree. The female is 1,135 structures from the HuBMAP Human Reference Atlas, with hip and leg muscles from the Visible Human Female and, where the source models no bone, the male model's skull, ribs, arms and feet fitted to it and labelled as borrowed. Peel, fade, isolate, search and explode either. Three.js is vendored; nothing is fetched. **Static**, 49 MB unpacked.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) · Make it yours: [`anatomy/NOTES.md`](anatomy/NOTES.md)
 

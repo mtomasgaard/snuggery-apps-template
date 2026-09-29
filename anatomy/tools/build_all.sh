@@ -13,5 +13,6 @@ python3 build_anatomy.py
 python3 build_full.py
 python3 fetch_atlas.py       # BodyParts3D 4.0 vessels and the female body, about 120 MB once
 python3 build_vessels.py
+python3 build_extras.py
 python3 build_female.py
 echo "Done. Check the app with: cd .. && python3 -m http.server 8000"

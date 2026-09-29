@@ -445,6 +445,62 @@
    "description": "Organs of the neck."
   },
   {
+   "id": "eye",
+   "region": "skull",
+   "name": "Eyes and tear glands",
+   "short": "Head",
+   "description": "The two eyes, from the cornea and lens to the retina, with the glands and ducts that make and drain tears."
+  },
+  {
+   "id": "orbit-muscles",
+   "region": "skull",
+   "name": "Muscles of the eye",
+   "short": "Head",
+   "description": "The six muscles that turn each eye and the one that lifts the upper eyelid, with the ring, pulley and check ligaments they work through and the eyelid plates."
+  },
+  {
+   "id": "orbit-nerves",
+   "region": "skull",
+   "name": "Nerves of the orbit",
+   "short": "Head",
+   "description": "The ophthalmic nerve and its branches, which carry feeling from the eye, forehead and nose, and the oculomotor and trochlear nerves, which move the eye."
+  },
+  {
+   "id": "mouth",
+   "region": "skull",
+   "name": "Tongue and salivary glands",
+   "short": "Head",
+   "description": "The tongue with the muscles that move it, and the submandibular and sublingual salivary glands."
+  },
+  {
+   "id": "larynx",
+   "region": "neck",
+   "name": "Larynx",
+   "short": "Neck",
+   "description": "The voice box: its cartilages, the ligaments and membranes that join them, and the small muscles that open, close and tense the vocal cords."
+  },
+  {
+   "id": "pharynx",
+   "region": "neck",
+   "name": "Pharynx and soft palate",
+   "short": "Neck",
+   "description": "The constrictor muscles that squeeze food down the throat, the muscles that lift the pharynx, and the muscles of the soft palate and uvula."
+  },
+  {
+   "id": "heart",
+   "region": "thorax",
+   "name": "Heart",
+   "short": "Chest",
+   "description": "The walls and chambers of the heart, its four valves cusp by cusp, and the papillary muscles that hold the valves shut."
+  },
+  {
+   "id": "airways",
+   "region": "thorax",
+   "name": "Bronchial tree",
+   "short": "Chest",
+   "description": "The main bronchi and the airway tree of each bronchopulmonary segment of the lungs."
+  },
+  {
    "id": "artery-skull",
    "region": "skull",
    "name": "Arteries of the head",
@@ -478,13 +534,6 @@
    "name": "Arteries of the neck",
    "short": "Neck",
    "description": "Arteries of the neck."
-  },
-  {
-   "id": "vein-abdomen",
-   "region": "abdomen",
-   "name": "Veins of the abdomen",
-   "short": "Abdomen",
-   "description": "Veins of the abdomen."
   },
   {
    "id": "artery-leg-r",
@@ -522,11 +571,25 @@
    "description": "Veins of the right lower limb."
   },
   {
+   "id": "artery-arm-l",
+   "region": "arm-l",
+   "name": "Arteries of the left upper limb",
+   "short": "Left upper limb",
+   "description": "Arteries of the left upper limb."
+  },
+  {
    "id": "vein-arm-l",
    "region": "arm-l",
    "name": "Veins of the left upper limb",
    "short": "Left upper limb",
    "description": "Veins of the left upper limb."
+  },
+  {
+   "id": "artery-arm-r",
+   "region": "arm-r",
+   "name": "Arteries of the right upper limb",
+   "short": "Right upper limb",
+   "description": "Arteries of the right upper limb."
   },
   {
    "id": "vein-arm-r",
@@ -536,18 +599,11 @@
    "description": "Veins of the right upper limb."
   },
   {
-   "id": "artery-arm-l",
-   "region": "arm-l",
-   "name": "Arteries of the left upper limb",
-   "short": "Left upper limb",
-   "description": "Arteries of the left upper limb."
-  },
-  {
-   "id": "artery-arm-r",
-   "region": "arm-r",
-   "name": "Arteries of the right upper limb",
-   "short": "Right upper limb",
-   "description": "Arteries of the right upper limb."
+   "id": "vein-abdomen",
+   "region": "abdomen",
+   "name": "Veins of the abdomen",
+   "short": "Abdomen",
+   "description": "Veins of the abdomen."
   },
   {
    "id": "artery-pelvis",
@@ -594,8 +650,9 @@
    "description": "Small paired bones forming the bridge of the nose."
   },
   "lacrimal": {
-   "latin": "Os lacrimale",
-   "description": "The smallest and most fragile facial bones, in the inner wall of each orbit. A groove in each holds the lacrimal sac of the tear drainage system."
+   "latin": "Apparatus lacrimalis",
+   "description": "The tear apparatus: the lacrimal gland above the outer corner of the eye makes tears, which drain from the inner corner through the canaliculi and lacrimal sac into the nasolacrimal duct and the nose.",
+   "color": "#d9b3a6"
   },
   "zygomatic": {
    "latin": "Os zygomaticum",
@@ -1141,6 +1198,112 @@
   "limb-vein": {
    "latin": null,
    "description": "A vein of the limb. The deep veins accompany the arteries; the superficial veins run just under the skin and are the ones seen through it."
+  },
+  "eye-part": {
+   "latin": null,
+   "description": "A part of the eye.",
+   "color": "#f2f0ea"
+  },
+  "cornea": {
+   "latin": "Cornea",
+   "description": "The clear front window of the eye. It does most of the focusing; the lens behind it does the fine adjustment.",
+   "color": "#dfe9ee"
+  },
+  "lens": {
+   "latin": "Lens",
+   "description": "A clear, flexible disc behind the pupil. The ciliary muscle changes its shape to focus on near or far objects; it stiffens with age, which is why reading glasses become necessary.",
+   "color": "#e8eef0"
+  },
+  "iris": {
+   "latin": "Iris",
+   "description": "The coloured ring of muscle around the pupil, which it widens in dim light and narrows in bright light.",
+   "color": "#6b7f8c"
+  },
+  "sclera": {
+   "latin": "Sclera",
+   "description": "The tough white outer coat of the eyeball, to which the eye muscles attach.",
+   "color": "#f2f0ea"
+  },
+  "eye-choroid": {
+   "latin": "Choroidea",
+   "description": "A layer rich in blood vessels between the sclera and the retina that feeds the outer retina.",
+   "color": "#a15b4a"
+  },
+  "ciliary": {
+   "latin": "Corpus ciliare",
+   "description": "A ring of muscle and folds behind the iris. It focuses the lens through the suspensory ligament and makes the fluid that fills the front of the eye.",
+   "color": "#b48273"
+  },
+  "vitreous": {
+   "latin": "Corpus vitreum",
+   "description": "The clear gel and fluid that fill the eyeball: the aqueous humour in front of the lens and the vitreous body behind it.",
+   "color": "#e4ecef"
+  },
+  "retina": {
+   "latin": "Retina",
+   "description": "The light-sensitive lining of the back of the eye, which turns light into nerve signals carried by the optic nerve.",
+   "color": "#c9855f"
+  },
+  "eye-muscle": {
+   "latin": "Musculi bulbi",
+   "description": "One of the small muscles that move the eye or lift the eyelid. Four recti and two obliques turn the eyeball; they are the fastest muscles in the body."
+  },
+  "cranial-nerve": {
+   "latin": "Nervus cranialis",
+   "description": "A branch of the cranial nerves in the orbit. The ophthalmic nerve and its branches carry feeling from the eye, forehead and nose; the oculomotor and trochlear nerves drive the eye muscles.",
+   "color": "#e8d27a"
+  },
+  "ganglion": {
+   "latin": "Ganglion ciliare",
+   "description": "A small cluster of nerve cells behind the eye. Its fibres, through the short ciliary nerves, narrow the pupil and focus the lens.",
+   "color": "#e8d27a"
+  },
+  "dura": {
+   "latin": "Dura mater",
+   "description": "The tough outer membrane around the brain. The tentorium cerebelli is a fold of it that forms a tent over the cerebellum and holds up the back of the cerebrum.",
+   "color": "#d9c7bd"
+  },
+  "tongue": {
+   "latin": "Lingua",
+   "description": "A muscular organ for tasting, chewing, swallowing and speaking. Its surface carries the papillae with the taste buds.",
+   "color": "#c57a74"
+  },
+  "salivary": {
+   "latin": "Glandula salivaria",
+   "description": "A salivary gland. With the parotid glands, the submandibular and sublingual glands make the saliva that moistens food and begins digesting starch.",
+   "color": "#dcb3a0"
+  },
+  "tongue-muscle": {
+   "latin": "Musculi linguae",
+   "description": "An extrinsic muscle of the tongue. Genioglossus pushes the tongue forward and out; hyoglossus pulls it down."
+  },
+  "pharynx-muscle": {
+   "latin": "Musculi pharyngis",
+   "description": "A muscle of the pharynx or soft palate. The constrictors squeeze swallowed food downwards; the palate muscles seal off the nose and open the auditory tube when swallowing."
+  },
+  "larynx-muscle": {
+   "latin": "Musculi laryngis",
+   "description": "One of the small muscles of the larynx that move its cartilages to open, close and tense the vocal cords, for breathing, swallowing and speech."
+  },
+  "laryngeal-cartilage": {
+   "latin": "Cartilagines laryngis",
+   "description": "A cartilage of the larynx. The ring-shaped cricoid sits below the thyroid cartilage, and the small arytenoids on top of it pivot to open and close the vocal cords.",
+   "color": "#b2cbd3"
+  },
+  "epiglottis": {
+   "latin": "Epiglottis",
+   "description": "A leaf of elastic cartilage behind the tongue that tips back over the entrance of the larynx when swallowing, so food goes down the oesophagus and not into the airway.",
+   "color": "#b2cbd3"
+  },
+  "heart-cavity": {
+   "latin": "Cavitas cordis",
+   "description": "The space inside a chamber of the heart, shown as the volume of blood it holds. Hidden by default so the valves stay visible; show it from the list.",
+   "color": "#8e2a33"
+  },
+  "bile-duct": {
+   "latin": "Ductus biliferi",
+   "description": "The bile ducts gather bile inside the liver and carry it to the gallbladder, where it is stored, and to the duodenum, where it helps digest fat.",
+   "color": "#6f8a4a"
   }
  },
  "parts": [
@@ -4043,15 +4206,6 @@
    "group": "muscle-abdomen",
    "type": "connective",
    "tissue": "connective"
-  },
-  {
-   "id": "FMA12513",
-   "source": "eyeball",
-   "name": "Eyeballs",
-   "layer": "organ",
-   "region": "skull",
-   "group": "organ-skull",
-   "type": "eye"
   },
   {
    "id": "FMA13295",
@@ -8434,10 +8588,10 @@
    "id": "FMA61961",
    "source": "anterior commissure",
    "name": "Anterior commissure",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle"
+   "group": "nerve-skull",
+   "type": "white-matter"
   },
   {
    "id": "FMA61970",
@@ -8452,10 +8606,10 @@
    "id": "FMA61975",
    "source": "lamina terminalis",
    "name": "Lamina terminalis",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle"
+   "group": "nerve-skull",
+   "type": "white-matter"
   },
   {
    "id": "FMA61993nsn",
@@ -8515,19 +8669,19 @@
    "id": "FMA62072",
    "source": "posterior commissure",
    "name": "Posterior commissure",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle"
+   "group": "nerve-skull",
+   "type": "white-matter"
   },
   {
    "id": "FMA62327",
    "source": "tuber cinereum",
    "name": "Tuber cinereum",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle"
+   "group": "nerve-skull",
+   "type": "diencephalon"
   },
   {
    "id": "FMA62382",
@@ -8785,15 +8939,6 @@
    "type": "skin"
   },
   {
-   "id": "FMA71704",
-   "source": "set of nasal cartilages",
-   "name": "Nasal cartilages",
-   "layer": "cartilage",
-   "region": "skull",
-   "group": "cartilage-skull",
-   "type": "nasal-cartilage"
-  },
-  {
    "id": "FMA7196",
    "source": "spleen",
    "name": "Spleen",
@@ -8897,39 +9042,12 @@
    "side": "left"
   },
   {
-   "id": "FMA7234",
-   "source": "tricuspid valve",
-   "name": "Tricuspid valve",
-   "layer": "organ",
-   "region": "thorax",
-   "group": "organ-thorax",
-   "type": "valve"
-  },
-  {
-   "id": "FMA7235",
-   "source": "mitral valve",
-   "name": "Mitral valve",
-   "layer": "organ",
-   "region": "thorax",
-   "group": "organ-thorax",
-   "type": "valve"
-  },
-  {
-   "id": "FMA7246",
-   "source": "pulmonary valve",
-   "name": "Pulmonary valve",
-   "layer": "organ",
-   "region": "thorax",
-   "group": "organ-thorax",
-   "type": "valve"
-  },
-  {
    "id": "FMA7260",
    "source": "anterior papillary muscle of right ventricle",
    "name": "Anterior papillary muscle of right ventricle",
    "layer": "organ",
    "region": "thorax",
-   "group": "organ-thorax",
+   "group": "heart",
    "type": "papillary",
    "side": "right"
   },
@@ -8939,7 +9057,7 @@
    "name": "Posterior papillary muscle of right ventricle",
    "layer": "organ",
    "region": "thorax",
-   "group": "organ-thorax",
+   "group": "heart",
    "type": "papillary",
    "side": "right"
   },
@@ -8949,7 +9067,7 @@
    "name": "Septal papillary muscle of right ventricle",
    "layer": "organ",
    "region": "thorax",
-   "group": "organ-thorax",
+   "group": "heart",
    "type": "papillary",
    "side": "right"
   },
@@ -8999,7 +9117,7 @@
    "name": "Posterior papillary muscle of left ventricle",
    "layer": "organ",
    "region": "thorax",
-   "group": "organ-thorax",
+   "group": "heart",
    "type": "papillary",
    "side": "left"
   },
@@ -9222,15 +9340,6 @@
    "group": "nerve-skull",
    "type": "limbic",
    "side": "left"
-  },
-  {
-   "id": "FMA7274",
-   "source": "wall of heart",
-   "name": "Heart wall (myocardium)",
-   "layer": "organ",
-   "region": "thorax",
-   "group": "organ-thorax",
-   "type": "heart"
   },
   {
    "id": "FMA72800",
@@ -9456,40 +9565,40 @@
    "id": "FMA73303",
    "source": "right lateral geniculate body",
    "name": "Right lateral geniculate body",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle",
+   "group": "nerve-skull",
+   "type": "diencephalon",
    "side": "right"
   },
   {
    "id": "FMA73304",
    "source": "left lateral geniculate body",
    "name": "Left lateral geniculate body",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle",
+   "group": "nerve-skull",
+   "type": "diencephalon",
    "side": "left"
   },
   {
    "id": "FMA73309",
    "source": "right medial geniculate body",
    "name": "Right medial geniculate body",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle",
+   "group": "nerve-skull",
+   "type": "diencephalon",
    "side": "right"
   },
   {
    "id": "FMA73310",
    "source": "left medial geniculate body",
    "name": "Left medial geniculate body",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle",
+   "group": "nerve-skull",
+   "type": "diencephalon",
    "side": "left"
   },
   {
@@ -9691,15 +9800,6 @@
    "side": "left"
   },
   {
-   "id": "FMA7409",
-   "source": "bronchus",
-   "name": "Bronchial tree",
-   "layer": "organ",
-   "region": "thorax",
-   "group": "organ-thorax",
-   "type": "bronchus"
-  },
-  {
    "id": "FMA74140",
    "source": "set of dorsal interossei of right foot",
    "name": "Dorsal interossei of right foot",
@@ -9732,10 +9832,10 @@
    "id": "FMA75351",
    "source": "interventricular foramen",
    "name": "Interventricular foramen",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle"
+   "group": "nerve-skull",
+   "type": "ventricle"
   },
   {
    "id": "FMA76775",
@@ -9873,10 +9973,10 @@
    "id": "FMA83740",
    "source": "interpeduncular fossa",
    "name": "Interpeduncular fossa",
-   "layer": "muscle",
+   "layer": "nerve",
    "region": "skull",
-   "group": "muscle-skull",
-   "type": "muscle"
+   "group": "nerve-skull",
+   "type": "brainstem"
   },
   {
    "id": "FMA86034",
@@ -9913,7 +10013,7 @@
    "name": "Papillary muscle of left ventricle",
    "layer": "organ",
    "region": "thorax",
-   "group": "organ-thorax",
+   "group": "heart",
    "type": "papillary",
    "side": "left"
   },
@@ -11203,16 +11303,6 @@
    "description": "Formed behind the pancreas by the superior mesenteric and splenic veins, it carries blood from the gut to the liver."
   },
   {
-   "id": "FJ1858",
-   "source": "Hepatovenous segment IX",
-   "name": "Hepatovenous segment IX",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15747"
-  },
-  {
    "id": "FJ1867",
    "source": "Tributary of middle hepatic vein",
    "name": "Tributary of middle hepatic vein",
@@ -11318,8 +11408,8 @@
    "source": "Abdominal aorta",
    "name": "Abdominal aorta",
    "layer": "artery",
-   "region": "abdomen",
-   "group": "artery-abdomen",
+   "region": "thorax",
+   "group": "artery-thorax",
    "type": "aorta",
    "fma": "FMA3789",
    "description": "The aorta below the diaphragm. It gives off the celiac, mesenteric and renal arteries and divides at the level of L4 into the common iliac arteries."
@@ -11592,8 +11682,8 @@
    "source": "Left subcostal vein",
    "name": "Left subcostal vein",
    "layer": "vein",
-   "region": "abdomen",
-   "group": "vein-abdomen",
+   "region": "thorax",
+   "group": "vein-thorax",
    "type": "vein",
    "fma": "FMA4951",
    "side": "left"
@@ -11636,8 +11726,8 @@
    "source": "Right subcostal vein",
    "name": "Right subcostal vein",
    "layer": "vein",
-   "region": "abdomen",
-   "group": "vein-abdomen",
+   "region": "thorax",
+   "group": "vein-thorax",
    "type": "vein",
    "fma": "FMA4844",
    "side": "right"
@@ -12808,10 +12898,10 @@
   {
    "id": "FJ2186",
    "source": "Dorsal metacarpal vein",
-   "name": "Dorsal metacarpal vein (left)",
+   "name": "Dorsal metatarsal vein (left)",
    "layer": "vein",
-   "region": "arm-l",
-   "group": "vein-arm-l",
+   "region": "leg-l",
+   "group": "vein-leg-l",
    "type": "limb-vein",
    "fma": "FMA22954",
    "side": "left"
@@ -12819,10 +12909,10 @@
   {
    "id": "FJ2199",
    "source": "Dorsal metacarpal vein",
-   "name": "Dorsal metacarpal vein (right)",
+   "name": "Dorsal metatarsal vein (right)",
    "layer": "vein",
-   "region": "arm-r",
-   "group": "vein-arm-r",
+   "region": "leg-r",
+   "group": "vein-leg-r",
    "type": "limb-vein",
    "fma": "FMA22954",
    "side": "right"
@@ -14546,16 +14636,6 @@
    "side": "left"
   },
   {
-   "id": "FJ2409",
-   "source": "Hepatovenous segment VII",
-   "name": "Hepatovenous segment VII",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15745"
-  },
-  {
    "id": "FJ2414",
    "source": "Middle hepatic vein",
    "name": "Middle hepatic vein",
@@ -14894,67 +14974,6 @@
    "type": "coronary",
    "fma": "FMA3855",
    "side": "left"
-  },
-  {
-   "id": "FJ2818",
-   "source": "Hepatovenous segment II",
-   "name": "Hepatovenous segment II",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15739"
-  },
-  {
-   "id": "FJ2819",
-   "source": "Hepatovenous segment III",
-   "name": "Hepatovenous segment III",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15741"
-  },
-  {
-   "id": "FJ2820",
-   "source": "Hepatovenous segment IV",
-   "name": "Hepatovenous segment IV",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15742"
-  },
-  {
-   "id": "FJ2821",
-   "source": "Hepatovenous segment V",
-   "name": "Hepatovenous segment V",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15743"
-  },
-  {
-   "id": "FJ2822",
-   "source": "Hepatovenous segment VI",
-   "name": "Hepatovenous segment VI",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15744"
-  },
-  {
-   "id": "FJ2823",
-   "source": "Hepatovenous segment VIII",
-   "name": "Hepatovenous segment VIII",
-   "layer": "vein",
-   "region": "thorax",
-   "group": "vein-thorax",
-   "type": "hepatic-vein",
-   "fma": "FMA15746",
-   "segments": 2
   },
   {
    "id": "FJ2881",
@@ -16069,8 +16088,8 @@
    "source": "Anterior superior pancreaticoduodenal artery",
    "name": "Anterior superior pancreaticoduodenal artery",
    "layer": "artery",
-   "region": "abdomen",
-   "group": "artery-abdomen",
+   "region": "thorax",
+   "group": "artery-thorax",
    "type": "artery",
    "fma": "FMA14782"
   },
@@ -17001,8 +17020,8 @@
    "source": "Right subclavian artery",
    "name": "Right subclavian artery",
    "layer": "artery",
-   "region": "thorax",
-   "group": "artery-thorax",
+   "region": "neck",
+   "group": "artery-neck",
    "type": "artery",
    "fma": "FMA3953",
    "side": "right"
@@ -17476,6 +17495,2481 @@
    "group": "vein-abdomen",
    "type": "vein",
    "fma": "FMA12858"
+  },
+  {
+   "id": "FJ1282",
+   "source": "Anterior chamber of left eyeball",
+   "name": "Anterior chamber of left eyeball",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "vitreous",
+   "fma": "FMA58082",
+   "side": "left"
+  },
+  {
+   "id": "FJ1283",
+   "source": "Left anterior ethmoidal nerve",
+   "name": "Left anterior ethmoidal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52677",
+   "side": "left"
+  },
+  {
+   "id": "FJ1284",
+   "source": "Check ligament of left lateral rectus",
+   "name": "Check ligament of left lateral rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49145",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ1285",
+   "source": "Left choroid",
+   "name": "Left choroid",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "eye-choroid",
+   "fma": "FMA58300",
+   "side": "left",
+   "segments": 2
+  },
+  {
+   "id": "FJ1287",
+   "source": "Left corona ciliaris",
+   "name": "Left corona ciliaris",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "ciliary",
+   "fma": "FMA58484",
+   "side": "left"
+  },
+  {
+   "id": "FJ1288",
+   "source": "Left ciliary ganglion",
+   "name": "Left ciliary ganglion",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "ganglion",
+   "fma": "FMA53550",
+   "side": "left"
+  },
+  {
+   "id": "FJ1289",
+   "source": "Left cornea",
+   "name": "Left cornea",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "cornea",
+   "fma": "FMA58240",
+   "side": "left"
+  },
+  {
+   "id": "FJ1290",
+   "source": "Left frontal nerve",
+   "name": "Left frontal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52640",
+   "side": "left"
+  },
+  {
+   "id": "FJ1291",
+   "source": "Left common tendinous ring",
+   "name": "Left common tendinous ring",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49073",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ1292",
+   "source": "Check ligament of left medial rectus",
+   "name": "Check ligament of left medial rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49148",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ1293",
+   "source": "Inferior branch of left oculomotor nerve",
+   "name": "Inferior branch of left oculomotor nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52577",
+   "side": "left"
+  },
+  {
+   "id": "FJ1294",
+   "source": "Left inferior oblique",
+   "name": "Left inferior oblique",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49051",
+   "side": "left"
+  },
+  {
+   "id": "FJ1295",
+   "source": "Left inferior rectus",
+   "name": "Left inferior rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49047",
+   "side": "left"
+  },
+  {
+   "id": "FJ1296",
+   "source": "Left infratrochlear nerve",
+   "name": "Left infratrochlear nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52699",
+   "side": "left"
+  },
+  {
+   "id": "FJ1297",
+   "source": "Left iris",
+   "name": "Left iris",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "iris",
+   "fma": "FMA58237",
+   "side": "left"
+  },
+  {
+   "id": "FJ1298",
+   "source": "Left lacrimal canaliculus",
+   "name": "Left lacrimal canaliculus",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59583",
+   "side": "left"
+  },
+  {
+   "id": "FJ1299",
+   "source": "Left lacrimal gland",
+   "name": "Left lacrimal gland",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59103",
+   "side": "left",
+   "description": "Makes tears. It sits in a hollow of the frontal bone above the outer corner of the eye."
+  },
+  {
+   "id": "FJ1300",
+   "source": "Left lacrimal nerve",
+   "name": "Left lacrimal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52630",
+   "side": "left"
+  },
+  {
+   "id": "FJ1301",
+   "source": "Left lacrimal lake",
+   "name": "Left lacrimal lake",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59542",
+   "side": "left"
+  },
+  {
+   "id": "FJ1302",
+   "source": "Left nasolacrimal duct",
+   "name": "Left nasolacrimal duct",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59556",
+   "side": "left",
+   "description": "Drains tears from the lacrimal sac into the nose, which is why crying makes the nose run."
+  },
+  {
+   "id": "FJ1304",
+   "source": "Left lateral rectus",
+   "name": "Left lateral rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49055",
+   "side": "left"
+  },
+  {
+   "id": "FJ1305",
+   "source": "Left lens",
+   "name": "Left lens",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lens",
+   "fma": "FMA58243",
+   "side": "left"
+  },
+  {
+   "id": "FJ1306",
+   "source": "Left levator palpebrae superioris",
+   "name": "Left levator palpebrae superioris",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49049",
+   "side": "left",
+   "description": "Lifts the upper eyelid."
+  },
+  {
+   "id": "FJ1308",
+   "source": "Left medial rectus",
+   "name": "Left medial rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49057",
+   "side": "left"
+  },
+  {
+   "id": "FJ1309",
+   "source": "Left lacrimal sac",
+   "name": "Left lacrimal sac",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59546",
+   "side": "left"
+  },
+  {
+   "id": "FJ1310",
+   "source": "Left nasociliary nerve",
+   "name": "Left nasociliary nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52670",
+   "side": "left"
+  },
+  {
+   "id": "FJ1311",
+   "source": "Communicating branch of left nasociliary nerve with left ciliary ganglion",
+   "name": "Communicating branch of left nasociliary nerve with left ciliary ganglion",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "ganglion",
+   "fma": "FMA52674",
+   "side": "left"
+  },
+  {
+   "id": "FJ1312",
+   "source": "Left ophthalmic nerve",
+   "name": "Left ophthalmic nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52623",
+   "side": "left",
+   "description": "The first division of the trigeminal nerve, carrying feeling from the eye, the forehead, the scalp and the nose."
+  },
+  {
+   "id": "FJ1315",
+   "source": "Left posterior ethmoidal nerve",
+   "name": "Left posterior ethmoidal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52716",
+   "side": "left"
+  },
+  {
+   "id": "FJ1316",
+   "source": "Optic part of left retina",
+   "name": "Left retina",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "retina",
+   "fma": "FMA58608",
+   "side": "left"
+  },
+  {
+   "id": "FJ1317",
+   "source": "Left sclera",
+   "name": "Left sclera",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "sclera",
+   "fma": "FMA58272",
+   "side": "left"
+  },
+  {
+   "id": "FJ1318",
+   "source": "Left long ciliary nerve",
+   "name": "Left long ciliary nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA82735",
+   "side": "left"
+  },
+  {
+   "id": "FJ1319",
+   "source": "Short ciliary nerve",
+   "name": "Short ciliary nerve (left)",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA7041",
+   "side": "left"
+  },
+  {
+   "id": "FJ1370",
+   "source": "Short ciliary nerve",
+   "name": "Short ciliary nerve (right)",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA7041",
+   "side": "right"
+  },
+  {
+   "id": "FJ1320",
+   "source": "Suspensory ligament of left lens",
+   "name": "Suspensory ligament of left lens",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lens",
+   "fma": "FMA58840",
+   "side": "left"
+  },
+  {
+   "id": "FJ1321",
+   "source": "Superior branch of left oculomotor nerve",
+   "name": "Superior branch of left oculomotor nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52575",
+   "side": "left"
+  },
+  {
+   "id": "FJ1322",
+   "source": "Left superior oblique",
+   "name": "Left superior oblique",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49053",
+   "side": "left",
+   "description": "Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inwards."
+  },
+  {
+   "id": "FJ1323",
+   "source": "Left superior rectus",
+   "name": "Left superior rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49045",
+   "side": "left"
+  },
+  {
+   "id": "FJ1324",
+   "source": "Tarsal plate of left upper eyelid",
+   "name": "Tarsal plate of left upper eyelid",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA59092",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ1325",
+   "source": "Left supra-orbital nerve",
+   "name": "Left supra-orbital nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52657",
+   "side": "left"
+  },
+  {
+   "id": "FJ1326",
+   "source": "Left supratrochlear nerve",
+   "name": "Left supratrochlear nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52644",
+   "side": "left"
+  },
+  {
+   "id": "FJ1328",
+   "source": "Tarsal plate of left lower eyelid",
+   "name": "Tarsal plate of left lower eyelid",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA59090",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ1329",
+   "source": "Trochlea of left superior oblique",
+   "name": "Trochlea of left superior oblique",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49068",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ1330",
+   "source": "Left trochlear nerve",
+   "name": "Left trochlear nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA50882",
+   "side": "left",
+   "description": "The thinnest cranial nerve and the only one to leave the back of the brainstem. It drives the superior oblique muscle of the eye."
+  },
+  {
+   "id": "FJ1331",
+   "source": "Left vitreous body",
+   "name": "Left vitreous body",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "vitreous",
+   "fma": "FMA58829",
+   "side": "left"
+  },
+  {
+   "id": "FJ1332",
+   "source": "Anterior chamber of right eyeball",
+   "name": "Anterior chamber of right eyeball",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "vitreous",
+   "fma": "FMA58081",
+   "side": "right"
+  },
+  {
+   "id": "FJ1333",
+   "source": "Right anterior ethmoidal nerve",
+   "name": "Right anterior ethmoidal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52676",
+   "side": "right"
+  },
+  {
+   "id": "FJ1334",
+   "source": "Check ligament of right lateral rectus",
+   "name": "Check ligament of right lateral rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49144",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1335",
+   "source": "Check ligament of right medial rectus",
+   "name": "Check ligament of right medial rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49147",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1336",
+   "source": "Right choroid",
+   "name": "Right choroid",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "eye-choroid",
+   "fma": "FMA58299",
+   "side": "right",
+   "segments": 2
+  },
+  {
+   "id": "FJ1338",
+   "source": "Right corona ciliaris",
+   "name": "Right corona ciliaris",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "ciliary",
+   "fma": "FMA58483",
+   "side": "right"
+  },
+  {
+   "id": "FJ1339",
+   "source": "Right ciliary ganglion",
+   "name": "Right ciliary ganglion",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "ganglion",
+   "fma": "FMA53549",
+   "side": "right"
+  },
+  {
+   "id": "FJ1340",
+   "source": "Right cornea",
+   "name": "Right cornea",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "cornea",
+   "fma": "FMA58239",
+   "side": "right"
+  },
+  {
+   "id": "FJ1341",
+   "source": "Right frontal nerve",
+   "name": "Right frontal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52639",
+   "side": "right"
+  },
+  {
+   "id": "FJ1342",
+   "source": "Right common tendinous ring",
+   "name": "Right common tendinous ring",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49072",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1343",
+   "source": "Tendon of right levator palpebrae superioris",
+   "name": "Tendon of right levator palpebrae superioris",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA54159",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1344",
+   "source": "Inferior branch of right oculomotor nerve",
+   "name": "Inferior branch of right oculomotor nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52576",
+   "side": "right"
+  },
+  {
+   "id": "FJ1345",
+   "source": "Right inferior oblique",
+   "name": "Right inferior oblique",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49050",
+   "side": "right"
+  },
+  {
+   "id": "FJ1346",
+   "source": "Right inferior rectus",
+   "name": "Right inferior rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49046",
+   "side": "right"
+  },
+  {
+   "id": "FJ1347",
+   "source": "Right infratrochlear nerve",
+   "name": "Right infratrochlear nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52698",
+   "side": "right"
+  },
+  {
+   "id": "FJ1348",
+   "source": "Right iris",
+   "name": "Right iris",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "iris",
+   "fma": "FMA58236",
+   "side": "right"
+  },
+  {
+   "id": "FJ1349",
+   "source": "Right lacrimal canaliculus",
+   "name": "Right lacrimal canaliculus",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59582",
+   "side": "right"
+  },
+  {
+   "id": "FJ1350",
+   "source": "Right lacrimal gland",
+   "name": "Right lacrimal gland",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59102",
+   "side": "right",
+   "description": "Makes tears. It sits in a hollow of the frontal bone above the outer corner of the eye."
+  },
+  {
+   "id": "FJ1351",
+   "source": "Right lacrimal nerve",
+   "name": "Right lacrimal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52629",
+   "side": "right"
+  },
+  {
+   "id": "FJ1352",
+   "source": "Right lacrimal lake",
+   "name": "Right lacrimal lake",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59541",
+   "side": "right"
+  },
+  {
+   "id": "FJ1353",
+   "source": "Right nasolacrimal duct",
+   "name": "Right nasolacrimal duct",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59555",
+   "side": "right",
+   "description": "Drains tears from the lacrimal sac into the nose, which is why crying makes the nose run."
+  },
+  {
+   "id": "FJ1355",
+   "source": "Right lateral rectus",
+   "name": "Right lateral rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49054",
+   "side": "right"
+  },
+  {
+   "id": "FJ1356",
+   "source": "Right lens",
+   "name": "Right lens",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lens",
+   "fma": "FMA58242",
+   "side": "right"
+  },
+  {
+   "id": "FJ1357",
+   "source": "Right levator palpebrae superioris",
+   "name": "Right levator palpebrae superioris",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49048",
+   "side": "right",
+   "description": "Lifts the upper eyelid."
+  },
+  {
+   "id": "FJ1359",
+   "source": "Right medial rectus",
+   "name": "Right medial rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49056",
+   "side": "right"
+  },
+  {
+   "id": "FJ1360",
+   "source": "Right lacrimal sac",
+   "name": "Right lacrimal sac",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lacrimal",
+   "fma": "FMA59545",
+   "side": "right"
+  },
+  {
+   "id": "FJ1361",
+   "source": "Right nasociliary nerve",
+   "name": "Right nasociliary nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52669",
+   "side": "right"
+  },
+  {
+   "id": "FJ1362",
+   "source": "Communicating branch of right nasociliary nerve with right ciliary ganglion",
+   "name": "Communicating branch of right nasociliary nerve with right ciliary ganglion",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "ganglion",
+   "fma": "FMA52673",
+   "side": "right"
+  },
+  {
+   "id": "FJ1363",
+   "source": "Right ophthalmic nerve",
+   "name": "Right ophthalmic nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52622",
+   "side": "right",
+   "description": "The first division of the trigeminal nerve, carrying feeling from the eye, the forehead, the scalp and the nose."
+  },
+  {
+   "id": "FJ1366",
+   "source": "Right posterior ethmoidal nerve",
+   "name": "Right posterior ethmoidal nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52715",
+   "side": "right"
+  },
+  {
+   "id": "FJ1367",
+   "source": "Optic part of right retina",
+   "name": "Right retina",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "retina",
+   "fma": "FMA58607",
+   "side": "right"
+  },
+  {
+   "id": "FJ1368",
+   "source": "Right sclera",
+   "name": "Right sclera",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "sclera",
+   "fma": "FMA58271",
+   "side": "right"
+  },
+  {
+   "id": "FJ1369",
+   "source": "Right long ciliary nerve",
+   "name": "Right long ciliary nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA82734",
+   "side": "right"
+  },
+  {
+   "id": "FJ1371",
+   "source": "Suspensory ligament of right lens",
+   "name": "Suspensory ligament of right lens",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "lens",
+   "fma": "FMA58839",
+   "side": "right"
+  },
+  {
+   "id": "FJ1372",
+   "source": "Superior branch of right oculomotor nerve",
+   "name": "Superior branch of right oculomotor nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52574",
+   "side": "right"
+  },
+  {
+   "id": "FJ1373",
+   "source": "Right superior oblique",
+   "name": "Right superior oblique",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49052",
+   "side": "right",
+   "description": "Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inwards."
+  },
+  {
+   "id": "FJ1374",
+   "source": "Right superior rectus",
+   "name": "Right superior rectus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "eye-muscle",
+   "fma": "FMA49044",
+   "side": "right"
+  },
+  {
+   "id": "FJ1375",
+   "source": "Tarsal plate of right upper eyelid",
+   "name": "Tarsal plate of right upper eyelid",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA59091",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1376",
+   "source": "Right supra-orbital nerve",
+   "name": "Right supra-orbital nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52656",
+   "side": "right"
+  },
+  {
+   "id": "FJ1377",
+   "source": "Right supratrochlear nerve",
+   "name": "Right supratrochlear nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA52643",
+   "side": "right"
+  },
+  {
+   "id": "FJ1379",
+   "source": "Tarsal plate of right lower eyelid",
+   "name": "Tarsal plate of right lower eyelid",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA59089",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1380",
+   "source": "Trochlea of right superior oblique",
+   "name": "Trochlea of right superior oblique",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "orbit-muscles",
+   "type": "connective",
+   "fma": "FMA49067",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ1381",
+   "source": "Right trochlear nerve",
+   "name": "Right trochlear nerve",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "orbit-nerves",
+   "type": "cranial-nerve",
+   "fma": "FMA50881",
+   "side": "right",
+   "description": "The thinnest cranial nerve and the only one to leave the back of the brainstem. It drives the superior oblique muscle of the eye."
+  },
+  {
+   "id": "FJ1382",
+   "source": "Right vitreous body",
+   "name": "Right vitreous body",
+   "layer": "organ",
+   "region": "skull",
+   "group": "eye",
+   "type": "vitreous",
+   "fma": "FMA58828",
+   "side": "right"
+  },
+  {
+   "id": "FJ1744",
+   "source": "Left inferior frontal gyrus",
+   "name": "Left inferior frontal gyrus",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "nerve-skull",
+   "type": "cortex",
+   "fma": "FMA72658",
+   "side": "left"
+  },
+  {
+   "id": "FJ1745",
+   "source": "Right inferior frontal gyrus",
+   "name": "Right inferior frontal gyrus",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "nerve-skull",
+   "type": "cortex",
+   "fma": "FMA72657",
+   "side": "right"
+  },
+  {
+   "id": "FJ1843",
+   "source": "Tentorium cerebelli",
+   "name": "Tentorium cerebelli",
+   "layer": "nerve",
+   "region": "skull",
+   "group": "nerve-skull",
+   "type": "dura",
+   "fma": "FMA83966"
+  },
+  {
+   "id": "FJ1883",
+   "source": "Caudate lobe tributary of left hepatic biliary tree",
+   "name": "Caudate lobe tributary of left hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71889",
+   "side": "left"
+  },
+  {
+   "id": "FJ2417",
+   "source": "Left anterior cusp of pulmonary valve",
+   "name": "Left anterior cusp of pulmonary valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7247",
+   "side": "left"
+  },
+  {
+   "id": "FJ2420",
+   "source": "Anterior leaflet of mitral valve",
+   "name": "Anterior leaflet of mitral valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7242"
+  },
+  {
+   "id": "FJ2421",
+   "source": "Anterior leaflet of tricuspid valve",
+   "name": "Anterior leaflet of tricuspid valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7238"
+  },
+  {
+   "id": "FJ2422",
+   "source": "Cavity of left ventricle",
+   "name": "Cavity of left ventricle",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart-cavity",
+   "fma": "FMA9466",
+   "side": "left",
+   "description": "Holds about 120 ml of blood at the end of filling and pushes out about 70 ml with each beat, into the aorta.",
+   "defaultHidden": true
+  },
+  {
+   "id": "FJ2423",
+   "source": "Cavity of right ventricle",
+   "name": "Cavity of right ventricle",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart-cavity",
+   "fma": "FMA9291",
+   "side": "right",
+   "defaultHidden": true
+  },
+  {
+   "id": "FJ2424",
+   "source": "Cavity of right atrium",
+   "name": "Cavity of right atrium",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart-cavity",
+   "fma": "FMA11359",
+   "side": "right",
+   "description": "Receives blood from the whole body through the venae cavae and from the heart itself through the coronary sinus.",
+   "defaultHidden": true
+  },
+  {
+   "id": "FJ2425",
+   "source": "Cavity of left atrium",
+   "name": "Cavity of left atrium",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart-cavity",
+   "fma": "FMA9465",
+   "side": "left",
+   "defaultHidden": true
+  },
+  {
+   "id": "FJ2426",
+   "source": "Left posterior cusp of aortic valve",
+   "name": "Left posterior cusp of aortic valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7254",
+   "side": "left"
+  },
+  {
+   "id": "FJ2427",
+   "source": "Posterior cusp of pulmonary valve",
+   "name": "Posterior cusp of pulmonary valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7250"
+  },
+  {
+   "id": "FJ2428",
+   "source": "Wall of ventricle",
+   "name": "Wall of the ventricles",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart",
+   "fma": "FMA13884",
+   "description": "The muscular wall of the two ventricles and the septum between them. The left ventricle’s wall is about three times thicker than the right’s, because it pumps blood round the whole body."
+  },
+  {
+   "id": "FJ2431",
+   "source": "Right posterior cusp of aortic valve",
+   "name": "Right posterior cusp of aortic valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7252",
+   "side": "right"
+  },
+  {
+   "id": "FJ2432",
+   "source": "Posterior leaflet of mitral valve",
+   "name": "Posterior leaflet of mitral valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7243"
+  },
+  {
+   "id": "FJ2433",
+   "source": "Posterior leaflet of tricuspid valve",
+   "name": "Posterior leaflet of tricuspid valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7239"
+  },
+  {
+   "id": "FJ2434",
+   "source": "Right anterior cusp of pulmonary valve",
+   "name": "Right anterior cusp of pulmonary valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7249",
+   "side": "right"
+  },
+  {
+   "id": "FJ2435",
+   "source": "Anterior cusp of aortic valve",
+   "name": "Anterior cusp of aortic valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7253"
+  },
+  {
+   "id": "FJ2436",
+   "source": "Septal leaflet of tricuspid valve",
+   "name": "Septal leaflet of tricuspid valve",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "valve",
+   "fma": "FMA7240"
+  },
+  {
+   "id": "FJ2438",
+   "source": "Wall of left atrium",
+   "name": "Wall of left atrium",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart",
+   "fma": "FMA9531",
+   "side": "left"
+  },
+  {
+   "id": "FJ2439",
+   "source": "Wall of right atrium",
+   "name": "Wall of right atrium",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "heart",
+   "type": "heart",
+   "fma": "FMA9457",
+   "side": "right"
+  },
+  {
+   "id": "FJ2440",
+   "source": "Cricoid cartilage",
+   "name": "Cricoid cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA9615",
+   "segments": 2
+  },
+  {
+   "id": "FJ2441",
+   "source": "Inferior lingular bronchial tree",
+   "name": "Inferior lingular bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68227",
+   "segments": 2
+  },
+  {
+   "id": "FJ2442",
+   "source": "Left medial basal segmental bronchial tree",
+   "name": "Left medial basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68230",
+   "side": "left",
+   "segments": 2
+  },
+  {
+   "id": "FJ2443",
+   "source": "Left anterior segmental bronchial tree",
+   "name": "Left anterior segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68222",
+   "side": "left",
+   "segments": 8
+  },
+  {
+   "id": "FJ2444",
+   "source": "Left apical segmental bronchial tree",
+   "name": "Left apical segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68223",
+   "side": "left",
+   "segments": 6
+  },
+  {
+   "id": "FJ2445",
+   "source": "Left lateral basal segmental bronchial tree",
+   "name": "Left lateral basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68232",
+   "side": "left",
+   "segments": 4
+  },
+  {
+   "id": "FJ2446",
+   "source": "Left posterior basal segmental bronchial tree",
+   "name": "Left posterior basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68233",
+   "side": "left",
+   "segments": 6
+  },
+  {
+   "id": "FJ2447",
+   "source": "Left posterior segmental bronchial tree",
+   "name": "Left posterior segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68225",
+   "side": "left",
+   "segments": 3
+  },
+  {
+   "id": "FJ2448",
+   "source": "Left superior segmental bronchial tree",
+   "name": "Left superior segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68228",
+   "side": "left",
+   "segments": 7
+  },
+  {
+   "id": "FJ2449",
+   "source": "Lateral segmental bronchial tree",
+   "name": "Lateral segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68215",
+   "segments": 4
+  },
+  {
+   "id": "FJ2450",
+   "source": "Left main bronchus",
+   "name": "Left main bronchus",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA7396",
+   "side": "left",
+   "description": "The first branch of the trachea. The right main bronchus is shorter, wider and steeper than the left, so inhaled objects more often lodge on the right."
+  },
+  {
+   "id": "FJ2451",
+   "source": "Medial segmental bronchial tree",
+   "name": "Medial segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68214",
+   "segments": 4
+  },
+  {
+   "id": "FJ2452",
+   "source": "Right anterior basal segmental bronchial tree",
+   "name": "Right anterior basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68321",
+   "side": "right",
+   "segments": 3
+  },
+  {
+   "id": "FJ2453",
+   "source": "Right anterior segmental bronchial tree",
+   "name": "Right anterior segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68212",
+   "side": "right",
+   "segments": 7
+  },
+  {
+   "id": "FJ2454",
+   "source": "Right apical segmental bronchial tree",
+   "name": "Right apical segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68211",
+   "side": "right",
+   "segments": 8
+  },
+  {
+   "id": "FJ2455",
+   "source": "Right lateral basal segmental bronchial tree",
+   "name": "Right lateral basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68220",
+   "side": "right",
+   "segments": 4
+  },
+  {
+   "id": "FJ2456",
+   "source": "Right medial basal segmental bronchial tree",
+   "name": "Right medial basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68218",
+   "side": "right",
+   "segments": 2
+  },
+  {
+   "id": "FJ2457",
+   "source": "Right posterior basal segmental bronchial tree",
+   "name": "Right posterior basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68221",
+   "side": "right",
+   "segments": 6
+  },
+  {
+   "id": "FJ2458",
+   "source": "Right posterior segmental bronchial tree",
+   "name": "Right posterior segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68213",
+   "side": "right",
+   "segments": 6
+  },
+  {
+   "id": "FJ2459",
+   "source": "Right superior segmental bronchial tree",
+   "name": "Right superior segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68216",
+   "side": "right",
+   "segments": 9
+  },
+  {
+   "id": "FJ2476",
+   "source": "Superior lingular bronchial tree",
+   "name": "Superior lingular bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68226",
+   "segments": 4
+  },
+  {
+   "id": "FJ2535",
+   "source": "Left anterior basal segmental bronchial tree",
+   "name": "Left anterior basal segmental bronchial tree",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68231",
+   "side": "left",
+   "segments": 3
+  },
+  {
+   "id": "FJ2539",
+   "source": "Right main bronchus proper",
+   "name": "Right main bronchus",
+   "layer": "organ",
+   "region": "thorax",
+   "group": "airways",
+   "type": "bronchus",
+   "fma": "FMA68418",
+   "side": "right",
+   "description": "The first branch of the trachea on the right. It is shorter, wider and steeper than the left, so inhaled objects more often lodge on the right."
+  },
+  {
+   "id": "FJ2554",
+   "source": "Right major alar cartilage",
+   "name": "Right major alar cartilage",
+   "layer": "cartilage",
+   "region": "skull",
+   "group": "cartilage-skull",
+   "type": "nasal-cartilage",
+   "fma": "FMA59505",
+   "side": "right"
+  },
+  {
+   "id": "FJ2555",
+   "source": "Left major alar cartilage",
+   "name": "Left major alar cartilage",
+   "layer": "cartilage",
+   "region": "skull",
+   "group": "cartilage-skull",
+   "type": "nasal-cartilage",
+   "fma": "FMA59506",
+   "side": "left"
+  },
+  {
+   "id": "FJ2556",
+   "source": "Left lateral nasal cartilage",
+   "name": "Left lateral nasal cartilage",
+   "layer": "cartilage",
+   "region": "skull",
+   "group": "cartilage-skull",
+   "type": "nasal-cartilage",
+   "fma": "FMA59513",
+   "side": "left"
+  },
+  {
+   "id": "FJ2557",
+   "source": "Septal nasal cartilage",
+   "name": "Septal nasal cartilage",
+   "layer": "cartilage",
+   "region": "skull",
+   "group": "cartilage-skull",
+   "type": "nasal-cartilage",
+   "fma": "FMA59503"
+  },
+  {
+   "id": "FJ2558",
+   "source": "Right lateral nasal cartilage",
+   "name": "Right lateral nasal cartilage",
+   "layer": "cartilage",
+   "region": "skull",
+   "group": "cartilage-skull",
+   "type": "nasal-cartilage",
+   "fma": "FMA59512",
+   "side": "right"
+  },
+  {
+   "id": "FJ2738",
+   "source": "Left genioglossus",
+   "name": "Left genioglossus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "mouth",
+   "type": "tongue-muscle",
+   "fma": "FMA46702",
+   "side": "left",
+   "description": "The main muscle of the tongue’s bulk, fanning from the inside of the chin. It pushes the tongue forward and out and keeps it from falling back in sleep."
+  },
+  {
+   "id": "FJ2739",
+   "source": "Left hyoglossus",
+   "name": "Left hyoglossus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "mouth",
+   "type": "tongue-muscle",
+   "fma": "FMA46704",
+   "side": "left"
+  },
+  {
+   "id": "FJ2740",
+   "source": "Left inferior pharyngeal constrictor",
+   "name": "Left inferior pharyngeal constrictor",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46636",
+   "side": "left"
+  },
+  {
+   "id": "FJ2741",
+   "source": "Left levator veli palatini",
+   "name": "Left levator veli palatini",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46729",
+   "side": "left"
+  },
+  {
+   "id": "FJ2742",
+   "source": "Right middle pharyngeal constrictor",
+   "name": "Right middle pharyngeal constrictor",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46633",
+   "side": "right"
+  },
+  {
+   "id": "FJ2743",
+   "source": "Left palatopharyngeus",
+   "name": "Left palatopharyngeus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46672",
+   "side": "left"
+  },
+  {
+   "id": "FJ2744",
+   "source": "Left pterygomandibular raphe",
+   "name": "Left pterygomandibular raphe",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "connective",
+   "fma": "FMA55620",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ2745",
+   "source": "Left salpingopharyngeus",
+   "name": "Left salpingopharyngeus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46670",
+   "side": "left"
+  },
+  {
+   "id": "FJ2746",
+   "source": "Left stylopharyngeus",
+   "name": "Left stylopharyngeus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46668",
+   "side": "left"
+  },
+  {
+   "id": "FJ2747",
+   "source": "Left superior pharyngeal constrictor",
+   "name": "Left superior pharyngeal constrictor",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46632",
+   "side": "left"
+  },
+  {
+   "id": "FJ2748",
+   "source": "Left tensor veli palatini",
+   "name": "Left tensor veli palatini",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46732",
+   "side": "left"
+  },
+  {
+   "id": "FJ2749",
+   "source": "Pharyngeal raphe",
+   "name": "Pharyngeal raphe",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "connective",
+   "fma": "FMA55077",
+   "tissue": "connective"
+  },
+  {
+   "id": "FJ2750",
+   "source": "Right genioglossus",
+   "name": "Right genioglossus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "mouth",
+   "type": "tongue-muscle",
+   "fma": "FMA46698",
+   "side": "right",
+   "description": "The main muscle of the tongue’s bulk, fanning from the inside of the chin. It pushes the tongue forward and out and keeps it from falling back in sleep."
+  },
+  {
+   "id": "FJ2751",
+   "source": "Right hyoglossus",
+   "name": "Right hyoglossus",
+   "layer": "muscle",
+   "region": "skull",
+   "group": "mouth",
+   "type": "tongue-muscle",
+   "fma": "FMA46703",
+   "side": "right"
+  },
+  {
+   "id": "FJ2752",
+   "source": "Right inferior pharyngeal constrictor",
+   "name": "Right inferior pharyngeal constrictor",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46635",
+   "side": "right"
+  },
+  {
+   "id": "FJ2753",
+   "source": "Right levator veli palatini",
+   "name": "Right levator veli palatini",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46728",
+   "side": "right"
+  },
+  {
+   "id": "FJ2754",
+   "source": "Left middle pharyngeal constrictor",
+   "name": "Left middle pharyngeal constrictor",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46634",
+   "side": "left"
+  },
+  {
+   "id": "FJ2755",
+   "source": "Right palatopharyngeus",
+   "name": "Right palatopharyngeus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46671",
+   "side": "right"
+  },
+  {
+   "id": "FJ2756",
+   "source": "Right pterygomandibular raphe",
+   "name": "Right pterygomandibular raphe",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "connective",
+   "fma": "FMA55619",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ2757",
+   "source": "Right salpingopharyngeus",
+   "name": "Right salpingopharyngeus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46669",
+   "side": "right"
+  },
+  {
+   "id": "FJ2758",
+   "source": "Right stylopharyngeus",
+   "name": "Right stylopharyngeus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46667",
+   "side": "right"
+  },
+  {
+   "id": "FJ2759",
+   "source": "Right superior pharyngeal constrictor",
+   "name": "Right superior pharyngeal constrictor",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46631",
+   "side": "right"
+  },
+  {
+   "id": "FJ2760",
+   "source": "Right tensor veli palatini",
+   "name": "Right tensor veli palatini",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46731",
+   "side": "right"
+  },
+  {
+   "id": "FJ2761",
+   "source": "Tongue",
+   "name": "Tongue",
+   "layer": "organ",
+   "region": "skull",
+   "group": "mouth",
+   "type": "tongue",
+   "fma": "FMA54640"
+  },
+  {
+   "id": "FJ2762",
+   "source": "Uvular muscle",
+   "name": "Uvular muscle",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "pharynx",
+   "type": "pharynx-muscle",
+   "fma": "FMA46733"
+  },
+  {
+   "id": "FJ2763",
+   "source": "Left stylohyoid ligament",
+   "name": "Left stylohyoid ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA72311",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ2764",
+   "source": "Right stylohyoid ligament",
+   "name": "Right stylohyoid ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA72309",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ2765",
+   "source": "Left sublingual gland",
+   "name": "Left sublingual gland",
+   "layer": "organ",
+   "region": "skull",
+   "group": "mouth",
+   "type": "salivary",
+   "fma": "FMA59805",
+   "side": "left"
+  },
+  {
+   "id": "FJ2766",
+   "source": "Left submandibular gland",
+   "name": "Left submandibular gland",
+   "layer": "organ",
+   "region": "skull",
+   "group": "mouth",
+   "type": "salivary",
+   "fma": "FMA59803",
+   "side": "left"
+  },
+  {
+   "id": "FJ2767",
+   "source": "Right sublingual gland",
+   "name": "Right sublingual gland",
+   "layer": "organ",
+   "region": "skull",
+   "group": "mouth",
+   "type": "salivary",
+   "fma": "FMA59804",
+   "side": "right"
+  },
+  {
+   "id": "FJ2768",
+   "source": "Right submandibular gland",
+   "name": "Right submandibular gland",
+   "layer": "organ",
+   "region": "skull",
+   "group": "mouth",
+   "type": "salivary",
+   "fma": "FMA59802",
+   "side": "right"
+  },
+  {
+   "id": "FJ2770",
+   "source": "Epiglottis",
+   "name": "Epiglottis",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "epiglottis",
+   "fma": "FMA55130"
+  },
+  {
+   "id": "FJ2771",
+   "source": "Hyo-epiglottic ligament",
+   "name": "Hyo-epiglottic ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55227",
+   "tissue": "connective"
+  },
+  {
+   "id": "FJ2773",
+   "source": "Left cuneiform cartilage",
+   "name": "Left cuneiform cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA55118",
+   "side": "left"
+  },
+  {
+   "id": "FJ2774",
+   "source": "Left aryepiglotticus",
+   "name": "Left aryepiglotticus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46605",
+   "side": "left"
+  },
+  {
+   "id": "FJ2775",
+   "source": "Left arytenoid cartilage",
+   "name": "Left arytenoid cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA55114",
+   "side": "left"
+  },
+  {
+   "id": "FJ2776",
+   "source": "Left corniculate cartilage",
+   "name": "Left corniculate cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA55116",
+   "side": "left"
+  },
+  {
+   "id": "FJ2777",
+   "source": "Left conus elasticus",
+   "name": "Left conus elasticus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55252",
+   "tissue": "connective",
+   "side": "left",
+   "description": "A membrane of elastic tissue from the cricoid cartilage up to the vocal ligament, which is its free upper edge."
+  },
+  {
+   "id": "FJ2778",
+   "source": "Left lateral crico-arytenoid",
+   "name": "Left lateral crico-arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46581",
+   "side": "left"
+  },
+  {
+   "id": "FJ2779",
+   "source": "Left lateral thyrohyoid ligament",
+   "name": "Left lateral thyrohyoid ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55141",
+   "tissue": "connective",
+   "side": "left"
+  },
+  {
+   "id": "FJ2780",
+   "source": "Left oblique arytenoid",
+   "name": "Left oblique arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46585",
+   "side": "left"
+  },
+  {
+   "id": "FJ2781",
+   "source": "Oblique part of left cricothyroid",
+   "name": "Oblique part of left cricothyroid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46614",
+   "side": "left",
+   "description": "Part of the cricothyroid, which tilts the thyroid cartilage forward on the cricoid, stretching the vocal cords to raise the pitch of the voice."
+  },
+  {
+   "id": "FJ2782",
+   "source": "Left posterior crico-arytenoid",
+   "name": "Left posterior crico-arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46578",
+   "side": "left",
+   "description": "The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outwards, and is essential for breathing."
+  },
+  {
+   "id": "FJ2783",
+   "source": "Straight part of left cricothyroid",
+   "name": "Straight part of left cricothyroid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46612",
+   "side": "left",
+   "description": "Tilts the thyroid cartilage forward on the cricoid, stretching the vocal cords to raise the pitch of the voice."
+  },
+  {
+   "id": "FJ2784",
+   "source": "Left thyro-arytenoid",
+   "name": "Left thyro-arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46590",
+   "side": "left",
+   "segments": 2
+  },
+  {
+   "id": "FJ2786",
+   "source": "Left thyrohyoid membrane",
+   "name": "Left thyrohyoid membrane",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55134",
+   "tissue": "connective",
+   "side": "left",
+   "description": "A broad membrane joining the thyroid cartilage to the hyoid bone, pierced by the nerve and vessels of the upper larynx."
+  },
+  {
+   "id": "FJ2787",
+   "source": "Left vocal ligament",
+   "name": "Left vocal ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55246",
+   "tissue": "connective",
+   "side": "left",
+   "description": "The core of each vocal cord: a band of elastic tissue from the thyroid cartilage to the arytenoid, which vibrates to make the voice."
+  },
+  {
+   "id": "FJ2788",
+   "source": "Left vocalis",
+   "name": "Left vocalis",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46593",
+   "side": "left"
+  },
+  {
+   "id": "FJ2789",
+   "source": "Median cricothyroid ligament",
+   "name": "Median cricothyroid ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA55237"
+  },
+  {
+   "id": "FJ2790",
+   "source": "Median thyrohyoid ligament",
+   "name": "Median thyrohyoid ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55138",
+   "tissue": "connective"
+  },
+  {
+   "id": "FJ2791",
+   "source": "Right aryepiglotticus",
+   "name": "Right aryepiglotticus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46604",
+   "side": "right"
+  },
+  {
+   "id": "FJ2792",
+   "source": "Right arytenoid cartilage",
+   "name": "Right arytenoid cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA55113",
+   "side": "right"
+  },
+  {
+   "id": "FJ2793",
+   "source": "Right corniculate cartilage",
+   "name": "Right corniculate cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA55115",
+   "side": "right"
+  },
+  {
+   "id": "FJ2794",
+   "source": "Right conus elasticus",
+   "name": "Right conus elasticus",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55251",
+   "tissue": "connective",
+   "side": "right",
+   "description": "A membrane of elastic tissue from the cricoid cartilage up to the vocal ligament, which is its free upper edge."
+  },
+  {
+   "id": "FJ2795",
+   "source": "Right cuneiform cartilage",
+   "name": "Right cuneiform cartilage",
+   "layer": "cartilage",
+   "region": "neck",
+   "group": "larynx",
+   "type": "laryngeal-cartilage",
+   "fma": "FMA55117",
+   "side": "right"
+  },
+  {
+   "id": "FJ2796",
+   "source": "Right lateral crico-arytenoid",
+   "name": "Right lateral crico-arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46580",
+   "side": "right"
+  },
+  {
+   "id": "FJ2797",
+   "source": "Right lateral thyrohyoid ligament",
+   "name": "Right lateral thyrohyoid ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55140",
+   "tissue": "connective",
+   "side": "right"
+  },
+  {
+   "id": "FJ2798",
+   "source": "Right oblique arytenoid",
+   "name": "Right oblique arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46584",
+   "side": "right"
+  },
+  {
+   "id": "FJ2799",
+   "source": "Oblique part of right cricothyroid",
+   "name": "Oblique part of right cricothyroid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46613",
+   "side": "right",
+   "description": "Part of the cricothyroid, which tilts the thyroid cartilage forward on the cricoid, stretching the vocal cords to raise the pitch of the voice."
+  },
+  {
+   "id": "FJ2800",
+   "source": "Right posterior crico-arytenoid",
+   "name": "Right posterior crico-arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46577",
+   "side": "right",
+   "description": "The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outwards, and is essential for breathing."
+  },
+  {
+   "id": "FJ2801",
+   "source": "Straight part of right cricothyroid",
+   "name": "Straight part of right cricothyroid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46611",
+   "side": "right",
+   "description": "Tilts the thyroid cartilage forward on the cricoid, stretching the vocal cords to raise the pitch of the voice."
+  },
+  {
+   "id": "FJ2802",
+   "source": "Right thyro-arytenoid",
+   "name": "Right thyro-arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46589",
+   "side": "right",
+   "segments": 2
+  },
+  {
+   "id": "FJ2804",
+   "source": "Right thyrohyoid membrane",
+   "name": "Right thyrohyoid membrane",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55133",
+   "tissue": "connective",
+   "side": "right",
+   "description": "A broad membrane joining the thyroid cartilage to the hyoid bone, pierced by the nerve and vessels of the upper larynx."
+  },
+  {
+   "id": "FJ2805",
+   "source": "Right vocal ligament",
+   "name": "Right vocal ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55245",
+   "tissue": "connective",
+   "side": "right",
+   "description": "The core of each vocal cord: a band of elastic tissue from the thyroid cartilage to the arytenoid, which vibrates to make the voice."
+  },
+  {
+   "id": "FJ2806",
+   "source": "Right vocalis",
+   "name": "Right vocalis",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46592",
+   "side": "right"
+  },
+  {
+   "id": "FJ2807",
+   "source": "Thyro-epiglottic ligament",
+   "name": "Thyro-epiglottic ligament",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "connective",
+   "fma": "FMA55230",
+   "tissue": "connective"
+  },
+  {
+   "id": "FJ2809",
+   "source": "Transverse arytenoid",
+   "name": "Transverse arytenoid",
+   "layer": "muscle",
+   "region": "neck",
+   "group": "larynx",
+   "type": "larynx-muscle",
+   "fma": "FMA46582"
+  },
+  {
+   "id": "FJ3071",
+   "source": "Anterior superior tributary of right hepatic biliary tree",
+   "name": "Anterior superior tributary of right hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71867",
+   "side": "right"
+  },
+  {
+   "id": "FJ3072",
+   "source": "Anterior inferior tributary of right hepatic biliary tree",
+   "name": "Anterior inferior tributary of right hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71868",
+   "side": "right"
+  },
+  {
+   "id": "FJ3079",
+   "source": "Common hepatic duct",
+   "name": "Common hepatic duct",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA14668"
+  },
+  {
+   "id": "FJ3080",
+   "source": "Cystic duct",
+   "name": "Cystic duct",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA14539"
+  },
+  {
+   "id": "FJ3088",
+   "source": "Lateral superior tributary of left hepatic biliary tree",
+   "name": "Lateral superior tributary of left hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71887",
+   "side": "left",
+   "segments": 2
+  },
+  {
+   "id": "FJ3089",
+   "source": "Lateral inferior tributary of left hepatic biliary tree",
+   "name": "Lateral inferior tributary of left hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71888",
+   "side": "left"
+  },
+  {
+   "id": "FJ3094",
+   "source": "Left duct of caudate lobe of liver",
+   "name": "Left duct of caudate lobe of liver",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA76903",
+   "side": "left"
+  },
+  {
+   "id": "FJ3096",
+   "source": "Left hepatic duct",
+   "name": "Left hepatic duct",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA14670",
+   "side": "left"
+  },
+  {
+   "id": "FJ3103",
+   "source": "Medial inferior tributary of left hepatic biliary tree",
+   "name": "Medial inferior tributary of left hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71886",
+   "side": "left"
+  },
+  {
+   "id": "FJ3104",
+   "source": "Medial superior tributary of left hepatic biliary tree",
+   "name": "Medial superior tributary of left hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71885",
+   "side": "left",
+   "segments": 2
+  },
+  {
+   "id": "FJ3108",
+   "source": "Posterior inferior tributary of right hepatic biliary tree",
+   "name": "Posterior inferior tributary of right hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71870",
+   "side": "right"
+  },
+  {
+   "id": "FJ3109",
+   "source": "Posterior superior tributary of right hepatic biliary tree",
+   "name": "Posterior superior tributary of right hepatic biliary tree",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA71869",
+   "side": "right",
+   "segments": 2
+  },
+  {
+   "id": "FJ3123",
+   "source": "Right hepatic duct",
+   "name": "Right hepatic duct",
+   "layer": "organ",
+   "region": "abdomen",
+   "group": "organ-abdomen",
+   "type": "bile-duct",
+   "fma": "FMA14669",
+   "side": "right"
   }
  ],
  "layers": [
@@ -17494,7 +19988,7 @@
    "color": "#b0524a",
    "connectiveColor": "#ddd3c3",
    "fade": 0.14,
-   "description": "Skeletal muscles pull on bones through tendons to move joints and hold posture. Tendons, ligaments and fasciae are shown in a paler colour."
+   "description": "Skeletal muscles pull on bones through tendons to move joints and hold posture, down to the muscles that move the eyes, the tongue, the soft palate and the vocal cords. Tendons, ligaments and fasciae are shown in a paler colour."
   },
   {
    "id": "organ",
@@ -17502,7 +19996,7 @@
    "short": "Organs",
    "color": "#c98a78",
    "fade": 0.18,
-   "description": "The internal organs of the chest, abdomen and pelvis, with the eyes, ears, lips and gums."
+   "description": "The internal organs of the chest, abdomen and pelvis, the heart chamber by chamber and valve by valve, the bronchial tree, the eyes with their lens, iris and retina, the tear glands, the tongue and salivary glands, the ears, lips and gums."
   },
   {
    "id": "artery",
@@ -17522,11 +20016,11 @@
   },
   {
    "id": "nerve",
-   "name": "Brain",
+   "name": "Brain and nerves",
    "short": "Brain",
    "color": "#e3bdb3",
    "fade": 0.18,
-   "description": "The brain with its gyri, deep nuclei and fluid-filled ventricles, and the optic nerves. The spinal cord and peripheral nerves are not part of this dataset."
+   "description": "The brain with its gyri, deep nuclei and fluid-filled ventricles, the tentorium, the optic nerves and the nerves of the orbit. The spinal cord and the peripheral nerves of the body are not part of this dataset."
   },
   {
    "id": "cartilage",
@@ -17534,7 +20028,7 @@
    "short": "Cartilage",
    "color": "#b2cbd3",
    "fade": 0.2,
-   "description": "Intervertebral discs, costal cartilages and the cartilages of the larynx and nose."
+   "description": "Intervertebral discs, costal cartilages, the cartilages of the larynx with the epiglottis, and the cartilages of the nose."
   },
   {
    "id": "bone",
@@ -17554,16 +20048,17 @@
   }
  ],
  "about": {
-  "intro": "A complete adult male body built from real anatomical surface models: skin, muscles, organs, the brain, the arteries and veins and every bone. Each structure is a separate object you can select, fade, hide, isolate and pull apart.",
+  "intro": "A complete adult male body built from real anatomical surface models: skin, muscles, organs, the brain, the arteries and veins and every bone, down to the parts of the eye, the cartilages of the larynx and each cusp of the heart valves. Each structure is a separate object you can select, fade, hide, isolate and pull apart.",
   "gaps": [
-   "Nerves: the brain and optic nerves are modelled, but not the spinal cord or the peripheral nerves.",
-   "Vessels: the arteries and veins are those of BodyParts3D 4.0, which stop at the fingers and toes and, in the head, model the arteries of the brain but not the veins or the vessels of the face and scalp.",
+   "Nerves: the brain, the optic nerves and the nerves of the orbit are modelled, but not the spinal cord or the peripheral nerves of the body.",
+   "Vessels: the arteries and veins stop at the fingers and toes. In the head the arteries of the brain are modelled, but not its veins or the vessels of the face and scalp.",
+   "Organs: the liver, the colon and the small intestine are single structures without their segments.",
    "Bones: the coccyx, the six ear ossicles and the third molars are missing from the dataset.",
    "The lymphatic system is not part of this model. Bones are outer surfaces only, without marrow."
   ],
   "sources": [
-   "Geometry: BodyParts3D, © The Database Center for Life Science (DBCLS). Skin, muscles, organs, brain, cartilage and bones from release 3.0 (CC BY-SA 2.1 Japan); arteries and veins from release 4.0 (CC BY 4.0), by way of the Human-Atlas package by slorksmo. Mitsuhashi N. et al., BodyParts3D: 3D structure database for anatomical concepts, Nucleic Acids Research 37 (2009), doi:10.1093/nar/gkn613.",
-   "Adapted: converted from millimetres Z-up to metres Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), segments of each vessel merged into one structure, positions quantised to 16 bits.",
+   "Geometry: BodyParts3D, © The Database Center for Life Science (DBCLS). The skin, muscles, organs, brain, cartilage and bones are release 3.0 (CC BY-SA 2.1 Japan). The arteries and veins, and the finer structures of the eyes, larynx, pharynx, tongue, heart, airways, bile ducts and orbital nerves, are release 4.0 (CC BY 4.0), by way of the Human-Atlas package by slorksmo, fitted onto the release 3.0 body. Mitsuhashi N. et al., BodyParts3D: 3D structure database for anatomical concepts, Nucleic Acids Research 37 (2009), doi:10.1093/nar/gkn613.",
+   "Adapted: converted from millimetres Z-up to metres Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), release 4.0 structures moved onto release 3.0 by a correction measured from the 591 structures both releases share, segments of each named structure merged into one, positions quantised to 16 bits.",
    "Rendering: three.js (MIT licence). Type: Atkinson Hyperlegible and Newsreader (SIL Open Font Licence)."
   ]
  }

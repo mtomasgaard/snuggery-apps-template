@@ -239,8 +239,17 @@ async function load() {
     // Per-body state, read once the parts are known. A body's first visit hides what its data says to hide.
     S.layers = bstore.get('layerModes', {});
     prevMode = bstore.get('layerPrev', {});
-    const savedHidden = bstore.get('hidden', null);
-    S.hidden = new Set(savedHidden || anat.parts.filter(p => p.defaultHidden && parts.has(p.id)).map(p => p.id));
+    // Parts the data hides by default start hidden the first time this device sees them, including
+    // parts added to the data later; after that the user's own choice is kept.
+    S.hidden = new Set(bstore.get('hidden', []));
+    const defaults = anat.parts.filter(p => p.defaultHidden && parts.has(p.id)).map(p => p.id);
+    const applied = new Set(bstore.get('defaultsApplied', []));
+    const fresh = defaults.filter(id => !applied.has(id));
+    if (fresh.length) {
+      for (const id of fresh) S.hidden.add(id);
+      bstore.set('hidden', [...S.hidden]);
+      bstore.set('defaultsApplied', [...new Set([...applied, ...defaults])]);
+    }
     S.isolate = bstore.get('isolate', null);
     if (S.isolate && !idsOf(S.isolate).length) S.isolate = null;
     search.placeholder = BODIES[body].hint;

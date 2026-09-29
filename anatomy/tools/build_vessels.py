@@ -1,36 +1,23 @@
 """Step 6: replace the artery and vein layers with the full vascular tree of BodyParts3D 4.0.
 
 BodyParts3D 3.0 (steps 1-5) has 55 vessels, all in the trunk and neck. Release 4.0 models about a thousand
-arterial and venous segments in the same body and the same coordinate frame, down to the vessels of the hands,
-feet and brain. This step reads them from the Human-Atlas package (fetch_atlas.py), aligns them to the 3.0
-skeleton with an offset measured from bones present in both releases, merges the segments of each named
+arterial and venous segments of the same body, down to the vessels of the hands, feet and brain. This step reads
+them from the Human-Atlas package (fetch_atlas.py) and places them on the 3.0 body vertex by vertex with
+atlaslib.BodyMap, because 4.0 moved the head and remodelled the legs. It merges the segments of each named
 vessel into one structure, decimates, and rewrites data/geometry-artery.bin, data/geometry-vein.bin,
-data/geometry.json and data/anatomy.json. Runs after build_full.py; re-runnable."""
+data/geometry.json and data/anatomy.json. Runs after build_full.py and before build_extras.py; re-runnable."""
 import json, os, re, collections
 import numpy as np
-from paths import DATA
-from atlaslib import load_atlas, read_part, weld, merge, decimate, write_layer, side_of, cap
+from paths import DATA, WORK, SOURCE
+from atlaslib import load_atlas, read_part, weld, merge, decimate, write_layer, side_of, cap, load_bodymap
 
 A = json.load(open(os.path.join(DATA, 'anatomy.json')))
 G = json.load(open(os.path.join(DATA, 'geometry.json')))
 M, chunks = load_atlas('atlas.json')
 
-# ---------- alignment: 4.0 -> 3.0 frame, measured from bones that did not change between releases ----------
-ours = {p['id']: p for p in G['parts']}
-byfma = collections.defaultdict(list)
-for p in M['parts']: byfma[p['conceptId']].append(p)
-deltas = []
-for fid, op in ours.items():
-    tp = byfma.get(fid)
-    if not tp or len(tp) != 1: continue
-    tp = tp[0]
-    osz = np.array(op['max']) - np.array(op['min']); tsz = np.array(tp['bounds'][1]) - np.array(tp['bounds'][0])
-    if np.abs(osz - tsz).max() > 0.0008: continue           # only meshes identical in extent
-    deltas.append((np.array(op['min']) + np.array(op['max'])) / 2 - (np.array(tp['bounds'][0]) + np.array(tp['bounds'][1])) / 2)
-D = np.array(deltas); OFF = np.median(D, 0)
-agree = (np.abs(D - OFF).max(1) < 0.003).mean()      # the rest were remodelled between releases
-print(f'{len(D)} same-extent structures give offset {np.round(OFF * 1000, 1)} mm ({agree:.0%} of them within 3 mm)')
-assert len(D) > 50 and agree > 0.5, 'the two releases do not line up'
+# ---------- alignment: 4.0 -> 3.0, measured from every structure the two releases share ----------
+BM = load_bodymap(G, A, M, os.path.join(SOURCE, 'bodymap_pairs.json'))
+print(BM.report())
 
 # ---------- regions (same rules as build_soft.py, plus names that position gets wrong) ----------
 def region(c, size):
@@ -48,11 +35,12 @@ def region(c, size):
 LIMB = [(r'femoral|saphenous|popliteal|genicular|tibial|fibular|plantar|dorsalis pedis|calcaneal|\bperforating', 'leg'),
         (r'axillary|\bbrachial|cephalic|basilic|cubital|radial|ulnar|interosseous|palmar|metacarpal|pollicis|indicis|carpal', 'arm')]
 def region_for(name, c, size, side):
-    l = name.lower()
-    if 'brachiocephalic' not in l:
-        for pat, limb in LIMB:
-            if re.search(pat, l) and side in ('left', 'right'): return f"{limb}-{side[0]}"
-    return region(c, size)
+    """Position decides; a limb vessel whose root reaches into the trunk (femoral, axillary) joins its limb."""
+    r = region(c, size)
+    if r.startswith(('arm', 'leg')) or 'brachiocephalic' in name.lower(): return r
+    for pat, limb in LIMB:
+        if re.search(pat, name.lower()) and side in ('left', 'right'): return f"{limb}-{side[0]}"
+    return r
 
 # ---------- names ----------
 RENAME = {'arteria princeps pollicis': 'princeps pollicis artery', 'arteria radialis indicis': 'radialis indicis artery',
@@ -151,10 +139,11 @@ def canon(l):
     return re.sub(r'\s+', ' ', l).strip()
 
 # ---------- select, merge and measure ----------
-vessels = [p for p in M['parts'] if p['system'] in ('arterial', 'venous')]
+# 'Hepatovenous segments' are the liver's venous drainage territories, 8-12 cm blocks of liver, not veins.
+vessels = [p for p in M['parts'] if p['system'] in ('arterial', 'venous') and not p['name'].lower().startswith('hepatovenous')]
 byname = collections.OrderedDict()
 for p in vessels:
-    p['cx'] = (p['bounds'][0][0] + p['bounds'][1][0]) / 2 + OFF[0]
+    p['cx'] = (p['bounds'][0][0] + p['bounds'][1][0]) / 2
     byname.setdefault((p['system'], p['name'].lower().strip()), []).append(p)
 groups = collections.OrderedDict()    # (system, name, side) -> segments; side is 'left', 'right' or None
 positional = set()
@@ -177,7 +166,7 @@ src_tris = new_tris = 0
 for (system, lname, side), pieces in groups.items():
     layer = 'artery' if system == 'arterial' else 'vein'
     P, F = merge([weld(*read_part(chunks, p)) for p in pieces])
-    P = P + OFF
+    P = BM.place(P)
     b0, b1 = P.min(0), P.max(0)
     reg = region_for(lname, (b0 + b1) / 2, b1 - b0, side or ('left' if (b0[0] + b1[0]) > 0 else 'right'))
     src_tris += len(F)
@@ -226,16 +215,6 @@ GR['vein-thorax']['description'] = 'The venae cavae and their tributaries, the v
 A['groups'] = list(GR.values())
 LS['artery']['description'] = 'Arteries carry blood away from the heart. The aorta and its branches to the trunk, the limbs and the head, down to the arteries of the fingers, toes and brain, with the coronary arteries and the pulmonary arteries to each segment of the lungs.'
 LS['vein']['description'] = 'Veins return blood to the heart. The venae cavae and the deep and superficial veins of the limbs, the veins of the heart and lungs, and the portal system that carries blood from the gut to the liver.'
-A['about'] = {
- 'intro': 'A complete adult male body built from real anatomical surface models: skin, muscles, organs, the brain, the arteries and veins and every bone. Each structure is a separate object you can select, fade, hide, isolate and pull apart.',
- 'gaps': ['Nerves: the brain and optic nerves are modelled, but not the spinal cord or the peripheral nerves.',
-          'Vessels: the arteries and veins are those of BodyParts3D 4.0, which stop at the fingers and toes and, in the head, model the arteries of the brain but not the veins or the vessels of the face and scalp.',
-          'Bones: the coccyx, the six ear ossicles and the third molars are missing from the dataset.',
-          'The lymphatic system is not part of this model. Bones are outer surfaces only, without marrow.'],
- 'sources': ['Geometry: BodyParts3D, © The Database Center for Life Science (DBCLS). Skin, muscles, organs, brain, cartilage and bones from release 3.0 (CC BY-SA 2.1 Japan); arteries and veins from release 4.0 (CC BY 4.0), by way of the Human-Atlas package by slorksmo. Mitsuhashi N. et al., BodyParts3D: 3D structure database for anatomical concepts, Nucleic Acids Research 37 (2009), doi:10.1093/nar/gkn613.',
-             'Adapted: converted from millimetres Z-up to metres Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), segments of each vessel merged into one structure, positions quantised to 16 bits.',
-             'Rendering: three.js (MIT licence). Type: Atkinson Hyperlegible and Newsreader (SIL Open Font Licence).'],
-}
 json.dump(A, open(os.path.join(DATA, 'anatomy.json'), 'w'), indent=1, ensure_ascii=False)
 print(len(A['parts']), 'parts;', collections.Counter(p['layer'] for p in A['parts']))
 print('vessel groups:', {g['id']: sum(1 for p in meta if p['group'] == g['id']) for g in A['groups'] if g['id'].startswith(('artery-', 'vein-'))})
