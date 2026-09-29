@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T20:01:18Z",
+ "generatedAt": "2026-09-29T21:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/starships-first-orbital-flight-put-its-heat-shield-to-the-test-how-it-fares-could-determine-if-spacexs-vision-is-possible-292960",
+     "published": "2026-09-29T20:20:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sven Bilén, Professor of Engineering Design, Electrical Engineering and Aerospace Engineering, Penn State"
+    },
+    {
      "title": "Ethiopia is sliding back toward war – a look at what is driving the fighting and why it matters",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Alemayehu Fentaw Weldemariam, Ph.D. Fellow, Center for Constitutional Democracy, Indiana University"
-    },
-    {
-     "title": "Chatbots as oracles: How AI is giving new life to the ancient practice of seeking answers from inscrutable sources",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/chatbots-as-oracles-how-ai-is-giving-new-life-to-the-ancient-practice-of-seeking-answers-from-inscrutable-sources-289279",
-     "published": "2026-09-29T12:45:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Webb Keane, George Herbert Mead Distinguished University Professor of Anthropology, University of Michigan"
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Ethiopia is sliding back toward war – a look at what is driving the fighting and why it matters",
-   "published": "2026-09-29 17:59 UTC"
+   "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
+   "published": "2026-09-29 20:20 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Chatbots as oracles: How AI is giving new life to the ancient practice of seeking answers from inscrutable sources",
-   "published": "2026-09-29 12:45 UTC"
+   "title": "Ethiopia is sliding back toward war – a look at what is driving the fighting and why it matters",
+   "published": "2026-09-29 17:59 UTC"
   },
   {
    "region": "Americas",
