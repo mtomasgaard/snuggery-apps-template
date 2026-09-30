@@ -7,7 +7,7 @@
 // full-height panels. Nothing is fetched from outside the app's folder. Frames are drawn only when
 // something changed (§5.11). window.__eh is the test surface (inert unless called).
 
-import { $, clamp, store, reducedMotion, hexRGB, cssVar, isNum, easeInOut, wrap180 } from './util.js';
+import { $, clamp, store, reducedMotion, hexRGB, cssVar, isNum, easeInOut, ease, wrap180 } from './util.js';
 import * as U from './units.js';
 import { createLoader, climateAt, climateBytes, elevationAt } from './data.js';
 import { createView, attachGestures, unitVec, lonLatOf } from './proj.js';
@@ -16,13 +16,13 @@ import { createPlates, compass, distanceKm, quatAt, rotate } from './plates.js';
 import { createOverlay } from './overlay.js';
 import { createTimeline } from './timeline.js';
 import { createCurves } from './curves.js';
-import { createSheet, shortCite } from './sheet.js';
+import { createSheet, shortCite, glideRows } from './sheet.js';
 import { createFind } from './find.js';
 import { createAbout } from './about.js';
 import { buildLut, legendGradient, legendTicks, legendUnit, LEGEND_TEXT, LEGEND_LONG } from './lut.js';
 
 const DEG = Math.PI / 180;
-const FADE_MS = 200, PLAY_MS = 667, REST_MS = 150, TURN_MS = 400, PERF_N = 120;
+const FADE_MS = 200, PLAY_MS = 667, TURN_MS = 400, PERF_N = 120, GLIDE_MS = 280;
 // The opening (§19): the globe fades in at 750 Ma, then the 90 maps play to today; once, skippable.
 const INTRO_FADE_MS = 700, INTRO_PLAY_MS = 5000, INTRO_GROW = 0.6, PIN_DROP_MS = 420;
 // The view follows the continents (§19): a point of today's Africa (Kinshasa, on plate 701, the
@@ -38,7 +38,7 @@ const PLATES_NOTE = ['Pieces of today\'s crust and how they moved', 'Arrows: the
 
 const S = {
   stop: 0, lens: 'surface', plates: false, coasts: true, units: 'metric', sheet: 0,
-  pin: null, playing: false, scrubbing: false, lost: false, perfHud: false, follow: true,
+  pin: null, playing: false, scrubbing: false, lost: false, perfHud: false, follow: true, focus: false,
 };
 let track = null, followLast = null, following = false;
 let manifest = null, ts = null, P = null, places = null, climate = null, elevation = null;
@@ -47,7 +47,8 @@ let view = null, earth = null, overlay = null, tl = null, curves = null, sheet =
 let arrows = null, lastRotateMs = 0, climateKey = null;
 const luts = {};
 const dirty = { earth: true, overlay: true, curves: true };
-let rafPending = false, fling = null, turn = null, playTimer = 0, restTimer = 0, hudTimer = 0;
+let rafPending = false, rafId = 0, fling = null, turn = null, playTimer = 0, hudTimer = 0;
+let glide = null, unfocusTimer = 0;
 const frames = [];
 const colours = { space: [0.02, 0.027, 0.047], glow: hexRGB('#8fc0ff') };
 let firstEarthFrame = null;
@@ -68,6 +69,7 @@ function restore() {
   S.sheet = store.get('sheet', 0, (v) => v === 0 || v === 1 || v === 2);
   S.pin = store.get('pin', null, validPin);
   S.follow = store.get('follow', true, (v) => typeof v === 'boolean');
+  S.focus = store.get('focus', false, (v) => typeof v === 'boolean');
   U.setSystem(S.units);
   view.mode = store.get('view', 'globe', (v) => v === 'globe' || v === 'map');
   const g = store.get('globe', null, (v) => v && [v.lon, v.lat, v.zoom].every(isNum));
@@ -86,7 +88,12 @@ function saveView() {
 function requestRender() {
   if (rafPending) return;
   rafPending = true;
-  requestAnimationFrame(frame);
+  rafId = requestAnimationFrame(frame);
+}
+/** Draw now, before the next paint: a canvas that has just been resized is blank until drawn. */
+function drawNow() {
+  if (rafPending) cancelAnimationFrame(rafId);
+  frame(performance.now());
 }
 function frame(now) {
   rafPending = false;
@@ -118,6 +125,13 @@ function frame(now) {
     view.clamp();
     dirty.earth = dirty.overlay = true;
     if (k >= 1) { turn = null; saveView(); settleAria(); } else more = true;
+  }
+  if (glide) {
+    // The Earth carried from where it was to its new seat (focus mode, §20), on the app's curve.
+    const k = Math.min(1, (performance.now() - glide.t0) / GLIDE_MS), e = 1 - ease(k);
+    view.sx = glide.x * e; view.sy = glide.y * e; view.sk = 1 + (glide.k - 1) * e;
+    dirty.earth = dirty.overlay = true;
+    if (k >= 1) glide = null; else more = true;
   }
   const t0 = performance.now();
   let e = 0, o = 0;
@@ -288,7 +302,7 @@ function startIntro() {
   introPending = false;
   intro = { t0: performance.now(), last: performance.now(), globe: view.mode === 'globe' };
   if (intro.globe) view.grow = INTRO_GROW;
-  earth.setScrubbing(true);
+  earth.setPreviews(true);
   $('intro-skip').hidden = false;
   $('intro-cap').hidden = false;
   requestRender();
@@ -315,7 +329,7 @@ function endIntro() {
   $('intro-skip').hidden = true;
   $('intro-cap').hidden = true;
   $('overlay').style.opacity = '';
-  if (earth && earth.supported) earth.setScrubbing(false);
+  if (earth && earth.supported) earth.setPreviews(false);
   if (tl) tl.stopRoll();
   setStop(0, { fade: fadeMs(), announce: true });
   settle();
@@ -566,8 +580,9 @@ function updateClimate() {
 function renderLegend() {
   const lg = $('legend');
   const s = manifest && manifest.slices[S.stop];
-  if (!s || S.lens === 'surface' || s.climate == null || !climate) { lg.hidden = true; return; }
-  lg.hidden = false;
+  // In focus mode a lens stays applied without its legend: a display choice the person made (§20).
+  if (S.focus || !s || S.lens === 'surface' || s.climate == null || !climate) { conceal(lg, true); return; }
+  conceal(lg, false);
   $('legend-bar').style.background = legendGradient(S.lens);
   const ticks = legendTicks(S.lens);
   const row = $('legend-ticks');
@@ -605,10 +620,10 @@ function renderNotice() {
   if (S.lost) lines.push('Restoring the view…');
   else {
     if (s && S.lens !== 'surface' && s.climate == null) lines.push(NO_CLIMATE);
-    if (S.plates) lines.push(...PLATES_NOTE);
+    if (S.plates && !S.focus) lines.push(...PLATES_NOTE);      // a legend, so not in focus mode (§20)
   }
   n.replaceChildren(...lines.map((t) => { const sp = document.createElement('span'); sp.textContent = t; return sp; }));
-  n.hidden = !lines.length;
+  conceal(n, !lines.length);
 }
 function settleAria() {
   const s = manifest.slices[S.stop];
@@ -689,6 +704,53 @@ function togglePerfHud(on = !S.perfHud) {
   hudTimer = setInterval(upd, 500);
 }
 
+/* ── focus mode (§20): the Earth alone with the age row and the slider. Everything else is hidden
+   and inert, so it leaves the accessibility tree and the tab order; the Earth takes the rows it held.
+   Remembered (eh.focus); never during the opening. ── */
+const conceal = (e, on) => { e.hidden = on; e.inert = on; };
+function applyFocus() {
+  $('app').classList.toggle('focus', S.focus);
+  for (const e of [$('top'), document.querySelector('.earth-top'), document.querySelector('.lenses'), $('curves'), $('sheet')]) conceal(e, S.focus);
+  $('focus-exit').hidden = !S.focus;
+  view.seat(S.focus);
+  renderLegend();
+  renderNotice();
+}
+const scaleNow = () => (view.mode === 'globe' ? view.radius() : view.mapScale());
+/**
+ * The panel takes its new shape at once, so every size is final straight away; then the rows glide
+ * to their places (glideRows), the Earth glides from where it was to its new seat (280 ms on the
+ * app's curve) and the keys fade in. Under Reduce Motion it all happens at once. Focus moves to the
+ * other key; `keys` (a keyboard did it) lets that key show its focus ring.
+ */
+function setFocus(on, keys = false) {
+  on = !!on;
+  if (on === S.focus) return;
+  endIntro();
+  const app = $('app'), motion = !reducedMotion(), e0 = $('earth').getBoundingClientRect();
+  const from = e0.height > 1 ? [e0.left + view.cx, e0.top + view.cy, scaleNow()] : null;
+  S.focus = on;
+  store.set('focus', on);
+  const apply = () => {
+    applyFocus();
+    clearTimeout(unfocusTimer);
+    app.classList.toggle('unfocusing', !on && motion);          // the controls fade back in (style.css)
+    if (!on && motion) unfocusTimer = setTimeout(() => app.classList.remove('unfocusing'), 320);
+  };
+  if (wide.matches) apply(); else glideRows(app, apply);        // side by side the rows change column: no glide
+  view.sx = view.sy = 0; view.sk = 1; glide = null;
+  resize();
+  resizeCurves();
+  if (motion && from) {
+    const e1 = $('earth').getBoundingClientRect();
+    glide = { t0: performance.now(), x: from[0] - e1.left - view.cx, y: from[1] - e1.top - view.cy, k: from[2] / scaleNow() };
+  }
+  drawNow();
+  const k = on ? $('focus-exit') : $('focus-enter');
+  k.focus({ focusVisible: keys });
+  if (document.activeElement !== k) $('sheet-grip').focus({ focusVisible: keys });   // the sheet at full hides the Earth
+}
+
 function wire() {
   for (const b of document.querySelectorAll('.segmented button')) b.addEventListener('click', () => setView(b.dataset.view));
   $('tg-plates').addEventListener('click', () => setLayer('plates', !S.plates));
@@ -698,6 +760,12 @@ function wire() {
   $('readout-close').addEventListener('click', closeReadout);
   $('readout-more').addEventListener('click', toggleCardMore);
   $('intro-skip').addEventListener('click', () => endIntro());
+  // Focus mode's keys; a keyboard's Enter or Space clicks with detail 0. Escape leaves focus mode.
+  $('focus-enter').addEventListener('click', (e) => setFocus(true, e.detail === 0));
+  $('focus-exit').addEventListener('click', (e) => setFocus(false, e.detail === 0));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && S.focus && $('find').hidden && $('about').hidden) { e.preventDefault(); setFocus(false, true); }
+  });
   // Any touch or key during the opening ends it: the app is itself at once.
   document.addEventListener('pointerdown', (e) => { if ((intro || introPending) && e.target !== $('intro-skip')) endIntro(); }, true);
   document.addEventListener('keydown', () => { if (intro || introPending) endIntro(); }, true);
@@ -790,7 +858,7 @@ function fatal(e) {
 function dataProblem(e) {
   const n = $('notice');
   n.textContent = `Could not read ${e.message || e}`;
-  n.hidden = false;
+  conceal(n, false);
 }
 
 async function boot() {
@@ -803,6 +871,8 @@ async function boot() {
   restore();
   introPending = wantIntro();
   if (introPending) {
+    S.focus = false;                      // the opening never runs in focus mode (§20)
+    store.set('focus', false);
     store.set('intro', 1);
     S.stop = manifest.count - 1;
     earthFade = 0;
@@ -813,7 +883,9 @@ async function boot() {
   }
   overlay = createOverlay($('overlay'));
   earth = createEarth($('gl'), {
-    manifest, mapPath: L.mapPath, fadeMs,
+    manifest, mapPath: L.mapPath,
+    // A full map arriving under a moving finger replaces its preview at once; otherwise it fades in.
+    arriveMs: () => (S.scrubbing ? 0 : fadeMs()),
     onChange: () => redraw(),
     onError: dataProblem,
     // While the context is lost the canvas shows nothing, so neither it nor the overlay is shown.
@@ -826,17 +898,17 @@ async function boot() {
     breakMark: $('break'), swatch: $('swatch'), age: $('age'), ics: $('ics-text'), live: $('age-live'),
     prev: $('btn-prev'), play: $('btn-play'), next: $('btn-next'), extraScrub: [$('curves')],
   }, manifest, ts, {
-    scrubStart() { pause(false); S.scrubbing = true; earth.supported && earth.setScrubbing(true); },
+    scrubStart() { pause(false); S.scrubbing = true; },
+    // The map under the finger loads first, at once; then the two ahead of it in the direction of
+    // travel, the way play reads ahead, so a steady drag stays sharp (§5.7, §21).
     scrub(i) {
+      const d = i < S.stop ? -1 : 1;
       setStop(i, { fade: 0, scrub: true });
-      clearTimeout(restTimer);
-      // A finger resting for 150 ms fetches the full map (§5.7).
-      restTimer = setTimeout(() => { if (S.scrubbing && earth.supported) earth.fetchCurrent(); }, REST_MS);
+      if (earth.supported) earth.setPrefetch([i + d, i + 2 * d]);
     },
     scrubEnd(i) {
-      clearTimeout(restTimer);
       S.scrubbing = false;
-      if (earth.supported) { earth.setScrubbing(false); earth.show(i, fadeMs()); }
+      if (earth.supported) earth.show(i, fadeMs());
       settle();
     },
     go: (i) => go(i),
@@ -850,7 +922,7 @@ async function boot() {
   $('tg-plates').setAttribute('aria-pressed', String(S.plates));
   $('tg-coasts').setAttribute('aria-pressed', String(S.coasts));
   if (!setLens(S.lens)) setLens('surface');
-  renderNotice();
+  applyFocus();
   resize();
   setStop(S.stop, { fade: 0, announce: true });
   settleAria();
@@ -900,7 +972,7 @@ window.__eh = {
     return new Promise((res, rej) => {
       const check = () => {
         const st = earth && earth.supported ? earth.state() : null;
-        const ok = (!st || (!S.lost && !st.B && st.A && st.A.kind === 'full' && st.A.stop === S.stop && st.running == null)) && !rafPending && !turn && !intro && !introPending && !pinDrop && !following;
+        const ok = (!st || (!S.lost && !st.B && st.A && st.A.kind === 'full' && st.A.stop === S.stop && st.running == null)) && !rafPending && !turn && !intro && !introPending && !pinDrop && !following && !glide;
         if (ok) res(true); else if (performance.now() - t0 > timeout) rej(new Error('not settled: ' + JSON.stringify(st))); else setTimeout(check, 30);
       };
       check();
@@ -935,7 +1007,9 @@ window.__eh = {
   perfHud: (on) => { togglePerfHud(on); return S.perfHud; },
   /** The view that follows the continents: whether it is on, and its centre for this map. */
   follow: (on) => { if (on === true) startFollowing(); else if (on === false) stopFollowing(); return { on: S.follow, at: followAt(S.stop) }; },
-  state: () => ({ follow: S.follow, stop: S.stop, map: manifest && manifest.slices[S.stop].map, lens: S.lens, plates: S.plates, coasts: S.coasts, units: S.units, sheet: S.sheet, playing: S.playing, lost: S.lost, pin: S.pin, climateKey, view: { mode: view.mode, globe: { ...view.globe }, map: { ...view.map }, W: view.W, H: view.H } }),
+  /** Focus mode (§20), set as its keys set it (focus moves too): whether it is on, gliding, stored. */
+  focus: (on) => { if (on != null) setFocus(on); return { on: S.focus, gliding: !!glide, stored: store.get('focus', null) }; },
+  state: () => ({ focus: S.focus, follow: S.follow, stop: S.stop, map: manifest && manifest.slices[S.stop].map, lens: S.lens, plates: S.plates, coasts: S.coasts, units: S.units, sheet: S.sheet, playing: S.playing, lost: S.lost, pin: S.pin, climateKey, view: { mode: view.mode, globe: { ...view.globe }, map: { ...view.map }, W: view.W, H: view.H, cx: view.cx, cy: view.cy, scale: scaleNow() } }),
   ageRow: () => ({ age: $('age').textContent, ics: $('ics').textContent, valuetext: $('slider').getAttribute('aria-valuetext') }),
   readout: () => ($('readout').hidden ? null : [...$('readout').querySelectorAll('p')].map((p) => p.textContent).filter(Boolean)),
   notice: () => ($('notice').hidden ? null : [...$('notice').children].map((s) => s.textContent)),
@@ -946,6 +1020,8 @@ window.__eh = {
   intro: () => ({ pending: introPending, running: !!intro, stop: S.stop, fade: +earthFade.toFixed(2), rolling: $('agerow').classList.contains('rolling'), stored: store.get('intro', null) }),
   skipIntro: () => endIntro(),
   card: () => { const c = $('readout'), r = c.getBoundingClientRect(), e = $('earth').getBoundingClientRect(); return c.hidden ? null : { left: r.left - e.left, top: r.top - e.top, width: r.width, height: r.height, side: c.classList.contains('above') ? 'above' : c.classList.contains('below') ? 'below' : 'free', open: c.classList.contains('open') }; },
+  /** What the Earth shows now: [the stop under the slider, 'full' or 'proxy', the stop that map is]. */
+  showing: () => { const s = earth && earth.supported ? earth.showing() : null; return [S.stop, s && s.kind, s && s.stop]; },
   curvesLabel: () => (curves ? curves.label(S.stop) : null),
   sheetHead: () => [...$('sheet-head').children].map((p) => p.textContent),
   sheetText: () => $('sheet-body').innerText,

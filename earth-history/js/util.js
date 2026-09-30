@@ -15,6 +15,18 @@ export function wrapPi(a) {
 }
 
 export const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - ((-2 * t + 2) ** 2) / 2);
+/** The app's one motion curve, cubic-bezier(0.22, 0.61, 0.36, 1) (ART.md "Motion"), for motion drawn in JS. */
+export function ease(x) {
+  const c = (a, b) => [3 * a, 3 * (b - a) - 3 * a, 1 - 3 * b + 3 * a];     // B(t) = ((C·t + B)·t + A)·t
+  const [ax, bx, cx] = c(0.22, 0.36), [ay, by, cy] = c(0.61, 1);
+  let t = clamp(x, 0, 1);
+  for (let k = 0; k < 8; k++) {                                             // Newton on x(t) = x
+    const d = ((cx * t + bx) * t + ax) * t - x, dx = (3 * cx * t + 2 * bx) * t + ax;
+    if (Math.abs(d) < 1e-6 || !dx) break;
+    t = clamp(t - d / dx, 0, 1);
+  }
+  return ((cy * t + by) * t + ay) * t;
+}
 
 export function reducedMotion() {
   try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { return false; }

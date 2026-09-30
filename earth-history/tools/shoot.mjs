@@ -2,12 +2,17 @@
 // and dark; fail on any console error or warning, page error, failed request, HTTP ≥ 400, or any
 // request that is not to the local server, data: or blob:; save a screenshot of each scene
 // (DESIGN §13). Then, in the first theme: the full sweep — all 90 stops by ›, the age row, the
-// sheet's two peek lines and the curves' three values checked against the manifest at each — and a
-// scripted scrub across the slider (and a short one on the curves strip), with __eh.perf() printed.
+// sheet's two peek lines and the curves' three values checked against the manifest at each — a
+// scripted scrub across the slider (and a short one on the curves strip), with __eh.perf() printed,
+// and a drag across 40 stops at 2, 6 and 15 stops a second and a 60-a-second flick (DESIGN §21),
+// reporting per speed how many stops showed the preview and how soon the full map took over. The
+// `focus` scene covers focus mode (DESIGN §20) in both themes.
 //
 //   node tools/shoot.mjs [outdir] [scene ...]
-//   SCREENSHOTS=1 node tools/shoot.mjs      also writes screenshots/app.png (780 × 1688, map 49, the
-//                                           sheet at peek) and ten named scenes beside it
+//   SCREENSHOTS=1 node tools/shoot.mjs      also writes screenshots/globe-49-light.png (780 × 1688, map
+//                                           49, the sheet at peek) and twelve named scenes beside it.
+//                                           It never writes screenshots/app.png: that is the README's
+//                                           two-pane picture, made by Tools/compose-readme.py.
 //
 // Each theme starts from a fresh profile, so the first-launch opening (DESIGN §19) runs: it is
 // watched for a moment (the "opening" scene's screenshot), then ended with __eh.skipIntro() before
@@ -81,6 +86,16 @@ function expectedCurves(s) {
     t.sea_level ? `Sea ${signed(t.sea_level.m, 1)} m` : 'Sea: no data',
   ];
 }
+// The slider's axis (DESIGN §3.4), computed here from the manifest, to put a finger on any stop.
+function axisX(age) {
+  const { compressed_fraction: c, break_ma: b, knots: k } = manifest.axis;
+  if (age <= b) return c + (1 - c) * (1 - age / b);
+  if (age >= k[0][0]) return k[0][1];
+  for (let j = 0; j < k.length - 1; j++) { const [a0, x0] = k[j], [a1, x1] = k[j + 1]; if (age <= a0 && age >= a1) return x0 + (x1 - x0) * (a0 - age) / (a0 - a1); }
+  return c;
+}
+const stopX = manifest.slices.map((s) => axisX(s.age_ma));
+const median = (a) => { if (!a.length) return null; const s = [...a].sort((p, q) => p - q); return s[Math.floor((s.length - 1) / 2)]; };
 const APP_LON = 15, APP_LAT = 5;
 /** Label boxes [[left, right], …] in order, at least 2 px apart. */
 const apart = (boxes) => Array.isArray(boxes) && boxes.length > 1 && boxes.every((b, j) => j === 0 || b[0] >= boxes[j - 1][1] + 2);
@@ -532,6 +547,186 @@ for (const [si, scheme] of schemes.entries()) {
       const b = await eh(() => window.__eh.state().view);
       check(b.W === 390 && b.H === 498, `back to 390 × 844: the Earth ${b.W} × ${b.H}`);
     },
+    focus: async () => {
+      // Focus mode (DESIGN §20): the Earth alone with the age row and the slider, entered by its key in
+      // the panel's top row and left by the ghost key in the corner or Escape; remembered; no glide
+      // under Reduce Motion; one column side by side too.
+      const i = stopOfMap(49), sl = manifest.slices[i];
+      const HIDE = { title: '#top h1', find: '#btn-find', about: '#btn-about', 'Globe|Map': '.segmented', plates: '#tg-plates', coasts: '#tg-coasts', 'entry key': '#focus-enter', 'lens chips': '.lenses', legend: '#legend', notice: '#notice', curves: '#curves', sheet: '#sheet' };
+      const KEEP = { 'exit key': '#focus-exit', stage: '#stage', 'age row': '#agerow', '‹': '#btn-prev', '▶': '#btn-play', '›': '#btn-next', slider: '#slider' };
+      const look = () => eh(([hide, keep]) => {
+        const st = (sel) => { const e = document.querySelector(sel); return { shown: e.getClientRects().length > 0, hidden: !!e.closest('[hidden]'), inert: !!e.closest('[inert]') }; };
+        const box = (id) => { const b = document.getElementById(id).getBoundingClientRect(); return [b.left, b.top, b.width, b.height].map((v) => +v.toFixed(1)); };
+        const gl = document.getElementById('gl');
+        return {
+          hide: Object.fromEntries(Object.entries(hide).map(([k, sel]) => [k, st(sel)])), keep: Object.fromEntries(Object.entries(keep).map(([k, sel]) => [k, st(sel)])),
+          earth: box('earth'), agerow: box('agerow'), slider: box('slider'), exit: box('focus-exit'), gl: [gl.width, gl.height], active: document.activeElement.id,
+          focus: window.__eh.focus(), view: window.__eh.state().view, app: document.getElementById('app').className, names: [document.getElementById('focus-enter').getAttribute('aria-label'), document.getElementById('focus-exit').getAttribute('aria-label')],
+        };
+      }, [HIDE, KEEP]);
+      const allHidden = (v) => Object.entries(v.hide).filter(([, x]) => x.shown || !x.hidden || !x.inert).map(([k]) => k);
+      const allShown = (v, except = []) => Object.entries(v.hide).filter(([k, x]) => !except.includes(k) && (!x.shown || x.hidden || x.inert)).map(([k]) => k);
+      const kept = (v) => Object.entries(v.keep).filter(([, x]) => !x.shown || x.hidden || x.inert).map(([k]) => k);
+      try {
+        await eh((j) => { window.__eh.setSheet(0); window.__eh.setView('globe'); window.__eh.setLens('surface'); window.__eh.toggle('coasts', true); window.__eh.toggle('plates', true); window.__eh.follow(true); window.__eh.goto(j); }, i);
+        await settled();
+        await rest();
+        const v0 = await look();
+        // The accessible names of what focus mode hides, as the tree prints them (checked present first).
+        const HIDDEN_NAMES = ['heading "Earth’s History"', 'button "Find a city"', 'button "About this app and its sources"', 'radio "Globe"', 'radio "Map"', 'button "Plates:', 'button "Today\'s coasts"',
+          'button "Hide the controls"', 'radio "Surface"', 'radio "Temperature"', 'radio "Rain"', 'region "This map and its period"', 'button "Show more about this map"'];
+        const aria0 = await page.locator('#app').ariaSnapshot();
+        check(v0.earth[3] === 498 && allShown(v0, ['legend', 'exit key']).length === 0 && !v0.keep['exit key'].shown && v0.names[0] === 'Hide the controls' && v0.names[1] === 'Show the controls',
+          `before: Earth ${v0.earth[3]} px; every control shown${allShown(v0, ['legend']).length ? ' — not shown: ' + allShown(v0, ['legend']).join(', ') : ''}; the key "${v0.names[0]}" at the end of the top row (${v0.hide['entry key'].shown ? 'shown' : 'missing'})`);
+
+        // Enter through the key (a pointer): the grid changes at once, so everything is measured straight away.
+        await page.click('#focus-enter');
+        const v1 = await look();
+        check(v1.focus.on && v1.focus.stored === true && /\bfocus\b/.test(v1.app), `the key enters focus mode (stored ${JSON.stringify(v1.focus.stored)}, #app.${v1.app.split(' ').join('.')})`);
+        check(allHidden(v1).length === 0, `hidden and inert: ${Object.keys(HIDE).join(', ')}${allHidden(v1).length ? ' — still showing or not inert: ' + allHidden(v1).join(', ') : ''}`);
+        check(v1.earth[3] === 498 + 44 + 84 + 112 && kept(v1).length === 0, `the Earth panel takes the top bar's, the curves' and the sheet's rows: ${v0.earth[3]} → ${v1.earth[3]} px (+44 +84 +112); still there: ${Object.keys(KEEP).join(', ')}${kept(v1).length ? ' — missing: ' + kept(v1).join(', ') : ''}`);
+        check(v1.active === 'focus-exit', `focus moves to the exit key (${v1.active})`);
+        check(v1.focus.gliding, 'the Earth glides to its new seat (280 ms, the app\'s curve)');
+        await settled();
+        await rest();
+        const v2 = await look();
+        check(v2.earth.join() === '0,0,390,738' && v2.agerow.join() === '0,738,390,48' && v2.slider.join() === '0,786,390,58', `at rest: the Earth ${v2.earth.join(' ')}, the age row ${v2.agerow.join(' ')}, the slider ${v2.slider.join(' ')} (left, top, width, height)`);
+        check(v2.view.W === 390 && v2.view.H === 738 && Math.abs(v2.view.cy - 369) < 0.01 && Math.abs(v2.view.cx - 195) < 0.01 && Math.abs(v2.view.scale - v0.view.scale) < 0.01 && v2.gl.join() === '780,1476',
+          `the globe re-centred in the taller panel: centre ${v0.view.cx}, ${v0.view.cy} → ${v2.view.cx}, ${v2.view.cy}; radius ${v2.view.scale.toFixed(1)} px (was ${v0.view.scale.toFixed(1)}); canvas ${v2.gl.join(' × ')} (the DPR cap of 2)`);
+        check(v2.exit.join() === '348,10,30,30', `the exit key sits in the neatline's top-right corner (${v2.exit.join(' ')}), where the entry key sat in the top row`);
+        const aria = await page.locator('#app').ariaSnapshot();
+        const gone = HIDDEN_NAMES.filter((w) => aria.includes(w)), unseen = HIDDEN_NAMES.filter((w) => !aria0.includes(w));
+        const there = ['button "Show the controls"', 'img "Globe of the Earth', 'button "One map older"', 'button "Play toward today"', 'button "One map newer"', 'slider "Time, from 750 million years ago to today"'].filter((w) => !aria.includes(w));
+        check(unseen.length === 0 && gone.length === 0 && there.length === 0, `the accessibility tree: the ${HIDDEN_NAMES.length} hidden controls it held before are gone; the exit key, the Earth, the age row's keys and the slider remain${unseen.length ? ' — not found even before: ' + unseen.join(', ') : ''}${gone.length ? ' — still there: ' + gone.join(', ') : ''}${there.length ? ' — missing: ' + there.join(', ') : ''}`);
+        await page.focus('#focus-exit');
+        const order = [];
+        for (let k = 0; k < 5; k++) { await page.keyboard.press('Tab'); order.push(await eh(() => document.activeElement.id || document.activeElement.tagName)); }
+        check(order.join() === 'stage,btn-prev,btn-play,btn-next,slider', `the tab order from the exit key: ${order.join(' → ')}`);
+        const n = await eh(() => ({ hidden: document.getElementById('notice').hidden, inert: document.getElementById('notice').inert, plates: window.__eh.state().plates, arrows: window.__eh.perf().overlay.arrows }));
+        check(n.plates && n.hidden && n.inert && n.arrows > 0, `Plates stays on (${n.arrows} arrows drawn) without its notice (hidden ${n.hidden}, inert ${n.inert})`);
+        await eh(() => { window.__eh.toggle('plates', false); document.activeElement.blur(); });   // the picture without the Tab walk's focus ring
+        await settled();
+        await shot('focus-49');
+
+        // What stays works: › steps a map and the view follows; the slider drags; play; a lens; a tap; gestures.
+        await page.click('#btn-next');
+        await settled();
+        const st1 = await eh(() => ({ row: window.__eh.ageRow(), f: window.__eh.follow(), g: window.__eh.state().view.globe }));
+        const fd = st1.f.at ? Math.hypot(((st1.g.lon - st1.f.at[0] + 540) % 360) - 180, st1.g.lat - st1.f.at[1]) : 99;
+        check(st1.row.age === `${manifest.slices[i - 1].age_ma} million years ago` && st1.f.on && fd < 0.06, `› steps to map ${manifest.slices[i - 1].map}: "${st1.row.age}"; the view follows the continents there (${st1.g.lon.toFixed(1)}°, ${st1.g.lat.toFixed(1)}°)`);
+        const tr = await page.locator('#track').boundingBox();
+        await page.mouse.move(tr.x + tr.width * 0.5, tr.y + 17);
+        await page.mouse.down();
+        await page.mouse.move(tr.x + tr.width * 0.8, tr.y + 17, { steps: 6 });
+        await page.mouse.up();
+        await settled();
+        const dragged = await eh(() => window.__eh.state().stop);
+        check(dragged < i - 1, `the slider drags in focus mode (stop ${i - 1} → ${dragged})`);
+        await page.click('#btn-play');
+        await page.waitForTimeout(1500);
+        const pl = await eh(() => window.__eh.state());
+        await page.click('#btn-play');
+        check(pl.playing && pl.stop < dragged, `▶ plays in focus mode (stop ${dragged} → ${pl.stop})`);
+        await eh((j) => window.__eh.goto(j), i);
+        await eh(() => window.__eh.setLens('temperature'));
+        await page.waitForFunction(() => window.__eh.state().climateKey !== null, null, { timeout: 20000 });
+        await settled();
+        const lens = await eh(() => ({ key: window.__eh.state().climateKey, legend: window.__eh.legend(), el: [document.getElementById('legend').hidden, document.getElementById('legend').inert] }));
+        check(lens.key === `temperature:${sl.climate}` && lens.legend === null && lens.el.join() === 'true,true', `a lens still renders without its legend (${lens.key}; the legend hidden ${lens.el[0]}, inert ${lens.el[1]})`);
+        const at = await eh(() => window.__eh.cityAt('Chicago'));
+        await eh(([lon, lat]) => window.__eh.look(lon, lat), at);
+        const box = await page.locator('#stage').boundingBox();
+        const pc = await eh(([lon, lat]) => window.__eh.project(lon, lat), at);
+        await page.touchscreen.tap(box.x + pc[0], box.y + pc[1]);
+        await page.waitForFunction(() => window.__eh.readout() && window.__eh.readout().length >= 3, null, { timeout: 10000 });
+        const ro = await eh(() => ({ r: window.__eh.readout(), c: window.__eh.card(), pin: window.__eh.state().pin }));
+        check(ro.r[0] === 'Here, 251 million years ago' && /from Chicago\./.test(ro.r[2]) && ro.c && ro.c.side === 'above' && ro.pin && ro.pin.kind === 'tap', `a tap opens the readout and drops a pin: "${ro.r[0]}", the card ${ro.c && ro.c.side} its pin`);
+        await eh(() => document.getElementById('readout-close').click());
+        const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
+        const g0 = await eh(() => window.__eh.state().view.globe.lon);
+        await page.mouse.move(cx, cy); await page.mouse.down();
+        for (let k = 1; k <= 10; k++) await page.mouse.move(cx - 6 * k, cy, { steps: 1 });
+        await page.mouse.up();
+        await page.waitForTimeout(700);
+        const g1 = await eh(() => ({ lon: window.__eh.state().view.globe.lon, f: window.__eh.follow().on }));
+        await page.touchscreen.tap(cx, cy);
+        await page.waitForTimeout(80);
+        await page.touchscreen.tap(cx, cy);
+        await page.waitForTimeout(450);
+        await settled();
+        const gs = await eh(() => ({ g: window.__eh.state().view.globe, f: window.__eh.follow(), on: window.__eh.focus().on, ro: window.__eh.readout() }));
+        const turned = Math.abs(((g1.lon - g0 + 540) % 360) - 180);
+        check(turned > 5 && !g1.f && gs.on && gs.f.on && gs.g.zoom === 1 && gs.ro === null, `gestures: a 60 px drag turned the globe ${turned.toFixed(1)}° (${g0.toFixed(1)}° → ${g1.lon.toFixed(1)}°); a double-tap gives the view back to the continents and does not leave focus mode`);
+
+        // Leave through the key: everything back, focus on the entry key. Temperature and Plates on, so the
+        // legend and the Plates notice must return with the rest.
+        await eh(() => window.__eh.toggle('plates', true));
+        await page.click('#focus-exit');
+        const v3 = await look();
+        check(!v3.focus.on && v3.focus.stored === false && allShown(v3, ['exit key']).length === 0 && v3.earth[3] === 498 && !v3.keep['exit key'].shown && v3.active === 'focus-enter',
+          `the exit key restores everything (Earth ${v3.earth[3]} px; the legend and the Plates notice back${allShown(v3).length ? ' — not back: ' + allShown(v3).join(', ') : ''}); focus on "${v3.names[0]}" (${v3.active})`);
+        await settled();
+        await rest();
+        const cl = await eh(() => window.__eh.curvesLabel());
+        check(JSON.stringify(cl) === JSON.stringify(expectedCurves(sl)), `the curves strip is back and current: ${cl.join(' · ')}`);
+        await eh(() => { window.__eh.setLens('surface'); window.__eh.toggle('plates', false); });
+
+        // The keyboard: Enter on the entry key, Escape to leave.
+        await page.focus('#focus-enter');
+        await page.keyboard.press('Enter');
+        const k1 = await eh(() => ({ on: window.__eh.focus().on, active: document.activeElement.id }));
+        await page.keyboard.press('Escape');
+        const k2 = await eh(() => ({ on: window.__eh.focus().on, active: document.activeElement.id, earth: document.getElementById('earth').getBoundingClientRect().height }));
+        check(k1.on && k1.active === 'focus-exit' && !k2.on && k2.active === 'focus-enter' && k2.earth === 498, `Enter on the key enters (focus on ${k1.active}); Escape leaves (focus on ${k2.active}, Earth ${k2.earth} px)`);
+        await settled();
+
+        // Remembered across a reload.
+        await eh(() => window.__eh.focus(true));
+        await page.reload();
+        await page.waitForFunction(() => document.getElementById('loading').classList.contains('done'), null, { timeout: 60000 });
+        await settled();
+        await rest();
+        const v4 = await look();
+        const ir = await eh(() => window.__eh.intro());
+        check(v4.focus.on && allHidden(v4).length === 0 && v4.earth[3] === 738 && v4.keep['exit key'].shown && !ir.pending && !ir.running && Math.abs(v4.view.cy - 369) < 0.01,
+          `after a reload: still in focus mode (Earth ${v4.earth[3]} px, globe centred at ${v4.view.cy}, the exit key shown), no opening`);
+        await eh(() => window.__eh.focus(false));
+        await settled();
+
+        // Reduce Motion: no glide of the rows or the Earth, no fade.
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.click('#focus-enter');
+        const rm1 = await eh(() => ({ on: window.__eh.focus().on, gliding: window.__eh.focus().gliding, flipping: document.getElementById('app').classList.contains('flipping'), tf: ['agerow', 'slider'].map((id) => document.getElementById(id).style.transform), running: document.getAnimations().filter((a) => a.playState === 'running').length, cy: window.__eh.state().view.cy }));
+        await page.keyboard.press('Escape');
+        const rm2 = await eh(() => ({ on: window.__eh.focus().on, gliding: window.__eh.focus().gliding, flipping: document.getElementById('app').classList.contains('flipping'), classes: document.getElementById('app').className, running: document.getAnimations().filter((a) => a.playState === 'running').length }));
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+        check(rm1.on && !rm1.gliding && !rm1.flipping && rm1.tf.join('') === '' && rm1.running === 0 && rm1.cy === 369 && !rm2.on && !rm2.gliding && !rm2.flipping && !/unfocusing/.test(rm2.classes) && rm2.running === 0,
+          `reduced motion: in and out at once (no glide, no row slide, ${rm1.running + rm2.running} animations running; the globe at ${rm1.cy} at once)`);
+        await settled();
+
+        // Side by side (844 × 390): one column, as on a phone.
+        await page.setViewportSize({ width: 844, height: 390 });
+        await page.waitForTimeout(400);
+        await settled();
+        const w0 = await look();
+        await page.click('#focus-enter');
+        await settled();
+        await rest();
+        const w1 = await look();
+        await shot('focus-landscape');
+        await page.keyboard.press('Escape');
+        await settled();
+        const w2 = await look();
+        check(w0.earth[2] === 444 && w1.focus.on && allHidden(w1).length === 0 && w1.earth.join() === '0,0,844,284' && w1.agerow.join() === '0,284,844,48' && w1.slider.join() === '0,332,844,58' && Math.abs(w1.view.cy - 142) < 0.01 && w2.earth[2] === 444 && !w2.focus.on,
+          `844 × 390: two columns (Earth ${w0.earth[2]} × ${w0.earth[3]}) → focus mode, one column (Earth ${w1.earth[2]} × ${w1.earth[3]}, radius ${w1.view.scale.toFixed(1)} px, the age row and the slider ${w1.slider[2]} px wide at the bottom) → back (${w2.earth[2]} × ${w2.earth[3]})`);
+      } finally {
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.waitForTimeout(300);
+        await eh(() => { window.__eh.focus(false); window.__eh.setLens('surface'); window.__eh.toggle('plates', false); window.__eh.toggle('coasts', true); window.__eh.follow(true); const b = document.getElementById('readout-close'); if (!document.getElementById('readout').hidden) b.click(); });
+        await settled();
+      }
+    },
     'persist-2': async () => {
       await eh((j) => { window.__eh.goto(j); window.__eh.setSheet(1); window.__eh.setUnits('metric'); window.__eh.setLens('rain'); window.__eh.find('Cape Town'); window.__eh.choose(0); }, stopOfMap(49));
       await page.reload();
@@ -618,17 +813,89 @@ for (const [si, scheme] of schemes.entries()) {
     const after = await eh(() => window.__eh.state().stop);
     const x = await eh(() => { const t = document.getElementById('track').getBoundingClientRect(), c = document.getElementById('curves-canvas').getBoundingClientRect(); return [t.left, t.width, c.left, c.width]; });
     check(after !== before && after > 0 && Math.abs(x[0] - x[2]) < 0.5 && Math.abs(x[1] - x[3]) < 0.5, `dragging on the curves scrubs like the slider (stop ${before} → ${after}); strip and track share their x axis (${x.map((n) => n.toFixed(1)).join(', ')})`);
+
+    // Sharp while scrubbing (DESIGN §5.7, §21): a finger dragged across 40 stops at 2, 6 and 15 stops a
+    // second, and a 60-a-second flick. Every frame, in the page, records the stop under the finger and
+    // whether its full map or its preview is drawn. Coasts are off here: SwiftShader rasterises that
+    // overlay at about 180 ms a frame, and Chromium delivers one pointer move per frame, so with them on a
+    // headless drag skips stops and every "on screen" time is one slow frame long. The loader is what is
+    // measured; whether a phone keeps pace with the overlay is a phone check (NOTES.md).
+    console.log('  - scrub speeds: 40 stops at 2, 6 and 15 a second and a flick at 60, Coasts off (see the comment)');
+    await eh(() => { window.__eh.toggle('plates', false); window.__eh.toggle('coasts', false); });
+    const tk = await page.locator('#track').boundingBox();
+    const fy = tk.y + 17;
+    async function speedDrag(from, to, rate, holdMs) {
+      await eh((j) => window.__eh.goto(j), from);
+      await settled();
+      await page.waitForTimeout(300);
+      await eh(() => {
+        const log = window.__scrubLog = [];
+        const tick = () => { log.push([performance.now(), ...window.__eh.showing()]); if (!window.__scrubStop && log.length < 20000) requestAnimationFrame(tick); };
+        window.__scrubStop = false;
+        requestAnimationFrame(tick);
+      });
+      const dir = Math.sign(to - from), n = Math.abs(to - from);
+      const xAt = (f) => { const k = Math.min(n, Math.floor(f)), a = from + dir * k, b = from + dir * Math.min(n, k + 1); return tk.x + tk.width * (stopX[a] + (stopX[b] - stopX[a]) * Math.min(1, f - k)); };
+      await page.mouse.move(xAt(0), fy);
+      await page.mouse.down();
+      const t0 = Date.now();
+      for (;;) {
+        const f = ((Date.now() - t0) / 1000) * rate;
+        await page.mouse.move(xAt(Math.min(n, f)), fy);
+        if (f >= n) break;
+        await page.waitForTimeout(12);
+      }
+      if (holdMs) await page.waitForTimeout(holdMs);
+      await page.mouse.up();
+      const upAt = await eh(() => performance.now());
+      await page.waitForTimeout(900);
+      const log = await eh(() => { window.__scrubStop = true; return window.__scrubLog; });
+      // A stop's first frame under the finger, and the first frame its own full map is drawn.
+      const st = [];
+      for (const [t, stop, kind, shown] of log) {
+        if (!st.length || st[st.length - 1].stop !== stop) st.push({ stop, t, sharpAtEntry: kind === 'full' && shown === stop, fullAt: null });
+        const e = st[st.length - 1];
+        if (e.fullAt == null && kind === 'full' && shown === stop) e.fullAt = t;
+      }
+      const run = st.filter((e) => e.stop !== from), last = run[run.length - 1];
+      const leftAt = (j) => (j + 1 < run.length ? run[j + 1].t : Infinity);
+      const previews = run.filter((e) => !e.sharpAtEntry);
+      const handed = previews.filter((e) => e.fullAt != null && e.fullAt < leftAt(run.indexOf(e))).map((e) => e.fullAt - e.t);
+      const sharpUnder = run.filter((e, j) => e.fullAt != null && e.fullAt < leftAt(j)).length;
+      return {
+        rate, stops: run.length, achieved: (run.length - 1) / ((last.t - run[0].t) / 1000), previews: previews.length, sharpUnder, handed,
+        leftFirst: previews.length - handed.length, stopped: last.fullAt == null ? null : Math.max(0, last.fullAt - last.t), lifted: last.fullAt == null ? null : Math.max(0, last.fullAt - upAt), hold: holdMs,
+      };
+    }
+    const speeds = [];
+    speeds.push(await speedDrag(88, 48, 2, 400));
+    speeds.push(await speedDrag(4, 44, 6, 400));
+    speeds.push(await speedDrag(88, 48, 15, 0));
+    speeds.push(await speedDrag(4, 44, 60, 0));
+    const fmt = (v) => (v == null ? '–' : `${Math.round(v)} ms`);
+    for (const r of speeds) {
+      const ho = r.previews ? `${r.handed.length} handed over to the full map under the finger (median ${fmt(median(r.handed))}, max ${fmt(r.handed.length ? Math.max(...r.handed) : null)}), ${r.leftFirst} left before theirs arrived` : 'no handover needed';
+      console.log(`      ${r.rate} stops/s (${r.achieved.toFixed(1)} a second measured, ${r.stops} stops drawn): ${r.previews} of ${r.stops} showed the preview — ${ho};`
+        + ` the full map on screen ${fmt(r.stopped)} after the finger stopped and ${fmt(r.lifted)} after it lifted (${r.hold ? `${r.hold} ms later` : 'at once'})`);
+    }
+    const mid = speeds[1];
+    check(mid.sharpUnder >= Math.ceil(mid.stops / 2), `at 6 stops a second the full map is on screen for most stops under the finger (${mid.sharpUnder} of ${mid.stops}; ${mid.previews} first drawn as the preview)`);
+    check(speeds.every((r) => r.lifted != null && r.lifted <= 300), `after every drag the full map is on screen within 300 ms of the lift (${speeds.map((r) => `${r.rate}/s: ${fmt(r.lifted)}`).join(', ')})`);
+    const cz = await eh(() => window.__eh.perf().cache);
+    check(cz.cached.length <= 8, `the cache stays within 8 maps through the drags (${cz.cached.length}; ${cz.decodes} decodes so far, ${cz.dropped} loads dropped as stale)`);
+    await eh(() => window.__eh.toggle('coasts', true));
   }
 
   if (si === 0 && process.env.SCREENSHOTS && !only.size) {
-    // The README picture: the Permian–Triassic boundary on the globe, the sheet at peek.
+    // The Permian–Triassic boundary on the globe, the sheet at peek (screenshots/app.png is the README's
+    // two-pane picture from Tools/compose-readme.py, and this script never touches it).
     await eh(([j, lon, lat]) => { window.__eh.setView('globe'); window.__eh.setLens('surface'); window.__eh.toggle('plates', false); window.__eh.toggle('coasts', true); window.__eh.setSheet(0); window.__eh.goto(j); window.__eh.look(lon, lat); }, [stopOfMap(49), APP_LON, APP_LAT]);
     await eh(() => { const b = document.getElementById('readout-close'); if (!document.getElementById('readout').hidden) b.click(); });
     await settled();
     fs.mkdirSync(path.join(APP, 'screenshots'), { recursive: true });
     await page.waitForTimeout(250);
-    await page.screenshot({ path: path.join(APP, 'screenshots', 'app.png') });
-    console.log('  screenshots/app.png');
+    await page.screenshot({ path: path.join(APP, 'screenshots', `globe-49-${scheme}.png`) });
+    console.log(`  screenshots/globe-49-${scheme}.png`);
   }
 
   if (si === 0 && (!only.size || only.has('opening'))) {
@@ -643,6 +910,17 @@ for (const [si, scheme] of schemes.entries()) {
     const ri = await rp.evaluate(() => ({ i: window.__eh.intro(), stop: window.__eh.state().stop }));
     check(!ri.i.pending && !ri.i.running && ri.stop === 0, `reduced motion: no opening on a first launch (stop ${ri.stop})`);
     await rc.close();
+    // The opening never runs in focus mode (DESIGN §20): a first launch with eh.focus already stored.
+    const fc = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme: scheme });
+    await fc.addInitScript(() => { try { if (!localStorage.getItem('eh.intro')) localStorage.setItem('eh.focus', 'true'); } catch { /* fine */ } });
+    const fp = await fc.newPage();
+    fp.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !HEADLESS_NOISE.test(m.text())) errors.push(`${m.type()}: ${m.text()}`); });
+    fp.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+    await fp.goto(`${origin}index.html`);
+    await fp.waitForFunction(() => document.getElementById('loading').classList.contains('done'), null, { timeout: 60000 });
+    const fi = await fp.evaluate(() => ({ i: window.__eh.intro(), f: window.__eh.focus(), app: document.getElementById('app').className }));
+    check(fi.i.stored === 1 && (fi.i.pending || fi.i.running) && !fi.f.on && fi.f.stored === false && !/\bfocus\b/.test(fi.app), `a first launch with eh.focus stored runs the opening, not focus mode (${JSON.stringify(fi.f)})`);
+    await fc.close();
   }
 
   const external = requests.filter((u) => !u.startsWith(origin) && !u.startsWith('data:') && !u.startsWith('blob:'));
@@ -653,8 +931,8 @@ for (const [si, scheme] of schemes.entries()) {
 await browser.close();
 server.close();
 if (process.env.SCREENSHOTS && !only.size) {
-  // A few named scenes beside app.png (screenshots/ is left out of the ZIP).
-  for (const n of ['opening-dark', 'temperature-14-light', 'rain-57-dark', 'plates-43-dark', 'readout-light', 'sheet-half-light', 'about-light', 'map-49-dark', 'no-climate-93-light', 'landscape-light']) {
+  // A few named scenes beside globe-49-light.png (screenshots/ is left out of the ZIP).
+  for (const n of ['opening-dark', 'temperature-14-light', 'rain-57-dark', 'plates-43-dark', 'readout-light', 'sheet-half-light', 'about-light', 'map-49-dark', 'no-climate-93-light', 'landscape-light', 'focus-49-light', 'focus-49-dark']) {
     const f = path.join(out, `${n}.png`);
     if (fs.existsSync(f)) { fs.copyFileSync(f, path.join(APP, 'screenshots', `${n}.png`)); console.log(`screenshots/${n}.png`); }
   }

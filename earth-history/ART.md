@@ -178,3 +178,27 @@ DESIGN.md §19 records the same changes against §3, §5, §6 and §9.
 - **Small things**: US spellings in every string the app shows, Find and About hold focus, the grip's
   focus ring and hit area, 38 px step keys, a pressed state on the icon and step keys, and the age
   row's live region cleared after it speaks.
+
+### Third pass: focus mode (DESIGN.md §20)
+
+Two keys, drawn in the plate's own terms rather than as a generic full-screen icon.
+
+- **Hide the controls** is a 30 × 30 key of the panel's black glass, 9 px corners and the hairline,
+  at the right end of the top row after Coasts, so it belongs to the row of instruments. Its mark is
+  the plate itself: four corner marks, the neatline's corners in small, around a 5 px Earth, a 1.5 px
+  stroke in the glass's secondary ink (`#b3bcc8`), brightening to `#eef0ea` on hover. Pressed, it
+  brightens as the toggles do.
+- **Show the controls** is the same mark with the corners turned inward and no Earth, set as a ghost
+  in the panel's top-right corner, inside the neatline and in the entry key's column, so the finger
+  that hid the controls finds the way back where it was. It has no glass: the strokes are drawn the
+  way the overlay draws today's coasts, a pale 1.4 px line (`#eef0ea`) over a 3.4 px dark halo, so it
+  reads over the night and over bright polar paint alike. It rests at 72 % and comes to full strength
+  on hover, focus and press. It fades in over 280 ms on the app's curve, and not at all under Reduce
+  Motion.
+- The rest of focus mode is motion in the existing language: the rows glide as the sheet's heights
+  do, the Earth eases to its new seat on the same curve, and the controls fade back in when they
+  return. `index.html` holds both marks as inline SVG, and `style.css` their rules (`.key-frame`,
+  `.key-ghost`).
+- `shoot.mjs` no longer writes `screenshots/app.png`, which is now the README's two-pane picture
+  (`Tools/compose-readme.py`). It writes `globe-49-light.png` and twelve named scenes, focus mode's two
+  among them.

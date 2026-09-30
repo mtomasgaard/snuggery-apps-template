@@ -13,6 +13,37 @@ export const HEIGHTS = ['peek', 'half', 'full'];
 const GRIP_LABEL = ['Show more about this map', 'Show the whole sheet', 'Show the Earth again'];
 const EVENT_WINDOW_MA = 5;
 
+/*
+ * The rows under the Earth glide (§19, §20): the grid takes its new rows at once, so every measured
+ * size is final straight away, then each row slides from where it was to where it is, 280 ms on the
+ * app's curve (a FLIP). A row that was not showing starts where the row above it started. The
+ * Earth panel's night extends under them meanwhile (#app.flipping), so nothing pale shows through.
+ * Used by the sheet's heights and by focus mode (app.js); nothing moves under Reduce Motion.
+ */
+const ROW_IDS = ['agerow', 'slider', 'curves', 'sheet'];
+let flipTimer = 0;
+export function glideRows(app, apply) {
+  if (reducedMotion()) { apply(); return; }
+  const rows = ROW_IDS.map((id) => app.querySelector(`#${id}`)).filter(Boolean);
+  const before = rows.map((e) => (e.offsetParent ? e.getBoundingClientRect().top : null));
+  apply();
+  let last = 0;
+  const moves = [];
+  rows.forEach((e, j) => {
+    if (!e.offsetParent) return;
+    const dy = before[j] == null ? last : before[j] - e.getBoundingClientRect().top;
+    last = dy;
+    if (Math.abs(dy) > 0.5) moves.push([e, dy]);
+  });
+  if (!moves.length) return;
+  app.classList.add('flipping');
+  for (const [e, dy] of moves) { e.style.transition = 'none'; e.style.transform = `translateY(${dy.toFixed(1)}px)`; }
+  void app.offsetWidth;
+  for (const [e] of moves) { e.style.transition = 'transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1)'; e.style.transform = ''; }
+  clearTimeout(flipTimer);
+  flipTimer = setTimeout(() => { for (const e of rows) e.style.transition = ''; app.classList.remove('flipping'); }, 320);
+}
+
 /** "Foster et al. 2017", "Bond & Grasby 2017", "Hatcher 2010" — from a cite "Surname, I., … (year)." */
 export function shortCite(cite) {
   const m = /^(.*?)\s*\((\d{4})\)/.exec(cite);
@@ -45,32 +76,8 @@ export function createSheet(els, D, h) {
   };
   let height = 0, shown = -1, wide = false;
 
-  /* ── heights ── */
-  /* The grid changes at once (every row has its final size straight away); the rows under the
-     Earth then glide from where they were to where they are, 280 ms, eased (a FLIP). The night of
-     the Earth panel extends under them meanwhile, so nothing pale shows through (§19). */
-  const ROWS = ['agerow', 'slider', 'curves', 'sheet'].map((id) => els.app.querySelector(`#${id}`)).filter(Boolean);
-  let flipTimer = 0;
-  function glide(apply) {
-    if (wide || reducedMotion()) { apply(); return; }
-    const before = ROWS.map((e) => (e.offsetParent ? e.getBoundingClientRect().top : null));
-    apply();
-    let last = 0;
-    const moves = [];
-    ROWS.forEach((e, j) => {
-      if (!e.offsetParent) return;
-      const dy = before[j] == null ? last : before[j] - e.getBoundingClientRect().top;
-      last = dy;
-      if (Math.abs(dy) > 0.5) moves.push([e, dy]);
-    });
-    if (!moves.length) return;
-    els.app.classList.add('flipping');
-    for (const [e, dy] of moves) { e.style.transition = 'none'; e.style.transform = `translateY(${dy.toFixed(1)}px)`; }
-    void els.app.offsetWidth;
-    for (const [e] of moves) { e.style.transition = 'transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1)'; e.style.transform = ''; }
-    clearTimeout(flipTimer);
-    flipTimer = setTimeout(() => { for (const e of ROWS) e.style.transition = ''; els.app.classList.remove('flipping'); }, 320);
-  }
+  /* ── heights: the rows glide to each (glideRows above); side by side there is nothing to glide ── */
+  const glide = (apply) => { if (wide) apply(); else glideRows(els.app, apply); };
   function setHeight(n, { quiet = false } = {}) {
     n = Math.max(0, Math.min(2, n | 0));
     const changed = n !== height;

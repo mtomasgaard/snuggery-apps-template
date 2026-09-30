@@ -82,21 +82,25 @@ export function lonLatOf(v) {
  * layer controls) to H − `bottom` (above the lens chips and a two-line legend), so a legend or a
  * notice sits under the disc instead of on it; never lower than the panel's middle, and never so
  * high that the disc's top runs under the controls (DESIGN §19). `grow` scales the
- * globe for the opening, which runs small and grows into place.
+ * globe for the opening, which runs small and grows into place. In focus mode (§20) no controls sit
+ * over the panel, so the seat is the whole panel less a 16 px margin (`seat()`). `sx`, `sy` and `sk`
+ * carry the Earth from where it was to its new seat when the panel changes shape (app.js's glide).
  */
 export function createView() {
   const v = {
     mode: 'globe',
     globe: { lon: defaultLon(), lat: 20, zoom: 1 },
     map: { lon0: 0, panY: 0, zoom: 1 },
-    W: 1, H: 1, top: 44, bottom: 96, grow: 1,
-    get cx() { return v.W / 2; },
+    W: 1, H: 1, top: 44, bottom: 96, room: 72, grow: 1, sx: 0, sy: 0, sk: 1,
+    get cx() { return v.W / 2 + v.sx; },
     get cy() {
-      const r0 = 0.46 * Math.max(40, Math.min(v.W, v.H - 72));
-      return Math.min(v.H / 2, Math.max((v.top + v.H - v.bottom) / 2, v.top + r0));
+      const r0 = 0.46 * Math.max(40, Math.min(v.W, v.H - v.room));
+      return Math.min(v.H / 2, Math.max((v.top + v.H - v.bottom) / 2, v.top + r0)) + v.sy;
     },
-    radius() { return 0.46 * Math.max(40, Math.min(v.W, v.H - 72)) * v.globe.zoom * v.grow; },
-    mapScale() { return Math.max(4, Math.min((0.92 * v.W) / (4 * SQ2), (0.92 * Math.max(40, v.H - 72)) / (2 * SQ2))) * v.map.zoom; },
+    radius() { return 0.46 * Math.max(40, Math.min(v.W, v.H - v.room)) * v.globe.zoom * v.grow * v.sk; },
+    mapScale() { return Math.max(4, Math.min((0.92 * v.W) / (4 * SQ2), (0.92 * Math.max(40, v.H - v.room)) / (2 * SQ2))) * v.map.zoom * v.sk; },
+    /** The controls over the panel (44 px above, 96 below), or none in focus mode (§20). */
+    seat(focus) { v.top = focus ? 16 : 44; v.bottom = focus ? 16 : 96; v.room = focus ? 32 : 72; },
     /** The centre longitude of whichever projection is showing. */
     centreLon() { return v.mode === 'globe' ? v.globe.lon : v.map.lon0; },
     setMode(m) {
@@ -113,7 +117,7 @@ export function createView() {
       v.globe.zoom = clamp(v.globe.zoom, ZOOM_MIN, ZOOM_MAX);
       v.map.lon0 = wrap180(v.map.lon0);
       v.map.zoom = clamp(v.map.zoom, ZOOM_MIN, ZOOM_MAX);
-      const s = v.mapScale(), room = Math.max(0, SQ2 - (v.H / 2 - 8) / s);
+      const s = v.mapScale() / v.sk, room = Math.max(0, SQ2 - (v.H / 2 - 8) / s);
       v.map.panY = clamp(v.map.panY, -room, room);
     },
     reset() {

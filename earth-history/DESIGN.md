@@ -450,24 +450,39 @@ Ramps (display choices, drawn in the legend; not copied from any published palet
 ### 5.7 While scrubbing: the proxy sheet
 `surface/proxy.webp` holds all 90 maps at 256 × 128 in a 10 × 9 grid (2560 × 1152), uploaded once at
 startup, `LINEAR`, no mipmaps, `CLAMP_TO_EDGE`. While a finger is on the slider or the curves, a stop
-change shows the new stop's proxy cell at once (no network, no decode) unless its full texture is
-already cached. Sampling clamps inside the cell by half a texel so neighbors never bleed:
+change shows the new stop's full map at once when it is cached, and otherwise its proxy cell at once
+(no network, no decode), so no frame is ever blank. Sampling clamps inside the cell by half a texel
+so neighbors never bleed:
 
 ```
 cell = vec2(i % 10, i / 10);  h = 0.5 / vec2(256.0, 128.0)
 uvp  = (cell + vec2(clamp(u1, h.x, 1.0 - h.x), clamp(v, h.y, 1.0 - h.y))) / vec2(10.0, 9.0)
 ```
 
-(so a hairline at the antimeridian is possible on a proxy; it lasts only while scrubbing). When the
-finger lifts, or rests for 150 ms, the full map is loaded and cross-faded in over 200 ms.
+(so a hairline at the antimeridian is possible on a proxy; it lasts only while scrubbing). The full
+map is never held back for the finger: the stop under it is always the next map loaded (§5.8), and
+the two stops ahead of it in the direction of travel are read ahead after it, the way play reads
+ahead, so a steady drag is shown in full maps. A full map that arrives while the finger is still on
+its stop replaces the preview at once (it is the same map, sharper: there is nothing to blend); one
+that arrives after the finger has lifted cross-fades in over 200 ms, as a step does. The preview is
+left for a drag faster than the maps can be decoded, and for the opening (§19), which runs on
+previews alone. Measured in `tools/shoot.mjs` (§21). The 150 ms rest before a full map was fetched
+is gone: it was the blur the finger felt.
 
 ### 5.8 Loading and the cache
 A full map is fetched as a blob and decoded with `createImageBitmap(blob, { imageOrientation:
-'none', premultiplyAlpha: 'none', colorSpaceConversion: 'none' })` (falling back to an `Image` and
-`await img.decode()` where that throws), uploaded, mipmapped, and the bitmap closed. At most one
-decode runs, one waits; a request for a stop that is no longer wanted is dropped before upload.
-**Cache: 8 full-map textures, least recently used out** (`gl.deleteTexture`). After the view
-settles the neighbors ±1 are prefetched; while playing, the next two in the play direction.
+'from-image', premultiplyAlpha: 'none', colorSpaceConversion: 'none' })` (falling back to an `Image`
+and `await img.decode()` where that throws), uploaded, mipmapped, and the bitmap closed. **One load
+runs at a time, and the next is chosen afresh when it ends**: the stop on screen first, then the
+prefetch list in its order. A load for a stop that is no longer wanted (neither on screen nor on the
+list) is dropped after its fetch, before any decode, or after its decode, before upload; so the map
+under a finger waits for at most one load, never for a queue of maps the drag has passed. The
+prefetch list: after the view settles, the neighbors ±1; while playing, the next two in the play
+direction; while a finger drags, the next two in the direction of travel. **Cache: 8 full-map
+textures, least recently used out** (`gl.deleteTexture`), whichever path filled it. During the
+opening (§19) no full map is loaded. The fetch is not aborted: Snuggery's host answers each request
+in full before the page sees its response, so an abort would save only reading a 50 KB blob, and an
+aborted request shows as a failed one.
 
 ### 5.9 Shading, glow, background
 Globe only, display effects: screen-space normal `n = (p.x, p.y, z)`, light
@@ -711,8 +726,10 @@ call, confirmed).
 - First paint (proxy of the saved stop, then its full map) < 1.5 s from launch.
 - A drag frame: ≤ 4 ms GPU for the one triangle at ≤ 780 × 1,000 device px; ≤ 8 ms JS for the
   overlay with Plates and Coasts both on (≈ 88,474 vertices projected, fewer stroked after decimation).
-- A stop change: rotating the geometry ≤ 3 ms; decode + upload of a full map off the gesture path.
-- Scrubbing the full slider shows a map for every stop with no blank frame (proxies).
+- A stop change: rotating the geometry ≤ 3 ms; the decode off the main thread (`createImageBitmap`).
+  While a finger drags, at most one upload per load, for the map under it or just ahead of it (§5.7).
+- Scrubbing the full slider shows a map for every stop with no blank frame (proxies), and a steady
+  drag shows full maps (§21 has the measured speeds).
 - Play holds 1.5 maps/s for the whole 750 Ma → today run.
 
 **How it is measured:** `window.__eh.perf()` (inert unless called) returns the last 120 frame times
@@ -753,7 +770,9 @@ earth-history/
   CREDITS.txt             written by tools/90_about.py
   NOTES.md                running it, the code map, the data table, the honesty caveats, decisions
   DESIGN.md               this file
-  screenshots/app.png     780 × 1688 (excluded from the ZIP)
+  screenshots/            excluded from the ZIP: app.png is the README's two-pane picture (Tools/
+                          compose-readme.py); shoot.mjs writes globe-49-light.png (780 × 1688) and
+                          copies twelve named scenes
   tools/                  excluded from the ZIP
     RESEARCH.md CONTRACT.md sources.py common.py paths.py probe.py make_slices.py slices.csv
     requirements.txt build_all.sh
@@ -825,7 +844,10 @@ two runs from the same cache give byte-identical `data/` and `CREDITS.txt`.
   restore. Then a **full sweep**: all 90 stops by ›, asserting the age row's text
   equals the manifest's for each, and a scripted scrub across the slider. Driven through
   `window.__eh`, which the shipped build carries inert.
-- **Screenshots** read by eye (both themes), and `screenshots/app.png` at 780 × 1688.
+- **Screenshots** read by eye (both themes), and `screenshots/globe-49-light.png` at 780 × 1688.
+  `screenshots/app.png` is the README's two-pane picture, which `Tools/compose-readme.py` makes from
+  the phone captures; `shoot.mjs` never writes it. Since §19 the scenes also cover the opening and the
+  card; since §20 and §21, focus mode and the drag at four speeds.
 - **On the phone**: import the ZIP, scrub the whole slider, play to today, switch
   globe and map, each lens, Plates and Coasts on, Find a city, tap the Earth, rotate the phone,
   background and return — the only evidence for frame time and memory.
@@ -991,6 +1013,106 @@ added effect is a display choice that About names.
   Markdown like this file.
 - *§10 budgets*: app code is 203,817 bytes of the 250,000 cap, so the cap is unchanged. The ZIP
   size is in `NOTES.md`.
-- *§13, §18.19 screenshots*: `SCREENSHOTS=1` writes `screenshots/app.png` (map 49, the light
-  theme, the sheet at peek) and ten named scenes, now including the opening and the callout card.
-  Each is taken at rest, after the sheet's glide and any CSS animation have finished.
+- *§13, §18.19 screenshots*: `SCREENSHOTS=1` writes `screenshots/globe-49-light.png` (map 49, the
+  light theme, the sheet at peek; it wrote `app.png` until that became the README's two-pane
+  picture, see §13) and twelve named scenes, now including the opening, the callout card and focus
+  mode. Each is taken at rest, after the sheet's glide and any CSS animation have finished.
+
+## 20. Focus mode
+
+Asked for by the app's owner, who looks at the app, shows it to people and records clips of it on
+the phone: "hide everything, maybe everything except the lower time slider? Curves can also be
+hidden in this mode." Besseggen's focus mode is the precedent. Where §3–§19 say otherwise, this
+section wins for focus mode.
+
+- **What it hides**: the top bar (the title, Find and About), Globe | Map, the Plates and Coasts
+  toggles, the lens chips, the lens legend, the Plates notice, the curves strip and the sheet. Each
+  gets the `hidden` attribute and `inert`, so it leaves the page, the accessibility tree and the tab
+  order; the Plates notice and the legend are concealed the same way by `renderNotice` and
+  `renderLegend`. The Earth panel takes every row they held: at 390 × 844 it grows from 498 px to
+  738 px (+44 the top bar, +84 the curves, +112 the sheet at peek; the grid is `0 1fr 48px 58px 0 0`
+  whatever the sheet's height). The Earth is then seated in the whole panel less 16 px (`view.seat`,
+  instead of between the controls, §19), so it sits centered; on a phone its radius is unchanged,
+  because the width limits it. The canvas is resized through the usual path, with the DPR cap of 2.
+- **What stays, exactly as it was**: the age row (the age, the ICS line, ‹ ▶ ›) and the stratigraphic
+  slider at the bottom. Everything that is not a control keeps working: the view that follows the
+  continents, play, drag, pinch, fling, the double-tap that gives the view back to the continents,
+  a tap and its callout card, pins, and the two notices that say why the Earth looks as it does
+  ("The climate model starts at 540 million years ago…" and "Restoring the view…"). The Plates
+  notice goes, because it is the outlines' caption, as the legend is the lens's.
+- **A lens stays applied without its legend**, and Plates and Coasts keep drawing: what the Earth
+  shows was the person's choice, and focus mode only takes the controls away. The legend returns
+  with the controls.
+- **The keys** (ART.md, change log). *Hide the controls*: a 30 × 30 key of the panel's black glass at
+  the right end of its top row, after Coasts, with the plate's four corner marks around a small
+  Earth. Measured at 390 px, the top row had 95.8 px free between the view switch and the toggles, and
+  59.8 px remain; at 375 px, 44.8 px remain, and below 360 px (iPad Slide Over, 320 px) the row gives up
+  some padding and keeps 13.8 px. It did not need the top bar. *Show the controls*: a ghost key, no glass,
+  in the panel's top-right corner inside the neatline, in the same place as the entry key's column
+  (348–378 px at 390), with the corner marks turned inward, drawn as the overlay draws its lines
+  (a pale 1.4 px stroke over a 3.4 px dark halo), so it reads over any paint; 72 % opacity at rest,
+  full on hover, focus and press. Both have 44 × 44 hit areas. **Escape** leaves too
+  (`aria-keyshortcuts`). The double-tap keeps its meaning (§19) and never toggles focus mode.
+- **Focus follows the keys**: entering moves focus to the exit key, leaving moves it back to the entry
+  key. A keyboard's Enter, Space or Escape asks for the focus ring (`focus({ focusVisible })`); a tap
+  does not, where the engine honors that option.
+- **Motion**: the grid takes its new rows at once, so every size is final straight away (the tests
+  measure it at once). Then the age row and the slider glide to their new places (the sheet's FLIP,
+  shared as `glideRows`, 280 ms), the Earth glides from where it was to its new seat (280 ms on the
+  app's curve, `cubic-bezier(0.22, 0.61, 0.36, 1)`, evaluated in JS as `ease`), and the exit key
+  fades in; leaving, the controls fade back in as the rows glide up. The canvas is resized and drawn
+  in the same task (`drawNow`), so it is never shown blank. Under Reduce Motion it all happens at once.
+- **Wide screens** (700 px and up): one column, as on a phone, the Earth over the age row and the
+  slider at full width. At 844 × 390 the Earth is 844 × 284 with a 115.9 px radius (the two-column
+  Earth is 444 × 346 with 126 px); a narrower column beside a blank one was the alternative, and it
+  read as a broken page.
+- **Remembered** as `eh.focus` (default off), so a reload comes back in focus mode. The first launch's
+  opening never runs in focus mode: when the opening is due, focus mode is switched off and stored off.
+- **Accessibility**: in focus mode the accessibility tree holds the exit key, the Earth (`role="img"`,
+  its description unchanged), the age row with its three keys, the slider and the live regions. The
+  tab order is the exit key, the Earth, ‹, ▶, ›, the slider.
+- **Tests**: `tools/shoot.mjs`'s `focus` scene, in both themes: entered by the key, the hidden
+  controls hidden and inert, the panel's new rows, the globe re-centered, the accessibility tree and the
+  tab order, › and a drag on the slider, play, a lens without its legend, a tap and its card, a drag
+  and a double-tap on the Earth, left by the key and by Escape with everything back, a reload, Reduce
+  Motion, and 844 × 390. `focus-49-light.png` and `focus-49-dark.png` are its pictures. A first launch
+  with `eh.focus` stored runs the opening, not focus mode.
+- **Code**: `app.js` (`applyFocus`, `setFocus`, the glide in the frame loop, `drawNow`, `__eh.focus`),
+  `proj.js` (`seat`, and `sx`, `sy`, `sk` for the glide), `sheet.js` (`glideRows`), `util.js`
+  (`ease`), `style.css`, `index.html`.
+
+## 21. Scrubbing
+
+The owner's report: "when dragging the time player fast, the view can become a bit blurry until I
+stop a little while … When playing with the play button it looks nice." The cause was two rules of
+§5.7 and §5.8. A finger on the slider showed each stop's 256 × 128 preview, magnified about 4× at
+DPR 2, and the full map was fetched only once the finger had rested 150 ms or lifted. Meanwhile the
+loader could still be busy with the neighbors of the stop the drag began on. Play looked sharp because
+it reads two maps ahead and holds each for 667 ms.
+
+Now (§5.7, §5.8, as built): the stop under the finger is always the next map loaded, the two stops
+ahead of it in the direction of travel follow, a load the view has left is dropped before its decode
+or its upload, and a full map arriving under the finger replaces the preview at once. The rest timer,
+`fetchCurrent` and the scrubbing flag in `earth.js` are gone; `setPreviews` keeps the opening on
+previews. The cache cap (8 maps), the memory budget (§10) and Reduce Motion are unchanged.
+
+**Measured** in headless Chromium on SwiftShader, at 390 × 844 and DPR 2, with a finger dragged across
+40 stops. Each frame, in the page, records the stop under the finger and whether its full map or its
+preview is drawn. Coasts are off for this measurement. SwiftShader rasterizes that overlay at about
+180 ms a frame, and Chromium delivers one pointer move per frame, so with Coasts on a headless drag
+skips stops and every time measured includes one slow frame. What is measured is the loader. Whether
+a phone keeps pace with the overlay during a drag is one of the phone checks in `NOTES.md`. Two runs
+each, with the same throwaway probe before the change and after it:
+
+| Drag | Before: stops drawn first as the preview | Before: left before their full map arrived | After: stops drawn first as the preview |
+| --- | --: | --: | --: |
+| 2 stops/s | 39 of 40 (sharp a median 161 ms later, max 176) | 0 | 0 of 40 |
+| 6 stops/s | 39 of 40 | 36–37 | 0 of 40 |
+| 15 stops/s | 38–39 of 39–40 | 37–38 | 0 of 40 |
+| a flick, 60 stops/s | — | — | 8–9 of 13 drawn; those sharpened under the finger did so in a median 7 ms (max 15) |
+
+`tools/shoot.mjs` now runs the same drag (2, 6, 15 and 60 stops a second) in the first theme. It asserts
+that at 6 a second the full map is on screen for most stops, and that after every drag the full map is
+on screen within 300 ms of the lift. Its numbers from the latest run are in `NOTES.md`. None of this is
+phone evidence. On a phone, the decode and upload of one map and the frame rate decide the speed at which
+the preview starts to show, and `NOTES.md` lists the checks.

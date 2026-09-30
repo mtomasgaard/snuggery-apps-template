@@ -71,6 +71,7 @@ body {
   overflow: hidden;
 }
 p, h1 { margin: 0; }
+[hidden] { display: none !important; }
 button { font: inherit; color: inherit; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 svg { display: block; }
@@ -92,7 +93,10 @@ svg { display: block; }
 #app.sheet-full { grid-template-rows: 44px 0 48px 58px 0 minmax(0, 1fr); }
 #app.sheet-half #curves, #app.sheet-full #curves { display: none; }
 #app.sheet-full #earth { visibility: hidden; }
-/* while the rows glide to a new sheet height (sheet.js), the night extends under them */
+/* focus mode (§20): the Earth takes the rows of everything hidden; the age row and the slider stay */
+#app.focus, #app.focus.sheet-half, #app.focus.sheet-full { grid-template-rows: 0 minmax(0, 1fr) 48px 58px 0 0; }
+#app.focus #earth { visibility: visible; }
+/* while the rows glide (sheet.js glideRows: a sheet height, focus mode), the night extends under them */
 #app.flipping #earth { box-shadow: 0 420px 0 0 var(--space); }
 button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 #earth button:focus-visible { outline-color: var(--g-key); }
@@ -108,7 +112,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .icon-btn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
 .icon-btn:disabled { opacity: 0.35; cursor: default; }
 .icon-btn:active:not(:disabled), .step:active { background: var(--tile); }
-.seg button:active, .toggle:active { filter: brightness(1.25); }
+.seg button:active, .toggle:active, .key-frame:active { filter: brightness(1.25); }
 .text-btn { border: 0; background: none; color: var(--accent-text); font: 700 var(--t-m)/1 var(--sans); min-height: 44px; padding: 0 4px 0 12px; cursor: pointer; }
 
 /* ── the Earth panel: always night ── */
@@ -132,7 +136,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .earth-top > * { pointer-events: auto; }
 
 /* one control language for the panel: black glass, a hairline, chalk keys for what is on */
-.seg, .toggle, .legend, .intro-skip {
+.seg, .toggle, .key-frame, .legend, .intro-skip {
   background: var(--g-bg); box-shadow: inset 0 0 0 1px var(--g-line);
   -webkit-backdrop-filter: blur(12px) saturate(1.15); backdrop-filter: blur(12px) saturate(1.15);
 }
@@ -156,6 +160,27 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .toggle .well { width: 20px; height: 16px; border-radius: 4px; background: #0b0f18; display: grid; place-items: center; opacity: 0.5; transition: opacity 0.2s var(--ease); }
 .toggle[aria-pressed="true"] .well { opacity: 1; }
 .toggle .well svg { width: 16px; height: 12px; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+/* focus mode's two keys (§20, ART.md): the plate's corner marks around a small Earth, a glass key at
+   the end of the top row; in focus mode the marks turn inward and stand alone in the neatline's
+   corner, drawn as the overlay draws its lines (pale over a dark halo), so they read over any paint */
+.key-frame {
+  width: 30px; height: 30px; border: 0; border-radius: 9px; padding: 0; position: relative; cursor: pointer;
+  display: grid; place-items: center; color: var(--g-ink-2); transition: color 0.2s var(--ease);
+}
+.key-frame:hover { color: var(--g-ink); }
+.key-frame::after { content: ''; position: absolute; inset: -7px -12px -7px -2px; }
+.key-frame svg, .key-ghost svg { width: 16px; height: 16px; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.key-frame svg { stroke: currentColor; stroke-width: 1.5; }
+.key-ghost {
+  position: absolute; top: 10px; right: 12px; z-index: 1; width: 30px; height: 30px; border: 0; border-radius: 9px;
+  background: none; padding: 0; display: grid; place-items: center; cursor: pointer; opacity: 0.72;
+  transition: opacity 0.2s var(--ease); animation: chrome-in 0.28s var(--ease);
+}
+.key-ghost::after { content: ''; position: absolute; inset: -7px; }
+.key-ghost:hover, .key-ghost:focus-visible, .key-ghost:active { opacity: 1; }
+/* leaving focus mode, the controls fade back in as the rows glide up under them */
+#app.unfocusing #top, #app.unfocusing .earth-top, #app.unfocusing .lenses, #app.unfocusing .legend { animation: chrome-in 0.28s var(--ease); }
+@keyframes chrome-in { from { opacity: 0; } }
 
 .earth-bottom {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 10px; display: flex; flex-direction: column;
@@ -176,7 +201,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .intro-cap { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.8); }
 .notice span { display: block; }
 .nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; font-size: var(--t-b); color: var(--g-ink-2); }
-.nogl[hidden], .notice[hidden], .legend[hidden], .card[hidden], .overlay[hidden], .perf-hud[hidden], .find-empty[hidden], .intro-skip[hidden], .intro-cap[hidden] { display: none; }
 .intro-cap { font-size: 13.5px; color: var(--g-ink); }
 .intro-skip {
   position: absolute; right: 12px; bottom: 10px; height: 30px; padding: 0 12px; border: 0; border-radius: 9px; cursor: pointer;
@@ -217,7 +241,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 }
 .card .close { top: 0; }
 .card .more { bottom: 0; }
-.card .more[hidden] { display: none; }
 .card .close::after, .card .more::after { content: ''; position: absolute; inset: -5px; }
 .card .close svg, .card .more svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .card .more svg { transition: transform 0.2s var(--ease); }
@@ -429,9 +452,23 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
   .sheet-head { padding-top: 10px; cursor: default !important; }
   .sheet-body { overflow-y: auto !important; }
 }
+/* focus mode side by side (§20): one column, as on a phone — the Earth over the age row and the slider */
+@media (min-width: 700px) {
+  #app.focus, #app.focus.sheet-half, #app.focus.sheet-full { grid-template-columns: minmax(0, 1fr); grid-template-rows: 0 minmax(0, 1fr) 48px 58px 0 0; }
+  #app.focus #earth { grid-row: 2; }
+  #app.focus #agerow, #app.focus #slider { grid-column: 1; border-left: 0; }
+  #app.focus #agerow { grid-row: 3; }
+  #app.focus #slider { grid-row: 4; }
+}
+/* narrower than any phone iOS 18 runs on (iPad Slide Over, 320 px): the top row gives up a little padding */
+@media (max-width: 359px) {
+  .earth-top { padding: 10px 8px 0; }
+  .segmented button { padding: 0 8px; }
+  .toggle { padding-right: 8px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .loading, #overlay, .seg button, .toggle, .toggle .well, .thumb, .units-switch button, .play .disc, #earth .earth-top, #earth .earth-bottom { transition: none; }
-  .card, .overlay { animation: none; }
+  .loading, #overlay, .seg button, .toggle, .toggle .well, .thumb, .units-switch button, .play .disc, #earth .earth-top, #earth .earth-bottom, .key-frame, .key-ghost { transition: none; }
+  .card, .overlay, .key-ghost { animation: none; }
   #slider.dragging .thumb { transform: none; }
 }

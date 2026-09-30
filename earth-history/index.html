@@ -24,6 +24,9 @@
   </header>
 
   <main id="earth">
+    <button type="button" id="focus-exit" class="key-ghost" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 1.5v3a1 1 0 0 1-1 1h-3M10.5 1.5v3a1 1 0 0 0 1 1h3M14.5 10.5h-3a1 1 0 0 0-1 1v3M1.5 10.5h3a1 1 0 0 1 1 1v3" stroke="rgba(0,0,0,.5)" stroke-width="3.4"/><path d="M5.5 1.5v3a1 1 0 0 1-1 1h-3M10.5 1.5v3a1 1 0 0 0 1 1h3M14.5 10.5h-3a1 1 0 0 0-1 1v3M1.5 10.5h3a1 1 0 0 1 1 1v3" stroke="#eef0ea" stroke-width="1.4"/></svg>
+    </button>
     <div class="earth-top">
       <div class="segmented seg" role="radiogroup" aria-label="View">
         <button type="button" role="radio" data-view="globe" aria-checked="true">Globe</button>
@@ -32,6 +35,9 @@
       <div class="toggles">
         <button type="button" id="tg-plates" class="toggle" aria-pressed="false" aria-label="Plates: pieces of today's crust and how they moved"><span class="well" aria-hidden="true"><svg viewBox="0 0 16 12"><path d="M2.5 9.5 4 3l5.5-1.5L13.5 5l-1 4.5-5 1z" stroke="rgba(0,0,0,.6)" stroke-width="2.6"/><path d="M2.5 9.5 4 3l5.5-1.5L13.5 5l-1 4.5-5 1z" stroke="#ffc247" stroke-width="1.2"/></svg></span>Plates</button>
         <button type="button" id="tg-coasts" class="toggle" aria-pressed="true" aria-label="Today's coasts"><span class="well" aria-hidden="true"><svg viewBox="0 0 16 12"><path d="M1.5 8c2-3.5 3.5 1.5 5.5-2s3 2.5 4.5-.5 2.5-2 3-2" stroke="rgba(0,0,0,.7)" stroke-width="2.6"/><path d="M1.5 8c2-3.5 3.5 1.5 5.5-2s3 2.5 4.5-.5 2.5-2 3-2" stroke="rgba(255,255,255,.9)" stroke-width="1"/></svg></span>Coasts</button>
+        <button type="button" id="focus-enter" class="key-frame" aria-label="Hide the controls">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 5.5v-3a1 1 0 0 1 1-1h3M10.5 1.5h3a1 1 0 0 1 1 1v3M14.5 10.5v3a1 1 0 0 1-1 1h-3M5.5 14.5h-3a1 1 0 0 1-1-1v-3"/><circle cx="8" cy="8" r="2.6"/></svg>
+        </button>
       </div>
     </div>
     <section id="readout" class="card" hidden aria-label="About this place">

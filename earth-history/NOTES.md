@@ -36,8 +36,9 @@ and the shading are display choices, not data, and About says so. The painted ma
   Reduce Motion). **Globe | Map** switches to
   Scotese's Mollweide map, where a drag slides the central meridian; the view carries across.
 - **Move through time**: drag the slider — or the curves strip under it — (the map under the finger
-  shows at once from a small sheet of all 90 maps, then the full map fades in when the finger rests or
-  lifts), tap **‹ ›** for one map older or newer, **▶** to play toward today at 1.5 maps a second (a
+  shows at once: its full map, since the two maps ahead of the finger are read ahead as play reads
+  ahead; only a drag faster than the maps decode shows the small preview sheet of all 90, which gives
+  way as soon as the finger slows), tap **‹ ›** for one map older or newer, **▶** to play toward today at 1.5 maps a second (a
   time-lapse: the thumb glides and the age counts to each map's own age), or
   use the arrow keys, Page Up/Down, Home and End on the focused slider.
 - The **age row** gives the map's age as Scotese's Table 1 does ("251 million years ago") and the
@@ -67,6 +68,16 @@ and the shading are display choices, not data, and About says so. The painted ma
 - **About** explains how to read each part, what to keep in mind (one reconstruction, the weak
   longitude, a climate model not measurements, the elevations' "first draft"), what is not shown and
   why, every source with its license and what this app changed, and a Units setting.
+- **Hide the controls**: the key with the four corner marks, at the right end of the Earth panel's top
+  row, leaves the Earth alone with the age row and the slider, for looking, showing it to someone, or
+  recording it. The top bar (title, Find, About), Globe | Map, Plates and Coasts, the lens chips and
+  legend, the Plates notice, the curves and the sheet all go, out of reach of VoiceOver and the Tab
+  key too, and the Earth takes their room and eases to its new center. Play, the follow, gestures, a
+  tap and its card and pins all still work. **A lens stays applied without its legend**, and Plates and
+  Coasts keep drawing: what the Earth shows is a display choice the person made, and the legend comes
+  back with the controls. The ghost key in the panel's corner, or Escape, shows the controls again.
+  Focus mode is remembered between launches, but the first launch's opening never starts in it. On a
+  wide screen it is one column, as on a phone.
 - Wide screens (700 px and up, or a phone turned sideways) put the Earth on the left and a 400 px column
   on the right. Everything is remembered between launches; both themes follow the system.
 
@@ -106,7 +117,7 @@ node tools/check.mjs          # limits, no URLs in code, relative references, da
 node tools/test_proj.mjs      # both projections: round trips on a 1° grid, and agreement with the shader's formulas
 node tools/test_plates.mjs    # 1,000 pygplates reference points at 10 of the 90 times; the tap lookup vs 300 places
 PLAYWRIGHT_MODULE=…/playwright/index.mjs node tools/shoot.mjs [outdir] [scene …]
-SCREENSHOTS=1 PLAYWRIGHT_MODULE=… node tools/shoot.mjs   # also writes screenshots/app.png and ten named scenes
+SCREENSHOTS=1 PLAYWRIGHT_MODULE=… node tools/shoot.mjs   # also writes screenshots/globe-49-light.png and twelve named scenes
 ```
 
 `test_plates.mjs` needs `tools/work/plates_ref.json`, which `tools/build_all.sh` writes (step 20).
@@ -114,48 +125,68 @@ SCREENSHOTS=1 PLAYWRIGHT_MODULE=… node tools/shoot.mjs   # also writes screens
 touch, in light and dark, and fails on any console error or warning, page error, failed request or
 request outside its own server, `data:` or `blob:`. Each theme starts from a fresh profile, so the
 first-launch opening runs. The driver watches it, takes the `opening` picture, then ends it with
-`__eh.skipIntro()` before the other scenes.
+`__eh.skipIntro()` before the other scenes. `screenshots/app.png` is the public README's two-pane
+picture, made by `Tools/compose-readme.py` from the phone captures; `shoot.mjs` never writes it.
 
-### Results at the time of writing (2026-09-30; Node 26, Chromium 153 on SwiftShader)
+### Results at the time of writing (2026-09-30, after focus mode and the scrub fix; Node 26, Chromium 153 on SwiftShader)
 
-- `node tools/check.mjs`: all 10 checks pass; 132 files ship; app code **203,817 bytes** of the
-  250,000 budget; no AI vendor, product or model-family name in the 33 shipped text files; **ZIP 6,950,425 bytes** (cap 8,000,000; 6,953,185 after
-  the art direction).
+- `node tools/check.mjs`: all 10 checks pass; 132 files ship; app code **213,774 bytes** of the
+  250,000 budget (204,007 before focus mode and the scrub fix); no AI vendor, product or model-family
+  name in the 33 shipped text files; **ZIP 6,959,913 bytes** (cap 8,000,000; 6,950,547 before).
 - `node tools/test_proj.mjs`: `test_proj: OK`. The orthographic round trip is at most 1.94e−13 rad
   over 192,961 points; the Mollweide round trip at most 4.22e−15 rad (latitude) and 1.99e−14 rad
   (longitude); the inverses match the §5.3 shader formulas to 1.13e−15 rad.
 - `node tools/test_plates.mjs`: `test_plates: OK`, 10,000 rotations, max error 0.323 km, and the
   tap lookup puts 300 of 300 places on pygplates' plate.
-- `tools/build_all.sh` from the cache, after the text corrections in `tools/content/story.yaml` and
-  the credits changes: exit 0, `verify_data: OK`; step 60 reports 47 sources, 13 map claims all ok
-  (the Paleogene claim now measures maps 13, 12, 11, 10 and 9: southern paint 0.0001, 0.0083,
-  0.0131, 0.0258, 0.0360); a second run left all 105 `data/` files and `CREDITS.txt` byte-identical.
-  `tools/.venv/bin/python tools/verify_data.py --cross-only`: `verify_data: OK`.
-- `SCREENSHOTS=1 node tools/shoot.mjs`: `all checks pass`, **176 checks**, 0 console errors or
-  warnings, 0 requests outside its server. New or changed since the art direction:
-  - The view follows the continents: after a step to map 49 it sits exactly on the followed center
-    (0.3°, −18.7°); a turn to a place stops it; a double-tap starts it again.
-  - The opening is running when the loading screen lifts. (A separate Playwright probe, not part of
-    `shoot.mjs`, held `plates.bin` back 1.5 s: the caption and Skip showed from its first sample and
-    the opening ran before the plates arrived.)
-  - The card sits above Chicago's pin, 104 px tall (two lines of "then", two of "now") and 300 px
-    wide; "More" opens it to 151 px. The tap is made at the pin's projected spot.
-  - The temperature legend reads "Air temperature, yearly mean · climate model" on one line, with
-    "1.5 m (5 ft) above the surface" in its accessible name; its labels and rain's do not touch.
-  - Text contrast is at least 4.5:1 for 35 text styles, the notices now on glass (lowest **5.79:1
-    light, 6.73:1 dark**).
-- The earlier scenes all still pass: the age row equals the manifest at 90 of 90 stops and stays
-  inside its row, the scrub puts a map on screen at 121 of 121 finger positions, and the cache stays
-  within 8 maps (37.9 MiB of textures by arithmetic).
-- `__eh.perf()` after the scripted scrub (SwiftShader, a trend and never phone evidence): 101 frames,
+- `SCREENSHOTS=1 node tools/shoot.mjs`: `all checks pass`, **230 checks** (178 before), 0 console errors
+  or warnings, 0 requests outside its server (676 requests in the first theme, 310 in the second).
+  `screenshots/app.png` was left
+  byte-identical (same SHA-256 before and after). New:
+  - **Focus mode** (DESIGN §20), both themes. The key enters it. The title, Find, About, Globe | Map,
+    Plates, Coasts, the key itself, the lens chips, the legend, the Plates notice, the curves and the
+    sheet are hidden and inert. The Earth grows from 498 to 738 px at once (+44 +84 +112), and at rest
+    the age row sits at 738 and the slider at 786, full width. The globe is re-centered from 223.4 to
+    369 px with its 179.4 px radius unchanged, and the canvas is 780 × 1476. The exit key sits at 348,
+    10 (30 × 30), in the neatline's corner. Of 13 accessible names present before, none remain. The
+    tab order runs exit key → Earth → ‹ → ▶ → › → slider, and focus lands on the exit key and back on
+    the entry key. Plates keeps drawing (16 arrows) without its notice. › steps to map 48 and the view
+    follows there; a drag on the slider, play, the Temperature lens without its legend, a tap and its
+    card, a 60 px drag turning the globe 18.8°, and a double-tap that stays in focus mode all work. The
+    exit key and Escape restore everything, the legend and the Plates notice included, with the curves
+    current. A reload comes back in focus mode with no opening. Under Reduce Motion there is no glide
+    and no animation. At 844 × 390 it is one column: the Earth 844 × 284 at a 115.9 px radius, the age
+    row and the slider 844 px wide. A first launch with `eh.focus` stored runs the opening, not focus
+    mode.
+  - **Scrubbing** (DESIGN §21), Coasts off (see there), with the finger across 40 stops. At 2 stops/s,
+    0 of 40 stops showed the preview. At 6 stops/s, 0 of 40. At 15 stops/s (14.5 measured), 0 of 40.
+    A 60-a-second flick drew 13 stops and 8 showed the preview: 3 handed over to the full map under the
+    finger (median 60 ms, max 70 ms) and 5 were left before theirs arrived. The flick's numbers vary
+    from run to run; the run before this one had 9 previews and 4 handovers, median 7 ms and max 54 ms.
+    After every drag the full map was already on screen when the finger stopped and when it lifted
+    (0 ms). The cache held 8 maps, after 370 decodes with 4 loads dropped as stale. The same drags on the loader before
+    the fix: at 2 stops/s, 39 of 40 stops showed the preview and sharpened a median 161 ms later; at
+    6 and 15 stops/s, 36–38 stops of 40 were left before their full map arrived.
+- Unchanged and still passing: the view follows the continents (map 49 centered on 0.3°, −18.7°); the
+  card sits above Chicago's pin, 104 px tall and 300 px wide; text contrast is at least 4.5:1 for 35
+  text styles (lowest **5.79:1 light, 6.73:1 dark**); the age row equals the manifest at 90 of 90
+  stops and stays inside its row; the scrub puts a map on screen at 121 of 121 finger positions; the
+  cache stays within 8 maps (37.9 MiB of textures by arithmetic).
+- `__eh.perf()` after the scripted scrub (SwiftShader, a trend and never phone evidence): 80 frames,
   a WebGL submit median of 0 ms (p95 0.1), an overlay median of 0.6 ms (p95 0.7), and a frame total
-  median of 0.8 ms (p95 0.9, max 1).
-- Land in view, measured on the shipped maps (area-weighted land in the visible hemisphere, 90 maps):
-  a fixed view on 105° W shows under 10 % land on 42 maps; the followed view shows under 20 % on none.
+  median of 0.9 ms (p95 1.8, max 2.2).
+- Not rerun for this change, since nothing in `data/` or `tools/*.py` changed. `tools/build_all.sh`
+  from the cache, after the text corrections in `tools/content/story.yaml` and the credits changes:
+  exit 0, `verify_data: OK`. Step 60 reports 47 sources and 13 map claims, all ok (the Paleogene claim
+  now measures maps 13, 12, 11, 10 and 9: southern paint 0.0001, 0.0083, 0.0131, 0.0258, 0.0360). A
+  second run left all 105 `data/` files and `CREDITS.txt` byte-identical.
+  `tools/.venv/bin/python tools/verify_data.py --cross-only`: `verify_data: OK`. Land in view, measured
+  on the shipped maps (area-weighted land in the visible hemisphere, 90 maps): a fixed view on 105° W
+  shows under 10 % land on 42 maps; the followed view shows under 20 % on none.
 
 ### On the phone (nothing above is evidence for these)
 
-Import the ZIP; scrub the whole slider (a map at every stop, no blank frame); play to today; switch
+Import the ZIP; scrub the whole slider (a map at every stop, no blank frame); a fast drag across the
+whole slider stays sharp, and the full map is on screen as soon as the finger slows; play to today; switch
 globe and map; each lens; Plates and Coasts on; Find a city; tap the Earth; pinch; rotate the phone;
 background and return; frame time (five taps on About's version line) and memory. For the art
 direction: the first-launch opening (reinstall or clear the app's data) runs smoothly and the counter
@@ -163,7 +194,12 @@ keeps pace with the maps (it is clamped to the neighboring map's age, so under S
 frames it trailed by at most one map); the sheet's glide between heights has no flash of paper; the fonts render (Atkinson's
 slashed zero is expected); Reduce Motion turns off the opening, the glide and the pin drop. Also whether iOS 18's WebKit accepts `createImageBitmap(…, { imageOrientation:
 'from-image' })`: if it does not, every map decodes through `Image.decode()` instead, which
-`__eh.perf().cache.fallbackDecodes` counts.
+`__eh.perf().cache.fallbackDecodes` counts. For focus mode: *Hide the controls* takes everything but
+the Earth, the age row and the slider away, the Earth eases to the middle with no blank or flashing
+frame, and the corner key brings it all back (and Escape on a hardware keyboard); after a tap, the
+corner key shows no focus ring (a ring there would mark every recorded clip; with a keyboard it
+should show one); VoiceOver finds only the corner key, the Earth, the age row and the slider; the
+phone relaunches in focus mode; a fresh install's opening does not.
 
 Costs no desktop browser can show, each with what to do if it fails:
 
@@ -181,6 +217,10 @@ Costs no desktop browser can show, each with what to do if it fails:
   scale). The app must not be reloaded by iOS when it returns from the background.
 - **The follow** at play speed: the view should glide with the continents, not lurch; with a pin set,
   VoiceOver should read one short line when the slider settles, not the card at every map.
+- **Uploads during a drag** (§21): a steady drag now uploads one full map per load, for the stop under
+  the finger or just ahead of it, where it used to upload nothing until the finger rested. Drag at a
+  steady pace with Plates and Coasts on and judge the smoothness on the oldest phone at hand. If it
+  stutters, read ahead one map instead of two (`app.js`, `scrub`).
 
 ---
 
@@ -188,27 +228,27 @@ Costs no desktop browser can show, each with what to do if it fails:
 
 | File | What it does |
 | --- | --- |
-| `js/app.js` | Boot and loading order, the state, the frame scheduler (one frame when something is dirty; only a blend, a fling, a turn-to, the view's follow, a pin drop or the opening keep going), the view that follows the continents, the first-launch opening, persistence, pins (tap, city, Look-for) and their callout card, the climate lens and legend, notices, units, the frame-time readout, the accessible description, `window.__eh` |
+| `js/app.js` | Boot and loading order, the state, the frame scheduler (one frame when something is dirty; only a blend, a fling, a turn-to, the view's follow, a pin drop, the opening or focus mode's glide keep going; `drawNow` for a canvas just resized), the view that follows the continents, the first-launch opening, focus mode (`applyFocus`, `setFocus`), the drag's read-ahead, persistence, pins (tap, city, Look-for) and their callout card, the climate lens and legend, notices, units, the frame-time readout, the accessible description, `window.__eh` |
 | `js/data.js` | Loads every data file and checks it against the contract; `.bin` decoders as typed-array views on one buffer; climate and elevation lookups; lazy loads |
-| `js/earth.js` | WebGL2: the program, the proxy sheet, the 8-map cache (least recently used out), the loader (one decode running, one waiting), the 200 ms blend and its mid-blend freeze, the climate texture and its LUT, context loss |
+| `js/earth.js` | WebGL2: the program, the proxy sheet, the 8-map cache (least recently used out), the loader (one load at a time: the map on screen first, then the prefetch list; a load the view has left is dropped before its decode or upload; previews only during the opening), the 200 ms blend and its mid-blend freeze, the climate texture and its LUT, context loss |
 | `js/shader.js` | The GLSL: one full-screen triangle; the inverse orthographic and Mollweide; the seam-free texture gradients; the blend; the lens; shading, the atmospheric rim and halo, and the night field |
-| `js/proj.js` | Forward and inverse projections (pure, tested in Node), the view state and its fits (the Earth seated between the controls), gestures |
+| `js/proj.js` | Forward and inverse projections (pure, tested in Node), the view state and its fits (the Earth seated between the controls, or in the whole panel in focus mode; the shift that carries it to a new seat), gestures |
 | `js/plates.js` | Quaternions, rotating today's rings and coasts to each map, validity, arrows, the tap lookup (winding number), distances |
 | `js/overlay.js` | Canvas 2D: coasts, outlines weighted by area, arrows, pins that drop, and labels, the map ellipse's edge; horizon clipping and decimation |
 | `js/timeline.js` | The broken axis, the stratigraphic slider (period track, era band and names, hatch, unconformity, ticks, labels, ring thumb, play glide), the age row and its rolling counter, play/step buttons; the curves strip scrubs through it |
 | `js/curves.js` | The curves strip: three sparklines with bands on the slider's axis, the hatch before 540 Ma, the marker with a glowing dot per curve, and the three values (from the manifest's tiles) |
-| `js/sheet.js` | The bottom sheet: its three heights, the glide between them, and its grip, the period card, This map, the tiles, events, Look for, sources; short citations |
+| `js/sheet.js` | The bottom sheet: its three heights, the glide between them (`glideRows`, which focus mode shares), and its grip, the period card, This map, the tiles, events, Look for, sources; short citations |
 | `js/lut.js` | The two lens ramps, the 256-entry LUTs built from climate.json's encoding, the legend's gradient and ticks |
 | `js/find.js` | City search (three ranks, accents ignored) and its overlay |
 | `js/about.js` | The About panel from about.json and story.json; the units setting; five taps on the version line |
 | `js/units.js` | US and metric formats, ages as Table 1 writes them, chart ages, the Sun's brightness (Gough 1981) |
-| `js/util.js` | Small helpers and the `localStorage` wrapper (`eh.` keys, every access in try/catch) |
+| `js/util.js` | Small helpers, the app's easing curve for motion drawn in JS (`ease`), and the `localStorage` wrapper (`eh.` keys, every access in try/catch) |
 
 `window.__eh` (inert unless called): `ready`, `settled`, `goto`, `step`, `play`, `pause`, `setView`,
 `setLens`, `toggle`, `setUnits`, `setSheet`, `tap`, `look`, `lookFor`, `find`, `choose`, `about`,
 `perfHud`, `cityAt`, `project`, `state`, `ageRow`, `readout`, `notice`, `legend`, `curvesLabel`,
 `sheetHead`, `sheetText`, `perf`, `resetPerf`, `loseContext`, `restoreContext`, `intro`, `skipIntro`,
-`card`, `legendBoxes`, `follow`.
+`card`, `legendBoxes`, `follow`, `focus`, `showing`.
 
 ## The data
 

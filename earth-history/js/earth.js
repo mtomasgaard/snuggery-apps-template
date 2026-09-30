@@ -18,7 +18,7 @@ export function createEarth(canvas, opts) {
   let frozen = [null, null], frozenNext = 0;
   const cache = new Map();            // stop → texture, in least-recently-used-first order
   let A = null, B = null, mix = 0, blendT0 = 0, blendMs = 0;
-  let current = -1, scrubbing = false, prefetch = [], force = -1;
+  let current = -1, previews = false, prefetch = [];
   let running = null, generation = 0;
   let proxyReady = false, proxyLoading = null;
   let climate = null;                 // { bytes: Uint8Array(7008), lut: Uint8Array(1024) } kept for a restore
@@ -71,14 +71,16 @@ export function createEarth(canvas, opts) {
   }
   setup();
 
-  /* ── loading full maps: one decode runs, one waits (§5.8) ── */
+  /* ── loading full maps (§5.8): one load at a time, and the next one is always chosen afresh — the
+     stop on screen first, then the prefetch list in its order (the maps ahead of a drag or of play,
+     or a settled stop's neighbours). A load the view has left is dropped after its fetch (before any
+     decode) or after its decode (before upload), so the map under the finger waits for at most one
+     load and never for a queue of maps the drag has passed. During the opening only previews show. ── */
   const wanted = (stop) => stop === current || prefetch.includes(stop);
   function nextJob() {
-    if (!wanted(current) || cache.has(current)) {
-      for (const s of prefetch) if (!cache.has(s)) return s;
-      return -1;
-    }
-    return scrubbing && force !== current ? prefetch.find((s) => !cache.has(s)) ?? -1 : current;
+    if (current >= 0 && !previews && !cache.has(current)) return current;
+    for (const s of prefetch) if (!cache.has(s)) return s;
+    return -1;
   }
   function pump() {
     if (running || E.lost) return;
@@ -143,7 +145,8 @@ export function createEarth(canvas, opts) {
   function touch(stop) { const t = cache.get(stop); cache.delete(stop); cache.set(stop, t); return t; }
   function arrived(stop) {
     if (stop !== current) return;
-    setTarget({ kind: 'full', stop, tex: touch(stop) }, opts.fadeMs());
+    // Under a moving finger the preview gives way at once (the same map, sharper; §5.7), else it fades.
+    setTarget({ kind: 'full', stop, tex: touch(stop) }, opts.arriveMs());
     opts.onChange();
   }
 
@@ -223,8 +226,8 @@ export function createEarth(canvas, opts) {
   }
 
   /**
-   * Show a stop. fade: cross-fade ms (0 = at once). While scrubbing a stop shows its proxy cell at
-   * once unless its full map is cached, and no full map is fetched (§5.7).
+   * Show a stop. fade: cross-fade ms (0 = at once). A stop whose full map is not cached shows its
+   * preview cell at once, and its full map is loaded next (§5.7).
    */
   E.show = (stop, fade = 0) => {
     current = stop;
@@ -233,9 +236,9 @@ export function createEarth(canvas, opts) {
     evict();
     pump();
   };
-  E.setScrubbing = (on) => { scrubbing = on; force = -1; if (!on) pump(); };
-  /** A finger resting on the slider: fetch the current stop's full map now (§5.7). */
-  E.fetchCurrent = () => { force = current; pump(); };
+  /** The opening runs on the previews alone: no full map is loaded until it ends (§19). */
+  E.setPreviews = (on) => { previews = on; if (!on) pump(); };
+  /** The maps to load after the one on screen, in order: ahead of a drag or of play, or a settled stop's neighbours. */
   E.setPrefetch = (stops) => { prefetch = stops.filter((s) => s >= 0 && s < opts.manifest.count && s !== current); pump(); };
   /** Advance the blend; true while it still needs frames. */
   E.tick = (now) => {
