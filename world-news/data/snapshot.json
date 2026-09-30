@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T00:01:20Z",
+ "generatedAt": "2026-09-30T01:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Bushfire season is fast approaching. A new satellite tool can help communities better prepare",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/bushfire-season-is-fast-approaching-a-new-satellite-tool-can-help-communities-better-prepare-291781",
+     "published": "2026-09-30T00:55:04Z",
+     "summary": "",
+     "stale": false,
+     "author": "Marta Yebra, Director, Bushfire Research Centre of Excellence, Australian National University"
+    },
+    {
+     "title": "After a decade, the UN’s Antonio Guterres is stepping down. His legacy will be mixed, at best",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/after-a-decade-the-uns-antonio-guterres-is-stepping-down-his-legacy-will-be-mixed-at-best-291974",
+     "published": "2026-09-30T00:43:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Simon Adams, Professor of Human Rights, Murdoch University"
+    },
+    {
+     "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/education-ministry-inquiry-the-latest-sign-nzs-official-information-act-isnt-working-293100",
+     "published": "2026-09-30T00:14:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Greg Treadwell, Senior Lecturer in Journalism, Auckland University of Technology"
+    },
+    {
      "title": "Tragedy stopped Mawson exploring this remote Antarctic region. We must get there to study its melting ice",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,26 +469,6 @@
      "author": "Matt King, Professor of Polar Geodesy and ARC Laureate Fellow, University of Tasmania"
     },
     {
-     "title": "Government takes early action to protect ‘legacy’ technology systems against AI breaches",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/government-takes-early-action-to-protect-legacy-technology-systems-against-ai-breaches-292583",
-     "published": "2026-09-29T21:12:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/stage-manager-is-arguably-the-most-stressful-job-in-live-performance-heres-why-291869",
-     "published": "2026-09-29T19:53:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Catherine Campbell, Lecturer, Performing Arts, Adelaide University"
-    },
-    {
      "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Dennis Wesselbaum, Associate Professor, Department of Economics, University of Otago"
-    },
-    {
-     "title": "How can the same El Niño cause drought in one part of the world and floods in another?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-can-the-same-el-nino-cause-drought-in-one-part-of-the-world-and-floods-in-another-293013",
-     "published": "2026-09-29T14:53:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ligin Joseph, PhD Candidate, Oceanography, University of Southampton"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Bushfire season is fast approaching. A new satellite tool can help communities better prepare",
+   "published": "2026-09-30 00:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "After a decade, the UN’s Antonio Guterres is stepping down. His legacy will be mixed, at best",
+   "published": "2026-09-30 00:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
+   "published": "2026-09-30 00:14 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Tragedy stopped Mawson exploring this remote Antarctic region. We must get there to study its melting ice",
    "published": "2026-09-29 23:00 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Government takes early action to protect ‘legacy’ technology systems against AI breaches",
-   "published": "2026-09-29 21:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
-   "published": "2026-09-29 19:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
    "published": "2026-09-29 16:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How can the same El Niño cause drought in one part of the world and floods in another?",
-   "published": "2026-09-29 14:53 UTC"
   },
   {
    "region": "Oceania",
