@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T20:01:20Z",
+ "generatedAt": "2026-09-30T21:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/question-of-whether-taxpayers-or-fossil-fuel-companies-pay-for-climate-change-damage-heads-to-supreme-court-292847",
+     "published": "2026-09-30T20:21:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Patrick Parenteau, Professor of Law Emeritus, Vermont Law & Graduate School"
+    },
+    {
      "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Yucheng Lin, Assistant Professor of Energy and Environment, City University of Hong Kong"
-    },
-    {
-     "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/as-ai-political-deepfakes-go-viral-lawmakers-struggle-to-keep-up-2-states-laws-show-limits-of-what-they-can-do-292107",
-     "published": "2026-09-30T12:44:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stefani Langehennig, Assistant Professor of Practice, University of Denver"
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -459,24 +459,24 @@
      "author": "Michelle Andrews Luke, Lecturer in Educational Psychology, The University of Melbourne"
     },
     {
-     "title": "Cities across the world are sinking because of groundwater depletion. But the process can be reversed",
+     "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/cities-across-the-world-are-sinking-because-of-groundwater-depletion-but-the-process-can-be-reversed-292669",
-     "published": "2026-09-30T09:05:49Z",
+     "link": "https://theconversation.com/digger-tries-to-mock-powerful-older-men-but-cant-escape-64-year-old-millionaire-tom-cruise-293276",
+     "published": "2026-09-30T15:03:28Z",
      "summary": "",
      "stale": false,
-     "author": "Jesse Kearse, Research Fellow in Earth Science, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Alexander Sergeant, Lecturer in Digital Media Production, University of Westminster"
     },
     {
-     "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
+     "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/education-ministry-inquiry-the-latest-sign-nzs-official-information-act-isnt-working-293100",
-     "published": "2026-09-30T00:14:38Z",
+     "link": "https://theconversation.com/antarcticas-ice-loss-is-locked-in-and-extra-snowfall-wont-save-it-thats-bad-news-for-low-lying-coastal-areas-elsewhere-293066",
+     "published": "2026-09-30T12:47:28Z",
      "summary": "",
      "stale": false,
-     "author": "Greg Treadwell, Senior Lecturer in Journalism, Auckland University of Technology"
+     "author": "Yucheng Lin, Assistant Professor of Energy and Environment, City University of Hong Kong"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
+   "published": "2026-09-30 20:21 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
    "published": "2026-09-30 14:09 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
    "published": "2026-09-30 12:47 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
-   "published": "2026-09-30 12:44 UTC"
   },
   {
    "region": "Americas",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Cities across the world are sinking because of groundwater depletion. But the process can be reversed",
-   "published": "2026-09-30 09:05 UTC"
+   "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
+   "published": "2026-09-30 15:03 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
-   "published": "2026-09-30 00:14 UTC"
+   "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
+   "published": "2026-09-30 12:47 UTC"
   },
   {
    "region": "Oceania",
