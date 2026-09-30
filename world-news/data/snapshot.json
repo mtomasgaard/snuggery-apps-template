@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T18:01:25Z",
+ "generatedAt": "2026-09-30T19:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Busani Ngcaweni, Director: Center for Public Policy and African Studies, University of Johannesburg"
     },
     {
+     "title": "Somali families face renewed violence amid worsening hunger crisis",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168495",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "Children have been killed and injured in fresh fighting in Baidoa, in Somalia’s South West State, where families were already facing severe hunger and other overlapping crises.",
+     "stale": false
+    },
+    {
      "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -233,15 +242,6 @@
      "summary": "Room to protest is narrowing in Africa, as governments lean on arrests, curfews, and internet blackouts to blunt dissent. When the streets become too dangerous, dissent often migrates online.",
      "stale": false,
      "author": "Ranking Digital Rights"
-    },
-    {
-     "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168475",
-     "published": "2026-09-28T12:00:00Z",
-     "summary": "South Sudan remains committed to holding general elections in December to conclude its transition period, the country’s Permanent Representative to the United Nations Cecilia Adout Majok Adeng, told the General Assembly…",
-     "stale": false
     },
     {
      "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
@@ -429,14 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Politics with Michelle Grattan: Tim Wilson says government is borrowing from the future to spend today",
+     "title": "Written as a single sentence, Adam Ouston’s Mine is a novel under the influence",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-tim-wilson-says-government-is-borrowing-from-the-future-to-spend-today-293196",
-     "published": "2026-09-30T09:15:38Z",
+     "link": "https://theconversation.com/written-as-a-single-sentence-adam-oustons-mine-is-a-novel-under-the-influence-281227",
+     "published": "2026-09-30T18:01:25Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Emmett Stinson, Senior Lecturer, Creative Writing and English, Edith Cowan University"
+    },
+    {
+     "title": "DreamWorks’ Forgotten Island is a joyous, painful love letter to the Filipino diaspora",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/dreamworks-forgotten-island-is-a-joyous-painful-love-letter-to-the-filipino-diaspora-293200",
+     "published": "2026-09-30T18:01:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kristine Aquino, Senior Lecturer, University of Technology Sydney"
+    },
+    {
+     "title": "How do I know my child is ready to leave the house on their own?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-do-i-know-my-child-is-ready-to-leave-the-house-on-their-own-293105",
+     "published": "2026-09-30T18:00:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Andrews Luke, Lecturer in Educational Psychology, The University of Melbourne"
     },
     {
      "title": "Cities across the world are sinking because of groundwater depletion. But the process can be reversed",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Jesse Kearse, Research Fellow in Earth Science, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "Interest rates have hit their highest level since 2011. The pain will feel different in 2026",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/interest-rates-have-hit-their-highest-level-since-2011-the-pain-will-feel-different-in-2026-293098",
-     "published": "2026-09-30T05:42:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alan Duncan, Director, Bankwest Curtin Economics Centre (BCEC) and John Curtin Distinguished Professor at Curtin Business School, Curtin University"
-    },
-    {
-     "title": "Inflation lifts to 4.0% in August, keeping pressure on the RBA for another rate rise",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/inflation-lifts-to-4-0-in-august-keeping-pressure-on-the-rba-for-another-rate-rise-292366",
-     "published": "2026-09-30T05:32:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Isaac Gross, Lecturer in Economics, Monash University"
     },
     {
      "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
@@ -780,6 +780,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Somali families face renewed violence amid worsening hunger crisis",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
    "published": "2026-09-30 03:37 UTC"
@@ -801,12 +807,6 @@
    "source": "Global Voices",
    "title": "When telcos shut down the internet, they shut down protests for the government",
    "published": "2026-09-28 18:11 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘Ballot must replace the bullets’, South Sudan tells General Assembly ahead of elections",
-   "published": "2026-09-28 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Tim Wilson says government is borrowing from the future to spend today",
-   "published": "2026-09-30 09:15 UTC"
+   "title": "Written as a single sentence, Adam Ouston’s Mine is a novel under the influence",
+   "published": "2026-09-30 18:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "DreamWorks’ Forgotten Island is a joyous, painful love letter to the Filipino diaspora",
+   "published": "2026-09-30 18:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How do I know my child is ready to leave the house on their own?",
+   "published": "2026-09-30 18:00 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Cities across the world are sinking because of groundwater depletion. But the process can be reversed",
    "published": "2026-09-30 09:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Interest rates have hit their highest level since 2011. The pain will feel different in 2026",
-   "published": "2026-09-30 05:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Inflation lifts to 4.0% in August, keeping pressure on the RBA for another rate rise",
-   "published": "2026-09-30 05:32 UTC"
   },
   {
    "region": "Oceania",
