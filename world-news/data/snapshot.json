@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T09:01:17Z",
+ "generatedAt": "2026-09-30T10:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Politics with Michelle Grattan: Tim Wilson says government is borrowing from the future to spend today",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-tim-wilson-says-government-is-borrowing-from-the-future-to-spend-today-293196",
+     "published": "2026-09-30T09:15:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "Cities across the world are sinking because of groundwater depletion. But the process can be reversed",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/cities-across-the-world-are-sinking-because-of-groundwater-depletion-but-the-process-can-be-reversed-292669",
+     "published": "2026-09-30T09:05:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jesse Kearse, Research Fellow in Earth Science, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
      "title": "Interest rates have hit their highest level since 2011. The pain will feel different in 2026",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,16 +469,6 @@
      "author": "Isaac Gross, Lecturer in Economics, Monash University"
     },
     {
-     "title": "Amid rising support for right-wing minor parties, can David Shoebridge reinvigorate the Greens?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/amid-rising-support-for-right-wing-minor-parties-can-david-shoebridge-reinvigorate-the-greens-293191",
-     "published": "2026-09-30T05:12:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nathan Fioritti, Lecturer in Politics, School of Social Sciences, Monash University"
-    },
-    {
      "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Greg Treadwell, Senior Lecturer in Journalism, Auckland University of Technology"
-    },
-    {
-     "title": "Tragedy stopped Mawson exploring this remote Antarctic region. We must get there to study its melting ice",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/tragedy-stopped-mawson-exploring-this-remote-antarctic-region-we-must-get-there-to-study-its-melting-ice-291165",
-     "published": "2026-09-29T23:00:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matt King, Professor of Polar Geodesy and ARC Laureate Fellow, University of Tasmania"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Politics with Michelle Grattan: Tim Wilson says government is borrowing from the future to spend today",
+   "published": "2026-09-30 09:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Cities across the world are sinking because of groundwater depletion. But the process can be reversed",
+   "published": "2026-09-30 09:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Interest rates have hit their highest level since 2011. The pain will feel different in 2026",
    "published": "2026-09-30 05:42 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Amid rising support for right-wing minor parties, can David Shoebridge reinvigorate the Greens?",
-   "published": "2026-09-30 05:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
    "published": "2026-09-30 00:14 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Tragedy stopped Mawson exploring this remote Antarctic region. We must get there to study its melting ice",
-   "published": "2026-09-29 23:00 UTC"
   },
   {
    "region": "Oceania",
