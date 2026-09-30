@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T14:01:19Z",
+ "generatedAt": "2026-09-30T15:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/09/30/in-brazils-capital-residents-grow-their-own-heat-fighting-solutions/",
+     "published": "2026-09-30T14:09:26Z",
+     "summary": "Life in the favelas surrounding Brazil’s capital brings the health risks of extreme heat — a symptom of the global inequities of green space access",
+     "stale": false,
+     "author": "Dialogue Earth"
+    },
+    {
      "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -158,16 +168,6 @@
      "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
      "stale": false,
      "author": "Marco Martínez"
-    },
-    {
-     "title": "Ecuador detains former minister José Serrano after U.S. deportation",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/09/18/ecuador-detains-former-minister-jose-serrano-after-u-s-deportation/",
-     "published": "2026-09-18T02:00:10Z",
-     "summary": "Deported from the United States, Ecuador’s former “superminister” now faces grave criminal investigations and political accusations in a justice system facing questions over due process.",
-     "stale": false,
-     "author": "Gina Yauri"
     }
    ]
   },
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/franc-cfa-un-nouvel-ouvrage-plaide-pour-une-monnaie-souveraine-au-senegal-292468",
+     "published": "2026-09-30T14:12:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Babo Amadou Ba, enseigant-chercheur, Université Amadou Mahtar MBOW de Dakar"
+    },
+    {
      "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Busani Ngcaweni, Director: Center for Public Policy and African Studies, University of Johannesburg"
-    },
-    {
-     "title": "Nigeria’s school kidnapping threat is changing: 4 lessons from the 56-day Oyo attack",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/nigerias-school-kidnapping-threat-is-changing-4-lessons-from-the-56-day-oyo-attack-289363",
-     "published": "2026-09-30T13:25:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Saheed Babajide Owonikoko, Researcher, Centre for Peace and Security Studies, Modibbo Adama University of Technology"
     },
     {
      "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168491",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "The UN refugee agency, UNHCHR, has voiced concern over Malaysia’s decision to return 1,476 people to Myanmar amid an ongoing civil war and a dire human rights and humanitarian situation.",
+     "stale": false
+    },
+    {
      "title": "Equating protest with terrorism: A narrative against dissent",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -371,15 +380,6 @@
      "summary": "Mob violence is rising in Bangladesh as unchecked impunity, weak law enforcement, and social media instigations drive lethal crowd attacks, challenging institutional responses, justice delivery, and overall state…",
      "stale": false,
      "author": "Maksuda Akter"
-    },
-    {
-     "title": "Countries far from conflict paying the price for wars not their own, India tells UN",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168460",
-     "published": "2026-09-26T12:00:00Z",
-     "summary": "India’s External Affairs Minister Subrahmanyam Jaishankar warned on Saturday that violent conflicts continue to undermine international peace and security, while countries far removed from the battlefield are being…",
-     "stale": false
     },
     {
      "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
+   "published": "2026-09-30 14:09 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
    "published": "2026-09-30 12:47 UTC"
@@ -761,22 +767,16 @@
    "published": "2026-09-21 06:21 UTC"
   },
   {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Ecuador detains former minister José Serrano after U.S. deportation",
-   "published": "2026-09-18 02:00 UTC"
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
+   "published": "2026-09-30 14:12 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
    "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
    "published": "2026-09-30 13:26 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Nigeria’s school kidnapping threat is changing: 4 lessons from the 56-day Oyo attack",
-   "published": "2026-09-30 13:25 UTC"
   },
   {
    "region": "Africa",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Equating protest with terrorism: A narrative against dissent",
    "published": "2026-09-29 00:00 UTC"
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
    "published": "2026-09-27 22:36 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Countries far from conflict paying the price for wars not their own, India tells UN",
-   "published": "2026-09-26 12:00 UTC"
   },
   {
    "region": "Asia",
