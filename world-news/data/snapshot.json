@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T22:01:22Z",
+ "generatedAt": "2026-09-30T23:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "FlyDubai incident: Airline safety expert explains how cockpits have become more secure – but only from outside threats",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/flydubai-incident-airline-safety-expert-explains-how-cockpits-have-become-more-secure-but-only-from-outside-threats-293299",
+     "published": "2026-09-30T22:07:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jeff Price, Professor iof Aviation and Aerospace Science, Metropolitan State University of Denver"
+    },
+    {
      "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -111,16 +121,6 @@
      "summary": "Life in the favelas surrounding Brazil’s capital brings the health risks of extreme heat — a symptom of the global inequities of green space access",
      "stale": false,
      "author": "Dialogue Earth"
-    },
-    {
-     "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/antarcticas-ice-loss-is-locked-in-and-extra-snowfall-wont-save-it-thats-bad-news-for-low-lying-coastal-areas-elsewhere-293066",
-     "published": "2026-09-30T12:47:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yucheng Lin, Assistant Professor of Energy and Environment, City University of Hong Kong"
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/gps-can-now-prescribe-adhd-medication-but-big-barriers-to-treatment-remain-292985",
+     "published": "2026-09-30T22:56:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Steven Lillis, Associate Professor, Division of Health, University of Waikato"
+    },
+    {
      "title": "Written as a single sentence, Adam Ouston’s Mine is a novel under the influence",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kristine Aquino, Senior Lecturer, University of Technology Sydney"
-    },
-    {
-     "title": "How do I know my child is ready to leave the house on their own?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-do-i-know-my-child-is-ready-to-leave-the-house-on-their-own-293105",
-     "published": "2026-09-30T18:00:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Andrews Luke, Lecturer in Educational Psychology, The University of Melbourne"
     },
     {
      "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
@@ -721,6 +721,12 @@
   {
    "region": "Americas",
    "source": "The Conversation",
+   "title": "FlyDubai incident: Airline safety expert explains how cockpits have become more secure – but only from outside threats",
+   "published": "2026-09-30 22:07 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
    "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
    "published": "2026-09-30 20:21 UTC"
   },
@@ -729,12 +735,6 @@
    "source": "Global Voices",
    "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
    "published": "2026-09-30 14:09 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
-   "published": "2026-09-30 12:47 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+   "published": "2026-09-30 22:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Written as a single sentence, Adam Ouston’s Mine is a novel under the influence",
    "published": "2026-09-30 18:01 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "DreamWorks’ Forgotten Island is a joyous, painful love letter to the Filipino diaspora",
    "published": "2026-09-30 18:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How do I know my child is ready to leave the house on their own?",
-   "published": "2026-09-30 18:00 UTC"
   },
   {
    "region": "Oceania",
