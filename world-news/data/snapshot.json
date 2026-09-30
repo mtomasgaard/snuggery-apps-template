@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T04:01:11Z",
+ "generatedAt": "2026-09-30T05:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "New Greens leader David Shoebridge declares Greens ‘here to replace’ Labor",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/new-greens-leader-david-shoebridge-declares-greens-here-to-replace-labor-292586",
+     "published": "2026-09-30T04:07:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australian electric car and bus sales soar - but trucks lag far behind",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Marta Yebra, Director, Bushfire Research Centre of Excellence, Australian National University"
-    },
-    {
-     "title": "After a decade, the UN’s Antonio Guterres is stepping down. His legacy will be mixed, at best",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/after-a-decade-the-uns-antonio-guterres-is-stepping-down-his-legacy-will-be-mixed-at-best-291974",
-     "published": "2026-09-30T00:43:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Simon Adams, Professor of Human Rights, Murdoch University"
     },
     {
      "title": "Education Ministry inquiry the latest sign NZ’s Official Information Act isn’t working",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "New Greens leader David Shoebridge declares Greens ‘here to replace’ Labor",
+   "published": "2026-09-30 04:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australian electric car and bus sales soar - but trucks lag far behind",
    "published": "2026-09-30 02:00 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Bushfire season is fast approaching. A new satellite tool can help communities better prepare",
    "published": "2026-09-30 00:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "After a decade, the UN’s Antonio Guterres is stepping down. His legacy will be mixed, at best",
-   "published": "2026-09-30 00:43 UTC"
   },
   {
    "region": "Oceania",
