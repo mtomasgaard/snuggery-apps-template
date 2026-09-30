@@ -1,0 +1,182 @@
+name: Refresh us-quakes
+
+# Rewrites US Quakes' live data about once an hour: the last 30 days of earthquakes in the app's four
+# map boxes from USGS's all_month.geojson feed, M2.5 and up since a year before the history cutoff
+# from USGS's FDSN event service (asked once a day; the other hours reuse the day's answer from
+# actions/cache), and the monitored volcanoes' alert levels from the Volcano Hazards Program. All
+# three are public USGS endpoints: no account, no key, no secret, so this job needs nothing set up
+# before it works. scripts/us_quakes/refresh.py is the code; us-quakes/tools/CONTRACT.md §3 the file.
+#
+# ============================================================================
+# WHERE THE FILE GOES: ITS OWN BRANCH, NEVER main
+# ============================================================================
+# The snapshot is about half a megabyte of base64 of compressed columns, different every hour, which
+# git can neither delta nor compress. Committed to `main` hourly it would add several gigabytes a year
+# to every clone, and each commit would be a push to main for build-zips.yml to consider. So it goes
+# on an orphan branch, `data-us-quakes`, force-pushed as a single parentless commit each time: a
+# mailbox, not a log. `main` keeps the demo snapshot the ZIP ships with, which build-us-quakes.yml
+# rewrites once a year.
+#
+# The address your Shortcut fetches is that branch's copy of the same path:
+#
+#   public repo   https://raw.githubusercontent.com/OWNER/REPO/data-us-quakes/us-quakes/data/snapshot.json
+#   private repo  https://api.github.com/repos/OWNER/REPO/contents/us-quakes/data/snapshot.json?ref=data-us-quakes
+#                 with Accept: application/vnd.github.raw and your read token
+#
+# ============================================================================
+# WHAT IT COSTS IN ACTIONS MINUTES
+# ============================================================================
+# The script takes a few seconds (the M2.5+ query adds about 20 s once a day), so a run should stay
+# under a minute, and GitHub bills each job rounded UP to a whole minute: about 720 minutes a month
+# hourly. Every completed run also
+# starts publish-web.yml (it follows the data), another minute each even while Pages is off. Free
+# on a public repository. In a PRIVATE copy that is roughly 1,440 of the Free plan's 2,000 monthly
+# minutes, so change the cron below to every three hours ('23 */3 * * *', about 480 with
+# publish-web) — the app shows the feed's own time, so a three-hour-old copy says so — and delete
+# publish-web.yml if you do not publish the apps to the web.
+#
+# ============================================================================
+# TWO THINGS THAT WILL WASTE AN AFTERNOON IF NOBODY SAYS THEM
+# ============================================================================
+# 1. `schedule:` only ever runs from the repository's DEFAULT branch. A workflow sitting on a pull
+#    request branch is inert no matter how correct it is.
+# 2. GitHub treats cron as best-effort. Runs are commonly late by 5-20 minutes, longer under load,
+#    and a newly added schedule often skips its first slot. Say "about hourly", never "at 23 past".
+
+on:
+  schedule:
+    - cron: '23 * * * *'                    # about hourly, off the top-of-hour stampede
+  workflow_dispatch:
+    inputs:
+      requery:
+        description: 'Ask USGS for the M2.5+ year again even if today''s answer is cached'
+        type: boolean
+        default: false
+  push:
+    branches: [main]                        # a push to any other branch must not force-publish
+                                            # over the shared data branch; only the default one may
+    paths:                                  # the code, never the committed demo snapshot
+      - 'scripts/us_quakes/refresh.py'
+      - 'scripts/us_quakes/verify_snapshot.py'
+      - 'scripts/us_quakes/common.py'
+      - 'scripts/us_quakes/sources.py'
+      - 'scripts/us_quakes/paths.py'
+      - '.github/workflows/refresh-us-quakes.yml'
+
+permissions:
+  contents: write                           # least privilege: it writes one branch
+
+concurrency:
+  group: refresh-us-quakes
+  cancel-in-progress: false
+
+env:
+  DATA_BRANCH: data-us-quakes
+  DATA_PATH: us-quakes/data/snapshot.json
+  LIVE_CACHE: scripts/us_quakes/cache/live
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Only what the refresh reads: its scripts and the three committed JSON files it takes the
+      # cutoff, the volcano list and the quoted meanings from. actions/checkout makes a sparse
+      # checkout a blob-less partial clone, so the rest of the repository is never downloaded.
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: |
+            scripts/us_quakes
+            us-quakes/assets
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # The one package the refresh needs; the rest of requirements.txt is the yearly build's.
+      - name: Install requests
+        run: python3 -m pip install --quiet 'requests==2.34.2'
+
+      # The day's M2.5+ answer from USGS and its marker (scripts/us_quakes/cache/live). The newest
+      # saved one is restored; refresh.py decides from the marker whether it is still good (under
+      # 24 h old, same history cutoff, files matching their sha256) or asks USGS again.
+      - name: Restore the day's M2.5+ query
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.LIVE_CACHE }}
+          key: us-quakes-fdsn-${{ github.run_id }}
+          restore-keys: |
+            us-quakes-fdsn-
+
+      - name: What is published already
+        run: |
+          set -euo pipefail
+          mkdir -p prev
+          if git fetch --quiet --depth=1 origin "$DATA_BRANCH" 2>/dev/null \
+             && git show "FETCH_HEAD:$DATA_PATH" > prev/snapshot.json 2>/dev/null; then
+            echo "published: $(python3 -c 'import json;print(json.load(open("prev/snapshot.json"))["generatedAt"])' || echo unreadable)"
+          else
+            rm -f prev/snapshot.json
+            echo "nothing published yet"
+          fi
+          echo "queried_before=$(python3 -c 'import json,os;print(json.load(open(os.environ["LIVE_CACHE"]+"/live-marker.json"))["queriedAt"])' 2>/dev/null || true)" >> "$GITHUB_ENV"
+
+      # refresh.py validates what it is about to write (CONTRACT §11.3) and writes nothing on any
+      # failure; verify_snapshot.py then checks the written file again, independently, against the
+      # same feed and FDSN answers. Either failing fails the job, nothing is published, and the last
+      # good snapshot stays on the data branch.
+      - name: Build and verify the snapshot
+        env:
+          REQUERY: ${{ inputs.requery }}
+        run: |
+          set -euo pipefail
+          args=(--out "out/$DATA_PATH")
+          [ -f prev/snapshot.json ] && args+=(--prev prev/snapshot.json)
+          [ "$REQUERY" = "true" ] && args+=(--requery)
+          python3 scripts/us_quakes/refresh.py "${args[@]}"
+          python3 scripts/us_quakes/verify_snapshot.py "out/$DATA_PATH"
+          q=$(python3 -c 'import json,os;print(json.load(open(os.environ["LIVE_CACHE"]+"/live-marker.json"))["queriedAt"])')
+          echo "queried_after=$q" >> "$GITHUB_ENV"
+          echo "cache_key=us-quakes-fdsn-${q//[^0-9A-Za-z]/}" >> "$GITHUB_ENV"
+
+      # Saved only when this run asked USGS (a new marker), under a key named for that moment, so
+      # the next 23 runs restore it and the day after makes a fresh one. Unused entries expire.
+      - name: Keep the day's M2.5+ query for the next runs
+        if: env.queried_after != env.queried_before
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.LIVE_CACHE }}
+          key: ${{ env.cache_key }}
+
+      # One commit, no parent, force-pushed; the push is retried, because a transient failure here
+      # means an hour-old map on somebody's phone.
+      - name: Publish to the data branch
+        run: |
+          set -euo pipefail
+          # A force-push is unrecoverable, so the refspec is checked first: an edited env block, a
+          # copy of this file with DATA_BRANCH left empty, or a branch renamed to match the one being
+          # pushed FROM would otherwise overwrite the repository's own history.
+          case "$DATA_BRANCH" in
+            ''|main|master|"${GITHUB_REF_NAME:-}")
+              echo "refusing to force-push $DATA_BRANCH" >&2; exit 1 ;;
+          esac
+          cd out
+          # The path reaches Python through the environment, never pasted into its source.
+          feed=$(DATA_PATH="$DATA_PATH" python3 -c 'import json,os;print(json.load(open(os.environ["DATA_PATH"]))["feed"]["generated"])')
+          git init -q -b "$DATA_BRANCH"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "us-quakes: USGS feed of $feed, published $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4; do
+            git push --force \
+              "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+              "HEAD:refs/heads/$DATA_BRANCH" && exit 0
+            echo "push failed, retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

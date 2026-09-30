@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>US Quakes</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <h1>US Quakes</h1>
+    <div class="seg" id="mode" role="radiogroup" aria-label="Mode">
+      <button role="radio" data-v="live">Live</button><button role="radio" data-v="history">History</button>
+    </div>
+    <button id="about-btn" class="icon" aria-label="About US Quakes">
+      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="8.4" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M10 8.6v5.6M10 5.6v1.2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+    </button>
+  </header>
+  <main id="map" aria-label="Map">
+    <canvas id="base" aria-hidden="true"></canvas><canvas id="relief" aria-hidden="true"></canvas><canvas id="lines" aria-hidden="true"></canvas><canvas id="gl" aria-hidden="true"></canvas><canvas id="over" tabindex="0" role="img" aria-label="Map: drag to pan, pinch to zoom, tap an earthquake"></canvas>
+    <div id="chips" class="chips" role="group" aria-label="Regions"></div>
+    <div id="tools">
+      <button id="layers-btn" class="tool glass" aria-label="Layers" aria-expanded="false" aria-pressed="false"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M10 3.5 17 7.2 10 10.9 3 7.2zM3 10.4l7 3.7 7-3.7M3 13.6l7 3.7 7-3.7" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/></svg></button>
+      <button id="section-btn" class="tool glass mono" aria-label="Section: draw a cross-section" aria-pressed="false">A—A′</button>
+      <button id="focus-btn" class="tool glass" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M3.5 7.5v-4h4M12.5 3.5h4v4M16.5 12.5v4h-4M7.5 16.5h-4v-4" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></button>
+    </div>
+    <button id="focus-exit" class="ghost" aria-label="Show the controls" hidden><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M7.5 3.5v4h-4M16.5 7.5h-4v-4M12.5 16.5v-4h4M3.5 12.5h4v4" fill="none" stroke="currentColor" stroke-width="1.25"/></svg></button>
+    <div id="layers" class="panel glass" role="dialog" aria-label="Layers" hidden></div>
+    <p id="perf" class="glass mono" hidden></p>
+    <p id="nogl" class="nogl" hidden>This map needs WebGL 2, which this device does not offer.</p>
+    <div id="foot">
+      <div id="notices"></div>
+      <div class="foot-row">
+        <div id="scale"><i></i><span></span></div>
+        <button id="legend" class="glass" aria-label="Reading the map: depth colors, 0 to 300 km" aria-expanded="false"><b>Depth</b><canvas id="legend-ramp" width="112" height="6"></canvas><span class="mono">0 · 35 · 300 km</span></button>
+      </div>
+      <button id="credit"><b>Not a warning service</b> · USGS · Natural Earth</button>
+    </div>
+  </main>
+  <section id="sheet" aria-label="Earthquakes">
+    <div id="grip" role="button" tabindex="0" aria-label="Sheet height"><i></i></div>
+    <div id="head">
+      <div id="live-head">
+        <div class="row1"><p id="stamp"></p>
+          <div class="seg" id="live-win" role="radiogroup" aria-label="Live window"><button role="radio" data-v="day">Day</button><button role="radio" data-v="week">Week</button><button role="radio" data-v="month">Month</button></div>
+        </div>
+        <div class="strip"><canvas id="strip-live" role="img" aria-label="Record strip"></canvas></div>
+        <button id="largest" class="largest"></button>
+      </div>
+      <div id="hist-head" hidden>
+        <div class="row1"><p id="hlabel"></p>
+          <button id="play" class="play" aria-label="Play"><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path id="play-glyph" d="M13 10.5v11l9-5.5z" fill="currentColor"/></svg></button>
+        </div>
+        <div class="strip" id="timeline" role="slider" tabindex="0" aria-label="Timeline" aria-valuemin="1600"><canvas id="strip-hist"></canvas></div>
+        <div class="row3">
+          <div class="seg" id="hist-win" role="radiogroup" aria-label="Window"><button role="radio" data-v="month">Month</button><button role="radio" data-v="year">Year</button><button role="radio" data-v="decade">Decade</button><button role="radio" data-v="all">All</button></div>
+          <div class="seg" id="floor" role="radiogroup" aria-label="Magnitude floor"></div>
+        </div>
+      </div>
+    </div>
+    <div id="body"><p class="loading" id="loading">Loading the catalog…</p></div>
+  </section>
+  <section id="about" role="dialog" aria-label="About US Quakes" tabindex="-1" hidden></section>
+  <p id="announce" class="sr" aria-live="polite"></p>
+</div>
+</body>
+</html>

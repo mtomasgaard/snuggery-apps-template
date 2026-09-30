@@ -67,6 +67,15 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   Hyperlegible and Newsreader under the SIL Open Font License 1.1
   (earth-history/fonts/OFL.txt). The app's own code and text share the licence
   above.
+- The data under us-quakes/assets/ and us-quakes/data/ is adapted from U.S.
+  Geological Survey products — the ANSS Comprehensive Earthquake Catalog
+  (doi:10.5066/F7MS3QZH), the 3D Elevation Program, the Quaternary Fault and
+  Fold Database of the United States and the Volcano Hazards Program — works
+  of the United States government in the public domain, with USGS's requested
+  acknowledgments and every adaptation in us-quakes/CREDITS.txt; the coastlines,
+  borders and depth bands are Natural Earth, public domain. us-quakes/fonts/ are
+  Atkinson Hyperlegible and Red Hat Mono under the SIL Open Font License 1.1
+  (us-quakes/fonts/OFL.txt). The app's own code and text share the licence above.
 - The wind and weather fields under global-wind/data/ and global-weather/data/
   are NOAA Global Forecast System output, a work of the United States government
   in the public domain. The coastlines in both apps' assets/world.json are

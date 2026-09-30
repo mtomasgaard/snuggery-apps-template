@@ -24,11 +24,11 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Sixteen complete apps. All are examples — none holds anybody's real data. Copy
+Seventeen complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
-**Five of them cost you nothing to run.** Hello Live, World News, Power Hours,
-Global Wind and Global Weather are refreshed by this repository's own workflows,
+**Six of them cost you nothing to run.** Hello Live, World News, Power Hours,
+Global Wind, Global Weather and US Quakes are refreshed by this repository's own workflows,
 from sources that need no key and no account, so they work from the moment you install them
 and keep working whether or not you ever copy this template. **Outdoor Window**
 is free in the same way but cannot run on its own: the forecast is for wherever
@@ -78,6 +78,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 0.7 MB | nothing (GOGET by hand) |
 | Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.5 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) | 7 MB | nothing |
+| US Quakes | [**Install US Quakes**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) | 6.4 MB | nothing (the feed refreshes here hourly) |
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
 Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
@@ -173,6 +174,12 @@ The Earth at 90 moments from 750 million years ago to today, on a globe and on a
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) · Make it yours: [`earth-history/NOTES.md`](earth-history/NOTES.md) · The design and the look: [`earth-history/DESIGN.md`](earth-history/DESIGN.md), [`earth-history/ART.md`](earth-history/ART.md)
 
+### US Quakes
+
+Every earthquake USGS has cataloged around the United States since 1638 — 394 890 of them, magnitude 2.5 and up from 1900 — on a map drawn like a seismograph's drum record, with the last 30 days of the USGS feed on top, refreshed hourly by this repository. Scrub a timeline from 1900 to now and play a decade; the plate boundaries draw themselves as a trace. Drag a line across Alaska and read a true-scale cross-section of the Cook Inlet slab down to 250 km. Seven stories (1700 Cascadia, 1811–12 New Madrid, 1906 San Francisco, 1964 Alaska, Oklahoma since 2009, 2018 Kīlauea, 2019 Ridgecrest), three of them playable; the Quaternary faults and USGS volcano alert levels as layers; a focus mode that leaves only the map and the record strip. Every sentence about the data is USGS's own, quoted, and "Not a warning service" stays on screen. **Live**, 6.4 MB; the history is rebuilt each January. USGS data is public domain; Natural Earth likewise.
+
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-us-quakes` branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md)) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
+
 ### Milky Way
 
 The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.9 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
@@ -195,6 +202,7 @@ The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D
 ![World Oil & Gas](world-oil-gas/screenshots/app.png)
 ![Snug Kart](snug-kart/screenshots/app.png)
 ![Earth's History](earth-history/screenshots/app.png)
+![US Quakes](us-quakes/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in `.github/workflows/`
 and its scripts in `scripts/`, where it has them. Then take out its row, entry
@@ -233,6 +241,7 @@ same app from the same folder, and it shows the data last published here. Open t
 | World Oil & Gas | [**Open World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/world-oil-gas/) |
 | Snug Kart | [**Open Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/snug-kart/) |
 | Earth's History | [**Open Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/earth-history/) |
+| US Quakes | [**Open US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/us-quakes/) |
 
 The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
 has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)

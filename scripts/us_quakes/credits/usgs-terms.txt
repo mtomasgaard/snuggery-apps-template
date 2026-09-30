@@ -1,0 +1,98 @@
+USGS terms that cover every USGS source in US Quakes, quoted verbatim.
+Retrieved 2026-09-30 with curl (browser User-Agent; usgs.gov answers curl's default agent with 403),
+text extracted from the HTML. Each quote is followed by its URL.
+
+------------------------------------------------------------------------------------------------
+1. Copyrights and Credits
+https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits
+
+"USGS-authored or produced data and information are considered to be in the U.S. Public Domain.
+While the content of most USGS websites is in the U.S. Public Domain, not all information,
+illustrations, or photographs on our site are. Some non-USGS photographs, images, and/or graphics
+that appear on USGS websites are used by the USGS with permission from the copyright holder (as
+required by USGS policy on the use of copyrighted material). These materials are generally marked
+as being copyrighted."
+
+"When using information from USGS information products, publications, or websites, we ask that
+proper credit be given. Credit can be provided by including a citation such as the following:
+Credit: U.S. Geological Survey"
+
+------------------------------------------------------------------------------------------------
+2. Acknowledging or Crediting USGS
+https://www.usgs.gov/information-policies-and-instructions/acknowledging-or-crediting-usgs
+
+"Most U.S. Geological Survey (USGS) information resides in the Public Domain and may be used
+without restriction. When using information from USGS information products, publications, or
+websites, we ask that proper credit be given."
+
+"When Using USGS Information at No Cost
+( Product or data name ) courtesy of the U.S. Geological Survey"
+
+"When Value-Adding to USGS Information for Resale
+Source of ( product or data name ): U.S. Geological Survey"
+
+------------------------------------------------------------------------------------------------
+3. The National Map (3DEP relief): terms of use
+https://www.usgs.gov/faqs/what-are-terms-uselicensing-map-services-and-data-national-map
+
+"Map services and data downloaded from The National Map are free and in the public domain. There
+are no restrictions; however, we request that the following acknowledgment statement of the
+originating agency be included in products and data derived from our map services when citing,
+copying, or reprinting:
+"Map services and data available from U.S. Geological Survey, National Geospatial Program.""
+
+Service citation form (https://www.usgs.gov/faqs/how-should-i-cite-datasets-and-services-national-map):
+"U.S. Geological Survey, 2019, USGS 3D Elevation Program Digital Elevation Model, accessed June 7,
+2019 at URL https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer ."
+The service's own copyrightText (3dep-imageserver-info.json in this folder):
+"USGS National Map 3D Elevation Program (3DEP). August 25, 2026."
+
+------------------------------------------------------------------------------------------------
+4. ComCat
+DOI 10.5066/F7MS3QZH (DataCite record: comcat-doi-10.5066-F7MS3QZH.datacite.json)
+  title "Advanced National Seismic System (ANSS) Comprehensive Catalog", creator and publisher
+  "U.S. Geological Survey", publicationYear 2017, resolves to http://earthquake.usgs.gov/earthquakes/search/
+  The record carries no rightsList; the terms are those of items 1 and 2 above.
+Citation: U.S. Geological Survey, 2017, Advanced National Seismic System (ANSS) Comprehensive
+Catalog, doi:10.5066/F7MS3QZH.
+
+------------------------------------------------------------------------------------------------
+5. Quaternary Fault and Fold Database
+https://www.usgs.gov/programs/earthquake-hazards/faults
+Download link on that page: "GIS files (16 MB ZIP file)" ->
+https://earthquake.usgs.gov/static/lfs/nshm/qfaults/Qfaults_GIS.zip (32,371,696 B on 2026-09-30)
+Map image credit on the page: "Sources/Usage: Public Domain."
+
+"Citation information
+When you use this data, please provide proper acknowledgment. Because there are many contributors
+to the database, the citation will depend on which data you are using. ... To cite the entire USGS
+Quaternary Fault and Fold Database, please use the following citation: U.S. Geological Survey,
+2020, Quaternary Fault and Fold Database for the Nation, accessed [Month, Day, Year], at
+https://doi.org/10.5066/P9BCVRCK"
+
+"As of February 26, 2026, the Database Search function is retired. The legacy reports can be
+accessed through the Interactive Fault Map."
+
+Metadata inside the ZIP, SHP/Qfaults_US_Database.shp.xml (kept here as
+qfaults-Qfaults_US_Database.shp.xml), FGDC fields:
+  <useconst>none</useconst>
+  <accconst>none</accconst>
+  <distliab>"Unless otherwise stated, all data, metadata and related materials are considered to
+  satisfy the quality standards relative to the purpose for which the data were collected. Although
+  these data and associated metadata have been reviewed for accuracy and completeness and approved
+  for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made
+  regarding the display or utility of the data on any other system or for general or scientific
+  purposes, nor shall the act of distribution constitute any such warranty.</distliab>
+  (origin: Robert Schmitt, Ryan Gold; pubdate 20190701)
+DOI 10.5066/P9BCVRCK (DataCite record: qfaults-doi-10.5066-P9BCVRCK.datacite.json): title
+"Quaternary Fault and Fold Database for the Nation", creators Schmitt, Robert G; Gold, Ryan D;
+Geologic Hazards Science Center; publisher U.S. Geological Survey, 2020; no rightsList.
+The ScienceBase landing page (sciencebase.gov/catalog/item/589097b1e4b072a7ac0cae23) answered 403
+behind a browser challenge on 2026-09-30, so its own "Use Constraints" text could not be read.
+
+------------------------------------------------------------------------------------------------
+6. Volcano Hazards Program API
+https://volcanoes.usgs.gov/vsc/api/
+
+"These items are freely available but are designed to support USGS applications.
+No guarantee of continuing support should be assumed."

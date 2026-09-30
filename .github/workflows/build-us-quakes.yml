@@ -1,0 +1,126 @@
+name: Build US Quakes data
+
+# Rebuilds US Quakes' static data once a year: the earthquake history to a new cutoff (assets/
+# history.bin + history.json), the map layers (assets/geo.json), About and the stories, CREDITS.txt
+# and the decoder references, from USGS and Natural Earth public-domain data. See
+# us-quakes/tools/HANDOFF.md and us-quakes/tools/CONTRACT.md; the code is scripts/us_quakes/.
+#
+# The cutoff is an input, never a clock read inside the build: the January run passes the first day
+# of the current year, and fetch_catalog.py downloads only the windows the new year adds (every older
+# window is closed and cached for good in actions/cache, pinned by sha256 in catalog-windows.json).
+# The relief JPEGs are committed and never rebuilt here.
+#
+# A push made with this job's token starts no workflow, so the job dispatches build-zips.yml itself
+# once the data is committed.
+#
+# It also rewrites the demo snapshot on main (us-quakes/data/snapshot.json, what a freshly installed
+# ZIP shows before its first Shortcut refresh) with refresh.py, the hourly job's own script, so the
+# demo's cutoff always equals the new history's. The hourly refresh (refresh-us-quakes.yml) publishes
+# to the data-us-quakes branch, never here.
+#
+# schedule: only runs from the default branch; a cron on any other branch is inert.
+
+on:
+  schedule:
+    - cron: '17 7 2 1 *'                      # 2 January, after USGS has had a day with the old year
+  workflow_dispatch:
+    inputs:
+      cutoff:
+        description: 'History cutoff, YYYY-01-01 (default: 1 January of the current year)'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: build-us-quakes
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # Pinned: requests, pyshp, Pillow, numpy, pypdf and pyogrio (its wheel carries GDAL, so there is
+      # nothing to apt-get). Build time only; none of it ships.
+      - name: Install the pipeline's dependencies
+        run: python3 -m pip install --quiet -r scripts/us_quakes/requirements.txt
+
+      - name: Choose the cutoff
+        id: cutoff
+        env:
+          INPUT: ${{ inputs.cutoff }}
+        run: |
+          set -euo pipefail
+          c="${INPUT:-$(date -u +%Y)-01-01}"
+          case "$c" in [0-9][0-9][0-9][0-9]-01-01) ;; *) echo "cutoff must be YYYY-01-01, got $c" >&2; exit 1 ;; esac
+          echo "value=$c" >> "$GITHUB_OUTPUT"
+          echo "cutoff $c"
+
+      # Closed catalogue windows never change, so the cache is kept across years. Without it the
+      # run refetches every window (about 400 000 rows at one request a second, some minutes) and
+      # prints which windows USGS has revised since they were pinned.
+      - name: Download cache
+        uses: actions/cache@v4
+        with:
+          path: scripts/us_quakes/cache
+          key: us-quakes-cache-${{ steps.cutoff.outputs.value }}-${{ github.run_id }}
+          restore-keys: |
+            us-quakes-cache-${{ steps.cutoff.outputs.value }}-
+            us-quakes-cache-
+
+      - name: Build and verify
+        env:
+          PYTHON: python3
+          CUTOFF: ${{ steps.cutoff.outputs.value }}
+        run: |
+          set -euo pipefail
+          scripts/us_quakes/build_all.sh --cutoff "$CUTOFF" --twice
+          ls -la us-quakes/assets
+
+      # The demo snapshot: the same script and checks as the hourly job, against the new cutoff. The
+      # published snapshot on data-us-quakes lends its volcano block if the volcano API is down.
+      - name: Write and verify the demo snapshot
+        run: |
+          set -euo pipefail
+          args=()
+          if git fetch --quiet --depth=1 origin data-us-quakes 2>/dev/null \
+             && git show FETCH_HEAD:us-quakes/data/snapshot.json > "$RUNNER_TEMP/prev.json" 2>/dev/null; then
+            args+=(--prev "$RUNNER_TEMP/prev.json")
+          fi
+          python3 scripts/us_quakes/refresh.py --ref "${args[@]}"
+          python3 scripts/us_quakes/verify_snapshot.py
+
+      - name: Commit the data, only if it changed
+        id: commit
+        env:
+          CUTOFF: ${{ steps.cutoff.outputs.value }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add us-quakes/assets us-quakes/CREDITS.txt us-quakes/tools/ref us-quakes/data/snapshot.json scripts/us_quakes/catalog-windows.json
+          if git diff --cached --quiet; then echo "no change"; echo "pushed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git commit -m "us-quakes: history to $CUTOFF, demo snapshot"
+          for i in 1 2 3 4; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then echo "pushed=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+            echo "push rejected; rebasing and retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1
+
+      - name: Rebuild the ZIPs
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-zips.yml --ref "${GITHUB_REF_NAME}"

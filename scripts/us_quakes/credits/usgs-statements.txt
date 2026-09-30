@@ -1,0 +1,261 @@
+USGS statements the app's honesty notes rest on, quoted verbatim. Retrieved 2026-09-30.
+
+------------------------------------------------------------------------------------------------
+More dots in recent decades mostly means more instruments
+https://www.usgs.gov/faqs/why-are-we-having-so-many-or-so-few-earthquakes-has-naturally-occurring-earthquake-activity
+
+"The ComCat earthquake catalog contains an increasing number of earthquakes in recent years--not
+because there are more earthquakes, but because there are more seismic instruments and they are
+able to record more earthquakes."
+
+------------------------------------------------------------------------------------------------
+Completeness
+https://www.usgs.gov/faqs/where-can-i-search-earthquake-catalog-past-events
+  "World-wide Earthquakes Catalog (M4.5+ worldwide, M2.5+ U.S.)"
+  "Historic ANSS (Advanced National Seismic System) Composite Catalog (M4.5+ world-wide, all magnitudes U.S.)"
+
+https://earthquake.usgs.gov/data/mineblast/goals.php (the USGS mining-seismicity programme's page)
+"For much of the U.S., earthquakes of magnitude 2.5 or larger are located and cataloged by the
+USGS/NEIC. In other parts of the U.S., the threshold of earthquakes that can be located and
+cataloged is higher, due either to the remoteness of those regions from seismographs or due to
+earthquake levels that are so high that a higher threshold of cataloging still reveals the
+important features of local seismicity. Within the conterminous U.S., the level of completeness for
+earthquake location by the USGS/NEIC is probably in the magnitude 3.0-3.5 range."
+
+------------------------------------------------------------------------------------------------
+Oklahoma and wastewater injection
+https://www.usgs.gov/faqs/oklahoma-has-had-a-surge-earthquakes-2009-are-they-due-fracking
+
+"Beginning in 2009, Oklahoma experienced a surge in seismicity. This surge was so large that its
+rate of magnitude 3 and larger earthquakes exceeded California's from 2014 through 2017."
+
+"While these earthquakes have been induced by oil and gas related process, few of these earthquakes
+were induced by fracking. ... The majority of earthquakes in Oklahoma are caused by the industrial
+practice known as "wastewater disposal". Wastewater disposal is a separate process in which fluid
+waste from oil and gas production is injected deep underground far below ground water or drinking
+water aquifers. In Oklahoma over 90% of the wastewater that is injected is a byproduct of oil
+extraction process and not waste frack fluid."
+
+https://www.usgs.gov/programs/earthquake-hazards/science/induced-earthquakes
+"The number of earthquakes in the central U.S. has increased dramatically over the past decade."
+
+
+================================================================================================
+Added by the pipeline stage, 2026-09-30: the quotes About and the stories print (DESIGN §10.3).
+Fetched with a browser User-Agent; text taken from the HTML with whitespace collapsed. Each is
+verbatim; build_about.py refuses any quote in content/ that is not in this file.
+================================================================================================
+
+------------------------------------------------------------------------------------------------
+Why do so many earthquakes occur at a depth of 10km? (FAQ)
+https://www.usgs.gov/faqs/why-do-so-many-earthquakes-occur-a-depth-10km
+
+"Ten kilometers is a "fixed depth." Sometimes data are too poor to compute a reliable depth for an
+earthquake. In such cases, the depth is assigned to be 10 km."
+
+------------------------------------------------------------------------------------------------
+What does it mean that the earthquake occurred at a depth of 0 km? How can an earthquake have a
+negative depth; that would mean it’s in the air. What is the geoid, and what does it have to do with
+earthquake depth? (FAQ)
+https://www.usgs.gov/faqs/what-does-it-mean-earthquake-occurred-a-depth-0-km-how-can-earthquake-have-a-negative-depth
+(added by the lead's pass, 2026-09-30, fetched with a browser User-Agent: HTTP 200, 249,255 B. The
+address ending "...-have-negative-depth-sometimes" answers 404.) Two sentences of the answer, in its
+order; "…" marks the paragraphs between them, which are not quoted:
+
+"A negative depth can sometimes be an artifact of the poor resolution for a shallow event. … When the
+earthquake depth is very shallow, it can be reported as a negative depth."
+
+------------------------------------------------------------------------------------------------
+Why do some earthquakes disappear from the map/list? (FAQ)
+https://www.usgs.gov/faqs/why-do-some-earthquakes-disappear-maplist
+
+"The faster we release earthquake locations and magnitudes, the more likely it is that the
+information may be erroneous."
+
+------------------------------------------------------------------------------------------------
+Why do USGS earthquake magnitudes differ from those published by other agencies? (FAQ)
+https://www.usgs.gov/faqs/why-do-usgs-earthquake-magnitudes-differ-those-published-other-agencies
+
+"Multiple methods are used to estimate magnitude. Fundamentally different calculation methods are
+specified by magnitude type."
+
+------------------------------------------------------------------------------------------------
+ComCat Event Terms: status
+https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php
+(USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live
+address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked
+2026-09-30))
+
+"Status is either automatic or reviewed. Automatic events are directly posted by automatic
+processing systems and have not been verified or altered by a human. Reviewed events have been
+looked at by a human."
+
+"The total number of felt reports submitted to the DYFI? system."
+
+"This flag is set to "1" for large events in oceanic regions and "0" otherwise. The existence or
+value of this flag does not indicate if a tsunami actually did or will exist."
+
+"The alert level from the PAGER earthquake impact scale."
+
+"A number describing how significant the event is. Larger numbers indicate a more significant
+event."
+
+"The method or algorithm used to calculate the preferred magnitude for the event."
+
+"This depth may be relative to the WGS84 geoid, mean sea-level, or the average elevation of the
+seismic stations which provided arrival-time data for the earthquake location."
+
+"Sometimes when depth is poorly constrained by available seismic data, the location program will set
+the depth at a fixed value."
+
+------------------------------------------------------------------------------------------------
+PAGER
+https://earthquake.usgs.gov/data/pager/
+
+"The PAGER system provides fatality and economic loss impact estimates following significant
+earthquakes worldwide."
+
+------------------------------------------------------------------------------------------------
+Did You Feel It?
+https://earthquake.usgs.gov/data/dyfi/
+
+"Did You Feel It? (DYFI) collects information from people who felt an earthquake and creates maps
+that show what people experienced and the extent of damage."
+
+------------------------------------------------------------------------------------------------
+Quaternary Fault and Fold Database of the United States
+https://www.usgs.gov/programs/earthquake-hazards/faults
+
+"This database contains information on faults and associated folds in the United States that
+demonstrate geological evidence of coseismic surface deformation in large earthquakes during the
+past 1.6 million years (Ma)."
+
+"Geologic evidence demonstrates the existence of a Quaternary fault of tectonic origin, whether the
+fault is exposed for mapping or inferred from liquefaction or other deformational features."
+
+"Geologic evidence demonstrates the existence of a fault or suggests Quaternary deformation, but
+either (1) the fault might not extend deeply enough to be a potential source of significant
+earthquakes, or (2) the currently available geologic evidence is too strong to confidently assign
+the feature to Class C but not strong enough to assign it to Class A."
+
+"Geologic evidence is insufficient to demonstrate (1) the existence of tectonic fault, or (2)
+Quaternary slip or deformation associated with the feature."
+
+------------------------------------------------------------------------------------------------
+The orphan tsunami of 1700—Japanese clues to a parent earthquake in North America (Professional Paper 1707), abstract
+https://pubs.usgs.gov/publication/pp1707
+
+"Some noted that no parent earthquake had been felt; they were wondering what had set off the waves.
+They had no way knowing that the tsunami had been spawned during an earthquake along the coast of
+northwestern North America."
+
+------------------------------------------------------------------------------------------------
+Summary of 1811-1812 New Madrid Earthquakes Sequence
+https://www.usgs.gov/programs/earthquake-hazards/science/summary-1811-1812-new-madrid-earthquakes-sequence
+
+"They were by far the largest east of the Rocky Mountains in the U.S. and Canada."
+
+------------------------------------------------------------------------------------------------
+How long was the 1906 rupture?
+https://earthquake.usgs.gov/earthquakes/events/1906calif/18april/howlong.php
+
+"The total length is 296 miles (477 kilometers)."
+
+------------------------------------------------------------------------------------------------
+M9.2 Alaska Earthquake and Tsunami of March 27, 1964
+https://earthquake.usgs.gov/earthquakes/events/alaska1964/
+
+"The earthquake lasted approximately 4.5 minutes and is the most powerful recorded earthquake in
+U.S. history. It is also the second largest earthquake ever recorded, next to the M9.5 earthquake in
+Chile in 1960."
+
+------------------------------------------------------------------------------------------------
+The 2018 rift eruption and summit collapse of Kilauea Volcano (publication abstract)
+https://www.usgs.gov/publications/2018-rift-eruption-and-summit-collapse-kilauea-volcano
+
+"In 2018, Kīlauea Volcano experienced its largest lower East Rift Zone (LERZ) eruption and caldera
+collapse in at least 200 years."
+
+------------------------------------------------------------------------------------------------
+Remembering Ridgecrest
+https://www.usgs.gov/news/featured-story/remembering-ridgecrest
+
+"As scientists and responders from different agencies and organizations focused their energy on
+emergency response, another stronger earthquake shook the area about 33 hours later."
+
+------------------------------------------------------------------------------------------------
+Magnitude Types
+https://www.usgs.gov/programs/earthquake-hazards/magnitude-types
+
+"Mww (Moment W-phase)(generic notation Mw) — Derived from a centroid moment tensor inversion of the
+W-phase"
+
+"Mwc (centroid) — Derived from a centroid moment tensor inversion of the long-period surface waves"
+
+"Mwb (body wave) — Derived from moment tensor inversion of long-period (~20-200 s; pass band based
+on size of EQ) body-waves (P- and SH)."
+
+"Mwr (regional) — Based on the scalar seismic-moment of the earthquake, derived from moment tensor
+inversion of the whole seismogram at regional distances"
+
+"Ms20 or Ms (20sec surface wave) — A magnitude based on the amplitude of Rayleigh surface waves
+measured at a period near 20 sec."
+
+"mb (short-period body wave) — Based on the amplitude of 1st arriving P-waves at periods of about 1
+s."
+
+"Mfa (felt-area magnitude) — An estimate of body-wave (mb) magnitude based on the size of the area
+over which the earthquake was felt"
+
+"ML Ml, or ml (local) — The original magnitude relationship defined by Richter and Gutenberg in 1935
+for local earthquakes."
+
+"mb_Lg, mb_lg, or MLg (short-period surface wave) — A magnitude for regional earthquakes based on
+the amplitude of the Lg surface waves as recorded on short-period instruments."
+
+"Md or md (duration) — Based on the duration of shaking as measured by the time decay of the
+amplitude of the seismogram."
+
+"Mi or Mwp (integrated p-wave) — Based on an estimate of moment calculated from the integral of the
+displacement of the P wave recorded on broadband instruments."
+
+"Mh — Non-standard magnitude method. Generally used when standard methods will not work."
+
+"Mint (intensity magnitude) — A magnitude estimated from the maximum reported intensity, typically
+for earthquakes occurring before seismic instruments were in general use."
+
+------------------------------------------------------------------------------------------------
+Alert Level System
+https://www.usgs.gov/programs/VHP/alert-level-system
+
+"NORMAL: Volcano is in typical background, noneruptive state or, after a change from a higher level,
+volcanic activity has ceased and volcano has returned to noneruptive background state."
+
+"ADVISORY: Volcano is exhibiting signs of elevated unrest above known background level or, after a
+change from a higher level, volcanic activity has decreased significantly but continues to be
+closely monitored for possible renewed increase."
+
+"WATCH: Volcano is exhibiting heightened or escalating unrest with increased potential of eruption,
+timeframe uncertain, OR eruption is underway but poses limited hazards."
+
+"WARNING: Hazardous eruption is imminent, underway, or suspected."
+
+"GREEN: Volcano is in typical background, non-eruptive state or, after a change from a higher level,
+volcanic activity has ceased and volcano has returned to noneruptive background state."
+
+"YELLOW: Volcano is exhibiting signs of elevated unrest above known background level or, after a
+change from a higher level, volcanic activity has decreased significantly but continues to be
+closely monitored for possible renewed increase."
+
+"ORANGE: Volcano is exhibiting heightened or escalating unrest with increased potential of eruption,
+timeframe uncertain, OR eruption is underway with no or minor volcanic-ash emissions [ash- plume
+height specified, if possible]."
+
+"RED: Eruption is imminent with significant emission of volcanic ash into the atmosphere likely OR
+eruption is underway or suspected with significant emission of volcanic ash into the atmosphere
+[ash-plume height specified, if possible]."
+
+------------------------------------------------------------------------------------------------
+Probe: the event-page address pattern
+https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38457511&format=geojson (200, application/json)
+properties.url: "https://earthquake.usgs.gov/earthquakes/eventpage/ci38457511"; that address answered 200.

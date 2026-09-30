@@ -30,8 +30,10 @@ on:
       - Refresh Finances
       - Refresh global-wind
       - Refresh global-weather
+      - Refresh us-quakes
       - Build Shelf Atlas data
       - Build World Oil & Gas data
+      - Build US Quakes data
       - Pull Garmin data for Running Dashboard
       - Rebuild Norne reservoir data
       - Build app ZIPs
@@ -77,13 +79,14 @@ jobs:
         if: steps.pages.outputs.on == 'true'
         run: python3 scripts/build_web.py --out _site
 
-      # Global Wind and Global Weather publish their live forecast to a branch
-      # of their own; `main` holds only the demo the ZIP ships with. The browser
-      # copy takes the live one when there is one, the demo when there is not.
-      - name: Take the live forecasts from their data branches
+      # Global Wind, Global Weather and US Quakes publish their live data to a
+      # branch of their own; `main` holds only the demo the ZIP ships with. The
+      # browser copy takes the live one when there is one, the demo when there
+      # is not.
+      - name: Take the live data from their data branches
         if: steps.pages.outputs.on == 'true'
         run: |
-          for app in global-wind global-weather; do
+          for app in global-wind global-weather us-quakes; do
             [ -d "_site/$app" ] || continue
             path="$app/data/snapshot.json"
             if git fetch --quiet --depth=1 origin "data-$app" 2>/dev/null \

@@ -1,0 +1,18 @@
+# The US Quakes pipeline's Python dependencies, pinned. Python 3.12.
+#
+#   /opt/homebrew/bin/python3.12 -m venv scripts/us_quakes/.venv
+#   scripts/us_quakes/.venv/bin/pip install -r scripts/us_quakes/requirements.txt
+#
+# The hourly refresh (refresh.py, run by refresh-us-quakes.yml) needs only the standard library and
+# `requests`; the runner installs that one line. The rest is for the yearly static build
+# (build-us-quakes.yml): pyshp reads the fault shapefile, Pillow re-encodes the relief JPEGs,
+# numpy packs the history, pypdf is kept for reading USGS PDFs during research; Pillow also reads
+# the 3DEP elevation TIFF (Int16, LZW) the relief is masked with. pyogrio (its wheel carries
+# GDAL 3.12.4, so nothing to apt-get) reads the fault database's File Geodatabase, which holds
+# 2025 edits the shapefile beside it does not (RESEARCH.md §2.4); build time only, nothing ships.
+requests==2.34.2
+pyshp==3.1.6
+pillow==12.3.0
+numpy==2.5.3
+pypdf==6.19.0
+pyogrio==0.13.0

@@ -1,0 +1,33 @@
+# US Quakes sources: what each returns now. `.venv/bin/python probe.py probe-urls.txt`
+# (or probe-us-quakes.yml from the Actions tab, which runs the same file on a GitHub runner).
+# Lines are fetched in order with a one-second pause (USGS asks for gentle use of its services).
+
+# --- ComCat through the FDSN event service ---
+https://earthquake.usgs.gov/fdsnws/event/1/version
+https://earthquake.usgs.gov/fdsnws/event/1/count?format=geojson&starttime=1900-01-01&minmagnitude=2.5&minlatitude=24&maxlatitude=50&minlongitude=-130&maxlongitude=-65
+https://earthquake.usgs.gov/fdsnws/event/1/count?format=geojson&starttime=1900-01-01&minmagnitude=2.5&minlatitude=50&maxlatitude=72&minlongitude=172&maxlongitude=231
+https://earthquake.usgs.gov/fdsnws/event/1/count?format=geojson&starttime=1900-01-01&minmagnitude=2.5&minlatitude=18&maxlatitude=23&minlongitude=-161&maxlongitude=-154
+https://earthquake.usgs.gov/fdsnws/event/1/count?format=geojson&starttime=1900-01-01&minmagnitude=2.5&minlatitude=17&maxlatitude=20&minlongitude=-68&maxlongitude=-64
+https://earthquake.usgs.gov/fdsnws/event/1/count?format=geojson&starttime=1600-01-01&endtime=1900-01-01&minlatitude=24&maxlatitude=50&minlongitude=-130&maxlongitude=-65
+https://earthquake.usgs.gov/fdsnws/event/1/query?format=csv&starttime=1600-01-01&endtime=1900-01-01&minlatitude=17&maxlatitude=20&minlongitude=-68&maxlongitude=-64&orderby=time-asc
+
+# --- the live GeoJSON summary feeds (updated every minute) ---
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson
+
+# --- 3DEP relief (service description, then one small hillshade tile) ---
+https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer?f=pjson
+https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=-160.5,18.5,-154.5,22.5&bboxSR=4326&imageSR=3857&size=512,365&format=png&pixelType=U8&interpolation=RSP_BilinearInterpolation&renderingRule=%7B%22rasterFunction%22%3A%22Hillshade%20Multidirectional%22%7D&f=image
+
+# --- Quaternary Fault and Fold Database ---
+https://earthquake.usgs.gov/static/lfs/nshm/qfaults/Qfaults_GIS.zip
+
+# --- Volcano Hazards Program ---
+https://volcanoes.usgs.gov/hans-public/api/volcano/getUSVolcanoes
+https://volcanoes.usgs.gov/hans-public/api/volcano/getMonitoredVolcanoes
+https://volcanoes.usgs.gov/hans-public/api/volcano/getElevatedVolcanoes
+
+# --- Natural Earth v5.1.2 (pinned commit) ---
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/f1890d9f152c896d250a77557a5751a93d494776/geojson/ne_50m_admin_1_states_provinces_lines.geojson
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/f1890d9f152c896d250a77557a5751a93d494776/LICENSE.md

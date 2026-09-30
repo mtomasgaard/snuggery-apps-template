@@ -1,0 +1,332 @@
+{
+ "title": "About US Quakes",
+ "version": "1.0",
+ "intro": "This map is not an earthquake or tsunami warning service. This copy is only as new as its last refresh, shown on the Live sheet. It draws the U.S. Geological Survey’s catalog of earthquakes in four map boxes: the Lower 48, Alaska with the Aleutians, Hawaii, and Puerto Rico with the Virgin Islands. {history} earthquakes from {firstYear} to {lastYear} ship with the app; the last {liveDays} days arrive with each refresh.",
+ "reading": [
+  {
+   "id": "sizes",
+   "title": "Size",
+   "text": "Each whole step of magnitude doubles a dot’s area, down to magnitude {sizeFloor}; smaller earthquakes share the smallest dot. It is a display rule, not a measure of energy."
+  },
+  {
+   "id": "colours",
+   "title": "Color",
+   "text": "Color is depth as the catalog gives it: straw near the surface, then amber, rose, mauve and violet, to slate navy at {rampDeepKm} km and deeper. The stops sit at {rampStops} km."
+  },
+  {
+   "id": "hollow",
+   "title": "Hollow",
+   "text": "A hollow ring is an automatic solution from the last {liveDays} days that no person has reviewed yet; it may move, change size or disappear. A ring is never drawn smaller than a magnitude {hollowMinMag} dot, so that its hole shows. Older rows the catalog still lists as automatic are drawn solid, and their card says so."
+  },
+  {
+   "id": "grey",
+   "title": "Gray",
+   "text": "A gray dot has no depth in the catalog: {noDepth} rows in the history, {noDepthBefore1900} of them before {eraYear}."
+  },
+  {
+   "id": "cross",
+   "title": "×",
+   "text": "A small × has no magnitude: {noMagnitude} rows, every one before {eraYear}. They are drawn only while the window reaches back before {eraYear}."
+  },
+  {
+   "id": "fade",
+   "title": "Fade",
+   "text": "Within a window, older dots are paler; in All, every dot is drawn at the same half strength. The paleness is a display choice, not a measurement."
+  },
+  {
+   "id": "display",
+   "title": "Display choices",
+   "text": "These are presentation, not data: the color ramp and its stops; the thin rim around each dot, dark above {rimKm} km and light from {rimKm} km down; the fading of older dots; the faint trace Play leaves; the dimming outside a cross-section; the shaded relief, its level stretch and its strength; the tints of the sea; the hatching where the map ends; and the ink of the record strip, whose density counts events."
+  }
+ ],
+ "notes": [
+  {
+   "id": "not-a-warning",
+   "title": "Not a warning service",
+   "text": "This map is not an earthquake or tsunami warning service. This copy is only as new as its last refresh, shown on the Live sheet."
+  },
+  {
+   "id": "more-instruments",
+   "title": "More dots mostly means more seismometers",
+   "text": "The history holds {pre1950} earthquakes before {midYear} and {post2000} from {recentYear} on. Most of that rise is in the instruments, not in the Earth.",
+   "quoteId": "usgs-faq-rates"
+  },
+  {
+   "id": "completeness",
+   "title": "What the catalog catches",
+   "text": "From {eraYear} this app keeps magnitude {floor} and up; before {eraYear}, every earthquake the catalog lists. Smaller earthquakes are missing unevenly from place to place.",
+   "quoteId": "usgs-completeness"
+  },
+  {
+   "id": "magnitude-types",
+   "title": "Magnitude types differ",
+   "text": "Each event’s card shows the magnitude type the catalog gives ({magTypeCount} labels in the history), and none is converted into another.",
+   "quoteId": "usgs-faq-magnitudes"
+  },
+  {
+   "id": "automatic",
+   "title": "Automatic solutions change or vanish",
+   "text": "A live earthquake marked automatic has not been checked by a person yet. Its place, depth or size may change, and it may be deleted.",
+   "quoteId": "usgs-faq-deleted"
+  },
+  {
+   "id": "depth-10km",
+   "title": "A depth of 10 km is often assigned",
+   "text": "{depth10km} earthquakes in the history sit at exactly {fixedDepthKm} km. That depth can be one assigned when the data could not fix one, and such rows line up flat in a cross-section.",
+   "quoteId": "usgs-faq-10km"
+  },
+  {
+   "id": "negative-depth",
+   "title": "Negative depths",
+   "text": "{negDepth} rows in the history have a negative depth. The map colors them as {zeroKm} km deep, and the cross-section plots them above its {zeroKm} km line.",
+   "quoteId": "usgs-faq-negative-depth"
+  },
+  {
+   "id": "mercator",
+   "title": "Mercator inflates the north",
+   "text": "At {latN}° N a kilometer is drawn {ratioLen} times as long as at {latS}° N, so an area there looks {ratioArea} times as large. The scale bar is measured at the latitude of the map’s center."
+  },
+  {
+   "id": "boxes",
+   "title": "Boxes, not borders",
+   "text": "The four map boxes also take in earthquakes outside the United States, among them in {countries}, and the app shows them as they are. Counts are labeled by map box, never by state or country."
+  },
+  {
+   "id": "before-1900",
+   "title": "Before 1900, nominal",
+   "text": "The catalog lists {before1900} earthquakes from {firstYear} to {lastPreYear}, {noDepthBefore1900} of them without a depth. Their times and positions are as the catalog lists them, often round numbers; the {cascadiaYear} Cascadia earthquake is a single point."
+  },
+  {
+   "id": "snapshot",
+   "title": "The history is a snapshot",
+   "text": "Rows are as USGS listed them when retrieved on {retrieved}. Later revisions arrive only with a new copy of the app."
+  },
+  {
+   "id": "only-earthquakes",
+   "title": "Only earthquakes",
+   "text": "{droppedOther} other events in the catalog are left out, among them {nuclear} nuclear explosions, {quarry} quarry blasts and {explosions} explosions."
+  },
+  {
+   "id": "faults",
+   "title": "Faults are not a hazard map",
+   "text": "The fault lines are the Quaternary Fault and Fold Database: evidence of movement in the geological past, not a rating of danger. Nearness is not cause: a dot beside a fault does not say that fault moved.",
+   "quoteId": "usgs-qfaults-scope"
+  },
+  {
+   "id": "volcanoes",
+   "title": "Not monitored is not Normal",
+   "text": "A volcano the USGS does not list as monitored has no alert level. The map draws it empty and calls it not monitored, never Normal."
+  },
+  {
+   "id": "relief",
+   "title": "Shaded relief",
+   "text": "Relief is drawn wherever the 3DEP elevation service had data: the United States and, near its borders, parts of Canada and Mexico; the Bahamas have none. The shading, its level stretch and its strength are display choices."
+  }
+ ],
+ "notShown": {
+  "title": "What this app does not show, and why",
+  "text": "No globe and no worldwide catalog: the story here is the United States. No hazard model: a model is not a measurement. No ShakeMap or Did You Feel It? maps: they are separate USGS products; the felt count is shown. No Guam, Northern Marianas or American Samoa: they are outside the four map boxes. No explosions, quarry blasts or nuclear tests: they are not earthquakes. No heat maps, clustering or interpolated rates: each would draw something the catalog does not hold. No links: the app has no network."
+ },
+ "fields": {
+  "status": {
+   "label": "Reviewed or automatic",
+   "quoteId": "comcat-status"
+  },
+  "felt": {
+   "label": "Felt reports",
+   "quoteId": "comcat-felt",
+   "more": "usgs-dyfi"
+  },
+  "tsunami": {
+   "label": "Tsunami flag",
+   "quoteId": "comcat-tsunami"
+  },
+  "alert": {
+   "label": "PAGER alert",
+   "quoteId": "comcat-alert",
+   "more": "usgs-pager"
+  },
+  "sig": {
+   "label": "Significance",
+   "quoteId": "comcat-sig"
+  },
+  "magType": {
+   "label": "Magnitude type",
+   "quoteId": "comcat-magtype"
+  },
+  "depth": {
+   "label": "Depth",
+   "quoteId": "comcat-depth"
+  },
+  "fixedDepth": {
+   "label": "Fixed depth",
+   "quoteId": "comcat-depth-fixed",
+   "more": "usgs-faq-10km"
+  }
+ },
+ "magTypeNames": {
+  "mww": {
+   "name": "moment, W-phase",
+   "header": "Mww (Moment W-phase)(generic notation Mw)",
+   "quote": "Derived from a centroid moment tensor inversion of the W-phase",
+   "source": "usgs-magtypes"
+  },
+  "mw": {
+   "name": "moment",
+   "header": "Mww (Moment W-phase)(generic notation Mw)",
+   "quote": null,
+   "source": "usgs-magtypes"
+  },
+  "mwc": {
+   "name": "moment, centroid",
+   "header": "Mwc (centroid)",
+   "quote": "Derived from a centroid moment tensor inversion of the long-period surface waves",
+   "source": "usgs-magtypes"
+  },
+  "mwb": {
+   "name": "moment, body wave",
+   "header": "Mwb (body wave)",
+   "quote": "Derived from moment tensor inversion of long-period (~20-200 s; pass band based on size of EQ) body-waves (P- and SH).",
+   "source": "usgs-magtypes"
+  },
+  "mwr": {
+   "name": "moment, regional",
+   "header": "Mwr (regional)",
+   "quote": "Based on the scalar seismic-moment of the earthquake, derived from moment tensor inversion of the whole seismogram at regional distances",
+   "source": "usgs-magtypes"
+  },
+  "ms": {
+   "name": "surface wave",
+   "header": "Ms20 or Ms (20sec surface wave)",
+   "quote": "A magnitude based on the amplitude of Rayleigh surface waves measured at a period near 20 sec.",
+   "source": "usgs-magtypes"
+  },
+  "mb": {
+   "name": "short-period body wave",
+   "header": "mb (short-period body wave)",
+   "quote": "Based on the amplitude of 1st arriving P-waves at periods of about 1 s.",
+   "source": "usgs-magtypes"
+  },
+  "mfa": {
+   "name": "felt area",
+   "header": "Mfa (felt-area magnitude)",
+   "quote": "An estimate of body-wave (mb) magnitude based on the size of the area over which the earthquake was felt",
+   "source": "usgs-magtypes"
+  },
+  "ml": {
+   "name": "local",
+   "header": "ML Ml, or ml (local)",
+   "quote": "The original magnitude relationship defined by Richter and Gutenberg in 1935 for local earthquakes.",
+   "source": "usgs-magtypes"
+  },
+  "mb_lg": {
+   "name": "short-period surface wave",
+   "header": "mb_Lg, mb_lg, or MLg (short-period surface wave)",
+   "quote": "A magnitude for regional earthquakes based on the amplitude of the Lg surface waves as recorded on short-period instruments.",
+   "source": "usgs-magtypes"
+  },
+  "mlg": {
+   "name": "short-period surface wave",
+   "header": "mb_Lg, mb_lg, or MLg (short-period surface wave)",
+   "quote": "A magnitude for regional earthquakes based on the amplitude of the Lg surface waves as recorded on short-period instruments.",
+   "source": "usgs-magtypes"
+  },
+  "md": {
+   "name": "duration",
+   "header": "Md or md (duration)",
+   "quote": "Based on the duration of shaking as measured by the time decay of the amplitude of the seismogram.",
+   "source": "usgs-magtypes"
+  },
+  "mwp": {
+   "name": "integrated P-wave",
+   "header": "Mi or Mwp (integrated p-wave)",
+   "quote": "Based on an estimate of moment calculated from the integral of the displacement of the P wave recorded on broadband instruments.",
+   "source": "usgs-magtypes"
+  },
+  "mh": {
+   "name": "non-standard method",
+   "header": "Mh",
+   "quote": "Non-standard magnitude method. Generally used when standard methods will not work.",
+   "source": "usgs-magtypes"
+  },
+  "mint": {
+   "name": "intensity",
+   "header": "Mint (intensity magnitude)",
+   "quote": "A magnitude estimated from the maximum reported intensity, typically for earthquakes occurring before seismic instruments were in general use.",
+   "source": "usgs-magtypes"
+  }
+ },
+ "magTypeRule": "Labels are matched without regard to case (Md and md, Ml and ml, Mb and mb, Mfa and mfa, Mw and mw). A label the USGS table does not name (for example mc, mlv, mblg) is shown as its code only.",
+ "faultScope": {
+  "quoteId": "usgs-qfaults-scope"
+ },
+ "faultAges": {
+  "historic": null,
+  "latest Quaternary": null,
+  "late Quaternary": null,
+  "middle and late Quaternary": null,
+  "undifferentiated Quaternary": null,
+  "class B": null,
+  "unspecified": null
+ },
+ "faultAgesNote": "No USGS page read for this build states the time bounds of the database’s age classes, so the app prints the class names only.",
+ "faultClasses": {
+  "A": {
+   "quoteId": "usgs-qfaults-class-a"
+  },
+  "B": {
+   "quoteId": "usgs-qfaults-class-b"
+  },
+  "C": {
+   "quoteId": "usgs-qfaults-class-c"
+  }
+ },
+ "volcanoLevels": {
+  "NORMAL": {
+   "kind": "alert",
+   "quote": "Volcano is in typical background, noneruptive state or, after a change from a higher level, volcanic activity has ceased and volcano has returned to noneruptive background state.",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "ADVISORY": {
+   "kind": "alert",
+   "quote": "Volcano is exhibiting signs of elevated unrest above known background level or, after a change from a higher level, volcanic activity has decreased significantly but continues to be closely monitored for possible renewed increase.",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "WATCH": {
+   "kind": "alert",
+   "quote": "Volcano is exhibiting heightened or escalating unrest with increased potential of eruption, timeframe uncertain, OR eruption is underway but poses limited hazards.",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "WARNING": {
+   "kind": "alert",
+   "quote": "Hazardous eruption is imminent, underway, or suspected.",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "GREEN": {
+   "kind": "aviation",
+   "quote": "Volcano is in typical background, non-eruptive state or, after a change from a higher level, volcanic activity has ceased and volcano has returned to noneruptive background state.",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "YELLOW": {
+   "kind": "aviation",
+   "quote": "Volcano is exhibiting signs of elevated unrest above known background level or, after a change from a higher level, volcanic activity has decreased significantly but continues to be closely monitored for possible renewed increase.",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "ORANGE": {
+   "kind": "aviation",
+   "quote": "Volcano is exhibiting heightened or escalating unrest with increased potential of eruption, timeframe uncertain, OR eruption is underway with no or minor volcanic-ash emissions [ash- plume height specified, if possible].",
+   "source": "usgs-vhp-alert-levels"
+  },
+  "RED": {
+   "kind": "aviation",
+   "quote": "Eruption is imminent with significant emission of volcanic ash into the atmosphere likely OR eruption is underway or suspected with significant emission of volcanic ash into the atmosphere [ash-plume height specified, if possible].",
+   "source": "usgs-vhp-alert-levels"
+  }
+ },
+ "eventPage": "earthquake.usgs.gov/earthquakes/eventpage/{id}",
+ "eventPageEvidence": "USGS’s own record of ci38457511 (the event service’s GeoJSON) gives its url as earthquake.usgs.gov/earthquakes/eventpage/ci38457511, and that address answered HTTP 200 on 2026-09-30.",
+ "software": {
+  "text": "No third-party code ships with this app. The map and its renderer are this app’s own code.",
+  "fonts": "Atkinson Hyperlegible (Copyright 2020 Braille Institute of America, Inc.) and Red Hat Mono (Copyright 2024 The Red Hat Project Authors), both under the SIL Open Font License 1.1, whose text ships as fonts/OFL.txt."
+ }
+}

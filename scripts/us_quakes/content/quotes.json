@@ -1,0 +1,262 @@
+{
+ "note": "Verbatim quotes from USGS pages, retrieved 2026-09-30 (whitespace collapsed from the HTML). Each is also in ../credits/usgs-statements.txt; build_about.py refuses a quote that is not there.",
+ "quotes": [
+  {
+   "id": "usgs-faq-rates",
+   "title": "Why are we having so many earthquakes? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/why-are-we-having-so-many-or-so-few-earthquakes-has-naturally-occurring-earthquake-activity",
+   "retrieved": "2026-09-30",
+   "quote": "The ComCat earthquake catalog contains an increasing number of earthquakes in recent years--not because there are more earthquakes, but because there are more seismic instruments and they are able to record more earthquakes."
+  },
+  {
+   "id": "usgs-faq-catalogs",
+   "title": "Where can I search the earthquake catalog for past events? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/where-can-i-search-earthquake-catalog-past-events",
+   "retrieved": "2026-09-30",
+   "quote": "World-wide Earthquakes Catalog (M4.5+ worldwide, M2.5+ U.S.)"
+  },
+  {
+   "id": "usgs-completeness",
+   "title": "Mining seismicity: goals (USGS/NEIC)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://earthquake.usgs.gov/data/mineblast/goals.php",
+   "retrieved": "2026-09-30",
+   "quote": "For much of the U.S., earthquakes of magnitude 2.5 or larger are located and cataloged by the USGS/NEIC. In other parts of the U.S., the threshold of earthquakes that can be located and cataloged is higher, due either to the remoteness of those regions from seismographs or due to earthquake levels that are so high that a higher threshold of cataloging still reveals the important features of local seismicity. Within the conterminous U.S., the level of completeness for earthquake location by the USGS/NEIC is probably in the magnitude 3.0-3.5 range."
+  },
+  {
+   "id": "usgs-faq-oklahoma-surge",
+   "title": "Oklahoma has had a surge of earthquakes since 2009. Are they due to fracking? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/oklahoma-has-had-a-surge-earthquakes-2009-are-they-due-fracking",
+   "retrieved": "2026-09-30",
+   "quote": "Beginning in 2009, Oklahoma experienced a surge in seismicity. This surge was so large that its rate of magnitude 3 and larger earthquakes exceeded California's from 2014 through 2017."
+  },
+  {
+   "id": "usgs-faq-oklahoma-wastewater",
+   "title": "Oklahoma has had a surge of earthquakes since 2009. Are they due to fracking? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/oklahoma-has-had-a-surge-earthquakes-2009-are-they-due-fracking",
+   "retrieved": "2026-09-30",
+   "quote": "The majority of earthquakes in Oklahoma are caused by the industrial practice known as \"wastewater disposal\"."
+  },
+  {
+   "id": "usgs-faq-10km",
+   "title": "Why do so many earthquakes occur at a depth of 10km? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/why-do-so-many-earthquakes-occur-a-depth-10km",
+   "retrieved": "2026-09-30",
+   "quote": "Ten kilometers is a \"fixed depth.\" Sometimes data are too poor to compute a reliable depth for an earthquake. In such cases, the depth is assigned to be 10 km."
+  },
+  {
+   "id": "usgs-faq-negative-depth",
+   "title": "What does it mean that the earthquake occurred at a depth of 0 km? How can an earthquake have a negative depth; that would mean it’s in the air. What is the geoid, and what does it have to do with earthquake depth? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/what-does-it-mean-earthquake-occurred-a-depth-0-km-how-can-earthquake-have-a-negative-depth",
+   "retrieved": "2026-09-30",
+   "quote": "A negative depth can sometimes be an artifact of the poor resolution for a shallow event. … When the earthquake depth is very shallow, it can be reported as a negative depth.",
+   "note": "Two sentences of the answer, in its order; “…” marks the paragraphs between them."
+  },
+  {
+   "id": "usgs-faq-deleted",
+   "title": "Why do some earthquakes disappear from the map/list? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/why-do-some-earthquakes-disappear-maplist",
+   "retrieved": "2026-09-30",
+   "quote": "The faster we release earthquake locations and magnitudes, the more likely it is that the information may be erroneous."
+  },
+  {
+   "id": "usgs-faq-magnitudes",
+   "title": "Why do USGS earthquake magnitudes differ from those published by other agencies? (FAQ)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/faqs/why-do-usgs-earthquake-magnitudes-differ-those-published-other-agencies",
+   "retrieved": "2026-09-30",
+   "quote": "Multiple methods are used to estimate magnitude. Fundamentally different calculation methods are specified by magnitude type."
+  },
+  {
+   "id": "comcat-status",
+   "title": "ComCat Event Terms: status",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "Status is either automatic or reviewed. Automatic events are directly posted by automatic processing systems and have not been verified or altered by a human. Reviewed events have been looked at by a human.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-felt",
+   "title": "ComCat Event Terms: felt",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "The total number of felt reports submitted to the DYFI? system.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-tsunami",
+   "title": "ComCat Event Terms: tsunami",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "This flag is set to \"1\" for large events in oceanic regions and \"0\" otherwise. The existence or value of this flag does not indicate if a tsunami actually did or will exist.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-alert",
+   "title": "ComCat Event Terms: alert",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "The alert level from the PAGER earthquake impact scale.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-sig",
+   "title": "ComCat Event Terms: sig",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "A number describing how significant the event is. Larger numbers indicate a more significant event.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-magtype",
+   "title": "ComCat Event Terms: magType",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "The method or algorithm used to calculate the preferred magnitude for the event.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-depth",
+   "title": "ComCat Event Terms: depth",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "This depth may be relative to the WGS84 geoid, mean sea-level, or the average elevation of the seismic stations which provided arrival-time data for the earthquake location.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "comcat-depth-fixed",
+   "title": "ComCat Event Terms: depth",
+   "owner": "U.S. Geological Survey",
+   "url": "https://web.archive.org/web/20250104202825/https://earthquake.usgs.gov/data/comcat/index.php",
+   "retrieved": "2026-09-30",
+   "quote": "Sometimes when depth is poorly constrained by available seismic data, the location program will set the depth at a fixed value.",
+   "note": "USGS ComCat documentation, Event Terms, as archived by the Internet Archive on 2025-01-04; the live address https://earthquake.usgs.gov/data/comcat/index.php no longer carries the glossary (checked 2026-09-30)"
+  },
+  {
+   "id": "usgs-pager",
+   "title": "PAGER",
+   "owner": "U.S. Geological Survey",
+   "url": "https://earthquake.usgs.gov/data/pager/",
+   "retrieved": "2026-09-30",
+   "quote": "The PAGER system provides fatality and economic loss impact estimates following significant earthquakes worldwide."
+  },
+  {
+   "id": "usgs-dyfi",
+   "title": "Did You Feel It?",
+   "owner": "U.S. Geological Survey",
+   "url": "https://earthquake.usgs.gov/data/dyfi/",
+   "retrieved": "2026-09-30",
+   "quote": "Did You Feel It? (DYFI) collects information from people who felt an earthquake and creates maps that show what people experienced and the extent of damage."
+  },
+  {
+   "id": "usgs-qfaults-scope",
+   "title": "Quaternary Fault and Fold Database of the United States",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+   "retrieved": "2026-09-30",
+   "quote": "This database contains information on faults and associated folds in the United States that demonstrate geological evidence of coseismic surface deformation in large earthquakes during the past 1.6 million years (Ma)."
+  },
+  {
+   "id": "usgs-qfaults-class-a",
+   "title": "Quaternary Fault and Fold Database: Fault Classes",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+   "retrieved": "2026-09-30",
+   "quote": "Geologic evidence demonstrates the existence of a Quaternary fault of tectonic origin, whether the fault is exposed for mapping or inferred from liquefaction or other deformational features."
+  },
+  {
+   "id": "usgs-qfaults-class-b",
+   "title": "Quaternary Fault and Fold Database: Fault Classes",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+   "retrieved": "2026-09-30",
+   "quote": "Geologic evidence demonstrates the existence of a fault or suggests Quaternary deformation, but either (1) the fault might not extend deeply enough to be a potential source of significant earthquakes, or (2) the currently available geologic evidence is too strong to confidently assign the feature to Class C but not strong enough to assign it to Class A."
+  },
+  {
+   "id": "usgs-qfaults-class-c",
+   "title": "Quaternary Fault and Fold Database: Fault Classes",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/faults",
+   "retrieved": "2026-09-30",
+   "quote": "Geologic evidence is insufficient to demonstrate (1) the existence of tectonic fault, or (2) Quaternary slip or deformation associated with the feature."
+  },
+  {
+   "id": "usgs-orphan-tsunami",
+   "title": "The orphan tsunami of 1700—Japanese clues to a parent earthquake in North America (Professional Paper 1707), abstract",
+   "owner": "U.S. Geological Survey",
+   "url": "https://pubs.usgs.gov/publication/pp1707",
+   "retrieved": "2026-09-30",
+   "quote": "Some noted that no parent earthquake had been felt; they were wondering what had set off the waves. They had no way knowing that the tsunami had been spawned during an earthquake along the coast of northwestern North America."
+  },
+  {
+   "id": "usgs-new-madrid",
+   "title": "Summary of 1811-1812 New Madrid Earthquakes Sequence",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/science/summary-1811-1812-new-madrid-earthquakes-sequence",
+   "retrieved": "2026-09-30",
+   "quote": "They were by far the largest east of the Rocky Mountains in the U.S. and Canada."
+  },
+  {
+   "id": "usgs-1906-length",
+   "title": "How long was the 1906 rupture?",
+   "owner": "U.S. Geological Survey",
+   "url": "https://earthquake.usgs.gov/earthquakes/events/1906calif/18april/howlong.php",
+   "retrieved": "2026-09-30",
+   "quote": "The total length is 296 miles (477 kilometers)."
+  },
+  {
+   "id": "usgs-1964",
+   "title": "M9.2 Alaska Earthquake and Tsunami of March 27, 1964",
+   "owner": "U.S. Geological Survey",
+   "url": "https://earthquake.usgs.gov/earthquakes/events/alaska1964/",
+   "retrieved": "2026-09-30",
+   "quote": "The earthquake lasted approximately 4.5 minutes and is the most powerful recorded earthquake in U.S. history. It is also the second largest earthquake ever recorded, next to the M9.5 earthquake in Chile in 1960."
+  },
+  {
+   "id": "usgs-kilauea-2018",
+   "title": "The 2018 rift eruption and summit collapse of Kilauea Volcano (publication abstract)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/publications/2018-rift-eruption-and-summit-collapse-kilauea-volcano",
+   "retrieved": "2026-09-30",
+   "quote": "In 2018, Kīlauea Volcano experienced its largest lower East Rift Zone (LERZ) eruption and caldera collapse in at least 200 years."
+  },
+  {
+   "id": "usgs-ridgecrest",
+   "title": "Remembering Ridgecrest",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/news/featured-story/remembering-ridgecrest",
+   "retrieved": "2026-09-30",
+   "quote": "As scientists and responders from different agencies and organizations focused their energy on emergency response, another stronger earthquake shook the area about 33 hours later."
+  }
+ ],
+ "sources": [
+  {
+   "id": "usgs-magtypes",
+   "title": "Magnitude Types",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/earthquake-hazards/magnitude-types",
+   "retrieved": "2026-09-30"
+  },
+  {
+   "id": "usgs-vhp-alert-levels",
+   "title": "Alert Level System (Volcano Hazards Program)",
+   "owner": "U.S. Geological Survey",
+   "url": "https://www.usgs.gov/programs/VHP/alert-level-system",
+   "retrieved": "2026-09-30"
+  }
+ ]
+}

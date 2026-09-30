@@ -1,0 +1,37 @@
+name: Probe US Quakes sources
+
+# A diagnostic, not a refresh. Fetches every URL in scripts/us_quakes/probe-urls.txt from a GitHub
+# runner and prints what each one returns (status, size, sha256, the feed's API version and fields,
+# the count endpoint's answer, the fault ZIP's members) so the pipeline can be checked against what
+# USGS serves today. It commits nothing and downloads nothing it keeps. Run it by hand from the
+# Actions tab whenever a source seems to have moved.
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Extra URLs to probe, one per line (optional)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      # probe.py is standard library only; nothing to install.
+      - name: Probe
+        env:
+          EXTRA: ${{ inputs.urls }}
+        run: |
+          set -uo pipefail
+          cp scripts/us_quakes/probe-urls.txt /tmp/urls.txt
+          if [ -n "$EXTRA" ]; then printf '%s\n' "$EXTRA" >> /tmp/urls.txt; fi
+          python3 scripts/us_quakes/probe.py /tmp/urls.txt

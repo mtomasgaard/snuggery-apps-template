@@ -1,0 +1,2272 @@
+{
+ "service": "https://earthquake.usgs.gov/fdsnws/event/1",
+ "apiVersion": "2.7.0",
+ "cutoff": "2026-01-01",
+ "limit": 20000,
+ "columns": [
+  "time",
+  "latitude",
+  "longitude",
+  "depth",
+  "mag",
+  "magType",
+  "nst",
+  "gap",
+  "dmin",
+  "rms",
+  "net",
+  "id",
+  "updated",
+  "place",
+  "type",
+  "horizontalError",
+  "depthError",
+  "magError",
+  "magNst",
+  "status",
+  "locationSource",
+  "magSource"
+ ],
+ "regions": {
+  "conus": {
+   "box": {
+    "minlatitude": 24,
+    "maxlatitude": 50,
+    "minlongitude": -130,
+    "maxlongitude": -65
+   },
+   "windows": [
+    {
+     "start": "1600-01-01",
+     "end": "1900-01-01",
+     "minmagnitude": null,
+     "count": 493,
+     "rows": 493,
+     "bytes": 79816,
+     "sha256": "cd0242adb651e7171242c95501dc19658fbdb7e857befb3f891358eb17498c1b",
+     "cache": "comcat/conus/1600-01-01_1900-01-01_mall.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1900-01-01",
+     "end": "1910-01-01",
+     "minmagnitude": 2.5,
+     "count": 107,
+     "rows": 107,
+     "bytes": 17161,
+     "sha256": "9180122244e0085df4a90d930543e06badec47aae94aa19d4b106505b7c53eee",
+     "cache": "comcat/conus/1900-01-01_1910-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1910-01-01",
+     "end": "1920-01-01",
+     "minmagnitude": 2.5,
+     "count": 136,
+     "rows": 136,
+     "bytes": 21828,
+     "sha256": "7d5a7015f7a083eda34c665ba5f4258c001dfb11ecf375bf9132c08b40c5cf13",
+     "cache": "comcat/conus/1910-01-01_1920-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1920-01-01",
+     "end": "1930-01-01",
+     "minmagnitude": 2.5,
+     "count": 109,
+     "rows": 109,
+     "bytes": 18103,
+     "sha256": "d09672d945aadf815db16c990f0cfac2ea0292e557c2d9552be1c3db0e2c67cc",
+     "cache": "comcat/conus/1920-01-01_1930-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1930-01-01",
+     "end": "1940-01-01",
+     "minmagnitude": 2.5,
+     "count": 2966,
+     "rows": 2966,
+     "bytes": 539420,
+     "sha256": "3f4802ffd1479475c5ca4eaa49fdcaf77e4ee80d1f0828adca81eb86d971a16d",
+     "cache": "comcat/conus/1930-01-01_1940-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1940-01-01",
+     "end": "1950-01-01",
+     "minmagnitude": 2.5,
+     "count": 3346,
+     "rows": 3346,
+     "bytes": 618538,
+     "sha256": "a231ffcd77cad5e08949dba302de85141104e1abd64bd8bfa4387eb6ab3cae56",
+     "cache": "comcat/conus/1940-01-01_1950-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1950-01-01",
+     "end": "1960-01-01",
+     "minmagnitude": 2.5,
+     "count": 4035,
+     "rows": 4035,
+     "bytes": 741260,
+     "sha256": "84f7ea214cb5f1bf87107c8280b9a98b0c489123d77fe7429885233a7f7c865a",
+     "cache": "comcat/conus/1950-01-01_1960-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1960-01-01",
+     "end": "1970-01-01",
+     "minmagnitude": 2.5,
+     "count": 3719,
+     "rows": 3719,
+     "bytes": 690521,
+     "sha256": "18a781ec977cf0521e0e1f76077702aa3bc5cef24003aef16877aa718e1b03c0",
+     "cache": "comcat/conus/1960-01-01_1970-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1970-01-01",
+     "end": "1980-01-01",
+     "minmagnitude": 2.5,
+     "count": 15075,
+     "rows": 15075,
+     "bytes": 2789160,
+     "sha256": "bd0fc9b58d8ebdc57c784eab3ba7f43eeeba4179d65ccfbd6c2ac7165c172e18",
+     "cache": "comcat/conus/1970-01-01_1980-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1980-01-01",
+     "end": "1981-01-01",
+     "minmagnitude": 2.5,
+     "count": 4293,
+     "rows": 4293,
+     "bytes": 806570,
+     "sha256": "8ad9067f479f5981c310b6fc21547a05a90f266a95abe7d11f7d297027e0e123",
+     "cache": "comcat/conus/1980-01-01_1981-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1981-01-01",
+     "end": "1982-01-01",
+     "minmagnitude": 2.5,
+     "count": 2135,
+     "rows": 2135,
+     "bytes": 397884,
+     "sha256": "87f62ade47b13627161dee9e32c36f7d90a077388e04a7a77b086cc130769415",
+     "cache": "comcat/conus/1981-01-01_1982-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1982-01-01",
+     "end": "1983-01-01",
+     "minmagnitude": 2.5,
+     "count": 2506,
+     "rows": 2506,
+     "bytes": 448372,
+     "sha256": "eda5dacbb48763d28e5d47b9ab14c773674f5a8252c83e1ee7c68088b035a668",
+     "cache": "comcat/conus/1982-01-01_1983-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1983-01-01",
+     "end": "1984-01-01",
+     "minmagnitude": 2.5,
+     "count": 3636,
+     "rows": 3636,
+     "bytes": 681060,
+     "sha256": "2824837fbc35c7b9c6f13e8ec1fce2e3af63d54a1de13507caa6b5038ac2e408",
+     "cache": "comcat/conus/1983-01-01_1984-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1984-01-01",
+     "end": "1985-01-01",
+     "minmagnitude": 2.5,
+     "count": 2749,
+     "rows": 2749,
+     "bytes": 492416,
+     "sha256": "22bfbd73ed8158be312867e2607ca3d68beed465a84c843cd209c8ee856082c0",
+     "cache": "comcat/conus/1984-01-01_1985-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1985-01-01",
+     "end": "1986-01-01",
+     "minmagnitude": 2.5,
+     "count": 2474,
+     "rows": 2474,
+     "bytes": 447178,
+     "sha256": "e35f6fc5def5ce3c7ac35492d835a3383509d41cb76c216993df232385061564",
+     "cache": "comcat/conus/1985-01-01_1986-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1986-01-01",
+     "end": "1987-01-01",
+     "minmagnitude": 2.5,
+     "count": 4235,
+     "rows": 4235,
+     "bytes": 766314,
+     "sha256": "65b540dab9f5ebd217e12dddeea7b41010cc4a43d2e91b039ba529104a72546f",
+     "cache": "comcat/conus/1986-01-01_1987-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1987-01-01",
+     "end": "1988-01-01",
+     "minmagnitude": 2.5,
+     "count": 3322,
+     "rows": 3322,
+     "bytes": 583969,
+     "sha256": "17f4602fc8c3108edf05bba20b2ebb02f9799c04c6c2febc36d7b799a83820bb",
+     "cache": "comcat/conus/1987-01-01_1988-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1988-01-01",
+     "end": "1989-01-01",
+     "minmagnitude": 2.5,
+     "count": 2648,
+     "rows": 2648,
+     "bytes": 470237,
+     "sha256": "32502064e996919283a9ebc1cb8ba8c211ee74228f72e39e3646431da5ab1bfa",
+     "cache": "comcat/conus/1988-01-01_1989-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1989-01-01",
+     "end": "1990-01-01",
+     "minmagnitude": 2.5,
+     "count": 2667,
+     "rows": 2667,
+     "bytes": 482709,
+     "sha256": "221009c3361dbe8730f2468ced0eb4cd49ddc98877735bd24adc0b64449e6bb0",
+     "cache": "comcat/conus/1989-01-01_1990-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1990-01-01",
+     "end": "1991-01-01",
+     "minmagnitude": 2.5,
+     "count": 2041,
+     "rows": 2041,
+     "bytes": 369177,
+     "sha256": "3c703a21e36a2b46aefcd4000be7a48e5e1440af57e4a833800af0bf4115d32b",
+     "cache": "comcat/conus/1990-01-01_1991-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1991-01-01",
+     "end": "1992-01-01",
+     "minmagnitude": 2.5,
+     "count": 1914,
+     "rows": 1914,
+     "bytes": 346850,
+     "sha256": "87931ba686d6f1824c72eb77ae27603ecbc2b0483b1aaf64d338e5b781a42119",
+     "cache": "comcat/conus/1991-01-01_1992-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1992-01-01",
+     "end": "1993-01-01",
+     "minmagnitude": 2.5,
+     "count": 8030,
+     "rows": 8030,
+     "bytes": 1466907,
+     "sha256": "c79e7c2b8c915b1f19285fd2eac6234051d13e6ca32bd24f938da8a0fa48fac8",
+     "cache": "comcat/conus/1992-01-01_1993-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1993-01-01",
+     "end": "1994-01-01",
+     "minmagnitude": 2.5,
+     "count": 2300,
+     "rows": 2300,
+     "bytes": 423541,
+     "sha256": "60aa0265587fa49ea8ad5eded0fb1aa62d24a3aef6481ecf6b84b50146667240",
+     "cache": "comcat/conus/1993-01-01_1994-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1994-01-01",
+     "end": "1995-01-01",
+     "minmagnitude": 2.5,
+     "count": 3472,
+     "rows": 3472,
+     "bytes": 631837,
+     "sha256": "32413247edafe6b17e0cc5813b48f0e776b419a1d4bf091bc73b1bcc4f52700b",
+     "cache": "comcat/conus/1994-01-01_1995-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1995-01-01",
+     "end": "1996-01-01",
+     "minmagnitude": 2.5,
+     "count": 2049,
+     "rows": 2049,
+     "bytes": 382018,
+     "sha256": "2d00483e589e74cf216b477cc8c83934e1b5c912a7fbdc2523465faf16f6fe9f",
+     "cache": "comcat/conus/1995-01-01_1996-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1996-01-01",
+     "end": "1997-01-01",
+     "minmagnitude": 2.5,
+     "count": 1835,
+     "rows": 1835,
+     "bytes": 342786,
+     "sha256": "6aed26a5d6c659f356148ffe5d020ac8e7b50b2da0d4f8ed6ebf8205ac2b3ac6",
+     "cache": "comcat/conus/1996-01-01_1997-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1997-01-01",
+     "end": "1998-01-01",
+     "minmagnitude": 2.5,
+     "count": 2352,
+     "rows": 2352,
+     "bytes": 433730,
+     "sha256": "60d3f7125b5c5027b7dad4ed34fff325f6c5e89331399c915ef64cbd39f15480",
+     "cache": "comcat/conus/1997-01-01_1998-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1998-01-01",
+     "end": "1999-01-01",
+     "minmagnitude": 2.5,
+     "count": 2389,
+     "rows": 2389,
+     "bytes": 443174,
+     "sha256": "0f1b743f3e25113f2043c53afe5cf497a5d9ece93f193c4abe273afb854743f5",
+     "cache": "comcat/conus/1998-01-01_1999-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1999-01-01",
+     "end": "2000-01-01",
+     "minmagnitude": 2.5,
+     "count": 4007,
+     "rows": 4007,
+     "bytes": 725642,
+     "sha256": "fec7ac607833e40f5ada765a4e5265e18672208cd02133c2943b8aeaf774e826",
+     "cache": "comcat/conus/1999-01-01_2000-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2000-01-01",
+     "end": "2001-01-01",
+     "minmagnitude": 2.5,
+     "count": 2451,
+     "rows": 2451,
+     "bytes": 444506,
+     "sha256": "7086570c2e4beef8420f290c77c281551d2bc4e1b02be1baa1c1d5212e3efb48",
+     "cache": "comcat/conus/2000-01-01_2001-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2001-01-01",
+     "end": "2002-01-01",
+     "minmagnitude": 2.5,
+     "count": 2719,
+     "rows": 2719,
+     "bytes": 497028,
+     "sha256": "da40067695d7ea1458c93aa3d6e24ff8dad129af437ba897df4890fdb4f1bfe2",
+     "cache": "comcat/conus/2001-01-01_2002-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2002-01-01",
+     "end": "2003-01-01",
+     "minmagnitude": 2.5,
+     "count": 2207,
+     "rows": 2207,
+     "bytes": 409642,
+     "sha256": "36e61678d203caae2acddfe18b3fc29aca1b4cf327abb3eee33d60b7f5a92699",
+     "cache": "comcat/conus/2002-01-01_2003-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2003-01-01",
+     "end": "2004-01-01",
+     "minmagnitude": 2.5,
+     "count": 2225,
+     "rows": 2225,
+     "bytes": 419411,
+     "sha256": "d0da7c2807425db944f0172c7e7e57952f3bb377e524623e0ab3271cc9c74dfc",
+     "cache": "comcat/conus/2003-01-01_2004-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2004-01-01",
+     "end": "2005-01-01",
+     "minmagnitude": 2.5,
+     "count": 3024,
+     "rows": 3024,
+     "bytes": 576278,
+     "sha256": "aace96bc9f2c00eb4fae712fbab3e5e6085ba74c6d50425a0f30a468048f722a",
+     "cache": "comcat/conus/2004-01-01_2005-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2005-01-01",
+     "end": "2006-01-01",
+     "minmagnitude": 2.5,
+     "count": 2355,
+     "rows": 2355,
+     "bytes": 441016,
+     "sha256": "e01ef4adaccb034ceca4e67f406ca8b1dccbd9166388c672d2428bc0c18e2a5b",
+     "cache": "comcat/conus/2005-01-01_2006-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2006-01-01",
+     "end": "2007-01-01",
+     "minmagnitude": 2.5,
+     "count": 1940,
+     "rows": 1940,
+     "bytes": 363039,
+     "sha256": "fda89d74df4db9fcb4752594a72f5513eabe764ac4baa8bca03ecb535ba08dd3",
+     "cache": "comcat/conus/2006-01-01_2007-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2007-01-01",
+     "end": "2008-01-01",
+     "minmagnitude": 2.5,
+     "count": 1769,
+     "rows": 1769,
+     "bytes": 329586,
+     "sha256": "4db1d739ffd8684def994affaf7b8e075e95367eafc38f7d494b002664b44d90",
+     "cache": "comcat/conus/2007-01-01_2008-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2008-01-01",
+     "end": "2009-01-01",
+     "minmagnitude": 2.5,
+     "count": 2598,
+     "rows": 2598,
+     "bytes": 478984,
+     "sha256": "27c167d420bd85c5f1187fe4f98241ee94d8faa0ba5e9da0257430e8545dd111",
+     "cache": "comcat/conus/2008-01-01_2009-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2009-01-01",
+     "end": "2010-01-01",
+     "minmagnitude": 2.5,
+     "count": 1876,
+     "rows": 1876,
+     "bytes": 351456,
+     "sha256": "e0d068f6750ed5dc718807430a717833a72560a0e8af7e1ff70067365d1c5b7d",
+     "cache": "comcat/conus/2009-01-01_2010-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2010-01-01",
+     "end": "2011-01-01",
+     "minmagnitude": 2.5,
+     "count": 5957,
+     "rows": 5957,
+     "bytes": 1157576,
+     "sha256": "d7d7a4cfec8f694576707d428b563a21733922503601fae245f186dee1f056ff",
+     "cache": "comcat/conus/2010-01-01_2011-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2011-01-01",
+     "end": "2012-01-01",
+     "minmagnitude": 2.5,
+     "count": 2519,
+     "rows": 2519,
+     "bytes": 469019,
+     "sha256": "bed5540dc50736994b30eddb3bd5c10638bf595f7bcd18380e5d6deada3062f1",
+     "cache": "comcat/conus/2011-01-01_2012-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2012-01-01",
+     "end": "2013-01-01",
+     "minmagnitude": 2.5,
+     "count": 2029,
+     "rows": 2029,
+     "bytes": 378461,
+     "sha256": "ddb68878ffe6f7edb6c3672a28773061865a4222fd5ba43d46a25d5a41900e6a",
+     "cache": "comcat/conus/2012-01-01_2013-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2013-01-01",
+     "end": "2014-01-01",
+     "minmagnitude": 2.5,
+     "count": 2273,
+     "rows": 2273,
+     "bytes": 422106,
+     "sha256": "f1ecf4acf4360ecad75e9e2ceb4f784ebd8e3d9a5eb031da17541abc5705f519",
+     "cache": "comcat/conus/2013-01-01_2014-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2014-01-01",
+     "end": "2015-01-01",
+     "minmagnitude": 2.5,
+     "count": 4463,
+     "rows": 4463,
+     "bytes": 807868,
+     "sha256": "04539a0f6014878ed345ace73c2d7434909913ab899d1acd36a8be4cf165ba4f",
+     "cache": "comcat/conus/2014-01-01_2015-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2015-01-01",
+     "end": "2016-01-01",
+     "minmagnitude": 2.5,
+     "count": 5166,
+     "rows": 5166,
+     "bytes": 929343,
+     "sha256": "28f2fbedda0aed383a1a7fa4312047dd1ab1f46fde8adef7067153a69477d786",
+     "cache": "comcat/conus/2015-01-01_2016-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2016-01-01",
+     "end": "2017-01-01",
+     "minmagnitude": 2.5,
+     "count": 3834,
+     "rows": 3834,
+     "bytes": 692983,
+     "sha256": "13fbabfe57b11758202d4732b94311d4d4272145338ad225d1d356ddbf7732f6",
+     "cache": "comcat/conus/2016-01-01_2017-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2017-01-01",
+     "end": "2018-01-01",
+     "minmagnitude": 2.5,
+     "count": 3465,
+     "rows": 3465,
+     "bytes": 639027,
+     "sha256": "9badd83dcadc33b8d5419d92ee0b8ac0abdbe8526afdbb0810984c5031eea3a4",
+     "cache": "comcat/conus/2017-01-01_2018-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2018-01-01",
+     "end": "2019-01-01",
+     "minmagnitude": 2.5,
+     "count": 2459,
+     "rows": 2459,
+     "bytes": 452788,
+     "sha256": "e653087364c0cc170cbaa5876fe5147863df48d57998a7ca63bce1e5570e5157",
+     "cache": "comcat/conus/2018-01-01_2019-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2019-01-01",
+     "end": "2020-01-01",
+     "minmagnitude": 2.5,
+     "count": 4921,
+     "rows": 4921,
+     "bytes": 932319,
+     "sha256": "86c53a2b2f48879b01c796fe6c1fd2309250890f2149397ee944864a5291f97a",
+     "cache": "comcat/conus/2019-01-01_2020-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2020-01-01",
+     "end": "2021-01-01",
+     "minmagnitude": 2.5,
+     "count": 4989,
+     "rows": 4989,
+     "bytes": 914885,
+     "sha256": "839b4c2bea1cd66b7d80d924e62d6c01b6fd76afeb391ae3fdb59e33432fbea9",
+     "cache": "comcat/conus/2020-01-01_2021-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2021-01-01",
+     "end": "2022-01-01",
+     "minmagnitude": 2.5,
+     "count": 3712,
+     "rows": 3712,
+     "bytes": 711662,
+     "sha256": "f03384ce17aeebe634ffe652f36fb95391348812f2ea9ce896075c79426093bb",
+     "cache": "comcat/conus/2021-01-01_2022-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2022-01-01",
+     "end": "2023-01-01",
+     "minmagnitude": 2.5,
+     "count": 2763,
+     "rows": 2763,
+     "bytes": 545026,
+     "sha256": "dc0505dd173efeb5b2b1dfccc06f5d9f22a5540ca9b933bd24bd4575f5f8fd04",
+     "cache": "comcat/conus/2022-01-01_2023-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2023-01-01",
+     "end": "2024-01-01",
+     "minmagnitude": 2.5,
+     "count": 2673,
+     "rows": 2673,
+     "bytes": 524015,
+     "sha256": "bf00ef72b3cf81622ca1d369ec6c0f28eff13bea495e763fc7486979d90f0346",
+     "cache": "comcat/conus/2023-01-01_2024-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2024-01-01",
+     "end": "2025-01-01",
+     "minmagnitude": 2.5,
+     "count": 3116,
+     "rows": 3116,
+     "bytes": 610435,
+     "sha256": "63e2660a6e4434fa8bb812bf69530aabb2c7ba64701cd7c98279322fd23e670d",
+     "cache": "comcat/conus/2024-01-01_2025-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2025-01-01",
+     "end": "2026-01-01",
+     "minmagnitude": 2.5,
+     "count": 2886,
+     "rows": 2886,
+     "bytes": 564810,
+     "sha256": "f7c079beadc7e8980a821d616e6511da5992003fe1a6b4ae5ada3b63913357b7",
+     "cache": "comcat/conus/2025-01-01_2026-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    }
+   ],
+   "events": 171429,
+   "bytes": 31721447,
+   "allEventsSince1600": 2688929,
+   "allEventsByDecade": [
+    [
+     "1600-01-01",
+     "1610-01-01",
+     0
+    ],
+    [
+     "1610-01-01",
+     "1620-01-01",
+     0
+    ],
+    [
+     "1620-01-01",
+     "1630-01-01",
+     1
+    ],
+    [
+     "1630-01-01",
+     "1640-01-01",
+     1
+    ],
+    [
+     "1640-01-01",
+     "1650-01-01",
+     0
+    ],
+    [
+     "1650-01-01",
+     "1660-01-01",
+     0
+    ],
+    [
+     "1660-01-01",
+     "1670-01-01",
+     6
+    ],
+    [
+     "1670-01-01",
+     "1680-01-01",
+     0
+    ],
+    [
+     "1680-01-01",
+     "1690-01-01",
+     1
+    ],
+    [
+     "1690-01-01",
+     "1700-01-01",
+     2
+    ],
+    [
+     "1700-01-01",
+     "1710-01-01",
+     1
+    ],
+    [
+     "1710-01-01",
+     "1720-01-01",
+     0
+    ],
+    [
+     "1720-01-01",
+     "1730-01-01",
+     21
+    ],
+    [
+     "1730-01-01",
+     "1740-01-01",
+     6
+    ],
+    [
+     "1740-01-01",
+     "1750-01-01",
+     2
+    ],
+    [
+     "1750-01-01",
+     "1760-01-01",
+     8
+    ],
+    [
+     "1760-01-01",
+     "1770-01-01",
+     3
+    ],
+    [
+     "1770-01-01",
+     "1780-01-01",
+     4
+    ],
+    [
+     "1780-01-01",
+     "1790-01-01",
+     2
+    ],
+    [
+     "1790-01-01",
+     "1800-01-01",
+     9
+    ],
+    [
+     "1800-01-01",
+     "1810-01-01",
+     13
+    ],
+    [
+     "1810-01-01",
+     "1820-01-01",
+     19
+    ],
+    [
+     "1820-01-01",
+     "1830-01-01",
+     13
+    ],
+    [
+     "1830-01-01",
+     "1840-01-01",
+     10
+    ],
+    [
+     "1840-01-01",
+     "1850-01-01",
+     17
+    ],
+    [
+     "1850-01-01",
+     "1860-01-01",
+     47
+    ],
+    [
+     "1860-01-01",
+     "1870-01-01",
+     47
+    ],
+    [
+     "1870-01-01",
+     "1880-01-01",
+     73
+    ],
+    [
+     "1880-01-01",
+     "1890-01-01",
+     100
+    ],
+    [
+     "1890-01-01",
+     "1900-01-01",
+     89
+    ],
+    [
+     "1900-01-01",
+     "1910-01-01",
+     141
+    ],
+    [
+     "1910-01-01",
+     "1920-01-01",
+     175
+    ],
+    [
+     "1920-01-01",
+     "1930-01-01",
+     130
+    ],
+    [
+     "1930-01-01",
+     "1940-01-01",
+     4764
+    ],
+    [
+     "1940-01-01",
+     "1950-01-01",
+     3914
+    ],
+    [
+     "1950-01-01",
+     "1960-01-01",
+     4607
+    ],
+    [
+     "1960-01-01",
+     "1970-01-01",
+     4740
+    ],
+    [
+     "1970-01-01",
+     "1980-01-01",
+     72466
+    ],
+    [
+     "1980-01-01",
+     "1990-01-01",
+     372676
+    ],
+    [
+     "1990-01-01",
+     "2000-01-01",
+     479306
+    ],
+    [
+     "2000-01-01",
+     "2010-01-01",
+     531175
+    ],
+    [
+     "2010-01-01",
+     "2020-01-01",
+     743918
+    ],
+    [
+     "2020-01-01",
+     "2026-01-01",
+     470422
+    ]
+   ]
+  },
+  "ak": {
+   "box": {
+    "minlatitude": 50,
+    "maxlatitude": 72,
+    "minlongitude": 172,
+    "maxlongitude": 231
+   },
+   "windows": [
+    {
+     "start": "1600-01-01",
+     "end": "1900-01-01",
+     "minmagnitude": null,
+     "count": 64,
+     "rows": 64,
+     "bytes": 10496,
+     "sha256": "fe93c0da77f758d936a404da36df3c39eac3e33267d8a66e71a197e981c42e49",
+     "cache": "comcat/ak/1600-01-01_1900-01-01_mall.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1900-01-01",
+     "end": "1910-01-01",
+     "minmagnitude": 2.5,
+     "count": 23,
+     "rows": 23,
+     "bytes": 4124,
+     "sha256": "102197e4305326ce6cd66371a545e8dce98a606423636b4c8702022fb07d69ea",
+     "cache": "comcat/ak/1900-01-01_1910-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1910-01-01",
+     "end": "1920-01-01",
+     "minmagnitude": 2.5,
+     "count": 94,
+     "rows": 94,
+     "bytes": 18353,
+     "sha256": "7251745ef044dc4a2651d2b6b7740ef11d0931142a983f63a6a04c284245b5e8",
+     "cache": "comcat/ak/1910-01-01_1920-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1920-01-01",
+     "end": "1930-01-01",
+     "minmagnitude": 2.5,
+     "count": 88,
+     "rows": 88,
+     "bytes": 15642,
+     "sha256": "585217187a36ba1bab49d42f1fb35764d6071c19e402f72397ed7904e438017e",
+     "cache": "comcat/ak/1920-01-01_1930-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1930-01-01",
+     "end": "1940-01-01",
+     "minmagnitude": 2.5,
+     "count": 115,
+     "rows": 115,
+     "bytes": 20147,
+     "sha256": "60fb20cc1266c72905530cf39fc09389312c2676cf1f7fc1bc72335a4c49e736",
+     "cache": "comcat/ak/1930-01-01_1940-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1940-01-01",
+     "end": "1950-01-01",
+     "minmagnitude": 2.5,
+     "count": 87,
+     "rows": 87,
+     "bytes": 15626,
+     "sha256": "4153ee9fd33495ad05e4dae65609f19a3e9a382183485acdde55b01b170ffeba",
+     "cache": "comcat/ak/1940-01-01_1950-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1950-01-01",
+     "end": "1960-01-01",
+     "minmagnitude": 2.5,
+     "count": 223,
+     "rows": 223,
+     "bytes": 39342,
+     "sha256": "963ed6ce87a93de4e2eab63ceee976e236156eb8bed381e6b33576c31c467f0f",
+     "cache": "comcat/ak/1950-01-01_1960-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1960-01-01",
+     "end": "1970-01-01",
+     "minmagnitude": 2.5,
+     "count": 476,
+     "rows": 476,
+     "bytes": 84858,
+     "sha256": "9a6a82eaf1b7f557e3f19b0470c44e0a2aa6448d3e76a606ba4ef35f69e21644",
+     "cache": "comcat/ak/1960-01-01_1970-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1970-01-01",
+     "end": "1980-01-01",
+     "minmagnitude": 2.5,
+     "count": 2546,
+     "rows": 2546,
+     "bytes": 399689,
+     "sha256": "4aaa8352c71654958eebb130b3cadba5c3c727623fdf26a0e62d8dd3e39e9ac9",
+     "cache": "comcat/ak/1970-01-01_1980-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1980-01-01",
+     "end": "1990-01-01",
+     "minmagnitude": 2.5,
+     "count": 5866,
+     "rows": 5866,
+     "bytes": 948749,
+     "sha256": "a45cad7776b187a34de00bc7b053ff898b6b1728c951b4c24f3e3a18c0494b0a",
+     "cache": "comcat/ak/1980-01-01_1990-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1990-01-01",
+     "end": "2000-01-01",
+     "minmagnitude": 2.5,
+     "count": 15195,
+     "rows": 15195,
+     "bytes": 2527793,
+     "sha256": "2daefbed375da88017289b3f64d7a0a567c8e8c45e48440b515f9f267a197dea",
+     "cache": "comcat/ak/1990-01-01_2000-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2000-01-01",
+     "end": "2001-01-01",
+     "minmagnitude": 2.5,
+     "count": 1442,
+     "rows": 1442,
+     "bytes": 240835,
+     "sha256": "af78b90cb78c27dab18f0c0095f0e0de1136d9b80be3fa5b2547e4f29103691e",
+     "cache": "comcat/ak/2000-01-01_2001-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2001-01-01",
+     "end": "2002-01-01",
+     "minmagnitude": 2.5,
+     "count": 1792,
+     "rows": 1792,
+     "bytes": 298777,
+     "sha256": "06b8b8416b8d28653443e75f7fe12dc4b77fce8e42554ba71bfc4f876077c153",
+     "cache": "comcat/ak/2001-01-01_2002-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2002-01-01",
+     "end": "2003-01-01",
+     "minmagnitude": 2.5,
+     "count": 4287,
+     "rows": 4287,
+     "bytes": 714639,
+     "sha256": "bf0f5d0811f553aef0363e9062697a4e4e6f1c3bd4e2ccb0b3ee4c78d589be4b",
+     "cache": "comcat/ak/2002-01-01_2003-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2003-01-01",
+     "end": "2004-01-01",
+     "minmagnitude": 2.5,
+     "count": 3780,
+     "rows": 3780,
+     "bytes": 636320,
+     "sha256": "268f21021d01299c4cb4372c0cfbc23d39ff0f8dd477a617efd23f6c53d62bda",
+     "cache": "comcat/ak/2003-01-01_2004-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2004-01-01",
+     "end": "2005-01-01",
+     "minmagnitude": 2.5,
+     "count": 2793,
+     "rows": 2793,
+     "bytes": 468980,
+     "sha256": "845822f490819b29b218db7ad5e5628e4a2e332fd0eb6ed6a21d95f3179172b5",
+     "cache": "comcat/ak/2004-01-01_2005-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2005-01-01",
+     "end": "2006-01-01",
+     "minmagnitude": 2.5,
+     "count": 3081,
+     "rows": 3081,
+     "bytes": 516912,
+     "sha256": "4c25737c4e6f5f86a7fdb0b9cfcd162524b9114c787c917dc23d800004b6ebb3",
+     "cache": "comcat/ak/2005-01-01_2006-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2006-01-01",
+     "end": "2007-01-01",
+     "minmagnitude": 2.5,
+     "count": 4553,
+     "rows": 4553,
+     "bytes": 767010,
+     "sha256": "f12379d055b7ada5b68a7818709e61b35a3329c3c097f87102c56887996a9ad7",
+     "cache": "comcat/ak/2006-01-01_2007-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2007-01-01",
+     "end": "2008-01-01",
+     "minmagnitude": 2.5,
+     "count": 4260,
+     "rows": 4260,
+     "bytes": 711757,
+     "sha256": "f44842c23ece762ec996dc9232333d37a2bdd5c3190387d58bfd04e258b87a39",
+     "cache": "comcat/ak/2007-01-01_2008-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2008-01-01",
+     "end": "2009-01-01",
+     "minmagnitude": 2.5,
+     "count": 4451,
+     "rows": 4451,
+     "bytes": 742344,
+     "sha256": "bf25d303d5cff8b5f4fb4b66b49fef630fc71cdd6cb09e64fb4cb2971e589826",
+     "cache": "comcat/ak/2008-01-01_2009-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2009-01-01",
+     "end": "2010-01-01",
+     "minmagnitude": 2.5,
+     "count": 3226,
+     "rows": 3226,
+     "bytes": 541248,
+     "sha256": "4cab6e8d8443c4530b7e1532347e4bcfa9c5df6484e56adb274d3ec86d1fb670",
+     "cache": "comcat/ak/2009-01-01_2010-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2010-01-01",
+     "end": "2011-01-01",
+     "minmagnitude": 2.5,
+     "count": 6291,
+     "rows": 6291,
+     "bytes": 1049802,
+     "sha256": "84dd242c3cef26f37ba3df4c7724197be481ebf323a7e89cb94a36a47223ca59",
+     "cache": "comcat/ak/2010-01-01_2011-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2011-01-01",
+     "end": "2012-01-01",
+     "minmagnitude": 2.5,
+     "count": 3817,
+     "rows": 3817,
+     "bytes": 636337,
+     "sha256": "d5b693a2a8a5e56c6076e3a8d37eedd4c40d2b67613aa16b98303f2908507372",
+     "cache": "comcat/ak/2011-01-01_2012-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2012-01-01",
+     "end": "2013-01-01",
+     "minmagnitude": 2.5,
+     "count": 3711,
+     "rows": 3711,
+     "bytes": 623256,
+     "sha256": "34d880a528295bbe53d2f5ad95f36ccc9db88668d5d193a67a9da625205f28b6",
+     "cache": "comcat/ak/2012-01-01_2013-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2013-01-01",
+     "end": "2014-01-01",
+     "minmagnitude": 2.5,
+     "count": 3477,
+     "rows": 3477,
+     "bytes": 582922,
+     "sha256": "0e5c3708acacb95a61fa1816c571bf2e3cc8b30c22a27b819ae39f18d99de633",
+     "cache": "comcat/ak/2013-01-01_2014-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2014-01-01",
+     "end": "2015-01-01",
+     "minmagnitude": 2.5,
+     "count": 4411,
+     "rows": 4411,
+     "bytes": 749108,
+     "sha256": "5d1d195bf135b42b6412decddd71138eae547895ddd55642e857688e0c6b1596",
+     "cache": "comcat/ak/2014-01-01_2015-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2015-01-01",
+     "end": "2016-01-01",
+     "minmagnitude": 2.5,
+     "count": 4234,
+     "rows": 4234,
+     "bytes": 729375,
+     "sha256": "66c574e3d667d98f28ddcbf221f7f21bd614076f04d132ef66b03aa852594df7",
+     "cache": "comcat/ak/2015-01-01_2016-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2016-01-01",
+     "end": "2017-01-01",
+     "minmagnitude": 2.5,
+     "count": 3962,
+     "rows": 3962,
+     "bytes": 683279,
+     "sha256": "044f0a82b5dc91c1bf8530edf18d84054dec6f395cfb6776ca6fd6cf519831a0",
+     "cache": "comcat/ak/2016-01-01_2017-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2017-01-01",
+     "end": "2018-01-01",
+     "minmagnitude": 2.5,
+     "count": 4773,
+     "rows": 4773,
+     "bytes": 829991,
+     "sha256": "d55ce7cce7ff80d5e90e41683f89a9223416e1d6eb13d1ab1f81e07be037664d",
+     "cache": "comcat/ak/2017-01-01_2018-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2018-01-01",
+     "end": "2019-01-01",
+     "minmagnitude": 2.5,
+     "count": 10159,
+     "rows": 10159,
+     "bytes": 1796855,
+     "sha256": "9340d1225d911ca44ab7ad5561bfb7ef56c4d90cd5f367f0b5eb9d73949c7dbf",
+     "cache": "comcat/ak/2018-01-01_2019-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2019-01-01",
+     "end": "2020-01-01",
+     "minmagnitude": 2.5,
+     "count": 4925,
+     "rows": 4925,
+     "bytes": 862939,
+     "sha256": "8978317e40bf6975156212fd46fab2a7d6ba1f205d78e31e43fd7be3c02949ee",
+     "cache": "comcat/ak/2019-01-01_2020-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2020-01-01",
+     "end": "2021-01-01",
+     "minmagnitude": 2.5,
+     "count": 6499,
+     "rows": 6499,
+     "bytes": 1165480,
+     "sha256": "9de031abf607066c2e0008574456939b8db3e31a1f39d53bf94ec94e06b46c32",
+     "cache": "comcat/ak/2020-01-01_2021-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2021-01-01",
+     "end": "2022-01-01",
+     "minmagnitude": 2.5,
+     "count": 5209,
+     "rows": 5209,
+     "bytes": 918090,
+     "sha256": "d77a1ac539e856f0d0b614af40b0d551dd569de39d97b5b34672dc6a33c3d471",
+     "cache": "comcat/ak/2021-01-01_2022-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2022-01-01",
+     "end": "2023-01-01",
+     "minmagnitude": 2.5,
+     "count": 5679,
+     "rows": 5679,
+     "bytes": 1031016,
+     "sha256": "2c9f4e417757ed7dac1e61a322d8ff70ffba0a6015dbf149eb53e259e0a6ee4e",
+     "cache": "comcat/ak/2022-01-01_2023-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2023-01-01",
+     "end": "2024-01-01",
+     "minmagnitude": 2.5,
+     "count": 6031,
+     "rows": 6031,
+     "bytes": 1100214,
+     "sha256": "50e61c772cac3a99cb7d51bdb4174d75b56211a02cc92eb58e9302887ed12c0e",
+     "cache": "comcat/ak/2023-01-01_2024-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2024-01-01",
+     "end": "2025-01-01",
+     "minmagnitude": 2.5,
+     "count": 5599,
+     "rows": 5599,
+     "bytes": 1021978,
+     "sha256": "b42be7e636ddccd7c39bcd88c838e854792bd85885ab5f3a5096858467b90ee7",
+     "cache": "comcat/ak/2024-01-01_2025-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2025-01-01",
+     "end": "2026-01-01",
+     "minmagnitude": 2.5,
+     "count": 6671,
+     "rows": 6671,
+     "bytes": 1231064,
+     "sha256": "0b9b038a08cc79ac701fb1c61ffad04b0ddaf9466f290f97930fc9892fc31c31",
+     "cache": "comcat/ak/2025-01-01_2026-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    }
+   ],
+   "events": 143890,
+   "bytes": 24735347,
+   "allEventsSince1600": 991271,
+   "allEventsByDecade": [
+    [
+     "1600-01-01",
+     "1610-01-01",
+     0
+    ],
+    [
+     "1610-01-01",
+     "1620-01-01",
+     0
+    ],
+    [
+     "1620-01-01",
+     "1630-01-01",
+     0
+    ],
+    [
+     "1630-01-01",
+     "1640-01-01",
+     0
+    ],
+    [
+     "1640-01-01",
+     "1650-01-01",
+     0
+    ],
+    [
+     "1650-01-01",
+     "1660-01-01",
+     0
+    ],
+    [
+     "1660-01-01",
+     "1670-01-01",
+     0
+    ],
+    [
+     "1670-01-01",
+     "1680-01-01",
+     0
+    ],
+    [
+     "1680-01-01",
+     "1690-01-01",
+     0
+    ],
+    [
+     "1690-01-01",
+     "1700-01-01",
+     0
+    ],
+    [
+     "1700-01-01",
+     "1710-01-01",
+     0
+    ],
+    [
+     "1710-01-01",
+     "1720-01-01",
+     0
+    ],
+    [
+     "1720-01-01",
+     "1730-01-01",
+     0
+    ],
+    [
+     "1730-01-01",
+     "1740-01-01",
+     0
+    ],
+    [
+     "1740-01-01",
+     "1750-01-01",
+     0
+    ],
+    [
+     "1750-01-01",
+     "1760-01-01",
+     0
+    ],
+    [
+     "1760-01-01",
+     "1770-01-01",
+     0
+    ],
+    [
+     "1770-01-01",
+     "1780-01-01",
+     0
+    ],
+    [
+     "1780-01-01",
+     "1790-01-01",
+     2
+    ],
+    [
+     "1790-01-01",
+     "1800-01-01",
+     1
+    ],
+    [
+     "1800-01-01",
+     "1810-01-01",
+     1
+    ],
+    [
+     "1810-01-01",
+     "1820-01-01",
+     1
+    ],
+    [
+     "1820-01-01",
+     "1830-01-01",
+     1
+    ],
+    [
+     "1830-01-01",
+     "1840-01-01",
+     2
+    ],
+    [
+     "1840-01-01",
+     "1850-01-01",
+     7
+    ],
+    [
+     "1850-01-01",
+     "1860-01-01",
+     2
+    ],
+    [
+     "1860-01-01",
+     "1870-01-01",
+     3
+    ],
+    [
+     "1870-01-01",
+     "1880-01-01",
+     3
+    ],
+    [
+     "1880-01-01",
+     "1890-01-01",
+     6
+    ],
+    [
+     "1890-01-01",
+     "1900-01-01",
+     35
+    ],
+    [
+     "1900-01-01",
+     "1910-01-01",
+     86
+    ],
+    [
+     "1910-01-01",
+     "1920-01-01",
+     113
+    ],
+    [
+     "1920-01-01",
+     "1930-01-01",
+     112
+    ],
+    [
+     "1930-01-01",
+     "1940-01-01",
+     126
+    ],
+    [
+     "1940-01-01",
+     "1950-01-01",
+     196
+    ],
+    [
+     "1950-01-01",
+     "1960-01-01",
+     374
+    ],
+    [
+     "1960-01-01",
+     "1970-01-01",
+     514
+    ],
+    [
+     "1970-01-01",
+     "1980-01-01",
+     3317
+    ],
+    [
+     "1980-01-01",
+     "1990-01-01",
+     14208
+    ],
+    [
+     "1990-01-01",
+     "2000-01-01",
+     54290
+    ],
+    [
+     "2000-01-01",
+     "2010-01-01",
+     216954
+    ],
+    [
+     "2010-01-01",
+     "2020-01-01",
+     385969
+    ],
+    [
+     "2020-01-01",
+     "2026-01-01",
+     314948
+    ]
+   ]
+  },
+  "hi": {
+   "box": {
+    "minlatitude": 18,
+    "maxlatitude": 23,
+    "minlongitude": -161,
+    "maxlongitude": -154
+   },
+   "windows": [
+    {
+     "start": "1600-01-01",
+     "end": "1900-01-01",
+     "minmagnitude": null,
+     "count": 61,
+     "rows": 61,
+     "bytes": 10607,
+     "sha256": "0d016a45031fea0711836e52ca0845187d7ea67419954cc4da616d22da2624a0",
+     "cache": "comcat/hi/1600-01-01_1900-01-01_mall.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1900-01-01",
+     "end": "1910-01-01",
+     "minmagnitude": 2.5,
+     "count": 5,
+     "rows": 5,
+     "bytes": 1001,
+     "sha256": "b1d7de19b5e50a795d581b9e55fcff77cda5aff3eb0db9b1ab4cb3fed50b2f73",
+     "cache": "comcat/hi/1900-01-01_1910-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1910-01-01",
+     "end": "1920-01-01",
+     "minmagnitude": 2.5,
+     "count": 7,
+     "rows": 7,
+     "bytes": 1210,
+     "sha256": "2f95963356ebbe32635e87cf46db68cb482a72f1538ceafe5de9e20766c6954c",
+     "cache": "comcat/hi/1910-01-01_1920-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1920-01-01",
+     "end": "1930-01-01",
+     "minmagnitude": 2.5,
+     "count": 6,
+     "rows": 6,
+     "bytes": 1083,
+     "sha256": "7306539e1f5156ec7a7f6b6f83fb3ff4c25ce40cec72144fb9c5eb016d164c7c",
+     "cache": "comcat/hi/1920-01-01_1930-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1930-01-01",
+     "end": "1940-01-01",
+     "minmagnitude": 2.5,
+     "count": 6,
+     "rows": 6,
+     "bytes": 1118,
+     "sha256": "511f450fdbcde2c3c61aae55d38642aa83434109a43abdc786dad33fa5d0dc2f",
+     "cache": "comcat/hi/1930-01-01_1940-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1940-01-01",
+     "end": "1950-01-01",
+     "minmagnitude": 2.5,
+     "count": 5,
+     "rows": 5,
+     "bytes": 951,
+     "sha256": "eb33d60fa9b163fb8406d1de02692ee9a76c5189c68bb0597265c2b5b036112a",
+     "cache": "comcat/hi/1940-01-01_1950-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1950-01-01",
+     "end": "1960-01-01",
+     "minmagnitude": 2.5,
+     "count": 131,
+     "rows": 131,
+     "bytes": 24216,
+     "sha256": "077c42b5a508a68116e65c503936119a008be592cbc522ecda4abcd18a84befc",
+     "cache": "comcat/hi/1950-01-01_1960-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1960-01-01",
+     "end": "1970-01-01",
+     "minmagnitude": 2.5,
+     "count": 4395,
+     "rows": 4395,
+     "bytes": 815103,
+     "sha256": "b343a63d1d31e1b6193b18c920aa7292ac48a8d9b2da26aa7e26e6290c91321a",
+     "cache": "comcat/hi/1960-01-01_1970-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1970-01-01",
+     "end": "1980-01-01",
+     "minmagnitude": 2.5,
+     "count": 7733,
+     "rows": 7733,
+     "bytes": 1431469,
+     "sha256": "052d4e8d3596d7fd399a577943ba2b8324a52e77b4f4ef15b6eea96160be6188",
+     "cache": "comcat/hi/1970-01-01_1980-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1980-01-01",
+     "end": "1990-01-01",
+     "minmagnitude": 2.5,
+     "count": 4460,
+     "rows": 4460,
+     "bytes": 823099,
+     "sha256": "0a48f91a28fc0280927ca7f625d3ac254ab6f02f8d06eb796b1196773a1980e5",
+     "cache": "comcat/hi/1980-01-01_1990-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1990-01-01",
+     "end": "2000-01-01",
+     "minmagnitude": 2.5,
+     "count": 2971,
+     "rows": 2971,
+     "bytes": 540911,
+     "sha256": "9e3e4b8a1911cf1498099aafbd4090c54d28032f6a9fb25f57515aa329b78424",
+     "cache": "comcat/hi/1990-01-01_2000-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2000-01-01",
+     "end": "2010-01-01",
+     "minmagnitude": 2.5,
+     "count": 1573,
+     "rows": 1573,
+     "bytes": 293160,
+     "sha256": "73f8bf95b98eef9398096eec44390b54d212b31a4dd026bc0ebda79e747dede6",
+     "cache": "comcat/hi/2000-01-01_2010-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2010-01-01",
+     "end": "2020-01-01",
+     "minmagnitude": 2.5,
+     "count": 14660,
+     "rows": 14660,
+     "bytes": 2924430,
+     "sha256": "9dfbc35c603e0ecb0b4a1158c9130a4c72d1f4e876a4e0190cb3a16676f2e8ae",
+     "cache": "comcat/hi/2010-01-01_2020-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2020-01-01",
+     "end": "2026-01-01",
+     "minmagnitude": 2.5,
+     "count": 3862,
+     "rows": 3862,
+     "bytes": 794211,
+     "sha256": "6edba864f6e1fb444d36be199736800c3b38fa47ea107d697fc855d392fafdc2",
+     "cache": "comcat/hi/2020-01-01_2026-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    }
+   ],
+   "events": 39875,
+   "bytes": 7662569,
+   "allEventsSince1600": 270525,
+   "allEventsByDecade": [
+    [
+     "1600-01-01",
+     "1610-01-01",
+     0
+    ],
+    [
+     "1610-01-01",
+     "1620-01-01",
+     0
+    ],
+    [
+     "1620-01-01",
+     "1630-01-01",
+     0
+    ],
+    [
+     "1630-01-01",
+     "1640-01-01",
+     0
+    ],
+    [
+     "1640-01-01",
+     "1650-01-01",
+     0
+    ],
+    [
+     "1650-01-01",
+     "1660-01-01",
+     0
+    ],
+    [
+     "1660-01-01",
+     "1670-01-01",
+     0
+    ],
+    [
+     "1670-01-01",
+     "1680-01-01",
+     0
+    ],
+    [
+     "1680-01-01",
+     "1690-01-01",
+     0
+    ],
+    [
+     "1690-01-01",
+     "1700-01-01",
+     0
+    ],
+    [
+     "1700-01-01",
+     "1710-01-01",
+     0
+    ],
+    [
+     "1710-01-01",
+     "1720-01-01",
+     0
+    ],
+    [
+     "1720-01-01",
+     "1730-01-01",
+     0
+    ],
+    [
+     "1730-01-01",
+     "1740-01-01",
+     0
+    ],
+    [
+     "1740-01-01",
+     "1750-01-01",
+     0
+    ],
+    [
+     "1750-01-01",
+     "1760-01-01",
+     0
+    ],
+    [
+     "1760-01-01",
+     "1770-01-01",
+     0
+    ],
+    [
+     "1770-01-01",
+     "1780-01-01",
+     0
+    ],
+    [
+     "1780-01-01",
+     "1790-01-01",
+     0
+    ],
+    [
+     "1790-01-01",
+     "1800-01-01",
+     0
+    ],
+    [
+     "1800-01-01",
+     "1810-01-01",
+     0
+    ],
+    [
+     "1810-01-01",
+     "1820-01-01",
+     0
+    ],
+    [
+     "1820-01-01",
+     "1830-01-01",
+     2
+    ],
+    [
+     "1830-01-01",
+     "1840-01-01",
+     3
+    ],
+    [
+     "1840-01-01",
+     "1850-01-01",
+     5
+    ],
+    [
+     "1850-01-01",
+     "1860-01-01",
+     3
+    ],
+    [
+     "1860-01-01",
+     "1870-01-01",
+     20
+    ],
+    [
+     "1870-01-01",
+     "1880-01-01",
+     11
+    ],
+    [
+     "1880-01-01",
+     "1890-01-01",
+     12
+    ],
+    [
+     "1890-01-01",
+     "1900-01-01",
+     5
+    ],
+    [
+     "1900-01-01",
+     "1910-01-01",
+     5
+    ],
+    [
+     "1910-01-01",
+     "1920-01-01",
+     9
+    ],
+    [
+     "1920-01-01",
+     "1930-01-01",
+     17
+    ],
+    [
+     "1930-01-01",
+     "1940-01-01",
+     9
+    ],
+    [
+     "1940-01-01",
+     "1950-01-01",
+     13
+    ],
+    [
+     "1950-01-01",
+     "1960-01-01",
+     225
+    ],
+    [
+     "1960-01-01",
+     "1970-01-01",
+     12055
+    ],
+    [
+     "1970-01-01",
+     "1980-01-01",
+     41229
+    ],
+    [
+     "1980-01-01",
+     "1990-01-01",
+     33130
+    ],
+    [
+     "1990-01-01",
+     "2000-01-01",
+     23423
+    ],
+    [
+     "2000-01-01",
+     "2010-01-01",
+     35734
+    ],
+    [
+     "2010-01-01",
+     "2020-01-01",
+     73299
+    ],
+    [
+     "2020-01-01",
+     "2026-01-01",
+     51316
+    ]
+   ]
+  },
+  "pr": {
+   "box": {
+    "minlatitude": 17,
+    "maxlatitude": 20,
+    "minlongitude": -68,
+    "maxlongitude": -64
+   },
+   "windows": [
+    {
+     "start": "1600-01-01",
+     "end": "1900-01-01",
+     "minmagnitude": null,
+     "count": 13,
+     "rows": 13,
+     "bytes": 2290,
+     "sha256": "95a8ccdbcad1337456ffd94430293863a681238a3751a638631b7d22caff8496",
+     "cache": "comcat/pr/1600-01-01_1900-01-01_mall.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1900-01-01",
+     "end": "1910-01-01",
+     "minmagnitude": 2.5,
+     "count": 0,
+     "rows": 0,
+     "bytes": 160,
+     "sha256": "d0011b19654d4069505c5263bdbd23d0992301571b783f489577472ebd3a7f17",
+     "cache": "comcat/pr/1900-01-01_1910-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1910-01-01",
+     "end": "1920-01-01",
+     "minmagnitude": 2.5,
+     "count": 11,
+     "rows": 11,
+     "bytes": 2178,
+     "sha256": "2f0c0c8ee1bcbe62f360678f773456270c0ed1f18d017499623f3a08615fc459",
+     "cache": "comcat/pr/1910-01-01_1920-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1920-01-01",
+     "end": "1930-01-01",
+     "minmagnitude": 2.5,
+     "count": 3,
+     "rows": 3,
+     "bytes": 717,
+     "sha256": "1b9e162e5db94ebd1870dda9dde1929c79e0b11b6f6d1bb429bffdbe4aa890b2",
+     "cache": "comcat/pr/1920-01-01_1930-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1930-01-01",
+     "end": "1940-01-01",
+     "minmagnitude": 2.5,
+     "count": 1,
+     "rows": 1,
+     "bytes": 348,
+     "sha256": "448d3c4895a71e5efe1215a9ec3f1218c0bb1bf2cb5b5b7e05b3260171923d37",
+     "cache": "comcat/pr/1930-01-01_1940-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1940-01-01",
+     "end": "1950-01-01",
+     "minmagnitude": 2.5,
+     "count": 3,
+     "rows": 3,
+     "bytes": 714,
+     "sha256": "e3ecf645eddb0e3eb8c519ca683951836ce8166dbee57ed09f7f80728b6e41b7",
+     "cache": "comcat/pr/1940-01-01_1950-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1950-01-01",
+     "end": "1960-01-01",
+     "minmagnitude": 2.5,
+     "count": 3,
+     "rows": 3,
+     "bytes": 715,
+     "sha256": "b009e65795a751d6372c4922e9871d5fdf68521189b28326eb6d4f75d65a7ace",
+     "cache": "comcat/pr/1950-01-01_1960-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1960-01-01",
+     "end": "1970-01-01",
+     "minmagnitude": 2.5,
+     "count": 4,
+     "rows": 4,
+     "bytes": 907,
+     "sha256": "05e7319c26e348497e4cb8c3aec685a748521aba6d6a1c9afc1b87074efe8e7b",
+     "cache": "comcat/pr/1960-01-01_1970-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1970-01-01",
+     "end": "1980-01-01",
+     "minmagnitude": 2.5,
+     "count": 60,
+     "rows": 60,
+     "bytes": 10251,
+     "sha256": "8ea2fcc2b9c083a7b95d62af35ca0474909e8b65a05206f1ed15ba1d16e41233",
+     "cache": "comcat/pr/1970-01-01_1980-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1980-01-01",
+     "end": "1990-01-01",
+     "minmagnitude": 2.5,
+     "count": 80,
+     "rows": 80,
+     "bytes": 13911,
+     "sha256": "e097427be06ed4fad47f965642d0d1d8125f9034783a06aa04e8200fac177541",
+     "cache": "comcat/pr/1980-01-01_1990-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "1990-01-01",
+     "end": "2000-01-01",
+     "minmagnitude": 2.5,
+     "count": 909,
+     "rows": 909,
+     "bytes": 149561,
+     "sha256": "0a8ac64184eaa300b14ec04842f01f9862a62348c3ff58b018aec5e8a033524b",
+     "cache": "comcat/pr/1990-01-01_2000-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2000-01-01",
+     "end": "2010-01-01",
+     "minmagnitude": 2.5,
+     "count": 8383,
+     "rows": 8383,
+     "bytes": 1455698,
+     "sha256": "a8e24eda12928442382323a77d9536ae27e7ff617ad5bd057cde23cf6a3d6c75",
+     "cache": "comcat/pr/2000-01-01_2010-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2010-01-01",
+     "end": "2020-01-01",
+     "minmagnitude": 2.5,
+     "count": 17690,
+     "rows": 17690,
+     "bytes": 3348592,
+     "sha256": "0a3cb2e20ea9ead0c0169d541e77d41c2e6277cce4bd5bdb2b9997048f245946",
+     "cache": "comcat/pr/2010-01-01_2020-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    },
+    {
+     "start": "2020-01-01",
+     "end": "2026-01-01",
+     "minmagnitude": 2.5,
+     "count": 15664,
+     "rows": 15664,
+     "bytes": 3113736,
+     "sha256": "8d6d40706c07dcd2cc29d5f967f078c535325060d78be31581d7d1b0f85b4a1f",
+     "cache": "comcat/pr/2020-01-01_2026-01-01_m2.5.csv",
+     "retrieved": "2026-09-30"
+    }
+   ],
+   "events": 42824,
+   "bytes": 8099778,
+   "allEventsSince1600": 71003,
+   "allEventsByDecade": [
+    [
+     "1600-01-01",
+     "1610-01-01",
+     0
+    ],
+    [
+     "1610-01-01",
+     "1620-01-01",
+     0
+    ],
+    [
+     "1620-01-01",
+     "1630-01-01",
+     0
+    ],
+    [
+     "1630-01-01",
+     "1640-01-01",
+     0
+    ],
+    [
+     "1640-01-01",
+     "1650-01-01",
+     0
+    ],
+    [
+     "1650-01-01",
+     "1660-01-01",
+     0
+    ],
+    [
+     "1660-01-01",
+     "1670-01-01",
+     0
+    ],
+    [
+     "1670-01-01",
+     "1680-01-01",
+     0
+    ],
+    [
+     "1680-01-01",
+     "1690-01-01",
+     0
+    ],
+    [
+     "1690-01-01",
+     "1700-01-01",
+     0
+    ],
+    [
+     "1700-01-01",
+     "1710-01-01",
+     0
+    ],
+    [
+     "1710-01-01",
+     "1720-01-01",
+     0
+    ],
+    [
+     "1720-01-01",
+     "1730-01-01",
+     0
+    ],
+    [
+     "1730-01-01",
+     "1740-01-01",
+     0
+    ],
+    [
+     "1740-01-01",
+     "1750-01-01",
+     0
+    ],
+    [
+     "1750-01-01",
+     "1760-01-01",
+     0
+    ],
+    [
+     "1760-01-01",
+     "1770-01-01",
+     0
+    ],
+    [
+     "1770-01-01",
+     "1780-01-01",
+     0
+    ],
+    [
+     "1780-01-01",
+     "1790-01-01",
+     2
+    ],
+    [
+     "1790-01-01",
+     "1800-01-01",
+     0
+    ],
+    [
+     "1800-01-01",
+     "1810-01-01",
+     0
+    ],
+    [
+     "1810-01-01",
+     "1820-01-01",
+     0
+    ],
+    [
+     "1820-01-01",
+     "1830-01-01",
+     0
+    ],
+    [
+     "1830-01-01",
+     "1840-01-01",
+     0
+    ],
+    [
+     "1840-01-01",
+     "1850-01-01",
+     2
+    ],
+    [
+     "1850-01-01",
+     "1860-01-01",
+     2
+    ],
+    [
+     "1860-01-01",
+     "1870-01-01",
+     5
+    ],
+    [
+     "1870-01-01",
+     "1880-01-01",
+     1
+    ],
+    [
+     "1880-01-01",
+     "1890-01-01",
+     0
+    ],
+    [
+     "1890-01-01",
+     "1900-01-01",
+     1
+    ],
+    [
+     "1900-01-01",
+     "1910-01-01",
+     10
+    ],
+    [
+     "1910-01-01",
+     "1920-01-01",
+     13
+    ],
+    [
+     "1920-01-01",
+     "1930-01-01",
+     3
+    ],
+    [
+     "1930-01-01",
+     "1940-01-01",
+     2
+    ],
+    [
+     "1940-01-01",
+     "1950-01-01",
+     20
+    ],
+    [
+     "1950-01-01",
+     "1960-01-01",
+     12
+    ],
+    [
+     "1960-01-01",
+     "1970-01-01",
+     5
+    ],
+    [
+     "1970-01-01",
+     "1980-01-01",
+     61
+    ],
+    [
+     "1980-01-01",
+     "1990-01-01",
+     347
+    ],
+    [
+     "1990-01-01",
+     "2000-01-01",
+     1492
+    ],
+    [
+     "2000-01-01",
+     "2010-01-01",
+     8692
+    ],
+    [
+     "2010-01-01",
+     "2020-01-01",
+     27300
+    ],
+    [
+     "2020-01-01",
+     "2026-01-01",
+     33033
+    ]
+   ]
+  }
+ }
+}

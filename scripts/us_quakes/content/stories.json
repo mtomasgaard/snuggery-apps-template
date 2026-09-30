@@ -1,0 +1,163 @@
+{
+ "stories": [
+  {
+   "id": "cascadia-1700",
+   "title": "Cascadia, 1700",
+   "when": "1700-01-27",
+   "view": "pacific-northwest",
+   "window": {
+    "kind": "stub",
+    "start": "1700"
+   },
+   "floor": 2.5,
+   "anchors": [
+    "official17000127050000000"
+   ],
+   "text": "The catalog gives it one nominal point off the coast, {lat}° N {lonW}° W, magnitude {mag} ({magType}), with no depth. USGS on the Japanese records of its tsunami: “Some noted that no parent earthquake had been felt; they were wondering what had set off the waves. They had no way knowing that the tsunami had been spawned during an earthquake along the coast of northwestern North America.”",
+   "sources": [
+    "usgs-orphan-tsunami",
+    "comcat"
+   ]
+  },
+  {
+   "id": "new-madrid-1811",
+   "title": "New Madrid, 1811–12",
+   "when": "1811-12-16",
+   "view": "new-madrid",
+   "window": {
+    "kind": "stub",
+    "start": "1811"
+   },
+   "floor": 2.5,
+   "anchors": [
+    "official18111216081500000",
+    "official18111216131500000",
+    "official18120123150000000",
+    "official18120207094500000"
+   ],
+   "text": "The catalog lists {n7} earthquakes of magnitude {seven} or more between {boxS} and {boxN}° N, {boxW} and {boxE}° W, from {first} to {last}: {m1}, {m2}, {m3} and {m4} ({magType}), none with a depth. USGS: “They were by far the largest east of the Rocky Mountains in the U.S. and Canada.”",
+   "sources": [
+    "usgs-new-madrid",
+    "comcat"
+   ]
+  },
+  {
+   "id": "san-francisco-1906",
+   "title": "San Francisco, 1906",
+   "when": "1906-04-18",
+   "view": "california",
+   "window": {
+    "kind": "year",
+    "start": "1906"
+   },
+   "floor": 2.5,
+   "anchors": [
+    "official19060418131226300_12"
+   ],
+   "text": "Magnitude {mag} ({magType}) at {time} UTC on {date}, {depth} km deep at {lat}° N {lonW}° W. One dot for a rupture whose length USGS gives as “The total length is 296 miles (477 kilometers).” In {year} the catalog lists {n} earthquakes of magnitude {floor} or more between {boxS} and {boxN}° N, {boxW} and {boxE}° W.",
+   "sources": [
+    "usgs-1906-length",
+    "comcat"
+   ]
+  },
+  {
+   "id": "alaska-1964",
+   "title": "Alaska, 1964",
+   "when": "1964-03-28",
+   "view": "alaska",
+   "window": {
+    "kind": "year",
+    "start": "1964"
+   },
+   "floor": 4,
+   "anchors": [
+    "official19640328033616_30"
+   ],
+   "text": "Magnitude {mag} ({magType}) at {time} UTC on {date}, {depth} km deep; the catalog still lists this solution as {status}. USGS: it “is the most powerful recorded earthquake in U.S. history.” In {year} the Alaska map box holds {n} earthquakes of magnitude {floor} or more, {nAfter} of them from that day on.",
+   "sources": [
+    "usgs-1964",
+    "comcat"
+   ],
+   "play": {
+    "from": "1964-03-27",
+    "to": "1964-05-01",
+    "step": "day"
+   }
+  },
+  {
+   "id": "oklahoma-2009",
+   "title": "Oklahoma, 2009–2017",
+   "when": "2009",
+   "view": "oklahoma",
+   "window": {
+    "kind": "decade",
+    "start": "2010"
+   },
+   "floor": 2.5,
+   "anchors": [
+    "us10006jxs"
+   ],
+   "text": "Magnitude {three} and up between {boxS} and {boxN}° N, {boxW} and {boxE}° W: {c2008} in {y2008}, {cPeak} in {yPeak}, {cLast} in {yLast}. The largest was magnitude {mag} ({magType}) on {date}, {place}. USGS: “The majority of earthquakes in Oklahoma are caused by the industrial practice known as \"wastewater disposal\".”",
+   "sources": [
+    "usgs-faq-oklahoma-wastewater",
+    "usgs-faq-oklahoma-surge",
+    "comcat"
+   ]
+  },
+  {
+   "id": "kilauea-2018",
+   "title": "Kīlauea, 2018",
+   "when": "2018-05-04",
+   "view": "hawaii",
+   "window": {
+    "kind": "month",
+    "start": "2018-05"
+   },
+   "floor": 2.5,
+   "anchors": [
+    "hv70116556"
+   ],
+   "box": [
+    -156.1,
+    18.8,
+    -154.7,
+    20.3
+   ],
+   "text": "From {from} to {to} the catalog lists {n} earthquakes of magnitude {floor} or more on and around the Island of Hawaii. The largest, magnitude {mag} ({magType}) on {date}, was {depth} km deep. USGS: “In 2018, Kīlauea Volcano experienced its largest lower East Rift Zone (LERZ) eruption and caldera collapse in at least 200 years.”",
+   "sources": [
+    "usgs-kilauea-2018",
+    "comcat"
+   ],
+   "play": {
+    "from": "2018-04-30",
+    "to": "2018-09-01",
+    "step": "week"
+   }
+  },
+  {
+   "id": "ridgecrest-2019",
+   "title": "Ridgecrest, 2019",
+   "when": "2019-07-06",
+   "view": "california",
+   "window": {
+    "kind": "month",
+    "start": "2019-07"
+   },
+   "floor": 2.5,
+   "anchors": [
+    "ci38443183",
+    "ci38457511"
+   ],
+   "text": "Magnitude {m1} ({mt1}) at {t1} UTC on {d1}, then magnitude {m2} ({mt2}) at {t2} UTC on {d2}, {hours} hours later and {depth2} km deep. USGS: “another stronger earthquake shook the area about 33 hours later.” In July {year} the catalog lists {n} earthquakes of magnitude {floor} or more between {boxS} and {boxN}° N, {boxW} and {boxE}° W.",
+   "sources": [
+    "usgs-ridgecrest",
+    "comcat"
+   ],
+   "play": {
+    "from": "2019-07-01",
+    "to": "2019-08-01",
+    "step": "day"
+   }
+  }
+ ]
+}
