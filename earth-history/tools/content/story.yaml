@@ -274,9 +274,9 @@ prologue:
 # One card per Period in data/timescale.json card_periods, youngest first.
 periods:
   - ics: Quaternary
-    text: "Map 1 is today’s world, the reference for every other map. Map 2 is Scotese’s Last Glacial Maximum, 21,000 years ago, painted white over Canada and northern Europe. Nearly all ice sheets stood at their largest from 26,500 until 19,000–20,000 years ago; then stronger northern summer sunshine started the melt, and meltwater raised the sea. On the map: switch between the two and compare."
+    text: "Map 1 is today’s world, the reference for every other map. Map 2 is Scotese’s Last Glacial Maximum, 21 000 years ago, painted white over Canada and northern Europe. Nearly all ice sheets stood at their largest from 26 500 until 19 000–20 000 years ago; then stronger northern summer sunshine started the melt, and meltwater raised the sea. On the map: switch between the two and compare."
     sources: [paleoatlas, clark2009]
-    numbers: {"1": paleoatlas, "2": paleoatlas, "21,000": paleoatlas, "26,500": clark2009, "19,000": clark2009, "20,000": clark2009}
+    numbers: {"1": paleoatlas, "2": paleoatlas, "21 000": paleoatlas, "26 500": clark2009, "19 000": clark2009, "20 000": clark2009}
 
   - ics: Neogene
     text: "The continents sit close to where they are today; the changes are at the edges. The Isthmus of Panama formed around 2.8 million years ago, joining North and South America. The review behind that date finds the evidence for a much older isthmus inconclusive. Antarctica is painted white on every Neogene map. On the map: follow the Himalaya pin as India keeps pushing north, and turn on today’s coasts to compare."
@@ -398,9 +398,9 @@ events:
     age_unc_ma: 0.19
     age_source: linnemann2019
     period: Cambrian
-    text: "In Namibia the last Ediacaran fossils and the first burrows of mobile animals are less than 410,000 years apart, ending 538.58 ± 0.19 million years ago. Through the early Cambrian many animal groups then appear as fossils, apparently within a few million years."
+    text: "In Namibia the last Ediacaran fossils and the first burrows of mobile animals are less than 410 000 years apart, ending 538.58 ± 0.19 million years ago. Through the early Cambrian many animal groups then appear as fossils, apparently within a few million years."
     sources: [linnemann2019, erwin2011]
-    numbers: {"410,000": linnemann2019, "538.58": linnemann2019, "0.19": linnemann2019}
+    numbers: {"410 000": linnemann2019, "538.58": linnemann2019, "0.19": linnemann2019}
 
   - id: first-land-plants
     title: "The oldest spores of land plants"
@@ -522,9 +522,9 @@ events:
     age_source: ics
     boundary: Jurassic
     period: Jurassic
-    text: "Major losses on land and in the sea. The first eruptions of the Central Atlantic lava province match the extinction in time; the lava came in four pulses over about 600,000 years."
+    text: "Major losses on land and in the sea. The first eruptions of the Central Atlantic lava province match the extinction in time; the lava came in four pulses over about 600 000 years."
     sources: [ics, blackburn2013]
-    numbers: {"600,000": blackburn2013}
+    numbers: {"600 000": blackburn2013}
 
   - id: pangaea-breakup
     title: "Pangaea begins to split"
@@ -568,9 +568,9 @@ events:
     age_source: ics
     boundary: Paleogene
     period: Paleogene
-    text: "An asteroid struck what is now Mexico’s Yucatán Peninsula. Its debris forms a single layer found worldwide at the Cretaceous–Paleogene boundary, and dating puts the impact within 32,000 years of the extinction."
+    text: "An asteroid struck what is now Mexico’s Yucatán Peninsula. Its debris forms a single layer found worldwide at the Cretaceous–Paleogene boundary, and dating puts the impact within 32 000 years of the extinction."
     sources: [ics, hildebrand1991, schulte2010, renne2013]
-    numbers: {"32,000": renne2013}
+    numbers: {"32 000": renne2013}
 
   - id: end-cretaceous
     title: "End-Cretaceous mass extinction"
@@ -588,9 +588,9 @@ events:
     age_source: ics
     boundary: Eocene
     period: Paleogene
-    text: "Thousands of billions of metric tons of carbon entered the ocean and air in less than 20,000 years, and global temperature rose 9–14 °F (5–8 °C). The whole event lasted about 200,000 years."
+    text: "Thousands of billions of metric tons of carbon entered the ocean and air in less than 20 000 years, and global temperature rose 9–14 °F (5–8 °C). The whole event lasted about 200 000 years."
     sources: [ics, mcinerney2011]
-    numbers: {"20,000": mcinerney2011, "9": mcinerney2011, "14": mcinerney2011, "5": mcinerney2011, "8": mcinerney2011, "200,000": mcinerney2011}
+    numbers: {"20 000": mcinerney2011, "9": mcinerney2011, "14": mcinerney2011, "5": mcinerney2011, "8": mcinerney2011, "200 000": mcinerney2011}
 
   - id: antarctic-ice
     title: "Ice sheets form on Antarctica"
@@ -618,10 +618,10 @@ events:
     range_ma: [0.0265, 0.0195]
     age_source: clark2009
     period: Quaternary
-    when: "26,500 to 19,000–20,000 years ago"
-    text: "Nearly all ice sheets stood at their largest from 26,500 years ago until 19,000–20,000 years ago, when stronger northern summer sunshine began the melt."
+    when: "26 500 to 19 000–20 000 years ago"
+    text: "Nearly all ice sheets stood at their largest from 26 500 years ago until 19 000–20 000 years ago, when stronger northern summer sunshine began the melt."
     sources: [clark2009]
-    numbers: {"26,500": clark2009, "19,000": clark2009, "20,000": clark2009}
+    numbers: {"26 500": clark2009, "19 000": clark2009, "20 000": clark2009}
 
 # Pins that ride their plate. Positions are present-day; 60_story.py partitions each with Scotese's
 # polygons at 0 Ma (as places.json does) and checks the claimed `plate`, and that the plate's crust
@@ -706,14 +706,14 @@ look_for:
 
   - id: meishan
     label: "Meishan, China"
-    text: "The reference section for the Permian–Triassic boundary; its ash beds date the extinction to an interval of 60,000 ± 48,000 years."
+    text: "The reference section for the Permian–Triassic boundary; its ash beds date the extinction to an interval of 60 000 ± 48 000 years."
     lon: 119.7
     lat: 31.1
     window_ma: [256, 248]
     plate: 611
     placement: "Meishan, Changxing County, Zhejiang, rounded to 0.1°"
     sources: [burgess2014]
-    numbers: {"60,000": burgess2014, "48,000": burgess2014}
+    numbers: {"60 000": burgess2014, "48 000": burgess2014}
 
   - id: ischigualasto
     label: "Ischigualasto, Argentina"
@@ -739,14 +739,14 @@ look_for:
 
   - id: camp-brazil
     label: "Atlantic magma, Brazil"
-    text: "Central Atlantic province magma extends over about 965,000 square miles (2.5 million km²) of north and central Brazil."
+    text: "Central Atlantic province magma extends over about 965 000 square miles (2.5 million km²) of north and central Brazil."
     lon: -50.0
     lat: -6.0
     window_ma: [205, 195]
     plate: 201
     placement: "a point in north-central Brazil (Pará); the source gives the region, not a site"
     sources: [marzoli1999]
-    numbers: {"965,000": marzoli1999, "2.5": marzoli1999}
+    numbers: {"965 000": marzoli1999, "2.5": marzoli1999}
 
   - id: liaoning
     label: "Yixian Formation, China"

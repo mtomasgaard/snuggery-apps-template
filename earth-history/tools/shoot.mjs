@@ -59,7 +59,7 @@ const stopOfMap = (m) => manifest.slices.findIndex((s) => s.map === m);
 // The age row as DESIGN §3.3 words it, computed here from the manifest (not by the app's code).
 function expectedAge(a) {
   if (a === 0) return 'Today';
-  if (a < 0.1) return `${(Math.round(a * 1000) * 1000).toLocaleString('en-US')} years ago`;
+  if (a < 0.1) return `${(Math.round(a * 1000) * 1000).toLocaleString('en-US').replace(/,/g, '\u202f')} years ago`;
   return `${a} million years ago`;
 }
 function expectedIcs(s) {
@@ -69,15 +69,16 @@ function expectedIcs(s) {
 }
 
 const periodName = (s) => tsUnits.get(s.ics.period).name;
-// The curves' three labels as DESIGN §3.5 words them in US units, computed here from the tiles.
-const num = (v, d) => Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
-const signed = (v, d) => { const t = num(v, d); return (/^[0.,]+$/.test(t) ? '' : v > 0 ? '+' : v < 0 ? '−' : '') + t; };
+// The curves' three labels as DESIGN §3.5 words them in SI units (the default), computed here from the
+// tiles; thousands grouped with a narrow no-break space, as the app prints them.
+const num = (v, d) => Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/,/g, '\u202f');
+const signed = (v, d) => { const t = num(v, d); return (/^[0.,\u202f]+$/.test(t) ? '' : v > 0 ? '+' : v < 0 ? '−' : '') + t; };
 function expectedCurves(s) {
   const t = s.tiles;
   return [
-    t.temperature ? `Temp ${num(t.temperature.c * 9 / 5 + 32, 1)} °F` : 'Temp: no data',
+    t.temperature ? `Temp ${num(t.temperature.c, 1)} °C` : 'Temp: no data',
     t.co2 ? `CO₂ ${num(t.co2.ppm, 0)} ppm${t.co2.kind === 'model_input' ? ', model input' : ''}` : 'CO₂: no data',
-    t.sea_level ? `Sea ${signed(t.sea_level.m / 0.3048, 0)} ft` : 'Sea: no data',
+    t.sea_level ? `Sea ${signed(t.sea_level.m, 1)} m` : 'Sea: no data',
   ];
 }
 const APP_LON = 15, APP_LAT = 5;
@@ -216,10 +217,12 @@ for (const [si, scheme] of schemes.entries()) {
       const r2 = await eh(() => window.__eh.readout());
       check(r2[0] === 'Here, 248.5 million years ago' && /from Chicago\./.test(r2[2] || ''), `after ›, the readout follows the pin to map 48: "${r2[0]}"`);
       check(after[0] !== at[0] || after[1] !== at[1], `the pin moved with its plate (${before.slice(0, 2).map((x) => x.toFixed(0))} px → rotated to ${after.map((x) => x.toFixed(2)).join(', ')})`);
-      await eh(() => window.__eh.setUnits('metric'));
       const rm = await eh(() => window.__eh.readout());
-      check(/ °C, \d[\d,]* mm of rain a year²/.test(rm[1]) && / km from Chicago|0 km from Chicago/.test(rm[2]) && /moving [\d.]+ cm a year/.test(rm[2]), `metric: "${rm[1]}" / "${rm[2]}"`);
+      check(/ °C, \d[\d,\u202f]* mm of rain a year²/.test(rm[1]) && / km from Chicago|0 km from Chicago/.test(rm[2]) && /moving [\d.]+ cm a year/.test(rm[2]), `metric (the default): "${rm[1]}" / "${rm[2]}"`);
       await eh(() => window.__eh.setUnits('us'));
+      const ru = await eh(() => window.__eh.readout());
+      check(/ °F, \d[\d,\u202f.]* in of rain a year²/.test(ru[1]) && / mi from Chicago|0 mi from Chicago/.test(ru[2]) && /moving [\d.]+ in \([\d.]+ cm\) a year/.test(ru[2]), `US: "${ru[1]}" / "${ru[2]}"`);
+      await eh(() => window.__eh.setUnits('metric'));
       // A tap on the open ocean at map 49: no crust, the first two lines only; the next map drops it.
       await eh(() => window.__eh.look(-150, 0));
       const po = await eh(() => window.__eh.project(-150, 0));
@@ -320,32 +323,32 @@ for (const [si, scheme] of schemes.entries()) {
       await settled();
       const v = await eh(() => ({ st: window.__eh.state(), lg: window.__eh.legend(), n: window.__eh.notice(), cl: window.__eh.curvesLabel() }));
       check(v.st.climateKey === `temperature:${sl.climate}`, `map 14 (55.8 Ma) Temperature: climate slice ${sl.climate} (${sl.climate_age_ma} Ma) on the Earth (${v.st.climateKey})`);
-      check(v.lg && v.lg.ticks.join(' ') === '−40 0 32 60 100 °F' && v.lg.text === 'Air temperature, yearly mean · climate model' && /1\.5 m \(5 ft\) above the surface/.test(v.lg.label), `legend: ${v.lg && v.lg.ticks.join(' ')} · "${v.lg && v.lg.text}"`);
+      check(v.lg && v.lg.ticks.join(' ') === '−40 −20 0 20 40 °C' && v.lg.text === 'Air temperature, yearly mean · climate model' && /1\.5 m \(5 ft\) above the surface/.test(v.lg.label), `legend: ${v.lg && v.lg.ticks.join(' ')} · "${v.lg && v.lg.text}"`);
       check(apart(await eh(() => window.__eh.legendBoxes())), `temperature legend labels do not touch: ${JSON.stringify(await eh(() => window.__eh.legendBoxes()))}`);
       check(v.n === null, 'no notice on a map with a climate slice');
       check(JSON.stringify(v.cl) === JSON.stringify(expectedCurves(sl)), `curves: ${v.cl.join(' · ')}`);
       await shot('temperature-14');
       await eh(() => document.getElementById('legend').click());
       const m = await eh(() => ({ u: window.__eh.state().units, lg: window.__eh.legend() }));
-      check(m.u === 'metric' && m.lg.ticks.join(' ') === '−40 −20 0 20 40 °C', `a tap on the legend switches to metric: ${m.lg.ticks.join(' ')}`);
-      check(apart(await eh(() => window.__eh.legendBoxes())), 'metric temperature legend labels do not touch');
-      await eh(() => window.__eh.setUnits('us'));
+      check(m.u === 'us' && m.lg.ticks.join(' ') === '−40 0 32 60 100 °F', `a tap on the legend switches to US units: ${m.lg.ticks.join(' ')}`);
+      check(apart(await eh(() => window.__eh.legendBoxes())), 'US temperature legend labels do not touch');
+      await eh(() => window.__eh.setUnits('metric'));
     },
     'rain-57': async () => {
       const i = stopOfMap(57), sl = manifest.slices[i];
       await eh((j) => { window.__eh.goto(j); window.__eh.look(20, 0); window.__eh.setLens('rain'); }, i);
       await settled();
       const v = await eh(() => ({ st: window.__eh.state(), lg: window.__eh.legend() }));
-      check(v.st.climateKey === `rain:${sl.climate}` && v.lg.ticks.join(' ') === '0 10 50 200 in' && v.lg.text === 'Rain and snow in an average year · climate model', `map 57 (301.2 Ma) Rain: ${v.st.climateKey}; legend ${v.lg.ticks.join(' ')} · "${v.lg.text}"`);
+      check(v.st.climateKey === `rain:${sl.climate}` && v.lg.ticks.join(' ') === '0 250 1\u202f000 5\u202f000 mm' && v.lg.text === 'Rain and snow in an average year · climate model', `map 57 (301.2 Ma) Rain: ${v.st.climateKey}; legend ${v.lg.ticks.join(' ')} · "${v.lg.text}"`);
       const rb = await eh(() => window.__eh.legendBoxes());
       check(apart(rb), `rain legend labels do not touch (no "100200"): ${JSON.stringify(rb)}`);
       await shot('rain-57');
-      await eh(() => window.__eh.setUnits('metric'));
-      const m = await eh(() => window.__eh.legend());
-      check(m.ticks.join(' ') === '0 250 1,000 5,000 mm', `metric rain legend: ${m.ticks.join(' ')}`);
-      const mb = await eh(() => window.__eh.legendBoxes());
-      check(apart(mb), `metric rain legend labels do not touch: ${JSON.stringify(mb)}`);
       await eh(() => window.__eh.setUnits('us'));
+      const m = await eh(() => window.__eh.legend());
+      check(m.ticks.join(' ') === '0 10 50 200 in', `US rain legend: ${m.ticks.join(' ')}`);
+      const mb = await eh(() => window.__eh.legendBoxes());
+      check(apart(mb), `US rain legend labels do not touch: ${JSON.stringify(mb)}`);
+      await eh(() => window.__eh.setUnits('metric'));
     },
     'no-climate-93': async () => {
       await eh((j) => { window.__eh.follow(true); window.__eh.goto(j); window.__eh.setLens('temperature'); }, stopOfMap(93));
@@ -410,7 +413,7 @@ for (const [si, scheme] of schemes.entries()) {
       check(h2.st === 2 && h2.earth === 0 && h2.sheet === 694, `↑ on the grip → full: Earth ${h2.earth} px, sheet ${h2.sheet} px`);
       const text = await eh(() => window.__eh.sheetText());
       const t = sl.tiles;
-      const want = [sl.ics_note.text, `${num(t.temperature.c * 9 / 5 + 32, 1)} °F`, `${num(t.co2.ppm, 0)} ppm`, `${signed(t.sea_level.m / 0.3048, 0)} ft`, `${num(t.land.land_pct, 1)}%`,
+      const want = [sl.ics_note.text, `${num(t.temperature.c, 1)} °C`, `${num(t.co2.ppm, 0)} ppm`, `${signed(t.sea_level.m, 1)} m`, `${num(t.land.land_pct, 1)}%`,
         `${sunPct(sl.age_ma)}% of today’s brightness`, 'End-Permian mass extinction', 'Siberian Traps', 'Overlays rotated to 250 Ma · Climate: model run for 250 Ma · Elevation: PaleoDEM for 250 Ma', 'License: CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/)'];
       const missing = want.filter((w) => !text.includes(w));
       check(missing.length === 0, `full sheet at map 49 holds the chart note, the tiles (${want.slice(1, 6).join(', ')}), the events, the Look-for pins and the sources${missing.length ? ' — missing: ' + missing.join(' | ') : ''}`);
@@ -444,9 +447,9 @@ for (const [si, scheme] of schemes.entries()) {
       const hud = await eh(() => ({ on: !document.getElementById('perf-hud').hidden, text: document.getElementById('perf-hud').textContent }));
       check(hud.on && /^frame /.test(hud.text), `five taps on the version line show the frame-time readout: "${hud.text.split('\n')[0]}"`);
       await eh(() => window.__eh.perfHud(false));
-      await page.click('.units-switch.big button[data-sys="metric"]');
-      check((await eh(() => window.__eh.state().units)) === 'metric', 'About\'s Units setting switches to metric');
-      await eh(() => window.__eh.setUnits('us'));
+      await page.click('.units-switch.big button[data-sys="us"]');
+      check((await eh(() => window.__eh.state().units)) === 'us', 'About\'s Units setting switches to US units');
+      await eh(() => window.__eh.setUnits('metric'));
       await page.keyboard.press('Escape');
       check(await eh(() => document.getElementById('about').hidden && document.activeElement.id === 'btn-about'), 'Escape closes About and gives focus back');
     },
@@ -459,7 +462,8 @@ for (const [si, scheme] of schemes.entries()) {
       check(v.cl[0] === `Temp ${num(t.temperature.c, 1)} °C` && v.cl[2] === `Sea ${signed(t.sea_level.m, 1)} m` && v.sheet.includes('Shelf seas (0–200 m deep)'), `metric: ${v.cl.join(' · ')}`);
       await eh(() => window.__eh.setUnits('us'));
       const u = await eh(() => window.__eh.sheetText());
-      check(u.includes('Shelf seas (0–660 ft deep)'), 'US again: the shelf-sea line reads in feet');
+      check(u.includes('Shelf seas (0–660 ft deep)'), 'US: the shelf-sea line reads in feet');
+      await eh(() => window.__eh.setUnits('metric'));
     },
     a11y: async () => {
       await eh((j) => { window.__eh.goto(j); window.__eh.setSheet(1); window.__eh.setLens('temperature'); window.__eh.toggle('plates', true); window.__eh.toggle('coasts', false); }, stopOfMap(49));
@@ -541,7 +545,7 @@ for (const [si, scheme] of schemes.entries()) {
       await page.waitForFunction(() => window.__eh.state().stop >= 0 && document.getElementById('btn-find').disabled === false, null, { timeout: 20000 });
       const b = await eh(() => ({ st: window.__eh.state(), ro: window.__eh.readout() }));
       check(b.st.sheet === 0 && b.st.pin === null && b.ro === null, 'a broken stored sheet height and a pin naming no city fall back to the defaults');
-      await eh(() => { window.__eh.setUnits('us'); window.__eh.setLens('surface'); });
+      await eh(() => { window.__eh.setUnits('metric'); window.__eh.setLens('surface'); });
     },
   };
 

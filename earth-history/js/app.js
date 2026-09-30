@@ -37,7 +37,7 @@ const NO_CLIMATE = 'The climate model starts at 540 million years ago — this m
 const PLATES_NOTE = ['Pieces of today\'s crust and how they moved', 'Arrows: the million years before this map'];
 
 const S = {
-  stop: 0, lens: 'surface', plates: false, coasts: true, units: 'us', sheet: 0,
+  stop: 0, lens: 'surface', plates: false, coasts: true, units: 'metric', sheet: 0,
   pin: null, playing: false, scrubbing: false, lost: false, perfHud: false, follow: true,
 };
 let track = null, followLast = null, following = false;
@@ -63,7 +63,7 @@ function restore() {
   S.stop = store.get('stop', 0, (v) => Number.isInteger(v) && v >= 0 && v < 90);
   S.plates = store.get('plates', false, (v) => typeof v === 'boolean');
   S.coasts = store.get('coasts', true, (v) => typeof v === 'boolean');
-  S.units = store.get('units', 'us', (v) => v === 'us' || v === 'metric');
+  S.units = store.get('units', 'metric', (v) => v === 'us' || v === 'metric');
   S.lens = store.get('lens', 'surface', (v) => ['surface', 'temperature', 'rain'].includes(v));
   S.sheet = store.get('sheet', 0, (v) => v === 0 || v === 1 || v === 2);
   S.pin = store.get('pin', null, validPin);

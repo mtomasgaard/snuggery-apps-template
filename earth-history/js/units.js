@@ -1,8 +1,9 @@
 // US / metric conversions and every number format the app prints (DESIGN §2, E10).
-// US units by default; metric one tap away. CO₂ is ppm in both; plate speeds are cm/yr, with inches
+// SI units by default (°C, m, km, mm); US units one tap away. Thousands are grouped with a narrow
+// no-break space (SI style), never a comma, so "1 732" cannot be read as a decimal. CO₂ is ppm in both; plate speeds are cm/yr, with inches
 // first in the US setting. Every number comes from the data files — these functions only convert.
 
-let system = 'us';
+let system = 'metric';
 export const setSystem = (s) => { system = s === 'metric' ? 'metric' : 'us'; };
 export const getSystem = () => system;
 export const isUS = () => system === 'us';
@@ -12,9 +13,9 @@ const nf = new Map();
 function fmtN(n, digits = 0) {
   let f = nf.get(digits);
   if (!f) { f = new Intl.NumberFormat('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits }); nf.set(digits, f); }
-  const s = f.format(Math.abs(n));
+  const s = f.format(Math.abs(n)).replace(/,/g, '\u202f');
   // "-0" never prints: a value that rounds to zero is zero.
-  return n < 0 && s.replace(/[0.,]/g, '') !== '' ? MINUS + s : s;
+  return n < 0 && s.replace(/[0.\u202f]/g, '') !== '' ? MINUS + s : s;
 }
 export const fmt = fmtN;
 
@@ -53,7 +54,7 @@ export function lonText(lon) {
 
 /**
  * The map's age as Scotese's Table 1 gives it (DESIGN §3.3): "Today" for 0; ages under 0.1 Ma in
- * years rounded to the thousand ("21,000 years ago"); otherwise the number exactly as in the table.
+ * years rounded to the thousand ("21 000 years ago"); otherwise the number exactly as in the table.
  */
 export function ageText(ageMa) {
   if (ageMa === 0) return 'Today';
@@ -70,7 +71,7 @@ export const sunPercent = (ageMa) => 100 / (1 + 0.4 * ageMa / 4700);
 /** Sea level relative to today: "+638 ft" / "+194.5 m" (whole feet; metres to 0.1). */
 export function seaLevel(m) {
   const v = isUS() ? m / M_PER_FT : m, s = fmtN(v, isUS() ? 0 : 1);
-  return `${v > 0 && s.replace(/[0.,]/g, '') !== '' ? '+' : ''}${s} ${isUS() ? 'ft' : 'm'}`;
+  return `${v > 0 && s.replace(/[0.\u202f]/g, '') !== '' ? '+' : ''}${s} ${isUS() ? 'ft' : 'm'}`;
 }
 /** A length without a sign: "599 ft" / "182.5 m". */
 export const depth = (m) => (isUS() ? `${fmtN(m / M_PER_FT)} ft` : `${fmtN(m, 1)} m`);
@@ -85,5 +86,5 @@ export function chartAge(ma, unc) {
   if (ma < 0.1) return `${fmtN(Math.round(ma * 1000) * 1000)} years ago`;
   return `${String(+ma)}${unc != null ? ` ± ${String(+unc)}` : ''} million years ago`;
 }
-/** A number of millions of years as written in the data: 1000 → "1,000", 251.902 → "251.902". */
+/** A number of millions of years as written in the data: 1000 → "1 000", 251.902 → "251.902". */
 export const maText = (ma) => (Number.isInteger(ma) ? fmtN(ma) : String(+ma));

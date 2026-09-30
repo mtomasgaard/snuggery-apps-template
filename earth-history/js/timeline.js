@@ -143,7 +143,7 @@ export function createTimeline(els, manifest, ts, h) {
   function rollTo(i, on) {
     const ageMa = manifest.slices[i].age_ma;
     roll.target = ageMa;
-    // Only a count between two ages in millions of years rolls; today and 21,000 years land at once.
+    // Only a count between two ages in millions of years rolls; today and 21 000 years land at once.
     if (!on || roll.v == null || ageMa < 0.1 || roll.v < 0.1 || reducedMotion()) { rollFinish(); return; }
     // The count never strays further than the map next to this one: it always sits between this
     // map's age and its neighbour's on the side it is counting from, however slow the frames are.

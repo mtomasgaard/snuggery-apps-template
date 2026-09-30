@@ -69,7 +69,7 @@ export function createAbout(els, about, story, version, h) {
     unitsGroup = el('div', 'units-switch big');
     unitsGroup.setAttribute('role', 'radiogroup');
     unitsGroup.setAttribute('aria-label', 'Units');
-    for (const [sys, text] of [['us', 'US (°F, ft, mi, in)'], ['metric', 'Metric (°C, m, km, mm)']]) {
+    for (const [sys, text] of [['metric', 'Metric (°C, m, km, mm)'], ['us', 'US (°F, ft, mi, in)']]) {
       const b = el('button', null, text);
       b.type = 'button'; b.dataset.sys = sys;
       b.setAttribute('role', 'radio');

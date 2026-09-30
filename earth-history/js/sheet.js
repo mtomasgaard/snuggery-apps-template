@@ -249,7 +249,7 @@ export function createSheet(els, D, h) {
     const g = el('div', 'units-switch');
     g.setAttribute('role', 'radiogroup');
     g.setAttribute('aria-label', 'Units');
-    for (const [sys, text] of [['us', 'US'], ['metric', 'Metric']]) {
+    for (const [sys, text] of [['metric', 'Metric'], ['us', 'US']]) {
       const b = el('button', null, text);
       b.type = 'button';
       b.setAttribute('role', 'radio');

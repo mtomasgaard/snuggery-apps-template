@@ -48,7 +48,7 @@ It is static: nothing refreshes, nothing is fetched from outside the app's own f
 - **Licenses.** Every source is CC BY 4.0 or public domain (`tools/RESEARCH.md` §2). The attribution
   each license asks for is in `CREDITS.txt` and in `data/about.json`, which the About panel renders.
   License URIs are printed as text, never as links.
-- **Language.** User-facing text is English for a US audience, in US spelling, US units by default
+- **Language.** User-facing text is English for a US audience, in US spelling, SI units by default (°C, m, km, mm; thousands grouped with a narrow no-break space), US units one tap away
   with metric one tap away. No text names any AI vendor or product.
 - **Targets.** 390 × 844 CSS px portrait, DPR 2–3, iOS 18 WKWebView; ZIP about 7 MB (hard cap 8 MB,
   §10).

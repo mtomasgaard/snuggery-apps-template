@@ -67,7 +67,7 @@ export function legendGradient(lens) {
  * Legend ticks in the current units: [{ pos, text }], the unit set on the last number ("100 °F",
  * "200 in"); the caption says "a year" for rain. Temperature: °F or °C; rain: yearly totals (the
  * rate × 365.25 days, as the readout gives them). The lists are chosen so no two labels meet on
- * the 184 px bar (rain's 100 in / 2,000 mm sat 26 px from its neighbour and collided; 70 °F sat
+ * the 184 px bar (rain's 100 in / 2 000 mm sat 26 px from its neighbour and collided; 70 °F sat
  * 6 px from "100 °F", so the US scale marks 60 °F); app.js
  * also measures them and nudges any that still would.
  */

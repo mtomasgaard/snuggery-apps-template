@@ -20,9 +20,9 @@ LIMITS = {
 AGE_RANGE_MA = (0.0, 750.0)
 BOUNDARY_TOLERANCE_MA = 0.05          # CONTRACT §10: when the unit's begin_unc_ma is null
 
-# Numerals as written: 716.5, 26,500, 0.07, 2.8. ASCII digits only, so a superscript (km²) or a
+# Numerals as written: 716.5, 26 500 (SI grouping with a narrow no-break space; a comma is also read), 0.07, 2.8. ASCII digits only, so a superscript (km²) or a
 # subscript (CO₂) is never read as a number; not preceded by a letter or digit (so e.g. 'M5' is not).
-NUM_RE = re.compile(r'(?<![0-9A-Za-z])[0-9](?:[0-9]|,(?=[0-9]{3}))*(?:\.[0-9]+)?')
+NUM_RE = re.compile(r'(?<![0-9A-Za-z])[0-9](?:[0-9]|[,\u202f\u2009](?=[0-9]{3}))*(?:\.[0-9]+)?')
 
 # AI vendors and products that must never appear in anything the app shows (CONTRACT §0).
 AI_NAMES = re.compile(
@@ -54,7 +54,7 @@ def decimals(tok):
 
 
 def num_value(tok):
-    return float(tok.replace(',', ''))
+    return float(tok.replace(',', '').replace('\u202f', '').replace('\u2009', ''))
 
 
 def unit_contains(u, a):
