@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T03:01:21Z",
+ "generatedAt": "2026-09-30T04:01:11Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/09/30/who-can-speak-on-behalf-of-the-people-the-new-frontiers-of-protest-in-the-sahel/",
+     "published": "2026-09-30T03:37:48Z",
+     "summary": "In central Sahel's countries military juntas claim to restore popular sovereignty. Political parties are dissolved in all three countries, over a thousand civil society organizations have been suspended.",
+     "stale": false,
+     "author": "Jean Sovon"
+    },
+    {
      "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
      "source": "UN News",
      "feed": "un-africa",
@@ -242,16 +252,6 @@
      "summary": "The protests strengthened the political consciousness of some young Nigerians and encouraged greater participation in elections, governance and activism. For others, the experience produced fear, distrust and…",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "How Togolese people are reinventing political protest amid civil society crackdown",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/09/18/how-togolese-people-are-reinventing-political-protest-amid-civil-society-crackdown/",
-     "published": "2026-09-18T20:34:50Z",
-     "summary": "As in-person gatherings have become difficult to organize or too risky for citizens, online protest has become an increasingly common form of political dissent in Togo.",
-     "stale": false,
-     "author": "Jean Sovon"
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
+   "published": "2026-09-30 03:37 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
    "published": "2026-09-29 12:00 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
    "published": "2026-09-27 08:20 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "How Togolese people are reinventing political protest amid civil society crackdown",
-   "published": "2026-09-18 20:34 UTC"
   },
   {
    "region": "Middle East",
