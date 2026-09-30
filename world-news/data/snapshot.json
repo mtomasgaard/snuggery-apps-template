@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T12:01:16Z",
+ "generatedAt": "2026-09-30T13:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "The ‘War Games’ problem: Computer science has long understood what it takes to keep AI under control",
+     "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/the-war-games-problem-computer-science-has-long-understood-what-it-takes-to-keep-ai-under-control-292884",
-     "published": "2026-09-29T21:11:58Z",
+     "link": "https://theconversation.com/as-ai-political-deepfakes-go-viral-lawmakers-struggle-to-keep-up-2-states-laws-show-limits-of-what-they-can-do-292107",
+     "published": "2026-09-30T12:44:44Z",
      "summary": "",
      "stale": false,
-     "author": "Deven Desai, Professor of Business Law and Ethics; Associate Director for Law, Policy, and Ethics at the Machine Learning Center, Georgia Institute of…"
+     "author": "Stefani Langehennig, Assistant Professor of Practice, University of Denver"
     },
     {
-     "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
+     "title": "Why the nor'easter’s storm surge was so high, and what it says about the El Niño winter ahead",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/starships-first-orbital-flight-put-its-heat-shield-to-the-test-how-it-fares-could-determine-if-spacexs-vision-is-possible-292960",
-     "published": "2026-09-29T20:20:06Z",
+     "link": "https://theconversation.com/why-the-noreasters-storm-surge-was-so-high-and-what-it-says-about-the-el-nino-winter-ahead-293082",
+     "published": "2026-09-30T12:44:28Z",
      "summary": "",
      "stale": false,
-     "author": "Sven Bilén, Professor of Engineering Design, Electrical Engineering and Aerospace Engineering, Penn State"
+     "author": "Brian Tang, Professor of Atmospheric Science, University at Albany, State University of New York"
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "The ‘War Games’ problem: Computer science has long understood what it takes to keep AI under control",
-   "published": "2026-09-29 21:11 UTC"
+   "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
+   "published": "2026-09-30 12:44 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Starship’s first orbital flight put its heat shield to the test – how it fares could determine if SpaceX’s vision is possible",
-   "published": "2026-09-29 20:20 UTC"
+   "title": "Why the nor'easter’s storm surge was so high, and what it says about the El Niño winter ahead",
+   "published": "2026-09-30 12:44 UTC"
   },
   {
    "region": "Americas",
