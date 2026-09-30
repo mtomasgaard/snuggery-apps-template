@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T15:01:22Z",
+ "generatedAt": "2026-09-30T16:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -261,7 +261,7 @@
    "stale": false,
    "items": [
     {
-     "title": "Lebanon: one in five children goes to bed hungry, says UNICEF",
+     "title": "Lebanon: One in five children goes to bed hungry, says UNICEF",
      "source": "UN News",
      "feed": "un-middle-east",
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168490",
@@ -349,7 +349,7 @@
      "feed": "un-asia-pacific",
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168491",
      "published": "2026-09-30T12:00:00Z",
-     "summary": "The UN refugee agency, UNHCHR, has voiced concern over Malaysia’s decision to return 1,476 people to Myanmar amid an ongoing civil war and a dire human rights and humanitarian situation.",
+     "summary": "The UN refugee agency, UNHCR, has voiced concern over Malaysia’s decision to return 1,476 people to Myanmar amid an ongoing civil war and a dire human rights and humanitarian situation.",
      "stale": false
     },
     {
@@ -817,7 +817,7 @@
   {
    "region": "Middle East",
    "source": "UN News",
-   "title": "Lebanon: one in five children goes to bed hungry, says UNICEF",
+   "title": "Lebanon: One in five children goes to bed hungry, says UNICEF",
    "published": "2026-09-30 12:00 UTC"
   },
   {
