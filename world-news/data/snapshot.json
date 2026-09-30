@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T21:01:24Z",
+ "generatedAt": "2026-09-30T22:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168496",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "UN teams are racing to protect families in Gaza from the coming rainy season, but restricted access to land and shortages of critical supplies are hampering the effort, UN Spokesperson Stéphane Dujarric said on…",
+     "stale": false
+    },
+    {
      "title": "Lebanon: One in five children goes to bed hungry, says UNICEF",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168464",
      "published": "2026-09-28T12:00:00Z",
      "summary": "The Security Council met Monday morning with prospects for peace in the Middle East under strain on two fronts. In the West Bank, settler violence and settlement expansion are raising fears for a two-State solution. In…",
-     "stale": false
-    },
-    {
-     "title": "Saudi Arabia warns Gulf security inseparable from global stability amid regional tensions",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168459",
-     "published": "2026-09-26T12:00:00Z",
-     "summary": "Saudi Arabia’s Foreign Minister warned on Saturday that escalating threats across the Middle East risked international peace, energy security and global trade, calling for stronger international cooperation to protect…",
      "stale": false
     },
     {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Lebanon: One in five children goes to bed hungry, says UNICEF",
    "published": "2026-09-30 12:00 UTC"
   },
@@ -843,12 +849,6 @@
    "source": "UN News",
    "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
    "published": "2026-09-28 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Saudi Arabia warns Gulf security inseparable from global stability amid regional tensions",
-   "published": "2026-09-26 12:00 UTC"
   },
   {
    "region": "Middle East",
