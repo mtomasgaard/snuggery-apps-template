@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-29T23:01:20Z",
+ "generatedAt": "2026-09-30T00:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Tragedy stopped Mawson exploring this remote Antarctic region. We must get there to study its melting ice",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/tragedy-stopped-mawson-exploring-this-remote-antarctic-region-we-must-get-there-to-study-its-melting-ice-291165",
+     "published": "2026-09-29T23:00:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matt King, Professor of Polar Geodesy and ARC Laureate Fellow, University of Tasmania"
+    },
+    {
      "title": "Government takes early action to protect ‘legacy’ technology systems against AI breaches",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Catherine Campbell, Lecturer, Performing Arts, Adelaide University"
-    },
-    {
-     "title": "Here are five of Australia’s top library influencers. One is a 72-year-old rare books librarian",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/here-are-five-of-australias-top-library-influencers-one-is-a-72-year-old-rare-books-librarian-291875",
-     "published": "2026-09-29T19:53:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Krystal Gagen-Spriggs, Lecturer, Charles Sturt University"
     },
     {
      "title": "Low productivity is NZ’s economic elephant in the room. Election pledges mostly avoid it",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Tragedy stopped Mawson exploring this remote Antarctic region. We must get there to study its melting ice",
+   "published": "2026-09-29 23:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Government takes early action to protect ‘legacy’ technology systems against AI breaches",
    "published": "2026-09-29 21:12 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Stage manager is arguably the most stressful job in live performance. Here’s why",
-   "published": "2026-09-29 19:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Here are five of Australia’s top library influencers. One is a 72-year-old rare books librarian",
    "published": "2026-09-29 19:53 UTC"
   },
   {
