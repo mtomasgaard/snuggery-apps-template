@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-09-30T13:01:31Z",
+ "generatedAt": "2026-09-30T14:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/antarcticas-ice-loss-is-locked-in-and-extra-snowfall-wont-save-it-thats-bad-news-for-low-lying-coastal-areas-elsewhere-293066",
+     "published": "2026-09-30T12:47:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Yucheng Lin, Assistant Professor of Energy and Environment, City University of Hong Kong"
+    },
+    {
      "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Stefani Langehennig, Assistant Professor of Practice, University of Denver"
-    },
-    {
-     "title": "Why the nor'easter’s storm surge was so high, and what it says about the El Niño winter ahead",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-the-noreasters-storm-surge-was-so-high-and-what-it-says-about-the-el-nino-winter-ahead-293082",
-     "published": "2026-09-30T12:44:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Brian Tang, Professor of Atmospheric Science, University at Albany, State University of New York"
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-public-service-new-laws-aim-to-put-competent-people-in-charge-and-hold-them-to-account-292376",
+     "published": "2026-09-30T13:26:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Busani Ngcaweni, Director: Center for Public Policy and African Studies, University of Johannesburg"
+    },
+    {
+     "title": "Nigeria’s school kidnapping threat is changing: 4 lessons from the 56-day Oyo attack",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/nigerias-school-kidnapping-threat-is-changing-4-lessons-from-the-56-day-oyo-attack-289363",
+     "published": "2026-09-30T13:25:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Saheed Babajide Owonikoko, Researcher, Centre for Peace and Security Studies, Modibbo Adama University of Technology"
+    },
+    {
      "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -203,26 +223,6 @@
      "published": "2026-09-29T12:00:00Z",
      "summary": "In the Democratic Republic of the Congo (DRC), health workers fighting the country’s largest-ever Ebola outbreak are struggling to overcome critical challenges to patient care, the UN World Health Organization (WHO)…",
      "stale": false
-    },
-    {
-     "title": "Certification des minerais dans la région des Grands Lacs : remède ou placebo ?",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/certification-des-minerais-dans-la-region-des-grands-lacs-remede-ou-placebo-292470",
-     "published": "2026-09-29T09:48:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Thierry Vircoulon, Chercheur associé au Centre Afrique de l'Institut Français des Relations Internationales, membre du Groupe de Recherche sur l'Eugénisme et…"
-    },
-    {
-     "title": "Ethiopia’s peace deal is unravelling – what went wrong with the Tigray agreement",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/ethiopias-peace-deal-is-unravelling-what-went-wrong-with-the-tigray-agreement-293005",
-     "published": "2026-09-29T08:37:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alemayehu Fentaw Weldemariam, Ph.D. Fellow, Center for Constitutional Democracy, Indiana University"
     },
     {
      "title": "When telcos shut down the internet, they shut down protests for the government",
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Lebanon: one in five children goes to bed hungry, says UNICEF",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168490",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "Four in five households in Lebanon struggle to afford basic necessities today, with children increasingly going without food, missing school and being pushed into work as conflict compounds years of economic crisis. \"I…",
+     "stale": false
+    },
     {
      "title": "Yemen escalation fuels fears of further cholera, measles spread",
      "source": "UN News",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168459",
      "published": "2026-09-26T12:00:00Z",
      "summary": "Saudi Arabia’s Foreign Minister warned on Saturday that escalating threats across the Middle East risked international peace, energy security and global trade, calling for stronger international cooperation to protect…",
-     "stale": false
-    },
-    {
-     "title": "‘No one speaks on behalf of Lebanon’: PM Salam asserts State authority at UN",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168444",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Lebanon’s Prime Minister, Nawaf Salam, has stressed that decisions over war and peace, and control of weapons, must rest solely with the State and its constitutional institutions.",
      "stale": false
     },
     {
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
-   "published": "2026-09-30 12:44 UTC"
+   "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
+   "published": "2026-09-30 12:47 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why the nor'easter’s storm surge was so high, and what it says about the El Niño winter ahead",
+   "title": "As AI political deepfakes go viral, lawmakers struggle to keep up – 2 states’ laws show limits of what they can do",
    "published": "2026-09-30 12:44 UTC"
   },
   {
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
+   "published": "2026-09-30 13:26 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Nigeria’s school kidnapping threat is changing: 4 lessons from the 56-day Oyo attack",
+   "published": "2026-09-30 13:25 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
    "published": "2026-09-30 03:37 UTC"
@@ -786,18 +798,6 @@
   },
   {
    "region": "Africa",
-   "source": "The Conversation",
-   "title": "Certification des minerais dans la région des Grands Lacs : remède ou placebo ?",
-   "published": "2026-09-29 09:48 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Ethiopia’s peace deal is unravelling – what went wrong with the Tigray agreement",
-   "published": "2026-09-29 08:37 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "When telcos shut down the internet, they shut down protests for the government",
    "published": "2026-09-28 18:11 UTC"
@@ -813,6 +813,12 @@
    "source": "Global Voices",
    "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
    "published": "2026-09-27 08:20 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Lebanon: one in five children goes to bed hungry, says UNICEF",
+   "published": "2026-09-30 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -843,12 +849,6 @@
    "source": "UN News",
    "title": "Saudi Arabia warns Gulf security inseparable from global stability amid regional tensions",
    "published": "2026-09-26 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "‘No one speaks on behalf of Lebanon’: PM Salam asserts State authority at UN",
-   "published": "2026-09-25 12:00 UTC"
   },
   {
    "region": "Middle East",
