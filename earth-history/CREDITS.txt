@@ -1,0 +1,352 @@
+Earth’s History — credits and licenses
+
+Every dataset below was downloaded by the pipeline in tools/ from a pinned source and checked
+against its sha256; the retrieval date is 2026-09-30. Licenses are quoted from the files and record
+pages kept in tools/credits/. The maps, plate model and elevation grids are C. R. Scotese’s; the
+climate fields are a climate model’s; every change this app made is listed under Adaptations.
+Nothing is fetched at run time.
+
+
+PALEOMAP PALEOATLAS FOR GPLATES V3: PALEOGEOGRAPHIC MAPS AND PLATE MODEL
+Owner: C. R. Scotese, PALEOMAP Project
+Source: Scotese_PaleoAtlas_v3.zip (sha256
+7bf15709970645465df17542e20f9e2e9ed01d20797f38513ed83621e4ace2a0), Zenodo record 5460860
+(doi:10.5281/zenodo.5460860): the 90 JPEG maps in "PALEOMAP PaleoAtlas Rasters v3", each 3600 x 1800
+px, equirectangular; ages from Table 1 of the PDF in the same zip. Scotese_PaleoAtlas_v3.zip (sha256
+7bf15709970645465df17542e20f9e2e9ed01d20797f38513ed83621e4ace2a0): "PALEOMAP_PlateModel.rot" (sha256
+d56846bb3c6260805d088171066bc18e9d54e831892b660fd31315260e288022; PALEOMAP Plate Model m15g60_v2d3
+(Scotese 2016)) and "PALEOMAP_PlatePolygons.gpml" (sha256
+4925c064a415cfa6e7fd3f5e0682585baa9908f01bee9e053ca5dea0b0dc57ca), read with pygplates 1.0.0.
+URL: https://zenodo.org/api/records/5460860/files/Scotese_PaleoAtlas_v3.zip/content
+License: CC BY 4.0
+License URI: http://creativecommons.org/licenses/by/4.0/
+License text: This work is licensed under the Creative Commons Attribution 4.0 International
+License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a
+letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+Retrieved: 2026-09-30
+Adaptations: Maps: resized from 3600 x 1800 to 1024 x 512 (Lanczos) and re-encoded as WebP quality
+65; a 256 x 128 preview of each, combined into one sheet at quality 70. No colors or content
+changed. Plate model: the 503 polygon outlines stored at their 0 Ma positions with coordinates
+rounded to 16 bits; the rotation of each of the 241 plates at each map's time and one million years
+earlier, as 16-bit quaternions; the 2 line features in the polygon file left out.
+Accuracy: A painted reconstruction by one author: one interpretation among several. Map ages are
+Scotese's Table 1 ages on the 2008 timescale his atlas uses. Rotations reproduce pygplates within
+0.36 km after 16-bit rounding. Rotations are one model's reconstruction; beyond each plate's last
+pole the rotation file holds the pole constant.
+Cite: Scotese, C.R., 2016. PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program,
+PALEOMAP Project. Via Scotese, C.R. & Wright, N.M., 2018, Zenodo, doi:10.5281/zenodo.5460860.
+Attribution: PALEOMAP PaleoAtlas for GPlates v3: paleogeographic maps and plate model, by C. R.
+Scotese, PALEOMAP Project. Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+This app resized and recompressed the maps; rotated outlines, coastlines, cities and pins with the
+plate model, rounded to 16 bits.
+
+PALEOMAP PALEODIGITAL ELEVATION MODELS (PALEODEMS), 1 DEGREE
+Owner: C. R. Scotese & N. M. Wright, PALEOMAP Project
+Source: Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip (sha256
+7014767a168c28d3762f55117ebafcd0f6b6b90029a495e2d14fd23f94abc16d), Zenodo record 5460860: the 109
+NetCDF grids, keyed by the Plate Model Age in the zip's interval CSV. The accompanying report
+Scotese_Wright2018_PALEOMAP_PaleoDEMs.pdf (sha256
+8a5fca14f9860d148427a56cec241b4fc5b4108ff91bb867e8b68bde1392edac, same record) was read for the
+method and for its statement that the grids are a "first draft" (p. 7); nothing of it ships.
+URL:
+https://zenodo.org/api/records/5460860/files/Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip/content
+; https://zenodo.org/api/records/5460860/files/Scotese_Wright2018_PALEOMAP_PaleoDEMs.pdf/content
+License: CC BY 4.0
+License URI: http://creativecommons.org/licenses/by/4.0/
+License text: This work is licensed under the Creative Commons Attribution 4.0 International
+License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a
+letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+Retrieved: 2026-09-30
+Adaptations: Elevation classes: Every second node of each 1-degree grid (a 2-degree grid) sorted
+into the ten elevation classes of Scotese's Table 2 (after Ziegler et al. 1985) and stored as one
+byte per node; the elevations themselves are not shipped. Land and shallow-sea area: Land (above 0
+m) and shallow sea (0 to 200 m deep) as shares of the globe, weighted by the cosine of latitude, one
+value per grid.
+Accuracy: The readout names the class of the nearest 2-degree node, which can be up to about 1.4
+degrees of arc from the point tapped. The authors call these elevation models a first draft.
+Cite: Scotese, C.R. & Wright, N.M., 2018. PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the
+Phanerozoic. Zenodo, doi:10.5281/zenodo.5460860. CC BY 4.0. Classes from Table 2 of Scotese, C.R.,
+2016, PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program, PALEOMAP Project.
+Attribution: PALEOMAP Paleodigital Elevation Models (PaleoDEMs), 1 degree, by C. R. Scotese & N. M.
+Wright, PALEOMAP Project. Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+This app computed land and shallow-sea shares from the elevation grids and sorted every second grid
+point into Scotese’s elevation classes.
+
+PHANDA HADCM3L MODEL PRIORS, SUITE SCOTESE_07
+Owner: E. J. Judd, J. E. Tierney, D. J. Lunt, I. P. Montanez, B. T. Huber, S. L. Wing & P. J.
+Valdes; simulations by the BRIDGE group, University of Bristol
+Source: ExperimentInfo.xlsx (sha256
+21866d6c30f930796cc3ee5ab25891847436859548d05865c037f521c8dd0f51), scotese_07_tas.zip (sha256
+f28c137c47dac9bdff4315947453c89c96bd2df709c2607f806a2524e0a15983) and scotese_07_pr.zip (sha256
+63fe79de34814b0a73697be6ab2d861560182e9b936d0d04ac274c6ae163980f), Zenodo record 8237751
+(doi:10.5281/zenodo.8237751): the fields temp_mm_1_5m and precip_mm_srf of experiments 1-109, five
+20-year monthly climatologies each. ExperimentInfo.xlsx (sha256
+21866d6c30f930796cc3ee5ab25891847436859548d05865c037f521c8dd0f51): columns P-Q (scotese_07 PUMA ID
+and CO2); global means from data/climate.json.
+URL: https://zenodo.org/records/8237751
+License: CC BY 4.0
+License URI: http://creativecommons.org/licenses/by/4.0/
+License text: Zenodo record 8237751: license cc-by-4.0 (Creative Commons Attribution 4.0
+International).
+Retrieved: 2026-09-30
+Adaptations: Climate fields: Averaged over the 12 months and the five 20-year means into annual
+means; temperature converted from kelvin to degrees Celsius and precipitation from kg m-2 s-1 to
+mm/day; each value rounded to one byte (temperature in steps of 0.5 C, rain on a square-root scale);
+area-weighted global means computed. Curves: Global mean temperature and the CO2 input interpolated
+linearly between the 5-million-year runs.
+Accuracy: A climate model, not measurements: one HadCM3L run per 5 million years on Scotese's
+reconstructed geography, forced with a CO2 history. Byte rounding changes values by at most 0.25 C
+and 0.060 mm/day. Model output and a model input, not measurements.
+Cite: Judd, E.J., Tierney, J.E., Lunt, D.J., Montanez, I.P., Huber, B.T., Wing, S.L. & Valdes, P.J.,
+2023. PhanDA HadCM3L Model Priors (suite scotese_07). Zenodo, doi:10.5281/zenodo.8237751. CC BY 4.0.
+Simulations by the BRIDGE group, University of Bristol. The simulations are described in Valdes,
+P.J., Scotese, C.R. & Lunt, D.J., 2021. Deep ocean temperatures through time. Climate of the Past
+17, 1483-1506, doi:10.5194/cp-17-1483-2021 (title, authors and pages from Crossref).
+Attribution: PhanDA HadCM3L model priors, suite scotese_07, by E. J. Judd, J. E. Tierney, D. J.
+Lunt, I. P. Montanez, B. T. Huber, S. L. Wing & P. J. Valdes; simulations by the BRIDGE group,
+University of Bristol. Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/). This
+app averaged the model output into annual means, converted units and rounded each value to one byte.
+
+CO2 OVER THE LAST 420 MILLION YEARS (LOESS FIT)
+Owner: G. L. Foster, D. L. Royer & D. J. Lunt
+Source: foster2017_supplementary_data_2.xlsx (sha256
+84df255974cb77c95d298d324fb281fe2ac40a0696ea92598985816e7095c74c): Supplementary Data 2, sheet
+"LOESS Fit", 840 rows, 0.0039-419.5039 Ma every 0.5 Myr.
+URL:
+https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fncomms14845/MediaObjects/41467_2017_BFncomms14845_MOESM2875_ESM.xlsx
+License: CC BY 4.0
+License URI: http://creativecommons.org/licenses/by/4.0/
+License text: "This work is licensed under a Creative Commons Attribution 4.0 International
+License." (Nature Communications article page, Rights and permissions)
+Retrieved: 2026-09-30
+Adaptations: Resampled by linear interpolation to whole millions of years; the lower edge of the 68
+% band clipped at 0 ppm (0 rows needed it); the 95 % band left out because its lower edge is
+negative in 124 rows (247.004-419.504 Ma).
+Accuracy: A statistical fit through proxy measurements; the 68 % band is its stated uncertainty.
+Coverage ends at 419.5 million years ago.
+Cite: Foster, G.L., Royer, D.L. & Lunt, D.J., 2017. Future climate forcing potentially without
+precedent in the last 420 million years. Nature Communications 8, 14845, doi:10.1038/ncomms14845.
+Supplementary Data 2 (LOESS fit). CC BY 4.0.
+Attribution: CO2 over the last 420 million years (LOESS fit), by G. L. Foster, D. L. Royer & D. J.
+Lunt. © The Author(s) 2017. Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+This app resampled the fit to whole millions of years and left out the 95% band.
+
+PHANEROZOIC GLOBAL MEAN SEA LEVEL
+Owner: D. G. van der Meer, C. R. Scotese, B. J. W. Mills, A. Sluijs, A.-P. van den Berg van Saparoea
+& R. M. B. van de Weg
+Source: vandermeer2022_mmc1.xlsx (sha256
+800b34928378ae902426fc16ef002debfc064465f8ac663cbeeb7bd0c77c074f): sheet "SuppTable", column group
+Fig10, TGE_SL_isocorr_m AVG / MIN / MAX, 0-540 Ma every 1 Myr.
+URL: https://ars.els-cdn.com/content/image/1-s2.0-S1342937X22002192-mmc1.xlsx
+License: CC BY 4.0
+License URI: http://creativecommons.org/licenses/by/4.0/
+License text: "This is an open access article under the CC BY license." (the article's license
+statement; the supplement carries none of its own, and Elsevier gives an open access article's
+supplementary files the article's license)
+Retrieved: 2026-09-30
+Adaptations: Values used as published, rounded to the millimeter; interpolated to map ages.
+Accuracy: A reconstruction from strontium isotope variations and estimates of continental glaciation
+(the paper's title). MIN and MAX are the supplement's columns as labeled; they are not ordered at
+[1] Ma, and AVG lies outside them at [1, 2, 3, 444, 445] Ma.
+Cite: van der Meer, D.G., Scotese, C.R., Mills, B.J.W., Sluijs, A., van den Berg van Saparoea, A.-P.
+& van de Weg, R.M.B., 2022. Long-term Phanerozoic global mean sea level: Insights from strontium
+isotope variations and estimates of continental glaciation. Gondwana Research 111, 103-121,
+doi:10.1016/j.gr.2022.07.014. Supplementary table (mmc1). CC BY 4.0.
+Attribution: Phanerozoic global mean sea level, by D. G. van der Meer, C. R. Scotese, B. J. W.
+Mills, A. Sluijs, A.-P. van den Berg van Saparoea & R. M. B. van de Weg. © 2022 The Authors,
+published by Elsevier B.V. on behalf of the International Association for Gondwana Research.
+Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/). This app rounded the
+published values to the millimeter and interpolated them to the map ages.
+
+INTERNATIONAL CHRONOSTRATIGRAPHIC CHART (DATA)
+Owner: International Commission on Stratigraphy
+Source: ics_chart.ttl (sha256 8548707d66c383460b3bddc20afb7070cb5f3ea187ea1262418dc3a6f2d6e9f7),
+chart.ttl at commit 81618a865cdb04998355a302f3e859908a080c0e of github.com/i-c-stratigraphy/chart
+(chart version 2026-06).
+URL:
+https://raw.githubusercontent.com/i-c-stratigraphy/chart/81618a865cdb04998355a302f3e859908a080c0e/chart.ttl
+License: CC BY 4.0
+License URI: https://creativecommons.org/licenses/by/4.0/
+License text: "This data is copyrighted as follows: (c) International Commission on Stratigraphy,
+2026. This data is licensed for use with the Creative Commons Attribution 4.0 license." (the
+repository's README.adoc)
+Retrieved: 2026-09-30
+Adaptations: The eons, eras, periods, sub-periods, epochs and ages ending less than 1000 million
+years ago: English names (or the identifier split into words where the data has no English name),
+begin and end ages with their uncertainties, colors and parents. No chart image is used.
+Accuracy: Ages and uncertainties as the chart data gives them.
+Cite: International Chronostratigraphic Chart data, (c) International Commission on Stratigraphy,
+2026, CC BY 4.0 (github.com/i-c-stratigraphy/chart at 81618a865cdb). Cite: Cohen K, Harper D,
+Gibbard P, Car N. The ICS international chronostratigraphic chart this decade. Episodes
+2025;48:105-115. doi:10.18814/epiiugs/2025/025001.
+Attribution: International Chronostratigraphic Chart data, © International Commission on
+Stratigraphy, 2026, licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). This
+app used the names, ages and colors of the units younger than 1,000 million years.
+
+NATURAL EARTH 1:50M COASTLINE AND POPULATED PLACES
+Owner: Natural Earth (naturalearthdata.com)
+Source: ne_50m_coastline.geojson (sha256
+271f1c4c1908312bac6b29d158ea1356544beafc129f260005300913aa5ea283),
+ne_50m_populated_places_simple.geojson (sha256
+8e70756b39fae9bcdc1e332bfc510c024c5edd3a13203ffd20092ee37b61d978) and ne_50m_land.geojson (sha256
+e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b, build-time checks only), version
+5.1.2, github.com/nvkelso/natural-earth-vector at commit f1890d9f152c.
+URL:
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/f1890d9f152c896d250a77557a5751a93d494776/geojson/ne_50m_coastline.geojson
+License: public domain
+License text: "All versions of Natural Earth raster + vector map data found on this website are in
+the public domain. ... No permission is needed to use Natural Earth. Crediting the authors is
+unnecessary." (Natural Earth LICENSE.md)
+Retrieved: 2026-09-30
+Adaptations: Coastlines split into 2121 pieces where they cross a plate outline and given the plate
+they lie on; coordinates rounded to 16 bits. The first 300 populated places by scalerank and
+population, names with runs of spaces collapsed, each given the plate it lies on.
+Accuracy: Made with Natural Earth. Today's coastlines at 1:50 million scale.
+Cite: Made with Natural Earth.
+Attribution: Made with Natural Earth. Public domain.
+
+THE SUN'S BRIGHTNESS IN THE PAST (A PUBLISHED FORMULA)
+Owner: D. O. Gough
+Source: Equation (1), p. 28: L(t) = [1 + 2/5 (1 - t/t_sun)]^-1 L_sun for t <= t_sun, with the
+Main-Sequence age t_sun "about 4.7 x 10^9 yr" (p. 23). Read from the NASA ADS scan
+https://articles.adsabs.harvard.edu/pdf/1981SoPh...74...21G (publisher copyright; the formula is
+used, no text or figure is copied).
+URL: https://articles.adsabs.harvard.edu/pdf/1981SoPh...74...21G
+License: publisher copyright; the formula is used, no text or figure is copied
+Retrieved: 2026-09-30
+Adaptations: The app evaluates equation (1) with the Sun's main-sequence age of 4.7 billion years at
+each map's age; nothing is stored.
+Accuracy: A model of the Sun's slow brightening, not a measurement.
+Cite: Gough, D.O., 1981. Solar interior structure and luminosity variations. Solar Physics 74,
+21-34, doi:10.1007/BF00151270.
+Attribution: Formula from Gough, D.O., 1981. Solar interior structure and luminosity variations.
+Solar Physics 74, 21-34, doi:10.1007/BF00151270.
+
+
+REFERENCES FOR THE TEXT
+The period cards, events and pins were written for this app. They quote no text from these works;
+each number in them is mapped to one of them in data/story.json. Citations were checked against
+Crossref.
+
+Blackburn, T.J., Olsen, P.E., Bowring, S.A. et al. (2013). Zircon U-Pb Geochronology Links the
+End-Triassic Extinction with the Central Atlantic Magmatic Province. Science 340, 941–945.
+doi:10.1126/science.1234204
+Bond, D.P.G. & Grasby, S.E. (2017). On the causes of mass extinctions. Palaeogeography,
+Palaeoclimatology, Palaeoecology 478, 3–29. doi:10.1016/j.palaeo.2016.11.005
+Bond, D.P.G. & Wignall, P.B. (2008). The role of sea-level change and marine anoxia in the
+Frasnian–Famennian (Late Devonian) mass extinction. Palaeogeography, Palaeoclimatology,
+Palaeoecology 263, 107–118. doi:10.1016/j.palaeo.2008.02.015
+Burgess, S.D., Bowring, S. & Shen, S.-Z. (2014). High-precision timeline for Earth’s most severe
+extinction. Proceedings of the National Academy of Sciences 111, 3316–3321.
+doi:10.1073/pnas.1317692111
+Burgess, S.D. & Bowring, S.A. (2015). High-precision geochronology confirms voluminous magmatism
+before, during, and after Earth’s most severe extinction. Science Advances 1, e1500470.
+doi:10.1126/sciadv.1500470
+Clark, P.U., Dyke, A.S., Shakun, J.D. et al. (2009). The Last Glacial Maximum. Science 325, 710–714.
+doi:10.1126/science.1172873
+Cleal, C.J. & Thomas, B.A. (2005). Palaeozoic tropical rainforests and their effect on global
+climates: is the past the key to the present? Geobiology 3, 13–31.
+doi:10.1111/j.1472-4669.2005.00043.x
+Coxall, H.K., Wilson, P.A., Pälike, H., Lear, C.H. & Backman, J. (2005). Rapid stepwise onset of
+Antarctic glaciation and deeper calcite compensation in the Pacific Ocean. Nature 433, 53–57.
+doi:10.1038/nature03135
+Daeschler, E.B., Shubin, N.H. & Jenkins, F.A. (2006). A Devonian tetrapod-like fish and the
+evolution of the tetrapod body plan. Nature 440, 757–763. doi:10.1038/nature04639
+Dalrymple, G.B. (2001). The age of the Earth in the twentieth century: a problem (mostly) solved.
+Geological Society, London, Special Publications 190, 205–221. doi:10.1144/GSL.SP.2001.190.01.14
+Erwin, D.H., Laflamme, M., Tweedt, S.M., Sperling, E.A., Pisani, D. & Peterson, K.J. (2011). The
+Cambrian Conundrum: Early Divergence and Later Ecological Success in the Early History of Animals.
+Science 334, 1091–1097. doi:10.1126/science.1206375
+Gumsley, A.P., Chamberlain, K.R., Bleeker, W. et al. (2017). Timing and tempo of the Great Oxidation
+Event. Proceedings of the National Academy of Sciences 114, 1811–1816. doi:10.1073/pnas.1608824114
+Harper, D.A.T., Hammarlund, E.U. & Rasmussen, C.M.Ø. (2014). End Ordovician extinctions: A
+coincidence of causes. Gondwana Research 25, 1294–1307. doi:10.1016/j.gr.2012.12.021
+Hatcher, R.D. (2010). The Appalachian orogen: A brief summary. In: From Rodinia to Pangea: The
+Lithotectonic Record of the Appalachian Region. Geological Society of America (ISBN 9780813712062).
+doi:10.1130/2010.1206(01)
+Hildebrand, A.R., Penfield, G.T., Kring, D.A. et al. (1991). Chicxulub Crater: A possible
+Cretaceous/Tertiary boundary impact crater on the Yucatán Peninsula, Mexico. Geology 19, 867–871.
+doi:10.1130/0091-7613(1991)019<0867:CCAPCT>2.3.CO;2
+Hoffman, P.F., Kaufman, A.J., Halverson, G.P. & Schrag, D.P. (1998). A Neoproterozoic Snowball
+Earth. Science 281, 1342–1346. doi:10.1126/science.281.5381.1342
+Hu, X., Garzanti, E., Wang, J., Huang, W., An, W. & Webb, A. (2016). The timing of India-Asia
+collision onset – Facts, theories, controversies. Earth-Science Reviews 160, 264–299.
+doi:10.1016/j.earscirev.2016.07.014
+Linnemann, U., Ovtcharova, M., Schaltegger, U. et al. (2019). New high‐resolution age data from the
+Ediacaran–Cambrian boundary indicate rapid, ecologically driven onset of the Cambrian explosion.
+Terra Nova 31, 49–58. doi:10.1111/ter.12368
+Lucas, S.G. & Luo, Z. (1993). Adelobasileus from the Upper Triassic of West Texas: the oldest
+mammal. Journal of Vertebrate Paleontology 13, 309–334. doi:10.1080/02724634.1993.10011512
+Luo, Z.-X., Crompton, A.W. & Sun, A.-L. (2001). A New Mammaliaform from the Early Jurassic and
+Evolution of Mammalian Characteristics. Science 292, 1535–1540. doi:10.1126/science.1058476
+Luo, Z.-X., Yuan, C.-X., Meng, Q.-J. & Ji, Q. (2011). A Jurassic eutherian mammal and divergence of
+marsupials and placentals. Nature 476, 442–445. doi:10.1038/nature10291
+Macdonald, F.A., Schmitz, M.D., Crowley, J.L. et al. (2010). Calibrating the Cryogenian. Science
+327, 1241–1243. doi:10.1126/science.1183325
+Martinez, R.N., Sereno, P.C., Alcober, O.A. et al. (2011). A Basal Dinosaur from the Dawn of the
+Dinosaur Era in Southwestern Pangaea. Science 331, 206–210. doi:10.1126/science.1198467
+Marzoli, A., Renne, P.R., Piccirillo, E.M., Ernesto, M., Bellieni, G. & De Min, A. (1999). Extensive
+200-Million-Year-Old Continental Flood Basalts of the Central Atlantic Magmatic Province. Science
+284, 616–618. doi:10.1126/science.284.5414.616
+Matthews, J.J., Liu, A.G., Yang, C., McIlroy, D., Levell, B. & Condon, D.J. (2021). A
+Chronostratigraphic Framework for the Rise of the Ediacaran Macrobiota: New Constraints from
+Mistaken Point Ecological Reserve, Newfoundland. GSA Bulletin 133, 612–624. doi:10.1130/b35646.1
+McInerney, F.A. & Wing, S.L. (2011). The Paleocene-Eocene Thermal Maximum: A Perturbation of Carbon
+Cycle, Climate, and Biosphere with Implications for the Future. Annual Review of Earth and Planetary
+Sciences 39, 489–516. doi:10.1146/annurev-earth-040610-133431
+Montañez, I.P., Tabor, N.J., Niemeier, D. et al. (2007). CO2-Forced Climate and Vegetation
+Instability During Late Paleozoic Deglaciation. Science 315, 87–91. doi:10.1126/science.1134207
+Montañez, I.P. & Poulsen, C.J. (2013). The Late Paleozoic Ice Age: An Evolving Paradigm. Annual
+Review of Earth and Planetary Sciences 41, 629–656. doi:10.1146/annurev.earth.031208.100118
+Narbonne, G.M. (2005). The Ediacara Biota: Neoproterozoic Origin of Animals and Their Ecosystems.
+Annual Review of Earth and Planetary Sciences 33, 421–442.
+doi:10.1146/annurev.earth.33.092203.122519
+O’Dea, A., Lessios, H.A., Coates, A.G. et al. (2016). Formation of the Isthmus of Panama. Science
+Advances 2, e1600883. doi:10.1126/sciadv.1600883
+Raup, D.M. & Sepkoski, J.J. (1982). Mass Extinctions in the Marine Fossil Record. Science 215,
+1501–1503. doi:10.1126/science.215.4539.1501
+Renne, P.R., Deino, A.L., Hilgen, F.J. et al. (2013). Time Scales of Critical Events Around the
+Cretaceous-Paleogene Boundary. Science 339, 684–687. doi:10.1126/science.1230492
+Rooney, A.D., Strauss, J.V., Brandon, A.D. & Macdonald, F.A. (2015). A Cryogenian chronology: Two
+long-lasting synchronous Neoproterozoic glaciations. Geology 43, 459–462. doi:10.1130/G36511.1
+Sahney, S., Benton, M.J. & Falcon-Lang, H.J. (2010). Rainforest collapse triggered Carboniferous
+tetrapod diversification in Euramerica. Geology 38, 1079–1082. doi:10.1130/G31182.1
+Schoene, B., Eddy, M.P., Samperton, K.M. et al. (2019). U-Pb constraints on pulsed eruption of the
+Deccan Traps across the end-Cretaceous mass extinction. Science 363, 862–866.
+doi:10.1126/science.aau2422
+Schulte, P., Alegret, L., Arenillas, I. et al. (2010). The Chicxulub Asteroid Impact and Mass
+Extinction at the Cretaceous-Paleogene Boundary. Science 327, 1214–1218. doi:10.1126/science.1177265
+Servais, T., Owen, A.W., Harper, D.A.T., Kröger, B. & Munnecke, A. (2010). The Great Ordovician
+Biodiversification Event (GOBE): The palaeoecological dimension. Palaeogeography, Palaeoclimatology,
+Palaeoecology 294, 99–119. doi:10.1016/j.palaeo.2010.05.031
+Sprain, C.J., Renne, P.R., Vanderkluysen, L., Pande, K., Self, S. & Mittal, T. (2019). The eruptive
+tempo of Deccan volcanism in relation to the Cretaceous-Paleogene boundary. Science 363, 866–870.
+doi:10.1126/science.aav1446
+Stanley, S.M. (2016). Estimates of the magnitudes of major marine mass extinctions in earth history.
+Proceedings of the National Academy of Sciences 113, E6325–E6334. doi:10.1073/pnas.1613094113
+Stein, W.E., Mannolini, F., Hernick, L.V., Landing, E. & Berry, C.M. (2007). Giant cladoxylopsid
+trees resolve the enigma of the Earth’s earliest forest stumps at Gilboa. Nature 446, 904–907.
+doi:10.1038/nature05705
+Stein, W.E., Berry, C.M., Morris, J.L. et al. (2020). Mid-Devonian Archaeopteris Roots Signal
+Revolutionary Change in Earliest Fossil Forests. Current Biology 30, 421–431.e2.
+doi:10.1016/j.cub.2019.11.067
+Sun, G., Ji, Q., Dilcher, D.L., Zheng, S., Nixon, K.C. & Wang, X. (2002). Archaefructaceae, a New
+Basal Angiosperm Family. Science 296, 899–904. doi:10.1126/science.1069439
+van Hinsbergen, D.J.J., de Groot, L.V., van Schaik, S.J. et al. (2015). A Paleolatitude Calculator
+for Paleoclimate Studies. PLOS ONE 10, e0126946. doi:10.1371/journal.pone.0126946
+Wellman, C.H., Osterloff, P.L. & Mohiuddin, U. (2003). Fragments of the earliest land plants. Nature
+425, 282–285. doi:10.1038/nature01884
+Wilde, S.A., Valley, J.W., Peck, W.H. & Graham, C.M. (2001). Evidence from detrital zircons for the
+existence of continental crust and oceans on the Earth 4.4 Gyr ago. Nature 409, 175–178.
+doi:10.1038/35051550
+Domeier, M. & Torsvik, T.H. (2014). Plate tectonics in the late Paleozoic. Geoscience Frontiers 5,
+303–350. doi:10.1016/j.gsf.2014.01.002
+
+
+SOFTWARE
+No third-party code ships with this app. Fonts: Atkinson Hyperlegible, Copyright 2020 Braille
+Institute of America, Inc.; Newsreader, Copyright 2020 The Newsreader Project Authors
+(github.com/productiontype/Newsreader). Both under the SIL Open Font License 1.1, whose text is
+fonts/OFL.txt, as clause 2 of that license requires. The build pipeline in tools/ runs at build time
+only, with pygplates (GPL-2.0), which reconstructs the plate model, and these Python packages: numpy
+2.5.3, scipy 1.18.1, pillow 12.3.0, h5py 3.16.0, pyyaml 6.0.3, rdflib 7.6.0, pypdf 6.19.0.

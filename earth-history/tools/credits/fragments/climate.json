@@ -1,0 +1,17 @@
+[
+ {
+  "accuracy": "A climate model, not measurements: one HadCM3L run per 5 million years on Scotese's reconstructed geography, forced with a CO2 history. Byte rounding changes values by at most 0.25 C and 0.060 mm/day.",
+  "adaptations": "Averaged over the 12 months and the five 20-year means into annual means; temperature converted from kelvin to degrees Celsius and precipitation from kg m-2 s-1 to mm/day; each value rounded to one byte (temperature in steps of 0.5 C, rain on a square-root scale); area-weighted global means computed.",
+  "cite": "Judd, E.J., Tierney, J.E., Lunt, D.J., Montanez, I.P., Huber, B.T., Wing, S.L. & Valdes, P.J., 2023. PhanDA HadCM3L Model Priors (suite scotese_07). Zenodo, doi:10.5281/zenodo.8237751. CC BY 4.0. Simulations by the BRIDGE group, University of Bristol. The simulations are described in Valdes, P.J., Scotese, C.R. & Lunt, D.J., 2021. Deep ocean temperatures through time. Climate of the Past 17, 1483-1506, doi:10.5194/cp-17-1483-2021 (title, authors and pages from Crossref).",
+  "id": "phanda",
+  "licence": "CC BY 4.0",
+  "licence_quote": "Zenodo record 8237751: license cc-by-4.0 (Creative Commons Attribution 4.0 International).",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "E. J. Judd, J. E. Tierney, D. J. Lunt, I. P. Montanez, B. T. Huber, S. L. Wing & P. J. Valdes; simulations by the BRIDGE group, University of Bristol",
+  "part": "climate fields",
+  "retrieved": "2026-09-30",
+  "source": "ExperimentInfo.xlsx (sha256 21866d6c30f930796cc3ee5ab25891847436859548d05865c037f521c8dd0f51), scotese_07_tas.zip (sha256 f28c137c47dac9bdff4315947453c89c96bd2df709c2607f806a2524e0a15983) and scotese_07_pr.zip (sha256 63fe79de34814b0a73697be6ab2d861560182e9b936d0d04ac274c6ae163980f), Zenodo record 8237751 (doi:10.5281/zenodo.8237751): the fields temp_mm_1_5m and precip_mm_srf of experiments 1-109, five 20-year monthly climatologies each.",
+  "title": "PhanDA HadCM3L model priors, suite scotese_07",
+  "url": "https://zenodo.org/records/8237751"
+ }
+]

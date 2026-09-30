@@ -1,0 +1,19 @@
+Foster, G.L., Royer, D.L. & Lunt, D.J., 2017. Future climate forcing potentially without precedent in
+the last 420 million years. Nature Communications 8, 14845. doi:10.1038/ncomms14845
+
+Quoted verbatim from the article page https://www.nature.com/articles/ncomms14845 ("Rights and
+permissions"), retrieved 2026-09-30:
+
+  This work is licensed under a Creative Commons Attribution 4.0 International License. The images or
+  other third party material in this article are included in the article's Creative Commons license,
+  unless indicated otherwise in the credit line; if the material is not included under the Creative
+  Commons license, users will need to obtain permission from the license holder to reproduce the
+  material. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/
+
+Page metadata: dc.rights "2017 The Author(s)"; dataLayer copyright.open true, licence type
+http://creativecommons.org/licenses/by/4.0/.
+
+The file used: Supplementary Data 2, "LOESS fit to the CO2 data set in Sup. Data 1." (XLSX 77 kb),
+https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fncomms14845/MediaObjects/41467_2017_BFncomms14845_MOESM2875_ESM.xlsx
+It is byte-identical (sha256 84df2559...c74c) to ncomms14845-s3.xlsx inside Europe PMC's
+supplementary-files zip for PMC5382278, whose zip wrapper is rebuilt on every request.

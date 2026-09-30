@@ -1,0 +1,16 @@
+[
+ {
+  "accuracy": "Ages and uncertainties as the chart data gives them.",
+  "adaptations": "The eons, eras, periods, sub-periods, epochs and ages ending less than 1000 million years ago: English names (or the identifier split into words where the data has no English name), begin and end ages with their uncertainties, colors and parents. No chart image is used.",
+  "cite": "International Chronostratigraphic Chart data, (c) International Commission on Stratigraphy, 2026, CC BY 4.0 (github.com/i-c-stratigraphy/chart at 81618a865cdb). Cite: Cohen K, Harper D, Gibbard P, Car N. The ICS international chronostratigraphic chart this decade. Episodes 2025;48:105-115. doi:10.18814/epiiugs/2025/025001.",
+  "id": "ics",
+  "licence": "CC BY 4.0",
+  "licence_quote": "\"This data is copyrighted as follows: (c) International Commission on Stratigraphy, 2026. This data is licensed for use with the Creative Commons Attribution 4.0 license.\" (the repository's README.adoc)",
+  "licence_uri": "https://creativecommons.org/licenses/by/4.0/",
+  "owner": "International Commission on Stratigraphy",
+  "retrieved": "2026-09-30",
+  "source": "ics_chart.ttl (sha256 8548707d66c383460b3bddc20afb7070cb5f3ea187ea1262418dc3a6f2d6e9f7), chart.ttl at commit 81618a865cdb04998355a302f3e859908a080c0e of github.com/i-c-stratigraphy/chart (chart version 2026-06).",
+  "title": "International Chronostratigraphic Chart (data)",
+  "url": "https://raw.githubusercontent.com/i-c-stratigraphy/chart/81618a865cdb04998355a302f3e859908a080c0e/chart.ttl"
+ }
+]

@@ -1,0 +1,31 @@
+[
+ {
+  "accuracy": "Rotations reproduce pygplates within 0.36 km after 16-bit rounding. Rotations are one model's reconstruction; beyond each plate's last pole the rotation file holds the pole constant.",
+  "adaptations": "Plate model: the 503 polygon outlines stored at their 0 Ma positions with coordinates rounded to 16 bits; the rotation of each of the 241 plates at each map's time and one million years earlier, as 16-bit quaternions; the 2 line features in the polygon file left out.",
+  "cite": "Scotese, C.R., 2016. PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program, PALEOMAP Project. Via Scotese, C.R. & Wright, N.M., 2018, Zenodo, doi:10.5281/zenodo.5460860.",
+  "id": "paleoatlas",
+  "licence": "CC BY 4.0",
+  "licence_quote": "This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "C. R. Scotese, PALEOMAP Project",
+  "part": "plate model",
+  "retrieved": "2026-09-30",
+  "source": "Scotese_PaleoAtlas_v3.zip (sha256 7bf15709970645465df17542e20f9e2e9ed01d20797f38513ed83621e4ace2a0): \"PALEOMAP_PlateModel.rot\" (sha256 d56846bb3c6260805d088171066bc18e9d54e831892b660fd31315260e288022; PALEOMAP Plate Model m15g60_v2d3 (Scotese 2016)) and \"PALEOMAP_PlatePolygons.gpml\" (sha256 4925c064a415cfa6e7fd3f5e0682585baa9908f01bee9e053ca5dea0b0dc57ca), read with pygplates 1.0.0.",
+  "title": "PALEOMAP PaleoAtlas for GPlates v3: paleogeographic maps and plate model",
+  "url": "https://zenodo.org/api/records/5460860/files/Scotese_PaleoAtlas_v3.zip/content"
+ },
+ {
+  "accuracy": "Made with Natural Earth. Today's coastlines at 1:50 million scale.",
+  "adaptations": "Coastlines split into 2121 pieces where they cross a plate outline and given the plate they lie on; coordinates rounded to 16 bits. The first 300 populated places by scalerank and population, names with runs of spaces collapsed, each given the plate it lies on.",
+  "cite": "Made with Natural Earth.",
+  "id": "naturalearth",
+  "licence": "public domain",
+  "licence_quote": "\"All versions of Natural Earth raster + vector map data found on this website are in the public domain. ... No permission is needed to use Natural Earth. Crediting the authors is unnecessary.\" (Natural Earth LICENSE.md)",
+  "licence_uri": null,
+  "owner": "Natural Earth (naturalearthdata.com)",
+  "retrieved": "2026-09-30",
+  "source": "ne_50m_coastline.geojson (sha256 271f1c4c1908312bac6b29d158ea1356544beafc129f260005300913aa5ea283), ne_50m_populated_places_simple.geojson (sha256 8e70756b39fae9bcdc1e332bfc510c024c5edd3a13203ffd20092ee37b61d978) and ne_50m_land.geojson (sha256 e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b, build-time checks only), version 5.1.2, github.com/nvkelso/natural-earth-vector at commit f1890d9f152c.",
+  "title": "Natural Earth 1:50m coastline and populated places",
+  "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/f1890d9f152c896d250a77557a5751a93d494776/geojson/ne_50m_coastline.geojson"
+ }
+]

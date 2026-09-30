@@ -56,6 +56,17 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   (snug-kart/vendor/three-LICENSE.txt). Everything else in snug-kart/ — the
   karts, the faces, the tracks, the props and the sounds — is generated in code
   and shares the licence above.
+- The data under earth-history/data/ is adapted from the sources listed, with
+  their licences and adaptations, in earth-history/CREDITS.txt: the PALEOMAP
+  PaleoAtlas maps, plate model and PaleoDEMs, © C. R. Scotese, CC BY 4.0; the
+  PhanDA HadCM3L climate model runs (Judd et al. 2023), CC BY 4.0; the CO₂ curve
+  of Foster, Royer & Lunt 2017 and the sea-level curve of van der Meer et al.
+  2022, CC BY 4.0; the International Chronostratigraphic Chart data,
+  © International Commission on Stratigraphy, CC BY 4.0; the coastlines and
+  cities, Natural Earth, public domain. earth-history/fonts/ are Atkinson
+  Hyperlegible and Newsreader under the SIL Open Font License 1.1
+  (earth-history/fonts/OFL.txt). The app's own code and text share the licence
+  above.
 - The wind and weather fields under global-wind/data/ and global-weather/data/
   are NOAA Global Forecast System output, a work of the United States government
   in the public domain. The coastlines in both apps' assets/world.json are

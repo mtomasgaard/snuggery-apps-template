@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no, email=no, address=no, date=no">
+<title>Earth's History</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <h1>Earth’s History</h1>
+    <div class="top-actions">
+      <button id="btn-find" class="icon-btn" type="button" aria-label="Find a city" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      </button>
+      <button id="btn-about" class="icon-btn" type="button" aria-label="About this app and its sources" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="earth">
+    <div class="earth-top">
+      <div class="segmented seg" role="radiogroup" aria-label="View">
+        <button type="button" role="radio" data-view="globe" aria-checked="true">Globe</button>
+        <button type="button" role="radio" data-view="map" aria-checked="false">Map</button>
+      </div>
+      <div class="toggles">
+        <button type="button" id="tg-plates" class="toggle" aria-pressed="false" aria-label="Plates: pieces of today's crust and how they moved"><span class="well" aria-hidden="true"><svg viewBox="0 0 16 12"><path d="M2.5 9.5 4 3l5.5-1.5L13.5 5l-1 4.5-5 1z" stroke="rgba(0,0,0,.6)" stroke-width="2.6"/><path d="M2.5 9.5 4 3l5.5-1.5L13.5 5l-1 4.5-5 1z" stroke="#ffc247" stroke-width="1.2"/></svg></span>Plates</button>
+        <button type="button" id="tg-coasts" class="toggle" aria-pressed="true" aria-label="Today's coasts"><span class="well" aria-hidden="true"><svg viewBox="0 0 16 12"><path d="M1.5 8c2-3.5 3.5 1.5 5.5-2s3 2.5 4.5-.5 2.5-2 3-2" stroke="rgba(0,0,0,.7)" stroke-width="2.6"/><path d="M1.5 8c2-3.5 3.5 1.5 5.5-2s3 2.5 4.5-.5 2.5-2 3-2" stroke="rgba(255,255,255,.9)" stroke-width="1"/></svg></span>Coasts</button>
+      </div>
+    </div>
+    <section id="readout" class="card" hidden aria-label="About this place">
+      <span class="pointer" aria-hidden="true"></span>
+      <button type="button" id="readout-close" class="close" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <button type="button" id="readout-more" class="more" aria-label="Show the whole card" aria-expanded="false" aria-controls="readout">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9.5 6 6 6-6"/></svg>
+      </button>
+      <p id="ro-head" class="ro-head"></p>
+      <p id="ro-then"></p>
+      <p id="ro-now"></p>
+      <p id="ro-notes" class="ro-notes"></p>
+    </section>
+    <p id="ro-live" class="sr-only" aria-live="polite"></p>
+    <div class="earth-bottom">
+      <p id="notice" class="notice" hidden></p>
+      <button type="button" id="legend" class="legend" hidden>
+        <span id="legend-bar" class="legend-bar"></span>
+        <span id="legend-ticks" class="legend-ticks" aria-hidden="true"></span>
+        <span id="legend-text" class="legend-text"></span>
+      </button>
+      <p id="intro-cap" class="intro-cap" hidden>750 million years, map by map, to today</p>
+      <div class="lenses seg" role="radiogroup" aria-label="Lens">
+        <button type="button" role="radio" class="chip" data-lens="surface" aria-checked="true">Surface</button>
+        <button type="button" role="radio" class="chip" data-lens="temperature" aria-checked="false">Temperature</button>
+        <button type="button" role="radio" class="chip" data-lens="rain" aria-checked="false">Rain</button>
+      </div>
+    </div>
+    <div id="stage" tabindex="0" role="img" aria-label="Globe of the Earth">
+      <canvas id="gl"></canvas>
+      <canvas id="overlay" aria-hidden="true"></canvas>
+    </div>
+    <button type="button" id="intro-skip" class="intro-skip" hidden>Skip</button>
+    <p id="nogl" class="nogl" hidden>This view needs WebGL 2, which this device does not offer.</p>
+  </main>
+
+  <section id="agerow" aria-label="Time">
+    <div class="age-text">
+      <div class="age-stack">
+        <p id="age" class="age"></p>
+        <p id="age-roll" class="age age-roll" aria-hidden="true"></p>
+      </div>
+      <p id="ics" class="ics"><span id="swatch" class="swatch" aria-hidden="true"></span><span id="ics-text"></span></p>
+    </div>
+    <div class="age-buttons">
+      <button type="button" id="btn-prev" class="step" aria-label="One map older">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6 8.5 12l6 6"/></svg>
+      </button>
+      <button type="button" id="btn-play" class="step play" aria-label="Play toward today">
+        <span class="disc"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span>
+      </button>
+      <button type="button" id="btn-next" class="step" aria-label="One map newer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <p id="age-live" class="sr-only" aria-live="polite"></p>
+  </section>
+
+  <section id="slider" role="slider" tabindex="0" aria-label="Time, from 750 million years ago to today">
+    <div id="track" class="track">
+      <div id="eras" class="eras" aria-hidden="true"></div>
+      <div class="bar" aria-hidden="true">
+        <div id="eraband" class="eraband"></div>
+        <div id="strip" class="strip"></div>
+        <div id="compressed" class="compressed"></div>
+      </div>
+      <svg id="break" class="break" viewBox="0 0 10 28" preserveAspectRatio="none" aria-hidden="true"><path class="cut" d="M5 0c-3 3.5 3 5.5 0 9.3s3 5.8 0 9.4 3 5.8 0 9.3"/><path class="edge" d="M5 0c-3 3.5 3 5.5 0 9.3s3 5.8 0 9.4 3 5.8 0 9.3"/></svg>
+      <div id="ticks" class="ticks" aria-hidden="true"></div>
+      <div id="thumb" class="thumb" aria-hidden="true"></div>
+      <div id="labels" class="labels" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section id="curves" aria-hidden="true">
+    <canvas id="curves-canvas"></canvas>
+  </section>
+
+  <section id="sheet" aria-label="This map and its period">
+    <button type="button" id="sheet-grip" class="grip" aria-controls="sheet-body" aria-expanded="false" aria-label="Show more about this map"><span></span></button>
+    <div id="sheet-head" class="sheet-head"></div>
+    <div id="sheet-body" class="sheet-body"></div>
+  </section>
+</div>
+
+<div id="find" class="overlay find" role="dialog" aria-modal="true" aria-label="Find a city" hidden>
+  <div class="find-bar">
+    <input id="find-q" type="search" enterkeyhint="search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="City or country" aria-label="City or country, from a list of 300">
+    <button type="button" id="find-cancel" class="text-btn">Cancel</button>
+  </div>
+  <ul id="find-list" class="find-list" aria-label="Cities"></ul>
+  <p id="find-hint" class="find-empty">Type a city or a country. The list holds 300 large cities; each is carried back with the crust it sits on.</p>
+  <p id="find-empty" class="find-empty" hidden>No city on the list matches. The list holds 300 large cities.</p>
+</div>
+
+<div id="about" class="overlay about" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
+  <div class="about-bar">
+    <h2 id="about-title">About Earth’s History</h2>
+    <button type="button" id="about-done" class="text-btn">Done</button>
+  </div>
+  <div id="about-body" class="about-body"></div>
+</div>
+
+<p id="perf-hud" class="perf-hud" aria-hidden="true" hidden></p>
+
+<div id="loading" class="loading" role="status"><p class="title" aria-hidden="true">Earth’s History</p><p id="load-msg">Loading the maps…</p></div>
+</body>
+</html>

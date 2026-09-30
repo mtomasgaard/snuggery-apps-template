@@ -1,0 +1,15 @@
+# The Earth's History pipeline's Python dependencies, pinned. Python 3.12 (pygplates 1.0.0 ships a
+# cp312 macOS arm64 wheel on PyPI).
+#
+#   /opt/homebrew/bin/python3.12 -m venv tools/.venv
+#   tools/.venv/bin/pip install -r tools/requirements.txt
+#
+# pygplates is GPL-2.0 and runs at build time only, inside tools/; nothing of it ships in the app.
+numpy==2.5.3
+scipy==1.18.1
+pillow==12.3.0
+h5py==3.16.0
+pygplates==1.0.0
+pyyaml==6.0.3
+rdflib==7.6.0
+pypdf==6.19.0

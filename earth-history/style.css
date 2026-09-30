@@ -1,0 +1,437 @@
+/* Earth's History — "Deep Field Atlas" (ART.md): tokens, both themes, the grid, the controls
+   (DESIGN §3, §9, §19). Chrome follows the theme; the Earth panel is always night, and the maps,
+   the overlay and the ICS colours never change with the theme. */
+
+@font-face { font-family: "Atkinson"; src: url("fonts/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Atkinson"; src: url("fonts/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/newsreader-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/newsreader-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  /* survey paper: a pale mineral grey-green, ink with a green bias, one survey-blue accent */
+  --bg: #eceee9;
+  --panel: #f7f8f5;
+  --tile: #e4e8e2;
+  --ink: #16201f;
+  --ink-2: #4e5a57;
+  --line: #cfd5cd;
+  --accent: #1d5a7e;
+  --accent-text: #1d5a7e;
+  --on-accent: #ffffff;
+  --c-temp: #b0391f;
+  --c-co2: #5a47ad;
+  --c-sea: #16649c;
+  --space: #05070c;          /* the Earth panel: night in both themes */
+  --glow: #8fc0ff;
+  --gutter: 16px;
+
+  /* the Earth panel's instruments: fixed, because the panel is always night */
+  --g-bg: rgba(12, 16, 26, 0.66);
+  --g-line: rgba(255, 255, 255, 0.15);
+  --g-ink: #eef0ea;
+  --g-ink-2: #b3bcc8;
+  --g-key: #e6ebe3;          /* a pressed key: chalk on black glass */
+  --g-key-ink: #121a1c;
+
+  --sans: "Atkinson", -apple-system, system-ui, sans-serif;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --t-xs: 10px; --t-s: 11.5px; --t-m: 13px; --t-b: 14px; --t-l: 17px; --t-xl: 21px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* deep navy */
+    --bg: #0a1120;
+    --panel: #0f182b;
+    --tile: #16213a;
+    --ink: #e8ebe6;
+    --ink-2: #9ea9ba;
+    --line: #1f2b45;
+    --accent: #86b6e6;
+    --accent-text: #86b6e6;
+    --on-accent: #0a1120;
+    --c-temp: #ff8a6b;
+    --c-co2: #b3a4ff;
+    --c-sea: #6cb2f5;
+    --space: #02040a;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 var(--t-b)/1.4 var(--sans);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+p, h1 { margin: 0; }
+button { font: inherit; color: inherit; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+svg { display: block; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+
+/* ── the grid: only the Earth panel flexes (§3) ── */
+#app {
+  display: grid;
+  grid-template-rows: 44px minmax(0, 1fr) 48px 58px 84px 112px;
+  grid-template-columns: minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+#top { grid-row: 1; } #earth { grid-row: 2; } #agerow { grid-row: 3; } #slider { grid-row: 4; } #curves { grid-row: 5; } #sheet { grid-row: 6; }
+#top, #agerow, #slider, #curves, #sheet { padding-left: var(--gutter); padding-right: var(--gutter); position: relative; }
+/* the sheet's three heights (§3.6): half hides the curves; full hides the Earth and the curves */
+#app.sheet-half { grid-template-rows: 44px minmax(0, 1fr) 48px 58px 0 380px; }
+#app.sheet-full { grid-template-rows: 44px 0 48px 58px 0 minmax(0, 1fr); }
+#app.sheet-half #curves, #app.sheet-full #curves { display: none; }
+#app.sheet-full #earth { visibility: hidden; }
+/* while the rows glide to a new sheet height (sheet.js), the night extends under them */
+#app.flipping #earth { box-shadow: 0 420px 0 0 var(--space); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+#earth button:focus-visible { outline-color: var(--g-key); }
+
+/* ── top bar ── */
+#top { display: flex; align-items: center; justify-content: space-between; background: var(--bg); z-index: 2; }
+#top h1 { font: 500 var(--t-l)/1 var(--serif); letter-spacing: 0.005em; }
+.top-actions { display: flex; margin-right: -12px; }
+.icon-btn {
+  width: 44px; height: 44px; border: 0; background: none; padding: 0; display: grid; place-items: center;
+  color: var(--ink); cursor: pointer; border-radius: 8px;
+}
+.icon-btn svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.icon-btn:disabled { opacity: 0.35; cursor: default; }
+.icon-btn:active:not(:disabled), .step:active { background: var(--tile); }
+.seg button:active, .toggle:active { filter: brightness(1.25); }
+.text-btn { border: 0; background: none; color: var(--accent-text); font: 700 var(--t-m)/1 var(--sans); min-height: 44px; padding: 0 4px 0 12px; cursor: pointer; }
+
+/* ── the Earth panel: always night ── */
+#earth { position: relative; overflow: hidden; background: var(--space); min-height: 0; color: var(--g-ink); }
+#stage { position: absolute; inset: 0; z-index: 0; touch-action: none; outline: none; cursor: grab; }
+/* the neatline (§19): the panel is framed as an atlas plate is, a hairline and a finer inner rule */
+#earth::before, #earth::after { content: ''; position: absolute; pointer-events: none; z-index: 1; }
+#earth::before { inset: 5px; box-shadow: inset 0 0 0 1px rgba(214, 226, 240, 0.16); border-radius: 2px; }
+#earth::after { inset: 8.5px; box-shadow: inset 0 0 0 0.5px rgba(214, 226, 240, 0.12); border-radius: 1px; }
+.earth-top, .earth-bottom, .card, .intro-skip { z-index: 1; }
+#stage:focus-visible { box-shadow: inset 0 0 0 2px var(--g-key); }
+#stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+#overlay { pointer-events: none; transition: opacity 0.6s var(--ease); }
+#earth .earth-top, #earth .earth-bottom { transition: opacity 0.5s var(--ease); }
+#earth.intro .earth-top, #earth.intro .earth-bottom > :not(.intro-cap) { opacity: 0; pointer-events: none; }
+
+.earth-top {
+  position: absolute; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px 0; pointer-events: none;
+}
+.earth-top > * { pointer-events: auto; }
+
+/* one control language for the panel: black glass, a hairline, chalk keys for what is on */
+.seg, .toggle, .legend, .intro-skip {
+  background: var(--g-bg); box-shadow: inset 0 0 0 1px var(--g-line);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15); backdrop-filter: blur(12px) saturate(1.15);
+}
+.seg { display: flex; gap: 2px; padding: 2px; height: 30px; border-radius: 9px; }
+.seg button {
+  border: 0; background: transparent; padding: 0 11px; border-radius: 7px; position: relative; cursor: pointer;
+  font: 400 12.5px/1 var(--sans); letter-spacing: 0.01em; color: var(--g-ink-2);
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.seg button[aria-checked="true"] { background: var(--g-key); color: var(--g-key-ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45); }
+.seg button::after, .toggle::after, .step::after { content: ''; position: absolute; inset: -9px -1px; }
+.seg button:disabled { opacity: 0.45; cursor: default; }
+.toggles { display: flex; gap: 6px; }
+.toggle {
+  height: 30px; padding: 0 10px 0 6px; border-radius: 9px; border: 0; color: var(--g-ink-2); cursor: pointer; position: relative;
+  display: inline-flex; align-items: center; gap: 6px; font: 400 12.5px/1 var(--sans); letter-spacing: 0.01em;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+.toggle[aria-pressed="true"] { background: var(--g-key); color: var(--g-key-ink); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45); }
+/* the toggle's swatch is a legend: the overlay's own line, drawn on night */
+.toggle .well { width: 20px; height: 16px; border-radius: 4px; background: #0b0f18; display: grid; place-items: center; opacity: 0.5; transition: opacity 0.2s var(--ease); }
+.toggle[aria-pressed="true"] .well { opacity: 1; }
+.toggle .well svg { width: 16px; height: 12px; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.earth-bottom {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 10px; display: flex; flex-direction: column;
+  align-items: center; gap: 7px; pointer-events: none;
+}
+.earth-bottom > * { pointer-events: auto; }
+.lenses { justify-content: center; }
+/* notices are captions, set like an atlas plate's: small italic, each clause its own line, on the
+   instruments' black glass so they read over any paint (bright polar ice included) */
+.notice, .intro-cap {
+  font: italic 400 12.5px/1.3 var(--serif); color: var(--g-ink); text-align: center; max-width: 330px;
+  pointer-events: none; text-wrap: balance;
+}
+.notice {
+  background: var(--g-bg); box-shadow: inset 0 0 0 1px var(--g-line); border-radius: 9px; padding: 5px 11px 6px;
+  -webkit-backdrop-filter: blur(12px) saturate(1.15); backdrop-filter: blur(12px) saturate(1.15);
+}
+.intro-cap { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.8); }
+.notice span { display: block; }
+.nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; font-size: var(--t-b); color: var(--g-ink-2); }
+.nogl[hidden], .notice[hidden], .legend[hidden], .card[hidden], .overlay[hidden], .perf-hud[hidden], .find-empty[hidden], .intro-skip[hidden], .intro-cap[hidden] { display: none; }
+.intro-cap { font-size: 13.5px; color: var(--g-ink); }
+.intro-skip {
+  position: absolute; right: 12px; bottom: 10px; height: 30px; padding: 0 12px; border: 0; border-radius: 9px; cursor: pointer;
+  font: 400 12.5px/1 var(--sans); color: var(--g-ink); letter-spacing: 0.02em;
+}
+.intro-skip::after { content: ''; position: absolute; inset: -7px -4px; }
+
+/* the lens legend (§3.2, §19): a caption, a 184 × 6 bar with hairline ticks, numbers with the unit on the last */
+.legend {
+  border: 0; color: var(--g-ink); border-radius: 9px; padding: 6px 12px 5px; min-height: 44px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; font: inherit;
+}
+.legend-text { order: -1; display: block; font: italic 400 12px/1.25 var(--serif); color: var(--g-ink); max-width: 300px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.legend-bar { display: block; width: 184px; height: 6px; border-radius: 1px; box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.35); margin-top: 1px; }
+.legend-ticks { position: relative; display: block; width: 184px; height: 15px; font: 400 var(--t-xs)/1 var(--sans); color: var(--g-ink-2); font-variant-numeric: tabular-nums; }
+.legend-ticks span { position: absolute; top: 5px; white-space: nowrap; }
+.legend-ticks i { position: absolute; top: 0; width: 1px; height: 3px; margin-left: -0.5px; background: rgba(255, 255, 255, 0.55); }
+
+/* the tap readout (§8, §19): a callout anchored to its pin, at most four lines until "More" */
+.card {
+  position: absolute; top: 52px; left: 10px; width: min(300px, calc(100% - 20px)); background: var(--panel); color: var(--ink);
+  border-radius: 10px; padding: 8px 34px 8px 11px; font: 400 12px/1.36 var(--sans);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 0 0.5px rgba(0, 0, 0, 0.25);
+  animation: card-in 0.22s var(--ease);
+}
+@keyframes card-in { from { opacity: 0; transform: translateY(4px) scale(0.98); } }
+.card p + p { margin-top: 2px; }
+.ro-head { font: 500 14.5px/1.25 var(--serif); padding-bottom: 1px; }
+.card:not(.open) #ro-then, .card:not(.open) #ro-now { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.card:not(.open) #ro-then:has(+ #ro-now:empty) { -webkit-line-clamp: 3; }
+.card:not(.open) .ro-notes, .card:not(.open) .fn { display: none; }
+/* a number and its unit, or a figure group, never breaks: the clamp cuts between groups (§19) */
+.card .nw { white-space: nowrap; }
+.ro-notes { color: var(--ink-2); font-size: 10.5px; }
+.card .close, .card .more {
+  position: absolute; right: 0; width: 34px; height: 34px; border: 0; background: none; padding: 0;
+  display: grid; place-items: center; cursor: pointer; color: var(--ink-2);
+}
+.card .close { top: 0; }
+.card .more { bottom: 0; }
+.card .more[hidden] { display: none; }
+.card .close::after, .card .more::after { content: ''; position: absolute; inset: -5px; }
+.card .close svg, .card .more svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.card .more svg { transition: transform 0.2s var(--ease); }
+.card.open .more svg { transform: rotate(180deg); }
+.card .pointer { position: absolute; left: var(--px, 50%); width: 12px; height: 12px; background: var(--panel); transform: rotate(45deg); margin-left: -6px; display: none; }
+.card.above .pointer { display: block; bottom: -5px; box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.18); }
+.card.below .pointer { display: block; top: -5px; }
+
+/* ── age row (§3.3, §19): the age in Newsreader, the unit in its italic ── */
+#agerow { display: flex; align-items: center; gap: 4px; border-top: 1px solid var(--line); background: var(--bg); }
+.age-text { flex: 1; min-width: 0; }
+.age-stack { display: grid; }
+.age-stack > p { grid-area: 1 / 1; }
+.age {
+  font: 500 var(--t-xl)/21px var(--serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums lining-nums; letter-spacing: -0.005em;
+}
+.age .u { font-style: italic; font-weight: 400; font-size: 15px; line-height: 1; color: var(--ink-2); letter-spacing: 0; }
+.age .n { line-height: 1; }
+.age-roll { visibility: hidden; }
+#agerow.rolling .age-roll { visibility: visible; }
+#agerow.rolling #age { opacity: 0; }   /* opacity, not visibility: it stays in the accessibility tree */
+.ics {
+  font: 400 11px/12px var(--sans); color: var(--ink-2); margin-top: 1px;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+}
+.swatch { display: inline-block; width: 7px; height: 7px; border-radius: 1.5px; margin-right: 5px; vertical-align: 0.5px; box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.25); }
+.age-buttons { display: flex; align-items: center; margin-right: -10px; }
+.step::after { inset: -1px -3px; }
+.step {
+  width: 38px; height: 44px; border: 0; background: none; padding: 0; display: grid; place-items: center;
+  cursor: pointer; color: var(--ink); position: relative; border-radius: 8px;
+}
+.step svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.play .disc { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 0 0 0 1px var(--line); background: var(--panel); transition: background-color 0.2s var(--ease); }
+.play svg { width: 14px; height: 14px; fill: currentColor; stroke: none; }
+.play .i-play { margin-left: 2px; }
+.play .i-pause { display: none; }
+.play.playing .i-play { display: none; }
+.play.playing .i-pause { display: block; }
+.play.playing .disc { background: var(--ink); color: var(--bg); box-shadow: none; }
+
+/* ── the slider as a stratigraphic bar (§3.4, §19) ── */
+#slider { touch-action: none; cursor: pointer; outline: none; background: var(--bg); }
+#slider:focus-visible .bar { box-shadow: 0 0 0 2px var(--accent); }
+.track { position: relative; height: 100%; }
+.eras { position: absolute; left: 0; right: 0; top: 0; height: 12px; }
+/* era names in the atlas voice: Newsreader italic, the way a chart names its columns */
+.era { position: absolute; top: 0; white-space: nowrap; font: italic 400 11.5px/12px var(--serif); color: var(--ink-2); }
+.bar { position: absolute; left: 0; right: 0; top: 13px; height: 22px; border-radius: 3px; overflow: hidden; background: var(--line); }
+.eraband { position: absolute; left: 0; right: 0; top: 0; height: 3px; }
+.strip { position: absolute; left: 0; right: 0; top: 4px; bottom: 0; }
+.eraband .seg-c, .strip .seg-c { position: absolute; top: 0; bottom: 0; }
+.strip .seg-c + .seg-c { box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14); }
+/* the squeezed 750–550 Ma stretch: hatched, as the curves strip hatches it */
+.compressed { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0 1px, transparent 1px 4px); }
+.break { position: absolute; top: 10px; width: 10px; height: 28px; transform: translateX(-5px); overflow: visible; }
+.break path { fill: none; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+.break .cut { stroke: var(--bg); stroke-width: 4px; }
+.break .edge { stroke: var(--ink-2); stroke-width: 1px; }
+.ticks { position: absolute; left: 0; right: 0; top: 37px; height: 4px; }
+.tick { position: absolute; top: 0; width: 1px; height: 4px; background: var(--ink-2); opacity: 0.5; transform: translateX(-0.5px); }
+.thumb {
+  position: absolute; top: 10px; width: 28px; height: 28px; margin-left: -14px; border-radius: 50%; pointer-events: none;
+  box-shadow: inset 0 0 0 2.5px #ffffff, inset 0 0 0 3.5px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s var(--ease);
+}
+.thumb::after { content: ''; position: absolute; left: 50%; top: 100%; width: 1px; height: 4px; margin-left: -0.5px; background: var(--ink); opacity: 0.7; }
+#slider.dragging .thumb { transform: scale(1.12); }
+#slider.gliding .thumb { transition: left var(--glide, 667ms) linear, transform 0.15s var(--ease); }
+.labels { position: absolute; left: 0; right: 0; top: 43px; height: 12px; font: 400 var(--t-xs)/12px var(--sans); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.lab { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.lab.first { transform: none; }
+.lab.last { transform: translateX(-100%); }
+
+/* ── curves strip (§3.5) ── */
+#curves { border-top: 1px solid var(--line); touch-action: none; cursor: pointer; background: var(--bg); }
+#curves canvas { width: 100%; height: 100%; display: block; }
+
+/* ── the bottom sheet (§3.6) ── */
+#sheet {
+  background: var(--panel); border-top: 1px solid var(--line); border-radius: 14px 14px 0 0; overflow: hidden;
+  display: flex; flex-direction: column; min-height: 0; padding-left: 0; padding-right: 0;
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.06);
+}
+.grip { flex: none; display: block; width: 100%; height: 20px; border: 0; background: none; padding: 0; cursor: pointer; touch-action: none; position: relative; }
+.grip::after { content: ''; position: absolute; inset: 0 0 -16px; }
+#sheet-grip:focus-visible { outline-offset: -3px; border-radius: 8px; }
+.grip span { display: block; width: 34px; height: 4px; border-radius: 2px; background: var(--ink-2); opacity: 0.35; margin: 7px auto 0; }
+.sheet-head { flex: none; padding: 0 var(--gutter) 7px; cursor: default; }
+#app:not(.sheet-half):not(.sheet-full) .sheet-head { cursor: pointer; }
+.sh-title { display: flex; align-items: baseline; gap: 7px; white-space: nowrap; overflow: hidden; padding-top: 2px; }
+.sh-title .nm { font: 500 var(--t-l)/1.2 var(--serif); flex: none; }
+.sh-title .rg { font: 400 var(--t-s)/1.2 var(--sans); color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.sh-swatch { flex: none; align-self: center; width: 10px; height: 10px; border-radius: 2px; box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.25); }
+.sh-map { font-size: 12px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+.sheet-body {
+  flex: 1; min-height: 0; overflow: hidden; padding: 0 var(--gutter) calc(16px + env(safe-area-inset-bottom));
+  font-size: 13.5px; line-height: 1.45; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+}
+#app.sheet-half .sheet-body, #app.sheet-full .sheet-body { overflow-y: auto; }
+.sh-sec { padding: 12px 0; border-top: 1px solid var(--line); }
+.sh-sec.sh-card { border-top: 0; padding-top: 2px; }
+.sh-card + .sh-card { border-top: 1px solid var(--line); padding-top: 12px; }
+.sh-h { font: 700 13px/1.2 var(--sans); font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: var(--ink-2); margin: 0 0 8px; }
+.sh-card .sh-h { font: 500 15.5px/1.25 var(--serif); font-variant-caps: normal; letter-spacing: 0; color: var(--ink); margin-bottom: 4px; }
+.sh-text { margin-top: 4px; max-width: 62ch; }
+.sh-strong { font-weight: 700; }
+.sh-ev { font: 500 15px/1.25 var(--serif); }
+.sh-meta { color: var(--ink-2); font-size: 12px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.sh-src { color: var(--ink-2); font-size: 11px; margin-top: 4px; }
+.sh-item + .sh-item { margin-top: 12px; }
+.sh-hrow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.sh-hrow .sh-h { margin: 0; }
+/* "Then and now" as a ruled ledger, the way a field notebook tabulates: hairline rules, no cards */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; border-bottom: 1px solid var(--line); }
+.tile { padding: 7px 0 8px; min-width: 0; border-top: 1px solid var(--line); }
+.tile.wide { grid-column: 1 / -1; display: grid; grid-template-columns: auto 1fr; column-gap: 12px; align-items: baseline; }
+.tile.wide .tile-s { grid-column: 1 / -1; }
+.tile-k { font: 700 12.5px/1.2 var(--sans); font-variant-caps: all-small-caps; letter-spacing: 0.07em; color: var(--ink-2); }
+.tile-v { font: 500 19px/1.2 var(--serif); margin-top: 3px; font-variant-numeric: tabular-nums lining-nums; }
+.tile.wide .tile-v { font-size: 16px; }
+.tile.none .tile-v { font: 400 12.5px/1.3 var(--sans); color: var(--ink-2); }
+.tile-s { font-size: 11px; color: var(--ink-2); line-height: 1.3; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.look {
+  display: grid; grid-template-columns: 14px 1fr; column-gap: 8px; width: 100%; text-align: left; border: 0; background: var(--tile);
+  border-radius: 8px; padding: 9px 10px; min-height: 44px; cursor: pointer; margin-top: 8px; color: var(--ink);
+}
+.look:first-of-type { margin-top: 0; }
+.look-dot { grid-row: 1 / 3; width: 10px; height: 10px; margin-top: 4px; border-radius: 50%; background: #ffc247; box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px rgba(0,0,0,0.25); }
+.look-label { font: 500 15px/1.25 var(--serif); }
+.look-text { font-size: 12px; color: var(--ink-2); margin-top: 1px; }
+.sh-cites { margin: 0; padding: 0 0 0 16px; font-size: 11.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.sh-cites li + li { margin-top: 4px; }
+.units-switch { display: inline-flex; background: var(--tile); border-radius: 8px; padding: 2px; box-shadow: inset 0 0 0 1px var(--line); }
+.units-switch button { border: 0; background: none; font: 400 12px/1 var(--sans); padding: 0 10px; height: 26px; border-radius: 6px; color: var(--ink-2); cursor: pointer; position: relative; transition: background-color 0.2s var(--ease), color 0.2s var(--ease); }
+.units-switch button::after { content: ''; position: absolute; inset: -9px -1px; }
+.units-switch button[aria-checked="true"] { background: var(--panel); color: var(--ink); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(0,0,0,0.12); }
+.units-switch.big button { height: 34px; font-size: 13px; }
+
+/* ── Find and About: full-height overlays (§3.7, §3.8) ── */
+.overlay {
+  position: fixed; inset: 0; z-index: 10; background: var(--bg); color: var(--ink); display: flex; flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  animation: sheet-in 0.24s var(--ease);
+}
+@keyframes sheet-in { from { opacity: 0; transform: translateY(10px); } }
+.find-bar, .about-bar { flex: none; display: flex; align-items: center; gap: 4px; padding: 6px var(--gutter) 6px; border-bottom: 1px solid var(--line); }
+#find-q {
+  flex: 1; min-width: 0; height: 36px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  font: 400 16px var(--sans); padding: 0 12px;
+}
+.find-list { list-style: none; margin: 0; padding: 4px 0; overflow-y: auto; }
+.find-row {
+  display: flex; flex-direction: column; align-items: flex-start; width: 100%; border: 0; background: none; text-align: left;
+  padding: 8px var(--gutter); min-height: 48px; cursor: pointer; color: var(--ink);
+}
+.find-row + .find-row, li + li .find-row { box-shadow: inset 0 1px 0 var(--line); }
+.find-row:active { background: var(--tile); }
+.find-name { font: 500 15.5px/1.3 var(--serif); }
+.find-now { font-size: var(--t-s); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.find-empty { padding: 16px var(--gutter); color: var(--ink-2); font-size: var(--t-m); }
+.about-bar h2 { flex: 1; font: 500 var(--t-l)/1.2 var(--serif); margin: 0; }
+.about-body { flex: 1; min-height: 0; overflow-y: auto; padding: 12px var(--gutter) 32px; font-size: 13.5px; line-height: 1.5; overscroll-behavior: contain; }
+.about-body > * { max-width: 64ch; }
+.about-body h3 { font: 700 13px/1.2 var(--sans); font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: var(--ink-2); margin: 0 0 8px; }
+.about-body h4 { font: 500 15px/1.3 var(--serif); margin: 12px 0 2px; }
+.about-body h3 + h4 { margin-top: 0; }
+.about-body p { margin: 0; }
+.ab-intro { margin-bottom: 4px !important; }
+.ab-sec { border-top: 1px solid var(--line); padding: 14px 0; margin-top: 8px; }
+.ab-src { font-size: var(--t-s); color: var(--ink-2); margin-top: 2px !important; }
+.ab-source + .ab-source { margin-top: 8px; }
+.ab-kv { font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; margin-top: 2px !important; }
+.ab-refs { margin: 0; padding-left: 16px; font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+.ab-refs li + li { margin-top: 4px; }
+.ab-version { font-size: 12px; color: var(--ink-2); padding: 14px 0 4px; min-height: 44px; user-select: none; -webkit-user-select: none; cursor: default; }
+@media (min-width: 700px) { .overlay { left: 50%; right: auto; width: 560px; transform: translateX(-50%); border-left: 1px solid var(--line); border-right: 1px solid var(--line); animation: none; } }
+
+/* the frame-time readout for a phone check (§10): five taps on the version line in About */
+.perf-hud {
+  position: fixed; left: 8px; top: calc(env(safe-area-inset-top) + 48px); z-index: 20; margin: 0; padding: 4px 7px; border-radius: 6px;
+  background: rgba(0,0,0,0.72); color: #fff; font: 11px/1.3 ui-monospace, Menlo, monospace; pointer-events: none; white-space: pre;
+}
+
+/* ── loading and errors: night, as the panel it opens onto ── */
+.loading {
+  position: fixed; inset: 0; display: grid; place-content: center; gap: 6px; background: var(--space); color: var(--g-ink-2);
+  font-size: var(--t-m); transition: opacity 0.35s var(--ease); padding: 24px; text-align: center;
+}
+.loading .title { font: italic 400 22px/1.2 var(--serif); color: var(--g-ink); }
+.loading.done { opacity: 0; pointer-events: none; }
+.loading.error { color: var(--g-ink); }
+
+/* ── wide screens (§3.9): the Earth on the left, a 400 px column on the right ── */
+@media (min-width: 700px) {
+  #app, #app.sheet-half, #app.sheet-full {
+    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-rows: 44px 48px 58px 84px minmax(0, 1fr);
+  }
+  #top { grid-column: 1 / -1; grid-row: 1; }
+  #earth, #app.sheet-full #earth { grid-column: 1; grid-row: 2 / 6; visibility: visible; }
+  #agerow { grid-column: 2; grid-row: 2; }
+  #slider { grid-column: 2; grid-row: 3; }
+  #curves, #app.sheet-half #curves, #app.sheet-full #curves { grid-column: 2; grid-row: 4; display: block; }
+  #sheet { grid-column: 2; grid-row: 5; border-radius: 0; border-left: 1px solid var(--line); box-shadow: none; }
+  #agerow, #slider, #curves { border-left: 1px solid var(--line); }
+  .grip { display: none; }
+  .sheet-head { padding-top: 10px; cursor: default !important; }
+  .sheet-body { overflow-y: auto !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading, #overlay, .seg button, .toggle, .toggle .well, .thumb, .units-switch button, .play .disc, #earth .earth-top, #earth .earth-bottom { transition: none; }
+  .card, .overlay { animation: none; }
+  #slider.dragging .thumb { transform: none; }
+}

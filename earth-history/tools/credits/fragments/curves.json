@@ -1,0 +1,60 @@
+[
+ {
+  "accuracy": "A statistical fit through proxy measurements; the 68 % band is its stated uncertainty. Coverage ends at 419.5 million years ago.",
+  "adaptations": "Resampled by linear interpolation to whole millions of years; the lower edge of the 68 % band clipped at 0 ppm (0 rows needed it); the 95 % band left out because its lower edge is negative in 124 rows (247.004-419.504 Ma).",
+  "cite": "Foster, G.L., Royer, D.L. & Lunt, D.J., 2017. Future climate forcing potentially without precedent in the last 420 million years. Nature Communications 8, 14845, doi:10.1038/ncomms14845. Supplementary Data 2 (LOESS fit). CC BY 4.0.",
+  "id": "foster2017",
+  "licence": "CC BY 4.0",
+  "licence_quote": "\"This work is licensed under a Creative Commons Attribution 4.0 International License.\" (Nature Communications article page, Rights and permissions)",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "G. L. Foster, D. L. Royer & D. J. Lunt",
+  "retrieved": "2026-09-30",
+  "source": "foster2017_supplementary_data_2.xlsx (sha256 84df255974cb77c95d298d324fb281fe2ac40a0696ea92598985816e7095c74c): Supplementary Data 2, sheet \"LOESS Fit\", 840 rows, 0.0039-419.5039 Ma every 0.5 Myr.",
+  "title": "CO2 over the last 420 million years (LOESS fit)",
+  "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fncomms14845/MediaObjects/41467_2017_BFncomms14845_MOESM2875_ESM.xlsx"
+ },
+ {
+  "accuracy": "A reconstruction from strontium isotope variations and estimates of continental glaciation (the paper's title). MIN and MAX are the supplement's columns as labeled; they are not ordered at [1] Ma, and AVG lies outside them at [1, 2, 3, 444, 445] Ma.",
+  "adaptations": "Values used as published, rounded to the millimeter; interpolated to map ages.",
+  "cite": "van der Meer, D.G., Scotese, C.R., Mills, B.J.W., Sluijs, A., van den Berg van Saparoea, A.-P. & van de Weg, R.M.B., 2022. Long-term Phanerozoic global mean sea level: Insights from strontium isotope variations and estimates of continental glaciation. Gondwana Research 111, 103-121, doi:10.1016/j.gr.2022.07.014. Supplementary table (mmc1). CC BY 4.0.",
+  "id": "vandermeer2022",
+  "licence": "CC BY 4.0",
+  "licence_quote": "\"This is an open access article under the CC BY license.\" (the article's license statement; the supplement carries none of its own, and Elsevier gives an open access article's supplementary files the article's license)",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "D. G. van der Meer, C. R. Scotese, B. J. W. Mills, A. Sluijs, A.-P. van den Berg van Saparoea & R. M. B. van de Weg",
+  "retrieved": "2026-09-30",
+  "source": "vandermeer2022_mmc1.xlsx (sha256 800b34928378ae902426fc16ef002debfc064465f8ac663cbeeb7bd0c77c074f): sheet \"SuppTable\", column group Fig10, TGE_SL_isocorr_m AVG / MIN / MAX, 0-540 Ma every 1 Myr.",
+  "title": "Phanerozoic global mean sea level",
+  "url": "https://ars.els-cdn.com/content/image/1-s2.0-S1342937X22002192-mmc1.xlsx"
+ },
+ {
+  "accuracy": "The authors call these elevation models a first draft.",
+  "adaptations": "Land (above 0 m) and shallow sea (0 to 200 m deep) as shares of the globe, weighted by the cosine of latitude, one value per grid.",
+  "cite": "Scotese, C.R. & Wright, N.M., 2018. PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. Zenodo, doi:10.5281/zenodo.5460860. CC BY 4.0.",
+  "id": "paleodem",
+  "licence": "CC BY 4.0",
+  "licence_quote": "This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "C. R. Scotese & N. M. Wright, PALEOMAP Project",
+  "part": "land and shallow-sea area",
+  "retrieved": "2026-09-30",
+  "source": "Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip (sha256 7014767a168c28d3762f55117ebafcd0f6b6b90029a495e2d14fd23f94abc16d), Zenodo record 5460860: the 109 NetCDF grids, keyed by the Plate Model Age in the zip's interval CSV.",
+  "title": "PALEOMAP Paleodigital Elevation Models (PaleoDEMs), 1 degree",
+  "url": "https://zenodo.org/api/records/5460860/files/Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip/content"
+ },
+ {
+  "accuracy": "Model output and a model input, not measurements.",
+  "adaptations": "Global mean temperature and the CO2 input interpolated linearly between the 5-million-year runs.",
+  "cite": "Judd, E.J., Tierney, J.E., Lunt, D.J., Montanez, I.P., Huber, B.T., Wing, S.L. & Valdes, P.J., 2023. PhanDA HadCM3L Model Priors (suite scotese_07). Zenodo, doi:10.5281/zenodo.8237751. CC BY 4.0. Simulations by the BRIDGE group, University of Bristol.",
+  "id": "phanda",
+  "licence": "CC BY 4.0",
+  "licence_quote": "Zenodo record 8237751: license cc-by-4.0 (Creative Commons Attribution 4.0 International).",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "E. J. Judd, J. E. Tierney, D. J. Lunt, I. P. Montanez, B. T. Huber, S. L. Wing & P. J. Valdes; simulations by the BRIDGE group, University of Bristol",
+  "part": "curves",
+  "retrieved": "2026-09-30",
+  "source": "ExperimentInfo.xlsx (sha256 21866d6c30f930796cc3ee5ab25891847436859548d05865c037f521c8dd0f51): columns P-Q (scotese_07 PUMA ID and CO2); global means from data/climate.json.",
+  "title": "PhanDA HadCM3L model priors, suite scotese_07",
+  "url": "https://zenodo.org/records/8237751"
+ }
+]

@@ -1,0 +1,17 @@
+[
+ {
+  "accuracy": "A painted reconstruction by one author: one interpretation among several. Map ages are Scotese's Table 1 ages on the 2008 timescale his atlas uses.",
+  "adaptations": "Maps: resized from 3600 x 1800 to 1024 x 512 (Lanczos) and re-encoded as WebP quality 65; a 256 x 128 preview of each, combined into one sheet at quality 70. No colors or content changed.",
+  "cite": "Scotese, C.R., 2016. PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program, PALEOMAP Project. Via Scotese, C.R. & Wright, N.M., 2018, Zenodo, doi:10.5281/zenodo.5460860.",
+  "id": "paleoatlas",
+  "licence": "CC BY 4.0",
+  "licence_quote": "This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "C. R. Scotese, PALEOMAP Project",
+  "part": "maps",
+  "retrieved": "2026-09-30",
+  "source": "Scotese_PaleoAtlas_v3.zip (sha256 7bf15709970645465df17542e20f9e2e9ed01d20797f38513ed83621e4ace2a0), Zenodo record 5460860 (doi:10.5281/zenodo.5460860): the 90 JPEG maps in \"PALEOMAP PaleoAtlas Rasters v3\", each 3600 x 1800 px, equirectangular; ages from Table 1 of the PDF in the same zip.",
+  "title": "PALEOMAP PaleoAtlas for GPlates v3: paleogeographic maps and plate model",
+  "url": "https://zenodo.org/api/records/5460860/files/Scotese_PaleoAtlas_v3.zip/content"
+ }
+]

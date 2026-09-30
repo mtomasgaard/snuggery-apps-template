@@ -1,0 +1,23 @@
+[
+ {
+  "accuracy": "The readout names the class of the nearest 2-degree node, which can be up to about 1.4 degrees of arc from the point tapped.",
+  "adaptations": "Every second node of each 1-degree grid (a 2-degree grid) sorted into the ten elevation classes of Scotese's Table 2 (after Ziegler et al. 1985) and stored as one byte per node; the elevations themselves are not shipped.",
+  "cite": "Scotese, C.R. & Wright, N.M., 2018. PALEOMAP Paleodigital Elevation Models (PaleoDEMS) for the Phanerozoic. Zenodo, doi:10.5281/zenodo.5460860. CC BY 4.0. Classes from Table 2 of Scotese, C.R., 2016, PALEOMAP PaleoAtlas for GPlates and the PaleoData Plotter Program, PALEOMAP Project.",
+  "id": "paleodem",
+  "licence": "CC BY 4.0",
+  "licence_quote": "This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.",
+  "licence_uri": "http://creativecommons.org/licenses/by/4.0/",
+  "owner": "C. R. Scotese & N. M. Wright, PALEOMAP Project",
+  "part": "elevation classes",
+  "retrieved": "2026-09-30",
+  "source": [
+   "Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip (sha256 7014767a168c28d3762f55117ebafcd0f6b6b90029a495e2d14fd23f94abc16d), Zenodo record 5460860: the 109 NetCDF grids, keyed by the Plate Model Age in the zip's interval CSV.",
+   "The accompanying report Scotese_Wright2018_PALEOMAP_PaleoDEMs.pdf (sha256 8a5fca14f9860d148427a56cec241b4fc5b4108ff91bb867e8b68bde1392edac, same record) was read for the method and for its statement that the grids are a \"first draft\" (p. 7); nothing of it ships."
+  ],
+  "title": "PALEOMAP Paleodigital Elevation Models (PaleoDEMs), 1 degree",
+  "url": [
+   "https://zenodo.org/api/records/5460860/files/Scotese_Wright_2018_Maps_1-88_1degX1deg_PaleoDEMS_nc.zip/content",
+   "https://zenodo.org/api/records/5460860/files/Scotese_Wright2018_PALEOMAP_PaleoDEMs.pdf/content"
+  ]
+ }
+]

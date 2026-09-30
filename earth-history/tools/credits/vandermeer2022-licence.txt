@@ -1,0 +1,33 @@
+van der Meer, D.G., Scotese, C.R., Mills, B.J.W., Sluijs, A., van den Berg van Saparoea, A.-P. &
+van de Weg, R.M.B., 2022. Long-term Phanerozoic global mean sea level: Insights from strontium
+isotope variations and estimates of continental glaciation. Gondwana Research 111, 103-121.
+doi:10.1016/j.gr.2022.07.014
+
+Quoted verbatim from the White Rose Research Online record https://eprints.whiterose.ac.uk/id/eprint/189833/
+("Copyright, Publisher and Additional Information"), retrieved 2026-09-30:
+
+  (c) 2022 The Authors. Published by Elsevier B.V. on behalf of International Association for
+  Gondwana Research. This is an open access article under the CC BY license
+  (http://creativecommons.org/licenses/by/4.0/).
+
+The same record lists the deposited published version with "Licence: CC-BY 4.0". Crossref's record
+for the DOI (api.crossref.org/works/10.1016/j.gr.2022.07.014) lists the version of record
+('content-version': 'vor') under http://creativecommons.org/licenses/by/4.0/ from 2022-08-07.
+
+The file used is the article's supplementary table, https://ars.els-cdn.com/content/image/1-s2.0-S1342937X22002192-mmc1.xlsx
+(sheet "SuppTable"; column group "Fig10", TGE_SL_isocorr_m AVG/MIN/MAX, metres, 0-540 Ma at 1 Myr).
+No separate licence is printed on the supplement itself; it is published with the article, whose
+licence statement is quoted above. www.sciencedirect.com refuses a script (HTTP 403), so the article
+page itself was not read.
+
+Elsevier's own policy on supplementary files, quoted verbatim from its Journal Article Publishing
+Support Center answer "Which license should I select when posting my research data?"
+(https://www.elsevier.support/publishing/answer/which-license-should-i-select-when-posting-my-research-data),
+retrieved 2026-09-30:
+
+  If you provide your data as supplementary files to your paper and the paper is Open Access, the
+  data will follow the same license as you choose for the article.
+
+So the supplement is under the article's CC BY 4.0, and its copyright notice, "(c) 2022 The Authors.
+Published by Elsevier B.V. on behalf of International Association for Gondwana Research", is
+reproduced in the attribution (CC BY 4.0 section 3(a)(1)(A)(ii)).
