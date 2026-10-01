@@ -2,17 +2,17 @@
  "blocks": [
   {
    "id": "reading-sizes",
-   "text": "Nothing is enlarged. Planets and moons are drawn at their true size and true distance, which is why most of them are a dot and a label until you come close; the dot is a marker, the globe appears when it is a few pixels across. The ruler at the bottom left is true at the distance of the object in the middle of the screen.",
+   "text": "Nothing is enlarged. Planets and moons are drawn at their true size and true distance, which is why most of them are a dot and a label until you come close; the dot is a marker, the globe appears when it is a few pixels across. The caption under the picture gives the width of the screen at the distance of the object in the middle of it.",
    "title": "Sizes and distances"
   },
   {
    "id": "reading-brightness",
-   "text": "Each star is drawn from its absolute magnitude and its distance from the camera, so from the Sun the sky has the real magnitudes and a star brightens as you fly to it. Farther from the Sun the exposure is raised so the neighbourhood stays readable. Interstellar dust is not modelled: distant stars look brighter than they would.",
+   "text": "Each star is drawn from its absolute magnitude and its distance from the camera, so from the Sun the sky has the real magnitudes and a star brightens as you fly to it. Farther from the Sun the exposure is raised so the neighborhood stays readable. Interstellar dust is not modeled: distant stars look brighter than they would.",
    "title": "Star brightness"
   },
   {
    "id": "reading-glow",
-   "text": "The glow around the Sun and the halo of points are display effects so small things stay visible on a phone. Marker and label colours are chosen for legibility and are not data, and neither are the colours of the galaxy model's glow, the young-star maps and the Gaia sky: those layers hold a density or a star count, drawn in a display tint. On a phone the Gaia sky is also given more contrast than its credited stretch: its faintest eighth of levels is drawn black and its mid-tones are darkened. A globe's surface colour is data where a map or a measured colour exists; where neither could be sourced it is a neutral grey (see \"What this app does not show\").",
+   "text": "The glow around the Sun and the halo of points are display effects so small things stay visible on a phone. A marker's color names its category: asteroids and comets by where the orbit lies (orange near the Earth and Mars, pale in the belt, blue beyond Jupiter, cyan for comets), and in the galaxy the clusters, the satellite galaxies, the two arm fits and the streams each in a color of their own; the card names each in words. Orbits, trails and the planets' markers are one neutral, and label colors are chosen for legibility. The colors of the galaxy model's glow, the young-star maps and the Gaia sky are not data: those layers hold a density or a star count, drawn in a display tint. On a phone the Gaia sky is also given more contrast than its credited stretch: its faintest eighth of levels is drawn black and its mid-tones are darkened. A globe's surface color is data where a map or a measured color exists; where neither could be sourced it is a neutral gray (see \"What this app does not show\").",
    "title": "Display effects"
   },
   {
@@ -22,62 +22,62 @@
    "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics (W. M. Folkner et al., IPN Progress Report 42-196, 2014); the SPK's comment block is by C. Acton (NAIF), 2013-09-03",
    "retrieved": "2026-09-23",
    "source": "de430.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 6e1b277c5f07135a84950604b83e56b736be696a7f3560bcddb1d4aeb944fca1",
-   "text": "Refitted to a float32 Chebyshev table for 1900-01-01 to 2100-01-01 TDB: heliocentric Mercury, Venus, Earth-Moon barycentre, Mars and the Jupiter-Pluto system barycentres, and the geocentric Moon (interval/degree per body in data/ephem.json). The Earth/Moon mass ratio (EMRAT 81.30056907) was measured from the file's own Earth and Moon segments. Pluto is the Pluto-system barycentre (about 2,135 km from the centre of Pluto); Charon is not shown — no long-term Pluto-satellite ephemeris was reachable.",
+   "text": "Refitted to a float32 Chebyshev table for 1900-01-01 to 2100-01-01 TDB: heliocentric Mercury, Venus, Earth-Moon barycenter, Mars and the Jupiter-Pluto system barycenters, and the geocentric Moon (interval/degree per body in data/ephem.json). The Earth/Moon mass ratio (EMRAT 81.30056907) was measured from the file's own Earth and Moon segments. Pluto is the Pluto-system barycenter (about 2,135 km from the center of Pluto); Charon is not shown — no long-term Pluto-satellite ephemeris was reachable.",
    "title": "JPL DE430 planetary and lunar ephemeris (de430.bsp)",
    "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/de430.bsp"
   },
   {
-   "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Phobos max 3 km (0.033 % of a), 400 windows of 91.3125 d; Deimos max 14 km (0.059 % of a), 400 windows of 91.3125 d.",
+   "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Phobos max 3 km (0.033 % of a), 400 windows of 91.3125 d; Deimos max 14 km (0.059 % of a), 400 windows of 91.3125 d.",
    "id": "jpl-mar097",
    "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
    "owner": "MAR097.3, R. A. Jacobson, JPL SSD; release form \"Release to: Horizons/NAIF\", \"Preparer: R. A. Jacobson\"",
    "retrieved": "2026-09-23",
    "source": "mar097.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 18af4611f536b1bccc07be6bce304b47cf8a829536023972e90097b5cefd902c",
-   "text": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
+   "text": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
    "title": "JPL Martian satellite ephemeris MAR097 (Phobos, Deimos)",
    "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/mar097.bsp"
   },
   {
-   "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Io max 61 km (0.015 % of a), 400 windows of 91.3125 d; Europa max 356 km (0.053 % of a), 600 windows of 60.875 d; Ganymede max 875 km (0.082 % of a), 600 windows of 60.875 d; Callisto max 306 km (0.016 % of a), 250 windows of 146.1 d.",
+   "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Io max 61 km (0.015 % of a), 400 windows of 91.3125 d; Europa max 356 km (0.053 % of a), 600 windows of 60.875 d; Ganymede max 875 km (0.082 % of a), 600 windows of 60.875 d; Callisto max 306 km (0.016 % of a), 250 windows of 146.1 d.",
    "id": "jpl-jup310",
    "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
    "owner": "JUP310.2, R. A. Jacobson, JPL SSD; release form \"Release to: Horizons/NAIF/Juno\", \"Preparer: R. A. Jacobson\"",
    "retrieved": "2026-09-23",
    "source": "jup310.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 ed64f05431a7da5486f9d00ecff3490213f871c247a293138a798d560fcfdebb",
-   "text": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
+   "text": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
    "title": "JPL Jovian satellite ephemeris JUP310 (Io, Europa, Ganymede, Callisto)",
    "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/jup310.bsp"
   },
   {
-   "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Mimas max 81 km (0.044 % of a), 1000 windows of 36.525 d; Enceladus max 38 km (0.016 % of a), 400 windows of 91.3125 d; Tethys max 79 km (0.027 % of a), 400 windows of 91.3125 d; Dione max 95 km (0.025 % of a), 250 windows of 146.1 d; Rhea max 151 km (0.029 % of a), 250 windows of 146.1 d; Titan max 40 km (0.003 % of a), 250 windows of 146.1 d; Hyperion max 1267 km (0.086 % of a), 3000 windows of 12.175 d; Iapetus max 840 km (0.024 % of a), 250 windows of 146.1 d.",
+   "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Mimas max 81 km (0.044 % of a), 1000 windows of 36.525 d; Enceladus max 38 km (0.016 % of a), 400 windows of 91.3125 d; Tethys max 79 km (0.027 % of a), 400 windows of 91.3125 d; Dione max 95 km (0.025 % of a), 250 windows of 146.1 d; Rhea max 151 km (0.029 % of a), 250 windows of 146.1 d; Titan max 40 km (0.003 % of a), 250 windows of 146.1 d; Hyperion max 1267 km (0.086 % of a), 3000 windows of 12.175 d; Iapetus max 840 km (0.024 % of a), 250 windows of 146.1 d.",
    "id": "jpl-sat425",
    "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
    "owner": "SAT425, R. A. Jacobson, JPL SSD (Saturn global fit); bsp by C. Acton, NAIF: \"sat425.bsp was created on 28 August 2019 by C. Acton. It was created from Bob Jacobson's sat425l.nio file.\"",
    "retrieved": "2026-09-23",
    "source": "sat425.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 2120505b93fe2c70f52a399f770a4e75dbb35fb44922ede48a18de71abb2d574",
-   "text": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such. Also the Saturn C, B and A ring radii from the header's \"Additional Constants\" (C_ring_RI ... A_ring_RO), copied as they are.",
+   "text": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such. Also the Saturn C, B and A ring radii from the header's \"Additional Constants\" (C_ring_RI ... A_ring_RO), copied as they are.",
    "title": "JPL Saturnian satellite ephemeris SAT425 (Mimas to Iapetus) and its ring radii",
    "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/sat425.bsp"
   },
   {
-   "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Ariel max 85 km (0.044 % of a), 250 windows of 146.1 d; Umbriel max 362 km (0.136 % of a), 1000 windows of 36.525 d; Titania max 871 km (0.200 % of a), 1000 windows of 36.525 d; Oberon max 937 km (0.161 % of a), 1000 windows of 36.525 d; Miranda max 58 km (0.044 % of a), 250 windows of 146.1 d.",
+   "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Ariel max 85 km (0.044 % of a), 250 windows of 146.1 d; Umbriel max 362 km (0.136 % of a), 1000 windows of 36.525 d; Titania max 871 km (0.200 % of a), 1000 windows of 36.525 d; Oberon max 937 km (0.161 % of a), 1000 windows of 36.525 d; Miranda max 58 km (0.044 % of a), 250 windows of 146.1 d.",
    "id": "jpl-ura111",
    "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
    "owner": "URA111, R. A. Jacobson, JPL SSD; release form \"Fit of the major Uranian satellites and Puck to Voyager and ...\" (Puck is not in the SPK)",
    "retrieved": "2026-09-23",
    "source": "ura111.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 384647ab7fdc085eb573926a8db6326748518d4ad600d5ca6bdaa06f9c0d7bdc",
-   "text": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
+   "text": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
    "title": "JPL Uranian satellite ephemeris URA111 (Miranda, Ariel, Umbriel, Titania, Oberon)",
    "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/ura111.bsp"
   },
   {
-   "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Triton max 3 km (0.001 % of a), 250 windows of 146.1 d; Nereid max 369 km (0.007 % of a), 250 windows of 146.1 d.",
+   "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Triton max 3 km (0.001 % of a), 250 windows of 146.1 d; Nereid max 369 km (0.007 % of a), 250 windows of 146.1 d.",
    "id": "jpl-nep081",
    "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
    "owner": "NEP081, R. A. Jacobson (Astron. J. 137, 4322, 2009), JPL SSD",
    "retrieved": "2026-09-23",
    "source": "nep081.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 a304baf7e6d853d41a44bea80ea0fb9a0a7e11239d057f618f683602fa8e49cb",
-   "text": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
+   "text": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
    "title": "JPL Neptunian satellite ephemeris NEP081 (Triton, Nereid)",
    "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/nep081.bsp"
   },
@@ -132,14 +132,14 @@
    "owner": "PDS Ring-Moon Systems Node, SETI Institute (rms-oops); values adapted, per the source, from the tabulated elements of French et al. 1991",
    "retrieved": "2026-09-23",
    "source": "SETI/rms-oops src/oops/body.py at commit 46b01e291102423df97a3a970abb4b9e3f312f4f, sha256 dc6b20924e69821bc8c6d4a5805f259ab07b0f4edbce388398511ab2427bd281",
-   "text": "Semi-major axis, eccentricity and radial width of the ten rings; drawn as circles a -/+ width/2 in Uranus's equatorial plane. Pericentre and node longitudes (epoch 1977-03-10T20:00 UTC, B1950-based ring frame in rms-oops) are not shipped.",
+   "text": "Semi-major axis, eccentricity and radial width of the ten rings; drawn as circles a -/+ width/2 in Uranus's equatorial plane. Pericenter and node longitudes (epoch 1977-03-10T20:00 UTC, B1950-based ring frame in rms-oops) are not shipped.",
    "title": "Uranian ring elements (PDS Ring-Moon Systems Node constants, French et al. 1991)",
    "url": "https://raw.githubusercontent.com/SETI/rms-oops/46b01e291102423df97a3a970abb4b9e3f312f4f/src/oops/body.py"
   },
   {
    "accuracy": "Two-body propagation of osculating elements, epoch 2025-11-21 for 7,501 rows, older for the rest (per row in the file). Against JPL Horizons' own osculating elements of Ceres, Pallas, Juno and Vesta, 1900-2100: 8.2e-06 AU 49 days from the epoch; worst of the four by years from the epoch: 0-1 yr 0.00034 AU, 1-5 yr 0.017 AU, 5-10 yr 0.054 AU, 10-25 yr 0.12 AU, 25-50 yr 0.29 AU, 50-75 yr 0.32 AU, 75-125 yr 0.54 AU (Vesta, the least perturbed, within 0.075 AU). Pluto's SBDB elements against DE430: 0-1 yr 0.001 AU, 1-5 yr 0.015 AU, 5-10 yr 0.037 AU, 10-25 yr 0.088 AU, 25-50 yr 0.220 AU, 50-75 yr 0.381 AU, 75-125 yr 0.449 AU.",
    "id": "jpl-sbdb-h12",
-   "licence": "No licence could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and the research pass found only a web-search summary of catalog.data.gov (\"No license information was provided\"). JPL is operated by Caltech, so this is not claimed to be a US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; kstars/data/ has no file-level licence); only the numbers are used, in a new format.",
+   "licence": "No license could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and the research pass found only a web-search summary of catalog.data.gov (\"No license information was provided\"). JPL is operated by Caltech, so this is not claimed to be a US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; kstars/data/ has no file-level license); only the numbers are used, in a new format.",
    "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics group (Small-Body Database)",
    "retrieved": "2026-09-23",
    "source": "kstars/data/asteroids.dat in the KDE KStars repository at commit 182b27aba4726a79f75fd1ffcd3e5d52d09f2450 (2026-04-04), sha256 dc39954ecc89f1062f07665ac3b6d10eb5a43a4a4b578947f60c2f161fdc45c2: a verbatim response of JPL's SBDB Query API (\"NASA/JPL SBDB (Small-Body DataBase) Query API\" v1.0) to KStars' query for H < 12 with full-precision elements. KStars' README.ephemerides: \"KStars keeps track of thousands of comets and asteroids. It uses orbital data published by NASA's Jet Propulsion Laboratory (JPL); these data are known as \"orbital elements\".\"",
@@ -194,7 +194,7 @@
   {
    "accuracy": "Two-body propagation from each comet's own epoch (1965-2020); far from it they are approximate.",
    "id": "jpl-sbdb-comets",
-   "licence": "No licence could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and the research pass found only a web-search summary of catalog.data.gov (\"No license information was provided\"). JPL is operated by Caltech, so this is not claimed to be a US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; kstars/data/ has no file-level licence); only the numbers are used, in a new format.",
+   "licence": "No license could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and the research pass found only a web-search summary of catalog.data.gov (\"No license information was provided\"). JPL is operated by Caltech, so this is not claimed to be a US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; kstars/data/ has no file-level license); only the numbers are used, in a new format.",
    "owner": "NASA Jet Propulsion Laboratory, Solar System Dynamics group (Small-Body Database)",
    "retrieved": "2026-09-23",
    "source": "kstars/data/comets.dat in the KDE KStars repository at commit 182b27aba4726a79f75fd1ffcd3e5d52d09f2450, sha256 e856704306967d9c8f8dcaed7cbf4039f8209f3d07bc15a263fd4217cd937e4c: an SBDB Query API response last updated in KStars in October 2021.",
@@ -210,17 +210,17 @@
    "retrieved": "2026-09-23",
    "source": "Stellarium data/ssystem_minor.ini at commit 450dbc0fcb81593f930371a165013f2a1b255f4f (the name of 162173 Ryugu) and data/asteroid_elements.json (JPL Horizons yearly osculating elements of Ceres, Pallas, Juno and Vesta, 1800-2100, generated by Stellarium's fetch_asteroid_elements.py — used only to measure the accuracy above, not shipped); CelestiaContent data/dwarfplanets.ssc (which bodies are grouped as dwarf planets) and data/asteroids.ssc (the name of 65803 Didymos) at commit eab93932c85fa315f370477ee8c6b7e15f12c327.",
    "text": "Nothing shipped beyond the kind of eight rows and two names. Stellarium types only Eris, Haumea, Makemake as \"dwarf planet\" and Ceres as \"asteroid\"; Celestia's grouping is the one used, and the file says so (dwarf_note).",
-   "title": "Stellarium and Celestia catalogues (dwarf-planet grouping, two names; accuracy checks)",
+   "title": "Stellarium and Celestia catalogs (dwarf-planet grouping, two names; accuracy checks)",
    "url": "https://raw.githubusercontent.com/Stellarium/stellarium/450dbc0fcb81593f930371a165013f2a1b255f4f/data/ssystem_minor.ini"
   },
   {
-   "accuracy": "A generic texture, per its commit message: sunspots from HMI images of 2025-08-07 to 08-31, the rest spotless data of 2019-12-15, each image used only in the central 60 % of the disc; limb darkening removed; no Carrington registration, so longitudes carry no meaning. The source is monochrome HMI 617 nm continuum data; the colour is the measured TSIS-1 colour, not HMI's.",
+   "accuracy": "A generic texture, per its commit message: sunspots from HMI images of 2025-08-07 to 08-31, the rest spotless data of 2019-12-15, each image used only in the central 60 % of the disk; limb darkening removed; no Carrington registration, so longitudes carry no meaning. The source is monochrome HMI 617 nm continuum data; the color is the measured TSIS-1 color, not HMI's.",
    "id": "stellarium-sun-hmi",
    "licence": "CC BY-SA 4.0",
    "owner": "NASA Solar Dynamics Observatory, HMI (data); map by Ruslan Kabatsayev for Stellarium (commit 2aa98a95, 2025-09-15)",
    "retrieved": "2026-09-23",
    "source": "Stellarium textures/sun.webp at commit 9910a2f0 (8192x4096 WebP, sha256 a1fc496b...)",
-   "text": "Averaged 8x8 in linear light to 1024x512; the intensity is kept and Stellarium's uniform warm tint is replaced by the TSIS-1 solar colour (sRGB [255, 244, 241]); JPEG quality 85. The adapted map data/tex/sun.jpg is shared under CC BY-SA 4.0.",
+   "text": "Averaged 8x8 in linear light to 1024x512; the intensity is kept and Stellarium's uniform warm tint is replaced by the TSIS-1 solar color (sRGB [255, 244, 241]); JPEG quality 85. The adapted map data/tex/sun.jpg is shared under CC BY-SA 4.0.",
    "title": "Sun: SDO HMI continuum map (Stellarium sun.webp)",
    "url": "https://raw.githubusercontent.com/Stellarium/stellarium/9910a2f05c52d4d9f351ff490c9bc4d99670df1f/textures/sun.webp"
   },
@@ -236,7 +236,7 @@
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Mercury_MESSENGER_mosaic_global_250m_2013.tif"
   },
   {
-   "accuracy": "Radar brightness of the surface under the clouds, not what an eye sees: the visible Venus is a nearly featureless cloud deck, and no Venus colour or cloud map could be sourced.",
+   "accuracy": "Radar brightness of the surface under the clouds, not what an eye sees: the visible Venus is a nearly featureless cloud deck, and no Venus color or cloud map could be sourced.",
    "id": "usgs-venus-magellan-c3mdir",
    "licence": "Public domain (USGS FGDC access constraint)",
    "owner": "NASA/JPL Magellan mission; PDS Geosciences Node (FGDC originator); mosaic by USGS Astrogeology",
@@ -247,9 +247,9 @@
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Venus_Magellan_C3-MDIR_Global_Mosaic_2025m.tif"
   },
   {
-   "accuracy": "Cloud-free monthly composite; its colours agree with an independent BMNG copy (PyPI basemap-data) to a mean 7 DN (research verifier). No clouds are shown: no clean real cloud map was found.",
+   "accuracy": "Cloud-free monthly composite; its colors agree with an independent BMNG copy (PyPI basemap-data) to a mean 7 DN (research verifier). No clouds are shown: no clean real cloud map was found.",
    "id": "nasa-bmng-200405",
-   "licence": "Public domain (NASA). WebWorldWind carries no licence text for the image itself; KDE Marble labels its copy of the same Blue Marble product \"NASA / Public Domain\", and the Earth Observatory terms quoted in Stellarium's CREDITS.md make its material freely reusable.",
+   "licence": "Public domain (NASA). WebWorldWind carries no license text for the image itself; KDE Marble labels its copy of the same Blue Marble product \"NASA / Public Domain\", and the Earth Observatory terms quoted in Stellarium's CREDITS.md make its material freely reusable.",
    "owner": "NASA Earth Observatory / NASA Goddard Space Flight Center (Reto Stöckli), from Terra MODIS",
    "retrieved": "2026-09-23",
    "source": "NASAWorldWind/WebWorldWind images/BMNG_world.topo.bathy.200405.3.2048x1024.jpg at commit 5ffe2dfc (sha256 7405c39a...), the file WebWorldWind's BMNGOneImageLayer drapes on the full sphere",
@@ -260,7 +260,7 @@
   {
    "accuracy": "DMSP satellite data of about 2000, composited over a dark land and ocean base (not a pure emission layer).",
    "id": "nasa-noaa-citylights-dmsp",
-   "licence": "Public domain (as labelled in KDE Marble's citylights.dgml)",
+   "licence": "Public domain (as labeled in KDE Marble's citylights.dgml)",
    "owner": "Marc Imhoff (NASA GSFC), Christopher Elvidge (NOAA NGDC), Craig Mayhew and Robert Simmon (NASA GSFC)",
    "retrieved": "2026-09-23",
    "source": "KDE/marble data/maps/earth/citylights/citylights.jpg at commit 600d542e (2700x1350, sha256 c79ca569...)",
@@ -269,42 +269,42 @@
    "url": "https://raw.githubusercontent.com/KDE/marble/600d542e8de95716864f3278f2a4110cb54cb012/data/maps/earth/citylights/citylights.jpg"
   },
   {
-   "accuracy": "Albedo with shading removed (suits the app's own lighting). Disclosed processing that is not measurement: brightness x4, polar colour fitted from the equatorial sectors, and colour balanced to grey instead of the natural beige. Longitude convention proved by Tycho, Mare Humorum and the maria/highlands asymmetry.",
+   "accuracy": "Albedo with shading removed (suits the app's own lighting). Disclosed processing that is not measurement: brightness x4, polar color fitted from the equatorial sectors, and color balanced to gray instead of the natural beige. Longitude convention proved by Tycho, Mare Humorum and the maria/highlands asymmetry.",
    "id": "stellarium-moon-lroc-albedo",
    "licence": "CC BY-SA 4.0",
    "owner": "NASA LRO / LROC team, Arizona State University (data); map by Ruslan Kabatsayev for Stellarium (commit ef231c69, 2026-03-13)",
    "retrieved": "2026-09-23",
    "source": "Stellarium textures/moon_4k.jpg at commit 9910a2f0 (4096x2048, sha256 ad4435c7...)",
    "text": "Averaged 2x2 to 2048x1024, JPEG quality 85. The adapted map data/tex/moon.jpg is shared under CC BY-SA 4.0.",
-   "title": "Moon: LROC WAC Hapke-normalised albedo map (Stellarium moon_4k.jpg)",
+   "title": "Moon: LROC WAC Hapke-normalized albedo map (Stellarium moon_4k.jpg)",
    "url": "https://raw.githubusercontent.com/Stellarium/stellarium/9910a2f05c52d4d9f351ff490c9bc4d99670df1f/textures/moon_4k.jpg"
   },
   {
-   "accuracy": "Two filters only: the green channel was synthesised from the red and violet data (FGDC abstract), so dark regions look bluish-grey; close to, not exactly, true colour. Olympus Mons, Syrtis Major and Hellas checked at their catalogued positions.",
+   "accuracy": "Two filters only: the green channel was synthesized from the red and violet data (FGDC abstract), so dark regions look bluish-gray; close to, not exactly, true color. Olympus Mons, Syrtis Major and Hellas checked at their cataloged positions.",
    "id": "usgs-mars-viking-color-925m",
    "licence": "Public domain (USGS FGDC access constraint)",
    "owner": "NASA Viking Orbiter; Planetary Data System (FGDC originator); USGS Astrogeology",
    "retrieved": "2026-09-23",
    "source": "USGS Astrogeology public bucket asc-pds-services, mosaic/Mars_Viking_ClrMosaic_global_925m.tif (797,888,177 bytes, sha256 5b3c6bea36cec0ec..., md5 a0e0bbf33ecb0ff65ece9cfa8e08813e = the USGS sidecar), with its ISIS label Mars_Viking_ClrMosaic_global_925m.lbl",
-   "text": "About 1000 red- and violet-filter images, Minnaert-normalised and haze-corrected (FGDC abstract). Area-averaged (every source pixel counted once, nodata excluded) to 2048x1024, east-positive, left edge -180 deg (ISIS label: PositiveEast, planetocentric, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0); JPEG quality 85.",
-   "title": "Mars: Viking Orbiter global colour mosaic 925 m",
+   "text": "About 1000 red- and violet-filter images, Minnaert-normalized and haze-corrected (FGDC abstract). Area-averaged (every source pixel counted once, nodata excluded) to 2048x1024, east-positive, left edge -180 deg (ISIS label: PositiveEast, planetocentric, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0); JPEG quality 85.",
+   "title": "Mars: Viking Orbiter global color mosaic 925 m",
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Mars_Viking_ClrMosaic_global_925m.tif"
   },
   {
-   "accuracy": "A snapshot of 11-12 December 2000 from 36 images in two filters (451 and 750 nm) combined to near-natural colour; the poles were poorly observed, and the source map is one flat colour [169, 173, 156] over the south polar region (4.3 % of the pixels): not imaged, not terrain. Features drift in longitude, so the Great Red Spot (about 21 S in this map) will not match any other date; the file does not state the longitude system.",
+   "accuracy": "A snapshot of 11-12 December 2000 from 36 images in two filters (451 and 750 nm) combined to near-natural color; the poles were poorly observed, and the source map is one flat color [169, 173, 156] over the south polar region (4.3 % of the pixels): not imaged, not terrain. Features drift in longitude, so the Great Red Spot (about 21 S in this map) will not match any other date; the file does not state the longitude system.",
    "id": "cassini-pia07782",
    "licence": "JPL Image Use Policy: any purpose with a credit line. The Space Science Institute is a non-NASA co-credit; the policy notes that such third-party material may carry restrictions on commercial use.",
    "owner": "NASA/JPL/Space Science Institute (Cassini Imaging Science Subsystem); USGS Astrogeology copy",
    "retrieved": "2026-09-23",
    "source": "USGS asc-pds-services wms_basemaps/Jupiter/Jupiter/originals/jupiter_rgb_cyl_www.jpg (4096x2048, sha256 0c6fa8e9...), with the annotated original jupiter_from_cassini.tif for the longitude labels",
    "text": "Averaged 2x2 to 2048x1024, JPEG quality 85. Not flipped: the annotated original labels its x axis 180, 150, ... 0, 330, ... 180, i.e. west longitude decreasing to the right, so east longitude increases to the right; left edge 180 W (-180 E). The web copy is the same picture (correlation 0.999 at zero shift, 0.85 mirrored). The web copy's world file puts the left edge at longitude 0 instead, 180 deg from the annotation; the annotation is followed.",
-   "title": "Jupiter: Cassini ISS global colour map PIA07782 (December 2000)",
+   "title": "Jupiter: Cassini ISS global color map PIA07782 (December 2000)",
    "url": "https://asc-pds-services.s3.amazonaws.com/wms_basemaps/Jupiter/Jupiter/originals/jupiter_rgb_cyl_www.jpg"
   },
   {
-   "accuracy": "Its label puts the map's centre at 180 E (0..360); Sputnik Planitia checked at 175 E, 20 N. Resolution is very uneven (sharp on the encounter hemisphere). The flat grey area is where New Horizons saw nothing (southern polar night); it is not terrain. Longitudes are in the frame the mosaic was made in (nh_targets_v001 / pck00010 per its ISIS label).",
+   "accuracy": "Its label puts the map's center at 180 E (0..360); Sputnik Planitia checked at 175 E, 20 N. Resolution is very uneven (sharp on the encounter hemisphere). The flat gray area is where New Horizons saw nothing (southern polar night); it is not terrain. Longitudes are in the frame the mosaic was made in (nh_targets_v001 / pck00010 per its ISIS label).",
    "id": "usgs-pluto-new-horizons-2017",
-   "licence": "No licence stated: FGDC access constraint \"None\", use constraint \"Please cite authors\"; a NASA mission product distributed by USGS. Credited as asked.",
+   "licence": "No license stated: FGDC access constraint \"None\", use constraint \"Please cite authors\"; a NASA mission product distributed by USGS. Credited as asked.",
    "owner": "NASA, Johns Hopkins University Applied Physics Laboratory, Southwest Research Institute, Lunar and Planetary Institute (FGDC originators); distributed by USGS Astrogeology",
    "retrieved": "2026-09-23",
    "source": "USGS Astrogeology public bucket asc-pds-services, mosaic/Pluto_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif (309,806,463 bytes, sha256 592b7fb0f88cafa0..., md5 3a137d75e3a1a325f3de037a27563ffa = the USGS sidecar), with its ISIS label Pluto_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.lbl",
@@ -313,7 +313,7 @@
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Pluto_NewHorizons_Global_Mosaic_300m_Jul2017_8bit.tif"
   },
   {
-   "accuracy": "Labelled PositiveWest; drawn east-positive (Loki Patera checked at 308.8 W). Grayscale only; 512x256.",
+   "accuracy": "Labeled PositiveWest; drawn east-positive (Loki Patera checked at 308.8 W). Grayscale only; 512x256.",
    "id": "usgs-io-galileo-voyager-1km",
    "licence": "Public domain (USGS FGDC access constraint)",
    "owner": "Planetary Data System (FGDC originator); NASA/JPL missions; USGS Astrogeology",
@@ -324,7 +324,7 @@
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Io_GalileoSSI-Voyager_Global_Mosaic_1km.tif"
   },
   {
-   "accuracy": "Labelled PositiveWest; drawn east-positive (Galileo Regio, Tros and Osiris checked). Grayscale only; 512x256.",
+   "accuracy": "Labeled PositiveWest; drawn east-positive (Galileo Regio, Tros and Osiris checked). Grayscale only; 512x256.",
    "id": "usgs-ganymede-voyager-galileo-1km",
    "licence": "Public domain (USGS FGDC access constraint)",
    "owner": "Astrogeology Science Center (FGDC originator); NASA/JPL missions; USGS Astrogeology",
@@ -335,43 +335,43 @@
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Ganymede_Voyager_GalileoSSI_global_mosaic_1km.tif"
   },
   {
-   "accuracy": "The flat grey north was in darkness during the 1989 flyby: not imaged, not terrain. The producer notes (FGDC procedure): \"Grid lines were filled by neighboring pixels.\" Grayscale only; 512x256.",
+   "accuracy": "The flat gray north was in darkness during the 1989 flyby: not imaged, not terrain. The producer notes (FGDC procedure): \"Grid lines were filled by neighboring pixels.\" Grayscale only; 512x256.",
    "id": "usgs-triton-voyager2-600m",
    "licence": "Public domain (USGS FGDC access constraint)",
    "owner": "NASA, Jet Propulsion Laboratory, Dr. Paul Schenk (FGDC originator); NASA/JPL missions; USGS Astrogeology",
    "retrieved": "2026-09-23",
    "source": "USGS Astrogeology public bucket asc-pds-services, mosaic/Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif (299,994,887 bytes, sha256 f20ed332e85df469..., md5 639d45b53604aa4395eccd17e4a9c0df = the USGS sidecar), with its ISIS label Triton_Voyager2_ClrMosaic_GlobalFill_600m.lbl",
-   "text": "Only the orange-filter band of the Voyager 2 colour composite (orange, violet and UV shown as RGB, i.e. false colour) is used. Area-averaged (every source pixel counted once, nodata excluded) to 512x256, east-positive, left edge -180 deg (ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0); JPEG quality 85. 38.4 % of the pixels had no data: flat DN 153 (mean of the imaged pixels) where Voyager 2 saw nothing (the north, in winter darkness in 1989): not imaged, not terrain.",
+   "text": "Only the orange-filter band of the Voyager 2 color composite (orange, violet and UV shown as RGB, i.e. false color) is used. Area-averaged (every source pixel counted once, nodata excluded) to 512x256, east-positive, left edge -180 deg (ISIS label: PositiveEast, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0); JPEG quality 85. 38.4 % of the pixels had no data: flat DN 153 (mean of the imaged pixels) where Voyager 2 saw nothing (the north, in winter darkness in 1989): not imaged, not terrain.",
    "title": "Triton: Voyager 2 global mosaic 600 m, orange filter",
    "url": "https://asc-pds-services.s3.amazonaws.com/mosaic/Triton_Voyager2_ClrMosaic_GlobalFill_600m.tif"
   },
   {
-   "accuracy": "Disk-averaged colours of July 1995 (Uranus's colour changes with its seasons); Jupiter, Saturn and Titan are full-disk albedo at 5.7-6.8 deg phase, Uranus and Neptune geometric albedo. An equal-energy illuminant instead of TSIS-1 changes them by at most 3 of 255.",
+   "accuracy": "Disk-averaged colors of July 1995 (Uranus's color changes with its seasons); Jupiter, Saturn and Titan are full-disk albedo at 5.7-6.8 deg phase, Uranus and Neptune geometric albedo. An equal-energy illuminant instead of TSIS-1 changes them by at most 3 of 255.",
    "id": "karkoschka-1998-spectra",
-   "licence": "PDS archive data (the label states no licence); the carrying repository is MIT-licensed",
+   "licence": "PDS archive data (the label states no license); the carrying repository is MIT-licensed",
    "owner": "Erich Karkoschka; ESO spectrophotometry of 1995-07-06 to 07-10; NASA Planetary Data System",
    "retrieved": "2026-09-23",
    "source": "PDS3 product 1995LOW.TAB and its label, carried verbatim in OrbitalCommons/starfield crates/surfaces/data/planet-spectra at commit 5cbc6620 (sha256 d8071e07... / 6fa49ffa...)",
-   "text": "Each spectrum x TSIS-1 sunlight integrated against the CIE 1931 2-degree colour-matching functions (as tabulated in colour-science 0.4.6, BSD-3-Clause), 1 nm steps 360-830 nm, Y = 1 for a white reflector, Bradford-adapted from the Sun's white to D65, IEC 61966-2-1 sRGB: Jupiter [193, 193, 178], Saturn [197, 185, 156], Uranus [157, 195, 202], Neptune [137, 183, 202], Titan [145, 126, 95].",
-   "title": "Disk colours: Karkoschka (1998) albedo spectra of Jupiter, Saturn, Uranus, Neptune and Titan, 300-1050 nm",
+   "text": "Each spectrum x TSIS-1 sunlight integrated against the CIE 1931 2-degree color-matching functions (as tabulated in colour-science 0.4.6, BSD-3-Clause), 1 nm steps 360-830 nm, Y = 1 for a white reflector, Bradford-adapted from the Sun's white to D65, IEC 61966-2-1 sRGB: Jupiter [193, 193, 178], Saturn [197, 185, 156], Uranus [157, 195, 202], Neptune [137, 183, 202], Titan [145, 126, 95].",
+   "title": "Disk colors: Karkoschka (1998) albedo spectra of Jupiter, Saturn, Uranus, Neptune and Titan, 300-1050 nm",
    "url": "https://raw.githubusercontent.com/OrbitalCommons/starfield/5cbc6620e74bb2139fb992a6886ed8b0414e34dd/crates/surfaces/data/planet-spectra/1995low.tab"
   },
   {
    "accuracy": "Solar-minimum spectrum, 0.3 % archive uncertainty over 460-2365 nm (file header).",
    "id": "tsis-1-hsrs",
-   "licence": "No licence in the file; the carrying repository is MIT-licensed",
+   "licence": "No license in the file; the carrying repository is MIT-licensed",
    "owner": "NASA TSIS-1 / LASP (Coddington et al. 2023); 1 nm resampling by OrbitalCommons/starfield",
    "retrieved": "2026-09-23",
    "source": "crates/surfaces/data/solar-spectrum/tsis1_hsrs_v2_1nm.csv in OrbitalCommons/starfield at commit 5cbc6620 (sha256 c27ca614...); LASP LISIRD itself is not reachable from the build network",
-   "text": "Colour of sunlight above the atmosphere: CIE xy [0.3216, 0.3321], about 6022 K (McCamy), sRGB [255, 244, 241] with the brightest channel at 255; used for the Sun's disc and to tint the Sun map. Also the illuminant for the planets' disk colours.",
-   "title": "Sun's colour: TSIS-1 Hybrid Solar Reference Spectrum v2",
+   "text": "Color of sunlight above the atmosphere: CIE xy [0.3216, 0.3321], about 6022 K (McCamy), sRGB [255, 244, 241] with the brightest channel at 255; used for the Sun's disk and to tint the Sun map. Also the illuminant for the planets' disk colors.",
+   "title": "Sun's color: TSIS-1 Hybrid Solar Reference Spectrum v2",
    "url": "https://raw.githubusercontent.com/OrbitalCommons/starfield/5cbc6620e74bb2139fb992a6886ed8b0414e34dd/crates/surfaces/data/solar-spectrum/tsis1_hsrs_v2_1nm.csv"
   },
   {
    "accuracy": "Star counts, not surface brightness: the bulge and the Magellanic Clouds are bright, bright stars do not stand out, and dust shows as holes. NSIDE 256 (0.23 deg pixels). The shipped 8-bit pixels invert (sky.json stretch) to the densities to a median 1.7 %, 99th percentile 11 % (verify_textures_sky.py). A global duplicate check of all 2,016 partitions was out of reach (8 GB of source_id); ten more suspicious partitions were checked clean by the research verifier.",
    "id": "gaia-dr3-hats-counts",
-   "licence": "CC BY-NC 3.0 IGO (non-commercial). ESA's Gaia licence page could not be read from the build network; a web-search summary of cosmos.esa.int/web/gaia-users/license gives CC BY-NC 3.0 IGO, and CelestiaContent's Gaia-derived data/stars.dat.license states the same. The AWS Open Data Registry entry only says \"Attribution required\".",
-   "owner": "European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC): Gaia Data Release 3. HATS catalogue by the LSST Interdisciplinary Network for Collaboration and Computing, hosted by STScI/MAST on AWS Open Data.",
+   "licence": "CC BY-NC 3.0 IGO (non-commercial). ESA's Gaia license page could not be read from the build network; a web-search summary of cosmos.esa.int/web/gaia-users/license gives CC BY-NC 3.0 IGO, and CelestiaContent's Gaia-derived data/stars.dat.license states the same. The AWS Open Data Registry entry only says \"Attribution required\".",
+   "owner": "European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC): Gaia Data Release 3. HATS catalog by the LSST Interdisciplinary Network for Collaboration and Computing, hosted by STScI/MAST on AWS Open Data.",
    "retrieved": "2026-09-23",
    "source": "point_map.fits (S3 bucket stpubdata, gaia/gaia_dr3/public/hats/gaia, versionId ap2bO438Iyoss8CsAujiN7K4GnPVyjVV, sha256 3bec7fbb3140c3bb...), and the source_id and _healpix_29 columns of partitions Norder=4/Npix=115 and Norder=3/Npix=29 (read by range requests at pinned versionIds, content pinned by sha256)",
    "text": "Two partitions of the MAST copy repeat rows (the same source_id up to 3 times): Norder=3/Npix=29 1,616,125 rows, 1,418,703 distinct; Norder=4/Npix=115 1,368,113 rows, 543,481 distinct. Their 257 HEALPix pixels were recounted from distinct source_id, giving 1,811,709,793 sources. Counts per square degree interpolated bilinearly onto a 2048x1024 ICRS equirectangular grid (RA increasing to the right), asinh stretch (black 2,500, soft 20,000, white 1,200,000 per deg^2, recorded in data/sky/sky.json), grayscale JPEG quality 85. Shared under the same terms (non-commercial).",
@@ -384,15 +384,15 @@
    "licence": "CC BY-SA 4.0",
    "owner": "David Nash (astronexus)",
    "retrieved": "2026-09-23",
-   "source": "Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA 1997, 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, from gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, the Gliese & Jahreiss 1991 nearby-star catalogue, the Tycho-2 Spectral Type Catalog (Wright et al. 2003) and SIMBAD cross-identifications (CDS, Strasbourg).",
-   "text": "Positions turned into ICRS Cartesian parsecs from ra, dec and dist; V derived from Tycho VT as V = VT - 0.090 (BT-VT), the formula in AT-HYG's own build notes, for 209,908 rows; absolute magnitudes recomputed as V + 5 - 5 log10 d with no extinction correction; colour indices and spectral types turned into display temperatures; 209,156 stars within 500 pc with parallax/error > 10 packed into deep.bin (pc x 64 in int16, M_V in 0.1 mag steps). The shipped star files are shared under CC BY-SA 4.0.",
+   "source": "Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA 1997, 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, from gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, the Gliese & Jahreiss 1991 nearby-star catalog, the Tycho-2 Spectral Type Catalog (Wright et al. 2003) and SIMBAD cross-identifications (CDS, Strasbourg).",
+   "text": "Positions turned into ICRS Cartesian parsecs from ra, dec and dist; V derived from Tycho VT as V = VT - 0.090 (BT-VT), the formula in AT-HYG's own build notes, for 209,908 rows; absolute magnitudes recomputed as V + 5 - 5 log10 d with no extinction correction; color indices and spectral types turned into display temperatures; 209,156 stars within 500 pc with parallax/error > 10 packed into deep.bin (pc x 64 in int16, M_V in 0.1 mag steps). The shipped star files are shared under CC BY-SA 4.0.",
    "title": "AT-HYG v3.2 (Augmented Tycho-HYG), subsets athyg_32_reduced_m10 and athyg_32_hyg_ids",
    "url": "https://github.com/astronexus/ATHYG-Database/tree/650346e2bc57f664eb411bc5f44ffd94b8006af2"
   },
   {
    "accuracy": "Parallax errors of the Gaia DR3 stars in deep.bin, read from Stellarium's copy (stored in 0.01 mas steps) at build time: median 0.02 mas, 90th percentile 0.07 mas. No zero-point correction.",
    "id": "gaia-dr3",
-   "licence": "CC BY-NC 3.0 IGO (non-commercial). ESA's Gaia licence page (cosmos.esa.int/web/gaia-users/license) could not be read from the build network; a web-search summary of it gives CC BY-NC 3.0 IGO, as do the Celestia and celestia-gaia-stardb licence files. A third-party PyPI package states CC BY-SA 3.0 IGO (ESA's licence for images), and the AWS Open Data registry \"Attribution required\". This app uses the Gaia-derived values non-commercially, as that licence requires.",
+   "licence": "CC BY-NC 3.0 IGO (non-commercial). ESA's Gaia license page (cosmos.esa.int/web/gaia-users/license) could not be read from the build network; a web-search summary of it gives CC BY-NC 3.0 IGO, as do the Celestia and celestia-gaia-stardb license files. A third-party PyPI package states CC BY-SA 3.0 IGO (ESA's license for images), and the AWS Open Data registry \"Attribution required\". This app uses the Gaia-derived values non-commercially, as that license requires.",
    "owner": "European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC)",
    "retrieved": "2026-09-23",
    "source": "Gaia Collaboration, Vallenari et al. 2023; parallaxes as carried by AT-HYG v3.2",
@@ -412,14 +412,14 @@
    "url": "https://github.com/astronexus/HYG-Database/tree/c7f7f883fe678cc7680169a50ccd7dcc49b060ce"
   },
   {
-   "accuracy": "Parallax stored in 0.02 mas steps; the catalogue author calls the files experimental.",
+   "accuracy": "Parallax stored in 0.02 mas steps; the catalog author calls the files experimental.",
    "id": "stellarium-hipgaia3",
-   "licence": "No data licence stated; the files sit in a GPL-2.0-or-later source tree",
-   "owner": "Stellarium team; catalogues built by Henry Leung (henrysky/stellarium_star_catalogs)",
+   "licence": "No data license stated; the files sit in a GPL-2.0-or-later source tree",
+   "owner": "Stellarium team; catalogs built by Henry Leung (henrysky/stellarium_star_catalogs)",
    "retrieved": "2026-09-23",
    "source": "Gaia DR3 (ESA/Gaia/DPAC) and Hipparcos values via SIMBAD",
    "text": "Nothing shipped. Each AT-HYG star was joined by Gaia DR3 id or HIP number to read a parallax error. The error qualifies AT-HYG's distance only when both come from the same Gaia DR3 source (332,286 rows) or when the two parallaxes agree within 3 sigma (1,733 rows); 2,951 rows with a distance have no applicable error.",
-   "title": "Stellarium v26.2 hip_gaia3 star catalogues 0-3 (build-time check only, not shipped)",
+   "title": "Stellarium v26.2 hip_gaia3 star catalogs 0-3 (build-time check only, not shipped)",
    "url": "https://github.com/Stellarium/stellarium/tree/2b10b1a3bb534eb4e7586751054bf67b36c22e53/stars/hip_gaia3"
   },
   {
@@ -440,18 +440,18 @@
    "owner": "Hanno Rein and contributors",
    "retrieved": "2026-09-23",
    "source": "Community-curated compilation (Rein 2012, arXiv:1211.7121); most recent entries imported from the NASA Exoplanet Archive.",
-   "text": "Planets listed as \"Confirmed planets\" only: 1,259 planets on 892 named rows. Hosts joined to AT-HYG/HYG by identifier or by position (<= 30 arcsec, distance within 5%); an identifier that points more than 1 degree from the catalogue's own coordinates and more than 50% off its distance is treated as a catalogue slip and not used (3 hosts: Gliese 3021 A, HD 11964 A, TOI-1411); 167 hosts within 100 pc placed from the catalogue's own coordinates and distance; values rounded to 4 significant digits.",
+   "text": "Planets listed as \"Confirmed planets\" only: 1,259 planets on 892 named rows. Hosts joined to AT-HYG/HYG by identifier or by position (<= 30 arcsec, distance within 5%); an identifier that points more than 1 degree from the catalog's own coordinates and more than 50% off its distance is treated as a catalog slip and not used (3 hosts: Gliese 3021 A, HD 11964 A, TOI-1411); 167 hosts within 100 pc placed from the catalog's own coordinates and distance; values rounded to 4 significant digits.",
    "title": "Open Exoplanet Catalogue",
    "url": "https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue/tree/77ab86906b5b9cade8ebff60bef6aff3dfee3206"
   },
   {
    "accuracy": "A dwarf sequence applied to every luminosity class; display use only.",
    "id": "mamajek",
-   "licence": "No licence stated on the table (the MeanStars code is BSD-3-Clause)",
+   "licence": "No license stated on the table (the MeanStars code is BSD-3-Clause)",
    "owner": "Eric Mamajek",
    "retrieved": "2026-09-23",
    "source": "Pecaut & Mamajek 2013, ApJS 208, 9 (Table 5); the copy bundled in the MeanStars 3.6.1 wheel on PyPI",
-   "text": "Bt-Vt and spectral-type columns interpolated to effective temperature for display colours; only the derived colour table ships.",
+   "text": "Bt-Vt and spectral-type columns interpolated to effective temperature for display colors; only the derived color table ships.",
    "title": "A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence, v2022.04.16",
    "url": "https://pypi.org/project/MeanStars/3.6.1/"
   },
@@ -473,8 +473,8 @@
    "owner": "CIE (tabulated by CVRL), via colour-science 0.4.6 (BSD-3-Clause)",
    "retrieved": "2026-09-23",
    "source": "colour/colorimetry/datasets/cmfs.py",
-   "text": "Planck spectra integrated against the CMFs at 1 nm, converted with the IEC 61966-2-1 sRGB matrix and normalised to the largest channel.",
-   "title": "CIE 1931 2-degree standard observer colour-matching functions",
+   "text": "Planck spectra integrated against the CMFs at 1 nm, converted with the IEC 61966-2-1 sRGB matrix and normalized to the largest channel.",
+   "title": "CIE 1931 2-degree standard observer color-matching functions",
    "url": "https://pypi.org/project/colour-science/0.4.6/"
   },
   {
@@ -483,19 +483,19 @@
    "licence": "BSD-3-Clause",
    "owner": "The Astropy Developers (astropy 7.1.0); parameters from the papers cited in the frame",
    "retrieved": "2026-09-23",
-   "source": "astropy.coordinates.Galactocentric, galactocentric_frame_defaults \"v4.0\", read from the pinned astropy 7.1.0 installed from PyPI (module file sha256 dfc1b53d...): R0 = 8.122 kpc (2018A&A...615L..15G), z_sun = 20.8 pc (2019MNRAS.482.1417B), the Galactic-centre direction galcen_coord at ICRS (266.4051, -28.936175) deg, i.e. Galactic l = b = 0 (2004ApJ...616..872R), roll 0.",
+   "source": "astropy.coordinates.Galactocentric, galactocentric_frame_defaults \"v4.0\", read from the pinned astropy 7.1.0 installed from PyPI (module file sha256 dfc1b53d...): R0 = 8.122 kpc (2018A&A...615L..15G), z_sun = 20.8 pc (2019MNRAS.482.1417B), the Galactic-center direction galcen_coord at ICRS (266.4051, -28.936175) deg, i.e. Galactic l = b = 0 (2004ApJ...616..872R), roll 0.",
    "text": "Every galaxy layer is converted into this frame at build time; the 4x4 matrix to ICRS is computed with astropy from transformed points and shipped in galaxy.json.",
    "title": "Galactocentric frame: astropy parameter set \"v4.0\"",
    "url": "https://pypi.org/project/astropy/7.1.0/"
   },
   {
-   "accuracy": "Recomputing each object's Galactocentric distance reproduces LVDB's own distance_gc to 8.7 pc at most (median 2.7 pc, 259 objects), so LVDB used the same frame. Distances equal 10^(DM/5 + 1) pc to 0.15 %; the shipped distance errors come from the catalogued distance-modulus errors (LVDB leaves the kpc errors of the Harris clusters at 0). verify_galaxy.py cross-checks the cluster distances against galpy 1.12.0.",
+   "accuracy": "Recomputing each object's Galactocentric distance reproduces LVDB's own distance_gc to 8.7 pc at most (median 2.7 pc, 259 objects), so LVDB used the same frame. Distances equal 10^(DM/5 + 1) pc to 0.15 %; the shipped distance errors come from the cataloged distance-modulus errors (LVDB leaves the kpc errors of the Harris clusters at 0). verify_galaxy.py cross-checks the cluster distances against galpy 1.12.0.",
    "id": "lvdb",
    "licence": "CC0 1.0 Universal (public domain dedication); the README asks for a citation and a link",
    "owner": "Andrew B. Pace and contributors (Pace 2025, The Open Journal of Astrophysics 8, 142); every distance is from the paper cited on its row (LVDB cites none for ESO 93-SC08)",
    "retrieved": "2026-09-23",
    "source": "Tables gc_harris, gc_mw_new and dwarf_mw at tag v1.1.1 (commit 72dabf78), sha256-pinned. Globular-cluster distances are mostly Baumgardt & Vasiliev 2021 (153 of 194); the other clusters and the satellites each cite the paper their distance comes from.",
-   "text": "194 Milky Way globular clusters (gc_harris 155 + gc_mw_new 39 with confirmed_real = 1) and 65 satellites (dwarf_mw with confirmed_real = 1, including the LMC and SMC: LVDB confirms 54 as galaxies, and the other 11 could still be star clusters) converted from RA, Dec and distance to Galactocentric kpc. Left out: the 19 unconfirmed cluster candidates, the 22 systems LVDB classes as ambiguous (cluster or dwarf), and 3 unconfirmed dwarfs. Distance, half-light radius (LVDB rhalf_physical, major axis), ellipticity, position angle, M_V and the distance reference are shipped as catalogued.",
+   "text": "194 Milky Way globular clusters (gc_harris 155 + gc_mw_new 39 with confirmed_real = 1) and 65 satellites (dwarf_mw with confirmed_real = 1, including the LMC and SMC: LVDB confirms 54 as galaxies, and the other 11 could still be star clusters) converted from RA, Dec and distance to Galactocentric kpc. Left out: the 19 unconfirmed cluster candidates, the 22 systems LVDB classes as ambiguous (cluster or dwarf), and 3 unconfirmed dwarfs. Distance, half-light radius (LVDB rhalf_physical, major axis), ellipticity, position angle, M_V and the distance reference are shipped as cataloged.",
    "title": "Local Volume Database v1.1.1 (globular clusters and satellite galaxies)",
    "url": "https://github.com/apace7/local_volume_database/tree/72dabf7862bf9e9f1cbf6846e8c1a684fdec904c"
   },
@@ -511,7 +511,7 @@
    "url": "https://files.pythonhosted.org/packages/b8/0b/5c897212bb8d075fd86cb395f69684aab06ad1a6761eab66bc4ecee5a7ca/galstreams-1.2.1.tar.gz"
   },
   {
-   "accuracy": "A fit, labelled as one. The sign of y was checked at build time against the Reid et al. 2014 maser parallaxes (galkin; not shipped): median |R - R_fit| Local 0.20 kpc (n=25), Perseus 0.23 kpc (n=24), Sgr-Car 0.23 kpc (n=18), Sct-Cen 0.32 kpc (n=17); the mirrored convention gives 0.79, 0.80, 1.23, 1.08 kpc. Fitted with R0 = 8.15 kpc, drawn in a frame with 8.122 kpc.",
+   "accuracy": "A fit, labeled as one. The sign of y was checked at build time against the Reid et al. 2014 maser parallaxes (galkin; not shipped): median |R - R_fit| Local 0.20 kpc (n=25), Perseus 0.23 kpc (n=24), Sgr-Car 0.23 kpc (n=18), Sct-Cen 0.32 kpc (n=17); the mirrored convention gives 0.79, 0.80, 1.23, 1.08 kpc. Fitted with R0 = 8.15 kpc, drawn in a frame with 8.122 kpc.",
    "id": "reid2019-arms",
    "licence": "MIT (SpiralMap)",
    "owner": "M. J. Reid, K. M. Menten, A. Brunthaler et al. (ApJ 885, 131); transcribed in SpiralMap by A. Prusty and S. Khanna",
@@ -522,7 +522,7 @@
    "url": "https://pypi.org/project/SpiralMap/0.27/"
   },
   {
-   "accuracy": "A fit, labelled as one. It disagrees with the maser fit: at the Sun's azimuth the Orion arm lies at R = 9.46 kpc, the Reid Local arm at 8.53 kpc (+0.93 kpc). The fits appear to assume R0 near 8.28 kpc: SpiralMap's default Rsun is 8.277, and in this frame the young Cepheids of Skowron et al. 2019 peak about ln(8.122/8.277) = -0.019 in ln R inside the Scutum and Sagittarius-Carina fits (verify_galaxy.py; Perseus -0.055, Orion shows no clear peak).",
+   "accuracy": "A fit, labeled as one. It disagrees with the maser fit: at the Sun's azimuth the Orion arm lies at R = 9.46 kpc, the Reid Local arm at 8.53 kpc (+0.93 kpc). The fits appear to assume R0 near 8.28 kpc: SpiralMap's default Rsun is 8.277, and in this frame the young Cepheids of Skowron et al. 2019 peak about ln(8.122/8.277) = -0.019 in ln R inside the Scutum and Sagittarius-Carina fits (verify_galaxy.py; Perseus -0.055, Orion shows no clear peak).",
    "id": "drimmel2024-arms",
    "licence": "MIT (SpiralMap); the fit parameters are included with the authors' permission",
    "owner": "R. Drimmel, S. Khanna, E. Poggio and D. M. Skowron (arXiv:2406.09127)",
@@ -544,20 +544,20 @@
    "url": "https://pypi.org/project/SpiralMap/0.27/"
   },
   {
-   "accuracy": "A model, not an observation, and labelled so: it shows where the fitted mass models put the stars, with no spiral arms. The bar model is fitted to the central ~5 kpc; the measured major axis of the drawn bar is -25.00 deg.",
+   "accuracy": "A model, not an observation, and labeled so: it shows where the fitted mass models put the stars, with no spiral arms. The bar model is fitted to the central ~5 kpc; the measured major axis of the drawn bar is -25.00 deg.",
    "id": "mw-disc-bar-model",
-   "licence": "Agama licence: BSD or MIT for Agama's own source (GPL only when linked with GSL)",
+   "licence": "Agama license: BSD or MIT for Agama's own source (GPL only when linked with GSL)",
    "owner": "P. J. McMillan (2017 best-fit Milky Way mass model); M. Portail et al. (2017) bar, analytic fit by M. C. Sormani et al. (2022); both as distributed with Agama by E. Vasiliev",
    "retrieved": "2026-09-23",
    "source": "Agama commit f302756b: data/McMillan17.ini (sha256 2fa000f9...) and py/example_mw_bar_potential.py (sha256 a1c3f49e...), makeBarDensity() evaluated in numpy",
-   "text": "Face-on surface density on 512 x 512 pixels over +-20 kpc: the thin and thick stellar discs (Sigma0 exp(-R/Rd)) plus the bar density integrated over z, the bar turned to -25 deg as in the script; log10 stretch (black 5.5e+05, white 5.8e+09 Msun/kpc^2) into an 8-bit grayscale PNG. McMillan's bulge and gas discs are not added. The scale heights are shipped for giving the glow its thickness.",
-   "title": "Disc and bar glow: McMillan (2017) discs + Portail (2017) / Sormani (2022) bar - a model",
+   "text": "Face-on surface density on 512 x 512 pixels over +-20 kpc: the thin and thick stellar disks (Sigma0 exp(-R/Rd)) plus the bar density integrated over z, the bar turned to -25 deg as in the script; log10 stretch (black 5.5e+05, white 5.8e+09 Msun/kpc^2) into an 8-bit grayscale PNG. McMillan's bulge and gas disks are not added. The scale heights are shipped for giving the glow its thickness.",
+   "title": "Disk and bar glow: McMillan (2017) disks + Portail (2017) / Sormani (2022) bar - a model",
    "url": "https://github.com/GalacticDynamics-Oxford/Agama/tree/f302756b8af2b763db58e278e30478517dc8eea3"
   },
   {
    "accuracy": "The numbers these checks measure (galpy distance agreement, maser offsets from the Reid arms, the orientation test of the young-star maps, the Cepheid offsets from the Drimmel arms) are printed by verify_galaxy.py and quoted in the blocks above.",
    "id": "galaxy-checks",
-   "licence": "Not shipped. galpy BSD-3; galkin no licence; UCC GPL-3.0; Skowron data explicitly not licensed",
+   "licence": "Not shipped. galpy BSD-3; galkin no license; UCC GPL-3.0; Skowron data explicitly not licensed",
    "owner": "galpy 1.12.0 (Jo Bovy; BSD-3); galkin (M. Pato & F. Iocco) Reid et al. 2014 maser table; Unified Cluster Catalogue (Perren et al. 2023); Skowron et al. 2019 Cepheids (J. Skowron)",
    "retrieved": "2026-09-23",
    "source": "galpy named_objects.json (globular-cluster distances), galkin data_Reid14.dat @ef9c4eab (sign convention of the Reid arms), UCC clusters_26061511.csv.gz @20ce90ee (orientation of the young-star maps), galactic_cepheids data/Data_Table_1.dat @e72dc56a (geometry of the Drimmel arms). All sha256-pinned.",
@@ -567,16 +567,16 @@
   },
   {
    "id": "not-shown",
-   "text": "There is no picture of the Milky Way from outside: no such photograph exists, and every face-on image of our galaxy is an artist's impression. The galaxy view is built from the tracers that have been measured and the models fitted to them, each labelled. The far side of the disc is shown only where a fit extends there. The deep star catalogue stops at 500 pc, where Gaia's parallaxes are still good enough to place single stars; the named naked-eye stars are placed at their catalogue distances, some as far as 3.6 kpc. 76 named stars have no usable parallax (Alnilam among them), so they are not placed in 3D: they are drawn only on the sky as seen from near the Sun, with the 30 figure lines that join them. Venus has no colour: no measured Venus colour or cloud map could be sourced, so it is a plain disc, with Magellan's radar map of the surface as an option. Saturn, Uranus and Neptune are uniform colours computed from measured spectra, because the only global maps of them are paintings or have no clear licence. 17 moons have neither a sourced map nor a measured colour and are drawn a neutral grey: Phobos, Deimos, Europa, Callisto, Mimas, Enceladus, Tethys, Dione, Rhea, Hyperion, Iapetus, Ariel, Umbriel, Titania, Oberon, Miranda and Nereid. Hyperion has no rotation model in pck00011, so its orientation is not modelled: its 180 × 133 × 103 km shape is drawn as a sphere of its mean radius, 135 km. Saturn's ring edges and gaps are JPL data; their brightness is drawn uniform and their colour a neutral grey, because no ring brightness or colour profile with a clean licence was reachable. Uranus's rings are thin lines at their measured radii: about 2 to 96 km wide, they are far too narrow to draw to scale. Neptune's rings are not shown. Pluto is placed at the Pluto–Charon barycentre and Charon is not shown: no long-term ephemeris for either centre could be sourced. The 21 moons of Mars and the giant planets are shown only from 1950 to 2050, the span of their fitted JPL ephemerides; outside it they are hidden, not extrapolated, and a view that follows one moves to its planet. The planets and the Moon cover 1900 to 2100. Bodies cast no shadows on each other, so eclipses and the shadows of moons on their planets are not drawn; only Saturn and its rings shadow each other. Only asteroids brighter than absolute magnitude 12 are included — 9,028 of them, a small fraction of those known — so the main belt is sparse and near-Earth asteroids are almost absent apart from a few named ones.",
+   "text": "There is no picture of the Milky Way from outside: no such photograph exists, and every face-on image of our galaxy is an artist's impression. The galaxy view is built from the tracers that have been measured and the models fitted to them, each labeled. The far side of the disk is shown only where a fit extends there. The deep star catalog stops at 500 pc, where Gaia's parallaxes are still good enough to place single stars; the named naked-eye stars are placed at their catalog distances, some as far as 3.6 kpc. 76 named stars have no usable parallax (Alnilam among them), so they are not placed in 3D: they are drawn only on the sky as seen from near the Sun, with the 30 figure lines that join them. Venus has no color: no measured Venus color or cloud map could be sourced, so it is a plain disk, with Magellan's radar map of the surface as an option. Saturn, Uranus and Neptune are uniform colors computed from measured spectra, because the only global maps of them are paintings or have no clear license. 17 moons have neither a sourced map nor a measured color and are drawn a neutral gray: Phobos, Deimos, Europa, Callisto, Mimas, Enceladus, Tethys, Dione, Rhea, Hyperion, Iapetus, Ariel, Umbriel, Titania, Oberon, Miranda and Nereid. Hyperion has no rotation model in pck00011, so its orientation is not modeled: its 180 × 133 × 103 km shape is drawn as a sphere of its mean radius, 135 km. Saturn's ring edges and gaps are JPL data; their brightness is drawn uniform and their color a neutral gray, because no ring brightness or color profile with a clean license was reachable. Uranus's rings are thin lines at their measured radii: about 2 to 96 km wide, they are far too narrow to draw to scale. Neptune's rings are not shown. Pluto is placed at the Pluto–Charon barycenter and Charon is not shown: no long-term ephemeris for either center could be sourced. The 21 moons of Mars and the giant planets are shown only from 1950 to 2049, the span of their fitted JPL ephemerides; outside it they are hidden, not extrapolated, and a view that follows one moves to its planet. The planets and the Moon cover 1900 to 2099. Bodies cast no shadows on each other, so eclipses and the shadows of moons on their planets are not drawn; only Saturn and its rings shadow each other. Only asteroids brighter than absolute magnitude 12 are included — 9,028 of them, a small fraction of those known — so the main belt is sparse and near-Earth asteroids are almost absent apart from a few named ones.",
    "title": "What this app does not show, and why"
   },
   {
    "id": "software",
-   "licence": "three.js r186: MIT. Atkinson Hyperlegible and Newsreader: SIL Open Font License 1.1",
-   "owner": "three.js authors; Braille Institute of America; The Newsreader Project Authors",
-   "source": "three.js r186 renders the scene; the copy in vendor/ is byte for byte the one vendored in the Anatomy and Besseggen apps in this repository. The fonts are the same files those apps ship, with the licence text in fonts/OFL.txt.",
+   "licence": "three.js r186: MIT. Ysabeau Office: SIL Open Font License 1.1",
+   "owner": "three.js authors; Christian Thalmann (Catharsis Fonts)",
+   "source": "three.js r186 renders the scene; the copy in vendor/ is byte for byte the one vendored in the Anatomy and Besseggen apps in this repository. Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license. A second subset of the same face holds the Greek letters, superscript figures and the okina the data's names use; tools/art/font_extra.py cuts it from the same pinned upstream.",
    "title": "Software and fonts"
   }
  ],
- "intro": "Everything in this app is measured data or a published fit to measured data, and each fit is labelled as one. Nothing is painted and nothing is fetched: the files ship inside the app. The sources, their licences and how accurate each layer is are below."
+ "intro": "Everything in this app is measured data or a published fit to measured data, and each fit is labeled as one. Nothing is painted and nothing is fetched: the files ship inside the app. The sources, their licenses and how accurate each layer is are below."
 }

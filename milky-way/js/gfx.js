@@ -1,12 +1,8 @@
 // Shaders and small three.js helpers shared by the three scales.
 //
-// Colour handling is deliberately simple: textures are sampled as the sRGB values they were saved
-// as, converted to linear only where light is multiplied in (the planet globes), and written back
-// as display values. The point and line layers are additive and never write depth.
-//
-// Every custom shader carries three.js's logarithmic-depth chunks, because the renderer is created
-// with a logarithmic depth buffer: the near side of a moon and a planet a billion kilometres behind
-// it share one frame.
+// Textures are sampled as the sRGB values they were saved as and made linear only where light is
+// multiplied in (the globes). Point and line layers are additive and never write depth. Every
+// shader carries three.js's logarithmic-depth chunks: a moon and a planet far behind it share a frame.
 
 import * as THREE from '../vendor/three.module.js';
 
@@ -19,7 +15,7 @@ const LOGF = /* glsl */`
 `;
 
 // ------------------------------------------------------------------ glow points
-// Per-point colour and size in CSS pixels; a soft round sprite. Used for markers, asteroids,
+// Per-point color and size in CSS pixels; a soft round sprite. Used for markers, asteroids,
 // clusters and anything that should stay visible however small it is.
 export function glowPointsMaterial({ opacity = 1, sharp = 0.0, ring = false } = {}) {
   return new THREE.ShaderMaterial({
@@ -59,7 +55,7 @@ export function glowPointsMaterial({ opacity = 1, sharp = 0.0, ring = false } = 
 // ------------------------------------------------------------------ stars by magnitude
 // Each star carries its absolute magnitude. The shader works out the apparent magnitude from the
 // camera's actual distance to it — m = M + 5·log10(d/10 pc) — so the sky seen from the Sun has the
-// real magnitudes, and flying towards a star brightens it by the inverse-square law. `uMLim` is
+// real magnitudes, and flying toward a star brightens it by the inverse-square law. `uMLim` is
 // the magnitude at which a star fades out; `uUnitPc` converts pass units to parsecs.
 export function starMaterial() {
   return new THREE.ShaderMaterial({
@@ -165,7 +161,7 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
         vec3 N = normalize(vN);
         float ndl = dot(N, L);
         float lit = smoothstep(-0.015, 0.06, ndl) * max(ndl, 0.0) + smoothstep(-0.015, 0.06, ndl) * 0.02;
-        // Ring shadow: where the ray towards the Sun crosses the ring plane inside a ring band.
+        // Ring shadow: where the ray toward the Sun crosses the ring plane inside a ring band.
         if (uRingCount > 0) {
           float dn = dot(L, uRingN);
           if (abs(dn) > 1e-5) {
@@ -184,7 +180,7 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
         if (uHasNight > 0.5) {
           float dark = 1.0 - smoothstep(-0.12, 0.04, ndl);
           vec3 nd = textureGrad(uNight, uv, gx, gy).rgb;
-          // The city-lights map is composited over a blue-grey land base (red and green about 0.15)
+          // The city-lights map is composited over a blue-gray land base (red and green about 0.15)
           // and black oceans; the lights are white. Keying on red and green keeps the lights and
           // drops the base, which would otherwise tint the whole night side.
           float lamp = smoothstep(0.2, 0.5, min(nd.r, nd.g));
@@ -198,8 +194,8 @@ export function globeMaterial({ map = null, night = null, color = [0.7, 0.7, 0.7
 
 // ------------------------------------------------------------------ rings
 // A flat annulus in the planet's equatorial plane, radii in km. Only the ring edges and gaps are
-// data (JPL's sat425 radii); the brightness is drawn uniform, in a neutral grey, because no ring
-// brightness or colour profile with a clean licence could be sourced. The planet's shadow falls on
+// data (JPL's sat425 radii); the brightness is drawn uniform, in a neutral gray, because no ring
+// brightness or color profile with a clean license could be sourced. The planet's shadow falls on
 // the rings.
 export function ringMaterial() {
   return new THREE.ShaderMaterial({
@@ -237,7 +233,7 @@ export function ringMaterial() {
         }
         if (a < 0.003) discard;
         vec3 L = normalize(uSun - vW);
-        // Planet shadow: does the ray towards the Sun hit the globe?
+        // Planet shadow: does the ray toward the Sun hit the globe?
         vec3 oc = vW - uCenter;
         float bq = dot(oc, L);
         float cq = dot(oc, oc) - uR * uR;
@@ -257,7 +253,7 @@ export function ringMaterial() {
 }
 
 // ------------------------------------------------------------------ sky sphere
-// The Gaia DR3 source-count map on the inside of a sphere centred on the camera. The texture is
+// The Gaia DR3 source-count map on the inside of a sphere centered on the camera. The texture is
 // equirectangular in ICRS (RA increasing to the right from 0 at the left edge, Dec +90 at the top),
 // looked up from the view direction, so no UV seam or mirroring can creep in.
 export function skyMaterial(tex) {
@@ -286,7 +282,7 @@ export function skyMaterial(tex) {
         gx.x -= floor(gx.x + 0.5); gy.x -= floor(gy.x + 0.5);
         float v = textureGrad(uMap, uv, gx, gy).r;
         // A darker black point than the file's own stretch: from among the planets the sky should
-        // read as black with the Milky Way band in it, not as grey.
+        // read as black with the Milky Way band in it, not as gray.
         v = max(v - 0.13, 0.0) / 0.87;
         vec3 c = pow(vec3(v), vec3(1.7)) * uTint;
         gl_FragColor = vec4(c * uOpacity, 1.0);
@@ -295,19 +291,22 @@ export function skyMaterial(tex) {
   });
 }
 
+// The vertex shader of the two flat layers below: their texture coordinates, passed on.
+const UV_VERTEX = LOGV + /* glsl */`
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    #include <logdepthbuf_vertex>
+  }`;
+
 // ------------------------------------------------------------------ textured plane (galaxy layers)
 // `zero` (0–1): the code value that means "nothing"; only what lies above it is lit (the young-star
 // maps encode overdensity from −1 to +1.5, so their zero sits at 0.4).
 export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap = false, zero = 0, gamma = 1 } = {}) {
   return new THREE.ShaderMaterial({
     uniforms: { uMap: { value: tex }, uTint: { value: new THREE.Vector3(...tint) }, uOpacity: { value: opacity }, uAlpha: { value: alphaFromMap ? 1 : 0 }, uZero: { value: zero }, uGamma: { value: gamma } },
-    vertexShader: LOGV + /* glsl */`
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        #include <logdepthbuf_vertex>
-      }`,
+    vertexShader: UV_VERTEX,
     fragmentShader: LOGF + /* glsl */`
       uniform sampler2D uMap;
       uniform vec3 uTint;
@@ -330,13 +329,7 @@ export function planeMaterial(tex, { tint = [1, 1, 1], opacity = 1, alphaFromMap
 export function ribbonMaterial(color, opacity = 0.5) {
   return new THREE.ShaderMaterial({
     uniforms: { uColor: { value: new THREE.Vector3(...hexToRgb01(color)) }, uOpacity: { value: opacity } },
-    vertexShader: LOGV + /* glsl */`
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        #include <logdepthbuf_vertex>
-      }`,
+    vertexShader: UV_VERTEX,
     fragmentShader: LOGF + /* glsl */`
       uniform vec3 uColor;
       uniform float uOpacity;
@@ -360,16 +353,7 @@ export function lineMaterial({ opacity = 1, depthTest = true, additive = true } 
   });
 }
 
-export function makeLine(points /* Float32Array xyz */, colors /* Float32Array rgba */, material, loop = false) {
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(points, 3));
-  g.setAttribute('color', new THREE.BufferAttribute(colors, 4));
-  const l = loop ? new THREE.LineLoop(g, material) : new THREE.Line(g, material);
-  l.frustumCulled = false;
-  return l;
-}
-
-// A CSS hex colour as the display (sRGB) values the custom shaders write out. THREE.Color would
+// A CSS hex color as the display (sRGB) values the custom shaders write out. THREE.Color would
 // convert it to linear, which draws a marker darker and more saturated than its label.
 export function hexToRgb01(hex) {
   const c = new THREE.Color().setStyle(hex, THREE.NoColorSpace);
@@ -377,10 +361,10 @@ export function hexToRgb01(hex) {
 }
 
 // A texture from an image URL, with the settings every map here wants.
-export function loadTexture(url, { srgb = false } = {}) {
+export function loadTexture(url) {
   return new Promise((resolve, reject) => {
     new THREE.TextureLoader().load(url, (t) => {
-      t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+      t.colorSpace = THREE.NoColorSpace;
       t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.ClampToEdgeWrapping;
       t.anisotropy = 4; t.generateMipmaps = true;
       t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
@@ -393,7 +377,7 @@ export function loadTexture(url, { srgb = false } = {}) {
 // WebGL draws lines one pixel wide whatever you ask, which reads as hairlines on a phone. A
 // ThickLine is a polyline drawn as screen-space quads: each segment is one instance of a four-vertex
 // quad, expanded perpendicular to the segment on screen by `width` CSS pixels, with anti-aliased
-// edges and a colour (RGBA) per point, so trails can fade. Segments reaching behind the camera are
+// edges and a color (RGBA) per point, so trails can fade. Segments reaching behind the camera are
 // clipped in clip space before the divide, so an orbit around the camera stays whole.
 export const lineUniforms = { uRes: { value: new THREE.Vector2(1, 1) }, uPx: { value: 1 } };
 
@@ -441,7 +425,7 @@ export function thickLineMaterial({ width = 1.5, opacity = 1, depthTest = true, 
         gl_FragColor = vec4(vC.rgb * alpha, alpha);
         #include <logdepthbuf_fragment>
       }`,
-    // The fragment writes premultiplied colour, so both modes are custom blends starting from One.
+    // The fragment writes premultiplied color, so both modes are custom blends starting from One.
     transparent: true, depthWrite: false, depthTest, blending: THREE.CustomBlending,
     blendSrc: THREE.OneFactor, blendDst: additive ? THREE.OneFactor : THREE.OneMinusSrcAlphaFactor,
   });
@@ -468,11 +452,11 @@ export class ThickLine {
     this.mesh = new THREE.Mesh(g, material);
     this.mesh.frustumCulled = false;
   }
-  update(count = this.max, colours = false) {
+  update(count = this.max, colors = false) {
     this.count = Math.min(count, this.max);
     this.geo.instanceCount = Math.max(0, this.count - 1);
     this.pb.needsUpdate = true;
-    if (colours) this.cb.needsUpdate = true;
+    if (colors) this.cb.needsUpdate = true;
   }
   static from(points /* [[x,y,z],…] or Float32Array */, rgba, material) {
     const n = points.length / (Array.isArray(points) ? 1 : 3);

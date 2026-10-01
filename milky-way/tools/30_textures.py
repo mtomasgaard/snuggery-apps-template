@@ -268,12 +268,12 @@ def colours():
                   'source': 'TSIS-1 HSRS v2, Coddington et al. 2023 (LASP), as resampled in OrbitalCommons/starfield',
                   'note': 'TSIS-1 solar spectrum (sunlight above the atmosphere)'}
     method = ('CIE 1931 2-degree observer (colour-science 0.4.6 table), 1 nm grid 360-830 nm, linear interpolation '
-              'of each spectrum (Karkoschka air wavelengths; TSIS 1 nm bins at their centres). Planets and Titan: '
-              'XYZ of albedo x TSIS-1 sunlight, normalised so a perfect white reflector has Y = 1, Bradford-adapted '
+              'of each spectrum (Karkoschka air wavelengths; TSIS 1 nm bins at their centers). Planets and Titan: '
+              'XYZ of albedo x TSIS-1 sunlight, normalized so a perfect white reflector has Y = 1, Bradford-adapted '
               'from the Sun\'s white to D65, IEC 61966-2-1 sRGB matrix and transfer curve, x 255, rounded; '
               'srgb_illuminant_E is the same with an equal-energy illuminant, as a cross-check. Sun: XYZ of the '
               'TSIS-1 spectrum through the same matrix without adaptation, largest channel scaled to 1. '
-              'Disk-averaged colours of July 1995 (Uranus changes with season); no limb darkening or banding.')
+              'Disk-averaged colors of July 1995 (Uranus changes with season); no limb darkening or banding.')
     return out, method
 
 
@@ -410,8 +410,8 @@ def main():
 
     print('Sun')
     put('sun', sun_map(cols['sun']['linear']), 1024, 512, -180.0, False, 'visible', 'stellarium-sun-hmi',
-        'SDO HMI continuum (Stellarium map by R. Kabatsayev), coloured by the TSIS-1 spectrum',
-        'Stellarium sphere-texture convention (prime meridian at the centre); a generic texture of HMI data '
+        'SDO HMI continuum (Stellarium map by R. Kabatsayev), colored by the TSIS-1 spectrum',
+        'Stellarium sphere-texture convention (prime meridian at the center); a generic texture of HMI data '
         'from Aug 2025 and Dec 2019 with no Carrington registration', 'not stated (sphere)')
 
     print('Mercury')
@@ -445,22 +445,22 @@ def main():
 
     print('Moon')
     put('moon', moon_map(), 2048, 1024, -180.0, False, 'albedo', 'stellarium-moon-lroc-albedo',
-        'LRO LROC WAC Hapke-normalised albedo (Stellarium map by R. Kabatsayev)',
-        'Stellarium sphere-texture convention (prime meridian at the centre); proved by maria and craters '
+        'LRO LROC WAC Hapke-normalized albedo (Stellarium map by R. Kabatsayev)',
+        'Stellarium sphere-texture convention (prime meridian at the center); proved by maria and craters '
         '(Tycho, Mare Crisium, Mare Humorum) in verify_textures_sky.py', 'not stated (sphere)')
 
     print('Mars')
     img, fill, frac, m = usgs_map('mars', 2048, 1024, -180.0, False)
     assert m['LongitudeDirection'] == 'PositiveEast' and m['CenterLongitude'] == 0.0
     put('mars', img, 2048, 1024, -180.0, False, 'albedo', 'usgs-mars-viking-color-925m',
-        'Viking Orbiter colour mosaic, red and violet filters (NASA, PDS, USGS)',
+        'Viking Orbiter color mosaic, red and violet filters (NASA, PDS, USGS)',
         'ISIS label: PositiveEast, planetocentric, CenterLongitude 0, -180..180; GeoTIFF central_meridian 0',
         m['LatitudeType'], fill, frac, f'flat RGB {fill} (mean) where the mosaic has no data')
 
     print('Jupiter')
     img, fill, frac, south_edge = jupiter_map()
     put('jupiter', img, 2048, 1024, -180.0, False, 'visible', 'cassini-pia07782',
-        'Cassini ISS colour map PIA07782, Dec 2000 (NASA/JPL/Space Science Institute)',
+        'Cassini ISS color map PIA07782, Dec 2000 (NASA/JPL/Space Science Institute)',
         'annotated original (USGS jupiter_from_cassini.tif) labels 180 ... 0 ... 180 decreasing to the right, i.e. '
         'west longitudes: east increases to the right, left edge 180 W; the web copy is the same picture '
         '(correlation 0.999 at zero shift, not mirrored); no flip applied. The web copy\'s world file '
@@ -513,7 +513,7 @@ def main():
         'convention': 'Equirectangular; row 0 = +90 deg latitude; longitude east-positive and increasing to the '
                       'right; column x covers longitudes lon_left_deg + 360 x / width .. + 360 (x + 1) / width.',
         'bodies': bodies, 'colours': cols, 'colour_method': method,
-        'resampling': 'USGS GeoTIFFs: exact area average of the source pixels whose centres fall in each output '
+        'resampling': 'USGS GeoTIFFs: exact area average of the source pixels whose centers fall in each output '
                       'pixel, nodata (0) excluded. Stellarium and Cassini maps: exact 2x2 (Moon, Jupiter) or 8x8 '
                       '(Sun, in linear light) box average. City lights: PIL BOX filter 2700 -> 2048. Blue Marble: '
                       'shipped byte for byte. JPEG quality 85 (Pillow 11.3.0).',
@@ -522,7 +522,7 @@ def main():
     common.write_json('tex/textures.json', out, pretty=True)
     print(f'  textures total {total:,} bytes')
     for k, v in cols.items():
-        print(f'  colour {k}: sRGB {v["srgb"]}' + (f' (illuminant E {v["srgb_illuminant_E"]}, Y {v["albedo_Y"]})'
+        print(f'  color {k}: sRGB {v["srgb"]}' + (f' (illuminant E {v["srgb_illuminant_E"]}, Y {v["albedo_Y"]})'
                                                   if 'albedo_Y' in v else f' xy {v["xy"]} CCT {v["cct_k_mccamy"]} K'))
     for k, v in report.items():
         print(f'  {k}: {v}')

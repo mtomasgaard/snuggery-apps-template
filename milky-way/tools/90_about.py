@@ -5,6 +5,7 @@ deliberately does not show, and the software and fonts it ships.
 The fragments are the single source: a dataset's owner, licence and adaptations are written once,
 by the step that uses it, and appear identically in the app, in CREDITS.txt and in NOTES.md's tables.
 """
+import datetime
 import json
 import math
 import os
@@ -17,36 +18,40 @@ from paths import APP, DATA, TOOLS
 ORDER = ['solar', 'smallbodies', 'textures-sky', 'stars', 'galaxy']
 
 INTRO = ('Everything in this app is measured data or a published fit to measured data, and each '
-         'fit is labelled as one. Nothing is painted and nothing is fetched: the files ship inside '
-         'the app. The sources, their licences and how accurate each layer is are below.')
+         'fit is labeled as one. Nothing is painted and nothing is fetched: the files ship inside '
+         'the app. The sources, their licenses and how accurate each layer is are below.')
 
 READING = [
     {
         'id': 'reading-sizes', 'title': 'Sizes and distances',
         'text': ('Nothing is enlarged. Planets and moons are drawn at their true size and true '
                  'distance, which is why most of them are a dot and a label until you come close; '
-                 'the dot is a marker, the globe appears when it is a few pixels across. The ruler '
-                 'at the bottom left is true at the distance of the object in the middle of the '
-                 'screen.'),
+                 'the dot is a marker, the globe appears when it is a few pixels across. The caption '
+                 'under the picture gives the width of the screen at the distance of the object in '
+                 'the middle of it.'),
     },
     {
         'id': 'reading-brightness', 'title': 'Star brightness',
         'text': ('Each star is drawn from its absolute magnitude and its distance from the camera, so '
                  'from the Sun the sky has the real magnitudes and a star brightens as you fly to '
-                 'it. Farther from the Sun the exposure is raised so the neighbourhood stays '
-                 'readable. Interstellar dust is not modelled: distant stars look brighter than '
+                 'it. Farther from the Sun the exposure is raised so the neighborhood stays '
+                 'readable. Interstellar dust is not modeled: distant stars look brighter than '
                  'they would.'),
     },
     {
         'id': 'reading-glow', 'title': 'Display effects',
         'text': ('The glow around the Sun and the halo of points are display effects so small things '
-                 'stay visible on a phone. Marker and label colours are chosen for legibility and '
-                 'are not data, and neither are the colours of the galaxy model\'s glow, the young-star '
-                 'maps and the Gaia sky: those layers hold a density or a star count, drawn in a '
-                 'display tint. On a phone the Gaia sky is also given more contrast than its '
+                 'stay visible on a phone. A marker\'s color names its category: asteroids and comets '
+                 'by where the orbit lies (orange near the Earth and Mars, pale in the belt, blue '
+                 'beyond Jupiter, cyan for comets), and in the galaxy the clusters, the satellite '
+                 'galaxies, the two arm fits and the streams each in a color of their own; the card '
+                 'names each in words. Orbits, trails and the planets\' markers are one neutral, and '
+                 'label colors are chosen for legibility. The colors of the galaxy model\'s glow, the '
+                 'young-star maps and the Gaia sky are not data: those layers hold a density or a '
+                 'star count, drawn in a display tint. On a phone the Gaia sky is also given more contrast than its '
                  'credited stretch: its faintest eighth of levels is drawn black and its mid-tones are '
-                 'darkened. A globe\'s surface colour is data where a map or a measured colour '
-                 'exists; where neither could be sourced it is a neutral grey (see "What this app '
+                 'darkened. A globe\'s surface color is data where a map or a measured color '
+                 'exists; where neither could be sourced it is a neutral gray (see "What this app '
                  'does not show").'),
     },
 ]
@@ -56,24 +61,24 @@ NOT_SHOWN = {
     'text': ' '.join([
         'There is no picture of the Milky Way from outside: no such photograph exists, and every',
         'face-on image of our galaxy is an artist\'s impression. The galaxy view is built from the',
-        'tracers that have been measured and the models fitted to them, each labelled. The far side',
-        'of the disc is shown only where a fit extends there. The deep star catalogue stops at',
+        'tracers that have been measured and the models fitted to them, each labeled. The far side',
+        'of the disk is shown only where a fit extends there. The deep star catalog stops at',
         '500 pc, where Gaia\'s parallaxes are still good enough to place single stars; the named',
-        'naked-eye stars are placed at their catalogue distances, some as far as {far_kpc} kpc.',
+        'naked-eye stars are placed at their catalog distances, some as far as {far_kpc} kpc.',
         '{n_sky} named stars have no usable parallax ({sky_eg} among them), so they are not placed in',
         '3D: they are drawn only on the sky as seen from near the Sun, with the {n_sky_lines} figure lines',
         'that join them.',
-        'Venus has no colour: no measured Venus colour or cloud map could be sourced, so it is a',
-        'plain disc, with Magellan\'s radar map of the surface as an option. Saturn, Uranus and',
-        'Neptune are uniform colours computed from measured spectra, because the only global maps',
-        'of them are paintings or have no clear licence. {n_grey} moons have neither a sourced map',
-        'nor a measured colour and are drawn a neutral grey: {grey}. {shapeless}',
+        'Venus has no color: no measured Venus color or cloud map could be sourced, so it is a',
+        'plain disk, with Magellan\'s radar map of the surface as an option. Saturn, Uranus and',
+        'Neptune are uniform colors computed from measured spectra, because the only global maps',
+        'of them are paintings or have no clear license. {n_grey} moons have neither a sourced map',
+        'nor a measured color and are drawn a neutral gray: {grey}. {shapeless}',
         'Saturn\'s ring edges and gaps are JPL data; their brightness is drawn uniform and their',
-        'colour a neutral grey, because no ring brightness or colour profile with a clean licence',
+        'color a neutral gray, because no ring brightness or color profile with a clean license',
         'was reachable. Uranus\'s rings are thin lines at their measured radii: about {ur_lo} to',
         '{ur_hi} km wide, they are far too narrow to draw to scale. Neptune\'s rings are not shown.',
-        'Pluto is placed at the Pluto–Charon barycentre and Charon is not',
-        'shown: no long-term ephemeris for either centre could be sourced.',
+        'Pluto is placed at the Pluto–Charon barycenter and Charon is not',
+        'shown: no long-term ephemeris for either center could be sourced.',
         'The {n_moons} moons of Mars and the giant planets are shown only from {m0} to {m1}, the span',
         'of their fitted JPL ephemerides; outside it they are hidden, not extrapolated, and a view',
         'that follows one moves to its planet. The planets',
@@ -87,11 +92,14 @@ NOT_SHOWN = {
 
 SOFTWARE = {
     'id': 'software', 'title': 'Software and fonts',
-    'owner': 'three.js authors; Braille Institute of America; The Newsreader Project Authors',
-    'licence': 'three.js r186: MIT. Atkinson Hyperlegible and Newsreader: SIL Open Font License 1.1',
+    'owner': 'three.js authors; Christian Thalmann (Catharsis Fonts)',
+    'licence': 'three.js r186: MIT. Ysabeau Office: SIL Open Font License 1.1',
     'source': ('three.js r186 renders the scene; the copy in vendor/ is byte for byte the one '
-               'vendored in the Anatomy and Besseggen apps in this repository. The fonts are the '
-               'same files those apps ship, with the licence text in fonts/OFL.txt.'),
+               'vendored in the Anatomy and Besseggen apps in this repository. Ysabeau Office by '
+               'Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in '
+               'fonts/ with its license. A second subset of the same face holds the Greek letters, '
+               'superscript figures and the okina the data\'s names use; tools/art/font_extra.py '
+               'cuts it from the same pinned upstream.'),
 }
 
 
@@ -134,7 +142,7 @@ LICENCE_TEXTS = [
     ('SpiralMap 0.27, the package the spiral-arm fits in galaxy/galaxy.json and the young-star maps '
      'galaxy/young-*.png were taken from; the maps also carry the Gaia terms quoted above '
      '(spiralmap-0.27.dist-info/licenses/LICENSE.md)', lambda: GS.spiralmap('licence')),
-    (f'Agama @ {GS.AGAMA_COMMIT[:8]}, for the disc and bar model in galaxy/model.png (LICENSE)',
+    (f'Agama @ {GS.AGAMA_COMMIT[:8]}, for the disk and bar model in galaxy/model.png (LICENSE)',
      lambda: read_bytes(GS.agama('LICENSE'))),
 ]
 
@@ -153,7 +161,8 @@ def load_data(name):
 
 
 def year(jd):
-    return round(2000 + (jd - 2451544.5) / 365.2425)
+    """The calendar year (UTC, proleptic Gregorian) a Julian Date falls in."""
+    return (datetime.date(2000, 1, 1) + datetime.timedelta(days=math.floor(jd - 2451544.5))).year
 
 
 def not_shown_values():
@@ -185,9 +194,10 @@ def not_shown_values():
         if grey:
             v['n_grey'], v['grey'] = len(grey), ' and '.join([', '.join(grey[:-1]), grey[-1]] if grey[:-1] else grey)
     if moons:
-        v['n_moons'], v['m0'], v['m1'] = len(moons['moons']), year(moons['jd_start']), year(moons['jd_end'])
+        # the years covered, as the app writes them: the fits end at the first instant of the year after
+        v['n_moons'], v['m0'], v['m1'] = len(moons['moons']), year(moons['jd_start']), year(moons['jd_end'] - 1)
     if eph:
-        v['e0'], v['e1'] = year(eph['jd_start']), year(eph['jd_end'])
+        v['e0'], v['e1'] = year(eph['jd_start']), year(eph['jd_end'] - 1)
     if phys:
         w = [r['width_km'] for r in phys['rings']['uranus']]
         v['ur_lo'], v['ur_hi'] = f'{min(w):.0f}', f'{max(w):.0f}'
@@ -195,7 +205,7 @@ def not_shown_values():
             r = b.get('radii_km')
             if b.get('pole') is None and r and len(set(r)) > 1:
                 v['shapeless'] += (f"{b['name']} has no rotation model in pck00011, so its orientation is not "
-                                   f"modelled: its {' × '.join(f'{x:.0f}' for x in r)} km shape is drawn as a "
+                                   f"modeled: its {' × '.join(f'{x:.0f}' for x in r)} km shape is drawn as a "
                                    f"sphere of its mean radius, {math.prod(r) ** (1 / 3):.0f} km. ")
     return v
 
@@ -210,15 +220,15 @@ def main():
 
     # CREDITS.txt: the same content as plain text, with URLs and licence quotes.
     w = lambda s, ind='': textwrap.fill(s, 98, initial_indent=ind, subsequent_indent=ind)
-    lines = ['Milky Way — credits and licences', '',
+    lines = ['Milky Way — credits and licenses', '',
              w('Every dataset below was downloaded by the pipeline in tools/ from a pinned source and '
                f'checked against its sha256; the retrieval date is {RETRIEVED} unless a block says '
-               'otherwise. Licences are quoted from the files and pages named; where a term could only '
+               'otherwise. Licenses are quoted from the files and pages named; where a term could only '
                'be read through a search summary, the block says so.'), '']
     for b in frags:
         lines += ['', b.get('title', b.get('id', '')).upper()]
-        for key, label in (('owner', 'Owner'), ('source', 'Source'), ('url', 'URL'), ('licence', 'Licence'),
-                           ('licence_quote', 'Licence text'), ('retrieved', 'Retrieved'),
+        for key, label in (('owner', 'Owner'), ('source', 'Source'), ('url', 'URL'), ('licence', 'License'),
+                           ('licence_quote', 'License text'), ('retrieved', 'Retrieved'),
                            ('adaptations', 'Adaptations'), ('accuracy', 'Accuracy')):
             v = b.get(key)
             if not v:
@@ -228,12 +238,10 @@ def main():
             lines.append(w(f'{label}: {v}'))
     lines += ['', '', 'NOT SHOWN', w(NOT_SHOWN['text']), '', '', 'SOFTWARE AND FONTS',
               w(SOFTWARE['source']), w(SOFTWARE['licence']),
-              w('The fonts carry their copyright in their own metadata: "Copyright 2020 Braille '
-                'Institute of America, Inc." (Atkinson Hyperlegible) and "Copyright 2020 The '
-                'Newsreader Project Authors (http://github.com/productiontype/Newsreader)" '
-                '(Newsreader).'), '']
-    lines += ['', 'FULL LICENCE TEXTS',
-              w('The licences below ask that their full text accompany copies of the work. Each is '
+              w('The face carries its copyright in its license file, fonts/OFL.txt: "Copyright 2023 '
+                'The Ysabeau Project Authors (https://github.com/CatharsisFonts/Ysabeau)".'), '']
+    lines += ['', 'FULL LICENSE TEXTS',
+              w('The licenses below ask that their full text accompany copies of the work. Each is '
                 'reproduced verbatim from the sha256-pinned file the credit block above quotes.')]
     for what, read in LICENCE_TEXTS:
         lines += ['', w(f'--- {what}'), '', read().decode('utf-8').replace('\r\n', '\n').rstrip(), '']

@@ -1,49 +1,37 @@
 // The Solar System scale: the Sun, the planets, their major moons, Saturn's rings and the small
 // bodies, all at true size and at their positions for the current date.
 //
-// Units inside `root` are astronomical units, relative to a *floating origin* — the camera's target
-// — so that a globe a few hundred kilometres from the camera is still drawn in float32 without
-// jitter. `root.scale` is set by app.js so that the target sits about one unit from the camera,
-// which is what the logarithmic depth buffer needs to resolve a planet against its own rings.
-//
-// Planets are never enlarged. A planet smaller than a few pixels is shown by a marker dot and its
-// label; the globe takes over as you come close. Orbits are the osculating ellipse at the current
-// date (from the ephemeris position and velocity); trails are the ephemeris path itself over the
-// last part of each orbit, fading behind the body, which is what shows the motion when time plays.
+// Units inside `root` are AU relative to a floating origin (the camera's target), scaled by app.js
+// so the target is about one unit away: float32 without jitter, and depth enough to part a planet
+// from its rings. Planets are never enlarged: below a few pixels a planet is a marker and a label.
+// Orbits are the osculating ellipse at the date; trails are the ephemeris path itself, fading.
 
 import * as THREE from '../vendor/three.module.js';
 import { glowPointsMaterial, globeMaterial, ringMaterial, thickLineMaterial, ThickLine, hexToRgb01 } from './gfx.js';
 import { AU_KM, vsub, vlen, vcross, vdot, vnorm } from './util.js';
+import { PLATE } from './plate.js';
 
 const PLANETS = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'];
 
-// Marker and label colours. These are interface colours for finding things, not data.
-const UI_COLOUR = {
-  sun: '#ffd89a', mercury: '#bdb6ad', venus: '#eadfc6', earth: '#8fbcff', moon: '#cfcfcf', mars: '#e8865c',
-  jupiter: '#dccaa6', saturn: '#e6d39c', uranus: '#a6dde4', neptune: '#8aa5f5', pluto: '#cbb9a6',
-};
-const KIND_COLOUR = {
-  mba: [0.92, 0.74, 0.48], marscrosser: [0.95, 0.6, 0.45], trojan: [0.6, 0.85, 0.55],
-  centaur: [0.85, 0.6, 0.85], tno: [0.55, 0.7, 0.95], neo: [1.0, 0.62, 0.35], comet: [0.55, 0.95, 1.0],
-  interstellar: [1.0, 0.45, 0.55], dwarf: [1.0, 0.92, 0.75], other: [0.6, 0.6, 0.6],
-};
+// Orbits, trails and markers are one neutral (PLATE.neutral): the planets are named by their labels,
+// and every hue on the plate is data. Small bodies take one of four groups by where the orbit lies
+// (ART.md section 2): ten class colors could not be told apart, so the card names the class in words.
+const GROUP = {};
+for (const [g, kinds] of Object.entries(PLATE.smallGroups)) for (const k of kinds) GROUP[k] = hexToRgb01(PLATE.cat[g].color);
 
 export class SolarSystem {
   constructor({ eph, rotation, phys, tex, textures, small }) {
     this.eph = eph; this.rotation = rotation; this.phys = phys; this.small = small;
-    this.textures = textures;            // tex/textures.json
     this.root = new THREE.Group();
     this.root.name = 'solar';
     this.bodies = new Map();
-    this.layers = {};
     this._tmp = [0, 0, 0];
     this._tmp2 = [0, 0, 0];
     this.hasMoons = new Set(['mars', 'jupiter', 'saturn', 'uranus', 'neptune'].filter((k) => eph.moons(k).length));
     const sphere = new THREE.SphereGeometry(1, 128, 64);
     sphere.rotateX(Math.PI / 2);          // three's sphere has its pole on y; the body frame has it on z
-    this.sphere = sphere;
 
-    const colours = (textures && textures.colours) || {};
+    const colors = (textures && textures.colours) || {};
     const texFor = (key) => tex[key] || null;
     const texMeta = (key) => (textures && textures.bodies && textures.bodies[key]) || null;
 
@@ -57,10 +45,10 @@ export class SolarSystem {
       const rMean = Math.cbrt(radii[0] * radii[1] * radii[2]);
       const drawRadii = rotation.has(key) ? radii : [rMean, rMean, rMean];
       const meta = texMeta(key);
-      // With neither a map nor a measured colour, a neutral grey: a stand-in, not data.
+      // With neither a map nor a measured color, a neutral gray: a stand-in, not data.
       let color = [0.72, 0.72, 0.72], map = null, gray = false, lonLeft = -180;
       if (meta && texFor(key)) { map = texFor(key); gray = !!meta.grayscale; lonLeft = meta.lon_left_deg; }
-      if (colours[key] && colours[key].srgb) color = colours[key].srgb.map((v) => v / 255);
+      if (colors[key] && colors[key].srgb) color = colors[key].srgb.map((v) => v / 255);
       const mat = globeMaterial({
         map, gray, lonLeft, color, emissive: key === 'sun',
         night: key === 'earth' ? texFor('earth_night') : null,
@@ -71,8 +59,8 @@ export class SolarSystem {
       this.root.add(mesh);
       const b = {
         key, name: name || p.name || key, kind, parent, radii, drawRadii, radiusKm: drawRadii[0], mesh, mat,
-        pos: [0, 0, 0], rel: [0, 0, 0], ui: UI_COLOUR[key] || (kind === 'moon' ? '#c9ccd2' : '#dddddd'),
-        naif: p.naif, meta, phys: p,
+        pos: [0, 0, 0], rel: [0, 0, 0], ui: PLATE.neutral,
+        meta, phys: p,
       };
       this.bodies.set(key, b);
       return b;
@@ -109,7 +97,7 @@ export class SolarSystem {
         }
         continue;
       }
-      const bands = list.map((r) => new THREE.Vector3(r.inner_km, r.outer_km, planet === 'saturn' ? 0.6 : 0.35)).slice(0, 6);
+      const bands = list.map((r) => new THREE.Vector3(r.inner_km, r.outer_km, 0.6)).slice(0, 6);
       const rMin = Math.min(...list.map((r) => r.inner_km)), rMax = Math.max(...list.map((r) => r.outer_km));
       const geo = new THREE.RingGeometry(rMin * 0.995, rMax * 1.005, 384, 1);
       const mat = ringMaterial();
@@ -119,10 +107,8 @@ export class SolarSystem {
       mesh.frustumCulled = false; mesh.renderOrder = 2; mesh.visible = false;
       this.root.add(mesh);
       this.rings.push({ planet, host, mesh, mat, bands, rMax });
-      if (planet === 'saturn') {
-        host.mat.uniforms.uRingCount.value = bands.length;
-        bands.forEach((v, i) => host.mat.uniforms.uRingBands.value[i].copy(v));
-      }
+      host.mat.uniforms.uRingCount.value = bands.length;
+      bands.forEach((v, i) => host.mat.uniforms.uRingBands.value[i].copy(v));
     }
 
     // ---- markers: one dot per body, sized in pixels, so a planet is findable at any zoom.
@@ -158,22 +144,22 @@ export class SolarSystem {
       const col = hexToRgb01(b.ui);
       const orbitCol = new Float32Array((ORBIT_N + 1) * 4);
       const trailCol = new Float32Array(TRAIL_N * 4);
-      for (let i = 0; i <= ORBIT_N; i++) orbitCol.set([col[0], col[1], col[2], 0.16], i * 4);
-      for (let i = 0; i < TRAIL_N; i++) { const a = Math.pow(i / (TRAIL_N - 1), 1.6); trailCol.set([col[0], col[1], col[2], 0.9 * a], i * 4); }
+      for (let i = 0; i <= ORBIT_N; i++) orbitCol.set([col[0], col[1], col[2], PLATE.alpha.orbit], i * 4);
+      for (let i = 0; i < TRAIL_N; i++) { const a = Math.pow(i / (TRAIL_N - 1), 1.6); trailCol.set([col[0], col[1], col[2], PLATE.alpha.trail * a], i * 4); }
       const orbit = ThickLine.from(new Float32Array((ORBIT_N + 1) * 3), (i) => orbitCol.subarray(i * 4, i * 4 + 4), this.orbitMat);
       const trail = ThickLine.from(new Float32Array(TRAIL_N * 3), (i) => trailCol.subarray(i * 4, i * 4 + 4), this.trailMat);
       orbit.mesh.renderOrder = 1; trail.mesh.renderOrder = 1;
       orbit.mesh.visible = trail.mesh.visible = false;
       this.root.add(orbit.mesh, trail.mesh);
-      this.orbits.set(k, { orbit, trail, n: ORBIT_N, tn: TRAIL_N, centre: [0, 0, 0], ok: false, jd: NaN });
+      this.orbits.set(k, { orbit, trail, n: ORBIT_N, tn: TRAIL_N, center: [0, 0, 0], ok: false, jd: NaN });
     }
     // Moon orbits of the giant planets: the fitted JPL path over one revolution, fading.
     this.moonOrbits = new Map();
     for (const b of this.bodies.values()) {
       if (b.kind !== 'moon' || b.key === 'moon') continue;
-      const N = 160, col = hexToRgb01('#9aa6b8');
+      const N = 160, col = hexToRgb01(PLATE.neutral);
       const c = new Float32Array(N * 4);
-      for (let i = 0; i < N; i++) c.set([col[0], col[1], col[2], 0.08 + 0.55 * Math.pow(i / (N - 1), 2)], i * 4);
+      for (let i = 0; i < N; i++) c.set([col[0], col[1], col[2], PLATE.alpha.moon_orbit * (0.15 + 0.85 * Math.pow(i / (N - 1), 2))], i * 4);
       const line = ThickLine.from(new Float32Array(N * 3), (i) => c.subarray(i * 4, i * 4 + 4), this.moonOrbitMat);
       line.mesh.visible = false; line.mesh.renderOrder = 1;
       this.root.add(line.mesh);
@@ -189,7 +175,7 @@ export class SolarSystem {
       const col = new Float32Array(n * 3), size = new Float32Array(n);
       for (let i = 0; i < n; i++) {
         const kind = small.kind(i);
-        col.set(KIND_COLOUR[kind] || KIND_COLOUR.other, i * 3);
+        col.set(GROUP[kind] || GROUP.other, i * 3);
         const H = small.H ? small.H(i) : NaN;
         // Asteroid H sets the size; a comet's H is a different quantity (its total-magnitude
         // parameter) and is not comparable, so comets are one size.
@@ -199,11 +185,11 @@ export class SolarSystem {
       }
       g.setAttribute('acolor', new THREE.BufferAttribute(col, 3));
       g.setAttribute('asize', new THREE.BufferAttribute(size, 1));
-      this.smallPts = new THREE.Points(g, glowPointsMaterial({ opacity: 1.0, sharp: 0.3 }));
+      this.smallPts = new THREE.Points(g, glowPointsMaterial({ opacity: PLATE.cat.inner.alpha, sharp: 0.3 }));
       this.smallPts.frustumCulled = false; this.smallPts.renderOrder = 3;
       this.root.add(this.smallPts);
       this._smallJd = NaN;
-      this.smallOrbitLine = ThickLine.from(new Float32Array(513 * 3), [0.55, 0.95, 1.0, 0.55], thickLineMaterial({ width: 1.6 }));
+      this.smallOrbitLine = ThickLine.from(new Float32Array(513 * 3), [...hexToRgb01(PLATE.neutral), 0.55], thickLineMaterial({ width: 1.6 }));
       this.smallOrbit = this.smallOrbitLine.mesh;
       this.smallOrbit.visible = false; this.smallOrbit.renderOrder = 1;
       this.root.add(this.smallOrbit);
@@ -216,7 +202,7 @@ export class SolarSystem {
     if (key === 'sun') { out[0] = out[1] = out[2] = 0; return out; }
     const b = this.bodies.get(key);
     if (b && b.kind === 'moon' && key !== 'moon') {
-      const par = this.positionOf(b.parent, jd, out);     // the planet's centre (see below)
+      const par = this.positionOf(b.parent, jd, out);     // the planet's center (see below)
       const m = this._tmp;
       if (!this.eph.moonFromCentre(b.moonName, jd, m)) return null;
       out[0] = par[0] + m[0] / AU_KM; out[1] = par[1] + m[1] / AU_KM; out[2] = par[2] + m[2] / AU_KM;
@@ -224,8 +210,8 @@ export class SolarSystem {
     }
     const p = this.eph.helio(key, jd, this._tmp);
     out[0] = p[0] / AU_KM; out[1] = p[1] / AU_KM; out[2] = p[2] / AU_KM;
-    // DE430 gives the giant planets' system barycentres; within the satellite range the planet's
-    // own centre is rebuilt from its moons (up to ~300 km away for Saturn), which is where the globe
+    // DE430 gives the giant planets' system barycenters; within the satellite range the planet's
+    // own center is rebuilt from its moons (up to ~300 km away for Saturn), which is where the globe
     // belongs and what the moons circle.
     if (this.hasMoons.has(key) && jd >= this.moonRange.jdStart && jd <= this.moonRange.jdEnd) {
       const c = this.eph.planetCentre(key, jd, this._tmp2);
@@ -234,12 +220,12 @@ export class SolarSystem {
     return out;
   }
   // Osculating heliocentric (or geocentric, for the Moon) ellipse from position and velocity.
-  _osculating(key, jd, centreKey, gm) {
+  _osculating(key, jd, centerKey, gm) {
     const h = 0.25;
     const p0 = this.positionOf(key, jd - h, [0, 0, 0]), p1 = this.positionOf(key, jd + h, [0, 0, 0]);
-    const c0 = centreKey ? this.positionOf(centreKey, jd - h, [0, 0, 0]) : [0, 0, 0];
-    const c1 = centreKey ? this.positionOf(centreKey, jd + h, [0, 0, 0]) : [0, 0, 0];
-    const pc = this.positionOf(key, jd, [0, 0, 0]), cc = centreKey ? this.positionOf(centreKey, jd, [0, 0, 0]) : [0, 0, 0];
+    const c0 = centerKey ? this.positionOf(centerKey, jd - h, [0, 0, 0]) : [0, 0, 0];
+    const c1 = centerKey ? this.positionOf(centerKey, jd + h, [0, 0, 0]) : [0, 0, 0];
+    const pc = this.positionOf(key, jd, [0, 0, 0]), cc = centerKey ? this.positionOf(centerKey, jd, [0, 0, 0]) : [0, 0, 0];
     const r = vsub([], pc, cc);
     const v = [((p1[0] - c1[0]) - (p0[0] - c0[0])) / (2 * h), ((p1[1] - c1[1]) - (p0[1] - c0[1])) / (2 * h), ((p1[2] - c1[2]) - (p0[2] - c0[2])) / (2 * h)];
     const mu = gm;                               // AU³/day²
@@ -251,21 +237,19 @@ export class SolarSystem {
     if (!(a > 0) || e >= 1) return null;
     const P = e > 1e-8 ? vnorm([], ev) : vnorm([], r);
     const Q = vnorm([], vcross([], vnorm([], hv), P));
-    return { a, e, P, Q, centre: cc, period: 2 * Math.PI * Math.sqrt(a * a * a / mu) };
+    return { a, e, P, Q, center: cc, period: 2 * Math.PI * Math.sqrt(a * a * a / mu) };
   }
 
   // ------------------------------------------------------------------ per frame
   // `origin` = floating origin (AU), `cam` = camera position (AU), `pxPerRad` = pixels per radian,
   // `S` = root.scale (world units per AU). Shader uniforms live in world units, so they carry S.
   update(jd, origin, cam, pxPerRad, pxRatio, layers, S = 1) {
-    this.layers = layers;
     // Far out (beyond ~0.1 light-year) the whole Solar System is one pixel: everything but the
     // Sun's glow is hidden, and the Sun stays marked until the galaxy layer's own marker takes over.
     const dSun = Math.hypot(cam[0], cam[1], cam[2]);
     this.far = dSun > 2e4;
     const k2 = this.phys.constants.k_gauss_au15_day ** 2;
     const inMoonRange = jd >= this.moonRange.jdStart && jd <= this.moonRange.jdEnd;
-    this.inMoonRange = inMoonRange;
     const sunRel = [-origin[0] * S, -origin[1] * S, -origin[2] * S];
 
     // Positions of every body; visibility by apparent size.
@@ -374,7 +358,7 @@ export class SolarSystem {
     // drawn for (kept per orbit, as a hidden orbit is not refreshed); trails every frame.
     for (const [k, o] of this.orbits) {
       const b = this.bodies.get(k);
-      const centreKey = k === 'moon' ? 'earth' : null;
+      const centerKey = k === 'moon' ? 'earth' : null;
       // Close to a planet its own orbit is a line straight through the globe: hide it.
       const near = b.px > 14;
       o.orbit.mesh.visible = layers.orbits && b.valid && !near;
@@ -388,7 +372,7 @@ export class SolarSystem {
       if (!o.ok || !(Math.abs(jd - o.jd) < 2)) {
         o.jd = jd;
         const gmSun = k2, gmP = this._gmAu(k === 'moon' ? 'earth' : k), gmM = k === 'moon' ? this._gmAu('moon') : 0;
-        const el = this._osculating(k, jd, centreKey, k === 'moon' ? gmP + gmM : gmSun + gmP);
+        const el = this._osculating(k, jd, centerKey, k === 'moon' ? gmP + gmM : gmSun + gmP);
         o.el = el; o.ok = !!el; o.period = el ? el.period : 365;
         if (el) {
           const arr = o.orbit.pos;
@@ -400,8 +384,8 @@ export class SolarSystem {
           o.orbit.update(o.n + 1);
         }
       }
-      // Orbit and trail are stored relative to their centre (the Sun, or the Earth for the Moon).
-      const c = centreKey ? this.bodies.get(centreKey).pos : [0, 0, 0];
+      // Orbit and trail are stored relative to their center (the Sun, or the Earth for the Moon).
+      const c = centerKey ? this.bodies.get(centerKey).pos : [0, 0, 0];
       o.orbit.mesh.position.set(c[0] - origin[0], c[1] - origin[1], c[2] - origin[2]);
       o.trail.mesh.position.copy(o.orbit.mesh.position);
       if (o.trail.mesh.visible && o.trailJd !== jd) {
@@ -411,7 +395,7 @@ export class SolarSystem {
         for (let i = 0; i < o.tn; i++) {
           const t = jd - span * (1 - i / (o.tn - 1));
           this.positionOf(k, t, tmp);
-          if (centreKey) this.positionOf(centreKey, t, ct); else { ct[0] = ct[1] = ct[2] = 0; }
+          if (centerKey) this.positionOf(centerKey, t, ct); else { ct[0] = ct[1] = ct[2] = 0; }
           arr[i * 3] = tmp[0] - ct[0]; arr[i * 3 + 1] = tmp[1] - ct[1]; arr[i * 3 + 2] = tmp[2] - ct[2];
         }
         o.trail.update(o.tn);
@@ -471,7 +455,7 @@ export class SolarSystem {
 
   _gmAu(key) {
     // km³/s² → AU³/day²
-    // The ephemeris gives system barycentres for the giant planets, so their orbits use the system's GM.
+    // The ephemeris gives system barycenters for the giant planets, so their orbits use the system's GM.
     const b = this.phys.bodies[key];
     const gm = b && (key === 'earth' || key === 'moon' ? b.gm_km3_s2 : (b.gm_system_km3_s2 || b.gm_km3_s2));
     if (!gm) return 0;

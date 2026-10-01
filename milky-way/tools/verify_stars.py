@@ -44,7 +44,7 @@ def main():
     srgb = np.array(col['srgb'])
     lin = np.array(col['linear'])
     check(len(T) == 256 and srgb.shape == (256, 3) and lin.shape == (256, 3), 'colour.json has 256 entries')
-    check(T[255] is None and col['unknown_index'] == 255, 'entry 255 is the no-colour entry')
+    check(T[255] is None and col['unknown_index'] == 255, 'entry 255 is the no-color entry')
     t = np.array(T[:255], float)
     check(np.all(np.diff(t) > 0), f'temperatures increase, {t[0]:.0f} K .. {t[-1]:.0f} K, '
           f'step {100 * (t[1] / t[0] - 1):.2f} %')
@@ -80,7 +80,7 @@ def main():
             assert rec['m'][n - 1] <= (int(k) + 8) * 10 < rec['m'][n], k
     check(True, f'mv_prefix consistent (e.g. {dj["mv_prefix"]["0"]:,} stars with M_V <= 0)')
     unk = int((rec['c'] == 255).sum())
-    print(f'    colour codes: {len(np.unique(rec["c"]))} distinct, {unk:,} without colour '
+    print(f'    color codes: {len(np.unique(rec["c"]))} distinct, {unk:,} without color '
           f'({100 * unk / len(rec):.2f} %)')
     print(f'    distance sources: {dj["dist_src_counts"]}')
 

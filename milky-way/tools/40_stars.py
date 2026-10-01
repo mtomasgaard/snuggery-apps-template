@@ -800,7 +800,7 @@ def iau_names_and_figures(iau, cat, hyg, extra):
             for h in pl:
                 r = resolve_hip(int(h))
                 if r is None:
-                    sys.exit(f'constellation {abbr}: HIP {h} has no catalogue row')
+                    sys.exit(f'constellation {abbr}: HIP {h} has no catalog row')
                 line_refs[int(h)] = r
     return names, cons, line_refs
 
@@ -1164,11 +1164,11 @@ def write_exoplanets(host_of, rows):
            'methods': methods, 'hosts': {},
            'source': f'Open Exoplanet Catalogue, git commit {OEC_COMMIT}; list = Confirmed planets',
            'units': {'period_d': 'days', 'a_au': 'AU',
-                     'mass_mj': 'Jupiter masses, as the catalogue gives it (for radial-velocity '
+                     'mass_mj': 'Jupiter masses, as the catalog gives it (for radial-velocity '
                                 'planets usually the minimum mass)',
                      'radius_rj': 'Jupiter radii', 'year': 'discovery year',
                      'method': 'index into methods', 'circumbinary': '1 if it orbits a binary'},
-           'note': 'null = not given by the catalogue; values rounded to 4 significant digits'}
+           'note': 'null = not given by the catalog; values rounded to 4 significant digits'}
     n = 0
     for ref, pls in host_of.items():
         seen, lst = set(), []
@@ -1232,7 +1232,7 @@ def write_deep(cat, named):
         'units_per_pc': POS_SCALE, 'quantisation_pc': 1 / POS_SCALE,
         'absmag': {'M_V': 'absmag_code / 10 - 8', 'min': -8.0, 'max': 17.5,
                    'note': 'V + 5 - 5 log10(d / pc); no extinction correction'},
-        'colour': 'colour_code indexes stars/colour.json (255 = no colour measurement)',
+        'colour': 'colour_code indexes stars/colour.json (255 = no color measurement)',
         'frame': 'ICRS, heliocentric; x -> RA 0 Dec 0, z -> north celestial pole; little-endian',
         'order': ('absmag_code ascending (intrinsically brightest first), then distance, then '
                   'AT-HYG id; the first mv_prefix[k] records are the stars whose absmag_code / '
@@ -1258,7 +1258,7 @@ def write_colour(temps, srgb, lin, M):
         'index_from_teff': (f'round(254 * ln(T / {LUT_TMIN:g}) / ln({LUT_TMAX:g} / {LUT_TMIN:g})), '
                             'clamped to 0..254'),
         'method': ('Planck spectrum at T, integrated at 1 nm over 360-830 nm against the CIE 1931 '
-                   '2-degree colour-matching functions -> XYZ -> linear sRGB with the IEC '
+                   '2-degree color-matching functions -> XYZ -> linear sRGB with the IEC '
                    '61966-2-1 matrix (D65 white) -> negative components set to 0 -> divided by the '
                    'largest component (chromaticity only; brightness comes from the magnitude). '
                    '"srgb" is encoded with the sRGB transfer curve, "linear" is not.'),
@@ -1266,8 +1266,8 @@ def write_colour(temps, srgb, lin, M):
         'teff_note': ('Display temperatures, not measurements: from B-V by the Ballesteros (2012) '
                       "blackbody model, from BT-VT or spectral type through Mamajek's dwarf "
                       'sequence (v2022.04.16), or from the Open Exoplanet Catalogue. Observed '
-                      'colours: interstellar reddening is not removed. Entry 255 is neutral white '
-                      'for stars with no colour index, spectral type or catalogue Teff.'),
+                      'colors: interstellar reddening is not removed. Entry 255 is neutral white '
+                      'for stars with no color index, spectral type or catalog Teff.'),
     }, ndigits=6)
 
 
@@ -1344,7 +1344,7 @@ def write_credits():
              source=('Compiled from Tycho-2 (Høg et al. 2000) and its first supplement, Hipparcos (ESA '
                      '1997, 2007 reduction via HYG), Gaia DR3 and DR2 parallaxes (ESA/Gaia/DPAC, from '
                      'gaiadr3.gaia_source_lite and SIMBAD look-ups), the Yale Bright Star Catalog, the '
-                     'Gliese & Jahreiss 1991 nearby-star catalogue, the Tycho-2 Spectral Type Catalog '
+                     'Gliese & Jahreiss 1991 nearby-star catalog, the Tycho-2 Spectral Type Catalog '
                      '(Wright et al. 2003) and SIMBAD cross-identifications (CDS, Strasbourg).'),
              url=f'https://github.com/astronexus/ATHYG-Database/tree/{ATHYG_COMMIT}',
              licence='CC BY-SA 4.0',
@@ -1354,7 +1354,7 @@ def write_credits():
              adaptations=(f'Positions turned into ICRS Cartesian parsecs from ra, dec and dist; V derived '
                           f'from Tycho VT as V = VT - 0.090 (BT-VT), the formula in AT-HYG\'s own build '
                           f'notes, for {r["vt_to_v_converted"]:,} rows; absolute magnitudes recomputed as '
-                          f'V + 5 - 5 log10 d with no extinction correction; colour indices and spectral '
+                          f'V + 5 - 5 log10 d with no extinction correction; color indices and spectral '
                           f'types turned into display temperatures; {dq["shipped"]:,} stars within 500 pc '
                           f'with parallax/error > 10 packed into deep.bin (pc x 64 in int16, M_V in 0.1 mag '
                           f'steps). The shipped star files are shared under CC BY-SA 4.0.'),
@@ -1367,12 +1367,12 @@ def write_credits():
              owner='European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC)',
              source='Gaia Collaboration, Vallenari et al. 2023; parallaxes as carried by AT-HYG v3.2',
              url='https://www.cosmos.esa.int/gaia',
-             licence=('CC BY-NC 3.0 IGO (non-commercial). ESA\'s Gaia licence page '
+             licence=('CC BY-NC 3.0 IGO (non-commercial). ESA\'s Gaia license page '
                       '(cosmos.esa.int/web/gaia-users/license) could not be read from the build network; a '
                       'web-search summary of it gives CC BY-NC 3.0 IGO, as do the Celestia and '
-                      'celestia-gaia-stardb licence files. A third-party PyPI package states CC BY-SA 3.0 IGO '
-                      '(ESA\'s licence for images), and the AWS Open Data registry "Attribution required". '
-                      'This app uses the Gaia-derived values non-commercially, as that licence requires.'),
+                      'celestia-gaia-stardb license files. A third-party PyPI package states CC BY-SA 3.0 IGO '
+                      '(ESA\'s license for images), and the AWS Open Data registry "Attribution required". '
+                      'This app uses the Gaia-derived values non-commercially, as that license requires.'),
              licence_quote=('"This work has made use of data from the European Space Agency (ESA) mission Gaia '
                             '(https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and '
                             'Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium). '
@@ -1403,11 +1403,11 @@ def write_credits():
                        f'20% and {gv["off_by_factor_2"]:.0%} are off by more than a factor of two '
                        f'(measured on these files).')),
         dict(id='stellarium-hipgaia3',
-             title='Stellarium v26.2 hip_gaia3 star catalogues 0-3 (build-time check only, not shipped)',
-             owner='Stellarium team; catalogues built by Henry Leung (henrysky/stellarium_star_catalogs)',
+             title='Stellarium v26.2 hip_gaia3 star catalogs 0-3 (build-time check only, not shipped)',
+             owner='Stellarium team; catalogs built by Henry Leung (henrysky/stellarium_star_catalogs)',
              source='Gaia DR3 (ESA/Gaia/DPAC) and Hipparcos values via SIMBAD',
              url=f'https://github.com/Stellarium/stellarium/tree/{STEL_COMMIT}/stars/hip_gaia3',
-             licence='No data licence stated; the files sit in a GPL-2.0-or-later source tree',
+             licence='No data license stated; the files sit in a GPL-2.0-or-later source tree',
              licence_quote='COPYING: "GNU GENERAL PUBLIC LICENSE Version 2, June 1991"; no data-specific notice.',
              retrieved=RETRIEVED,
              adaptations=(f'Nothing shipped. Each AT-HYG star was joined by Gaia DR3 id or HIP number to '
@@ -1416,7 +1416,7 @@ def write_credits():
                           f'or when the two parallaxes agree within 3 sigma '
                           f'({qa["error_applies_by_3sigma_agreement"]:,} rows); {qa["disagree_or_no_error"]:,} '
                           f'rows with a distance have no applicable error.'),
-             accuracy='Parallax stored in 0.02 mas steps; the catalogue author calls the files experimental.'),
+             accuracy='Parallax stored in 0.02 mas steps; the catalog author calls the files experimental.'),
         dict(id='stellarium-modern-iau', title='Stellarium v26.2 sky culture "modern_iau"',
              owner="Stellarium's team",
              source=('Constellation figures from the IAU "The Constellations" pages (Sky & Telescope: Roger '
@@ -1437,17 +1437,17 @@ def write_credits():
              url=f'https://github.com/OpenExoplanetCatalogue/open_exoplanet_catalogue/tree/{OEC_COMMIT}',
              licence='MIT',
              licence_quote=('"The database is licensed under an MIT license (see below), which basically says '
-                            'you can do everything with it." (README.md) The licence, verbatim from the '
+                            'you can do everything with it." (README.md) The license, verbatim from the '
                             'README: "' + OEC_LICENCE_TEXT[0] + '"'),
              retrieved=RETRIEVED,
              adaptations=(f'Planets listed as "Confirmed planets" only: {r["exoplanets"]["planets"]:,} planets '
                           f'on {r["exoplanets"]["hosts"]} named rows. Hosts joined to AT-HYG/HYG by '
                           f'identifier or by position (<= 30 arcsec, distance within 5%); an identifier '
-                          f'that points more than 1 degree from the catalogue\'s own coordinates and more '
-                          f'than 50% off its distance is treated as a catalogue slip and not used '
+                          f'that points more than 1 degree from the catalog\'s own coordinates and more '
+                          f'than 50% off its distance is treated as a catalog slip and not used '
                           f'({len(r["oec_id_joins_rejected"])} hosts: '
                           f'{", ".join(r["oec_id_joins_rejected"])}); '
-                          f'{r["oec_only_rows"]} hosts within 100 pc placed from the catalogue\'s own '
+                          f'{r["oec_only_rows"]} hosts within 100 pc placed from the catalog\'s own '
                           f'coordinates and distance; values rounded to 4 significant digits.'),
              accuracy=('As of the pinned commit, and not complete: no planet is listed for Barnard\'s Star, '
                        'and eps Eridani b is "Controversial", so it is not shown.')),
@@ -1457,12 +1457,12 @@ def write_credits():
              source=('Pecaut & Mamajek 2013, ApJS 208, 9 (Table 5); the copy bundled in the MeanStars '
                      '3.6.1 wheel on PyPI'),
              url='https://pypi.org/project/MeanStars/3.6.1/',
-             licence='No licence stated on the table (the MeanStars code is BSD-3-Clause)',
+             licence='No license stated on the table (the MeanStars code is BSD-3-Clause)',
              licence_quote=('"that reference should be cited until an updated version of the table is '
                             'published" (file header)'),
              retrieved=RETRIEVED,
              adaptations=('Bt-Vt and spectral-type columns interpolated to effective temperature for display '
-                          'colours; only the derived colour table ships.'),
+                          'colors; only the derived color table ships.'),
              accuracy='A dwarf sequence applied to every luminosity class; display use only.'),
         dict(id='ballesteros', title='B-V to effective temperature (Ballesteros 2012, EPL 97, 34008) — a model',
              owner='F. J. Ballesteros; coefficients as coded in PyAstronomy 0.25.0 (MIT)',
@@ -1478,7 +1478,7 @@ def write_credits():
                        f'{r["ballesteros_check"]["mamajek_B2V_K"]:,} K; at the Sun\'s B-V of 0.65 it gives '
                        f'{r["ballesteros_check"]["bv_0.65_K"]:,} K (Mamajek G2V: '
                        f'{r["ballesteros_check"]["mamajek_G2V_K"]:,} K).')),
-        dict(id='cie1931', title='CIE 1931 2-degree standard observer colour-matching functions',
+        dict(id='cie1931', title='CIE 1931 2-degree standard observer color-matching functions',
              owner='CIE (tabulated by CVRL), via colour-science 0.4.6 (BSD-3-Clause)',
              source='colour/colorimetry/datasets/cmfs.py', url='https://pypi.org/project/colour-science/0.4.6/',
              licence='Standard reference data; colour-science is BSD-3-Clause',
@@ -1486,7 +1486,7 @@ def write_credits():
                             'without modification, are permitted..."'),
              retrieved=RETRIEVED,
              adaptations=('Planck spectra integrated against the CMFs at 1 nm, converted with the IEC '
-                          '61966-2-1 sRGB matrix and normalised to the largest channel.'),
+                          '61966-2-1 sRGB matrix and normalized to the largest channel.'),
              accuracy='The chromaticity of an ideal blackbody; real stellar spectra differ, most for M stars.'),
     ]
     os.makedirs(os.path.join(TOOLS, 'credits'), exist_ok=True)

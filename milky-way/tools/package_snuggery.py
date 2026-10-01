@@ -57,7 +57,7 @@ for rel in files:
             if URL_RE.search(line):
                 offenders.append(f'{rel}:{n}: {line.strip()[:90]}')
 assert not offenders, ('a URL in the app\'s own code — Snuggery blocks every network request, so '
-                       'this must go (licence links belong in CREDITS.txt, NOTES.md or '
+                       'this must go (license links belong in CREDITS.txt, NOTES.md or '
                        'data/about.json):\n  ' + '\n  '.join(offenders[:10]))
 
 sizes = {f: os.path.getsize(os.path.join(APP, f)) for f in files}

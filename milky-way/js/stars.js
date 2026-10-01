@@ -1,45 +1,35 @@
-// The neighbourhood scale: stars in 3D around the Sun, in parsecs on ICRS axes, the Sun at the
-// origin — plus the Gaia DR3 sky as a backdrop for everything seen from near the Sun.
-//
-// Three star sets, all drawn by the magnitude shader in gfx.js, so a star's brightness is its real
-// absolute magnitude seen from wherever the camera is:
-//   deep.bin    ~209 000 stars within 500 pc with good parallaxes (AT-HYG / Gaia DR3), no names;
-//   named.json  every naked-eye star, everything within 20 pc and exoplanet hosts within 100 pc,
-//               with names and designations — these are the ones you can tap. They are placed at
-//               their catalogue distances, a few of them out to ~3.5 kpc;
-//   the constellation figures joining named stars, drawn in 3D: from the Sun they are the familiar
-//   shapes, and a few light-years out they come apart, because the stars in them are not related.
-// Named stars with no usable parallax (flag 16: x, y, z is a unit direction) cannot be placed in
-// 3D. They and the figure lines that touch them (`lines_sky_only`) are drawn on the sky, at their
-// V magnitudes, as directions seen from the Sun — only while the camera is near the Sun.
-//
-// deep.bin layout (tools/CONTRACT.md §7): 8 bytes per star — int16 x, y, z in pc × 64,
-// uint8 absolute-magnitude code (M_V = code/10 − 8), uint8 index into colour.json.
+// The neighborhood scale: stars in 3D around the Sun, in parsecs on ICRS axes, the Sun at the
+// origin, and the Gaia DR3 sky as a backdrop seen from near the Sun. The deep catalog (deep.bin,
+// tools/CONTRACT.md section 7: int16 x, y, z in pc times 64, a magnitude code, a color index) and the
+// named stars you can tap are drawn by the magnitude shader in gfx.js, so a star's brightness is its
+// absolute magnitude seen from wherever the camera is. The constellation figures are drawn in 3D and
+// come apart a few light-years out. Named stars with no usable parallax (flag 16) are directions,
+// drawn on the sky only while the camera is near the Sun, with the figure lines that touch them.
 
 import * as THREE from '../vendor/three.module.js';
-import { starMaterial, skyMaterial, lineMaterial, glowPointsMaterial } from './gfx.js';
+import { starMaterial, skyMaterial, lineMaterial, glowPointsMaterial, hexToRgb01 } from './gfx.js';
 import { PC_AU } from './util.js';
+import { PLATE } from './plate.js';
 
 export class Stars {
-  constructor({ deepBuf, deepMeta, named, colour, constellations, exoplanets, skyTex, sky }) {
+  constructor({ deepBuf, deepMeta, named, color, constellations, exoplanets, skyTex, sky }) {
     this.root = new THREE.Group();
     this.root.name = 'stars';
     this.named = named;
     this.exo = exoplanets.hosts;            // row -> [[name, period_d, a_au, …], …] in exoplanets.fields order
     this.exoFields = exoplanets.fields;
     this.exoMethods = exoplanets.methods;
-    this.skyMeta = sky;
     // colour.json: 256 sRGB triples (0–1) by effective temperature; the last entry is neutral white
-    // for stars with no colour measurement.
-    const lut = colour.srgb;
+    // for stars with no color measurement.
+    const lut = color.srgb;
     const rgbAt = (i) => lut[Math.max(0, Math.min(lut.length - 1, i))];
 
-    // ---- the Gaia sky, centred on the camera
+    // ---- the Gaia sky, centered on the camera
     this.sky = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 32), skyMaterial(skyTex));
     this.sky.frustumCulled = false; this.sky.renderOrder = -10;
     this.root.add(this.sky);
 
-    // ---- deep catalogue
+    // ---- deep catalog
     const n = Math.floor(deepBuf.byteLength / 8);
     const i16 = new Int16Array(deepBuf, 0, n * 4), u8 = new Uint8Array(deepBuf, 0, n * 8);
     const pos = new Float32Array(n * 3), mag = new Float32Array(n), col = new Float32Array(n * 3);
@@ -68,7 +58,7 @@ export class Stars {
       np[k * 3] = placed ? named.x[k] : 0; np[k * 3 + 1] = placed ? named.y[k] : 0; np[k * 3 + 2] = placed ? named.z[k] : 0;
       this.namedAU[k * 3] = named.x[k] * PC_AU; this.namedAU[k * 3 + 1] = named.y[k] * PC_AU; this.namedAU[k * 3 + 2] = named.z[k] * PC_AU;
       // Rows with no measured magnitude (a few exoplanet hosts known only from the Open Exoplanet
-      // Catalogue) are placed but not drawn as stars: a null would read as magnitude 0, a bright star.
+      // Catalog) are placed but not drawn as stars: a null would read as magnitude 0, a bright star.
       nm[k] = placed && named.absmag[k] != null ? named.absmag[k] : 99;
       nc.set(rgbAt(named.colour[k]), k * 3);
     }
@@ -79,11 +69,9 @@ export class Stars {
     this.namedPts = new THREE.Points(ng, starMaterial());
     this.namedPts.frustumCulled = false; this.namedPts.renderOrder = 2;
     this.root.add(this.namedPts);
-    // Stars actually drawn in 3D: the deep catalogue and the placed named rows with a magnitude.
-    this.drawnCount = n + nm.reduce((s, m) => s + (m < 99 ? 1 : 0), 0);
 
     // ---- the sky from the Sun: named stars with no usable parallax, and the figure lines that
-    // touch them, as directions. A group centred on the camera holds them SKY_R pc away, so the
+    // touch them, as directions. A group centered on the camera holds them SKY_R pc away, so the
     // magnitude shader sees them at their V magnitudes: absmag = V + 5 − 5·log10(SKY_R).
     const SKY_R = 10;
     this.skyIdx = [...Array(N).keys()].filter((k) => named.flags[k] & 16);
@@ -118,8 +106,10 @@ export class Stars {
       for (const [i, j] of c.lines_sky_only || []) skySegs.push(i, j);
       this.constellations.push({ abbr, name: c.name, members: [...members] });
     }
+    // The figures are the plate's neutral at PLATE.alpha.figure (0.5 here, times the material's 0.55).
+    const fig = [...hexToRgb01(PLATE.neutral), PLATE.alpha.figure / 0.55];
     const slp = new Float32Array(skySegs.length * 3), slc = new Float32Array(skySegs.length * 4);
-    skySegs.forEach((i, k) => { const d = dirOf(i); slp.set([d[0] * SKY_R, d[1] * SKY_R, d[2] * SKY_R], k * 3); slc.set([0.45, 0.62, 0.95, 0.5], k * 4); });
+    skySegs.forEach((i, k) => { const d = dirOf(i); slp.set([d[0] * SKY_R, d[1] * SKY_R, d[2] * SKY_R], k * 3); slc.set(fig, k * 4); });
     const slg = new THREE.BufferGeometry();
     slg.setAttribute('position', new THREE.BufferAttribute(slp, 3));
     slg.setAttribute('color', new THREE.BufferAttribute(slc, 4));
@@ -127,7 +117,7 @@ export class Stars {
     this.skyLines.frustumCulled = false; this.skyLines.renderOrder = 3;
     this.skyRoot.add(this.skyLines);
     const lp = new Float32Array(segs.length * 3), lc = new Float32Array(segs.length * 4);
-    segs.forEach((i, k) => { lp.set([np[i * 3], np[i * 3 + 1], np[i * 3 + 2]], k * 3); lc.set([0.45, 0.62, 0.95, 0.5], k * 4); });
+    segs.forEach((i, k) => { lp.set([np[i * 3], np[i * 3 + 1], np[i * 3 + 2]], k * 3); lc.set(fig, k * 4); });
     const lg = new THREE.BufferGeometry();
     lg.setAttribute('position', new THREE.BufferAttribute(lp, 3));
     lg.setAttribute('color', new THREE.BufferAttribute(lc, 4));
@@ -137,14 +127,13 @@ export class Stars {
 
     // ---- exoplanet hosts: a small ring marker, drawn as a sharp glow point
     const hosts = Object.keys(this.exo).map(Number).filter((k) => !(named.flags[k] & 16));
-    this.hostIdx = hosts;
     const hp = new Float32Array(hosts.length * 3), hc = new Float32Array(hosts.length * 3), hs = new Float32Array(hosts.length);
-    hosts.forEach((k, i) => { hp.set([np[k * 3], np[k * 3 + 1], np[k * 3 + 2]], i * 3); hc.set([0.45, 0.95, 0.75], i * 3); hs[i] = 11; });
+    hosts.forEach((k, i) => { hp.set([np[k * 3], np[k * 3 + 1], np[k * 3 + 2]], i * 3); hc.set(hexToRgb01(PLATE.cat.host.color), i * 3); hs[i] = 11; });
     const hg = new THREE.BufferGeometry();
     hg.setAttribute('position', new THREE.BufferAttribute(hp, 3));
     hg.setAttribute('acolor', new THREE.BufferAttribute(hc, 3));
     hg.setAttribute('asize', new THREE.BufferAttribute(hs, 1));
-    const hm = glowPointsMaterial({ opacity: 0.32, ring: true });
+    const hm = glowPointsMaterial({ opacity: PLATE.cat.host.alpha, ring: true });
     hm.depthTest = false;
     this.hosts = new THREE.Points(hg, hm);
     this.hosts.frustumCulled = false; this.hosts.renderOrder = 4;
@@ -157,11 +146,11 @@ export class Stars {
   }
 
   // `camPc` = camera position in pc (from the Sun); `dSunPc` its distance from the Sun.
-  update(camPc, dSunPc, pxRatio, layers, extent) {
-    // Deeper exposure the farther the camera is from the Sun, so the structure of the neighbourhood
+  update(camPc, dSunPc, pxRatio, layers) {
+    // Deeper exposure the farther the camera is from the Sun, so the structure of the neighborhood
     // stays readable from outside it. From the Sun the limit is the naked eye's 6.5. Past the
-    // catalogue's 500 pc the limit stops rising and the stars fade from ~300 pc out: otherwise the
-    // summed light of the whole catalogue sphere saturates into a white ball, which is its
+    // catalog's 500 pc the limit stops rising and the stars fade from ~300 pc out: otherwise the
+    // summed light of the whole catalog sphere saturates into a white ball, which is its
     // selection cut, not a structure, and hides the galaxy's young-star map and arm fits.
     const far = Math.max(1, Math.min(dSunPc, 500) / 3);
     const mLim = 6.5 + 2.6 * Math.log10(far);

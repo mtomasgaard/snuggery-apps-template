@@ -1,135 +1,144 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#03050a">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Milky Way</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<main id="stage">
-  <canvas id="gl" aria-label="The Solar System, the Sun's neighbourhood and the Milky Way in 3D. Drag to turn, pinch to zoom from a planet out to the whole galaxy, two fingers to move, tap anything to learn about it, double-tap to fly to it."></canvas>
+
+<!-- Every address here is relative: the stars, the orbits, the maps and the face travel inside the
+     folder, and the app never goes online. The look is ART.md; what the data is, NOTES.md. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Milky Way</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the sky&hellip;</button></div>
+  <span class="sr" id="stamp-hint">Opens About this data.</span>
+  <nav class="scales" id="scales" aria-label="Scale">
+    <button type="button" data-scale="solar" aria-pressed="false">Solar System</button>
+    <button type="button" data-scale="stars" aria-pressed="false">Neighborhood</button>
+    <button type="button" data-scale="galaxy" aria-pressed="false">Milky Way</button>
+  </nav>
+</header>
+
+<main class="plate" id="plate">
+  <canvas id="gl" role="img" aria-label="The Solar System, the stars around the Sun and the Milky Way in 3D. Drag to turn, pinch to zoom from a planet out to the whole galaxy, two fingers to move, tap anything to learn about it, double-tap to fly to it."></canvas>
   <div id="labels" aria-hidden="true"></div>
 
-  <header id="head">
-    <div class="title">
-      <h1>Milky Way</h1>
-      <p id="sub">—</p>
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5v11M2.5 8h11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="btn-search" aria-label="Find" aria-haspopup="dialog" aria-expanded="false" aria-describedby="find-hint"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="6.75" cy="6.75" r="4.5"/><path d="M10 10l4.25 4.25"/></svg></button>
+      <button type="button" id="btn-layers" aria-label="Layers" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><ellipse cx="8" cy="3" rx="6.5" ry="1.25"/><ellipse cx="8" cy="8" rx="6.5" ry="1.25"/><ellipse cx="8" cy="13" rx="6.5" ry="1.25"/></svg></button>
     </div>
-    <div class="head-actions">
-      <button id="btn-search" class="round" aria-controls="search" aria-expanded="false" aria-label="Find a planet, moon, star or cluster" title="Find">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
-      </button>
-      <button id="btn-layers" class="round" aria-controls="layers" aria-expanded="false" aria-label="Layers" title="Layers">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="M3 13l9 5 9-5"/></svg>
-      </button>
-      <button id="btn-about" class="round" aria-controls="about" aria-expanded="false" aria-label="About the data" title="About the data">i</button>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
     </div>
-  </header>
-
-  <div id="hud" aria-live="polite">
-    <div id="ruler" role="img" aria-label="Scale">
-      <div id="ruler-bar"></div>
-      <p id="ruler-len">—</p>
-    </div>
-    <p id="hud-dist" class="dim">—</p>
   </div>
+  <span class="sr" id="find-hint">Find a planet, moon, star or cluster.</span>
 
-  <section id="card" hidden aria-live="polite" aria-label="Selected object">
-    <div class="card-head">
-      <div>
-        <p id="card-kind" class="kicker">—</p>
-        <h2 id="card-name">—</h2>
-      </div>
-      <button id="card-close" class="round small" aria-label="Close" title="Close">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-      </button>
-    </div>
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
+    </svg>
+  </button>
+
+  <section class="card" id="card" hidden aria-labelledby="card-name">
+    <div class="card-kind"><span id="card-kind"></span><button class="card-close" id="card-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <h2 id="card-name" translate="no"></h2>
+    <p class="card-fig" id="card-fig"><span id="card-num"></span><span class="unit" id="card-unit"></span></p>
+    <p class="card-sub" id="card-sub"></p>
     <dl id="card-facts"></dl>
     <ul id="card-planets" class="planets" hidden></ul>
     <p id="card-note" class="note"></p>
-    <p id="card-src" class="src"></p>
-    <div class="card-actions">
-      <button id="card-go" class="btn primary">Fly there</button>
-      <button id="card-orbit" class="btn">Show orbit</button>
-    </div>
+    <p id="card-src" class="note"></p>
+    <div class="card-keys"><button type="button" class="textkey" id="card-go">Fly there</button><button type="button" class="textkey" id="card-orbit">Show orbit</button></div>
   </section>
+
+  <div class="notice" id="notice" role="alert" hidden></div>
 </main>
 
-<!-- Before the dock and above it: the dock's controls work only once the app has loaded. -->
-<div id="loading" role="status">
-  <p class="load-title">Milky Way</p>
-  <div class="track"><div id="load-bar"></div></div>
-  <p id="load-msg">Reading the sky…</p>
-</div>
+<!-- The caption under the plate: the Reach (how far these catalogs reach, and where you are on it),
+     what the picture is, and the credits, on screen in every mode. -->
+<section class="caption" id="caption" aria-label="Distance ruler, caption and credits">
+  <div class="reach" id="reach" role="img" aria-label="A ruler of distance in powers of ten"><canvas id="reach-c" aria-hidden="true"></canvas></div>
+  <p class="cap" id="cap"></p>
+  <p class="credits" id="credits" translate="no"></p>
+</section>
 
-<footer id="dock">
-  <div id="timebar" aria-label="Time">
-    <div class="trow">
-      <button id="t-play" class="round play" aria-label="Play" title="Play">
-        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5Z"/></svg>
-        <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13M16 5.5v13"/></svg>
-      </button>
-      <div class="tdate">
-        <output id="t-date">—</output>
-        <output id="t-time" class="dim">—</output>
-      </div>
-      <button id="t-speed" class="chip" aria-label="Playback speed" title="Playback speed">1 week / s</button>
-      <button id="t-now" class="chip" title="Back to the present moment">Now</button>
-    </div>
-    <div class="trow scrub">
-      <button id="t-yprev" class="yr" aria-label="Previous year">‹</button>
-      <output id="t-year">—</output>
-      <button id="t-ynext" class="yr" aria-label="Next year">›</button>
-      <div class="scrubwrap">
-        <input id="t-scrub" type="range" min="0" max="1000" step="1" value="0" aria-label="Day of the year">
-        <div class="months" aria-hidden="true"><span>J</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
-      </div>
-    </div>
+<footer class="player" id="player">
+  <div class="time-row">
+    <div class="valid" id="valid"><span id="t-date">&ndash;</span><span class="clk" id="t-clock"></span></div>
+    <span class="lead"><span class="clk2" id="t-lclock"></span>UTC</span>
+    <button type="button" class="wordkey" id="t-speed" translate="no" aria-describedby="speed-hint">1&#8239;s = 7&#8239;d</button>
+    <button type="button" class="textkey" id="t-now" aria-describedby="now-hint">Now</button>
   </div>
-  <nav id="scales" aria-label="Scale">
-    <button data-scale="solar" aria-pressed="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="9.5" ry="4.2"/></svg>
-      <span>Solar System</span>
-    </button>
-    <button data-scale="stars" aria-pressed="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.6 5.1 5.1 1.6-5.1 1.6L12 17l-1.6-5.2-5.1-1.6 5.1-1.6Z"/><circle cx="5" cy="18.5" r="1"/><circle cx="19" cy="17" r="1.2"/><circle cx="18.5" cy="4.5" r=".9"/></svg>
-      <span>Neighbourhood</span>
-    </button>
-    <button data-scale="galaxy" aria-pressed="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c3-3.5 8-2 8.5 1.5M12 12c-3 3.5-8 2-8.5-1.5M12 12c3.5 3 2 8-1.5 8.5M12 12c-3.5-3-2-8 1.5-8.5"/><circle cx="12" cy="12" r="1.3"/></svg>
-      <span>Milky Way</span>
-    </button>
-  </nav>
+  <span class="sr" id="now-hint">Back to the present moment.</span><span class="sr" id="speed-hint"></span>
+  <div class="controls">
+    <button type="button" class="tkey" id="t-yprev" aria-label="Previous year"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M7.5 1 3 6l4.5 5"/></svg></button>
+    <button type="button" class="tkey play" id="t-play" aria-label="Play"><span class="shutter"><svg id="ico-play" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg><svg id="ico-pause" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" hidden><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg></span></button>
+    <button type="button" class="tkey" id="t-ynext" aria-label="Next year"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4.5 1 9 6l-4.5 5"/></svg></button>
+    <div class="track" id="slider" role="slider" tabindex="0" aria-label="Day of the year" aria-valuemin="0" aria-valuemax="364" aria-valuenow="0"><canvas id="track" aria-hidden="true"></canvas></div>
+  </div>
 </footer>
 
-<aside id="layers" class="sheet-right" hidden aria-label="Layers">
-  <div class="sheet-head">
-    <h2>Layers</h2>
-    <button class="pill" data-close>Done</button>
+<div class="sheet" id="about" hidden>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="sheet-head"><h2 id="about-title">About this data</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="sheet-body">
+      <section>
+        <h3>What the picture is</h3>
+        <p>The bar under the picture is a ruler of distance from the Sun, 0.001&#8239;AU to 10&sup1;&sup2;&#8239;AU, a tick at every power of ten. It is inked wherever these catalogs hold an object at the date shown and blank where they hold none; the notch is your own distance, the number the caption prints.</p>
+        <p>The blank between <span id="gap-a">the farthest asteroid</span> and <span id="gap-b">the nearest star</span> is the reach of these catalogs, not empty space: long-period comets and bodies too faint for these lists live there. The ink says whether anything is listed at a distance, not how much.</p>
+        <p>Nothing is enlarged: planets and moons are drawn at true size and distance, so most are a dot and a label until you come close. The caption gives the screen&rsquo;s width at the distance of the object in the middle.</p>
+        <div id="about-reading"></div>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <div id="about-sources"></div>
+        <h4>Software and type</h4>
+        <p>three.js r186 renders the scene (MIT License); the copy in vendor/ is byte for byte the one the Anatomy and Besseggen apps carry, with its license.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license. A second subset of the same face holds the Greek letters, superscript figures and the &#699;okina the star and asteroid names use.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>Every file was built once from the sources above by the pipeline in the app&rsquo;s tools/ folder and travels inside the app. Nothing is fetched and nothing refreshes: the planets are computed for any date from 1900 to 2099 from the ephemeris that ships here.</p>
+      </section>
+      <button type="button" class="textkey sheet-foot" data-close>Close</button>
+    </div>
   </div>
-  <div id="layer-rows" class="layer-rows"></div>
-</aside>
+</div>
 
-<aside id="search" class="sheet-right" hidden aria-label="Find">
-  <div class="sheet-head">
-    <h2>Find</h2>
-    <button class="pill" data-close>Done</button>
+<div class="sheet" id="search" hidden>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="sheet-head"><h2 id="search-title">Find</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="sheet-body">
+      <input class="search-q" id="search-q" type="search" placeholder="Jupiter, Sirius, NGC 5139&hellip;" autocomplete="off" spellcheck="false" aria-label="Search">
+      <ul class="results" id="search-res"></ul>
+      <button type="button" class="textkey sheet-foot" data-close>Close</button>
+    </div>
   </div>
-  <input id="search-q" type="search" placeholder="Jupiter, Sirius, NGC 5139…" autocomplete="off" spellcheck="false" aria-label="Search">
-  <ul id="search-res" class="results"></ul>
-</aside>
+</div>
 
-<aside id="about" class="sheet-right" hidden aria-label="About the data">
-  <div class="sheet-head">
-    <h2>About</h2>
-    <button class="pill" data-close>Done</button>
+<div class="sheet" id="layers" hidden>
+  <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="layers-title">
+    <div class="sheet-head"><h2 id="layers-title">Layers</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="sheet-body"><div id="layer-rows"></div><button type="button" class="textkey sheet-foot" data-close>Close</button></div>
   </div>
-  <div id="about-body" class="prose"></div>
-</aside>
+</div>
 
-<script type="module" src="app.js"></script>
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script type="module" src="./app.js"></script>
 </body>
 </html>

@@ -200,8 +200,8 @@ def main():
             h = np.cross(p - ps, v - vs)
             b['obliquity_deg'] = round(angle_deg(spin_axis(sp, bid), h), 4)
             b['obliquity_ref'] = ('osculating heliocentric orbit of the '
-                                  + ('Earth-Moon barycentre' if key == 'earth' else
-                                     'system barycentre' if bary >= 5 else 'planet')
+                                  + ('Earth-Moon barycenter' if key == 'earth' else
+                                     'system barycenter' if bary >= 5 else 'planet')
                                   + ' at J2000 (DE430)')
             b['gm_system_km3_s2'] = S.pool(sp, f'BODY{bary}_GM')[0]
         bodies[key] = b
@@ -243,7 +243,7 @@ def main():
                 'leap_seconds': ('ERFA dat.c (release year 2023), rows from 1972 on: '
                                  '[JD UTC at 0h of the day the value starts, TAI - UTC s]. '
                                  'Before 1972 the app uses 10 s (dat.c\'s 1960-1971 drift rows '
-                                 'are not modelled; < 1 minute of error).'),
+                                 'are not modeled; < 1 minute of error).'),
             },
         },
         'nut_prec_angles': nut,
@@ -252,7 +252,7 @@ def main():
         'rings_note': ('Saturn C/B/A edges from JPL\'s SAT425 header. Uranian rings: semi-major axis '
                        'a, eccentricity e and radial width as written in rms-oops (a sum such as '
                        '58.1+37.6 is added up); inner/outer = a -/+ width/2 as circles in Uranus\'s '
-                       'equatorial plane. The rings\' pericentre and node longitudes are not shipped: '
+                       'equatorial plane. The rings\' pericenter and node longitudes are not shipped: '
                        'rms-oops applies them at 1977-03-10T20:00 UTC in a B1950-based Uranus '
                        'ring frame, and they mean nothing without it. Saturn\'s D and F rings are '
                        'left out: rms-oops has them only as uncited constants.'),

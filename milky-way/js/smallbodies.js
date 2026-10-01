@@ -1,31 +1,12 @@
 // Asteroids, trans-Neptunian objects and comets: where each one is on a given date, and its orbit.
 //
-// Two files, written by tools/20_smallbodies.py (tools/CONTRACT.md section 4):
-//
-//   smallbodies.bin   column arrays, little-endian, no header, each column contiguous, at the byte
-//                     offsets smallbodies.json.columns gives:
-//                       q      float32   perihelion distance (au)
-//                       e      float32   eccentricity (e > 1: hyperbolic; e == 1: parabolic)
-//                       tp     float64   time of perihelion, days from J2000.0 (JD 2451545.0) TDB
-//                       P      3xfloat32 unit vector to perihelion, ICRF        [row][x, y, z]
-//                       Q      3xfloat32 unit vector 90 deg ahead in the orbit  [row][x, y, z]
-//                       H      float32   absolute magnitude (comets: the total-magnitude parameter)
-//                       kind   uint8     index into json.kinds
-//                       flags  uint8     bit 0 weak orbit, bit 1 no epoch (json.flag_bits)
-//   smallbodies.json  names, kinds, the row range of each source, epochs, labelled rows, info for
-//                     labelled rows, diameters, the constants (k) and the measured accuracy.
-//
-// Every orbit is a two-body (Kepler) orbit of the body's osculating elements at their epoch, with
-// the Sun's GM from DE440: a = q/(1-e), n = k/|a|^1.5, M = n (jd - J2000 - tp), then Kepler's
-// equation — elliptic E - e sin E = M, hyperbolic e sinh F - F = M, parabolic Barker's equation —
-// and r = x P + y Q (au, ICRF, heliocentric). x and y are written in the forms that stay accurate
-// near e = 1: x = q - 2a sin^2(E/2), y = sqrt(a q (1+e)) sin E (hyperbola: sinh, same shape).
-// Planets do not perturb these orbits, so positions drift away from the epoch; the drift was
-// measured against JPL Horizons and DE430 and is in json.epoch_note / json.accuracy (for the big
-// main-belt asteroids: about 0.05 au at 5-10 years, 0.3 au at 50 years).
-//
-// All times are Julian Dates in TDB (TT for the MPC's comets; they differ by < 2 ms). Positions are
-// computed on the CPU in float64 and handed out as float32 (positionsAt) or float64 (position).
+// The format is tools/CONTRACT.md section 4 (written by tools/20_smallbodies.py): smallbodies.bin
+// holds little-endian columns (q, e, tp, the P and Q unit vectors, H, kind, flags) at the offsets
+// smallbodies.json gives. Each orbit is two-body Kepler from the osculating elements at their epoch
+// (the Sun's GM from DE440): a = q/(1-e), n = k/|a|^1.5, M = n (jd - J2000 - tp), the elliptic,
+// hyperbolic or parabolic (Barker) equation, r = x P + y Q in au, ICRF, with x and y in the forms
+// that stay accurate near e = 1. Planets do not perturb these orbits: the measured drift is in
+// json.accuracy. Times are TDB Julian Dates; float64 inside, float32 out of positionsAt().
 
 const TWO_PI = 2 * Math.PI;
 const J2000 = 2451545.0;
@@ -219,7 +200,7 @@ export class SmallBodies {
     const src = this.source(i), ep = this.epoch(i);
     out.epoch = ep;
     out.source = src.label + (out.orbit_id ? `; orbit ${out.orbit_id}` : '') + (out.orbit_ref ? `; ${out.orbit_ref}` : '')
-      + (out.phys_ref ? `. Physical values — ${out.phys_ref}` : out.phys_from ? `. Size from ${out.phys_from}` : '');
+      + (out.phys_ref ? `. Physical values: ${out.phys_ref}` : out.phys_from ? `. Size from ${out.phys_from}` : '');
     const notes = [];
     if (ep != null) notes.push(`Orbit elements for ${ymd(ep)}; the position is a two-body extrapolation from that date, less accurate the further from it.`);
     else notes.push('The source gives no epoch for these elements; the position is a two-body extrapolation.');

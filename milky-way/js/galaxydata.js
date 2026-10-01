@@ -1,30 +1,12 @@
 // The galaxy layer's data: the frame it lives in, the measured tracers, the arm fits and the three
 // face-on textures, decoded exactly as tools/50_galaxy.py wrote them (tools/CONTRACT.md section 8).
-// No drawing here — js/galaxy.js draws; this module owns the numbers and how to read them.
-//
-// Files (under data/galaxy/):
-//
-//   galaxy.json                everything but the pixels. Coordinates are kiloparsecs in astropy's
-//                              Galactocentric frame, parameter set "v4.0": origin at the Galactic
-//                              centre, +x from the Sun towards the centre (the Sun at x = -8.122),
-//                              +y towards Galactic longitude 90 deg, +z towards the North Galactic
-//                              Pole. frame.to_icrs is a 4x4 row-major affine matrix taking those
-//                              kpc to ICRS kpc centred on the Sun (the stars' and planets' axes).
-//   young-gaiadr3-ob.png       Gaia overdensity maps of young stars, RGBA, one pixel per 0.1 kpc
-//   young-poggio2021-ums.png   grid node: R = G = B = code, overdensity = lo + code/255 (hi - lo);
-//                              A = 0 where the published grid holds no data (beyond ~4 kpc).
-//   model.png                  8-bit gray face-on surface density of a MODEL (McMillan 2017 discs +
-//                              Portail 2017 bar): Sigma = black (white/black)^(code/255) Msun/kpc^2,
-//                              code 0 = at or below black.
-//
-// Every image is the view from the North Galactic Pole: column c (0 = left), row r (0 = top) of a
-// W x H image with extent [x0, x1, y0, y1] covers x = x0 + (c + 0.5)(x1 - x0)/W,
-// y = y1 - (r + 0.5)(y1 - y0)/H. A three.js PlaneGeometry of that extent in the x-y plane, with its
-// default UVs and texture.flipY = true (the default), therefore shows it the right way round.
-//
-// Arms are two published FITS (Reid+2019 to masers, Drimmel+2024 to Cepheids), each only over the
-// azimuths it was fitted to; the model texture is a model. Streams marked `approximate` have a
-// constructed sky path or no measured distance track (see each stream's note).
+// No drawing here: js/galaxy.js draws; this module owns the numbers and how to read them.
+// Coordinates are kiloparsecs in astropy's Galactocentric frame "v4.0" (the Sun at x = -8.122, +z
+// toward the North Galactic Pole); frame.to_icrs takes them to ICRS kpc centered on the Sun. The
+// three images are face-on views from the North Galactic Pole (the young-star overdensity maps and
+// a mass MODEL's surface density), laid so a three.js plane of their extent with default UVs shows
+// them the right way round. The arms are two published fits, each only over the azimuths it was
+// fitted to; streams marked `approximate` have a constructed path or no measured distance track.
 
 // Load galaxy.json (the textures are for the renderer to load; their paths are in the result).
 export async function loadGalaxyData(base = 'data/') {
@@ -91,7 +73,7 @@ export class GalaxyData {
     return { file: m.file, width: m.width, height: m.height, extent: e, z: m.z_kpc || 0, meta: m };
   }
 
-  // Centre of pixel (col, row) in Galactocentric kpc, [x, y].
+  // Center of pixel (col, row) in Galactocentric kpc, [x, y].
   pixelCentre(key, col, row, out = [0, 0]) {
     const { width: W, height: H, extent: e } = this.image(key);
     out[0] = e[0] + (col + 0.5) * (e[1] - e[0]) / W;

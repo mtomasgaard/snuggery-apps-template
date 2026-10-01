@@ -1,29 +1,31 @@
-// The camera rig: one camera and one continuous zoom, from a few hundred kilometres above a moon to
-// half a megaparsec from the Sun — fifteen orders of magnitude on a single pinch.
-//
-// Everything here is float64 and in astronomical units, heliocentric, on ICRF axes. The render
-// passes (app.js) turn that into three cameras in their own units; nothing in this file knows about
-// three.js.
-//
-// State is a *target* (a function returning a position, so a moving planet stays centred while time
-// plays), a *distance* from it, and a *direction* from the target to the camera. "Up" is not stored:
-// it is a function of the distance. Close in it is the ecliptic north pole, so the planets' plane
-// lies flat; far out it is the galactic north pole, so the disc of the Milky Way does; in between
-// (about 0.01–1 light-year) it turns smoothly from one to the other. The direction is kept
-// continuous through that turn — only the roll changes — which is what lets the solar system tilt
-// by 60° against the galaxy as you leave it without the view jumping.
+// The camera rig: one camera and one continuous zoom, from a few hundred kilometers above a moon to
+// half a megaparsec from the Sun: fifteen powers of ten on a single pinch. Float64, AU,
+// heliocentric, ICRF; no three.js here. State is a target (a function, so a moving planet stays
+// centered while time plays), a distance and a direction. "Up" is a function of the distance: the
+// ecliptic pole close in, the galactic pole far out, turning between about 0.01 and 1 light-year
+// with only the roll changing, so the Solar System tilts against the galaxy without a jump.
 
 import { clamp, lerp, smoothstep, vadd, vcopy, vcross, vdot, vlen, vnorm, vrot, vscale, vsub, DEG } from './util.js';
 
-const MIN_DIST = 2e-7;         // AU, ~30 km
-const MAX_DIST = 1.2e11;       // AU, ~580 kpc: past the farthest satellite galaxy in the data
-const UP_BLEND = [Math.log10(3e3), Math.log10(3e5)];   // AU: ecliptic → galactic "up"
+const MIN_DIST = 2e-7;         // AU, about 30 km
+const MAX_DIST = 1.2e11;       // AU, about 580 kpc: past the farthest satellite galaxy in the data
+const UP_BLEND = [Math.log10(3e3), Math.log10(3e5)];   // AU: from the ecliptic "up" to the galactic one
 const POLE_GAP = 4 * DEG;      // how close the view may get to looking straight along "up"
 const START_DIST = 12, START_DIR = [0.3, -0.75, 0.6];
 
 export const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+// A flight's path (van Wijk and Nuij 2003, d3's interpolateZoom, rho √2): pull back while the target
+// moves, close in over the new one, never skimming the young-star map's plane. Distances a to b, a
+// move m in plate heights at unit distance; e in [0, 1] gives [share of the move, distance].
+function zoomPath(a, b, m) {
+  if (!(m > 1e-9 * (a + b))) return (e) => [e, a * (b / a) ** e];
+  const r0 = -Math.asinh((b * b - a * a + 4 * m * m) / (4 * a * m));
+  const S = -r0 - Math.asinh((b * b - a * a - 4 * m * m) / (4 * b * m));
+  return (e) => { const s = S * e; return [a * Math.sinh(s) / (2 * m * Math.cosh(s + r0)), a * Math.cosh(r0) / Math.cosh(s + r0)]; };
+}
 
 export class Rig {
   constructor(canvas) {
@@ -54,7 +56,7 @@ export class Rig {
   // "Up" at a given distance: the ecliptic pole near the Sun, the galactic pole far away.
   upAt(dist, out = []) {
     const s = smoothstep(UP_BLEND[0], UP_BLEND[1], Math.log10(Math.max(dist, 1e-12)));
-    // Spherical interpolation between the two poles (62.6° apart), then normalise.
+    // Spherical interpolation between the two poles (62.6° apart), then normalize.
     const a = this.eclUp, b = this.galUp;
     const cosO = clamp(vdot(a, b), -1, 1), O = Math.acos(cosO), sO = Math.sin(O) || 1;
     const wa = Math.sin((1 - s) * O) / sO, wb = Math.sin(s * O) / sO;
@@ -70,7 +72,7 @@ export class Rig {
     const pos = vadd([], t, vscale([], this.dir, this.dist));
     const fwd = vscale([], this.dir, -1);
     let up = this.upAt(this.dist);
-    // Orthogonalise up against the view direction; fall back to the last good up near the pole.
+    // Orthogonalize up against the view direction; fall back to the last good up near the pole.
     const d = vdot(up, fwd);
     up = [up[0] - fwd[0] * d, up[1] - fwd[1] * d, up[2] - fwd[2] * d];
     if (vlen(up) < 1e-6) up = this.lastUp.slice(); else vnorm(up, up);
@@ -110,8 +112,7 @@ export class Rig {
     this.emit('free');
   }
 
-  // Fly to a new target. `to` = { id, fn, dist, dir?, minDist? }. The path zooms out far enough to
-  // see both ends when they are far apart, then in again: log-distance follows an arch.
+  // Fly to a new target. `to` = { id, fn, dist, dir?, minDist? }, along zoomPath().
   flyTo(to, jd, duration) {
     const finite = (v) => !!v && v.every(Number.isFinite);
     const toPos = to.fn(jd);
@@ -128,6 +129,7 @@ export class Rig {
     if (!Number.isFinite(this.dist)) this.dist = dist;
     const sep = Math.hypot(toPos[0] - fromPos[0], toPos[1] - fromPos[1], toPos[2] - fromPos[2]);
     const l0 = Math.log(this.dist), l1 = Math.log(dist);
+    // timed as before the path changed: the camera's waits are tuned to it
     const bump = Math.max(0, Math.log(Math.max(sep, 1e-12) * 1.4) - Math.max(l0, l1));
     const dir = toDir || this.dir.slice();
     if (!duration) duration = clamp(900 + 180 * (Math.abs(l1 - l0) + bump), 900, 3200);
@@ -136,16 +138,16 @@ export class Rig {
       this.setTarget(to.id, to.fn, to.minDist); this.dist = dist; vcopy(this.dir, dir);
       this.anim = null; this.emit('arrive', to.id); return;
     }
-    this.anim = { t0: performance.now(), dur: duration, fromPos, fromDir: this.dir.slice(), l0, l1, bump, to, dir };
+    this.anim = { t0: performance.now(), dur: duration, fromPos, fromDir: this.dir.slice(), l1, to, dir, path: zoomPath(this.dist, dist, sep / (2 * Math.tan(this.fov / 2))) };
     this.setTarget('flight', (j) => this._flightPos(j), MIN_DIST);
   }
 
   _flightPos(jd) {
     const a = this.anim;
     if (!a) return this._target;
-    const u = clamp((performance.now() - a.t0) / a.dur, 0, 1), e = easeInOut(u);
+    const f = a.path(easeInOut(clamp((performance.now() - a.t0) / a.dur, 0, 1)))[0];
     const p1 = a.to.fn(jd);
-    return [lerp(a.fromPos[0], p1[0], e), lerp(a.fromPos[1], p1[1], e), lerp(a.fromPos[2], p1[2], e)];
+    return [lerp(a.fromPos[0], p1[0], f), lerp(a.fromPos[1], p1[1], f), lerp(a.fromPos[2], p1[2], f)];
   }
 
   // Advance animations and inertia. Returns true while something is still moving.
@@ -154,7 +156,7 @@ export class Rig {
     if (this.anim) {
       const a = this.anim;
       const u = clamp((performance.now() - a.t0) / a.dur, 0, 1), e = easeInOut(u);
-      this.dist = Math.exp(lerp(a.l0, a.l1, e) + a.bump * Math.sin(Math.PI * u));
+      this.dist = a.path(e)[1];
       // Slerp the view direction.
       const c = clamp(vdot(a.fromDir, a.dir), -1, 1), O = Math.acos(c);
       if (O > 1e-6) {
@@ -185,6 +187,15 @@ export class Rig {
   }
 
   get animating() { return !!this.anim; }
+  // Land the flight in progress at its destination now (a touch mid-flight lands at the final state).
+  finish() {
+    const a = this.anim;
+    if (!a) return;
+    this.anim = null;
+    this.setTarget(a.to.id, a.to.fn, a.to.minDist);
+    this.dist = Math.min(Math.max(Math.exp(a.l1), this.minDist), MAX_DIST); vcopy(this.dir, a.dir);
+    this.emit('arrive', a.to.id);
+  }
 
   // ----------------------------------------------------------------- gestures
   _bindGestures() {
@@ -206,7 +217,7 @@ export class Rig {
       pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
       this.touching = true;
       this.vel.yaw = this.vel.pitch = this.vel.zoom = 0;
-      if (this.anim && pts.size === 1) { /* a touch during a flight lets it finish */ }
+      if (this.anim && pts.size === 1) this.finish();       // a touch during a flight lands it at once
       if (pts.size === 1) {
         mode = (e.button === 2 || e.shiftKey) ? 'pan' : 'rot';
         last = { x: e.clientX, y: e.clientY }; downAt = { x: e.clientX, y: e.clientY, t: performance.now() }; moved = 0;

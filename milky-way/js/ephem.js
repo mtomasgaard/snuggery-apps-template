@@ -1,30 +1,12 @@
 // Where everything in the solar system is: the planets, the Moon, Pluto and the major moons.
 //
-// Four files, all written by tools/10_ephemeris.py and tools/11_moons.py (CONTRACT.md sections 1
-// and 2), plus the leap-second table from physical.json:
-//
-//   ephem.json / ephem.bin   a float32 Chebyshev table refitted from JPL DE430, 1900-2100 TDB.
-//                            Per body: `intervals` x 3 x (degree+1) coefficients, laid out
-//                            [interval][x,y,z][coefficient], km, ICRF. Mercury ... Pluto and the
-//                            Earth-Moon barycentre are heliocentric (Jupiter ... Pluto are system
-//                            barycentres); the Moon is geocentric. Earth = EMB - Moon/(1+EMRAT).
-//   moons.json / moons.bin   precessing Keplerian ellipses fitted to JPL's satellite ephemerides
-//                            per window of W days, 1950-2050 TDB, nine float32 per window:
-//                            a, e, varpi0, dvarpi, inc, Omega0, dOmega, lambda0, n (km, rad,
-//                            rad/day). Each ellipse is the moon relative to its PLANET'S CENTRE in
-//                            a fixed per-planet frame F (rows, ICRF -> fit frame); the planet's
-//                            centre sits at -sum(mass_ratio_j * r_j) from the system barycentre,
-//                            and moon() adds that so its answer is relative to the barycentre —
-//                            the point helio() gives for the planet.
-//
-// Accuracy is measured by the pipeline and carried in the manifests (max_error_km); the worst
-// planet is Pluto at about 290 km (the float32 floor at 40 AU), the Moon 2.6 km, and every moon is
-// within 0.25 % of its orbit radius (Titania is the worst; most are within 0.06 %). All times are
-// Julian Dates in TDB; jdFromDate() converts a
-// JavaScript Date (UTC) with ERFA's leap seconds. TT is used for TDB: they differ by < 2 ms.
-//
-// Outside its range a table is not extrapolated: the time is clamped to the nearest end, and
-// moon() returns false so the caller can hide the moon.
+// The formats are tools/CONTRACT.md sections 1 and 2 (written by tools/10_ephemeris.py and
+// 11_moons.py): ephem.bin, a float32 Chebyshev table refitted from JPL DE430, 1900-2100 TDB, km,
+// ICRF (the Moon geocentric, Earth = EMB - Moon/(1+EMRAT)); moons.bin, precessing Keplerian
+// ellipses fitted per window to JPL's satellite ephemerides, 1950-2050, each relative to its
+// planet's center, which moon() turns into the system barycenter helio() gives. Times are Julian
+// Dates in TDB (TT, within 2 ms); jdFromDate() uses ERFA's leap seconds. Outside its range a table is
+// clamped, never extrapolated, and moon() returns false. The measured accuracy is in the manifests.
 
 const TWO_PI = 2 * Math.PI;
 
@@ -153,7 +135,7 @@ export class Ephemeris {
     return out;
   }
 
-  // Heliocentric ICRF km. 'sun' is the origin; 'emb' is the Earth-Moon barycentre.
+  // Heliocentric ICRF km. 'sun' is the origin; 'emb' is the Earth-Moon barycenter.
   helio(name, jd, out = new Float64Array(3)) {
     switch (name) {
       case 'sun': out[0] = out[1] = out[2] = 0; return out;
@@ -179,7 +161,7 @@ export class Ephemeris {
     return (this.byParent[parent] || []).map((m) => ({ name: m.name, naif: m.naif, parent: m.parent, aKm: m.aKm }));
   }
 
-  // One moon relative to its planet's centre, ICRF km (the fitted ellipse).
+  // One moon relative to its planet's center, ICRF km (the fitted ellipse).
   _moonCentre(m, jd, out) {
     const t0 = Math.min(Math.max(jd, this.mjd0), this.mjd1);
     let k = Math.floor((t0 - this.mjd0) / m.W);
@@ -205,7 +187,7 @@ export class Ephemeris {
     return out;
   }
 
-  // The planet's centre relative to its system barycentre (km, ICRF), rebuilt from its moons.
+  // The planet's center relative to its system barycenter (km, ICRF), rebuilt from its moons.
   planetCentre(parent, jd, out = new Float64Array(3)) {
     out[0] = out[1] = out[2] = 0;
     const list = this.byParent[parent];
@@ -219,7 +201,7 @@ export class Ephemeris {
     return out;
   }
 
-  // A moon relative to its planet's system barycentre (km, ICRF). False outside 1950-2050.
+  // A moon relative to its planet's system barycenter (km, ICRF). False outside 1950-2050.
   moon(name, jd, out = new Float64Array(3)) {
     const m = this.moonByName[name.toLowerCase()];
     if (!m) throw new Error(`ephem: no moon '${name}'`);
@@ -229,7 +211,7 @@ export class Ephemeris {
     return jd >= this.mjd0 && jd <= this.mjd1;
   }
 
-  // A moon relative to its planet's centre (km, ICRF) — for drawing it around the globe.
+  // A moon relative to its planet's center (km, ICRF) — for drawing it around the globe.
   moonFromCentre(name, jd, out = new Float64Array(3)) {
     const m = this.moonByName[name.toLowerCase()];
     if (!m) throw new Error(`ephem: no moon '${name}'`);
@@ -238,7 +220,7 @@ export class Ephemeris {
   }
 
   // The ellipse of the window that contains jd, frozen at jd: `segments`+1 points relative to the
-  // planet's centre (km, ICRF), first = last. An orbit line, not a track: the fitted ellipse of
+  // planet's center (km, ICRF), first = last. An orbit line, not a track: the fitted ellipse of
   // the moment, which is what the moon follows for the next few revolutions.
   moonOrbit(name, jd, segments = 128) {
     const m = this.moonByName[name.toLowerCase()];

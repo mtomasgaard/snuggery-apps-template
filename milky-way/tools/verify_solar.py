@@ -126,7 +126,7 @@ def verify_moons():
             check(frac <= 0.005, f'{m["name"]:9s} max {err:8.1f} km = {100 * frac:.4f} % of a at 5,000 fresh '
                   f'epochs (manifest {m["max_error_km"]:.1f} km)')
         cerr = float(np.linalg.norm(centre - k[b, p].compute(T)[:3], axis=0).max())
-        check(cerr < 1.0, f'{key} centre rebuilt from moons: max {cerr:.3f} km off JPL\'s planet segment')
+        check(cerr < 1.0, f'{key} center rebuilt from moons: max {cerr:.3f} km off JPL\'s planet segment')
 
 
 def pole_eval(body, angles, jd):

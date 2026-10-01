@@ -103,7 +103,7 @@ def main():
         'max_error_km': {kk: round(v, 3) for kk, v in errs.items()},
         'error_epochs': N_TEST,
         'note': ('Refit of JPL DE430 (Folkner et al. 2014). Heliocentric ICRF; jupiter..pluto are '
-                 'system barycentres (Pluto-system barycentre, ~2,135 km from the centre of Pluto); '
+                 'system barycenters (Pluto-system barycenter, ~2,135 km from the center of Pluto); '
                  'moon is geocentric. Earth = emb - moon/(1+emrat).'),
     }
     common.write_bin('ephem.bin', bytes(blob))

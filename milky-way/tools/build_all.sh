@@ -1,6 +1,6 @@
 #!/bin/sh
-# Rebuilds data/ from pinned open data. The first run downloads about 3 GB into a gitignored cache
-# (tools/.cache) — mostly JPL's satellite ephemerides and one USGS Mars mosaic — and then never
+# Rebuilds data/ from pinned open data. The first run downloads about 6.3 GB into a gitignored cache
+# (tools/.cache) — mostly JPL's satellite ephemerides and seven USGS mosaics — and then never
 # touches the network again; a warm rebuild reads the cache only.
 #
 # Env overrides:

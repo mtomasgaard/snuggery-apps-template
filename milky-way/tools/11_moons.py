@@ -217,8 +217,8 @@ def main():
         # the reflex formula with the SPK's own moon positions: how much the formula itself costs
         c_formula = -sum(m['mass_ratio'] * rel_centre(m['naif'], T) for m in mine)
         c_formula_err = np.linalg.norm(c_formula - centre(T), axis=0).max()
-        print(f'  {key:8s} planet centre from the fitted moons: max error {c_err:.3f} km '
-              f'(formula with SPK moons {c_formula_err:.3f} km; centre offset up to '
+        print(f'  {key:8s} planet center from the fitted moons: max error {c_err:.3f} km '
+              f'(formula with SPK moons {c_formula_err:.3f} km; center offset up to '
               f'{np.linalg.norm(centre(T), axis=0).max():.1f} km)')
         check[key] = dict(centre_err=c_err, centre_formula_err=c_formula_err)
         for m in mine:
@@ -232,7 +232,7 @@ def main():
             flag = 'OK ' if m['frac'] <= TARGET else 'MISS'
             print(f'  {flag} {m["name"]:9s} a {a_mean:11.1f} km  max {eb.max():9.2f} km '
                   f'({100 * m["frac"]:.4f} %)  p99 {np.percentile(eb, 99):8.2f}  '
-                  f'rel. centre {ec.max():9.2f}  windows {m["errs"].max():9.2f}')
+                  f'rel. center {ec.max():9.2f}  windows {m["errs"].max():9.2f}')
         # Reference values for tools/test_ephem.mjs (not shipped).
         tr = T[:: N_TEST // 300][:300]
         ref['centres'][key] = centre(tr).T.tolist()
@@ -262,8 +262,8 @@ def main():
         'centre_error_km': {k: round(v['centre_err'], 3) for k, v in check.items()},
         'error_epochs': N_TEST,
         'note': ('Precessing Keplerian ellipses least-squares fitted per window to R. A. Jacobson\'s '
-                 'JPL satellite ephemerides, relative to the planet\'s centre; positions relative '
-                 'to the system barycentre add centre = -sum(mass_ratio * r). A fitted model of the '
+                 'JPL satellite ephemerides, relative to the planet\'s center; positions relative '
+                 'to the system barycenter add center = -sum(mass_ratio * r). A fitted model of the '
                  'JPL ephemeris, not the ephemeris itself.'),
     }
     common.write_bin('moons.bin', bytes(blob))

@@ -578,8 +578,8 @@ def measure_drift(rows, C, stored):
     out['pluto_vs_de430'] = {'epoch_jd': ep, 'epochs': len(jds),
                              'bins': binned((jds - ep) / 365.25, errs, np.linalg.norm(ref, axis=1)),
                              'note': ('SBDB 134340 Pluto elements (epoch 2016-07-19), two-body, against '
-                                      'DE430 Pluto-system barycentre; includes the ~2,100 km '
-                                      'Pluto-barycentre offset, negligible here.')}
+                                      'DE430 Pluto-system barycenter; includes the ~2,100 km '
+                                      'Pluto-barycenter offset, negligible here.')}
 
     # (c) Halley: the shipped MPC 2026 elements, back to JPL's 1994 solution (SBDB comet export)
     i = next(j for j, r in enumerate(rows) if r['src'] == 'mpc' and r['ckey'] == '1P')
@@ -747,7 +747,7 @@ def main():
                        + ', '.join(report['stellarium_dwarf_type']) + ' as "dwarf planet" and Ceres as '
                        '"asteroid".'),
         'names_note': ('SBDB full names; numbered asteroids that have a name are written without their '
-                       'provisional designation ("1 Ceres"); labelled rows keep it in info.desig.'),
+                       'provisional designation ("1 Ceres"); labeled rows keep it in info.desig.'),
         'selection': ('JPL SBDB asteroids and TNOs with H < 12 (a brightness-limited sample: the main '
                       'belt is sparse and near-Earth asteroids are absent apart from named ones), '
                       'named near-Earth asteroids, every comet in the MPC\'s CometEls list and six '
@@ -771,7 +771,7 @@ def main():
     print(f"  dropped: {report['dropped']}")
     print(f"  weak-orbit flag: {int((flags & FLAG_WEAK).astype(bool).sum())} rows; no epoch: "
           f"{int((flags & FLAG_NO_EPOCH).astype(bool).sum())}")
-    print(f'  labelled {len(labelled)}; label targets not present: {missing}')
+    print(f'  labeled {len(labelled)}; label targets not present: {missing}')
     print(f'  open orbits (e >= 1): {int((e >= 1).sum())}; e == 1 exactly: {int((e == 1).sum())}')
     print(f'  smallbodies.json {jb:,} B + smallbodies.bin {bb:,} B = {jb + bb:,} B (budget 700,000)')
     print('  drift vs Horizons (max AU per |t - epoch| bin): ' +
@@ -818,12 +818,12 @@ def write_credits(rows, C, drift, meta):
     stel_gpl = SB.quote('stellarium_copying', 'GNU GENERAL PUBLIC LICENSE Version 2, June 1991')
     celestia_spdx = SB.quote('celestia_asteroids', 'SPDX-License-Identifier: GPL-2.0-or-later')
     SB.quote('celestia_dwarfs', celestia_spdx)
-    jpl_terms = ('No licence could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and '
+    jpl_terms = ('No license could be read: ssd.jpl.nasa.gov is not reachable from the build machine, and '
                  'the research pass found only a web-search summary of catalog.data.gov ("No license '
                  'information was provided"). JPL is operated by Caltech, so this is not claimed to be a '
                  'US-Government public-domain work. Credited as NASA/JPL Solar System Dynamics with the '
                  'retrieval date. The copy read here sits in KStars (GPL-2.0-or-later at project level; '
-                 'kstars/data/ has no file-level licence); only the numbers are used, in a new format.')
+                 'kstars/data/ has no file-level license); only the numbers are used, in a new format.')
     hz = drift['horizons_big4']
     pl = drift['pluto_vs_de430']['bins']
     ha = drift['halley']
@@ -846,7 +846,7 @@ def write_credits(rows, C, drift, meta):
                        f'KStars\' README.ephemerides: "{readme_eph}"'),
             'url': SB.url('asteroids'),
             'licence': jpl_terms,
-            'licence_quote': f'KStars README.md: "{gpl}" The data file itself carries no licence.',
+            'licence_quote': f'KStars README.md: "{gpl}" The data file itself carries no license.',
             'retrieved': RETRIEVED,
             'adaptations': (f'{report["sbdb_rows"]:,} rows read; {s0["count"]:,} kept. Dropped: '
                             + '; '.join(f'{", ".join(v)} — {k_}' for k_, v in sorted(report['dropped'].items()))
@@ -961,7 +961,7 @@ def write_credits(rows, C, drift, meta):
                        'API response last updated in KStars in October 2021.'),
             'url': SB.url('comets'),
             'licence': jpl_terms,
-            'licence_quote': f'KStars README.md: "{gpl}" The data file itself carries no licence.',
+            'licence_quote': f'KStars README.md: "{gpl}" The data file itself carries no license.',
             'retrieved': RETRIEVED,
             'adaptations': ('Orbits of ' + ', '.join(HISTORIC) + ' — famous comets the MPC list no longer '
                             'carries (an editorial choice; the numbers are the file\'s). Shoemaker-Levy 9 is '
@@ -973,7 +973,7 @@ def write_credits(rows, C, drift, meta):
         },
         {
             'id': 'planetarium-catalogues',
-            'title': 'Stellarium and Celestia catalogues (dwarf-planet grouping, two names; accuracy checks)',
+            'title': 'Stellarium and Celestia catalogs (dwarf-planet grouping, two names; accuracy checks)',
             'owner': 'The Stellarium developers; the Celestia project (CelestiaContent contributors)',
             'source': (f'Stellarium data/ssystem_minor.ini at commit {SB.STELLARIUM[1]} (the name of 162173 '
                        'Ryugu) and data/asteroid_elements.json '

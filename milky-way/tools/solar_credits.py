@@ -64,11 +64,11 @@ def write():
                          f'of a), {m["windows"]} windows of {m["window_days"]:g} d'
                          for m in by_file[parent])
 
-    moon_adapt = ('Positions relative to the planet\'s centre, fitted per window with a precessing '
+    moon_adapt = ('Positions relative to the planet\'s center, fitted per window with a precessing '
                   'Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to '
-                  '2050-01-01 TDB; the app adds back the planet centre\'s motion about the system '
-                  'barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the '
-                  'JPL ephemeris, labelled as such.')
+                  '2050-01-01 TDB; the app adds back the planet center\'s motion about the system '
+                  'barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the '
+                  'JPL ephemeris, labeled as such.')
     sat = {
         'mar097': ('mars', 'JPL Martian satellite ephemeris MAR097 (Phobos, Deimos)',
                    'MAR097.3, R. A. Jacobson, JPL SSD; release form "Release to: Horizons/NAIF", '
@@ -99,12 +99,12 @@ def write():
                          'export lunar/planetary ephemeris, suitable for all users/uses."',
         'retrieved': common.RETRIEVED,
         'adaptations': ('Refitted to a float32 Chebyshev table for 1900-01-01 to 2100-01-01 TDB: '
-                        'heliocentric Mercury, Venus, Earth-Moon barycentre, Mars and the Jupiter-'
-                        'Pluto system barycentres, and the geocentric Moon (interval/degree per body '
+                        'heliocentric Mercury, Venus, Earth-Moon barycenter, Mars and the Jupiter-'
+                        'Pluto system barycenters, and the geocentric Moon (interval/degree per body '
                         'in data/ephem.json). The Earth/Moon mass ratio (EMRAT '
                         f'{eph["emrat"]:.8f}) was measured from the file\'s own Earth and Moon '
-                        'segments. Pluto is the Pluto-system barycentre (about 2,135 km from the '
-                        'centre of Pluto); Charon is not shown — no long-term Pluto-satellite '
+                        'segments. Pluto is the Pluto-system barycenter (about 2,135 km from the '
+                        'center of Pluto); Charon is not shown — no long-term Pluto-satellite '
                         'ephemeris was reachable.'),
         'accuracy': f'Max error against DE430 at {eph["error_epochs"]} random epochs: {planets_acc}.',
     }]
@@ -114,11 +114,11 @@ def write():
             'id': f'jpl-{f}', 'title': title, 'owner': owner,
             'source': f'{f}.bsp, ' + MIRROR + '; sha256 ' + S.SPK[f][2], 'url': url,
             'licence': NAIF_TERMS,
-            'licence_quote': 'No licence text in the file; its release form reads "Release to: '
+            'licence_quote': 'No license text in the file; its release form reads "Release to: '
                              f'{release_to(f)}" (NAIF terms as above).',
             'retrieved': common.RETRIEVED,
             'adaptations': moon_adapt,
-            'accuracy': ('Max error of the position relative to the system barycentre against the '
+            'accuracy': ('Max error of the position relative to the system barycenter against the '
                          f'SPK at {mo["error_epochs"]} random epochs per moon: ' + moons_acc(parent) + '.'),
         }
         if f == 'sat425':
@@ -160,7 +160,7 @@ def write():
                   + '; sha256 ' + S.GM[2],
         'url': f'https://raw.githubusercontent.com/nyx-space/anise/{S.ANISE[1]}/{S.GM[0]}',
         'licence': NAIF_TERMS,
-        'licence_quote': 'No licence text in the file. Its header: "Sources: 1. DE-440 NAVIO file '
+        'licence_quote': 'No license text in the file. Its header: "Sources: 1. DE-440 NAVIO file '
                          '"ASTRO-VALUES" ... 2. Natural satellite file release forms".',
         'retrieved': common.RETRIEVED,
         'adaptations': 'GM values copied into physical.json; moon/system mass ratios in moons.json.',
@@ -208,7 +208,7 @@ def write():
                          '"# Local function to adapt the tabulated elements from French et al. 1991."',
         'retrieved': common.RETRIEVED,
         'adaptations': ('Semi-major axis, eccentricity and radial width of the ten rings; drawn as '
-                        'circles a -/+ width/2 in Uranus\'s equatorial plane. Pericentre and node '
+                        'circles a -/+ width/2 in Uranus\'s equatorial plane. Pericenter and node '
                         'longitudes (epoch 1977-03-10T20:00 UTC, B1950-based ring frame in rms-oops) '
                         'are not shipped.'),
         'accuracy': 'Copied exactly; the circular drawing ignores e (up to 406 km for the epsilon ring).',

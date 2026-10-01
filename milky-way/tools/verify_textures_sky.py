@@ -334,14 +334,14 @@ def corr2(bb):
 
 cj = [corr2(np.roll(b, s, axis=1)) for s in range(0, 720, 2)]
 cjm = max(corr2(np.roll(b[:, ::-1], s, axis=1)) for s in range(0, 720, 2))
-check(int(np.argmax(cj)) == 0 and cj[0] > 0.99, f'Jupiter: shipped map vs the annotated original (x axis labelled '
+check(int(np.argmax(cj)) == 0 and cj[0] > 0.99, f'Jupiter: shipped map vs the annotated original (x axis labeled '
       f'180 ... 0 ... 180, west longitude decreasing to the right): best shift 0, correlation {cj[0]:.4f}; mirrored {cjm:.4f}')
 
 # Sun: the colour is the TSIS-1 colour
 sun = imgs['sun'].reshape(-1, 3)
 lin = np.where(sun / 255 <= 0.04045, sun / 255 / 12.92, ((sun / 255 + 0.055) / 1.055) ** 2.4).mean(0)
 want = np.array(J['colours']['sun']['linear'])
-check(np.abs(lin / lin[0] - want / want[0]).max() < 0.01, f'Sun map: mean linear colour ratio {np.round(lin / lin[0], 3).tolist()} '
+check(np.abs(lin / lin[0] - want / want[0]).max() < 0.01, f'Sun map: mean linear color ratio {np.round(lin / lin[0], 3).tolist()} '
       f'vs TSIS-1 {np.round(want / want[0], 3).tolist()}')
 
 # ------------------------------------------------------------------ colours
@@ -359,7 +359,7 @@ xy = J['colours']['sun']['xy']
 check(abs(xy[0] - 0.3216) < 0.001 and abs(xy[1] - 0.3321) < 0.001, f'Sun (TSIS-1): xy {xy}, CCT {J["colours"]["sun"]["cct_k_mccamy"]} K, '
                                                                     f'sRGB {J["colours"]["sun"]["srgb"]}')
 jm = imgs['jupiter'].reshape(-1, 3).mean(0)
-print(f'  info  Jupiter map mean sRGB {np.round(jm, 1).tolist()} vs Karkoschka disk colour {J["colours"]["jupiter"]["srgb"]}')
+print(f'  info  Jupiter map mean sRGB {np.round(jm, 1).tolist()} vs Karkoschka disk color {J["colours"]["jupiter"]["srgb"]}')
 
 # ------------------------------------------------------------------ the sky
 print('sky: Gaia DR3 counts')
@@ -403,7 +403,7 @@ mid = (D > b0 * 1.5) & (D < w0 * 0.9) & (v > 0)
 rel = np.abs(D_ship[mid] / D[mid] - 1)
 check(np.median(rel) < 0.02 and np.percentile(rel, 99) < 0.15,
       f'shipped pixels invert (sky.json stretch) to the recomputed densities: median {100 * np.median(rel):.2f} %, '
-      f'99th percentile {100 * np.percentile(rel, 99):.1f} % (8-bit and JPEG quantisation)')
+      f'99th percentile {100 * np.percentile(rel, 99):.1f} % (8-bit and JPEG quantization)')
 
 # the formerly triplicated patch (l 154-160, b 2-7) must look like its surroundings
 from astropy.coordinates import SkyCoord
@@ -444,8 +444,8 @@ for dc in np.arange(-80, 81, 4.0):
             best = (mval, rc, dc)
 sep = np.degrees(np.arccos(np.sin(np.radians(best[2])) * np.sin(np.radians(-28.936)) +
                            np.cos(np.radians(best[2])) * np.cos(np.radians(-28.936)) * np.cos(np.radians(best[1] - 266.405))))
-check(sep < 8, f'brightest 10 deg cap of the sky centred at RA {best[1]:.0f} Dec {best[2]:.0f}, {sep:.1f} deg from the '
-               f'Galactic centre (266.4, -28.9); mean {255 * best[0]:.0f}')
+check(sep < 8, f'brightest 10 deg cap of the sky centered at RA {best[1]:.0f} Dec {best[2]:.0f}, {sep:.1f} deg from the '
+               f'Galactic center (266.4, -28.9); mean {255 * best[0]:.0f}')
 plane = float(np.median(v[np.abs(B) < 5])) * 255
 caps = float(np.median(v[np.abs(B) > 60])) * 255
 check(plane > caps + 80, f'|b| < 5 deg median {plane:.0f} vs |b| > 60 deg median {caps:.0f}')

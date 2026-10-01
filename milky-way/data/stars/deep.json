@@ -5,7 +5,7 @@
   "min": -8.0,
   "note": "V + 5 - 5 log10(d / pc); no extinction correction"
  },
- "colour": "colour_code indexes stars/colour.json (255 = no colour measurement)",
+ "colour": "colour_code indexes stars/colour.json (255 = no color measurement)",
  "colour_src_counts": {
   "B-V via Ballesteros 2012 (model)": 78936,
   "BT-VT outside the Mamajek table, clamped to its nearest end": 421,

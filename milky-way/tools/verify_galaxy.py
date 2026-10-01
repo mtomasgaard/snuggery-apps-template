@@ -116,7 +116,7 @@ def main():
     gcd = SkyCoord(ICRS(CartesianRepresentation(*b, unit=u.kpc)))
     sep = gcd.separation(SkyCoord(ra=fr['galcen_icrs_deg'][0] * u.deg, dec=fr['galcen_icrs_deg'][1] * u.deg)).arcsec
     check(abs(np.linalg.norm(b) - 8.122) < 1e-9 and sep < 1e-6,
-          f'the Galactic centre lies 8.122 kpc from the Sun towards ICRS (266.4051, -28.936175) ({sep:.1e}")')
+          f'the Galactic center lies 8.122 kpc from the Sun toward ICRS (266.4051, -28.936175) ({sep:.1e}")')
     lg = SkyCoord(ICRS(CartesianRepresentation(*(A @ np.array([0, 1.0, 0])), unit=u.kpc))).galactic
     check(abs(((lg.l.deg - 90 + 180) % 360) - 180) < 0.01 and abs(lg.b.deg) < 0.01,
           f'+y points to Galactic l = {lg.l.deg:.4f}, b = {lg.b.deg:.4f} deg')
@@ -300,7 +300,7 @@ def main():
         xs, ys = pixel_centres(meta)
         sun_x = g['frame']['sun_kpc'][0]
         check(np.allclose(xs - sun_x, np.linspace(-6, 6, 121), atol=1e-6) and np.allclose(ys, np.linspace(6, -6, 121), atol=1e-6),
-              f'{key}: pixel centres are the grid nodes (heliocentric -6..6 kpc every 0.1)')
+              f'{key}: pixel centers are the grid nodes (heliocentric -6..6 kpc every 0.1)')
         # orientation: 8 flips / transposes of the decoded image, sampled (nearest pixel) at young open
         # clusters from UCC - the decisive test - and, for information only, along the Reid arms and at
         # the Reid+2014 masers (both too sparse or too symmetric to tell the flips apart)
@@ -324,7 +324,7 @@ def main():
               f'{key}: orientation - mean overdensity at {len(yc):,} UCC open clusters younger than 50 Myr (build-time '
               f'only): as shipped {score["as shipped"]:+.3f}, best of the other 7 flips/transposes {others:+.3f}')
         print(f'        (information: along the Reid arms within 4 kpc the shipped orientation ranks {rank(arm_score)} of 8 '
-              f'({arm_score["as shipped"]:+.3f}), at the {len(mxy)} labelled masers {rank(maser_score)} of 8 '
+              f'({arm_score["as shipped"]:+.3f}), at the {len(mxy)} labeled masers {rank(maser_score)} of 8 '
               f'({maser_score["as shipped"]:+.3f}): too few or too symmetric to decide)')
         fx['young'][key] = {'grid_rows_top_first': np.round(img_v, 12).tolist()}
 
@@ -336,7 +336,7 @@ def main():
     blk, wht = st_['black_msun_kpc2'], st_['white_msun_kpc2']
     sig_img = blk * (wht / blk) ** (img / 255.0)
     comp = {c['name']: c for c in mo['components']}
-    thin, thick = comp['thin stellar disc'], comp['thick stellar disc']
+    thin, thick = comp['thin stellar disk'], comp['thick stellar disk']
     xs, ys = pixel_centres(mo)
     X, Y = np.meshgrid(xs, ys)
     Rr = np.hypot(X, Y)
@@ -363,12 +363,12 @@ def main():
             zero_bad += 1
     half = (wht / blk) ** (0.5 / 255) - 1
     check(zero_bad == 0, f'model.png: code 0 only where Sigma is below black ({zero_bad} exceptions)')
-    check(worst_rel <= half + 1e-6, f'model.png decodes to the disc formula + an independent quad() of the bar to '
+    check(worst_rel <= half + 1e-6, f'model.png decodes to the disk formula + an independent quad() of the bar to '
           f'{worst_rel * 100:.2f} % over {len(picks)} pixels (half a code step = {half * 100:.2f} %)')
     resid = np.clip(sig_img - disc, 0, None) * (Rr < 5)
     Ixx, Iyy, Ixy = (resid * X * X).sum(), (resid * Y * Y).sum(), (resid * X * Y).sum()
     pa = 0.5 * math.degrees(math.atan2(2 * Ixy, Ixx - Iyy))
-    check(abs(pa - mo['bar_angle_deg']) < 2, f'bar measured on the decoded image (image minus disc, R < 5 kpc): major axis '
+    check(abs(pa - mo['bar_angle_deg']) < 2, f'bar measured on the decoded image (image minus disk, R < 5 kpc): major axis '
           f'{pa:.2f} deg (model {mo["bar_angle_deg"]:g})')
     far = np.array([3 * math.cos(math.radians(pa + 180)), 3 * math.sin(math.radians(pa + 180))])
     lnear = math.degrees(math.atan2(far[1], far[0] - g['frame']['sun_kpc'][0]))

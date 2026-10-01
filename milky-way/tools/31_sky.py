@@ -145,13 +145,13 @@ def main():
         'frame': 'ICRS', 'projection': 'equirectangular',
         'pixel_to_sky': {'ra_deg': 'RA = 360 * (x + 0.5) / width', 'dec_deg': 'Dec = 90 - 180 * (y + 0.5) / height',
                          'note': 'x = column from the left, y = row from the top; RA increases to the right'},
-        'quantity': 'Gaia DR3 sources per square degree (catalogue counts, not surface brightness)',
+        'quantity': 'Gaia DR3 sources per square degree (catalog counts, not surface brightness)',
         'stretch': {'type': 'asinh', 'black_per_deg2': BLACK, 'soft_per_deg2': SOFT, 'white_per_deg2': WHITE,
                     'formula': 'v = asinh(max(D - black, 0) / soft) / asinh((white - black) / soft), clipped '
                                'to [0, 1]; pixel = round(255 v)',
                     'inverse': 'D = black + soft * sinh(v * asinh((white - black) / soft)) (for v > 0)',
                     'black_per_pixel': BLACK * area, 'white_per_pixel': WHITE * area},
-        'resampling': 'bilinear interpolation of the NSIDE 256 map (per deg^2) at each pixel centre, '
+        'resampling': 'bilinear interpolation of the NSIDE 256 map (per deg^2) at each pixel center, '
                       'astropy-healpix 1.1.2',
         'source': {'catalogue': 'Gaia DR3 gaia_source', 'product': 'HATS point_map.fits (STScI/MAST, AWS Open '
                    'Data bucket stpubdata, gaia/gaia_dr3/public/hats/gaia)',

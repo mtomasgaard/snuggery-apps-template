@@ -72,7 +72,7 @@
    "lon_left_deg": -180.0,
    "nodata_fill": "flat RGB [169, 173, 156] south of 82.3 S, already in the source map (the south polar region was not observed; the map maker's fill, not the mean of the imaged pixels): not imaged, not terrain",
    "nodata_fraction": 0.04297,
-   "note": "Cassini ISS colour map PIA07782, Dec 2000 (NASA/JPL/Space Science Institute)",
+   "note": "Cassini ISS color map PIA07782, Dec 2000 (NASA/JPL/Space Science Institute)",
    "source_id": "cassini-pia07782",
    "width": 2048
   },
@@ -86,7 +86,7 @@
    "lon_left_deg": -180.0,
    "nodata_fill": "none: every pixel imaged",
    "nodata_fraction": 0.0,
-   "note": "Viking Orbiter colour mosaic, red and violet filters (NASA, PDS, USGS)",
+   "note": "Viking Orbiter color mosaic, red and violet filters (NASA, PDS, USGS)",
    "source_id": "usgs-mars-viking-color-925m",
    "width": 2048
   },
@@ -110,11 +110,11 @@
    "height": 1024,
    "kind": "albedo",
    "lat_type": "not stated (sphere)",
-   "lon_evidence": "Stellarium sphere-texture convention (prime meridian at the centre); proved by maria and craters (Tycho, Mare Crisium, Mare Humorum) in verify_textures_sky.py",
+   "lon_evidence": "Stellarium sphere-texture convention (prime meridian at the center); proved by maria and craters (Tycho, Mare Crisium, Mare Humorum) in verify_textures_sky.py",
    "lon_left_deg": -180.0,
    "nodata_fill": "none: every pixel imaged",
    "nodata_fraction": 0.0,
-   "note": "LRO LROC WAC Hapke-normalised albedo (Stellarium map by R. Kabatsayev)",
+   "note": "LRO LROC WAC Hapke-normalized albedo (Stellarium map by R. Kabatsayev)",
    "source_id": "stellarium-moon-lroc-albedo",
    "width": 2048
   },
@@ -139,11 +139,11 @@
    "height": 512,
    "kind": "visible",
    "lat_type": "not stated (sphere)",
-   "lon_evidence": "Stellarium sphere-texture convention (prime meridian at the centre); a generic texture of HMI data from Aug 2025 and Dec 2019 with no Carrington registration",
+   "lon_evidence": "Stellarium sphere-texture convention (prime meridian at the center); a generic texture of HMI data from Aug 2025 and Dec 2019 with no Carrington registration",
    "lon_left_deg": -180.0,
    "nodata_fill": "none: every pixel imaged",
    "nodata_fraction": 0.0,
-   "note": "SDO HMI continuum (Stellarium map by R. Kabatsayev), coloured by the TSIS-1 spectrum",
+   "note": "SDO HMI continuum (Stellarium map by R. Kabatsayev), colored by the TSIS-1 spectrum",
    "source_id": "stellarium-sun-hmi",
    "width": 1024
   },
@@ -178,7 +178,7 @@
    "width": 1024
   }
  },
- "colour_method": "CIE 1931 2-degree observer (colour-science 0.4.6 table), 1 nm grid 360-830 nm, linear interpolation of each spectrum (Karkoschka air wavelengths; TSIS 1 nm bins at their centres). Planets and Titan: XYZ of albedo x TSIS-1 sunlight, normalised so a perfect white reflector has Y = 1, Bradford-adapted from the Sun's white to D65, IEC 61966-2-1 sRGB matrix and transfer curve, x 255, rounded; srgb_illuminant_E is the same with an equal-energy illuminant, as a cross-check. Sun: XYZ of the TSIS-1 spectrum through the same matrix without adaptation, largest channel scaled to 1. Disk-averaged colours of July 1995 (Uranus changes with season); no limb darkening or banding.",
+ "colour_method": "CIE 1931 2-degree observer (colour-science 0.4.6 table), 1 nm grid 360-830 nm, linear interpolation of each spectrum (Karkoschka air wavelengths; TSIS 1 nm bins at their centers). Planets and Titan: XYZ of albedo x TSIS-1 sunlight, normalized so a perfect white reflector has Y = 1, Bradford-adapted from the Sun's white to D65, IEC 61966-2-1 sRGB matrix and transfer curve, x 255, rounded; srgb_illuminant_E is the same with an equal-energy illuminant, as a cross-check. Sun: XYZ of the TSIS-1 spectrum through the same matrix without adaptation, largest channel scaled to 1. Disk-averaged colors of July 1995 (Uranus changes with season); no limb darkening or banding.",
  "colours": {
   "jupiter": {
    "albedo_Y": 0.5276,
@@ -333,6 +333,6 @@
   }
  },
  "convention": "Equirectangular; row 0 = +90 deg latitude; longitude east-positive and increasing to the right; column x covers longitudes lon_left_deg + 360 x / width .. + 360 (x + 1) / width.",
- "resampling": "USGS GeoTIFFs: exact area average of the source pixels whose centres fall in each output pixel, nodata (0) excluded. Stellarium and Cassini maps: exact 2x2 (Moon, Jupiter) or 8x8 (Sun, in linear light) box average. City lights: PIL BOX filter 2700 -> 2048. Blue Marble: shipped byte for byte. JPEG quality 85 (Pillow 11.3.0).",
+ "resampling": "USGS GeoTIFFs: exact area average of the source pixels whose centers fall in each output pixel, nodata (0) excluded. Stellarium and Cassini maps: exact 2x2 (Moon, Jupiter) or 8x8 (Sun, in linear light) box average. City lights: PIL BOX filter 2700 -> 2048. Blue Marble: shipped byte for byte. JPEG quality 85 (Pillow 11.3.0).",
  "total_bytes": 1678374
 }

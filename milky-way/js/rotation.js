@@ -1,27 +1,12 @@
 // Which way each body faces: the IAU rotation model from physical.json (CONTRACT.md section 3).
 //
-// physical.json carries, per body, the pole and prime-meridian polynomials of NAIF's pck00011
-// (IAU WGCCRE 2015) exactly as the kernel gives them, and at the top level the nutation/
-// precession angles of each planetary system:
-//
-//   T = Julian centuries TDB from J2000, d = days TDB from J2000
-//   alpha = a0 + a1 T + a2 T^2 + sum_k nut_ra[k]  sin(theta_k)
-//   delta = d0 + d1 T + d2 T^2 + sum_k nut_dec[k] cos(theta_k)
-//   W     = W0 + W1 d + W2 d^2 + sum_k nut_pm[k]  sin(theta_k)
-//   theta_k = sum_j nut_prec_angles[system][k][j] T^j            (all in degrees)
-//
-// and the body-fixed frame is Rz(W) Rx(90 deg - delta) Rz(90 deg + alpha) applied to an ICRF
-// vector, where Rz/Rx are FRAME rotations (SPICE's convention): Rz(t) = [[c, s, 0], [-s, c, 0],
-// [0, 0, 1]], Rx(t) = [[1, 0, 0], [0, c, s], [0, -s, c]]. This is what CSPICE's tipbod / pxform
-// ('J2000' -> 'IAU_<BODY>') compute from the same kernel, and tools/test_rotation.mjs checks it
-// against them. Row 2 of the matrix is the IAU north pole; row 0 points at the prime meridian.
-//
-// Bodies without a model in pck00011 (Hyperion, Nereid) have pole = null: bodyFrame returns null.
-//
-// Two ways in: bodyFrame(body, jd) on a physical.json body object (after linkRotation(physical),
-// or with the system's angle list as a third argument), or loadRotation(base, physical) /
-// buildRotation(physical), which return { bodyFrame(key, jd), poleAngles, spinAxis, has } keyed
-// by the body names of physical.json ('mars', 'io', ...).
+// physical.json carries NAIF pck00011's pole and prime-meridian polynomials per body and the
+// nutation/precession angles per system; alpha, delta and W are evaluated as the kernel defines them
+// and the body-fixed frame is Rz(W) Rx(90 deg - delta) Rz(90 deg + alpha) on an ICRF vector (SPICE's
+// frame rotations, what CSPICE's tipbod/pxform compute; tools/test_rotation.mjs checks it against
+// them). Row 2 is the north pole, row 0 the prime meridian. Hyperion and Nereid have no model:
+// bodyFrame returns null. Ways in: bodyFrame(body, jd) after linkRotation(physical), or
+// loadRotation/buildRotation, which return { bodyFrame(key, jd), poleAngles, spinAxis, has }.
 
 const DEG = Math.PI / 180;
 

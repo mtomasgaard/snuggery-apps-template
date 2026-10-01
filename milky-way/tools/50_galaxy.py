@@ -114,7 +114,7 @@ def quoted(src, *needles):
     hay = ' '.join(text_of(src).split())
     for n in needles:
         if ' '.join(n.split()) not in hay:
-            raise SystemExit(f'licence quote not found in its pinned file: {n[:80]!r}')
+            raise SystemExit(f'license quote not found in its pinned file: {n[:80]!r}')
     return needles
 
 
@@ -278,7 +278,7 @@ def build_frame():
     frame_refs = [
         f"R0 = {r0} kpc: {bibcode(refs['galcen_distance'])}",
         f"z_sun = {zsun * 1000:.1f} pc: {bibcode(refs['z_sun'])}",
-        f"Galactic-centre direction (galcen_coord; Galactic l = b = 0 to 0.001 deg) at ICRS RA {gc_coord.ra.deg}, "
+        f"Galactic-center direction (galcen_coord; Galactic l = b = 0 to 0.001 deg) at ICRS RA {gc_coord.ra.deg}, "
         f"Dec {gc_coord.dec.deg} deg: {bibcode(refs['galcen_coord'])}",
         f"astropy {S.ASTROPY_VERSION} Galactocentric frame, parameter set 'v4.0'",
     ]
@@ -291,11 +291,11 @@ def build_frame():
         'to_icrs_note': ('4x4 row-major, column vectors: [x_icrs, y_icrs, z_icrs, 1] = to_icrs . '
                          '[x_gc, y_gc, z_gc, 1], kpc in and out. The upper-left 3x3 is a rotation '
                          '(orthonormal), so the inverse is x_gc = R^T (x_icrs - t). ICRS here is '
-                         'heliocentric: astropy puts it at the solar-system barycentre, < 1e-10 kpc '
+                         'heliocentric: astropy puts it at the solar-system barycenter, < 1e-10 kpc '
                          'from the Sun.'),
-        'axes': ('x from the Sun towards the Galactic centre (the Sun at x = -8.122 kpc), y towards '
-                 'Galactic longitude 90 deg (the direction of the Sun\'s rotation), z towards the '
-                 'North Galactic Pole; right-handed. The disc rotates clockwise seen from +z.'),
+        'axes': ('x from the Sun toward the Galactic center (the Sun at x = -8.122 kpc), y toward '
+                 'Galactic longitude 90 deg (the direction of the Sun\'s rotation), z toward the '
+                 'North Galactic Pole; right-handed. The disk rotates clockwise seen from +z.'),
         'refs': frame_refs,
         'checks': {'roundtrip_max_kpc': float(f'{rt:.3g}'), 'points': n},
     }
@@ -484,7 +484,7 @@ def build_streams(GC):
         elif 'interpolat' in doc:
             notes.append('Distance: interpolated between a few published reference distances.')
         if 'perturbed' in doc and 'disc' in doc:
-            notes.append('galstreams notes that this is most likely a feature of the perturbed disc '
+            notes.append('galstreams notes that this is most likely a feature of the perturbed disk '
                          'rather than a tidal stream.')
         streams.append({
             'name': r['name'], 'track': r['track'], 'ref': '; '.join(refs),
@@ -657,7 +657,7 @@ def build_drimmel(bibs, reid_P):
             'points': [[rnd(a, 3), rnd(c, 3), 0.0] for a, c in zip(x, y)],
             'note': (f'A fit, not a picture: the Drimmel et al. 2024 log-spiral fitted to young classical '
                      f'Cepheids, drawn only over the azimuths it was fitted to (phi {phi_lo:g} to {phi_hi:g} deg, '
-                     f'the side of the Sun towards Galactic longitudes 180-360 deg).'),
+                     f'the side of the Sun toward Galactic longitudes 180-360 deg).'),
         })
     # where the two arm models sit at the Sun's azimuth (beta = phi = 0)
     reid_local0 = float(reid_R(reid_P['Local'], np.array(0.0)))
@@ -769,9 +769,9 @@ def build_young(GC, fr, bibs):
         'orientation': ('Face-on, seen from the North Galactic Pole (+z). Column c (0 = left) and row r '
                         '(0 = top) of the W x H image cover x = x0 + (c + 0.5)(x1 - x0)/W and '
                         'y = y1 - (r + 0.5)(y1 - y0)/H, with extent_kpc = [x0, x1, y0, y1] in this '
-                        'frame: +x (right) towards the Galactic centre, +y (up) towards l = 90 deg. '
-                        'Each pixel centre is one node of the published grid (heliocentric, 0.1 kpc). '
-                        'In three.js a PlaneGeometry(x1 - x0, y1 - y0) centred on the extent, lying in '
+                        'frame: +x (right) toward the Galactic center, +y (up) toward l = 90 deg. '
+                        'Each pixel center is one node of the published grid (heliocentric, 0.1 kpc). '
+                        'In three.js a PlaneGeometry(x1 - x0, y1 - y0) centered on the extent, lying in '
                         'the x-y plane, with its default UVs and texture.flipY = true shows it the '
                         'right way round.'),
         'plane': ('The grids are projections onto the Galactic plane b = 0 through the Sun. That plane '
@@ -781,7 +781,7 @@ def build_young(GC, fr, bibs):
                   'with astropy instead of on the flat rectangle moves none of them by more than '
                   f'{max(p["max_offset_kpc"] for p in placement.values()) * 1e6:.0f} micro-kpc.'),
         'orientation_source': ('SpiralMap plots the grids as contourf(x, y, grid.T), i.e. grid[ix, iy] with '
-                               'x heliocentric towards the Galactic centre (x_gc = x_hc + x_sun) and y towards '
+                               'x heliocentric toward the Galactic center (x_gc = x_hc + x_sun) and y toward '
                                'l = 90 deg. verify_galaxy.py confirms it on the shipped PNGs: young open '
                                'clusters (UCC, younger than 50 Myr) sit on about twice the mean overdensity in '
                                'this orientation than in any of the other 7 flips and transposes.'),
@@ -927,18 +927,18 @@ def build_model():
         'file': f'{OUT}/model.png', 'width': N, 'height': N, 'bytes': len(data),
         'extent_kpc': [-H, H, -H, H], 'z_kpc': 0.0,
         'what': ('A MODEL, not an image: the face-on stellar surface density of two published mass '
-                 'models added together - the McMillan (2017) thin and thick discs and the Portail et '
+                 'models added together - the McMillan (2017) thin and thick disks and the Portail et '
                  'al. (2017) bar in the analytic form of Sormani et al. (2022). Nothing here was '
                  'photographed; it shows where the models put the stars.'),
         'quantity': 'stellar surface density Sigma, Msun per kpc^2 (grayscale code, see stretch)',
         'orientation': ('Face-on from the North Galactic Pole, like the young-star maps: column c, row r '
                         '(row 0 = top) covers x = x0 + (c + 0.5)(x1 - x0)/W, y = y1 - (r + 0.5)(y1 - y0)/H; '
-                        '+x right towards the Galactic centre from the Sun, +y up towards l = 90 deg.'),
+                        '+x right toward the Galactic center from the Sun, +y up toward l = 90 deg.'),
         'stretch': {'type': 'log10', 'black_msun_kpc2': black, 'white_msun_kpc2': white,
                     'formula': 'code = round(255 * clip((log10 Sigma - log10 black) / (log10 white - log10 black), 0, 1))',
                     'inverse': 'Sigma = black * (white / black) ** (code / 255)   (code 0 means Sigma <= black)',
-                    'why': ('white is the map maximum and black the disc surface density at R = 20 kpc, each '
-                            'rounded up to 2 significant digits, so the disc fades to zero just inside the '
+                    'why': ('white is the map maximum and black the disk surface density at R = 20 kpc, each '
+                            'rounded up to 2 significant digits, so the disk fades to zero just inside the '
                             'square')},
         'components': [],
         'bar_angle_deg': BAR_ANGLE_DEG,
@@ -960,10 +960,10 @@ def build_model():
         'long_bar_1': 'sech^2(z / h)', 'long_bar_2': 'sech^2(z / h)',
     }
     model['components'] = [
-        {'name': 'thin stellar disc', 'model': 'McMillan (2017), Agama data/McMillan17.ini',
+        {'name': 'thin stellar disk', 'model': 'McMillan (2017), Agama data/McMillan17.ini',
          'surface_density_msun_kpc2': S0t, 'scale_radius_kpc': Rt, 'scale_height_kpc': ht,
          'sigma': 'Sigma0 exp(-R / Rd)'},
-        {'name': 'thick stellar disc', 'model': 'McMillan (2017), Agama data/McMillan17.ini',
+        {'name': 'thick stellar disk', 'model': 'McMillan (2017), Agama data/McMillan17.ini',
          'surface_density_msun_kpc2': S0T, 'scale_radius_kpc': RT, 'scale_height_kpc': hT,
          'sigma': 'Sigma0 exp(-R / Rd)'},
         {'name': 'bar (X-shaped short bar + two long bars)',
@@ -977,9 +977,9 @@ def build_model():
          'sigma': 'rho integrated over z by Gauss-Legendre quadrature (0-8 kpc, x2)',
          'measured_major_axis_deg': rnd(pa, 3)},
     ]
-    model['not_included'] = ('McMillan\'s axisymmetric bulge and HI / H2 gas discs, the Sormani model\'s own '
-                             'disc and central mass concentration, and every dark-matter halo: the image is '
-                             'the two stellar discs plus the bar only.')
+    model['not_included'] = ('McMillan\'s axisymmetric bulge and HI / H2 gas disks, the Sormani model\'s own '
+                             'disk and central mass concentration, and every dark-matter halo: the image is '
+                             'the two stellar disks plus the bar only.')
     model['refs'] = ['McMillan (2017): "#best-fit potential from McMillan(2017)" (Agama data/McMillan17.ini)',
                      'Portail et al. (2017) bar, analytic approximation of ' +
                      re.search(r'Reference: (Sormani et al\. 2022 \(MNRAS Letters/514/L5\))', bar_head).group(1) +
@@ -1020,7 +1020,7 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
     lic_sk = quoted(S.skowron('LICENSE'), 'This data is NOT licenced under the MIT or CC licenses.')
     lic_galkin = quoted(S.galkin_pkginfo(), 'License: UNKNOWN')
     q = lambda parts, where: ' / '.join(f'"{p}"' for p in parts) + f' ({where})'
-    gaia_terms = ('ESA/Gaia/DPAC data terms: CC BY-NC 3.0 IGO (non-commercial). ESA\'s licence page could '
+    gaia_terms = ('ESA/Gaia/DPAC data terms: CC BY-NC 3.0 IGO (non-commercial). ESA\'s license page could '
                   'not be read from the build network; a web-search summary of '
                   'cosmos.esa.int/web/gaia-users/license gives CC BY-NC 3.0 IGO, and CelestiaContent\'s '
                   'Gaia-derived data/stars.dat.license states the same (see the sky backdrop block).')
@@ -1030,7 +1030,7 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
              owner='The Astropy Developers (astropy 7.1.0); parameters from the papers cited in the frame',
              source=('astropy.coordinates.Galactocentric, galactocentric_frame_defaults "v4.0", read from the '
                      'pinned astropy 7.1.0 installed from PyPI (module file sha256 dfc1b53d...): R0 = 8.122 kpc '
-                     '(2018A&A...615L..15G), z_sun = 20.8 pc (2019MNRAS.482.1417B), the Galactic-centre '
+                     '(2018A&A...615L..15G), z_sun = 20.8 pc (2019MNRAS.482.1417B), the Galactic-center '
                      'direction galcen_coord at ICRS (266.4051, -28.936175) deg, i.e. Galactic l = b = 0 '
                      '(2004ApJ...616..872R), roll 0.'),
              url='https://pypi.org/project/astropy/7.1.0/',
@@ -1065,13 +1065,13 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
                           f'{len(left_out["gc_ambiguous"])} systems LVDB classes as ambiguous (cluster or dwarf), '
                           f'and {len(left_out["dwarf_mw_unconfirmed"])} unconfirmed dwarfs. Distance, half-light '
                           'radius (LVDB rhalf_physical, major axis), ellipticity, position angle, M_V and the '
-                          'distance reference are shipped as catalogued.'),
+                          'distance reference are shipped as cataloged.'),
              accuracy=(f"Recomputing each object's Galactocentric distance reproduces LVDB's own distance_gc to "
                        f"{L['distance_gc_max_diff_kpc'] * 1000:.1f} pc at most (median "
                        f"{L['distance_gc_median_diff_kpc'] * 1000:.1f} pc, {L['n_compared']} objects), so LVDB used "
                        'the same frame. Distances equal 10^(DM/5 + 1) pc to '
                        f"{L['dm_distance_max_rel'] * 100:.2f} %; the shipped distance errors come from the "
-                       'catalogued distance-modulus errors (LVDB leaves the kpc errors of the Harris clusters at '
+                       'cataloged distance-modulus errors (LVDB leaves the kpc errors of the Harris clusters at '
                        '0). verify_galaxy.py cross-checks the cluster distances against galpy 1.12.0.')),
         dict(id='galstreams', title='galstreams 1.2.1: Milky Way stellar-stream tracks',
              owner='Cecilia Mateu (Mateu 2023, MNRAS 520, 5225) and the authors of each track, named per stream',
@@ -1102,7 +1102,7 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
              adaptations=('Seven kinked log-spirals R = R_kink exp(-(beta - beta_kink) tan psi) sampled every '
                           f'{REID_STEP_DEG:g} deg only over each arm\'s fitted beta range, x = -R cos beta, '
                           'y = +R sin beta, z = 0; the table\'s arm widths are shipped as they are.'),
-             accuracy=('A fit, labelled as one. The sign of y was checked at build time against the Reid et al. '
+             accuracy=('A fit, labeled as one. The sign of y was checked at build time against the Reid et al. '
                        '2014 maser parallaxes (galkin; not shipped): median |R - R_fit| ' +
                        ', '.join(f'{a} {ms[a]["median_kpc"]:.2f} kpc (n={ms[a]["n"]})' for a in
                                  ('Local', 'Perseus', 'Sgr-Car', 'Sct-Cen')) +
@@ -1125,7 +1125,7 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
                           f'y = R sin phi, sampled every {DRIMMEL_STEP_DEG:g} deg only over the fitted range. The '
                           'paper itself could not be read from the build network, so which variant it calls '
                           'primary was not checked there.'),
-             accuracy=(f"A fit, labelled as one. It disagrees with the maser fit: at the Sun's azimuth the Orion "
+             accuracy=(f"A fit, labeled as one. It disagrees with the maser fit: at the Sun's azimuth the Orion "
                        f"arm lies at R = {dr['drimmel_orion_R0']:.2f} kpc, the Reid Local arm at "
                        f"{dr['reid_local_R0']:.2f} kpc ({dr['offset']:+.2f} kpc). The fits appear to assume R0 near "
                        '8.28 kpc: SpiralMap\'s default Rsun is 8.277, and in this frame the young Cepheids of '
@@ -1154,23 +1154,23 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
                        ', '.join(f"{k} {v:.0%}" for k, v in (
                            (k, report['young_cover'][k]) for k in sorted(report['young_cover']))) +
                        '). The Gaia DR3 map is clipped at 1.30 by its producers. 8-bit storage: +-0.005.')),
-        dict(id='mw-disc-bar-model', title='Disc and bar glow: McMillan (2017) discs + Portail (2017) / '
+        dict(id='mw-disc-bar-model', title='Disk and bar glow: McMillan (2017) disks + Portail (2017) / '
                                            'Sormani (2022) bar - a model',
              owner=('P. J. McMillan (2017 best-fit Milky Way mass model); M. Portail et al. (2017) bar, analytic '
                     'fit by M. C. Sormani et al. (2022); both as distributed with Agama by E. Vasiliev'),
              source=(f'Agama commit {S.AGAMA_COMMIT[:8]}: data/McMillan17.ini (sha256 2fa000f9...) and '
                      'py/example_mw_bar_potential.py (sha256 a1c3f49e...), makeBarDensity() evaluated in numpy'),
              url=f'https://github.com/GalacticDynamics-Oxford/Agama/tree/{S.AGAMA_COMMIT}',
-             licence='Agama licence: BSD or MIT for Agama\'s own source (GPL only when linked with GSL)',
+             licence='Agama license: BSD or MIT for Agama\'s own source (GPL only when linked with GSL)',
              licence_quote=q(lic_ag, 'Agama LICENSE'),
              retrieved=common.RETRIEVED,
              adaptations=(f'Face-on surface density on {MODEL_N} x {MODEL_N} pixels over +-{MODEL_HALF:g} kpc: the '
-                          'thin and thick stellar discs (Sigma0 exp(-R/Rd)) plus the bar density integrated over z, '
+                          'thin and thick stellar disks (Sigma0 exp(-R/Rd)) plus the bar density integrated over z, '
                           f'the bar turned to {BAR_ANGLE_DEG:g} deg as in the script; log10 stretch (black '
                           f'{mo["black"]:.2g}, white {mo["white"]:.2g} Msun/kpc^2) into an 8-bit grayscale PNG. '
-                          "McMillan's bulge and gas discs are not added. The scale heights are shipped for "
+                          "McMillan's bulge and gas disks are not added. The scale heights are shipped for "
                           'giving the glow its thickness.'),
-             accuracy=('A model, not an observation, and labelled so: it shows where the fitted mass models put '
+             accuracy=('A model, not an observation, and labeled so: it shows where the fitted mass models put '
                        'the stars, with no spiral arms. The bar model is fitted to the central ~5 kpc; the '
                        f'measured major axis of the drawn bar is {mo["bar_pa"]:.2f} deg.')),
         dict(id='galaxy-checks', title='Used only to check the galaxy layer (build time, not shipped)',
@@ -1181,7 +1181,7 @@ def write_credits(counts, left_out, streams, dropped, drimmel_variants):
                      'the young-star maps), galactic_cepheids data/Data_Table_1.dat @e72dc56a (geometry of the '
                      'Drimmel arms). All sha256-pinned.'),
              url=S.GALPY_URL,
-             licence='Not shipped. galpy BSD-3; galkin no licence; UCC GPL-3.0; Skowron data explicitly not licensed',
+             licence='Not shipped. galpy BSD-3; galkin no license; UCC GPL-3.0; Skowron data explicitly not licensed',
              licence_quote=(q(lic_galpy, 'galpy LICENSE') + '; ' + q(lic_galkin, 'galkin PKG-INFO') + '; ' +
                             q(lic_ucc, 'UCC LICENSE') + '; ' + q(lic_sk, 'galactic_cepheids data/LICENSE')),
              retrieved=common.RETRIEVED,
@@ -1237,7 +1237,7 @@ def main():
             'satellites': 'LVDB v1.1.1 dwarf_mw with confirmed_real = 1 (host "lmc" = a satellite of the LMC)',
             'left_out': left_out,
             'fields': {'xyz': 'Galactocentric kpc (0.1 pc steps)', 'dist_kpc': 'heliocentric distance, kpc',
-                       'dist_err_kpc': '[minus, plus] error, kpc, from the catalogued distance-modulus errors', 'rhalf_pc': 'major-axis half-light radius, pc',
+                       'dist_err_kpc': '[minus, plus] error, kpc, from the cataloged distance-modulus errors', 'rhalf_pc': 'major-axis half-light radius, pc',
                        'mv': 'absolute V magnitude', 'ellipticity': '1 - b/a', 'pa_deg': 'position angle on the '
                        'sky, degrees east of north', 'galaxy_confirmed': 'LVDB confirmed_galaxy (dark-matter '
                        'dominated galaxy confirmed); false = could still be a star cluster',

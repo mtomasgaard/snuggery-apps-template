@@ -43,8 +43,8 @@
   "ra_deg": "RA = 360 * (x + 0.5) / width"
  },
  "projection": "equirectangular",
- "quantity": "Gaia DR3 sources per square degree (catalogue counts, not surface brightness)",
- "resampling": "bilinear interpolation of the NSIDE 256 map (per deg^2) at each pixel centre, astropy-healpix 1.1.2",
+ "quantity": "Gaia DR3 sources per square degree (catalog counts, not surface brightness)",
+ "resampling": "bilinear interpolation of the NSIDE 256 map (per deg^2) at each pixel center, astropy-healpix 1.1.2",
  "source": {
   "catalogue": "Gaia DR3 gaia_source",
   "coordsys": "CEL (ICRS)",

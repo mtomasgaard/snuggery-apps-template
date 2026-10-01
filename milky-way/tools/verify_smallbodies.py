@@ -151,7 +151,7 @@ def main():
     ep_idx = [i for v in m['epochs'].values() for i in v]
     check(len(ep_idx) == len(set(ep_idx)) and all(0 <= i < n for i in ep_idx), f'{len(ep_idx):,} per-row epochs, valid indices')
     check(all(0 <= i < n for i in m['labelled']) and all(0 <= int(i) < n for i in m['info']) and
-          all(0 <= int(i) < n for i in m['diameter_km']), f"{len(m['labelled'])} labelled rows, "
+          all(0 <= int(i) < n for i in m['diameter_km']), f"{len(m['labelled'])} labeled rows, "
           f"{len(m['info'])} info rows, {len(m['diameter_km']):,} diameters: valid indices")
 
     # ---- physics of the stored numbers
@@ -179,7 +179,7 @@ def main():
                  '1I/ʻOumuamua', '2I/Borisov', '3I/ATLAS', '1 Ceres', '4 Vesta', '99942 Apophis',
                  '101955 Bennu', '486958 Arrokoth', '136199 Eris']:
         if want not in names or names.index(want) not in m['labelled']:
-            check(False, f'{want} present and labelled')
+            check(False, f'{want} present and labeled')
     check(all(('2061-07-28' not in json.dumps(v)) for v in m.values()), 'no from-memory Halley date anywhere')
 
     # ---- frame and constants

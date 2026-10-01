@@ -122,12 +122,12 @@ def write():
         'url': _raw('sun_webp'), 'licence': 'CC BY-SA 4.0',
         'licence_quote': f'Stellarium CREDITS.md section 4.3o: "{q_sun}"', 'retrieved': R,
         'adaptations': 'Averaged 8x8 in linear light to 1024x512; the intensity is kept and Stellarium\'s uniform '
-                       f'warm tint is replaced by the TSIS-1 solar colour (sRGB {C["sun"]["srgb"]}); JPEG quality 85. '
+                       f'warm tint is replaced by the TSIS-1 solar color (sRGB {C["sun"]["srgb"]}); JPEG quality 85. '
                        'The adapted map data/tex/sun.jpg is shared under CC BY-SA 4.0.',
         'accuracy': 'A generic texture, per its commit message: sunspots from HMI images of 2025-08-07 to 08-31, the '
-                    'rest spotless data of 2019-12-15, each image used only in the central 60 % of the disc; limb '
+                    'rest spotless data of 2019-12-15, each image used only in the central 60 % of the disk; limb '
                     'darkening removed; no Carrington registration, so longitudes carry no meaning. The source is '
-                    'monochrome HMI 617 nm continuum data; the colour is the measured TSIS-1 colour, not HMI\'s.',
+                    'monochrome HMI 617 nm continuum data; the color is the measured TSIS-1 color, not HMI\'s.',
     })
     f, q = fg('mercury_fgdc')
     blocks.append({
@@ -149,7 +149,7 @@ def write():
         'licence': 'Public domain (USGS FGDC access constraint)', 'licence_quote': q, 'retrieved': R,
         'adaptations': geo_adapt('venus', 'S-band synthetic-aperture radar backscatter.'),
         'accuracy': 'Radar brightness of the surface under the clouds, not what an eye sees: the visible Venus is a '
-                    'nearly featureless cloud deck, and no Venus colour or cloud map could be sourced.',
+                    'nearly featureless cloud deck, and no Venus color or cloud map could be sourced.',
     })
     blocks.append({
         'id': 'nasa-bmng-200405', 'title': 'Earth: NASA Blue Marble Next Generation, May 2004 (topography and bathymetry)',
@@ -157,20 +157,20 @@ def write():
         'source': 'NASAWorldWind/WebWorldWind images/BMNG_world.topo.bathy.200405.3.2048x1024.jpg at commit 5ffe2dfc '
                   '(sha256 7405c39a...), the file WebWorldWind\'s BMNGOneImageLayer drapes on the full sphere',
         'url': _raw('earth_jpg'),
-        'licence': 'Public domain (NASA). WebWorldWind carries no licence text for the image itself; KDE Marble labels '
+        'licence': 'Public domain (NASA). WebWorldWind carries no license text for the image itself; KDE Marble labels '
                    'its copy of the same Blue Marble product "NASA / Public Domain", and the Earth Observatory terms '
                    'quoted in Stellarium\'s CREDITS.md make its material freely reusable.',
         'licence_quote': f'KDE Marble data/maps/earth/bluemarble/bluemarble.dgml @600d542e: {q_bm}; Stellarium '
                          f'CREDITS.md (Blue Marble, Reto Stockli): {q_eo}',
         'retrieved': R, 'adaptations': 'None: shipped byte for byte (2048x1024, left edge -180).',
-        'accuracy': 'Cloud-free monthly composite; its colours agree with an independent BMNG copy (PyPI basemap-data) '
+        'accuracy': 'Cloud-free monthly composite; its colors agree with an independent BMNG copy (PyPI basemap-data) '
                     'to a mean 7 DN (research verifier). No clouds are shown: no clean real cloud map was found.',
     })
     blocks.append({
         'id': 'nasa-noaa-citylights-dmsp', 'title': 'Earth at night: Earth\'s City Lights (DMSP-OLS), KDE Marble copy',
         'owner': 'Marc Imhoff (NASA GSFC), Christopher Elvidge (NOAA NGDC), Craig Mayhew and Robert Simmon (NASA GSFC)',
         'source': 'KDE/marble data/maps/earth/citylights/citylights.jpg at commit 600d542e (2700x1350, sha256 c79ca569...)',
-        'url': _raw('night_jpg'), 'licence': 'Public domain (as labelled in KDE Marble\'s citylights.dgml)',
+        'url': _raw('night_jpg'), 'licence': 'Public domain (as labeled in KDE Marble\'s citylights.dgml)',
         'licence_quote': f'citylights.dgml @600d542e: {q_cl}', 'retrieved': R,
         'adaptations': 'Box-filtered 2700x1350 -> 2048x1024 (PIL BOX), JPEG quality 85. The dgml gives no bounds; the '
                        'left edge -180 is proved by registering the map\'s own land/ocean base against the Blue '
@@ -180,7 +180,7 @@ def write():
                     'layer).',
     })
     blocks.append({
-        'id': 'stellarium-moon-lroc-albedo', 'title': 'Moon: LROC WAC Hapke-normalised albedo map (Stellarium moon_4k.jpg)',
+        'id': 'stellarium-moon-lroc-albedo', 'title': 'Moon: LROC WAC Hapke-normalized albedo map (Stellarium moon_4k.jpg)',
         'owner': 'NASA LRO / LROC team, Arizona State University (data); map by Ruslan Kabatsayev for Stellarium '
                  '(commit ef231c69, 2026-03-13)',
         'source': 'Stellarium textures/moon_4k.jpg at commit 9910a2f0 (4096x2048, sha256 ad4435c7...)',
@@ -189,24 +189,24 @@ def write():
         'adaptations': 'Averaged 2x2 to 2048x1024, JPEG quality 85. The adapted map data/tex/moon.jpg is shared under '
                        'CC BY-SA 4.0.',
         'accuracy': 'Albedo with shading removed (suits the app\'s own lighting). Disclosed processing that is not '
-                    'measurement: brightness x4, polar colour fitted from the equatorial sectors, and colour balanced '
-                    'to grey instead of the natural beige. Longitude convention proved by Tycho, Mare Humorum and the '
+                    'measurement: brightness x4, polar color fitted from the equatorial sectors, and color balanced '
+                    'to gray instead of the natural beige. Longitude convention proved by Tycho, Mare Humorum and the '
                     'maria/highlands asymmetry.',
     })
     f, q = fg('mars_fgdc')
     blocks.append({
-        'id': 'usgs-mars-viking-color-925m', 'title': 'Mars: Viking Orbiter global colour mosaic 925 m',
+        'id': 'usgs-mars-viking-color-925m', 'title': 'Mars: Viking Orbiter global color mosaic 925 m',
         'owner': 'NASA Viking Orbiter; Planetary Data System (FGDC originator); USGS Astrogeology',
         'source': usgs_src('mars_tif', 'mars_lbl', 'mars_md5'), 'url': _usgs_url('mars_tif'),
         'licence': 'Public domain (USGS FGDC access constraint)', 'licence_quote': q, 'retrieved': R,
-        'adaptations': geo_adapt('mars', 'About 1000 red- and violet-filter images, Minnaert-normalised and '
+        'adaptations': geo_adapt('mars', 'About 1000 red- and violet-filter images, Minnaert-normalized and '
                                          'haze-corrected (FGDC abstract).'),
-        'accuracy': 'Two filters only: the green channel was synthesised from the red and violet data (FGDC abstract), '
-                    'so dark regions look bluish-grey; close to, not exactly, true colour. Olympus Mons, Syrtis Major '
-                    'and Hellas checked at their catalogued positions.',
+        'accuracy': 'Two filters only: the green channel was synthesized from the red and violet data (FGDC abstract), '
+                    'so dark regions look bluish-gray; close to, not exactly, true color. Olympus Mons, Syrtis Major '
+                    'and Hellas checked at their cataloged positions.',
     })
     blocks.append({
-        'id': 'cassini-pia07782', 'title': 'Jupiter: Cassini ISS global colour map PIA07782 (December 2000)',
+        'id': 'cassini-pia07782', 'title': 'Jupiter: Cassini ISS global color map PIA07782 (December 2000)',
         'owner': 'NASA/JPL/Space Science Institute (Cassini Imaging Science Subsystem); USGS Astrogeology copy',
         'source': 'USGS asc-pds-services wms_basemaps/Jupiter/Jupiter/originals/jupiter_rgb_cyl_www.jpg (4096x2048, '
                   'sha256 0c6fa8e9...), with the annotated original jupiter_from_cassini.tif for the longitude labels',
@@ -223,7 +223,7 @@ def write():
                        '(correlation 0.999 at zero shift, 0.85 mirrored). The web copy\'s world file puts the left '
                        'edge at longitude 0 instead, 180 deg from the annotation; the annotation is followed.',
         'accuracy': 'A snapshot of 11-12 December 2000 from 36 images in two filters (451 and 750 nm) combined to '
-                    'near-natural colour; the poles were poorly observed, and the source map is one flat colour '
+                    'near-natural color; the poles were poorly observed, and the source map is one flat color '
                     f'{B["jupiter"]["fill_value"]} over the south polar region ({pct("jupiter")} of the pixels): '
                     'not imaged, not terrain. Features drift in longitude, so the Great '
                     'Red Spot (about 21 S in this map) will not match any other date; the file does not state the '
@@ -231,28 +231,28 @@ def write():
     })
     for k, title, extra in (
             ('pluto', 'Pluto: New Horizons LORRI/MVIC global mosaic 300 m (July 2017)',
-             'Its label puts the map\'s centre at 180 E (0..360); Sputnik Planitia checked at 175 E, 20 N. '),):
+             'Its label puts the map\'s center at 180 E (0..360); Sputnik Planitia checked at 175 E, 20 N. '),):
         f, q = fg(f'{k}_fgdc')
         blocks.append({
             'id': f'usgs-{k}-new-horizons-2017', 'title': title,
             'owner': f'{f["origin"][0].replace(",", ", ")} (FGDC originators); distributed by USGS Astrogeology',
             'source': usgs_src(f'{k}_tif', f'{k}_lbl', f'{k}_md5'), 'url': _usgs_url(f'{k}_tif'),
-            'licence': 'No licence stated: FGDC access constraint "None", use constraint "Please cite authors"; a NASA '
+            'licence': 'No license stated: FGDC access constraint "None", use constraint "Please cite authors"; a NASA '
                        'mission product distributed by USGS. Credited as asked.',
             'licence_quote': q, 'retrieved': R,
             'adaptations': geo_adapt(k, 'Panchromatic LORRI and MVIC images of the 2015 flyby.'),
-            'accuracy': extra + 'Resolution is very uneven (sharp on the encounter hemisphere). The flat grey area is '
+            'accuracy': extra + 'Resolution is very uneven (sharp on the encounter hemisphere). The flat gray area is '
                         'where New Horizons saw nothing (southern polar night); it is not terrain. Longitudes are in '
                         'the frame the mosaic was made in (nh_targets_v001 / pck00010 per its ISIS label).',
         })
     for k, title, how, extra in (
             ('io', 'Io: Galileo SSI and Voyager 1 global mosaic 1 km', 'Galileo SSI and Voyager 1 images.',
-             'Labelled PositiveWest; drawn east-positive (Loki Patera checked at 308.8 W).'),
+             'Labeled PositiveWest; drawn east-positive (Loki Patera checked at 308.8 W).'),
             ('ganymede', 'Ganymede: Voyager and Galileo SSI global mosaic 1 km', 'Voyager 1/2 and Galileo SSI images.',
-             'Labelled PositiveWest; drawn east-positive (Galileo Regio, Tros and Osiris checked).'),
+             'Labeled PositiveWest; drawn east-positive (Galileo Regio, Tros and Osiris checked).'),
             ('triton', 'Triton: Voyager 2 global mosaic 600 m, orange filter', 'Only the orange-filter band of the '
-             'Voyager 2 colour composite (orange, violet and UV shown as RGB, i.e. false colour) is used.',
-             'The flat grey north was in darkness during the 1989 flyby: not imaged, not terrain. The producer notes '
+             'Voyager 2 color composite (orange, violet and UV shown as RGB, i.e. false color) is used.',
+             'The flat gray north was in darkness during the 1989 flyby: not imaged, not terrain. The producer notes '
              f'(FGDC procedure): "{q_tri}"')):
         if k not in B:
             continue
@@ -266,33 +266,33 @@ def write():
         })
     kc = ', '.join(f'{k.capitalize()} {C[k]["srgb"]}' for k in ('jupiter', 'saturn', 'uranus', 'neptune', 'titan'))
     blocks.append({
-        'id': 'karkoschka-1998-spectra', 'title': 'Disk colours: Karkoschka (1998) albedo spectra of Jupiter, Saturn, '
+        'id': 'karkoschka-1998-spectra', 'title': 'Disk colors: Karkoschka (1998) albedo spectra of Jupiter, Saturn, '
                                                   'Uranus, Neptune and Titan, 300-1050 nm',
         'owner': 'Erich Karkoschka; ESO spectrophotometry of 1995-07-06 to 07-10; NASA Planetary Data System',
         'source': 'PDS3 product 1995LOW.TAB and its label, carried verbatim in OrbitalCommons/starfield '
                   'crates/surfaces/data/planet-spectra at commit 5cbc6620 (sha256 d8071e07... / 6fa49ffa...)',
         'url': _raw('karkoschka_tab'),
-        'licence': 'PDS archive data (the label states no licence); the carrying repository is MIT-licensed',
+        'licence': 'PDS archive data (the label states no license); the carrying repository is MIT-licensed',
         'licence_quote': '1995LOW.LBL: ' + '; '.join(q_kar_note) + f'; starfield LICENSE: "{q_mit}"', 'retrieved': R,
-        'adaptations': 'Each spectrum x TSIS-1 sunlight integrated against the CIE 1931 2-degree colour-matching '
+        'adaptations': 'Each spectrum x TSIS-1 sunlight integrated against the CIE 1931 2-degree color-matching '
                        'functions (as tabulated in colour-science 0.4.6, BSD-3-Clause), 1 nm steps 360-830 nm, Y = 1 '
                        'for a white reflector, Bradford-adapted from the Sun\'s white to D65, IEC 61966-2-1 sRGB: '
                        f'{kc}.',
-        'accuracy': 'Disk-averaged colours of July 1995 (Uranus\'s colour changes with its seasons); Jupiter, Saturn and '
+        'accuracy': 'Disk-averaged colors of July 1995 (Uranus\'s color changes with its seasons); Jupiter, Saturn and '
                     'Titan are full-disk albedo at 5.7-6.8 deg phase, Uranus and Neptune geometric albedo. An '
                     'equal-energy illuminant instead of TSIS-1 changes them by at most 3 of 255.',
     })
     blocks.append({
-        'id': 'tsis-1-hsrs', 'title': 'Sun\'s colour: TSIS-1 Hybrid Solar Reference Spectrum v2',
+        'id': 'tsis-1-hsrs', 'title': 'Sun\'s color: TSIS-1 Hybrid Solar Reference Spectrum v2',
         'owner': 'NASA TSIS-1 / LASP (Coddington et al. 2023); 1 nm resampling by OrbitalCommons/starfield',
         'source': 'crates/surfaces/data/solar-spectrum/tsis1_hsrs_v2_1nm.csv in OrbitalCommons/starfield at commit '
                   '5cbc6620 (sha256 c27ca614...); LASP LISIRD itself is not reachable from the build network',
         'url': _raw('tsis_csv'),
-        'licence': 'No licence in the file; the carrying repository is MIT-licensed',
+        'licence': 'No license in the file; the carrying repository is MIT-licensed',
         'licence_quote': 'File header: "' + '" / "'.join(q_tsis) + f'"; starfield LICENSE: "{q_mit}"', 'retrieved': R,
-        'adaptations': f'Colour of sunlight above the atmosphere: CIE xy {C["sun"]["xy"]}, about {C["sun"]["cct_k_mccamy"]} K '
-                       f'(McCamy), sRGB {C["sun"]["srgb"]} with the brightest channel at 255; used for the Sun\'s disc '
-                       'and to tint the Sun map. Also the illuminant for the planets\' disk colours.',
+        'adaptations': f'Color of sunlight above the atmosphere: CIE xy {C["sun"]["xy"]}, about {C["sun"]["cct_k_mccamy"]} K '
+                       f'(McCamy), sRGB {C["sun"]["srgb"]} with the brightest channel at 255; used for the Sun\'s disk '
+                       'and to tint the Sun map. Also the illuminant for the planets\' disk colors.',
         'accuracy': 'Solar-minimum spectrum, 0.3 % archive uncertainty over 460-2365 nm (file header).',
     })
 
@@ -301,14 +301,14 @@ def write():
     blocks.append({
         'id': 'gaia-dr3-hats-counts', 'title': 'Sky backdrop: Gaia DR3 source counts (STScI/MAST HATS point map)',
         'owner': 'European Space Agency (ESA), Gaia Data Processing and Analysis Consortium (DPAC): Gaia Data Release 3. '
-                 'HATS catalogue by the LSST Interdisciplinary Network for Collaboration and Computing, hosted by '
+                 'HATS catalog by the LSST Interdisciplinary Network for Collaboration and Computing, hosted by '
                  'STScI/MAST on AWS Open Data.',
         'source': f'point_map.fits (S3 bucket stpubdata, gaia/gaia_dr3/public/hats/gaia, versionId '
                   f'{T.GAIA_FILES["point_map"][1]}, sha256 {T.GAIA_FILES["point_map"][2][:16]}...), and the source_id '
                   'and _healpix_29 columns of partitions Norder=4/Npix=115 and Norder=3/Npix=29 (read by range '
                   'requests at pinned versionIds, content pinned by sha256)',
         'url': f'{T.GAIA}point_map.fits?versionId={T.GAIA_FILES["point_map"][1]}',
-        'licence': 'CC BY-NC 3.0 IGO (non-commercial). ESA\'s Gaia licence page could not be read from the build '
+        'licence': 'CC BY-NC 3.0 IGO (non-commercial). ESA\'s Gaia license page could not be read from the build '
                    'network; a web-search summary of cosmos.esa.int/web/gaia-users/license gives CC BY-NC 3.0 IGO, '
                    'and CelestiaContent\'s Gaia-derived data/stars.dat.license states the same. The AWS Open Data '
                    'Registry entry only says "Attribution required".',

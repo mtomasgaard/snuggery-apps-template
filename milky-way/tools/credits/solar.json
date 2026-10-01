@@ -8,7 +8,7 @@
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
   "licence_quote": "From the file's own comment block: \"DE430 is now considered the official export lunar/planetary ephemeris, suitable for all users/uses.\"",
   "retrieved": "2026-09-23",
-  "adaptations": "Refitted to a float32 Chebyshev table for 1900-01-01 to 2100-01-01 TDB: heliocentric Mercury, Venus, Earth-Moon barycentre, Mars and the Jupiter-Pluto system barycentres, and the geocentric Moon (interval/degree per body in data/ephem.json). The Earth/Moon mass ratio (EMRAT 81.30056907) was measured from the file's own Earth and Moon segments. Pluto is the Pluto-system barycentre (about 2,135 km from the centre of Pluto); Charon is not shown — no long-term Pluto-satellite ephemeris was reachable.",
+  "adaptations": "Refitted to a float32 Chebyshev table for 1900-01-01 to 2100-01-01 TDB: heliocentric Mercury, Venus, Earth-Moon barycenter, Mars and the Jupiter-Pluto system barycenters, and the geocentric Moon (interval/degree per body in data/ephem.json). The Earth/Moon mass ratio (EMRAT 81.30056907) was measured from the file's own Earth and Moon segments. Pluto is the Pluto-system barycenter (about 2,135 km from the center of Pluto); Charon is not shown — no long-term Pluto-satellite ephemeris was reachable.",
   "accuracy": "Max error against DE430 at 20000 random epochs: mercury 20 km, venus 8.5 km, earth 11 km, moon 2.6 km, mars 26 km, jupiter 67 km, saturn 101 km, uranus 169 km, neptune 285 km, pluto 291 km."
  },
  {
@@ -18,10 +18,10 @@
   "source": "mar097.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 18af4611f536b1bccc07be6bce304b47cf8a829536023972e90097b5cefd902c",
   "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/mar097.bsp",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
+  "licence_quote": "No license text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
   "retrieved": "2026-09-23",
-  "adaptations": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
-  "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Phobos max 3 km (0.033 % of a), 400 windows of 91.3125 d; Deimos max 14 km (0.059 % of a), 400 windows of 91.3125 d."
+  "adaptations": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
+  "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Phobos max 3 km (0.033 % of a), 400 windows of 91.3125 d; Deimos max 14 km (0.059 % of a), 400 windows of 91.3125 d."
  },
  {
   "id": "jpl-jup310",
@@ -30,10 +30,10 @@
   "source": "jup310.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 ed64f05431a7da5486f9d00ecff3490213f871c247a293138a798d560fcfdebb",
   "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/jup310.bsp",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF/Juno\" (NAIF terms as above).",
+  "licence_quote": "No license text in the file; its release form reads \"Release to: Horizons/NAIF/Juno\" (NAIF terms as above).",
   "retrieved": "2026-09-23",
-  "adaptations": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
-  "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Io max 61 km (0.015 % of a), 400 windows of 91.3125 d; Europa max 356 km (0.053 % of a), 600 windows of 60.875 d; Ganymede max 875 km (0.082 % of a), 600 windows of 60.875 d; Callisto max 306 km (0.016 % of a), 250 windows of 146.1 d."
+  "adaptations": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
+  "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Io max 61 km (0.015 % of a), 400 windows of 91.3125 d; Europa max 356 km (0.053 % of a), 600 windows of 60.875 d; Ganymede max 875 km (0.082 % of a), 600 windows of 60.875 d; Callisto max 306 km (0.016 % of a), 250 windows of 146.1 d."
  },
  {
   "id": "jpl-sat425",
@@ -42,10 +42,10 @@
   "source": "sat425.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 2120505b93fe2c70f52a399f770a4e75dbb35fb44922ede48a18de71abb2d574",
   "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/sat425.bsp",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
+  "licence_quote": "No license text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
   "retrieved": "2026-09-23",
-  "adaptations": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such. Also the Saturn C, B and A ring radii from the header's \"Additional Constants\" (C_ring_RI ... A_ring_RO), copied as they are.",
-  "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Mimas max 81 km (0.044 % of a), 1000 windows of 36.525 d; Enceladus max 38 km (0.016 % of a), 400 windows of 91.3125 d; Tethys max 79 km (0.027 % of a), 400 windows of 91.3125 d; Dione max 95 km (0.025 % of a), 250 windows of 146.1 d; Rhea max 151 km (0.029 % of a), 250 windows of 146.1 d; Titan max 40 km (0.003 % of a), 250 windows of 146.1 d; Hyperion max 1267 km (0.086 % of a), 3000 windows of 12.175 d; Iapetus max 840 km (0.024 % of a), 250 windows of 146.1 d."
+  "adaptations": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such. Also the Saturn C, B and A ring radii from the header's \"Additional Constants\" (C_ring_RI ... A_ring_RO), copied as they are.",
+  "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Mimas max 81 km (0.044 % of a), 1000 windows of 36.525 d; Enceladus max 38 km (0.016 % of a), 400 windows of 91.3125 d; Tethys max 79 km (0.027 % of a), 400 windows of 91.3125 d; Dione max 95 km (0.025 % of a), 250 windows of 146.1 d; Rhea max 151 km (0.029 % of a), 250 windows of 146.1 d; Titan max 40 km (0.003 % of a), 250 windows of 146.1 d; Hyperion max 1267 km (0.086 % of a), 3000 windows of 12.175 d; Iapetus max 840 km (0.024 % of a), 250 windows of 146.1 d."
  },
  {
   "id": "jpl-ura111",
@@ -54,10 +54,10 @@
   "source": "ura111.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 384647ab7fdc085eb573926a8db6326748518d4ad600d5ca6bdaa06f9c0d7bdc",
   "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/ura111.bsp",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
+  "licence_quote": "No license text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
   "retrieved": "2026-09-23",
-  "adaptations": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
-  "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Ariel max 85 km (0.044 % of a), 250 windows of 146.1 d; Umbriel max 362 km (0.136 % of a), 1000 windows of 36.525 d; Titania max 871 km (0.200 % of a), 1000 windows of 36.525 d; Oberon max 937 km (0.161 % of a), 1000 windows of 36.525 d; Miranda max 58 km (0.044 % of a), 250 windows of 146.1 d."
+  "adaptations": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
+  "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Ariel max 85 km (0.044 % of a), 250 windows of 146.1 d; Umbriel max 362 km (0.136 % of a), 1000 windows of 36.525 d; Titania max 871 km (0.200 % of a), 1000 windows of 36.525 d; Oberon max 937 km (0.161 % of a), 1000 windows of 36.525 d; Miranda max 58 km (0.044 % of a), 250 windows of 146.1 d."
  },
  {
   "id": "jpl-nep081",
@@ -66,10 +66,10 @@
   "source": "nep081.bsp, USGS Astrogeology ISIS data area (public S3 mirror of NAIF generic_kernels, named in DOI-USGS/ISIS3 isis/config/rclone.conf at commit 51b99bd4); sha256 a304baf7e6d853d41a44bea80ea0fb9a0a7e11239d057f618f683602fa8e49cb",
   "url": "https://asc-isisdata.s3.amazonaws.com/usgs_data/base/kernels/spk/nep081.bsp",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
+  "licence_quote": "No license text in the file; its release form reads \"Release to: Horizons/NAIF\" (NAIF terms as above).",
   "retrieved": "2026-09-23",
-  "adaptations": "Positions relative to the planet's centre, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet centre's motion about the system barycentre from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labelled as such.",
-  "accuracy": "Max error of the position relative to the system barycentre against the SPK at 20000 random epochs per moon: Triton max 3 km (0.001 % of a), 250 windows of 146.1 d; Nereid max 369 km (0.007 % of a), 250 windows of 146.1 d."
+  "adaptations": "Positions relative to the planet's center, fitted per window with a precessing Keplerian ellipse (9 float32 per window, scipy least_squares), 1950-01-01 to 2050-01-01 TDB; the app adds back the planet center's motion about the system barycenter from the fitted moons and gm_de440 mass ratios. A fitted model of the JPL ephemeris, labeled as such.",
+  "accuracy": "Max error of the position relative to the system barycenter against the SPK at 20000 random epochs per moon: Triton max 3 km (0.001 % of a), 250 windows of 146.1 d; Nereid max 369 km (0.007 % of a), 250 windows of 146.1 d."
  },
  {
   "id": "naif-pck00011",
@@ -90,7 +90,7 @@
   "source": "gm_de440.tpc from the nyx-space/anise repository at commit a3aff9db1f6c92cd83d9fef70e8912993a4bff57; sha256 924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
   "url": "https://raw.githubusercontent.com/nyx-space/anise/a3aff9db1f6c92cd83d9fef70e8912993a4bff57/data/gm_de440.tpc",
   "licence": "NAIF/JPL SPICE data, freely available. NAIF's rules page states that SPICE data \"are all freely available ... with no licensing or export restrictions\" — read only through a web-search summary, because naif.jpl.nasa.gov is not reachable from the build machine. JPL is operated by Caltech; this is not a US-Government public-domain claim.",
-  "licence_quote": "No licence text in the file. Its header: \"Sources: 1. DE-440 NAVIO file \"ASTRO-VALUES\" ... 2. Natural satellite file release forms\".",
+  "licence_quote": "No license text in the file. Its header: \"Sources: 1. DE-440 NAVIO file \"ASTRO-VALUES\" ... 2. Natural satellite file release forms\".",
   "retrieved": "2026-09-23",
   "adaptations": "GM values copied into physical.json; moon/system mass ratios in moons.json.",
   "accuracy": "Copied exactly."
@@ -128,7 +128,7 @@
   "licence": "Apache License 2.0 (the repository's LICENSE.md; the numbers themselves are published measurements)",
   "licence_quote": "LICENSE.md: \"Apache License ... Version 2.0, January 2004\"; body.py: \"# Local function to adapt the tabulated elements from French et al. 1991.\"",
   "retrieved": "2026-09-23",
-  "adaptations": "Semi-major axis, eccentricity and radial width of the ten rings; drawn as circles a -/+ width/2 in Uranus's equatorial plane. Pericentre and node longitudes (epoch 1977-03-10T20:00 UTC, B1950-based ring frame in rms-oops) are not shipped.",
+  "adaptations": "Semi-major axis, eccentricity and radial width of the ten rings; drawn as circles a -/+ width/2 in Uranus's equatorial plane. Pericenter and node longitudes (epoch 1977-03-10T20:00 UTC, B1950-based ring frame in rms-oops) are not shipped.",
   "accuracy": "Copied exactly; the circular drawing ignores e (up to 406 km for the epsilon ring)."
  }
 ]
