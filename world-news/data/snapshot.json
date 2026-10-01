@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T01:01:19Z",
+ "generatedAt": "2026-10-01T02:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+     "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/a-sapphic-sitcom-answer-to-heated-rivalry-british-spies-and-premium-aussie-drama-what-to-stream-in-october-292696",
+     "published": "2026-10-01T01:01:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dee Jefferson, Deputy Arts + Culture Editor, The Conversation"
+    },
+    {
+     "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/gps-can-now-prescribe-adhd-medication-but-big-barriers-to-treatment-remain-292985",
      "published": "2026-09-30T22:56:54Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Alexander Sergeant, Lecturer in Digital Media Production, University of Westminster"
-    },
-    {
-     "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/antarcticas-ice-loss-is-locked-in-and-extra-snowfall-wont-save-it-thats-bad-news-for-low-lying-coastal-areas-elsewhere-293066",
-     "published": "2026-09-30T12:47:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yucheng Lin, Assistant Professor of Energy and Environment, City University of Hong Kong"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
+   "published": "2026-10-01 01:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
    "published": "2026-09-30 22:56 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
    "published": "2026-09-30 15:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Antarctica’s ice loss is locked in, and extra snowfall won’t save it – that’s bad news for low-lying coastal areas elsewhere",
-   "published": "2026-09-30 12:47 UTC"
   },
   {
    "region": "Oceania",
