@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T06:01:24Z",
+ "generatedAt": "2026-10-01T07:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
+     "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/flydubai-attack-feeds-into-netanyahus-protector-narrative-with-crucial-elections-approaching-293336",
+     "published": "2026-10-01T06:30:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
+    },
+    {
+     "title": "With a tragedy averted, the Flydubai incident has put cockpit security under new scrutiny",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/with-a-tragedy-averted-the-flydubai-incident-has-put-cockpit-security-under-new-scrutiny-293331",
+     "published": "2026-10-01T05:59:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Steven Leib, Associate Professor in Aviation, CQUniversity Australia"
+    },
+    {
+     "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/with-a-former-wallabys-cruel-diagnosis-is-there-a-link-between-contact-sports-and-mnd-293330",
      "published": "2026-10-01T05:06:06Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Francesco Bailo, Senior Lecturer in Data Analytics in the Social Sciences, Deputy Director of the Centre for AI, Trust and Governance, University of Sydney"
     },
     {
-     "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/nsws-largest-coal-mine-project-is-set-to-expand-heres-what-authorities-got-wrong-about-the-trade-offs-293096",
-     "published": "2026-10-01T02:45:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liz Hicks, Lecturer in Law, The University of Melbourne"
-    },
-    {
      "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Steven Lillis, Associate Professor, Division of Health, University of Waikato"
-    },
-    {
-     "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/digger-tries-to-mock-powerful-older-men-but-cant-escape-64-year-old-millionaire-tom-cruise-293276",
-     "published": "2026-09-30T15:03:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alexander Sergeant, Lecturer in Digital Media Production, University of Westminster"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
+   "published": "2026-10-01 06:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "With a tragedy averted, the Flydubai incident has put cockpit security under new scrutiny",
+   "published": "2026-10-01 05:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
    "published": "2026-10-01 05:06 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
-   "published": "2026-10-01 02:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
    "published": "2026-09-30 22:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
-   "published": "2026-09-30 15:03 UTC"
   },
   {
    "region": "Oceania",
