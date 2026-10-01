@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T10:01:33Z",
+ "generatedAt": "2026-10-01T11:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Palestinians yearn for ‘a return to normal life,’ says top Middle East peace envoy",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168497",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "The UN is continuing efforts to support Palestinians in Gaza amid major challenges to humanitarian access, reconstruction and the restoration of essential services, according to Ramiz Alakbarov, Acting UN Special…",
+     "stale": false
+    },
+    {
      "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -306,15 +315,6 @@
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
      "stale": false,
      "author": "Elmira Lyapina"
-    },
-    {
-     "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168464",
-     "published": "2026-09-28T12:00:00Z",
-     "summary": "The Security Council met Monday morning with prospects for peace in the Middle East under strain on two fronts. In the West Bank, settler violence and settlement expansion are raising fears for a two-State solution. In…",
-     "stale": false
     },
     {
      "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Palestinians yearn for ‘a return to normal life,’ says top Middle East peace envoy",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
    "published": "2026-09-30 12:00 UTC"
   },
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "When the right to protest remains, but demonstrating comes at a price",
    "published": "2026-09-29 00:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
-   "published": "2026-09-28 12:00 UTC"
   },
   {
    "region": "Middle East",
