@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T18:01:19Z",
+ "generatedAt": "2026-10-01T19:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Could a former IDF chief break Benjamin Netanyahu’s grip on power in Israel?",
+     "title": "Ahead of the global climate summit, Pacific leaders call on nations to keep 1.5°C within reach",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/could-a-former-idf-chief-break-benjamin-netanyahus-grip-on-power-in-israel-293097",
-     "published": "2026-10-01T15:04:43Z",
+     "link": "https://theconversation.com/ahead-of-the-global-climate-summit-pacific-leaders-call-on-nations-to-keep-1-5-c-within-reach-292766",
+     "published": "2026-10-01T18:02:03Z",
      "summary": "",
      "stale": false,
-     "author": "Isabella Podwinski, Social Media Producer, The Conversation"
+     "author": "Vaeno Wayne Vigulu, Dean of the Faculty of Agriculture, Forestry, and Fisheries, Solomon Islands National University"
     },
     {
-     "title": "Grattan on Friday: Albanese leaves grim domestic scene as he flies to the blue Pacific",
+     "title": "Are right-brained people really more creative? Here’s what the science really tells us",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-albanese-leaves-grim-domestic-scene-as-he-flies-to-the-blue-pacific-292581",
-     "published": "2026-10-01T07:46:48Z",
+     "link": "https://theconversation.com/are-right-brained-people-really-more-creative-heres-what-the-science-really-tells-us-291032",
+     "published": "2026-10-01T18:00:59Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Sarah Hellewell, Senior Research Fellow, The Perron Institute for Neurological and Translational Science, and Faculty of Health Sciences, Curtin University"
     },
     {
-     "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
+     "title": "Friday essay: The Catcher in the Rye is 75 – and every time I meet Holden Caulfield, I see him anew",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-how-far-will-the-opposition-go-on-industrial-relations-reform-probably-not-too-far-293213",
-     "published": "2026-10-01T07:33:54Z",
+     "link": "https://theconversation.com/friday-essay-the-catcher-in-the-rye-is-75-and-every-time-i-meet-holden-caulfield-i-see-him-anew-272342",
+     "published": "2026-10-01T18:00:41Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Sascha Morrell, Lecturer in Literary Studies, Monash University"
     },
     {
      "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Could a former IDF chief break Benjamin Netanyahu’s grip on power in Israel?",
-   "published": "2026-10-01 15:04 UTC"
+   "title": "Ahead of the global climate summit, Pacific leaders call on nations to keep 1.5°C within reach",
+   "published": "2026-10-01 18:02 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Grattan on Friday: Albanese leaves grim domestic scene as he flies to the blue Pacific",
-   "published": "2026-10-01 07:46 UTC"
+   "title": "Are right-brained people really more creative? Here’s what the science really tells us",
+   "published": "2026-10-01 18:00 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
-   "published": "2026-10-01 07:33 UTC"
+   "title": "Friday essay: The Catcher in the Rye is 75 – and every time I meet Holden Caulfield, I see him anew",
+   "published": "2026-10-01 18:00 UTC"
   },
   {
    "region": "Oceania",
