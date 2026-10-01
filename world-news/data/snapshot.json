@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T07:01:28Z",
+ "generatedAt": "2026-10-01T08:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/01/west-to-east-energy-east-to-west-computing-the-uyghur-costs-of-chinas-digital-order/",
+     "published": "2026-10-01T07:34:18Z",
+     "summary": "Beijing is carrying an older geography of extraction into the AI era, turning Uyghur land, energy and labour into computing power while remaining silent about coercion and surveillance.",
+     "stale": false,
+     "author": "Asiye Uyghur"
+    },
+    {
      "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -402,16 +412,6 @@
      "author": "Juliana Harsianti"
     },
     {
-     "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/09/25/young-japanese-find-new-outlets-for-peace-activism-amid-rising-tensions-in-the-pacific/",
-     "published": "2026-09-25T06:52:28Z",
-     "summary": "GV observed Japanese peace activism shifting from an ideological, often confrontational and hierarchical approach among the older generation to a more individualised, accessible, pop-style approach among young people.",
-     "stale": false,
-     "author": "Jo Carter"
-    },
-    {
      "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -428,6 +428,16 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-how-far-will-the-opposition-go-on-industrial-relations-reform-probably-not-too-far-293213",
+     "published": "2026-10-01T07:33:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
     {
      "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
      "source": "The Conversation",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Alan Pearce, Professor, Adjunct Research Fellow, School of Health Science, Swinburne University of Technology"
-    },
-    {
-     "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/meta-wants-people-to-use-ai-agents-to-do-daily-tasks-for-them-heres-why-thats-a-problem-292962",
-     "published": "2026-10-01T02:49:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Francesco Bailo, Senior Lecturer in Data Analytics in the Social Sciences, Deputy Director of the Centre for AI, Trust and Governance, University of Sydney"
     },
     {
      "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
+   "published": "2026-10-01 07:34 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
    "published": "2026-09-30 12:00 UTC"
@@ -901,14 +907,14 @@
   {
    "region": "Asia",
    "source": "Global Voices",
-   "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
-   "published": "2026-09-25 06:52 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
    "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
    "published": "2026-09-24 10:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
+   "published": "2026-10-01 07:33 UTC"
   },
   {
    "region": "Oceania",
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
    "published": "2026-10-01 05:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
-   "published": "2026-10-01 02:49 UTC"
   },
   {
    "region": "Oceania",
