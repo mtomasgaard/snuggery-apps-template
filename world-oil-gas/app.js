@@ -12,7 +12,7 @@
  * algorithm, LON FIRST, then lat, at the file's `factor` (1000 = three
  * decimals). Rings are closed (the last point repeats the first).
  *
- * ── data/world.json — Natural Earth 1:50m countries (static) ───────────────
+ * ── data/world.json — Natural Earth 1:10m countries (static) ───────────────
  * { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
  *   "relief": { "file": "relief.jpg", "width": 4096, "height": 2048,   // optional
  *               "bounds": [-180, -90, 180, 90], "projection": "plate carrée…", "source": "…" },

@@ -83,7 +83,7 @@ Month index `mi` counts months from January 1971: `mi = (year − 1971) × 12 + 
 A series is decoded as: `codes = Uint16Array(atob(b64) bytes)`, `value[mi] = codes[mi − start] × scale`
 for `start ≤ mi < start + codes.length`, else 0.
 
-## world-oil-gas/data/world.json — Natural Earth 1:50m countries, 1:10m bathymetry, relief raster (static)
+## world-oil-gas/data/world.json — Natural Earth 1:10m countries, 1:10m bathymetry, relief raster (static)
 
 ```
 { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
@@ -93,9 +93,14 @@ for `start ≤ mi < start + codes.length`, else 0.
               "projection": "plate carrée (equirectangular), WGS84", "source": "…" } }     // optional
 ```
 
-Countries are 1:50m simplified at 2.5 km² triangles (242 features; dependencies that share their
+Countries are Natural Earth v5.1.2 1:10m (`ne_10m_admin_0_countries`, pinned by commit and sha256),
+outer rings only, simplified with Visvalingam in Web Mercator pixels at the app's deepest zoom (120 px
+a degree of longitude) while a triangle is under 4 px² (243 features; dependencies that share their
 parent's ISO code, such as Ashmore and Cartier under AUS, carry their own ADM0 code instead so nothing
-is painted twice). Bathymetry layers are listed deepest first, but the bands NEST (the 200 m band
+is painted twice). The sixteen 1:10m features 1:50m lacked are merged into the country that painted
+their ground at 1:50m, kept (the Southern Patagonian Ice Field, `SPI`, with no series) or dropped
+(open-sea specks and Gibraltar), per `NE10_EXTRA` in `build_world.py`; a ring inside another ring of
+the same country is dropped, since the app fills even-odd and the ring around it already covers it. Bathymetry layers are listed deepest first, but the bands NEST (the 200 m band
 contains everything deeper), so paint them shallowest first and let the deeper tints land on top.
 `relief` describes `data/relief.jpg`, Natural Earth I (shaded relief, hypsometric tints, water) in
 plate carrée: x = (lon + 180) / 360 × width, y = (90 − lat) / 180 × height; the app reprojects it to

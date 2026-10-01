@@ -114,22 +114,25 @@ USGS VOLCANO HAZARDS PROGRAM, HANS PUBLIC API (US VOLCANO LIST AND MONITORED STA
     Attribution: Volcano status: USGS Volcano Hazards Program.
 
 ----------------------------------------------------------------------------------------------------
-NATURAL EARTH V5.1.2 (1:50M COASTLINE, LAND, LAKES, BOUNDARIES, POPULATED PLACES; 1:10M BATHYMETRY)
+NATURAL EARTH V5.1.2 (1:10M COASTLINE, LAND, LAKES, BOUNDARIES AND BATHYMETRY; 1:50M POPULATED PLACES)
 
     Owner: Natural Earth (naturalearthdata.com), free vector and raster map data
-    Source: ne_50m_coastline.geojson (1 640 858 B, sha256
-            271f1c4c1908312bac6b29d158ea1356544beafc129f260005300913aa5ea283)
-            ne_50m_land.geojson (1 636 166 B, sha256
-            e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b)
-            ne_50m_lakes.geojson (876 018 B, sha256
-            d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52)
-            ne_50m_admin_1_states_provinces_lines.geojson (882 513 B, sha256
-            72cca93c850d412628a5da4bc5ebfe21ba4d376eb34611bde6b623ee73f0fdcf)
-            ne_50m_admin_0_boundary_lines_land.geojson (760 189 B, sha256
-            2faac4f6b34386f3d21b6e018cf151f241f00e5c936d44dd17d7d9bfb147fa48)
+    Source: ne_10m_coastline.geojson (10 110 735 B, sha256
+            6f75ae0e0de157b14946e2255eb1f5486d9a13819032e26d4610852d296788f6)
             ne_10m_land.geojson (10 157 965 B, sha256
-            1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416), used only to check
-            the relief's registration, not shipped
+            1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416)
+            ne_10m_lakes.geojson (5 043 554 B, sha256
+            2d036f53dedec578001c5c30c2959ee7d4eebc1306900fa4367c49929ec8f2d9)
+            ne_10m_admin_0_boundary_lines_land.geojson (2 284 669 B, sha256
+            74d9c16229c095fde65943a9919e337682f044bcebccb120764f38edf3b70f4a)
+            ne_10m_admin_1_states_provinces_lines.geojson (21 092 537 B, sha256
+            1a1f30ccaaf4cc9c4bde34266f0b8cbb955d3a4cf254b756912255f2ec7c75b6)
+            ne_50m_lakes.geojson (876 018 B, sha256
+            d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52), used only for the
+            relief's lake mask and to choose the 1:10m lakes drawn, not shipped
+            ne_50m_admin_1_states_provinces_lines.geojson (882 513 B, sha256
+            72cca93c850d412628a5da4bc5ebfe21ba4d376eb34611bde6b623ee73f0fdcf), used only to choose
+            the countries whose state lines are drawn, not shipped
             ne_50m_populated_places_simple.geojson (850 767 B, sha256
             8e70756b39fae9bcdc1e332bfc510c024c5edd3a13203ffd20092ee37b61d978)
             ne_10m_bathymetry_K_200.geojson (4 229 885 B, sha256
@@ -160,7 +163,11 @@ NATURAL EARTH V5.1.2 (1:50M COASTLINE, LAND, LAKES, BOUNDARIES, POPULATED PLACES
     Retrieved: 2026-09-30
     Adaptations: clipped to the map's extent (168°E to 55°W, 25°S to 81°N), cut at 180° and put on
                  one continuous longitude axis
-                 simplified (Visvalingam-Whyatt: 250 000 m² for 1:50m land, coast, lakes and
+                 land, coast, lakes and boundaries at 1:10m, cut to what 1:50m drew: its lakes (by
+                 Natural Earth's ne_id, and the 1:50m water 1:10m files under another id), its nine
+                 countries' state lines less the indicators across water, the borders less the
+                 Guantánamo lease limit
+                 simplified (Visvalingam-Whyatt: 250 000 m² for 1:10m land, coast, lakes and
                  boundaries; 5 km² for the depth bands, whose rings under 50 km² are dropped) from
                  172°E to 64°W and 14° to 75°N, ten times coarser elsewhere north of 5°N and eighty
                  times south of it; coordinates rounded to 0.001°; packed as encoded polylines

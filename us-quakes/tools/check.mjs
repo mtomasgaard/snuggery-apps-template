@@ -12,7 +12,8 @@
 //   8. app code (index.html, style.css, js/*.js) ≤ 200,000 bytes (raised from 150,000 on 2026-09-30 to give
 //      the module headers back and fit focus mode); data/snapshot.json ≤ 1,500,000;
 //   9. the ZIP, built exactly as build-zips.yml builds it, has index.html at its top, its assets/ entries
-//      are stored in ≤ 6,000,000 bytes, and the whole is ≤ 8,000,000 bytes (each size printed).
+//      are stored in ≤ 6,340,000 bytes (6,000,000 until the 1:10m basemap, plan 0011 A), and the whole is
+//      ≤ 8,000,000 bytes (each size printed).
 //
 //   node tools/check.mjs
 
@@ -165,7 +166,7 @@ const size = fs.statSync(zip).size;
 ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length} files)`);
 ok(names.length === shipped.length && !names.some((f) => f.startsWith('tools/') || f.startsWith('screenshots/') || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/ or dotfiles`);
-ok(stored('assets/') <= 6000000, `ZIP stores assets/ in ${fmt(stored('assets/'))} bytes (cap 6,000,000); data/ ${fmt(stored('data/'))}; app code ${fmt(entries.filter((p) => codeFiles.includes(p[7])).reduce((n, p) => n + Number(p[2]), 0))}; fonts/ ${fmt(stored('fonts/'))}`);
+ok(stored('assets/') <= 6340000, `ZIP stores assets/ in ${fmt(stored('assets/'))} bytes (cap 6,340,000); data/ ${fmt(stored('data/'))}; app code ${fmt(entries.filter((p) => codeFiles.includes(p[7])).reduce((n, p) => n + Number(p[2]), 0))}; fonts/ ${fmt(stored('fonts/'))}`);
 ok(size <= 8000000, `ZIP size ${fmt(size)} bytes (cap 8,000,000)`);
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }

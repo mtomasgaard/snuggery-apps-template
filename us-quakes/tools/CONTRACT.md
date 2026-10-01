@@ -367,17 +367,27 @@ line never crosses 180 inside the file. Rings are closed (last = first). Simplif
 Visvalingam–Whyatt (`common.simplify`, minimum triangle area in m² on a local equirectangular
 frame). Arrays keep the source's feature order unless stated.
 
-### 4.2 Basemap (Natural Earth 1:50m, pinned in `sources.STATIC`)
+### 4.2 Basemap (Natural Earth 1:10m, pinned in `sources.STATIC`)
+1:10m since plan 0011 A (2026-10-01): at the deepest zoom (`S_MAX` 180,000) a CSS pixel is 0.11 km at
+60° N, and 1:50m cut across the fjords and arms the relief shows. The features are cut to what 1:50m drew,
+so only the detail changes (`build_geo.BASEMAP`, `lakes_keep`, `basemap_keep`): lakes by a 1:50m lake's
+`ne_id`, plus a 1:10m lake of which ≥ ¼ lies in 1:50m water and < ½ in those id-matched lakes (Reindeer
+Lake, McLeod Bay, the St. Marys River, one unnamed); never a 1:10m bay laid over its own lake (Georgian
+Bay over Huron), since the even-odd fill would cancel water drawn twice, and the build stops if any land
+or lake ring is written twice; state lines of the nine countries in `ne_50m_admin_1_states_provinces_lines`
+less the "Admin-1 boundary indicator" lines across water; borders less the "Lease limit".
+
 | Key | Source | Geometry | VW threshold | *Measured* pieces · vertices · JSON · deflated |
 | --- | --- | --- | --: | --- |
-| `land` | `ne_50m_land` | rings, filled even-odd | 250,000 m² | 273 · 13,308 · 50,844 · 35,527 |
-| `coast` | `ne_50m_coastline` | lines | 250,000 m² | 289 · 13,318 · 50,980 · 35,599 |
-| `lakes` | `ne_50m_lakes` | rings | 250,000 m² | 223 · 8,104 · 30,291 · 20,490 |
-| `states` | `ne_50m_admin_1_states_provinces_lines` | lines | 250,000 m² | 149 · 2,633 · 10,611 · 7,154 |
-| `borders` | `ne_50m_admin_0_boundary_lines_land` | lines | 250,000 m² | 9 · 521 · 2,026 · 1,457 |
+| `land` | `ne_10m_land` | rings, filled even-odd | 250,000 m² | 2,002 · 92,111 · 293,957 · 200,239 |
+| `coast` | `ne_10m_coastline` | lines | 250,000 m² | 1,137 · 86,198 · 273,131 · 186,251 |
+| `lakes` | `ne_10m_lakes`, cut as above | rings | 250,000 m² | 332 · 26,089 · 80,006 · 54,206 |
+| `states` | `ne_10m_admin_1_states_provinces_lines`, cut as above | lines | 250,000 m² | 1,267 · 9,074 · 37,844 · 24,685 |
+| `borders` | `ne_10m_admin_0_boundary_lines_land`, cut as above | lines | 250,000 m² | 1,059 · 4,858 · 23,443 · 15,477 |
 
-(Measured with the seam-crossing pieces skipped instead of split; the build splits them, which adds a
-few pieces.)
+(Measured on the built `geo.json`, 2026-10-01, over the whole basemap box with `DETAIL`'s zones. At 1:50m,
+measured over the axis box with the seam-crossing pieces skipped, they were land 273 · 13,308, coast
+289 · 13,318, lakes 223 · 8,104, states 149 · 2,633, borders 9 · 521.)
 
 ### 4.3 `bathymetry` (Natural Earth 1:10m, the only scale with depth bands)
 `[{ "depth": 200, "rings": […] }, { "depth": 1000, … }, … { "depth": 7000, … }]` — shallowest first;
@@ -448,7 +458,9 @@ the ZIP stores it** (`verify_static.py`); the basemap's keys 673,536 B raw (land
 lakes 31,170, states 12,166, borders 6,665, bathymetry 471,531). The design-stage estimate follows.
 Basemap 144,752 + bathymetry 307,615 + faults 1,140,969 (*measured*) + places, volcanoes, relief,
 views and sections ≈ 27,000 (*estimate*) ≈ **1,620,000 B raw, ≈ 832,000 B in the ZIP**. Cap
-1,900,000 raw.
+1,900,000 raw. *With the 1:10m basemap* (plan 0011 A, `verify_static.py`, 2026-10-01): **2,358,179 B raw,
+1,326,898 B as the ZIP stores it**; the basemap's five line and ring keys 708,381 B raw. Cap **2,360,000**
+raw (+24.2 %).
 
 ---
 
@@ -573,9 +585,9 @@ cache refresh, not with the cutoff. The relief is not rebuilt by `build_all.sh` 
 | --- | --: | --- |
 | `history.bin` / `history.json` | 5,800,000 / 16,000 | 5,331,970 (*measured* sections) / ≈ 6,000 |
 | `relief-conus/ak/hi/pr.jpg` | 1,050,000 / 720,000 / 60,000 / 100,000 | 942,611 / 635,849 / 43,668 / 84,413 (*measured*) |
-| `geo.json` | 1,900,000 | 1,851,803 (*measured*, the lead's pass, §4.10) |
+| `geo.json` | 2,360,000 | 2,358,179 (*measured*, the 1:10m basemap, §4.10; 1,900,000 and 1,851,803 at 1:50m) |
 | `stories.json` / `about.json` | 30,000 / 40,000 | *estimate* |
-| **`assets/` as stored in the ZIP** | **6,000,000** | 5,851,793 (*measured*, the lead's pass; headroom 148,207) |
+| **`assets/` as stored in the ZIP** | **6,340,000** | 6,191,803 (*measured*, the 1:10m basemap; headroom 148,197; 6,000,000 and 5,851,793 at 1:50m) |
 | `data/snapshot.json` | 1,500,000 | ≈ 560,000 (§3.8) |
 | `../CREDITS.txt` | 40,000 | *estimate* |
 | app code (`index.html`, `style.css`, `js/*.js`) | 150,000 | *estimate* (DESIGN §13) |

@@ -2,7 +2,7 @@ name: Build World Oil & Gas data
 
 # Rebuilds the World Oil & Gas app's data files: the country choropleth from Our World in Data's
 # energy dataset (which carries the Energy Institute Statistical Review, CC BY 4.0), the
-# 1:110m Natural Earth countries, and — if a Global Oil and Gas Extraction Tracker workbook has
+# 1:10m Natural Earth countries (pinned by commit and sha256), and — if a Global Oil and Gas Extraction Tracker workbook has
 # been dropped into world-oil-gas/raw/manual/ — the field points. Nothing here needs a key.
 #
 # Yearly, because the Energy Institute publishes once a year (June) and OWID follows within

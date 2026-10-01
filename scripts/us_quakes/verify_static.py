@@ -44,9 +44,9 @@ from paths import APP, ASSETS, CACHE, HERE
 CLAIMED = ['about.json', 'geo.json', 'history.bin', 'history.json', 'relief-ak.jpg', 'relief-conus.jpg',
            'relief-hi.jpg', 'relief-pr.jpg', 'stories.json']
 RAW_CAPS = {'history.bin': 5_800_000, 'history.json': 16_000, 'relief-conus.jpg': 1_050_000,
-            'relief-ak.jpg': 720_000, 'relief-hi.jpg': 60_000, 'relief-pr.jpg': 100_000, 'geo.json': 1_900_000,
+            'relief-ak.jpg': 720_000, 'relief-hi.jpg': 60_000, 'relief-pr.jpg': 100_000, 'geo.json': 2_360_000,
             'stories.json': 30_000, 'about.json': 40_000}
-ZIP_CAP = 6_000_000
+ZIP_CAP = 6_340_000   # 6,000,000 until the 1:10m basemap and its credit added 340,010 B as stored (plan 0011 A); the yearly headroom kept
 KNOWN = {  # CONTRACT §11.2, the values measured in the cache on 2026-09-30
     'official17000127050000000': ('1700-01-27T05:00', 45.0, -125.0, None, '9.0', 'mw'),
     'official18111216081500000': ('1811-12-16T08:15', 36.0, -89.96, None, '7.5', 'mw'),

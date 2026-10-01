@@ -111,14 +111,20 @@ STATIC = {
         'read': 'GDB/Qfaults_2020_WGS84.gdb layer Qfaults_2020 (112,944 lines, 2025 edits) with pyogrio; '
                 'the SHP/ copy (112,809) predates those edits (RESEARCH.md §2.4)',
     },
-    'ne_coastline': _ne('ne_50m_coastline', '271f1c4c1908312bac6b29d158ea1356544beafc129f260005300913aa5ea283', 1640858),
-    'ne_land': _ne('ne_50m_land', 'e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b', 1636166),
+    # The basemap (build_geo.BASEMAP) is 1:10m: at the map's deepest zoom a CSS pixel is 0.11 km at 60° N,
+    # and 1:50m cut across the fjords and arms the relief shows (docs/plans/0011-coastlines-research.md §4).
+    'ne_coastline_10m': _ne('ne_10m_coastline', '6f75ae0e0de157b14946e2255eb1f5486d9a13819032e26d4610852d296788f6', 10110735),
+    # 1:10m land: the basemap's land, and build_relief.py's registration gate measures the relief against
+    # it, because 1:50m is too coarse for 326 m and 190 m pixels (its Ka Lae is 5.8 km north of the DEM's).
+    'ne_land_10m': _ne('ne_10m_land', '1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416', 10157965),
+    'ne_lakes_10m': _ne('ne_10m_lakes', '2d036f53dedec578001c5c30c2959ee7d4eebc1306900fa4367c49929ec8f2d9', 5043554),
+    'ne_borders_10m': _ne('ne_10m_admin_0_boundary_lines_land', '74d9c16229c095fde65943a9919e337682f044bcebccb120764f38edf3b70f4a', 2284669),
+    'ne_states_10m': _ne('ne_10m_admin_1_states_provinces_lines', '1a1f30ccaaf4cc9c4bde34266f0b8cbb955d3a4cf254b756912255f2ec7c75b6', 21092537),
+    # 1:50m, not shipped: the relief's lake mask (build_relief.py; the JPEGs are committed and stay as built),
+    # the lakes the map draws at 1:10m (build_geo.lakes_keep) and the nine countries whose state lines it
+    # draws (build_geo.basemap_keep reads them from it).
     'ne_lakes': _ne('ne_50m_lakes', 'd350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52', 876018),
     'ne_states': _ne('ne_50m_admin_1_states_provinces_lines', '72cca93c850d412628a5da4bc5ebfe21ba4d376eb34611bde6b623ee73f0fdcf', 882513),
-    'ne_borders': _ne('ne_50m_admin_0_boundary_lines_land', '2faac4f6b34386f3d21b6e018cf151f241f00e5c936d44dd17d7d9bfb147fa48', 760189),
-    # 1:10m land is not shipped: build_relief.py's registration gate measures the relief against it,
-    # because 1:50m is too coarse for 326 m and 190 m pixels (its Ka Lae is 5.8 km north of the DEM's).
-    'ne_land_10m': _ne('ne_10m_land', '1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416', 10157965),
     'ne_places': _ne('ne_50m_populated_places_simple', '8e70756b39fae9bcdc1e332bfc510c024c5edd3a13203ffd20092ee37b61d978', 850767),
     # Natural Earth has depth bands only at 1:10m; the plan's "1:50m depth bands" do not exist.
     'ne_bathy_200': _ne('ne_10m_bathymetry_K_200', '5c6c182da8608153ea2dce22dfb32c987e5390e0bd4a122266143ba181a7b636', 4229885),
@@ -274,8 +280,8 @@ CREDIT = {
         'attribution': VOLCANOES['attribution'],
     },
     'naturalearth': {
-        'title': 'Natural Earth v5.1.2 (1:50m coastline, land, lakes, boundaries, populated places; '
-                 '1:10m bathymetry)',
+        'title': 'Natural Earth v5.1.2 (1:10m coastline, land, lakes, boundaries and bathymetry; 1:50m '
+                 'populated places)',
         'owner': 'Natural Earth (naturalearthdata.com), free vector and raster map data',
         'url': NE_REPO + '/tree/' + NE_COMMIT,
         'licence': 'Public domain by its authors\' dedication',

@@ -8,8 +8,10 @@ condition, not a courtesy.
 
 ## `world.json` — coastlines and country borders
 
-**Natural Earth, public domain.** Derived from Natural Earth 1:50 m cultural and
-physical vectors, simplified and delta-encoded to a few hundred kilobytes.
+**Natural Earth, public domain.** Derived from Natural Earth 1:10 m cultural and
+physical vectors (v5.1.2: land, and the countries' land borders), simplified and
+delta-encoded to about one and a half megabytes by `scripts/world_json.py` in the
+template repository.
 Natural Earth's terms of use say:
 
 > All versions of Natural Earth raster + vector map data found on this website

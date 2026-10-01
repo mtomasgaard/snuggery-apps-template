@@ -463,7 +463,7 @@ check printed as `ok`/`FAIL` with its number, exit 1 on any failure.
     `d`, `km`) in strings the app writes; `toFixed`/`toLocaleString` only where the allow-list says.
 11. No `transition` or `animation` on the track's thumb, the time row or the label.
 12. Only `.innerHTML = ''` anywhere (the app's own security rule).
-13. Budgets: app code (`index.html`, `style.css`, `app.js`, `js/*.js`) ≤ 200 000 B; `fonts/` ≤
+13. Budgets: app code (`index.html`, `style.css`, `app.js`, `js/*.js`) ≤ 203 000 B (200 000 until the 1:10m coast's levels of detail, plan 0011); `fonts/` ≤
     160 000 B; the ZIP built exactly as `build-zips.yml` builds it (`zip -r -X … -x '.*' '*/.*'
     'screenshots/*' 'tools/*' …`) has `index.html` at its top, holds exactly the shipped files (no
     `tools/`, `screenshots/` or dotfiles) and is ≤ 2 800 000 B (Global Wind 1 600 000). Every size

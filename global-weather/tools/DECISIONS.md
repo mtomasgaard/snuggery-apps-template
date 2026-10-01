@@ -79,7 +79,7 @@ for each file.
    - The readout gets its coordinate line and direction glyph.
    - About gets its four sections and the font credit.
    - `CREDITS` does not change.
-5. **`js/units.js`** (DESIGN §4): the valid-time and stamp formats above, through `Intl` with fixed
+5. **`js/units.js`** (DESIGN §4): the valid-time and stamp formats above, built by hand (not through `Intl`) with fixed
    options, plus U+2212, U+202F and grouping.
 6. **`js/track.js`** (DESIGN §2): the baseline, ticks, day labels, `now` notch and tracer thumb as
    drawn above, with no transitions.
@@ -110,7 +110,7 @@ for each file.
       text.
     - Both `theme-color` metas exist.
 12. **`tools/shoot.mjs`** adds:
-    - `document.fonts.check('560 11.5px "Ysabeau Office"')` before every picture.
+    - `document.fonts.check('560 11.5px "Ysabeau Office"')` once per theme, before its pictures.
     - The rendered-text contrast sampler (≥ 4.5:1) over every text style in both themes.
     - The streak sampler (DESIGN §5.2) holding the head to 3.0:1 by day and 2.5:1 at night, over
       the five layers.

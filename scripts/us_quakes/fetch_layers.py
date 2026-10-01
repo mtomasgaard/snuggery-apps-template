@@ -1,5 +1,5 @@
 """Fetch the static map layers and check every pin: the Quaternary Fault and Fold Database ZIP, the
-fourteen Natural Earth files (sources.STATIC), and the committed volcano list
+sixteen Natural Earth files (sources.STATIC), and the committed volcano list
 (samples/volcano-getUSVolcanoes.json, sources.VOLCANO_LIST_SAMPLE).
 
     .venv/bin/python fetch_layers.py                        # fetch what is missing, verify every sha256
@@ -49,6 +49,8 @@ def main(argv=None):
     print(f'{"volcano-list":16s} ok  {VOLCANO_LIST_SAMPLE["bytes"]:>11,} B  {VOLCANO_LIST_SAMPLE["path"]}')
 
     ne = [k for k in STATIC if k.startswith('ne_')]
+    NOT_SHIPPED = {'ne_lakes': ', used only for the relief\'s lake mask and to choose the 1:10m lakes drawn, not shipped',
+                   'ne_states': ', used only to choose the countries whose state lines are drawn, not shipped'}
     write_credits_fragment('fetch_layers', [
         {'id': 'qfaults',
          'source': [f'{os.path.basename(STATIC["qfaults"]["name"])} ({group(STATIC["qfaults"]["bytes"])} B, '
@@ -57,7 +59,7 @@ def main(argv=None):
          'retrieved': STATIC['qfaults']['retrieved'], 'adaptations': []},
         {'id': 'naturalearth',
          'source': [f'{STATIC[k]["name"].split("/")[-1]} ({group(STATIC[k]["bytes"])} B, sha256 {STATIC[k]["sha256"]})'
-                    + (', used only to check the relief\'s registration, not shipped' if k == 'ne_land_10m' else '')
+                    + NOT_SHIPPED.get(k, '')
                     for k in ne] + [f'from the natural-earth-vector repository at commit {NE_COMMIT} (tag v5.1.2)'],
          'retrieved': RETRIEVED, 'adaptations': []},
         {'id': 'volcano-list',

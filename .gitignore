@@ -44,3 +44,7 @@ scripts/us_quakes/cache/
 # The Warming World pipeline's download cache (scripts/warming_world/cache): the 26 MB GISTEMP grid, GISS's
 # global-mean table and Natural Earth, all refetchable.
 scripts/warming_world/cache/
+
+# The weather pair's coastline builder's download cache (scripts/world_json_cache): two Natural Earth
+# 1:10m GeoJSON files, 12 MB, sha256-pinned in scripts/world_json.py and refetchable.
+scripts/world_json_cache/

@@ -1,6 +1,7 @@
 """Basemap and boundaries for the North Sea app.
 
-  Natural Earth 1:10m (public domain): coastline, countries (land fill), bathymetry 200 m polygons.
+  Natural Earth 1:10m (public domain; v5.1.2, pinned by commit and sha256): coastline, countries (land
+  fill), bathymetry 200 m polygons.
   Marine Regions (Flanders Marine Institute), Maritime Boundaries v12, CC BY 4.0: the median lines
   between Norway, the UK, Denmark, the Netherlands, Germany, Belgium, Sweden and the Faroes.
   EMODnet Human Activities (CC BY 4.0): pipelines and platforms for Denmark and the Netherlands,
@@ -9,12 +10,22 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import urllib.parse
 
 from .common import BuildError, Cache, clip_line_to_bbox, clip_polygon_to_bbox, log, ring_area_m2, simplify
 
-NE = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/"
+# Natural Earth v5.1.2 from the nvkelso mirror at the release's commit, never `master`, and every file
+# checked against its sha256 before use: a moved or edited file stops the build instead of quietly
+# changing the coast. The same commit and countries hash as build_world.py (plan 0011, package A).
+NE_COMMIT = "f1890d9f152c896d250a77557a5751a93d494776"
+NE = f"https://raw.githubusercontent.com/nvkelso/natural-earth-vector/{NE_COMMIT}/geojson/"
+NE_SHA256 = {
+    "ne_10m_coastline": "6f75ae0e0de157b14946e2255eb1f5486d9a13819032e26d4610852d296788f6",          # 10,110,735 B
+    "ne_10m_admin_0_countries": "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255",  # 13,287,234 B
+    "ne_10m_bathymetry_K_200": "5c6c182da8608153ea2dce22dfb32c987e5390e0bd4a122266143ba181a7b636",   # 4,229,885 B
+}
 VLIZ = "https://geo.vliz.be/geoserver/MarineRegions/wfs"
 EMODNET = "https://ows.emodnet-humanactivities.eu/wfs"
 NEIGHBOURS = ["Norway", "United Kingdom", "Denmark", "Netherlands", "Germany", "Belgium", "Sweden", "Faroe"]
@@ -51,6 +62,17 @@ def _geojson_lines(gj):
             yield f.get("properties", {}), g["coordinates"]
 
 
+def _natural_earth_file(cache: Cache, name: str) -> bytes:
+    """One pinned Natural Earth GeoJSON, from the cache or the pinned commit, checked by sha256."""
+    key = f"global/{name}.geojson"
+    raw = cache.get(key, NE + f"{name}.geojson")
+    got = hashlib.sha256(raw).hexdigest()
+    if got != NE_SHA256[name]:
+        raise BuildError(f"{key}: sha256 {got} is not the pinned {NE_SHA256[name]}; delete {cache.path(key)} "
+                         f"and rerun, or re-pin it deliberately")
+    return raw
+
+
 def natural_earth(cache: Cache, bbox, min_area_m2: float):
     """Returns coast (lines), land (list of polygons as ring lists), bathy200 (same), all clipped
     to bbox, simplified with the metric Visvalingam threshold, as lon/lat tuples."""
@@ -60,7 +82,7 @@ def natural_earth(cache: Cache, bbox, min_area_m2: float):
         return any(x0 <= x <= x1 and y0 <= y <= y1 for x, y in pts)
 
     coast = []
-    gj = json.loads(cache.get("global/ne_10m_coastline.geojson", NE + "ne_10m_coastline.geojson"))
+    gj = json.loads(_natural_earth_file(cache, "ne_10m_coastline"))
     for _, lines in _geojson_lines(gj):
         for line in lines:
             pts = [tuple(c[:2]) for c in line]
@@ -73,7 +95,7 @@ def natural_earth(cache: Cache, bbox, min_area_m2: float):
 
     def polys_from(name, key):
         out = []
-        gj = json.loads(cache.get(f"global/{name}.geojson", NE + f"{name}.geojson"))
+        gj = json.loads(_natural_earth_file(cache, name))
         for props, polys in _geojson_polys(gj):
             for poly in polys:
                 rings = []

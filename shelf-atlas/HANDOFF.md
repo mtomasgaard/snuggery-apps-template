@@ -12,7 +12,7 @@ shelf-atlas/                    the North Sea app (index.html, app.js, style.css
   data/bathy.png                EMODnet depth raster, 8-bit grey in Web Mercator rows          (rebuilt weekly, rarely changes)
   RESEARCH.md  HANDOFF.md       these documents
 world-oil-gas/                  the world app
-  data/world.json               Natural Earth 1:50m countries, bathymetry bands (rarely changes)
+  data/world.json               Natural Earth 1:10m countries, bathymetry bands (rarely changes)
   data/relief.jpg               Natural Earth I shaded relief, 4096×2048 plate carrée (rarely changes)
   data/snapshot.json            annual oil and gas by country, 1900 →                        (rebuilt yearly)
   data/fields.json              GOGET units: points, production, reserves, outlines            (manual)
@@ -111,7 +111,7 @@ and the world app shows only the country choropleth, with the reason on its laye
 - Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
   producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
   boundaries, depth shading, names, circle edges) can be switched off from the map's layers button.
-- World app basemap: white land with Natural Earth 1:50m boundaries by default; the shaded relief
+- World app basemap: white land with Natural Earth 1:10m boundaries by default; the shaded relief
   (`data/relief.jpg`) and the depth bands are optional layers; countries with no figure are plain,
   never hatched.
 - Canvas 2D map, own Web Mercator, geometry packed as Google polylines (4 decimals North Sea,

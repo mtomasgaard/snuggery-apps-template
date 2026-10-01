@@ -36,7 +36,7 @@ from common import (group, BuildError, RETRIEVED, clip_line_to_bbox, clip_polygo
 from paths import APP, ASSETS, CACHE, HERE
 from sources import COMCAT, STATIC, VOLCANO_LIST_SAMPLE
 
-BUDGET = 1_900_000
+BUDGET = 2_360_000     # 1,900,000 for the 1:50m basemap; +24.2 % for 1:10m (plan 0011 A, inside a quarter)
 BUDGET_SECTION_REF = 250_000
 FACTOR = 1000
 AXIS = {'west': 172, 'east': 296, 'south': 17, 'north': 72, 'unwrapBelow': 172}
@@ -59,8 +59,21 @@ DETAIL = ((172.0, 14.0, 296.0, 75.0, 1), (0.0, 5.0, 999.0, 84.0, 10), (0.0, -90.
 FAULT_M2 = 50_000
 R_KM = 6371.0088
 
-BASEMAP = [('land', 'ne_land', True), ('lakes', 'ne_lakes', True), ('coast', 'ne_coastline', False),
-           ('borders', 'ne_borders', False), ('states', 'ne_states', False)]
+# Natural Earth 1:10m (plan 0011 A: the map's deepest zoom is 0.11 km a CSS pixel at 60° N). 1:10m carries
+# a little more than the 1:50m the map drew before, and the extra is left out so only the detail changes:
+# the Guantánamo "Lease limit" among the borders, and among the state lines every country but the nine
+# 1:50m drew (read from ne_50m_admin_1_states_provinces_lines) and the "boundary indicator" lines that
+# carry a state line out across water.
+BASEMAP = [('land', 'ne_land_10m', True), ('lakes', 'ne_lakes_10m', True), ('coast', 'ne_coastline_10m', False),
+           ('borders', 'ne_borders_10m', False), ('states', 'ne_states_10m', False)]
+BORDERS_LEFT_OUT = {'Lease limit'}
+STATES_LEFT_OUT = {'Admin-1 boundary indicator'}
+# Lakes (lakes_keep): 1:10m carries 1,355 lakes to 1:50m's 412 rings, and all of them would put geo.json 27 %
+# over its 1:50m budget, so the map draws 1:50m's lakes at 1:10m's detail. Areas are compared on a
+# LAKE_RASTER-square raster over each 1:10m lake's bounding box.
+LAKE_IN_50M = 0.25
+LAKE_COVERED = 0.5
+LAKE_RASTER = 64
 BATHY = [(200, 'ne_bathy_200'), (1000, 'ne_bathy_1000'), (2000, 'ne_bathy_2000'), (3000, 'ne_bathy_3000'),
          (4000, 'ne_bathy_4000'), (5000, 'ne_bathy_5000'), (6000, 'ne_bathy_6000'), (7000, 'ne_bathy_7000')]
 
@@ -177,12 +190,97 @@ def detail(x, y):
     return DETAIL[-1][4]
 
 
-def layer(key, poly, thr, min_km2=0.0):
+def _polygons(g):
+    return [g['coordinates']] if g['type'] == 'Polygon' else g['coordinates']
+
+
+def _bbox(polys):
+    xs = [p[0] for poly in polys for p in poly[0]]
+    ys = [p[1] for poly in polys for p in poly[0]]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _overlaps(a, b):
+    return not (a[2] < b[0] or a[0] > b[2] or a[3] < b[1] or a[1] > b[3])
+
+
+def _raster(polys, win):
+    """Polygons (exteriors filled, holes cleared) on a LAKE_RASTER-square grid over `win` (W, S, E, N)."""
+    from PIL import Image, ImageDraw
+    x0, y0, x1, y1 = win
+    sx, sy = LAKE_RASTER / max(x1 - x0, 1e-9), LAKE_RASTER / max(y1 - y0, 1e-9)
+    im = Image.new('1', (LAKE_RASTER, LAKE_RASTER))
+    d = ImageDraw.Draw(im)
+    for poly in polys:
+        for i, ring in enumerate(poly):
+            d.polygon([((x - x0) * sx, (y1 - y) * sy) for x, y, *_ in ring], fill=0 if i else 1)
+    return np.asarray(im, dtype=bool)
+
+
+def _share(polys, others):
+    """The share of `polys`' area that lies inside the union of `others` ([(polys, bbox)])."""
+    b = _bbox(polys)
+    m = _raster(polys, b)
+    u = np.zeros_like(m)
+    for q, qb in others:
+        if _overlaps(qb, b):
+            u |= _raster(q, b)
+    n = int(m.sum())
+    return float((m & u).sum()) / n if n else 0.0
+
+
+def lakes_keep():
+    """The 1:10m lakes the map draws, as a set of ne_id: 1:50m's lakes at 1:10m's detail. A 1:10m lake is
+    kept when it carries a 1:50m lake's ne_id (Natural Earth's identity across its scales), or when at least
+    LAKE_IN_50M of its area lies in 1:50m water and less than LAKE_COVERED of it in those id-matched lakes:
+    water 1:50m drew that 1:10m files under another id (Reindeer Lake, whose 1:50m id is a point-sized
+    1:10m feature; McLeod Bay; the St. Marys River). The bays 1:10m lays over their own lake (Georgian Bay
+    and the North Channel over Lake Huron, Whitefish Bay over Lake Superior) are not kept: the app fills
+    the lakes even-odd in one path, so water drawn twice would show as land."""
+    ids50 = {ft['properties']['ne_id'] for ft in _load_ne('ne_lakes')['features']}
+    w50 = [(p, _bbox(p)) for p in (_polygons(ft['geometry']) for ft in _load_ne('ne_lakes')['features'])]
+    feats = _load_ne('ne_lakes_10m')['features']
+    by_id = [(p, _bbox(p)) for p in (_polygons(ft['geometry']) for ft in feats if ft['properties']['ne_id'] in ids50)]
+    keep, extra = set(), []
+    for ft in feats:
+        i = ft['properties']['ne_id']
+        if i in ids50:
+            keep.add(i)
+            continue
+        polys = _polygons(ft['geometry'])
+        if not any(_overlaps(qb, _bbox(polys)) for _, qb in w50):
+            continue
+        in50 = _share(polys, w50)
+        if in50 >= LAKE_IN_50M and _share(polys, by_id) < LAKE_COVERED:
+            keep.add(i)
+            extra.append(ft['properties']['name'] or str(i))
+    log(f'  lakes: {len(keep):,} of {len(feats):,} 1:10m lakes kept, {len(keep) - len(extra)} by a 1:50m lake\'s ne_id '
+        f'and {len(extra)} as 1:50m water under another id ({", ".join(extra)})')
+    return keep
+
+
+def basemap_keep(name):
+    """The feature filter for one basemap layer (BASEMAP's note), or None to keep every feature."""
+    if name == 'lakes':
+        ids = lakes_keep()
+        return lambda p: p['ne_id'] in ids
+    if name == 'borders':
+        return lambda p: p['FEATURECLA'] not in BORDERS_LEFT_OUT
+    if name == 'states':
+        countries = {ft['properties']['ADM0_A3'] for ft in _load_ne('ne_states')['features']}
+        return lambda p: p['ADM0_A3'] in countries and p['FEATURECLA'] not in STATES_LEFT_OUT
+    return None
+
+
+def layer(key, poly, thr, min_km2=0.0, keep=None):
     """One basemap layer over BASEMAP_BOX, simplified zone by zone (DETAIL). A ring under `min_km2` is
-    dropped, the limit scaled like the threshold by the finest zone the ring touches."""
+    dropped, the limit scaled like the threshold by the finest zone the ring touches. `keep(properties)`
+    chooses the features; a feature without geometry is skipped."""
     out, nv = [], 0
     boxes = (BASE_A, BASE_B)
     for ft in _load_ne(key)['features']:
+        if not ft.get('geometry') or (keep and not keep(ft['properties'])):
+            continue
         for part in _parts(ft['geometry']):
             pieces = ring_to_axis(part, boxes) if poly else line_to_axis(part, boxes)
             for p in pieces:
@@ -457,8 +555,10 @@ def build():
     geo['polyline'] = {'algorithm': 'Google encoded polyline, longitude first', 'factor': FACTOR}
     stats = {}
     for name, key, poly in BASEMAP:
-        geo[name], nv = layer(key, poly, BASEMAP_M2)
+        geo[name], nv = layer(key, poly, BASEMAP_M2, keep=basemap_keep(name))
         stats[name] = (len(geo[name]), nv)
+        if poly and len(set(geo[name])) != len(geo[name]):
+            raise BuildError(f'{name}: a ring is written twice; the even-odd fill would cancel it')
     bands = []
     for depth, key in BATHY:
         rings, nv = layer(key, True, BATHY_M2, BATHY_MIN_KM2)
@@ -496,7 +596,10 @@ def build():
         {'id': 'naturalearth', 'source': [], 'retrieved': RETRIEVED,
          'adaptations': ['clipped to the map\'s extent (168°E to 55°W, 25°S to 81°N), cut at 180° and put on '
                          'one continuous longitude axis',
-                         'simplified (Visvalingam-Whyatt: 250 000 m² for 1:50m land, coast, lakes and '
+                         'land, coast, lakes and boundaries at 1:10m, cut to what 1:50m drew: its lakes (by Natural '
+                         'Earth\'s ne_id, and the 1:50m water 1:10m files under another id), its nine countries\' state '
+                         'lines less the indicators across water, the borders less the Guantánamo lease limit',
+                         'simplified (Visvalingam-Whyatt: 250 000 m² for 1:10m land, coast, lakes and '
                          'boundaries; 5 km² for the depth bands, whose rings under 50 km² are dropped) from 172°E '
                          'to 64°W and 14° to 75°N, ten times coarser elsewhere north of 5°N and eighty times '
                          'south of it; coordinates rounded to 0.001°; packed as encoded polylines (assets/geo.json)',

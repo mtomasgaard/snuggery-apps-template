@@ -4,8 +4,10 @@
     python3 -m scripts.shelf_atlas.build_world --out world-oil-gas/data [--cache DIR] [--offline]
 
 Writes
-  world.json     Natural Earth 1:50m countries, packed polylines keyed by ISO 3166-1 alpha-3, plus
-                 the relief block for data/relief.jpg (Natural Earth I, plate carrée)
+  world.json     Natural Earth 1:10m countries (v5.1.2, pinned by commit and sha256), simplified for
+                 the app's deepest zoom, packed polylines keyed by ISO 3166-1 alpha-3, plus the
+                 1:10m bathymetry bands and the relief block for data/relief.jpg (Natural Earth I,
+                 plate carrée)
   snapshot.json  annual oil and gas production by country, 1900 -> latest, from Our World in
                  Data's energy dataset (which carries the Energy Institute Statistical Review),
                  plus `ask` rows and the source list the app prints on its attribution screen
@@ -24,6 +26,8 @@ import collections
 import csv
 import datetime as dt
 import glob
+import hashlib
+import heapq
 import io
 import json
 import math
@@ -39,16 +43,27 @@ OWID_CSV = "https://raw.githubusercontent.com/owid/energy-data/master/owid-energ
 OWID_CODEBOOK = "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-codebook.csv"
 NE_COUNTRIES = ("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/"
                 "ne_110m_admin_0_countries.geojson")
-NE_COUNTRIES_50 = ("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/"
-                   "ne_50m_admin_0_countries.geojson")
+# The countries: Natural Earth v5.1.2 1:10m admin-0, from the nvkelso mirror at the release's commit,
+# checked against its sha256 before use (a moved or edited file stops the build). 1:50m generalises a
+# fjord to a few kilometres, and the app zooms to 0.46 km a pixel at 60° N (plan 0011, package A).
+NE_COMMIT = "f1890d9f152c896d250a77557a5751a93d494776"
+NE_COUNTRIES_10 = (f"https://raw.githubusercontent.com/nvkelso/natural-earth-vector/{NE_COMMIT}/geojson/"
+                   "ne_10m_admin_0_countries.geojson")
+NE_COUNTRIES_10_SHA256 = "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255"   # 13,287,234 B
 
 # Energy-equivalence used to turn OWID's terawatt-hours into barrels of oil
 # equivalent. EI's own conversion factor: 1 boe = 5.8 million Btu = 6.1178632 GJ.
 # So 1 TWh = 3.6e6 GJ / 6.1178632 GJ = 588,441 boe. See RESEARCH.md, "Units".
 BOE_PER_TWH = 3.6e6 / 6.1178632
 WORLD_FACTOR = 1000          # world.json packed at 3 decimals (~110 m)
-WORLD_MIN_AREA_M2 = 2.5e6    # Visvalingam threshold on the 1:50m countries: 2.5 km² triangles
-WORLD_BUDGET = 1_400_000     # world.json: 1:50m countries plus the bathymetry bands
+# Visvalingam in Web Mercator pixels at the app's deepest zoom (app.js: MAX_SCALE = 360 * 120, i.e.
+# 120 CSS px per degree of longitude): a vertex goes while its triangle is under WORLD_MIN_PX2 square
+# pixels there, so the tolerance is the same on screen at every latitude. Half a pixel (0.25 px²)
+# would be invisible but costs a ZIP 44 % larger; 4 px² (a dropped vertex moves the line by a pixel or
+# two at the deepest zoom, nothing at any other) is the finest that keeps the ZIP inside a quarter.
+WORLD_PX_PER_DEG = 120.0
+WORLD_MIN_PX2 = 4.0
+WORLD_BUDGET = 1_400_000     # world.json: 1:10m countries plus the bathymetry bands
 # Natural Earth I: shaded relief with hypsometric tints and water, 1:50m, public domain. The
 # NACIS CDN is the canonical host; the GitHub mirror is tried when it is down.
 NE_RELIEF_URLS = ("https://naciscdn.org/naturalearth/50m/raster/NE1_50M_SR_W.zip",
@@ -63,10 +78,153 @@ NE_TO_ISO3_FIXES = {"NOR": "NOR", "FRA": "FRA", "KOS": "OWID_KOS", "SOL": "OWID_
                     "CYN": "OWID_CYN", "SDS": "SSD", "PSX": "PSE", "SAH": "ESH"}
 
 
+# 1:10m admin-0 has sixteen features 1:50m does not. Holes are dropped and each feature is painted by
+# its own code, so left alone they would cut patches into their neighbours or add shapes the 1:50m map
+# never had. Each is merged into the country that painted that ground at 1:50m (or that Natural Earth's
+# own ISO code names), kept, or dropped:
+#   merged   its outer rings join that country's (a ring already inside one of the country's rings is
+#            covered by it and left out); the country's code, name and series are unchanged
+#   kept     drawn under its own code: no series, so always plain, and listed in the app's About
+#   dropped  open-sea specks 1:50m never drew, and Gibraltar (3.7 km², not drawn at 1:50m either; its
+#            series stays listed under "Series with no outline")
+NE10_EXTRA = {
+    "KAB": "KAZ",    # Baikonur Cosmodrome: leased, inside Kazakhstan (Natural Earth's own ISO code is KAZ)
+    "USG": "CUB",    # US Naval Base Guantanamo Bay: leased, Cuban sovereignty; Cuba at 1:50m
+    "BRI": "BRA",    # Brazilian Island (2.8 km², river island): Natural Earth's own ISO code is BRA
+    "WSB": "CYP",    # Akrotiri, Dhekelia and the U.N. buffer zone: mostly Cyprus at 1:50m, the buffer
+    "ESB": "CYP",    #   zone split with northern Cyprus. Cyprus's series is zero in every year and
+    "CNM": "CYP",    #   northern Cyprus has none, so this ground is plain land whichever it joins
+    "BRT": "SDN",    # Bir Tawil: Sudan at 1:50m
+    "SPI": "keep",   # Southern Patagonian Ice Field: undemarcated, split between Argentina and Chile at
+                     #   1:50m; giving it to either would be a claim neither source makes
+    "GIB": None, "UMI": None, "CSI": None, "PGA": None, "CLP": None, "BJN": None, "SER": None, "SCR": None,
+}
+
+
+def pinned(cache: Cache, key: str, url: str, sha256: str) -> bytes:
+    """cache.get, then the bytes are checked against their recorded sha256."""
+    raw = cache.get(key, url)
+    got = hashlib.sha256(raw).hexdigest()
+    if got != sha256:
+        raise BuildError(f"{key}: sha256 {got} is not the pinned {sha256}; delete {cache.path(key)} and rerun, "
+                         "or re-pin after checking what changed upstream")
+    return raw
+
+
+def _merc_px(lon, lat):
+    lat = max(-85.05112878, min(85.05112878, lat))
+    return (lon * WORLD_PX_PER_DEG,
+            math.degrees(math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))) * WORLD_PX_PER_DEG)
+
+
+def simplify_px(coords, min_px2: float, closed: bool = False):
+    """Visvalingam–Whyatt as common.simplify (same heap, same floors: a ring keeps 4 points, a line 2),
+    with each triangle measured in Web Mercator CSS pixels at WORLD_PX_PER_DEG."""
+    pts = list(coords)
+    if closed and len(pts) > 1 and pts[0] == pts[-1]:
+        pts = pts[:-1]
+    n = len(pts)
+    if n < 3:
+        return pts + ([pts[0]] if closed and pts else [])
+    P = [_merc_px(x, y) for x, y in pts]
+
+    def tri(a, b, c):
+        return abs((P[b][0] - P[a][0]) * (P[c][1] - P[a][1]) - (P[b][1] - P[a][1]) * (P[c][0] - P[a][0])) / 2
+
+    prev = list(range(-1, n - 1))
+    nxt = list(range(1, n + 1))
+    if closed:
+        prev[0], nxt[-1] = n - 1, 0
+    else:
+        prev[0], nxt[-1] = -1, -1
+    area = [math.inf] * n
+    heap = []
+    for i in range(n):
+        if prev[i] >= 0 and nxt[i] >= 0:
+            area[i] = tri(prev[i], i, nxt[i])
+            heap.append((area[i], i))
+    heapq.heapify(heap)
+    alive = [True] * n
+    count = n
+    floor = 4 if closed else 2
+    while heap and count > floor:
+        a, i = heapq.heappop(heap)
+        if not alive[i] or a != area[i]:
+            continue
+        if a >= min_px2:
+            break
+        alive[i] = False
+        count -= 1
+        p, q = prev[i], nxt[i]
+        if p >= 0:
+            nxt[p] = q
+        if q >= 0:
+            prev[q] = p
+        for j in (p, q):
+            if j >= 0 and alive[j] and prev[j] >= 0 and nxt[j] >= 0:
+                area[j] = max(a, tri(prev[j], j, nxt[j]))
+                heapq.heappush(heap, (area[j], j))
+    out = [pts[i] for i in range(n) if alive[i]]
+    if closed:
+        out.append(out[0])
+    return out
+
+
+def _bbox(ring):
+    xs = [p[0] for p in ring]
+    ys = [p[1] for p in ring]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _contains(ring, x, y) -> bool:
+    inside = False
+    for (x0, y0), (x1, y1) in zip(ring, ring[1:]):
+        if (y0 > y) != (y1 > y) and x < (x1 - x0) * (y - y0) / (y1 - y0) + x0:
+            inside = not inside
+    return inside
+
+
+def _interior_points(ring):
+    """Points strictly inside a closed ring: on the horizontal lines at a quarter, half and three
+    quarters of its height, the middle of the widest span the ring covers. Unlike its vertices, they
+    are never on an edge it shares with a neighbour."""
+    y0, y1 = min(p[1] for p in ring), max(p[1] for p in ring)
+    pts = []
+    for f in (0.5, 0.25, 0.75):
+        y = y0 + (y1 - y0) * f
+        xs = sorted(x0 + (x1 - x0) * (y - ya) / (yb - ya)
+                    for (x0, ya), (x1, yb) in zip(ring, ring[1:]) if (ya > y) != (yb > y))
+        spans = [(xs[k + 1] - xs[k], (xs[k] + xs[k + 1]) / 2) for k in range(0, len(xs) - 1, 2)]
+        if spans:
+            pts.append((max(spans)[1], y))
+    return pts
+
+
+def _ring_inside(a, b, ba=None, bb=None) -> bool:
+    """True when ring `a` lies inside ring `b`: its box inside b's, and most of its interior points
+    (above) inside b, even-odd as the app fills. A ring that shares edges with b but lies beside it,
+    like a lease on a coast or Bir Tawil on Sudan's border, is not inside. `ba`, `bb`: the boxes."""
+    ax0, ay0, ax1, ay1 = ba or _bbox(a)
+    bx0, by0, bx1, by1 = bb or _bbox(b)
+    if ax0 < bx0 or ay0 < by0 or ax1 > bx1 or ay1 > by1:
+        return False
+    pts = _interior_points(a)
+    return bool(pts) and sum(_contains(b, x, y) for x, y in pts) * 2 > len(pts)
+
+
+def _drop_nested(rings):
+    """The app fills a country's rings even-odd and the build drops holes, so a ring inside another
+    ring of the same country (an enclave's own enclave, or a merged feature's island) would paint as
+    a hole. It is already covered by the ring around it, so it is left out."""
+    boxes = [_bbox(r) for r in rings]
+    return [a for i, a in enumerate(rings)
+            if not any(j != i and _ring_inside(a, b, boxes[i], boxes[j]) for j, b in enumerate(rings))]
+
+
 def build_world_geometry(cache: Cache):
-    raw = cache.get("global/ne_50m_admin_0_countries.geojson", NE_COUNTRIES_50)
+    raw = pinned(cache, "global/ne_10m_admin_0_countries.geojson", NE_COUNTRIES_10, NE_COUNTRIES_10_SHA256)
     gj = json.loads(raw.decode("utf-8"))
-    countries = []
+    feats = []
     for f in gj["features"]:
         p = f["properties"]
         a3 = p.get("ISO_A3_EH") if p.get("ISO_A3_EH") not in (None, "-99") else p.get("ADM0_A3")
@@ -76,18 +234,34 @@ def build_world_geometry(cache: Cache):
         rings = []
         for poly in polys:
             outer = [tuple(c) for c in poly[0]]
-            outer = simplify(outer, WORLD_MIN_AREA_M2, closed=True)
+            outer = simplify_px(outer, WORLD_MIN_PX2, closed=True)
             if len(outer) >= 4 and ring_area_m2(outer) > 0:
                 rings.append(outer)
+        feats.append({"iso3": a3, "name": p.get("NAME") or p.get("ADMIN"), "adm0": p.get("ADM0_A3"), "rings": rings})
+    by_adm0 = {f["adm0"]: f for f in feats}
+    unknown = [k for k, v in NE10_EXTRA.items() if k not in by_adm0 or (v not in (None, "keep") and v not in by_adm0)]
+    if unknown:
+        raise BuildError(f"Natural Earth admin-0 no longer has {unknown} (or their targets); review NE10_EXTRA")
+    for adm0, target in NE10_EXTRA.items():
+        f = by_adm0[adm0]
+        if target == "keep":
+            continue
+        if target is not None:
+            t = by_adm0[target]
+            t["rings"].extend(r for r in f["rings"] if not any(_ring_inside(r, tr) for tr in t["rings"]))
+        f["rings"] = []
+    countries = []
+    for f in feats:
+        rings = _drop_nested(f["rings"])
         if not rings:
             continue
         cx, cy = centroid(rings)
         countries.append({
-            "iso3": a3, "name": p.get("NAME") or p.get("ADMIN"), "adm0": p.get("ADM0_A3"),
+            "iso3": f["iso3"], "name": f["name"], "adm0": f["adm0"],
             "c": [round(cx, 3), round(cy, 3)],
             "rings": [encode_line(r, WORLD_FACTOR) for r in rings],
         })
-    # 1:50m carries dependencies that share their parent's ISO code (Ashmore and Cartier and
+    # Natural Earth carries dependencies that share their parent's ISO code (Ashmore and Cartier and
     # the Indian Ocean Territories are "AUS"): the biggest feature keeps the code, the others
     # fall back to their own ADM0 code so no country is painted twice.
     by = {}
@@ -103,7 +277,7 @@ def build_world_geometry(cache: Cache):
         "schema": 1,
         "factor": WORLD_FACTOR,
         "encoding": "Google polyline, lon then lat, 3 decimals; rings closed",
-        "source": "Natural Earth 1:50m admin-0 countries and 1:10m bathymetry (public domain), simplified",
+        "source": "Natural Earth 1:10m admin-0 countries and 1:10m bathymetry (public domain), simplified",
         "countries": countries,
         "bathymetry": build_world_bathymetry(cache),
     }
@@ -640,7 +814,7 @@ def main():
         world["relief"] = build_world_relief(cache, args.out)
     n = len(json.dumps(world, ensure_ascii=False, separators=(",", ":")).encode())
     if n > WORLD_BUDGET:
-        raise BuildError(f"world.json would be {n:,} B, over its budget of {WORLD_BUDGET:,}; raise WORLD_MIN_AREA_M2")
+        raise BuildError(f"world.json would be {n:,} B, over its budget of {WORLD_BUDGET:,}; raise WORLD_MIN_PX2")
     write_json(os.path.join(args.out, "world.json"), world)
 
     log("world: countries")
@@ -683,7 +857,7 @@ def main():
              "licence": "CC BY 4.0",
              "detail": src or "Energy Institute Statistical Review of World Energy; The Shift Data Portal for years before 1965",
              "attribution": "Country production: Energy Institute Statistical Review of World Energy, via Our World in Data (CC BY 4.0)"},
-            {"name": "Natural Earth 1:50m admin-0 countries, 1:10m bathymetry and Natural Earth I shaded relief", "url": "https://www.naturalearthdata.com/",
+            {"name": "Natural Earth 1:10m admin-0 countries, 1:10m bathymetry and Natural Earth I shaded relief", "url": "https://www.naturalearthdata.com/",
              "licence": "Public domain", "attribution": "Basemap: Natural Earth"},
         ],
         "world": wrl,

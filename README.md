@@ -69,16 +69,16 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | World News | [**Install World News**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) | tiny | nothing |
 | Outdoor Window | [**Install Outdoor Window**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) | tiny | your own Shortcut |
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
-| Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.2 MB | nothing |
-| Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.5 MB | nothing |
+| Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.5 MB | nothing |
+| Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.8 MB | nothing |
 | Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 25 MB | nothing |
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
-| World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 0.7 MB | nothing (GOGET by hand) |
+| World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 2.1 MB | nothing (GOGET by hand) |
 | Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.5 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) | 7 MB | nothing |
-| US Quakes | [**Install US Quakes**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) | 6.4 MB | nothing (the feed refreshes here hourly) |
+| US Quakes | [**Install US Quakes**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
 | Warming World | [**Install Warming World**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.

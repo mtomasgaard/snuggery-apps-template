@@ -87,10 +87,10 @@ None of them is a Renaissance sans. The four reasons it was chosen, all measured
 | Fine print | 400, 10.5 px, `--ink-2` | the credit line |
 | Place names (canvas) | 560, 11.5 px over a 3 px halo | the map and the globe |
 
-The scale is **10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 / 21 px**. Nothing is larger than 21 px. Nothing
+The scale is **10.5 / 11 / 11.5 / 12 / 12.5 / 13.5 / 15 / 21 px** (12 px is the readout's place line, as built). Nothing is larger than 21 px. Nothing
 is set in capitals or small capitals, nothing is letter-spaced, and no label sits above a heading.
 `body` sets `font-variant-numeric: tabular-nums lining-nums`. Prose that is not a number column
-(About, the caption) sets `proportional-nums`.
+(About, the caption) sets `proportional-nums`, which the cut cannot honor: the face has no `pnum`, and its default figures are already tabular (every digit 517/1000 em), so the figures are the same either way.
 
 **The file** (`fonts/`, vendored in this pass):
 
@@ -109,7 +109,7 @@ Two runs were byte-identical (`cmp`).
   Ț ț (U+0218–021B), combining macron and dot above (U+0304, U+0307), Latin Extended Additional
   (U+1E00–1EFF, which GeoNames uses for Vietnamese and transliterated names), U+2009, U+202F,
   dashes, quotes, the ellipsis, primes, single guillemets, U+2212 and ≤ ≥.
-- **Features kept**: kern, tnum, lnum, pnum, case, liga, calt, ccmp, locl, mark, mkmk.
+- **Features kept**: kern, tnum, case, liga, calt, ccmp, locl, mark, mkmk (the upstream has no `pnum`, and the subset empties `lnum`; measured on the shipped woff2).
 - **Checked on the cut** with fontTools: axis wght 400–650, features as above, places missing
   `ḑḨḩ` only, and U+2212, U+202F, U+2009, °, ≤ ≥, …, ‹ ›, × and ′ all present.
 
@@ -336,7 +336,7 @@ The layout at 390 × 844 (heights in CSS px, safe-area insets added outside them
 
 That leaves 559 px of plate at 390 × 844 (measured by `tools/shoot.mjs`, with the stamp on two
 lines because the demo forecast has run out), against about 657 in the stock app. The caption band
-costs about 85 px, its exposure line holding two lines' height whatever it says, and in exchange
+costs about 85 px of height (about 45 px more of the plate than the overlaid legend it replaced), its exposure line holding two lines' height whatever it says, and in exchange
 the legend and the credits no longer cover the plate (owner call 6).
 Content is left-aligned throughout. The only centered things are the error sentence on the plate
 and the play key's glyph.
@@ -354,7 +354,7 @@ forecast leads with a sentence in `--ink` (the rest of the line stays `--ink-2`)
 the temperature ramp uses those colors, and the words carry the warning. Tapping the stamp opens
 About, as today.
 
-**The view switch and the layer words** share one 40 px row. `Map` and `Globe` (exact text, for the
+**The view switch and the layer words** share one 44 px row. `Map` and `Globe` (exact text, for the
 camera) are tabs, then a 1 px `--line` divider 14 px tall, then the layer words from the snapshot's
 `label` in full: Wind, Temperature, Rain, Cloud, Pressure. Each is a 44 px-tall hit, with the words
 16 px apart. **The chosen one is marked by a tracer**: weight 620, and under it a 2 px line as wide
@@ -366,7 +366,7 @@ The swatches the stock chips carried are gone, because the legend under the plat
 
 **The key column** sits over the plate's right edge, inset 8 px. It holds three plates of
 `--sheet`, each with a 1 px `--line` edge, a 6 px radius and no shadow, separated by 8 px. Each key
-is 36 × 36 drawn (44 × 44 hit) with hairline `--line` separators inside a plate. Icons are
+is 36 × 44 drawn (44 × 44 hit) with hairline `--line` separators inside a plate. Icons are
 1.5 px strokes in `--ink-2`, `--ink` when on.
 - **Zoom in** (`+`), **Zoom out** (`−`), **Whole world** (four corner brackets around a 5.5 px
   circle: everything, fitted; not a globe, which would be read as the Globe tab one row up). These
@@ -439,8 +439,8 @@ hit across the remaining width.
 
 **The readout card** (the tapped place) sits top-left on the plate, inset 8 px, at most 280 px
 wide. When it would cover the place that was tapped, it sits bottom-left instead, so the marker is
-never under its own card. Place names are not drawn under it, nor under the key column. `--sheet`, a 1 px `--line-strong` edge, an 8 px radius, no shadow, no blur, and 10 × 12 px
-padding.
+never under its own card. Place names are not drawn under it, nor under the key column. `--sheet`, a 1 px `--line-strong` edge, an 8 px radius, no shadow, no blur, `4px 4px 10px 12px`
+padding and a 176 px minimum width.
 - The place line: the coordinates as today, `27.0° N, 1.5° E` (U+202F before the hemisphere).
   12 px `--ink-2`, with ✕ (an SVG, 44 px hit) at the right.
 - The value: 21 px, 600, with the unit 13.5 px after U+202F.
@@ -448,7 +448,7 @@ padding.
   goes, never the ➤ character. Then a line in 12.5 px: `From ENE (63°), moderate breeze, Beaufort
   4`.
 - The other layers' rows: a `dl` in 12.5 px, labels `--ink-2` left, values `--ink` 560 tabular
-  right-aligned. It appears with a 120 ms fade and a 4 px rise, and leaves with a 100 ms fade.
+  right-aligned. It appears with a 120 ms fade and a 4 px rise, and is hidden at once (no exit animation is built: `[hidden]` is `display: none`).
 
 **About** is a full-height `--sheet` panel that slides up over 220 ms, with `overscroll-behavior:
 contain` and focus held inside it. Its sections, each headed 650 at 13.5 px in sentence case and
@@ -476,8 +476,8 @@ screen each one leads to:
   a laptop.)
 - **Show the controls** (the ghost key), in the plate's top-right corner where the column was,
   inset 8 px below the top safe area (in Snuggery's full screen the plate starts under the status
-  bar once the header has gone), 44 × 44 hit, `aria-keyshortcuts="Escape"`: the same mark with a
-  15 px line added 3.5 px above the frame, the header returning. No arrow is drawn under it. It has no plate. It is drawn like the overlay:
+  bar once the header has gone), 44 × 44 hit, `aria-keyshortcuts="Escape"`: the same frame, holding a plain line
+  where the hide key holds a streak, with a 15 px line added 3.5 px above the frame, the header returning. No arrow is drawn under it. It has no plate. It is drawn like the overlay:
   dark theme, a 1.4 px `#f2f4f1` stroke over a 3.4 px `rgb(10,16,19)` halo at 45 %; light theme, a
   1.4 px `#0f1c23` stroke over a 3.4 px `rgb(246,249,250)` halo at 60 %. It rests at 72 % opacity
   and is full on hover, focus and press. Over every base the stroke holds 5.28:1 (light) and 4.85:1
@@ -520,8 +520,8 @@ Two curves:
 | What | How |
 | --- | --- |
 | The selection tracer moving to a new word | it draws in from its tail to its head, 160 ms `--draw` (`clip-path` inset from the right, so only `transform`/`clip-path` animate) |
-| Readout card in / out | 120 ms opacity and a 4 px `translateY`, then a 100 ms fade |
-| About in / out | 220 ms `translateY`, `--sheet-in` / 160 ms |
+| Readout card in | 120 ms opacity and a 4 px `translateY`; out at once |
+| About in | 220 ms `translateY`, `--sheet-in`; out at once |
 | Focus mode | the chrome fades out over 160 ms; the canvases resize once, never blank (DESIGN §3); the ghost key fades in over 200 ms |
 | The thumb, the time row, the lead, the legend's numbers, the exposure text | **no transition, ever** (DESIGN §2.2; `check.mjs`) |
 | The flow | DESIGN §1, the only continuous motion |
@@ -547,7 +547,7 @@ was opened on, and play goes on from there.
 ## Deliberately restrained
 
 - One face, one file, 35 372 bytes. One large figure (the valid time, 21 px).
-- No accent color. Chrome tokens stay at OKLCh chroma ≤ 0.024 (the ink's), and every hue on the
+- No accent color. Chrome tokens stay at OKLCh chroma ≤ 0.024 (`--ink-2`'s, the highest), and every hue on the
   plate is a layer's scale.
 - No shadows, blur, glass or glow anywhere: not on the keys, not on the card, not on the globe.
 - One solid control (Play). Radii: 6 px (keys), 8 px (card, notices, Play), 0 on the legend bar.
@@ -581,7 +581,7 @@ was opened on, and play goes on from there.
 | ALL-CAPS tracked eyebrow labels | None. Sentence case everywhere, no tracking, and no label above a heading. |
 | Meta strings joined with middle dots | The stamp, the lead, the readout and About use commas, sentences or one value per line. The three-credit line keeps its dots because its text is fixed by license (owner call 4). |
 | "WORD — fragment" labels with a spaced em dash | None. |
-| Tinted near-black (#0B0B0B, #111) standing in for black | Ink is `#0f1c23`, a stated developer-ink color (L 0.20) used for text and streaks, and the dark page is L 0.224. |
+| Tinted near-black (#0B0B0B, #111) standing in for black | Ink is `#0f1c23`, a stated developer-ink color (L 0.22) used for text and streaks, and the dark page is L 0.224. |
 | A monospace face for small data labels | None. Ysabeau's tabular figures do the aligning. |
 | "→" appended to links and buttons | None. There are no links, and button words say what they do. |
 | One word accented in a headline | None. The only emphasis is the stale sentence in the stamp, which is a status: its words, not its color, say "ran out". |
@@ -608,7 +608,7 @@ was opened on, and play goes on from there.
 
 The same file set, copied by hand (a mini-app is one folder). It differs only in these ways:
 - **No layer row.** Row 3 holds `Map` and `Globe`, and at its right a word toggle **`Speed
-  colors`** (`aria-pressed`, accessible name `Color the map by wind speed`), which replaces the
+  colors`** (`aria-pressed`, named `Speed colors`, with `Color the map by wind speed` as its description), which replaces the
   `btn-heat` icon key. Its stored key stays `gw.heat`. Every string is in US spelling.
 - **An Arrows key** joins Flow and Night in the column (DESIGN owner call 10), so the pair has the
   same four states. Stored `gw.arrows`.

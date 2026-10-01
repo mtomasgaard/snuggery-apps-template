@@ -279,7 +279,9 @@ or produced before 2003. The national gas total for 2024 comes out at 8.9 bcm, a
   simplification); ISO_A3 is `-99` for France, Norway, Kosovo and a few others, mapped explicitly,
   and dependencies sharing a parent's ISO code (Ashmore and Cartier, the Indian Ocean Territories,
   both `AUS`) get their ADM0 code so no country is painted twice. 1:110m was used first and looked
-  like a sketch on a phone.
+  like a sketch on a phone. Since plan 0011 (October 2026) the countries are 1:10m, pinned by commit
+  and sha256 and simplified for the app's deepest zoom, because 1:50m had smoothed Norway's fjords
+  away at 0.46 km a pixel; `world-oil-gas/NOTES.md` ("The coast") has the details.
 - **Natural Earth I with shaded relief, hypsometric tints and water, 1:50m** (`NE1_50M_SR_W.zip`,
   ~90 MB from `naciscdn.org`; public domain): the basemap raster. The build resamples the
   10,800 × 5,400 TIFF to 4,096 × 2,048 plate carrée with Pillow and writes `data/relief.jpg`

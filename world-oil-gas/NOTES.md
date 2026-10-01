@@ -18,7 +18,7 @@ one pipeline) and the running of it in **`shelf-atlas/HANDOFF.md`**; the data co
 | --- | --- | --- |
 | Our World in Data, energy dataset (carrying the Energy Institute Statistical Review and The Shift Data Portal) | CC BY 4.0 | "Country production: Energy Institute Statistical Review of World Energy, via Our World in Data (CC BY 4.0)" |
 | Global Energy Monitor, Global Oil and Gas Extraction Tracker, March 2026 | CC BY 4.0 | "Fields: Global Energy Monitor, Global Oil and Gas Extraction Tracker (CC BY 4.0)" |
-| Natural Earth (1:50m countries, 1:10m bathymetry, Natural Earth I shaded relief) | public domain | "Basemap: Natural Earth" |
+| Natural Earth (1:10m countries, 1:10m bathymetry, Natural Earth I shaded relief) | public domain | "Basemap: Natural Earth" |
 
 The credits line on the map is one short line that opens the About screen, where the full
 attributions, licence links and a "changes made" line live. Keep both if you change the app.
@@ -27,7 +27,7 @@ attributions, licence links and a "changes made" line live. Keep both if you cha
 
 ```
 data/snapshot.json   annual oil and gas by country, 1900 →, plus ask rows   0.15 MB   yearly build (1 July, 1 September), differs once a year
-data/world.json      countries, bathymetry bands, the relief block           0.6 MB    yearly build, rarely differs
+data/world.json      countries, bathymetry bands, the relief block           1.2 MB    yearly build, rarely differs
 data/relief.jpg      Natural Earth I shaded relief, 4096×2048 plate carrée   0.8 MB    yearly build, never differs
 data/fields.json     the tracker's units, production, reserves, outlines     2.5 MB    by hand, when a new tracker release is dropped in
 ```
@@ -57,6 +57,25 @@ basemap and the relief travel in the ZIP and change when you replace the app (se
 
 ## Size
 
-The ZIP is about 1.7 MB; the app parses 3.3 MB of JSON and decodes one JPEG on open. `app.js`
-is 130 KB against a 150 KB budget, `fields.json` 2.5 MB against 2.6 MB, `world.json` 0.6 MB
-against 1.4 MB; the build fails rather than ship over budget.
+The ZIP is about 2.1 MB (2,068,007 B, from 1,670,512 B before the 1:10m coast); the app parses
+3.8 MB of JSON and decodes one JPEG on open. `app.js` is 130 KB against a 150 KB budget,
+`fields.json` 2.5 MB against 2.6 MB, `world.json` 1.2 MB (1,222,141 B) against 1.4 MB; the build
+fails rather than ship over budget.
+
+## The coast
+
+The countries are Natural Earth **1:10m** (v5.1.2, pinned by commit and sha256 in
+`scripts/shelf_atlas/build_world.py`), because the map zooms to 120 px a degree of longitude,
+0.46 km a pixel at 60° N, where 1:50m had smoothed Norway's fjords into a few blunt inlets. They are
+simplified for that zoom: a vertex is dropped while its triangle is under 4 square CSS pixels in Web
+Mercator at the deepest zoom (`WORLD_MIN_PX2`), so the line moves by a pixel or two there and by
+nothing visible anywhere else; 269,237 vertices in 4,240 rings. Holes are dropped, as before. 1:10m
+has sixteen small features 1:50m did not, and `NE10_EXTRA` says what became of each: the leases,
+the sovereign base areas, the U.N. buffer zone, Bir Tawil and Brazilian Island join Kazakhstan, Cuba,
+Cyprus, Sudan and Brazil (the country that painted that ground at 1:50m, or the one Natural Earth's
+own ISO code names); eight open-sea specks and
+Gibraltar are left out, as they were at 1:50m; and the Southern Patagonian Ice Field, which 1:50m
+split between Argentina and Chile, is its own plain outline (About lists it under "Outlines with no
+series"). The shaded relief is still Natural Earth I at 1:50m, so with the relief on, its own water
+edge does not follow the vector fjords. Label points are each country's centroid, so most moved a
+little with the finer outline.

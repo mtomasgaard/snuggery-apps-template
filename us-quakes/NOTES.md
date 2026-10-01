@@ -103,18 +103,31 @@ With it the code is back in two-space indentation, each module has a two-to-four
 what it owns, and focus mode fits; the reasoning lives in DESIGN §20–§25. The second fix pass
 (§24) added 11,754 bytes, the lead's pass (§25) 4,581.
 
-## What ships (measured by `tools/check.mjs`, 2026-09-30, the lead's pass)
+## What ships (measured by `tools/check.mjs`, 2026-10-01, after the 1:10m basemap)
 
 | File | Raw bytes | As the ZIP stores it |
 | --- | --: | --: |
-| `assets/` (history.bin, geo.json, four relief JPEGs, about, stories, history.json) | 8,945,829 | **5,859,345** (cap 6,000,000; `verify_static.py`, counting deflate streams without entry headers, prints 5,851,793 and 148,207 of headroom) |
+| `assets/` (history.bin, geo.json, four relief JPEGs, about, stories, history.json) | 9,452,727 | **6,200,432** (cap 6,340,000; `verify_static.py`, counting deflate streams without entry headers, prints 6,191,803 and 148,197 of headroom) |
 | `data/snapshot.json` (the demo, the feed of 2026-09-30T23:17:42Z) | 535,106 | 363,628 |
 | `fonts/` (five WOFF2 + OFL.txt) | 68,742 | 65,718 |
 | app code | 178,069 | 65,927 |
-| **The ZIP** (41 files, with CREDITS, NOTES, DESIGN, ART, miniapp.json) | | **6,446,225** (cap 8,000,000) |
+| **The ZIP** (41 files, with CREDITS, NOTES, DESIGN, ART, miniapp.json) | | **6,788,418** (cap 8,000,000) |
 
 The basemap past the axis took 149,533 B of the assets' headroom (`geo.json` 837,552 → 987,085 as the
 ZIP stores it): the January 2027 rebuild fits, and 2028's will need the first of HANDOFF's levers.
+
+**The basemap is Natural Earth 1:10m** (plan 0011 A, 2026-10-01): at the deepest zoom a CSS pixel is
+0.11 km at 60° N, and 1:50m cut straight across the arms of Prince William Sound and the Inside Passage
+that the relief shows. Land, coast, lakes, borders and state lines come from 1:10m, cut to what 1:50m
+drew (`build_geo.py`: 1:50m's lakes by Natural Earth's `ne_id` plus four pieces of 1:50m water 1:10m
+files under another id; the nine 1:50m countries' state lines less the indicators across water; the
+borders less the Guantánamo lease limit), at the same 250 000 m² thresholds. `geo.json` 1,851,803 →
+2,358,179 B raw (budget 1,900,000 → 2,360,000, +24.2 %), 987,085 → 1,326,898 B stored; the assets' cap
+rose by what the basemap and its credit added (340,010 B), 6,000,000 → 6,340,000 (+5.7 %), so the
+yearly headroom above is unchanged. The ZIP cap did not move. The 1:50m file drew Lake Mead, Fort Peck
+Lake, Teslin Lake and Lower Arrow Lake twice, and the even-odd fill cancelled them: they were land on
+the map until this build; `build_geo.py` now stops if a ring is written twice. The relief JPEGs still
+mask lakes with 1:50m (`build_relief.py`, unchanged, byte-identical).
 At run time the history and the snapshot join at the cutoff: 385,071 + 18,350 = 403,421 rows.
 
 ## Measurements (headless Chromium 153 on SwiftShader: a trend, never phone evidence)
@@ -123,7 +136,10 @@ From `tools/shoot.mjs` on 2026-09-30: ready about 150–950 ms after navigation 
 history, indexed; relief textures about 1–2 s). Over a scripted pan and pinch of History All at M 2.5+:
 JS time for the points draw 0.1 ms median (the GPU work is not in it), the base redraw 4.4 ms median /
 5.9 p95, the lines 1.7 / 2.4, the overlay 0.2 / 0.6; after the lead's pass, with the basemap past the
-axis in view, the base 7.4 / 10.1, the lines 2.2 / 2.8, the overlay 0.2 / 0.9. In the full harness a
+axis in view, the base 7.4 / 10.1, the lines 2.2 / 2.8, the overlay 0.2 / 0.9; with the 1:10m basemap
+(2026-10-01, the same scenes, the old file measured in the same session for comparison: base 7.4 / 10.1,
+lines 2.1 / 2.8) the base 9.7 / 12.3 and the lines 2.4 / 3.2, geo.json's load mark 47 → 58 ms and the
+Alaska chip's base and lines 24.6 → 26.1 ms (median of five). In the full harness a
 real long press listed after 1,004 ms held (alone, the same steps before it, 533 ms: the 500 ms timer
 and a frame), so the check now waits for the list rather than reading at 750 ms. The section query and plot: Cook Inlet 14–15 ms,
 Aleutians 8, Cascadia 1, Hawaii 53–55 (35 342 dots). The relief over the western US's land (scene 1):

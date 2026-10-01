@@ -20,7 +20,7 @@
 //  14. the look: no box-shadow, backdrop-filter, `transition: all`, uppercase or letter-spacing in
 //      style.css; no middle dot in a string the app writes but CREDITS; no →, ➤ or "..." in shipped
 //      text; both theme-color metas, each its theme's --page;
-//  15. budgets: app code ≤ 200,000 bytes, fonts/ ≤ 160,000, and the ZIP built exactly as
+//  15. budgets: app code ≤ 203,000 bytes (200,000 until plan 0011's 1:10m coast needed levels of detail), fonts/ ≤ 160,000, and the ZIP built exactly as
 //      build-zips.yml builds it ≤ 2,800,000 with index.html at its top and nothing else in it;
 //  16. (after review) assets/LICENSES.md credits the face that ships and never says no font does;
 //      no British spelling in any shipped text file (US English for a US audience), the snapshot's
@@ -240,7 +240,7 @@ const css = read('style.css');
 const codeFiles = ['index.html', 'style.css', 'app.js', ...shipped.filter((f) => /^js\/[^/]+\.js$/.test(f))];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= 200000, `app code ${fmt(codeBytes)} bytes (budget 200,000): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= 203000, `app code ${fmt(codeBytes)} bytes (budget 203,000): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

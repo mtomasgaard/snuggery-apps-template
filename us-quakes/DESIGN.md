@@ -387,7 +387,8 @@ In CSS px on canvases scaled by the same factor, the same Mercator in JS (forwar
 built per view from world-unit vertices decoded once. Colors and weights are ART.md's.
 
 On **`#lines`**, under the dots:
-1. Coastline (Natural Earth 1:50m), 0.9 px `--ink` at 55 %.
+1. Coastline (Natural Earth 1:10m since plan 0011 A; 1:50m before, which cut across the fjords and arms the
+   relief shows at the deepest zoom), 0.9 px `--ink` at 55 %.
 2. Country borders, 0.8 px at 45 %; state and province lines, 0.6 px dashed 3/2, at 30 %.
 3. **Faults** by age (§10.1), in `--fault` (graphite in light, pencil in dark); a chain is drawn only
    when its screen extent is ≥ 2 px (the level of detail is the screen, not the data).
@@ -877,22 +878,23 @@ bytes carry their own caps.
 | `relief-ak.jpg` 3072 × 2482, q75 | 635,849 | same | measured | 720,000 |
 | `relief-hi.jpg` 2048 × 1458, q75 | 43,668 | same | measured | 60,000 |
 | `relief-pr.jpg` 2048 × 801, q75 | 84,413 | same | measured | 100,000 |
-| `geo.json` (the basemap to 25° S–81° N, §25) | 1,851,803 | 987,085 | measured, `verify_static.py` (§25) | 1,900,000 raw |
+| `geo.json` (the 1:10m basemap to 25° S–81° N, §25, plan 0011 A) | 2,358,179 | 1,326,898 | measured, `verify_static.py` (2026-10-01) | 2,360,000 raw (1,900,000 at 1:50m) |
 | `stories.json` + `about.json` | ≈ 45,000 | ≈ 18,000 | estimate | 30,000 + 40,000 |
-| **`assets/` total** | 8,945,829 | **5,851,793** | measured, `verify_static.py` (§25) | **6,000,000 in the ZIP** |
+| **`assets/` total** | 9,452,727 | **6,191,803** | measured, `verify_static.py` (2026-10-01) | **6,340,000 in the ZIP** (6,000,000 at 1:50m) |
 | `data/snapshot.json` | ≈ 560,000 | ≈ 480,000 | estimate from measured parts (§CONTRACT 3.8) | **1,500,000 raw** |
 | app code (`index.html`, `style.css`, `js/*.js`) | ≈ 120,000 | ≈ 35,000 | estimate | **150,000 raw** |
 | `fonts/` (five WOFF2 + `OFL.txt`) | 68,742 | ≈ 66,000 | measured raw (`wc -c`, ART.md); WOFF2 does not deflate further | 120,000 raw |
 | `CREDITS.txt`, `NOTES.md`, `DESIGN.md`, `ART.md` | ≈ 155,000 | ≈ 52,000 | estimate (DESIGN 75,781 and ART 37,867 raw, `wc -c`, 2026-09-30) | |
-| **The ZIP** | | **6,446,225** | measured, `check.mjs` (§25) | **8,000,000** |
+| **The ZIP** | | **6,788,418** | measured, `check.mjs` (2026-10-01, the 1:10m basemap) | **8,000,000** |
 
 The assets' headroom was about 230 KB at design time and is **148,207 B** after the lead's pass
-(`verify_static.py`: 5,851,793 B of 6,000,000; the basemap past the axis took 149,533 B, §25), and the
+(`verify_static.py`: 5,851,793 B of 6,000,000; the basemap past the axis took 149,533 B, §25); the 1:10m
+basemap (plan 0011 A) added 340,010 B and the cap rose by the same, to 6,340,000, leaving 148,197 B; and the
 history grows about 12,000 rows a year (2020–2025 averaged 12,300, `RESEARCH.md` §4; ≈ 100 KB in the ZIP
 at 7.9 B a row): the January 2027 rebuild fits, and the 2028 one will need the first lever. The levers,
 in order, when the yearly build's assertion fails: the Lower 48 relief at q70 (−86 KB, measured), fault
 simplification at 200,000 m² (−44 KB), the basemap's coarse zones doubled (×20 north of 5° N, −22 KB,
-measured in the lead's scratch run), then a decision for the owner (the floor, or dropping a bathymetry
+measured in the lead's scratch run at 1:50m; not re-measured at 1:10m), then a decision for the owner (the floor, or dropping a bathymetry
 band). The build fails rather than trims silently.
 
 **Memory** (budgets; the phone numbers come from the phone):

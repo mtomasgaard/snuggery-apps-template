@@ -4,7 +4,7 @@ variable font (ART.md, "Type").
 Ysabeau Office (Christian Thalmann, Catharsis Fonts; SIL OFL 1.1, no Reserved Font Name: the
 copyright line of google/fonts' OFL.txt names none) as published in google/fonts at a pinned
 commit. The cut keeps the weight axis 400-650 and the characters the app sets:
-  Basic Latin, Latin-1, Latin Extended-A, o-horn and u-horn (U+01A0-01B0), the comma-below
+  Basic Latin, Latin-1, Latin Extended-A, o-horn and u-horn (U+01A0-01A1, U+01AF-01B0), the comma-below
   letters (U+0218-021B), the combining macron and dot above (U+0304, U+0307), Latin Extended
   Additional (U+1E00-1EFF: GeoNames writes Vietnamese and transliterated names with it),
   the thin and narrow no-break spaces (U+2009, U+202F), dashes, quotes, the ellipsis, primes,

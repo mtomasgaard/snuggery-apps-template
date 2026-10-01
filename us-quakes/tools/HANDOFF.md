@@ -107,15 +107,15 @@ display note and two adaptations.
 | --- | --: | --: | --: |
 | `assets/history.bin` | 5,339,530 | 3,216,030 | 5,800,000 raw |
 | `assets/history.json` | 2,856 | 1,368 | 16,000 |
-| `assets/geo.json` | 1,851,803 | 987,085 | 1,900,000 raw |
+| `assets/geo.json` (1:10m basemap, plan 0011 A) | 2,358,179 | 1,326,898 | 2,360,000 raw |
 | `assets/relief-conus.jpg` | 941,150 | 922,296 | 1,050,000 |
 | `assets/relief-ak.jpg` | 635,665 | 600,888 | 720,000 |
 | `assets/relief-hi.jpg` | 43,668 | 32,856 | 60,000 |
 | `assets/relief-pr.jpg` | 84,413 | 76,504 | 100,000 |
-| `assets/about.json` | 37,509 | 11,722 | 40,000 |
+| `assets/about.json` | 38,031 | 11,919 | 40,000 |
 | `assets/stories.json` | 9,235 | 3,044 | 30,000 |
-| **`assets/` total** | **8,945,829** | **5,851,793** | **6,000,000 in the ZIP** |
-| `CREDITS.txt` | 20,410 | | 40,000 |
+| **`assets/` total** | **9,452,727** | **6,191,803** | **6,340,000 in the ZIP** |
+| `CREDITS.txt` | 21,032 | | 40,000 |
 | `tools/ref/history_ref.json` / `section_ref.json` | 134,986 / 40,232 | not shipped | 250,000 each |
 
 **If a step fails** it prints `BUILD FAILED:` with the reason and writes nothing: a changed upstream
@@ -139,11 +139,12 @@ windows would not be closed). Then check the stories: their numbers are recomput
 year moves with the cutoff), and a changed anchor stops the build rather than printing a wrong claim.
 
 **The budget.** The history grows by about 12 000 rows a year, ≈ 100 KB as the ZIP stores it, against
-148 KB of headroom since the lead's pass carried the basemap past the axis (it took 149 KB), so the
+148 KB of headroom since the lead's pass carried the basemap past the axis (it took 149 KB; the 1:10m
+basemap of plan 0011 A added 340 KB and the cap rose by the same, so the headroom stands), so the
 January 2027 rebuild fits and the 2028 one will fail its assertion. Then: Lower 48 relief at quality 70
 (−86 KB, measured at the design stage; change `QUALITY` in `build_relief.py` and run with `--relief`),
 faults at 200 000 m² (−44 KB; `FAULT_M2` in `build_geo.py`), the basemap's coarse zones doubled (the
-10 in `build_geo.DETAIL` to 20: −22 KB, measured on the layers alone), then a decision for the owner
+10 in `build_geo.DETAIL` to 20: −22 KB, measured on the 1:50m layers alone), then a decision for the owner
 (the floor, or a bathymetry band). The build fails rather than trims.
 
 **Relief** is rebuilt only by hand (`./build_all.sh --relief`), after the service's data changes and
@@ -274,7 +275,7 @@ not published to the web. The workflow's header says the same.
   the text is computed by the build; this is not a warning service and says so first.
 - SI by default (km, m), thousands grouped with a narrow no-break space; English for a US audience; no
   AI vendor named anywhere.
-- Budgets asserted before writing: `assets/` ≤ 6,000,000 B as the ZIP stores it, `history.bin` ≤
-  5.8 MB raw, `geo.json` ≤ 1.9 MB raw, snapshot ≤ 1.5 MB, app code ≤ 200 KB (raised from 150 KB for the
+- Budgets asserted before writing: `assets/` ≤ 6,340,000 B as the ZIP stores it (6,000,000 until the 1:10m
+  basemap, plan 0011 A), `history.bin` ≤ 5.8 MB raw, `geo.json` ≤ 2.36 MB raw (1.9 MB at 1:50m), snapshot ≤ 1.5 MB, app code ≤ 200 KB (raised from 150 KB for the
   QA pass, `check.mjs`), the ZIP ≤ 8 MB.
 - Deterministic: no clock in any static output; `build_all.sh --twice` proves two builds identical.

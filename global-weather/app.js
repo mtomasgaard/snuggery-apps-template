@@ -804,8 +804,7 @@ function yToLat(y) {
 let snap = null;
 let field = null;
 let world = null;              // the raw assets/world.json, kept for the globe
-let worldPaths = null;         // Mercator Path2Ds, for the Map tab
-let sphere = null;             // per-point sines and cosines, for the Globe tab
+let worldPaths = null;         // the levels of lod(), once world.json is in
 let landMask = null;           // plate carrée land/sea, for the Globe tab
 let places = [];
 let t = 0;                     // step index, fractional while playing
@@ -941,20 +940,24 @@ function nightFade(cosZenith) {
 
 /* ── world geometry ──────────────────────────────────────────────────────── */
 
+/* Each ring is its own Path2D, added whole: in Chromium a moveTo costs as much as the path so far. */
 function addLine(path, enc, close) {
+  const p = new Path2D();
   let x = 0, y = 0;
   for (let i = 0; i < enc.length; i += 2) {
     x += enc[i]; y += enc[i + 1];
     const px = lonToX(x / 100) * PATH_K, py = latToY(y / 100) * PATH_K;
-    if (i === 0) path.moveTo(px, py); else path.lineTo(px, py);
+    if (i === 0) p.moveTo(px, py); else p.lineTo(px, py);
   }
-  if (close) path.closePath();
+  if (close) p.closePath();
+  path.addPath(p);
 }
 /* A ring's coastline, for stroking: the same points, but broken wherever Natural Earth's Antarctica is
  * cut off straight across (below ANTARCTIC_EDGE), and across any segment that jumps more than 180° of
  * longitude — the ring's closing run from 180° E back to 180° W at 84.35° S, which on the map would be
- * a hard rule along the bottom of the world that no coast draws (found at the whole-world zoom).
- * A ring with neither is closed as it is filled. */
+ * a hard rule along the bottom of the world that no coast draws (found at the whole-world zoom),
+ * and along 180° itself, where Natural Earth cuts Chukotka, Wrangel Island and Fiji in two.
+ * A ring with none is closed as it is filled. */
 function addCoast(path, enc) {
   const n = enc.length / 2, px = new Float64Array(n), py = new Float64Array(n), lon = new Float64Array(n);
   const cut = new Uint8Array(n);
@@ -969,21 +972,68 @@ function addCoast(path, enc) {
   let first = -1;
   for (let i = 0; i < n; i++) {
     const h = (i + n - 1) % n;
-    gap[i] = cut[i] || cut[h] || Math.abs(lon[i] - lon[h]) > 180 ? 1 : 0;
+    gap[i] = cut[i] || cut[h] || Math.abs(lon[i] - lon[h]) > 180 || (lon[i] === lon[h] && Math.abs(lon[i]) === 180) ? 1 : 0;
     if (gap[i] && first < 0) first = i;
   }
   if (first < 0) { addLine(path, enc, true); return; }
+  const p = new Path2D();
   for (let k = 0; k < n; k++) {                 // start at a gap, so no stretch is split
     const i = (first + k) % n;
     if (cut[i]) continue;
-    if (gap[i]) path.moveTo(px[i], py[i]); else path.lineTo(px[i], py[i]);
+    if (gap[i]) p.moveTo(px[i], py[i]); else p.lineTo(px[i], py[i]);
   }
+  path.addPath(p);
 }
 function buildWorldPaths(w) {
   const land = new Path2D(), coast = new Path2D(), borders = new Path2D();
   for (const poly of w.land) for (const ring of poly) { addLine(land, ring, true); addCoast(coast, ring); }
   for (const line of w.borders) addLine(borders, line, false);
   return { land, coast, borders };
+}
+
+/* Natural Earth 1:10m is 300 000 points, too many to draw on every frame of a pan at a small scale. So the
+ * world has four levels, each built when a view first needs it: level k serves up to 400 × 4^k px a world
+ * and keeps a point half a pixel there from the last one kept (level 3 keeps all), in tiles a view draws
+ * only if it touches them. */
+const LODS = [];
+const lodAt = (s) => Math.min(3, Math.max(0, Math.ceil(Math.log(s / 400) / Math.log(4))));
+function thin(enc, tw) {
+  const out = [], b = [9, 9, -9, -9], n = enc.length / 2;
+  let x = 0, y = 0, kx = 0, ky = 0, mx = 0, my = 0;
+  for (let i = 0; i < n; i++) {
+    x += enc[i * 2]; y += enc[i * 2 + 1];
+    const wx = lonToX(x / 100), wy = latToY(y / 100);
+    if (i && i < n - 1 && y / 100 >= ANTARCTIC_EDGE && Math.abs(wx - mx) < tw && Math.abs(wy - my) < tw) continue;
+    out.push(x - kx, y - ky);
+    kx = x; ky = y; mx = wx; my = wy;
+    b[0] = Math.min(b[0], wx); b[1] = Math.min(b[1], wy); b[2] = Math.max(b[2], wx); b[3] = Math.max(b[3], wy);
+  }
+  out.b = b;
+  return out;
+}
+function lod(k) {
+  if (LODS[k]) return LODS[k];
+  const tw = 0.5 / (400 * 4 ** k), tiles = new Map();
+  const put = (b, key, item) => {
+    const id = Math.floor((b[0] + b[2]) * 8) * 64 + Math.floor((b[1] + b[3]) * 8);
+    let t = tiles.get(id);
+    if (!t) tiles.set(id, t = { b: [...b], land: [], borders: [] });
+    t.b = [Math.min(t.b[0], b[0]), Math.min(t.b[1], b[1]), Math.max(t.b[2], b[2]), Math.max(t.b[3], b[3])];
+    t[key].push(item);
+  };
+  for (const poly of world.land) {
+    const rings = [];
+    for (const r of poly) { const e = thin(r, tw); if (e.length >= 8) rings.push(e); else if (!rings.length) break; }
+    if (rings.length) put(rings[0].b, 'land', rings);
+  }
+  for (const line of world.borders) { const e = thin(line, tw); put(e.b, 'borders', e); }
+  return (LODS[k] = [...tiles.values()]);
+}
+/* The map's paths that copy k of the world shows, at the level for the scale. */
+function mapPaths(k) {
+  const x = map.cx - k, hw = (W / 2 + 2) / map.scale, hh = (H / 2 + 2) / map.scale;
+  return lod(lodAt(map.scale)).filter(({ b }) => b[2] > x - hw && b[0] < x + hw && b[3] > map.cy - hh && b[1] < map.cy + hh)
+    .map((t) => t.p || (t.p = buildWorldPaths(t)));
 }
 
 /* The globe draws the same coastlines, but a sphere needs each point's sine
@@ -1001,15 +1051,16 @@ function encodeRing(enc) {
     trig[i * 4] = Math.sin(lat); trig[i * 4 + 1] = Math.cos(lat);
     trig[i * 4 + 2] = Math.sin(lon); trig[i * 4 + 3] = Math.cos(lon);
     // Natural Earth's Antarctica is cut off straight across the bottom, which
-    // is invisible on a Mercator map and a fake coastline on a globe.
-    edge[i] = y / 100 < ANTARCTIC_EDGE ? 1 : 0;
+    // is invisible on a Mercator map and a fake coastline on a globe; so is a
+    // run along 180° (2: the line lifts and starts again at this point).
+    edge[i] = y / 100 < ANTARCTIC_EDGE ? 1 : i && !enc[i * 2] && Math.abs(x) === 18000 ? 2 : 0;
   }
-  return { trig, edge, n };
-}
-function buildSphere(w) {
-  const coast = [];
-  for (const poly of w.land) for (const ring of poly) coast.push(encodeRing(ring));
-  return { coast, borders: w.borders.map(encodeRing) };
+  // the cap round the ring's mean that holds every point (none past a hemisphere), so a view can skip it
+  let x0 = 0, y0 = 0, z0 = 0, lo = 1;
+  for (let o = 0; o < n * 4; o += 4) { x0 += trig[o + 1] * trig[o + 3]; y0 += trig[o + 1] * trig[o + 2]; z0 += trig[o]; }
+  const m = Math.hypot(x0, y0, z0) || 1, c = [x0 / m, y0 / m, z0 / m];
+  for (let o = 0; o < n * 4; o += 4) lo = Math.min(lo, trig[o + 1] * (trig[o + 3] * c[0] + trig[o + 2] * c[1]) + trig[o] * c[2]);
+  return { trig, edge, n, c, rho: lo > 0 ? Math.acos(lo) : 9 };
 }
 
 /* Land or sea, in plate carrée, so the globe can ask one question per pixel
@@ -1020,7 +1071,7 @@ function buildSphere(w) {
  *
  * Built the first time the Globe tab is opened, and not before — somebody who
  * only ever looks at the flat map never pays for it. */
-function buildLandMask(w) {
+function buildLandMask() {
   let cv;
   try {
     cv = document.createElement('canvas');
@@ -1031,16 +1082,18 @@ function buildLandMask(w) {
   c.fillStyle = '#000';
   c.fillRect(0, 0, MASK_NX, MASK_NY);
   const path = new Path2D();
-  for (const poly of w.land) {
+  for (const poly of lod(lodAt(MASK_NX)).flatMap((t) => t.land)) {
     for (const ring of poly) {
+      const p = new Path2D();
       let x = 0, y = 0;
       for (let i = 0; i < ring.length; i += 2) {
         x += ring[i]; y += ring[i + 1];
         const px = (x / 100 + 180) / 360 * MASK_NX;
         const py = (90 - y / 100) / 180 * MASK_NY;
-        if (i === 0) path.moveTo(px, py); else path.lineTo(px, py);
+        if (i === 0) p.moveTo(px, py); else p.lineTo(px, py);
       }
-      path.closePath();
+      p.closePath();
+      path.addPath(p);
     }
   }
   c.fillStyle = '#fff';
@@ -1058,19 +1111,18 @@ function buildLandMask(w) {
   } catch { return null; }
   const mask = new Uint8Array(MASK_NX * MASK_NY);
   for (let i = 0; i < mask.length; i++) mask[i] = pixels[i * 4] > 127 ? 1 : 0;
-  // The source stops at 85.19°S, which would leave a hole at the south pole
-  // exactly where Antarctica is. The last row that is inside the ice sheet is
-  // copied down to the pole; nothing else lives there to be got wrong.
+  // The source stops near 85°S, which would leave a hole at the south pole
+  // exactly where Antarctica is. Every row from ANTARCTIC_EDGE to the pole is
+  // land outright: at 1:10m the Ross grounding line dips to 85.05°S, so the row
+  // just inside the cut holds a few sea cells, and copying that row down (the
+  // 1:50m fix) would have drawn a sea wedge over the pole. Nothing south of the
+  // cut is open water; the ice shelves read as ground, as they do on the map.
   const solid = Math.floor((90 - ANTARCTIC_EDGE + 0.4) / 180 * MASK_NY);
-  for (let row = solid + 1; row < MASK_NY; row++) {
-    mask.copyWithin(row * MASK_NX, solid * MASK_NX, (solid + 1) * MASK_NX);
-  }
+  mask.fill(1, solid * MASK_NX);
   return mask;
 }
 function needGlobeGeometry() {
-  if (!world) return;
-  if (!sphere) sphere = buildSphere(world);
-  if (!landMask) { landMask = buildLandMask(world); gcache = null; }
+  if (world && !landMask) { landMask = buildLandMask(); gcache = null; }
 }
 
 /* ── the two views ───────────────────────────────────────────────────────── *
@@ -1332,7 +1384,7 @@ function drawMap() {
     if (worldPaths) {
       for (const k of worldCopies()) withWorldTransform(k, () => {
         ctx.fillStyle = pal.land;
-        ctx.fill(worldPaths.land, 'evenodd');
+        for (const p of mapPaths(k)) ctx.fill(p.land, 'evenodd');
       });
     }
   });
@@ -1345,9 +1397,10 @@ function drawMap() {
     drawMapGraticule();
     if (worldPaths) {
       for (const k of worldCopies()) withWorldTransform(k, (s) => {
+        const ps = mapPaths(k);
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = pal.border; ctx.lineWidth = 0.6 / s; ctx.stroke(worldPaths.borders);
-        ctx.strokeStyle = pal.coast;  ctx.lineWidth = 0.9 / s; ctx.stroke(worldPaths.coast);
+        ctx.strokeStyle = pal.border; ctx.lineWidth = 0.6 / s; for (const p of ps) ctx.stroke(p.borders);
+        ctx.strokeStyle = pal.coast;  ctx.lineWidth = 0.9 / s; for (const p of ps) ctx.stroke(p.coast);
       });
     }
     ctx.restore();
@@ -1527,10 +1580,10 @@ function drawGlobe() {
   syncGlobe();
   needGlobeGeometry();
   drawGlobeSurface();
-  const key = `${globe.lon}|${globe.lat}|${globe.r}|${W}|${H}|${dpr}|${darkMq.matches}|${sphere ? 1 : 0}`;
+  const key = `${globe.lon}|${globe.lat}|${globe.r}|${W}|${H}|${dpr}|${darkMq.matches}|${world ? 1 : 0}`;
   cached('globe-lines', key, () => {
     drawGlobeGraticule();
-    if (sphere) {
+    if (world) {
       const paths = globePaths();
       ctx.lineJoin = 'round';
       ctx.strokeStyle = pal.border; ctx.lineWidth = 0.6; ctx.stroke(paths.borders);
@@ -1670,17 +1723,32 @@ let pathCache = null;
 function globePaths() {
   const key = `${globe.lon.toFixed(3)}|${globe.lat.toFixed(3)}|${globe.r.toFixed(2)}|${W}|${H}`;
   if (pathCache && pathCache.key === key) return pathCache;
-  pathCache = { key, coast: sphereRings(sphere.coast), borders: sphereRings(sphere.borders) };
+  const ts = lod(lodAt(2 * Math.PI * globe.r)).map((t) => t.s || (t.s = { coast: t.land.flat().flatMap(runs).map(encodeRing), borders: t.borders.flatMap(runs).map(encodeRing) }));
+  pathCache = { key, coast: sphereRings(ts.flatMap((t) => t.coast)), borders: sphereRings(ts.flatMap((t) => t.borders)) };
   return pathCache;
+}
+/* A line in runs of 256 segments, each from where the last ended, so a close view skips most of a continent. */
+function runs(enc) {
+  const out = [];
+  let x = 0, y = 0, cur;
+  for (let i = 0; i < enc.length; i += 2) {
+    x += enc[i]; y += enc[i + 1];
+    if (i) cur.push(enc[i], enc[i + 1]);
+    if (i % 512 === 0 && i < enc.length - 2) out.push(cur = [x, y]);
+  }
+  return out;
 }
 function sphereRings(rings) {
   const path = new Path2D();
   const { sinLat, cosLat, sinLon, cosLon, r, cx, cy } = gp;
+  const vx = cosLat * cosLon, vy = cosLat * sinLon, a = Math.asin(Math.min(1, (Math.hypot(cx, cy) + 2) / r));
   for (const ring of rings) {
-    const trig = ring.trig, edge = ring.edge;
-    let pen = false;
+    const c = ring.c;
+    if (Math.acos(Math.min(1, vx * c[0] + vy * c[1] + sinLat * c[2])) > a + ring.rho) continue;   // wholly off screen
+    const trig = ring.trig, edge = ring.edge, p = new Path2D();
+    let pen = false, lx = 0, ly = 0;
     for (let i = 0, o = 0; i < ring.n; i++, o += 4) {
-      if (edge[i]) { pen = false; continue; }
+      if (edge[i]) { pen = false; if (edge[i] === 1) continue; }
       const sLat = trig[o], cLat = trig[o + 1], sLon = trig[o + 2], cLon = trig[o + 3];
       const cosD = cLon * cosLon + sLon * sinLon;       // cos(lon − center)
       const z = sinLat * sLat + cosLat * cLat * cosD;
@@ -1688,8 +1756,11 @@ function sphereRings(rings) {
       const sinD = sLon * cosLon - cLon * sinLon;       // sin(lon − center)
       const sx = cx + r * (cLat * sinD);
       const sy = cy - r * (cosLat * sLat - sinLat * cLat * cosD);
-      if (pen) path.lineTo(sx, sy); else { path.moveTo(sx, sy); pen = true; }
+      if (!pen) { p.moveTo(sx, sy); pen = true; } else if (Math.abs(sx - lx) < 0.5 && Math.abs(sy - ly) < 0.5 && i < ring.n - 1) continue;
+      else p.lineTo(sx, sy);                            // a point under half a pixel from the last one drawn is skipped
+      lx = sx; ly = sy;
     }
+    path.addPath(p);
   }
   return path;
 }
@@ -2644,7 +2715,8 @@ async function loadStatic() {
     const w = await r.json();
     if (!Array.isArray(w.land) || !Array.isArray(w.borders)) throw new Error('unexpected shape');
     world = w;
-    worldPaths = buildWorldPaths(w);
+    worldPaths = LODS;
+    lod(lodAt(map.scale || 400));
     setProblem('world', null);
   } catch (e) {
     setProblem('world', `Coastlines could not be loaded (assets/world.json: ${e.message}) — the weather still shows.`);

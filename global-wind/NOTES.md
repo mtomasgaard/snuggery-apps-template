@@ -139,9 +139,33 @@ face's in `fonts/OFL.txt`.
 
 | File | What it is | Terms |
 | --- | --- | --- |
-| `assets/world.json` | Coastlines and country borders, simplified and delta-encoded | **Natural Earth — public domain.** "All versions of Natural Earth raster + vector map data found on this website are in the public domain." No permission and no credit are required; the app says *Made with Natural Earth* anyway, which is the form Natural Earth suggests. |
+| `assets/world.json` | Coastlines and country borders, Natural Earth 1:10m, simplified and delta-encoded (1.5 MB; how, below) | **Natural Earth — public domain.** "All versions of Natural Earth raster + vector map data found on this website are in the public domain." No permission and no credit are required; the app says *Made with Natural Earth* anyway, which is the form Natural Earth suggests. |
 | `fonts/ysabeau-office-gw.woff2` | The app's one face, a Latin subset (35 KB) | **Ysabeau Office, SIL Open Font License 1.1**, by Christian Thalmann (Catharsis Fonts), no Reserved Font Name. `fonts/OFL.txt` carries the license and says how the subset was cut. |
 | `assets/places.json` | About 1 600 city labels, tiered so the map shows a few at world scale and more as you zoom in | **GeoNames — CC BY 4.0.** Attribution is a *condition*, not a courtesy: the credit line under the map and the *About this data* panel both name GeoNames and the license. Do not remove them. Editing the list is fine — add your own places, delete the ones you never look at; it stays the same data under the same license. |
+
+### The coastlines
+
+`assets/world.json` is Natural Earth v5.1.2 at **1:10m** — `ne_10m_land` for the land and its coast,
+`ne_10m_admin_0_boundary_lines_land` for the borders — built by `scripts/world_json.py` from the
+same pinned commit the other apps use, with every download checked against its sha256. It is the
+same file, byte for byte, as Global Weather's. The map zooms to 80 points a degree of longitude,
+0.7 km a point at 60° N, and at 1:50m a fjord was a few kilometers of guesswork there: the
+Sognefjord one smooth inlet, Nordfjord and the outer islands gone. Each line is simplified until a
+point would move it by less than one square point at that zoom, and stored in hundredths of a
+degree (about a kilometer east to west at 60° N, under a point on screen). From `Template/`, with
+any Python 3.10 or newer and nothing to install:
+
+    python3 scripts/world_json.py            # fetch once, build, write both weather apps' copies
+    python3 scripts/world_json.py --check    # a second build, compared byte for byte
+    python3 scripts/world_json.py --verify   # decoded the way app.js decodes it
+
+Three hundred thousand points are more than a small scale can show, so the app keeps the world at
+four levels, built the first time a view needs one: each keeps a point only half a point from the
+last one kept at the scale it serves, and is cut into tiles that a view draws only where it
+touches them; the globe also skips a point under half a point from the last one drawn. The whole
+world on a phone draws about 21 000 points; the closest zoom draws all of them, but only near the
+screen. Natural Earth cuts Chukotka, Wrangel Island and Fiji in two at 180°, and that cut is not a
+coast, so neither view strokes it. Lakes are land, as they were at 1:50m, except the Caspian.
 
 **No third-party JavaScript ships with this app.** The snapshot's byte planes
 are zlib-compressed, and the app unpacks them with the browser's own
@@ -324,9 +348,10 @@ Action, and a Shortcut carries the file in.
 
 | measured 2026-10-01 by `node tools/check.mjs` | bytes | budget |
 | --- | --: | --: |
-| app code: `index.html`, `style.css`, `app.js`, `js/` | 180 486 | 200 000 |
+| app code: `index.html`, `style.css`, `app.js`, `js/` | 184 653 | 200 000 |
 | `fonts/` | 40 075 | 160 000 |
-| the ZIP, packed as `build-zips.yml` packs it | 1 177 963 | 1 600 000 |
+| `assets/world.json` (stored in the ZIP: 431 665) | 1 538 738 | 1 600 000 |
+| the ZIP, packed as `build-zips.yml` packs it | 1 483 034 | 1 600 000 |
 
 `tools/` is not in the ZIP. From `global-wind/`:
 
