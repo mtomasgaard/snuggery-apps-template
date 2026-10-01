@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T08:01:23Z",
+ "generatedAt": "2026-10-01T09:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: Albanese leaves grim domestic scene as he flies to the blue Pacific",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-albanese-leaves-grim-domestic-scene-as-he-flies-to-the-blue-pacific-292581",
+     "published": "2026-10-01T07:46:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
-    },
-    {
-     "title": "With a tragedy averted, the Flydubai incident has put cockpit security under new scrutiny",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/with-a-tragedy-averted-the-flydubai-incident-has-put-cockpit-security-under-new-scrutiny-293331",
-     "published": "2026-10-01T05:59:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Steven Leib, Associate Professor in Aviation, CQUniversity Australia"
     },
     {
      "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: Albanese leaves grim domestic scene as he flies to the blue Pacific",
+   "published": "2026-10-01 07:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
    "published": "2026-10-01 07:33 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
    "published": "2026-10-01 06:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "With a tragedy averted, the Flydubai incident has put cockpit security under new scrutiny",
-   "published": "2026-10-01 05:59 UTC"
   },
   {
    "region": "Oceania",
