@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T20:01:42Z",
+ "generatedAt": "2026-10-01T21:01:18Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "The sound of resistance",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
+     "published": "2026-10-01T20:45:32Z",
+     "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
+     "stale": false,
+     "author": "Sydney Allen"
+    },
     {
      "title": "When the right to protest remains, but demonstrating comes at a price",
      "source": "Global Voices",
@@ -56,16 +66,6 @@
      "author": "Daria Dergacheva"
     },
     {
-     "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/09/21/russian-tiktokers-wanted-to-vote-for-an-anti-war-agenda-putins-farce-elections-did-not-allow-that/",
-     "published": "2026-09-21T13:15:19Z",
-     "summary": "Elections in Russia are a sham. Yet when someone appears genuinely committed to an anti-war agenda, many had seize that hope as a chance to change, including young TikTokers",
-     "stale": false,
-     "author": "Daria Dergacheva"
-    },
-    {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
      "source": "Global Voices",
      "feed": "gv-western-europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Christa Pike survived a lethal injection attempt – the latest person to endure a failed execution",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/christa-pike-survived-a-lethal-injection-attempt-the-latest-person-to-endure-a-failed-execution-293405",
+     "published": "2026-10-01T20:34:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Austin Sarat, William Nelson Cromwell Professor of Jurisprudence and Political Science, Amherst College"
+    },
+    {
      "title": "Dozens of men failed to stop an alleged gang rape at Cornell – here’s the misperception that keeps bystanders from intervening and how to short-circuit it",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -103,14 +113,13 @@
      "author": "Catherine A. Sanderson, Poler Family Professor of Psychology, Amherst College"
     },
     {
-     "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/dan-rather-has-followed-the-news-wherever-he-goes-in-a-career-that-highlights-75-years-of-evolving-journalism-265967",
-     "published": "2026-10-01T14:30:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Walter Podrazik, Adjunct Lecturer in Communication, University of Illinois Chicago"
+     "title": "No more execution attempts on Christa Pike: UN rights chief",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168504",
+     "published": "2026-10-01T12:00:00Z",
+     "summary": "The UN human rights chief and nine independent rights experts on Thursday called on authorities in Tennessee not to pursue any further attempts to execute Christa Pike, saying her case highlights multiple concerns…",
+     "stale": false
     },
     {
      "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
@@ -151,15 +160,6 @@
      "stale": false
     },
     {
-     "title": "Haiti at ‘watershed moment’, Prime Minister tells UN, urging full backing for security force",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168453",
-     "published": "2026-09-25T12:00:00Z",
-     "summary": "Haiti is at a “watershed moment” in its struggle against gang violence and needs sustained international support alongside stronger national security institutions, Prime Minister Alix Didier Fils-Aimé told the UN…",
-     "stale": false
-    },
-    {
      "title": "The commodification of Indigenous cultures and traditions",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -176,6 +176,16 @@
    "name": "Africa",
    "stale": false,
    "items": [
+    {
+     "title": "The sound of resistance",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
+     "published": "2026-10-01T20:45:32Z",
+     "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
+     "stale": false,
+     "author": "Sydney Allen"
+    },
     {
      "title": "Rising CO₂ is making African savanna grasses grow more – what this means for grazing, fire and carbon storage",
      "source": "The Conversation",
@@ -242,16 +252,6 @@
      "summary": "Room to protest is narrowing in Africa, as governments lean on arrests, curfews, and internet blackouts to blunt dissent. When the streets become too dangerous, dissent often migrates online.",
      "stale": false,
      "author": "Ranking Digital Rights"
-    },
-    {
-     "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/09/27/what-endsars-left-behind-in-nigeria-a-generation-caught-between-protest-politics-and-departure/",
-     "published": "2026-09-27T08:20:29Z",
-     "summary": "The protests strengthened the political consciousness of some young Nigerians and encouraged greater participation in elections, governance and activism. For others, the experience produced fear, distrust and…",
-     "stale": false,
-     "author": "Guest Contributor"
     }
    ]
   },
@@ -261,7 +261,7 @@
    "stale": false,
    "items": [
     {
-     "title": "Palestinians yearn for ‘a return to normal life,’ says top Middle East peace envoy",
+     "title": "Palestinians yearn for ‘a return to normal life’, says top Middle East peace envoy",
      "source": "UN News",
      "feed": "un-middle-east",
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168497",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The sound of resistance",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
+     "published": "2026-10-01T20:45:32Z",
+     "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
+     "stale": false,
+     "author": "Sydney Allen"
+    },
+    {
      "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "The growth of online activism has given different colors in the movement agendas. There is a debate on how effective it is, and how it could complement each other.",
      "stale": false,
      "author": "Juliana Harsianti"
-    },
-    {
-     "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/24/bangladesh-protests-can-change-governments-but-can-they-strengthen-democracy/",
-     "published": "2026-09-24T10:41:11Z",
-     "summary": "Bangladesh’s 2024 uprising toppled a government, but two years later, reforms to police, judiciary, cyber laws, and state institutions remain contested, incomplete, and debated, leaving citizens asking whether real…",
-     "stale": false,
-     "author": "Rezwan"
     }
    ]
   },
@@ -428,6 +428,16 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "The sound of resistance",
+     "source": "Global Voices",
+     "feed": "gv-oceania",
+     "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
+     "published": "2026-10-01T20:45:32Z",
+     "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
+     "stale": false,
+     "author": "Sydney Allen"
+    },
     {
      "title": "Ahead of the global climate summit, Pacific leaders call on nations to keep 1.5°C within reach",
      "source": "The Conversation",
@@ -495,16 +505,6 @@
      "link": "https://globalvoices.org/2026/08/26/thousands-of-little-penguins-will-be-vaccinated-against-bird-flu-down-under/",
      "published": "2026-08-26T18:45:20Z",
      "summary": "“These penguins are part of what makes our community so special. We are lucky to share our home with them, and we’re going to do our best to protect them.”",
-     "stale": false,
-     "author": "Kevin Rennie"
-    },
-    {
-     "title": "The bleak picture of how Indigenous youth are treated in Australia’s justice system",
-     "source": "Global Voices",
-     "feed": "gv-oceania",
-     "link": "https://globalvoices.org/2026/08/11/the-bleak-picture-of-how-indigenous-youth-are-treated-in-australias-justice-system/",
-     "published": "2026-08-11T20:37:33Z",
-     "summary": "\"From coast to coast across our lands, Aboriginal and Torres Strait Islander children are being criminalised and imprisoned at alarming rates because of political point-scoring rather than evidence-based reforms.\"",
      "stale": false,
      "author": "Kevin Rennie"
     }
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "The sound of resistance",
+   "published": "2026-10-01 20:45 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "When the right to protest remains, but demonstrating comes at a price",
    "published": "2026-09-29 00:00 UTC"
   },
@@ -703,12 +709,6 @@
   {
    "region": "Europe",
    "source": "Global Voices",
-   "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
-   "published": "2026-09-21 13:15 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
    "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
    "published": "2026-09-19 08:01 UTC"
   },
@@ -721,14 +721,20 @@
   {
    "region": "Americas",
    "source": "The Conversation",
+   "title": "Christa Pike survived a lethal injection attempt – the latest person to endure a failed execution",
+   "published": "2026-10-01 20:34 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
    "title": "Dozens of men failed to stop an alleged gang rape at Cornell – here’s the misperception that keeps bystanders from intervening and how to short-circuit it",
    "published": "2026-10-01 19:05 UTC"
   },
   {
    "region": "Americas",
-   "source": "The Conversation",
-   "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
-   "published": "2026-10-01 14:30 UTC"
+   "source": "UN News",
+   "title": "No more execution attempts on Christa Pike: UN rights chief",
+   "published": "2026-10-01 12:00 UTC"
   },
   {
    "region": "Americas",
@@ -756,15 +762,15 @@
   },
   {
    "region": "Americas",
-   "source": "UN News",
-   "title": "Haiti at ‘watershed moment’, Prime Minister tells UN, urging full backing for security force",
-   "published": "2026-09-25 12:00 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "Global Voices",
    "title": "The commodification of Indigenous cultures and traditions",
    "published": "2026-09-21 06:21 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "The sound of resistance",
+   "published": "2026-10-01 20:45 UTC"
   },
   {
    "region": "Africa",
@@ -809,15 +815,9 @@
    "published": "2026-09-28 18:11 UTC"
   },
   {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
-   "published": "2026-09-27 08:20 UTC"
-  },
-  {
    "region": "Middle East",
    "source": "UN News",
-   "title": "Palestinians yearn for ‘a return to normal life,’ says top Middle East peace envoy",
+   "title": "Palestinians yearn for ‘a return to normal life’, says top Middle East peace envoy",
    "published": "2026-09-30 12:00 UTC"
   },
   {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "The sound of resistance",
+   "published": "2026-10-01 20:45 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
    "published": "2026-10-01 12:00 UTC"
@@ -905,10 +911,10 @@
    "published": "2026-09-25 18:58 UTC"
   },
   {
-   "region": "Asia",
+   "region": "Oceania",
    "source": "Global Voices",
-   "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
-   "published": "2026-09-24 10:41 UTC"
+   "title": "The sound of resistance",
+   "published": "2026-10-01 20:45 UTC"
   },
   {
    "region": "Oceania",
@@ -951,12 +957,6 @@
    "source": "Global Voices",
    "title": "Thousands of little penguins will be vaccinated against bird flu down under",
    "published": "2026-08-26 18:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "Global Voices",
-   "title": "The bleak picture of how Indigenous youth are treated in Australia’s justice system",
-   "published": "2026-08-11 20:37 UTC"
   }
  ]
 }
