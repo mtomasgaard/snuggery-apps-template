@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T11:01:20Z",
+ "generatedAt": "2026-10-01T11:41:31Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "“Le brun est beau” : ce que Windhoek peut apprendre aux villes africaines",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/le-brun-est-beau-ce-que-windhoek-peut-apprendre-aux-villes-africaines-292799",
+     "published": "2026-10-01T10:19:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Gaby Hansen, Lecturer in the Department of Architecture, Planning and Construction, Namibia University of Science and Technology"
+    },
+    {
      "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Babo Amadou Ba, enseigant-chercheur, Université Amadou Mahtar MBOW de Dakar"
-    },
-    {
-     "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-public-service-new-laws-aim-to-put-competent-people-in-charge-and-hold-them-to-account-292376",
-     "published": "2026-09-30T13:26:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Busani Ngcaweni, Director: Center for Public Policy and African Studies, University of Johannesburg"
     },
     {
      "title": "Somali families face renewed violence amid worsening hunger crisis",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
-   "published": "2026-09-30 14:12 UTC"
+   "title": "“Le brun est beau” : ce que Windhoek peut apprendre aux villes africaines",
+   "published": "2026-10-01 10:19 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
-   "published": "2026-09-30 13:26 UTC"
+   "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
+   "published": "2026-09-30 14:12 UTC"
   },
   {
    "region": "Africa",
