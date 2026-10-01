@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T22:01:19Z",
+ "generatedAt": "2026-10-01T23:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Money for something: why public funding for NZ’s live music scene needs retuning",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/money-for-something-why-public-funding-for-nzs-live-music-scene-needs-retuning-293197",
+     "published": "2026-10-01T22:25:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dave Carter, Associate Professor, School of Music and Screen Arts, Te Kunenga ki Pūrehuroa – Massey University"
+    },
+    {
      "title": "The sound of resistance",
      "source": "Global Voices",
      "feed": "gv-oceania",
@@ -441,7 +451,7 @@
     {
      "title": "Ahead of the global climate summit, Pacific leaders call on nations to keep 1.5°C within reach",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/ahead-of-the-global-climate-summit-pacific-leaders-call-on-nations-to-keep-1-5-c-within-reach-292766",
      "published": "2026-10-01T18:02:03Z",
      "summary": "",
@@ -477,16 +487,6 @@
      "summary": "",
      "stale": false,
      "author": "Pascal Vrticka, Associate Professor, Department of Psychology, University of Essex"
-    },
-    {
-     "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/flydubai-attack-feeds-into-netanyahus-protector-narrative-with-crucial-elections-approaching-293336",
-     "published": "2026-10-01T06:30:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -912,6 +912,12 @@
   },
   {
    "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Money for something: why public funding for NZ’s live music scene needs retuning",
+   "published": "2026-10-01 22:25 UTC"
+  },
+  {
+   "region": "Oceania",
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
@@ -939,12 +945,6 @@
    "source": "The Conversation",
    "title": "How deep do AI relationships really go? An expert in attachment theory explains",
    "published": "2026-10-01 15:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
-   "published": "2026-10-01 06:30 UTC"
   },
   {
    "region": "Oceania",
