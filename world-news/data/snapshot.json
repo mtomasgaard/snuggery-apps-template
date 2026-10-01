@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T05:01:21Z",
+ "generatedAt": "2026-10-01T06:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/with-a-former-wallabys-cruel-diagnosis-is-there-a-link-between-contact-sports-and-mnd-293330",
+     "published": "2026-10-01T05:06:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alan Pearce, Professor, Adjunct Research Fellow, School of Health Science, Swinburne University of Technology"
+    },
+    {
      "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Liz Hicks, Lecturer in Law, The University of Melbourne"
-    },
-    {
-     "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-sapphic-sitcom-answer-to-heated-rivalry-british-spies-and-premium-aussie-drama-what-to-stream-in-october-292696",
-     "published": "2026-10-01T01:01:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dee Jefferson, Deputy Arts + Culture Editor, The Conversation"
     },
     {
      "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
+   "published": "2026-10-01 05:06 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
    "published": "2026-10-01 02:49 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
    "published": "2026-10-01 02:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
-   "published": "2026-10-01 01:01 UTC"
   },
   {
    "region": "Oceania",
