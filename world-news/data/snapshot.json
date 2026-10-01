@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T02:01:19Z",
+ "generatedAt": "2026-10-01T03:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/meta-wants-people-to-use-ai-agents-to-do-daily-tasks-for-them-heres-why-thats-a-problem-292962",
+     "published": "2026-10-01T02:49:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Francesco Bailo, Senior Lecturer in Data Analytics in the Social Sciences, Deputy Director of the Centre for AI, Trust and Governance, University of Sydney"
+    },
+    {
+     "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nsws-largest-coal-mine-project-is-set-to-expand-heres-what-authorities-got-wrong-about-the-trade-offs-293096",
+     "published": "2026-10-01T02:45:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liz Hicks, Lecturer in Law, The University of Melbourne"
+    },
+    {
      "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Steven Lillis, Associate Professor, Division of Health, University of Waikato"
-    },
-    {
-     "title": "Written as a single sentence, Adam Ouston’s Mine is a novel under the influence",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/written-as-a-single-sentence-adam-oustons-mine-is-a-novel-under-the-influence-281227",
-     "published": "2026-09-30T18:01:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Emmett Stinson, Senior Lecturer, Creative Writing and English, Edith Cowan University"
-    },
-    {
-     "title": "DreamWorks’ Forgotten Island is a joyous, painful love letter to the Filipino diaspora",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/dreamworks-forgotten-island-is-a-joyous-painful-love-letter-to-the-filipino-diaspora-293200",
-     "published": "2026-09-30T18:01:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kristine Aquino, Senior Lecturer, University of Technology Sydney"
     },
     {
      "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
+   "published": "2026-10-01 02:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
+   "published": "2026-10-01 02:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
    "published": "2026-10-01 01:01 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
    "published": "2026-09-30 22:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Written as a single sentence, Adam Ouston’s Mine is a novel under the influence",
-   "published": "2026-09-30 18:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "DreamWorks’ Forgotten Island is a joyous, painful love letter to the Filipino diaspora",
-   "published": "2026-09-30 18:01 UTC"
   },
   {
    "region": "Oceania",
