@@ -1,6 +1,6 @@
 name: Refresh global-weather
 
-# Rewrites the Global Weather app's data twice a day from NOAA's GFS forecast. The
+# Rewrites the Global Weather app's data after each GFS run, up to four times a day, from NOAA's forecast. The
 # bucket is a plain public HTTPS endpoint: no account, no key, no secret, so
 # this job needs nothing set up before it works.
 #
@@ -9,7 +9,7 @@ name: Refresh global-weather
 # ============================================================================
 # Five global weather fields are megabytes, and every byte of them is different
 # every run — it is base64 of compressed data, so git can neither delta it nor
-# compress it. Committing it to `main` twice a day would add several gigabytes
+# compress it. Committing it to `main` four times a day would add several gigabytes
 # a year to this repository and to every clone of it, for a file nobody ever
 # wants the history of.
 #
@@ -37,7 +37,7 @@ name: Refresh global-weather
 #    land this on main before expecting a single scheduled run.
 # 2. GitHub treats cron as best-effort, not a promise. Runs are commonly late by
 #    5-20 minutes, longer under load, and a newly added schedule often skips its
-#    first slot entirely. Say "twice a day", never "at 04:23".
+#    first slot entirely. Say "after each run", never "at 04:23".
 
 on:
   schedule:

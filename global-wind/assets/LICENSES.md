@@ -1,4 +1,4 @@
-# The two files in this folder, and what their licences require
+# The two files in this folder, and what their licenses require
 
 These travel inside the app so the map can draw without going online. Neither is
 ever rewritten by the refresh job — coastlines and cities do not change daily.
@@ -22,15 +22,15 @@ Earth* — because a map should say where its coastlines came from.
 ## `places.json` — about 1,600 city labels
 
 **GeoNames, Creative Commons Attribution 4.0 International (CC BY 4.0).** The
-GeoNames geographical database is published under that licence, and attribution
+GeoNames geographical database is published under that license, and attribution
 is a **condition** of using it:
 
 > This work is licensed under a Creative Commons Attribution 4.0 License.
 
-Source: <https://www.geonames.org/>. The licence itself:
+Source: <https://www.geonames.org/>. The license itself:
 <https://creativecommons.org/licenses/by/4.0/>. Both addresses are printed as
 plain text in the app's *About this data* panel, because CC BY asks for the URI
-of the licence where it is reasonable to give one — and are text only: a
+of the license where it is reasonable to give one — and are text only: a
 mini-app cannot reach the network, and this one never tries.
 
 CC BY 4.0 also disclaims warranties, and that travels with the data:
@@ -55,20 +55,26 @@ The file is **not** all of GeoNames, and the tiers are not GeoNames' own. About
 1,600 places were hand-picked for a wind map — capitals, big coastal cities,
 island stations, the places a moving weather system gets talked about — and each
 was given a tier by the author of this app, not by the source. The list leans
-towards where the author looks; a map made by somebody in São Paulo or Lagos
+toward where the author looks; a map made by somebody in São Paulo or Lagos
 would tier it differently, and should.
 
 The file itself is a plain list of `{"n", "lon", "lat", "r"}` objects, where `r`
 is the label tier (1 is shown first at world scale, 4 only when zoomed right
 in). **Edit it freely** — add the places you look for, delete the ones you never
 do, move a tier because your weather comes from a different direction. A
-modified list is still GeoNames-derived data under the same licence, so the
+modified list is still GeoNames-derived data under the same license, so the
 credits stay either way.
 
-## Nothing else is bundled
+## One more thing travels with them: the face, in `../fonts/`
 
-There is no font, no image, no map tile and no third-party JavaScript in this
-app. The snapshot's compressed planes are unpacked with the browser's own
+`fonts/ysabeau-office-gw.woff2` is a subset of **Ysabeau Office** by Christian
+Thalmann (Catharsis Fonts), under the **SIL Open Font License 1.1**, with no
+Reserved Font Name. The license's full text, headed by a note saying how the
+subset was cut, is `fonts/OFL.txt` beside it, and *About this data* carries the
+credit.
+
+Nothing else is bundled: no image, no map tile and no third-party JavaScript.
+The snapshot's compressed planes are unpacked with the browser's own
 `DecompressionStream`, with a small decoder written out in full in `app.js` for
 anything older — no minified blob, nothing to take on trust.
 

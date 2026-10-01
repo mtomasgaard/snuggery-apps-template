@@ -89,9 +89,11 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   are NOAA Global Forecast System output, a work of the United States government
   in the public domain. The coastlines in both apps' assets/world.json are
   Natural Earth, public domain; the city labels in assets/places.json are
-  © GeoNames under CC BY 4.0, whose attribution is a condition of use; and
-  assets/fflate.min.js is fflate under the MIT licence — see
+  © GeoNames under CC BY 4.0, whose attribution is a condition of use — see
   global-wind/assets/LICENSES.md and global-weather/assets/LICENSES.md.
+  global-wind/fonts/ and global-weather/fonts/ are a Ysabeau Office subset
+  under the SIL Open Font License 1.1 (fonts/OFL.txt in each). The apps' own
+  code and text share the licence above.
 - The data under milky-way/data/ is adapted from the sources listed, with their
   licences and adaptations, in milky-way/CREDITS.txt. The planet, moon and
   rotation data are from JPL/NAIF (freely available SPICE data). The asteroid

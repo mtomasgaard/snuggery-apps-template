@@ -1,57 +1,43 @@
-/* Global Wind — Snuggery mini-app.
+/* Global Wind — "Long Exposure", Global Weather's look by copy (ART.md says where it differs).
 
-   A map fills the screen, so the chrome has to stay out of its way: a compact
-   header, a player pinned to the bottom, and everything else floating over the
-   canvas on a translucent panel. The same cool-neutral palette and compact type
-   as the other apps here, minus the cards — the ground is the world.
+   The screen is a flow photograph of the air and its caption. The plate (the map or the globe) runs
+   edge to edge; under it the caption band states the scale, the exposure and the credits. One face,
+   no accent color, no glass, no shadows, no gradient in the chrome but the data scale and the
+   selection tracer. The light theme is the negative (ink tracers on film base), the dark theme the
+   print (pale tracers on a dark plate). The data's own colors live in js/ramps.js; nothing here is
+   fetched, and there is no external address in this file. */
 
-   Every colour is a token declared once, so the light/dark pair swaps in one
-   place. The wind's own colour scale lives in app.js (STOPS), because the
-   canvas needs it as numbers; the legend is painted from the same array, so the
-   scale under the map is by construction the scale on it.
-
-   Nothing is encoded by colour alone: an arrow's length and thickness carry
-   speed as well, the legend is labelled in the chosen unit, and the stale stamp
-   changes its words rather than only its colour.
-
-   No font is loaded and no image is fetched. There is no external address in
-   this file. */
-
-:root {
-  --bg: #eef0f4;              /* the ground behind the map */
-  --card: #ffffff;
-  --ink: #14181f;
-  --ink-dim: #4a5162;
-  --ink-faint: #8a94a1;
-  --line: #dfe4ec;
-  --accent: #2f6df6;
-  --accent-ink: #ffffff;
-  --chip: #e7ebf3;
-  --warn-bg: #fdeaea;
-  --warn-ink: #8c1d1d;        /* 6.0:1 on its own tint, 5.4:1 on the page ground */
-  --warn-line: #f3c3c3;
-  --shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 6px 18px rgba(16, 24, 40, .10);
-  --radius: 14px;
-  --glass: rgba(255, 255, 255, .86);
-  color-scheme: light;
+@font-face {
+  font-family: 'Ysabeau Office';
+  src: url(fonts/ysabeau-office-gw.woff2) format('woff2');
+  font-weight: 400 650;
+  font-display: block;
 }
 
+:root {
+  --page: #e8eef0;            /* header, caption band, player */
+  --sheet: #f6f9fa;           /* key plates, the readout card, About, notices */
+  --ink: #0f1c23;
+  --ink-2: #45555d;
+  --ink-3: #5b6a72;
+  --line: #c9d4d8;
+  --line-strong: #74858c;
+  --outside: #e8eef0;         /* the plate beyond the globe */
+  --draw: cubic-bezier(0.2, 0, 0, 1);
+  --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
+  --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b0e13;
-    --card: #151a22;
-    --ink: #e8ecf2;
-    --ink-dim: #9aa6b5;
-    --ink-faint: #6b7787;
-    --line: #262e39;
-    --accent: #5b8eff;
-    --accent-ink: #0b0e13;
-    --chip: #212a35;
-    --warn-bg: #3a1a1a;
-    --warn-ink: #ffb4b4;
-    --warn-line: #5a2a2a;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .35);
-    --glass: rgba(21, 26, 34, .86);
+    --page: #141d21;
+    --sheet: #1c272c;
+    --ink: #e6edee;
+    --ink-2: #a3b1b6;
+    --ink-3: #8b9a9f;
+    --line: #2a373c;
+    --line-strong: #64757b;
+    --outside: #0a1013;
     color-scheme: dark;
   }
 }
@@ -63,399 +49,399 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--page);
   color: var(--ink);
-  font: 15px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font: 400 13.5px/1.35 var(--face);
+  font-variant-numeric: tabular-nums lining-nums;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior: none;
 }
-
 body {
   display: flex;
   flex-direction: column;
   height: 100vh;
   height: 100dvh;
-  padding-top: env(safe-area-inset-top);
 }
 
 button {
   font: inherit;
   color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+svg .fill, svg.fill path { fill: currentColor; stroke: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
-/* ── top bar ─────────────────────────────────────────────────────────────── */
+/* ── header: the name and the units key, the stamp, the view switch and the speed colors ── */
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px 6px 16px;
+.head {
   flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 44px;
+  column-gap: 12px;
+  padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  background: var(--page);
 }
-.titles { min-width: 0; }
-.titles h1 {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -.01em;
-  line-height: 1.2;
-}
-/* The stamp is a button because it opens About; it must not look like one. */
+.head h1 { grid-area: 1 / 1; margin: 0; font-size: 15px; font-weight: 650; line-height: 22px; }
+.stamp-home { grid-area: 2 / 1; min-width: 0; padding-bottom: 6px; }
 .stamp {
+  position: relative;
   display: block;
-  margin: 1px 0 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  text-align: left;
-  font-size: 12px;
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   max-width: 100%;
-  cursor: pointer;
+  text-align: left;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--ink-2);
 }
-.stamp.stale { color: var(--warn-ink); font-weight: 600; }
-
-.actions { display: flex; gap: 6px; flex: 0 0 auto; }
-.iconbtn {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--ink-dim);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
+.stamp .stale { color: var(--ink); }
+/* the stamp opens About: its hit runs up over the name and down into the gap, 44 px in all */
+.stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }
+/* in focus mode it heads the caption: the hit runs down over the caption's words (never up into the
+   plate, whose taps are the map's), 6 + 16 + 22 = 44 px (after QA) */
+.caption > .stamp::before { inset: -6px 0 -22px 0; }
+.unitkey {
+  grid-area: 1 / 2 / 3 / 3;
+  align-self: center;
+  position: relative;
+  min-width: 44px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
-.iconbtn[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
-.unitbtn { font-size: 12px; font-weight: 700; width: auto; min-width: 44px; padding: 0 8px; color: var(--ink); }
-
-/* ── the view tabs ───────────────────────────────────────────────────────── */
+.unitkey::before { content: ''; position: absolute; inset: -9px -1px; }   /* from the padding box: 44 px in all */
+.unitkey[disabled] { opacity: .45; cursor: default; }
 
 .switcher {
+  grid-area: 3 / 1 / 4 / 3;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  margin: 0 -8px;
+}
+.views { display: flex; flex: 0 0 auto; }
+/* the speed colors: a word at the row's right, on and off, marked like a chosen view */
+.wordkey { margin-left: auto; }
+.views button, .wordkey {
+  position: relative;
   flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  padding: 0 12px 8px 16px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
 }
-/* A two-button segmented control. It is a tablist, and it says so. */
-.viewtabs {
-  display: flex;
-  padding: 2px;
-  gap: 2px;
-  border-radius: 10px;
-  background: var(--chip);
+/* the chosen word: weight 620 and a tracer under it, drawn from its tail to its head */
+.views button[aria-selected="true"], .wordkey[aria-pressed="true"] { color: var(--ink); font-weight: 620; }
+.views button[aria-selected="true"]::after, .wordkey[aria-pressed="true"]::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 9px;
+  height: 4px;
+  background:
+    radial-gradient(circle at calc(100% - 2px) 50%, var(--ink) 1.9px, transparent 2.1px),
+    linear-gradient(90deg, transparent, var(--ink) calc(100% - 3px), transparent calc(100% - 3px)) 0 1px / 100% 2px no-repeat;
+  animation: tracer-in 160ms var(--draw);
 }
-.viewtabs button {
-  border: 0;
-  background: none;
-  color: var(--ink-dim);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 5px 11px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.viewtabs button[aria-selected="true"] {
-  background: var(--card);
-  color: var(--ink);
-  box-shadow: 0 1px 2px rgba(16, 24, 40, .12);
-}
+@keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
-/* ── map ─────────────────────────────────────────────────────────────────── */
+/* ── the plate ── */
 
-.map-wrap {
+.plate {
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--outside);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
-#map {
-  display: block;
-  width: 100%;
-  height: 100%;
-  touch-action: none;
-  cursor: grab;
-}
+.plate .view { position: absolute; inset: 0; }
+.plate canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+#map { touch-action: none; cursor: grab; }
+.plate canvas.over { pointer-events: none; }
 
-.error {
+/* the key column: three plates, no shadow; each key a full 44 px hit, the plate 36 px wide */
+.keys {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  top: 12px;
-  z-index: 5;
-  padding: 12px 14px;
-  border-radius: var(--radius);
-  background: var(--warn-bg);
-  color: var(--warn-ink);
-  border: 1px solid var(--warn-line);
-  box-shadow: var(--shadow);
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-/* Two groups, because they answer two questions: where am I looking, and what
-   is drawn over it. The night toggle lives here rather than in the header so
-   the stamp keeps room to print the model run in full on a phone. */
-.mapbtns {
-  position: absolute;
-  right: 10px;
-  top: 10px;
+  top: 8px;
+  right: calc(8px + env(safe-area-inset-right));
   z-index: 3;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap-reverse;
+  align-content: flex-start;
   gap: 8px;
+  max-height: calc(100% - 16px);
 }
-.btngroup {
+.keyplate {
+  width: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--sheet);
+}
+.keyplate button {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 1px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-.btngroup button {
-  width: 34px;
-  height: 34px;
-  border: 0;
-  background: var(--glass);
-  color: var(--ink);
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  width: 44px;
+  height: 44px;
+  margin: 0 -4px;
+  color: var(--ink-2);
 }
-.btngroup button[aria-pressed="true"] { color: var(--accent); }
-.btngroup button[aria-pressed="false"] { color: var(--ink-faint); }
-
-.legend {
+.keyplate button + button::after {
+  content: '';
   position: absolute;
-  left: 10px;
-  bottom: 30px;
-  z-index: 3;
-  width: min(220px, 55vw);
-  padding: 6px 8px 4px;
-  border-radius: 10px;
-  background: var(--glass);
-  box-shadow: var(--shadow);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  pointer-events: none;
+  left: 4px;
+  right: 4px;
+  top: 0;
+  height: 1px;
+  background: var(--line);
 }
-/* The unit lives here, above the bar, and not on the last tick: in km/h the
-   last tick is three digits and the unit label lands on top of it. */
-.legend-head {
+.keyplate button svg { position: relative; padding: 0; }
+/* a key that is on carries a plate of ink behind its mark (after review: the 2 px tick read as a caret) */
+.keyplate button::before { content: ''; position: absolute; inset: 8px; border-radius: 4px; }
+.keyplate button[aria-pressed="true"] { color: var(--ink); }
+.keyplate button[aria-pressed="true"]::before { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.keyplate button:active::before { background: color-mix(in srgb, currentColor 22%, transparent); }
+.tkey:active > svg, .textkey:active { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: 4px; }
+svg.streaks path { stroke-width: 1.25; }
+/* a plate too short for the column (a phone on its side): the keys run as a row along the top */
+.keys-row .keys { flex-direction: row; flex-wrap: nowrap; max-height: none; }
+.keys-row .keyplate { display: flex; width: auto; height: 38px; }
+.keys-row .keyplate button { margin: -4px 0; }
+.keys-row .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
+#focus-key { color: var(--ink-2); }
+
+/* the ghost key: no plate, a halo under the mark so it reads over any weather and the streaks. In focus
+   mode the header has gone, so in Snuggery's full screen the plate starts under the status bar: the
+   key keeps clear of it (after review) */
+.ghost {
+  position: absolute;
+  top: calc(8px + env(safe-area-inset-top));
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 4;
+  width: 44px;
+  height: 44px;
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  font-size: 10px;
-  line-height: 1.3;
-  color: var(--ink-dim);
-  margin-bottom: 3px;
+  align-items: center;
+  justify-content: center;
+  opacity: .72;
+  animation: ghost-in 200ms var(--draw);
 }
-.legend-head span:last-child { font-weight: 700; }
-.legend-bar { height: 8px; border-radius: 4px; }
-.legend-ticks {
-  position: relative;
-  height: 14px;
-  font-size: 10px;
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
+.ghost:focus-visible, .ghost:active { opacity: 1; }
+.ghost .halo { stroke: rgba(246, 249, 250, .6); stroke-width: 3.4; }
+.ghost .mark { stroke: #0f1c23; stroke-width: 1.4; }
+.ghost .mark .fill { fill: #0f1c23; }
+.ghost .halo circle { fill: rgba(246, 249, 250, .6); }
+@media (prefers-color-scheme: dark) {
+  .ghost .halo { stroke: rgba(10, 16, 19, .45); }
+  .ghost .halo circle { fill: rgba(10, 16, 19, .45); }
+  .ghost .mark { stroke: #f2f4f1; }
+  .ghost .mark .fill { fill: #f2f4f1; }
 }
-.legend-ticks span { position: absolute; top: 1px; transform: translateX(-50%); white-space: nowrap; }
-.legend-ticks span:first-child { transform: none; }
-.legend-ticks span:last-child { transform: translateX(-100%); }
+@keyframes ghost-in { from { opacity: 0; } }
 
-/* A credit printed over a wind map is unreadable — the ground under it is
-   whatever the weather is doing there. So it gets its own chip, like the
-   legend: attribution that cannot be read is not attribution. */
-.credits {
-  position: absolute;
-  right: 10px;
-  bottom: 6px;
-  z-index: 3;
-  margin: 0;
-  max-width: calc(100% - 20px);
-  padding: 2px 7px;
-  border-radius: 7px;
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  font-size: 10px;
-  line-height: 1.5;
-  color: var(--ink-dim);
-  text-align: right;
-  pointer-events: none;
-}
-
+/* the tapped place */
 .readout {
   position: absolute;
-  left: 10px;
-  top: 10px;
-  z-index: 4;
-  min-width: 150px;
-  max-width: calc(100% - 64px);   /* clear of the zoom buttons on the right */
-  padding: 10px 34px 10px 12px;
-  border-radius: var(--radius);
-  background: var(--glass);
-  box-shadow: var(--shadow);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-.readout-close {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  width: 28px;
-  height: 28px;
-  border: 0;
+  left: calc(8px + env(safe-area-inset-left));
+  top: 8px;
+  z-index: 3;
+  width: max-content;
+  min-width: 176px;
+  max-width: min(280px, calc(100% - 76px));
+  padding: 4px 4px 10px 12px;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: none;
-  color: var(--ink-faint);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
+  background: var(--sheet);
+  animation: card-in 120ms var(--draw);
 }
-.readout-where { font-size: 11px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
-.readout-main { display: flex; align-items: center; gap: 8px; margin: 2px 0; }
-.readout-arrow { display: inline-block; font-size: 20px; color: var(--accent); transform-origin: 50% 50%; }
-.readout-speed { font-size: 22px; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-.readout-speed small { font-size: 13px; font-weight: 600; color: var(--ink-dim); margin-left: 3px; }
-.readout-sub { font-size: 12px; color: var(--ink-dim); }
+@keyframes card-in { from { opacity: 0; transform: translateY(4px); } }
+/* the card moves to the bottom corner when it would cover the place that was tapped (app.js placeReadout) */
+.readout.low { top: auto; bottom: 8px; }
+.focus .readout:not(.low) { top: calc(8px + env(safe-area-inset-top)); }
+.readout-where { display: flex; align-items: center; justify-content: space-between; gap: 4px; font-size: 12px; color: var(--ink-2); }
+.readout-close { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin: -6px 0 -10px; color: var(--ink-2); }
+.readout-main { display: flex; align-items: center; gap: 8px; padding-right: 8px; }
+.readout-arrow { flex: 0 0 auto; fill: var(--ink); stroke: none; }
+.readout-value { font-size: 21px; font-weight: 600; line-height: 1.2; }
+.readout-unit { font-size: 13.5px; font-weight: 400; color: var(--ink-2); }
+.readout-sub { font-size: 12.5px; color: var(--ink-2); padding-right: 8px; }
 
-.about {
+/* a problem with the data is a sentence on the plate, never a blank map */
+.error {
   position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(0, 0, 0, .35);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: max-content;
+  max-width: min(300px, calc(100% - 32px));
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-align: center;
 }
-.about-card {
-  width: 100%;
-  max-width: 380px;
-  max-height: 100%;
-  overflow-y: auto;
-  padding: 16px 18px;
-  border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--shadow);
-}
-.about-card h2 { margin: 0 0 10px; font-size: 16px; }
-.about-card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 13px; }
-.about-card dt { color: var(--ink-dim); }
-.about-card dd { margin: 0; }
-.about-note { font-size: 12px; color: var(--ink-dim); margin: 12px 0 0; line-height: 1.5; }
-.about-note code { font-size: 11px; }
-.about-close {
-  margin-top: 12px;
-  width: 100%;
-  height: 44px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-weight: 600;
-  cursor: pointer;
-}
+.error div + div { margin-top: 6px; }
 
-/* ── player ──────────────────────────────────────────────────────────────── */
+/* ── the caption band: the legend, the exposure, the credits ── */
+
+.caption {
+  flex: 0 0 auto;
+  padding: 6px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--ink-2);
+  font-variant-numeric: proportional-nums lining-nums;
+}
+.caption > .stamp { margin-bottom: 2px; }
+.legend { display: flex; align-items: flex-start; gap: 12px; min-height: 30px; }
+.focus .legend { min-height: 0; }
+.legend-title { flex: 0 1 auto; min-width: 0; font-size: 11.5px; font-weight: 600; color: var(--ink); padding-top: 1px; }
+.legend-scale { flex: 1 1 150px; min-width: 150px; padding-top: 5px; }
+.legend-bar { height: 6px; outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); outline-offset: 0; }
+.legend-ticks { position: relative; height: 15px; font-size: 10.5px; font-variant-numeric: tabular-nums lining-nums; }
+.legend-ticks span { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; line-height: 12px; }
+.legend-ticks span::before { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 3px; background: var(--line-strong); }
+.legend-ticks span.first { transform: none; }
+.legend-ticks span.first::before { left: 0; }
+.legend-ticks span.last { transform: translateX(-100%); }
+.legend-ticks span.last::before { left: auto; right: 0; }
+.exposure, .credits { margin: 0; }
+/* The exposure line has a fixed height, whatever it says or whether it says anything: its words change
+   with the view (the polar clause), the flow key and Reduce Motion, and a caption that grew and shrank
+   with them would resize the plate above it, which changes the view, which changes the words (after
+   review: a loop at 45° of latitude). Two lines hold the longest line (544 px) on any phone held
+   upright; one line from 640 px. tools/shoot.mjs checks the longest line fits at every width it runs. */
+.exposure { height: 30px; overflow: hidden; }
+@media (min-width: 640px) { .exposure { height: 15px; } }
+.credits { font-size: 10.5px; }
+
+/* ── the player: the valid time, the transport and the track ── */
 
 .player {
   flex: 0 0 auto;
-  padding: 8px 14px calc(10px + env(safe-area-inset-bottom));
-  background: var(--card);
+  padding: 2px calc(12px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(12px + env(safe-area-inset-left));
+  background: var(--page);
   border-top: 1px solid var(--line);
 }
-.time-row {
+.time-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 6px 4px 0; }
+.valid { font-size: 21px; line-height: 1; font-weight: 600; white-space: nowrap; }
+.lead { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.controls { display: flex; align-items: flex-start; gap: 0; }
+.tkey { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.tkey.play { color: var(--page); }
+.shutter { width: 32px; height: 32px; border-radius: 8px; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+.shutter svg { fill: currentColor; stroke: none; }
+.track { position: relative; flex: 1 1 auto; min-width: 0; height: 58px; margin-left: 4px; cursor: pointer; touch-action: none; }
+.track canvas { display: block; width: 100%; height: 58px; }
+.track:focus-visible { outline-offset: -2px; }
+/* no transition, ever, on what carries a step (DESIGN §2.2) */
+.valid, .lead, .track, .track canvas { transition: none; animation: none; }
+
+/* ── About: a full-height sheet ── */
+
+.about { position: fixed; inset: 0; z-index: 20; }
+.about-sheet {
+  position: absolute;
+  inset: 0;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 4px;
+  flex-direction: column;
+  background: var(--sheet);
+  animation: sheet-in 220ms var(--sheet-in);
 }
-.valid { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.lead { font-size: 12px; color: var(--ink-dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
-
-.controls { display: flex; align-items: center; gap: 6px; }
-.pbtn {
-  width: 44px;
-  height: 44px;
+@keyframes sheet-in { from { transform: translateY(100%); } }
+.about-head {
   flex: 0 0 auto;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--chip);
-  color: var(--ink);
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
+  justify-content: space-between;
+  padding: env(safe-area-inset-top) calc(8px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  border-bottom: 1px solid var(--line);
 }
-.pbtn.play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.about-head h2 { margin: 0; font-size: 15px; font-weight: 650; }
+.textkey { min-width: 44px; height: 44px; padding: 0 8px; font-size: 12.5px; color: var(--ink); }
+.about-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+  font-variant-numeric: proportional-nums lining-nums;
+}
+.about-body section { max-width: 62ch; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.about-body h3 { margin: 0 0 6px; font-size: 13.5px; font-weight: 650; }
+.about-body p { margin: 0 0 8px; line-height: 1.5; }
+.about-body p:last-child { margin-bottom: 0; }
+.about-body code { font: inherit; }
+.about-body dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; line-height: 1.45; }
+.about-body dt { color: var(--ink-2); }
+.about-body dd { margin: 0; overflow-wrap: anywhere; }
+.about-foot { margin-top: 8px; }
 
-.slider-wrap { flex: 1 1 auto; min-width: 0; padding-top: 2px; }
-#slider {
-  display: block;
-  width: 100%;
-  margin: 0;
-  height: 32px;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-.ticks {
-  position: relative;
-  height: 14px;
-  margin: 0 8px;
-  font-size: 10px;
-  color: var(--ink-faint);
-}
-.ticks span {
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  white-space: nowrap;
-}
-.ticks span::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -5px;
-  width: 1px;
-  height: 4px;
-  background: var(--line);
-}
+/* ── focus mode: everything but the plate, its track, the stamp and the caption's words leaves ── */
 
-/* Larger text: let the header wrap to two lines rather than clip the stamp,
-   and give the player room. The map itself is drawn, so it rescales on its
-   own — only the chrome needs this. */
+.leaving { opacity: 0; transition: opacity 160ms var(--draw); }
+
+@media (hover: hover) {
+  .keyplate button:hover svg { background: color-mix(in srgb, currentColor 7%, transparent); border-radius: 4px; }
+  .views button:hover, .wordkey:hover, .unitkey:hover, .stamp:hover, .textkey:hover, .tkey:hover { color: var(--ink); }
+  .ghost:hover { opacity: 1; }
+}
 @media (min-width: 700px) {
-  .topbar { padding: 10px 20px; }
-  .switcher { padding-left: 20px; padding-right: 20px; }
-  .player { padding-left: 20px; padding-right: 20px; }
+  .head, .caption { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
 }
 
+/* ── a phone on its side: the header, the caption and the player each give the plate their second row ── */
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .head {
+    grid-template-columns: max-content minmax(0, 1fr) auto;
+    grid-template-rows: 22px 24px;
+    column-gap: 16px;
+    padding-top: env(safe-area-inset-top);
+  }
+  .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
+  .stamp { white-space: nowrap; }
+  .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
+  .unitkey { grid-area: 1 / 3 / 3 / 4; }
+  /* the legend and the credits share a row; the exposure line runs under them, full width */
+  .caption {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 16px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+  }
+  .caption > .stamp, .exposure { grid-column: 1 / -1; }
+  .legend { grid-column: 1; }
+  .credits { grid-column: 2; grid-row: span 1; align-self: start; padding-top: 1px; }
+  .caption > .legend + .exposure { grid-row: 2; }
+  .caption > .stamp + .legend + .exposure { grid-row: 3; }
+  /* the time, the transport and the track on one row */
+  .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
+  .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; }
+  .controls { flex: 1 1 auto; min-width: 0; align-items: center; }
+}
 @media (prefers-reduced-motion: reduce) {
-  * { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }
 }

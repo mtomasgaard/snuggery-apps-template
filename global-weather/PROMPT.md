@@ -8,7 +8,8 @@ The agent does the typing.
 
 Global Weather is the whole planet's weather, five days ahead, on a map you can
 pan, pinch and zoom — and on a globe you can turn. Five layers from one
-forecast: **wind** (a colour layer and arrows), **temperature**, **rain**,
+forecast: **wind** (a color layer, with the wind itself drawn as moving
+streaks, or as arrows), **temperature**, **rain**,
 **cloud** and **pressure**. A player along the bottom walks the forecast
 forward hour by hour with the night side moving across it, and a tap anywhere
 gives all five numbers at that point. The data is NOAA's Global Forecast
@@ -83,9 +84,10 @@ phone and your patience allow. Three things to know before you do —
 - The **pull** grows with the step count. Hourly for five days is 121 forecast
   files and about 560 MB of range requests; 3-hourly is 41 files and 190 MB.
 - **Deleting a layer saves both ends.** It is one entry out of `LAYERS`, and the
-  app needs no edit at all: the chips, the legend, the units button and the
+  app needs no edit at all: the layer words, the legend, the units key and the
   tapped readout are built from whatever the snapshot declares. Keep `wind` if
-  you want the arrows — they are the one thing that looks for a layer by name.
+  you want the streaks and the arrows — they are the one thing that looks for a
+  layer by name.
 
 Measure before you commit to a setting — one download, the whole table:
 
@@ -113,7 +115,7 @@ python3 scripts/global_weather.py --check
 
 `--check` rebuilds that exact run from the bucket and compares, which is the
 stronger proof — and it is honest about its own limits. The bucket does not keep
-runs for ever; once the demo's has gone, `--check` prints *the run has aged out*
+runs forever; once the demo's has gone, `--check` prints *the run has aged out*
 and exits **2**, not 0, because "I could not tell" is not "it matched". The
 fingerprint is what still works then, and `--verify` compares it offline, on
 whatever `python3` you happen to have — no numpy, no network.
@@ -124,20 +126,27 @@ least 3.
 
 ## Step 2 — the clock
 
-`.github/workflows/refresh-global-weather.yml` runs at **04:33 and 10:33 UTC**,
-plus `workflow_dispatch`. Those are not arbitrary. GFS runs four times a day and
-takes about four hours to finish writing each one, file by file; the 00Z run's
-five-day file lands around 04:10 UTC and the 06Z run's around 10:10. Each slot
-sits half an hour later, which still works when GitHub fires late — and it does.
+`.github/workflows/refresh-global-weather.yml` has **eight slots, at 33
+minutes past 01, 04, 07, 10, 13, 16, 19 and 22 UTC**, plus `workflow_dispatch`.
+Those are not arbitrary. GFS runs four times a day and takes about four hours
+to finish writing each one, file by file; the 00Z run's five-day file lands
+around 04:10 UTC, the 06Z run's around 10:10, 12Z's around 16:10 and 18Z's
+around 22:10. One slot sits half an hour after each, and a second slot three
+hours later catches the ones GitHub fires late or drops — and it does both.
 
 The ten minutes between this and Global Wind's slots are deliberate: both jobs
 read the same bucket for the same runs, and two of them pulling hundreds of
-megabytes through it at the same minute is not neighbourly.
+megabytes through it at the same minute is not neighborly.
 
 The job passes the run it already published to `--skip-run`, so a slot that
 lands on a model cycle already on the branch costs one HEAD request and stops.
 A new GFS run is the only thing that can change this file, so that check *is*
 the "commit only if it changed" test.
+
+So the data is refreshed up to four times a day, once for each new GFS run,
+and each new run is one pull of about 190 MB. If that is more than you want,
+comment out the slots after the runs you do not need: keeping `04:33` and
+`10:33` alone gives the 00Z and 06Z runs, twice a day.
 
 If you change `FORECAST_DAYS`, change the cron with it: a shorter forecast is
 ready earlier, so you can move the slots an hour or two forward.
@@ -164,8 +173,8 @@ gh run watch
 
 **Global Weather and Global Wind are the two apps here that do not commit their
 snapshots to `main`.** The file is megabytes and every byte of it is different
-every run, so git can neither delta it nor compress it; twice a day that is a
-couple of gigabytes a year in a repository you clone.
+every run, so git can neither delta it nor compress it; up to four new runs a
+day, that is about four gigabytes a year in a repository you clone.
 
 Instead the job force-pushes one parentless commit to an orphan branch,
 **`data-global-weather`**. The branch only ever holds the newest snapshot, at
@@ -223,7 +232,7 @@ In rough order of how often people want them:
   are stored on and the words the app prints. Delete the ones you never look at;
   add one you do — the same forecast files hold gusts (`GUST` at the surface),
   humidity (`RH` at 2 m), snow depth, CAPE, and winds aloft, all listed in the
-  same `.idx` sidecar the job already reads. A new layer draws on a plain colour
+  same `.idx` sidecar the job already reads. A new layer draws on a plain color
   scale with no edit to the app; give it a nicer one by adding an entry to
   `LOOKS` near the top of `app.js`, which is where the five shipped scales live.
 - **The twelve cities.** `CITIES` in the same file is the `ask` table — the rows
@@ -234,25 +243,31 @@ In rough order of how often people want them:
   to a dozen or so, because the table is meant to stay under a hundred rows.
 - **The map's labels.** `global-weather/assets/places.json` is a plain list of
   `{"n", "lon", "lat", "r"}` — `r` is the tier, 1 shown first, 4 only when you
-  zoom right in. Add your own harbour, delete a continent's worth of cities you
+  zoom right in. Add your own harbor, delete a continent's worth of cities you
   never look at. The app reads the file exactly as it finds it.
 - **Units.** The header button cycles the units of whichever layer is on
   screen — m/s, km/h, knots, mph for wind; °C and °F; mm/h and in/h; hPa and
   inHg — and each layer remembers its own. The lists are `UNITS` near the top of
   `app.js`.
-- **The colour scales.** `LOOKS` in `app.js` is one entry per layer: `stops` is
-  value → colour, `alpha` is value → opacity, `legend` is where the bar starts
-  and stops. The legend and the chips are painted from the same arrays as the
-  map, so changing one changes all three. Keep each one a single progression
-  with no hue cycling: on a map, "further along the scale" has to mean "more",
-  and nothing may depend on colour alone.
+- **The color scales.** `LOOKS` in `app.js` sets each layer's legend range;
+  the ramps themselves are `js/ramps.js`, printed per theme by
+  `python3 global-weather/tools/art/palette.py --json`, which also checks that
+  a streak reads over every value. Change the stops in `palette.py`, rerun it,
+  and replace `js/ramps.js` with its output (`node tools/check.mjs` fails while
+  the two differ). Keep each one a single progression: on a map, "further along
+  the scale" has to mean "more", and nothing may depend on color alone.
+- **The streaks.** `js/flow.js` draws them and `js/flow-math.js` holds their
+  math; they read the `wind` layer's u and v and nothing else. Never color
+  them, or tie their width or length to anything: the color layer is the speed,
+  and the caption prints the one rate they run at (`DESIGN.md` §1).
 - **The night wash.** `nightRgb` and `nightMax` in `buildPalette()`. Set
   `nightMax` to 0 in both palettes if you would rather it never shaded at all,
-  or just leave the moon button off — the app remembers.
-- **Where it opens.** The map fits 70°S to 70°N on first launch; the globe opens
-  on the reader's own longitude, worked out from the clock's offset from UTC.
-  After that each remembers where you left it. `MAP_VIEW.fit()` and
-  `GLOBE_VIEW.fit()` in `app.js` are where the defaults live.
+  or just leave the Night key off — the app remembers.
+- **Where it opens.** Both views open on the reader's own longitude, worked out
+  from the clock's offset from UTC (`CLOCK_LON` in `app.js`), so a phone in
+  Chicago opens on the Americas; the map fits 70°S to 70°N. After that each
+  remembers where you left it. `MAP_VIEW.fit()` and `GLOBE_VIEW.fit()` in
+  `app.js` are where the defaults live.
 
 ## Do not touch
 
@@ -272,7 +287,7 @@ Stop and report the exact error text rather than working around it.
 **`no complete GFS run found in the last two days`** — the script checks whether
 a run's *last* step is in the bucket before using any of it, so this means the
 bucket is genuinely behind, not that anything is broken. Re-run in an hour; the
-schedule's second slot exists for exactly this.
+catch-up slot three hours after each run's slot exists for exactly this.
 
 **`the index does not hold <field>`** — a layer is asking for a GRIB message
 that is not in the file under that name. The variable and level in a `LAYERS`

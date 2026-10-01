@@ -33,7 +33,7 @@
  *                                                //   (value − the previous step's value) mod 256;
  *                                                //   absent or "none" = absolute values
  *   },
- *   "layers": [{                                 // what the map can colour, in menu order
+ *   "layers": [{                                 // what the map can color, in menu order
  *     "key": "wind", "label": "Wind",            //   `key` is the identity, `label` the chip
  *     "kind": "vector",                          //   "vector" = speed + dir, "scalar" = one plane
  *     "unit": "m/s", "level": "10 m above ground",
@@ -66,7 +66,7 @@
  * A VALUE IS ONE BYTE: `offset + step * byte ** power`, with the numbers coming
  * from the plane's own entry in `layers`. `power` is 1 for everything except
  * rain, where 2 spends the bytes where the weather is — drizzle resolved to
- * hundredths of a millimetre an hour, and 65 mm/h still at the top of the byte.
+ * hundredths of a millimeter an hour, and 65 mm/h still at the top of the byte.
  * `wrap: true` marks an angle, which goes round rather than clipping at 255.
  *
  * The delta-plus-deflate pair is what makes five global fields fit in a file a
@@ -82,132 +82,91 @@
  * folder — so a fix to the sphere, the land mask or the terminator belongs in
  * both. The data half is what differs: schema 1 there, schema 2 here.
  *
- * THE APP READS THE LAYERS, IT DOES NOT KNOW THEM. The chips, the legend, the
- * units button and the tapped readout are all built from `layers`. LOOKS below
- * gives the five shipped layers their colour scales and their units; a layer
- * that is not in it still draws, on a plain scale over its own `range`, which
- * is what makes "add a sixth field to the puller" a one-file change.
+ * THE APP READS THE LAYERS, IT DOES NOT KNOW THEM. The layer words, the legend,
+ * the units key and the tapped readout are all built from `layers`. LOOKS below
+ * gives the five shipped layers their legend ranges, and js/ramps.js their color
+ * ramps per theme (printed by tools/art/palette.py --json; ART.md says why each
+ * looks as it does); a layer that is not in it still draws, on a plain scale over
+ * its own `range`, which is what makes "add a sixth field to the puller" a
+ * one-file change.
+ *
+ * THE FLOW (js/flow.js, DESIGN.md §1) is the wind itself moving: tracers carried
+ * at the snapshot's wind, in its direction, at the hour on the slider, times one
+ * printed rate. It reads the same u and v the tapped readout reads.
  *
  * -----------------------------------------------------------------------------
  * STATIC COMPANIONS in ./assets, never rewritten by the schedule:
  *   world.json    coastlines and country borders. Natural Earth, public domain.
  *   places.json   [{ "n": "London", "lon": -0.13, "lat": 51.51, "r": 1 }, …] where
- *                 r is the label tier, 1 shown first. GeoNames, CC BY 4.0 — the
+ *                 r is the label tier, 1 shown first. GeoNames, CC BY 4.0: the
  *                 credit line under the map is a condition of using it. Edit the
  *                 file freely; the app reads it as it finds it.
- * Both licences are in assets/LICENSES.md, and NOTES.md has the weather's.
+ * Both licenses are in assets/LICENSES.md, and NOTES.md has the weather's.
  *
  * -----------------------------------------------------------------------------
  * NO VALUE EVER REACHES innerHTML. The only `.innerHTML` below is `= ''`, used
  * to empty a container; every piece of text is set with textContent or built as
  * a DOM node. There is no eval, no `new Function`, no postMessage, no
  * WebSocket, and no address is ever fetched but `./data/…` and `./assets/…`.
- * The two licence URIs printed in *About this data* are text on a page, which
- * is what CC BY asks for; nothing requests them.
+ * The two license addresses printed in *About this data* are text on a page,
+ * which is what CC BY asks for; nothing requests them.
  * ========================================================================== */
+
+import { RAMPS } from './js/ramps.js';
+import * as U from './js/units.js';
+import { createFlow } from './js/flow.js';
+import { createTrack } from './js/track.js';
+import { exposure as exposureLine } from './js/flow-math.js';
 
 const STORE = {
   map: 'gwe.map', globe: 'gwe.globe', tab: 'gwe.tab', layer: 'gwe.layer',
   units: 'gwe.units', arrows: 'gwe.arrows', night: 'gwe.night', marker: 'gwe.marker',
+  flow: 'gwe.flow', focus: 'gwe.focus',
 };
 const MAX_LAT = 85.05112878;   // where Web Mercator stops being finite
 const DEG = Math.PI / 180;
 const ARROW_SPACING = 30;      // CSS px between arrows, roughly
-const HEAT_PX = 3;             // CSS px per colour sample, flat map
-const GLOBE_PX = 3;            // CSS px per colour sample, globe
+const HEAT_PX = 3;             // CSS px per color sample, flat map
+const GLOBE_PX = 3;            // CSS px per color sample, globe
 const PLAY_HOURS_PER_SEC = 5;  // playback speed: a day of forecast every ~5 s
-const FLOAT_CACHE = 16;        // decoded planes kept in memory
+const FLOAT_CACHE = 16;        // decoded scalar planes kept in memory
 const PATH_K = 4096;           // land paths are built in world units × PATH_K
 const MAX_SCALE = 360 * 80;    // 80 px per degree of longitude
 const STALE_HOURS = 30;        // a forecast older than this is stamped stale
 const MASK_NX = 2048;          // the globe's land mask, in plate carrée
 const MASK_NY = 1024;
 const ANTARCTIC_EDGE = -84.6;  // Natural Earth stops here; see buildLandMask()
+const LABEL_FONT = '560 11.5px "Ysabeau Office", system-ui, -apple-system, sans-serif';
 
 /* ── what each layer looks like ──────────────────────────────────────────── *
- * One entry per layer key the puller can write. `stops` is value → colour and
- * `alpha` is value → opacity, both in the layer's own unit; the legend, the
- * chips and the map are painted from these same numbers, so the scale under
- * the map is by construction the scale on it.
+ * One entry per layer key the puller can write: the color ramp (per theme,
+ * from js/ramps.js), the alpha rule, and where the legend bar starts and stops,
+ * all in the layer's own unit. The legend and the map are painted from these
+ * same numbers, so the scale under the map is by construction the scale on it.
  *
- * Every scale is a single progression with no hue cycling: further along
- * always means more. And nothing is encoded by colour alone — wind is drawn as
- * arrow length and thickness too, and a tap gives the number in figures.
+ * Every ramp is one hue path printed twice: the light theme prints "more" as
+ * darker, the dark theme as lighter, and both stay inside ART.md's tonal budget
+ * so a streak reads over any of them. Nothing is encoded by color alone: a tap
+ * gives the number in figures and words.
  *
  * A layer with no entry here (one you added to the puller) still draws, on the
  * plain scale at the bottom of this block, over the range the snapshot says it
  * reached.                                                                    */
 
+const ramp = (key, legend) => ({ stops: (dark) => RAMPS[key][dark ? 'dark' : 'light'], alpha: RAMPS[key].alpha, legend });
 const LOOKS = {
-  wind: {
-    /* Cool → warm → violet: stronger always reads as further along. */
-    short: 'Wind',
-    stops: [
-      [0, [86, 115, 190]], [2, [70, 140, 205]], [4, [60, 175, 195]], [6, [70, 195, 150]],
-      [8, [100, 205, 95]], [10, [165, 212, 60]], [12, [232, 210, 45]], [15, [250, 172, 45]],
-      [18, [250, 125, 45]], [21, [240, 78, 55]], [25, [222, 45, 95]], [30, [195, 45, 165]],
-      [36, [145, 45, 205]], [45, [100, 40, 190]], [60, [245, 225, 255]],
-    ],
-    /* Calm is nearly transparent so the map shows through where nothing is
-     * happening; a gale is solid. */
-    alpha: { at: [0, 10], from: 0.42, to: 0.82 },
-    legend: [0, 36],
-  },
-  temp: {
-    short: 'Temp',
-    /* Violet through blue, green, yellow and orange to a dark red. Pale at
-     * 0 °C, because freezing is the one boundary everybody reads off a map. */
-    stops: [
-      [-60, [40, 20, 70]], [-45, [68, 34, 128]], [-35, [62, 70, 170]], [-25, [58, 110, 200]],
-      [-15, [78, 155, 218]], [-8, [126, 194, 232]], [0, [196, 226, 238]], [4, [168, 214, 178]],
-      [10, [140, 200, 106]], [16, [206, 214, 78]], [22, [240, 196, 66]], [28, [240, 150, 54]],
-      [34, [226, 100, 46]], [40, [200, 52, 48]], [50, [140, 20, 40]],
-    ],
-    alpha: { at: [0, 1], from: 0.78, to: 0.78 },
-    legend: [-40, 45],
-  },
-  rain: {
-    short: 'Rain',
-    /* The radar progression, which is the one people have already learnt:
-     * blue, green, yellow, red, magenta. */
-    stops: [
-      [0, [140, 190, 230]], [0.1, [120, 175, 225]], [0.4, [70, 140, 215]], [1, [45, 100, 200]],
-      [2, [40, 165, 120]], [4, [90, 195, 70]], [7, [225, 205, 60]], [12, [240, 150, 45]],
-      [20, [225, 70, 50]], [32, [190, 40, 120]], [50, [150, 40, 170]],
-    ],
-    /* Nothing at all below a fiftieth of a millimetre an hour: a dry world has
-     * to look dry, or the layer says nothing. */
-    alpha: { at: [0.02, 1.2], from: 0, to: 0.88 },
-    legend: [0, 40],
-  },
-  cloud: {
-    short: 'Cloud',
-    /* One hue, opacity doing the work — the clearest scale there is. Grey on
-     * the light map and white on the dark one, because a white veil over a
-     * cream continent is not a veil. */
-    stops: (dark) => (dark
-      ? [[0, [232, 238, 246]], [100, [252, 253, 255]]]
-      : [[0, [150, 162, 178]], [100, [88, 102, 122]]]),
-    alpha: { at: [0, 100], from: 0, to: 0.75 },
-    legend: [0, 100],
-  },
-  pressure: {
-    short: 'Press.',
-    /* Deep lows violet, the 1013 hPa middle near-neutral, highs warm. */
-    stops: [
-      [950, [70, 30, 120]], [975, [62, 80, 180]], [995, [95, 160, 215]], [1008, [186, 214, 226]],
-      [1013, [238, 238, 234]], [1020, [236, 206, 140]], [1032, [232, 160, 70]],
-      [1045, [200, 100, 40]], [1060, [150, 60, 30]],
-    ],
-    alpha: { at: [0, 1], from: 0.62, to: 0.62 },
-    legend: [955, 1050],
-  },
+  wind: ramp('wind', [0, 36]),
+  temp: ramp('temp', [-40, 45]),
+  rain: ramp('rain', [0, 40]),
+  cloud: ramp('cloud', [0, 100]),
+  pressure: ramp('pressure', [955, 1050]),
 };
 
-/* The scale a layer nobody wrote a look for is drawn on. */
+/* The scale a layer nobody wrote a look for is drawn on: one cool gray, inside
+ * the tonal budget, "more" further from the ground in both themes. */
 const PLAIN = {
-  stops: [[0, [60, 90, 170]], [0.5, [120, 190, 170]], [0.75, [235, 200, 80]], [1, [200, 60, 60]]],
-  alpha: { at: [0, 1], from: 0.7, to: 0.7 },
+  stops: (dark) => (dark ? [[0, [40, 48, 52]], [1, [150, 160, 166]]] : [[0, [205, 214, 219]], [1, [110, 122, 131]]]),
+  alpha: { at: [0, 1], from: 0.85, to: 0.85 },
 };
 
 /* Units, per layer key. The header button cycles the ACTIVE layer's list, so
@@ -219,23 +178,23 @@ const PLAIN = {
  * in, unconverted — which is right, because nothing here knows what it means. */
 const UNITS = {
   wind: [
-    { id: 'ms', label: 'm/s', f: 1, d: 1 },
-    { id: 'kmh', label: 'km/h', f: 3.6, d: 0 },
-    { id: 'kt', label: 'kt', f: 1.943844, d: 0 },
-    { id: 'mph', label: 'mph', f: 2.236936, d: 0 },
+    { id: 'ms', label: 'm/s', say: 'meters a second', f: 1, d: 1 },
+    { id: 'kmh', label: 'km/h', say: 'kilometers an hour', f: 3.6, d: 0 },
+    { id: 'kt', label: 'kt', say: 'knots', f: 1.943844, d: 0 },
+    { id: 'mph', label: 'mph', say: 'miles an hour', f: 2.236936, d: 0 },
   ],
   temp: [
-    { id: 'c', label: '°C', f: 1, d: 1 },
-    { id: 'f', label: '°F', f: 1.8, o: 32, d: 0 },
+    { id: 'c', label: '°C', say: 'degrees Celsius', f: 1, d: 1 },
+    { id: 'f', label: '°F', say: 'degrees Fahrenheit', f: 1.8, o: 32, d: 0 },
   ],
   rain: [
-    { id: 'mm', label: 'mm/h', f: 1, d: 2 },
-    { id: 'in', label: 'in/h', f: 0.0393701, d: 3 },
+    { id: 'mm', label: 'mm/h', say: 'millimeters an hour', f: 1, d: 2 },
+    { id: 'in', label: 'in/h', say: 'inches an hour', f: 0.0393701, d: 3 },
   ],
-  cloud: [{ id: 'pct', label: '%', f: 1, d: 0 }],
+  cloud: [{ id: 'pct', label: '%', say: 'percent', f: 1, d: 0 }],
   pressure: [
-    { id: 'hpa', label: 'hPa', f: 1, d: 0 },
-    { id: 'inhg', label: 'inHg', f: 0.02952998, d: 2 },
+    { id: 'hpa', label: 'hPa', say: 'hectopascals', f: 1, d: 0 },
+    { id: 'inhg', label: 'inHg', say: 'inches of mercury', f: 0.02952998, d: 2 },
   ],
 };
 
@@ -250,7 +209,7 @@ const COMPASS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
 
 /* The line that stays on screen. It says "sampled" because NOAA asks that
  * modified data is not presented as unaltered NOAA data, and it names GeoNames
- * and the licence because CC BY 4.0 makes that a condition rather than a
+ * and the license because CC BY 4.0 makes that a condition rather than a
  * courtesy. NOTES.md says to keep both, and means it. */
 const CREDITS = 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0';
 
@@ -259,7 +218,7 @@ const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 const pad2 = (n) => String(n).padStart(2, '0');
 const wrapLon = (lon) => ((lon + 180) % 360 + 360) % 360 - 180;
 
-/* ── colour and alpha from a stop table ──────────────────────────────────── */
+/* ── color and alpha from a stop table ──────────────────────────────────── */
 
 function rampAt(stops, value) {
   let k = 0;
@@ -276,6 +235,7 @@ function alphaAt(spec, value) {
   const f = v1 === v0 ? 1 : clamp((value - v0) / (v1 - v0), 0, 1);
   return spec.from + (spec.to - spec.from) * f;
 }
+
 /* ── inflate ─────────────────────────────────────────────────────────────── *
  * Every browser shipped since 2023 has DecompressionStream, and that native
  * path is the one that runs. The rest of this section is a small, complete
@@ -294,7 +254,7 @@ function inflateRaw(src, expected) {
                 10, 11, 11, 12, 12, 13, 13];
   const ORDER = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
-  /* The cap is the whole defence against a crafted plane. A few kilobytes of
+  /* The cap is the whole defense against a crafted plane. A few kilobytes of
    * deflate can describe gigabytes of output, so the decoder refuses to write
    * more bytes than the grid can hold: `expected` is nx*ny, which validate()
    * has already bounded. Without one, 16 MB is far more than any plane here. */
@@ -490,7 +450,7 @@ function b64ToBytes(s) {
 }
 
 /* One entry of the snapshot's `layers`, with the app's half of it attached:
- * the colour scale, the units, and the byte↔value pair that both ends share. */
+ * the color scale, the units, and the byte↔value pair that both ends share. */
 class Layer {
   constructor(described) {
     this.key = described.key;
@@ -503,17 +463,17 @@ class Layer {
       ? described.range : null;
     this.planes = described.planes;
     // A vector layer is speed and direction, by contract; a scalar layer is one
-    // plane, whatever it is called. Either way `main` is the plane the colour
+    // plane, whatever it is called. Either way `main` is the plane the color
     // scale, the legend and the tapped number are all about.
     this.main = this.kind === 'vector' ? 'speed' : Object.keys(this.planes)[0];
     this.spec = this.planes[this.main];
-    this.units = UNITS[this.key] || [{ id: 'raw', label: this.unit, f: 1, d: 1 }];
+    this.units = UNITS[this.key] || [{ id: 'raw', label: this.unit, say: this.unit, f: 1, d: 1 }];
     this.lut = null;
   }
 
   /* value → the byte that would hold it, fractionally. This is the index the
-   * colour lookup is built on, so a scale that is coarse in storage is coarse
-   * in colour too — and a quadratic plane like rain gets its resolution where
+   * color lookup is built on, so a scale that is coarse in storage is coarse
+   * in color too — and a quadratic plane like rain gets its resolution where
    * the weather is. */
   toByte(value) {
     const t = (value - this.spec.offset) / this.spec.step;
@@ -525,7 +485,7 @@ class Layer {
     return this.spec.offset + this.spec.step * (p === 1 ? b : Math.pow(b, p));
   }
 
-  /* The colour scale, resolved for this colour scheme. A layer nobody wrote a
+  /* The color scale, resolved for this color scheme. A layer nobody wrote a
    * look for gets the plain ramp, stretched over whatever the snapshot says it
    * reached — which is not pretty, but it is honest and it draws. */
   look(dark) {
@@ -535,16 +495,14 @@ class Layer {
         stops: typeof found.stops === 'function' ? found.stops(dark) : found.stops,
         alpha: found.alpha,
         legend: found.legend,
-        short: found.short || this.label,
       };
     }
     const lo = this.range ? this.range[0] : this.fromByte(0);
     const hi = this.range ? this.range[1] : this.fromByte(255);
     return {
-      stops: PLAIN.stops.map(([f, c]) => [lo + (hi - lo) * f, c]),
+      stops: PLAIN.stops(dark).map(([f, c]) => [lo + (hi - lo) * f, c]),
       alpha: PLAIN.alpha,
       legend: [lo, hi],
-      short: this.label,
     };
   }
 }
@@ -588,6 +546,8 @@ class WeatherField {
       hours: s.hours, valid: Date.parse(s.validTime), packed: s.planes, planes: null,
     }));
     this.cache = new Map();               // "layer:step" → decoded values
+    this.wind = null;
+    this.grid = { nx: this.nx, ny: this.ny, lon0: this.lon0, dlon: this.dlon, lat0: this.lat0, dlat: this.dlat };
   }
 
   async unpack(b64) {
@@ -629,13 +589,32 @@ class WeatherField {
     }
   }
 
+  /* The wind's u and v for EVERY step, built once after unpacking and kept
+   * (41 × 16 380 × 2 × 4 bytes, 5.4 MB): a step change, a scrub and every frame
+   * of the flow are then a lookup, never a decode (DESIGN §1.2). */
+  buildWind() {
+    this.wind = [];
+    const layer = this.byKey.get('wind');
+    if (!layer || layer.kind !== 'vector') return;
+    for (let k = 0; k < this.steps.length; k++) this.wind.push(this.decode('wind', k));
+  }
+
   /* One layer's bytes at one step, as values: { u, v } for the wind, { v } for
-   * everything else. Kept in a small FIFO cache, because a frame wants two
-   * steps of the coloured layer and two of the wind. */
+   * everything else. The wind is resident; the rest are kept in a small FIFO
+   * cache, because a frame wants two steps of the colored layer. */
   values(layerKey, k) {
+    if (layerKey === 'wind' && this.wind && this.wind[k]) return this.wind[k];
     const cacheKey = `${layerKey}:${k}`;
     let found = this.cache.get(cacheKey);
     if (found) return found;
+    found = this.decode(layerKey, k);
+    this.cache.set(cacheKey, found);
+    if (this.cache.size > FLOAT_CACHE) this.cache.delete(this.cache.keys().next().value);
+    return found;
+  }
+
+  decode(layerKey, k) {
+    let found;
     const layer = this.byKey.get(layerKey);
     const step = this.steps[k];
     const n = this.n;
@@ -658,13 +637,11 @@ class WeatherField {
       for (let i = 0; i < n; i++) v[i] = table[B[i]];
       found = { v };
     }
-    this.cache.set(cacheKey, found);
-    if (this.cache.size > FLOAT_CACHE) this.cache.delete(this.cache.keys().next().value);
     return found;
   }
 
   /* The two arrays a raster pass reads: [values, null] for a scalar layer,
-   * [u, v] for a vector one, whose magnitude is what gets coloured. */
+   * [u, v] for a vector one, whose magnitude is what gets colored. */
   pair(layerKey, k) {
     const e = this.values(layerKey, k);
     return e.u ? [e.u, e.v] : [e.v, null];
@@ -811,7 +788,7 @@ function validate(d) {
  * Two of them. The Map tab is Web Mercator on a unit square, which is what
  * every slippy map is and what makes panning and zooming cheap. The Globe tab
  * is orthographic — the view from far enough away that the sphere reads as a
- * sphere — centred on wherever it has been turned to.                         */
+ * sphere — centered on wherever it has been turned to.                         */
 
 const lonToX = (lon) => (lon + 180) / 360;
 const xToLon = (x) => x * 360 - 180;
@@ -822,7 +799,6 @@ function latToY(lat) {
 function yToLat(y) {
   return (2 * Math.atan(Math.exp((0.5 - y) * 2 * Math.PI)) - Math.PI / 2) / DEG;
 }
-
 /* ── state ───────────────────────────────────────────────────────────────── */
 
 let snap = null;
@@ -833,56 +809,83 @@ let sphere = null;             // per-point sines and cosines, for the Globe tab
 let landMask = null;           // plate carrée land/sea, for the Globe tab
 let places = [];
 let t = 0;                     // step index, fractional while playing
+let shownT = 0;                // the t the base last drew: what the time row, track and flow read
 let playing = false;
 let tab = 'map';
 let layerKey = '';
 let unitChoice = {};           // layer key → unit id
-let arrows = true;
+let flowChoice = true;         // the viewer's choices, never rewritten by Reduce Motion
+let arrowsChoice = false;
 let night = true;
+let focusMode = false;
 let marker = null;             // { lon, lat }
-const map = { cx: lonToX(0), cy: 0.5, scale: 0 };   // world units; scale = world width in CSS px
+/* Both views open on the reader's own side of the planet: the clock's offset from UTC is fifteen
+ * degrees an hour, close enough to put their continent in the middle. Nothing is asked of the device
+ * but the time, and nothing is stored but the view the reader leaves. */
+const CLOCK_LON = wrapLon(-new Date().getTimezoneOffset() / 4);
+const map = { cx: lonToX(CLOCK_LON), cy: 0.5, scale: 0 };   // world units; scale = world width in CSS px
+let mapFitted = true;          // the map's zoom is still the first launch's fit, so a new plate size refits it
+let playClock = 0;             // hours since the run, while playing; t follows it (whole steps under Reduce Motion)
 const globe = { lon: 0, lat: 20, r: 0 };            // degrees, degrees, radius in CSS px
 let W = 0, H = 0, dpr = 1;
 let pal = null;
-let renderPending = false;
 let loadGeneration = 0;
+let fontReady = false;
+let firstField = true;
 const problems = new Map();
 
 const canvas = $('map');
-const ctx = canvas.getContext('2d');
+const baseCtx = canvas.getContext('2d');
+const topCanvas = $('top');
+const topCtx = topCanvas.getContext('2d');
+let ctx = baseCtx;             // whichever canvas is being drawn: the base, #top or a cached bitmap
 const wrap = $('map-wrap');
+const panel = $('view-panel');  // the tab panel: the canvases, labeled by the tab that is chosen
 const slider = $('slider');
+const flow = createFlow($('flow-a'), $('flow-b'));
 
 const activeLayer = () => (field ? field.byKey.get(layerKey) || field.layers[0] : null);
+const hasWind = () => !!(field && field.wind && field.wind.length);
+const reducedMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+const reduced = () => reducedMq.matches;
+const aboutOpen = () => !$('about').hidden;
+/** Arrows are drawn when chosen, and in place of the flow while Reduce Motion is on. */
+const arrowsDrawn = () => hasWind() && (arrowsChoice || (flowChoice && reduced()));
+/** Why the flow is not running, or null when it runs. */
+function flowSuppressed() {
+  if (reduced()) return 'reduced';
+  if (document.hidden) return 'hidden';
+  if (aboutOpen()) return 'about';
+  return null;
+}
+const flowLive = () => flowChoice && hasWind() && !flowSuppressed();
 
-/* ── palette ─────────────────────────────────────────────────────────────── */
+/* ── palette (ART.md "The plate") ────────────────────────────────────────── */
 
 const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
 function buildPalette() {
   const dark = darkMq.matches;
   pal = dark ? {
-    outside: '#0b0e13', ocean: '#141b26', land: '#242d3a', coast: '#5c6c86', border: '#3a4656',
-    grat: 'rgba(255,255,255,0.07)', arrow: 'rgba(255,255,255,0.93)', arrowHalo: 'rgba(0,0,0,0.5)',
-    label: '#eef2f7', labelHalo: 'rgba(11,14,19,0.9)', marker: '#ffffff', markerRing: 'rgba(0,0,0,0.6)',
-    limb: 'rgba(255,255,255,0.22)',
-    oceanRgb: [20, 27, 38], landRgb: [36, 45, 58],
-    nightRgb: [2, 4, 10], nightMax: 0.4,
-    alphaScale: 1,
+    outside: '#0a1013', ocean: '#0c1518', land: '#1a262a', coast: '#8a9ca3', border: '#46565c',
+    grat: 'rgba(230,237,238,0.06)', label: '#e6edee', labelHalo: 'rgba(12,21,24,0.88)',
+    ink: '#e6edee', limb: 'rgba(230,237,238,0.30)',
+    streak: '#f4f2ea', head: 0.95, kappa: 0.30,
+    oceanRgb: [12, 21, 24], landRgb: [26, 38, 42],
+    nightRgb: [2, 6, 9], nightMax: 0.42,
   } : {
-    outside: '#eef0f4', ocean: '#d9e2ec', land: '#f4f1e9', coast: '#7f8c9c', border: '#b3bcc8',
-    grat: 'rgba(0,0,0,0.07)', arrow: 'rgba(20,24,31,0.92)', arrowHalo: 'rgba(255,255,255,0.75)',
-    label: '#14181f', labelHalo: 'rgba(255,255,255,0.9)', marker: '#14181f', markerRing: 'rgba(255,255,255,0.9)',
-    limb: 'rgba(20,24,31,0.25)',
-    oceanRgb: [217, 226, 236], landRgb: [244, 241, 233],
-    nightRgb: [24, 34, 58], nightMax: 0.3,
-    alphaScale: 0.92,
+    outside: '#e8eef0', ocean: '#d3e0e4', land: '#eef2ef', coast: '#5f7079', border: '#9fb0b7',
+    grat: 'rgba(15,28,35,0.07)', label: '#0f1c23', labelHalo: 'rgba(246,249,250,0.88)',
+    ink: '#0f1c23', limb: 'rgba(15,28,35,0.35)',
+    streak: '#0b171d', head: 0.85, kappa: 0,
+    oceanRgb: [211, 224, 228], landRgb: [238, 242, 239],
+    nightRgb: [18, 33, 43], nightMax: 0.20,
   };
 }
 buildPalette();
 
-/* A colour lookup per layer, indexed by the byte the value is stored in, so
- * the map, the legend and the chips are all painted from one table. Rebuilt
- * when the colour scheme changes, because two of the scales answer to it. */
+/* A color lookup per layer, indexed by the byte the value is stored in, so
+ * the map and the legend are painted from one table. Rebuilt when the color
+ * scheme changes, because every ramp is printed once per theme. */
 function buildLuts() {
   if (!field) return;
   const dark = darkMq.matches;
@@ -894,7 +897,7 @@ function buildLuts() {
       const rgb = rampAt(look.stops, value);
       const o = b * 4;
       lut[o] = rgb[0]; lut[o + 1] = rgb[1]; lut[o + 2] = rgb[2];
-      lut[o + 3] = 255 * clamp(alphaAt(look.alpha, value) * pal.alphaScale, 0, 1);
+      lut[o + 3] = 255 * clamp(alphaAt(look.alpha, value), 0, 1);
     }
     layer.lut = lut;
   }
@@ -904,7 +907,7 @@ darkMq.addEventListener('change', () => {
   buildLuts();
   gcache = null;
   updateLegend();
-  buildChips();
+  track.invalidate();
   requestRender();
 });
 
@@ -928,7 +931,7 @@ function sunAt(ms) {
 }
 
 /* Daylight above, full night below, civil twilight in between — so the edge is
- * a band a few hundred kilometres wide rather than a hard line, which is what
+ * a band a few hundred kilometers wide rather than a hard line, which is what
  * it is. */
 function nightFade(cosZenith) {
   if (cosZenith > 0.02) return 0;
@@ -947,11 +950,40 @@ function addLine(path, enc, close) {
   }
   if (close) path.closePath();
 }
+/* A ring's coastline, for stroking: the same points, but broken wherever Natural Earth's Antarctica is
+ * cut off straight across (below ANTARCTIC_EDGE), and across any segment that jumps more than 180° of
+ * longitude — the ring's closing run from 180° E back to 180° W at 84.35° S, which on the map would be
+ * a hard rule along the bottom of the world that no coast draws (found at the whole-world zoom).
+ * A ring with neither is closed as it is filled. */
+function addCoast(path, enc) {
+  const n = enc.length / 2, px = new Float64Array(n), py = new Float64Array(n), lon = new Float64Array(n);
+  const cut = new Uint8Array(n);
+  let x = 0, y = 0;
+  for (let i = 0; i < n; i++) {
+    x += enc[i * 2]; y += enc[i * 2 + 1];
+    px[i] = lonToX(x / 100) * PATH_K; py[i] = latToY(y / 100) * PATH_K; lon[i] = x / 100;
+    cut[i] = y / 100 < ANTARCTIC_EDGE ? 1 : 0;
+  }
+  // gap[i]: the segment arriving at point i (from i − 1, round the ring) is not drawn
+  const gap = new Uint8Array(n);
+  let first = -1;
+  for (let i = 0; i < n; i++) {
+    const h = (i + n - 1) % n;
+    gap[i] = cut[i] || cut[h] || Math.abs(lon[i] - lon[h]) > 180 ? 1 : 0;
+    if (gap[i] && first < 0) first = i;
+  }
+  if (first < 0) { addLine(path, enc, true); return; }
+  for (let k = 0; k < n; k++) {                 // start at a gap, so no stretch is split
+    const i = (first + k) % n;
+    if (cut[i]) continue;
+    if (gap[i]) path.moveTo(px[i], py[i]); else path.lineTo(px[i], py[i]);
+  }
+}
 function buildWorldPaths(w) {
-  const land = new Path2D(), borders = new Path2D();
-  for (const poly of w.land) for (const ring of poly) addLine(land, ring, true);
+  const land = new Path2D(), coast = new Path2D(), borders = new Path2D();
+  for (const poly of w.land) for (const ring of poly) { addLine(land, ring, true); addCoast(coast, ring); }
   for (const line of w.borders) addLine(borders, line, false);
-  return { land, borders };
+  return { land, coast, borders };
 }
 
 /* The globe draws the same coastlines, but a sphere needs each point's sine
@@ -1045,7 +1077,7 @@ function needGlobeGeometry() {
  * Each knows how to put a longitude and latitude on the screen, how to get one
  * back, what a drag and a pinch mean on it, and how to draw itself. Everything
  * else — the time player, the layers, the marker, the readout — is shared, and
- * switching tabs carries the centre of the world across so the globe opens
+ * switching tabs carries the center of the world across so the globe opens
  * looking at whatever the map was looking at.                                 */
 
 const V = () => VIEWS[tab];
@@ -1084,28 +1116,29 @@ function withWorldTransform(k, fn) {
 
 const MAP_VIEW = {
   fit() {
-    if (map.scale) { clampMap(); return; }
-    // First launch: fit 70°S–70°N to the height, which on a phone shows a
-    // hemisphere of longitude. The globe button zooms out to the whole world.
-    map.scale = H / (latToY(-70) - latToY(70));
+    // First launch: fit 70°S–70°N to the plate's height, which on a phone shows a hemisphere of
+    // longitude. Until the reader zooms, the fit follows the plate (the caption filling in after the
+    // forecast unpacks, a rotation), so the opening view is measured on the plate it is shown on.
+    if (!map.scale || mapFitted) { map.scale = H / (latToY(-70) - latToY(70)); mapFitted = true; }
     clampMap();
   },
-  home() { map.scale = minScale(); map.cx = lonToX(0); map.cy = 0.5; clampMap(); },
-  centre() { return { lon: xToLon(map.cx - Math.floor(map.cx)), lat: yToLat(map.cy) }; },
+  home() { mapFitted = false; map.scale = minScale(); map.cx = lonToX(0); map.cy = 0.5; clampMap(); },
+  center() { return { lon: xToLon(map.cx - Math.floor(map.cx)), lat: yToLat(map.cy) }; },
   adopt(c) {
     map.cx = lonToX(c.lon);
     map.cy = latToY(clamp(c.lat, -MAX_LAT, MAX_LAT));
     clampMap();
   },
-  panBy(dx, dy) { map.cx -= dx / map.scale; map.cy -= dy / map.scale; clampMap(); },
+  panBy(dx, dy) { mapFitted = false; map.cx -= dx / map.scale; map.cy -= dy / map.scale; clampMap(); },
   zoomBy(factor, sx, sy) {
+    mapFitted = false;
     const [wx, wy] = screenToWorld(sx, sy);
     map.scale = clamp(map.scale * factor, minScale(), MAX_SCALE);
     map.cx = wx - (sx - W / 2) / map.scale;
     map.cy = wy - (sy - H / 2) / map.scale;
     clampMap();
   },
-  pinchStart(g) { g.scale0 = map.scale; g.world0 = screenToWorld(g.mx, g.my); },
+  pinchStart(g) { mapFitted = false; g.scale0 = map.scale; g.world0 = screenToWorld(g.mx, g.my); },
   pinchMove(g, ratio) {
     map.scale = clamp(g.scale0 * ratio, minScale(), MAX_SCALE);
     map.cx = g.world0[0] - (g.mx - W / 2) / map.scale;
@@ -1126,7 +1159,7 @@ const MAP_VIEW = {
   restore() {
     try {
       const v = JSON.parse(localStorage.getItem(STORE.map) || 'null');
-      if (v && [v.cx, v.cy, v.scale].every(Number.isFinite) && v.scale > 0) Object.assign(map, v);
+      if (v && [v.cx, v.cy, v.scale].every(Number.isFinite) && v.scale > 0) { Object.assign(map, v); mapFitted = false; }
     } catch { /* fine */ }
   },
   draw: drawMap,
@@ -1151,16 +1184,13 @@ const GLOBE_VIEW = {
   fit() {
     if (!globe.r) {
       globe.r = Math.min(W, H) * 0.48;
-      // Open looking at the reader's own side of the planet: the clock's offset
-      // from UTC is fifteen degrees an hour, which is close enough to put their
-      // continent on the disc. Nothing is asked of the device but the time.
-      globe.lon = wrapLon(-new Date().getTimezoneOffset() / 4);
+      globe.lon = CLOCK_LON;     // the reader's own side of the planet (CLOCK_LON, above)
       globe.lat = 20;
     }
     syncGlobe();
   },
   home() { globe.r = Math.min(W, H) * 0.48; globe.lat = 20; syncGlobe(); },
-  centre() { return { lon: globe.lon, lat: globe.lat }; },
+  center() { return { lon: globe.lon, lat: globe.lat }; },
   adopt(c) { globe.lon = c.lon; globe.lat = clamp(c.lat, -80, 80); syncGlobe(); },
   /* A drag turns the world under the finger: one pixel at the middle of the
    * disc is one radius-worth of angle, so the same gesture turns it less when
@@ -1210,63 +1240,121 @@ const GLOBE_VIEW = {
 };
 
 const VIEWS = { map: MAP_VIEW, globe: GLOBE_VIEW };
+/* ── drawing ─────────────────────────────────────────────────────────────── *
+ * Four canvases, bottom to top (DESIGN §1.9): #map, the base (ground, the
+ * color layer, the night wash, the lines); flow A and B (js/flow.js); #top,
+ * the arrows, the place names and the tapped marker. One requestAnimationFrame
+ * loop draws whatever is dirty, then the flow; with the flow off and nothing
+ * playing, no frame is drawn that nothing asked for.                          */
 
-/* ── drawing ─────────────────────────────────────────────────────────────── */
-
-function requestRender() {
-  if (renderPending) return;
-  renderPending = true;
-  requestAnimationFrame(render);
+/* The geography only changes with the view, so it is drawn once into a bitmap
+ * per view and copied after that; while a finger moves the view it is drawn
+ * directly, and rebuilt when the gesture ends. */
+const geo = new Map();
+function cached(name, key, draw) {
+  if (gesture) { draw(); return; }
+  let g = geo.get(name);
+  if (!g) { g = { cv: document.createElement('canvas'), key: '' }; geo.set(name, g); }
+  if (g.key !== key) {
+    g.cv.width = canvas.width; g.cv.height = canvas.height;
+    const keep = ctx;
+    ctx = g.cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+    ctx = keep;
+    g.key = key;
+  }
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(g.cv, 0, 0);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
-function render() {
-  renderPending = false;
-  if (!W || !H) return;
+function drawBase() {
+  ctx = baseCtx;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = pal.outside;
   ctx.fillRect(0, 0, W, H);
   V().draw();
+  shownT = t;
 }
+function drawTop() {
+  ctx = topCtx;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, topCanvas.width, topCanvas.height);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const keep = exclusions();
+  if (field && arrowsDrawn()) (tab === 'map' ? drawMapArrows : drawGlobeArrows)(keep);
+  drawPlaces(keep);
+  drawMarker();
+  ctx = baseCtx;
+  placeDirty = true;             // the view or the marker moved: the readout card may need the other corner
+}
+
+/* What sits over the plate, in plate coordinates: the key column (or, in focus mode, the ghost key)
+ * and the readout card. A place name is not drawn under them, and neither is an arrow under the ghost
+ * key, which has no plate of its own to hide it. */
+function exclusions() {
+  const out = [], pr = wrap.getBoundingClientRect();
+  for (const el of [focusMode ? $('focus-exit') : $('keys'), $('readout')]) {
+    if (!el || el.hidden) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width && r.height) out.push([r.left - pr.left, r.top - pr.top, r.right - pr.left, r.bottom - pr.top]);
+  }
+  return out;
+}
+const inside = (boxes, x, y, m) => boxes.some((b) => x > b[0] - m && x < b[2] + m && y > b[1] - m && y < b[3] + m);
 
 /* The two steps either side of where the player is, and how far between them.
  * Everything that samples the weather asks this first. */
-function frame() {
+function frame(tt = t) {
   const last = field.steps.length - 1;
-  const k0 = clamp(Math.floor(t), 0, last);
+  const k0 = clamp(Math.floor(tt), 0, last);
   const k1 = Math.min(k0 + 1, last);
-  return { k0, k1, f: k1 === k0 ? 0 : clamp(t - k0, 0, 1) };
+  return { k0, k1, f: k1 === k0 ? 0 : clamp(tt - k0, 0, 1) };
 }
 
 /* — the flat map — */
 
-function drawMap() {
-  const top = Math.max(0, (0 - map.cy) * map.scale + H / 2);
-  const bottom = Math.min(H, (1 - map.cy) * map.scale + H / 2);
-  ctx.fillStyle = pal.ocean;
-  ctx.fillRect(0, top, W, bottom - top);
-
-  if (worldPaths) {
-    for (const k of worldCopies()) withWorldTransform(k, () => {
-      ctx.fillStyle = pal.land;
-      ctx.fill(worldPaths.land, 'evenodd');
-    });
-  }
-  if (field) drawMapLayer();
-  if (night) drawMapNight();
-  drawMapGraticule();
-  if (worldPaths) {
-    for (const k of worldCopies()) withWorldTransform(k, (s) => {
-      ctx.lineJoin = 'round';
-      ctx.strokeStyle = pal.border; ctx.lineWidth = 0.7 / s; ctx.stroke(worldPaths.borders);
-      ctx.strokeStyle = pal.coast;  ctx.lineWidth = 0.9 / s; ctx.stroke(worldPaths.land);
-    });
-  }
-  if (field && arrows) drawMapArrows();
-  drawPlaces();
-  drawMarker();
+/* The rows of the plate the Mercator square covers; above and below it, at the whole-world zoom on a
+ * tall screen, is the plate's own ground with nothing drawn on it. */
+function mapRows() {
+  return [Math.max(0, (0 - map.cy) * map.scale + H / 2), Math.min(H, (1 - map.cy) * map.scale + H / 2)];
 }
 
-/* Two off-screen grids, kept between frames: one for the colour layer and one
+function drawMap() {
+  const key = `${map.cx}|${map.cy}|${map.scale}|${W}|${H}|${dpr}|${darkMq.matches}|${worldPaths ? 1 : 0}`;
+  cached('ground', key, () => {
+    const [top, bottom] = mapRows();
+    ctx.fillStyle = pal.outside;
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = pal.ocean;
+    ctx.fillRect(0, top, W, bottom - top);
+    if (worldPaths) {
+      for (const k of worldCopies()) withWorldTransform(k, () => {
+        ctx.fillStyle = pal.land;
+        ctx.fill(worldPaths.land, 'evenodd');
+      });
+    }
+  });
+  if (field) drawMapLayer();
+  if (night) drawMapNight();
+  cached('lines', key, () => {
+    const [top, bottom] = mapRows();
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, top, W, bottom - top); ctx.clip();   // the lines stop where the map does
+    drawMapGraticule();
+    if (worldPaths) {
+      for (const k of worldCopies()) withWorldTransform(k, (s) => {
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = pal.border; ctx.lineWidth = 0.6 / s; ctx.stroke(worldPaths.borders);
+        ctx.strokeStyle = pal.coast;  ctx.lineWidth = 0.9 / s; ctx.stroke(worldPaths.coast);
+      });
+    }
+    ctx.restore();
+  });
+}
+
+/* Two off-screen grids, kept between frames: one for the color layer and one
  * for the night wash. They are different sizes, so sharing a single canvas
  * would reallocate both of them on every frame. */
 const scratches = new Map();
@@ -1348,7 +1436,7 @@ function interp(arr, a0, a1, b0, b1, tx, ty) {
   return top + (bottom - top) * ty;
 }
 
-/* Night on the flat map is its own wash rather than part of the colour pass,
+/* Night on the flat map is its own wash rather than part of the color pass,
  * because the map's ground is drawn as shapes, not as pixels. It is coarse on
  * purpose: a terminator is a smooth curve, and a six-pixel grid scaled up is
  * smoother than a fine one. */
@@ -1407,7 +1495,7 @@ function drawMapGraticule() {
 /* Arrows on the flat map sit at fixed places in the WORLD, so they stay put
  * under a pan instead of swimming across the weather. */
 const uvTmp = [0, 0];
-function drawMapArrows() {
+function drawMapArrows(keep) {
   if (!field.byKey.has('wind')) return;
   const n = Math.max(2, Math.round(Math.log2(map.scale / ARROW_SPACING)));
   const d = 1 / 2 ** n;                 // world units between arrows
@@ -1426,32 +1514,32 @@ function drawMapArrows() {
     for (let i = Math.floor(xmin / d); (i + 0.5) * d <= xmax; i++) {
       const wx = (i + 0.5) * d;
       const sx = (wx - map.cx) * map.scale + W / 2;
-      field.sample('wind', t, xToLon(wx - Math.floor(wx)), lat, uvTmp);
+      if (inside(keep, sx, sy, 6)) continue;
+      field.sample('wind', shownT, xToLon(wx - Math.floor(wx)), lat, uvTmp);
       const u = uvTmp[0], v = uvTmp[1];
       drawArrow(sx, sy, Math.atan2(-v, u), Math.hypot(u, v), cell);
     }
   }
 }
-
 /* — the globe — */
 
 function drawGlobe() {
   syncGlobe();
   needGlobeGeometry();
   drawGlobeSurface();
-  drawGlobeGraticule();
-  if (sphere) {
-    const paths = globePaths();
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = pal.border; ctx.lineWidth = 0.7; ctx.stroke(paths.borders);
-    ctx.strokeStyle = pal.coast; ctx.lineWidth = 0.9; ctx.stroke(paths.coast);
-  }
-  ctx.beginPath();
-  ctx.arc(gp.cx, gp.cy, gp.r, 0, Math.PI * 2);
-  ctx.strokeStyle = pal.limb; ctx.lineWidth = 1; ctx.stroke();
-  if (field && arrows) drawGlobeArrows();
-  drawPlaces();
-  drawMarker();
+  const key = `${globe.lon}|${globe.lat}|${globe.r}|${W}|${H}|${dpr}|${darkMq.matches}|${sphere ? 1 : 0}`;
+  cached('globe-lines', key, () => {
+    drawGlobeGraticule();
+    if (sphere) {
+      const paths = globePaths();
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = pal.border; ctx.lineWidth = 0.6; ctx.stroke(paths.borders);
+      ctx.strokeStyle = pal.coast; ctx.lineWidth = 0.9; ctx.stroke(paths.coast);
+    }
+    ctx.beginPath();
+    ctx.arc(gp.cx, gp.cy, gp.r, 0, Math.PI * 2);
+    ctx.strokeStyle = pal.limb; ctx.lineWidth = 1; ctx.stroke();
+  });
 }
 
 /* Everything that only changes when the world is turned: which cells of the
@@ -1594,10 +1682,10 @@ function sphereRings(rings) {
     for (let i = 0, o = 0; i < ring.n; i++, o += 4) {
       if (edge[i]) { pen = false; continue; }
       const sLat = trig[o], cLat = trig[o + 1], sLon = trig[o + 2], cLon = trig[o + 3];
-      const cosD = cLon * cosLon + sLon * sinLon;       // cos(lon − centre)
+      const cosD = cLon * cosLon + sLon * sinLon;       // cos(lon − center)
       const z = sinLat * sLat + cosLat * cLat * cosD;
       if (z < 0) { pen = false; continue; }
-      const sinD = sLon * cosLon - cLon * sinLon;       // sin(lon − centre)
+      const sinD = sLon * cosLon - cLon * sinLon;       // sin(lon − center)
       const sx = cx + r * (cLat * sinD);
       const sy = cy - r * (cosLat * sLat - sinLat * cLat * cosD);
       if (pen) path.lineTo(sx, sy); else { path.moveTo(sx, sy); pen = true; }
@@ -1635,7 +1723,7 @@ function drawGlobeGraticule() {
 /* Arrows on the globe sit on a screen grid rather than a world one: a grid of
  * meridians would crowd into a knot at the poles, and turning the world is a
  * deliberate gesture rather than something you do while reading. */
-function drawGlobeArrows() {
+function drawGlobeArrows(keep) {
   if (!field.byKey.has('wind')) return;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
@@ -1647,12 +1735,13 @@ function drawGlobeArrows() {
       const X = (sx - cx) / r, Y = (cy - sy) / r;
       const r2 = X * X + Y * Y;
       if (r2 > 0.988) continue;                  // the rim is too foreshortened to read
+      if (inside(keep, sx, sy, 6)) continue;
       const Z = Math.sqrt(1 - r2);
       const sinLat = clamp(Z * sinLat0 + Y * cosLat0, -1, 1);
       const lat = Math.asin(sinLat) / DEG;
       const dlon = Math.atan2(X, Z * cosLat0 - Y * sinLat0);
       const lon = wrapLon(globe.lon + dlon / DEG);
-      field.sample('wind', t, lon, lat, uvTmp);
+      field.sample('wind', shownT, lon, lat, uvTmp);
       const u = uvTmp[0], v = uvTmp[1];
       const speed = Math.hypot(u, v);
       // The wind blows along the ground, so its arrow has to be turned into
@@ -1665,113 +1754,100 @@ function drawGlobeArrows() {
     }
   }
 }
+/* — shared, on #top — */
 
-/* — shared — */
-
+/* An arrow: the streak's ink over a halo, its length and weight growing with
+ * the speed up to ARROW_TOP m/s (both stop there, as the caption says), a
+ * filled head where the air goes. Calm is a dot. */
+const ARROW_TOP = 25;
 function drawArrow(x, y, angle, spd, cell) {
-  if (spd < 0.5) {                      // calm: a dot, because there is no direction to show
+  if (spd < 0.5) {
     ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2);
-    ctx.fillStyle = pal.arrow; ctx.fill();
+    ctx.fillStyle = pal.labelHalo; ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, 1.1, 0, Math.PI * 2);
+    ctx.fillStyle = pal.streak; ctx.fill();
     return;
   }
-  const len = cell * clamp(0.28 + spd / 25 * 0.67, 0.28, 0.95);
-  const lw = clamp(0.9 + spd / 12, 0.9, 3.2);
-  const head = clamp(2.5 + lw * 1.5, 3, 8.5);
+  const len = cell * clamp(0.28 + spd / ARROW_TOP * 0.67, 0.28, 0.95);
+  const lw = clamp(1.0 + spd / ARROW_TOP * 2, 1.0, 3.0);
+  const head = clamp(3.5 + lw, 4.5, 6.5);
   const h = len / 2;
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(angle);
-  ctx.beginPath();
-  ctx.moveTo(-h, 0); ctx.lineTo(h, 0);
-  ctx.moveTo(h - head, -head * 0.55); ctx.lineTo(h, 0); ctx.lineTo(h - head, head * 0.55);
-  ctx.strokeStyle = pal.arrowHalo; ctx.lineWidth = lw + 2; ctx.stroke();
-  ctx.strokeStyle = pal.arrow; ctx.lineWidth = lw; ctx.stroke();
+  const shape = () => {
+    ctx.beginPath();
+    ctx.moveTo(-h, 0); ctx.lineTo(h - head * 0.8, 0);
+  };
+  const tip = () => {
+    ctx.beginPath();
+    ctx.moveTo(h, 0); ctx.lineTo(h - head, -head * 0.5); ctx.lineTo(h - head, head * 0.5); ctx.closePath();
+  };
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = pal.labelHalo; ctx.lineWidth = lw + 2.6;
+  shape(); ctx.stroke(); tip(); ctx.stroke();
+  ctx.strokeStyle = pal.streak; ctx.fillStyle = pal.streak; ctx.lineWidth = lw;
+  shape(); ctx.stroke(); tip(); ctx.fill();
   ctx.restore();
 }
 
 const projTmp = [0, 0, 0];
-function drawPlaces() {
-  if (!places.length) return;
+function drawPlaces(keep) {
+  if (!places.length || !fontReady) return;
   const zoom = tab === 'map' ? map.scale : globe.r * 4;
   const maxTier = zoom < 1100 ? 1 : zoom < 2800 ? 2 : zoom < 7500 ? 3 : 4;
-  ctx.font = '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  ctx.font = LABEL_FONT;
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
   ctx.lineJoin = 'round';
-  const boxes = [];
+  const boxes = keep.slice();          // what sits over the plate counts as a label already placed
   const view = V();
   for (const p of places) {
     if (p.r > maxTier) break;           // sorted by tier
     view.project(p.lon, p.lat, projTmp);
     if (!projTmp[2]) continue;
     const sx = projTmp[0], sy = projTmp[1];
-    if (sx < -80 || sx > W + 80 || sy < -12 || sy > H + 12) continue;
+    if (sx < 4 || sx > W || sy < 8 || sy > H - 8) continue;   // a label clipped by an edge is worse than none
     const tw = ctx.measureText(p.n).width;
-    if (sx + 8 + tw > W - 2) continue;  // a label clipped by the edge is worse than none
+    if (sx + 8 + tw > W - 2) continue;
     const box = [sx - 4, sy - 8, sx + 8 + tw, sy + 8];
     if (boxes.some((b) => b[0] < box[2] && b[2] > box[0] && b[1] < box[3] && b[3] > box[1])) continue;
     boxes.push(box);
     ctx.beginPath(); ctx.arc(sx, sy, 2.2, 0, Math.PI * 2);
-    ctx.fillStyle = pal.labelHalo; ctx.lineWidth = 3; ctx.strokeStyle = pal.labelHalo; ctx.stroke();
+    ctx.lineWidth = 3; ctx.strokeStyle = pal.labelHalo; ctx.stroke();
     ctx.fillStyle = pal.label; ctx.fill();
     ctx.strokeStyle = pal.labelHalo; ctx.lineWidth = 3; ctx.strokeText(p.n, sx + 6, sy);
     ctx.fillStyle = pal.label; ctx.fillText(p.n, sx + 6, sy);
   }
 }
 
+/* The tapped place: a 6 px ring over a label-halo ring, and a 2 px dot. */
 function drawMarker() {
   if (!marker) return;
   V().project(marker.lon, marker.lat, projTmp);
   if (!projTmp[2]) return;
   const sx = projTmp[0], sy = projTmp[1];
   ctx.beginPath(); ctx.arc(sx, sy, 6, 0, Math.PI * 2);
-  ctx.strokeStyle = pal.markerRing; ctx.lineWidth = 5; ctx.stroke();
-  ctx.strokeStyle = pal.marker; ctx.lineWidth = 2; ctx.stroke();
-  ctx.beginPath(); ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
-  ctx.fillStyle = pal.marker; ctx.fill();
+  ctx.strokeStyle = pal.labelHalo; ctx.lineWidth = 3.5; ctx.stroke();
+  ctx.strokeStyle = pal.ink; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath(); ctx.arc(sx, sy, 1, 0, Math.PI * 2);
+  ctx.fillStyle = pal.ink; ctx.fill();
 }
 
-/* ── formatting ──────────────────────────────────────────────────────────── */
+/* ── formatting: every figure through js/units.js (DESIGN §4) ────────────── */
 
-const fmtWhen = new Intl.DateTimeFormat(undefined, {
-  weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-});
-const fmtDay = new Intl.DateTimeFormat(undefined, { weekday: 'short' });
-/* The run label pairs a UTC hour with a date, so the date has to be UTC too —
- * formatting it locally gives "06Z Sep 20" for a run at 06:00 on the 21st,
- * which is a date nobody can act on. About shows the same instant in the
- * reader's own zone, with the zone named, which is the other half of it. */
-const fmtDateUTC = new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'short', timeZone: 'UTC' });
-const fmtFull = new Intl.DateTimeFormat(undefined, {
-  weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
-});
-
-function fmtAgo(ms) {
-  const m = Math.round(ms / 60000);
-  if (m < 1) return 'just now';
-  if (m < 60) return `${m} min ago`;
-  const h = Math.round(m / 60);
-  if (h < 36) return `${h} h ago`;
-  return `${Math.round(h / 24)} d ago`;
-}
 function unitFor(layer) {
   const list = layer.units;
   return list.find((u) => u.id === unitChoice[layer.key]) || list[0];
 }
-function convert(layer, value) {
-  const u = unitFor(layer);
-  return value * u.f + (u.o || 0);
-}
 function fmtValue(layer, value) {
   const u = unitFor(layer);
-  return (value * u.f + (u.o || 0)).toFixed(u.d);
-}
-function fmtCoord(lat, lon) {
-  return `${Math.abs(lat).toFixed(1)}°${lat >= 0 ? 'N' : 'S'} ${Math.abs(lon).toFixed(1)}°${lon >= 0 ? 'E' : 'W'}`;
+  return U.fixed(value * u.f + (u.o || 0), u.d);
 }
 function beaufort(spd) {
-  for (let i = 0; i < BEAUFORT.length; i++) if (spd < BEAUFORT[i][0]) return `${BEAUFORT[i][1]} · Bf ${i}`;
-  return 'Hurricane force · Bf 12';
+  let i = 0;
+  while (i < BEAUFORT.length - 1 && spd >= BEAUFORT[i][0]) i++;
+  return `${BEAUFORT[i][1].toLowerCase()}, Beaufort ${i}`;
 }
 /* A number in words, for the line under the tapped value. The bands are the
  * ones the puller writes into the ask table, so the map and a question in
@@ -1780,8 +1856,8 @@ function describe(layer, value, second) {
   if (layer.kind === 'vector') {
     const from = (Math.atan2(-second[0], -second[1]) / DEG + 360) % 360;
     const where = value < 0.5 ? 'No direction'
-      : `From ${COMPASS[Math.round(from / 22.5) % 16]} (${Math.round(from)}°)`;
-    return `${where} · ${beaufort(value)}`;
+      : `From ${COMPASS[Math.round(from / 22.5) % 16]} (${Math.round(from) % 360}°)`;
+    return `${where}, ${beaufort(value)}`;
   }
   if (layer.key === 'rain') {
     return value < 0.05 ? 'Dry' : value < 0.3 ? 'Drizzle' : value < 1.5 ? 'Light rain'
@@ -1791,10 +1867,10 @@ function describe(layer, value, second) {
     return value < 10 ? 'Clear' : value < 30 ? 'Mostly clear' : value < 60 ? 'Partly cloudy'
       : value < 85 ? 'Cloudy' : 'Overcast';
   }
-  return layer.level || layer.label;
+  return U.si(layer.level || layer.label);
 }
 
-/* ── header, chips, legend, readout ──────────────────────────────────────── */
+/* ── the stamp, the layer words, the legend, the exposure, the readout ───── */
 
 function setProblem(key, msg) {
   if (msg) problems.set(key, msg); else problems.delete(key);
@@ -1809,70 +1885,65 @@ function setProblem(key, msg) {
   box.hidden = false;
 }
 
-/* The stamp is the reader's own clock — it answers "how old is what I am
+/* The stamp is the reader's own clock: it answers "how old is what I am
  * looking at", which is the question a dashboard has to answer before any
- * number on it can be trusted. */
+ * number on it can be trusted. A stale forecast leads with a sentence in full
+ * ink; the words, not a color, say so (red and amber are temperatures here). */
 function updateStamp() {
   const el = $('stamp');
+  el.innerHTML = '';                         // empty it; the text below is DOM nodes
   if (!snap || !field) {
-    el.textContent = 'No weather data';
-    el.className = 'stamp stale';
+    const s = document.createElement('span');
+    s.className = 'stale';
+    s.textContent = 'No weather data';
+    el.append(s);
     return;
   }
-  const when = new Date(snap.generatedAt);
-  const age = Date.now() - when.getTime();
-  const run = new Date(snap.run);
+  const now = Date.now();
+  const when = new Date(snap.generatedAt).getTime();
+  const run = new Date(snap.run).getTime();
   const lastValid = field.steps[field.steps.length - 1].valid;
-  const runLabel = `${pad2(run.getUTCHours())}Z ${fmtDateUTC.format(run)}`;
-  let text = `Updated ${pad2(when.getHours())}:${pad2(when.getMinutes())} · ${snap.model || 'GFS'} ${runLabel}`;
-  let stale = false;
-  if (Date.now() > lastValid) {
-    text = `Forecast ran out ${fmtAgo(Date.now() - lastValid)} · ${text}`;
-    stale = true;
-  } else if (age > STALE_HOURS * 3600e3) {
-    text = `Stale · ${text}`;
-    stale = true;
+  const today = new Date(now).toDateString() === new Date(when).toDateString();
+  // the run's label is kept on one line (no-break spaces), so a narrow screen wraps before it
+  const updated = `Updated ${today ? '' : `${U.dayMonth(when)}, `}${U.clock(when)}, `;
+  const runName = document.createElement('span');
+  runName.setAttribute('translate', 'no');   // a model's name and a cycle, never a phrase to translate
+  runName.textContent = `${snap.model || 'GFS'}\u00A0${U.zHour(run)}\u00A0${U.dayMonthUTC(run).replace(' ', '\u00A0')}`;
+  let lead = '';
+  if (now > lastValid) lead = `Forecast ran out ${U.ago(now - lastValid)}. `;
+  else if (now - when > STALE_HOURS * 3600e3) lead = 'Stale. ';
+  if (lead) {
+    const s = document.createElement('span');
+    s.className = 'stale';
+    s.textContent = lead;
+    el.append(s);
   }
-  el.textContent = text;
-  el.className = 'stamp' + (stale ? ' stale' : '');
-  el.title = when.toLocaleString();
+  el.append(document.createTextNode(updated));
+  el.append(runName);
+  el.title = U.full(when);
 }
 
-/* The chips, built from the snapshot rather than from a list in here: a sixth
- * field added to scripts/global_weather.py turns up as a sixth chip. */
-function buildChips() {
+/* The layer words, built from the snapshot rather than from a list in here: a
+ * sixth field added to scripts/global_weather.py turns up as a sixth word. */
+function buildLayerWords() {
   const row = $('layerchips');
   row.innerHTML = '';                        // empty it; the buttons below are DOM nodes
   if (!field) return;
-  const dark = darkMq.matches;
   for (const layer of field.layers) {
     const button = document.createElement('button');
     button.type = 'button';
     button.setAttribute('aria-pressed', String(layer.key === layerKey));
-    const dot = document.createElement('span');
-    dot.className = 'chipdot';
-    const look = layer.look(dark);
-    const [lo, hi] = look.legend;
-    const parts = [];
-    for (let s = 0; s <= 3; s++) {
-      const value = lo + (hi - lo) * (s / 3);
-      const rgb = rampAt(look.stops, value).map(Math.round);
-      parts.push(`rgb(${rgb[0]},${rgb[1]},${rgb[2]}) ${(s / 3 * 100).toFixed(0)}%`);
-    }
-    dot.style.background = `linear-gradient(135deg, ${parts.join(', ')})`;
-    const text = document.createElement('span');
-    text.textContent = look.short || layer.label;
-    button.append(dot, text);
+    button.textContent = layer.label;
     button.addEventListener('click', () => setLayer(layer.key));
     row.append(button);
   }
 }
 
 /* Round numbers, at most a handful, chosen in WHATEVER UNIT IS ON SCREEN
- * rather than converted from a fixed list: 0 5 10 … reads well in metres a
- * second and turns into 0 18 36 54 … in km/h, which is seven wide labels in
- * 220 points and collides. A layer stored on a curve — rain — gets the 1-2-5
- * ladder instead, so the drizzle end of the bar is labelled at all.
+ * rather than converted from a fixed list: 0 5 10 … reads well in meters a
+ * second and turns into 0 18 36 54 … in km/h, which is seven wide labels and
+ * collides. A layer stored on a curve (rain) gets the 1-2-5 ladder instead, so
+ * the drizzle end of the bar is labeled at all.
  *
  * `lo` and `hi` are the ends of the bar in the displayed unit, and so is what
  * comes back; the caller turns each one back into the layer's own unit to find
@@ -1890,7 +1961,7 @@ function legendTicks(layer, lo, hi) {
     return out;
   }
   const steps = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 500];
-  const step = steps.find((v) => (hi - lo) / v <= 6) ?? 1000;
+  const step = steps.find((v) => (hi - lo) / v <= 5) ?? 1000;
   for (let v = Math.ceil(lo / step) * step; v < hi - step * 0.45; v += step) {
     if (v > lo + step * 0.45) out.push(v);
   }
@@ -1906,26 +1977,27 @@ function updateLegend() {
   const b0 = layer.toByte(lo), b1 = layer.toByte(hi);
   const pos = (v) => clamp((layer.toByte(v) - b0) / (b1 - b0), 0, 1);
 
-  /* The bar is painted from the same stops and the same opacity as the map, so
-   * a scale that fades out where nothing is happening fades out here too. */
+  /* The bar is painted from the same stops and the same opacity as the map,
+   * over the theme's ocean, so a scale that lets the plate through on the map
+   * lets it through here too. */
   const parts = [];
   const seen = new Set();
   const addStop = (v) => {
     const at = pos(v);
-    const keyed = at.toFixed(3);
+    const keyed = Math.round(at * 1000);
     if (seen.has(keyed)) return;
     seen.add(keyed);
     const rgb = rampAt(look.stops, v).map(Math.round);
-    const a = clamp(alphaAt(look.alpha, v) * pal.alphaScale, 0, 1);
-    parts.push(`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a.toFixed(2)}) ${(at * 100).toFixed(1)}%`);
+    const a = Math.round(clamp(alphaAt(look.alpha, v), 0, 1) * 100) / 100;
+    parts.push([at, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a}) ${Math.round(at * 1000) / 10}%`]);
   };
   addStop(lo);
   for (const [v] of look.stops) if (v > lo && v < hi) addStop(v);
-  // A curved scale needs stops of its own, or the gradient straightens it out.
-  if ((layer.spec.power || 1) !== 1) for (let s = 1; s < 12; s++) addStop(lo + (hi - lo) * (s / 12));
+  // a curved scale needs stops of its own, or the gradient straightens it out
+  for (let s = 1; s < 16; s++) addStop(layer.fromByte(b0 + (b1 - b0) * (s / 16)));
   addStop(hi);
-  parts.sort((a, b) => parseFloat(a.split(' ').pop()) - parseFloat(b.split(' ').pop()));
-  $('legend-bar').style.background = `linear-gradient(90deg, ${parts.join(', ')})`;
+  parts.sort((a, b) => a[0] - b[0]);
+  $('legend-bar').style.background = `linear-gradient(90deg, ${parts.map((p) => p[1]).join(', ')}), ${pal.ocean}`;
 
   const ticks = $('legend-ticks');
   ticks.innerHTML = '';                      // empty it; the spans below are DOM nodes
@@ -1933,25 +2005,57 @@ function updateLegend() {
   const shown = (v) => v * u.f + (u.o || 0);
   const back = (v) => (v - (u.o || 0)) / u.f;
   let placed = -1;
+  const reach = layer.range || [layer.fromByte(0), layer.fromByte(255)];
+  const beyond = [reach[0] < lo - 1e-9, reach[1] > hi + 1e-9];
   const values = legendTicks(layer, shown(lo), shown(hi));
   values.forEach((value, n) => {
     const at = pos(back(value));
     const last = n === values.length - 1;
-    if (n && !last && at - placed < 0.13) return;
-    if (last && at - placed < 0.16 && ticks.lastChild) ticks.lastChild.remove();
+    if (n && !last && at - placed < 0.14) return;
+    if (last && at - placed < 0.24 && ticks.childElementCount > 1) ticks.lastChild.remove();
     placed = at;
     const span = document.createElement('span');
-    span.style.left = `${(at * 100).toFixed(1)}%`;
+    span.style.left = `${Math.round(at * 1000) / 10}%`;
     if (at < 0.02) span.className = 'first';
     if (at > 0.98) span.className = 'last';
-    span.textContent = Math.abs(value) >= 10 || Number.isInteger(value)
-      ? String(Math.round(value)) : String(Number(value.toFixed(2)));
+    // an end of the bar the forecast went past is an open end: the colors stop there, the data did not
+    const open = n === 0 && beyond[0] ? '\u2264\u2009' : last && beyond[1] ? '\u2265\u2009' : '';
+    span.textContent = open + (last ? U.withUnit(U.tick(value), u.label) : U.tick(value));
     ticks.append(span);
   });
-  $('legend-name').textContent = layer.label;
-  $('legend-unit').textContent = u.label;
-  $('btn-units').textContent = u.label;
-  $('btn-units').disabled = layer.units.length < 2;
+  // measured, not guessed: a label that would touch its neighbor gives way (the last, with the unit, stays)
+  const spans = [...ticks.children], box = (el) => el.getBoundingClientRect(), kept = [];
+  for (const el of spans) {
+    const touches = () => kept.length && box(kept[kept.length - 1]).right + 6 > box(el).left;
+    if (el === spans[spans.length - 1]) { while (kept.length > 1 && touches()) kept.pop().remove(); kept.push(el); continue; }
+    if (touches()) el.remove(); else kept.push(el);
+  }
+  $('legend-name').textContent = layer.level ? `${layer.label}, ${U.si(layer.level)}` : layer.label;
+  const key = $('btn-units');
+  key.textContent = u.label;
+  key.setAttribute('aria-label', `Change units, now ${u.label}`);
+  key.disabled = layer.units.length < 2;
+}
+
+/* The exposure: the rung the streaks run at, in words (DESIGN §1.13). On the
+ * flat map, once the view reaches latitudes where the stretch is large, it
+ * says so. With the flow off it names what the arrows mean, or nothing. */
+function updateExposure() {
+  let text = '';
+  if (flowLive() && flow.rung()) {
+    text = exposureLine(flow.rung());
+    if (tab === 'map') {
+      const half = H / (2 * map.scale);
+      const edge = Math.max(Math.abs(yToLat(clamp(map.cy - half, 0, 1))), Math.abs(yToLat(clamp(map.cy + half, 0, 1))));
+      if (edge >= 45) text += ', faster toward the poles, where the map stretches';
+    }
+  } else if (arrowsDrawn()) {
+    const wind = field.byKey.get('wind');
+    // a whole number is printed whole: "up to 25 m/s", not "25.0"
+    text = `Arrows: length and weight grow with wind speed up to ${U.withUnit(fmtValue(wind, ARROW_TOP).replace(/\.0+$/, ''), unitFor(wind).label)}`;
+  }
+  const el = $('exposure');
+  if (el.textContent !== text) el.textContent = text;
 }
 
 /* The three sources' credits. The short line stays on screen because CC BY 4.0
@@ -1965,51 +2069,101 @@ function updateCredits() {
   $('credits').textContent = CREDITS;
   $('about-credits').textContent =
     `${source.attribution || 'Weather: NOAA Global Forecast System'}. `
-    + `${source.licence || 'Public domain — a work of the United States Government'}. `
+    + `${source.licence || 'Public domain, a work of the United States Government'}. `
     + 'It is sampled and rounded here, so it is not unaltered NOAA data, and nothing on this '
     + 'screen is endorsed by NOAA. Coastlines: made with Natural Earth, public domain. '
-    + 'City labels: © GeoNames (https://www.geonames.org/), CC BY 4.0 — '
-    + 'https://creativecommons.org/licenses/by/4.0/. The full terms, and the '
-    + 'no-warranty sentence that comes with them, are in assets/LICENSES.md inside the app.';
+    + 'City labels: © GeoNames (www.geonames.org), licensed under CC BY 4.0 '
+    + '(creativecommons.org/licenses/by/4.0/). The full terms, and the no-warranty sentence '
+    + 'that comes with them, are in assets/LICENSES.md inside the app.';
 }
 
-/* A tap gives the whole weather at that point, not just the layer on screen —
- * which is the difference between a map of one field and a weather app. */
+/* A tap gives the whole weather at that point, not just the layer on screen,
+ * which is the difference between a map of one field and a weather app. It
+ * reads the step the base last drew. */
 const readTmp = [0, 0];
+/** Text written only when it changed: during play the card is rewritten every frame, and most of its
+ *  strings stay the same from one frame to the next. */
+const setText = (el, text) => { if (el.textContent !== text) el.textContent = text; };
+const setStyle = (el, prop, value) => { if (el.style[prop] !== value) el.style[prop] = value; };
+let readoutRows = '', announce = false, placeDirty = false;
 function updateReadout() {
   const box = $('readout');
-  if (!marker || !field) { box.hidden = true; return; }
+  if (!marker || !field) { if (!box.hidden) { box.hidden = true; requestTop(); } return; }
   const layer = activeLayer();
-  field.sample(layer.key, t, marker.lon, marker.lat, readTmp);
+  field.sample(layer.key, shownT, marker.lon, marker.lat, readTmp);
   const vector = layer.kind === 'vector';
   const value = vector ? Math.hypot(readTmp[0], readTmp[1]) : readTmp[0];
+  const u = unitFor(layer), number = fmtValue(layer, value), sub = describe(layer, value, readTmp);
 
-  $('readout-where').textContent = fmtCoord(marker.lat, marker.lon);
-  $('readout-number').textContent = fmtValue(layer, value);
-  $('readout-unit').textContent = unitFor(layer).label;
+  setText($('readout-where'), U.coord(marker.lat, marker.lon));
+  setText($('readout-number'), number);
+  setText($('readout-unit'), `${U.NNBSP}${u.label}`);
   const arrow = $('readout-arrow');
-  arrow.hidden = !vector;
+  setStyle(arrow, 'display', vector ? '' : 'none');
   if (vector) {
-    arrow.style.transform = `rotate(${(Math.atan2(-readTmp[1], readTmp[0]) / DEG).toFixed(0)}deg)`;
-    // Calm has no direction to point in, but the gap it leaves keeps the
-    // number from jumping sideways as the forecast plays.
-    arrow.style.visibility = value < 0.5 ? 'hidden' : 'visible';
+    // a streak glyph turned to where the air goes; calm has no direction, but
+    // the gap it leaves keeps the number from jumping sideways during play
+    setStyle(arrow, 'transform', `rotate(${Math.round(Math.atan2(-readTmp[1], readTmp[0]) / DEG)}deg)`);
+    setStyle(arrow, 'visibility', value < 0.5 ? 'hidden' : 'visible');
   }
-  $('readout-sub').textContent = describe(layer, value, readTmp);
+  setText($('readout-sub'), sub);
 
+  // the other layers' rows: built when the set of rows changes, rewritten in place after that
   const list = $('readout-all');
-  list.innerHTML = '';                       // empty it; the rows below are DOM nodes
-  for (const other of field.layers) {
-    if (other.key === layer.key) continue;
-    field.sample(other.key, t, marker.lon, marker.lat, readTmp);
-    const v = other.kind === 'vector' ? Math.hypot(readTmp[0], readTmp[1]) : readTmp[0];
-    const term = document.createElement('dt');
-    term.textContent = other.label;
-    const def = document.createElement('dd');
-    def.textContent = `${fmtValue(other, v)} ${unitFor(other).label}`;
-    list.append(term, def);
+  const others = field.layers.filter((l) => l.key !== layer.key);
+  const rowsKey = others.map((l) => l.key).join('|');
+  if (rowsKey !== readoutRows) {
+    readoutRows = rowsKey;
+    list.innerHTML = '';                     // empty it; the rows below are DOM nodes
+    for (const other of others) {
+      const term = document.createElement('dt');
+      term.textContent = other.label;
+      list.append(term, document.createElement('dd'));
+    }
   }
+  others.forEach((other, i) => {
+    field.sample(other.key, shownT, marker.lon, marker.lat, readTmp);
+    const v = other.kind === 'vector' ? Math.hypot(readTmp[0], readTmp[1]) : readTmp[0];
+    setText(list.children[i * 2 + 1], U.withUnit(fmtValue(other, v), unitFor(other).label));
+  });
+  const opened = box.hidden;
   box.hidden = false;
+  if (opened || placeDirty) placeReadout();
+  // the place names make room for a card that has just opened (a real tap drew #top before the card
+  // was there, and the names under it stayed until the card moved)
+  if (opened) requestTop();
+  if (announce) {
+    // once, when a tap opens it: VoiceOver hears the place and the value with its unit in words
+    announce = false;
+    const where = `${U.fixed(Math.abs(marker.lat), 1)} degrees ${marker.lat >= 0 ? 'north' : 'south'}, `
+      + `${U.fixed(Math.abs(marker.lon), 1)} degrees ${marker.lon >= 0 ? 'east' : 'west'}`;
+    say(`${where}. ${layer.label} ${number} ${u.say}. ${sub}.`);
+  }
+}
+
+/* The card sits at the plate's top left, and moves to the bottom left whenever it would cover the
+ * place that was tapped (and stays at the top if both would). */
+function placeReadout() {
+  placeDirty = false;
+  const box = $('readout');
+  if (box.hidden || !marker) return;
+  V().project(marker.lon, marker.lat, projTmp);
+  const mx = projTmp[0], my = projTmp[1];
+  const covers = () => projTmp[2] && mx > box.offsetLeft - 12 && mx < box.offsetLeft + box.offsetWidth + 12
+    && my > box.offsetTop - 12 && my < box.offsetTop + box.offsetHeight + 12;
+  const was = box.classList.contains('low');
+  box.classList.remove('low');
+  if (covers()) {
+    box.classList.add('low');
+    if (covers()) box.classList.remove('low');
+  }
+  if (box.classList.contains('low') !== was) requestTop();   // the place names make room for it
+}
+function closeReadout() {
+  marker = null;
+  try { localStorage.removeItem(STORE.marker); } catch { /* fine */ }
+  updateReadout();
+  requestTop();
 }
 
 function stepSpacing() {
@@ -2018,29 +2172,32 @@ function stepSpacing() {
   for (let k = 1; k < h.length; k++) gaps.add(h[k] - h[k - 1]);
   if (gaps.size !== 1) return '';
   const g = [...gaps][0];
-  return g === 1 ? ', hourly' : `, every ${g} h`;
+  return g === 1 ? ', hourly' : `, every ${U.withUnit(g, 'h')}`;
 }
 
+/* ── About: a full-height sheet, focus held inside, Escape closes ────────── */
+
+let aboutFrom = null;
 function showAbout() {
   const list = $('about-list');
   list.innerHTML = '';                       // empty it; the rows below are DOM nodes
   const source = (snap && snap.source) || {};
-  const rows = snap ? [
-    ['Source', source.detail || source.name || '—'],
-    ['Terms', source.licence || '—'],
-    ['Model run', fmtFull.format(new Date(snap.run))],
-    ['Updated', fmtFull.format(new Date(snap.generatedAt))],
-    ['Forecast', `${field.steps.length} steps${stepSpacing()}, +${field.steps[0].hours} h to `
-                 + `+${field.steps[field.steps.length - 1].hours} h`],
-    ['Grid', `${field.nx} × ${field.ny} points, ${Math.abs(field.dlon)}° apart`],
+  const rows = snap && field ? [
+    ['Source', source.detail || source.name || '–'],
+    ['Terms', source.licence || '–'],
+    ['Model run', U.full(new Date(snap.run).getTime())],
+    ['Updated', U.full(new Date(snap.generatedAt).getTime())],
+    ['Forecast', `${field.steps.length} steps${stepSpacing()}, +${U.withUnit(field.steps[0].hours, 'h')} to `
+                 + `+${U.withUnit(field.steps[field.steps.length - 1].hours, 'h')}`],
+    ['Grid', `${field.nx} × ${field.ny} points (${U.int(field.n)}), ${Math.abs(field.dlon)}° apart`],
   ] : [['Data', 'No snapshot could be read']];
   if (field) {
     for (const layer of field.layers) {
       const u = unitFor(layer);
       const reached = layer.range
-        ? `${fmtValue(layer, layer.range[0])} to ${fmtValue(layer, layer.range[1])} ${u.label}`
+        ? `${fmtValue(layer, layer.range[0])} to ${U.withUnit(fmtValue(layer, layer.range[1]), u.label)} in this forecast`
         : 'in this forecast';
-      rows.push([layer.label, `${layer.level || layer.field} · ${reached}`]);
+      rows.push([layer.label, `${U.si(layer.level || layer.field)}, ${reached}`]);
     }
   }
   for (const [key, value] of rows) {
@@ -2048,75 +2205,42 @@ function showAbout() {
     const def = document.createElement('dd'); def.textContent = value;
     list.append(term, def);
   }
+  aboutFrom = document.activeElement;
   $('about').hidden = false;
+  $('about-body').scrollTop = 0;
+  $('about-close').focus({ preventScroll: true });
+  flow.stop('about');
+  updateExposure();
 }
+function closeAbout() {
+  if (!aboutOpen()) return;
+  $('about').hidden = true;
+  const back = aboutFrom && aboutFrom.isConnected && !aboutFrom.closest('[hidden]') ? aboutFrom : $('stamp');
+  try { back.focus({ preventScroll: true }); } catch { /* fine */ }
+  flow.invalidate();
+  requestRender();
+}
+$('about').addEventListener('keydown', (e) => {
+  if (e.key !== 'Tab') return;
+  const keys = [...$('about').querySelectorAll('button')];
+  const i = keys.indexOf(document.activeElement);
+  if (e.shiftKey && i <= 0) { e.preventDefault(); keys[keys.length - 1].focus(); }
+  else if (!e.shiftKey && i === keys.length - 1) { e.preventDefault(); keys[0].focus(); }
+});
 
-/* ── time player ─────────────────────────────────────────────────────────── */
+/* ── time ────────────────────────────────────────────────────────────────── */
 
-function currentValidMs() {
+function validMsAt(tt) {
   const s = field.steps, last = s.length - 1;
-  const k0 = clamp(Math.floor(t), 0, last), k1 = Math.min(k0 + 1, last);
-  return s[k0].valid + (s[k1].valid - s[k0].valid) * clamp(t - k0, 0, 1);
+  const k0 = clamp(Math.floor(tt), 0, last), k1 = Math.min(k0 + 1, last);
+  return s[k0].valid + (s[k1].valid - s[k0].valid) * clamp(tt - k0, 0, 1);
 }
+const currentValidMs = () => validMsAt(shownT);
 function nearestStep(ms) {
   let best = 0, bd = Infinity;
   field.steps.forEach((s, k) => { const d = Math.abs(s.valid - ms); if (d < bd) { bd = d; best = k; } });
   return best;
 }
-function syncTimeUI() {
-  const s = field.steps, last = s.length - 1;
-  const k0 = clamp(Math.floor(t), 0, last), k1 = Math.min(k0 + 1, last);
-  const f = clamp(t - k0, 0, 1);
-  const ms = currentValidMs();
-  const hours = s[k0].hours + (s[k1].hours - s[k0].hours) * f;
-  $('valid-time').textContent = fmtWhen.format(new Date(ms));
-  const rel = ms - Date.now();
-  const relTxt = Math.abs(rel) < 1800e3 ? 'now' : rel > 0 ? `in ${fmtAgo(rel).replace(' ago', '')}` : fmtAgo(-rel);
-  $('lead').textContent = `${relTxt} · +${Math.round(hours)} h`;
-  if (document.activeElement !== slider) slider.value = String(Math.round(t));
-}
-function setTime(tt) {
-  t = clamp(tt, 0, field.steps.length - 1);
-  syncTimeUI();
-  updateReadout();
-  requestRender();
-}
-function buildTicks() {
-  const el = $('ticks');
-  el.innerHTML = '';                         // empty it; the spans below are DOM nodes
-  const s = field.steps, last = s.length - 1;
-  if (last < 1) return;
-  let prevDay = null;
-  let placed = -Infinity;                       // per cent along, of the last label drawn
-  let partDay = false;                          // …and whether that label was the first
-  // Three letters want about thirty points of track, which is a fifth of it on
-  // a phone and a twentieth on a tablet, so the gap is measured rather than
-  // guessed at.
-  const room = Math.min(22, 3200 / Math.max(120, el.clientWidth));
-  s.forEach((st, k) => {
-    const d = new Date(st.valid);
-    const day = d.toDateString();
-    if (day === prevDay) return;
-    prevDay = day;
-    const at = k / last * 100;
-    if (k > 0 && at > 94) return;               // no room for a label at the very end
-    if (at - placed < room) {
-      // Too close to read. The first label is whatever was left of the day the
-      // run started in — an hour of it, if the run was late in the evening — so
-      // it gives way to the first whole day; any other pair just waits, and the
-      // next day along gets the label.
-      if (!partDay) return;
-      el.lastChild.remove();
-    }
-    const span = document.createElement('span');
-    span.style.left = `${at.toFixed(2)}%`;
-    span.textContent = fmtDay.format(d);
-    placed = at;
-    partDay = k === 0;
-    el.append(span);
-  });
-}
-
 function hoursAt(tt) {
   const s = field.steps, last = s.length - 1;
   const k0 = clamp(Math.floor(tt), 0, last), k1 = Math.min(k0 + 1, last);
@@ -2134,41 +2258,162 @@ function indexAtHours(h) {
   return lo + (h - s[lo].hours) / (s[hi].hours - s[lo].hours);
 }
 
-let lastFrame = 0;
-function tick(now) {
-  if (!playing) return;
-  const elapsed = lastFrame ? now - lastFrame : 0;
-  lastFrame = now;
-  const s = field.steps;
-  let h = hoursAt(t) + (elapsed / 1000) * PLAY_HOURS_PER_SEC;
-  if (h >= s[s.length - 1].hours) h = s[0].hours;   // loop
-  t = indexAtHours(h);
-  syncTimeUI();
-  updateReadout();
-  render();
-  requestAnimationFrame(tick);
+/* The time row, the track and the slider's words, all for the step the base
+ * has just drawn: for no frame can the label and the picture disagree. */
+function syncTimeUI() {
+  const ms = validMsAt(shownT), hours = hoursAt(shownT);
+  const label = U.valid(ms);
+  $('valid-time').textContent = label;
+  $('lead').textContent = U.lead(hours, ms - Date.now());
+  slider.setAttribute('aria-valuenow', String(Math.round(shownT)));
+  const h = Math.round(hours);
+  slider.setAttribute('aria-valuetext', `${U.spoken(ms)}, ${h} ${h === 1 ? 'hour' : 'hours'} after the run`);
+  track.draw(shownT);
+}
+function trackModel() {
+  if (!field) return;
+  const v = field.steps.map((s) => s.valid), now = Date.now();
+  let at = null;
+  if (now >= v[0] && now <= v[v.length - 1]) {
+    let k = 0; while (k < v.length - 2 && v[k + 1] <= now) k++;
+    at = k + (now - v[k]) / (v[k + 1] - v[k]);
+  }
+  track.setModel({ n: v.length, valid: v, now: at });
+  slider.setAttribute('aria-valuemax', String(v.length - 1));
+}
+function setTime(tt) {
+  if (!field) return;
+  track.wanted = null;
+  t = clamp(Math.round(tt), 0, field.steps.length - 1);
+  requestRender();
 }
 function setPlaying(on) {
   if (!field) on = false;
+  if (on === playing) return;
   playing = on;
-  $('ico-play').hidden = on;
-  $('ico-pause').hidden = !on;
+  // an <svg> has no `hidden` property, so the attribute itself is what is toggled
+  $('ico-play').toggleAttribute('hidden', on);
+  $('ico-pause').toggleAttribute('hidden', !on);
   $('btn-play').setAttribute('aria-label', on ? 'Pause' : 'Play');
-  if (on) { lastFrame = 0; requestAnimationFrame(tick); }
+  if (on) { track.wanted = null; lastPlay = 0; playClock = hoursAt(t); schedule(); }
   else setTime(Math.round(t));
 }
 
-/* ── layers and tabs ─────────────────────────────────────────────────────── */
+const track = createTrack(slider, $('track'), {
+  onStart() { if (playing) setPlaying(false); },
+  onScrub() { schedule(); },
+  onKey(k) {
+    if (!field) return;
+    setPlaying(false);
+    setTime(k === 'home' ? 0 : k === 'end' ? field.steps.length - 1 : Math.round(t) + k);
+  },
+});
+new ResizeObserver(() => { track.resize(); if (field) track.draw(shownT); }).observe(slider);
+
+/* ── the frame loop (DESIGN §1.8) ────────────────────────────────────────── *
+ * One requestAnimationFrame chain: play advances `t`; a held track sets it to
+ * the step under the finger; the base and #top are drawn if anything changed;
+ * the time row is written for what was drawn; then the flow, in the same frame
+ * and on the same field. It reschedules itself only while something moves.    */
+
+let raf = 0, baseDirty = true, topDirty = true, readoutDirty = false, lastPlay = 0, lastNow = 0, parity = 0;
+let logRows = null;
+const loopRows = [];
+function schedule() { if (!raf && !document.hidden) raf = requestAnimationFrame(loop); }
+function requestRender() { baseDirty = true; topDirty = true; schedule(); }
+function requestTop() { topDirty = true; schedule(); }
+
+function loop(now) {
+  raf = 0;
+  if (!W || !H) return;
+  // About covers the plate: nothing is drawn under it and play waits, so closing it shows the hour
+  // it was opened on (closeAbout() asks for the next frame)
+  if (aboutOpen()) { lastPlay = 0; lastNow = 0; return; }
+  const iv = lastNow ? now - lastNow : 0;
+  lastNow = now;
+  if (field) {
+    if (playing) {
+      const s = field.steps;
+      const elapsed = lastPlay ? Math.min(now - lastPlay, 100) : 0;
+      lastPlay = now;
+      playClock += (elapsed / 1000) * PLAY_HOURS_PER_SEC;
+      if (playClock >= s[s.length - 1].hours) playClock = s[0].hours;   // loop
+      // Reduce Motion: the same 5 h a second, drawn as whole steps (one every 0.6 s at 3 h steps),
+      // each a state of the forecast rather than a blend of two
+      const next = reduced() ? Math.floor(indexAtHours(playClock) + 1e-9) : indexAtHours(playClock);
+      if (next !== t) {
+        t = next;
+        // a base that cannot keep up is redrawn on alternate frames before the flow is touched; #top
+        // moves with the step only when it carries arrows (the place names do not move)
+        if (!slowPlay() || (parity++ & 1) === 0) { baseDirty = true; if (arrowsDrawn()) topDirty = true; }
+      }
+    } else lastPlay = 0;
+    if (track.wanted !== null && track.wanted !== t) { t = track.wanted; baseDirty = topDirty = true; }
+  }
+  const b0 = performance.now(), baseDrawn = baseDirty;
+  if (baseDirty) { baseDirty = false; drawBase(); if (field) { syncTimeUI(); readoutDirty = true; } }
+  if (topDirty) { topDirty = false; drawTop(); }
+  const baseMs = performance.now() - b0;
+  if (readoutDirty) { readoutDirty = false; updateReadout(); } else if (placeDirty) placeReadout();
+  const live = field && flowLive();
+  const f0 = performance.now();
+  if (live) flow.frame(now, flowState(baseDrawn));
+  const flowMs = performance.now() - f0;
+  updateExposure();
+  loopRows.push({ t: now, iv, baseMs, flowMs, base: baseDrawn });
+  if (loopRows.length > 240) loopRows.splice(0, loopRows.length - 240);
+  if (logRows) {
+    const fs = live ? flow.state() : null;
+    logRows.push({ t: now, finger: track.finger, wanted: track.wanted, shown: shownT, drawn: baseDrawn,
+      flowK0: fs ? fs.k0 : null, flowK1: fs ? fs.k1 : null, flowF: fs ? fs.f : null,
+      label: $('valid-time').textContent, pressed: track.pressed, playing });
+  }
+  if (playing || live) schedule();
+}
+/* Whether play's base cannot keep up: the median of the last 30 intervals against the display period
+ * (the 10th percentile of all 240). Judged every 15th frame and kept between, so play does not sort
+ * 240 numbers a frame. */
+let slowN = 0, slowWas = false;
+function slowPlay() {
+  if (slowN++ % 15) return slowWas;
+  const r = loopRows.slice(-30).filter((x) => x.iv > 0).map((x) => x.iv).sort((a, b) => a - b);
+  const all = loopRows.filter((x) => x.iv > 0).map((x) => x.iv).sort((a, b) => a - b);
+  slowWas = r.length >= 20 && all.length >= 60 && r[r.length >> 1] > 1.5 * all[Math.floor(all.length * 0.1)];
+  return slowWas;
+}
+
+/* What the flow reads: the field of the step the base just drew (during play,
+ * the same k0, k1 and fraction as the color layer), the view, the sun, the
+ * streak's ink for this theme. */
+function flowState(baseDrawn) {
+  const { k0, k1, f } = frame(shownT);
+  const A = field.wind[k0], B = field.wind[k1];
+  let sun = null;
+  if (night) {
+    const s = sunAt(currentValidMs()), c = Math.cos(s.dec);
+    sun = [c * Math.cos(s.lon), c * Math.sin(s.lon), Math.sin(s.dec)];
+  }
+  if (tab === 'globe') syncGlobe();
+  return {
+    tab, W, H, dpr, map: { cx: map.cx, cy: map.cy, scale: map.scale, W, H }, g: gp, grid: field.grid, U0: A.u, V0: A.v, U1: B.u, V1: B.v, k0, k1, f, playing, sun,
+    look: { color: pal.streak, head: pal.head, kappa: pal.kappa }, theme: darkMq.matches ? 'dark' : 'light', baseDrawn,
+    dragging: !!(gesture && gesture.moved),   // a finger moving the view, even on a frame between two of its moves
+  };
+}
+
+/* ── layers, tabs, keys ──────────────────────────────────────────────────── */
+
+const store = (key, value) => { try { localStorage.setItem(key, value); } catch { /* fine */ } };
+const say = (text) => { const el = $('live'); el.textContent = ''; setTimeout(() => { el.textContent = text; }, 30); };
 
 function setLayer(key) {
   if (!field || !field.byKey.has(key)) return;
   layerKey = key;
-  try { localStorage.setItem(STORE.layer, key); } catch { /* fine */ }
+  store(STORE.layer, key);
   for (const [n, button] of [...$('layerchips').children].entries()) {
     button.setAttribute('aria-pressed', String(field.layers[n].key === key));
   }
   updateLegend();
-  updateReadout();
   requestRender();
 }
 
@@ -2176,16 +2421,68 @@ function setTab(next) {
   if (next === tab) return;
   // Carry the middle of the world across, so the globe opens looking at
   // whatever the map was looking at, and the other way round.
-  const centre = V().centre();
+  const center = V().center();
   tab = next;
-  try { localStorage.setItem(STORE.tab, tab); } catch { /* fine */ }
-  $('tab-map').setAttribute('aria-selected', String(tab === 'map'));
-  $('tab-globe').setAttribute('aria-selected', String(tab === 'globe'));
-  wrap.setAttribute('aria-labelledby', tab === 'map' ? 'tab-map' : 'tab-globe');
+  store(STORE.tab, tab);
+  labelView();
   V().fit();
-  V().adopt(centre);
+  V().adopt(center);
   V().save();
   requestRender();
+}
+
+function labelView() {
+  $('tab-map').setAttribute('aria-selected', String(tab === 'map'));
+  $('tab-globe').setAttribute('aria-selected', String(tab === 'globe'));
+  panel.setAttribute('aria-labelledby', tab === 'map' ? 'tab-map' : 'tab-globe');
+  canvas.setAttribute('aria-label', tab === 'map' ? 'World map of the weather' : 'Globe of the weather');
+}
+
+/* Flow and Arrows: two toggles give all four states, and each says its own. */
+function syncKeys() {
+  const flowKey = $('btn-flow');
+  if (flowKey.hidden !== (!!field && !hasWind())) { flowKey.hidden = !!field && !hasWind(); layoutKeys(); }
+  flowKey.setAttribute('aria-pressed', String(flowChoice && !reduced()));
+  flowKey.title = reduced() ? 'The flow is off while Reduce Motion is on.' : '';
+  $('btn-arrows').setAttribute('aria-pressed', String(arrowsChoice || (flowChoice && reduced())));
+  $('btn-night').setAttribute('aria-pressed', String(night));
+  updateExposure();
+}
+function applyFlow() {
+  const why = flowSuppressed();
+  if (!flowChoice || !hasWind()) flow.stop(null);
+  else if (why) flow.stop(why);
+  else flow.invalidate();
+  syncKeys();
+  requestRender();
+}
+reducedMq.addEventListener('change', applyFlow);
+
+/* ── focus mode (DESIGN §3): the plate, its track, the stamp and the caption's
+ * words; everything else leaves, hidden and inert. Remembered as gwe.focus. ── */
+
+let leaveTimer = 0;
+function setFocus(on, { kbd = false, boot = false } = {}) {
+  if (on === focusMode && !boot) return;
+  focusMode = on;
+  if (!boot) store(STORE.focus, on ? '1' : '0');
+  const leaving = [$('head'), $('keys'), $('legend-scale')];
+  clearTimeout(leaveTimer);
+  if (on && marker && !boot) closeReadout();   // a tap in focus mode opens it again
+  const apply = () => {
+    for (const el of leaving) { el.classList.remove('leaving'); el.hidden = on; el.inert = on; }
+    if (on) $('caption').prepend($('stamp')); else $('stamp-home').append($('stamp'));
+    $('focus-exit').hidden = !on;
+    document.body.classList.toggle('focus', on);
+    if (!on) updateLegend();
+    flow.invalidate();
+    if (kbd && !boot) { const k = $(on ? 'focus-exit' : 'focus-key'); try { k.focus({ focusVisible: true }); } catch { k.focus(); } }
+  };
+  if (on && !boot && !reduced()) {
+    for (const el of leaving) { el.inert = true; el.classList.add('leaving'); }
+    leaveTimer = setTimeout(apply, 160);
+  } else apply();
+  if (!boot) say(on ? 'Controls hidden. Press Escape or the corner key to show them.' : 'Controls shown.');
 }
 
 /* ── loading ─────────────────────────────────────────────────────────────── */
@@ -2199,7 +2496,7 @@ async function loadSnapshot() {
     try { data = JSON.parse(text); } catch {
       const html = text.trim().startsWith('<');
       throw new Error('data/snapshot.json is not valid JSON'
-        + (html ? ' — it looks like a web page was written over it' : ''));
+        + (html ? '; it looks like a web page was written over it' : ''));
     }
     const why = validate(data);
     if (why) throw new Error(`data/snapshot.json is not a Global Weather snapshot: ${why}`);
@@ -2217,11 +2514,12 @@ async function loadSnapshot() {
   const fresh = new WeatherField(data);
   data.steps = null;                            // the field holds the planes now
   const stamp = $('stamp');
-  stamp.textContent = `Unpacking ${fresh.steps.length} steps…`;
+  if (!field) stamp.textContent = `Unpacking the forecast… 0 of ${fresh.steps.length}`;
   try {
     await fresh.load((done, total) => {
-      if (gen === loadGeneration) stamp.textContent = `Unpacking ${done} of ${total} steps…`;
+      if (gen === loadGeneration && !field) stamp.textContent = `Unpacking the forecast… ${done} of ${total}`;
     });
+    fresh.buildWind();
   } catch (e) {
     if (gen !== loadGeneration) return;
     setProblem('snapshot', `data/snapshot.json is not a Global Weather snapshot: ${e.message}`);
@@ -2229,46 +2527,23 @@ async function loadSnapshot() {
     return;
   }
   if (gen !== loadGeneration) return;           // a newer load overtook this one
-  const keepValid = field ? currentValidMs() : null;
+  const keepValid = field ? validMsAt(shownT) : null;
   const wasPlaying = playing;
   playing = false;
   snap = data;
   field = fresh;
   if (!field.byKey.has(layerKey)) layerKey = field.layers[0].key;
   buildLuts();
-  buildChips();
-  slider.max = String(field.steps.length - 1);
-  buildTicks();
-  setTime(nearestStep(keepValid ?? Date.now()));
+  buildLayerWords();
+  trackModel();
+  t = nearestStep(keepValid ?? Date.now());
+  track.wanted = null;
   setLayer(layerKey);
   updateStamp();
   updateCredits();
+  if (firstField) { firstField = false; flow.release(); } else flow.invalidate();
+  applyFlow();
   if (wasPlaying) setPlaying(true);
-}
-
-async function loadStatic() {
-  try {
-    const r = await fetch('./assets/world.json');
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const w = await r.json();
-    if (!Array.isArray(w.land) || !Array.isArray(w.borders)) throw new Error('unexpected shape');
-    world = w;
-    worldPaths = buildWorldPaths(w);
-    setProblem('world', null);
-  } catch (e) {
-    setProblem('world', `Coastlines could not be loaded (assets/world.json: ${e.message}) — the weather still shows.`);
-  }
-  try {
-    const r = await fetch('./assets/places.json');
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const p = await r.json();
-    places = Array.isArray(p)
-      ? p.filter((x) => x && typeof x.n === 'string' && Number.isFinite(x.lon) && Number.isFinite(x.lat))
-          .map((x) => ({ n: x.n, lon: x.lon, lat: x.lat, r: Number.isFinite(x.r) ? x.r : 4 }))
-          .sort((a, b) => a.r - b.r)
-      : [];
-  } catch { places = []; }
-  requestRender();
 }
 
 /* ── gestures ────────────────────────────────────────────────────────────── */
@@ -2321,8 +2596,10 @@ function endPointer(e) {
   pointers.delete(e.pointerId);
   if (pointers.size > 0) { startGesture(); return; }
   if (wasTap) onTap(e.clientX - rect.left, e.clientY - rect.top);
+  const moved = gesture && gesture.moved;
   gesture = null;
   V().save();
+  if (moved) requestRender();               // the geography's bitmaps are rebuilt once the finger lifts
 }
 canvas.addEventListener('pointerup', endPointer);
 canvas.addEventListener('pointercancel', endPointer);
@@ -2355,11 +2632,35 @@ function onTap(sx, sy) {
     const p = V().unproject(sx, sy);
     marker = p ? { lon: Math.round(p[0] * 100) / 100, lat: Math.round(p[1] * 100) / 100 } : null;
     try { localStorage.setItem(STORE.marker, JSON.stringify(marker)); } catch { /* fine */ }
-    updateReadout();
-    requestRender();
+    announce = !!marker;
+    readoutDirty = true;
+    requestTop();
   }, 330);
 }
-
+async function loadStatic() {
+  try {
+    const r = await fetch('./assets/world.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const w = await r.json();
+    if (!Array.isArray(w.land) || !Array.isArray(w.borders)) throw new Error('unexpected shape');
+    world = w;
+    worldPaths = buildWorldPaths(w);
+    setProblem('world', null);
+  } catch (e) {
+    setProblem('world', `Coastlines could not be loaded (assets/world.json: ${e.message}) — the weather still shows.`);
+  }
+  try {
+    const r = await fetch('./assets/places.json');
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const p = await r.json();
+    places = Array.isArray(p)
+      ? p.filter((x) => x && typeof x.n === 'string' && Number.isFinite(x.lon) && Number.isFinite(x.lat))
+          .map((x) => ({ n: x.n, lon: x.lon, lat: x.lat, r: Number.isFinite(x.r) ? x.r : 4 }))
+          .sort((a, b) => a.r - b.r)
+      : [];
+  } catch { places = []; }
+  requestRender();
+}
 /* ── controls ────────────────────────────────────────────────────────────── */
 
 $('tab-map').addEventListener('click', () => setTab('map'));
@@ -2367,66 +2668,108 @@ $('tab-globe').addEventListener('click', () => setTab('globe'));
 $('zoom-in').addEventListener('click', () => zoomAt(W / 2, H / 2, 2));
 $('zoom-out').addEventListener('click', () => zoomAt(W / 2, H / 2, 0.5));
 $('zoom-home').addEventListener('click', () => { V().home(); V().save(); requestRender(); });
+$('btn-flow').addEventListener('click', () => {
+  if (reduced()) { say('The flow is off while Reduce Motion is on.'); return; }
+  flowChoice = !flowChoice;
+  store(STORE.flow, flowChoice ? '1' : '0');
+  applyFlow();
+});
 $('btn-arrows').addEventListener('click', () => {
-  arrows = !arrows;
-  $('btn-arrows').setAttribute('aria-pressed', String(arrows));
-  try { localStorage.setItem(STORE.arrows, arrows ? '1' : '0'); } catch { /* fine */ }
+  arrowsChoice = !arrowsChoice;
+  store(STORE.arrows, arrowsChoice ? '1' : '0');
+  if (reduced() && flowChoice && !arrowsChoice) say('The arrows stand in for the flow while Reduce Motion is on.');
+  syncKeys();
   requestRender();
 });
 $('btn-night').addEventListener('click', () => {
   night = !night;
-  $('btn-night').setAttribute('aria-pressed', String(night));
-  try { localStorage.setItem(STORE.night, night ? '1' : '0'); } catch { /* fine */ }
+  store(STORE.night, night ? '1' : '0');
+  syncKeys();
   requestRender();
 });
 $('btn-units').addEventListener('click', () => {
   const layer = activeLayer();
   if (!layer || layer.units.length < 2) return;
-  const at = layer.units.findIndex((u) => u.id === unitChoice[layer.key]);
+  const at = layer.units.indexOf(unitFor(layer));          // the one on screen, chosen or not
   unitChoice[layer.key] = layer.units[(at + 1) % layer.units.length].id;
-  try { localStorage.setItem(STORE.units, JSON.stringify(unitChoice)); } catch { /* fine */ }
+  store(STORE.units, JSON.stringify(unitChoice));
   updateLegend();
-  updateReadout();
+  readoutDirty = true;
+  schedule();
 });
 $('stamp').addEventListener('click', showAbout);
-$('about-close').addEventListener('click', () => { $('about').hidden = true; });
-$('about').addEventListener('click', (e) => { if (e.target === $('about')) $('about').hidden = true; });
-$('readout-close').addEventListener('click', () => {
-  marker = null;
-  try { localStorage.removeItem(STORE.marker); } catch { /* fine */ }
-  updateReadout();
-  requestRender();
-});
+$('about-close').addEventListener('click', closeAbout);
+$('about-close-2').addEventListener('click', closeAbout);
+$('readout-close').addEventListener('click', closeReadout);
 $('btn-play').addEventListener('click', () => setPlaying(!playing));
-$('btn-prev').addEventListener('click', () => { if (field) { setPlaying(false); setTime(Math.round(t) - 1); } });
-$('btn-next').addEventListener('click', () => { if (field) { setPlaying(false); setTime(Math.round(t) + 1); } });
-slider.addEventListener('input', () => { if (field) { if (playing) setPlaying(false); setTime(Number(slider.value)); } });
+/* The step keys keep the focus on themselves, so VoiceOver is told the new time in words (the track,
+ * a role="slider", announces its own aria-valuetext when it changes). */
+const stepBy = (d) => { if (!field) return; setPlaying(false); setTime(Math.round(t) + d); say(U.spoken(validMsAt(t))); };
+$('btn-prev').addEventListener('click', () => stepBy(-1));
+$('btn-next').addEventListener('click', () => stepBy(1));
+// focus follows the two focus keys only when the keyboard pressed them (a click's detail is 0)
+$('focus-key').addEventListener('click', (e) => setFocus(true, { kbd: e.detail === 0 }));
+$('focus-exit').addEventListener('click', (e) => setFocus(false, { kbd: e.detail === 0 }));
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (aboutOpen()) { e.preventDefault(); closeAbout(); }
+  else if (focusMode) { e.preventDefault(); setFocus(false, { kbd: true }); }
+});
 
 /* Live means re-render in place. Reads are fresh from disk, so this one
  * listener is what makes an app opened this morning show this morning's
- * numbers — and Snuggery fires the same event when a Shortcut delivers new
+ * numbers, and Snuggery fires the same event when a Shortcut delivers new
  * data while the app is open. The view, the marker, the units and the position
  * in the forecast all survive, because loadSnapshot() replaces the field
- * rather than rebuilding the page. */
+ * rather than rebuilding the page. Hidden, nothing animates: the loop stops
+ * and the trails are cleared, so a return never shows streaks from before. */
+function onHidden() {
+  if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  flow.stop('hidden');
+}
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) loadSnapshot();
+  if (document.hidden) { onHidden(); return; }
+  lastPlay = 0; lastNow = 0;
+  updateStamp();
+  applyFlow();
+  loadSnapshot();
 });
+window.addEventListener('pagehide', onHidden);
+window.addEventListener('pageshow', (e) => { if (e.persisted && !document.hidden) { lastPlay = 0; lastNow = 0; applyFlow(); } });
 
 /* ── boot ────────────────────────────────────────────────────────────────── */
 
+/* The key column, on a plate too short for it (a phone on its side), becomes a row along the top, so
+ * it never wraps into a second column over the weather. Positioned over the plate, it never changes
+ * the plate's size. */
+function layoutKeys() {
+  const plates = [...$('keys').children];
+  let len = 8 * (plates.length - 1);
+  for (const p of plates) len += [...p.children].filter((b) => !b.hidden).length * 44 + 2;
+  wrap.classList.toggle('keys-row', len + 16 > H && len + 16 <= W - 200);
+}
+
 function resize() {
   const r = wrap.getBoundingClientRect();
+  const before = Math.min(W, H);
   W = Math.max(1, Math.round(r.width));
   H = Math.max(1, Math.round(r.height));
+  // the globe keeps its size relative to the plate, so a plate that settles after the first frame (the
+  // caption filling in) or turns on its side still shows the disc it showed
+  if (globe.r && before > 1) globe.r *= Math.min(W, H) / before;
+  layoutKeys();
   dpr = Math.min(3, window.devicePixelRatio || 1);
-  canvas.width = Math.round(W * dpr);
-  canvas.height = Math.round(H * dpr);
+  for (const c of [canvas, topCanvas]) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
   gcache = null;
   pathCache = null;
   MAP_VIEW.fit();
   GLOBE_VIEW.fit();
   syncGlobe();
-  render();
+  updateLegend();
+  // drawn now, not next frame: resizing a canvas clears it, and a blank frame would show
+  if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  baseDirty = topDirty = true;
+  loop(performance.now());
 }
 
 try {
@@ -2435,36 +2778,71 @@ try {
   const savedLayer = localStorage.getItem(STORE.layer);
   if (typeof savedLayer === 'string' && savedLayer) layerKey = savedLayer;
   if (localStorage.getItem(STORE.tab) === 'globe') tab = 'globe';
-  arrows = localStorage.getItem(STORE.arrows) !== '0';
+  arrowsChoice = localStorage.getItem(STORE.arrows) === '1';
+  flowChoice = localStorage.getItem(STORE.flow) !== '0';
   night = localStorage.getItem(STORE.night) !== '0';
+  focusMode = localStorage.getItem(STORE.focus) === '1';
   const m = JSON.parse(localStorage.getItem(STORE.marker) || 'null');
   if (m && Number.isFinite(m.lon) && Number.isFinite(m.lat)) marker = m;
 } catch { /* fine */ }
 MAP_VIEW.restore();
 GLOBE_VIEW.restore();
-$('btn-arrows').setAttribute('aria-pressed', String(arrows));
-$('btn-night').setAttribute('aria-pressed', String(night));
-$('tab-map').setAttribute('aria-selected', String(tab === 'map'));
-$('tab-globe').setAttribute('aria-selected', String(tab === 'globe'));
-wrap.setAttribute('aria-labelledby', tab === 'map' ? 'tab-map' : 'tab-globe');
+labelView();
+if (focusMode) setFocus(true, { boot: true });           // restored before the first draw
 updateCredits();
+syncKeys();
+track.resize();
 new ResizeObserver(resize).observe(wrap);
 resize();
+/* Place names are drawn in the app's face, so the canvas waits for it. */
+document.fonts.load(LABEL_FONT).then(() => { fontReady = true; track.invalidate(); requestRender(); },
+  () => { fontReady = true; requestRender(); });
+document.fonts.addEventListener('loadingdone', () => { track.invalidate(); requestRender(); });
 loadStatic();
 loadSnapshot();
 
-/* For a browser console and for tests, never for the app itself. */
+/* For a browser console and for tools/shoot.mjs, never for the app itself. */
+const pct = (a, q) => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); return +s[Math.min(s.length - 1, Math.floor(q * s.length))].toFixed(2); };
 window.__weather = {
-  render() { const t0 = performance.now(); render(); return performance.now() - t0; },
+  ready: () => !!field && fontReady && !!worldPaths,
+  render() { const t0 = performance.now(); drawBase(); drawTop(); return performance.now() - t0; },
   get state() {
-    return { t, playing, tab, layer: layerKey, units: { ...unitChoice }, arrows, night, marker,
-             map: { ...map }, globe: { ...globe },
+    return { t, shown: shownT, playing, tab, layer: layerKey, units: { ...unitChoice },
+             flow: flowChoice, arrows: arrowsChoice, arrowsDrawn: arrowsDrawn(), night, focus: focusMode,
+             reduced: reduced(), marker, map: { ...map }, globe: { ...globe }, W, H, dpr,
              steps: field ? field.steps.length : 0,
              layers: field ? field.layers.map((l) => l.key) : [],
-             schema: snap ? snap.schema : null };
+             schema: snap ? snap.schema : null,
+             stamp: $('stamp').textContent, exposure: $('exposure').textContent,
+             valid: $('valid-time').textContent, lead: $('lead').textContent,
+             legend: $('legend-name').textContent, unitKey: $('btn-units').textContent };
   },
   setTab, setLayer,
-  sample(key, lon, lat) { return field ? field.sample(key, t, lon, lat, [0, 0]) : null; },
-  setTime(tt) { if (field) setTime(tt); },
+  center(lon, lat) { V().adopt({ lon, lat }); V().save(); requestRender(); },
+  sample(key, lon, lat) { return field ? field.sample(key, shownT, lon, lat, [0, 0]) : null; },
+  setTime(tt) { if (field) { track.wanted = null; t = clamp(tt, 0, field.steps.length - 1); playClock = hoursAt(t); requestRender(); } },
+  play: (on) => setPlaying(!!on),
+  focus: (on, kbd = false) => setFocus(!!on, { kbd }),
+  tap(lon, lat) { marker = { lon, lat }; readoutDirty = true; requestTop(); },
+  project(lon, lat) { const o = [0, 0, 0]; V().project(lon, lat, o); return o; },
+  view: () => ({ tab, W, H, dpr, map: { ...map }, globe: { ...globe } }),
+  flow: {
+    state: () => ({ ...flow.state(), live: !!field && flowLive(), choice: flowChoice }),
+    probe: (points, seed) => flow.probe(points, seed),
+    step: (n, dt) => flow.step(n, dt),
+    positions: () => flow.positions(),
+    perf: () => flow.perf(),
+    reseed: (seed) => flow.reseed(seed),
+    hold: (on) => flow.hold(on),
+  },
+  log(on = true) { if (on) { logRows = []; return true; } const l = logRows; logRows = null; return l; },
+  perf() {
+    const rows = loopRows.slice(-120), iv = rows.filter((r) => r.iv > 0).map((r) => r.iv);
+    const quiet = rows.filter((r) => !r.base);
+    return { frames: rows.length, interval: { median: pct(iv, 0.5), p95: pct(iv, 0.95) },
+             base: { n: rows.filter((r) => r.base).length, median: pct(rows.filter((r) => r.base).map((r) => r.baseMs), 0.5) },
+             flow: { median: pct(quiet.map((r) => r.flowMs), 0.5), p95: pct(quiet.map((r) => r.flowMs), 0.95) },
+             state: flow.state(), ladder: flow.perf().ladder };
+  },
   unzlib,
 };

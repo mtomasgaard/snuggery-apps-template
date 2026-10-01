@@ -69,8 +69,8 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | World News | [**Install World News**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) | tiny | nothing |
 | Outdoor Window | [**Install Outdoor Window**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) | tiny | your own Shortcut |
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
-| Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.1 MB | nothing |
-| Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.4 MB | nothing |
+| Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.2 MB | nothing |
+| Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.5 MB | nothing |
 | Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 25 MB | nothing |
 | Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
@@ -123,13 +123,13 @@ Tomorrow's electricity prices for one bidding zone and the cheapest hours to run
 
 ### Global Wind
 
-Five days of global 10 m wind from NOAA's GFS forecast, drawn as arrows over a colour layer — on a map you pan and zoom, or a globe you turn — with a five-day time player, a moving night side and a table of twelve cities at local noon. **Live**: refreshed here twice a day, to its own `data-global-wind` branch because the file is 1.2 MB.
+Five days of global 10 m wind from NOAA's GFS forecast, drawn as a long exposure: thousands of tracers carried by the forecast's own wind over a color layer, with the exposure printed under the plate ("1 s = 24 h of wind"), arrows as the alternative — on a map you pan and zoom, or a globe you turn — with a five-day time player you can scrub at any speed, a moving night side, a focus mode that leaves only the picture and the player, and a table of twelve cities at local noon. **Live**: refreshed here after each GFS run, up to four times a day, to its own `data-global-wind` branch because the file is 1.2 MB.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) · Make it yours: [`global-wind/PROMPT.md`](global-wind/PROMPT.md)
 
 ### Global Weather
 
-Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, and a tap anywhere giving all five numbers at that point. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here twice a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size.
+Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, the same tracers of the wind over any of them, and a tap anywhere giving all five numbers at that point, in SI units. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here after each GFS run, up to four times a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) · Make it yours: [`global-weather/PROMPT.md`](global-weather/PROMPT.md)
 

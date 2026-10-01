@@ -5,9 +5,9 @@ five days, from **NOAA's Global Forecast System**:
 
 | Layer | What it is | GFS field |
 | --- | --- | --- |
-| **Wind** | speed and direction 10 metres above the ground | `UGRD`/`VGRD` at 10 m |
-| **Temperature** | air temperature 2 metres above the ground | `TMP` at 2 m |
-| **Rain** | precipitation rate at the surface, in millimetres an hour | `PRATE` at the surface |
+| **Wind** | speed and direction 10 meters above the ground | `UGRD`/`VGRD` at 10 m |
+| **Temperature** | air temperature 2 meters above the ground | `TMP` at 2 m |
+| **Rain** | precipitation rate at the surface, in millimeters an hour | `PRATE` at the surface |
 | **Cloud** | total cloud cover, top to bottom, as a percentage | `TCDC`, entire atmosphere |
 | **Pressure** | pressure reduced to mean sea level | `PRMSL` |
 
@@ -45,10 +45,59 @@ looking at whatever the map was looking at.
 
 Both views draw the **night side** as a soft wash, worked out from the sun's
 position at the forecast time — so playing the forecast forward walks the
-terminator across the planet. It is the moon button in the header, and it is
-worth knowing what it costs: a colour under the wash is a slightly darker
-colour, so if you are reading temperatures off the scale on the night side,
+terminator across the planet. It is the Night key in the map's key column (a
+globe with its night side filled and its equator drawn on the day side), and it
+is worth knowing what it costs: a color under the wash is a slightly darker
+color, so if you are reading temperatures off the scale on the night side,
 turn it off. The tapped readout is never shaded — it prints the number.
+
+## What the streaks are
+
+The moving streaks on the map and the globe are the wind itself. Each is a
+tracer carried by the forecast's wind at the place it is over, for the hour on
+the slider: it moves the way that wind blows, at that wind's speed, times one
+rate the caption prints — *Streaks: 1 s = 24 h of wind at the hour shown*. The
+rate is a rung of a fixed ladder (2 days, 24 h, 12 h, 6 h, 3 h, 90 min, 45 min),
+chosen so a typical wind moves about 18 points a second at the middle of the
+screen, and it changes only when a zoom needs it.
+
+What they are not:
+
+- **Not strength by length.** On the flat map the same wind moves faster toward
+  the poles, because Web Mercator stretches there (twice as fast at 60°), and
+  the caption says so; on the globe streaks slow toward the edge. The color
+  layer and a tap give the speed.
+- **Not invented, and not a density map.** Streaks start at random, evenly
+  over the screen, live 1.5–3.5 s, and get no minimum speed. Where they gather
+  is partly the air and partly the picture: they bunch where the forecast's air
+  converges, but also where the picture shrinks the ground under them (toward
+  the equator on the flat map, toward the edge on the globe), and otherwise
+  their spacing is random. Their color and width encode nothing.
+- **Not the air's path over five days.** They trace the wind of the hour shown
+  as if it held still; play moves that hour on at 5 h a second while the
+  streaks keep the printed rate.
+- **No finer than the grid.** The flow reads one value every 2°, so it runs
+  smoothly across coasts, straits and mountains smaller than that sampled grid
+  can show.
+
+Reduce Motion turns the streaks off and draws the arrows in their place, and play
+then moves a whole forecast step at a time. The page stops animating whenever it
+is hidden, and About holds everything still while it is open. The math is
+`js/flow-math.js`; `DESIGN.md` §1 is the whole design.
+
+## The look
+
+*Long Exposure* (`ART.md`): the screen is a flow photograph of the air with its
+caption. The dark theme is the print (pale tracers), the light theme the
+negative (ink tracers). Every color ramp is one hue path printed twice, its
+lightness inverted between the themes, and all of them stay inside a tonal
+budget so a one-point streak reads over any weather — at least 3.0:1 by day and
+2.5:1 at night, which `tools/art/palette.py` checks. The one face is **Ysabeau
+Office** by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a
+subset is in `fonts/` with its license. From `Template/`:
+`python global-weather/tools/art/font_subset.py` rebuilds it (fonttools and
+Brotli), and `python3 global-weather/tools/art/palette.py --json` prints the
+ramps `js/ramps.js` holds.
 
 ---
 
@@ -61,7 +110,7 @@ under reads:
 > NOAA data disseminated through NODD are open to the public and can be used as
 > desired.
 
-with two conditions attached, both of which this app honours on screen:
+with two conditions attached, both of which this app honors on screen:
 
 > NOAA requests attribution for the use or dissemination of unaltered NOAA data.
 
@@ -77,18 +126,20 @@ NOAA's suggested citation, for anywhere you write about this:
 > NOAA Global Forecast System (GFS) was accessed on *DATE* from
 > `registry.opendata.aws/noaa-gfs-bdp-pds`.
 
-### The two things that travel inside the app
+### The three things that travel inside the app
 
-Both are spelled out beside the files themselves, in `assets/LICENSES.md`.
+The two data files' terms are spelled out in `assets/LICENSES.md`, and the
+face's in `fonts/OFL.txt`.
 
 | File | What it is | Terms |
 | --- | --- | --- |
 | `assets/world.json` | Coastlines and country borders, simplified and delta-encoded | **Natural Earth — public domain.** "All versions of Natural Earth raster + vector map data found on this website are in the public domain." No permission and no credit are required; the app says *Made with Natural Earth* anyway, which is the form Natural Earth suggests. |
-| `assets/places.json` | About 1,600 city labels, tiered so the map shows a few at world scale and more as you zoom in | **GeoNames — CC BY 4.0.** Attribution is a *condition*, not a courtesy: the credit line under the map and the *About this data* panel both name GeoNames and the licence. Do not remove them. Editing the list is fine — add your own places, delete the ones you never look at; it stays the same data under the same licence. |
+| `fonts/ysabeau-office-gw.woff2` | The app's one face, a Latin subset (35 KB) | **Ysabeau Office, SIL Open Font License 1.1**, by Christian Thalmann (Catharsis Fonts), no Reserved Font Name. `fonts/OFL.txt` carries the license and says how the subset was cut. |
+| `assets/places.json` | About 1 600 city labels, tiered so the map shows a few at world scale and more as you zoom in | **GeoNames — CC BY 4.0.** Attribution is a *condition*, not a courtesy: the credit line under the map and the *About this data* panel both name GeoNames and the license. Do not remove them. Editing the list is fine — add your own places, delete the ones you never look at; it stays the same data under the same license. |
 
 **No third-party JavaScript ships with this app.** Not for the globe either:
 the sphere is drawn with the browser's own 2D canvas, a few lines of
-trigonometry and a land mask rasterised from the same `world.json` the flat map
+trigonometry and a land mask rasterized from the same `world.json` the flat map
 uses — no WebGL library, no map engine, no tiles. The snapshot's byte planes
 are zlib-compressed, and the app unpacks them with the browser's own
 `DecompressionStream` where there is one — every major browser since mid-2023 —
@@ -148,16 +199,16 @@ dials move the answer by a factor of twenty-five, measured on one real GFS run
 
 | grid | points per step | 3 days, hourly | 5 days, hourly | 3 days, 3-hourly | **5 days, 3-hourly** | 3 days, 6-hourly | 5 days, 6-hourly |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.0° | 65,160 | 15.77 MB | 25.98 MB | 6.58 MB | 10.74 MB | 3.76 MB | 6.05 MB |
-| 1.5° | 29,040 | 7.30 MB | 12.02 MB | 3.07 MB | 4.99 MB | 1.76 MB | 2.83 MB |
-| **2.0°** | **16,380** | 4.21 MB | 6.93 MB | 1.78 MB | **2.89 MB** | 1.03 MB | 1.64 MB |
+| 1.0° | 65 160 | 15.77 MB | 25.98 MB | 6.58 MB | 10.74 MB | 3.76 MB | 6.05 MB |
+| 1.5° | 29 040 | 7.30 MB | 12.02 MB | 3.07 MB | 4.99 MB | 1.76 MB | 2.83 MB |
+| **2.0°** | **16 380** | 4.21 MB | 6.93 MB | 1.78 MB | **2.89 MB** | 1.03 MB | 1.64 MB |
 
 **The demo committed here is the bold cell: 2°, 3-hourly, five days, five
 layers, about 2.9 MB.** That is a deliberate choice for a *template*, where
-every copy of the repository carries the file and every phone downloads it twice
-a day. It is coarse — a grid point every 200 km or so — and the map still reads
+every copy of the repository carries the file and every phone downloads it on
+every refresh. It is coarse — a grid point every 220 km or so — and the map still reads
 as a convincing weather field, because the app interpolates between points and
-the colour layer is smooth. What you lose is the detail of a single fjord or
+the color layer is smooth. What you lose is the detail of a single fjord or
 valley, and a shower that falls on one town rather than a county.
 
 And what each layer costs of that 2.9 MB, at those settings:
@@ -172,10 +223,10 @@ And what each layer costs of that 2.9 MB, at those settings:
 
 **Delete a layer and you save both ends**: its bytes in the file and its
 share of the download. Deleting is removing its entry from `LAYERS`; the app
-needs no edit, because the chips, the legend, the units button and the tapped
+needs no edit, because the layer words, the legend, the units key and the tapped
 readout are all built from whatever the snapshot declares. (Wind is the one
-exception worth knowing: the arrows and the globe's wind rotation look for a
-layer whose key is `wind`, and simply do not draw if there is not one.)
+exception worth knowing: the streaks and the arrows look for a layer whose key
+is `wind`, and simply do not draw if there is not one.)
 
 **Your own copy can turn all of them up.** `1.0°, hourly, five days` is the full
 resolution the source can give inside five days, and it is 25.98 MB — which is
@@ -220,8 +271,8 @@ least 3.
 Most apps here commit their snapshot to `main`. Global Weather does not, and
 neither does Global Wind, and the reason is arithmetic: the file is megabytes,
 and every byte of it is different every run — it is base64 of compressed data,
-so git can neither delta it nor compress it. Twice a day at 2.9 MB is more than
-two gigabytes a year, in a repository people clone.
+so git can neither delta it nor compress it. Up to four new runs a day at
+2.9 MB is about four gigabytes a year, in a repository people clone.
 
 So `.github/workflows/refresh-global-weather.yml` force-pushes a single
 parentless commit to an orphan branch, **`data-global-weather`**. The branch is
@@ -242,29 +293,31 @@ dials down first, or cut the layer list to the two or three you actually read.
 - **A forecast, not a measurement.** Everything on the map except the first step
   is a model's guess, and the further right the slider goes the more of a guess
   it is. The header says which model run it came from and how old that run is.
-- **Wind 10 metres above the ground, temperature at 2 metres**, which are the
+- **Wind 10 meters above the ground, temperature at 2 meters**, which are the
   standard heights weather services report. Wind here is not the wind at the top
-  of a hill, at sea level in a harbour, or at the height of a sail.
+  of a hill, at sea level in a harbor, or at the height of a sail.
 - **Sustained wind, not gusts.** A gust is commonly half again as strong as the
   number shown here, sometimes more. Do not plan a crossing on this app.
 - **Rain is a rate at an instant, not an accumulation.** "2 mm/h at noon" is not
   "2 mm of rain today"; it is how hard it is falling at that moment in the
   model. A shower that lasts twenty minutes shows up as a rate, not a total.
-- **Cloud is the total column.** A hundred per cent can be high cirrus you can
+- **Cloud is the total column.** A hundred percent can be high cirrus you can
   read a newspaper under, or a stratus deck at three hundred feet.
 - **Pressure is reduced to sea level**, which is what a weather chart shows and
   what a barometer at home should be set to — not the pressure where you are
   standing, if where you are standing is up a mountain.
-- **A 2° grid point is an average over a couple of hundred kilometres.** Coasts,
-  mountains and cities are all invisible at that scale. Turning `DEGREES` down
-  helps; nothing gets you a street.
+- **A 2° grid point is the 0.25° model's value at that one point**, sampled
+  every 2° (about 220 km), not an average of the area around it. A point that
+  lands on a peak or a coast carries that spot's weather, and everything
+  between two points is interpolated. Turning `DEGREES` down helps; nothing
+  gets you a street.
 - **Rounded to a byte**, on the scales in the table above, which are finer than
   the forecast's own uncertainty by a wide margin but do mean the numbers are
   not the model's to the last decimal.
-- **The colours are a scale, not a category.** Each layer's ramp is a single
-  progression with no hue cycling, so stronger always reads as further along
-  it, wind speed is drawn as arrow length and thickness too, and a tap gives the
-  figure — nothing on the map is encoded by colour alone.
+- **The colors are a scale, not a category.** Each layer's ramp is a single
+  progression, so "more" always stands further from the ground; the legend
+  under the map is painted from the same numbers, and a tap gives the figure —
+  nothing on the map is encoded by color alone.
 
 ## What the `ask` table holds
 
@@ -287,17 +340,20 @@ what they mean.
 ## Being a good guest
 
 The bucket is a public, requester-pays-free AWS Open Data endpoint, and this job
-is small by its standards: 41 index requests and 246 range requests per run, six
-at a time, twice a day, for about 190 MB. It sends a User-Agent naming your
-repository. There is no point running it more often than the model publishes —
-GFS runs four times a day and takes about four hours to finish writing each run,
-which is why the schedule sits at 04:33 and 10:33 UTC, half an hour after the
-00Z and 06Z runs finish landing, and ten minutes behind Global Wind's slots so
-the two jobs do not pull from the same bucket at the same minute.
+is small by its standards: 41 index requests and 246 range requests per new run,
+six at a time, for about 190 MB. It sends a User-Agent naming your repository.
+There is no point running it more often than the model publishes — GFS runs four
+times a day and takes about four hours to finish writing each run. So the
+workflow has eight slots, at 33 minutes past 01, 04, 07, 10, 13, 16, 19 and
+22 UTC: one half an hour after each run's last file lands, and a catch-up three
+hours later for the slots GitHub fires late or drops. A slot that finds the
+newest run already published costs one HEAD request and stops. The slots sit
+ten minutes behind Global Wind's, so the two jobs do not pull from the same
+bucket at the same minute.
 
-If 190 MB twice a day feels like more than you want to take from a free
-service — a fair thought — cut the `LAYERS` list. Each one you drop takes its
-share of the download with it.
+If up to four pulls of 190 MB a day feels like more than you want to take from
+a free service — a fair thought — cut the `LAYERS` list, or comment out some of
+the slots. Each layer you drop takes its share of the download with it.
 
 ## Nothing here is anybody's
 
@@ -308,15 +364,37 @@ them. There is no account, no token, no address, no name and no location of
 anybody's anywhere in this app or in the job that fills it.
 
 The one thing the app asks the device is the clock's offset from UTC, once, to
-decide which side of the planet to show when the globe is first opened. It is
+decide which side of the planet to show when the map or the globe is first opened. It is
 not stored and it goes nowhere.
 
 ## No network from the app
 
 The app fetches `./data/snapshot.json`, `./assets/world.json` and
 `./assets/places.json`, and nothing else. There is no external URL, font,
-script, image or map tile anywhere in `index.html`, `app.js` or `style.css` —
+script, image or map tile anywhere in `index.html`, `app.js`, `js/` or
+`style.css` (the face is in `fonts/`) —
 mini-apps in Snuggery cannot reach the network, and this one does not try. The
 coastlines, the city labels and the weather all travel inside the folder. The
 refresh happens outside, in the GitHub Action, and a Shortcut carries the file
 in.
+
+## Size, and the checks
+
+| measured 2026-10-01 by `node tools/check.mjs` | bytes | budget |
+| --- | --: | --: |
+| app code: `index.html`, `style.css`, `app.js`, `js/` | 197 683 | 200 000 |
+| `fonts/` | 40 075 | 160 000 |
+| the ZIP, packed as `build-zips.yml` packs it | 2 490 139 | 2 800 000 |
+
+`tools/` is not in the ZIP. From `global-weather/`:
+
+- `node tools/check.mjs`: the runtime rules, the budgets, the vendor-name grep,
+  the three credits, the camera's strings, the ramps against `palette.py`, and
+  the ZIP built exactly as the workflow builds it.
+- `node tools/test_flow.mjs`: the flow's math alone, against formulas written
+  in the test and the snapshot's own `ask` rows.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`: the app in headless Chromium at
+  390 × 844, by real touch, both themes and Reduce Motion (`SCREENSHOTS=1`
+  writes `screenshots/*-light.png` and `*-dark.png`, never `app.png`). Its frame
+  times are headless Chromium's, a trend only: how the flow runs on a phone is
+  measured on a phone.

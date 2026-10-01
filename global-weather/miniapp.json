@@ -3,5 +3,5 @@
   "name": "Global Weather",
   "entryPoint": "index.html",
   "description": "Five days of global wind, temperature, rain, cloud and pressure on a map and a 3D globe",
-  "version": "2.0"
+  "version": "2.1"
 }

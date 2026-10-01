@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Global Wind",
   "entryPoint": "index.html",
-  "description": "Five days of global wind on a world map and a 3D globe, with a time player",
-  "version": "1.0"
+  "description": "Five days of global wind, drawn as it moves, on a world map and a 3D globe, with a time player",
+  "version": "1.1"
 }
