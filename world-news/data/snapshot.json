@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T19:01:18Z",
+ "generatedAt": "2026-10-01T20:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Dozens of men failed to stop an alleged gang rape at Cornell – here’s the misperception that keeps bystanders from intervening and how to short-circuit it",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/dozens-of-men-failed-to-stop-an-alleged-gang-rape-at-cornell-heres-the-misperception-that-keeps-bystanders-from-intervening-and-how-to-short-circuit-it-293321",
+     "published": "2026-10-01T19:05:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Catherine A. Sanderson, Poler Family Professor of Psychology, Amherst College"
+    },
+    {
      "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Walter Podrazik, Adjunct Lecturer in Communication, University of Illinois Chicago"
-    },
-    {
-     "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/from-suicide-bombers-to-positions-of-authority-the-changing-role-of-women-in-jihadi-groups-292409",
-     "published": "2026-10-01T12:48:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sara Harmouch, Research Fellow in Counterterrorism, George Washington University"
     },
     {
      "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
@@ -459,24 +459,24 @@
      "author": "Sascha Morrell, Lecturer in Literary Studies, Monash University"
     },
     {
-     "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
+     "title": "How deep do AI relationships really go? An expert in attachment theory explains",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/with-a-former-wallabys-cruel-diagnosis-is-there-a-link-between-contact-sports-and-mnd-293330",
-     "published": "2026-10-01T05:06:06Z",
+     "link": "https://theconversation.com/how-deep-do-ai-relationships-really-go-an-expert-in-attachment-theory-explains-293139",
+     "published": "2026-10-01T15:29:02Z",
      "summary": "",
      "stale": false,
-     "author": "Alan Pearce, Professor, Adjunct Research Fellow, School of Health Science, Swinburne University of Technology"
+     "author": "Pascal Vrticka, Associate Professor, Department of Psychology, University of Essex"
     },
     {
-     "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+     "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/gps-can-now-prescribe-adhd-medication-but-big-barriers-to-treatment-remain-292985",
-     "published": "2026-09-30T22:56:54Z",
+     "link": "https://theconversation.com/flydubai-attack-feeds-into-netanyahus-protector-narrative-with-crucial-elections-approaching-293336",
+     "published": "2026-10-01T06:30:34Z",
      "summary": "",
      "stale": false,
-     "author": "Steven Lillis, Associate Professor, Division of Health, University of Waikato"
+     "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
     },
     {
      "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
-   "published": "2026-10-01 14:30 UTC"
+   "title": "Dozens of men failed to stop an alleged gang rape at Cornell – here’s the misperception that keeps bystanders from intervening and how to short-circuit it",
+   "published": "2026-10-01 19:05 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
-   "published": "2026-10-01 12:48 UTC"
+   "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
+   "published": "2026-10-01 14:30 UTC"
   },
   {
    "region": "Americas",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
-   "published": "2026-10-01 05:06 UTC"
+   "title": "How deep do AI relationships really go? An expert in attachment theory explains",
+   "published": "2026-10-01 15:29 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
-   "published": "2026-09-30 22:56 UTC"
+   "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
+   "published": "2026-10-01 06:30 UTC"
   },
   {
    "region": "Oceania",
