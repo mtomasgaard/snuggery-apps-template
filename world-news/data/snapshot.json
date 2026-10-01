@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T13:01:29Z",
+ "generatedAt": "2026-10-01T14:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/from-suicide-bombers-to-positions-of-authority-the-changing-role-of-women-in-jihadi-groups-292409",
+     "published": "2026-10-01T12:48:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sara Harmouch, Research Fellow in Counterterrorism, George Washington University"
+    },
+    {
      "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Mark Satta, Associate Professor of Philosophy and Law, Wayne State University; Institute for Humane Studies"
-    },
-    {
-     "title": "3 iconic animals show the value of the US Endangered Species Act – and the harm in stripping it away",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/3-iconic-animals-show-the-value-of-the-us-endangered-species-act-and-the-harm-in-stripping-it-away-292887",
-     "published": "2026-10-01T12:42:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Timothy Randhir, Professor of Environmental Sciences, UMass Amherst"
     },
     {
      "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168499",
+     "published": "2026-10-01T12:00:00Z",
+     "summary": "The enormous challenge of halting the spread of Ebola in the Democratic Republic of the Congo (DRC) just became even harder after a key transit centre for patients requiring treatment burned down in Ituri province.",
+     "stale": false
+    },
+    {
      "title": "“Le brun est beau” : ce que Windhoek peut apprendre aux villes africaines",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168482",
      "published": "2026-09-29T12:00:00Z",
      "summary": "The Security Council met in New York on the Democratic Republic of the Congo (DRC) Tuesday, where clashes between Government forces and M23 rebels continue in the east, despite a series of peace agreements. Ambassadors…",
-     "stale": false
-    },
-    {
-     "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168481",
-     "published": "2026-09-29T12:00:00Z",
-     "summary": "In the Democratic Republic of the Congo (DRC), health workers fighting the country’s largest-ever Ebola outbreak are struggling to overcome critical challenges to patient care, the UN World Health Organization (WHO)…",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
-   "published": "2026-10-01 12:43 UTC"
+   "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
+   "published": "2026-10-01 12:48 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "3 iconic animals show the value of the US Endangered Species Act – and the harm in stripping it away",
-   "published": "2026-10-01 12:42 UTC"
+   "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
+   "published": "2026-10-01 12:43 UTC"
   },
   {
    "region": "Americas",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
+   "published": "2026-10-01 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "“Le brun est beau” : ce que Windhoek peut apprendre aux villes africaines",
    "published": "2026-10-01 10:19 UTC"
@@ -794,12 +800,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
-   "published": "2026-09-29 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
    "published": "2026-09-29 12:00 UTC"
   },
   {
