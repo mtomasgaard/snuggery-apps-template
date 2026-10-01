@@ -1,0 +1,93 @@
+name: Build Warming World demo
+
+# Rebuilds the demo snapshot Warming World's ZIP ships with (warming-world/data/snapshot.json, what a
+# freshly installed copy shows before its first Shortcut refresh) from NASA GISS's newest GISTEMP v4
+# release, with the same code as the monthly refresh: scripts/warming_world/build_all.sh runs
+# build_snapshot.py --source live, build_static.py, verify_static.py and verify_snapshot.py, then
+# rebuilds everything a second time and fails unless the two builds are byte-identical. It also
+# rewrites CREDITS.txt (the demo's GISTEMP release and access date come from the build's own credits
+# fragment) and the decoder reference under warming-world/tools/ref. See warming-world/tools/HANDOFF.md.
+#
+# The monthly refresh (refresh-warming-world.yml) publishes to the data-warming-world branch, never
+# here; this job commits to main, so it runs once a year, after January's release, and on demand —
+# the demo snapshot is about 1.1 MB of base64 and every byte can change with a release, so committing
+# it monthly would add about 13 MB a year to every clone.
+#
+# A push made with this job's token starts no workflow, so the job dispatches build-zips.yml itself
+# once the data is committed.
+#
+# schedule: only runs from the default branch; a cron on any other branch is inert.
+
+on:
+  schedule:
+    - cron: '41 7 16 1 *'                     # 16 January, the day after the refresh's mid-month slot
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: build-warming-world
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # The one package the pipeline needs at build time (the grid is classic NetCDF-3, read with the
+      # standard library; see requirements.txt). numpy and scipy are for the research stage only.
+      - name: Install requests
+        run: python3 -m pip install --quiet 'requests==2.34.2'
+
+      # The pinned static sources (Natural Earth at a fixed commit, the Archivo font) never change, so
+      # the cache spares their downloads; GISS's live files are fetched fresh every run regardless.
+      - name: Download cache
+        uses: actions/cache@v4
+        with:
+          path: scripts/warming_world/cache
+          key: warming-world-cache-${{ github.run_id }}
+          restore-keys: |
+            warming-world-cache-
+
+      - name: Build twice and verify
+        env:
+          PYTHON: python3
+        run: |
+          set -euo pipefail
+          scripts/warming_world/build_all.sh --source live --twice
+          ls -la warming-world/data warming-world/CREDITS.txt
+
+      - name: Commit the demo, only if it changed
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add warming-world/data/snapshot.json warming-world/CREDITS.txt warming-world/tools/ref \
+                  warming-world/assets scripts/warming_world/credits/fragments
+          if git diff --cached --quiet; then echo "no change"; echo "pushed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          rid=$(python3 -c 'import json; print(json.load(open("warming-world/data/snapshot.json"))["release"]["id"])')
+          rid=${rid//[$'\n\r']/}
+          git commit -m "warming-world: demo snapshot from GISTEMP release $rid"
+          for i in 1 2 3 4; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then echo "pushed=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+            echo "push rejected; rebasing and retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1
+
+      - name: Rebuild the ZIPs
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-zips.yml --ref "${GITHUB_REF_NAME}"
