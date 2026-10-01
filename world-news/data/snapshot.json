@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T14:01:17Z",
+ "generatedAt": "2026-10-01T15:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Rising CO₂ is making African savanna grasses grow more – what this means for grazing, fire and carbon storage",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/rising-co-is-making-african-savanna-grasses-grow-more-what-this-means-for-grazing-fire-and-carbon-storage-291313",
+     "published": "2026-10-01T13:47:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kimberley Simpson, Research Fellow, School of Biosciences, University of Sheffield"
+    },
+    {
+     "title": "Ecowas Court and women’s rights in west Africa: what’s working – and what isn’t",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/ecowas-court-and-womens-rights-in-west-africa-whats-working-and-what-isnt-291919",
+     "published": "2026-10-01T13:47:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Maame Efua Addadzi-Koom, Senior Lecturer, Kwame Nkrumah University of Science and Technology (KNUST)"
+    },
+    {
      "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
      "source": "UN News",
      "feed": "un-africa",
@@ -184,26 +204,6 @@
      "published": "2026-10-01T12:00:00Z",
      "summary": "The enormous challenge of halting the spread of Ebola in the Democratic Republic of the Congo (DRC) just became even harder after a key transit centre for patients requiring treatment burned down in Ituri province.",
      "stale": false
-    },
-    {
-     "title": "“Le brun est beau” : ce que Windhoek peut apprendre aux villes africaines",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/le-brun-est-beau-ce-que-windhoek-peut-apprendre-aux-villes-africaines-292799",
-     "published": "2026-10-01T10:19:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gaby Hansen, Lecturer in the Department of Architecture, Planning and Construction, Namibia University of Science and Technology"
-    },
-    {
-     "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/franc-cfa-un-nouvel-ouvrage-plaide-pour-une-monnaie-souveraine-au-senegal-292468",
-     "published": "2026-09-30T14:12:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Babo Amadou Ba, enseigant-chercheur, Université Amadou Mahtar MBOW de Dakar"
     },
     {
      "title": "Somali families face renewed violence amid worsening hunger crisis",
@@ -768,21 +768,21 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Rising CO₂ is making African savanna grasses grow more – what this means for grazing, fire and carbon storage",
+   "published": "2026-10-01 13:47 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Ecowas Court and women’s rights in west Africa: what’s working – and what isn’t",
+   "published": "2026-10-01 13:47 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
    "published": "2026-10-01 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "“Le brun est beau” : ce que Windhoek peut apprendre aux villes africaines",
-   "published": "2026-10-01 10:19 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
-   "published": "2026-09-30 14:12 UTC"
   },
   {
    "region": "Africa",
