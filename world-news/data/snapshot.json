@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T12:01:28Z",
+ "generatedAt": "2026-10-01T13:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "FlyDubai incident: Airline safety expert explains how cockpits have become more secure – but only from outside threats",
+     "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/flydubai-incident-airline-safety-expert-explains-how-cockpits-have-become-more-secure-but-only-from-outside-threats-293299",
-     "published": "2026-09-30T22:07:52Z",
+     "link": "https://theconversation.com/a-colorado-preschool-case-will-be-the-supreme-courts-latest-to-test-boundaries-of-lgbtq-rights-and-religious-freedom-290122",
+     "published": "2026-10-01T12:43:04Z",
      "summary": "",
      "stale": false,
-     "author": "Jeff Price, Professor iof Aviation and Aerospace Science, Metropolitan State University of Denver"
+     "author": "Mark Satta, Associate Professor of Philosophy and Law, Wayne State University; Institute for Humane Studies"
     },
     {
-     "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
+     "title": "3 iconic animals show the value of the US Endangered Species Act – and the harm in stripping it away",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/question-of-whether-taxpayers-or-fossil-fuel-companies-pay-for-climate-change-damage-heads-to-supreme-court-292847",
-     "published": "2026-09-30T20:21:09Z",
+     "link": "https://theconversation.com/3-iconic-animals-show-the-value-of-the-us-endangered-species-act-and-the-harm-in-stripping-it-away-292887",
+     "published": "2026-10-01T12:42:43Z",
      "summary": "",
      "stale": false,
-     "author": "Patrick Parenteau, Professor of Law Emeritus, Vermont Law & Graduate School"
+     "author": "Timothy Randhir, Professor of Environmental Sciences, UMass Amherst"
     },
     {
      "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "FlyDubai incident: Airline safety expert explains how cockpits have become more secure – but only from outside threats",
-   "published": "2026-09-30 22:07 UTC"
+   "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
+   "published": "2026-10-01 12:43 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
-   "published": "2026-09-30 20:21 UTC"
+   "title": "3 iconic animals show the value of the US Endangered Species Act – and the harm in stripping it away",
+   "published": "2026-10-01 12:42 UTC"
   },
   {
    "region": "Americas",
