@@ -1,0 +1,181 @@
+name: Refresh warming-world
+
+# Rewrites Warming World's data once a month from NASA GISS's newest GISTEMP v4 release: the 2° grid
+# of monthly surface temperature anomalies since 1880 (gistemp1200_GHCNv4_ERSSTv5.nc.gz, about 26 MB)
+# and GISS's own table of global means (GLB.Ts+dSST.csv). Both are plain public HTTPS files: no
+# account, no key, no secret, so this job needs nothing set up before it works.
+# scripts/warming_world/refresh.py (the code is build_snapshot.py and gistemp.py) builds the file;
+# warming-world/tools/CONTRACT.md §3 lays it out byte for byte, §8 lists every check.
+#
+# ============================================================================
+# WHERE THE FILE GOES: ITS OWN BRANCH, NEVER main
+# ============================================================================
+# The snapshot is about 1.1 MB of base64 of compressed frames, and GISS revises earlier months with
+# every release, so every byte can change each month. Committed to `main` it would add about 13 MB a
+# year to every clone for a file nobody wants the history of. So it goes on an orphan branch,
+# `data-warming-world`, force-pushed as a single parentless commit each time: a mailbox, not a log.
+# `main` keeps the demo snapshot the ZIP ships with (scripts/warming_world/build_all.sh).
+#
+# The address your Shortcut fetches is that branch's copy of the same path:
+#
+#   public repo   https://raw.githubusercontent.com/OWNER/REPO/data-warming-world/warming-world/data/snapshot.json
+#   private repo  https://api.github.com/repos/OWNER/REPO/contents/warming-world/data/snapshot.json?ref=data-warming-world
+#                 with Accept: application/vnd.github.raw and your read token
+#
+# ============================================================================
+# WHEN IT RUNS, AND WHAT IT COSTS
+# ============================================================================
+# GISS updates "about the 10th of every month". The 15th's slot normally finds the new release; the
+# 22nd's catches a late one, and when it finds the release already published it downloads the two
+# files, says so and writes nothing. It fails red, publishing nothing, when the newest month ended
+# more than 60 days before the run (GISS has missed two releases), or when any check of the file
+# fails: the last good snapshot then stays on the data branch. A run takes about a minute: two runs
+# a month, plus the publish-web.yml run each one starts.
+#
+# ============================================================================
+# TWO THINGS THAT WILL WASTE AN AFTERNOON IF NOBODY SAYS THEM
+# ============================================================================
+# 1. `schedule:` only ever runs from the repository's DEFAULT branch. A workflow sitting on a pull
+#    request branch is inert no matter how correct it is.
+# 2. GitHub treats cron as best-effort. Runs are commonly late by 5-20 minutes, longer under load,
+#    and a newly added schedule often skips its first slot. Say "mid-month", never "at 06:41".
+
+on:
+  schedule:
+    - cron: '41 6 15 * *'                   # mid-month, after GISS's release about the 10th
+    - cron: '41 6 22 * *'                   # a second slot for a late release; costs two downloads
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Publish even if this GISS release is already on the data branch'
+        type: boolean
+        default: false
+  push:
+    branches: [main]                        # a push to any other branch must not force-publish
+                                            # over the shared data branch; only the default one may
+    paths:                                  # the code, never the committed demo snapshot
+      - 'scripts/warming_world/refresh.py'
+      - 'scripts/warming_world/build_snapshot.py'
+      - 'scripts/warming_world/gistemp.py'
+      - 'scripts/warming_world/netcdf3.py'
+      - 'scripts/warming_world/common.py'
+      - 'scripts/warming_world/sources.py'
+      - 'scripts/warming_world/paths.py'
+      - 'scripts/warming_world/verify_snapshot.py'
+      - '.github/workflows/refresh-warming-world.yml'
+
+permissions:
+  contents: write                           # least privilege: it writes one branch
+
+concurrency:
+  group: refresh-warming-world
+  cancel-in-progress: false
+
+env:
+  DATA_BRANCH: data-warming-world
+  DATA_PATH: warming-world/data/snapshot.json
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Only the pipeline: the refresh reads nothing else in the repository. A sparse checkout is a
+      # blob-less partial clone, so the rest is never downloaded.
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: |
+            scripts/warming_world
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      # The one package the refresh needs. NOT numpy and NOT a NetCDF library: GISS's grid is classic
+      # NetCDF-3, which scripts/warming_world/netcdf3.py reads with the standard library, and the
+      # annual means are pure Python (about 2 s for 147 years). requirements.txt's numpy and scipy are
+      # for the research stage only.
+      - name: Install requests
+        run: python3 -m pip install --quiet 'requests==2.34.2'
+
+      - name: What is published already
+        id: current
+        run: |
+          set -euo pipefail
+          rid=""
+          if git fetch --quiet --depth=1 origin "$DATA_BRANCH" 2>/dev/null; then
+            rid=$(git show "FETCH_HEAD:$DATA_PATH" \
+                  | python3 -c 'import json,sys; print(json.load(sys.stdin)["release"]["id"])' || true)
+          fi
+          # $GITHUB_OUTPUT is a line-based file, so a value with a newline in it writes whatever
+          # follows as another key. The id came out of a JSON file on a branch this job force-pushes,
+          # which is not a place to start trusting strings: flatten it before it is written.
+          rid=${rid//[$'\n\r']/}
+          echo "published release: ${rid:-none}"
+          echo "release=$rid" >> "$GITHUB_OUTPUT"
+
+      # refresh.py downloads the table, then the grid (one connection at a time: GISS refused a second
+      # one while the first streamed), checks the file's contract and every rule of CONTRACT §8.1, and
+      # writes nothing on any failure. With --skip-release it writes nothing when GISS's newest release
+      # is the one already published; it checks freshness first, so a GISS that stops publishing turns
+      # this job red rather than green-and-silent. verify_snapshot.py then recomputes every frame from
+      # the same downloaded grid with code of its own before anything is published.
+      - name: Build and verify the snapshot
+        id: build
+        env:
+          SKIP: ${{ steps.current.outputs.release }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          set -euo pipefail
+          skip="$SKIP"
+          if [ "$FORCE" = "true" ]; then skip=""; fi
+          python3 scripts/warming_world/refresh.py --out "out/$DATA_PATH" --skip-release "$skip"
+          if [ -f "out/$DATA_PATH" ]; then
+            python3 scripts/warming_world/verify_snapshot.py "out/$DATA_PATH"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # One commit, no parent, force-pushed; the push is retried, because a transient failure here
+      # means last month's map on somebody's phone.
+      - name: Publish to the data branch
+        if: steps.build.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          # A force-push is unrecoverable, so the refspec is checked first: an edited env block, a
+          # copy of this file with DATA_BRANCH left empty, or a branch renamed to match the one being
+          # pushed FROM would otherwise overwrite the repository's own history.
+          case "$DATA_BRANCH" in
+            ''|main|master|"${GITHUB_REF_NAME:-}")
+              echo "refusing to force-push $DATA_BRANCH" >&2; exit 1 ;;
+          esac
+          cd out
+          # The path reaches Python through the environment, never pasted into its source.
+          rid=$(DATA_PATH="$DATA_PATH" python3 -c 'import json,os;print(json.load(open(os.environ["DATA_PATH"]))["release"]["id"])')
+          git init -q -b "$DATA_BRANCH"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "warming-world: GISTEMP release $rid, published $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3 4; do
+            git push --force \
+              "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+              "HEAD:refs/heads/$DATA_BRANCH" && exit 0
+            echo "push failed, retrying in $((2 ** i))s"
+            sleep $((2 ** i))
+          done
+          echo "could not push after 4 attempts" >&2
+          exit 1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Say what happened
+        env:
+          CHANGED: ${{ steps.build.outputs.changed }}
+        run: |
+          if [ "$CHANGED" = "true" ]; then
+            echo "published a new snapshot to $DATA_BRANCH"
+          else
+            echo "GISS's newest release is already published; nothing to do"
+          fi

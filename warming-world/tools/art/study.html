@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warming World art study</title>
+<!--
+  The art study for ART.md ("Gray Card"). Not shipped (tools/ is outside the ZIP), not app code.
+  Serve Template/ over HTTP and open warming-world/tools/art/study.html; parameters:
+    ?dark  ?y=1880  ?card=1  ?lat=72  ?focus=1  ?w=390&h=844
+  It reads the bench frames (tools/.work/bench/annual.bin, from tools/bench/make_frames.py),
+  study-data.json (study_data.py: GISS's table and the coverage), and, for the study only, Global
+  Weather's world.json for coastlines (the app builds its own from Natural Earth).
+  The ramp below is tools/art/ramp.py's STOPS, copied; the builders take it from ART.md.
+-->
+<style>
+@font-face { font-family: Archivo; src: url(../../fonts/archivo-ww.woff2) format('woff2');
+  font-weight: 400 700; font-stretch: 87.5% 100%; font-display: block; }
+:root {
+  --page: #f5f5f5; --card: #bebebe; --ink: #161616; --ink-2: #4f4f4f; --ink-3: #666666;
+  --line: #d9d9d9; --line-strong: #8a8a8a; --card-ink: #121212; --card-ink-2: #333333;
+  --sheet: #f5f5f5;
+}
+:root.dark {
+  --page: #1f1f1f; --card: #303030; --ink: #ededed; --ink-2: #ababab; --ink-3: #8e8e8e;
+  --line: #393939; --line-strong: #6b6b6b; --card-ink: #f0f0f0; --card-ink-2: #c4c4c4;
+  --sheet: #262626;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--page); color: var(--ink); }
+body { font: 400 12.5px/1.35 Archivo, system-ui, sans-serif; font-variant-numeric: tabular-nums lining-nums;
+  width: var(--w); height: var(--h); display: grid; overflow: hidden;
+  grid-template-rows: 44px 1fr 56px 64px 48px; }
+body.focus { grid-template-rows: 1fr 64px 48px; }
+body.focus .top, body.focus .strip, body.focus .legend, body.focus .yearrow, body.focus .switch { display: none; }
+.top { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+.name { font-weight: 650; font-size: 14px; font-stretch: 87.5%; letter-spacing: .005em; }
+.about { font-size: 12.5px; color: var(--ink-2); }
+.panel { position: relative; background: var(--card); color: var(--card-ink); }
+.panel > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.strip { position: absolute; left: 0; right: 0; top: 0; height: 44px; padding: 0 16px; display: flex;
+  align-items: center; justify-content: space-between; }
+.seg { display: inline-flex; gap: 14px; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); font-size: 12px; font-stretch: 87.5%; }
+.seg span { padding: 6px 0 5px; color: var(--card-ink-2); }
+.seg span.on { color: inherit; font-weight: 650; box-shadow: inset 0 -2px 0 currentColor; }
+.below .seg { border-color: var(--line-strong); }
+.below .seg span { color: var(--ink-2); }
+.below .seg span.on { color: var(--ink); }
+.keys { display: flex; gap: 14px; align-items: center; font-size: 12px; font-stretch: 87.5%; }
+.keys .k { color: var(--card-ink-2); }
+.keys .k.on { color: var(--card-ink); font-weight: 650; }
+.panel > canvas.legend { inset: auto 16px 0 16px; width: calc(100% - 32px); height: 44px; }
+.yearrow { display: flex; justify-content: space-between; align-items: center; padding: 0 16px; }
+.yr { position: relative; font-weight: 600; font-size: 30px; line-height: 1; font-stretch: 87.5%; letter-spacing: -.01em; }
+.yr small { display: block; font-size: 11px; font-weight: 400; letter-spacing: 0; color: var(--ink-2); margin-top: 3px; font-stretch: 100%; }
+.yr .p { position: absolute; left: 100%; top: 2px; margin-left: 6px; font-size: 11px; font-weight: 500; color: var(--ink-2); letter-spacing: 0; font-stretch: 100%; white-space: nowrap; }
+.read { text-align: right; font-size: 12px; line-height: 1.4; color: var(--ink-2); }
+.read b { color: var(--ink); font-weight: 600; }
+.stripes { position: relative; padding: 0 16px; }
+.stripes canvas { width: 100%; height: 64px; display: block; }
+.controls { display: flex; align-items: center; justify-content: space-between; padding: 0 10px 0 6px; }
+.pk { display: flex; align-items: center; }
+.pk svg { width: 44px; height: 44px; display: block; }
+.focusname { display: none; font-weight: 600; font-size: 20px; font-stretch: 87.5%; }
+body.focus .focusname { display: block; margin-right: 6px; }
+.card { position: absolute; left: 8px; right: 8px; bottom: 50px; height: 222px; background: var(--sheet);
+  color: var(--ink); border: 1px solid var(--line-strong); border-radius: 3px; padding: 9px 12px 8px; }
+.card .where { font-size: 11.5px; color: var(--ink-2); display: flex; justify-content: space-between; }
+.card .v { font-size: 22px; font-weight: 600; font-stretch: 87.5%; line-height: 1.1; margin-top: 3px; }
+.card .v span { font-size: 12px; font-weight: 400; font-stretch: 100%; color: var(--ink-2); margin-left: 4px; }
+.card canvas { display: block; width: 100%; margin-top: 6px; }
+.card .fn { font-size: 10.5px; color: var(--ink-3); margin-top: 4px; }
+.ghost { position: absolute; right: 8px; top: 8px; width: 44px; height: 44px; display: none; }
+body.focus .ghost { display: block; }
+</style>
+</head>
+<body>
+<div class="top"><span class="name">Warming World</span><span class="about">About</span></div>
+<div class="panel" id="panel">
+  <canvas id="earth"></canvas>
+  <div class="strip">
+    <span class="seg"><span class="on">Globe</span><span>Map</span></span>
+    <span class="keys"><span class="k" id="karc">Arctic</span><span class="k">Antarctic</span>
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <circle cx="15" cy="12" r="6"/><path d="M7 23.5h16"/><path d="M5 5h3M22 5h3" opacity=".55"/></svg></span>
+  </div>
+  <canvas id="legend" class="legend"></canvas>
+  <svg class="ghost" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+    <g stroke="#000" stroke-opacity=".45" stroke-width="3.4" stroke-linecap="round"><circle cx="22" cy="20" r="6"/><path d="M14 31.5h16M11 11h4M29 11h4"/></g>
+    <g stroke="#f2f2f2" stroke-width="1.4" stroke-linecap="round"><circle cx="22" cy="20" r="6"/><path d="M14 31.5h16M11 11h4M29 11h4"/></g></svg>
+  <div class="card" id="card" hidden>
+    <div class="where"><span>64–66° N, 148–146° W, with Fairbanks</span><span>✕</span></div>
+    <div class="v" id="cv"></div>
+    <canvas id="chart" height="0"></canvas>
+    <div class="fn">Annual mean of at least 9 months. Smoothed over 1&#x202F;200&#x202F;km around stations.</div>
+  </div>
+</div>
+<div class="yearrow">
+  <div class="yr" id="yr"></div>
+  <div class="read" id="read"></div>
+</div>
+<div class="stripes"><canvas id="track"></canvas></div>
+<div class="controls">
+  <span class="pk">
+    <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M25 15l-7 7 7 7"/></svg>
+    <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="22" cy="22" r="15.5"/><path d="M19 15.5v13l10-6.5z" fill="currentColor" stroke="none"/></svg>
+    <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 15l7 7-7 7"/></svg>
+  </span>
+  <span class="focusname" id="fname"></span>
+  <span class="seg below switch"><span class="on">Annual</span><span>Last 24 months</span></span>
+</div>
+<script type="module">
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 390), H = +(q.get('h') || 844);
+document.body.style.setProperty('--w', W + 'px'); document.body.style.setProperty('--h', H + 'px');
+if (q.has('dark')) document.documentElement.classList.add('dark');
+if (q.has('focus')) document.body.classList.add('focus');
+await Promise.all(['400 12px Archivo', '600 12px Archivo'].map(f => document.fonts.load(f)));  // canvas text needs the face loaded first
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const DPR = 2, NN = ' ', MINUS = '−';
+const fmt = (v, d = 1) => (v > 0.04 ? '+' : v < -0.04 ? MINUS : '') + Math.abs(v).toFixed(d) + NN + '°C';
+
+// ---- the ramp: ART.md's stops, OKLab interpolation (ramp.py) ----
+const STOPS = [[-4, .44, .12, 262], [-2, .64, .105, 251], [-1, .80, .062, 245], [-.5, .89, .03, 240], [0, .965, .004, 95],
+  [.5, .89, .032, 30], [1, .80, .068, 28], [2, .64, .125, 27], [4, .44, .125, 24]];
+const lab = STOPS.map(([v, L, C, h]) => [v, L, C * Math.cos(h * Math.PI / 180), C * Math.sin(h * Math.PI / 180)]);
+function lab2rgb(L, a, b) {
+  const l = (L + .3963377774 * a + .2158037573 * b) ** 3, m = (L - .1055613458 * a - .0638541728 * b) ** 3, s = (L - .0894841775 * a - 1.291485548 * b) ** 3;
+  const lin = [4.0767416621 * l - 3.3077115913 * m + .2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s, -.0041960863 * l - .7034186147 * m + 1.707614701 * s];
+  return lin.map(x => { x = Math.min(1, Math.max(0, x)); return Math.round(255 * (x <= .0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - .055)); });
+}
+function ramp(v) {
+  v = Math.max(-4, Math.min(4, v));
+  for (let i = 0; i < lab.length - 1; i++) { const p = lab[i], n = lab[i + 1];
+    if (v <= n[0]) { const t = (v - p[0]) / (n[0] - p[0]); return lab2rgb(p[1] + (n[1] - p[1]) * t, p[2] + (n[2] - p[2]) * t, p[3] + (n[3] - p[3]) * t); } }
+}
+const LUT = Array.from({ length: 255 }, (_, b) => ramp(Math.round((-12.7 + .1 * b) * 10) / 10));
+const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+const HATCH_A = [152, 152, 152], HATCH_B = [128, 128, 128];
+
+// ---- data ----
+const [bin, sd, world] = await Promise.all([
+  fetch('../.work/bench/annual.bin').then(r => r.arrayBuffer()).then(b => new Uint8Array(b)),
+  fetch('study-data.json').then(r => r.json()),
+  fetch('../../../global-weather/assets/world.json').then(r => r.json())]);
+const NF = bin.length / 16200, YEARS = Array.from({ length: NF }, (_, i) => 1880 + i);
+const MEANS = [...sd.means, sd.partial.mean];
+const year = +(q.get('y') || 2025), step = year - 1880, frame = bin.subarray(step * 16200, step * 16200 + 16200);
+const partial = year === sd.partial.year;
+
+// ---- globe ----
+const panel = document.getElementById('panel'), earth = document.getElementById('earth');
+const PW = panel.clientWidth, PH = panel.clientHeight;
+earth.width = PW * DPR; earth.height = PH * DPR;
+const focus = q.has('focus');
+const seatTop = focus ? 0 : 44, seatH = PH - (focus ? 16 : 84);
+const R = (focus ? .48 : .47) * Math.min(PW, seatH), CX = PW / 2, CY = seatTop + seatH / 2;
+const lat0 = +(q.get('lat') || 20) * Math.PI / 180, lon0 = +(q.get('lon') || -150) * Math.PI / 180;
+const g = earth.getContext('2d'), img = g.createImageData(earth.width, earth.height), px = img.data;
+const card = css('--card').match(/\w\w/g).map(h => parseInt(h, 16));
+const sl0 = Math.sin(lat0), cl0 = Math.cos(lat0);
+for (let j = 0; j < earth.height; j++) for (let i = 0; i < earth.width; i++) {
+  const x = (i + .5) / DPR, y = (j + .5) / DPR, u = (x - CX) / R, w = -(y - CY) / R, r2 = u * u + w * w, o = (j * earth.width + i) * 4;
+  let c = card;
+  if (r2 <= 1) {
+    const z = Math.sqrt(1 - r2), phi = Math.asin(z * sl0 + w * cl0), lam = lon0 + Math.atan2(u, z * cl0 - w * sl0);
+    let lon = lam * 180 / Math.PI; lon = ((lon + 180) % 360 + 360) % 360 - 180;
+    const col = Math.min(179, Math.floor((lon + 180) / 2)), row = Math.min(89, Math.max(0, Math.floor((90 - phi * 180 / Math.PI) / 2)));
+    const b = frame[row * 180 + col];
+    if (b === 255) { const t = ((x + y) % 6 + 6) % 6; c = t < 1.5 * Math.SQRT2 ? HATCH_B : HATCH_A; }
+    else c = LUT[b];
+    const a = Math.min(1, Math.max(0, (1 - Math.sqrt(r2)) * R * DPR + .5));
+    c = c.map((v, k) => v * a + card[k] * (1 - a));
+  }
+  px[o] = c[0]; px[o + 1] = c[1]; px[o + 2] = c[2]; px[o + 3] = 255;
+}
+g.putImageData(img, 0, 0);
+g.scale(DPR, DPR);
+function proj(lon, lat) {
+  const l = lon * Math.PI / 180 - lon0, p = lat * Math.PI / 180;
+  const z = sl0 * Math.sin(p) + cl0 * Math.cos(p) * Math.cos(l);
+  return [CX + R * Math.cos(p) * Math.sin(l), CY - R * (cl0 * Math.sin(p) - sl0 * Math.cos(p) * Math.cos(l)), z];
+}
+function ringsOf(a, out = []) { if (typeof a[0] === 'number') out.push(a); else for (const x of a) ringsOf(x, out); return out; }
+function pathOf(rings) {
+  const P = new Path2D();
+  for (const r of rings) { let lon = 0, lat = 0, pen = false;
+    for (let i = 0; i < r.length; i += 2) { lon += r[i] / 100; lat += r[i + 1] / 100; const [sx, sy, z] = proj(lon, lat);
+      if (z < 0) { pen = false; continue; } pen ? P.lineTo(sx, sy) : P.moveTo(sx, sy); pen = true; } }
+  return P;
+}
+const grat = new Path2D();
+for (let lo = -180; lo < 180; lo += 30) { let pen = false; for (let la = -90; la <= 90; la += 2) { const [x, y, z] = proj(lo, la); if (z < 0) { pen = false; continue; } pen ? grat.lineTo(x, y) : grat.moveTo(x, y); pen = true; } }
+for (let la = -60; la <= 60; la += 30) { let pen = false; for (let lo = -180; lo <= 180; lo += 2) { const [x, y, z] = proj(lo, la); if (z < 0) { pen = false; continue; } pen ? grat.lineTo(x, y) : grat.moveTo(x, y); pen = true; } }
+g.lineJoin = g.lineCap = 'round';
+g.strokeStyle = 'rgba(16,16,16,.13)'; g.lineWidth = .6; g.stroke(grat);
+const land = pathOf(ringsOf(world.land)), borders = pathOf(ringsOf(world.borders || []));
+g.strokeStyle = 'rgba(255,255,255,.40)'; g.lineWidth = 2.2; g.stroke(land);
+g.strokeStyle = 'rgba(16,16,16,.74)'; g.lineWidth = .8; g.stroke(land);
+g.strokeStyle = 'rgba(16,16,16,.30)'; g.lineWidth = .5; g.stroke(borders);
+g.beginPath(); g.arc(CX, CY, R, 0, 7); g.strokeStyle = css('--card-ink'); g.globalAlpha = .55; g.lineWidth = 1; g.stroke(); g.globalAlpha = 1;
+// places (study: three labels in the house label style)
+g.font = '500 11px Archivo'; g.textBaseline = 'middle';
+for (const [n, lo, la] of [['Fairbanks', -147.7, 64.8], ['Anchorage', -149.9, 61.2], ['Honolulu', -157.8, 21.3], ['Vancouver', -123.1, 49.3], ['Utqiaġvik', -156.8, 71.3]]) {
+  const [x, y, z] = proj(lo, la); if (z < .15) continue;
+  g.fillStyle = '#121212'; g.beginPath(); g.arc(x, y, 1.6, 0, 7); g.fill();
+  g.lineWidth = 3; g.strokeStyle = 'rgba(245,245,245,.85)'; g.strokeText(n, x + 5, y); g.fillStyle = '#121212'; g.fillText(n, x + 5, y);
+}
+if (q.has('card')) { // selected cell outline
+  const P = new Path2D(); let first = true;
+  const edge = [[-148, 66], [-146, 66], [-146, 64], [-148, 64], [-148, 66]];
+  for (let k = 0; k < 4; k++) for (let s = 0; s <= 8; s++) { const [a, b] = edge[k], [c, d] = edge[k + 1];
+    const [x, y] = proj(a + (c - a) * s / 8, b + (d - b) * s / 8); first ? P.moveTo(x, y) : P.lineTo(x, y); first = false; }
+  g.strokeStyle = 'rgba(245,245,245,.95)'; g.lineWidth = 3.5; g.stroke(P); g.strokeStyle = '#121212'; g.lineWidth = 1.5; g.stroke(P);
+}
+if (q.get('lat') === '72') document.getElementById('karc').classList.add('on');
+
+// ---- legend (panel foot): 81 graduations, pointed ends, hatch swatch ----
+let beyondHi = 0, beyondLo = 0; for (const b of frame) { if (b !== 255 && b > 167) beyondHi++; if (b < 87) beyondLo++; }
+{
+  const c = document.getElementById('legend'), w = c.clientWidth, h = 44; c.width = w * DPR; c.height = h * DPR;
+  const x = c.getContext('2d'); x.scale(DPR, DPR); const ink = css('--card-ink'), ink2 = css('--card-ink-2');
+  const x0 = 26, cw = 2.6, y0 = 6, bh = 9, x1 = x0 + 81 * cw;
+  for (let k = 0; k <= 80; k++) { x.fillStyle = rgb(ramp(-4 + k / 10)); x.fillRect(x0 + k * cw, y0, cw + .02, bh); }
+  x.fillStyle = rgb(ramp(-4)); x.beginPath(); x.moveTo(x0, y0); x.lineTo(x0 - 7, y0 + bh / 2); x.lineTo(x0, y0 + bh); x.fill();
+  x.fillStyle = rgb(ramp(4)); x.beginPath(); x.moveTo(x1, y0); x.lineTo(x1 + 7, y0 + bh / 2); x.lineTo(x1, y0 + bh); x.fill();
+  x.strokeStyle = ink; x.lineWidth = 1;
+  for (let v = -4; v <= 4; v += .5) { const tx = x0 + (v + 4) * 10 * cw + cw / 2, big = Number.isInteger(v / 2);
+    x.globalAlpha = big ? .9 : .45; x.beginPath(); x.moveTo(Math.round(tx) + .5, y0 + bh); x.lineTo(Math.round(tx) + .5, y0 + bh + (big ? 4 : 2)); x.stroke(); }
+  x.globalAlpha = 1; x.font = '400 10.5px Archivo'; x.fillStyle = ink; x.textBaseline = 'top'; x.textAlign = 'center';
+  x.fontStretch = 'semi-condensed';
+  for (const v of [-2, 0, 2]) x.fillText(v ? (v > 0 ? '+' : MINUS) + Math.abs(v) : '0', x0 + (v + 4) * 10 * cw + cw / 2, y0 + bh + 5);
+  x.textAlign = 'left'; x.fillText('≥' + NN + '+4' + NN + '°C' + (beyondHi ? ', ' + beyondHi + ' cells' : ''), x1 - 10, y0 + bh + 5);
+  x.textAlign = 'right'; x.fillText('≤' + NN + MINUS + '4', x0 + 12, y0 + bh + 5);
+  // hatch swatch
+  const hx = w - 52; x.save(); x.beginPath(); x.rect(hx, y0, 14, bh); x.clip(); x.fillStyle = rgb(HATCH_A); x.fillRect(hx, y0, 14, bh);
+  x.strokeStyle = rgb(HATCH_B); x.lineWidth = 1.5; for (let s = -12; s < 24; s += 4.24) { x.beginPath(); x.moveTo(hx + s, y0 + bh); x.lineTo(hx + s + bh, y0); x.stroke(); } x.restore();
+  x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillStyle = ink; x.fillText('no data', hx + 18, y0 + bh / 2 + .5);
+  x.fillStyle = ink2; x.textBaseline = 'top'; x.font = '400 10.5px Archivo';
+  x.fillText('Anomaly vs each place’s 1951–1980 average, not temperature' + (partial ? '. Partial year.' : ''), 0, 30);
+}
+
+// ---- year row ----
+const cov = sd.coverage[step];
+document.getElementById('yr').innerHTML = partial ? `${year}<small>Jan–Aug, partial</small>` : `${year}`;
+document.getElementById('read').innerHTML = (partial ? `Global mean so far <b>${fmt(MEANS[step], 2)}</b> (8 months)` : `Global mean <b>${fmt(MEANS[step], 2)}</b>`)
+  + `<br>Data cover ${Math.round(cov * 100)}${NN}% of Earth’s surface`;
+document.getElementById('fname').textContent = partial ? `${year}, Jan–Aug (partial)` : `${year}`;
+
+// ---- the stripes track ----
+{
+  const c = document.getElementById('track'), w = c.clientWidth, h = 64; c.width = w * DPR; c.height = h * DPR;
+  const x = c.getContext('2d'); x.scale(DPR, DPR);
+  const ink = css('--ink'), ink2 = css('--ink-2'), page = css('--page'), ls = css('--line-strong');
+  const n = MEANS.length, ty = 17, th = 25, sw = w / n;
+  x.font = '400 10.5px Archivo'; x.textBaseline = 'alphabetic'; x.fillStyle = ink2;
+  x.fillText('Stripes: GISS global mean, each year, on a ±1.5' + NN + '°C scale', 0, 9); x.textAlign = 'left';
+  const sc = v => ramp(Math.max(-1.5, Math.min(1.5, v)) * 4 / 1.5);
+  for (let i = 0; i < n; i++) {
+    const X0 = Math.round(i * sw * DPR) / DPR, X1 = Math.round((i + 1) * sw * DPR) / DPR; x.fillStyle = rgb(sc(MEANS[i]));
+    if (i === n - 1) { // the partial year: open
+      x.fillRect(X0, ty, X1 - X0, th / 3); x.fillRect(X0, ty + th * 2 / 3, X1 - X0, th / 3);
+    } else x.fillRect(X0, ty, X1 - X0 + .02, th);
+  }
+  x.strokeStyle = ls; x.lineWidth = 1; x.strokeRect(.5, ty - .5, w - 1, th + 1);
+  // decade graduations under the track
+  x.strokeStyle = ink2;
+  for (let y = 1880; y <= YEARS[n - 1]; y += 10) { const gx = Math.round(((y - 1880) + .5) * sw * DPR) / DPR + .25, big = y % 50 === 0;
+    x.globalAlpha = big ? .9 : .5; x.beginPath(); x.moveTo(gx, ty + th + 1); x.lineTo(gx, ty + th + (big ? 5 : 3)); x.stroke(); }
+  x.globalAlpha = 1;
+  // base period bracket 1951–1980
+  const bx0 = (1951 - 1880) * sw, bx1 = (1981 - 1880) * sw, by = ty + th + 8;
+  x.strokeStyle = ink; x.lineWidth = 1; x.beginPath(); x.moveTo(bx0 + .5, by - 3); x.lineTo(bx0 + .5, by + .5); x.lineTo(bx1 - .5, by + .5); x.lineTo(bx1 - .5, by - 3); x.stroke();
+  x.fillStyle = ink2; x.textBaseline = 'top'; const ly = by + 3;
+  x.fillText('1880', 0, ly); x.textAlign = 'center'; x.fillText('1900', (20.5) * sw, ly);
+  x.fillStyle = ink; x.fillText('1951–1980 = 0', (bx0 + bx1) / 2, ly); x.fillStyle = ink2;
+  x.fillText('2000', 120.5 * sw, ly); x.textAlign = 'right'; x.fillText(String(YEARS[n - 1]), w, ly); x.textAlign = 'left';
+  // thumb: a reading index
+  const tx = Math.round((step + .5) * sw * DPR) / DPR;
+  x.fillStyle = page; x.fillRect(tx - 2.25, ty - 2, 4.5, th + 6);
+  x.fillStyle = ink; x.fillRect(tx - .75, ty - 3, 1.5, th + 6);
+  x.beginPath(); x.moveTo(tx - 3.5, ty - 5); x.lineTo(tx + 3.5, ty - 5); x.lineTo(tx, ty - 1); x.fill();
+}
+
+// ---- the tap card ----
+if (q.has('card')) {
+  const cardEl = document.getElementById('card'); cardEl.hidden = false;
+  const series = YEARS.map((_, i) => { const b = bin[i * 16200 + 12 * 180 + 16]; return b === 255 ? null : Math.round((-12.7 + .1 * b) * 10) / 10; });
+  const v = series[step];
+  document.getElementById('cv').innerHTML = `${fmt(v)}<span>in ${year}, against this cell’s 1951–1980 average</span>`;
+  const c = document.getElementById('chart'), w = c.clientWidth, h = 130; c.style.height = h + 'px'; c.width = w * DPR; c.height = h * DPR;
+  const x = c.getContext('2d'); x.scale(DPR, DPR);
+  const ink = css('--ink'), ink2 = css('--ink-2'), ink3 = css('--ink-3');
+  const maxAbs = Math.max(...series.filter(s => s !== null).map(Math.abs)), Rr = Math.max(2, Math.ceil(maxAbs));
+  const L = 20, Rm = 4, T = 4, ph = 92, X = yy => L + (yy - 1880) / (YEARS.at(-1) - 1880) * (w - L - Rm), Y = vv => T + (Rr - vv) / (2 * Rr) * ph;
+  x.fillStyle = ink; x.globalAlpha = .07; x.fillRect(X(1951), T, X(1980) - X(1951), ph); x.globalAlpha = 1;
+  x.font = '400 10px Archivo'; x.fillStyle = ink3; x.textBaseline = 'middle'; x.textAlign = 'right';
+  for (let t = -Rr; t <= Rr; t += (Rr <= 4 ? 1 : 2)) { x.fillText(t ? (t > 0 ? '+' : MINUS) + Math.abs(t) : '0', L - 5, Y(t));
+    x.strokeStyle = ink; x.globalAlpha = t ? .08 : .45; x.lineWidth = 1; x.beginPath(); x.moveTo(L, Math.round(Y(t)) + .5); x.lineTo(w - Rm, Math.round(Y(t)) + .5); x.stroke(); x.globalAlpha = 1; }
+  // global mean, faint
+  x.strokeStyle = ink3; x.lineWidth = 1; x.beginPath(); MEANS.forEach((m, i) => i ? x.lineTo(X(1880 + i), Y(m)) : x.moveTo(X(1880), Y(m))); x.stroke();
+  x.textAlign = 'right'; x.textBaseline = 'bottom'; x.fillStyle = ink3; x.fillText('global mean', w - Rm, Y(MEANS.at(-1)) - 14);
+  // the cell
+  x.strokeStyle = ink; x.lineWidth = 1.5; x.lineJoin = 'round'; x.beginPath(); let pen = false;
+  series.forEach((s, i) => { if (s === null) { pen = false; return; } pen ? x.lineTo(X(1880 + i), Y(s)) : x.moveTo(X(1880 + i), Y(s)); pen = true; }); x.stroke();
+  // current step rule
+  x.strokeStyle = ink; x.globalAlpha = .6; x.lineWidth = 1; x.beginPath(); x.moveTo(Math.round(X(year)) + .5, T); x.lineTo(Math.round(X(year)) + .5, T + ph); x.stroke(); x.globalAlpha = 1;
+  x.fillStyle = ink; x.beginPath(); x.arc(X(year), Y(v), 2.6, 0, 7); x.fill();
+  // the cell's own stripes on the map's ±4 scale
+  const sy = T + ph + 6, sw2 = (w - L - Rm) / series.length;
+  series.forEach((s, i) => { if (s === null) { x.fillStyle = rgb(HATCH_A); } else x.fillStyle = rgb(ramp(s)); x.fillRect(L + i * sw2, sy, sw2 + .3, 10); });
+  x.fillStyle = ink3; x.textBaseline = 'top'; x.textAlign = 'left'; x.font = '400 10px Archivo';
+  x.fillText('1880', L, sy + 12); x.textAlign = 'center'; x.fillText('1951–1980', (X(1951) + X(1980)) / 2, sy + 12); x.textAlign = 'right'; x.fillText(String(YEARS.at(-1)), w - Rm, sy + 12);
+}
+document.body.dataset.ready = '1';
+</script>
+</body>
+</html>

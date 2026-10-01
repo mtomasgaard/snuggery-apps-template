@@ -1,0 +1,166 @@
+// The year row, the legend and its counts, the notices and the errors (DESIGN §3.2, §3.3, §3.7, §7.3).
+// Every number here is the snapshot's: GISS's global mean, the coverage, the beyond-scale counts, the
+// release. Values are printed from integers (units.js) and cut from step to step: nothing counts up.
+
+import { $, cssVar, setText, richText, el } from './util.js';
+import { rampRGB, css, HATCH_GROUND, HATCH_LINE, MAP_SCALE } from './ramp.js';
+import { hundredths, degC, percent, group, MINUS, NNBSP, monthName, MONTH } from './units.js';
+
+/* ── the year row (§3.3): the step's name, and GISS's mean and the coverage for that step ── */
+let rollPrev = '';
+/** The step's parts for the year row and for every label that names it. */
+export function stepText(idx, k) {
+  const months = k >= idx.ny, partial = k === idx.partial;
+  const meanV = degC(hundredths(idx.meanH[k]));
+  return {
+    figure: months ? idx.short[k] : String(idx.years[k]),
+    sub: partial ? `${idx.partialSpan}, partial` : '',
+    meanLead: partial ? 'Global mean so far ' : 'Global mean ',
+    meanVal: meanV,
+    meanTail: partial ? ` (${idx.partialMonths} months)` : '',
+    cover: `Data cover ${percent(idx.area[k])} of Earth’s surface`,
+    name: idx.name[k],                                   // "1998", "2026, Jan–Jul (partial)", "July 2026"
+    spoken: months ? `${idx.name[k]}, global mean ${meanV}`
+      : partial ? `${idx.years[k]}, partial, January to ${MONTH[idx.partialMonths - 1]}, global mean so far ${meanV}`
+        : `${idx.years[k]}, global mean ${meanV}`,
+  };
+}
+
+/** Write the year row for layer k. rolling: the digits that change roll in (play only, ART moment 2). */
+export function renderYearRow(idx, k, rolling) {
+  const t = stepText(idx, k);
+  setText($('year'), t.figure);
+  setText($('year-sub'), t.sub);
+  setText($('mean-lead'), t.meanLead); setText($('mean-val'), t.meanVal); setText($('mean-tail'), t.meanTail);
+  setText($('cover'), t.cover);
+  const fig = $('year').parentElement, roll = $('year-roll');
+  if (rolling) {
+    // an aria-hidden twin over the true text (Earth's History's pattern): only the digits that changed
+    if (roll.hidden) { roll.hidden = false; roll.textContent = ''; rollPrev = ''; }
+    fig.classList.add('rolling');
+    const txt = t.figure;
+    if (roll.childNodes.length !== txt.length) { roll.textContent = ''; for (const ch of txt) roll.append(el('span', '', ch)); rollPrev = txt; }
+    for (let i = 0; i < txt.length; i++) {
+      if (txt[i] === rollPrev[i]) continue;
+      const s = el('span', 'in', txt[i]);
+      roll.replaceChild(s, roll.childNodes[i]);
+    }
+    rollPrev = txt;
+  } else if (!roll.hidden) {
+    roll.hidden = true; roll.textContent = ''; rollPrev = '';
+    fig.classList.remove('rolling');
+  }
+  return t;
+}
+
+/* ── the legend (§7.3, ART): 81 graduated steps with pointed ends, ticks, labels, the hatch key ── */
+function font(x, weight = 400) {
+  x.font = `semi-condensed ${weight} 10.5px Archivo, system-ui, -apple-system, sans-serif`;
+  if ('fontStretch' in x) x.fontStretch = 'semi-condensed';
+}
+/**
+ * Lines 1–2 on the canvas: the bar (one step per 0.1 °C byte from −4.0 to +4.0, the LUT itself),
+ * its pointed ends, ticks every 0.5 °C, labels under −4, −2, 0, +2, +4, the hatch swatch and "no
+ * data", and the step's beyond-scale counts (strictly beyond ±4.0, CONTRACT §3.4).
+ */
+export function drawLegendBar(canvas, dpr, above, below) {
+  const w = canvas.clientWidth || 358, h = 30;
+  if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+  const x = canvas.getContext('2d');
+  x.setTransform(dpr, 0, 0, dpr, 0, 0);
+  x.clearRect(0, 0, w, h);
+  const ink = cssVar('--card-ink'), ink2 = cssVar('--card-ink-2');
+  const CW = 2.6, x0 = 16, y0 = 3, bh = 9, steps = MAP_SCALE * 20 + 1, x1 = x0 + steps * CW;
+  for (let k = 0; k < steps; k++) {
+    x.fillStyle = css(rampRGB((k - MAP_SCALE * 10) / 10));
+    x.fillRect(x0 + k * CW, y0, CW + 0.03, bh);
+  }
+  x.fillStyle = css(rampRGB(-MAP_SCALE)); x.beginPath(); x.moveTo(x0, y0); x.lineTo(x0 - 7, y0 + bh / 2); x.lineTo(x0, y0 + bh); x.fill();
+  x.fillStyle = css(rampRGB(MAP_SCALE)); x.beginPath(); x.moveTo(x1, y0); x.lineTo(x1 + 7, y0 + bh / 2); x.lineTo(x1, y0 + bh); x.fill();
+  const tickX = (v) => Math.round((x0 + (v + MAP_SCALE) * 10 * CW + CW / 2) * dpr) / dpr + 0.5 / dpr;
+  x.strokeStyle = ink; x.lineWidth = 1;
+  for (let t = -2 * MAP_SCALE; t <= 2 * MAP_SCALE; t++) {
+    const v = t / 2, big = t % 4 === 0;
+    x.globalAlpha = big ? 0.9 : 0.45;
+    x.beginPath(); x.moveTo(tickX(v), y0 + bh); x.lineTo(tickX(v), y0 + bh + (big ? 4 : 2)); x.stroke();
+  }
+  x.globalAlpha = 1;
+  font(x); x.textBaseline = 'top'; x.fillStyle = ink;
+  const ly = y0 + bh + 5;
+  const label = (v, txt, anchor) => { const tw = x.measureText(anchor).width; x.fillText(txt, tickX(v) - tw / 2, ly); };
+  label(-MAP_SCALE, `≤${NNBSP}${MINUS}${MAP_SCALE}`, `≤${NNBSP}${MINUS}${MAP_SCALE}`);
+  label(-MAP_SCALE / 2, `${MINUS}${MAP_SCALE / 2}`, `${MINUS}${MAP_SCALE / 2}`);
+  label(0, '0', '0');
+  label(MAP_SCALE / 2, `+${MAP_SCALE / 2}`, `+${MAP_SCALE / 2}`);
+  label(MAP_SCALE, `≥${NNBSP}+${MAP_SCALE}${NNBSP}°C`, `≥${NNBSP}+${MAP_SCALE}`);
+  // the hatch key at the right of line 1, the beyond counts at the right of line 2
+  const hx = w - 14 - 4 - x.measureText('no data').width;
+  x.save(); x.beginPath(); x.rect(hx, y0, 14, bh); x.clip();
+  x.fillStyle = css(HATCH_GROUND); x.fillRect(hx, y0, 14, bh);
+  x.strokeStyle = css(HATCH_LINE); x.lineWidth = 1.5;
+  for (let s = -12; s < 24; s += 6 / Math.SQRT2) { x.beginPath(); x.moveTo(hx + s, y0 + bh); x.lineTo(hx + s + bh, y0); x.stroke(); }
+  x.restore();
+  x.fillStyle = ink; x.textBaseline = 'middle'; x.fillText('no data', hx + 18, y0 + bh / 2 + 0.5);
+  // the counts at the right of line 2 when they clear the "≥ +4 °C" label, with their noun where it fits
+  // (review nit: "846 cells above +4"); else the caption carries them
+  const cl = (n) => `${group(n)} cell${n === 1 ? '' : 's'}`;
+  const say = (noun) => (below && above ? `${noun(below)} below, ${group(above)} above` : below ? `${noun(below)} below ${MINUS}${MAP_SCALE}` : above ? `${noun(above)} above +${MAP_SCALE}` : '');
+  const capEnd = tickX(MAP_SCALE) - x.measureText(`\u2265${NNBSP}+${MAP_SCALE}`).width / 2 + x.measureText(`\u2265${NNBSP}+${MAP_SCALE}${NNBSP}°C`).width;
+  const room = (t) => !t || w - x.measureText(t).width >= capEnd + 8;
+  let beyond = say(cl);
+  if (!room(beyond)) beyond = say(group);
+  const fits = room(beyond);
+  if (beyond && fits) { x.fillStyle = ink2; x.textBaseline = 'top'; x.textAlign = 'right'; x.fillText(beyond, w, ly); x.textAlign = 'left'; }
+  if (fits) return '';
+  const cells = [];
+  if (below) cells.push(`${group(below)} cell${below === 1 ? '' : 's'} below ${MINUS}${MAP_SCALE}${NNBSP}°C`);
+  if (above) cells.push(`${group(above)} cell${above === 1 ? '' : 's'} above +${MAP_SCALE}${NNBSP}°C`);
+  return `${cells.join(', ')}.`;
+}
+
+/** The credit as one small line (§20 Q-5): the snapshot's attribution with its "Temperature:" label
+ *  read as "Data:" and GISS's long product name shortened to its acronym. If the pipeline ever words
+ *  it otherwise, the line is the attribution as it stands (and the legend measures its height). */
+export function creditLine(attr) {
+  return String(attr || '').replace(/^Temperature:\s*/, 'Data: ').replace(/ Surface Temperature Analysis \(/, ' (');
+}
+
+/** Line 3: the caption, one line where it fits; line 4: the credit in one small line, or, where it
+ *  does not fit (below 375 px, or a card open), "Data: NASA GISS, to <month>[, from an archived copy]."
+ *  at the caption's end. The release and the research mode are in the top bar's stamp as well. */
+export function renderLegendText(idx, k, wide, beyondLead = '') {
+  const months = k >= idx.ny, partial = k === idx.partial;
+  let cap = (beyondLead ? `${beyondLead} ` : '') + `Anomaly vs. each place’s ${idx.baseText} average, not temperature.`;
+  if (months) cap += ' Single months swing further than years.';
+  if (partial) cap += ` Partial year: ${idx.partialSpan}.`;
+  const research = idx.release.mode === 'research';
+  const newest = monthName(idx.release.newestMonth, true);
+  if (!wide) cap += ` Data: NASA GISS, to ${newest}${research ? ', from an archived copy' : ''}.`;
+  richText($('legend-caption'), cap.replace(/\u2013/g, '\u2013\u2060'));   // a word joiner: "Jan–Jul" never breaks at its dash
+  const credit = $('legend-credit');
+  credit.hidden = !wide;
+  if (wide) richText(credit, creditLine(idx.attribution));       // idx.attribution is SI-spaced (units.si)
+}
+
+/* ── notices (§3.2): one line each on a sheet chip; never amber or red ── */
+const live = new Map();
+export function notice(id, text, ms = 0) {
+  const box = $('notices');
+  let n = live.get(id);
+  if (!text) {
+    if (n) { n.el.classList.remove('in'); clearTimeout(n.t); const e = n.el; setTimeout(() => e.remove(), 220); live.delete(id); }
+    return;
+  }
+  if (!n) { n = { el: el('div', 'notice') }; n.el.dataset.id = id; box.append(n.el); live.set(id, n); requestAnimationFrame(() => requestAnimationFrame(() => n.el.classList.add('in'))); }
+  richText(n.el, text);
+  clearTimeout(n.t);
+  if (ms) n.t = setTimeout(() => notice(id, null), ms);
+}
+export const notices = () => [...live.values()].map((n) => n.el.textContent);
+
+/** The panel's sentence when the Earth cannot be shown (§3.7). */
+export function showError(text) {
+  const e = $('error');
+  e.hidden = !text;
+  setText(e, text || '');
+}

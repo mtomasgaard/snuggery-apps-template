@@ -1,0 +1,26 @@
+# Warming World sources: what each returns now. `.venv/bin/python probe.py probe-urls.txt`
+# (or probe-warming-world.yml from the Actions tab, which runs the same file on a GitHub runner).
+# Lines are fetched in order with a one-second pause. The GISTEMP grid is 26 MB; the probe reads its
+# NetCDF header and the time axis, and keeps nothing.
+
+# --- NASA GISTEMP v4 ---
+https://data.giss.nasa.gov/gistemp/
+https://data.giss.nasa.gov/gistemp/data_v4.html
+https://data.giss.nasa.gov/gistemp/faq/
+https://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv
+https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz
+
+# --- NASA's rules on media use and endorsement ---
+https://www.nasa.gov/nasa-brand-center/images-and-media/
+
+# --- GISTEMP's inputs (cited, not downloaded) ---
+https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-monthly
+https://www.ncei.noaa.gov/products/extended-reconstructed-sst
+
+# --- fallbacks named by the plan (terms only) ---
+https://www.metoffice.gov.uk/hadobs/hadcrut5/terms_and_conditions.html
+https://cds.climate.copernicus.eu/api/catalogue/v1/collections/reanalysis-era5-single-levels
+
+# --- Natural Earth v5.1.2 (pinned commit) ---
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/f1890d9f152c896d250a77557a5751a93d494776/geojson/ne_50m_populated_places_simple.geojson
+https://raw.githubusercontent.com/nvkelso/natural-earth-vector/f1890d9f152c896d250a77557a5751a93d494776/LICENSE.md

@@ -24,11 +24,11 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Seventeen complete apps. All are examples — none holds anybody's real data. Copy
+Eighteen complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
-**Six of them cost you nothing to run.** Hello Live, World News, Power Hours,
-Global Wind, Global Weather and US Quakes are refreshed by this repository's own workflows,
+**Seven of them cost you nothing to run.** Hello Live, World News, Power Hours,
+Global Wind, Global Weather, US Quakes and Warming World are refreshed by this repository's own workflows,
 from sources that need no key and no account, so they work from the moment you install them
 and keep working whether or not you ever copy this template. **Outdoor Window**
 is free in the same way but cannot run on its own: the forecast is for wherever
@@ -79,6 +79,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.5 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) | 7 MB | nothing |
 | US Quakes | [**Install US Quakes**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) | 6.4 MB | nothing (the feed refreshes here hourly) |
+| Warming World | [**Install Warming World**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
 Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
@@ -180,6 +181,12 @@ Every earthquake USGS has cataloged around the United States since 1638 — 394 
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-us-quakes` branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md)) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
 
+### Warming World
+
+NASA's GISTEMP temperature record on a globe: every 2° cell's anomaly against its own 1951–1980 average, year by year from 1880 to now, with the last 24 months beside it. The year slider is the warming stripes themselves, drawn as an instrument with the base period bracketed; the globe sits on a gray card so the only color on screen is a departure from normal; tap any place and its own line draws itself from 1880 over the cell's stripes; turn to the Arctic and read the cap's mean. Every number comes from GISS's published grid and table, rounded to 0.1 °C by this app; anomalies are never called temperatures; cells with no data are hatched; the current year is marked partial; a copy's release and age are on screen. **Live**, 1.2 MB, refreshed monthly from NASA's release. GISTEMP is US Government work (public domain); Natural Earth likewise; Archivo under the OFL.
+
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/warming-world.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-warming-world` branch (the address is in [`warming-world/tools/HANDOFF.md`](warming-world/tools/HANDOFF.md)) · Make it yours: [`warming-world/NOTES.md`](warming-world/NOTES.md) · The design and the look: [`warming-world/DESIGN.md`](warming-world/DESIGN.md), [`warming-world/ART.md`](warming-world/ART.md)
+
 ### Milky Way
 
 The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D zoom, built from real data only. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2100, and 21 moons of Mars and the giant planets from 1950 to 2050. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labelled as what it is. There is no artist's impression anywhere. **Static**, 9.9 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
@@ -203,6 +210,7 @@ The Solar System, the Sun's neighbourhood and the Milky Way in one continuous 3D
 ![Snug Kart](snug-kart/screenshots/app.png)
 ![Earth's History](earth-history/screenshots/app.png)
 ![US Quakes](us-quakes/screenshots/app.png)
+![Warming World](warming-world/screenshots/app.png)
 
 Deleting an example is deleting its folder, its workflow in `.github/workflows/`
 and its scripts in `scripts/`, where it has them. Then take out its row, entry
@@ -242,6 +250,7 @@ same app from the same folder, and it shows the data last published here. Open t
 | Snug Kart | [**Open Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/snug-kart/) |
 | Earth's History | [**Open Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/earth-history/) |
 | US Quakes | [**Open US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/us-quakes/) |
+| Warming World | [**Open Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/warming-world/) |
 
 The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
 has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)

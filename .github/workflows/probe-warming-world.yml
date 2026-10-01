@@ -1,0 +1,39 @@
+name: Probe Warming World sources
+
+# A diagnostic, not a refresh. Fetches every URL in scripts/warming_world/probe-urls.txt from a
+# GitHub runner and prints what each one returns (status, size, sha256, Last-Modified; for the
+# GISTEMP grid its NetCDF header and first and last month; for GISS's table the newest year and how
+# many months it has), so the pipeline can be checked against what GISS serves today. It commits
+# nothing and keeps nothing. Run it by hand from the Actions tab whenever a source seems to have
+# moved, or when data.giss.nasa.gov is unreachable from a development machine (as it was from
+# 00:00 UTC on 2026-10-01).
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Extra URLs to probe, one per line (optional)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      # probe.py and netcdf3.py are standard library only; nothing to install.
+      - name: Probe
+        env:
+          EXTRA: ${{ inputs.urls }}
+        run: |
+          set -uo pipefail
+          cp scripts/warming_world/probe-urls.txt /tmp/urls.txt
+          if [ -n "$EXTRA" ]; then printf '%s\n' "$EXTRA" >> /tmp/urls.txt; fi
+          python3 scripts/warming_world/probe.py /tmp/urls.txt

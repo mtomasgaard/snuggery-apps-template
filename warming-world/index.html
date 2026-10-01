@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1f1f1f" media="(prefers-color-scheme: dark)">
+<title>Warming World</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="js/app.js"></script>
+</head>
+<body>
+<div id="app" class="app">
+  <header class="top" id="top">
+    <h1 class="name">Warming World</h1>
+    <div class="top-r">
+      <button id="stamp" class="stamp" type="button" hidden><span id="stamp-1"></span><span id="stamp-2"></span></button>
+      <button id="about-key" class="textkey" type="button" aria-haspopup="dialog" aria-expanded="false">About</button>
+    </div>
+  </header>
+
+  <section class="panel" id="panel" aria-label="The Earth">
+    <div class="earth" id="earth" tabindex="0" role="img" aria-label="Loading the data">
+      <canvas id="gl" aria-hidden="true"></canvas>
+      <canvas id="over" aria-hidden="true"></canvas>
+    </div>
+    <div class="strip" id="strip">
+      <div class="seg" id="view-seg" role="radiogroup" aria-label="View">
+        <button type="button" role="radio" aria-checked="true" data-v="globe">Globe</button>
+        <button type="button" role="radio" aria-checked="false" data-v="map">Map</button>
+        <span class="mark" aria-hidden="true"></span>
+      </div>
+      <div class="keys">
+        <button id="arctic" class="textkey pole" type="button" aria-label="Arctic" aria-pressed="false"><span class="pole-w" aria-hidden="true">Arctic</span><svg class="pole-g" viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="4.6" r="1.5" fill="currentColor" stroke="none"/></svg></button>
+        <button id="antarctic" class="textkey pole" type="button" aria-label="Antarctic" aria-pressed="false"><span class="pole-w" aria-hidden="true">Antarctic</span><svg class="pole-g" viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="15.4" r="1.5" fill="currentColor" stroke="none"/></svg></button>
+        <button id="focus-key" class="iconkey" type="button" aria-label="Hide the controls">
+          <svg viewBox="0 0 30 30" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="15" cy="12" r="6"/><path d="M7 23.5h16"/><path d="M5 5h3M22 5h3" opacity=".55"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="chips" id="chips">
+      <div class="notices" id="notices" aria-live="polite"></div>
+      <p class="chip" id="pole-read" hidden></p>
+    </div>
+    <p class="error" id="error" hidden></p>
+    <button id="focus-exit" class="iconkey ghost" type="button" aria-label="Show the controls and the color scale" aria-keyshortcuts="Escape" hidden>
+      <svg viewBox="0 0 30 30" width="30" height="30" fill="none" stroke-width="3.4" stroke-linecap="round" aria-hidden="true"><g stroke="rgba(0,0,0,0.45)"><circle cx="15" cy="12" r="6"/><path d="M7 23.5h16"/><path d="M5 5h3M22 5h3"/></g><g stroke="#f2f2f2" stroke-width="1.4"><circle cx="15" cy="12" r="6"/><path d="M7 23.5h16"/><path d="M5 5h3M22 5h3" opacity=".55"/></g></svg>
+    </button>
+    <div class="legend" id="legend">
+      <canvas id="legend-bar" aria-hidden="true"></canvas>
+      <button type="button" class="legend-caption" id="legend-caption" aria-describedby="legend-hint"></button>
+      <p class="legend-credit" id="legend-credit"></p>
+      <span class="sr" id="legend-hint" hidden>Opens About at what the colors mean.</span>
+    </div>
+    <div class="tapcard" id="card" role="region" aria-label="The selected cell" hidden>
+      <div class="c-head"><p id="c-place"></p>
+        <button id="c-close" class="iconkey" type="button" aria-label="Close the cell">
+          <svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 17l10 10M27 17L17 27"/></svg>
+        </button>
+      </div>
+      <p class="c-val"><b id="c-value"></b> <span id="c-when"></span></p>
+      <p class="c-note" id="c-note" hidden></p>
+      <canvas id="c-chart" role="img" aria-label=""></canvas>
+      <canvas id="c-months" aria-hidden="true" hidden></canvas>
+      <p class="c-foot" id="c-foot"></p>
+    </div>
+  </section>
+
+  <div class="side-legend" id="side-legend"></div>
+
+  <section class="yearrow" id="yearrow" aria-label="The step on screen">
+    <div class="yr">
+      <div class="yr-figure"><span id="year"></span><span id="year-roll" class="roll" aria-hidden="true" hidden></span></div>
+      <div class="yr-sub" id="year-sub"></div>
+    </div>
+    <div class="read">
+      <div id="mean"><span id="mean-lead"></span><b id="mean-val"></b><span id="mean-tail"></span></div>
+      <div id="cover"></div>
+    </div>
+  </section>
+
+  <section class="track" id="track-row">
+    <canvas id="track" aria-hidden="true"></canvas>
+    <div class="track-hit" id="track-hit" role="slider" tabindex="0" aria-label="Year" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"></div>
+  </section>
+
+  <section class="controls" id="controls">
+    <div class="transport">
+      <button id="prev" class="iconkey" type="button" aria-label="Previous year">
+        <svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M25 15l-7 7 7 7"/></svg>
+      </button>
+      <button id="play" class="iconkey" type="button" aria-label="Play">
+        <svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="22" cy="22" r="15.5"/><path class="i-play" d="M19 15.5v13l10-6.5z" fill="currentColor" stroke="none"/><path class="i-pause" d="M18.25 16v12M25.75 16v12" stroke-width="2.5"/></svg>
+      </button>
+      <button id="next" class="iconkey" type="button" aria-label="Next year">
+        <svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 15l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="seg" id="mode-seg" role="radiogroup" aria-label="Time">
+      <button type="button" role="radio" aria-checked="true" data-m="annual">Annual</button>
+      <button type="button" role="radio" aria-checked="false" data-m="months">Last 24 months</button>
+      <span class="mark" aria-hidden="true"></span>
+    </div>
+    <div class="focus-name" id="focus-name" hidden></div>
+  </section>
+
+  <div class="about" id="about" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
+    <div class="ab-head">
+      <h2 id="about-title">About Warming World</h2>
+      <button id="about-close" class="iconkey" type="button" aria-label="Close About">
+        <svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M16 16l12 12M28 16L16 28"/></svg>
+      </button>
+    </div>
+    <div class="ab-body" id="about-body" tabindex="-1"></div>
+  </div>
+  <p class="perf" id="perf" aria-hidden="true" hidden></p>
+
+  <div class="sr" id="live" aria-live="polite"></div>
+</div>
+</body>
+</html>

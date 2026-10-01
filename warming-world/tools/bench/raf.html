@@ -1,0 +1,36 @@
+<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:#111}canvas{position:absolute;left:0;top:0;width:390px;height:600px}</style>
+<canvas id="c"></canvas>
+<script type="module">
+const q=new URLSearchParams(location.search); const mode=q.get('mode'); const dpr=+q.get('dpr')||2;
+const DEG=Math.PI/180, PW=390*dpr, PH=600*dpr; const now=()=>performance.now();
+const snap=await (await fetch('bench.json')).json();
+async function inflate(s){ const bin=atob(s); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+  return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer()); }
+const fr=await Promise.all(snap.annual.map(inflate)); const N=fr.length; const frames=new Uint8Array(N*16200); fr.forEach((f,i)=>frames.set(f,i*16200));
+const lut=new Uint8Array(1024); for(let b=0;b<256;b++){const t=Math.max(-1,Math.min(1,(-12.7+0.1*b)/4)); lut.set(t<0?[255*(1+t),255*(1+0.6*t),255,255]:[255,255*(1-0.8*t),255*(1-t),255],b*4);} lut.set([128,128,128,255],1020);
+const cv=document.getElementById('c'); cv.width=PW; cv.height=PH;
+let drawYear, rotate;
+if(mode==='2d'){ const ctx=cv.getContext('2d'); const img=ctx.createImageData(PW,PH); const px=new Uint32Array(img.data.buffer), L=new Uint32Array(lut.buffer), idx=new Int32Array(PW*PH);
+  let lon0=-40; const proj=()=>{const R=Math.min(PW,PH)*0.46,cx=PW/2,cy=PH/2,sl=Math.sin(25*DEG),cl=Math.cos(25*DEG);let i=0;for(let y=0;y<PH;y++){const Y=(cy-y-0.5)/R;for(let x=0;x<PW;x++,i++){const X=(x+0.5-cx)/R,r2=X*X+Y*Y;if(r2>1){idx[i]=-1;continue;}const Z=Math.sqrt(1-r2);const lat=Math.asin(Math.max(-1,Math.min(1,Z*sl+Y*cl)))/DEG;let lon=lon0+Math.atan2(X,Z*cl-Y*sl)/DEG;lon-=Math.floor((lon+180)/360)*360;idx[i]=Math.min(89,Math.floor((90-lat)/2))*180+Math.min(179,Math.floor((lon+180)/2));}}};
+  proj(); let k=0; drawYear=(y)=>{k=y;const b=y*16200;for(let i=0;i<px.length;i++){const c=idx[i];px[i]=c<0?0xff111111:L[frames[b+c]];}ctx.putImageData(img,0,0);};
+  rotate=(d)=>{lon0+=d;proj();drawYear(k);};
+} else { const gl=cv.getContext('webgl2',{alpha:false,antialias:false,depth:false,stencil:false});
+  const sh=(t,s)=>{const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);return x;}; const pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,`#version 300 es
+void main(){gl_Position=vec4(vec2((gl_VertexID<<1)&2,gl_VertexID&2)*2.0-1.0,0.0,1.0);}`));
+  gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,`#version 300 es
+precision highp float;precision highp int;precision highp sampler2DArray;uniform sampler2DArray Y;uniform sampler2D T;uniform int K;uniform vec2 C;uniform float S;uniform vec2 V;out vec4 o;
+void main(){vec2 p=(gl_FragCoord.xy-C)/S;float r2=dot(p,p);float z=sqrt(max(0.0,1.0-r2));float lat=asin(clamp(z*sin(V.y)+p.y*cos(V.y),-1.0,1.0));float lon=degrees(V.x+atan(p.x,z*cos(V.y)-p.y*sin(V.y)));lon-=floor((lon+180.0)/360.0)*360.0;
+int b=int(texelFetch(Y,ivec3(min(179,int((lon+180.0)/2.0)),clamp(int((90.0-degrees(lat))/2.0),0,89),K),0).r*255.0+0.5);vec4 c=texelFetch(T,ivec2(b,0),0);o=vec4(mix(vec3(0.07),c.rgb,step(r2,1.0)),1.0);}`));
+  gl.linkProgram(pr);gl.useProgram(pr);gl.bindVertexArray(gl.createVertexArray());gl.pixelStorei(gl.UNPACK_ALIGNMENT,1);
+  const U=n=>gl.getUniformLocation(pr,n); const t=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D_ARRAY,t);gl.texParameteri(gl.TEXTURE_2D_ARRAY,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D_ARRAY,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
+  gl.texImage3D(gl.TEXTURE_2D_ARRAY,0,gl.R8,180,90,N,0,gl.RED,gl.UNSIGNED_BYTE,frames);
+  const l=gl.createTexture();gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,l);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,256,1,0,gl.RGBA,gl.UNSIGNED_BYTE,lut);
+  gl.uniform1i(U('Y'),0);gl.uniform1i(U('T'),1);gl.viewport(0,0,PW,PH);gl.uniform2f(U('C'),PW/2,PH/2);gl.uniform1f(U('S'),Math.min(PW,PH)*0.46);
+  let lon0=-40,k=0; drawYear=(y)=>{k=y;gl.uniform1i(U('K'),y);gl.uniform2f(U('V'),lon0*DEG,25*DEG);gl.drawArrays(gl.TRIANGLES,0,3);}; rotate=(d)=>{lon0+=d;drawYear(k);}; }
+async function run(fn,n){ const iv=[], work=[]; let last=await new Promise(r=>requestAnimationFrame(r));
+  for(let i=0;i<n;i++){ const t=await new Promise(r=>requestAnimationFrame(r)); iv.push(t-last); last=t; const a=now(); fn(i); work.push(now()-a); } 
+  const s=a=>{a=[...a].sort((x,y)=>x-y);return {median:+a[a.length>>1].toFixed(1),p90:+a[Math.floor(a.length*0.9)].toFixed(1),max:+a[a.length-1].toFixed(1)}};
+  return {interval:s(iv.slice(2)), mainThreadWork:s(work)}; }
+window.__out={mode,dpr, yearPerFrame: await run(i=>drawYear(i%N),120), rotatePerFrame: await run(()=>rotate(1.5),60)}; document.title='done';
+</script>

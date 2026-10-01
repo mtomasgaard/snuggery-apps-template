@@ -1,0 +1,30 @@
+Header of gistemp1200_GHCNv4_ERSSTv5.nc.gz as read by netcdf3.py (standard library), cross-checked with scipy.io.netcdf_file 1.18.1: every value identical.
+file: Wayback capture 20260906203026 of https://data.giss.nasa.gov/pub/gistemp/gistemp1200_GHCNv4_ERSSTv5.nc.gz
+gzip 25,836,095 B sha256 93f73f648a5e43b2870880865406ae98d35b03146612717e538d48a3bec02425; NetCDF 57,014,888 B sha256 2d886aaff02133e0a3b39d38770c8c10dd812d136538e1e972283b8e1f302282
+format: magic b'CDF\x01' (classic CDF-1, 32-bit offsets); numrecs 0 (no unlimited dimension)
+dimensions: lat = 90, lon = 180, time = 1759, nv = 2
+global attributes:
+  title = 'GISTEMP Surface Temperature Analysis'
+  institution = 'NASA Goddard Institute for Space Studies'
+  source = 'http://data.giss.nasa.gov/gistemp/'
+  Conventions = 'CF-1.6'
+  history = 'Created 2026-08-10 06:37:42 by SBBX_to_nc 2.0 - ILAND=1200, IOCEAN=NCDC/ER5, Base: 1951-1980'
+variable lat('lat',): type f (4 B), begin 1100, vsize 360
+    standard_name = 'latitude'
+    long_name = 'Latitude'
+    units = 'degrees_north'
+variable lon('lon',): type f (4 B), begin 1460, vsize 720
+    standard_name = 'longitude'
+    long_name = 'Longitude'
+    units = 'degrees_east'
+variable time('time',): type i (4 B), begin 2180, vsize 7036
+    long_name = 'time'
+    units = 'days since 1800-01-01 00:00:00'
+    bounds = 'time_bnds'
+variable time_bnds('time', 'nv'): type i (4 B), begin 9216, vsize 14072
+variable tempanomaly('time', 'lat', 'lon'): type h (2 B), begin 23288, vsize 56991600
+    long_name = 'Surface temperature anomaly'
+    units = 'K'
+    scale_factor = 0.009999999776482582
+    cell_methods = 'time: mean'
+    _FillValue = 32767

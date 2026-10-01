@@ -1,0 +1,49 @@
+NASA Earth Science Data and Information Policy, quoted verbatim (HTML tags stripped).
+https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-information-policy -> redirects to .../data-information-guidance (HTTP 200, 142,113 B), retrieved 2026-09-30.
+GISTEMP is a GISS analysis product, not mission data from a NASA Earth observing platform; the policy is quoted for NASA's stance on open data, not as the licence of GISTEMP. The licence is that GISTEMP is a US Government work (17 U.S.C. 105).
+
+ NASA promotes full and open sharing of data with research and applications communities, private industry, academia, 
+and the general public. The greater the availability of these data, the more quickly and effectively the user 
+communities can utilize them to address basic Earth science questions and use them for developing innovative practical 
+applications to benefit the general public.A common set of carefully crafted data exchange and access principles was 
+created by the Japanese, European, and U.S. International Earth Observing System 
+([http://www.codata.info/data_access/policies.html#IEOS] IEOS) partners during the 1990s and the early years of the 
+21st century. From these principles, NASA has adopted the following data policy (in this context the term 'data' 
+includes observation data, metadata, products, information, algorithms, scientific source code, documentation, models, 
+images, and research results):NASA will plan and follow data acquisition policies that ensure the collection of 
+long-term datasets needed to satisfy the research requirements of NASA's Earth science programNASA commits to the full 
+and open sharing of Earth science data obtained from NASA Earth observing platforms, sub-orbital platforms, and field 
+campaigns with all users as soon as these data become availableThere will be no period of exclusive access to NASA 
+Earth science data. Following a post-launch checkout period, all data will be made available to the user community. Any 
+variation in access will result solely from user capability, equipment, and connectivityNASA will make available all 
+NASA-generated standard products along with the source code for algorithm software, coefficients, and ancillary data 
+used to generate these productsAll NASA Earth science missions, projects, and grants and cooperative agreements shall 
+include [/engage/data-management-guidance] open science and data management plans to facilitate the implementation of 
+these data principlesNASA will enforce a principle of non-discriminatory data access so that all users will be treated 
+equally. For data products supplied from an international partner or another agency, NASA will restrict access only to 
+the extent required by the appropriate Memorandum of Understanding (MOU)In keeping with the Office of Management and 
+Budget (OMB) Circular A-130, NASA will charge for distribution of data no more than the cost of dissemination. In cases 
+where such dissemination cost would unduly inhibit use, the distribution charge will generally be below that 
+costThrough MOUs and agreements with appropriate interagency partners, NASA will ensure that all data required for 
+Earth system science research are archived. Data archives will include easily accessible information about the data 
+holdings, including quality assessments, relevant supporting information, and guidance for locating and obtaining 
+dataNASA will engage in ongoing partnerships with other Federal agencies to increase the effectiveness and reduce the 
+cost of the NASA Earth science program. This interagency cooperation shall include: sharing of data from space-based 
+platforms and other sources, mutual validation and calibration of data, and consolidation of duplicative capabilities 
+and functionsNASA will, in compliance with applicable Federal law and policy, negotiate and implement arrangements with 
+its international partners, with an emphasis on meeting the data acquisition, distribution, and archival needs of the 
+U.S.NASA will collect a variety of metrics intended to measure or assess the efficacy of its data systems and services 
+as well as to assess user satisfaction. Consistent with applicable laws, NASA will make those assessment data available 
+for reviewThe data collected by NASA represent a significant public investment in research. NASA holds these data in a 
+public trust to promote comprehensive, long-term Earth science research. Consequently, NASA developed policies 
+consistent with existing international policies to maximize access to data and to keep user costs as low as possible. 
+These policies apply to all data archived, maintained, distributed, or produced by NASA data 
+systems.[/engage/open-data-services-software/data-rights-related-issues] Data Rights and Related Issues - Detailed 
+information on NASA data policy applicable to all NASA Earth Science Research 
+Announcements[/learn/earth-observation-data-basics/data-processing-levels] Data Processing Levels[/node/9558] Data 
+Maturity LevelsReferencesThe National Aeronautics and Space Act of 1958, as amended, 42 U.S.C. §2451, et seq.The Land 
+Remote Sensing Policy Act of 1992, 15 U.S.C. §5601, et seq.The Paperwork Reduction Act, 44 U.S.C. §3501, et seq.The 
+Freedom of Information Act, as amended, 5 U.S.C. §552 (1994), amended by P. L. 104-231OMB Circular A-130 (February 8, 
+1996)National Space Policy (NSTC-8, September 19, 1996)Presidential Directive (NSPD-7), Space-Based Global Change 
+Observation (May 28, 1992)Statements on Data Management for Global Change Research (Office of Science and Technology 
+Policy, July 1991)Mission to Planet Earth Commercial Strategy (March 1997)IEOS Data Exchange Principles

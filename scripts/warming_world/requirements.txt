@@ -1,0 +1,13 @@
+# The Warming World pipeline's Python dependencies, pinned. Python 3.12.
+#
+#   /opt/homebrew/bin/python3.12 -m venv scripts/warming_world/.venv
+#   scripts/warming_world/.venv/bin/pip install -r scripts/warming_world/requirements.txt
+#
+# The monthly refresh a GitHub runner executes needs only the standard library and `requests`:
+# the GISTEMP grid is classic NetCDF-3, which netcdf3.py reads with `struct` and `gzip`, no
+# netCDF4/HDF5. numpy only speeds the annual means up; if the refresh uses it, its workflow must
+# install it (`pip install requests numpy`) and say so. scipy is here for one thing: the research
+# stage cross-checks netcdf3.py against scipy.io.netcdf_file, an independent NetCDF-3 reader.
+requests==2.34.2
+numpy==2.5.3
+scipy==1.18.1

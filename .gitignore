@@ -40,3 +40,7 @@ scripts/shelf_atlas/cache/
 # The US Quakes pipeline's download cache (scripts/us_quakes/cache): the ComCat catalogue as closed
 # CSV windows (69 MB), the 3DEP relief exports, the fault database and Natural Earth, all refetchable.
 scripts/us_quakes/cache/
+
+# The Warming World pipeline's download cache (scripts/warming_world/cache): the 26 MB GISTEMP grid, GISS's
+# global-mean table and Natural Earth, all refetchable.
+scripts/warming_world/cache/

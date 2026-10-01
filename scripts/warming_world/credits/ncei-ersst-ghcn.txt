@@ -1,0 +1,39 @@
+NOAA NCEI pages GISS cites for its inputs, quoted verbatim (HTML tags stripped), retrieved 2026-09-30. Both are US Government works.
+
+=== ERSST: https://www.ncei.noaa.gov/products/extended-reconstructed-sst (HTTP 200, 56,535 B)
+Citation
+Huang, B., X. Yin, T. Boyer, C. Liu, M. Menne, Y. D. Rao, T. Smith, R. Vose, H.-M. Zhang, 2025: Extended Reconstructed Sea Surface Temperature Version 6 (ERSSTv6): Part I. An Artificial Neural Network Approach. J. Climate, 38, 1105-1121. [https://doi.org/10.1175/JCLI-D-23-0707.1] https://doi.org/10.1175/JCLI-D-23-0707.1
+Huang, B., X. Yin, T. Boyer, C. Liu, M. Menne, Y. D. Rao, T. Smith, R. Vose, H.-M. Zhang, 2025: Extended Reconstructed Sea Surface Temperature Version 6 (ERSSTv6): Part II. Upgrades on Quality Control and Large-scale Filter. J. Climate, 38, 1123-1136. [https://doi.org/10.1175/JCLI-D-24-0185.1] https://doi.org/10.1175/JCLI-D-24-0185.1
+(we may need a data citation such as for v5 after data DOI is generated)
+ December 11, 2025
+ [https://www.ncei.noaa.gov/news/key-noaa-dataset-upgraded-using-ai] 
+ Key NOAA Dataset Upgraded Using AI
+ ERSSTv6 has been upgraded from ERSSTv5 by implementing an interpolation method using an artificial neural network.
+ [https://www.ncei.noaa.gov/news/key-noaa-dataset-upgraded-using-ai] Read More
+ Previous Versions
+ Version 5
+ Version 5
+[https://www.ncei.noaa.gov/data/sea-surface-temperature-extended-reconstructed/v5/ascii/] ASCII
+[https://www.ncei.noaa.gov/data/sea-surface-temperature-extended-reconstructed/v5/netcdf/] NetCDF
+Citation
+Boyin Huang, Peter W. Thorne, Viva F. Banzon, Tim Boyer, Gennady Chepurin, Jay H. Lawrimore, Matthew J. Menne, Thomas M. Smith, Russell S. Vose, and Huai-Min Zhang (2017): NOAA Extended Reconstructed Sea Surface Temperature (ERSST), Version 5. [indicate subset used]. NOAA National Centers for Environmental Information. [https://doi.org/10.7289/V5T72FNM] doi:10.7289/V5T72FNM [access date].
+ERSST v5
+Huang, B., M. J. Menne, T. Boyer, E. Freeman, B. E. Gleason, J. H. Lawrimore, C. Liu, J. J. Rennie, C. Schreck, F. Sun, R. Vose, C. N. Williams, X. Yin, and H.-M. Zhang, 2020: Uncertainty estimates for sea surface temperature and land surface air temperature in NOAAGlobalTemp version 5. Journal of Climate, 33, 1351-1379, [https://doi.org/10.1175/JCLI-D-19-0395.1] doi: 10.1175/JCLI-D-19-0395.1
+Huang, B., C. Liu, G. Ren, H.-M. Zhang, and L. Zhang, 2019: The role of buoy and Argo observations in two SST analyses in the global and tropical Pacific oceans. Journal of Climate, [https://doi.org/10.1175/JCLI-D-18-0368.1] doi:10.1175/JCLI-D-18-0368.1
+Huang, B., W. Angel, T. Boyer, L. Cheng, G. Chepurin, E. Freeman, C. Liu, and H.-M. Zhang, 2018: Evaluating SST analyses with independent ocean profile observations. J. Climate, 31, 5015-5030, [https://doi.org/10.1175/JCLI-D-17-0824.1] doi:10.1175/jcli-d-17-0824.1
+Huang, B., Peter W. Thorne, et. al, 2017: Extended Reconstructed Sea Surface Temperature version 5 (ERSSTv5), Upgrades, validations, and intercomparisons. Journal of Climate, [http://journals.ametsoc.org/doi/10.1175/JCLI-D-16-0836.1] doi: 10.1175/JCLI-D-16-0836.1
+
+=== GHCNm: https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-monthly (HTTP 200, 66,992 B)
+ The Global Historical Climatology Network monthly (GHCNm) dataset provides monthly climate summaries from thousands of 
+weather stations around the world. The initial version was developed in the early 1990s, with subsequent iterations 
+released in 1997, 2011, and 2018. The period of record for each summary varies by station, with the earliest 
+observations dating to the 18th century. Some station records are purely historical and are no longer updated, but many 
+others are operational and provide short time delay updates that are useful for climate monitoring. The current version 
+(GHCNm v4) consists of mean monthly temperature data, as well as a beta release of monthly precipitation data.NCEI uses 
+GHCN monthly to monitor long-term trends in temperature and precipitation. It is referenced in several international 
+climate assessments, including the Intergovernmental Panel on Climate Change 4th Assessment Report, the Arctic Climate 
+Impact Assessment, and the "State of the Climate" report published annually by the Bulletin of the American 
+Meteorological Society.
+Version 4 combines data from a variety of sources for a total 26,000 monthly temperature stations compared to 7,200 in v2 and v3.
+Citation
+Menne, M. J., C. N. Williams, B.E. Gleason, J. J Rennie, and J. H. Lawrimore, 2018: The Global Historical Climatology Network Monthly Temperature Dataset, Version 4. J. Climate, in press. [https://doi.org/10.1175/JCLI-D-18-0094.1] doi:10.1175/JCLI-D-18-0094.1.

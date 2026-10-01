@@ -1,0 +1,107 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<style>html,body{margin:0;background:#111}canvas{display:block;width:390px;height:600px}</style>
+<canvas id="c2"></canvas><canvas id="gl"></canvas>
+<script type="module">
+const out = {};
+const DEG = Math.PI/180, W = 390, H = 600, dpr = 2, PW = W*dpr, PH = H*dpr;
+const now = () => performance.now();
+function stats(a){ a=[...a].sort((x,y)=>x-y); const q=p=>a[Math.min(a.length-1,Math.floor(p*a.length))]; return {n:a.length, median:+q(0.5).toFixed(2), p90:+q(0.9).toFixed(2), max:+a[a.length-1].toFixed(2)}; }
+// ---- decode ----
+let t0 = now();
+const snap = await (await fetch('bench.json')).json();
+out.parseMs = +(now()-t0).toFixed(1);
+function b64(s){ const bin=atob(s); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return u; }
+async function inflate(bytes){ const ds=new DecompressionStream('deflate'); const r=new Response(new Blob([bytes]).stream().pipeThrough(ds)); return new Uint8Array(await r.arrayBuffer()); }
+const all = snap.annual.concat(snap.months);
+t0 = now();
+const one = await inflate(b64(all[all.length-25])); out.firstFrameMs = +(now()-t0).toFixed(2);
+t0 = now(); const seq=[]; for (const s of all) seq.push(await inflate(b64(s))); out.decodeAllSequentialMs = +(now()-t0).toFixed(1);
+t0 = now(); const par = await Promise.all(all.map(s=>inflate(b64(s)))); out.decodeAllParallelMs = +(now()-t0).toFixed(1);
+const N = all.length; const frames = new Uint8Array(N*16200); par.forEach((f,i)=>{ if(f.length!==16200) throw new Error('len'); frames.set(f,i*16200); });
+// LUT: blue-white-red, byte -> rgba
+const lut = new Uint8Array(256*4);
+for (let b=0;b<256;b++){ const v=-12.7+0.1*b; const t=Math.max(-1,Math.min(1,v/4)); let r,g,bl; if(t<0){r=255*(1+t);g=255*(1+t*0.6);bl=255;} else {r=255;g=255*(1-t*0.8);bl=255*(1-t);} lut[b*4]=r;lut[b*4+1]=g;lut[b*4+2]=bl;lut[b*4+3]=255; }
+lut[255*4]=128;lut[255*4+1]=128;lut[255*4+2]=128;
+// ---- Canvas 2D, per device pixel, nearest cell ----
+const c2 = document.getElementById('c2'); c2.width=PW; c2.height=PH; const ctx=c2.getContext('2d');
+const img = ctx.createImageData(PW,PH); const px32 = new Uint32Array(img.data.buffer);
+const lut32 = new Uint32Array(lut.buffer);
+const cellIdx = new Int32Array(PW*PH);
+function project2d(lon0, lat0){ // inverse orthographic per device pixel -> cell index (-1 outside)
+  const R=Math.min(PW,PH)*0.46, cx=PW/2, cy=PH/2, sl=Math.sin(lat0*DEG), cl=Math.cos(lat0*DEG);
+  let i=0; for(let y=0;y<PH;y++){ const Y=(cy-y-0.5)/R; for(let x=0;x<PW;x++,i++){ const X=(x+0.5-cx)/R; const r2=X*X+Y*Y; if(r2>1){cellIdx[i]=-1;continue;} const Z=Math.sqrt(1-r2);
+    const lat=Math.asin(Math.max(-1,Math.min(1,Z*sl+Y*cl)))/DEG; let lon=lon0+Math.atan2(X,Z*cl-Y*sl)/DEG; lon-=Math.floor((lon+180)/360)*360;
+    const col=Math.min(179,Math.floor((lon+180)/2)), row=Math.min(89,Math.floor((90-lat)/2)); cellIdx[i]=row*180+col; } } }
+function paint2d(k){ const base=k*16200; for(let i=0;i<px32.length;i++){ const c=cellIdx[i]; px32[i]= c<0?0xff111111:lut32[frames[base+c]]; } ctx.putImageData(img,0,0); }
+function sync2d(){ ctx.getImageData(0,0,1,1); }
+const rot2=[], yr2=[];
+for (let k=0;k<12;k++){ t0=now(); project2d(-40+k*3, 25); paint2d(140); sync2d(); rot2.push(now()-t0); }
+project2d(-40,25);
+for (let k=0;k<60;k++){ t0=now(); paint2d(k%147); sync2d(); yr2.push(now()-t0); }
+out.canvas2d = { devicePx: PW*PH, rotateFrameMs: stats(rot2), yearChangeMs: stats(yr2) };
+// ---- WebGL2 ----
+const cv = document.getElementById('gl'); cv.width=PW; cv.height=PH;
+const gl = cv.getContext('webgl2',{alpha:false,antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
+const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+out.renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+out.maxArrayLayers = gl.getParameter(gl.MAX_ARRAY_TEXTURE_LAYERS); out.maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+const vs=`#version 300 es
+void main(){ gl_Position=vec4(vec2((gl_VertexID<<1)&2, gl_VertexID&2)*2.0-1.0,0.0,1.0); }`;
+const fs=`#version 300 es
+precision highp float; precision highp int; precision highp sampler2DArray;
+uniform sampler2DArray uYears; uniform sampler2D uLut; uniform int uLayer; uniform int uProj;
+uniform vec2 uCenter; uniform float uScale; uniform vec2 uView; // lon0, lat0 radians
+out vec4 o;
+const float A1=1.340264, A2=-0.081106, A3=0.000893, A4=0.003796, M=0.8660254037844386;
+void main(){
+  vec2 p=(gl_FragCoord.xy-uCenter)/uScale; float lat, lon; float inside;
+  if(uProj==0){ float r2=dot(p,p); inside=step(r2,1.0); float z=sqrt(max(0.0,1.0-r2));
+    lat=asin(clamp(z*sin(uView.y)+p.y*cos(uView.y),-1.0,1.0)); lon=uView.x+atan(p.x, z*cos(uView.y)-p.y*sin(uView.y)); }
+  else { // Equal Earth inverse, Newton on theta
+    float y=p.y, th=y; for(int i=0;i<6;i++){ float t2=th*th, t6=t2*t2*t2; float fy=th*(A1+A2*t2+t6*(A3+A4*t2))-y; float fpy=A1+3.0*A2*t2+t6*(7.0*A3+9.0*A4*t2); th-=fy/fpy; }
+    float t2=th*th, t6=t2*t2*t2; lon=uView.x + M*p.x*(A1+3.0*A2*t2+t6*(7.0*A3+9.0*A4*t2))/cos(th); lat=asin(clamp(sin(th)/M,-1.0,1.0));
+    inside=step(abs(y),1.3173627591574)*step(abs(lon-uView.x),3.14159265); }
+  float lond=degrees(lon); lond-=floor((lond+180.0)/360.0)*360.0;
+  int col=min(179,int(floor((lond+180.0)/2.0))), row=clamp(int(floor((90.0-degrees(lat))/2.0)),0,89);
+  int b=int(texelFetch(uYears, ivec3(col,row,uLayer),0).r*255.0+0.5);
+  vec4 c=texelFetch(uLut, ivec2(b,0),0);
+  if(b==255){ float h=mod(gl_FragCoord.x+gl_FragCoord.y,8.0); c.rgb=h<2.5?vec3(0.42):vec3(0.55); }
+  o=vec4(mix(vec3(0.07),c.rgb,inside),1.0);
+}`;
+function sh(t,s){ const x=gl.createShader(t); gl.shaderSource(x,s); gl.compileShader(x); if(!gl.getShaderParameter(x,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(x)); return x; }
+const pr=gl.createProgram(); gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs)); gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(pr); if(!gl.getProgramParameter(pr,gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+gl.useProgram(pr); gl.bindVertexArray(gl.createVertexArray());
+const U=n=>gl.getUniformLocation(pr,n);
+gl.pixelStorei(gl.UNPACK_ALIGNMENT,1);
+// route A: one array texture, every frame uploaded once
+const texA=gl.createTexture(); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D_ARRAY,texA);
+for (const p of [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER]) gl.texParameteri(gl.TEXTURE_2D_ARRAY,p,gl.NEAREST);
+const px1=new Uint8Array(4);
+t0=now(); gl.texImage3D(gl.TEXTURE_2D_ARRAY,0,gl.R8,180,90,N,0,gl.RED,gl.UNSIGNED_BYTE,frames); gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,px1); out.uploadAllMs=+(now()-t0).toFixed(2); out.uploadAllBytes=frames.length;
+const lt=gl.createTexture(); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,lt);
+gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
+gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,256,1,0,gl.RGBA,gl.UNSIGNED_BYTE,lut);
+gl.uniform1i(U('uYears'),0); gl.uniform1i(U('uLut'),1);
+gl.viewport(0,0,PW,PH); gl.uniform2f(U('uCenter'),PW/2,PH/2);
+function draw(layer,proj,lon){ gl.uniform1i(U('uLayer'),layer); gl.uniform1i(U('uProj'),proj);
+  gl.uniform1f(U('uScale'), proj===0?Math.min(PW,PH)*0.46:PW/(2*2.7066297)); gl.uniform2f(U('uView'),lon*DEG,25*DEG);
+  gl.drawArrays(gl.TRIANGLES,0,3); gl.readPixels(0,0,1,1,gl.RGBA,gl.UNSIGNED_BYTE,px1); }
+draw(0,0,-40); draw(1,1,-40); // warm up
+const g0=[],g1=[],g2=[];
+for(let k=0;k<60;k++){ t0=now(); draw(k%147,0,-40); g0.push(now()-t0); }
+for(let k=0;k<60;k++){ t0=now(); draw(k%147,1,-40); g1.push(now()-t0); }
+for(let k=0;k<30;k++){ t0=now(); draw(140,0,-40+k*3); g2.push(now()-t0); }
+// route B: one R8 2D texture, texSubImage2D per year change
+const texB=gl.createTexture(); gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D_ARRAY,texB);
+for (const p of [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER]) gl.texParameteri(gl.TEXTURE_2D_ARRAY,p,gl.NEAREST);
+gl.texImage3D(gl.TEXTURE_2D_ARRAY,0,gl.R8,180,90,1,0,gl.RED,gl.UNSIGNED_BYTE,null); gl.uniform1i(U('uYears'),2);
+const g3=[];
+for(let k=0;k<60;k++){ t0=now(); gl.texSubImage3D(gl.TEXTURE_2D_ARRAY,0,0,0,0,180,90,1,gl.RED,gl.UNSIGNED_BYTE,frames.subarray((k%147)*16200,(k%147+1)*16200)); draw(0,0,-40); g3.push(now()-t0); }
+gl.uniform1i(U('uYears'),0);
+out.webgl = { devicePx: PW*PH, arrayYearChangeOrtho: stats(g0), arrayYearChangeEqualEarth: stats(g1), arrayRotateOrtho: stats(g2), subImagePerYear: stats(g3), err: gl.getError() };
+// sanity: compare a pixel's byte between routes at the disc centre
+draw(146,0,-40);
+const cpx=new Uint8Array(4); gl.readPixels(PW/2,PH/2,1,1,gl.RGBA,gl.UNSIGNED_BYTE,cpx);
+project2d(-40,25); const ci=cellIdx[(PH/2)*PW+PW/2]; out.centreCheck={ webglRGB:[...cpx.slice(0,3)], lutRGB:[...lut.slice(frames[146*16200+ci]*4, frames[146*16200+ci]*4+3)] };
+window.__out=out; document.title='done';
+</script>

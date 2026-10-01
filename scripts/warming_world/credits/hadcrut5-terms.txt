@@ -1,0 +1,13 @@
+HadCRUT5 (fallback, nothing downloaded): terms quoted verbatim (HTML tags stripped), retrieved 2026-09-30.
+https://www.metoffice.gov.uk/hadobs/hadcrut5/ (HTTP 200) and https://www.metoffice.gov.uk/hadobs/hadcrut5/terms_and_conditions.html (HTTP 200). The current release is HadCRUT.5.2.0.0 (download page HTTP 200); 5.1.0.0's page still answers.
+
+ Data are available from the [data/HadCRUT.5.2.0.0/download.html] download page without charge under the [http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/] Open Government License v3. Please read the [terms_and_conditions.html] terms and conditions.
+ When using the data set in a paper, the following is the correct citation to use:
+ Morice, C. P., Kennedy, J. J., Rayner, N. A., Winn, J. P., Hogan, E., Killick, R. E., et al. (2021). An updated assessment of near-surface temperature change from 1850: the HadCRUT5 data set. Journal of Geophysical Research: Atmospheres, 126, e2019JD032361. https://doi.org/10.1029/2019JD032361
+
+ HadCRUT5: terms and conditions
+ HadCRUT5 is subject to Crown copyright protection and is provided under the 
+ [http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/] Open Government License v3. When publishing work using the data, please use the following citation: 
+ Morice, C.P., J.J. Kennedy, N.A. Rayner, J.P. Winn, E. Hogan, R.E. Killick, R.J.H. Dunn, T.J. Osborn, P.D. Jones and I.R. Simpson (in press) An updated assessment of near-surface temperature change from 1850: the HadCRUT5 dataset. Journal of Geophysical Research (Atmospheres) doi:10.1029/2019JD032361 
+ A term of the licence is that users must include the following acknowledgement when the data are used: 
+ HadCRUT.[version number] data were obtained from http://www.metoffice.gov.uk/hadobs/hadcrut5 on [date downloaded] and are © British Crown Copyright, Met Office [year of first publication], provided under an Open Government License, http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/

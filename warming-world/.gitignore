@@ -1,0 +1,9 @@
+# The pipeline lives in ../scripts/warming_world/ (its cache is ignored in ../.gitignore). What is
+# ignored here is only what the app's own tools/ make: the headless browser for check.mjs and
+# shoot.mjs, scratch output, and a local ZIP.
+tools/node_modules/
+tools/.work/
+tools/__pycache__/
+dist/
+.DS_Store
+tools/art/__pycache__/
