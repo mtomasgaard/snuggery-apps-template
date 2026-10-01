@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-01T15:01:29Z",
+ "generatedAt": "2026-10-01T16:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/dan-rather-has-followed-the-news-wherever-he-goes-in-a-career-that-highlights-75-years-of-evolving-journalism-265967",
+     "published": "2026-10-01T14:30:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "Walter Podrazik, Adjunct Lecturer in Communication, University of Illinois Chicago"
+    },
+    {
      "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Sara Harmouch, Research Fellow in Counterterrorism, George Washington University"
-    },
-    {
-     "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/a-colorado-preschool-case-will-be-the-supreme-courts-latest-to-test-boundaries-of-lgbtq-rights-and-religious-freedom-290122",
-     "published": "2026-10-01T12:43:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mark Satta, Associate Professor of Philosophy and Law, Wayne State University; Institute for Humane Studies"
     },
     {
      "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168500",
+     "published": "2026-10-01T12:00:00Z",
+     "summary": "The deadly flash floods in northern Nepal have severely disrupted employment and livelihoods, with wider impacts beyond communities that were directly affected, the International Labour Organization (ILO) said in a…",
+     "stale": false
+    },
+    {
      "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -371,15 +380,6 @@
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
      "stale": false,
      "author": "Civic Media Observatory"
-    },
-    {
-     "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168476",
-     "published": "2026-09-28T12:00:00Z",
-     "summary": "The Democratic People’s Republic of Korea (DPRK) told the UN General Assembly on Monday that its status as a nuclear-armed State was irreversible, arguing that its military capabilities were necessary to safeguard the…",
-     "stale": false
     },
     {
      "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Could a former IDF chief break Benjamin Netanyahu’s grip on power in Israel?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/could-a-former-idf-chief-break-benjamin-netanyahus-grip-on-power-in-israel-293097",
+     "published": "2026-10-01T15:04:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Isabella Podwinski, Social Media Producer, The Conversation"
+    },
+    {
      "title": "Grattan on Friday: Albanese leaves grim domestic scene as he flies to the blue Pacific",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/flydubai-attack-feeds-into-netanyahus-protector-narrative-with-crucial-elections-approaching-293336",
-     "published": "2026-10-01T06:30:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
     },
     {
      "title": "With a former Wallaby’s ‘cruel’ diagnosis, is there a link between contact sports and MND?",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
-   "published": "2026-10-01 12:48 UTC"
+   "title": "Dan Rather has followed the news wherever he goes, in a career that highlights 75 years of evolving journalism",
+   "published": "2026-10-01 14:30 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A Colorado preschool case will be the Supreme Court’s latest to test boundaries of LGBTQ rights and religious freedom",
-   "published": "2026-10-01 12:43 UTC"
+   "title": "From suicide bombers to positions of authority – the changing role of women in jihadi groups",
+   "published": "2026-10-01 12:48 UTC"
   },
   {
    "region": "Americas",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
+   "published": "2026-10-01 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
    "published": "2026-10-01 07:34 UTC"
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "Equating protest with terrorism: A narrative against dissent",
    "published": "2026-09-29 00:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
-   "published": "2026-09-28 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Could a former IDF chief break Benjamin Netanyahu’s grip on power in Israel?",
+   "published": "2026-10-01 15:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Grattan on Friday: Albanese leaves grim domestic scene as he flies to the blue Pacific",
    "published": "2026-10-01 07:46 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: how far will the opposition go on industrial relations reform? Probably not too far",
    "published": "2026-10-01 07:33 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Flydubai attack feeds into Netanyahu’s ‘protector’ narrative with crucial elections approaching",
-   "published": "2026-10-01 06:30 UTC"
   },
   {
    "region": "Oceania",
