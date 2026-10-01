@@ -66,8 +66,9 @@ PLAYWRIGHT_MODULE=…/playwright/index.mjs node tools/shoot.mjs   # headless Chr
 ```
 
 Never from `file://`: modules and `fetch()` need a server. `shoot.mjs` serves the folder itself,
-writes its scenes to `tools/.work/shots/` (or the folder given) and writes `screenshots/app.png` (Alaska
-with the Cook Inlet section at Half, light), `screenshots/live-{light,dark}.png`,
+writes its scenes to `tools/.work/shots/` (or the folder given) and writes `screenshots/cook-inlet-light.png` (Alaska
+with the Cook Inlet section at Half, light; `screenshots/app.png` is the README's two-pane composite and is never
+written by the script), `screenshots/live-{light,dark}.png`,
 `screenshots/focus-live-{light,dark}.png` (California, Live, focus mode) and
 `screenshots/focus-history-{light,dark}.png` (Alaska, 1964, focus mode).
 

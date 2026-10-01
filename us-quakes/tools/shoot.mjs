@@ -30,8 +30,9 @@
 // mode: the panel inside geo.json's basemap, no hatching); focus mode by a pointer moves no focus and draws no ring, by keys it
 // does; a 2D hollow ring (drawDot) whole at 0°, 5° and all round; US units in the depth legend and the section's 10 km key;
 // Escape takes back a pending keyboard A, and a drawn section ends it; the Live pen's nib clear of the count label; labels
-// placed again once the foot has moved (no label ink under it after Peek → Half). Writes screenshots/app.png,
-// live-{light,dark}.png, focus-live-{light,dark}.png and focus-history-{light,dark}.png too.
+// placed again once the foot has moved (no label ink under it after Peek → Half). Writes screenshots/
+// cook-inlet-light.png, live-{light,dark}.png, focus-live-{light,dark}.png and focus-history-{light,dark}.png
+// too — never screenshots/app.png, which is the README's two-pane composite and must survive a run of this script.
 
 import http from 'node:http';
 import fs from 'node:fs';
@@ -378,7 +379,7 @@ for (const scheme of schemes) {
   await shot('story-sequence');
   await uq(() => window.__uq.goto({ mode: 'history' }));
 
-  // 5. The four section presets, and Cook Inlet at Half over Alaska for screenshots/app.png
+  // 5. The four section presets, and Cook Inlet at Half over Alaska for screenshots/cook-inlet-light.png
   await goto({ mode: 'history', view: 'alaska', sheet: 'half' });
   for (const p of geo.sections) {
     await uq((k) => window.__uq._.A.preset(k), p.key);
@@ -395,7 +396,7 @@ for (const scheme of schemes) {
       check(sc.plotted >= 1000 && sc.deep >= 150 && hiOk, `Cook Inlet: ${sc.plotted} plotted (≥ 1 000), deepest ${sc.deep} km (≥ 150), the 2018 M 7.1 (row ${hi}) plotted and called out`);
       await shot('section-cook-inlet');
       await uq(() => { const b = document.getElementById('body'); b.scrollTop = document.querySelector('.sec .seg[aria-label="Presets"]').offsetTop - b.offsetTop - 4; });
-      if (scheme === 'light') await shot('app', path.join(APP, 'screenshots', 'app.png'));
+      if (scheme === 'light') await shot('app', path.join(APP, 'screenshots', 'cook-inlet-light.png'));
       const plot = await uq(() => { const r = window.__uq._.sec.cv.getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; });
       await page.screenshot({ path: path.join(out, `section-plot-${scheme}.png`), clip: { x: plot[0], y: Math.max(0, plot[1] - 60), width: plot[2], height: Math.min(844 - Math.max(0, plot[1] - 60), plot[3] + 120) } });
       // the stretch: 5× reads "Depth stretched 5×" on the plot; true scale again at 1×

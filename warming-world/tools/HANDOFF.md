@@ -51,8 +51,10 @@ branch, and (once the app stage adds them) the README row and the `LICENSE` carv
 
 ```bash
 /opt/homebrew/bin/python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
-./build_all.sh                 # the demo from the Internet Archive pins (cache-first), static, both verifiers
-./build_all.sh --offline       # the same with no network
+./build_all.sh                 # the demo from GISS's live files (what the ZIP ships), static, both verifiers;
+                               # it fails, writing nothing, when data.giss.nasa.gov does not answer
+./build_all.sh --source research   # the sha256-pinned Internet Archive copies instead (the record)
+./build_all.sh --offline       # the chosen source from cache/ only, no network
 ./build_all.sh --twice         # then rebuild and prove 10 files byte-identical
 ./build_all.sh --source live   # the demo from GISS's live files (when data.giss.nasa.gov answers)
 .venv/bin/python build_snapshot.py --source research --offline --ref    # just the snapshot
@@ -102,8 +104,8 @@ byte-identical: 10 files
 
 | File | Bytes | As the ZIP stores it | Cap |
 | --- | --: | --: | --: |
-| `data/snapshot.json` (research mode, release 2026-07) | 1 151 893 | 814 602 | 1 500 000 raw |
-| of which `ask` (177 rows) | 58 976 | | 70 000 |
+| `data/snapshot.json` (live, release 2026-08; the research build was 1 151 893) | 1 152 161 | 814 925 | 1 500 000 raw |
+| of which `ask` (177 rows) | 58 798 | | 70 000 |
 | `assets/world.json` | 361 123 | 123 695 | 420 000 |
 | `assets/places.json` | 59 509 | 17 000 | 70 000 |
 | `assets/about.json` | 6 510 | 2 819 | 40 000 |
@@ -193,21 +195,25 @@ have run. The same copy with `--source research --offline` (the cache passed in 
 `WARMINGWORLD_CACHE`) wrote 1 147 429 B and `verify_snapshot.py` printed `verify_snapshot: all checks
 passed`.
 
-## When GISS answers again (owed)
+## When GISS answered again (2026-10-01, done from GitHub)
 
-data.giss.nasa.gov refused every connection from about 00:00 UTC on 2026-10-01 (RESEARCH §3; still
-refused at 01:06 UTC, `curl: (7) … Connection refused`). The committed demo is therefore a **research**
-build: the Internet Archive's copy of the August release (newest month 2026-07), `release.mode`
-"research", `sources[].via` naming the captures, and `CREDITS.txt` saying so. When GISS answers:
+data.giss.nasa.gov refused every connection from the build machine from about 00:00 UTC on
+2026-10-01 (RESEARCH §3; `curl: (7) … Connection refused`, and still at 06:00 UTC) — but answered
+GitHub's runners the whole time. So the research build (the Internet Archive's copy of the August
+release, newest month 2026-07, `release.mode` "research", `sources[].via` naming the captures) was
+the demo for about an hour, and the live path was proved on the runners instead:
 
-1. Run *Probe Warming World sources* on GitHub (or `probe.py` here) and read the grid's header line.
-2. Run *Refresh warming-world* with `force` once: the data branch then holds a live release, which is
-   what phones get.
-3. Rebuild the demo on `main`: `./build_all.sh --source live --twice`. V8 then applies, so do it
-   within 60 days of the newest month's end.
-4. Replace the research pins in `sources.GISTEMP_RESEARCH` with the live files only if the
-   measurements in RESEARCH.md are re-run on them; otherwise leave them as the record of what was
-   measured.
+1. The first *Refresh warming-world* run, started by the publish itself, read the live September
+   release (grid 25 853 076 B, sha256 6a597332…, Last-Modified 2026-09-08) and created
+   `data-warming-world` in 29 s. The data branch is what phones get.
+2. *Build Warming World demo* (`build-warming-world.yml`, new that morning) ran `build_all.sh --source
+   live --twice` on a runner — V1–V13 and both verifiers, 10 files byte-identical — and committed the
+   live demo to `main` (release 2026-08/2026-09-08), then dispatched the ZIP build. It repeats every
+   16 January and on demand, so the ZIP's own copy is never more than a year behind the branch; a
+   local `./build_all.sh` (the default is now `--source live`) does the same when GISS answers here.
+3. Still open: replace the research pins in `sources.GISTEMP_RESEARCH` with the live files only if
+   the measurements in RESEARCH.md are re-run on them; otherwise leave them as the record of what was
+   measured. The research build stays reachable as `./build_all.sh --source research`.
 
 ## Known data gaps
 
@@ -221,7 +227,7 @@ build: the Internet Archive's copy of the August release (newest month 2026-07),
 | 9–11-month cells | no seasonal adjustment | 96 % of cell-years are complete (RESEARCH §1.4) |
 | Revisions | earlier months change slightly every release; the snapshot is replaced whole | GISS's FAQ |
 | Uncertainty | not shown (Lenssen et al. 2024 ensemble) | About §7 |
-| The demo | research mode, one month behind the September release | GISS unreachable during the build |
+| The demo | the ZIP's copy is the release of the last January run (or the last `build-warming-world` dispatch); the branch is monthly | the demo is committed to `main`, where a monthly 1.1 MB would bloat every clone |
 
 ## Constraints summary (reuse in future prompts)
 

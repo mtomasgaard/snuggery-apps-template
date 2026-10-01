@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Build Warming World's data end to end and verify it (warming-world/tools/CONTRACT.md §5, §8, §9).
 #
-#   ./build_all.sh                    # the demo snapshot from the Internet Archive pins (cache-first), then static
-#   ./build_all.sh --offline          # the same, never touching the network
-#   ./build_all.sh --source live      # the demo snapshot from GISS's live files instead (when GISS answers)
+#   ./build_all.sh                    # the demo snapshot from GISS's live files (what the ZIP ships), then static;
+#                                     # it fails, writing nothing, when data.giss.nasa.gov does not answer
+#   ./build_all.sh --source research  # the sha256-pinned Internet Archive copies instead (the record of what
+#                                     # RESEARCH.md measured; reproducible offline from cache/wayback/)
+#   ./build_all.sh --offline          # the chosen source from cache/ only, never touching the network
 #   ./build_all.sh --twice            # then rebuild everything and prove it byte-identical
 #
 # Steps: build_snapshot.py --ref (data/snapshot.json, tools/ref/snapshot_ref.json, the GISTEMP credits
@@ -16,7 +18,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 PY="${PYTHON:-.venv/bin/python}"
-SOURCE=research
+SOURCE=live
 OFFLINE=""
 TWICE=0
 while [ $# -gt 0 ]; do

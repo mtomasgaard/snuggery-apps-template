@@ -36,8 +36,9 @@
 // pressed, hover and focus on every kind of key, in grays, with a mouse in both themes and by a held
 // touch; the legend's one-line caption and credit and its height; the one-line stamp; theme-color; the
 // switch's underline by transform; translate="no" on the proper names; place labels per view at zoom 1;
-// the legend inside its reserve at 320, 360 and 375. Pictures: screenshots/app.png and
-// screenshots/*-{light,dark}.png; every scene under tools/.work/shots/.
+// the legend inside its reserve at 320, 360 and 375. Pictures: screenshots/*-{light,dark}.png — never
+// screenshots/app.png, which is the README's two-pane composite (Tools/compose-readme.py in the private
+// repository) and must survive a run of this script; every scene under tools/.work/shots/.
 
 import http from 'node:http';
 import fs from 'node:fs';
@@ -459,7 +460,7 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
       check(tc.bad.length === 0 && tl.bad.length === 0 && tc.kept >= 1 && tl.kept >= 1,
         `translate="no" on the names in the card (${tc.kept}: the place) and the legend (${tl.kept}: GISS); ${tc.bad.length + tl.bad.length} left bare${tc.bad.concat(tl.bad).length ? ': ' + tc.bad.concat(tl.bad).join(', ') : ''}`);
     }
-    await A.shot('card', scheme === 'light' ? 'app.png' : false);
+    await A.shot('card', true);
     // the card follows the step without drawing itself again; the pin stays on the cell
     await goto(ww, 1990);
     await page.waitForTimeout(40);

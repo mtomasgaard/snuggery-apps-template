@@ -107,8 +107,9 @@ SCRUB=0 …                            # without the 100-second three-speed scru
 SCHEMES=none …                       # only the once-scenes
 ```
 
-`shoot.mjs` writes every scene's picture to `tools/.work/shots/` (gitignored) and keeps `screenshots/app.png`
-(780 × 1 688, light, 2025 over the North Pacific with the Fairbanks card open, as ART's study),
+`shoot.mjs` writes every scene's picture to `tools/.work/shots/` (gitignored) and keeps `screenshots/card-{light,dark}.png`
+(780 × 1 688, 2025 over the North Pacific with the Fairbanks card open, as ART's study; `screenshots/app.png` is the
+README's two-pane composite, made in the private repository, and the script never writes it),
 `focus-{light,dark}.png`, `arctic-dark.png`, `about-light.png` and `opening-light.png`. Snuggery's own copy has no
 server: it serves the folder over its own scheme, and the app only ever `fetch()`es its own files.
 
@@ -359,11 +360,14 @@ the builders could not reach):
 - The colors are fixed at ±4 °C (the map) and ±1.5 °C (the stripes) and printed; values beyond take the
   end colors, and the legend counts the cells beyond for the step on screen.
 - The coverage is never printed as 100 % while a cell has no value (January 2025 reads 99.7 %).
-- The demo snapshot is a research build (GISS was unreachable). The top bar's stamp says "archived
-  copy" at every width from 360 px (below it, the legend's caption ends "from an archived copy"), and
-  About's "This copy" names the Internet Archive. Its map is GISS's release with data to July 2026 and
-  its global means GISS's table through August 2026; About says both, and that GISS's data already run
-  to August. The first live refresh replaces it.
+- The demo snapshot is a live build: GISS's September 2026 release (data to August 2026), read by a
+  GitHub runner on 2026-10-01 with `build-warming-world.yml`, which rebuilds it every January and on
+  demand; the top bar's stamp says when it was made. A research build — the sha256-pinned Internet
+  Archive copies, `./build_all.sh --source research`, used while data.giss.nasa.gov refused every
+  connection from the build machine — says "archived copy" in the stamp at every width from 360 px
+  (below it, the legend's caption ends "from an archived copy"), names the Internet Archive under
+  About's "This copy", and says when its global means come from a newer table than its map. The
+  monthly refresh replaces either.
 - The stripes are clipped at ±1.5 °C like the map at ±4 °C; none is today, and the caption counts any
   that are. The pole readings are this app's area-weighted means of the map, said so on the chip and
   in About.

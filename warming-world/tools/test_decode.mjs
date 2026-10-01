@@ -68,9 +68,13 @@ ok(!!fb && cellBounds(12, 16) === '64–66° N, 148–146° W' && sp.length >= 1
   && cellOf(-147.71, 64.84).k === 12 * 180 + 16 && cellOf(1, -89.5).k === 89 * 180 + 90,
   `row 0 is the north: Fairbanks (−147.71, 64.84) is row 12 col 16 = ${cellBounds(12, 16)}, value ${fb ? tenths(Math.round(fb.c * 10)) : '?'} in ${fb && fb.step}; ${sp.length} reference cells at 88–90° S`);
 
-// 4. the partial step and the numbers the app prints
+// 4. the partial step and the numbers the app prints — the span is read from the release, so the test
+//    survives the demo's yearly rebuild (build-warming-world.yml) and the monthly branch
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const nmYear = Number(snap.release.newestMonth.slice(0, 4)), nmIdx = Number(snap.release.newestMonth.slice(5, 7));
 const last = snap.steps[snap.steps.length - 1];
-ok(idx.partial === snap.steps.length - 1 && last.label === ref.partialLabel && idx.partialSpan === 'Jan–Jul' && idx.partialMonths === 7,
+ok(idx.partial === snap.steps.length - 1 && last.label === ref.partialLabel && idx.partialSpan === `Jan–${MON[nmIdx - 1]}` && idx.partialMonths === nmIdx,
   `partial step ${JSON.stringify(last.label)} = reference ${JSON.stringify(ref.partialLabel)}; span ${idx.partialSpan}, ${idx.partialMonths} months; last complete ${idx.years[idx.lastComplete]}`);
 ok(ref.counts.steps === idx.ny && ref.counts.months === idx.nm, `counts: ${idx.ny} steps, ${idx.nm} months (reference ${ref.counts.steps}, ${ref.counts.months})`);
 const k25 = idx.years.indexOf(2025);
@@ -123,7 +127,7 @@ ok(wj.land.length === 1420 && w.land.n === ringsIn(wj.land) && wj.lakes.length =
   const text = ab.sections.flatMap((x) => x.paragraphs).map((t) => fill(t, idx, unknown)).join('\n');
   const cov = (y) => percent(idx.area[idx.years.indexOf(y)], 1);
   ok(unknown.length === 0 && !/\{[A-Za-z]+(:[0-9a-z]+)?\}/.test(text) && text.includes(`Data cover ${cov(1880)} of Earth’s surface in 1880, ${cov(1900)} in 1900, ${cov(1950)} in 1950, ${cov(1980)} in 1980 and ${cov(2025)} in 2025.`)
-    && text.includes(snap.steps[snap.steps.length - 1].label) && text.includes(`release created ${snap.release.created.slice(0, 10)}, with the newest month July 2026. It was read on ${snap.release.retrieved}.`),
+    && text.includes(snap.steps[snap.steps.length - 1].label) && text.includes(`release created ${snap.release.created.slice(0, 10)}, with the newest month ${MONTH[nmIdx - 1]} ${nmYear}. It was read on ${snap.release.retrieved}.`),
     `About's ${ab.sections.length} sections: every placeholder filled (${unknown.length} unknown): "Data cover ${cov(1880)} … ${cov(2025)} in 2025", the partial label, the release created ${snap.release.created.slice(0, 10)}, read ${snap.release.retrieved}`);
   const u2 = []; fill('{coverage:1700} {colour}', idx, u2);
   ok(u2.length === 2, `an unknown placeholder is reported, not filled: ${u2.join(', ')}`);
@@ -148,7 +152,7 @@ await fails_with('a frame one byte too long', (s) => { const p = s.steps[5].plan
 await fails_with('a frame that expands to 64 KB', (s) => { s.steps[6].planes['anom.v'] = zlib.deflateSync(Buffer.alloc(65536)).toString('base64'); }, '1886 holds more than 16\u202f200 cells');
 await fails_with('nx 181', (s) => { s.grid.nx = 181; }, 'the grid is 181 × 90 cells, expected 180 × 90');
 await fails_with('a gap in the years', (s) => { s.steps.splice(40, 1); }, 'expected 1920');
-await fails_with('the partial year misnamed', (s) => { s.steps[s.steps.length - 1].label = '2026, Jan–Aug (partial)'; }, 'does not name its 7 months');
+await fails_with('the partial year misnamed', (s) => { s.steps[s.steps.length - 1].label = `${nmYear}, Jan–${MON[nmIdx % 12]} (partial)`; }, `does not name its ${nmIdx} months`);
 await fails_with('an HTML body', '<!doctype html><title>404</title>', 'it is not valid JSON');
 await fails_with('a coverage of 1.2', (s) => { s.steps[10].coverage.area = 1.2; }, '1890 has no coverage between 0 and 1');
 

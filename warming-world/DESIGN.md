@@ -1088,8 +1088,9 @@ contents API with a read token).
     - a reload with focus on (restored, no opening);
     - Reduce Motion (at once, nothing running);
     - 844 × 390.
-  - Pictures: `screenshots/app.png` (780 × 1 688, light, the globe at the last complete year with the
-    Fairbanks cell's card open), `focus-{light,dark}.png`, and one scene per item above under
+  - Pictures: `screenshots/card-{light,dark}.png` (780 × 1 688, the globe at the last complete year with the
+    Fairbanks cell's card open; `app.png` is the README's composite, never written by the script),
+    `focus-{light,dark}.png`, and one scene per item above under
     `tools/.work/shots/`.
 - **The pipeline's own checks**: `verify_snapshot.py` and `verify_static.py` (CONTRACT §8), and two
   `build_static.py` runs byte-identical.
