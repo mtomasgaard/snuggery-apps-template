@@ -456,7 +456,7 @@ smaller, from the follow-up's rebuilt `about.json` and `colors.json`):
 | `vendor/` (three.js r186, OrbitControls, RoomEnvironment, license) | 2 167 705 | 5 |
 | app code: `index.html`, `app.js`, `styles.css` and the fifteen modules in `js/` | 226 787 | 18 |
 | `fonts/` (the house face and `OFL.txt`) | 40 075 | 2 |
-| the ZIP, built as `build-zips.yml` builds it | about 16 854 360 (this file is inside the ZIP, so its own figure moves the last digit) | 46 |
+| the ZIP, built as `build-zips.yml` builds it | about 16 854 390 (this file is inside the ZIP, so its own figure moves the last digit) | 46 |
 
 The app code was 215 934 B before the pass, over the house's 200 000 B cap; HOUSE.md section 8 holds
 such an app at its size until the lead rules another; the lead ruled 227 000 B for this pass (plan
