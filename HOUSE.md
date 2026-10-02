@@ -1163,7 +1163,7 @@ name and for the word.
 | Norne Reservoir | `Oil saturation` (the default property's label, written once every file is in); it waits out `Double-tap a spot` | `Show the whole field`; the property chips `Pressure` and `Oil` (by label in the stills; as buttons in the clip); `Play production history`, then `Pause` | CAM 230-259; SHOTS 603-627; CLIPS 150-184 |
 | Anatomy | `Every layer is showing` (the add button's label, written once the model is in) | a control whose label begins `Remove the`; the slider `Explode amount`, set by taps at 0.45 and 0.01 of its track; a control whose label begins `Bring back the` | CAM 211-228; SHOTS 560-601; CLIPS 186-224 |
 | Shelf Atlas | a control named `Play` | `Back one year`, `Cumulative`, `Rate` | CAM 261-266; SHOTS 711-743 |
-| World Oil & Gas | a control named `Play` | `Play`, then `Pause` | CAM 385-388; SHOTS 745-761 |
+| World Oil & Gas | visible text containing `Updated` (the stamp, written once the snapshot is read; `Play` is in the static markup, disabled until then), then a control named `Play` | `Play`, then `Pause`; then the slider named `Year` tapped at 0.995 of its track, which puts the year back | CAM 385-394; SHOTS 749-778 |
 | Snug Kart | a control named `Race` | `Race` | CAM 270-276; SHOTS 763-777 |
 | Running Dashboard | a button named `Health` (the panes are built after the data parses) | the panes `Now` and `Health`, as buttons by name | SHOTS 283-301, 327-332; CLIPS 239-240 |
 | Finances | a button named `Overview` | the panes `Overview` and `Spending` | SHOTS 334-345 |
@@ -1236,8 +1236,8 @@ figures into its `ART.md`.
 | Besseggen | 16 854 391 (after its pass; the record left `ART.md` on 2026-10-02; NOTES.md's own figure is approximate because it ships inside the ZIP) | 21 088 756 | 226 787 of 227 000 (the lead's ruling, D11) | 40 075 |
 | Norne Reservoir | 15 354 792 (after its pass) | 19 110 591 | 161 833 | 40 075 |
 | Anatomy | 24 552 764 (after its pass) | 30 692 577 | 116 467 | 40 075 |
-| Shelf Atlas | 1 980 292 (after its pass and the data follow-up of 2026-10-02) | 2 413 130 | 183 869 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
-| World Oil & Gas | 2 068 029 † | 2 622 870 | 165 162 | 0 |
+| Shelf Atlas | 1 980 291 (after its pass and the data follow-up of 2026-10-02) | 2 413 130 | 183 869 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
+| World Oil & Gas | 2 147 328 (after its pass) | 2 622 870 | 199 917 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
 | Snug Kart | 546 378 | 720 806 | **220 070, over** | 0 |
 | Running Dashboard | 1 072 155 | 1 340 193 | **236 521, over** | 74 128 |
 | Finances | 69 976 | 125 304 | 103 178 | 0 |

@@ -1,15 +1,16 @@
 # Setting up World Oil & Gas
 
-Paste this whole file into a coding-agent session that has this repository open
-— **your own copy**, made with *Use this template*, never the template itself.
+Paste this whole file into a coding-agent session that has this repository open:
+**your own copy**, made with *Use this template*, never the template itself.
 The agent does the typing.
 
 ## What this app is
 
 World Oil & Gas is every country's oil and gas production since 1900, annual
-or cumulative, on a map with a year player, and 7,055 fields from Global
-Energy Monitor's extraction tracker that appear at discovery and fill at first
-production. The country data comes from Our World in Data (which carries the
+or cumulative, on a map with a year player; under the map, the year's world
+output as shares, one ink block per producing country (the Ledger); and 7 055
+fields from Global Energy Monitor's extraction tracker that appear at discovery
+and fill at first production. The country data comes from Our World in Data (which carries the
 Energy Institute Statistical Review), fetched by a job with no key or account.
 The field data is a workbook that sits behind a form, so it is dropped in by
 hand; the March 2026 release ships with the app.
@@ -34,7 +35,7 @@ It ships working. There is nothing to decide before the Shortcut row.
   the app must print (all three sources are CC BY or public domain) and the
   estimate the moving field circles rest on.
 
-## Step 1 — the clock
+## Step 1: the clock
 
 `.github/workflows/build-world-oil-gas.yml` runs **on 1 July and 1 September**
 (`17 6 1 7,9 *`) and on demand. The Energy Institute publishes its Statistical
@@ -56,9 +57,9 @@ gh workflow run build-world-oil-gas.yml --repo "$REPO"
 gh run watch
 ```
 
-## Step 2 — onto the phone
+## Step 2: onto the phone
 
-1. Open the raw address of `zips/world-oil-gas.zip` in Safari → Share →
+1. Open the raw address of `zips/world-oil-gas.zip` in Safari, then Share, then
    Snuggery, to install it.
 2. In your loop shortcut's Dictionary, add one row: key `World Oil & Gas`,
    value
@@ -71,13 +72,13 @@ gh run watch
    data = the same data address as above
    ```
 
-**The loop refreshes `data/snapshot.json` only** — the country data, which is
+**The loop refreshes `data/snapshot.json` only**: the country data, which is
 what changes once a year. The fields (`fields.json`), the basemap
 (`world.json`) and the relief (`relief.jpg`) travel in the ZIP: when they
 change, the ZIP is rebuilt, and the app picks them up when you replace it
-(Safari → the ZIP's address → Share → Snuggery → **Replace the app**).
+(in Safari, the ZIP's address, then Share, then Snuggery, then **Replace the app**).
 
-## Step 3 — a newer tracker release, when there is one
+## Step 3: a newer tracker release, when there is one
 
 Global Energy Monitor updates the tracker about twice a year. To load a new
 release:
@@ -98,15 +99,22 @@ ships: the ZIP builder leaves it out.
 
 ## Making it yours
 
-- **The colour domains.** The log scale's ends per unit are the `dom` pairs
-  in `UNITS` and `CUM_UNITS` at the top of `app.js` (kboe/d, TWh/yr, Gboe,
-  PWh); widen or narrow them if your interest is small producers.
-- **The estimate.** How a field's circle moves with the year is one function
-  (`buildEst` in `app.js`): the latest rate scaled by its country's series,
-  ratio clamped to 0–3. Switch "Fields follow the year" off in the layers
-  panel to draw the tracker as it is, one rate per field.
-- **Terrain.** The shaded relief is an optional layer, off by default; the
-  land is plain by design so the colour encodings read. `--no-relief` on the
+- **Units.** The app opens in SI: countries in TWh/yr (PWh to date), the
+  source's own unit, and fields in standard cubic meters (`Sm³/d`, and
+  `Sm³ o.e./d` for oil and gas together). One press on the units key gives
+  kboe/d (Gboe to date) and the tracker's barrels (`bbl/d`, `boe/d`).
+- **The color domains.** The log scale's ends per unit are the `dom` pairs
+  in `COUNTRY` and `COUNTRY_CUM` in `js/units.js` (TWh/yr, kboe/d, PWh,
+  Gboe); widen or narrow them if your interest is small producers.
+- **The estimate.** How a field's disc moves with the year is one function
+  (`estimate` in `js/data.js`): the reported rate scaled by its country's
+  series, the ratio held between 0 and 3. Switch "Fields follow the year" off
+  in Map layers to draw the tracker as it is, one rate per field.
+- **The Ledger.** The strip under the map is `ledgerAt` in `js/data.js`; its
+  1 % floor is `LEDGER_FLOOR`, and its rule for former states (counted until
+  their largest member has a figure of its own) is `counted`.
+- **Terrain.** The shaded relief is an optional layer, off by default, drawn as
+  gray shading; the land is plain by design so the color encodings read. `--no-relief` on the
   build skips the 90 MB download and the app draws exactly the same without
   the file.
 - **Outlines.** The tracker's own field outlines are drawn at high zoom. The

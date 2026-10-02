@@ -1,59 +1,50 @@
-/* World Oil & Gas — Snuggery mini-app.
+/* World Oil & Gas, on the template's house system (ART.md; Template/HOUSE.md).
 
-   The map is the content, so the chrome stays compact: a header with the
-   stamp and the unit, a three-way switch for what the countries are coloured
-   by, a year player pinned to the bottom, and everything else floating over
-   the canvas on translucent panels. Same cool-neutral tokens and compact type
-   as Global Wind, so the apps read as one family.
+   The screen is a plate and its caption: the world runs edge to edge, and under it a band of plain
+   type holds the Ledger (the world's output as shares, the one bold thing), the scale, how to read the
+   picture, and whose data it is. One face, gray chrome, no accent color, no glass, no shadows, no
+   gradient in the chrome but the legend's data scale and the selection tracer. The light theme is the
+   negative, the dark theme the print. The plate's own colors live in app.js's THEMES, pasted from
+   tools/art/palette.py; nothing here is fetched, and there is no external address in this file. */
 
-   The data colours (the choropleth ramp, the fuel hues, the hatching) live in
-   app.js because the canvas needs them as numbers; the legend is painted from
-   those same arrays, so the key under the map is by construction the key on it.
-
-   No font is loaded and no image is fetched. There is no external address in
-   this file. */
-
-:root {
-  --bg: #eef0f4;
-  --card: #ffffff;
-  --ink: #14181f;
-  --ink-dim: #4a5162;
-  --ink-faint: #8a94a1;
-  --line: #dfe4ec;
-  --accent: #2f6df6;
-  --accent-ink: #ffffff;
-  --chip: #e7ebf3;
-  --warn-bg: #fdeaea;
-  --warn-ink: #8c1d1d;
-  --warn-line: #f3c3c3;
-  --note-bg: #fff6e0;
-  --note-ink: #6b4a00;
-  --note-line: #f0dca8;
-  --shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 6px 18px rgba(16, 24, 40, .10);
-  --radius: 14px;
-  --glass: rgba(255, 255, 255, .88);
-  color-scheme: light;
+@font-face {
+  font-family: 'Ysabeau Office';
+  src: url(fonts/ysabeau-office-gw.woff2) format('woff2');
+  font-weight: 400 650;
+  font-display: block;
 }
 
+:root {
+  --page: #e8eef0;            /* header, caption band, player, the sheet's slot */
+  --sheet: #f6f9fa;           /* key plates, the card, About, Find, notices */
+  --ink: #0f1c23;
+  --ink-2: #45555d;
+  --ink-3: #5b6a72;
+  --line: #c9d4d8;
+  --line-strong: #74858c;
+  --draw: cubic-bezier(0.2, 0, 0, 1);
+  --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
+  --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
+  /* this app's own (ART.md section 2): the Ledger's ink, the details chart's two lines, the sea */
+  --ledger: #1b150e;
+  --chart-oil: #b2580b;
+  --chart-gas: #066d90;
+  --sea: #d5e2e8;
+  color-scheme: light;
+}
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b0e13;
-    --card: #151a22;
-    --ink: #e8ecf2;
-    --ink-dim: #9aa6b5;
-    --ink-faint: #6b7787;
-    --line: #262e39;
-    --accent: #5b8eff;
-    --accent-ink: #0b0e13;
-    --chip: #212a35;
-    --warn-bg: #3a1a1a;
-    --warn-ink: #ffb4b4;
-    --warn-line: #5a2a2a;
-    --note-bg: #332a14;
-    --note-ink: #f3d68f;
-    --note-line: #54461f;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 22px rgba(0, 0, 0, .35);
-    --glass: rgba(21, 26, 34, .88);
+    --page: #141d21;
+    --sheet: #1c272c;
+    --ink: #e6edee;
+    --ink-2: #a3b1b6;
+    --ink-3: #8b9a9f;
+    --line: #2a373c;
+    --line-strong: #64757b;
+    --ledger: #f4f0e7;
+    --chart-oil: #eb9259;
+    --chart-gas: #49abd6;
+    --sea: #111b20;
     color-scheme: dark;
   }
 }
@@ -65,712 +56,476 @@ html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--page);
   color: var(--ink);
-  font: 15px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font: 400 13.5px/1.35 var(--face);
+  font-variant-numeric: tabular-nums lining-nums;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior: none;
 }
-
+/* one column: the header, the plate, the caption band, the sheet's slot, the player */
 body {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(220px, 1fr) auto auto auto;
+  grid-template-areas: "head" "plate" "caption" "sheet" "player";
   height: 100vh;
   height: 100dvh;
-  padding-top: env(safe-area-inset-top);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
 }
+.head { grid-area: head; }
+.plate { grid-area: plate; }
+.caption { grid-area: caption; }
+.sheet { grid-area: sheet; }
+.player { grid-area: player; }
 
-button {
+button, input {
   font: inherit;
   color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+svg .fill { fill: currentColor; stroke: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
-/* ── top bar ─────────────────────────────────────────────────────────────── */
+/* ── header: the name, Find and the units key, the stamp, the row of words ── */
 
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px 6px 16px;
-  flex: 0 0 auto;
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 44px;
+  column-gap: 12px;
+  padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  background: var(--page);
 }
-.titles { min-width: 0; }
-.titles h1 {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -.01em;
-  line-height: 1.2;
-}
-/* The stamp is a button because it opens About; it must not look like one,
-   but it still gets a finger-sized target. */
+.head h1 { grid-area: 1 / 1; margin: 0; font-size: 15px; font-weight: 650; line-height: 22px; white-space: nowrap; }
+.stamp-home { grid-area: 2 / 1; min-width: 0; padding-bottom: 6px; }
 .stamp {
-  display: block;
-  margin: 0;
-  padding: 2px 0;
-  min-height: 24px;
-  border: 0;
-  background: none;
-  text-align: left;
-  font-size: 12px;
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  cursor: pointer;
-}
-.stamp.stale { color: var(--warn-ink); font-weight: 600; }
-.stamp::after { content: " \24D8"; color: var(--ink-faint); }
-
-.actions { display: flex; gap: 6px; flex: 0 0 auto; }
-.iconbtn {
-  height: 44px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.searchbtn { width: 44px; color: var(--ink); padding: 0; }
-.searchbtn[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
-.unitbtn {
-  font-size: 13px;
-  font-weight: 700;
-  min-width: 72px;
-  padding: 0 10px;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── segmented controls ──────────────────────────────────────────────────── */
-
-.switcher {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 0 12px 8px 16px;
-}
-.seg {
-  display: flex;
-  padding: 2px;
-  gap: 2px;
-  border-radius: 11px;
-  background: var(--chip);
-}
-.seg button {
-  border: 0;
-  background: none;
-  color: var(--ink-dim);
-  font-size: 14px;
-  font-weight: 600;
-  min-height: 36px;
-  padding: 0 14px;
-  border-radius: 9px;
-  cursor: pointer;
-}
-.seg button[aria-pressed="true"] {
-  background: var(--card);
-  color: var(--ink);
-  box-shadow: 0 1px 2px rgba(16, 24, 40, .12);
-}
-.seg.small button { font-size: 13px; min-height: 34px; padding: 0 12px; }
-/* Two segmented controls share the row on a phone: tighter buttons there. */
-@media (max-width: 440px) {
-  .switcher { padding-left: 12px; padding-right: 10px; gap: 6px; }
-  .switcher .seg button { padding: 0 9px; }
-  .switcher .seg.small button { padding: 0 8px; }
-}
-
-/* ── map ─────────────────────────────────────────────────────────────────── */
-
-.map-wrap {
   position: relative;
-  flex: 1 1 auto;
+  display: block;
+  max-width: 100%;
+  text-align: left;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--ink-2);
+}
+.stamp .stale { color: var(--ink); }
+/* the stamp opens About: its hit runs up over the name and down into the gap, 44 px in all */
+.stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }
+/* in focus mode it heads the caption: its hit runs down over the caption's words, never up into the plate */
+.caption > .stamp::before { inset: -6px 0 -22px 0; }
+.hkeys { grid-area: 1 / 2 / 3 / 3; align-self: center; display: flex; gap: 8px; }
+.wordkey {
+  position: relative;
+  min-width: 44px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.wordkey::before { content: ''; position: absolute; inset: -9px -4px; }   /* 44 px tall, the gap between the two shared */
+
+.switcher { grid-area: 3 / 1 / 4 / 3; display: flex; align-items: stretch; min-width: 0; margin: 0 -8px; overflow-x: auto; scrollbar-width: none; scroll-padding: 0 16px; }
+.switcher::-webkit-scrollbar { display: none; }
+.words { display: flex; flex: 0 0 auto; }
+.divider { flex: 0 0 1px; align-self: center; height: 14px; margin: 0 4px; background: var(--line); }
+.words button {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+/* the chosen word: weight 620 and a tracer under it, drawn from its tail to its head */
+.words button[aria-checked="true"] { color: var(--ink); font-weight: 620; }
+.words button[aria-checked="true"]::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 9px;
+  height: 4px;
+  background:
+    radial-gradient(circle at calc(100% - 2px) 50%, var(--ink) 1.9px, transparent 2.1px),
+    linear-gradient(90deg, transparent, var(--ink) calc(100% - 3px), transparent calc(100% - 3px)) 0 1px / 100% 2px no-repeat;
+  animation: tracer-in 160ms var(--draw);
+}
+@keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* ── the plate ── */
+
+.plate {
+  position: relative;
   min-height: 0;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--sea);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
-#map {
-  display: block;
-  width: 100%;
-  height: 100%;
-  touch-action: none;
-  cursor: grab;
-}
+.plate canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+#map:focus-visible { outline-offset: -2px; }
 
-/* Errors and the fields notice stack down the top-left, clear of the map
-   buttons, so one never hides the other. */
-.topstack {
+/* the key column: three plates, no shadow; each key a full 44 px hit, the plate 36 px wide */
+.keys {
   position: absolute;
-  left: 10px;
-  right: 60px;
-  top: 10px;
-  z-index: 8;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  pointer-events: none;
-}
-.topstack > * { pointer-events: auto; }
-.error {
-  padding: 12px 14px;
-  border-radius: var(--radius);
-  background: var(--warn-bg);
-  color: var(--warn-ink);
-  border: 1px solid var(--warn-line);
-  box-shadow: var(--shadow);
-  font-size: 14px;
-  line-height: 1.4;
-  user-select: text;
-  -webkit-user-select: text;
-}
-.error div + div { margin-top: 8px; }
-.error strong { display: block; margin-bottom: 2px; }
-
-.banner {
-  max-width: 100%;
-  min-height: 34px;
-  padding: 6px 10px;
-  text-align: left;
-  cursor: pointer;
-  border-radius: 10px;
-  background: var(--note-bg);
-  color: var(--note-ink);
-  border: 1px solid var(--note-line);
-  box-shadow: var(--shadow);
-  font-size: 12px;
-  line-height: 1.35;
-}
-.banner b { font-weight: 700; }
-.banner::after { content: " \203A"; font-weight: 700; }
-
-.mapbtns {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.btngroup {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-.btngroup button {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  background: var(--glass);
-  color: var(--ink);
-  font-size: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-.btngroup button[aria-expanded="true"] { color: var(--accent); }
-
-.layers {
-  position: absolute;
-  right: 58px;
-  top: 10px;
-  z-index: 6;
-  width: min(290px, calc(100% - 78px));
-  max-height: calc(100% - 20px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  padding: 6px 12px 8px;
-  border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--line);
-}
-.layers-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: 44px;
-}
-.layers-row + .layers-row { border-top: 1px solid var(--line); }
-.layers-row.col { flex-direction: column; align-items: stretch; gap: 4px; padding: 7px 0 8px; }
-.layers-row.col .seg button { flex: 1 1 auto; padding: 0 6px; }
-.layers-label { font-size: 14px; color: var(--ink-dim); }
-.layers-note {
-  margin: -4px 0 8px;
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--ink-dim);
-}
-.layers-note.warn { color: var(--note-ink); }
-.switch {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  min-height: 44px;
-  font-size: 14px;
-  cursor: pointer;
-  flex-direction: row-reverse;
-}
-.switch span { flex: 1 1 auto; }
-.switch input {
-  appearance: none;
-  -webkit-appearance: none;
-  flex: 0 0 auto;
-  width: 44px;
-  height: 26px;
-  margin: 0;
-  border-radius: 13px;
-  background: var(--chip);
-  border: 1px solid var(--line);
-  position: relative;
-  cursor: pointer;
-  transition: background .15s;
-}
-.switch input::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
-  transition: transform .15s;
-}
-.switch input:checked { background: var(--accent); border-color: var(--accent); }
-.switch input:checked::after { transform: translateX(18px); }
-.switch input:disabled { opacity: .45; cursor: not-allowed; }
-.switch input:disabled + span { color: var(--ink-faint); }
-
-/* ── legend ──────────────────────────────────────────────────────────────── */
-
-/* Legend and credits stack from the bottom, so a credit line that wraps on a
-   narrow phone pushes the legend up instead of running under it. */
-.bottomstack {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 6px;
+  top: 8px;
+  right: calc(8px + env(safe-area-inset-right));
   z-index: 3;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  pointer-events: none;
-}
-/* The legend is one tap target: folded it is the title row and the colour
-   bar (~38px); open, the whole key. */
-.legend {
-  width: min(250px, 100%);
-  padding: 6px 9px 7px;
-  border-radius: 10px;
-  background: var(--glass);
-  box-shadow: var(--shadow);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  pointer-events: auto;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.legend-head {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-  font-size: 11px;
-  line-height: 1.3;
-  color: var(--ink-dim);
-  margin-bottom: 4px;
-  white-space: nowrap;
-}
-.legend-head > span:first-child { color: var(--ink); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
-.legend-u { flex: 1 1 auto; font-weight: 700; display: flex; }
-.legend-u::before { content: "\00B7\00A0"; font-weight: 400; }
-.chev { margin-left: auto; padding-left: 8px; font-style: normal; color: var(--ink-faint); transition: transform .15s; }
-.legend[aria-expanded="true"] .chev { transform: rotate(90deg); }
-.legend-bar { height: 8px; border-radius: 3px; }
-.legend-ticks {
-  position: relative;
-  height: 14px;
-  margin-top: 1px;
-  font-size: 10px;
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
-}
-.legend-ticks span { position: absolute; top: 1px; transform: translateX(-50%); white-space: nowrap; }
-.legend-ticks span::before { content: ""; position: absolute; left: 50%; top: -3px; width: 1px; height: 3px; background: var(--ink-faint); }
-.legend-ticks .lo { transform: none; }
-.legend-ticks .lo::before { left: 0; }
-.legend-ticks .hi { transform: translateX(-100%); }
-.legend-ticks .hi::before { left: auto; right: 0; }
-.legend-extra, .legend-fields {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 12px;
-  margin-top: 3px;
-  font-size: 11px;
-  color: var(--ink-dim);
-}
-.legend-fields { padding-top: 4px; border-top: 1px solid var(--line); margin-top: 5px; align-items: center; }
-.key { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
-.sw {
-  display: inline-block;
-  width: 14px;
-  height: 10px;
-  border-radius: 2px;
-  border: 1px solid var(--line);
-}
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--card); }
-.sizes { display: inline-flex; align-items: center; gap: 3px; flex-wrap: wrap; }
-.sizes i { display: inline-block; border-radius: 50%; border: 1px solid var(--ink-faint); }
-.sizes span { margin-right: 5px; font-variant-numeric: tabular-nums; }
-.legend-note { flex: 1 1 100%; font-size: 10.5px; line-height: 1.3; }
-
-/* The highlight chip: a company or basin picked in search. */
-.hlchip {
-  display: flex;
-  align-items: center;
-  max-width: 100%;
-  min-height: 36px;
-  padding-left: 11px;
-  border-radius: 18px;
-  background: var(--card);
-  border: 1px solid var(--accent);
-  box-shadow: var(--shadow);
-  font-size: 12px;
-  pointer-events: auto;
-}
-.hlchip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
-.hlchip button { flex: 0 0 auto; width: 40px; height: 36px; border: 0; background: none; color: var(--ink-dim); font-size: 20px; line-height: 1; cursor: pointer; }
-
-/* ── search ──────────────────────────────────────────────────────────────── */
-
-.search {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 8px;
-  z-index: 9;
-  max-height: calc(100% - 16px);
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--radius);
-  background: var(--card);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-.search-bar { display: flex; align-items: center; gap: 4px; padding: 2px 2px 2px 12px; border-bottom: 1px solid var(--line); }
-.search-bar input {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 44px;
-  border: 0;
-  background: none;
-  color: var(--ink);
-  font: inherit;
-  font-size: 16px;              /* 16px or iOS zooms the page on focus */
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  user-select: text;
-  -webkit-user-select: text;
-}
-.search-bar input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; display: none; }
-.search-close { width: 44px; height: 44px; border: 0; background: none; color: var(--ink-faint); font-size: 24px; line-height: 1; cursor: pointer; }
-.search-results { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; padding-bottom: 6px; }
-.search-results h3 { margin: 10px 14px 2px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-dim); }
-.search-results ul { list-style: none; margin: 0; padding: 0; }
-.res {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  min-height: 44px;
-  padding: 5px 14px;
-  border: 0;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-}
-.res:active { background: var(--chip); }
-@media (hover: hover) { .res:hover, .tl:hover { background: var(--chip); } }
-.res-main { font-size: 14px; font-weight: 600; line-height: 1.3; }
-.res-sub { font-size: 12px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
-.search-hint { margin: 12px 14px; font-size: 13px; color: var(--ink-dim); }
-
-/* One line, ellipsised; a tap opens About with every source in full. */
-.credits {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  max-width: 100%;
-  min-height: 26px;
-  margin: 0;
-  padding: 0 8px;
-  border: 0;
-  border-radius: 7px;
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  font-size: 10.5px;
-  line-height: 1.2;
-  color: var(--ink-dim);
-  text-align: left;
-  pointer-events: auto;
-  cursor: pointer;
-}
-#credits-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.credits-i { flex: 0 0 auto; font-size: 12px; color: var(--ink-faint); }
-
-/* ── the tapped-thing sheet ──────────────────────────────────────────────── */
-
-.sheet {
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  z-index: 7;
-  max-height: calc(100% - 16px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  padding: 12px 14px 12px;
-  border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--line);
-  user-select: text;
-  -webkit-user-select: text;
-}
-.sheet-close {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 10px;
-  background: none;
-  color: var(--ink-faint);
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-}
-.sheet h2 { margin: 0 44px 0 0; font-size: 17px; line-height: 1.25; }
-.sheet .sub { margin: 2px 44px 8px 0; font-size: 12px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.stat { padding: 6px 8px; border-radius: 10px; background: var(--chip); min-width: 0; }
-.stat.on { box-shadow: inset 0 0 0 1.5px var(--ink-faint); }
-.stat-k { font-size: 11px; color: var(--ink-dim); display: flex; align-items: center; gap: 4px; }
-.stat-v { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -.01em; white-space: nowrap; }
-.stat-v.nd { font-size: 13px; font-weight: 600; color: var(--ink-dim); padding: 3px 0; }
-.stat-s { font-size: 11px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
-.swatch-line { display: inline-block; width: 12px; height: 3px; border-radius: 2px; }
-.spark { display: block; width: 100%; height: 96px; margin-top: 8px; touch-action: none; cursor: crosshair; }
-.spark text { font-size: 10px; font-variant-numeric: tabular-nums; }
-.sheet-note { margin: 6px 0 0; font-size: 12px; color: var(--ink-dim); line-height: 1.4; }
-.sheet dl { margin: 4px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 14px; }
-.sheet dt { color: var(--ink-dim); }
-.sheet dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.sheet .url { font-size: 12px; color: var(--ink-dim); overflow-wrap: anywhere; }
-.sheet h3 { margin: 12px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-dim); }
-.tlist { list-style: none; margin: 4px 0 0; padding: 0; }
-.tlist li + li { border-top: 1px solid var(--line); }
-.tl {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  min-height: 40px;
-  padding: 4px 6px;
-  border: 0;
-  border-radius: 8px;
-  background: none;
-  text-align: left;
-  font-size: 13px;
-  cursor: pointer;
-}
-.tl:active { background: var(--chip); }
-.tl-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.tl-v { flex: 0 0 auto; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
-
-/* ── About ───────────────────────────────────────────────────────────────── */
-
-.about {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  background: rgba(0, 0, 0, .35);
-}
-.about-card {
-  width: 100%;
-  max-width: 420px;
-  max-height: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  padding: 16px 18px;
-  border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--shadow);
-  user-select: text;
-  -webkit-user-select: text;
-}
-.about-card h2 { margin: 0 0 8px; font-size: 17px; }
-.about-card h3 { margin: 16px 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-dim); }
-.about-card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 13px; }
-.about-card dt { color: var(--ink-dim); }
-.about-card dd { margin: 0; overflow-wrap: anywhere; }
-.about-card p { font-size: 13px; margin: 6px 0 0; line-height: 1.45; }
-.about-card .src { padding: 8px 0; border-top: 1px solid var(--line); }
-.about-card .src:first-of-type { border-top: 0; }
-.about-card .src b { display: block; font-size: 14px; }
-.about-card .muted { color: var(--ink-dim); font-size: 12px; }
-.about-card ul { margin: 4px 0 0; padding-left: 18px; font-size: 13px; line-height: 1.45; }
-.about-close {
-  margin-top: 16px;
-  width: 100%;
-  height: 44px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* ── player ──────────────────────────────────────────────────────────────── */
-
-.player {
-  flex: 0 0 auto;
-  padding: 8px 14px calc(10px + env(safe-area-inset-bottom));
-  background: var(--card);
-  border-top: 1px solid var(--line);
-}
-.time-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
   gap: 8px;
-  margin-bottom: 4px;
 }
-.leads { min-width: 0; display: flex; flex-direction: column; align-items: flex-end; }
-.leads .lead { max-width: 100%; }
-.valid { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.lead {
-  font-size: 12px;
-  color: var(--ink-dim);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
-
-.controls { display: flex; align-items: center; gap: 6px; }
-.pbtn {
-  width: 44px;
-  height: 44px;
-  flex: 0 0 auto;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: var(--chip);
-  color: var(--ink);
-  display: inline-flex;
+.keyplate { width: 38px; border: 1px solid var(--line); border-radius: 6px; background: var(--sheet); }
+.keyplate button {
+  position: relative;
+  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  padding: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0 -4px;
+  color: var(--ink-2);
 }
-.pbtn.play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.pbtn:disabled, #slider:disabled { opacity: .4; cursor: not-allowed; }
+.keyplate button + button::after { content: ''; position: absolute; left: 4px; right: 4px; top: 0; height: 1px; background: var(--line); }
+.keyplate button svg { position: relative; }
+/* a key that is on carries a plate of ink behind its mark */
+.keyplate button::before { content: ''; position: absolute; inset: 8px; border-radius: 4px; }
+.keyplate button[aria-expanded="true"] { color: var(--ink); }
+.keyplate button[aria-expanded="true"]::before { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.keyplate button:active::before { background: color-mix(in srgb, currentColor 22%, transparent); }
+.tkey:active > svg, .textkey:active { background: color-mix(in srgb, currentColor 12%, transparent); border-radius: 4px; }
+/* a plate too short for the column (a phone on its side, a sheet open): the keys run as a row along the top */
+.keys-row .keys { flex-direction: row; }
+.keys-row .keyplate { display: flex; width: auto; height: 38px; }
+.keys-row .keyplate button { margin: -4px 0; }
+.keys-row .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
 
-.slider-wrap { flex: 1 1 auto; min-width: 0; padding-top: 2px; }
-#slider {
-  display: block;
-  width: 100%;
-  margin: 0;
-  height: 32px;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-.ticks {
-  position: relative;
-  height: 14px;
-  margin: 0 8px;
-  font-size: 10px;
-  color: var(--ink-faint);
-  font-variant-numeric: tabular-nums;
-}
-.ticks span {
+/* the ghost key: no plate, a halo under the mark so it reads over any color of the plate */
+.ghost {
   position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  white-space: nowrap;
+  top: calc(8px + env(safe-area-inset-top));
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: .72;
+  animation: ghost-in 200ms var(--draw);
 }
-.ticks span::before {
-  content: "";
+.ghost:focus-visible, .ghost:active { opacity: 1; }
+.ghost .halo { stroke: rgba(246, 249, 250, .6); stroke-width: 3.4; }
+.ghost .halo circle { fill: rgba(246, 249, 250, .6); }
+.ghost .mark { stroke: #0f1c23; stroke-width: 1.4; }
+.ghost .mark .fill { fill: #0f1c23; }
+@media (prefers-color-scheme: dark) {
+  .ghost .halo { stroke: rgba(10, 16, 19, .45); }
+  .ghost .halo circle { fill: rgba(10, 16, 19, .45); }
+  .ghost .mark { stroke: #f2f4f1; }
+  .ghost .mark .fill { fill: #f2f4f1; }
+}
+@keyframes ghost-in { from { opacity: 0; } }
+
+/* the card: the tapped country or field */
+.card {
+  position: absolute;
+  left: calc(8px + env(safe-area-inset-left));
+  top: 8px;
+  z-index: 3;
+  width: max-content;
+  min-width: 200px;
+  max-width: min(280px, calc(100% - 76px));
+  padding: 4px 4px 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  animation: card-in 120ms var(--draw);
+}
+@keyframes card-in { from { opacity: 0; transform: translateY(4px); } }
+/* it moves to the bottom corner when it would cover what was tapped (app.js placeCard) */
+.card.low { top: auto; bottom: 8px; }
+.focus .card:not(.low) { top: calc(8px + env(safe-area-inset-top)); }
+.card-where { display: flex; align-items: center; justify-content: space-between; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
+.card-close { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin: -6px 0 -10px; color: var(--ink-2); }
+/* a field's long name wraps, at most three lines */
+.card-name { font-size: 13.5px; font-weight: 650; padding-right: 8px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+.card-main { padding-right: 8px; }
+.card-value { font-size: 21px; font-weight: 600; line-height: 1.2; }
+.card-unit { font-size: 13.5px; color: var(--ink-2); }
+.card-sub, .card-note { font-size: 12.5px; color: var(--ink-2); padding-right: 8px; }
+.card-note { margin: 4px 0 0; line-height: 1.35; }
+.card-rows {
+  margin: 6px 8px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1px 14px;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+.card-rows:empty { display: none; }
+.card-rows dt { color: var(--ink-2); }
+.card-rows dd { margin: 0; text-align: right; font-weight: 560; overflow-wrap: anywhere; }
+.card-act { margin: 4px 0 -10px -8px; }
+
+/* a problem with the data is a sentence on the plate, never a blank map */
+.error {
   position: absolute;
   left: 50%;
-  top: -5px;
-  width: 1px;
-  height: 4px;
-  background: var(--line);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: max-content;
+  max-width: min(300px, calc(100% - 32px));
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-align: center;
 }
+.error div + div { margin-top: 6px; }
 
-/* On a phone the sheet stops at 60% so the thing it describes (a field the
-   search flew to sits at 20% from the top) stays in view; it scrolls inside. */
-@media (max-width: 699px) {
-  .sheet { max-height: 60%; }
+/* ── the caption band: the Ledger, the legend, how to read the picture, the credits ── */
+
+.caption {
+  padding: 6px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--ink-2);
 }
+.caption > .stamp { margin-bottom: 2px; z-index: 1; }
+/* the Ledger's row keeps its height whatever it draws, so the plate never resizes with the data */
+.ledger { height: 30px; margin-bottom: 4px; }
+.ledger canvas { display: block; width: 100%; height: 30px; cursor: pointer; }
+.legend { display: flex; align-items: flex-start; gap: 12px; min-height: 30px; }
+.focus .legend { min-height: 0; }
+.legend-title { flex: 0 1 auto; min-width: 0; font-size: 11.5px; font-weight: 600; color: var(--ink); padding-top: 1px; white-space: nowrap; }
+.legend-scale { flex: 1 1 150px; min-width: 150px; padding-top: 5px; }
+.legend-bar { height: 6px; outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); }
+.legend-ticks { position: relative; height: 15px; font-size: 10.5px; }
+.legend-ticks span { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; line-height: 12px; }
+.legend-ticks span::before { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 3px; background: var(--line-strong); }
+.legend-ticks span.first { transform: none; }
+.legend-ticks span.first::before { left: 0; }
+.legend-ticks span.last { transform: translateX(-100%); }
+.legend-ticks span.last::before { left: auto; right: 0; }
+/* below 640 px the title has its own line, so the bar runs the full width */
+@media (max-width: 639px) { .legend { flex-wrap: wrap; row-gap: 0; } .legend-scale { flex-basis: 100%; padding-top: 2px; } }
+.readline, .credits { margin: 0; }
+/* The caption line has a fixed height, whatever it says: its words change with the year, and a line
+   that grew and shrank would resize the plate on every year of play. Two lines below 640 px; one from 640. */
+.readline { height: 30px; overflow: hidden; }
+@media (min-width: 640px) { .readline { height: 15px; } }
+.credits { font-size: 10.5px; }
 
+/* ── the sheet's slot: details or the map's layers, on the page, under a hairline ── */
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  max-height: 46vh;
+  max-height: 46dvh;
+  min-height: 0;
+  background: var(--page);
+  border-top: 1px solid var(--line);
+}
+.sheet-head, .panel-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 calc(8px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+}
+.sheet-head h2 { margin: 0; min-width: 0; font-size: 13.5px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 calc(16px + env(safe-area-inset-right)) 12px calc(16px + env(safe-area-inset-left)); font-size: 12.5px; }
+.sheet-body h3 { margin: 12px 0 4px; font-size: 13.5px; font-weight: 650; }
+.sheet-body dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; line-height: 1.35; }
+.sheet-body dt { color: var(--ink-2); }
+.sheet-body dd { margin: 0; text-align: right; font-weight: 560; overflow-wrap: anywhere; }
+.sheet-note { margin: 8px 0 0; color: var(--ink-2); line-height: 1.4; max-width: 62ch; }
+.textkey { min-width: 44px; height: 44px; padding: 0 8px; font-size: 12.5px; color: var(--ink); }
+
+/* the details chart and its key */
+.chart { display: block; width: 100%; height: 104px; margin-top: 4px; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 2px 16px; margin-top: 2px; color: var(--ink-2); }
+.chart-key i { display: inline-block; width: 14px; height: 1.5px; margin: 0 6px 3px 0; vertical-align: middle; }
+.chart-key .oil i { background: var(--chart-oil); }
+.chart-key .gas i { background: var(--chart-gas); }
+/* the tracker's units under a country, each a 44 px row */
+.tlist { list-style: none; margin: 4px 0 0; padding: 0; }
+.tlist li + li { border-top: 1px solid var(--line); }
+.tlist button { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 12px 0; text-align: left; font-size: 12.5px; }
+.tlist .v { color: var(--ink-2); white-space: nowrap; }
+
+/* the layers: one row a layer with a drawn box, the word groups, and the plate's own samples */
+.lrow { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; text-align: left; font-size: 13.5px; }
+.lrow .box { flex: 0 0 auto; color: var(--ink-2); }
+.lrow .box .tick { display: none; }
+.lrow[aria-pressed="true"] .box { color: var(--ink); }
+.lrow[aria-pressed="true"] .box .tick { display: inline; }
+.lrow .what { flex: 1 1 auto; min-width: 0; }
+.lgroup { display: flex; align-items: center; flex-wrap: wrap; column-gap: 4px; }
+.llabel { flex: 0 0 auto; min-width: 86px; color: var(--ink-2); font-size: 12.5px; }
+.lgroup .words { flex-wrap: wrap; margin-left: -8px; }
+.fkey { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 8px 0 4px; font-size: 11px; color: var(--ink-2); }
+.fkey > span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.fkey svg { overflow: visible; }
+.fkey .sizes { gap: 4px; }
+.fkey .sizes span { margin-right: 6px; }
+
+/* ── the player: the year, the transport and the track ── */
+
+.player {
+  padding: 2px calc(12px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(12px + env(safe-area-inset-left));
+  background: var(--page);
+  border-top: 1px solid var(--line);
+}
+.time-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 6px 4px 0; }
+.valid { font-size: 21px; line-height: 1; font-weight: 600; white-space: nowrap; }
+.lead { min-width: 0; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.controls { display: flex; align-items: flex-start; }
+.tkey { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.tkey[aria-disabled="true"] { opacity: .4; }
+.tkey.play { color: var(--page); }
+.shutter { width: 32px; height: 32px; border-radius: 8px; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+.shutter svg { fill: currentColor; stroke: none; }
+.track { position: relative; flex: 1 1 auto; min-width: 0; height: 58px; margin-left: 4px; cursor: pointer; touch-action: none; }
+.track canvas { display: block; width: 100%; height: 58px; }
+.track:focus-visible { outline-offset: -2px; }
+/* no transition, ever, on what carries a year */
+.valid, .lead, .track, .track canvas { transition: none; animation: none; }
+
+/* ── About and Find: full-height panels ── */
+
+.panel { position: fixed; inset: 0; z-index: 20; }
+.panel-sheet {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--sheet);
+  animation: sheet-in 220ms var(--sheet-in);
+}
+@keyframes sheet-in { from { transform: translateY(100%); } }
+.panel-head { padding-top: env(safe-area-inset-top); border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 0; font-size: 15px; font-weight: 650; }
+.about-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+}
+.about-body section { max-width: 62ch; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.about-body h3 { margin: 0 0 6px; font-size: 13.5px; font-weight: 650; }
+.about-body h4 { margin: 10px 0 4px; font-size: 13.5px; font-weight: 600; }
+.about-body p, .about-body li { margin: 0 0 8px; line-height: 1.5; }
+.about-body ul { margin: 0; padding-left: 18px; }
+.about-body code { font: inherit; }
+.about-body dl { margin: 0 0 8px; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; line-height: 1.45; }
+.about-body dt { color: var(--ink-2); }
+.about-body dd { margin: 0; overflow-wrap: anywhere; }
+.about-body .src { margin: 0 0 10px; line-height: 1.45; overflow-wrap: anywhere; }
+.about-body .src span { display: block; }
+.about-body .src .src-name { font-weight: 560; }
+.about-body .src .src-term { color: var(--ink-2); }
+.about-foot { margin-top: 8px; }
+
+.find-field { position: relative; flex: 0 0 auto; margin: 12px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left)); }
+/* 16 px: iOS zooms into any field set smaller (a stated departure from the scale, ART.md section 4) */
+.find-field input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 44px;
+  padding: 0 44px 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 16px;
+  color: var(--ink);
+}
+.find-field input::placeholder { color: var(--ink-3); opacity: 1; }
+/* the browser's own clear button is drawn in the browser's accent; the house draws its own */
+.find-field input::-webkit-search-cancel-button { appearance: none; -webkit-appearance: none; }
+.find-clear { position: absolute; right: 0; top: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.find-list { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); }
+.find-list h3 { margin: 12px 0 2px; font-size: 13.5px; font-weight: 650; }
+.find-list ul { list-style: none; margin: 0; padding: 0; }
+.find-list li + li { border-top: 1px solid var(--line); }
+.find-list button { display: block; width: 100%; min-height: 44px; padding: 8px 0; text-align: left; }
+.find-list .name { display: block; font-size: 13.5px; }
+.find-list .sub { display: block; font-size: 12.5px; color: var(--ink-2); }
+.find-list .none { padding: 12px 0; margin: 0; color: var(--ink-2); }
+
+/* ── focus mode: everything but the plate, the player, the stamp and the caption's words leaves ── */
+
+.leaving { opacity: 0; transition: opacity 160ms var(--draw); }
+
+@media (hover: hover) {
+  .keyplate button:hover svg { background: color-mix(in srgb, currentColor 7%, transparent); border-radius: 4px; }
+  .words button:hover, .wordkey:hover, .stamp:hover, .textkey:hover, .tkey:hover, .lrow:hover, .find-list button:hover, .tlist button:hover { color: var(--ink); }
+  .ghost:hover { opacity: 1; }
+}
 @media (min-width: 700px) {
-  .topbar { padding: 10px 20px; }
-  .switcher { padding-left: 20px; padding-right: 20px; }
-  .player { padding-left: 20px; padding-right: 20px; }
-  .sheet { left: auto; width: 400px; max-height: calc(100% - 200px); }   /* clear of the map buttons */
-  .search { left: auto; right: 58px; width: 380px; }
+  .head, .caption { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
+}
+/* a wide screen: the sheet is a column at the plate's right, never over it */
+@media (min-width: 820px) and (min-height: 480px) {
+  body.side { grid-template-columns: minmax(0, 1fr) 380px; grid-template-rows: auto minmax(220px, 1fr) auto auto; grid-template-areas: "head head" "plate sheet" "caption sheet" "player player"; }
+  body.side .sheet { max-height: none; border-top: 0; border-left: 1px solid var(--line); }
 }
 
+/* ── a phone on its side: the header, the caption and the player each give the plate their second row ── */
+
+@media (orientation: landscape) and (max-height: 500px) {
+  body.side { grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: auto minmax(0, 1fr) auto auto; grid-template-areas: "head head" "plate sheet" "caption caption" "player player"; }
+  body.side .sheet { max-height: none; border-top: 0; border-left: 1px solid var(--line); }
+  .head {
+    grid-template-columns: max-content minmax(0, 1fr) auto;
+    grid-template-rows: 22px 24px;
+    column-gap: 16px;
+    padding-top: env(safe-area-inset-top);
+  }
+  .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
+  .stamp { white-space: nowrap; }
+  .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
+  .hkeys { grid-area: 1 / 3 / 3 / 4; }
+  /* the Ledger and the legend share a row, then the caption line and the credits, each one line */
+  .caption { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; padding-top: 4px; padding-bottom: 2px; }
+  .caption > .stamp { grid-column: 1 / -1; }
+  .ledger { grid-column: 1; margin-bottom: 0; }
+  .legend { grid-column: 2; }
+  .readline { grid-column: 1; height: 15px; }
+  .credits { grid-column: 2; }
+  /* the year, the transport and the track on one row */
+  .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
+  .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; max-width: 40%; }
+  .controls { flex: 1 1 auto; min-width: 0; align-items: center; }
+}
+/* a short screen upright, a sheet open: the plate gives it room down to 150 px, the legend's bar leaves */
+@media (orientation: portrait) and (max-height: 760px) {
+  body.side { grid-template-rows: auto minmax(150px, 1fr) auto auto auto; }
+  body.side .legend-scale { display: none; }
+  body.side .legend { min-height: 0; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .switch input, .switch input::after, .chev { transition: none; }
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }
 }

@@ -1,0 +1,6 @@
+# What the app's own tools/ make: scratch output and measurements, a local ZIP, and a
+# headless browser if one is ever installed beside the tools. The pipeline lives in ../scripts/shelf_atlas/.
+tools/.work/
+tools/node_modules/
+dist/
+.DS_Store
