@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T02:01:18Z",
+ "generatedAt": "2026-10-02T03:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Are Australia’s native bees thriving or declining? We don’t know but can find out",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/are-australias-native-bees-thriving-or-declining-we-dont-know-but-can-find-out-292219",
+     "published": "2026-10-02T02:00:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Scarlett Howard, Research Fellow, School of Biological Sciences, Monash University"
+    },
+    {
      "title": "In a year of record-breaking heat, Australia and Pacific leaders meet to sharpen climate goals",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Alexandra Sims, Professor in Commericial Law, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Literary pioneer Hilary McPhee launched Helen Garner, published Cloudstreet – and inspired me",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/literary-pioneer-hilary-mcphee-launched-helen-garner-published-cloudstreet-and-inspired-me-293361",
-     "published": "2026-10-01T23:54:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alice Grundy, Visiting Fellow, School of Literature, Language and Linguistics, Australian National University"
     },
     {
      "title": "From rock bottom to a grand final: what’s behind the Newcastle Knights’ incredible rise?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Are Australia’s native bees thriving or declining? We don’t know but can find out",
+   "published": "2026-10-02 02:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "In a year of record-breaking heat, Australia and Pacific leaders meet to sharpen climate goals",
    "published": "2026-10-02 01:22 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
    "published": "2026-10-02 00:36 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Literary pioneer Hilary McPhee launched Helen Garner, published Cloudstreet – and inspired me",
-   "published": "2026-10-01 23:54 UTC"
   },
   {
    "region": "Oceania",
