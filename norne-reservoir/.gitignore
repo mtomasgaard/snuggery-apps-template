@@ -1,3 +1,5 @@
 dist/
 pipeline/work/
 __pycache__/
+tools/.work/
+tools/node_modules/

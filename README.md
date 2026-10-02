@@ -147,7 +147,7 @@ The Besseggen ridge in Jotunheimen in 3D, from Kartverket's 1 m elevation data: 
 
 ### Norne Reservoir
 
-The open Norne oil-field reservoir simulation model in 3D: 44,431 cells coloured by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. A pure reservoir view: nothing above the seabed is drawn. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked.
+The open Norne oil-field reservoir simulation model in 3D: 44,431 cells colored by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. The time track is the field's own water-cut record: each month a column as tall as the liquid the wells lifted per day, oil in ink and water stacked on it as a tint, so the plateau and the water's rise are read off the track. A pure reservoir view: nothing above the seabed is drawn. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
 

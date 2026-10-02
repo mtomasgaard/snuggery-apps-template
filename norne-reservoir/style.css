@@ -1,249 +1,640 @@
-[hidden] { display: none !important; }
+/* Norne Reservoir under the template's house system (ART.md; Template/HOUSE.md).
+
+   The screen is a plate and its caption. The plate is the reservoir model, printed twice: the light
+   theme is the negative (pale rock, more of a quantity darker), the dark theme the print (dark rock,
+   more of a quantity brighter). Under it the caption band holds the scale, the instruments, the
+   wells' key, the line that reads the cut, and the credits. The player's track is the signature, the
+   cut. One face, gray chrome, no accent color, no glass, no shadows, no gradient but the data's
+   scales and the selection tracer. The data's colors live in config.json (written from
+   tools/art/palette.py); nothing here is fetched, and there is no external address in this file. */
+
+@font-face {
+  font-family: 'Ysabeau Office';
+  src: url(fonts/ysabeau-office-gw.woff2) format('woff2');
+  font-weight: 400 650;
+  font-display: block;
+}
+
 :root {
-  --stage: #DDE4E5;
-  --panel: #F4F6F6;
-  --ink: #15222A;
-  --muted: #5A6A73;
-  --rule: #C9D2D5;
-  --accent: #A8740F;
-  --accent-ink: #FFFFFF;
-  --glass: rgba(244, 246, 246, 0.82);
-  --c-oil: #2E8B4E;
-  --c-water: #2F6FC4;
-  --c-gas: #C8423A;
-  --face: "Avenir Next", "Avenir", "Segoe UI", system-ui, sans-serif;
-  --face-narrow: "Avenir Next Condensed", "Avenir Next", "Arial Narrow", system-ui, sans-serif;
-  color-scheme: light dark;
+  --page: #e8eef0;            /* header, caption band, player, sheet */
+  --sheet: #f6f9fa;           /* key plates, the readout card, About, notices */
+  --ink: #0f1c23;
+  --ink-2: #45555d;
+  --ink-3: #5b6a72;
+  --line: #c9d4d8;
+  --line-strong: #74858c;
+  --draw: cubic-bezier(0.2, 0, 0, 1);
+  --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
+  --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
+  /* this app's own (ART.md section 2) */
+  --plate: #e8eef0;           /* the WebGL clear color: the film base itself */
+  --plate-halo: rgba(246, 249, 250, 0.85);
+  --cut: #12150b;             /* the signature's ink: crude, an olive near-black */
+  --cut-water-a: 0.30;
+  --chart-oil: #005d38;
+  --chart-water: #4479b8;
+  --chart-gas: #a63430;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --stage: #0C161C;
-    --panel: #12222A;
-    --ink: #E2EAEC;
-    --muted: #8FA2AB;
-    --rule: #27404A;
-    --accent: #DDAA3F;
-    --accent-ink: #1A1406;
-    --glass: rgba(18, 34, 42, 0.8);
-    --c-oil: #6CC48A;
-    --c-water: #6FA8F0;
-    --c-gas: #F07A6A;
+    --page: #141d21;
+    --sheet: #1c272c;
+    --ink: #e6edee;
+    --ink-2: #a3b1b6;
+    --ink-3: #8b9a9f;
+    --line: #2a373c;
+    --line-strong: #64757b;
+    --plate: #0c1316;
+    --plate-halo: rgba(12, 19, 22, 0.85);
+    --cut: #eff5e7;
+    --cut-water-a: 0.34;
+    --chart-oil: #8ff0b9;
+    --chart-water: #75acef;
+    --chart-gas: #ffa59b;
+    color-scheme: dark;
   }
 }
 
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-body {
-  display: flex; flex-direction: column;
-  background: var(--panel); color: var(--ink);
-  font: 15px/1.4 var(--face);
-  -webkit-text-size-adjust: 100%;
-  font-variant-numeric: tabular-nums;
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
   overflow: hidden;
+  background: var(--page);
+  color: var(--ink);
+  font: 400 13.5px/1.35 var(--face);
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
-button, input { font: inherit; color: inherit; }
+/* the column: header, plate, caption band, player, sheet. The plate keeps at least 200 px; the sheet
+   takes what its stop needs of the rest and scrolls inside itself */
+body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(200px, 1fr) auto auto minmax(0, max-content);
+  height: 100vh;
+  height: 100dvh;
+}
 
-#stage { position: relative; flex: 1 1 0%; min-height: 0; background: var(--stage); overflow: hidden; }
-#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+button, input, select { font: inherit; color: inherit; }
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+svg .fill, svg.fill path { fill: currentColor; stroke: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
-#head {
-  position: absolute; left: 0; right: 0; top: 0;
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
-  padding: calc(env(safe-area-inset-top) + 10px) 16px 0;
+/* ── header: the name and the units key, the stamp, the property words ── */
+
+.head {
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 44px;
+  column-gap: 12px;
+  padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+}
+.head h1 { grid-area: 1 / 1; margin: 0; font-size: 15px; font-weight: 650; line-height: 22px; }
+.stamp-home { grid-area: 2 / 1; min-width: 0; padding-bottom: 6px; }
+.stamp {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  text-align: left;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--ink-2);
+}
+/* the stamp opens About: its hit runs up over the name and down into the gap, 44 px in all */
+.stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }
+/* in focus mode it heads the caption: the hit runs down over the caption, never up into the plate */
+.caption > .stamp { z-index: 1; }
+.caption > .stamp::before { inset: -6px 0 -22px 0; }
+.unitkey {
+  grid-area: 1 / 2 / 3 / 3;
+  align-self: center;
+  position: relative;
+  min-width: 44px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.unitkey::before { content: ''; position: absolute; inset: -9px -1px; }   /* from the padding box: 44 px in all */
+
+.switcher { grid-area: 3 / 1 / 4 / 3; display: flex; align-items: stretch; min-width: 0; margin: 0 -8px; }
+.words {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding: 0 16px;
+  -webkit-overflow-scrolling: touch;
+}
+.words::-webkit-scrollbar { display: none; }
+.divider { flex: 0 0 1px; align-self: center; height: 14px; margin: 0 4px; background: var(--line); }
+.words button {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+/* the chosen word: weight 620 and a tracer under it, drawn from its tail to its head */
+.words button[aria-checked="true"] { color: var(--ink); font-weight: 620; }
+.words button[aria-checked="true"]::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 9px;
+  height: 4px;
+  background:
+    radial-gradient(circle at calc(100% - 2px) 50%, var(--ink) 1.9px, transparent 2.1px),
+    linear-gradient(90deg, transparent, var(--ink) calc(100% - 3px), transparent calc(100% - 3px)) 0 1px / 100% 2px no-repeat;
+  animation: tracer-in 160ms var(--draw);
+}
+@keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* ── the plate ── */
+
+.plate {
+  grid-row: 2;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--plate);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#gl { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+
+/* names on the plate: ink on a 3 px halo, no pill. The labels never take a touch themselves (a drag
+   that starts on one still turns the model); app.js reads a tap inside a label's 44 px hit as a tap
+   on its well. They stay buttons for the keyboard and VoiceOver. */
+.labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.wl, .zl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  font-size: 11.5px;
+  font-weight: 560;
+  line-height: 16px;
+  white-space: nowrap;
+  color: var(--ink);
+  -webkit-text-stroke: 3px var(--plate-halo);
+  paint-order: stroke fill;
   pointer-events: none;
 }
-#head p, #head h1 { margin: 0; }
-#head h1 { font: 600 28px/1 var(--face-narrow); letter-spacing: -0.01em; }
-#field-sub { color: var(--muted); font-size: 13px; margin-top: 3px !important; }
-.when { text-align: right; }
-#date { font: 600 30px/1 var(--face-narrow); letter-spacing: -0.01em; white-space: nowrap; }
-#prop-name { color: var(--muted); font-size: 13px; margin-top: 3px !important; }
+.wl svg { flex: 0 0 auto; }
+.pickmark { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border: 1.5px solid var(--ink); border-radius: 50%; outline: 2px solid var(--plate-halo); pointer-events: none; }
+.wl .casing { stroke: var(--plate-halo); stroke-width: 4; stroke-linecap: butt; }
+.wl .core { stroke: var(--c, #6f7274); stroke-width: 2; stroke-linecap: butt; }
+.wl.dash .core, .wl.dash .casing { stroke-dasharray: 3 2; }
+.wl.thin .core { stroke-width: 1.2; opacity: .6; }
+.wl.sel { font-weight: 650; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 
-#legend {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-  font-size: 12px; color: var(--ink); pointer-events: none;
-  text-shadow: 0 0 3px var(--stage), 0 0 6px var(--stage);
+/* the key column: plates, no shadow; each key a full 44 px hit, the plate 36 px wide */
+.keys {
+  position: absolute;
+  top: 8px;
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-#leg-bar { width: 12px; height: 160px; border-radius: 2px; outline: 1px solid var(--rule); }
-#leg-unit { color: var(--muted); }
+.keyplate {
+  width: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--sheet);
+}
+.keyplate button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 -4px;
+  color: var(--ink-2);
+}
+.keyplate button + button::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 0;
+  height: 1px;
+  background: var(--line);
+}
+.keyplate button svg { position: relative; }
+.keyplate button::before { content: ''; position: absolute; inset: 8px; border-radius: 4px; }
+.keyplate button[aria-pressed="true"] { color: var(--ink); }
+.keyplate button[aria-pressed="true"]::before { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.keyplate button:active::before { background: color-mix(in srgb, currentColor 22%, transparent); }
+/* a plate too short for the column (the sheet raised, a phone on its side): the keys run as a row */
+.keys-row .keys { flex-direction: row; }
+.keys-row .keyplate { display: flex; width: auto; height: 38px; }
+.keys-row .keyplate button { margin: -4px 0; }
+.keys-row .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
 
-#labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.wl {
-  position: absolute; left: 0; top: 0; pointer-events: auto;
-  font: 600 11px/1 var(--face-narrow); padding: 3px 5px 3px 7px; border-radius: 3px;
-  background: var(--glass); color: var(--ink); white-space: nowrap;
-  border-left: 3px solid var(--c, #888); cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+/* the ghost key: no plate, a halo under the mark so it reads over any part of the model */
+.ghost {
+  position: absolute;
+  top: calc(8px + env(safe-area-inset-top));
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: .72;
+  animation: ghost-in 200ms var(--draw);
 }
-.wl.sel { outline: 2px solid var(--ink); }
+.ghost:focus-visible, .ghost:active { opacity: 1; }
+.ghost .halo { stroke: rgba(246, 249, 250, .6); stroke-width: 3.4; }
+.ghost .halo circle { fill: rgba(246, 249, 250, .6); }
+.ghost .mark { stroke: #0f1c23; stroke-width: 1.4; }
+.ghost .mark .fill { fill: #0f1c23; }
+@media (prefers-color-scheme: dark) {
+  /* 0.70 where the house has 0.45: the print's bright ends need it (ART.md section 2) */
+  .ghost .halo { stroke: rgba(10, 16, 19, .7); }
+  .ghost .halo circle { fill: rgba(10, 16, 19, .7); }
+  .ghost .mark { stroke: #f2f4f1; }
+  .ghost .mark .fill { fill: #f2f4f1; }
+}
+@keyframes ghost-in { from { opacity: 0; } }
 
-#inspect {
-  position: absolute; left: 12px; bottom: 68px; width: min(340px, calc(100% - 24px));
-  background: var(--glass); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px 8px;
+/* the tapped cell or well. app.js (placeCard) puts it in a corner of the room the keys and the ghost
+   key leave, clear of the selection's mark: top-left, else bottom-left, else the right-hand side, and
+   sets its top there */
+.readout {
+  position: absolute;
+  left: calc(8px + env(safe-area-inset-left));
+  top: 8px;
+  z-index: 3;
+  width: max-content;
+  min-width: 190px;
+  max-width: min(280px, calc(100% - 76px));
+  display: flex;
+  flex-direction: column;
+  padding: 4px 4px 4px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  animation: card-in 120ms var(--draw);
 }
-.inspect-head { display: flex; justify-content: space-between; align-items: center; }
-#inspect h2 { margin: 0; font: 600 16px/1.1 var(--face-narrow); }
-#ins-list { display: grid; grid-template-columns: auto 1fr; gap: 1px 12px; margin: 6px 0 0; font-size: 12.5px; }
-#ins-list.c4 { grid-template-columns: auto 1fr auto 1fr; }
-#ins-list dt { color: var(--muted); }
-#ins-list dd { margin: 0; text-align: right; white-space: nowrap; }
-#ins-list .sep { grid-column: 1 / -1; height: 1px; background: var(--rule); margin: 4px 0; }
-.icon { border: 0; background: none; font-size: 22px; line-height: 1; padding: 2px 4px; cursor: pointer; color: var(--muted); }
+@keyframes card-in { from { opacity: 0; transform: translateY(4px); } }
+.readout.right { left: auto; right: calc(8px + env(safe-area-inset-right)); }
+.readout-where { display: flex; align-items: center; justify-content: space-between; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
+.readout-close { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin: -6px 0 -10px; color: var(--ink-2); }
+/* the full form: the body and the head only wrap (the compact form scrolls them as one) */
+.readout-body, .readout-head { display: contents; }
+.readout-value { font-size: 21px; font-weight: 600; line-height: 1.2; padding-right: 8px; }
+.readout-unit { font-size: 13.5px; font-weight: 400; color: var(--ink-2); }
+.readout-sub { font-size: 12.5px; color: var(--ink-2); padding-right: 8px; }
+/* only the rows scroll, and app.js ends them on a row's edge (placeCard); the Zoom key stays in view */
+.readout-all {
+  order: 2;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0 8px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1px 14px;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+.readout-all dt { color: var(--ink-2); }
+.readout-all dd { margin: 0; text-align: right; font-weight: 560; }
+.readout-all .rule { grid-column: 1 / -1; height: 1px; background: var(--line); margin: 3px 0; }
+.readout-zoom { order: 1; align-self: flex-start; margin: -4px 0 0 -8px; }
+/* the sign that more rows follow: a 1 px --line-strong rule at the foot of what scrolls */
+.readout-all.more, .readout-body.more { border-bottom: 1px solid var(--line-strong); }
+.readout-all.more { margin-bottom: 4px; }
+/* the compact form, on a plate too short for the full one (the sheet raised, a phone on its side):
+   the place line with Zoom and Close on one 24 px row, their 44 px hits reaching over its edges; under
+   it the body, the figure and its line, then the rows, scrolling as one */
+.readout.compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-rows: 24px minmax(0, auto);
+  max-width: calc(100% - 16px - env(safe-area-inset-left) - env(safe-area-inset-right));
+  padding: 3px 4px 3px 12px;
+}
+.compact .readout-where { display: contents; }
+.compact #readout-where { grid-area: 1 / 1; align-self: center; min-width: 0; padding-right: 8px; }
+.compact .readout-zoom { grid-area: 1 / 2; position: relative; z-index: 1; margin: -8px 0 -12px; }
+.compact .readout-close { grid-area: 1 / 3; position: relative; z-index: 1; margin: -8px 0 -12px; }
+.compact .readout-body { grid-area: 2 / 1 / 3 / 4; display: block; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.compact .readout-head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; padding-right: 8px; }
+.compact .readout-value, .compact .readout-sub { padding-right: 0; }
+.compact .readout-all { overflow: visible; }
 
-.btn.small { flex: none; width: 100%; margin-top: 8px; padding: 7px 10px; font-size: 13px; }
-.fab {
-  position: absolute; right: 12px; bottom: 12px; width: 40px; height: 40px; border-radius: 50%;
-  border: 1px solid var(--rule); background: var(--glass); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  display: grid; place-items: center; cursor: pointer; color: var(--ink);
-}
-.fab svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-#hint {
-  position: absolute; left: 50%; bottom: 70px; transform: translateX(-50%); margin: 0;
-  max-width: calc(100% - 130px); padding: 7px 12px; border-radius: 8px; text-align: center;
-  background: var(--glass); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-  border: 1px solid var(--rule); font-size: 13px; color: var(--ink); pointer-events: none;
-}
-#inspect { max-width: calc(100% - 76px); }
-#ins-list dt { white-space: nowrap; }
-
-/* No z-index: the loading panel comes later in the markup and must stay on top. */
-#gauge {
-  position: absolute; left: 12px; bottom: 12px;
-  display: flex; align-items: flex-end; gap: 10px; pointer-events: none;
-}
-#compass {
-  flex: none; width: 48px; height: 48px; border-radius: 50%;
-  border: 1px solid var(--rule); background: var(--glass);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-}
-#compass .n { fill: var(--accent); }
-#compass .s { fill: var(--muted); opacity: 0.6; }
-#compass text { font: 600 9px var(--face-narrow); fill: var(--ink); }
-#scale {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
-  padding-bottom: 3px; font-size: 12px; color: var(--ink);
-  text-shadow: 0 0 3px var(--stage), 0 0 6px var(--stage);
-}
-#scale p { margin: 0; }
-#scale-len { font-weight: 600; }
-#scale-sub { color: var(--muted); font-size: 11px; }
-#scale-bar {
-  width: 80px; height: 6px; border: 1px solid var(--ink); border-top: 0;
-  box-shadow: 0 0 3px var(--stage), 0 0 6px var(--stage);
+/* a problem with the data is a sentence on the plate, never a blank plate */
+.error {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: max-content;
+  max-width: min(300px, calc(100% - 32px));
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-align: center;
+  pointer-events: none;
 }
 
-#loading {
-  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-  background: var(--stage); color: var(--muted); font-size: 14px; padding: 24px; text-align: center;
+/* ── the caption band: the legend, the instruments, the wells' key, the cut's line, the credits ── */
+
+.caption {
+  grid-row: 3;
+  padding: 6px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--ink-2);
 }
-#loading.done { display: none; }
-#loading .bar { width: 180px; height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; }
-#load-bar { width: 0; height: 100%; background: var(--accent); transition: width .2s; }
+.caption > .stamp { margin-bottom: 2px; }
+.legend { display: flex; align-items: flex-start; gap: 12px; min-height: 30px; }
+.legend-title { flex: 0 1 auto; min-width: 0; font-size: 11.5px; font-weight: 600; color: var(--ink); padding-top: 1px; }
+.legend-scale { flex: 1 1 150px; min-width: 150px; padding-top: 5px; }
+.legend-bar { display: block; width: 100%; height: 6px; outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); outline-offset: 0; }
+.legend-ticks { position: relative; height: 15px; font-size: 10.5px; }
+.legend-ticks span { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; line-height: 12px; }
+.legend-ticks span::before { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 3px; background: var(--line-strong); }
+.legend-ticks span.first { transform: none; }
+.legend-ticks span.first::before { left: 0; }
+.legend-ticks span.last { transform: translateX(-100%); }
+.legend-ticks span.last::before { left: auto; right: 0; }
+.swatches { flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 2px 12px; padding-top: 1px; font-size: 10.5px; }
+.swatches span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.swatches i { width: 10px; height: 10px; background: var(--c); outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); }
+.instruments { display: flex; align-items: center; gap: 14px; height: 20px; }
+.north { display: inline-flex; align-items: center; gap: 2px; font-size: 10.5px; color: var(--ink-2); }
+.north .n { color: var(--ink); }
+.north .s { color: var(--ink-3); }
+.scale { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.scale-bar { display: block; height: 6px; border: 0 solid var(--ink); border-width: 0 1.5px; position: relative; }
+.scale-bar::after { content: ''; position: absolute; left: 0; right: 0; top: 2px; height: 2px; background: var(--ink); }
+.wellkey { display: flex; flex-wrap: wrap; gap: 0 12px; min-height: 15px; font-size: 10.5px; }
+.wellkey span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.wellkey .casing { stroke: var(--ink); stroke-width: 4.5; stroke-linecap: butt; stroke-opacity: .85; }
+.wellkey .core { stroke: var(--c, #6f7274); stroke-width: 2.5; stroke-linecap: butt; }
+.wellkey .dash { stroke-dasharray: 3 2; }
+.wellkey .thin.casing { stroke-width: 3; }
+.wellkey .thin.core { stroke-width: 1.5; opacity: .6; }
+.cutline, .credits { margin: 0; }
+/* The cut's line has a fixed height, whatever it says: two lines below 640 px, one from 640 px, so
+   the plate above it never resizes as the month changes. tools/shoot.mjs measures the longest line
+   the data can produce at every width it runs. */
+.cutline { height: 30px; overflow: hidden; }
+@media (min-width: 640px) { .cutline { height: 15px; } }
+.credits { font-size: 10.5px; }
 
-#sheet {
-  flex: 0 0 auto; max-height: 58%; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  padding: 0 16px calc(env(safe-area-inset-bottom) + 14px);
-  border-top: 1px solid var(--rule); background: var(--panel);
+/* ── the player: the date, the transport and the track ── */
+
+.player {
+  grid-row: 4;
+  padding: 2px calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left));
+  background: var(--page);
+  border-top: 1px solid var(--line);
 }
-#grip {
-  position: sticky; top: 0; z-index: 3; display: block;
-  width: calc(100% + 32px); margin: 0 -16px 2px; padding: 9px 0 8px;
-  border: 0; background: var(--panel); cursor: grab; touch-action: none;
-  -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none;
+.focus .player { padding-bottom: env(safe-area-inset-bottom); }
+.time-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 6px 4px 0; }
+.valid { font-size: 21px; line-height: 1; font-weight: 600; white-space: nowrap; min-height: 21px; }
+.lead { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.controls { display: flex; align-items: flex-start; }
+.tkey { flex: 0 0 auto; width: 44px; height: 44px; margin-top: 7px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.tkey.play { color: var(--page); }
+.shutter { width: 32px; height: 32px; border-radius: 8px; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+.shutter svg { fill: currentColor; stroke: none; }
+.track { position: relative; flex: 1 1 auto; min-width: 0; height: 58px; margin-left: 4px; cursor: pointer; touch-action: none; }
+.track canvas { display: block; width: 100%; height: 58px; }
+.track:focus-visible { outline-offset: -2px; }
+/* no transition, ever, on what carries a step */
+.valid, .lead, .track, .track canvas { transition: none; animation: none; }
+
+/* ── the controls sheet: a grip and two stops ── */
+
+.sheet {
+  grid-row: 5;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 calc(16px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+  border-top: 1px solid var(--line);
 }
-#grip:active { cursor: grabbing; }
-#grip .bar { display: block; width: 40px; height: 5px; margin: 0 auto; border-radius: 3px; background: var(--rule); }
-#grip:hover .bar, #grip:focus-visible .bar { background: var(--muted); }
-#grip .chev {
-  position: absolute; right: 14px; top: 50%; margin-top: -8px; width: 16px; height: 16px;
-  fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+.grip { position: relative; display: block; width: 100%; height: 44px; touch-action: none; color: var(--ink-2); }
+.grip-bar { position: absolute; left: 50%; top: 20px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--line-strong); }
+.grip-chev { position: absolute; right: 0; top: 16px; }
+.s2 .grip-chev { transform: rotate(180deg); }
+.stop { display: none; padding-bottom: 12px; }
+.s1 .stop1, .s2 .stop1, .s2 .stop2 { display: block; }
+.sheet-head { margin: 0; padding: 10px 0 4px; font-size: 13.5px; font-weight: 650; border-top: 1px solid var(--line); }
+.srow { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 5.5em; align-items: center; column-gap: 10px; min-height: 44px; }
+.slabel { font-size: 12.5px; color: var(--ink-2); }
+.sval { font-size: 12.5px; text-align: right; white-space: nowrap; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+.words.sub { margin: 0 -8px; }
+/* house sliders drawn by CSS alone: a 1 px track, the value so far 2 px of ink, a tracer-head thumb */
+.hslider {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: pan-y;
+  --p: 0%;
 }
-#sheet.s2 #grip .chev { transform: rotate(180deg); }
-#sheet.s0 .explode, #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more { display: none; }
-
-.chips { display: flex; gap: 2px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
-.chips::-webkit-scrollbar { display: none; }
-.chip {
-  flex: 0 0 auto; border: 0; background: none; cursor: pointer;
-  padding: 7px 9px 9px; font-size: 14px; color: var(--muted); position: relative;
+.hslider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(var(--ink), var(--ink)) 0 0 / var(--p) 2px no-repeat, linear-gradient(var(--line-strong), var(--line-strong)) 0 0.5px / 100% 1px no-repeat;
 }
-.chip::after { content: ""; position: absolute; left: 9px; right: 9px; bottom: 2px; height: 3px; border-radius: 2px; background: var(--grad); opacity: 0; }
-.chip[aria-checked="true"] { color: var(--ink); font-weight: 600; }
-.chip[aria-checked="true"]::after { opacity: 1; }
-.chip-sep { flex: 0 0 1px; background: var(--rule); margin: 9px 7px 11px; }
-
-.timeline { display: flex; align-items: center; gap: 12px; margin: 8px 0 4px; }
-.play {
-  flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
-  background: var(--accent); color: var(--accent-ink); display: grid; place-items: center;
+.hslider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -6px; border-radius: 50%; background: var(--ink); border: 3px solid var(--page); }
+.hslider::-moz-range-track { height: 1px; background: var(--line-strong); }
+.hslider::-moz-range-progress { height: 2px; background: var(--ink); }
+.hslider::-moz-range-thumb { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); border: 3px solid var(--page); }
+.hslider:disabled { opacity: .45; cursor: default; }
+.toggles { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; height: 44px; font-size: 12.5px; }
+.tbox { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--ink); }
+.toggle[aria-pressed="false"] .tbox svg { visibility: hidden; }
+.textkey { min-width: 44px; height: 44px; padding: 0 8px; font-size: 12.5px; color: var(--ink); }
+#reset-cut { margin-left: -8px; }
+.chart-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); margin-top: 6px; }
+.chart-head .sheet-head { border: 0; }
+.pick {
+  height: 44px;
+  max-width: 50%;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--page);
+  font-size: 12.5px;
 }
-.play svg { width: 20px; height: 20px; fill: currentColor; }
+.chart { display: block; width: 100%; height: 140px; touch-action: none; cursor: pointer; }
+.chart text { font: 10.5px var(--face); fill: var(--ink-2); stroke: none; }
+.chart text.top { fill: var(--ink-3); stroke: var(--page); stroke-width: 3px; stroke-linejoin: round; paint-order: stroke fill; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.ln { fill: none; stroke-width: 1.5; stroke-linecap: butt; }
+.ln.oil { stroke: var(--chart-oil); }
+.ln.water { stroke: var(--chart-water); }
+.ln.gas { stroke: var(--chart-gas); }
+.ln.inj { stroke-dasharray: 4 3; }
+.chart .cursor { stroke: var(--ink); stroke-width: 1.5; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 0 12px; font-size: 10.5px; color: var(--ink-2); min-height: 15px; }
+.chart-key span { display: inline-flex; align-items: center; gap: 4px; }
 
-input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; margin: 0; }
-input[type="range"]::-webkit-slider-runnable-track { height: 3px; background: var(--rule); border-radius: 2px; }
-input[type="range"]::-moz-range-track { height: 3px; background: var(--rule); border-radius: 2px; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -8.5px; border-radius: 50%; background: var(--ink); border: 3px solid var(--panel); box-shadow: 0 0 0 1px var(--rule); }
-input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--ink); border: 3px solid var(--panel); }
-#time::-webkit-slider-thumb { background: var(--accent); }
-#time::-moz-range-thumb { background: var(--accent); }
+/* ── About: a full-height sheet ── */
 
-#chart-wrap { margin-top: 6px; }
-.chart-head { display: flex; justify-content: space-between; align-items: baseline; }
-#chart-title { margin: 0; font-weight: 600; font-size: 14px; }
-select.pick { font-size: 13px; padding: 4px 8px; border: 1px solid var(--rule); border-radius: 6px; background: transparent; max-width: 48%; }
-.explode { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; margin: 2px 0 6px; font-size: 14px; }
-.explode label { font-weight: 600; }
-.explode select.pick { max-width: none; }
-#well-key { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: 12px; color: var(--muted); margin-top: 6px !important; max-width: 230px; }
-#well-key span, #leg-cats span { display: inline-flex; align-items: center; gap: 5px; }
-#well-key i { width: 10px; height: 3px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(14, 26, 32, 0.5); }
-#leg-cats { display: grid; gap: 4px; justify-items: end; }
-#leg-cats i { width: 12px; height: 12px; border-radius: 2px; order: 2; }
-.zl { position: absolute; left: 0; top: 0; font: 600 13px/1 var(--face-narrow); padding: 4px 8px; border-radius: 4px; background: var(--glass); color: var(--ink); white-space: nowrap; pointer-events: none; }
-.chart-head { gap: 10px; align-items: center !important; }
-#chart { width: 100%; height: 132px; display: block; margin-top: 4px; touch-action: pan-y; cursor: pointer; }
-#chart text { font: 10px var(--face); fill: var(--muted); }
-#chart .grid { stroke: var(--rule); stroke-width: 1; vector-effect: non-scaling-stroke; }
-#chart .cursor { stroke: var(--accent); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-#chart .ln { fill: none; stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
-.key { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); margin-top: 4px; }
-.key i { display: inline-block; width: 14px; height: 0; border-top: 2px solid var(--c); vertical-align: middle; margin-right: 5px; }
-.key i.d { border-top-style: dashed; }
-.key i.dot { border-top-style: dotted; }
+.about { position: fixed; inset: 0; z-index: 20; }
+.about-sheet {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--sheet);
+  animation: sheet-in 220ms var(--sheet-in);
+}
+@keyframes sheet-in { from { transform: translateY(100%); } }
+.about-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: env(safe-area-inset-top) calc(8px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  border-bottom: 1px solid var(--line);
+}
+.about-head h2 { margin: 0; font-size: 15px; font-weight: 650; }
+.about-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+}
+.about-body section { max-width: 62ch; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.about-body h3 { margin: 0 0 6px; font-size: 13.5px; font-weight: 650; }
+.about-body p + h3 { margin-top: 12px; }
+.about-body p { margin: 0 0 8px; line-height: 1.5; }
+.about-body p:last-child { margin-bottom: 0; }
+.about-body code { font: inherit; }
+.about-body dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; line-height: 1.45; }
+.about-body dt { color: var(--ink-2); }
+.about-body dd { margin: 0; overflow-wrap: anywhere; }
+.about-foot { margin-top: 8px; }
 
-#more { display: block; margin-top: 10px; border-top: 1px solid var(--rule); }
-.more-title { margin: 0; padding: 11px 0 6px; font-weight: 600; font-size: 14px; }
-.rows { display: grid; gap: 2px; padding-bottom: 6px; }
-.row { display: grid; grid-template-columns: 92px 1fr 70px; align-items: center; gap: 10px; font-size: 13px; }
-.row label { color: var(--muted); }
-.row output { text-align: right; white-space: nowrap; font-size: 12px; }
-.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.toggles { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 8px 0 2px; font-size: 14px; }
-.toggles input { accent-color: var(--accent); width: 17px; height: 17px; vertical-align: -3px; margin: 0 5px 0 0; }
-.actions { display: flex; gap: 10px; margin-top: 8px; }
-.btn { flex: 1; border: 1px solid var(--rule); background: transparent; border-radius: 8px; padding: 9px 10px; cursor: pointer; font-size: 14px; }
-.credit { color: var(--muted); font-size: 12px; margin: 10px 0 0; max-width: 70ch; }
+/* ── focus mode: the header, the keys and the sheet leave; the plate, the caption and the player stay ── */
 
-button:focus-visible, input:focus-visible, .wl:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.leaving { opacity: 0; transition: opacity 160ms var(--draw); }
+
+@media (hover: hover) {
+  .keyplate button:hover svg { background: color-mix(in srgb, currentColor 7%, transparent); border-radius: 4px; }
+  .words button:hover, .unitkey:hover, .stamp:hover, .textkey:hover, .tkey:hover, .grip:hover, .toggle:hover { color: var(--ink); }
+  .ghost:hover { opacity: 1; }
+}
+@media (min-width: 700px) {
+  .head, .caption, .sheet { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
+}
+
+/* ── a wide screen: the sheet becomes a column at the right ── */
 
 @media (min-width: 820px) and (min-height: 480px) {
-  body { flex-direction: row; }
-  #stage { flex: 1 1 auto; }
-  #sheet { flex: 0 0 380px; max-height: none; height: 100%; border-top: 0; border-left: 1px solid var(--rule); padding-top: 16px; }
-  .chips { flex-wrap: wrap; overflow: visible; }
-  #grip { display: none; }
-  #sheet.s0 .explode { display: grid; }
-  #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more { display: block; }
+  body { grid-template-columns: minmax(0, 1fr) 380px; grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  .head, .plate, .caption, .player { grid-column: 1; }
+  .sheet { grid-column: 2; grid-row: 1 / -1; border-top: 0; border-left: 1px solid var(--line); padding-top: env(safe-area-inset-top); }
+  .player { padding-bottom: env(safe-area-inset-bottom); }
 }
-@media (orientation: landscape) and (max-height: 479px) {
-  body { flex-direction: row; }
-  #stage { flex: 1 1 auto; }
-  #sheet { flex: 0 0 min(340px, 45%); max-height: none; height: 100%; border-top: 0; border-left: 1px solid var(--rule); padding-top: calc(env(safe-area-inset-top) + 8px); }
-  #chart { height: 96px; }
-  #grip { display: none; }
-  #sheet.s0 .explode { display: grid; }
-  #sheet.s0 #chart-wrap, #sheet.s0 #more, #sheet.s1 #more { display: block; }
+
+/* at its closed stop the sheet's column is only its grip, a 44 px strip, so the plate keeps the width */
+@media (min-width: 820px) and (min-height: 480px), (orientation: landscape) and (max-height: 500px) {
+  body:has(.sheet.s0) { grid-template-columns: minmax(0, 1fr) 45px; }
+  .sheet.s0 { padding-left: 0; padding-right: 0; overflow: hidden; }
+  .sheet.s0 .grip-bar { display: none; }
+  .sheet.s0 .grip-chev { left: 16px; right: auto; transform: rotate(-90deg); }
 }
-@media (prefers-reduced-motion: reduce) { #load-bar { transition: none; } }
+
+/* ── a phone on its side: the header, the caption and the player each give the plate a row ── */
+
+@media (orientation: landscape) and (max-height: 500px) {
+  body { grid-template-columns: minmax(0, 1fr) min(340px, 45%); grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  .head, .plate, .caption, .player { grid-column: 1; }
+  .sheet { grid-column: 2; grid-row: 1 / -1; border-top: 0; border-left: 1px solid var(--line); padding-top: env(safe-area-inset-top); }
+  .head {
+    grid-template-columns: max-content minmax(0, 1fr) auto;
+    grid-template-rows: 22px 24px;
+    column-gap: 16px;
+    padding-top: env(safe-area-inset-top);
+  }
+  .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
+  .stamp { white-space: nowrap; }
+  .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
+  .unitkey { grid-area: 1 / 3 / 3 / 4; }
+  /* the legend and the credits share a row; the instruments and the wells' key share the next; the
+     cut's line runs under them on one line */
+  .caption {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(0, max-content);
+    grid-template-areas: "stamp stamp" "legend credits" "inst wells" "cut cut";
+    column-gap: 16px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+  }
+  .caption > .stamp { grid-area: stamp; }
+  .legend { grid-area: legend; min-height: 26px; }
+  .credits { grid-area: credits; align-self: start; padding-top: 1px; }
+  .instruments { grid-area: inst; height: 15px; }
+  .wellkey { grid-area: wells; align-self: center; }
+  .cutline { grid-area: cut; height: 15px; white-space: nowrap; overflow: hidden; }
+  .player { display: flex; align-items: center; gap: 8px; padding-top: 0; padding-bottom: env(safe-area-inset-bottom); }
+  .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; }
+  .controls { flex: 1 1 auto; min-width: 0; align-items: center; }
+  .tkey { margin-top: 0; }
+}
+/* focus mode on a wide screen or a phone on its side: the hidden sheet leaves no column behind */
+@media (min-width: 820px) and (min-height: 480px), (orientation: landscape) and (max-height: 500px) {
+  body.focus, body.focus:has(.sheet.s0) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }
+}

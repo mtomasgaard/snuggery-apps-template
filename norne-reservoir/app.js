@@ -1,218 +1,197 @@
-// Norne reservoir viewer — vanilla WebGL2, no dependencies, runs offline.
+// Norne Reservoir: the open Norne benchmark model in 3D, vanilla WebGL 2, no dependencies, offline.
+// The look is ART.md under Template/HOUSE.md; the data and its formats are NOTES.md and
+// data/ATTRIBUTION.txt. Every number and date the app writes goes through js/units.js; the data is
+// decoded by js/data.js (pure, tested by tools/test_decode.mjs); the player's track, which carries
+// the signature (the cut), is js/track.js.
+//
+// The frame (the scrub rule, HOUSE 4.6): input only records the WANTED report date. Each animation
+// frame draws the newest wanted date (its colors decoded and uploaded in the same frame), then sets
+// SHOWN to it, and everything that carries a date (the time row, the lead, the cut's line, the card,
+// the chart's cursor, the track's thumb and aria-valuenow) reads SHOWN. The loop asks for a frame
+// only while something is dirty, a flight runs or play is on.
+
+import * as U from './js/units.js';
+import { buildZones, segmentOf, fillValues, cellValue, propRange, norm, denorm, gasMax, openEnds, cutSeries, cutFacts } from './js/data.js';
+import { createTrack, CUT_SCALE } from './js/track.js';
+
 const $ = (id) => document.getElementById(id);
 const LS_KEY = 'norne-viewer:v1';
+const STORE = { state: LS_KEY, focus: `${LS_KEY}:focus`, units: `${LS_KEY}:units` };
+// Retired: `${LS_KEY}:hint`, the first-run hint's flag (the hint went in the house pass; owner call 8, in tools/DECISIONS.md).
+const CREDIT = 'Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0';
 const TEX_W = 1024;
 const FOV = 40 * Math.PI / 180;
 const FACES = [[0, 2, 6, 4], [1, 3, 7, 5], [0, 1, 5, 4], [2, 3, 7, 6], [0, 1, 3, 2], [4, 5, 7, 6]];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const ROLE = ['Shut', 'Producer', 'Water injector', 'Gas injector'];
+const DOING = ['Shut', 'Producing', 'Injecting water', 'Injecting gas'];
+const ROLE_KEY = ['shut', 'producer', 'waterInjector', 'gasInjector'];
+const FILES = 7;                              // config.json, model.json and the five binaries
 
 let cfg, cfgText = '', model, gl;
-const G = {};            // data + GL objects
-const S = {              // UI state (saved to localStorage)
+const G = { stats: { colorPasses: 0, faceRebuilds: 0, draws: 0, frames: 0, colorMs: 0, faceMs: 0 } };   // data + GL objects; stats for the test hook
+const D = {};                                 // the decoded model, as js/data.js reads it
+const S = {                                   // the view, saved to localStorage
   prop: null, frame: 0,
   cut: { i0: 1, i1: 46, j0: 1, j1: 112, k0: 1, k1: 22 },
   vf: [0, 100], exag: 5, wells: true, labels: true, edges: true,
   cam: null, well: null,
   explode: { mode: 'formations', t: 0 },
-  sheet: 0,               // controls sheet: 0 player, 1 + chart, 2 + section and view
+  sheet: 0,                                   // the controls sheet: 0 the grip, 1 + explode and rates, 2 + section and view
 };
-const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true }; // dirty flags
-let pick = -1, cardMode = null, playing = false;
+const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0 };   // dirty; card: 1 check the card's place, 2 place it afresh
+let pick = -1, cardMode = null, playing = null, wanted = 0, shown = -1, units = 'SI', focus = false, track = null;
+let raf = 0, flog = null;
+const dark = matchMedia('(prefers-color-scheme: dark)');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const isHex = (h) => typeof h === 'string' && /^#[0-9a-f]{6}$/i.test(h);
+const store = (key, value) => { try { localStorage.setItem(key, value); } catch { /* storage blocked */ } };
+const say = (text) => { const l = $('live'); l.textContent = ''; requestAnimationFrame(() => { l.textContent = text; }); };
+
+/** Ask for one frame, unless one is already coming. */
+function kick() { if (!raf && document.visibilityState !== 'hidden') raf = requestAnimationFrame(loop); }
 
 main().catch((err) => fail(err));
 
 // ---------------------------------------------------------------- loading
+class DataError extends Error {}
+let loaded = 0;
+function counted() { loaded++; if (!model || loaded < FILES) $('stamp').textContent = `Reading the model… ${loaded} of ${FILES}`; }
+async function fetchOk(url) {
+  let r;
+  try { r = await fetch(url, { cache: 'no-store' }); } catch { throw new DataError(`${url} could not be read.`); }
+  if (!r.ok) throw new DataError(`${url} could not be read (HTTP ${r.status}).`);
+  return r;
+}
 async function loadJSON(url) {
-  const r = await fetch(url, { cache: 'no-store' });
-  if (!r.ok) throw new Error(`${url} returned ${r.status}`);
-  const text = await r.text();
-  return { text, json: JSON.parse(text) };
-}
-async function loadBin(url, onProgress) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(`${url} returned ${r.status}`);
-  const total = +r.headers.get('content-length') || 0;
-  if (!r.body || !total) return r.arrayBuffer();
-  const reader = r.body.getReader();
-  const out = new Uint8Array(total);
-  let got = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    out.set(value, got); got += value.length;
-    onProgress(got / total);
+  const text = await (await fetchOk(url)).text();
+  try { return { text, json: JSON.parse(text) }; } catch {
+    throw new DataError(`${url} is not valid JSON${/^\s*</.test(text) ? '; it looks like a web page was written over it' : ''}.`);
   }
-  return out.buffer;
 }
-function progress(p, msg) {
-  $('load-bar').style.width = `${Math.round(p * 100)}%`;
-  if (msg) $('load-msg').textContent = msg;
+async function loadBin(name, want) {
+  const buf = await (await fetchOk(`data/${name}`)).arrayBuffer();
+  if (buf.byteLength !== want) throw new DataError(`data/${name} holds ${U.int(buf.byteLength)} bytes; ${want === model.frames.length * model.dynamic.frameBytes ? `${model.frames.length} report dates need` : 'the model needs'} ${U.int(want)}.`);
+  counted();
+  return buf;
 }
 function fail(err) {
-  console.error(err);
-  $('loading').classList.remove('done');
-  $('load-msg').textContent = `Could not open the model: ${err.message}. ` +
-    'Open this app from Snuggery or a local web server; a file opened directly in a browser cannot load its data.';
+  if (!(err instanceof DataError)) console.error(err);
+  const msg = location.protocol === 'file:' ? 'This app reads its data over Snuggery’s own server; opened as a file, the browser blocks it.'
+    : err instanceof DataError ? err.message : `The model could not be shown: ${err.message}`;
+  notice(msg);
+  $('stamp').textContent = 'The model could not be read.';
+  // an alpha:false context paints its own black buffer over the plate's CSS background: clear it to
+  // the theme's --plate, and again when the theme changes, so the notice sits on the app's own ground
+  if (gl) { paintPlate(); dark.addEventListener('change', paintPlate); }
 }
+function paintPlate() { readTheme(); gl.clearColor(...G.clear, 1); gl.clear(gl.COLOR_BUFFER_BIT); }
+function notice(text) { const e = $('error'); e.textContent = text; e.hidden = !text; }
 
 async function main() {
+  focus = (() => { try { return localStorage.getItem(STORE.focus) === '1'; } catch { return false; } })();
+  if (focus) applyFocus(true, true);
+  try { const u = localStorage.getItem(STORE.units); if (U.SYSTEMS.includes(u)) units = u; } catch { /* default SI */ }
   gl = $('gl').getContext('webgl2', { antialias: true, alpha: false });
-  if (!gl) throw new Error('this device has no WebGL 2, which the 3D view needs');
-  progress(0.02, 'Loading settings…');
-  const c = await loadJSON('config.json'); cfg = c.json; cfgText = c.text;
-  model = (await loadJSON('data/model.json')).json;
+  if (!gl) throw new DataError('This phone gave no WebGL 2, which the 3D view needs.');
+  const c = await loadJSON('config.json'); cfg = c.json; cfgText = c.text; counted();
+  model = (await loadJSON('data/model.json')).json; counted();
+  const NA = model.NA, nf = model.frames.length;
+  const want = { geometry: NA * 96, neighbours: NA * 24, ijk: NA * 3, static: NA * 4 * model.static.order.length, dynamic: nf * model.dynamic.frameBytes };
+  const bufs = {};
+  for (const key of ['geometry', 'neighbours', 'ijk', 'static', 'dynamic']) bufs[key] = await loadBin(model.files[key], want[key]);
+  await document.fonts.load('560 11.5px "Ysabeau Office"');   // labels and the track are measured in the face
 
-  const parts = [['geometry', 'Loading grid geometry…', 0.2], ['neighbours', 'Loading cell connections…', 0.05],
-    ['ijk', 'Loading cell indices…', 0.01], ['static', 'Loading rock properties…', 0.05], ['dynamic', 'Loading simulation results…', 0.6]];
-  const bufs = {}; let done = 0.05;
-  for (const [key, msg, w] of parts) {
-    progress(done, msg);
-    const base = done;
-    bufs[key] = await loadBin(`data/${model.files[key]}`, (p) => progress(base + w * 0.9 * p));
-    done += w * 0.9;
-  }
-  const NA = G.NA = model.NA;
+  G.NA = NA; G.nf = nf;
   G.geom = new Float32Array(bufs.geometry);
   G.nb = new Int32Array(bufs.neighbours);
   G.ijk = new Uint8Array(bufs.ijk);
-  G.dyn = bufs.dynamic;
-  G.nf = model.frames.length;
   const st = new Float32Array(bufs.static);
-  G.static = {};
-  model.static.order.forEach((k, i) => { G.static[k] = st.subarray(i * NA, (i + 1) * NA); });
+  const statics = {};
+  model.static.order.forEach((k, i) => { statics[k] = st.subarray(i * NA, (i + 1) * NA); });
+  Object.assign(D, { model, cfg, NA, ijk: G.ijk, static: statics, dyn: bufs.dynamic });
   G.vals = new Float32Array(NA);
   G.vis = new Uint8Array(NA);
   G.texH = Math.ceil(NA / TEX_W);
   G.colors = new Uint8Array(TEX_W * G.texH * 4);
-  if (G.dyn.byteLength < G.nf * model.dynamic.frameBytes) throw new Error('simulation results file is incomplete');
+  G.days = model.frames.map(U.dayNumber);
+  G.cut = cutSeries(model, U.dayNumber);
+  G.gasMax = gasMax(D);
 
   S.cut = { i0: 1, i1: model.NI, j0: 1, j1: model.NJ, k0: 1, k1: model.NK };
   S.exag = cfg.verticalExaggeration || 5;
   S.prop = cfg.defaultProperty;
   restore();
   if (!propDef(S.prop)) S.prop = cfg.properties[0].key;
-  S.frame = Math.min(Math.max(0, S.frame | 0), G.nf - 1);
+  wanted = Math.min(Math.max(0, S.frame | 0), nf - 1);
 
   for (const w of model.wells) { w.firstOpen = w.state.findIndex((s) => s > 0); const zmin = Math.min(...w.path.slice(1).map((p) => p[2])); w.path[0][2] = zmin - 70; }
-  buildZones();
+  buildZoneData();
   computeExplode();
   initGL();
-  initUI();
   initCamera();
-  $('field-name').textContent = model.name;
-  $('field-sub').textContent = 'Norwegian Sea';
-  buildWellKey();
-  $('credit').textContent = model.source;
-  progress(1, '');
-  $('loading').classList.add('done');
-  new ResizeObserver(() => { R.draw = true; R.chart = true; R.labels = true; }).observe($('stage'));
-  new ResizeObserver(() => { R.chart = true; }).observe($('chart'));
-  requestAnimationFrame(loop);
+  initUI();
+  $('credits').textContent = CREDIT;
+  writeStamp();
+  writeAbout();
+  new ResizeObserver(() => { R.draw = true; R.labels = true; R.card = 2; layoutKeys(); reframe(); kick(); }).observe($('plate'));
+  new ResizeObserver(() => { R.chart = true; kick(); }).observe($('chart'));
+  new ResizeObserver(() => { track.resize(); R.track = true; R.legend = true; kick(); }).observe($('slider'));
+  document.fonts.addEventListener('loadingdone', () => { track.invalidate(); R.track = true; R.labels = true; G.labelW = null; kick(); });
+  // the legend's title is written last: the marketing camera waits for "Oil saturation" as the sign
+  // that every file is in
+  drawLegend();
+  kick();
 }
 
 // ---------------------------------------------------------------- persistence
 function restore() {
   try {
-    const s = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+    const s = JSON.parse(localStorage.getItem(STORE.state) || 'null');
     if (!s) return;
     for (const k of ['prop', 'frame', 'exag', 'wells', 'labels', 'edges', 'well']) if (k in s) S[k] = s[k];
     if (Number.isFinite(s.sheet)) S.sheet = Math.max(0, Math.min(2, s.sheet | 0));
     if (s.cut) for (const k in S.cut) if (Number.isFinite(s.cut[k])) S.cut[k] = s.cut[k];
     if (Array.isArray(s.vf)) S.vf = s.vf;
-    if (s.cam && Number.isFinite(s.cam.dist)) S.cam = s.cam;
+    if (s.cam && Number.isFinite(s.cam.dist) && 'sx' in s.cam) S.cam = s.cam;   // a camera saved before the fit had no lens shift: the fit replaces it
     if (s.explode && ['formations', 'layers', 'segments'].includes(s.explode.mode) && Number.isFinite(s.explode.t)) S.explode = s.explode;
     if (S.well && !model.wells.some((w) => w.name === S.well)) S.well = null;
-  } catch { /* ignore a broken saved state */ }
+  } catch { /* a broken saved state is ignored */ }
 }
 let saveTimer = 0;
 function save() {
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch { /* storage full or blocked */ }
-  }, 400);
+  saveTimer = setTimeout(() => { S.frame = Math.max(0, shown); store(STORE.state, JSON.stringify(S)); }, 400);
 }
 
-// ---------------------------------------------------------------- properties + colour
+// ---------------------------------------------------------------- properties + color
 function propDef(key) { return cfg.properties.find((p) => p.key === key); }
-function propRange(p) {
-  if (p.type === 'category') {
-    if (p.key === 'LAYER') return [1, model.NK];
-    if (p.key === 'ZONE') return [1, Math.max(1, (cfg.zones || []).length)];
-    const r = model.static.ranges[p.key]; return r ? r : [1, 1];
-  }
-  if (Array.isArray(p.range)) return p.range;
-  if (p.key === 'PRESSURE') return model.dynamic.pressureRange;
-  return model.static.ranges[p.key] || [0, 1];
-}
-function norm(p, r, v) {
-  if (p.scale === 'log') {
-    const a = Math.log10(Math.max(r[0], 1e-6)), b = Math.log10(r[1]);
-    return (Math.log10(Math.max(v, 1e-6)) - a) / (b - a);
-  }
-  return (v - r[0]) / (r[1] - r[0]);
-}
-function denorm(p, r, t) {
-  if (p.scale === 'log') {
-    const a = Math.log10(Math.max(r[0], 1e-6)), b = Math.log10(r[1]);
-    return 10 ** (a + (b - a) * t);
-  }
-  return r[0] + (r[1] - r[0]) * t;
-}
+const isDynamic = (p) => !!p.dynamic;
 function hex(h) { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+/** The theme's color scales: config.json's colormapsDark in the dark theme where it has one. */
+function maps() { return (dark.matches && cfg.colormapsDark) || cfg.colormaps; }
+function stopsOf(name) { const m = maps(); return (m[name] || cfg.colormaps[name] || Object.values(cfg.colormaps)[0]).filter(isHex); }
 const lutCache = new Map();
 function lut(name) {
-  if (lutCache.has(name)) return lutCache.get(name);
-  const stops = (cfg.colormaps[name] || cfg.colormaps.viridis).map(hex);
+  const key = `${dark.matches ? 'd' : 'l'}|${name}`;
+  if (lutCache.has(key)) return lutCache.get(key);
+  const stops = stopsOf(name).map(hex);
   const out = new Uint8Array(256 * 3);
   for (let i = 0; i < 256; i++) {
     const t = i / 255 * (stops.length - 1), k = Math.min(Math.floor(t), stops.length - 2), f = t - k;
     for (let c = 0; c < 3; c++) out[i * 3 + c] = Math.round(stops[k][c] * (1 - f) + stops[k + 1][c] * f);
   }
-  lutCache.set(name, out);
+  lutCache.set(key, out);
   return out;
 }
-function gradCSS(name) {
-  const s = cfg.colormaps[name] || cfg.colormaps.viridis;
-  return `linear-gradient(90deg, ${s.join(', ')})`;
-}
+function category(p) { return p.type === 'category'; }
 
-function fillValues(key, f, out) {
-  const NA = G.NA;
-  if (G.static[key]) { out.set(G.static[key]); return; }
-  if (key === 'LAYER') { for (let a = 0; a < NA; a++) out[a] = G.ijk[a * 3 + 2] + 1; return; }
-  if (key === 'ZONE') { for (let a = 0; a < NA; a++) out[a] = G.zoneOfK[G.ijk[a * 3 + 2] + 1] + 1; return; }
-  const base = f * model.dynamic.frameBytes;
-  const sw = new Uint8Array(G.dyn, base, NA), sg = new Uint8Array(G.dyn, base + NA, NA);
-  if (key === 'SWAT') for (let a = 0; a < NA; a++) out[a] = sw[a] / 255;
-  else if (key === 'SGAS') for (let a = 0; a < NA; a++) out[a] = sg[a] / 255;
-  else if (key === 'SOIL') for (let a = 0; a < NA; a++) out[a] = Math.max(0, 1 - (sw[a] + sg[a]) / 255);
-  else if (key === 'PRESSURE') {
-    const p = new Uint16Array(G.dyn, base + 2 * NA, NA);
-    const [p0, p1] = model.dynamic.pressureRange, k = (p1 - p0) / 65535;
-    for (let a = 0; a < NA; a++) out[a] = p0 + p[a] * k;
-  } else out.fill(NaN);
-}
-function cellValue(key, f, a) {
-  if (G.static[key]) return G.static[key][a];
-  if (key === 'LAYER') return G.ijk[a * 3 + 2] + 1;
-  if (key === 'ZONE') return G.zoneOfK[G.ijk[a * 3 + 2] + 1] + 1;
-  const NA = G.NA, base = f * model.dynamic.frameBytes, u8 = new Uint8Array(G.dyn, base, 2 * NA);
-  if (key === 'SWAT') return u8[a] / 255;
-  if (key === 'SGAS') return u8[NA + a] / 255;
-  if (key === 'SOIL') return Math.max(0, 1 - (u8[a] + u8[NA + a]) / 255);
-  if (key === 'PRESSURE') {
-    const [p0, p1] = model.dynamic.pressureRange;
-    return p0 + new Uint16Array(G.dyn, base + 2 * NA, NA)[a] * (p1 - p0) / 65535;
-  }
-  return NaN;
-}
-
-function updateColors() {
-  const p = propDef(S.prop), r = propRange(p), NA = G.NA, col = G.colors, v = G.vals;
-  fillValues(S.prop, S.frame, v);
-  if (p.type === 'category') {
-    const pal = (cfg.colormaps[p.colormap] || cfg.colormaps.regions).map(hex);
+/** The color pass: one report date's values, through the scale, into the cells' texture. */
+function updateColors(f) {
+  const t0 = performance.now(), p = propDef(S.prop), r = propRange(D, p), NA = G.NA, col = G.colors, v = G.vals;
+  fillValues(D, S.prop, f, v);
+  if (category(p)) {
+    const pal = stopsOf(p.colormap).map(hex);
     for (let a = 0; a < NA; a++) {
       const c = pal[((Math.round(v[a]) - 1) % pal.length + pal.length) % pal.length];
       col[a * 4] = c[0]; col[a * 4 + 1] = c[1]; col[a * 4 + 2] = c[2]; col[a * 4 + 3] = 255;
@@ -228,13 +207,16 @@ function updateColors() {
   }
   gl.bindTexture(gl.TEXTURE_2D, G.tex);
   gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, TEX_W, G.texH, gl.RGBA, gl.UNSIGNED_BYTE, col);
+  G.stats.colorPasses++; G.stats.colorMs += performance.now() - t0;
+  G.texStep = f; G.texKey = colorKey(f);
 }
+/** What the texture must hold for report date f: a static property's colors do not change with it. */
+function colorKey(f) { const p = propDef(S.prop); return `${S.prop}|${isDynamic(p) ? f : '-'}|${dark.matches ? 'd' : 'l'}`; }
 
-function valueFilterOn() { return propDef(S.prop).type !== 'category' && (S.vf[0] > 0 || S.vf[1] < 100); }
-
+function valueFilterOn() { return !category(propDef(S.prop)) && (S.vf[0] > 0 || S.vf[1] < 100); }
 function computeVisible() {
   const { i0, i1, j0, j1, k0, k1 } = S.cut, NA = G.NA, ijk = G.ijk, vis = G.vis;
-  const vf = valueFilterOn(), p = propDef(S.prop), r = propRange(p);
+  const vf = valueFilterOn(), p = propDef(S.prop), r = propRange(D, p);
   const lo = S.vf[0] / 100 - 1e-4, hi = S.vf[1] / 100 + 1e-4;
   for (let a = 0; a < NA; a++) {
     const i = ijk[a * 3] + 1, j = ijk[a * 3 + 1] + 1, k = ijk[a * 3 + 2] + 1;
@@ -245,12 +227,13 @@ function computeVisible() {
 }
 
 // ---------------------------------------------------------------- formations + explode
-function buildZones() {
-  G.zoneOfK = new Int8Array(model.NK + 2).fill(-1);
-  (cfg.zones || []).forEach((z, zi) => { for (let k = z.k[0]; k <= z.k[1] && k <= model.NK; k++) G.zoneOfK[k] = zi; });
+function buildZoneData() {
+  G.zoneOfK = D.zoneOfK = buildZones(cfg.zones, model.NK);
+  // which formations hold cells: Not, a shale, has none in this grid and is left out of the legend
+  G.zoneCells = new Uint32Array((cfg.zones || []).length);
+  for (let a = 0; a < G.NA; a++) { const z = G.zoneOfK[G.ijk[a * 3 + 2] + 1]; if (z >= 0) G.zoneCells[z]++; }
 }
-function zoneName(k) { const z = (cfg.zones || [])[G.zoneOfK[k]]; return z ? z.name : '—'; }
-function segmentOf(a) { return ((Math.round(G.static.FIPNUM[a]) - 1) % 4 + 4) % 4; }
+function zoneName(k) { const z = (cfg.zones || [])[G.zoneOfK[k]]; return z ? z.name : 'no formation'; }
 
 function computeExplode() {
   const NA = G.NA, ijk = G.ijk, geom = G.geom, mode = S.explode.mode, t = S.explode.t / 100;
@@ -260,7 +243,7 @@ function computeExplode() {
   const gOf = G.gOf;
   let n;
   if (mode === 'layers') { n = model.NK; for (let a = 0; a < NA; a++) gOf[a] = ijk[a * 3 + 2]; }
-  else if (mode === 'segments') { n = 4; for (let a = 0; a < NA; a++) gOf[a] = segmentOf(a); }
+  else if (mode === 'segments') { n = 4; for (let a = 0; a < NA; a++) gOf[a] = segmentOf(D, a); }
   else { n = Math.max(1, (cfg.zones || []).length); for (let a = 0; a < NA; a++) gOf[a] = Math.max(0, G.zoneOfK[ijk[a * 3 + 2] + 1]); }
   const cnt = new Float64Array(n), cx = new Float64Array(n), cy = new Float64Array(n), cz = new Float64Array(n);
   const bb = new Float64Array(n * 4).fill(NaN);
@@ -280,19 +263,22 @@ function computeExplode() {
     const k = t * (ex.segmentSpread ?? 1.2);
     for (let g = 0; g < n; g++) if (cnt[g]) { off[g * 3] = (cx[g] - ax) * k; off[g * 3 + 1] = (cy[g] - ay) * k; }
   } else {
-    const gap = (mode === 'layers' ? ex.layerGapMetres ?? 18 : ex.formationGapMetres ?? 70) * t;
+    const gap = (mode === 'layers' ? gapOf('layer', 18) : gapOf('formation', 70)) * t;
     const used = []; for (let g = 0; g < n; g++) if (cnt[g]) used.push(g);
     used.forEach((g, r) => { off[g * 3 + 2] = (r - (used.length - 1) / 2) * gap; });
   }
   G.gOff = off; G.gN = n; G.gCnt = cnt; G.gCen = [cx, cy, cz]; G.gBox = bb;
   G.topOff = G.exOn && mode !== 'segments' ? Math.min(...Array.from({ length: n }, (_, g) => (cnt[g] ? off[g * 3 + 2] : Infinity))) : 0;
 }
+/** An explode gap from config.json; a copy edited before the house pass names it formationGapMetres or layerGapMetres. */
+function gapOf(kind, fallback) { const ex = cfg.explode || {}; return ex[`${kind}GapMeters`] ?? ex[`${kind}GapMetres`] ?? fallback; }
 
 function buildWellBuffer() {
   const seg = [], SE = [[-1, 0], [1, 0], [1, 1], [-1, 0], [1, 1], [-1, 1]];
   const ex = G.exOn, gOf = G.gOf, off = G.gOff, segMode = S.explode.mode === 'segments';
   const offOf = (c) => (ex && c >= 0 ? [off[gOf[c] * 3], off[gOf[c] * 3 + 1], off[gOf[c] * 3 + 2]] : [0, 0, 0]);
   G.wellHeads = [];
+  G.wellPts = [];
   model.wells.forEach((w, wi) => {
     const pc = w.pathCells || [];
     const pts = w.path.map((p, s) => {
@@ -301,7 +287,7 @@ function buildWellBuffer() {
       return [p[0] + o[0], p[1] + o[1], p[2] + o[2]];
     });
     G.wellHeads[wi] = pts[0];
-    (G.wellPts || (G.wellPts = []))[wi] = pts;
+    G.wellPts[wi] = pts;
     for (let s = 0; s + 1 < pts.length; s++) {
       const A = pts[s], B = pts[s + 1];
       for (const [side, end] of SE) seg.push(A[0], A[1], A[2], B[0], B[1], B[2], side, end, wi);
@@ -313,6 +299,7 @@ function buildWellBuffer() {
 }
 
 function rebuildFaces() {
+  const t0 = performance.now();
   computeVisible();
   const NA = G.NA, nb = G.nb, vis = G.vis, geom = G.geom, ex = G.exOn, gOf = G.gOf, off = G.gOff;
   let n = 0;
@@ -339,6 +326,7 @@ function rebuildFaces() {
   gl.bindBuffer(gl.ARRAY_BUFFER, G.gridBuf);
   gl.bufferData(gl.ARRAY_BUFFER, d.subarray(0, o), gl.DYNAMIC_DRAW);
   G.faceCount = n;
+  G.stats.faceRebuilds++; G.stats.faceMs += performance.now() - t0;
 }
 
 // ---------------------------------------------------------------- WebGL
@@ -352,10 +340,12 @@ void main(){
   vView = v.xyz; vUV = aUV; vCell = int(aCell + 0.5);
   gl_Position = uP * v;
 }`;
+// The light on the faces (ART.md section 2): the cell's sRGB color times 0.42 + 0.5 lambert + 0.14
+// fill; a cell edge multiplies by 0.55. The picked cell leans to the theme's far end (uHi).
 const GRID_FS = `#version 300 es
 precision highp float; precision highp int;
 in vec3 vView; in vec2 vUV; flat in int vCell;
-uniform sampler2D uTex; uniform int uMode, uPicked; uniform float uEdges;
+uniform sampler2D uTex; uniform int uMode, uPicked; uniform float uEdges; uniform vec4 uHi;
 out vec4 o;
 void main(){
   if (uMode == 1) { int id = vCell + 1; o = vec4(float(id & 255), float((id >> 8) & 255), float((id >> 16) & 255), 255.0) / 255.0; return; }
@@ -368,30 +358,36 @@ void main(){
   vec2 g = smoothstep(vec2(0.0), w * 1.3, vUV) * smoothstep(vec2(0.0), w * 1.3, 1.0 - vUV);
   float edge = (1.0 - min(g.x, g.y)) * uEdges * (1.0 - smoothstep(0.06, 0.28, max(w.x, w.y)));
   col = mix(col, col * 0.55, edge);
-  if (vCell == uPicked) col = mix(col, vec3(1.0), 0.6);
+  if (vCell == uPicked) col = mix(col, uHi.rgb, uHi.a);
   o = vec4(col, 1.0);
 }`;
+// The wells: screen-space ribbons. uStyle per well: x 1 for a dashed (injecting) well, y its width
+// factor (0.6 for a shut well). The dash is measured along the segment on screen (vS, divided by w in
+// the fragment shader so it stays even under perspective), about 8 CSS px on and off.
 const WELL_VS = `#version 300 es
 precision highp float;
 layout(location=0) in vec3 aA; layout(location=1) in vec3 aB; layout(location=2) in vec2 aSE; layout(location=3) in float aWell;
-uniform mat4 uMV, uP; uniform float uExag, uWidth, uAlpha, uGrow; uniform vec2 uVP; uniform vec4 uColor[64], uTint; uniform int uSel;
-out vec4 vC;
+uniform mat4 uMV, uP; uniform float uExag, uWidth, uAlpha, uGrow; uniform vec2 uVP; uniform vec4 uColor[64], uStyle[64], uTint; uniform int uSel;
+out vec4 vC; out vec2 vS; out float vDash;
 vec4 clip(vec3 p){ return uP * uMV * vec4(p.x, -p.z * uExag, -p.y, 1.0); }
 void main(){
   int wi = int(aWell + 0.5);
   vec4 a = clip(aA), b = clip(aB);
   vec4 cur = aSE.y < 0.5 ? a : b;
   vec2 sa = a.xy / a.w * uVP, sb = b.xy / b.w * uVP;
-  vec2 dir = sb - sa; dir = length(dir) < 1e-4 ? vec2(1.0, 0.0) : normalize(dir);
-  float wpx = uWidth * (wi == uSel ? 1.9 : 1.0) + uGrow;
+  vec2 dir = sb - sa; float len = length(dir); dir = len < 1e-4 ? vec2(1.0, 0.0) : dir / len;
+  float wpx = uWidth * uStyle[wi].y * (wi == uSel ? 1.9 : 1.0) + uGrow;
   cur.xy += vec2(-dir.y, dir.x) * aSE.x * wpx / uVP * cur.w;
   gl_Position = cur;
+  vS = vec2((aSE.y < 0.5 ? 0.0 : len) * cur.w, cur.w);
+  vDash = uStyle[wi].x;
   vec4 c = uColor[wi];
   vC = uTint.a > 0.0 ? vec4(uTint.rgb, uTint.a * step(0.01, c.a) * c.a) : c;
   vC.a *= uAlpha;
 }`;
 const WELL_FS = `#version 300 es
-precision highp float; in vec4 vC; out vec4 o; void main(){ o = vC; }`;
+precision highp float; in vec4 vC; in vec2 vS; in float vDash; uniform float uDashPx; out vec4 o;
+void main(){ if (vDash > 0.5 && mod(vS.x / vS.y, 2.0 * uDashPx) > uDashPx) discard; o = vC; }`;
 
 function program(vs, fs) {
   const p = gl.createProgram();
@@ -426,7 +422,6 @@ function initGL() {
   const ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW);
   gl.bindVertexArray(null);
 
-  // wells: screen-space ribbons, 6 vertices per segment (filled by buildWellBuffer)
   G.wellVAO = gl.createVertexArray(); gl.bindVertexArray(G.wellVAO);
   G.wellBuf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, G.wellBuf);
   gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 36, 0);
@@ -435,13 +430,15 @@ function initGL() {
   gl.enableVertexAttribArray(3); gl.vertexAttribPointer(3, 1, gl.FLOAT, false, 36, 32);
   gl.bindVertexArray(null);
   G.wellColors = new Float32Array(64 * 4);
-  setClearColor();
+  G.wellStyle = new Float32Array(64 * 4);
+  readTheme();
 }
-
-function setClearColor() {
-  const c = getComputedStyle(document.documentElement).getPropertyValue('--stage').trim() || '#DDE4E5';
-  const [r, g, b] = hex(c.length === 4 ? '#' + [...c.slice(1)].map((x) => x + x).join('') : c);
+/** The plate's colors for the theme: the clear color from --plate, the picked cell's lean. */
+function readTheme() {
+  const c = css('--plate');
+  const [r, g, b] = hex(isHex(c) ? c : '#e8eef0');
   G.clear = [r / 255, g / 255, b / 255];
+  G.hi = dark.matches ? [1, 1, 1, 0.6] : [15 / 255, 28 / 255, 35 / 255, 0.5];
 }
 
 // ---------------------------------------------------------------- camera
@@ -457,28 +454,157 @@ function dot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
 function crs(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
 function nrm(a) { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; }
 
-function defaultCam() {
-  const [ex, ey] = model.extent, c = $('gl'), asp = (c.clientWidth || 1) / (c.clientHeight || 1);
-  const fx = 2 * Math.atan(Math.tan(FOV / 2) * asp);
-  const dist = (Math.hypot(ex, ey) / 2) / Math.tan(Math.min(FOV, fx) / 2);
-  return { theta: 62, phi: 36, dist: dist * 0.97, target: [0, 0, 0] };
+/* The fit (the reviewer's finding, after the pass): the whole field is fitted by its projected box,
+   to both of the plate's axes, less the key column or row, with room above for the well names. The
+   field's points are two opposite corners of every fourth cell, moved as the explode moves them, and
+   the well heads; a lens shift (sx, sy, in clip units) puts the field's middle at the middle of the
+   room it was fitted to, so turning the model still turns it about its own middle. */
+const FIT_PAD = { l: 12, t: 26, r: 12, b: 12 };
+function fitPoints() {
+  const g = G.geom, ex = G.exOn, gOf = G.gOf, off = G.gOff, out = [];
+  for (let a = 0; a < G.NA; a += 4) {
+    const o = ex ? gOf[a] * 3 : -1;
+    for (const c of [0, 21]) {
+      const x = g[a * 24 + c] + (o >= 0 ? off[o] : 0), y = g[a * 24 + c + 1] + (o >= 0 ? off[o + 1] : 0), z = g[a * 24 + c + 2] + (o >= 0 ? off[o + 2] : 0);
+      out.push(x, -z * S.exag, -y);
+    }
+  }
+  model.wells.forEach((w, i) => { const p = G.wellHeads && G.wellHeads[i] || w.path[0]; out.push(p[0], -p[2] * S.exag, -p[1]); });
+  return out;
 }
+/** The rooms the field may be fitted to, in the plate's CSS px: the plate less its margins, and with
+ *  the keys showing, the part below their row and the part left of their column. */
+function fitRooms(W, H, plain) {
+  const P = FIT_PAD, rooms = [], k = $('keys');
+  if (!plain && !k.hidden && !k.closest('[hidden]')) {
+    const pr = $('plate').getBoundingClientRect(), r = k.getBoundingClientRect();
+    if (r.width) {
+      rooms.push({ l: P.l, t: P.t, r: Math.min(W - P.r, r.left - pr.left - 6), b: H - P.b });
+      // below the keys only when that field is at least a fifth larger: the field keeps the plate's middle
+      rooms.push({ l: P.l, t: Math.max(P.t, r.bottom - pr.top + 22), r: W - P.r, b: H - P.b, pref: 1.2 });   // 22: a name's room
+    }
+  }
+  if (!rooms.length) rooms.push({ l: P.l, t: P.t, r: W - P.r, b: H - P.b });
+  return rooms.filter((q) => q.r - q.l > 40 && q.b - q.t > 40);
+}
+/** The camera that fits the field at (theta, phi) on a plate W x H: the nearest distance at which the
+ *  projected field fits one of the rooms, and the shift that centers it there. */
+function fitCam(theta, phi, size, pts) {
+  const c = $('gl'), [W, H] = size || [c.clientWidth || 1, c.clientHeight || 1];
+  pts = pts || fitPoints();
+  let lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+  for (let i = 0; i < pts.length; i += 3) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], pts[i + k]); hi[k] = Math.max(hi[k], pts[i + k]); }
+  const T = [0, 1, 2].map((k) => (lo[k] + hi[k]) / 2);
+  const t = theta * Math.PI / 180, p = phi * Math.PI / 180;
+  const z = [Math.cos(p) * Math.sin(t), Math.sin(p), Math.cos(p) * Math.cos(t)], x = nrm(crs([0, 1, 0], z)), y = crs(z, x);
+  const n = pts.length / 3, A = new Float64Array(n), B = new Float64Array(n), C = new Float64Array(n);
+  let cMax = -Infinity;
+  for (let i = 0; i < n; i++) {
+    const r = [pts[i * 3] - T[0], pts[i * 3 + 1] - T[1], pts[i * 3 + 2] - T[2]];
+    A[i] = dot(r, x); B[i] = dot(r, y); C[i] = dot(r, z); cMax = Math.max(cMax, C[i]);
+  }
+  const f = (H / 2) / Math.tan(FOV / 2);
+  const box = (d) => {
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (let i = 0; i < n; i++) { const D = d - C[i], X = f * A[i] / D, Y = -f * B[i] / D; if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y; }
+    return [x0, x1, y0, y1];
+  };
+  const m = Math.hypot(...model.extent);
+  let best = null;
+  for (const q of fitRooms(W, H, !!size)) {
+    let a = Math.max(cMax * 1.02, m * 0.05), b = m * 30;
+    for (let it = 0; it < 36; it++) {
+      const d = Math.sqrt(a * b), [x0, x1, y0, y1] = box(d);
+      if (x1 - x0 <= q.r - q.l && y1 - y0 <= q.b - q.t) b = d; else a = d;
+    }
+    if (best && best.dist <= b * (q.pref || 1)) continue;
+    const [x0, x1, y0, y1] = box(b);
+    const dx = (q.l + q.r) / 2 - W / 2 - (x0 + x1) / 2, dy = (q.t + q.b) / 2 - H / 2 - (y0 + y1) / 2;
+    best = { dist: b, sx: 2 * dx / W, sy: -2 * dy / H };
+  }
+  if (!best) best = { dist: m * 1.6, sx: 0, sy: 0 };
+  return { theta, phi, dist: best.dist, target: T, sx: best.sx, sy: best.sy };
+}
+/** The whole field: theta 62 and phi 36 on an upright plate; on a plate much wider than tall the eye
+ *  comes down toward the horizon, so the flat field fills more of the width. */
+function defaultCam() {
+  const c = $('gl'), asp = (c.clientWidth || 1) / (c.clientHeight || 1);
+  const phi = asp <= 1.6 ? 36 : Math.max(24, 36 - (asp - 1.6) * 7);
+  return { ...fitCam(62, Math.round(phi * 10) / 10), fit: true };
+}
+/** After the plate changes size (focus mode, the sheet's stops, a turn of the phone): a camera still at
+ *  the fit is fitted again; any other keeps its zoom against the fit, so the field neither crops nor
+ *  shrinks to a stamp. */
+function reframe() {
+  const c = $('gl'), wh = [c.clientWidth, c.clientHeight];
+  if (!S.cam || !model || !wh[0] || !wh[1]) return;
+  const old = G.camWH; G.camWH = wh;
+  if (old && old[0] === wh[0] && old[1] === wh[1]) return;
+  const pts = fitPoints();
+  for (const cam of G.anim ? [S.cam, G.anim.to] : [S.cam]) {
+    if (cam.fit) Object.assign(cam, defaultCam());
+    else if (old) { const a = fitCam(cam.theta, cam.phi, old, pts), b = fitCam(cam.theta, cam.phi, wh, pts); cam.dist = clampDist(cam.dist * b.dist / a.dist); }
+  }
+  R.draw = true; R.labels = true;
+}
+/** The field's size changed (the explode, the vertical stretch): a camera at the fit follows it. */
+function refitIfFitted() { if (S.cam && S.cam.fit && !G.anim) { S.cam = defaultCam(); R.draw = true; } }
 function initCamera() { if (!S.cam) S.cam = defaultCam(); }
 function eye() {
   const { theta, phi, dist, target } = S.cam, t = theta * Math.PI / 180, p = phi * Math.PI / 180;
   return [target[0] + dist * Math.cos(p) * Math.sin(t), target[1] + dist * Math.sin(p), target[2] + dist * Math.cos(p) * Math.cos(t)];
 }
 
-// ---------------------------------------------------------------- render loop
+// ---------------------------------------------------------------- the frame
 function loop(now) {
-  if (G.anim) stepAnim(now || performance.now());
-  if (R.colors) { updateColors(); R.colors = false; R.draw = true; if (valueFilterOn()) R.faces = true; }
+  raf = 0;
+  G.stats.frames++;
+  if (playing) {
+    const k = playing.from + Math.floor(((now - playing.t0) * (cfg.playbackFramesPerSecond || 6)) / 1000);
+    wanted = Math.min(G.nf - 1, k);
+    if (k >= G.nf - 1) stop();
+  }
+  if (G.anim) stepAnim(now);
+  const step = wanted;
+  const stepChanged = step !== shown;
+  if (stepChanged || R.colors) {
+    if (G.texKey !== colorKey(step)) { updateColors(step); if (valueFilterOn()) R.faces = true; }
+    else G.texStep = step;
+    R.colors = false; R.draw = true;
+  }
+  if (stepChanged) { shown = step; R.step = true; R.draw = true; R.labels = true; }
   if (R.faces) { rebuildFaces(); R.faces = false; R.draw = true; }
   if (R.wells) { buildWellBuffer(); R.wells = false; R.draw = true; }
   if (R.draw) { draw(); R.draw = false; R.labels = true; }
+  if (R.card) { placeCard(R.card > 1); R.labels = true; }   // after the draw: the mark is where this frame shows it
   if (R.labels) { placeLabels(); updateGauge(); R.labels = false; }
+  if (R.legend) { drawLegend(); R.legend = false; }
+  if (R.step) { writeStep(); R.step = false; R.track = true; }
+  if (R.track) { track.draw(shown); R.track = false; }
   if (R.chart) { drawChart(); R.chart = false; }
-  requestAnimationFrame(loop);
+  if (flog && stepChanged) flog.push({ t: now, wanted, shown, tex: G.texStep, label: $('valid').textContent, now: +$('slider').getAttribute('aria-valuenow') });
+  if (playing || G.anim || Object.values(R).some(Boolean)) kick();
+}
+
+/** Everything that carries the report date, from SHOWN. */
+function writeStep() {
+  const f = shown, iso = model.frames[f], c = G.cut[f], days = G.days[f] - G.days[0];
+  const lead = U.lead(days);
+  setText('valid', U.date(iso));
+  setText('lead', lead);
+  setText('cutline', cutSentence(c));
+  const sl = $('slider');
+  sl.setAttribute('aria-valuenow', String(f));
+  sl.setAttribute('aria-valuetext', `${U.spokenDate(iso)}, ${f ? lead : 'first oil'}. ${f ? U.spokenUnits(`Oil ${U.liquid(c.oil, units)}, water ${U.liquid(c.water, units).replace(/\u202f\S+$/, '')}, ${U.percent(c.share)} water.`) : 'Nothing lifted yet.'}`);
+  if (cardMode) { refreshCardValues(); R.card = Math.max(R.card, 1); }   // a new figure may widen the card
+  updateCursor();
+  save();
+}
+function setText(id, t) { const e = $(id); if (e.textContent !== t) e.textContent = t; }
+/** The caption line: how to read the cut, with the shown month's figures. */
+function cutSentence(c) {
+  if (!(c.liquid > 0)) return `The track starts here, at first oil on ${U.date(c.iso)}: nothing lifted yet.`;
+  return `On the track, the month to ${U.date(c.iso)}: oil ${U.liquid(c.oil, units)} (ink), water ${U.liquid(c.water, units)} (tint), ${U.percent(c.share)} water cut.`;
 }
 
 function sizeCanvas() {
@@ -490,27 +616,27 @@ function sizeCanvas() {
 function matrices() {
   const [w, h] = sizeCanvas(), d = S.cam.dist;
   const P = M4.persp(FOV, w / h, d / 60, d * 20);
+  P[8] = -(S.cam.sx || 0); P[9] = -(S.cam.sy || 0);   // the lens shift: the fit's middle at its room's middle
   const V = M4.look(eye(), S.cam.target);
   G.P = P; G.V = V; G.PV = M4.mul(P, V);
   return [w, h];
 }
-
 function drawGrid(mode) {
   const g = G.grid;
   gl.useProgram(g.p);
   gl.uniformMatrix4fv(g.u.uMV, false, G.V); gl.uniformMatrix4fv(g.u.uP, false, G.P);
   gl.uniform1f(g.u.uExag, S.exag); gl.uniform1i(g.u.uMode, mode);
   gl.uniform1i(g.u.uPicked, cardMode === 'cell' ? pick : G.hl ?? -1);
+  gl.uniform4fv(g.u.uHi, G.hi);
   gl.uniform1f(g.u.uEdges, S.edges ? 1 : 0);
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, G.tex); gl.uniform1i(g.u.uTex, 0);
   gl.bindVertexArray(G.gridVAO);
   gl.drawElements(gl.TRIANGLES, G.faceCount * 6, gl.UNSIGNED_INT, 0);
   gl.bindVertexArray(null);
 }
-
 function wellColor(code) {
-  const wc = cfg.wellColors;
-  return hex([wc.shut, wc.producer, wc.waterInjector, wc.gasInjector][code] || wc.shut);
+  const c = cfg.wellColors[ROLE_KEY[code]] || cfg.wellColors.shut;
+  return hex(isHex(c) ? c : '#6f7274');
 }
 function draw() {
   const [w, h] = matrices();
@@ -520,31 +646,34 @@ function draw() {
   gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.disable(gl.BLEND);
   drawGrid(0);
   if (S.wells && G.wellVerts) drawWells(w, h);
+  G.stats.draws++;
 }
 function drawWells(w, h) {
-  const wp = G.wellP, sel = model.wells.findIndex((x) => x.name === S.well);
+  const wp = G.wellP, sel = model.wells.findIndex((x) => x.name === S.well), f = shown;
   model.wells.forEach((wl, i) => {
-    const code = wl.state[S.frame] || 0, c = wellColor(code);
-    const drilled = wl.firstOpen >= 0 && S.frame >= wl.firstOpen;
+    const code = wl.state[f] || 0, c = wellColor(code);
+    const drilled = wl.firstOpen >= 0 && f >= wl.firstOpen;
     G.wellColors.set([c[0] / 255, c[1] / 255, c[2] / 255, !drilled ? 0 : code ? 1 : 0.5], i * 4);
+    G.wellStyle.set([code >= 2 ? 1 : 0, code ? 1 : 0.6, 0, 0], i * 4);
   });
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), oc = hex(isHex(cfg.wellColors.outline) ? cfg.wellColors.outline : '#0f1c23');
   gl.useProgram(wp.p);
   gl.uniformMatrix4fv(wp.u.uMV, false, G.V); gl.uniformMatrix4fv(wp.u.uP, false, G.P);
   gl.uniform1f(wp.u.uExag, S.exag); gl.uniform2f(wp.u.uVP, w / 2, h / 2);
-  gl.uniform1f(wp.u.uWidth, (cfg.wellWidthPixels || 3.5) * Math.min(window.devicePixelRatio || 1, 2) / 2);
-  gl.uniform4fv(wp.u.uColor, G.wellColors); gl.uniform1i(wp.u.uSel, sel);
+  gl.uniform1f(wp.u.uWidth, (cfg.wellWidthPixels || 3.5) * dpr / 2);
+  gl.uniform1f(wp.u.uDashPx, 8 * dpr);
+  gl.uniform4fv(wp.u.uColor, G.wellColors); gl.uniform4fv(wp.u.uStyle, G.wellStyle); gl.uniform1i(wp.u.uSel, sel);
   gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   gl.bindVertexArray(G.wellVAO);
-  const dpr = Math.min(window.devicePixelRatio || 1, 2), oc = hex(cfg.wellColors.outline || '#0E1A20');
   gl.uniform4f(wp.u.uTint, 0, 0, 0, 0); gl.uniform1f(wp.u.uGrow, 0);
-  gl.disable(gl.DEPTH_TEST); gl.uniform1f(wp.u.uAlpha, 0.3);
+  gl.disable(gl.DEPTH_TEST); gl.uniform1f(wp.u.uAlpha, 0.3);            // a faint pass seen through the rock
   gl.drawArrays(gl.TRIANGLES, 0, G.wellVerts);
   gl.enable(gl.DEPTH_TEST); gl.uniform1f(wp.u.uAlpha, 1);
   gl.depthMask(false);
-  gl.uniform4f(wp.u.uTint, oc[0] / 255, oc[1] / 255, oc[2] / 255, 0.85); gl.uniform1f(wp.u.uGrow, 1.25 * dpr);
+  gl.uniform4f(wp.u.uTint, oc[0] / 255, oc[1] / 255, oc[2] / 255, 0.85); gl.uniform1f(wp.u.uGrow, 1.25 * dpr);   // the casing
   gl.drawArrays(gl.TRIANGLES, 0, G.wellVerts);
   gl.depthMask(true);
-  gl.uniform4f(wp.u.uTint, 0, 0, 0, 0); gl.uniform1f(wp.u.uGrow, 0);
+  gl.uniform4f(wp.u.uTint, 0, 0, 0, 0); gl.uniform1f(wp.u.uGrow, 0);    // the core
   gl.drawArrays(gl.TRIANGLES, 0, G.wellVerts);
   gl.bindVertexArray(null);
   gl.disable(gl.BLEND);
@@ -571,13 +700,13 @@ function pickAt(cx, cy) {
   const x = Math.round(cx / c.clientWidth * w), y = Math.round((1 - cy / c.clientHeight) * h);
   gl.readPixels(Math.min(w - 1, Math.max(0, x)), Math.min(h - 1, Math.max(0, y)), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-  R.draw = true;
+  R.draw = true; kick();
   return (px[0] | (px[1] << 8) | (px[2] << 16)) - 1;
 }
 
-// ---------------------------------------------------------------- well labels
-// World space is x east, y up, z south (see the grid shader). project() takes a model
-// point (x, y, depth) and converts it to that world space first.
+// ---------------------------------------------------------------- names on the plate
+// World space is x east, y up, z south (see the grid shader). project() takes a model point (x, y,
+// depth) and converts it to that world space first.
 function projectWorld(X, Y, Z) {
   const m = G.PV;
   const cx = m[0] * X + m[4] * Y + m[8] * Z + m[12], cy = m[1] * X + m[5] * Y + m[9] * Z + m[13], cw = m[3] * X + m[7] * Y + m[11] * Z + m[15];
@@ -586,21 +715,44 @@ function projectWorld(X, Y, Z) {
   return [(cx / cw * 0.5 + 0.5) * c.clientWidth, (0.5 - cy / cw * 0.5) * c.clientHeight];
 }
 function project(p) { return projectWorld(p[0], -p[2] * S.exag, -p[1]); }
+const SVGNS = document.documentElement.namespaceURI.replace('1999/xhtml', '2000/svg');   // the SVG namespace, built from the page's own
+function svgEl(tag, attrs) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
 function buildLabels() {
   const box = $('labels'); box.innerHTML = '';
   G.zoneLabels = (cfg.zones || []).map((z) => {
-    const el = document.createElement('span'); el.className = 'zl'; el.textContent = z.name; box.appendChild(el); return el;
+    const el = document.createElement('span'); el.className = 'zl'; el.textContent = z.name; el.setAttribute('aria-hidden', 'true'); el.translate = false; box.appendChild(el); return el;
   });
   G.labels = model.wells.map((w) => {
     const el = document.createElement('button');
-    el.className = 'wl'; el.textContent = w.name; el.type = 'button';
-    el.addEventListener('click', (e) => { e.stopPropagation(); selectWell(w.name); });
+    el.className = 'wl'; el.type = 'button'; el.translate = false; el.tabIndex = -1;
+    const s = svgEl('svg', { viewBox: '0 0 10 6', width: '10', height: '6', 'aria-hidden': 'true' });
+    s.append(svgEl('path', { class: 'casing', d: 'M0 3h10' }), svgEl('path', { class: 'core', d: 'M0 3h10' }));
+    el.append(s, document.createTextNode(w.name));
+    el.setAttribute('aria-label', `Well ${w.name}`);
+    el.addEventListener('click', () => selectWell(w.name, true));
     box.appendChild(el);
     return el;
   });
+  // the tapped cell's mark: a ring at its middle, on the names' layer, kept out of the card like them
+  G.pickMark = document.createElement('span'); G.pickMark.className = 'pickmark'; G.pickMark.setAttribute('aria-hidden', 'true');
+  box.appendChild(G.pickMark);
+  G.labelW = null;
+}
+/** Rectangles labels keep out of, in the plate's coordinates: the card, the keys, the ghost key. Their
+ *  layout boxes, so the card's 4 px rise as it appears never moves what is kept out of it. */
+function keepOut() {
+  const out = [];
+  for (const id of ['readout', 'keys', 'focus-exit']) {
+    const e = $(id);
+    if (e.hidden || e.closest('[hidden]')) continue;
+    if (e.offsetWidth) out.push({ x: e.offsetLeft - 4, y: e.offsetTop - 4, w: e.offsetWidth + 8, h: e.offsetHeight + 8 });
+  }
+  return out;
 }
 function placeLabels() {
   if (!G.labels || !G.PV) return;
+  const f = Math.max(0, shown), avoid = keepOut();
+  const clear = (x, y, w, h) => !avoid.some((r) => x < r.x + r.w && x + w > r.x && y < r.y + r.h && y + h > r.y);
   const showZones = G.exOn && S.explode.mode === 'formations';
   (G.zoneLabels || []).forEach((el, g) => {
     let best = null;
@@ -611,59 +763,76 @@ function placeLabels() {
         if (p && (!best || p[0] < best[0])) best = p;
       }
     }
-    if (!best) { el.style.display = 'none'; return; }
+    const w = best ? el.offsetWidth || 50 : 0, x = best ? Math.round(Math.max(4, best[0] - 8 - w)) : 0, y = best ? Math.round(best[1] - 8) : 0;
+    if (!best || !clear(x, y, w, 16)) { el.style.display = 'none'; return; }
     el.style.display = '';
-    const w = el.offsetWidth || 50;
-    el.style.transform = `translate(${Math.round(Math.max(4, best[0] - 8 - w))}px, ${Math.round(best[1] - 11)}px)`;
+    el.style.transform = `translate(${x}px, ${y}px)`;
   });
-  const placed = [];
-  const show = S.wells && S.labels;
-  const items = [];
+  {
+    const m = G.pickMark, w = cardMode === 'cell' && pick >= 0 ? cellWorld(pick) : null, p = w && projectWorld(w[0], w[1], w[2]);
+    // placeCard keeps the card 10 px from the ring's middle; the ring hides only when its middle is under
+    // the card or a key (within keepOut's 4 px), and otherwise any sliver of it goes under the card
+    const ok = p && p[0] >= 0 && p[1] >= 0 && p[0] <= $('gl').clientWidth && p[1] <= $('gl').clientHeight && clear(p[0] - 1, p[1] - 1, 2, 2);
+    m.style.display = ok ? '' : 'none';
+    if (ok) m.style.transform = `translate(${Math.round(p[0])}px, ${Math.round(p[1])}px)`;
+  }
+  if (!G.labelW) G.labelW = G.labels.map((el) => { el.style.display = ''; return el.offsetWidth || 40; });
+  const placed = [], items = [], show = S.wells && S.labels;
+  G.labelHits = [];
   model.wells.forEach((w, i) => {
-    const el = G.labels[i], code = w.state[S.frame] || 0;
+    const el = G.labels[i], code = w.state[f] || 0;
     const on = show && (code > 0 || w.name === S.well);
     const p = on ? project(G.wellHeads ? G.wellHeads[i] : w.path[0]) : null;
     if (!p) { el.style.display = 'none'; return; }
-    const c = wellColor(code);
-    el.style.setProperty('--c', `rgb(${c.join(',')})`);
+    if (el._code !== code) {
+      el._code = code;
+      const c = wellColor(code);
+      el.style.setProperty('--c', `rgb(${c.join(',')})`);
+      el.classList.toggle('dash', code >= 2); el.classList.toggle('thin', code === 0);
+    }
     el.classList.toggle('sel', w.name === S.well);
-    el.style.display = '';
-    items.push({ el, x: p[0], y: p[1], sel: w.name === S.well ? 1 : 0 });
+    items.push({ el, i, x: p[0], y: p[1], sel: w.name === S.well ? 1 : 0 });
   });
   items.sort((a, b) => (b.sel - a.sel) || (a.y - b.y));
-  const top = $('head').offsetHeight + 4;
   for (const it of items) {
-    const wdt = it.el._w || (it.el._w = it.el.offsetWidth || 40), hgt = 19;
-    const x = it.x - 6, y = it.y - hgt - 4;
-    const hit = y < top || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
+    const wdt = G.labelW[it.i], hgt = 16, x = Math.round(it.x - 7);
+    const taken = (y) => y < 2 || !clear(x, y, wdt, hgt) || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
+    let y = Math.round(it.y - hgt - 4), hit = taken(y);
+    // the chosen well's name is always drawn: under its head when the card or the keys hold the place over it
+    if (hit && it.sel && !taken(Math.round(it.y + 6))) { y = Math.round(it.y + 6); hit = false; }
     if (hit && !it.sel) { it.el.style.display = 'none'; continue; }
     placed.push({ x, y, w: wdt, h: hgt });
-    it.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(Math.max(y, top))}px)`;
+    it.el.style.display = '';
+    it.el.style.transform = `translate(${x}px, ${y}px)`;
+    // the label's hits (the review, after the pass): its own text padded to 24 px tall wins over the
+    // rock (WCAG 2.5.8); the full 44 x 44 box is grown upward, away from the rock under the well head,
+    // and counts only where no cell is under the finger
+    const hw = Math.max(44, wdt), cx = x + wdt / 2;
+    G.labelHits.push({ name: model.wells[it.i].name, x: cx - hw / 2, y: y + hgt + 4 - 44, w: hw, h: 44, ix: x - 2, iy: y - 4, iw: wdt + 4, ih: hgt + 8 });
   }
 }
-
-function buildWellKey() {
-  const wc = cfg.wellColors;
-  $('well-key').innerHTML = [['producer', 'Producer'], ['waterInjector', 'Water injector'], ['gasInjector', 'Gas injector'], ['shut', 'Shut']]
-    .map(([k, label]) => `<span><i style="background:${wc[k]}"></i>${label}</span>`).join('');
-  $('well-key').hidden = !S.wells;
+/** The well whose label's hit holds a point on the plate, the nearest if several do: `inner` asks for
+ *  the name's own padded text, otherwise its 44 x 44 box. */
+function labelAt(x, y, inner) {
+  let best = null, bd = Infinity;
+  for (const h of G.labelHits || []) {
+    const [hx, hy, hw, hh] = inner ? [h.ix, h.iy, h.iw, h.ih] : [h.x, h.y, h.w, h.h];
+    if (x < hx || x > hx + hw || y < hy || y > hy + hh) continue;
+    const d = Math.hypot(x - (hx + hw / 2), y - (hy + hh / 2));
+    if (d < bd) { bd = d; best = h.name; }
+  }
+  return best;
 }
 
-// ---------------------------------------------------------------- north arrow + scale
-// Round scale-bar lengths, one decade at a time. The gaps are small enough that the
-// chosen bar always lands within about 82-137 px of the 106 px it aims for.
-const SCALE_STEPS = [1, 1.5, 2, 2.5, 3, 5, 7.5];
-const SCALE_PX = 106;
-const DIRS = ['the top', 'the top right', 'the right', 'the bottom right',
-  'the bottom', 'the bottom left', 'the left', 'the top left'];
-
+// ---------------------------------------------------------------- north arrow + scale (the instrument line)
+const SCALE_PX = 96;
+const DIRS = ['the top', 'the top right', 'the right', 'the bottom right', 'the bottom', 'the bottom left', 'the left', 'the top left'];
 // Both readings come from the live view matrix, measured at the camera target.
-//   north  data/model.json centre is easting, northing, depth, and geometry.bin is
-//          x, y, depth relative to it, so model +y is north. The grid shader maps a
-//          model point to world (x, -depth * exag, -y), so north is world (0, 0, -1).
-//   scale  M4.look builds the camera's right axis as cross(world up, view direction),
-//          so it is always horizontal in world space and always across the screen:
-//          the honest direction to measure horizontal metres per pixel along.
+//   north  data/model.json center is easting, northing, depth, and geometry.bin is x, y, depth
+//          relative to it, so model +y is north. The grid shader maps a model point to world
+//          (x, -depth * exag, -y), so north is world (0, 0, -1).
+//   scale  M4.look builds the camera's right axis as cross(world up, view direction), so it is always
+//          horizontal in world space and across the screen: the honest direction to measure along.
 function updateGauge() {
   if (!G.PV || !G.V) return;
   const V = G.V, T = S.cam.target, d = Math.max(1, S.cam.dist * 0.02);
@@ -673,51 +842,156 @@ function updateGauge() {
   const pN = projectWorld(T[0], T[1], T[2] - d);
   if (!pE || !pN) return;
   const acrossPx = Math.hypot(pE[0] - p0[0], pE[1] - p0[1]);
-
-  // scale bar
   const ppm = acrossPx / d;
   if (ppm > 0 && Number.isFinite(ppm)) {
     let best = 0, err = Infinity;
-    for (let e = -1; e <= 5; e++) for (const step of SCALE_STEPS) {
-      const m = step * 10 ** e, x = Math.abs(Math.log(m * ppm / SCALE_PX));
-      if (x < err) { err = x; best = m; }
-    }
-    const label = best >= 1000 ? `${+(best / 1000).toFixed(2)} km` : `${+best.toFixed(2)} m`;
-    const exag = +(+S.exag).toFixed(1);
+    for (const m of U.scaleSteps(units)) { const x = Math.abs(Math.log(m * ppm / SCALE_PX)); if (x < err) { err = x; best = m; } }
+    const label = U.length(best, units), exag = U.times(S.exag);
     $('scale-bar').style.width = `${Math.max(8, Math.round(best * ppm))}px`;
-    if ($('scale-len').textContent !== label) $('scale-len').textContent = label;
-    $('scale-sub').textContent = `vertical ×${exag}`;
-    $('scale').setAttribute('aria-label', `Scale bar: ${label} across, measured level with the middle of the view. Depth is stretched ${exag} times.`);
+    setText('scale-len', label);
+    setText('scale-sub', `vertical ${exag}`);
+    $('scale').setAttribute('aria-label', `Scale bar: ${U.spokenUnits(label)} across, measured level with the middle of the view. Depth is stretched ${U.tick(Math.round(S.exag * 10) / 10)} times.`);
   }
-
-  // north arrow: the screen direction of the model's north, squashed as it tips away
   const nx = pN[0] - p0[0], ny = pN[1] - p0[1], nl = Math.hypot(nx, ny);
   if (nl > 0.01) G.north = Math.atan2(nx, -ny) * 180 / Math.PI;
   const a = G.north || 0, k = Math.max(0.3, acrossPx > 0 ? Math.min(1, nl / acrossPx) : 1);
-  $('needle').setAttribute('transform', `translate(24 24) rotate(${a.toFixed(1)}) scale(1 ${k.toFixed(3)}) translate(-24 -24)`);
-  const r = 18.5, rad = a * Math.PI / 180, t = $('compass-n');
-  t.setAttribute('x', (24 + r * Math.sin(rad)).toFixed(1));
-  t.setAttribute('y', (24 - r * Math.cos(rad)).toFixed(1));
-  $('compass').setAttribute('aria-label', `North arrow: north is toward ${DIRS[((Math.round(a / 45) % 8) + 8) % 8]} of the view.`);
+  $('needle').setAttribute('transform', `translate(8 8) rotate(${Math.round(a * 10) / 10}) scale(1 ${Math.round(k * 1000) / 1000}) translate(-8 -8)`);
+  $('north').setAttribute('aria-label', `North arrow: north is toward ${DIRS[((Math.round(a / 45) % 8) + 8) % 8]} of the view.`);
 }
 
-// ---------------------------------------------------------------- controls sheet
+// ---------------------------------------------------------------- the caption band's legend
+/** Round ticks inside a linear range, in the shown system's numbers. */
+function niceStep(span, n) {
+  const raw = span / n, e = 10 ** Math.floor(Math.log10(raw));
+  return [1, 2, 2.5, 5, 10].map((m) => m * e).reduce((a, b) => (Math.abs(Math.log(b / raw)) < Math.abs(Math.log(a / raw)) ? b : a));
+}
+function legendTicks(p) {
+  const r = propRange(D, p), sys = units, ends = openEnds(D, p, G.gasMax), out = [];
+  const toSys = (v) => U.toSystem(v, p.unit, sys), fromSys = (v) => (p.unit === 'bar' || p.unit === 'm') && sys === 'US' ? v / U.toSystem(1, p.unit, sys) : v;
+  const at = (v) => norm(p, r, v);
+  if (p.key === 'LAYER') {
+    const ks = (cfg.zones || []).filter((z, i) => G.zoneCells[i]).map((z) => z.k[0]).concat(model.NK);
+    for (const k of [...new Set(ks)]) out.push({ t: at(k), text: U.tick(k) });
+  } else if (p.scale === 'log') {
+    out.push({ t: 0, text: U.tick(r[0]) });
+    for (let e = Math.ceil(Math.log10(r[0])); 10 ** e < r[1]; e++) if (10 ** e > r[0] * 1.0001) out.push({ t: at(10 ** e), text: U.tick(10 ** e) });
+    out.push({ t: 1, text: U.tick(r[1]) });
+  } else {
+    const lo = toSys(r[0]), hi = toSys(r[1]), step = niceStep(hi - lo, 3), d = p.unit === 'bar' || p.unit === 'm' ? 0 : 3;
+    const endText = (v) => (d ? U.tick(v) : U.int(v));
+    out.push({ t: 0, text: endText(lo) });
+    for (let v = Math.ceil(lo / step - 1e-9) * step; v < hi - 1e-9; v += step) {
+      const t = at(fromSys(v));
+      if (t > 0.08 && t < 0.92) out.push({ t, text: U.tick(Math.round(v * 1e6) / 1e6) });
+    }
+    out.push({ t: 1, text: endText(hi) });
+  }
+  out.sort((a, b) => a.t - b.t);
+  if (ends.lo) out[0].text = `≤${U.NNBSP}${out[0].text}`;
+  if (ends.hi) out[out.length - 1].text = `≥${U.NNBSP}${out[out.length - 1].text}`;
+  out[out.length - 1].text = U.withUnit(out[out.length - 1].text, U.unitOf(p.unit, sys));
+  return out;
+}
+function drawLegend() {
+  if (!cfg || !model || !G.zoneCells) return;
+  const p = propDef(S.prop), named = category(p), cats = $('legend-cats');
+  $('legend-name').textContent = p.label;
+  $('legend-scale').hidden = named;
+  cats.hidden = !named;
+  if (named) {
+    cats.replaceChildren();
+    const pal = stopsOf(p.colormap);
+    const items = p.key === 'ZONE' ? (cfg.zones || []).map((z, i) => [z.name, pal[i % pal.length], G.zoneCells[i] > 0])
+      : [1, 2, 3, 4].map((n) => [String(n), pal[(n - 1) % pal.length], true]);
+    for (const [name, color, has] of items) {
+      if (!has) continue;
+      const s = document.createElement('span'), i = document.createElement('i');
+      i.style.setProperty('--c', color);
+      s.append(i, document.createTextNode(name));
+      cats.appendChild(s);
+    }
+    return;
+  }
+  const bar = $('legend-bar'), w = Math.max(1, Math.round(bar.clientWidth * (window.devicePixelRatio || 1)));
+  bar.width = w; bar.height = 1;
+  const x = bar.getContext('2d'), L = lut(p.colormap), img = x.createImageData(w, 1);
+  for (let i = 0; i < w; i++) { const k = Math.round((i / Math.max(1, w - 1)) * 255) * 3; img.data.set([L[k], L[k + 1], L[k + 2], 255], i * 4); }
+  x.putImageData(img, 0, 0);
+  const box = $('legend-ticks'); box.replaceChildren();
+  const ticks = legendTicks(p);
+  ticks.forEach((tk, n) => {
+    const s = document.createElement('span');
+    s.textContent = tk.text;
+    s.style.left = `${tk.t * 100}%`;
+    if (n === 0) s.className = 'first'; else if (n === ticks.length - 1) s.className = 'last';
+    box.appendChild(s);
+  });
+  // interior labels that would touch a neighbor go; the two ends always print
+  const spans = [...box.children], rects = spans.map((e) => e.getBoundingClientRect());
+  let last = rects[0];
+  for (let i = 1; i < spans.length - 1; i++) {
+    if (rects[i].left < last.right + 6 || rects[i].right > rects[spans.length - 1].left - 6) spans[i].hidden = true; else last = rects[i];
+  }
+}
+
+// ---------------------------------------------------------------- the stamp and About
+function writeStamp() {
+  const run = (String(model.source).match(/OPM Flow \d{4}\.\d{2}/) || ['OPM Flow'])[0];
+  $('stamp').textContent = `Norne benchmark, ${run} run`;
+  $('stamp').translate = false;
+}
+function writeAbout() {
+  const f0 = model.frames[0], f1 = model.frames[G.nf - 1], [p0, p1] = model.dynamic.pressureRange;
+  const facts = cutFacts(G.cut), sc = CUT_SCALE[units];
+  $('ab-explode').textContent = `${U.withUnit(U.int(gapOf('formation', 70)), 'm')} between formations, ${U.withUnit(U.int(gapOf('layer', 18)), 'm')} between layers, the four fault segments spread apart`;
+  const scaleWords = units === 'US' ? `0.08${U.NNBSP}px per 1${U.NNBSP}000${U.NNBSP}bbl/d` : `0.5${U.NNBSP}px per 1${U.NNBSP}000${U.NNBSP}Sm³/d`;
+  const cross = facts.cross ? ` From the month to ${U.date(facts.cross.iso)} the wells lift more water than oil in ${facts.stays === facts.of ? `all ${facts.of}` : `${facts.stays} of the ${facts.of}`} months left, and the last month is ${U.percent(facts.last.share)} water.` : '';
+  $('ab-cut').textContent = `Each column on the player’s track is one report date: its width is the days since the date before, and its height is the liquid the field’s wells lifted per day in that month, at ${scaleWords} (the tick at the track’s left end is ${sc.label}). The oil is the solid ink at the foot and the water the paler ink stacked on it. The liquid peaks at ${U.liquid(facts.peak.liquid, units)} in the month to ${U.date(facts.peak.iso)}, ${U.percent(facts.peak.share)} of it water.${cross}`;
+  $('about-source').textContent = model.source;
+  const list = $('about-list'); list.replaceChildren();
+  const rows = [
+    ['Region', 'the Norne field, Norwegian Sea'],
+    ['Grid', `${model.NI} by ${model.NJ} by ${model.NK} cells, ${U.int(model.NA)} of them active`],
+    ['Report dates', `${G.nf}, ${U.date(f0)} to ${U.date(f1)}`],
+    ['Wells', String(model.wells.length)],
+    ['Storage', `saturations to 1/255, pressure to ${U.withUnit(U.fixed((p1 - p0) / 65535, 4), 'bar')} over ${U.withUnit(U.int(p0), 'bar')} to ${U.withUnit(U.int(p1), 'bar')}`],
+    ['Rates', 'standard cubic meters a day, averaged over the month to each date'],
+    ['Units', 'SI, or US units from the key at the top right: psi, feet, barrels and thousand cubic feet a day. Standard conditions differ slightly between the two; the conversion ignores that'],
+  ];
+  for (const [k, v] of rows) { const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = `${k}:`; dd.textContent = v; list.append(dt, dd); }
+  const oilPeak = G.cut.reduce((a, c) => (c.oil > a.oil ? c : a));
+  $('cut-desc').textContent = `The cut: the liquid the field lifted per day, month by month, from ${U.spokenMonth(f0)} to ${U.spokenMonth(f1)}. Oil peaks at ${U.spokenUnits(U.liquid(oilPeak.oil, units))} in the month to ${U.spokenDate(oilPeak.iso)}.${facts.cross ? ` Water passes oil from the month to ${U.spokenDate(facts.cross.iso)}.` : ''}`;
+}
+let aboutFrom = null, aboutPlay = false;
+function openAbout() {
+  aboutFrom = document.activeElement;
+  aboutPlay = !!playing; if (playing) stop();
+  $('about').hidden = false;
+  $('about-close').focus();
+}
+function closeAbout() {
+  if ($('about').hidden) return;
+  $('about').hidden = true;
+  if (aboutFrom && aboutFrom.focus) aboutFrom.focus();
+  if (aboutPlay) play();
+  aboutPlay = false;
+}
+
+// ---------------------------------------------------------------- the controls sheet
 const GRIP = ['Show more controls', 'Show all controls', 'Hide the extra controls'];
 function applyStop() {
   const sheet = $('sheet'), grip = $('grip');
   sheet.classList.remove('s0', 's1', 's2');
   sheet.classList.add('s' + S.sheet);
   grip.setAttribute('aria-label', GRIP[S.sheet]);
-  grip.title = GRIP[S.sheet];
-  R.draw = true; R.chart = true; R.labels = true;   // the stage changes size with the sheet
+  R.draw = true; R.chart = true; R.labels = true; kick();
 }
 function setStop(n) {
   n = Math.max(0, Math.min(2, Math.round(n)));
   if (n === S.sheet) return;
   S.sheet = n; applyStop(); save();
 }
-// Drag the handle to move a stop at a time, or tap it to step through them. The handle
-// takes touch-action: none so a drag is never read as a scroll; the canvas is untouched.
+// Drag the grip a stop at a time, or tap it to step through the stops.
 function initSheet() {
   const grip = $('grip');
   let drag = null, skipClick = false;
@@ -746,36 +1020,50 @@ function initSheet() {
   });
   applyStop();
 }
-
-// ---------------------------------------------------------------- formatting
-function fmt(v, dec = 2) {
-  if (!Number.isFinite(v)) return '—';
-  return v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-}
-function fmtProp(p, v) {
-  if (p.type === 'category') return String(Math.round(v));
-  if (p.scale === 'log') return fmt(v, v < 10 ? 1 : 0);
-  return fmt(v, p.decimals ?? 2);
-}
-function fmtDate(iso, long) {
-  const [y, m, d] = iso.split('-').map(Number);
-  return long ? `${d} ${MONTHS[m - 1]} ${y}` : `${MONTHS[m - 1]} ${y}`;
-}
-function fmtRate(v) {
-  if (!Number.isFinite(v)) return '—';
-  if (v >= 1e6) return `${+(v / 1e6).toFixed(v >= 1e7 ? 0 : 1)} M`;
-  if (v >= 1e4) return `${fmt(v / 1e3, 0)} k`;
-  return fmt(v, 0);
+/** The keys run as a row along the plate's top when the column would not fit its height. */
+function layoutKeys() {
+  const plate = $('plate');
+  plate.classList.toggle('keys-row', plate.clientHeight < 258);
 }
 
 // ---------------------------------------------------------------- UI
+/** A group of words with the tracer under the chosen one: role="radio", arrow keys move the choice. */
+function radioKeys(box) {
+  box.addEventListener('keydown', (e) => {
+    const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+    if (!d) return;
+    const all = [...box.querySelectorAll('[role="radio"]')], i = all.indexOf(document.activeElement);
+    if (i < 0) return;
+    e.preventDefault();
+    const next = all[(i + d + all.length) % all.length];
+    next.focus(); next.click();
+  });
+  // one tab stop per group (a roving tabindex): the chosen word; the arrows move inside it
+  const rove = () => {
+    const all = [...box.querySelectorAll('[role="radio"]')], on = all.find((b) => b.getAttribute('aria-checked') === 'true') || all[0];
+    for (const b of all) b.tabIndex = b === on ? 0 : -1;
+  };
+  new MutationObserver(rove).observe(box, { subtree: true, childList: true, attributeFilter: ['aria-checked'] });
+  rove();
+}
+function setSliderFill(el) { el.style.setProperty('--p', `${((el.value - el.min) / (el.max - el.min || 1)) * 100}%`); }
 function initUI() {
-  buildChips();
+  buildWords();
   buildLabels();
-  const t = $('time');
-  t.max = G.nf - 1; t.value = S.frame;
-  t.addEventListener('input', () => { stop(); setFrame(+t.value); });
-  $('play').addEventListener('click', () => (playing ? stop() : play()));
+  buildWellPicker();
+  paintWellKey();
+  track = createTrack($('slider'), $('track'), {
+    onStart: () => { if (playing) stop(); R.track = true; kick(); },   // the thumb grows under the finger
+    onEnd: () => { R.track = true; kick(); },
+    onScrub: (k) => { wanted = k; kick(); },
+    onKey: (k) => { if (playing) stop(); wanted = k === 'home' ? 0 : k === 'end' ? G.nf - 1 : Math.max(0, Math.min(G.nf - 1, shown + k)); kick(); },
+  });
+  setTrackModel();
+  $('slider').setAttribute('aria-valuemax', String(G.nf - 1));
+  $('btn-play').addEventListener('click', () => (playing ? stop() : play()));
+  const stepKey = (d) => { if (playing) stop(); wanted = Math.max(0, Math.min(G.nf - 1, shown + d)); say(`${U.spokenDate(model.frames[wanted])}.`); kick(); };
+  $('btn-prev').addEventListener('click', () => stepKey(-1));
+  $('btn-next').addEventListener('click', () => stepKey(1));
 
   for (const ax of ['i', 'j', 'k']) {
     const a = $(ax + '0'), b = $(ax + '1');
@@ -785,177 +1073,233 @@ function initUI() {
       let lo = +a.value, hi = +b.value;
       if (lo > hi) { if (which === 0) b.value = hi = lo; else a.value = lo = hi; }
       S.cut[ax + '0'] = lo; S.cut[ax + '1'] = hi;
-      $(ax + 'v').textContent = `${lo}–${hi}`;
-      R.faces = true; save();
+      writeCutOutputs(); R.faces = true; save(); kick();
     };
     a.addEventListener('input', () => on(0)); b.addEventListener('input', () => on(1));
-    $(ax + 'v').textContent = `${S.cut[ax + '0']}–${S.cut[ax + '1']}`;
   }
   const v0 = $('v0'), v1 = $('v1');
   v0.value = S.vf[0]; v1.value = S.vf[1];
   const onV = (which) => {
     let lo = +v0.value, hi = +v1.value;
     if (lo > hi) { if (which === 0) v1.value = hi = lo; else v0.value = lo = hi; }
-    S.vf = [lo, hi]; updateValueOutput(); R.faces = true; save();
+    S.vf = [lo, hi]; writeCutOutputs(); R.faces = true; save(); kick();
   };
   v0.addEventListener('input', () => onV(0)); v1.addEventListener('input', () => onV(1));
-
   const ex = $('exag');
-  ex.value = S.exag; $('exv').textContent = `${S.exag}×`;
-  ex.addEventListener('input', () => { S.cam.target[1] *= +ex.value / S.exag; S.exag = +ex.value; $('exv').textContent = `${S.exag}×`; R.draw = true; save(); });
+  ex.value = S.exag;
+  ex.addEventListener('input', () => { S.cam.target[1] *= +ex.value / S.exag; S.exag = +ex.value; refitIfFitted(); writeCutOutputs(); R.draw = true; save(); kick(); });
 
-  for (const [id, key] of [['t-wells', 'wells'], ['t-labels', 'labels'], ['t-edges', 'edges']]) {
-    const el = $(id); el.checked = S[key];
-    el.addEventListener('change', () => { S[key] = el.checked; R.draw = true; $('well-key').hidden = !S.wells; save(); });
-  }
+  const toggle = (id, key, after) => {
+    const el = $(id);
+    const show = () => el.setAttribute('aria-pressed', String(!!S[key]));
+    show();
+    el.addEventListener('click', () => { S[key] = !S[key]; show(); if (after) after(); R.draw = true; R.labels = true; save(); kick(); });
+  };
+  toggle('btn-wells', 'wells', () => { $('wellkey').hidden = !S.wells; });
+  toggle('t-labels', 'labels');
+  toggle('t-edges', 'edges');
+  $('wellkey').hidden = !S.wells;
   $('reset-cut').addEventListener('click', () => {
     S.cut = { i0: 1, i1: model.NI, j0: 1, j1: model.NJ, k0: 1, k1: model.NK }; S.vf = [0, 100];
-    for (const ax of ['i', 'j', 'k']) { $(ax + '0').value = 1; $(ax + '1').value = model['N' + ax.toUpperCase()]; $(ax + 'v').textContent = `1–${model['N' + ax.toUpperCase()]}`; }
-    v0.value = 0; v1.value = 100; updateValueOutput();
-    S.explode.t = 0; $('explode').value = 0; computeExplode(); R.wells = true;
-    R.faces = true; save();
+    for (const ax of ['i', 'j', 'k']) { $(ax + '0').value = 1; $(ax + '1').value = model['N' + ax.toUpperCase()]; }
+    v0.value = 0; v1.value = 100;
+    S.explode.t = 0; $('explode').value = 0; computeExplode(); refitIfFitted(); R.wells = true;
+    writeCutOutputs(); R.faces = true; save(); kick();
   });
-  $('reset-view').addEventListener('click', fitView);
   $('fit').addEventListener('click', fitView);
-  $('ins-focus').addEventListener('click', () => {
+  $('zoom-in').addEventListener('click', () => flyTo(S.cam.target, S.cam.dist * 0.7));
+  $('zoom-out').addEventListener('click', () => flyTo(S.cam.target, S.cam.dist / 0.7));
+  $('readout-zoom').addEventListener('click', () => {
     if (cardMode === 'cell' && pick >= 0) { const a = pick; closeCard(); G.hl = a; focusCell(a); }
     else if (cardMode === 'well' && S.well) { const w = S.well; closeCard(); focusWell(w); }
   });
-  let hintSeen = false; try { hintSeen = !!localStorage.getItem(LS_KEY + ':hint'); } catch { /* ignore */ }
-  if (!hintSeen) { $('hint').hidden = false; setTimeout(hideHint, 7000); }
-  $('ins-close').addEventListener('click', closeCard);
-  const sel = $('well-pick');
-  sel.innerHTML = '<option value="">Whole field</option>' + model.wells
-    .filter((w) => Object.keys(model.summary.wells[w.name] || {}).length).map((w) => w.name).sort()
-    .map((n) => `<option value="${n}">${n}</option>`).join('');
-  sel.value = S.well || '';
-  sel.addEventListener('change', () => selectWell(sel.value || null));
+  $('readout-close').addEventListener('click', closeCard);
+  $('well-pick').addEventListener('change', (e) => selectWell(e.target.value || null, true));
 
-  const exs = $('explode'), exm = $('ex-mode');
-  exs.value = S.explode.t; exm.value = S.explode.mode;
-  const onEx = () => {
-    S.explode = { mode: exm.value, t: +exs.value };
-    computeExplode(); R.faces = true; R.wells = true; save();
-  };
-  exs.addEventListener('input', onEx); exm.addEventListener('change', onEx);
+  const exs = $('explode');
+  exs.value = S.explode.t;
+  const exModes = $('ex-mode');
+  const showMode = () => { for (const b of exModes.querySelectorAll('button')) b.setAttribute('aria-checked', String(b.dataset.mode === S.explode.mode)); };
+  showMode();
+  const onEx = () => { S.explode = { mode: S.explode.mode, t: +exs.value }; computeExplode(); refitIfFitted(); writeCutOutputs(); R.faces = true; R.wells = true; save(); kick(); };
+  exs.addEventListener('input', onEx);
+  for (const b of exModes.querySelectorAll('button')) b.addEventListener('click', () => { S.explode.mode = b.dataset.mode; showMode(); onEx(); });
+  radioKeys(exModes);
+  writeCutOutputs();
+
+  $('stamp').addEventListener('click', openAbout);
+  $('about-close').addEventListener('click', closeAbout);
+  $('about-close-2').addEventListener('click', closeAbout);
+  $('about').addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const f = [...$('about').querySelectorAll('button')], i = f.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+  });
+  $('btn-units').addEventListener('click', () => {
+    units = U.SYSTEMS[(U.SYSTEMS.indexOf(units) + 1) % U.SYSTEMS.length];
+    store(STORE.units, units);
+    applyUnits();
+  });
+  $('focus-key').addEventListener('click', (e) => setFocus(true, e.detail === 0));
+  $('focus-exit').addEventListener('click', (e) => setFocus(false, e.detail === 0));
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!$('about').hidden) { closeAbout(); return; }
+    if (focus) setFocus(false, true);
+  });
 
   initSheet();
   initPointer();
   initChartSeek();
-  setFrame(S.frame, true);
-  applyProp();
+  applyUnits(true);
+  applyProp(true);
+  layoutKeys();
 
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { setClearColor(); R.draw = true; R.chart = true; drawLegend(); });
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refreshConfig(); });
+  dark.addEventListener('change', () => { readTheme(); track.invalidate(); R.colors = true; R.legend = true; R.track = true; R.chart = true; G.texKey = null; paintWellKey(); kick(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') { if (playing) stop(); if (raf) cancelAnimationFrame(raf); raf = 0; G.anim = null; return; }
+    R.draw = true; R.track = true; kick(); refreshConfig();
+  });
+  window.addEventListener('pagehide', () => { if (playing) stop(); if (raf) cancelAnimationFrame(raf); raf = 0; });
   window.addEventListener('focus', refreshConfig);
+}
+function writeCutOutputs() {
+  for (const ax of ['i', 'j', 'k']) { $(ax + 'v').textContent = `${S.cut[ax + '0']} to ${S.cut[ax + '1']}`; setSliderFill($(ax + '1')); $(ax + '0').style.setProperty('--p', '0%'); }
+  const p = propDef(S.prop), r = propRange(D, p), cat = category(p);
+  $('v0').disabled = $('v1').disabled = cat;
+  const bound = (t) => U.valueWithUnit(p, denorm(p, r, t / 100), units);
+  $('vv').textContent = cat ? 'none' : (S.vf[0] === 0 && S.vf[1] === 100) ? 'all' : `${bound(S.vf[0])} to ${bound(S.vf[1])}`;
+  $('exv2').textContent = U.times(S.exag);
+  $('exv').textContent = U.withUnit(U.int(S.explode.t), '%');
+  for (const id of ['exag', 'explode', 'v1']) setSliderFill($(id));
+}
+function setTrackModel() {
+  const y0 = +model.frames[0].slice(0, 4), y1 = +model.frames[G.nf - 1].slice(0, 4), years = [];
+  for (let y = y0 + 1; y <= y1; y++) years.push({ day: U.dayNumber(`${y}-01-01`), label: String(y) });
+  track.setModel({ n: G.nf, days: G.days, cut: G.cut, sys: units, years });
+}
+function applyUnits(initial) {
+  const b = $('btn-units');
+  b.textContent = units;
+  b.setAttribute('aria-label', units === 'US' ? 'Change units, now US: psi, feet, barrels a day' : 'Change units, now SI: bar, meters, cubic meters a day');
+  setTrackModel();
+  R.legend = true; R.step = true; R.track = true; R.chart = true; R.labels = true;
+  if (!initial) { writeCutOutputs(); writeAbout(); if (cardMode) refreshCard(); }
+  kick();
+}
+
+function buildWords() {
+  const box = $('props'); box.replaceChildren();
+  let prevDynamic = false;
+  for (const p of cfg.properties) {
+    if (!isDynamic(p) && prevDynamic) { const d = document.createElement('span'); d.className = 'divider'; d.setAttribute('aria-hidden', 'true'); box.appendChild(d); }
+    prevDynamic = isDynamic(p);
+    const b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.key = p.key;
+    b.textContent = p.short || p.label;
+    b.addEventListener('click', () => { if (S.prop !== p.key) { S.prop = p.key; applyProp(); save(); } });
+    box.appendChild(b);
+  }
+  if (!box.dataset.keys) { radioKeys(box); box.dataset.keys = '1'; }
+}
+function applyProp(initial) {
+  for (const b of $('props').querySelectorAll('[role="radio"]')) b.setAttribute('aria-checked', String(b.dataset.key === S.prop));
+  const on = $('props').querySelector('[aria-checked="true"]');
+  if (on && !initial) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  writeCutOutputs();
+  if (!initial) drawLegend();
+  R.colors = true; R.faces = true; G.texKey = null;
+  if (cardMode) refreshCard();
+  kick();
+}
+
+function buildWellPicker() {
+  const sel = $('well-pick'); sel.replaceChildren();
+  const all = document.createElement('option'); all.value = ''; all.textContent = 'Whole field'; sel.appendChild(all);
+  for (const n of model.wells.filter((w) => Object.keys(model.summary.wells[w.name] || {}).length).map((w) => w.name).sort()) {
+    const o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o);
+  }
+  sel.value = S.well || '';
+}
+function paintWellKey() {
+  for (const el of $('wellkey').querySelectorAll('.core')) {
+    const c = cfg.wellColors[el.dataset.role];
+    if (isHex(c)) el.style.setProperty('--c', c);
+  }
 }
 
 async function refreshConfig() {
-  try {
-    const c = await loadJSON('config.json');
-    if (c.text === cfgText) return;
-    cfg = c.json; cfgText = c.text; lutCache.clear();
-    if (!propDef(S.prop)) S.prop = cfg.properties[0].key;
-    buildZones(); computeExplode(); buildLabels(); buildWellKey();
-    buildChips(); applyProp(); R.draw = true; R.wells = true;
-  } catch { /* keep the settings already loaded */ }
-}
-
-function buildChips() {
-  const box = $('props'); box.innerHTML = '';
-  let prevDynamic = false;
-  for (const p of cfg.properties) {
-    const b = document.createElement('button');
-    b.className = 'chip'; b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.key = p.key;
-    b.style.setProperty('--grad', gradCSS(p.colormap));
-    b.textContent = p.short || p.label;
-    if (!p.dynamic && prevDynamic) { const d = document.createElement('span'); d.className = 'chip-sep'; d.setAttribute('aria-hidden', 'true'); box.appendChild(d); }
-    prevDynamic = !!p.dynamic;
-    b.addEventListener('click', () => { S.prop = p.key; applyProp(); save(); });
-    box.appendChild(b);
-  }
-}
-function applyProp() {
-  const p = propDef(S.prop);
-  for (const b of $('props').querySelectorAll('.chip')) b.setAttribute('aria-checked', String(b.dataset.key === S.prop));
-  $('prop-name').textContent = p.unit ? `${p.label}, ${p.unit}` : p.label;
-  const cat = p.type === 'category';
-  $('v0').disabled = $('v1').disabled = cat;
-  updateValueOutput(); drawLegend();
-  R.colors = true; R.faces = true;
-  if (cardMode) refreshCard();
-}
-function updateValueOutput() {
-  const p = propDef(S.prop), r = propRange(p);
-  $('vv').textContent = p.type === 'category' ? '—' : (S.vf[0] === 0 && S.vf[1] === 100) ? 'all'
-    : `${fmtProp(p, denorm(p, r, S.vf[0] / 100))}–${fmtProp(p, denorm(p, r, S.vf[1] / 100))}`;
-}
-function drawLegend() {
-  const p = propDef(S.prop), r = propRange(p), c = $('leg-bar'), x = c.getContext('2d'), H = c.height;
-  const named = p.key === 'ZONE', cats = $('leg-cats');
-  for (const id of ['leg-bar', 'leg-max', 'leg-min', 'leg-unit']) $(id).hidden = named;
-  cats.hidden = !named;
-  if (named) {
-    const pal = cfg.colormaps[p.colormap] || cfg.colormaps.regions;
-    cats.innerHTML = (cfg.zones || []).map((z, i) => `<span><i style="background:${pal[i % pal.length]}"></i>${z.name}</span>`).join('');
+  if (!cfg) return;
+  let c;
+  try { c = await loadJSON('config.json'); } catch (e) {
+    if (!G.cfgWarned) { G.cfgWarned = true; notice(`${e.message} The settings already loaded stay.`); }
     return;
   }
-  if (p.type === 'category') {
-    const pal = cfg.colormaps[p.colormap] || cfg.colormaps.regions, n = Math.round(r[1] - r[0] + 1);
-    for (let i = 0; i < n; i++) { x.fillStyle = pal[(i + Math.round(r[0]) - 1) % pal.length]; x.fillRect(0, H - (i + 1) * H / n, c.width, Math.ceil(H / n)); }
-  } else {
-    const L = lut(p.colormap);
-    for (let y = 0; y < H; y++) { const i = Math.round((1 - y / (H - 1)) * 255) * 3; x.fillStyle = `rgb(${L[i]},${L[i + 1]},${L[i + 2]})`; x.fillRect(0, y, c.width, 1); }
-  }
-  $('leg-max').textContent = fmtProp(p, r[1]);
-  $('leg-min').textContent = fmtProp(p, r[0]);
-  $('leg-unit').textContent = p.unit || '';
+  G.cfgWarned = false;
+  if (c.text === cfgText) return;
+  cfg = c.json; cfgText = c.text; D.cfg = cfg; lutCache.clear();
+  if (!propDef(S.prop)) S.prop = cfg.properties[0].key;
+  buildZoneData(); computeExplode(); buildLabels(); paintWellKey();
+  buildWords(); applyProp(); R.draw = true; R.wells = true; R.legend = true; kick();
 }
 
-function setFrame(f, initial) {
-  S.frame = Math.max(0, Math.min(G.nf - 1, f));
-  $('time').value = S.frame;
-  $('date').textContent = fmtDate(model.frames[S.frame]);
-  if (propDef(S.prop).dynamic || initial) R.colors = true;
-  R.draw = true; R.labels = true;
-  updateCursor();
-  if (cardMode) refreshCard();
-  if (!initial) save();
-}
+// ---------------------------------------------------------------- play
 function play() {
-  if (S.frame >= G.nf - 1) setFrame(0);
-  playing = true;
-  $('play-icon').setAttribute('d', 'M7 5h4v14H7zM13 5h4v14h-4z');
-  $('play').setAttribute('aria-label', 'Pause');
-  let last = 0;
-  const step = (t) => {
-    if (!playing) return;
-    if (t - last >= 1000 / (cfg.playbackFramesPerSecond || 6)) {
-      last = t;
-      if (S.frame >= G.nf - 1) { stop(); return; }
-      setFrame(S.frame + 1);
-    }
-    requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
+  const from = shown >= G.nf - 1 ? 0 : shown;
+  wanted = from;
+  playing = { from, t0: performance.now() };
+  showPlay();
+  kick();
 }
 function stop() {
-  playing = false;
-  $('play-icon').setAttribute('d', 'M7 5l12 7-12 7z');
-  $('play').setAttribute('aria-label', 'Play production history');
+  if (!playing) return;
+  playing = null;
+  showPlay();
+}
+function showPlay() {
+  const on = !!playing;
+  $('ico-play').toggleAttribute('hidden', on);
+  $('ico-pause').toggleAttribute('hidden', !on);
+  $('btn-play').setAttribute('aria-label', on ? 'Pause' : 'Play production history');
 }
 
-// ---------------------------------------------------------------- touch + mouse
+// ---------------------------------------------------------------- focus mode
+function setFocus(on, byKeyboard) {
+  if (on === focus) return;
+  focus = on;
+  store(STORE.focus, on ? '1' : '0');
+  if (on) closeCard();
+  const leaving = on ? [$('head'), $('keys'), $('sheet')] : [];
+  if (on && !reduced.matches) {
+    for (const e of leaving) e.classList.add('leaving');
+    setTimeout(() => { for (const e of leaving) e.classList.remove('leaving'); applyFocus(true); after(); }, 160);
+  } else { applyFocus(on); after(); }
+  function after() {
+    say(on ? 'Controls hidden. Press Escape or the corner key to show them.' : 'Controls shown.');
+    if (byKeyboard) (on ? $('focus-exit') : $('focus-key')).focus();
+  }
+}
+function applyFocus(on) {
+  document.body.classList.toggle('focus', on);
+  for (const e of [$('head'), $('keys'), $('sheet')]) { e.hidden = on; e.inert = on; }
+  $('focus-exit').hidden = !on;
+  // the stamp keeps its words, and moves into the caption band as its first line
+  if (on) $('caption').prepend($('stamp')); else $('stamp-home').appendChild($('stamp'));
+  if (model) { R.draw = true; R.labels = true; kick(); }
+}
+
+// ---------------------------------------------------------------- touch + mouse on the plate
 function initPointer() {
   const c = $('gl'), pts = new Map();
-  let down = null, pinch = null;
-  let lastTap = null;
+  let down = null, pinch = null, lastTap = null;
   c.addEventListener('pointerdown', (e) => {
-    G.anim = null;
+    if (G.anim) { S.cam = G.anim.to; G.anim = null; R.draw = true; }   // a touch ends a flight at its end
+    if (!$('error').hidden && model && G.cfgWarned) notice('');
     c.setPointerCapture(e.pointerId);
     pts.set(e.pointerId, [e.offsetX, e.offsetY]);
     if (pts.size === 1) down = { x: e.offsetX, y: e.offsetY, t: performance.now(), moved: false, btn: e.button, shift: e.shiftKey };
     if (pts.size === 2) { pinch = pinchState(pts); if (down) down.moved = true; }
+    kick();
   });
   c.addEventListener('pointermove', (e) => {
     if (!pts.has(e.pointerId)) return;
@@ -967,12 +1311,13 @@ function initPointer() {
       if (!down.moved) return;
       if (down.btn === 2 || down.shift) pan(dx, dy);
       else { S.cam.theta -= dx * 0.35; S.cam.phi = Math.max(-80, Math.min(88, S.cam.phi + dy * 0.3)); }
-      R.draw = true;
+      S.cam.fit = false;
+      R.draw = true; kick();
     } else if (pts.size === 2 && pinch) {
       const now = pinchState(pts);
-      S.cam.dist = clampDist(S.cam.dist * pinch.d / Math.max(now.d, 1));
+      S.cam.dist = clampDist(S.cam.dist * pinch.d / Math.max(now.d, 1)); S.cam.fit = false;
       pan(now.x - pinch.x, now.y - pinch.y);
-      pinch = now; R.draw = true;
+      pinch = now; R.draw = true; kick();
     }
   });
   const end = (e) => {
@@ -985,12 +1330,13 @@ function initPointer() {
         if (lastTap && now - lastTap.t < 380 && Math.hypot(down.x - lastTap.x, down.y - lastTap.y) < 30) { lastTap = null; focusAt(down.x, down.y); }
         else { lastTap = { t: now, x: down.x, y: down.y }; tap(down.x, down.y); }
       }
+      if (down.moved && cardMode) { R.card = Math.max(R.card, 1); kick(); }   // a turn, a pan or a pinch moved the mark
       down = null; save();
     }
   };
   c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end);
   c.addEventListener('contextmenu', (e) => e.preventDefault());
-  c.addEventListener('wheel', (e) => { e.preventDefault(); S.cam.dist = clampDist(S.cam.dist * Math.exp(e.deltaY * 0.0015)); R.draw = true; save(); }, { passive: false });
+  c.addEventListener('wheel', (e) => { e.preventDefault(); S.cam.fit = false; S.cam.dist = clampDist(S.cam.dist * Math.exp(e.deltaY * 0.0015)); R.draw = true; if (cardMode) R.card = Math.max(R.card, 1); save(); kick(); }, { passive: false });
 }
 function pinchState(pts) {
   const [a, b] = [...pts.values()];
@@ -998,7 +1344,7 @@ function pinchState(pts) {
 }
 function clampDist(d) { const m = Math.hypot(...model.extent); return Math.max(m * 0.012, Math.min(m * 6, d)); }
 
-// ---------------------------------------------------------------- focus + camera animation
+// ---------------------------------------------------------------- flights
 function cellWorld(a) {
   const p = a * 24, g = G.geom;
   let x = 0, y = 0, z = 0;
@@ -1007,24 +1353,32 @@ function cellWorld(a) {
   if (G.exOn) { const o = G.gOf[a] * 3; x += G.gOff[o]; y += G.gOff[o + 1]; z += G.gOff[o + 2]; }
   return [x, -z * S.exag, -y];
 }
+/** --draw's curve, cubic-bezier(0.2, 0, 0, 1), solved for x by bisection. */
+function drawCurve(u) {
+  const bz = (t, a, b) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+  let lo = 0, hi = 1;
+  for (let i = 0; i < 24; i++) { const m = (lo + hi) / 2; if (bz(m, 0.2, 0) < u) lo = m; else hi = m; }
+  return bz((lo + hi) / 2, 0, 1);
+}
 function flyTo(target, dist, cam) {
-  const to = { theta: S.cam.theta, phi: S.cam.phi, ...(cam || {}), target, dist: clampDist(dist) };
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { S.cam = to; R.draw = true; save(); return; }
+  const to = { theta: S.cam.theta, phi: S.cam.phi, sx: S.cam.sx || 0, sy: S.cam.sy || 0, ...(cam || {}), target: [...target], dist: clampDist(dist) };
+  if (reduced.matches) { S.cam = to; G.anim = null; R.draw = true; save(); kick(); return; }
   G.anim = { from: { ...S.cam, target: [...S.cam.target] }, to, t0: performance.now(), dur: 520 };
-  hideHint();
+  kick();
 }
 function stepAnim(now) {
   const A = G.anim; if (!A) return;
-  const u = Math.min(1, (now - A.t0) / A.dur), k = u < 0.5 ? 4 * u * u * u : 1 - (-2 * u + 2) ** 3 / 2;
+  const u = Math.min(1, (now - A.t0) / A.dur), k = drawCurve(u);
   const f = A.from, t = A.to;
-  let dth = ((t.theta - f.theta) % 360 + 540) % 360 - 180;
+  const dth = ((t.theta - f.theta) % 360 + 540) % 360 - 180;
   S.cam = {
     theta: f.theta + dth * k, phi: f.phi + (t.phi - f.phi) * k,
     dist: Math.exp(Math.log(f.dist) + (Math.log(t.dist) - Math.log(f.dist)) * k),
+    sx: (f.sx || 0) + ((t.sx || 0) - (f.sx || 0)) * k, sy: (f.sy || 0) + ((t.sy || 0) - (f.sy || 0)) * k,
     target: f.target.map((v, i) => v + (t.target[i] - v) * k),
   };
   R.draw = true;
-  if (u >= 1) { G.anim = null; save(); }
+  if (u >= 1) { S.cam = { ...t, target: [...t.target] }; G.anim = null; if (cardMode) R.card = Math.max(R.card, 1); save(); }
 }
 function focusDist() { return Math.max(Math.hypot(...model.extent) * 0.08, S.cam.dist * 0.42); }
 function focusAt(x, y) {
@@ -1043,128 +1397,273 @@ function focusWell(name) {
   const m = Math.hypot(...model.extent);
   flyTo([c[0], -c[2] * S.exag, -c[1]], Math.max(m * 0.25, r * 4));
 }
-function fitView() { const d = defaultCam(); flyTo(d.target, d.dist, { theta: d.theta, phi: d.phi }); }
-function hideHint() { const h = $('hint'); if (h && !h.hidden) { h.hidden = true; try { localStorage.setItem(LS_KEY + ':hint', '1'); } catch { /* ignore */ } } }
+function fitView() { const d = defaultCam(); flyTo(d.target, d.dist, d); }
 function pan(dx, dy) {
   const V = G.V || M4.look(eye(), S.cam.target), c = $('gl');
   const k = 2 * S.cam.dist * Math.tan(FOV / 2) / (c.clientHeight || 1);
   const right = [V[0], V[4], V[8]], up = [V[1], V[5], V[9]];
   for (let i = 0; i < 3; i++) S.cam.target[i] += (-dx * right[i] + dy * up[i]) * k;
 }
+/** What a tap at (x, y) on the plate opens: a well's name (its own text first), else the cell under the
+ *  finger, else a well's 44 px box. */
+function resolveTap(x, y) {
+  const names = S.wells && S.labels;
+  const inner = names ? labelAt(x, y, true) : null;
+  if (inner) return { well: inner };
+  const a = pickAt(x, y);
+  if (a >= 0 && a < G.NA) return { cell: a };
+  const outer = names ? labelAt(x, y, false) : null;
+  return outer ? { well: outer } : {};
+}
 function tap(x, y) {
   G.hl = -1;
-  const a = pickAt(x, y);
-  if (a >= 0 && a < G.NA) { pick = a; cardMode = 'cell'; refreshCard(); placeCard(y); }
-  else closeCard();
-  R.draw = true;
-}
-// Keep the card away from the tapped spot, and let a quick second tap fall through to the model.
-function placeCard(y) {
-  const card = $('inspect'), stageH = $('stage').clientHeight;
-  if (y > stageH * 0.5) { card.style.top = `${$('head').offsetHeight + 6}px`; card.style.bottom = 'auto'; }
-  else { card.style.top = ''; card.style.bottom = ''; }
-  card.style.pointerEvents = 'none';
-  clearTimeout(G.cardTimer);
-  G.cardTimer = setTimeout(() => { card.style.pointerEvents = ''; }, 450);
+  const t = resolveTap(x, y), a = t.cell ?? -1;
+  if (t.well) { selectWell(t.well, true, [x, y]); return; }
+  if (a >= 0) {
+    pick = a; cardMode = 'cell'; G.cardPt = [x, y]; refreshCard(); placeCard(); G.cardPt = null;   // the finger's spot counts for this placing only
+    const p = propDef(S.prop);
+    say(`${$('readout-where').textContent}. ${p.label} ${U.spokenUnits(cardFigure(p, a))} on ${U.spokenDate(model.frames[shown])}.`);
+  } else closeCard();
+  R.draw = true; kick();
 }
 
-// ---------------------------------------------------------------- details card
-function closeCard() { cardMode = null; pick = -1; $('inspect').hidden = true; R.draw = true; }
-function row(dl, k, v) { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); }
-function sep(dl, text) { const d = document.createElement('div'); d.className = 'sep'; dl.appendChild(d); if (text) { const dt = document.createElement('dt'); dt.textContent = text; dt.style.gridColumn = '1 / -1'; dt.style.color = 'var(--ink)'; dl.appendChild(dt); } }
+// ---------------------------------------------------------------- the readout card
+/** The selection's mark on the plate, padded by 10 px so its 18 px ring stays in view: the tapped
+ *  cell's middle, or a well's head with its name over it (placeLabels draws the name 7 px left of the
+ *  head, 16 px tall, 4 px above it); right after a tap, the spot the finger touched too. { l, t, r, b }
+ *  in the plate's CSS px; null when nothing of it is on the plate. */
+function markBox(withName = true) {
+  const c = $('gl'), W = c.clientWidth, H = c.clientHeight, m = 10, on = (q) => q && q[0] >= 0 && q[1] >= 0 && q[0] <= W && q[1] <= H;
+  let p = null, nameW = 0;
+  if (cardMode === 'cell' && pick >= 0) { const w = cellWorld(pick); p = projectWorld(w[0], w[1], w[2]); }
+  else if (cardMode === 'well' && S.well) {
+    const i = model.wells.findIndex((w) => w.name === S.well);
+    if (i >= 0) { p = project(G.wellHeads ? G.wellHeads[i] : model.wells[i].path[0]); nameW = withName && G.labelW ? G.labelW[i] : 0; }
+  }
+  const pts = [p, G.cardPt].filter(on);
+  if (!pts.length) return null;
+  const b = { l: Math.min(...pts.map((q) => q[0])) - m, t: Math.min(...pts.map((q) => q[1])) - m, r: Math.max(...pts.map((q) => q[0])) + m, b: Math.max(...pts.map((q) => q[1])) + m };
+  if (nameW && on(p)) { b.l = Math.min(b.l, p[0] - 11); b.t = Math.min(b.t, p[1] - 24); b.r = Math.max(b.r, p[0] - 7 + nameW + 4); }
+  return b;
+}
+/** Places the card (HOUSE 4.7, carried to a short plate). It goes to a corner of the room the keys and
+ *  the ghost key leave, 6 px clear of their hits, never over the selection's mark: top-left, else
+ *  bottom-left, else the right-hand side, top or bottom. Where the full form could not sit beside the
+ *  mark wherever the mark fell (the sheet raised, a phone on its side), the card takes its compact form.
+ *  What scrolls (the rows; in the compact form the figure's line and the rows) ends on a row's edge, at
+ *  most 55 % of the plate with the sheet closed or in focus mode and half of it otherwise, with a
+ *  --line-strong rule at its foot when more follow. fresh false (a new step, new units, the end of a
+ *  turn or a flight) keeps the card where it is while that still fits. */
+function placeCard(fresh = true) {
+  const card = $('readout');
+  R.card = 0;
+  if (card.hidden) return;
+  const plate = $('plate'), pr = plate.getBoundingClientRect(), W = plate.clientWidth, H = plate.clientHeight;
+  const body = $('readout-body'), dl = $('readout-all'), was = G.cardAt;
+  card.classList.remove('right');
+  const L = parseFloat(getComputedStyle(card).left) || 8, Rm = parseFloat(getComputedStyle($('keys')).right) || 8;
+  const T = focus ? $('focus-exit').offsetTop : 8, B = H - 8, cap = H * (S.sheet === 0 || focus ? 0.55 : 0.5);
+  const keep = [];                    // the keys' and the ghost key's hits; the card's Close hit reaches 4 px over its top
+  for (const e of [...$('keys').querySelectorAll('button'), $('focus-exit')]) {
+    if (e.hidden || e.closest('[hidden]')) continue;
+    const r = e.getBoundingClientRect();
+    if (r.width) keep.push({ l: r.left - pr.left - 6, t: r.top - pr.top - 6, r: r.right - pr.left + 6, b: r.bottom - pr.top + 6 });
+  }
+  /** The free stretches of the column x0..x1, top to bottom, beside the keys and the mark. */
+  const stretches = (x0, x1, mark) => {
+    let free = [{ t: T, b: B }];
+    const cut = (t, b) => { free = free.flatMap((s) => (b <= s.t || t >= s.b ? [s] : [{ t: s.t, b: Math.min(s.b, t) }, { t: Math.max(s.t, b), b: s.b }])).filter((s) => s.b - s.t > 1); };
+    for (const k of keep) if (k.l < x1 && k.r > x0) cut(k.t, k.b);
+    const by = mark && mark.l < x1 && mark.r > x0;
+    if (by) cut(mark.t, mark.b);
+    return free.map((s) => ({ ...s, below: !!by && s.t >= mark.b - 0.5 }));
+  };
+  /** The card in a form: its width, its fixed part, what scrolls and that region's row edges. */
+  const measure = (compact) => {
+    card.classList.toggle('compact', compact);
+    for (const e of [body, dl]) { e.style.maxHeight = ''; e.classList.remove('more'); }
+    const region = compact ? body : dl, rr = region.getBoundingClientRect(), cr = card.getBoundingClientRect(), cuts = [];
+    if (compact) {
+      const v = $('readout-number').parentElement.getBoundingClientRect(), s = $('readout-sub').getBoundingClientRect();
+      cuts.push(s.top < v.bottom - 1 ? Math.max(v.bottom, s.bottom) - rr.top : v.bottom - rr.top, s.bottom - rr.top);
+    }
+    for (const e of dl.children) if (e.tagName === 'DD') cuts.push(e.getBoundingClientRect().bottom - rr.top);
+    const first = cuts.length ? cuts[0] : 0;   // fractional px: a rounded height let a full card reach 1 px into the mark's margin
+    return { compact, region, cw: cr.width, fixed: cr.height - rr.height, full: rr.height, cuts: cuts.filter((c) => c >= first - 0.01).sort((a, b) => a - b) };
+  };
+  const span = (f, right) => (right ? [W - Rm - f.cw, W - Rm] : [L, L + f.cw]);
+  const need = (f, k) => f.fixed + (f.cuts.length ? f.cuts[Math.min(k, f.cuts.length) - 1] + 1 : f.full);
+  // the form: the full one where it sits beside a cell's mark wherever that falls in the left-hand
+  // column, so a plate shows one form whatever is tapped; else the compact one
+  let f = measure(false);
+  const room = Math.max(0, ...stretches(...span(f, false), null).map((s) => s.b - s.t));
+  if (Math.min((room - 20) / 2, cap) < need(f, 2)) f = measure(true);
+  const target = Math.min(f.fixed + f.full, cap), least = need(f, 1);
+  const put = (right, align, y, h) => {
+    card.classList.toggle('right', right);
+    const fits = h - f.fixed;
+    if (f.full > fits + 0.01) {
+      let end = f.cuts.length ? f.cuts[0] : Math.max(0, fits - 1);
+      for (const c of f.cuts) if (c + 1 <= fits + 0.01) end = c;
+      f.region.style.maxHeight = `${Math.round((end + 1) * 100) / 100}px`; f.region.classList.add('more');   // border-box: the foot rule
+    }
+    // on a whole pixel, toward the room: down from a top edge, up from a bottom one
+    card.style.top = `${align === 'top' ? Math.ceil(y) : Math.floor(y - card.getBoundingClientRect().height)}px`;
+    G.cardAt = { compact: f.compact, right, align, y };
+  };
+  // a card that still fits where it is stays there
+  if (!fresh && was && was.compact === f.compact) {
+    for (const s of stretches(...span(f, was.right), markBox())) {
+      if (was.align === 'top' && s.t <= was.y + 0.5 && s.b - was.y >= least) return put(was.right, 'top', was.y, Math.min(target, s.b - was.y));
+      if (was.align === 'bottom' && s.b >= was.y - 0.5 && was.y - s.t >= least) return put(was.right, 'bottom', was.y, Math.min(target, was.y - s.t));
+    }
+  }
+  // else the first stretch in the house's order that holds the whole card, else the tallest; a well
+  // whose head and name leave no stretch tall enough keeps its head clear and lets the card take its name
+  const marks = [markBox()];
+  if (cardMode === 'well' && marks[0]) marks.push(markBox(false));
+  let o = null;
+  for (const mark of marks) {
+    const all = [false, true].flatMap((right) => stretches(...span(f, right), mark).map((s) => ({ right, s, h: s.b - s.t })));
+    o = all.find((q) => q.h >= target) || all.reduce((a, q) => (!a || q.h > a.h ? q : a), null);
+    if (o && o.h >= least) break;
+  }
+  if (o) put(o.right, o.s.below ? 'bottom' : 'top', o.s.below ? o.s.b : o.s.t, Math.min(target, Math.max(least, o.h)));
+  else put(false, 'top', T, target);
+}
+function closeCard() { cardMode = null; pick = -1; G.cardAt = null; $('readout').hidden = true; R.draw = true; R.labels = true; kick(); }
+function cardFigure(p, a) {
+  const v = cellValue(D, p.key, shown, a);
+  if (p.key === 'ZONE') return zoneName(G.ijk[a * 3 + 2] + 1);
+  if (category(p)) return U.tick(v);
+  return U.valueWithUnit(p, v, units);
+}
+const CELL_DATED = [['SOIL', 'Oil saturation'], ['SWAT', 'Water saturation'], ['SGAS', 'Gas saturation'], ['PRESSURE', 'Pressure']];
+const CELL_ROCK = [['DEPTH', 'Depth'], ['PORO', 'Porosity'], ['PERMX', 'Horizontal permeability'], ['PERMZ', 'Vertical permeability'], ['NTG', 'Net to gross'], ['SEGMENT', 'Fault segment'], ['FIPNUM', 'Fluid-in-place region']];
+const WELL_RATES = [['oil', 'Oil produced', false], ['water', 'Water produced', false], ['gas', 'Gas produced', true], ['winj', 'Water injected', false], ['ginj', 'Gas injected', true]];
+function cardRow(dl, label, value) {
+  const dt = document.createElement('dt'), dd = document.createElement('dd');
+  dt.textContent = label; dd.textContent = value; dl.append(dt, dd);
+  return dd;
+}
+function rule(dl) { const d = document.createElement('div'); d.className = 'rule'; dl.appendChild(d); }
+const pdef = (key) => propDef(key) || { key, unit: { PRESSURE: 'bar', DEPTH: 'm', PERMX: 'mD', PERMZ: 'mD' }[key] || '', decimals: key === 'PORO' ? 3 : 2 };
+/** Builds the card's rows once per selection; refreshCardValues() writes the dated values in place. */
 function refreshCard() {
-  $('ins-focus').hidden = false;
-  const dl = $('ins-list'); dl.innerHTML = '';
-  const date = fmtDate(model.frames[S.frame], true);
+  const dl = $('readout-all'); dl.replaceChildren();
+  G.cardDyn = [];
   if (cardMode === 'cell' && pick >= 0) {
-    const a = pick, i = G.ijk[a * 3] + 1, j = G.ijk[a * 3 + 1] + 1, k = G.ijk[a * 3 + 2] + 1, f = S.frame;
-    $('ins-title').textContent = `Cell I ${i}, J ${j}, K ${k}`;
-    dl.className = 'c4';
-    const sv = (key) => G.static[key] ? G.static[key][a] : NaN;
-    row(dl, 'Formation', zoneName(k));
-    row(dl, 'Segment', String(segmentOf(a) + 1));
-    row(dl, 'Depth', `${fmt(sv('DEPTH'), 0)} m`);
-    row(dl, 'Porosity', fmt(sv('PORO'), 3));
-    row(dl, 'Perm X', `${fmt(sv('PERMX'), sv('PERMX') < 10 ? 1 : 0)} mD`);
-    row(dl, 'Perm Z', `${fmt(sv('PERMZ'), sv('PERMZ') < 10 ? 2 : 0)} mD`);
-    row(dl, 'NTG', fmt(sv('NTG'), 2));
-    sep(dl, date);
-    row(dl, 'Oil sat.', fmt(cellValue('SOIL', f, a), 2));
-    row(dl, 'Water sat.', fmt(cellValue('SWAT', f, a), 2));
-    row(dl, 'Gas sat.', fmt(cellValue('SGAS', f, a), 2));
-    row(dl, 'Pressure', `${fmt(cellValue('PRESSURE', f, a), 0)} bar`);
+    const a = pick, i = G.ijk[a * 3] + 1, j = G.ijk[a * 3 + 1] + 1, k = G.ijk[a * 3 + 2] + 1;
+    $('readout-where').textContent = `Cell I ${i}, J ${j}, K ${k}, ${zoneName(k)}`;
+    for (const [key, label] of CELL_DATED) G.cardDyn.push([cardRow(dl, label, ''), () => U.valueWithUnit(pdef(key), cellValue(D, key, shown, a), units)]);
+    rule(dl);
+    for (const [key, label] of CELL_ROCK) {
+      const v = cellValue(D, key, shown, a);
+      cardRow(dl, label, key === 'SEGMENT' || key === 'FIPNUM' ? U.tick(Math.round(v)) : U.valueWithUnit(pdef(key), v, units));
+    }
+    $('readout-zoom').textContent = 'Zoom to cell';
   } else if (cardMode === 'well' && S.well) {
-    const w = model.wells.find((x) => x.name === S.well); if (!w) return closeCard();
-    $('ins-title').textContent = w.name;
-    dl.className = '';
+    const w = model.wells.find((x) => x.name === S.well); if (!w) { closeCard(); return; }
+    $('readout-where').textContent = `Well ${w.name}`;
     const firstOn = w.state.findIndex((s) => s > 0), lastOn = w.state.length - 1 - [...w.state].reverse().findIndex((s) => s > 0);
     const roles = [...new Set(w.state.filter((s) => s > 0))].map((s) => ROLE[s]).join(', ');
     const ks = w.cells.map((c) => c[2]);
-    row(dl, 'Role', roles || 'Never opened');
-    row(dl, 'Completions', `${w.cells.length} cells, layers ${Math.min(...ks)}–${Math.max(...ks)}`);
-    if (firstOn >= 0) row(dl, 'Open', `${fmtDate(model.frames[firstOn])} to ${fmtDate(model.frames[lastOn])}`);
-    sep(dl, date);
-    row(dl, 'Status', ROLE[w.state[S.frame] || 0]);
+    G.cardDyn.push([cardRow(dl, 'Now', ''), () => DOING[w.state[shown] || 0]]);
     const sm = model.summary.wells[w.name] || {};
-    const lab = { oil: 'Oil produced', water: 'Water produced', gas: 'Gas produced', winj: 'Water injected', ginj: 'Gas injected' };
-    for (const k in lab) if (sm[k]) row(dl, lab[k], `${fmtRate(sm[k][S.frame])} Sm³/d`);
-  } else return closeCard();
-  $('ins-focus').textContent = cardMode === 'well' ? 'Zoom to well' : 'Zoom to cell';
-  $('inspect').hidden = false;
+    for (const [key, label, isGas] of WELL_RATES) if (sm[key]) G.cardDyn.push([cardRow(dl, label, ''), () => (isGas ? U.gas : U.liquid)(sm[key][shown] || 0, units)]);
+    rule(dl);
+    cardRow(dl, 'Roles', roles || 'never opened');
+    cardRow(dl, 'Completions', `${w.cells.length} cells, layers ${Math.min(...ks)} to ${Math.max(...ks)}`);
+    if (firstOn >= 0) cardRow(dl, 'Open', `${U.month(model.frames[firstOn])} to ${U.month(model.frames[lastOn])}`);
+    $('readout-zoom').textContent = 'Zoom to well';
+  } else { closeCard(); return; }
+  $('readout').hidden = false;
+  refreshCardValues();
+  R.card = Math.max(R.card, 1); kick();   // its rows changed: placed again on the next frame, where it is if it still fits
 }
-function selectWell(name) {
-  S.well = name;
-  $('well-pick').value = name && [...$('well-pick').options].some((o) => o.value === name) ? name : '';
-  if (name) { cardMode = 'well'; pick = -1; refreshCard(); } else if (cardMode === 'well') closeCard();
-  R.draw = true; R.chart = true; save();
-}
-
-// ---------------------------------------------------------------- chart
-const SERIES = {
-  liquid: [['oil', 'Oil produced', 'var(--c-oil)', false], ['water', 'Water produced', 'var(--c-water)', false], ['winj', 'Water injected', 'var(--c-water)', true]],
-  gas: [['gas', 'Gas produced', 'var(--c-gas)', false], ['ginj', 'Gas injected', 'var(--c-gas)', true]],
-};
-function frameT(f) {
-  if (!G.days) { G.days = model.frames.map((iso) => Date.UTC(+iso.slice(0, 4), +iso.slice(5, 7) - 1, +iso.slice(8, 10)) / 864e5); }
-  const d = G.days; return (d[f] - d[0]) / (d[d.length - 1] - d[0] || 1);
-}
-frameT.days0 = () => { frameT(0); return G.days[0]; };
-frameT.days1 = () => { frameT(0); return G.days[G.days.length - 1]; };
-function niceCeil(v) { if (v <= 0) return 1; const e = 10 ** Math.floor(Math.log10(v)), f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * e; }
-function drawChart() {
-  const svg = $('chart'), W = svg.clientWidth || 320, H = svg.clientHeight || 132, nf = G.nf;
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  const src = (S.well ? model.summary.wells[S.well] : model.summary.field) || {};
-  $('chart-title').textContent = S.well ? `${S.well} rates, Sm³/d` : 'Field rates, Sm³/d';
-  const X = (f) => frameT(f) * W;
-  const panels = [{ key: 'liquid', y0: H * 0.1, y1: H * 0.56 }, { key: 'gas', y0: H * 0.68, y1: H * 0.86 }];
-  let html = '', keyHtml = '';
-  for (const pn of panels) {
-    const list = SERIES[pn.key].filter(([k]) => src[k] && src[k].some((v) => v > 0));
-    const max = niceCeil(Math.max(0, ...list.flatMap(([k]) => src[k])));
-    html += `<line class="grid" x1="0" x2="${W}" y1="${pn.y1}" y2="${pn.y1}"/><line class="grid" x1="0" x2="${W}" y1="${pn.y0}" y2="${pn.y0}" stroke-dasharray="2 3"/>`;
-    html += `<text x="2" y="${pn.y0 - 3}">${list.length ? fmtRate(max) : (pn.key === 'gas' ? 'No gas flow' : 'No liquid flow')}</text>`;
-    for (const [k, label, color, dashed] of list) {
-      const d = src[k].map((v, f) => `${f ? 'L' : 'M'}${X(f).toFixed(1)} ${(pn.y1 - (v / max) * (pn.y1 - pn.y0)).toFixed(1)}`).join('');
-      html += `<path class="ln" d="${d}" stroke="${color}"${dashed ? ' stroke-dasharray="4 3"' : ''}/>`;
-      keyHtml += `<span><i class="${dashed ? 'd' : ''}" style="--c:${color}"></i>${label}</span>`;
+function refreshCardValues() {
+  for (const [dd, fn] of G.cardDyn || []) { const t = fn(); if (dd.textContent !== t) dd.textContent = t; }
+  const iso = model.frames[shown];
+  if (cardMode === 'cell' && pick >= 0) {
+    const p = propDef(S.prop), fig = cardFigure(p, pick), m = fig.match(/^(.*?) (\S+)$/);
+    setText('readout-number', m && !category(p) ? m[1] : fig);
+    setText('readout-unit', m && !category(p) ? ` ${m[2]}` : '');
+    setText('readout-sub', isDynamic(p) ? `${p.label} on ${U.date(iso)}` : p.label);
+  } else if (cardMode === 'well' && S.well) {
+    const w = model.wells.find((x) => x.name === S.well), code = w.state[shown] || 0, sm = model.summary.wells[w.name] || {};
+    const main = [null, ['oil', 'Oil produced', false], ['winj', 'Water injected', false], ['ginj', 'Gas injected', true]][code];
+    if (main && sm[main[0]]) {
+      const t = (main[2] ? U.gas : U.liquid)(sm[main[0]][shown] || 0, units), m = t.match(/^(.*?) (\S+)$/);
+      setText('readout-number', m[1]); setText('readout-unit', ` ${m[2]}`);
+      setText('readout-sub', `${main[1]} in the month to ${U.date(iso)}`);   // the pipeline averages each rate over the month to the date
+    } else {
+      // open in a role the summary holds no rate for (C-4H on 6 Nov 1997, F-4H on 1 Sep 2001): the
+      // headline says what the well was doing, as the Now row does, and that no rate was reported
+      setText('readout-number', code ? DOING[code] : w.firstOpen >= 0 && shown < w.firstOpen ? 'Not yet open' : 'Shut');
+      setText('readout-unit', ''); setText('readout-sub', code ? `no rate reported for the month to ${U.date(iso)}` : `on ${U.date(iso)}`);
     }
   }
-  const d0 = frameT.days0(), d1 = frameT.days1();
-  for (let y = 1998; y <= 2010; y += 2) {
-    const t = (Date.UTC(y, 0, 1) / 864e5 - d0) / (d1 - d0);
-    if (t < 0.02 || t > 0.98) continue;
-    const x = (t * W).toFixed(1);
-    html += `<text x="${x}" y="${H - 2}" text-anchor="middle">${y}</text><line class="grid" x1="${x}" x2="${x}" y1="${H * 0.86}" y2="${H * 0.9}"/>`;
+}
+function selectWell(name, open, pt) {
+  S.well = name;
+  $('well-pick').value = name && [...$('well-pick').options].some((o) => o.value === name) ? name : '';
+  if (name && open) {
+    cardMode = 'well'; pick = -1; G.cardPt = pt || null; refreshCard();
+    placeCard(); G.cardPt = null;   // clear of the well's head and name, wherever it was chosen from
+    say(`Well ${name}. ${U.spokenUnits($('readout-number').textContent + $('readout-unit').textContent)}, ${$('readout-sub').textContent}.`);
+  } else if (!name && cardMode === 'well') closeCard();
+  R.draw = true; R.chart = true; R.labels = true; save(); kick();
+}
+
+// ---------------------------------------------------------------- the rates chart
+function frameT(f) { const d = G.days; return (d[f] - d[0]) / (d[d.length - 1] - d[0] || 1); }
+function niceCeil(v) { if (v <= 0) return 1; const e = 10 ** Math.floor(Math.log10(v)), f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * e; }
+const SERIES = {
+  liquid: [['oil', 'Oil produced', 'oil', false], ['water', 'Water produced', 'water', false], ['winj', 'Water injected', 'water', true]],
+  gas: [['gas', 'Gas produced', 'gas', false], ['ginj', 'Gas injected', 'gas', true]],
+};
+function drawChart() {
+  const svg = $('chart'), W = svg.clientWidth, H = svg.clientHeight || 140;
+  if (!W) return;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.replaceChildren();
+  const src = (S.well ? model.summary.wells[S.well] : model.summary.field) || {};
+  $('chart-title').textContent = S.well ? `${S.well} rates` : 'Field rates';
+  const X = (f) => frameT(f) * W, key = $('chart-key');
+  key.replaceChildren();
+  const panels = [{ key: 'liquid', y0: 16, y1: H * 0.56, conv: U.liquidIn, unit: U.liquidUnit(units) }, { key: 'gas', y0: H * 0.56 + 18, y1: H * 0.86, conv: U.gasIn, unit: U.gasUnit(units) }];
+  for (const pn of panels) {
+    const list = SERIES[pn.key].filter(([k]) => src[k] && src[k].some((v) => v > 0));
+    const max = niceCeil(Math.max(0, ...list.flatMap(([k]) => src[k].map((v) => pn.conv(v, units)))));
+    svg.append(svgEl('line', { class: 'grid', x1: 0, x2: W, y1: pn.y1, y2: pn.y1 }), svgEl('line', { class: 'grid', x1: 0, x2: W, y1: pn.y0, y2: pn.y0, 'stroke-dasharray': '2 3' }));
+    const top = svgEl('text', { x: 2, y: pn.y0 - 3, class: 'top' });
+    top.textContent = list.length ? U.withUnit(U.int(max), pn.unit) : (pn.key === 'gas' ? 'No gas flow' : 'No liquid flow');
+    svg.append(top);
+    for (const [k, label, cls, inj] of list) {
+      const d = src[k].map((v, f) => `${f ? 'L' : 'M'}${Math.round(X(f) * 10) / 10} ${Math.round((pn.y1 - (pn.conv(v, units) / max) * (pn.y1 - pn.y0)) * 10) / 10}`).join('');
+      svg.append(svgEl('path', { class: `ln ${cls}${inj ? ' inj' : ''}`, d }));
+      const s = document.createElement('span'), sample = svgEl('svg', { viewBox: '0 0 14 4', width: '14', height: '4', 'aria-hidden': 'true' });
+      sample.append(svgEl('path', { class: `ln ${cls}${inj ? ' inj' : ''}`, d: 'M0 2h14' }));
+      s.append(sample, document.createTextNode(label));
+      key.appendChild(s);
+    }
   }
-  html += `<line id="chart-cursor" class="cursor" y1="0" y2="${H * 0.88}"/>`;
-  svg.innerHTML = html;
-  $('chart-key').innerHTML = keyHtml;
+  const y0 = +model.frames[0].slice(0, 4), y1 = +model.frames[G.nf - 1].slice(0, 4);
+  for (let y = y0 + 1; y <= y1; y += 2) {
+    const t = (U.dayNumber(`${y}-01-01`) - G.days[0]) / (G.days[G.nf - 1] - G.days[0]);
+    if (t < 0.03 || t > 0.97) continue;
+    const x = Math.round(t * W * 10) / 10, label = svgEl('text', { x, y: H - 2, 'text-anchor': 'middle' });
+    label.textContent = String(y);
+    svg.append(label, svgEl('line', { class: 'grid', x1: x, x2: x, y1: H * 0.86, y2: H * 0.9 }));
+  }
+  // the cursor runs under the panels' top labels, which carry a --page halo
+  svg.insertBefore(svgEl('line', { id: 'chart-cursor', class: 'cursor', y1: 0, y2: H * 0.88 }), svg.querySelector('text.top'));
+  svg.setAttribute('aria-label', `${S.well ? `${S.well}’s` : 'The field’s'} production and injection rates over the history`);
   updateCursor();
 }
 function updateCursor() {
-  const c = document.getElementById('chart-cursor'); if (!c) return;
-  const W = $('chart').clientWidth || 320, x = frameT(S.frame) * W;
+  const c = document.getElementById('chart-cursor'); if (!c || shown < 0) return;
+  const x = frameT(shown) * ($('chart').clientWidth || 320);
   c.setAttribute('x1', x); c.setAttribute('x2', x);
 }
 function initChartSeek() {
@@ -1173,10 +1672,32 @@ function initChartSeek() {
     const r = svg.getBoundingClientRect(), t = (e.clientX - r.left) / r.width;
     let best = 0, bd = 9;
     for (let f = 0; f < G.nf; f++) { const d = Math.abs(frameT(f) - t); if (d < bd) { bd = d; best = f; } }
-    if (best !== S.frame) setFrame(best);
+    wanted = best; kick();
   };
   svg.addEventListener('pointerdown', (e) => { active = true; stop(); svg.setPointerCapture(e.pointerId); seek(e); });
   svg.addEventListener('pointermove', (e) => { if (active) seek(e); });
   const end = () => { active = false; };
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
 }
+
+// ---------------------------------------------------------------- the test hook
+// Inert: nothing in the app calls it. tools/shoot.mjs reads the app's state through it.
+window.__norne = {
+  stats: () => ({ ...G.stats, texStep: G.texStep, shown, wanted, trackBuilds: track ? track.builds : 0, playing: !!playing, raf: !!raf }),
+  wanted: () => wanted,
+  shown: () => shown,
+  pick: (x, y) => pickAt(x, y),
+  cell: (a, f) => Object.fromEntries(['SOIL', 'SWAT', 'SGAS', 'PRESSURE', 'PORO', 'PERMX', 'PERMZ', 'NTG', 'DEPTH', 'FIPNUM', 'ZONE', 'SEGMENT', 'LAYER'].map((k) => [k, cellValue(D, k, f ?? shown, a)]).concat([['ijk', [...G.ijk.subarray(a * 3, a * 3 + 3)]]])),
+  cellScreen: (a) => { const w = cellWorld(a); return projectWorld(w[0], w[1], w[2]); },
+  wellScreen: (name) => { const i = model.wells.findIndex((w) => w.name === name); return i < 0 ? null : project(G.wellHeads ? G.wellHeads[i] : model.wells[i].path[0]); },
+  cut: () => G.cut,
+  focus: () => focus,
+  cam: () => ({ ...S.cam, target: [...S.cam.target], flying: !!G.anim }),
+  units: () => units,
+  setFrame: (f) => { wanted = Math.max(0, Math.min(G.nf - 1, f | 0)); kick(); },
+  setProp: (key) => { if (propDef(key)) { S.prop = key; applyProp(); } },
+  log: (on) => { if (on) flog = []; const out = flog; if (!on) flog = null; return out; },
+  labelHits: () => G.labelHits || [],
+  resolveTap: (x, y) => resolveTap(x, y),
+  ends: (key) => openEnds(D, propDef(key), G.gasMax),
+};

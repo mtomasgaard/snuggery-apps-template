@@ -1,0 +1,544 @@
+# Norne Reservoir: art direction
+
+`NOTES.md` says what the app does and where every number comes from. This file says how it looks,
+moves and speaks under the template's house system (`Template/HOUSE.md`, the brief this pass
+follows; Global Weather is the reference, Milky Way and Besseggen the passes before this one).
+Every figure names the command that printed it. The scripts are in `tools/`, which the ZIP leaves
+out. Choices marked *owner call* are listed, with what each was chosen over, in `tools/DECISIONS.md`
+there, beside the record of how this look was built, checked and reviewed; B1 to B11 are the bugs
+the pass fixed, listed there too.
+
+**Measured on 2026-10-01**, before the pass, on the working tree. Commands run from
+`Template/norne-reservoir/` unless they say `Template/`. Load and frame times are headless Chromium
+(SwiftShader) on the build Mac: a trend, never phone evidence. The throwaway scripts named below
+live in `tools/.work/`, which git ignores.
+
+---
+
+## The look: the house, with one bold thing of its own
+
+Norne Reservoir takes the house chrome whole: one face, gray chrome, the row of words, the key
+column, the caption band, the player and the app's own track, the readout card, About, focus mode,
+SI and the no-tells rules. What is its own is the plate, printed twice, and one signature.
+
+- **The plate is printed twice.** A reservoir model has no true appearance: every color on it is a
+  value on a scale. So it takes Global Weather's road, not Besseggen's: the light theme is the
+  negative (pale rock, more of a quantity darker), the dark theme is the print (dark rock, more of a
+  quantity brighter). In the dark theme the oil leg glows out of a dark body, which is what the
+  model is about (`tools/.work/look/preview-dark-Oil-0.png`). The stock app drew the same colors in
+  both themes, so its dark theme was a near-white block on a near-black stage
+  (`tools/.work/look/dark-0-open.png`).
+- **One bold thing: the Cut** (section 1), on the player's track. Everything else is quiet.
+- **Honesty is already the app's point.** `NOTES.md` states the run's check against the published
+  reference and the model's distance from the field's own history. The pass keeps every word of
+  that, says it where the picture is read (About, section 3), and fixes the places where the screen
+  says less than the data: scales that clip without saying so, a legend that sits over the date
+  (B5, B1).
+
+**What a stranger saw before the pass** (`PLAYWRIGHT_MODULE=… node tools/.work/look.mjs`, light and dark at
+390 x 844, DPR 2, touch, plus 844 x 390; pictures in `tools/.work/look/`): a 28 px condensed `Norne`
+and a 30 px condensed `Nov 1997` floating over the model, with `Norwegian Sea`, the property name
+and a four-entry well key stacked under them; a 160 px vertical color bar on the plate's right edge
+with a text shadow; a frosted round compass with an ochre needle and a scale bar at the plate's
+foot; a frosted round frame button; a frosted hint card for seven seconds; well names as pills with
+a colored left edge; an ochre (`#A8740F` light, `#DDAA3F` dark) Play disc, slider thumb, chart
+cursor, focus ring and checkboxes. Two system faces (Avenir Next and its condensed cut), neither
+shipped. The model is the same colors in both themes. Every control the run measured is under 44 px
+in one dimension or both (`look.mjs`'s `small` list at the sheet's top stop: the property chips
+36 px tall, Play and the frame button 40, the grip 22, the sliders 28, the checkboxes 17, the well
+labels 21, the selects 27, the two text buttons 40).
+
+**How it differs from the apps before it** (it copies none of them):
+
+| | Global Weather, Global Wind | Earth's History | US Quakes | Warming World | Milky Way | Besseggen | Norne Reservoir |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Signature | the streak field on the plate | the time control as a stratigraphic column | the record strip, one stem per quake | the stripes as an instrument | the Reach: a log ruler of distance | the Burn: one day's sun at one point | **the Cut: nine years of what the field's wells lifted, oil in ink, water stacked on it** |
+| Axis | the map | time (Ma) | time (days) | time (years) | distance from the Sun | the hours of one day | **the production history, 6 Nov 1997 to 1 Dec 2006, linear in days** |
+| What it encodes | the wind's path | period colors | magnitude by stem height | anomaly by color | presence only | the sun's altitude; direct sun by ink | **liquid per day by height; oil and water by tone** |
+| Shape | streaks | a banded column | stems | stripes | a flat bar with gaps | one arch with bites | **a two-tone skyline: an ink plateau that sinks while a gray layer of water rises over it** |
+| Plate | film base / print | night in both themes | drum paper | gray card | space in both themes | daylight terrain in both themes | **the rock printed twice: negative and print** |
+
+The Cut and the Burn both live on the track, as three of the house's first four signatures do. They
+read differently: the Burn is one day for one point and binary (lit or not under a geometric arc);
+the Cut is a field's whole life and a quantity split in two (oil, water) at a printed scale.
+
+---
+
+## 1. The signature: the Cut
+
+**What it is, in one paragraph a stranger would get.** An oil field does not lift oil. It lifts
+liquid, and as the years pass more and more of that liquid is water: the share that is water is
+what the trade calls the *water cut*, and it is the curve a reservoir engineer looks at first. The
+Cut draws the player's track as that record. Each month of the history is a column standing on the
+track's baseline, as tall as the liquid the field's wells lifted per day in the month to that date,
+at a fixed and printed scale. The oil in it is solid ink from the baseline up; the water is the same
+ink, thinned, stacked on top. Read left to right, the ink climbs to a plateau in 2000 and 2001 and
+then sinks, while the gray layer above it thickens until, from the month to 1 Jul 2004 on, the wells
+lift more water than oil in every month. The thumb stands on the month shown; the caption
+under the plate gives that month's two figures and its cut.
+
+**What a stranger remembers is the crossover.** Measured from `data/model.json`'s field rates
+(`python3 tools/.work/cut.py`; `tools/test_decode.mjs` and `tools/shoot.mjs` reproduce them with their
+own decode): liquid peaks at 37 144 Sm³/d in the month to
+1 Nov 2000, 35 735 of it oil and 1 409 water (4 %). Water passes oil for the first time in the month
+to 1 Jul 2004 and stays above it in all 30 months from there to the end; in the month to 1 Dec 2006 the field lifts
+7 361 Sm³/d of oil and 16 251 of water, 69 % water. By year the water share runs 0, 2, 4, 8, 19,
+28, 48, 63 and 59 % from 1998 to 2006. Over the 3 312 days the averages sum to 67.20 million Sm³ of
+oil and 23.29 million of water. No other app in the template has a number like that, and the Cut
+shows it without a word: scrub to 2005 and two thirds of each column is gray.
+
+**How it was found** (HOUSE 5.1):
+
+1. *What does a specialist call the picture of this data?* For a producing field the reservoir
+   engineer's first documents are the production profile (rate against time, the plateau and the
+   decline) and the water-cut plot (the water share against time, rising from zero). The Cut is the
+   two in one: a stacked liquid-rate record, so the profile is the column's height and the cut is its
+   split.
+2. *What does a person do most here?* Play the production history and scrub it while the colors
+   change in the rock (the marketing clip does exactly that: `Play production history`, then
+   `Pause`). The track is where the hands are, and the Cut tells the viewer which month is worth
+   stopping on.
+3. *What does this data have that no other app has?* A reservoir simulation's own account of what
+   came out of the rock, month by month, next to the 3D state of the rock it came out of. The
+   atlases carry fields' reported production on a map, never the water a field lifted with its oil;
+   the Cut moved to either would have nothing to split. Candidates tried and set aside: the wells
+   restyled in ink as the signature (memorable less than the crossover, and the wells already carry
+   role colors that are data); the oil left in the cells, summed per month from the 44 431 cells (a
+   true number, but a gentle monotone decline nobody remembers); a stipple on swept cells (sub-pixel
+   at the whole-field view on a phone, and redundant with the oil-saturation view).
+4. *Can it be drawn with the house's means?* One ink at the far end of the tonal budget and its own
+   tint, the house's track, ticks and labels, no motion of its own.
+
+**The test** (HOUSE 5.2), each answered yes:
+
+1. *Delete the data and it disappears.* The columns are `summary.field.oil` and
+   `summary.field.water`, nothing else. With `model.json` missing the app shows its notice and the
+   track carries only its graduation; a month with no liquid (the first report date, 6 Nov 1997, the
+   day production started) has no column.
+2. *Every property that varies is measured.* A column's height is oil plus water in Sm³ a day at a
+   fixed 0.5 px per 1 000 Sm³/d, printed by a tick at the track's left end labeled `40 000 Sm³/d` (US `250 000 bbl/d`; 20 px;
+   the peak, 37 144, is 18.6 px). The split is the two measured rates. A column's width is its
+   interval in days on a linear time axis (25 days for the first, 28 to 31 after), so nothing is
+   projected or stretched. The scale is never fitted to what is on screen.
+3. *It is captioned.* The caption line (section 3) says how to read it, with its numbers:
+   `On the track, the month to 1 Dec 2006: oil 7 361 Sm³/d (ink), water 16 251 Sm³/d (tint), 69 % water
+   cut.` At the first report date: `The track starts here, at first oil on 6 Nov 1997: nothing lifted yet.`
+   Every figure comes from the same two arrays the columns are drawn from.
+4. *It reads.* On the player's page: the oil ink 15.75:1 (light) and 15.39:1 (dark); the water tint
+   1.94:1 and 2.90:1 (a tone, deliberately faint, as the house's derived states are; its top edge is
+   a 1 px `--ink-3` line at 4.78:1 and 5.88:1); oil against water 8.11:1 and 5.30:1; the thumb's
+   `--page` ring on the ink 15.75:1 and 15.39:1 (`python3 norne-reservoir/tools/art/palette.py`,
+   from `Template/`). `tools/shoot.mjs` samples the rendered track.
+5. *It survives Reduce Motion.* It has no motion of its own. It is drawn once per size and per unit
+   system, and the thumb moves only with the step.
+6. *About says what it shows and what it does not.* It is the simulation's field production, the
+   run of the public deck driven by the field's historical well controls, averaged over each month
+   to the date shown; not the field's reported production (against the field's history the model
+   lifts about 7 % less oil and 43 % more water, as `NOTES.md` says). Gas is not in it: at the
+   surface the field's gas is measured in volumes about 220 times the oil's (218 over the run), so it is in the
+   rates chart instead, and so is injection.
+7. *It is the only bold element* on the chrome. The rest passes section 7.
+
+**Drawn exactly so** (in `js/track.js`, on the track's canvas; the series from `js/data.js`):
+
+- The track canvas is 58 px tall, the house's. The baseline at y = 34: a 1 px `--line-strong`
+  line, inset 10 px from each end, the first report date at the left inset and the last at the right,
+  linear in days. At 390 px the track is 230 px wide, so a month is 1.6 to 2.0 px (5 to 6
+  device pixels at DPR 3).
+- For each device-pixel column, the report interval under it (the interval that ends at report
+  date f covers the days from date f - 1 to date f, which is how `pipeline/extract.py`'s `avg_rate`
+  builds the rates): from y = 32 up (a 2 px `--page` gap above the baseline, so the house's "exposure
+  so far" line stays its own mark), oil at 0.5 px per 1 000 Sm³/d in `--cut`, then water on it in
+  `--cut` at `--cut-water-a` (0.30 light, 0.34 dark), then a 1 px `--ink-3` pixel at the liquid's
+  top. Every month is drawn, before and after the shown one: the record is complete.
+- The scale: at the left end, a 3 px `--ink-3` tick at the 40 000 height (20 px above y = 32) with
+  its value and unit over it, `40 000 Sm³/d` (U+202F in both places), in 10.5 px `--ink-3`, the
+  label's foot 1 px above the tick, at y = 11. In US units the scale is 0.08 px per 1 000 bbl/d and
+  the tick reads `250 000 bbl/d` at the same 20 px (40 000 Sm³ is 251 592 bbl, rounded down to a
+  round value). The label runs 57.6 px (SI) or 59.5 px (US) into the track; the columns under it top
+  out between y = 12.3 and 16.2 (at 320 and 390 px wide, both systems), under the label's foot, so
+  the label never sits on ink. `tools/shoot.mjs` checks both systems at both widths.
+- The graduation: no per-step ticks (110 steps at under 2 px would be a gray smear; a stated
+  departure, as Besseggen's); a 7 px `--ink-2` tick under the baseline at each 1 January with a
+  10.5 px year label (`1998` to `2006`, years never grouped), labels that would collide skipped (at
+  390 px every other year shows).
+- No `now` notch: the data ends on 1 Dec 2006, and the present is outside it. The stamp names the
+  edition (section 3), so there is no ran-out sentence either: this is a history, not a forecast.
+- The thumb: the house's tracer head on the baseline at the shown report date (the right edge of its
+  column), never gliding: an 8 px `--ink` disc in a 3 px `--page` ring, 10 px while a finger is on
+  the track, with a 1.5 x 18 px `--ink` rule through it that crosses the column's foot.
+- Accessible: the track keeps `role="slider"`; `aria-valuetext` says the date, the lead and the
+  month's cut in words, its figures without their group spaces so VoiceOver reads each as one
+  number: `1 December 2006, 9.1 years after first oil. Oil 7361 standard cubic meters a day, water
+  16251, 69 percent water.` The whole history is its description (`aria-describedby` on a visually
+  hidden sentence written at boot and again when the units change): `The cut: the liquid the field
+  lifted per day, month by month, from November 1997 to December 2006. Oil peaks at 35735 standard
+  cubic meters a day in the month to 1 November 2000. Water passes oil from the month to 1 July
+  2004.`
+- Cost: 110 numbers, drawn into the canvas once per size, per theme and per unit system; the thumb
+  is a second, cheap pass. Nothing is recomputed per frame.
+
+---
+
+## 2. Palette
+
+`tools/art/palette.py` (written in this pass; run from `Template/`, standard library only) holds
+every value below and ended `ALL CHECKS PASS` with exit 0 (`python3
+norne-reservoir/tools/art/palette.py`). `--json` prints what `config.json` takes (`colormaps`, the
+light theme, in the evenly spaced shape `lut()` has always read; `colormapsDark`; `wellColors`) and
+the rates chart's three series per theme, which `style.css` carries as tokens. The builder pastes
+the output; `tools/check.mjs` fails while `config.json` and `--json` differ. `config.json` is the
+app's settings file, not data: no pipeline writes it (`grep -rn config.json pipeline scripts` finds
+only `scripts/package.sh` copying it), so the pass wrote its color fields, and the app still reads a
+copy in the old shape (one scale for both themes, the explode distances under their older key names).
+
+### The chrome tokens
+
+The house tokens of HOUSE 3.1, copied exactly, in both themes. Measured by the same run:
+
+| Pair (WCAG 2) | Light | Dark |
+| --- | --: | --: |
+| `--ink` / `--ink-2` / `--ink-3` on `--page` | 14.80 / 6.61 / 4.78 | 14.43 / 7.76 / 5.88 |
+| `--ink` / `--ink-2` / `--ink-3` on `--sheet` | 16.40 / 7.32 / 5.29 | 12.87 / 6.92 / 5.25 |
+| `--line-strong` on `--page` | 3.27 | 3.56 |
+
+Highest chroma of any chrome token: 0.0239. The stock look's `--stage`, `--panel`, `--muted`,
+`--rule`, `--accent`, `--accent-ink`, `--glass`, `--c-oil`, `--c-water`, `--c-gas`, `--face-narrow`
+and the Avenir stack go, with every `backdrop-filter` (four rules), `box-shadow` (three),
+`text-shadow` (two) and the 50 % radii.
+
+### The signature, per theme
+
+| | Light (the negative) | Dark (the print) |
+| --- | --- | --- |
+| Ground | the player's `--page` `#e8eef0`, L 0.945 | `--page` `#141d21`, L 0.224 |
+| The track's other marks | baseline `--line-strong`, ticks and the liquid's top `--ink-3`, year labels `--ink-2`, thumb `--ink`: all between the page and the ink | the same |
+| Signature | `--cut` `#12150b`, OKLCh (0.189, 0.0198, 122): crude, an olive near-black; water its tint at 0.30 (`#a8adab` on the page) | `#eff5e7`, OKLCh (0.962, 0.0195, 126): a pale straw; water at 0.34 (`#5e6664`) |
+| Beyond `--ink`? | yes: L 0.189 against 0.218 | yes: L 0.962 against 0.941 |
+| Worst measured | oil 15.75; water 1.94; oil against water 8.11; top line 4.78; ring 15.75 | 15.39; 2.90; 5.30; 5.88; 15.39 |
+
+A near-neutral (chroma 0.0198 and 0.0195, under the house's 0.021), not `--ink` and not a hue of any
+data scale. Its distances to the template's other signature inks, printed by the same run: light,
+dE 0.034 to Global Weather's streak, 0.038 to Milky Way's Reach, 0.023 to Besseggen's Burn; dark,
+0.012, 0.027 and 0.018. Near-neutrals at the far end of a range are close in color by construction;
+the Cut is a different mark in a different place, and its hue (122° to 126°, crude oil's olive) is
+its own (the others sit at 231°/95°, 258°/253°, 52°/75°).
+
+### The plate: printed twice
+
+The grid shader (`app.js`, `GRID_FS`) multiplies each cell's color, as the texture's sRGB numbers,
+by a light factor of 0.42 + 0.5 lambert + 0.14 fill: 0.42 on a face turned from both lamps, about
+0.83 on a top face from the default camera, at most 1.06 (clamped); a cell edge multiplies by 0.55.
+`palette.py` runs every plate check over the base colors at the factors 0.42, 0.62, 0.83, 1.00 and
+1.06; `tools/shoot.mjs` samples rendered frames.
+
+| | Light (the negative) | Dark (the print) |
+| --- | --- | --- |
+| Ground (`--plate`, the WebGL clear color) | `#e8eef0`, the film base itself: the plate's edge is the edge, as in Global Weather | `#0c1316`, OKLCh (0.181, 0.012, 226): a stated slate darker than the page, as Global Weather's globe sits on `#0a1013` |
+| Data band | L 0.975 (salience 0) to 0.420 (salience 1) | L 0.330 (salience 0) to 0.880 (salience 1) |
+| The body off its ground | a salience-0 top face `#cbcec8` against the ground: dE 0.098, 1.36:1 | `#2b2d29`: dE 0.114, 1.35:1 |
+| What stands at the far end | the labels' ink on its halo; the wells' casing | the labels' ink on its halo; the wells' bright cores |
+
+**The ten scales** (`palette.py` prints each one's stops; every one is monotone in lightness, its two
+ends separate by dE 0.475 or more in all four visions, every eighth steps by dE 0.049 or more as
+rendered on a top face, and the 33 stored stops interpolated as `lut()` does stay within dE 0.0054 of
+the OKLab path):
+
+| Scale | Properties | Hue logic kept | Light, salience 0 to 1 | Dark, salience 0 to 1 |
+| --- | --- | --- | --- | --- |
+| `oil` | Oil saturation, 0 to 1 | oil green, the reservoir-display convention the stock app used | `#f5f8f1` to `#005d38` | `#343631` to `#8ff0b9` |
+| `water` | Water saturation, 0 to 1 | water blue | `#f1f8fd` to `#234993` | `#31363a` to `#c3d8ff` |
+| `gas` | Gas saturation, 0 to 0.90 | gas red | `#fdf5f1` to `#8d1920` | `#3a3431` to `#ffc8c3` |
+| `pressure` | Pressure, 200 to 450 bar | magma's violet through rose to orange | `#f8f5ff` to `#773a00` | `#383243` to `#ffcba9` |
+| `rock` | Porosity, 0.13 to 0.35; both permeabilities, log | viridis's hue path, violet through blue and teal to green | `#f7f5ff` to `#305a12` | `#363243` to `#b8e89e` |
+| `sand` | Net to gross, 0 to 1 | new: sand, since net to gross is the clean-sand share of the rock (the stock cividis carried no meaning of its own) | `#fbf6ee` to `#6d4201` | `#39352f` to `#ffcd98` |
+| `depth` | Depth, the model's own 2 467 to 3 062 m | blue as charted water depth | `#e1fefd` to `#31478e` | `#223a3a` to `#c7d7ff` |
+| `layers` | Layer (K), 1 to 22 | new: a stone sequence, since K is ordered and 22 categorical colors could not be told apart | `#f1e2cf` to `#723c2e` | `#4d4232` to `#ffc9bb` |
+
+**What was given up, plainly.** In the light theme the high ends of viridis and magma are no longer
+yellow: a yellow cannot be dark, and the negative prints "more" darker, so the rock scale ends in a
+deep green and pressure in a burnt orange. In the dark theme the scales read as their originals did.
+A value has one color per theme (HOUSE 3.2), and the legend under the plate is always the theme's.
+
+**Ends the data goes past, printed open.** Measured over all 110 report dates
+(`python3 tools/.work/ranges.py`): pressure spans 56.4 to 612.5 bar against the scale's 200 to 450,
+with up to 1 719 cells outside it on 1 Nov 2005; gas saturation reaches 0.922 against 0.90;
+horizontal permeability has 13 cells under 1 mD; vertical permeability 101 cells under 0.1 mD and 5
+over 2 000 mD. Those ends print `≤ 200`, `≥ 450 bar`, `≥ 0.9`, `≤ 1`, `≤ 0.1` and `≥ 2 000 mD` (as built, the gas end prints `0.9` like the scale's other ticks, which drop trailing zeros)
+(HOUSE 4.5). Porosity, net to gross and depth stay inside their ranges, so their ends print plain.
+`model.json`'s `dynamic.pressureRange` (56 to 613) is the 16-bit encoding's range, the floor and
+ceiling of the run's own extremes (`pipeline/extract.py`), so the pressure ends are known at boot
+without a scan; gas needs one pass over the 110 frames' bytes, once.
+
+**Categories** (one set for both themes, inside both bands' overlap, L 0.45 to 0.86; every pair
+separates by dE 0.10 or more in all four visions, and every color by 0.22 or more from both
+grounds):
+
+| Set | Colors | Worst pair |
+| --- | --- | --- |
+| Formations | Garn `#f2cd6f`, Not `#bababa`, Ile `#329e9e`, Tofte `#be563d`, Tilje `#534b97` | 0.104, Garn and Not under tritan |
+| Fault segments | 1 `#e1ca74`, 2 `#37a1b8`, 3 `#bc5243`, 4 `#5a478b` | 0.161, 2 and 3 under deutan |
+
+Not, a shale, has no active cell in this grid (`ijk.bin` holds no K = 4, `tools/.work/ranges.py`),
+so it is never drawn and the legend leaves it out; it is checked anyway. The fluid-in-place regions
+are formation by segment: FIPNUM 1 to 4 lie in K 1 to 3 (Garn), 5 to 8 in K 5 to 11 (Ile), 9 to 12
+in K 12 to 18 (Tofte), 13 to 16 in K 19 to 22 (Tilje), the same `ranges.py` run. So the stock
+`Regions` view (16 colors, unlabeled) becomes `Segments` (4, named), and the card still names the
+region (owner call 4).
+
+**The wells.** Role colors kept from the stock logic (a producer green, a water injector blue, a gas
+injector red, a shut well gray), fitted so each core stands off its casing over every base:
+
+| Role | Core (both themes) | Core on its casing over the worst base | Also carried by |
+| --- | --- | --- | --- |
+| Producer | `#90faa8` | light 8.88, dark 13.70 on the bare casing; worst 4.17 or more over any base | a solid line |
+| Water injector | `#7cc2fd` | 5.94, 9.17 | a dashed line |
+| Gas injector | `#ef806f` | 4.32, 6.66; worst over any base 4.17 (light, over white) and 4.37 (dark) | a dashed line |
+| Shut | `#6f7274` | 2.34, 3.62: faint on purpose | 60 % of the width, half see-through |
+
+The casing is the stock dark outline (`#0f1c23` at 0.85, 1.25 px each side), kept. Roles separate by
+dE 0.118 or more in the four visions (worst: the gas injector and a shut well under protan), and the
+dash and the weight carry the role besides, so color is never its only carrier. The stock cores
+(`#2E9E5B`, `#2F74D0`, `#D0493A`) sat at the oil, water and gas scales' own hues and lightness, so a
+producer vanished into an oil leg (`tools/.work/look/light-8-explode.png`: the green producers over
+the green oil); the new cores are all lighter than any data color's dark end and sit on a dark casing.
+
+**Labels on the plate** (well names, formation names when exploded): `--ink` on a 3 px halo at 0.85
+of the theme's halo color (`#f6f9fa` light, the plate ground `#0c1316` dark): worst 11.95:1 and
+10.83:1 over every base (text, ≥ 4.5).
+
+**The ghost key** (focus mode): a 1.4 px stroke at rest (72 %) over a 3.4 px halo: light `#0f1c23`
+over `rgb(246,249,250)` at 0.60, worst 3.91:1; dark `#f2f4f1` over `rgb(10,16,19)` at **0.70** (the
+house's 0.45 measured 2.44:1 over the print's bright ends), worst 4.68:1.
+
+**The rates chart** (in the controls sheet, on `--page`): oil at its scale's far end, water a step
+nearer the page, gas at 0.85, produced solid and injected dashed: light `#005d38` 6.83, `#4479b8`
+3.83, `#a63430` 5.68; dark `#8ff0b9` 12.49, `#75acef` 7.25, `#ffa59b` 9.05 (marks, ≥ 3). Oil and water
+share the liquids panel and separate by dE 0.146 and 0.155 at worst; gas has its own panel.
+
+### CSS custom properties this app adds
+
+`--plate` (`#e8eef0`; dark `#0c1316`), `--cut` (`#12150b`; dark `#eff5e7`), `--cut-water-a` (0.30;
+dark 0.34), `--plate-halo` (`rgba(246, 249, 250, 0.85)`; dark `rgba(12, 19, 22, 0.85)`),
+`--chart-oil`, `--chart-water`, `--chart-gas` (the `chart` block of `--json`, per theme). `app.js`
+reads `--plate` for the WebGL clear color, and `js/track.js` reads `--cut` and `--cut-water-a` for the
+track.
+
+---
+
+## 3. The chrome, object by object
+
+Norne Reservoir is HOUSE 4.0's *3D view with time*: the time is the production history. It keeps a
+controls sheet (HOUSE 4.10's "any sheet of controls") for the explode, the rates chart and the
+section cuts, which need the model in view while they move. The frame at 390 x 844 (CSS px, safe
+areas outside):
+
+```
++------------------------------------------+
+| Norne Reservoir                    [SI]  | 22  name 15/650; the units key
+| Norne benchmark, OPM Flow 2026.04 run    | 16  the stamp, 11.5 --ink-2, opens About
+| Oil  Water  Gas  Pressure | Porosity  P… | 44  the property words, the tracer under one
++------------------------------------------+
+| [card]                              [+]  |
+|                                     [-]  |     the plate: the grid, printed per theme,
+|                                     [#]  |     wells on their casing, names on halos;
+|                                     ---  |     keys: Zoom in, Zoom out, Show the whole
+|                                     [W]  |     field / Wells / Hide the controls
+|                                     ---  |
+|                                     [H]  |
++------------------------------------------+
+| Oil saturation    |=================|    | 30  the legend: title, bar, ticks, open ends
+|                   0  0.25  0.5  0.75  1  |
+| (N)  3 km |------| vertical x5           | 20  the instrument line
+| - producer  -- water inj.  -- gas  . shut| 15  the wells key (while Wells is on)
+| On the track, the month to 1 Dec 2006:   | 30  the caption line, two lines, fixed
+| oil 7 361 Sm³/d (ink), water 16 251 Sm³… |
+| Data: Norne benchmark, Equinor and the…  | 15  the credit line
++------------------------------------------+
+| 1 Dec 2006         9.1 years after first oil | 28  the time row
+|  <  [>]  >   ..:|||||||||||:::...  *---  | 58  the transport; the Cut on the track
+|              1998   2000   2002   2004   |
++------------------------------------------+
+|                 ----                   ^ | 44  the grip: Show more controls
++------------------------------------------+
+```
+
+That leaves 480 px of plate with the sheet closed and 601 px in focus mode (the header and the grip
+freed, the stamp's line moved into the caption band); `shoot.mjs` measures both and holds them at
+≥ 460 px and ≥ 590 px at 390 x 844. The page is a one-column grid: header, plate, caption band,
+player, sheet; `100dvh`, `overscroll-behavior: none`; the plate's row `minmax(200px, 1fr)` and the
+sheet's `minmax(0, max-content)`, the sheet scrolling inside itself, so with the sheet raised the
+plate keeps 200 px instead of the stock 58 % drawer leaving it 354 (and, with the phone's insets, the
+recorded bug B1). Wide screens (≥ 820 x 480) keep the sheet as a 380 px column at the right; a phone
+on its side, the last rows of the table.
+
+| Object | Here | Notes |
+| --- | --- | --- |
+| **Header: name** | `h1` `Norne Reservoir`, 15/650, `translate="no"` | `miniapp.json`'s name (the Library row the camera opens). The stock `model.name` (`Norne`), the 28 px condensed title and the `Norwegian Sea` subtitle go; the sea is named in About. |
+| **Header: stamp** | `<button>` opening About (`aria-haspopup="dialog"`, described *Opens About this data.*), 11.5 px `--ink-2`, a 44 px hit: `Norne benchmark, OPM Flow 2026.04 run`, `translate="no"` | Data built once (HOUSE 4.2): the stamp names the edition, from `model.json`'s `source` (the builder takes the run's name and version from it, never retypes them). While loading it counts the seven files: `Reading the model… 3 of 7`. Nothing is refreshed, so no stale state. |
+| **Header: units key** | at the right: `SI`, then `US` (owner call 5) | A word key in a 1 px `--line-strong` frame, 28 px tall, 6 px radius, a 44 x 44 hit, 600 at 12.5 px. Its accessible name says the system and its units: `Change units, now SI: bar, meters, cubic meters a day`. One system for every quantity (pressure bar or psi, depth and the scale bar meters or feet, oil and water Sm³/d or bbl/d, gas Sm³/d or Mscf/d; permeability stays mD in both), a stated departure from the house's one-quantity key, since an engineer switches the system, not a unit. Remembered as `norne-viewer:v1:units`. |
+| **Row of words** | the twelve properties as words in full, `role="radio"` in a `role="radiogroup"` named `Property`, the tracer under the chosen one; a 1 px `--line` divider between the four that change with time and the eight that do not | `Oil`, `Water`, `Gas`, `Pressure` (the camera's words, kept exactly), then `Porosity`, `Permeability`, `Vertical permeability`, `Net to gross`, `Depth`, `Formations`, `Segments`, `Layers`. The stock `Perm X`, `Perm Z`, `NTG` and `Regions` go (words in full; owner call 4 for Segments). Scrolls sideways inside itself; 44 px hits. The stock 3 px gradient underline (`--grad`, a swatch, HOUSE 4.3) goes: the legend shows the scale. One tab stop for the group, the chosen word; the arrow keys move the choice inside it, as in the explode words. |
+| **Key column** | `--sheet` plates on the plate's right edge, inset 8 px: `Zoom in`, `Zoom out`, `Show the whole field` / `Wells` / `Hide the controls` | 44 x 44 hits drawn 36 x 44, 16 px marks in 1.5 px strokes, `--ink-2` at rest. Zoom keys move `S.cam.dist` by 0.7 and 1/0.7 through `flyTo` (one-finger and keyboard zoom, WCAG 2.5.1, where the stock app zoomed by pinch or wheel only). `Show the whole field` (the camera's key, the stock round frame button) draws four corner brackets around a small three-by-two block of cells, not the house's Whole world circle. `Wells` (`aria-pressed`, the stock `t-wells` checkbox moved) draws three wellheads on a line, each dropping a stroke of a different length. Where five keys do not fit the plate's height (a plate under 258 px: the sheet raised, a phone on its side), they run as a row along the plate's top. `Show the whole field` fits the field by its projected box (two corners of every fourth cell, as exploded, and the well heads) to both of the plate's axes, in the room left of the key column or below the key row, with 26 px above for the names; a lens shift puts the field's middle at that room's middle. A camera still at the fit is fitted again whenever the plate changes size (focus mode, the sheet's stops, a turn of the phone, the explode, the vertical stretch); one moved by hand keeps its zoom against the fit. On a plate much wider than tall the eye comes down from 36° toward 24°. |
+| **Caption band: the legend** | 30 px: the property's label from `config.json` as the title (`Oil saturation`, 600 at 11.5 px `--ink`), the 6 px bar in the remaining width, ticks at round values, the unit after the last label | Painted from the same 256-entry `lut()` the plate uses, unshaded, over `--page`; 1 px `--line-strong` frame at 60 %, square ends. Open ends as section 2 lists. Log scales tick at decades (`≤ 1`, `10`, `100`, `1 000`, `4 000 mD`). Categories: named swatches in one row (`Garn`, `Ile`, `Tofte`, `Tilje`; `1` to `4` titled `Fault segment`); `Layers` a bar with ticks at `1`, `5`, `12`, `19`, `22` (the four formations' first layers and the last). **This ends the recorded bug B1**: the stock bar stood on the plate, centered on its height, and met the header whenever the plate shrank. |
+| **Caption band: the instrument line** | 20 px: the north mark, then the scale bar and its words | The stock compass and scale bar leave the plate (HOUSE 4.1), as Besseggen's did. North: a 16 px drawn needle in `--ink` (the south arm `--ink-3`) with `N` in 10.5 px; its accessible name kept from the stock app (`North arrow: north is toward the top right of the view.`). Scale: a 2 px `--ink` bar with 4 px end ticks, its length before it (`3 km`) and `vertical ×5` after it in 11 px `--ink-2`. `updateGauge()` moved, not rewritten; written through `units.js`; never transitioned. |
+| **Caption band: the wells key** | 15 px, while `Wells` is on: four drawn samples (solid green, dashed blue, dashed red, thin gray) and `Producer`, `Water injector`, `Gas injector`, `Shut` at 10.5 px | A group named `Wells key`. The stock key left the header, where it sat over the model (B3). |
+| **Caption band: the caption line** | 11 px `--ink-2`, a fixed two lines at every width below 640 px and one from 640 px | The Cut's sentence (section 1, test 3). The step's figures come from the same arrays the track draws. `shoot.mjs` measures the longest sentence the data can produce (the six-figure US gas cases included) at 320 and 360 px. |
+| **Caption band: credits** | the constant `CREDIT`, 10.5 px `--ink-2`, on screen in every mode | `Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0` (owner call 6). Commas, no middle dot. `model.json`'s `source` sentence, verbatim, and `ATTRIBUTION.txt`'s license line stay in About. The stock `#credit` paragraph at the sheet's foot goes. |
+| **Player: time row** | the one large figure `1 Dec 2006` (600 at 21 px); the lead at right, 12.5 px `--ink-2`: `9.1 years after first oil`, `25 days after first oil`, or `First oil` at the first report date | Report dates are instants (the restart's date), so the figure carries the day; the first is `6 Nov 1997`. By hand in `js/units.js`, day before month, the same on every locale. VoiceOver hears `1 December 2006`. Below 60 days the lead counts days, then years to one decimal. Empty until boot completes. Nothing in the row transitions. The stock 30 px condensed date at the header's top right goes, which also ends its overlap with Snuggery's full-screen exit control on iOS 18 (B2). |
+| **Player: transport** | `Back one month`, `Play production history` / `Pause`, `Forward one month`, 44 x 44 | Play is the one solid control: a 32 x 32 `--ink` square, 8 px radius, a `--page` triangle; while playing, two 2.5 px bars, toggled by attribute so the mark always matches its name (HOUSE 4.6). The step keys say the new date in the live region. The stock ochre disc goes. |
+| **Player: the track** | `js/track.js` on Global Weather's pattern: `id="slider"`, `role="slider"`, 110 steps, `aria-valuetext` in words, the Cut drawn in it (section 1) | Left and Right a step; Page Up and Page Down twelve (a year; a stated departure from the house's eight); Home and End the ends. **The scrub rule holds**: input records `wanted`; the frame decodes the newest wanted step's colors (`fillValues`, the LUT pass and one texture upload), sets `shown`, then draws; the time row, the lead, the caption, the card, the chart's cursor and `aria-valuenow` read `shown`. Stale requests are dropped. With a value filter on, the frame also rebuilds the faces (the costly path); there is no preview, a slow phone draws fewer frames, each whole. `shoot.mjs` counts frames whose texture step differs from the label's step (must be 0) and prints the color pass and face rebuild times as a trend. The stock `<input type="range">` goes. |
+| **Play** | the history at `config.json`'s `playbackFramesPerSecond` (6 steps a second, 18 s end to end) on the clock, from the shown step to the last, where it stops; Play at the end starts from the first | Every frame is one whole step. Reduce Motion: the same whole steps (it already is). A touch on the track stops it, landing on the step under the finger; hidden stops it. About holds play still, and closing it lets play go on (HOUSE 4.6). The expensive work runs only when the step changed (HOUSE 4.6's second rule: at 60 Hz, nine frames in ten during play draw nothing new); a counter in the test hook proves it. |
+| **Readout card** | the tapped cell or well: `--sheet`, 1 px `--line-strong` edge, 8 px radius, inset 8 px, at most 55 % of the plate's height with the sheet closed or in focus mode and half of it otherwise; in a corner of the room the keys leave, never over the selection's mark, in its full form (at most 280 px wide) or, on a short plate, its compact one (below the table); what scrolls ends on a row's edge, with a 1 px `--line-strong` rule at its foot when more follow | Cell: the place line `Cell I 41, J 66, K 15, Tofte` (12.5 px `--ink-2`) with ✕ (SVG, a 44 px hit, `Close`); the one figure, the shown property's value with its unit (`287 bar`; a saturation `0.62`; a category its name, `Tofte`); rows at 12.5 px, labels `--ink-2`, values 560 `--ink`, in full words: at the date (`Oil saturation`, `Water saturation`, `Gas saturation`, `Pressure`), then the rock (`Depth`, `Porosity`, `Horizontal permeability`, `Vertical permeability`, `Net to gross`, `Fault segment`, `Fluid-in-place region`). Well: `Well C-4H`; the figure its main rate at the date (`412 000 Sm³/d` of gas injected), `Shut` or `Not yet open`; open in a role the summary holds no rate for, what it is doing, as the `Now` row says it (`Producing`, under it `no rate reported for the month to 6 Nov 1997`); a rate is dated `Water injected in the month to 1 Jul 2004`, since the pipeline averages it over the month, never `Shut` beside a `Now` that is not; rows: what it is doing in words (`Producing`, `Injecting water`, `Injecting gas`, `Shut`), its roles over the history, its completions (`7 cells, layers 1 to 20`), its open span (`Nov 1997 to Dec 2006`), its rates at the date. A text key, always in view: `Zoom to cell` or `Zoom to well`, under the figure's line (beside Close in the compact form). The tapped cell is also marked on the plate: a 14 px ring, 1.5 px `--ink` on a 2 px `--plate-halo` outline, at the cell's middle, which the card keeps clear of (below the table). In: 120 ms fade and 4 px rise; out at once. **Updated in place per step** (the stock `refreshCard()` emptied and rebuilt the list on every step of play). A tap says it once: `Cell I 41, J 66, K 15, Tofte. Oil saturation 0.00 on 6 November 1997.` The stock glass card, its 16 px condensed title and the two-column grid go. |
+| **Labels on the plate** | well names 11.5/560 `--ink` on the 3 px halo, a 10 px sample of the well's role line before the name; formation names (exploded by formation) 11.5/560 on the same halo; no pill, border or background | Each well label stays a `<button>` (tap to select). As built, the labels take no touch themselves (a drag that starts on one still turns the model): `app.js` reads a tap on a name's own text, padded to 24 px tall (WCAG 2.5.8), as a tap on its well; its 44 x 44 box, grown upward from the text and away from the rock under the well head, counts only where no cell is under the finger, and the labels stay buttons for VoiceOver and the keyboard. Widths measured in `"Ysabeau Office"` after `document.fonts.load`. Labels are kept out of the card's, the key column's and the ghost key's rectangles (HOUSE 4.7) as well as each other's (the stock collision pass, extended). The chosen well's name is always drawn, under its head when the card or the keys hold the place over it. If WebKit does not paint `paint-order: stroke fill` under HTML text (a phone check), eight zero-blur 1.5 px `text-shadow` offsets in the halo color are the fallback, as Milky Way's. |
+| **The wells** | the stock three passes (see-through, casing, core), with injectors dashed and a shut well thin and faint | `WELL_VS` gains a per-vertex distance along the path; the fragment shader discards the dash's gaps for codes 2 and 3 (a dash of about 8 px on screen, its world length from `S.cam.dist`). A shut well: 60 % of the width, alpha 0.5, as the stock alpha already was. |
+| **About** | a full-height `--sheet` panel from the stamp: `role="dialog"`, `aria-modal`, slides up 220 ms on `--sheet-in`, closes at once, `Close` at the top right and at the foot, Escape, focus held and returned | New; the stock app had none. **1. What the picture is**: each cell colored by its value on the scale under the plate, at the report date shown; the light on the faces and the darker cell edges are display, not data; the depth stretched ×5 by default; ends the data goes past printed open; the explode a display distance (110 m between formations, 22 m between layers, segments spread by 0.4); the Cut, what it shows and what it does not (section 1, test 6); the wells' paths from the deck's completions, their roles from the schedule. **2. This data**: `label: value` lines: the grid (46 by 112 by 22, 44 431 active cells), the report dates (110, 6 Nov 1997 to 1 Dec 2006), the wells (36), the storage (saturations to 1/255, pressure to 0.0085 bar over 56 to 613 bar), the rates (Sm³ a day, averaged over the month to each date). **3. Sources and credits**: `model.json`'s `source`, verbatim; the license as `ATTRIBUTION.txt` names it, under a US-spelled label: `License: Open Database License (ODbL) 1.0, opendatacommons.org/licenses/odbl/1-0/` (the address without its scheme); the check against the published reference results; `Type: Ysabeau Office by …` (section 4). **4. How the data gets here**: built once by `pipeline/` on a Linux runner; nothing is fetched; `config.json` is re-read on return; how to move around (the gestures and the keys). The Norwegian Sea is named here. |
+| **Controls sheet** | three stops, on `--page` with a 1 px `--line` rule on top | **Grip**: a 36 x 4 px `--line-strong` bar centered and a drawn chevron 1.5 px `--ink-2` at the right, a 44 px hit (the stock 22 px), its names exactly the stock three (`Show more controls`, `Show all controls`, `Hide the extra controls`). **Stop 0**: the grip alone. **Stop 1**: `Explode` (a house slider) with `Formations`, `Layers`, `Segments` as words with the tracer (`role="radio"`; the stock `select` goes); `Rates` (the chart, below) with the well picker. **Stop 2**: `Section and view`: `Columns (I)`, `Rows (J)`, `Layers (K)` and `Value range` as pairs of house sliders with their outputs (`1 to 46`), `Vertical exaggeration` (`×5`), `Well names` and `Cell edges` as house toggle rows (`aria-pressed`, a 28 x 28 key drawn on or off), `Show all cells`. The stock `Reset view` goes (it did what `Show the whole field` does; owner call 9). Sliders are the native range inputs drawn by CSS alone (a 1 px `--line-strong` track, the value so far 2 px `--ink`, an 8 px `--ink` thumb with a 3 px `--page` ring), labels 12.5 px `--ink-2`, values 12.5 px tabular, right-aligned. Section heads 13.5/650 sentence case between 1 px `--line` rules. Stop changes are instant. |
+| **The rates chart** | the stock SVG, redrawn: `Field rates` or `C-4H rates` as its title (13.5/650); the liquids panel and the gas panel; series in `--chart-oil`, `--chart-water`, `--chart-gas`, 1.5 px, injected dashed; gridlines 1 px `--line`; each panel's top value in full figures with its unit (the field's `50 000 Sm³/d` and `10 000 000 Sm³/d`) at 10.5 px `--ink-3` on a 3 px `--page` halo, the cursor passing under it; years at 10.5 px `--ink-2`; the cursor a 1.5 px `--ink` line at the shown step; a drawn key (line samples, `Oil produced`, `Water produced`, `Water injected`, `Gas produced`, `Gas injected`) | The stock `50 k` and `10 M` labels go (SI, B5). The well picker stays a native `select` (36 wells; a stated departure from the house's words, since a native list is the right control for 36 names), restyled: 44 px tall, a 1 px `--line-strong` frame, 6 px radius, its options built as DOM nodes, not markup. Tapping or dragging the chart seeks, through `wanted`. |
+| **Notices** | a `--sheet` plate centered on the plate, `role="alert"`, 13.5 px, at most 300 px, no icon | In the file's terms, no apology: `data/model.json could not be read (HTTP 404).`, `data/dynamic.bin holds 19 549 000 bytes; 110 report dates need 19 549 640.`, `This phone gave no WebGL 2, which the 3D view needs.`, and, opened from a file: `This app reads its data over Snuggery's own server; opened as a file, the browser blocks it.` A broken `config.json` on a later read keeps the settings already loaded, as the stock app did, and says so once. The stock loading overlay, its progress bar and its `Could not open the model:` box go. |
+| **Live region** | one `<p class="sr" aria-live="polite">` | A tap's sentence; a step key's new date; focus mode's two sentences. Never per frame. The stock `aria-live` on the date (it spoke every step of play) and on the card (it spoke every rebuild) go (B4). |
+| **Focus mode** | `Hide the controls` alone in the column's last plate; the ghost key `Show the controls` (`aria-keyshortcuts="Escape"`) top-right of the plate, 8 px under the top safe area; Escape | Leaves (`hidden` and `inert`): the header (name, units key, the row of words), the key column, the controls sheet, an open card. Stays: the plate; the stamp, moved into the caption band as its first line; **the legend, the instrument line and the wells key** (a stated departure: a false-color model cannot be read without its scale; owner call 7); the caption; the credits; the player. A tap still opens the card; the double-tap still flies to a cell. **Remembered** as `norne-viewer:v1:focus` (`'1'` or `'0'`), restored before the first draw. Sentences: `Controls hidden. Press Escape or the corner key to show them.` and `Controls shown.`; focus moves only when the keyboard did it. Fades: chrome out 160 ms, the ghost key in 200 ms, one resize. |
+| **The opening** | none | The arrival is the model appearing once its seven files are in; the stamp counts while they load. The stock overlay and the first-run hint card go (owner call 8); the gestures are in the canvas's description and in About. |
+| **Motion** | HOUSE 4.12 | A camera move that answers a touch (`Show the whole field`, the zoom keys, a double-tap, `Zoom to cell`) keeps its 520 ms (the camera waits 2 s after the first) and takes `--draw`'s curve in place of the stock cubic in-out; any touch ends it at its destination. Under Reduce Motion they are cuts. The render loop requests a frame only while something is dirty, a flight runs or play is on. Hidden: play stops and the loop stops; a return re-reads `config.json`, as the stock app did, and redraws. |
+| **On its side** | HOUSE 4.13 with the sheet as a right column, `min(340px, 45%)`; at the sheet's closed stop the column is only its grip, a 45 px strip with a chevron, on a wide screen too, because the full column left the plate 157 px tall at 844 x 390; in focus mode, here and on a wide screen, one column, the strip gone with the sheet | The header one 46 px row (name over stamp at left, the words, the units key); the caption band's legend and credits side by side over a one-line caption (the instrument line and wells key on one row); the player one row (the time row stacked at left, the transport, the track); the keys a row along the plate's top. At 844 x 390 the plate must be ≥ 220 px, measured by `shoot.mjs`. The card takes its compact form here. |
+| **Safe areas** | HOUSE 4.14 | Every band pads itself; the sheet pads the bottom inset; the card and the ghost key sit under the top inset in focus mode. Phone checks. |
+
+**Where the card goes, and its compact form** (`placeCard()` in `app.js`; HOUSE 4.7 carried to a
+short plate). The card goes to a corner of the room the keys and the ghost key leave, 6 px clear of
+their hits, and never within 10 px of the selection's mark: the tapped cell's ring (18 px with its
+outline), the spot the finger touched, or a well's head with its name over it. The corners are tried
+in the house's order, top-left, then bottom-left, then the right-hand side, top or bottom; the first
+that holds the whole card wins, else the tallest. The card is placed again whenever the plate changes
+size (the sheet's stops, focus mode, a turn of the phone) and checked after a step, new units, a turn
+of the model or a flight, staying where it is while it still fits. With the sheet raised the plate is
+200 px tall at 390 x 844 and the keys run along its top, which leaves 137 px under them; the full
+card, 149 px with one row, cannot sit beside a point in the middle of that. So the form follows the
+plate: where the full card fits beside a cell's mark wherever the mark falls, it keeps its full form
+(the sheet closed and focus mode, upright); elsewhere (the sheet raised, a phone on its side) it takes
+its compact form, as wide as its lines need up to the plate's width less 16 px (a stated departure
+from the house's 280 px): the place line with `Zoom to cell` and Close on one 24 px row, their 44 px
+hits reaching 4 px above the card and 12 px down into what follows, then the figure with its line
+beside it, then the rows, everything under the first row scrolling as one. At its tightest the compact card is 58 px
+tall, the place line and the figure's line with the rule at its foot, which fits on one side or the
+other of a mark anywhere in those 137 px. A chosen well's name goes under its head when the card or
+the keys hold the place over it. `tools/shoot.mjs` taps a grid over the field at every stop, in focus
+mode and on a phone on its side, and chooses every well in the list.
+
+**What does not apply, and why:** a `now` notch and a ran-out sentence (a finished history, not a
+forecast: the stamp names the edition); per-step ticks on the track (110 steps under 2 px apart; year
+ticks instead); an opening (section 3); a second large figure (the card's value is the only other
+21 px figure, and only while the card is open).
+
+---
+
+## 4. Type
+
+- **The house file, byte for byte.** `fonts/ysabeau-office-gw.woff2` (35 372 B, sha256
+  `fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262`) and `fonts/OFL.txt` (4 703 B,
+  sha256 `d1adfffd83f9e896bcc17e6067c7f57f6824083fdd8d6951acbfca5b29be6269`), copied from
+  `global-weather/fonts/` (`cmp` both after copying). The one `@font-face` rule exactly as HOUSE 2.5
+  gives it; the family used only through `--face`.
+- **No supplement.** Every character the app writes outside comments was read against the cut
+  (`python3` over `index.html`, `app.js` with `//` comments stripped, `style.css`, `config.json` and
+  every string in `data/model.json`): beyond ASCII it writes only U+2014, U+00D7 (×), U+2026 (…),
+  U+2013 and U+00B3 (³, in `Sm³`), all in the cut (HOUSE 2.2). The pass adds U+202F, U+2212, ≤ and
+  ≥, also in the cut. The em dashes go anyway (section 7). Well names are ASCII.
+- **Removed:** nothing shipped, since the stock app named the system's Avenir Next and its condensed
+  cut without shipping them: the two stacks (`--face`, `--face-narrow`) go, and with them the 28 and
+  30 px condensed display sizes. Fonts after the pass: 40 075 B (0 before it).
+- **The scale here:** name 15/650; stamp 11.5; the property words 12.5 (620 chosen); legend title
+  11.5/600; caption 11; instrument line 11 with its labels 10.5; wells key 10.5; credits 10.5; the
+  date 21/600 (the one large figure in the bands), the lead 12.5; the track's year and scale labels
+  10.5; card place line 12.5, card figure 21/600 with its unit 13.5, rows 12.5 (values 560); plate
+  labels 11.5/560 on the halo; sheet labels and values 12.5; section heads 13.5/650; the chart's
+  labels 10.5; About prose 13.5/1.5 within 62 ch; notices 13.5. The stock 30 px date, 28 px title,
+  16 px card title, 15 px body and 14 px chips go.
+- **Text waits for the face.** `document.fonts.load('560 11.5px "Ysabeau Office"')` before the first
+  frame with labels, before the well labels are measured (the stock code caches each label's width
+  on first placement, `it.el._w`, so a fallback face would place every label wrong for good) and
+  before the track's first draw; labels and the track redrawn on `document.fonts`' `loadingdone`.
+  Every font string in a script (the track's canvas) names `"Ysabeau Office"` first.
+- **Credit line, word for word** (About, `NOTES.md`): `Ysabeau Office by Christian Thalmann
+  (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.`
+
+---
+
+## 5. The camera's strings (HOUSE 7.4)
+
+What the marketing camera reads in this app, in the Snuggery app's repository:
+`Tests/SnuggeryUITests/MarketingCameraCase.swift` (`waitForNorne()`, `frameNorne()`, and the note on
+`setWebSlider`, which names Norne's former date slider), `MarketingShotsUITests.swift` (shot 17, the
+README panes) and `MarketingClipsUITests.swift` (clip 2).
+
+| String | Role | Kept as |
+| --- | --- | --- |
+| `Oil saturation` in visible text (waited up to 300 s; `label CONTAINS[c]`) | the legend's title in the caption band | the default property's `config.json` label, written once every file is in. `index.html` never contains it (a hidden copy would let the wait pass early), and it stays visible in focus mode, so the wait passes in a library left in focus mode too. |
+| `Show the whole field` (`webControl` by exact label, then a 2 s sleep) | a key in the key column | the exact accessible name of a `<button>`, the only control so named, in the tree at every sheet stop; its fly stays 520 ms. |
+| `Pressure`, `Oil` (the stills and clip 2: `webControl` by exact label) | property words, `role="radio"` | role and exact names. `app.buttons[…]` cannot find a `role="radio"` element, so the camera matches them by label. |
+| `Play production history`, then `Pause` | the Play key's name at rest and while playing | the two names; no other control is named `Pause`. |
+| `Show the controls` (`showControlsIfHidden()`, at the end of `waitForNorne()`) | the ghost key of a remembered focus mode (`norne-viewer:v1:focus`) | the exact name, so a kept library left in focus mode shows `Pressure` and `Show the whole field` again. |
+| what the camera changes | the property (Pressure, then Oil again) | put back with the same words; nothing else it does is remembered. |
+
+The stock app's first-run hint, `Double-tap a spot`, went with owner call 8, and the camera no longer
+waits it out. Nothing the camera waits out got longer: there is no opening, the files and their order
+are unchanged, and the stamp's count replaced the overlay.
+
+---
+
+## 6. Budgets
+
+Measured on the working tree before the pass:
+
+| | Before the pass | Cap | Command |
+| --- | --: | --: | --- |
+| App code (`index.html` 5 795, `style.css` 13 352, `app.js` 57 885) | 77 032 B | **200 000 B** (HOUSE 8; not over it then, so not held) | `find . -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.mjs' \) -not -path './vendor/*' -not -path './data/*' -not -path './tools/*' -not -path './pipeline/*' -not -path './scripts/*' -print0 \| xargs -0 wc -c` |
+| Fonts | 0 B | 160 000 B; planned 40 075 B | `cat fonts/* \| wc -c` |
+| ZIP, as `build-zips.yml` packs it (14 entries then) | 15 258 206 B | **19 110 591 B** (that size × 1.25, rounded down, plus 37 834 B for the face the app gains: plan 0011 D5) | `zip -q -r -X OUT . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'`, then `wc -c` |
+
+The data, pinned before the pass (`check.mjs` checks them every run): `find data -type f | sort |
+xargs shasum -a 256 | shasum -a 256` gives `f8b8a7d1913bdeccd2263674c9f9a124f16200d0ec9d7072d91283657af7f005`;
+per file, `ATTRIBUTION.txt` `e6c83cba…3cae`, `dynamic.bin` `2fa5d166…dc28`, `geometry.bin`
+`77e7b35d…e11d`, `ijk.bin` `7b8ad432…2c45a`, `model.json` `979cfdfd…6a38`, the cell connections file
+`ea665b90…f49`, `static.bin` `5766ae91…5f28` (`shasum -a 256 data/*`; the builder copies the full
+values from that command). `screenshots/app.png`, the README's composite, is `2b91205d…b635` and
+stays so. `config.json` was `aacc94ec…6ca9` before the pass, which rewrote its color fields.
+
+**As built** (`node tools/check.mjs`): app code 161 833 B (`app.js` 96 282, `style.css` 28 448,
+`index.html` 15 651, `js/track.js` 7 840, `js/units.js` 7 225, `js/data.js` 6 387), 38 167 B under the
+200 000 B cap; fonts 40 075 B of 160 000; the ZIP about 15.4 MB of its 19.11 MB cap. The exact ZIP
+size is in `tools/DECISIONS.md`, since this file's own bytes move it, and so is the plan's code
+ledger, which put the pass at about 110 000 B.
+
+---
+
+## 7. The generated-page tells, answered
+
+| Tell | Norne Reservoir |
+| --- | --- |
+| 1. Warm cream ground, high-contrast serif display, terracotta accent | No cream (the stock stage `#DDE4E5` was cool), but an ochre accent on Play, the thumb, the needle, the chart cursor, the focus ring and the checkboxes, and two condensed display sizes. The chrome's ground becomes the house film base `#e8eef0`; one Renaissance sans at every size; no accent. Warm hues on screen are data: the gas and pressure scales, the gas injector, the sand. |
+| 2. Near-black ground with one acid-green or vermilion accent | The stock dark stage `#0C161C` with the brighter ochre `#DDAA3F` goes. The dark page is the house slate (L 0.224); the plate's darker slate (L 0.181) is stated as the print's ground, as Global Weather's globe plate is. No accent; the bright things in the dark theme are data (the oil leg) and the Cut. |
+| 3. Broadsheet hairlines, zero radius, dense columns | One column; hairlines between the sheet's sections, the key plates and the player. Radii 6, 8 and 4 px by role; 0 only on the legend bar. |
+| 4. SaaS-card kit, one radius, soft shadow, gradient washes | Four frosted `backdrop-filter` surfaces (the card, the frame button, the hint, the compass), the translucent well and formation pills, three `box-shadow`s and two `text-shadow` halos go. One card (the tapped cell or well), one sheet at a time. No gradient but the data scales and the selection tracer (the stock per-chip gradient underline goes). |
+| 5. All-caps tracked eyebrow labels | None before the pass; none added. Sentence case, letter-spacing 0 (the stock condensed title's −0.01em goes). |
+| 6. Meta strings joined with middle dots | None before the pass, none now; the credit line and the card's rows use commas and one value per line. |
+| 7. "WORD — fragment" with a spaced em dash | Before the pass, no spaced em dash on screen, but nine em dashes as placeholders (`grep -n '—' app.js index.html`): `#date`, `#prop-name`, the legend's two ends and the scale's length in `index.html`; a missing value in `fmt()` and `fmtRate()`, a category's value range and an unknown formation in `app.js`. Empty elements before boot; a missing value says `not in the data`; a cell with no formation says `no formation`. |
+| 8. A tinted near-black standing in for black | The stock `#0C161C` stage goes. The plate's darkest data colors are stated stops of named scales; the wells' casing is the house ink `#0f1c23`. |
+| 9. Monospace for small data labels | None; the stock condensed face for small labels (well pills, formation pills, the compass `N`) is the same habit and goes. Tabular figures from the one face. |
+| 10. An arrow appended to buttons | None before the pass, none now. Buttons say what they do: `Show the whole field`, `Zoom to cell`, `Show all cells`, `Hide the controls`. |
+| 11. One accented word in a headline | None. |
+| 12. Unnecessary labels above content | The legend's title is the quantity its bar measures, from `config.json`. The stock `Field rates, Sm³/d` keeps its words with the unit moved to the scale labels; `Section and view` stays as a section head between rules, not a label over one control. |
+| 13. Numbered markers | None. The fault segments are named `1` to `4` because that is their name in the deck, under the title `Fault segment`. |
+| 14. Big number, small label, gradient accent | The stock 30 px date over a 13 px property name goes; the date is the 21 px figure in the player, and the property is the legend's title. No gradient but the data. |
+| 15. Scattered fade-and-slide entrances, hover on every card | The first-run hint's appearance and the load bar's width transition go; the house's three small transitions answer a touch; the one continuous motion is the history played. |
+
+The interface guidelines, where the house writes its own rule: sentence case (`Hide the controls`,
+`Show all cells`); dates by hand, not `Intl`; `font-display: block`; `translate="no"` on the name,
+the stamp's source and version, the well names, the formation names; `…` never `...` (the loading
+strings already use the real ellipsis); `<button>` for every action (the explode `select` becomes
+three words; the well picker stays a `select`, a stated departure); the viewport loses
+`user-scalable=no`; `<html lang="en-US">`.
+
+---
+
+The record of the pass, the owner calls as they stood, the change list with the bugs it fixed (B1 to
+B11), the phone checks, and what QA, the review and the follow-up changed, is in `tools/DECISIONS.md`,
+which the ZIP leaves out.

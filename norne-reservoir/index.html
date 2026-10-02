@@ -1,128 +1,171 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>Norne reservoir viewer</title>
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
+<title>Norne Reservoir</title>
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<main id="stage">
-  <canvas id="gl" aria-label="3D reservoir model. Drag to rotate, pinch to zoom, two fingers to pan, tap a cell to inspect it, double-tap to zoom in on it."></canvas>
-  <div id="labels" aria-hidden="true"></div>
 
-  <header id="head">
-    <div class="title">
-      <h1 id="field-name">Norne</h1>
-      <p id="field-sub">Norwegian Sea</p>
-      <p id="well-key" aria-label="Well colours"></p>
+<!-- Every address in this app is relative: the model, the settings and the face travel inside the
+     folder, and nothing is fetched from anywhere else. The look is ART.md; what the data is and how it
+     was built is NOTES.md. The legend's title is written by app.js once every file is in, and only
+     then: the marketing camera waits for it. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Norne Reservoir</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the model&hellip;</button></div>
+  <span class="sr" id="stamp-hint">Opens About this data.</span>
+  <button class="unitkey" id="btn-units" type="button" aria-label="Change units, now SI: bar, meters, cubic meters a day" translate="no">SI</button>
+  <div class="switcher"><div class="words" id="props" role="radiogroup" aria-label="Property"></div></div>
+</header>
+
+<main class="plate" id="plate">
+  <canvas id="gl" role="img" aria-label="The Norne reservoir model in 3D" aria-describedby="gl-desc"></canvas>
+  <p class="sr" id="gl-desc">Each cell is colored by the property named under the picture, at the report date in the player. Drag to turn the model, pinch or use the zoom keys to zoom, and drag with two fingers to pan. Tap a cell or a well name for its values. Double-tap a cell to fly to it; double-tap empty space to see the whole field again.</p>
+  <div class="labels" id="labels"></div>
+
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11M8 2.5v11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="fit" aria-label="Show the whole field"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.75 5.25v-3.5h3.5M10.75 1.75h3.5v3.5M14.25 10.75v3.5h-3.5M5.25 14.25h-3.5v-3.5"/><path d="M4.75 6h6.5v4h-6.5zM6.9 6v4M9.1 6v4M4.75 8h6.5"/></svg></button>
     </div>
-    <div class="when">
-      <p id="date" aria-live="polite">—</p>
-      <p id="prop-name">—</p>
+    <div class="keyplate">
+      <button type="button" id="btn-wells" aria-pressed="true" aria-label="Wells"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.75 3.5h12.5M4 3.5v10.75M8 3.5v5.75M12 3.5v8.25"/></svg></button>
     </div>
-  </header>
-
-  <aside id="legend" aria-label="Colour scale">
-    <span id="leg-max">—</span>
-    <canvas id="leg-bar" width="12" height="160"></canvas>
-    <span id="leg-min">—</span>
-    <span id="leg-unit"></span>
-    <div id="leg-cats" hidden></div>
-  </aside>
-
-  <section id="inspect" hidden aria-live="polite">
-    <div class="inspect-head">
-      <h2 id="ins-title">Cell</h2>
-      <button id="ins-close" class="icon" aria-label="Close cell details">×</button>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
     </div>
-    <dl id="ins-list"></dl>
-    <button id="ins-focus" class="btn small">Zoom to cell</button>
-  </section>
+  </div>
 
-  <button id="fit" class="fab" aria-label="Show the whole field" title="Show the whole field">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
-  </button>
-  <p id="hint" hidden>Double-tap a spot to zoom in. Double-tap empty space to zoom out.</p>
-
-  <div id="gauge">
-    <svg id="compass" viewBox="0 0 48 48" role="img" aria-label="North arrow">
-      <g id="needle">
-        <path class="n" d="M24 11.5 L29 24 L19 24 Z"/>
-        <path class="s" d="M24 34.5 L29 24 L19 24 Z"/>
-      </g>
-      <text id="compass-n" x="24" y="6" dy="0.34em" text-anchor="middle">N</text>
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
     </svg>
-    <div id="scale" role="img" aria-label="Scale bar">
-      <p id="scale-len">—</p>
-      <div id="scale-bar"></div>
-      <p id="scale-sub">vertical ×5</p>
+  </button>
+
+  <!-- The card for the tapped cell or well. Full form: the place line, the figure, its line, the Zoom
+       key, then the rows, which alone scroll. Compact form, on a short plate: the place line with
+       Zoom and Close, then the body (the figure, its line and the rows) scrolling under it. -->
+  <div class="readout" id="readout" hidden>
+    <div class="readout-where"><span id="readout-where" translate="no"></span><button class="readout-close" id="readout-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <div class="readout-body" id="readout-body">
+      <div class="readout-head"><div class="readout-value"><span id="readout-number"></span><span class="readout-unit" id="readout-unit"></span></div><div class="readout-sub" id="readout-sub"></div></div>
+      <dl class="readout-all" id="readout-all"></dl>
     </div>
+    <button type="button" class="textkey readout-zoom" id="readout-zoom">Zoom to cell</button>
   </div>
 
-  <div id="loading" role="status">
-    <p id="load-msg">Loading the Norne model…</p>
-    <div class="bar"><div id="load-bar"></div></div>
-  </div>
+  <div class="error" id="error" role="alert" hidden></div>
 </main>
 
-<section id="sheet" class="s0" aria-label="Controls">
-  <button id="grip" type="button" aria-label="Show more controls" title="Show more controls">
-    <span class="bar" aria-hidden="true"></span>
-    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
-  </button>
-
-  <div id="props" class="chips" role="radiogroup" aria-label="Property"></div>
-
-  <div class="timeline">
-    <button id="play" class="play" aria-label="Play production history">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="play-icon" d="M7 5l12 7-12 7z"/></svg>
-    </button>
-    <input id="time" type="range" min="0" max="0" value="0" step="1" aria-label="Date">
+<!-- The caption under the plate: the property's scale, the instruments, the wells' key, the line that
+     says how to read the cut on the track, and the credit line, on screen in every mode. -->
+<section class="caption" id="caption" aria-label="Scale, instruments, the cut and credits">
+  <div class="legend" id="legend">
+    <span class="legend-title" id="legend-name"></span>
+    <div class="legend-scale" id="legend-scale"><canvas class="legend-bar" id="legend-bar" aria-hidden="true"></canvas><div class="legend-ticks" id="legend-ticks"></div></div>
+    <div class="swatches" id="legend-cats" hidden></div>
   </div>
-
-  <div class="explode">
-    <label for="explode">Explode</label>
-    <input id="explode" type="range" min="0" max="100" value="0">
-    <select id="ex-mode" class="pick" aria-label="Explode by">
-      <option value="formations">Formations</option>
-      <option value="layers">Layers</option>
-      <option value="segments">Segments</option>
-    </select>
+  <div class="instruments" id="instruments">
+    <span class="north" id="north" role="img" aria-label="North arrow"><span aria-hidden="true">N</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><g id="needle"><path class="n fill" d="M8 1.5 10.25 8h-4.5z"/><path class="s fill" d="M8 14.5 10.25 8h-4.5z"/></g></svg></span>
+    <span class="scale" id="scale" role="img" aria-label="Scale bar"><span id="scale-len"></span><span class="scale-bar" id="scale-bar"></span><span id="scale-sub"></span></span>
   </div>
-
-  <div id="chart-wrap">
-    <div class="chart-head">
-      <p id="chart-title">Field rates</p>
-      <select id="well-pick" class="pick" aria-label="Show rates for"></select>
-    </div>
-    <svg id="chart" preserveAspectRatio="none" role="img" aria-label="Production and injection rates over time"></svg>
-    <div id="chart-key" class="key"></div>
+  <div class="wellkey" id="wellkey" role="group" aria-label="Wells key">
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing" d="M1 3h12"/><path class="core" data-role="producer" d="M1 3h12"/></svg>Producer</span>
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing dash" d="M1 3h12"/><path class="core dash" data-role="waterInjector" d="M1 3h12"/></svg>Water injector</span>
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing dash" d="M1 3h12"/><path class="core dash" data-role="gasInjector" d="M1 3h12"/></svg>Gas injector</span>
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing thin" d="M1 3h12"/><path class="core thin" data-role="shut" d="M1 3h12"/></svg>Shut</span>
   </div>
-
-  <section id="more" aria-label="Section and view">
-    <h2 class="more-title">Section and view</h2>
-    <div class="rows">
-      <div class="row"><label>Columns I</label><div class="pair"><input id="i0" type="range" min="1" max="46" value="1" aria-label="First I column"><input id="i1" type="range" min="1" max="46" value="46" aria-label="Last I column"></div><output id="iv">1–46</output></div>
-      <div class="row"><label>Rows J</label><div class="pair"><input id="j0" type="range" min="1" max="112" value="1" aria-label="First J row"><input id="j1" type="range" min="1" max="112" value="112" aria-label="Last J row"></div><output id="jv">1–112</output></div>
-      <div class="row"><label>Layers K</label><div class="pair"><input id="k0" type="range" min="1" max="22" value="1" aria-label="First K layer"><input id="k1" type="range" min="1" max="22" value="22" aria-label="Last K layer"></div><output id="kv">1–22</output></div>
-      <div class="row"><label>Value range</label><div class="pair"><input id="v0" type="range" min="0" max="100" value="0" aria-label="Hide values below"><input id="v1" type="range" min="0" max="100" value="100" aria-label="Hide values above"></div><output id="vv">all</output></div>
-      <div class="row"><label>Vertical scale</label><input id="exag" type="range" min="1" max="15" step="0.5" value="5"><output id="exv">5×</output></div>
-      <div class="toggles">
-        <label><input id="t-wells" type="checkbox" checked> Wells</label>
-        <label><input id="t-labels" type="checkbox" checked> Well names</label>
-        <label><input id="t-edges" type="checkbox" checked> Cell edges</label>
-      </div>
-      <div class="actions">
-        <button id="reset-cut" class="btn">Show all cells</button>
-        <button id="reset-view" class="btn">Reset view</button>
-      </div>
-      <p id="credit" class="credit"></p>
-    </div>
-  </section>
+  <p class="cutline" id="cutline"></p>
+  <p class="credits" id="credits" translate="no"></p>
 </section>
 
-<script type="module" src="app.js"></script>
+<footer class="player" id="player">
+  <div class="time-row">
+    <div class="valid" id="valid"></div>
+    <div class="lead" id="lead"></div>
+  </div>
+  <div class="controls">
+    <button type="button" class="tkey" id="btn-prev" aria-label="Back one month"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M7.5 1 3 6l4.5 5"/></svg></button>
+    <button type="button" class="tkey play" id="btn-play" aria-label="Play production history"><span class="shutter"><svg id="ico-play" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg><svg id="ico-pause" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" hidden><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg></span></button>
+    <button type="button" class="tkey" id="btn-next" aria-label="Forward one month"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4.5 1 9 6l-4.5 5"/></svg></button>
+    <div class="track" id="slider" role="slider" tabindex="0" aria-label="Report date" aria-describedby="cut-desc" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"><canvas id="track" aria-hidden="true"></canvas></div>
+  </div>
+</footer>
+
+<section class="sheet s0" id="sheet" aria-label="More controls">
+  <button type="button" class="grip" id="grip" aria-label="Show more controls"><span class="grip-bar" aria-hidden="true"></span><svg class="grip-chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1.5 8 6 3.5 10.5 8"/></svg></button>
+  <div class="stop stop1">
+    <h2 class="sheet-head">Explode</h2>
+    <div class="srow"><label class="slabel" for="explode">Explode amount</label><input class="hslider" id="explode" type="range" min="0" max="100" value="0"><output class="sval" id="exv" for="explode"></output></div>
+    <div class="words sub" id="ex-mode" role="radiogroup" aria-label="Explode by">
+      <button type="button" role="radio" aria-checked="true" data-mode="formations">Formations</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="layers">Layers</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="segments">Segments</button>
+    </div>
+    <div class="chart-head"><h2 class="sheet-head" id="chart-title">Field rates</h2><select class="pick" id="well-pick" aria-label="Show rates for"></select></div>
+    <svg class="chart" id="chart" preserveAspectRatio="none" role="img" aria-label="Production and injection rates over the history"></svg>
+    <div class="chart-key" id="chart-key"></div>
+  </div>
+  <div class="stop stop2">
+    <h2 class="sheet-head">Section and view</h2>
+    <div class="srow"><span class="slabel" id="lab-i">Columns (I)</span><div class="pair"><input class="hslider" id="i0" type="range" min="1" max="46" value="1" aria-label="First column (I)"><input class="hslider" id="i1" type="range" min="1" max="46" value="46" aria-label="Last column (I)"></div><output class="sval" id="iv"></output></div>
+    <div class="srow"><span class="slabel" id="lab-j">Rows (J)</span><div class="pair"><input class="hslider" id="j0" type="range" min="1" max="112" value="1" aria-label="First row (J)"><input class="hslider" id="j1" type="range" min="1" max="112" value="112" aria-label="Last row (J)"></div><output class="sval" id="jv"></output></div>
+    <div class="srow"><span class="slabel" id="lab-k">Layers (K)</span><div class="pair"><input class="hslider" id="k0" type="range" min="1" max="22" value="1" aria-label="First layer (K)"><input class="hslider" id="k1" type="range" min="1" max="22" value="22" aria-label="Last layer (K)"></div><output class="sval" id="kv"></output></div>
+    <div class="srow"><span class="slabel">Value range</span><div class="pair"><input class="hslider" id="v0" type="range" min="0" max="100" value="0" aria-label="Hide values below"><input class="hslider" id="v1" type="range" min="0" max="100" value="100" aria-label="Hide values above"></div><output class="sval" id="vv"></output></div>
+    <div class="srow"><label class="slabel" for="exag">Vertical exaggeration</label><input class="hslider" id="exag" type="range" min="1" max="15" step="0.5" value="5"><output class="sval" id="exv2" for="exag"></output></div>
+    <div class="toggles">
+      <button type="button" class="toggle" id="t-labels" aria-pressed="true"><span class="tbox" aria-hidden="true"><svg viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 6.25 5 8.75l4.5-5.5"/></svg></span>Well names</button>
+      <button type="button" class="toggle" id="t-edges" aria-pressed="true"><span class="tbox" aria-hidden="true"><svg viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 6.25 5 8.75l4.5-5.5"/></svg></span>Cell edges</button>
+    </div>
+    <button type="button" class="textkey" id="reset-cut">Show all cells</button>
+  </div>
+</section>
+
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About this data</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body" id="about-body">
+      <section>
+        <h3>What the picture is</h3>
+        <p>The model is the Norne field&rsquo;s reservoir, under the Norwegian Sea, cut into 44&#8239;431 active cells. Each cell is colored by its value on the scale under the picture, at the report date in the player. Where cells go past a scale&rsquo;s end, the end prints open (&le;&#8239;and &ge;) and those cells take the end&rsquo;s color.</p>
+        <p>The light on the cells&rsquo; faces and the darker cell edges are part of the drawing, not of the data, and the depth is stretched: the caption under the picture says by how much. Explode pulls the model apart to look inside it (<span id="ab-explode"></span>); those distances are display, not geology.</p>
+        <p>The wells&rsquo; paths come from the deck&rsquo;s completions and their roles from its schedule. A producer is a solid line, an injector a dashed one, a shut well thin and faint; a well appears once it first opens.</p>
+        <h3>The cut, on the track</h3>
+        <p id="ab-cut"></p>
+        <p>It is the simulation&rsquo;s field production: the run of the public deck, driven by the field&rsquo;s historical well controls, averaged over each month. It is not the field&rsquo;s reported production; against the field&rsquo;s own history the model lifts about 7&#8239;% less oil and 43&#8239;% more water. Gas is not in it, because at the surface the field&rsquo;s gas is measured in volumes about 220 times the oil&rsquo;s; gas and injection are in the rates chart under More controls.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p id="about-source"></p>
+        <p>License: Open Database License (ODbL) 1.0, opendatacommons.org/licenses/odbl/1-0/</p>
+        <p>Checked against the Eclipse 2014.2 summary results that the Open Porous Media initiative publishes for the same deck: at 1 Dec 2006 the run&rsquo;s cumulative oil differs by &minus;0.2&#8239;%, water by +0.4&#8239;%, gas by &minus;0.1&#8239;% and water injected by +0.1&#8239;%, and the average field pressure stays within 0.1&#8239;bar over the run. The published results hold field and well summaries only, no cell data.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>The model was built once by the folder&rsquo;s pipeline on a Linux runner and travels inside the app; nothing is fetched. The app re-reads <code translate="no">config.json</code>, its settings file, whenever it comes back to the screen.</p>
+        <p>Drag to turn the model, pinch or use the zoom keys to zoom, and drag with two fingers to pan. Tap a cell or a well name for its values; double-tap a cell to fly to it, and double-tap empty space or use Show the whole field to see it all again. On a keyboard, the arrow keys move the track a month at a time and Page Up and Page Down a year.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<p class="sr" id="cut-desc"></p>
+
+<script type="module" src="./app.js"></script>
 </body>
 </html>
