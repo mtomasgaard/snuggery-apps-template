@@ -1,5 +1,5 @@
 // Drive Milky Way in headless Chromium at phone size (390 × 844 CSS px, DPR 2, real touch), light and
-// dark (HOUSE.md section 7.2; ART.md change list 21). Fails on any console error or warning, page
+// dark (HOUSE.md section 7.2; the change list, step 21, in tools/DECISIONS.md). Fails on any console error or warning, page
 // error, failed request, HTTP ≥ 400, or any request outside the local server; the one message
 // tolerated is headless Chromium's own "GPU stall due to ReadPixels" (its WebGL under SwiftShader
 // says it whenever a screenshot reads the canvas back). Every figure it asserts is worked out here

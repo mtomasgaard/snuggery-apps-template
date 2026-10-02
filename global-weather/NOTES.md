@@ -408,7 +408,7 @@ in.
 | app code: `index.html`, `style.css`, `app.js`, `js/` | 202 560 | 203 000 |
 | `fonts/` | 40 075 | 160 000 |
 | `assets/world.json` (stored in the ZIP: 431 665) | 1 538 738 | 1 600 000 |
-| the ZIP, packed as `build-zips.yml` packs it | 2 788 110 | 2 800 000 |
+| the ZIP, packed as `build-zips.yml` packs it | 2 788 186 | 2 800 000 |
 
 `tools/` is not in the ZIP. From `global-weather/`:
 

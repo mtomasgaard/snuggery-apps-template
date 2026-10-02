@@ -622,18 +622,8 @@ The same file set, copied by hand (a mini-app is one folder). It differs only in
 
 ---
 
-## After review (2026-10-01)
+## Where the record is
 
-Two reviews, one for honesty and one with a stranger's phone, changed these. The look is the same:
-- The keys' *on* state is a plate of ink behind the mark, not a 2 px tick that read as a text
-  caret. The Flow, Night, Whole world and Hide the controls marks were redrawn so that none of them
-  reads as another app's icon.
-- The exposure line has a fixed height, so the plate never moves when its words do.
-- The Play key's mark now follows play. About holds play still. The readout card moves out of the
-  way of the place that was tapped. Reduce Motion plays whole steps.
-- A phone on its side gets its own layout.
-- About's sentence on where streaks gather now names the projection as well as convergence, and
-  the grid is described as sampled, not averaged.
-
-Each finding, what was done or declined and why, and the commands that checked it are in
-`tools/DECISIONS.md`.
+The after-review summary that closed this file moved to `tools/DECISIONS.md` on 2026-10-02, word
+for word, beside the review record it pointed at: this file ships inside the ZIP, and the house rule
+(`Template/HOUSE.md`, "What ships and what does not") keeps build history out of a shipped file.

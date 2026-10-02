@@ -1,4 +1,4 @@
-// Static checks for Milky Way (HOUSE.md section 7.1; ART.md change list 20). Node, no dependencies but
+// Static checks for Milky Way (HOUSE.md section 7.1; the change list, step 20, in tools/DECISIONS.md). Node, no dependencies but
 // python3 for tools/art/palette.py; Global Weather's tools/check.mjs in shape, changed for this app:
 //   1. what the ZIP ships stays within Snuggery's limits (count, depth, largest, total, no symlinks);
 //   2. no http:// or https:// in any .html, .css or .js the app ships outside vendor/, which is

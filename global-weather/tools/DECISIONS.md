@@ -360,3 +360,29 @@ math is unchanged, and so are the snapshot, `validate()`, `CREDITS`, `world.json
   width it keeps two lines.
 - The globe shows no streaks while it is being turned.
 - Every owner call in the lists above is still open as written.
+
+---
+
+## Moved from `ART.md` on 2026-10-02: its after-review summary, word for word
+
+`ART.md` ships inside the ZIP, and the house rule (`Template/HOUSE.md`, "What ships and what does not")
+keeps build history out of a shipped file, so the lead moved these here unchanged on 2026-10-02, as
+Anatomy's pass did for its own. Inside the moved text, *this file*, *§N* and *section N* mean `ART.md`
+as it stood on 2026-10-01, and a pointer to `tools/DECISIONS.md` section N means this file's own
+section N above.
+
+## After review (2026-10-01)
+
+Two reviews, one for honesty and one with a stranger's phone, changed these. The look is the same:
+- The keys' *on* state is a plate of ink behind the mark, not a 2 px tick that read as a text
+  caret. The Flow, Night, Whole world and Hide the controls marks were redrawn so that none of them
+  reads as another app's icon.
+- The exposure line has a fixed height, so the plate never moves when its words do.
+- The Play key's mark now follows play. About holds play still. The readout card moves out of the
+  way of the place that was tapped. Reduce Motion plays whole steps.
+- A phone on its side gets its own layout.
+- About's sentence on where streaks gather now names the projection as well as convergence, and
+  the grid is described as sampled, not averaged.
+
+Each finding, what was done or declined and why, and the commands that checked it are in
+`tools/DECISIONS.md`.

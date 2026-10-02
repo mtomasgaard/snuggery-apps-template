@@ -637,3 +637,307 @@ fix pass had declined for want of bytes: the Zoom in and Zoom out keys (owner ca
 and the keyboard could not zoom out, WCAG 2.5.1) and a view offset that keeps a globe flown to clear
 of the readout card at every size (owner call 16). Recorded in `tools/check.mjs` (item 16) and in
 ART.md §6. The follow-up spent it on those two and paid for the rest in place (section 9): 241 813 B.
+
+---
+
+## 10. Moved from `ART.md` on 2026-10-02: its sections 8 and 9 and its after-QA, after-review and after-follow-up summaries, word for word
+
+`ART.md` ships inside the ZIP, and the house rule (`Template/HOUSE.md`, "What ships and what does not")
+keeps build history out of a shipped file, so the lead moved these here unchanged on 2026-10-02, as
+Anatomy's pass did for its own. Inside the moved text, *this file*, *§N* and *section N* mean `ART.md`
+as it stood on 2026-10-01, and a pointer to `tools/DECISIONS.md` section N means this file's own
+section N above.
+
+## 8. The change list (the builder applies these in order)
+
+Nothing in `data/`, `vendor/`, the pipeline's logic or `screenshots/app.png` changes. Before step 1,
+record the sha256 of every one of the 33 files in `data/` (their combined digest today:
+`find data -type f | sort | xargs shasum -a 256 | shasum -a 256` gives `a9c72c12…07d4a1`) and of
+`vendor/three.core.js` (`9edde002…`) and `vendor/three.module.js` (`90520426…`); `check.mjs` pins
+them.
+
+1. **`fonts/`**: delete the four Atkinson and Newsreader files and `fonts/OFL.txt`; copy
+   `global-weather/fonts/ysabeau-office-gw.woff2` and `global-weather/fonts/OFL.txt` byte for byte;
+   write `tools/art/font_extra.py` (Global Weather's recipe, §4's `UNICODES`, writing only
+   `fonts/ysabeau-office-milky-way-extra.woff2`, printing its size and sha256) and run it twice in
+   a venv with fonttools 4.60.2 and Brotli (the pinned upstream is cached at
+   `global-weather/tools/.work/font/YsabeauOffice-var.ttf`, sha256 `0f305c84…`); expect 5 620 B
+   and `efdeac3f…e42f` both times.
+2. **`js/plate.js`**: `export const PLATE = ` + `python3 milky-way/tools/art/palette.py --json`
+   pasted, with a two-line comment naming the command.
+3. **`js/units.js`**: the one writer of numbers, units and dates, on Global Weather's pattern:
+   U+2212 for negatives (never −0.0), U+202F between number and unit and in thousands from four
+   digits (years, clock times, catalog numbers like `NGC 5139` and `HIP 71683` never grouped),
+   three significant figures as the stock `sig()`; distances km below 10⁶ km, AU below 20 000 AU,
+   pc below 1 000 pc, kpc below 1 000 kpc, Mpc beyond, and light-years as a second figure where
+   the card asks; durations in h below 2 d, d below 800 d, then years in words; dates
+   `1 Oct 2026`, `16:03`, `23 Sep 2026`; spans `in 3 y`, `12 y ago`; the spoken forms
+   (`astronomical units`, `parsecs`, `kiloparsecs`, `kilometers`, `light-years`). The stock
+   `fmt`, `sig`, `fmtAU`, `fmtLightTime`, `fmtDays` move here; `fmtRuler` and the dead vector
+   helpers leave `util.js`.
+4. **`styles.css`**: rewritten as the house stylesheet for this app: the §3.1 tokens in both
+   themes and `color-scheme`, `html, body { background: var(--page) }`, `--face` only, the two
+   `@font-face` rules, the plate tokens of §2, the column frame, header, row and tracer, key
+   column and states, caption band, player, track, card, sheets, notices, ghost key, labels on
+   their halos, landscape at `(orientation: landscape) and (max-height: 500px)`, gutters 20 px from
+   700 px, `@media (prefers-reduced-motion: reduce)` zeroing every duration, `@media (hover:
+   hover)` hovers, `touch-action: manipulation` and `-webkit-tap-highlight-color: transparent` on
+   controls. No `box-shadow`, `backdrop-filter`, `text-shadow` (but item 9's fallback, if needed),
+   `transition: all`, uppercase or letter-spacing; `.valid, .lead, .track, .track canvas`
+   carry `transition: none; animation: none`.
+5. **`index.html`**: `lang="en-US"`; the viewport without `user-scalable=no`; `<meta
+   name="color-scheme" content="light dark">`; two `theme-color` metas carrying each theme's
+   `--page`; the column (header with `h1`, stamp and the three scale words; the plate with the
+   canvas, the labels layer, the key column, the card, the notice and the ghost key; the caption
+   band with the Reach's canvas, the caption, the stamp's focus-mode slot and the credits; the
+   player); the three sheets as dialogs; the live region. The canvas's description in US spelling
+   and without `from the Sun`. The stock loading overlay goes.
+6. **`app.js`, the frame**: create the renderer and start loading as today; drive the stamp's
+   counter from the stock `progress()` phases (`Reading the ephemeris… 1 of 6` …); `fail()` writes
+   the notice; `ResizeObserver` on the plate and the held angular scale of §3; delete `wantedShift`,
+   the view offset and the shift in `project()`; keep `window.__mw` (add `shown`, `wanted`, `focus`
+   and the census for the tests; drop `timing`).
+7. **`js/track.js`** and the player (§3): the year of days, the scrub rule, play on the clock,
+   Reduce Motion jumps, About and the other sheets holding play, a touch during play landing on
+   its day, the speed and `Now` keys, the year keys with their stock disabled states.
+8. **`js/rule.js`**, the Reach (§1): a pure census function (sorted log distances in, a column mask
+   out) the decode test can call, and the drawing. The caption's two sentences in `app.js`.
+9. **`js/labels.js`** and the label styles: the face and its wait, widths measured in it, the
+   halo, the neutral or category point marks from `PLATE`, the selected label's tracer. Candidate
+   colors in `app.js` (`'#bcd4ff'`, `'#cfd7e2'`, `'#ffe2a8'`, `'#ffffff'`, `'#e6cfa8'`,
+   `'#ff8fa3'`, `'#ffd27a'`, `'#f2c56f'`) come from `PLATE`.
+10. **The plate's colors** from `PLATE`: `js/solar.js` (`UI_COLOUR` becomes the neutral for every
+    body's orbit, trail and marker; `KIND_COLOUR`'s ten classes become the four groups through
+    `PLATE.smallGroups`; the moon orbits' `#9aa6b8`), `js/stars.js` (the figures'
+    `[0.45, 0.62, 0.95]` and the host rings' `[0.45, 0.95, 0.75]` at 0.32 become the neutral at
+    0.275 and the host color at 0.60), `js/galaxy.js` (Reid, Drimmel, streams at 0.26 and 0.16,
+    clusters, satellites, the Sun's and the center's marks). Shaders, the stars' colors, textures
+    and the three display tints are not touched.
+11. **The card** (§3): top-left, 280 px, its fields, its placement rule, its text keys, the one
+    figure; facts' strings through `units.js`; the live sentence.
+12. **The sheets**: About, Find and Layers as dialogs (focus held and returned, Escape, `Close`
+    twice), Find's rows as buttons, Layers' drawn keys.
+13. **Focus mode** (§3), with `milkyway:focus`, the ghost key, Escape, the two sentences and the
+    held angular scale.
+14. **Motion**: a touch during a flight completes it (`js/view.js`, the one change there); the
+    stock card and sheet keyframes go; Reduce Motion as §3.
+15. **Words**: US spelling in every shipped file, comments included (`center`, `color`, `gray`,
+    `catalog`, `kilometer`, `normalize`, `neighborhood`, `disk`), except the data's own names
+    and keys, which keep their British spelling (the stars' color file and its index field, the
+    textures' color table, the license key) and text read from the data; `Galactic center`, `Disk and bar model`, `Catalog` in the card; no middle dot,
+    no spaced em dash, no `~` for "about", no arrow characters in comments; SI through `units.js` everywhere
+    (the layer descriptions' counts, the card's rows, the search's empty sentence).
+16. **About** (§3): the four sections; about.json's dataset blocks rendered field by field; the
+    two stock blocks it no longer matches not rendered.
+17. **Credits and the pipeline's content strings** (the only pipeline file touched, and only its
+    text): in `tools/90_about.py`, `SOFTWARE['owner']` becomes `three.js authors; Christian
+    Thalmann (Catharsis Fonts)`, the `SOFTWARE` entry for the license `three.js r186: MIT. Ysabeau Office: SIL
+    Open Font License 1.1`, `SOFTWARE['source']` names vendor/ as today and then the house credit
+    line and the supplement; the CREDITS fonts paragraph quotes the face's own copyright line whole, `Copyright
+    2023 The Ysabeau Project Authors` followed by the project's address in parentheses, as name ID 0
+    of the shipped file gives it (fontTools); `READING`'s `reading-sizes` drops the ruler sentence. Then
+    `CREDITS.txt`'s `SOFTWARE AND FONTS` section (lines 1111–1118 today) is edited by hand to
+    exactly what the edited script writes there (`textwrap.fill(…, 98)`), the rest of the file
+    untouched. `data/about.json` stays byte-identical (the brief: data files do not change); the
+    app does not render its two stale blocks, and the next pipeline run writes them anew (owner
+    call 8). The pipeline is not run.
+18. **`miniapp.json`**: name, entry, schema and version unchanged; the description in US English
+    and at most 200 characters (343 today), for instance `The Solar System, the stars around the
+    Sun and the Milky Way in one 3D zoom, from real data only: JPL planets from 1900 to 2099, Gaia
+    stars in 3D, and the galaxy as measured. Offline.` (183).
+19. **`NOTES.md`**: US English; the code map gains `units.js`, `track.js`, `rule.js`, `plate.js`;
+    "Using it" describes the header's words, the key column, the Reach, focus mode and the card;
+    the folder list names the face and the supplement with its recipe, code points and sha256; the
+    house credit line; the tools section names `check.mjs`, `shoot.mjs`, `test_decode.mjs`,
+    `palette.py` and `font_extra.py`.
+20. **`tools/check.mjs`** (HOUSE §7.1, all seventeen, for this app): the ZIP's limits; no scheme in
+    shipped `.html`/`.css`/`.js` (`vendor/` pinned by sha256 instead); relative references present;
+    `fonts/` exactly the house pair and the supplement, three sha256 pins; the 33 data files and
+    two vendor files pinned; `miniapp.json`; the vendor-name list copied from Global Weather's
+    `check.mjs` as ROT13, never decoded into a source file, with data words that collide
+    allow-listed by file and word (a constellation's name in `data/stars/constellations.json`);
+    `CREDITS` byte for byte; the camera's strings with their roles (the caption's `You are` …
+    `from the Sun` written by the frame loop, the three scale words as `<button>`s, `Play`,
+    `Show the controls`, `Hide the controls`), every `localStorage` key under `milkyway:` and
+    today's `layers`, `speed` and `camera` still read; SI; nothing that carries a step
+    transitions; innerHTML: no new uses, every value in the touched ones escaped (`escapeHtml`
+    stays), no `insertAdjacentHTML`, `outerHTML`, `document.write`, `eval`, `new Function`;
+    `js/plate.js` equals `palette.py --json` and `palette.py` prints `ALL CHECKS PASS`; the tells
+    (the house's greps, plus `text-shadow` outside the labels' fallback); budgets as §6; US
+    spelling over every shipped text file except `data/` and `CREDITS.txt` (pipeline outputs
+    quoting their sources), with the data names of item 15 allowed.
+21. **`tools/shoot.mjs`** (HOUSE §7.2): the stock scenes (solar, inner, earth, moon, jupiter,
+    saturn, mars, play, stars, orion, galaxy, edge, search) kept as the picture set in both themes,
+    plus every check of §7.2 that a 3D view with time carries: boot and the camera's strings; text
+    contrast on the chrome; for plate labels, a screenshot sampler comparing each placed label's
+    brightest glyph pixels with its halo ring (90 % at 4.5:1 or more, the lowest printed); the
+    signature sampler over the Reach's pixels against `--page`; the SI scan; the card against the
+    script's own decode (the planets' distances from `data/ephem.bin` read and evaluated in the
+    script); the three-speed scrub by real touch with drawn = wanted = the day under the finger;
+    play, its mark, About holding it, a touch landing; the plate holding still while the caption
+    changes; focus mode end to end; hidden; hit targets ≥ 44 × 44; About; Reduce Motion; broken
+    data (`data/physical.json` missing, not JSON, short; a sentence each); widths 320, 360, 375,
+    844 × 390 and 125 % zoom. Console warnings fail the run, except the exact headless message
+    `GPU stall due to ReadPixels`, allow-listed by its text (the stock run printed it four times
+    while taking screenshots). Frame times are printed as headless figures.
+    `screenshots/app.png` is never written and its sha256 (`7981ec84…`) is checked unchanged.
+22. **`tools/test_decode.mjs`** (HOUSE §7.3), Node with no dependencies and no `tools/.cache/`:
+    decodes `stars/deep.bin` (int16 × 3 / 64, the two codes), `stars/named.json`,
+    `galaxy/galaxy.json` and the small bodies' elements with formulas written in the test,
+    computes the census, and compares `js/rule.js`'s census with it column by column; and pins the
+    decoders unchanged: positions from `js/ephem.js`, `js/smallbodies.js` and `js/galaxydata.js`
+    at three fixed epochs, recorded before step 1 and written into the test as constants. The
+    stock `test_*.mjs` stay; they need `tools/.cache/`, which this machine does not have, so the
+    report says they were not run.
+23. **`tools/DECISIONS.md`**: the owner calls below with what each was chosen over, the camera
+    change list for the lead (§5), the budget figures before and after, the phone checks, and the
+    review record as it comes.
+
+---
+
+## 9. Owner calls left open
+
+1. **The code cap.** If §6's four trims still leave the code over 223 463 B, a raised cap and its
+   reason (Global Weather's was raised 1.5 % for its coast).
+2. **A units key** (pc and AU, or light-years) in the header. Not in this pass: distances are in
+   km, AU, pc and kpc, with light-years as the card's second figure for stars and galaxy objects.
+3. **The Sun's glow and the points' soft halo** kept as the plate's documented display effects
+   (about.json's `reading-glow` says so), against the house's no-glow rule read strictly.
+4. **Small bodies in four orbit groups** instead of ten class colors.
+5. **Neutral orbits, trails and markers** instead of a hue per planet.
+6. **The on-screen credit line's names.**
+7. **The speed key written as exposures** (`1 s = 7 d`) instead of words (`1 week a second`).
+8. **`data/about.json` keeps its two stale blocks** (the dropped faces, the stock ruler) until the
+   next pipeline run, with `tools/90_about.py`'s text already corrected and the app not rendering
+   them; the alternative is regenerating the file in this pass, which needs the pipeline's cache.
+9. **The plate stays night in the light theme** (space has one appearance), against a star chart
+   printed as its own negative.
+10. **Focus mode hides the Reach** with the legend slot, as the house says; the alternative keeps it.
+11. **The caption is three lines high below 640 px** (Global Weather's is two), to hold the view's
+    sentence and the Reach's at 320 px.
+12. **The search field at 16 px**, the one size off the type scale, so iOS does not zoom into it.
+
+**Phone checks for the device matrix** (none claimed): frame time idle, flying, playing and
+scrubbing; memory after five minutes; background and return; focus mode in Snuggery's full screen
+with the ghost key and Snuggery's own exit control both reachable in the top-right corner; the
+labels' halo (`paint-order` on HTML text in WebKit); VoiceOver on the track, the Reach, a tap and
+the sheets; the phone on its side; the safe areas of every band.
+
+---
+
+## After QA (2026-10-01)
+
+What changed after QA's report, each run with what it printed (the full record is in
+`tools/DECISIONS.md` section 8):
+
+- **The code cap is 240 000 B**, the lead's ruling (owner call 1, §6). `check.mjs` item 16 says so:
+  `ok app code 239,674 bytes (cap 240,000, …; 326 to spare)`.
+- **One SI fix in the app:** the Drimmel arm fit's note read `0.9 kpc` with a plain space; it is
+  `0.9\u202Fkpc` (`app.js`, the arm-fit card's note).
+- **`check.mjs`'s SI scan skips shader source**: the template literals `js/gfx.js` tags
+  `/* glsl */` are dropped before the scan, so `vec2 d` no longer reads as "2 d". With the note's
+  plain space put back, the scan still fails on exactly that string.
+- **The time row is 44 px tall** (was 28 px of row in 32 px with padding). The speed key's hit area
+  ended where the track begins, because the track, a later positioned sibling, paints over it: it
+  measured 63 × 35.5 px. Now it is 44 px, and so is `Now`'s, which the track had also been covering
+  by 8 px unseen (its box was 44 px, so the probe never ran). `shoot.mjs` now probes every control's
+  hit area even when its box is 44 px. The plate is 12 px shorter at the Solar System scale.
+- **`shoot.mjs`'s play check needs 12 drawn frames in 3 s, not 60**: the count was a frame rate,
+  and HOUSE §7.2 fails nothing on a frame time; SwiftShader draws this scene at about 9 a second.
+  The touch-during-play check reads the state at the end of the next animation frame instead of
+  after a fixed 120 ms, which at about 113 ms a frame could read before the touched day was drawn.
+- **British spellings in About** (owner call 15, new): `data/about.json` is pipeline output and
+  stays byte for byte, and About shows its prose verbatim, so its British spellings (91 counted by
+  `check.mjs`, which now prints the count instead of exempting `data/` silently) stay on screen
+  until the pipeline runs again. `tools/90_about.py`'s own blocks (the intro, the reading blocks,
+  "What this app does not show") are now US English; the dataset blocks' text comes from the other
+  pipeline scripts and is not yet.
+
+
+---
+
+## After review (2026-10-01)
+
+The reviewer's must and shoulds, as built (each with its command and output in `tools/DECISIONS.md`
+section 8, "Review, and the fixes"):
+
+- **The bottom safe area.** At the Neighborhood and Milky Way scales the player is hidden and the
+  caption band is the last band, so it now pads itself for the home indicator:
+  `.caption:has(+ [hidden])` adds `env(safe-area-inset-bottom)` (HOUSE §4.14). `shoot.mjs` checks
+  the rule applies exactly when the player has gone; the inset itself is a phone check.
+- **The Reach is the day shown's.** Its Solar System part is taken again whenever a frame draws
+  another day, the finger on the track included, reusing the small bodies' positions when the frame
+  has just placed them for the same instant; the stars', clusters', satellites' and streams' columns
+  are worked out once per canvas width (`js/rule.js`), so a new day costs the Solar System's ten
+  thousand distances, not the 230 000. `shoot.mjs` sets 30 Dec and 2 Jan of one year and finds the
+  census taken at the instant shown both times, 0 columns off its own decode.
+- **Focus mode's caption** no longer describes the Reach, which has gone with the legend slot
+  (owner call 10 stands: focus mode hides it).
+- **The card.** Its height is at most 34 % of the plate (at least 144 px), its `Fly there` and
+  `Show orbit` keys are held at its foot while its rows scroll, and its placement counts a globe's
+  disk, not only its center. At 390 × 844 the card for Saturn, Jupiter and the Earth, each flown to,
+  leaves the whole disk clear (`shoot.mjs`, the disk worked out from `data/physical.json`). Saturn's
+  rings reach past the disk and the card can still cover their ends. The trade: on a 375 × 667
+  phone the floor wins and the card covers about 12 px of the disk's lower edge; a view offset (the
+  stock `wantedShift`) would clear it at every size but costs about 500 B the cap does not have.
+- **Venus is labeled again.** The Solar System scale frames the inner planets at about 120 px to
+  the AU on the plate's shorter side (`3.2 × pxPerRad / min(W, H)`, 4.80 AU on a 390 × 844 phone
+  where the stock look's 7.5 AU on a taller canvas gave the same scale), and the Sun's label, when
+  it steps off the glow, is drawn without its point mark, which would sit where the Sun is not.
+- **About no longer scrolls sideways**: its paragraphs wrap anywhere (the sha256 lines).
+- **`js/units.js` rounds first**: the figures and the unit come from the rounded value, so 99.99 is
+  `100`, 999.96 pc is `1.00 kpc` and 1.999 d is `2.00 d`; ten boundary cases in `test_decode.mjs`.
+- **The speed key's name carries its visible words**, `Playback speed, now 1 s = 7 d`, described
+  `7 days a second` (WCAG 2.5.3, as Global Wind's `Speed colors`).
+- **The Layers mark** is three flat planes stacked, no longer a Wi-Fi glyph.
+- **The small bodies' colors have a key**: the Layers row says `colored by orbit: orange near the
+  Earth and Mars, pale in the belt, blue beyond Jupiter, cyan for comets`. About still shows
+  `data/about.json`'s `reading-glow` sentence that marker colors "are not data"; the pipeline's text
+  (`tools/90_about.py`) now says what they are, and the data refresh that writes it is owner call 17.
+- **Nits taken:** the exoplanet host rings are a guide at 0.35 (2.34:1 on space, `palette.py`); one
+  formatter writes the year spans and one count the stars placed in 3D, in Layers, About and the
+  moons' card note; with a data file missing, the scale words, the key column and the player leave
+  with the data; Find focuses its field inside the tap and drops the native search look; the 3D
+  canvas has `role="img"`.
+- **Not taken, with the reason:** the zoom keys (owner call 13, restated in `tools/DECISIONS.md`
+  with the accessibility consequence: about 430 B against 50 B of headroom); a `you` at the notch
+  (bytes; the caption's first sentence and About name the notch); caching the label layer's four
+  rectangles (bytes; a frame-time phone check instead).
+- **Paid for, with no function removed:** an unused test hook (`stats`), one vertex shader shared by
+  the galaxy's two flat layers, one fetch helper for both readers, the card's and Find's kind words
+  written once, the canvas helpers `rule.js` now takes from `track.js` (ART's trim 1, in part),
+  `solar.js` and `stars.js` fields nothing read, a dead label opacity, the `CAT` table inlined.
+
+**Budget after review:** app code **239 950 B** of 240 000 (50 B, 0.02 %, to spare: anything more
+pays for itself); fonts 45 695 B; the ZIP as `node tools/check.mjs` prints it.
+
+---
+
+## After the follow-up (2026-10-01)
+
+The items the pass left for the lead, as built (each with its command and output in
+`tools/DECISIONS.md` section 9):
+
+- **The zoom keys are back** (owner call 13): `Zoom in` and `Zoom out` head the column's first
+  plate, above Find and Layers, one plate rather than §3's two so the column fits the 255 px plate
+  of a 320 × 568 screen. Each press is the double-tap's zoom, about ×2.8; under Reduce Motion one
+  step at once.
+- **The view shifts a globe flown to clear of its card** (owner call 16): with the card open on
+  the object the camera is aimed at, the picture moves it to the middle of the plate the card
+  leaves free, below the card upright and to its right on a wide plate (the stock `wantedShift`,
+  fitted to this layout). Saturn's disk and rings stay whole at 390 × 844 and 375 × 667, and the
+  disk at 320 × 568 and on its side.
+- **Flights pull back while the target moves** (the bug on record, plan 0011 D8): the old path slid
+  the target along the galaxy's disk while the camera was a few tens of parsecs from it, so it
+  skimmed the young-star map, which lies flat at the Sun's own height, and one of its 0.1 kpc cells
+  filled the screen with blue (the phone's recording, frames 2532–2536). The path is now van Wijk
+  and Nuij's; the durations are unchanged, so the camera's waits stand. On the way out the screen
+  shows what a pinch shows (the deep catalog's 500 pc ball, the young-star maps in patches, the
+  arm fits, the model), and a flight to the Earth keeps the Earth in view all the way, with no
+  black middle.
+- **Crowded inner planets keep their names**: important labels may also sit a label's height
+  further above or below, without the dot.
+- **Smaller things**: the year spans read 1900 to 2099 and 1950 to 2049, as the app computes them;
+  Find's field has no browser cross; after a load failure the stamp is inert.
+- **The pipeline's prose is US English** (owner calls 8, 15, 17): see `tools/DECISIONS.md` section 9
+  for the rebuild and its proof that only prose changed.
