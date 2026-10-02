@@ -4,3 +4,4 @@ tools/.work/
 tools/__pycache__/
 dist/
 .DS_Store
+tools/node_modules/

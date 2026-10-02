@@ -3,7 +3,7 @@
 //
 // Lines are expanded in the vertex shader to a constant width in PIXELS. WebGL caps
 // gl_LineWidth at 1 on every platform that matters, and a trail drawn as a world-space ribbon is
-// either a hairline from the summit or a twelve-metre road from eye height.
+// either a hairline from the summit or a twelve-meter road from eye height.
 
 import * as THREE from '../vendor/three.module.js';
 import { parseColor } from './util.js';
@@ -19,6 +19,7 @@ const LINE_VERT = /* glsl */`
   uniform float uLift;
   uniform float uBias;
   varying float vT;
+  varying float vS;
   vec4 toClip(vec3 p) {
     vec3 q = vec3(p.x, (p.y + uLift) * uExag, p.z);
     return projectionMatrix * modelViewMatrix * vec4(q, 1.0);
@@ -38,20 +39,27 @@ const LINE_VERT = /* glsl */`
     c.xy += nrm * aSide * uWidth / uRes * w;
     c.z -= uBias * w;
     vT = aT;
+    vS = aSide;
     gl_Position = c;
   }
 `;
 
+// The casing is the cartographer's pale edge under a line (ART.md section 2): the line is drawn
+// wider by the casing on each side, and the outer part of its width takes the casing's color.
+// Past uSplit (a blocked line of sight) the line is dashed, so no color carries "blocked".
 const LINE_FRAG = /* glsl */`
   precision highp float;
   uniform vec3 uColor;
-  uniform vec3 uColor2;
-  uniform float uSplit;      // -1 = one colour; otherwise vT below it uses uColor
+  uniform float uSplit;
   uniform float uOpacity;
+  uniform vec4 uCase;
+  uniform float uCore;
   varying float vT;
+  varying float vS;
   void main() {
-    vec3 c = uSplit < 0.0 ? uColor : (vT < uSplit ? uColor : uColor2);
-    gl_FragColor = vec4(c, uOpacity);
+    if (uSplit >= 0.0 && vT > uSplit && fract(vT * 60.0) > 0.5) discard;
+    bool edge = abs(vS) > uCore;
+    gl_FragColor = vec4(edge ? uCase.rgb : uColor, edge ? uCase.a : uOpacity);
     #include <colorspace_fragment>
   }
 `;
@@ -65,16 +73,17 @@ export function makeLineMaterial(color = 0xc0392b, width = 3.2) {
       uLift: { value: 2.5 },
       uBias: { value: 0.00035 },
       uColor: { value: new THREE.Color(color) },
-      uColor2: { value: new THREE.Color(color) },
       uSplit: { value: -1 },
       uOpacity: { value: 1 },
+      uCase: { value: new THREE.Vector4() },
+      uCore: { value: 1 },
     },
     vertexShader: LINE_VERT, fragmentShader: LINE_FRAG,
     transparent: true, depthWrite: false, side: THREE.DoubleSide,
   });
 }
 
-// pts: flat [x, y, z, ...] already in SCENE coordinates, with y as the TRUE elevation in metres
+// pts: flat [x, y, z, ...] already in SCENE coordinates, with y as the TRUE elevation in meters
 // (the exaggeration is applied in the shader so the slider never rebuilds a line).
 export function buildLine(pts, tVals) {
   const n = pts.length / 3;
@@ -170,7 +179,7 @@ export function lineFeatureToPoints(coords, frame, sampleH, lift = 0) {
 
 // ---------------------------------------------------------------- lakes
 //
-// A lake is rasterised into its own small grid with the canvas fill rule (which handles holes
+// A lake is rasterized into its own small grid with the canvas fill rule (which handles holes
 // for free), then the rows are merged into runs and each run becomes one quad at the lake's real
 // surface level from N50. Gjende is about 1500 x 170 cells at 8 m, and comes out as a couple of
 // hundred quads rather than the thousands a naive grid would make or the earcut a polygon with
@@ -194,7 +203,7 @@ function bboxOf(geometry) {
   }
   return { x0, y0, x1, y1 };
 }
-function rasterise(geometry, res) {
+function rasterize(geometry, res) {
   const b = bboxOf(geometry);
   if (!Number.isFinite(b.x0)) return null;
   const pad = res * 2;
@@ -232,7 +241,7 @@ export function buildWater(waterGeo, frame, res = 8) {
     const p = f.properties || {};
     const level = Number(p.levelM);
     if (!Number.isFinite(level)) continue;
-    const r = rasterise(f.geometry, res);
+    const r = rasterize(f.geometry, res);
     if (!r) continue;
     let cells = 0, quads = 0;
     for (let row = 0; row < r.ny; row++) {
@@ -271,9 +280,9 @@ const WATER_VERT = /* glsl */`
     vec3 q = vec3(position.x, position.y * uExag, position.z);
     vP = q;
     vec4 c = projectionMatrix * modelViewMatrix * vec4(q, 1.0);
-    // The lake surface and the terrain under it are the same height to within a metre, and at
-    // fifteen kilometres the depth buffer cannot tell them apart. A small bias toward the camera
-    // decides it in the lake's favour without letting it show through a ridge in front.
+    // The lake surface and the terrain under it are the same height to within a meter, and at
+    // fifteen kilometers the depth buffer cannot tell them apart. A small bias toward the camera
+    // decides it in the lake's favor without letting it show through a ridge in front.
     c.z -= uBias * c.w;
     gl_Position = c;
   }

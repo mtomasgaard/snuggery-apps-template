@@ -1,11 +1,12 @@
 // The walk: the polyline, the distance axis, the waypoints, and how long it takes.
 //
 // route.geojson ships the geometry as [x, y, z] in EPSG:25833 with a cumulative distance array,
-// kilometre marks and waypoints carried as INDICES into the coordinates, never as second copies
+// kilometer marks and waypoints carried as INDICES into the coordinates, never as second copies
 // of the geometry. Reading a direction backwards is this array read in reverse with the distance
 // mirrored; there is no second dataset for the other way round.
 
 import { clamp } from './util.js';
+import { unit, m } from './units.js';
 
 export class Route {
   constructor(geo, waypointsFile) {
@@ -106,9 +107,9 @@ export class Route {
 // Tobler's hiking function, 1993:  v = baseKmh * exp(-3.5 * |S + 0.05|), S = rise over run.
 // The maximum is at S = -0.05, a gentle downhill, which is the point of the model.
 //
-// Naismith with Langmuir's corrections: a flat speed, an hour per so many metres of ascent, a
+// Naismith with Langmuir's corrections: a flat speed, an hour per so many meters of ascent, a
 // bonus for gentle descent and a penalty for steep descent. The rates come from pace.json and
-// are read literally as "metres of descent per hour of correction", so an unusual number in that
+// are read literally as "meters of descent per hour of correction", so an unusual number in that
 // file shows up as an unusual time rather than being silently clamped.
 export function timeForSegments(route, i0, i1, pace) {
   const model = (pace && pace.model) === 'naismith' ? 'naismith' : 'tobler';
@@ -156,10 +157,10 @@ export function paceLabel(pace) {
   const cfg = (pace && pace.models) || {};
   if (model === 'tobler') {
     const base = Number(cfg.tobler && cfg.tobler.baseKmh) || 6;
-    return `Tobler, ${base} km/h on the flat-ish`;
+    return `Tobler, ${unit(base, 'km/h')} on the flat`;
   }
   const nm = cfg.naismith || {};
-  return `Naismith ${Number(nm.flatKmh) || 4.8} km/h, +1 h per ${Number(nm.ascentMPerHour) || 600} m`;
+  return `Naismith, ${unit(Number(nm.flatKmh) || 4.8, 'km/h')} and ${unit(1, 'h')} for each ${m(Number(nm.ascentMPerHour) || 600)} up`;
 }
 
 // Tell the user, in the panel, what the Langmuir rates in their file actually mean. The classic
@@ -172,7 +173,7 @@ export function langmuirNote(pace) {
   const p = Number(lm.steepDescentPenaltyMPerHour) || 0;
   if (!b && !p) return null;
   const mins = (rate) => (rate > 0 ? Math.round(300 / rate * 60) : 0);
-  return `Langmuir from data/pace.json: −${mins(b)} min per 300 m of gentle descent, `
-    + `+${mins(p)} min per 300 m of steep descent. The classic figures are 10 and 10 `
-    + `(that is 1800 m per hour in both fields).`;
+  return `Langmuir from data/pace.json: −${unit(mins(b), 'min')} for each ${m(300)} of gentle descent, `
+    + `+${unit(mins(p), 'min')} for each ${m(300)} of steep descent. The classic figures are 10 and 10 `
+    + `(that is ${m(1800)} an hour in both fields).`;
 }

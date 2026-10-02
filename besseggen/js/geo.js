@@ -1,10 +1,10 @@
 // Coordinates.
 //
-// On disk everything is absolute EPSG:25833 (ETRS89 / UTM 33N) metres. In the three.js scene
-// everything is metres relative to manifest.origin, with Y up:
+// On disk everything is absolute EPSG:25833 (ETRS89 / UTM 33N) meters. In the three.js scene
+// everything is meters relative to manifest.origin, with Y up:
 //
 //   scene.x =  (x25833 - origin.x)
-//   scene.y =  z_metres * verticalExaggeration
+//   scene.y =  z_meters * verticalExaggeration
 //   scene.z = -(y25833 - origin.y)          // +Z is south, so -Z is north
 //
 // The subtraction happens once, in float64, before anything reaches a Float32Array. Northings
@@ -38,7 +38,7 @@ export function utmToWgs84(x, y, w) {
 }
 
 // Grid convergence: the angle from grid north to true north, positive when true north lies
-// east of grid north. West of the central meridian (we are, at 8.7 E in a zone centred on
+// east of grid north. West of the central meridian (we are, at 8.7 E in a zone centered on
 // 15 E) that is about -5.5 degrees, so a true bearing becomes a grid bearing by SUBTRACTING it.
 // Ignoring this would put every bearing, and the sun, five and a half degrees out.
 export function convergenceDeg(lon, lat, w) {
@@ -55,8 +55,8 @@ export class Frame {
     this.shell = manifest.shell;
     const cx = (this.core.x0 + this.core.x1) / 2, cy = (this.core.y0 + this.core.y1) / 2;
     const [lon, lat] = utmToWgs84(cx, cy, manifest.wgs84);
-    this.centreLon = lon;
-    this.centreLat = lat;
+    this.centerLon = lon;
+    this.centerLat = lat;
     // One convergence for the whole model: it varies by 0.09 degrees across the 20 km core,
     // which is far below anything the app claims.
     this.convergence = convergenceDeg(lon, lat, manifest.wgs84);
@@ -66,33 +66,23 @@ export class Frame {
   wx(sx) { return sx + this.ox; }
   wy(sz) { return this.oy - sz; }
   lonLat(x, y) { return utmToWgs84(x, y, this.m.wgs84); }
-  // True bearing (clockwise from true north) of the direction from a to b, in UTM metres.
+  // True bearing (clockwise from true north) of the direction from a to b, in UTM meters.
   trueBearing(ax, ay, bx, by) {
     const grid = Math.atan2(bx - ax, by - ay) * RAD;
     return (((grid + this.convergence) % 360) + 360) % 360;
   }
   // A true azimuth expressed in grid terms, for anything that walks the UTM raster.
   gridFromTrue(deg) { return deg - this.convergence; }
-  // Verify the manifest's own checkpoints. Returns the worst error in millimetres.
+  // Verify the manifest's own checkpoints. Returns the worst error in millimeters.
   checkProjection() {
     let worst = 0;
     for (const c of (this.m.wgs84.checkpoints || [])) {
       const [lon, lat] = utmToWgs84(c.x, c.y, this.m.wgs84);
-      // Degrees to metres, roughly, at this latitude: 111320 m per degree of latitude.
+      // Degrees to meters, roughly, at this latitude: 111320 m per degree of latitude.
       const dy = (lat - c.lat) * 111320;
       const dx = (lon - c.lon) * 111320 * Math.cos(lat * DEG);
       worst = Math.max(worst, Math.hypot(dx, dy) * 1000);
     }
     return worst;
   }
-}
-
-// Degrees and decimal minutes, the form a paper map in Norway is gridded in.
-export function fmtLonLat(lon, lat) {
-  const one = (v, pos, neg) => {
-    const h = v >= 0 ? pos : neg, a = Math.abs(v);
-    const d = Math.floor(a), m = (a - d) * 60;
-    return `${d}° ${m.toFixed(3)}′ ${h}`;
-  };
-  return `${one(lat, 'N', 'S')}  ${one(lon, 'E', 'W')}`;
 }

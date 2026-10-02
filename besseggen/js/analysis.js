@@ -8,12 +8,12 @@ import { DEG, RAD, clamp } from './util.js';
 // a sample is visible exactly when it rises above that running maximum. O(azimuths * range),
 // which is what makes it usable on a phone instead of testing every cell against the eye.
 //
-// The azimuth count is chosen so the gap between neighbouring rays at the far edge is about four
+// The azimuth count is chosen so the gap between neighboring rays at the far edge is about four
 // cells, and each visible sample is splatted into a disc that grows with distance, so the far
 // field fills in rather than turning into a fan of spokes.
 // targetAboveGround is the standard second offset of a viewshed: the question is not "can I see
 // that patch of dirt" but "could I see a person standing there", and on a long uniform slope
-// seen from its own top — which is exactly Veslfjellet — the two answers differ over kilometres.
+// seen from its own top (which is exactly Veslfjellet) the two answers differ over kilometers.
 // The horizon is still built from the bare ground; only the test is raised.
 export function viewshed(grid, ex, ey, eyeAboveGround, radiusM, sampleH, targetAboveGround = 1.7) {
   const nx = grid.nx, ny = grid.ny, res = grid.res;
@@ -61,10 +61,10 @@ export function viewshed(grid, ex, ey, eyeAboveGround, radiusM, sampleH, targetA
 //
 // `tol` is the height the ground has to rise above the sight line before the line counts as
 // blocked, and it is not a fudge: the profile is sampled every 12 m along the ground, heights are
-// quantised to decimetres and interpolated between grid nodes, so an encroachment of a few
-// centimetres is below what the model can resolve. Without it, sighting the exact top of a summit
-// reports "blocked by up to 0 m" — the last few metres of the summit cone poke centimetres above a
-// line that ends on the summit itself — which is both wrong and unreadable. The measured value is
+// quantized to decimeters and interpolated between grid nodes, so an encroachment of a few
+// centimeters is below what the model can resolve. Without it, sighting the exact top of a summit
+// reports "blocked by up to 0 m" (the last few meters of the summit cone poke centimeters above a
+// line that ends on the summit itself), which is both wrong and unreadable. The measured value is
 // still returned as `worst`, and `grazes` says the line came within `tol` of the ground.
 export function lineOfSight(sampleH, ax, ay, aEye, bx, by, bEye, maxSamples = 700, tol = 0.5) {
   const dist = Math.hypot(bx - ax, by - ay);
@@ -144,14 +144,4 @@ export function measure(sampleH, ax, ay, bx, by) {
     angleDeg: horiz > 0 ? Math.atan2(dz, horiz) * RAD : 0,
     az, bz,
   };
-}
-
-// A cheap benchmark of the two heavy sweeps at whatever grid size is actually loaded, so the
-// debug readout reports measured milliseconds rather than an estimate.
-export function benchGrid(nx, ny) {
-  const g = { nx, ny, res: 16, x0: 0, y1: 0, x1: nx * 16, y0: -ny * 16, data: new Uint16Array(nx * ny) };
-  for (let i = 0; i < g.data.length; i++) {
-    g.data[i] = 10000 + ((Math.sin(i * 0.013) + Math.cos(i * 0.0071)) * 2500 | 0);
-  }
-  return g;
 }

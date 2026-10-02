@@ -1,5 +1,5 @@
 {
- "note": "One palette per colour scheme; the keys match the layer switches. Elevation bands run from Gjende at 984 m to Surtningssue at 2367 m.",
+ "note": "One palette per color scheme; the keys match the layer switches. Elevation bands run from Gjende at 984 m to Surtningssue at 2367 m.",
  "light": {
   "sky": "#dfe7ef",
   "terrain": "#cfc6b4",
@@ -12,7 +12,7 @@
   "contour20": "#00000018",
   "contour100": "#00000038",
   "slope30": "#e67e22",
-  "slope40": "#c0392b",
+  "slope40": "#8e1f4f",
   "sunlit": "#fffaf0",
   "shadow": "#5a6b80",
   "viewshed": "#3fa7a0"
@@ -29,7 +29,7 @@
   "contour20": "#ffffff14",
   "contour100": "#ffffff2e",
   "slope30": "#d98a3a",
-  "slope40": "#e06a54",
+  "slope40": "#b64770",
   "sunlit": "#e9e3d4",
   "shadow": "#1b2531",
   "viewshed": "#4fd0c6"
@@ -41,11 +41,11 @@
   },
   {
    "toM": 1400,
-   "color": "#8a8158"
+   "color": "#908862"
   },
   {
    "toM": 1800,
-   "color": "#9b9182"
+   "color": "#b3a99a"
   },
   {
    "toM": 2400,

@@ -3,7 +3,7 @@
 //
 //   height       vertical exaggeration is applied here, not on the CPU, so the slider is one
 //                uniform and the tiles never rebuild
-//   normal       from the stored gradient (dh/dx, dh/dy in metres per metre), scaled by the
+//   normal       from the stored gradient (dh/dx, dh/dy in meters per meter), scaled by the
 //                exaggeration so the shading matches the shape actually drawn
 //   slope layer  from the RAW gradient, so "30 degrees and steeper" stays a fact about the
 //                mountain rather than about the slider
@@ -34,7 +34,7 @@ const VERT = /* glsl */`
     vScene = world.xyz;
     vH = aHeight;
     vG = aGrad;
-    // The gradient is already in world metres per metre, so this is the world normal and must
+    // The gradient is already in world meters per meter, so this is the world normal and must
     // not be run through normalMatrix (the model matrix scales x and z by the cell size).
     vN = normalize(vec3(-aGrad.x * uExag, 1.0, aGrad.y * uExag));
     vSkirt = aSkirt;
@@ -63,6 +63,8 @@ const FRAG = /* glsl */`
   uniform vec4 uC20;
   uniform vec4 uC100;
   uniform vec3 uViewshedCol;
+  uniform vec4 uVeil;
+  uniform float uTint;
   uniform vec3 uFogCol;
 
   uniform vec3 uBandCol[${MAX_BANDS}];
@@ -73,7 +75,7 @@ const FRAG = /* glsl */`
   uniform float uElevHigh;
   uniform float uExag;
 
-  uniform vec3 uSunDir;          // toward the sun, scene space, normalised
+  uniform vec3 uSunDir;          // toward the sun, scene space, normalized
   uniform float uSunUp;          // 1 when the sun is above the horizon
   uniform float uLayerSun;
   uniform float uLayerHill;
@@ -115,8 +117,8 @@ const FRAG = /* glsl */`
   }
 
   // Contours from the interpolated TRUE height, with fwidth() so a line is about a pixel wide at
-  // any zoom, and faded out once the spacing would be finer than the screen can show — otherwise
-  // a 20 m interval turns into a grey wash as soon as you zoom out.
+  // any zoom, and faded out once the spacing would be finer than the screen can show; otherwise
+  // a 20 m interval turns into a gray wash as soon as you zoom out.
   float contour(float h, float spacing) {
     float s = h / spacing;
     float w = fwidth(s);
@@ -130,7 +132,7 @@ const FRAG = /* glsl */`
     float slopeRad = atan(length(vG));          // TRUE slope, exaggeration excluded
     float slopeDeg = degrees(slopeRad);
 
-    // ---- base colour
+    // ---- base color
     float t = clamp((vH - uElevLow) / max(1.0, uElevHigh - uElevLow), 0.0, 1.0);
     vec3 base = mix(uTerrainLow, uTerrain, smoothstep(0.0, 0.55, t));
     base = mix(base, bandColor(vH), uLayerBands);
@@ -169,11 +171,11 @@ const FRAG = /* glsl */`
     }
     float sunTerm = lambert * mix(1.0, cast_, uLayerShadow) * uSunUp;
 
-    // Two lights, added rather than blended: the sky (the palette's shadow colour) is what a
+    // Two lights, added rather than blended: the sky (the palette's shadow color) is what a
     // shadowed slope is actually lit by, and the sun is what is added on top of it. A luminance
     // floor keeps a very dark palette readable without throwing the palette away.
     // The sky term carries the fixed hillshade strongly, because when the whole visible slope is
-    // in shadow — a west face at seven in the morning — it is the only thing showing the relief.
+    // in shadow (a west face at seven in the morning) it is the only thing showing the relief.
     vec3 amb = uShadowCol * (0.75 + 0.85 * hillTerm);
     float lum = dot(amb, vec3(0.299, 0.587, 0.114));
     amb *= max(1.0, 0.16 / max(lum, 0.01));
@@ -198,15 +200,13 @@ const FRAG = /* glsl */`
     col = mix(col, uC100.rgb, c100 * uC100.a);
 
     // ---- viewshed
-    // Tint what can be seen, and take light and colour out of what cannot. A tint on its own is
-    // strong on the dark palette and weak on the light one, because light terrain already sits
-    // near the overlay colour: measured over the same frame, mean |dRGB| was 111 in dark and 27
-    // in light. Dimming the hidden ground is the half that works the same in both.
+    // Seen ground is tinted toward the viewshed color; hidden ground is veiled toward the plate's
+    // pale tone, the way haze veils far ground. The stock pair (a tint, and hidden ground grayed and
+    // darkened) separated by dE 0.001 on sunlit ground for a protan reader; this one by 0.117
+    // (tools/art/palette.py).
     if (uHasViewshed > 0.5 && uLayerViewshed > 0.5 && inRect(cUV)) {
       float vis = texture2D(uViewshedTex, cUV).r;
-      col = mix(col, uViewshedCol, vis * 0.42);
-      float grey = dot(col, vec3(0.2126, 0.7152, 0.0722));
-      col = mix(mix(col, vec3(grey), 0.22) * 0.88, col, vis);
+      col = mix(mix(col, uVeil.rgb, uVeil.a), mix(col, uViewshedCol, uTint), vis);
     }
 
     // The apron is never seen from above the surface. If one is glimpsed at a silhouette it
@@ -219,7 +219,7 @@ const FRAG = /* glsl */`
     gl_FragColor = vec4(col, 1.0);
     // Everything above is LINEAR light: the palette is converted out of sRGB when it is loaded,
     // and the renderer expects linear in and converts on the way out. three.js only appends that
-    // conversion to its own materials, so a custom shader has to ask for it — without this line
+    // conversion to its own materials, so a custom shader has to ask for it; without this line
     // the whole terrain renders about a stop and a half too dark, which is exactly what it did.
     #include <colorspace_fragment>
   }
@@ -235,10 +235,12 @@ export function makeTerrainMaterial() {
     uSunlit: { value: new THREE.Color(0xfffaf0) },
     uShadowCol: { value: new THREE.Color(0x5a6b80) },
     uSlope30: { value: new THREE.Color(0xe67e22) },
-    uSlope40: { value: new THREE.Color(0xc0392b) },
+    uSlope40: { value: new THREE.Color(0x8e1f4f) },
     uC20: { value: new THREE.Vector4(0, 0, 0, 0.1) },
     uC100: { value: new THREE.Vector4(0, 0, 0, 0.22) },
     uViewshedCol: { value: new THREE.Color(0x3fa7a0) },
+    uVeil: { value: new THREE.Vector4(0.92, 0.95, 0.96, 0.4) },
+    uTint: { value: 0.5 },
     uFogCol: { value: new THREE.Color(0xdfe7ef) },
     uBandCol: { value: Array.from({ length: MAX_BANDS }, () => new THREE.Color(0x888888)) },
     uBandTop: { value: new Float32Array(MAX_BANDS) },
@@ -288,7 +290,7 @@ export function applyPalette(mat, colors, scheme, elevation) {
   set('uSunlit', 'sunlit', '#fffaf0');
   set('uShadowCol', 'shadow', '#5a6b80');
   set('uSlope30', 'slope30', '#e67e22');
-  set('uSlope40', 'slope40', '#c0392b');
+  set('uSlope40', 'slope40', '#8e1f4f');
   set('uViewshedCol', 'viewshed', '#3fa7a0');
   set('uFogCol', 'sky', '#dfe7ef');
 
@@ -309,7 +311,7 @@ export function applyPalette(mat, colors, scheme, elevation) {
   mat.uniforms.uBandCount.value = n;
   if (elevation) {
     // Ramp over the CORE's range where the manifest gives one: the shell reaches 550 m twenty
-    // kilometres away, and stretching the ramp to reach it washes out the ground you look at.
+    // kilometers away, and stretching the ramp to reach it washes out the ground you look at.
     const e = elevation.core || elevation;
     mat.uniforms.uElevLow.value = e.minM;
     mat.uniforms.uElevHigh.value = e.maxM;

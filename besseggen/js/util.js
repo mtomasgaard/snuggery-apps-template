@@ -4,7 +4,6 @@ export const $ = (id) => document.getElementById(id);
 export const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
 export const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
-export const lerp = (a, b, t) => a + (b - a) * t;
 export const DEG = Math.PI / 180;
 export const RAD = 180 / Math.PI;
 
@@ -18,50 +17,12 @@ export const store = {
   set(k, v) {
     try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch { /* full or blocked */ }
   },
-  del(k) { try { localStorage.removeItem(KEY + k); } catch { /* ignore */ } },
 };
-
-export function fmt(v, dec = 0) {
-  if (!Number.isFinite(v)) return '—';
-  return v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-}
-
-export function fmtDist(m) {
-  if (!Number.isFinite(m)) return '—';
-  return m < 1000 ? `${Math.round(m)} m` : `${fmt(m / 1000, m < 10000 ? 2 : 1)} km`;
-}
-
-export function fmtHM(hours) {
-  if (!Number.isFinite(hours) || hours < 0) return '—';
-  const total = Math.round(hours * 60);
-  const h = Math.floor(total / 60), m = total % 60;
-  return h ? `${h} h ${String(m).padStart(2, '0')} min` : `${m} min`;
-}
-
-// Minutes past local midnight -> "07:05".
-export function fmtClock(minutes) {
-  if (!Number.isFinite(minutes)) return '—';
-  let m = Math.round(minutes);
-  m = ((m % 1440) + 1440) % 1440;
-  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-}
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'];
-export function fmtDate(y, mo, d) { return `${d} ${MONTHS[mo - 1]} ${y}`; }
-export function fmtDateShort(y, mo, d) { return `${d} ${MONTHS[mo - 1].slice(0, 3)}`; }
 
 export function dayOfYear(y, mo, d) {
   return Math.round((Date.UTC(y, mo - 1, d) - Date.UTC(y, 0, 1)) / 86400000) + 1;
 }
 export function daysInMonth(y, mo) { return new Date(Date.UTC(y, mo, 0)).getUTCDate(); }
-
-export const COMPASS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
-  'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-export function compassPoint(deg) {
-  const i = Math.round((((deg % 360) + 360) % 360) / 22.5) % 16;
-  return COMPASS[i];
-}
 
 // "#rrggbb" or "#rrggbbaa" -> {r,g,b,a} in 0..1
 export function parseColor(hex, fallback = '#888888') {

@@ -1,6 +1,9 @@
 // The elevation profile strip. An SVG built by setting innerHTML on an <svg> that already exists
-// in the document, which parses in the SVG namespace — so the app never has to name a namespace
+// in the document, which parses in the SVG namespace, so the app never has to name a namespace
 // URL, and the packager's "no scheme strings in the source" rule stays satisfied.
+// Drawn in the house's language (ART.md section 3): the line, the walk so far in ink up to the
+// cursor (a clipped copy of the line), the steep stretches in the trail's red, and the cursor as the
+// tracer head, counter-scaled like the labels so its disc stays round.
 //
 // Dragging the strip moves the marker on the terrain; moving the marker on the terrain moves the
 // cursor here. Both go through the same route index, so they cannot disagree.
@@ -13,7 +16,8 @@
 // whatever the strip is stretched to. Having measured them, `relayout()` also keeps them inside
 // the strip and off each other.
 
-import { clamp, escapeHtml, fmt } from './util.js';
+import { clamp, escapeHtml } from './util.js';
+import { int, m, distSpoken } from './units.js';
 
 const W = 1000, H = 132, PAD_T = 12, PAD_B = 20;
 
@@ -58,6 +62,7 @@ export class Profile {
 
   setRoute(route, reversed) {
     this.route = route; this.reversed = reversed;
+    this.svg.setAttribute('aria-valuemax', Math.round(route.length));
     this.build();
   }
   setReversed(r) { this.reversed = r; this.build(); }
@@ -99,7 +104,7 @@ export class Profile {
     let grid = '';
     for (let z = this.zLo; z <= this.zHi; z += 200) {
       grid += `<line class="pgrid" x1="0" y1="${Y(z).toFixed(1)}" x2="${W}" y2="${Y(z).toFixed(1)}"/>`;
-      grid += `<text class="plab" data-ax="0" data-ay="${(Y(z) - 3).toFixed(1)}" x="0" y="0">${z} m</text>`;
+      grid += `<text class="plab" data-ax="0" data-ay="${(Y(z) - 3).toFixed(1)}" x="0" y="0">${m(z)}</text>`;
     }
     let km = '';
     for (const mk of (r.kmMarks || [])) {
@@ -123,14 +128,16 @@ export class Profile {
 
     this.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     this.svg.innerHTML =
+      `<clipPath id="pclip"><rect id="pcr" x="0" y="0" width="0" height="${H}"/></clipPath>` +
       `<path class="pfill" d="${fill}"/>` +
       grid + km +
-      `<path class="pline" d="${d}"/>` +
+      `<path class="pline" d="${d}"/><path class="pso" clip-path="url(#pclip)" d="${d}"/>` +
       (steep ? `<path class="psteep" d="${steep}"/>` : '') +
       wps +
-      `<line id="pcur" class="pcur" x1="0" y1="${PAD_T}" x2="0" y2="${H - PAD_B}"/>` +
-      `<circle id="pdot" class="pdot" cx="0" cy="0" r="4.5"/>` +
+      `<line id="pcur" class="pcur" x1="0" y1="0" x2="0" y2="${H - PAD_B}"/>` +
+      `<g id="pdot"><circle class="pring" r="7"/><circle class="pdot" r="4"/></g>` +
       axis;
+    this.clip = this.svg.querySelector('#pcr');
     this.cur = this.svg.querySelector('#pcur');
     this.dot = this.svg.querySelector('#pdot');
     this.labels = Array.from(this.svg.querySelectorAll('text[data-ax]'));
@@ -138,13 +145,14 @@ export class Profile {
     this.setCursor(this.cursor);
   }
 
-  // Place every label at its natural size, inside the strip, and off its neighbours. Called after
+  // Place every label at its natural size, inside the strip, and off its neighbors. Called after
   // a build and again on resize, because the counter-scale depends on the width the strip got.
   relayout() {
     const svg = this.svg;
     const cw = svg.clientWidth, ch = svg.clientHeight;
     if (!cw || !ch || !this.labels || !this.labels.length) return;
     const sx = W / cw, sy = H / ch;        // undo preserveAspectRatio="none", both axes
+    this.sx = sx; this.sy = sy;
     const PAD = 3;
 
     // Position one label and return its box in CSS pixels measured from the strip's top left.
@@ -167,9 +175,9 @@ export class Profile {
     const placed = [];
 
     // The names the strip exists for go first, each pulled inside the edge if it hangs over.
-    // A name that would sit on its neighbour is nudged off it — up first, so it stays clear of
-    // the profile line — and only dropped if none of those places is free. The dot stays either
-    // way, and every waypoint is also labelled on the terrain itself.
+    // A name that would sit on its neighbor is nudged off it (up first, so it stays clear of
+    // the profile line) and only dropped if none of those places is free. The dot stays either
+    // way, and every waypoint is also labeled on the terrain itself.
     const ROWS = [0, -12, 6, -18, 12];
     for (const el of wpt) {
       el.style.display = '';
@@ -185,23 +193,25 @@ export class Profile {
       if (!ok) { el.style.display = 'none'; continue; }
       placed.push(box);
     }
-    // The axes yield: a metre label tries the other side of the strip, a kilometre number is
+    // The axes yield: a meter label tries the other side of the strip, a kilometer number is
     // dropped rather than drawn through a name. The gridline itself stays either way.
     for (const el of rest) {
       el.style.display = '';
       const axis = el.classList.contains('pax');
       let box = put(el, axis ? 0 : PAD, 0);
-      const dx = inset(box);
-      if (dx) box = put(el, (axis ? 0 : PAD) + dx, 0);
+      // a label that would cross the strip's top (the highest gridline's) comes down inside it
+      const dx = inset(box), dy = Math.max(0, -box.y0);
+      if (dx || dy) box = put(el, (axis ? 0 : PAD) + dx, dy);
       if (placed.some((p) => hits(box, p))) {
         if (axis) { el.style.display = 'none'; continue; }
         // box moves one for one with dx, so this lands its right edge on the right inset
-        const moved = put(el, PAD + ((cw - PAD) - box.x1), 0);
+        const moved = put(el, PAD + ((cw - PAD) - box.x1), dy);
         if (moved.x0 < PAD || placed.some((p) => hits(moved, p))) { el.style.display = 'none'; continue; }
         box = moved;
       }
       placed.push(box);
     }
+    if (this.cur) this.setCursor(this.cursor);
   }
 
   setCursor(i) {
@@ -210,10 +220,10 @@ export class Profile {
     const x = this.X(this.cursor), y = this.Y(this.route.z[this.cursor]);
     this.cur.setAttribute('x1', x.toFixed(1));
     this.cur.setAttribute('x2', x.toFixed(1));
-    this.dot.setAttribute('cx', x.toFixed(1));
-    this.dot.setAttribute('cy', y.toFixed(1));
-    this.svg.setAttribute('aria-valuenow', Math.round(this.route.dirDist(this.cursor, this.reversed)));
-    this.svg.setAttribute('aria-valuetext',
-      `${fmt(this.route.dirDist(this.cursor, this.reversed) / 1000, 2)} km, ${Math.round(this.route.z[this.cursor])} metres`);
+    this.clip.setAttribute('width', x);
+    this.dot.setAttribute('transform', `translate(${x} ${y}) scale(${this.sx || 1} ${this.sy || 1})`);
+    const dd = this.route.dirDist(this.cursor, this.reversed);
+    this.svg.setAttribute('aria-valuenow', Math.round(dd));
+    this.svg.setAttribute('aria-valuetext', `${distSpoken(dd)}, ${int(this.route.z[this.cursor])} meters`);
   }
 }

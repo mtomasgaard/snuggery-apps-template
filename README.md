@@ -141,7 +141,7 @@ A full human body in 3D: 1,752 real anatomical structures from BodyParts3D in ni
 
 ### Besseggen
 
-The Besseggen ridge in Jotunheimen in 3D, from Kartverket's 1 m elevation data: the marked trail from Gjendesheim over Veslfjellet to Memurubu draped on the terrain with a walking-time profile, real sun position and cast shadows for any date and hour, viewsheds and lines of sight with the visible peaks named, saved viewpoints and a fly-through. A planning tool, not a navigation aid — it has no position fix. **Static**, 27 MB unpacked.
+The Besseggen ridge in Jotunheimen in 3D, from Kartverket's 1 m elevation data: the marked trail from Gjendesheim over Veslfjellet to Memurubu draped on the terrain with a walking-time profile, real sun position and cast shadows for any date and hour, viewsheds and lines of sight with the visible peaks named, saved viewpoints and a fly-through. The time track is a sunshine recorder's card for the point under the marker: the sun's arc for the day, inked only where the ridges leave that spot in direct sun. A planning tool, not a navigation aid; it has no position fix. **Static**, 27 MB unpacked.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) · Make it yours: [`besseggen/NOTES.md`](besseggen/NOTES.md)
 

@@ -1,204 +1,151 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Besseggen</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main id="stage">
-  <canvas id="gl" aria-label="The Besseggen ridge in 3D. Drag to turn, pinch to zoom, two fingers to pan, tap the ground to move the marker, double-tap to show or hide the controls."></canvas>
+
+<!-- Every address here is relative: the terrain, the trail and the face travel inside the folder,
+     and the app never goes online. The look is ART.md; what the data is, NOTES.md. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Besseggen</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the terrain&hellip;</button></div>
+  <span class="sr" id="stamp-hint">Opens About this data.</span>
+</header>
+
+<main class="plate" id="plate">
+  <canvas id="gl" role="img" aria-label="The Besseggen ridge in 3D. Drag to turn, pinch to zoom, two fingers to pan, tap the ground to move the marker, double-tap to show or hide the controls."></canvas>
   <div id="labels" aria-hidden="true"></div>
 
-  <header id="head">
-    <div class="title">
-      <h1>Besseggen</h1>
-      <p id="sub">Jotunheimen</p>
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5v11M2.5 8h11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="btn-fit" aria-label="Fit the route"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.5 5V1.5H5M11 1.5h3.5V5M14.5 11v3.5H11M5 14.5H1.5V11M4.5 10.5l2-3.5 2 2 3-3.5"/></svg></button>
     </div>
-    <div class="head-actions">
-      <button id="btn-layers" class="round" aria-controls="layers" aria-expanded="false" aria-label="Shading layers" title="Shading layers">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="M3 13l9 5 9-5"/></svg>
-      </button>
-      <button id="btn-about" class="round" aria-controls="about" aria-expanded="false" aria-label="About the data">i</button>
+    <div class="keyplate">
+      <button type="button" id="btn-layers" aria-label="Layers" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.5 3.5c3 .2 4.2 2.6 6.6 2.4s3.6-2.2 6.4-2.4M1.5 8c2.8-.1 4.4 1.4 6.8 1.3s3.4-1.3 6.2-1.3M1.5 12.5c3.4-.4 5 .4 7.2.3s3.2-.5 5.8-.3"/></svg></button>
     </div>
-  </header>
-
-  <p id="pickbar" hidden role="status"></p>
-
-  <div id="readout" class="readout" hidden aria-live="polite">
-    <span id="r-main">—</span>
-    <span id="r-sub" class="dim">—</span>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
+    </div>
   </div>
 
-  <div id="gauge">
-    <svg id="compass" viewBox="0 0 52 52" role="img" aria-label="Compass rose">
-      <circle class="ring" cx="26" cy="26" r="22"/>
-      <g id="needle">
-        <path class="n" d="M26 7 L31.5 26 L20.5 26 Z"/>
-        <path class="s" d="M26 45 L31.5 26 L20.5 26 Z"/>
-      </g>
-      <line id="gridn" class="gridn" x1="26" y1="26" x2="26" y2="6"/>
-      <text id="cn" x="26" y="4" dy="0.34em" text-anchor="middle">N</text>
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
     </svg>
-    <div id="scale" role="img" aria-label="Scale bar">
-      <p id="scale-len">—</p>
-      <div id="scale-bar"></div>
-      <p id="scale-sub">vertical ×1.0</p>
-    </div>
-  </div>
-
-  <!-- Focus mode's own controls. Hidden until focus mode is on, and kept clear of the band along
-       the top right where Snuggery draws its own full-screen exit control. -->
-  <div id="focus-kit" hidden>
-    <button id="btn-unfocus" class="round" type="button" aria-label="Show the controls" title="Show the controls">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 13l6-6 6 6"/><path d="M5 18h14"/></svg>
-    </button>
-    <button id="btn-zoom-in" class="round" type="button" aria-label="Zoom in" title="Zoom in">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12"/><path d="M6 12h12"/></svg>
-    </button>
-    <button id="btn-zoom-out" class="round" type="button" aria-label="Zoom out" title="Zoom out">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>
-    </button>
-    <button id="btn-whole" class="round" type="button" aria-label="The whole walk" title="The whole walk">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5"/><path d="M15 4h5v5"/><path d="M20 15v5h-5"/><path d="M9 20H4v-5"/></svg>
-    </button>
-    <button id="btn-hint" class="round" type="button" aria-controls="hint" aria-expanded="false" aria-label="How to move around" title="How to move around">?</button>
-  </div>
-
-  <div id="hint" hidden role="group" aria-label="How to move around">
-    <h2>Moving around</h2>
-    <ul>
-      <li><b>One finger</b> turns the view</li>
-      <li><b>Two fingers</b> move it</li>
-      <li><b>Pinch</b> zooms</li>
-      <li><b>Tap the ground</b> to move the marker</li>
-      <li><b>Double-tap</b> to bring the controls back</li>
-    </ul>
-    <button id="hint-ok" class="pill" type="button">Got it</button>
-  </div>
-
-  <div id="debug" hidden>
-    <p id="dbg-body"></p>
-    <button id="dbg-bench" class="mini">Benchmark sweeps</button>
-  </div>
-
-  <div id="loading" role="status">
-    <p class="load-title">Besseggen</p>
-    <div class="track"><div id="load-bar"></div></div>
-    <p id="load-msg">Reading the mountain…</p>
-  </div>
-</main>
-
-<section id="sheet" class="s0" aria-label="Controls">
-  <button id="grip" type="button" aria-label="Show more controls" title="Show more controls">
-    <span class="bar" aria-hidden="true"></span>
-    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
   </button>
 
-  <!-- stop 0: the walk -->
-  <div class="prof-head">
-    <div class="stat"><b id="s-dist">—</b><span>distance</span></div>
-    <div class="stat"><b id="s-elev">—</b><span>elevation</span></div>
-    <div class="stat"><b id="s-grad">—</b><span>gradient</span></div>
-    <div class="stat"><b id="s-time">—</b><span id="s-time-label">time left</span></div>
-  </div>
-  <svg id="profile" preserveAspectRatio="none" role="slider" tabindex="0"
-       aria-label="Elevation profile. Drag to move the marker on the terrain." aria-valuemin="0" aria-valuenow="0"></svg>
-  <div class="prof-foot">
-    <p id="s-updown" class="dim">—</p>
-    <button id="btn-dir" class="chip">Gjendesheim → Memurubu</button>
-  </div>
-
-  <!-- stop 1: sun and camera -->
-  <section id="more1">
-    <div class="rowline">
-      <h2>Sun and shadow</h2>
-      <output id="sun-when">—</output>
-    </div>
-    <div class="row"><label for="date-d">Date</label>
-      <input id="date-d" type="range" min="1" max="365" step="1" value="165" aria-label="Day of year">
-      <output id="date-out">—</output>
-    </div>
-    <div class="row"><label for="time-t">Time</label>
-      <input id="time-t" type="range" min="0" max="1439" step="5" value="420" aria-label="Time of day">
-      <output id="time-out">—</output>
-    </div>
-    <p id="sun-events" class="dim small">—</p>
-    <div class="chips" id="cam-chips" role="group" aria-label="Camera"></div>
-    <div class="row"><label for="fp-t">Walk</label>
-      <input id="fp-t" type="range" min="0" max="1000" step="1" value="0" aria-label="Position along the route">
-      <output id="fp-out">—</output>
-    </div>
-    <div class="actions">
-      <button id="btn-fly" class="btn">Fly the route</button>
-      <button id="btn-orbit" class="btn">Free orbit</button>
-    </div>
+  <section class="card" id="card" hidden aria-labelledby="card-kind">
+    <div class="card-kind"><span id="card-kind"></span><button class="card-close" id="card-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <p class="card-fig"><span id="card-num"></span><span class="unit" id="card-unit"></span></p>
+    <div id="card-body"></div>
   </section>
 
-  <!-- stop 2: everything else -->
-  <section id="more2">
-    <div class="rowline"><h2>Terrain</h2></div>
-    <div class="row"><label for="exag">Vertical</label>
-      <input id="exag" type="range" min="1" max="3" step="0.1" value="1" aria-label="Vertical exaggeration">
-      <output id="exag-out">×1.0 (true)</output>
-    </div>
+  <div class="notice" id="notice" role="alert" hidden></div>
+</main>
 
-    <div class="rowline"><h2>Tools</h2></div>
-    <div class="chips" id="tool-chips" role="group" aria-label="Tools"></div>
-    <div class="row"><label for="eye-h">Eye height</label>
-      <input id="eye-h" type="range" min="1.7" max="60" step="0.3" value="1.7" aria-label="Eye height above the ground for the visibility tools">
-      <output id="eye-out">1.7 m</output>
-    </div>
-    <div id="tool-body" class="tool-body" hidden></div>
+<!-- The caption under the plate: north and the scale, the legend rows of a colored layer, what the
+     picture is (the Burn's sentence), and the credits, on screen in every mode. -->
+<section class="caption" id="caption" aria-label="Caption and credits">
+  <div class="inst" data-boot hidden>
+    <svg id="compass" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Compass"><path id="gridn" class="gn" d="M12 12V3"/><g id="needle"><path class="fill" d="M12 5.5l2.2 6.5h-4.4z"/><path class="tail" d="M12 12v5"/></g><text id="cn" x="12" y="2.5">N</text></svg>
+    <span id="scale-len"></span><span class="sbar" id="scale-bar"></span><span id="scale-sub"></span>
+  </div>
+  <div id="legends">
+    <div class="legend" id="lg-slope" hidden><span class="lt">Slope angle</span><div class="ls"><div class="lb" id="lb-slope"></div><div class="lk"><span class="first">0°</span><span style="left:50%">30°</span><span style="left:66.67%">40°</span><span class="last">60°</span></div></div></div>
+    <div class="legend" id="lg-bands" hidden><span class="lt">Elevation</span><div class="ls"><div class="lb" id="lb-bands"></div><div class="lk" id="lk-bands"><span class="first" id="lb-lo"></span><span></span><span></span><span></span><span></span><span></span><span class="last" id="lb-hi"></span></div></div></div>
+    <div class="legend" id="lg-view" hidden><span class="lt" id="lt-view">Viewshed</span><div class="ls"><div class="lb" id="lb-view"></div><div class="lk"><span style="left:25%">seen</span><span style="left:75%">hidden</span></div></div></div>
+  </div>
+  <div class="capbox"><p id="cap"></p><p id="cap-tool"></p></div>
+  <p class="credits" id="credits" translate="no"></p>
+</section>
 
-    <div class="rowline"><h2>Walking pace</h2></div>
-    <div class="row note"><label for="pace-model">Model</label>
-      <select id="pace-model" class="pick">
-        <option value="tobler">Tobler</option>
-        <option value="naismith">Naismith + Langmuir</option>
-      </select>
-      <output id="pace-out">—</output>
-    </div>
-    <div class="row"><label for="pace-fit">Pace</label>
-      <input id="pace-fit" type="range" min="0.7" max="1.6" step="0.05" value="1" aria-label="Pace factor">
-      <output id="fit-out">×1.00</output>
-    </div>
-    <p id="pace-note" class="dim small"></p>
+<footer class="player" id="player" inert>
+  <div class="time-row">
+    <p class="valid"><span id="t-date"></span><span class="zone" id="t-zone"></span></p>
+    <p class="lead"><span id="lead-a"></span><span class="wide" id="lead-b"></span></p>
+  </div>
+  <div class="controls" data-boot hidden>
+    <button type="button" class="tkey" id="t-prev" aria-label="Previous day"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M7.5 1 3 6l4.5 5"/></svg></button>
+    <button type="button" class="tkey play" id="t-play" aria-label="Play" aria-describedby="play-hint"><span class="shutter"><svg id="ico-play" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg><svg id="ico-pause" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" hidden><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg></span></button>
+    <button type="button" class="tkey" id="t-next" aria-label="Next day"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4.5 1 9 6l-4.5 5"/></svg></button>
+    <div class="track" id="slider" role="slider" tabindex="0" aria-label="Time of day" aria-describedby="burn-desc" aria-valuemin="0" aria-valuemax="287" aria-valuenow="0"><canvas id="track" aria-hidden="true"></canvas></div>
+  </div>
+  <span class="sr" id="play-hint">Plays the day, one hour a second.</span><span class="sr" id="burn-desc"></span>
+</footer>
 
-    <div class="rowline"><h2>Saved viewpoints</h2></div>
-    <div class="chips" id="vp-chips" role="group" aria-label="Saved viewpoints"></div>
-    <div class="actions">
-      <button id="btn-save-vp" class="btn">Save this view</button>
-      <button id="btn-clear-vp" class="btn">Clear mine</button>
-    </div>
+<section class="sheet s0" id="sheet" aria-label="Controls">
+  <button type="button" class="grip" id="grip" aria-label="Show more controls"><span class="bar"></span><svg class="chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 8l4-4 4 4"/></svg></button>
+  <p class="walk" data-boot hidden><b id="s-dist"></b> walked, at <b id="s-elev"></b>, <b id="s-grad"></b> grade, <b id="s-time"></b> left</p>
+  <svg id="profile" data-boot hidden preserveAspectRatio="none" role="slider" tabindex="0" aria-label="Elevation profile. Drag to move the marker on the terrain." aria-valuemin="0" aria-valuenow="0"></svg>
+  <div class="foot" data-boot hidden><p id="s-updown"></p><button type="button" class="textkey framed" id="btn-dir" translate="no"></button></div>
 
-    <div class="rowline"><h2>Display</h2></div>
-    <div class="toggles">
-      <label><input id="t-debug" type="checkbox"> Debug readout</label>
-      <label><input id="t-labels" type="checkbox" checked> Place names</label>
-    </div>
-    <p id="notices" class="notice" hidden></p>
+  <section id="more1" data-boot hidden>
+    <h2>Sun and shadow</h2>
+    <div class="row"><label for="date-d">Date</label><input id="date-d" type="range" min="1" max="365" step="1" aria-label="Date, day of year"><output id="date-out"></output></div>
+    <p class="note" id="sun-events"></p>
+    <div class="words"><button type="button" class="word" id="cam-whole">Whole area</button><button type="button" class="word" id="cam-route">On the route</button><button type="button" class="word" id="btn-fly">Fly the route</button><button type="button" class="word" id="btn-orbit">Free orbit</button></div>
+  </section>
+
+  <section id="more2" data-boot hidden>
+    <h2>Terrain</h2>
+    <div class="row"><label for="exag">Vertical</label><input id="exag" type="range" min="1" max="3" step="0.1" aria-label="Vertical exaggeration"><output id="exag-out"></output></div>
+    <h2>Tools</h2>
+    <div class="words" id="tool-words" role="group" aria-label="Tools"><button type="button" class="word" data-tool="measure" aria-pressed="false">Measure</button><button type="button" class="word" data-tool="los" aria-pressed="false">Line of sight</button><button type="button" class="word" data-tool="viewshed" aria-pressed="false">Viewshed</button><button type="button" class="word" id="tool-clear">Clear</button></div>
+    <div class="row"><label for="eye-h">Eye height</label><input id="eye-h" type="range" min="1.7" max="60" step="0.3" aria-label="Eye height above the ground for the visibility tools"><output id="eye-out"></output></div>
+    <h2>Walking pace</h2>
+    <div class="words" id="pace-words" role="radiogroup" aria-label="Walking model"><button type="button" class="word" role="radio" data-model="tobler" aria-checked="true">Tobler</button><button type="button" class="word" role="radio" data-model="naismith" aria-checked="false">Naismith and Langmuir</button></div>
+    <div class="row"><label for="pace-fit">Pace</label><input id="pace-fit" type="range" min="0.7" max="1.6" step="0.05" aria-label="Pace factor"><output id="fit-out"></output></div>
+    <p class="note"><span id="pace-out"></span>. <span id="pace-note"></span></p>
+    <h2>Saved viewpoints</h2>
+    <div class="words" id="vp-chips" role="group" aria-label="Saved viewpoints"></div>
+    <div class="words"><button type="button" class="word" id="btn-save-vp">Save this view</button><button type="button" class="word" id="btn-clear-vp">Clear mine</button></div>
   </section>
 </section>
 
-<aside id="layers" class="sheet-right" hidden aria-label="Shading layers">
-  <div class="sheet-head">
-    <h2>Layers</h2>
-    <button class="pill" data-close>Done</button>
+<div class="dlg" id="about" hidden>
+  <div class="dlg-panel" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="dlg-head"><h2 id="about-title">About this data</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="dlg-body">
+      <p class="ab-lead"><b>Not a navigation tool.</b> <span id="ab-lead"></span></p>
+      <section>
+        <h3>What the picture is</h3>
+        <p>The mountain is lit by the real sun for the date and the time shown: the sun's position is computed for this place, and the shadows the ridges cast are swept over the height grid for that instant, not guessed from the slope. A fixed mapmaker's lamp from the northwest adds relief that reads at any hour, and the 100&#8239;m contours are drawn from the true height.</p>
+        <p>The plate keeps one daylight look in both of the phone's themes: a dark version would turn the lit faces dark and drown the shadows, so only the chrome around it follows the theme. That is a display choice, not data.</p>
+        <p>The time track under the picture is a sunshine recorder's card for the point under the marker: the sun's arc for the day, 0.4&#8239;px for each degree it stands above the horizon, burned in wherever the terrain leaves that point in direct sun. Where the arc is drawn only as a line, the sun is up but a ridge hides it. It is direct sun as this terrain allows it: no cloud, haze, trees, buildings or snow; the sun treated as a point, so the first sun is when its center clears the ridge; the terrain at 16&#8239;m in the detailed box and 64&#8239;m beyond it. It is not a forecast of sunshine hours.</p>
+        <p>The scale bar is true at one distance, the ground in the middle of the view, and says which. Lakes are drawn at the level the lidar reads.</p>
+      </section>
+      <div id="ab-gen"></div>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>Every file was built once from the sources above by the pipeline in the app's tools/ folder (tools/build_all.sh) and travels inside the app. Nothing is fetched, and the app has no position fix and reads no sensor.</p>
+        <p id="ab-boat"></p>
+        <p>Solar position uses the NOAA Solar Calculator algorithm (Meeus, Astronomical Algorithms), written out in this app: about a minute on sunrise and sunset inside 72° of latitude. Times are Norwegian, CET and CEST in summer, from the European rule, not from this phone's clock. Bearings are true; magnetic declination is not modeled.</p>
+        <p>One finger turns the view, two fingers move it, a pinch zooms, and the keys at the right zoom and fit the route. Tap the ground to put the marker there. A double-tap, the F key or the corner key hides the controls; the corner key, Escape or a double-tap brings them back. While a tool waits for points the double-tap stands down.</p>
+      </section>
+      <button type="button" class="textkey dlg-foot" data-close>Close</button>
+    </div>
   </div>
-  <div id="layer-rows" class="layer-rows"></div>
-  <p id="layer-note" class="dim small"></p>
-</aside>
+</div>
 
-<aside id="about" class="sheet-right" hidden aria-label="About the data">
-  <div class="sheet-head">
-    <h2>About</h2>
-    <button class="pill" data-close>Done</button>
+<div class="dlg" id="layers" hidden>
+  <div class="dlg-panel" role="dialog" aria-modal="true" aria-labelledby="layers-title">
+    <div class="dlg-head"><h2 id="layers-title">Layers</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="dlg-body"><div id="layer-rows"></div><p class="note" id="layer-note"></p><button type="button" class="textkey dlg-foot" data-close>Close</button></div>
   </div>
-  <div id="about-body" class="prose"></div>
-</aside>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
 
 <script type="module" src="app.js"></script>
 </body>

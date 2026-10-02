@@ -1,16 +1,16 @@
 // The terrain: tile store, height sampling, the two flat analysis grids, and the LOD quadtree.
 //
 // Tile format (data contract, NOTES/DESIGN.md sections 3 and 6): 65 x 65 uint16 little-endian
-// samples per tile, 8450 bytes, row 0 north, column 0 west, quantised per tile between dmin and
-// dmax in integer decimetres. Decoding rounds to the integer decimetre BEFORE dividing, which is
-// what makes two tiles that share an edge agree bit for bit — the flat analysis grids and the
+// samples per tile, 8450 bytes, row 0 north, column 0 west, quantized per tile between dmin and
+// dmax in integer decimeters. Decoding rounds to the integer decimeter BEFORE dividing, which is
+// what makes two tiles that share an edge agree bit for bit: the flat analysis grids and the
 // crack-free same-level joins both depend on that.
 
 import * as THREE from '../vendor/three.module.js';
 import { MaxHeap, clamp } from './util.js';
 
 export const CELLS = 64;              // cells across a tile
-export const SAMPLES = CELLS + 1;     // 65 samples, edges shared with the neighbour
+export const SAMPLES = CELLS + 1;     // 65 samples, edges shared with the neighbor
 const SURF_VERTS = SAMPLES * SAMPLES; // 4225
 const SKIRT_VERTS = 4 * SAMPLES;      // 260
 export const TILE_VERTS = SURF_VERTS + SKIRT_VERTS;   // 4485
@@ -20,7 +20,7 @@ export const TRIS_PER_TILE = 2 * CELLS * CELLS + 4 * CELLS * 2;  // 8704
 // budget with 7 % of headroom. It is a constant, not a hope.
 export const MAX_TILES = 160;
 const POOL_SLOTS = 200;               // built geometries kept resident; churn above this rebuilds
-const SKIRT_CELLS = 4;                // skirt depth = 4 cells, in metres, scaled by exaggeration
+const SKIRT_CELLS = 4;                // skirt depth = 4 cells, in meters, scaled by exaggeration
 
 // ---------------------------------------------------------------- shared geometry template
 // Every tile of every level shares one position buffer and one index buffer. Local coordinates
@@ -144,7 +144,7 @@ export class Terrain {
     return L.map.get(`${tx}:${ty}`) || null;
   }
 
-  // Bilinear height in metres from the deepest level that covers the point. Used by the route
+  // Bilinear height in meters from the deepest level that covers the point. Used by the route
   // drape check, the camera ground clamp, the marker and every readout.
   heightAt(x, y) {
     for (let li = this.maxLevel; li >= 0; li--) {
@@ -166,7 +166,7 @@ export class Terrain {
   // ---------- the two flat grids ----------
   // Viewshed, line of sight, first and last sun, the camera clamp and the terrain marker all want
   // a plain array, not a quadtree. Both are assembled from tiles already downloaded, so they cost
-  // nothing on disk, and because the quantisation round-trips exactly they are bit-identical to
+  // nothing on disk, and because the quantization round-trips exactly they are bit-identical to
   // what the pipeline decimated.
   buildAnalysisGrids(onNote) {
     const core = this._flatten(this.levels.find((L) => L.region === 'core' && L.res === 16)
@@ -178,7 +178,7 @@ export class Terrain {
   }
   _flatten(L, onNote) {
     const nx = L.grid.nx * CELLS + 1, ny = L.grid.ny * CELLS + 1;
-    const g = new Uint16Array(nx * ny);          // decimetres
+    const g = new Uint16Array(nx * ny);          // decimeters
     const cov = new Uint8Array(L.grid.nx * L.grid.ny);
     for (const tile of L.tiles) {
       cov[tile.ty * L.grid.nx + tile.tx] = 1;
@@ -222,7 +222,7 @@ export class Terrain {
     };
   }
 
-  // Bilinear metres from a flat grid; outside it, the nearest edge.
+  // Bilinear meters from a flat grid; outside it, the nearest edge.
   gridSample(g, x, y) {
     const u = clamp((x - g.x0) / g.res, 0, g.nx - 1.0001);
     const v = clamp((g.y1 - y) / g.res, 0, g.ny - 1.0001);
@@ -326,8 +326,8 @@ export class Terrain {
     slot.key = key;
     this.byKey.set(key, slot);
 
-    // A padded 67 x 67 window, so the gradient at a tile edge uses the neighbour's real sample
-    // rather than a one-sided difference. Same-level neighbours share the edge exactly, so this
+    // A padded 67 x 67 window, so the gradient at a tile edge uses the neighbor's real sample
+    // rather than a one-sided difference. Same-level neighbors share the edge exactly, so this
     // is not an approximation: it is the true central difference.
     const P = SAMPLES + 2, pad = this._pad;
     for (let r = 0; r < SAMPLES; r++) {
@@ -399,7 +399,7 @@ export class Terrain {
     const frustum = _frustum;
     // The renderer is what normally refreshes matrixWorldInverse, and it has not run yet this
     // frame. Without this line the first selection is made against an identity view matrix and
-    // culls almost the whole model — and because the app renders on change, it then stays that
+    // culls almost the whole model, and because the app renders on change, it then stays that
     // way.
     camera.updateMatrixWorld();
     camera.matrixWorldInverse.copy(camera.matrixWorld).invert();

@@ -1,20 +1,13 @@
-Copyright 2020 Braille Institute of America, Inc.
-Copyright 2020 The Newsreader Project Authors (http://github.com/productiontype/Newsreader)
+fonts/ysabeau-office-gw.woff2 is a subset of Ysabeau Office by Christian Thalmann, cut by
+tools/art/font_subset.py from google/fonts commit 9710da1eacb3be272583c3224dcb70f9da6eadbb,
+ofl/ysabeauoffice/YsabeauOffice[wght].ttf: weight 400-650, Latin characters only.
+Ysabeau Office declares no Reserved Font Name.
 
-The two notices above are quoted verbatim from the fonts themselves (OpenType name ID 0) and
-cover the four .woff2 files in this folder:
-
-    atkinson-hyperlegible-latin-400-normal.woff2   Atkinson Hyperlegible Regular
-    atkinson-hyperlegible-latin-700-normal.woff2   Atkinson Hyperlegible Bold
-    newsreader-latin-400-italic.woff2              Newsreader 16pt Italic
-    newsreader-latin-500-normal.woff2              Newsreader 16pt Medium
-
-Neither family declares a Reserved Font Name in its own metadata, so none is claimed here.
+Copyright 2023 The Ysabeau Project Authors (https://github.com/CatharsisFonts/Ysabeau)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
-https://openfontlicense.org
-
+https://scripts.sil.org/OFL
 
 
 -----------------------------------------------------------
@@ -30,7 +23,7 @@ with others.
 
 The OFL allows the licensed fonts to be used, studied, modified and
 redistributed freely as long as they are not sold by themselves. The
-fonts, including any derivative works, can be bundled, embedded,
+fonts, including any derivative works, can be bundled, embedded, 
 redistributed and/or sold with any software provided that any reserved
 names are not used by derivative works. The fonts and derivatives,
 however, cannot be released under any other type of license. The

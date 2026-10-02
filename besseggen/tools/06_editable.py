@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""Step 6 — the five files a person is expected to open and edit.
+"""Step 6: the five files a person is expected to open and edit.
 
     waypoints.json   the named points on the walk, with a sentence each
-    viewpoints.json  the saved cameras — and the six corridor anchors, so the cameras and the
+    viewpoints.json  the saved cameras, and the six corridor anchors, so the cameras and the
                      level-of-detail corridor can never drift apart
     pace.json        the walking-speed model
     colors.json      the layer palette, light and dark
-    about.json       the sources, the licences, and the honesty text
+    about.json       the sources, the licenses, and the honesty text
 
-Every number in here is derived from the data built by steps 3 to 5 — waypoint heights from the
-terrain, camera headings from the geometry — so nothing drifts if the model is rebuilt.
+Every number in here is derived from the data built by steps 3 to 5: waypoint heights from the
+terrain, camera headings from the geometry. Nothing drifts if the model is rebuilt.
 
 There is deliberately NO boat timetable, here or anywhere in data/ (NOTES/OWNER-DECISIONS.md,
 2026-09-22). It is the one thing in the brief that cannot be built honestly: it changes every
-season, has no open source with a licence and a date, and would ship as an unverified placeholder
+season, has no open source with a license and a date, and would ship as an unverified placeholder
 for a boat people plan a mountain day around. about.json carries one sentence saying so, with no
 times and no link.
 """
@@ -182,48 +182,48 @@ def main():
 
     # ------------------------------------------------------------------ colors.json
     geom.write_json(os.path.join(DATA, 'colors.json'), {
-        'note': 'One palette per colour scheme; the keys match the layer switches. Elevation bands '
+        'note': 'One palette per color scheme; the keys match the layer switches. Elevation bands '
                 'run from Gjende at 984 m to Surtningssue at 2367 m.',
         'light': {'sky': '#dfe7ef', 'terrain': '#cfc6b4', 'terrainLow': '#9db183',
                   'water': '#9fb9cf', 'glacier': '#e8eef2', 'route': '#c0392b',
                   'routeAlt': '#2c3e50', 'marker': '#111418',
                   'contour20': '#00000018', 'contour100': '#00000038',
-                  'slope30': '#e67e22', 'slope40': '#c0392b',
+                  'slope30': '#e67e22', 'slope40': '#8e1f4f',
                   'sunlit': '#fffaf0', 'shadow': '#5a6b80', 'viewshed': '#3fa7a0'},
         'dark': {'sky': '#0d1218', 'terrain': '#565043', 'terrainLow': '#3c4a33',
                  'water': '#2d4257', 'glacier': '#7f8f9b', 'route': '#e8705f',
                  'routeAlt': '#9fb2c6', 'marker': '#f2f4f7',
                  'contour20': '#ffffff14', 'contour100': '#ffffff2e',
-                 'slope30': '#d98a3a', 'slope40': '#e06a54',
+                 'slope30': '#d98a3a', 'slope40': '#b64770',
                  'sunlit': '#e9e3d4', 'shadow': '#1b2531', 'viewshed': '#4fd0c6'},
         'elevationBands': [{'toM': 1000, 'color': '#4a6b3f'},
-                           {'toM': 1400, 'color': '#8a8158'},
-                           {'toM': 1800, 'color': '#9b9182'},
+                           {'toM': 1400, 'color': '#908862'},
+                           {'toM': 1800, 'color': '#b3a99a'},
                            {'toM': 2400, 'color': '#f2f2f4'}]})
 
     # ------------------------------------------------------------------ about.json
     manifest = json.load(open(os.path.join(DATA, 'manifest.json'), encoding='utf-8'))
     geom.write_json(os.path.join(DATA, 'about.json'), {
         'boat': 'Most people take the MS Gjende boat one way along the lake. The timetable '
-                'changes every season and is deliberately not in this app — check the current one '
+                'changes every season and is deliberately not in this app. Check the current one '
                 'with the operator before you plan the day.',
         'notNavigation': 'This is a planning tool. It has no position fix, no compass and no live '
                          'weather. Besseggen is exposed, the scramble is real, and the weather '
-                         'turns fast — carry a map and compass and check conditions before you go.',
+                         'turns fast. Carry a map and compass and check conditions before you go.',
         'fixtureWarning': None,
         'terrain': {
             'name': 'Nasjonal høydemodell DTM1',
             'owner': 'Kartverket',
             'resolutionM': 1,
             'modelResolutionM': geom.MASTER_RES,
-            'licence': 'Open data — NLOD 2.0 / CC BY 4.0',
+            'licence': 'Open data: NLOD 2.0 / CC BY 4.0',
             'retrieved': geom.RETRIEVED,
             'projects': manifest['source']['projects'],
             'accuracy': f"The source is a 1 m lidar terrain model. This app holds it resampled to "
                         f"{geom.MASTER_RES} m along the route, 4 m for 800 m either side, 8 m out "
                         f"to 4 km, 16 m across the rest of the detailed box and 64 m for the "
                         f"horizon ring. Heights carry the source's own error, which on open "
-                        f"mountain is a few decimetres and on a cliff or under water is worse: "
+                        f"mountain is a few decimeters and on a cliff or under water is worse: "
                         f"lidar reads the water surface, so the ground under Gjende sits at "
                         f"the lake's own level.",
             'elevationRangeM': [manifest['elevation']['core']['minM'],
@@ -232,12 +232,12 @@ def main():
         'trails': {
             'name': 'Turrutebasen (Tur- og friluftsruter)',
             'owner': 'Kartverket',
-            'licence': 'Open data — no conditions apply to access and use',
+            'licence': 'Open data: no conditions apply to access and use',
             'retrieved': geom.RETRIEVED,
             'sourceUpdated': route['sourceUpdated'],
-            'accuracy': 'Route geometry is generalised and largely contributed by clubs, '
+            'accuracy': 'Route geometry is generalized and largely contributed by clubs, '
                         'associations and individuals, so quality varies by route. The Besseggen '
-                        'line is not labelled "Besseggen" in the source; it was assembled as the '
+                        'line is not labeled "Besseggen" in the source; it was assembled as the '
                         'shortest marked path from Gjendesheim to Memurubu.',
         },
         'route': {
@@ -252,16 +252,16 @@ def main():
                            f"three-sample box. Without that smoothing the same line gives "
                            f"{round(stats['unsmoothedAscentM'])} m of ascent, and read at the "
                            f"source's own vertex spacing it gives "
-                           f"{round(stats['rawAscentM'])} m — a 1 m model counts boulders as "
+                           f"{round(stats['rawAscentM'])} m: a 1 m model counts boulders as "
                            f"climbing. The figure shown is the smoothed one.",
         },
         'mapData': {'name': 'N50 Kartdata', 'owner': 'Kartverket', 'licence': 'CC BY 4.0',
                     'retrieved': geom.RETRIEVED,
                     'note': 'Lakes, rivers and glaciers, for kommunes 3434 Lom and 3435 Vågå. '
                             'Gjende arrives cut at the kommune border and is rejoined here. '
-                            'N50 states a lake\'s height as a whole metre; the surface drawn in '
+                            'N50 states a lake\'s height as a whole meter; the surface drawn in '
                             'the app is the water level the lidar reads, floored at that integer '
-                            'and lifted a decimetre, and each lake carries both figures.'},
+                            'and lifted a decimeter, and each lake carries both figures.'},
         'placeNames': {'name': 'Sentralt stedsnavnregister (SSR)', 'owner': 'Kartverket',
                        'licence': 'CC BY 4.0', 'retrieved': geom.RETRIEVED,
                        'note': 'Heights are sampled from the terrain: SSR carries none.'},

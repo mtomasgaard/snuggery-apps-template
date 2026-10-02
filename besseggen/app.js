@@ -1,28 +1,28 @@
-// Besseggen — an offline 3D terrain viewer for the ridge between Gjende and Bessvatnet.
+// Besseggen: an offline 3D terrain viewer for the ridge between Gjende and Bessvatnet.
 //
-// This file wires the pieces together and owns the render scheduler. Everything else lives in
-// js/: the tile store and quadtree (terrain.js), the shading shader (material.js), solar
-// position and cast shadows (sun.js), viewshed and line of sight (analysis.js), the walk and the
-// walking-time models (route.js), the profile strip (profile.js), the camera modes (camera.js),
-// the trail, lakes and masks (overlays.js), loading and re-reading (data.js), coordinates
-// (geo.js), focus mode (focus.js) and the small shared helpers (util.js).
-//
-// Nothing here draws on a loop. A frame is scheduled when something changed and the scheduler
-// stops as soon as nothing is animating.
+// This file wires the pieces together and owns the render scheduler; each file in js/ says in its
+// head what it holds. Nothing draws on a loop: a frame is drawn when something changed, and play
+// draws one per step. The look is ART.md; what the data is, NOTES.md.
 
 import * as THREE from './vendor/three.module.js';
-import { $, $$, clamp, store, fmt, fmtDist, fmtHM, fmtClock, fmtDate, fmtDateShort, dayOfYear, daysInMonth, compassPoint, escapeHtml, DEG, RAD } from './js/util.js';
-import { Frame, fmtLonLat } from './js/geo.js';
+import { $, $$, clamp, store, dayOfYear, daysInMonth, escapeHtml, DEG, RAD } from './js/util.js';
+import * as U from './js/units.js';
+import { Frame } from './js/geo.js';
 import { DataSet, onRegainFocus } from './js/data.js';
 import { Terrain, MAX_TILES, TRIS_PER_TILE } from './js/terrain.js';
 import { makeTerrainMaterial, applyPalette, makeMaskTexture, setGridRect } from './js/material.js';
-import { sunAt, dayEvents, sunVector, shadowMask, makeSeed, directSunWindow, tzName, tzOffsetHours } from './js/sun.js';
-import { viewshed, lineOfSight, visiblePeaks, visibleFrom, measure, benchGrid } from './js/analysis.js';
+import { sunAt, dayEvents, sunVector, shadowMask, makeSeed, directSunWindow, tzOffsetHours } from './js/sun.js';
+import { viewshed, lineOfSight, visiblePeaks, visibleFrom, measure } from './js/analysis.js';
 import { Route, timeForSegments, paceLabel, langmuirNote } from './js/route.js';
 import { Profile } from './js/profile.js';
 import { CameraRig, reduceMotion } from './js/camera.js';
 import { setupFocus } from './js/focus.js';
+import { createTrack, STEPS } from './js/track.js';
+import { PLATE } from './js/plate.js';
 import { makeLineMaterial, buildLine, buildLines, lineFeatureToPoints, buildWater, makeWaterMaterial, buildMask, colorOf } from './js/overlays.js';
+
+// The credit line on screen in every mode (owner call 8); every source in full is in About.
+const CREDITS = 'Terrain, trail, lakes and names: Kartverket, CC BY 4.0';
 
 // ---------------------------------------------------------------- state
 const today = new Date();
@@ -34,57 +34,91 @@ const S = {
     route: true, rivers: true, viewshed: true, labels: true,
   }, store.get('layers', {})),
   date: store.get('date', { y: today.getFullYear(), mo: 6, d: 14 }),
-  minutes: store.get('minutes', 7 * 60),
+  minutes: clamp(Math.round(store.get('minutes', 7 * 60) / 5) * 5, 0, 1435),
   exag: store.get('exag', 1),
   reversed: store.get('reversed', false),
   cursor: store.get('cursor', 0),
   marker: store.get('marker', null),
   paceModel: store.get('paceModel', null),
   paceFit: store.get('paceFit', null),
-  debug: store.get('debug', false),
   savedViews: store.get('savedViews', []),
   eyeM: store.get('eyeM', 1.7),
   tool: null,
+  card: null,          // what the card shows: 'point', or a tool's id
+  dialog: null,        // 'about' or 'layers' while one is open
 };
 const save = () => {
-  store.set('sheet', S.sheet); store.set('layers', S.layers); store.set('date', S.date);
-  store.set('minutes', S.minutes); store.set('exag', S.exag); store.set('reversed', S.reversed);
-  store.set('cursor', S.cursor); store.set('marker', S.marker); store.set('debug', S.debug);
-  store.set('paceModel', S.paceModel); store.set('paceFit', S.paceFit);
-  store.set('savedViews', S.savedViews);
-  store.set('eyeM', S.eyeM);
-  store.set('camera', rig ? rig.serialise() : null);
+  for (const k of ['sheet', 'layers', 'date', 'minutes', 'exag', 'reversed', 'cursor', 'marker', 'paceModel', 'paceFit', 'savedViews', 'eyeM']) store.set(k, S[k]);
+  store.set('camera', rig ? rig.serialize() : null);
 };
+const say = (t) => { $('live').textContent = ''; requestAnimationFrame(() => { $('live').textContent = t; }); };
+const text = (id, t) => { const e = $(id); if (e.textContent !== t) e.textContent = t; };
+const attr = (e, k, v) => { if (e.getAttribute(k) !== String(v)) e.setAttribute(k, v); };
 
 // ---------------------------------------------------------------- renderer
 const canvas = $('gl');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+let renderer;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(55, 1, 4, 140000);
 const raycaster = new THREE.Raycaster();
 
-let data, frame, terrain, mat, route, profile, rig, focus, waterMesh, waterMat, lineMat, routeLine,
-  altLine, connLine, riverLine, toolLine, markerLine, shadowCore, shadowShell, viewshedTex,
-  shadowBuf, shellBuf, viewshedInfo = null, sunInfo = null, events = null;
+let data, frame, terrain, mat, route, profile, rig, focus, track, waterMesh, waterMat, lineMat, routeLine,
+  connLine, riverLine, toolLine, markerLine, shadowCore, shadowShell, viewshedTex,
+  shadowBuf, shellBuf, viewshedInfo = null, sunInfo = null, events = null, burn = null, projErr = 0;
 let scheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-const timings = { shadowMs: 0, viewshedMs: 0, selectMs: 0, frameMs: 0, buildMs: 0 };
+const timings = { shadowMs: 0, viewshedMs: 0, selectMs: 0, frameMs: 0 };
+
+// A problem is a sentence on the plate, never a blank screen (HOUSE.md section 4.9).
+function fail(msg) {
+  $('notice').textContent = msg; $('notice').hidden = false;
+  text('stamp', 'Besseggen could not start.');
+  for (const id of ['keys', 'sheet', 'player']) $(id).hidden = true;
+}
+
+// ---------------------------------------------------------------- the time: wanted, then shown
+// The scrub rule (HOUSE.md 4.6; ART.md B3): handlers record the wanted step or date; the frame takes
+// the newest, computes its sun and cast shadows, then draws: every frame shows one instant.
+let want = null, play = null, held = false, logOn = false, flog = [], lit = '', playTimer = 0, sweeps = 0;
+const dateKey = (d) => `${d.y}-${d.mo}-${d.d}`;
+const RM = matchMedia('(prefers-reduced-motion: reduce)');
+
+function setPlaying(on) {
+  play = on ? { t0: performance.now(), from: S.minutes / 5 >= STEPS - 1 ? 0 : S.minutes / 5 } : null;
+  $('t-play').setAttribute('aria-label', on ? 'Pause' : 'Play');
+  // an <svg> has no `hidden` property: the attribute is what is toggled
+  $('ico-play').toggleAttribute('hidden', on); $('ico-pause').toggleAttribute('hidden', !on);
+  clearTimeout(playTimer);
+  invalidate();
+}
 
 // ---------------------------------------------------------------- render scheduler
-let queued = false, lastT = 0, shadowDirty = false, shadowTimer = 0;
+let queued = false, lastT = 0;
 function invalidate() { if (!queued) { queued = true; requestAnimationFrame(frameLoop); } }
 
 function frameLoop(t) {
   queued = false;
+  if (S.dialog) return;                  // About and Layers cover the plate: nothing is drawn under them
   const dt = lastT ? t - lastT : 16; lastT = t;
   const t0 = performance.now();
+  if (play) {
+    // the day at an hour a second; under Reduce Motion in whole hours, once a second
+    const e = (t0 - play.t0) / 1000, k = RM.matches ? Math.floor(e) * 12 : Math.floor(e * 12);
+    want = { ...want, step: Math.min(STEPS - 1, play.from + k) };
+    if (play.from + k >= STEPS - 1) setPlaying(false);
+    // the next frame at the next step, not on every display refresh
+    else { clearTimeout(playTimer); playTimer = setTimeout(invalidate, play.t0 + (RM.matches ? Math.floor(e) + 1 : (k + 1) / 12) * 1000 - t0); }
+  }
+  if (want) {
+    const w = want; want = null;
+    const day = w.date && dateKey(w.date) !== dateKey(S.date);
+    if (day) S.date = w.date;
+    if (w.step != null) S.minutes = w.step * 5;
+    if (day) newDay();
+    applyTime();
+  }
   let busy = rig.update(dt, route, S.reversed);
   if (rig.flying) {
-    // The walk slider, the profile cursor and the readouts follow the fly-through. No saving
-    // while it runs: a localStorage write per frame is not worth it, and the state is stored
-    // again when it stops.
-    $('fp-t').value = String(Math.round(rig.routeT * 1000));
+    // The profile cursor follows the fly-through; the state is stored again when it stops.
     const i = route.indexAtDist(rig.routeT * route.length, S.reversed);
     if (i !== S.cursor) setCursor(i, false, false);
   }
@@ -103,24 +137,113 @@ function frameLoop(t) {
   renderer.render(scene, camera);
   updateLabels();
   updateGauge();
+  if (S.card) placeCard();
+  track.draw(S.minutes / 5);
   timings.frameMs = performance.now() - t0;
-  if (S.debug) updateDebug();
+  if (logOn) flog.push({ t: t0, pressed: track.pressed, finger: track.finger, wanted: track.wanted, shown: S.minutes / 5, label: $('t-date').textContent, sun: sunInfo.key, shadow: shadowKey, playing: !!play, ms: timings.shadowMs, n: sweeps });
   if (busy || sel.pending > 0) invalidate();
+}
+
+// The instant shown: the sun, its cast shadows, the time row, the lead and the track's value.
+let shadowKey = '';
+function applyTime() {
+  const { y, mo, d } = S.date, key = `${dateKey(S.date)} ${S.minutes}`;
+  if (key === shadowKey) return;          // the instant shown already: no second sweep
+  const s = sunAt(y, mo, d, S.minutes, frame.centerLat, frame.centerLon);
+  s.key = key;
+  sunInfo = s;
+  const v = sunVector(s.az, s.elevApparent, frame.convergence);
+  mat.uniforms.uSunDir.value.set(v.x, v.y, v.z).normalize();
+  mat.uniforms.uSunUp.value = s.elevApparent > -0.5 ? 1 : 0;
+  waterMat.uniforms.uSunDir.value.set(v.x, v.y, v.z);
+  waterMat.uniforms.uSunUp.value = s.elevApparent > 0 ? 1 : 0;
+  computeShadows();
+  timeWords();
+}
+function timeWords() {
+  const { y, mo, d } = S.date, s = sunInfo;
+  const off = tzOffsetHours(y, mo, d, S.minutes), up = s.elevApparent > 0;
+  text('t-date', `${U.date(y, mo, d)}, ${U.clock(S.minutes)}`);
+  text('t-zone', `${U.NN}${U.zone(off)}`);
+  text('lead-a', up ? `Sun ${U.deg(s.elevApparent)} up, ${U.wind(s.az)}` : `Sun below the horizon (${U.deg(s.elevApparent)})`);
+  text('lead-b', up ? ` (${U.deg(s.az, 0)})` : '');
+  const sl = $('slider');
+  attr(sl, 'aria-valuenow', S.minutes / 5);
+  const k = burn && burn.lit[Math.floor(S.minutes / 2)];
+  lit = up ? (k ? ' The marker is in direct sun.' : ' The marker is in shadow.') : '';
+  attr(sl, 'aria-valuetext', `${U.date(y, mo, d, 0, 1)}, ${U.clock(S.minutes)} ${U.zoneSpoken(off)}. ${up
+    ? `Sun ${U.int(s.elevApparent)} degrees up in the ${U.wind(s.az, 1)}.` : 'The sun is below the horizon.'}${lit}`);
+}
+
+function computeShadows() {
+  const s = sunInfo;
+  const core = terrain.analysis.core, shell = terrain.analysis.shell;
+  const t0 = performance.now();
+  const gridAz = s.az - frame.convergence;
+  if (s.elevApparent <= 0) {
+    shadowBuf.fill(0); shellBuf.fill(0);
+  } else {
+    shadowMask(shell, gridAz, s.elevApparent, shellBuf);
+    const seed = makeSeed(shell, core, (x, y) => terrain.gridSample(shell, x, y), gridAz, s.elevApparent);
+    shadowMask(core, gridAz, s.elevApparent, shadowBuf, seed);
+  }
+  timings.shadowMs = performance.now() - t0;
+  shadowKey = s.key; sweeps++;
+  shadowCore.needsUpdate = true;
+  shadowShell.needsUpdate = true;
+}
+
+// A new day: its sun events, the date's words, and the Burn for the marker.
+function newDay() {
+  const { y, mo, d } = S.date;
+  events = dayEvents(y, mo, d, frame.centerLat, frame.centerLon);
+  $('date-d').value = String(dayOfYear(y, mo, d));
+  fill($('date-d'));
+  text('date-out', U.date(y, mo, d, true));
+  const e = events, ev = [];
+  if (e.polarDay) ev.push('The sun does not set today.');
+  else if (e.polarNight) ev.push('The sun does not rise today.');
+  else ev.push(`Sunrise ${U.clock(e.sunrise)}, sunset ${U.clock(e.sunset)}.`);
+  const g = (a) => a && a[0] != null && a[1] != null;
+  if (g(e.goldenMorning) || g(e.goldenEvening)) ev.push(`Golden hour ${[e.goldenMorning, e.goldenEvening].filter(g).map(([a, b]) => U.span(a, b)).join(' and ')}.`);
+  if (e.dawn == null && e.dusk == null && !e.polarNight) ev.push('Civil twilight lasts all night; it never gets fully dark.');
+  else if (e.dawn != null && e.dusk != null) ev.push(`Civil twilight from ${U.clock(e.dawn)} and until ${U.clock(e.dusk)}.`);
+  ev.push(`Highest ${U.deg(e.maxAlt)} at ${U.clock(e.solarNoon)}.`);
+  text('sun-events', ev.join(' '));
+  computeBurn();
+}
+
+// ---------------------------------------------------------------- the Burn
+// Direct sun on the marker for the day shown (js/sun.js), recomputed when the marker or date moves.
+const spells = (w) => w.spans;
+function computeBurn() {
+  if (!events || !S.marker) return;
+  const { y, mo, d } = S.date, m = S.marker;
+  // Never below the 16 m grid the march runs over: at a col it stands above the 2 m point.
+  const z = Math.max(terrain.heightAt(m.x, m.y), terrain.analysisHeight(m.x, m.y));
+  burn = directSunWindow((x, yy) => terrain.analysisHeight(x, yy), m.x, m.y, z, y, mo, d,
+    frame.centerLat, frame.centerLon, frame.convergence, terrain.maxM + 5);
+  track.setModel({ id: `${dateKey(S.date)} ${m.x} ${m.y}`, alt: events.altApparent, lit: burn.lit });
+  const sp = spells(burn), date = U.date(y, mo, d);
+  const words = !burn.totalMinutes ? null : sp.length > 2
+    ? ` in ${sp.length} spells from ${U.span(sp[0][0], sp[sp.length - 1][1])}` : `, ${sp.map(([a, b]) => U.span(a, b)).join(' and ')}`;
+  text('cap', words ? `The burn: direct sun at the marker${markName ? `, ${markName}` : ''}${words} (${U.hm(burn.totalMinutes / 60)}). Terrain shadow only; no cloud.`
+    : `No direct sun reaches the marker${markName ? ` at ${markName}` : ''} on ${date}: the sun climbs to ${U.deg(events.maxAlt)} and the terrain hides it.`);
+  text('burn-desc', words ? `Direct sun on the marker from ${sp.map(([a, b]) => U.span(a, b)).join(' and ')}, ${U.hm(burn.totalMinutes / 60, 1)}.` : `No direct sun on the marker on ${U.date(y, mo, d, 0, 1)}.`);
+  if (S.card === 'point') showPoint();
+  if (sunInfo) timeWords();
+  invalidate();
 }
 
 // ---------------------------------------------------------------- boot
 async function boot() {
-  // Read the stored camera before anything can overwrite it: wireUI() saves state as a side
-  // effect of setting the sheet stop, and a save before the restore would hand back the default
-  // camera sitting at the origin.
+  // Read the stored camera before anything can overwrite it: a save before the restore would hand
+  // back the default camera sitting at the origin.
   const savedCam = store.get('camera', null);
   data = new DataSet();
-  await data.load((p, msg) => {
-    $('load-bar').style.width = `${Math.round(p * 100)}%`;
-    $('load-msg').textContent = msg;
-  });
+  await data.load((msg) => text('stamp', msg));
   frame = new Frame(data.manifest);
-  const projErr = frame.checkProjection();
+  projErr = frame.checkProjection();
 
   terrain = new Terrain(data, frame);
   mat = makeTerrainMaterial();
@@ -139,11 +262,13 @@ async function boot() {
   mat.uniforms.uShadowShell.value = shadowShell;
 
   // Water and glacier mask, on the same grid as the core analysis raster.
-  const maskTex = buildMask(core, data.geo.water, data.geo.glaciers);
-  mat.uniforms.uMask.value = maskTex;
+  mat.uniforms.uMask.value = buildMask(core, data.geo.water, data.geo.glaciers);
   setGridRect(mat, 'uMask', core, frame);
   viewshedTex = makeMaskTexture(new Uint8Array(core.nx * core.ny), core.nx, core.ny);
   mat.uniforms.uViewshedTex.value = viewshedTex;
+  const veil = new THREE.Color(PLATE.viewshed.veil);
+  mat.uniforms.uVeil.value.set(veil.r, veil.g, veil.b, PLATE.viewshed.veil_a);
+  mat.uniforms.uTint.value = PLATE.viewshed.tint;
 
   route = new Route(data.geo.route, data.edit.waypoints);
   S.cursor = clamp(S.cursor, 0, Math.max(0, route.n - 1));
@@ -153,26 +278,30 @@ async function boot() {
   rig = new CameraRig(camera, canvas, terrain, frame, invalidate);
   profile = new Profile($('profile'), (i) => { setCursor(i, true); });
   profile.setRoute(route, S.reversed);
+  track = createTrack($('slider'), $('track'), {
+    onStart: () => setPlaying(false),
+    onScrub: (k) => { want = { ...want, step: k }; invalidate(); },
+    onKey: (k) => { setPlaying(false); want = { ...want, step: clamp(k === 'home' ? 0 : k === 'end' ? STEPS - 1 : S.minutes / 5 + k, 0, STEPS - 1) }; invalidate(); },
+    onEnd: () => { save(); invalidate(); },
+  });
 
   applyScheme();
   applyExaggeration(S.exag);
   buildLayerPanel();
-  buildCameraChips();
-  buildToolChips();
   buildViewpointChips();
-  buildAbout(projErr);
+  buildAbout();
   wireUI();
 
   focus = setupFocus({
-    onLayoutChange: onResize,
-    zoom: (f) => { rig.zoomBy(f); save(); },
-    wholeWalk: () => { frameRoute(); save(); },
+    onChange: (on) => { if (on) { closeCard(); closeDialog(false); } },
     toolActive: () => !!S.tool,
+    say,
+    dialogOpen: () => !!S.dialog,
   });
 
   if (!rig.restore(savedCam)) frameRoute();
+  newDay();
   setCursor(S.cursor, false);
-  updateSun(true);
   applyLayerUniforms();
   updatePace();
   showNotices();
@@ -181,10 +310,10 @@ async function boot() {
     const changed = await data.refetchEditable();
     if (!changed.length) return;
     if (changed.includes('colors')) applyScheme();
-    if (changed.includes('waypoints')) { route.setWaypointNames(data.edit.waypoints); profile.build(); }
+    if (changed.includes('waypoints')) { route.setWaypointNames(data.edit.waypoints); profile.build(); updateDirLabel(); }
     if (changed.includes('viewpoints')) buildViewpointChips();
     if (changed.includes('pace')) updatePace();
-    if (changed.includes('about')) buildAbout(projErr);
+    if (changed.includes('about')) buildAbout();
     showNotices();
     setCursor(S.cursor, false);
     invalidate();
@@ -196,8 +325,8 @@ async function boot() {
     invalidate();
   });
 
-  // A read-only hook for the headless verification run and for anyone debugging in a console.
-  // It reports; it changes nothing.
+  // A read-only hook for tools/shoot.mjs; nothing in the app calls it.
+  const r3 = (v) => Math.round(v * 1000) / 1000;
   window.__besseggen = {
     stats: () => ({
       tilesDrawn: terrain.stats.tiles, tileCap: MAX_TILES,
@@ -209,282 +338,180 @@ async function boot() {
       shellGrid: [terrain.analysis.shell.nx, terrain.analysis.shell.ny],
       levels: terrain.levels.map((L) => ({ level: L.level, res: L.res, tiles: L.tiles.length })),
       timings: { ...timings },
-      projectionErrMm: +frame.checkProjection().toFixed(3),
-      convergenceDeg: +frame.convergence.toFixed(4),
-      lat: +frame.centreLat.toFixed(5), lon: +frame.centreLon.toFixed(5),
-      sun: sunInfo ? { azTrue: +sunInfo.az.toFixed(3), altApparent: +sunInfo.elevApparent.toFixed(3) } : null,
-      events: events ? {
-        sunrise: events.sunrise, sunset: events.sunset, dawn: events.dawn, dusk: events.dusk,
-        maxAlt: +events.maxAlt.toFixed(3), minAlt: +events.minAlt.toFixed(3),
-      } : null,
-      route: { n: route.n, lengthM: +route.length.toFixed(1), ascentM: Math.round(route.ascent), highM: Math.round(route.z[route.highIdx] || 0) },
-      lakes: (waterMesh.userData && waterMesh.userData.lakes) || [],
-      waterTriangles: (waterMesh.userData && waterMesh.userData.triangles) || 0,
+      projectionErrMm: r3(projErr), convergenceDeg: r3(frame.convergence),
+      lat: r3(frame.centerLat), lon: r3(frame.centerLon),
+      sun: { azTrue: r3(sunInfo.az), altApparent: r3(sunInfo.elevApparent) },
+      events: { sunrise: events.sunrise, sunset: events.sunset, dawn: events.dawn, dusk: events.dusk, maxAlt: r3(events.maxAlt), minAlt: r3(events.minAlt) },
+      route: { n: route.n, lengthM: r3(route.length), ascentM: Math.round(route.ascent), highM: Math.round(route.z[route.highIdx] || 0) },
+      lakes: waterMesh.userData.lakes || [],
+      waterTriangles: waterMesh.userData.triangles || 0,
       notices: data.notices,
       bytes: data.bytes,
     }),
-    sunAt: (y, mo, d, min) => sunAt(y, mo, d, min, frame.centreLat, frame.centreLon),
+    sunAt: (y, mo, d, min) => sunAt(y, mo, d, min, frame.centerLat, frame.centerLon),
     dayEvents: (y, mo, d) => {
-      const e = dayEvents(y, mo, d, frame.centreLat, frame.centreLon);
+      const e = dayEvents(y, mo, d, frame.centerLat, frame.centerLon);
       return { sunrise: e.sunrise, sunset: e.sunset, dawn: e.dawn, dusk: e.dusk, maxAlt: e.maxAlt, minAlt: e.minAlt, polarDay: e.polarDay };
     },
     heightAt: (x, y) => terrain.heightAt(x, y),
     camera: () => ({
-      mode: rig.mode,
-      pos: camera.position.toArray().map((v) => +v.toFixed(3)),
-      target: rig.controls.target.toArray().map((v) => +v.toFixed(3)),
-      fovDeg: +camera.fov.toFixed(3),
-      distM: +camera.position.distanceTo(rig.controls.target).toFixed(3),
+      mode: rig.mode, pos: camera.position.toArray().map(r3), target: rig.controls.target.toArray().map(r3),
+      fovDeg: r3(camera.fov), distM: r3(camera.position.distanceTo(rig.controls.target)),
     }),
-    bench: () => {
-      const g = benchGrid(1281, 1025);
-      const buf = new Uint8Array(g.nx * g.ny);
-      let t0 = performance.now();
-      shadowMask(g, 140, 18, buf);
-      const sweep = performance.now() - t0;
-      t0 = performance.now();
-      const vs = viewshed(g, g.x0 + g.nx * 8, g.y1 - g.ny * 8, 1.7, 12000, (x, y) => terrain.gridSample(g, x, y));
-      const v = performance.now() - t0;
-      return { sweepMs: +sweep.toFixed(1), viewshedMs: +v.toFixed(1), viewshedRays: vs.nAz, viewshedSamples: vs.samples };
-    },
+    project: (x, y) => { const p = projectScene(frame.sx(x), terrain.heightAt(x, y), frame.sz(y)); return p && { x: p.x, y: p.y }; },
     setLayer: (id, on) => { S.layers[id] = !!on; applyLayerUniforms(); },
-    drawnLevels: () => {
-      const h = {};
-      for (const sl of terrain.pool) {
-        if (!sl.mesh.visible || !sl.L) continue;
-        h[sl.L.level] = (h[sl.L.level] || 0) + 1;
-      }
-      return h;
-    },
     applyViewpoint: (i) => {
       const list = (data.edit.viewpoints && data.edit.viewpoints.viewpoints) || [];
       if (list[i]) rig.applyViewpoint(list[i]);
       return list[i] && list[i].name;
     },
-    debugSelect: () => {
-      camera.updateMatrixWorld();
-      camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
-      const m = new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
-      const fr = new THREE.Frustum().setFromProjectionMatrix(m);
-      const box = new THREE.Box3();
-      let pass = 0;
-      const L = terrain.levels[0];
-      for (const t of L.tiles) {
-        const S_ = L.tileSpan;
-        const x0 = L.grid.x0 + t.tx * S_ - frame.ox;
-        const z1 = -((L.grid.y0 + t.ty * S_) - frame.oy);
-        box.min.set(x0, t.dmin * 0.1 - 300, z1 - S_);
-        box.max.set(x0 + S_, t.dmax * 0.1 + 100, z1);
-        if (fr.intersectsBox(box)) pass++;
-      }
-      return {
-        camPos: camera.position.toArray().map((v) => +v.toFixed(0)),
-        target: rig.controls.target.toArray().map((v) => +v.toFixed(0)),
-        // Unrounded, for a check that has to reproduce the projection: a metre of rounding is
-        // nothing at a 15 km target and everything when the ground is seven metres away.
-        camPosExact: camera.position.toArray(),
-        targetExact: rig.controls.target.toArray(),
-        near: camera.near, far: camera.far, fov: camera.fov, aspect: +camera.aspect.toFixed(3),
-        canvas: [canvas.clientWidth, canvas.clientHeight],
-        l0Pass: pass, l0Total: L.tiles.length,
-        stats: { ...terrain.stats },
-        mode: rig.mode,
-      };
-    },
-    setDateTime: (mo, d, min) => { S.date = { ...S.date, mo, d }; S.minutes = min; updateSun(true); },
+    setDateTime: (mo, d, min) => { want = { date: { ...S.date, mo, d }, step: Math.round(min / 5) }; invalidate(); },
+    setMarker: (x, y) => setMarker({ x, y }, false),
     // Run a tool the way a tap would, so the verification exercises the real code path.
     runTool: (id, pts) => {
-      S.tool = id;
-      picked = [];
-      const body = $('tool-body');
-      body.hidden = false;
       const hits = pts.map(([x, y]) => ({ x, y, elevM: terrain.heightAt(x, y) }));
-      if (id === 'measure') runMeasure(hits[0], hits[1], body);
-      if (id === 'los') runLos(hits[0], hits[1], body);
-      if (id === 'viewshed') runViewshed(hits[0], body);
-      if (id === 'firstsun') runFirstSun(hits[0], body);
-      S.tool = null;
-      return body.textContent.replace(/\s+/g, ' ').trim();
+      ({ measure: runMeasure, los: runLos, viewshed: runViewshed })[id](...hits);
+      return $('card').textContent.replace(/\s+/g, ' ').trim();
     },
-    setEye: (m) => { S.eyeM = m; $('eye-h').value = String(m); $('eye-out').textContent = `${m.toFixed(1)} m`; },
+    setEye: (m) => { S.eyeM = m; $('eye-h').value = String(m); slid($('eye-h')); },
     peaksFrom: (x, y, eye) => {
       const z = terrain.analysisHeight(x, y) + (eye ?? 1.7);
       return visiblePeaks(data.geo.places, (a, b) => terrain.analysisHeight(a, b), frame, x, y, z,
-        { maxDist: 25000 }).map((k) => ({
-        name: k.name, elevM: Math.round(k.elevM), distM: Math.round(k.dist),
-        bearing: Math.round(k.bearing),
-      }));
+        { maxDist: 25000 }).map((k) => ({ name: k.name, elevM: Math.round(k.elevM), distM: Math.round(k.dist), bearing: Math.round(k.bearing) }));
     },
     los: (ax, ay, bx, by) => {
       const r = lineOfSight((x, y) => terrain.heightAt(x, y), ax, ay, 1.7, bx, by, 0);
-      return { clear: r.clear, distM: Math.round(r.dist), worstM: +r.worst.toFixed(1), blocks: r.blocks.length };
+      return { clear: r.clear, distM: Math.round(r.dist), worstM: Math.round(r.worst * 10) / 10, blocks: r.blocks.length };
     },
-    viewshedRings: (ex, ey) => {
-      const g = terrain.analysis.core, d = viewshedTex.image.data;
-      const rings = new Array(16).fill(0).map(() => [0, 0]);
-      for (let r = 0; r < g.ny; r++) {
-        for (let c = 0; c < g.nx; c++) {
-          const x = g.x0 + c * g.res, y = g.y1 - r * g.res;
-          const k = Math.min(15, Math.floor(Math.hypot(x - ex, y - ey) / 1000));
-          rings[k][1]++;
-          if (d[r * g.nx + c]) rings[k][0]++;
-        }
-      }
-      return rings.map(([lit, tot], i) => `${i}-${i + 1}km ${(100 * lit / Math.max(1, tot)).toFixed(1)}%`);
-    },
-    profileLine: (ax, ay, bx, by, n) => {
-      const out = [];
-      for (let i = 0; i <= n; i++) {
-        const f = i / n;
-        out.push(+terrain.analysisHeight(ax + (bx - ax) * f, ay + (by - ay) * f).toFixed(1));
-      }
-      return out;
-    },
-    viewshedVisible: (x, y) => {
-      const g = terrain.analysis.core;
-      const c = Math.round((x - g.x0) / g.res), r = Math.round((g.y1 - y) / g.res);
-      if (c < 0 || r < 0 || c >= g.nx || r >= g.ny) return null;
-      return viewshedTex.image.data[r * g.nx + c] > 0;
-    },
-    gradientAt: (x, y) => {
-      const d = 16;
-      return {
-        dzdx: (terrain.analysisHeight(x + d, y) - terrain.analysisHeight(x - d, y)) / (2 * d),
-        dzdy: (terrain.analysisHeight(x, y + d) - terrain.analysisHeight(x, y - d)) / (2 * d),
-        z: terrain.analysisHeight(x, y),
-      };
-    },
-    shadowAt: (x, y) => {
-      const g = terrain.analysis.core;
-      const c = Math.round((x - g.x0) / g.res), r = Math.round((g.y1 - y) / g.res);
-      if (c < 0 || r < 0 || c >= g.nx || r >= g.ny) return null;
-      return shadowBuf[r * g.nx + c] > 0 ? 'lit' : 'shadow';
-    },
+    viewshedVisible: (x, y) => cellOf(x, y, (i) => viewshedTex.image.data[i] > 0),
+    shadowAt: (x, y) => cellOf(x, y, (i) => (shadowBuf[i] > 0 ? 'lit' : 'shadow')),
+    burn: () => burn && { first: burn.first, last: burn.last, total: burn.totalMinutes, spans: spells(burn), lit: burn.lit.map(Number).join(''), marker: S.marker },
+    shown: () => S.minutes / 5,
+    wanted: () => track.wanted,
+    focus: () => focus.isOn(),
+    setFocus: (on) => focus.set(on),
+    state: () => ({ shown: S.minutes / 5, date: { ...S.date }, playing: !!play, sheet: S.sheet, dialog: S.dialog, card: S.card, tool: S.tool, focus: focus.isOn(), sun: sunInfo.key, shadow: shadowKey, label: $('t-date').textContent, caption: $('cap').textContent }),
+    log: (on) => { logOn = on; const out = flog; if (on) flog = []; return out; },
+    labels: () => placedLabels,
   };
 
+  new ResizeObserver(onResize).observe($('plate'));
   onResize();
-  window.addEventListener('resize', onResize);
-  $('loading').classList.add('done');
+  applyTime();
+  text('stamp', `${(data.edit.about.terrain || {}).owner || 'Kartverket'} data, retrieved ${U.iso((data.edit.about.terrain || {}).retrieved || data.manifest.source.retrieved)}`);
+  for (const e of $$('[data-boot]')) e.removeAttribute('hidden');
+  $('player').inert = false;
+  // Canvas text and the labels' widths wait for the face.
+  await document.fonts.load('560 11.5px "Ysabeau Office"').catch(() => {});
+  widths.clear(); profile.relayout(); track.invalidate();
+  document.fonts.addEventListener('loadingdone', () => { widths.clear(); profile.relayout(); track.invalidate(); invalidate(); });
   invalidate();
 }
+
+const cellOf = (x, y, f) => {
+  const g = terrain.analysis.core;
+  const c = Math.round((x - g.x0) / g.res), r = Math.round((g.y1 - y) / g.res);
+  return c < 0 || r < 0 || c >= g.nx || r >= g.ny ? null : f(r * g.nx + c);
+};
 
 function onResize() {
   const w = canvas.clientWidth || window.innerWidth, h = canvas.clientHeight || window.innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / Math.max(1, h);
   camera.updateProjectionMatrix();
-  lineMat.uniforms.uRes.value.set(w, h);
-  for (const m of [connLine, riverLine, toolLine, markerLine]) {
-    if (m) m.material.uniforms.uRes.value.set(w, h);
-  }
+  for (const m of [routeLine, connLine, riverLine, toolLine, markerLine]) m.material.uniforms.uRes.value.set(w, h);
+  // the key column becomes a row along the plate's top when the plate is too short for it
+  $('plate').classList.toggle('keys-row', h < 258);
   // The profile's labels are counter-scaled against the width the strip was given, so they have
   // to be measured again whenever that width changes.
-  if (profile) profile.relayout();
+  profile.relayout();
+  track.resize();
   invalidate();
 }
 
 function frameWholeModel() {
   const c = data.manifest.core;
-  const box = new THREE.Box3(
+  rig.frameBox(new THREE.Box3(
     new THREE.Vector3(frame.sx(c.x0), terrain.minM, frame.sz(c.y1)),
     new THREE.Vector3(frame.sx(c.x1), terrain.maxM, frame.sz(c.y0)),
-  );
-  rig.frameBox(box, 34, 200);
-}
-
-function routeBox() {
-  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-  for (let k = 0; k < route.n; k++) {
-    x0 = Math.min(x0, route.x[k]); x1 = Math.max(x1, route.x[k]);
-    y0 = Math.min(y0, route.y[k]); y1 = Math.max(y1, route.y[k]);
-  }
-  if (!Number.isFinite(x0)) return null;
-  return new THREE.Box3(
-    new THREE.Vector3(frame.sx(x0 - 2000), terrain.minM, frame.sz(y1 + 2500)),
-    new THREE.Vector3(frame.sx(x1 + 2000), terrain.maxM, frame.sz(y0 - 2500)),
-  );
+  ), 34, 200);
 }
 
 // The opening view: standing east of Gjendesheim looking west along the whole walk, which is the
 // way the ridge is normally photographed and the only angle where both lakes are visible at once.
 function frameRoute() {
-  const b = routeBox();
-  if (b) rig.frameBox(b, 24, 95); else frameWholeModel();
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (let k = 0; k < route.n; k++) {
+    x0 = Math.min(x0, route.x[k]); x1 = Math.max(x1, route.x[k]);
+    y0 = Math.min(y0, route.y[k]); y1 = Math.max(y1, route.y[k]);
+  }
+  if (!Number.isFinite(x0)) { frameWholeModel(); return; }
+  rig.frameBox(new THREE.Box3(
+    new THREE.Vector3(frame.sx(x0 - 2000), terrain.minM, frame.sz(y1 + 2500)),
+    new THREE.Vector3(frame.sx(x1 + 2000), terrain.maxM, frame.sz(y0 - 2500)),
+  ), 24, 95);
 }
 
 // ---------------------------------------------------------------- overlays
-function buildOverlays() {
-  lineMat = makeLineMaterial(0xc0392b, 3.4);
-  const sample = (x, y) => terrain.heightAt(x, y);
+// The trail, the marker's stick and the tool line sit on a pale casing (ART.md section 2).
+function cased(m) {
+  const u = m.uniforms, w = u.uWidth.value, c = new THREE.Color(PLATE.casing.color);
+  u.uWidth.value = w + 2 * PLATE.casing.px;
+  u.uCore.value = w / u.uWidth.value;
+  u.uCase.value.set(c.r, c.g, c.b, PLATE.casing.alpha);
+  return m;
+}
+const lineMesh = (geo, m, order) => { const o = new THREE.Mesh(geo, m); o.frustumCulled = false; o.renderOrder = order; scene.add(o); return o; };
+const runsOf = (g) => (g && g.type === 'LineString' ? [g.coordinates] : g && g.type === 'MultiLineString' ? g.coordinates : []);
 
-  const mainPts = lineFeatureToPoints(
-    (route.main && route.main.geometry.coordinates) || [], frame, sample, 0,
-  );
-  routeLine = new THREE.Mesh(buildLine(mainPts), lineMat);
-  routeLine.frustumCulled = false; routeLine.renderOrder = 4;
-  scene.add(routeLine);
+function buildOverlays() {
+  const sample = (x, y) => terrain.heightAt(x, y);
+  lineMat = cased(makeLineMaterial(0xc0392b, 3.4));
+  routeLine = lineMesh(buildLine(lineFeatureToPoints((route.main && route.main.geometry.coordinates) || [], frame, sample, 0)), lineMat, 4);
 
   // Connectors and rivers are merged into one geometry each: the real rivers layer is hundreds
   // of features, and hundreds of draw calls cost a phone more than the triangles do.
+  const merged = (feats) => buildLines(feats.flatMap((f) => runsOf(f.geometry).map((co) => lineFeatureToPoints(co, frame, sample, 0))));
   const connMat = makeLineMaterial(0x2c3e50, 2.0);
   connMat.uniforms.uOpacity.value = 0.85;
-  const connPts = [];
-  for (const f of route.connectors) {
-    const g = f.geometry;
-    const runs = g && g.type === 'LineString' ? [g.coordinates]
-      : (g && g.type === 'MultiLineString' ? g.coordinates : []);
-    for (const co of runs) connPts.push(lineFeatureToPoints(co, frame, sample, 0));
-  }
-  connLine = new THREE.Mesh(buildLines(connPts), connMat);
-  connLine.frustumCulled = false; connLine.renderOrder = 3;
-  scene.add(connLine);
-
+  connLine = lineMesh(merged(route.connectors), connMat, 3);
   const riverMat = makeLineMaterial(0x6f93b5, 1.6);
   riverMat.uniforms.uOpacity.value = 0.8;
-  const riverPts = [];
-  for (const f of (data.geo.rivers.features || [])) {
-    const g = f.geometry;
-    const runs = g && g.type === 'LineString' ? [g.coordinates]
-      : (g && g.type === 'MultiLineString' ? g.coordinates : []);
-    for (const co of runs) riverPts.push(lineFeatureToPoints(co, frame, sample, 0));
-  }
-  riverLine = new THREE.Mesh(buildLines(riverPts), riverMat);
-  riverLine.frustumCulled = false; riverLine.renderOrder = 2;
-  scene.add(riverLine);
+  riverLine = lineMesh(merged(data.geo.rivers.features || []), riverMat, 2);
 
   const w = buildWater(data.geo.water, frame, 8);
   waterMat = makeWaterMaterial();
-  waterMesh = new THREE.Mesh(w.geo, waterMat);
-  waterMesh.frustumCulled = false; waterMesh.renderOrder = 1;
-  scene.add(waterMesh);
+  waterMesh = lineMesh(w.geo, waterMat, 1);
   waterMesh.userData = w;
 
-  const toolMat = makeLineMaterial(0x2f6a4f, 2.6);
+  const toolMat = cased(makeLineMaterial(0x111418, 2.6));
   toolMat.uniforms.uLift.value = 6;
-  toolLine = new THREE.Mesh(new THREE.BufferGeometry(), toolMat);
-  toolLine.frustumCulled = false; toolLine.renderOrder = 6; toolLine.visible = false;
-  scene.add(toolLine);
-
-  const markMat = makeLineMaterial(0x111418, 2.2);
+  toolLine = lineMesh(new THREE.BufferGeometry(), toolMat, 6);
+  toolLine.visible = false;
+  const markMat = cased(makeLineMaterial(0x111418, 2.2));
   markMat.uniforms.uLift.value = 0;
-  markerLine = new THREE.Mesh(new THREE.BufferGeometry(), markMat);
-  markerLine.frustumCulled = false; markerLine.renderOrder = 7; markerLine.visible = false;
-  scene.add(markerLine);
-
-  altLine = null;
+  markerLine = lineMesh(new THREE.BufferGeometry(), markMat, 7);
+  markerLine.visible = false;
 }
 
+// The plate is drawn from colors.json's light block in both themes (owner call 2); the profile's
+// steep red reads the current theme's block.
 function applyScheme() {
-  const colors = data.edit.colors;
-  applyPalette(mat, colors, scheme, data.manifest.elevation);
-  scene.background = colorOf(colors, scheme, 'sky', scheme === 'dark' ? '#0d1218' : '#dfe7ef');
-  lineMat.uniforms.uColor.value.copy(colorOf(colors, scheme, 'route', '#c0392b'));
-  connLine.material.uniforms.uColor.value.copy(colorOf(colors, scheme, 'routeAlt', '#2c3e50'));
-  riverLine.material.uniforms.uColor.value.copy(colorOf(colors, scheme, 'water', '#9fb9cf'));
-  waterMat.uniforms.uColor.value.copy(colorOf(colors, scheme, 'water', '#9fb9cf'));
-  markerLine.material.uniforms.uColor.value.copy(colorOf(colors, scheme, 'marker', '#111418'));
-  toolLine.material.uniforms.uColor.value.copy(colorOf(colors, scheme, 'viewshed', '#3fa7a0'));
-  toolLine.material.uniforms.uColor2.value.copy(colorOf(colors, scheme, 'route', '#c0392b'));
+  const colors = data.edit.colors, L = 'light';
+  applyPalette(mat, colors, L, data.manifest.elevation);
+  scene.background = colorOf(colors, L, 'sky', '#dfe7ef');
+  lineMat.uniforms.uColor.value.copy(colorOf(colors, L, 'route', '#c0392b'));
+  connLine.material.uniforms.uColor.value.copy(colorOf(colors, L, 'routeAlt', '#2c3e50'));
+  riverLine.material.uniforms.uColor.value.copy(colorOf(colors, L, 'water', '#9fb9cf'));
+  waterMat.uniforms.uColor.value.copy(colorOf(colors, L, 'water', '#9fb9cf'));
+  markerLine.material.uniforms.uColor.value.copy(colorOf(colors, L, 'marker', '#111418'));
+  toolLine.material.uniforms.uColor.value.copy(colorOf(colors, L, 'marker', '#111418'));
+  const pick = (s, k, d) => ((colors && colors[s]) || {})[k] || d;
+  const root = document.documentElement.style;
+  root.setProperty('--trail', pick(scheme, 'route', '#c0392b'));
+  root.setProperty('--route', pick(L, 'route', '#c0392b'));
+  legends();
+  if (track) track.invalidate();
 }
 
 function applyExaggeration(v) {
@@ -492,86 +519,8 @@ function applyExaggeration(v) {
   terrain.setExaggeration(v);
   mat.uniforms.uExag.value = v;
   waterMat.uniforms.uExag.value = v;
-  for (const m of [lineMat, connLine.material, riverLine.material,
-    toolLine.material, markerLine.material]) {
-    m.uniforms.uExag.value = v;
-  }
-  $('exag-out').textContent = v === 1 ? '×1.0 (true)' : `×${v.toFixed(1)}`;
-  if (!$('scale-sub').textContent.includes('·')) $('scale-sub').textContent = `vertical ×${v.toFixed(1)}`;
-  invalidate();
-}
-
-// ---------------------------------------------------------------- sun
-function sunNow() {
-  const { y, mo, d } = S.date;
-  return sunAt(y, mo, d, S.minutes, frame.centreLat, frame.centreLon);
-}
-
-function updateSun(recomputeShadow) {
-  const s = sunNow();
-  sunInfo = s;
-  const v = sunVector(s.az, s.elevApparent, frame.convergence);
-  mat.uniforms.uSunDir.value.set(v.x, v.y, v.z).normalize();
-  mat.uniforms.uSunUp.value = s.elevApparent > -0.5 ? 1 : 0;
-  waterMat.uniforms.uSunDir.value.set(v.x, v.y, v.z);
-  waterMat.uniforms.uSunUp.value = s.elevApparent > 0 ? 1 : 0;
-
-  const { y, mo, d } = S.date;
-  events = dayEvents(y, mo, d, frame.centreLat, frame.centreLon);
-  const off = tzOffsetHours(y, mo, d, S.minutes);
-  $('date-out').textContent = fmtDateShort(y, mo, d);
-  $('time-out').textContent = `${fmtClock(S.minutes)} ${tzName(off)}`;
-  $('sun-when').textContent = s.elevApparent > 0
-    ? `${s.elevApparent.toFixed(1)}° up, ${compassPoint(s.az)} ${Math.round(s.az)}°`
-    : `below the horizon (${s.elevApparent.toFixed(1)}°)`;
-
-  const ev = [];
-  if (events.polarDay) ev.push('The sun does not set today.');
-  else if (events.polarNight) ev.push('The sun does not rise today.');
-  else {
-    ev.push(`Sunrise ${fmtClock(events.sunrise)} · sunset ${fmtClock(events.sunset)}`);
-  }
-  if (events.goldenMorning && events.goldenMorning[0] != null && events.goldenMorning[1] != null) {
-    ev.push(`Golden ${fmtClock(events.goldenMorning[0])}–${fmtClock(events.goldenMorning[1])}`);
-  }
-  if (events.goldenEvening && events.goldenEvening[0] != null && events.goldenEvening[1] != null) {
-    ev.push(`and ${fmtClock(events.goldenEvening[0])}–${fmtClock(events.goldenEvening[1])}`);
-  }
-  if (events.dawn == null && events.dusk == null && !events.polarNight) {
-    ev.push('Civil twilight lasts all night — it never gets properly dark.');
-  } else if (events.dawn != null && events.dusk != null) {
-    ev.push(`Civil twilight from ${fmtClock(events.dawn)} and until ${fmtClock(events.dusk)}.`);
-  }
-  ev.push(`Highest ${events.maxAlt.toFixed(1)}° at ${fmtClock(events.solarNoon)}.`);
-  $('sun-events').textContent = ev.join(' ');
-  $('sub').textContent = `${fmtDate(y, mo, d)} · ${fmtClock(S.minutes)} ${tzName(off)}`;
-
-  if (recomputeShadow) computeShadows();
-  else { shadowDirty = true; scheduleShadow(); }
-  invalidate();
-}
-
-function scheduleShadow() {
-  clearTimeout(shadowTimer);
-  shadowTimer = setTimeout(() => { if (shadowDirty) computeShadows(); }, 170);
-}
-
-function computeShadows() {
-  shadowDirty = false;
-  const s = sunInfo || sunNow();
-  const core = terrain.analysis.core, shell = terrain.analysis.shell;
-  const t0 = performance.now();
-  const gridAz = s.az - frame.convergence;
-  if (s.elevApparent <= 0) {
-    shadowBuf.fill(0); shellBuf.fill(0);
-  } else {
-    shadowMask(shell, gridAz, s.elevApparent, shellBuf);
-    const seed = makeSeed(shell, core, (x, y) => terrain.gridSample(shell, x, y), gridAz, s.elevApparent);
-    shadowMask(core, gridAz, s.elevApparent, shadowBuf, seed);
-  }
-  timings.shadowMs = performance.now() - t0;
-  shadowCore.needsUpdate = true;
-  shadowShell.needsUpdate = true;
+  for (const m of [routeLine, connLine, riverLine, toolLine, markerLine]) m.material.uniforms.uExag.value = v;
+  text('exag-out', v === 1 ? 'True scale' : `×${U.fixed(v, 1)}`);
   invalidate();
 }
 
@@ -581,50 +530,41 @@ function setCursor(i, fromProfile, persist = true) {
   profile.setCursor(S.cursor);
   const r = route;
   const dist = r.dirDist(S.cursor, S.reversed);
-  const g = r.gradientAt(S.cursor);
-  $('s-dist').textContent = fmtDist(dist);
-  $('s-elev').textContent = `${Math.round(r.z[S.cursor])} m`;
-  $('s-grad').textContent = `${(g * 100).toFixed(0)} %`;
-  const endIdx = S.reversed ? 0 : r.n - 1;
-  const t = timeForSegments(r, S.cursor, endIdx, effectivePace());
-  $('s-time').textContent = fmtHM(t.hours);
+  const t = timeForSegments(r, S.cursor, S.reversed ? 0 : r.n - 1, effectivePace());
+  text('s-dist', U.dist(dist));
+  text('s-elev', U.m(r.z[S.cursor]));
+  text('s-grad', U.pct(r.gradientAt(S.cursor) * 100));
+  text('s-time', U.hm(t.hours));
   const upto = S.reversed
     ? { up: r.descent - r.descentTo[S.cursor], down: r.ascent - r.ascentTo[S.cursor] }
     : { up: r.ascentTo[S.cursor], down: r.descentTo[S.cursor] };
-  const totalUp = Math.round(r.props.ascentM ?? r.ascent);
-  $('s-updown').textContent =
-    `+${Math.round(upto.up)} / −${Math.round(upto.down)} m so far · `
-    + `${fmtDist(r.props.lengthM ?? r.length)} and ${totalUp} m up in all`;
+  text('s-updown', `${U.m(upto.up)} up and ${U.m(upto.down)} down so far, of ${U.m(r.props.ascentM ?? r.ascent)} up in all. Red: 25${U.NN}% or steeper.`);
   if (rig && rig.mode !== 'orbit' && !rig.flying && fromProfile) {
     // routeT is measured along the direction being walked, so it mirrors with the direction.
-    const t = S.reversed ? 1 - r.cum[S.cursor] / r.length : r.cum[S.cursor] / r.length;
-    rig.placeOnRoute(r, t, S.reversed, rig.eyeM, true);
-    $('fp-t').value = String(Math.round(t * 1000));
+    rig.placeOnRoute(r, S.reversed ? 1 - r.cum[S.cursor] / r.length : r.cum[S.cursor] / r.length, S.reversed, rig.eyeM, true);
   }
-  $('fp-out').textContent = `${fmtDist(dist)} · ${Math.round(r.z[S.cursor])} m`;
-  setMarker({ x: r.x[S.cursor], y: r.y[S.cursor], z: r.z[S.cursor], onRoute: true }, false);
+  setMarker({ x: r.x[S.cursor], y: r.y[S.cursor], z: r.z[S.cursor] }, false);
   if (persist) save();
   invalidate();
 }
 
+let markName = '';
 function setMarker(m, updateCursor = true) {
-  S.marker = m ? { x: m.x, y: m.y } : null;
-  if (!m) { markerLine.visible = false; invalidate(); return; }
+  const moved = !S.marker || S.marker.x !== m.x || S.marker.y !== m.y;
+  const was = markName;
+  markName = (route.waypoints.find((w) => Math.hypot(w.x - m.x, w.y - m.y) < 30) || {}).name || '';
+  S.marker = { x: m.x, y: m.y };
   const z = Number.isFinite(m.z) ? m.z : terrain.heightAt(m.x, m.y);
   const sx = frame.sx(m.x), sz = frame.sz(m.y);
-  const pts = new Float64Array([sx, z, sz, sx, z + 90, sz]);
   markerLine.geometry.dispose();
-  markerLine.geometry = buildLine(pts);
+  markerLine.geometry = buildLine(new Float64Array([sx, z, sz, sx, z + 90, sz]));
   markerLine.visible = true;
   markerLine.userData = { x: m.x, y: m.y, z };
   if (updateCursor) {
     const near = route.n ? route.nearestIndex(m.x, m.y) : null;
     if (near && near.dist < 180) setCursor(near.i, false);
   }
-  const [lon, lat] = frame.lonLat(m.x, m.y);
-  $('readout').hidden = false;
-  $('r-main').textContent = `${Math.round(z)} m`;
-  $('r-sub').textContent = fmtLonLat(lon, lat);
+  if (moved || !burn || was !== markName) computeBurn();
   invalidate();
 }
 
@@ -635,32 +575,68 @@ function effectivePace() {
   return p;
 }
 
+// ---------------------------------------------------------------- the card
+// One card, for the tapped point or a tool's result (HOUSE.md 4.7), moved down if it would cover it.
+const row = (k, v) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`;
+let cardAt = null, cardShownAt = 0;
+function setCard(id, kind, num, unit, html, at) {
+  const wasOpen = !!S.card;
+  S.card = id; cardAt = at;
+  text('card-kind', kind);
+  text('card-num', num);
+  text('card-unit', unit ? `${U.NN}${unit}` : '');
+  $('card-body').innerHTML = html;
+  $('card').hidden = false;
+  if (!wasOpen) cardShownAt = performance.now();
+  placeCard();
+  invalidate();
+}
+function closeCard() { if (S.card !== 'point' && toolLine) toolLine.visible = false; S.card = null; $('card').hidden = true; invalidate(); }
+function placeCard() {
+  const c = $('card');
+  if (c.hidden) return;
+  c.classList.remove('low');
+  if (!cardAt) return;
+  const p = projectScene(frame.sx(cardAt.x), cardAt.z, frame.sz(cardAt.y));
+  const b = c.getBoundingClientRect();
+  if (p && p.x < b.width + 20 && p.y < b.height + 20) c.classList.add('low');
+}
+function showPoint(announce) {
+  const m = S.marker, z = terrain.heightAt(m.x, m.y), { y, mo, d } = S.date;
+  const near = route.nearestIndex(m.x, m.y), wps = route.waypoints, from = wps.length ? wps[S.reversed ? wps.length - 1 : 0].name : 'the start';
+  const kind = near.dist < 30 ? `On the trail, ${U.dist(route.dirDist(near.i, S.reversed))} from ${from}` : 'Tapped point';
+  const [lon, lat] = frame.lonLat(m.x, m.y), sp = spells(burn);
+  const sun = burn.totalMinutes ? `${U.date(y, mo, d)}, ${U.span(sp[0][0], sp[sp.length - 1][1])}` : `none on ${U.date(y, mo, d)}`;
+  setCard('point', kind, U.int(z), 'm', `<dl>${row('Position', U.pos(lon, lat)) + row('Direct sun', sun)
+    + (burn.totalMinutes ? row('Total', U.hm(burn.totalMinutes / 60)) : '')
+    + (sp.length > 1 ? row('Spells', sp.map(([a, b]) => U.span(a, b)).join(', ')) : '')}</dl>`, { x: m.x, y: m.y, z });
+  if (announce) {
+    say(`${kind}, ${U.int(z)} meters. ${burn.totalMinutes ? `Direct sun on ${U.date(y, mo, d, 0, 1)} from ${U.span(sp[0][0], sp[sp.length - 1][1])}.` : `No direct sun on ${U.date(y, mo, d, 0, 1)}.`}`);
+  }
+}
+
 // ---------------------------------------------------------------- picking
 // One finger down and up again without moving is a tap, and a tap picks. Two of those inside
 // 300 ms and within a thumb's width of each other is a double-tap, which toggles focus mode.
-//
-// The first tap of a pair is never held back: it picks straight away, so nothing a single tap
-// does is slowed down waiting to find out whether a second one is coming. The second tap only
-// toggles — it does not pick again, which would otherwise spend a tool's second point or nudge
-// the marker twice on the way into focus mode.
-const DOUBLE_MS = 300;         // the window between the two lifts
-const DOUBLE_SLOP = 32;        // how far the second may land from the first, in CSS pixels
+// The first tap of a pair is never held back: it picks straight away. The second tap only
+// toggles; it does not pick again, which would spend a tool's second point.
+const DOUBLE_MS = 300, DOUBLE_SLOP = 32;
 let tap = null, lastTap = null;
 const down = new Set();
 canvas.addEventListener('pointerdown', (e) => {
   down.add(e.pointerId);
   // A second finger means a pinch or a two-finger pan, and neither is a tap of any kind.
   if (down.size > 1) { tap = null; lastTap = null; return; }
-  tap = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+  tap = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId };
 });
 canvas.addEventListener('pointerup', (e) => {
   down.delete(e.pointerId);
   if (!tap || e.pointerId !== tap.id) { tap = null; return; }
-  const moved = Math.hypot(e.clientX - tap.x, e.clientY - tap.y);
-  const dt = performance.now() - tap.t;
+  // event times: a busy frame must not stretch a double-tap
+  const moved = Math.hypot(e.clientX - tap.x, e.clientY - tap.y), now = e.timeStamp;
+  const dt = now - tap.t;
   tap = null;
   if (!(moved < 10 && dt < 600)) { lastTap = null; return; }
-  const now = performance.now();
   if (lastTap && now - lastTap.t < DOUBLE_MS
       && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < DOUBLE_SLOP
       && focus && focus.toggle('tap')) {
@@ -674,198 +650,141 @@ canvas.addEventListener('pointercancel', (e) => { down.delete(e.pointerId); tap 
 
 function pickTerrain(clientX, clientY) {
   const r = canvas.getBoundingClientRect();
-  const ndc = new THREE.Vector2(
-    ((clientX - r.left) / r.width) * 2 - 1,
-    -((clientY - r.top) / r.height) * 2 + 1,
-  );
-  raycaster.setFromCamera(ndc, camera);
+  raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), camera);
   return terrain.raycast(raycaster.ray.origin, raycaster.ray.direction);
 }
 
 function onTap(cx, cy) {
+  if (!route) return;
   const hit = pickTerrain(cx, cy);
   if (!hit) return;
   if (S.tool) { toolPoint(hit); return; }
   setMarker(hit, true);
+  showPoint(true);
 }
 
 // ---------------------------------------------------------------- tools
-const TOOLS = [
-  { id: 'measure', name: 'Measure', points: 2, hint: 'Tap two points to measure between them.' },
-  { id: 'los', name: 'Line of sight', points: 2, hint: 'Tap the eye, then what you want to see.' },
-  { id: 'viewshed', name: 'Viewshed', points: 1, hint: 'Tap a viewpoint to see what it can see.' },
-  { id: 'firstsun', name: 'First and last sun', points: 1, hint: 'Tap a point to find when the sun reaches it.' },
-];
-let picked = [];
-let lastRun = null;
+const TOOLS = {
+  measure: { name: 'Measure', points: 2, hint: 'Tap two points to measure between them.', next: 'Now tap the second point.' },
+  los: { name: 'Line of sight', points: 2, hint: 'Tap the eye, then what you want to see.', next: 'Now tap what you want to see.' },
+  viewshed: { name: 'Viewshed', points: 1, hint: 'Tap a viewpoint to see what it can see.' },
+};
+let picked = [], lastRun = null;
 
 function setTool(id) {
   S.tool = S.tool === id ? null : id;
   picked = [];
-  $$('#tool-chips .chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tool === S.tool)));
-  const def = TOOLS.find((t) => t.id === S.tool);
-  $('pickbar').hidden = !def;
-  if (def) $('pickbar').textContent = def.hint;
-  if (!def) { toolLine.visible = false; $('tool-body').hidden = true; invalidate(); }
+  for (const b of $$('#tool-words [data-tool]')) b.setAttribute('aria-pressed', String(b.dataset.tool === S.tool));
+  if (!S.tool) toolLine.visible = false;
+  toolCaption();
   invalidate();
+}
+// While a tool waits for points its instruction replaces the caption.
+function toolCaption(t) {
+  const def = TOOLS[S.tool];
+  $('cap').hidden = !!def;
+  text('cap-tool', def ? t || def.hint : '');
 }
 
 function toolPoint(hit) {
-  const def = TOOLS.find((t) => t.id === S.tool);
-  if (!def) return;
+  const def = TOOLS[S.tool];
   picked.push(hit);
-  if (picked.length < def.points) {
-    $('pickbar').textContent = def.id === 'los' ? 'Now tap what you want to see.' : 'Now tap the second point.';
-    setMarker(hit, false);
-    return;
-  }
-  $('pickbar').hidden = true;
-  const body = $('tool-body');
-  body.hidden = false;
-  if (def.id === 'measure') runMeasure(picked[0], picked[1], body);
-  if (def.id === 'los') runLos(picked[0], picked[1], body);
-  if (def.id === 'viewshed') runViewshed(picked[0], body);
-  if (def.id === 'firstsun') runFirstSun(picked[0], body);
+  if (picked.length < def.points) { toolCaption(def.next); setMarker(hit, false); return; }
+  ({ measure: runMeasure, los: runLos, viewshed: runViewshed })[S.tool](...picked);
   picked = [];
-  if (S.sheet < 2) setStop(2);
-  $('pickbar').hidden = false;
-  $('pickbar').textContent = def.hint;
+  toolCaption();
 }
 
-function drawToolLine(pts, split) {
+function drawToolLine(arr, t, split) {
   toolLine.geometry.dispose();
-  toolLine.geometry = buildLine(pts.arr, pts.t);
-  toolLine.material.uniforms.uSplit.value = split == null ? -1 : split;
+  toolLine.geometry = buildLine(arr, t);
+  toolLine.material.uniforms.uSplit.value = split;
   toolLine.visible = true;
   invalidate();
 }
 
-function runMeasure(a, b, body) {
+function runMeasure(a, b) {
   const m = measure((x, y) => terrain.heightAt(x, y), a.x, a.y, b.x, b.y);
   const n = 64, arr = new Float64Array((n + 1) * 3);
   for (let i = 0; i <= n; i++) {
     const f = i / n, x = a.x + (b.x - a.x) * f, y = a.y + (b.y - a.y) * f;
     arr[i * 3] = frame.sx(x); arr[i * 3 + 1] = terrain.heightAt(x, y) + 4; arr[i * 3 + 2] = frame.sz(y);
   }
-  drawToolLine({ arr }, null);
+  drawToolLine(arr, null, -1);
   const bearing = frame.trueBearing(a.x, a.y, b.x, b.y);
-  body.innerHTML = `<b>Measure</b><dl>`
-    + row('Horizontal', fmtDist(m.horiz))
-    + row('Straight line', fmtDist(m.slant))
-    + row('Height difference', `${m.dz >= 0 ? '+' : ''}${Math.round(m.dz)} m`)
-    + row('Average gradient', `${(m.gradient * 100).toFixed(1)} % (${m.angleDeg.toFixed(1)}°)`)
-    + row('Bearing', `${Math.round(bearing)}° ${compassPoint(bearing)} true`)
-    + `</dl><p class="dim small">Heights from the finest terrain level loaded at each end.</p>`;
+  setCard('measure', 'Measure', ...U.dist(m.horiz).split(U.NN), '<dl>'
+    + row('Straight line', U.dist(m.slant))
+    + row('Height difference', U.signed(m.dz))
+    + row('Average gradient', `${U.pct(m.gradient * 100)}, ${U.deg(m.angleDeg)}`)
+    + row('Bearing', `${U.deg(bearing, 0)} ${U.wind(bearing)}, true`)
+    + '</dl><p class="note">Horizontal distance. Heights from the finest terrain level loaded at each end.</p>', b);
 }
 
-function runLos(a, b, body) {
-  const eyeA = S.eyeM, eyeB = 0;
+function runLos(a, b) {
+  const eyeA = S.eyeM;
   lastRun = { id: 'los', pts: [a, b] };
-  const los = lineOfSight((x, y) => terrain.heightAt(x, y), a.x, a.y, eyeA, b.x, b.y, eyeB);
+  const los = lineOfSight((x, y) => terrain.heightAt(x, y), a.x, a.y, eyeA, b.x, b.y, 0);
   const n = los.n, arr = new Float64Array((n + 1) * 3), tv = new Float32Array(n + 1);
   for (let i = 0; i <= n; i++) {
     const f = i / n, x = a.x + (b.x - a.x) * f, y = a.y + (b.y - a.y) * f;
     arr[i * 3] = frame.sx(x); arr[i * 3 + 1] = los.sight[i]; arr[i * 3 + 2] = frame.sz(y);
     tv[i] = f;
   }
-  // Colour splits at the first blocking stretch, so the line itself shows where it is stopped.
-  drawToolLine({ arr, t: tv }, los.clear ? -1 : los.blocks[0].from);
+  // Solid where the sight is clear, dashed past the first blocking stretch.
+  drawToolLine(arr, tv, los.clear ? -1 : los.blocks[0].from);
 
   let lo = Infinity, hi = -Infinity;
-  for (let i = 0; i <= n; i++) {
-    lo = Math.min(lo, los.prof[i], los.sight[i]); hi = Math.max(hi, los.prof[i], los.sight[i]);
-  }
+  for (let i = 0; i <= n; i++) { lo = Math.min(lo, los.prof[i], los.sight[i]); hi = Math.max(hi, los.prof[i], los.sight[i]); }
   const W = 300, H = 88, pad = 4;
   const X = (i) => (i / n) * W;
   const Y = (z) => pad + (1 - (z - lo) / Math.max(1, hi - lo)) * (H - pad * 2);
   let terr = `M0 ${H}`;
   for (let i = 0; i <= n; i++) terr += `L${X(i).toFixed(1)} ${Y(los.prof[i]).toFixed(1)}`;
   terr += `L${W} ${H}Z`;
-  let sight = `M0 ${Y(los.sight[0]).toFixed(1)}L${W} ${Y(los.sight[n]).toFixed(1)}`;
-  let blocks = '';
-  for (const bl of los.blocks) {
-    blocks += `<rect class="blk" x="${(bl.from * W).toFixed(1)}" y="0" width="${Math.max(1.5, (bl.to - bl.from) * W).toFixed(1)}" height="${H}"/>`;
-  }
-  body.innerHTML = `<b>Line of sight</b><dl>`
-    + row('Distance', fmtDist(los.dist))
-    + row('Eye', `${Math.round(los.az)} m (${eyeA} m above ground)`)
-    + row('Target', `${Math.round(los.bz)} m`)
-    + row('Verdict', los.clear
-      ? (los.grazes
-        ? (Math.abs(los.worst) < 0.1
-          ? `clear, but only just — the line grazes the ground at ${fmtDist(los.worstAt * los.dist)}`
-          : `clear, but only just — the line passes within ${Math.abs(los.worst).toFixed(1)} m `
-            + `of the ground at ${fmtDist(los.worstAt * los.dist)}`)
-        : 'clear')
-      : `blocked by up to ${Math.round(los.worst)} m at ${fmtDist(los.worstAt * los.dist)}`)
-    + `</dl><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Terrain cross-section with the sight line">`
-    + `${blocks}<path class="terr" d="${terr}"/><path class="sight${los.clear ? '' : ' blocked'}" d="${sight}"/></svg>`;
+  const sight = `M0 ${Y(los.sight[0]).toFixed(1)}L${W} ${Y(los.sight[n]).toFixed(1)}`;
+  const at = U.dist(los.worstAt * los.dist);
+  setCard('los', 'Line of sight', ...U.dist(los.dist).split(U.NN), '<dl>'
+    + row('Eye', `${U.m(los.az)}, ${U.unit(U.fixed(eyeA, 1), 'm')} above the ground`)
+    + row('Target', U.m(los.bz))
+    + row('Verdict', los.clear ? (los.grazes ? (Math.abs(los.worst) < 0.1
+      ? `clear, but only just: the line grazes the ground at ${at}`
+      : `clear, but only just: the line passes within ${U.m(Math.abs(los.worst))} of the ground at ${at}`) : 'clear')
+      : `blocked by up to ${U.m(los.worst)} at ${at}`)
+    + `</dl><svg class="xs" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Terrain cross-section with the sight line">`
+    + `<path class="terr" d="${terr}"/><path class="sight${los.clear ? '' : ' blocked'}" d="${sight}"/></svg>`, b);
 }
 
-function runViewshed(p, body) {
-  const core = terrain.analysis.core;
-  const eye = S.eyeM;
+function runViewshed(p) {
+  const core = terrain.analysis.core, eye = S.eyeM;
   lastRun = { id: 'viewshed', pts: [p] };
   const t0 = performance.now();
-  const vs = viewshed(core, p.x, p.y, eye, Math.min(25000, (core.x1 - core.x0) * 0.75),
-    (x, y) => terrain.analysisHeight(x, y));
+  const vs = viewshed(core, p.x, p.y, eye, Math.min(25000, (core.x1 - core.x0) * 0.75), (x, y) => terrain.analysisHeight(x, y));
   timings.viewshedMs = performance.now() - t0;
   viewshedTex.image.data.set(vs.mask);
   viewshedTex.needsUpdate = true;
   mat.uniforms.uHasViewshed.value = 1;
   S.layers.viewshed = true;
-  applyLayerUniforms();
   viewshedInfo = { x: p.x, y: p.y, eyeZ: vs.eyeZ };
+  applyLayerUniforms();
   toolLine.visible = false;
-
-  const peaks = visiblePeaks(data.geo.places, (x, y) => terrain.analysisHeight(x, y),
-    frame, p.x, p.y, vs.eyeZ, { maxDist: vs.radiusM });
+  const peaks = visiblePeaks(data.geo.places, (x, y) => terrain.analysisHeight(x, y), frame, p.x, p.y, vs.eyeZ, { maxDist: vs.radiusM });
   let lit = 0;
   for (let i = 0; i < vs.mask.length; i++) if (vs.mask[i]) lit++;
-  body.innerHTML = `<b>Viewshed</b><dl>`
-    + row('Eye', `${Math.round(vs.eyeZ)} m (${eye} m above ground)`)
-    + row('Radius', fmtDist(vs.radiusM))
-    + row('Visible ground', `${((lit / vs.mask.length) * 100).toFixed(1)} % of the core box`)
-    + row('Rays', `${vs.nAz} azimuths, ${core.res} m steps`)
-    + row('Target', `a person ${vs.targetAboveGround} m tall standing there`)
-    + `</dl>`
+  setMarker(p, false);
+  setCard('viewshed', 'Viewshed', U.fixed((lit / vs.mask.length) * 100, 1), '%', '<p class="note">of the detailed box is seen from here</p><dl>'
+    + row('Eye', `${U.m(vs.eyeZ)}, ${U.unit(U.fixed(eye, 1), 'm')} above the ground`)
+    + row('Radius', U.dist(vs.radiusM))
+    + row('Rays', `${U.int(vs.nAz)} azimuths, ${U.m(core.res)} steps`)
+    + row('Target', `a person ${U.m(vs.targetAboveGround)} tall standing there`)
+    + '</dl>'
     + (peaks.length
-      ? `<ul class="peaks">${peaks.map((k) => `<li><span>${escapeHtml(k.name || '—')}</span>`
-        + `<span class="d">${Math.round(k.elevM)} m</span>`
-        + `<span class="d">${fmtDist(k.dist)} ${compassPoint(k.bearing)} ${Math.round(k.bearing)}°</span></li>`).join('')}</ul>`
-      : `<p class="dim small">No named peak in places.geojson is visible from here.</p>`)
-    + `<p class="dim small">Marched on the ${core.res} m analysis grid inside the core box only. `
-    + `Bearings are TRUE, corrected for the ${frame.convergence.toFixed(2)}° grid convergence. `
-    + `A viewpoint on a convex summit hides much of its own slope from an eye ${eye} m above the `
-    + `ground — that is the geometry, not a bug. Raise the eye height to see how far it reaches.</p>`;
-  setMarker(p, false);
+      ? `<ul class="peaks">${peaks.map((k) => `<li><span translate="no">${escapeHtml(k.name || 'Unnamed')}</span><span>${escapeHtml(U.m(k.elevM))}</span>`
+        + `<span>${escapeHtml(`${U.dist(k.dist)} ${U.wind(k.bearing)}`)}</span></li>`).join('')}</ul>`
+      : '<p class="note">No named peak in places.geojson is visible from here.</p>')
+    + `<p class="note">Marched on the ${escapeHtml(U.m(core.res))} analysis grid inside the detailed box only. Bearings are true, `
+    + `corrected for the ${escapeHtml(U.deg(frame.convergence, 2))} grid convergence. A viewpoint on a convex summit hides much of `
+    + 'its own slope from an eye just above the ground: that is the geometry. Raise the eye height to see how far it reaches.</p>', p);
 }
-
-function runFirstSun(p, body) {
-  lastRun = { id: 'firstsun', pts: [p] };
-  const { y, mo, d } = S.date;
-  const t0 = performance.now();
-  const w = directSunWindow(
-    (x, yy) => terrain.analysisHeight(x, yy), p.x, p.y, p.elevM,
-    y, mo, d, frame.centreLat, frame.centreLon, frame.convergence, terrain.maxM + 5,
-  );
-  const ms = performance.now() - t0;
-  const off = tzOffsetHours(y, mo, d, 720);
-  const spans = w.spans.map(([a, b]) => `${fmtClock(a)}–${fmtClock(b)}`).join(', ');
-  body.innerHTML = `<b>Direct sun on this point</b><dl>`
-    + row('Point', `${Math.round(p.elevM)} m`)
-    + row('Date', fmtDate(y, mo, d))
-    + row('First sun', w.first == null ? 'never today' : `${fmtClock(w.first)} ${tzName(off)}`)
-    + row('Last sun', w.last == null ? '—' : `${fmtClock(w.last)} ${tzName(off)}`)
-    + row('Total', w.totalMinutes ? fmtHM(w.totalMinutes / 60) : 'none')
-    + (w.spans.length > 1 ? row('In', spans) : '')
-    + `</dl><p class="dim small">Sampled every two minutes and bisected to the minute, `
-    + `ray-marching the height grid toward the sun each time (${ms.toFixed(0)} ms). `
-    + `Shadowing by terrain only — no cloud, no trees.</p>`;
-  setMarker(p, false);
-}
-
-const row = (k, v) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`;
 
 // ---------------------------------------------------------------- labels
 const labelBox = $('labels');
@@ -882,30 +801,36 @@ function zoomBand() {
 }
 // A label is worth drawing only if the thing it names can actually be seen. The occlusion test
 // is the same ray-march the line-of-sight tool uses, from the camera to the point, on the
-// analysis grid — which is what stops a summit label from floating over the valley in front of it.
+// analysis grid: it stops a summit label floating over the valley in front of it.
 function labelVisible(x, y, z) {
   const cx = frame.wx(camera.position.x), cy = frame.wy(camera.position.z);
   const cz = camera.position.y / Math.max(S.exag, 0.001);
   const dist = Math.hypot(x - cx, y - cy);
   if (dist < 60) return true;
-  return visibleFrom((ax, ay) => terrain.analysisHeight(ax, ay), cx, cy, cz, x, y, z + 8,
-    clamp(dist / 140, 24, 400));
+  return visibleFrom((ax, ay) => terrain.analysisHeight(ax, ay), cx, cy, cz, x, y, z + 8, clamp(dist / 140, 24, 400));
+}
+// Widths measured in the face once it has loaded.
+const widths = new Map(), mctx = document.createElement('canvas').getContext('2d');
+const FONTS = { wp: '560 11.5px', peak: '400 11px', km: '400 10.5px', mark: '560 11.5px', sub: '400 10.5px' };
+function textW(s, f) {
+  const k = `${f}|${s}`;
+  if (!widths.has(k)) { mctx.font = `${FONTS[f]} "Ysabeau Office", system-ui, sans-serif`; widths.set(k, mctx.measureText(s).width); }
+  return widths.get(k);
 }
 
 const LABEL_LIMIT = 26;
+let placedLabels = [];
 function updateLabels() {
-  if (!S.layers.labels) { if (labelBox.childElementCount) labelBox.textContent = ''; return; }
+  if (!S.layers.labels) { if (labelBox.childElementCount) labelBox.textContent = ''; placedLabels = []; return; }
   const band = zoomBand();
   const items = [];
-  for (const w of route.waypoints) {
-    items.push({ cls: 'wp', name: w.name, sub: `${Math.round(w.elevM)} m`, x: w.x, y: w.y, z: w.elevM, pri: 1000 });
-  }
+  for (const w of route.waypoints) items.push({ cls: 'wp', name: w.name, sub: U.m(w.elevM), x: w.x, y: w.y, z: w.elevM, pri: 1000 });
   for (const f of (data.geo.places.features || [])) {
     const p = f.properties || {};
     if ((p.showAt ?? 3) > band) continue;
     const c = f.geometry.coordinates;
     items.push({
-      cls: 'peak', name: p.name, sub: p.kind === 'peak' || p.kind === 'ridge' ? `${Math.round(p.elevM ?? c[2])} m` : '',
+      cls: 'peak', name: p.name, sub: p.kind === 'peak' || p.kind === 'ridge' ? U.m(p.elevM ?? c[2]) : '',
       x: c[0], y: c[1], z: c[2] ?? terrain.heightAt(c[0], c[1]), pri: (p.relief1kmM ?? 0) + (p.elevM ?? 0) / 20,
     });
   }
@@ -913,53 +838,53 @@ function updateLabels() {
     for (const mk of (route.kmMarks || [])) {
       const i = clamp(mk.i | 0, 0, route.n - 1);
       const km = S.reversed ? Math.round((route.length - route.cum[i]) / 1000) : mk.km;
-      items.push({ cls: 'km', name: `${km} km`, sub: '', x: route.x[i], y: route.y[i], z: route.z[i], pri: 5 });
+      items.push({ cls: 'km', name: U.unit(km, 'km'), sub: '', x: route.x[i], y: route.y[i], z: route.z[i], pri: 5 });
     }
   }
   if (markerLine.visible) {
     const m = markerLine.userData;
-    items.push({ cls: 'mark', name: `${Math.round(m.z)} m`, sub: '', x: m.x, y: m.y, z: m.z + 90, pri: 2000, noOcclude: true });
+    items.push({ cls: 'mark', name: markName ? `${markName}, ${U.m(m.z)}` : U.m(m.z), sub: '', x: m.x, y: m.y, z: m.z + 90, pri: 2000, noOcclude: true });
   }
   items.sort((a, b) => b.pri - a.pri);
 
+  // Labels keep out of the card, the keys and the ghost key (HOUSE.md section 4.7; ART.md B1).
+  const r = canvas.getBoundingClientRect(), keep = [];
+  for (const id of ['card', 'keys', 'focus-exit']) {
+    const e = $(id), b = e.getBoundingClientRect();
+    if (!e.hidden && b.width) keep.push({ x: (b.left + b.right) / 2 - r.left, y: (b.top + b.bottom) / 2 - r.top, w: b.width + 8, h: b.height + 8 });
+  }
   const placed = [];
-  const r = canvas.getBoundingClientRect();
-  let html = '';
-  let n = 0, tested = 0;
+  let html = '', n = 0, tested = 0;
   for (const it of items) {
     if (n >= LABEL_LIMIT || tested > 90) break;
     const p = projectScene(frame.sx(it.x), it.z, frame.sz(it.y));
     if (!p) continue;
     if (p.x < 6 || p.y < 6 || p.x > r.width - 6 || p.y > r.height - 6) continue;
-    // Boxes, not points: these labels are 70 to 160 px wide and a point test lets them pile up.
-    const w = (String(it.name || '').length * 6.2) + 14;
-    const h = it.sub ? 30 : 19;
-    // Slide a label back inside the frame rather than dropping it: a name half off the edge is
-    // worse than the same name nudged twenty pixels.
+    const name = String(it.name || '');
+    const w = Math.max(textW(name, it.cls), it.sub ? textW(it.sub, 'sub') : 0) + (it.cls === 'wp' ? 21 : 12);
+    const h = it.sub ? 30 : 18;
+    // Slide a label back inside the frame rather than dropping it.
     if (w < r.width - 12) p.x = clamp(p.x, w / 2 + 4, r.width - w / 2 - 4);
     p.y = clamp(p.y, h + 4, r.height - 4);
-    let clash = false;
-    for (const q of placed) {
-      if (Math.abs(q.x - p.x) * 2 < (q.w + w) && Math.abs(q.y - p.y) * 2 < (q.h + h)) { clash = true; break; }
-    }
-    if (clash) continue;
+    const box = { x: p.x, y: p.y - h / 2, w, h };
+    const hit = (q) => Math.abs(q.x - box.x) * 2 < q.w + w && Math.abs(q.y - box.y) * 2 < q.h + h;
+    if (placed.some(hit) || keep.some(hit)) continue;
     tested++;
     if (!it.noOcclude && !labelVisible(it.x, it.y, it.z)) continue;
-    placed.push({ x: p.x, y: p.y - h / 2, w, h });
+    placed.push(box);
     n++;
-    html += `<span class="lbl ${it.cls}" style="transform:translate(${p.x.toFixed(0)}px,${p.y.toFixed(0)}px) translate(-50%,-100%)">`
-      + `${escapeHtml(it.name || '')}${it.sub ? `<small>${escapeHtml(it.sub)}</small>` : ''}</span>`;
+    html += `<span class="lbl ${it.cls}" translate="no" style="transform:translate(${Math.round(p.x)}px,${Math.round(p.y)}px) translate(-50%,-100%)">`
+      + `<span>${escapeHtml(name)}</span>${it.sub ? `<small>${escapeHtml(it.sub)}</small>` : ''}</span>`;
   }
+  placedLabels = placed;
   labelBox.innerHTML = html;
 }
 
-// ---------------------------------------------------------------- compass and scale
+// ---------------------------------------------------------------- the instrument line: north and the scale
 const SCALE_STEPS = [1, 1.5, 2, 2.5, 3, 5, 7.5];
 // A scale bar in a perspective view is only true at one depth, so the depth has to be the ground
-// the viewer is looking at: the centre of the screen. Using the orbit target instead is right in
-// orbit — the target is what you are looking at — and badly wrong in first person, where the rig
-// parks the target 500 m ahead and the bar then reads 50 m across a fifteen-kilometre panorama.
-// If the centre ray misses the terrain (looking at the sky) the target is the fallback.
+// the viewer is looking at: the center of the screen. If the center ray misses the terrain
+// (looking at the sky) the orbit target is the fallback.
 function gaugeReference() {
   const r = canvas.getBoundingClientRect();
   const hit = pickTerrain(r.left + r.width / 2, r.top + r.height / 2);
@@ -970,8 +895,7 @@ function gaugeReference() {
 
 function updateGauge() {
   const ref = gaugeReference();
-  const camDist = Math.hypot(camera.position.x - ref.x,
-    camera.position.y - ref.y * S.exag, camera.position.z - ref.z);
+  const camDist = Math.hypot(camera.position.x - ref.x, camera.position.y - ref.y * S.exag, camera.position.z - ref.z);
   const d = Math.max(1, camDist * 0.02);
   const p0 = projectScene(ref.x, ref.y, ref.z);
   if (!p0) return;
@@ -981,290 +905,198 @@ function updateGauge() {
   const pnT = projectScene(ref.x - d * Math.sin(cv), ref.y, ref.z - d * Math.cos(cv));
   const pnG = projectScene(ref.x, ref.y, ref.z - d);
   if (!pe || !pnT || !pnG) return;
-
   const acrossPx = Math.hypot(pe.x - p0.x, pe.y - p0.y);
   const ppm = acrossPx / d;
   if (ppm > 0 && Number.isFinite(ppm)) {
     let best = 0, err = Infinity;
     for (let e = -1; e <= 5; e++) {
       for (const st of SCALE_STEPS) {
-        const m = st * 10 ** e, x = Math.abs(Math.log(m * ppm / 104));
+        const m = st * 10 ** e, x = Math.abs(Math.log(m * ppm / 80));
         if (x < err) { err = x; best = m; }
       }
     }
-    $('scale-len').textContent = best >= 1000 ? `${+(best / 1000).toFixed(2)} km` : `${+best.toFixed(0)} m`;
-    $('scale-bar').style.width = `${Math.max(8, Math.round(best * ppm))}px`;
-    // Say where the bar is true. One scale cannot hold across a perspective view, and in a
-    // first-person view tilted down the middle of the screen can be the ground at your feet —
-    // so the caption names the distance the bar applies at rather than letting it read as global.
-    $('scale-sub').textContent = `${ref.onGround ? `at ${fmtDist(camDist)} · ` : ''}`
-      + `vertical ×${S.exag.toFixed(1)}`;
+    const short = (v) => U.fixed(v, Number.isInteger(v) ? 0 : Number.isInteger(v * 10) ? 1 : 2);
+    text('scale-len', best >= 1000 ? U.unit(short(best / 1000), 'km') : U.unit(short(best), 'm'));
+    attr($('scale-bar'), 'style', `width:${Math.max(8, Math.round(best * ppm))}px`);
+    // Say where the bar is true: one scale cannot hold across a perspective view.
+    text('scale-sub', `${ref.onGround ? `at ${U.dist(camDist)}, ` : ''}vertical ×${U.fixed(S.exag, 1)}`);
   }
   const ang = (p, el) => {
     const dx = p.x - p0.x, dy = p.y - p0.y;
     const a = Math.atan2(dx, -dy) * RAD;
     const k = clamp(Math.hypot(dx, dy) / Math.max(acrossPx, 0.001), 0.3, 1);
-    el.setAttribute('transform', `translate(26 26) rotate(${a.toFixed(1)}) scale(1 ${k.toFixed(3)}) translate(-26 -26)`);
+    attr(el, 'transform', `translate(12 12) rotate(${Math.round(a)}) scale(1 ${Math.round(k * 100) / 100}) translate(-12 -12)`);
     return a;
   };
   const aT = ang(pnT, $('needle'));
   ang(pnG, $('gridn'));
-  const r = 21, rad = aT * DEG;
-  $('cn').setAttribute('x', (26 + r * Math.sin(rad)).toFixed(1));
-  $('cn').setAttribute('y', (26 - r * Math.cos(rad)).toFixed(1));
-  $('compass').setAttribute('aria-label',
-    `Compass: true north is ${Math.round(((-aT % 360) + 360) % 360)} degrees from the top of the view. `
-    + `The dashed arm is UTM grid north, ${Math.abs(frame.convergence).toFixed(1)} degrees away.`);
+  attr($('cn'), 'x', Math.round(120 + 95 * Math.sin(aT * DEG)) / 10);
+  attr($('cn'), 'y', Math.round(120 - 95 * Math.cos(aT * DEG)) / 10);
+  attr($('compass'), 'aria-label', `Compass: true north is ${U.int(((-aT % 360) + 360) % 360)} degrees from the top of the view. `
+    + `The dashed arm is UTM grid north, ${U.fixed(Math.abs(frame.convergence), 1)} degrees away.`);
 }
 
-// ---------------------------------------------------------------- layers panel
+// ---------------------------------------------------------------- layers
 const LAYERS = [
-  { id: 'sun', name: 'Sunlight', sub: 'Lit from the real solar position for the date and time' },
-  { id: 'shadow', name: 'Cast shadows', sub: 'Swept over the height grid, not a guess from the slope' },
-  { id: 'hillshade', name: 'Hillshade', sub: 'The map-maker’s fixed lamp from the north-west' },
-  { id: 'slope', name: 'Slope angle', sub: '30° and 40° picked out, measured on the true surface' },
-  { id: 'bands', name: 'Elevation bands', sub: 'Colours from data/colors.json' },
-  { id: 'contour20', name: 'Contours, 20 m', sub: '' },
-  { id: 'contour100', name: 'Contours, 100 m', sub: '' },
-  { id: 'water', name: 'Water surfaces', sub: '' },
-  { id: 'glacier', name: 'Glaciers', sub: '' },
-  { id: 'rivers', name: 'Rivers and streams', sub: '' },
-  { id: 'route', name: 'The trail', sub: 'Turrutebasen, draped on the terrain' },
-  { id: 'viewshed', name: 'Viewshed overlay', sub: 'Shown once you have run the viewshed tool' },
-  { id: 'labels', name: 'Place names', sub: '' },
+  ['sun', 'Sunlight', 'Lit from the real solar position for the date and time'],
+  ['shadow', 'Cast shadows', 'Swept over the height grid, not a guess from the slope'],
+  ['hillshade', 'Hillshade', 'The mapmaker’s fixed lamp from the northwest'],
+  ['slope', 'Slope angle', '30° and 40° picked out, measured on the true surface'],
+  ['bands', 'Elevation bands', 'Colors from data/colors.json'],
+  ['contour20', `Contours, 20${U.NN}m`, ''],
+  ['contour100', `Contours, 100${U.NN}m`, ''],
+  ['water', 'Water surfaces', ''],
+  ['glacier', 'Glaciers', ''],
+  ['rivers', 'Rivers and streams', ''],
+  ['route', 'The trail', 'Turrutebasen, draped on the terrain'],
+  ['viewshed', 'Viewshed', 'Shown once the Viewshed tool has run'],
+  ['labels', 'Place names', ''],
 ];
 function buildLayerPanel() {
   const box = $('layer-rows');
-  box.innerHTML = LAYERS.map((L) => `<div class="layer-row">`
-    + `<button class="sw" data-layer="${L.id}" aria-pressed="${S.layers[L.id] ? 'true' : 'false'}" aria-label="${escapeHtml(L.name)}"></button>`
-    + `<span class="t"><b>${escapeHtml(L.name)}</b>${L.sub ? `<span>${escapeHtml(L.sub)}</span>` : ''}</span>`
-    + `</div>`).join('');
+  box.innerHTML = LAYERS.map(([id, name, sub]) => `<button type="button" class="layer-row" data-layer="${id}" aria-pressed="false">`
+    + `<span class="box"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7"/></svg></span>`
+    + `<span><span class="t">${escapeHtml(name)}</span>${sub ? `<span class="s">${escapeHtml(sub)}</span>` : ''}</span></button>`).join('');
   box.addEventListener('click', (e) => {
-    const b = e.target.closest('.sw');
+    const b = e.target.closest('[data-layer]');
     if (!b) return;
-    const id = b.dataset.layer;
-    S.layers[id] = !S.layers[id];
-    b.setAttribute('aria-pressed', String(S.layers[id]));
+    S.layers[b.dataset.layer] = !S.layers[b.dataset.layer];
     applyLayerUniforms();
     save();
   });
 }
 function applyLayerUniforms() {
-  const u = mat.uniforms;
-  u.uLayerSun.value = S.layers.sun ? 1 : 0;
-  u.uLayerShadow.value = S.layers.shadow ? 1 : 0;
-  u.uLayerHill.value = S.layers.hillshade ? 1 : 0;
-  u.uLayerSlope.value = S.layers.slope ? 1 : 0;
-  u.uLayerBands.value = S.layers.bands ? 1 : 0;
-  u.uLayerC20.value = S.layers.contour20 ? 1 : 0;
-  u.uLayerC100.value = S.layers.contour100 ? 1 : 0;
-  u.uLayerGlacier.value = S.layers.glacier ? 1 : 0;
-  u.uLayerWater.value = S.layers.water ? 1 : 0;
-  u.uLayerViewshed.value = S.layers.viewshed ? 1 : 0;
-  waterMesh.visible = !!S.layers.water;
-  routeLine.visible = !!S.layers.route;
-  connLine.visible = !!S.layers.route;
-  riverLine.visible = !!S.layers.rivers;
-  $$('#layer-rows .sw').forEach((b) => b.setAttribute('aria-pressed', String(!!S.layers[b.dataset.layer])));
-  const lakes = (waterMesh.userData && waterMesh.userData.lakes) || [];
-  $('layer-note').textContent = lakes.length
-    ? `Lake surfaces are drawn flat at the level N50 states: ${lakes.filter((l) => l.name).slice(0, 4).map((l) => `${l.name} ${Math.round(l.levelM)} m`).join(', ')}.`
-    : '';
+  const u = mat.uniforms, L = S.layers;
+  for (const [k, id] of [['uLayerSun', 'sun'], ['uLayerShadow', 'shadow'], ['uLayerHill', 'hillshade'], ['uLayerSlope', 'slope'], ['uLayerBands', 'bands'],
+    ['uLayerC20', 'contour20'], ['uLayerC100', 'contour100'], ['uLayerGlacier', 'glacier'], ['uLayerWater', 'water'], ['uLayerViewshed', 'viewshed']]) u[k].value = L[id] ? 1 : 0;
+  waterMesh.visible = !!L.water;
+  routeLine.visible = connLine.visible = !!L.route;
+  riverLine.visible = !!L.rivers;
+  for (const b of $$('#layer-rows [data-layer]')) b.setAttribute('aria-pressed', String(!!L[b.dataset.layer]));
+  // The lake levels the planes are drawn at are the lidar's, with N50's whole meter beside it (B5).
+  const lakes = (waterMesh.userData.lakes || []).filter((l) => l.name).slice(0, 4);
+  text('layer-note', lakes.length ? `Lake surfaces are drawn at the water level the lidar reads: ${lakes.map((l) => `${l.name} ${U.unit(U.fixed(l.levelM, 1), 'm')}`
+    + (l.n50Hoyde != null && Math.abs(l.n50Hoyde - l.levelM) > 0.15 ? ` (N50: ${U.m(l.n50Hoyde)})` : '')).join(', ')}.` : '');
+  legends();
   invalidate();
 }
 
-// ---------------------------------------------------------------- chips
-function buildCameraChips() {
-  const box = $('cam-chips');
-  box.innerHTML = ['Whole area', 'Fit the route', 'On the route'].map((n, i) =>
-    `<button class="chip" data-cam="${i}">${n}</button>`).join('');
-  box.addEventListener('click', (e) => {
-    const b = e.target.closest('.chip');
-    if (!b) return;
-    const i = +b.dataset.cam;
-    if (i === 0) frameWholeModel();
-    if (i === 1) frameRoute();
-    if (i === 2) { rig.setMode('fp'); rig.placeOnRoute(route, rig.routeT, S.reversed, rig.eyeM, false); }
-    save();
-  });
+// A legend row for each layer read through a color.
+function legends() {
+  if (!mat) return;
+  const c = data.edit.colors || {}, L = c.light || {}, pct = (v) => `${Math.round(v * 1000) / 10}%`;
+  const show = (id, on) => { $(id).hidden = !on; };
+  show('lg-slope', S.layers.slope);
+  $('lb-slope').style.background = `linear-gradient(90deg, transparent 50%, ${L.slope30} 50% 66.67%, ${L.slope40} 66.67%)`;
+  const bands = c.elevationBands || [], e = data.manifest.elevation.core || data.manifest.elevation;
+  const lo = Math.floor(e.minM / 10) * 10, hi = Math.ceil(e.maxM / 10) * 10, at = (v) => clamp((v - lo) / (hi - lo), 0, 1);
+  show('lg-bands', S.layers.bands && bands.length > 1);
+  $('lb-bands').style.background = `linear-gradient(90deg, ${bands.map((b, i) => `${b.color} ${pct(i ? at(bands[i - 1].toM) : 0)} ${pct(i === bands.length - 1 ? 1 : at(b.toM))}`).join(', ')})`;
+  const ticks = $$('#lk-bands span:not([id])'), tops = bands.slice(0, -1).map((b) => b.toM);
+  // a tick at every band's top; its number only where it keeps clear of the ends' numbers
+  ticks.forEach((t, i) => { t.hidden = i >= tops.length; if (i < tops.length) { t.style.left = pct(at(tops[i])); t.textContent = at(tops[i]) > 0.1 && at(tops[i]) < 0.85 ? U.int(tops[i]) : ''; } });
+  text('lb-lo', U.int(lo)); text('lb-hi', U.m(hi));
+  $('lb-view').style.background = `linear-gradient(90deg, color-mix(in srgb-linear, ${L.viewshed} ${PLATE.viewshed.tint * 100}%, ${L.terrain}) 50%, color-mix(in srgb-linear, ${PLATE.viewshed.veil} ${PLATE.viewshed.veil_a * 100}%, ${L.terrain}) 50%)`;
+  show('lg-view', S.layers.viewshed && !!viewshedInfo);
+  if (viewshedInfo) text('lt-view', `Viewshed from ${U.m(viewshedInfo.eyeZ)}`);
 }
 
+// ---------------------------------------------------------------- viewpoints
 function buildViewpointChips() {
   const list = [...((data.edit.viewpoints && data.edit.viewpoints.viewpoints) || []), ...S.savedViews];
   $('vp-chips').innerHTML = list.length
-    ? list.map((v, i) => `<button class="chip" data-vp="${i}">${escapeHtml(v.name || v.id || `View ${i + 1}`)}</button>`).join('')
-    : '<span class="dim small">data/viewpoints.json has no viewpoints.</span>';
+    ? list.map((v, i) => `<button type="button" class="word" data-vp="${i}">${escapeHtml(v.name || v.id || `View ${i + 1}`)}</button>`).join('')
+    : '<span class="note">data/viewpoints.json has no viewpoints.</span>';
   $('vp-chips').onclick = (e) => {
-    const b = e.target.closest('.chip');
+    const b = e.target.closest('[data-vp]');
     if (!b) return;
     rig.applyViewpoint(list[+b.dataset.vp]);
     save();
   };
 }
 
-function buildToolChips() {
-  const box = $('tool-chips');
-  box.innerHTML = TOOLS.map((t) => `<button class="chip" data-tool="${t.id}" aria-pressed="false">${t.name}</button>`).join('')
-    + `<button class="chip" data-tool="clear">Clear</button>`;
-  box.addEventListener('click', (e) => {
-    const b = e.target.closest('.chip');
-    if (!b) return;
-    if (b.dataset.tool === 'clear') {
-      S.tool = null; picked = []; toolLine.visible = false;
-      mat.uniforms.uHasViewshed.value = 0; viewshedInfo = null;
-      $('tool-body').hidden = true; $('pickbar').hidden = true;
-      $$('#tool-chips .chip').forEach((x) => x.setAttribute('aria-pressed', 'false'));
-      invalidate();
-      return;
-    }
-    setTool(b.dataset.tool);
-  });
-}
-
-// ---------------------------------------------------------------- about
-function buildAbout(projErr) {
-  const a = data.edit.about || {};
-  const m = data.manifest;
-  const rp = route.props || {};
-  const src = m.source || {};
-  const fixture = m.fixture === true;
-  const lakes = (waterMesh.userData && waterMesh.userData.lakes) || [];
-  const box = $('about-body');
-  box.innerHTML =
-    `<p class="lead"><b>Not a navigation tool.</b> ${escapeHtml(a.notNavigation
-      || 'This is a planning tool. It has no position fix, no compass reading and no live weather. '
-      + 'Besseggen is exposed and the weather turns fast — carry a map and compass and check conditions before you go.')}</p>`
-    + (fixture ? `<p class="lead"><b>Fixture data.</b> ${escapeHtml(a.fixtureWarning || 'This build is running on synthetic data. Nothing you see is a real mountain.')}</p>` : '')
-    + `<h3>Elevation</h3><dl>`
-    + row('Source', `${(a.terrain && a.terrain.name) || src.terrain || '—'}`)
-    + row('Owner', (a.terrain && a.terrain.owner) || '—')
-    + row('Source resolution', `${(a.terrain && a.terrain.resolutionM) || src.resolutionM || '—'} m`)
-    + row('Model resolution', `${(a.terrain && a.terrain.modelResolutionM) || '—'} m on the route, ${m.levels[0].res} m at the horizon`)
-    + row('Licence', (a.terrain && a.terrain.licence) || '—')
-    + row('Retrieved', (a.terrain && a.terrain.retrieved) || src.retrieved || '—')
-    // The download date is not the survey date, and for a lidar model the survey is the one
-    // that matters. about.json has carried the capture projects all along.
-    + (((a.terrain && a.terrain.projects) || []).length
-      ? row('Surveyed', a.terrain.projects.join(', ')) : '')
-    + row('Elevation range', (() => {
-      // The detailed box, not the horizon ring: the shell reaches down to a valley 20 km away
-      // and quoting that as "the elevation range" would say nothing about this mountain.
-      const r = (a.terrain && a.terrain.elevationRangeM) || null;
-      const c = m.elevation.core || m.elevation;
-      return r ? `${Math.round(r[0])}–${Math.round(r[1])} m` : `${Math.round(c.minM)}–${Math.round(c.maxM)} m`;
-    })())
-    + `</dl>`
-    + ((a.terrain && a.terrain.accuracy) ? `<p class="dim">${escapeHtml(a.terrain.accuracy)}</p>` : '')
-    + `<h3>The trail</h3><dl>`
-    + row('Source', (a.trails && a.trails.name) || rp.source || '—')
-    + row('Owner', (a.trails && a.trails.owner) || '—')
-    + row('Licence', (a.trails && a.trails.licence) || '—')
-    + row('Updated', rp.sourceUpdated || (a.trails && a.trails.retrieved) || '—')
-    + row('Length', fmtDist(rp.lengthM ?? route.length))
-    + row('Ascent as shipped', `${Math.round(rp.ascentM ?? route.ascent)} m up, ${Math.round(rp.descentM ?? route.descent)} m down`)
-    + row('Sampling', `${rp.sampleStepM ?? '—'} m steps, ${rp.smoothing || 'no smoothing stated'}`)
-    + (rp.rawAscentM ? row('Unsmoothed', `${Math.round(rp.unsmoothedAscentM ?? 0)} m at ${rp.sampleStepM} m, ${Math.round(rp.rawAscentM)} m on the raw vertices`) : '')
-    + `</dl>`
-    + `<p class="dim">Cumulative ascent depends entirely on how often you sample a noisy elevation `
-    + `model. The figure above is the one the pipeline states, with what it did to get there; `
-    + `the raw number is about 20 % higher because a 1 m model read every few metres counts `
-    + `boulders as climbing.</p>`
-    + ((a.trails && a.trails.accuracy) ? `<p class="dim">${escapeHtml(a.trails.accuracy)}</p>` : '')
-    + `<h3>Map data</h3><dl>`
-    + row('Lakes, glaciers, rivers', (a.mapData && a.mapData.name) || '—')
-    + row('Owner', (a.mapData && a.mapData.owner) || '—')
-    + row('Licence', (a.mapData && a.mapData.licence) || '—')
-    + row('Place names', (a.placeNames && a.placeNames.name) || '—')
-    + row('Owner', (a.placeNames && a.placeNames.owner) || '—')
-    + row('Licence', (a.placeNames && a.placeNames.licence) || '—')
-    + `</dl>`
-    + (lakes.length ? `<p class="dim">Lake surfaces are drawn at the water level the lidar reads, `
-      + `never below the whole metre N50 states, because lidar returns the surface itself and that `
-      + `surface is usually a few decimetres above the rounded figure — a plane at the integer `
-      + `would be buried under its own shore: `
-      + `${lakes.filter((l) => l.name).map((l) => `${escapeHtml(l.name)} ${l.levelM.toFixed(1)} m`
-        + (l.n50Hoyde != null && Math.abs(l.n50Hoyde - l.levelM) > 0.15 ? ` (N50 ${l.n50Hoyde})` : '')).join(', ')}. `
-      + `Lidar returns the water surface, not the bed, so the terrain under a lake already sits at that level.</p>` : '')
-    + (a.route && a.route.howMeasured ? `<p class="dim">${escapeHtml(a.route.howMeasured)}</p>` : '')
-    + `<h3>The boat</h3><p>${escapeHtml(a.boat || 'Most people take the MS Gjende boat one way. No timetable is shown here; it changes every season.')}</p>`
-    + `<h3>How the sun is computed</h3>`
-    + `<p>Solar position uses the NOAA Solar Calculator algorithm (Meeus, <i>Astronomical `
-    + `Algorithms</i>), written out in this app rather than taken from a library. NOAA gives about `
-    + `one minute of error on sunrise and sunset for latitudes inside 72°, and a hundredth of a `
-    + `degree on position before the refraction model's own error. Times are Norwegian local time `
-    + `(CET, CEST in summer) computed from the European rule, not from this device's clock.</p>`
-    + `<p>Shadows are cast by sweeping the ${terrain.analysis.core.res} m height grid away from `
-    + `the sun in one pass, so a ridge really does shade the slope behind it. Bearings are true `
-    + `bearings: the UTM grid here is turned ${frame.convergence.toFixed(2)}° from true north and `
-    + `the app corrects for it. Magnetic declination is not modelled.</p>`
-    + `<h3>Projection</h3>`
-    + `<p>Everything on disk is EPSG:25833 (ETRS89 / UTM 33N). The inverse projection is a `
-    + `fourth-order Krüger series carried in the manifest; checked against the manifest's own `
-    + `checkpoints at startup, worst error ${projErr.toFixed(1)} mm.</p>`
-    + (a.app ? `<h3>This app</h3><dl>`
-      + row('Coordinates', a.app.crs || '—')
-      + row('Built', a.app.built || '—')
-      + `</dl>${a.app.offline ? `<p class="dim">${escapeHtml(a.app.offline)}</p>` : ''}` : '')
-    + `<h3>Moving around</h3>`
-    + `<p>One finger turns the view, two fingers move it, and a pinch zooms. Tap the ground to `
-    + `put the marker there. A double-tap on the view — or the F key — hides the controls and `
-    + `leaves the mountain on its own, with zoom, the whole walk and the same gesture help on a `
-    + `slim column at the right; double-tap again, or press the button at the top of that column, `
-    + `to bring the controls back. While a tool is picking points the double-tap stands down, so `
-    + `a second try at a pick is not mistaken for it.</p>`
-    + `<h3>Honest limits</h3>`
-    + `<p>The elevation model has real error and the trail geometry is generalised and largely `
-    + `contributed, so its position on the ground is approximate. There is no position fix, no `
-    + `compass sensor and no live weather in this app, by design. The walking time is a model, `
-    + `not a measurement. Nothing here should be used to decide whether to go on in bad `
-    + `visibility.</p>`;
+// ---------------------------------------------------------------- About
+// Sections 2 and 3 from data/about.json, values verbatim.
+function buildAbout() {
+  const a = data.edit.about || {}, m = data.manifest, rp = route.props || {}, src = m.source || {};
+  const t = a.terrain || {}, tr = a.trails || {}, md = a.mapData || {}, pn = a.placeNames || {};
+  const lakes = (waterMesh.userData.lakes || []).filter((l) => l.name);
+  const dl = (rows) => `<dl>${rows.filter((r) => r[1] != null && r[1] !== '').map(([k, v]) => row(k, v)).join('')}</dl>`;
+  const p = (s) => (s ? `<p>${escapeHtml(s)}</p>` : '');
+  const r = (t.elevationRangeM || [m.elevation.core.minM, m.elevation.core.maxM]).map(U.m).join(' to ');
+  text('ab-lead', a.notNavigation || 'This is a planning tool. It has no position fix and no live weather.');
+  text('ab-boat', a.boat || 'Most people take the MS Gjende boat one way. No timetable is shown here; it changes every season.');
+  $('ab-gen').innerHTML = '<section><h3>This data</h3>'
+    + dl([['Terrain', t.name || src.terrain], ['Source resolution', t.resolutionM && U.m(t.resolutionM)],
+      ['Model resolution', `${U.m(t.modelResolutionM || 2)} along the route, ${U.m(m.levels[0].res)} at the horizon`],
+      ['Surveyed', (t.projects || []).join(', ')], ['Elevation range', r]])
+    + p(t.accuracy)
+    + dl([['The walk', U.dist(rp.lengthM ?? route.length)], ['Ascent as shipped', `${U.m(rp.ascentM ?? route.ascent)} up, ${U.m(rp.descentM ?? route.descent)} down`],
+      ['Sampling', `${U.m(rp.sampleStepM ?? 25)} steps, ${rp.smoothing || 'no smoothing stated'}`],
+      ['Unsmoothed', rp.rawAscentM && `${U.m(rp.unsmoothedAscentM ?? 0)} at ${U.m(rp.sampleStepM)} steps, ${U.m(rp.rawAscentM)} on the raw vertices`],
+      ['Gradient', `over 150${U.NN}m in the walk’s figures; red on the profile is 25${U.NN}% or steeper over 100${U.NN}m`]])
+    + p((a.route || {}).howMeasured)
+    + (lakes.length ? `<p>Lake surfaces are drawn at the water level the lidar reads, never below the whole meter N50 states, because lidar returns the surface itself: ${escapeHtml(lakes.map((l) => `${l.name} ${U.unit(U.fixed(l.levelM, 1), 'm')}`
+      + (l.n50Hoyde != null && Math.abs(l.n50Hoyde - l.levelM) > 0.15 ? ` (N50: ${U.m(l.n50Hoyde)})` : '')).join(', '))}.</p>` : '')
+    + dl([['Coordinates', (a.app || {}).crs || 'EPSG:25833'], ['Projection check', `${U.unit(U.fixed(projErr, 1), 'mm')} worst error against the manifest’s checkpoints`],
+      ['Grid convergence', `${U.deg(frame.convergence, 2)} from true north`], ['Built', (a.app || {}).built]])
+    + '</section><section><h3>Sources and credits</h3>'
+    + [t, tr, md, pn].map((b) => `<h4 translate="no">${escapeHtml(b.name || '')}</h4>${dl([['Owner', b.owner], ['License', b.licence], ['Retrieved', b.retrieved], ['Updated', b.sourceUpdated]])}${p(b.note)}${p(b === tr ? b.accuracy : '')}`).join('')
+    + '<p>three.js r186 renders the scene (MIT License); the copy in vendor/ is byte for byte the one the Anatomy app carries, with its license.</p>'
+    + '<p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p></section>';
 }
 
 function updatePace() {
-  const p = effectivePace();
-  $('pace-model').value = p.model === 'naismith' ? 'naismith' : 'tobler';
-  $('pace-fit').value = String(p.fitnessFactor ?? 1);
-  $('fit-out').textContent = `×${Number(p.fitnessFactor ?? 1).toFixed(2)}`;
-  $('pace-out').textContent = paceLabel(p);
-  const note = p.model === 'naismith' ? langmuirNote(p) : null;
-  $('pace-note').textContent = note || 'Tobler 1993: walking speed falls off either side of a gentle downhill. Editable in data/pace.json.';
+  const p = effectivePace(), f = p.fitnessFactor ?? 1;
+  for (const b of $$('#pace-words [data-model]')) b.setAttribute('aria-checked', String(b.dataset.model === (p.model === 'naismith' ? 'naismith' : 'tobler')));
+  $('pace-fit').value = String(f);
+  slid($('pace-fit'));
+  text('pace-out', paceLabel(p));
+  text('pace-note', (p.model === 'naismith' && langmuirNote(p)) || 'Tobler 1993: walking speed falls off either side of a gentle downhill. Editable in data/pace.json.');
   setCursor(S.cursor, false);
 }
 
 function showNotices() {
-  const el = $('notices');
-  if (!data.notices.length) { el.hidden = true; return; }
-  el.hidden = false;
-  el.textContent = data.notices.join(' ');
+  $('notice').hidden = !data.notices.length;
+  $('notice').textContent = data.notices.join(' ');
 }
 
-// ---------------------------------------------------------------- debug
-function updateDebug() {
-  const st = terrain.stats;
-  const ri = renderer.info.render;
-  const core = terrain.analysis.core, shell = terrain.analysis.shell;
-  $('dbg-body').textContent = [
-    `tiles drawn   ${st.tiles} / ${MAX_TILES}${st.capped ? ' (capped)' : ''}`,
-    `triangles     ${fmt(ri.triangles)}  budget 1 500 000`,
-    `  submitted   ${fmt(st.tiles * TRIS_PER_TILE)} terrain + overlays`,
-    `draw calls    ${ri.calls}`,
-    `frame         ${timings.frameMs.toFixed(1)} ms (select ${timings.selectMs.toFixed(1)})`,
-    `shadow sweep  ${timings.shadowMs.toFixed(0)} ms  grid ${core.nx}x${core.ny} + ${shell.nx}x${shell.ny}`,
-    `viewshed      ${timings.viewshedMs ? `${timings.viewshedMs.toFixed(0)} ms` : '—'}`,
-    `geom built    ${st.built}  pool ${terrain.pool.length}`,
-    `exaggeration  x${S.exag.toFixed(1)}`,
-  ].join('\n');
+// ---------------------------------------------------------------- dialogs: About and Layers
+// Modal: focus held inside, Escape closes, focus returns; play waits.
+let opener = null;
+function openDialog(id) {
+  closeDialog(false);
+  opener = document.activeElement;
+  S.dialog = id;
+  if (play) { held = true; setPlaying(false); }
+  $(id).hidden = false;
+  $('btn-layers').setAttribute('aria-expanded', String(id === 'layers'));
+  $(id).querySelector('[data-close]').focus({ preventScroll: true });
+}
+function closeDialog(restore = true) {
+  if (!S.dialog) return;
+  $(S.dialog).hidden = true;
+  S.dialog = null;
+  $('btn-layers').setAttribute('aria-expanded', 'false');
+  if (held) { held = false; setPlaying(true); }
+  if (restore && opener && opener.focus) opener.focus({ preventScroll: true });
+  invalidate();
 }
 
 // ---------------------------------------------------------------- UI wiring
+const GRIP = ['Show more controls', 'Show all controls', 'Hide the extra controls'];
 function setStop(n) {
   S.sheet = clamp(Math.round(n), 0, 2);
-  const sheet = $('sheet');
-  sheet.classList.remove('s0', 's1', 's2');
-  sheet.classList.add(`s${S.sheet}`);
-  $('grip').setAttribute('aria-label', ['Show more controls', 'Show all controls', 'Hide the extra controls'][S.sheet]);
+  $('sheet').className = `sheet s${S.sheet}`;
+  $('grip').setAttribute('aria-label', GRIP[S.sheet]);
   save();
-  requestAnimationFrame(onResize);
+}
+// A native range drawn in the house's language: the value so far in ink (styles.css reads --v).
+const fill = (el) => el.style.setProperty('--v', `${((el.value - el.min) / (el.max - el.min)) * 100}%`);
+function slid(el) {
+  fill(el);
+  if (el.id === 'eye-h') text('eye-out', U.unit(U.fixed(S.eyeM, 1), 'm'));
+  if (el.id === 'pace-fit') text('fit-out', `×${U.fixed(+el.value, 2)}`);
 }
 
 function wireUI() {
@@ -1290,18 +1122,37 @@ function wireUI() {
     if (e.key === 'ArrowDown') { e.preventDefault(); setStop(S.sheet - 1); }
   });
 
-  const openSheet = (id, btn) => {
-    const el = $(id);
-    el.hidden = !el.hidden;
-    if (btn) btn.setAttribute('aria-expanded', String(!el.hidden));
+  $('stamp').addEventListener('click', () => openDialog('about'));
+  $('btn-layers').addEventListener('click', () => (S.dialog === 'layers' ? closeDialog() : openDialog('layers')));
+  for (const b of $$('[data-close]')) b.addEventListener('click', () => closeDialog());
+  // ignore the synthesized click of the tap that opened the card
+  $('card-close').addEventListener('click', () => { if (performance.now() - cardShownAt > 450) closeCard(); });
+  $('zoom-in').addEventListener('click', () => { rig.zoomBy(1 / 1.35); save(); });
+  $('zoom-out').addEventListener('click', () => { rig.zoomBy(1.35); save(); });
+  $('btn-fit').addEventListener('click', () => { frameRoute(); save(); });
+  $('cam-whole').addEventListener('click', () => { frameWholeModel(); save(); });
+  $('cam-route').addEventListener('click', () => { rig.setMode('fp'); rig.placeOnRoute(route, rig.routeT, S.reversed, rig.eyeM, false); save(); });
+
+  $('t-play').addEventListener('click', () => setPlaying(!play));
+  const day = (k) => {
+    setPlaying(false);
+    const t = new Date(Date.UTC(S.date.y, S.date.mo - 1, S.date.d + k));
+    want = { ...want, date: { y: t.getUTCFullYear(), mo: t.getUTCMonth() + 1, d: t.getUTCDate() } };
+    say(U.date(want.date.y, want.date.mo, want.date.d, 1, 1));
+    invalidate();
   };
-  $('btn-layers').addEventListener('click', (e) => { $('about').hidden = true; openSheet('layers', e.currentTarget); });
-  $('btn-about').addEventListener('click', (e) => { $('layers').hidden = true; openSheet('about', e.currentTarget); });
-  $$('[data-close]').forEach((b) => b.addEventListener('click', () => {
-    b.closest('aside').hidden = true;
-    $('btn-layers').setAttribute('aria-expanded', 'false');
-    $('btn-about').setAttribute('aria-expanded', 'false');
-  }));
+  $('t-prev').addEventListener('click', () => day(-1));
+  $('t-next').addEventListener('click', () => day(1));
+  const dateEl = $('date-d');
+  dateEl.addEventListener('input', () => {
+    const y = S.date.y;
+    let mo = 1, d = clamp(+dateEl.value, 1, 366);
+    while (d > daysInMonth(y, mo) && mo < 12) { d -= daysInMonth(y, mo); mo++; }
+    want = { ...want, date: { y, mo, d: Math.min(d, 31) } };
+    fill(dateEl);
+    invalidate();
+  });
+  dateEl.addEventListener('change', save);
 
   $('btn-dir').addEventListener('click', () => {
     S.reversed = !S.reversed;
@@ -1312,60 +1163,25 @@ function wireUI() {
   });
   updateDirLabel();
 
-  const dateEl = $('date-d'), timeEl = $('time-t');
-  dateEl.value = String(dayOfYear(S.date.y, S.date.mo, S.date.d));
-  timeEl.value = String(S.minutes);
-  const setDoy = (doy) => {
-    const y = S.date.y;
-    let mo = 1, d = clamp(doy, 1, 366);
-    while (d > daysInMonth(y, mo)) { d -= daysInMonth(y, mo); mo++; if (mo > 12) { mo = 12; d = 31; break; } }
-    S.date = { y, mo, d };
-  };
-  dateEl.addEventListener('input', () => { setDoy(+dateEl.value); updateSun(false); save(); });
-  dateEl.addEventListener('change', () => { computeShadows(); });
-  timeEl.addEventListener('input', () => { S.minutes = +timeEl.value; updateSun(false); save(); });
-  timeEl.addEventListener('change', () => { computeShadows(); });
-
   const exagEl = $('exag');
   exagEl.value = String(S.exag);
-  exagEl.addEventListener('input', () => { applyExaggeration(+exagEl.value); });
+  fill(exagEl);
+  exagEl.addEventListener('input', () => { fill(exagEl); applyExaggeration(+exagEl.value); });
   exagEl.addEventListener('change', save);
-
-  const fp = $('fp-t');
-  fp.addEventListener('input', () => {
-    const t = +fp.value / 1000;
-    if (rig.mode === 'orbit') rig.setMode('fp');
-    const i = rig.placeOnRoute(route, t, S.reversed, rig.eyeM, false);
-    if (i != null) setCursor(i, false);
-  });
-  fp.addEventListener('change', save);
 
   // Reduced motion: the same walk, one named point at a time, with nothing moving in between.
   const flyLabel = () => (reduceMotion() ? 'Step to the next point' : 'Fly the route');
-  const stopFlying = () => {
-    rig.flying = false;
-    $('btn-fly').textContent = flyLabel();
-    $('btn-fly').classList.remove('primary');
-  };
+  const stopFlying = () => { rig.flying = false; $('btn-fly').textContent = flyLabel(); };
   $('btn-fly').textContent = flyLabel();
   rig.onFlyEnd = () => { stopFlying(); save(); };
-  if (typeof matchMedia === 'function') {
-    matchMedia('(prefers-reduced-motion: reduce)')
-      .addEventListener('change', () => { if (!rig.flying) $('btn-fly').textContent = flyLabel(); });
-  }
+  RM.addEventListener('change', () => { if (!rig.flying) $('btn-fly').textContent = flyLabel(); if (play) setPlaying(true); });
   const stepToNextWaypoint = () => {
-    // routeT and dirDist are both measured in the direction being walked, so this needs no
-    // special case for the reversed walk.
-    const wps = (route.waypoints || []).map((w) => route.dirDist(w.i, S.reversed))
-      .sort((a, b) => a - b);
+    const wps = (route.waypoints || []).map((w) => route.dirDist(w.i, S.reversed)).sort((a, b) => a - b);
     if (!wps.length) return;
-    const here = rig.routeT * route.length;
-    const next = wps.find((d) => d > here + 5);
+    const next = wps.find((d) => d > rig.routeT * route.length + 5);
     rig.setMode('fp');
-    const i = rig.placeOnRoute(route, (next === undefined ? wps[0] : next) / route.length,
-      S.reversed, rig.eyeM, false);
+    const i = rig.placeOnRoute(route, (next === undefined ? wps[0] : next) / route.length, S.reversed, rig.eyeM, false);
     if (i != null) setCursor(i, false);
-    $('fp-t').value = String(Math.round(rig.routeT * 1000));
     save();
   };
   $('btn-fly').addEventListener('click', () => {
@@ -1375,39 +1191,41 @@ function wireUI() {
       rig.setMode('fp');
       if (rig.routeT >= 0.999) rig.routeT = 0;
       $('btn-fly').textContent = 'Stop';
-      $('btn-fly').classList.add('primary');
     } else { stopFlying(); save(); }
     invalidate();
   });
   $('btn-orbit').addEventListener('click', () => {
     stopFlying();
     rig.setMode('orbit');
-    rig.controls.target.copy(camera.position).add(
-      new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).multiplyScalar(1800),
-    );
+    rig.controls.target.copy(camera.position).add(new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).multiplyScalar(1800));
     rig.controls.update();
     save();
   });
 
+  $('tool-words').addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.id !== 'tool-clear') { setTool(b.dataset.tool); return; }
+    S.tool = null; picked = []; lastRun = null; toolLine.visible = false;
+    mat.uniforms.uHasViewshed.value = 0; viewshedInfo = null;
+    if (S.card && S.card !== 'point') closeCard();
+    setTool(null);
+    legends();
+  });
   const eye = $('eye-h');
   eye.value = String(S.eyeM);
-  $('eye-out').textContent = `${Number(S.eyeM).toFixed(1)} m`;
-  eye.addEventListener('input', () => {
-    S.eyeM = +eye.value;
-    $('eye-out').textContent = `${S.eyeM.toFixed(1)} m`;
-  });
+  slid(eye);
+  eye.addEventListener('input', () => { S.eyeM = +eye.value; slid(eye); });
   eye.addEventListener('change', () => {
     save();
-    // Re-run whatever visibility question was last asked, rather than making the user tap again.
-    if (lastRun && lastRun.id !== 'firstsun') {
-      const body = $('tool-body');
-      body.hidden = false;
-      if (lastRun.id === 'viewshed') runViewshed(lastRun.pts[0], body);
-      if (lastRun.id === 'los') runLos(lastRun.pts[0], lastRun.pts[1], body);
-    }
+    // Run again whatever visibility question was last asked, rather than making the user tap again.
+    if (lastRun) (lastRun.id === 'viewshed' ? runViewshed : runLos)(...lastRun.pts);
   });
 
-  $('pace-model').addEventListener('change', (e) => { S.paceModel = e.target.value; updatePace(); save(); });
+  $('pace-words').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-model]');
+    if (b) { S.paceModel = b.dataset.model; updatePace(); save(); }
+  });
   $('pace-fit').addEventListener('input', (e) => { S.paceFit = +e.target.value; updatePace(); });
   $('pace-fit').addEventListener('change', save);
 
@@ -1422,33 +1240,23 @@ function wireUI() {
   });
   $('btn-clear-vp').addEventListener('click', () => { S.savedViews = []; buildViewpointChips(); save(); });
 
-  const dbg = $('t-debug');
-  dbg.checked = S.debug;
-  $('debug').hidden = !S.debug;
-  dbg.addEventListener('change', () => { S.debug = dbg.checked; $('debug').hidden = !S.debug; save(); invalidate(); });
-  const lab = $('t-labels');
-  lab.checked = !!S.layers.labels;
-  lab.addEventListener('change', () => { S.layers.labels = lab.checked; applyLayerUniforms(); save(); });
-
-  $('dbg-bench').addEventListener('click', () => {
-    // The fixture's grids are small; benchmark at the real model's size so the number means
-    // something for the shipped data.
-    const g = benchGrid(1281, 1025);
-    const buf = new Uint8Array(g.nx * g.ny);
-    const t0 = performance.now();
-    shadowMask(g, 140, 18, buf);
-    const sweep = performance.now() - t0;
-    const t1 = performance.now();
-    viewshed(g, g.x0 + g.nx * 8, g.y1 - g.ny * 8, 1.7, 12000, (x, y) => terrain.gridSample(g, x, y));
-    const vs = performance.now() - t1;
-    $('dbg-body').textContent += `\nbench 1281x1025: sweep ${sweep.toFixed(0)} ms, viewshed ${vs.toFixed(0)} ms`;
+  addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (S.dialog) closeDialog(); else if (S.card) closeCard(); else if (focus && focus.isOn()) focus.set(false, true);
+      return;
+    }
+    if (S.dialog && e.key === 'Tab') {
+      // hold Tab inside the open sheet
+      const f = $$('button, [tabindex="0"]', $(S.dialog)).filter((x) => !x.closest('[hidden]'));
+      const i = f.indexOf(document.activeElement);
+      if (i < 0 || (e.shiftKey ? i === 0 : i === f.length - 1)) { f[e.shiftKey ? f.length - 1 : 0].focus(); e.preventDefault(); }
+    }
   });
 
   // ---- persistence on the way out, and after every drag ----------------------------------
-  // A camera set by dragging has to survive the app being closed. `beforeunload` is not enough:
-  // WebKit does not fire it in a WKWebView, and an app killed in the background never fires it
-  // anywhere. `pagehide` and a hidden `visibilitychange` are the two events iOS does give, and a
-  // debounced save after the camera settles means even a kill with no event at all loses nothing.
+  // WebKit does not fire `beforeunload` in a WKWebView and an app killed in the background fires
+  // nothing, so state is stored on `pagehide`, on a hidden `visibilitychange`, and 400 ms after a
+  // camera drag settles. Hidden, play and the fly-through stop (HOUSE.md section 4.12).
   let camTimer = 0;
   const saveCameraSoon = () => {
     if (camTimer) clearTimeout(camTimer);
@@ -1457,21 +1265,26 @@ function wireUI() {
   rig.controls.addEventListener('end', saveCameraSoon);   // orbit drag, pinch and wheel zoom
   rig.onLookEnd = saveCameraSoon;                         // first-person look drag
   const saveNow = () => { if (camTimer) { clearTimeout(camTimer); camTimer = 0; } save(); };
-  window.addEventListener('pagehide', saveNow);
-  window.addEventListener('beforeunload', saveNow);
-  document.addEventListener('visibilitychange', () => { if (document.hidden) saveNow(); });
+  addEventListener('pagehide', saveNow);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) { invalidate(); return; }
+    setPlaying(false); stopFlying(); saveNow();
+  });
 }
 
 function updateDirLabel() {
   const wps = route.waypoints;
-  const a = wps.length ? wps[0].name : 'start';
-  const b = wps.length ? wps[wps.length - 1].name : 'end';
-  $('btn-dir').textContent = S.reversed ? `${b} → ${a}` : `${a} → ${b}`;
-  $('s-time-label').textContent = 'time to the end';
+  const a = wps.length ? wps[0].name : 'the start', b = wps.length ? wps[wps.length - 1].name : 'the end';
+  $('btn-dir').textContent = S.reversed ? `${b} to ${a}` : `${a} to ${b}`;
 }
 
-// Started last, so every const in this module is initialised before the first await returns.
-boot().catch((err) => {
-  $('load-msg').textContent = `Could not start: ${err && err.message ? err.message : err}`;
-  console.error(err);
-});
+// Started last, so every const in this module is initialized before the first await returns.
+$('credits').textContent = CREDITS;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  boot().catch((err) => { fail(err && err.message ? err.message : String(err)); console.error(err); });
+} catch (err) {
+  fail('This phone gave no 3D graphics just now. Close other apps and open Besseggen again.');
+}

@@ -28,7 +28,6 @@ export function tzOffsetHours(y, mo, d, minutes) {
   const end = Date.UTC(y, 9, lastSunday(y, 10), 3, 0);
   return (t >= start && t < end) ? 2 : 1;
 }
-export function tzName(offset) { return offset === 2 ? 'CEST' : 'CET'; }
 
 // Local wall-clock -> Julian Day and minutes past UTC midnight.
 export function toUT(y, mo, d, minutes) {
@@ -103,10 +102,10 @@ const THRESH = { sunrise: -0.833, civil: -6, nautical: -12, goldenLo: -4, golden
 export function dayEvents(y, mo, d, lat, lon) {
   const N = 1441;
   const alt = new Float64Array(N);
-  const az = new Float64Array(N);
+  const az = new Float64Array(N), ap = new Float64Array(N);
   for (let i = 0; i < N; i++) {
     const s = sunAt(y, mo, d, i, lat, lon);
-    alt[i] = s.elev; az[i] = s.az;
+    alt[i] = s.elev; az[i] = s.az; ap[i] = s.elevApparent;
   }
   let noon = 0, mid = 0;
   for (let i = 1; i < N; i++) { if (alt[i] > alt[noon]) noon = i; if (alt[i] < alt[mid]) mid = i; }
@@ -132,7 +131,7 @@ export function dayEvents(y, mo, d, lat, lon) {
   const dawn = cross(THRESH.civil, true);
   const dusk = cross(THRESH.civil, false);
   return {
-    alt, az,
+    alt, az, altApparent: ap,
     maxAlt: alt[noon], minAlt: alt[mid],
     solarNoon: noon, solarMidnight: mid,
     sunrise, sunset, dawn, dusk,
@@ -149,7 +148,7 @@ export function dayEvents(y, mo, d, lat, lon) {
 }
 
 // A unit vector toward the sun in scene coordinates (+X east, +Y up, -Z north). The true azimuth
-// is turned into a grid azimuth first: at 8.7 E in a zone centred on 15 E the two are 5.5 degrees
+// is turned into a grid azimuth first: at 8.7 E in a zone centered on 15 E the two are 5.5 degrees
 // apart, and skipping that would put every shadow 5.5 degrees out.
 export function sunVector(azTrue, altDeg, convergenceDeg) {
   const g = (azTrue - convergenceDeg) * DEG, a = altDeg * DEG;
@@ -176,7 +175,7 @@ export function shadowMask(grid, sunGridAzDeg, sunAltDeg, out, seed) {
   const ux = Math.sin(a), uy = Math.cos(a);          // toward the sun, east and north
   // Grid axes: column increases east, row increases south. Sweeping AWAY from the sun.
   const dCol = -ux, dRow = uy;
-  const eps = 0.5;                                    // decimetres of slack, 5 cm
+  const eps = 0.5;                                    // decimeters of slack, 5 cm
 
   const E = new Float32Array(nx);
   const Eprev = new Float32Array(nx);
@@ -185,7 +184,7 @@ export function shadowMask(grid, sunGridAzDeg, sunAltDeg, out, seed) {
   if (Math.abs(dRow) >= Math.abs(dCol)) {
     const shift = dCol / Math.abs(dRow);               // columns moved per row step
     const stepM = res * Math.hypot(1, shift);
-    const drop = stepM * tanAlt * 10;                  // decimetres
+    const drop = stepM * tanAlt * 10;                  // decimeters
     const rowStep = dRow > 0 ? 1 : -1;
     const first = rowStep > 0 ? 0 : ny - 1;
     for (let k = 0; k < ny; k++) {
@@ -270,8 +269,8 @@ export function makeSeed(shellGrid, coreGrid, sampleShell, gridAzDeg, altDeg) {
   };
 }
 
-// Is one point in direct sun? Ray-march the height field toward the sun. Used by the first and
-// last direct sun tool, where the answer has to be right rather than smooth.
+// Is one point in direct sun? Ray-march the height field toward the sun. Used by the Burn (the
+// time track, js/track.js) and the card's sun rows, where the answer has to be right, not smooth.
 export function isSunlit(sampleH, x, y, z, gridAzDeg, altDeg, maxH, eye = 0.5) {
   if (altDeg <= 0) return false;
   const a = gridAzDeg * DEG, ux = Math.sin(a), uy = Math.cos(a);
@@ -288,45 +287,29 @@ export function isSunlit(sampleH, x, y, z, gridAzDeg, altDeg, maxH, eye = 0.5) {
   return true;
 }
 
-// First and last direct sun on one point, for one day. Sampled every two minutes, then bisected
-// to the minute — the same ray-march the shadow layer uses, so the two always agree.
+// Direct sun on one point, for one day: sampled every two minutes, then every edge of every spell
+// bisected to the minute, with the same ray march the shadow layer uses, so the two always agree.
+// The total is the sum of the spells as written, so a caption's figures add up.
 export function directSunWindow(sampleH, x, y, z, y_, mo, d, lat, lon, convergence, maxH) {
-  const lit = [];
-  for (let m = 0; m <= 1440; m += 2) {
-    const s = sunAt(y_, mo, d, m, lat, lon);
-    const ok = s.elevApparent > 0
-      && isSunlit(sampleH, x, y, z, s.az - convergence, s.elevApparent, maxH);
-    lit.push(ok);
-  }
   const at = (m) => {
     const s = sunAt(y_, mo, d, m, lat, lon);
     return s.elevApparent > 0 && isSunlit(sampleH, x, y, z, s.az - convergence, s.elevApparent, maxH);
   };
-  const refine = (i0, i1) => {          // i0 unlit, i1 lit (indices into the 2-minute samples)
-    let lo = i0 * 2, hi = i1 * 2;
-    for (let k = 0; k < 8; k++) {
-      const m = (lo + hi) / 2;
-      if (at(m)) hi = m; else lo = m;
-    }
-    return hi;
+  const lit = [];
+  for (let m = 0; m <= 1440; m += 2) lit.push(at(m));
+  const edge = (lo, hi, on) => {       // lo has the other answer, hi has `on`: the minute it turns
+    for (let k = 0; k < 8; k++) { const m = (lo + hi) / 2; if (at(m) === on) hi = m; else lo = m; }
+    return Math.round(hi);
   };
-  let first = null, last = null, total = 0;
-  for (let i = 0; i < lit.length; i++) {
-    if (lit[i]) total += 2;
-    if (lit[i] && first === null) first = i > 0 ? refine(i - 1, i) : 0;
-    if (lit[i]) last = i;
-  }
-  if (last !== null && last < lit.length - 1) {
-    let lo = last * 2, hi = (last + 1) * 2;
-    for (let k = 0; k < 8; k++) { const m = (lo + hi) / 2; if (at(m)) lo = m; else hi = m; }
-    last = lo;
-  } else if (last !== null) last = 1440;
   // Gaps matter here: a point on a north face can be lit twice in a day with a ridge in between.
   const spans = [];
-  let s = null;
+  let s = null, total = 0;
   for (let i = 0; i < lit.length; i++) {
-    if (lit[i] && s === null) s = i;
-    if ((!lit[i] || i === lit.length - 1) && s !== null) { spans.push([s * 2, (lit[i] ? i : i - 1) * 2]); s = null; }
+    if (lit[i] && s === null) s = i ? edge(i * 2 - 2, i * 2, true) : 0;
+    if (s !== null && (!lit[i] || i === lit.length - 1)) {
+      const e = lit[i] ? 1440 : edge(i * 2 - 2, i * 2, false);
+      spans.push([s, e]); total += e - s; s = null;
+    }
   }
-  return { first, last, totalMinutes: Math.round(total), spans };
+  return { first: spans.length ? spans[0][0] : null, last: spans.length ? spans[spans.length - 1][1] : null, totalMinutes: total, spans, lit };
 }

@@ -2,8 +2,8 @@
 // and a fly-through along it.
 //
 // Orbit uses OrbitControls with damping OFF. Damping needs a frame loop to run out its inertia,
-// and this app renders on change; a smooth tween where one is wanted (a jump to a viewpoint) is
-// animated deliberately and stops when it is done.
+// and this app renders on change. Every jump (a viewpoint, Fit the route) is a cut: the camera's
+// waits are timed, and a cut is what Reduce Motion asks for anyway.
 
 import * as THREE from '../vendor/three.module.js';
 import { OrbitControls } from '../vendor/OrbitControls.js';
@@ -28,9 +28,8 @@ export class CameraRig {
     this.yaw = 0; this.pitch = 0;
     this.eyeM = 1.7;
     this.routeT = 0;
-    this.flySpeed = 90;           // metres per second along the ground
+    this.flySpeed = 90;           // meters per second along the ground
     this.flying = false;
-    this.tween = null;
 
     this.controls = new OrbitControls(camera, dom);
     this.controls.enableDamping = false;
@@ -93,41 +92,24 @@ export class CameraRig {
     const tgt = new THREE.Vector3(
       (box.min.x + box.max.x) / 2, (box.min.y + box.max.y) / 2, (box.min.z + box.max.z) / 2,
     );
-    this.goTo(tgt, dist, headingDeg, pitchDeg, false);
-  }
-  goTo(target, dist, headingDeg, pitchDeg, animate = true) {
     const a = headingDeg * DEG, p = clamp(pitchDeg, 2, 88) * DEG;
-    const pos = new THREE.Vector3(
-      target.x + dist * Math.cos(p) * Math.sin(a),
-      target.y + dist * Math.sin(p),
-      target.z + dist * Math.cos(p) * Math.cos(a),
-    );
-    this.setOrbit(pos, target, animate);
-  }
-  setOrbit(pos, target, animate = true) {
     this.mode = 'orbit';
     this.controls.enabled = true;
-    if (!animate || reduceMotion()) {
-      this.camera.position.copy(pos);
-      this.controls.target.copy(target);
-      this.clamp();
-      this.controls.update();
-      this.invalidate();
-      return;
-    }
-    this.tween = {
-      t0: performance.now(), dur: 850,
-      p0: this.camera.position.clone(), p1: pos.clone(),
-      t0v: this.controls.target.clone(), t1v: target.clone(),
-      fov0: this.camera.fov, fov1: this.camera.fov,
-    };
+    this.camera.position.set(
+      tgt.x + dist * Math.cos(p) * Math.sin(a),
+      tgt.y + dist * Math.sin(p),
+      tgt.z + dist * Math.cos(p) * Math.cos(a),
+    );
+    this.controls.target.copy(tgt);
+    this.clamp();
+    this.controls.update();
     this.invalidate();
   }
 
   // One step of the zoom keys in focus mode, where there is no pinch to reach for. A factor
   // below 1 comes closer. Orbiting, that is a dolly along the view ray between the same limits
-  // the pinch obeys; standing on the ground there is nothing to dolly towards without walking
-  // into the hillside, so it becomes a lens — the same thing binoculars do.
+  // the pinch obeys; standing on the ground there is nothing to dolly toward without walking
+  // into the hillside, so it becomes a lens, the same thing binoculars do.
   zoomBy(factor) {
     if (this.mode === 'orbit') {
       const v = this.camera.position.clone().sub(this.controls.target);
@@ -199,16 +181,6 @@ export class CameraRig {
   // ---------- animation ----------
   update(dtMs, route, reversed) {
     let busy = false;
-    if (this.tween) {
-      const k = clamp((performance.now() - this.tween.t0) / this.tween.dur, 0, 1);
-      const e = k < 0.5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2;
-      this.camera.position.lerpVectors(this.tween.p0, this.tween.p1, e);
-      this.controls.target.lerpVectors(this.tween.t0v, this.tween.t1v, e);
-      this.clamp();
-      this.controls.update();
-      if (k >= 1) this.tween = null;
-      busy = true;
-    }
     if (this.flying && route && route.length > 0) {
       // Clamped so a stalled frame cannot teleport the camera down the ridge; on a slow
       // renderer that makes the fly-through run slower than wall-clock, which is the right way
@@ -218,12 +190,12 @@ export class CameraRig {
       if (this.routeT >= 1) { this.routeT = 1; this.flying = false; }
       if (this.onFlyEnd && !this.flying) this.onFlyEnd();
       this.placeOnRoute(route, this.routeT, reversed, this.eyeM, false);
-      busy = busy || this.flying;
+      busy = this.flying;
     }
     return busy;
   }
 
-  serialise() {
+  serialize() {
     return {
       mode: this.mode,
       pos: this.camera.position.toArray(),
