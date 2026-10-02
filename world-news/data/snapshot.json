@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T03:01:18Z",
+ "generatedAt": "2026-10-02T04:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/as-brazil-prepares-to-vote-for-a-new-leader-can-latin-american-democracies-withstand-us-pressure-293094",
+     "published": "2026-10-02T03:51:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shannon Brincat, Senior Lecturer in Politics and International Relations, University of the Sunshine Coast"
+    },
+    {
+     "title": "What should parents consider when tracking their child’s location?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-should-parents-consider-when-tracking-their-childs-location-293090",
+     "published": "2026-10-02T03:30:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bjørn Nansen, Associate Professor, School of Computing and Information Systems, The University of Melbourne"
+    },
+    {
      "title": "Are Australia’s native bees thriving or declining? We don’t know but can find out",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Scarlett Howard, Research Fellow, School of Biological Sciences, Monash University"
-    },
-    {
-     "title": "In a year of record-breaking heat, Australia and Pacific leaders meet to sharpen climate goals",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/in-a-year-of-record-breaking-heat-australia-and-pacific-leaders-meet-to-sharpen-climate-goals-292990",
-     "published": "2026-10-02T01:22:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jacqueline Peel, Professor of Law, The University of Melbourne"
-    },
-    {
-     "title": "The ‘Cornell 7’ reported rape shows why we need to rethink sexual violence prevention",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-cornell-7-reported-rape-shows-why-we-need-to-rethink-sexual-violence-prevention-293338",
-     "published": "2026-10-02T01:19:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sarah Vrankovich, Research Fellow, La Trobe University"
     },
     {
      "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
+   "published": "2026-10-02 03:51 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What should parents consider when tracking their child’s location?",
+   "published": "2026-10-02 03:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Are Australia’s native bees thriving or declining? We don’t know but can find out",
    "published": "2026-10-02 02:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "In a year of record-breaking heat, Australia and Pacific leaders meet to sharpen climate goals",
-   "published": "2026-10-02 01:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The ‘Cornell 7’ reported rape shows why we need to rethink sexual violence prevention",
-   "published": "2026-10-02 01:19 UTC"
   },
   {
    "region": "Oceania",
