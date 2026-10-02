@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T06:01:28Z",
+ "generatedAt": "2026-10-02T07:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Christa Pike’s botched execution exposes the deep contradictions of a ‘painless’ state-imposed death",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/christa-pikes-botched-execution-exposes-the-deep-contradictions-of-a-painless-state-imposed-death-293432",
+     "published": "2026-10-02T06:27:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Julian Koplin, Lecturer in Bioethics, Monash University; The University of Melbourne"
+    },
+    {
      "title": "Why a decade of AI safety promises keep failing to bite",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Shannon Brincat, Senior Lecturer in Politics and International Relations, University of the Sunshine Coast"
-    },
-    {
-     "title": "What should parents consider when tracking their child’s location?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-should-parents-consider-when-tracking-their-childs-location-293090",
-     "published": "2026-10-02T03:30:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Bjørn Nansen, Associate Professor, School of Computing and Information Systems, The University of Melbourne"
     },
     {
      "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Christa Pike’s botched execution exposes the deep contradictions of a ‘painless’ state-imposed death",
+   "published": "2026-10-02 06:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Why a decade of AI safety promises keep failing to bite",
    "published": "2026-10-02 04:42 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
    "published": "2026-10-02 03:51 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What should parents consider when tracking their child’s location?",
-   "published": "2026-10-02 03:30 UTC"
   },
   {
    "region": "Oceania",
