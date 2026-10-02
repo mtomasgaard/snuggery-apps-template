@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T08:01:23Z",
+ "generatedAt": "2026-10-02T09:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How Cambodia’s law on ‘freedom parks’ curtailed people’s right to protest",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/02/how-cambodias-law-on-freedom-parks-curtailed-the-peoples-right-to-protest/",
+     "published": "2026-10-02T08:10:31Z",
+     "summary": "\"It has not only been used to confine peaceful gatherings and demonstrations to Freedom Park, but increasingly, the very use of Freedom Park has been restricted and denied.\"",
+     "stale": false,
+     "author": "Mong Palatino"
+    },
+    {
      "title": "The sound of resistance",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -410,16 +420,6 @@
      "summary": "“When our journalism produces positive outcomes, the sense of fulfilment is difficult to compare with anything else.”",
      "stale": false,
      "author": "Exile Hub"
-    },
-    {
-     "title": "Movement from behind your gadget",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/09/25/movement-from-behind-your-gadget/",
-     "published": "2026-09-25T18:58:21Z",
-     "summary": "The growth of online activism has given different colors in the movement agendas. There is a debate on how effective it is, and how it could complement each other.",
-     "stale": false,
-     "author": "Juliana Harsianti"
     }
    ]
   },
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "How Cambodia’s law on ‘freedom parks’ curtailed people’s right to protest",
+   "published": "2026-10-02 08:10 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
   },
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
    "published": "2026-09-26 00:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Movement from behind your gadget",
-   "published": "2026-09-25 18:58 UTC"
   },
   {
    "region": "Oceania",
