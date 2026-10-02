@@ -1219,8 +1219,8 @@ device they need, for the lead to put in the device matrix (DESIGN 612-622; DEC 
   lines 60-62); Shelf Atlas's `NOTES.md` said 150 KB of app code too, but no build or check ever
   enforced it, so the lead ruled the house's 200 000 B for its pass (plan 0011 D15; its data caps
   stay, and its `check.mjs` now enforces all of them); Snug Kart keeps its ZIP under 3 MB and its
-  frames inside their draw-call and triangle budgets (`snug-kart/tools/check.mjs` line 113;
-  `snug-kart/NOTES.md`).
+  frames inside their draw-call and triangle budgets (`snug-kart/tools/check.mjs` line 300 after its
+  pass; `snug-kart/NOTES.md`).
 
 **The figures today** (*measured* 2026-10-01 on the working tree: each folder zipped by the
 `build-zips.yml` command, `zip -q -r -X … . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*'
@@ -1238,7 +1238,7 @@ figures into its `ART.md`.
 | Anatomy | 24 552 764 (after its pass) | 30 692 577 | 116 467 | 40 075 |
 | Shelf Atlas | 1 980 291 (after its pass and the data follow-up of 2026-10-02) | 2 413 130 | 183 869 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
 | World Oil & Gas | 2 147 328 (after its pass) | 2 622 870 | 199 917 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
-| Snug Kart | 546 378 | 720 806 | **220 070, over** | 0 |
+| Snug Kart | 619 349 (after its pass) | 720 806 | 242 655 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
 | Running Dashboard | 1 072 155 | 1 340 193 | **236 521, over** | 74 128 |
 | Finances | 69 976 | 125 304 | 103 178 | 0 |
 | World News | 27 445 | 72 140 | 21 787 | 0 |

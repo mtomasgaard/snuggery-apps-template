@@ -1,108 +1,145 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Snug Kart</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="gl" aria-label="The race"></canvas>
-<canvas id="lines" aria-hidden="true"></canvas>
+<canvas id="gl" role="img" aria-label="The race"></canvas>
 <div id="fade" aria-hidden="true"></div>
 
 <!-- The game's touch layer: the steering pad or the two sides. -->
 <div id="touch" aria-hidden="true">
-  <div id="pad" hidden><div id="pad-knob"></div></div>
-  <div id="pad-ghost" hidden><span>Steer</span></div>
-  <div id="sides-hint"><span>Left</span><span>Right</span></div>
+  <div id="pad" hidden><svg viewBox="0 0 116 116"><circle class="halo" cx="58" cy="58" r="56"/><circle class="stroke" cx="58" cy="58" r="56"/></svg><div id="pad-knob"></div></div>
+  <div id="pad-ghost" hidden><svg viewBox="0 0 116 116"><circle class="halo" cx="58" cy="58" r="56"/><circle class="stroke" cx="58" cy="58" r="56"/></svg><span class="plate">Steer</span></div>
+  <div id="sides-hint"><span class="plate">Left</span><span class="plate">Right</span></div>
 </div>
 
 <div id="hud" hidden>
-  <!-- Top left: place, lap and times. The top-right corner is left clear for Snuggery's own
-       exit-full-screen button; the mini-map starts below it. -->
-  <div id="topleft">
-    <div id="pos" aria-live="polite"><span id="pos-n">5</span><span id="pos-suf">th</span><span id="pos-of"> / 8</span></div>
-    <div id="lapbox">
-      <div id="lap">Lap 1/3</div>
-      <div id="rtime" title="Tap five times for diagnostics">0:00.000</div>
-      <div id="last"></div>
-    </div>
+  <!-- Top left: the race card. The top-right corner is left clear for Snuggery's own exit control;
+       the track map starts below it. -->
+  <div id="card" class="plate">
+    <p class="card-place"><span id="pos-n">5th</span><span id="pos-of"> of 8</span></p>
+    <p class="card-row"><span id="lap">Lap 1 of 3</span><span id="rtime" title="Tap five times for diagnostics" aria-hidden="true">0:00.000</span><span class="sr"></span></p>
+    <p id="last" aria-hidden="true"></p><p class="sr"></p>
+    <canvas id="strip" aria-hidden="true"></canvas>
   </div>
-  <button id="btn-pause" class="round" aria-label="Pause"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.4" height="12" rx="1"/><rect x="11.6" y="4" width="3.4" height="12" rx="1"/></svg></button>
-  <canvas id="minimap" aria-label="Map"></canvas>
-  <div id="diag" hidden></div>
-  <div id="count" hidden></div>
-  <div id="hint" hidden></div>
-  <div id="banner"></div>
-  <div id="reticle" hidden><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="13" fill="none" stroke-width="3"/><path d="M18 1v8M18 27v8M1 18h8M27 18h8" stroke-width="3"/></svg></div>
-  <div id="warn" hidden><svg class="icon" aria-hidden="true"><use href="#i-plane"/></svg>Plane behind</div>
-  <button id="btn-item" class="round" aria-label="Use item"><svg class="icon" aria-hidden="true"><use id="item-use"/></svg></button>
-  <button id="btn-drift" class="round" aria-label="Drift">Drift</button>
+  <button id="btn-pause" aria-label="Pause"><span class="keyplate"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 3.5v9M10.5 3.5v9"/></svg></span></button>
+  <canvas id="minimap" role="img" aria-label="Map of the track"></canvas>
+  <div id="diag" class="plate" hidden></div>
+  <div id="count" class="plate" hidden></div>
+  <div id="hint" class="plate" hidden></div>
+  <div id="banner" class="plate" hidden></div>
+  <div id="reticle" hidden><svg viewBox="0 0 40 40" aria-hidden="true">
+    <g class="open"><circle class="halo" cx="20" cy="20" r="14"/><path class="halo" d="M20 1v8M20 31v8M1 20h8M31 20h8"/><circle class="stroke" cx="20" cy="20" r="14"/><path class="stroke" d="M20 1v8M20 31v8M1 20h8M31 20h8"/></g>
+    <g class="lock"><circle class="halo" cx="20" cy="20" r="9"/><circle class="stroke" cx="20" cy="20" r="9"/><circle class="halo-dot" cx="20" cy="20" r="3.2"/><circle class="dot" cx="20" cy="20" r="1.5"/></g>
+  </svg></div>
+  <div id="warn" class="plate" hidden>Paper plane behind you</div>
+  <button id="btn-item" class="key empty" aria-label="No item"><svg class="icon" aria-hidden="true"><use id="item-use"/></svg><span class="none" aria-hidden="true">No item</span></button>
+  <button id="btn-drift" class="key">Drift</button>
 </div>
 
 <section id="loading" class="screen">
-  <div class="panel center">
-    <div class="wordmark small">Snug Kart</div>
-    <p id="load-msg">Warming up the engines…</p>
-  </div>
+  <p id="load-msg" class="notice">Building the karts and the tracks…</p>
 </section>
 
 <section id="title" class="screen" hidden>
-  <header class="title-top">
-    <h1 class="wordmark">Snug Kart</h1>
-    <p class="tagline">Three laps. Seven rivals. One cosy town.</p>
+  <header class="head">
+    <h1 translate="no">Snug Kart</h1>
+    <button id="btn-about" class="textkey" aria-haspopup="dialog">About</button>
+    <div id="tracks" class="words" role="radiogroup" aria-label="Track"></div>
   </header>
-  <div class="panel title-panel">
-    <div class="track-card" id="track-card">
-      <button class="nav" id="track-prev" aria-label="Previous track">‹</button>
-      <div class="track-info">
-        <div class="track-name" id="track-name"></div>
-        <div class="track-blurb" id="track-blurb"></div>
-        <div class="track-meta" id="track-meta"></div>
-      </div>
-      <button class="nav" id="track-next" aria-label="Next track">›</button>
+  <div id="title-plate"></div>
+  <div class="bands">
+    <p id="caption" class="two"></p>
+    <div id="racers" role="radiogroup" aria-label="Racer"></div>
+    <p id="racer-name"></p>
+    <p id="racer-line" class="two"></p>
+    <div id="settings" class="words">
+      <button id="set-sound" aria-pressed="false">Sound</button>
+      <button id="set-tilt" aria-pressed="false">Tilt</button>
+      <button id="set-quality">Quality <b></b></button>
+      <button id="set-controls">Controls <b></b></button>
+      <button id="set-pace">Pace <b></b></button>
     </div>
-    <div class="racer-grid" id="racer-grid" role="radiogroup" aria-label="Racer"></div>
-    <p class="racer-line" id="racer-line"></p>
-    <div class="chips" id="chips"></div>
-    <p class="chip-note" id="chip-note"></p>
-    <button class="big" id="btn-race">Race</button>
+    <p id="note" class="two"></p>
+  </div>
+  <div class="record">
+    <p id="record"></p>
+    <button id="btn-race" class="solid">Race</button>
   </div>
 </section>
 
 <section id="building" class="screen" hidden>
-  <div class="panel center"><p>Building the track…</p></div>
+  <p class="notice">Building the track…</p>
 </section>
 
-<section id="pause" class="screen dim" hidden>
-  <div class="panel center">
-    <h2>Paused</h2>
-    <button class="big" id="btn-resume">Resume</button>
-    <button class="plain" id="btn-restart">Restart</button>
-    <button class="plain" id="btn-quit">Quit to title</button>
+<section id="pause" class="screen" role="dialog" aria-labelledby="pause-h" hidden>
+  <div class="sheet panel">
+    <h2 id="pause-h">Paused</h2>
+    <button class="solid" id="btn-resume">Resume</button>
+    <button class="framed" id="btn-restart">Restart</button>
+    <button class="framed" id="btn-quit">Quit to title</button>
   </div>
 </section>
 
-<section id="lost" class="screen dim" hidden>
-  <div class="panel center"><p>Graphics were reset — tap to continue.</p></div>
+<section id="lost" class="screen" hidden>
+  <p class="notice" role="alert">Graphics were reset. Tap to continue.</p>
 </section>
 
-<section id="results" class="screen dim" hidden>
-  <div class="panel results-panel">
-    <h2 id="res-title">Results</h2>
-    <div id="res-badges"></div>
-    <ol id="res-list"></ol>
+<section id="results" class="screen" hidden>
+  <div class="sheet results-panel">
+    <h2 id="res-track"></h2>
+    <p class="res-head"><span id="res-place"></span> <span id="res-lead" aria-hidden="true"></span><span class="sr"></span></p>
+    <canvas id="chart" role="img"></canvas>
+    <p class="two chart-cap">Places at every tenth of a lap, from the grid to the line. Your line is ink; a dotted end is a projected finish.</p>
+    <ol id="res-list" role="list"></ol>
+    <p id="res-record" hidden></p>
     <div class="res-buttons">
-      <button class="big" id="btn-again">Race again</button>
-      <button class="plain" id="btn-change">Change track or racer</button>
+      <button class="solid" id="btn-again">Race again</button>
+      <button class="framed" id="btn-change">Change track or racer</button>
     </div>
   </div>
 </section>
 
+<div id="about" class="about" role="dialog" aria-modal="true" aria-labelledby="about-title" hidden>
+  <div class="about-sheet">
+    <div class="about-head"><h2 id="about-title">About Snug Kart</h2><button class="textkey" id="about-close">Close</button></div>
+    <div class="about-body">
+      <section>
+        <h3>What the lap chart is</h3>
+        <p>A lap chart is how a race was kept on paper before timing screens: at each timing line, someone wrote down the order the cars crossed it in. This game keeps one for every race. There are ten timing lines on every lap, one at each tenth of the way round, so thirty in a race, and at each the chart notes the place every racer crossed it in. Read across, a line is one racer’s race, from the grid on the left to the finish on the right, first place at the top. Yours is drawn in ink; the others are in their karts’ colors and named at their ends. In the race, the card under your place draws your own line as it is written.</p>
+        <p>What it does not show: a pass and a pass back between two timing lines leaves no mark, and the straight stretch between two lines is not where a pass happened. A racer still out when the race ends gets a projected time, worked out from their average speed over their last ten seconds; their line is dotted from the last timing line they crossed to the place that time gives them, and their time reads “about”.</p>
+      </section>
+      <section>
+        <h3>This game</h3>
+        <dl id="about-game"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p>Everything you see and hear (the karts, the racers’ faces, the tracks, the scenery and every sound) is made by this app’s code when it starts, from the two data files. The only work of others in it is the 3D library and the typeface.</p>
+        <p>3D: three.js r186, MIT License, as follows.</p>
+        <p id="about-license" class="license"></p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>The game reads data/tracks.json and data/racers.json from its own folder each time it opens, and checks them before it builds anything; a file it cannot use stops the game with a sentence naming the file and the problem. Edit them, in Snuggery or with an agent, and the next start races your tracks and your racers. Your settings and best times are kept on this phone, in this app’s own storage. The app never goes online.</p>
+      </section>
+      <button class="textkey" id="about-close2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p id="live" class="sr" aria-live="polite"></p>
+
 <!-- The five item icons, original symbols drawn for this game. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<svg class="sprite" aria-hidden="true">
   <symbol id="i-kettle" viewBox="0 0 48 48"><path d="M14 18h20l3 20a3 3 0 0 1-3 3H14a3 3 0 0 1-3-3z" fill="#E8EEF2" stroke="#2A2622" stroke-width="2.5"/><path d="M18 18c0-5 3-8 6-8s6 3 6 8" fill="none" stroke="#2A2622" stroke-width="2.5"/><path d="M36 24l7-5v5l-6 5" fill="#E8EEF2" stroke="#2A2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M40 12c2-2 0-4 2-6M44 14c2-2 0-4 2-6" stroke="#9BC7E0" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
   <symbol id="i-quilt" viewBox="0 0 48 48"><rect x="8" y="8" width="32" height="32" rx="4" fill="#F4B6C2" stroke="#2A2622" stroke-width="2.5"/><path d="M24 8v32M8 24h32" stroke="#2A2622" stroke-width="2" stroke-dasharray="3 3"/><rect x="11" y="11" width="10" height="10" rx="2" fill="#FFF1D6"/><rect x="27" y="27" width="10" height="10" rx="2" fill="#FFF1D6"/></symbol>
   <symbol id="i-yarn" viewBox="0 0 48 48"><circle cx="22" cy="24" r="14" fill="#E0607E" stroke="#2A2622" stroke-width="2.5"/><path d="M12 16c8 2 14 10 16 21M10 26c8-2 16 2 22 9M18 11c6 5 10 13 10 23" fill="none" stroke="#FFE3EA" stroke-width="2"/><path d="M34 32c4 2 6 6 8 8" fill="none" stroke="#E0607E" stroke-width="2.5" stroke-linecap="round"/></symbol>

@@ -104,7 +104,7 @@ function tileUV(i, tx, ty) {
   return [(col * TILE + tx * TILE) / ATLAS_W, 1 - (row * TILE + ty * TILE) / ATLAS_H];
 }
 
-/** The merged geometry of one kart (local frame: +z forward, origin on the ground under its centre). */
+/** The merged geometry of one kart (local frame: +z forward, origin on the ground under its center). */
 export function kartGeometry(racer, atlasIndex) {
   const body = racer.body, trim = racer.trim, hair = racer.face.hair;
   const W = WHITE_UV;
@@ -123,7 +123,7 @@ export function kartGeometry(racer, atlasIndex) {
     { geo: new CylinderGeometry(0.30, 0.34, 0.55, 10), pos: [0, 0.95, -0.25], color: body, uv: W },
   ];
   // Head: sphere r 0.30, its UVs remapped so the face covers the front half of the wrap (u ∈ [0, 0.5]
-  // of three's sphere, which is centred on +z) and the back and crown sample hair or skin.
+  // of three's sphere, which is centered on +z) and the back and crown sample hair or skin.
   parts.push({
     geo: new SphereGeometry(0.30, 16, 12), pos: [0, 1.45, -0.20], color: '#FFFFFF',
     uv: (u, v) => {
@@ -181,7 +181,7 @@ export class Field {
       return { racer: r, outer, body, material, up: new Vector3(0, 1, 0), slip: 0, spin: [0, 0, 0, 0], lean: 0 };
     });
     this.byId = new Map(this.karts.map((k) => [k.racer.id, k]));
-    // Wheels: a 14-sided cylinder along x, unit radius and width, rubber with hub-coloured caps.
+    // Wheels: a 14-sided cylinder along x, unit radius and width, rubber with hub-colored caps.
     const wg = new CylinderGeometry(1, 1, 1, 14).rotateZ(Math.PI / 2);
     const rubber = new Color('#1C1C1E'), hub = new Color('#C9CCD1'), cols = [];
     const n = wg.attributes.normal;
@@ -214,7 +214,7 @@ export class Field {
    * Place every kart from the simulation state. `karts` are race karts (physics state + racer),
    * `track` gives the road normal. Visual-only motion here never feeds back into physics.
    *
-   * `view` (racing only) = { camera, player, countdown }. A rival that comes between the camera and
+   * `view` (racing only) = { camera, player, countdown, still }. A rival that comes between the camera and
    * the player fades out by its depth in front of the camera — gone at 1.5 m, whole again at 4 m
    * (the player sits about 5 m in front of the chase camera) — instead of filling the lower screen
    * and then vanishing. During the countdown every rival behind the player on the grid is hidden,
@@ -240,6 +240,7 @@ export class Field {
       }
       const near = op < 0.5;              // wheels, blob and shadow go at the half-way mark
       k.nearCam = op < 0.95;              // the Quilt bubble (bigger than the kart) goes first
+      if (view && view.still && k.immuneT > 0) op = Math.min(op, 0.5);   // Reduce Motion: a steady half form, no blink
       vk.outer.visible = op > 0.02;
       if (vk.material.opacity !== op) vk.material.opacity = op;
       vk.body.castShadow = !near;
@@ -266,7 +267,7 @@ export class Field {
       this._e.set(0, -(vk.slip + spinYaw), -vk.lean + roll);
       vk.body.rotation.copy(this._e);
       vk.body.scale.set(1, k.landT > 0 ? 0.92 : 1, 1);
-      vk.body.visible = !(k.immuneT > 0 && Math.floor(time * 12) % 2 === 0) && !(k.respawnT > 0);
+      vk.body.visible = !(k.immuneT > 0 && !(view && view.still) && Math.floor(time * 6) % 2 === 0) && !(k.respawnT > 0);   // 3 Hz
       // Blinking after a hit, fading on a respawn, or faded out at the camera: the wheels and the
       // blob go with the body (they are instances, so they are collapsed rather than hidden).
       const hidden = near || !vk.body.visible || !vk.outer.visible;

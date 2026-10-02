@@ -17,7 +17,7 @@ export const ITEM_NAMES = { kettle: 'Kettle', quilt: 'Quilt', yarn: 'Yarn Snare'
 export const ITEM = {
   // respawn: first designed as 3.0 s, but a pack passes a row in about 2 s, so at most four of eight
   // karts got an item. pickR: first designed as 1.3 m, which leaves a 1 m gap between parcels 0.4 ×
-  // half-width apart, so a kart on the centre line passed between them; 1.8 m closes it. (NOTES.md,
+  // half-width apart, so a kart on the center line passed between them; 1.8 m closes it. (NOTES.md,
   // Decision 23.)
   lanes: [-0.6, -0.2, 0.2, 0.6], pickR: 1.8, respawn: 1.5, shrink: 0.15, grow: 0.3, roll: 0.8,
   kettle: 1.4,

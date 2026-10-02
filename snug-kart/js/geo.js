@@ -1,6 +1,6 @@
 // Small geometry helpers shared by kart.js and scenery.js. three's BufferGeometryUtils is not
 // vendored, so merging is done by hand: every part becomes non-indexed triangles, and their
-// position / normal / colour / uv arrays are concatenated.
+// position / normal / color / uv arrays are concatenated.
 
 import { BufferGeometry, Float32BufferAttribute, Color, Matrix4, Euler, Quaternion, Vector3, CanvasTexture, SRGBColorSpace, RepeatWrapping } from '../vendor/three.module.js';
 
@@ -56,7 +56,7 @@ export function canvasTexture(w, h, paint, { repeat = false, srgb = true } = {})
   return t;
 }
 
-/** A builder for triangle soups with colours (for strips and walls). */
+/** A builder for triangle soups with colors (for strips and walls). */
 export class Soup {
   constructor(withUV = false) { this.p = []; this.c = []; this.u = withUV ? [] : null; this.col = new Color(1, 1, 1); }
   color(hex) { this.col.set(hex); return this; }

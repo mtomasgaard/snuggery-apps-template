@@ -1,15 +1,16 @@
 // The track: a closed Catmull-Rom spline through the control points in data/tracks.json, sampled
-// every metre of arc length, with width, bank, curvature, verge and wall limits per sample.
+// every meter of arc length, with width, bank, curvature, verge and wall limits per sample.
 // Pure: imports only three.core.js and touches no DOM, so tools/sim.mjs and tools/check.mjs run it
 // in Node. DESIGN.md §5.1 is the specification; the numbers here are its numbers.
 
 import { CatmullRomCurve3, Vector3 } from '../vendor/three.core.js';
+import { meters, percent, unit } from './units.js';
 
 export const WALL_THICK = 0.6;       // barrier thickness (m)
 export const WALL_HEIGHT = 1.1;      // barrier height (m)
 export const KART_HALF = 0.75;       // wall line = w/2 + verge − KART_HALF
 export const FLAG_BRIDGE = 1, FLAG_ROCKCUT = 2;
-const SECTION_BLEND = 10;            // metres over which a section's verge fades in and out
+const SECTION_BLEND = 10;            // meters over which a section's verge fades in and out
 const DEG = Math.PI / 180;
 
 const wrapAngle = (a) => { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; };
@@ -62,7 +63,7 @@ export function buildTrack(def) {
     const cl = Math.hypot(cx, cy, cz); nx[i] = cx / cl; ny[i] = cy / cl; nz[i] = cz / cl;
   }
 
-  // Verge per sample, with section overrides blended over SECTION_BLEND metres; flags per section kind.
+  // Verge per sample, with section overrides blended over SECTION_BLEND meters; flags per section kind.
   const verge = new Float32Array(N).fill(def.verge ?? 4);
   const flags = new Uint8Array(N);
   for (const sec of def.sections || []) {
@@ -71,7 +72,7 @@ export function buildTrack(def) {
       const s = i * ds;
       if (s >= sec.from && s <= sec.to) flags[i] |= kind;
       if (sec.verge === undefined) continue;
-      const inside = Math.min(s - sec.from, sec.to - s);   // metres inside the section (negative outside)
+      const inside = Math.min(s - sec.from, sec.to - s);   // meters inside the section (negative outside)
       const w = clamp((inside + SECTION_BLEND) / SECTION_BLEND, 0, 1);
       if (w > 0) verge[i] = verge[i] + (sec.verge - verge[i]) * w;
     }
@@ -96,7 +97,7 @@ function checkDef(def) {
   if (!Array.isArray(def.points) || def.points.length < 4) bad('"points" needs at least four [x, z, y, width, bank] entries.');
   def.points.forEach((p, i) => {
     if (!Array.isArray(p) || p.length !== 5 || !p.every(Number.isFinite)) bad(`point ${i} is not five numbers [x, z, y, width, bank].`);
-    if (p[3] < 8 || p[3] > 30) bad(`point ${i} has a road width of ${p[3]} m; it must be between 8 and 30.`);
+    if (p[3] < 8 || p[3] > 30) bad(`point ${i} has a road width of ${unit(p[3], 'm')}; it must be between 8 and 30.`);
     if (p[4] < 0 || p[4] > 20) bad(`point ${i} has a bank of ${p[4]}°; it must be between 0 and 20 (the sign is worked out).`);
   });
   if (!Array.isArray(def.parcels)) bad('"parcels" must be a list of distances along the lap.');
@@ -147,7 +148,7 @@ export function frame(track, i, x, z, out) {
   const along = dx * fx[i] + dz * fz[i];
   const l = -dx * fz[i] + dz * fx[i];
   const f = along / ds;
-  // Height: interpolate the centreline along, then drop by the bank across (plan lateral → tan b).
+  // Height: interpolate the centerline along, then drop by the bank across (plan lateral → tan b).
   const j = f >= 0 ? (i + 1) % N : (i - 1 + N) % N, a = Math.min(1, Math.abs(f));
   const cy = py[i] + (py[j] - py[i]) * a;
   out.idx = i; out.f = f; out.l = l;
@@ -157,7 +158,7 @@ export function frame(track, i, x, z, out) {
   return out;
 }
 
-/** World point at sample i and lateral l on the banked surface (lift = metres above it). */
+/** World point at sample i and lateral l on the banked surface (lift = meters above it). */
 export function pointAt(track, i, l, lift = 0, out = {}) {
   const { px, py, pz, fx, fz, sinB, cosB } = track;
   out.x = px[i] - fz[i] * l * cosB[i];
@@ -200,18 +201,18 @@ export function validateTrack(track) {
     const r = 1 / Math.max(1e-9, Math.abs(kappa[i]));
     const need = hw[i] + verge[i] + WALL_THICK + 2;
     if (r < minR) { minR = r; minRAt = i * ds; }
-    if (r < need) problems.push(`the bend at ${Math.round(i * ds)} m is too tight for its width (radius ${r.toFixed(1)} m, needs ${need.toFixed(1)} m)`);
+    if (r < need) problems.push(`the bend at ${meters(i * ds)} is too tight for its width (radius ${meters(r, 1)}, needs ${meters(need, 1)})`);
     const g = Math.abs(py[(i + 1) % N] - py[i]) / ds;
     if (g > maxGrade) { maxGrade = g; maxGradeAt = i * ds; }
     minW = Math.min(minW, hw[i] * 2); maxW = Math.max(maxW, hw[i] * 2);
   }
-  if (maxGrade > 0.12) problems.push(`the slope at ${Math.round(maxGradeAt)} m is ${(maxGrade * 100).toFixed(1)} % (at most 12 %)`);
+  if (maxGrade > 0.12) problems.push(`the slope at ${meters(maxGradeAt)} is ${percent(maxGrade * 100)} (at most ${percent(12, 0)})`);
   // Grid: the 40 m before the line.
   for (let d = 1; d <= 40; d++) {
     const i = (N - Math.round(d / ds)) % N;
-    if (Math.abs(kappa[i]) >= 1 / 80) { problems.push(`the starting grid (the 40 m before the line) is not straight enough`); break; }
+    if (Math.abs(kappa[i]) >= 1 / 80) { problems.push(`the starting grid (the ${meters(40)} before the line) is not straight enough`); break; }
   }
-  // Corridors: every pair more than 60 m apart along the loop keeps its distance, unless ≥ 7 m apart in height.
+  // Corridors: every pair more than 60 m apart along the loop keeps its distance, unless 7 m or more apart in height.
   let crossings = 0, minClear = Infinity;
   const step = 2, sep = Math.round(60 / ds);
   let reported = 0;
@@ -223,7 +224,7 @@ export function validateTrack(track) {
       if (d >= need) continue;
       const dy = Math.abs(py[i] - py[j]);
       if (dy >= 7) { crossings++; minClear = Math.min(minClear, dy); continue; }
-      if (reported++ < 3) problems.push(`the road at ${Math.round(i * ds)} m comes within ${d.toFixed(1)} m of the road at ${Math.round(j * ds)} m (needs ${need.toFixed(1)} m)`);
+      if (reported++ < 3) problems.push(`the road at ${meters(i * ds)} comes within ${meters(d, 1)} of the road at ${meters(j * ds)} (needs ${meters(need, 1)})`);
     }
   }
   let minY = Infinity, maxY = -Infinity;

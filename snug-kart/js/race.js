@@ -11,6 +11,7 @@ import { mulberry32 } from './rng.js';
 export const STEP = 1 / 120;
 export const LAPS = 3;
 export const COUNTDOWN = 3;
+export const GATES = 10;              // timing lines a lap, for the Lap Chart (ART.md 1)
 const FINISH_BANNER = 2, FINISH_WAIT = 8;
 
 /**
@@ -44,6 +45,7 @@ export function createRace(opts) {
     k.item = null;                        // the held item (js/items.js)
     k.aiInput = {};                       // the AI's input, reused every step
     k.place = slot + 1;
+    k.gates = [slot + 1];                 // the place at every timing line crossed; the grid first
     return k;
   });
   const race = {
@@ -118,6 +120,7 @@ export function stepRace(race, playerInput) {
     for (const k of karts) { k.hist.push(k.dist); if (k.hist.length > 21) k.hist.shift(); }
   }
   updatePlaces(race);
+  recordGates(race);
 
   if (race.phase === 'finished') {
     race.finishT += dt;
@@ -167,7 +170,18 @@ function updatePlaces(race) {
   for (let i = 0; i < order.length; i++) order[i].place = i + 1;
 }
 
-/** End the race: anyone still racing gets a projected time (§12), marked "est.". */
+// The Lap Chart's record: at each tenth of a lap the place the kart crossed it in, the finish (column
+// 30) included. A projected kart's record stops where it stood when the race ended.
+function recordGates(race) {
+  const w = race.track.L / GATES, last = GATES * race.laps;
+  for (const k of race.karts) {
+    if (k.projected) continue;
+    const g = Math.min(last, Math.floor(Math.max(0, k.dist) / w));
+    while (k.gates.length <= g) k.gates.push(k.place);
+  }
+}
+
+/** End the race: anyone still racing gets a projected time (§12), shown as "about". */
 export function finishRace(race) {
   if (race.done) return;
   const L = race.track.L, total = race.laps * L;

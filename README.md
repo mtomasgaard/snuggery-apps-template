@@ -76,7 +76,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
 | World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 2.1 MB | nothing (GOGET by hand) |
-| Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.5 MB | nothing |
+| Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.6 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) | 7 MB | nothing |
 | US Quakes | [**Install US Quakes**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
 | Warming World | [**Install Warming World**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
@@ -165,7 +165,7 @@ Every country's oil and gas production from 1900 to the latest Energy Institute 
 
 ### Snug Kart
 
-An original arcade kart racer for a phone held upright: eight racers from an imaginary seaside-and-mountain town, three tracks (a flat harbour loop, a 26 m climb through banked sweepers to summit hairpins, a figure of eight at night that crosses its own start straight), three laps against seven rubber-banded rivals that drift, pass and use items. Throttle is automatic; one thumb steers, the other drifts and throws household items — a kettle, a quilt, a yarn snare, a paper plane, a honey puddle. Every kart, face, track, tree, lantern and sound is generated in code at start-up; the only third-party code is three.js. Sound and tilt steering are off until you switch them on. **Static**, 0.5 MB.
+An original arcade kart racer for a phone held upright: eight racers from an imaginary seaside-and-mountain town, three tracks (a flat harbor loop, a 26 m climb through banked sweepers to summit hairpins, a figure of eight at night that crosses its own start straight), three laps against seven rubber-banded rivals that drift, pass and use items. Throttle is automatic; one thumb steers, the other drifts and throws household items — a kettle, a quilt, a yarn snare, a paper plane, a honey puddle. Every race is kept on a lap chart, the race officials' sheet: the order at each of ten timing lines a lap, joined into one line per driver, which the results open on, your line in ink from the grid to the flag. Every kart, face, track, tree, lantern and sound is generated in code at start-up; the only third-party code is three.js. Sound and tilt steering are off until you switch them on. **Static**, 0.6 MB.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) · Make it yours: [`snug-kart/NOTES.md`](snug-kart/NOTES.md) · The design it was built from: [`snug-kart/DESIGN.md`](snug-kart/DESIGN.md)
 

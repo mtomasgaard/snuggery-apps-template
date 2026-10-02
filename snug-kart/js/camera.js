@@ -1,5 +1,6 @@
 // The camera (DESIGN.md §10): a smoothed chase rig, the countdown swoop, the title screen's glide
-// along the track, and the side-on finish view.
+// along the track, and the side-on finish view. Under Reduce Motion (`still`) the title holds one
+// view, the countdown starts behind the kart, the finish keeps the chase and nothing shakes.
 
 import { Vector3 } from '../vendor/three.module.js';
 import { pointAt, project } from './track.js';
@@ -13,7 +14,7 @@ export class ChaseCamera {
     this.pos = new Vector3(); this.look = new Vector3(); this.lookS = new Vector3();
     this.yaw = 0; this.fov = 80; this.mode = 'title'; this.glideS = 0; this.t = 0;
     this.fr = { idx: 0 }; this.P = {};
-    this.shake = 0;
+    this.shake = 0; this.still = false;
     this.tune = { back: 4.8, up: 2.7, ahead: 6, lookUp: 1.0 };
   }
 
@@ -59,19 +60,20 @@ export class ChaseCamera {
     this.look.set(k.x + Math.cos(k.psi) * T.ahead, k.y + T.lookUp, k.z + Math.sin(k.psi) * T.ahead);
     this.lookS.lerp(this.look, 1 - Math.exp(-14 * dt));
     this.fov += (this.fovFor(Math.abs(k.v), k.boostT > 0) - this.fov) * (1 - Math.exp(-3 * dt));
-    this.shake = k.boostT > 0 ? 0.03 : 0;
+    this.shake = k.boostT > 0 && !this.still ? 0.03 : 0;
     this.apply();
   }
 
-  /** The title screen: glide along the centreline at 8 m/s, 6 m up, looking ahead. */
+  /** The title screen: glide along the centerline at 8 m/s, 6 m up, looking ahead; still, 40 m past the line. */
   glide(track, dt) {
-    this.glideS = (this.glideS + 8 * dt) % track.L;
-    // 6 m up per the design, looking down at the road 14 m ahead so the track shows between the
-    // wordmark and the title panel (the panel covers the lower half of a portrait screen).
-    const i = Math.floor(this.glideS / track.ds) % track.N, j = (i + Math.round(14 / track.ds)) % track.N;
+    this.glideS = this.still ? 40 : (this.glideS + 8 * dt) % track.L;
+    // 6 m up per the design, looking about 10° down at the road 32 m ahead, so the horizon sits near a
+    // third of the way down the plate (main.js centers the view in it with setViewOffset) and the
+    // track's own scenery fills it rather than the asphalt under the camera.
+    const i = Math.floor(this.glideS / track.ds) % track.N, j = (i + Math.round(32 / track.ds)) % track.N;
     pointAt(track, i, 0, 6, this.P); const px = this.P.x, py = this.P.y, pz = this.P.z;
-    pointAt(track, j, 0, -4, this.P);
-    const a = 1 - Math.exp(-3 * dt);
+    pointAt(track, j, 0, 0.6, this.P);
+    const a = this.still ? 1 : 1 - Math.exp(-3 * dt);
     if (this.mode !== 'title') { this.pos.set(px, py, pz); this.lookS.set(this.P.x, this.P.y, this.P.z); this.mode = 'title'; }
     this.pos.x += (px - this.pos.x) * a; this.pos.y += (py - this.pos.y) * a; this.pos.z += (pz - this.pos.z) * a;
     this.lookS.x += (this.P.x - this.lookS.x) * a; this.lookS.y += (this.P.y - this.lookS.y) * a; this.lookS.z += (this.P.z - this.lookS.z) * a;

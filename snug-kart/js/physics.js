@@ -1,7 +1,7 @@
 // Kart dynamics, walls and kart-to-kart bumps (DESIGN.md §8). Pure: no three, no DOM.
 // Every kart, player and AI alike, goes through stepKart with the same kind of input:
 //   { steer: −1..1 (+ = right), drift: bool, brake: 0..1 }
-// Units are metres, seconds, radians. Plan heading ψ uses the track's convention: forward is
+// Units are meters, seconds, radians. Plan heading ψ uses the track's convention: forward is
 // (cos ψ, sin ψ) in (x, z), and ψ increasing is a right turn (because +z is south).
 
 import { project, pointAt } from './track.js';

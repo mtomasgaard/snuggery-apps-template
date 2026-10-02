@@ -21,7 +21,7 @@ export function hashSeed(str) {
 
 export const range = (rnd, a, b) => a + (b - a) * rnd();
 
-/** Seeded 2D value noise, `octaves` octaves, base period `period` metres. Returns roughly [0, 1]. */
+/** Seeded 2D value noise, `octaves` octaves, base period `period` meters. Returns roughly [0, 1]. */
 export function valueNoise2D(seed, period = 120, octaves = 3) {
   const SIZE = 256, table = new Float32Array(SIZE * SIZE), rnd = mulberry32(seed);
   for (let i = 0; i < table.length; i++) table[i] = rnd();

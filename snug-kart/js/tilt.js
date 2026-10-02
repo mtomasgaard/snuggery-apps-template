@@ -1,6 +1,6 @@
-// Tilt steering (DESIGN.md §13), off by default. Turning it on is a tap on the title's Tilt chip, so
+// Tilt steering (DESIGN.md §13), off by default. Turning it on is a tap on the title's Tilt word, so
 // iOS's DeviceOrientationEvent.requestPermission() can be called inside the gesture; either way the
-// chip turns on only if real orientation readings actually arrive. Steering then comes from gamma in
+// word turns on only if real orientation readings actually arrive. Steering then comes from gamma in
 // portrait (beta in landscape, signed by the screen angle): steer = (angle − neutral) / 22°, with a 3°
 // dead zone, where `neutral` is the average reading over the countdown. No reading in the last half
 // second → null, and the pad or keys steer as usual.
@@ -59,7 +59,7 @@ export const tiltHook = {
       try { r = await DOE.requestPermission(); } catch { return false; }
       if (r !== 'granted') return false;
     }
-    // Permission or not, the chip turns on only if a real reading arrives within 1 s (a desktop
+    // Permission or not, the word turns on only if a real reading arrives within 1 s (a desktop
     // may grant it and still have no sensor).
     listen(true);
     const t0 = performance.now();

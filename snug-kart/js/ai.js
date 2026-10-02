@@ -70,7 +70,7 @@ export function drive(k, drv, ctx, out = {}) {
   if (drv.mistakeT > 0) drv.mistakeT -= dt; else drv.mistakeLane = 0;
 
   // Passing: a kart 0–6 m ahead within 1.5 m laterally → shift 1.6 m to the side with more room.
-  // Side by side (within 3 m along, 2.4 m across): ease apart so neighbouring lanes do not grind.
+  // Side by side (within 3 m along, 2.4 m across): ease apart so neighboring lanes do not grind.
   let pass = 0, side = 0;
   for (const o of karts) {
     if (o === k || o.respawnT > 0 || Math.abs(o.y - k.y) > 1.5) continue;
@@ -85,7 +85,7 @@ export function drive(k, drv, ctx, out = {}) {
   drv.passShift += (pass - drv.passShift) * (1 - Math.exp(-4 * dt));
   drv.sideShift = (drv.sideShift || 0) + (clamp(side, -2, 2) - (drv.sideShift || 0)) * (1 - Math.exp(-6 * dt));
 
-  // Target point: the centreline sample La ahead, at the personality's lane plus the bend pull.
+  // Target point: the centerline sample La ahead, at the personality's lane plus the bend pull.
   const La = 6 + 0.55 * v, j = (i + Math.round(La / ds)) % N;
   const usable = Math.max(0.5, hw[j] - 2);
   let lat = (p.lane + drv.mistakeLane) * usable + clamp(ai.kbar[i] * 25, -0.55, 0.55) * usable + drv.passShift + drv.sideShift + drv.dodgeShift;
@@ -117,7 +117,7 @@ export function drive(k, drv, ctx, out = {}) {
   if (drv.drifting) {
     drv.driftT += dt;
     const done = drv.driftT > 0.3 && Math.abs(track.kappa[i]) < DRIFT_RELEASE_K;
-    const failed = !k.drift && drv.driftT > 0.6;      // never started (wheel stayed near centre)
+    const failed = !k.drift && drv.driftT > 0.6;      // never started (wheel stayed near center)
     // Steering fully out of a drift is how a wide bend is held; let go only when the drift is
     // carrying the kart more than 4 m inside its line, or once a tier is banked and the wheel is
     // still hard over (take the boost rather than run inside).

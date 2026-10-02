@@ -90,7 +90,7 @@ export const itemsHook = {
       planes: makeMesh(scene, planeGeometry(), new MeshLambertMaterial({ color: '#FFFFFF', side: DoubleSide, emissive: new Color(night ? '#8090B0' : '#303030') }), 8, 'planes'),
       bubbles: makeMesh(scene, new SphereGeometry(1.55, 18, 12), new MeshBasicMaterial({ map: quiltTex, transparent: true, opacity: 0.7, depthWrite: false }), 8, 'bubbles'),
     };
-    meshes.yarns.setColorAt(0, col.set('#FFFFFF'));          // create the colour buffer before the first compile
+    meshes.yarns.setColorAt(0, col.set('#FFFFFF'));          // create the color buffer before the first compile
     meshes.honeys.renderOrder = 1; meshes.bubbles.renderOrder = 2;
     meshes.parcels.count = items.parcels.length;
     V = {
@@ -116,7 +116,7 @@ export const itemsHook = {
   },
 
   /** Every rendered frame: instance matrices from the item state, and the HUD bits. */
-  frame(race, dt, camera) {
+  frame(race, dt, camera, still) {
     if (!V || V.race !== race) return;
     V.time += dt;
     const { items, meshes } = V, track = race.track, t = V.time;
@@ -129,7 +129,7 @@ export const itemsHook = {
     });
     meshes.parcels.instanceMatrix.needsUpdate = true;
     meshes.parcels.visible = true;
-    // Snares, coloured by the kart that dropped them.
+    // Snares, colored by the kart that dropped them.
     items.yarns.forEach((y, n) => {
       const grow = Math.min(1, y.age / 0.2);
       roadBasis(track, y.idx, track.theta[y.idx] + y.age * 0.8);
@@ -156,32 +156,33 @@ export const itemsHook = {
     let nb = 0;
     for (const k of race.karts) {
       if (k.shieldT <= 0 || k.respawnT > 0 || k.nearCam) continue;
-      if (k.shieldT < 2 && Math.floor(t * 10) % 2 === 0) continue;       // blinks before it goes
-      const wob = 1 + 0.03 * Math.sin(t * 6 + k.index);
+      const ending = k.shieldT < 2;
+      if (ending && !still && Math.floor(t * 6) % 2 === 0) continue;       // blinks at 3 Hz before it goes; under Reduce Motion it shrinks once instead
+      const wob = (ending && still ? 0.8 : 1) * (1 + 0.03 * Math.sin(t * 6 + k.index));
       m4.makeRotationY(t * 0.6 + k.index); m4.scale(s3.set(wob, wob * 0.8, wob)); m4.setPosition(k.x, k.y + 0.8, k.z);
       meshes.bubbles.setMatrixAt(nb++, m4);
     }
     finish(meshes.bubbles, nb);
-    this.hud(race, camera);
+    this.hud(race, camera, still);
   },
 
   /** The item button (icon, shuffle), the reticle on the plane's target, the "plane behind" warning. */
-  hud(race, camera) {
+  hud(race, camera, still) {
     const P = race.player, playing = !P.finished && !P.autopilot;
     let icon = P.item || null, rolling = P.item && P.itemRoll > 0;
-    if (rolling) icon = ITEMS[Math.floor((0.8 - P.itemRoll) / 0.2 + ITEMS.indexOf(P.item) + 1) % ITEMS.length];
+    if (rolling && !still) icon = ITEMS[Math.floor((0.8 - P.itemRoll) / 0.2 + ITEMS.indexOf(P.item) + 1) % ITEMS.length];
     if (icon !== V.shown) {
       V.shown = icon;
       V.btn.classList.toggle('empty', !icon);
       if (icon) V.use.setAttribute('href', `#i-${icon}`); else V.use.removeAttribute('href');
     }
     // The shuffle's last tick already shows the item, so the label follows the roll, not the icon.
-    const label = icon && !rolling ? `Use the ${ITEM_NAMES[icon]}` : 'Item';
+    const label = !icon ? 'No item' : rolling ? 'Item' : `Use the ${ITEM_NAMES[icon]}`;
     if (label !== V.label) { V.label = label; V.btn.setAttribute('aria-label', label); }
     if (!!rolling !== V.rolling) { V.rolling = !!rolling; V.btn.classList.toggle('rolling', V.rolling); }
     V.btn.classList.toggle('ready', !!P.item && !rolling);
     // Reticle: on the racer one place ahead while a ready plane is in hand, or on the target of the
-    // player's plane in flight.
+    // player's plane in flight, where its ring closes round a dot: the lock is a shape, not a color.
     let target = null;
     if (playing && P.item === 'plane' && !rolling && race.order) target = race.order.find((o) => o.place === P.place - 1) || null;
     if (P.plane && P.plane.target) target = P.plane.target;

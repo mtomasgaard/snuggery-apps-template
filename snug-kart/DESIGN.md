@@ -11,11 +11,11 @@ editing the tracks and racers.
 
 Snug Kart is an original arcade kart racer for a phone held upright. Eight small karts, driven by
 eight people from an imaginary seaside-and-mountain town, race three laps of one of three tracks —
-a flat harbour loop, a mountain pass that climbs to a pair of banked hairpins, and a fast night
+a flat harbor loop, a mountain pass that climbs to a pair of banked hairpins, and a fast night
 circuit that crosses over its own start straight on a bridge. Throttle is automatic: one thumb
 steers, the other drifts and uses items picked up from floating parcels. Everything — karts,
 tracks, trees, houses, lanterns, the faces of the drivers, every sound — is generated in code at
-start-up, so the whole game is one small ZIP that runs offline inside Snuggery. The tone is cosy
+start-up, so the whole game is one small ZIP that runs offline inside Snuggery. The tone is cozy
 rather than aggressive: the items are household things (a kettle, a quilt, a ball of yarn, a paper
 plane, a pot of honey), nobody is hurt, and a spin-out is a comic wobble, not a crash.
 
@@ -23,7 +23,7 @@ plane, a pot of honey), nobody is hurt, and a spin-out is a comic wobble, not a 
 
 ## 2. Ground rules
 
-- **Original everything.** No name, character, track, item, sound, logo or colour scheme from any
+- **Original everything.** No name, character, track, item, sound, logo or color scheme from any
   existing kart game appears in code, comments, text, file names or assets. `tools/check.mjs`
   enforces a banned-word list (§17.1). The word "kart" for the vehicle is fine.
 - **No assets.** Every model is three.js geometry, every texture a `<canvas>` painted at start-up,
@@ -45,7 +45,7 @@ plane, a pot of honey), nobody is hurt, and a spin-out is a comic wobble, not a 
 Eight racers. In v1 **all karts share one physics model** — the choice is cosmetic plus the AI
 personality the other seven drive with. (Per-racer weight and speed classes are cut: §19.)
 
-| id | Name | Body colour | Trim | Personality (one line, shown on the title screen) |
+| id | Name | Body color | Trim | Personality (one line, shown on the title screen) |
 | --- | --- | --- | --- | --- |
 | `pip` | Pip Marlow | tangerine `#F28C28` | cream `#FFF1D6` | A bike courier who has never once touched the brakes. |
 | `juno` | Juno Vale | teal `#17A3A0` | mist `#E8F6F5` | A lighthouse keeper: patient, precise, always on the clean line. |
@@ -56,7 +56,7 @@ personality the other seven drive with. (Per-racer weight and speed classes are 
 | `tuck` | Tuck Rowan | moss `#5B8C3A` | sprout `#EAF2DF` | A gardener who takes every patch of grass personally. |
 | `ines` | Ines Carvo | charcoal `#3A3F47` | ivory `#F2EBDD` | A night-shift nurse: calm, exact, fastest on the final lap. |
 
-Faces (painted into the atlas, §6.2) — skin, hair colour, hair style, expression:
+Faces (painted into the atlas, §6.2) — skin, hair color, hair style, expression:
 
 | id | Skin | Hair | Style | Expression |
 | --- | --- | --- | --- | --- |
@@ -64,9 +64,9 @@ Faces (painted into the atlas, §6.2) — skin, hair colour, hair style, express
 | juno | `#8D5A3B` | `#1A1A1A` | high bun | calm smile |
 | otto | `#F1C8A8` | `#D8D8D8` | bald crown, side tufts, moustache | flat, content |
 | wren | `#F3D0B0` | `#C8552B` | goggles on the forehead, messy top | open-mouth "whee" |
-| soren | `#C68A62` | `#3A2A1E` | knitted cap in trim colour | friendly smile |
+| soren | `#C68A62` | `#3A2A1E` | knitted cap in trim color | friendly smile |
 | mabel | `#F6D5C0` | `#9A9AA5` | curls | mischievous smirk |
-| tuck | `#B77B55` | `#5A3A1C` | wide-brim sun hat in trim colour | big smile |
+| tuck | `#B77B55` | `#5A3A1C` | wide-brim sun hat in trim color | big smile |
 | ines | `#6E452C` | `#111111` | short crop, visor in `#FFB000` | small focused smile |
 
 AI personality parameters, in `data/racers.json` (a person can edit it in Snuggery):
@@ -89,7 +89,7 @@ The player picks one racer; the other seven are AI. The player's own row is igno
 ## 4. Items
 
 Items come from **parcels**: small wrapped boxes (a 0.9 m cube in a warm cream `#F7E7C6` with a
-ribbon cross in the track's accent colour and a bow on top), floating 1.0 m above the road, slowly
+ribbon cross in the track's accent color and a bow on top), floating 1.0 m above the road, slowly
 turning (1.2 rad/s) and bobbing (±0.12 m, 1.6 s period). Parcels stand in **rows of four** across
 the road at lateral positions −0.6, −0.2, +0.2, +0.6 × half-width, at three places per lap (§5);
 the first place is a **double row** (two rows 10 m apart), so the whole grid can collect one on the
@@ -107,8 +107,8 @@ the drop code:
 | **Kettle** (boost) | A jet of steam from the back: a burst of speed. | Boost 1.4 s: top speed +8 m/s, extra acceleration 30 m/s², off-track slowdown mostly ignored (§8). |
 | **Quilt** (shield) | A quilted, translucent bubble wraps the kart. Blocks the next spin-out or tumble, then pops. While up, Honey has no effect and bumps push others 3× harder. | Lasts 10 s or one hit. |
 | **Yarn Snare** (dropped behind) | A ball of yarn left on the road 2.5 m behind the kart. The next kart to touch it spins out. | Arms after 0.35 s. Catches a kart within 0.9 m plus 0.7 m of the kart's radius. Spin-out: 1.0 s, control lost, speed shed at 40 m/s² down to 8 m/s. Lasts until touched or 40 s. At most 10 on the track (oldest unravels first). |
-| **Paper Plane** (fired ahead) | A folded paper plane that flies forward along the track and homes on **the racer one place ahead at launch**. | Speed 45 m/s along the centreline at the shooter's lateral offset; once within 25 m of its target it closes laterally at 8 m/s and vertically to kart height. Hit radius 1.2 m: tumble 1.3 s, speed × 0.2. Expires after 7 s. Fired by the leader, it flies ahead and fades out after 2 s. |
-| **Honey Puddle** (dropped behind, the cheap fifth) | A golden puddle spreads behind the kart. Anyone driving through it is slowed while inside. | Centred 4 m behind, it spreads 0 → 3.2 m radius in 0.4 s. Inside: top speed × 0.5, plus 0.3 s after leaving; the kart that dropped it is spared for 1.5 s. Lasts 14 s. At most 4 on the track. |
+| **Paper Plane** (fired ahead) | A folded paper plane that flies forward along the track and homes on **the racer one place ahead at launch**. | Speed 45 m/s along the centerline at the shooter's lateral offset; once within 25 m of its target it closes laterally at 8 m/s and vertically to kart height. Hit radius 1.2 m: tumble 1.3 s, speed × 0.2. Expires after 7 s. Fired by the leader, it flies ahead and fades out after 2 s. |
+| **Honey Puddle** (dropped behind, the cheap fifth) | A golden puddle spreads behind the kart. Anyone driving through it is slowed while inside. | Centered 4 m behind, it spreads 0 → 3.2 m radius in 0.4 s. Inside: top speed × 0.5, plus 0.3 s after leaving; the kart that dropped it is spared for 1.5 s. Lasts 14 s. At most 4 on the track. |
 
 **Recovery:** after a spin-out or tumble a kart is immune to further spin-outs and tumbles for
 1.0 s (a gentle blink), so a pile-up does not chain; a blinking kart drives through a Snare without
@@ -125,11 +125,11 @@ and underpass never interact.
 | 7th–8th | 40 | 15 | 5 | 35 | 5 |
 
 **How the AI uses them** (each AI rolls a hold time of 1.5–6.0 s × (1.3 − `aggression`) on
-pickup and will not use the item before it, except the Quilt defence):
+pickup and will not use the item before it, except the Quilt defense):
 
 - **Kettle** — used when the next 60 m of track is nearly straight (|κ| < 1/120 m⁻¹ throughout), or
   after 15 s held.
-- **Quilt** — held as a defence: raised the moment a Paper Plane targets this kart (with
+- **Quilt** — held as a defense: raised the moment a Paper Plane targets this kart (with
   probability `awareness`), or when a Snare or Honey lies on its line within 15 m and it has decided
   not to dodge. Raised anyway after 12 s held.
 - **Yarn Snare** — dropped when another kart is 3–15 m behind on roughly the same line
@@ -155,7 +155,7 @@ the results screen.
 ### 5.1 How a track is defined and generated
 
 Each track is a closed loop of control points, in `data/tracks.json`. A point is
-`[x, z, y, width, bank]` in metres and degrees:
+`[x, z, y, width, bank]` in meters and degrees:
 
 - `x`, `z` — the plane. three.js convention: **+x is east (screen right on the mini-map), +z is
   south (screen down)**, y is up. The order of points is the direction of travel. Point 0 is on the
@@ -177,21 +177,21 @@ it):
    position `P = curve.getPoint(t)`; segment `seg = floor(t·n)`, local `f = t·n − seg`,
    `sm = f²(3 − 2f)`; width and bank magnitude are `lerp(point[seg], point[seg+1], sm)`.
 3. **Plan heading** `θᵢ = atan2(zᵢ₊₁ − zᵢ₋₁, xᵢ₊₁ − xᵢ₋₁)`. **Signed curvature**
-   `κᵢ = wrap(θᵢ₊₁₂ − θᵢ₋₁₂) / 24` (radians per metre; **positive = turning right**, because with
+   `κᵢ = wrap(θᵢ₊₁₂ − θᵢ₋₁₂) / 24` (radians per meter; **positive = turning right**, because with
    +z south the right-hand vector of a forward tangent `(tx, tz)` is `R = (−tz, 0, tx)` and
    `dθ/ds > 0` rotates the tangent toward it).
 4. **Signed bank** `bᵢ = bankMagᵢ · clamp(κᵢ · 150, −1, 1)` (full bank at radius ≤ 150 m, fading to
    0 on straights). A point at lateral offset `l` (+ = right) is
    `P + R·l·cos b − Up·l·sin b`, so a right-hand bend (b > 0) has its right (inside) edge lower.
-5. Per sample store: `P`, forward `T` (3D, normalised), plan right `R`, surface normal, `w/2`,
+5. Per sample store: `P`, forward `T` (3D, normalized), plan right `R`, surface normal, `w/2`,
    `verge`, `b`, `κ`, cumulative distance `s = i`, section flags (bridge, tunnel-cut, etc.).
 6. **Road mesh** from every 2nd sample (2 m): a strip with 2 vertices across (the edges); UV `u`
    across 0–1, `v = s / 8` (the asphalt texture repeats every 8 m). **Verge** strips outside each
    edge, continuing the banked plane. **Walls** from every 4th sample. A **start line** quad
-   (checker texture 64 × 16 canvas) at s = 0, and **kerb** strips (alternating trim/white every 2 m,
+   (checker texture 64 × 16 canvas) at s = 0, and **curb** strips (alternating trim/white every 2 m,
    0.5 m wide) on the inside edge wherever |κ| > 1/60.
 7. **Under the road:** where `y > 1.5` on a flat-ground track, a skirt (vertical faces from the
-   road edge to the ground) in the track's stone colour — or, on Lantern Night, **viaduct columns**
+   road edge to the ground) in the track's stone color — or, on Lantern Night, **viaduct columns**
    every 14 m at both edges. Pinewood Pass instead gets a heightfield (§5.5).
 
 Karts never raycast. Each kart keeps its **nearest sample index**, searched locally within ±30
@@ -223,7 +223,7 @@ The checks, which `tools/check.mjs` must repeat on every run (they catch an edit
 - **Radius:** at every sample, `1/|κ| ≥ w/2 + verge + wall + 2` (else the inside edge folds).
 - **Corridors:** for every pair of samples more than 60 m apart along the loop, the plan distance
   ≥ `w₁/2 + w₂/2 + 2·(verge + wall) + 4`, unless the heights differ by ≥ 7 m (a bridge).
-- **Grade:** `|Δy| per metre ≤ 0.12`.
+- **Grade:** `|Δy| per meter ≤ 0.12`.
 - **Grid:** the 40 m before point 0 has `|κ| < 1/80` (the starting grid sits there).
 
 ### 5.3 Harbour Loop — "flat and friendly, with one tight gate"
@@ -241,16 +241,16 @@ bridge over the canal and the narrow old-town gate chicane.
   "parcels": [70, 80, 450, 800] }
 ```
 
-Sections by distance along the lap (≈, metres): **0–121** harbour-front straight (start); **121–385**
+Sections by distance along the lap (≈, meters): **0–121** harbor-front straight (start); **121–385**
 the east sweep past the crane yard, banked 4–6°; **385–505** the hump bridge over the canal (up to
-4 m; skirt of harbour stone, left open over the canal, which reads as a deck on two stone piers at x = 45 and x = 75); **505–674** the old-town gate chicane, 13 m wide,
+4 m; skirt of harbor stone, left open over the canal, which reads as a deck on two stone piers at x = 45 and x = 75); **505–674** the old-town gate chicane, 13 m wide,
 with a stone archway spanning the road at s ≈ 590; **674–857** the west hairpin, banked 8°;
 **857–1028** back along the quay.
 
 - **Palette:** sky zenith `#6FB3E0` → horizon `#E9F2F5` (fog = horizon, near 60 m, far 260 m);
-  sea `#2E6F95`; asphalt `#5A5E66`; verge sand `#E3D3A6`; harbour stone `#B8B2A7`; house walls
+  sea `#2E6F95`; asphalt `#5A5E66`; verge sand `#E3D3A6`; harbor stone `#B8B2A7`; house walls
   apricot `#F2C6A0`, mint `#A8D5BA`, butter `#F6E3A1`, powder `#C9D7F2`, rose `#E7B7C8`; roofs
-  terracotta `#B5543C`; accent (parcel ribbons, kerbs) `#2E6F95`.
+  terracotta `#B5543C`; accent (parcel ribbons, curbs) `#2E6F95`.
 - **Ground:** a flat plane at y = −0.05 in sand; a sea plane at y = −1.2 south of z = +20 (the
   quay edge is 6 m beyond the start straight's wall); and a **canal**, a 30 m-wide water strip at
   x ∈ [45, 75], z ∈ [−320, −135], which passes under the hump bridge (road height ≈ 4 m there) and
@@ -258,11 +258,11 @@ with a stone archway spanning the road at s ≈ 590; **674–857** the west hair
   ground as rectangles around the canal, with stone canal walls from −1.2 to 0.
 - **Props** (all instanced, positions from a seeded RNG so every race looks the same):
   - **Houses:** 60 boxes, 6–10 m wide, 7–9 m deep, 6–14 m tall, pitched roof prism on top, placed
-    along the inside of the loop and north of the gate, ≥ 6 m outside the wall; instance colours
-    from the five wall colours. Window grid via a shared 128 × 128 canvas texture (dark panes on
-    white; the wall colour comes from the instance colour).
+    along the inside of the loop and north of the gate, ≥ 6 m outside the wall; instance colors
+    from the five wall colors. Window grid via a shared 128 × 128 canvas texture (dark panes on
+    white; the wall color comes from the instance color).
   - **Archway** at the gate: two 4 × 4 × 10 m towers and a 3 m-deep beam across the road at 8.5 m.
-  - **Lamp posts** every 24 m on the outer edge of the harbour-front and quay straights (a 5 m
+  - **Lamp posts** every 24 m on the outer edge of the harbor-front and quay straights (a 5 m
     cylinder and a small box head).
   - **Bollards** every 6 m along the sea side of the quay (0.3 × 0.8 m cylinders) — the main close
     cue for speed.
@@ -299,22 +299,22 @@ bends back to the lodge.
   `#8A8D91`; terrain grass `#6E8F4E` → rock `#8A8D91` above 45 m → snow `#F2F4F5` above 75 m;
   accent `#C8552B`.
 - **Ground (heightfield):** a grid of 160 × 160 vertices over the track's bounding box plus 180 m on
-  each side. For each vertex, find the nearest centreline sample (a 20 m spatial hash of the samples
+  each side. For each vertex, find the nearest centerline sample (a 20 m spatial hash of the samples
   keeps this under ~100 ms); with `d` = plan distance and `edge = w/2 + verge + wall`:
   - `d ≤ edge + 2` → height = road height at that sample − 0.6 (always under the road).
   - otherwise → road height − 0.6 + `(d − edge − 2) · 0.35 · (0.6 + 0.8·n(x, z))`, where `n` is a
     seeded 2D value noise (3 octaves, base period 120 m), giving slopes that rise away from the road
-    into ridges 60–100 m high at the far edges. Vertex colours by height as above.
+    into ridges 60–100 m high at the far edges. Vertex colors by height as above.
   - In the rock cut, the walls are replaced by **cliff faces**: a strip from the wall line up to
     road height + 8 m, jagged by ±0.8 m of noise, granite.
 - **Props:**
   - **Pines:** 700 on High, 380 on Low. Each is a trunk cylinder plus three stacked cones (one merged
-    geometry with vertex colours, ≈ 40 triangles), scale 0.8–1.6, placed by jittered grid (12 m cells,
+    geometry with vertex colors, ≈ 40 triangles), scale 0.8–1.6, placed by jittered grid (12 m cells,
     one candidate per cell, rejected within `edge + 3` of the road or on terrain steeper than 0.8).
   - **Rocks:** 120 icosahedrons (detail 0, vertices jittered ±25 %), 0.6–3 m.
   - **Log lodge** at the start: two cabins (boxes, prism roofs) and a timber arch over the line.
   - **Chevron boards** on the outer wall of both summit hairpins and the first sweeper: 1.2 × 0.8 m
-    boards, accent colour with white chevrons (canvas 64 × 32), every 8 m through the bend — the key
+    boards, accent color with white chevrons (canvas 64 × 32), every 8 m through the bend — the key
     readability cue for "turn now".
   - **Marker posts** every 10 m on both edges of the climb and descent (0.15 × 1.0 m, white with a
     reflector) — the close speed cue.
@@ -350,7 +350,7 @@ of height between the two road surfaces); **889–1142** the west sweepers, bank
 - **Ground:** flat plane at −0.05 (lawn); a lake plane at −0.6 south of z = +110.
 - **Props:**
   - **Lanterns:** on 3 m poles every 18 m on both edges (≈ 150), a sphere (8 × 6 segments) in one of
-    the three lantern colours, `MeshBasicMaterial`. Under each, a **light pool**: an additive,
+    the three lantern colors, `MeshBasicMaterial`. Under each, a **light pool**: an additive,
     transparent radial-gradient quad (canvas 64 × 64) lying on the road/verge, 6 m across,
     instanced. This is what makes the road readable at night.
   - **String lights** across the road at 6 places (a sagging curve of 24 small quads per string).
@@ -370,25 +370,25 @@ of height between the two road surfaces); **889–1142** the west sweepers, bank
 
 One kart is **one mesh**: boxes and cylinders merged (`BufferGeometryUtils` is not vendored —
 merge by hand: concatenate position/normal/uv/color arrays and offset the indices; ≈ 40 lines in
-`js/kart.js`). Dimensions in metres, origin at ground level under the kart's centre, +z forward in
+`js/kart.js`). Dimensions in meters, origin at ground level under the kart's center, +z forward in
 the kart's local frame (rotate the group so it faces along its heading):
 
-| Part | Shape | Size | Position (x, y, z) | Colour |
+| Part | Shape | Size | Position (x, y, z) | Color |
 | --- | --- | --- | --- | --- |
 | Floor pan | box | 1.40 × 0.12 × 2.10 | (0, 0.28, 0) | charcoal `#2B2D33` |
-| Body tub | box | 1.30 × 0.32 × 1.50 | (0, 0.50, −0.10) | body colour |
-| Nose | box, top edge bevelled by a second thin box | 1.00 × 0.24 × 0.60 | (0, 0.44, 0.95) | body colour |
+| Body tub | box | 1.30 × 0.32 × 1.50 | (0, 0.50, −0.10) | body color |
+| Nose | box, top edge bevelled by a second thin box | 1.00 × 0.24 × 0.60 | (0, 0.44, 0.95) | body color |
 | Front bumper | cylinder along x, r 0.09 | length 1.36 | (0, 0.30, 1.22) | trim |
 | Seat back | box | 0.80 × 0.55 × 0.12 | (0, 0.85, −0.55) | trim |
 | Engine | box | 0.80 × 0.40 × 0.45 | (0, 0.55, −1.05) | `#5C6068` |
 | Exhausts | 2 cylinders along z, r 0.07, length 0.35 | | (±0.25, 0.62, −1.35) | `#9EA3AB` |
 | Steering column + wheel | thin cylinder + a torus-like 12-sided flat cylinder r 0.18 | | (0, 0.85, 0.30), tilted 30° | `#1E1F24` |
-| Driver torso | cylinder r 0.30 top, 0.34 bottom, h 0.55 | | (0, 0.95, −0.25) | body colour |
+| Driver torso | cylinder r 0.30 top, 0.34 bottom, h 0.55 | | (0, 0.95, −0.25) | body color |
 | Driver head | sphere r 0.30, 16 × 12 | | (0, 1.45, −0.20) | textured (atlas) |
 | Hair / hat | per style: hemisphere cap, bun sphere, brim cylinder, goggles band | | on the head | hair / trim |
 
 **Wheels** are separate: all 32 wheels of all 8 karts are **one `InstancedMesh`** (a 14-sided
-cylinder, dark rubber `#1C1C1E` with a hub disc in `#C9CCD1` via vertex colours). Front r 0.30,
+cylinder, dark rubber `#1C1C1E` with a hub disc in `#C9CCD1` via vertex colors). Front r 0.30,
 width 0.28, at (±0.72, 0.30, 0.78); rear r 0.36, width 0.40, at (±0.74, 0.36, −0.78). Each frame
 their matrices are set from the kart transform, the wheel spin (`angle += v·dt / r`) and, for the
 front pair, the steer angle (± 0.45 rad at full lock).
@@ -406,25 +406,25 @@ A single canvas **512 × 256** (8 tiles of 128 × 128, `pip` … `ines` left-to-
 bottom row) is the `map` of the kart material
 (`MeshLambertMaterial({ map: atlas, vertexColors: true, alphaHash: true })`). The top-left
 **8 × 8 pixels of tile 0 are left pure white** — every non-face vertex of every kart gets UVs
-pointing at that white patch, so its colour comes from the vertex colour alone. That makes each
+pointing at that white patch, so its color comes from the vertex color alone. That makes each
 kart **one draw call**. Each kart has its own copy of the material (all eight identical, so one
 shader program) only so that a rival can fade on its own (§10); `alphaHash` dithers the fade, so
 nothing needs sorting, and at full opacity discards nothing.
 
 Painting a tile (the same function paints the 72 px faces on the title screen and the 30 px ones on
 the results):
-fill the skin colour; two white ellipses (22 × 26 px) at 40 % and 60 % across, 45 % down, with
+fill the skin color; two white ellipses (22 × 26 px) at 40 % and 60 % across, 45 % down, with
 dark pupils looking slightly forward; brows angled per expression; mouth per expression (arc,
 grin with teeth, flat line, "o"); cheek blush circles at 15 % alpha; hair fringe across the top
-third in the hair colour. The head sphere's UVs are remapped at build time so the face occupies
-the middle half of the sphere's wrap and is centred on the kart's forward direction — verify with
+third in the hair color. The head sphere's UVs are remapped at build time so the face occupies
+the middle half of the sphere's wrap and is centered on the kart's forward direction — verify with
 the `face` test scene (§17.3), which puts the camera in front of each kart.
 
 ---
 
 ## 7. Units and the simulation step
 
-Metres, seconds, radians. **Fixed simulation step 1/120 s**; each animation frame runs
+Meters, seconds, radians. **Fixed simulation step 1/120 s**; each animation frame runs
 `floor(accumulator / step)` steps, at most 8. The frame delta from `requestAnimationFrame` is
 **clamped to 1/15 s**, so a stall or a return from background never teleports a kart; the race
 clock is the sum of simulated steps, never wall time.
@@ -454,7 +454,7 @@ stun state, the nearest sample index.
 ### 8.1 Drift and mini-boost
 
 - **Entry:** drift button pressed while `|σ| ≥ 0.25` and `v ≥ 12` → drift direction `dir = sign(σ)`.
-  If pressed with the wheel near centre, the drift **arms** and begins as soon as `|σ|` passes 0.25
+  If pressed with the wheel near center, the drift **arms** and begins as soon as `|σ|` passes 0.25
   within 0.4 s.
 - **While drifting:** `ω = dir · 2.3 · g(v) · (0.80 + 0.60 · σ·dir)` (steering *into* the drift
   tightens it to 1.40×, steering out widens it to 0.20×, it never flips); grip `e^(−2.5·dt)`; top
@@ -479,7 +479,7 @@ for 0.15 s so it does not stick.
 
 Each kart is a circle of **radius 1.0 m** in plan. For every pair (28 pairs, all checked every step)
 closer than 2.0 m with height difference < 1.5 m (the bridge again): push each out by half the
-overlap along the line of centres; exchange the relative normal velocity with **restitution 0.4**
+overlap along the line of centers; exchange the relative normal velocity with **restitution 0.4**
 (equal masses; a Quilt-shielded kart counts as 3× mass). Forward speed is not allowed to drop below
 85 % of its pre-bump value from a bump alone — bumps shove sideways, they do not stop you.
 
@@ -491,7 +491,7 @@ overlap along the line of centres; exchange the relative normal velocity with **
   a 1 m hop.
 - **Recovery immunity** 1.0 s (§4).
 - **Stuck:** `|v| < 2` for 2.5 s outside the countdown (e.g. nosed into a wall at an angle), or
-  wrong way for 4 s → a 0.3 s fade, the kart is placed on the centreline 10 m back at its current
+  wrong way for 4 s → a 0.3 s fade, the kart is placed on the centerline 10 m back at its current
   `s`, facing along the track, at 10 m/s. No character appears; it is just a fade.
 - **Wrong way:** heading · track forward < −0.3 for 1.5 s at > 3 m/s → "Wrong way" banner (player).
 
@@ -509,7 +509,7 @@ Implemented in `js/ai.js`, pure (no three, no DOM), called once per simulation s
 It produces the same inputs a human does — steer, drift button, brake, use item — and goes through
 the same physics.
 
-- **Target point:** the centreline sample at `s + La`, `La = 6 + 0.55·v` m (≈ 22 m at full speed).
+- **Target point:** the centerline sample at `s + La`, `La = 6 + 0.55·v` m (≈ 22 m at full speed).
   **Target lateral** `= lane · (w/2 − 2)` (personality) `+ clamp(κ̄ · 25, −0.55, 0.55) · (w/2 − 2)`,
   where `κ̄` is the mean curvature over `[s + 10, s + 40]` — a pull toward the inside of the coming
   bend. Plus temporary shifts: hazard dodging and parcel seeking (§4), passing (another kart 0–6 m
@@ -528,7 +528,7 @@ the same physics.
 - **Pace and rubber-banding:** `vTop_ai = 30 · pace · skill · band`, where `pace` is the title
   screen's setting — **Relaxed 0.90, Standard 0.95, Fierce 0.99** — and
   `band = 1 + clamp(−gap/150, −1, 1) · (gap < 0 ? 0.08 : 0.06)` with
-  `gap = raceDistance_ai − raceDistance_player` in metres: an AI 150 m or more behind the player
+  `gap = raceDistance_ai − raceDistance_player` in meters: an AI 150 m or more behind the player
   runs up to 8 % faster, one 150 m or more ahead up to 6 % slower. Hard cap 31.5 m/s without boost.
   After the player finishes, `band = 1`.
 - **Mistakes:** every 20–40 s (random), with probability `0.25 · (1.03 − skill) / 0.06`, the AI moves
@@ -549,10 +549,8 @@ A chase camera, in `js/camera.js`:
 - **Field of view** (vertical, because the screen is portrait): **80° at rest → 90° at top speed →
   96° boosting**, eased with `1 − e^(−3·dt)`. In landscape (aspect > 1): 58° → 66° → 70°. Tune
   within ±4° by screenshot; keep the kart's rear wheels at about 72 % of the screen height.
-- **Speed cues:** the FOV kick; **speed lines** (High only) while boosting — up to 18 thin white
-  streaks on a transparent 2D canvas above the WebGL canvas, each living 0.2–0.35 s while it slides
-  outward, kept to the left and right of a portrait screen, at most 25 % opaque and easing in and
-  out with the boost; a 0.03 m camera shake while boosting; and the close props (bollards, marker
+- **Speed cues:** the FOV kick; a 0.03 m camera shake while boosting (none under Reduce Motion);
+  and the close props (bollards, marker
   posts, lanterns) that pass at the road edge.
 - **Rivals at the camera:** a rival between the camera and the player fades by its depth in front
   of the camera — solid beyond 4 m, gone at 1.5 m (the player is about 5 m in front) — its Quilt
@@ -560,48 +558,60 @@ A chase camera, in `js/camera.js`:
 - **Countdown:** the camera starts 12 m behind and 7 m up and eases into the rig position over the
   3 s countdown. Every rival behind the player on the grid is hidden until Go, so the swoop frames
   the player's kart; at Go the kart behind is under the camera and comes back already faded.
-- **Title backdrop:** the same camera glides along the selected track's centreline at 8 m/s, 6 m up,
-  looking ahead — so the title screen is a slow tour of the track (§12).
+- **Title backdrop:** the same camera glides along the selected track's centerline at 8 m/s, 6 m up,
+  looking about 10° down at the road 32 m ahead, its view centered in the title's plate (the horizon
+  near a third of the way down it, the track's scenery filling it) — so the title
+  screen is a slow tour of the track (§12).
 - **Finish:** after the line the player's kart switches to autopilot (the AI driver) and the camera
   swings to a side-on view for the 2 s banner.
+- **Reduce Motion** (`prefers-reduced-motion: reduce`, read live): the title holds one still view 40 m
+  past the line, 6 m up, looking 32 m ahead; the countdown starts at the rig position instead of
+  swooping; the finish keeps the chase view; nothing shakes; a respawn is a cut with no fade; nothing blinks
+  (a kart recovering from a hit is a steady half form, an expiring Quilt shrinks once, the item
+  shuffle shows the item it lands on). The race itself runs as it does.
 
 ---
 
 ## 11. HUD and mini-map
 
-DOM elements over the canvas (`js/hud.js`), updated at most 30 times a second except the
-countdown. All inside safe margins: `max(env(safe-area-inset-*), 12px)` on every side, plus 8 px at
-the top (Snuggery's full screen may leave the status bar visible). Font: `ui-rounded, system-ui,
--apple-system, sans-serif` (no bundled font), numbers `font-variant-numeric: tabular-nums`, white
-with a 2 px dark text-shadow outline so they read over sky or road.
+DOM plates over the canvas (`js/hud.js`), updated at most 30 times a second except the countdown.
+All inside safe margins: `max(env(safe-area-inset-*), 12px)` on every side, plus 8 px at the top
+(Snuggery's full screen may leave the status bar visible). **The look is `ART.md`'s** (the template's
+house system): one face, Ysabeau Office, from `fonts/`, tabular figures; every sentence and number
+over the scene sits on a `--sheet` plate with a 1 px edge, in `--ink`, never held up by a shadow;
+marks drawn straight over the scene (the reticle, the steering ring) are a 1.5 px stroke over a
+3.4 px halo.
 
 Portrait layout at 390 × 844:
 
 | Element | Where | Size |
 | --- | --- | --- |
-| Position ("3" + "rd" + " / 8") | top-left | 48 px numeral, 20 px suffix, 16 px total |
-| Lap ("Lap 2/3") and race time; last lap below after lap 1 | top-left, under the position | 18 / 16 / 13 px |
-| Pause button | top-centre | 40 × 40 px |
-| Mini-map | right edge, 56 px below the top margin | 104 × 104 px canvas |
-| Item button (shows the held item / the shuffle) | bottom-right, above the drift button | 76 px circle |
-| Drift button | bottom-right | 88 px circle |
-| Drift hint (the first two races, during the countdown) | centre, below the mini-map | 15 px |
-| Steering pad (appears where the thumb lands) | lower-left | 112 px ring, 44 px knob |
-| Countdown numerals / "Go" | centre | 120 px |
-| Banners ("Lap 2", "Final lap", "Wrong way", "Finished 3rd") | centre, upper third | 32 px, 1.2 s |
-| Paper Plane lock-on reticle on the target | over the target kart (projected) | 40 px |
+| The race card: place ("3rd" + " of 8"), lap ("Lap 2 of 3") and race time, last lap, and the strip of your own line on the Lap Chart | top-left | 154 px plate; 21 px place, 13.5 px " of 8", 12.5 px lines, a 132 × 24 px strip |
+| Pause key | top-center (just right of the card on a phone too narrow for both) | 38 px plate, 44 × 44 hit |
+| Track map | right edge, 56 px below the top margin | 104 × 104 px plate |
+| Item key (the held item, the shuffle, or "No item") | bottom-right, above the drift key | 76 px plate |
+| Drift key | bottom-right | 88 px plate |
+| Drift hint (the first two races, during the countdown) | center, 8 px under the countdown's plate | 13.5 px, on a plate |
+| Steering ring (appears where the thumb lands) | lower-left | 112 px ring, 14 px knob |
+| Countdown numerals / "Go" | center, 22 % down or 8 px under the track map, whichever is lower (18 % on its side) | 96 px on a 128 px plate (75 on 100 on an upright phone ≤ 600 px tall), no animation |
+| Banners ("Lap 2", "Final lap", "Wrong way", "Finished 3rd of 8", "Hit by a paper plane", "Caught in a yarn snare", "Stuck in honey") | center, at the countdown's top | 15 px on a plate |
+| "Paper plane behind you" | under the race card | 13.5 px on a plate, steady |
+| Paper Plane lock-on reticle on the target | over the target kart (projected) | 40 px; locked, the ring closes round a dot |
 
 **The top-right corner stays clear.** In Snuggery's full screen on iOS 18, Snuggery's own 44 pt
-exit button sits 16 pt inside the safe area's top-right corner; nothing of the HUD goes there.
+exit button sits 16 pt inside the safe area's top-right corner; nothing of the HUD goes there, and
+on the title About sits after the name and the track words stop short of the corner.
 
-**Mini-map** (`<canvas>`, drawn at device pixel ratio): north-up, the track fitted into the square
-with 8 px padding. The road outline is drawn once into an offscreen canvas — 5 px white at 85 %
-opacity over a 2 px dark outline; on Lantern Night the samples are drawn in order of height so the
-bridge passes visibly over the underpass. Each frame (30 Hz) the offscreen image is copied and eight
-dots drawn: 7 px in each racer's body colour, the player 10 px with a 2 px white ring, drawn last.
+**Track map** (`<canvas>` on a `--sheet` plate, drawn at device pixel ratio): north-up, the track
+fitted into the square with 9 px padding. The road is drawn once into an offscreen canvas, 4 px of
+`--line-strong` over an 8 px `--sheet` casing with butt ends, the samples in order of height so on
+Lantern Night the bridge passes visibly over the underpass; the start a 2 px `--ink-2` tick. Each
+frame (30 Hz) the offscreen image is copied and eight dots drawn: 6 px in each rival's tone
+(`ART.md` section 2) on a 1 px `--sheet` ring, the player an 8 px `--ink` disc in a 3 px `--sheet`
+ring, drawn last.
 
 A hidden diagnostics line — **tap the race time five times** — shows fps, JS ms per frame, draw
-calls, triangles and pixel ratio. It is what a device test reads (§16).
+calls, triangles and pixel ratio, in the house face on a plate. It is what a device test reads (§16).
 
 ---
 
@@ -614,19 +624,25 @@ loading ─► title ─► (building track…) ─► countdown ─► race ─
              └──────────────────── "Change track or racer" ◄────────── "Race again" ─► countdown
 ```
 
-- **Loading:** a plain panel while modules, `data/tracks.json` and `data/racers.json` load. If
+- **Loading:** a plain notice plate while modules, `data/tracks.json` and `data/racers.json` load. If
   either file is missing or malformed, or a track fails the §5.2 checks, the panel says so in a
   sentence naming the file and the problem — it never shows an empty race.
-- **Title** (fits 390 × 844 without scrolling; scrolls inside the panel on shorter screens): the
-  wordmark "Snug Kart" at the top; a **track card** (name, one line, length, best lap and best race
-  time or "No best yet") with ‹ › buttons and swipe; a **racer grid** of 4 × 2 face tiles (72 px,
-  name under each, a ring on the selected one, the personality line of the selected racer below);
-  a row of **setting chips** (44 px tall) — Sound (off by default), Tilt (off), Quality (High / Low),
-  Controls (Pad / Sides), Pace (Relaxed / Standard / Fierce); and a large **Race** button. Behind it,
-  the selected track renders at the selected quality, at pixel ratio 1.25, with the gliding camera
-  (§10), so tapping Race never rebuilds the track. Panels follow
-  `prefers-color-scheme` (light: cream `#FFF8EC` panels, ink `#2A2622`; dark: `#1D1B22` panels,
-  ink `#F2EDE4`), translucent over the scene.
+- **Title** (`ART.md` section 3): a header with the name, an **About** key and the **tracks as
+  words** (the chosen one with the house's tracer under it; a sideways swipe on the scene changes
+  track too); the plate, where the selected track renders at the selected quality, at pixel ratio
+  1.25, with the gliding camera (§10) centered in the plate by `setViewOffset`, so tapping Race
+  never rebuilds the track; under it the bands: the track's blurb, length and rise; the **racers**
+  as eight painted faces (36 px in a ring of the racer's tone, each a 44 × 52 px button; eight
+  across from 384 px, two rows of four below it and on a phone on its side), the chosen racer's name
+  and line; the **settings** as words (Sound and Tilt toggles, off by default; Quality high / low,
+  Controls pad / sides, Pace relaxed / standard / fierce); a note after a tap; and the record row:
+  the best lap (the screen's one large figure), the best race and who set it, or "No best lap on
+  this track yet.", with **Race**, the one solid key. The bands scroll inside themselves on a short
+  screen; the plate keeps at least 38 % of the height. The chrome follows `prefers-color-scheme`
+  (the house tokens); the scene keeps its own light.
+- **About:** a full-height sheet: what the Lap Chart is and is not, this game's figures from the
+  loaded data, the sources and credits (three.js's license printed as text, the face's credit line),
+  and how the data gets here. The title's loop stops under it.
 - **Building track:** a short overlay while geometry is generated (target < 1.5 s on a phone). The
   same track is reused, not rebuilt, for "Race again".
 - **Countdown:** 3 – 2 – 1 – Go, one per second, with beeps (§14). Inputs are live (the player can
@@ -635,13 +651,16 @@ loading ─► title ─► (building track…) ─► countdown ─► race ─
 - **Pause** (button, Escape / P, or the page becoming hidden): the simulation stops, audio is
   suspended, a panel offers Resume, Restart, Quit to title. Returning to the page leaves it paused
   until Resume is tapped.
-- **Finish:** "Finished 3rd" for 2 s while the player's kart drives on autopilot. AI still racing
+- **Finish:** "Finished 3rd of 8" for 2 s while the player's kart drives on autopilot. AI still racing
   keep racing for up to 8 s more (a tap anywhere after the banner ends the wait at once); any not
   finished by then get a **projected** time
-  `t + remainingDistance / max(averageSpeedOverLast10s, 10)`, marked "est." in the results.
-- **Results:** eight rows — place, face, name, total time (m:ss.mmm) or "est.", best lap; the
-  player's row highlighted; a "New best lap" and/or "New best race" badge when a record fell. Buttons:
-  **Race again** and **Change track or racer**.
+  `t + remainingDistance / max(averageSpeedOverLast10s, 10)`, shown in the results as "about 1:54",
+  to the second, because ten seconds of average speed is all it is.
+- **Results:** a sheet that opens on the race's **Lap Chart** (`ART.md` section 1: eight lines from
+  the grid to the finish through the places at every tenth of a lap, yours in ink, a projected
+  finish dotted), its caption, then eight rows: place, face, name, total time (m:ss.mmm, or "about
+  m:ss") and best lap; the player's row on the on-plate; a sentence when a record fell ("New best lap
+  on Harbour Loop."). Keys: **Race again** and **Change track or racer**.
 
 **Persistence** (`localStorage`, every access in `try/catch`, the game works without it):
 `snugkart:v1:settings` → `{ sound, tilt, quality, controls, pace, track, racer }`;
@@ -655,34 +674,35 @@ loading ─► title ─► (building track…) ─► countdown ─► race ─
 All pointer input uses Pointer Events with per-`pointerId` tracking (true multi-touch: steer and
 drift at the same time), `setPointerCapture`, and `touch-action: none` on the game layer. The page
 blocks text selection, the long-press callout and double-tap zoom
-(`user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;`, viewport
-`user-scalable=no, viewport-fit=cover`), and the body is `position: fixed; overflow: hidden` so the
+(`user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;`, and `touch-action`
+on the game layer; the viewport is `width=device-width, initial-scale=1, viewport-fit=cover` and
+never blocks zoom), and the body is `position: fixed; overflow: hidden` so the
 web view never scrolls or bounces.
 
 - **Pad** (default): a touch anywhere in the lower-left region (left 60 % of the width, below 40 % of
-  the height) sets the pad's centre where it lands (and past the ring the ring follows the thumb, so
+  the height) sets the pad's center where it lands (and past the ring the ring follows the thumb, so
   steering back never needs a long drag); horizontal drag `dx` gives
   `steer = clamp(dx / 64 px, −1, 1)` with a 6 px dead zone; dragging **down more than 56 px** brakes,
-  then reverses once stopped. The ring and knob draw at the touch point; a ghost ring labelled
-  "Steer" shows at 30 % opacity until the first race's first touch.
+  then reverses once stopped. The ring and knob draw at the touch point; a ghost ring at 50 %
+  with "Steer" on a small plate shows until the first race's first touch.
 - **Sides:** the lower 42 % of the screen is split into a left zone (steer left, full lock) and a
   right zone (steer right); holding both brakes. **Drift in Sides mode:** tap-and-hold — release and
   press the same side again within 250 ms and keep holding: that starts a drift in that direction.
   Sides mode has no drift button (in the corner it would swallow the right thumb's steering); the
-  Controls chip and the first races' hint explain the gesture. The item button sits above the right
+  Controls setting and the first races' hint explain the gesture. The item button sits above the right
   zone.
 - **Drift button:** press and hold to drift (§8.1); release to fire the mini-boost. In Pad mode a
   thumb anywhere in the lower right below the item button drifts too.
-- **Item button:** tap to use the held item. Both buttons take touches 14 px beyond their ring.
-- **Tilt** (off by default): turning it on from the title chip is a tap, so it can call
+- **Item button:** tap to use the held item. Both keys take touches 14 px beyond their plate.
+- **Tilt** (off by default): turning it on from the title's Tilt word is a tap, so it can call
   `DeviceOrientationEvent.requestPermission()` when that function exists (iOS); on `"granted"` the
-  chip turns on, otherwise it stays off with the line "Tilt isn't available here". Steering then
+  word turns on, otherwise it stays off with the line "Tilt isn’t available here". Steering then
   comes from `gamma` in portrait (`beta` in landscape, sign by `screen.orientation.angle`):
   `steer = clamp((angle − neutral) / 22°, −1, 1)` with a 3° dead zone, where `neutral` is the average
   reading during the countdown. The pad is then ignored; drift and item buttons stay. **Untested in
   Snuggery** — see §16's device list: Snuggery's `WKUIDelegate` does not implement the
   orientation-permission callback, and whether WebKit then prompts or refuses has to be seen on a
-  phone. If it refuses, the chip explains it and the game is unaffected.
+  phone. If it refuses, the note explains it and the game is unaffected.
 - **Keyboard** (desktop testing): ← → / A D steer; Space or Shift drift; X, E or Enter item; ↓ / S
   brake and reverse; Escape or P pause. While racing these keys call `preventDefault`; on the menus
   they do not, so Space and Enter still press a focused button.
@@ -712,7 +732,7 @@ A master gain of 0.7 through a `DynamicsCompressorNode`.
 | Lap / final lap | two notes (784, 1047 Hz) / three notes (784, 988, 1175 Hz), 0.12 s each. |
 | Finish | an arpeggio 523 → 659 → 784 → 1047 Hz, 0.15 s each, the last held 0.6 s. |
 
-No music in v1 (§19). The in-app line under the Sound chip: "Uses your phone's volume. If you hear
+No music in v1 (§19). The note under the settings after Sound is turned on: "Uses your phone’s volume. If you hear
 nothing, check the silent switch." (Web Audio in a web view on iOS usually follows the ring/silent
 switch; whether it does inside Snuggery is a device check.)
 
@@ -726,8 +746,8 @@ switch; whether it does inside Snuggery is a device check.)
 across races; `outputColorSpace` sRGB; no tone mapping. Materials are `MeshLambertMaterial`
 throughout (plus `MeshBasicMaterial` for sky, lanterns, light pools, particles) — no
 `MeshStandardMaterial`, no environment maps, no post-processing. The sky is a sphere of radius
-0.92 × the camera's far plane that follows the camera, vertex-coloured zenith → horizon, `fog: false`, `depthWrite: false`.
-Linear fog in the horizon colour. Camera `near 0.3`, `far = fogFar + 10`.
+0.92 × the camera's far plane that follows the camera, vertex-colored zenith → horizon, `fog: false`, `depthWrite: false`.
+Linear fog in the horizon color. Camera `near 0.3`, `far = fogFar + 10`.
 
 ### 15.2 Budgets (measured with `renderer.info` after a frame, reported by `__sk.stats()`)
 
@@ -736,12 +756,12 @@ Linear fog in the horizon colour. Camera `near 0.3`, `far = fogFar + 10`.
 | Pixel ratio | `min(devicePixelRatio, 2)` | 1.25 |
 | Shadows | one 1024² directional shadow map following the player (70 × 70 m ortho frustum); karts cast, road/verge/terrain receive | none; a blob shadow quad under each kart (instanced, one call) |
 | Props | 100 % of the counts in §5 | 55 % |
-| Speed lines, spark particles | on (particles ≤ 400) | speed lines off, particles ≤ 150 |
+| Spark particles | ≤ 400 | ≤ 150 |
 | Fog far / camera far | 260 / 270 m (Pinewood 240) | 180 / 190 m |
 | Triangles drawn per frame | ≤ 150,000 | ≤ 90,000 |
 | Draw calls per frame | ≤ 50 | ≤ 35 |
 
-Where the draw calls go (expected ≈ 35–45 on High): sky 1; road, verge, walls, kerbs, start line ≈
+Where the draw calls go (expected ≈ 35–45 on High): sky 1; road, verge, walls, curbs, start line ≈
 6; terrain or ground/water 1–4; each prop type one `InstancedMesh` (≈ 6–10); karts 8 (one mesh
 each); wheels 1; parcels 1 (instanced); items on track ≈ 4 (one instanced mesh per type); particles
 1; Quilt bubbles ≤ 8 (only while up); shadow pass extra ≈ 10.
@@ -779,7 +799,7 @@ judging again. It never steps up during a race and never changes the Quality set
   mode (§10), mini-map canvas re-created at the new device pixel ratio, pad region recomputed. The
   HUD is CSS and needs nothing. Portrait is the design; landscape must work, not shine.
 - **WebGL context loss:** listen for `webglcontextlost` (prevent default, pause, suspend the sound,
-  show "Graphics were reset — tap to continue" above every other screen) and
+  show "Graphics were reset. Tap to continue." above every other screen) and
   `webglcontextrestored` (nothing is rebuilt: three.js re-uploads every geometry and texture on
   the next render; the stale dispose listeners it keeps are cleared at the loss).
 - **No console errors, no failed requests, no request outside the app.** The only fetches are
@@ -802,29 +822,34 @@ survive closing and reopening the app.
 
 ```
 snug-kart/
-  index.html          the page: canvas, HUD and menu markup, the item <symbol>s, one module script
-  style.css           menus, HUD, buttons; light and dark tokens
+  index.html          the page: canvas, the race's plates, the title, results, pause, About, the item <symbol>s
+  style.css           the house look (ART.md): chrome tokens in both themes, plates, keys, About
+  ART.md              the look: the Lap Chart, the palette, the chrome
+  fonts/              ysabeau-office-gw.woff2 and OFL.txt, the house face
   miniapp.json        {"schemaVersion":1,"name":"Snug Kart","entryPoint":"index.html",
                        "description":"An original kart racer for your phone: eight racers, three
                        tracks, drifting and household items, all offline.","version":"1.0"}
-  NOTES.md            what it is, the folder, run it locally, how it was built, code map, licences
+  NOTES.md            what it is, the folder, run it locally, how it was built, code map, licenses
   DESIGN.md           this file
   data/
     tracks.json       the three tracks of §5 (control points, sections, parcels, palette, prop counts)
-    racers.json       the eight racers of §3 (names, colours, faces, AI personality)
+    racers.json       the eight racers of §3 (names, colors, faces, AI personality)
   js/
-    main.js           boot, screens, the loop, speed lines, the __sk hook
+    main.js           boot, screens, the title, About, the loop, the results, the __sk hook
+    chart.js          the Lap Chart and the race card's strip (2D canvas)
+    units.js          every number, time and place the game writes (pure)
+    palette.js        the racers' tones per theme
     track.js          spline, samples, surface queries, validation (three.core only, no DOM)
     physics.js        kart dynamics, walls, bumps (pure)
     ai.js             the AI driver (pure)
     items.js          parcels, items, hits, the AI's item use (pure logic)
     items-view.js     item meshes and Quilt bubbles (instanced), the item button, reticle, warning
-    race.js           grid, laps, checkpoints, positions, finish, projected times (pure)
+    race.js           grid, laps, checkpoints, positions, the Lap Chart's record, finish, projected times (pure)
     scenery.js        road, verge, walls, terrain, props, sky (three)
     kart.js           kart mesh, wheels, face atlas painter (three + canvas)
     fx.js             drift sparks, boost puffs, Kettle steam, Quilt pops, wall sparks (three)
     camera.js         chase, countdown, title glide, finish views
-    hud.js            HUD and mini-map (DOM + canvas)
+    hud.js            the race card, its strip, the track map, banners (DOM + canvas)
     input.js          pad, sides, drift and item buttons, keyboard
     tilt.js           orientation permission, readings, calibration
     audio.js          Web Audio synthesis
@@ -835,12 +860,15 @@ snug-kart/
     three.module.js   three.js r186, copied from ../anatomy/vendor/ unchanged
     three.core.js
     three-LICENSE.txt
-  screenshots/app.png (left out of the ZIP)
+  screenshots/        app.png and the house scenes per theme (left out of the ZIP)
   tools/              (left out of the ZIP)
     check.mjs         static checks + track validation + ZIP build and size
     sim.mjs           headless races in Node (no browser)
     items.mjs         each item's rule, set up deterministically on the race code
-    shoot.mjs         headless Chromium screenshots and runtime checks
+    test_chart.mjs    the Lap Chart's record against the test's own
+    shoot.mjs         headless Chromium screenshots and runtime checks, both themes
+    art/              palette.py (every color and contrast), measure_lapchart.mjs
+    DECISIONS.md      the record of the look's pass
 ```
 
 `OrbitControls.js` is **not** copied (not needed). No `PROMPT.md` (the app needs no setup).
@@ -887,6 +915,10 @@ between 95 % of a lap at the AI's 31.5 m/s cap and 75 s; and the finishing sprea
 (the rubber band works without making it a procession). It prints per-track lap-time ranges —
 these are the numbers to tune §8–§9 against.
 
+`check.mjs` also carries the house's checks (HOUSE.md 7.1: the face, the data's hashes, the AI
+vendor names, the credits, the camera's string, SI, the look, the budgets, US spelling); `NOTES.md`
+lists them. **`test_chart.mjs`** proves the Lap Chart's record over 30 races.
+
 **`shoot.mjs`**, copied in shape from `../milky-way/tools/shoot.mjs`: serves the folder on a
 local port, launches Chromium with SwiftShader at **390 × 844, DPR 2, `isMobile`, `hasTouch`**, and
 **fails on any console error or warning, page error, failed request, HTTP ≥ 400, or any request
@@ -895,16 +927,18 @@ that is not to the local server, `data:` or `blob:`**. It needs Playwright (how 
 
 | Scene | What it does | Checks |
 | --- | --- | --- |
-| `title` | loads; waits for the title | the track card and racer grid are visible |
-| `countdown` | `__sk.startRace({ track: 'harbour', racer: 'pip', seed: 1 })`, freezes at "2" | numeral shown |
-| `race-harbour`, `race-pinewood`, `race-lantern` | start with the player on autopilot, `__sk.advance(20)` (simulate 20 s, then render one frame); give the player a Paper Plane and a tier-2 drift for the Pinewood shot | position, lap, mini-map, item shown; `__sk.stats()` within budget for High and Low |
+| `title` | loads; waits for the title | the track words and the racers' faces are visible |
+| `countdown` | `__sk.startRace({ track: 'harbour', racer: 'pip', seed: 1 })`, freezes at "2" | numeral shown, no animation |
+| `race-harbour`, `race-pinewood`, `race-lantern` | start with the player on autopilot, `__sk.advance(20)` (simulate 20 s, then render one frame); give the player a Paper Plane and a tier-2 drift for the Pinewood shot | position, lap, track map, item shown; `__sk.stats()` within budget for High and Low |
 | `touch` | synthetic pointer events: pad drag right, drift hold, item tap | steer > 0.5, drift begins, item used; no errors |
 | `resize` | viewport 844 × 390, one frame, back to 390 × 844 | canvas size follows |
 | `hidden` | fake `visibilitychange` to hidden | race paused, no frames scheduled |
 | `results` | `__sk.advance(400)` to the finish, 8 s on | eight rows; a best lap written to `localStorage` |
 | `face` | camera in front of each kart in turn | faces face forward (look at the image) |
 
-`screenshots/app.png` is a Pinewood Pass shot like `race-pinewood`, written by `SAVE=1`.
+`screenshots/app.png` is the README's picture (the lead's); `SCREENSHOTS=1` writes the house scenes per
+theme beside it and never touches it. The house's scenes (contrast, the tracer, SI, hit targets, the
+Lap Chart and its ink, About, Reduce Motion, widths, broken data) are listed in `NOTES.md`.
 
 **The hook:** `window.__sk = { startRace, advance(seconds), setAutopilot, giveItem, stats, state,
 pause, resume, … }` — present in the shipped build (it is inert unless called) so the tests exercise
@@ -912,13 +946,14 @@ exactly what ships; `NOTES.md` lists the helpers added for the tests.
 
 ---
 
-## 18. Licences
+## 18. Licenses
 
 - **three.js** r186 — MIT, © 2010–2026 three.js authors; `vendor/three-LICENSE.txt`, unchanged.
-- **Everything else** — the code, the tracks, the racers, the items, every texture and sound
-  generated by that code — is original to this app and released under the **MIT** licence in the
-  repository's root `LICENSE`. No font, image, model, sound or data file from anywhere else is
-  included. NOTES.md repeats this in its licence section.
+- **Type:** Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+- **Everything else** (the code, the tracks, the racers, the items, every texture and sound
+  generated by that code) is original to this app and released under the **MIT** license in the
+  repository's root `LICENSE`. No image, model, sound or data file from anywhere else is included.
+  NOTES.md repeats this in its license section.
 
 ---
 

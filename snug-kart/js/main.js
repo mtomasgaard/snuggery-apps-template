@@ -1,4 +1,5 @@
-// Snug Kart — boot, screens, the loop and the window.__sk test hook (DESIGN.md §12, §15, §16, §17).
+// Snug Kart: boot, screens, the loop and the window.__sk test hook (DESIGN.md §12, §15, §16, §17;
+// the look, ART.md).
 //
 // Items, sound and tilt plug in through `hooks` below (js/items-view.js, js/audio.js, js/tilt.js).
 // Each is optional: with a hook set to null the rest of the game still runs.
@@ -7,28 +8,33 @@ import {
   WebGLRenderer, Scene, PerspectiveCamera, SRGBColorSpace, NoToneMapping, PCFShadowMap,
 } from '../vendor/three.module.js';
 import { loadTracks } from './track.js';
-import { createRace, stepRace, finishRace, STEP, COUNTDOWN } from './race.js';
+import { createRace, stepRace, finishRace, STEP, COUNTDOWN, GATES } from './race.js';
 import { Field, paintFace } from './kart.js';
 import { buildScenery } from './scenery.js';
 import { ChaseCamera } from './camera.js';
-import { Hud, fmtTime, ordinal } from './hud.js';
+import { Hud } from './hud.js';
 import { Input } from './input.js';
 import { Sparks } from './fx.js';
 import * as store from './store.js';
 import { itemsHook } from './items-view.js';
 import { audioHook } from './audio.js';
 import { tiltHook } from './tilt.js';
+import { place, placeOf, raceTime, aboutTime, spokenTime, meters, diagnostics } from './units.js';
+import { drawChart } from './chart.js';
+import { TONES } from './palette.js';
 
 /**
  * The three optional modules, each behind one small interface:
  *   hooks.audio = { unlock(), setEnabled(on), onEvent(event, race), frame(race, dt), suspend(), resume() }
- *   hooks.items = { attach(race, scene) → { step(race, dt), onUse(race, kart) }, frame(race, dt, camera), give(race, kart, id), detach() }
- *   hooks.tilt  = { request() → Promise<boolean>, start(input), stop(), calibrate(race) }
+ *   hooks.items = { attach(race, scene) gives { step(race, dt), onUse(race, kart) }, frame(race, dt, camera), give(race, kart, id), detach() }
+ *   hooks.tilt  = { request() gives Promise<boolean>, start(input), stop(), calibrate(race) }
  */
 export const hooks = { audio: audioHook, items: itemsHook, tilt: tiltHook };
 
 const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
 const PR = { high: [2, 1.7, 1.4], low: [1.25, 1.0] };
+const RM = matchMedia('(prefers-reduced-motion: reduce)'), DARK = matchMedia('(prefers-color-scheme: dark)');
 
 const G = {
   screen: 'loading', tracks: [], racers: [], settings: store.load('settings', store.DEFAULT_SETTINGS),
@@ -37,7 +43,7 @@ const G = {
   prLevel: 0, frameLog: new Float64Array(240), frameN: 0, judgeAt: 0, adaptive: true,
   stats: { fps: 60, js: 0, buildMs: 0 }, finishView: 0,
   view: { camera: null, player: null, countdown: false },
-  lines: { op: 0, streaks: [] },
+  chart: null, about: null,
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -50,7 +56,8 @@ const inp = { steer: 0, drift: false, brake: 0, useItem: false };
 boot().catch((e) => failLoad(e && e.message ? e.message : String(e)));
 
 async function boot() {
-  const [tj, rj] = await Promise.all([fetchJSON('data/tracks.json'), fetchJSON('data/racers.json')]);
+  const face = document.fonts ? document.fonts.load('560 10.5px "Ysabeau Office"').catch(() => null) : null;
+  const [tj, rj] = await Promise.all([fetchJSON('data/tracks.json'), fetchJSON('data/racers.json'), face]);
   G.tracks = loadTracks(tj);
   G.racers = checkRacers(rj);
   if (!G.tracks.some((t) => t.id === G.settings.track)) G.settings.track = G.tracks[0].id;
@@ -65,13 +72,14 @@ async function boot() {
   scene = new Scene();
   camera = new PerspectiveCamera(80, 1, 0.3, 270);
   chase = new ChaseCamera(camera);
+  chase.still = RM.matches;
   G.view.camera = camera;
   field = new Field(G.racers);
   scene.add(field.group);
   sparks = new Sparks(G.settings.quality === 'high' ? 400 : 150);
   scene.add(sparks.points);
   hud = new Hud({
-    root: $('hud'), posN: $('pos-n'), posSuf: $('pos-suf'), lap: $('lap'), time: $('rtime'), last: $('last'),
+    root: $('hud'), posN: $('pos-n'), posOf: $('pos-of'), lap: $('lap'), time: $('rtime'), last: $('last'), strip: $('strip'),
     map: $('minimap'), count: $('count'), banner: $('banner'), diag: $('diag'), drift: $('btn-drift'),
   });
   input = new Input({ layer: $('touch'), pad: $('pad'), knob: $('pad-knob'), ghost: $('pad-ghost'), drift: $('btn-drift'), item: $('btn-item'), onPause: () => togglePause() });
@@ -79,6 +87,7 @@ async function boot() {
   hooks.audio.setEnabled(G.settings.sound);          // the context itself waits for a tap
   if (G.settings.tilt) hooks.tilt.start(input);      // steers once readings arrive; the pad until then
   wireScreens();
+  wireAbout();
   // iOS: audio may start only from a gesture, and a context can be suspended behind our back (a
   // call, another app). Any tap while Sound is on creates or resumes it.
   document.addEventListener('pointerdown', () => { if (G.settings.sound && !G.paused) hooks.audio.unlock(); }, { capture: true, passive: true });
@@ -88,6 +97,9 @@ async function boot() {
   window.addEventListener('orientationchange', onResize);
   document.addEventListener('visibilitychange', () => (document.hidden ? onHidden() : onVisible()));
   window.addEventListener('pagehide', onHidden);
+  RM.addEventListener('change', () => { chase.still = RM.matches; });
+  DARK.addEventListener('change', restyle);
+  if (document.fonts) document.fonts.addEventListener('loadingdone', restyle);
   onResize();
   await showTitle();
   const l = $('loading'); l.classList.add('done'); l.hidden = true;
@@ -97,7 +109,7 @@ async function fetchJSON(path) {
   let res;
   try { res = await fetch(path, { cache: 'no-store' }); } catch { throw new Error(`${path} could not be read.`); }
   if (!res.ok) throw new Error(`${path} is missing (the app needs it to build the races).`);
-  try { return await res.json(); } catch { throw new Error(`${path} is not valid JSON — check for a missing comma or bracket.`); }
+  try { return await res.json(); } catch { throw new Error(`${path} is not valid JSON. Check for a missing comma or bracket.`); }
 }
 
 function checkRacers(json) {
@@ -108,8 +120,8 @@ function checkRacers(json) {
     const where = `data/racers.json, racer "${r && (r.name || r.id)}"`;
     if (!r || typeof r.id !== 'string' || typeof r.name !== 'string') throw new Error(`${where}: needs an "id" and a "name".`);
     if (ids.has(r.id)) throw new Error(`${where}: the id "${r.id}" is used twice.`); ids.add(r.id);
-    for (const c of ['body', 'trim']) if (!/^#[0-9a-f]{6}$/i.test(r[c] || '')) throw new Error(`${where}: "${c}" must be a colour like #F28C28.`);
-    if (!r.face || !/^#[0-9a-f]{6}$/i.test(r.face.skin || '') || !/^#[0-9a-f]{6}$/i.test(r.face.hair || '')) throw new Error(`${where}: "face" needs "skin" and "hair" colours.`);
+    for (const c of ['body', 'trim']) if (!/^#[0-9a-f]{6}$/i.test(r[c] || '')) throw new Error(`${where}: "${c}" must be a color like #F28C28.`);
+    if (!r.face || !/^#[0-9a-f]{6}$/i.test(r.face.skin || '') || !/^#[0-9a-f]{6}$/i.test(r.face.hair || '')) throw new Error(`${where}: "face" needs "skin" and "hair" colors.`);
     const a = r.ai || {};
     for (const k of ['lane', 'skill', 'drift', 'aggression', 'awareness']) if (!Number.isFinite(a[k])) throw new Error(`${where}: "ai.${k}" must be a number.`);
     if (a.skill < 0.8 || a.skill > 1.1) throw new Error(`${where}: "ai.skill" must be between 0.8 and 1.1.`);
@@ -121,7 +133,7 @@ function checkRacers(json) {
 
 function failLoad(msg) {
   const l = $('loading'); l.hidden = false; l.classList.add('error');
-  $('load-msg').textContent = msg;
+  const m = $('load-msg'); m.textContent = msg; m.setAttribute('role', 'alert');
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -155,6 +167,13 @@ function applyPixelRatio() {
   if (renderer.getPixelRatio() !== pr) { renderer.setPixelRatio(pr); renderer.setSize(window.innerWidth, window.innerHeight, false); }
 }
 
+/** On the title the camera's view is centered in the plate between the bands; elsewhere it is the screen's. */
+function aim() {
+  const W = window.innerWidth, H = window.innerHeight, r = $('title-plate').getBoundingClientRect();
+  if (G.screen === 'title' && r.height > 0) camera.setViewOffset(W, H, W / 2 - (r.left + r.width / 2), H / 2 - (r.top + r.height / 2), W, H);
+  else camera.clearViewOffset();
+}
+
 // ---------------------------------------------------------------------------------------------
 // Screens
 
@@ -165,6 +184,7 @@ function show(screen) {
   hud.show(screen === 'race');
   input.enable(screen === 'race' && G.race && !G.race.player.autopilot);
   applyPixelRatio();
+  aim();
 }
 
 async function showTitle() {
@@ -184,22 +204,21 @@ function endRace() {
   sparks.clear();
   hud.hideBanner(); hud.countdown(''); $('hint').hidden = true;
   $('fade').classList.remove('on');
-  clearLines();
 }
 
 function wireScreens() {
-  $('track-prev').onclick = () => cycleTrack(-1);
-  $('track-next').onclick = () => cycleTrack(1);
+  // A sideways swipe on the title's plate changes track, as the track words do.
   let sx = null;
-  $('track-card').addEventListener('pointerdown', (e) => { sx = e.clientX; });
-  $('track-card').addEventListener('pointerup', (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 40) cycleTrack(e.clientX < sx ? 1 : -1); sx = null; });
+  $('title-plate').addEventListener('pointerdown', (e) => { sx = e.clientX; });
+  $('title-plate').addEventListener('pointerup', (e) => { if (sx !== null && Math.abs(e.clientX - sx) > 40) cycleTrack(e.clientX < sx ? 1 : -1); sx = null; });
+  for (const k of ['sound', 'tilt', 'quality', 'controls', 'pace']) $(`set-${k}`).onclick = () => onSetting(k);
   $('btn-race').onclick = () => {
     if (G.settings.sound && hooks.audio) hooks.audio.unlock();
     // iOS asks for motion access once per visit; a tap is the only place it can be asked.
     if (G.settings.tilt && hooks.tilt && window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
       hooks.tilt.request().then((ok) => {
         if (ok) hooks.tilt.start(input);
-        else { G.settings.tilt = false; hooks.tilt.stop(); saveSettings(); renderChips(); }   // refused: steer with the pad
+        else { G.settings.tilt = false; hooks.tilt.stop(); saveSettings(); renderSettings(); }   // refused: steer with the pad
       });
     }
     startRace({ track: G.settings.track, racer: G.settings.racer, seed: (Date.now() % 100000) + 1, pace: G.settings.pace });
@@ -219,7 +238,7 @@ function wireScreens() {
   // After the finish banner, a tap anywhere but a button skips the wait for the stragglers. (On the
   // document: the HUD takes no touches, and the touch layer is what lies under a thumb.) The skip
   // consumes its tap: the results appear a frame later, under a finger that is still down, and the
-  // browser aims the tap's click at whatever is under it when it lifts — Race again or Change.
+  // browser aims the tap's click at whatever is under it when it lifts: Race again or Change.
   document.addEventListener('pointerdown', (e) => {
     if (guard.pointer !== null && e.pointerId !== guard.pointer) lifted({ pointerId: guard.pointer });   // its lift was lost
     const r = G.race;
@@ -259,87 +278,103 @@ function settle() {
   else $('results').classList.remove('settling');
 }
 
-async function cycleTrack(d) {
-  const i = G.tracks.findIndex((t) => t.id === G.settings.track);
-  G.settings.track = G.tracks[(i + d + G.tracks.length) % G.tracks.length].id;
+async function selectTrack(id) {
+  G.settings.track = id;
   saveSettings();
   await ensureScenery(G.settings.track, G.settings.quality);
   G.titleRace = createRace({ track: G.track, racers: G.racers, player: G.settings.racer, seed: 1, pace: G.settings.pace });
   chase.mode = 'none';
   renderTitle();
 }
+function cycleTrack(d) {
+  const i = G.tracks.findIndex((t) => t.id === G.settings.track);
+  return selectTrack(G.tracks[(i + d + G.tracks.length) % G.tracks.length].id);
+}
 
 function saveSettings() { store.save('settings', G.settings); }
 
-function faceCanvas(racer, css) {
-  const c = document.createElement('canvas'), dpr = Math.min(3, window.devicePixelRatio || 1);
+/** A racer's painted face in a ring of its tone (the ring's color per theme comes from the CSS). */
+function face(racer, css) {
+  const ring = el('span', 'ring'), c = document.createElement('canvas'), dpr = Math.min(3, window.devicePixelRatio || 1);
   c.width = c.height = Math.round(css * dpr);
   paintFace(c.getContext('2d'), 0, 0, c.width, racer, { round: true });
-  return c;
+  const own = TONES.from[racer.id] && TONES.from[racer.id].toLowerCase() === racer.body.toLowerCase();
+  ring.style.setProperty('--ring-l', own ? TONES.light[racer.id] : racer.body);
+  ring.style.setProperty('--ring-d', own ? TONES.dark[racer.id] : racer.body);
+  ring.append(c);
+  return ring;
+}
+const first = (r) => r.name.split(' ')[0];
+/** "1 028 m a lap, rising 4.1 m": the track's length and rise, from the loaded data. */
+const lapWords = (t) => `${meters(t.L)} a lap, rising ${meters(t.validation.maxY - t.validation.minY, 1)}`;
+
+function radio(group, key, label, on, pick) {
+  const b = el('button', key === 'racer' ? 'racer' : '', key === 'racer' ? null : label);
+  b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(on));
+  if (key === 'racer') b.setAttribute('aria-label', label);
+  b.onclick = pick;
+  group.append(b);
+  return b;
 }
 
 function renderTitle() {
-  const t = G.tracks.find((x) => x.id === G.settings.track);
-  $('track-name').textContent = t.name;
-  $('track-blurb').textContent = t.def.blurb || '';
-  const best = store.bestFor(t.id);
-  const len = `${Math.round(t.L).toLocaleString('en-US')} m`;
-  $('track-meta').textContent = best && (best.lap || best.race)
-    ? `${len}\nBest lap ${fmtTime(best.lap / 1000)} · Best race ${fmtTime(best.race / 1000)}`
-    : `${len} · No best yet`;
-  const grid = $('racer-grid');
-  if (!grid.childElementCount) {
+  const t = G.tracks.find((x) => x.id === G.settings.track), s = G.settings;
+  const tracks = $('tracks');
+  if (!tracks.childElementCount) for (const tr of G.tracks) radio(tracks, 'track', tr.name, false, () => { if (tr.id !== G.settings.track) selectTrack(tr.id); }).dataset.id = tr.id;
+  for (const b of tracks.children) b.setAttribute('aria-checked', String(b.dataset.id === s.track));
+  $('caption').textContent = `${t.def.blurb ? `${t.def.blurb} ` : ''}${lapWords(t)}.`;
+  const racers = $('racers');
+  if (!racers.childElementCount) {
     for (const r of G.racers) {
-      const b = document.createElement('button');
-      b.className = 'racer'; b.setAttribute('role', 'radio'); b.dataset.id = r.id;
-      b.style.setProperty('--ring', r.body);
-      b.append(faceCanvas(r, 72), Object.assign(document.createElement('span'), { textContent: r.name.split(' ')[0] }));
-      b.onclick = () => { G.settings.racer = r.id; saveSettings(); G.titleRace = createRace({ track: G.track, racers: G.racers, player: r.id, seed: 1, pace: G.settings.pace }); renderTitle(); };
-      grid.append(b);
+      radio(racers, 'racer', r.name, false, () => { G.settings.racer = r.id; saveSettings(); G.titleRace = createRace({ track: G.track, racers: G.racers, player: r.id, seed: 1, pace: G.settings.pace }); renderTitle(); })
+        .append(face(r, 36));
+      racers.lastChild.dataset.id = r.id;
     }
   }
-  for (const b of grid.children) b.setAttribute('aria-checked', String(b.dataset.id === G.settings.racer));
-  const me = G.racers.find((r) => r.id === G.settings.racer);
-  $('racer-line').textContent = `${me.name} — ${me.line}`;
-  renderChips();
+  for (const b of racers.children) b.setAttribute('aria-checked', String(b.dataset.id === s.racer));
+  const me = G.racers.find((r) => r.id === s.racer);
+  $('racer-name').textContent = me.name;
+  $('racer-line').textContent = me.line;
+  // The record row: the best lap as the one large figure, the best race and who set it after it.
+  const best = store.bestFor(t.id), rec = $('record');
+  rec.textContent = '';
+  if (best && best.lap != null) {
+    const who = G.racers.find((r) => r.id === best.racer), shown = el('span');
+    const lead = (f) => (best.race != null ? `best race ${f(best.race / 1000)}${who ? `, as ${first(who)}` : ''}` : 'no full race yet');
+    shown.setAttribute('aria-hidden', 'true');   // drawn as figures; the .sr twin says them in words
+    shown.append('Best lap', el('b', '', raceTime(best.lap / 1000)), el('span', '', lead(raceTime)));
+    rec.append(shown, el('span', 'sr', `Best lap ${spokenTime(best.lap / 1000)}, ${lead(spokenTime)}`));
+  } else rec.append('No best lap on this track yet.');
+  renderSettings();
 }
 
-function renderChips() {
-  const s = G.settings, chips = $('chips');
-  const defs = [
-    ['sound', 'Sound', s.sound ? 'On' : 'Off', s.sound],
-    ['tilt', 'Tilt', s.tilt ? 'On' : 'Off', s.tilt],
-    ['quality', 'Quality', s.quality === 'high' ? 'High' : 'Low', false],
-    ['controls', 'Controls', s.controls === 'pad' ? 'Pad' : 'Sides', false],
-    ['pace', 'Pace', { relaxed: 'Relaxed', standard: 'Standard', fierce: 'Fierce' }[s.pace], false],
-  ];
-  chips.textContent = '';
-  for (const [key, label, value, on] of defs) {
-    const b = document.createElement('button');
-    b.className = 'chip' + (on ? ' on' : ''); b.innerHTML = `${label} <b>${value}</b>`;
-    b.onclick = () => onChip(key);
-    chips.append(b);
-  }
+function renderSettings() {
+  const s = G.settings;
+  $('set-sound').setAttribute('aria-pressed', String(!!s.sound));
+  $('set-tilt').setAttribute('aria-pressed', String(!!s.tilt));
+  $('set-quality').lastElementChild.textContent = s.quality;
+  $('set-controls').lastElementChild.textContent = s.controls;
+  $('set-pace').lastElementChild.textContent = s.pace;
 }
 
-async function onChip(key) {
+async function onSetting(key) {
   const s = G.settings;
   let note = '';
   if (key === 'sound') {
     s.sound = !s.sound;
     if (hooks.audio) { if (s.sound) hooks.audio.unlock(); hooks.audio.setEnabled(s.sound); }
-    if (s.sound) note = "Uses your phone's volume. If you hear nothing, check the silent switch.";
+    if (s.sound) note = "Uses your phone’s volume. If you hear nothing, check the silent switch.";
   } else if (key === 'tilt') {
     if (s.tilt) { s.tilt = false; hooks.tilt && hooks.tilt.stop(); }
     else {
       const ok = hooks.tilt ? await hooks.tilt.request() : false;
       s.tilt = !!ok;
       if (ok) { hooks.tilt.start(input); note = 'Tilt the phone to steer. However you hold it at the countdown is straight ahead.'; }
-      else note = "Tilt isn't available here.";
+      else note = "Tilt isn’t available here.";
     }
   } else if (key === 'quality') {
     s.quality = s.quality === 'high' ? 'low' : 'high'; G.prLevel = 0;
-    saveSettings(); renderChips();
+    saveSettings(); renderSettings();
     await ensureScenery(s.track, s.quality);
   } else if (key === 'controls') {
     s.controls = s.controls === 'pad' ? 'sides' : 'pad'; input.setMode(s.controls);
@@ -348,8 +383,52 @@ async function onChip(key) {
       : 'Pad: drag left or right to steer, pull down to brake. Hold Drift through a bend.';
   }
   else if (key === 'pace') s.pace = { relaxed: 'standard', standard: 'fierce', fierce: 'relaxed' }[s.pace];
-  saveSettings(); renderChips();
-  $('chip-note').textContent = note;
+  saveSettings(); renderSettings();
+  $('note').textContent = note;
+  if (note) say(note);
+}
+
+// ---------------------------------------------------------------------------------------------
+// About: a full-height sheet over the title; the title's loop stops under it.
+
+function wireAbout() {
+  const dlg = $('about');
+  $('btn-about').onclick = openAbout;
+  $('about-close').onclick = closeAbout;
+  $('about-close2').onclick = closeAbout;
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { e.stopPropagation(); closeAbout(); return; }
+    if (e.key !== 'Tab') return;
+    const keys = [...dlg.querySelectorAll('button')], i = keys.indexOf(document.activeElement);
+    const next = e.shiftKey ? (i <= 0 ? keys.length - 1 : i - 1) : (i + 1) % keys.length;
+    e.preventDefault(); keys[next].focus();
+  });
+}
+
+async function openAbout() {
+  G.about = document.activeElement;
+  const dl = $('about-game'); dl.textContent = '';
+  const row = (k, v) => dl.append(el('dt', '', k), el('dd', '', v));
+  row('Tracks', `${G.tracks.length}, from data/tracks.json`);
+  for (const t of G.tracks) row(t.name, lapWords(t) + (t.validation.crossover ? `, crossing itself ${meters(t.validation.clearance, 1)} apart` : ''));
+  row('Racers', `${G.racers.length}, from data/racers.json`);
+  row('Laps', String(G.titleRace ? G.titleRace.laps : 3));
+  row('Timing lines', `${GATES} a lap`);
+  row('Simulation', `${Math.round(1 / STEP)} steps a second`);
+  $('about').hidden = false;
+  stopLoop();
+  $('about-close').focus();
+  const lic = $('about-license');   // printed as paragraphs, not in its 80 columns
+  if (!lic.textContent) {
+    try { const res = await fetch('vendor/three-LICENSE.txt'); if (res.ok) lic.textContent = (await res.text()).trim().replace(/(?<!\n)\n(?!\n)/g, ' '); } catch { /* the line above still names the license */ }
+  }
+}
+
+function closeAbout() {
+  if ($('about').hidden) return;
+  $('about').hidden = true;
+  if (G.screen === 'title' && !document.hidden) startLoop();
+  if (G.about && G.about.focus) G.about.focus();
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -373,30 +452,39 @@ async function startRace({ track, racer, seed = 1, pace = G.settings.pace }) {
   $('hint').hidden = hinted >= 2;
   if (hinted < 2) store.save('hints', hinted + 1);
   document.body.classList.remove('done');
-  chase.snapTo(race.player, G.track, 12, 7);
+  // The countdown swoops in from 12 m back and 7 m up; under Reduce Motion it starts at the chase pose.
+  if (chase.still) chase.snapTo(race.player, G.track, chase.tune.back, chase.tune.up); else chase.snapTo(race.player, G.track, 12, 7);
   setItemButton(null);
   show('race');
   startLoop();
   return race;
 }
 
+/** One sentence to VoiceOver through the polite live region; never once per frame. */
+function say(text) { const l = $('live'); l.textContent = ''; requestAnimationFrame(() => { l.textContent = text; }); }
+
 function handleEvents(race) {
+  const of = race.karts.length;
   for (const e of race.events) {
     if (hooks.audio) hooks.audio.onEvent(e, race);
     const mine = e.kart && e.kart.isPlayer;
+    const hit = (text, s) => { hud.banner(text, s); say(`${text}.`); };
     switch (e.type) {
       case 'count': hud.countdown(String(e.n)); break;
-      case 'go': hud.countdown('Go'); $('hint').hidden = true; if (hooks.tilt && G.settings.tilt) hooks.tilt.calibrate(race); break;
-      case 'lap': hud.banner(e.final ? 'Final lap' : `Lap ${e.lap}`); break;
+      case 'go': hud.countdown('Go'); say('Go'); $('hint').hidden = true; if (hooks.tilt && G.settings.tilt) hooks.tilt.calibrate(race); break;
+      case 'lap': hud.banner(e.final ? 'Final lap' : `Lap ${e.lap}`); say(`Lap ${e.lap} of ${race.laps}, ${placeOf(e.kart.place, of)}.`); break;
       case 'wrongWay': if (e.on) hud.banner('Wrong way', 99); else hud.hideBanner(); break;
       case 'finish':
-        if (mine) { hud.banner(`Finished ${e.place}${ordinal(e.place)}`, 2.2); input.enable(false); G.finishView = 0; document.body.classList.add('done'); }
+        if (mine) {
+          hud.banner(`Finished ${placeOf(e.place, of)}`, 2.2); say(`Finished ${placeOf(e.place, of)} in ${spokenTime(e.time)}.`);
+          input.enable(false); G.finishView = 0; document.body.classList.add('done');
+        }
         break;
       case 'wall': if (Math.hypot(e.kart.x - camera.position.x, e.kart.z - camera.position.z) < 60) sparks.burst(e.kart, e.speed); break;
-      case 'respawn': if (mine) { $('fade').classList.add('on'); setTimeout(() => $('fade').classList.remove('on'), 320); } break;
+      case 'respawn': if (mine && !chase.still) { $('fade').classList.add('on'); setTimeout(() => $('fade').classList.remove('on'), 320); } break;
       case 'shieldPop': sparks.pop(e.kart); break;
-      case 'hit': if (mine) hud.banner(e.by === 'plane' ? 'Paper plane!' : 'Tangled!', 0.9); break;
-      case 'honeyIn': if (mine) hud.banner('Sticky!', 0.7); break;
+      case 'hit': if (mine) hit(e.by === 'plane' ? 'Hit by a paper plane' : 'Caught in a yarn snare', 0.9); break;
+      case 'honeyIn': if (mine) hit('Stuck in honey', 0.7); break;
       case 'results': showResults(race); break;
     }
   }
@@ -406,33 +494,45 @@ function handleEvents(race) {
 function setItemButton(id) {
   const btn = $('btn-item');
   btn.classList.toggle('empty', !id);
+  if (!id) btn.setAttribute('aria-label', 'No item');
   const use = $('item-use');
   if (id) use.setAttribute('href', `#i-${id}`); else use.removeAttribute('href');
 }
 
 function showResults(race) {
-  const P = race.player;
+  const P = race.player, of = race.karts.length;
   const lapMs = P.bestLap != null ? Math.round(P.bestLap * 1000) : null;
   const raceMs = !P.projected && P.finishTime != null ? Math.round(P.finishTime * 1000) : null;
   const rec = store.recordBest(race.track.id, lapMs, raceMs, P.racer.id);
-  $('res-title').textContent = `${race.track.name} — ${P.place}${ordinal(P.place)}`;
-  const badges = $('res-badges'); badges.textContent = '';
-  if (rec.newLap) badges.append(Object.assign(document.createElement('span'), { textContent: 'New best lap' }));
-  if (rec.newRace) badges.append(Object.assign(document.createElement('span'), { textContent: 'New best race' }));
+  const time = (k) => (k.projected ? aboutTime(k.finishTime) : raceTime(k.finishTime));
+  $('res-track').textContent = race.track.name;
+  $('res-place').textContent = place(P.place);
+  $('res-lead').textContent = `of ${of} in ${time(P)}`;
+  $('res-lead').nextElementSibling.textContent = `of ${of} in ${spokenTime(P.finishTime, P.projected)}`;
   const list = $('res-list'); list.textContent = '';
   for (const k of race.order) {
-    const li = document.createElement('li'); if (k.isPlayer) li.className = 'me';
-    const place = Object.assign(document.createElement('span'), { className: 'place', textContent: k.place });
-    const name = Object.assign(document.createElement('span'), { textContent: k.racer.name });
-    const times = document.createElement('span'); times.className = 'times';
-    times.textContent = k.projected ? `${fmtTime(k.finishTime)} est.` : fmtTime(k.finishTime);
-    const best = document.createElement('small'); best.textContent = k.bestLap != null ? `best lap ${fmtTime(k.bestLap)}` : 'no full lap';
-    times.append(best);
-    li.append(place, faceCanvas(k.racer, 30), name, times);
+    const li = el('li', k.isPlayer ? 'me' : '');
+    const times = el('span', 'times', time(k));
+    times.append(el('small', '', k.bestLap != null ? `best lap ${raceTime(k.bestLap)}` : 'no full lap'));
+    li.append(el('span', 'place', String(k.place)), face(k.racer, 24), el('span', 'name', k.racer.name), times);
+    li.setAttribute('aria-label', `${place(k.place)}, ${k.racer.name}, ${spokenTime(k.finishTime, k.projected)}${k.bestLap != null ? `, best lap ${spokenTime(k.bestLap)}` : ''}`);
     list.append(li);
   }
+  const best = rec.newLap && rec.newRace ? 'best lap and best race' : rec.newLap ? 'best lap' : rec.newRace ? 'best race' : '';
+  $('res-record').textContent = best ? `New ${best} on ${race.track.name}.` : '';
+  $('res-record').hidden = !best;
+  $('chart').setAttribute('aria-label', `Lap chart: you started ${place(P.gates[0])} and finished ${placeOf(P.place, of)}.`);
   guardResults(GUARD_AFTER_SHOW);
   show('results');
+  say(`Results: ${placeOf(P.place, of)}. Race again or change track.`);
+  G.chart = drawChart($('chart'), race);
+}
+
+/** The theme or the face changed: the canvases the chrome draws are drawn again in the new tokens. */
+function restyle() {
+  if (!hud) return;
+  hud.restyle();
+  if (G.screen === 'results' && G.lastRace && G.lastRace.done) G.chart = drawChart($('chart'), G.lastRace);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -445,6 +545,7 @@ function pause() {
   show('pause');
   stopLoop();
   render(0);         // leave a current frame behind the panel
+  $('btn-resume').focus();
 }
 function resume() {
   if (!G.race || !G.paused) return;
@@ -452,6 +553,7 @@ function resume() {
   if (hooks.audio) hooks.audio.resume();
   show('race');
   startLoop();
+  $('btn-pause').focus();
 }
 function togglePause() { if (G.screen === 'race') pause(); else if (G.screen === 'pause') resume(); }
 
@@ -461,19 +563,18 @@ function onHidden() {
   stopLoop();
 }
 function onVisible() {
-  // A race stays paused behind its panel until Resume; the title's glide just carries on.
-  if (G.screen === 'title' || G.screen === 'results') { startLoop(); if (hooks.audio) hooks.audio.resume(); }
+  // A race stays paused behind its panel until Resume; the title's glide just carries on (not under About).
+  if ((G.screen === 'title' && $('about').hidden) || G.screen === 'results') { startLoop(); if (hooks.audio) hooks.audio.resume(); }
 }
 
 function onResize() {
   const w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h; camera.updateProjectionMatrix();
-  const lines = $('lines'), dpr = Math.min(2, window.devicePixelRatio || 1);
-  lines.width = Math.round(w * dpr); lines.height = Math.round(h * dpr);
-  G.linesDrawn = false;
-  if (hud && hud.track) hud.base = null;
+  if (hud && hud.track) hud.restyle();
   applyPixelRatio();
+  aim();
+  if (G.screen === 'results' && G.lastRace && G.lastRace.done) G.chart = drawChart($('chart'), G.lastRace);
   if (!G.running && G.scenery) render(0);
 }
 
@@ -544,64 +645,27 @@ function render(dt, draw = true) {
   const track = G.track;
   if (race) {
     const P = race.player;
-    G.view.player = P; G.view.countdown = race.phase === 'countdown';
+    G.view.player = P; G.view.countdown = race.phase === 'countdown'; G.view.still = chase.still;
     field.update(race.karts, track, dt, G.time, G.view);
-    if (race.phase === 'countdown') chase.chase(P, track, dt, Math.min(1, 1 - race.countdown / COUNTDOWN));
-    else if (P.finished && !P.projected) { G.finishView += dt; if (G.finishView < 2.5) chase.finish(P, track, dt); else chase.chase(P, track, dt); }
+    if (race.phase === 'countdown') chase.chase(P, track, dt, chase.still ? 1 : Math.min(1, 1 - race.countdown / COUNTDOWN));
+    else if (P.finished && !P.projected && !chase.still) { G.finishView += dt; if (G.finishView < 2.5) chase.finish(P, track, dt); else chase.chase(P, track, dt); }
     else chase.chase(P, track, dt);
     G.scenery.followShadow(P.x, P.y, P.z);
-    if (hooks.items && race.items) hooks.items.frame(race, dt, camera);
+    if (hooks.items && race.items) hooks.items.frame(race, dt, camera, chase.still);
     if (hooks.audio) hooks.audio.frame(race, dt);
     sparks.update(race.karts, dt, camera);
-    speedLines(P, dt);
     if (G.screen === 'race') hud.update(race, dt, diagText);
   } else if (G.titleRace && track) {
     field.update(G.titleRace.karts, track, dt, G.time);
     chase.glide(track, dt);
-    clearLines();
   }
   if (G.scenery) G.scenery.tick(dt, camera, G.time);
   if (draw) renderer.render(scene, camera);
 }
 
 function diagText() {
-  const i = renderer.info.render, pr = renderer.getPixelRatio();
-  return `${G.stats.fps.toFixed(0)} fps · ${G.stats.js.toFixed(1)} ms JS\n${i.calls} calls · ${(i.triangles / 1000).toFixed(1)}k tris · ×${pr.toFixed(2)}\nbuilt in ${G.stats.buildMs.toFixed(0)} ms`;
-}
-
-// Speed lines (High only): an accent for a boost (the Kettle or a drift's mini-boost), not a
-// constant — the field of view already carries ordinary speed. Up to 18 white streaks on a 2D
-// canvas over the scene, each living 0.2–0.35 s while it slides outward, kept to the left and right
-// of the screen (in portrait, streaks above and below would read as rain over the sky and the
-// controls). Opacity eases up to 0.25 while boosting and back to nothing after.
-function speedLines(P, dt) {
-  const L = G.lines, high = G.settings.quality === 'high';
-  const want = high && G.screen === 'race' && P.boostT > 0 ? 0.25 : 0;
-  L.op += (want - L.op) * Math.min(1, dt * (want > L.op ? 12 : 5));
-  if (L.op < 0.01) { L.op = 0; L.streaks.length = 0; clearLines(); return; }
-  const lines = $('lines'), g = lines.getContext('2d'), w = lines.width, h = lines.height;
-  const cx = w / 2, cy = h * 0.5, R = Math.min(w, h) / 2;
-  while (L.streaks.length < 18) {
-    const side = L.streaks.length % 2 ? 0 : Math.PI;
-    L.streaks.push({ a: side + (Math.random() - 0.5) * 1.0, r: R * (0.75 + Math.random() * 0.35), len: R * (0.18 + Math.random() * 0.2), w: 1 + Math.random() * 1.5, t: 0, life: 0.2 + Math.random() * 0.15 });
-  }
-  g.clearRect(0, 0, w, h);
-  g.lineCap = 'round';
-  for (const st of L.streaks) {
-    st.t += dt; st.r += R * 3.2 * dt;
-    if (st.t >= st.life) { st.t = 0; st.a = (Math.cos(st.a) < 0 ? Math.PI : 0) + (Math.random() - 0.5) * 1.0; st.r = R * (0.75 + Math.random() * 0.35); st.life = 0.2 + Math.random() * 0.15; }
-    const fade = Math.sin(Math.PI * (st.t / st.life));
-    g.strokeStyle = `rgba(255,255,255,${(L.op * fade).toFixed(3)})`; g.lineWidth = st.w;
-    // The screen is taller than wide: stretch the ring vertically so side streaks reach the edges.
-    const ca = Math.cos(st.a), sa = Math.sin(st.a) * (h / w);
-    g.beginPath(); g.moveTo(cx + ca * st.r, cy + sa * st.r); g.lineTo(cx + ca * (st.r + st.len), cy + sa * (st.r + st.len)); g.stroke();
-  }
-  G.linesDrawn = true;
-}
-function clearLines() {
-  if (!G.linesDrawn) return;
-  const l = $('lines'); l.getContext('2d').clearRect(0, 0, l.width, l.height); G.linesDrawn = false;
-  G.lines.op = 0; G.lines.streaks.length = 0;
+  const i = renderer.info.render;
+  return diagnostics(G.stats.fps, G.stats.js, i.calls, i.triangles, renderer.getPixelRatio(), G.stats.buildMs);
 }
 
 // Adaptive resolution: if the 90th-percentile frame interval over 2 s exceeds 19 ms, step the pixel
@@ -642,7 +706,7 @@ window.__sk = {
     for (let i = 0; i < n && !race.done; i++) { stepRace(race, input.read(inp)); if (i % 60 === 0) handleEvents(race); }
     handleEvents(race);
     // The chase camera is smoothed in real time; after a jump in simulated time, put it back behind
-    // the kart and let it settle over a few rendered frames (camera only — the race does not move).
+    // the kart and let it settle over a few rendered frames (camera only: the race does not move).
     const P = race.player;
     if (race.phase !== 'countdown') { chase.snapTo(P, G.track, chase.tune.back, chase.tune.up); chase.fov = chase.fovFor(Math.abs(P.v), P.boostT > 0); }
     for (let i = 0; i < 19; i++) render(1 / 60, false);   // settle without queuing GPU work
@@ -669,7 +733,7 @@ window.__sk = {
   state() {
     const r = G.race, P = r && r.player;
     return {
-      screen: G.screen, paused: G.paused, running: G.running, rafScheduled: !!G.raf,
+      screen: G.screen, paused: G.paused, running: G.running, rafScheduled: !!G.raf, still: chase.still, strips: hud.strips || 0,
       phase: r && r.phase, countdown: r && r.countdown, time: r && r.time, finishT: r && r.finishT,
       place: P && P.place, lap: P && P.lapsDone + 1, s: P && P.fr.s, l: P && P.fr.l, kappa: P && r.track.kappa[P.fr.idx], v: P && P.v, steer: P && P.steer, drift: P && P.drift, driftTier: P && P.driftTier,
       boost: P && P.boostT, boostKind: P && P.boostKind, item: P && P.item, itemRoll: P && P.itemRoll, shield: P && P.shieldT, honey: P && P.honeyT, stun: P && P.stun, finished: P && P.finished,
@@ -679,11 +743,20 @@ window.__sk = {
       input: { ...input.read({}) },
     };
   },
+  /** The Lap Chart as drawn: each racer's recorded places, who was projected, the points in CSS px. */
+  chart() {
+    const r = G.lastRace; if (!r) return null;
+    const ids = (f) => r.karts.filter(f).map((k) => k.racer.id);
+    return {
+      gates: Object.fromEntries(r.karts.map((k) => [k.racer.id, [...k.gates]])), projected: ids((k) => k.projected),
+      final: Object.fromEntries(r.karts.map((k) => [k.racer.id, k.place])), player: r.player.racer.id, drawn: G.chart,
+    };
+  },
   pause, resume,
   /** Each kart as drawn: race distance, whether its mesh is shown, and its fade (1 = solid). */
   karts() {
     const r = G.race || G.titleRace; if (!r) return [];
-    return r.karts.map((k) => { const vk = field.byId.get(k.racer.id); return { id: k.racer.id, player: k.isPlayer, dist: k.dist, visible: vk.outer.visible, opacity: +vk.material.opacity.toFixed(2) }; });
+    return r.karts.map((k) => { const vk = field.byId.get(k.racer.id); return { id: k.racer.id, player: k.isPlayer, dist: k.dist, visible: vk.outer.visible, body: vk.body.visible, opacity: +vk.material.opacity.toFixed(2) }; });
   },
   /** Put every kart's item in its hand at once (for profiling a crowded race). */
   giveAll(id) { const r = G.race; if (!r || !r.items) return false; for (const k of r.karts) r.items.give(k, id); return true; },
@@ -691,7 +764,7 @@ window.__sk = {
   freeze(on) { G.frozen = !!on; return G.frozen; },
   adaptive(on) { G.adaptive = !!on; return G.adaptive; },
   showTitle,
-  camera: () => ({ fov: camera.fov, pos: camera.position.toArray(), aspect: camera.aspect }),
+  camera: () => ({ fov: camera.fov, pos: camera.position.toArray(), aspect: camera.aspect, view: camera.view && camera.view.enabled ? [camera.view.offsetX, camera.view.offsetY] : null }),
   lookAtKart(id, dist = 3.2) {
     // The `face` test scene: put the camera in front of one kart.
     const k = (G.race || G.titleRace).karts.find((x) => x.racer.id === id); if (!k) return false;

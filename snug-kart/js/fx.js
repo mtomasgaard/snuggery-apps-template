@@ -1,4 +1,4 @@
-// Effects (DESIGN.md §8.1, §15): one particle pool — drift sparks in the charge colour (gold at
+// Effects (DESIGN.md §8.1, §15): one particle pool — drift sparks in the charge color (gold at
 // tier 1, mint at tier 2), boost puffs from the exhausts and sparks off the walls — drawn as a single
 // Points mesh (one draw call), at most 400 particles on High and 150 on Low. The Kettle's steam and
 // a Quilt's pop use the same pool; the item models themselves are in js/items-view.js.

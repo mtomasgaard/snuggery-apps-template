@@ -1,18 +1,14 @@
-// The HUD and the mini-map (DESIGN.md §11): DOM over the canvas, refreshed at most 30 times a
-// second (the countdown and banners are immediate).
+// The race card, the track map, the countdown and the banners (DESIGN.md §11; ART.md 3): DOM plates
+// over the canvas, refreshed at most 30 times a second (the countdown and banners are immediate).
 
 import { lapShown } from './race.js';
-
-export const ordinal = (n) => (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
-export const fmtTime = (t) => {
-  if (t == null || !Number.isFinite(t)) return '–:––.–––';
-  const m = Math.floor(t / 60), s = t - m * 60;
-  return `${m}:${s.toFixed(3).padStart(6, '0')}`;
-};
+import { place, raceTime, spokenTime } from './units.js';
+import { drawStrip, stripKey } from './chart.js';
+import { tone, token, isDark } from './palette.js';
 
 export class Hud {
   constructor(el) {
-    this.el = el;           // { root, posN, posSuf, lap, time, last, map, count, banner, diag, drift }
+    this.el = el;           // { root, posN, posOf, lap, time, last, strip, map, count, banner, diag, drift }
     this.shown = {};        // the text last written to each element
     this.acc = 0;
     this.bannerT = 0;
@@ -27,15 +23,16 @@ export class Hud {
 
   show(on) { this.el.root.hidden = !on; }
 
-  /** Prepare the mini-map for a track (drawn once into an offscreen canvas at the device pixel ratio). */
+  /** Prepare the map for a track (drawn once into an offscreen canvas at the device pixel ratio). */
   setTrack(track) { this.track = track; this.base = null; this.shown = {}; }
 
+  /** The road in --line-strong over a --sheet casing, segments in order of height, so on Lantern
+   *  Night the bridge reads over its underpass by a gap; the start a tick of --ink-2. */
   buildMap() {
     const track = this.track, cv = this.el.map, dpr = Math.min(3, window.devicePixelRatio || 1);
-    const css = cv.clientWidth || 104;
-    const size = Math.round(css * dpr);
+    const size = Math.round((cv.clientWidth || 104) * dpr);
     cv.width = size; cv.height = size;
-    const B = track.bounds, pad = 8 * dpr;
+    const B = track.bounds, pad = 9 * dpr;
     const sc = (size - 2 * pad) / Math.max(B.maxX - B.minX, B.maxZ - B.minZ);
     const ox = pad + ((size - 2 * pad) - (B.maxX - B.minX) * sc) / 2, oz = pad + ((size - 2 * pad) - (B.maxZ - B.minZ) * sc) / 2;
     this.map = { sc, ox, oz, B, dpr, size };
@@ -43,78 +40,72 @@ export class Hud {
     const g = off.getContext('2d');
     g.lineCap = 'round'; g.lineJoin = 'round';
     const X = (i) => ox + (track.px[i] - B.minX) * sc, Z = (i) => oz + (track.pz[i] - B.minZ) * sc;
-    const step = 3, segs = [];
+    const step = 3, segs = [], sheet = token('--sheet'), road = token('--line-strong');
     for (let i = 0; i < track.N; i += step) segs.push([i, Math.min(i + step, track.N) % track.N]);
-    // Draw in order of height, so on Lantern Night the bridge passes visibly over the underpass.
     segs.sort((a, b) => track.py[a[0]] - track.py[b[0]]);
     for (const [a, b] of segs) {
-      g.strokeStyle = 'rgba(20,20,28,0.9)'; g.lineWidth = 9 * dpr;
-      g.beginPath(); g.moveTo(X(a), Z(a)); g.lineTo(X(b), Z(b)); g.stroke();
-      g.strokeStyle = 'rgba(255,255,255,0.85)'; g.lineWidth = 5 * dpr;
-      g.beginPath(); g.moveTo(X(a), Z(a)); g.lineTo(X(b), Z(b)); g.stroke();
+      for (const [w, c, cap] of [[8, sheet, 'butt'], [4, road, 'round']]) {   // a butt casing never covers a neighbor's road
+        g.strokeStyle = c; g.lineWidth = w * dpr; g.lineCap = cap;
+        g.beginPath(); g.moveTo(X(a), Z(a)); g.lineTo(X(b), Z(b)); g.stroke();
+      }
     }
-    // Start line tick
-    const i0 = 0, rx = -track.fz[i0], rz = track.fx[i0];
-    g.strokeStyle = '#1E1E22'; g.lineWidth = 2 * dpr;
-    g.beginPath(); g.moveTo(X(i0) - rx * 5 * dpr, Z(i0) - rz * 5 * dpr); g.lineTo(X(i0) + rx * 5 * dpr, Z(i0) + rz * 5 * dpr); g.stroke();
+    const rx = -track.fz[0], rz = track.fx[0];
+    g.strokeStyle = token('--ink-2'); g.lineWidth = 2 * dpr; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(X(0) - rx * 5 * dpr, Z(0) - rz * 5 * dpr); g.lineTo(X(0) + rx * 5 * dpr, Z(0) + rz * 5 * dpr); g.stroke();
     this.base = off;
+    this.colors = { sheet, ink: token('--ink'), theme: isDark() ? 'dark' : 'light' };   // read once, not per dot per frame
   }
 
+  /** Rivals as 6 px discs in their tones on a 1 px ring; you as the tracer head, drawn last. */
   drawMap(karts) {
     if (!this.track) return;
-    if (!this.base) this.buildMap();         // main.js clears `base` on every resize
-    const { size } = this.map, g = this.el.map.getContext('2d');
+    if (!this.base) this.buildMap();         // cleared on every resize and theme change
+    const { size, sc, ox, oz, B, dpr } = this.map, g = this.el.map.getContext('2d'), { sheet, ink, theme } = this.colors;
     g.clearRect(0, 0, size, size);
     g.drawImage(this.base, 0, 0);
-    let player = null;
-    for (const k of karts) { if (k.isPlayer) { player = k; continue; } this.dot(g, k, 3.5, false); }
-    if (player) this.dot(g, player, 5, true);
+    const dot = (k, r, ring, fill) => {
+      g.beginPath(); g.arc(ox + (k.x - B.minX) * sc, oz + (k.z - B.minZ) * sc, (r + ring) * dpr, 0, 7); g.fillStyle = sheet; g.fill();
+      g.beginPath(); g.arc(ox + (k.x - B.minX) * sc, oz + (k.z - B.minZ) * sc, r * dpr, 0, 7); g.fillStyle = fill; g.fill();
+    };
+    for (const k of karts) if (!k.isPlayer) dot(k, 3, 1, tone(k.racer, theme));
+    const P = karts.find((k) => k.isPlayer);
+    if (P) dot(P, 4, 3, ink);
   }
 
-  dot(g, k, r, ring) {
-    const { sc, ox, oz, B, dpr } = this.map;
-    const x = ox + (k.x - B.minX) * sc, y = oz + (k.z - B.minZ) * sc;
-    g.beginPath(); g.arc(x, y, r * dpr, 0, Math.PI * 2);
-    g.fillStyle = k.racer.body; g.fill();
-    g.lineWidth = (ring ? 2 : 1) * dpr; g.strokeStyle = ring ? '#FFFFFF' : 'rgba(0,0,0,0.6)'; g.stroke();
-  }
-
-  /** Set an element's text only when it changes (no layout work, and no re-announcing #pos). */
-  text(key, node, value) {
+  /** Set an element's text only when it changes; a time's words go to the .sr twin after it. */
+  text(key, node, value, said) {
     if (this.shown[key] === value) return;
     this.shown[key] = value; node.textContent = value;
+    if (said != null) node.nextElementSibling.textContent = said;
   }
 
   /** Called every frame; does the DOM work at ≤ 30 Hz. */
   update(race, dt, diagText) {
-    if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) this.el.banner.classList.remove('show'); }
+    if (this.bannerT > 0) { this.bannerT -= dt; if (this.bannerT <= 0) this.el.banner.hidden = true; }
     this.acc += dt;
     if (this.acc < 1 / 30) return;
     this.acc = 0;
     const P = race.player, el = this.el;
     if (race.phase !== 'countdown' && race.time > 0.9 && !el.count.hidden) el.count.hidden = true;
-    this.text('posN', el.posN, String(P.place)); this.text('posSuf', el.posSuf, ordinal(P.place));
-    this.text('lap', el.lap, `Lap ${lapShown(race, P)}/${race.laps}`);
-    this.text('time', el.time, fmtTime(P.finished && !P.projected ? P.finishTime : race.time));
-    const lt = P.lapTimes;
-    this.text('last', el.last, lt.length ? `Last ${fmtTime(lt[lt.length - 1])}` : '');
+    this.text('pos', el.posN, place(P.place)); this.text('of', el.posOf, ` of ${race.karts.length}`);
+    this.text('lap', el.lap, `Lap ${lapShown(race, P)} of ${race.laps}`);
+    const t = P.finished && !P.projected ? P.finishTime : race.time, lt = P.lapTimes, last = lt[lt.length - 1];
+    this.text('time', el.time, raceTime(t), `, ${spokenTime(t)}`);
+    this.text('last', el.last, lt.length ? `Last lap ${raceTime(last)}` : '', lt.length ? `Last lap ${spokenTime(last)}` : '');
+    const key = stripKey(el.strip, race, P);
+    if (key !== this.shown.strip) { this.shown.strip = key; this.strips = (this.strips || 0) + 1; drawStrip(el.strip, race, P); }
     this.drawMap(race.karts);
     const tier = P.drift ? String(P.driftTier) : '';
     if (el.drift && el.drift.dataset.tier !== tier) el.drift.dataset.tier = tier;
     if (this.diagOn && diagText) el.diag.textContent = diagText();
   }
 
-  countdown(text) {
-    const c = this.el.count;
-    c.textContent = text; c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop');
-    c.hidden = !text;
-  }
+  countdown(text) { this.el.count.textContent = text; this.el.count.hidden = !text; }
 
-  banner(text, seconds = 1.2) {
-    const b = this.el.banner;
-    b.textContent = text; b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
-    this.bannerT = seconds;
-  }
+  banner(text, seconds = 1.2) { this.el.banner.textContent = text; this.el.banner.hidden = false; this.bannerT = seconds; }
 
-  hideBanner() { this.bannerT = 0; this.el.banner.classList.remove('show'); }
+  hideBanner() { this.bannerT = 0; this.el.banner.hidden = true; }
+
+  /** After a theme change: the map and the strip are drawn again in the new tokens. */
+  restyle() { this.base = null; this.shown.strip = null; }
 }

@@ -1,4 +1,4 @@
-// Everything a track looks like (DESIGN.md §5, §15): road, verges, walls, kerbs, the start line,
+// Everything a track looks like (DESIGN.md §5, §15): road, verges, walls, curbs, the start line,
 // what holds the road up, the ground or terrain, the sky, lights and the props — all generated here
 // from data/tracks.json and a seeded RNG, so every race on a track looks the same.
 
@@ -45,7 +45,7 @@ export function buildScenery(track, quality) {
   group.add(hemi, sun, sun.target);
   S.sun = sun;
 
-  // ---- Sky: a vertex-coloured sphere that follows the camera, inside the camera's far plane.
+  // ---- Sky: a vertex-colored sphere that follows the camera, inside the camera's far plane.
   {
     const R = S.far * 0.92;
     const g = new SphereGeometry(R, 24, 12), top = new Color(pal.skyTop), hor = new Color(pal.skyHorizon), cols = [];
@@ -90,9 +90,9 @@ export function buildScenery(track, quality) {
   const matVC = new MeshLambertMaterial({ vertexColors: true });
   const matVC2 = new MeshLambertMaterial({ vertexColors: true, side: DoubleSide });
 
-  // ---- Road, verges, kerbs, start line
+  // ---- Road, verges, curbs, start line
   const N = track.N, W = track.wrap;
-  const road = new Soup(true), verge = new Soup(true), kerb = new Soup(), walls = new Soup(), struct = new Soup();
+  const road = new Soup(true), verge = new Soup(true), curb = new Soup(), walls = new Soup(), struct = new Soup();
   const at = (i, l, lift = 0) => { pointAt(track, W(i), l, lift, P); return [P.x, P.y, P.z]; };
   const ROAD_STEP = 2;
   for (let i = 0; i < N; i += ROAD_STEP) {
@@ -103,12 +103,12 @@ export function buildScenery(track, quality) {
     const si = i * track.ds / 4, sj = j * track.ds / 4;
     verge.quad([...at(i, -ei), 0, si], [...at(i, -hi), 1, si], [...at(j, -hj), 1, sj], [...at(j, -ej), 0, sj]);
     verge.quad([...at(i, hi), 0, si], [...at(i, ei), 1, si], [...at(j, ej), 1, sj], [...at(j, hj), 0, sj]);
-    // Kerbs on the inside edge wherever |κ| > 1/60, alternating trim and white every 2 m.
+    // Curbs on the inside edge wherever |κ| > 1/60, alternating trim and white every 2 m.
     const k = track.kappa[W(i)];
     if (Math.abs(k) > 1 / 60) {
-      kerb.color((i / ROAD_STEP) % 2 ? '#FFFFFF' : pal.accent);
-      if (k > 0) kerb.quad(at(i, hi - 0.6, 0.02), at(i, hi, 0.02), at(j, hj, 0.02), at(j, hj - 0.6, 0.02));
-      else kerb.quad(at(i, -hi, 0.02), at(i, -hi + 0.6, 0.02), at(j, -hj + 0.6, 0.02), at(j, -hj, 0.02));
+      curb.color((i / ROAD_STEP) % 2 ? '#FFFFFF' : pal.accent);
+      if (k > 0) curb.quad(at(i, hi - 0.6, 0.02), at(i, hi, 0.02), at(j, hj, 0.02), at(j, hj - 0.6, 0.02));
+      else curb.quad(at(i, -hi, 0.02), at(i, -hi + 0.6, 0.02), at(j, -hj + 0.6, 0.02), at(j, -hj, 0.02));
     }
   }
   const addMesh = (geo, mat, { cast = false, receive = true, name } = {}) => {
@@ -116,7 +116,7 @@ export function buildScenery(track, quality) {
   };
   addMesh(road.geometry(), matRoad, { name: 'road' });
   addMesh(verge.geometry(), matVerge, { name: 'verge' });
-  if (kerb.count) addMesh(kerb.geometry(), matVC, { name: 'kerbs' });
+  if (curb.count) addMesh(curb.geometry(), matVC, { name: 'curbs' });
   {
     const checker = canvasTexture(64, 16, (ctx) => { for (let x = 0; x < 8; x++) for (let y = 0; y < 2; y++) { ctx.fillStyle = (x + y) % 2 ? '#1E1E22' : '#FFFFFF'; ctx.fillRect(x * 8, y * 8, 8, 8); } });
     S.tex.push(checker);
@@ -170,7 +170,7 @@ export function buildScenery(track, quality) {
       const ei = edgeOf(W(i)), ej = edgeOf(W(j));
       struct.color(pal.stone);
       if (def.ground === 'harbour') {
-        // A skirt of harbour stone down to the ground, left open over the canal (piers below).
+        // A skirt of harbor stone down to the ground, left open over the canal (piers below).
         for (const side of [-1, 1]) {
           pointAt(track, W(i), side * ei, 0, P);
           if (P.x > 45 && P.x < 75) continue;
@@ -317,7 +317,7 @@ function buildTerrain(S, track, pal, high, edgeOf) {
 
 function pinewoodProps(S, track, pal, props, scale, rnd) {
   const B = track.bounds, M = 170;
-  // Pines: trunk + three stacked cones, one merged geometry with vertex colours.
+  // Pines: trunk + three stacked cones, one merged geometry with vertex colors.
   const pine = mergeParts([
     { geo: new CylinderGeometry(0.18, 0.25, 1.6, 5, 1, true), pos: [0, 0.8, 0], color: pal.timber },
     { geo: new ConeGeometry(1.9, 2.8, 6, 1, true), pos: [0, 2.6, 0], color: pal.pines[0] },
@@ -453,7 +453,7 @@ function harbourProps(S, track, pal, props, scale, rnd) {
     parts.push({ geo: new BoxGeometry(0.1, 14, 0.1), pos: [cx, 25, cz + 32], color: '#333333' });
   }
   S.group.add(Object.assign(new Mesh(mergeParts(parts, { uvs: false }), new MeshLambertMaterial({ vertexColors: true })), { name: 'landmarks', castShadow: false }));
-  // Lamp posts every `lampEvery` m (24) on the outer edge of the harbour-front and quay straights.
+  // Lamp posts every `lampEvery` m (24) on the outer edge of the harbor-front and quay straights.
   const lamps = [];
   const lamp = mergeParts([
     { geo: new CylinderGeometry(0.1, 0.14, 5, 6, 1, true), pos: [0, 2.5, 0], color: '#3A4048' },
