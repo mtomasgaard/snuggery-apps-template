@@ -93,11 +93,12 @@ record against its own running maximum.
 - Cross-border fields are grouped only where the split is published (`CROSS_BORDER` in
   `scripts/shelf_atlas/build_north_sea.py`); every other same-name match is listed in
   `snapshot.matching` and drawn separately.
-- 316 Norwegian names in `data/geo.json` (platforms, operators, pipelines) arrive double-encoded,
-  `Ã…SGARD A` for ÅSGARD A, because `scripts/shelf_atlas/common.py` reads every shapefile's DBF
-  as Latin-1. `repairText()` in `js/data.js` undoes it when the file is read, only for strings
-  that carry the pattern and decode as UTF-8, so it does nothing once the pipeline reads each DBF
-  with its own encoding. The data file is not changed by the app.
+- Norwegian names in `data/geo.json` (platforms, operators, pipelines) arrive as Sodir writes them,
+  `ÅSGARD A`: the pipeline reads each shapefile's DBF in the encoding its `.cpg` declares (UTF-8 for
+  Sodir's). Until 2026-10-02 it read every DBF as Latin-1, and 316 names arrived double-encoded,
+  `Ã…SGARD A`. `repairText()` in `js/data.js` stays as a guard: it undoes that double encoding when
+  the file is read, only for strings that carry the pattern and decode as UTF-8, and finds nothing to
+  change in today's data (`tools/test_decode.mjs` checks both). The data file is not changed by the app.
 
 ## The look, the controls and the tests
 

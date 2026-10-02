@@ -36,7 +36,7 @@ SOURCE = {
     "licence": "NLOD 2.0 (Norwegian Licence for Open Government Data)",
     "attribution": "Contains data under the Norwegian licence for Open Government data (NLOD) "
                    "distributed by the Norwegian Offshore Directorate",
-    "cadence": "FactPages are synchronised daily; monthly production lands about a month in arrears",
+    "cadence": "FactPages are synchronized daily; monthly production lands about a month in arrears",
 }
 
 

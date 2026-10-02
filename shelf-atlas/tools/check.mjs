@@ -6,7 +6,7 @@
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
 //   4. data/ holds exactly geo.json, snapshot.json, bathy.png; js/ the three modules; fonts/ the house
 //      face and OFL.txt, both at the sha256 HOUSE.md pins; NOTES.md credits the face;
-//   5. the data is untouched: each data file's sha256 is the one recorded before the pass;
+//   5. the data is the data follow-up's rebuild: each data file's sha256 is the one tools/DECISIONS.md records;
 //   6. miniapp.json is valid, its name unchanged;
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credit line: built from the snapshot's sources by creditLine(), written to #credits, and for
@@ -112,13 +112,15 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && read('index.html').includes(`Type: ${FONT_CREDIT}`) && !/no font (is |ships|is loaded)/i.test(read('NOTES.md') + read('style.css')),
   'the face is credited word for word in NOTES.md and in About ("Type: …"), and nothing says no font ships');
 
-// 5. The data is untouched (the hashes recorded before the pass, ART.md's change list)
+// 5. The data is the data follow-up's rebuild (2026-10-02, tools/DECISIONS.md): the pipeline reading each DBF in its
+// declared encoding, the fetchers' prose in US English, and the sources as they stood that day. The pass left the
+// data untouched; the hashes it recorded before it began are in tools/DECISIONS.md.
 const DATA_SHA = {
   'data/bathy.png': 'a97b5bf5e64900ca241628c0f8b10c90256f3bf7c5b75929288d206eb9fb4b51',
-  'data/geo.json': 'c9d897206df0d74e76f803f4ef16b26734acf0dcb88d4c6ce43cc50f253ff623',
-  'data/snapshot.json': '367aca9db92e8d009f205f99fa2b869c595dd234c79e4835607d7db76f6cf1e5',
+  'data/geo.json': '4dc10f498ef23a2a5c441386b40e839ae222a8df5fe6df96cd1235895b0b1448',
+  'data/snapshot.json': 'ea6c01e73f4370b756e0193d9982bc35c676a7a042814918150951b153b11932',
 };
-for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… is the one recorded before the pass`);
+for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… is the data follow-up's rebuild`);
 
 // 6. miniapp.json
 let mini = null;
@@ -283,8 +285,8 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 1,900,2
 {
   const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|synchronis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|for ever)\b/gi;
   const ALLOW = {
-    'data/snapshot.json': ['licence', 'Licence', 'synchronised', 'Harbour'],    // the sources' key and two license names, Sodir's cadence, an operator
-    'data/geo.json': ['CENTRE', 'Centre', 'Harbour', 'grey'],                   // pipeline and platform names, an operator, the raster's encoding note
+    'data/snapshot.json': ['Harbour'],                       // an operator (the data follow-up swept the fetchers' own prose)
+    'data/geo.json': ['CENTRE', 'Centre', 'Harbour'],        // pipeline and platform names, an operator
   };
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {

@@ -78,7 +78,7 @@ const M = D.buildModel(snap);
   ok(JSON.stringify(M.ccLast) === JSON.stringify(Object.fromEntries(Object.keys(M.ccLast).map((c) => [c, last[c]])))
     && Object.keys(first).every((c) => M.ccFirst[c] === first[c]),
   `reporting months: ${D.CC.map((c) => `${c} ${mon(M.ccFirst[c])} to ${mon(M.ccLast[c])}`).join(', ')}`);
-  ok(M.ccFirst.UK === (1975 - 1971) * 12 + 5 && M.ccFirst.NL === (2003 - 1971) * 12 && M.defaultMonth === (2026 - 1971) * 12 + 5 && D.commonMonth(M, { NO: true, UK: true, DK: true, NL: true }) === M.defaultMonth,
+  ok(M.ccFirst.UK === (1975 - 1971) * 12 + 5 && M.ccFirst.NL === (2003 - 1971) * 12 && M.defaultMonth === (2026 - 1971) * 12 + 6 && D.commonMonth(M, { NO: true, UK: true, DK: true, NL: true }) === M.defaultMonth,
     `About's claims hold: the UK series starts in ${mon(M.ccFirst.UK)}, the Dutch in ${mon(M.ccFirst.NL)}; the player opens and play stops at ${mon(M.defaultMonth)}`);
   const dk = snap.fields.filter((f) => D.isInt(f.monthlyFrom));
   ok(dk.length > 0 && dk.every((f) => f.country === 'DK' && f.monthlyFrom === (2018 - 1971) * 12), `About's claim holds: ${dk.length} fields carry monthlyFrom, all Danish, all ${mon((2018 - 1971) * 12)}`);
@@ -94,7 +94,7 @@ const M = D.buildModel(snap);
 {
   const all = { NO: true, UK: true, DK: true, NL: true };
   const rep = (c, m) => M.ccFirst[c] != null && m >= M.ccFirst[c] && m <= M.ccLast[c];
-  const want = { liq: { 173: 33, 353: 129, 665: 205 } };
+  const want = { liq: { 173: 33, 353: 129, 666: 205 } };
   const counts = {};
   let bad = 0;
   for (const q of ['liq', 'gas', 'oe']) {
@@ -104,10 +104,10 @@ const M = D.buildModel(snap);
       const R = D.bestRecords(M, Un, q, all);
       let best = 0, bm = -1;
       for (let m = 0; m <= M.lastMonth; m++) {
-        if (!Un.members.every((F) => rep(F.cc, m))) { if (m === 173 || m === 353 || m === 665) check(m); continue; }
+        if (!Un.members.every((F) => rep(F.cc, m))) { if (m === 173 || m === 353 || m === 666) check(m); continue; }
         const v = Un.members.reduce((a, F) => a + ownMonthly(F.id, q, m), 0) / days(m);
         if (v > best) { best = v; bm = m; }
-        if (m === 173 || m === 353 || m === 665) check(m);
+        if (m === 173 || m === 353 || m === 666) check(m);
       }
       function check(m) {
         const k = D.bestAt(R, m);
@@ -119,33 +119,46 @@ const M = D.buildModel(snap);
   }
   ok(bad === 0, `bestRecords and bestAt equal this file's running maximum for ${M.units.length} units × 3 quantities × 3 months (${bad} differ)`);
   ok(Object.entries(want.liq).every(([m, n]) => counts.liq[m] === n),
-    `rings over the floor in liquids: ${[173, 353, 665].map((m) => `${mon(m)} ${counts.liq[m]}`).join(', ')} (ART.md: 33, 129, 205)`);
-  console.log(`     gas ${[173, 353, 665].map((m) => `${mon(m)} ${counts.gas[m]}`).join(', ')}; oil equivalent ${[173, 353, 665].map((m) => `${mon(m)} ${counts.oe[m]}`).join(', ')}`);
-  const st = M.units.find((Un) => Un.name === 'Statfjord'), R = D.bestRecords(M, st, 'liq', all), k = D.bestAt(R, 665);
-  ok(Math.round(R.v[k]) === 134273 && R.m[k] === (1986 - 1971) * 12 + 10, `Statfjord's best month so far at Jun 2026: ${Math.round(R.v[k])} Sm³/d in ${mon(R.m[k])} (ART.md: 134 273, Nov 1986)`);
+    `rings over the floor in liquids: ${[173, 353, 666].map((m) => `${mon(m)} ${counts.liq[m]}`).join(', ')} (ART.md: 33, 129, 205)`);
+  console.log(`     gas ${[173, 353, 666].map((m) => `${mon(m)} ${counts.gas[m]}`).join(', ')}; oil equivalent ${[173, 353, 666].map((m) => `${mon(m)} ${counts.oe[m]}`).join(', ')}`);
+  const st = M.units.find((Un) => Un.name === 'Statfjord'), R = D.bestRecords(M, st, 'liq', all), k = D.bestAt(R, 666);
+  ok(Math.round(R.v[k]) === 134273 && R.m[k] === (1986 - 1971) * 12 + 10, `Statfjord's best month so far at Jul 2026: ${Math.round(R.v[k])} Sm³/d in ${mon(R.m[k])} (ART.md: 134 273, Nov 1986)`);
   // a cross-border unit is never drawn from one side: with the UK unreported, the unit has no rate
   const g = M.units.find((Un) => Un.kind === 'group' && Un.members.some((F) => F.cc === 'UK') && Un.members.some((F) => F.cc === 'NO'));
   ok(D.unitRateAt(M, g, 'liq', M.ccLast.UK + 1, all) === null && D.unitRateAt(M, g, 'liq', M.ccLast.UK, all) !== null,
     `${g.name}: no rate in ${mon(M.ccLast.UK + 1)}, when the UK has not reported; a rate in ${mon(M.ccLast.UK)}`);
 }
 
-/* 5. The name repair (B1): all 316 double-encoded strings repair, and no other string changes */
+/* 5. The name repair (B1). Since the data follow-up (2026-10-02) the pipeline reads each DBF in the encoding
+ *    its .cpg declares (UTF-8 for Sodir's three), so the shipped data has nothing to repair: repairText() finds
+ *    no string to change. It stays as a guard, and it is tested on garbled samples written here (Sodir's own
+ *    names as the Latin-1 read had them) so it keeps working if a double-encoded name ever returns. */
 {
-  const PAT = /[\u00C2\u00C3][\u0080-\u00BF]/;
-  let n = 0, changed = 0, wrong = 0, other = 0, total = 0;
+  const PAT = /[ÂÃ][\u0080-¿]/;
+  const all = [];
+  const walk = (v) => { if (typeof v === 'string') all.push(v); else if (v && typeof v === 'object') for (const x of Object.values(v)) walk(x); };
+  walk(geo); walk(snap);
+  let rec = 0, recChanged = 0;
   for (const k of ['pipelines', 'facilities', 'borders']) for (const o of geo[k]) {
     const r = D.repaired(o);
-    for (const [key, v] of Object.entries(o)) {
-      if (typeof v !== 'string') continue;
-      total++;
-      if (PAT.test(v)) { n++; if (r[key] !== v) changed++; if (r[key] !== Buffer.from(v, 'latin1').toString('utf8') || PAT.test(r[key])) wrong++; } else if (r[key] !== v) other++;
-    }
+    for (const [key, v] of Object.entries(o)) if (typeof v === 'string') { rec++; if (r[key] !== v) recChanged++; }
   }
-  const sample = geo.facilities.find((f) => /SGARD A$/.test(f.name || '') && PAT.test(f.name));
-  ok(n === 316 && changed === 316 && wrong === 0 && other === 0 && D.repairText(D.repairText(sample.name)) === 'ÅSGARD A',
-    `repairText: ${changed} of ${n} double-encoded strings repaired by the Latin-1 round trip, ${other} of the other ${total - n} strings changed; "${sample.name}" reads "${D.repairText(sample.name)}" and a second pass changes nothing`);
-  const snapHits = JSON.stringify(snap).match(/[\u00C2\u00C3][\u0080-\u00BF]/g);
-  ok(!snapHits, 'data/snapshot.json carries no double-encoded string');
+  const hits = all.filter((s) => PAT.test(s)).length, changed = all.filter((s) => D.repairText(s) !== s).length;
+  ok(hits === 0 && changed === 0 && recChanged === 0,
+    `nothing to repair: ${hits} of the ${all.length} strings in data/geo.json and data/snapshot.json carry the double-encoding pattern; repairText changes ${changed} of them, repaired() ${recChanged} of the ${rec} in the pipeline, facility and border records`);
+  const G = [['Ã\u0085SGARD A', 'ÅSGARD A'], ['KÃ\u0085RSTÃ\u0098', 'KÅRSTØ'], ['VÃ¥r Energi ASA', 'Vår Energi ASA'],
+    ['GJÃ\u0098A', 'GJØA'], ['42" Gas Ã\u0085SGARD ERB, KÃ\u0085RSTÃ\u0098', '42" Gas ÅSGARD ERB, KÅRSTØ'], ['Ã\u0086', 'Æ']];
+  const K = ['ÅSGARD A', 'GJØA', 'STATFJORD A', 'Ã', 'Ã\u0085\u0085', 'Ã\u0085 – x', ''];   // right already; a lone Ã; not UTF-8; a character over U+00FF
+  const gBad = G.filter(([g, want]) => Buffer.from(g, 'latin1').toString('utf8') !== want || D.repairText(g) !== want || D.repairText(D.repairText(g)) !== want);
+  const kBad = K.filter((s) => D.repairText(s) !== s);
+  ok(gBad.length === 0 && kBad.length === 0,
+    `repairText still repairs: ${G.length} garbled samples written here come back as the Latin-1 round trip gives them ("${D.repairText(G[0][0])}", "${D.repairText(G[1][0])}"), a second pass changes nothing, and ${K.length} other strings stay as they are${gBad.length + kBad.length ? `; wrong: ${[...gBad.map((x) => x[0]), ...kBad].map((s) => JSON.stringify(s)).join(', ')}` : ''}`);
+  const asg = geo.facilities.find((f) => f.country === 'NO' && f.name === 'ÅSGARD A');
+  const gjoa = geo.facilities.find((f) => f.country === 'NO' && f.name === 'GJØA');
+  const karsto = geo.pipelines.filter((p) => p.from === 'KÅRSTØ' || p.to === 'KÅRSTØ').length;
+  const vaar = geo.facilities.filter((f) => f.operator === 'Vår Energi ASA').length;
+  ok(asg && asg.field === 'ÅSGARD' && gjoa && gjoa.field === 'GJØA' && karsto > 0 && vaar > 0,
+    `the names arrive spelled right in data/geo.json itself: the platform "${asg && asg.name}" of the field "${asg && asg.field}", "${gjoa && gjoa.name}" of "${gjoa && gjoa.field}", ${karsto} pipelines to or from "KÅRSTØ", ${vaar} facilities operated by "Vår Energi ASA"`);
 }
 
 /* 6. Polylines: decodeLine against this file's decode, a sample of every kind */

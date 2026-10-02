@@ -658,3 +658,258 @@ HOUSE 8 forbids minifying or stripping comments to fit (`app.js` carries 15 672 
 about 32 000 B zipped alone by `zip -q -X OUT ART.md`; less once step 24 moves sections 8 and 9 out),
 since root `*.md` files ship, and the code's growth with `js/` (about 32 000 B, about 9 000 zipped):
 about **1 979 000 B against the 2 413 130 cap**, about 434 000 B of headroom. Nothing in `tools/` ships.
+
+---
+
+## The data follow-up (2026-10-02)
+
+Owner call 8, as plan 0011 D15 scoped it: the pipeline reads each DBF in the encoding its shapefile
+declares, the fetchers' prose that lands in the data is US English, and the data is rebuilt with the
+change proved. Every figure below was printed by a command run on the build Mac on 2026-10-02; the
+scratch for all of it is `tools/.work/data-followup/` (not shipped, not tracked), named by file.
+Nothing here ran on a phone.
+
+### Reachability
+
+`python3 scripts/shelf_atlas/probe.py shelf-atlas/tools/.work/data-followup/probe-hosts.txt` (from
+`Template/`; one URL per host the North Sea build fetches, since `probe-urls.txt` lists only the
+bathymetry hosts): all eleven URLs, ten hosts, answered HTTP 200 from this Mac: factpages.sodir.no
+(a CSV and `fclPoint.zip`), services-eu1.arcgis.com (NSTA), ens.dk, data.geus.dk,
+www.gdngeoservices.nl, www.nlog.nl (the production API, by POST), geo.vliz.be,
+ows.emodnet-humanactivities.eu, ows.emodnet-bathymetry.eu and raw.githubusercontent.com. So the
+rebuild ran here, not on a runner.
+
+One host is unreliable. EMODnet Bathymetry's WCS answered `GetCoverage` for the second tile with
+HTTP 502 four times inside the build's 15 s of retries (`fetch()`: four tries, 1 + 2 + 4 + 8 s), and
+the first build stopped there (`BUILD FAILED: could not fetch …BBOX=-3.0%2C70.0%2C0.0%2C73.0…: HTTP
+Error 502: Bad Gateway`); a minute later a probe tile came back. `warm_bathy.py` then called the
+pipeline's own `fetch_bathymetry._tile()` for all 104 tiles, in the build's order, with up to 40
+tries 10 to 90 s apart: all 104 came back at the first try. The weekly runner keeps the tiles in its
+Actions cache, so this bites only on `refresh` or a cold cache.
+
+### The encodings, per source
+
+`peek_dbf.py` read each zip's members, its `.cpg` and the DBF header's language-driver byte (offset
+29), and tested every text value with a byte over 127; the build logs the same per file
+(`build-new.log`):
+
+| Source | `.cpg` | Byte 29 | Text values (beyond ASCII) | Read as |
+| --- | --- | --- | --- | --- |
+| Sodir `fldArea.zip`, field outlines | `UTF-8` | 0x00 | 1 846 (51) | UTF-8 |
+| Sodir `fclPoint.zip`, facilities | `UTF-8` | 0x00 | 24 580 (311) | UTF-8 |
+| Sodir `pipLine.zip`, pipelines | `UTF-8` | 0x00 | 913 (85) | UTF-8 |
+| Danish Energy Agency `FieldDelination_12_12_2025` (ens.dk/media/7661/download) | `UTF-8` | 0x00 | 102 (2) | UTF-8 |
+
+Every value beyond ASCII in the four files is valid UTF-8, and none fills its field to the last
+byte, so none was cut mid-character. No source is Latin-1: the Danish file's two such values, the
+`Label`s `Halfdan NØ` and `Tyra SØ`, read as `Halfdan NÃ\x98` and `Tyra SÃ\x98` as Latin-1. They never
+reached the data either way: the build matches Danish outlines on the `Field` column (`Halfdan (Igor
+area)`, `Tyra Southeast`, ASCII) and reads `Label` only when `Field` is empty, which it is for
+neither; and of `fldArea` the build keeps only `idField`. So the fix changes names in `geo.json`'s
+facilities and pipelines and nothing else.
+
+### The code
+
+`scripts/shelf_atlas/common.py`: `shapefile_records(blob)` keeps its signature and its records. It
+asks `dbf_encoding()` for the codec, which takes the `.cpg` beside the DBF when it names a code page
+(`cpg_codec()`: `UTF-8`, `UTF8`, `ISO-8859-1`, `88591`, `1252`, `ANSI 1252`, `cp1252`,
+`Windows-1252` and the like), else the header's language-driver byte (`LDID_CODECS`: 23 common
+drivers, each as GDAL's shapefile driver reads it, compared with its `ogrshapelayer.cpp` with no
+disagreement; 0x57 as Latin-1), else UTF-8 when every text value decodes as UTF-8 and Latin-1 when
+one does not, and logs the choice per file. The order is the one GDAL's shapefile documentation gives
+(the `.cpg`, "or as a fallback in the LDID/codepage setting from the .dbf"). pyshp 3.1.6 does not expose the byte (it
+skips header bytes 12 to 31), so the build reads it from the DBF. A declared encoding that one of the
+file's values does not decode in stops the build with a `BuildError` naming the file, the
+declaration and the value: the declaration or the file changed, and a guess would ship garbled names.
+None of today's four files is near that (above). `test_encoding.py` puts synthetic zipped shapefiles
+through `shapefile_records()`: a `.cpg` `UTF-8`, a `.cpg` `UTF8` with a line end, no `.cpg` over
+UTF-8 text, no `.cpg` over Latin-1 text, byte 0x57, byte 0x03 with a cp1252 `€`, a `.cpg` `1252`, an
+unknown `.cpg`, a `.cpg` `UTF-8` over Latin-1 text (it stops), ASCII only, and fourteen `.cpg`
+spellings: all pass on pyshp 3.1.6, what `pip install 'pyshp>=2.3'` installs today, and on 2.3.1,
+the floor the workflow allows.
+
+### The prose
+
+Three strings the fetchers write into the data, spelling only:
+
+- `fetch_norway.py`, Sodir's cadence: `FactPages are synchronised daily` becomes `synchronized`.
+- `fetch_denmark.py`, the Danish license statement: `No licence stated on the data pages` becomes
+  `No license stated` (the `licence` key the app reads stays).
+- `fetch_bathymetry.py`, `geo.json`'s `bathymetry.encoding`: `8-bit grey` becomes `8-bit gray`;
+  `scripts/shelf_atlas/SCHEMA.md`'s quotation of that string follows.
+
+Kept: `NLOD 2.0 (Norwegian Licence for Open Government Data)`, `NSTA Open User Licence (June 2023):
+…` and NLOD's own attribution sentence (`Contains data under the Norwegian licence for Open
+Government data (NLOD) distributed by …`), each a license's name, which `check.mjs` already strips
+as one. No other sentence that lands in the data has a British spelling; comments and docstrings
+(`colouring`, `metres`, `greyscale`, `organisation`, `NEIGHBOURS`) do not ship and were left alone.
+
+### The rebuild, and what it proves
+
+Three builds compared with a structural diff (`jsondiff.py`: both trees walked together, record
+lists matched by id, every difference classed as a key, a record, an order, a list length, a type, a
+number, a geometry polyline, a series payload or a text, and each text tested against the Latin-1
+round trip and the three swept spellings; outputs `diff-AB-*.out`, `diff-drift-*.out`,
+`diff-total-*.out`):
+
+- **A**, the unchanged code (a copy in the scratch folder), run online into a scratch cache
+  (`build-old.log`; the bathymetry tiles and the four shapefile zips were already in that cache from
+  the warm-up and the encoding probe, fetched through the pipeline's own `Cache`);
+- **B**, the fixed code, run `--offline` from the same cache (`build-new.log`), so A and B read the
+  same bytes;
+- the shipped files of 2026-09-26.
+
+**A against B, the fix alone.** `geo.json`: 316 strings changed, each exactly the Latin-1 to UTF-8
+round trip of the old (facilities' `field` 112, `name` 109, `operator` 63; pipelines' `name` 14,
+`from` 10, `to` 8), plus the one swept string and the stamp; 0 keys, 0 records, 0 order, 0 list
+lengths, 0 types, 0 numbers, 0 geometry polylines, 0 series, 0 other strings. Examples:
+`Ã\x85SGARD A` to `ÅSGARD A`, `KÃ\x85RSTÃ\x98` to `KÅRSTØ`, `VÃ¥r Energi ASA` to `Vår Energi ASA` (63
+facilities), `GJÃ\x98A` to `GJØA`, `Ã\x98ST FRIGG CMS` to `ØST FRIGG CMS`, `42" Gas Ã\x85SGARD ERB,
+KÃ\x85RSTÃ\x98` to `42" Gas ÅSGARD ERB, KÅRSTØ` (`diff-AB-geo-repairs.out` lists all 316). The file
+goes from 1 362 547 B to 1 361 881 B: 666 B, two for each of the 333 pairs. `snapshot.json`: the two
+swept strings and the stamp, nothing else. `bathy.png`: byte-identical in all three (`a97b5bf5…`).
+
+**The shipped files against A, what the sources changed since 2026-09-26** (the old code both
+times; `drift.out`):
+
+- The UK's newest month went from Jun to Jul 2026 (179 UK fields' `lastMonth`, 169 of them from
+  Jun); 14 Dutch fields gained Jul 2026 (5 from May, 9 from Jun). Norway (Jul 2026) and Denmark (Aug
+  2026) did not move, so `lastMonth` stays 667 and **the month the app opens on, the newest every
+  country has reported, moves from Jun to Jul 2026**.
+- Teal West, a UK field the snapshot already listed without a series, reports its first month: Jul
+  2026, 23 543 Sm³ of liquids and 852 905 Sm³ of gas (its six keys added).
+- NSTA revised 12 UK series in Jun 2026 by more than one quantization step, the largest Nevis's gas,
+  1 018 008 to 1 089 126 Sm³ for the month; nothing earlier moved.
+- So 746 numbers (`lastMonth` of 193 fields, `cumGas` 191, `cumLiq` 178, Teal West's `firstMonth`
+  and peaks), 376 series payloads and 63 `ask` rows (the newest month and its three rates) changed;
+  `groups`, `matching`, `sources` and `units` did not, and no field's text did.
+- `geo.json`: two Norwegian outlines come out as Sodir's `fldArea.zip` draws them today: Gudrun's
+  first ring (49 points either way, 3.298 to 3.295 km², no vertex more than 26 m from the old ring's)
+  and Knarr's second (43 points, 2.662 to 2.661 km², one vertex 236 m from any old one). Every other
+  outline, all 2 082 facilities, all 1 200 pipelines, the coast, the land, the 200 m bathymetry and
+  the borders come out identical, so this Mac reproduces the build's arithmetic and the two rings
+  follow the source. NLOG's WFS now lists the 567 Dutch outlines in another order (the same 567);
+  the app keys outlines by id and hit-tests by the smallest area, so the order shows nowhere.
+
+**The shipped files against B** are those two sums and nothing else (`diff-total-*.out`). The brief
+allowed new months as long as they are what the regulators publish and are said; B went into
+`data/` as built (`cmp` against the scratch copy), stamped `2026-10-02T13:23:40Z`.
+
+### The data now
+
+```
+a97b5bf5e64900ca241628c0f8b10c90256f3bf7c5b75929288d206eb9fb4b51  data/bathy.png       unchanged
+4dc10f498ef23a2a5c441386b40e839ae222a8df5fe6df96cd1235895b0b1448  data/geo.json        1 361 881 B
+ea6c01e73f4370b756e0193d9982bc35c676a7a042814918150951b153b11932  data/snapshot.json   1 681 298 B
+```
+
+The final code, run once more `--offline` with the same stamp (`--generated-at
+2026-10-02T13:23:40Z`, `build-final.log`), rebuilds all three byte for byte (`cmp`). `check.mjs`
+pins these. The hashes the pass recorded before it began stay at the head of the change list, as its
+record. `NOTES.md` records no hashes.
+
+### The tools, changed and run (from `Template/shelf-atlas/`)
+
+- `tools/test_decode.mjs`, section 5: the shipped data has nothing to repair (0 of the 38 630
+  strings in both files carry the pattern, `repairText` changes none, `repaired()` none of the 19 872
+  strings of the pipeline, facility and border records); the function is tested on six garbled
+  samples written in the file (Sodir's names as the Latin-1 read had them) and on seven strings it
+  must leave alone; and the names arrive spelled right in `geo.json` itself (`ÅSGARD A` of `ÅSGARD`,
+  `GJØA` of `GJØA`, 5 pipelines to or from `KÅRSTØ`, 63 facilities of `Vår Energi ASA`). The
+  opening-month pins move from Jun to Jul 2026: the default month, and the third month of the Peaks'
+  checks (205 rings; Statfjord's best, 134 273 Sm³/d in Nov 1986, the same at both). The new checks
+  are not vacuous: on a scratch copy holding the 2026-09-26 data, the data checks fail (316 strings
+  with the pattern, the names not found) and the sample check passes; with `repairText` switched off
+  in a scratch copy of `js/data.js`, the sample check fails (all six) and the data checks pass.
+  `node tools/test_decode.mjs`: 20 checks, `all checks pass` (19 before: section 5's two became
+  three).
+- `tools/check.mjs`: the three data pins and their wording; the spelling allow-list down to the
+  regulators' own words (`Harbour` in both files, `CENTRE` and `Centre` in `geo.json`), since
+  `synchronised`, `licence` and `grey` are gone from the data. `node tools/check.mjs`: 38 checks,
+  `all checks pass`; the ZIP 1 980 247 B of 2 413 130; app code 183 795 B, unchanged.
+- `tools/shoot.mjs`: `COMMON + 2` (with the old data, the month only Denmark had reported) becomes
+  `LAST`, the snapshot's own `lastMonth`: the same month with the old data, and the right one with the
+  new, where `COMMON + 2` falls past the track (the app clamps it to Aug 2026 while the check counted
+  rings for Sep 2026, which nobody reported). The two month names it pinned (`Aug 2026`, `June 2026`)
+  are worked out from the data, like the rest of its figures. `PLAYWRIGHT_MODULE=… node
+  tools/shoot.mjs`: 109 checks, `all checks pass`, no console error, both themes; it opens on Jul 2026
+  with the stamp `Updated 06:23, figures to Jul 2026`; B1's check reads `Åsgard A`, its key `Show
+  Åsgard`, selecting `NO-43765`. Headless Chromium on the build Mac, never phone evidence.
+- `tools/.work/data-followup/dom_read.mjs`, serving a copy of `js/data.js` whose `repairText` returns
+  its input: the Åsgard A card reads `Åsgard A` (key `Show Åsgard`, field `Åsgard`), the Gjøa
+  platform's `Gjøa` (key `Show Gjøa`, operator `Vår Energi ASA`), the field's card `Gjøa`; 0 console
+  errors; exit 0. So the names come from the data itself. Pictures: `dom/*-repair-off.png`.
+
+### ART.md and NOTES.md, corrected in place
+
+Each ART.md figure that names the opening month moves to Jul 2026, from the command it names, rerun
+on the new data. Every Jun 2026 figure the pass printed is unchanged at Jun 2026 (`peaks.py` at month
+665 gives the pass's output line for line), so nothing it measured was wrong; the app now opens a
+month later.
+
+| Where in ART.md | Was | Now (Jul 2026) | Printed by |
+| --- | --- | --- | --- |
+| The Peaks, liquids | Jun 2026: 205 rings; 70 empty, 72 under a tenth, 142 of 205 | 205; 68, 75, 143 of 205 | `python3 tools/.work/peaks.py` (`peaks-new.out`) |
+| The giants, now | Statfjord 985 Sm³/d (0.7 %); Forties 2.0 %; Ekofisk 12.3 %; Troll 8.6 %; Johan Sverdrup 82.4 % | 2 561 (1.9 %); 2.2 %; 12.8 %; 8.8 %; 79.0 % | the same |
+| Oil equivalent; gas | 179 rings, 111; 73 and 43 | 179, 112; 73 and 40 | the same |
+| Ring contrast | 2 952 samples, the lowest 3.26 and 3.52 | 2 952, 3.26 and 3.57 | `shoot.mjs` |
+| Discs inside rings | 76 of 135 | 79 of 137 | `shoot.mjs` |
+| The stamp, wireframe and row | `Updated 26 Sep, 10:56, figures to Jun 2026` | `Updated 2 Oct, 06:23, figures to Jul 2026` | `shoot.mjs` (`Updated 06:23, …` the same day) |
+| The time row | `408 000 Sm³/d, 426 fields`; `10.8 billion Sm³, 949 fields`; `NO, DK: 331 000 Sm³/d, 107 fields`; `June 2026` | `401 000`, `425`; `10.8 billion`, `950`; `NO, DK: 327 000`, `107`; `July 2026` | `shoot.mjs`; `tools/.work/review/lead.mjs` |
+| The track's words | `June 2026`, or `July 2026, no UK figures yet` | `July 2026`, or `August 2026, no NO, UK or NL figures yet` | `shoot.mjs` |
+| The card | `985`, `Liquids in Jun 2026.`, `Liquids to Jun 2026.`; spoken `June 2026: 985` | `2 560`, `Jul 2026`; `July 2026: 2560` | `card_read.mjs`; `shoot.mjs` |
+| No supplement | the data adds `Å Æ Ø ” ¥ Ã` and three C1 bytes | `Å Æ Ø ”`, the rest named as gone | fontTools over the face's cmap: every character beyond ASCII in the data is in it |
+
+`NOTES.md`'s note on the double-encoded names now says the names arrive as Sodir writes them, why
+they once did not, and that `repairText()` stays as a guard with nothing to do.
+
+### Left alone, and why
+
+- ART.md's 947 rings at Jun 2026, the prototype over the stock map that led to the floor: a dated
+  design record, not something the app or a tool prints now.
+- ART.md's caption example `No UK figures for Jul 2026 yet.`: a form of the caption; with this data
+  no month lacks one country only, and the form stays right for when one does.
+- ART.md's ZIP row (`about 1 980 000`, about 433 000 to spare): still right at 1 980 247.
+- ART.md's spoken example leaves out `, cross-border unit`, which the app says (the pass's own
+  `shoot.out` printed it too): not the rebuild's; noted for the lead.
+- `js/data.js`'s comment on `repairText` (lines 121 to 125) still describes the Latin-1 read as
+  current: app code, outside this follow-up's files.
+- The pipelines carry one repeated id, `NL-EPL0205_HS` (two unnamed 19.3 km EMODnet segments), as
+  they did before.
+
+### World Oil & Gas
+
+`build_world.py` never calls `shapefile_records()` (Natural Earth arrives as GeoJSON, pinned by
+sha256), and the coordinator asked for the proof. Run from `Template/` with the fixed code,
+`--offline` from the existing cache into `tools/.work/data-followup/world-out/`
+(`scripts/shelf_atlas/.venv`, Python 3.12.14; of the hosts it would fetch, naciscdn.org and
+raw.githubusercontent.com answered, and the relief's GitHub fallback URL answers 404): `world.json`
+is byte-identical to `world-oil-gas/data/world.json` (`cmp`; sha256 `926c3cb93f75…`), `relief.jpg`
+byte-identical (`c92737899f1e…`), and `snapshot.json` and `fields.json` equal apart from
+`generatedAt` (built in place, `write_json()` keeps the old stamp, so neither file would change).
+Nothing was written into `world-oil-gas/`.
+
+### For the lead, outside this folder
+
+- `Template/HOUSE.md`'s budget row for Shelf Atlas: the ZIP is now 1 980 247 B (1 979 297 after the
+  pass).
+- `js/data.js` lines 121 to 125: the comment can say the read was fixed on 2026-10-02 and the
+  function stays as a guard.
+- `screenshots/*-{light,dark}.png` show the 2026-09-26 data (Jun 2026); `SCREENSHOTS=1 node
+  tools/shoot.mjs` refreshes them. Not run here.
+- The marketing camera needs nothing: it steps back a year from the opening month (Jul 2025 now).
+- The opening-month pins in `test_decode.mjs` and the opening-view figures in ART.md move whenever
+  the weekly build moves the newest common month (next when Sodir, NSTA and NLOG publish Aug 2026);
+  deriving them from the data, as `shoot.mjs` now does, would stop that.
+- The build gives a host 15 s (four tries); EMODnet's bathymetry server needed more today.
+
+### Phone checks this adds (none claimed)
+
+- A Norwegian platform's card (Åsgard A) and a pipeline's (to Kårstø) on the iOS 18 floor device in
+  both themes: the names in the house face, nothing garbled.
+- The app opening on Jul 2026 with the stamp `figures to Jul 2026` on the device.
+
+### The lead's pass on the follow-up (2026-10-02)
+
+The lead re-ran the three tools (`node tools/check.mjs`, `node tools/test_decode.mjs`, `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`: all pass, no FAIL line), counted `Ã` in `data/geo.json` (0) and read `ÅSGARD ERB` from it, and checked the three sha256 values above. The `repairText` comment in `js/data.js` was describing the Latin-1 read as current; it now says the read was fixed on 2026-10-02 and that the guard stays for a data file built before the fix. With that comment the app code is **183 869 B** and the ZIP **1 980 292 B** (`node tools/check.mjs`); `ART.md` section 6 and `HOUSE.md`'s budget row carry these. The README panes, the composite and the before/after picture were shot before the data copy and show the opening on Jun 2026 with the old figures; they stand, because the weekly build moves the data every Monday anyway and the pictures describe a date, as every live app's do. The public repository's log shows no weekly data commit for Shelf Atlas since the app landed on 2026-09-26, so the lead checked the workflow's runs separately (recorded in plan 0011 and CURRENT_STATE).
+

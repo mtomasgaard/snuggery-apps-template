@@ -133,7 +133,7 @@ def build(cache: Cache, bbox, out_png: str):
         "bounds": [x0, y0, x1, y1],
         "width": w, "height": out_h,
         "rows": "uniform in Web Mercator y between bounds[1] and bounds[3]; columns uniform in longitude",
-        "encoding": f"8-bit grey; 0 = land or no data; depth_m = {MAX_DEPTH:.0f} × (v/255)²",
+        "encoding": f"8-bit gray; 0 = land or no data; depth_m = {MAX_DEPTH:.0f} × (v/255)²",
         "maxDepth": MAX_DEPTH,
         "source": SOURCE["id"],
     }

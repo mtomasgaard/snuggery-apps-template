@@ -118,11 +118,12 @@ export function fold(s) {
     .replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/å/g, 'a');
 }
 
-/* B1 (ART.md section 8, now tools/DECISIONS.md): the pipeline reads every
- * shapefile's DBF as Latin-1, so Sodir's UTF-8 names arrive double-encoded
- * ("Ã\x85SGARD A" for ÅSGARD A). This undoes it at display time, and only for
- * a string that carries the pattern and decodes as UTF-8, so it does nothing
- * once the pipeline is fixed. The data file is not changed. */
+/* B1 (tools/DECISIONS.md): until 2026-10-02 the pipeline read every
+ * shapefile's DBF as Latin-1, so Sodir's UTF-8 names arrived double-encoded
+ * ("Ã\x85SGARD A" for ÅSGARD A). The pipeline now reads each DBF with its
+ * declared encoding and the shipped data is clean (test_decode.mjs asserts
+ * it); this guard still undoes the pattern at display time for a data file
+ * built before the fix, and only for a string that decodes as UTF-8. */
 const MOJIBAKE = /[ÂÃ][\u0080-¿]/;
 export function repairText(s) {
   if (!isStr(s) || !MOJIBAKE.test(s)) return s;

@@ -39,7 +39,7 @@ SOURCE = {
     "id": "dea",
     "name": "Danish Energy Agency (Energistyrelsen) — monthly and yearly production, field delineations; GEUS — installations",
     "url": PAGE,
-    "licence": "No licence stated on the data pages; Danish public-sector information, reusable under the PSI Act, attribution given",
+    "licence": "No license stated on the data pages; Danish public-sector information, reusable under the PSI Act, attribution given",
     "attribution": "Danish field data: Danish Energy Agency (ens.dk); installations via GEUS",
     "cadence": "Monthly report about six weeks after month end; yearly workbook each spring",
 }

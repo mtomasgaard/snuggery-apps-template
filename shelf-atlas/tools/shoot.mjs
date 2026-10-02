@@ -58,6 +58,8 @@ const last = {}, first = {};
 for (const { f, liq, gas } of FS.values()) for (const S of [liq, gas]) if (S) { last[f.country] = Math.max(last[f.country] ?? -1, S.start + S.v.length - 1); first[f.country] = Math.min(first[f.country] ?? 1e9, S.start); }
 const rep = (c, m) => first[c] != null && m >= first[c] && m <= last[c];
 const COMMON = Math.min(...Object.values(last));
+// the newest month any country has reported (Denmark's, alone, in both builds of the data so far); the app's track ends there
+const LAST = snap.lastMonth;
 /** A unit's daily rate of liquids in month m, or null when one of its countries has not reported m. */
 const rateOf = (U, m) => (U.ids.every((id) => rep(FS.get(id).f.country, m)) ? U.ids.reduce((a, id) => a + at(FS.get(id).liq, m), 0) / days(m) : null);
 function bestOf(U, m) { let b = 0, bm = -1; for (let k = 0; k <= m; k++) { const v = rateOf(U, k); if (v != null && v > b) { b = v; bm = k; } } return bm < 0 ? null : { v: b, m: bm }; }
@@ -71,6 +73,7 @@ const NN = ' ';
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const mon = (m) => `${MON[m % 12]} ${1971 + Math.floor(m / 12)}`;
+const monLong = (m) => `${MONTHS[m % 12]} ${1971 + Math.floor(m / 12)}`;
 const grp = (s) => (s.length > 3 ? s.replace(/\B(?=(\d{3})+$)/g, NN) : s);
 function sig3(v) {
   if (v === 0) return '0';
@@ -474,17 +477,17 @@ console.log('\n== once (light)');
   // the plate holds still while the caption's words change; every form fits its two lines
   {
     const hs = new Set(), forms = new Set(), over = [];
-    for (const m of [0, 5, 20, 60, 300, 380, COMMON, COMMON + 1, COMMON + 2]) {
+    for (const m of [0, 5, 20, 60, 300, 380, COMMON, COMMON + 1, LAST]) {
       await setMonth(A, m);
       const r = await w(() => { const e = document.getElementById('readline'); return [document.getElementById('map-wrap').getBoundingClientRect().height, e.textContent, e.scrollHeight <= e.clientHeight + 1]; });
       hs.add(r[0]); forms.add(r[1]); if (!r[2]) over.push(r[1]);
     }
     check(hs.size === 1 && over.length === 0, `the plate holds still while the caption changes: plate ${[...hs].map(Math.round).join(', ')} px over ${forms.size} forms of the line, each inside its two lines${over.length ? ': over ' + over.join(' | ') : ''}`);
     check([...hs][0] >= 540, `the plate at 390 × 844: ${Math.round([...hs][0])} px (ART.md: at least 540)`);
-    await setMonth(A, COMMON + 2);
+    await setMonth(A, LAST);
     const late = await w(() => [document.getElementById('readline').textContent, document.getElementById('slider').getAttribute('aria-valuetext'), window.__sa.rings().map((r) => r[0])]);
-    const m2 = COMMON + 2, dkOnly = UNITS.filter((U) => U.ids.every((id) => rep(FS.get(id).f.country, m2))).filter((U) => { const b = bestOf(U, m2); return b && b.v >= FLOOR; });
-    check(/^No NO, UK or NL figures for Aug 2026 yet\./.test(late[0]) && late[1] === 'August 2026, no NO, UK or NL figures yet' && late[2].length === dkOnly.length
+    const m2 = LAST, dkOnly = UNITS.filter((U) => U.ids.every((id) => rep(FS.get(id).f.country, m2))).filter((U) => { const b = bestOf(U, m2); return b && b.v >= FLOOR; });
+    check(new RegExp(`^No NO, UK or NL figures for ${mon(LAST)} yet\\.`).test(late[0]) && late[1] === `${monLong(LAST)}, no NO, UK or NL figures yet` && late[2].length === dkOnly.length
       && dkOnly.every((U) => U.ids.every((id) => FS.get(id).f.country === 'DK')),
     `an unreported month names what is missing ("${late[0]}"; the track says "${late[1]}") and rings only the units whose every country reported it: ${late[2].length}, all Danish (this file: ${dkOnly.length})`);
     await setMonth(A, COMMON);
@@ -504,7 +507,7 @@ console.log('\n== once (light)');
     const card = await A.rect('#card');
     const clear = !(plate.left + target[2] > card.left - 4 && plate.left + target[2] < card.right + 4 && plate.top + target[3] > card.top - 4 && plate.top + target[3] < card.bottom + 4);
     const live = await text(A, 'live');
-    check(clear && /^.+\. Liquids in June 2026: .+ a day\. Best month so far: \d+(\.\d+)?( million)? standard cubic meters a day, \w+ \d{4}\.$/.test(live), `a tap on ${target[0]} under the card's corner: the card moves clear of it (${Math.round(card.left)}, ${Math.round(card.top)}); VoiceOver hears "${live}"`);
+    check(clear && new RegExp(`^.+\\. Liquids in ${monLong(COMMON)}: .+ a day\\. Best month so far: \\d+(\\.\\d+)?( million)? standard cubic meters a day, \\w+ \\d{4}\\.$`).test(live), `a tap on ${target[0]} under the card's corner: the card moves clear of it (${Math.round(card.left)}, ${Math.round(card.top)}); VoiceOver hears "${live}"`);
     const labels = await w(() => window.__sa.labels());
     const boxes = await w(() => ['card', 'keys'].map((id) => document.getElementById(id).getBoundingClientRect().toJSON()));
     const hit = labels.filter(([x0, y0, x1, y1]) => boxes.some((b) => plate.left + x0 < b.right && plate.left + x1 > b.left && plate.top + y0 < b.bottom && plate.top + y1 > b.top));
@@ -768,7 +771,7 @@ console.log('\n== once (light)');
     const A = await open('light', { w: wd, h: ht, dpr });
     const r = await A.w(() => ({ sw: document.documentElement.scrollWidth, iw: innerWidth, plate: document.getElementById('map-wrap').getBoundingClientRect().height, line: (() => { const e = document.getElementById('readline'); return e.scrollHeight <= e.clientHeight + 1; })(), keysRow: document.getElementById('map-wrap').classList.contains('keys-row'), keys: document.getElementById('keys').getBoundingClientRect().height }));
     const forms = [];
-    for (const [sys, m] of [['si', 0], ['si', 20], ['field', COMMON], ['field', COMMON + 2], ['si', 380]]) {
+    for (const [sys, m] of [['si', 0], ['si', 20], ['field', COMMON], ['field', LAST], ['si', 380]]) {
       await A.w(([s, k]) => { if (window.__sa.state.sys !== s) document.getElementById('btn-units').click(); window.__sa.setMonth(k); }, [sys, m]); await A.frame();
       forms.push(await A.w(() => { const e = document.getElementById('readline'); return e.scrollHeight <= e.clientHeight + 1 ? '' : e.textContent; }));
     }

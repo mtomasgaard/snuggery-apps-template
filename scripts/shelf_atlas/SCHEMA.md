@@ -23,7 +23,7 @@ Month index `mi` counts months from January 1971: `mi = (year − 1971) × 12 + 
   "bathymetry": { "file": "bathy.png",         // EMODnet DTM as an 8-bit grey PNG beside geo.json (optional key)
                   "bounds": [-6, 50.5, 32, 73], "width": 1267, "height": 1725,
                   "rows": "uniform in Web Mercator y between bounds[1] and bounds[3]; columns uniform in longitude",
-                  "encoding": "8-bit grey; 0 = land or no data; depth_m = 3000 × (v/255)²",
+                  "encoding": "8-bit gray; 0 = land or no data; depth_m = 3000 × (v/255)²",
                   "maxDepth": 3000, "source": "emodnet-bathymetry" },
                                                 // draw: project the four corners, one drawImage; tint via a per-theme LUT
   "borders":  [{ "name": "Norway - United Kingdom", "type": "Treaty", "a": "Norway", "b": "United Kingdom",

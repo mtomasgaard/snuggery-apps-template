@@ -16,6 +16,7 @@ Contents
 from __future__ import annotations
 
 import base64
+import codecs
 import hashlib
 import io
 import json
@@ -374,18 +375,106 @@ def clip_polygon_to_bbox(ring, bbox):
     return pts + [pts[0]]
 
 
+# A shapefile says what encoding its DBF's text is in, in one of two places: the .cpg file beside
+# the .dbf (a code page in words or digits: "UTF-8", "UTF8", "ISO-8859-1", "88591", "1252",
+# "ANSI 1252", "cp1252") and the language-driver byte at offset 29 of the DBF header. GDAL reads
+# the .cpg first and the byte second, and so does the build. Sodir's three shapefiles and the
+# Danish Energy Agency's carry a .cpg that says UTF-8 (and the byte 0x00, nothing); until
+# 2026-10-02 the build read every DBF as Latin-1, which double-encoded 316 Norwegian names in
+# geo.json (ÅSGARD A arrived as "Ã\x85SGARD A"). The language drivers below are common ones, each
+# read as GDAL's shapefile driver reads it (ogrshapelayer.cpp); 0x57, which ArcGIS writes for
+# "ANSI", it reads as Latin-1.
+LDID_CODECS = {
+    0x01: "cp437", 0x02: "cp850", 0x03: "cp1252", 0x04: "mac_roman", 0x57: "latin1", 0x58: "cp1252",
+    0x59: "cp1252", 0x64: "cp852", 0x65: "cp866", 0x66: "cp865", 0x67: "cp861", 0x6A: "cp737",
+    0x6B: "cp857", 0x78: "cp950", 0x79: "cp949", 0x7A: "cp936", 0x7B: "cp932", 0x7C: "cp874",
+    0xC8: "cp1250", 0xC9: "cp1251", 0xCA: "cp1254", 0xCB: "cp1253", 0xCC: "cp1257",
+}
+
+
+def cpg_codec(text: str) -> str | None:
+    """The Python codec a .cpg's contents name, or None for one this build does not know.
+    'UTF-8' and 'UTF8' -> utf-8; 'ISO-8859-1' and '88591' -> iso8859-1; '1252', 'ANSI 1252',
+    'cp1252' and 'Windows-1252' -> cp1252."""
+    t = re.sub(r"[\s_\-\x00]", "", text).upper()
+    if not t:
+        return None
+    m = re.fullmatch(r"(?:ISO)?8859(\d{1,2})", t)
+    if m:
+        t = f"iso8859_{m.group(1)}"
+    else:
+        m = re.fullmatch(r"(?:ANSI|CP|WINDOWS|WIN|OEM)?(\d{3,5})", t)
+        if m:
+            t = f"cp{m.group(1)}"
+    try:
+        name = codecs.lookup(t).name
+        b"A".decode(name)           # a text codec, not base64 and the like
+        return name
+    except (LookupError, UnicodeError):
+        return None
+
+
+def dbf_encoding(z: zipfile.ZipFile, dbf_name: str) -> str:
+    """The codec of one zipped DBF's text, logged with how it was found: the .cpg beside it when
+    it names a code page, else the header's language-driver byte, else UTF-8 when every text value
+    decodes as UTF-8 and Latin-1 when one does not. A declared encoding that one of the file's
+    values does not decode in stops the build: the declaration or the file changed, and a guess
+    would ship garbled names."""
+    import shapefile  # pyshp
+    dbf = z.read(dbf_name)
+    stem = dbf_name.rsplit(".", 1)[0].lower()
+    cpg = next((n for n in z.namelist() if n.lower() == stem + ".cpg"), None)
+    codec = how = None
+    if cpg is not None:
+        said = z.read(cpg).decode("ascii", "replace").strip()
+        codec, how = cpg_codec(said), f"{cpg.rsplit('/', 1)[-1]} says {said!r}"
+        if codec is None:
+            log(f"  {dbf_name}: {how}, which names no code page this build knows; trying the header")
+    ldid = dbf[29] if len(dbf) > 29 else 0
+    if codec is None and ldid in LDID_CODECS:
+        codec, how = LDID_CODECS[ldid], f"no usable .cpg; language driver 0x{ldid:02X} in the header"
+    # Every text value's bytes, as the file holds them: Latin-1 maps each byte to one character,
+    # so reading as Latin-1 and encoding back loses nothing.
+    texts = [v.encode("latin1") for rec in shapefile.Reader(dbf=io.BytesIO(dbf), encoding="latin1").iterRecords()
+             for v in rec if isinstance(v, str)]
+
+    def first_undecodable(c):
+        for b in texts:
+            try:
+                b.decode(c)
+            except UnicodeDecodeError:
+                return b
+        return None
+
+    if codec is None:
+        bad = first_undecodable("utf-8")
+        codec = "utf-8" if bad is None else "latin1"
+        how = ("nothing declared; every text value decodes as UTF-8" if bad is None
+               else f"nothing declared; {bad!r} is not UTF-8, so Latin-1")
+    else:
+        bad = first_undecodable(codec)
+        if bad is not None:
+            raise BuildError(f"{dbf_name}: {how}, but its text value {bad!r} does not decode as {codec}")
+    beyond = sum(1 for b in texts if any(c > 127 for c in b))
+    log(f"  {dbf_name}: read as {codec} ({how}); {len(texts)} text values, {beyond} of them beyond ASCII")
+    return codec
+
+
 def shapefile_records(blob: bytes):
-    """Yield (record dict, shape) pairs from a zipped shapefile, via pyshp."""
+    """Yield (record dict, shape) pairs from a zipped shapefile, via pyshp, its text decoded in
+    the encoding the shapefile declares (dbf_encoding)."""
     import shapefile  # pyshp
     z = zipfile.ZipFile(io.BytesIO(blob))
-    parts = {}
+    parts, names = {}, {}
     for n in z.namelist():
         ext = n.rsplit(".", 1)[-1].lower()
         if ext in ("shp", "shx", "dbf"):
             parts[ext] = io.BytesIO(z.read(n))
+            names[ext] = n
     if "shp" not in parts or "dbf" not in parts:
         raise BuildError(f"zip is not a shapefile: {z.namelist()}")
-    r = shapefile.Reader(shp=parts["shp"], shx=parts.get("shx"), dbf=parts["dbf"], encoding="latin1")
+    encoding = dbf_encoding(z, names["dbf"])
+    r = shapefile.Reader(shp=parts["shp"], shx=parts.get("shx"), dbf=parts["dbf"], encoding=encoding)
     fields = [f[0] for f in r.fields[1:]]
     for sr in r.iterShapeRecords():
         yield dict(zip(fields, sr.record)), sr.shape
