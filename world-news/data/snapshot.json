@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T12:01:19Z",
+ "generatedAt": "2026-10-02T13:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Christa Pike survived a lethal injection attempt – the latest person to endure a failed execution",
+     "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/christa-pike-survived-a-lethal-injection-attempt-the-latest-person-to-endure-a-failed-execution-293405",
-     "published": "2026-10-01T20:34:22Z",
+     "link": "https://theconversation.com/us-regulators-want-to-make-corporate-earnings-reports-less-frequent-but-investors-have-doubts-289338",
+     "published": "2026-10-02T12:50:15Z",
      "summary": "",
      "stale": false,
-     "author": "Austin Sarat, William Nelson Cromwell Professor of Jurisprudence and Political Science, Amherst College"
+     "author": "Tzachi Zach, Professor of Accounting, The Ohio State University"
     },
     {
-     "title": "Dozens of men failed to stop an alleged gang rape at Cornell – here’s the misperception that keeps bystanders from intervening and how to short-circuit it",
+     "title": "White nationalism’s appeal runs deeper than partisan politics",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/dozens-of-men-failed-to-stop-an-alleged-gang-rape-at-cornell-heres-the-misperception-that-keeps-bystanders-from-intervening-and-how-to-short-circuit-it-293321",
-     "published": "2026-10-01T19:05:51Z",
+     "link": "https://theconversation.com/white-nationalisms-appeal-runs-deeper-than-partisan-politics-292676",
+     "published": "2026-10-02T12:49:44Z",
      "summary": "",
      "stale": false,
-     "author": "Catherine A. Sanderson, Poler Family Professor of Psychology, Amherst College"
+     "author": "Patrick Egan, Professor of Politics & Public Policy, New York University"
     },
     {
      "title": "No more execution attempts on Christa Pike: UN rights chief",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Christa Pike survived a lethal injection attempt – the latest person to endure a failed execution",
-   "published": "2026-10-01 20:34 UTC"
+   "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
+   "published": "2026-10-02 12:50 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Dozens of men failed to stop an alleged gang rape at Cornell – here’s the misperception that keeps bystanders from intervening and how to short-circuit it",
-   "published": "2026-10-01 19:05 UTC"
+   "title": "White nationalism’s appeal runs deeper than partisan politics",
+   "published": "2026-10-02 12:49 UTC"
   },
   {
    "region": "Americas",
