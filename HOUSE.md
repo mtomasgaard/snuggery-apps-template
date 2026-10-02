@@ -1231,7 +1231,7 @@ figures into its `ART.md`.
 | Global Weather (reference) | 2 788 186 (2026-10-02) | its own, 2 800 000 (CHECK 258) | 202 709 of 203 000 (D5/D6) | 40 075 |
 | Global Wind (reference) | 1 483 034 | its own, 1 600 000 (ART 621) | 184 653 | 40 075 |
 | Milky Way | 6 513 445 (after its pass; the record left `ART.md` on 2026-10-02) | 8 156 512 | 241 813 of 242 000 (the lead's ruling, plan 0011 D9) | 45 695 |
-| Besseggen | 16 854 331 (after its pass; the record left `ART.md` on 2026-10-02) | 21 088 756 | 226 787 of 227 000 (the lead's ruling, D11) | 40 075 |
+| Besseggen | 16 854 360 (after its pass; the record left `ART.md` on 2026-10-02) | 21 088 756 | 226 787 of 227 000 (the lead's ruling, D11) | 40 075 |
 | Norne Reservoir | 15 354 792 (after its pass) | 19 110 591 | 161 833 | 40 075 |
 | Anatomy | 24 552 764 (after its pass) | 30 692 577 | 116 467 | 40 075 |
 | Shelf Atlas | 1 900 237 † | 2 413 130 | 139 305 | 0 |
