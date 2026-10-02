@@ -135,7 +135,7 @@ Global Wind with four more fields — temperature, rain, cloud and pressure besi
 
 ### Anatomy
 
-A full human body in 3D: 1,752 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain and nerves, cartilage, bone, teeth — with release 4.0's arteries and veins down to the fingers, toes and brain, and its finer eyes, larynx, heart valves and bronchial tree. Peel, fade, isolate, search and explode it. Three.js is vendored; nothing is fetched. **Static**, 35 MB unpacked.
+A full human body in 3D: 1,752 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain and nerves, cartilage, bone, teeth — with release 4.0's arteries and veins down to the fingers, toes and brain, and its finer eyes, larynx, heart valves and bronchial tree. Peel, fade, isolate, search and explode it. Along the picture's edge the body's own spine serves as its rule: one ink block per labeled vertebra at the height the camera draws it, and a bar beside it spanning the levels of whatever is selected. Three.js is vendored; nothing is fetched. **Static**, 35 MB unpacked.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) · Make it yours: [`anatomy/NOTES.md`](anatomy/NOTES.md)
 
@@ -153,7 +153,7 @@ The open Norne oil-field reservoir simulation model in 3D: 44,431 cells colored 
 
 ### Shelf Atlas
 
-The North Sea's oil and gas on a map you pan and pinch: every field outline in the Norwegian, UK, Danish and Dutch sectors, the platforms and the pipelines, the median lines between the four shelves, and a month scrubber from January 1971 to the newest report that colours and sizes each field by what it produced that month. Tap a field for its operator, discovery year, status and a production sparkline; cross-border units (Statfjord, Frigg, Murchison…) show each side's share and the sum. **Live**: rebuilt weekly here from the four regulators' open data — Sodir, NSTA, the Danish Energy Agency and NLOG — plus Natural Earth and Marine Regions.
+The North Sea's oil and gas on a map you pan and pinch: every field outline in the Norwegian, UK, Danish and Dutch sectors, the platforms and the pipelines, the median lines between the four shelves, and a month scrubber from January 1971 to the newest report that colors and sizes each field by what it produced that month. Tap a field for its operator, discovery year, status and a production sparkline; cross-border units (Statfjord, Frigg, Murchison…) show each side's share and the sum. **Live**: rebuilt weekly here from the four regulators' open data — Sodir, NSTA, the Danish Energy Agency and NLOG — plus Natural Earth and Marine Regions.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) · Set it up: [`shelf-atlas/PROMPT.md`](shelf-atlas/PROMPT.md) · Make it yours: [`shelf-atlas/NOTES.md`](shelf-atlas/NOTES.md) · How it was built: [`shelf-atlas/RESEARCH.md`](shelf-atlas/RESEARCH.md) · Running it: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 
@@ -495,8 +495,8 @@ terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-der
 (ODbL) and the Geist typeface (SIL OFL) in Running Dashboard, spelled out in
 [TILES.md](running-dashboard/TILES.md); the BodyParts3D geometry in Anatomy (CC BY-SA 2.1 JP, also
 CC BY 4.0 at source) with its BodyParts3D 4.0 structures (CC BY 4.0 —
-[CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and two
-SIL OFL fonts; the Norne benchmark model in Norne Reservoir (ODbL —
+[CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and the
+Ysabeau Office typeface (SIL OFL 1.1); the Norne benchmark model in Norne Reservoir (ODbL —
 [ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
 (open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); in Milky Way, the
 Gaia-derived star, sky and young-star map files (`deep.bin`, `named.json`, the sky JPEG and `young-*.png`; CC BY-NC

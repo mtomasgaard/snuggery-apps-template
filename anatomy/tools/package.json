@@ -9,8 +9,6 @@
     "package": "python3 package_snuggery.py"
   },
   "dependencies": {
-    "@fontsource/atkinson-hyperlegible": "5.3.0",
-    "@fontsource/newsreader": "5.3.0",
     "meshoptimizer": "1.2.0",
     "three": "0.186.0"
   }

@@ -1,5 +1,5 @@
 {
- "_about": "Names, descriptions, layers and colours used by the anatomy viewer. Edit freely; the app reloads this file when it regains focus. Geometry lives in the geometry-*.bin files and is matched by id. A part can override its colour with \"color\" and its text with \"description\".",
+ "_about": "Names, descriptions, layers and colors used by the anatomy viewer. Edit freely; the app reloads this file when it regains focus. Geometry lives in the geometry-*.bin files and is matched by id. A part can override its color with \"color\" and its text with \"description\".",
  "colors": {
   "selected": "#3552d6",
   "selectedDark": "#8ea2ff"
@@ -672,7 +672,7 @@
   },
   "vomer": {
    "latin": "Vomer",
-   "description": "A thin, ploughshare-shaped bone forming the lower back part of the nasal septum."
+   "description": "A thin, plowshare-shaped bone forming the lower back part of the nasal septum."
   },
   "mandible": {
    "latin": "Mandibula",
@@ -712,7 +712,7 @@
   },
   "thoracic": {
    "latin": "Vertebra thoracica",
-   "description": "Thoracic vertebrae carry joint facets for the heads of the ribs, have heart-shaped bodies and long spinous processes that slope downwards."
+   "description": "Thoracic vertebrae carry joint facets for the heads of the ribs, have heart-shaped bodies and long spinous processes that slope downward."
   },
   "lumbar": {
    "latin": "Vertebra lumbalis",
@@ -804,11 +804,11 @@
   },
   "capitate": {
    "latin": "Os capitatum",
-   "description": "The largest carpal bone, at the centre of the wrist."
+   "description": "The largest carpal bone, at the center of the wrist."
   },
   "hamate": {
    "latin": "Os hamatum",
-   "description": "A wedge-shaped distal-row bone on the little-finger side, recognised by its hook."
+   "description": "A wedge-shaped distal-row bone on the little-finger side, recognized by its hook."
   },
   "metacarpal": {
    "latin": "Os metacarpi",
@@ -894,7 +894,7 @@
   },
   "valve": {
    "latin": "Valva cordis",
-   "description": "A heart valve. Its thin cusps open to let blood through and snap shut to stop it flowing backwards.",
+   "description": "A heart valve. Its thin cusps open to let blood through and snap shut to stop it flowing backward.",
    "color": "#e2c3b4"
   },
   "papillary": {
@@ -934,12 +934,12 @@
   },
   "small-intestine": {
    "latin": "Intestinum tenue",
-   "description": "The jejunum and ileum, about six metres of coiled tube in which most nutrients are absorbed.",
+   "description": "The jejunum and ileum, about six meters of coiled tube in which most nutrients are absorbed.",
    "color": "#dca489"
   },
   "colon": {
    "latin": "Colon",
-   "description": "The large intestine absorbs water and salts from what remains of digested food and forms faeces.",
+   "description": "The large intestine absorbs water and salts from what remains of digested food and forms feces.",
    "color": "#c99479"
   },
   "taenia": {
@@ -954,7 +954,7 @@
   },
   "rectum": {
    "latin": "Rectum",
-   "description": "The last part of the large intestine, which stores faeces before they leave the body.",
+   "description": "The last part of the large intestine, which stores feces before they leave the body.",
    "color": "#c99479"
   },
   "liver": {
@@ -979,7 +979,7 @@
   },
   "kidney": {
    "latin": "Ren",
-   "description": "Each kidney filters about 180 litres of blood plasma a day, keeping what the body needs and passing the rest to the bladder as urine.",
+   "description": "Each kidney filters about 180 liters of blood plasma a day, keeping what the body needs and passing the rest to the bladder as urine.",
    "color": "#8c3c33"
   },
   "adrenal": {
@@ -1069,7 +1069,7 @@
   },
   "cortex": {
    "latin": "Gyrus cerebri",
-   "description": "A fold of the cerebral cortex. The folds greatly increase its surface area; different gyri specialise in movement, sensation, language, vision and planning."
+   "description": "A fold of the cerebral cortex. The folds greatly increase its surface area; different gyri specialize in movement, sensation, language, vision and planning."
   },
   "brain-lobe": {
    "latin": "Lobus cerebri",
@@ -1092,7 +1092,7 @@
   },
   "basal": {
    "latin": "Nuclei basales",
-   "description": "Deep grey matter involved in starting and controlling movement and in habits and reward.",
+   "description": "Deep gray matter involved in starting and controlling movement and in habits and reward.",
    "color": "#c99790"
   },
   "limbic": {
@@ -1102,7 +1102,7 @@
   },
   "white-matter": {
    "latin": "Substantia alba",
-   "description": "Bundles of nerve fibres connecting different parts of the brain.",
+   "description": "Bundles of nerve fibers connecting different parts of the brain.",
    "color": "#efe4d8"
   },
   "ventricle": {
@@ -1117,7 +1117,7 @@
   },
   "optic": {
    "latin": "Nervus opticus",
-   "description": "Carries visual signals from the eye. The two optic nerves meet at the optic chiasm, where half of the fibres cross, and continue as the optic tracts.",
+   "description": "Carries visual signals from the eye. The two optic nerves meet at the optic chiasm, where half of the fibers cross, and continue as the optic tracts.",
    "color": "#e8d27a"
   },
   "colliculus": {
@@ -1216,7 +1216,7 @@
   },
   "iris": {
    "latin": "Iris",
-   "description": "The coloured ring of muscle around the pupil, which it widens in dim light and narrows in bright light.",
+   "description": "The colored ring of muscle around the pupil, which it widens in dim light and narrows in bright light.",
    "color": "#6b7f8c"
   },
   "sclera": {
@@ -1236,7 +1236,7 @@
   },
   "vitreous": {
    "latin": "Corpus vitreum",
-   "description": "The clear gel and fluid that fill the eyeball: the aqueous humour in front of the lens and the vitreous body behind it.",
+   "description": "The clear gel and fluid that fill the eyeball: the aqueous humor in front of the lens and the vitreous body behind it.",
    "color": "#e4ecef"
   },
   "retina": {
@@ -1255,7 +1255,7 @@
   },
   "ganglion": {
    "latin": "Ganglion ciliare",
-   "description": "A small cluster of nerve cells behind the eye. Its fibres, through the short ciliary nerves, narrow the pupil and focus the lens.",
+   "description": "A small cluster of nerve cells behind the eye. Its fibers, through the short ciliary nerves, narrow the pupil and focus the lens.",
    "color": "#e8d27a"
   },
   "dura": {
@@ -1279,7 +1279,7 @@
   },
   "pharynx-muscle": {
    "latin": "Musculi pharyngis",
-   "description": "A muscle of the pharynx or soft palate. The constrictors squeeze swallowed food downwards; the palate muscles seal off the nose and open the auditory tube when swallowing."
+   "description": "A muscle of the pharynx or soft palate. The constrictors squeeze swallowed food downward; the palate muscles seal off the nose and open the auditory tube when swallowing."
   },
   "larynx-muscle": {
    "latin": "Musculi laryngis",
@@ -1292,7 +1292,7 @@
   },
   "epiglottis": {
    "latin": "Epiglottis",
-   "description": "A leaf of elastic cartilage behind the tongue that tips back over the entrance of the larynx when swallowing, so food goes down the oesophagus and not into the airway.",
+   "description": "A leaf of elastic cartilage behind the tongue that tips back over the entrance of the larynx when swallowing, so food goes down the esophagus and not into the airway.",
    "color": "#b2cbd3"
   },
   "heart-cavity": {
@@ -12090,7 +12090,7 @@
    "type": "limb-artery",
    "fma": "FMA20802",
    "side": "left",
-   "description": "Winds round the front of the femur to supply the thigh muscles and the hip joint."
+   "description": "Winds around the front of the femur to supply the thigh muscles and the hip joint."
   },
   {
    "id": "FJ2079",
@@ -12700,7 +12700,7 @@
    "type": "limb-artery",
    "fma": "FMA20801",
    "side": "right",
-   "description": "Winds round the front of the femur to supply the thigh muscles and the hip joint."
+   "description": "Winds around the front of the femur to supply the thigh muscles and the hip joint."
   },
   {
    "id": "FJ2159",
@@ -13197,7 +13197,7 @@
    "type": "limb-artery",
    "fma": "FMA22697",
    "side": "left",
-   "description": "Spirals round the back of the humerus with the radial nerve to supply the triceps."
+   "description": "Spirals around the back of the humerus with the radial nerve to supply the triceps."
   },
   {
    "id": "FJ2226",
@@ -13775,7 +13775,7 @@
    "type": "limb-artery",
    "fma": "FMA22696",
    "side": "right",
-   "description": "Spirals round the back of the humerus with the radial nerve to supply the triceps."
+   "description": "Spirals around the back of the humerus with the radial nerve to supply the triceps."
   },
   {
    "id": "FJ2278",
@@ -16240,7 +16240,7 @@
   {
    "id": "FJ3431",
    "source": "Set of oesophageal branches of thoracic aorta",
-   "name": "Oesophageal branches of thoracic aorta",
+   "name": "Esophageal branches of thoracic aorta",
    "layer": "artery",
    "region": "thorax",
    "group": "artery-thorax",
@@ -17910,7 +17910,7 @@
    "type": "eye-muscle",
    "fma": "FMA49053",
    "side": "left",
-   "description": "Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inwards."
+   "description": "Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inward."
   },
   {
    "id": "FJ1323",
@@ -18408,7 +18408,7 @@
    "type": "eye-muscle",
    "fma": "FMA49052",
    "side": "right",
-   "description": "Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inwards."
+   "description": "Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inward."
   },
   {
    "id": "FJ1374",
@@ -18656,7 +18656,7 @@
    "group": "heart",
    "type": "heart",
    "fma": "FMA13884",
-   "description": "The muscular wall of the two ventricles and the septum between them. The left ventricle’s wall is about three times thicker than the right’s, because it pumps blood round the whole body."
+   "description": "The muscular wall of the two ventricles and the septum between them. The left ventricle’s wall is about three times thicker than the right’s, because it pumps blood around the whole body."
   },
   {
    "id": "FJ2431",
@@ -19546,7 +19546,7 @@
    "type": "larynx-muscle",
    "fma": "FMA46578",
    "side": "left",
-   "description": "The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outwards, and is essential for breathing."
+   "description": "The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outward, and is essential for breathing."
   },
   {
    "id": "FJ2783",
@@ -19743,7 +19743,7 @@
    "type": "larynx-muscle",
    "fma": "FMA46577",
    "side": "right",
-   "description": "The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outwards, and is essential for breathing."
+   "description": "The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outward, and is essential for breathing."
   },
   {
    "id": "FJ2801",
@@ -19988,7 +19988,7 @@
    "color": "#b0524a",
    "connectiveColor": "#ddd3c3",
    "fade": 0.14,
-   "description": "Skeletal muscles pull on bones through tendons to move joints and hold posture, down to the muscles that move the eyes, the tongue, the soft palate and the vocal cords. Tendons, ligaments and fasciae are shown in a paler colour."
+   "description": "Skeletal muscles pull on bones through tendons to move joints and hold posture, down to the muscles that move the eyes, the tongue, the soft palate and the vocal cords. Tendons, ligaments and fasciae are shown in a paler color."
   },
   {
    "id": "organ",
@@ -20050,16 +20050,16 @@
  "about": {
   "intro": "A complete adult male body built from real anatomical surface models: skin, muscles, organs, the brain, the arteries and veins and every bone, down to the parts of the eye, the cartilages of the larynx and each cusp of the heart valves. Each structure is a separate object you can select, fade, hide, isolate and pull apart.",
   "gaps": [
-   "Nerves: the brain, the optic nerves and the nerves of the orbit are modelled, but not the spinal cord or the peripheral nerves of the body.",
-   "Vessels: the arteries and veins stop at the fingers and toes. In the head the arteries of the brain are modelled, but not its veins or the vessels of the face and scalp.",
+   "Nerves: the brain, the optic nerves and the nerves of the orbit are modeled, but not the spinal cord or the peripheral nerves of the body.",
+   "Vessels: the arteries and veins stop at the fingers and toes. In the head the arteries of the brain are modeled, but not its veins or the vessels of the face and scalp.",
    "Organs: the liver, the colon and the small intestine are single structures without their segments.",
    "Bones: the coccyx, the six ear ossicles and the third molars are missing from the dataset.",
    "The lymphatic system and female anatomy are not part of this model. Bones are outer surfaces only, without marrow."
   ],
   "sources": [
    "Geometry: BodyParts3D, © The Database Center for Life Science (DBCLS). The skin, muscles, organs, brain, cartilage and bones are release 3.0 (CC BY-SA 2.1 Japan). The arteries and veins, and the finer structures of the eyes, larynx, pharynx, tongue, heart, airways, bile ducts and orbital nerves, are release 4.0 (CC BY 4.0), by way of the Human-Atlas package by slorksmo, fitted onto the release 3.0 body. Mitsuhashi N. et al., BodyParts3D: 3D structure database for anatomical concepts, Nucleic Acids Research 37 (2009), doi:10.1093/nar/gkn613.",
-   "Adapted: converted from millimetres Z-up to metres Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), release 4.0 structures moved onto release 3.0 by a correction measured from the 591 structures both releases share, segments of each named structure merged into one, positions quantised to 16 bits.",
-   "Rendering: three.js (MIT licence). Type: Atkinson Hyperlegible and Newsreader (SIL Open Font Licence)."
+   "Adapted: converted from millimeters Z-up to meters Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), release 4.0 structures moved onto release 3.0 by a correction measured from the 651 structures both releases share, segments of each named structure merged into one, positions quantized to 16 bits.",
+   "Rendering: three.js r186, MIT License (its text is in vendor/three-LICENSE.txt). Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license."
   ]
  }
 }

@@ -67,6 +67,12 @@ shipped text use plain spaces, except in §6.1 and §6.2, where the narrow no-br
 
 ---
 
+**What ships and what does not (a rule learned on the third pass).** `ART.md` ships inside the ZIP, so
+it carries only the rules, the measured figures and the look as built, corrected in place when a
+fix changes them. The record of the pass — the owner calls as they stood, the as-built departures,
+the "after QA", "after review" and "after the follow-up" sections, the phone checks — lives in
+`tools/DECISIONS.md`, which never ships. A pass that finds history in a shipped `ART.md` moves it.
+
 ## 1. The idea, and the rule that governs everything
 
 **The idea.** Each app's screen is printed like a scientific photograph: a plate and its caption.
@@ -672,6 +678,19 @@ DEC 269-271). A touch on the track during play stops it and lands on the step un
   SHOTS 583-585). Their names stay.
 - *No time*: no player. The plate takes the space, and the caption band is the last band.
 
+**Two rules every player carries, learned twice (Global Weather's Flow pass, Besseggen's pass):**
+
+- *The Play key shows the pause bars while playing.* Toggle the icons with
+  `toggleAttribute('hidden', …)` or by hiding a wrapping element: an SVG element has no `hidden`
+  property, so `svg.hidden = true` only creates an expando and the triangle never changes.
+  `shoot.mjs` asserts, while playing, that the pause mark is displayed and the triangle is
+  `display: none` — by computed style, never by reading the property back.
+- *A frame that draws the step already drawn does no work.* Play and the scrub call for a frame
+  per input, but the expensive parts (a shadow sweep, a census, a texture upload, a readout
+  rebuild) run only when the step, the view or the marker changed since the last draw. Keep a
+  counter of the expensive runs and let `shoot.mjs` assert it does not grow across a second of
+  play at a fixed step.
+
 ### 4.7 The readout card
 
 The one card on the screen, for the thing that was tapped (ART 440-451; CSS 268-305; HTML 65-73).
@@ -713,6 +732,13 @@ A full-height `--sheet` panel that slides up over 220 ms on `--sheet-in` and clo
      and the font's credit line.
   4. **How the data gets here.**
 - While About is open, the app draws nothing under it and play waits (DESIGN 288-289).
+
+**A search field, if the app has one (learned on Milky Way and again on Anatomy):** a native
+`<input type="search">` draws the browser's own clear button in the browser's accent blue once
+text is typed — invisible in a screenshot of the empty field, a chroma violation the moment someone
+types. `appearance: none` on the input does not remove it; the field needs its own
+`::-webkit-search-cancel-button { appearance: none }` (and `-webkit-appearance`), and `shoot.mjs`
+types into the field and asserts no blue-led pixels at its right end.
 
 ### 4.9 Notices and the live region
 
@@ -1204,10 +1230,10 @@ figures into its `ART.md`.
 | --- | --: | --: | --: | --: |
 | Global Weather (reference) | 2 788 111 | its own, 2 800 000 (CHECK 258) | 202 560 of 203 000 (D5/D6) | 40 075 |
 | Global Wind (reference) | 1 483 034 | its own, 1 600 000 (ART 621) | 184 653 | 40 075 |
-| Milky Way | 6 525 210 | 8 156 512 | **223 463, over** | 87 680 |
-| Besseggen | 16 871 005 | 21 088 756 | **215 934, over** | 87 680 |
-| Norne Reservoir | 15 258 206 | 19 110 591 | 77 032 | 0 |
-| Anatomy | 24 554 062 | 30 692 577 | 57 615 | 87 680 |
+| Milky Way | 6 522 068 (after its pass) | 8 156 512 | 241 813 of 242 000 (the lead's ruling, plan 0011 D9) | 45 695 |
+| Besseggen | 16 866 174 (after its pass) | 21 088 756 | 226 787 of 227 000 (the lead's ruling, D11) | 40 075 |
+| Norne Reservoir | 15 354 792 (after its pass) | 19 110 591 | 161 833 | 40 075 |
+| Anatomy | 24 552 764 (after its pass) | 30 692 577 | 116 467 | 40 075 |
 | Shelf Atlas | 1 900 237 † | 2 413 130 | 139 305 | 0 |
 | World Oil & Gas | 2 068 029 † | 2 622 870 | 165 162 | 0 |
 | Snug Kart | 546 378 | 720 806 | **220 070, over** | 0 |

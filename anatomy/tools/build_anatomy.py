@@ -64,7 +64,7 @@ types = {
  "maxilla":("Maxilla","The paired upper jaw bones. They carry the upper teeth, form most of the hard palate and the floor of each orbit, and contain the maxillary sinuses."),
  "palatine":("Os palatinum","L-shaped bones forming the back of the hard palate and part of the side wall of the nasal cavity."),
  "concha":("Concha nasalis inferior","A scroll-shaped bone on the side wall of the nasal cavity. Its mucous lining warms and moistens inhaled air."),
- "vomer":("Vomer","A thin, ploughshare-shaped bone forming the lower back part of the nasal septum."),
+ "vomer":("Vomer","A thin, plowshare-shaped bone forming the lower back part of the nasal septum."),
  "mandible":("Mandibula","The lower jaw and the only freely movable bone of the skull. It carries the lower teeth and meets the temporal bones at the jaw joints."),
  "hyoid":("Os hyoideum","A U-shaped bone that articulates with no other bone. It anchors the tongue and the muscles used for swallowing and speech."),
  "incisor":("Dens incisivus","Chisel-shaped front teeth for cutting food."),
@@ -74,7 +74,7 @@ types = {
  "atlas":("Atlas","The first cervical vertebra (C1), a ring of bone without a body that carries the skull. Nodding happens at its joints with the occipital bone."),
  "axis":("Axis","The second cervical vertebra (C2). Its tooth-like dens projects up into the ring of the atlas and forms the pivot for turning the head."),
  "cervical":("Vertebra cervicalis","Cervical vertebrae have small bodies, forked spinous processes and a hole in each transverse process for the vertebral artery."),
- "thoracic":("Vertebra thoracica","Thoracic vertebrae carry joint facets for the heads of the ribs, have heart-shaped bodies and long spinous processes that slope downwards."),
+ "thoracic":("Vertebra thoracica","Thoracic vertebrae carry joint facets for the heads of the ribs, have heart-shaped bodies and long spinous processes that slope downward."),
  "lumbar":("Vertebra lumbalis","The largest vertebrae, with massive kidney-shaped bodies that carry the weight of the upper body."),
  "sacrum":("Os sacrum","Five fused vertebrae forming a wedge between the hip bones. It passes the weight of the body to the pelvis through the sacroiliac joints. The coccyx below it is not part of this model."),
  "disc":("Discus intervertebralis","A fibrocartilage pad between two vertebral bodies: a tough outer ring (annulus fibrosus) around a gel-like core (nucleus pulposus). The discs absorb load and let the spine bend."),
@@ -97,8 +97,8 @@ types = {
  "pisiform":("Os pisiforme","A pea-shaped sesamoid bone on the palm side of the triquetral, embedded in the tendon of the flexor carpi ulnaris."),
  "trapezium":("Os trapezium","Distal-row carpal bone at the base of the thumb. Its saddle joint with the first metacarpal lets the thumb reach across the palm."),
  "trapezoid":("Os trapezoideum","The smallest bone of the distal carpal row, wedged between the trapezium and the capitate."),
- "capitate":("Os capitatum","The largest carpal bone, at the centre of the wrist."),
- "hamate":("Os hamatum","A wedge-shaped distal-row bone on the little-finger side, recognised by its hook."),
+ "capitate":("Os capitatum","The largest carpal bone, at the center of the wrist."),
+ "hamate":("Os hamatum","A wedge-shaped distal-row bone on the little-finger side, recognized by its hook."),
  "metacarpal":("Os metacarpi","The five metacarpals form the palm, numbered I (thumb) to V (little finger). Their heads are the knuckles."),
  "phalanx-hand":("Phalanx","Finger bones. Each finger has a proximal, a middle and a distal phalanx; the thumb has no middle phalanx."),
  "hip":("Os coxae","Three bones, the ilium, ischium and pubis, that fuse at the acetabulum, the socket of the hip joint."),
@@ -253,7 +253,7 @@ print(Counter(p['layer'] for p in parts), len(parts))
 print(Counter(p['group'] for p in parts))
 BIAS={"skull":[0,0.1,0.03],"thorax":[0,0.02,0.1],"spine":[0,0,-0.05]}
 out = {
- "_about":"Names, descriptions and colours used by the skeleton viewer. Edit freely; the app reloads this file when it regains focus. Geometry lives in geometry.bin and is matched by id.",
+ "_about":"Names, descriptions and colors used by the skeleton viewer. Edit freely; the app reloads this file when it regains focus. Geometry lives in geometry.bin and is matched by id.",
  "colors":{"bone":"#e6d9bf","cartilage":"#b2cbd3","tooth":"#f3efe3","selected":"#3552d6","selectedDark":"#8ea2ff"},
  "regions":[dict({"id":r,"name":n,"description":ds}, **({"explodeBias":BIAS[r]} if r in BIAS else {})) for r,n,ds in regions],
  "groups":[{"id":g,"region":v[0],"name":v[1],"description":v[2]} for g,v in groups.items()],

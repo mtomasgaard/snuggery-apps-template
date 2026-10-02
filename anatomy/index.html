@@ -1,106 +1,178 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Anatomy</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<div id="stage"><canvas id="view" aria-label="3D human body. Drag to rotate, pinch to zoom, two fingers to pan, tap a structure to select it."></canvas></div>
 
-<header class="bar">
-  <button id="btn-list" class="pill" aria-controls="list">Search</button>
-  <h1>Anatomy</h1>
-  <button id="btn-about" class="round" aria-controls="about" aria-label="About this model">i</button>
+<!-- Every address in this app is relative: the body, its text and the face travel inside the folder,
+     and nothing is fetched from anywhere else. The look is ART.md; what the data is and how it was
+     built is NOTES.md. The step keys' names are written by app.js once the model is in, and only
+     then: the marketing camera waits for one of them. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Anatomy</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the model&hellip;</button></div>
+  <span class="sr" id="stamp-hint">Opens About this data.</span>
+  <div class="hkeys">
+    <button class="wordkey" id="btn-layers" type="button" aria-expanded="false" aria-controls="layers">Layers</button>
+    <button class="wordkey" id="btn-find" type="button" aria-haspopup="dialog" aria-label="Find a structure">Find</button>
+  </div>
+  <div class="row" id="row">
+    <div class="words" id="depth" role="radiogroup" aria-label="Show the body from"></div>
+    <span class="divider" aria-hidden="true"></span>
+    <div class="words" id="views" role="group" aria-label="Turn the camera">
+      <button type="button" data-view="front" aria-describedby="vd-front">Front</button>
+      <button type="button" data-view="back" aria-describedby="vd-back">Back</button>
+      <button type="button" data-view="left" aria-describedby="vd-left">Left</button>
+      <button type="button" data-view="right" aria-describedby="vd-right">Right</button>
+      <button type="button" data-view="top" aria-describedby="vd-top">Top</button>
+    </div>
+  </div>
+  <!-- hidden, so a swipe through the page never reads them twice; aria-describedby still reads them -->
+  <span id="vd-front" hidden>Turns the camera to the body's front.</span>
+  <span id="vd-back" hidden>Turns the camera to the body's back.</span>
+  <span id="vd-left" hidden>Turns the camera to the body's left side.</span>
+  <span id="vd-right" hidden>Turns the camera to the body's right side.</span>
+  <span id="vd-top" hidden>Turns the camera to look down on the head.</span>
 </header>
 
-<nav class="views" aria-label="Camera">
-  <button data-view="front">Front</button>
-  <button data-view="side">Side</button>
-  <button data-view="back">Back</button>
-  <button data-view="top">Top</button>
-  <button data-view="fit">Fit</button>
-</nav>
+<main class="plate" id="plate">
+  <canvas id="view" role="img" aria-label="The body in 3D" aria-describedby="view-desc"></canvas>
+  <p class="sr" id="view-desc">Drag to turn the body, pinch or use the zoom keys to zoom, and drag with two fingers to move it. Tap a structure for its name and its levels; double-tap one to fly to it.</p>
+  <canvas id="levels" aria-hidden="true"></canvas>
 
-<div id="status" class="status" hidden>
-  <span id="status-text"></span>
-  <button id="status-reset">Show all</button>
-</div>
-
-<section id="card" class="card" hidden aria-live="polite">
-  <div class="card-head">
-    <div class="card-title">
-      <h2 id="c-name"></h2>
-      <p id="c-latin" class="latin"></p>
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11M8 2.5v11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="fit" aria-label="Show the whole body"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.75 5.25v-3.5h3.5M10.75 1.75h3.5v3.5M14.25 10.75v3.5h-3.5M5.25 14.25h-3.5v-3.5"/><circle cx="8" cy="4.75" r="1.5"/><path d="M8 6.75v7"/></svg></button>
     </div>
-    <button id="c-close" class="round" aria-label="Clear selection">×</button>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
+    </div>
   </div>
-  <p id="c-where" class="where"></p>
-  <p id="c-desc" class="desc"></p>
-  <p id="c-note" class="note" hidden></p>
-  <div class="actions">
-    <button id="c-focus">Focus</button>
-    <button id="c-isolate">Isolate</button>
-    <button id="c-ghost" aria-pressed="false">X-ray</button>
-    <button id="c-hide">Hide</button>
-  </div>
+
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
+    </svg>
+  </button>
+
+  <!-- The card for the selected structure, group or region: the place line with Close, then the body
+       (the name, the Latin, the rows, the description), which alone scrolls, then the four actions. -->
+  <section class="card" id="card" aria-labelledby="c-name" hidden>
+    <div class="card-where"><span class="where" id="c-where"></span><button class="card-close" id="c-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <div class="card-body" id="card-body">
+      <h2 class="card-name" id="c-name"></h2>
+      <p class="card-latin" id="c-latin" lang="la" translate="no"></p>
+      <dl class="card-rows">
+        <div id="r-layer"><dt>Layer</dt><dd id="c-layer"></dd></div>
+        <div id="r-levels"><dt>Levels</dt><dd id="c-levels" translate="no"></dd></div>
+        <div id="r-label"><dt>Label</dt><dd id="c-label" translate="no"></dd></div>
+        <div id="r-tooth"><dt>Tooth</dt><dd id="c-tooth" translate="no"></dd></div>
+      </dl>
+      <p class="card-desc" id="c-desc"></p>
+      <p class="card-note" id="c-note" hidden></p>
+    </div>
+    <div class="card-actions">
+      <button type="button" class="textkey" id="c-zoom">Zoom<span class="long"> to it</span></button>
+      <button type="button" class="textkey" id="c-isolate">Isolate</button>
+      <button type="button" class="textkey" id="c-ghost" aria-pressed="false">X-ray</button>
+      <button type="button" class="textkey" id="c-hide">Hide</button>
+    </div>
+  </section>
+
+  <div class="status" id="status" hidden><span id="status-text"></span><button type="button" class="textkey" id="status-reset">Show all</button></div>
+  <div class="notice" id="notice" role="alert" hidden></div>
+</main>
+
+<!-- The caption under the plate: the line that says how to read the Levels, and the credit line, on
+     screen in every mode. -->
+<section class="caption" id="caption" aria-label="Caption and credits">
+  <p class="capline" id="capline"></p>
+  <p class="credits" id="credits" translate="no"></p>
 </section>
 
-<section id="dock" class="dock">
-  <div class="dock-row">
-    <button id="btn-peel" class="step">Peel skin</button>
-    <button id="btn-add" class="step">Add</button>
-    <button id="btn-layers" class="step outline" aria-controls="layers" aria-expanded="false">Layers</button>
-  </div>
-  <div class="dock-row">
-    <button id="btn-explode" class="primary">Explode</button>
-    <input id="explode" type="range" min="0" max="100" step="1" value="0" aria-label="Explode amount">
-    <select id="level" class="level" aria-label="Explode by">
-      <option value="bones">By part</option>
-      <option value="groups">By group</option>
-      <option value="regions">By region</option>
-    </select>
-  </div>
+<section class="layers" id="layers" aria-labelledby="layers-title" hidden>
+  <div class="layers-head"><h2 id="layers-title">Layers</h2><button type="button" class="textkey" id="layers-close">Close</button></div>
+  <p class="layers-note">Listed from the outside in. The key under this list removes the outermost layer that is on, and the one beside it brings back the last one removed, the way it was.</p>
+  <div id="layer-rows"></div>
+  <button type="button" class="textkey" id="layers-all">Turn every layer on</button>
 </section>
 
-<section id="layers" class="panel" hidden aria-label="Layers">
-  <div class="panel-head">
-    <div><h2>Layers</h2><p class="panel-sub">Listed from the outside in. Peel removes from the top, Add brings back from the bottom.</p></div>
-    <button id="layers-close" class="round" aria-label="Close layers">×</button>
+<footer class="dissect" id="dissect">
+  <div class="drow">
+    <button type="button" class="wordkey" id="btn-peel" disabled>Remove a layer</button>
+    <button type="button" class="wordkey" id="btn-add" disabled>Bring back a layer</button>
   </div>
-  <div id="layer-rows" class="layer-rows"></div>
-  <div class="panel-foot-row">
-    <button id="panel-peel" class="panel-foot step-btn">Peel skin</button>
-    <button id="panel-add" class="panel-foot step-btn">Add</button>
+  <div class="drow" id="drow-explode">
+    <button type="button" class="wordkey" id="btn-explode">Explode</button>
+    <input class="hslider" id="explode" type="range" min="0" max="100" step="1" value="0" aria-label="Explode amount">
+    <div class="words" id="ex-by" role="radiogroup" aria-label="Explode by">
+      <button type="button" role="radio" aria-checked="true" data-level="bones">Part</button>
+      <button type="button" role="radio" aria-checked="false" data-level="groups">Group</button>
+      <button type="button" role="radio" aria-checked="false" data-level="regions">Region</button>
+    </div>
   </div>
-  <button id="layers-all" class="panel-link">Turn every layer on</button>
-</section>
+</footer>
 
-<aside id="list" class="sheet sheet-left" hidden aria-label="Structures">
-  <div class="sheet-head">
-    <h2>Find a structure</h2>
-    <button class="pill" data-close>Done</button>
+<div class="dialog" id="find" hidden>
+  <div class="dialog-sheet" role="dialog" aria-modal="true" aria-labelledby="find-title">
+    <div class="dialog-head"><h2 id="find-title">Find a structure</h2><button type="button" class="textkey" id="find-close">Close</button></div>
+    <div class="find-field"><input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Femur, liver, biceps, C5, tooth 36" aria-label="Search the structures"><button type="button" class="find-clear" id="search-clear" aria-label="Clear the search" hidden><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <div class="dialog-body tree" id="tree"></div>
   </div>
-  <input id="search" type="search" autocomplete="off" spellcheck="false" placeholder="Search: femur, liver, biceps, C5, tooth 36">
-  <div id="tree" class="tree"></div>
-</aside>
-
-<aside id="about" class="sheet sheet-right" hidden aria-label="About this model">
-  <div class="sheet-head">
-    <h2>About this model</h2>
-    <button class="pill" data-close>Done</button>
-  </div>
-  <div id="about-body" class="prose"></div>
-</aside>
-
-<div id="loader" class="loader">
-  <p class="loader-title">Anatomy</p>
-  <div class="bar-track"><div id="load-bar" class="bar-fill"></div></div>
-  <p id="load-text" class="loader-text">Reading anatomy</p>
 </div>
 
-<script type="module" src="app.js"></script>
+<div class="dialog" id="about" hidden>
+  <div class="dialog-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="dialog-head"><h2 id="about-title">About this data</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="dialog-body about-body">
+      <section>
+        <h3>What the picture is</h3>
+        <p id="ab-intro"></p>
+        <p>It is one adult male reference body, every structure a separate surface model. The colors come from <code translate="no">data/anatomy.json</code> and are a convention of anatomical plates (arteries red, veins blue, bone ivory), not measured tissue colors; the light and the shading are part of the drawing. A faded layer is drawn see-through and ignores taps. Explode moves the parts apart by a display distance from their region&rsquo;s, their group&rsquo;s and their own centers.</p>
+        <p>A selected structure keeps its own color and is outlined in ink. A selection of more than 60 structures, a large group or a region, is tinted toward the selection color in <code translate="no">data/anatomy.json</code> instead; the outline and the tint are display choices. When a structure chosen in Find, or zoomed to, lies behind the layers in front of it, X-ray turns on so it shows, and goes off again when the structure is let go.</p>
+        <h3>The levels beside the body</h3>
+        <p>The column at the left of the picture is this body&rsquo;s own spine used as a ruler, the way anatomy places anything in the trunk: one block per labeled vertebra in the data, C1 at the top and the sacrum, its five fused vertebrae counted as one level, at the foot, each at the height where the camera draws that vertebra, the gaps between them where the discs are. A selected structure gets a bar beside the column from its top to its bottom, and its card and the caption say the same span in words.</p>
+        <p>A level here is a height, read off this one model&rsquo;s spine from the boxes around whole structures, so a long structure spans many levels and an arm hanging beside the trunk has levels too. Levels differ between people by a vertebra or more. A vertebral level is not a spinal cord segment and says nothing about which nerves supply a structure. The blocks are spaced by the vertebrae&rsquo;s centers, not drawn as the vertebral bodies, and above C1 and below the sacrum there are no levels.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <div id="ab-sources"></div>
+        <p>Rendering: three.js r186, MIT License (its text is in vendor/three-LICENSE.txt).</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+        <h3>What is not included</h3>
+        <ul id="ab-gaps"></ul>
+        <p>For learning and reference. Not for diagnosis or clinical use.</p>
+      </section>
+      <section>
+        <h3>How the data gets here, and how to use it</h3>
+        <p>The model was built once by the folder&rsquo;s tools from BodyParts3D 3.0 and 4.0 and travels inside the app; nothing is fetched. The app reads <code translate="no">data/anatomy.json</code> again whenever it comes back to the screen, so names and descriptions edited in Snuggery show.</p>
+        <p>Drag to turn the body, pinch or use the zoom keys to zoom, and drag with two fingers to move it. The words under the title show the body from that layer in, and Front, Back, Left, Right and Top turn the camera. The key that begins Remove the takes the outermost layer off, and Bring back returns it the way it was. Layers sets each layer off, faded or on; Find searches by name, Latin term, vertebra (T7) or tooth number (36).</p>
+        <p>Tap a structure for its card, tap it twice quickly to fly to it, and tap empty space to clear it. On the card, its group and its region select those; Zoom to it flies there, Isolate shows only the selection, X-ray fades everything else, and Hide hides it. Explode and its track pull the body apart; Part, Group and Region set how it comes apart. The camera, the layers, the explode setting, hidden structures and whether the controls are hidden are kept between launches.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<!-- padded by the safe-area insets, so app.js can read them for the camera's fit -->
+<div class="safe-probe" id="safe-probe" aria-hidden="true"></div>
+
+<script type="module" src="./app.js"></script>
 </body>
 </html>

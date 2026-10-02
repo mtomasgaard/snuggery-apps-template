@@ -3,7 +3,7 @@
 BodyParts3D 3.0 (steps 1-5) has 55 vessels, all in the trunk and neck. Release 4.0 models about a thousand
 arterial and venous segments of the same body, down to the vessels of the hands, feet and brain. This step reads
 them from the Human-Atlas package (fetch_atlas.py) and places them on the 3.0 body vertex by vertex with
-atlaslib.BodyMap, because 4.0 moved the head and remodelled the legs. It merges the segments of each named
+atlaslib.BodyMap, because 4.0 moved the head and remodeled the legs. It merges the segments of each named
 vessel into one structure, decimates, and rewrites data/geometry-artery.bin, data/geometry-vein.bin,
 data/geometry.json and data/anatomy.json. Runs after build_full.py and before build_extras.py; re-runnable."""
 import json, os, re, collections
@@ -44,7 +44,8 @@ def region_for(name, c, size, side):
 
 # ---------- names ----------
 RENAME = {'arteria princeps pollicis': 'princeps pollicis artery', 'arteria radialis indicis': 'radialis indicis artery',
-          'hepatic artery proper': 'proper hepatic artery', 'pre-hepatic portal vein': 'prehepatic portal vein'}
+          'hepatic artery proper': 'proper hepatic artery', 'pre-hepatic portal vein': 'prehepatic portal vein',
+          'oesophageal': 'esophageal'}   # the source's British spelling; its own name stays in 'source'
 def nice(n, reg):
     l = n.lower().strip()
     for a, b in RENAME.items(): l = l.replace(a, b)
@@ -90,7 +91,7 @@ def typeof(n, layer, reg):
 DESC = {
  'femoral artery': 'The main artery of the thigh, continuing from the external iliac artery under the inguinal ligament. Its pulse can be felt in the groin.',
  'deep femoral vein': 'The deep vein of the thigh, draining the thigh muscles into the femoral vein.',
- 'lateral circumflex femoral artery': 'Winds round the front of the femur to supply the thigh muscles and the hip joint.',
+ 'lateral circumflex femoral artery': 'Winds around the front of the femur to supply the thigh muscles and the hip joint.',
  'popliteal artery': 'The continuation of the femoral artery behind the knee, where it divides into the anterior and posterior tibial arteries.',
  'popliteal vein': 'Runs behind the knee with the popliteal artery and becomes the femoral vein in the thigh.',
  'anterior tibial artery': 'Runs down the front of the leg between the tibia and fibula and continues onto the foot as the dorsalis pedis artery.',
@@ -103,7 +104,7 @@ DESC = {
  'axillary artery': 'The continuation of the subclavian artery through the armpit, becoming the brachial artery at the lower border of teres major.',
  'axillary vein': 'Formed by the basilic and brachial veins; it drains the arm through the armpit into the subclavian vein.',
  'brachial artery': 'The main artery of the upper arm. It runs along the inside of the biceps and divides at the elbow into the radial and ulnar arteries. Blood pressure is measured over it.',
- 'deep brachial artery': 'Spirals round the back of the humerus with the radial nerve to supply the triceps.',
+ 'deep brachial artery': 'Spirals around the back of the humerus with the radial nerve to supply the triceps.',
  'radial artery': 'Runs down the thumb side of the forearm. Its pulse is felt at the wrist, and it is often used for blood samples and catheters.',
  'ulnar artery': 'The larger of the two forearm arteries, running down the little-finger side to form the superficial palmar arch.',
  'superficial palmar arterial arch': 'An arterial arch across the palm, mainly from the ulnar artery, giving off the common palmar digital arteries to the fingers.',

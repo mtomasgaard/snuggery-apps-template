@@ -5,7 +5,7 @@ the tear glands, the cartilages, ligaments and muscles of the larynx, the pharyn
 salivary glands, the nerves of the orbit, the heart's walls, chambers and each valve cusp, the bronchial tree
 segment by segment, and the bile ducts. This step places them on the 3.0 body with atlaslib.BodyMap (as
 build_vessels.py does), removes the 3.0 lumps they subdivide (eyeballs, heart wall, three valves, bronchial
-tree, nasal cartilages), and files them into layers, regions and groups. It also moves eleven brain structures
+tree, nasal cartilages), and files them into layers, regions and groups. It also moves ten brain structures
 that build_soft.py's name rules put in the muscle layer. It leaves out the 4.0 liver, colon and small intestine:
 4.0 reshaped them, so their parts would not fit the 3.0 organs. Runs after build_vessels.py; re-runnable."""
 import json, os, re, collections
@@ -87,24 +87,24 @@ def ty(k, lat, desc, color=None):
 ty('eye-part', None, 'A part of the eye.', '#f2f0ea')
 ty('cornea', 'Cornea', 'The clear front window of the eye. It does most of the focusing; the lens behind it does the fine adjustment.', '#dfe9ee')
 ty('lens', 'Lens', 'A clear, flexible disc behind the pupil. The ciliary muscle changes its shape to focus on near or far objects; it stiffens with age, which is why reading glasses become necessary.', '#e8eef0')
-ty('iris', 'Iris', 'The coloured ring of muscle around the pupil, which it widens in dim light and narrows in bright light.', '#6b7f8c')
+ty('iris', 'Iris', 'The colored ring of muscle around the pupil, which it widens in dim light and narrows in bright light.', '#6b7f8c')
 ty('sclera', 'Sclera', 'The tough white outer coat of the eyeball, to which the eye muscles attach.', '#f2f0ea')
 ty('eye-choroid', 'Choroidea', 'A layer rich in blood vessels between the sclera and the retina that feeds the outer retina.', '#a15b4a')
 ty('ciliary', 'Corpus ciliare', 'A ring of muscle and folds behind the iris. It focuses the lens through the suspensory ligament and makes the fluid that fills the front of the eye.', '#b48273')
-ty('vitreous', 'Corpus vitreum', 'The clear gel and fluid that fill the eyeball: the aqueous humour in front of the lens and the vitreous body behind it.', '#e4ecef')
+ty('vitreous', 'Corpus vitreum', 'The clear gel and fluid that fill the eyeball: the aqueous humor in front of the lens and the vitreous body behind it.', '#e4ecef')
 ty('retina', 'Retina', 'The light-sensitive lining of the back of the eye, which turns light into nerve signals carried by the optic nerve.', '#c9855f')
 ty('lacrimal', 'Apparatus lacrimalis', 'The tear apparatus: the lacrimal gland above the outer corner of the eye makes tears, which drain from the inner corner through the canaliculi and lacrimal sac into the nasolacrimal duct and the nose.', '#d9b3a6')
 ty('eye-muscle', 'Musculi bulbi', 'One of the small muscles that move the eye or lift the eyelid. Four recti and two obliques turn the eyeball; they are the fastest muscles in the body.')
 ty('cranial-nerve', 'Nervus cranialis', 'A branch of the cranial nerves in the orbit. The ophthalmic nerve and its branches carry feeling from the eye, forehead and nose; the oculomotor and trochlear nerves drive the eye muscles.', '#e8d27a')
-ty('ganglion', 'Ganglion ciliare', 'A small cluster of nerve cells behind the eye. Its fibres, through the short ciliary nerves, narrow the pupil and focus the lens.', '#e8d27a')
+ty('ganglion', 'Ganglion ciliare', 'A small cluster of nerve cells behind the eye. Its fibers, through the short ciliary nerves, narrow the pupil and focus the lens.', '#e8d27a')
 ty('dura', 'Dura mater', 'The tough outer membrane around the brain. The tentorium cerebelli is a fold of it that forms a tent over the cerebellum and holds up the back of the cerebrum.', '#d9c7bd')
 ty('tongue', 'Lingua', 'A muscular organ for tasting, chewing, swallowing and speaking. Its surface carries the papillae with the taste buds.', '#c57a74')
 ty('salivary', 'Glandula salivaria', 'A salivary gland. With the parotid glands, the submandibular and sublingual glands make the saliva that moistens food and begins digesting starch.', '#dcb3a0')
 ty('tongue-muscle', 'Musculi linguae', 'An extrinsic muscle of the tongue. Genioglossus pushes the tongue forward and out; hyoglossus pulls it down.')
-ty('pharynx-muscle', 'Musculi pharyngis', 'A muscle of the pharynx or soft palate. The constrictors squeeze swallowed food downwards; the palate muscles seal off the nose and open the auditory tube when swallowing.')
+ty('pharynx-muscle', 'Musculi pharyngis', 'A muscle of the pharynx or soft palate. The constrictors squeeze swallowed food downward; the palate muscles seal off the nose and open the auditory tube when swallowing.')
 ty('larynx-muscle', 'Musculi laryngis', 'One of the small muscles of the larynx that move its cartilages to open, close and tense the vocal cords, for breathing, swallowing and speech.')
 ty('laryngeal-cartilage', 'Cartilagines laryngis', 'A cartilage of the larynx. The ring-shaped cricoid sits below the thyroid cartilage, and the small arytenoids on top of it pivot to open and close the vocal cords.', '#b2cbd3')
-ty('epiglottis', 'Epiglottis', 'A leaf of elastic cartilage behind the tongue that tips back over the entrance of the larynx when swallowing, so food goes down the oesophagus and not into the airway.', '#b2cbd3')
+ty('epiglottis', 'Epiglottis', 'A leaf of elastic cartilage behind the tongue that tips back over the entrance of the larynx when swallowing, so food goes down the esophagus and not into the airway.', '#b2cbd3')
 ty('heart-cavity', 'Cavitas cordis', 'The space inside a chamber of the heart, shown as the volume of blood it holds. Hidden by default so the valves stay visible; show it from the list.', '#8e2a33')
 ty('bile-duct', 'Ductus biliferi', 'The bile ducts gather bile inside the liver and carry it to the gallbladder, where it is stored, and to the duodenum, where it helps digest fat.', '#6f8a4a')
 ty('larynx-cartilage', 'Cartilago thyroidea', T['larynx-cartilage']['description'])
@@ -112,7 +112,7 @@ DESC = {
  'epiglottis': None,
  'vocal ligament': 'The core of each vocal cord: a band of elastic tissue from the thyroid cartilage to the arytenoid, which vibrates to make the voice.',
  'conus elasticus': 'A membrane of elastic tissue from the cricoid cartilage up to the vocal ligament, which is its free upper edge.',
- 'posterior crico-arytenoid': 'The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outwards, and is essential for breathing.',
+ 'posterior crico-arytenoid': 'The only muscle that opens the vocal cords. It rotates the arytenoid cartilage outward, and is essential for breathing.',
  'oblique part of cricothyroid': 'Part of the cricothyroid, which tilts the thyroid cartilage forward on the cricoid, stretching the vocal cords to raise the pitch of the voice.',
  'straight part of cricothyroid': 'Tilts the thyroid cartilage forward on the cricoid, stretching the vocal cords to raise the pitch of the voice.',
  'thyrohyoid membrane': 'A broad membrane joining the thyroid cartilage to the hyoid bone, pierced by the nerve and vessels of the upper larynx.',
@@ -122,11 +122,11 @@ DESC = {
  'nasolacrimal duct': 'Drains tears from the lacrimal sac into the nose, which is why crying makes the nose run.',
  'ciliary ganglion': None,
  'trochlear nerve': 'The thinnest cranial nerve and the only one to leave the back of the brainstem. It drives the superior oblique muscle of the eye.',
- 'oculomotor nerve': 'Drives four of the six eye muscles and the muscle that lifts the eyelid, and carries the fibres that narrow the pupil.',
+ 'oculomotor nerve': 'Drives four of the six eye muscles and the muscle that lifts the eyelid, and carries the fibers that narrow the pupil.',
  'ophthalmic nerve': 'The first division of the trigeminal nerve, carrying feeling from the eye, the forehead, the scalp and the nose.',
- 'superior oblique': 'Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inwards.',
+ 'superior oblique': 'Runs forward through a cartilage pulley, the trochlea, and turns back to the eyeball, so it rotates the eye down and inward.',
  'levator palpebrae superioris': 'Lifts the upper eyelid.',
- 'wall of ventricle': 'The muscular wall of the two ventricles and the septum between them. The left ventricle’s wall is about three times thicker than the right’s, because it pumps blood round the whole body.',
+ 'wall of ventricle': 'The muscular wall of the two ventricles and the septum between them. The left ventricle’s wall is about three times thicker than the right’s, because it pumps blood around the whole body.',
  'cavity of left ventricle': 'Holds about 120 ml of blood at the end of filling and pushes out about 70 ml with each beat, into the aorta.',
  'cavity of right atrium': 'Receives blood from the whole body through the venae cavae and from the heart itself through the coronary sinus.',
  'main bronchus proper': 'The first branch of the trachea on the right. It is shorter, wider and steeper than the left, so inhaled objects more often lodge on the right.',
@@ -207,18 +207,19 @@ LS = {L['id']: L for L in A['layers']}
 LS['nerve'].update(name='Brain and nerves', description='The brain with its gyri, deep nuclei and fluid-filled ventricles, the tentorium, the optic nerves and the nerves of the orbit. The spinal cord and the peripheral nerves of the body are not part of this dataset.')
 LS['organ']['description'] = 'The internal organs of the chest, abdomen and pelvis, the heart chamber by chamber and valve by valve, the bronchial tree, the eyes with their lens, iris and retina, the tear glands, the tongue and salivary glands, the ears, lips and gums.'
 LS['cartilage']['description'] = 'Intervertebral discs, costal cartilages, the cartilages of the larynx with the epiglottis, and the cartilages of the nose.'
-LS['muscle']['description'] = 'Skeletal muscles pull on bones through tendons to move joints and hold posture, down to the muscles that move the eyes, the tongue, the soft palate and the vocal cords. Tendons, ligaments and fasciae are shown in a paler colour.'
+LS['muscle']['description'] = 'Skeletal muscles pull on bones through tendons to move joints and hold posture, down to the muscles that move the eyes, the tongue, the soft palate and the vocal cords. Tendons, ligaments and fasciae are shown in a paler color.'
 
 A['about'] = {
  'intro': 'A complete adult male body built from real anatomical surface models: skin, muscles, organs, the brain, the arteries and veins and every bone, down to the parts of the eye, the cartilages of the larynx and each cusp of the heart valves. Each structure is a separate object you can select, fade, hide, isolate and pull apart.',
- 'gaps': ['Nerves: the brain, the optic nerves and the nerves of the orbit are modelled, but not the spinal cord or the peripheral nerves of the body.',
-          'Vessels: the arteries and veins stop at the fingers and toes. In the head the arteries of the brain are modelled, but not its veins or the vessels of the face and scalp.',
+ 'gaps': ['Nerves: the brain, the optic nerves and the nerves of the orbit are modeled, but not the spinal cord or the peripheral nerves of the body.',
+          'Vessels: the arteries and veins stop at the fingers and toes. In the head the arteries of the brain are modeled, but not its veins or the vessels of the face and scalp.',
           'Organs: the liver, the colon and the small intestine are single structures without their segments.',
           'Bones: the coccyx, the six ear ossicles and the third molars are missing from the dataset.',
           'The lymphatic system and female anatomy are not part of this model. Bones are outer surfaces only, without marrow.'],
  'sources': ['Geometry: BodyParts3D, © The Database Center for Life Science (DBCLS). The skin, muscles, organs, brain, cartilage and bones are release 3.0 (CC BY-SA 2.1 Japan). The arteries and veins, and the finer structures of the eyes, larynx, pharynx, tongue, heart, airways, bile ducts and orbital nerves, are release 4.0 (CC BY 4.0), by way of the Human-Atlas package by slorksmo, fitted onto the release 3.0 body. Mitsuhashi N. et al., BodyParts3D: 3D structure database for anatomical concepts, Nucleic Acids Research 37 (2009), doi:10.1093/nar/gkn613.',
-             'Adapted: converted from millimetres Z-up to metres Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), release 4.0 structures moved onto release 3.0 by a correction measured from the 591 structures both releases share, segments of each named structure merged into one, positions quantised to 16 bits.',
-             'Rendering: three.js (MIT licence). Type: Atkinson Hyperlegible and Newsreader (SIL Open Font Licence).'],
+             f'Adapted: converted from millimeters Z-up to meters Y-up, vertices welded, simplified (bones with meshoptimizer at about 0.1% maximum error, soft tissue with quadric decimation to a per-layer budget), release 4.0 structures moved onto release 3.0 by a correction measured from the {len(BM.names)} structures both releases share, segments of each named structure merged into one, positions quantized to 16 bits.',
+             # the app's own rendering and type credit, as its About writes it word for word
+             'Rendering: three.js r186, MIT License (its text is in vendor/three-LICENSE.txt). Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.'],
 }
 G = repack(os.path.join(DATA, ''), G, adds)
 G['source'] = 'BodyParts3D 3.0 (DBCLS), simplified; arteries, veins and finer structures from BodyParts3D 4.0'

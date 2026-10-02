@@ -1,25 +1,24 @@
-Anatomy viewer — credits and licences
+Anatomy viewer: credits and licenses
 
 Geometry: BodyParts3D, (c) The Database Center for Life Science (DBCLS).
 - Skin, muscles, organs, brain, cartilage, bones and teeth: release 3.0, licensed under Creative
   Commons Attribution-ShareAlike 2.1 Japan (CC BY-SA 2.1 JP); DBCLS now publishes BodyParts3D under
   CC BY 4.0. https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html
 - Arteries and veins, and the finer structures of the eyes, larynx, pharynx, tongue, orbital nerves,
-  heart, bronchial tree and bile ducts: release 4.0 (isa_BP3D_4.0_obj_99), CC BY 4.0, taken from the browser-ready copy
-  in the Human-Atlas package by slorksmo (https://github.com/slorksmo/Human-Atlas, MIT code, CC BY 4.0
-  data), where they had been simplified with meshoptimizer at 0.2% relative error.
+  heart, bronchial tree and bile ducts: release 4.0 (isa_BP3D_4.0_obj_99), CC BY 4.0, taken from the
+  browser-ready copy in the Human-Atlas package by slorksmo (https://github.com/slorksmo/Human-Atlas,
+  MIT code, CC BY 4.0 data), where they had been simplified with meshoptimizer at 0.2% relative error.
 Mitsuhashi N. et al. BodyParts3D: 3D structure database for anatomical concepts.
 Nucleic Acids Research 37 (2009) D782-D785. doi:10.1093/nar/gkn613
-Adaptations: millimetres Z-up converted to metres Y-up, vertices welded; bones simplified with
+Adaptations: millimeters Z-up converted to meters Y-up, vertices welded; bones simplified with
 meshoptimizer (about 0.1% maximum error per structure), soft tissue simplified with quadric
 decimation (fast-simplification) to a per-layer triangle budget; the release 4.0 structures moved
 onto the release 3.0 body by a correction measured from the structures both releases share, and the
-segments of each named structure merged into one;
-positions quantised to 16 bits. The adapted geometry is shared under the same licences.
+segments of each named structure merged into one; positions quantized to 16 bits. The adapted
+geometry is shared under the same licenses.
 
-Rendering: three.js r186, MIT licence (vendor/three-LICENSE.txt).
-Fonts: Atkinson Hyperlegible, Copyright 2020 Braille Institute of America, Inc.; Newsreader,
-Copyright 2020 The Newsreader Project Authors (github.com/productiontype/Newsreader). Both under the
-SIL Open Font Licence 1.1, whose text is fonts/OFL.txt, as clause 2 of that licence requires.
+Rendering: three.js r186, MIT License (vendor/three-LICENSE.txt).
+Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+The license's text is fonts/OFL.txt, as clause 2 of that license requires.
 
 For learning and reference. Not for diagnosis or clinical use.

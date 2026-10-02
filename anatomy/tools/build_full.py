@@ -1,5 +1,5 @@
 """Step 5: full-body metadata and manifest. Adds soft tissue to data/anatomy.json (layers, regions,
-groups, types with Latin names, descriptions and colours) and merges all geometry into data/geometry.json."""
+groups, types with Latin names, descriptions and colors) and merges all geometry into data/geometry.json."""
 import json, re, os
 from paths import DATA, WORK
 A=json.load(open(os.path.join(DATA,'anatomy.json')))
@@ -22,7 +22,7 @@ PH={'skull':'the head','neck':'the neck','thorax':'the chest','abdomen':'the abd
 # ---------- layers ----------
 A['layers']=[
  {'id':'skin','name':'Skin and hair','short':'Skin','color':'#d7a58b','fade':0.16,'description':'The skin is the largest organ of the body, a waterproof, self-repairing barrier that also senses touch and heat and helps control body temperature.'},
- {'id':'muscle','name':'Muscles and tendons','short':'Muscles','color':'#b0524a','connectiveColor':'#ddd3c3','fade':0.14,'description':'Skeletal muscles pull on bones through tendons to move joints and hold posture. Tendons, ligaments and fasciae are shown in a paler colour.'},
+ {'id':'muscle','name':'Muscles and tendons','short':'Muscles','color':'#b0524a','connectiveColor':'#ddd3c3','fade':0.14,'description':'Skeletal muscles pull on bones through tendons to move joints and hold posture. Tendons, ligaments and fasciae are shown in a paler color.'},
  {'id':'organ','name':'Organs','short':'Organs','color':'#c98a78','fade':0.18,'description':'The internal organs of the chest, abdomen and pelvis, with the eyes, ears, lips and gums.'},
  {'id':'artery','name':'Arteries','short':'Arteries','color':'#c4383b','fade':0.2,'description':'Arteries carry blood away from the heart. This model has the aorta, its main branches in the trunk and neck, the coronary arteries and the pulmonary artery, but not the vessels of the limbs or head.'},
  {'id':'vein','name':'Veins','short':'Veins','color':'#3e62b6','fade':0.2,'description':'Veins return blood to the heart. This model has the venae cavae, the main veins of the trunk and neck, the cardiac veins and the pulmonary veins, but not the veins of the limbs or head.'},
@@ -42,7 +42,7 @@ ty('hair','Pili','Hair grows from follicles in the dermis. It protects the scalp
 ty('muscle',None,'A skeletal muscle. Skeletal muscles pull on bones through tendons to move the joints they cross, and are controlled voluntarily.')
 ty('connective',None,'Dense connective tissue: tendons join muscle to bone, ligaments join bone to bone, and aponeuroses and fasciae spread the pull of muscles over a wide area.')
 ty('heart','Cor','A four-chambered muscular pump about the size of a fist. The right side sends blood to the lungs; the left side sends it to the rest of the body.','#a8413c')
-ty('valve','Valva cordis','A heart valve. Its thin cusps open to let blood through and snap shut to stop it flowing backwards.','#e2c3b4')
+ty('valve','Valva cordis','A heart valve. Its thin cusps open to let blood through and snap shut to stop it flowing backward.','#e2c3b4')
 ty('papillary','Musculus papillaris','A finger-like muscle on the inner wall of a ventricle. Through tendinous cords it holds the cusps of the valve closed while the heart contracts.','#b85a50')
 ty('lung','Pulmo','A lobe of the lungs, where oxygen passes into the blood and carbon dioxide leaves it. The right lung has three lobes, the left lung two, leaving room for the heart.','#e0a5a1')
 ty('bronchus','Arbor bronchialis','The bronchi branch from the trachea into each lung, dividing again and again down to the tiny airways that end in air sacs.','#e7cfc2')
@@ -50,16 +50,16 @@ ty('trachea','Trachea','The windpipe, held open by C-shaped rings of cartilage. 
 ty('esophagus','Oesophagus','A muscular tube about 25 cm long that pushes swallowed food from the throat to the stomach in waves.','#d49a86')
 ty('stomach','Gaster','A muscular sac that stores food and churns it with acid and enzymes before passing it on to the duodenum.','#d8917d')
 ty('duodenum','Duodenum','The first part of the small intestine, a C-shaped loop around the head of the pancreas. Bile and pancreatic juice enter it here.','#dca489')
-ty('small-intestine','Intestinum tenue','The jejunum and ileum, about six metres of coiled tube in which most nutrients are absorbed.','#dca489')
-ty('colon','Colon','The large intestine absorbs water and salts from what remains of digested food and forms faeces.','#c99479')
+ty('small-intestine','Intestinum tenue','The jejunum and ileum, about six meters of coiled tube in which most nutrients are absorbed.','#dca489')
+ty('colon','Colon','The large intestine absorbs water and salts from what remains of digested food and forms feces.','#c99479')
 ty('taenia','Taenia coli','Three bands of longitudinal muscle along the colon. They are shorter than the colon itself, which gathers it into pouches.','#b98068')
 ty('appendix','Appendix vermiformis','A narrow, finger-like pouch from the start of the large intestine, rich in lymphoid tissue.','#c99479')
-ty('rectum','Rectum','The last part of the large intestine, which stores faeces before they leave the body.','#c99479')
+ty('rectum','Rectum','The last part of the large intestine, which stores feces before they leave the body.','#c99479')
 ty('liver','Hepar','The largest internal organ. It processes nutrients from the gut, makes bile and many blood proteins, stores energy and breaks down toxins.','#7c3a2e')
 ty('gallbladder','Vesica biliaris','A small pear-shaped sac under the liver that stores and concentrates bile.','#6f8a4a')
 ty('pancreas','Pancreas','A gland behind the stomach. It releases digestive enzymes into the duodenum and the hormones insulin and glucagon into the blood.','#e0b48c')
 ty('spleen','Splen','Filters the blood, removes worn-out red blood cells and stores immune cells.','#6e3040')
-ty('kidney','Ren','Each kidney filters about 180 litres of blood plasma a day, keeping what the body needs and passing the rest to the bladder as urine.','#8c3c33')
+ty('kidney','Ren','Each kidney filters about 180 liters of blood plasma a day, keeping what the body needs and passing the rest to the bladder as urine.','#8c3c33')
 ty('adrenal','Glandula suprarenalis','A gland on top of each kidney that makes adrenaline, cortisol and aldosterone.','#d6a157')
 ty('ureter','Ureter','A muscular tube that carries urine from a kidney to the bladder.','#d6b2a0')
 ty('bladder','Vesica urinaria','A stretchy muscular sac that stores urine.','#d6b2a0')
@@ -77,17 +77,17 @@ ty('lips','Labia oris','The lips surround the mouth. They are used in speech, ea
 ty('pituitary','Hypophysis','A pea-sized gland under the brain that controls many other glands through the hormones it releases.','#d6a157')
 ty('pineal','Glandula pinealis','A small gland in the middle of the brain that releases melatonin, which helps set the daily sleep–wake rhythm.','#d6a157')
 ty('pancreatic-duct','Ductus pancreaticus','Carries digestive juice from the pancreas to the duodenum.','#e6c9a4')
-ty('cortex','Gyrus cerebri','A fold of the cerebral cortex. The folds greatly increase its surface area; different gyri specialise in movement, sensation, language, vision and planning.')
+ty('cortex','Gyrus cerebri','A fold of the cerebral cortex. The folds greatly increase its surface area; different gyri specialize in movement, sensation, language, vision and planning.')
 ty('brain-lobe','Lobus cerebri','A lobe of the cerebral hemisphere.')
 ty('cerebellum','Cerebellum','Coordinates movement, balance and posture, and fine-tunes motor learning.','#d9aea4')
 ty('brainstem','Truncus encephali','The brainstem connects the brain to the spinal cord and controls breathing, heart rate and many reflexes.','#dcb9a6')
 ty('diencephalon','Diencephalon','Deep structures around the third ventricle. The thalamus relays sensory information to the cortex; the hypothalamus controls hunger, thirst, temperature and hormones.','#d9a9a0')
-ty('basal','Nuclei basales','Deep grey matter involved in starting and controlling movement and in habits and reward.','#c99790')
+ty('basal','Nuclei basales','Deep gray matter involved in starting and controlling movement and in habits and reward.','#c99790')
 ty('limbic','Systema limbicum','Part of the limbic system, involved in memory and emotion.','#d19c95')
-ty('white-matter','Substantia alba','Bundles of nerve fibres connecting different parts of the brain.','#efe4d8')
+ty('white-matter','Substantia alba','Bundles of nerve fibers connecting different parts of the brain.','#efe4d8')
 ty('ventricle','Ventriculus','A space inside the brain filled with cerebrospinal fluid, which cushions the brain and carries nutrients and waste.','#8fb7d6')
 ty('choroid','Plexus choroideus','Tufts of blood vessels in the ventricles that produce cerebrospinal fluid.','#c56c6c')
-ty('optic','Nervus opticus','Carries visual signals from the eye. The two optic nerves meet at the optic chiasm, where half of the fibres cross, and continue as the optic tracts.','#e8d27a')
+ty('optic','Nervus opticus','Carries visual signals from the eye. The two optic nerves meet at the optic chiasm, where half of the fibers cross, and continue as the optic tracts.','#e8d27a')
 ty('colliculus','Colliculus','A small mound on the back of the midbrain. The superior colliculi help steer the eyes; the inferior colliculi relay hearing.','#dcb9a6')
 ty('artery',None,'An artery. Its thick muscular wall carries blood away from the heart under high pressure.')
 ty('aorta','Aorta','The largest artery. It leaves the left ventricle, arches over the heart and runs down through the chest and abdomen, giving branches to the whole body.')
@@ -149,7 +149,7 @@ for d in soft:
     if side: p['side']=side
     A['parts'].append(p)
 A['groups']=list(G.values())
-A['_about']="Names, descriptions, layers and colours used by the anatomy viewer. Edit freely; the app reloads this file when it regains focus. Geometry lives in the geometry-*.bin files and is matched by id. A part can override its colour with \"color\" and its text with \"description\"."
+A['_about']="Names, descriptions, layers and colors used by the anatomy viewer. Edit freely; the app reloads this file when it regains focus. Geometry lives in the geometry-*.bin files and is matched by id. A part can override its color with \"color\" and its text with \"description\"."
 json.dump(A,open(os.path.join(DATA,'anatomy.json'),'w'),indent=1,ensure_ascii=False)
 from collections import Counter
 print(len(A['parts']),'parts;',Counter(p['layer'] for p in A['parts']))

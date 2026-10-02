@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "Anatomy",
   "entryPoint": "index.html",
-  "description": "A full human body in 3D: about 1,750 real anatomical models in layers you can peel, fade, isolate and explode, down to the vessels of the hands and feet, the parts of the eye and each cusp of the heart valves.",
-  "version": "3.2"
+  "description": "A human body in 3D: 1 752 real anatomical structures in nine layers to peel, fade, isolate and pull apart, each placed against the model's own spine.",
+  "version": "4.0"
 }
