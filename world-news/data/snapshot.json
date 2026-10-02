@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T05:01:21Z",
+ "generatedAt": "2026-10-02T06:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why a decade of AI safety promises keep failing to bite",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-a-decade-of-ai-safety-promises-keep-failing-to-bite-293342",
+     "published": "2026-10-02T04:42:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jon Whittle, Professorial Fellow (Artificial Intelligence), Melbourne Business School, The University of Melbourne"
+    },
+    {
      "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Bjørn Nansen, Associate Professor, School of Computing and Information Systems, The University of Melbourne"
-    },
-    {
-     "title": "Are Australia’s native bees thriving or declining? We don’t know but can find out",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/are-australias-native-bees-thriving-or-declining-we-dont-know-but-can-find-out-292219",
-     "published": "2026-10-02T02:00:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Scarlett Howard, Research Fellow, School of Biological Sciences, Monash University"
     },
     {
      "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why a decade of AI safety promises keep failing to bite",
+   "published": "2026-10-02 04:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
    "published": "2026-10-02 03:51 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "What should parents consider when tracking their child’s location?",
    "published": "2026-10-02 03:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Are Australia’s native bees thriving or declining? We don’t know but can find out",
-   "published": "2026-10-02 02:00 UTC"
   },
   {
    "region": "Oceania",
