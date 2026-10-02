@@ -336,7 +336,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 
 // 16. US spelling in every shipped text file, the data's own text included
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|litres?|fibres?|behaviour\w*|recognis\w*|organis\w*|quantis\w*|optimis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|humour\w*|defence|labelled|labelling|modelled|modelling|remodelled|towards|(?:down|up|out|in|back)wards|grey|favour\w*|catalogue\w*|for ever|visualis\w*|initialis\w*|dequantis\w*|speciali[sz]e\w*|faeces|plough\w*|oesophag\w*)\b/i;
+  const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|litres?|fibres?|behaviour\w*|recognis\w*|organis\w*|quantis\w*|optimis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|humour\w*|defence|labelled|labelling|modelled|modelling|remodelled|towards|(?:down|up|out|in|back)wards|grey|favour\w*|catalogue\w*|for ever|visualis\w*|initialis\w*|dequantis\w*|speciali[sz]e\w*|faeces|plough\w*|oesophag\w*)\b/i;
   const hits = [];
   for (const f of texts.filter((x) => !x.startsWith('data/') && x !== 'fonts/OFL.txt' && !x.startsWith('vendor/'))) {
     read(f).split('\n').forEach((line, i) => { const m = line.match(BRIT); if (m) hits.push(`${f}:${i + 1} ${m[0]}`); });

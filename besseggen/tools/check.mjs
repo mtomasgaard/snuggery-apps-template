@@ -333,7 +333,7 @@ ok(zsize <= 21088756, `ZIP size ${fmt(zsize)} bytes (budget 21,088,756: 16,871,0
 
 // 17. US spelling in every shipped text file but data/ (pipeline output) and fonts/OFL.txt (upstream)
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi|deci)?metres?|behaviour\w*|recognis\w*|normalis\w*|quantis\w*|serialis\w*|optimis\w*|generalis\w*|initialis\w*|rasteris\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|modelled|modelling|for ever)\b/i;
+  const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi|deci)?metres?|behaviour\w*|recognis\w*|normalis\w*|quantis\w*|serialis\w*|optimis\w*|generalis\w*|initialis\w*|rasteris\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|modelled|modelling|for ever)\b/i;
   // the data's own keys, which the code must spell as the data does (about.json's license key)
   const DATA_WORDS = /\b(b|t|tr|md|pn)\.licence\b|'quantisation'/g;
   const hits = [];

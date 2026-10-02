@@ -305,7 +305,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 
 // 16. US spelling in every shipped text file; the data's own words excepted by file and word
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|for ever|organis\w*|visualis\w*|initialis\w*)\b/i;
+  const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|for ever|organis\w*|visualis\w*|initialis\w*)\b/i;
   // data/ATTRIBUTION.txt is the data's own statement (its "licence", "metres" and "neighbours" stay);
   // the cell connections file is named neighbours.bin, so model.json's key and the code that reads
   // it keep the word; fonts/OFL.txt is the upstream license, quoted whole.

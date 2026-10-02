@@ -734,3 +734,8 @@ before the pass; the reticle's and the steering ring's halo over Pinewood Pass's
 theme; the title on its side, its two rows of faces under a thumb, on an iPhone SE (667 × 375) and
 on a notched iPhone, whose side insets the emulation above only assumed; the safe areas of every
 band with the status bar showing.
+
+### The lead's note after the recompose (2026-10-02)
+
+`screenshots/app.png`, the README's picture, was recomposed by the lead from the marketing camera's two panes (the title and a race, `Tools/compose-readme.py snug-kart`), so `check.mjs` item 18 now pins the new file's sha256 (`3d369cbe…`); the pin says so. The family-wide spelling check also learned `judgement` (Running Dashboard's final found the word; no shipped text of this app carries it).
+

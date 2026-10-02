@@ -302,7 +302,7 @@ ok(zsize <= 720806 && zsize < 3 * 2 ** 20, `ZIP size ${fmt(zsize)} bytes (cap 72
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole;
 // the track's name "Harbour Loop", its id and ground `harbour` and the identifiers that read them are data)
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|initialis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|for ever|cosy|kerbs?|tyres?)\b/i;
+  const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|initialis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|for ever|cosy|kerbs?|tyres?)\b/i;
   const DATA_NAMES = /Harbour Loop|`harbour`|'harbour'|"harbour"|harbourProps|race-harbour|best:harbour/g;
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
@@ -312,7 +312,7 @@ ok(zsize <= 720806 && zsize < 3 * 2 ** 20, `ZIP size ${fmt(zsize)} bytes (cap 72
 }
 
 // 18. The README's picture
-ok(sha('screenshots/app.png') === '6568ae797c44d88b07c0d4204c0361b9e9b3680c435ef13e046de2ff3629239c', 'screenshots/app.png (the README\'s picture) unchanged');
+ok(sha('screenshots/app.png') === '3d369cbeb93ec2ea3178edb3408c5b1f8f90fda49a939d2768dc53ee762d665e', 'screenshots/app.png (the README\'s picture, recomposed by the lead on 2026-10-02 from the camera\'s panes) unchanged');
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }
 console.log('\nall checks pass');

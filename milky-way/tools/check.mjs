@@ -330,7 +330,7 @@ ok(zsize <= 8156512, `ZIP size ${fmt(zsize)} bytes (budget 8,156,512: 6,525,210 
 
 // 17. US spelling in every shipped text file (data/ and CREDITS.txt quote their sources; OFL.txt is upstream)
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|behaviour\w*|recognis\w*|normalis\w*|quantis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|modelled|for ever)\b/i;
+  const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|behaviour\w*|recognis\w*|normalis\w*|quantis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|modelled|for ever)\b/i;
   // the data's own names and keys, which the code must spell as the data does
   const DATA_WORDS = /colour\.json|named\.colour|textures\.colours|quantisation_pc|\['licence', 'License'\]|gal:centre|(?:json|this|small|sb)\.labelled|planetCentre|moonFromCentre|_moonCentre|pixelCentre|jdCentre/g;
   const hits = [];

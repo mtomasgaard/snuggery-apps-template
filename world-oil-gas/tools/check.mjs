@@ -299,7 +299,7 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 2,068,0
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The
 // data's words are the sources' and are printed as data: allowed by file and word, nowhere else.
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|synchronis\w*|ellipsis(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|for ever)\b/gi;
+  const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|synchronis\w*|ellipsis(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|for ever)\b/gi;
   const ALLOW = { 'data/fields.json': ['Harbour', 'Greys', 'Greymouth', 'Greylock'] };   // operators, owners and places, as the tracker spells them
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
