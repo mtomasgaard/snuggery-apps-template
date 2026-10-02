@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T18:01:30Z",
+ "generatedAt": "2026-10-02T19:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/cornell-7-case-puts-a-spotlight-on-fraternity-misconduct-and-the-limits-of-universities-power-to-stop-it-293305",
+     "published": "2026-10-02T18:10:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Pietro A. Sasso, Associate Professor of Education, Old Dominion University"
+    },
+    {
      "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Tzachi Zach, Professor of Accounting, The Ohio State University"
-    },
-    {
-     "title": "White nationalism’s appeal runs deeper than partisan politics",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/white-nationalisms-appeal-runs-deeper-than-partisan-politics-292676",
-     "published": "2026-10-02T12:49:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Patrick Egan, Professor of Politics & Public Policy, New York University"
     },
     {
      "title": "No more execution attempts on Christa Pike: UN rights chief",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
-   "published": "2026-10-02 12:50 UTC"
+   "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
+   "published": "2026-10-02 18:10 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "White nationalism’s appeal runs deeper than partisan politics",
-   "published": "2026-10-02 12:49 UTC"
+   "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
+   "published": "2026-10-02 12:50 UTC"
   },
   {
    "region": "Americas",
