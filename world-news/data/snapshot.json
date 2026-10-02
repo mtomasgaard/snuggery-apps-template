@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-02T10:01:21Z",
+ "generatedAt": "2026-10-02T11:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Olympe Bhêly-Quenum a 100 ans : l’écrivain béninois qui a élargi les frontières de la francophonie",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/olympe-bhely-quenum-a-100-ans-lecrivain-beninois-qui-a-elargi-les-frontieres-de-la-francophonie-293229",
+     "published": "2026-10-02T10:02:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christophe Premat, Professor, Canadian and Cultural Studies, Stockholm University"
+    },
+    {
      "title": "The sound of resistance",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Kimberley Simpson, Research Fellow, School of Biosciences, University of Sheffield"
-    },
-    {
-     "title": "Ecowas Court and women’s rights in west Africa: what’s working – and what isn’t",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/ecowas-court-and-womens-rights-in-west-africa-whats-working-and-what-isnt-291919",
-     "published": "2026-10-01T13:47:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Maame Efua Addadzi-Koom, Senior Lecturer, Kwame Nkrumah University of Science and Technology (KNUST)"
     },
     {
      "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Olympe Bhêly-Quenum a 100 ans : l’écrivain béninois qui a élargi les frontières de la francophonie",
+   "published": "2026-10-02 10:02 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
@@ -776,12 +782,6 @@
    "region": "Africa",
    "source": "The Conversation",
    "title": "Rising CO₂ is making African savanna grasses grow more – what this means for grazing, fire and carbon storage",
-   "published": "2026-10-01 13:47 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Ecowas Court and women’s rights in west Africa: what’s working – and what isn’t",
    "published": "2026-10-01 13:47 UTC"
   },
   {
