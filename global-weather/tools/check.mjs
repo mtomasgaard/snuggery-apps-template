@@ -259,7 +259,7 @@ ok(zsize <= 2800000, `ZIP size ${fmt(zsize)} bytes (budget 2,800,000)`);
 
 // 16. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole)
 {
-  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue|for ever)\b/i;
+  const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey|favour\w*|catalogue\w*|for ever)\b/i;
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt' && x !== 'data/snapshot.json')) {
     read(f).split('\n').forEach((line, i) => {

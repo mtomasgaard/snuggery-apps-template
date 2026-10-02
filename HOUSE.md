@@ -1214,11 +1214,13 @@ device they need, for the lead to put in the device matrix (DESIGN 612-622; DEC 
   Live's is 3 730 B), so without it the rule could not be met by any pass that vendors the face. An
   app that swaps its faces for the house's needs no allowance: the house's 40 075 B replace 87 680 B
   of Atkinson Hyperlegible and Newsreader, or 74 128 B of Geist.
-- **An app's own budgets stay**, and the tighter one wins. World Oil & Gas holds its `app.js` to
-  150 KB and each data file to its own cap (`world-oil-gas/NOTES.md` lines 60-62); Shelf Atlas holds
-  its app code to 150 KB and its data files likewise (`shelf-atlas/NOTES.md` lines 67-69), tighter
-  than the house's 200 000 B; Snug Kart keeps its ZIP under 3 MB and its frames inside their
-  draw-call and triangle budgets (`snug-kart/tools/check.mjs` line 113; `snug-kart/NOTES.md`).
+- **An app's own budgets stay**, and the tighter one wins — when the app actually enforces it. World
+  Oil & Gas holds its `app.js` to 150 KB and each data file to its own cap (`world-oil-gas/NOTES.md`
+  lines 60-62); Shelf Atlas's `NOTES.md` said 150 KB of app code too, but no build or check ever
+  enforced it, so the lead ruled the house's 200 000 B for its pass (plan 0011 D15; its data caps
+  stay, and its `check.mjs` now enforces all of them); Snug Kart keeps its ZIP under 3 MB and its
+  frames inside their draw-call and triangle budgets (`snug-kart/tools/check.mjs` line 113;
+  `snug-kart/NOTES.md`).
 
 **The figures today** (*measured* 2026-10-01 on the working tree: each folder zipped by the
 `build-zips.yml` command, `zip -q -r -X … . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*'
@@ -1234,7 +1236,7 @@ figures into its `ART.md`.
 | Besseggen | 16 854 391 (after its pass; the record left `ART.md` on 2026-10-02; NOTES.md's own figure is approximate because it ships inside the ZIP) | 21 088 756 | 226 787 of 227 000 (the lead's ruling, D11) | 40 075 |
 | Norne Reservoir | 15 354 792 (after its pass) | 19 110 591 | 161 833 | 40 075 |
 | Anatomy | 24 552 764 (after its pass) | 30 692 577 | 116 467 | 40 075 |
-| Shelf Atlas | 1 900 237 † | 2 413 130 | 139 305 | 0 |
+| Shelf Atlas | 1 979 297 (after its pass) | 2 413 130 | 183 795 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
 | World Oil & Gas | 2 068 029 † | 2 622 870 | 165 162 | 0 |
 | Snug Kart | 546 378 | 720 806 | **220 070, over** | 0 |
 | Running Dashboard | 1 072 155 | 1 340 193 | **236 521, over** | 74 128 |

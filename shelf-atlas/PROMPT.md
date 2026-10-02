@@ -10,8 +10,9 @@ Shelf Atlas is the North Sea and the Norwegian shelf as the four regulators
 publish it: 1,200 field outlines, 2,100 platforms and subsea structures, 1,300
 pipelines, the maritime boundaries and the seabed, with a monthly player from
 1971 to the newest reported month. A circle on each producing field carries
-its rate that month, or its volume to date in cumulative mode; tap it for the
-operator, discovery year, status history and a sparkline of its whole life.
+its rate that month, or its volume to date in cumulative mode, and a thin ink
+ring marks each field's best month so far; tap it for its figure, its best month
+and its operator, and Details for its status history and a chart of its whole life.
 The data is fetched from Sodir, the NSTA, the Danish Energy Agency, GEUS and
 NLOG, none of which needs a key or an account.
 
@@ -89,15 +90,15 @@ figures. The outlines, pipelines and depth raster (`geo.json`, `bathy.png`)
 change a few times a year; when the build commits a new `geo.json`, the ZIP
 is rebuilt, and the app picks the new outlines up when you replace it (Safari
 → the ZIP's address → Share → Snuggery → **Replace the app**). Until then a
-new field is drawn as a point at the regulator's field centre.
+new field is drawn as a point at the regulator's field center.
 
 ## Making it yours
 
 In rough order of how often people want them:
 
 - **Fewer countries.** `--countries NO` (or any subset) on the build, or the
-  workflow's `countries` input. The app's country chips follow whatever the
-  snapshot carries.
+  workflow's `countries` input. The countries in the app's Map layers sheet
+  follow whatever the snapshot carries.
 - **A different box.** `BBOX` in `scripts/shelf_atlas/build_north_sea.py`
   is `[-6, 50.5, 32, 73]`, the whole Norwegian shelf; `HOME` in `app.js` is
   the North Sea proper, where the map opens. Narrow the box to shrink the
@@ -109,9 +110,15 @@ In rough order of how often people want them:
 - **Simplification and budgets.** The Visvalingam thresholds and the file
   budgets are constants at the top of `build_north_sea.py`; the build fails
   rather than ship over budget.
-- **What the sheet says.** Every honesty note (Danish delineations, series
+- **What the screen says.** Every honesty note (Danish delineations, series
   that start late, uneven newest month) is a string in `app.js`, next to the
-  rule that triggers it.
+  rule that triggers it: the caption line under the map, the field's details
+  and About. Numbers and dates go through `js/units.js`, which keeps SI units
+  first and the field units one press away.
+- **The look.** `ART.md` is the app's look on the template's house system; its
+  colors come from `tools/art/palette.py` (run from the template's root, `--json`
+  pasted into `THEMES` in `app.js`), and `node tools/check.mjs` says when a change
+  breaks a rule or a budget.
 
 If a regulator moves a file, the build stops with a `BUILD FAILED:` line
 naming the table and what it found. `.github/workflows/probe-shelf-atlas.yml`

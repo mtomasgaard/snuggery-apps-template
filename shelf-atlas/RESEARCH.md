@@ -1,4 +1,4 @@
-# Research: sources, licences and decisions for Shelf Atlas and World Oil & Gas
+# Research: sources, licenses and decisions for Shelf Atlas and World Oil & Gas
 
 Two Snuggery apps built from one pipeline (`scripts/shelf_atlas/`):
 
@@ -44,7 +44,7 @@ Path2D objects; a month change is a recolour, never a rebuild.
 
 ### Geometry simplification and size budget
 No mapshaper and no GDAL: a **Visvalingam–Whyatt** implementation in `common.py` with a threshold in
-square metres (lat-aware), so a field outline is simplified the same way at 52°N and 62°N. Thresholds:
+square meters (lat-aware), so a field outline is simplified the same way at 52°N and 62°N. Thresholds:
 coast/land/bathymetry 8,000 m², field outlines 2,500 m², pipelines 6,000 m². Pipeline pieces under
 3 km (risers, spools, jumpers) are dropped, as are umbilicals, cables and control lines, and UK
 pipelines whose fluid is not a hydrocarbon (seawater, chemicals). Coordinates are packed with Google's
@@ -56,7 +56,7 @@ polyline encoding at four decimals (~6–11 m). Budgets enforced by the build: `
   (`https://ows.emodnet-bathymetry.eu/wcs`, coverage `emodnet:mean`, GeoTIFF float32 of mean
   depth). The server reads the source grid at full resolution for every request and refuses more
   than ~98 MB, so the box is fetched as 104 tiles of 3°×3° at 0.03°×0.015° (about 2 km) and
-  mosaicked. The pipeline resamples the rows to Web Mercator and writes an **8-bit greyscale PNG**
+  mosaicked. The pipeline resamples the rows to Web Mercator and writes an **8-bit grayscale PNG**
   (`shelf-atlas/data/bathy.png`, v = 255·√(depth/3000), 0 = land) that the app tints per theme
   with a lookup table and draws with one `drawImage`. Budget 1.2 MB. Natural Earth's 200 m
   polygons are kept as a fallback when the raster is absent.
@@ -88,19 +88,19 @@ fewer boe than its reported bbl/d. The app says so in About. GOGET's own million
 m³/y are converted to bbl/d and to boe/d at 159 Sm³ per boe (Sodir's 1000:1 o.e. rule times 6.29).
 
 ### Field-name matching across sources
-Names are normalised to upper-case letters and digits (`STATFJORD ØST` → `STATFJORDOST`). A name
+Names are normalized to upper-case letters and digits (`STATFJORD ØST` → `STATFJORDOST`). A name
 appearing in two regulators' data is a **candidate** cross-border unit. It becomes a **group** only
 if listed in `CROSS_BORDER` in `build_north_sea.py`, which also carries the published national
 shares (Statfjord 85.47/14.53, Frigg 60.82/39.18, Murchison 22.2/77.8, Blane, Enoch, Playfair,
 Markham). Each member keeps its own series (each regulator reports its national share only), the app
-colours each member by its own share and the field sheet shows the summed unit. Candidates that are
+colors each member by its own share and the field sheet shows the summed unit. Candidates that are
 not confirmed are listed under `snapshot.matching.crossBorderCandidates` and drawn separately.
 Fields dropped for lack of any geometry are listed by name in `snapshot.matching.dropped`; nothing
 is dropped silently.
 
 GOGET names are not matched to regulator names at all: the world app shows GOGET as GOGET, with
-its own ids, and the North Sea app shows the regulators' data. Reconciling the two catalogues is a
-research project (GOGET units are often unitised areas, licences or "complexes"), and a bad merge
+its own ids, and the North Sea app shows the regulators' data. Reconciling the two catalogs is a
+research project (GOGET units are often unitized areas, licenses or "complexes"), and a bad merge
 would be worse than two honest layers.
 
 ### Refresh cadence
@@ -112,7 +112,7 @@ would be worse than two honest layers.
 
 ### Map box: the North Sea, plus the whole Norwegian shelf
 The first build used a North Sea box (lon −6…12, lat 50.5…63) and dropped 38 Norwegian fields north
-of it — Draugen, Heidrun, Åsgard's neighbours, Ormen Lange, Snøhvit, Goliat, Johan Castberg. They
+of it — Draugen, Heidrun, Åsgard's neighbors, Ormen Lange, Snøhvit, Goliat, Johan Castberg. They
 come free with Sodir's data and a user tapping "Norway" expects them, so the box is now
 lon −6…32, lat 50.5…73 (`BBOX` in `build_north_sea.py`); the app opens on the North Sea proper and
 pans north. The Natural Earth basemap for the larger box costs ~150 KB more.
@@ -122,7 +122,7 @@ PPRS reports per *unit*, not per field: `BRAE-CENTRAL [Part of BRAE]`, `LEMAN [S
 `INDEFATIGABLE [PERENCO]`. NSTA's outline layer knows only `BRAE`, `LEMAN`, `INDEFATIGABLE`. The
 build folds a unit into its field: a `[Part of X]`/`[pt. of X]` tag names the parent, any other
 bracket (an operator) is dropped, and the units' months are summed. 45 PPRS names had no outline
-before this; most now do, and the rest get their point from the PPRS field-centre geometry.
+before this; most now do, and the rest get their point from the PPRS field-center geometry.
 
 ### Cross-border median lines
 From Marine Regions (VLIZ) v12, filtered to lines whose two territories are both among Norway, UK,
@@ -149,7 +149,7 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   exist too (not used); `prlArea` is 404.
 - **FactMaps** REST/WFS at `factmaps.sodir.no` (WGS84 service, 97 feature types) works and is the
   alternative if the shapefile downloads move; not used because the shapefiles are one request each.
-- **Licence: NLOD 2.0** (Norwegian Licence for Open Government Data). Required attribution:
+- **License: NLOD 2.0** (Norwegian Licence for Open Government Data). Required attribution:
   *"Contains data under the Norwegian licence for Open Government data (NLOD) distributed by the
   Norwegian Offshore Directorate."* Changes must be indicated (they are: datum shift, simplification,
   unit conversion).
@@ -159,7 +159,7 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
 ### 2.2 United Kingdom — NSTA (North Sea Transition Authority)
 - The old `data.nstauthority.co.uk` ArcGIS server **no longer resolves in DNS** and the old hub
   (`opendata-nstauthority.hub.arcgis.com`) search API returns global ArcGIS results. NSTA's data now
-  lives in ArcGIS Online organisation `OZMfUznmLTnWccBc`:
+  lives in ArcGIS Online organization `OZMfUznmLTnWccBc`:
   `https://services-eu1.arcgis.com/OZMfUznmLTnWccBc/arcgis/rest/services` (listing works with `?f=pjson`),
   hub at `https://open-data-ukcs-transition.hub.arcgis.com/`.
 - Layers used (all WGS84; the layer id inside a service is read at build time because NSTA
@@ -172,12 +172,12 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   - `UKCS offshore infrastructure surface points WGS84` layer 1 — 309 surface structures: `NAME, INF_TYPE (FPSO, PLATFORM…), STATUS, REP_GROUP, START_DATE, END_DATE, PIPE_SYS`
   - `UKCS_offshore_infrastructure_subsea_points_(WGS84)` layer 1 — 20,004 points (every wellhead and PLET); the build keeps manifolds, templates and production systems only.
   - Not used: `Offshore_petroleum_fields_daily_production_(WGS84)` (40 fields with daily data as zipped downloads), `SDC_infrastructure_*` (decommissioning survey, 567 pipelines / 6,724 points, a subset).
-- **Licence: NSTA Open User Licence** (the "North Sea Transition Authority User Agreement", June
+- **License: NSTA Open User Licence** (the "North Sea Transition Authority User Agreement", June
   2023, `https://www.nstauthority.co.uk/media/u51lhvio/nsta-user-agreeement-june-2023.pdf`).
   Worldwide, royalty-free, perpetual: copy, publish, distribute, transmit, adapt, and *"exploit the
   Information non-commercially"*. Required attribution: *"Contains information provided by the North
   Sea Transition Authority and/or other third parties."* Some layers are additionally marked Open
-  Government Licence. **Read this as: fine for this app and for a public repository; not a licence
+  Government Licence. **Read this as: fine for this app and for a public repository; not a license
   to sell a product built on it.** Noted in LICENSE.
 - **Cadence:** PPRS about two months in arrears; GIS layers as republished (layer names carry the date).
 
@@ -222,7 +222,7 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   evenly over its twelve months and sets `monthlyFrom` on every Danish field so the app can say so.
 - **Pipelines: none.** The Agency publishes no pipeline geometry, GEUS has none, and EMODnet's
   Danish pipelines are five onshore heating lines. Known gap (see HANDOFF.md).
-- **Licence:** the data pages carry no licence statement at all. The Agency is a public authority
+- **License:** the data pages carry no license statement at all. The Agency is a public authority
   and this is statutory reporting under the Danish Subsoil Act, reusable under the Danish PSI Act
   (lov om videreanvendelse af den offentlige sektors informationer). Treated as free to reuse with
   attribution ("Danish field data: Danish Energy Agency"); flagged as an assumption in LICENSE.
@@ -250,10 +250,10 @@ line, joint regime). Neither Sodir's nor NSTA's public layers carry a clean boun
   in the Norwegian sector (Ula–Ekofisk), which would duplicate Sodir's; the build keeps only lines
   that touch the Dutch sector (a vertex south of 56°N). The facility layer includes wind farms
   and geothermal sites, which are dropped, and subsea structures, which are flagged` with `medium, status, operator, size_in, from_loc, to_loc`.
-- **Licence:** NLOG's disclaimer: *"NLOG.NL does not claim any rights (except domain names,
+- **License:** NLOG's disclaimer: *"NLOG.NL does not claim any rights (except domain names,
   trademark rights, patents and other intellectual property rights) in respect of information
   provided on or through this site"* — public information under the Mining Act. No formal open
-  licence; attribution given.
+  license; attribution given.
 - **Cadence:** monthly figures published within about two months.
 
 ### 2.4a Netherlands — result of the first build
@@ -285,7 +285,7 @@ or produced before 2003. The national gas total for 2024 comes out at 8.9 bcm, a
 - **Natural Earth I with shaded relief, hypsometric tints and water, 1:50m** (`NE1_50M_SR_W.zip`,
   ~90 MB from `naciscdn.org`; public domain): the basemap raster. The build resamples the
   10,800 × 5,400 TIFF to 4,096 × 2,048 plate carrée with Pillow and writes `data/relief.jpg`
-  (~0.8 MB at quality 72). Chosen over the grey `SR_50M` (relief only) because the hypsometric
+  (~0.8 MB at quality 72). Chosen over the gray `SR_50M` (relief only) because the hypsometric
   tints and ocean shading are what make the map read as a map under a translucent choropleth.
 
 ### 2.6 World — fields: Global Energy Monitor, GOGET
@@ -340,7 +340,7 @@ or produced before 2003. The national gas total for 2024 comes out at 8.9 bcm, a
 ## 4. Known data gaps (also in HANDOFF.md)
 - Denmark: no pipelines; monthly per-field series only from January 2018 (annual spread before).
 - Netherlands: production depends on an undocumented API (§2.4); onshore fields (Groningen and
-  ~300 small ones) are inside the map box and are drawn — they are labelled by `LANDSEA`.
+  ~300 small ones) are inside the map box and are drawn — they are labeled by `LANDSEA`.
 - UK: PPRS starts in June 1975; fields that produced before that (e.g. Argyll from June 1975 is the
   first) are covered, but the UK series begins four years after Norway's. Subsea points are
   thinned to manifolds/templates.

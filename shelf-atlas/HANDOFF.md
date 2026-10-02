@@ -9,7 +9,7 @@ run and maintain them.
 shelf-atlas/                    the North Sea app (index.html, app.js, style.css, miniapp.json)
   data/geo.json                 basemap, boundaries, field outlines, pipelines, facilities   (rebuilt weekly)
   data/snapshot.json            fields with monthly production series, sources, ask rows      (rebuilt weekly)
-  data/bathy.png                EMODnet depth raster, 8-bit grey in Web Mercator rows          (rebuilt weekly, rarely changes)
+  data/bathy.png                EMODnet depth raster, 8-bit gray in Web Mercator rows          (rebuilt weekly, rarely changes)
   RESEARCH.md  HANDOFF.md       these documents
 world-oil-gas/                  the world app
   data/world.json               Natural Earth 1:10m countries, bathymetry bands (rarely changes)
@@ -79,12 +79,12 @@ and the world app shows only the country choropleth, with the reason on its laye
 | Netherlands | series start in 2003 | the NLOG datacenter holds 2003 → |
 | Netherlands | production comes from an undocumented API | documented in `nlog_production.py`; if it moves, Dutch fields keep outlines and lose series, and the build fails loudly |
 | UK | PPRS starts June 1975; subsea points thinned to manifolds/templates; pipelines limited to hydrocarbon fluids and ≥ 3 km | volume |
-| UK | licence forbids commercial exploitation (NSTA Open User Licence) | see LICENSE |
+| UK | license forbids commercial exploitation (NSTA Open User Licence) | see LICENSE |
 | Norway | fields north of 73°N would fall outside the box (none today) | `BBOX` in `build_north_sea.py` |
 | Cross-border | only the units listed in `CROSS_BORDER` (`build_north_sea.py`) are grouped; other same-name matches are listed in `snapshot.matching` and drawn separately | avoid silent bad merges |
-| UK | one-month outliers exist in PPRS (Tern gas, September 2000, ~50× its usual level); the app's colour scale uses each field's second-highest month so one bad month cannot flatten it | source data, left as reported |
+| UK | one-month outliers exist in PPRS (Tern gas, September 2000, ~50× its usual level); the app's color scale uses each field's second-highest month so one bad month cannot flatten it | source data, left as reported |
 | All | the newest month is uneven: Denmark reports about a month earlier than Norway, and the UK and Netherlands about two months later; the app opens on the newest month every country has reported and says which countries are missing beyond it | source cadence |
-| All | 23 UK production units and one Danish field (Ravn) have no outline and are drawn as a point at the regulator's field centre | source geometry |
+| All | 23 UK production units and one Danish field (Ravn) have no outline and are drawn as a point at the regulator's field center | source geometry |
 | World fields | 618 GOGET units have no coordinates and are left out; 1,021 are marked approximate | source; the sheet says so |
 | World fields | 110 tracker outlines (all of Poland's) are in a projected grid, not degrees, and 4 rings sit a degree or more from their unit; the build drops them (`goget_units_to_file`) | source geometry |
 | World fields | one production figure per unit, so "fields follow the year" shows discovery and start, sized by the latest rate; undated units (1,748) are always drawn | GOGET has no per-field series |
@@ -108,8 +108,8 @@ and the world app shows only the country choropleth, with the reason on its laye
 - Shelf Atlas: Rate | Cumulative under the quantity segment; cumulative is the exact prefix sum of
   each field's monthly series from where its regulator's series starts (NL 2003, UK June 1975), and
   the field sheet says when earlier production may be missing.
-- Map encoding: circle area and colour carry the rate; outlines carry status only (tinted while
-  producing, grey when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
+- Map encoding: circle area and color carry the rate; outlines carry status only (tinted while
+  producing, gray when shut, dashed for Danish delineations). Layers (outlines, platforms, pipelines,
   boundaries, depth shading, names, circle edges) can be switched off from the map's layers button.
 - World app basemap: white land with Natural Earth 1:10m boundaries by default; the shaded relief
   (`data/relief.jpg`) and the depth bands are optional layers; countries with no figure are plain,
@@ -118,5 +118,5 @@ and the world app shows only the country choropleth, with the reason on its laye
   3 world), monthly series as base64 uint16 with a per-series scale; contract in
   `scripts/shelf_atlas/SCHEMA.md`.
 - Budgets: `geo.json` ≤ 2 MB, `snapshot.json` ≤ 2.5 MB, app code ≤ 150 KB.
-- Sources and licences are listed on the app's attribution screen and in `LICENSE`; attribution
-  strings are the ones the licences require (NLOD, NSTA, CC BY 4.0).
+- Sources and licenses are listed on the app's attribution screen and in `LICENSE`; attribution
+  strings are the ones the licenses require (NLOD, NSTA, CC BY 4.0).
