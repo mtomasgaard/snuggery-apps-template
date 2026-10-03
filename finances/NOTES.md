@@ -137,6 +137,10 @@ python3 scripts/make_demo_finances.py --check
 which regenerates the file into a temporary directory and compares it byte for
 byte with the committed one.
 
+Its words are US English. Its transactions keep the bank's capitals, as a feed
+writes them (`BAKERY` under Transactions), while Spending's *Where it went*
+groups them by merchant under a name the refresh writes in title case (`Bakery`).
+
 ## The type
 
 Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.

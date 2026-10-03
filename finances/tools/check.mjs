@@ -6,7 +6,7 @@
 //   3. every import / src / href / url( / fetch( is relative, inside the folder, present; the one data read;
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and
 //      no supplement; NOTES.md and About credit the face word for word;
-//   5. the data is pinned: the four data files' sha256 as they were before the pass;
+//   5. the data is pinned: the four data files' sha256 as the data follow-up rebuilt them (2026-10-02);
 //   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word: the two constants, one written to the band on every pane;
@@ -25,7 +25,7 @@
 //  15. the bugs on record (ART.md's B1 to B25, now in tools/DECISIONS.md) stay fixed in the code;
 //  16. budgets: app code at most 200,000 bytes (the house's), fonts/ at most 160,000, the ZIP built exactly
 //      as build-zips.yml builds it at most 125,304 (69,976 × 1.25 plus 37,834 for the face; plan 0011 D5, D26);
-//  17. US spelling in every shipped text file, the data's own words allowed by file and word.
+//  17. US spelling in every shipped text file, the data's own words included since the data follow-up.
 //
 //   node tools/check.mjs
 
@@ -112,17 +112,18 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no font ships|system font only/i.test(read('NOTES.md')),
   'the face is credited word for word in NOTES.md (the app\'s credits file) and About ("Type: …"); nothing says no font ships');
 
-// 5. The data is pinned: the four files as they were before the pass (ART.md section 6). The pipeline's
-// own check, `python3 scripts/make_demo_finances.py --check` (from Template/finances), rebuilds the snapshot.
+// 5. The data is pinned: the four files as the data follow-up rebuilt them (2026-10-02; ART.md section 6,
+// tools/DECISIONS.md). The pipeline's own check, `python3 scripts/make_demo_finances.py --check` (from Template/),
+// rebuilds the snapshot from the three JSON files byte for byte.
 const DATA_SHA = {
-  'data/snapshot.json': '5d1c30a33c44213a5a56edfe5b787fc523c2c80414e64b6d1c72085d36085be0',
-  'assets.json': '03ff325ae6655f0c6f127b572da62a2037d5278b3ae5d62f307409ae89f92e1c',
+  'data/snapshot.json': '2481554ae4fc5b2c818cca58d45f78be8cab50408638624e5e39b30233aae1c1',
+  'assets.json': '78df79dd193395e51b912ebe63a4b739008388dc263d0a55d54f19c2bba2164d',
   'holdings.json': '6301079e6000f87e83ddcde779f9df78b68394e1bfca0b6eafc3748583d2bb86',
-  'categories.json': '7d6e4a2f8ab3600e5e53ccc1facd0a74b1c1340fe397557a775184251a8ba60b',
+  'categories.json': '07b65e5ef923cf5f0a8688056e3c0b753053985a4ce9ef5e8864720ab87282c8',
 };
 {
   const off = Object.entries(DATA_SHA).filter(([f, want]) => !fs.existsSync(path.join(APP, f)) || sha(f) !== want).map(([f]) => f);
-  ok(off.length === 0, `the data: ${Object.keys(DATA_SHA).join(', ')} byte-identical to before the pass${off.length ? '; changed: ' + off.join(', ') : ''}`);
+  ok(off.length === 0, `the data: ${Object.keys(DATA_SHA).join(', ')} as the data follow-up rebuilt them${off.length ? '; changed: ' + off.join(', ') : ''}`);
 }
 
 // 6. miniapp.json
@@ -307,14 +308,10 @@ console.log(`     stored in the ZIP: data and the three JSON files ${fmt(stored(
 ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 69,976 before the pass × 1.25 plus 37,834 for the face, plan 0011 D5; the lead's ruling on the measured 128,025, D27)`);
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The data's
-// own words stay as the pipeline writes them until the data follow-up (owner call 2).
+// own words included: the data follow-up (owner call 2) swept them, so no file is allowed a word any more.
 {
   const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|behaviour\w*|recognis\w*|organis\w*|analys(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|judgement\w*|for ever|amortis\w*|authoris\w*|categoris\w*|instalments?|artefacts?)\b/gi;
-  const ALLOW = {
-    'data/snapshot.json': ['amortised', 'modelled', 'Instalment', 'INSTALMENT'],
-    'categories.json': ['categorises', 'CENTRE', 'INSTALMENT', 'Uncategorised'],
-    'assets.json': ['modelled', 'Modelled'],
-  };
+  const ALLOW = {};   // by file, a word the data may keep; empty since the data follow-up
   const PHRASES = { 'NOTES.md': ['Norwegian Licence for Open Government Data'] };   // a proper name
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
@@ -325,7 +322,7 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 69,976 
       for (const m of l.matchAll(BRIT)) if (!allow.includes(m[0])) hits.push(`${f}:${i + 1} ${m[0]}`);
     });
   }
-  ok(hits.length === 0, `US spelling in ${texts.length - 1} shipped text files, the data's own words allowed by file (B22)${hits.length ? ': ' + hits.slice(0, 14).join(', ') + (hits.length > 14 ? ` and ${hits.length - 14} more` : '') : ''}`);
+  ok(hits.length === 0, `US spelling in ${texts.length - 1} shipped text files, the data's own words included (B22; the data follow-up)${hits.length ? ': ' + hits.slice(0, 14).join(', ') + (hits.length > 14 ? ` and ${hits.length - 14} more` : '') : ''}`);
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }

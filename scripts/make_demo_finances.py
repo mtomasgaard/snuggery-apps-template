@@ -6,7 +6,7 @@ and that data cannot be anybody's. So this file makes a household up: four
 accounts, a year of ordinary transactions, one fund bought by a standing
 monthly transfer, a home, two cars, and the two loans against them. Every
 figure below is invented. No name, no address, no account number, no merchant
-that exists — the shops are called "Grocery store" and "Petrol station"
+that exists — the shops are called "Grocery store" and "Gas station"
 because a real chain in a demo is a claim about somebody's week.
 
 ONE THING IS REAL, deliberately: the house-price index. The home is anchored
@@ -75,8 +75,8 @@ def load_finances():
 SPEND = [
     (4.0, 180, 980, ["GROCERY STORE", "SUPERMARKET", "CORNER SHOP", "BAKERY"], "current"),
     (1.2, 45, 220, ["COFFEE SHOP", "LUNCH BAR"], "current"),
-    (0.8, 180, 950, ["TAKEAWAY", "RESTAURANT", "PIZZA PLACE"], "credit"),
-    (0.5, 240, 760, ["PETROL STATION", "CHARGING POINT"], "credit"),
+    (0.8, 180, 950, ["TAKEOUT", "RESTAURANT", "PIZZA PLACE"], "credit"),
+    (0.5, 240, 760, ["GAS STATION", "CHARGING POINT"], "credit"),
     (0.9, 40, 120, ["PUBLIC TRANSPORT", "TOLL ROAD", "PARKING"], "current"),
     (0.35, 390, 2900, ["CLOTHING SHOP", "ELECTRONICS SHOP", "HOME GOODS STORE",
                        "SPORTS SHOP", "BOOKSHOP"], "credit"),
@@ -85,10 +85,10 @@ SPEND = [
 
 # (day of month, amount, what the bank prints, which account, does it vary)
 MONTHLY = [
-    # The two loan payments are the figures assets.json's own terms amortise
-    # to, so the feed and the modelled balance tell the same story.
+    # The two loan payments are the figures assets.json's own terms amortize
+    # to, so the feed and the modeled balance tell the same story.
     (2, -18520.92, "MORTGAGE PAYMENT", "current", False),
-    (2, -3700.27, "CAR LOAN INSTALMENT", "current", False),
+    (2, -3700.27, "CAR LOAN INSTALLMENT", "current", False),
     (3, -1289.00, "ELECTRICITY SUPPLIER", "current", True),
     (4, -2400.00, "HOUSING COSTS SHARED", "current", False),
     (5, -3000.00, "MONTHLY FUND PURCHASE", "current", False),
@@ -113,7 +113,7 @@ CREDIT_ACCOUNT = "Credit card"
 # transactions above, so any plausible figure here is self-consistent.
 EVERYDAY_TODAY = 58200.00
 SAVINGS_TODAY = 185000.00
-HOLIDAY_TODAY = 42000.00
+VACATION_TODAY = 42000.00
 CREDIT_LIMIT = 60000.00
 
 # The fund price the demo's own NAV series ends on, and how much it wanders.
@@ -181,8 +181,8 @@ def build(fin, when: date):
         {"id": "bank-2", "name": "Savings account", "source": "bank", "type": "savings",
          "balance": SAVINGS_TODAY, "available": SAVINGS_TODAY, "mask": "•• 9062",
          "creditLimit": None, "dueDate": None, "dueAmount": None},
-        {"id": "bank-3", "name": "Holiday fund", "source": "bank", "type": "savings",
-         "balance": HOLIDAY_TODAY, "available": HOLIDAY_TODAY, "mask": "•• 5530",
+        {"id": "bank-3", "name": "Vacation fund", "source": "bank", "type": "savings",
+         "balance": VACATION_TODAY, "available": VACATION_TODAY, "mask": "•• 5530",
          "creditLimit": None, "dueDate": None, "dueAmount": None},
         {"id": "card-1", "name": CREDIT_ACCOUNT, "source": "card", "type": "credit",
          "balance": round(card, 2), "available": round(CREDIT_LIMIT + card, 2),
@@ -192,7 +192,7 @@ def build(fin, when: date):
     ]
 
     # The two fetched series stood in for, so the generator needs no network.
-    # Everything downstream — accrual, indexing, amortisation, the history walk
+    # Everything downstream — accrual, indexing, amortization, the history walk
     # — is the same code the live run uses.
     holdings = copy.deepcopy(fin.read_json(fin.HOLDINGS, {}) or {})
     for f in ((holdings.get("investments") or {}).get("funds") or []):
@@ -229,11 +229,11 @@ def build(fin, when: date):
          "message": "units accrued from the transfers that bought them"},
         {"id": "owned", "label": "Property & vehicles", "status": "derived",
          "fetchedAt": stamp, "consentExpires": None,
-         "message": "valued from assets.json, indexed and amortised by date"},
+         "message": "valued from assets.json, indexed and amortized by date"},
     ]
 
     notes = list(notes) + [
-        "Example text — every account, balance, transaction and holding in this "
+        "Example text: every account, balance, transaction and holding in this "
         "file was invented by scripts/make_demo_finances.py. Nobody's money is "
         "in here. The house-price index that moves the home is the real public "
         "one; everything it is applied to is made up.",
@@ -281,10 +281,10 @@ def validate(snapshot: dict) -> list:
         if t.get("category") in (None, ""):
             bad.append(f"transaction with no category: {t.get('text')}")
             break
-    uncategorised = sum(1 for t in snapshot.get("transactions") or []
+    uncategorized = sum(1 for t in snapshot.get("transactions") or []
                         if t.get("category") == "other")
-    if uncategorised:
-        bad.append(f"{uncategorised} demo transactions fell through to Uncategorised; "
+    if uncategorized:
+        bad.append(f"{uncategorized} demo transactions fell through to Uncategorized; "
                    f"the example should match its own categories.json")
     if not snapshot.get("synthetic"):
         bad.append("the example must be marked synthetic")

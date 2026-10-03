@@ -5,7 +5,7 @@ The data half of the Finances app. Reads accounts, balances and transactions
 from Enable Banking (a licensed PSD2 account-information provider, free for
 personal use), accrues the fund units that your standing transfers bought,
 prices them at published NAV, values the home and vehicles that no bank
-reports, amortises the loans against them, and writes one small JSON file the
+reports, amortizes the loans against them, and writes one small JSON file the
 app reads.
 
 The parts nobody reports come from finances/assets.json: each is anchored to a
@@ -15,7 +15,7 @@ vehicle depreciation curve. Two of those three are deterministic functions of
 the date, so the net worth HISTORY is recomputed from scratch on every run
 rather than appended to — correct a wrong anchor and the past corrects itself.
 
-Nothing here is specific to one bank: Enable Banking normalises the banks it
+Nothing here is specific to one bank: Enable Banking normalizes the banks it
 talks to, and the one place a national convention shows through is the account
 type map (NO_ACCOUNT_KINDS) and the house-price index. Both are marked, and
 both are a few lines to replace.
@@ -26,12 +26,12 @@ something is shaped differently than expected you want the raw answer, not a
 traceback:
 
     --no-banks    everything EXCEPT the banks, for real: your home indexed at
-                  the live figure, your car depreciated, your loan amortised,
+                  the live figure, your car depreciated, your loan amortized,
                   your fund and share prices fetched. No Enable Banking account
                   needed, so it is the fastest way to see your own numbers
                   before committing to the bank setup.
     --aspsps      list the banks Enable Banking can connect to in a country
-    --connect     authorise ONE bank in a browser and print its session id
+    --connect     authorize ONE bank in a browser and print its session id
     --probe       fetch one session and print the RAW shapes, redacted
     --probe-nav   try every NAV source for every fund and report what answered
     --probe-assets  list the regions the index offers, and value every asset
@@ -212,7 +212,7 @@ class ApiError(Exception):
 
 
 # ── Shapes ──────────────────────────────────────────────────────────────────
-# Enable Banking normalises the banks it talks to, but not every bank fills
+# Enable Banking normalizes the banks it talks to, but not every bank fills
 # every field, so read defensively: a missing name is not a reason to lose an
 # account, and an amount arrives as a string more often than as a number.
 
@@ -246,7 +246,7 @@ def pick_balance(balances: list) -> tuple[float | None, float | None]:
             available = amt
         elif booked is None and kind in order:
             booked = amt
-    if booked is None:                       # no recognised type; take the first
+    if booked is None:                       # no recognized type; take the first
         for b in balances or []:
             amt = amount_of(b.get("balance_amount"))
             if amt is not None:
@@ -284,7 +284,7 @@ ACCOUNT_KINDS = {
 def account_label(acc: dict) -> tuple[str, str]:
     """-> (what the holder called the account, the bank's type suffix). Either
     may be empty: only some banks fill `details`, and only some of those end it
-    with a type this recognises."""
+    with a type this recognizes."""
     raw = acc.get("details")
     if not isinstance(raw, str) or not raw.strip():
         return "", ""
@@ -366,7 +366,7 @@ def txn_date(t: dict) -> str | None:
     return None
 
 
-# ── Categorising ────────────────────────────────────────────────────────────
+# ── Categorizing ────────────────────────────────────────────────────────────
 
 def fold(s: str) -> str:
     """Upper-case and strip accents, so ELKJØP matches ELKJOP and vice versa —
@@ -380,7 +380,7 @@ class Categoriser:
         self.income = [fold(x) for x in cfg.get("income", [])]
         self.rules = [(r["id"], r["label"], [fold(m) for m in r.get("match", [])])
                       for r in cfg.get("categories", [])]
-        fb = cfg.get("fallback") or {"id": "other", "label": "Uncategorised"}
+        fb = cfg.get("fallback") or {"id": "other", "label": "Uncategorized"}
         self.fallback = (fb["id"], fb["label"])
         self.labels = {i: l for i, l, _ in self.rules}
         self.labels[self.fallback[0]] = self.fallback[1]
@@ -836,7 +836,7 @@ def build_pension(cfg: dict, txns: list, probe: bool = False):
             # pension account is not a payment account and its funds are not
             # quoted anywhere public. The anchor is what you last read off, and
             # a proxy fund carries it forward so it is not simply frozen — an
-            # estimate, labelled as one, not a measurement.
+            # estimate, labeled as one, not a measurement.
             out_funds = []
             anchor_value = num(acc.get("anchorValue"), 0.0) or 0.0
             proxy = acc.get("proxy") or {}
@@ -1303,7 +1303,7 @@ def _ssb_query(meta: dict, picks: dict, contents_code, table: str, probe: bool):
 
 def interpolate(series: dict, when: date) -> float | None:
     """A quarterly index that steps once every three months makes net worth jump
-    by six figures on publication day, which is an artefact of the calendar and
+    by six figures on publication day, which is an artifact of the calendar and
     not of the market. Straight-line between published points; hold flat outside
     them, because extrapolating a house price is inventing one."""
     if not series:
@@ -1358,7 +1358,7 @@ def asset_value_on(item: dict, when: date, ssb_cache: dict):
             base_ix = interpolate(series, a_day)
             if now_ix and base_ix:
                 return anchor * (now_ix / base_ix), f"SSB {SSB_TABLE} — {described}"
-        return anchor, "SSB index unavailable — holding the anchor value"
+        return anchor, "SSB index unavailable; holding the anchor value"
 
     if method == "rate":
         rate = num(item.get("annualRate"), 0.0) or 0.0
@@ -1374,7 +1374,7 @@ def asset_value_on(item: dict, when: date, ssb_cache: dict):
         share_now = curve_share(curve, tail, max(0.0, (when - born).days / 365.25))
         share_anchor = curve_share(curve, tail, max(0.0, (a_day - born).days / 365.25))
         if share_anchor <= 0:
-            return anchor, "depreciation curve is degenerate — holding the anchor"
+            return anchor, "depreciation curve is degenerate; holding the anchor"
         value = max(floor, anchor * (share_now / share_anchor))
         age = (when - born).days / 365.25
         return value, f"depreciation curve, age {age:.1f} yr"
@@ -1385,7 +1385,7 @@ def asset_value_on(item: dict, when: date, ssb_cache: dict):
 def loan_balance_on(loan: dict, when: date):
     """Remaining principal, as a NEGATIVE number, from the loan's own terms.
     PSD2 covers payment accounts and a mortgage usually is not one, so this is
-    modelled rather than read — which is fine, because amortisation is
+    modeled rather than read — which is fine, because amortization is
     arithmetic, and the one input that drifts (the rate) is in the config."""
     principal = num(loan.get("principal"))
     n = int(num(loan.get("termMonths"), 0) or 0)
@@ -1415,7 +1415,7 @@ def loan_balance_on(loan: dict, when: date):
         remaining = principal * (growth - (1.0 + r) ** k) / (growth - 1.0)
         payment = principal * r / (1.0 - (1.0 + r) ** -n)
 
-    return -max(0.0, remaining), payment, f"modelled {kind}, {k} of {n} payments made"
+    return -max(0.0, remaining), payment, f"modeled {kind}, {k} of {n} payments made"
 
 
 def asset_variants(item: dict) -> list:
@@ -1474,7 +1474,7 @@ def build_assets(cfg: dict, when: date, accounts: list | None = None,
                 {"region": key[0], "boligtype": key[1]}, probe=probe)
             ssb_cache[key] = (series, described)
             if missed:
-                notes.append(f"SSB: could not match {', '.join(missed)} — used {described}")
+                notes.append(f"SSB: could not match {', '.join(missed)}; used {described}")
             log(f"SSB {SSB_TABLE}: {len(series)} periods for {described}")
         except Exception as e:                    # noqa: BLE001
             ssb_cache[key] = (None, "")
@@ -1526,7 +1526,7 @@ def build_assets(cfg: dict, when: date, accounts: list | None = None,
     for loan in loans_cfg:
         # If the bank reports the loan, that figure is the truth and the model
         # is only ever the stand-in. Counting both would double the debt, so the
-        # real one wins and the modelled one is marked as coming from the bank.
+        # real one wins and the modeled one is marked as coming from the bank.
         prefer = loan.get("preferBankBalance")
         bank = by_name.get(fold(prefer)) if prefer else None
         if bank is None and prefer:
@@ -1692,7 +1692,7 @@ def build_history(point: dict, txns: list, compose, days_back: int = HISTORY_DAY
 
     Everything except cash is a deterministic function of the date: a house is
     its anchor times an index published for that quarter, a car is its curve at
-    that age, a loan is its amortisation schedule at that payment number, a fund
+    that age, a loan is its amortization schedule at that payment number, a fund
     is the units held then times the price then. Cash is the balance today minus
     every transaction since. So the whole line is computable, which means it is
     also self-correcting — fix a wrong anchor and the past fixes itself, instead
@@ -1782,7 +1782,7 @@ def fetch_source(api: Api, sid: str, session_id: str, label: str, probe: bool = 
     since = (today() - timedelta(days=TXN_WINDOW)).isoformat()
 
     # GET /sessions answers with account IDS — ["2166fa1c-…", …] — and nothing
-    # else. It is POST /sessions, back in the one-off authorisation, that hands
+    # else. It is POST /sessions, back in the one-off authorization, that hands
     # over whole account objects, and those are gone by the time this runs. So
     # every run asks /accounts/{id}/details for the name, the type and the
     # credit limit. That is a third call per account per day, inside PSD2's
@@ -2074,8 +2074,8 @@ def assemble(accounts, txns, sources, investments, cat, *, assets=None, loans=No
 
     # Loans the bank actually reports are already in `accounts` as negative
     # balances; counting the model on top would double the debt.
-    modelled_loans = [l for l in loans if not l.get("fromBank")]
-    loan_total = round(sum(l["balance"] for l in modelled_loans), 2)
+    modeled_loans = [l for l in loans if not l.get("fromBank")]
+    loan_total = round(sum(l["balance"] for l in modeled_loans), 2)
 
     pension_total = round((pension or {}).get("counted", 0.0), 2)
 
@@ -2188,7 +2188,7 @@ def run_no_banks(probe: bool = False):
     sources = [{
         "id": "bank", "label": "Banks", "status": "error", "fetchedAt": None,
         "consentExpires": None,
-        "message": "not connected yet — this snapshot was built with --no-banks, "
+        "message": "not connected yet; this snapshot was built with --no-banks, "
                    "so there are no accounts, no cash and no spending in it.",
     }]
     if investments:
@@ -2207,7 +2207,7 @@ def run_no_banks(probe: bool = False):
         sources.append({"id": "owned", "label": "Property & vehicles",
                         "status": "derived", "fetchedAt": utcnow(),
                         "consentExpires": None,
-                        "message": "valued from assets.json, indexed and amortised by date"})
+                        "message": "valued from assets.json, indexed and amortized by date"})
 
     notes = list(notes) + ["Built with --no-banks: no accounts, cash or spending. "
                            "Connect the banks and this fills in."]
@@ -2262,12 +2262,12 @@ def run_live(probe: bool = False):
             # list is the most misleading thing this file could say.
             if not accs:
                 status, message = "error", (
-                    "answered, but no account could be read — usually the four "
+                    "answered, but no account could be read; usually the four "
                     "unattended reads a day are spent. It recovers tomorrow.")
             elif stale:
                 status, message = "stale", (
-                    f"{', '.join(stale)} could not be read today — the bank allows four "
-                    f"unattended reads a day and they are used up; showing the last good "
+                    f"{', '.join(stale)} could not be read today (the bank allows four "
+                    f"unattended reads a day and they are used up); showing the last good "
                     f"figure until tomorrow.")
             else:
                 status, message = "ok", None
@@ -2283,7 +2283,7 @@ def run_live(probe: bool = False):
             kept = [a for a in ((prev or {}).get("accounts") or []) if a.get("source") == sid]
             accounts += kept
             old = next((s for s in ((prev or {}).get("sources") or []) if s.get("id") == sid), {})
-            reason = ("the consent has expired — re-authorise with BankID"
+            reason = ("the consent has expired; authorize again with BankID"
                       if e.status in (401, 403) else f"the last refresh failed ({e.status or 'network'}).")
             sources.append({
                 "id": sid, "label": label,
@@ -2303,7 +2303,7 @@ def run_live(probe: bool = False):
     # Two things must never ride in on that. The example snapshot this app ships
     # with is a whole fake month — wages from ARBEIDSGIVER AS, groceries in
     # Bogstadveien — and the FIRST live run finds it sitting there as `prev`. And
-    # an account that is no longer authorised leaves transactions behind that
+    # an account that is no longer authorized leaves transactions behind that
     # belong to no account on screen. So: nothing from a synthetic file, and
     # nothing whose account is not in this snapshot.
     carried = [] if (prev or {}).get("synthetic") else ((prev or {}).get("transactions") or [])
@@ -2355,7 +2355,7 @@ def run_live(probe: bool = False):
     if assets or loans:
         sources.append({"id": "owned", "label": "Property & vehicles", "status": "derived",
                         "fetchedAt": utcnow(), "consentExpires": None,
-                        "message": "valued from assets.json, indexed and amortised by date"})
+                        "message": "valued from assets.json, indexed and amortized by date"})
 
     return assemble(accounts, txns, sources, investments, cat,
                     assets=assets, loans=loans, equity=equity, pension=pension,
@@ -2460,7 +2460,7 @@ def catch_code(redirect: str, state: str, timeout: int = 300) -> str | None:
 
 
 def connect_bank(api: Api, aspsp: str, sid: str, country: str, redirect: str, days: int):
-    """Authorise one bank and print `<id> = <session id>` on standard output.
+    """Authorize one bank and print `<id> = <session id>` on standard output.
 
     Everything else goes to stderr, so `--connect … > bank.sid` captures the
     session id and nothing else — a session id is a credential and has no
@@ -2479,14 +2479,14 @@ def connect_bank(api: Api, aspsp: str, sid: str, country: str, redirect: str, da
             "psu_type": "personal",
         })
     except ApiError as e:
-        raise SystemExit(f"could not start the authorisation: {e}\n"
+        raise SystemExit(f"could not start the authorization: {e}\n"
                          "A 4xx here is almost always the bank name (it must match "
                          "--aspsps exactly) or a redirect address that is not registered "
                          "on the application in the control panel.")
 
     url = auth.get("url")
     if not url:
-        raise SystemExit(f"no authorisation URL came back: {json.dumps(auth)[:400]}")
+        raise SystemExit(f"no authorization URL came back: {json.dumps(auth)[:400]}")
 
     log(f"\nOpen this and sign in with your bank:\n\n  {url}\n")
     try:
@@ -2521,7 +2521,7 @@ def connect_bank(api: Api, aspsp: str, sid: str, country: str, redirect: str, da
         raise SystemExit(f"no session_id came back: {json.dumps(session)[:400]}")
 
     accounts = session.get("accounts") or []
-    log(f"\n{len(accounts)} account(s) authorised"
+    log(f"\n{len(accounts)} account(s) authorized"
         + (f", access valid until {(session.get('access') or {}).get('valid_until', '?')[:10]}"
            if session.get("access") else ""))
     for a in accounts:
@@ -2604,7 +2604,7 @@ def main():
                     help="everything except the banks, for real — no credentials needed")
     ap.add_argument("--aspsps", action="store_true", help="list the banks on offer in --country")
     ap.add_argument("--connect", action="store_true",
-                    help="authorise ONE bank interactively and print its session id")
+                    help="authorize ONE bank interactively and print its session id")
     ap.add_argument("--aspsp", help="with --connect: the bank's name, exactly as --aspsps prints it")
     ap.add_argument("--id", help="with --connect: the key this bank takes in ENABLEBANKING_SESSIONS")
     ap.add_argument("--country", default="NO", help="two-letter country code for --aspsps/--connect")

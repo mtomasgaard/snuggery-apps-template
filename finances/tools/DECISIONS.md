@@ -415,3 +415,195 @@ and its license take 37 510 B, the app code 41 954 B (29 406 before the pass; 40
 The build first measured 128 025 B, over D5's 125 304; the lead raised the cap on that figure (D27,
 `tools/DECISIONS.md`), and the record of that ruling here accounts for the rest.
 
+---
+
+## The data follow-up (2026-10-02)
+
+Owner call 2, as D28 widened it (the British words, the merchant case, the example note's em dash), done after
+the pass as the lead ruled (D26): the example rebuilt by its generator with its words in US English and its
+note without a spaced em dash, the pipeline's own words swept with it, and `PROMPT.md` giving a copy's agent
+the same rules. Every figure below was printed by a command run on this Mac. The throwaway scripts
+(`structdiff.py`, `txnalign.py`, `dom.mjs`), the rebuilds and every tool's output are in
+`tools/.work/data-followup/` (gitignored). Nothing in `app.js`, `js/`, `style.css`, `index.html` or `fonts/`
+changed; no git command was run.
+
+### The scripts
+
+- **`scripts/make_demo_finances.py`** (15 lines): the invented bank's texts `CAR LOAN INSTALMENT`, `PETROL
+  STATION` and `TAKEAWAY` to `CAR LOAN INSTALLMENT`, `GAS STATION` and `TAKEOUT`, capitals kept (owner call 3);
+  the account `Holiday fund` to `Vacation fund`; the owned source's message `indexed and amortised by date` to
+  `amortized`; the note `Example text — every account, …` to `Example text: every account, …`, its words
+  otherwise the same; `validate()`'s `Uncategorised` to `Uncategorized`; the docstring's `Petrol station` and
+  three comments (`amortise`, `modelled`, `amortisation`); the constant `HOLIDAY_TODAY` and the local
+  `uncategorised` renamed `VACATION_TODAY` and `uncategorized`. The seed, every number and every draw untouched.
+- **`scripts/finances.py`** (34 lines). What the example and a copy's own refresh write: the loans' basis
+  `modelled annuity, …` to `modeled annuity, …`; the owned source's `amortised` (twice: `--no-banks` and the live
+  run); the fallback category `Uncategorised` to `Uncategorized`. Its seven other spaced em dashes in words the
+  app prints (Owned's basis line when the index or a curve fails, the note when SSB cannot match a name, and
+  four messages a failed or stale source prints on Overview) become a semicolon or parentheses, the words the
+  same, except the consent message: `the consent has expired — re-authorise with BankID` is now `the consent
+  has expired; authorize again with BankID`, the app's own words since B22. The SSB attribution,
+  `f"SSB {SSB_TABLE} — {described}"`, is unchanged. Twenty lines of prose (docstrings, comments, `--help`, log
+  and exit messages): `amortizes`, `normalizes` (twice), `amortized`, `authorize` (three), `authorization`
+  (three), `authorized` (two), `recognized`, `recognizes`, `Categorizing`, `labeled`, `artifact`, `modeled`
+  (two), `amortization` (two); the local `modelled_loans` renamed `modeled_loans`.
+- **The inputs the generator reads** (they ship, and `check.mjs` pins them). `categories.json`, 7 strings: the
+  match strings that find the example's texts follow them (`LOAN INSTALLMENT`, `GAS STATION`, `TAKEOUT`),
+  `FIBRE` and `GARDEN CENTRE` to `FIBER` and `GARDEN CENTER`, the fallback's label and the `_comment`'s
+  `categorises` and `Uncategorised`. `assets.json`, 6 strings: `Estate car` to `Station wagon` (id `car-estate`
+  kept), the home's variant `Flats` to `Apartments` (id `flats` kept, so a stored `fin.basis` choice still
+  applies), `Modelled` and `modelled` in `_loans` and `_floatingRate`, `a three-year-old estate` and `a holiday
+  property` in two notes on method. `holdings.json` had nothing to change and is byte-identical.
+- **Beyond the brief's list, for the lead to keep or revert**: `Station wagon`, `Apartments`, `TAKEOUT` and
+  `vacation property`, by the rule that took `Holiday fund` and `Petrol Station` (a British word for a thing US
+  English names otherwise); `FIBER` and `GARDEN CENTER`, by the grep list's `centre`; and the seven dashes in
+  the refresh's failure words, by the rule `PROMPT.md` now teaches (no spaced em dash in what the app shows),
+  which the template's own refresh would otherwise break.
+
+Checked where it can be without a bank or a network (`asset_value_on`, `loan_balance_on` and `Categoriser`
+called from the scratch copy): `SSB index unavailable; holding the anchor value`, `depreciation curve is
+degenerate; holding the anchor`, `modeled annuity, 43 of 84 payments made`, `('other', 'Uncategorized')`. The
+four source messages and the SSB-match note sit in `run_live()`, `run_no_banks()` and the index fetch of
+`build_assets()`: **not exercised** (they need a bank session or the network); `python3 -m py_compile` passes
+on both scripts.
+
+### Deterministic, and only words moved
+
+- **Two runs, byte-identical.** `finances.py` reads its inputs from beside itself, so the edited scripts were
+  copied into a scratch root beside the edited inputs (their sha256 equal to the in-place files', `73841ebc…`
+  and `506cc4a7…`), then `python3 root/scripts/make_demo_finances.py --today 2026-09-21 --out-root <run1>`,
+  and again into `<run2>`: both print `validate: ok`, `cmp` is silent, sha256 `2481554a…aae1c1` both times.
+  The same harness with the original scripts and inputs rebuilds the shipped snapshot byte for byte
+  (`5d1c30a3…085be0`), so the harness itself changes nothing.
+- **The structural diff** (`structdiff.py`, then `txnalign.py` for the transactions), the four rebuilt files
+  against the shipped ones: **55 strings changed; numbers, ids, dates, keys and array lengths changed: 0.**
+  - `data/snapshot.json` (7 088 leaves: 4 413 numbers, 2 656 strings, 931 of them dates): 42 strings. Outside
+    `transactions`, no key, length, type or number differs and 19 strings do. The 300 transactions, matched
+    by date, amount, account, source and category, are the same 300 with 23 texts renamed and nothing else.
+    The pairs: `CAR LOAN INSTALMENT` → `CAR LOAN INSTALLMENT` ×10 (5 transactions, the repeating charge, 4 rows
+    of the ask table), `PETROL STATION` → `GAS STATION` ×14 (13 transactions, 1 ask row), `TAKEAWAY` →
+    `TAKEOUT` ×5, `Car Loan Instalment` → `Car Loan Installment` ×2 and `Petrol Station` → `Gas Station` ×2
+    (*Where it went* and its ask row), `Holiday fund` → `Vacation fund` ×2, `Estate car` → `Station wagon` ×2,
+    `Flats` → `Apartments`, `modelled annuity, 54 of 300 payments made` and `…, 43 of 84 …` → `modeled …`,
+    `… indexed and amortised by date` → `amortized`, and the note. 104 501 B (104 534 before); spaced em
+    dashes 8 (9 before): the SSB line five times and the three asset notes.
+  - `assets.json` 6 strings (6 532 B, 6 518 before), `categories.json` 7 (3 601 B, 3 604 before),
+    `holdings.json` none.
+  - **What the write touched beyond those strings: the order of 13 transactions within their days**, and only
+    that. `assemble()` sorts by `(date, text)`, newest first, so a renamed text moves within its day: 13
+    positions on 6 days (14 Apr, 29 Apr, 8 Jun, 8 Jul, 14 Jul, 25 Aug) hold a different transaction, every date
+    stays at its position, and the cut at 300 keeps the same two transactions on its oldest day (4 Apr).
+    *Where it went*, the repeating charges and the ask table keep their order.
+- **The generator's own check.** Before anything was copied, over the scratch root: `check: the committed data
+  is what the generator makes`; the new generator against the shipped snapshot: `check: problems [] | bytes
+  match: False`, as it should. After the copy, from `Template/`: `check: the committed data is what the
+  generator makes`.
+
+### The merchant case: no change to the data
+
+The app changes the case of nothing it prints: Transactions prints each transaction's `text`, *Where it went*
+each merchant's `label` and the repeating charges theirs, as the data has them (`app.js` and `js/balance.js`
+lowercase only to compare, as with a repeated word, a kind word or the search, and for one name inside the
+Balance's VoiceOver sentence). So both cases are the pipeline's, and both stay, as the lead preferred: the
+transactions, the repeating charges and the account names are the bank's text as it was sent (owner call 3),
+while *Where it went*'s labels are the pipeline's own words, `titlecase(merchant_key(text))`, a name it makes
+for a group of the bank's texts (dates, card numbers and long digit runs dropped, the first three words kept).
+`NOTES.md` says so in one paragraph; `PROMPT.md` teaches it.
+
+### What the copy changed
+
+- `data/snapshot.json`, renamed into place from a staging copy after every check above had passed in a scratch
+  copy of the whole app; `assets.json` and `categories.json` copied; `holdings.json` not written.
+- `tools/check.mjs`: the pins `5d1c30a3…` to `2481554ae4fc5b2c818cca58d45f78be8cab50408638624e5e39b30233aae1c1`
+  (`data/snapshot.json`), `03ff325a…` to `78df79dd193395e51b912ebe63a4b739008388dc263d0a55d54f19c2bba2164d`
+  (`assets.json`), `7d6e4a2f…` to `07b65e5ef923cf5f0a8688056e3c0b753053985a4ce9ef5e8864720ab87282c8`
+  (`categories.json`), `holdings.json`'s `6301079e…` unchanged; the item's words (`as the data follow-up rebuilt
+  them`); the US-spelling allowance emptied (`ALLOW = {}`; it allowed `amortised`, `modelled`, `Instalment`,
+  `INSTALMENT`, `categorises`, `CENTRE`, `Uncategorised` and `Modelled` by file); and the section-5 comment's
+  `(from Template/finances)`, where the command cannot run, corrected to `(from Template/)`. **Proven to pin
+  the sweep**: the new `check.mjs` over a scratch copy holding the old data fails on both lines (the pins:
+  `changed: data/snapshot.json, assets.json, categories.json`; the spelling: `assets.json:75 Modelled,
+  assets.json:77 modelled, categories.json:2 categorises, categories.json:9 INSTALMENT, categories.json:22
+  CENTRE, data/snapshot.json:1 amortised, … and 6 more`).
+- `ART.md`: section 3's quoted labels (`Apartments`); section 6's data row (the three new hashes beside
+  `holdings.json`'s, and the rule: pinned, `--check` rebuilds the snapshot byte for byte), the ZIP row **129 764
+  → 130 333** and its paragraph (`about 130 300`; the `.md` files `about 19 400`), iterated to the fixed point
+  the figures describe. 129 764 was already stale before this follow-up: `check.mjs` measured 129 699 once the
+  lead had moved the budget paragraph out. **The Balance's figures are unchanged**: `test_balance.mjs`'s whole
+  output over the shipped data and over the rebuild is identical once `Holiday fund` and `Estate car` are
+  mapped to their new names (the scale 50 000, the depths 115 and 60 px, every block's rows, the labels, the
+  VoiceOver sentence).
+- `NOTES.md`: one paragraph under *The example data is not data* (US English; the bank's capitals in
+  Transactions; *Where it went*'s groups in the refresh's title case). It records no hash of the data.
+- `PROMPT.md`: a section, *The words the app prints*, before Step 1, in the guide's voice: US spelling in every
+  name and label the agent writes; no spaced em dash, the SSB basis line the one exception; the bank's names as
+  the bank writes them, a `match` string spelled as the bank spells the text, and why one shop reads `BAKERY`
+  and `Bakery`. Step 6 now names the fallback `Uncategorized` (departure 13 above named it by its place while
+  the label was British).
+- **The ZIP**: 129 699 → 130 333 B (+634: the data and the three JSON files store 29 552 B, 12 more; the `.md`
+  files 19 370, 622 more); 667 B under the 131 000 cap.
+
+### On screen
+
+`dom.mjs` served each folder in headless Chromium (390 × 844, light, `shoot.mjs`'s clock; what the page draws,
+never phone evidence) and read every pane, the Transactions list opened to all 300. Before, then after (the
+real folder, after the copy):
+- **Overview**: the statement `Example text — every account, …`, then `Example text: every account, …`; no
+  spaced em dash anywhere on the pane after. `Holiday fund`, then `Vacation fund`.
+- **Spending**: `Petrol Station` and `Car Loan Instalment` under *Where it went*, then `Gas Station` and `Car
+  Loan Installment`; `Bakery` as before.
+- **Owned**: `Estate car`, `Flats`, `modelled annuity` twice, then `Station wagon`, `Apartments`, `modeled
+  annuity` twice; the one spaced em dash on the pane is the SSB line, before and after.
+- **Cash flow**: `CAR LOAN INSTALMENT`, then `CAR LOAN INSTALLMENT`. **Transactions**: `PETROL STATION` ×13,
+  `TAKEAWAY` ×5, `INSTALMENT` ×5, then `GAS STATION` ×13, `TAKEOUT` ×5, `INSTALLMENT` ×5; `BAKERY` ×30 both
+  times.
+- No console error or warning, before or after.
+
+### Verified (2026-10-02, after the copy)
+
+- `node tools/check.mjs` (from `Template/finances/`): `all checks pass` (39 lines `ok`; `the data: … as the
+  data follow-up rebuilt them`; `ZIP size 130,333 bytes`; `US spelling in 13 shipped text files, the data's own
+  words included`).
+- `node tools/test_balance.mjs`: `all checks pass` (18 `ok`).
+- `python3 finances/tools/art/palette.py` (from `Template/`): `ALL CHECKS PASS`.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, no `SCREENSHOTS`: `all checks pass` (177 `ok`, 0 `FAIL`, exit 0);
+  `screenshots/app.png` untouched and no screenshot rewritten. The same run over the scratch copy before the
+  copy: 177 `ok`, 0 `FAIL`.
+- `python3 scripts/make_demo_finances.py --check` (from `Template/`): `check: the committed data is what the
+  generator makes`.
+
+### Left alone, and why
+
+- **The SSB basis line** (`SSB 07221 — Hele landet, …`): the NLOD attribution `NOTES.md` quotes.
+- **Words the app never prints**: the example's asset and loan notes (`Example text — a round figure, not a
+  purchase price`; the asset notes ride in the snapshot, and Owned does not print them), `holdings.json`'s
+  `_account`, the prose of every `_` key in the three JSON files, the equity source's `vesting is a calendar,
+  not a feed — …` (a derived source's message is never printed; About lists each source's state and time),
+  log and exit messages, comments.
+- **British-flavored words in US use**: `CORNER SHOP`, `BOOKSHOP` and the other `… SHOP` names, `CHARGING
+  POINT`, `PUBLIC TRANSPORT`, `LUNCH BAR`, the category `Transport`, `Everyday account`, `MOBILE PHONE PLAN`,
+  `HOUSING COSTS SHARED`, `CHILD BENEFIT`; and match strings for texts European terminals send that the
+  example never writes (`CAR HIRE`, `GREENGROCER`, `SERVICE CHARGE`, `GROUND RENT`). Whether the US-market
+  example goes further (`CORNER STORE`, `PUBLIC TRANSIT`, `CHARGING STATION`, `Checking account`) is an owner
+  call.
+- **Keys and the module's class**: the snapshot key `unrealised` (investments and equity; structure, named in
+  `app.js`'s contract), the class `Categoriser` (the generator imports it as `fin.Categoriser`), the ids
+  `car-estate` and `flats`; the NLOD's proper name (*Licence*) in the generator's comment.
+- **`PROMPT.md`'s and `NOTES.md`'s own spaced em dashes** in their prose from before: the rules were added;
+  sweeping the guides is a separate edit, as Running Dashboard's follow-up left its own.
+- **`check.mjs`'s spelling pattern** knows no vocabulary (`holiday`, `petrol`, `estate car`, `takeaway`,
+  `flat`) and no `fibre`; widening it is family-wide, the lead's.
+- **Outside this follow-up's files**, for the lead: `app.js`'s contract comment still quotes `"note": "Example
+  text — a round figure, not a valuation"` and `("index unavailable — holding the anchor value")` (the refresh
+  now writes `SSB index unavailable; holding the anchor value`); `docs/MANUAL_STEPS.md` line 3353 still lists
+  these faults as pending; `App/Snuggery/Resources/StarterPack/live/finances.zip` (20:05) and
+  `screenshots/*-{light,dark}.png` (19:50) were made before the copy (20:28), so they carry the old words
+  (`Holiday fund` on Overview, `Petrol Station` on Spending).
+
+### Phone checks this adds (not claimed here)
+
+On an iPhone with iOS 18 and one with iOS 26: Spending's `Car Loan Installment` and Overview's `Vacation fund`
+rows at the largest accessibility text size (each name now longer); VoiceOver reading Overview's `Example
+text: every account, …` as one statement; Owned's `Apartments` valuation word at the largest text size; on a
+real copy, a stale or failed source's message with its new punctuation (`Bank: the consent has expired;
+authorize again with BankID.`).

@@ -149,7 +149,7 @@ a fixed caption band; no key column, player, focus mode or opening.
   chosen one scrolled whole into view; focus rings inset 2 px, as the row clips), built after the
   snapshot parses (section 5).
 - **Rows of words** with the tracer (`aria-pressed`, 44 px): the range `30 days`, `90 days`, `1 year`,
-  `All`; the home's valuation `All dwellings`, `Detached houses`, `Flats` (the data's labels).
+  `All`; the home's valuation `All dwellings`, `Detached houses`, `Apartments` (the data's labels).
 - **Sections, not cards**, between hairlines, headed 13.5 px 650 in sentence case. One 21 px figure per
   pane at most: the net worth (in the Balance), `Owned, less what is owed on it`, `Spent, 23 Aug to
   21 Sep`, `Invested`. **Facts** (`<dl>` rows, label left, value right) replace the stock's tiles and
@@ -227,11 +227,11 @@ built by `build-zips.yml`'s command (`zip -q -r -X … . -x '.*' '*/.*' 'screens
 | --- | --: | --: | --: |
 | App code | 103 178 | 123 733 | 200 000, the house's |
 | Fonts | 0 | 40 075 | 160 000 |
-| ZIP | 69 976 | **129 764** | **131 000, the lead's ruling (2026-10-02, plan 0011 D27)**: 125 304 by D5's formula (69 976 × 1.25 plus 37 834 for the face) until the build had measured 128 025 with nothing cut or minified; the face stores 37 510 and the code's growth 11 000, more than the formula foresees for a 70 kB app; about 3 000 B for the fix stages |
-| Data | `data/snapshot.json` `5d1c30a3…085be0`, `assets.json` `03ff325a…f92e1c`, `holdings.json` `6301079e…d2bb86`, `categories.json` `7d6e4a2f…ba60b` | unchanged | pinned by `check.mjs` |
+| ZIP | 69 976 | **130 333** | **131 000, the lead's ruling (2026-10-02, plan 0011 D27)**: 125 304 by D5's formula (69 976 × 1.25 plus 37 834 for the face) until the build had measured 128 025 with nothing cut or minified; the face stores 37 510 and the code's growth 11 000, more than the formula foresees for a 70 kB app; about 3 000 B for the fix stages |
+| Data | `data/snapshot.json` `5d1c30a3…085be0`, `assets.json` `03ff325a…f92e1c`, `holdings.json` `6301079e…d2bb86`, `categories.json` `7d6e4a2f…ba60b` | `data/snapshot.json` `2481554a…aae1c1`, `assets.json` `78df79dd…a2164d`, `holdings.json` `6301079e…d2bb86`, `categories.json` `07b65e5e…7282c8` | pinned by `check.mjs`; `scripts/make_demo_finances.py --check` rebuilds the snapshot byte for byte |
 
-**The ZIP is inside its cap**: about 129 800 B of 131 000. Stored in the ZIP, the face and its license take
-37 510 B, the app code 41 954 B and the shipped `.md` files about 18 800 B; this file's own size moves the last
+**The ZIP is inside its cap**: about 130 300 B of 131 000. Stored in the ZIP, the face and its license take
+37 510 B, the app code 41 954 B and the shipped `.md` files about 19 400 B; this file's own size moves the last
 digits, and `node tools/check.mjs` prints the exact figure.
 
 ---

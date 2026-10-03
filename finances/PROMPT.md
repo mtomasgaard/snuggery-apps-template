@@ -52,6 +52,21 @@ file's own "Example text" note is on Overview. This guide replaces it with your 
   or an authentication code.
 - If a step fails, stop and report the exact error text rather than working around it.
 
+## The words the app prints
+
+The app prints the data's words exactly as they are written:
+
+- **US spelling** in every name and label you write into `assets.json`, `holdings.json`,
+  `categories.json` or `SOURCE_LABELS` (`Station wagon`, `Apartments`, `Uncategorized`).
+- **No spaced em dash** in them; use a colon, a comma or a second sentence. The one exception is the
+  index's basis line (`SSB 07221 — Hele landet, …`), the attribution `finances/NOTES.md` quotes:
+  leave it as the refresh writes it.
+- **The bank's names as the bank writes them.** A transaction's text and an account's name are
+  printed as the bank sent them, capitals and all (`MORTGAGE PAYMENT`): never rewrite them or change
+  their case, and spell a `match` string the way your bank spells the text, in its own language.
+  Spending's *Where it went* groups the bank's text by merchant under the refresh's own name for
+  each, in title case (`Bakery` there, `BAKERY` under Transactions).
+
 ## Step 1 — see your own numbers before touching a bank
 
 The banks are the slow half. Everything else needs no credential at all, so start there: it is the
@@ -234,8 +249,8 @@ the fastest way to fix a shape mismatch.
 
 `finances/categories.json` turns a transaction's text into a category. What ships matches the
 plain-English texts the example uses; **your bank writes something else**. Open the Transactions
-pane after the first real run, read what is landing in the fallback category (the `fallback` entry
-at the end of the file), and paste those strings
+pane after the first real run, read what is landing in *Uncategorized* (the `fallback` entry at
+the end of the file), and paste those strings
 into the right rule. First match wins, top to bottom, so specific rules go above general ones.
 Editing the file re-categorizes everything on the next refresh, past transactions included —
 nothing is baked in.
