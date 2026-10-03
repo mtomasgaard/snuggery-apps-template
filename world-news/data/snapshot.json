@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-03T06:01:17Z",
+ "generatedAt": "2026-10-03T06:12:30Z",
  "regions": [
   {
    "key": "europe",
@@ -514,13 +514,13 @@
  "sources": [
   {
    "attribution": "Headlines, summaries and links from Global Voices, used under CC BY 3.0.",
-   "licence": "Creative Commons Attribution 3.0 — credit the author, link to the licence, and indicate changes: the summaries here are the feed's own line, shortened.",
+   "licence": "Creative Commons Attribution 3.0. Credit the author, link to the license, and indicate changes: the summaries here are the feed's own line, shortened.",
    "terms": "https://creativecommons.org/licenses/by/3.0/",
    "name": "Global Voices"
   },
   {
    "attribution": "Headlines, bylines and links from The Conversation.",
-   "licence": "Creative Commons Attribution–NoDerivatives 4.0 — credit the author and their institution and link back. Nothing of theirs is changed here: the headline stands as written and no article text is carried.",
+   "licence": "Creative Commons Attribution–NoDerivatives 4.0. Credit the author and their institution and link back. Nothing of theirs is changed here: the headline stands as written and no article text is carried.",
    "terms": "https://theconversation.com/au/republishing-and-media",
    "name": "The Conversation"
   },
