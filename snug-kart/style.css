@@ -65,6 +65,7 @@ button {
   touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.words :focus-visible { outline-offset: -2px; } /* the ring inside a row that scrolls sideways; family-wide, 2026-10-02 */
 p, h2, h3, ol { margin: 0; }
 svg { display: block; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }

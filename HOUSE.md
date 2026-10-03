@@ -1235,16 +1235,16 @@ figures into its `ART.md`.
 
 | App | ZIP today | ZIP cap | App code today | Fonts today |
 | --- | --: | --: | --: | --: |
-| Global Weather (reference) | 2 788 186 (2026-10-02) | its own, 2 800 000 (CHECK 258) | 202 709 of 203 000 (D5/D6) | 40 075 |
-| Global Wind (reference) | 1 483 034 | its own, 1 600 000 (ART 621) | 184 653 | 40 075 |
-| Milky Way | 6 513 445 (after its pass; the record left `ART.md` on 2026-10-02) | 8 156 512 | 241 813 of 242 000 (the lead's ruling, plan 0011 D9) | 45 695 |
-| Besseggen | 16 854 391 (after its pass; the record left `ART.md` on 2026-10-02; NOTES.md's own figure is approximate because it ships inside the ZIP) | 21 088 756 | 226 787 of 227 000 (the lead's ruling, D11) | 40 075 |
-| Norne Reservoir | 15 354 792 (after its pass) | 19 110 591 | 161 833 | 40 075 |
-| Anatomy | 24 552 764 (after its pass) | 30 692 577 | 116 467 | 40 075 |
-| Shelf Atlas | 1 980 291 (after its pass and the data follow-up of 2026-10-02) | 2 413 130 | 183 869 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
-| World Oil & Gas | 2 147 328 (after its pass) | 2 622 870 | 199 917 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
-| Snug Kart | 619 349 (after its pass) | 720 806 | 242 655 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
-| Running Dashboard | 1 074 350 (after its pass) | 1 340 193 | 244 919 of 245 000 (the lead's rulings, plan 0011 D23–D24; held at 236 521 before them) | 41 291 |
+| Global Weather (reference) | 2 788 259 (2026-10-02, with the family fixes) | its own, 2 800 000 (CHECK 258) | 202 840 of 203 000 (D5/D6) | 40 075 |
+| Global Wind (reference) | 1 483 107 (with the family fixes of 2026-10-02) | its own, 1 600 000 (ART 621) | 184 653 | 40 075 |
+| Milky Way | 6 513 447 (after its pass, the record's move and the family fixes of 2026-10-02) | 8 156 512 | 241 820 of 242 000 (the lead's ruling, plan 0011 D9) | 45 695 |
+| Besseggen | 16 854 392 (after its pass, the record's move and the family fixes of 2026-10-02; NOTES.md's own figure is approximate because it ships inside the ZIP) | 21 088 756 | 226 794 of 227 000 (the lead's ruling, D11) | 40 075 |
+| Norne Reservoir | 15 354 835 (after its pass and the family fixes of 2026-10-02) | 19 110 591 | 161 833 | 40 075 |
+| Anatomy | 24 552 816 (after its pass and the family fixes of 2026-10-02) | 30 692 577 | 116 467 | 40 075 |
+| Shelf Atlas | 1 980 340 (after its pass, the data follow-up and the family fixes of 2026-10-02) | 2 413 130 | 184 002 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
+| World Oil & Gas | 2 147 335 (after its pass and the family fixes of 2026-10-02) | 2 622 870 | 199 975 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
+| Snug Kart | 619 403 (after its pass and the family fixes of 2026-10-02) | 720 806 | 242 778 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
+| Running Dashboard | 1 075 089 (after its pass, the data follow-up and the family fixes of 2026-10-02) | 1 340 193 | 244 994 of 245 000 (the lead's rulings, plan 0011 D23–D24; held at 236 521 before them) | 41 291 |
 | Finances | about 129 800 (after its pass; `ART.md`'s own size moves the last digits) | 131 000 (the lead's ruling, plan 0011 D27; 125 304 by D5's formula) | 123 733 of 200 000 | 40 075 |
 | World News | 27 445 | 72 140 | 21 787 | 0 |
 | Outdoor Window | 29 939 | 75 257 | 50 637 | 0 |
