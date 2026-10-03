@@ -679,6 +679,19 @@ function syncFilterVisibility() {
   $('picksRow').hidden = !(has('sport') || has('gear'));
 }
 
+// The filters stay under the tabs while the pane scrolls beneath them (the owner, 2026-10-03). The sport
+// and equipment row at their top goes up and out with a scroll down and comes back with a scroll up,
+// as a browser's bar does: it moves with the pane, pixel for pixel, never on a timer.
+let tuck = 0, lastTop = 0;
+function tucked() {
+  const s = $('main').scrollTop, p = $('picksRow'), h = $('filters').hidden ? 0 : p.offsetHeight;
+  tuck = Math.max(0, Math.min(h, tuck + s - lastTop, s));
+  lastTop = s;
+  $('filters').style.transform = tuck ? `translateY(${-tuck}px)` : '';
+}
+$('main').addEventListener('scroll', tucked, { passive: true });
+$('filters').addEventListener('focusin', (ev) => { if (ev.target.matches(':focus-visible')) { tuck = 0; tucked(); } });   // a key, never a finger on a thumb
+
 /* -------------------------------------------------------------- filtering */
 
 function windowRange() {
@@ -807,11 +820,12 @@ function linePath(svg, d, color, dash, w = 2) {
   if (color === INK) svg.append(svgEl('path', { d, class: 'casing' }));
   svg.append(svgEl('path', { d, fill: 'none', stroke: color, 'stroke-width': w, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-dasharray': dash }));
 }
-/** A stacked bar segment: filled when done, a 1.5 px outline of its token when planned. */
+/** A stacked bar segment: filled when done; when planned, a 1.5 px outline of its token around a light
+ *  tint of it (.tint, 20 %: the owner asked to see the plan, 2026-10-03; tools/art/palette.py check 8). */
 function segRect(svg, x, y, w, h, color, plan) {
   if (!plan) return svg.append(svgEl('rect', { x: r1(x), y: r1(y), width: r1(w), height: r1(Math.max(0.6, h)), fill: color }));
   if (h < 3) return svg.append(svgEl('line', { x1: r1(x), x2: r1(x + w), y1: r1(y + h / 2), y2: r1(y + h / 2), stroke: color, 'stroke-width': 1.5 }));
-  svg.append(svgEl('rect', { x: r1(x + 0.75), y: r1(y + 0.75), width: r1(w - 1.5), height: r1(h - 1.5), fill: 'none', stroke: color, 'stroke-width': 1.5 }));
+  svg.append(svgEl('rect', { x: r1(x + 0.75), y: r1(y + 0.75), width: r1(w - 1.5), height: r1(h - 1.5), fill: color, stroke: color, 'stroke-width': 1.5, class: 'tint' }));
 }
 /** Month labels for week or day columns: thinned from the right so the newest survives, the year
  *  on the first label and on every January (never a two-digit year: B10). */
@@ -1278,6 +1292,7 @@ function blockSection(main, scale) {
     L.grid.forEach(([v, y], k) => gridLine(svg, 0, W, y));
     gridLine(svg, 0, W, L.base, true);
     for (const [x, y, w, h] of L.points) svg.append(svgEl('rect', { x, y, width: w, height: h, class: 'ink' }));
+    for (const [x, y, w, h] of L.tints) svg.append(svgEl('rect', { x, y, width: w, height: h, class: 'ink tint' }));
     for (const [x, y, w, h] of L.outlines) svg.append(svgEl('rect', { x: x + 0.75, y: y + 0.75, width: w - 1.5, height: h - 1.5, class: 'outline' }));
     for (const [x, y, w] of L.ticks) svg.append(svgEl('line', { x1: x, x2: x + w, y1: y + 0.5, y2: y + 0.5, class: 'lowtick' }));
     L.grid.forEach(([v, y], k) => svg.append(svgText({ x: W, y: y - 2, 'text-anchor': 'end', class: 'tk mk halo' }, k === last ? u(v, 'km') : String(v))));
@@ -1351,11 +1366,7 @@ function paneNow(main) {
   const acts = DATA.activities;
   const today = todayIso();
   const since = (days) => acts.filter((a) => ago(a.d, today) < days);
-
-  const B = blockSection(main, SCALE.now);
-  const wk = B.columns[B.now], past = pastPull(), last = (n) => (past ? `${n} days to ${dayMon(today)}` : `last ${n} days`);
-  figure(main, past ? `Week of ${dayMon(wk.week)}, data to ${dayMon(today)}` : `This week, ${dayMon(wk.week)} to ${dayMon(plusDays(wk.week, 6))}`, kmU(wk.km),
-    wk.target != null ? `of ${wk.range || u(f0(wk.target), 'km')} planned` : '');
+  const past = pastPull(), last = (n) => (past ? `${n} days to ${dayMon(today)}` : `last ${n} days`);
 
   const w1 = since(7), w4 = since(28), prev4 = acts.filter((a) => ago(a.d, today) >= 28 && ago(a.d, today) < 56);
   const runsIn = (list) => list.filter((a) => a.sport === 'run');
@@ -1375,25 +1386,34 @@ function paneNow(main) {
 
   const a = DATA.assessment;
   const gn = DATA.garminNow || {};
-  if (!a) {
-    const c = card('Evaluation');
-    c.append(el('p', null, 'No assessment in this snapshot. The data pull does not write one; the optional daily coaching routine does. If that is set up and this stays empty, the routine is not completing.'));
-    main.append(c);
-  } else {
-    // the verdict, then what to do about it, then the numbers behind it, then the reasoning, folded
-    const lead = toneSentence(a.tone) + (a.verdict && a.verdict.toLowerCase() !== toneWord(a.tone || 'neutral') ? ` ${a.verdict}.` : '');
-    main.append(verdict(lead, a.headline || ''));
-  }
-  planPointer(main);
-
-  const t = facts();
+  // The short facts first, as a table, so the numbers are what the eye meets (the owner, 2026-10-03); a
+  // metric whose words run on (over 64 characters, or a second sentence) is the evaluation's, below its verdict.
+  const top = card(null), t = el('dl', 'tab'), long = el('dl', 'long');
   t.append(tile(`Run, ${last(7)}`, f1(km(w1)), `${plural(runsIn(w1).length, 'run')}${walkNote(w1)}`, 'km'));
   t.append(tile(`Run, ${last(28)}`, f1(km4), note28 + walkNote(w4), 'km'));
   t.append(tile('Garmin status', (gn.trainingStatus || '–').replace(/_\d+$/, '').replace(/_/g, ' ').toLowerCase(),
     `acute ${f0(gn.acuteLoad)}, chronic ${f0(gn.chronicLoad)}`));
   t.append(tile('VO₂ max', f1(gn.vo2max || DATA.athlete.vo2maxRunning), lastRun ? `last run ${dayMon(lastRun.d)}` : ''));
-  if (a && a.metrics) for (const m of a.metrics) t.append(tile(si(m.label), si(m.value), si(m.note || '')));
-  main.append(t);
+  if (a && a.metrics) for (const m of a.metrics) (`${m.value} ${m.note || ''}`.length > 64 || /[.!?] [A-Z]/.test(m.note || '') ? long : t).append(tile(si(m.label), si(m.value), si(m.note || '')));
+  top.append(t);
+  main.append(top);
+
+  const B = blockSection(main, SCALE.now);
+  const wk = B.columns[B.now];
+  figure(main, past ? `Week of ${dayMon(wk.week)}, data to ${dayMon(today)}` : `This week, ${dayMon(wk.week)} to ${dayMon(plusDays(wk.week, 6))}`, kmU(wk.km),
+    wk.target != null ? `of ${wk.range || u(f0(wk.target), 'km')} planned` : '');
+
+  if (!a) {
+    const c = card('Evaluation');
+    c.append(el('p', null, 'No assessment in this snapshot. The data pull does not write one; the optional daily coaching routine does. If that is set up and this stays empty, the routine is not completing.'));
+    main.append(c);
+  } else {
+    // the verdict and the long facts behind it, then what to do about it, then the reasoning, folded
+    const lead = toneSentence(a.tone) + (a.verdict && a.verdict.toLowerCase() !== toneWord(a.tone || 'neutral') ? ` ${a.verdict}.` : '');
+    main.append(verdict(lead, a.headline || ''));
+    if (long.children.length) main.append(long);
+  }
+  planPointer(main);
 
   raceCard(main, gn);
   if (!a) return;
@@ -1600,6 +1620,7 @@ function panePlan(main) {
     main.append(c);
   }
 
+  runPlan(main, p, today);
   horizonLoad(main, p, today);
   dayChart(main, p, today);
   dayChart(main, p, today, 'load');
@@ -1845,6 +1866,46 @@ const AVG_LEGEND = [
   { color: INK, label: '4-week average, actual', line: true },
   { color: INK, label: '4-week average, planned', line: true, dash: true },
 ];
+
+/** The Block's weeks as kilometers by heart-rate zone, in the colors the stock chart had (the owner,
+ *  2026-10-03): run weeks filled, the plan's weeks split by its mix and drawn planned, this week's
+ *  rest of its target on top of what was run, and the two four-week averages meeting at now. */
+function runPlan(main, p, today) {
+  const B = blockWeeks(DATA.activities, p, today), KM = [BELOW, ...MIX];
+  if (!B.planned) return;
+  const zk = new Map(B.columns.map((c) => [c.week, [0, 0, 0, 0, 0, 0]]));
+  for (const a of DATA.activities) {
+    const z = a.sport === 'run' && a.d <= plusDays(B.columns[B.now].week, 6) && zk.get(mondayOf(a.d));
+    if (z) kmByZone(a).forEach((v, i) => { z[i] += v; });
+  }
+  const rows = B.columns.map((c, i) => {
+    const z = zk.get(c.week), part = [z[5], z[0] + z[1], z[2], z[3] + z[4]];
+    const seg = i > B.now ? [] : KM.map((m, k) => ({ v: part[k], color: m.color }));
+    const rest = c.target != null ? c.target - c.km : 0, mix = c.mix || [100, 0, 0];
+    if (rest > 0) MIX.forEach((m, k) => seg.push({ v: rest * mix[k] / 100, color: m.color, plan: true }));
+    return { key: c.week, total: Math.max(c.km, c.target || 0), seg, part };
+  });
+  const marks = [{ i: B.now, label: markWord(1), after: true }];
+  if (B.race) marks.push({ i: B.race.idx, label: B.race.name, race: true });
+  const c = card('Running volume, past and planned',
+    'Kilometers of running per week, walk breaks left out, each split by the heart-rate zone it was run in, as on the day charts: gray under the zone 1 floor, then easy, moderate and hard. Filled bars are what was run. Outlined, tinted bars are the plan’s weeks, split by its shares of easy, moderate and hard; this week’s sit on what was run so far, up to its target. The lines are the four-week averages, run and planned, meeting at now.');
+  columnChart(c, {
+    height: 210,
+    rows,
+    lines: avgLines(rows.map((r) => r.total), B.now),
+    marks,
+    minMax: Math.max(...rows.map((r) => r.total)) * 1.1,   // a tenth of headroom: the race's name above the tallest week
+    tickFmt: (t) => f0(t),
+    aria: 'Weekly running kilometers by heart-rate zone, run and planned',
+    yLabel: 'km per week',
+    tip: (r, i) => { const k = blockCard(B, i); delete k.say; if (i <= B.now) KM.forEach((m, j) => { if (r.part[j] >= 0.05) k.rows.push([m.label, kmU(r.part[j])]); }); return k; },
+  });
+  c.append(legend(KM.map((m) => ({ color: m.color, label: m.label })).concat({ color: INK, label: 'Planned', plan: true }, AVG_LEGEND)));
+  c.append(help('One bar is one week, Monday to Sunday.'));
+  tableToggle(c, 'runplan', () => table(['Week', 'Run km', 'Easy', 'Moderate', 'Hard', 'Below Z1', 'Plan'],
+    B.columns.map((col, i) => [date(col.week), ...[col.km, ...[1, 2, 3, 0].map((k) => rows[i].part[k])].map((v) => (i > B.now ? '–' : f1(v))), col.range || (col.target != null ? f0(col.target) : '–')])));
+  main.append(c);
+}
 
 /** The weeks of the Block as load: every sport counts, so a ride in place of a run keeps the bar up
  *  where the kilometers would have dropped. Done is filled; the plan is drawn in outline. */
@@ -2762,8 +2823,8 @@ function paneSessions(main) {
       for (const [id, node] of rows) node.setAttribute('aria-current', String(id === a.id));
       detail.replaceChildren();
       renderSession(detail, a);
-      const m = $('main');
-      m.scrollTo({ top: m.scrollTop + detail.getBoundingClientRect().top - m.getBoundingClientRect().top - 8, behavior: reduced.matches ? 'auto' : 'smooth' });
+      const m = $('main'), f = $('filters');   // below the filters as they stand once the scroll has tucked them
+      m.scrollTo({ top: m.scrollTop + detail.getBoundingClientRect().top - m.getBoundingClientRect().top - 8 - f.offsetHeight + $('picksRow').offsetHeight, behavior: reduced.matches ? 'auto' : 'smooth' });
     };
     rows.set(a.id, b);
     box.append(b);
@@ -3824,7 +3885,7 @@ window.__rd = {
   block: () => lastBlock && {
     columns: lastBlock.B.columns.map(({ week, runs, target, low, kind }) => ({ week, runs, target, low, kind })),
     scale: lastBlock.scale, now: lastBlock.B.now, topKm: lastBlock.L.topKm, base: lastBlock.L.base,
-    points: lastBlock.L.points.map((p) => p.slice(0, 4)), outlines: lastBlock.L.outlines.map((p) => p.slice(0, 4)),
+    points: lastBlock.L.points.map((p) => p.slice(0, 4)), outlines: lastBlock.L.outlines.map((p) => p.slice(0, 4)), tints: lastBlock.L.tints.map((p) => p.slice(0, 4)),
   },
 };
 

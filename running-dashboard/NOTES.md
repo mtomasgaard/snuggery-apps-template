@@ -187,6 +187,11 @@ pull, writes it; without the race forecast, the race card shows Garmin's
 predictions alone; a session without a note says it has none. Every number
 still works.
 
+On Now, a metric of the assessment whose value and note fit a line (64
+characters or fewer, one sentence) joins the table of short figures at the
+head of the pane; a longer one is set under the verdict, a label over its own
+prose. The routine can write either.
+
 `notes.json` goes in through `garmin_append.py`, which merges by activity id
 and replaces a note sent again; the routine writes the other three whole:
 
@@ -252,7 +257,8 @@ session streams arrive with the ZIP.
 ## The look and the typeface
 
 The look is the template's house system (`ART.md` says how it is applied here, and why the one
-bold thing is the Block, the training block at the head of Now and Plan). Every number, unit and
+bold thing is the Block, the training block under Now's table of figures and at the head of Plan,
+the weeks still to run drawn as outlines around a light tint). Every number, unit and
 date the app writes goes through `js/units.js`: SI units, a true minus, a narrow no-break space
 between a number and its unit and between thousands, dates built by hand with fixed English words,
 day before month, the 24-hour clock, the same on every phone. The Block's weeks, runs and targets

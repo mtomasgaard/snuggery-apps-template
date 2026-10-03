@@ -102,22 +102,29 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
 /* ── the pane: it scrolls inside the frame, so the header and the caption band stay put ── */
 .pane { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .filters, .panebody { max-width: 760px; margin: 0 auto; padding: 0 calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+/* the filters stay under the tabs and the pane scrolls beneath them; in the flow, so at rest they cover
+   nothing; tucked() in app.js lifts the sport and equipment row out with a scroll down (the owner, 2026-10-03) */
+.filters { position: sticky; top: 0; z-index: 4; background: var(--page); }
 .panebody { padding-bottom: 24px; }
 .frow { display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; }
 .winlabel { font-size: 12.5px; }
 
-/* two native range inputs on one track, in the house's slider language: a baseline, the window in
-   2 px of ink, tracer-head thumbs; each thumb a 44 × 44 hit */
+/* two native range inputs on one track, in the house's slider language: a baseline, the window in 2 px
+   of ink, a tracer head at each end of it. The inputs are the 44 × 44 hits and the accessible sliders,
+   drawn at opacity 0, so a phone paints nothing of its own behind a thumb (the owner saw a plate,
+   2026-10-03); the heads are the fill's ::before and ::after, 10 px while their thumb is pressed */
 .dual { position: relative; height: 44px; }
-.dual-track { position: absolute; left: 22px; right: 22px; top: 21.5px; height: 1px; background: var(--line-strong); }
+.dual-track { position: absolute; left: 22px; right: 22px; top: 21.5px; height: 1px; background: var(--line-strong); pointer-events: none; }
 .dual-fill { position: absolute; top: -0.5px; height: 2px; background: var(--ink); }
-.dual input { position: absolute; inset: 0; width: 100%; height: 44px; margin: 0; background: none; pointer-events: none; appearance: none; -webkit-appearance: none; }
-.dual input::-webkit-slider-runnable-track { height: 44px; background: none; }
-.dual input::-moz-range-track { background: none; }
-.dual input::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 44px; height: 44px; border: 0; cursor: pointer; background: var(--thumb); }
-.dual input::-moz-range-thumb { pointer-events: auto; width: 44px; height: 44px; border: 0; border-radius: 0; cursor: pointer; background: var(--thumb); }
-.dual input:active::-webkit-slider-thumb { background: radial-gradient(circle, var(--ink) 4.6px, var(--page) 5px 7.6px, transparent 8px), linear-gradient(var(--ink), var(--ink)) center / 1.5px 18px no-repeat; }
-.picks { display: flex; gap: 8px; padding-bottom: 8px; }
+.dual-fill::before, .dual-fill::after { content: ''; position: absolute; top: -8px; left: -9px; width: 18px; height: 18px; border-radius: 50%; background: var(--thumb); }
+.dual-fill::after { left: auto; right: -9px; }
+.dual:has(input:nth-of-type(1):active) .dual-fill::before, .dual:has(input:nth-of-type(2):active) .dual-fill::after { background: radial-gradient(circle, var(--ink) 4.6px, var(--page) 5px 7.6px, transparent 8px), linear-gradient(var(--ink), var(--ink)) center / 1.5px 18px no-repeat; }
+.dual:has(input:nth-of-type(1):focus-visible) .dual-fill::before, .dual:has(input:nth-of-type(2):focus-visible) .dual-fill::after { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dual input { position: absolute; inset: 0; width: 100%; height: 44px; margin: 0; opacity: 0; pointer-events: none; appearance: none; -webkit-appearance: none; }
+.dual input::-webkit-slider-runnable-track { height: 44px; }
+.dual input::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 44px; height: 44px; cursor: pointer; }
+.dual input::-moz-range-thumb { pointer-events: auto; width: 44px; height: 44px; border: 0; cursor: pointer; }
+.picks { display: flex; gap: 8px; padding-top: 4px; }
 .pick { flex: 1 1 0; min-width: 0; height: 44px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 6px; font-size: 12.5px; font-weight: 560; appearance: none; -webkit-appearance: none; text-overflow: ellipsis; }
 
 /* ── sections, not cards ── */
@@ -169,6 +176,15 @@ summary::-webkit-details-marker { display: none; }
 .fact dd span::before { content: ', '; }
 .fact dd .per::before { content: ' '; }
 @media (min-width: 560px) { .facts { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; } .facts .fact:nth-child(2) { border-top: 0; } }
+/* Now's short facts, a table at the pane's head: the labels a column as wide as the longest (at most
+   half), the values left-aligned so a note wraps under its value; a long fact, a label over its prose */
+.tab { display: grid; grid-template-columns: fit-content(50%) minmax(0, 1fr); column-gap: 12px; }
+.tab .fact { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; }
+.tab .fact:first-child, .long .fact:first-child { border-top: 0; }
+.tab dd, .long dd { margin: 0; text-align: left; text-wrap: pretty; }
+.long { padding-top: 8px; }
+.long .fact { display: block; }
+.long dd { margin-top: 2px; line-height: 1.5; max-width: 62ch; }
 
 /* ── charts: square bars, ink only where it is read against ── */
 .chartwrap { position: relative; margin-top: 4px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -187,12 +203,14 @@ summary::-webkit-details-marker { display: none; }
 .dot { stroke: var(--page); stroke-width: 2; }
 .ink { fill: var(--ink); }
 .outline { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+/* the plan, wherever it is drawn: its outline holds a 20 % tint of its own color (palette.py check 8) */
+.tint { fill-opacity: 0.2; }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 6px; font-size: 10.5px; color: var(--ink-2); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { flex: 0 0 auto; width: 8px; height: 8px; background: var(--c); }
 .legend i.line { width: 16px; height: 2px; }
 .legend i.dash { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 9px); }
-.legend i.plan { background: none; border: 1.5px solid var(--c); }
+.legend i.plan, .zbar.plan span { background: color-mix(in srgb, var(--c) 20%, transparent); border: 1.5px solid var(--c); }
 
 /* the readout card (HOUSE 4.7): the one card on the screen */
 .readout { position: absolute; z-index: 3; width: max-content; min-width: 176px; max-width: min(280px, calc(100% - 16px)); padding: 4px 4px 10px 10px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--sheet); animation: card-in 120ms var(--draw); }
@@ -240,7 +258,6 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .zbar { display: flex; gap: 1px; height: 8px; margin-top: 6px; }
 .zbar.mini { height: 5px; max-width: 160px; }
 .zbar span { background: var(--c); }
-.zbar.plan span { background: none; border: 1.5px solid var(--c); }
 .zbar.empty { background: var(--line); }
 .spark { margin-top: 8px; }
 .mapwrap { border-radius: 8px; background: var(--sheet); margin-top: 8px; }

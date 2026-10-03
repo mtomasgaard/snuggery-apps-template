@@ -1,6 +1,7 @@
 // The Block (ART.md section 1): the training block as a coach draws it, one column a week from
 // eleven weeks back to race day. Ink is each run's running kilometers, an outline the plan's target
-// for the week. Pure, so tools/test_block.mjs can check it against its own decode of the snapshot.
+// for the week, tinted where it is still to run. Pure, so tools/test_block.mjs can check it against
+// its own decode of the snapshot.
 
 import { f1, f0, dateWords, date } from './units.js';
 
@@ -57,7 +58,7 @@ export function blockLayout(B, width, scale) {
   const top = 14, base = top + topKm * scale;
   const xs = B.columns.map((_, i) => Math.round(i * slot));
   const colW = (i) => Math.round((i + 1) * slot) - xs[i] - 4;
-  const points = [], outlines = [], ticks = [];
+  const points = [], outlines = [], ticks = [], tints = [];
   B.columns.forEach((c, i) => {
     let edge = base, cum = 0;
     c.runs.forEach((v, k) => {
@@ -69,13 +70,15 @@ export function blockLayout(B, width, scale) {
     if (c.target != null) {
       const h = Math.round(c.target * scale);
       outlines.push([xs[i], base - h, colW(i), h, i]);
+      // the week still to run: a tint from the outline's top down to the ink (the owner, 2026-10-03)
+      if (edge > base - h) tints.push([xs[i], base - h, colW(i), edge - base + h, i]);
       if (c.low != null) ticks.push([xs[i], base - Math.round(c.low * scale), colW(i), i]);
     }
   });
   const grid = [];
   for (let v = 20; v < topKm; v += 20) grid.push([v, base - v * scale]);
   return {
-    n, slot, xs, colW, topKm, top, base, height: base + 3 + 14, points, outlines, ticks, grid,
+    n, slot, xs, colW, topKm, top, base, height: base + 3 + 14, points, outlines, ticks, tints, grid,
     nowX: xs[B.now] + colW(B.now) / 2,
     raceX: B.race ? xs[B.race.idx] + B.race.day * colW(B.race.idx) : null,
   };

@@ -118,6 +118,16 @@ GRAY_C = 0.012
 # grounds (check 2). It is not a category, so it is not in check 3's pairs.
 AMOUNT = {'light': (0.500, 0.065, 255), 'dark': (0.740, 0.050, 250)}
 
+# The plan's tint (the owner, 2026-10-03: "fill inside the planned stuff (light) to make it possible to
+# see"). Whatever the plan asks for is drawn as a 1.5 px outline of its token around that token at TINT
+# over --page: the Block's weeks still to run (in --ink), the planned bars of the running, zone and day
+# charts, the plan's zone bars and the legend's planned swatch. 0.20 is the largest round strength at
+# which every token ever drawn planned stands at 3:1 or more against its own tint in both themes, so done
+# (solid) and planned (tinted, outlined) stay apart; the tint itself stays under 2:1 on the page (light).
+# Check 8 prints each. style.css carries it as `.tint { fill-opacity: 0.2; }` and `20%` in color-mix().
+TINT = 0.20
+PLANNED = ['zone-1', 'zone-2', 'zone-3', 'zone-4', 'zone-5', 'series-1', 'series-3', 'series-6']   # and --ink
+
 RAMP = [(0.00, 0.120, 245), (0.25, 0.150, 285), (0.50, 0.170, 330), (0.75, 0.170, 15), (1.00, 0.160, 45)]
 RAMP_BAND = {'light': (0.640, 0.420), 'dark': (0.580, 0.860)}
 ROUTE_CASING = 'sheet'
@@ -150,7 +160,7 @@ def ramp_stops(th, n=9):
 def main():
     F = {th: fit(th) for th in BAND}
     if '--json' in sys.argv:
-        print(json.dumps({th: {**F[th], 'ramp': ramp_stops(th)} for th in BAND}, indent=1)); return
+        print(json.dumps({th: {**F[th], 'ramp': ramp_stops(th), 'tint': TINT} for th in BAND}, indent=1)); return
     ok = True
     def check(cond, msg):
         nonlocal ok; ok &= bool(cond); print(('ok   ' if cond else 'FAIL ') + msg)
@@ -249,6 +259,17 @@ def main():
     for th, t in TOK.items():
         check(cr(parse(t['strong']), parse(t['page'])) >= 3, f'{th}: the card\'s edge on the page {cr(parse(t["strong"]), parse(t["page"])):.2f}')
         check(cr(parse(t['ink2']), parse(t['sheet'])) >= 4.5, f'{th}: the card\'s labels, ink-2 on sheet {cr(parse(t["ink2"]), parse(t["sheet"])):.2f}')
+
+    print(f'\n== 8. the plan\'s tint: each planned token at {TINT:.2f} over --page inside its own 1.5 px outline;')
+    print('     the tint seen (1.2:1 or more on the page) and light (under 2:1), done and planned apart (the')
+    print('     solid token at 3:1 or more against its tint, which is also its outline on the tint)')
+    for th in BAND:
+        t = TOK[th]; page = parse(t['page']); seen = []
+        for k in PLANNED + ['ink']:
+            c = parse(t['ink'] if k == 'ink' else F[th][k]); tint = over(c, TINT, page)
+            s, a = cr(tint, page), cr(c, tint); seen.append(s)
+            check(1.2 <= s < 2 and a >= 3, f'{th}: {k:8} {hx(c)} tinted {hx(tint)}: on page {s:.2f}; the token against it {a:.2f}')
+        print(f'     {th}: the tints stand {min(seen):.2f} to {max(seen):.2f} on the page')
 
     print('\nALL CHECKS PASS' if ok else '\nSOME CHECKS FAIL')
     sys.exit(0 if ok else 1)

@@ -1753,3 +1753,223 @@ On an iPhone with iOS 18 and one with iOS 26:
 - Plan's `Week 12 of 16, 28 Sep to 4 Oct` at the largest accessibility text size (one line at 320 px in
   Chromium at the default size);
 - the goal's `Preferences: …` read by VoiceOver as one sentence.
+
+---
+
+## The owner's six (2026-10-03)
+
+The owner used the app on their phone on the morning of 3 Oct (their private copy, Training Load, built
+from this one) and sent three screenshots (Training, Plan, Now) with six points, numbered as they wrote
+them. **The lead's ruling (plan 0011 D32): the owner's features take precedence over the house budget, so
+the code cap is 252 000 B for exactly these six**; `tools/check.mjs` sets `CODE_CAP` to it with that reason.
+HOUSE.md's rules otherwise hold. Every probe named here is a throwaway script in `tools/.work/owner/`
+(gitignored), with the files as they were before this round kept in `tools/.work/owner/orig/`. Headless
+Chromium 153 and WebKit 26.6 on this Mac, 390 × 844 at DPR 2: what the page draws, never how a phone feels.
+
+### What was built, point by point
+
+1. **"I do not like the squares around the sliders."** The two gray squares in the owner's Training
+   screenshot sit exactly on the window's two thumbs, 44 × 44 CSS px with a shadow. They are not this
+   stylesheet's: with the CSS as it was, neither WebKit 26.6 nor Chromium 153 on this Mac draws them
+   (`probe-thumbs.mjs`, `thumbs-before-all.png`: a bare head on the page in both themes), so they are the
+   phone's own painting of a native thumb, whatever its cause. **Built:** the two range inputs are drawn
+   at opacity 0, so nothing the platform paints for them can show, and stay the 44 × 44 hits and the
+   accessible sliders; the heads are drawn by the window's fill, its `::before` and `::after`, the same
+   tracer heads as before (an 8 px ink disc on a 3 px page ring with a 1.5 × 18 px tick through it, 10 px
+   while its thumb is pressed, by `:has(input:active)`), round, so even a key's focus ring is a circle
+   around the head, never a square. The route's distance window on Sessions shares the drawing. **589 B**
+   (`style.css`). *Tested:* `shoot.mjs` finds the inputs at opacity 0, nothing but the page in each thumb's
+   44 × 44 box outside its head and the track (0 of 5 616 samples, both themes), each head's ink 14.80 and
+   14.43:1, and each hit 44 × 44 by `elementFromPoint` (43 of 43 points both ways). *Not shown here:* that the
+   phone's square is gone; Chromium never drew it, so the pixel check passes on the old CSS too, and only
+   the opacity check fails there. That is a phone check.
+
+2. **"The sliders should be locked on top for relevant pages."** On Training, Health and Sessions the window
+   (its words, its printed range, its track) is held under the tabs while the pane scrolls beneath. **Built:**
+   the filter block is `position: sticky; top: 0` inside the pane's scroller, on `--page`, z-index 4 (over a
+   chart's card at 3, under a notice at 5). It stays in the flow, so at rest the pane's content begins at
+   its foot and nothing is covered. *The brief asked for the pane's top padding to equal the block's
+   height:* there is no padding to set, because the block keeps its own place in the flow; the equivalent
+   is measured instead, the content's top at the block's height (136 = 136 on Training, 88 on Health). An
+   overlay with a padding would have needed the padding to follow the tuck (point 3) and opened a gap at
+   the top. A session picked on Sessions scrolls to 8 px under the block as it stands once tucked (the old
+   scroll put it under the block). **429 B** (`style.css` 296, `app.js` 133). *Counts against the plate:* of
+   the 694 px pane at 390 × 844, 136 at rest and 88 once tucked, leaving 558 and 606; on a phone on its side
+   (844 × 390), 136 and 88 of 320, leaving 184 and 232 (`shoot.mjs`).
+
+3. **"The sport/equipment filter can be above sliders and can be hidden when moving down."** **Built:** the
+   selects' row moves to the top of the block (4 px under the tabs, 48 px with its frames), above the window's
+   words and track. It tucks like a browser's bar: `tucked()` in `app.js`, on the scroller's `scroll`, sets the
+   block's `translateY` to the scroll moved since the direction last changed, held between 0 and the row's
+   height and never more than the scroll itself. So a scroll down carries the row up and out with the pane,
+   pixel for pixel, gone after 48 px; a scroll up brings it back the same way; at the top it is always
+   there, with no gap. It never moves on a timer: no transition, so `check.mjs`'s motion rule (no transition
+   anywhere) holds unchanged and Reduce Motion has nothing to stop. A key that focuses a control in the block
+   brings it back (`focusin`, only when the target matches `:focus-visible`): a finger on a thumb does not, so
+   the track never moves under a drag. In Chromium a touch on a thumb does not focus it at all
+   (`probe-drag.mjs`); whether iOS does is unknown, hence the gate. Health has no selects, so nothing tucks
+   there. **807 B** (`app.js` 810, `style.css` −3; `index.html` only reordered). *Tested:* `shoot.mjs`, both
+   themes: 200 px down, the row's foot at the pane's top and the window's words at the top, 88 px of block
+   held; 60 px back up, the row back whole; at the top, the block as at rest; the same by touch (a drag up
+   to about 300 px tucks it, a drag down of about 125 px brings it back); a finger dragging the window's end
+   with the row tucked moves the window (week 37 to 30) while the track holds at one height through all ten
+   moves; Health holds its 88 px and tucks nothing. `probe-focus.mjs`: Tab into the selects while tucked
+   brings the row back in both engines.
+
+4. **"On the plan I want a running plot similar to the time in zone plot with colors as it was. I like the
+   new one as well."** The stock app's chart was read from the stranger's pictures of the stock app,
+   `tools/.work/shots/light-Plan-full.png` and `dark-Plan-full.png` (2026-10-02, 13:59, before the pass; crops
+   in `tools/.work/owner/stock/`): **Running volume, past and planned**, after the goal and before the time in
+   zone, kilometers per week stacked `Below Z1`, `Easy (Z1–2)`, `Moderate (Z3)`, `Hard (Z4–5)` (the zone hues:
+   pale gray, blue, green, orange), the plan's weeks as pale fills of the same colors, a 4-week average
+   actual (ink) and planned (dashed), `now` and the race's rule. **Built:** the same chart in the house: the
+   Block's sixteen weeks (`blockWeeks()`), each run week's kilometers by zone from `kmByZone()` (as the day
+   charts take them) in the fitted tokens of those four colors (`--zone-0`, `--zone-2`, `--zone-3`,
+   `--zone-4`: the stock's hues, lightness fitted), the plan's weeks split by their own `mix`, drawn planned
+   (outlined and tinted, point 5), this week's rest of its target on top of what was run, the two averages
+   meeting at `now`, the race's rule and name, its card the Block's with the zones under it, a legend, the
+   caption `One bar is one week, Monday to Sunday.` and `Show the table`. The Block stays as it is. *Where the
+   brief and the stock differ:* the stock's planned bars were pale fills (its "faint" fills at 38 %, the
+   pass's record says), not outlines; the outline with a 20 % tint keeps the house's rule and gives the
+   stock's pale look. The stock showed no walked portion in this chart (`Below Z1` is running below the zone
+   1 floor), so none is drawn. This week's rest is split by the week's mix, where the time in zone puts its
+   rest in easy; and this week counts at the larger of done and target in both averages, as on the time in
+   zone. *Fixed in the build:* the first build's race name crossed the bar of 14 Sep (77.8 km in an 80 km
+   plot); the plot now keeps a tenth of headroom over its tallest week (top 100 km). **2 941 B** (`app.js`).
+   *Tested:* `shoot.mjs`, both themes: the section between `Goal: Copenhagen Half Marathon` and `Time in zone,
+   past and planned`; its legend's seven entries; 15 planned segments tinted; the race's name clear of all
+   63 bars; its table's 16 weeks, each run week's kilometers as the script sums them and its four zones
+   adding up to them, this week's 62 km, the plan's 76, 62, 48 and 49; a tap on 14 Sep, `77.8 km` (the
+   script's sum) with four zones adding up to 77.8.
+
+5. **"I want fill inside the planned stuff (light) to make it possible to see."** **Built:** every planned
+   element drawn as an outline now holds its own token at 20 % over the page: the Block's weeks still to run
+   (in ink, and only from the outline's top down to the ink, so this week is tinted above its runs and a
+   week run past its target not at all; `js/block.js` computes the tints, `window.__rd.block().tints` shows
+   them), the running, time-in-zone and day charts' planned segments (`segRect()`: the segment's own fill
+   under `.tint { fill-opacity: 0.2; }`, its stroke at full strength), the plan's zone bars in the week rows
+   and the legend's `Planned` swatch (`color-mix(in srgb, var(--c) 20%, transparent)`), and About's sentence
+   on the outline. *Why 0.20:* `palette.py` (new `TINT`, check 8, `tint` in `--json`): the largest round
+   strength at which every token ever drawn planned stands at 3:1 or more against its own tint in both themes
+   (at 0.22 zone 5 falls to 2.95 in the light theme), so done and planned stay apart at the mark's target,
+   and every tint stays under 2:1 on the page: light 1.28 to 1.51, dark 1.22 to 1.80; the Block's ink tint
+   `#bdc4c7` (1.51:1, the ink 9.82:1 on it) and `#3e474a` (1.80:1, 8.03:1). ART.md section 2 prints the whole
+   table. **713 B** (`style.css` 125, `js/block.js` 244, `app.js` 303, `index.html` 41). *Tested:*
+   `test_block.mjs` (two new cases, both scales: 5 tints from each outline's top to the ink, this week's
+   31 px on Now over its 24.0 km; a week run past its target keeps its outline and no tint); `shoot.mjs`, both
+   themes: the Block's 535 samples inside its tints, 94.8 % at the tint's exact color (the race's rule
+   crosses one column), the outlines' strokes still ink; on Plan, the tallest planned segment of each of the
+   four charts sampled inside, within one step per channel of its token at 20 % (light `rgb(186,209,227)` for
+   `rgb(186,210,227)`, dark exact), the done segment of its color 4.00 (light) and 5.11 (dark) against it; the
+   zone bars and the legend swatch at alpha 0.2. `check.mjs` holds the stylesheet's two forms to
+   `palette.py`'s `tint`.
+
+6. **"The Now pane would read better as a table on top."** **Built:** Now opens on a table of its short facts,
+   above the Block and the verdict: the app's four (`Run, last 7 days`, `Run, last 28 days`, `Garmin status`,
+   `VO₂ max`) and every metric of the evaluation that fits a line, by a rule a routine can follow: its value
+   and note 64 characters or fewer, and no second sentence (a period, `!` or `?` followed by a capital). The
+   demo's four metrics (`Weeks done`, `Biggest week`, `10 km tune-up`, `Goal`) all fit; the owner's
+   (`Share of the 2025 peak`, `The down week, as it closed`, `Fridays without a run`, `HRV last night`) run
+   to three to five sentences and do not. The table is a `<dl class="tab">` on a grid with `subgrid` rows:
+   the labels a column as wide as the longest (at most half), the values left-aligned beside them, a note
+   wrapping under its own value, `text-wrap: pretty` (it kept the demo's `1 Nov` whole in both engines; iOS
+   18 ignores it). A long metric is set under the verdict as a label over its prose, left-aligned at 12.5 px,
+   line height 1.5, at most 62 characters wide. *Placement, decided here:* the brief says the long facts
+   "stay below with the evaluation". Under the verdict was chosen over two alternatives: where they stood
+   (after `What to do next`, where they read as part of the plan's section) and inside `The full evaluation`
+   (below the race table, far from the headline they argue for). The verdict is the evaluation's headline and
+   these are its evidence; moving them is one line in `paneNow()` if the owner prefers otherwise. The Block,
+   the figure, the coaching text and the private copy's anchors (the empty-assessment and empty-plan
+   sentences, `rewritten by each run of the coaching routine`, the race table's strings) are unchanged.
+   `NOTES.md` states the rule for the routine's author. **1 086 B** (`app.js` 435, `style.css` 651). *Tested:*
+   `shoot.mjs`, both themes: the pane's first section is the table, its eight labels as the script expects
+   them, the first value the script's own 50.1 km, every value at one left edge (x 147), the Block second,
+   no long fact in the demo; then the snapshot served with one long metric added: it is under the verdict,
+   not in the table (still eight rows), three lines of left-aligned prose inside the gutters.
+
+### What it cost
+
+| Point | Bytes | Where |
+| --- | --: | --- |
+| 1. No plate behind the thumbs | 589 | `style.css` |
+| 2. The filters held under the tabs | 429 | `style.css` 296, `app.js` 133 |
+| 3. The selects above, tucking with the scroll | 807 | `app.js` 810, `style.css` −3 |
+| 4. Plan's running chart | 2 941 | `app.js` |
+| 5. The plan's tint | 713 | `style.css` 125, `js/block.js` 244, `app.js` 303, `index.html` 41 |
+| 6. Now's table | 1 086 | `app.js` 435, `style.css` 651 |
+| **All six** | **6 565** | 244 994 before (the record's 244 917 and the lead's 77 B in `index.html` and `style.css` at 20:07 on 2 Oct) to **251 559 of 252 000**, 441 B to spare |
+
+Attributed hunk by hunk from a `difflib` comparison with `tools/.work/owner/orig/` (the sum is the measured
+total). Nothing was minified and no existing comment stripped; the new comments were kept to a line or
+two. The ZIP is 1 080 837 B of 1 340 193 (`ART.md` and `NOTES.md` ship inside it). The data: 37 files,
+byte-identical (`check.mjs`: concatenation `871171cb…b13f0dc`). The stored keys are as they were
+(`running-dashboard.ui.v3`, `tl-loadunit`).
+
+### Declined, departed from, or not mine
+
+- **Nothing declined.** Departures from the brief's letter, each above: no top padding (the block keeps its
+  place in the flow, measured equal); the stock's planned bars were fills, not outlines; no walked portion
+  (the stock had none in this chart).
+- **`shoot.mjs` has no three-speed scrub in this app**, so there was none to keep: a pane app has no player
+  (HOUSE 4.0). Its other checks (hit targets, Reduce Motion, the camera's drag, the card sweeps and the rest)
+  pass; the two card sweeps' "in view" now means under the held filters, not only inside the pane.
+- **For the lead:** `screenshots/app.png`, the README's composite, is untouched (`f3d36d54aaa8…`) and shows
+  Now as it was; the camera's picture of Now now leads with the table. The private copy's anchors were
+  counted before and after: every one present the same number of times, and every line naming the agent
+  identical.
+
+### The tools' last lines (2026-10-03, from `Template/running-dashboard/` unless noted)
+
+- `node tools/check.mjs`: `all checks pass` (`app code 251,559 bytes (cap 252,000, …)`, `ZIP size 1,080,837
+  bytes`, and the new line `the plan's tint at palette.py's 0.2 in both themes: …`).
+- `node tools/test_block.mjs`: `all 18 pass` (15 before; the tint at both scales, and a week run past its
+  target).
+- `python3 running-dashboard/tools/art/palette.py` (from `Template/`): `ALL CHECKS PASS` (check 8 new, 18 lines).
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: `all checks pass`, 157 checks (116 before),
+  `screenshots/{now,plan,training,health,sessions}-{light,dark}.png` and `about-light.png` refreshed,
+  `screenshots/app.png` untouched.
+- **The regression proof.** The new `shoot.mjs` was run (`SCHEMES=light`) on the app as it was before this
+  round (`app.js`, `style.css`, `index.html`, `js/block.js` from `tools/.work/owner/orig/`), then the new files
+  were put back and `cmp` was silent for all four (`tools/.work/owner/proof-final.log`). 19 checks failed,
+  every new per-theme one: the Block's tints (`0 tints`), the Now table (`a table of 0 short facts`), the
+  thumb drag (`week 37 to 37`, the track scrolled away to −62 px), the held filters (`140 px … its foot at
+  -60 px`) in all four states and by touch, Health, the thumbs (`the inputs at opacity 1 and 1`; the pixels
+  around them were already clean in Chromium), the running chart (`between "undefined" and ""`), its table
+  and card, the four charts' planned interiors (`a planned segment to sample`), the zone bars (`rgba(0, 0, 0,
+  0)`) and the long fact.
+
+### What I looked at
+
+`screenshots/now-*.png`: the pane opens on the eight-row table (labels in a column, values left-aligned,
+`253.9 km, 12 % more than the 28 days before, 0.5 km walked` wrapping under its value, `1 Nov` whole), then
+the Block with its coming weeks pale inside their outlines and this week tinted above its two runs, then
+`Week of 28 Sep, data to 30 Sep 24.0 km of 62 km planned` and the verdict. `screenshots/plan-*.png`: the
+Block on Plan with the same pale weeks, the race-day figure, the verdict, the goal, then the head of
+`Running volume, past and planned`; `tools/.work/shots/plan-running-*.png` shows the whole chart: the
+stock's four colors fitted to the band, run weeks solid, the plan's weeks outlined around pale blue, green
+and brown (dim blue, green and amber in the dark theme), the averages meeting at `now`, the race's name
+clear over the plan's weeks, a tapped week's card with its zones, the table. `screenshots/training-*.png`:
+the selects, the window's words and the track with its two bare heads held at the top over `Running`;
+`training-tucked-*.png`: the selects gone, the window and track over the chart as it scrolls beneath;
+`training-landscape-light.png`: the same on a phone on its side, 232 px of chart under them;
+`now-long-fact-*.png`: a served long metric under the verdict as a label over three lines of prose.
+
+### Phone checks this adds (not claimed here)
+
+On an iPhone with iOS 18 and one with iOS 26:
+- **the filters held and the selects' row tucking, by thumb**: the row following the finger both ways,
+  momentum and the rubber-band at the top (the row always there) and at the bottom (it may come back on the
+  bounce, as a browser's bar does); the 88 px held over Training and Sessions, 136 at rest, and on a phone
+  on its side; VoiceOver reaching a tucked select (does it come back, can it be opened);
+- **the thumbs without their plates**: no square behind either thumb at rest, under a finger or after one;
+  each hit still 44 × 44; the head growing to 10 px while pressed (`:active` on iOS needs a touch handler,
+  as before); whether a touch focuses the range input, and if it does, that no ring appears on a touch and
+  the track holds still;
+- **the tints at the phone's display**, both themes and at full and low brightness: the plan's weeks seen as
+  pale bars and never mistaken for done, on the Block, the running and time-in-zone charts, the day charts and
+  the week rows' zone bars;
+- **Now's table**: the label column and the left-aligned values (`subgrid`, `fit-content()`), and a date in a
+  note on iOS 18, where `text-wrap: pretty` does nothing; the owner's long metrics under the verdict, read by
+  VoiceOver label first;
+- **Plan's running chart**: a tap's card over the chart's neighbors, the table's sideways scroll, the race's
+  name on the owner's own plan.

@@ -84,6 +84,25 @@ for (const [pane, scale] of [['Now', SCALE.now], ['Plan', SCALE.plan]]) {
   ok(good, `${pane}: ${scale} px per km, a ${topKm} km plot ${L.base - L.top} px tall, ${L.points.length} blocks and ${L.outlines.length} outlines where this file puts them${msgs.length ? ': ' + msgs.slice(0, 4).join('; ') : ''}`);
 }
 
+/* ── the plan's tint (the owner, 2026-10-03): inside every outline, from its top down to the ink, so only
+   the part of a week still to run is tinted; a week run past its target keeps its outline and no tint ── */
+for (const [pane, scale] of [['Now', SCALE.now], ['Plan', SCALE.plan]]) {
+  const L = blockLayout(B, 358, scale), bad = [];
+  B.columns.forEach((c, i) => {
+    const o = L.outlines.find((x) => x[4] === i), tn = L.tints.find((x) => x[4] === i);
+    const ink = L.base - Math.round(sums[i] * scale), want = o && ink > o[1] ? [o[0], o[1], o[2], ink - o[1]] : null;
+    if (JSON.stringify(want) !== JSON.stringify(tn ? tn.slice(0, 4) : null)) bad.push(`column ${i}: ${JSON.stringify(tn)} for ${JSON.stringify(want)}`);
+  });
+  const now = L.tints.find((x) => x[4] === B.now);
+  ok(bad.length === 0 && L.tints.length === L.outlines.length, `${pane}: ${L.tints.length} tints, each from its outline's top down to the ink (this week ${now && now[3]} px over its ${sums[B.now].toFixed(1)} km, the planned weeks whole)${bad.length ? ': ' + bad.slice(0, 3).join('; ') : ''}`);
+}
+{
+  const plan = { ...snap.plan, weeks: [], horizon: snap.plan.horizon.map((h) => (h.w === '2026-09-28' ? { ...h, km: 20 } : h)) };
+  const B2 = blockWeeks(snap.activities, plan, today), L2 = blockLayout(B2, 358, SCALE.now);
+  ok(L2.outlines.some((x) => x[4] === B2.now) && !L2.tints.some((x) => x[4] === B2.now) && L2.tints.length === L2.outlines.length - 1,
+    `a week run past its target (${sums[B.now].toFixed(1)} km against 20): its outline kept, no tint`);
+}
+
 /* ── without a plan, and with a plan whose week is a range ── */
 {
   const B0 = blockWeeks(snap.activities, null, today);

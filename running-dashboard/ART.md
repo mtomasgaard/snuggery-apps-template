@@ -5,12 +5,14 @@ file says how the app looks, moves and speaks under the template's house system
 (`Template/HOUSE.md`, the brief; Global Weather is the reference). It is the first of HOUSE 4.0's
 *panes from a pull* to take the house, so what it settles for a pane app (the frame that scrolls
 inside itself, the caption band that closes each pane, the readout card inside a chart, the plan drawn
-in outline, a finger that scrolls without opening cards) is the pattern the pane apps after it follow.
+in outline around a light tint, a finger that scrolls without opening cards, the filters held under the
+tabs) is the pattern the pane apps after it follow.
 
 The record of the pass (the lead's rulings, the owner calls, the departures as built, the QA, review and
 follow-up answers) is in `tools/DECISIONS.md`, which does not ship (section 8).
 
-**Every figure here was measured on 2026-10-02** and names the command that printed it. The commands
+**Every figure here was measured on 2026-10-02, and those of the owner's six on 2026-10-03,** and names the
+command that printed it. The commands
 run from `Template/running-dashboard/` unless they say `Template/`. `python3
 running-dashboard/tools/art/palette.py` (from `Template/`) prints every color and contrast and ends
 `ALL CHECKS PASS`. Pictures from `tools/shoot.mjs` (headless Chromium, 390 × 844, DPR 2, real touch,
@@ -32,11 +34,13 @@ Copenhagen, the morning after the demo's pull, unless the text names the evening
   of one quantity (weekly kilometers, sleep, steps, floors, calories, HRV, VO₂ max, weight) wears no hue
   of its own: it is drawn in `--amount`, a quiet slate, so Training and Health read as instrument
   plates and every average line is ink on a casing.
-- **The plan is drawn in outline, everywhere.** What was done is filled; what the plan asks is a
-  1.5 px outline of the same shape. The Block (section 1) is where that rule is born; the day charts,
-  the load chart and the plan's zone bars follow it, so a reader learns it once.
+- **The plan is drawn in outline, everywhere, around a light tint.** What was done is filled; what the
+  plan asks is a 1.5 px outline of the same shape around its own color at 20 % (section 2, "The plan's
+  tint"), so the plan can be seen and done still reads apart from planned. The Block (section 1) is where
+  that rule is born; the running and time-in-zone charts on Plan, the day charts and the plan's zone bars
+  follow it, so a reader learns it once.
 - **One bold thing: the Block** (section 1), the training block as a coach's sheet, weeks of running
-  in ink with the weeks still to run as empty outlines up to race day. It is the only drawing in ink at
+  in ink with the weeks still to run as pale outlines up to race day. It is the only drawing in ink at
   full strength; everything else is quiet.
 - **Honesty is the coaching text's provenance and the data's age.** Every number is the watch's or is
   computed here by a method About names. The evaluation, the plan and the race forecast are text the
@@ -59,12 +63,12 @@ Copenhagen, the morning after the demo's pull, unless the text names the evening
 | Shelf Atlas | the Peaks | the map | each field's best month so far | around the discs | rings |
 | World Oil & Gas | the Ledger | the world's output in one year | each country's share | a strip under the plate | one strip of blocks |
 | Snug Kart | the Lap Chart | race distance, in timing lines | each racer's place at each line | the results sheet | eight crossing lines |
-| **Running Dashboard** | **the Block** | **weeks, twelve back to race day** | **each run's kilometers, and the plan's target per week** | **the head of Now and Plan** | **ink columns cut into runs, then empty outlines** |
+| **Running Dashboard** | **the Block** | **weeks, twelve back to race day** | **each run's kilometers, and the plan's target per week** | **under Now's facts; the head of Plan** | **ink columns cut into runs, then pale outlines** |
 
 The one family resemblance is Shelf Atlas's Peaks, where an outline is a reference and the fill is
 now. There the reference is a record behind the disc (the field's best month); here it is an
-intention ahead of the ink (the week the plan asks for), and the outline is empty until the runner
-fills it. It is the only signature in the template that draws the future as something a person is
+intention ahead of the ink (the week the plan asks for), and the outline holds only a pale tint until
+the runner fills it with ink. It is the only signature in the template that draws the future as something a person is
 going to do rather than something that will happen to them.
 
 ---
@@ -74,15 +78,15 @@ going to do rather than something that will happen to them.
 **What it is, in one paragraph a stranger would get.** A coach plans a race as a *block*: sixteen
 weeks or so of running drawn up on one sheet, the weekly distance climbing through a build with an
 easier week every few, peaking, then tapering into race day. Runners pin that sheet to the fridge and
-fill it in. Running Dashboard draws the sheet at the top of its first pane. Each week is a column.
-The weeks already run are solid ink, cut into one block per run, so a week of six runs shows six
-pieces with the long run the tallest. The weeks still to come are empty outlines as tall as the plan
+fill it in. Running Dashboard draws the sheet on its first pane, under the morning's figures. Each week
+is a column. The weeks already run are solid ink, cut into one block per run, so a week of six runs shows
+six pieces with the long run the tallest. The weeks still to come are pale outlines as tall as the plan
 asks, ending at the race, named over its week. This week is both: an outline of what the plan wants,
 with this week's runs filling it from the bottom, a block at a time. A glance says how far into the
 block you are, what the shape of it has been, how much of this week is left, and how many weeks
 until the start line.
 
-**What a stranger remembers** is the empty boxes. The demo's Block (`node tools/test_block.mjs`
+**What a stranger remembers** is the pale boxes. The demo's Block (`node tools/test_block.mjs`
 decodes `data/snapshot.json` with its own code and prints these): twelve weeks back from the week of
 28 Sep, from 49.8 km (13 Jul, five runs) through two peaks of 73.9 and 77.8 km (7 and 14 Sep, six runs
 each, the long runs 23.0 and 24.0 km) and two down weeks (40.0 km on 24 Aug, 45.9 km on 21 Sep), then
@@ -100,7 +104,8 @@ distances are 49.9, 74.0, 78.0 and 46.0 km.
    plan and the runs on one axis.
 2. *What does a person do most here?* Opens it in the morning on Now, the pane the app opens on and
    the marketing camera photographs: did the week go to plan, what is next, how long to the race. The
-   Block sits where the eyes land and answers all three.
+   Block sits on the first screen, under the table of the morning's figures the owner asked to read first
+   (2026-10-03), and answers all three.
 3. *What does this data have that no other app has?* A plan: an intention written ahead by the
    coaching routine (`plan.horizon[]`, one target per week to the race; `plan.goal.race`, a dated race)
    set against what the watch recorded. No other app in the template has a future that a person will
@@ -115,8 +120,8 @@ distances are 49.9, 74.0, 78.0 and 46.0 km.
      and the demo's routes are segments of famous courses, not the runner's own.
    - *The heart-rate zone trace* (every second of a run credited to a zone, `zk`): precise and rare, but
      a picture of one session, read on Sessions, not the thing a person opens the app for.
-4. *Can it be drawn with the house's means?* Yes: `--ink` blocks and 1.5 px `--ink` outlines on
-   `--page`, `--line` hairlines, 10.5 px labels in the house face, no motion at all.
+4. *Can it be drawn with the house's means?* Yes: `--ink` blocks and 1.5 px `--ink` outlines around a
+   20 % `--ink` tint on `--page`, `--line` hairlines, 10.5 px labels in the house face, no motion at all.
 
 **The rule it is drawn by** (`js/block.js`, pure; `tools/test_block.mjs` proves it):
 
@@ -133,8 +138,11 @@ distances are 49.9, 74.0, 78.0 and 46.0 km.
   blocks; a block under 1 px is drawn 1 px. No other sport is drawn: the Block is running kilometers,
   as its caption says.
 - **The outline.** For `this` and each later column, the plan's target: `horizon[i].km` for that Monday.
-  Drawn as a 1.5 px `--ink` stroke inset by 0.75 px so its outer edge is the column's edge, no fill,
-  square corners. Where `plan.weeks[]` gives the same week a range (`targetKm` like `26–30 km`), the
+  Drawn as a 1.5 px `--ink` stroke inset by 0.75 px so its outer edge is the column's edge, square
+  corners, around **the tint**: `--ink` at 20 % over the page (`.tint`; `#bdc4c7` light, `#3e474a` dark),
+  from the outline's top down to the ink, so only the part of a week still to run is tinted: a planned
+  week whole, this week above its runs (31 px of the 50 px outline on Now in the demo, over 24.0 km), a
+  week run past its target not at all (the owner asked to see the plan, 2026-10-03). Where `plan.weeks[]` gives the same week a range (`targetKm` like `26–30 km`), the
   outline runs to the upper value and a 1 px `--ink` tick crosses it at the lower value; the readout
   prints the range as written. A week before `this` never has an outline: past plans are not kept in
   the data, and the Block does not invent them (About says so).
@@ -179,8 +187,9 @@ distances are 49.9, 74.0, 78.0 and 46.0 km.
   run, an outline the plan's week.` Without a race: `Weeks of running: ink is a run, an outline the
   plan's week.` Without a plan: `Weeks of running: each block is a run. No plan in this snapshot.`
 - **The test hook**: `window.__rd.block()` returns `{ columns: [{ week, runs: [km…], target, low,
-  kind }], scale, now, topKm, base, points: [[x, y, w, h]…], outlines }`, the drawn rectangles in CSS px,
-  so `shoot.mjs` checks the drawing against its own decode and samples the ink's pixels.
+  kind }], scale, now, topKm, base, points: [[x, y, w, h]…], outlines, tints }`, the drawn rectangles in
+  CSS px, so `shoot.mjs` checks the drawing against its own decode and samples the ink's and the tint's
+  pixels.
 
 **The test** (HOUSE 5.2), each answered yes:
 
@@ -197,7 +206,11 @@ distances are 49.9, 74.0, 78.0 and 46.0 km.
    running-dashboard/tools/art/palette.py`, check 4), against a target of 3.0:1 for a mark. The 1 px
    gap between two runs is the page itself, so it holds the same figure. `shoot.mjs` samples the drawn
    ink on rendered pixels: 2 257 samples in each theme, every one at 3:1 or more, the lowest 14.80
-   (light) and 14.43 (dark).
+   (light) and 14.43 (dark). The tint inside the outlines stands 1.51:1 (light) and 1.80:1 (dark) on the
+   page, seen and light, and the ink 9.82:1 and 8.03:1 against it, so a run never reads as a plan
+   (`palette.py`, check 8); `shoot.mjs` samples 535 points inside the tints in each theme, 94.8 % at the
+   tint's exact color (the race's 1 px rule crosses one column), and `test_block.mjs` checks every tint's
+   place against its own decode.
 5. *It survives Reduce Motion.* It has no motion.
 6. *About says what it shows and what it does not* (its first section): running only, walk breaks
    out; one block per run, not per day; the outline is the plan as the coaching routine wrote it on
@@ -317,6 +330,38 @@ orange (`#965a01`) and its green as a forest green (`#115702`)**, because Garmin
 green (L 0.676) are too light to stand at 3:1 on the film-base page; in the dark theme both stay close
 to Garmin's (`#dc8602`, `#8dec7e`).
 
+### The plan's tint
+
+Whatever the plan asks for is drawn as a 1.5 px outline of its token around **that token at 20 % over
+`--page`** (the owner: "fill inside the planned stuff (light) to make it possible to see", 2026-10-03):
+the Block's weeks still to run (in `--ink`), the planned bars of the running, time-in-zone and day charts
+on Plan, the plan's zone bars in its week rows, and the legend's `Planned` swatch. In the SVG it is the
+segment's own fill under `.tint { fill-opacity: 0.2; }`, the stroke at full strength over it; in HTML,
+`color-mix(in srgb, var(--c) 20%, transparent)` inside the 1.5 px border. One strength for both themes,
+in `palette.py` as `TINT` and in `--json` as `tint`; `check.mjs` holds the stylesheet's two forms to it.
+
+**0.20 is the largest round strength at which every token ever drawn planned stands at 3:1 or more
+against its own tint in both themes** (at 0.22 zone 5 falls to 2.95 in the light theme), so done (solid)
+and planned (tinted, outlined) stay apart at the mark's own target, and the outline reads on its tint as
+it does on the page. Every tint stays under 2:1 on the page: light. Check 8 prints each:
+
+| Token | Light: tint | on page | token on it | Dark: tint | on page | token on it |
+| --- | --- | --: | --: | --- | --: | --: |
+| `--zone-1` | `#cdd3d5` | 1.29 | 3.81 | `#2f383c` | 1.43 | 4.78 |
+| `--zone-2` (easy) | `#bad2e3` | 1.34 | 4.03 | `#243a4d` | 1.46 | 5.11 |
+| `--zone-3` (moderate) | `#bdd0c0` | 1.38 | 5.42 | `#2c4634` | 1.66 | 7.10 |
+| `--zone-4` (hard) | `#d8d0c0` | 1.31 | 3.64 | `#3c321b` | 1.36 | 4.48 |
+| `--zone-5` | `#e5c9c9` | 1.32 | 3.05 | `#3e2526` | 1.22 | 3.49 |
+| `--series-1` | `#bbcbe8` | 1.40 | 4.94 | `#2f3d4d` | 1.54 | 5.92 |
+| `--series-3` | `#bad6d0` | 1.32 | 3.67 | `#1b3e36` | 1.46 | 5.12 |
+| `--series-6` | `#d2d1e9` | 1.28 | 3.35 | `#2d2f4a` | 1.32 | 3.77 |
+| `--ink` (the Block) | `#bdc4c7` | 1.51 | 9.82 | `#3e474a` | 1.80 | 8.03 |
+
+`shoot.mjs` samples the inside of the tallest planned segment of each chart on Plan in both themes and
+finds the tint within one step per channel of its token at 20 % over the page (light `rgb(186,209,227)`
+for easy's `rgb(186,210,227)`, 1.35:1 on the page, the done easy segment 4.00:1 against it; dark
+`rgb(36,58,77)` exactly, 1.46:1 and 5.11:1).
+
 ### The route ramp
 
 The Sessions pane colors a route by pace, speed, cadence, power or elevation: cool for low, warm for
@@ -378,8 +423,9 @@ region, the motion rules, landscape and safe areas.
 ### The frame
 
 Now, at 390 × 844, on the evening of the pull (the clock at 30 Sep 2026, 21:00 in Copenhagen; heights
-in CSS px, safe-area insets outside them; from the next day the stamp and the week's words read as
-"When the phone has moved past the data" says):
+in CSS px, safe-area insets outside them, measured by a throwaway probe in `tools/.work/owner/` on
+2026-10-03; from the next day the stamp and the week's words read as "When the phone has moved past the
+data" says):
 
 ```
 ┌──────────────────────────────────────────┐
@@ -387,25 +433,28 @@ in CSS px, safe-area insets outside them; from the next day the stamp and the we
 │ Updated 20:20, last session 30 Sep       │ 16  the stamp, 11.5, --ink-2 (opens About)
 │ Now  Plan  Training  Health  Sessions    │ 44  the panes as tabs; the tracer under the chosen
 ├──────────────────────────────────────────┤ ── the pane scrolls from here down, inside the frame
-│                Copenhagen Half …, 1 Nov│ │ 14  the race's name over its day
-│ ▇ ▇ ▇ ▇ ▇ ▇ ▅ ▇ █ █ ▆ ▄  ┌┐ ┌┐ ┌┐ ┌┐      │ 64  the Block: ink cut into runs, then outlines
-│ Jul 2026     Aug       Sep          Oct  │ 14
-│ Weeks of running to Copenhagen Half      │ 30  its caption, 11 px, two lines
-│ Marathon: ink is a run, an outline the … │
+│ Run, last 7 days   50.1 km, 5 runs       │275  the short facts first, a table: labels in a
+│ Run, last 28 days  253.9 km, 12 % more   │     column, values left-aligned, a note wrapping
+│                    than the 28 days …    │     under its value; eight rows, the app's four
+│ Garmin status      productive, acute 144 │     and the evaluation's four short metrics
+│ …                                        │
+│                Copenhagen Half …, 1 Nov│ │202  the Block's section: the race's name over its
+│ ▇ ▇ ▇ ▇ ▇ ▇ ▅ ▇ █ █ ▆ ▄  ┌┐ ┌┐ ┌┐ ┌┐      │     day, ink cut into runs, then tinted outlines,
+│ Jul 2026     Aug       Sep          Oct  │     the months, its caption in two lines and its
+│ Weeks of running to Copenhagen Half …    │     Show the table key
 │ This week, 28 Sep to 4 Oct       24.0 km │ 59  the one large figure 21/600, 14 px of air
 │                         of 62 km planned │     above it; the week at its left
-│ On track. Eleven weeks in, the block …   │     the verdict in --ink 620, the headline in prose
-│ What to do next                          │     a section's heading, 13.5/650
-│ On track. Sharpen this week, one last …  │     the plan's tone and headline
-│ [Open the plan]                          │ 44  a framed text key
-│ Run, last 7 days         50.1 km, 5 runs │     the facts as label: value rows
-│ …                                        │
+│ On track. Eleven weeks in, the block …   │ 77  the verdict in --ink 620, the headline in prose
+│ What to do next                          │     a section's heading, 13.5/650 (from 612 px down)
 ├──────────────────────────────────────────┤ ── fixed: the caption band
 │ Updated 30 Sep, 20:20. Evaluation and    │ 30  the pane's caption line, two fixed lines
 │ plan written 30 Sep.                     │
 │ Data: Garmin Connect. Coaching text: …   │ 15  the credits, word for word
 └──────────────────────────────────────────┘
 ```
+
+The pane is 694 px tall between the header (94) and the caption band (56), so Now's first screen holds
+the table, the Block, this week's figure and the verdict.
 
 - **The frame.** `body` is a column of three: the header, the pane (`<main>`, `flex: 1 1 auto;
   min-height: 0; overflow-y: auto; overscroll-behavior: contain`) and the caption band; the page is
@@ -435,20 +484,40 @@ in CSS px, safe-area insets outside them; from the next day the stamp and the we
   pane is a `role="tabpanel"` labeled by the chosen tab. **The tabs are built by `buildTabs()` after
   the snapshot parses**, never in the static markup: the marketing camera waits for the button
   `Health` as its proof that the data loaded (section 5).
-- **The pane's own controls** (Training, Health, Sessions): the first rows of the pane, scrolling with
-  it, so the frame's fixed bands stay three:
+- **The pane's own controls** (Training, Health, Sessions) are **held under the tabs** while the pane
+  scrolls beneath them (the owner: "The sliders should be locked on top for relevant pages", 2026-10-03).
+  They are one block at the top of the pane's scroller, `position: sticky; top: 0` on `--page` (z-index 4:
+  over a chart's card, under a notice), in the flow, so at rest the pane's content begins at its foot and
+  nothing is covered: 136 px on Training and Sessions, 88 on Health (`shoot.mjs` measures the content's
+  top at the block's height). It counts against the plate as the header does: of the 694 px pane at
+  390 × 844 it leaves 558 at rest and 606 once its first row has tucked; on a phone on its side, 184 and
+  232 of 320. Its rows, from the top:
+  - *Sport and equipment*: native `<select>`s set as word keys: 12.5 px `--ink` at 560 in a 1 px
+    `--line-strong` frame, 6 px radius, 44 px tall, no chevron glyph and no fill, 4 px under the tabs.
+    Named `Activity type` and `Equipment`. Whether iOS zooms the page when one is focused (its text is
+    under 16 px) is a phone check (`tools/DECISIONS.md`). **This row tucks** (the owner: "can be hidden
+    when moving down"): a scroll down carries it up and out with the pane, pixel for pixel, gone after
+    its 48 px; a scroll up brings it back the same way, whole after 48 px; at the top it is always there.
+    `tucked()` in `app.js` sets the block's `translateY` to the scroll moved since the direction last
+    changed, held between 0 and the row's height and never more than the scroll itself, so no gap opens
+    at the top. It moves only with the pane, never on a timer: no transition, nothing for Reduce Motion
+    to stop. A key that focuses a control in the block brings the row back; a finger on a thumb does
+    not, so the track never moves under a drag (`shoot.mjs` drags the window's end with the row tucked:
+    the track holds at one height through all ten moves). A session picked on Sessions scrolls to 8 px
+    under the block as it stands once tucked.
   - *The window*: `3 months`, `6 months`, `1 year`, `All` as words, `aria-pressed` buttons in a
     `role="group"` named `Time window`, 12.5 px, the tracer under the chosen, 44 px hits; at the row's
     right, the window in words, `12 Jan to 4 Oct 2026` (12.5 px, `--ink`).
   - *The window's track*: two native range inputs (accessible for free) in the house's slider
-    language: a 1 px `--line-strong` baseline, the chosen window in 2 px `--ink`, each thumb a tracer
-    head (an 8 px `--ink` disc with a 3 px `--page` ring and a 1.5 × 18 px `--ink` rule through it,
-    10 px while pressed), the input 44 px tall so the thumb's hit is 44 × 44; no accent, no shadow.
-    Named `Start of window` and `End of window`.
-  - *Sport and equipment*: native `<select>`s set as word keys: 12.5 px `--ink` at 560 in a 1 px
-    `--line-strong` frame, 6 px radius, 44 px tall, no chevron glyph and no fill. Named `Activity
-    type` and `Equipment`. Whether iOS zooms the page when one is focused (its text is under 16 px) is
-    a phone check (`tools/DECISIONS.md`).
+    language: a 1 px `--line-strong` baseline, the chosen window in 2 px `--ink`, a tracer head at each
+    end of it (an 8 px `--ink` disc with a 3 px `--page` ring and a 1.5 × 18 px `--ink` tick through it,
+    10 px while its thumb is pressed). **No plate behind a thumb** (the owner: "I do not like the squares
+    around the sliders"): the inputs are drawn at opacity 0, still the 44 × 44 hits and the accessible
+    sliders, so the phone paints nothing of its own there, and the heads are the fill's `::before` and
+    `::after`, round, ringed in a 2 px `--ink` circle on a key's focus only. `shoot.mjs` finds nothing
+    but the page in each thumb's 44 × 44 box outside its head and the track (0 of 5 616 samples) and each
+    hit 44 × 44. Named `Start of window` and `End of window`. The route's distance window on Sessions
+    is drawn the same way.
 - **Sections, not cards.** Each chart is a section on `--page`: a 1 px `--line` rule above it (none
   above the first), 16 px padding top; its heading at 13.5 px 650 in sentence case. A pane's group
   heading (`Running`, `Load`, `Heart` on Training; `Today`, `Recovery and trends` on Health) is an `h2`
@@ -459,24 +528,55 @@ in CSS px, safe-area insets outside them; from the next day the stamp and the we
   (12.5 px `--ink-2`, 44 px tall, sentence case). `How to read it` is a `<details>` whose `<summary>`
   is those words; its body is 13.5 px, line height 1.5, `--ink-2`, at most 62 characters wide. `Show
   the table` turns to `Hide the table`.
-- **The legend** of a chart: swatches 8 × 8 px, square, a line series 16 × 2 px, labels 10.5 px
-  `--ink-2`, 12 px apart; the route ramp's legend is the bar described in section 2 with its ends
+- **The legend** of a chart: swatches 8 × 8 px, square, a line series 16 × 2 px, the planned swatch
+  a 1.5 px outline around its color at 20 %, labels 10.5 px `--ink-2`, 12 px apart; the route ramp's legend is the bar described in section 2 with its ends
   printed (`slower ≥ 5:55 /km`, `faster ≤ 5:10 /km` for the demo's easy run of 29 Sep; `≤ 173`, `≥ 183
   spm` for its cadence: the ends are the session's 5th and 95th percentiles, or the minimum span around
   its median when those lie closer, as on this steady run; printed open because the colors clip there).
 - **Charts.** Every axis and tick label 10.5 px, `--ink-2`; the unit caption above the plot 10.5 px
   `--ink-2` at 400; bars square-topped; ticks and numbers through `js/units.js`. Planned bars,
-  wherever they are (the day charts, the load chart, the plan's zone bars), are drawn in outline: each
-  segment a 1.5 px stroke of its token, inset, no fill, 1 px gaps between segments, a segment under
-  3 px drawn as a 1.5 px line. The planned four-week average is `--ink` dashed 5/4 on its casing, the
-  actual one solid.
-- **The facts** (eight on Now, the app's four and the evaluation's own four; four on Today; six on
-  Health; up to sixteen in a session, as on the easy run of 29 Sep; the race day, distance and goal on
-  Plan): a `<dl>` of rows, each a label at 12.5 px `--ink-2` at the left and the value at 12.5 px
-  `--ink` 560 right-aligned, with the note after the value in `--ink-2`, joined by a comma (`Run, 28
-  days to 30 Sep`, then `253.9 km`, then `12 % more than the 28 days before, 0.5 km walked`; on the
-  evening of the pull the label is `Run, last 28 days`), or by a space when the note begins `per` (`7.7
-  h per night`); three cells of one row, wrapping under on a narrow screen, rows parted by 1 px
+  wherever they are (the running, time-in-zone and day charts on Plan, the plan's zone bars), are drawn
+  in outline around a light tint: each segment a 1.5 px stroke of its token, inset, around the token at
+  20 % (section 2, "The plan's tint"), 1 px gaps between segments, a segment under 3 px drawn as a 1.5 px
+  line. The planned four-week average is `--ink` dashed 5/4 on its casing, the actual one solid.
+- **Plan's charts, in order** after the Block, the race-day figure, the plan's verdict and the goal:
+  - **Running volume, past and planned** (the owner: "a running plot similar to the time in zone plot
+    with colors as it was", 2026-10-03), where the stock app had its weekly running chart, between the
+    goal and the time in zone. The Block's sixteen weeks as kilometers of running per week, walk breaks
+    out, each stacked from the baseline by the zone it was run in, in the stock chart's four colors fitted
+    to the band: `Below Z1` (`--zone-0`), `Easy (Z1–2)` (`--zone-2`), `Moderate (Z3)` (`--zone-3`), `Hard
+    (Z4–5)` (`--zone-4`), the kilometers by zone as the day charts take them (`kmByZone()`: the record
+    stream, else the laps, else the time in zone). The plan's weeks are its targets split by its own
+    shares of easy, moderate and hard (`horizon[].mix`), outlined and tinted; this week's are the rest of
+    its target on top of what was run so far; the two four-week averages, actual (solid) and planned
+    (dashed), meet at `now`, which is dashed over the plot after this week; the race's rule and name as on
+    the time in zone. The plot keeps a tenth of headroom over its tallest week, so the race's name never
+    meets a bar (`shoot.mjs`: clear of all 63). Its card is the Block's for the same week (`Week of 14 Sep
+    2026`, `77.8 km`, `Runs 6`, `Longest 24.0 km`) with the zones under it (`Below Z1 5.1 km`, `Easy (Z1–2)
+    40.7 km`, `Moderate (Z3) 20.1 km`, `Hard (Z4–5) 11.9 km`); its legend the four, `Planned` and the two
+    averages; its caption `One bar is one week, Monday to Sunday.`; `Show the table` lists every week:
+    `Week`, `Run km`, `Easy`, `Moderate`, `Hard`, `Below Z1`, `Plan`.
+  - **Time in zone, past and planned** with its four units, then **Day by day, planned and run** and
+    **Day by day, as time in zone**, then the plan's weeks and `About this plan`.
+- **Now's facts are a table at the head of the pane** (the owner: "The Now pane would read better as a
+  table on top", 2026-10-03), so the numbers are the first thing read, above the Block and the verdict:
+  the app's four (`Run, last 7 days`, `Run, last 28 days`, `Garmin status`, `VO₂ max`) and every metric
+  of the evaluation that fits a line (its value and note 64 characters or fewer and one sentence: the
+  demo's `Weeks done`, `Biggest week`, `10 km tune-up`, `Goal`). A `<dl class="tab">`: the labels a
+  column as wide as the longest (at most half the width), 12.5 px `--ink-2`; the values left-aligned in
+  the column beside it, `--ink` 560 with the note after a comma in `--ink-2`, so a long note wraps under
+  its own value (`text-wrap: pretty` keeps `1 Nov` whole); rows parted by 1 px `--line`, one column of
+  rows at every width. A metric whose words run on (the owner's coaching routine writes them: `Share of
+  the 2025 peak`, `The down week, as it closed`) is the evaluation's, set under its verdict as a label
+  over its prose: the label in `--ink-2`, then the value and note left-aligned at 12.5 px, line height
+  1.5, at most 62 characters wide (`shoot.mjs` serves one and finds it below the verdict, three lines of
+  left-aligned prose, the table still eight rows). The demo has none.
+- **The facts** elsewhere (four on Today; six on Health; up to sixteen in a session, as on the easy run of
+  29 Sep; the race day, distance and goal on Plan; a plan week's): a `<dl>` of rows, each a label at
+  12.5 px `--ink-2` at the left and the value at 12.5 px `--ink` 560 right-aligned, with the note after
+  the value in `--ink-2`, joined by a comma (a plan week's `So far`, then `24.0 km`, then `in 2 runs, 2
+  other, 1 hard`; Health's `Weight`, `69.7 kg`, `−2.5 kg since 12 Jan`), or by a space when the note
+  begins `per` (`7.7 h per night`); three cells of one row, wrapping under on a narrow screen, rows parted by 1 px
   `--line` hairlines; two columns of rows from 560 px. A label is the quantity in words, beside its
   value, never above it. A session's `Body battery change` is Garmin's change over the session, signed.
 - **The one large figure** (at most one per pane, 21 px, 600, tabular, set at the row's right): Now,
@@ -502,7 +602,7 @@ in CSS px, safe-area insets outside them; from the next day the stamp and the we
 - **The plan's week rows**: the day, the session's words at 13.5 px 600, the kind as a word in 11 px
   `--ink-2` (sentence case; `done` and `missed` in `--ink`), the stats in 12.5 px `--ink-2`, the kind's
   8 px dot in its token. A missed session says `missed` in `--ink`, at full opacity. A session after
-  the last day the data saw is planned, never missed. Planned zone bars in outline.
+  the last day the data saw is planned, never missed. Planned zone bars in outline around their tint.
 - **The readout card** (HOUSE 4.7). The one card on the screen: `--sheet`, a 1 px `--line-strong` edge,
   an 8 px radius, no shadow, at most 280 px wide, 10 px padding. It sits inside the chart's box,
   top-left, inset 8 px, and keeps 12 px clear of what was tapped, so the marker is never under its own
@@ -562,8 +662,8 @@ in CSS px, safe-area insets outside them; from the next day the stamp and the we
   on 1 Nov.`; Training `Weeks of 12 Jan to 4 Oct 2026, all sports, any equipment.`; Health `Weeks of
   12 Jan to 4 Oct 2026. Today is the last 24 hours the watch handed over.` (Health has no sport or
   equipment filter); Sessions `248 sessions in the window, all sports, any equipment, newest first.`
-  The window and the filters are in words, so the scope is on screen while the controls have scrolled
-  away. Then **the credits**, 10.5 px `--ink-2`, one constant, on screen on every pane: `Data: Garmin
+  The window and the filters are in words, so the scope stays on screen while the sport and equipment
+  row has tucked. Then **the credits**, 10.5 px `--ink-2`, one constant, on screen on every pane: `Data: Garmin
   Connect. Coaching text: the coaching routine.` One verb names the instant the data was made, in the
   stamp, the caption, About and the notices: *Updated*.
 - **The player: none.** No time to scrub. The session curves, the 24-hour charts and the route keep
@@ -631,7 +731,8 @@ wide.
 
 1. **What the Block is.** The Block in prose: one column a week from twelve weeks back to the race;
    one block of ink per run's running, walk breaks out; an outline is the plan's week as the coaching
-   routine wrote it on the plan's date, a range drawn to its top with a tick at its bottom; this week
+   routine wrote it on the plan's date, lightly tinted where it is still to run, a range drawn to its
+   top with a tick at its bottom; this week
    both; past weeks without outlines because the data keeps only today's plan; the fixed scale (0.8
    pixels a kilometer on Now, 1.2 on Plan, a line every 20 kilometers); weeks Monday to Sunday by the
    phone's calendar; other sports on Training.
@@ -718,21 +819,23 @@ scroll the pane: at 844 px the drag starts at 633 px, inside the pane's scroller
 band, so the pane, not the page, scrolls, and no card opens even where the drag starts on a chart
 (`shoot.mjs` drives it by real touch). The app remembers its pane (`running-dashboard.ui.v3`); the
 camera selects `Now` first, so nothing has to be put back. No string is British; no remembered focus
-mode exists.
+mode exists. Since the owner's six (2026-10-03) Now opens on its table of short figures with the Block
+under it, so the camera's picture of Now leads with the table; no string or role the camera reads
+moved, and the drag scrolls the pane by 380 px in `shoot.mjs`.
 
 ---
 
 ## 6. Budget
 
-*Measured* 2026-10-02 by `node tools/check.mjs`: the ZIP by `build-zips.yml`'s own command, `zip -q -r
+*Measured* 2026-10-02, and on 2026-10-03 after the owner's six, by `node tools/check.mjs`: the ZIP by `build-zips.yml`'s own command, `zip -q -r
 -X … . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'`, then its
 size; code by the size of every shipped `.html`, `.css` and `.js` outside `data/`.
 
 | | As built | Cap | Rule |
 | --- | --: | --: | --- |
-| App code | 244 917 (`app.js` 203 308, `style.css` 20 866, `index.html` 7 501, `js/block.js` 6 857, `js/units.js` 5 956, `js/palette.js` 429) | **245 000** | the lead's ruling (plan 0011 D24), the reasons in `tools/DECISIONS.md`; 63 B to spare, so anything the app gains, it pays for |
+| App code | 251 559 (`app.js` 207 930, `style.css` 22 594, `index.html` 7 549, `js/block.js` 7 101, `js/units.js` 5 956, `js/palette.js` 429) | **252 000** | the lead's ruling for the owner's six (plan 0011 D32): the owner's features take precedence over the house budget, for exactly those six (6 565 B, item by item in `tools/DECISIONS.md`); 441 B to spare |
 | Fonts | 41 291 (the house's 40 075 and the supplement's 1 216) | 160 000 | |
-| ZIP | about 1 075 100 (this file ships inside it, so its own figure moves the last digits; `check.mjs` prints the exact size) | **1 340 193** | the size before the pass × 1.25, rounded down; no face allowance: an app that swaps its own face for the house's gets none |
+| ZIP | about 1 080 800 (this file ships inside it, so its own figure moves the last digits; `check.mjs` prints the exact size) | **1 340 193** | the size before the pass × 1.25, rounded down; no face allowance: an app that swaps its own face for the house's gets none |
 | Data | 37 files, sha256 of the concatenation in sorted path order `871171cb856ae3da7ed869aa88a3cc335f7822ec01530fd47ae975d4eb13f0dc`; `data/snapshot.json` `d47c5c1c41fbc0243d59ec9fcabc38ed3803e27c269c994bec614008bbb36434` | pinned | `check.mjs` pins every file's own sha256 and the concatenation's; `scripts/make_demo_running_dashboard.py --check` rebuilds them byte for byte |
 
 ---

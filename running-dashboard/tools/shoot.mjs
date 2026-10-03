@@ -13,10 +13,14 @@
 //
 // Per theme: boot (the camera's tabs by role and name, the credits, the face and its ₂ supplement, the
 // stamp), every pane's text contrast and SVG labels, the tracer under exactly the chosen words, the Block
-// (its blocks against this file's decode, its ink sampled on rendered pixels, its card and sentence),
-// a chart's card against this file's sums and clear of the tapped bar, fifteen taps along that chart with
-// no column under its card, each card's ✕ inside its button, a vertical drag on a chart scrolling with no
-// card, SI in every visible text node, hit targets on every pane, the pictures. Once: the loop clip's drag
+// (its blocks against this file's decode, its ink and its planned weeks' tint sampled on rendered pixels,
+// its card and sentence), a chart's card against this file's sums and clear of the tapped bar, fifteen taps
+// along that chart with no column under its card, each card's ✕ inside its button, a vertical drag on a chart
+// scrolling with no card, SI in every visible text node, hit targets on every pane, the pictures; and the
+// owner's six (2026-10-03): the Now table at the pane's head and a long fact below the verdict, the filters
+// held under the tabs with the sport and equipment row going and coming back with the scroll, the thumbs
+// with nothing painted behind them, Plan's running chart (its place, legend, table, card and race name) and
+// a planned bar's tint in every chart on Plan. Once: the loop clip's drag
 // scrolling the pane, the stale stamp, the phone 21 days past the data, About, the tabs by keyboard, Reduce
 // Motion, hidden and back (the same file, then a changed one, keeping the open folds and the scroll),
 // broken data (missing, not JSON, the wrong shape, a broken replacement keeping the view and its plate's
@@ -68,6 +72,12 @@ const NN = '\u202F';
 
 const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
 const contrast = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
+/* The plan's tint: its token at 20 % over the page (tools/art/palette.py, TINT), as the browser composites it. */
+const TINT = 0.2, over = (c, a, g) => c.map((v, i) => Math.round(v * a + g[i] * (1 - a)));
+const near = (p, q, d = 2) => p.every((v, i) => Math.abs(v - q[i]) <= d);
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const dateOf = (s) => `${Number(s.slice(8))} ${MON[Number(s.slice(5, 7)) - 1]} ${s.slice(0, 4)}`;
+const siLabel = (s) => String(s).replace(/(\d) (km|min|h|m|bpm|kg|%)(?=$|[\s,.;)])/g, `$1${NN}$2`);
 
 /** A PNG (8-bit RGB or RGBA, not interlaced, as Chromium writes them) to RGBA pixels. */
 function decodePng(buf) {
@@ -300,6 +310,14 @@ for (const scheme of schemes) {
     for (const [x, y, wd, h] of B.outlines) for (let yy = y + 3; yy < y + h - 3; yy += 2) edges.push(contrast(img.at(Math.round((sv.left + x + 0.75) * 2), Math.round((sv.top + yy) * 2)), PAGE));
     const e3 = edges.filter((s) => s >= 3).length / edges.length;
     check(at3 >= 0.9 && e3 >= 0.9, `the Block's ink: ${samples.length} samples inside its blocks, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the page (lowest ${Math.min(...samples).toFixed(2)}, a block's antialiased edge); its outlines' 1.5 px strokes ${(e3 * 100).toFixed(1)} % (lowest ${Math.min(...edges).toFixed(2)})`);
+    // the plan's tint inside the outlines (the owner, 2026-10-03): from each outline's top down to the ink, the
+    // ink at 20 % over the page, light, and apart from the ink; this week's only above what was run
+    const INKC = scheme === 'light' ? [0x0f, 0x1c, 0x23] : [0xe6, 0xed, 0xee], tint = over(INKC, TINT, PAGE), tints = [];
+    const BT = B.tints || [], okT = BT.length === B.outlines.length && BT.every(([x, y, wd, h], k) => { const o = B.outlines[k], i = B.columns.findIndex((c) => c.target != null) + k, ink = B.base - Math.round(sums[i] * B.scale); return x === o[0] && y === o[1] && wd === o[2] && h === Math.min(o[3], ink - o[1]); });
+    for (const [x, y, wd, h] of BT) for (let xx = x + 3; xx < x + wd - 3; xx += 2) for (let yy = y + 3; yy < y + h - 2; yy += 2) tints.push(img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)));
+    const atT = tints.filter((p) => near(p, tint)).length / (tints.length || 1);
+    check(okT && atT >= 0.9 && contrast(tint, PAGE) >= 1.2 && contrast(tint, PAGE) < 2 && contrast(INKC, tint) >= 3,
+      `the Block's planned weeks: ${BT.length} tints from each outline's top down to the ink (this week's ${(BT.find((tn) => tn[0] === B.outlines[0][0]) || [])[3]} px above its ${sums[B.now].toFixed(1)} km); ${tints.length} samples inside them, ${(atT * 100).toFixed(1)} % at the tint rgb(${tint}) (the race's rule crosses one), ${contrast(tint, PAGE).toFixed(2)}:1 on the page, the ink ${contrast(INKC, tint).toFixed(2)}:1 against it`);
     const label = await w(() => document.querySelector('.blocksec svg').getAttribute('aria-label'));
     check(label.includes(`the latest ${weekKm('2026-09-14').toFixed(1)}, ${weekKm('2026-09-21').toFixed(1)} and so far ${weekKm(now).toFixed(1)} kilometers`) && label.includes(snap.plan.goal.race.name),
       `the Block's label for VoiceOver: "${label.slice(0, 90)}…"`);
@@ -316,6 +334,21 @@ for (const scheme of schemes) {
       `the Block's card: "${card.c && card.c.place}", ${card.c && card.c.value} km (this file ${want14.toFixed(1)}), hung from the chart's foot, said once: "${card.live}"`);
     await A.shot(`block-card-${scheme}`, false);
     await A.tapAt(5, 300);
+  }
+
+  // the Now table (the owner, 2026-10-03): the short facts are the pane's first section, the app's four and
+  // the evaluation's short metrics, their values on one left edge; the Block follows; nothing long in the demo
+  {
+    const n = await w(() => {
+      const t = document.querySelector('#pane > .sec:first-child > dl.tab');
+      return { t: !!t, block: !!document.querySelector('#pane > .sec:nth-child(2).blocksec'), labels: t ? [...t.querySelectorAll('dt')].map((d) => d.textContent) : [],
+        v: t ? t.querySelector('dd').textContent : '', lefts: t ? [...t.querySelectorAll('dd')].map((d) => Math.round(d.getBoundingClientRect().left)) : [], long: document.querySelectorAll('#pane dl.long .fact').length };
+    });
+    const pd = `${Number(snap.dataThrough.slice(8))} ${MON[Number(snap.dataThrough.slice(5, 7)) - 1]}`, d0 = ymd(t(snap.dataThrough) - 6 * DAY);
+    const run7 = snap.activities.filter((a) => a.sport === 'run' && a.d >= d0 && a.d <= snap.dataThrough).reduce((s, a) => s + running(a), 0);
+    const want = [`Run, 7 days to ${pd}`, `Run, 28 days to ${pd}`, 'Garmin status', 'VO₂ max', ...snap.assessment.metrics.map((m) => siLabel(m.label))];
+    check(n.t && n.block && JSON.stringify(n.labels) === JSON.stringify(want) && n.v.startsWith(`${run7.toFixed(1)}${NN}km`) && new Set(n.lefts).size === 1 && n.long === 0,
+      `Now: the pane opens on a table of ${n.labels.length} short facts (${n.labels.join('; ')}), the first ${run7.toFixed(1)} km as this file sums it, every value at x ${n.lefts[0]}; the Block second; no long fact in this snapshot`);
   }
 
   // a chart's card on Training: this week's running against this file's sum, clear of the tapped bar
@@ -352,8 +385,8 @@ for (const scheme of schemes) {
         const q = await w(() => {
           const c = document.querySelector('.sec .chartwrap .readout:not([hidden])'), col = document.querySelector('.sec .chartwrap svg rect[opacity="0.07"]'), m = document.getElementById('main').getBoundingClientRect();
           if (!c || !col) return null;
-          const a = c.getBoundingClientRect(), b = col.getBoundingClientRect(), r = c.parentElement.getBoundingClientRect();
-          return { meet: a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom, seen: a.top >= m.top - 1 && a.bottom <= m.bottom + 1, at: a.top >= r.bottom - 1 ? 'hung from the foot' : a.left - r.left > 20 ? 'top-right' : 'top-left' };
+          const a = c.getBoundingClientRect(), b = col.getBoundingClientRect(), r = c.parentElement.getBoundingClientRect(), f = document.getElementById('filters').getBoundingClientRect();   // in view: under the filters held at the top
+          return { meet: a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom, seen: a.top >= f.bottom - 1 && a.bottom <= m.bottom + 1, at: a.top >= r.bottom - 1 ? 'hung from the foot' : a.left - r.left > 20 ? 'top-right' : 'top-left' };
         });
         if (!q || q.meet || !q.seen) bad.push(`${Math.round(s.width * f)} px ${!q ? 'no card' : q.meet ? 'covered' : 'out of view'}`);
         if (q) where.add(q.at);
@@ -372,7 +405,173 @@ for (const scheme of schemes) {
     const v = await w(() => ({ card: window.__rd.card(), live: document.getElementById('live').textContent, top: document.getElementById('main').scrollTop }));
     check(!v.card && v.live === '' && v.top > 100, `a vertical drag that starts on a chart scrolls the pane by ${Math.round(v.top)} px, opens no card${v.card ? ` (opened "${v.card.place}")` : ''} and says nothing${v.live ? ` (said "${v.live}")` : ''}`);
   }
+
+  // the filters held under the tabs (the owner, 2026-10-03): in the flow, so at rest the pane's content begins
+  // at their foot and nothing is covered; the sport and equipment row above the window goes up and out with
+  // a scroll down and comes back with a scroll up, moving with the pane; the window and its track stay
+  {
+    const at = () => w(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => {
+      const g = (id) => document.getElementById(id).getBoundingClientRect(), m = g('main').top;
+      r({ h: Math.round(g('filters').height), foot: Math.round(g('filters').bottom - m), picks: [g('picksRow').top - m, g('picksRow').bottom - m], row: Math.round(g('picksRow').height),
+        time: g('timeRow').top - m, content: Math.round(g('pane').top - m), first: Math.round(document.querySelector('#pane > :first-child').getBoundingClientRect().top - m), top: document.getElementById('main').scrollTop });
+    }))));
+    const to = (y) => w((v) => { document.getElementById('main').scrollTop = v; }, y);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
+    const s0 = await at();
+    await to(200); const s1 = await at();
+    // a finger dragging a thumb while the row is tucked: the window moves, the track holds still under it
+    const th0 = await w(() => { const r = document.getElementById('dual').getBoundingClientRect(), t2 = document.getElementById('toRange'); return { x: r.left + 22 + (r.width - 44) * +t2.value / +t2.max, y: r.top + 22, v: +t2.value }; });
+    const tops = [];
+    await A.touch('touchStart', th0.x, th0.y);
+    for (let k = 1; k <= 10; k++) { await A.touch('touchMove', th0.x - 6 * k, th0.y); await page.waitForTimeout(16); tops.push(await w(() => Math.round(document.getElementById('dual').getBoundingClientRect().top))); }
+    await A.touch('touchEnd'); await page.waitForTimeout(300);
+    const th1 = await w(() => ({ v: +document.getElementById('toRange').value, tf: document.getElementById('filters').style.transform }));
+    check(new Set(tops).size === 1 && th1.v < th0.v && th1.tf === `translateY(-${s0.row}px)`, `a finger dragging the window's end with the row tucked: the window moves (week ${th0.v} to ${th1.v}), the track holds still under it (at ${tops[0]} px on all ${tops.length} moves), the row stays tucked`);
+    await page.getByRole('button', { name: '1 year', exact: true }).click();
+    await page.waitForTimeout(300);
+    await to(140); const s2 = await at();
+    await to(0); const s3 = await at();
+    check(s0.content === s0.h && s0.first >= s0.foot && s0.picks[0] === 0, `Training: the filters under the tabs, ${s0.h} px (the sport and equipment row ${s0.row} px above the window's words and track, ${s0.h - s0.row} px); the pane's content begins ${s0.content} px down, at their foot, so at rest they cover nothing`);
+    check(s1.picks[1] <= 0.5 && Math.abs(s1.time) < 0.5 && s1.foot === s0.h - s0.row, `scrolled 200 px down: the sport and equipment row gone above the pane (its foot at ${s1.picks[1]} px), the window's words at the top, ${s1.foot} px of filters held over the pane`);
+    check(Math.abs(s2.picks[0]) < 0.5 && s2.foot === s0.h, `60 px back up (at ${s2.top} px): the row back whole (its top at ${s2.picks[0]} px), the filters ${s2.foot} px`);
+    check(Math.abs(s3.picks[0]) < 0.5 && s3.foot === s0.h && s3.content === s0.h, `back at the top: the filters as at rest (${s3.foot} px), the content at their foot`);
+    // the same by touch: a drag up tucks the row, a drag down brings it back; the window stays at the top
+    await A.touch('touchStart', 200, 640);
+    for (let k = 1; k <= 20; k++) { await A.touch('touchMove', 200, 640 - 13 * k); await page.waitForTimeout(16); }
+    await A.touch('touchEnd'); await page.waitForTimeout(500);
+    const t1 = await at();
+    await A.shot(`training-tucked-${scheme}`, false);
+    await A.touch('touchStart', 200, 400);
+    for (let k = 1; k <= 8; k++) { await A.touch('touchMove', 200, 400 + 12 * k); await page.waitForTimeout(16); }
+    await A.touch('touchEnd'); await page.waitForTimeout(500);
+    const t2 = await at();
+    check(t1.top > 150 && t1.picks[1] <= 0.5 && Math.abs(t1.time) < 0.5 && t2.top < t1.top - 48 && Math.abs(t2.picks[0]) < 0.5 && Math.abs(t2.time - s0.row) < 0.5,
+      `by touch: a drag up scrolls the pane to ${t1.top} px with the row tucked and the window's words on top; a drag down back to ${t2.top} px brings the row back`);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
+    await A.pane('Health');
+    await to(200);
+    const hs = await at();
+    check(hs.row === 0 && Math.abs(hs.time) < 0.5 && hs.foot === hs.h, `Health (no sport or equipment): the window's words and track held at the top, ${hs.h} px, nothing tucked`);
+    await to(0);
+    await A.pane('Training');
+  }
+
+  // the window's thumbs (the owner, 2026-10-03: "I do not like the squares around the sliders"): the inputs
+  // drawn at opacity 0, so the platform paints nothing of its own behind a thumb; a tracer head at each end
+  // of the window; a thumb's 44 × 44 box holds nothing but the page outside its head and the track; each hit
+  // still 44 × 44
+  {
+    const th = await w(() => {
+      const d = document.getElementById('dual').getBoundingClientRect(), f = document.getElementById('fromRange'), t2 = document.getElementById('toRange');
+      const x = (v) => d.left + 22 + (d.width - 44) * v / +f.max, y = d.top + 22;
+      const hit = (cx) => { let n = 0; for (let k = -21; k <= 21; k++) { const a = document.elementFromPoint(cx + k, y), b = document.elementFromPoint(cx, y + k); if (a && a.type === 'range' && b && b.type === 'range') n++; } return n; };
+      return { op: [getComputedStyle(f).opacity, getComputedStyle(t2).opacity], xs: [x(+f.value), x(+t2.value)], y, hits: [hit(x(+f.value)), hit(x(+t2.value))] };
+    });
+    const img = await A.png(), off = [], head = [];
+    let seen = 0;
+    for (const cx of th.xs) {
+      let n = 0;
+      for (let dy = -21.5; dy <= 21.5; dy += 0.5) for (let dx = -21.5; dx <= 21.5; dx += 0.5) {
+        if ((Math.abs(dx) <= 9.5 && Math.abs(dy) <= 9.5) || Math.abs(dy) <= 2) continue;
+        seen++;
+        if (!near(img.at(Math.round((cx + dx) * 2), Math.round((th.y + dy) * 2)), PAGE, 3)) n++;
+      }
+      off.push(n);
+      head.push(contrast(img.at(Math.round(cx * 2), Math.round(th.y * 2)), PAGE));
+    }
+    check(th.op.every((o) => o === '0') && off.every((n) => n === 0) && head.every((c) => c >= 3) && th.hits.every((n) => n === 43),
+      `the window's thumbs: the inputs at opacity ${th.op.join(' and ')}; around each, ${off.join(' and ')} of ${seen / 2} sampled pixels off the page outside its head and the track (no plate); each head's ink ${head.map((c) => c.toFixed(2)).join(' and ')}:1; each hit 44 × 44 (${th.hits.join(' and ')} of 43 points both ways)`);
+  }
+
+  // Plan: the weekly running chart (the owner, 2026-10-03), where the stock had it, between the goal and the time in
+  // zone; its legend, its table against this file's sums and the plan's targets, a tap's card, the race's name
+  // clear of every bar; then a planned bar's tint in every chart on the pane, and the plan's zone bars
+  await A.pane('Plan');
+  {
+    const RUN = 'Running volume, past and planned';
+    const p = await w((T) => {
+      const secs = [...document.querySelectorAll('#pane > .sec')], names = secs.map((x) => (x.querySelector('h2, h3') || {}).textContent || ''), s = secs[names.indexOf(T)], i = secs.indexOf(s);
+      const lab = s && [...s.querySelectorAll('svg text')].find((x) => x.classList.contains('halo') && !x.classList.contains('mk') && x.textContent.length > 12);
+      const L = lab && lab.getBBox(), bars = s ? [...s.querySelectorAll('svg rect')].filter((r) => r.getAttribute('fill') && r.getAttribute('fill') !== 'transparent' && r.getAttribute('opacity') !== '0') : [];
+      const hits = L ? bars.filter((r) => { const b = r.getBBox(); return b.x < L.x + L.width && L.x < b.x + b.width && b.y < L.y + L.height && L.y < b.y + b.height; }).length : -1;
+      return { before: names[i - 1], after: names[i + 1], aria: s && s.querySelector('svg').getAttribute('aria-label'), legend: s ? [...s.querySelectorAll('.legend span')].map((x) => x.textContent) : [],
+        label: lab ? lab.textContent : '', hits, bars: bars.length, tinted: s ? s.querySelectorAll('svg rect.tint').length : 0 };
+    }, RUN);
+    check(p.before === `Goal: ${snap.plan.goal.race.name}` && p.after === 'Time in zone, past and planned' && p.aria === 'Weekly running kilometers by heart-rate zone, run and planned'
+      && JSON.stringify(p.legend) === JSON.stringify(['Below Z1', 'Easy (Z1–2)', 'Moderate (Z3)', 'Hard (Z4–5)', 'Planned', '4-week average, actual', '4-week average, planned']) && p.tinted > 0 && p.label === snap.plan.goal.race.name && p.hits === 0,
+      `Plan: "${RUN}" between "${p.before}" and "${p.after}"; its legend ${p.legend.join(', ')}; ${p.tinted} planned segments tinted; "${p.label}" clear of all ${p.bars} bars (${p.hits} met)`);
+    const key = page.locator('.sec', { has: page.locator('h2', { hasText: RUN }) }).getByRole('button', { name: 'Show the table', exact: true });
+    if (await key.count()) await key.click();
+    await page.waitForTimeout(150);
+    const rows = await w((T) => [...([...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T) || document.createElement('i')).querySelectorAll('.tableview tbody tr')].map((tr) => [...tr.children].map((td) => td.textContent)), RUN);
+    const now = monday('2026-10-01'), weeks = [];
+    for (let k = 11; k >= 0; k--) weeks.push(ymd(t(now) - 7 * k * DAY));
+    for (const h of snap.plan.horizon) if (h.w > now) weeks.push(h.w);
+    const bad = [];
+    weeks.forEach((wk, i) => {
+      const r = rows[i] || [], h = snap.plan.horizon.find((x) => x.w === wk);
+      if (r[0] !== dateOf(wk)) bad.push(`${wk}: week ${r[0]}`);
+      else if (wk <= now) { const z = r.slice(2, 6).reduce((s, v) => s + Number(v), 0); if (r[1] !== weekKm(wk).toFixed(1) || Math.abs(z - weekKm(wk)) > 0.2) bad.push(`${wk}: ${r[1]} km, zones ${z.toFixed(1)} (this file ${weekKm(wk).toFixed(1)})`); }
+      else if (r[1] !== '–' || r[6] !== String(h.km)) bad.push(`${wk}: ${r[1]}, plan ${r[6]}`);
+    });
+    check(rows.length === weeks.length && bad.length === 0 && (rows[11] || [])[6] === '62',
+      `its table: ${rows.length} weeks, ${weeks[0]} to ${weeks[weeks.length - 1]}, each run week's kilometers as this file sums them and its four zones adding up to them, this week with its 62 km, the plan's weeks ${snap.plan.horizon.filter((h) => h.w > now).map((h) => h.km).join(', ')} km${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
+    // a tap on the week of 14 Sep: its card, the run kilometers and their zones
+    await w((T) => ([...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T) || document.querySelector('#pane > .sec')).querySelector('svg').scrollIntoView({ block: 'center' }), RUN);
+    await page.waitForTimeout(200);
+    const sr = await w((T) => ([...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T) || document.querySelector('#pane > .sec')).querySelector('svg').getBoundingClientRect().toJSON(), RUN);
+    await A.tapAt(sr.left + 38 + (weeks.indexOf('2026-09-14') + 0.5) * (sr.width - 46) / weeks.length, sr.top + sr.height - 60);
+    await page.waitForTimeout(250);
+    const c = await w(() => window.__rd.card());
+    const zones = c ? c.rows.filter(([l]) => /^(Below Z1|Easy|Moderate|Hard)/.test(l)).map(([, v]) => parseFloat(v)) : [];
+    check(c && c.place === 'Week of 14 Sep 2026' && c.value === weekKm('2026-09-14').toFixed(1) && zones.length >= 3 && Math.abs(zones.reduce((s, v) => s + v, 0) - weekKm('2026-09-14')) <= 0.2,
+      `its card for 14 Sep: "${c && c.place}", ${c && c.value} km (this file ${weekKm('2026-09-14').toFixed(1)}), ${zones.length} zones adding up to ${zones.reduce((s, v) => s + v, 0).toFixed(1)}`);
+    await A.shot(`plan-running-${scheme}`, false);
+    await A.tapAt(5, 300);
+    // every chart on Plan: its tallest planned segment's inside is its own color at 20 % over the page, and the
+    // done segment of the same color stands at 3:1 or more against it (done solid, planned tinted)
+    for (const title of [RUN, 'Time in zone, past and planned', 'Day by day, planned and run', 'Day by day, as time in zone']) {
+      const q = await w((T) => {
+        const s = [...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T), ts = s ? [...s.querySelectorAll('svg rect.tint')] : [].sort((a, b) => b.getBBox().height - a.getBBox().height), r = ts[0];
+        if (!r) return null;
+        r.scrollIntoView({ block: 'center' });
+        const b = r.getBoundingClientRect(), fill = getComputedStyle(r).fill.match(/\d+/g).map(Number);
+        const done = [...s.querySelectorAll('svg rect:not(.tint)')].some((x) => x.getAttribute('fill') === r.getAttribute('fill') && x.getBBox().height > 2);
+        return { b: [b.left, b.top, b.width, b.height], h: b.height, fill, done };
+      }, title);
+      if (!q) { check(false, `${title}: a planned segment to sample`); continue; }
+      await page.waitForTimeout(120);
+      // four points inside it, the best taken (a race's rule or an average's line may cross one)
+      const img = await A.png(), want = over(q.fill, TINT, PAGE), [bx, by, bw, bh] = q.b;
+      const px = [[0.3, 0.4], [0.7, 0.4], [0.3, 0.6], [0.7, 0.6]].map(([fx, fy]) => img.at(Math.round((bx + bw * fx) * 2), Math.round((by + bh * fy) * 2))).sort((m, k) => Math.max(...m.map((v, i) => Math.abs(v - want[i]))) - Math.max(...k.map((v, i) => Math.abs(v - want[i]))))[0];
+      const ok = near(px, want) && contrast(q.fill, px) >= 3 && q.done;
+      check(ok, `${title}: a planned segment ${Math.round(q.h)} px tall, inside rgb(${px}) for rgb(${want}) (its rgb(${q.fill}) at 20 % over the page), ${contrast(px, PAGE).toFixed(2)}:1 on the page; the done segment of its color ${contrast(q.fill, px).toFixed(2)}:1 against it`);
+    }
+    const zb = await w(() => { const s = document.querySelector('.zbar.plan span'), l = document.querySelector('.legend i.plan'); return [s && getComputedStyle(s).backgroundColor, l && getComputedStyle(l).backgroundColor]; });
+    check(zb.every((c2) => c2 && /\/ 0\.2\)|, 0\.2\)$/.test(c2)), `the plan's zone bars in the week rows and the legend's planned swatch: their outline's color at 20 % inside (${zb.join('; ')})`);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
+  }
   await closeOut(A, scheme);
+
+  // a long fact (a metric whose note runs on, as the owner's coaching routine writes them) stays below, under
+  // the verdict, as a label over its prose, left-aligned and wrapped, never right-aligned prose in the table
+  {
+    const s = JSON.parse(raw), LONG = 'The down week, as it closed';
+    s.assessment.metrics.push({ label: LONG, value: '45.9 km', note: 'Against the 46 km written: on target to the kilometer. The long run moved to Saturday, so the week ended a day early, and by load it reads as written.' });
+    override = { '/data/snapshot.json': { body: JSON.stringify(s) } };
+    const L = await open(scheme);
+    const q = await L.w((label) => {
+      const lg = document.querySelector('#pane > dl.long'), f = lg && [...lg.querySelectorAll('.fact')].find((x) => x.querySelector('dt').textContent === label), dd = f && f.querySelector('dd');
+      const tab = [...document.querySelectorAll('#pane dl.tab dt')].map((d) => d.textContent), pr = document.getElementById('pane').getBoundingClientRect(), r = dd && dd.getBoundingClientRect();
+      return { found: !!dd, after: lg && lg.previousElementSibling && lg.previousElementSibling.matches('p.verdict'), inTab: tab.includes(label), n: tab.length,
+        align: dd && getComputedStyle(dd).textAlign, lines: r ? Math.round(r.height / parseFloat(getComputedStyle(dd).lineHeight)) : 0, inside: r && r.right <= pr.right - 15 && r.left >= pr.left + 15 };
+    }, LONG);
+    check(q.found && q.after && !q.inTab && q.n === 8 && q.align === 'left' && q.lines >= 2 && q.inside,
+      `a long fact ("${LONG}…"): below the verdict, not in the table (still ${q.n} short facts), a label over ${q.lines} lines of left-aligned prose inside the pane's gutters`);
+    await L.shot(`now-long-fact-${scheme}`, false);
+    override = {};
+    await closeOut(L, `${scheme}, a long fact`);
+  }
 }
 
 /* ════════════════════════════════════ once ════════════════════════════════════ */
@@ -544,8 +743,8 @@ console.log('\n== once');
         const q = await w(() => {
           const c = document.querySelector('.mapwrap .readout:not([hidden])'), d = document.querySelector('.mapwrap > svg .cdot'), m = document.getElementById('main').getBoundingClientRect();
           if (!c || !d || +d.getAttribute('opacity') !== 1) return null;
-          const a = c.getBoundingClientRect(), b = d.getBoundingClientRect(), r = c.parentElement.getBoundingClientRect();   // the dot and its 1 px of ring outside
-          return { meet: a.left < b.right + 1 && b.left - 1 < a.right && a.top < b.bottom + 1 && b.top - 1 < a.bottom, seen: a.top >= m.top - 1 && a.bottom <= m.bottom + 1,
+          const a = c.getBoundingClientRect(), b = d.getBoundingClientRect(), r = c.parentElement.getBoundingClientRect(), f = document.getElementById('filters').getBoundingClientRect();   // the dot and its 1 px of ring outside; in view under the filters
+          return { meet: a.left < b.right + 1 && b.left - 1 < a.right && a.top < b.bottom + 1 && b.top - 1 < a.bottom, seen: a.top >= f.bottom - 1 && a.bottom <= m.bottom + 1,
             at: a.top >= r.bottom - 1 ? 'hung from the foot' : a.bottom <= r.top + 1 ? 'over its head' : `${a.top - r.top > 20 ? 'bottom' : 'top'}-${a.left - r.left > 20 ? 'right' : 'left'}` };
         });
         if (!q || q.meet || !q.seen) bad.push(`${Math.round(x)},${Math.round(y)} ${!q ? 'no card' : q.meet ? 'covered' : 'out of view'}`);
@@ -622,7 +821,15 @@ for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740
   const side = r.filter((x) => x.side).length, cap = r.filter((x) => !x.cap).length;
   const land = wv > hv ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
   check(side === 0 && cap === 0 && land, `${label}: no sideways scroll on any pane, the caption line inside its height on every pane${wv > hv ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
-  if (wv > hv) await A.shot('now-landscape-light', false);
+  if (wv > hv) {
+    await A.shot('now-landscape-light', false);
+    // the filters held over a pane on its side: they count against it as the header does
+    await A.pane('Training');
+    const f = async (y) => A.w((v) => new Promise((res) => { document.getElementById('main').scrollTop = v; requestAnimationFrame(() => requestAnimationFrame(() => res([document.getElementById('main').clientHeight, Math.round(document.getElementById('filters').getBoundingClientRect().bottom - document.getElementById('main').getBoundingClientRect().top)]))); }), y);
+    const [pane, rest] = await f(0), [, held] = await f(200);
+    check(pane - held >= pane / 2, `on its side, Training: the pane ${pane} px tall, the filters ${rest} px of it at rest and ${held} px once the row has tucked, ${pane - held} px left for the charts`);
+    await A.shot('training-landscape-light', false);
+  }
   await closeOut(A, label);
 }
 

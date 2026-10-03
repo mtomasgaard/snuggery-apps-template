@@ -24,9 +24,10 @@
 //      no middle dot or em dash in the app's own strings; no →, ➤, ▸, ▾, ▴, ⓘ, Δ, ≈, ↑, ↓ or "..." in
 //      shipped text; both theme-color metas; the two @font-face rules; the page's language and viewport;
 //  15. the bugs on record (ART.md B1 to B17) stay fixed in the code;
-//  16. budgets: app code at most 245,000 bytes (the lead's rulings: plan 0011 D24, after D23's 244,000 and
-//      the 236,521 held before the build, HOUSE.md 8 and D5), fonts/ at most 160,000, the ZIP built
-//      exactly as build-zips.yml builds it at most 1,340,193 (1,072,155 × 1.25; the face replaces Geist);
+//  16. budgets: app code at most 252,000 bytes (the lead's ruling for the owner's six, plan 0011 D32, after
+//      D24's 245,000, D23's 244,000 and the 236,521 held before the build, HOUSE.md 8 and D5), fonts/ at
+//      most 160,000, the ZIP built exactly as build-zips.yml builds it at most 1,340,193 (1,072,155 × 1.25;
+//      the face replaces Geist);
 //  17. US spelling in every shipped text file, the data's own words allowed by file and word.
 //
 //   node tools/check.mjs
@@ -43,7 +44,7 @@ const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if 
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 245000, FONT_CAP = 160000, ZIP_CAP = 1340193; // CODE_CAP: the lead's second ruling, for the follow-up's three items (plan 0011 D24; tools/DECISIONS.md); 244 000 after the build (D23), 236 521 held before it
+const CODE_CAP = 252000, FONT_CAP = 160000, ZIP_CAP = 1340193; // CODE_CAP: the lead's ruling for the owner's six (plan 0011 D32; tools/DECISIONS.md, "The owner's six"): the owner's features take precedence over the house budget, for exactly those six; 245 000 for the follow-up (D24), 244 000 after the build (D23), 236 521 held before it
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -246,11 +247,16 @@ let PAL = null;
   const c = code(css, 'x.css');
   const block = (scheme) => (scheme === 'light' ? c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)')) : c.slice(c.indexOf('@media (prefers-color-scheme: dark)'), c.indexOf('* { box-sizing')));
   const off = [];
-  for (const s of ['light', 'dark']) for (const [k, v] of Object.entries((PAL || {})[s] || {})) if (k !== 'ramp' && (block(s).match(new RegExp(`--${k}:\\s*(#[0-9a-f]{6})`)) || [])[1] !== v) off.push(`${s} --${k}`);
+  for (const s of ['light', 'dark']) for (const [k, v] of Object.entries((PAL || {})[s] || {})) if (k !== 'ramp' && k !== 'tint' && (block(s).match(new RegExp(`--${k}:\\s*(#[0-9a-f]{6})`)) || [])[1] !== v) off.push(`${s} --${k}`);
   let ramp = null;
   try { ramp = JSON.parse((read('js/palette.js').match(/export const RAMP = (\{.*\});/) || [])[1]); } catch { /* reported below */ }
-  ok(PAL && off.length === 0 && ramp && JSON.stringify(ramp) === JSON.stringify({ light: PAL.light.ramp, dark: PAL.dark.ramp }) && Object.keys(PAL.light).length === 16,
+  ok(PAL && off.length === 0 && ramp && JSON.stringify(ramp) === JSON.stringify({ light: PAL.light.ramp, dark: PAL.dark.ramp }) && Object.keys(PAL.light).length === 17,
     `style.css's 15 data tokens per theme (--amount, the single-quantity slate, among them) and js/palette.js's 9 ramp stops per theme equal palette.py --json${off.length ? ': differ ' + off.join(', ') : ''}`);
+  // the plan's tint (the owner's six, 2026-10-03): one strength for both themes, in its two CSS forms
+  const tint = PAL && PAL.light.tint === PAL.dark.tint ? PAL.light.tint : null;
+  const mixes = (c.match(/color-mix\(in srgb, var\(--c\) (\d+)%, transparent\)/g) || []).map((m) => Number(m.match(/(\d+)%/)[1]));
+  ok(tint != null && new RegExp(`\\.tint \\{ fill-opacity: ${tint}; \\}`).test(c) && mixes.length === 1 && mixes[0] === Math.round(tint * 100) && /\.legend i\.plan, \.zbar\.plan span \{ background: color-mix/.test(c),
+    `the plan's tint at palette.py's ${tint} in both themes: .tint's fill-opacity in the charts and the Block, ${mixes.join(', ')} % in color-mix() for the legend's swatch and the plan's zone bars`);
 }
 
 // 14. The look
@@ -325,7 +331,7 @@ let PAL = null;
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling, plan 0011 D24; 244,000 after the build, 236,521 held before it): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling for the owner's six, plan 0011 D32; 245,000 before them, D24): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; Geist's 74,128 before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });
