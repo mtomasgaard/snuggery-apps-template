@@ -1,28 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Power Hours</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<!-- Title, stamp and the day tabs lock together in one sticky block, so the
-     tabs cannot slide under the title on the way to being pinned. -->
-<header class="topbar">
-  <div class="titles">
-    <h1>Power Hours</h1>
-    <p class="stamp" id="stamp">Loading…</p>
-  </div>
-  <p class="zone" id="zone"></p>
-  <nav class="tabs" id="tabs" role="tablist" aria-label="Day"></nav>
+<!-- The app reads data/snapshot.json and data/appliances.json and nothing else. The look is ART.md (the house
+     system and the Landing); where the prices come from, and on what terms, is NOTES.md. The unit of a price is
+     written by app.js only once the snapshot parses, so the camera's wait for it proves the prices are in: this
+     file never names it. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Power Hours</h1>
+  <div class="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the prices&hellip;</button></div>
+  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
 </header>
 
-<main id="main" aria-live="polite"></main>
+<main class="pane" id="main">
+  <div class="notice" id="notice" role="alert" hidden></div>
+  <div class="panebody" id="pane"></div>
+</main>
 
-<footer class="foot" id="foot"></footer>
+<footer class="band" id="band">
+  <p class="capline" id="capline"></p>
+  <!-- CC BY 4.0 asks for the attribution wherever the prices are shown. The static words are the fallback, so a
+       broken snapshot cannot take the attribution down; once the snapshot parses, app.js writes the data's own
+       attribution and license words, byte for byte, in their place. -->
+  <p class="credits" id="credits">Day-ahead prices: Energy-Charts (Fraunhofer ISE).</p>
+  <p class="credits private" id="private" hidden>These prices are licensed for private and internal use only. Do not republish them.</p>
+</footer>
+
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About Power Hours</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body">
+      <section>
+        <h3>What the Landing is</h3>
+        <p>The market settles electricity a quarter of an hour at a time (an hour in some zones), so a day&rsquo;s price is a staircase: one tread per interval, as high as that interval&rsquo;s price. The blue line is that staircase, across every interval in the file, today&rsquo;s and, once the afternoon auction has published them, tomorrow&rsquo;s, on one scale for the whole file. Intervals that have ended are drawn faint.</p>
+        <p>The ink level is the landing: the chosen appliance&rsquo;s cheapest unbroken run, as long as the run, laid where the staircase sits lowest for that long, at the height of the mean price over it, standing on two posts, its times bracketed under the axis. The dashed line is the mean of every price searched, from the current interval to the end of the file, so the drop from the dashes to the level is the saving the list prints. Only the chosen appliance&rsquo;s run is drawn; a tap on another in the list moves it.</p>
+        <p>It is not a bill: grid rent, energy tax and VAT come on top and are usually the larger half of one, and a tariff may average the spot price over a month. It is not a forecast: the day-ahead price is fixed in one auction the afternoon before. The level&rsquo;s height is the mean of the run&rsquo;s interval prices, not what an appliance pays, which depends on how its power draw varies through the run. The scale starts near the lowest price, not at zero, and is the same for every day in the file. A run is searched from the current interval, so its first interval may already have begun.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p id="about-credit">Day-ahead prices: Energy-Charts (Fraunhofer ISE).</p>
+        <p><span translate="no">api.energy-charts.info</span><br><span translate="no">creativecommons.org/licenses/by/4.0</span></p>
+        <p>Energy-Charts publishes 16 of the bidding zones it serves under CC&nbsp;BY&nbsp;4.0, from Bundesnetzagentur and SMARD.de, and those may be republished with the credit above; the prices of every other zone are for private and internal use only. <span translate="no">NOTES.md</span> lists them.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>In the template, a job refreshes <span translate="no">data/snapshot.json</span> after each day&rsquo;s auction, at 13:30 and 16:30 UTC, and a Shortcut carries the file to the phone. Nothing here goes online. The app reads both files again whenever it comes back to the screen.</p>
+        <p>Asking a question about this app&rsquo;s data reads a table written when the prices were fetched, which carries the whole day and the stretch that was then still ahead.</p>
+        <p>Day-ahead prices are set once a day, in an auction, for every interval of the following day.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<p class="sr" id="st-desc" hidden></p>
+<template id="st-tpl"><div class="stair" role="slider" tabindex="0" aria-label="Time" aria-describedby="st-desc" aria-valuemin="0"><svg aria-hidden="true" focusable="false"></svg></div></template>
 
 <script type="module" src="./app.js"></script>
 </body>

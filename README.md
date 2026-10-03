@@ -117,7 +117,7 @@ Scores the next 48 hours of weather against rules you write yourself and shows w
 
 ### Power Hours
 
-Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. **Live**: refreshed here twice a day (NO2 in the demo).
+Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. Its drawing, the Landing, is the day-ahead price as the market settles it, a staircase with one tread per quarter hour on one printed scale, and laid into it the chosen appliance's cheapest run as a level drawn where the stairs sit lowest for that long, at the run's mean price, with a dashed line for the mean of everything ahead so the drop between them is the saving. **Live**: refreshed here twice a day (NO2 in the demo).
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) · Make it yours: [`power-hours/PROMPT.md`](power-hours/PROMPT.md)
 

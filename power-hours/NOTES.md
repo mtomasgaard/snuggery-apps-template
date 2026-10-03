@@ -6,17 +6,17 @@ Energy Systems (ISE). No key, no account, no registration.
 
     GET https://api.energy-charts.info/price?bzn=NO2&start=2026-09-21&end=2026-09-21
 
-`scripts/power_hours.py` calls it at most twice a run — today, then tomorrow —
+`scripts/power_hours.py` calls it at most twice a run (today, then tomorrow)
 and writes `data/snapshot.json`. The app reads that file and nothing else.
 
 ---
 
-## The licence differs per bidding zone, and that is the thing to get right
+## The license differs per bidding zone, and that is the thing to get right
 
 The API offers 57 bidding zones. **Sixteen of them are CC BY 4.0 and may be
 republished. The other forty-one are private and internal use only.** A public
 repository is republication, so changing the zone in the script is also a
-licence decision. This is the API's own wording, from the `/price` endpoint's
+license decision. This is the API's own wording, from the `/price` endpoint's
 documentation at <https://api.energy-charts.info/>:
 
 > **The data for the following bidding zones is licensed as CC BY 4.0 from
@@ -41,24 +41,25 @@ The API's general terms, on the same page, add the attribution condition:
 > licensed under the CC BY 4.0 license. Proper attribution to Energy-Charts.info
 > as the source is required.
 
-Every answer also carries the licence for the zone it just returned, in a
+Every answer also carries the license for the zone it just returned, in a
 `license_info` field. For NO2 today that reads:
 
 > CC BY 4.0 (creativecommons.org/licenses/by/4.0) from Bundesnetzagentur |
 > SMARD.de
 
-**This demo uses NO2 — southern Norway — which is on the CC BY list.** The app
-prints the attribution in its footer on every screen, which is what CC BY 4.0
-asks for. Keep that line.
+**This demo uses NO2, southern Norway, which is on the CC BY list.** The app
+prints the attribution in its credits line, under every screen, which is what
+CC BY 4.0 asks for. Keep that line.
 
-The footer prints that `license_info` **verbatim**, licence address and all,
-rather than a sentence typed into the app: the script stores the field as
-`source.licenceInfo` in the snapshot and the app prefers it over its own
-constant. The list in the script is a copy of a decision that belongs to
-Energy-Charts, so the script also compares the two on every run — if a zone on
-`CC_BY_ZONES` comes back saying anything other than CC BY, the run prints the
-mismatch, writes nothing and exits non-zero, which fails the workflow instead
-of quietly republishing under a licence that has changed.
+The credits line prints that `license_info` **verbatim**, license address and
+all, rather than a sentence typed into the app: the script stores the field as
+`source.licenceInfo` in the snapshot (the snapshot's own key, spelled as the
+pipeline wrote it), and the app prefers it over the job's constant
+`source.licence`. The list in the script is a copy of a decision that belongs
+to Energy-Charts, so the script also compares the two on every run: if a zone
+on `CC_BY_ZONES` comes back saying anything other than CC BY, the run prints
+the mismatch, writes nothing and exits non-zero, which fails the workflow
+instead of quietly republishing under a license that has changed.
 
 ### If you change the zone
 
@@ -67,7 +68,7 @@ for any zone outside it** unless you pass `--private-use`. That flag also sets
 `source.publishable: false` in the snapshot, and the app then prints a line
 saying the prices must not be republished. Use it only in a **private**
 repository, and remember that a repository is as private as its most sensitive
-file — git history cannot be un-published.
+file: git history cannot be un-published.
 
 The zones the API offers, at the time of writing, are: AT, BE, BG, CH, CZ,
 DE-LU, DE-AT-LU, DK1, DK2, EE, ES, FI, FR, GR, HR, HU, IE(SEM), IT-Brindisi,
@@ -91,7 +92,7 @@ From the API's own documentation:
 > header instead of assuming fixed limits, and cache responses on their side.
 
 `scripts/power_hours.py` makes two requests per run, waits a second between
-them, and honours `Retry-After` on a 429. Twice a day is well inside the limit.
+them, and honors `Retry-After` on a 429. Twice a day is well inside the limit.
 Do not put this script in a loop, and do not lower the workflow's cron to
 hourly: the auction that sets these prices runs once a day, so there would be
 nothing new to fetch.
@@ -100,24 +101,31 @@ nothing new to fetch.
 
 ## What the numbers are, and what they are not
 
-- **Day-ahead spot price only.** Tomorrow's curve is fixed in a single auction
-  each afternoon, for every settlement interval of the following day. It is
-  not a forecast.
+- **Day-ahead spot price only.** Tomorrow's prices are fixed in a single
+  auction each afternoon, for every settlement interval of the following day.
+  They are not a forecast.
 - **Not your bill.** Grid rent, energy tax and VAT are on top, and in most
   countries they are the larger half of what you pay. A tariff may also average
-  the spot price over a month rather than follow it hourly — if yours does,
-  this app tells you about the market, not about your money.
+  the spot price over a month rather than follow it interval by interval; if
+  yours does, this app tells you about the market, not about your money.
 - **The source's unit is EUR/MWh**, and the snapshot keeps it that way. The app
   divides by ten to show euro-cents per kWh, because that is the unit a
-  household tariff is quoted in. The conversion is stated on screen.
+  household tariff is quoted in. The conversion is stated in About.
 - **Fifteen minutes, not an hour.** The European day-ahead market settles in
-  15-minute intervals, so a day is 96 prices. The chart draws hourly means
-  because 96 bars on a phone is a texture rather than a chart; the cheapest
-  window is searched at the market's own resolution, so it can start at a
-  quarter past. An hourly zone gives 24 prices and everything still works —
-  `resolutionMinutes` in the snapshot says which you have.
-- **Negative prices are normal** and the app draws them below a zero line.
-  Plenty of wind and little demand is all it takes.
+  15-minute intervals, so a day is 96 prices (92 or 100 on the days the clocks
+  change). The app draws exactly that: a staircase with one tread per
+  interval, never hourly means, which would hide the spread inside an hour
+  (up to 1.42 euro-cents per kWh in the committed file). The cheapest run for
+  each appliance is searched at the same resolution, so it can start at a
+  quarter past, and it is drawn into the staircase as an ink level at its mean
+  price: the Landing, which `ART.md` describes. An hourly zone gives 24 prices
+  and everything still works; `resolutionMinutes` in the snapshot says which
+  you have, and the app measures the step from the times themselves.
+- **One fixed scale for the whole file, not from zero.** The staircase is a
+  line read against printed ticks, never a bar's length, so its scale starts
+  near the lowest price; zero is drawn when the prices cross it.
+- **Negative prices are normal** and the app draws them below a zero rule,
+  shaded. Plenty of wind and little demand is all it takes.
 
 ## Nothing here is anybody's
 
@@ -130,7 +138,16 @@ ordinary run lengths, and it is yours to change.
 ## No network from the app
 
 The app fetches `./data/snapshot.json` and `./data/appliances.json` and nothing
-else. There is no external URL, font, script, image or tile anywhere in
-`index.html`, `app.js` or `style.css` — mini-apps in Snuggery cannot reach the
+else. There is no external URL, script, image or tile anywhere in
+`index.html`, `app.js`, `style.css` or the three modules in `js/`; the one
+typeface is a file in `fonts/`. Mini-apps in Snuggery cannot reach the
 network, and this one does not try. The refresh happens outside, in the GitHub
 Action, and a Shortcut carries the file in.
+
+## Credits
+
+- Day-ahead prices: Energy-Charts (Fraunhofer ISE), under the license each
+  answer states (above), printed in the app's credits line word for word.
+- Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+  The subset is the template's house file, copied byte for byte from
+  `global-weather/fonts/` (sha256 `fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262`).

@@ -1174,7 +1174,7 @@ name and for the word.
 | Finances | a button named `Overview` | the panes `Overview` and `Spending` | SHOTS 334-345 |
 | World News | a button named `Europe` (built from the data's regions) | `Europe`, `Americas` | SHOTS 347-353 |
 | Outdoor Window | a button named `Hours` | `Windows`, `Hours` | SHOTS 355-360 |
-| Power Hours | visible text containing `c/kWh` | a swipe up in full screen: the page scrolls | SHOTS 253-259, 362-374 |
+| Power Hours | visible text containing `c/kWh` (written only after the snapshot parses) | a tap on car charging's pressed word in the runs list: its four-hour landing, apart from the dishwasher's (the washing machine's sits in the same trough in the run-out state) (the pane has nothing to scroll at the camera's size since the pass, plan 0011 D39) | SHOTS 253-259, 362-377 |
 | Hello Live | its Library row | nothing inside the app | SHOTS 238; CLIPS 398-402 |
 
 **Rules (must).**
@@ -1248,8 +1248,7 @@ figures into its `ART.md`.
 | Finances | about 129 800 (after its pass; `ART.md`'s own size moves the last digits) | 131 000 (the lead's ruling, plan 0011 D27; 125 304 by D5's formula) | 123 733 of 200 000 | 40 075 |
 | World News | 86 993 (after its pass and the data follow-up of 2026-10-02; `ART.md`'s own size moves the last digits) | 88 000 (the lead's ruling, plan 0011 D30; 72 140 by D5's formula) | 46 119 of 200 000 | 40 075 |
 | Outdoor Window | 98 073 (after its pass and the lead's fix of the final's should, 2026-10-03; `ART.md`'s own size moves the last digits) | 99 000 (the lead's ruling, plan 0011 D34; 75 257 by D5's formula) | 87 647 of 200 000 | 40 075 |
-| Outdoor Window | 29 939 | 75 257 | 50 637 | 0 |
-| Power Hours | 25 977 | 70 305 | 46 466 | 0 |
+| Power Hours | 95 506 (after its pass, 2026-10-03; `ART.md`'s own size moves the last digits) | 97 000 (the lead's ruling, plan 0011 D39; 70 305 by D5's formula) | 84 497 of 200 000 | 40 075 |
 | Hello Live | 3 730 | 42 496 | 7 281 | 0 |
 
 The ZIP caps are today's size times 1.25, rounded down, plus 37 834 B where the app gains a face.
