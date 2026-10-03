@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-03T14:01:24Z",
+ "generatedAt": "2026-10-03T15:02:02Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Hunter-gatherer societies are often put on a pedestal as paragons of equality – but the reality is more complicated",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/hunter-gatherer-societies-are-often-put-on-a-pedestal-as-paragons-of-equality-but-the-reality-is-more-complicated-289009",
+     "published": "2026-10-03T14:38:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Duncan Stibbard Hawkes, Assistant Professor of Anthropology, Baylor University"
+    },
+    {
      "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Pietro A. Sasso, Associate Professor of Education, Old Dominion University"
-    },
-    {
-     "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/us-regulators-want-to-make-corporate-earnings-reports-less-frequent-but-investors-have-doubts-289338",
-     "published": "2026-10-02T12:50:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tzachi Zach, Professor of Accounting, The Ohio State University"
     },
     {
      "title": "No more execution attempts on Christa Pike: UN rights chief",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
-   "published": "2026-10-02 18:10 UTC"
+   "title": "Hunter-gatherer societies are often put on a pedestal as paragons of equality – but the reality is more complicated",
+   "published": "2026-10-03 14:38 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US regulators want to make corporate earnings reports less frequent, but investors have doubts",
-   "published": "2026-10-02 12:50 UTC"
+   "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
+   "published": "2026-10-02 18:10 UTC"
   },
   {
    "region": "Americas",
