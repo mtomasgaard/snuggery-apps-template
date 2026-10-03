@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-03T16:01:29Z",
+ "generatedAt": "2026-10-03T17:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168469",
+     "published": "2026-10-03T12:00:00Z",
+     "summary": "The package originated in Entebbe, Uganda, bound for Cairo, containing 10 kilograms of thumb-sized pieces that could have been either bone or elephant ivory.",
+     "stale": false
+    },
+    {
      "title": "79 deaths a day: South Africa’s diabetes crisis needs a new strategy",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -233,15 +242,6 @@
      "summary": "In central Sahel's countries military juntas claim to restore popular sovereignty. Political parties are dissolved in all three countries, over a thousand civil society organizations have been suspended.",
      "stale": false,
      "author": "Jean Sovon"
-    },
-    {
-     "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168482",
-     "published": "2026-09-29T12:00:00Z",
-     "summary": "The Security Council met in New York on the Democratic Republic of the Congo (DRC) Tuesday, where clashes between Government forces and M23 rebels continue in the east, despite a series of peace agreements. Ambassadors…",
-     "stale": false
     },
     {
      "title": "When telcos shut down the internet, they shut down protests for the government",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
+   "published": "2026-10-03 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "79 deaths a day: South Africa’s diabetes crisis needs a new strategy",
    "published": "2026-10-02 12:56 UTC"
@@ -801,12 +807,6 @@
    "source": "Global Voices",
    "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
    "published": "2026-09-30 03:37 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
-   "published": "2026-09-29 12:00 UTC"
   },
   {
    "region": "Africa",
