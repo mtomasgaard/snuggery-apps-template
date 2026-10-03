@@ -2,6 +2,6 @@
   "schemaVersion": 1,
   "name": "World News",
   "entryPoint": "index.html",
-  "description": "Today's headlines by region, from freely licensed newsrooms' RSS feeds",
+  "description": "The latest headlines by region from newsrooms whose terms allow a credited headline and link, each linking out to its publisher",
   "version": "1.0"
 }

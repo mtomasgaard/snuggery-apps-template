@@ -1070,7 +1070,7 @@ Every app's check asserts at least these (CHECK 1-31):
 13. **No value reaches markup unescaped.** Global Weather allows `innerHTML` only as `= ''`
     (CHECK 190-197; DESIGN 24-25). Eight of the thirteen still set markup from strings
     (*measured*, assignments that are not `= ''`: Running Dashboard 15, Besseggen 11, Milky Way 7,
-    Norne Reservoir 5, Finances 2, World News 2, Snug Kart 1, Hello Live 1). A pass adds no new
+    Norne Reservoir 5, Finances 2, World News 0 (after its pass), Snug Kart 1, Hello Live 1). A pass adds no new
     such use, escapes every value in the ones it touches, and never adds `insertAdjacentHTML`,
     `outerHTML`, `document.write`, `eval` or `new Function`. An app that already holds Global
     Weather's rule (Anatomy, Shelf Atlas, World Oil & Gas, Outdoor Window, Power Hours) keeps it,
@@ -1246,7 +1246,7 @@ figures into its `ART.md`.
 | Snug Kart | 619 403 (after its pass and the family fixes of 2026-10-02) | 720 806 | 242 778 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
 | Running Dashboard | 1 075 089 (after its pass, the data follow-up and the family fixes of 2026-10-02) | 1 340 193 | 244 994 of 245 000 (the lead's rulings, plan 0011 D23–D24; held at 236 521 before them) | 41 291 |
 | Finances | about 129 800 (after its pass; `ART.md`'s own size moves the last digits) | 131 000 (the lead's ruling, plan 0011 D27; 125 304 by D5's formula) | 123 733 of 200 000 | 40 075 |
-| World News | 27 445 | 72 140 | 21 787 | 0 |
+| World News | 86 948 (after its pass; `ART.md`'s own size moves the last digits) | 88 000 (the lead's ruling, plan 0011 D30; 72 140 by D5's formula) | 46 119 of 200 000 | 40 075 |
 | Outdoor Window | 29 939 | 75 257 | 50 637 | 0 |
 | Power Hours | 25 977 | 70 305 | 46 466 | 0 |
 | Hello Live | 3 730 | 42 496 | 7 281 | 0 |
@@ -1257,6 +1257,12 @@ The ZIP caps are today's size times 1.25, rounded down, plus 37 834 B where the 
 1:10m coast (it was 1 670 512 B, cap 2 125 974); Shelf Atlas gained two documentation sentences (it
 was 1 900 111 B, cap 2 412 972). Global Weather's and Global Wind's rows predate package A too; their
 caps are their own, and their `check.mjs` prints today's figures.
+
+**The formula and the small apps (plan 0011 D27, D29).** For an app whose stock ZIP is smaller than
+the face it gains — Finances (70 kB) and the loop apps after it — the ZIP cap of today × 1.25 plus the
+face leaves no room for the house modules, About and the shipped `ART.md`, so the builder applies the
+whole list, cuts nothing, and the lead rules on the measured figure after the build, as every pass over
+a cap has been ruled; the measured ZIP plus a few thousand bytes for the fix stages is the expected cap.
 
 **What to do near or over a cap.**
 

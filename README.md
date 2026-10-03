@@ -105,7 +105,7 @@ Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banki
 
 ### World News
 
-Today's headlines by region from freely licensed newsrooms' RSS feeds, each linking out to the publisher. **Live**: refreshed daily here.
+The latest headlines by region from newsrooms whose terms allow a credited headline and link, read from their RSS and Atom feeds, each story linking out to the publisher. Every pane opens on the Datelines: one tick of ink per headline, placed by how old it was when the file was made, on one fixed scale from an hour to sixty days, so a region's news reads at a glance as fresh or stale. **Live**: refreshed daily here.
 
 **Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) · Make it yours: [`world-news/PROMPT.md`](world-news/PROMPT.md)
 

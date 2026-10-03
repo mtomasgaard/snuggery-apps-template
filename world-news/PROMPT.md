@@ -7,9 +7,10 @@ The agent does the typing; you decide which parts of the world you care about.
 ## What this app is
 
 Six sections — Europe, Americas, Africa, Middle East, Asia, Oceania — each
-holding eight of today's headlines, with the publisher, the time, a byline
-where the feed gives one, and the feed's own summary line where its licence
-allows one to be shortened. The feeds are the ones whose terms permit a
+holding the latest eight headlines, with the publisher, the date and, when the
+feed gives one, the time (in the file of 1 Oct 2026, 20 of the 48 have a date
+alone), a byline where the feed gives one, and the feed's own summary line
+where its license allows one to be shortened. The feeds are the ones whose terms permit a
 headline to be taken out of a feed and republished with credit: most large
 broadcasters', including the BBC's, do not, and `world-news/NOTES.md` quotes
 the sentence that rules each one out.
@@ -47,8 +48,9 @@ python3 scripts/world_news.py
 
 It prints one line per feed and then a summary. A feed or two failing is normal
 and is the point of the design: a failed feed keeps its headlines from the last
-snapshot and marks them **cached**, so a section shows yesterday with a marker
-rather than an error. Only if *every* feed fails does the script refuse to
+snapshot and marks them **stale**, so a section shows yesterday's headlines,
+each said to be kept from an earlier run and drawn as a hollow tick at the head
+of the pane, rather than an error. Only if *every* feed fails does the script refuse to
 write, leaving the good snapshot alone.
 
 To rehearse that outage path without touching your data:
@@ -71,12 +73,12 @@ Everything you would want to change is in one list at the top of
   in the file; nothing in `app.js` knows these names.
 - **`FEEDS`** — `(id, region key, source name, url, verbatim)`. Add a feed by
   adding a row. The `id` is what the cache is keyed on, so keep it stable.
-  `verbatim` is a **licence** flag, not a formatting one: `True` means the
+  `verbatim` is a **license** flag, not a formatting one: `True` means the
   source forbids derivative works, so its headline is carried exactly as
   written rather than cut at `TITLE_CHARS`, and no summary line of theirs is
-  carried at all. `False` means the licence permits a shortened line.
+  carried at all. `False` means the license permits a shortened line.
 - **`SOURCES`** — one entry per source name, holding the attribution and
-  licence line the app prints in its footer. **A new source needs a row here**,
+  license line the app prints in About. **A new source needs a row here**,
   or its headlines appear with no credit.
 - **`ITEMS_PER_REGION`** — 8 by default. Six regions × eight headlines is 48
   `ask` rows, comfortably under the ceiling the script enforces (60). Raising
@@ -99,8 +101,8 @@ feed", which is why the BBC is not in this app.
 
 If your copy is **private**, most of those become usable again — your snapshot
 is a personal copy rather than a website. If it is public, they are not. Either
-way the licence line you add to `SOURCES` is what the app prints, so make it
-true, and set `verbatim=True` if the licence says no derivatives.
+way the license line you add to `SOURCES` is what the app prints, so make it
+true, and set `verbatim=True` if the license says no derivatives.
 
 A feed you add should be regional, keyless, and answer a plain
 `curl -A "your-repo-url" <feed>` before it goes in the list. Run
@@ -139,7 +141,7 @@ out the alternatives and what each costs.
 
 ## Step 4 — onto the phone
 
-1. Open the raw address of `zips/world-news.zip` in Safari → Share → Snuggery.
+1. Open the raw address of `zips/world-news.zip` in Safari, then Share, then Snuggery.
 2. In your **loop** shortcut's Dictionary, add one row:
    key `World News`, value the raw address of
    `world-news/data/snapshot.json`. If your repository is private, the fetch
@@ -150,7 +152,7 @@ out the alternatives and what each costs.
    - `job` = `https://api.github.com/repos/OWNER/REPO/actions/workflows/refresh-world-news.yml/dispatches`
    - `data` = the same snapshot address as above.
 
-That second row is what makes the app's ⋯ → *Rebuild Data Now* work: one tap
+That second row is what makes Snuggery's Options, then *Rebuild Data Now* work: one tap
 runs the job and pulls the result back.
 
 ## Step 5 — asking about it
@@ -164,9 +166,9 @@ touching anything — the rows are built from whatever was drawn.
 
 ## Do not touch
 
-- `world-news/app.js`, `style.css`, `index.html` — the app. Change the data and
-  the feed list, not the code.
-- The attribution and licence lines the app prints, and the `verbatim` flags
+- `world-news/app.js`, `style.css`, `index.html`, `js/` and `fonts/` — the app.
+  Change the data and the feed list, not the code.
+- The attribution and license lines the app prints, and the `verbatim` flags
   in `FEEDS`. They are the condition on which the feeds may be shown at all.
 
 ## If something fails
@@ -178,4 +180,4 @@ still returns a body, and that body is valid JSON — GitHub's error envelope.
 The shortcut will write it over your good data without complaining. The app
 notices: it says the file is not the shape it expects and names the missing
 field, instead of drawing an empty page. If you see that message, look at
-`data/snapshot.json` in Snuggery — Options ⋯ → App Files.
+`data/snapshot.json` in Snuggery: Options, then App Files.

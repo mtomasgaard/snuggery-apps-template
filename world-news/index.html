@@ -1,34 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>World News</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<!-- Title, stamp and region tabs lock together in one sticky block, so the
-     tabs cannot slide under the title on the way to being pinned. -->
-<header class="topbar">
-  <div class="titles">
-    <h1>World News</h1>
-    <p class="stamp" id="stamp">Loading…</p>
-  </div>
-  <nav class="tabs" id="tabs" role="tablist" aria-label="Regions"></nav>
+<!-- The app reads data/snapshot.json and nothing else. The look is ART.md (the house system and the
+     Datelines); where the headlines come from is NOTES.md. The region tabs are built by app.js once the
+     snapshot parses, so the tab named Europe is the camera's proof of data. -->
+
+<header class="head" id="head">
+  <h1 translate="no">World News</h1>
+  <div class="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the headlines&hellip;</button></div>
+  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Regions" hidden></nav>
+  <span id="kept-hint" hidden>Kept from an earlier run: its feeds did not answer.</span>
 </header>
 
-<main id="main" aria-live="polite"></main>
+<main class="pane" id="main">
+  <div class="notice" id="notice" role="alert" hidden></div>
+  <div class="panebody" id="pane" role="tabpanel"></div>
+</main>
 
-<footer class="foot" id="foot" hidden>
-  <h2>Sources</h2>
-  <ul id="sources"></ul>
-  <p id="feednote" class="feednote" hidden></p>
-  <p>Headlines, the publishers' own summary lines, and links — nothing else is
-  copied. Every story opens on the publisher's own site, in your browser:
-  this app has no way to fetch one.</p>
+<footer class="band" id="band">
+  <p class="capline" id="capline"></p>
+  <p class="credits" id="credits"></p>
 </footer>
+
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About World News</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body">
+      <section>
+        <h3>What the Datelines are</h3>
+        <p>A dateline is the line a newsroom puts on a story to say when it was filed. The rows at the head of every pane hold one tick for each headline, placed by how long before this file was made the story was published: an hour at the right, sixty days at the left. A desk that published this morning has its ticks against the right edge; one whose feeds have gone quiet has them far to the left. Ticks that would touch share one tick, cut into a part for each headline, up to four; one that holds more has its count beside it. A hollow tick is a headline kept from an earlier run, because its feed did not answer on the last one. A tap on a tick finds its story in the list.</p>
+        <p>The ages are counted to the moment this file was made, not to now; the stamp says how old the file is. A tick says nothing of importance: every headline is one tick. Its place is the feed&rsquo;s own time, and a feed that gives only a date (UN News stamps every story at noon UTC, Global Voices some at midnight) is drawn at the time it wrote; such headlines show their date alone in the list, and their age is read aloud as a span (7 or 8 days). The scale is logarithmic, so the step from one hour to six is as wide as the step from one day to six. A story a publisher files under two regions is a tick in both rows.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <div id="about-sources"></div>
+        <p>Headlines, the publishers&rsquo; own summary lines, bylines and links: nothing else is copied. A tap on a story asks Snuggery to open it in Safari, on the publisher&rsquo;s own site; this app has no way to fetch one.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>A scheduled job in the repository reads the feeds once a day at 05:20 UTC and writes <span translate="no">data/snapshot.json</span>; a Shortcut carries it to this phone, and the app reads it again whenever it comes back to the screen. The app itself reaches no network.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<template id="dl-tpl"><div class="dlw"><svg class="dl" role="img"></svg><div class="dlhit" aria-hidden="true"></div></div></template>
 
 <script type="module" src="./app.js"></script>
 </body>

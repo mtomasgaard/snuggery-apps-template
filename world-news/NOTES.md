@@ -1,10 +1,11 @@
 # World News — the feeds, and what their terms ask for
 
-This app shows **headlines, the publisher's name, the time, a byline where the
-feed gives one, a one-line summary where the licence allows it, and a link
-out**. It never copies an article. Every story opens on the publisher's own
-site in your browser — a Snuggery mini-app has no network access at all, so it
-could not fetch one even if it wanted to.
+This app shows **headlines, the publisher's name, the date (and the time when
+the feed gives one), a byline where the feed gives one, a one-line summary
+where the license allows it, and a link out**. It never copies an article.
+Every story opens on the publisher's own site in your browser — a Snuggery
+mini-app has no network access at all, so it could not fetch one even if it
+wanted to.
 
 Three things make a feed usable here:
 
@@ -44,14 +45,14 @@ It stops this repository from republishing them. If your own copy is
 **private**, most of these become usable again — your snapshot is then a
 personal copy, not a website — and adding one is a row in `FEEDS` in
 `scripts/world_news.py`. Read the terms yourself before you do; they change,
-and an old page that says something friendlier is not a licence.
+and an old page that says something friendlier is not a license.
 
 **A consequence worth naming: there is no wire service here.** Once the
 feeds that forbid this use are removed, what is left is not Reuters or the
 BBC. It is a citizen-media network, a UN newsroom and an academic commentary
-network — good, credited, freely licensed journalism that is slower and more
-analytical than a wire. The app is honest about that; you should be too if you
-show it to somebody.
+network — good journalism from newsrooms whose terms allow a credited headline
+and link, slower and more analytical than a wire. The app is honest about
+that; you should be too if you show it to somebody.
 
 ## The feeds this app does use
 
@@ -63,14 +64,14 @@ Seventeen feeds across six regions. Each was fetched successfully on
 Western Europe, Eastern & Central Europe, Latin America, Sub-Saharan Africa,
 West Asia & North Africa, East Asia, South Asia, Oceania.
 
-Published under **Creative Commons Attribution 3.0** — the licence line is in
-the app's footer, linking to
+Published under **Creative Commons Attribution 3.0** — the license line is in
+the app's About, linking to
 <https://creativecommons.org/licenses/by/3.0/>. Global Voices' attribution
 policy asks that a republished story "give appropriate credit, provide a link
 to the license, and **indicate if changes were made**". Changes *are* made
 here: `clean()` strips the markup out of the feed's description, collapses the
 whitespace and cuts the line at about 220 characters with an ellipsis. So the
-licence line the app prints says so — *"the summaries here are the feed's own
+license line the app prints says so — *"the summaries here are the feed's own
 line, shortened"* — rather than implying the text is untouched. The app also
 prints the author when the feed names one (`dc:creator`), and every headline is
 itself the link to the original.
@@ -82,7 +83,8 @@ Policy: <https://globalvoices.org/about/global-voices-attribution-policy/>
 One quirk of theirs to expect: Global Voices files a single story into several
 regional feeds, so a piece about Indigenous land rights can appear under Europe,
 the Middle East and Asia on the same day. That is their filing, not a bug here —
-the app removes duplicates within a section, not across them.
+the app removes duplicates within a section, not across them, and says so: such
+a story's source line reads *also under Middle East*, and About counts them.
 
 ### UN News — `news.un.org`
 
@@ -93,9 +95,9 @@ Europe, Americas, Africa, Middle East, Asia-Pacific.
 > — <https://www.un.org/en/about-us/copyright>
 
 That is one sentence with **two** conditions joined by "and", so the app's
-footer line carries both: *"news-related material may be used as long as
+About carries both: *"news-related material may be used as long as
 appropriate credit is given and the United Nations is advised."* Credit is
-given in the footer and under each headline. Advising the UN is the condition
+given in About, in the credit line under every pane and under each headline. Advising the UN is the condition
 whoever runs a copy has to satisfy for themselves; at the scale of one personal
 dashboard nobody has ever been asked to, but the page says what it says, and it
 is written down here so nobody has to rediscover it.
@@ -124,13 +126,13 @@ United States, Africa, Australia, New Zealand.
 > — <https://theconversation.com/au/republishing-and-media>
 
 **No derivatives** is why these four feeds are marked `verbatim` in `FEEDS`,
-and the flag is a licence decision rather than a formatting one:
+and the flag is a license decision rather than a formatting one:
 
 - the headline is carried **exactly as written** — never cut at `TITLE_CHARS`
   with an ellipsis, the way the other feeds' are;
 - **no summary line is carried at all**, so nothing of theirs is shortened;
 - the byline is carried whole, institution included, because that is the credit
-  the licence asks for.
+  the license asks for.
 
 What is left is a headline and a link, which the same page allows explicitly:
 "extracts are fine as long as they're followed by a link back". The app takes at
@@ -167,8 +169,15 @@ picked sorted for display. Every source that answered is on screen.
 ## What the app draws, and what it does not
 
 - **Drawn:** title, source, publication time, the author when given, the link,
-  and — for the feeds whose licence permits a shortened line — the feed's own
-  `description` trimmed to about 220 characters.
+  and — for the feeds whose license permits a shortened line — the feed's own
+  `description` trimmed to about 220 characters. A feed that gives a date and no
+  time stamps it at exactly 00:00 or 12:00 UTC; such a headline shows its date
+  alone, never a time of day the feed did not give, and VoiceOver hears its age
+  as the span of that day (`7 or 8 days`), never hours.
+- **The Datelines**, at the head of every pane: each headline's age when the file
+  was made (`generatedAt` less `published`, never the phone's clock), one tick a
+  headline on a logarithmic scale from an hour to sixty days, one row a region.
+  A headline kept from a failed feed is a hollow tick and says so in words.
 - **Never fetched or stored:** images, enclosures, audio, video, full text.
 - **No tracking of any kind**, because there is nothing to track with: the app
   makes no request except to `./data/snapshot.json` inside its own folder.
@@ -198,3 +207,11 @@ anything.
 Every headline in the committed snapshot is a public news headline. There is no
 account, name, location, token or personal figure anywhere in this app or its
 data — there is nothing for there to be.
+
+## Type
+
+Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+
+`fonts/ysabeau-office-gw.woff2` and `fonts/OFL.txt` are byte-identical copies of the template's house
+face (`Template/HOUSE.md` section 2.2). A headline in a script the subset does not draw falls back to the
+phone's own face for those letters.
