@@ -1,41 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Outdoor Window</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="titles">
-    <h1>Outdoor Window</h1>
-    <p class="stamp" id="stamp">Loading…</p>
-  </div>
-  <p class="place" id="place"></p>
-  <nav class="tabs" id="tabs" role="tablist" aria-label="Panes"></nav>
+<!-- The app reads data/snapshot.json and data/rules.json and nothing else. The look is ART.md (the house
+     system and the Shutters); where the forecast comes from, and on what terms, is NOTES.md. The pane tabs
+     are built by app.js once the forecast parses, so the tab named Hours is the camera's proof of data. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Outdoor Window</h1>
+  <div class="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the forecast&hellip;</button></div>
+  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Panes" hidden></nav>
 </header>
 
-<main id="main" aria-live="polite"></main>
+<main class="pane" id="main">
+  <div class="notice" id="notice" role="alert" hidden></div>
+  <div class="panebody" id="pane" role="tabpanel"></div>
+</main>
 
-<footer class="foot">
-  <!-- Open-Meteo's licence asks for this credit next to any place their data is
-       shown, as a link, with a link to the licence beside it, and for changes to
-       be indicated. It is static markup rather than something the JavaScript
-       draws: a broken snapshot must not be able to take the attribution down
-       with it.
-       These two anchors are the only external addresses anywhere in the app, and
-       nothing is ever fetched from them. A tap on one is a link activation,
-       which Snuggery hands to Safari after asking — the same thing world-news
-       does with its headlines. The app itself still loads nothing but ./data/. -->
-  <p><a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>, under
+<footer class="band" id="band">
+  <p class="capline" id="capline"></p>
+  <!-- Open-Meteo's license asks for this credit next to any place their data is shown, as a link, with a
+       link to the license beside it, and for changes to be indicated. It is static markup rather than
+       something the script draws, so a broken snapshot cannot take the attribution down with it. These two
+       anchors are the only external addresses in the app (an exception tools/check.mjs allows by file and
+       exact string), and nothing is ever fetched from them: a tap is a link activation, which Snuggery
+       names and offers to hand to Safari. -->
+  <p class="credits" id="credits"><a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>, under
      <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>.
      The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified;
      the scores and the ask table beside it are this app's.</p>
-  <p>Hours are local to the forecast's own place. Forecasts are forecasts: the app scores what was predicted, not what happened.</p>
 </footer>
+
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About Outdoor Window</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body">
+      <section>
+        <h3>What the Shutters are</h3>
+        <p>A window is what is left when every rule in <span translate="no">data/rules.json</span> has had its say. The Shutters draw one row for each rule in use, across every hour in the file. Each run of hours a rule rules out is a block of ink; an hour with no value in the file for that rule is a hollow block, because no data is not a pass. Where no row has ink, a clear channel runs down the stack. A window, a run of open hours at least as long as the shortest window the rules ask for, is drawn as one: lit, an ink jamb up the stack at each edge and an ink sill under it. An open run that is too short has no frame.</p>
+        <p>On an hour a rule lets through, a green bar shows how much of that rule&rsquo;s allowance the hour uses: nothing at the most comfortable value the rule allows, its full 12 pixels exactly at the limit, so a bar is never as tall as a block. An hour&rsquo;s score is 100 minus the mean of its column&rsquo;s marks, each counted as a share of those 12 pixels and a block as all of them. The count at the right of a row is the hours that rule rules out; an hour can fail more than one rule, so the counts add up to more than the hours lost.</p>
+        <p>The Shutters are not a forecast of comfort beyond these rules: an hour no rule blocks is open by these rules and no others. A bar&rsquo;s height does not say which side of a band an hour is on (too warm and too cold stand the same height); the readout under the Shutters does. Daylight is counted by the hour&rsquo;s start, as the forecast&rsquo;s <span translate="no">is_day</span> gives it, so a window&rsquo;s last hour can run past sunset; the readout of that hour prints the sunset. Hours that have ended are drawn faint, left of &ldquo;now&rdquo; over the Shutters, and windows start at the current hour. Every hour is told on the forecast place&rsquo;s own clock.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p>Weather data by Open-Meteo.com, under CC&nbsp;BY&nbsp;4.0. The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.</p>
+        <p><span translate="no">open-meteo.com</span><br><span translate="no">creativecommons.org/licenses/by/4.0/</span></p>
+        <p>Open-Meteo gathers its forecasts from national weather services, among them DWD, ECMWF, NOAA NCEP, M&eacute;t&eacute;o-France, JMA, MET Norway and the UK Met Office, each under its own open license; crediting Open-Meteo is the credit their license asks for.</p>
+        <p>Forecasts are forecasts: the app scores what was predicted, not what happened.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>A Shortcut on the phone asks for its location, fetches the forecast for it and writes it into this app as <span translate="no">data/snapshot.json</span>. Nothing here goes online, and the location is never written to any repository; <span translate="no">PROMPT.md</span> has the recipe. The app reads both files again whenever it comes back to the screen.</p>
+        <p id="about-ask"></p>
+        <p>Air quality is left out on purpose, so the app stays one fetch and one file; <span translate="no">NOTES.md</span> says what adding it would take.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<p class="sr" id="sh-desc" hidden></p>
+<template id="sh-tpl"><div class="sh" role="slider" tabindex="0" aria-label="Hour" aria-describedby="sh-desc" aria-valuemin="0"><svg aria-hidden="true" focusable="false"></svg></div></template>
 
 <script type="module" src="./app.js"></script>
 </body>

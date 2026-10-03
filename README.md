@@ -111,7 +111,7 @@ The latest headlines by region from newsrooms whose terms allow a credited headl
 
 ### Outdoor Window
 
-Scores the next 48 hours of weather against rules you write yourself and shows when to go out. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server.
+Scores the next 48 hours of weather against rules you write yourself and shows when to go out. Its drawing, the Shutters, is one row per rule across the 48 hours: every hour a rule rules out is a block of ink, a small green mark shows how much of a rule's allowance an hour used, and where no row has ink a framed window stands open, with `now` marked above the rows. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server.
 
 **Needs:** your own Shortcut · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) · Make it yours: [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md)
 

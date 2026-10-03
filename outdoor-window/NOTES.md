@@ -1,6 +1,6 @@
-# Outdoor Window — where the data comes from, and on what terms
+# Outdoor Window: where the data comes from, and on what terms
 
-The MIT licence at the root of this repository covers the app's own code. The **weather data**
+The MIT license at the root of this repository covers the app's own code. The **weather data**
 that travels inside `zips/outdoor-window.zip` is not ours, and this file states whose it is and
 what its terms say.
 
@@ -12,16 +12,16 @@ account, no key, no sign-up.
 **The terms, read from the source on 2026-09-21** (`open-meteo.com/en/licence` and
 `open-meteo.com/en/terms`):
 
-- **Licence.** *"API data are offered under Attribution 4.0 International (CC BY 4.0)."* Free to
+- **License.** *"API data are offered under Attribution 4.0 International (CC BY 4.0)."* Free to
   share and adapt, with credit.
 - **The attribution they ask for, in their own words.** *"You must include a link next to any
   location Open-Meteo data are displayed, for example: `Weather data by Open-Meteo.com`."* CC BY's
   own clause, quoted on the same page, asks for three things: *"You must give appropriate credit,
   provide a link to the licence, and indicate if changes were made."*
-- **Changes were made, and the footer says so.** The committed demo is not Open-Meteo's reply as
+- **Changes were made, and the credit line says so.** The committed demo is not Open-Meteo's reply as
   it arrived: `scripts/outdoor_window.py --demo` adds `schema`, `generatedAt`, `demoPlace` and a
   48-row `ask` table of scores this app worked out. The forecast numbers themselves are untouched,
-  which is what the footer's last clause states — *the forecast is Open-Meteo's, unmodified; the
+  which is what the credit line's last clause states: *the forecast is Open-Meteo's, unmodified; the
   scores and the ask table beside it are this app's*.
 - **The free tier is non-commercial.** *"You may only use the free API services for
   non-commercial purposes"*, with *"less than 10'000 API calls per day, 5'000 per hour and 600
@@ -32,13 +32,13 @@ account, no key, no sign-up.
   accuracy and availability. This is a forecast about the weather, being used to decide when to
   go for a walk; that is the right amount of reliance to place on it.
 - **Upstream sources.** Open-Meteo aggregates national weather services — DWD, ECMWF, NOAA NCEP,
-  Météo-France, JMA, MET Norway, the UK Met Office and others — each under its own open licence
-  (mostly CC BY, the UK Met Office's CC BY-SA). Crediting Open-Meteo is the credit their licence
-  asks of us; the full list is on their licence page.
+  Météo-France, JMA, MET Norway, the UK Met Office and others — each under its own open license
+  (mostly CC BY, the UK Met Office's CC BY-SA). Crediting Open-Meteo is the credit their license
+  asks of us; the full list is on their license page.
 
-**How the credit is printed.** The licence asks for the credit as a *link*, with a link to the
-licence beside it, so the footer carries two real anchors — `open-meteo.com` and the CC BY 4.0
-deed — on every screen, in `index.html` as static markup rather than in JavaScript, so that a
+**How the credit is printed.** The license asks for the credit as a *link*, with a link to the
+license beside it, so the caption band at the foot of every pane carries two real anchors, `open-meteo.com` and the CC BY 4.0
+deed, on every screen, in `index.html` as static markup rather than in JavaScript, so that a
 broken data file cannot take the attribution down with it. Those two addresses are the only
 external URLs anywhere in the app, and nothing is ever *fetched* from them: the convention this
 repository follows forbids external **resources** (fonts, scripts, images, tiles), not links out.
@@ -47,15 +47,18 @@ address and offers to hand it to Safari. `world-news` does the same with its hea
 
 ## What is in the app, and what is not
 
-- **No fonts, no images, no icons, no map tiles, no third-party code.** The type is the system's,
-  the strip is `<div>`s with a height, and everything else is CSS. There is nothing here under
-  anybody else's licence except the data above.
+- **One font, and no images, icons, map tiles or third-party code.** The type is the template's
+  house face, vendored byte for byte from `global-weather/fonts/` with its license:
+  Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+  The Shutters, the picture at the head of the Windows and Hours panes, are an SVG drawn by
+  `js/shutters.js` from the scorer's own numbers (`js/score.js`); `ART.md` says how to read them.
+  There is nothing else here under anybody else's license except the data above.
 - **No network.** The app fetches `./data/snapshot.json` and `./data/rules.json` and nothing
-  else, ever. The only `http` addresses in `index.html`, `app.js` or `style.css` are the two
-  attribution anchors in the footer, and an anchor is not a fetch: nothing is loaded from them
+  else, ever. The only `http` addresses in `index.html`, `app.js`, `js/` or `style.css` are the two
+  attribution anchors in the caption band, and an anchor is not a fetch: nothing is loaded from them
   unless the reader taps one and Snuggery hands it to Safari.
-- **No `innerHTML` with data.** Every value from either file goes in through `textContent`. The
-  only `innerHTML` in the app is `main.innerHTML = ''`, which clears.
+- **No `innerHTML` at all.** Every value from either file goes in through `textContent` or an
+  attribute; `innerHTML` is never assigned, and `tools/check.mjs` fails if it is.
 
 ## The demo data
 
@@ -114,7 +117,7 @@ three things, in this order:
 2. A rule group in `data/rules.json` — something like
    `"air": { "maxPm25": 15, "maxEuropeanAqi": 40, "maxBirchPollen": 10 }` — with the same
    "leave a key out and it is not applied" rule as everything else.
-3. Three more checks in the scorer, in **both** `app.js` and `scripts/outdoor_window.py`, and the
+3. Three more checks in the scorer, in **both** `js/score.js` and `scripts/outdoor_window.py`, and the
    hourly times of the two files aligned by timestamp rather than by index, because the two
    endpoints do not have to start at the same hour.
 
@@ -128,5 +131,5 @@ rounded to whatever precision the shortcut passes. Nothing goes to this reposito
 workflow for this app — and nothing goes to Snuggery, which never makes a network request of any
 kind. If the coordinates themselves matter to you, note that Open-Meteo snaps them to its model
 grid anyway (the reply's `latitude` and `longitude` are the grid point, not what you asked for),
-and that passing a deliberately rounded pair — two decimal places is about a kilometre — costs
+and that passing a deliberately rounded pair — two decimal places is about a kilometer — costs
 the forecast nothing.

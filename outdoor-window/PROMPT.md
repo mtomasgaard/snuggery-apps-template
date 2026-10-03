@@ -12,9 +12,12 @@ out. Not "will it rain" — your phone already knows that. *When is there a two-
 daylight, under 35 km/h of gusts, with the dew point low enough that it will not feel like soup.*
 The rules are a file you edit; the app is the part that does the arithmetic.
 
-Three panes: **Windows** (the next good stretch, then the ones after it, then which rule is
-costing you the most hours), **Hours** (all 48, each one either highlighted or labelled with the
-rules it failed), **Rules** (what is currently being applied, and how to change it).
+Three panes: **Windows** (the Shutters, one row per rule across the 48 hours with ink wherever
+that rule rules an hour out, so the windows are the gaps where no row has ink; then the next good
+stretch and the ones after it), **Hours** (the same picture, then every hour with its values,
+either marked as part of a window or labeled with the rules it failed), **Rules** (what is
+currently being applied, what each rule did to this forecast, and how to change it). How the
+picture is drawn and read is `ART.md`; a copy keeps it.
 
 ## What is different about this one
 
@@ -38,7 +41,7 @@ Open `outdoor-window/data/rules.json`. This is the whole configuration of the ap
 
 | Key | What it means | Leave it out and… |
 | --- | --- | --- |
-| `activity` | the label shown in the header — "A walk outside", "Photographs", "Painting the fence" | it says *Outdoors* |
+| `activity` | the heading of the Windows and Rules panes: "A walk outside", "Photographs", "Painting the fence" | it says *Outdoors* |
 | `maxRainChancePct` | the forecast chance of any rain in the hour | rain chance is not checked |
 | `maxPrecipMm` | how much is expected to fall in the hour | rainfall is not checked |
 | `maxGustKmh` | gusts, not average wind — gusts are what you feel | gusts are not checked |
@@ -55,15 +58,15 @@ so a low-scoring pass reads as marginal rather than as a promise.
 Two things worth knowing before you tune it:
 
 - **Start loose.** Rules that are too tight give an app that says "no window in the next 48
-  hours" for a week, which teaches you nothing. The *What ruled hours out* card on the Windows
-  pane tells you which rule to relax first.
+  hours" for a week, which teaches you nothing. The Shutters on the Windows pane show which rule
+  to relax first: the row with the most ink, its count of hours at the right.
 - **The numbers are in whatever units the forecast carries.** The address in Step 2 asks for
   Celsius and km/h, so `maxGustKmh` really is km/h. Change the units in the address and the key
   names will lie to you; change the numbers to match.
 
 You can edit this file here in the repository, but the point of it is that you can also edit it
-**on the phone**, with no computer and no agent: in Snuggery, the app's ⋯ menu → *App Files* →
-`data/rules.json`. The app re-reads it every time you come back to it.
+**on the phone**, with no computer and no agent: in Snuggery, the app's Options, then *App Files*,
+then `data/rules.json`. The app re-reads it every time you come back to it.
 
 ## Step 2 — the address
 
@@ -81,8 +84,8 @@ retyped. Every part of it is load-bearing:
 - `daily=sunrise,sunset` — only the golden-hour rule needs them, but they cost nothing.
 - `current=` — this is what puts a **moment** in the file. The reply has no "generated at" field
   of its own; `current.time` is the service's own now, rounded to the quarter hour, and it is
-  what the app's *About HH:MM* stamp is derived from. Drop it and the header falls back to the
-  first hour of the forecast, which only tells you the file is *at least* that old.
+  what the app's *Updated about HH:MM* stamp is derived from. Drop it and the stamp falls back to
+  the first hour of the forecast (*Forecast from HH:MM*), which only tells you the file is *at least* that old.
 - `timezone=auto` — hourly times come back as local wall clock for the forecast's own place,
   with `utc_offset_seconds` beside them so the app can put them on a clock. Without it, nothing
   can be placed.
@@ -99,7 +102,7 @@ Two shapes. Build whichever suits you; they are not exclusive.
 
 ### A — it follows you (five actions, no token)
 
-In Shortcuts, new shortcut, named something you will recognise — *Outdoor Window* will do:
+In Shortcuts, new shortcut, named something you will recognize: *Outdoor Window* will do:
 
 1. **Get Current Location**
 2. **Get Details of Location** — Detail **Latitude**, of *Current Location*
@@ -109,10 +112,10 @@ In Shortcuts, new shortcut, named something you will recognise — *Outdoor Wind
 4. **Get Contents of URL** — paste the address from Step 2 and replace `LAT` with the Latitude
    variable and `LON` with the Longitude variable. Method **GET**, no headers.
 5. **Update a File in a Snuggery App**
-   - **App** → *Outdoor Window* (the picker), or leave it empty and put `Outdoor Window` in
+   - **App**: *Outdoor Window* (the picker), or leave it empty and put `Outdoor Window` in
      **App name**
-   - **Path in the app** → `data/snapshot.json`
-   - **Text instead of a file** → *Contents of URL* from step 4
+   - **Path in the app**: `data/snapshot.json`
+   - **Text instead of a file**: *Contents of URL* from step 4
 
 Two field traps, both of which everyone hits once:
 
@@ -128,7 +131,7 @@ it to run from an automation while the phone is in a pocket).
 
 ### B — a place that does not move
 
-If you only care about one spot — home, the allotment, the trailhead — you do not need a new
+If you only care about one spot — home, the community garden, the trailhead — you do not need a new
 shortcut at all. Put your coordinates into the address from Step 2 and add **one row** to the
 Dictionary in the loop shortcut you already have: key `Outdoor Window`, value that address. The
 loop fetches it and writes it like any other app.
@@ -143,11 +146,11 @@ open addresses without it.
 ### Running it on a schedule
 
 Shape A is a plain shortcut, so every way of running a shortcut works: a Home Screen icon, *Hey
-Siri*, the Action Button, or Shortcuts → Automation → Time of Day → *Run Immediately*. A forecast
+Siri*, the Action Button, or Shortcuts, then Automation, then Time of Day, then *Run Immediately*. A forecast
 is worth refreshing once or twice a day; it does not change by the minute, and neither should the
 app you look at.
 
-Snuggery's ⋯ → *Keep This Up To Date* also has a *Run now* row that opens **one** rebuild shortcut
+Snuggery's Options, then *Keep This Up To Date*, also has a *Run now* row that opens **one** rebuild shortcut
 by name, shared across all your apps, passing the app's name as its input. That shortcut's recipe
 starts by POSTing to a workflow, which this app does not have — so unless you are willing to put
 an *If* around that step, leave Outdoor Window out of it and run its own shortcut directly. The
@@ -158,12 +161,12 @@ keeping the pane you were on.
 
 Open the app. Three things say it worked:
 
-- the header stamp is the current time, not the demo's,
-- the place line under the title shows your own coordinates and time zone rather than *Boston
-  Common*,
+- the stamp under the app's name says when your file was made, not the demo's,
+- the line under the Windows pane's heading shows your own coordinates rather than *Boston
+  Common*, and the example statement at the top of each pane is gone,
 - the hours start at the current hour.
 
-If instead you get a red card, read it — it names the specific thing that is wrong: a missing
+If instead you get a notice, read it — it names the specific thing that is wrong: a missing
 hourly variable (and which), a reply that is not a forecast, a refusal from the service with its
 own reason quoted, or a file that is not JSON at all. The last one is the common one: a fetch that
 failed upstream still returns text, and the shortcut writes it over good data without complaint.
@@ -186,29 +189,29 @@ array of flat rows. It ignores the rest of the file.
 which is why it works perfectly on a raw reply. The gap is only in Ask. Three honest choices:
 
 1. **Leave it.** The app's own panes answer the questions the `ask` rows would.
-2. **Add the timestamp only** — three actions, no loop, worth doing regardless: **Current Date** →
-   **Format Date** (ISO 8601, with time) → **Set Dictionary Value**, key `generatedAt`, in
-   *Contents of URL*, before the Update step. The header then reads *Updated HH:MM* rather than
-   *About HH:MM*, from your clock rather than the service's.
+2. **Add the timestamp only** — three actions, no loop, worth doing regardless: **Current Date**, then
+   **Format Date** (ISO 8601, with time), then **Set Dictionary Value**, key `generatedAt`, in
+   *Contents of URL*, before the Update step. The stamp then reads *Updated HH:MM* rather than
+   *Updated about HH:MM*, from your clock rather than the service's.
 3. **Build the rows in Shortcuts** — a *Repeat with Each* over `hourly.time` with a *Get Item
    from List* per variable, assembling one dictionary per hour. It is about a dozen actions, it
    cannot reproduce the scoring, and `outdoor-window/NOTES.md` sketches it. Worth it only if you
    ask questions of this app in words often.
 
-## The licence line to keep
+## The license line to keep
 
-The app's footer prints this, word for word:
+The app prints this in the caption band at the foot of every pane, word for word:
 
 > Weather data by Open-Meteo.com, under CC BY 4.0. The free API is for non-commercial use. The
 > forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.
 
-*If this ever disagrees with `index.html`, `index.html` is right* — do not normalise the footer
+*If this ever disagrees with `index.html`, `index.html` is right* — do not normalize the credit line
 to match a quote in a document.
 
 Two of those words are **links** in the markup: *Open-Meteo.com* points at `open-meteo.com`, and
-*CC BY 4.0* at the licence deed. They are the only external addresses in the whole app, and
+*CC BY 4.0* at the license deed. They are the only external addresses in the whole app, and
 nothing is loaded from them; a tap is a link activation, which Snuggery names and offers to hand
-to Safari. The licence asks for the credit as a link and for a link to the licence, so both
+to Safari. The license asks for the credit as a link and for a link to the license, so both
 anchors are conditions, not decoration — keep them anchors.
 
 The whole attribution is a condition of using the data, so it stays in `index.html` whatever else
@@ -219,19 +222,19 @@ there is a paid tier for the other kind.
 
 ## Do not touch
 
-- `outdoor-window/app.js`, `style.css`, `index.html` — the app. Change `data/rules.json`, not the
-  code. The shape of both data files is documented in the header comment at the top of `app.js`;
-  read that before changing anything here.
-- The attribution line in the footer.
-- The scoring arithmetic in **one** place only: `app.js` and `scripts/outdoor_window.py` mirror
-  each other deliberately, because the app must score a raw reply and the script must write the
-  demo's `ask` rows. Change one, change the other — and know what the check can and cannot see.
+- `outdoor-window/app.js`, `js/`, `style.css`, `index.html`, `fonts/` — the app. Change
+  `data/rules.json`, not the code. The shape of both data files is documented in the header
+  comment at the top of `app.js`; read that before changing anything here.
+- The attribution line in the caption band.
+- The scoring arithmetic in **one** place only: `js/score.js` and `scripts/outdoor_window.py`
+  mirror each other deliberately, because the app must score a raw reply and the script must
+  write the demo's `ask` rows. Change one, change the other, and run both guards:
   `python3 scripts/outdoor_window.py --check` recomputes the `ask` table from the committed
   snapshot and the committed rules and fails if the committed table no longer matches, so it
-  catches a change to the Python scorer, to `rules.json`, or to the snapshot. **It never opens
-  `app.js`**: an edit to the app's half of the arithmetic leaves `--check` green, and that half
-  has to be checked by eye. If you want a real guard, the mode to add is a fourth one that loads
-  `app.js`'s `scoreHours` in `node` and compares the two row sets.
+  catches a change to the Python scorer, to `rules.json`, or to the snapshot; it never opens the
+  app. `node outdoor-window/tools/test_shutters.mjs` is the app's half: it loads `js/score.js` in
+  Node and compares its rows with the committed `ask` table, row by row, and with a scorer
+  written in the test, so an edit to either half that the other does not share fails there.
 
 ## If something fails
 

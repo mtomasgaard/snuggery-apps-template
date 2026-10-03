@@ -1,23 +1,25 @@
-/* Outdoor Window — Snuggery mini-app.
+/* Outdoor Window, a Snuggery mini-app. The look is ART.md (the house system, Template/HOUSE.md, and the
+ * Shutters); every number, date and span on screen is written by js/units.js, the scores by js/score.js,
+ * the Shutters by js/shutters.js.
  *
  * ---------------------------------------------------------------------------
  * WHAT THIS APP READS
  * ---------------------------------------------------------------------------
- * Two files, both under ./data/, both re-read every time the app comes back
+ * Two files, both under ./data/, both read again every time the app comes back
  * into view. Nothing else. No network: a mini-app in Snuggery cannot reach it,
  * and this one does not want to.
  *
  *   data/snapshot.json   the forecast. Rewritten by a Shortcut on the phone.
  *   data/rules.json      what counts as a good hour. Written by the person,
- *                        in Snuggery's ⋯ → App Files.
+ *                        in Snuggery's Options, then App Files.
  *
  * ---------------------------------------------------------------------------
- * data/snapshot.json — THE RAW OPEN-METEO REPLY, AS IT ARRIVES
+ * data/snapshot.json: THE RAW OPEN-METEO REPLY, AS IT ARRIVES
  * ---------------------------------------------------------------------------
  * This app is unusual in the template: it has no GitHub Action behind it. The
  * Shortcut asks the phone for its own location, fetches the forecast for that
  * spot, and hands the reply straight over. So the shape below is not ours to
- * choose — it is Open-Meteo's forecast response, written here unmodified:
+ * choose; it is Open-Meteo's forecast response, written here unmodified:
  *
  * {
  *   "latitude": 42.36, "longitude": -71.06,
@@ -54,65 +56,61 @@
  * WHERE THE HEADER'S STAMP COMES FROM, precisely, in this order:
  *   1. `generatedAt`, if it is a string that parses. The demo script writes it;
  *      a Shortcut can add it with one *Set Dictionary Value* action.
- *   2. `current.time` — Open-Meteo's own "now", rounded to the quarter hour —
+ *   2. `current.time`: Open-Meteo's own "now", rounded to the quarter hour,
  *      read as local wall clock and shifted by `utc_offset_seconds`. This is
  *      why the fetch asks for `&current=`: without it the file carries no
- *      moment at all. Shown as "about HH:MM".
+ *      moment at all. Shown as "Updated about HH:MM".
  *   3. `hourly.time[0]` shifted the same way: the first hour of the forecast.
- *      Shown as "forecast from HH:MM", because it is a lower bound on the age,
+ *      Shown as "Forecast from HH:MM", because it is a lower bound on the age,
  *      not the age.
  * `generationtime_ms` is never used for this. It is a duration in
- * milliseconds — how long their server spent computing — and reading it as a
+ * milliseconds (how long their server spent computing), and reading it as a
  * timestamp is the obvious wrong turn, so it is named here to close it off.
  *
  * WHAT ASK CAN AND CANNOT SEE. Snuggery's *Ask About This Data* reads one key:
  * a top-level `ask` array. The committed demo has one; a file delivered by the
  * Shortcut does not, because Shortcuts cannot build 48 scored rows without a
- * Repeat loop. The app itself never needs `ask` — it scores the hours below —
+ * Repeat loop. The app itself never needs `ask` (it scores the hours below),
  * but Ask does. PROMPT.md says this plainly and gives the optional recipe.
  *
  * ---------------------------------------------------------------------------
- * data/rules.json — WHAT COUNTS AS A GOOD HOUR
+ * data/rules.json: WHAT COUNTS AS A GOOD HOUR
  * ---------------------------------------------------------------------------
  * {
  *   "schema": 1,
- *   "activity": "A walk outside",     // the label in the header of the panes
+ *   "activity": "A walk outside",     // heads the Windows and Rules panes
  *   "maxRainChancePct": 30,           // hourly.precipitation_probability ≤ this
  *   "maxPrecipMm": 0.2,               // hourly.precipitation ≤ this
  *   "maxGustKmh": 35,                 // hourly.wind_gusts_10m ≤ this
  *   "temperatureC": { "min": 2, "max": 26 },
  *   "dewPointC":    { "min": -10, "max": 17 },
- *   "daylight": "daylight",           // "any" | "daylight" | "golden"
+ *   "daylight": "daylight",           // "any" | "daylight" | "golden", read ignoring case
  *   "goldenHourMinutes": 75,          // the width of the golden band, each end
  *   "minWindowHours": 2               // shorter runs of good hours are not windows
  * }
  * Any rule may be left out; a missing rule is simply not applied. The numbers
- * are in whatever units the snapshot uses — the shipped fetch is °C and km/h.
- *
- * HOW AN HOUR IS SCORED. Each rule that applies yields two things: whether the
- * hour passes it, and a comfort between 0 and 1 — 1 at the most comfortable
- * value the rule allows, 0 exactly at the limit. A "no more than" rule scores
- * (limit − value) / limit; a band scores how near the middle of the band the
- * value sits; daylight scores 1 or 0. The hour's score is the mean comfort,
- * rounded to a percentage, and it passes only if every rule passes. So a
- * scraped pass scores low and reads as marginal, which is the honest picture.
- * `scripts/outdoor_window.py` mirrors this arithmetic to write the demo's
- * `ask` rows; change a formula in one and change it in the other.
+ * are in whatever units the snapshot uses; the shipped fetch is °C and km/h.
+ * How an hour is scored is in js/score.js's header comment.
  *
  * ---------------------------------------------------------------------------
  * A NOTE ON SAFETY, since this file renders data somebody else's server wrote:
- * nothing from either JSON file ever reaches innerHTML. Every value goes in
- * through textContent, via the `el()` helper below. innerHTML appears three
- * times in this file and is assigned the empty string every time, to clear a
- * container before redrawing it. Keep it that way.
+ * nothing from either JSON file ever reaches markup as markup. Every value goes
+ * in through textContent (the el() helper below) or an attribute. innerHTML is
+ * never assigned. Keep it that way.
  * ---------------------------------------------------------------------------
  */
 
+import { scoreHours, findWindows, sunTimes, isNumber, localToEpoch, lightRule } from './js/score.js';
+import { int, count, list, num, withUnit, spokenValue, coords, meters, stampWhen, full, span, zone, placeClock, placeDate, placeFull, placeDays, placeSpan, spokenHour } from './js/units.js';
+import { model as shutterModel, draw as drawSvg, hourAt, nameOf, caption as shutterCaption, describe } from './js/shutters.js';
+
 const SNAPSHOT_URL = './data/snapshot.json';
 const RULES_URL = './data/rules.json';
+const STALE_HOURS = 6;        // the stock's threshold, unchanged (owner call 1)
+const LABEL_FONT = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
 
 /* The hourly variables the scoring needs. `cloud_cover` is shown, never
-   scored, so it is not in this list — a file without it still works. */
+   scored, so it is not in this list: a file without it still works. */
 const REQUIRED_HOURLY = [
   'temperature_2m',
   'precipitation_probability',
@@ -136,249 +134,76 @@ const DEFAULT_RULES = {
   minWindowHours: 2
 };
 
-const TABS = [
-  { id: 'windows', label: 'Windows' },
-  { id: 'hours', label: 'Hours' },
-  { id: 'rules', label: 'Rules' }
-];
+const TABS = [['windows', 'Windows'], ['hours', 'Hours'], ['rules', 'Rules']];
 
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
 
-const state = { tab: 'windows', selected: null, model: null };
+let S = null;                       // the forecast as drawn (derive())
+let texts = { snap: null, rules: null };   // both files as last read, to tell a new file from the same one
+let tab = 'windows';                // the pane; the app stores nothing
+let chosen = 0;                     // the chosen hour, an index into S.all
+let labelW = 0;                     // the Shutters' label column, measured in the face
+let M = null, shut = null;          // the Shutters' model and drawing on the open pane
 
-const main = document.getElementById('main');
-const tabsNav = document.getElementById('tabs');
-const stampNode = document.getElementById('stamp');
-const placeNode = document.getElementById('place');
-
-/* -------------------------------------------------------------- tiny helpers */
-
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined && text !== null) node.textContent = String(text);
-  return node;
+/** One polite live region for sentences (HOUSE 4.9): never twice for one event. */
+function announce(text) {
+  const n = $('live');
+  n.textContent = '';
+  setTimeout(() => { n.textContent = text; }, 60);
 }
 
-function clamp(value, low = 0, high = 1) {
-  return Math.max(low, Math.min(high, value));
-}
+/* ── reading the files ────────────────────────────────────────────────── */
 
-function isNumber(value) {
-  return typeof value === 'number' && Number.isFinite(value);
-}
-
-/* "2026-09-21T05:00" in a place that is `offset` seconds from UTC, as an
-   instant. Parsed as UTC and then shifted back, which avoids handing a
-   zone-less string to the engine's local-time guesswork. */
-function localToEpoch(stamp, offset) {
-  if (typeof stamp !== 'string') return NaN;
-  const ms = Date.parse(stamp.slice(0, 16) + 'Z');
-  return Number.isNaN(ms) ? NaN : ms - offset * 1000;
-}
-
-/* Formatting is always in the FORECAST's time zone, not the reader's — the
-   weather happens where the weather is. The header stamp is the exception and
-   says so. */
-function atPlace(epoch, offset) {
-  return new Date(epoch + offset * 1000);
-}
-
-function hhmm(epoch, offset) {
-  const d = atPlace(epoch, offset);
-  return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0');
-}
-
-function dayLabel(epoch, offset) {
-  const d = atPlace(epoch, offset);
-  return DAY_NAMES[d.getUTCDay()] + ' ' + d.getUTCDate();
-}
-
-function dayKey(epoch, offset) {
-  return atPlace(epoch, offset).toISOString().slice(0, 10);
-}
-
-function num(value, digits = 0, suffix = '') {
-  if (!isNumber(value)) return '—';
-  return value.toFixed(digits) + suffix;
-}
-
-function plural(count, one, many) {
-  return count + ' ' + (count === 1 ? one : many);
-}
-
-/* --------------------------------------------------------------- the scoring */
-
-function maxRule(value, limit) {
-  if (!isNumber(limit)) return null;                       // rule not in use
-  if (!isNumber(value)) return { ok: false, comfort: 0 };  // no data is not a pass
-  if (limit <= 0) return { ok: value <= 0, comfort: value <= 0 ? 1 : 0 };
-  return { ok: value <= limit, comfort: clamp((limit - value) / limit) };
-}
-
-function bandRule(value, band) {
-  if (!band || !isNumber(band.min) || !isNumber(band.max)) return null;
-  if (!isNumber(value)) return { ok: false, comfort: 0 };
-  const { min, max } = band;
-  if (max <= min) return { ok: value === min, comfort: value === min ? 1 : 0 };
-  const half = (max - min) / 2;
-  const middle = (max + min) / 2;
-  return { ok: value >= min && value <= max, comfort: clamp((half - Math.abs(value - middle)) / half) };
-}
-
-function sunTimes(snapshot, offset) {
-  const daily = snapshot.daily || {};
-  const days = Array.isArray(daily.time) ? daily.time : [];
-  const table = new Map();
-  days.forEach((day, index) => {
-    const rise = Array.isArray(daily.sunrise) ? daily.sunrise[index] : null;
-    const set = Array.isArray(daily.sunset) ? daily.sunset[index] : null;
-    table.set(day, {
-      rise: typeof rise === 'string' ? localToEpoch(rise, offset) : NaN,
-      set: typeof set === 'string' ? localToEpoch(set, offset) : NaN
-    });
-  });
-  return table;
-}
-
-function scoreHours(snapshot, rules) {
-  const hourly = snapshot.hourly || {};
-  const times = Array.isArray(hourly.time) ? hourly.time : [];
-  const offset = isNumber(snapshot.utc_offset_seconds) ? snapshot.utc_offset_seconds : 0;
-  const sun = sunTimes(snapshot, offset);
-  const wantLight = String(rules.daylight || 'any').toLowerCase();
-  const goldenMinutes = isNumber(rules.goldenHourMinutes) ? rules.goldenHourMinutes : 0;
-
-  return times.map((stamp, index) => {
-    const at = (name) => {
-      const series = hourly[name];
-      return Array.isArray(series) && index < series.length ? series[index] : null;
-    };
-
-    const temp = at('temperature_2m');
-    const rainPct = at('precipitation_probability');
-    const precip = at('precipitation');
-    const gust = at('wind_gusts_10m');
-    const dew = at('dew_point_2m');
-    const cloud = at('cloud_cover');
-    const isDay = at('is_day');
-    const epoch = localToEpoch(stamp, offset);
-
-    // Golden hour: within `goldenHourMinutes` of sunrise or of sunset, on the
-    // hour's own calendar day in the forecast's zone.
-    let light = isDay === 1 ? 'day' : 'night';
-    let golden = false;
-    const today = sun.get(typeof stamp === 'string' ? stamp.slice(0, 10) : '');
-    if (today && goldenMinutes > 0 && Number.isFinite(today.rise) && Number.isFinite(today.set)) {
-      const span = goldenMinutes * 60000;
-      golden = (epoch >= today.rise && epoch <= today.rise + span) ||
-               (epoch >= today.set - span && epoch <= today.set);
-    }
-    if (golden) light = 'golden';
-
-    const checks = [
-      { label: 'rain chance', result: maxRule(rainPct, rules.maxRainChancePct) },
-      { label: 'rainfall', result: maxRule(precip, rules.maxPrecipMm) },
-      { label: 'gusts', result: maxRule(gust, rules.maxGustKmh) },
-      { label: 'temperature', result: bandRule(temp, rules.temperatureC) },
-      { label: 'dew point', result: bandRule(dew, rules.dewPointC) }
-    ];
-    if (wantLight === 'daylight') {
-      checks.push({ label: 'daylight', result: { ok: isDay === 1, comfort: isDay === 1 ? 1 : 0 } });
-    } else if (wantLight === 'golden') {
-      checks.push({ label: 'golden hour', result: { ok: golden, comfort: golden ? 1 : 0 } });
-    }
-
-    const active = checks.filter((check) => check.result !== null);
-    const comforts = active.map((check) => check.result.comfort);
-    const blocked = active.filter((check) => !check.result.ok).map((check) => check.label);
-    const score = comforts.length
-      ? Math.round(100 * comforts.reduce((sum, c) => sum + c, 0) / comforts.length)
-      : 0;
-
-    return {
-      index, stamp, epoch, score, light,
-      pass: blocked.length === 0,
-      blocked, temp, rainPct, precip, gust, dew, cloud
-    };
-  });
-}
-
-function findWindows(rows, minHours) {
-  const need = isNumber(minHours) && minHours > 0 ? Math.ceil(minHours) : 1;
-  const windows = [];
-  let run = [];
-  const flush = () => {
-    if (run.length >= need) {
-      const scores = run.map((r) => r.score);
-      windows.push({
-        rows: run,
-        hours: run.length,
-        start: run[0],
-        end: run[run.length - 1],
-        best: Math.max(...scores),
-        mean: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
-      });
-    }
-    run = [];
-  };
-  for (const row of rows) {
-    if (row.pass) run.push(row);
-    else flush();
-  }
-  flush();
-  return windows;
-}
-
-/* ------------------------------------------------------------- reading files */
-
-/* `hint` is the sentence after "is not valid JSON", and it differs by file:
-   the forecast is overwritten by a machine, the rules by a person, and the
-   two make different mistakes. */
-async function readJson(url, name, hint) {
-  let response;
+async function readText(url) {
   try {
-    response = await fetch(url, { cache: 'no-store' });
-  } catch (error) {
-    return { error: `${name} could not be read. The file is missing, or this page was opened straight off the filesystem rather than served.` };
-  }
-  if (!response.ok) return { error: `${name} returned ${response.status}.` };
-  try {
-    return { value: await response.json() };
-  } catch (error) {
-    return { error: `${name} is not valid JSON. ${hint}` };
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) return { error: `could not be read (HTTP ${res.status}).` };
+    return { text: await res.text() };
+  } catch (err) {
+    return { error: `could not be read (${err.message || err}).` };
   }
 }
 
-function validate(snapshot) {
-  const problems = [];
-  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) {
-    return ['data/snapshot.json is not an object.'];
+/** What is wrong with a parsed forecast, as whole sentences, or [] when it is usable. */
+function validate(s) {
+  if (!s || typeof s !== 'object' || Array.isArray(s)) return ['data/snapshot.json is not a JSON object.'];
+  if (s.error) {
+    const reason = String(s.reason || 'no reason given').replace(/\.\s*$/, '');
+    return [`The weather service refused the request: ${reason}. Check the latitude and longitude the Shortcut passes.`];
   }
-  if (snapshot.error) {
-    const reason = String(snapshot.reason || 'no reason given').replace(/\.\s*$/, '');
-    problems.push(`The weather service refused the request: ${reason}. The address the Shortcut fetched is wrong — check the latitude and longitude variables.`);
-    return problems;
-  }
-  const hourly = snapshot.hourly;
-  if (!hourly || typeof hourly !== 'object' || !Array.isArray(hourly.time) || hourly.time.length === 0) {
-    problems.push('There is no hourly.time array, so this is not a forecast reply at all.');
-    return problems;
-  }
-  const hours = hourly.time.length;
+  const h = s.hourly;
+  if (!h || typeof h !== 'object' || !Array.isArray(h.time) || !h.time.length) return ['data/snapshot.json has no hourly.time, so it is not a forecast.'];
+  const out = [];
   for (const name of REQUIRED_HOURLY) {
-    const series = hourly[name];
-    if (!Array.isArray(series)) {
-      problems.push(`hourly.${name} is missing — add it to the &hourly= list in the address the Shortcut fetches.`);
-    } else if (series.length !== hours) {
-      problems.push(`hourly.${name} has ${series.length} values for ${hours} hours.`);
-    }
+    const series = h[name];
+    if (!Array.isArray(series)) out.push(`data/snapshot.json is missing hourly.${name}: add it to the hourly list in the address the Shortcut fetches.`);
+    else if (series.length !== h.time.length) out.push(`data/snapshot.json has ${count(series.length, 'value')} of hourly.${name} for ${count(h.time.length, 'hour')}.`);
   }
-  if (!isNumber(snapshot.utc_offset_seconds)) {
-    problems.push('utc_offset_seconds is missing, so the forecast’s local times cannot be placed on a clock. Add &timezone=auto to the address.');
-  }
-  return problems;
+  if (!isNumber(s.utc_offset_seconds)) out.push('data/snapshot.json has no utc_offset_seconds, so its local times cannot be put on a clock: add timezone=auto to the address.');
+  return out;
+}
+
+function parseSnapshot(r) {
+  if (r.error) return { problems: [`data/snapshot.json ${r.error}`] };
+  let d;
+  try { d = JSON.parse(r.text); } catch { return { problems: ['data/snapshot.json is not valid JSON; it looks like an error page was written over it, which a Shortcut does without noticing.'] }; }
+  const problems = validate(d);
+  return problems.length ? { problems } : { value: d };
+}
+
+/** The rules file, or the end of the sentence that says why it cannot be used. */
+function parseRules(r) {
+  if (r.error) return { problem: `it ${r.error}` };
+  let d;
+  try { d = JSON.parse(r.text); } catch { return { problem: 'it is not valid JSON; a trailing comma or a missing quote will do it, and JSON allows neither, nor comments.' }; }
+  if (!d || typeof d !== 'object' || Array.isArray(d)) return { problem: 'it is not a JSON object.' };
+  return { value: d };
 }
 
 /* The stamp, and how sure we are of it. See the header comment. */
@@ -400,475 +225,529 @@ function timestampOf(snapshot, offset) {
   return null;
 }
 
-/* ------------------------------------------------------------------ chrome */
+const unitOr = (v, d) => (typeof v === 'string' && v ? v : d);
 
-function renderStamp(model) {
-  if (!model || !model.stamp) {
-    stampNode.textContent = 'Undated file';
-    stampNode.classList.add('stale');
-    return;
-  }
-  const { ms, kind } = model.stamp;
-  // The header stamp is in the READER's time zone, because it answers "how old
-  // is what I am looking at" — a question about the reader's own clock.
-  const clock = new Date(ms).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const prefix = kind === 'exact' ? 'Updated ' : kind === 'about' ? 'About ' : 'Forecast from ';
-  const ageHours = (Date.now() - ms) / 3600000;
-  let text = prefix + clock;
-  if (ageHours >= 24) text += ` · ${Math.round(ageHours / 24)}d old`;
-  else if (ageHours >= 2) text += ` · ${Math.round(ageHours)}h old`;
-  stampNode.textContent = text;
-  stampNode.classList.toggle('stale', ageHours >= 6);
+/** Everything the panes draw, scored from the two files at the phone's present. */
+function derive(snap, rules, rulesProblem) {
+  const offset = snap.utc_offset_seconds, hu = snap.hourly_units || {};
+  const temp = unitOr(hu.temperature_2m, '°C');
+  const units = { temp, rain: unitOr(hu.precipitation_probability, '%'), precip: unitOr(hu.precipitation, 'mm'), gust: unitOr(hu.wind_gusts_10m, 'km/h'), dew: unitOr(hu.dew_point_2m, temp), cloud: unitOr(hu.cloud_cover, '%') };
+  const all = scoreHours(snap, rules), now = Date.now();
+  // Hours that have already happened are dropped from the windows and the table: a file fetched at local
+  // midnight carries the whole day, and a window that closed this morning is not an answer to "when can I go
+  // out". The Shutters still draw them, faint. When every hour has ended, every hour is used.
+  let rows = all.filter((row) => Number.isFinite(row.epoch) && row.epoch + 3600000 > now), ranOut = false;
+  if (rows.length === 0) { rows = all; ranOut = true; }
+  return { snap, rules, rulesProblem, offset, units, all, rows, ranOut, now,
+    windows: findWindows(rows, rules.minWindowHours), stamp: timestampOf(snap, offset), sun: sunTimes(snap, offset),
+    place: typeof snap.demoPlace === 'string' ? snap.demoPlace : null, hasAsk: Array.isArray(snap.ask) && snap.ask.length > 0 };
 }
 
-function renderPlace(model) {
-  if (!model) { placeNode.textContent = ''; return; }
-  const bits = [];
-  if (model.place) bits.push(model.place);
-  else if (isNumber(model.lat) && isNumber(model.lon)) bits.push(`${model.lat.toFixed(2)}, ${model.lon.toFixed(2)}`);
-  if (model.tz) bits.push(model.tz.replace(/_/g, ' '));
-  bits.push(model.rules.activity || 'Outdoors');
-  placeNode.textContent = bits.join(' · ');
-}
-
-function renderTabs() {
-  tabsNav.innerHTML = '';
-  for (const tab of TABS) {
-    const button = el('button', 'tab', tab.label);
-    button.type = 'button';
-    button.setAttribute('role', 'tab');
-    button.setAttribute('aria-selected', String(state.tab === tab.id));
-    button.addEventListener('click', () => {
-      if (state.tab === tab.id) return;
-      state.tab = tab.id;
-      renderTabs();
-      draw();
-      window.scrollTo(0, 0);
-    });
-    tabsNav.append(button);
-  }
-}
-
-function problemCard(title, problems, hint) {
-  const card = el('div', 'card problem');
-  card.append(el('h2', null, title));
-  const list = el('ul');
-  for (const problem of problems) list.append(el('li', null, problem));
-  card.append(list);
-  if (hint) card.append(el('p', 'small muted', hint));
-  return card;
-}
-
-/* --------------------------------------------------------------- the strip */
-
-function strip(model) {
-  const card = el('div', 'card');
-  const wrap = el('div', 'strip-wrap');
-
-  const bars = el('div', 'strip');
-  bars.setAttribute('role', 'group');
-  bars.setAttribute('aria-label', 'The next hours, each scored');
-  let previousDay = null;
-  model.rows.forEach((row) => {
-    const button = el('button', 'bar');
-    button.type = 'button';
-    const key = dayKey(row.epoch, model.offset);
-    if (previousDay && key !== previousDay) button.classList.add('daybreak');
-    previousDay = key;
-    if (row.pass) button.classList.add('good');
-    else if (row.score >= 60) button.classList.add('near');
-    const fill = el('div', 'fill');
-    fill.style.height = Math.max(6, row.score) + '%';
-    button.append(fill);
-    button.setAttribute('aria-pressed', String(state.selected === row.index));
-    button.setAttribute(
-      'aria-label',
-      `${dayLabel(row.epoch, model.offset)} ${hhmm(row.epoch, model.offset)}, ` +
-      `${row.pass ? 'good' : 'not good'}, score ${row.score}` +
-      (row.blocked.length ? `, held back by ${row.blocked.join(' and ')}` : '')
-    );
-    button.addEventListener('click', () => {
-      state.selected = row.index;
-      draw();
-    });
-    bars.append(button);
-  });
-  wrap.append(bars);
-
-  const axis = el('div', 'axis');
-  const first = model.rows[0];
-  const last = model.rows[model.rows.length - 1];
-  axis.append(el('span', null, `${dayLabel(first.epoch, model.offset)} ${hhmm(first.epoch, model.offset)}`));
-  axis.append(el('span', null, `${dayLabel(last.epoch, model.offset)} ${hhmm(last.epoch, model.offset)}`));
-  wrap.append(axis);
-
-  const chosen = model.rows.find((row) => row.index === state.selected) || model.rows[0];
-  const readout = el('div', 'readout');
-  readout.append(el('b', null, `${dayLabel(chosen.epoch, model.offset)} ${hhmm(chosen.epoch, model.offset)}`));
-  readout.append(el('span', 'verdict ' + (chosen.pass ? 'good' : 'bad'),
-    chosen.pass ? `good · ${chosen.score}` : (chosen.blocked.length ? chosen.blocked.join(', ') : 'no')));
-  readout.append(el('span', null, `${num(chosen.temp, 0, model.units.temp)}`));
-  readout.append(el('span', null, `rain ${num(chosen.rainPct, 0, '%')}`));
-  readout.append(el('span', null, `gust ${num(chosen.gust, 0, ' ' + model.units.gust)}`));
-  readout.append(el('span', null, `dew ${num(chosen.dew, 0, model.units.temp)}`));
-  if (isNumber(chosen.cloud)) readout.append(el('span', null, `cloud ${num(chosen.cloud, 0, '%')}`));
-  readout.append(el('span', null, chosen.light));
-  wrap.append(readout);
-
-  card.append(wrap);
-  return card;
-}
-
-/* -------------------------------------------------------------- the panes */
-
-function windowsPane(model) {
-  const nodes = [];
-  nodes.push(strip(model));
-
-  if (model.windows.length === 0) {
-    const card = el('div', 'card');
-    card.append(el('h2', null, 'No window in the next ' + plural(model.rows.length, 'hour', 'hours')));
-    card.append(el('p', null,
-      `Nothing here clears every rule for ${plural(Math.ceil(model.rules.minWindowHours || 1), 'hour', 'hours')} together.`));
-    const best = model.rows.reduce((a, b) => (b.score > a.score ? b : a), model.rows[0]);
-    card.append(el('p', 'small muted',
-      `The closest is ${dayLabel(best.epoch, model.offset)} ${hhmm(best.epoch, model.offset)}, scoring ${best.score}` +
-      (best.blocked.length ? `, held back by ${best.blocked.join(' and ')}.` : '.')));
-    nodes.push(card);
-  } else {
-    const next = model.windows[0];
-    const hero = el('div', 'card hero');
-    // When every hour has already happened (a sample past its date, or a loop
-    // that stopped) the best stretch in the file is not a "next" anything.
-    hero.append(el('h2', null, model.ranOut
-      ? (model.place ? 'Best window in this sample' : 'Best window in this file')
-      : 'Next window'));
-    hero.append(el('div', 'when',
-      `${hhmm(next.start.epoch, model.offset)}–${hhmm(next.end.epoch + 3600000, model.offset)}`));
-    hero.append(el('div', 'day', dayOf(next, model)));
-    hero.append(el('span', 'length', plural(next.hours, 'hour', 'hours') + ` · best ${next.best}`));
-
-    const stats = el('div', 'stats');
-    stats.append(stat('warmest', num(maxOf(next.rows, 'temp'), 0, model.units.temp)));
-    stats.append(stat('rain', num(maxOf(next.rows, 'rainPct'), 0, '%')));
-    stats.append(stat('gust', num(maxOf(next.rows, 'gust'), 0)));
-    stats.append(stat('dew', num(maxOf(next.rows, 'dew'), 0, model.units.temp)));
-    hero.append(stats);
-    nodes.push(hero);
-
-    if (model.windows.length > 1) {
-      const later = el('div', 'card');
-      later.append(el('h2', null, 'After that'));
-      const list = el('ul', 'rows');
-      for (const window of model.windows.slice(1)) {
-        const row = el('li');
-        row.append(el('span', 'lead',
-          `${dayOf(window, model)} ${hhmm(window.start.epoch, model.offset)}–${hhmm(window.end.epoch + 3600000, model.offset)}`));
-        row.append(el('span', 'trail', `${plural(window.hours, 'hour', 'hours')} · best ${window.best}`));
-        list.append(row);
-      }
-      later.append(list);
-      nodes.push(later);
-    }
-  }
-
-  // Which rule is actually costing you hours. This is the question a person
-  // asks second, right after "when can I go out", and the reason the rules are
-  // editable at all.
-  const blockers = new Map();
-  for (const row of model.rows) {
-    for (const label of row.blocked) blockers.set(label, (blockers.get(label) || 0) + 1);
-  }
-  const ruled = el('div', 'card');
-  ruled.append(el('h2', null, 'What ruled hours out'));
-  if (blockers.size === 0) {
-    ruled.append(el('p', null, 'Nothing. Every hour in the forecast clears every rule.'));
-  } else {
-    const list = el('ul', 'rows');
-    [...blockers.entries()].sort((a, b) => b[1] - a[1]).forEach(([label, count]) => {
-      const row = el('li');
-      row.append(el('span', 'lead', label));
-      row.append(el('span', 'trail', `${count} of ${model.rows.length} hours`));
-      list.append(row);
-    });
-    ruled.append(list);
-    ruled.append(el('p', 'small muted',
-      'An hour can fail more than one rule, so these add up to more than the hours lost.'));
-  }
-  nodes.push(ruled);
-  return nodes;
-}
-
-function dayOf(window, model) {
-  const startDay = dayLabel(window.start.epoch, model.offset);
-  const endDay = dayLabel(window.end.epoch, model.offset);
-  const span = startDay === endDay ? startDay : `${startDay} – ${endDay}`;
-  // "Mon 21" is enough for a forecast, and nowhere near enough for a file whose
-  // hours are all in the past — which month, which year? Only then, and only
-  // here, is the full date worth the width.
-  return model.ranOut ? `${span} ${monthYear(window.end.epoch, model.offset)}` : span;
-}
-
-function monthYear(epoch, offset) {
-  const d = atPlace(epoch, offset);
-  return MONTH_NAMES[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
-}
-
-function maxOf(rows, key) {
-  const values = rows.map((row) => row[key]).filter(isNumber);
-  return values.length ? Math.max(...values) : null;
-}
-
-function stat(key, value) {
-  const node = el('div', 'stat');
-  node.append(el('span', 'k', key));
-  node.append(el('span', 'v', value));
-  return node;
-}
-
-function hoursPane(model) {
-  const nodes = [strip(model)];
-  const card = el('div', 'card table');
-  const list = el('ul', 'hours');
-
-  const head = el('li', 'head');
-  ['time', '', model.units.temp.trim() || 'temp', 'rain', 'gust', 'dew'].forEach((label, i) => {
-    head.append(el('span', i >= 2 ? 'n' : (i === 0 ? 't' : 'light'), label));
-  });
-  list.append(head);
-
-  let previousDay = null;
-  for (const row of model.rows) {
-    const key = dayKey(row.epoch, model.offset);
-    if (key !== previousDay) {
-      list.append(el('li', 'daylabel', dayLabel(row.epoch, model.offset)));
-      previousDay = key;
-    }
-    const item = el('li', 'hour' + (row.pass ? ' good' : ''));
-    item.append(el('span', 't', hhmm(row.epoch, model.offset)));
-    item.append(el('span', 'light', row.light === 'golden' ? 'golden' : row.light === 'day' ? 'day' : 'night'));
-    item.append(el('span', 'n', num(row.temp, 0)));
-    item.append(el('span', 'n', num(row.rainPct, 0, '%')));
-    item.append(el('span', 'n', num(row.gust, 0)));
-    item.append(el('span', 'n', num(row.dew, 0)));
-    if (!row.pass && row.blocked.length) {
-      item.append(el('span', 'why', row.blocked.join(' · ')));
-    }
-    list.append(item);
-  }
-  card.append(list);
-  nodes.push(card);
-
-  const legend = el('div', 'card');
-  legend.append(el('h2', null, 'Reading this'));
-  legend.append(el('p', 'small',
-    `Highlighted hours clear every rule. The line under an hour names the rules it failed. ` +
-    `Gust is ${model.units.gust}, rain is the chance of any rain in the hour, dew point is ${model.units.temp.trim() || 'degrees'} — ` +
-    `above about 16 it feels muggy, below about −5 it feels sharp.`));
-  nodes.push(legend);
-  return nodes;
-}
-
-function rulesPane(model) {
-  const nodes = [];
-  const rules = model.rules;
-
-  const card = el('div', 'card');
-  card.append(el('h2', null, 'What counts as a good hour'));
-  card.append(el('p', 'activity', rules.activity || 'Outdoors'));
-  const dl = el('div', 'dl');
-
-  const item = (name, value, note) => {
-    const row = el('div', 'item');
-    row.append(el('span', 'name', name));
-    row.append(el('span', 'val', value));
-    if (note) row.append(el('span', 'note', note));
-    dl.append(row);
-  };
-
-  item('Rain chance', isNumber(rules.maxRainChancePct) ? `≤ ${rules.maxRainChancePct}%` : 'not used',
-    'maxRainChancePct — the forecast chance of any rain in the hour');
-  item('Rainfall', isNumber(rules.maxPrecipMm) ? `≤ ${rules.maxPrecipMm} mm` : 'not used',
-    'maxPrecipMm — how much is expected to fall');
-  item('Gusts', isNumber(rules.maxGustKmh) ? `≤ ${rules.maxGustKmh} ${model.units.gust}` : 'not used',
-    'maxGustKmh — gusts, not the average wind, because gusts are what you feel');
-  item('Temperature', rules.temperatureC && isNumber(rules.temperatureC.min)
-    ? `${rules.temperatureC.min} to ${rules.temperatureC.max}${model.units.temp}` : 'not used', 'temperatureC');
-  item('Dew point', rules.dewPointC && isNumber(rules.dewPointC.min)
-    ? `${rules.dewPointC.min} to ${rules.dewPointC.max}${model.units.temp}` : 'not used',
-    'dewPointC — muggy above, raw below; a better guide to comfort than temperature alone');
-  item('Light', rules.daylight === 'golden' ? `golden hour, ${rules.goldenHourMinutes || 0} min`
-    : rules.daylight === 'daylight' ? 'daylight only' : 'any hour',
-    'daylight — "any", "daylight" or "golden"');
-  item('Shortest window', plural(Math.ceil(rules.minWindowHours || 1), 'hour', 'hours'),
-    'minWindowHours — a run of good hours shorter than this is not offered');
-  card.append(dl);
-  nodes.push(card);
-
-  const how = el('div', 'card');
-  how.append(el('h2', null, 'Changing them'));
-  how.append(el('p', null, 'The rules are a file inside this app, not a setting buried in it.'));
-  const steps = el('ul', 'rows');
-  [
-    ['In Snuggery: ⋯ → App Files', 'data/rules.json'],
-    ['Edit the numbers, save', 'any rule you leave out is simply not applied'],
-    ['Come back here', 'the app re-reads both files every time it comes into view']
-  ].forEach(([lead, trail]) => {
-    const row = el('li');
-    row.append(el('span', 'lead', lead));
-    row.append(el('span', 'trail', trail));
-    steps.append(row);
-  });
-  how.append(steps);
-  nodes.push(how);
-
-  const data = el('div', 'card');
-  data.append(el('h2', null, 'Where the forecast comes from'));
-  data.append(el('p', null, model.place
-    ? `This copy is showing ${model.place}.`
-    : 'This copy is showing the coordinates in the file.'));
-  data.append(el('p', 'small muted',
-    'A Shortcut on the phone asks for your location, fetches the forecast for it and writes it into this app. ' +
-    'Nothing here goes online, and the location is never written back to any repository. PROMPT.md has the recipe.'));
-  data.append(el('p', 'small muted', model.hasAsk
-    ? 'This file carries an ask table, so Snuggery’s Ask About This Data can answer questions about these hours.'
-    : 'This file came straight from the weather service, so it has no ask table in it and Snuggery’s Ask has only the raw file to read. PROMPT.md explains what to add if you want that.'));
-  nodes.push(data);
-
-  const more = el('div', 'card');
-  more.append(el('h2', null, 'Not built, on purpose'));
-  more.append(el('p', 'small muted',
-    'Air quality is the obvious next rule group — the same service has an air-quality endpoint with PM2.5, ' +
-    'pollen and a European AQI, on the same shape of reply. It is left out so the app stays one fetch and one file. ' +
-    'NOTES.md says what adding it would take: a second rule group, a second fetch in the Shortcut, and one more ' +
-    'set of checks in the scorer.'));
-  nodes.push(more);
-  return nodes;
-}
-
-/* ---------------------------------------------------------------- drawing */
-
-function draw() {
-  const y = window.scrollY;
-  main.innerHTML = '';
-  const model = state.model;
-  if (!model) return;
-
-  // Both of these are reasons not to trust what follows, so they sit above
-  // every pane rather than on whichever one happens to be open.
-  // `demoPlace` is written only by the script that makes the shipped sample, so
-  // its presence says "this is example data" — and it says so from the first
-  // launch, not only once the forecast has expired. A fresh copy showing a
-  // confident window over somewhere the reader has never been should say where
-  // that came from while the window is still in the future.
-  if (model.place) {
-    main.append(el('div', 'notice', model.ranOut
-      ? `This is the sample this app shipped with: a real 48 hours over ${model.place}, now in the past. ` +
-        'Everything below is working — it is just showing a forecast that has expired. ' +
-        'Build the shortcut in PROMPT.md and it will show where you are instead.'
-      : `This is the sample this app shipped with: a real forecast for ${model.place}. ` +
-        'Build the shortcut in PROMPT.md and it will show where you are instead.'));
-  } else if (model.ranOut) {
-    // No `demoPlace`, every hour in the past: this is somebody's own data, and
-    // the loop that refreshes it has stopped. A different thing to say.
-    main.append(el('div', 'notice',
-      'Every hour in this file is already in the past, so what follows is history, not a forecast. Run the shortcut that refreshes this app.'));
-  }
-  if (model.rulesProblem) {
-    main.append(el('div', 'notice',
-      model.rulesProblem + ' The built-in rules are being used instead — the Rules pane shows which.'));
-  }
-
-  const pane = state.tab === 'hours' ? hoursPane(model)
-    : state.tab === 'rules' ? rulesPane(model)
-    : windowsPane(model);
-  for (const node of pane) main.append(node);
-  window.scrollTo(0, y);
-}
-
-function showProblem(title, problems, hint) {
-  state.model = null;
-  main.innerHTML = '';
-  main.append(problemCard(title, problems, hint));
-  stampNode.textContent = 'No data';
-  stampNode.classList.add('stale');
-  placeNode.textContent = '';
-}
+/** The hour chosen when nothing was: the first hour of the next window, or the best-scoring hour. */
+const defaultHour = (D) => (D.windows.length ? D.windows[0].start.index : D.rows.reduce((a, b) => (b.score > a.score ? b : a), D.rows[0]).index);
 
 async function load() {
-  const [snapshotRead, rulesRead] = await Promise.all([
-    // By far the commonest cause of an unreadable snapshot, and worth naming:
-    // a fetch that failed upstream still returns valid text, and the Shortcut
-    // writes it here without complaint.
-    readJson(SNAPSHOT_URL, 'data/snapshot.json',
-      'Something replaced it with text — an error page from the weather service, most likely, which a Shortcut copies over good data without noticing.'),
-    readJson(RULES_URL, 'data/rules.json',
-      'A trailing comma or a missing quote will do it: JSON allows neither, nor comments.')
-  ]);
-
-  if (snapshotRead.error) {
-    return showProblem('Could not read the forecast', [snapshotRead.error],
-      'Open the file in Snuggery — ⋯ → App Files — and look at what is actually in it.');
+  const [a, b] = await Promise.all([readText(SNAPSHOT_URL), readText(RULES_URL)]);
+  const rulesText = b.text != null ? b.text : `error ${b.error}`;
+  if (S && a.text != null && a.text === texts.snap && rulesText === texts.rules) { $('notice').hidden = true; refresh(); return; }
+  const P = parseSnapshot(a);
+  if (P.problems) return fail(P.problems);
+  const R = parseRules(b), before = S, was = texts, hourStamp = S ? S.all[chosen].stamp : null;
+  const D = derive(P.value, R.value || DEFAULT_RULES, R.problem || null);
+  try { await document.fonts.load(LABEL_FONT); } catch { /* measured in the fallback face */ }
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = LABEL_FONT;
+  labelW = D.all.length && D.all[0].checks.length ? Math.ceil(Math.max(...D.all[0].checks.map((c) => ctx.measureText(nameOf(c)).width))) + 8 : 0;
+  S = D;
+  texts = { snap: a.text, rules: rulesText };
+  $('notice').hidden = true;
+  const keep = hourStamp == null ? -1 : S.all.findIndex((row) => row.stamp === hourStamp);
+  chosen = keep >= 0 ? keep : defaultHour(S);
+  if (!before) buildTabs();
+  const top = $('main').scrollTop;
+  render();
+  if (before) {
+    $('main').scrollTop = top;
+    announce(a.text !== was.snap ? `New forecast${S.stamp ? `, updated ${stampWhen(S.stamp.ms)}` : ''}.` : 'The rules were read again from data/rules.json.');
   }
-
-  const snapshot = snapshotRead.value;
-  const problems = validate(snapshot);
-  if (problems.length) {
-    return showProblem('The forecast file is not the shape this app expects', problems,
-      'An error reply is valid JSON too. The address the Shortcut fetches is in PROMPT.md; compare it with the one in the Shortcut.');
-  }
-
-  let rules = rulesRead.value;
-  let rulesProblem = null;
-  if (rulesRead.error || !rules || typeof rules !== 'object' || Array.isArray(rules)) {
-    rulesProblem = rulesRead.error || 'data/rules.json is not an object.';
-    rules = DEFAULT_RULES;
-  }
-
-  const offset = isNumber(snapshot.utc_offset_seconds) ? snapshot.utc_offset_seconds : 0;
-  const units = {
-    temp: (snapshot.hourly_units && snapshot.hourly_units.temperature_2m) || '°',
-    gust: (snapshot.hourly_units && snapshot.hourly_units.wind_gusts_10m) || 'km/h'
-  };
-
-  const all = scoreHours(snapshot, rules);
-  // Hours that have already happened are dropped: a file fetched at local
-  // midnight carries the whole day, and a window that closed this morning is
-  // not an answer to "when can I go out".
-  const now = Date.now();
-  let rows = all.filter((row) => Number.isFinite(row.epoch) && row.epoch + 3600000 > now);
-  let ranOut = false;
-  if (rows.length === 0) { rows = all; ranOut = true; }
-
-  const model = {
-    snapshot, rules, rulesProblem, offset, units, rows,
-    windows: findWindows(rows, rules.minWindowHours),
-    stamp: timestampOf(snapshot, offset),
-    lat: snapshot.latitude, lon: snapshot.longitude,
-    tz: typeof snapshot.timezone === 'string' ? snapshot.timezone : null,
-    place: typeof snapshot.demoPlace === 'string' ? snapshot.demoPlace : null,
-    hasAsk: Array.isArray(snapshot.ask) && snapshot.ask.length > 0,
-    ranOut
-  };
-  if (state.selected === null || !model.rows.some((row) => row.index === state.selected)) {
-    state.selected = model.windows.length ? model.windows[0].start.index : model.rows[0].index;
-  }
-  state.model = model;
-
-  renderStamp(model);
-  renderPlace(model);
-  renderTabs();
-  draw();
 }
 
-renderTabs();
-load();
+/** The same two files on a return: the present moved, so the stamp is written again, and the panes are drawn
+ *  again only when an hour has ended since (the Shutters' faint hours, the table's first row). */
+function refresh() {
+  const D = derive(S.snap, S.rules, S.rulesProblem);
+  if (D.ranOut === S.ranOut && D.rows[0].index === S.rows[0].index) { S.now = D.now; stamp(); return; }
+  S = D;
+  const top = $('main').scrollTop;
+  render();
+  $('main').scrollTop = top;
+}
 
-/* Reads come fresh off disk, so re-reading when the page comes back into view
-   is what makes an app opened this morning show this morning's forecast.
-   Snuggery fires the same event when a Shortcut delivers new data while the
-   app is open — which is why this redraws in place, keeping the open pane and
-   the scroll position, rather than rebuilding the page. */
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) load();
-});
+/** A problem with the forecast is a sentence on a plate (HOUSE 4.9). A broken replacement keeps the forecast
+ *  that was showing, the stamp, the pane and the scroll, and says so; Close puts the plate away. */
+function fail(problems) {
+  const box = $('notice');
+  box.replaceChildren();
+  if (S) {
+    const x = el('button', 'textkey', 'Close');
+    x.type = 'button';
+    x.onclick = () => { box.hidden = true; };
+    box.append(el('p', null, `A new data/snapshot.json arrived and cannot be used. ${problems.join(' ')} Still showing the forecast ${S.stamp ? `updated ${stampWhen(S.stamp.ms)}` : 'that was open'}.`), x);
+    box.classList.add('kept');
+  } else {
+    $('stamp').textContent = 'No usable forecast';
+    $('tabs').hidden = true;
+    $('pane').replaceChildren();
+    $('capline').textContent = '';
+    box.classList.remove('kept');
+    for (const p of problems) box.append(el('p', null, p));
+    box.append(el('p', 'notice-lines', 'In Snuggery, Options, then App Files shows what the file holds.'));
+  }
+  box.hidden = false;
+}
+
+/* ── the stamp and the tabs ───────────────────────────────────────────── */
+
+/** When the file was made, on the phone's clock, in words; stale and ran out are sentences in ink, never a color. */
+function stamp() {
+  const s = S.stamp, node = $('stamp');
+  if (!s) { node.replaceChildren(el('span', 'lead', 'Undated file.')); return; }
+  const words = s.kind === 'exact' ? `Updated ${stampWhen(s.ms)}` : s.kind === 'about' ? `Updated about ${stampWhen(s.ms)}` : `Forecast from ${stampWhen(s.ms)}`;
+  const now = Date.now(), end = S.all[S.all.length - 1].epoch + 3600000;
+  const lead = S.ranOut && Number.isFinite(end) ? `Forecast ran out ${span(now - end)} ago.` : now - s.ms > STALE_HOURS * 3600000 ? 'Stale.' : null;
+  node.replaceChildren(...(lead ? [el('span', 'lead', lead), ` ${words}`] : [words]));
+}
+
+/** The tabs, built after the forecast parses, so the camera's wait for Hours proves the data is in (B7). */
+function buildTabs() {
+  const nav = $('tabs');
+  nav.replaceChildren();
+  TABS.forEach(([key, name], i) => {
+    const b = el('button', null, name);
+    b.type = 'button';
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-controls', 'pane');
+    b.id = `tab-${key}`;
+    b.dataset.key = key;
+    b.onclick = () => choosePane(key);
+    b.onkeydown = (ev) => {
+      const j = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[ev.key];
+      if (j == null) return;
+      ev.preventDefault();
+      const k = TABS[(j + TABS.length) % TABS.length][0];
+      choosePane(k);
+      $(`tab-${k}`).focus();
+    };
+    nav.append(b);
+  });
+  nav.hidden = false;
+}
+function markTabs() {
+  for (const b of $('tabs').children) {
+    const on = b.dataset.key === tab;
+    b.setAttribute('aria-selected', String(on));
+    b.tabIndex = on ? 0 : -1;
+    if (on) $('pane').setAttribute('aria-labelledby', b.id);
+  }
+}
+/** A pane chosen: the focused tab says its own name, so the live region adds nothing (HOUSE 4.9). */
+function choosePane(key) {
+  if (key === tab) return;
+  tab = key;
+  render();
+  $('main').scrollTop = 0;
+}
+
+/* ── the panes ────────────────────────────────────────────────────────── */
+
+function render() {
+  const pane = $('pane');
+  pane.replaceChildren(...statements());
+  M = null;
+  shut = null;
+  if (tab === 'hours') hoursPane(pane);
+  else if (tab === 'rules') rulesPane(pane);
+  else windowsPane(pane);
+  if (pane.querySelector('.sh')) drawShutters();
+  markTabs();
+  stamp();
+  caption();
+  aboutList();
+}
+
+/** Sentences on the page, the first words at 620, at the head of every pane. */
+function statements() {
+  const out = [], say = (lead, text) => { const p = el('p', 'statement'); p.append(el('b', null, lead), ` ${text}`); return p; };
+  // one line at 390 px, so the Shutters lead the pane (the stamp says when it ran out); the way to a forecast of
+  // one's own closes the Windows pane
+  if (S.place) out.push(say('Example forecast:', `${S.place}, ${placeDays(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.offset)}.`));
+  else if (S.ranOut) {
+    out.push(say('Every hour in this file has ended,', 'so this is history, not a forecast. Run the Shortcut that refreshes the app.'));
+  }
+  if (S.rulesProblem) out.push(say('data/rules.json could not be used:', `${S.rulesProblem} The built-in rules are in use; the Rules pane shows them.`));
+  else if (!S.all[0].checks.length) out.push(say('No rule is in use,', 'so every hour clears and scores 0. The Rules pane says how to add one.'));
+  return out;
+}
+
+const activity = () => (typeof S.rules.activity === 'string' && S.rules.activity.trim() ? S.rules.activity : 'Outdoors');
+
+/** The pane's heading: the reader's own activity, and under it the place. */
+function title(withPlace) {
+  const t = el('div', 'title');
+  t.append(el('h2', null, activity()));
+  if (withPlace) {
+    const s = S.snap, at = isNumber(s.latitude) && isNumber(s.longitude) ? coords(s.latitude, s.longitude) : null;
+    const line = [S.place, at].filter(Boolean).join(', ');
+    if (line) t.append(el('p', null, line));
+  }
+  return t;
+}
+
+/** The Shutters and their readout (ART.md section 1): the hours' slider, a tap, a sideways drag, the keys. */
+function shuttersBlock() {
+  const wrap = el('div', 'shw');
+  const box = $('sh-tpl').content.firstElementChild.cloneNode(true);
+  box.id = 'sh';
+  box.setAttribute('aria-valuemax', String(S.all.length - 1));
+  const ro = el('div', 'ro'), when = el('p', 'ro-when');
+  when.append(el('b', null, ''), el('span', null, ''));
+  ro.append(when, el('p', 'ro-vals', ''));
+  wrap.append(box, ro);
+  wireSlider(box);
+  return wrap;
+}
+
+function drawShutters() {
+  const pane = $('pane'), box = pane.querySelector('.sh');
+  if (!box) return;
+  const cs = getComputedStyle(pane), ctx = document.createElement('canvas').getContext('2d');
+  ctx.font = LABEL_FONT;
+  const width = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  M = shutterModel({ rows: S.all, windows: S.windows, offset: S.offset, now: S.now, width, label: labelW, ranOut: S.ranOut, measure: (t) => ctx.measureText(t).width });
+  shut = drawSvg(box.querySelector('svg'), M);
+  $('sh-desc').textContent = describe(M, S.all, S.windows, S.offset);
+  show(chosen);
+  holdReadout(pane.querySelector('.ro'));
+  caption();
+}
+
+/** The readout is a fixed block (ART.md section 3): its first line is held at the tallest it gets for any
+    hour of this file at this width, measured once per draw, so nothing under it moves while scrubbing. */
+function holdReadout(ro) {
+  if (!ro) return;
+  const when = ro.querySelector('.ro-when'), b = when.querySelector('b'), span = when.querySelector('span');
+  const keep = [b.textContent, span.textContent];
+  when.style.minHeight = '';
+  let h = 0;
+  for (const row of S.all) {
+    b.textContent = `${placeDate(row.epoch, S.offset)}, ${placeClock(row.epoch, S.offset)}`;
+    span.textContent = ` ${isNow(row) ? 'now, ' : ''}${verdict(row)}`;
+    h = Math.max(h, when.offsetHeight);
+  }
+  [b.textContent, span.textContent] = keep;
+  when.style.minHeight = `${h}px`;
+}
+
+const isPast = (row) => !S.ranOut && row.epoch + 3600000 <= S.now;
+/** The hour the phone's clock is in: the readout and the slider's value say `now` for it. */
+const isNow = (row) => !S.ranOut && S.now >= row.epoch && S.now < row.epoch + 3600000;
+const verdict = (row) => `${row.pass ? 'clears every rule' : `ruled out by ${list(row.blocked)}`}, score ${row.score}`;
+const valueText = (row) => `${spokenHour(row.epoch, S.offset)}${isNow(row) ? ', now' : ''}: ${verdict(row)}`;
+
+/** An hour's values, at the data's own precision (B10, B17), with the sunrise or sunset inside the hour. */
+function values(row, speak) {
+  const u = S.units, out = [];
+  const add = (word, v, unit) => out.push(`${word} ${speak ? spokenValue(v, unit) : withUnit(v, unit) ?? 'not in the file'}`);
+  add('air', row.temp, u.temp);
+  add('rain chance', row.rainPct, u.rain);
+  add('rainfall', row.precip, u.precip);
+  add('gusts', row.gust, u.gust);
+  add('dew point', row.dew, u.dew);
+  if (isNumber(row.cloud)) add('cloud', row.cloud, u.cloud);
+  out.push(row.light === 'golden' ? 'golden hour' : row.light === 'day' ? 'daylight' : 'night');
+  const sun = S.sun.get(row.stamp.slice(0, 10));
+  for (const [word, ms] of sun ? [['sunrise', sun.rise], ['sunset', sun.set]] : []) if (ms >= row.epoch && ms < row.epoch + 3600000) out.push(`${word} ${placeClock(ms, S.offset)}`);
+  if (isPast(row)) out.push('already past');
+  return out.join(', ');
+}
+
+/** Hour i shown: the Shutters' column and head, the readout, the slider's value, the table's row. In place. */
+function show(i) {
+  chosen = i;
+  const row = S.all[i];
+  if (shut) shut.place(i);
+  const ro = $('pane').querySelector('.ro');
+  if (ro) {
+    ro.querySelector('b').textContent = `${placeDate(row.epoch, S.offset)}, ${placeClock(row.epoch, S.offset)}`;
+    ro.querySelector('.ro-when span').textContent = ` ${isNow(row) ? 'now, ' : ''}${verdict(row)}`;
+    ro.querySelector('.ro-vals').textContent = values(row, false);
+  }
+  const box = $('sh');
+  if (box) { box.setAttribute('aria-valuenow', String(i)); box.setAttribute('aria-valuetext', valueText(row)); }
+  for (const tr of $('pane').querySelectorAll('tr.on')) tr.classList.remove('on');
+  for (const tr of $('pane').querySelectorAll(`tr[data-i="${i}"]`)) tr.classList.add('on');
+}
+
+/** A tap on the Shutters: the hour, said once; on the Hours pane the table scrolls until its row is in view. */
+function tapped(i) {
+  show(i);
+  const row = S.all[i];
+  announce(`${valueText(row)}. ${values(row, true)}.`);
+  if (tab !== 'hours') return;
+  const rows = $('pane').querySelectorAll(`tr[data-i="${i}"]`), main = $('main');
+  if (!rows.length) return;
+  const top = rows[0].getBoundingClientRect().top, bottom = rows[rows.length - 1].getBoundingClientRect().bottom, m = main.getBoundingClientRect();
+  if (bottom > m.bottom - 8) main.scrollTop += bottom - m.bottom + 8;
+  else if (top < m.top + 8) main.scrollTop += top - m.top - 8;
+}
+
+/** The pointers down on the page, so a second finger on the Shutters reads as a pinch and never as a scrub. */
+const fingers = new Set();
+for (const type of ['pointerup', 'pointercancel']) window.addEventListener(type, (e) => fingers.delete(e.pointerId), true);
+
+/**
+ * The slider's input. A tap picks the hour under the finger; a drag that is mostly sideways moves the chosen
+ * hour with the finger, drawn on the next animation frame (the house scrub: the head, the readout and the
+ * value show the hour under the finger on every frame); a vertical swipe that starts here scrolls the pane
+ * (touch-action: pan-y pinch-zoom) and picks nothing; a second finger is a pinch, which zooms the page. A tap is taken in the click that follows the pointer's lift, so a
+ * table row that the tap scrolls under the finger never receives that click; a click with no pointer tap
+ * before it (VoiceOver's press) picks nothing. The arrow keys move an hour, Page Up and Page Down six, Home
+ * and End to the ends; a focused slider says its own value, so the keys add no sentence.
+ */
+function wireSlider(box) {
+  let start = null, scrub = false, wanted = null, frame = 0, tap = null;
+  const xOf = (e) => e.clientX - box.querySelector('svg').getBoundingClientRect().left;
+  const flush = () => { if (frame) cancelAnimationFrame(frame); frame = 0; if (wanted != null && wanted !== chosen) show(wanted); };
+  box.addEventListener('pointerdown', (e) => {
+    fingers.add(e.pointerId);
+    if (fingers.size > 1) {   // a second finger: a pinch, which the page zooms (touch-action: pan-y pinch-zoom)
+      if (scrub) flush();
+      start = null; scrub = false; tap = null;
+      if (shut) shut.press(false);
+      return;
+    }
+    if (e.button > 0 || !M) return;
+    start = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    scrub = false;
+  });
+  box.addEventListener('pointermove', (e) => {
+    if (!start || e.pointerId !== start.id) return;
+    if (!scrub) {
+      const dx = Math.abs(e.clientX - start.x), dy = Math.abs(e.clientY - start.y);
+      if (dx < 6 || dx < dy * 1.2) return;
+      scrub = true;
+      try { box.setPointerCapture(e.pointerId); } catch { /* the pointer is gone */ }
+      if (shut) shut.press(true);
+    }
+    wanted = hourAt(M, xOf(e), true);
+    if (!frame) frame = requestAnimationFrame(() => { frame = 0; if (wanted !== chosen) show(wanted); });
+  });
+  const end = (e, canceled) => {
+    if (!start || e.pointerId !== start.id) return;
+    const moved = Math.hypot(e.clientX - start.x, e.clientY - start.y), was = scrub;
+    start = null;
+    scrub = false;
+    if (shut) shut.press(false);
+    if (was) { flush(); return; }
+    if (!canceled && moved < 10) tap = { x: e.clientX, at: e.timeStamp };
+  };
+  box.addEventListener('pointerup', (e) => end(e, false));
+  box.addEventListener('pointercancel', (e) => end(e, true));
+  box.addEventListener('click', (e) => {
+    const t = tap;
+    tap = null;
+    if (!t || e.timeStamp - t.at > 800 || !M) return;
+    const i = hourAt(M, t.x - box.querySelector('svg').getBoundingClientRect().left);
+    if (i != null) tapped(i);
+  });
+  box.addEventListener('keydown', (e) => {
+    const n = S.all.length, step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, PageUp: 6, PageDown: -6 }[e.key];
+    const i = step != null ? chosen + step : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : null;
+    if (i == null) return;
+    e.preventDefault();
+    show(Math.max(0, Math.min(n - 1, i)));
+  });
+}
+
+const maxOf = (rows, key) => { const v = rows.map((r) => r[key]).filter(isNumber); return v.length ? Math.max(...v) : null; };
+const hoursOf = (w) => placeSpan(w.start.epoch, w.end.epoch + 3600000, S.offset);
+const facts = (pairs, cls = 'facts') => { const dl = el('dl', cls); for (const [k, v] of pairs) dl.append(el('dt', null, k), el('dd', null, v)); return dl; };
+
+function windowsPane(pane) {
+  pane.append(title(true), shuttersBlock());
+  const sec = el('section', 'sec'), u = S.units, off = S.offset;
+  if (!S.windows.length) {
+    const need = isNumber(S.rules.minWindowHours) && S.rules.minWindowHours > 0 ? Math.ceil(S.rules.minWindowHours) : 1;
+    const best = S.rows.reduce((a, b) => (b.score > a.score ? b : a), S.rows[0]);
+    sec.append(el('h2', null, S.ranOut ? 'No window in this file' : `No window in the next ${count(S.rows.length, 'hour')}`),
+      el('p', null, `Nothing here clears every rule for ${count(need, 'hour')} together.`),
+      el('p', 'note', `The closest is ${placeDate(best.epoch, off)}, ${placeClock(best.epoch, off)}, scoring ${best.score}${best.blocked.length ? `, ruled out by ${list(best.blocked)}` : ''}.`));
+    pane.append(sec, ...ownForecast());
+    return;
+  }
+  const w = S.windows[0], fig = el('p', 'fig');
+  fig.append(el('b', null, hoursOf(w)), el('span', null, `${placeDate(w.start.epoch, off)}, ${count(w.hours, 'hour')}, best score ${int(w.best)}`));
+  const or = (v, unit) => withUnit(v, unit) ?? 'not in the file';
+  const pairs = [['Warmest', or(maxOf(w.rows, 'temp'), u.temp)], ['Highest chance of rain', or(maxOf(w.rows, 'rainPct'), u.rain)], ['Most rainfall', or(maxOf(w.rows, 'precip'), u.precip)],
+    ['Strongest gust', or(maxOf(w.rows, 'gust'), u.gust)], ['Highest dew point', or(maxOf(w.rows, 'dew'), u.dew)]];
+  const sun = S.sun.get(w.end.stamp.slice(0, 10));
+  if (sun && sun.set > w.end.epoch && sun.set < w.end.epoch + 3600000) pairs.push(['Sunset', placeClock(sun.set, off)]);
+  sec.append(el('h2', null, S.ranOut ? 'First window in this file' : 'Next window'), fig, facts(pairs));
+  pane.append(sec);
+  if (S.windows.length > 1) {
+    const later = el('section', 'sec');
+    later.append(el('h2', null, 'After that'), facts(S.windows.slice(1).map((x) => [`${placeDate(x.start.epoch, off)}, ${hoursOf(x)}`, `${count(x.hours, 'hour')}, best score ${int(x.best)}`]), 'facts wins'));
+    pane.append(later);
+  }
+  pane.append(...ownForecast());
+}
+
+/** Under the example forecast's Windows pane: how to get one's own (the statement at the head is one line). */
+function ownForecast() {
+  if (!S.place) return [];
+  const sec = el('section', 'sec');
+  sec.append(el('p', 'note', 'Build the Shortcut in PROMPT.md and the app shows where you are.'));
+  return [sec];
+}
+
+function hoursPane(pane) {
+  pane.append(title(true), shuttersBlock());
+  const u = S.units, off = S.offset, table = el('table', 'hours'), head = el('tr');
+  const th = (word, unit) => { const c = el('th', null, word); c.scope = 'col'; if (unit) c.append(el('br'), unit); return c; };
+  head.append(th('Time'), th('Light'), th('Air', u.temp), th('Rain chance', u.rain), th('Rainfall', u.precip), th('Gusts', u.gust), th('Dew point', u.dew));
+  const thead = el('thead');
+  thead.append(head);
+  table.append(thead);
+  const inWindow = new Set(S.windows.flatMap((w) => w.rows.map((r) => r.index)));
+  let body = null, day = null;
+  for (const row of S.rows) {
+    const d = placeDate(row.epoch, off);
+    if (d !== day) {
+      day = d;
+      body = el('tbody');
+      const tr = el('tr', 'day'), c = el('th', null, d);
+      c.colSpan = 7;
+      c.scope = 'rowgroup';
+      tr.append(c);
+      body.append(tr);
+      table.append(body);
+    }
+    const cls = `h${row.pass ? ' ok' : ' has-why'}${inWindow.has(row.index) ? ' win' : ''}${row.index === chosen ? ' on' : ''}`;
+    const tr = el('tr', cls);
+    tr.dataset.i = row.index;
+    const cell = (text, c) => tr.append(el('td', c, text));
+    cell(placeClock(row.epoch, off), 't');
+    cell(row.light === 'golden' ? 'golden' : row.light === 'day' ? 'day' : 'night', 'lt');
+    for (const v of [row.temp, row.rainPct, row.precip, row.gust, row.dew]) cell(num(v) ?? '–');
+    body.append(tr);
+    if (!row.pass) {
+      const why = el('tr', `why${inWindow.has(row.index) ? ' win' : ''}${row.index === chosen ? ' on' : ''}`), c = el('td', null, `ruled out by ${list(row.blocked)}`);
+      why.dataset.i = row.index;
+      c.colSpan = 6;
+      why.append(el('td'), c);
+      body.append(why);
+    }
+  }
+  pane.append(table);
+}
+
+function rulesPane(pane) {
+  const r = S.rules, u = S.units, all = S.all, n = all.length;
+  pane.append(title(false));
+  const dl = el('dl', 'rules');
+  const outOf = (key) => all.filter((h) => h.checks.some((c) => c.key === key && !c.ok)).length;
+  const tally = (key) => ` Rules out ${int(outOf(key))} of ${count(n, 'hour')}.`;
+  const row = (name, limit, note) => { const g = el('div', 'rule'); g.append(el('dt', null, name), el('dd', null, limit), el('dd', 'note', note)); dl.append(g); };
+  const given = (key) => (key in r ? ` The file gives ${JSON.stringify(r[key])}, which this app cannot use, so it is not applied.` : ' Left out, so it is not applied.');
+  const max = (name, key, ruleKey, unit, what) => {
+    const used = isNumber(r[key]);
+    row(name, used ? `≤ ${withUnit(r[key], unit)}` : 'Not used', `${key}: ${what}.${used ? tally(ruleKey) : given(key)}`);
+  };
+  const band = (name, key, ruleKey, unit, what) => {
+    const v = r[key], used = v && isNumber(v.min) && isNumber(v.max), half = v && (isNumber(v.min) || isNumber(v.max));
+    row(name, used ? `${num(v.min)} to ${withUnit(v.max, unit)}` : half ? 'Not used: needs both min and max' : 'Not used', `${key}: ${what}.${used ? tally(ruleKey) : half ? '' : given(key)}`);
+  };
+  max('Rain chance', 'maxRainChancePct', 'rain', u.rain, 'the forecast chance of any rain in the hour');
+  max('Rainfall', 'maxPrecipMm', 'rainfall', u.precip, 'how much is expected to fall in the hour');
+  max('Gusts', 'maxGustKmh', 'gust', u.gust, 'gusts, not the average wind, because gusts are what you feel');
+  band('Temperature', 'temperatureC', 'temp', u.temp, 'the air, from min to max');
+  band('Dew point', 'dewPointC', 'dew', u.dew, 'muggy above, raw below; a better guide to comfort than temperature alone');
+  const light = lightRule(r), mins = isNumber(r.goldenHourMinutes) ? r.goldenHourMinutes : 0;
+  const said = 'daylight' in r ? ` The file gives “${String(r.daylight)}”.` : '';
+  if (light === 'daylight') row('Light', 'Daylight only', `daylight: “any”, “daylight” or “golden”, read ignoring case.${said}${tally('light')}`);
+  else if (light === 'golden') row('Light', `Golden hour, ${withUnit(mins, 'min')}`, `daylight and goldenHourMinutes: within this much of sunrise or sunset, on the hour’s own day.${said}${tally('light')}`);
+  else row('Light', 'Any hour', `daylight: “any”, “daylight” or “golden”, read ignoring case.${said || ' Left out, so any hour qualifies.'}`);
+  const need = isNumber(r.minWindowHours) && r.minWindowHours > 0 ? Math.ceil(r.minWindowHours) : 1;
+  row('Shortest window', count(need, 'hour'), 'minWindowHours: a run of open hours shorter than this is not offered as a window.');
+  const sec = el('section', 'sec'), steps = el('ol', 'steps');
+  for (const s of ['In Snuggery, Options, then App Files: data/rules.json.', 'Edit the numbers and save; a rule you leave out is not applied.', 'Come back here; the app reads both files again when it returns to the screen.']) steps.append(el('li', null, s));
+  sec.append(el('h2', null, 'Changing them'), steps);
+  pane.append(dl, sec);
+}
+
+/** The caption band's line (HOUSE 4.5), two fixed lines: how to read the pane. */
+function caption() {
+  const c = $('capline'), u = S.units;
+  if (tab === 'windows') { c.textContent = M ? shutterCaption(M) : ''; return; }
+  if (tab === 'hours') {
+    const air = u.temp === u.dew ? `Air and dew point in ${u.temp}` : `Air in ${u.temp}, dew point in ${u.dew}`;
+    c.textContent = `Hours in ${S.place ? `${S.place}’s` : 'the forecast’s'} own time, ${zone(S.offset / 60)}. ${air}, rain chance in ${u.rain}, rainfall in ${u.precip}, gusts in ${u.gust}.`;
+    return;
+  }
+  c.textContent = `${S.rulesProblem ? 'The built-in rules: data/rules.json could not be used.' : 'Read from data/rules.json.'} An hour must clear every rule, in the forecast’s own units.`;
+}
+
+/* ── About ────────────────────────────────────────────────────────────── */
+
+function aboutList() {
+  const dl = $('about-list'), s = S.snap, n = S.all.length;
+  dl.replaceChildren();
+  const add = (k, v) => dl.append(el('dt', null, `${k}:`), el('dd', null, v));
+  if (S.place) add('Place', `${S.place} (an example)`);
+  if (isNumber(s.latitude) && isNumber(s.longitude)) add('Grid point', `${coords(s.latitude, s.longitude)}${isNumber(s.elevation) ? `, ${meters(s.elevation)}` : ''}`);
+  add('Time zone', `${typeof s.timezone === 'string' ? `${s.timezone.replace(/_/g, ' ')}, ` : ''}${zone(S.offset / 60)}`);
+  add('Forecast', `${placeFull(S.all[0].epoch, S.offset)} to ${placeFull(S.all[n - 1].epoch + 3600000, S.offset)}, ${count(n, 'hour')}`);
+  const st = S.stamp;
+  if (st) add('Updated', st.kind === 'exact' ? `${full(st.ms)}, from the file’s own time` : st.kind === 'about' ? `about ${full(st.ms)}, the weather service’s time to the quarter hour` : `${full(st.ms)} at the earliest: the forecast’s first hour`);
+  else add('Updated', 'not in the file');
+  add('Stale after', count(STALE_HOURS, 'hour'));
+  add('Rules', S.rulesProblem ? 'built in, because data/rules.json could not be used' : 'data/rules.json');
+  add('Ask table', S.hasAsk ? count(s.ask.length, 'row') : 'none: the file came straight from the weather service');
+  $('about-ask').textContent = S.hasAsk
+    ? 'This file carries an ask table, so Snuggery’s Ask About This Data can answer questions about these hours.'
+    : 'This file came straight from the weather service, so it has no ask table, and Snuggery’s Ask has only the raw file to read; PROMPT.md says what to add.';
+}
+
+let aboutFrom = null;
+function about(open) {
+  $('about').hidden = !open;
+  for (const id of ['head', 'main', 'band']) $(id).inert = open;   // holds Tab inside the sheet
+  $('about-list').parentElement.hidden = !S;                       // with no usable file, its prose stands
+  $('about-ask').hidden = !S;
+  if (open) { aboutFrom = document.activeElement; $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
+}
+$('stamp').onclick = () => about(true);
+$('about-close').onclick = $('about-close-2').onclick = () => about(false);
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('about').hidden) about(false); });
+
+/* Reads come fresh off disk, so reading again when the page comes back into view is what makes an app opened
+   this morning show this morning's forecast. Snuggery fires the same event when a Shortcut delivers new data
+   while the app is open, which is why a new file redraws in place, keeping the pane, the scroll and the hour. */
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+// A new width (a phone turned on its side) redraws the Shutters alone.
+let lastW = 0;
+new ResizeObserver(() => {
+  const w = $('pane').clientWidth;
+  if (S && w !== lastW) { lastW = w; drawShutters(); }
+}).observe($('pane'));
+
+// The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
+window.__ow = {
+  ready: () => !!S && !$('tabs').hidden && !!$('pane').firstElementChild,
+  pane: () => tab,
+  chosen: () => chosen,
+  shutters: () => M && { G: M.G, n: M.n, nowAt: M.nowAt, labels: M.labels.map((l) => l.text),
+    rules: M.rules.map((r) => ({ key: r.key, name: r.name, out: r.out, blocks: r.blocks, hollows: r.hollows, bars: r.bars })), brackets: M.brackets },
+};
+
+load();

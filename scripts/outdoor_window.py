@@ -64,7 +64,7 @@ DEMO_PLACE = "Boston Common"
 DEMO_LAT = 42.355
 DEMO_LON = -71.066
 
-# The hourly variables the app scores. Keep this list and the one in app.js in
+# The hourly variables the app scores. Keep this list and the one in js/score.js in
 # step; the app names any that are missing rather than drawing a blank strip.
 HOURLY_VARS = [
     "temperature_2m",
@@ -119,7 +119,7 @@ def fetch(lat: float, lon: float, timeout: int = 30) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Scoring — the mirror of the same logic in outdoor-window/app.js
+# Scoring — the mirror of the same logic in outdoor-window/js/score.js
 # ---------------------------------------------------------------------------
 # The app has to score whatever the phone delivers, which is the raw reply with
 # no `ask` table in it, so the scoring cannot live only here. This copy exists
@@ -138,12 +138,12 @@ def _local_to_epoch(stamp: str, offset_seconds: int) -> float:
 
 
 def _is_number(value) -> bool:
-    """app.js's isNumber(), exactly: a real number, and `true` is not one.
+    """js/score.js's isNumber(), exactly: a real number, and `true` is not one.
 
     The script has to agree with the app on what counts as a usable value,
     because a rules.json edited by hand on a phone can hold `"35"` where a
     number was meant, and Open-Meteo returns nulls for a variable the chosen
-    model does not produce. app.js shows "not used" for such a rule; without
+    model does not produce. The app shows "not used" for such a rule; without
     this the script raised a TypeError instead.
     """
     return isinstance(value, (int, float)) and not isinstance(value, bool)
@@ -152,7 +152,7 @@ def _is_number(value) -> bool:
 def _max_rule(value, limit):
     """A 'no more than' rule: (passes, comfort 0..1).
 
-    The order of these two guards is load-bearing and mirrors app.js's
+    The order of these two guards is load-bearing and mirrors js/score.js's
     `maxRule` (which returns null — rule not in use — before it looks at the
     value). Test the value first and a rule the person deliberately left out of
     rules.json turns into a phantom blocker whenever the forecast has a null in
