@@ -1,6 +1,6 @@
 # What travels with this app, and under whose terms
 
-Four things in Finances are not ours, and the MIT licence at the root of this
+Four things in Finances are not ours, and the MIT license at the root of this
 repository does not cover them. Three are data sources the app depends on — and
 only one of the three states its terms at all. The fourth is an endpoint the app
 can be pointed at but is not licensed to use.
@@ -12,15 +12,16 @@ price index for existing dwellings**, table **07221** — quarterly, back to 199
 fetched from SSB's open, unauthenticated API at `data.ssb.no`. No key, no
 registration, no rate limit worth worrying about.
 
-Statistics Norway publishes its statistics under the **Norwegian Licence for
-Open Government Data (NLOD)**: free to use, share and adapt, including
+Statistics Norway publishes its statistics under the
+**Norwegian Licence for Open Government Data (NLOD)** (its proper name, in its
+own spelling): free to use, share and adapt, including
 commercially, provided the source is credited and it is not presented in a way
 that implies SSB endorses what you did with it. The terms are at
 [data.norge.no/nlod/en](https://data.norge.no/nlod/en/), and SSB's own
 statement of them is at
 [ssb.no](https://www.ssb.no/en/informasjon/copyright).
 
-**The attribution the licence asks for is printed by the app**, under the
+**The attribution the license asks for is printed by the app**, under the
 home's value on the Owned pane, as the basis line the refresh writes:
 
 > SSB 07221 — Hele landet, Alle boligtyper, Prisindeks for brukte boliger, sesongjustert
@@ -42,7 +43,7 @@ index: the code needs a date-to-level series and `ssb_series()` in
 
 Balances and transactions arrive through **Enable Banking**, a licensed PSD2
 account-information provider. Their free tier is *restricted production*: real
-data, from accounts you authorise yourself, with no contract and no eIDAS
+data, from accounts you authorize yourself, with no contract and no eIDAS
 certificate — which is exactly this use and nothing more. Their terms are their
 own; read them at [enablebanking.com](https://enablebanking.com) before you sign
 up, because you are the one agreeing to them.
@@ -56,7 +57,8 @@ Two things worth knowing before you build on it:
   refresh starts answering 401, run `--connect` again for that bank and replace
   its entry in the secret. The app keeps the last good balance and marks the
   source stale rather than dropping the account, so this shows up as a warning
-  rather than as money vanishing.
+  rather than as money vanishing. When the whole snapshot is more than 30 hours
+  old, the stamp at the top leads with *Stale.*, in words rather than a color.
 
 Nothing about this app passes through anybody else's server except Enable
 Banking's, which is the regulated party in the middle by design. Snuggery
@@ -104,9 +106,9 @@ country's central bank as reference data. The snapshot records
 share price, so the credit sits with the number it produced.
 
 **On the terms, the honest answer is that they are not published.** Norges
-Bank's exchange-rate pages and its open-data API documentation carry no licence
+Bank's exchange-rate pages and its open-data API documentation carry no license
 statement, no terms of use and no stated attribution requirement — unlike SSB
-above, which says NLOD plainly. So this app does not claim a licence it cannot
+above, which says NLOD plainly. So this app does not claim a license it cannot
 point at. It credits the source on screen regardless, which is what NLOD would
 have asked for and what any reasonable reading of reference data published for
 public use asks for anyway, and it calls the endpoint the way a well-behaved
@@ -124,7 +126,8 @@ travels with it.
 Every account, balance, transaction, merchant, fund, car and loan in
 `data/snapshot.json` was invented by `scripts/make_demo_finances.py` from a
 fixed seed. There is no household. The app says so on screen, the file says so
-in its `notes`, and `synthetic: true` is what puts the banner there. Prove it
+in its `notes`, and `synthetic: true` is what makes the stamp read *Example
+data.* and the credits under every pane say the accounts were invented. Prove it
 for yourself:
 
 ```
@@ -133,3 +136,13 @@ python3 scripts/make_demo_finances.py --check
 
 which regenerates the file into a temporary directory and compares it byte for
 byte with the committed one.
+
+## The type
+
+Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+
+`fonts/ysabeau-office-gw.woff2` (35 372 bytes, sha256
+`fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262`) and its
+`fonts/OFL.txt` are the template's house face, copied byte for byte from
+`global-weather/fonts/`, where the recipe that cuts it lives. The license
+covers the file; About repeats the credit.

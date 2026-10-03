@@ -65,7 +65,7 @@ Every app, one link each — open the link in Safari on the iPhone, then steps 2
 | Milky Way | [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) | 6.5 MB | nothing |
 | Hello Live | [**Install Hello Live**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) | tiny | nothing |
 | Running Dashboard | [**Install Running Dashboard**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) | 1.1 MB | a Garmin sign-in |
-| Finances | [**Install Finances**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) | tiny | a bank connection |
+| Finances | [**Install Finances**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) | 0.1 MB | a bank connection |
 | World News | [**Install World News**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) | tiny | nothing |
 | Outdoor Window | [**Install Outdoor Window**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) | tiny | your own Shortcut |
 | Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
@@ -99,7 +99,7 @@ Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessi
 
 ### Finances
 
-Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. **Static example: a generated fake household**, labelled as such.
+Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. Overview opens on the Balance, the household's balance sheet drawn as an accountant's T-account to one printed scale: one block of ink per account, fund, car, home and loan, and the empty space under the debts is the net worth. **Static example: a generated fake household**, labeled as such.
 
 **Needs:** a bank connection · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) · Make it yours: [`finances/PROMPT.md`](finances/PROMPT.md)
 

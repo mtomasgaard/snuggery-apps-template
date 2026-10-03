@@ -1245,7 +1245,7 @@ figures into its `ART.md`.
 | World Oil & Gas | 2 147 328 (after its pass) | 2 622 870 | 199 917 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
 | Snug Kart | 619 349 (after its pass) | 720 806 | 242 655 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
 | Running Dashboard | 1 074 350 (after its pass) | 1 340 193 | 244 919 of 245 000 (the lead's rulings, plan 0011 D23–D24; held at 236 521 before them) | 41 291 |
-| Finances | 69 976 | 125 304 | 103 178 | 0 |
+| Finances | about 129 800 (after its pass; `ART.md`'s own size moves the last digits) | 131 000 (the lead's ruling, plan 0011 D27; 125 304 by D5's formula) | 123 733 of 200 000 | 40 075 |
 | World News | 27 445 | 72 140 | 21 787 | 0 |
 | Outdoor Window | 29 939 | 75 257 | 50 637 | 0 |
 | Power Hours | 25 977 | 70 305 | 46 466 | 0 |

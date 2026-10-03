@@ -92,7 +92,7 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   global-wind/fonts/ and global-weather/fonts/ — and the fonts/ folder of every
   app that carries the house face (ysabeau-office-*.woff2: Milky Way, Besseggen,
   Norne Reservoir, Anatomy, Shelf Atlas, World Oil & Gas, Snug Kart, Running
-  Dashboard, and each app that takes it after them) — are a Ysabeau Office
+  Dashboard, Finances, and each app that takes it after them) — are a Ysabeau Office
   subset under the SIL Open Font License 1.1 (fonts/OFL.txt in each). The apps'
   own code and text share the licence above.
 - The data under milky-way/data/ is adapted from the sources listed, with their

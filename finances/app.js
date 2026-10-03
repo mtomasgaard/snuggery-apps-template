@@ -1,4 +1,4 @@
-/* Finances — Snuggery mini-app.
+/* Finances, a Snuggery mini-app.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * SHAPE OF ./data/snapshot.json — the ONLY file that changes between updates.
@@ -84,8 +84,8 @@
  *     "balance": -2900000.00, "principal": 3200000, "paidOff": 0.094,
  *     "monthlyPayment": 18453.00, "nominalRate": 0.049,
  *     "termMonths": 300, "kind": "annuity",
- *     "basis": "modelled annuity, 42 of 300 payments made",
- *     "fromBank": false                  // true => the bank reported it, not modelled
+ *     "basis": "modeled annuity, 42 of 300 payments made",
+ *     "fromBank": false                  // true => the bank reported it, not modeled
  *   }, …],
  *
  *   "accounts": [{                      // REQUIRED array, may be empty
@@ -240,240 +240,270 @@
  * simply vanishes from the screen until it comes back.
  * ───────────────────────────────────────────────────────────────────────────── */
 
+// The look is ART.md: the house system (Template/HOUSE.md) and the Balance. Every number, unit and
+// date on screen is written by js/units.js; the Balance's geometry is js/balance.js.
+
+import {
+  NB, fixed, signed, u, unitOf, money, moneySigned, pct, units, count, axis, dayMon, date, dowDate, dowDateYear,
+  month, dateWords, span, plusDays, daysBetween, todayIso, clock, dayOf, full, days, ago, spoken,
+} from './js/units.js';
+import { balanceItems, layout, hitAt, sayBalance, rung } from './js/balance.js';
+
 const DATA_URL = './data/snapshot.json';
 const STORE_TAB = 'fin.tab';
 const STORE_RANGE = 'fin.range';
 const STORE_BASIS = 'fin.basis';
+const STALE_HOURS = 30;   // a daily job that has not run for 30 hours has missed one
 
-/* Categorical slots, fixed order, never cycled — read from the stylesheet so
-   light and dark each get their own validated step. Used only where identity
-   is the job (which fund a stacked segment is). Amount-across-categories is one
-   series and therefore one colour. */
-const SERIES = n => `var(--series-${n})`;
+// The credits, word for word (ART.md section 3; owner call 6): one constant for the example data, one for
+// a copy reading its own banks. tools/check.mjs compares both byte for byte.
+const CREDITS = {
+  example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).',
+  real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).',
+};
+
+/* Categorical slots, fixed order, never cycled, read from the stylesheet so light and dark each get their
+   own fitted step (ART.md section 2). Used only where identity is the job: a pair's two series and the
+   funds. A chart of one quantity is one color, --amount. */
+const SERIES = (n) => `var(--series-${n})`;
+const AMOUNT = 'var(--amount)';
+
+/* Per-device conveniences, every access in try/catch (B13): with storage blocked the app still renders. */
+function stored(key, fallback) {
+  try { const v = localStorage.getItem(key); return v == null ? fallback : v; } catch { return fallback; }
+}
+function store(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* private mode, blocked storage */ }
+}
 
 let snap = null;
-let baseSnap = null;        // as it arrived; `snap` may be re-based onto a variant
-let range = +(localStorage.getItem(STORE_RANGE) || 90);
+let baseSnap = null;        // as it arrived; `snap` may be re-based onto a valuation variant
+let lastRaw = null, lastDay = null;
+let tab = 'overview';
+let range = Number(stored(STORE_RANGE, '90'));
+if (![30, 90, 365, 0].includes(range)) range = 90;
 let txQuery = '';
 let txShown = 100;          // 300 rows at once is a 50 000-pixel page
 
-/* Which valuation basis is chosen per asset, {assetId: variantId}. Survives a
-   reload, because a house valued two ways is a preference, not a session. */
+/* Which valuation basis is chosen per asset, {assetId: variantId}. Survives a reload, because a house
+   valued two ways is a preference, not a session. */
 let basisChoice = (() => {
-  try { return JSON.parse(localStorage.getItem(STORE_BASIS) || '{}') || {}; }
-  catch { return {}; }
+  try { return JSON.parse(stored(STORE_BASIS, '{}')) || {}; } catch { return {}; }
 })();
 
-const $ = id => document.getElementById(id);
-const el = (tag, cls, txt) => {
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
-  if (txt != null) n.textContent = txt;
+  if (text != null) n.textContent = text;
   return n;
 };
+const num = (v) => typeof v === 'number' && Number.isFinite(v);
+const r1 = (v) => Math.round(v * 10) / 10;   // SVG coordinates, never text
+const kr = (v, d = 0) => money(v, snap.currency, d);
+const krs = (v, d = 0) => moneySigned(v, snap.currency, d);
+const pctSigned = (x, d = 0) => u(signed(x * 100, d), '%');
+const lastIso = () => snap.history.days[snap.history.days.length - 1];
+// "Today" for every relative day (a bill due, consent ending, units set, a vest): the phone's day for a copy's
+// own data, the snapshot's own day for the example, which never refreshes, so its bill never reads overdue
+// and it never asks a stranger to authorize a bank that does not exist (after review, finding 1).
+const today = () => (snap.synthetic ? lastIso() : todayIso());
+const nowMs = () => (snap.synthetic ? Date.parse(snap.generatedAt) : Date.now());
 
-/** Swap a whole pane for one explanatory card, reversibly: render() runs again
- *  on every visibility change, so a pane emptied by destroying its nodes would
- *  never come back when the data returned. */
-function paneEmpty(paneId, msg) {
-  const pane = $(paneId);
-  let box = pane.querySelector(':scope > .emptycard');
-  if (!box) {
-    box = el('div', 'card emptycard');
-    box.appendChild(el('div', 'empty'));
-    pane.insertBefore(box, pane.firstChild);
-  }
-  box.firstChild.textContent = msg;
-  box.hidden = false;
-  for (const c of pane.children) if (c !== box) c.hidden = true;
-  return false;
+/** One polite live region for sentences (HOUSE 4.9): never per move, never twice for one event. */
+function announce(text) {
+  const n = $('live');
+  n.textContent = '';
+  setTimeout(() => { n.textContent = text; }, 60);
+}
+const SVGNS = document.querySelector('svg').namespaceURI;   // the page's own inline mark carries it
+const svgEl = (tag, attrs) => {
+  const n = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) if (attrs[k] != null) n.setAttribute(k, attrs[k]);
+  return n;
+};
+const svgText = (attrs, text) => Object.assign(svgEl('text', attrs), { textContent: text });
+
+/* ── the readout card (HOUSE 4.7) ─────────────────────────────────────── */
+
+// One per chart, the house's one card. Chart code hands it an object { place, value, unit, rows:
+// [[label, value]…] }; it is written as text and updated in place while a finger slides, never rebuilt.
+let openCard = null;
+function cardOf(wrap) {
+  if (wrap._card) return wrap._card;
+  const c = el('div', 'readout');
+  c.hidden = true;
+  const where = el('div', 'readout-where'), place = el('span');
+  const close = el('button', 'readout-close');
+  close.setAttribute('aria-label', 'Close');
+  const x = $('x-mark').cloneNode(true);
+  x.removeAttribute('id');
+  x.removeAttribute('hidden');
+  close.append(x);
+  close.onclick = () => unpin();
+  where.append(place, close);
+  const value = el('span', 'readout-value'), unit = el('span', 'readout-unit'), rows = el('dl', 'readout-all');
+  const main = el('div', 'readout-main');
+  main.append(value, unit);
+  c.append(where, main, rows);
+  wrap.append(c);
+  return (wrap._card = { c, place, value, unit, rows });
+}
+/** Show `card` in `wrap` 12 px clear of the point (ax, ay) or the column at ax: top-left, inset 8 px,
+ *  else top-right, else bottom-left, else hung from the chart's foot (over its head if no room below).
+ *  `spots`, when given, replaces the three corners (the Balance: beside the drawing, or none). */
+function showCard(wrap, card, ax, ay, spots) {
+  const k = cardOf(wrap);
+  k.place.textContent = card.place;
+  k.value.textContent = card.value == null ? '' : card.value;
+  k.unit.textContent = card.unit ? `${NB}${card.unit}` : '';
+  const rows = card.rows || [], kids = k.rows.children;
+  while (kids.length > rows.length * 2) kids[kids.length - 1].remove();
+  rows.forEach(([l, v], i) => {
+    if (!kids[i * 2]) k.rows.append(el('dt'), el('dd'));
+    kids[i * 2].textContent = l;
+    kids[i * 2 + 1].textContent = v;
+  });
+  k.c.hidden = false;
+  const W = wrap.clientWidth, H = wrap.clientHeight, cw = k.c.offsetWidth, ch = k.c.offsetHeight;
+  const off = ([x, y]) => ax == null || ax < x - 12 || ax > x + cw + 12 || (ay != null && (ay < y - 12 || ay > y + ch + 12));
+  let [left, top] = (spots ? spots.find(off) : ch + 16 <= H && [[8, 8], [W - cw - 8, 8], [8, H - ch - 8]].find(off)) || [8, H];
+  if (top === H && wrap.getBoundingClientRect().bottom + ch > $('main').getBoundingClientRect().bottom) top = -ch - 8;
+  k.c.style.left = `${left}px`;
+  k.c.style.top = `${top}px`;
+  openCard = { wrap, card };
+}
+function hideCard(wrap) {
+  if (wrap._card) wrap._card.c.hidden = true;
+  if (openCard && openCard.wrap === wrap) openCard = null;
+}
+const sayCard = (c) => `${spoken([c.place, u(c.value, c.unit), ...(c.rows || []).map(([l, v]) => `${l} ${v}`)].join('. '))}.`;
+
+// A tap on a chart pins its card until a tap lands somewhere else, so a value can be read without
+// keeping a finger on the screen. Only one card is pinned at a time.
+const pin = { wrap: null, clear: null };
+document.addEventListener('pointerdown', (ev) => {
+  if (pin.wrap && !pin.wrap.contains(ev.target)) unpin();
+}, true);
+function pinTo(wrap, clear) {
+  if (pin.wrap && pin.wrap !== wrap && pin.clear) pin.clear();
+  pin.wrap = wrap;
+  pin.clear = clear;
+}
+function unpin() {
+  const clear = pin.clear;
+  pin.wrap = null;
+  pin.clear = null;
+  if (clear) clear();
+}
+const isPinned = (wrap) => pin.wrap === wrap;
+
+/** Hover, slide and tap on a chart's hit layer (B14). A mouse reads on the press; a finger waits: a tap
+ *  pins the card and says it once, a sideways slide reads along the chart, a vertical drag is a scroll
+ *  (the browser takes it and sends pointercancel) and opens nothing. */
+function readout(hit, wrap, show, hide) {
+  let down = 0, at = null;   // at: a finger's first point
+  const open = (ev) => { down = 1; at = null; show(ev); pinTo(wrap, () => hide()); };
+  const say = () => { if (openCard && openCard.wrap === wrap) announce(sayCard(openCard.card)); };
+  const on = (type, f) => hit.addEventListener(type, f);
+  on('pointerdown', (ev) => { if (ev.pointerType === 'touch') at = [ev.clientX, ev.clientY]; else { open(ev); say(); } });
+  on('pointermove', (ev) => {
+    if (!at) { if (down || !isPinned(wrap)) show(ev); return; }
+    const dx = Math.abs(ev.clientX - at[0]);
+    if (dx > 8 && dx > Math.abs(ev.clientY - at[1])) open(ev);
+  });
+  on('pointerup', (ev) => { if (at) { open(ev); say(); } down = 0; at = null; });
+  on('pointercancel', () => { if (down && isPinned(wrap)) unpin(); down = 0; at = null; });
+  on('pointerleave', () => { down = 0; if (!isPinned(wrap)) hide(); });
 }
 
-/** The other half: show the real cards again and drop the explanation. */
-function paneFilled(paneId) {
-  const pane = $(paneId);
-  const box = pane.querySelector(':scope > .emptycard');
-  if (box) box.hidden = true;
-  for (const c of pane.children) if (c !== box) c.hidden = false;
-  return true;
-}
+/* ── loading and validation ───────────────────────────────────────────── */
 
-/* ── Formatting ──────────────────────────────────────────────────────── */
-
-const nf = (n, d = 0) => Number(n).toLocaleString('nb-NO',
-  { minimumFractionDigits: d, maximumFractionDigits: d });
-
-/* Everything that reaches innerHTML goes through this. The only innerHTML in
-   this app is the chart tooltip, and the only values in it are formatted dates
-   and formatted numbers — but data/snapshot.json is a file a Shortcut writes,
-   so "it can only be a date" is an assumption about the file rather than a
-   property of it. Escaping costs nothing and removes the assumption. */
-const esc = (v) => String(v)
-  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-
-const kr = (n, d = 0) => (n == null || !isFinite(n)) ? '—' : `${nf(n, d)} kr`;
-
-const krSigned = (n, d = 0) =>
-  (n == null || !isFinite(n)) ? '—' : `${n > 0 ? '+' : ''}${nf(n, d)} kr`;
-
-/** Short form for a chart axis, where the tick has to fit. `step` is the gap
- *  between ticks: the decimals come from it, so every tick on one axis is
- *  written the same way rather than 5,0m sitting next to 10m. */
-function krAxis(n, step) {
-  if (n === 0) return '0';          // "0m" is not a quantity anybody writes
-  const gap = Math.abs(step || n) || 1;
-  if (gap >= 1e6) return `${nf(n / 1e6, gap >= 1e6 ? 0 : 1)}m`;
-  if (Math.abs(n) >= 1e6) return `${nf(n / 1e6, 1)}m`;
-  if (gap >= 1e3) return `${nf(n / 1e3, 0)}k`;
-  if (Math.abs(n) >= 1e4) return `${nf(n / 1e3, 0)}k`;
-  if (Math.abs(n) >= 1e3) return `${nf(n / 1e3, 1)}k`;
-  return nf(n, 0);
-}
-
-const pct = (n, d = 1) => (n == null || !isFinite(n)) ? '—' : `${nf(n * 100, d)} %`;
-
-function dayLabel(iso) {
-  const d = new Date(`${iso}T12:00:00Z`);
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-}
-
-function fullDay(iso) {
-  const d = new Date(`${iso}T12:00:00Z`);
-  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function monthYear(iso) {
-  const d = new Date(`${iso}T12:00:00Z`);
-  return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
-}
-
-function monthLabel(ym) {
-  const d = new Date(`${ym}-01T12:00:00Z`);
-  return d.toLocaleDateString('en-GB', { month: 'short' });
-}
-
-function monthFull(ym) {
-  const d = new Date(`${ym}-01T12:00:00Z`);
-  return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-}
-
-function ago(iso) {
-  const t = Date.parse(iso);
-  if (!isFinite(t)) return 'at an unknown time';
-  const mins = Math.round((Date.now() - t) / 60000);
-  if (mins < 2) return 'just now';
-  if (mins < 60) return `${mins} min ago`;
-  const hrs = Math.round(mins / 60);
-  if (hrs < 24) return `${hrs} ${hrs === 1 ? 'hour' : 'hours'} ago`;
-  const days = Math.round(hrs / 24);
-  return `${days} ${days === 1 ? 'day' : 'days'} ago`;
-}
-
-const daysBetween = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 86400000);
-
-/* ── Loading and validation ──────────────────────────────────────────── */
-
-/* An expired credential does not return a network error — it returns an error
-   page that is perfectly valid JSON, and whatever delivers the file writes it
-   straight over the good data. So parsing is not the test: the test is whether
-   the fields this app actually reads are present and the right type. */
+/* An expired credential does not return a network error: it returns an error page that is perfectly valid
+   JSON, and whatever delivers the file writes it straight over the good data. So parsing is not the test:
+   the test is whether the fields this app actually reads are present and the right type. */
 function validate(d) {
-  const bad = m => ({ ok: false, why: m });
-  if (d === null || typeof d !== 'object' || Array.isArray(d)) return bad('The file is not a JSON object.');
-  if (typeof d.generatedAt !== 'string' || !isFinite(Date.parse(d.generatedAt)))
-    return bad('`generatedAt` is missing or is not an ISO 8601 timestamp.');
-  if (!d.netWorth || typeof d.netWorth.total !== 'number' || !isFinite(d.netWorth.total))
-    return bad('`netWorth.total` is missing or is not a number.');
-  if (!Array.isArray(d.accounts)) return bad('`accounts` is missing or is not an array.');
-
+  if (d === null || typeof d !== 'object' || Array.isArray(d)) return 'The file is not a JSON object.';
+  if (typeof d.generatedAt !== 'string' || !Number.isFinite(Date.parse(d.generatedAt)))
+    return '“generatedAt” is missing or is not an ISO 8601 timestamp.';
+  if (!d.netWorth || !num(d.netWorth.total)) return '“netWorth.total” is missing or is not a number.';
+  if (!Array.isArray(d.accounts)) return '“accounts” is missing or is not an array.';
   const h = d.history;
   if (!h || !Array.isArray(h.days) || !Array.isArray(h.netWorth))
-    return bad('`history.days` / `history.netWorth` are missing or are not arrays.');
+    return '“history.days” or “history.netWorth” is missing or is not an array.';
   if (h.days.length !== h.netWorth.length)
-    return bad(`\`history\` arrays disagree: ${h.days.length} days against ${h.netWorth.length} values.`);
-  if (!h.days.length) return bad('`history` is empty — there is nothing to plot.');
-  if (h.netWorth.some(v => typeof v !== 'number' || !isFinite(v)))
-    return bad('`history.netWorth` holds something that is not a number.');
-
-  if (d.accounts.some(a => !a || typeof a.balance !== 'number' || !isFinite(a.balance)))
-    return bad('An entry in `accounts` has no numeric `balance`.');
-
-  return { ok: true };
-}
-
-function showError(title, detail) {
-  const box = $('error');
-  box.hidden = false;
-  box.innerHTML = '';
-  box.appendChild(el('strong', null, title));
-  box.appendChild(el('div', null, detail));
-  const hint = el('div');
-  hint.style.marginTop = '8px';
-  hint.style.fontSize = '12.5px';
-  hint.style.opacity = '.85';
-  hint.textContent = 'Nothing below is drawn from this file, so none of it is a stale number pretending to be fresh. '
-    + 'A private repository answers 404 rather than 401 when the token is wrong — check the token before the address.';
-  box.appendChild(hint);
-  $('main').hidden = true;
-  $('footer').hidden = true;
-  $('freshness').textContent = 'Data unavailable';
+    return `The “history” arrays disagree: ${h.days.length} days against ${h.netWorth.length} values.`;
+  if (!h.days.length) return '“history” is empty; there is nothing to plot.';
+  if (h.netWorth.some((v) => !num(v))) return '“history.netWorth” holds something that is not a number.';
+  if (d.accounts.some((a) => !a || !num(a.balance))) return 'An entry in “accounts” has no numeric “balance”.';
+  return null;
 }
 
 async function load() {
-  let text;
+  let raw;
   try {
     const res = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    text = await res.text();
-  } catch (e) {
-    showError('Could not read data/snapshot.json', `The file did not load: ${e.message}.`);
-    return;
+    raw = await res.text();
+    // the same file on the same day: only the stamp can have changed (B15 of the return: nothing redrawn)
+    if (raw === lastRaw && todayIso() === lastDay) { $('notice').hidden = true; stamp(); return; }
+  } catch (err) {
+    return fail(`could not be read (${err.message || err}).`, null,
+      'The app is installed but its data file is missing or unreadable. Run the Shortcut again.');
   }
-
   let parsed;
   try {
-    parsed = JSON.parse(text);
-  } catch (e) {
-    showError('data/snapshot.json will not parse',
-      `It is not valid JSON: ${e.message}. It begins: ${JSON.stringify(text.slice(0, 120))}`);
-    return;
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    return fail(`is not valid JSON${/^\s*</.test(raw) ? '; it looks like a web page was written over it' : ''}.`, raw,
+      `${err.message}.`);
   }
-
-  const v = validate(parsed);
-  if (!v.ok) {
-    showError('data/snapshot.json is not the shape this app expects', v.why);
-    return;
+  const why = validate(parsed);
+  if (why) {
+    return fail('is not the shape this app expects:', raw,
+      'Nothing here is drawn from this file, so none of it is a stale number pretending to be fresh. A private '
+      + 'repository answers 404 rather than 401 when the token is wrong; check the token before the address.', [why]);
   }
-
-  // A reload is a re-render IN PLACE. The open tab survives because nothing
-  // here calls showTab(), and the scroll position is put back by hand: the
-  // panes are rebuilt from scratch, and a document that is briefly shorter
-  // than it was clamps the scroll to its new bottom. Only on a reload — the
-  // first load should start at the top.
-  const wasShowing = baseSnap !== null && baseSnap !== undefined;
-  const keepScroll = wasShowing ? window.scrollY : 0;
-
+  try { await document.fonts.load('600 21px "Ysabeau Office"'); } catch { /* measured in the fallback face */ }
   baseSnap = parsed;
   snap = rebase(parsed);
-  $('error').hidden = true;
-  $('main').hidden = false;
-  $('footer').hidden = false;
-  render();
-
-  if (wasShowing && keepScroll) {
-    // After layout, or the page may not yet be tall enough to scroll back to.
-    requestAnimationFrame(() => window.scrollTo({ top: keepScroll }));
-  }
+  lastRaw = raw;
+  lastDay = todayIso();
+  $('notice').hidden = true;
+  boot();
 }
 
-/* ── Valuation basis ──────────────────────────────────────────────────────
-   An asset may offer more than one honest way to value it — for the house,
-   which cut of SSB's index to follow. The file is built on the first one, so
-   choosing another is a DELTA against that: apply it to the asset, to net
-   worth, and to every day of the history, and then let the ordinary render
-   redraw. Nothing here invents a number; the refresh job computed each
-   variant's whole line and this only picks which one to show. */
+/** A problem with the data is a sentence on a plate, never a blank pane (HOUSE 4.9). A broken replacement
+ *  keeps the data that was showing, its pane and its scroll, and says so; Close puts the plate away (B12). */
+function fail(what, raw, hint, lines) {
+  const box = $('notice');
+  box.replaceChildren();
+  if (snap) {
+    const p = Date.parse(snap.generatedAt), x = el('button', 'textkey', 'Close');
+    x.onclick = () => { box.hidden = true; };
+    box.append(el('p', null, `The new data/snapshot.json ${what.replace(/:$/, '.')} Still showing the data from ${dayOf(p)}, ${clock(p)}.`), x);
+    box.classList.add('kept');
+    box.hidden = false;
+    return;
+  }
+  $('stamp').textContent = 'No usable data';
+  $('tabs').hidden = true;
+  $('pane').replaceChildren();
+  $('capline').textContent = '';
+  box.classList.remove('kept');
+  box.append(el('p', null, `data/snapshot.json ${what}`));
+  if (lines) box.append(el('p', 'notice-lines', lines.join('\n')));
+  if (raw != null) box.append(el('p', 'notice-lines', `The file begins: ${raw.slice(0, 160)}`));
+  if (hint) box.append(el('p', 'notice-lines', hint));
+  box.hidden = false;
+}
+
+/* ── valuation basis ──────────────────────────────────────────────────────
+   An asset may offer more than one honest way to value it: for the house, which cut of SSB's index to
+   follow. The file is built on the first one, so choosing another is a DELTA against that: apply it to the
+   asset, to net worth, and to every day of the history, and then let the ordinary render redraw. Nothing
+   here invents a number; the refresh job computed each variant's whole line and this only picks which one
+   to show. */
 
 function rebase(base) {
   const ids = Object.keys(basisChoice);
@@ -481,20 +511,20 @@ function rebase(base) {
 
   const out = {
     ...base,
-    assets: base.assets.map(a => ({ ...a })),
+    assets: base.assets.map((a) => ({ ...a })),
     netWorth: { ...base.netWorth },
     history: { ...base.history },
   };
 
   const days = (base.history && base.history.days) || [];
-  let delta = null;                       // per-day, built only if something moves
+  let delta = null;                       // per day, built only if something moves
   let deltaNow = 0;
 
   for (const a of out.assets) {
     const want = basisChoice[a.id];
     const vs = Array.isArray(a.variants) ? a.variants : null;
     if (!want || !vs || !vs.length) continue;
-    const pick = vs.find(v => v.id === want);
+    const pick = vs.find((v) => v.id === want);
     const built = vs[0];
     if (!pick || pick === built) continue;
 
@@ -504,8 +534,7 @@ function rebase(base) {
     a.changeSinceAnchor = round2(pick.value - (a.anchorValue || 0));
 
     const ph = pick.history, bh = built.history;
-    if (Array.isArray(ph) && Array.isArray(bh) &&
-        ph.length === bh.length && ph.length === days.length) {
+    if (Array.isArray(ph) && Array.isArray(bh) && ph.length === bh.length && ph.length === days.length) {
       if (!delta) delta = new Array(days.length).fill(0);
       for (let i = 0; i < ph.length; i++) delta[i] += ph[i] - bh[i];
       const back = ph.length - 1 - 365;
@@ -519,1261 +548,963 @@ function rebase(base) {
   out.netWorth.total = round2((base.netWorth.total || 0) + deltaNow);
 
   if (delta) {
-    out.history = { ...base.history };
     for (const key of ['netWorth', 'assets']) {
       const src = base.history[key];
-      if (Array.isArray(src) && src.length === delta.length)
-        out.history[key] = src.map((v, i) => round2(v + delta[i]));
+      if (Array.isArray(src) && src.length === delta.length) out.history[key] = src.map((v, i) => round2(v + delta[i]));
     }
-    // The headline changes are differences between two days of that same line,
-    // so they move by the difference between the two deltas, not by deltaNow.
+    // The headline changes are differences between two days of that same line, so they move by the
+    // difference between the two deltas, not by deltaNow.
     for (const [key, back] of [['change30d', 30], ['change365d', 365]]) {
       const at = shiftIndex(days, back);
       if (at != null && typeof base.netWorth[key] === 'number')
-        out.netWorth[key] = round2(base.netWorth[key]
-          + (delta[delta.length - 1] - delta[at]));
+        out.netWorth[key] = round2(base.netWorth[key] + (delta[delta.length - 1] - delta[at]));
     }
   }
   return out;
 }
 
-const round2 = n => Math.round(n * 100) / 100;
+const round2 = (n) => Math.round(n * 100) / 100;
 
-/** Index of the last day at or before `back` days before the newest one —
-    the same rule the refresh job uses, so the two agree. */
+/** Index of the last day at or before `back` days before the newest one: the same rule the refresh job
+    uses, so the two agree. */
 function shiftIndex(days, back) {
   if (!days.length) return null;
   const target = Date.parse(days[days.length - 1]) - back * 86400000;
-  for (let i = days.length - 1; i >= 0; i--)
-    if (Date.parse(days[i]) <= target) return i;
+  for (let i = days.length - 1; i >= 0; i--) if (Date.parse(days[i]) <= target) return i;
   return null;
 }
 
 function chooseBasis(assetId, variantId, isDefault) {
   if (isDefault) delete basisChoice[assetId];
   else basisChoice[assetId] = variantId;
-  try { localStorage.setItem(STORE_BASIS, JSON.stringify(basisChoice)); } catch { /* private mode */ }
+  store(STORE_BASIS, JSON.stringify(basisChoice));
   snap = rebase(baseSnap);
   render();
+  aboutList();
 }
 
-/* ── Render ──────────────────────────────────────────────────────────── */
+/* ── boot, the stamp, the tabs ────────────────────────────────────────── */
 
+let booted = false;
+function boot() {
+  const first = !booted;
+  booted = true;
+  if (first) {
+    const t = stored(STORE_TAB, 'overview');
+    if (TABS.some(([k]) => k === t)) tab = t;
+  }
+  $('credits').textContent = snap.synthetic ? CREDITS.example : CREDITS.real;
+  stamp();
+  buildTabs();
+  render();
+  if (first) showTab();
+  aboutList();
+  if (first) {
+    // Reads are always fresh from disk, so re-reading when the app comes back to the front is what makes an
+    // app opened this morning show this morning's data.
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+  }
+}
+
+/** The stamp (HOUSE 4.2): when the data was made, in words; stale is a sentence, never a color (B4). The
+ *  example never refreshes, so it says what it is where real data would say Stale. (owner call 1). */
+function stamp() {
+  const gen = Date.parse(snap.generatedAt);
+  const day = todayIso(gen), when = day === todayIso() ? '' : day.slice(0, 4) === todayIso().slice(0, 4) ? `${dayOf(gen)}, ` : `${date(day)}, `;
+  const tail = `Updated ${when}${clock(gen)}`;
+  const lead = snap.synthetic ? 'Example data.' : Date.now() - gen > STALE_HOURS * 3600e3 ? 'Stale.' : null;
+  $('stamp').replaceChildren(...(lead ? [el('span', 'lead', lead), ` ${tail}`] : [tail]));
+}
+
+const TABS = [
+  ['overview', 'Overview'],
+  ['owned', 'Owned'],
+  ['spending', 'Spending'],
+  ['flow', 'Cash flow'],
+  ['savings', 'Savings'],
+  ['txns', 'Transactions'],
+];
+
+// Built after the snapshot parses, never in the static markup: the marketing camera waits for the tab named
+// Overview as its proof that the data is in.
+function buildTabs() {
+  const nav = $('tabs');
+  nav.hidden = false;
+  if (!nav.children.length) {
+    for (const [key, label] of TABS) {
+      const b = el('button', null, label);
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-controls', 'pane');
+      b.id = `tab-${key}`;
+      b.dataset.key = key;
+      b.onclick = (ev) => choose(key, ev.detail === 0);
+      b.onkeydown = (ev) => {
+        const i = TABS.findIndex((t) => t[0] === key), d = { ArrowRight: 1, ArrowLeft: -1 }[ev.key];
+        if (!d) return;
+        ev.preventDefault();
+        const k = TABS[(i + d + TABS.length) % TABS.length][0];
+        choose(k, true);
+        nav.querySelector(`[data-key="${k}"]`).focus();
+      };
+      nav.append(b);
+    }
+  }
+  for (const b of nav.children) {
+    const on = b.dataset.key === tab;
+    b.setAttribute('aria-selected', String(on));
+    b.tabIndex = on ? 0 : -1;
+    if (on) $('pane').setAttribute('aria-labelledby', b.id);
+  }
+}
+/** The chosen tab is never left half off the row's edge (after review, finding 5). */
+const showTab = () => { const b = $('tabs').querySelector('[aria-selected="true"]'); if (b) b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); };
+function choose(key, byKeyboard) {
+  tab = key;
+  store(STORE_TAB, key);
+  buildTabs();
+  render();
+  showTab();
+  $('main').scrollTop = 0;
+  if (byKeyboard) announce(`${TABS.find((t) => t[0] === key)[1]}.`);
+}
+
+/* ── the pane ─────────────────────────────────────────────────────────── */
+
+let shownTab = null;
+const PANES = () => ({ overview: paneOverview, owned: paneOwned, spending: paneSpending, flow: paneFlow, savings: paneSavings, txns: paneTxns });
+/** Draw the chosen pane. A re-render of the same pane (a new file, a range, a valuation) keeps the
+ *  reader's place; a tab switch starts at the top. */
 function render() {
-  renderHeader();
-  renderSources();
-  renderOverview();
-  renderOwned();
-  renderSpending();
-  renderFlow();
-  renderSavings();
-  renderTxns();
+  const main = $('main'), pane = $('pane');
+  const samePane = shownTab === tab, keep = samePane ? main.scrollTop : 0;
+  pane.style.minHeight = samePane ? `${pane.offsetHeight}px` : '';
+  pin.wrap = pin.clear = openCard = null;
+  for (const o of observers.splice(0)) o.disconnect();
+  pane.replaceChildren();
+  shownTab = tab;
+  PANES()[tab](pane);
+  main.scrollTop = keep;
+  pane.style.minHeight = '';
+  caption();
 }
 
-function renderHeader() {
-  // The clock time, not "3 hours ago": this job runs once a day, and the one
-  // thing a person wants from a header is whether they are looking at today.
-  // The date is added the moment it is not today, because "07:20" on its own
-  // is the most confident way to show last week's numbers.
-  const when = new Date(snap.generatedAt);
-  const el0 = $('freshness');
-  let stamp;
-  if (!isFinite(when.getTime())) {
-    stamp = 'Updated at an unknown time';
-  } else {
-    const time = when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    const sameDay = when.toDateString() === new Date().toDateString();
-    stamp = sameDay
-      ? `Updated ${time}`
-      : `Updated ${when.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })} ${time}`;
-  }
-  const parts = [stamp];
-  if (snap.synthetic) parts.push('example data');
-  el0.textContent = parts.join(' · ');
-  // A daily job that has not run for 30 hours has missed one. Say so in the
-  // header's own colour rather than leaving yesterday to pass as today.
-  const hours = isFinite(when.getTime()) ? (Date.now() - when.getTime()) / 3600000 : Infinity;
-  el0.classList.toggle('stale', hours > 30);
-  el0.title = isFinite(when.getTime())
-    ? `${when.toLocaleString('en-GB')} — ${ago(snap.generatedAt)}`
-    : snap.generatedAt;
+/** The caption band's line (HOUSE 4.5): what the pane is showing, in two fixed lines. */
+function caption() {
+  const s = snap.spending, cf = snap.cashflow, tx = Array.isArray(snap.transactions) ? snap.transactions : [];
+  const inv = snap.investments, day = date(lastIso());
+  const months = cf && Array.isArray(cf.months) ? cf.months.slice(-12) : [];
+  $('capline').textContent = {
+    overview: `Accounts as read on ${day}; what no bank reports is estimated, each by the method Owned names.`,
+    owned: `Values on ${day}, each moved from a value set by hand, by the method named under it; estimates, not valuations.`,
+    spending: s && s.from && s.to ? `Payments out, ${span(plusDays(s.from, 1), s.to)}; moves between own accounts, savings and income left out.` : 'No spending breakdown in this snapshot.',
+    flow: months.length ? `Money in and out by month, ${month(months[0])} to ${month(months[months.length - 1])}; moves between own accounts left out.` : 'No monthly cash flow in this snapshot.',
+    savings: inv && inv.funds && inv.funds[0] && inv.funds[0].navDate ? `Funds priced at the NAV of ${date(inv.funds[0].navDate)}${inv.anchoredAt ? `; units counted from the transfers that bought them since ${date(inv.anchoredAt)}` : ''}.` : `Holdings on ${day}.`,
+    txns: tx.length ? `The ${fixed(tx.length, 0)} newest transactions, ${span(tx[tx.length - 1].date, tx[0].date)}, as the banks wrote them.` : 'No transactions in this snapshot.',
+  }[tab];
 }
 
-function renderSources() {
-  const wrap = $('sourcebanners');
-  wrap.innerHTML = '';
-  const srcs = Array.isArray(snap.sources) ? snap.sources : [];
+/* Pieces every pane is built from. */
+function sec(title, tag = 'h2') {
+  const c = el('section', 'sec');
+  if (title) c.append(el(tag, null, title));
+  return c;
+}
+const help = (text) => el('p', 'cap', text);
+const empty = (main, text) => main.append(el('p', 'empty', text));
+/** The one large figure of a pane (21 px, 600): the subject's own number, its lead under it. */
+function figure(main, what, value, lead) {
+  const f = el('div', 'figure');
+  f.append(el('span', 'fig-what', what), el('span', 'fig', value), el('span', 'fig-lead', lead || ''));
+  main.append(f);
+}
+const facts = () => el('dl', 'facts');
+/** A fact as a row: the quantity in words at the left, the value at the right, a note after it. */
+function fact(label, value, note) {
+  const r = el('div', 'fact'), dd = el('dd');
+  dd.append(el('b', null, value));
+  if (note) dd.append(el('span', null, note));
+  r.append(el('dt', null, label), dd);
+  return r;
+}
+/** A statement on the page: its first words at 620, the rest plain. No box, dot or color (B18). */
+function statement(lead, text) {
+  const p = el('p', 'statement');
+  if (lead) p.append(el('b', null, lead));
+  if (text) p.append(lead ? ` ${text}` : text);
+  return p;
+}
+/** Meta words joined by commas, each dropped when it repeats the name or one before it (B7, B10). */
+function meta(name, words) {
+  const seen = [String(name || '').toLowerCase()];
+  return words.filter((w) => {
+    if (!w) return false;
+    const k = String(w).toLowerCase();
+    if (seen.includes(k)) return false;
+    seen.push(k);
+    return true;
+  }).join(', ');
+}
+/** A row: the name and its meta at the left, the amount (and a line under it) at the right. */
+function row(name, metaText, amount, sub) {
+  const r = el('div', 'row'), left = el('div'), right = el('div', 'amt', amount);
+  left.append(el('div', 'nm', name));
+  if (metaText) left.append(el('div', 'meta', metaText));
+  if (sub) right.append(el('span', 'sm', sub));
+  r.append(left, right);
+  return r;
+}
+/** A row of words (HOUSE 4.3): aria-pressed buttons in a named group, the tracer under the chosen. */
+function words(name, items, cur, pick) {
+  const g = el('div', 'words');
+  g.setAttribute('role', 'group');
+  g.setAttribute('aria-label', name);
+  for (const [key, label] of items) {
+    const b = el('button', null, label);
+    b.type = 'button';
+    b.setAttribute('aria-pressed', String(key === cur));
+    b.onclick = () => pick(key);
+    g.append(b);
+  }
+  return g;
+}
+function legend(items) {
+  const l = el('div', 'legend');
+  for (const it of items) {
+    const s = el('span'), i = el('i', it.line ? 'line' : null);
+    i.style.setProperty('--c', it.color);
+    s.append(i, it.label);
+    l.append(s);
+  }
+  return l;
+}
+/** `Show the table` under a chart: the same numbers as rows (the stock's disclosure triangle is gone). */
+const tablesOpen = new Set();
+function tableToggle(host, id, headers, build) {
+  const keys = el('div', 'keys'), box = el('div', 'tableview'), b = el('button', 'textkey');
+  b.type = 'button';
+  const set = (open) => {
+    box.replaceChildren(...(open ? [table(headers, build())] : []));
+    box.hidden = !open;
+    b.textContent = open ? 'Hide the table' : 'Show the table';
+    b.setAttribute('aria-expanded', String(open));
+  };
+  b.onclick = () => { const open = !tablesOpen.has(id); if (open) tablesOpen.add(id); else tablesOpen.delete(id); set(open); };
+  set(tablesOpen.has(id));
+  keys.append(b);
+  host.append(keys, box);
+}
+function table(headers, rows) {
+  const t = el('table'), hr = el('tr'), tb = el('tbody'), th = el('thead');
+  for (const h of headers) hr.append(el('th', null, h));
+  th.append(hr);
+  for (const r of rows) {
+    const tr = el('tr');
+    for (const cell of r) tr.append(el('td', null, cell));
+    tb.append(tr);
+  }
+  t.append(th, tb);
+  return t;
+}
+/** The last day of each month in a run of days, and the last day: a table's rows for a daily line. */
+const monthEnds = (days) => days.map((d, i) => i).filter((i) => i === days.length - 1 || days[i + 1].slice(0, 7) !== days[i].slice(0, 7));
 
-  if (snap.synthetic) {
-    const b = el('div', 'banner warn');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null,
-      'These are example numbers shipped with the app. They will be replaced the first time the refresh job runs against your banks.'));
-    wrap.appendChild(b);
+/* ── charts ───────────────────────────────────────────────────────────── */
+
+/** Draw once now, and again only when the width changes: an observer's first call reports the width just
+ *  drawn at. render() disconnects every observer before it replaces the pane (after review, a nit). */
+const observers = [];
+function watch(wrap, draw) {
+  let at = wrap.clientWidth;
+  draw();
+  const o = new ResizeObserver(() => { if (wrap.clientWidth !== at) { at = wrap.clientWidth; draw(); } });
+  o.observe(wrap);
+  observers.push(o);
+}
+
+/** A line chart over days: the unit above the plot, plain tick numbers with the step's decimals, the value
+ *  axis past the largest value (B20), first and last day under it. One quantity is --amount; a pair is
+ *  --series-1 and -2. The cursor is a 1 px ink rule at 50 % with ink discs on a --page ring. */
+function lineChart(host, spec) {
+  const wrap = el('div', 'chartwrap');
+  host.append(wrap);
+  const draw = () => {
+    const W = Math.max(260, wrap.clientWidth || 320), H = 168, padL = 38, padR = 8, padT = 20, padB = 22;
+    const iw = W - padL - padR, ih = H - padT - padB, n = spec.days.length;
+    let lo = Infinity, hi = -Infinity;
+    for (const s of spec.series) for (const v of s.values) { lo = Math.min(lo, v); hi = Math.max(hi, v); }
+    if (spec.zero) lo = Math.min(0, lo);
+    const ax = axis(lo, hi, snap.currency);
+    const X = (i) => padL + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
+    const Y = (v) => padT + ih - ((v - ax.lo) / (ax.hi - ax.lo)) * ih;
+    wrap.querySelectorAll('svg').forEach((s) => s.remove());
+    const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img', 'aria-label': spec.aria });
+    svg.append(svgText({ x: padL, y: 10 }, ax.unit));
+    for (const t of ax.ticks) {
+      svg.append(svgEl('line', { x1: padL, x2: W - padR, y1: r1(Y(t.v)) + 0.5, y2: r1(Y(t.v)) + 0.5, class: t.v === 0 ? 'base' : 'grid' }));
+      svg.append(svgText({ x: padL - 5, y: r1(Y(t.v) + 3.5), 'text-anchor': 'end' }, t.label));
+    }
+    // the end mark's 4 px page casing goes under the line: it clears the gridlines from the dot, never the
+    // line's last days (after review, finding 2); the dot's own 2 px page ring sits on the line's end
+    const endAt = spec.endDot ? [r1(X(n - 1)), r1(Y(spec.series[0].values[n - 1]))] : null;
+    if (endAt) svg.append(svgEl('circle', { cx: endAt[0], cy: endAt[1], r: 5.5, fill: 'none', stroke: 'var(--page)', 'stroke-width': 4, class: 'casing' }));
+    for (const s of spec.series) {
+      svg.append(svgEl('polyline', { points: s.values.map((v, i) => `${r1(X(i))},${r1(Y(v))}`).join(' '), fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    }
+    if (endAt) svg.append(svgEl('circle', { cx: endAt[0], cy: endAt[1], r: 3.5, class: 'cdot end' }));
+    const yearOn = spec.days[0].slice(0, 4) !== spec.days[n - 1].slice(0, 4);
+    svg.append(svgText({ x: padL, y: H - 6 }, yearOn ? date(spec.days[0]) : dayMon(spec.days[0])), svgText({ x: W - padR, y: H - 6, 'text-anchor': 'end' }, date(spec.days[n - 1])));
+    const rule = svgEl('line', { y1: padT, y2: padT + ih, stroke: 'var(--ink)', opacity: 0, 'pointer-events': 'none' });
+    const dots = spec.series.map(() => svgEl('circle', { r: 3.5, class: 'cdot', opacity: 0, 'pointer-events': 'none' }));
+    const hit = svgEl('rect', { x: padL, y: 0, width: iw, height: H, fill: 'transparent' });
+    svg.append(rule, ...dots, hit);
+    wrap.prepend(svg);
+    const move = (ev) => {
+      const box = svg.getBoundingClientRect(), scale = W / box.width;
+      const i = Math.max(0, Math.min(n - 1, Math.round((((ev.clientX - box.left) * scale - padL) / iw) * (n - 1))));
+      rule.setAttribute('x1', r1(X(i)) + 0.5); rule.setAttribute('x2', r1(X(i)) + 0.5); rule.setAttribute('opacity', 0.5);
+      spec.series.forEach((s, k) => { dots[k].setAttribute('cx', r1(X(i))); dots[k].setAttribute('cy', r1(Y(s.values[i]))); dots[k].setAttribute('opacity', 1); });
+      showCard(wrap, spec.tip(i), X(i) / scale, Math.min(...spec.series.map((s) => Y(s.values[i]))) / scale);
+    };
+    const leave = () => { hideCard(wrap); rule.setAttribute('opacity', 0); dots.forEach((d) => d.setAttribute('opacity', 0)); };
+    readout(hit, wrap, move, leave);
+  };
+  watch(wrap, draw);
+}
+
+/** Paired columns by month (Cash flow): square bars, a 2 px page gap inside each pair, axis from 0. */
+function pairChart(host, spec) {
+  const wrap = el('div', 'chartwrap');
+  host.append(wrap);
+  const draw = () => {
+    const W = Math.max(260, wrap.clientWidth || 320), H = 184, padL = 38, padR = 8, padT = 20, padB = 22;
+    const iw = W - padL - padR, ih = H - padT - padB, n = spec.keys.length;
+    const ax = axis(0, Math.max(1, ...spec.a, ...spec.b), snap.currency);
+    const Y = (v) => padT + ih - (v / ax.hi) * ih;
+    const slot = iw / n, bw = Math.max(2, (slot * 0.64 - 2) / 2);
+    wrap.querySelectorAll('svg').forEach((s) => s.remove());
+    const svg = svgEl('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img', 'aria-label': spec.aria });
+    svg.append(svgText({ x: padL, y: 10 }, ax.unit));
+    const cursor = svgEl('rect', { y: padT, height: ih, width: slot, fill: 'var(--ink)', opacity: 0, 'pointer-events': 'none' });
+    svg.append(cursor);
+    for (const t of ax.ticks) {
+      svg.append(svgEl('line', { x1: padL, x2: W - padR, y1: r1(Y(t.v)) + 0.5, y2: r1(Y(t.v)) + 0.5, class: t.v === 0 ? 'base' : 'grid' }));
+      svg.append(svgText({ x: padL - 5, y: r1(Y(t.v) + 3.5), 'text-anchor': 'end' }, t.label));
+    }
+    for (let i = 0; i < n; i++) {
+      const cx = padL + slot * (i + 0.5);
+      for (const [v, color, x] of [[spec.a[i] || 0, SERIES(1), cx - 1 - bw], [spec.b[i] || 0, SERIES(2), cx + 1]]) {
+        if (v > 0) svg.append(svgEl('rect', { x: r1(x), y: r1(Y(v)), width: r1(bw), height: r1(padT + ih - Y(v)), fill: color }));
+      }
+      if (slot >= 20 || i % 2 === n % 2) svg.append(svgText({ x: r1(cx), y: H - 6, 'text-anchor': 'middle' }, month(spec.keys[i], false)));
+    }
+    const hit = svgEl('rect', { x: padL, y: 0, width: iw, height: H, fill: 'transparent' });
+    svg.append(hit);
+    wrap.prepend(svg);
+    const move = (ev) => {
+      const box = svg.getBoundingClientRect(), scale = W / box.width;
+      const i = Math.max(0, Math.min(n - 1, Math.floor(((ev.clientX - box.left) * scale - padL) / slot)));
+      cursor.setAttribute('x', r1(padL + slot * i)); cursor.setAttribute('opacity', 0.07);
+      showCard(wrap, spec.tip(i), (padL + slot * (i + 0.5)) / scale);
+    };
+    readout(hit, wrap, move, () => { hideCard(wrap); cursor.setAttribute('opacity', 0); });
+  };
+  watch(wrap, draw);
+}
+
+/* ── Overview: the Balance ────────────────────────────────────────────── */
+
+const KIND_WORD = { account: 'account', fund: 'fund', shares: 'employee shares', pension: 'pension', vehicle: 'vehicle', other: '', property: 'property', card: 'card', overdraft: 'overdrawn account', loan: 'loan', rest: '' };
+let lastBalance = null;
+
+/** The signature (ART.md section 1): the T-account, to scale, at the head of Overview. */
+function balanceSection(main) {
+  const B = balanceItems(snap), c = sec(null), wrap = el('div', 'chartwrap');
+  c.classList.add('balsec');
+  c.append(wrap);
+  main.append(c);
+  const cur = unitOf(snap.currency), word = cur === 'kr' ? 'kroner' : cur;
+  const draw = () => {
+    // at most 420 px wide, left-aligned: on a wide screen the T keeps its ruler beside it
+    const W = Math.max(280, Math.min(420, wrap.clientWidth || 320));
+    wrap.querySelectorAll('svg').forEach((s) => s.remove());
+    const svg = svgEl('svg', { width: W, role: 'img', 'aria-label': sayBalance(B, dateWords(lastIso()), word) });
+    wrap.prepend(svg);
+    const fig = svgText({ x: 0, y: -40, class: 'nw-fig' }, kr(Math.abs(B.total)));   // the words carry the sign
+    svg.append(fig);
+    const L = layout(B, W, fig.getComputedTextLength());
+    lastBalance = { B, L };
+    svg.setAttribute('viewBox', `0 0 ${W} ${L.height}`);
+    svg.setAttribute('height', L.height);
+    const add = (tag, attrs, text) => { const n = text == null ? svgEl(tag, attrs) : svgText(attrs, text); svg.insertBefore(n, fig); return n; };
+    const x0 = L.own.x0, x1 = L.owe.x1;
+    // the ruler and its hairlines, under the ink
+    add('text', { x: 0, y: 10 }, `${L.ruler.unit}${cur}`);
+    for (const t of L.ruler.ticks) {
+      add('rect', { x: x0 - 3, y: t.y, width: x1 - x0 + 6, height: 1, class: 'grid', fill: 'var(--line)' });
+      add('rect', { x: L.ruler.x - 4, y: t.y, width: 4, height: 1, fill: 'var(--ink-3)' });
+      add('text', { x: L.ruler.x - 6, y: t.y + 3.5, 'text-anchor': 'end' }, t.label);
+    }
+    add('rect', { x: L.ruler.x, y: L.top, width: 1, height: L.foot - L.top, class: 'ruler' });
+    // the T: Own and Owe over a 2 px crossbar, the stem, every block, the double rule
+    add('text', { x: L.own.x1, y: 14, 'text-anchor': 'end', class: 'head-word' }, 'Own');
+    add('text', { x: L.owe.x0, y: 14, class: 'head-word' }, 'Owe');
+    const [bx, by, bw, bh] = L.bar;
+    add('rect', { x: bx, y: by, width: bw, height: bh, class: 'ink' });
+    add('rect', { x: L.stem, y: L.top, width: 1, height: L.rules[1] + 1 - L.top, class: 'ink' });
+    for (const s of [L.own, L.owe]) for (const b of s.blocks) add('rect', { x: b.rect[0], y: b.rect[1], width: b.rect[2], height: b.rect[3], class: 'ink' });
+    for (const y of L.rules) add('rect', { x: x0, y, width: x1 - x0, height: 1, class: 'ink' });
+    // the balancing figure: the hollow bracketed, its words beside it or under the double rule
+    const h = L.hollow, tall = h.y1 > h.y0;
+    if (tall) {
+      const hx = h.side === 'owe' ? L.owe.x1 + 8 : L.own.x0 - 8, dir = h.side === 'owe' ? 4 : -4;
+      add('path', { d: `M${hx} ${h.y0 + 0.5}h${dir}V${h.y1 - 0.5}h${-dir}`, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1 });
+    }
+    const what = add('text', { class: 'nw-what' }, B.total < 0 ? 'Owed beyond what is owned' : 'Net worth');
+    if (L.words.beside) {
+      what.setAttribute('x', L.words.x); what.setAttribute('y', r1(L.words.y - 6));
+      fig.setAttribute('x', L.words.x); fig.setAttribute('y', r1(L.words.y + 16));
+    } else {   // under the double rule, ending at the drawing's right edge
+      fig.setAttribute('x', W); fig.setAttribute('y', L.words.y); fig.setAttribute('text-anchor', 'end');
+      what.setAttribute('x', r1(W - fig.getComputedTextLength() - 8)); what.setAttribute('y', L.words.y); what.setAttribute('text-anchor', 'end');
+    }
+    // labels outside the columns, at a block's middle, on a 3 px page halo; wrapped to the room there
+    for (const s of [L.own, L.owe]) {
+      let bottom = -Infinity;
+      for (const g of s.groups) {
+        if (!g.shown) continue;
+        const t = labelText(svg, fig, g.label, s.lab, g.mid);
+        const box = t.getBBox();
+        if (box.y < bottom + 2 || box.x < -0.5) { t.remove(); g.shown = false; continue; }
+        bottom = box.y + box.height;
+      }
+    }
+    // the selection mark (after review, finding 3): a 1 px page ring inset in a block 6 px or deeper; for a
+    // run of shallow blocks, a thin one, or the hollow, a 2 px ink tick outside the column along its rows
+    const mark = svgEl('g', { class: 'sel', 'pointer-events': 'none' }), hit = svgEl('rect', { x: 0, y: 0, width: W, height: L.height, fill: 'transparent' });
+    svg.append(mark, hit);
+    const select = (at) => {
+      if (!at) return mark.replaceChildren();
+      const s = (at.hollow ? L.hollow.side : at.side) === 'own' ? L.own : L.owe, one = !at.hollow && at.group.items.length === 1 && at.group.items[0].rect;
+      if (one && one[3] >= 5) return mark.replaceChildren(svgEl('rect', { x: one[0] + 1.5, y: one[1] + 1.5, width: one[2] - 3, height: one[3] - 3, fill: 'none', stroke: 'var(--page)', 'stroke-width': 1 }));
+      const [y0, y1] = at.hollow ? [L.hollow.y0, L.hollow.y1] : [at.group.y0, at.group.y1];
+      mark.replaceChildren(svgEl('rect', { x: s === L.own ? s.x0 - 4 : s.x1 + 2, y: y0, width: 2, height: Math.max(6, y1 - y0), class: 'ink' }));   // at least 6 px, to be seen
+    };
+    // the card hangs below the drawing, or beside it when the screen is wide, never over the T
+    const spots = wrap.clientWidth - W >= 300 ? [[W + 12, 8]] : [];
+    const show = (ev) => {
+      const box = svg.getBoundingClientRect(), k = W / box.width, x = (ev.clientX - box.left) * k, y = (ev.clientY - box.top) * k;
+      const at = hitAt(L, x, y);
+      select(at);
+      showCard(wrap, at.hollow ? hollowCard(B) : groupCard(B, at.side, at.group), x / k, y / k, spots);
+    };
+    readout(hit, wrap, show, () => { hideCard(wrap); select(null); });
+  };
+  watch(wrap, draw);
+  c.append(help(B.total < 0
+    ? `Owned against owed on ${date(lastIso())}, one block per account, holding or loan, to one scale; the space under what is owned is owed beyond it.`
+    : `Owned against owed on ${date(lastIso())}, one block per account, holding or loan, to one scale; the space under the debts is net worth.`));
+  return { B, c };
+}
+/** One label, wrapped by words onto as many lines as its room needs (three at most), centered on y. */
+function labelText(svg, before, text, lab, y) {
+  const t = svgEl('text', { x: lab.x, 'text-anchor': lab.anchor, class: 'halo' });
+  svg.insertBefore(t, before);
+  // break at the commas first, so "1 fund" never parts; a part still too wide breaks between its words
+  const fits = (str) => { t.textContent = str; return t.getComputedTextLength() <= lab.width; };
+  const parts = text.split(/(?<=,) /).flatMap((p) => (fits(p) ? [p] : p.split(' ')));
+  const lines = [];
+  let line = '';
+  for (const w of parts) {
+    const next = line ? `${line} ${w}` : w;
+    if (line && !fits(next) && lines.length < 2) { lines.push(line); line = w; } else line = next;
+  }
+  lines.push(line);
+  t.textContent = '';
+  lines.forEach((l, i) => t.append(svgEl('tspan', { x: lab.x, y: r1(y + 3.5 + (i - (lines.length - 1) / 2) * 12) })));
+  [...t.children].forEach((sp, i) => { sp.textContent = lines[i]; });
+  return t;
+}
+/** What a tap on a block or a run of shallow blocks reads (ART.md section 1). */
+function groupCard(B, side, g) {
+  const total = side === 'own' ? B.owned : B.owed, cur = unitOf(snap.currency);
+  if (g.items.length > 1) return { place: g.label, value: fixed(g.value, 0), unit: cur, rows: g.items.map((i) => [i.name, kr(i.value)]) };
+  const it = g.items[0], r = it.ref || {}, kind = KIND_WORD[it.kind];
+  const rows = [[side === 'own' ? 'Share of what is owned' : 'Share of what is owed', pct(it.value / total)]];
+  if (it.kind === 'card' && num(r.creditLimit) && r.creditLimit > 0) rows.push(['Limit', kr(r.creditLimit)]);
+  if (num(r.nominalRate)) rows.push(['Rate', `${pct(r.nominalRate, 2)} nominal`]);
+  if (r.basis) rows.push(['Basis', r.basis]);
+  if (num(r.changeSinceAnchor)) rows.push([`Since ${month(r.anchorDate || lastIso())}`, krs(r.changeSinceAnchor)]);
+  return { place: kind && !it.name.toLowerCase().includes(kind) ? `${it.name}, ${kind}` : it.name, value: fixed(it.value, 0), unit: cur, rows };
+}
+function hollowCard(B) {
+  const n = snap.netWorth, rows = [['Owned', kr(B.owned)], ['Owed', kr(B.owed)]];
+  if (num(n.change30d)) rows.push(['Change in 30 days', krs(n.change30d)]);
+  if (num(n.change365d)) rows.push(['Change in a year', krs(n.change365d)]);
+  return { place: B.total < 0 ? 'Owed beyond what is owned' : 'Net worth', value: fixed(Math.abs(B.total), 0), unit: unitOf(snap.currency), rows };
+}
+
+/* ── Overview ─────────────────────────────────────────────────────────── */
+
+const TYPE_WORD = { current: 'current account', savings: 'savings account', credit: 'credit card', other: 'account' };
+const sourceLabel = (id) => { const s = (snap.sources || []).find((x) => x.id === id); return s ? s.label : id; };
+const masked = (m) => (m && /\d/.test(m) ? `ending ${m.replace(/\D/g, '')}` : null);   // the data's •• is not in the face (B24)
+
+function paneOverview(main) {
+  const { B, c: bal } = balanceSection(main), n = snap.netWorth, f = facts();
+  f.append(fact('Owned', kr(B.owned)), fact('Owed', kr(B.owed)));
+  if (num(n.change30d)) f.append(fact('Change in 30 days', krs(n.change30d)));
+  if (num(n.change365d)) f.append(fact('Change in a year', krs(n.change365d)));
+  if (!num(n.change30d)) f.append(fact('Change', 'not enough history yet'));
+  bal.append(f);
+  tableToggle(bal, 'balance', ['Item', 'Side', 'Amount', 'Share'], () => [
+    ...B.own.map((i) => [i.name, 'Own', kr(i.value), pct(i.value / B.owned)]),
+    ...B.owe.map((i) => [i.name, 'Owe', kr(i.value), pct(i.value / B.owed)]),
+    ['Net worth', '', kr(B.total), ''],
+  ]);
+  statements(main);
+
+  // net worth over the chosen range
+  {
+    const c = sec('Net worth over time'), h = snap.history, total = h.days.length;
+    const k = range > 0 ? Math.min(range, total) : total, d = h.days.slice(total - k), v = h.netWorth.slice(total - k);
+    c.append(words('Time range', [[30, '30 days'], [90, '90 days'], [365, '1 year'], [0, 'All']], range, (key) => { range = key; store(STORE_RANGE, String(key)); render(); }));
+    main.append(c);
+    lineChart(c, { days: d, series: [{ values: v, color: AMOUNT }], endDot: true, aria: `Net worth each day, ${span(d[0], d[d.length - 1])}`,
+      tip: (i) => ({ place: dowDateYear(d[i]), value: fixed(v[i], 0), unit: unitOf(snap.currency), rows: [] }) });
+    c.append(help(`Net worth each day, ${span(d[0], d[d.length - 1])}; the dot is the latest.`));
+    tableToggle(c, 'networth', ['Day', 'Net worth'], () => monthEnds(d).reverse().map((i) => [date(d[i]), kr(v[i])]));
   }
 
-  for (const note of (Array.isArray(snap.notes) ? snap.notes : [])) {
-    const b = el('div', 'banner warn');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null, String(note)));
-    wrap.appendChild(b);
+  // accounts, heaviest first, cards last because they read as debt
+  const c = sec('Accounts');
+  const accs = [...snap.accounts].sort((a, b) => (a.type === 'credit') - (b.type === 'credit') || b.balance - a.balance);
+  if (!accs.length) c.append(el('p', 'empty', 'No accounts in this snapshot.'));
+  for (const a of accs) {
+    const name = a.name || 'Account';
+    const avail = num(a.available) && Math.abs(a.available - a.balance) > 0.5 ? `${kr(a.available)} available` : null;
+    c.append(row(name, meta(name, [masked(a.mask), sourceLabel(a.source), TYPE_WORD[a.type] || a.type]), kr(a.balance), avail));
   }
+  main.append(c);
 
-  for (const s of srcs) {
+  // the card bill: the one number with a deadline
+  const card = snap.accounts.find((a) => a.type === 'credit' && a.dueDate);
+  if (card) {
+    const t = sec('To pay'), left = daysBetween(today(), card.dueDate);
+    const limit = num(card.creditLimit) && card.creditLimit > 0 ? `${pct(Math.abs(card.balance) / card.creditLimit, 0)} of the ${kr(card.creditLimit)} limit` : null;
+    t.append(row(card.name, `Due ${dowDate(card.dueDate)}, ${days(left)}`, kr(Math.abs(num(card.dueAmount) ? card.dueAmount : card.balance)), limit));
+    main.append(t);
+  }
+}
+
+/** The snapshot's own notes, a source that failed or is stale, consent about to end: sentences on the page
+ *  (B18). The app's own example sentence is in About and the stamp. */
+function statements(main) {
+  const out = [];
+  for (const note of Array.isArray(snap.notes) ? snap.notes : []) out.push(Object.assign(statement(null, String(note)), { className: 'statement data' }));
+  for (const s of Array.isArray(snap.sources) ? snap.sources : []) {
     if (s.status === 'ok' || s.status === 'derived') {
-      // Consent that is about to lapse is the one thing worth saying early:
-      // once it does, the feed goes quiet rather than loud.
-      const days = s.consentExpires ? daysBetween(new Date().toISOString().slice(0, 10), s.consentExpires) : null;
-      if (days != null && days <= 21) {
-        const b = el('div', 'banner warn');
-        b.appendChild(el('span', 'dot'));
-        b.appendChild(el('span', null, days < 0
-          ? `${s.label} access has expired. Re-authorise with BankID to start the feed again.`
-          : `${s.label} access expires in ${days} ${days === 1 ? 'day' : 'days'} — re-authorise with BankID before then.`));
-        wrap.appendChild(b);
+      // Consent that is about to lapse is the one thing worth saying early: once it does, the feed goes quiet.
+      const n = s.consentExpires ? daysBetween(today(), s.consentExpires) : null;
+      if (n != null && n <= 21) {
+        out.push(n < 0 ? statement(`${s.label}: consent has ended.`, 'Authorize again with BankID to start the feed again.')
+          : statement(`${s.label}: consent ends ${days(n)}.`, 'Authorize again with BankID before then.'));
       }
       continue;
     }
-    const b = el('div', s.status === 'error' ? 'banner bad' : 'banner warn');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null,
-      `${s.label}: ${s.message || (s.status === 'error' ? 'the last refresh failed' : 'the numbers are older than the rest')}`
-      + (s.fetchedAt ? ` Last good read ${ago(s.fetchedAt)}.` : '')));
-    wrap.appendChild(b);
+    const why = String(s.message || (s.status === 'error' ? 'the last refresh failed' : 'the numbers are older than the rest')).replace(/\.$/, '');
+    out.push(statement(`${s.label}: ${why}.`, s.fetchedAt ? `Last good read ${ago(nowMs() - Date.parse(s.fetchedAt))}.` : null));
   }
-
-  const foot = srcs.map(s => {
-    const when = s.fetchedAt ? ago(s.fetchedAt) : 'never';
-    return `${s.label} — ${s.status}, read ${when}`;
-  });
-  $('foot-sources').textContent = foot.length
-    ? `Sources: ${foot.join('. ')}.`
-    : 'No sources declared in the snapshot.';
+  if (!out.length) return;
+  const c = sec(null);
+  c.append(...out);
+  main.append(c);
 }
 
-/* ── Overview ────────────────────────────────────────────────────────── */
+/* ── Owned ────────────────────────────────────────────────────────────── */
 
-function renderOverview() {
-  const n = snap.netWorth;
-  $('nw-value').textContent = kr(n.total);
+const KIND_LABEL = { property: 'property', vehicle: 'vehicle', other: 'other' };
 
-  const d = $('nw-delta');
-  d.innerHTML = '';
-  if (typeof n.change30d === 'number' && isFinite(n.change30d)) {
-    const b = el('b', n.change30d >= 0 ? 'pos' : 'neg', krSigned(n.change30d));
-    d.append(b, document.createTextNode(' in 30 days'));
-    if (typeof n.change365d === 'number' && isFinite(n.change365d)) {
-      d.append(document.createTextNode(' · '));
-      d.append(el('b', n.change365d >= 0 ? 'pos' : 'neg', krSigned(n.change365d)));
-      d.append(document.createTextNode(' in a year'));
-    }
-  } else {
-    d.textContent = 'Not enough history yet to show a change.';
+function paneOwned(main) {
+  const items = Array.isArray(snap.assets) ? snap.assets : [], loans = Array.isArray(snap.loans) ? snap.loans : [];
+  if (!items.length && !loans.length) return empty(main, 'Nothing is listed in assets.json yet; add the home, a car or anything else owned, and it appears here.');
+  const worth = items.reduce((a, i) => a + (i.value || 0), 0), owed = loans.reduce((a, l) => a + (l.balance || 0), 0);
+  const known = items.some((i) => num(i.change365d)), yr = items.reduce((a, i) => a + (num(i.change365d) ? i.change365d : 0), 0);
+  figure(main, 'Owned, less what is owed on it', kr(worth + owed), known ? `${krs(yr)} in value over a year, before the loans moved` : '');
+  const f = facts();
+  f.append(fact('Value', kr(worth)), fact('Owed on it', kr(-owed)));
+  main.append(f);
+
+  const h = snap.history;
+  if (Array.isArray(h.assets) && h.assets.length === h.days.length && Array.isArray(h.liabilities)) {
+    const c = sec('Value against what is owed'), own = h.assets, owe = h.liabilities.map((v) => Math.abs(v)), n = h.days.length;
+    main.append(c);
+    lineChart(c, { days: h.days, zero: true, series: [{ values: own, color: SERIES(1) }, { values: owe, color: SERIES(2) }], aria: 'Value of what is owned against every debt, by day',
+      tip: (i) => ({ place: `${dowDateYear(h.days[i])}, value less every debt`, value: fixed(own[i] - owe[i], 0), unit: unitOf(snap.currency), rows: [['Value', kr(own[i])], ['Every debt', kr(owe[i])]] }) });
+    c.append(legend([{ color: SERIES(1), label: `Value, ${kr(own[n - 1])}`, line: 1 }, { color: SERIES(2), label: `Every debt, ${kr(owe[n - 1])}`, line: 1 }]));
+    c.append(help(`${span(h.days[0], h.days[n - 1])}. Every debt counts the card too; the gap is net worth less cash and savings.`));
+    tableToggle(c, 'owned', ['Day', 'Value', 'Every debt'], () => monthEnds(h.days).reverse().map((i) => [date(h.days[i]), kr(own[i]), kr(owe[i])]));
   }
 
-  drawMix(n);
-  drawNetWorth();
-  document.querySelectorAll('#nw-range button').forEach(b =>
-    b.classList.toggle('is-active', +b.dataset.days === range));
-
-  // Accounts, heaviest first, with credit cards last because they read as debt.
-  const rows = $('accounts');
-  rows.innerHTML = '';
-  const accs = [...snap.accounts].sort((a, b) =>
-    (a.type === 'credit') - (b.type === 'credit') || b.balance - a.balance);
-
-  if (!accs.length) rows.appendChild(el('div', 'empty', 'No accounts in this snapshot.'));
-
-  for (const a of accs) {
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', a.name || 'Account'));
-    const bits = [a.mask, sourceLabel(a.source), TYPE_LABEL[a.type] || a.type].filter(Boolean);
-    main.appendChild(el('div', 'meta', bits.join(' · ')));
-    r.appendChild(main);
-
-    const amt = el('div', 'amount' + (a.balance < 0 ? ' neg' : ''), kr(a.balance));
-    if (typeof a.available === 'number' && isFinite(a.available) && Math.abs(a.available - a.balance) > 0.5)
-      amt.appendChild(el('span', 'sm', `${kr(a.available)} available`));
-    r.appendChild(amt);
-    rows.appendChild(r);
-  }
-
-  // The card bill gets its own block: it is the one number with a deadline.
-  const card = snap.accounts.find(a => a.type === 'credit' && a.dueDate);
-  const host = $('card-bill');
-  $('card-bill-card').hidden = !card;
-  if (card) {
-    host.innerHTML = '';
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', card.name));
-    const left = daysBetween(new Date().toISOString().slice(0, 10), card.dueDate);
-    main.appendChild(el('div', 'meta',
-      `Due ${fullDay(card.dueDate)} · ${left < 0 ? `${-left} days ago` : left === 0 ? 'today' : `in ${left} days`}`));
-    r.appendChild(main);
-    const amt = el('div', 'amount neg', kr(Math.abs(card.dueAmount ?? card.balance)));
-    if (typeof card.creditLimit === 'number' && card.creditLimit > 0)
-      amt.appendChild(el('span', 'sm', `${pct(Math.abs(card.balance) / card.creditLimit, 0)} of limit`));
-    r.appendChild(amt);
-    host.appendChild(r);
-  }
-}
-
-/** What the total is made of. A stacked bar rather than a row of splits: five
- *  components will not fit as columns at phone width, and the shares are the
- *  point. Debt is not a slice of it — it is drawn underneath, as its own row. */
-function drawMix(n) {
-  const parts = [
-    { label: 'Cash', value: n.cash || 0, color: SERIES(1) },
-    { label: 'Invested', value: n.investments || 0, color: SERIES(3) },
-    // Pension is separate from what you have invested, because you cannot
-    // reach it for decades — folding it in would flatter every other figure.
-    { label: 'Pension', value: n.pension || 0, color: SERIES(2) },
-    { label: 'Property & things', value: n.assets || 0, color: SERIES(4) },
-  ].filter(p => p.value > 0);
-
-  const svg = $('nw-mix');
-  svg.innerHTML = '';
-  const gross = parts.reduce((a, p) => a + p.value, 0);
-  const W = 320, H = 34, GAP = 2, h = 20;
-
-  if (!gross) {
-    $('nw-mixlegend').innerHTML = '';
-  } else {
-    let x = 0;
-    for (const p of parts) {
-      const w = Math.max(2, (p.value / gross) * (W - GAP * (parts.length - 1)));
-      svg.appendChild(svgEl('rect', {
-        x: x.toFixed(2), y: 0, width: w.toFixed(2), height: h, rx: 4, fill: p.color
-      }));
-      if (w > 44) {
-        const t = svgEl('text', { x: (x + w / 2).toFixed(2), y: h + 12, 'text-anchor': 'middle', class: 'dlabel' });
-        t.textContent = pct(p.value / gross, 0);
-        svg.appendChild(t);
+  if (items.length) {
+    const c = sec('What is owned');
+    c.append(help('Each moved from a value set by hand, by the method named under it.'));
+    for (const i of [...items].sort((a, b) => b.value - a.value)) {
+      const sub = num(i.changeSinceAnchor) && i.anchorValue ? `${krs(i.changeSinceAnchor)}, ${pctSigned(i.changeSinceAnchor / i.anchorValue)}` : null;
+      const r = row(i.name, meta(i.name, [KIND_LABEL[i.kind] || i.kind, i.anchorDate ? `set ${month(i.anchorDate)}` : null]), kr(i.value), sub);
+      // The method is the caveat, so it is on screen rather than in a file; for the home it is also the
+      // index's attribution, which NLOD asks for (NOTES.md).
+      if (i.basis) r.append(el('div', 'basis data', i.basis));
+      // Where the same thing can be valued more than one defensible way, the choice belongs to whoever is reading.
+      if (Array.isArray(i.variants) && i.variants.length > 1) {
+        const active = basisChoice[i.id] || i.variants[0].id;
+        r.append(words(`Valuation of ${i.name}`, i.variants.map((v) => [v.id, v.label || v.id]), active, (id) => chooseBasis(i.id, id, id === i.variants[0].id)));
       }
-      x += w + GAP;
+      c.append(r);
     }
-    const lg = $('nw-mixlegend');
-    lg.innerHTML = '';
-    for (const p of parts) lg.appendChild(legendItem(p.color, p.label, kr(p.value)));
+    main.append(c);
   }
 
-  // Debt gets its own line because subtracting it is the whole point, and a
-  // slice in the same bar would read as something you have.
-  const row = $('nw-debtrow');
-  row.innerHTML = '';
-  const owed = n.liabilities || 0;
-  if (owed) {
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', 'Less what you owe'));
-    const bits = [];
-    if (n.loans) bits.push(`${kr(Math.abs(n.loans))} in loans`);
-    if (n.cardDebt) bits.push(`${kr(Math.abs(n.cardDebt))} on the card`);
-    // This one line is a breakdown, not a subtitle — let it wrap rather than
-    // elide the half that says what the rest of the debt is.
-    const meta = el('div', 'meta wrap', bits.join(' · '));
-    main.appendChild(meta);
-    r.append(main, el('div', 'amount neg', kr(owed)));
-    row.appendChild(r);
-  }
-}
-
-const TYPE_LABEL = { current: 'Current', savings: 'Savings', credit: 'Credit card', other: 'Account' };
-
-function catLabel(id) {
-  const m = snap.categoryLabels;
-  return (m && typeof m[id] === 'string') ? m[id] : (id || '');
-}
-
-function sourceLabel(id) {
-  const s = (snap.sources || []).find(x => x.id === id);
-  return s ? s.label : id;
-}
-
-/* ── Chart helpers ───────────────────────────────────────────────────── */
-
-const SVGNS = 'http://www.w3.org/2000/svg';
-
-function svgEl(name, attrs) {
-  const n = document.createElementNS(SVGNS, name);
-  for (const k in attrs) if (attrs[k] != null) n.setAttribute(k, attrs[k]);
-  return n;
-}
-
-/** Ticks that land on round money, so the grid reads as money and not as pixels. */
-function niceTicks(lo, hi, count = 4, padTop = false) {
-  if (!(hi > lo)) { const p = Math.abs(hi) * 0.1 || 1; lo = hi - p; hi = hi + p; }
-  const raw = (hi - lo) / count;
-  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
-  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw) || 10 * mag;
-  const out = [];
-  const first = Math.floor(lo / step) * step;
-  const last = padTop ? Math.ceil(hi / step) * step : Math.floor(hi / step) * step;
-  for (let t = first; t <= last + step * 0.001; t += step) out.push(t);
-  if (!out.length) out.push(first);
-  out.step = step;
-  return out;
-}
-
-/* ── Net worth chart ─────────────────────────────────────────────────── */
-
-const NW = { x: [], y: [], days: [], vals: [] };
-
-function drawNetWorth() {
-  const svg = $('nw-chart');
-  svg.innerHTML = '';
-  const h = snap.history;
-  const total = h.days.length;
-  const n = range > 0 ? Math.min(range, total) : total;
-  const days = h.days.slice(total - n);
-  const vals = h.netWorth.slice(total - n);
-
-  const W = 320, H = 150, L = 42, R = 6, T = 10, B = 20;
-  const iw = W - L - R, ih = H - T - B;
-
-  let lo = Math.min(...vals), hi = Math.max(...vals);
-  if (lo === hi) { lo -= Math.abs(lo) * 0.02 || 1; hi += Math.abs(hi) * 0.02 || 1; }
-  const ticks = niceTicks(lo, hi, 4);
-  lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
-
-  const X = i => L + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
-  const Y = v => T + ih - ((v - lo) / (hi - lo)) * ih;
-
-  for (const t of ticks) {
-    svg.appendChild(svgEl('line', { class: 'grid', x1: L, x2: W - R, y1: Y(t).toFixed(2), y2: Y(t).toFixed(2) }));
-    const tx = svgEl('text', { x: L - 6, y: (Y(t) + 3.4).toFixed(2), 'text-anchor': 'end' });
-    tx.textContent = krAxis(t, ticks.step);
-    svg.appendChild(tx);
-  }
-
-  const line = vals.map((v, i) => `${X(i).toFixed(2)},${Y(v).toFixed(2)}`).join(' ');
-
-  const grad = svgEl('linearGradient', { id: 'nwfill', x1: 0, y1: 0, x2: 0, y2: 1 });
-  grad.appendChild(svgEl('stop', { offset: '0%', 'stop-color': SERIES(1), 'stop-opacity': .22 }));
-  grad.appendChild(svgEl('stop', { offset: '100%', 'stop-color': SERIES(1), 'stop-opacity': 0 }));
-  const defs = svgEl('defs'); defs.appendChild(grad); svg.appendChild(defs);
-
-  svg.appendChild(svgEl('polygon', {
-    points: `${L},${T + ih} ${line} ${X(n - 1).toFixed(2)},${T + ih}`, fill: 'url(#nwfill)'
-  }));
-  svg.appendChild(svgEl('polyline', {
-    points: line, fill: 'none', stroke: SERIES(1), 'stroke-width': 2,
-    'stroke-linejoin': 'round', 'stroke-linecap': 'round'
-  }));
-
-  // Only the endpoint is labelled — a number on every point goes unread.
-  const last = vals[vals.length - 1];
-  svg.appendChild(svgEl('circle', {
-    cx: X(n - 1).toFixed(2), cy: Y(last).toFixed(2), r: 3.4,
-    fill: SERIES(1), stroke: 'var(--surface-1)', 'stroke-width': 2
-  }));
-
-  const firstLbl = svgEl('text', { x: L, y: H - 5 }); firstLbl.textContent = dayLabel(days[0]);
-  const lastLbl = svgEl('text', { x: W - R, y: H - 5, 'text-anchor': 'end' }); lastLbl.textContent = dayLabel(days[n - 1]);
-  svg.append(firstLbl, lastLbl);
-
-  const cross = svgEl('line', { class: 'axis', y1: T, y2: T + ih, opacity: 0, id: 'nw-cross' });
-  const dot = svgEl('circle', { r: 4, fill: SERIES(1), stroke: 'var(--surface-1)', 'stroke-width': 2, opacity: 0, id: 'nw-dot' });
-  svg.append(cross, dot);
-
-  NW.days = days; NW.vals = vals;
-  NW.geom = { X, Y, L, R, W, n };
-  attachHover(svg, $('nw-tip'), (frac) => {
-    const i = Math.max(0, Math.min(n - 1, Math.round(frac * (n - 1))));
-    cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('opacity', 1);
-    dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(vals[i])); dot.setAttribute('opacity', 1);
-    return { x: X(i) / W, y: Y(vals[i]) / H,
-      html: `<div class="t">${esc(fullDay(days[i]))}</div><div class="v">${esc(kr(vals[i]))}</div>` };
-  }, () => { cross.setAttribute('opacity', 0); dot.setAttribute('opacity', 0); });
-}
-
-/** Pointer/touch crosshair. Hit target is the whole plot, not the 2px line. */
-function attachHover(svg, tip, at, off) {
-  const wrap = svg.parentElement;
-  const move = e => {
-    const r = svg.getBoundingClientRect();
-    const frac = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
-    const res = at(frac);
-    if (!res) return;
-    tip.innerHTML = res.html;
-    tip.style.left = `${res.x * r.width}px`;
-    tip.style.top = `${res.y * r.height - 10}px`;
-    tip.classList.add('on');
-  };
-  const end = () => { tip.classList.remove('on'); off && off(); };
-  wrap.addEventListener('pointerdown', move);
-  wrap.addEventListener('pointermove', e => { if (e.pointerType === 'mouse' || e.buttons) move(e); });
-  wrap.addEventListener('pointerup', end);
-  wrap.addEventListener('pointercancel', end);
-  wrap.addEventListener('pointerleave', end);
-}
-
-/* ── Owned ───────────────────────────────────────────────────────────── */
-
-const KIND_LABEL = { property: 'Property', vehicle: 'Vehicle', other: 'Other' };
-
-function renderOwned() {
-  const items = Array.isArray(snap.assets) ? snap.assets : [];
-  const loans = Array.isArray(snap.loans) ? snap.loans : [];
-  if (!items.length && !loans.length) {
-    paneEmpty('pane-owned',
-      'Nothing is listed in assets.json yet — add the home, a car or anything else you own and it appears here.');
-    return;
-  }
-  paneFilled('pane-owned');
-
-  const worth = items.reduce((a, i) => a + (i.value || 0), 0);
-  const owed = loans.reduce((a, l) => a + (l.balance || 0), 0);
-
-  $('own-value').textContent = kr(worth + owed);
-  $('own-assets').textContent = kr(worth);
-  const ln = $('own-loans');
-  ln.textContent = kr(Math.abs(owed));
-  ln.className = 'v num' + (owed ? ' neg' : '');
-
-  const d = $('own-delta');
-  d.innerHTML = '';
-  const yr = items.reduce((a, i) => a + (typeof i.change365d === 'number' ? i.change365d : 0), 0);
-  const known = items.some(i => typeof i.change365d === 'number');
-  if (known) {
-    d.append(el('b', yr >= 0 ? 'pos' : 'neg', krSigned(yr)),
-      document.createTextNode(' in value over a year, before the loan moved'));
-  }
-
-  const host = $('own-items');
-  $('own-items-card').hidden = !items.length;
-  host.innerHTML = '';
-  for (const i of [...items].sort((a, b) => b.value - a.value)) {
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', i.name));
-    const bits = [KIND_LABEL[i.kind] || i.kind];
-    if (i.anchorDate) bits.push(`anchored ${monthYear(i.anchorDate)}`);
-    main.appendChild(el('div', 'meta', bits.join(' · ')));
-    // The method is the caveat, so it is on screen rather than in a file.
-    main.appendChild(el('div', 'basis', i.basis || ''));
-
-    // Where the same thing can be valued more than one defensible way, the
-    // choice belongs to whoever is reading, not to the file.
-    if (Array.isArray(i.variants) && i.variants.length > 1) {
-      const active = basisChoice[i.id] || i.variants[0].id;
-      const sw = el('div', 'basis-switch');
-      i.variants.forEach((v, n) => {
-        const b = el('button', 'chip' + (v.id === active ? ' on' : ''), v.label || v.id);
-        b.type = 'button';
-        b.setAttribute('aria-pressed', String(v.id === active));
-        b.title = `${v.basis || ''} — ${kr(v.value)}`;
-        b.addEventListener('click', () => chooseBasis(i.id, v.id, n === 0));
-        sw.appendChild(b);
-      });
-      main.appendChild(sw);
+  if (loans.length) {
+    const c = sec('Loans');
+    for (const l of loans) {
+      const done = Math.max(0, Math.min(1, l.paidOff || 0));
+      const r = row(l.name, null, kr(l.balance));
+      const track = el('div', 'track'), fill = el('i');
+      fill.style.width = `${Math.max(1, done * 100)}%`;
+      track.append(fill);
+      track.setAttribute('aria-hidden', 'true');
+      const bits = [`${pct(done, 1)} of ${kr(l.principal)} repaid`];
+      if (num(l.monthlyPayment)) bits.push(`${kr(l.monthlyPayment)} a month`);
+      if (num(l.nominalRate)) bits.push(`${pct(l.nominalRate, 2)} nominal`);
+      r.append(track, el('div', 'basis', bits.join(', ')));
+      if (l.basis) r.append(el('div', 'basis data', l.basis));
+      c.append(r);
     }
-    r.appendChild(main);
-
-    const amt = el('div', 'amount', kr(i.value));
-    if (typeof i.changeSinceAnchor === 'number' && i.anchorValue) {
-      const g = i.changeSinceAnchor;
-      const sm = el('span', 'sm', `${krSigned(g)} (${pct(g / i.anchorValue, 0)})`);
-      sm.style.color = g >= 0 ? 'var(--pos)' : 'var(--neg)';
-      amt.appendChild(sm);
-    }
-    r.appendChild(amt);
-    host.appendChild(r);
+    main.append(c);
   }
-
-  const lhost = $('own-loanlist');
-  $('own-loans-card').hidden = !loans.length;
-  lhost.innerHTML = '';
-  for (const l of loans) {
-    const box = el('div', 'cat');
-    const top = el('div', 'top');
-    top.appendChild(el('div', 'nm', l.name));
-    top.appendChild(el('div', 'amount neg', kr(l.balance)));
-    box.appendChild(top);
-
-    const track = el('div', 'track');
-    const fill = el('div', 'fill is-loan');
-    const done = Math.max(0, Math.min(1, l.paidOff || 0));
-    fill.style.width = `${Math.max(1.5, done * 100)}%`;
-    track.appendChild(fill);
-    box.appendChild(track);
-
-    const foot = el('div', 'foot');
-    foot.appendChild(el('span', null, `${pct(done, 1)} of ${kr(l.principal)} repaid`));
-    if (l.monthlyPayment) foot.appendChild(el('span', null, `${kr(l.monthlyPayment)}/mo`));
-    if (typeof l.nominalRate === 'number') foot.appendChild(el('span', null, `${pct(l.nominalRate, 2)} nominal`));
-    box.appendChild(foot);
-    box.appendChild(el('div', 'basis', l.basis || ''));
-    lhost.appendChild(box);
-  }
-
-  drawOwned();
 }
 
-/** What you own against what you owe on it, from the same history the net worth
- *  line uses — two series, so a legend, and only the endpoints direct-labelled. */
-function drawOwned() {
-  const h = snap.history;
-  const card = $('own-chart-card');
-  if (!Array.isArray(h.assets) || h.assets.length !== h.days.length) {
-    card.hidden = true;
-    return;
-  }
-  card.hidden = false;
+/* ── Spending ─────────────────────────────────────────────────────────── */
 
-  const n = h.days.length;
-  const own = h.assets;
-  const owe = h.liabilities.map(v => Math.abs(v));
-  $('own-sub').textContent = `${fullDay(h.days[0])} to ${fullDay(h.days[n - 1])}. `
-    + `The gap between them is the part of your net worth that is bricks and metal.`;
-
-  const svg = $('own-chart');
-  svg.innerHTML = '';
-  const W = 320, H = 150, L = 42, R = 6, T = 10, B = 20;
-  const iw = W - L - R, ih = H - T - B;
-  let lo = 0, hi = Math.max(...own, ...owe);
-  const ticks = niceTicks(lo, hi, 4);
-  lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
-
-  const X = i => L + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
-  const Y = v => T + ih - ((v - lo) / (hi - lo)) * ih;
-
-  for (const t of ticks) {
-    svg.appendChild(svgEl('line', { class: 'grid', x1: L, x2: W - R, y1: Y(t).toFixed(2), y2: Y(t).toFixed(2) }));
-    const tx = svgEl('text', { x: L - 6, y: (Y(t) + 3.4).toFixed(2), 'text-anchor': 'end' });
-    tx.textContent = krAxis(t, ticks.step);
-    svg.appendChild(tx);
-  }
-
-  const path = arr => arr.map((v, i) => `${X(i).toFixed(2)},${Y(v).toFixed(2)}`).join(' ');
-  svg.appendChild(svgEl('polyline', {
-    points: path(own), fill: 'none', stroke: SERIES(4), 'stroke-width': 2, 'stroke-linecap': 'round'
-  }));
-  svg.appendChild(svgEl('polyline', {
-    points: path(owe), fill: 'none', stroke: SERIES(2), 'stroke-width': 2, 'stroke-linecap': 'round'
-  }));
-
-  const f = svgEl('text', { x: L, y: H - 5 }); f.textContent = dayLabel(h.days[0]);
-  const l = svgEl('text', { x: W - R, y: H - 5, 'text-anchor': 'end' }); l.textContent = dayLabel(h.days[n - 1]);
-  svg.append(f, l);
-
-  const cross = svgEl('line', { class: 'axis', y1: T, y2: T + ih, opacity: 0 });
-  svg.appendChild(cross);
-  attachHover(svg, $('own-tip'), frac => {
-    const i = Math.max(0, Math.min(n - 1, Math.round(frac * (n - 1))));
-    cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('opacity', 1);
-    return {
-      x: X(i) / W, y: Y(Math.max(own[i], owe[i])) / H,
-      html: `<div class="t">${esc(fullDay(h.days[i]))}</div>`
-        + `<div class="v">${esc(kr(own[i]))} <small>owned</small></div>`
-        + `<div class="v">${esc(kr(owe[i]))} <small>owed</small></div>`
-        + `<div class="v"><small>net</small> ${esc(kr(own[i] - owe[i]))}</div>`
-    };
-  }, () => cross.setAttribute('opacity', 0));
-
-  const lg = $('own-legend');
-  lg.innerHTML = '';
-  lg.append(legendItem(SERIES(4), 'Owned', kr(own[n - 1])),
-            legendItem(SERIES(2), 'Owed', kr(owe[n - 1])));
+/** "3 991 kr more than the 30 days before", in words, never a color (B17). */
+function versus(now, before, what) {
+  const d = now - before;
+  if (Math.abs(d) < 1) return `the same as ${what}`;
+  return `${kr(Math.abs(d))} ${d > 0 ? 'more' : 'less'} than ${what}`;
 }
 
-/* ── Spending ────────────────────────────────────────────────────────── */
-
-function renderSpending() {
+function paneSpending(main) {
   const s = snap.spending;
-  if (!s || !Array.isArray(s.categories) || !s.categories.length) {
-    paneEmpty('pane-spending', 'This snapshot carries no spending breakdown.');
-    return;
+  if (!s || !Array.isArray(s.categories) || !s.categories.length) return empty(main, 'This snapshot carries no spending breakdown.');
+  const win = s.windowDays || 30, before = `the ${count(win, 'day')} before`;
+  // The window is (from, to]: the day after `from` is its first day (B11).
+  figure(main, s.from && s.to ? `Spent, ${span(plusDays(s.from, 1), s.to)}` : `Spent in ${count(win, 'day')}`, kr(s.total),
+    num(s.previousTotal) && s.previousTotal > 0 ? versus(s.total, s.previousTotal, before) : '');
+
+  // One measure across categories is one series, so every bar is one color: hue would only repeat the length.
+  const c = sec('By category'), cats = [...s.categories].sort((a, b) => b.amount - a.amount), max = Math.max(...cats.map((x) => x.amount), 1);
+  for (const x of cats) {
+    const bits = [count(x.count || 0, 'payment')];
+    if (num(x.previous)) bits.push(x.previous > 0 ? versus(x.amount, x.previous, 'before') : 'none before');
+    const r = row(x.label || x.id, bits.join(', '), kr(x.amount));
+    const track = el('div', 'track'), fill = el('i');
+    fill.style.width = `${Math.max(1, (x.amount / max) * 100)}%`;
+    track.append(fill);
+    track.setAttribute('aria-hidden', 'true');
+    r.append(track);
+    c.append(r);
   }
-  paneFilled('pane-spending');
+  main.append(c);
 
-  $('sp-label').textContent = `Spent in ${s.windowDays || 30} days`;
-  $('sp-value').textContent = kr(s.total);
-
-  const d = $('sp-delta'); d.innerHTML = '';
-  if (typeof s.previousTotal === 'number' && s.previousTotal > 0) {
-    const diff = s.total - s.previousTotal;
-    // Spending up is the unwelcome direction, so the sign flips relative to net worth.
-    d.append(el('b', diff <= 0 ? 'pos' : 'neg', krSigned(diff)),
-      document.createTextNode(` against the ${s.windowDays || 30} days before`));
-  }
-
-  $('sp-sub').textContent = s.from && s.to
-    ? `${fullDay(s.from)} to ${fullDay(s.to)}. Ranked by size.`
-    : 'Ranked by size.';
-
-  // One measure across nominal categories is ONE series, so every bar is one
-  // colour — hue here would only re-encode the bar length.
-  const cats = [...s.categories].sort((a, b) => b.amount - a.amount);
-  const max = Math.max(...cats.map(c => c.amount), 1);
-  const host = $('sp-cats'); host.innerHTML = '';
-
-  for (const c of cats) {
-    const box = el('div', 'cat');
-    const top = el('div', 'top');
-    top.appendChild(el('div', 'nm', c.label || c.id));
-    top.appendChild(el('div', 'amount', kr(c.amount)));
-    box.appendChild(top);
-
-    const track = el('div', 'track');
-    const fill = el('div', 'fill');
-    fill.style.width = `${Math.max(1.5, (c.amount / max) * 100)}%`;
-    track.appendChild(fill);
-    box.appendChild(track);
-
-    const foot = el('div', 'foot');
-    foot.appendChild(el('span', null, `${c.count || 0} ${c.count === 1 ? 'payment' : 'payments'}`));
-    if (typeof c.previous === 'number' && c.previous > 0) {
-      const diff = c.amount - c.previous;
-      foot.appendChild(Math.abs(diff) < 1
-        ? el('span', null, 'unchanged')
-        : el('span', diff < 0 ? 'pos' : 'neg', `${krSigned(diff)} vs previous`));
-    }
-    box.appendChild(foot);
-    host.appendChild(box);
-  }
-
-  const mh = $('sp-merchants');
   const merch = Array.isArray(s.merchants) ? s.merchants : [];
-  $('sp-merch-card').hidden = !merch.length;
-  mh.innerHTML = '';
-  for (const m of merch.slice(0, 12)) {
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', m.label));
-    main.appendChild(el('div', 'meta', `${m.count} ${m.count === 1 ? 'payment' : 'payments'}`));
-    r.append(main, el('div', 'amount', kr(m.amount)));
-    mh.appendChild(r);
+  if (merch.length) {
+    const m = sec('Where it went');
+    m.append(help('The largest counterparties in the window.'));
+    for (const x of merch.slice(0, 12)) m.append(row(x.label, count(x.count, 'payment'), kr(x.amount)));
+    main.append(m);
   }
 }
 
-/* ── Cash flow ───────────────────────────────────────────────────────── */
+/* ── Cash flow ────────────────────────────────────────────────────────── */
 
-function renderFlow() {
-  const cf = snap.cashflow;
-  const rec0 = Array.isArray(snap.recurring) ? snap.recurring : [];
-  if ((!cf || !Array.isArray(cf.months) || !cf.months.length) && !rec0.length) {
-    paneEmpty('pane-flow', 'This snapshot carries no monthly cash flow.');
-    return;
+function paneFlow(main) {
+  const cf = snap.cashflow, rec = Array.isArray(snap.recurring) ? snap.recurring : [];
+  const has = cf && Array.isArray(cf.months) && cf.months.length;
+  if (!has && !rec.length) return empty(main, 'This snapshot carries no monthly cash flow.');
+  if (has) {
+    const keys = cf.months.slice(-12), start = cf.months.length - keys.length, n = keys.length;
+    const ins = (cf.in || []).slice(start).map((v) => v || 0), outs = (cf.out || []).slice(start).map((v) => v || 0);
+    const c = sec('In and out by month');
+    main.append(c);
+    pairChart(c, { keys, a: ins, b: outs, aria: `Money in and out each month, ${month(keys[0])} to ${month(keys[n - 1])}`,
+      tip: (i) => ({ place: `${month(keys[i])}, in less out`, value: signed(ins[i] - outs[i], 0), unit: unitOf(snap.currency), rows: [['In', kr(ins[i])], ['Out', kr(outs[i])]] }) });
+    const avg = (a) => a.reduce((x, y) => x + y, 0) / n;
+    c.append(legend([{ color: SERIES(1), label: `In, ${kr(avg(ins))} a month on average` }, { color: SERIES(2), label: `Out, ${kr(avg(outs))} a month on average` }]));
+    c.append(help(`${month(keys[0])} to ${month(keys[n - 1])}, one pair of bars a month; out is drawn upward.`));
+    tableToggle(c, 'flow', ['Month', 'In', 'Out', 'Net'], () => keys.map((k, i) => [month(k), kr(ins[i]), kr(outs[i]), krs(ins[i] - outs[i])]).reverse());
   }
-  paneFilled('pane-flow');
-
-  const cfCard = $('cf-chart').closest('.card');
-  cfCard.hidden = !(cf && Array.isArray(cf.months) && cf.months.length);
-  if (!cfCard.hidden) drawCashflow(cf);
-
-  const rec = Array.isArray(snap.recurring) ? snap.recurring : [];
-  $('rec-card').hidden = !rec.length;
-  const host = $('recurring'); host.innerHTML = '';
-  for (const r of rec) {
-    const row = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', r.label));
-    const bits = [r.cadence || 'repeating'];
-    if (r.nextExpected) bits.push(`next ${dayLabel(r.nextExpected)}`);
-    else if (r.lastSeen) bits.push(`last ${dayLabel(r.lastSeen)}`);
-    main.appendChild(el('div', 'meta', bits.join(' · ')));
-    row.append(main, el('div', 'amount' + (r.amount < 0 ? ' neg' : ' pos'), krSigned(r.amount)));
-    host.appendChild(row);
-  }
-}
-
-function drawCashflow(cf) {
-  const svg = $('cf-chart');
-  svg.innerHTML = '';
-  const months = cf.months.slice(-12);
-  const start = cf.months.length - months.length;
-  const ins = (cf.in || []).slice(start);
-  const outs = (cf.out || []).slice(start);
-  const n = months.length;
-
-  $('cf-sub').textContent = `${monthFull(months[0])} to ${monthFull(months[n - 1])}. Out is shown as a positive amount.`;
-
-  const W = 320, H = 180, L = 42, R = 6, T = 12, B = 24;
-  const iw = W - L - R, ih = H - T - B;
-  const hi = Math.max(...ins, ...outs, 1);
-  const ticks = niceTicks(0, hi, 4, true);   // bars need room above the tallest
-  const top = Math.max(hi, ticks[ticks.length - 1]);
-  const Y = v => T + ih - (v / top) * ih;
-
-  for (const t of ticks) {
-    svg.appendChild(svgEl('line', { class: 'grid', x1: L, x2: W - R, y1: Y(t).toFixed(2), y2: Y(t).toFixed(2) }));
-    const tx = svgEl('text', { x: L - 6, y: (Y(t) + 3.4).toFixed(2), 'text-anchor': 'end' });
-    tx.textContent = krAxis(t, ticks.step);
-    svg.appendChild(tx);
-  }
-
-  const slot = iw / n;
-  const GAP = 2;                       // surface gap between the paired bars
-  const bw = Math.max(3, (slot * 0.62 - GAP) / 2);
-
-  for (let i = 0; i < n; i++) {
-    const cx = L + slot * (i + 0.5);
-    const pairs = [[ins[i] || 0, SERIES(1), cx - GAP / 2 - bw], [outs[i] || 0, SERIES(2), cx + GAP / 2]];
-    for (const [v, col, x] of pairs) {
-      const y = Y(v), hgt = Math.max(v > 0 ? 1.5 : 0, T + ih - y);
-      if (!hgt) continue;
-      // Rounded at the data end only, so the bar stays anchored to the baseline.
-      const r = Math.min(4, bw / 2, hgt);
-      svg.appendChild(svgEl('path', {
-        d: `M${x.toFixed(2)},${(T + ih).toFixed(2)} V${(y + r).toFixed(2)} Q${x.toFixed(2)},${y.toFixed(2)} ${(x + r).toFixed(2)},${y.toFixed(2)} H${(x + bw - r).toFixed(2)} Q${(x + bw).toFixed(2)},${y.toFixed(2)} ${(x + bw).toFixed(2)},${(y + r).toFixed(2)} V${(T + ih).toFixed(2)} Z`,
-        fill: col
-      }));
+  if (rec.length) {
+    const c = sec('Repeating');
+    c.append(help('Charges that landed on a regular rhythm, as the bank writes them.'));
+    for (const r of rec) {
+      const when = r.nextExpected ? `next ${dayMon(r.nextExpected)}` : r.lastSeen ? `last ${dayMon(r.lastSeen)}` : null;
+      c.append(row(r.label, meta(r.label, [r.cadence || 'repeating', when]), krs(r.amount)));
     }
-    if (n <= 12 || i % 2 === 0) {
-      const tx = svgEl('text', { x: cx.toFixed(2), y: H - 8, 'text-anchor': 'middle' });
-      tx.textContent = monthLabel(months[i]);
-      svg.appendChild(tx);
-    }
+    main.append(c);
   }
-
-  svg.appendChild(svgEl('line', { class: 'axis', x1: L, x2: W - R, y1: T + ih, y2: T + ih }));
-
-  const band = svgEl('rect', { y: T, height: ih, width: slot, fill: 'var(--ink)', opacity: 0, id: 'cf-band' });
-  svg.insertBefore(band, svg.firstChild);
-
-  attachHover(svg, $('cf-tip'), frac => {
-    const plotFrac = (frac * W - L) / iw;              // 0 at the first slot, 1 past the last
-    const i = Math.max(0, Math.min(n - 1, Math.floor(plotFrac * n)));
-    band.setAttribute('x', L + slot * i); band.setAttribute('opacity', .05);
-    const net = (ins[i] || 0) - (outs[i] || 0);
-    return {
-      x: (L + slot * (i + 0.5)) / W, y: T / H,
-      html: `<div class="t">${esc(monthFull(months[i]))}</div>`
-        + `<div class="v">${esc(kr(ins[i] || 0))} <small>in</small></div>`
-        + `<div class="v">${esc(kr(outs[i] || 0))} <small>out</small></div>`
-        + `<div class="v"><small>net</small> ${esc(krSigned(net))}</div>`
-    };
-  }, () => band.setAttribute('opacity', 0));
-
-  const totIn = ins.reduce((a, b) => a + b, 0), totOut = outs.reduce((a, b) => a + b, 0);
-  const lg = $('cf-legend'); lg.innerHTML = '';
-  lg.append(legendItem(SERIES(1), 'In', kr(totIn / n) + ' / mo'),
-            legendItem(SERIES(2), 'Out', kr(totOut / n) + ' / mo'));
-
-  const tbl = $('cf-table');
-  tbl.innerHTML = '<thead><tr><th>Month</th><th class="n">In</th><th class="n">Out</th><th class="n">Net</th></tr></thead>';
-  const body = el('tbody');
-  for (let i = n - 1; i >= 0; i--) {
-    const tr = el('tr');
-    tr.appendChild(el('td', null, monthFull(months[i])));
-    tr.appendChild(el('td', 'n', kr(ins[i] || 0)));
-    tr.appendChild(el('td', 'n', kr(outs[i] || 0)));
-    const net = (ins[i] || 0) - (outs[i] || 0);
-    tr.appendChild(el('td', 'n' + (net >= 0 ? ' pos' : ' neg'), krSigned(net)));
-    body.appendChild(tr);
-  }
-  tbl.appendChild(body);
 }
 
-function legendItem(color, label, value) {
-  const it = el('div', 'item');
-  const sw = el('span', 'swatch'); sw.style.background = color;
-  it.append(sw, el('span', null, label));
-  if (value) it.append(el('b', null, value));
-  return it;
-}
+/* ── Savings ──────────────────────────────────────────────────────────── */
 
-/* ── Savings ─────────────────────────────────────────────────────────── */
-
-function renderSavings() {
-  const inv = snap.investments;
-  const eq = snap.equity;
-  const pen = snap.pension;
+function paneSavings(main) {
+  const inv = snap.investments, eq = snap.equity, pen = snap.pension;
   const hasFunds = inv && Array.isArray(inv.funds) && inv.funds.length;
   const hasEquity = eq && Array.isArray(eq.grants) && eq.grants.length;
   const hasPension = pen && Array.isArray(pen.accounts) && pen.accounts.length;
-  if (!hasFunds && !hasEquity && !hasPension) {
-    paneEmpty('pane-savings', 'No investments are tracked in this snapshot.');
-    return;
-  }
-  paneFilled('pane-savings');
+  if (!hasFunds && !hasEquity && !hasPension) return empty(main, 'No investments are tracked in this snapshot.');
 
-  // Headline covers all three holdings; each keeps its own section below.
-  const fundsTotal = hasFunds ? (inv.total || 0) : 0;
-  const eqTotal = hasEquity ? (eq.counted || 0) : 0;
-  const penTotal = hasPension ? (pen.total || 0) : 0;
-  // Only compare like with like. An employer's pension account is anchored to
-  // a value with no record of what went in, so counting it against a cost of
-  // nothing would report the whole balance as profit.
+  const fundsTotal = hasFunds ? inv.total || 0 : 0, eqTotal = hasEquity ? eq.counted || 0 : 0, penTotal = hasPension ? pen.total || 0 : 0;
+  // Only compare like with like. An employer's pension account is anchored to a value with no record of
+  // what went in, so counting it against a cost of nothing would report the whole balance as profit.
   const priced = [];
   if (hasFunds) priced.push({ value: fundsTotal, cost: inv.costBasis || 0 });
   if (hasEquity) priced.push({ value: eqTotal, cost: eq.costBasis || 0 });
   let unknownCost = 0;
-  if (hasPension) for (const a of pen.accounts) {
-    if (a.costBasis > 0) priced.push({ value: a.value || 0, cost: a.costBasis });
-    else unknownCost += a.value || 0;
-  }
-  const cost = priced.reduce((a, p) => a + p.cost, 0);
-  const gain = priced.reduce((a, p) => a + p.value, 0) - cost;
+  if (hasPension) for (const a of pen.accounts) { if (a.costBasis > 0) priced.push({ value: a.value || 0, cost: a.costBasis }); else unknownCost += a.value || 0; }
+  const cost = priced.reduce((a, p) => a + p.cost, 0), gain = priced.reduce((a, p) => a + p.value, 0) - cost;
+  // A percentage return means something only if everything in the total was bought. Granted shares were not,
+  // so once they are in it, "91 % on what was paid in" would be an artifact of dividing by a cost never paid.
+  const granted = hasEquity && eq.grants.some((g) => (g.vestedShares || 0) + (g.unvestedShares || 0) > 0 && !(g.costBasis > 0));
+  const lead = cost > 0 && !granted
+    ? `${krs(gain)}, ${pctSigned(gain / cost, 1)} on what was paid in${unknownCost > 0 ? `, on all but the ${kr(unknownCost)} of pension whose contributions are not recorded here` : ''}`
+    : cost > 0 ? `${krs(gain)} above what was paid; some of these shares were granted, not bought` : 'All of this was granted rather than bought.';
+  figure(main, 'Invested', kr(fundsTotal + eqTotal + penTotal), lead);
+  const f = facts();
+  if (hasFunds) f.append(fact('Funds', kr(fundsTotal)));
+  if (hasPension) f.append(fact('Pension', kr(penTotal), pen.includeInNetWorth === false ? 'not counted in net worth' : null));
+  if (hasEquity) f.append(fact('Shares', kr(eqTotal)));
+  f.append(fact('Paid in', kr(cost)));
+  main.append(f);
 
-  $('inv-value').textContent = kr(fundsTotal + eqTotal + penTotal);
-  $('inv-funds-tot').textContent = hasFunds ? kr(fundsTotal) : '—';
-  $('inv-equity-tot').textContent = hasEquity ? kr(eqTotal) : '—';
-  $('inv-pension-tot').textContent = hasPension ? kr(penTotal) : '—';
-  $('inv-cost').textContent = kr(cost);
-
-  renderPension(pen, hasPension);
-
-  // A percentage return is only meaningful if everything in the total was
-  // bought. RSUs are granted, so once they are in it, "91 % on what you paid
-  // in" is an artefact of dividing by a cost that was never paid.
-  const granted = hasEquity && eq.grants.some(g =>
-    (g.vestedShares || 0) + (g.unvestedShares || 0) > 0 && !(g.costBasis > 0));
-
-  const d = $('inv-delta'); d.innerHTML = '';
-  if (cost > 0 && !granted) {
-    d.append(el('b', gain >= 0 ? 'pos' : 'neg', krSigned(gain)),
-      document.createTextNode(` · ${pct(gain / cost)} on what you paid in`));
-    if (unknownCost > 0)
-      d.append(document.createTextNode(`, on all but the ${kr(unknownCost)} of pension`
-        + ' whose contributions are not recorded here'));
-  } else if (cost > 0) {
-    d.append(el('b', gain >= 0 ? 'pos' : 'neg', krSigned(gain)),
-      document.createTextNode(' above what you paid — some of these shares were granted, not bought'));
-  } else {
-    d.textContent = 'All of this was granted rather than bought.';
-  }
-
-  renderEquity(eq, hasEquity);
-
-  const fundCards = ['funds-head', 'inv-drift', 'inv-alloc-card', 'inv-growth-card'];
-  for (const id of fundCards) { const n = $(id); if (n) n.hidden = !hasFunds; }
-  const fundsCard = $('inv-funds') && $('inv-funds').closest('.card');
-  if (fundsCard) fundsCard.hidden = !hasFunds;
-  if (!hasFunds) return;
-
-  // Accrued units drift. Saying so is the difference between an estimate and a
-  // number pretending to be a fact.
-  const drift = $('inv-drift'); drift.innerHTML = '';
-
-  // A fund counted as zero because nothing would price it is not a fund worth
-  // zero, and a total quietly missing one is worse than a total that says so.
-  if (Array.isArray(inv.unpriced) && inv.unpriced.length) {
-    const b = el('div', 'banner bad');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null,
-      `No price could be found for ${inv.unpriced.join(', ')}, so ${inv.unpriced.length === 1 ? 'it is' : 'they are'} `
-      + 'counted as nothing in the total above. Set a navSource that resolves, or a manual price.'));
-    drift.appendChild(b);
-  }
-
-  if (inv.anchoredAt) {
-    const age = daysBetween(inv.anchoredAt, new Date().toISOString().slice(0, 10));
-    const stale = age > 120;
-    const b = el('div', stale ? 'banner warn' : 'banner');
-    if (!stale) { b.style.background = 'var(--chip)'; b.style.color = 'var(--ink-dim)'; }
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null,
-      `Units last checked against your fund provider ${age} ${age === 1 ? 'day' : 'days'} ago`
-      + (inv.accruedSince ? `, ${inv.accruedSince} purchases accrued since` : '')
-      + (stale ? '. Worth pasting the real unit counts from your provider into holdings.json.' : '.')));
-    drift.appendChild(b);
-  }
-
-  drawAllocation(inv.funds);
-
-  $('inv-sub').textContent = inv.funds[0] && inv.funds[0].navDate
-    ? `Priced at NAV of ${fullDay(inv.funds[0].navDate)}.` : '';
-
-  const host = $('inv-funds'); host.innerHTML = '';
-  for (const f of [...inv.funds].sort((a, b) => b.value - a.value)) {
-    const priced = typeof f.nav === 'number' && f.nav > 0;
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', f.name));
-    const bits = [`${nf(f.units, 4)} units`];
-    if (priced) bits.push(`NAV ${nf(f.nav, 2)}`);
-    if (f.navSource === 'stale') bits.push('price is stale');
-    if (f.navSource === 'unavailable') bits.push('no price found');
-    if (f.navSource === 'manual') bits.push('price entered by hand');
-    main.appendChild(el('div', 'meta', bits.join(' · ')));
-    r.appendChild(main);
-
-    // An unpriced fund is not a fund that lost everything. Showing "0 kr" beside
-    // "−100 %" in red says exactly that, so neither figure is drawn at all.
-    const amt = el('div', 'amount', priced ? kr(f.value) : '—');
-    if (!priced) {
-      amt.appendChild(el('span', 'sm', 'not counted'));
-    } else if (typeof f.costBasis === 'number' && f.costBasis > 0) {
-      const g = f.value - f.costBasis;
-      const sm = el('span', 'sm', `${krSigned(g)} (${pct(g / f.costBasis, 0)})`);
-      sm.style.color = g >= 0 ? 'var(--pos)' : 'var(--neg)';
-      amt.appendChild(sm);
-    }
-    r.appendChild(amt);
-    host.appendChild(r);
-  }
-
-  // A chart drawn from units alone is not a chart of the market, and saying so
-  // is the difference between an estimate and a number pretending to be one.
-  if (inv.historyBasis === 'contributions' || inv.historyBasis === 'mixed') {
-    const b = el('div', 'banner warn');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null, inv.historyBasis === 'contributions'
-      ? 'No price history was available, so the line below moves only as money goes in — the market’s part of it is missing.'
-      : 'Only some funds carry price history, so the line below is part market and part contributions.'));
-    drift.appendChild(b);
-  }
-
-  drawInvGrowth(inv);
+  const several = [hasFunds, hasEquity, hasPension].filter(Boolean).length > 1, tag = several ? 'h3' : 'h2';
+  if (hasPension) pensionSection(main, pen, several, tag);
+  if (hasFunds) fundsSection(main, inv, several, tag);
+  if (hasEquity) equitySection(main, eq, several, tag);
 }
 
-function drawAllocation(funds) {
-  const svg = $('inv-alloc');
-  svg.innerHTML = '';
-  const total = funds.reduce((a, f) => a + f.value, 0) || 1;
+function fundsSection(main, inv, several, tag) {
+  if (several) main.append(el('h2', 'group', 'Funds'));
+  // Accrued units drift. Saying so is the difference between an estimate and a number pretending to be a fact.
+  const st = sec(null), said = [];
+  // A fund counted as zero because nothing would price it is not a fund worth zero.
+  if (Array.isArray(inv.unpriced) && inv.unpriced.length) {
+    said.push(statement('No price found.', `${inv.unpriced.join(', ')} ${inv.unpriced.length === 1 ? 'is' : 'are'} counted as nothing in the total above. Set a navSource that resolves, or a price by hand.`));
+  }
+  if (inv.anchoredAt) {
+    const age = daysBetween(inv.anchoredAt, today());
+    said.push(statement(`Units last set from the provider ${days(-age)}.`, `${inv.accruedSince ? `${count(inv.accruedSince, 'purchase')} counted since. ` : ''}${age > 120 ? 'Worth pasting the real unit counts from the provider into holdings.json.' : ''}`.trim() || null));
+  }
+  if (inv.historyBasis === 'contributions' || inv.historyBasis === 'mixed') {
+    said.push(statement(null, inv.historyBasis === 'contributions'
+      ? 'No price history was available, so the value line moves only as money goes in; the market’s part of it is missing.'
+      : 'Only some funds carry price history, so the value line is part market and part contributions.'));
+  }
+  if (said.length) { st.append(...said); main.append(st); }
 
+  const funds = [...inv.funds].sort((a, b) => b.value - a.value), total = funds.reduce((a, x) => a + x.value, 0) || 1;
   // Slots are fixed and never cycled: past six funds the tail folds into Other.
-  const sorted = [...funds].sort((a, b) => b.value - a.value);
-  const shown = sorted.slice(0, 5);
-  const rest = sorted.slice(5);
-  const segs = shown.map((f, i) => ({ label: f.name, value: f.value, color: SERIES(i + 1) }));
-  if (rest.length) segs.push({
-    label: `Other (${rest.length})`, value: rest.reduce((a, f) => a + f.value, 0), color: SERIES(6)
-  });
-
-  const W = 320, H = 34, GAP = 2, h = 20;
+  const segs = funds.slice(0, 5).map((x, i) => ({ label: x.name, value: x.value, color: SERIES(i + 1) }));
+  if (funds.length > 5) segs.push({ label: `Other (${funds.length - 5})`, value: funds.slice(5).reduce((a, x) => a + x.value, 0), color: SERIES(6) });
+  const c = sec(several ? 'Holdings' : 'Funds', tag);
+  if (funds[0] && funds[0].navDate) c.append(help(`Priced at the NAV of ${date(funds[0].navDate)}.`));
+  const strip = el('div', 'chartwrap'), svg = svgEl('svg', { viewBox: '0 0 100 10', preserveAspectRatio: 'none', width: '100%', height: 10, role: 'img', 'aria-label': `Share of the funds held in each: ${segs.map((s) => `${s.label} ${pct(s.value / total)}`).join(', ')}` });
   let x = 0;
   for (const s of segs) {
-    const w = Math.max(2, (s.value / total) * (W - GAP * (segs.length - 1)));
-    svg.appendChild(svgEl('rect', { x: x.toFixed(2), y: 0, width: w.toFixed(2), height: h, rx: 4, fill: s.color }));
-    // The relief rule: three light-mode slots sit under 3:1, so the share is
-    // written on the bar wherever it fits and always in the legend.
-    if (w > 40) {
-      const tx = svgEl('text', { x: (x + w / 2).toFixed(2), y: h + 12, 'text-anchor': 'middle', class: 'dlabel' });
-      tx.textContent = pct(s.value / total, 0);
-      svg.appendChild(tx);
-    }
-    x += w + GAP;
+    const w = (s.value / total) * 100;
+    svg.append(svgEl('rect', { x: r1(x), y: 0, width: r1(Math.max(0.4, w - (segs.length > 1 ? 0.4 : 0))), height: 10, fill: s.color }));
+    x += w;
   }
+  strip.append(svg);
+  if (segs.length > 1) c.append(strip);   // one fund is 100 %, which the legend and its row already say
+  c.append(legend(segs.map((s) => ({ color: s.color, label: `${s.label}, ${kr(s.value)}, ${pct(s.value / total, 0)}` }))));
+  for (const fd of funds) {
+    const ok = num(fd.nav) && fd.nav > 0;
+    const bits = [units(fd.units)];
+    if (ok) bits.push(`NAV ${kr(fd.nav, 2)}`);
+    bits.push(NAV_WORD[fd.navSource]);
+    // An unpriced fund is not a fund that lost everything, so neither "0 kr" nor "−100 %" is drawn.
+    const sub = !ok ? null : num(fd.costBasis) && fd.costBasis > 0 ? `${krs(fd.value - fd.costBasis)}, ${pctSigned((fd.value - fd.costBasis) / fd.costBasis)}` : null;
+    c.append(row(fd.name, meta(fd.name, bits), ok ? kr(fd.value) : 'not counted', sub));
+  }
+  main.append(c);
 
-  const lg = $('inv-legend'); lg.innerHTML = '';
-  for (const s of segs) lg.appendChild(legendItem(s.color, s.label, kr(s.value)));
-}
-
-function drawInvGrowth(inv) {
-  const card = $('inv-growth-card');
   const ser = inv.series;
-  if (!ser || !Array.isArray(ser.days) || ser.days.length < 2
-      || !Array.isArray(ser.value) || ser.value.length !== ser.days.length) {
-    card.hidden = true;
-    return;
+  if (ser && Array.isArray(ser.days) && ser.days.length >= 2 && Array.isArray(ser.value) && ser.value.length === ser.days.length) {
+    const g = sec('Value against money paid in', tag), d = ser.days, v = ser.value, n = d.length;
+    const con = Array.isArray(ser.contributed) && ser.contributed.length === n ? ser.contributed : null;
+    main.append(g);
+    lineChart(g, { days: d, zero: true, series: [{ values: v, color: SERIES(1) }, ...(con ? [{ values: con, color: SERIES(2) }] : [])], aria: 'Value of the funds against the money paid in',
+      tip: (i) => ({ place: dowDateYear(d[i]), value: fixed(v[i], 0), unit: unitOf(snap.currency), rows: con ? [['Paid in', kr(con[i])], ['Gain', krs(v[i] - con[i])]] : [] }) });
+    g.append(legend([{ color: SERIES(1), label: `Value, ${kr(v[n - 1])}`, line: 1 }, ...(con ? [{ color: SERIES(2), label: `Paid in, ${kr(con[n - 1])}`, line: 1 }] : [])]));
+    g.append(help(`${span(d[0], d[n - 1])}.`));
+    tableToggle(g, 'funds', con ? ['Day', 'Value', 'Paid in'] : ['Day', 'Value'], () => monthEnds(d).reverse().map((i) => [date(d[i]), kr(v[i]), ...(con ? [kr(con[i])] : [])]));
   }
-  card.hidden = false;
-  const svg = $('inv-chart');
-  svg.innerHTML = '';
-  const days = ser.days, val = ser.value;
-  const con = Array.isArray(ser.contributed) && ser.contributed.length === days.length ? ser.contributed : null;
-  const n = days.length;
-
-  const W = 320, H = 150, L = 42, R = 6, T = 10, B = 20;
-  const iw = W - L - R, ih = H - T - B;
-  const all = con ? val.concat(con) : val;
-  let lo = Math.min(...all, 0), hi = Math.max(...all);
-  const ticks = niceTicks(lo, hi, 4);
-  lo = Math.min(lo, ticks[0]); hi = Math.max(hi, ticks[ticks.length - 1]);
-
-  const X = i => L + (i / (n - 1)) * iw;
-  const Y = v => T + ih - ((v - lo) / (hi - lo)) * ih;
-
-  for (const t of ticks) {
-    svg.appendChild(svgEl('line', { class: 'grid', x1: L, x2: W - R, y1: Y(t).toFixed(2), y2: Y(t).toFixed(2) }));
-    const tx = svgEl('text', { x: L - 6, y: (Y(t) + 3.4).toFixed(2), 'text-anchor': 'end' });
-    tx.textContent = krAxis(t, ticks.step);
-    svg.appendChild(tx);
-  }
-
-  if (con) svg.appendChild(svgEl('polyline', {
-    points: con.map((v, i) => `${X(i).toFixed(2)},${Y(v).toFixed(2)}`).join(' '),
-    fill: 'none', stroke: SERIES(2), 'stroke-width': 2, 'stroke-linecap': 'round'
-  }));
-  svg.appendChild(svgEl('polyline', {
-    points: val.map((v, i) => `${X(i).toFixed(2)},${Y(v).toFixed(2)}`).join(' '),
-    fill: 'none', stroke: SERIES(1), 'stroke-width': 2, 'stroke-linecap': 'round'
-  }));
-
-  const f = svgEl('text', { x: L, y: H - 5 }); f.textContent = dayLabel(days[0]);
-  const l = svgEl('text', { x: W - R, y: H - 5, 'text-anchor': 'end' }); l.textContent = dayLabel(days[n - 1]);
-  svg.append(f, l);
-
-  const cross = svgEl('line', { class: 'axis', y1: T, y2: T + ih, opacity: 0 });
-  svg.appendChild(cross);
-  attachHover(svg, $('inv-tip'), frac => {
-    const i = Math.max(0, Math.min(n - 1, Math.round(frac * (n - 1))));
-    cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('opacity', 1);
-    return {
-      x: X(i) / W, y: Y(Math.max(val[i], con ? con[i] : val[i])) / H,
-      html: `<div class="t">${esc(fullDay(days[i]))}</div>`
-        + `<div class="v">${esc(kr(val[i]))} <small>value</small></div>`
-        + (con ? `<div class="v">${esc(kr(con[i]))} <small>paid in</small></div>` : '')
-    };
-  }, () => cross.setAttribute('opacity', 0));
-
-  const lg = $('inv-glegend'); lg.innerHTML = '';
-  lg.append(legendItem(SERIES(1), 'Value', kr(val[n - 1])));
-  if (con) lg.append(legendItem(SERIES(2), 'Paid in', kr(con[n - 1])));
 }
 
-const GRANT_LABEL = { rsu: 'RSU', psu: 'PSU', espp: 'ESPP', option: 'Options', share: 'Shares' };
-
-/** Who the exchange rate came from. Norges Bank publishes its reference rates
- *  under NLOD, which asks that the source be credited — so the credit is
- *  printed beside the rate it produced rather than buried in a notes file. */
+const NAV_WORD = { stale: 'the price is stale', unavailable: 'no price found', manual: 'price entered by hand' };
+const GRANT_LABEL = { rsu: 'RSU', psu: 'PSU', espp: 'ESPP', option: 'options', share: 'shares' };
+/** Who the exchange rate came from. Norges Bank's reference rates are credited beside the rate they produced
+ *  rather than in a notes file. */
 const FX_SOURCE_LABEL = { 'norges-bank': 'Norges Bank', manual: 'typed in', inline: 'from the file' };
 
-/** Employee shares. Nothing here is fetched from the plan administrator — the
- *  share counts are copied out once and the calendar does the rest, so the one
- *  thing worth showing prominently is which tranches have actually landed. */
-function renderEquity(eq, has) {
-  for (const id of ['eq-head', 'eq-card', 'eq-grants-card', 'eq-vest-card']) {
-    const n = $(id);
-    if (n) n.hidden = !has;
-  }
-  if (!has) return;
-
-  $('eq-title').textContent = eq.provider || 'Employee shares';
-  const price = typeof eq.price === 'number'
-    ? `${eq.symbol || 'Share'} at ${nf(eq.price, 2)} ${eq.currency}` : 'Price unavailable';
-  const fxCredit = FX_SOURCE_LABEL[eq.fxSource] || eq.fxSource;
-  const fx = typeof eq.fxRate === 'number' && eq.currency !== 'NOK'
-    ? ` · ${nf(eq.fxRate, 4)} NOK/${eq.currency}${fxCredit ? ` (${fxCredit})` : ''}` : '';
-  const when = eq.priceDate ? ` · ${fullDay(eq.priceDate)}` : '';
-  $('eq-sub').textContent = price + fx + when;
-
-  const host = $('eq-summary');
-  host.innerHTML = '';
-
-  if (eq.error) {
-    const b = el('div', 'banner bad');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null, `These shares are not in your net worth: ${eq.error}.`));
-    host.appendChild(b);
-  }
-
-  host.appendChild(summaryRow('Vested',
-    `${nf(eq.vestedShares, 0)} shares · yours now`, eq.vested, true));
-
+/** Employee shares. Nothing here is fetched from the plan administrator: the share counts are copied out
+ *  once and the calendar does the rest, so what is worth showing is which tranches have landed. */
+function equitySection(main, eq, several, tag) {
+  if (several) main.append(el('h2', 'group', 'Employee shares'));
+  const c = sec(eq.provider || 'Employee shares', tag), cur = eq.currency || '';
+  const fxBy = FX_SOURCE_LABEL[eq.fxSource] || eq.fxSource;
+  const bits = [num(eq.price) ? `${eq.symbol || 'Share'} at ${u(fixed(eq.price, 2), cur)}` : 'price unavailable'];
+  if (num(eq.fxRate) && cur !== snap.currency) bits.push(`${u(fixed(eq.fxRate, 4), `${snap.currency} per ${cur}`)}${fxBy ? ` (${fxBy})` : ''}`);
+  if (eq.priceDate) bits.push(dowDateYear(eq.priceDate));
+  c.append(help(bits.join(', ')));
+  if (eq.error) c.append(statement('Not in net worth.', `${String(eq.error).replace(/\.$/, '')}.`));
+  const f = facts();
+  f.append(fact('Vested', kr(eq.vested), `${count(eq.vestedShares || 0, 'share')}, held now`));
+  // An unvested grant is a promise, and in Norway it is taxed as salary the moment it lands, so its worth
+  // is said both ways.
   if (eq.unvestedShares > 0) {
-    // An unvested RSU is a promise, and in Norway it is taxed as salary the
-    // moment it lands — so saying what it is worth means saying both things.
-    const meta = eq.includeUnvested
-      ? `${nf(eq.unvestedShares, 0)} shares · counted after ${pct(eq.unvestedTaxRate, 0)} tax`
-      : `${nf(eq.unvestedShares, 0)} shares · not counted in net worth`;
-    const row = summaryRow('Not vested yet', meta,
-      eq.includeUnvested ? eq.unvestedAfterTax : eq.unvested, false);
-    if (!eq.includeUnvested) row.style.opacity = '.7';
-    host.appendChild(row);
+    f.append(fact('Not vested yet', kr(eq.includeUnvested ? eq.unvestedAfterTax : eq.unvested),
+      eq.includeUnvested ? `${count(eq.unvestedShares, 'share')}, counted after ${pct(eq.unvestedTaxRate, 0)} tax` : `${count(eq.unvestedShares, 'share')}, not counted in net worth`));
   }
-
-  host.appendChild(summaryRow('In your net worth',
-    eq.includeUnvested ? 'vested, plus unvested after tax' : 'vested shares only',
-    eq.counted, true));
-
+  f.append(fact('In net worth', kr(eq.counted), eq.includeUnvested ? 'vested, and unvested after tax' : 'vested shares only'));
+  c.append(f);
   if (eq.historyBasis === 'flat' || eq.historyBasis === 'partial') {
-    const b = el('div', 'banner warn');
-    b.appendChild(el('span', 'dot'));
-    b.appendChild(el('span', null, eq.historyBasis === 'flat'
-      ? 'No price or exchange-rate history was available, so past values move only as tranches vest.'
+    c.append(statement(null, eq.historyBasis === 'flat' ? 'No price or exchange-rate history was available, so past values move only as tranches vest.'
       : 'Only one of the price and the exchange rate carries history, so part of the past line is held flat.'));
-    host.appendChild(b);
   }
+  main.append(c);
 
-  const gh = $('eq-grants');
-  gh.innerHTML = '';
-  for (const g of eq.grants) {
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', g.label));
-    const bits = [GRANT_LABEL[g.kind] || g.kind];
-    if (g.unvestedShares > 0 && g.nextVest) bits.push(`next ${monthYear(g.nextVest)}`);
-    else if (g.unvestedShares === 0) bits.push('fully vested');
-    if (g.kind === 'option' && typeof g.strike === 'number')
-      bits.push(`strike ${nf(g.strike, 2)} ${eq.currency}`);
-    main.appendChild(el('div', 'meta', bits.join(' · ')));
-    if (g.underWater) main.appendChild(el('div', 'basis', 'Under water — worth nothing at this price.'));
-    r.appendChild(main);
-
-    const amt = el('div', 'amount', kr(g.vested));
-    if (g.unvestedShares > 0)
-      amt.appendChild(el('span', 'sm', `+ ${kr(g.unvested)} to come`));
-    r.append(amt);
-    gh.appendChild(r);
+  const g = sec('Grants', tag);
+  for (const gr of eq.grants) {
+    const b = [GRANT_LABEL[gr.kind] || gr.kind];
+    if (gr.unvestedShares > 0 && gr.nextVest) b.push(`next ${month(gr.nextVest)}`);
+    else if (gr.unvestedShares === 0) b.push('fully vested');
+    if (gr.kind === 'option' && num(gr.strike)) b.push(`strike ${u(fixed(gr.strike, 2), cur)}`);
+    const r = row(gr.label, meta(gr.label, b), kr(gr.vested), gr.unvestedShares > 0 ? `and ${kr(gr.unvested)} to come` : null);
+    if (gr.underWater) r.append(el('div', 'basis', 'Under water: worth nothing at this price.'));
+    g.append(r);
   }
+  main.append(g);
 
-  const vh = $('eq-vest');
-  vh.innerHTML = '';
-  const upcoming = Array.isArray(eq.upcoming) ? eq.upcoming : [];
-  $('eq-vest-card').hidden = !upcoming.length;
-  if (upcoming.length) {
-    $('eq-vest-sub').textContent = 'Valued at today’s price — what it is actually worth '
-      + 'depends on the price on the day, and tax comes off it.';
-    for (const u of upcoming) {
-      const r = el('div', 'row');
-      const main = el('div', 'main');
-      main.appendChild(el('div', 'nm', fullDay(u.date)));
-      const days = daysBetween(new Date().toISOString().slice(0, 10), u.date);
-      main.appendChild(el('div', 'meta',
-        `${nf(u.shares, 0)} shares · ${u.label} · in ${days} days`));
-      r.append(main, el('div', 'amount', kr(u.value)));
-      vh.appendChild(r);
-    }
+  const up = Array.isArray(eq.upcoming) ? eq.upcoming : [];
+  if (up.length) {
+    const v = sec('Still to vest', tag);
+    v.append(help('Valued at today’s price; what it is worth depends on the price on the day, and tax comes off it.'));
+    for (const x of up) v.append(row(dowDateYear(x.date), meta('', [count(x.shares, 'share'), x.label, days(daysBetween(today(), x.date))]), kr(x.value)));
+    main.append(v);
   }
 }
 
-/** Pension: its own section, because it is its own kind of money — counted in
-    net worth, but not reachable for decades, and part of it an estimate rather
-    than a reading. Each account says which of the two it is and how old its
-    anchor is, so nothing here can pass for a live figure when it is not. */
-function renderPension(pen, has) {
-  for (const id of ['pen-head', 'pen-card']) { const n = $(id); if (n) n.hidden = !has; }
-  if (!has) return;
-
-  const sub = [];
-  if (!pen.includeInNetWorth) sub.push('Shown here but NOT counted in net worth.');
-  sub.push(pen.accounts.length === 1 ? 'One account.' : `${pen.accounts.length} accounts.`);
+/** Pension: its own section, because it is its own kind of money: counted in net worth, out of reach for
+    decades, and partly an estimate. Each account says which and how old its anchor is. */
+function pensionSection(main, pen, several, tag) {
+  if (several) main.append(el('h2', 'group', 'Pension'));
+  const c = sec('Locked until retirement', tag), sub = [];
+  if (pen.includeInNetWorth === false) sub.push('Shown here, not counted in net worth.');
+  sub.push(pen.accounts.length === 1 ? 'One account.' : `${fixed(pen.accounts.length, 0)} accounts.`);
   if (Array.isArray(pen.notes) && pen.notes.length) sub.push(pen.notes.join(' '));
-  $('pen-sub').textContent = sub.join(' ');
-
-  const host = $('pen-accounts');
-  host.innerHTML = '';
+  c.append(help(sub.join(' ')));
   for (const a of [...pen.accounts].sort((x, y) => (y.value || 0) - (x.value || 0))) {
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', a.label || a.id));
-    const bits = [];
-    if (a.provider) bits.push(a.provider);
-    if (a.accruedSince) bits.push(`${a.accruedSince} payment${a.accruedSince === 1 ? '' : 's'} since the anchor`);
-    if (a.note) bits.push(a.note);
-    main.appendChild(el('div', 'meta', bits.join(' · ')));
-    // How this number was arrived at, in the same place every other estimate
-    // in this app declares itself.
-    main.appendChild(el('div', 'basis', a.basis || ''));
-    r.appendChild(main);
-
-    const amt = el('div', 'amount', kr(a.value));
-    if (a.costBasis > 0) {
-      const g = (a.value || 0) - a.costBasis;
-      const sm = el('span', 'sm', `${krSigned(g)} (${pct(g / a.costBasis, 0)})`);
-      sm.style.color = g >= 0 ? 'var(--pos)' : 'var(--neg)';
-      amt.appendChild(sm);
-    }
-    r.appendChild(amt);
-    host.appendChild(r);
-  }
-
-  // The funds inside each account, where the account is priced from units.
-  const fh = $('pen-funds');
-  fh.innerHTML = '';
-  for (const a of pen.accounts) {
-    for (const f of a.funds || []) {
-      fh.appendChild(summaryRow(
-        f.name || 'Fund',
-        `${a.label} · ${nf(f.units, 4)} units` + (f.nav ? ` at ${kr(f.nav, 2)}` : '')
-        + (f.navSource && f.navSource !== 'yahoo' ? ` · ${f.navSource}` : ''),
-        f.value));
+    const name = a.label || a.id;
+    const sub2 = a.costBasis > 0 ? `${krs((a.value || 0) - a.costBasis)}, ${pctSigned(((a.value || 0) - a.costBasis) / a.costBasis)}` : null;
+    const r = row(name, meta(name, [a.provider, a.accruedSince ? `${count(a.accruedSince, 'payment')} since the anchor` : null, a.note]), kr(a.value), sub2);
+    if (a.basis) r.append(el('div', 'basis data', a.basis));
+    c.append(r);
+    for (const fd of a.funds || []) {
+      c.append(row(fd.name || 'Fund', meta(fd.name, [name, units(fd.units), num(fd.nav) ? `at ${kr(fd.nav, 2)}` : null, NAV_WORD[fd.navSource]]), kr(fd.value)));
     }
   }
+  main.append(c);
 }
 
-function summaryRow(name, meta, value, strong) {
-  const r = el('div', 'row');
-  const main = el('div', 'main');
-  main.appendChild(el('div', 'nm', name));
-  main.appendChild(el('div', 'meta', meta));
-  r.append(main, el('div', 'amount', kr(value)));
-  if (!strong) r.querySelector('.amount').style.fontWeight = '540';
-  return r;
-}
+/* ── Transactions ─────────────────────────────────────────────────────── */
 
-/* ── Transactions ────────────────────────────────────────────────────── */
+const catLabel = (id) => { const m = snap.categoryLabels; return m && typeof m[id] === 'string' ? m[id] : id || ''; };
 
-function renderTxns() {
-  const list = $('tx-list');
-  list.innerHTML = '';
+function paneTxns(main) {
   const all = Array.isArray(snap.transactions) ? snap.transactions : [];
-  if (!all.length) {
-    list.appendChild(el('div', 'empty', 'This snapshot carries no transactions.'));
-    return;
-  }
-
+  if (!all.length) return empty(main, 'This snapshot carries no transactions.');
+  const q = el('input', 'search');
+  Object.assign(q, { type: 'search', value: txQuery, placeholder: 'Search text, account or category…', autocomplete: 'off', name: 'q' });
+  q.setAttribute('inputmode', 'search');
+  q.setAttribute('aria-label', 'Search transactions');
+  const list = el('div');
+  q.oninput = () => { txQuery = q.value; txShown = 100; txList(list, all); };
+  main.append(q, list);
+  txList(list, all);
+}
+function txList(list, all) {
+  list.replaceChildren();
   const q = txQuery.trim().toLowerCase();
-  const rows = q
-    ? all.filter(t => `${t.text} ${t.account} ${t.category} ${catLabel(t.category)} ${t.source}`
-        .toLowerCase().includes(q))
-    : all;
-
-  if (!rows.length) {
-    list.appendChild(el('div', 'empty', `Nothing matches “${txQuery}”.`));
-    return;
-  }
-
-  let day = null, group = null;
+  const rows = q ? all.filter((t) => `${t.text} ${t.account} ${t.category} ${catLabel(t.category)} ${t.source}`.toLowerCase().includes(q)) : all;
+  if (!rows.length) { list.append(el('p', 'empty', `Nothing matches “${txQuery}”.`)); return; }
+  let day = null;
   for (const t of rows.slice(0, txShown)) {
-    if (t.date !== day) {
-      day = t.date;
-      group = el('div', 'daygroup');
-      group.appendChild(el('div', 'd', fullDay(day)));
-      list.appendChild(group);
-    }
-    const r = el('div', 'row');
-    const main = el('div', 'main');
-    main.appendChild(el('div', 'nm', t.text));
-    main.appendChild(el('div', 'meta', [t.account, catLabel(t.category)].filter(Boolean).join(' · ')));
-    r.append(main, el('div', 'amount' + (t.amount < 0 ? '' : ' pos'), krSigned(t.amount, 2)));
-    group.appendChild(r);
+    if (t.date !== day) { day = t.date; list.append(el('h3', 'day', dowDateYear(day))); }
+    list.append(row(t.text, meta(t.text, [t.account, catLabel(t.category)]), krs(t.amount, 2)));
   }
-
   if (rows.length > txShown) {
-    const more = el('button', 'more', `Show ${Math.min(100, rows.length - txShown)} more of ${rows.length}`);
-    more.addEventListener('click', () => { txShown += 100; renderTxns(); });
-    list.appendChild(more);
+    const more = el('button', 'textkey', `Show ${fixed(Math.min(100, rows.length - txShown), 0)} more of ${fixed(rows.length, 0)}`);
+    more.type = 'button';
+    more.onclick = () => { txShown += 100; txList(list, all); };
+    list.append(more);
   }
 }
 
-/* ── Wiring ──────────────────────────────────────────────────────────── */
+/* ── About ────────────────────────────────────────────────────────────── */
 
-$('tabs').addEventListener('click', e => {
-  const b = e.target.closest('.tab');
-  if (!b) return;
-  showTab(b.dataset.pane);
-});
-
-function showTab(name) {
-  document.querySelectorAll('.tab').forEach(t => {
-    const on = t.dataset.pane === name;
-    t.classList.toggle('is-active', on);
-    t.setAttribute('aria-selected', on ? 'true' : 'false');
-  });
-  document.querySelectorAll('.pane').forEach(p =>
-    p.classList.toggle('is-active', p.id === `pane-${name}`));
-  localStorage.setItem(STORE_TAB, name);
-  window.scrollTo({ top: 0 });
+const STATUS_WORD = { ok: 'read', derived: 'computed', stale: 'stale', error: 'failed' };
+function aboutList() {
+  const dl = $('about-list');
+  dl.replaceChildren();
+  const add = (k, v) => { if (v) dl.append(el('dt', null, `${k}:`), el('dd', null, v)); };
+  const h = snap.history.days;
+  add('Example data', snap.synthetic ? 'every account, transaction, holding and loan here was invented by scripts/make_demo_finances.py; the price index that moves the home is the real public one' : null);
+  add('Updated', full(Date.parse(snap.generatedAt)));
+  add('Currency', snap.currency === 'NOK' ? 'Norwegian kroner (kr)' : snap.currency);
+  add('History', `${count(h.length, 'day')}, ${span(h[0], h[h.length - 1])}`);
+  for (const s of Array.isArray(snap.sources) ? snap.sources : []) {
+    const at = s.fetchedAt ? `, ${full(Date.parse(s.fetchedAt))}` : '';
+    add(s.label, `${STATUS_WORD[s.status] || s.status}${at}${s.consentExpires ? `; consent to ${date(s.consentExpires)}` : ''}`);
+  }
+  add('Stale after', u(STALE_HOURS, 'hours'));
+  const B = balanceItems(snap);
+  $('about-scale').textContent = `${kr(rung(Math.max(B.owned, B.owed)))} a pixel here`;
 }
+let aboutFrom = null;
+function about(open) {
+  $('about').hidden = !open;
+  for (const id of ['head', 'main', 'band']) $(id).inert = open;
+  // with no usable data, About still opens: its prose and credits stand; This data has nothing to list
+  $('about-list').parentElement.hidden = !snap;
+  if (open) { aboutFrom = document.activeElement; if (snap) aboutList(); $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
+}
+$('stamp').onclick = () => about(true);
+$('about-close').onclick = $('about-close-2').onclick = () => about(false);
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('about').hidden) about(false); });
 
-$('nw-range').addEventListener('click', e => {
-  const b = e.target.closest('button');
-  if (!b) return;
-  range = +b.dataset.days;
-  localStorage.setItem(STORE_RANGE, String(range));
-  document.querySelectorAll('#nw-range button').forEach(x =>
-    x.classList.toggle('is-active', x === b));
-  drawNetWorth();
-});
-
-$('tx-search').addEventListener('input', e => {
-  txQuery = e.target.value;
-  txShown = 100;
-  renderTxns();
-});
-
-/* Reads are always fresh from disk, so re-reading when the app comes back to
-   the front is what makes an app opened this morning show this morning's data. */
-document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
-
-const savedTab = localStorage.getItem(STORE_TAB);
-if (savedTab && document.getElementById(`pane-${savedTab}`)) showTab(savedTab);
+// The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
+window.__fin = {
+  ready: () => !!snap && $('pane').children.length > 0,
+  pane: () => tab,
+  card: () => (openCard ? openCard.card : null),
+  balance: () => lastBalance && {
+    scale: lastBalance.L.scale, top: lastBalance.L.top, foot: lastBalance.L.foot, hollow: lastBalance.L.hollow, words: lastBalance.L.words,
+    owned: lastBalance.B.owned, owed: lastBalance.B.owed, total: lastBalance.B.total,
+    own: lastBalance.L.own.blocks.map(({ name, kind, value, y0, y1, rect }) => ({ name, kind, value, y0, y1, rect })),
+    owe: lastBalance.L.owe.blocks.map(({ name, kind, value, y0, y1, rect }) => ({ name, kind, value, y0, y1, rect })),
+    labels: [...lastBalance.L.own.groups, ...lastBalance.L.owe.groups].filter((g) => g.shown).map((g) => g.label),
+  },
+};
 
 load();
