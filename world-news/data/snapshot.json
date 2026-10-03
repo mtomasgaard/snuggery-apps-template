@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-03T18:01:25Z",
+ "generatedAt": "2026-10-03T19:02:02Z",
  "regions": [
   {
    "key": "europe",
@@ -23,7 +23,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
+     "stale": true,
      "author": "Sydney Allen"
     },
     {
@@ -33,7 +33,7 @@
      "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": false,
+     "stale": true,
      "author": "Elmira Lyapina"
     },
     {
@@ -43,7 +43,7 @@
      "link": "https://globalvoices.org/2026/09/28/after-five-years-of-war-how-do-ukrainian-small-businesses-survive/",
      "published": "2026-09-28T06:00:15Z",
      "summary": "In this interview, writer and journalist Victoria Belim-Frolova shares her observations about Russia’s war on Ukraine and how it forces “a constant process of adaptation,” especially in women-led small businesses.",
-     "stale": false,
+     "stale": true,
      "author": "Nevena Borisova"
     },
     {
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/09/23/pskovs-medieval-religious-art-is-being-appropriated-by-the-russian-state-to-support-the-invasion-of-ukraine/",
      "published": "2026-09-23T06:04:03Z",
      "summary": "In Russia, authorities are leveraging traditional medieval religious art of the once-independent city-state of Pskov to justify its invasion of Ukraine.",
-     "stale": false,
+     "stale": true,
      "author": "Daria Dergacheva"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": false,
+     "stale": true,
      "author": "Omid Memarian"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
      "published": "2026-09-15T08:33:09Z",
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     }
    ]
@@ -536,17 +536,17 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "gv-eastern-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "un-europe",
