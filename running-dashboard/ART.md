@@ -730,10 +730,10 @@ size; code by the size of every shipped `.html`, `.css` and `.js` outside `data/
 
 | | As built | Cap | Rule |
 | --- | --: | --: | --- |
-| App code | 244 937 (`app.js` 203 328, `style.css` 20 866, `index.html` 7 501, `js/block.js` 6 857, `js/units.js` 5 956, `js/palette.js` 429) | **245 000** | the lead's ruling (plan 0011 D24), the reasons in `tools/DECISIONS.md`; 63 B to spare, so anything the app gains, it pays for |
+| App code | 244 917 (`app.js` 203 308, `style.css` 20 866, `index.html` 7 501, `js/block.js` 6 857, `js/units.js` 5 956, `js/palette.js` 429) | **245 000** | the lead's ruling (plan 0011 D24), the reasons in `tools/DECISIONS.md`; 63 B to spare, so anything the app gains, it pays for |
 | Fonts | 41 291 (the house's 40 075 and the supplement's 1 216) | 160 000 | |
-| ZIP | about 1 074 300 (this file ships inside it, so its own figure moves the last digits; `check.mjs` prints the exact size) | **1 340 193** | the size before the pass × 1.25, rounded down; no face allowance: an app that swaps its own face for the house's gets none |
-| Data | 37 files, sha256 of the concatenation in sorted path order `37973fe9069081a8814e4621069ba84fa03820ac0efc6fa73406c6d04ecf180e`; `data/snapshot.json` `7c6084b9b216232ddd56def183fdf9b16301d1b5879e04c0ee8a0ef092eb849d` | byte-identical | `check.mjs` pins every file's own sha256 |
+| ZIP | about 1 075 100 (this file ships inside it, so its own figure moves the last digits; `check.mjs` prints the exact size) | **1 340 193** | the size before the pass × 1.25, rounded down; no face allowance: an app that swaps its own face for the house's gets none |
+| Data | 37 files, sha256 of the concatenation in sorted path order `871171cb856ae3da7ed869aa88a3cc335f7822ec01530fd47ae975d4eb13f0dc`; `data/snapshot.json` `d47c5c1c41fbc0243d59ec9fcabc38ed3803e27c269c994bec614008bbb36434` | pinned | `check.mjs` pins every file's own sha256 and the concatenation's; `scripts/make_demo_running_dashboard.py --check` rebuilds them byte for byte |
 
 ---
 
@@ -747,7 +747,7 @@ size; code by the size of every shipped `.html`, `.css` and `.js` outside `data/
 | 4. The SaaS-card kit | no card but the readout and About; sections between hairlines; no shadow; no gradient but the route's legend; single-quantity charts in one quiet slate, not a kit of hues |
 | 5. ALL-CAPS tracked eyebrow labels | none: sentence case, `letter-spacing` 0, no label above a value |
 | 6. Meta strings joined with middle dots | commas and sentences; the credits constant has none |
-| 7. "WORD — fragment" with a spaced em dash | none written by the app (`1.5, a spike`, `Road shoes A, 691 km`); the coaching text's own dashes are data and stay |
+| 7. "WORD — fragment" with a spaced em dash | none written by the app (`1.5, a spike`, `Road shoes A, 691 km`), and none in the demo's coaching text, which is data |
 | 8. A tinted near-black standing in for black | ink `#0f1c23` used as ink; the dark page a slate at L 0.224 |
 | 9. A monospace face for small data labels | none; the house face's figures are tabular |
 | 10. An arrow appended to links and buttons | none anywhere; `check.mjs` fails on it |

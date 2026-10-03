@@ -3570,7 +3570,7 @@ function paneHealth(main) {
     const hv = sVal('hrv');
     if (have(hv) >= 3) {
       const c2 = card('Overnight heart-rate variability',
-        `${spanNote}A single night says almost nothing; a baseline that slides down over a fortnight is the signal worth acting on.`);
+        `${spanNote}A single night says almost nothing; a baseline that slides down over two weeks is the signal worth acting on.`);
       const sm = smooth(hv);
       columnChart(c2, {
         height: 165, rows: bars(hv), lines: [{ values: sm, color: INK }],

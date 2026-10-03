@@ -158,6 +158,26 @@ each file should take is documented in the header comment at the top of `running
 (the notes' in `scripts/garmin_append.py`); what the routine reads, and how its files go in, is in
 `running-dashboard/NOTES.md`.
 
+If you set the routine up, give it these rules as well, so that what it writes reads like the rest
+of the app:
+
+- **US spelling**, with metric units: *kilometer*, *percent*, *two weeks* rather than *fortnight*.
+  Keys keep the spelling the app reads, `programme` among them.
+- **Dates in words, the way the app writes them**: day before month, `14 Sep`, `1 Nov`, with the
+  year (`14 Sep 2026`) only when it is needed. An ISO date such as `2026-09-14` goes in a date
+  field, never in a sentence.
+- **No spaced em dash** (` — `) anywhere in the text: a comma, a colon, a semicolon or parentheses
+  instead.
+- **A session's body battery is Garmin's change over that session**, the figure the pull records:
+  negative when the session drained it (a run that cost 14 points is `-14`), never the 0 to 100
+  level the watch showed at some moment.
+- **Each week of the plan gets a name that stays true after the day it was written**: its place in
+  the block (`Week 12 of 16`) or what it is for (`Taper, week 2`), never `This week` or `Next week`.
+  The app prints the week's dates after the name (`Week 12 of 16, 28 Sep to 4 Oct`), and a plan is
+  often read days after the routine wrote it.
+- **The goal's `preferences` are fragments**, lowercase and without a closing period: the app joins
+  them into one sentence (`Preferences: a; b.`).
+
 ## Do not touch
 
 - The four coaching files above — they belong to the optional daily session, not to this pull.

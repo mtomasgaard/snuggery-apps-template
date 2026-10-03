@@ -32,7 +32,7 @@ Chicago and New York City (with USGS map tiles, public domain), Berlin, London
 and Tokyo (no basemap) — read from scripts/demo_courses.json, which
 make_demo_courses.py derives from OpenStreetMap (ODbL) with bare-earth
 terrain elevations; see running-dashboard/TILES.md. A session runs its segment once, from
-a chosen kilometre of the course. None is a GPS trace of anyone's run.
+a chosen kilometer of the course. None is a GPS trace of anyone's run.
 
     python3 scripts/make_demo_running_dashboard.py            # rebuild running-dashboard/data/
     python3 scripts/make_demo_running_dashboard.py --tiles    # ...and fetch the basemap tiles
@@ -104,7 +104,7 @@ GEAR = [
 
 # ------------------------------------------------------------------ the block
 
-# Running kilometres per week, Monday to Sunday. The race week's figure is the
+# Running kilometers per week, Monday to Sunday. The race week's figure is the
 # taper before the race; the race adds its 21.1 km on the Sunday.
 WEEK_KM = [50, 54, 56,                     # base
            58, 62, 66, 40, 56, 74, 78, 46,  # build, a down week every fourth; week 8 sharpens for its 10 km
@@ -116,7 +116,7 @@ TUNE_UPS = {8: ("10 km tune-up", 10.0), 12: ("15 km tune-up", 15.0)}
 RACE = ("Copenhagen Half Marathon", 21.1)
 GOAL_HALF = "1:37:30"
 
-# Six months before week 1, oldest first: running kilometres per week and the
+# Six months before week 1, oldest first: running kilometers per week and the
 # kind of week. "off" is the cold (nothing logged but a walk), "back" the
 # first week after it, "race" the spring 10 km, "holiday" three hikes and two
 # short runs.
@@ -141,7 +141,7 @@ KINDS = {
 # ------------------------------------------------------------------ the routes
 #
 # Which sessions carry a record stream: (week index from 0, weekday from Monday)
-# → the course and the kilometre of it the session starts at. Four inside the
+# → the course and the kilometer of it the session starts at. Four inside the
 # last 21 days (embedded in the snapshot), two older (files only), so both of
 # the app's loading paths are exercised. The three US courses get map tiles.
 STREAMED = [
@@ -164,6 +164,16 @@ def load_courses():
 
 def iso(d):
     return d.isoformat()
+
+
+MONS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def day_mon(d):
+    """A date in words as the app writes one (js/units.js dayMon): day before month, fixed English
+    names, whatever the machine's locale: "14 Sep", "1 Nov". Accepts a date or an ISO string."""
+    d = date.fromisoformat(d) if isinstance(d, str) else d
+    return f"{d.day} {MONS[d.month - 1]}"
 
 
 def haversine_km(a, b):
@@ -217,7 +227,7 @@ def segment(courses, name, start_km, km):
 
 
 def elevation_gain(alts):
-    """Positive climb in metres, counting a rise only once it is 3 m above
+    """Positive climb in meters, counting a rise only once it is 3 m above
     the last trough — the hysteresis a watch applies."""
     gain, base = 0.0, alts[0]
     for a in alts[1:]:
@@ -266,7 +276,7 @@ class Session:
         self.minutes = minutes   # for sessions without distance (strength)
         self.id = None
         self.hr_series = []      # per-minute HR
-        self.course = None       # a streamed session: course name and the kilometre it starts at
+        self.course = None       # a streamed session: course name and the kilometer it starts at
         self.start_km = 0.0
         self.week = None         # 0-based week of the block
 
@@ -427,7 +437,7 @@ def plan_block(race_sunday, today, rng):
 def hr_series(session, rng):
     """One HR value per minute, from a warm-up ramp into the kind's mean with
     a slow wobble; intervals alternate hard and easy after the warm-up; a
-    long run drifts upward and its last three kilometres go to goal pace."""
+    long run drifts upward and its last three kilometers go to goal pace."""
     minutes = session_minutes(session)
     target = KINDS[session.kind]["hr"] if session.kind in KINDS else 118
     series = []
@@ -474,8 +484,18 @@ def zone_seconds(series):
     return z
 
 
+def bb_change(z, day_factor):
+    """The body-battery change over a session, in the shape a real pull writes it (Garmin's
+    differenceBodyBattery, garmin_pull.py): negative, since a run drains it. Sized to the session's
+    duration and effort: each minute costs its heart-rate zone's number in tenths of a point, a
+    tenth in zone 1 up to half a point in zone 5. `day_factor` (0.85 to 1.15) stands for the day's
+    stress and sleep; it is one draw from the generator, as the level it replaces was, so every
+    later draw, and every other number, stays as it was. At least 1."""
+    return -max(1, int(round(sum(z[k] / 60 * (k + 1) for k in range(5)) * day_factor / 10)))
+
+
 def zone_km(series, km):
-    """Kilometres per zone at an even pace; zk[5] is the distance below the
+    """Kilometers per zone at an even pace; zk[5] is the distance below the
     Z1 floor (the first warm-up minute, at most)."""
     floors = ATHLETE["zoneFloors"]
     per_min = km / max(1, len(series))
@@ -491,7 +511,7 @@ def zone_km(series, km):
 
 def stream_rows(session, courses, rng):
     """Per-second rows in the pull's shape: sec,distM,hr,spdMps,cad,altM,pwr,lat,lon,
-    following the session's course segment from its start kilometre."""
+    following the session's course segment from its start kilometer."""
     pts, cum, alts = course_geometry(courses, session.course)
     total_s = session_minutes(session) * 60
     base_pace = pace_of(session)
@@ -693,12 +713,18 @@ PLAN_ZONES = {"easy": [55, 45, 0, 0, 0], "recovery": [70, 30, 0, 0, 0], "steady"
 PLAN_WHY = {"easy": "Easy means easy; the quality days need it.", "recovery": "Legs only. Heart rate under 140.",
             "steady": "Comfortably hard, not a tempo.", "tempo": "Twenty minutes at goal-half pace inside an easy run.",
             "intervals": "3-minute reps at 5 km effort, 2-minute floats; the last as fast as the first.",
-            "long": "The last three kilometres at goal pace, the rest conversational.",
+            "long": "The last three kilometers at goal pace, the rest conversational.",
             "race": "Even pace; a check on the goal, not a target in itself.",
             "strength": "Squats, single-leg deadlifts, calf raises, planks."}
 PLAN_ALT = {"easy": "Tired: shorter, not slower than 6:00.", "recovery": "A walk is fine.", "steady": "Flat: easy instead.",
             "tempo": "Flat: 2 × 10 min.", "intervals": "Flat: 4 reps and go home.", "long": "Skip the fast finish if the legs say so.",
             "race": "Warm: start 5 s/km slower.", "strength": "Half the load in a heavy week."}
+
+
+def week_label(w):
+    """A plan week's label: its place in the block ("Week 12 of 16"), which stays true after the day it
+    was written, where "This week" would not. The app adds the week's dates after it."""
+    return f"Week {w + 1} of {len(WEEK_KM)}"
 
 
 def plan_week(sessions, label, target_km, intensity):
@@ -742,12 +768,12 @@ def coaching(done, planned, today, race, weekly):
         return round(sum(beats) / len(beats)) if beats else KINDS["easy"]["hr"]
     easy_recent = mean_hr([s for s in done if s.kind == "easy" and s.day > today - timedelta(days=14)])
     easy_build = mean_hr([s for s in done if s.kind == "easy" and 3 <= (s.week or -1) <= 9])
-    easy_line = (f"the easy runs averaged {easy_recent} bpm over the last fortnight against {easy_build} through "
+    easy_line = (f"the easy runs averaged {easy_recent} bpm over the last two weeks against {easy_build} through "
                  f"the build, which in a peak week is fatigue talking, not fitness"
                  if easy_recent > easy_build + 1 else
                  f"the easy runs are holding at {easy_recent} bpm, where they sat through the build, which is the "
                  f"number that says the volume is being absorbed")
-    race_day = race.strftime("%-d %B")
+    race_day = day_mon(race)
     assessment = {
         "updated": iso(today),
         "verdict": "On track",
@@ -758,26 +784,26 @@ def coaching(done, planned, today, race, weekly):
                     "touch under its monthly line and readiness in the middle of its range rather than the top. "
                     "That is the expected cost of a 78 km week, not a warning, and "
                     "the taper is built to pay it back. Sunday's 15 km is the last hard check before the last big "
-                    "week. Run it as a rehearsal — race shoes, race breakfast, even pace from the first kilometre — "
+                    "week. Run it as a rehearsal (race shoes, race breakfast, even pace from the first kilometer) "
                     "and let the time be whatever it is."),
         "metrics": [
             {"label": "Weeks done", "value": f"{weeks_done} of 16", "note": "the tune-up week in progress"},
-            {"label": "Biggest week", "value": f"{biggest['km']:.0f} km", "note": f"week of {biggest['monday']}"},
+            {"label": "Biggest week", "value": f"{biggest['km']:.0f} km", "note": f"week of {day_mon(biggest['monday'])}"},
             {"label": "10 km tune-up", "value": hms(t10), "note": f"{hms(t_spring - t10)} up on May"},
             {"label": "Goal", "value": GOAL_HALF, "note": f"{RACE[0]}, {race_day}"},
         ],
         "sections": [
             {"title": "Before the block", "tone": "neutral",
              "body": ["Six months of ordinary weeks at 30–48 km before the block started: a winter base, two weeks "
-                      "off with a cold in March, a spring 10 km in May, a lighter week on holiday in June. The block "
-                      "is built on that, not on nothing — which is why 50 km in week one was a step and not a jump."],
+                      "off with a cold in March, a spring 10 km in May, a lighter week on vacation in June. The block "
+                      "is built on that, not on nothing, which is why 50 km in week one was a step and not a jump."],
              "bullets": []},
             {"title": "Volume", "tone": "good",
-             "body": ["Eleven weeks from 50 km to 78, with a down week every fourth — 40 and 46 km — and those two "
+             "body": ["Eleven weeks from 50 km to 78, with a down week every fourth (40 and 46 km), and those two "
                       "weeks are what let the weeks after them go higher. This week sharpens around Sunday's 15 km; "
                       "next week is the last big one at 76 km, then a three-week taper."],
              "bullets": ["Six runs a week, one strength session, one walk with the stroller.",
-                         f"Long run up to {longest:.0f} km, the last three kilometres at goal pace."]},
+                         f"Long run up to {longest:.0f} km, the last three kilometers at goal pace."]},
             {"title": "Intensity", "tone": "good",
              "body": ["About four fifths of the running time is easy or steady and one fifth is hard, which is the "
                       "split the block was written for. The tempo runs have held goal-half pace at a heart rate just "
@@ -787,8 +813,8 @@ def coaching(done, planned, today, race, weekly):
             {"title": "Recovery", "tone": "neutral",
              "body": ["HRV dipped this week, which is what the first peak week does; sleep has held near seven and "
                       "a half hours across the block and resting heart rate has not moved. Readiness is moderate, as "
-                      "it should be inside a peak fortnight. If HRV is still under its line the day before the "
-                      "tune-up, that day's easy run becomes a walk — the race rehearsal matters more than 8 km."],
+                      "it should be inside the two peak weeks. If HRV is still under its line the day before the "
+                      "tune-up, that day's easy run becomes a walk: the race rehearsal matters more than 8 km."],
              "bullets": []},
             {"title": "Fitness", "tone": "good",
              "body": [f"The 10 km tune-up in week 8 ({hms(t10)}) landed where a {GOAL_HALF} half would put it, "
@@ -819,7 +845,7 @@ def coaching(done, planned, today, race, weekly):
         "tone": "good",
         "headline": f"Sharpen this week, one last big week, then three weeks of taper into {RACE[0].split()[0]}.",
         "why": ("The block was written as base, build with a down week every fourth, two peak weeks and a "
-                "three-week taper. Eleven weeks in, every phase has landed within a few kilometres of the plan, so "
+                "three-week taper. Eleven weeks in, every phase has landed within a few kilometers of the plan, so "
                 "the last five weeks stay as written. The taper cuts volume, not intensity: a short tempo stays in "
                 "every week to race week so the legs keep the feel of goal pace while the fatigue drains out."),
         "goal": {
@@ -827,15 +853,15 @@ def coaching(done, planned, today, race, weekly):
             "text": f"Run {RACE[0]} in {GOAL_HALF}.",
             "race": {"name": RACE[0], "date": iso(race), "distanceKm": 21.1, "start": "09:30",
                      "expect": GOAL_HALF, "source": "entered by hand"},
-            "preferences": ["Nothing new on race day — the shoes, the breakfast and the gels are the ones the long runs used.",
-                            "Long runs on Sunday mornings; the tempo on Wednesday; Monday is strength."],
+            "preferences": ["nothing new on race day (the shoes, the breakfast and the gels are the ones the long runs used)",
+                            "long runs on Sunday mornings, the tempo on Wednesday and strength on Monday"],
             "strength": {"from": iso(planned[0].day), "perWeek": 1, "day": "Monday",
-                         "programme": ["Squats, single-leg deadlifts, calf raises, planks — 40 minutes."],
+                         "programme": ["Squats, single-leg deadlifts, calf raises and planks, 40 minutes."],
                          "notes": "Kept through the taper at half the load; the last session ten days out."},
         },
         "weeks": [
-            plan_week(this_week, "This week", f"{WEEK_KM[11]} km", "sharpening; the 15 km tune-up on Sunday"),
-            plan_week(next_week, "Next week", f"{WEEK_KM[12]} km", f"the last big week; the last {longest:.0f} km long run"),
+            plan_week(this_week, week_label(11), f"{WEEK_KM[11]} km", "sharpening; the 15 km tune-up on Sunday"),
+            plan_week(next_week, week_label(12), f"{WEEK_KM[12]} km", f"the last big week; the last {longest:.0f} km long run"),
         ],
         "horizon": [
             {"w": iso(this_monday + timedelta(days=7 * i)),
@@ -846,8 +872,8 @@ def coaching(done, planned, today, race, weekly):
              "note": {0: "Tune-up Sunday.", 1: "The last big week.", 2: "Taper.", 4: f"{RACE[0]}."}.get(i, "")}
             for i in range(len(horizon_km))
         ],
-        "after": (f"The plan ends at {RACE[0]}. What comes after it — a recovery fortnight, then whatever the "
-                  f"next goal is — gets written after the race, with the race in the data."),
+        "after": (f"The plan ends at {RACE[0]}. What comes after it (two weeks of recovery, then whatever the "
+                  f"next goal is) gets written after the race, with the race in the data."),
         "guardrails": ["Nothing new on race day.",
                        "Easy means easy: under 150 on the easy days, every time.",
                        "A down week every fourth week, no exceptions.",
@@ -873,17 +899,17 @@ def coaching(done, planned, today, race, weekly):
             {"key": "10K", "label": "10 km", "mine": hms(t10 - 25), "low": hms(t10 - 50), "high": hms(t10 + 10), "confidence": "moderate",
              "why": f"Raced in week 8, {hms(t_spring - t10)} faster than the spring 10 km; the four weeks since were the biggest of the block, so a rested 10 km would be quicker still."},
             {"key": "half", "label": "Half marathon", "mine": "1:37:10", "low": "1:35:45", "high": "1:38:40", "confidence": "moderate",
-             "why": f"One tune-up and the long runs' goal-pace finishes point here; Sunday's 15 km ({iso(tune_15k.day)}) will narrow it."},
+             "why": f"One tune-up and the long runs' goal-pace finishes point here; Sunday's 15 km ({day_mon(tune_15k.day)}) will narrow it."},
             {"key": "marathon", "label": "Marathon", "mine": None, "low": None, "high": None, "confidence": "none",
              "why": f"No long run past {longest:.0f} km; nothing to anchor a marathon on."},
         ],
         "summary": (f"Two 10 km races a spring apart anchor the half: {hms(t_spring)} in May and {hms(t10)} in week 8. "
                     "The long runs' goal-pace finishes agree with them, and Sunday's 15 km is the next fix. 1:37:10 is "
-                    "the middle of the range — the low end needs the taper to land and a cool morning, the high end is "
+                    "the middle of the range: the low end needs the taper to land and a cool morning, the high end is "
                     "what a warm day or a fast first 5 km would cost."),
         "outlook": {"horizon": "race day", "condition": "on plan, not yet rested", "5K": "21:05", "10K": hms(t10 - 25), "half": "1:37:10"},
         "method": ["Riegel from the week-8 tune-up, shaded by the block's volume and the taper still to come.",
-                   "The range is the two anchors' spread plus the one to two per cent a taper usually gives."],
+                   "The range is the two anchors' spread plus the one to two percent a taper usually gives."],
         "analysed": iso(today),
     }
     return assessment, plan, racecast
@@ -1005,7 +1031,7 @@ def write_raw(raw, done, planned, today, race, courses, rng, tiles_dir):
                              "intervals": "VO2 max", "long": "Base", "race": "Threshold"}.get(s.kind, "Base"),
                             int(round(sum(z[k] / 60 * (k + 1) for k in range(5)) * 1.1)),
                             int(round((z[1] + z[2]) / 60)), int(round((z[3] + z[4]) / 60)),
-                            elev, elev, 30 + elev, 30, int(rng.uniform(55, 95)), "", "", round(1000 / (pace_of(s) * 60) * 1.25, 2), ""])
+                            elev, elev, 30 + elev, 30, bb_change(z, rng.uniform(0.85, 1.15)), "", "", round(1000 / (pace_of(s) * 60) * 1.25, 2), ""])
             if s.course or s.race:
                 n = int(math.ceil(s.km))
                 for lap in range(1, n + 1):

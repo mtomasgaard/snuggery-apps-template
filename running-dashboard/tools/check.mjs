@@ -6,7 +6,8 @@
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
 //   4. js/ holds the three modules, fonts/ the house face, its OFL.txt and the ₂ supplement at the
 //      sha256 HOUSE.md and NOTES.md pin; NOTES.md, TILES.md and About credit the face word for word;
-//   5. the data is untouched: each of the 37 data files' sha256 as recorded before the pass;
+//   5. the data is pinned: each of the 37 data files' sha256 and their concatenation's, as the data follow-up
+//      rebuilt them (scripts/make_demo_running_dashboard.py --check rebuilds them byte for byte);
 //   6. miniapp.json is valid, its name unchanged;
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word, in the band on every pane;
@@ -115,9 +116,11 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && read('TILES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/geist/i.test(shipped.filter((f) => /\.(md|html|css|js)$/.test(f)).map(read).join('\n')),
   'the face is credited word for word in NOTES.md, TILES.md and About ("Type: …"); Geist is named in no shipped .md, .html, .css or .js file, ART.md included');
 
-// 5. The data is untouched (the hashes recorded before the pass, ART.md section 6)
+// 5. The data is pinned (the hashes as the data follow-up rebuilt it, tools/DECISIONS.md; ART.md section 6). Only the
+// snapshot changed then (the body battery as a change, the coaching text's words); the streams and tiles are as before the pass.
+const DATA_ALL = '871171cb856ae3da7ed869aa88a3cc335f7822ec01530fd47ae975d4eb13f0dc';
 const DATA_SHA = {
-  'data/snapshot.json': '7c6084b9b216232ddd56def183fdf9b16301d1b5879e04c0ee8a0ef092eb849d',
+  'data/snapshot.json': 'd47c5c1c41fbc0243d59ec9fcabc38ed3803e27c269c994bec614008bbb36434',
   'data/streams/demo-0203.json': '4a07c044fd9238f53374f8d203ad32d3399441b562fab3393159d1b38ecb53b2',
   'data/streams/demo-0221.json': '99bc1ad6ce5bfd45028c522e15a5dbd01ee7d50ee2ae1dbd9713e97a0f17ca90',
   'data/streams/demo-0237.json': '614c9e8d2c34d311c54923ce6c01416067dae1859d7e7c0990a818536b67a5c1',
@@ -159,8 +162,8 @@ const DATA_SHA = {
   const data = shipped.filter((f) => f.startsWith('data/')).sort();
   const off = Object.entries(DATA_SHA).filter(([f, want]) => !fs.existsSync(path.join(APP, f)) || sha(f) !== want).map(([f]) => f);
   const all = crypto.createHash('sha256').update(Buffer.concat(data.map((f) => fs.readFileSync(path.join(APP, f))))).digest('hex');
-  ok(off.length === 0 && JSON.stringify(data) === JSON.stringify(Object.keys(DATA_SHA).sort()),
-    `data/: the ${Object.keys(DATA_SHA).length} files byte-identical to before the pass (concatenation ${all.slice(0, 8)}…${all.slice(-7)})${off.length ? ': changed ' + off.join(', ') : ''}`);
+  ok(off.length === 0 && JSON.stringify(data) === JSON.stringify(Object.keys(DATA_SHA).sort()) && all === DATA_ALL,
+    `data/: the ${Object.keys(DATA_SHA).length} files as the data follow-up rebuilt them (concatenation ${all.slice(0, 8)}…${all.slice(-7)})${off.length ? ': changed ' + off.join(', ') : ''}`);
 }
 
 // 6. miniapp.json
@@ -340,10 +343,10 @@ console.log(`     stored in the ZIP: data/ ${fmt(stored((n) => n.startsWith('dat
 ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 1,072,155 before the pass × 1.25)`);
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The
-// coaching text's words are data, written by the demo's generator (owner call 5): allowed by file and word.
+// demo's coaching text is US English since the data follow-up; its keys keep the spelling the code reads.
 {
   const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|synchronis\w*|analys(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|judgement\w*|for ever)\b/gi;
-  const ALLOW = { 'data/snapshot.json': ['kilometre', 'kilometres', 'analysed', 'programme'] };
+  const ALLOW = { 'data/snapshot.json': ['analysed'] };   // the race forecast's `analysed` key
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
     const allow = ALLOW[f] || [];

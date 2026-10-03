@@ -86,7 +86,7 @@ they do not.
 | `zones.csv` | the pull | seconds in each heart-rate zone, per session |
 | `gear.csv` | the pull | the gear each session used — shoes, mostly |
 | `splits.csv` | the pull | Garmin's run/walk split of each outdoor run |
-| `details.csv` | the pull | cadence, stride, ground contact, power, training effect, elevation, feel and effort, per session, for the last six months |
+| `details.csv` | the pull | cadence, stride, ground contact, power, training effect, elevation, the body-battery change over the session (Garmin's own figure, negative for a drain), feel and effort, per session, for the last six months |
 | `laps.csv` | the pull | one row per lap, for the last six months |
 | `weather.csv` | the pull | the weather-station observation Garmin attaches to an outdoor session |
 | `zonekm.csv` | the pull | kilometers run in each zone, counted second by second from the record stream with the zone floors in `context.json` as they were at the time |
@@ -197,7 +197,9 @@ python3 scripts/garmin_append.py notes < notes.json
 The shapes of the assessment, the plan and the race forecast are in the
 header comment of `app.js`; the notes' shape is in the docstring of
 `scripts/garmin_append.py`. This repository has no recipe for the routine
-itself. What it writes, and how, is yours to decide.
+itself. What it writes, and how, is yours to decide; `PROMPT.md` gives the few
+rules that make its words read like the rest of the app (US spelling, dates as
+`14 Sep`, week names that stay true), and the demo's text follows them.
 
 The demo's evaluation, plan, race forecast and session notes were written for
 the demo runner from the demo's own numbers, to show what the routine's output

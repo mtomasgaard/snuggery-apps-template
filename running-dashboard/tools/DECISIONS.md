@@ -1583,3 +1583,173 @@ On an iPhone with iOS 18 and one with iOS 26:
   rows of words as pressed buttons, and the Block's label;
 - the readout card at the screen's edges and hung under the Block;
 - safe areas and the caption band over the home indicator; landscape (`now` over the Block's column).
+
+---
+
+## The data follow-up (2026-10-02)
+
+Owner call 5, as the review and the final widened it, done after the pass as the lead ruled (D22): the
+demo's data rebuilt by its generator, with a session's body battery as Garmin's change, the coaching
+text in US English with the app's dates and plain punctuation, and the plan's weeks named so they stay
+true; `PROMPT.md` gives a copy's coaching routine the same rules. Every figure below was printed by a
+command run on this Mac. The throwaway scripts (`structdiff.py`, `texts.py`, `dom.mjs`, `heads.mjs`)
+and the rebuilds are in `tools/.work/data-followup/` (gitignored). Nothing in `app.js`, `js/`,
+`style.css` or `index.html` changed.
+
+### The generator (`scripts/make_demo_running_dashboard.py`, 32 lines out, 58 in)
+
+- **The body battery as a change.** The session's row of `details.csv` wrote `int(rng.uniform(55,
+  95))`, a level, where `garmin_pull.py` (line 301) writes Garmin's `differenceBodyBattery`, the change
+  over the session. `bb_change(z, day_factor)` now writes a negative change sized to the session's
+  duration and effort: each minute costs its heart-rate zone's number in tenths of a point (a tenth in
+  zone 1, half a point in zone 5), times a factor of 0.85 to 1.15 for the day's stress and sleep,
+  rounded, at least 1. The factor is `rng.uniform(0.85, 1.15)`: one draw, at the place of the old
+  level's one draw, so every later draw, and every other number in the data, is what it was (the diff
+  below shows it).
+  - **Why tenths.** A twelfth was tried first (−29 to −3). Tenths put the demo on the scale of the one
+    real pull the repository quotes, the example in `app.js`'s header (`"bb":-6` on a 52-minute session
+    Garmin labeled recovery): the demo's recovery runs of 24 to 59 minutes read −3 to −10, median −5.
+  - **Measured on the rebuild**, the 121 sessions with detail (118 outdoor runs, 3 on the treadmill):
+    −34 to −3. By kind, median and range: long runs −25.5 (−20 to −34, 75 to 128 min), intervals −17
+    (−9 to −25), the two 10 km races −16 and −17, tempo runs −14 (−7 to −28), easy runs −10 (−3 to
+    −16), steady runs −6 (−3 to −10), recovery runs −5 (−3 to −10), treadmill recovery −5 (−3 to −7).
+    Per hour, medians: easy 10.7, long 16.7, intervals 19.4, tempo 20.7. The newest session (the
+    intervals of 30 Sep, 55 min) is −20, the easy run of 29 Sep −12, the 24 km long run of 20 Sep
+    (2 h 08) −34.
+- **Dates in the app's words.** `day_mon()` writes `14 Sep` and `1 Nov` with fixed English names, as
+  `js/units.js` does. It replaces `race.strftime("%-d %B")` (`1 November`; `%-d` is not portable) and
+  the two ISO dates in prose (`week of 2026-09-14`; `Sunday's 15 km (2026-10-04)`).
+- **The week labels.** `week_label()` names the plan's two weeks by their place in the block, `Week 12
+  of 16` and `Week 13 of 16`, for `This week` and `Next week`. Not the dated label the brief suggested:
+  `weekCard()` in `app.js` already heads a week `${w.label}, ${dayMon(start)} to ${dayMon(end)}`, so a
+  label with dates in it would print them twice (`28 Sep to 4 Oct, 28 Sep to 4 Oct`). The heading now
+  reads `Week 12 of 16, 28 Sep to 4 Oct`: dated by the app, and true on any day. The field is still
+  `label`.
+- **The coaching text, words only** (19 strings): `kilometre(s)` to `kilometer(s)` (the four places);
+  `fortnight` out (`inside the two peak weeks`, `two weeks of recovery`, and `over the last two weeks`
+  in the easy days' sentence's other branch, which the committed day does not take); `on holiday` to
+  `on vacation`; `per cent` to `percent`; the eleven
+  spaced em dashes to parentheses, commas or a colon; `1 November` to `1 Nov` (twice); the two ISO
+  dates as above. For example: `Run it as a rehearsal (race shoes, race breakfast, even pace from the
+  first kilometer) and let the time be whatever it is.`; `What comes after it (two weeks of recovery,
+  then whatever the next goal is) gets written after the race, with the race in the data.`; `1:37:10 is
+  the middle of the range: the low end needs the taper to land and a cool morning, …`.
+- **The goal's preferences, punctuation.** Beyond the em dash: the two preferences were sentences with
+  closing periods, and `panePlan()` joins them as `Preferences: a; b.`, so Plan printed `… the long runs
+  used.; Long runs on Sunday mornings; the tempo on Wednesday; Monday is strength..`. They are fragments
+  now, the shape `app.js`'s header shows: `nothing new on race day (the shoes, the breakfast and the gels
+  are the ones the long runs used)` and `long runs on Sunday mornings, the tempo on Wednesday and
+  strength on Monday`. The strength line reads `Squats, single-leg deadlifts, calf raises and planks,
+  40 minutes.`
+- **The generator's own comments** spell `kilometer` and `meters` now (nine lines); they write nothing.
+
+### Deterministic, and nothing else moved
+
+- **Two runs, byte-identical.** From `Template/`, `python3 scripts/make_demo_running_dashboard.py
+  --out-root <scratch> --today 2026-09-30 --keep-raw <scratch>/raw`, twice, each over a copy of the
+  committed tiles (as `--check` builds): `diff -r` silent over 63 files (the 37 of `data/` and the raw
+  store's 26), the snapshot's sha256 `d47c5c1c…bb36434` both times. Repeated with the final file (after
+  the comments): silent again, identical to the first pair, and its `data/` identical to the committed
+  one.
+- **The structural diff against the shipped `data/`** (`structdiff.py`): the same 37 paths, 36 of them
+  byte-identical (the 30 tiles and the 6 stream files). `snapshot.json`: 140 changed leaves, 121 of them
+  `activities[].dt.bb` (every session with detail: 55 to 94 before, all positive; −34 to −3 after, all
+  negative integers) and 19 coaching strings (the evaluation 8, the plan 8, the race forecast 3);
+  **anything else: 0**. The 248 session ids identical and in order, all `demo-`; every session's date,
+  start, distance, duration, heart rate, zones, zone kilometers, laps, weather and gear unchanged, and
+  every detail field but `bb`; the four embedded streams' route points unchanged; every top-level key but
+  `activities`, `assessment`, `plan` and `racecast` unchanged. The 21 session notes needed nothing. The
+  snapshot is 408 115 B (408 116 before); its eleven em dashes are gone, its eight en dashes (ranges)
+  stay.
+- **The generator's own check.** Before anything was copied: `--check --out-root <the rebuild>` printed
+  `check: the committed data is what the generator makes` and `--verify --out-root …` `verify: ok`;
+  against the shipped `data/`, `--check` drifted on `snapshot.json` alone, as it should. After the copy,
+  from `Template/`: `python3 scripts/make_demo_running_dashboard.py --check` prints `check: the
+  committed data is what the generator makes`, and `--verify` prints `verify: ok`. On three other days
+  (`--today` 2026-10-05, 2026-10-11 and 2026-12-02) the generator writes `Week 12 of 16` and `Week 13 of
+  16`, `week of 21 Sep`, `8 Nov` and `(11 Oct)`, no em dash and no ISO date in prose, and `verify: ok`.
+
+### What the copy changed
+
+- `data/snapshot.json`, renamed into place; the other 36 files untouched.
+- `tools/check.mjs`: the snapshot's pin `7c6084b9…92eb849d` to
+  `d47c5c1c41fbc0243d59ec9fcabc38ed3803e27c269c994bec614008bbb36434` (the other 36 pins were already
+  right); the concatenation `37973fe9…ecf180e` to
+  `871171cb856ae3da7ed869aa88a3cc335f7822ec01530fd47ae975d4eb13f0dc`, which the check printed but did
+  not pin and now pins (`DATA_ALL`); the item's words (`as the data follow-up rebuilt them`); and the
+  US-spelling allowance for `data/snapshot.json`, from `kilometre`, `kilometres`, `analysed` and
+  `programme` to `analysed` alone (the race forecast's key; the plan's `programme` key is already
+  stripped by the check's rule for it). Run over the shipped snapshot, the narrowed allowance flags its
+  four `kilometre(s)`; over the rebuild, nothing.
+- `ART.md`, section 6: the data row's two hashes and its rule (pinned; `--check` rebuilds them byte for
+  byte), and the ZIP's `about 1 075 100` (`check.mjs`: 1 075 078 B; zipped alone, the snapshot stores
+  48 B smaller, `PROMPT.md` 622 B larger, `NOTES.md` 113 B and `ART.md` 41 B). Section 7, tell 7: `and
+  none in the demo's coaching text, which is data`, for `the coaching text's own dashes are data and
+  stay`. None of the Block's figures changed (`test_block.mjs`, below).
+- `NOTES.md`: `details.csv`'s row names the body-battery change (Garmin's own figure, negative for a
+  drain), and the coaching text's section points to `PROMPT.md`'s rules. `NOTES.md` records no hash of
+  the data, so there was none to change.
+- `PROMPT.md`, under *Optional: the coaching text*, the routine's rules in the guide's voice: US
+  spelling with metric units; dates as `14 Sep` and `1 Nov`, ISO dates in date fields only; no spaced
+  em dash; a session's body battery as Garmin's change (`-14`), never a level; week names that stay
+  true (`Week 12 of 16`, `Taper, week 2`), since the app prints the dates after them; the goal's
+  preferences as fragments.
+
+### On screen
+
+`dom.mjs` served the app with each `data/` in headless Chromium (390 × 844, `shoot.mjs`'s clock: what
+the page draws, never phone evidence) and read the panes. Before, then after:
+- **Sessions**, all 248 listed, each clicked: the 121 with detail show `Body battery change`, `+55` to
+  `+94` before (`+76` on the intervals of 30 Sep, `+66` on the easy run of 29 Sep), `−34` to `−3` after,
+  every one with the true minus (`−20`, `−12`).
+- **Plan's week headings**: `This week, 28 Sep to 4 Oct` and `Next week, 5 Oct to 11 Oct`, then `Week 12
+  of 16, 28 Sep to 4 Oct` and `Week 13 of 16, 5 Oct to 11 Oct`, one line each at 320 and at 390 px (177
+  and 178 px wide, in 288 at 320 px; `heads.mjs`).
+- **Plan, The goal**: `Preferences: Nothing new on race day — the shoes, … used.; Long runs on Sunday
+  mornings; the tempo on Wednesday; Monday is strength..`, then `Preferences: nothing new on race day
+  (the shoes, … used); long runs on Sunday mornings, the tempo on Wednesday and strength on Monday.`
+- **Now**, the evaluation's facts: `Biggest week 78 km, week of 2026-09-14`, then `week of 14 Sep`;
+  `Goal 1:37:30, Copenhagen Half Marathon, 1 November`, then `1 Nov`. No em dash and no `kilometre` on
+  Now after.
+- No console error or warning, page error or failed response, before or after.
+
+### Verified (2026-10-02, from `Template/running-dashboard/` unless noted)
+
+- `node tools/check.mjs`: `all checks pass` (`data/: the 37 files as the data follow-up rebuilt them
+  (concatenation 871171cb…b13f0dc)`; `US spelling in 18 shipped text files, the data's own words allowed
+  by file`).
+- `node tools/test_block.mjs`: `all 15 pass` (the Block as before: 49.8 … 77.8, 45.9 and 24.0 km; the
+  outlines 76, 62, 48 and 49).
+- `python3 running-dashboard/tools/art/palette.py` (from `Template/`): `ALL CHECKS PASS`.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, no `SCREENSHOTS`: `all checks pass`, 116 checks, no console
+  error in any context; `screenshots/app.png` untouched.
+- `python3 scripts/make_demo_running_dashboard.py --check` (from `Template/`): `check: the committed data
+  is what the generator makes`.
+
+### Left alone, and why
+
+- **Relative words in the prose** (`This week sharpens …`, `HRV dipped this week`, the plan's headline
+  `Sharpen this week, …`, `Sunday's 15 km`): the evaluation and the plan are dated (`Plan written 30
+  Sep`) and read as of that day. The fault was the week headings, which are not dated.
+- **Month names in prose** (`in March`, `in May`, `in June`) are months, not dates. **Ranges** keep
+  their en dashes (`30–48 km`, `168–176`, `km 0–10`).
+- **The keys** `programme` and `analysed`, the shape the code and the routine share; **`niggle`,
+  `mileage` and `2:00 up on May`**, which are in US use.
+- **`PROMPT.md`'s own spaced em dashes**, in its prose from before the pass: the rules were added, and
+  sweeping the guide is a separate edit.
+- **Outside this follow-up's files**, for the lead: `app.js` line 3573 says `over a fortnight` (the app's
+  own string); `docs/MANUAL_STEPS.md` line 3308 still calls the data's faults pending;
+  `App/Snuggery/Resources/StarterPack/live/running-dashboard.zip`, last written at 17:48 by the other
+  work on this Mac (its file time; `screenshots/app.png` and `docs/marketing/` at 17:49), before the
+  snapshot was copied at 17:55, so it carries the data as it was; and `ART.md`'s app-code row says
+  244 937 B (`app.js` 203 328) where `check.mjs` measures 244 919 B (`app.js` 203 310), a difference
+  this follow-up did not make.
+
+### Phone checks this adds (not claimed here)
+
+On an iPhone with iOS 18 and one with iOS 26:
+- a session's `Body battery change −20`: that VoiceOver says the minus (U+2212), and that the figure
+  reads as a drain beside Health's 0 to 100 levels;
+- Plan's `Week 12 of 16, 28 Sep to 4 Oct` at the largest accessibility text size (one line at 320 px in
+  Chromium at the default size);
+- the goal's `Preferences: …` read by VoiceOver as one sentence.
