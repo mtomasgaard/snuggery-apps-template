@@ -171,8 +171,8 @@ SOURCES = {
     "Global Voices": {
         "attribution": "Headlines, summaries and links from Global Voices, "
                        "used under CC BY 3.0.",
-        "licence": "Creative Commons Attribution 3.0 — credit the author, link "
-                   "to the licence, and indicate changes: the summaries here "
+        "licence": "Creative Commons Attribution 3.0. Credit the author, link "
+                   "to the license, and indicate changes: the summaries here "
                    "are the feed's own line, shortened.",
         "terms": "https://creativecommons.org/licenses/by/3.0/",
     },
@@ -185,7 +185,7 @@ SOURCES = {
     },
     "The Conversation": {
         "attribution": "Headlines, bylines and links from The Conversation.",
-        "licence": "Creative Commons Attribution–NoDerivatives 4.0 — credit the "
+        "licence": "Creative Commons Attribution–NoDerivatives 4.0. Credit the "
                    "author and their institution and link back. Nothing of "
                    "theirs is changed here: the headline stands as written and "
                    "no article text is carried.",

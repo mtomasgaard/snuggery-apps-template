@@ -1246,7 +1246,7 @@ figures into its `ART.md`.
 | Snug Kart | 619 403 (after its pass and the family fixes of 2026-10-02) | 720 806 | 242 778 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
 | Running Dashboard | 1 075 089 (after its pass, the data follow-up and the family fixes of 2026-10-02) | 1 340 193 | 244 994 of 245 000 (the lead's rulings, plan 0011 D23–D24; held at 236 521 before them) | 41 291 |
 | Finances | about 129 800 (after its pass; `ART.md`'s own size moves the last digits) | 131 000 (the lead's ruling, plan 0011 D27; 125 304 by D5's formula) | 123 733 of 200 000 | 40 075 |
-| World News | 86 948 (after its pass; `ART.md`'s own size moves the last digits) | 88 000 (the lead's ruling, plan 0011 D30; 72 140 by D5's formula) | 46 119 of 200 000 | 40 075 |
+| World News | 86 993 (after its pass and the data follow-up of 2026-10-02; `ART.md`'s own size moves the last digits) | 88 000 (the lead's ruling, plan 0011 D30; 72 140 by D5's formula) | 46 119 of 200 000 | 40 075 |
 | Outdoor Window | 29 939 | 75 257 | 50 637 | 0 |
 | Power Hours | 25 977 | 70 305 | 46 466 | 0 |
 | Hello Live | 3 730 | 42 496 | 7 281 | 0 |

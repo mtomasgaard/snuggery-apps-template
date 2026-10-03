@@ -7,7 +7,7 @@ change list, the owner calls, the as-built departures, the phone checks) is in `
 which does not ship.
 
 Figures were measured on 2026-10-02 on `data/snapshot.json` as committed (made 1 Oct 2026, 05:01 UTC;
-sha256 `4a26ced7…749018409`). `python3 world-news/tools/art/palette.py` (from `Template/`) prints
+sha256 `ecb80872…f910c5d2c`). `python3 world-news/tools/art/palette.py` (from `Template/`) prints
 every color figure and ends `ALL CHECKS PASS`. Screens were read in headless Chromium at 390 × 844,
 the clock at 1 Oct 2026, 12:00 in Oslo: what the page draws, never how a phone feels.
 
@@ -273,11 +273,11 @@ built by `build-zips.yml`'s command (`zip -q -r -X … . -x '.*' '*/.*' 'screens
 | --- | --: | --: | --: |
 | App code | 21 787 | 46 119 | 200 000, the house's |
 | Fonts | 0 | 40 075 | 160 000 |
-| ZIP | 27 445 | **86 948** | **88 000, the lead's ruling (2026-10-02, plan 0011 D30)**: D5's formula gave 72 140 (27 445 × 1.25 plus 37 834 for the face) until the build had measured 84 990 with nothing cut or minified; the face alone stores 37 510, more than the stock ZIP. The ZIP is within 5 % of it: 1 052 B left (HOUSE 8), so whatever the app gains, it pays for |
-| Data | `data/snapshot.json` `4a26ced7…749018409` | the same, byte for byte | pinned by `check.mjs` |
+| ZIP | 27 445 | **86 993** | **88 000, the lead's ruling (2026-10-02, plan 0011 D30)**: D5's formula gave 72 140 (27 445 × 1.25 plus 37 834 for the face) until the build had measured 84 990 with nothing cut or minified; the face alone stores 37 510, more than the stock ZIP. The ZIP is within 5 % of it: 1 007 B left (HOUSE 8), so whatever the app gains, it pays for |
+| Data | `data/snapshot.json` `4a26ced7…749018409` | `ecb80872…f910c5d2c`: the same but the two license lines, swept to US English (`tools/DECISIONS.md`) | pinned by `check.mjs` |
 
-**The ZIP is over D5's cap.** Stored in it, the face and its license take 37 510 B, the data 9 157, the
-app code 17 737 (7 602 before the pass), this file about 10 500 and `NOTES.md` and `PROMPT.md`
+**The ZIP is over D5's cap.** Stored in it, the face and its license take 37 510 B, the data 9 156, the
+app code 17 737 (7 602 before the pass), this file about 10 600 and `NOTES.md` and `PROMPT.md`
 10 346; this file's own size moves the last digits, and `node tools/check.mjs` prints the exact
 figure. The formula leaves a 27 kB app about 14 000 B for its code and this file together; the house's
 two modules, the stylesheet, About and the Datelines need more than that, as the art pass's simulation
@@ -295,7 +295,7 @@ foresaw (about 84 000 B).
 | 4. The SaaS-card kit | the stock's white region cards with 14 px radii go; rows on the page |
 | 5. Tracked capitals | none; `EUROPE`, `SOURCES` and `CACHED` go |
 | 6. Middle-dot joins | commas (`UN News, 23 Sep`) and lines (`By …`); the stale stamp's middle dot goes |
-| 7. Spaced em dash | none in the app's own text; the data's (license lines, headlines) as written |
+| 7. Spaced em dash | none in the app's own text or the data's license lines; the publishers' words as written |
 | 8. Tinted near-black | ink `#0f1c23` as ink; the stock's `#0b0e13` ground goes |
 | 9. Monospace labels | none; the notice's `code` face goes |
 | 10. Arrows on buttons | none; the stock's arrowed help sentence becomes words, in the app and `PROMPT.md` |

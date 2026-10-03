@@ -600,3 +600,98 @@ now holds the listener has no role, and the image keeps its image trait.
 8. In Snuggery's full screen, the header sits under the status bar and the caption band over the home
    indicator.
 9. The phone on its side on a notched model (the safe-area gutters).
+
+## The data follow-up (2026-10-02)
+
+Owner call 2, as the owner ruled it: the license lines `scripts/world_news.py` writes into the data are the
+repository's own sentences, so they are now in US English with plain punctuation. The publishers' names, their
+terms' quoted wording, every URL and the key `licence` are unchanged. My scratch is in
+`tools/.work/data-followup/` (gitignored): `orig/` (every file as it stood before), `apply_sources.py`,
+`fixpoint.py`, `about-read.mjs`, the diffs and every log named below.
+
+**The script.** Three lines changed, all inside `SOURCES` (`script.diff`): 174, 175 and 188. A full stop takes
+the place of each spaced em dash. A colon would have put two colons into one sentence in Global Voices' line,
+and the same stop in both Creative Commons lines keeps them parallel. The word after the stop is capitalized,
+and `licence` in Global Voices' line becomes `license`. The UN News line and all three attribution lines were
+already US English with no dash and are unchanged.
+
+| Source | Before | After |
+| --- | --- | --- |
+| Global Voices | `Creative Commons Attribution 3.0 — credit the author, link to the licence, and indicate changes: the summaries here are the feed's own line, shortened.` | `Creative Commons Attribution 3.0. Credit the author, link to the license, and indicate changes: the summaries here are the feed's own line, shortened.` |
+| The Conversation | `Creative Commons Attribution–NoDerivatives 4.0 — credit the author and their institution and link back. Nothing of theirs is changed here: the headline stands as written and no article text is carried.` | `Creative Commons Attribution–NoDerivatives 4.0. Credit the author and their institution and link back. Nothing of theirs is changed here: the headline stands as written and no article text is carried.` |
+
+The module still imports (`python3 -B`, so nothing was written to `__pycache__/`): 17 feeds, 6 regions, 3
+sources, and check.mjs's British pattern finds nothing in the table. `python3 -B scripts/world_news.py
+--selftest` prints `4 self-tests passed`. The offline path `--demo --out` (it fetches nothing and reads `data/` only)
+wrote `48 headlines, 48 ask rows, 0/17 feeds live` to scratch, and its `sources[]` carry the new lines: the
+public copy's refresh writes them on its next run that reaches a feed, and a push of the script starts one.
+
+**The fixture, not rebuilt.** `apply_sources.py` loads both versions of the module, the swept one and the
+pre-sweep copy in `orig/`, with `importlib`, so no string is retyped. It refuses an input whose sha256 is not
+the pin, and it proves that the fixture round-trips byte for byte through the script's own serialization
+(`json.dumps`, `indent=1`, `ensure_ascii=False`, a final newline). It also proves that the fixture's three
+`sources[]` entries equal the pre-sweep table key for key and in order. Then it sets each entry's fields from
+the swept table and writes the file as the script writes it (`apply.log`):
+
+- sha256 `4a26ced769fa9b20a438031ecbf008791c920af165b26151b533007749018409` (40 681 B) became
+  `ecb808729f4562dfe98f324aaef3a54ffaeebef03982c62348ab6f8f910c5d2c` (40 675 B, −6).
+- Structural diff over 696 leaves: **2 strings changed** (`$.sources[0].licence` and `$.sources[1].licence`,
+  old → new as in the table above). Changed: 0 numbers, 0 booleans, 0 nulls, 0 types, 0 key sets or
+  orders, 0 array lengths, 0 ids (`regions[].key`, `items[].feed`, `feeds[].id`), 0 dates (`generatedAt`,
+  every `published`), 0 headlines (`items[].title`, `ask[].title`), and 0 anything outside `$.sources` or
+  other than a `licence` field. Counts before and after: regions 6, items 48, sources 3, feeds 17, ask 48.
+- Byte diff: 962 lines both, and only lines 517 and 523 differ. The first 27 831 B and the last 12 488 B are
+  identical. Cross-checked in Node: the two files are equal once the `licence` fields are removed, and the new
+  `sources[]` equal the `--demo` output's.
+
+**`check.mjs`.** `DATA_SHA` is now `ecb80872…`, and its comment and message say the file is the one committed
+before the pass, with its license lines swept. The British-spelling allowance for the data is narrowed to
+the key: `ALLOW` no longer lists the data, and `PHRASES` passes over `"licence":` in the data and nothing else,
+so a `licence` inside a line now fails. The proof, run before the new file went in (`regress-narrowed-on-old-data.log`):
+the narrowed check against the old data exited 1 with exactly 2 `FAIL`s, the pin and `US spelling … data/snapshot.json:1 licence`.
+That is the one `licence` in Global Voices' line; the three keys were passed over. `app.js` and `ART.md`
+keep `licence`, where they name the key.
+
+**`ART.md`** (it ships). The sha256 in the opening paragraph and in section 6's Data row is now
+`ecb80872…f910c5d2c`, and the row says the file is the same apart from the two swept license lines. Section 6's
+figures: the ZIP **86 993**, 1 007 B left, the data stored 9 156, this file about 10 600. Section 7's row 7
+said the data's spaced em dashes were in its license lines; it now says `none in the app's own text or the
+data's license lines; the publishers' words as written`. The two left are in summaries. `fixpoint.py` built
+the ZIP with `build-zips.yml`'s command on a copy of the shipped files, after first proving that the copy
+builds what `check.mjs` measured on the real folder (86 947). 86 993 is the only figure between 86 949 and
+87 029 that measures itself. **`NOTES.md` is unchanged**: its two quoted fragments of the lines (`the summaries
+here are the feed's own line, shortened` and the UN sentence) are in the new lines word for word.
+
+**Measured** (`node tools/check.mjs`): before, ZIP 86 948 and data stored 9 157. With the data alone changed,
+86 947 and 9 156. After `ART.md`, **86 993 of 88 000** and `ART.md` stored 10 591 (10 545 before). App code is
+46 119 B (17 737 stored), unchanged, and so are fonts (37 510 stored) and `NOTES.md` with `PROMPT.md` (10 346).
+
+**The tools' last runs** (2026-10-02, from `Template/world-news/` unless stated; headless Chromium 153 on this
+Mac, never phone evidence):
+
+- `node tools/check.mjs`: exit 0, 40 `ok` (40 before), `all checks pass`.
+- `node tools/test_datelines.mjs`: `all 34 checks pass`.
+- `python3 world-news/tools/art/palette.py` (from `Template/`): `ALL CHECKS PASS`.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (no `SCREENSHOTS`): exit 0, 202 `ok`, 0 `FAIL`, `all checks pass`,
+  both themes. Its About check reads each source's lines from the file. All 10 `screenshots/*.png` are
+  unchanged by sha256.
+- `about-read.mjs`: About open, every source's attribution and license line on its own line, word for word
+  from the file; 0 spaced em dashes and 0 `licence` in About; no fragment of the old lines. The page's 2
+  spaced em dashes are both in `.sum`, publishers' summaries. No console error.
+
+**Left alone, and why:**
+
+- The en dash in `Attribution–NoDerivatives` is inside the license's name and is not a spaced em dash. The
+  license's own title uses a hyphen, so matching it is the owner's call.
+- The script's comments and its `--selftest` help (`the licence flag`, `check the parser's licence and safety
+  rules`), and `SOURCES`' comment, which still calls About `its footer`. None of them reaches the data or the
+  app, and the brief kept the script's diff to the table's strings.
+- The two spaced em dashes in summaries (the publishers' words) and the key `licence`, which the app reads.
+- `screenshots/about-light.png` still shows the first words of Global Voices' old line at its bottom edge
+  (`Creative Commons Attribution 3.0 — credit the author, link to`): this run did not rewrite screenshots, and
+  a `SCREENSHOTS=1` run does.
+- This file's earlier sections, which record what was true when they were written.
+
+**For the lead, outside this folder:** HOUSE §8's World News row (86 948), `docs/CURRENT_STATE.md` and plan
+0011 D31 quote the old ZIP figure; it is now 86 993 of 88 000. The starter pack's `world-news.zip` carries
+the data and `ART.md`. Owner call 2 is closed.

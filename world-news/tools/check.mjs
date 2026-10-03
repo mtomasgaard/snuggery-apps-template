@@ -5,7 +5,8 @@
 //   3. every import / src / href / url( / fetch( is relative, inside the folder, present; the one data read;
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and no
 //      supplement; NOTES.md and About credit the face word for word;
-//   5. the data is pinned: data/snapshot.json's sha256 as committed before the pass;
+//   5. the data is pinned: data/snapshot.json's sha256, the file committed before the pass with its two license
+//      lines swept to US English after it (the data follow-up, owner call 2), every other byte the same;
 //   6. miniapp.json is valid, its name unchanged, its description neither "today's" (B13) nor an em dash;
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits: the constant words around the sources' names, written once into the band;
@@ -115,9 +116,11 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no font ships|system font only|No web font/i.test(read('NOTES.md') + css),
   'the face is credited word for word in NOTES.md (the app\'s credits file) and About ("Type: …"); nothing says no font ships');
 
-// 5. The data is pinned: data/snapshot.json as committed before the pass (ART.md section 6)
-const DATA_SHA = '4a26ced769fa9b20a438031ecbf008791c920af165b26151b533007749018409';
-ok(sha('data/snapshot.json') === DATA_SHA, `data/snapshot.json sha256 ${sha('data/snapshot.json').slice(0, 12)}… is the file committed before the pass (${DATA_SHA.slice(0, 12)}…)`);
+// 5. The data is pinned: data/snapshot.json as committed before the pass (4a26ced7…749018409), its two license lines
+// then swept to US English from scripts/world_news.py's own table, every other byte the same (the data follow-up,
+// 2026-10-02: tools/DECISIONS.md; ART.md section 6)
+const DATA_SHA = 'ecb808729f4562dfe98f324aaef3a54ffaeebef03982c62348ab6f8f910c5d2c';
+ok(sha('data/snapshot.json') === DATA_SHA, `data/snapshot.json sha256 ${sha('data/snapshot.json').slice(0, 12)}… is the file committed before the pass, its license lines swept (${DATA_SHA.slice(0, 12)}…)`);
 const snap = JSON.parse(read('data/snapshot.json'));
 
 // 6. miniapp.json
@@ -299,12 +302,14 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: the lea
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The snapshot
 // is checked for the pipeline's own words (sources' lines, region names); its headlines, summaries and bylines
-// are the publishers' and are listed, never failed. `licence` is the pipeline's data key and its own license
-// lines' word (owner call 2), so it is allowed where the data and the documents name it.
+// are the publishers' and are listed, never failed. `licence` is the pipeline's data key, so app.js and ART.md
+// may name it and the data may hold it as a key alone; since the data follow-up (owner call 2) the license lines
+// themselves say `license`, so a `licence` inside a line fails.
 {
   const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|behaviour\w*|recognis\w*|organis\w*|analys(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|judgement\w*|for ever|amortis\w*|authoris\w*|categoris\w*|instalments?|artefacts?|cosy|cancell\w*)\b/gi;
-  const ALLOW = { 'app.js': ['licence'], 'ART.md': ['licence'], 'data/snapshot.json': ['licence'] };
-  const PHRASES = { 'NOTES.md': ['Attribution/No derivatives licence'] };   // The Conversation's own words, quoted
+  const ALLOW = { 'app.js': ['licence'], 'ART.md': ['licence'] };
+  // NOTES.md quotes The Conversation's own words; the data's `licence` is passed over as the key itself, nowhere else.
+  const PHRASES = { 'NOTES.md': ['Attribution/No derivatives licence'], 'data/snapshot.json': ['"licence":'] };
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
     const allow = ALLOW[f] || [];
