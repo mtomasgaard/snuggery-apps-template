@@ -712,6 +712,11 @@ The one card on the screen, for the thing that was tapped (ART 440-451; CSS 268-
   area (ART 487-488; CSS 286).
 - *In other apps* it holds the selected thing: a planet, a structure, a cell, a field, a country, a
   bar of a chart. *Nothing to tap*: no card.
+- **A card opens on a tap, never on a swipe.** A vertical swipe that starts on a chart or a map
+  scrolls the pane, opens nothing and says nothing to the live region; the chart's or map's touch
+  handler yields to the scroll until the finger has moved mostly sideways or has held still. Running
+  Dashboard's reviewer found every scroll on its pane apps popping a card and a sentence
+  (2026-10-02); the pane apps that take the pattern after it carry this rule from the start.
 
 ### 4.8 About
 
@@ -1239,7 +1244,7 @@ figures into its `ART.md`.
 | Shelf Atlas | 1 980 291 (after its pass and the data follow-up of 2026-10-02) | 2 413 130 | 183 869 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
 | World Oil & Gas | 2 147 328 (after its pass) | 2 622 870 | 199 917 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
 | Snug Kart | 619 349 (after its pass) | 720 806 | 242 655 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
-| Running Dashboard | 1 072 155 | 1 340 193 | **236 521, over** | 74 128 |
+| Running Dashboard | 1 074 350 (after its pass) | 1 340 193 | 244 919 of 245 000 (the lead's rulings, plan 0011 D23–D24; held at 236 521 before them) | 41 291 |
 | Finances | 69 976 | 125 304 | 103 178 | 0 |
 | World News | 27 445 | 72 140 | 21 787 | 0 |
 | Outdoor Window | 29 939 | 75 257 | 50 637 | 0 |

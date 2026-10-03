@@ -1,8 +1,14 @@
-Copyright (c) 2023 Vercel, in collaboration with basement.studio
+fonts/ysabeau-office-gw.woff2 is a subset of Ysabeau Office by Christian Thalmann, cut by
+tools/art/font_subset.py from google/fonts commit 9710da1eacb3be272583c3224dcb70f9da6eadbb,
+ofl/ysabeauoffice/YsabeauOffice[wght].ttf: weight 400-650, Latin characters only.
+Ysabeau Office declares no Reserved Font Name.
+
+Copyright 2023 The Ysabeau Project Authors (https://github.com/CatharsisFonts/Ysabeau)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:
-http://scripts.sil.org/OFL
+https://scripts.sil.org/OFL
+
 
 -----------------------------------------------------------
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
@@ -17,7 +23,7 @@ with others.
 
 The OFL allows the licensed fonts to be used, studied, modified and
 redistributed freely as long as they are not sold by themselves. The
-fonts, including any derivative works, can be bundled, embedded,
+fonts, including any derivative works, can be bundled, embedded, 
 redistributed and/or sold with any software provided that any reserved
 names are not used by derivative works. The fonts and derivatives,
 however, cannot be released under any other type of license. The
@@ -43,7 +49,7 @@ new environment.
 "Author" refers to any designer, engineer, programmer, technical
 writer or other person who contributed to the Font Software.
 
-PERMISSION AND CONDITIONS
+PERMISSION & CONDITIONS
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of the Font Software, to use, study, copy, merge, embed, modify,
 redistribute, and sell modified and unmodified copies of the Font

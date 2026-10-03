@@ -11,7 +11,7 @@ merges what is new into the raw store, `raw/`, and fetches map tiles into
 store. The app reads those three and nothing else.
 
 [`PROMPT.md`](PROMPT.md) sets it up, step by step. [`TILES.md`](TILES.md) gives
-the terms of the map tiles, routes and typeface the demo ships with. This file
+the terms of the map tiles and routes the demo ships with. This file
 is how the pieces fit together.
 
 ---
@@ -23,7 +23,10 @@ reaches the same web API Garmin's own apps use. **It is not an official API** �
 Garmin can change it without notice. The library usually catches up within
 days. Until it does, the workflow's runs fail or report failed steps, and once
 no snapshot has been built for two days the time stamp in the app's header
-turns into a warning. `scripts/requirements.txt` asks for a minimum version
+leads with the word *Stale.* Whatever counts back from today (this week, the
+last 7 and 28 days, the plan's days) stops at the day of the last pull and says
+so (*7 days to 30 Sep*), so days the data has not seen never read as days
+without running. `scripts/requirements.txt` asks for a minimum version
 rather than a pinned one for the same reason: the fix arrives as a new release.
 
 You sign in with your own account, once, on your own machine (`--login`,
@@ -78,7 +81,7 @@ they do not.
 
 | File | Written by | What it holds |
 | --- | --- | --- |
-| `context.json` | you, then the pull | `athlete` — maximum, resting and threshold heart rate, the five zone floors, VO₂ max, weight, height — is yours to fill in, and nothing pulls it. The pull adds `gear` (the gear catalogue), `garminNow` (today's training status, readiness and race predictions, as Garmin gives them) and `backfill` (how far back the history has been filled). |
+| `context.json` | you, then the pull | `athlete` — maximum, resting and threshold heart rate, the five zone floors, VO₂ max, weight, height — is yours to fill in, and nothing pulls it. The pull adds `gear` (the gear catalog), `garminNow` (today's training status, readiness and race predictions, as Garmin gives them) and `backfill` (how far back the history has been filled). |
 | `activities.json` | the pull | every session's summary from Garmin's activity list, oldest first |
 | `zones.csv` | the pull | seconds in each heart-rate zone, per session |
 | `gear.csv` | the pull | the gear each session used — shoes, mostly |
@@ -86,7 +89,7 @@ they do not.
 | `details.csv` | the pull | cadence, stride, ground contact, power, training effect, elevation, feel and effort, per session, for the last six months |
 | `laps.csv` | the pull | one row per lap, for the last six months |
 | `weather.csv` | the pull | the weather-station observation Garmin attaches to an outdoor session |
-| `zonekm.csv` | the pull | kilometres run in each zone, counted second by second from the record stream with the zone floors in `context.json` as they were at the time |
+| `zonekm.csv` | the pull | kilometers run in each zone, counted second by second from the record stream with the zone floors in `context.json` as they were at the time |
 | `streams/<id>.csv` | the pull | the per-second record of a session: time, distance, heart rate, speed, cadence, altitude, power, latitude, longitude |
 | `maps.json` | the pull | each session's map extent, and every tile on disk with the source it came from |
 | `garmin_load.csv` | the pull | Garmin's acute and chronic load, training status and VO₂ max, per day; 900 days kept |
@@ -164,7 +167,7 @@ standing coverage exists for that gap: a new run in an area you have run before
 already has a map on the phone.
 
 Do not want a basemap? In the demo, delete `data/tiles/`, and the route card
-draws the coloured track on its own background, as the demo's Berlin, London
+draws the colored track on its own background, as the demo's Berlin, London
 and Tokyo sessions do. In your own copy the next pull would fetch the tiles
 again, so also remove the two map steps, `pull_maps` and `pull_coverage`, from
 `main()` in `scripts/garmin_pull.py`.
@@ -232,15 +235,43 @@ Deleting Running Dashboard means deleting:
   `make_demo_courses.py` and `demo_courses.json`, plus `requirements.txt`,
   which only this app's workflow installs;
 - the line in `.gitignore` that keeps the receipt out of git, the first three
-  carve-outs in `LICENSE`, and the app's row, entry, picture and licence line
+  carve-outs in `LICENSE`, and the app's row, entry, picture and license line
   in the root `README.md`.
 
 ## No network from the app
 
 The app fetches `./data/snapshot.json`, `./data/streams/<id>.json` and
-`./data/tiles/<z>/<x>/<y>.png`, and nothing else; its one typeface is
-`fonts/Geist.woff2`. There is no external URL, font, script, image or tile
-anywhere in `index.html`, `app.js` or `style.css`. Mini-apps in Snuggery cannot
+`./data/tiles/<z>/<x>/<y>.png`, and nothing else. There is no external URL, font,
+script, image or tile anywhere in `index.html`, `app.js`, `js/` or `style.css`. Mini-apps in Snuggery cannot
 reach the network, and this one does not try. The pull happens outside, in the
 GitHub Action. A Shortcut carries the snapshot in, and the tiles and older
 session streams arrive with the ZIP.
+
+## The look and the typeface
+
+The look is the template's house system (`ART.md` says how it is applied here, and why the one
+bold thing is the Block, the training block at the head of Now and Plan). Every number, unit and
+date the app writes goes through `js/units.js`: SI units, a true minus, a narrow no-break space
+between a number and its unit and between thousands, dates built by hand with fixed English words,
+day before month, the 24-hour clock, the same on every phone. The Block's weeks, runs and targets
+are computed in `js/block.js`, which `tools/test_block.mjs` checks against its own decode of the
+snapshot; the route's colors are `js/palette.js`, pasted from `tools/art/palette.py --json`.
+
+The one typeface is the house's: `fonts/ysabeau-office-gw.woff2`, copied byte for byte from
+`global-weather/fonts/` (35 372 B, sha256 `fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262`),
+with its license, `fonts/OFL.txt`. One character the app writes is not in that cut: U+2082, the
+subscript two of VO₂ max and SpO₂. It comes from a supplement cut by the same recipe from the same
+pinned upstream, `fonts/ysabeau-office-running-dashboard-extra.woff2` (1 216 B, sha256
+`f9937497336f4bf70c2728bc020588ebdb2a952acdf7dc5e96f14b8377583268`), declared as a second
+`@font-face` of the same family with `unicode-range: U+2082`. `OFL.txt` covers both files. To
+rebuild it, from `Template/`, in any venv with fonttools 4.60.x and Brotli:
+
+```
+python running-dashboard/tools/art/font_extra.py
+```
+
+Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+
+`tools/check.mjs` checks the rules, the budgets, the font's sha256, the data's sha256 and the
+camera's strings; `tools/shoot.mjs` drives the app in headless Chromium in both themes; neither
+ships.

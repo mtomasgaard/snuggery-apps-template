@@ -37,7 +37,7 @@ alongside this.
 
 Open `running-dashboard/raw/context.json` and edit `athlete` to your own numbers: `maxHr`,
 `restingHr`, `lthr`, the five `zoneFloors`, `weightKg`, `heightCm`. Nothing pulls these for you.
-Every zone chart in the app depends on what you put here, and the kilometres run in each zone are
+Every zone chart in the app depends on what you put here, and the kilometers run in each zone are
 counted with these floors when a session is first pulled and never recounted, so do this before
 the first pull. Leave `gear: []` and `garminNow: {}` alone; the pull fills those in.
 
@@ -47,7 +47,7 @@ Map tiles come from Kartverket (Norway), USGS The National Map (the United State
 OpenStreetMap (everywhere else), chosen automatically per route: each source answers only inside
 its coverage and the script falls through to the next. Set `TILE_AGENT` in `scripts/garmin_pull.py`,
 just below `TILE_SOURCES`, to your own repository's URL — OpenStreetMap's tile usage policy asks
-for an identifying User-Agent, and a generic one is a bad neighbour to the people who run those
+for an identifying User-Agent, and a generic one is a bad neighbor to the people who run those
 servers for free.
 
 Tiles only reach your phone when `zips/running-dashboard.zip` is rebuilt (a code change, not a data
@@ -68,7 +68,7 @@ git commit -m "Running Dashboard: my heart-rate zones and tile agent"
 git push origin main
 ```
 
-A pull that ran before this push would count your kilometres per zone against the demo runner's
+A pull that ran before this push would count your kilometers per zone against the demo runner's
 zone floors, for good, and ask the tile servers for tiles under the template's placeholder name.
 Neither file travels in the app's ZIP, so this push rebuilds no ZIP.
 
@@ -162,7 +162,7 @@ each file should take is documented in the header comment at the top of `running
 
 - The four coaching files above — they belong to the optional daily session, not to this pull.
 - The rest of `running-dashboard/raw/`, apart from `athlete` in `context.json` — the pull owns it.
-- `running-dashboard/app.js`, `style.css`, `index.html` — the app itself. Change the data, not the code.
+- `running-dashboard/app.js`, `js/`, `style.css`, `index.html`, `fonts/` — the app itself. Change the data, not the code.
 - The `GARMINTOKENS` secret's value, once set, except by running Step 5 again.
 
 ## If something fails

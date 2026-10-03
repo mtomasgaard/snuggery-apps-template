@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Running Dashboard</title>
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<!-- One sticky block: title, pane tabs and the filters lock together, so the
-     filters can never slide under the tabs on the way to being pinned. -->
-<header class="topbar">
-  <div class="titles">
-    <h1>Running Dashboard</h1>
-    <p class="stamp" id="stamp">Loading…</p>
-  </div>
-  <nav class="tabs" id="tabs" role="tablist" aria-label="Panes"></nav>
+<!-- Every address here is relative: the app reads data/ and nothing else. The look is ART.md (the
+     house system and the Block); where the data comes from is NOTES.md. The panes are built by
+     app.js once the snapshot parses, so the tab named Health is the camera's proof of data. -->
 
+<header class="head" id="head">
+  <h1 translate="no">Running Dashboard</h1>
+  <div class="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the data&hellip;</button></div>
+  <span class="sr" id="stamp-hint">Opens About this data.</span>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Panes" hidden></nav>
+</header>
+
+<main class="pane" id="main">
+  <div class="notice" id="notice" role="alert" hidden></div>
   <div class="filters" id="filters" hidden>
     <div class="frow" id="timeRow">
-      <div class="presets" id="presets" role="group" aria-label="Time range presets"></div>
-      <span class="range-label"><b id="fromLabel">—</b> – <b id="toLabel">—</b></span>
+      <div id="presets"></div>
+      <span class="winlabel" id="winLabel"></span>
     </div>
     <div class="dual" id="dual">
       <div class="dual-track"><div class="dual-fill" id="dualFill"></div></div>
@@ -33,13 +40,53 @@
       <select class="pick" id="gearSelect" aria-label="Equipment"></select>
     </div>
   </div>
-</header>
+  <div class="panebody" id="pane" role="tabpanel"></div>
+</main>
 
-<main id="main" aria-live="polite"></main>
-
-<footer class="foot">
-  <p>Running distance, pace and heart rate use the watch's run/walk detection, so walk breaks inside a session are not counted as running. Heart-rate zone load is computed in this app from time in zone (Edwards TRIMP: minutes in Z1–Z5 weighted&nbsp;1–5). Garmin's own acute/chronic load is shown separately on the Load pane and only exists from the day Garmin started recording it for your account.</p>
+<footer class="band" id="band">
+  <p class="capline" id="capline"></p>
+  <p class="credits" id="credits" translate="no">Data: Garmin Connect. Coaching text: the coaching routine.</p>
 </footer>
+
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About Running Dashboard</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body">
+      <section>
+        <h3>What the Block is</h3>
+        <p>The strip at the top of Now and Plan is the training block as a coach draws it: one column a week, from twelve weeks back to the race. Each block of ink is one run&rsquo;s running, walk breaks left out, so a week of six runs is six pieces. An outline is the week the plan asks for, as the coaching routine wrote it on <span id="about-plan">the date under This data</span>; when the plan gives a range, the outline runs to its top and a tick marks its bottom. This week is both: its runs fill its outline from the bottom.</p>
+        <p>Past weeks have no outline because the data keeps only today&rsquo;s plan, not the plans that came before it. The scale is fixed: 0.8 pixels a kilometer on Now, 1.2 on Plan, with a line every 20 kilometers. Weeks run Monday to Sunday by the phone&rsquo;s calendar. Other sports are not in it; they are on Training.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>How the numbers are made</h3>
+        <p>Running distance, pace and heart rate use the watch&rsquo;s run/walk detection, so walk breaks inside a session are not counted as running. Zone load is computed in this app from time in zone: Edwards&rsquo; TRIMP, the minutes in zones 1 to 5 weighted 1 to 5. Garmin&rsquo;s own acute and chronic load is shown separately on Training and exists only from the day Garmin started recording it for the account.</p>
+        <p>Muscle load estimates the mechanical work of the muscles in kilojoules per kilogram of body mass, from published magnitudes: about 1.0 + 0.3 &times; speed joules per kilogram and meter for running on the level, 0.7 for walking, 9.81 per meter climbed or descended, cycling from the watch&rsquo;s power or its calories at 22&#8239;% efficiency, strength and other sessions from their time at a standard energy cost. Its two judgment calls are the weights on the lengthening (eccentric) work: &times;3 on descents and &times;5 for lifting.</p>
+        <p>Kilometers by zone credit every meter to the zone of that second&rsquo;s heart rate when the record stream is there; otherwise each lap&rsquo;s distance goes to the zone of its average heart rate; otherwise the run&rsquo;s distance is split by time in zone, which undercounts the fast zones.</p>
+        <p>The ramp ratio is a week&rsquo;s running divided by its own four-week average. The efficiency index is running heart rate times running pace on easy outdoor runs, heartbeats per kilometer: lower is better.</p>
+        <p>A route is colored between its own 5th and 95th percentile of the quantity chosen, so the colors compare stretches of this session with each other, never one session with another; the legend prints the two ends. Ends closer than 45 seconds a kilometer, 4 kilometers an hour, 10 steps or turns a minute, 30 watts or 20 meters are spread that far around the median, so a steady run reads steady.</p>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p>Every session, night and weigh-in comes from the runner&rsquo;s own Garmin Connect account, through the pull; NOTES.md says how. The evaluation, the plan, the race forecast and the session notes are text the coaching routine wrote on the dates under This data.</p>
+        <p>Map tiles: USGS The National Map, public domain; the USGS asks for this acknowledgment: Map services and data available from U.S. Geological Survey, National Geospatial Program. A copy that fetches its own tiles credits &copy; Kartverket (CC BY 4.0) in Norway and &copy; OpenStreetMap contributors elsewhere, under each map.</p>
+        <p id="about-routes" hidden>Routes: &copy; OpenStreetMap contributors, under the Open Database License 1.0 (opendatacommons.org/licenses/odbl/1-0); the route shapes in these sessions are derived from it.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>A scheduled job pulls the account into the repository and builds <span translate="no">data/snapshot.json</span>; a Shortcut carries it to this phone, and the app reads it again whenever it comes back to the screen. The coaching routine, an optional daily session, writes the evaluation, the plan, the race forecast and the session notes. The app itself reaches no network: the map tiles and older session records travel inside its folder.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<svg id="x-mark" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" hidden><path d="M2 2l8 8M10 2l-8 8"/></svg>
 
 <script type="module" src="./app.js"></script>
 </body>

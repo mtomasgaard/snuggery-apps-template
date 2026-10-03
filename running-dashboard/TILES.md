@@ -1,7 +1,7 @@
-# Map tiles, routes and the typeface in this demo
+# Map tiles and routes in this demo
 
-Three parts of the app are not ours to license, and the MIT licence at the root of this
-repository does not cover them. All three travel inside `zips/running-dashboard.zip`.
+Two parts of the app are not ours to license, and the MIT license at the root of this
+repository does not cover them. Both travel inside `zips/running-dashboard.zip`.
 
 ## The tiles: USGS The National Map (public domain)
 
@@ -53,8 +53,6 @@ under the [Open Database License 1.0](https://opendatacommons.org/licenses/odbl/
 else in this repository is affected, and the first real pull of your own runs replaces every one
 of these files.
 
-## The typeface: Geist (SIL Open Font License)
+## The typeface
 
-`fonts/Geist.woff2` is the Geist typeface, © Vercel, under the SIL Open Font License 1.1; the
-licence text is `fonts/LICENSE-Geist.txt` and travels with the file. It may be used, redistributed
-and modified under that licence, and may not be sold on its own.
+The typeface has a license of its own and travels with it: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.

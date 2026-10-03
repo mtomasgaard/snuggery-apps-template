@@ -93,7 +93,7 @@ A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends
 
 ### Running Dashboard
 
-Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.**
+Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. Now and Plan open on the training block, drawn the way a coach draws one: twelve weeks back to race day, each run a block of ink at a fixed 0.8 px per kilometer, the plan's weeks still to run as empty outlines of their targets. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.**
 
 **Needs:** a Garmin sign-in · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) · Make it yours: [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) · How it works: [`running-dashboard/NOTES.md`](running-dashboard/NOTES.md)
 
@@ -344,8 +344,8 @@ Any folder can be deleted once you no longer need it as a reference, together
 with its scripts and its workflow.
 
 **An app is not always one file.** Hello Live is a single `index.html` with its
-CSS and JS inline. Running Dashboard is `index.html` plus `app.js`, `style.css`,
-and a `data/` folder holding a snapshot, six session streams, and about a
+CSS and JS inline. Running Dashboard is `index.html` plus `app.js`, `style.css`, three modules in
+`js/`, the house face in `fonts/`, and a `data/` folder holding a snapshot, six session streams, and about a
 megabyte of map tiles. The ZIP takes the app's folder whole either way, less
 the folders marked above as left out — still no build step.
 
@@ -492,7 +492,7 @@ the same run. This table is the cheapest possible defence against that.
 
 MIT licensed — see [LICENSE](LICENSE), whose carve-outs name everything that travels under its own
 terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-derived route shapes
-(ODbL) and the Geist typeface (SIL OFL) in Running Dashboard, spelled out in
+(ODbL) in Running Dashboard, spelled out in
 [TILES.md](running-dashboard/TILES.md); the BodyParts3D geometry in Anatomy (CC BY-SA 2.1 JP, also
 CC BY 4.0 at source) with its BodyParts3D 4.0 structures (CC BY 4.0 —
 [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and the
