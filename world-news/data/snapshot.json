@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-03T15:02:02Z",
+ "generatedAt": "2026-10-03T16:01:29Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Ukraine war ‘a human rights catastrophe’ that must end, says Türk",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168513",
+     "published": "2026-10-02T12:00:00Z",
+     "summary": "The war in Ukraine is a human rights catastrophe that is “growing and intensifying by the week” and threatening an even greater disaster across the region, UN High Commissioner for Human Rights Volker Türk said on…",
+     "stale": false
+    },
     {
      "title": "The sound of resistance",
      "source": "Global Voices",
@@ -44,15 +53,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168416",
      "published": "2026-09-23T12:00:00Z",
      "summary": "Ukrainian President Volodymyr Zelenskyy on Wednesday called for intensified pressure on Russia to end its war against Ukraine, arguing that Moscow continues to incur massive losses while prolonging a conflict whose…",
-     "stale": false
-    },
-    {
-     "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168410",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "Five years of war. Another winter closing in. Today, the Security Council once again debates a path to peace – though any resolution still runs up against the veto of Russia, one of its own permanent members, whose…",
      "stale": false
     },
     {
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Ukraine war ‘a human rights catastrophe’ that must end, says Türk",
+   "published": "2026-10-02 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
@@ -692,12 +698,6 @@
    "region": "Europe",
    "source": "UN News",
    "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
-   "published": "2026-09-23 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
    "published": "2026-09-23 12:00 UTC"
   },
   {
