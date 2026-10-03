@@ -1973,3 +1973,15 @@ On an iPhone with iOS 18 and one with iOS 26:
   VoiceOver label first;
 - **Plan's running chart**: a tap's card over the chart's neighbors, the table's sideways scroll, the race's
   name on the owner's own plan.
+
+## The owner's seventh (2026-10-03)
+
+Seeing the six on the phone, the owner asked for the slider "moved slightly upwards to make it take up
+less space". The lead made the change: `.dual` is 32 px tall with its track at 9.5 px (it was 44 with
+the track at 21.5), so the heads sit 32 px under the window words' center instead of 43.5 and the fixed
+block is 12 px shorter on every pane that has it (Training and Sessions 124 px, Health 76). The range
+inputs keep their 44 px hits and overhang the content's first line by 12 px; that line is a heading on
+every pane, so no tap is meant for it, and the block's z-index keeps the thumbs on top. The words row
+above keeps its 44 px, so nothing overlaps upward. `shoot.mjs` measures the content's top at the block's
+foot, so its checks follow the new height without a change; `ART.md` §3 carries the new figures. Code
+251 775 B of 252 000 after the stylesheet's comment.

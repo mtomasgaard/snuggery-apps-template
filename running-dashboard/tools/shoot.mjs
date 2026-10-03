@@ -462,25 +462,27 @@ for (const scheme of schemes) {
   // still 44 × 44
   {
     const th = await w(() => {
-      const d = document.getElementById('dual').getBoundingClientRect(), f = document.getElementById('fromRange'), t2 = document.getElementById('toRange');
-      const x = (v) => d.left + 22 + (d.width - 44) * v / +f.max, y = d.top + 22;
-      const hit = (cx) => { let n = 0; for (let k = -21; k <= 21; k++) { const a = document.elementFromPoint(cx + k, y), b = document.elementFromPoint(cx, y + k); if (a && a.type === 'range' && b && b.type === 'range') n++; } return n; };
-      return { op: [getComputedStyle(f).opacity, getComputedStyle(t2).opacity], xs: [x(+f.value), x(+t2.value)], y, hits: [hit(x(+f.value)), hit(x(+t2.value))] };
+      const d = document.getElementById('dual').getBoundingClientRect(), tr = document.querySelector('.dual-track').getBoundingClientRect(), f = document.getElementById('fromRange'), t2 = document.getElementById('toRange');
+      // the head sits on the track (10 px down a 32 px row since the owner's seventh, 2026-10-03); the hit is the input's 44 px box, from the row's top
+      const x = (v) => d.left + 22 + (d.width - 44) * v / +f.max, y = tr.top + tr.height / 2, hy = d.top + 22;
+      const hit = (cx) => { let n = 0; for (let k = -21; k <= 21; k++) { const a = document.elementFromPoint(cx + k, hy), b = document.elementFromPoint(cx, hy + k); if (a && a.type === 'range' && b && b.type === 'range') n++; } return n; };
+      return { op: [getComputedStyle(f).opacity, getComputedStyle(t2).opacity], xs: [x(+f.value), x(+t2.value)], y, hy, hits: [hit(x(+f.value)), hit(x(+t2.value))] };
     });
     const img = await A.png(), off = [], head = [];
     let seen = 0;
     for (const cx of th.xs) {
       let n = 0;
       for (let dy = -21.5; dy <= 21.5; dy += 0.5) for (let dx = -21.5; dx <= 21.5; dx += 0.5) {
-        if ((Math.abs(dx) <= 9.5 && Math.abs(dy) <= 9.5) || Math.abs(dy) <= 2) continue;
+        const fromHead = th.hy + dy - th.y;   // the sample's height above or below the track, where the head is
+        if ((Math.abs(dx) <= 9.5 && Math.abs(fromHead) <= 9.5) || Math.abs(fromHead) <= 2) continue;
         seen++;
-        if (!near(img.at(Math.round((cx + dx) * 2), Math.round((th.y + dy) * 2)), PAGE, 3)) n++;
+        if (!near(img.at(Math.round((cx + dx) * 2), Math.round((th.hy + dy) * 2)), PAGE, 3)) n++;
       }
       off.push(n);
       head.push(contrast(img.at(Math.round(cx * 2), Math.round(th.y * 2)), PAGE));
     }
     check(th.op.every((o) => o === '0') && off.every((n) => n === 0) && head.every((c) => c >= 3) && th.hits.every((n) => n === 43),
-      `the window's thumbs: the inputs at opacity ${th.op.join(' and ')}; around each, ${off.join(' and ')} of ${seen / 2} sampled pixels off the page outside its head and the track (no plate); each head's ink ${head.map((c) => c.toFixed(2)).join(' and ')}:1; each hit 44 × 44 (${th.hits.join(' and ')} of 43 points both ways)`);
+      `the window's thumbs: the inputs at opacity ${th.op.join(' and ')}; around each, ${off.join(' and ')} of ${seen / 2} sampled pixels off the page outside its head and the track (no plate; the head ${Math.round(th.y - th.hy + 22)} px down the 44 px box); each head's ink ${head.map((c) => c.toFixed(2)).join(' and ')}:1; each hit 44 × 44 (${th.hits.join(' and ')} of 43 points both ways)`);
   }
 
   // Plan: the weekly running chart (the owner, 2026-10-03), where the stock had it, between the goal and the time in

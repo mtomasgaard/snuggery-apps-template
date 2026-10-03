@@ -113,8 +113,8 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
    of ink, a tracer head at each end of it. The inputs are the 44 × 44 hits and the accessible sliders,
    drawn at opacity 0, so a phone paints nothing of its own behind a thumb (the owner saw a plate,
    2026-10-03); the heads are the fill's ::before and ::after, 10 px while their thumb is pressed */
-.dual { position: relative; height: 44px; }
-.dual-track { position: absolute; left: 22px; right: 22px; top: 21.5px; height: 1px; background: var(--line-strong); pointer-events: none; }
+.dual { position: relative; height: 32px; }   /* 32 px with the track 10 px down: the heads sit close under the window words and the block is 12 px shorter (the owner, 2026-10-03); the inputs keep their 44 px hits and overhang the content's inert first line */
+.dual-track { position: absolute; left: 22px; right: 22px; top: 9.5px; height: 1px; background: var(--line-strong); pointer-events: none; }
 .dual-fill { position: absolute; top: -0.5px; height: 2px; background: var(--ink); }
 .dual-fill::before, .dual-fill::after { content: ''; position: absolute; top: -8px; left: -9px; width: 18px; height: 18px; border-radius: 50%; background: var(--thumb); }
 .dual-fill::after { left: auto; right: -9px; }

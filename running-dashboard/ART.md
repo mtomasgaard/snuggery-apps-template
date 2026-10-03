@@ -488,10 +488,10 @@ the table, the Block, this week's figure and the verdict.
   scrolls beneath them (the owner: "The sliders should be locked on top for relevant pages", 2026-10-03).
   They are one block at the top of the pane's scroller, `position: sticky; top: 0` on `--page` (z-index 4:
   over a chart's card, under a notice), in the flow, so at rest the pane's content begins at its foot and
-  nothing is covered: 136 px on Training and Sessions, 88 on Health (`shoot.mjs` measures the content's
+  nothing is covered: 124 px on Training and Sessions, 76 on Health (`shoot.mjs` measures the content's
   top at the block's height). It counts against the plate as the header does: of the 694 px pane at
-  390 × 844 it leaves 558 at rest and 606 once its first row has tucked; on a phone on its side, 184 and
-  232 of 320. Its rows, from the top:
+  390 × 844 it leaves 570 at rest and 618 once its first row has tucked; on a phone on its side, 196 and
+  244 of 320. Its rows, from the top:
   - *Sport and equipment*: native `<select>`s set as word keys: 12.5 px `--ink` at 560 in a 1 px
     `--line-strong` frame, 6 px radius, 44 px tall, no chevron glyph and no fill, 4 px under the tabs.
     Named `Activity type` and `Equipment`. Whether iOS zooms the page when one is focused (its text is
@@ -516,8 +516,11 @@ the table, the Block, this week's figure and the verdict.
     sliders, so the phone paints nothing of its own there, and the heads are the fill's `::before` and
     `::after`, round, ringed in a 2 px `--ink` circle on a key's focus only. `shoot.mjs` finds nothing
     but the page in each thumb's 44 × 44 box outside its head and the track (0 of 5 616 samples) and each
-    hit 44 × 44. Named `Start of window` and `End of window`. The route's distance window on Sessions
-    is drawn the same way.
+    hit 44 × 44. Named `Start of window` and `End of window`. **The row is 32 px with the track 10 px
+    down** (the owner: "moved slightly upwards to make it take up less space", 2026-10-03), so the heads
+    sit close under the window words and the block is 12 px shorter than with a 44 px row; the inputs
+    keep their 44 px and overhang the content's first line, a heading, which no tap is meant for. The
+    route's distance window on Sessions is drawn the same way.
 - **Sections, not cards.** Each chart is a section on `--page`: a 1 px `--line` rule above it (none
   above the first), 16 px padding top; its heading at 13.5 px 650 in sentence case. A pane's group
   heading (`Running`, `Load`, `Heart` on Training; `Today`, `Recovery and trends` on Health) is an `h2`
