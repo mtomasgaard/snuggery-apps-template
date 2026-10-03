@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-03T19:02:02Z",
+ "generatedAt": "2026-10-03T20:01:21Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/03/how-a-farmers-protest-in-bucharest-was-inflated-online-then-hijacked/",
+     "published": "2026-10-03T18:40:44Z",
+     "summary": "Over 1,180 Facebook posts and 100 TikTok videos analyzed showed how a genuine farmers’ protest was inflated by clusters of accounts sharing identical messages, then folded into anti-government, anti-EU and pro-Kremlin…",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
     {
      "title": "Ukraine war ‘a human rights catastrophe’ that must end, says Türk",
      "source": "UN News",
@@ -23,7 +33,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": true,
+     "stale": false,
      "author": "Sydney Allen"
     },
     {
@@ -33,7 +43,7 @@
      "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": true,
+     "stale": false,
      "author": "Elmira Lyapina"
     },
     {
@@ -43,7 +53,7 @@
      "link": "https://globalvoices.org/2026/09/28/after-five-years-of-war-how-do-ukrainian-small-businesses-survive/",
      "published": "2026-09-28T06:00:15Z",
      "summary": "In this interview, writer and journalist Victoria Belim-Frolova shares her observations about Russia’s war on Ukraine and how it forces “a constant process of adaptation,” especially in women-led small businesses.",
-     "stale": true,
+     "stale": false,
      "author": "Nevena Borisova"
     },
     {
@@ -56,23 +66,13 @@
      "stale": false
     },
     {
-     "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/09/23/pskovs-medieval-religious-art-is-being-appropriated-by-the-russian-state-to-support-the-invasion-of-ukraine/",
-     "published": "2026-09-23T06:04:03Z",
-     "summary": "In Russia, authorities are leveraging traditional medieval religious art of the once-independent city-state of Pskov to justify its invasion of Ukraine.",
-     "stale": true,
-     "author": "Daria Dergacheva"
-    },
-    {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
      "source": "Global Voices",
      "feed": "gv-western-europe",
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Omid Memarian"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
      "published": "2026-09-15T08:33:09Z",
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     }
    ]
@@ -536,17 +536,17 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-europe",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
+   "published": "2026-10-03 18:40 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Ukraine war ‘a human rights catastrophe’ that must end, says Türk",
    "published": "2026-10-02 12:00 UTC"
@@ -699,12 +705,6 @@
    "source": "UN News",
    "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
    "published": "2026-09-23 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
-   "published": "2026-09-23 06:04 UTC"
   },
   {
    "region": "Europe",
