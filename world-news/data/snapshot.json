@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-04T19:01:22Z",
+ "generatedAt": "2026-10-04T20:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Christa Pike’s botched execution exposes the deep contradictions of a ‘painless’ state-imposed death",
+     "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/christa-pikes-botched-execution-exposes-the-deep-contradictions-of-a-painless-state-imposed-death-293432",
-     "published": "2026-10-02T06:27:13Z",
+     "link": "https://theconversation.com/the-same-satellite-can-have-military-and-civilian-functions-this-creates-a-dilemma-for-nz-293087",
+     "published": "2026-10-04T19:08:25Z",
      "summary": "",
      "stale": false,
-     "author": "Julian Koplin, Lecturer in Bioethics, Monash University; The University of Melbourne"
+     "author": "Carolle Varughese, PhD Candidate in Public Policy (space-related risks), University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "Why a decade of AI safety promises keep failing to bite",
+     "title": "Aboriginal historian Barry Corr vividly investigates colonisation – but is less convincing on politics",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-a-decade-of-ai-safety-promises-keep-failing-to-bite-293342",
-     "published": "2026-10-02T04:42:33Z",
+     "link": "https://theconversation.com/aboriginal-historian-barry-corr-vividly-investigates-colonisation-but-is-less-convincing-on-politics-289904",
+     "published": "2026-10-04T19:08:11Z",
      "summary": "",
      "stale": false,
-     "author": "Jon Whittle, Professorial Fellow (Artificial Intelligence), Melbourne Business School, The University of Melbourne"
+     "author": "Tim Rowse, Emeritus Professor, Institute for Culture and Society, Western Sydney University"
     },
     {
-     "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
+     "title": "Friendships are important. Could (or should) they be legally recognised?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/as-brazil-prepares-to-vote-for-a-new-leader-can-latin-american-democracies-withstand-us-pressure-293094",
-     "published": "2026-10-02T03:51:12Z",
+     "link": "https://theconversation.com/friendships-are-important-could-or-should-they-be-legally-recognised-292224",
+     "published": "2026-10-04T19:07:52Z",
      "summary": "",
      "stale": false,
-     "author": "Shannon Brincat, Senior Lecturer in Politics and International Relations, University of the Sunshine Coast"
+     "author": "Maddison Sideris, Associate Teaching Fellow, Sociology, Deakin University"
     },
     {
      "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Christa Pike’s botched execution exposes the deep contradictions of a ‘painless’ state-imposed death",
-   "published": "2026-10-02 06:27 UTC"
+   "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
+   "published": "2026-10-04 19:08 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why a decade of AI safety promises keep failing to bite",
-   "published": "2026-10-02 04:42 UTC"
+   "title": "Aboriginal historian Barry Corr vividly investigates colonisation – but is less convincing on politics",
+   "published": "2026-10-04 19:08 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "As Brazil prepares to vote for a new leader, can Latin American democracies withstand US pressure?",
-   "published": "2026-10-02 03:51 UTC"
+   "title": "Friendships are important. Could (or should) they be legally recognised?",
+   "published": "2026-10-04 19:07 UTC"
   },
   {
    "region": "Oceania",
