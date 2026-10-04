@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-04T22:01:17Z",
+ "generatedAt": "2026-10-04T23:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/albaneses-ratings-slump-in-redbridge-poll-after-interest-rate-hike-293202",
+     "published": "2026-10-04T22:38:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Your say: week beginning October 5",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,7 +461,7 @@
     {
      "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/the-same-satellite-can-have-military-and-civilian-functions-this-creates-a-dilemma-for-nz-293087",
      "published": "2026-10-04T19:08:25Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Tim Rowse, Emeritus Professor, Institute for Culture and Society, Western Sydney University"
-    },
-    {
-     "title": "Faith, rhetoric and the ballot box: How religion has shaped Brazil’s current presidential election",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/faith-rhetoric-and-the-ballot-box-how-religion-has-shaped-brazils-current-presidential-election-293495",
-     "published": "2026-10-02T20:09:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Manuela Lowenthal, Pesquisadora de Doutorado, Universidade Federal de São Paulo (UNIFESP)"
     },
     {
      "title": "The sound of resistance",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
+   "published": "2026-10-04 22:38 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning October 5",
    "published": "2026-10-04 20:06 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Aboriginal historian Barry Corr vividly investigates colonisation – but is less convincing on politics",
    "published": "2026-10-04 19:08 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Faith, rhetoric and the ballot box: How religion has shaped Brazil’s current presidential election",
-   "published": "2026-10-02 20:09 UTC"
   },
   {
    "region": "Oceania",
