@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-04T10:01:52Z",
+ "generatedAt": "2026-10-04T16:01:47Z",
  "zone": "NO2",
  "zoneName": "Norway south-west",
  "timezone": "Europe/Oslo",
@@ -34,7 +34,7 @@
  ],
  "hours": [],
  "lastGood": {
-  "generatedAt": "2026-10-04T04:01:24Z",
+  "generatedAt": "2026-10-04T10:01:52Z",
   "days": [
    {
     "date": "2026-10-04",
@@ -719,13 +719,13 @@
    "date": "2026-10-04",
    "appliance": "Dishwasher",
    "runHours": 2.0,
-   "windowScope": "from 12:00",
-   "cheapestStart": "13:15",
-   "cheapestEnd": "15:15",
-   "avgPrice": 63.55,
+   "windowScope": "from 18:00",
+   "cheapestStart": "22:00",
+   "cheapestEnd": "00:00",
+   "avgPrice": 152.88,
    "dayMean": 139.69,
    "unit": "EUR/MWh",
-   "savingPct": 55
+   "savingPct": -9
   },
   {
    "row": "appliance",
@@ -747,13 +747,13 @@
    "date": "2026-10-04",
    "appliance": "Washing machine",
    "runHours": 1.5,
-   "windowScope": "from 12:00",
-   "cheapestStart": "13:15",
-   "cheapestEnd": "14:45",
-   "avgPrice": 60.85,
+   "windowScope": "from 18:00",
+   "cheapestStart": "22:30",
+   "cheapestEnd": "00:00",
+   "avgPrice": 152.38,
    "dayMean": 139.69,
    "unit": "EUR/MWh",
-   "savingPct": 56
+   "savingPct": -9
   },
   {
    "row": "appliance",
@@ -775,13 +775,13 @@
    "date": "2026-10-04",
    "appliance": "Car charging",
    "runHours": 4.0,
-   "windowScope": "from 12:00",
-   "cheapestStart": "12:00",
-   "cheapestEnd": "16:00",
-   "avgPrice": 77.92,
+   "windowScope": "from 18:00",
+   "cheapestStart": "20:00",
+   "cheapestEnd": "00:00",
+   "avgPrice": 154.12,
    "dayMean": 139.69,
    "unit": "EUR/MWh",
-   "savingPct": 44
+   "savingPct": -10
   },
   {
    "row": "appliance",
@@ -803,13 +803,13 @@
    "date": "2026-10-04",
    "appliance": "Tumble dryer",
    "runHours": 2.0,
-   "windowScope": "from 12:00",
-   "cheapestStart": "13:15",
-   "cheapestEnd": "15:15",
-   "avgPrice": 63.55,
+   "windowScope": "from 18:00",
+   "cheapestStart": "22:00",
+   "cheapestEnd": "00:00",
+   "avgPrice": 152.88,
    "dayMean": 139.69,
    "unit": "EUR/MWh",
-   "savingPct": 55
+   "savingPct": -9
   }
  ]
 }
