@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-04T20:01:26Z",
+ "generatedAt": "2026-10-04T21:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168492",
+     "published": "2026-10-04T12:00:00Z",
+     "summary": "A documentary drawn from United Nations University research was screened at the COP30 climate conference and film festivals across Europe. Its most important journey, though, was the one back to the Mexico City canals…",
+     "stale": false
+    },
+    {
      "title": "Hunter-gatherer societies are often put on a pedestal as paragons of equality – but the reality is more complicated",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -148,15 +157,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168461",
      "published": "2026-09-26T12:00:00Z",
      "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
-     "stale": false
-    },
-    {
-     "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168458",
-     "published": "2026-09-26T12:00:00Z",
-     "summary": "Cuba’s Foreign Minister warned the UN General Assembly on Saturday that escalating military and economic pressure in Latin America and the Caribbean was threatening international law, while accusing the United States of…",
      "stale": false
     },
     {
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Your say: week beginning October 5",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-october-5-293530",
+     "published": "2026-10-04T20:06:08Z",
+     "summary": "",
+     "stale": false,
+     "author": "Judy Ingham, Newsletter Producer, The Conversation"
+    },
+    {
+     "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/breaking-up-nzs-power-gentailers-sounds-appealing-the-consequences-may-not-be-292898",
+     "published": "2026-10-04T20:01:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Richard Meade, Adjunct Associate Professor, Centre for Applied Energy Economics and Policy Research, Griffith University"
+    },
+    {
      "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,34 +469,14 @@
      "author": "Tim Rowse, Emeritus Professor, Institute for Culture and Society, Western Sydney University"
     },
     {
-     "title": "Friendships are important. Could (or should) they be legally recognised?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/friendships-are-important-could-or-should-they-be-legally-recognised-292224",
-     "published": "2026-10-04T19:07:52Z",
-     "summary": "",
-     "stale": false,
-     "author": "Maddison Sideris, Associate Teaching Fellow, Sociology, Deakin University"
-    },
-    {
-     "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
+     "title": "Faith, rhetoric and the ballot box: How religion has shaped Brazil’s current presidential election",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/australias-medicare-breach-reveals-a-new-kind-of-cyber-threat-how-must-nz-respond-293332",
-     "published": "2026-10-02T00:36:47Z",
+     "link": "https://theconversation.com/faith-rhetoric-and-the-ballot-box-how-religion-has-shaped-brazils-current-presidential-election-293495",
+     "published": "2026-10-02T20:09:41Z",
      "summary": "",
      "stale": false,
-     "author": "Alexandra Sims, Professor in Commericial Law, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "From rock bottom to a grand final: what’s behind the Newcastle Knights’ incredible rise?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/from-rock-bottom-to-a-grand-final-whats-behind-the-newcastle-knights-incredible-rise-293106",
-     "published": "2026-10-01T23:48:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ashlee Morgan, Associate Professor, Sports Management, Flinders University"
+     "author": "Manuela Lowenthal, Pesquisadora de Doutorado, Universidade Federal de São Paulo (UNIFESP)"
     },
     {
      "title": "The sound of resistance",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
+   "published": "2026-10-04 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Hunter-gatherer societies are often put on a pedestal as paragons of equality – but the reality is more complicated",
    "published": "2026-10-03 14:38 UTC"
@@ -752,12 +758,6 @@
    "region": "Americas",
    "source": "UN News",
    "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
-   "published": "2026-09-26 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
    "published": "2026-09-26 12:00 UTC"
   },
   {
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Your say: week beginning October 5",
+   "published": "2026-10-04 20:06 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
+   "published": "2026-10-04 20:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
    "published": "2026-10-04 19:08 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Friendships are important. Could (or should) they be legally recognised?",
-   "published": "2026-10-04 19:07 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australia’s Medicare breach reveals a new kind of cyber threat. How must NZ respond?",
-   "published": "2026-10-02 00:36 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "From rock bottom to a grand final: what’s behind the Newcastle Knights’ incredible rise?",
-   "published": "2026-10-01 23:48 UTC"
+   "title": "Faith, rhetoric and the ballot box: How religion has shaped Brazil’s current presidential election",
+   "published": "2026-10-02 20:09 UTC"
   },
   {
    "region": "Oceania",
