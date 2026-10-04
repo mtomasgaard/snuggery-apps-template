@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-04T09:01:30Z",
+ "generatedAt": "2026-10-04T10:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/africas-new-credit-agency-why-its-about-a-lot-more-than-just-ratings-293227",
+     "published": "2026-10-04T08:19:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Misheck Mutize, Post Doctoral Researcher, Graduate School of Business (GSB), University of Cape Town"
+    },
+    {
+     "title": "Africa’s new credit agency: why it’s needed",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/africas-new-credit-agency-why-its-needed-291947",
+     "published": "2026-10-04T08:19:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Daniel Cash, Senior Fellow, Centre for Policy Research (UNU-CPR), United Nations University; Aston University"
+    },
+    {
      "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
      "source": "UN News",
      "feed": "un-africa",
@@ -184,26 +204,6 @@
      "published": "2026-10-03T12:00:00Z",
      "summary": "The package originated in Entebbe, Uganda, bound for Cairo, containing 10 kilograms of thumb-sized pieces that could have been either bone or elephant ivory.",
      "stale": false
-    },
-    {
-     "title": "79 deaths a day: South Africa’s diabetes crisis needs a new strategy",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/79-deaths-a-day-south-africas-diabetes-crisis-needs-a-new-strategy-293063",
-     "published": "2026-10-02T12:56:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Patrick Ngassa Piotie, Chairperson, Diabetes Alliance; Co-founder, Diabetes Research Centre, University of Pretoria"
-    },
-    {
-     "title": "Olympe Bhêly-Quenum a 100 ans : l’écrivain béninois qui a élargi les frontières de la francophonie",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/olympe-bhely-quenum-a-100-ans-lecrivain-beninois-qui-a-elargi-les-frontieres-de-la-francophonie-293229",
-     "published": "2026-10-02T10:02:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christophe Premat, Professor, Canadian and Cultural Studies, Stockholm University"
     },
     {
      "title": "The sound of resistance",
@@ -768,21 +768,21 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
+   "published": "2026-10-04 08:19 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Africa’s new credit agency: why it’s needed",
+   "published": "2026-10-04 08:19 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
    "published": "2026-10-03 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "79 deaths a day: South Africa’s diabetes crisis needs a new strategy",
-   "published": "2026-10-02 12:56 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Olympe Bhêly-Quenum a 100 ans : l’écrivain béninois qui a élargi les frontières de la francophonie",
-   "published": "2026-10-02 10:02 UTC"
   },
   {
    "region": "Africa",
