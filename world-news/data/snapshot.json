@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T05:01:24Z",
+ "generatedAt": "2026-10-05T06:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/05/too-young-to-run-old-enough-to-protest-west-africas-unfinished-democratic-bargain/",
+     "published": "2026-10-05T05:22:25Z",
+     "summary": "Young people are old enough to vote and old enough to protest but are often told they need experience before they can hold political office.",
+     "stale": false,
+     "author": "Adesewa Olofinko"
+    },
+    {
      "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "In central Sahel's countries military juntas claim to restore popular sovereignty. Political parties are dissolved in all three countries, over a thousand civil society organizations have been suspended.",
      "stale": false,
      "author": "Jean Sovon"
-    },
-    {
-     "title": "When telcos shut down the internet, they shut down protests for the government",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/09/28/when-telcos-shut-down-the-internet-they-shut-down-protests-for-the-government/",
-     "published": "2026-09-28T18:11:19Z",
-     "summary": "Room to protest is narrowing in Africa, as governments lean on arrests, curfews, and internet blackouts to blunt dissent. When the streets become too dangerous, dissent often migrates online.",
-     "stale": false,
-     "author": "Ranking Digital Rights"
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
+   "published": "2026-10-05 05:22 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
    "published": "2026-10-04 08:19 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
    "published": "2026-09-30 03:37 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "When telcos shut down the internet, they shut down protests for the government",
-   "published": "2026-09-28 18:11 UTC"
   },
   {
    "region": "Middle East",
