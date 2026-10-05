@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T16:01:26Z",
+ "generatedAt": "2026-10-05T21:16:03Z",
  "zone": "NO2",
  "zoneName": "Norway south-west",
  "timezone": "Europe/Oslo",
@@ -1088,20 +1088,6 @@
    "row": "appliance",
    "day": "Today",
    "date": "2026-10-05",
-   "appliance": "Dishwasher",
-   "runHours": 2.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 142.35,
-   "dayMean": 124.72,
-   "unit": "EUR/MWh",
-   "savingPct": -14
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-05",
    "appliance": "Washing machine",
    "runHours": 1.5,
    "windowScope": "whole day",
@@ -1111,20 +1097,6 @@
    "dayMean": 124.72,
    "unit": "EUR/MWh",
    "savingPct": 85
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-05",
-   "appliance": "Washing machine",
-   "runHours": 1.5,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:30",
-   "cheapestEnd": "00:00",
-   "avgPrice": 142.07,
-   "dayMean": 124.72,
-   "unit": "EUR/MWh",
-   "savingPct": -14
   },
   {
    "row": "appliance",
@@ -1144,20 +1116,6 @@
    "row": "appliance",
    "day": "Today",
    "date": "2026-10-05",
-   "appliance": "Car charging",
-   "runHours": 4.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "20:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 145.27,
-   "dayMean": 124.72,
-   "unit": "EUR/MWh",
-   "savingPct": -16
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-05",
    "appliance": "Tumble dryer",
    "runHours": 2.0,
    "windowScope": "whole day",
@@ -1167,20 +1125,6 @@
    "dayMean": 124.72,
    "unit": "EUR/MWh",
    "savingPct": 78
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-05",
-   "appliance": "Tumble dryer",
-   "runHours": 2.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 142.35,
-   "dayMean": 124.72,
-   "unit": "EUR/MWh",
-   "savingPct": -14
   },
   {
    "row": "hour",
