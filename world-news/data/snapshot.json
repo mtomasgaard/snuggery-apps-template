@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-04T23:01:22Z",
+ "generatedAt": "2026-10-05T00:01:59Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "An Australian novelist’s ‘masterful’ memoir taught me more about my crippling hormonal mood disorder",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/an-australian-novelists-masterful-memoir-taught-me-more-about-my-crippling-hormonal-mood-disorder-289219",
+     "published": "2026-10-04T23:48:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adele Pavlidis, Associate Professor, and Director of the Griffith Centre for Social and Cultural Research, Griffith University"
+    },
+    {
+     "title": "Kauri dieback threatens more than trees: it could change how much carbon forests store",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/kauri-dieback-threatens-more-than-trees-it-could-change-how-much-carbon-forests-store-293102",
+     "published": "2026-10-04T23:10:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Pin Jia Chan, PhD Candidate, School of Environment, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
      "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Richard Meade, Adjunct Associate Professor, Centre for Applied Energy Economics and Policy Research, Griffith University"
-    },
-    {
-     "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-same-satellite-can-have-military-and-civilian-functions-this-creates-a-dilemma-for-nz-293087",
-     "published": "2026-10-04T19:08:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Carolle Varughese, PhD Candidate in Public Policy (space-related risks), University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Aboriginal historian Barry Corr vividly investigates colonisation – but is less convincing on politics",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/aboriginal-historian-barry-corr-vividly-investigates-colonisation-but-is-less-convincing-on-politics-289904",
-     "published": "2026-10-04T19:08:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tim Rowse, Emeritus Professor, Institute for Culture and Society, Western Sydney University"
     },
     {
      "title": "The sound of resistance",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "An Australian novelist’s ‘masterful’ memoir taught me more about my crippling hormonal mood disorder",
+   "published": "2026-10-04 23:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Kauri dieback threatens more than trees: it could change how much carbon forests store",
+   "published": "2026-10-04 23:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
    "published": "2026-10-04 22:38 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
    "published": "2026-10-04 20:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The same satellite can have military and civilian functions. This creates a dilemma for NZ",
-   "published": "2026-10-04 19:08 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Aboriginal historian Barry Corr vividly investigates colonisation – but is less convincing on politics",
-   "published": "2026-10-04 19:08 UTC"
   },
   {
    "region": "Oceania",
