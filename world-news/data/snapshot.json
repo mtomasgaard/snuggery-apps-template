@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T19:01:33Z",
+ "generatedAt": "2026-10-05T21:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,46 @@
    "stale": false,
    "items": [
     {
+     "title": "Africa’s rhinos often get the spotlight – but Indonesia’s two rhino species are far closer to extinction",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/africas-rhinos-often-get-the-spotlight-but-indonesias-two-rhino-species-are-far-closer-to-extinction-292679",
+     "published": "2026-10-05T19:10:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Campbell-Ward, Associate Professor, Wildlife and Avian Medicine, University of Sydney"
+    },
+    {
+     "title": "Psychedelic drugs were once considered ‘revolutionary rocket fuel’, but could they be life-changing medicines?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/psychedelic-drugs-were-once-considered-revolutionary-rocket-fuel-but-could-they-be-life-changing-medicines-288801",
+     "published": "2026-10-05T19:10:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Marty Branagan, Associate Professor in Peace Studies, University of New England"
+    },
+    {
+     "title": "Slow down, reminisce if it feels right: practical tips for talking to people with dementia",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/slow-down-reminisce-if-it-feels-right-practical-tips-for-talking-to-people-with-dementia-289486",
+     "published": "2026-10-05T19:10:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nikki-Anne Wilson, Lecturer, School of Psychology, UNSW ; Neuroscience Research Australia"
+    },
+    {
+     "title": "Three years after October 7, global attention on Gaza has receded. The real test will come after Israel’s election",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/three-years-after-october-7-global-attention-on-gaza-has-receded-the-real-test-will-come-after-israels-election-292360",
+     "published": "2026-10-05T19:09:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Eyal Mayroz, Senior Lecturer in Peace and Conflict Studies, University of Sydney"
+    },
+    {
      "title": "How much is the European trade deal at risk over NZ’s climate commitments?",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -437,46 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Vernon Rive, Associate Professor of Law, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "How pond algae led to a Nobel prize and a new way to study the brain",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-pond-algae-led-to-a-nobel-prize-and-a-new-way-to-study-the-brain-293579",
-     "published": "2026-10-05T14:59:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert Lucas, Professor, Neuroscience, University of Manchester"
-    },
-    {
-     "title": "A magnitude 4.8 earthquake just shook southeast Victoria. Here’s why we may expect more",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-magnitude-4-8-earthquake-just-shook-southeast-victoria-heres-why-we-may-expect-more-293522",
-     "published": "2026-10-05T02:21:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dee Ninis, Earthquake Scientist, Monash University"
-    },
-    {
-     "title": "Before the budget: how Governor Phillip managed without cash in the colony",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/before-the-budget-how-governor-phillip-managed-without-cash-in-the-colony-292371",
-     "published": "2026-10-05T01:15:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Crocker, Graduate Researcher Teaching Fellow, Deakin University"
-    },
-    {
-     "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/anger-remorse-conspiracy-theories-how-sports-fans-cope-when-their-club-does-wrong-293205",
-     "published": "2026-10-05T00:31:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Rowe, Emeritus Professor of Cultural Research, Institute for Culture and Society, Western Sydney University"
     },
     {
      "title": "The sound of resistance",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Africa’s rhinos often get the spotlight – but Indonesia’s two rhino species are far closer to extinction",
+   "published": "2026-10-05 19:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Psychedelic drugs were once considered ‘revolutionary rocket fuel’, but could they be life-changing medicines?",
+   "published": "2026-10-05 19:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Slow down, reminisce if it feels right: practical tips for talking to people with dementia",
+   "published": "2026-10-05 19:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Three years after October 7, global attention on Gaza has receded. The real test will come after Israel’s election",
+   "published": "2026-10-05 19:09 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How much is the European trade deal at risk over NZ’s climate commitments?",
    "published": "2026-10-05 18:50 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How pond algae led to a Nobel prize and a new way to study the brain",
-   "published": "2026-10-05 14:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A magnitude 4.8 earthquake just shook southeast Victoria. Here’s why we may expect more",
-   "published": "2026-10-05 02:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Before the budget: how Governor Phillip managed without cash in the colony",
-   "published": "2026-10-05 01:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
-   "published": "2026-10-05 00:31 UTC"
   },
   {
    "region": "Oceania",
