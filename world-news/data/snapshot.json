@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T22:01:22Z",
+ "generatedAt": "2026-10-05T23:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/optogenetics-wins-the-nobel-one-neuroscience-breakthrough-in-a-line-of-technological-innovations-helping-scientists-map-and-control-the-brain-293619",
+     "published": "2026-10-05T22:06:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kimberlee D'Ardenne, Assistant Research Professor in Psychology, Arizona State University"
+    },
+    {
      "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Karen Masterson, Assistant Professor of Journalism, University of Richmond"
-    },
-    {
-     "title": "Fewer Americans are getting help buying groceries from SNAP benefits as states grapple with the program’s cascade of changes",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/fewer-americans-are-getting-help-buying-groceries-from-snap-benefits-as-states-grapple-with-the-programs-cascade-of-changes-292829",
-     "published": "2026-10-05T12:17:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tracy Roof, Associate Professor of Political Science, University of Richmond"
     },
     {
      "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Cheap Chinese EVs could soon shake up NZ’s used car market. Are we ready?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/cheap-chinese-evs-could-soon-shake-up-nzs-used-car-market-are-we-ready-292596",
+     "published": "2026-10-05T22:31:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kenny Ching, Senior Lecturer, Business School, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "You’ve probably never heard of synchronous condensers. But they’re essential in the push for renewables",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/youve-probably-never-heard-of-synchronous-condensers-but-theyre-essential-in-the-push-for-renewables-290630",
+     "published": "2026-10-05T22:25:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Md Ohirul Qays, Research Officer in Electrical and Electronic Engineering, CQUniversity Australia"
+    },
+    {
      "title": "Africa’s rhinos often get the spotlight – but Indonesia’s two rhino species are far closer to extinction",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,24 +459,14 @@
      "author": "Michelle Campbell-Ward, Associate Professor, Wildlife and Avian Medicine, University of Sydney"
     },
     {
-     "title": "Psychedelic drugs were once considered ‘revolutionary rocket fuel’, but could they be life-changing medicines?",
+     "title": "‘1.5°C to stay alive’: Pacific countries demand the world makes good on climate promises",
      "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/psychedelic-drugs-were-once-considered-revolutionary-rocket-fuel-but-could-they-be-life-changing-medicines-288801",
-     "published": "2026-10-05T19:10:24Z",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/1-5-c-to-stay-alive-pacific-countries-demand-the-world-makes-good-on-climate-promises-293539",
+     "published": "2026-10-05T19:09:59Z",
      "summary": "",
      "stale": false,
-     "author": "Marty Branagan, Associate Professor in Peace Studies, University of New England"
-    },
-    {
-     "title": "Slow down, reminisce if it feels right: practical tips for talking to people with dementia",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/slow-down-reminisce-if-it-feels-right-practical-tips-for-talking-to-people-with-dementia-289486",
-     "published": "2026-10-05T19:10:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nikki-Anne Wilson, Lecturer, School of Psychology, UNSW ; Neuroscience Research Australia"
+     "author": "Wesley Morgan, Research Associate, Institute for Climate Risk and Response, UNSW"
     },
     {
      "title": "Three years after October 7, global attention on Gaza has receded. The real test will come after Israel’s election",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Eyal Mayroz, Senior Lecturer in Peace and Conflict Studies, University of Sydney"
-    },
-    {
-     "title": "How much is the European trade deal at risk over NZ’s climate commitments?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-much-is-the-european-trade-deal-at-risk-over-nzs-climate-commitments-293425",
-     "published": "2026-10-05T18:50:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Vernon Rive, Associate Professor of Law, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "The sound of resistance",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
-   "published": "2026-10-05 12:29 UTC"
+   "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
+   "published": "2026-10-05 22:06 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Fewer Americans are getting help buying groceries from SNAP benefits as states grapple with the program’s cascade of changes",
-   "published": "2026-10-05 12:17 UTC"
+   "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
+   "published": "2026-10-05 12:29 UTC"
   },
   {
    "region": "Americas",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Cheap Chinese EVs could soon shake up NZ’s used car market. Are we ready?",
+   "published": "2026-10-05 22:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "You’ve probably never heard of synchronous condensers. But they’re essential in the push for renewables",
+   "published": "2026-10-05 22:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Africa’s rhinos often get the spotlight – but Indonesia’s two rhino species are far closer to extinction",
    "published": "2026-10-05 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Psychedelic drugs were once considered ‘revolutionary rocket fuel’, but could they be life-changing medicines?",
-   "published": "2026-10-05 19:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Slow down, reminisce if it feels right: practical tips for talking to people with dementia",
-   "published": "2026-10-05 19:10 UTC"
+   "title": "‘1.5°C to stay alive’: Pacific countries demand the world makes good on climate promises",
+   "published": "2026-10-05 19:09 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Three years after October 7, global attention on Gaza has receded. The real test will come after Israel’s election",
    "published": "2026-10-05 19:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How much is the European trade deal at risk over NZ’s climate commitments?",
-   "published": "2026-10-05 18:50 UTC"
   },
   {
    "region": "Oceania",
