@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T09:01:28Z",
+ "generatedAt": "2026-10-05T10:02:06Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Diphtérie : ce qu'il faut savoir sur une maladie que l'on croyait oubliée",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/diphterie-ce-quil-faut-savoir-sur-une-maladie-que-lon-croyait-oubliee-293137",
+     "published": "2026-10-05T09:21:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alpha Kabinet Keita, Médecin et Microbiologiste, chercheur au Centre de Recherche et de Formation en Infectiologie de Guinée et à l'Unité TransVIHMI (Univ…"
+    },
+    {
      "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Misheck Mutize, Post Doctoral Researcher, Graduate School of Business (GSB), University of Cape Town"
-    },
-    {
-     "title": "Africa’s new credit agency: why it’s needed",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/africas-new-credit-agency-why-its-needed-291947",
-     "published": "2026-10-04T08:19:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel Cash, Senior Fellow, Centre for Policy Research (UNU-CPR), United Nations University; Aston University"
     },
     {
      "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "One day behind bars: Students and incarcerated women break prison stigma in Thailand",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168518",
+     "published": "2026-10-05T12:00:00Z",
+     "summary": "“Your mind follows the thread, one by one, row by row. You know? It’s like meditation. I don’t like machines.”",
+     "stale": false
+    },
+    {
      "title": "How Cambodia’s law on ‘freedom parks’ curtailed people’s right to protest",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -381,15 +390,6 @@
      "summary": "Beijing is carrying an older geography of extraction into the AI era, turning Uyghur land, energy and labour into computing power while remaining silent about coercion and surveillance.",
      "stale": false,
      "author": "Asiye Uyghur"
-    },
-    {
-     "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168491",
-     "published": "2026-09-30T12:00:00Z",
-     "summary": "The UN refugee agency, UNHCR, has voiced concern over Malaysia’s decision to return 1,476 people to Myanmar amid an ongoing civil war and a dire human rights and humanitarian situation.",
-     "stale": false
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Diphtérie : ce qu'il faut savoir sur une maladie que l'on croyait oubliée",
+   "published": "2026-10-05 09:21 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
    "published": "2026-10-05 05:22 UTC"
@@ -776,12 +782,6 @@
    "region": "Africa",
    "source": "The Conversation",
    "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
-   "published": "2026-10-04 08:19 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Africa’s new credit agency: why it’s needed",
    "published": "2026-10-04 08:19 UTC"
   },
   {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "One day behind bars: Students and incarcerated women break prison stigma in Thailand",
+   "published": "2026-10-05 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "How Cambodia’s law on ‘freedom parks’ curtailed people’s right to protest",
    "published": "2026-10-02 08:10 UTC"
@@ -885,12 +891,6 @@
    "source": "Global Voices",
    "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
    "published": "2026-10-01 07:34 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
-   "published": "2026-09-30 12:00 UTC"
   },
   {
    "region": "Asia",
