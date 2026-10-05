@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T00:01:59Z",
+ "generatedAt": "2026-10-05T01:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/anger-remorse-conspiracy-theories-how-sports-fans-cope-when-their-club-does-wrong-293205",
+     "published": "2026-10-05T00:31:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "David Rowe, Emeritus Professor of Cultural Research, Institute for Culture and Society, Western Sydney University"
+    },
+    {
      "title": "An Australian novelist’s ‘masterful’ memoir taught me more about my crippling hormonal mood disorder",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Your say: week beginning October 5",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-october-5-293530",
-     "published": "2026-10-04T20:06:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Judy Ingham, Newsletter Producer, The Conversation"
     },
     {
      "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
+   "published": "2026-10-05 00:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "An Australian novelist’s ‘masterful’ memoir taught me more about my crippling hormonal mood disorder",
    "published": "2026-10-04 23:48 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
    "published": "2026-10-04 22:38 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning October 5",
-   "published": "2026-10-04 20:06 UTC"
   },
   {
    "region": "Oceania",
