@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T18:01:25Z",
+ "generatedAt": "2026-10-05T19:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "ICC unseals four arrest warrants over Taliban persecution of women and girls",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168521",
+     "published": "2026-10-05T12:00:00Z",
+     "summary": "The International Criminal Court (ICC) has made public four arrest warrants against senior Taliban figures, accusing them of persecuting women and girls in Afghanistan, which amounts to a crime against humanity.",
+     "stale": false
+    },
+    {
      "title": "One day behind bars: Students and incarcerated women break prison stigma in Thailand",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -371,15 +380,6 @@
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168500",
-     "published": "2026-10-01T12:00:00Z",
-     "summary": "The deadly flash floods in northern Nepal have severely disrupted employment and livelihoods, with wider impacts beyond communities that were directly affected, the International Labour Organization (ILO) said in a…",
-     "stale": false
     },
     {
      "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "How much is the European trade deal at risk over NZ’s climate commitments?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/how-much-is-the-european-trade-deal-at-risk-over-nzs-climate-commitments-293425",
+     "published": "2026-10-05T18:50:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Vernon Rive, Associate Professor of Law, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "How pond algae led to a Nobel prize and a new way to study the brain",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/how-pond-algae-led-to-a-nobel-prize-and-a-new-way-to-study-the-brain-293579",
+     "published": "2026-10-05T14:59:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert Lucas, Professor, Neuroscience, University of Manchester"
+    },
+    {
      "title": "A magnitude 4.8 earthquake just shook southeast Victoria. Here’s why we may expect more",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "David Rowe, Emeritus Professor of Cultural Research, Institute for Culture and Society, Western Sydney University"
-    },
-    {
-     "title": "Kauri dieback threatens more than trees: it could change how much carbon forests store",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/kauri-dieback-threatens-more-than-trees-it-could-change-how-much-carbon-forests-store-293102",
-     "published": "2026-10-04T23:10:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Pin Jia Chan, PhD Candidate, School of Environment, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/breaking-up-nzs-power-gentailers-sounds-appealing-the-consequences-may-not-be-292898",
-     "published": "2026-10-04T20:01:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Richard Meade, Adjunct Associate Professor, Centre for Applied Energy Economics and Policy Research, Griffith University"
     },
     {
      "title": "The sound of resistance",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "UN News",
+   "title": "ICC unseals four arrest warrants over Taliban persecution of women and girls",
+   "published": "2026-10-05 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
    "title": "One day behind bars: Students and incarcerated women break prison stigma in Thailand",
    "published": "2026-10-05 12:00 UTC"
   },
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
-   "published": "2026-10-01 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How much is the European trade deal at risk over NZ’s climate commitments?",
+   "published": "2026-10-05 18:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How pond algae led to a Nobel prize and a new way to study the brain",
+   "published": "2026-10-05 14:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A magnitude 4.8 earthquake just shook southeast Victoria. Here’s why we may expect more",
    "published": "2026-10-05 02:21 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
    "published": "2026-10-05 00:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Kauri dieback threatens more than trees: it could change how much carbon forests store",
-   "published": "2026-10-04 23:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
-   "published": "2026-10-04 20:01 UTC"
   },
   {
    "region": "Oceania",
