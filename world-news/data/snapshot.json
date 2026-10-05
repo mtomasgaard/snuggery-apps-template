@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T02:01:27Z",
+ "generatedAt": "2026-10-05T03:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "A magnitude 4.8 earthquake just shook southeast Victoria. Here’s why we may expect more",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-magnitude-4-8-earthquake-just-shook-southeast-victoria-heres-why-we-may-expect-more-293522",
+     "published": "2026-10-05T02:21:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dee Ninis, Earthquake Scientist, Monash University"
+    },
+    {
+     "title": "Before the budget: how Governor Phillip managed without cash in the colony",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/before-the-budget-how-governor-phillip-managed-without-cash-in-the-colony-292371",
+     "published": "2026-10-05T01:15:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew Crocker, Graduate Researcher Teaching Fellow, Deakin University"
+    },
+    {
      "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,16 +459,6 @@
      "author": "David Rowe, Emeritus Professor of Cultural Research, Institute for Culture and Society, Western Sydney University"
     },
     {
-     "title": "An Australian novelist’s ‘masterful’ memoir taught me more about my crippling hormonal mood disorder",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/an-australian-novelists-masterful-memoir-taught-me-more-about-my-crippling-hormonal-mood-disorder-289219",
-     "published": "2026-10-04T23:48:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adele Pavlidis, Associate Professor, and Director of the Griffith Centre for Social and Cultural Research, Griffith University"
-    },
-    {
      "title": "Kauri dieback threatens more than trees: it could change how much carbon forests store",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Pin Jia Chan, PhD Candidate, School of Environment, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/albaneses-ratings-slump-in-redbridge-poll-after-interest-rate-hike-293202",
-     "published": "2026-10-04T22:38:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Breaking up NZ’s power gentailers sounds appealing. The consequences may not be",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A magnitude 4.8 earthquake just shook southeast Victoria. Here’s why we may expect more",
+   "published": "2026-10-05 02:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Before the budget: how Governor Phillip managed without cash in the colony",
+   "published": "2026-10-05 01:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Anger, remorse, conspiracy theories: how sports fans cope when their club does wrong",
    "published": "2026-10-05 00:31 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "An Australian novelist’s ‘masterful’ memoir taught me more about my crippling hormonal mood disorder",
-   "published": "2026-10-04 23:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Kauri dieback threatens more than trees: it could change how much carbon forests store",
    "published": "2026-10-04 23:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Albanese’s ratings slump in Redbridge poll after interest rate hike",
-   "published": "2026-10-04 22:38 UTC"
   },
   {
    "region": "Oceania",
