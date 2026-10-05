@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-05T13:01:28Z",
+ "generatedAt": "2026-10-05T14:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/us-migrant-flights-to-liberia-evoke-troubling-history-of-sending-people-deemed-unwanted-to-the-west-african-nation-293186",
+     "published": "2026-10-05T12:29:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Karen Masterson, Assistant Professor of Journalism, University of Richmond"
+    },
+    {
+     "title": "Fewer Americans are getting help buying groceries from SNAP benefits as states grapple with the program’s cascade of changes",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/fewer-americans-are-getting-help-buying-groceries-from-snap-benefits-as-states-grapple-with-the-programs-cascade-of-changes-292829",
+     "published": "2026-10-05T12:17:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tracy Roof, Associate Professor of Political Science, University of Richmond"
+    },
+    {
      "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
      "source": "UN News",
      "feed": "un-americas",
@@ -100,26 +120,6 @@
      "published": "2026-10-04T12:00:00Z",
      "summary": "A documentary drawn from United Nations University research was screened at the COP30 climate conference and film festivals across Europe. Its most important journey, though, was the one back to the Mexico City canals…",
      "stale": false
-    },
-    {
-     "title": "Hunter-gatherer societies are often put on a pedestal as paragons of equality – but the reality is more complicated",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/hunter-gatherer-societies-are-often-put-on-a-pedestal-as-paragons-of-equality-but-the-reality-is-more-complicated-289009",
-     "published": "2026-10-03T14:38:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Duncan Stibbard Hawkes, Assistant Professor of Anthropology, Baylor University"
-    },
-    {
-     "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/cornell-7-case-puts-a-spotlight-on-fraternity-misconduct-and-the-limits-of-universities-power-to-stop-it-293305",
-     "published": "2026-10-02T18:10:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Pietro A. Sasso, Associate Professor of Education, Old Dominion University"
     },
     {
      "title": "No more execution attempts on Christa Pike: UN rights chief",
@@ -177,14 +177,33 @@
    "stale": false,
    "items": [
     {
-     "title": "Diphtérie : ce qu'il faut savoir sur une maladie que l'on croyait oubliée",
+     "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/diphterie-ce-quil-faut-savoir-sur-une-maladie-que-lon-croyait-oubliee-293137",
-     "published": "2026-10-05T09:21:22Z",
+     "link": "https://theconversation.com/listen-understand-repeat-the-circular-approach-to-good-communication-in-a-health-crisis-291739",
+     "published": "2026-10-05T13:08:22Z",
      "summary": "",
      "stale": false,
-     "author": "Alpha Kabinet Keita, Médecin et Microbiologiste, chercheur au Centre de Recherche et de Formation en Infectiologie de Guinée et à l'Unité TransVIHMI (Univ…"
+     "author": "Herkulaas MvE Combrink, Senior lecturer/ Co-Director, University of the Free State"
+    },
+    {
+     "title": "Military coups promise change – 4 ways they can leave African countries worse off",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/military-coups-promise-change-4-ways-they-can-leave-african-countries-worse-off-292469",
+     "published": "2026-10-05T13:05:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Mukum Mbaku, Professor, Weber State University"
+    },
+    {
+     "title": "Sudan: Driver killed in aerial attack on aid trucks in South Kordofan",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168519",
+     "published": "2026-10-05T12:00:00Z",
+     "summary": "The World Food Programme (WFP) has strongly condemned a deadly airstrike on two clearly marked aid trucks in South Kordofan, Sudan, this past weekend.",
+     "stale": false
     },
     {
      "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
@@ -195,16 +214,6 @@
      "summary": "Young people are old enough to vote and old enough to protest but are often told they need experience before they can hold political office.",
      "stale": false,
      "author": "Adesewa Olofinko"
-    },
-    {
-     "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/africas-new-credit-agency-why-its-about-a-lot-more-than-just-ratings-293227",
-     "published": "2026-10-04T08:19:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Misheck Mutize, Post Doctoral Researcher, Graduate School of Business (GSB), University of Cape Town"
     },
     {
      "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
@@ -232,15 +241,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168499",
      "published": "2026-10-01T12:00:00Z",
      "summary": "The enormous challenge of halting the spread of Ebola in the Democratic Republic of the Congo (DRC) just became even harder after a key transit centre for patients requiring treatment burned down in Ituri province.",
-     "stale": false
-    },
-    {
-     "title": "Somali families face renewed violence amid worsening hunger crisis",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168495",
-     "published": "2026-09-30T12:00:00Z",
-     "summary": "Children have been killed and injured in fresh fighting in Baidoa, in Somalia’s South West State, where families were already facing severe hunger and other overlapping crises.",
      "stale": false
     },
     {
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
+   "published": "2026-10-05 12:29 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Fewer Americans are getting help buying groceries from SNAP benefits as states grapple with the program’s cascade of changes",
+   "published": "2026-10-05 12:17 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "UN News",
    "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
    "published": "2026-10-04 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Hunter-gatherer societies are often put on a pedestal as paragons of equality – but the reality is more complicated",
-   "published": "2026-10-03 14:38 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Cornell 7 case puts a spotlight on fraternity misconduct – and the limits of universities’ power to stop it",
-   "published": "2026-10-02 18:10 UTC"
   },
   {
    "region": "Americas",
@@ -769,20 +769,26 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Diphtérie : ce qu'il faut savoir sur une maladie que l'on croyait oubliée",
-   "published": "2026-10-05 09:21 UTC"
+   "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
+   "published": "2026-10-05 13:08 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Military coups promise change – 4 ways they can leave African countries worse off",
+   "published": "2026-10-05 13:05 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan: Driver killed in aerial attack on aid trucks in South Kordofan",
+   "published": "2026-10-05 12:00 UTC"
   },
   {
    "region": "Africa",
    "source": "Global Voices",
    "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
    "published": "2026-10-05 05:22 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Africa’s new credit agency: why it’s about a lot more than just ratings",
-   "published": "2026-10-04 08:19 UTC"
   },
   {
    "region": "Africa",
@@ -801,12 +807,6 @@
    "source": "UN News",
    "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
    "published": "2026-10-01 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Somali families face renewed violence amid worsening hunger crisis",
-   "published": "2026-09-30 12:00 UTC"
   },
   {
    "region": "Africa",
