@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T22:01:21Z",
+ "generatedAt": "2026-10-06T23:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Flu season is near – here’s a guide to available vaccines",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/flu-season-is-near-heres-a-guide-to-available-vaccines-293480",
+     "published": "2026-10-06T21:41:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Annette Regan, Adjunct Associate Professor of Epidemiology, University of California, Los Angeles"
+    },
+    {
      "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Peter C. Mancall, Distinguished Professor and Professor of the Humanities, USC Dornsife College of Letters, Arts and Sciences"
-    },
-    {
-     "title": "What is a professional patient advocate, and why might you need one?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-is-a-professional-patient-advocate-and-why-might-you-need-one-281971",
-     "published": "2026-10-06T12:14:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jennifer Schlinger, Clinical Associate Professor of Social Work, University of North Dakota"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Eva Marie Saint has died age 102: the last star of Hollywood’s Golden Age",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/eva-marie-saint-has-died-age-102-the-last-star-of-hollywoods-golden-age-261107",
+     "published": "2026-10-06T22:16:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Marcus Harmes, Professor in Pathways Education, University of Southern Queensland"
+    },
+    {
      "title": "NZ election poll watch: Opportunity holds as potential kingmaker in tight race",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -451,7 +461,7 @@
     {
      "title": "Truth, evidence and controversy: Richard Dawkins’ The God Delusion at 20",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/truth-evidence-and-controversy-richard-dawkins-the-god-delusion-at-20-290331",
      "published": "2026-10-06T18:25:49Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Terry Goldsworthy, Associate Professor in Criminal Justice and Criminology, Bond University"
-    },
-    {
-     "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-next-government-could-be-a-four-party-coalition-get-used-to-the-new-normal-293335",
-     "published": "2026-10-06T17:08:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
-   "published": "2026-10-06 12:22 UTC"
+   "title": "Flu season is near – here’s a guide to available vaccines",
+   "published": "2026-10-06 21:41 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What is a professional patient advocate, and why might you need one?",
-   "published": "2026-10-06 12:14 UTC"
+   "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
+   "published": "2026-10-06 12:22 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Eva Marie Saint has died age 102: the last star of Hollywood’s Golden Age",
+   "published": "2026-10-06 22:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ election poll watch: Opportunity holds as potential kingmaker in tight race",
    "published": "2026-10-06 21:57 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Counterfeit cash is at an 8-year high in Australia, new figures show. Here’s how to spot it",
    "published": "2026-10-06 18:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
-   "published": "2026-10-06 17:08 UTC"
   },
   {
    "region": "Oceania",
