@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T08:01:24Z",
+ "generatedAt": "2026-10-06T09:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/06/young-people-are-bridging-the-climate-divide-for-oceania-and-the-caribbean/",
+     "published": "2026-10-06T08:05:24Z",
+     "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -158,16 +168,6 @@
      "published": "2026-09-26T12:00:00Z",
      "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
      "stale": false
-    },
-    {
-     "title": "The commodification of Indigenous cultures and traditions",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/09/21/the-commodification-of-indigenous-cultures-and-traditions/",
-     "published": "2026-09-21T06:21:22Z",
-     "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
-     "stale": false,
-     "author": "Marco Martínez"
     }
    ]
   },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
+     "source": "Global Voices",
+     "feed": "gv-oceania",
+     "link": "https://globalvoices.org/2026/10/06/young-people-are-bridging-the-climate-divide-for-oceania-and-the-caribbean/",
+     "published": "2026-10-06T08:05:24Z",
+     "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "Medicine and God: how medieval people faced the deadly pneumonic plague",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -495,16 +505,6 @@
      "link": "https://globalvoices.org/2026/09/14/nest-flix-peregrine-falcons-become-streaming-stars-of-the-34th-floor-in-australia/",
      "published": "2026-09-14T18:56:04Z",
      "summary": "\"Get ready to watch as the chicks hatch and their parents raise them high above the hustle and bustle of Melbourne city life.\"",
-     "stale": false,
-     "author": "Kevin Rennie"
-    },
-    {
-     "title": "Thousands of little penguins will be vaccinated against bird flu down under",
-     "source": "Global Voices",
-     "feed": "gv-oceania",
-     "link": "https://globalvoices.org/2026/08/26/thousands-of-little-penguins-will-be-vaccinated-against-bird-flu-down-under/",
-     "published": "2026-08-26T18:45:20Z",
-     "summary": "“These penguins are part of what makes our community so special. We are lucky to share our home with them, and we’re going to do our best to protect them.”",
      "stale": false,
      "author": "Kevin Rennie"
     }
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
+   "published": "2026-10-06 08:05 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
    "published": "2026-10-05 22:06 UTC"
@@ -759,12 +765,6 @@
    "source": "UN News",
    "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
    "published": "2026-09-26 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "The commodification of Indigenous cultures and traditions",
-   "published": "2026-09-21 06:21 UTC"
   },
   {
    "region": "Africa",
@@ -912,6 +912,12 @@
   },
   {
    "region": "Oceania",
+   "source": "Global Voices",
+   "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
+   "published": "2026-10-06 08:05 UTC"
+  },
+  {
+   "region": "Oceania",
    "source": "The Conversation",
    "title": "Medicine and God: how medieval people faced the deadly pneumonic plague",
    "published": "2026-10-06 07:08 UTC"
@@ -951,12 +957,6 @@
    "source": "Global Voices",
    "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
    "published": "2026-09-14 18:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "Global Voices",
-   "title": "Thousands of little penguins will be vaccinated against bird flu down under",
-   "published": "2026-08-26 18:45 UTC"
   }
  ]
 }
