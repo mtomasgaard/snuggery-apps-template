@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T17:09:25Z",
+ "generatedAt": "2026-10-06T18:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nzs-next-government-could-be-a-four-party-coalition-get-used-to-the-new-normal-293335",
+     "published": "2026-10-06T17:08:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
      "source": "Global Voices",
      "feed": "gv-oceania",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Thomas Jeffries, Senior Lecturer in Microbiology, Western Sydney University"
-    },
-    {
-     "title": "The Coalition’s migration changes would slash international student enrolments",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-coalitions-migration-changes-would-slash-international-student-enrolments-293678",
-     "published": "2026-10-06T06:24:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andrew Norton, Professor of Higher Education Policy, Monash University"
     },
     {
      "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
@@ -912,6 +912,12 @@
   },
   {
    "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
+   "published": "2026-10-06 17:08 UTC"
+  },
+  {
+   "region": "Oceania",
    "source": "Global Voices",
    "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
    "published": "2026-10-06 08:05 UTC"
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "The death of a Russian plague researcher, explained by a microbiologist",
    "published": "2026-10-06 06:41 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Coalition’s migration changes would slash international student enrolments",
-   "published": "2026-10-06 06:24 UTC"
   },
   {
    "region": "Oceania",
