@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T03:01:29Z",
+ "generatedAt": "2026-10-06T04:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Taylor would hold net overseas migration at annual 100,000 for two years in plan hitting students, refugees",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/taylor-would-hold-net-overseas-migration-at-annual-100-000-for-two-years-in-plan-hitting-students-refugees-293211",
+     "published": "2026-10-06T03:49:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "As the planet warms, cities like Bangkok could be increasingly inundated by deadly floods",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/as-the-planet-warms-cities-like-bangkok-could-be-increasingly-inundated-by-deadly-floods-293537",
+     "published": "2026-10-06T03:06:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kimberley Reid, Postdoctoral Research Fellow in Atmospheric Sciences, The University of Melbourne"
+    },
+    {
      "title": "The Coalition’s migration policy rests on a series of false premises",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,32 +471,12 @@
     {
      "title": "Where are the best places for life in the cosmos? A universe in a supercomputer yields the answer",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/where-are-the-best-places-for-life-in-the-cosmos-a-universe-in-a-supercomputer-yields-the-answer-292608",
      "published": "2026-10-06T00:24:00Z",
      "summary": "",
      "stale": false,
      "author": "Luke Barnes, Senior Lecturer in Physics, Western Sydney University"
-    },
-    {
-     "title": "Cheap Chinese EVs could soon shake up NZ’s used car market. Are we ready?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/cheap-chinese-evs-could-soon-shake-up-nzs-used-car-market-are-we-ready-292596",
-     "published": "2026-10-05T22:31:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kenny Ching, Senior Lecturer, Business School, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "You’ve probably never heard of synchronous condensers. But they’re essential in the push for renewables",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/youve-probably-never-heard-of-synchronous-condensers-but-theyre-essential-in-the-push-for-renewables-290630",
-     "published": "2026-10-05T22:25:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Md Ohirul Qays, Research Officer in Electrical and Electronic Engineering, CQUniversity Australia"
     },
     {
      "title": "The sound of resistance",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Taylor would hold net overseas migration at annual 100,000 for two years in plan hitting students, refugees",
+   "published": "2026-10-06 03:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "As the planet warms, cities like Bangkok could be increasingly inundated by deadly floods",
+   "published": "2026-10-06 03:06 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The Coalition’s migration policy rests on a series of false premises",
    "published": "2026-10-06 02:27 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Where are the best places for life in the cosmos? A universe in a supercomputer yields the answer",
    "published": "2026-10-06 00:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Cheap Chinese EVs could soon shake up NZ’s used car market. Are we ready?",
-   "published": "2026-10-05 22:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "You’ve probably never heard of synchronous condensers. But they’re essential in the push for renewables",
-   "published": "2026-10-05 22:25 UTC"
   },
   {
    "region": "Oceania",
