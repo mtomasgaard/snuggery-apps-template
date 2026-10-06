@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T19:01:25Z",
+ "generatedAt": "2026-10-06T20:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -344,21 +344,21 @@
    "stale": false,
    "items": [
     {
+     "title": "From drought to deluge: ‘Super’ El Niño’s expanding reach",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168537",
+     "published": "2026-10-06T12:00:00Z",
+     "summary": "Across Papua New Guinea, water sources are drying up, crops are failing and food prices are rising months before the worst agricultural impacts are expected. Behind those warning signs is an El Niño whose Pacific Ocean…",
+     "stale": false
+    },
+    {
      "title": "In Islamabad, Guterres calls for end to US-Iran conflict",
      "source": "UN News",
      "feed": "un-asia-pacific",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168532",
      "published": "2026-10-06T12:00:00Z",
      "summary": "The UN Secretary-General appealed on Tuesday for an end to the United States-Iran war and the toll it has taken on global trade, as he began an official visit to Pakistan.",
-     "stale": false
-    },
-    {
-     "title": "ICC unseals four arrest warrants over Taliban persecution of women and girls",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168521",
-     "published": "2026-10-05T12:00:00Z",
-     "summary": "The International Criminal Court (ICC) has made public four arrest warrants against senior Taliban figures, accusing them of persecuting women and girls in Afghanistan, which amounts to a crime against humanity.",
      "stale": false
     },
     {
@@ -441,7 +441,7 @@
     {
      "title": "Truth, evidence and controversy: Richard Dawkins’ The God Delusion at 20",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/truth-evidence-and-controversy-richard-dawkins-the-god-delusion-at-20-290331",
      "published": "2026-10-06T18:25:49Z",
      "summary": "",
@@ -457,6 +457,16 @@
      "summary": "",
      "stale": false,
      "author": "Terry Goldsworthy, Associate Professor in Criminal Justice and Criminology, Bond University"
+    },
+    {
+     "title": "Are you seeing new ‘service fees’ since the card surcharge ban? Here are the rules",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/are-you-seeing-new-service-fees-since-the-card-surcharge-ban-here-are-the-rules-293544",
+     "published": "2026-10-06T18:25:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fengfei Li, Senior Lecturer in Finance, Deakin University"
     },
     {
      "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
@@ -477,16 +487,6 @@
      "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-to-build-an-expansion-club-the-challenges-and-opportunities-for-the-new-nrl-and-afl-teams-290144",
-     "published": "2026-10-06T00:48:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Geoff Dickson, Adjunct Professor of Sport Management, La Trobe University"
     },
     {
      "title": "The sound of resistance",
@@ -865,14 +865,14 @@
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "In Islamabad, Guterres calls for end to US-Iran conflict",
+   "title": "From drought to deluge: ‘Super’ El Niño’s expanding reach",
    "published": "2026-10-06 12:00 UTC"
   },
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "ICC unseals four arrest warrants over Taliban persecution of women and girls",
-   "published": "2026-10-05 12:00 UTC"
+   "title": "In Islamabad, Guterres calls for end to US-Iran conflict",
+   "published": "2026-10-06 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -931,6 +931,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Are you seeing new ‘service fees’ since the card surcharge ban? Here are the rules",
+   "published": "2026-10-06 18:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
    "published": "2026-10-06 17:08 UTC"
   },
@@ -939,12 +945,6 @@
    "source": "Global Voices",
    "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
    "published": "2026-10-06 08:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
-   "published": "2026-10-06 00:48 UTC"
   },
   {
    "region": "Oceania",
