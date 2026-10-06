@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T01:01:25Z",
+ "generatedAt": "2026-10-06T02:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "ICC unseals four arrest warrants over Taliban persecution of women and girls",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168521",
+     "published": "2026-10-05T12:00:00Z",
+     "summary": "The International Criminal Court (ICC) has made public four arrest warrants against senior Taliban figures, accusing them of persecuting women and girls in Afghanistan, which amounts to a crime against humanity.",
+     "stale": false
+    },
+    {
      "title": "One day behind bars: Students and incarcerated women break prison stigma in Thailand",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -371,15 +380,6 @@
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168500",
-     "published": "2026-10-01T12:00:00Z",
-     "summary": "The deadly flash floods in northern Nepal have severely disrupted employment and livelihoods, with wider impacts beyond communities that were directly affected, the International Labour Organization (ILO) said in a…",
-     "stale": false
     },
     {
      "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-to-build-an-expansion-club-the-challenges-and-opportunities-for-the-new-nrl-and-afl-teams-290144",
+     "published": "2026-10-06T00:48:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Geoff Dickson, Adjunct Professor of Sport Management, La Trobe University"
+    },
+    {
      "title": "Where are the best places for life in the cosmos? A universe in a supercomputer yields the answer",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Md Ohirul Qays, Research Officer in Electrical and Electronic Engineering, CQUniversity Australia"
-    },
-    {
-     "title": "Africa’s rhinos often get the spotlight – but Indonesia’s two rhino species are far closer to extinction",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/africas-rhinos-often-get-the-spotlight-but-indonesias-two-rhino-species-are-far-closer-to-extinction-292679",
-     "published": "2026-10-05T19:10:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Campbell-Ward, Associate Professor, Wildlife and Avian Medicine, University of Sydney"
     },
     {
      "title": "‘1.5°C to stay alive’: Pacific countries demand the world makes good on climate promises",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "UN News",
+   "title": "ICC unseals four arrest warrants over Taliban persecution of women and girls",
+   "published": "2026-10-05 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
    "title": "One day behind bars: Students and incarcerated women break prison stigma in Thailand",
    "published": "2026-10-05 12:00 UTC"
   },
@@ -879,12 +885,6 @@
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Nepal floods threaten jobs and livelihoods beyond disaster zone: ILO",
-   "published": "2026-10-01 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
+   "published": "2026-10-06 00:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Where are the best places for life in the cosmos? A universe in a supercomputer yields the answer",
    "published": "2026-10-06 00:24 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "You’ve probably never heard of synchronous condensers. But they’re essential in the push for renewables",
    "published": "2026-10-05 22:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Africa’s rhinos often get the spotlight – but Indonesia’s two rhino species are far closer to extinction",
-   "published": "2026-10-05 19:10 UTC"
   },
   {
    "region": "Oceania",
