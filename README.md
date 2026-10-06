@@ -1,7 +1,7 @@
 # Snuggery live apps
 
 **Just want an app on your iPhone? There is nothing to copy or set up.** In Safari on the iPhone,
-tap [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) (6.5 MB) — or any app in
+tap [**Install Milky Way**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) (6.5 MB) — or any app in
 [the install table](#install-any-of-them-on-your-phone--three-taps) — tap **Download** if Safari
 asks, then open the download and choose **Share → Snuggery**.
 
@@ -45,7 +45,30 @@ three taps, just below.
 
 ## Install any of them on your phone — three taps
 
-1. **On the iPhone, in Safari**, tap an app's **Install …** link in the table below (or its
+Open an app's **Install** link in Safari on the iPhone, then do the three steps under the table.
+
+| App | Link | Size | Needs |
+| --- | --- | --- | --- |
+| Milky Way | [**Install Milky Way**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) | 6.5 MB | nothing |
+| Hello Live | [**Install Hello Live**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-live.zip) | tiny | nothing |
+| Running Dashboard | [**Install Running Dashboard**](https://mtomasgaard.github.io/snuggery-apps-template/zips/running-dashboard.zip) | 1.1 MB | a Garmin sign-in |
+| Finances | [**Install Finances**](https://mtomasgaard.github.io/snuggery-apps-template/zips/finances.zip) | 0.1 MB | a bank connection |
+| World News | [**Install World News**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-news.zip) | tiny | nothing |
+| Outdoor Window | [**Install Outdoor Window**](https://mtomasgaard.github.io/snuggery-apps-template/zips/outdoor-window.zip) | tiny | your own Shortcut |
+| Power Hours | [**Install Power Hours**](https://mtomasgaard.github.io/snuggery-apps-template/zips/power-hours.zip) | tiny | nothing |
+| Global Wind | [**Install Global Wind**](https://mtomasgaard.github.io/snuggery-apps-template/zips/global-wind.zip) | 1.5 MB | nothing |
+| Global Weather | [**Install Global Weather**](https://mtomasgaard.github.io/snuggery-apps-template/zips/global-weather.zip) | 2.8 MB | nothing |
+| Anatomy | [**Install Anatomy**](https://mtomasgaard.github.io/snuggery-apps-template/zips/anatomy.zip) | 25 MB | nothing |
+| Besseggen | [**Install Besseggen**](https://mtomasgaard.github.io/snuggery-apps-template/zips/besseggen.zip) | 17 MB | nothing |
+| Norne Reservoir | [**Install Norne Reservoir**](https://mtomasgaard.github.io/snuggery-apps-template/zips/norne-reservoir.zip) | 15 MB | nothing |
+| Shelf Atlas | [**Install Shelf Atlas**](https://mtomasgaard.github.io/snuggery-apps-template/zips/shelf-atlas.zip) | ~2 MB | nothing |
+| World Oil & Gas | [**Install World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-oil-gas.zip) | 2.1 MB | nothing (GOGET by hand) |
+| Snug Kart | [**Install Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/zips/snug-kart.zip) | 0.6 MB | nothing |
+| Earth's History | [**Install Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/zips/earth-history.zip) | 7 MB | nothing |
+| US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
+| Warming World | [**Install Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
+
+1. **On the iPhone, in Safari**, tap an app's **Install …** link in the table above (or its
    **Get the ZIP** link further down). If Safari asks whether to download it, tap **Download**.
 2. Tap the download arrow in Safari's address bar and tap the ZIP, then the **Share** button — or
    open **Files → Downloads**, touch and hold the ZIP, and tap **Share**.
@@ -54,32 +77,14 @@ three taps, just below.
 Don't have Snuggery yet? [**Get it on the App Store**](https://apps.apple.com/app/id6805883209) — for
 iPhone (iOS 18 and later), one purchase after a free week.
 
-**Just want the galaxy?** On your iPhone, open [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) in Safari
+**Just want the galaxy?** On your iPhone, open [**Install Milky Way**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) in Safari
 (a 6.5 MB download), then steps 2 and 3. That's it — it needs no account, no key and no network
 once installed.
 
-Every app, one link each — open the link in Safari on the iPhone, then steps 2 and 3 above:
-
-| App | Link | Size | Needs |
-| --- | --- | --- | --- |
-| Milky Way | [**Install Milky Way**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) | 6.5 MB | nothing |
-| Hello Live | [**Install Hello Live**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) | tiny | nothing |
-| Running Dashboard | [**Install Running Dashboard**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) | 1.1 MB | a Garmin sign-in |
-| Finances | [**Install Finances**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) | 0.1 MB | a bank connection |
-| World News | [**Install World News**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) | tiny | nothing |
-| Outdoor Window | [**Install Outdoor Window**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) | tiny | your own Shortcut |
-| Power Hours | [**Install Power Hours**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) | tiny | nothing |
-| Global Wind | [**Install Global Wind**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) | 1.5 MB | nothing |
-| Global Weather | [**Install Global Weather**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) | 2.8 MB | nothing |
-| Anatomy | [**Install Anatomy**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) | 25 MB | nothing |
-| Besseggen | [**Install Besseggen**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) | 17 MB | nothing |
-| Norne Reservoir | [**Install Norne Reservoir**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) | 15 MB | nothing |
-| Shelf Atlas | [**Install Shelf Atlas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) | ~2 MB | nothing |
-| World Oil & Gas | [**Install World Oil & Gas**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) | 2.1 MB | nothing (GOGET by hand) |
-| Snug Kart | [**Install Snug Kart**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) | 0.6 MB | nothing |
-| Earth's History | [**Install Earth's History**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) | 7 MB | nothing |
-| US Quakes | [**Install US Quakes**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
-| Warming World | [**Install Warming World**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
+Every **Install** and **Get the ZIP** link here is the copy on this repository's web pages, packed
+again after every refresh with the newest data published for the app, so a live app installs with its
+latest numbers rather than those of its last code change. The repository's own `zips/` folder holds the
+code build, rebuilt only when an app's code changes.
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
 Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
@@ -89,109 +94,109 @@ back to this page.
 
 A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. Its drawing, the Time Card, is the loop itself: a week of days, one row each, with a punch at the minute each file was written and a tail to the minute this phone first read it.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) · It is the loop's proof, not a thing to personalize.
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-live.zip) · It is the loop's proof, not a thing to personalize.
 
 ### Running Dashboard
 
 Five panes of running from a Garmin watch — Now, Plan, Training, Health, Sessions: weekly volume and load, heart-rate zones, sleep, HRV, steps and weight, per-session charts with a route map, and a coaching evaluation. Now opens on a table of the week's figures with the training block under it, and Plan on the block itself, drawn the way a coach draws one: twelve weeks back to race day, each run a block of ink at a fixed 0.8 px per kilometer, the plan's weeks still to run as outlines of their targets around a light tint; under Plan's goal, the weekly running chart in its stock colors, past and planned. On the panes with a time window, the window stays at the top while the pane scrolls. **Ships with made-up data — nine months of running with a half-marathon block in progress, its recent runs drawn along segments of famous marathon courses — and a coaching evaluation, plan and race forecast written for that runner, so the panes look the way a real copy's do.**
 
-**Needs:** a Garmin sign-in · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/running-dashboard.zip) · Make it yours: [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) · How it works: [`running-dashboard/NOTES.md`](running-dashboard/NOTES.md)
+**Needs:** a Garmin sign-in · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/running-dashboard.zip) · Make it yours: [`running-dashboard/PROMPT.md`](running-dashboard/PROMPT.md) · How it works: [`running-dashboard/NOTES.md`](running-dashboard/NOTES.md)
 
 ### Finances
 
 Net worth, accounts, spending and savings from bank data over PSD2 (Enable Banking), plus the house, cars and loans no bank reports. Overview opens on the Balance, the household's balance sheet drawn as an accountant's T-account to one printed scale: one block of ink per account, fund, car, home and loan, and the empty space under the debts is the net worth. **Static example: a generated fake household**, labeled as such.
 
-**Needs:** a bank connection · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/finances.zip) · Make it yours: [`finances/PROMPT.md`](finances/PROMPT.md)
+**Needs:** a bank connection · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/finances.zip) · Make it yours: [`finances/PROMPT.md`](finances/PROMPT.md)
 
 ### World News
 
 The latest headlines by region from newsrooms whose terms allow a credited headline and link, read from their RSS and Atom feeds, each story linking out to the publisher. Every pane opens on the Datelines: one tick of ink per headline, placed by how old it was when the file was made, on one fixed scale from an hour to sixty days, so a region's news reads at a glance as fresh or stale. **Live**: refreshed daily here.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-news.zip) · Make it yours: [`world-news/PROMPT.md`](world-news/PROMPT.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-news.zip) · Make it yours: [`world-news/PROMPT.md`](world-news/PROMPT.md)
 
 ### Outdoor Window
 
 Scores the next 48 hours of weather against rules you write yourself and shows when to go out. Its drawing, the Shutters, is one row per rule across the 48 hours: every hour a rule rules out is a block of ink, a small green mark shows how much of a rule's allowance an hour used, and where no row has ink a framed window stands open, with `now` marked above the rows. **Live through your Shortcut**: it sends the phone's location to Open-Meteo and hands the answer to the app; no server.
 
-**Needs:** your own Shortcut · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/outdoor-window.zip) · Make it yours: [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md)
+**Needs:** your own Shortcut · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/outdoor-window.zip) · Make it yours: [`outdoor-window/PROMPT.md`](outdoor-window/PROMPT.md)
 
 ### Power Hours
 
 Tomorrow's electricity prices for one bidding zone and the cheapest hours to run each appliance. Its drawing, the Landing, is the day-ahead price as the market settles it, a staircase with one tread per quarter hour on one printed scale, and laid into it the chosen appliance's cheapest run as a level drawn where the stairs sit lowest for that long, at the run's mean price, with a dashed line for the mean of everything ahead so the drop between them is the saving. **Live**: refreshed here twice a day (NO2 in the demo).
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/power-hours.zip) · Make it yours: [`power-hours/PROMPT.md`](power-hours/PROMPT.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/power-hours.zip) · Make it yours: [`power-hours/PROMPT.md`](power-hours/PROMPT.md)
 
 ### Global Wind
 
 Five days of global 10 m wind from NOAA's GFS forecast, drawn as a long exposure: thousands of tracers carried by the forecast's own wind over a color layer, with the exposure printed under the plate ("1 s = 24 h of wind"), arrows as the alternative — on a map you pan and zoom, or a globe you turn — with a five-day time player you can scrub at any speed, a moving night side, a focus mode that leaves only the picture and the player, and a table of twelve cities at local noon. **Live**: refreshed here after each GFS run, up to four times a day, to its own `data-global-wind` branch because the file is 1.2 MB.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-wind.zip) · Make it yours: [`global-wind/PROMPT.md`](global-wind/PROMPT.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/global-wind.zip) · Make it yours: [`global-wind/PROMPT.md`](global-wind/PROMPT.md)
 
 ### Global Weather
 
 Global Wind with four more fields — temperature, rain, cloud and pressure beside it — on the same map and globe, the same tracers of the wind over any of them, and a tap anywhere giving all five numbers at that point, in SI units. A separate app; installing it changes nothing about Global Wind. **Live**: refreshed here after each GFS run, up to four times a day, to its own `data-global-weather` branch because the file is 2.9 MB. Not in Snuggery's built-in pack, for size.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/global-weather.zip) · Make it yours: [`global-weather/PROMPT.md`](global-weather/PROMPT.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/global-weather.zip) · Make it yours: [`global-weather/PROMPT.md`](global-weather/PROMPT.md)
 
 ### Anatomy
 
 A full human body in 3D: 1,752 real anatomical structures from BodyParts3D in nine layers — skin, muscle, organs, arteries, veins, brain and nerves, cartilage, bone, teeth — with release 4.0's arteries and veins down to the fingers, toes and brain, and its finer eyes, larynx, heart valves and bronchial tree. Peel, fade, isolate, search and explode it. Along the picture's edge the body's own spine serves as its rule: one ink block per labeled vertebra at the height the camera draws it, and a bar beside it spanning the levels of whatever is selected. Three.js is vendored; nothing is fetched. **Static**, 35 MB unpacked.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/anatomy.zip) · Make it yours: [`anatomy/NOTES.md`](anatomy/NOTES.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/anatomy.zip) · Make it yours: [`anatomy/NOTES.md`](anatomy/NOTES.md)
 
 ### Besseggen
 
 The Besseggen ridge in Jotunheimen in 3D, from Kartverket's 1 m elevation data: the marked trail from Gjendesheim over Veslfjellet to Memurubu draped on the terrain with a walking-time profile, real sun position and cast shadows for any date and hour, viewsheds and lines of sight with the visible peaks named, saved viewpoints and a fly-through. The time track is a sunshine recorder's card for the point under the marker: the sun's arc for the day, inked only where the ridges leave that spot in direct sun. A planning tool, not a navigation aid; it has no position fix. **Static**, 27 MB unpacked.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/besseggen.zip) · Make it yours: [`besseggen/NOTES.md`](besseggen/NOTES.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/besseggen.zip) · Make it yours: [`besseggen/NOTES.md`](besseggen/NOTES.md)
 
 ### Norne Reservoir
 
 The open Norne oil-field reservoir simulation model in 3D: 44,431 cells colored by oil, water or gas saturation, pressure or rock property, played through 110 monthly frames of production history, with wells and their rates, explode and cut views. The time track is the field's own water-cut record: each month a column as tall as the liquid the wells lifted per day, oil in ink and water stacked on it as a tint, so the plateau and the water's rise are read off the track. A pure reservoir view: nothing above the seabed is drawn. Plain WebGL 2, no libraries. **Static**, 26 MB unpacked.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
 
 ### Shelf Atlas
 
 The North Sea's oil and gas on a map you pan and pinch: every field outline in the Norwegian, UK, Danish and Dutch sectors, the platforms and the pipelines, the median lines between the four shelves, and a month player from January 1971 to the newest month all four regulators have reported. Each field is a disc sized and colored by what it produced that month, drawn inside a thin ink ring at its best month so far: a rising field fills its ring, a declining one sits small inside it, and by 2026 the northern North Sea is a basin of near-empty rings. Tap a field for the month's figure, its best month and its operator; Details opens its history chart and, for a cross-border unit (Statfjord, Frigg, Murchison…), each side's share and the sum. **Live**: rebuilt weekly here from the four regulators' open data — Sodir, NSTA, the Danish Energy Agency and NLOG — plus Natural Earth and Marine Regions.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/shelf-atlas.zip) · Set it up: [`shelf-atlas/PROMPT.md`](shelf-atlas/PROMPT.md) · Make it yours: [`shelf-atlas/NOTES.md`](shelf-atlas/NOTES.md) · How it was built: [`shelf-atlas/RESEARCH.md`](shelf-atlas/RESEARCH.md) · Running it: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/shelf-atlas.zip) · Set it up: [`shelf-atlas/PROMPT.md`](shelf-atlas/PROMPT.md) · Make it yours: [`shelf-atlas/NOTES.md`](shelf-atlas/NOTES.md) · How it was built: [`shelf-atlas/RESEARCH.md`](shelf-atlas/RESEARCH.md) · Running it: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 
 ### World Oil & Gas
 
 Every country's oil and gas production from 1900 to the latest Energy Institute year, annual or cumulative, as a choropleth with a year player; and 7,055 fields from Global Energy Monitor's extraction tracker (March 2026) that follow the same player: a ring from discovery, filled from first production, sized by an estimate that follows the country's series, by the latest rate or by remaining reserves. Under the map runs the Ledger, the year's world output as one strip of ink: a block per producing country, widest first, each as wide as its share, everything under 1 % hatched. Play the century and the United States' 68.7 % of 1920 thins to 21.6 % by 2024 with Russia and Saudi Arabia beside it; tap a block for that country's card. Filter by status, onshore/offshore and conventional/unconventional; search fields, companies, basins and countries and light up a company's or basin's fields; the tracker's own outlines appear at high zoom, and a country's details list its units against the national figure. **Live**: countries rebuilt here after each Statistical Review; fields by hand (the tracker sits behind a form).
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/world-oil-gas.zip) · Set it up: [`world-oil-gas/PROMPT.md`](world-oil-gas/PROMPT.md) · Make it yours: [`world-oil-gas/NOTES.md`](world-oil-gas/NOTES.md) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-oil-gas.zip) · Set it up: [`world-oil-gas/PROMPT.md`](world-oil-gas/PROMPT.md) · Make it yours: [`world-oil-gas/NOTES.md`](world-oil-gas/NOTES.md) · The manual step and the gaps: [`shelf-atlas/HANDOFF.md`](shelf-atlas/HANDOFF.md)
 
 ### Snug Kart
 
 An original arcade kart racer for a phone held upright: eight racers from an imaginary seaside-and-mountain town, three tracks (a flat harbor loop, a 26 m climb through banked sweepers to summit hairpins, a figure of eight at night that crosses its own start straight), three laps against seven rubber-banded rivals that drift, pass and use items. Throttle is automatic; one thumb steers, the other drifts and throws household items — a kettle, a quilt, a yarn snare, a paper plane, a honey puddle. Every race is kept on a lap chart, the race officials' sheet: the order at each of ten timing lines a lap, joined into one line per driver, which the results open on, your line in ink from the grid to the flag. Every kart, face, track, tree, lantern and sound is generated in code at start-up; the only third-party code is three.js. Sound and tilt steering are off until you switch them on. **Static**, 0.6 MB.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/snug-kart.zip) · Make it yours: [`snug-kart/NOTES.md`](snug-kart/NOTES.md) · The design it was built from: [`snug-kart/DESIGN.md`](snug-kart/DESIGN.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/snug-kart.zip) · Make it yours: [`snug-kart/NOTES.md`](snug-kart/NOTES.md) · The design it was built from: [`snug-kart/DESIGN.md`](snug-kart/DESIGN.md)
 
 ### Earth's History
 
 The Earth at 90 moments from 750 million years ago to today, on a globe and on a Mollweide map: the PALEOMAP atlas's painted reconstructions, a slider whose track is the geological timescale, the pieces of today's crust shown moving with their plates, a climate model's temperature and rain as lenses over the maps, curves of CO₂, sea level and temperature, and 300 cities carried back to where their rock was. Each period has a card and its events, every number with its source, and every caveat is on screen: one reconstruction among several, a model rather than measurements, and where the atlas's 2008 ages differ from today's chart. It opens with 750 million years played map by map, once. **Static**, 7 MB. The maps, plate model and elevation grids are C. R. Scotese's (CC BY 4.0); the climate fields, the CO₂ and sea-level curves and the timescale are CC BY 4.0; the coastlines and cities are Natural Earth, public domain.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/earth-history.zip) · Make it yours: [`earth-history/NOTES.md`](earth-history/NOTES.md) · The design and the look: [`earth-history/DESIGN.md`](earth-history/DESIGN.md), [`earth-history/ART.md`](earth-history/ART.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/earth-history.zip) · Make it yours: [`earth-history/NOTES.md`](earth-history/NOTES.md) · The design and the look: [`earth-history/DESIGN.md`](earth-history/DESIGN.md), [`earth-history/ART.md`](earth-history/ART.md)
 
 ### US Quakes
 
 Every earthquake USGS has cataloged around the United States since 1638 — 394 890 of them, magnitude 2.5 and up from 1900 — on a map drawn like a seismograph's drum record, with the last 30 days of the USGS feed on top, refreshed hourly by this repository. Scrub a timeline from 1900 to now and play a decade; the plate boundaries draw themselves as a trace. Drag a line across Alaska and read a true-scale cross-section of the Cook Inlet slab down to 250 km. Seven stories (1700 Cascadia, 1811–12 New Madrid, 1906 San Francisco, 1964 Alaska, Oklahoma since 2009, 2018 Kīlauea, 2019 Ridgecrest), three of them playable; the Quaternary faults and USGS volcano alert levels as layers; a focus mode that leaves only the map and the record strip. Every sentence about the data is USGS's own, quoted, and "Not a warning service" stays on screen. **Live**, 6.4 MB; the history is rebuilt each January. USGS data is public domain; Natural Earth likewise.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/us-quakes.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-us-quakes` branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md)) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-us-quakes` branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md)) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
 
 ### Warming World
 
 NASA's GISTEMP temperature record on a globe: every 2° cell's anomaly against its own 1951–1980 average, year by year from 1880 to now, with the last 24 months beside it. The year slider is the warming stripes themselves, drawn as an instrument with the base period bracketed; the globe sits on a gray card so the only color on screen is a departure from normal; tap any place and its own line draws itself from 1880 over the cell's stripes; turn to the Arctic and read the cap's mean. Every number comes from GISS's published grid and table, rounded to 0.1 °C by this app; anomalies are never called temperatures; cells with no data are hatched; the current year is marked partial; a copy's release and age are on screen. **Live**, 1.2 MB, refreshed monthly from NASA's release. GISTEMP is US Government work (public domain); Natural Earth likewise; Archivo under the OFL.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/warming-world.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-warming-world` branch (the address is in [`warming-world/tools/HANDOFF.md`](warming-world/tools/HANDOFF.md)) · Make it yours: [`warming-world/NOTES.md`](warming-world/NOTES.md) · The design and the look: [`warming-world/DESIGN.md`](warming-world/DESIGN.md), [`warming-world/ART.md`](warming-world/ART.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-warming-world` branch (the address is in [`warming-world/tools/HANDOFF.md`](warming-world/tools/HANDOFF.md)) · Make it yours: [`warming-world/NOTES.md`](warming-world/NOTES.md) · The design and the look: [`warming-world/DESIGN.md`](warming-world/DESIGN.md), [`warming-world/ART.md`](warming-world/ART.md)
 
 ### Milky Way
 
 The Solar System, the Sun's neighborhood and the Milky Way in one continuous 3D zoom, built from real data only. Under the picture runs a ruler of distance from the Sun, 0.001 AU to 10¹² AU, inked wherever these catalogs hold an object on the day shown, with the gap between the farthest comet and the nearest star left blank. The planets and the Moon come from JPL's ephemerides for any date from 1900 to 2099, and 21 moons of Mars and the giant planets from 1950 to 2049. A time player runs the year forward, and each planet trails its real path. There are 9,989 asteroids and comets, and 220,000 stars in 3D, mostly at their Gaia distances; the constellations come apart as you leave the Sun. The galaxy is shown as it has actually been measured: globular clusters, satellite galaxies, stellar streams, where young stars crowd, and two published spiral-arm fits, each labeled as what it is. There is no artist's impression anywhere. **Static**, 9.9 MB unpacked. The Gaia-derived star, sky and young-star map files (`data/stars/deep.bin`, `data/stars/named.json`, `data/sky/gaia-dr3-counts.jpg`, `data/galaxy/young-*.png`) may be used only non-commercially; the young-star maps are redistributed under a permission their authors gave SpiralMap, and no grant to downstream redistributors was found.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/milky-way.zip) (6.5 MB) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) (6.5 MB) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
 
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
@@ -256,11 +261,14 @@ The big 3D apps download their whole size on first open, just as the ZIP does. W
 has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)
 is not in the browser copy.
 
-**This changes nothing about the ZIPs.** [`publish-web.yml`](.github/workflows/publish-web.yml)
-copies each app folder, leaving out what the ZIP leaves out (screenshots, build tools, `raw/`), and
-publishes it with GitHub Pages. It commits nothing and runs again after every refresh, so the web
-copy follows the data. Global Wind and Global Weather take their live forecast from their data
-branches.
+**It also publishes the ZIPs with the newest data.** [`publish-web.yml`](.github/workflows/publish-web.yml)
+copies each app folder, leaving out what the ZIP leaves out (screenshots, build tools, `raw/`), packs
+each one as `zips/<app-folder>.zip` with the same zip line as the ZIP builder, and publishes both with
+GitHub Pages. It commits nothing and runs again after every refresh, so the web copy and its ZIP follow
+the data; Global Wind, Global Weather, US Quakes and Warming World take theirs from their data branches.
+That ZIP is what the install links above open. `zips/` on `main` stays the code build: rebuilt only
+when an app's code changes, so its data is the data of that push (the demo, for the four apps with a
+data branch), and it is the only ZIP a copy without Pages has.
 
 **In your own copy it is off until you turn it on:** Settings → Pages → *Build and deployment* →
 Source: **GitHub Actions**, then run *Publish apps to the web* once from the Actions tab. Your
@@ -310,7 +318,7 @@ is genuinely one line.
 ### Every new app
 
 1. **Ask an agent to build it**, in a session attached to this repository.
-2. **Install it once** — in Safari on the phone, open `github.com/<you>/<repo>/raw/main/zips/<app>.zip` (the raw address downloads; the normal page only shows it), then Share → Snuggery.
+2. **Install it once** — in Safari on the phone, open `github.com/<you>/<repo>/raw/main/zips/<app>.zip` (the raw address downloads; the normal page only shows it), then Share → Snuggery. That is the code build, with the data of the last code change; with Pages on, `https://<you>.github.io/<repo>/zips/<app>.zip` carries the newest data.
 3. **Add one row** to the Dictionary in your shortcut: display name → data address.
 
 That is the whole per-app cost. Nothing else changes, ever.
@@ -334,7 +342,8 @@ scripts/                 one or more refresh scripts per app
 data-flow.html           the picture of the loop above, animated; data-flow.svg for the README
 .github/workflows/       one refresh workflow per app, plus the ZIP builder and the
                          web publisher (publish-web.yml, with scripts/build_web.py)
-zips/<app-folder>.zip    built automatically; this is what you install from
+zips/<app-folder>.zip    built automatically on every code change: the code build, with the data of
+                         that push. With Pages on, the site's zips/ carries the newest data
 ```
 
 Every app folder is a complete working example. Install Hello Live first and
