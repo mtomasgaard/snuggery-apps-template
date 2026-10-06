@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T09:01:33Z",
+ "generatedAt": "2026-10-06T10:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why old dogs might be able to teach Alzheimer’s researchers new tricks",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/why-old-dogs-might-be-able-to-teach-alzheimers-researchers-new-tricks-291257",
+     "published": "2026-10-06T09:02:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Julie Moreno, Associate Professor of Environmental and Radiological Health Sciences, Colorado State University"
+    },
+    {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Kimberlee D'Ardenne, Assistant Research Professor in Psychology, Arizona State University"
-    },
-    {
-     "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/us-migrant-flights-to-liberia-evoke-troubling-history-of-sending-people-deemed-unwanted-to-the-west-african-nation-293186",
-     "published": "2026-10-05T12:29:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Karen Masterson, Assistant Professor of Journalism, University of Richmond"
     },
     {
      "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Why old dogs might be able to teach Alzheimer’s researchers new tricks",
+   "published": "2026-10-06 09:02 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
    "published": "2026-10-06 08:05 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
    "published": "2026-10-05 22:06 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "US migrant flights to Liberia evoke troubling history of sending people deemed unwanted to the West African nation",
-   "published": "2026-10-05 12:29 UTC"
   },
   {
    "region": "Americas",
