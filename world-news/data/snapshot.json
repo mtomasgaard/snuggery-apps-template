@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T17:01:26Z",
+ "generatedAt": "2026-10-06T17:09:25Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Testing and monitoring underway in suspected Russia plague death",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168533",
+     "published": "2026-10-06T12:00:00Z",
+     "summary": "The death of a lab worker in Russia’s Siberia region has sparked concerns over a possible plague case, the UN World Health Organization (WHO) said on Tuesday, adding that it was following the situation closely.",
+     "stale": false
+    },
     {
      "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
      "source": "Global Voices",
@@ -55,15 +64,6 @@
      "summary": "In this interview, writer and journalist Victoria Belim-Frolova shares her observations about Russia’s war on Ukraine and how it forces “a constant process of adaptation,” especially in women-led small businesses.",
      "stale": false,
      "author": "Nevena Borisova"
-    },
-    {
-     "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168416",
-     "published": "2026-09-23T12:00:00Z",
-     "summary": "Ukrainian President Volodymyr Zelenskyy on Wednesday called for intensified pressure on Russia to end its war against Ukraine, arguing that Moscow continues to incur massive losses while prolonging a conflict whose…",
-     "stale": false
     },
     {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Testing and monitoring underway in suspected Russia plague death",
+   "published": "2026-10-06 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
    "published": "2026-10-03 18:40 UTC"
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "After five years of war, how do Ukrainian small businesses survive?",
    "published": "2026-09-28 06:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
-   "published": "2026-09-23 12:00 UTC"
   },
   {
    "region": "Europe",
