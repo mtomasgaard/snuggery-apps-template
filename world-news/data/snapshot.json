@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T12:06:22Z",
+ "generatedAt": "2026-10-06T13:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -93,14 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Why old dogs might be able to teach Alzheimer’s researchers new tricks",
+     "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/why-old-dogs-might-be-able-to-teach-alzheimers-researchers-new-tricks-291257",
-     "published": "2026-10-06T09:02:25Z",
+     "link": "https://theconversation.com/columbus-own-writings-reveal-how-tightly-religion-and-conquest-were-intertwined-from-the-start-291332",
+     "published": "2026-10-06T12:22:35Z",
      "summary": "",
      "stale": false,
-     "author": "Julie Moreno, Associate Professor of Environmental and Radiological Health Sciences, Colorado State University"
+     "author": "Peter C. Mancall, Distinguished Professor and Professor of the Humanities, USC Dornsife College of Letters, Arts and Sciences"
+    },
+    {
+     "title": "What is a professional patient advocate, and why might you need one?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-is-a-professional-patient-advocate-and-why-might-you-need-one-281971",
+     "published": "2026-10-06T12:14:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jennifer Schlinger, Clinical Associate Professor of Social Work, University of North Dakota"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -111,16 +121,6 @@
      "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/optogenetics-wins-the-nobel-one-neuroscience-breakthrough-in-a-line-of-technological-innovations-helping-scientists-map-and-control-the-brain-293619",
-     "published": "2026-10-05T22:06:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kimberlee D'Ardenne, Assistant Research Professor in Psychology, Arizona State University"
     },
     {
      "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
@@ -721,20 +721,20 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why old dogs might be able to teach Alzheimer’s researchers new tricks",
-   "published": "2026-10-06 09:02 UTC"
+   "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
+   "published": "2026-10-06 12:22 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "What is a professional patient advocate, and why might you need one?",
+   "published": "2026-10-06 12:14 UTC"
   },
   {
    "region": "Americas",
    "source": "Global Voices",
    "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
    "published": "2026-10-06 08:05 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Optogenetics wins the Nobel – one neuroscience breakthrough in a line of technological innovations helping scientists map and control the brain",
-   "published": "2026-10-05 22:06 UTC"
   },
   {
    "region": "Americas",
