@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T06:01:35Z",
+ "generatedAt": "2026-10-06T07:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The Coalition’s migration changes would slash international student enrolments",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-coalitions-migration-changes-would-slash-international-student-enrolments-293678",
+     "published": "2026-10-06T06:24:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Norton, Professor of Higher Education Policy, Monash University"
+    },
+    {
      "title": "Taylor would hold net overseas migration at annual 100,000 for two years in plan hitting students, refugees",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kimberley Reid, Postdoctoral Research Fellow in Atmospheric Sciences, The University of Melbourne"
-    },
-    {
-     "title": "The Coalition’s migration policy rests on a series of false premises",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-coalitions-migration-policy-rests-on-a-series-of-false-premises-293672",
-     "published": "2026-10-06T02:27:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alan Gamlen, Professor and Director of the Migration Hub, School of Regulation and Global Governance, Australian National University"
     },
     {
      "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The Coalition’s migration changes would slash international student enrolments",
+   "published": "2026-10-06 06:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Taylor would hold net overseas migration at annual 100,000 for two years in plan hitting students, refugees",
    "published": "2026-10-06 03:49 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "As the planet warms, cities like Bangkok could be increasingly inundated by deadly floods",
    "published": "2026-10-06 03:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Coalition’s migration policy rests on a series of false premises",
-   "published": "2026-10-06 02:27 UTC"
   },
   {
    "region": "Oceania",
