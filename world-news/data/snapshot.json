@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T02:01:23Z",
+ "generatedAt": "2026-10-06T03:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
+     "title": "The Coalition’s migration policy rests on a series of false premises",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/the-coalitions-migration-policy-rests-on-a-series-of-false-premises-293672",
+     "published": "2026-10-06T02:27:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alan Gamlen, Professor and Director of the Migration Hub, School of Regulation and Global Governance, Australian National University"
+    },
+    {
+     "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/how-to-build-an-expansion-club-the-challenges-and-opportunities-for-the-new-nrl-and-afl-teams-290144",
      "published": "2026-10-06T00:48:00Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Md Ohirul Qays, Research Officer in Electrical and Electronic Engineering, CQUniversity Australia"
-    },
-    {
-     "title": "‘1.5°C to stay alive’: Pacific countries demand the world makes good on climate promises",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/1-5-c-to-stay-alive-pacific-countries-demand-the-world-makes-good-on-climate-promises-293539",
-     "published": "2026-10-05T19:09:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Wesley Morgan, Research Associate, Institute for Climate Risk and Response, UNSW"
     },
     {
      "title": "The sound of resistance",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The Coalition’s migration policy rests on a series of false premises",
+   "published": "2026-10-06 02:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
    "published": "2026-10-06 00:48 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "You’ve probably never heard of synchronous condensers. But they’re essential in the push for renewables",
    "published": "2026-10-05 22:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘1.5°C to stay alive’: Pacific countries demand the world makes good on climate promises",
-   "published": "2026-10-05 19:09 UTC"
   },
   {
    "region": "Oceania",
