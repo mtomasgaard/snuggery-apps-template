@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T13:01:37Z",
+ "generatedAt": "2026-10-06T14:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,42 @@
    "stale": false,
    "items": [
     {
-     "title": "Sénégal : après la dette cachée, quel rôle pour le FMI ?",
+     "title": "Protest later or push for better planning now? 7 actions South African voters can take before local elections",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/senegal-apres-la-dette-cachee-quel-role-pour-le-fmi-291627",
-     "published": "2026-10-06T07:55:14Z",
+     "link": "https://theconversation.com/protest-later-or-push-for-better-planning-now-7-actions-south-african-voters-can-take-before-local-elections-291783",
+     "published": "2026-10-06T13:20:13Z",
      "summary": "",
      "stale": false,
-     "author": "Souleymane Gueye, Professor of Economics and Statistics, City College of San Francisco"
+     "author": "Hope Magidimisha-Chipungu, Full Professor, University of KwaZulu-Natal"
     },
     {
-     "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
+     "title": "The global panel on inequality needs African evidence: here’s how it could work",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/listen-understand-repeat-the-circular-approach-to-good-communication-in-a-health-crisis-291739",
-     "published": "2026-10-05T13:08:22Z",
+     "link": "https://theconversation.com/the-global-panel-on-inequality-needs-african-evidence-heres-how-it-could-work-292927",
+     "published": "2026-10-06T13:19:56Z",
      "summary": "",
      "stale": false,
-     "author": "Herkulaas MvE Combrink, Senior lecturer/ Co-Director, University of the Free State"
+     "author": "Murray Leibbrandt, UCT Emeritus Professor and Senior Research Scholar; Director of ARUA's African Centre of Excellence for Inequality Research within SALDRU…"
+    },
+    {
+     "title": "‘Ebola takes the people children depend on’: UNICEF",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168531",
+     "published": "2026-10-06T12:00:00Z",
+     "summary": "The Ebola outbreak in the eastern Democratic Republic of the Congo (DRC) is robbing children of their loved ones – with some succumbing to the deadly disease themselves, the UN Children’s Fund (UNICEF) reported on…",
+     "stale": false
+    },
+    {
+     "title": "When streets become pharmacies: Booming illicit markets in Central Africa",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168527",
+     "published": "2026-10-06T12:00:00Z",
+     "summary": "Antibiotics, malaria treatments, painkillers, opioids. More than 250 tonnes of medical products were seized over six years in Central Africa. Behind those numbers is an illicit market that thrives not simply despite the…",
+     "stale": false
     },
     {
      "title": "Sudan: Driver killed in aerial attack on aid trucks in South Kordofan",
@@ -216,15 +234,6 @@
      "author": "Adesewa Olofinko"
     },
     {
-     "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168469",
-     "published": "2026-10-03T12:00:00Z",
-     "summary": "The package originated in Entebbe, Uganda, bound for Cairo, containing 10 kilograms of thumb-sized pieces that could have been either bone or elephant ivory.",
-     "stale": false
-    },
-    {
      "title": "The sound of resistance",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -233,15 +242,6 @@
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168499",
-     "published": "2026-10-01T12:00:00Z",
-     "summary": "The enormous challenge of halting the spread of Ebola in the Democratic Republic of the Congo (DRC) just became even harder after a key transit centre for patients requiring treatment burned down in Ituri province.",
-     "stale": false
     },
     {
      "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
@@ -261,6 +261,24 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168530",
+     "published": "2026-10-05T12:00:00Z",
+     "summary": "Three years after Hamas and other Palestinian armed groups attacked Israel, UN Secretary-General António Guterres has said nothing can justify the atrocities of 7 October – calling for an end to the suffering of…",
+     "stale": false
+    },
+    {
+     "title": "More than 184,000 displaced as fighting intensifies in Yemen",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168528",
+     "published": "2026-10-05T12:00:00Z",
+     "summary": "Intense fighting in Yemen has forced more than 184,000 people from their homes since the start of August, most of them since early September, the UN migration agency (IOM) said on Monday.",
+     "stale": false
+    },
+    {
      "title": "Escalating fighting in Yemen deepens food security crisis",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -276,24 +294,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168508",
      "published": "2026-10-02T12:00:00Z",
      "summary": "Repeated delays in bringing lifesaving medicines, prosthetics and more from Israel into Gaza risk having devastating consequences on Palestinians who urgently need them in the war-torn enclave, the UN World Health…",
-     "stale": false
-    },
-    {
-     "title": "Palestinians yearn for ‘a return to normal life’, says top Middle East peace envoy",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168497",
-     "published": "2026-09-30T12:00:00Z",
-     "summary": "The UN is continuing efforts to support Palestinians in Gaza amid major challenges to humanitarian access, reconstruction and the restoration of essential services, according to Ramiz Alakbarov, Acting UN Special…",
-     "stale": false
-    },
-    {
-     "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168496",
-     "published": "2026-09-30T12:00:00Z",
-     "summary": "UN teams are racing to protect families in Gaza from the coming rainy season, but restricted access to land and shortages of critical supplies are hampering the effort, UN Spokesperson Stéphane Dujarric said on…",
      "stale": false
     },
     {
@@ -769,14 +769,26 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Sénégal : après la dette cachée, quel rôle pour le FMI ?",
-   "published": "2026-10-06 07:55 UTC"
+   "title": "Protest later or push for better planning now? 7 actions South African voters can take before local elections",
+   "published": "2026-10-06 13:20 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
-   "published": "2026-10-05 13:08 UTC"
+   "title": "The global panel on inequality needs African evidence: here’s how it could work",
+   "published": "2026-10-06 13:19 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "‘Ebola takes the people children depend on’: UNICEF",
+   "published": "2026-10-06 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "When streets become pharmacies: Booming illicit markets in Central Africa",
+   "published": "2026-10-06 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -792,27 +804,27 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Uganda’s UN-supported wildlife forensics lab turns ivory seizures into convictions",
-   "published": "2026-10-03 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Ebola response faces setback as transit centre burns down in DR Congo camp",
-   "published": "2026-10-01 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
    "published": "2026-09-30 03:37 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
+   "published": "2026-10-05 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "More than 184,000 displaced as fighting intensifies in Yemen",
+   "published": "2026-10-05 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -825,18 +837,6 @@
    "source": "UN News",
    "title": "Gaza: WHO appeals for massive aid influx ahead of winter",
    "published": "2026-10-02 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Palestinians yearn for ‘a return to normal life’, says top Middle East peace envoy",
-   "published": "2026-09-30 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
-   "published": "2026-09-30 12:00 UTC"
   },
   {
    "region": "Middle East",
