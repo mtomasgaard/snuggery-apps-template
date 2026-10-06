@@ -493,7 +493,7 @@ function pick(k) {
 function statements() {
   const M = D.M, d = D.data, out = [];
   const say = (lead, text) => { const p = el('p', 'statement'); p.append(el('b', null, lead), ` ${text}`); return p; };
-  if (M.history) out.push(say('These prices have all ended,', 'so this is a past day, not a plan. The refresh after each day’s auction brings the next.'));
+  if (M.history) out.push(say('These prices have all ended,', `so this is a past day, not a plan: the last are for ${isoDate(M.dates[M.dates.length - 1])}, and no newer ones have arrived. The refresh after each day’s auction brings the next.`));
   const days = (D.kept && d.lastGood && Array.isArray(d.lastGood.days) ? d.lastGood.days : Array.isArray(d.days) ? d.days : []).filter((x) => x && typeof x.date === 'string');
   for (const day of days) {
     if (M.days.has(day.date)) {

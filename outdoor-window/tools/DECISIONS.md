@@ -526,3 +526,46 @@ start the final noticed on its line 146 is corrected with this commit). Owner ca
 sentence: "a framed window stands open, with `now` marked above the rows". The demo forecast of 21 Sep
 has no refresh bot, so the camera's README panes show the ran-out state; refreshing the demo means
 re-pinning the shoot's and the decode test's fixtures to the new file, an owed follow-up (plan 0011 D37).
+
+## D-DST: daylight saving time, measured and fixed (plan 0012 L7, 2026-10-06)
+
+**What Open-Meteo returns across a change of the clocks**, measured on 2026-10-06 with `timezone=auto`
+and with the zone named (`Europe/Oslo`, `Australia/Sydney`, `America/New_York`), from the forecast API
+(the only changes inside its window then were Sydney's spring-forward of 4 Oct 2026 and Auckland's of
+27 Sep 2026; it refuses dates outside 2026-07-05 to 2026-10-21), the historical-forecast API (Oslo's
+26 Oct 2025 and 29 Mar 2026, Boston's 2 Nov 2025) and the archive API (Oslo's two):
+
+- every time in one reply, hourly and daily, is written on **one** offset, `utc_offset_seconds`, and that
+  offset is the place's offset **at the moment of the request**, not at the start of the requested days:
+  Sydney's 3–5 Oct 2026 came back at UTC+11 though 3 Oct was UTC+10, and Oslo's 28–30 Mar 2026 at UTC+2
+  though 28 Mar was UTC+1;
+- no hour is repeated or skipped: 72 hours for three days on every change, each label an hour after the
+  last;
+- the values are the UTC series shifted by that one offset (Oslo's autumn 2025 reply against the same
+  days asked for in `GMT`: 0 differences in 72 hours × 7 variables; the temperature of the other six
+  replies likewise, the only misses being Boston's last four hours, beyond the end of its GMT request).
+  Read as true local time instead, the same replies match in only 26 to 49 of 72 hours.
+
+So **the instants were never wrong**: `localToEpoch(stamp, utc_offset_seconds)` in `js/score.js` and
+`_local_to_epoch` in `scripts/outdoor_window.py` place every hour correctly, and so do the sunrise and
+sunset, whose day keys are on the same one offset as `daily.time`. Neither scorer's arithmetic changed.
+**What was wrong is the label.** A file fetched in Oslo on Saturday 24 Oct 2026 writes the hours after
+the change in UTC+2, so the app printed the hour Oslo's clocks call 02:00 the second time as 03:00, the
+sunrise of the 25th as 08:24 for 07:24, put Sunday's last hour under Monday, and said "UTC+2" for the
+whole file; in spring, an hour early the other way.
+
+**The fix** tells every hour on the clock the place keeps at that instant. `js/units.js` reads the
+offset at each instant from the file's own `timezone` through `Intl.DateTimeFormat(...).formatToParts`
+(in the engine's own time-zone data, so it works offline in WKWebView), and the strings are still built
+by hand: check 10 allows `Intl` exactly once, there, read with `formatToParts`. The zone is used only
+when the engine knows it and it keeps the file's `utc_offset_seconds` at one of the file's own hours;
+otherwise the file's one offset, as before. The caption and About name both offsets when the clocks
+change inside the file ("UTC+2, then UTC+1"). `scripts/outdoor_window.py`'s `ask` rows take their
+date, weekday and time from the same zone through `zoneinfo`, with the same fallback. The Shortcut's
+address is unchanged; `PROMPT.md` says what the offset is.
+
+**The tests:** `tools/test_dst.mjs` (50 checks) and `scripts/tests/test_outdoor_window.py`, over five
+fixtures in `tools/dst/` written by `tools/dst/make_fixtures.py` from the historical-forecast API: Oslo
+autumn 2025 and 2026, Oslo spring 2026, Boston autumn 2025 and 2026 (the 2026 autumn files are the 2025
+replies moved 364 days, weekday for weekday, because those forecasts do not exist yet). The committed
+demo (Boston, 21 Sep) crosses no change, so its `ask` table and the data pins are unchanged.

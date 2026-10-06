@@ -274,7 +274,8 @@ fixed caption band. No units key, key column, player, focus mode or opening (the
      hour.`
   5. **Statements**, sentences on the page, 13.5 px `--ink`, the first words at 620, never a box, a
      colored edge or a dot, each only when true: in history mode `These prices have all ended, so this
-     is a past day, not a plan. The refresh after each day's auction brings the next.`; with no prices
+     is a past day, not a plan: the last are for Thu 1 Oct, and no newer ones have arrived. The refresh
+     after each day's auction brings the next.`; with no prices
      after today, from the file's own `days[]` note: `Fri 2 Oct: no prices yet when this file was made
      at 06:01. The auction publishes them about 13:00 Central European time; the refresh after that brings
      them.` (the auction's hour is Central European wherever the zone is, so the zone's city is not named)`;

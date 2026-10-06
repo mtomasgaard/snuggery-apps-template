@@ -13,7 +13,8 @@
 //   9. the marketing camera's strings (HOUSE.md 7.4): Windows and Hours as tabs built after the forecast parses
 //      (B7); nothing else a button by either name; no storage at all;
 //  10. SI and the dates: no plain space between a digit and a unit in the app's strings; toFixed only in
-//      js/units.js, toLocale* and Intl nowhere (B1);
+//      js/units.js, toLocale* nowhere, and Intl once, in js/units.js, to read the place's offset from its
+//      zone, never to print (B1; D-DST);
 //  11. no transition anywhere, and only the house's two animations (the tracer, About);
 //  12. innerHTML never set; no insertAdjacentHTML, outerHTML, document.write, eval or new Function;
 //  13. palette.py passes, and its --json --used is style.css's in both themes;
@@ -167,7 +168,7 @@ const CREDIT = "Weather data by Open-Meteo.com, under CC\u00a0BY\u00a04.0. The f
   ok(!/localStorage|sessionStorage|indexedDB/.test(web.map((f) => code(read(f), f)).join('\n')), 'storage: none, as before the pass (the app opens on Windows and stores nothing; the camera has nothing to put back)');
 }
 
-// 10. SI and the dates in what the app writes; toFixed only in js/units.js; no toLocale* or Intl
+// 10. SI and the dates in what the app writes; toFixed only in js/units.js; no toLocale*; Intl only to read an offset
 {
   const UNIT = /\d (h|d|min|%|mm|m|km\/h|°C|UTC)(?![\w/])/;
   const files = ['index.html', 'app.js', ...mods];
@@ -179,10 +180,13 @@ const CREDIT = "Weather data by Open-Meteo.com, under CC\u00a0BY\u00a04.0. The f
   ok(hits.length === 0, `SI: no plain space between a digit and a unit in ${files.length} files' strings${hits.length ? ': ' + hits.join(' | ') : ''}`);
   const locale = [];
   for (const f of ['app.js', ...mods]) code(read(f), f).split('\n').forEach((l, i) => {
-    if (/\.(toLocaleString|toLocaleDateString|toLocaleTimeString)\(|\bIntl\.|en-GB|nb-NO/.test(l) || (f !== 'js/units.js' && /\.toFixed\(/.test(l))) locale.push(`${f}:${i + 1}`);
+    const l2 = f === 'js/units.js' ? l.replace("new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23',", '') : l;
+    if (/\.(toLocaleString|toLocaleDateString|toLocaleTimeString)\(|\bIntl\.|en-GB|nb-NO/.test(l2) || (f !== 'js/units.js' && /\.toFixed\(/.test(l))) locale.push(`${f}:${i + 1}`);
   });
-  const fixed = (code(read('js/units.js'), 'x.js').match(/\.toFixed\(/g) || []).length;
-  ok(locale.length === 0 && fixed === 1, `dates and numbers by hand: no toLocale*, Intl, en-GB or nb-NO; toFixed once, in js/units.js (coordinates to two decimals) (B1, B10)${locale.length ? ': ' + locale.join(', ') : ''}`);
+  const u = code(read('js/units.js'), 'x.js');
+  const fixed = (u.match(/\.toFixed\(/g) || []).length;
+  const intl = (u.match(/\bIntl\./g) || []).length === 1 && (u.match(/\.format(ToParts)?\(/g) || []).join() === '.formatToParts(';
+  ok(locale.length === 0 && fixed === 1 && intl, `dates and numbers by hand: no toLocale*, en-GB or nb-NO; Intl once, in js/units.js, read with formatToParts for the place's offset and never to print; toFixed once, in js/units.js (coordinates to two decimals) (B1, B10, D-DST)${locale.length ? ': ' + locale.join(', ') : ''}`);
 }
 
 // 11. Motion: no transition at all; only the tracer and About animate, both under Reduce Motion

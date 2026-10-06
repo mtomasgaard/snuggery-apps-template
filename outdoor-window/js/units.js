@@ -3,8 +3,8 @@
 // minus, 24-hour clock, day before month, fixed English words built by hand, so every locale prints the same.
 //
 // Two clocks. The stamp says when the file was made on the PHONE's clock (a question about the reader's own
-// time). Every hour of the forecast is told on the FORECAST PLACE's clock, from utc_offset_seconds, because
-// the weather happens where the weather is.
+// time). Every hour of the forecast is told on the FORECAST PLACE's clock, from its own zone, because the
+// weather happens where the weather is.
 
 export const NB = '\u202f';
 export const MINUS = '\u2212';
@@ -75,8 +75,39 @@ export function span(ms) {
   return m < 60 ? `${m}${NB}min` : m < 48 * 60 ? `${Math.floor(m / 60)}${NB}h` : `${Math.floor(m / 1440)}${NB}d`;
 }
 
-/* ── the forecast place's clock (utc_offset_seconds) ── */
-const at = (ms, off) => new Date(ms + off * 1000);
+/* ── the forecast place's clock ──
+   Open-Meteo writes a file on the one offset in force when it was fetched, so past a change of the clocks
+   only the zone (Intl, offline) tells an hour as the place's clocks do (tools/DECISIONS.md, D-DST).
+   A place is { zone, offset }; a bare number is a fixed offset. */
+const walls = new Map();
+const wall = (zone) => {
+  if (!walls.has(zone)) {
+    let f = null;
+    try { f = new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }); } catch { /* not a zone */ }
+    walls.set(zone, f);
+  }
+  return walls.get(zone);
+};
+/** Seconds east of UTC on the place's clock at `ms`. */
+export function offsetAt(ms, place) {
+  const f = place && place.zone ? wall(place.zone) : null;
+  if (!f) return typeof place === 'number' ? place : place.offset;
+  const p = {}, t = Math.floor(ms / 1000) * 1000;
+  for (const { type, value } of f.formatToParts(new Date(t))) p[type] = Number(value);
+  return (Date.UTC(p.year, p.month - 1, p.day, p.hour % 24, p.minute, p.second) - t) / 1000;
+}
+/** The file's place: its zone if known here and keeping the file's offset at one of `probes`, else the offset. */
+export function placeOf(zone, offset, probes = []) {
+  const p = { zone: typeof zone === 'string' && wall(zone) ? zone : null, offset };
+  if (p.zone && probes.length && !probes.some((ms) => offsetAt(ms, p) === offset)) p.zone = null;
+  return p;
+}
+/** The file's zone by its offsets: "UTC+2", or "UTC+2, then UTC+1" when the clocks change inside it. */
+export function placeZones(a, b, place) {
+  const x = zone(offsetAt(a, place) / 60), y = zone(offsetAt(b, place) / 60);
+  return x === y ? x : `${x}, then ${y}`;
+}
+const at = (ms, off) => new Date(ms + offsetAt(ms, off) * 1000);
 /** "07:00". */
 export const placeClock = (ms, off) => { const d = at(ms, off); return `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}`; };
 /** "Mon 21": the Shutters' day labels. */
@@ -98,7 +129,7 @@ export function placeDays(a, b, off) {
 /** A run of hours, its end exclusive: "07:00–19:00"; "20:00–24:00" when it ends at midnight; "10:00 to Wed
  *  05:00" when it ends on a later day, so an overnight window never reads as a backwards range. */
 export function placeSpan(a, b, off) {
-  const day = (ms) => Math.floor((ms + off * 1000) / 864e5), end = placeClock(b, off);
+  const day = (ms) => Math.floor(at(ms, off) / 864e5), end = placeClock(b, off);
   return day(a) === day(b - 1) ? `${placeClock(a, off)}–${end === '00:00' ? '24:00' : end}` : `${placeClock(a, off)} to ${DAYS[at(b, off).getUTCDay()]} ${end}`;
 }
 /** What VoiceOver hears for an hour: "Monday 21 September, 07:00". */

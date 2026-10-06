@@ -101,7 +101,7 @@
  */
 
 import { scoreHours, findWindows, sunTimes, isNumber, localToEpoch, lightRule } from './js/score.js';
-import { int, count, list, num, withUnit, spokenValue, coords, meters, stampWhen, full, span, zone, placeClock, placeDate, placeFull, placeDays, placeSpan, spokenHour } from './js/units.js';
+import { int, count, list, num, withUnit, spokenValue, coords, meters, stampWhen, full, span, placeOf, placeZones, placeClock, placeDate, placeFull, placeDays, placeSpan, spokenHour } from './js/units.js';
 import { model as shutterModel, draw as drawSvg, hourAt, nameOf, caption as shutterCaption, describe } from './js/shutters.js';
 
 const SNAPSHOT_URL = './data/snapshot.json';
@@ -238,7 +238,7 @@ function derive(snap, rules, rulesProblem) {
   // out". The Shutters still draw them, faint. When every hour has ended, every hour is used.
   let rows = all.filter((row) => Number.isFinite(row.epoch) && row.epoch + 3600000 > now), ranOut = false;
   if (rows.length === 0) { rows = all; ranOut = true; }
-  return { snap, rules, rulesProblem, offset, units, all, rows, ranOut, now,
+  return { snap, rules, rulesProblem, offset, clock: placeOf(snap.timezone, offset, all.map((r) => r.epoch).filter(Number.isFinite)), units, all, rows, ranOut, now,
     windows: findWindows(rows, rules.minWindowHours), stamp: timestampOf(snap, offset), sun: sunTimes(snap, offset),
     place: typeof snap.demoPlace === 'string' ? snap.demoPlace : null, hasAsk: Array.isArray(snap.ask) && snap.ask.length > 0 };
 }
@@ -380,7 +380,7 @@ function statements() {
   const out = [], say = (lead, text) => { const p = el('p', 'statement'); p.append(el('b', null, lead), ` ${text}`); return p; };
   // one line at 390 px, so the Shutters lead the pane (the stamp says when it ran out); the way to a forecast of
   // one's own closes the Windows pane
-  if (S.place) out.push(say('Example forecast:', `${S.place}, ${placeDays(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.offset)}.`));
+  if (S.place) out.push(say('Example forecast:', `${S.place}, ${placeDays(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.clock)}.`));
   else if (S.ranOut) {
     out.push(say('Every hour in this file has ended,', 'so this is history, not a forecast. Run the Shortcut that refreshes the app.'));
   }
@@ -423,9 +423,9 @@ function drawShutters() {
   const cs = getComputedStyle(pane), ctx = document.createElement('canvas').getContext('2d');
   ctx.font = LABEL_FONT;
   const width = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-  M = shutterModel({ rows: S.all, windows: S.windows, offset: S.offset, now: S.now, width, label: labelW, ranOut: S.ranOut, measure: (t) => ctx.measureText(t).width });
+  M = shutterModel({ rows: S.all, windows: S.windows, offset: S.clock, now: S.now, width, label: labelW, ranOut: S.ranOut, measure: (t) => ctx.measureText(t).width });
   shut = drawSvg(box.querySelector('svg'), M);
-  $('sh-desc').textContent = describe(M, S.all, S.windows, S.offset);
+  $('sh-desc').textContent = describe(M, S.all, S.windows, S.clock);
   show(chosen);
   holdReadout(pane.querySelector('.ro'));
   caption();
@@ -440,7 +440,7 @@ function holdReadout(ro) {
   when.style.minHeight = '';
   let h = 0;
   for (const row of S.all) {
-    b.textContent = `${placeDate(row.epoch, S.offset)}, ${placeClock(row.epoch, S.offset)}`;
+    b.textContent = `${placeDate(row.epoch, S.clock)}, ${placeClock(row.epoch, S.clock)}`;
     span.textContent = ` ${isNow(row) ? 'now, ' : ''}${verdict(row)}`;
     h = Math.max(h, when.offsetHeight);
   }
@@ -452,7 +452,7 @@ const isPast = (row) => !S.ranOut && row.epoch + 3600000 <= S.now;
 /** The hour the phone's clock is in: the readout and the slider's value say `now` for it. */
 const isNow = (row) => !S.ranOut && S.now >= row.epoch && S.now < row.epoch + 3600000;
 const verdict = (row) => `${row.pass ? 'clears every rule' : `ruled out by ${list(row.blocked)}`}, score ${row.score}`;
-const valueText = (row) => `${spokenHour(row.epoch, S.offset)}${isNow(row) ? ', now' : ''}: ${verdict(row)}`;
+const valueText = (row) => `${spokenHour(row.epoch, S.clock)}${isNow(row) ? ', now' : ''}: ${verdict(row)}`;
 
 /** An hour's values, at the data's own precision (B10, B17), with the sunrise or sunset inside the hour. */
 function values(row, speak) {
@@ -466,7 +466,7 @@ function values(row, speak) {
   if (isNumber(row.cloud)) add('cloud', row.cloud, u.cloud);
   out.push(row.light === 'golden' ? 'golden hour' : row.light === 'day' ? 'daylight' : 'night');
   const sun = S.sun.get(row.stamp.slice(0, 10));
-  for (const [word, ms] of sun ? [['sunrise', sun.rise], ['sunset', sun.set]] : []) if (ms >= row.epoch && ms < row.epoch + 3600000) out.push(`${word} ${placeClock(ms, S.offset)}`);
+  for (const [word, ms] of sun ? [['sunrise', sun.rise], ['sunset', sun.set]] : []) if (ms >= row.epoch && ms < row.epoch + 3600000) out.push(`${word} ${placeClock(ms, S.clock)}`);
   if (isPast(row)) out.push('already past');
   return out.join(', ');
 }
@@ -478,7 +478,7 @@ function show(i) {
   if (shut) shut.place(i);
   const ro = $('pane').querySelector('.ro');
   if (ro) {
-    ro.querySelector('b').textContent = `${placeDate(row.epoch, S.offset)}, ${placeClock(row.epoch, S.offset)}`;
+    ro.querySelector('b').textContent = `${placeDate(row.epoch, S.clock)}, ${placeClock(row.epoch, S.clock)}`;
     ro.querySelector('.ro-when span').textContent = ` ${isNow(row) ? 'now, ' : ''}${verdict(row)}`;
     ro.querySelector('.ro-vals').textContent = values(row, false);
   }
@@ -570,12 +570,12 @@ function wireSlider(box) {
 }
 
 const maxOf = (rows, key) => { const v = rows.map((r) => r[key]).filter(isNumber); return v.length ? Math.max(...v) : null; };
-const hoursOf = (w) => placeSpan(w.start.epoch, w.end.epoch + 3600000, S.offset);
+const hoursOf = (w) => placeSpan(w.start.epoch, w.end.epoch + 3600000, S.clock);
 const facts = (pairs, cls = 'facts') => { const dl = el('dl', cls); for (const [k, v] of pairs) dl.append(el('dt', null, k), el('dd', null, v)); return dl; };
 
 function windowsPane(pane) {
   pane.append(title(true), shuttersBlock());
-  const sec = el('section', 'sec'), u = S.units, off = S.offset;
+  const sec = el('section', 'sec'), u = S.units, off = S.clock;
   if (!S.windows.length) {
     const need = isNumber(S.rules.minWindowHours) && S.rules.minWindowHours > 0 ? Math.ceil(S.rules.minWindowHours) : 1;
     const best = S.rows.reduce((a, b) => (b.score > a.score ? b : a), S.rows[0]);
@@ -612,7 +612,7 @@ function ownForecast() {
 
 function hoursPane(pane) {
   pane.append(title(true), shuttersBlock());
-  const u = S.units, off = S.offset, table = el('table', 'hours'), head = el('tr');
+  const u = S.units, off = S.clock, table = el('table', 'hours'), head = el('tr');
   const th = (word, unit) => { const c = el('th', null, word); c.scope = 'col'; if (unit) c.append(el('br'), unit); return c; };
   head.append(th('Time'), th('Light'), th('Air', u.temp), th('Rain chance', u.rain), th('Rainfall', u.precip), th('Gusts', u.gust), th('Dew point', u.dew));
   const thead = el('thead');
@@ -691,7 +691,7 @@ function caption() {
   if (tab === 'windows') { c.textContent = M ? shutterCaption(M) : ''; return; }
   if (tab === 'hours') {
     const air = u.temp === u.dew ? `Air and dew point in ${u.temp}` : `Air in ${u.temp}, dew point in ${u.dew}`;
-    c.textContent = `Hours in ${S.place ? `${S.place}’s` : 'the forecast’s'} own time, ${zone(S.offset / 60)}. ${air}, rain chance in ${u.rain}, rainfall in ${u.precip}, gusts in ${u.gust}.`;
+    c.textContent = `Hours in ${S.place ? `${S.place}’s` : 'the forecast’s'} own time, ${placeZones(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.clock)}. ${air}, rain chance in ${u.rain}, rainfall in ${u.precip}, gusts in ${u.gust}.`;
     return;
   }
   c.textContent = `${S.rulesProblem ? 'The built-in rules: data/rules.json could not be used.' : 'Read from data/rules.json.'} An hour must clear every rule, in the forecast’s own units.`;
@@ -705,8 +705,8 @@ function aboutList() {
   const add = (k, v) => dl.append(el('dt', null, `${k}:`), el('dd', null, v));
   if (S.place) add('Place', `${S.place} (an example)`);
   if (isNumber(s.latitude) && isNumber(s.longitude)) add('Grid point', `${coords(s.latitude, s.longitude)}${isNumber(s.elevation) ? `, ${meters(s.elevation)}` : ''}`);
-  add('Time zone', `${typeof s.timezone === 'string' ? `${s.timezone.replace(/_/g, ' ')}, ` : ''}${zone(S.offset / 60)}`);
-  add('Forecast', `${placeFull(S.all[0].epoch, S.offset)} to ${placeFull(S.all[n - 1].epoch + 3600000, S.offset)}, ${count(n, 'hour')}`);
+  add('Time zone', `${typeof s.timezone === 'string' ? `${s.timezone.replace(/_/g, ' ')}, ` : ''}${placeZones(S.all[0].epoch, S.all[n - 1].epoch, S.clock)}`);
+  add('Forecast', `${placeFull(S.all[0].epoch, S.clock)} to ${placeFull(S.all[n - 1].epoch + 3600000, S.clock)}, ${count(n, 'hour')}`);
   const st = S.stamp;
   if (st) add('Updated', st.kind === 'exact' ? `${full(st.ms)}, from the file’s own time` : st.kind === 'about' ? `about ${full(st.ms)}, the weather service’s time to the quarter hour` : `${full(st.ms)} at the earliest: the forecast’s first hour`);
   else add('Updated', 'not in the file');

@@ -77,7 +77,7 @@ env:
 
 jobs:
   refresh:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned: ubuntu-latest becomes Ubuntu 26 from 2026-10-19; move on purpose, after a test run
     timeout-minutes: 15
     steps:
       # Only the pipeline: the refresh reads nothing else in the repository. A sparse checkout is a

@@ -10,7 +10,10 @@ in a private copy is personal history, is never published.
 
 It changes nothing in the repository. It writes one folder (default `_site/`),
 which .github/workflows/publish-web.yml uploads to Pages, plus an index page
-listing the apps, built from each one's miniapp.json.
+listing the apps, built from each one's miniapp.json. Each app's Get the ZIP
+link is the site's own zips/<app>.zip, which publish-web.yml packs after this
+runs, from the same folders with the same data; run by hand, this writes no
+ZIPs, so those links answer 404 on localhost.
 
     python3 scripts/build_web.py                 # writes _site/
     python3 -m http.server -d _site 8000         # then open localhost:8000
@@ -61,7 +64,6 @@ def apps():
 
 
 def page(cards, repo):
-    zip_base = f"https://github.com/{repo}/raw/main/zips" if repo else "../zips"
     items = []
     for name, meta, preview in cards:
         title = html.escape(meta.get("name") or name)
@@ -75,7 +77,7 @@ def page(cards, repo):
           <h2><a href="{html.escape(name)}/">{title}</a></h2>
           <p>{desc}</p>
           <p class="links"><a class="open" href="{html.escape(name)}/">Open in browser</a>
-            <a href="{zip_base}/{html.escape(name)}.zip">Get the ZIP</a></p>
+            <a href="zips/{html.escape(name)}.zip">Get the ZIP</a></p>
         </div>
       </li>""")
     source = f"https://github.com/{repo}" if repo else ".."
@@ -103,6 +105,7 @@ def page(cards, repo):
   main {{ max-width:1100px; margin:0 auto; padding:32px 16px 48px; }}
   h1 {{ margin:0 0 8px; font-size:28px; letter-spacing:-0.02em; }}
   .site {{ margin:0 0 12px; font-size:15px; }}
+  .how {{ margin:0 0 12px; }}
   .lede {{ color:var(--muted); margin:0 0 28px; max-width:70ch; }}
   a {{ color:var(--accent); }}
   ul {{ list-style:none; padding:0; margin:0; display:grid; gap:16px;
@@ -124,10 +127,12 @@ def page(cards, repo):
 <body>
 <main>
   <h1>Snuggery live apps</h1>
-{header}  <p class="lede">Every app in <a href="{source}">the repository</a>, running in the browser. Each shows the
-  data last published here; on a phone, <strong>Get the ZIP</strong> in Safari and share it to Snuggery to
-  install it instead. The big 3D apps download tens of megabytes on first open.{phone}</p>
-  <ul>{"".join(items)}
+{header}  <p class="how">On an iPhone, in Safari: <a href="#apps"><strong>Get the ZIP</strong></a> under any app,
+  then <strong>Share</strong>, then <strong>{html.escape(SITE_NAME or "Snuggery")}</strong>.</p>
+  <p class="lede">Every app in <a href="{source}">the repository</a>, running in the browser. Each shows the
+  data last published here, and so does its ZIP. The big 3D apps download tens of megabytes on first
+  open.{phone}</p>
+  <ul id="apps">{"".join(items)}
   </ul>
   <footer>How the data reaches the apps: <a href="data-flow.html">the loop, animated</a>.</footer>
 </main>

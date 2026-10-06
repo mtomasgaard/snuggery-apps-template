@@ -288,7 +288,8 @@ inside the frame, a fixed caption band. No units key, key column, player, focus 
 - **Caption band** (fixed, on `--page`, 16 px gutters): the caption line per pane, 11 px / 15 px
   `--ink-2`, two lines below 640 px: Windows, the Shutters' (section 1); Hours, `Hours in Boston
   Common's own time, UTC−4. Air and dew point in °C, rain chance in %, rainfall in mm, gusts in km/h.` (the place
-  `the forecast's own time` when the file names none, the units from `hourly_units`); Rules, `Read from
+  `the forecast's own time` when the file names none, `UTC+2, then UTC+1` when the clocks change inside
+  the file (D-DST), the units from `hourly_units`); Rules, `Read from
   data/rules.json. An hour must clear every rule, in the forecast's own units.` Then the credits,
   10.5 px / 15 px `--ink-2`, the stock's static markup word for word: `Weather data by Open-Meteo.com,
   under CC BY 4.0. The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified; the

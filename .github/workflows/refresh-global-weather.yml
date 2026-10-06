@@ -91,7 +91,7 @@ env:
 
 jobs:
   refresh:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned: ubuntu-latest becomes Ubuntu 26 from 2026-10-19; move on purpose, after a test run
     steps:
       - uses: actions/checkout@v5
 

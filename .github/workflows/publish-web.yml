@@ -4,10 +4,20 @@ name: Publish apps to the web
 #   https://<owner>.github.io/<repo>/<app-folder>/
 # with an index of them all at https://<owner>.github.io/<repo>/.
 #
-# This sits BESIDE the ZIPs and changes nothing about them: it commits nothing,
-# writes no branch, and the ZIP builder and every refresh job run exactly as
-# before. It copies each app folder less what the ZIP leaves out (see
-# scripts/build_web.py) and hands the result to GitHub Pages.
+# It commits nothing and writes no branch; the ZIP builder and every refresh job
+# run exactly as before. It copies each app folder less what the ZIP leaves out
+# (see scripts/build_web.py), packs each one as a ZIP with the same data, and
+# hands the result to GitHub Pages: the apps at <app-folder>/, their ZIPs at
+# zips/<app-folder>.zip.
+#
+# Why the ZIPs are packed here as well as on main: main's zips/ is rebuilt on a
+# CODE push only, so a ZIP from there carries the data of the last code push
+# (or, for the apps whose live data is on a data-<app> branch, the demo). A ZIP
+# packed here carries the data this run publishes, which is the newest. It is
+# not committed, so the repository's history does not grow by a binary on every
+# refresh: a ZIP does not delta, and Global Weather's alone, six times a day,
+# would add gigabytes a year. main's zips/ stays as it is: the code build, and
+# the only ZIPs a private copy without Pages has.
 #
 # OFF UNTIL YOU TURN IT ON. Settings → Pages → Build and deployment → Source:
 # "GitHub Actions". Until then every run says so in one line and stops, green.
@@ -53,7 +63,7 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned: ubuntu-latest becomes Ubuntu 26 from 2026-10-19; move on purpose, after a test run
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -76,28 +86,48 @@ jobs:
         with:
           ref: main               # the newest data, whichever event started this
 
-      - name: Build the site
-        if: steps.pages.outputs.on == 'true'
-        run: python3 scripts/build_web.py --out _site
-
       # Global Wind, Global Weather, US Quakes and Warming World publish their live data to a
-      # branch of their own; `main` holds only the demo the ZIP ships with. The
-      # browser copy takes the live one when there is one, the demo when there
-      # is not.
+      # branch of their own; `main` holds only the demo the code ZIP ships with. Every file the
+      # branch holds under <app>/data/ is written over this job's checkout (never committed or
+      # pushed), so the browser copy and its ZIP both take the live data when there is some, the
+      # demo when there is not. A fingerprint the demo keeps beside its snapshot
+      # (snapshot.sha256) that no longer matches the file is dropped rather than shipped false.
       - name: Take the live data from their data branches
         if: steps.pages.outputs.on == 'true'
         run: |
           for app in global-wind global-weather us-quakes warming-world; do
-            [ -d "_site/$app" ] || continue
-            path="$app/data/snapshot.json"
+            [ -f "$app/index.html" ] || continue
             if git fetch --quiet --depth=1 origin "data-$app" 2>/dev/null \
-               && git show "FETCH_HEAD:$path" > "_site/$path.new" 2>/dev/null; then
-              mv "_site/$path.new" "_site/$path"
-              echo "$app: live snapshot from data-$app"
+               && files=$(git ls-tree -r --name-only FETCH_HEAD -- "$app/data/") && [ -n "$files" ]; then
+              git archive FETCH_HEAD -- "$app/data/" | tar -x
+              for sum in "$app"/data/*.sha256; do
+                [ -f "$sum" ] || continue
+                (cd "$app/data" && sha256sum --status -c "$(basename "$sum")") && continue
+                rm "$sum"
+                echo "$app: dropped $(basename "$sum"), the demo's fingerprint"
+              done
+              echo "$app: live data from data-$app:" $files
             else
-              rm -f "_site/$path.new"
               echo "$app: no data branch yet, keeping the demo"
             fi
+          done
+
+      - name: Build the site
+        if: steps.pages.outputs.on == 'true'
+        run: python3 scripts/build_web.py --out _site
+
+      # One ZIP per app the site publishes, packed from the same folder the browser copy
+      # was copied from, with the same zip line as build-zips.yml (keep the two in step):
+      # so a ZIP here is the code ZIP with this run's data inside it, nothing added.
+      - name: Pack every app as a ZIP, with the data it was published with
+        if: steps.pages.outputs.on == 'true'
+        run: |
+          mkdir -p _site/zips
+          for page in _site/*/index.html; do
+            name=$(basename "$(dirname "$page")")
+            [ -f "$name/index.html" ] || continue
+            (cd "$name" && zip -q -r -X "../_site/zips/$name.zip" . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*')
+            echo "packed $name: $(wc -c < "_site/zips/$name.zip") bytes"
           done
 
       - uses: actions/upload-pages-artifact@v3

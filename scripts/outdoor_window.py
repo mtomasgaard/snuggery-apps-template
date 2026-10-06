@@ -45,6 +45,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from zoneinfo import ZoneInfo
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 APP = ROOT / "outdoor-window"
@@ -132,7 +133,14 @@ def _clamp(value: float, low: float = 0.0, high: float = 1.0) -> float:
 
 
 def _local_to_epoch(stamp: str, offset_seconds: int) -> float:
-    """'2026-09-21T05:00' plus an offset -> epoch seconds."""
+    """'2026-09-21T05:00' plus an offset -> epoch seconds.
+
+    One offset for the whole file is right even across a change of the clocks:
+    Open-Meteo writes every time in a reply on the offset in force when it was
+    fetched, and repeats or skips no hour (measured 2026-10-06; outdoor-window/
+    tools/DECISIONS.md, D-DST). What goes wrong past a change is the LABEL, so
+    the ask table tells each hour on the place's own clock (see place_zone).
+    """
     naive = dt.datetime.strptime(stamp[:16], "%Y-%m-%dT%H:%M")
     return naive.replace(tzinfo=dt.timezone.utc).timestamp() - offset_seconds
 
@@ -277,6 +285,27 @@ def score_hours(snapshot: dict, rules: dict) -> list[dict]:
 WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 
+def place_zone(snapshot: dict, epochs: list[float]):
+    """The file's own IANA zone, or None to tell the hours on its one offset.
+
+    js/units.js placeOf(), mirrored: the zone is used when this machine knows
+    it and it keeps the file's offset at one of the file's own hours, so a zone
+    that does not belong to the file can never move its labels. A file fetched
+    in Oslo on 24 October 2026 says 03:00 for the hour Oslo's clocks call 02:00
+    the second time; the zone is what tells the two apart.
+    """
+    name, offset = snapshot.get("timezone"), snapshot.get("utc_offset_seconds")
+    if not isinstance(name, str) or not name or not _is_number(offset):
+        return None
+    try:
+        zone = ZoneInfo(name)
+    except (KeyError, ValueError, OSError):  # unknown, malformed, or no tz database
+        return None
+    if epochs and not any(dt.datetime.fromtimestamp(e, zone).utcoffset().total_seconds() == offset for e in epochs):
+        return None
+    return zone
+
+
 def ask_rows(snapshot: dict, rules: dict) -> list[dict]:
     """The flat table Snuggery's *Ask About This Data* reads: one row per hour.
 
@@ -284,15 +313,21 @@ def ask_rows(snapshot: dict, rules: dict) -> list[dict]:
     objects, because the reader is a table, not a parser.
     """
     rows = []
-    for row in score_hours(snapshot, rules):
+    scored = score_hours(snapshot, rules)
+    zone = place_zone(snapshot, [row["epoch"] for row in scored])
+    for row in scored:
         stamp = row["time"]
-        date = stamp[:10]
+        if zone is not None:
+            local = dt.datetime.fromtimestamp(row["epoch"], zone)
+            date, clock = local.date().isoformat(), local.strftime("%H:%M")
+        else:
+            date, clock = stamp[:10], stamp[11:16]
         weekday = WEEKDAYS[dt.date.fromisoformat(date).weekday()]
         rows.append(
             {
                 "date": date,
                 "weekday": weekday,
-                "time": stamp[11:16],
+                "time": clock,
                 "pass": "yes" if row["pass"] else "no",
                 "score": row["score"],
                 "tempC": row["temp"],

@@ -97,6 +97,16 @@ RATE LIMIT
 Energy-Charts limits /price to 2 requests per minute per IP, burst 2, lowered
 further when its servers are busy. This script makes at most two requests per
 run and honours the Retry-After header on a 429. Do not run it in a loop.
+
+EXIT STATUS
+-----------
+0 when a snapshot was written. Also 0 when the source had nothing for today or
+tomorrow and nothing could be carried, but a snapshot already exists: that file
+is left byte for byte as it was, and the run carries a warning annotation
+naming the source's error instead of failing (an outage is not this job's
+fault, and the app already stamps the old curve stale). 1 for a licence change,
+or when there is nothing to draw and no snapshot yet. 2 for a zone whose prices
+may not be republished.
 """
 
 from __future__ import annotations
@@ -524,6 +534,8 @@ def main() -> int:
 
     # Anything this run could not fetch may still be on disk from the last one.
     old = previous(args.out)
+    if not isinstance(old, dict):
+        old = {}
     old_hours = old.get("hours") or (old.get("lastGood") or {}).get("hours") or []
     carried: dict[str, list[tuple[int, float]]] = {}
     for entry in old_hours:
@@ -616,11 +628,28 @@ def main() -> int:
 
     snapshot["ask"] = build_ask(days, by_day, step, tz, appliances, snapshot["unit"], now_local)
 
+    drawn = snapshot["hours"] or (snapshot["lastGood"] or {}).get("hours") or []
+    if not drawn and old:
+        # Nothing for today or tomorrow, new or carried: the source is down
+        # (Energy-Charts answered 503 for both days around Oslo midnight on
+        # 4-5 Oct 2026, three runs in a row). The committed snapshot is left
+        # exactly as it is, so the app keeps drawing its last curve stamped
+        # stale and says the newer prices have not arrived. That is an outage
+        # nobody here can fix, so it is a warning on the run, not a failure
+        # email every six hours. Exit 1 stays for a licence change (above) and
+        # for a first run with nothing at all to show (below).
+        said = "; ".join(f"{key} {state}: {note}" for key, (state, note) in sorted(states.items()) if note)
+        message = (f"Energy-Charts gave no prices for today or tomorrow ({said or 'no answer'}). "
+                   f"{args.out.name} is left as it was, from {old.get('generatedAt', 'an earlier run')}; "
+                   f"the app shows its last curve, stamped stale.")
+        print("::warning title=No new Power Hours prices::"
+              + message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"))
+        return 0
+
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(snapshot, indent=1, ensure_ascii=False) + "\n",
                         encoding="utf-8")
 
-    drawn = snapshot["hours"] or (snapshot["lastGood"] or {}).get("hours") or []
     print(f"wrote {args.out}: {len(drawn)} intervals, {len(snapshot['ask'])} ask rows, "
           f"{snapshot['resolutionMinutes']} min steps"
           + (" (stale — nothing fetched)" if not snapshot["hours"] else ""))

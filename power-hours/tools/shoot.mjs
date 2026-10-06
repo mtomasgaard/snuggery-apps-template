@@ -490,7 +490,7 @@ for (const scheme of schemes) {
     const ago = Math.floor((Date.parse(RANOUT) - (pts[N - 1].at + STEP)) / 3600e3);
     check(s.stamp === `Prices ran out ${ago}${NN}h ago. Updated 1 Oct, ${osloClock(GEN)}` && s.lead === `Prices ran out ${ago}${NN}h ago.` && s.h2.join() === 'Cheapest runs in this file' && s.now === 0 && s.past === 0 && s.chosen === H.from && s.cam,
       `run out, ${scheme}: "${s.stamp.replace(NN, ' ')}" (the sentence in ink); no Now, no now mark, nothing faint; "${s.h2[0]}", the chosen interval the run's first`);
-    check(s.tm === runText(H, false) && s.sub === `2${NN}h run, ${f2(H.mean)}${NN}c/kWh, ${pctBelow(H.mean, hmean)}${NN}% below the file’s mean` && s.st[0] === 'These prices have all ended, so this is a past day, not a plan. The refresh after each day’s auction brings the next.',
+    check(s.tm === runText(H, false) && s.sub === `2${NN}h run, ${f2(H.mean)}${NN}c/kWh, ${pctBelow(H.mean, hmean)}${NN}% below the file’s mean` && s.st[0] === `These prices have all ended, so this is a past day, not a plan: the last are for ${(([y, m, d]) => { const w = new Date(Date.UTC(y, m - 1, d)); return `${DAYS[w.getUTCDay()].slice(0, 3)} ${d} ${MONTHS[m - 1].slice(0, 3)}`; })(pts[N - 1].date.split('-').map(Number))}, and no newer ones have arrived. The refresh after each day’s auction brings the next.`,
       `history, never a plan (the stock planned "Dishwasher 00:30–02:30" for a day that had ended): "${s.tm}", "${s.sub.replace(/ /g, ' ')}"; "${s.st[0].slice(0, 40)}…"`);
     await clearCheck(B.w, 'run out');
     await B.shot(`history-${scheme}`);

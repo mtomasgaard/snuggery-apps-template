@@ -24,7 +24,8 @@ export function isNumber(value) {
 
 /* "2026-09-21T05:00" in a place that is `offset` seconds from UTC, as an
    instant. Parsed as UTC and then shifted back, which avoids handing a
-   zone-less string to the engine's local-time guesswork. */
+   zone-less string to the engine's local-time guesswork. Right across a
+   change of the clocks too: Open-Meteo keeps one offset per file (D-DST). */
 export function localToEpoch(stamp, offset) {
   if (typeof stamp !== 'string') return NaN;
   const ms = Date.parse(stamp.slice(0, 16) + 'Z');

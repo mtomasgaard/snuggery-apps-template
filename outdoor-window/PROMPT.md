@@ -87,8 +87,9 @@ retyped. Every part of it is load-bearing:
   what the app's *Updated about HH:MM* stamp is derived from. Drop it and the stamp falls back to
   the first hour of the forecast (*Forecast from HH:MM*), which only tells you the file is *at least* that old.
 - `timezone=auto` — hourly times come back as local wall clock for the forecast's own place,
-  with `utc_offset_seconds` beside them so the app can put them on a clock. Without it, nothing
-  can be placed.
+  all on the offset in force at the fetch (`utc_offset_seconds`), with the zone's name
+  (`timezone`) beside it, so the app tells every hour on the place's clock, even past a change of
+  the clocks. Without it, nothing can be placed.
 - `forecast_hours=48` — start at the current hour, not at local midnight, so the app never has
   to throw away a morning that already happened. `forecast_days=3` is only there so sunrise and
   sunset cover every date those 48 hours touch.
