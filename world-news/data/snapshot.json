@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T18:01:37Z",
+ "generatedAt": "2026-10-06T19:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
+     "title": "Why are new wind farms stuck in the doldrums in Australia?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/why-are-new-wind-farms-stuck-in-the-doldrums-in-australia-292231",
+     "published": "2026-10-06T18:26:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kumuthini Sivathas, Postdoctoral Researcher in Economics, Adelaide University"
+    },
+    {
+     "title": "Truth, evidence and controversy: Richard Dawkins’ The God Delusion at 20",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/truth-evidence-and-controversy-richard-dawkins-the-god-delusion-at-20-290331",
+     "published": "2026-10-06T18:25:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jamie Q. Roberts, Lecturer in Politics and International Relations, University of Sydney"
+    },
+    {
+     "title": "Counterfeit cash is at an 8-year high in Australia, new figures show. Here’s how to spot it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/counterfeit-cash-is-at-an-8-year-high-in-australia-new-figures-show-heres-how-to-spot-it-290327",
+     "published": "2026-10-06T18:25:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Terry Goldsworthy, Associate Professor in Criminal Justice and Criminology, Bond University"
+    },
+    {
+     "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-next-government-could-be-a-four-party-coalition-get-used-to-the-new-normal-293335",
      "published": "2026-10-06T17:08:23Z",
      "summary": "",
@@ -449,26 +479,6 @@
      "author": "Guest Contributor"
     },
     {
-     "title": "Medicine and God: how medieval people faced the deadly pneumonic plague",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/medicine-and-god-how-medieval-people-faced-the-deadly-pneumonic-plague-293676",
-     "published": "2026-10-06T07:08:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Beth Spacey, Lecturer in Medieval History, The University of Queensland"
-    },
-    {
-     "title": "The death of a Russian plague researcher, explained by a microbiologist",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-death-of-a-russian-plague-researcher-explained-by-a-microbiologist-293675",
-     "published": "2026-10-06T06:41:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Thomas Jeffries, Senior Lecturer in Microbiology, Western Sydney University"
-    },
-    {
      "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -477,16 +487,6 @@
      "summary": "",
      "stale": false,
      "author": "Geoff Dickson, Adjunct Professor of Sport Management, La Trobe University"
-    },
-    {
-     "title": "Where are the best places for life in the cosmos? A universe in a supercomputer yields the answer",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/where-are-the-best-places-for-life-in-the-cosmos-a-universe-in-a-supercomputer-yields-the-answer-292608",
-     "published": "2026-10-06T00:24:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Luke Barnes, Senior Lecturer in Physics, Western Sydney University"
     },
     {
      "title": "The sound of resistance",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why are new wind farms stuck in the doldrums in Australia?",
+   "published": "2026-10-06 18:26 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Truth, evidence and controversy: Richard Dawkins’ The God Delusion at 20",
+   "published": "2026-10-06 18:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Counterfeit cash is at an 8-year high in Australia, new figures show. Here’s how to spot it",
+   "published": "2026-10-06 18:25 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s next government could be a four-party coalition. Get used to the new normal",
    "published": "2026-10-06 17:08 UTC"
   },
@@ -925,26 +943,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Medicine and God: how medieval people faced the deadly pneumonic plague",
-   "published": "2026-10-06 07:08 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The death of a Russian plague researcher, explained by a microbiologist",
-   "published": "2026-10-06 06:41 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
    "published": "2026-10-06 00:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Where are the best places for life in the cosmos? A universe in a supercomputer yields the answer",
-   "published": "2026-10-06 00:24 UTC"
   },
   {
    "region": "Oceania",
