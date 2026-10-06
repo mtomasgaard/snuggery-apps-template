@@ -87,9 +87,9 @@ back to this page.
 
 ### Hello Live
 
-A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built.
+A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. Its drawing, the Time Card, is the loop itself: a week of days, one row each, with a punch at the minute each file was written and a tail to the minute this phone first read it.
 
-**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) · It is the loop's proof, not a thing to personalise.
+**Needs:** nothing · [**Get the ZIP**](https://github.com/mtomasgaard/snuggery-apps-template/raw/main/zips/hello-live.zip) · It is the loop's proof, not a thing to personalize.
 
 ### Running Dashboard
 
@@ -343,8 +343,9 @@ loop works, and any later problem is in the new app rather than in the setup.
 Any folder can be deleted once you no longer need it as a reference, together
 with its scripts and its workflow.
 
-**An app is not always one file.** Hello Live is a single `index.html` with its
-CSS and JS inline. Running Dashboard is `index.html` plus `app.js`, `style.css`, three modules in
+**An app is not always one file.** The smallest working app is a single `index.html` with its
+CSS and JS inline. Hello Live is `index.html` plus `style.css`, `app.js`, two modules in `js/` and the
+house face in `fonts/`. Running Dashboard is `index.html` plus `app.js`, `style.css`, three modules in
 `js/`, the house face in `fonts/`, and a `data/` folder holding a snapshot, six session streams, and about a
 megabyte of map tiles. The ZIP takes the app's folder whole either way, less
 the folders marked above as left out — still no build step.

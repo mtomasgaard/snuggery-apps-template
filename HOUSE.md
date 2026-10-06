@@ -181,7 +181,7 @@ against the cut's character map. Many hits sit in code comments, so read each be
 | Milky Way | Greek letters (its stars' designations, in its data), superscript digits (⁰ ⁴ ⁹), arrows |
 | Running Dashboard | ₂ (the `VO₂ max` tile), ≈ (in a tooltip), ▴ ▾ (a fold's chevrons), and Δ, ⓘ, ↑ ↓ → |
 | Finances | • (its data's masked account numbers, `•• 4417`) |
-| World News, Outdoor Window, Power Hours, Hello Live | ⋯ and → in help sentences (`Options ⋯ → App Files`) |
+| World News, Outdoor Window, Power Hours, Hello Live | ⋯ and → in help sentences (`Options ⋯ → App Files`) on 2026-10-01; each pass replaced them with words, so none ships either now |
 | Shelf Atlas, World Oil & Gas | ▸ ▾ in CSS, → and math signs (mostly in comments) |
 | Besseggen | → in its route chip (`Gjendesheim → Memurubu`) |
 | Norne Reservoir, Anatomy, Snug Kart (outside comments) | none |
@@ -1070,7 +1070,7 @@ Every app's check asserts at least these (CHECK 1-31):
 13. **No value reaches markup unescaped.** Global Weather allows `innerHTML` only as `= ''`
     (CHECK 190-197; DESIGN 24-25). Eight of the thirteen still set markup from strings
     (*measured*, assignments that are not `= ''`: Running Dashboard 15, Besseggen 11, Milky Way 7,
-    Norne Reservoir 5, Finances 2, World News 0 (after its pass), Snug Kart 1, Hello Live 1). A pass adds no new
+    Norne Reservoir 5, Finances 2, World News 0 (after its pass), Snug Kart 1, Hello Live 0 (after its pass)). A pass adds no new
     such use, escapes every value in the ones it touches, and never adds `insertAdjacentHTML`,
     `outerHTML`, `document.write`, `eval` or `new Function`. An app that already holds Global
     Weather's rule (Anatomy, Shelf Atlas, World Oil & Gas, Outdoor Window, Power Hours) keeps it,
@@ -1249,7 +1249,7 @@ figures into its `ART.md`.
 | World News | 86 993 (after its pass and the data follow-up of 2026-10-02; `ART.md`'s own size moves the last digits) | 88 000 (the lead's ruling, plan 0011 D30; 72 140 by D5's formula) | 46 119 of 200 000 | 40 075 |
 | Outdoor Window | 98 073 (after its pass and the lead's fix of the final's should, 2026-10-03; `ART.md`'s own size moves the last digits) | 99 000 (the lead's ruling, plan 0011 D34; 75 257 by D5's formula) | 87 647 of 200 000 | 40 075 |
 | Power Hours | 95 506 (after its pass, 2026-10-03; `ART.md`'s own size moves the last digits) | 97 000 (the lead's ruling, plan 0011 D39; 70 305 by D5's formula) | 84 497 of 200 000 | 40 075 |
-| Hello Live | 3 730 | 42 496 | 7 281 | 0 |
+| Hello Live | 71 844 (after its pass, 2026-10-06; `ART.md`'s own size moves the last digits) | 74 000 (the lead's ruling, plan 0011 D42; 42 496 by D5's formula) | 46 888 of 200 000 | 40 075 |
 
 The ZIP caps are today's size times 1.25, rounded down, plus 37 834 B where the app gains a face.
 

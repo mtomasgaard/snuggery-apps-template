@@ -1,197 +1,81 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Hello Live</title>
-<style>
-  :root {
-    color-scheme: light dark;
-    --bg: #f6f6f4; --card: #fff; --ink: #16161a; --dim: #6b6b73;
-    --line: #e3e3df; --accent: #2f6f4f; --warn: #8a3324;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #131316; --card: #1d1d21; --ink: #f2f2f0; --dim: #9a9aa2;
-      --line: #2e2e34; --accent: #7ec79b; --warn: #e5907f;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
-    background: var(--bg); color: var(--ink);
-    font: 16px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-    -webkit-text-size-adjust: 100%;
-  }
-  h1 { font-size: 1.05rem; margin: 0 0 14px; letter-spacing: .01em; }
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 20px; margin-bottom: 12px;
-  }
-  .headline { font-size: 2.6rem; font-weight: 640; letter-spacing: -.02em; line-height: 1.05; }
-  .caption { color: var(--dim); font-size: .9rem; margin-top: 6px; }
-  .rows { display: grid; gap: 1px; background: var(--line); border-radius: 10px; overflow: hidden; }
-  .row {
-    background: var(--card); display: flex; justify-content: space-between;
-    align-items: baseline; padding: 12px 14px; gap: 12px;
-  }
-  .row span:first-child { color: var(--dim); font-size: .9rem; }
-  .row span:last-child { font-variant-numeric: tabular-nums; font-weight: 560; }
-  footer { color: var(--dim); font-size: .8rem; text-align: center; margin-top: 18px; }
-  .age { color: var(--accent); font-weight: 560; }
-  .stale { color: var(--warn); }
-  .problem { border-color: var(--warn); }
-  .problem h2 { color: var(--warn); font-size: 1rem; margin: 0 0 6px; }
-  .problem p { margin: 0 0 8px; font-size: .9rem; }
-  .problem code {
-    font: .82rem ui-monospace, SFMono-Regular, Menlo, monospace;
-    background: var(--bg); padding: 1px 5px; border-radius: 4px;
-  }
-</style>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<h1>Hello Live</h1>
-<main id="app" aria-live="polite"></main>
-<footer id="foot"></footer>
 
-<script>
-// ---------------------------------------------------------------------------
-// data/snapshot.json — the ONLY file that changes. Whatever rewrites it
-// tomorrow will not have read this conversation, so the shape is documented
-// here rather than left to be inferred:
-//
-//   {
-//     "generatedAt": "2026-09-08T12:31:42Z",   ISO 8601, UTC. Required.
-//     "headline":    "12:31 UTC",              the big number. Required.
-//     "caption":     "…",                      one line under it. Optional.
-//     "runs": [ { "label": "…", "value": "…" } ]   zero or more rows.
-//   }
-//
-// Everything else — layout, colours, copy — lives in this file and should not
-// need to change for months while the data is replaced daily.
-// ---------------------------------------------------------------------------
+<!-- The app reads data/snapshot.json and nothing else. The look is ART.md (the house system and the Time Card);
+     what the file is and who writes it is NOTES.md; the file's shape is the comment at the top of app.js. -->
 
-const app = document.getElementById('app');
-const foot = document.getElementById('foot');
+<header class="head" id="head">
+  <h1 translate="no">Hello Live</h1>
+  <div class="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the file&hellip;</button></div>
+  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+</header>
 
-function problem(title, detail, hint) {
-  // Never draw a plausible-looking empty state. A dashboard showing zeroes is
-  // indistinguishable from a dashboard showing real zeroes, and the person
-  // trusts it either way — which is exactly the failure worth avoiding.
-  app.innerHTML = '';
-  const box = document.createElement('div');
-  box.className = 'card problem';
-  const h = document.createElement('h2');
-  h.textContent = title;
-  const p = document.createElement('p');
-  p.textContent = detail;
-  box.append(h, p);
-  if (hint) {
-    const q = document.createElement('p');
-    q.innerHTML = hint;
-    box.append(q);
-  }
-  app.append(box);
-  foot.textContent = '';
-}
+<main class="pane" id="main">
+  <div class="notice" id="notice" role="alert" hidden></div>
+  <div class="panebody" id="pane" hidden>
+    <section class="sec">
+      <p class="fig"><b id="headline"></b> <span class="lead" id="lead"></span></p>
+      <p class="cap" id="caption" hidden></p>
+    </section>
+    <section class="sec">
+      <h2>Time card</h2>
+      <svg class="card" id="card" role="img" aria-label="Time card" focusable="false"></svg>
+    </section>
+    <section class="sec" id="rows-sec">
+      <dl class="rows" id="rows"></dl>
+    </section>
+  </div>
+</main>
 
-function ageOf(iso) {
-  const then = Date.parse(iso);
-  if (Number.isNaN(then)) return null;
-  const mins = Math.round((Date.now() - then) / 60000);
-  if (mins < 2) return { text: 'just now', stale: false };
-  if (mins < 60) return { text: `${mins} min ago`, stale: false };
-  const hrs = Math.round(mins / 60);
-  if (hrs < 48) return { text: `${hrs} h ago`, stale: hrs >= 6 };
-  return { text: `${Math.round(hrs / 24)} days ago`, stale: true };
-}
+<footer class="band" id="band">
+  <p class="capline" id="capline"></p>
+  <!-- The file names no source and the job fetches nothing, so the credit says exactly that; tools/check.mjs compares
+       it byte for byte with app.js's constant. The face's credit is in About. -->
+  <p class="credits" id="credits">Data: this repository&rsquo;s own refresh job; no outside source.</p>
+</footer>
 
-function render(data) {
-  app.innerHTML = '';
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About Hello Live</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body">
+      <section>
+        <h3>What the Time Card is</h3>
+        <p>A time clock stamps a card with the minute somebody clocks in, one row per day, and a week of punches is the proof that they kept turning up. This file is written about every hour by a job on a server and carried to the phone by a Shortcut, and the one thing the app can prove is that files keep arriving. So the card has seven rows, today&rsquo;s at the top, each a day&rsquo;s 24 hours on the phone&rsquo;s clock; in each row one mark of ink at the minute a file this app has read was written, and from the mark a tail running to the minute this app first read it, which is the earliest the phone can be known to have had it. A tail that reaches the row&rsquo;s end goes on from the left of the next day&rsquo;s row, above. The short notch at the foot of today&rsquo;s row, under the word, is now.</p>
+        <p>It is not the job&rsquo;s log: the card holds only the files this app parsed on this phone, so an hourly job whose files a daily Shortcut carries shows one mark a day, and an empty day can be a job that did not run, a Shortcut that did not run, or an app that was not opened; the card cannot tell which. The tail ends at this app&rsquo;s first reading, which is at or after the Shortcut&rsquo;s copy and never before it: it says how long the file took to be seen here, not how long any one hop took. Two files written less than a few minutes apart share one mark. On the day the clocks change, the row still runs 00:00 to 24:00 by the wall clock, so the repeated hour draws on itself and the missing hour stays empty. The hours are the phone&rsquo;s clock, while the headline is the file&rsquo;s own words in UTC.</p>
+        <p>The record of readings lives in this app&rsquo;s storage on this phone, holds at most 400 files, and goes when the app is removed or its storage is cleared; the card then starts again from the current file.</p>
+      </section>
+      <section id="about-data">
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p>The file is written by this repository&rsquo;s own refresh job, <span translate="no">scripts/refresh_hello_live.py</span>, which fetches nothing; there is no outside source and nothing to license.</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>A workflow in the repository rewrites <span translate="no">data/snapshot.json</span> about every hour (the schedule is best effort, so rarely exactly on the hour), writing the time it ran as a headline, the day of the year, the week and the minute of the day, all of that one instant. A Shortcut carries the file to the phone. The app reads it again whenever it comes back to the screen and, when the file is new, adds its mark to the card.</p>
+        <p>A file is called stale after six hours without a newer one: the job writes about hourly, so six hours means a hop has not run. Asking a question about this app&rsquo;s data reads the file&rsquo;s own table, written by the job.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
 
-  const card = document.createElement('div');
-  card.className = 'card';
-  const head = document.createElement('div');
-  head.className = 'headline';
-  head.textContent = data.headline;
-  card.append(head);
-  if (data.caption) {
-    const cap = document.createElement('div');
-    cap.className = 'caption';
-    cap.textContent = data.caption;
-    card.append(cap);
-  }
-  app.append(card);
+<p class="sr" id="live" aria-live="polite"></p>
 
-  if (Array.isArray(data.runs) && data.runs.length) {
-    const rows = document.createElement('div');
-    rows.className = 'rows';
-    for (const r of data.runs) {
-      const row = document.createElement('div');
-      row.className = 'row';
-      const l = document.createElement('span');
-      l.textContent = r.label ?? '';
-      const v = document.createElement('span');
-      v.textContent = r.value ?? '';
-      row.append(l, v);
-      rows.append(row);
-    }
-    app.append(rows);
-  }
-
-  const age = ageOf(data.generatedAt);
-  foot.innerHTML = '';
-  foot.append(document.createTextNode('Updated '));
-  const span = document.createElement('span');
-  span.className = 'age' + (age && age.stale ? ' stale' : '');
-  span.textContent = age ? age.text : data.generatedAt;
-  foot.append(span);
-}
-
-async function load() {
-  let response;
-  try {
-    response = await fetch('./data/snapshot.json', { cache: 'no-store' });
-  } catch (e) {
-    return problem(
-      'Could not read data/snapshot.json',
-      'The file is missing, or this page was opened directly from the filesystem.',
-      'Serve it with <code>python3 -m http.server</code> — opening index.html in a browser blocks fetch() of its own data.'
-    );
-  }
-  if (!response.ok) {
-    return problem('Could not read data/snapshot.json', `The file returned ${response.status}.`);
-  }
-
-  let data;
-  try {
-    data = await response.json();
-  } catch (e) {
-    // The commonest cause by far, and worth naming: a fetch that failed
-    // upstream still returns valid JSON — an API error envelope — and the
-    // Shortcut writes it here without complaint.
-    return problem(
-      'data/snapshot.json is not valid JSON',
-      'Something replaced it with text this app cannot read.',
-      'If a Shortcut writes this file, check what its web address actually returned — an expired token often answers with an error page, not data.'
-    );
-  }
-
-  if (!data || typeof data.headline !== 'string' || typeof data.generatedAt !== 'string') {
-    return problem(
-      'data/snapshot.json is not the shape this app expects',
-      'It parsed, but has no headline or no generatedAt.',
-      'An API error reply is valid JSON too. Open the file in Snuggery — Options ⋯ → App Files — and look at what is actually in it.'
-    );
-  }
-
-  render(data);
-}
-
-load();
-// Reads are always fresh from disk, so re-reading when the page comes back
-// into view is what makes an app opened this morning show this morning's data.
-document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
-</script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>

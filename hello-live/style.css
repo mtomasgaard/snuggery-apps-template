@@ -1,0 +1,156 @@
+/* Hello Live, under the template's house system (ART.md; Template/HOUSE.md). One live card on a page, not cards:
+   one column on --page, sections parted by hairlines, one face, gray chrome, no accent, no shadows, no glass. This
+   app has no data color: its data is a clock time and three counts, and the one bold thing is the Time Card's ink.
+   Staleness and failure are words, never a hue. The tokens are tools/art/palette.py --json, pasted, never retyped;
+   tools/check.mjs fails while the two differ. */
+
+@font-face {
+  font-family: 'Ysabeau Office';
+  src: url(fonts/ysabeau-office-gw.woff2) format('woff2');
+  font-weight: 400 650;
+  font-display: block;
+}
+
+:root {
+  --page: #e8eef0;
+  --sheet: #f6f9fa;
+  --ink: #0f1c23;
+  --ink-2: #45555d;
+  --ink-3: #5b6a72;
+  --line: #c9d4d8;
+  --line-strong: #74858c;
+  --draw: cubic-bezier(0.2, 0, 0, 1);
+  --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
+  --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #141d21;
+    --sheet: #1c272c;
+    --ink: #e6edee;
+    --ink-2: #a3b1b6;
+    --ink-3: #8b9a9f;
+    --line: #2a373c;
+    --line-strong: #64757b;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--page);
+  color: var(--ink);
+  font: 400 13.5px/1.35 var(--face);
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
+h1, h2, h3, p, dl, dt, dd { margin: 0; }
+button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; text-align: inherit; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
+
+/* ── the header: the name and the stamp; no row of tabs (one card, no views) ── */
+.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+.head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
+.stamp-home { min-width: 0; padding-bottom: 6px; }
+.stamp { position: relative; display: block; max-width: 100%; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
+.stamp .lead { color: var(--ink); }
+/* the hit runs up over the name (not a control) and down into the gap: 22 + 16 + 6 = 44 px */
+.stamp::before { content: ''; position: absolute; inset: -22px 0 -6px; }
+
+/* ── the pane: it scrolls inside the frame, so the header and the caption band stay put ── */
+.pane { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.panebody { max-width: 760px; padding: 0 calc(16px + env(safe-area-inset-right)) 24px calc(16px + env(safe-area-inset-left)); }
+
+.sec { padding: 10px 0 6px; border-top: 1px solid var(--line); }
+.sec:first-child { border-top: 0; padding-top: 8px; }
+.sec > h2 { font-size: 13.5px; font-weight: 650; }
+
+/* the headline: the pane's one large figure, the file's own words, with the same instant on the phone's clock */
+.fig { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; }
+.fig b { font-size: 21px; line-height: 1; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.fig .lead { font-size: 12.5px; color: var(--ink-2); }
+.cap { margin-top: 4px; font-size: 12.5px; color: var(--ink-2); max-width: 62ch; overflow-wrap: anywhere; }
+
+/* ── the Time Card: rows of days, punches and tails in ink, the axis in chrome (js/card.js) ── */
+.card { display: block; overflow: visible; margin: 6px 0 2px; max-width: 100%; font-size: 10.5px; }
+.card text { font-size: 10.5px; fill: var(--ink-2); }
+.card .nowl { fill: var(--ink-3); }
+.card .today { fill: var(--ink); fill-opacity: 0.04; }
+.card .hair { fill: var(--line); }
+.card .axis { fill: var(--line-strong); }
+.card .tick { fill: var(--ink-3); opacity: 0.5; }
+.card .tick6, .card .now { fill: var(--ink-2); }
+/* the ink on whole device pixels: no edge row blended into the hairline under it */
+.card .punch, .card .tail { fill: var(--ink); shape-rendering: crispEdges; }
+
+/* the rows: the file's runs[], labels at the left, values at the right, 28 px rows parted by hairlines */
+.rows { display: grid; grid-template-columns: minmax(0, 1fr) auto; font-size: 12.5px; }
+.rows dt, .rows dd { display: flex; align-items: center; min-height: 28px; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.rows dt:first-of-type, .rows dd:first-of-type { border-top: 0; }
+/* the gap between label and value is the label's padding, so each row's hairline runs unbroken across both */
+.rows dt { padding-right: 12px; color: var(--ink-2); }
+.rows dd { justify-content: flex-end; font-weight: 560; text-align: right; }
+
+
+/* text keys: a 28 px frame on a 44 px hit */
+.textkey { position: relative; height: 44px; padding: 0 10px; font-size: 12.5px; }
+.textkey::before { content: ''; position: absolute; inset: 8px 0; border: 1px solid var(--line-strong); border-radius: 6px; }
+.textkey:active::before { background: color-mix(in srgb, currentColor 22%, transparent); }
+
+/* a problem with the file is a sentence on a plate, never a blank pane */
+.notice { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 5; width: max-content; max-width: min(300px, calc(100% - 32px)); padding: 10px 14px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--sheet); line-height: 1.4; text-align: center; }
+.notice.kept { position: fixed; }
+.notice p + p { margin-top: 6px; }
+.notice-lines { font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; text-align: left; }
+
+/* ── the caption band: the caption line, fixed at two lines, and the credits ── */
+.band { flex: 0 0 auto; padding: 6px calc(16px + env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); border-top: 1px solid var(--line); font-size: 11px; line-height: 15px; color: var(--ink-2); }
+.capline { height: 30px; overflow: hidden; }
+.credits { font-size: 10.5px; }
+
+/* ── About: a full-height sheet ── */
+.about { position: fixed; inset: 0; z-index: 20; }
+.about-sheet { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--sheet); animation: sheet-in 220ms var(--sheet-in); }
+@keyframes sheet-in { from { transform: translateY(100%); } }
+.about-head { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; padding: env(safe-area-inset-top) calc(8px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); border-bottom: 1px solid var(--line); }
+.about-head h2 { font-size: 15px; font-weight: 650; }
+.about .textkey::before { border: 0; }
+.about-body { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); }
+.about-body section { max-width: 62ch; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.about-body h3 { margin-bottom: 6px; font-size: 13.5px; font-weight: 650; }
+.about-body p { line-height: 1.5; }
+.about-body p + p { margin-top: 8px; }
+.about-body dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; line-height: 1.45; }
+.about-body dt { color: var(--ink-2); }
+.about-body dd { overflow-wrap: anywhere; }
+.about-foot { margin-top: 8px; }
+
+@media (hover: hover) {
+  .stamp:hover { color: var(--ink); }
+  .textkey:hover::before { background: color-mix(in srgb, currentColor 7%, transparent); }
+}
+@media (min-width: 640px) { .capline { height: 15px; } }
+@media (min-width: 700px) {
+  .head, .band, .panebody { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
+}
+/* a phone on its side: the header is one 46 px block, the caption band one line over the credits, the card at
+   24 px an hour (js/card.js) */
+@media (orientation: landscape) and (max-height: 500px) {
+  .head { grid-template-rows: 22px 24px; padding-top: env(safe-area-inset-top); }
+  .stamp-home { padding-bottom: 0; }
+  .stamp { white-space: nowrap; }
+  .band { padding-top: 4px; }
+  .capline { height: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }
+}
