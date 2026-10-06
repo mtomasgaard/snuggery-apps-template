@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T07:01:31Z",
+ "generatedAt": "2026-10-06T08:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Sénégal : après la dette cachée, quel rôle pour le FMI ?",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/senegal-apres-la-dette-cachee-quel-role-pour-le-fmi-291627",
+     "published": "2026-10-06T07:55:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Souleymane Gueye, Professor of Economics and Statistics, City College of San Francisco"
+    },
+    {
      "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Herkulaas MvE Combrink, Senior lecturer/ Co-Director, University of the Free State"
-    },
-    {
-     "title": "Military coups promise change – 4 ways they can leave African countries worse off",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/military-coups-promise-change-4-ways-they-can-leave-african-countries-worse-off-292469",
-     "published": "2026-10-05T13:05:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Mukum Mbaku, Professor, Weber State University"
     },
     {
      "title": "Sudan: Driver killed in aerial attack on aid trucks in South Kordofan",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Medicine and God: how medieval people faced the deadly pneumonic plague",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/medicine-and-god-how-medieval-people-faced-the-deadly-pneumonic-plague-293676",
+     "published": "2026-10-06T07:08:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Beth Spacey, Lecturer in Medieval History, The University of Queensland"
+    },
+    {
+     "title": "The death of a Russian plague researcher, explained by a microbiologist",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-death-of-a-russian-plague-researcher-explained-by-a-microbiologist-293675",
+     "published": "2026-10-06T06:41:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Thomas Jeffries, Senior Lecturer in Microbiology, Western Sydney University"
+    },
+    {
      "title": "The Coalition’s migration changes would slash international student enrolments",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Andrew Norton, Professor of Higher Education Policy, Monash University"
-    },
-    {
-     "title": "Taylor would hold net overseas migration at annual 100,000 for two years in plan hitting students, refugees",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/taylor-would-hold-net-overseas-migration-at-annual-100-000-for-two-years-in-plan-hitting-students-refugees-293211",
-     "published": "2026-10-06T03:49:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "As the planet warms, cities like Bangkok could be increasingly inundated by deadly floods",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/as-the-planet-warms-cities-like-bangkok-could-be-increasingly-inundated-by-deadly-floods-293537",
-     "published": "2026-10-06T03:06:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kimberley Reid, Postdoctoral Research Fellow in Atmospheric Sciences, The University of Melbourne"
     },
     {
      "title": "How to build an expansion club: the challenges and opportunities for the new NRL and AFL teams",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
-   "published": "2026-10-05 13:08 UTC"
+   "title": "Sénégal : après la dette cachée, quel rôle pour le FMI ?",
+   "published": "2026-10-06 07:55 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Military coups promise change – 4 ways they can leave African countries worse off",
-   "published": "2026-10-05 13:05 UTC"
+   "title": "Listen, understand, repeat: the circular approach to good communication in a health crisis",
+   "published": "2026-10-05 13:08 UTC"
   },
   {
    "region": "Africa",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Medicine and God: how medieval people faced the deadly pneumonic plague",
+   "published": "2026-10-06 07:08 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The death of a Russian plague researcher, explained by a microbiologist",
+   "published": "2026-10-06 06:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The Coalition’s migration changes would slash international student enrolments",
    "published": "2026-10-06 06:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Taylor would hold net overseas migration at annual 100,000 for two years in plan hitting students, refugees",
-   "published": "2026-10-06 03:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "As the planet warms, cities like Bangkok could be increasingly inundated by deadly floods",
-   "published": "2026-10-06 03:06 UTC"
   },
   {
    "region": "Oceania",
