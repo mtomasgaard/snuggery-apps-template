@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T15:01:41Z",
+ "generatedAt": "2026-10-07T16:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From jargon to impact: Teaching undergraduates the art of public communication",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/from-jargon-to-impact-teaching-undergraduates-the-art-of-public-communication-293752",
+     "published": "2026-10-07T15:24:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Seth T. Kannarr, Visiting Honors Lecturer, Southern Illinois University Edwardsville"
+    },
+    {
      "title": "These state supreme court races could decide abortion access and trans rights",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Rachel Rebouché, Professor of Law, The University of Texas at Austin"
-    },
-    {
-     "title": "Why your boss matters more than remote or hybrid work when it comes to burnout and job satisfaction",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-your-boss-matters-more-than-remote-or-hybrid-work-when-it-comes-to-burnout-and-job-satisfaction-293319",
-     "published": "2026-10-07T12:12:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christos Makridis, Associate Research Professor of Information Systems, Arizona State University; Institute for Humane Studies"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Critical funding gap threatens health response in Yemen",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168541",
+     "published": "2026-10-07T12:00:00Z",
+     "summary": "The World Health Organization (WHO) warned that significantly more resources are required to scale up its response in Yemen amid escalating conflict and rising needs.",
+     "stale": false
+    },
+    {
      "title": "Digital hopes, real power: From connection to collective action",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168528",
      "published": "2026-10-05T12:00:00Z",
      "summary": "Intense fighting in Yemen has forced more than 184,000 people from their homes since the start of August, most of them since early September, the UN migration agency (IOM) said on Monday.",
-     "stale": false
-    },
-    {
-     "title": "Escalating fighting in Yemen deepens food security crisis",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168509",
-     "published": "2026-10-02T12:00:00Z",
-     "summary": "Renewed conflict in Yemen has triggered a surge in hunger that could have consequences in the wider region and beyond, the World Food Programme (WFP) warned on Friday.",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "These state supreme court races could decide abortion access and trans rights",
-   "published": "2026-10-07 12:40 UTC"
+   "title": "From jargon to impact: Teaching undergraduates the art of public communication",
+   "published": "2026-10-07 15:24 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why your boss matters more than remote or hybrid work when it comes to burnout and job satisfaction",
-   "published": "2026-10-07 12:12 UTC"
+   "title": "These state supreme court races could decide abortion access and trans rights",
+   "published": "2026-10-07 12:40 UTC"
   },
   {
    "region": "Americas",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "Critical funding gap threatens health response in Yemen",
+   "published": "2026-10-07 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "Digital hopes, real power: From connection to collective action",
    "published": "2026-10-07 06:20 UTC"
@@ -837,12 +843,6 @@
    "source": "UN News",
    "title": "More than 184,000 displaced as fighting intensifies in Yemen",
    "published": "2026-10-05 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Escalating fighting in Yemen deepens food security crisis",
-   "published": "2026-10-02 12:00 UTC"
   },
   {
    "region": "Middle East",
