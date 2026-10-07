@@ -63,9 +63,9 @@ def sim(rgb, kind):
 def dE(a, b, kind='normal'): return math.dist(sim(a, kind), sim(b, kind))
 def shade(rgb, f): return tuple(min(255, round(c * f)) for c in rgb)   # the shader's multiply, in the texture's sRGB numbers
 
-# ── the house chrome tokens (HOUSE 3.1), copied exactly ──────────────────────
+# ── the house chrome tokens (HOUSE 3.1), copied exactly; the light page white (HOUSE 12, plan 0012 D6) ──
 TOK = {
- 'light': dict(page='#e8eef0', sheet='#f6f9fa', ink='#0f1c23', ink2='#45555d', ink3='#5b6a72',
+ 'light': dict(page='#ffffff', sheet='#f6f9fa', ink='#0f1c23', ink2='#45555d', ink3='#5b6a72',
                line='#c9d4d8', strong='#74858c'),
  'dark':  dict(page='#141d21', sheet='#1c272c', ink='#e6edee', ink2='#a3b1b6', ink3='#8b9a9f',
                line='#2a373c', strong='#64757b'),
@@ -83,9 +83,9 @@ OTHERS = {'Global Weather streak': {'light': '#0b171d', 'dark': '#f4f2ea'},
           'Besseggen burn': {'light': '#1b110b', 'dark': '#fcf2e5'}}
 
 # ── the plate ────────────────────────────────────────────────────────────────
-# Light: the film base itself (the plate's edge is the edge, as in Global Weather). Dark: a darker
+# Light: white, the page itself (plan 0012 D6; the film base #e8eef0 before it). Dark: a darker
 # slate under the print, so the dark page (L 0.224) frames it.
-GROUND = {'light': parse('#e8eef0'), 'dark': oklch(0.180, 0.012, 225)}
+GROUND = {'light': parse('#ffffff'), 'dark': oklch(0.180, 0.012, 225)}
 FACTORS = (0.42, 0.62, 0.83, 1.0, 1.06)
 TOP = 0.83                                       # a top face from the default camera
 # The data band: L at salience 0 and at salience 1, per theme. Salience 0 is the pale (light) or
@@ -133,9 +133,10 @@ CASING = ('#0f1c23', 0.85)
 CHART_T = {'oil': 1.0, 'water': 0.70, 'gas': 0.85}
 CHART = ('oil', 'water', 'gas')
 
-LABEL = {'light': dict(ink='#0f1c23', halo='#f6f9fa', halo_a=0.85), 'dark': dict(ink='#e6edee', halo=None, halo_a=0.85)}
+LABEL = {'light': dict(ink='#0f1c23', halo='#ffffff', halo_a=0.85), 'dark': dict(ink='#e6edee', halo=None, halo_a=0.85)}
 GHOST = {'light': dict(stroke='#0f1c23', halo=(246, 249, 250), halo_a=0.60), 'dark': dict(stroke='#f2f4f1', halo=(10, 16, 19), halo_a=0.70)}
 
+def nrm3(v): l = math.sqrt(sum(x * x for x in v)); return tuple(x / l for x in v)
 def ramp_rgb(key, th, t):
     st = RAMPS[key]; t = max(0.0, min(1.0, t))
     for (t0, s0, c0, h0), (t1, s1, c1, h1) in zip(st, st[1:]):
@@ -204,6 +205,26 @@ def main():
         sep = dE(body, g); con = cr(body, g)
         print(f'  {th}: ground {hx(g)} OKLCh ({L:.3f}, {C:.4f}, {h:.0f}); band L {BAND[th][0]}..{BAND[th][1]}; '
               f'a salience-0 top face {hx(body)} against the ground dE {sep:.3f}, {con:.2f}:1{need(sep >= 0.03, "body off ground")}')
+
+    # The scales' "nothing" end (salience 0) was tuned to fade into the gray ground; on white it is
+    # measured where it is drawn: unshaded (the legend's bar, the section's cells) and lit (a face of the
+    # 3D view at the brightest factor the shader reaches, and at a top face from the default camera).
+    # The view's cell edges and the section's 1.5 px --line-strong rim carry the body's edge.
+    L1, L2 = nrm3((0.35, 0.75, 0.55)), nrm3((-0.6, -0.2, 0.8))
+    brightest = 0.42 + math.sqrt(0.5 ** 2 + 0.14 ** 2 + 2 * 0.5 * 0.14 * abs(sum(a * b for a, b in zip(L1, L2))))
+    print(f'== the scales\' nothing end on the light ground {hx(GROUND["light"])}: unshaded, and lit at a top face ({TOP}) and at the brightest face ({brightest:.3f})')
+    worst = (9, '')
+    for key in RAMPS:
+        c0 = ramp_rgb(key, 'light', 0)[0]
+        row = []
+        for f in (1.0, TOP, brightest):
+            c = c0 if f == 1.0 else shade(c0, f)
+            row.append(f'{hx(c)} dE {dE(c, GROUND["light"]):.3f} {cr(c, GROUND["light"]):.2f}:1')
+            if f != 1.0 and dE(c, GROUND['light']) < worst[0]: worst = (dE(c, GROUND['light']), f'{key} lit at {f:.2f}')
+        print(f'  {key:8s} unshaded {row[0]}; top face {row[1]}; brightest {row[2]}')
+    rim = cr(parse(TOK['light']['strong']), GROUND['light'])
+    print(f'    worst lit: {worst[0]:.3f} ({worst[1]}){need(worst[0] >= 0.03, "nothing end lit, off the ground")}; '
+          f'unshaded, the section\'s rim (--line-strong) on the ground {rim:.2f}:1{need(rim >= 3, "section rim")}')
 
     print('== the scales: gamut, salience order, color-vision ends, steps per eighth as rendered on a top face')
     for key in RAMPS:

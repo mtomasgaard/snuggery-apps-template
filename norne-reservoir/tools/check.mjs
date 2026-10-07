@@ -3,12 +3,14 @@
 //   1. what the ZIP ships stays within Snuggery's limits (count, depth, largest, total, no symlinks);
 //   2. no http:// or https:// in any .html, .css or .js the app ships, not even in a comment;
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
-//   4. data/ holds exactly the seven files, fonts/ the house face and OFL.txt, js/ the three modules;
+//   4. data/ holds exactly the seven files, fonts/ the house face and OFL.txt, js/ the four modules
+//      (js/section.js added by plan 0012's package 3.4);
 //      the face's and OFL.txt's sha256 are the house's; NOTES.md and About credit the face;
 //   5. the data is untouched: each data file's sha256 is the one recorded before the pass;
-//   6. miniapp.json is valid;
+//   6. miniapp.json is valid, at version 2.2 (HOUSE 13; plan 0012's package 3.4 from 2.1);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
-//   8. the credit line, word for word, in the CREDIT constant written to #credits;
+//   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line, its
+//      first Sources and credits paragraph; no #credits and no other credit on the front (HOUSE 4.15);
 //   9. the marketing camera's strings (HOUSE 7.4): "Oil saturation" written only by app.js (never in
 //      index.html), the property words Oil and Pressure as role="radio", "Show the whole field" a button,
 //      "Play production history" and "Pause" the Play key's names, "Show the controls" the ghost key, the
@@ -23,7 +25,7 @@
 //      letter-spacing; no middle dot, →, ➤ or "..." in what the app writes; both theme-color metas;
 //      the @font-face rule word for word; the house's chrome tokens in both themes; one family, no
 //      monospace; every script font string names "Ysabeau Office" first;
-//  15. budgets: app code ≤ 200,000 bytes, fonts/ ≤ 160,000, the ZIP built exactly as build-zips.yml
+//  15. budgets: app code ≤ 222,000 bytes (the lead's ruling on the measured figure, plan 0012 3.4), fonts/ ≤ 160,000, the ZIP built exactly as build-zips.yml
 //      builds it ≤ 19,110,591 (plan 0011 D5) with index.html at its top and nothing else in it;
 //  16. US spelling in every shipped text file, the data's own words excepted by file and word.
 //
@@ -101,7 +103,7 @@ const exactly = (dir, names) => {
 };
 exactly('data', ['ATTRIBUTION.txt', 'dynamic.bin', 'geometry.bin', 'ijk.bin', 'model.json', 'neighbours.bin', 'static.bin']);
 exactly('fonts', ['ysabeau-office-gw.woff2', 'OFL.txt']);
-exactly('js', ['units.js', 'data.js', 'track.js']);
+exactly('js', ['units.js', 'data.js', 'track.js', 'section.js']);
 {
   const FONT_SHA = 'fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262';
   const OFL_SHA = 'd1adfffd83f9e896bcc17e6067c7f57f6824083fdd8d6951acbfca5b29be6269';
@@ -134,7 +136,7 @@ exactly('js', ['units.js', 'data.js', 'track.js']);
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Norne Reservoir' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -151,8 +153,14 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 // 8. The credit line
 {
   const credit = (app.match(/^const CREDIT = '([^']*)';$/m) || [])[1];
-  ok(credit === 'Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0' && /\$\('credits'\)\.textContent = CREDIT;/.test(app),
-    `the credit line: CREDIT is "${credit}", written to #credits`);
+  ok(credit === 'Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0' && /\$\('about-credit-line'\)\.textContent = CREDIT;/.test(app)
+    && (app.match(/textContent = CREDIT;/g) || []).length === 1,
+    `the credit line: CREDIT is "${credit}", written once, to About's #about-credit-line`);
+  const about = html.indexOf('<div class="about" id="about"'), front = code(html.slice(0, about), 'index.html');
+  const firstP = (html.slice(html.indexOf('<h3>Sources and credits</h3>')).match(/<p[^>]*>/) || [''])[0];
+  const credits = ['ODbL', 'Equinor', 'Open Porous Media', 'Ysabeau Office by', 'opendatacommons', 'Norne benchmark'].filter((w) => front.includes(w));
+  ok(!/id="credits"/.test(html) && !/'credits'/.test(app) && about > 0 && credits.length === 0 && firstP === '<p id="about-credit-line" translate="no">',
+    `no #credits; nothing on the front carries a credit${credits.length ? ': ' + credits.join(', ') : ''}; #about-credit-line is About's first Sources and credits paragraph (HOUSE 4.15, F1)`);
   ok(/\$\('about-source'\)\.textContent = model\.source;/.test(app), "About carries model.json's source sentence verbatim (textContent, never retyped)");
 }
 
@@ -176,17 +184,17 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const direct = [...app.matchAll(/localStorage\.(?:getItem|setItem|removeItem)\(\s*([^,)]+)/g)].map((m) => m[1].trim()).filter((d) => d !== 'key');
   const viaStore = [...app.matchAll(/\bstore\(\s*([^,)]+),/g)].map((m) => m[1].trim());
   const fields = (app.match(/for \(const k of (\[[^\]]+\])\) if \(k in s\) S\[k\] = s\[k\];/) || [])[1];
-  const rest = ['s.sheet', 's.cut', 's.vf', 's.cam', 's.explode'].every((k) => app.includes(k));
+  const rest = ['s.sheet', 's.cut', 's.vf', 's.cam', 's.explode', 's.section'].every((k) => app.includes(k));
   ok(/state: LS_KEY, focus: `\$\{LS_KEY\}:focus`, units: `\$\{LS_KEY\}:units`/.test(STORE) && /const LS_KEY = 'norne-viewer:v1';/.test(app)
     && [...direct, ...viaStore].every((d) => /^STORE\.\w+$/.test(d)) && fields === "['prop', 'frame', 'exag', 'wells', 'labels', 'edges', 'well']" && rest
     && !/:hint/.test(code(app, 'app.js')),
-  `storage: norne-viewer:v1 still read with every field restore() read before (${fields}, sheet, cut, vf, cam, explode); :focus and :units added; every call through STORE; :hint retired (owner call 8)`);
+  `storage: norne-viewer:v1 still read with every field restore() read before (${fields}, sheet, cut, vf, cam, explode, and the section since 2.2); :focus and :units added; every call through STORE; :hint retired (owner call 8)`);
 }
 
 // 10. SI notation in what the app writes; toFixed and toLocaleString only in js/units.js
 {
   const UNIT = /\d (bar|psi|m|ft|km|mi|mD|Sm³\/d|bbl\/d|Mscf\/d|%|px)(?![\w/])/;
-  const files = ['index.html', 'app.js', 'js/units.js', 'js/data.js', 'js/track.js'];
+  const files = ['index.html', 'app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js'];
   const hits = [];
   for (const f of files) {
     const lits = f.endsWith('.html') ? [code(read(f), f).replace(/<[^>]+>/g, ' ')] : strings(read(f));
@@ -245,7 +253,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(sizes.every((s) => [10.5, 11, 11.5, 12.5, 13.5, 15, 21].includes(s)) && weights.every((w) => [400, 560, 600, 620, 650].includes(w)),
     `type: every size on the house scale (${[...new Set(sizes)].sort((a, b) => a - b).join(', ')} px), every weight in the cut (${[...new Set(weights)].sort().join(', ')})`);
   const dots = [], arrows = [];
-  for (const f of ['app.js', 'js/units.js', 'js/data.js', 'js/track.js']) for (const s of strings(read(f))) if (s.includes('·')) dots.push(`${f}: ${s.slice(0, 50)}`);
+  for (const f of ['app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js']) for (const s of strings(read(f))) if (s.includes('·')) dots.push(`${f}: ${s.slice(0, 50)}`);
   if (code(html, 'index.html').replace(/<[^>]+>/g, ' ').includes('·')) dots.push('index.html');
   ok(dots.length === 0, `no middle dot in any string the app writes${dots.length ? ': ' + dots.join(' | ') : ''}`);
   for (const f of web) {
@@ -258,7 +266,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const light = c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)')), dark = c.slice(c.indexOf('@media (prefers-color-scheme: dark)'));
   const tok = (block, name) => ((block.match(new RegExp(`--${name}:\\s*([^;]+);`)) || [])[1] || '').trim();
   const HOUSE = {
-    light: { page: '#e8eef0', sheet: '#f6f9fa', ink: '#0f1c23', 'ink-2': '#45555d', 'ink-3': '#5b6a72', line: '#c9d4d8', 'line-strong': '#74858c' },
+    light: { page: '#ffffff', sheet: '#f6f9fa', ink: '#0f1c23', 'ink-2': '#45555d', 'ink-3': '#5b6a72', line: '#c9d4d8', 'line-strong': '#74858c' },   // the page white (HOUSE 12, D6)
     dark: { page: '#141d21', sheet: '#1c272c', ink: '#e6edee', 'ink-2': '#a3b1b6', 'ink-3': '#8b9a9f', line: '#2a373c', 'line-strong': '#64757b' },
   };
   const off = [];
@@ -274,7 +282,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const fontShorts = [...c.matchAll(/\bfont:\s*([^;]+);/g)].map((m) => m[1]).filter((f) => !/var\(--face\)|inherit/.test(f));
   ok(families.length === 0 && fontShorts.length === 0 && !/monospace|ui-monospace/i.test(c), `one family: every font through --face, no monospace${families.length + fontShorts.length ? ': ' + families.concat(fontShorts).join(', ') : ''}`);
   const scriptFonts = [];
-  for (const f of ['app.js', 'js/track.js']) for (const s of strings(read(f))) if (/\d(\.\d)?px\s/.test(s) && /[a-z]/i.test(s.replace(/\d+(\.\d+)?px/, ''))) scriptFonts.push([f, s]);
+  for (const f of ['app.js', 'js/track.js', 'js/section.js']) for (const s of strings(read(f))) if (/\d(\.\d)?px\s/.test(s) && /[a-z]/i.test(s.replace(/\d+(\.\d+)?px/, ''))) scriptFonts.push([f, s]);
   ok(scriptFonts.length > 0 && scriptFonts.every(([, s]) => /px "Ysabeau Office"/.test(s)), `script font strings name "Ysabeau Office" first (${scriptFonts.length}: ${scriptFonts.map(([f, s]) => `${f} ${s.slice(0, 40)}`).join(' | ')})`);
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html),
     'index.html: lang en-US, viewport-fit=cover without user-scalable=no, color-scheme light dark');
@@ -285,7 +293,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const codeFiles = shipped.filter((f) => /\.(html|css|js|mjs)$/.test(f) && !f.startsWith('data/') && !f.startsWith('vendor/'));
   const size = (f) => fs.statSync(path.join(APP, f)).size;
   const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-  ok(codeBytes <= 200000, `app code ${fmt(codeBytes)} bytes (budget 200,000; 77,032 before the pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+  ok(codeBytes <= 222000, `app code ${fmt(codeBytes)} bytes (budget 222,000, the lead's ruling on the measured figure, plan 0012 3.4; 77,032 before plan 0011's pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
   const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
   ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000; 0 before the pass)`);
   const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

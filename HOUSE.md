@@ -1020,9 +1020,9 @@ edition stamp, §4.5's credit line, §4.10's credits in focus mode, §6.5's "on 
     its instrument line (north, the scale, `vertical ×5`), the well key and a key for the cut; the
     cut's sentence with its month's oil, water and water cut leaves the front. §5.2 test 3 is met for
     Norne by the cut's key on the track and by the month's figures in the rates chart under More
-    controls, and Norne's `ART.md` records the departure. **The lead confirms, before Norne's build,
-    that the well key and the cut's key read as part of "the legend and the scale"**; until then
-    `docs/plans/0012-change-lists.md`'s Norne item 4 waits.
+    controls, and Norne's `ART.md` records the departure. **The lead confirmed on 2026-10-06** that the
+    well key and the cut's key read as part of "the legend and the scale": both explain marks drawn in
+    the view. Norne 2.2 was built that way.
 - **Text in the view that names what is drawn is the view's own** and stays: a period's name, Earth's
   History's `This map: Scotese map 49 · …`, a story's source on its own row in World News, a value's
   basis line where the data writes it (Finances' home index, Norges Bank beside its rate).

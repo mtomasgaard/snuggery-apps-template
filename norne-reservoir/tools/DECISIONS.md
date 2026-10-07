@@ -657,3 +657,309 @@ edge. Focus mode on a wide plate is one column. Of the nits: the caption reads `
 to …`, the well card dates a rate `in the month to`, the thumb grows under the finger, the tapped cell
 has a ring, the chart's top labels carry a halo under which the cursor passes, each word group is one
 tab stop, and the wells key is a named group.
+
+## Plan 0012, package 3.4 (2026-10-06 and 07): the text cut, the view's share, the section, white
+
+The template's plan 0012 (`docs/plans/0012-the-owners-brief-of-2026-10-06.md` in the Snuggery
+repository; this app's change list is in `docs/plans/0012-change-lists.md`). The owner: *"Norne full
+screen mode has too much text at the bottom, just above time slider. Also when expanding the bottom
+section, the 3d view becomes too small … Maybe add a section view as an additional pane to the 3d"*;
+D4: no Norne seismic can ship, so the section is the model's alone; D6: the ground goes white; D11:
+model cells are blocks, never interpolated, and a later app (Volve) adds seismic along the same line
+on the same depth axis. Version 2.1 → 2.2. Pictures: `tools/.work/p0012/` (before: `before/`, the
+screenshots as the pass found them; the probes' and drives' pictures in `shots/`).
+
+**Measured before** (`tools/.work/p0012/measure.mjs`, 390 x 844, DPR 2, touch, light; Chromium and
+WebKit agree within 1 px): header 94 px, plate 480 with the sheet closed and **200 px at both raised
+stops** (24 % of the screen; the brief's "about 270 px" was read off a picture), caption band 135,
+player 90, sheet 45 closed and 325 raised.
+
+**The change list, as built.**
+
+1. *The stamp (F2).* `writeStamp()` now hides `#stamp-home` and shows `#btn-about`; the edition
+   (`Norne benchmark, OPM Flow 2026.04 run`, from `model.json`'s `source`) is About's first *This data*
+   row, `Edition`. The loading count and `The model could not be read.` stay, and `fail()` shows the
+   line again. `shoot.mjs` holds it at one line, 16 px, in all three kinds of words it can hold.
+2. *The About key (F2).* **A departure from the list's placement**: the list put the group in the units
+   key's grid area (rows 1 and 2, beside the name). With the stamp's row gone those rows are 28 px, and
+   the two keys' 44 px hits were cut to 33.25 px (`shoot.mjs`'s hit-target check, measured), while a
+   44 px row there would have given the 22 px back. So `.hkeys` closes the row of words (row 3, a
+   44 px row), the About key before the units key. The header is 72 px (94 before). The words' scroller
+   is narrower by the two keys; `Pressure`, the camera's word, stays in view. The About key is hidden
+   until the data is in and on an error, as the stamp was inert then. In focus mode it moves into the
+   caption band, floated right on the legend's line, its hit over the legend (`z-index`), and back.
+3. *The credit line (F1).* `#credits` and its write are gone; `CREDIT` is unchanged and written once,
+   to `#about-credit-line`, About's first *Sources and credits* paragraph, before `#about-source` and the
+   license line. `.credits` rules and the landscape `credits` area are gone.
+4. *The cut's sentence becomes a key (F4; the lead's gate released 2026-10-06).* `#cutline`,
+   `cutSentence()` and `.cutline` are gone; `#cutkey` holds `Oil lifted` (a `--cut` swatch), `Water
+   lifted` (the tint, `color-mix` of `--cut` at `--cut-water-a` over `--page`, with the track's 1 px
+   `--ink-3` top) and `on the track`, one 15 px line. The month's figures stay in the track's
+   `aria-valuetext` and the rates chart. ART.md records the departure (section 1, test 3).
+5. *What stays in the band:* the legend (`Oil saturation`, the camera's wait), the instrument line,
+   the wells key, and the cut's key. 135 px → 90 px.
+6. *The ground (F7).* `--page` and `--plate` `#ffffff` in light; `readTheme()`'s fallback `#ffffff`;
+   the light `theme-color` `#ffffff`; `--plate-halo` white (it was `--sheet`'s `#f6f9fa`, near the old
+   gray); `palette.py`'s light page, `GROUND['light']` and label halo `#ffffff`; `check.mjs`'s token
+   table and `shoot.mjs`'s six `#e8eef0` constants follow. **The palette re-checked on white** (the
+   brief: fix it if it fails, and say so). `python3 norne-reservoir/tools/art/palette.py` ends `ALL
+   CHECKS PASS`; its `--json` is unchanged, so `config.json` did not move. The body off its ground, a
+   salience-0 top face `#cbcec8`: dE 0.153, 1.59:1 on white (0.098, 1.36:1 on the gray). The scales'
+   nothing end, measured where it is drawn (a new block in `palette.py`): lit at the brightest factor
+   the shader reaches (0.950) it stands off white by dE 0.062 or more (1.19:1), where on the gray it
+   was dE 0.007 to 0.014 (1.02:1); unshaded, as the legend and the section draw it, dE 0.027 to 0.039
+   (1.06 to 1.08:1) on white against 0.030 to 0.044 on the gray. So nothing failed that the gray passed,
+   but a pale cell's edge cannot be seen by color on either ground: the fix is in the section, a 1.5 px
+   `--line-strong` rim under its cells (3.83:1 on white), and `palette.py` now checks that rim. The
+   legend's bar keeps its frame.
+7. *Prose (F5):* `ART.md` and `NOTES.md` say the credit is in About; `ART.md`'s focus-mode row, the
+   band's rows, the frame, the palette figures, the type scale and the tells follow.
+8. *Version (F6):* `2.2`; `check.mjs` item 6 pins it.
+
+**Checks that followed the change (F8)**, beyond the list's lines: `shoot.mjs`'s tracer check counts
+three chosen words (the properties, the section's lines, the explode); the plate's floor with the
+sheet closed is 530 px (it was 460, under 480); the units-key check reads the track's value in words
+where it read the cut's line; the widths check measures the cut's key, the section's key and its row
+instead of the cut's longest line; About opens from the About key by the keyboard; a broken file shows
+the stamp's line and hides the About key; the card scenes expect the full card at the raised stops
+(the model is 405 px there now) and gain one with the section open and the sheet raised (245 px, the
+compact card); "the card at every stop" takes 4 taps on the field or more where it took 6 (the shorter
+plates leave fewer rows clear of the names). `check.mjs`: js/ holds four modules; the credit is
+written once, to About, and nothing on the front carries one; the storage check reads `s.section`.
+
+**(2) The view's share with the sheet raised.** Chosen: **cap how far the sheet rises** rather than
+compact what sits between the view and the sheet, because that is the legend, the instruments and
+the player, which the view cannot be read or moved without, and the text cut already took 45 px out of
+the band. `body.raised` (set by `applyStop()`) gives the view's row `minmax(var(--view-min), 1fr)`,
+`--view-min: max(200px, min(48dvh, 100dvh - 432px))`: about half of an 844 px screen, never under
+200 px, and the sheet keeps about 180 px on a short phone. The sheet scrolls inside itself and its grip
+is sticky at its top. Measured by `shoot.mjs` at 390 x 844: the model 547 px with the sheet closed,
+405 px (48 %) at either raised stop (200 before), the sheet 187; with the section open, 387 + 160 and
+245 + 160. The two raised stops are now the same height (the second stop adds *Cells and view* below,
+reached by scrolling the sheet).
+
+**(3) The section A–A′ (D4, D11).** ART.md section 3 describes it as built; the decisions behind it:
+
+- *A pane under the model* (beside it on a wide screen or on its side), not a pane in the sheet: the
+  brief's "an additional pane to the 3d", and it follows the player, which the sheet does not show.
+- *The line's two presets come from the cells.* The first try, the principal axis through the cells'
+  middle, left the field for its last third (the field is a SW–NE body with a northern lobe and an
+  eastern arm), and its pane was mostly empty. Along is now the line that passes nearest the most
+  grid columns, Across the line square to it that does; both are trimmed to what they cut. Words:
+  `Along`, `Across`.
+- *Drawing meets the reservoir, not a plane.* The first try mapped the finger onto a plane at the
+  grid's top. In the oblique view that plane lies in front of the field, so a line drawn over the
+  model landed south of it and cut nothing (WebKit drive: `6144 m, 0 cells`). The finger now follows
+  its ray to the field's top, kept as a height field (`surfaces()`, 40 m a pixel, read bilinearly so
+  the surface has no steps for a ray to catch), and the line is laid on that top on the model. A
+  finger on the model's front wall meets the column whose wall it touches, and the line's end is drawn
+  on that column's top, a few pixels above the finger: the wall's meaning, accepted. Measured: at the
+  points on the model a touch can reach, the point a touch maps to lies within 150 m of the middle of
+  the cell drawn there (cells are up to 160 m across), in 66 of 67 points in both engines, the farthest
+  155 m; a line drawn between two such points ends 0.01 to 0.62 px from the finger (Chromium by touch
+  0.02 and 0.01; WebKit by mouse 0.21 and 0.62).
+- *The pane's height follows the section*, up to a cap, so a long flat section leaves the model the
+  rest; it is fixed while a line is drawn or an end moved, because a refit under the finger moved the
+  line 10 px from where it was drawn (measured before the lock).
+- *Blocks, never samples (D11).* Each polygon is one cell in one color from the 3D view's own
+  texture; nothing is blended. `tools/test_section.mjs` checks every polygon of 42 lines is its own
+  cell's, inside the line and the cell's depth range, convex and with area; that a plane through a
+  cell's middle cuts that cell and holds the middle (within 2.03 m where a face is warped and drawn as
+  chords: 27 of 2 000 cells); and that no point of a section lies in two cells (0 of 8 000 in the last
+  run, 2 in an earlier one with other points: slivers on shared edges). `shoot.mjs` checks the pane's
+  pixels at the middles of the 30 widest cells on Across against its own decode of `dynamic.bin` and
+  `config.json`'s scales: oil on two dates 30 of 30; pressure, water and the dark theme 29 of 30, the
+  other the same cell each time (39961, I 8, J 69, K 19), whose middle lies under the formation name
+  `Tofte` (`tools/.work/p0012/shots/probe-cell39961.png`).
+- *Gaps.* The plane passing between active cells inside the model is hatched, found per pixel column
+  between the shallowest and deepest cell, from every cell filled as one path (so neighbors leave no
+  seam). The first build also stroked that path to close seams, and the stroke erased a real gap: Not,
+  the shale in K 4 with no active cell, lies between Garn's base and Ile's top in all 2 263 columns,
+  3.20 to 10.37 m thick (median 7.24; measured from `geometry.bin` with `node`), about 1.3 px at ×5
+  along the field. Without the stroke it shows. `No active cell` joins the key only where 150 CSS px²
+  or more show (Along: 1 497 device px, about 374 CSS px², so the key shows there too); the test's
+  case is a line found by a search for inactive cells (−3337, −2360 to 663, −675), 925 CSS px²
+  hatched.
+- *Wells within 150 m* of the plane, projected square onto it: the cells are 70 to 160 m across, so
+  150 m takes the wells completed in the cells the plane cuts and their neighbors.
+- *Not applied in the section:* the explode, the I, J, K ranges and the value range. About says so.
+- *Escape* turns Draw off before it leaves focus mode.
+- **For Volve (D10, D11), the seams.** `js/section.js` keeps the axis and the layers apart:
+  `sectionAxis(sec, box, exag, datum)` is the one scale, `X(s)` and `Y(z)` with z the model's depth
+  less `datum` (`model.json`'s `center[2]`), so `Y(depth - datum)` places any depth in meters on it.
+  `drawSection()` in `app.js` draws the layers in order (ground and guides; gaps; cells; tops; wells;
+  the tapped cell; frame), each its own call. A seismic layer goes after the ground's guides, drawn
+  from its own samples at its own depths through `ax.X` and `ax.Y`, with `drawCells(…, alpha)`'s alpha
+  below 1 if the cells are to let it through, and the gap hatch left out where the seismic should
+  show. The axis states one datum; D11 asks that the seismic's datum be stated and nothing be tied,
+  so Volve's About says which datum each set uses.
+
+**(4) White (D6):** item 6 above.
+
+**Bugs on record, fixed as musts.**
+
+- *A hidden well label kept its `sel` class* (the follow-up's left-open list): `placeLabels()` sets
+  `sel` on every label before it decides whether the label shows.
+- *The cut's line was cut off on a phone on its side with the sheet raised* (the same list): the
+  line is gone; its key fits one line at every width `shoot.mjs` runs, in both unit systems.
+- *The colour scale over the date and the property name with the sheet raised* (the clip reviewers,
+  plan 0009 item 5; B1 here): fixed in 2.0's house pass, and `shoot.mjs`'s B1 check, with the phone's
+  insets emulated, passes again at all three stops with 2.2's layout.
+- *Found in this pass:* the card could reach up to 4 px past the room it was placed in when its rows
+  were clipped, because the full form's foot rule carries a 4 px margin `placeCard()` did not count;
+  with the section open in focus mode that put the card's edge on a tapped cell's ring (`shoot.mjs`,
+  the card at every stop). Counted now.
+- *Not fixable here:* matrix row 149's note that on iOS 18 Snuggery's exit arrows share the top-right
+  band with a mini-app's controls (in focus mode, Norne's ghost key); the camera's stale comments
+  (`waitForNorne()`'s note on `#prop-name`) are in the Snuggery repository, the lead's.
+
+**The camera (HOUSE 7.4).** No string the camera reads changed: `Oil saturation` (the legend's title,
+written last), `Pressure`, `Oil`, `Show the whole field`, `Play production history`, `Pause`, `Show
+the controls`, the grip's three names. New names: `About`, `Section`, `Along`, `Across`, `Draw`,
+`Hide the section`.
+
+**Budgets.** App code is **216 746 B against its 200 000 B cap** (`app.js` 120 577, `js/section.js`
+23 535, `style.css` 32 833, `index.html` 18 349, `js/track.js` 7 840, `js/units.js` 7 225,
+`js/data.js` 6 387; 161 963 B at the start of the pass, so 2.2 adds 54 783 B, nearly all the
+section). Nothing was cut to fit (the brief); the lead rules on the cap, and `check.mjs` keeps
+failing that one line until then. Fonts 40 075 B of 160 000. The ZIP as `build-zips.yml` packs it is
+15 378 349 B of its 19 110 591 B cap (15 354 835 at the start). `data/` is byte for byte as it was: the
+section is code only.
+
+**Owner calls left open (taste, each reversible).**
+
+1. The About and units keys close the row of words (item 2 above), rather than sit beside the name.
+2. `Section and view` in the sheet is renamed `Cells and view`, since a section now means A–A′.
+3. The section's pane under the model upright, beside it on its side; its height following the
+   section up to `clamp(170px, 26dvh, 230px)`.
+4. The two raised stops the same height (the cap), the sheet scrolling.
+5. Along and Across as defined (the most columns), their words; the wells' corridor at 150 m.
+6. The line laid on the reservoir's top on the model, with a faint curtain to the base.
+7. The section's cells unshaded (the legend's colors) with a rim, where the 3D view shades faces.
+8. The focus-mode About key on the legend's line, at its right.
+
+**Phone checks (none claimed; for the device matrix).** Drawing a line and moving its ends by
+finger in Snuggery's web view (Playwright's WebKit has no touch drag, so WebKit drags were by mouse;
+taps were by touch); the section's draw time per date during play (about 17 ms in headless Chromium
+with SwiftShader, never phone evidence) and memory; the pane beside the model on its side and the
+sticky grip; VoiceOver on the pane (its image description, the words, Draw); the white ground on the
+phone's screen in both themes; the About key in Snuggery's full screen against its exit control on
+iOS 18.
+
+**Verified** (run from `Template/norne-reservoir/` on 2026-10-07, after the last change; headless
+times are SwiftShader trends on the build Mac, never phone evidence):
+
+- `node tools/check.mjs`: 44 ok, 1 FAIL, the code cap above (exit 1 for that line alone); the seven
+  data files byte-identical to their pins; `palette.py` ALL CHECKS PASS; the credit written once, to
+  About; nothing on the front carries a credit; the camera's strings with their roles; version 2.2.
+- `node tools/test_decode.mjs`: all checks pass.
+- `node tools/test_section.mjs` (new): all checks pass: 42 lines, 23 081 polygons; Along 8 513 m,
+  2 061 cells; Across 3 686 m, 792 cells; a cut 2.6 ms on average in Node.
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: all checks pass, exit 0, 160 ok, both
+  themes; the section drawn in about 17 ms a draw; a scrub with it open at 8 and 20 dates a second,
+  0 frames whose section is another date's; `screenshots/*-{light,dark}.png` written (two new:
+  `section-light.png`, `section-dark.png`), `screenshots/app.png` untouched.
+- `tools/.work/p0012/drive.mjs` in WebKit and Chromium, both themes, at 390 x 844 DPR 2 (taps by
+  touch; drags by touch in Chromium and by mouse in WebKit): all ok, no console error.
+- `python3 norne-reservoir/tools/art/palette.py` (from `Template/`): ALL CHECKS PASS.
+- Not run: anything on a phone; `scripts/package.sh` (its URL scan now names `js/section.js`; it copies
+  `js/` whole).
+
+## Plan 0012, package 3.4, after QA and review (2026-10-07)
+
+QA passed with one should (the code cap, the lead's) and a nit (HOUSE §4.15 and §5.2 still read Norne's
+gate as pending). The review passed with six shoulds and six nits. Each, as taken:
+
+1. **The pane kept its old height after a line was drawn or an end moved** (should). `SEC.lockH` was
+   set on every drag step and cleared only by `setSection` and the line words. The plate's pointer
+   `end()` now clears it and asks for a redraw once the finger lifts (and on the two-finger hand-back),
+   so the pane fits the new section. `shoot.mjs` reads where the line lies under the finger *before*
+   the lift (the plate refits after it), checks the lift keeps the line, and checks the plot's set
+   height equals what the section needs (`__norne.secFit()`) after a drawn line and after A′ is moved:
+   126 of 126 px, 263 of 263 px (shown under `--sec-h`).
+2. **A line off the field was kept and printed a broken pane** (should). On the lift, a moved line is
+   cut once; if it cuts no cell the line before it is restored, Draw stays on, and the live region
+   says `That line misses the field.` While such a line is drawn the pane prints only `This line
+   misses the field.` (no depth ticks, no gap key) and the plot's description says `…: the line misses
+   the field, so no cell is cut.` `shoot.mjs` draws a line above the model by touch: 0 cells while
+   drawn, refused on the lift, the line as it was (578 cells). The reviewer's `offfield.mjs`: the
+   restored Along (2 061 cells), also after a reload.
+3. **Focus mode with the section open: `400` ran into `≥ 450 bar` on Pressure** (should). The tick
+   thinning is `thinTicks()`, run by `drawLegend()` and again by a `ResizeObserver` on
+   `#legend-ticks`, so it re-measures after the band reflows round the About key. The reviewer's
+   `legend2.mjs`: no overlap (`≤ 200 | 300 | ≥ 450 bar`). `shoot.mjs` now chooses Pressure before
+   focus mode with the section open and checks the labels stand 5 px apart or more (63.8 px).
+4. **The second stop looked like the first** (should). Taken as the review's first option, keeping
+   owner call 4 (both raised stops one height): at stop 2 `applyStop()` scrolls the sheet so `Cells
+   and view` sits under the sticky grip (smoothly; at once under Reduce Motion), and stop 1 and closed
+   go back to the top. `shoot.mjs`: the heading 0 px under the grip at stop 2 with and without the
+   section (the sheet scrolled 353 px); stop 1 at 0.
+5. **Well names dropped silently in the section** (should). A well's name tries, in order, centered
+   over its path's top, then beside the top on the right and on the left, then up to three 13 px rows
+   lower on either side, with a 1 px `--ink-2` hairline to the path's top when it is set more than 6 px
+   off; a well that finds no place is named in the key (`, unlabeled: …` after `Wells within 150 m`),
+   so none is drawn unnamed. `__norne.section()` reports `named` and `unnamed`; `shoot.mjs` checks every
+   drawn well is in one of the two and that the key lists the unnamed. The reviewer's `wells.mjs` on
+   Along and Across at report dates 78 and 110: all named on the pane (Along 110: D-1CH, B-2H, D-4H,
+   B-4DH, E-4AH; `tools/.work/review/shots/wells-*.png`).
+6. **The code cap** (should, both): **221 794 B** now against 200 000 (`app.js` 125 390, `style.css`
+   33 041, `js/section.js` 23 535, `index.html` 18 376, `js/track.js` 7 840, `js/units.js` 7 225,
+   `js/data.js` 6 387); these fixes added 5 048 B to the 216 746 B the build reported. Nothing was cut;
+   the lead rules, and `check.mjs` fails that line alone until then. The ZIP is 15 380 277 B of
+   19 110 591.
+
+**Nits.**
+
+- *Ile never named* (taken): a formation's name now tries its left end, then the middle of its run, a
+  quarter and three quarters along it, then its right end. Ile is named on Along and Across.
+- *The words' row cut flush against the About key* (taken): `#props.more` fades its right 22 px with a
+  mask while more words lie past it (set on scroll and by a `ResizeObserver`), so `Porosity` reads as
+  scrolling on.
+- *The section head lost 1 px of its hits to the plot on its side* (found in this pass, at 844 × 390,
+  DPR 3: `Draw` and ✕ measured 43 px tall because Chromium's hit test gave the plot the head's last
+  device pixel). `.sec-head` is `position: relative; z-index: 1`; 44 px again.
+- *TVD on the depth axis and the datum* (declined): the depth words sit in a 46 px margin that
+  `2 800 m TVD` does not fit, and About already says the depth is the model's true vertical depth.
+  No datum is named anywhere in `data/` (`model.json` has `center`, no datum), so About cannot state
+  one without inventing it; Volve (D11), which must state datums, will carry its own.
+- *The model at 245 px with the section open and the sheet raised* (owner call, left): the model and
+  the section keep 48 % together. Listed for the owner beside calls 3 and 4.
+- *Records* (the lead's): matrix row 160 for 2.2's phone checks (the list above, under *Phone checks*,
+  plus the section's pane fitting after a lift and the stop-2 scroll on the phone) and HOUSE §4.15 and
+  §5.2's gate wording are outside this folder.
+- *The A stub* (verified by the reviewer, `tools/.work/review/stub_node.mjs`): on Along the cut at s 0
+  to 20 m holds only a deep sliver (z 24 to 56) and the top at s 0 to 30 m is 23 to 24, −22 at 60 m;
+  Across alike. The line's drop at A is the cells' own geometry, not a fault.
+
+**The camera.** No string the camera reads changed. New words on screen: `This line misses the
+field.` (in the pane), `That line misses the field.` (spoken), `, unlabeled: …` (in the key, only when
+needed).
+
+**Verified** (from `Template/norne-reservoir/`, 2026-10-07, after the last change; headless figures
+are SwiftShader trends, never phone evidence):
+
+- `node tools/check.mjs`: 44 ok, 1 FAIL, the code cap (221 794 B); data byte-identical to the pins;
+  palette ALL CHECKS PASS; version 2.2 (`tools/.work/p0012/check-fix.log`).
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`: all checks pass.
+- `python3 norne-reservoir/tools/art/palette.py` from `Template/`: ALL CHECKS PASS.
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: exit 0, 166 ok, both themes
+  (`tools/.work/p0012/shoot-fix-3.log`); `screenshots/*` rewritten.
+- `tools/.work/fix/drive.mjs` (the reviewer's drive, its pictures to `tools/.work/fix/shots/`) in
+  Chromium light and dark (CDP touch, drags by touch) and WebKit light (touch taps, mouse drags), 390 ×
+  844 DPR 2: a drawn line refits the pane, an off-field line is refused (Draw left on), no console
+  error. The reviewer's `legend2.mjs`, `offfield.mjs` and `wells.mjs` as above.
+- `bash scripts/package.sh`: built (15 MB), then `dist/` removed.
+
+### The lead's pass on plan 0012 3.4 (2026-10-06)
+
+- **The code budget is 222 000 B,** ruled on the measured 221 794 B. The overage is the owner's section
+  pane (its geometry, the drawn line, the presets and the refit) plus the review's fixes; nothing was cut.
+- **ART.md's card passage** now says what 2.2 does: the plate keeps 405 px at both raised stops and
+  the card is full there; the compact form is for a phone on its side. NOTES's frame line drops the cut's
+  line, which no longer exists.
+- **TVD on the axis:** the fixer's decline stands for Norne (a 46 px margin; About says true vertical
+  depth). For Volve, where seismic and model share the axis (D11), the pane gets one axis title, "Depth,
+  m TVD", instead of a word per tick.
+- **Left as an owner call:** with the section open and the sheet raised, the model keeps 245 px; the
+  model and the section together keep 48 % of the screen.
+

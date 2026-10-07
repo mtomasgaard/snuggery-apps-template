@@ -2,17 +2,18 @@
 // The look is ART.md under Template/HOUSE.md; the data and its formats are NOTES.md and
 // data/ATTRIBUTION.txt. Every number and date the app writes goes through js/units.js; the data is
 // decoded by js/data.js (pure, tested by tools/test_decode.mjs); the player's track, which carries
-// the signature (the cut), is js/track.js.
+// the signature (the cut), is js/track.js; the section A–A′ under the model is js/section.js.
 //
 // The frame (the scrub rule, HOUSE 4.6): input only records the WANTED report date. Each animation
 // frame draws the newest wanted date (its colors decoded and uploaded in the same frame), then sets
-// SHOWN to it, and everything that carries a date (the time row, the lead, the cut's line, the card,
+// SHOWN to it, and everything that carries a date (the time row, the lead, the section, the card,
 // the chart's cursor, the track's thumb and aria-valuenow) reads SHOWN. The loop asks for a frame
 // only while something is dirty, a flight runs or play is on.
 
 import * as U from './js/units.js';
 import { buildZones, segmentOf, fillValues, cellValue, propRange, norm, denorm, gasMax, openEnds, cutSeries, cutFacts } from './js/data.js';
 import { createTrack, CUT_SCALE } from './js/track.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, drawCells, drawTops, drawOutline, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop } from './js/section.js';
 
 const $ = (id) => document.getElementById(id);
 const LS_KEY = 'norne-viewer:v1';
@@ -36,9 +37,10 @@ const S = {                                   // the view, saved to localStorage
   vf: [0, 100], exag: 5, wells: true, labels: true, edges: true,
   cam: null, well: null,
   explode: { mode: 'formations', t: 0 },
-  sheet: 0,                                   // the controls sheet: 0 the grip, 1 + explode and rates, 2 + section and view
+  sheet: 0,                                   // the controls sheet: 0 the grip, 1 + explode and rates, 2 + cells and view
+  section: { on: false, line: 'along', a: null, b: null },   // the section A–A′: a line of the field's own, or one drawn (a, b in model meters)
 };
-const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0 };   // dirty; card: 1 check the card's place, 2 place it afresh
+const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0, section: false, secGeom: true };   // dirty; card: 1 check the card's place, 2 place it afresh
 let pick = -1, cardMode = null, playing = null, wanted = 0, shown = -1, units = 'SI', focus = false, track = null;
 let raf = 0, flog = null;
 const dark = matchMedia('(prefers-color-scheme: dark)');
@@ -80,6 +82,7 @@ function fail(err) {
   const msg = location.protocol === 'file:' ? 'This app reads its data over Snuggery’s own server; opened as a file, the browser blocks it.'
     : err instanceof DataError ? err.message : `The model could not be shown: ${err.message}`;
   notice(msg);
+  $('stamp-home').hidden = false;
   $('stamp').textContent = 'The model could not be read.';
   // an alpha:false context paints its own black buffer over the plate's CSS background: clear it to
   // the theme's --plate, and again when the theme changes, so the notice sits on the app's own ground
@@ -128,15 +131,20 @@ async function main() {
   for (const w of model.wells) { w.firstOpen = w.state.findIndex((s) => s > 0); const zmin = Math.min(...w.path.slice(1).map((p) => p[2])); w.path[0][2] = zmin - 70; }
   buildZoneData();
   computeExplode();
+  // the section: the field's own two lines; the field's top and base as height fields, where a finger
+  // on the 3D view meets the reservoir and the line lies on it
+  G.lines = fieldLines(G.geom, NA, G.ijk, model.NI, model.NJ);
+  G.surf = surfaces(G.geom, NA);
   initGL();
   initCamera();
   initUI();
-  $('credits').textContent = CREDIT;
+  $('about-credit-line').textContent = CREDIT;
   writeStamp();
   writeAbout();
   new ResizeObserver(() => { R.draw = true; R.labels = true; R.card = 2; layoutKeys(); reframe(); kick(); }).observe($('plate'));
   new ResizeObserver(() => { R.chart = true; kick(); }).observe($('chart'));
   new ResizeObserver(() => { track.resize(); R.track = true; R.legend = true; kick(); }).observe($('slider'));
+  new ResizeObserver(() => thinTicks()).observe($('legend-ticks'));   // the legend's width can change after it is written
   document.fonts.addEventListener('loadingdone', () => { track.invalidate(); R.track = true; R.labels = true; G.labelW = null; kick(); });
   // the legend's title is written last: the marketing camera waits for "Oil saturation" as the sign
   // that every file is in
@@ -155,6 +163,11 @@ function restore() {
     if (Array.isArray(s.vf)) S.vf = s.vf;
     if (s.cam && Number.isFinite(s.cam.dist) && 'sx' in s.cam) S.cam = s.cam;   // a camera saved before the fit had no lens shift: the fit replaces it
     if (s.explode && ['formations', 'layers', 'segments'].includes(s.explode.mode) && Number.isFinite(s.explode.t)) S.explode = s.explode;
+    if (s.section && typeof s.section === 'object') {
+      const q = s.section, pt = (v) => Array.isArray(v) && v.length === 2 && v.every(Number.isFinite);
+      S.section = { on: !!q.on, line: ['along', 'across'].includes(q.line) ? q.line : null, a: pt(q.a) ? q.a : null, b: pt(q.b) ? q.b : null };
+      if (!S.section.line && !(S.section.a && S.section.b)) S.section.line = 'along';
+    }
     if (S.well && !model.wells.some((w) => w.name === S.well)) S.well = null;
   } catch { /* a broken saved state is ignored */ }
 }
@@ -229,6 +242,9 @@ function computeVisible() {
 // ---------------------------------------------------------------- formations + explode
 function buildZoneData() {
   G.zoneOfK = D.zoneOfK = buildZones(cfg.zones, model.NK);
+  G.secTops = new Uint8Array(model.NK + 2);   // the section draws each formation's top: its first layer's top faces
+  for (const z of cfg.zones || []) if (z.k[0] >= 1 && z.k[0] <= model.NK) G.secTops[z.k[0]] = 1;
+  R.secGeom = true;
   // which formations hold cells: Not, a shale, has none in this grid and is left out of the legend
   G.zoneCells = new Uint32Array((cfg.zones || []).length);
   for (let a = 0; a < G.NA; a++) { const z = G.zoneOfK[G.ijk[a * 3 + 2] + 1]; if (z >= 0) G.zoneCells[z]++; }
@@ -436,7 +452,7 @@ function initGL() {
 /** The plate's colors for the theme: the clear color from --plate, the picked cell's lean. */
 function readTheme() {
   const c = css('--plate');
-  const [r, g, b] = hex(isHex(c) ? c : '#e8eef0');
+  const [r, g, b] = hex(isHex(c) ? c : '#ffffff');
   G.clear = [r / 255, g / 255, b / 255];
   G.hi = dark.matches ? [1, 1, 1, 0.6] : [15 / 255, 28 / 255, 35 / 255, 0.5];
 }
@@ -571,6 +587,7 @@ function loop(now) {
     if (G.texKey !== colorKey(step)) { updateColors(step); if (valueFilterOn()) R.faces = true; }
     else G.texStep = step;
     R.colors = false; R.draw = true;
+    if (S.section.on) R.section = true;   // the section shows the same colors, in the same frame
   }
   if (stepChanged) { shown = step; R.step = true; R.draw = true; R.labels = true; }
   if (R.faces) { rebuildFaces(); R.faces = false; R.draw = true; }
@@ -582,7 +599,8 @@ function loop(now) {
   if (R.step) { writeStep(); R.step = false; R.track = true; }
   if (R.track) { track.draw(shown); R.track = false; }
   if (R.chart) { drawChart(); R.chart = false; }
-  if (flog && stepChanged) flog.push({ t: now, wanted, shown, tex: G.texStep, label: $('valid').textContent, now: +$('slider').getAttribute('aria-valuenow') });
+  if (R.section || R.secGeom) drawSection();
+  if (flog && stepChanged) flog.push({ t: now, wanted, shown, tex: G.texStep, sec: S.section.on ? G.secStep : null, label: $('valid').textContent, now: +$('slider').getAttribute('aria-valuenow') });
   if (playing || G.anim || Object.values(R).some(Boolean)) kick();
 }
 
@@ -592,7 +610,6 @@ function writeStep() {
   const lead = U.lead(days);
   setText('valid', U.date(iso));
   setText('lead', lead);
-  setText('cutline', cutSentence(c));
   const sl = $('slider');
   sl.setAttribute('aria-valuenow', String(f));
   sl.setAttribute('aria-valuetext', `${U.spokenDate(iso)}, ${f ? lead : 'first oil'}. ${f ? U.spokenUnits(`Oil ${U.liquid(c.oil, units)}, water ${U.liquid(c.water, units).replace(/\u202f\S+$/, '')}, ${U.percent(c.share)} water.`) : 'Nothing lifted yet.'}`);
@@ -601,11 +618,6 @@ function writeStep() {
   save();
 }
 function setText(id, t) { const e = $(id); if (e.textContent !== t) e.textContent = t; }
-/** The caption line: how to read the cut, with the shown month's figures. */
-function cutSentence(c) {
-  if (!(c.liquid > 0)) return `The track starts here, at first oil on ${U.date(c.iso)}: nothing lifted yet.`;
-  return `On the track, the month to ${U.date(c.iso)}: oil ${U.liquid(c.oil, units)} (ink), water ${U.liquid(c.water, units)} (tint), ${U.percent(c.share)} water cut.`;
-}
 
 function sizeCanvas() {
   const c = $('gl'), dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -751,8 +763,10 @@ function keepOut() {
 }
 function placeLabels() {
   if (!G.labels || !G.PV) return;
-  const f = Math.max(0, shown), avoid = keepOut();
-  const clear = (x, y, w, h) => !avoid.some((r) => x < r.x + r.w && x + w > r.x && y < r.y + r.h && y + h > r.y);
+  placeSecLine();
+  const f = Math.max(0, shown), avoid = keepOut(), names = avoid.concat((SEC.ends || []).map((p) => ({ x: p[0] - 12, y: p[1] - 12, w: 24, h: 24 })));   // names keep off the section's A and A′ too
+  const clearOf = (list) => (x, y, w, h) => !list.some((r) => x < r.x + r.w && x + w > r.x && y < r.y + r.h && y + h > r.y);
+  const clear = clearOf(names), clearRing = clearOf(avoid);
   const showZones = G.exOn && S.explode.mode === 'formations';
   (G.zoneLabels || []).forEach((el, g) => {
     let best = null;
@@ -772,7 +786,7 @@ function placeLabels() {
     const m = G.pickMark, w = cardMode === 'cell' && pick >= 0 ? cellWorld(pick) : null, p = w && projectWorld(w[0], w[1], w[2]);
     // placeCard keeps the card 10 px from the ring's middle; the ring hides only when its middle is under
     // the card or a key (within keepOut's 4 px), and otherwise any sliver of it goes under the card
-    const ok = p && p[0] >= 0 && p[1] >= 0 && p[0] <= $('gl').clientWidth && p[1] <= $('gl').clientHeight && clear(p[0] - 1, p[1] - 1, 2, 2);
+    const ok = p && p[0] >= 0 && p[1] >= 0 && p[0] <= $('gl').clientWidth && p[1] <= $('gl').clientHeight && clearRing(p[0] - 1, p[1] - 1, 2, 2);
     m.style.display = ok ? '' : 'none';
     if (ok) m.style.transform = `translate(${Math.round(p[0])}px, ${Math.round(p[1])}px)`;
   }
@@ -783,6 +797,7 @@ function placeLabels() {
     const el = G.labels[i], code = w.state[f] || 0;
     const on = show && (code > 0 || w.name === S.well);
     const p = on ? project(G.wellHeads ? G.wellHeads[i] : w.path[0]) : null;
+    el.classList.toggle('sel', w.name === S.well);   // on every label, shown or not (DECISIONS: a hidden label kept it)
     if (!p) { el.style.display = 'none'; return; }
     if (el._code !== code) {
       el._code = code;
@@ -790,7 +805,6 @@ function placeLabels() {
       el.style.setProperty('--c', `rgb(${c.join(',')})`);
       el.classList.toggle('dash', code >= 2); el.classList.toggle('thin', code === 0);
     }
-    el.classList.toggle('sel', w.name === S.well);
     items.push({ el, i, x: p[0], y: p[1], sel: w.name === S.well ? 1 : 0 });
   });
   items.sort((a, b) => (b.sel - a.sel) || (a.y - b.y));
@@ -926,8 +940,15 @@ function drawLegend() {
     if (n === 0) s.className = 'first'; else if (n === ticks.length - 1) s.className = 'last';
     box.appendChild(s);
   });
-  // interior labels that would touch a neighbor go; the two ends always print
-  const spans = [...box.children], rects = spans.map((e) => e.getBoundingClientRect());
+  thinTicks();
+}
+/** Interior labels that would touch a neighbor go; the two ends always print. Run again whenever the
+ *  bar's width changes after the legend was written (focus mode moves the About key onto its line). */
+function thinTicks() {
+  const spans = [...$('legend-ticks').children];
+  if (spans.length < 3) return;
+  for (const e of spans) e.hidden = false;
+  const rects = spans.map((e) => e.getBoundingClientRect());
   let last = rects[0];
   for (let i = 1; i < spans.length - 1; i++) {
     if (rects[i].left < last.right + 6 || rects[i].right > rects[spans.length - 1].left - 6) spans[i].hidden = true; else last = rects[i];
@@ -935,11 +956,13 @@ function drawLegend() {
 }
 
 // ---------------------------------------------------------------- the stamp and About
+/** Data built once (HOUSE 4.2, 4.15): once every file is in, the stamp's line hides and the About key
+ *  takes its place; the edition is About's first row. */
 function writeStamp() {
-  const run = (String(model.source).match(/OPM Flow \d{4}\.\d{2}/) || ['OPM Flow'])[0];
-  $('stamp').textContent = `Norne benchmark, ${run} run`;
-  $('stamp').translate = false;
+  $('stamp-home').hidden = true;
+  $('btn-about').hidden = false;
 }
+function edition() { return `Norne benchmark, ${(String(model.source).match(/OPM Flow \d{4}\.\d{2}/) || ['OPM Flow'])[0]} run`; }
 function writeAbout() {
   const f0 = model.frames[0], f1 = model.frames[G.nf - 1], [p0, p1] = model.dynamic.pressureRange;
   const facts = cutFacts(G.cut), sc = CUT_SCALE[units];
@@ -947,9 +970,12 @@ function writeAbout() {
   const scaleWords = units === 'US' ? `0.08${U.NNBSP}px per 1${U.NNBSP}000${U.NNBSP}bbl/d` : `0.5${U.NNBSP}px per 1${U.NNBSP}000${U.NNBSP}Sm³/d`;
   const cross = facts.cross ? ` From the month to ${U.date(facts.cross.iso)} the wells lift more water than oil in ${facts.stays === facts.of ? `all ${facts.of}` : `${facts.stays} of the ${facts.of}`} months left, and the last month is ${U.percent(facts.last.share)} water.` : '';
   $('ab-cut').textContent = `Each column on the player’s track is one report date: its width is the days since the date before, and its height is the liquid the field’s wells lifted per day in that month, at ${scaleWords} (the tick at the track’s left end is ${sc.label}). The oil is the solid ink at the foot and the water the paler ink stacked on it. The liquid peaks at ${U.liquid(facts.peak.liquid, units)} in the month to ${U.date(facts.peak.iso)}, ${U.percent(facts.peak.share)} of it water.${cross}`;
+  const lenOf = (l) => U.length(Math.hypot(l.b[0] - l.a[0], l.b[1] - l.a[1]), units), us = units === 'US';
+  $('ab-section').textContent = `The section shows the model where a vertical plane along the line from A to A′ passes through it. Each cell the plane cuts is drawn as the block it cuts, in one color: the cell’s value on the scale under the picture at the report date in the player, unshaded and never blended with its neighbors, since a model cell holds one value. Depth is the model’s own true vertical depth (TVD) in ${us ? 'feet' : 'meters'}, stretched as the 3D view is (Vertical exaggeration, under More controls), and distance runs from A in ${us ? 'feet' : 'meters'}. Lines mark the top of each formation. Hatching marks where the plane passes between active cells inside the model, where inactive cells hold no values. The wells that come within ${U.length(SEC_CORRIDOR, units)} of the plane are drawn on it, moved square onto it, as the 3D view draws them on that date. The explode, the cell ranges and the value range change the 3D view only. Along is the straight line through the field that crosses the most of its grid columns (${lenOf(G.lines.along)}); Across is the one square to it that crosses the most (${lenOf(G.lines.across)}).`;
   $('about-source').textContent = model.source;
   const list = $('about-list'); list.replaceChildren();
   const rows = [
+    ['Edition', edition()],
     ['Region', 'the Norne field, Norwegian Sea'],
     ['Grid', `${model.NI} by ${model.NJ} by ${model.NK} cells, ${U.int(model.NA)} of them active`],
     ['Report dates', `${G.nf}, ${U.date(f0)} to ${U.date(f1)}`],
@@ -958,7 +984,7 @@ function writeAbout() {
     ['Rates', 'standard cubic meters a day, averaged over the month to each date'],
     ['Units', 'SI, or US units from the key at the top right: psi, feet, barrels and thousand cubic feet a day. Standard conditions differ slightly between the two; the conversion ignores that'],
   ];
-  for (const [k, v] of rows) { const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = `${k}:`; dd.textContent = v; list.append(dt, dd); }
+  for (const [k, v] of rows) { const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = `${k}:`; dd.textContent = v; if (k === 'Edition') dd.translate = false; list.append(dt, dd); }
   const oilPeak = G.cut.reduce((a, c) => (c.oil > a.oil ? c : a));
   $('cut-desc').textContent = `The cut: the liquid the field lifted per day, month by month, from ${U.spokenMonth(f0)} to ${U.spokenMonth(f1)}. Oil peaks at ${U.spokenUnits(U.liquid(oilPeak.oil, units))} in the month to ${U.spokenDate(oilPeak.iso)}.${facts.cross ? ` Water passes oil from the month to ${U.spokenDate(facts.cross.iso)}.` : ''}`;
 }
@@ -983,7 +1009,13 @@ function applyStop() {
   const sheet = $('sheet'), grip = $('grip');
   sheet.classList.remove('s0', 's1', 's2');
   sheet.classList.add('s' + S.sheet);
+  document.body.classList.toggle('raised', S.sheet > 0);   // the view keeps --view-min (style.css)
   grip.setAttribute('aria-label', GRIP[S.sheet]);
+  // the raised stops are one height (the view keeps its share), so the second stop shows what it adds:
+  // the sheet scrolls Cells and view up under the grip; the first stop and closed go back to the top
+  const head = document.querySelector('.stop2 .sheet-head');
+  const to = S.sheet === 2 && head ? sheet.scrollTop + head.getBoundingClientRect().top - sheet.getBoundingClientRect().top - sheet.clientTop - grip.offsetHeight : 0;
+  sheet.scrollTo({ top: Math.max(0, to), behavior: reduced.matches || !model ? 'auto' : 'smooth' });
   R.draw = true; R.chart = true; R.labels = true; kick();
 }
 function setStop(n) {
@@ -1023,7 +1055,7 @@ function initSheet() {
 /** The keys run as a row along the plate's top when the column would not fit its height. */
 function layoutKeys() {
   const plate = $('plate');
-  plate.classList.toggle('keys-row', plate.clientHeight < 258);
+  plate.classList.toggle('keys-row', plate.clientHeight < 302);   // six keys in three plates: 294 px with the 8 px inset
 }
 
 // ---------------------------------------------------------------- UI
@@ -1087,7 +1119,7 @@ function initUI() {
   v0.addEventListener('input', () => onV(0)); v1.addEventListener('input', () => onV(1));
   const ex = $('exag');
   ex.value = S.exag;
-  ex.addEventListener('input', () => { S.cam.target[1] *= +ex.value / S.exag; S.exag = +ex.value; refitIfFitted(); writeCutOutputs(); R.draw = true; save(); kick(); });
+  ex.addEventListener('input', () => { S.cam.target[1] *= +ex.value / S.exag; S.exag = +ex.value; refitIfFitted(); writeCutOutputs(); writeSecWords(); R.draw = true; R.section = true; save(); kick(); });
 
   const toggle = (id, key, after) => {
     const el = $(id);
@@ -1095,10 +1127,11 @@ function initUI() {
     show();
     el.addEventListener('click', () => { S[key] = !S[key]; show(); if (after) after(); R.draw = true; R.labels = true; save(); kick(); });
   };
-  toggle('btn-wells', 'wells', () => { $('wellkey').hidden = !S.wells; });
+  toggle('btn-wells', 'wells', () => { $('wellkey').hidden = !S.wells; $('sec-key-wells').hidden = !S.wells; R.section = true; });
   toggle('t-labels', 'labels');
   toggle('t-edges', 'edges');
   $('wellkey').hidden = !S.wells;
+  $('sec-key-wells').hidden = !S.wells;
   $('reset-cut').addEventListener('click', () => {
     S.cut = { i0: 1, i1: model.NI, j0: 1, j1: model.NJ, k0: 1, k1: model.NK }; S.vf = [0, 100];
     for (const ax of ['i', 'j', 'k']) { $(ax + '0').value = 1; $(ax + '1').value = model['N' + ax.toUpperCase()]; }
@@ -1128,6 +1161,7 @@ function initUI() {
   writeCutOutputs();
 
   $('stamp').addEventListener('click', openAbout);
+  $('btn-about').addEventListener('click', openAbout);
   $('about-close').addEventListener('click', closeAbout);
   $('about-close-2').addEventListener('click', closeAbout);
   $('about').addEventListener('keydown', (e) => {
@@ -1145,17 +1179,19 @@ function initUI() {
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     if (!$('about').hidden) { closeAbout(); return; }
+    if (SEC.armed) { armDraw(false); return; }   // Draw off first, then focus mode
     if (focus) setFocus(false, true);
   });
 
   initSheet();
+  initSection();
   initPointer();
   initChartSeek();
   applyUnits(true);
   applyProp(true);
   layoutKeys();
 
-  dark.addEventListener('change', () => { readTheme(); track.invalidate(); R.colors = true; R.legend = true; R.track = true; R.chart = true; G.texKey = null; paintWellKey(); kick(); });
+  dark.addEventListener('change', () => { readTheme(); track.invalidate(); R.colors = true; R.legend = true; R.track = true; R.chart = true; R.section = true; G.texKey = null; paintWellKey(); kick(); });
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') { if (playing) stop(); if (raf) cancelAnimationFrame(raf); raf = 0; G.anim = null; return; }
     R.draw = true; R.track = true; kick(); refreshConfig();
@@ -1183,8 +1219,8 @@ function applyUnits(initial) {
   b.textContent = units;
   b.setAttribute('aria-label', units === 'US' ? 'Change units, now US: psi, feet, barrels a day' : 'Change units, now SI: bar, meters, cubic meters a day');
   setTrackModel();
-  R.legend = true; R.step = true; R.track = true; R.chart = true; R.labels = true;
-  if (!initial) { writeCutOutputs(); writeAbout(); if (cardMode) refreshCard(); }
+  R.legend = true; R.step = true; R.track = true; R.chart = true; R.labels = true; R.section = true;
+  if (!initial) { writeCutOutputs(); writeAbout(); writeSecWords(); if (cardMode) refreshCard(); }
   kick();
 }
 
@@ -1200,14 +1236,19 @@ function buildWords() {
     b.addEventListener('click', () => { if (S.prop !== p.key) { S.prop = p.key; applyProp(); save(); } });
     box.appendChild(b);
   }
-  if (!box.dataset.keys) { radioKeys(box); box.dataset.keys = '1'; }
+  if (!box.dataset.keys) {
+    radioKeys(box); box.dataset.keys = '1';
+    // the row fades at its right edge while more words lie past it, so it reads as a row that scrolls
+    const fade = () => box.classList.toggle('more', box.scrollLeft + box.clientWidth < box.scrollWidth - 1);
+    box.addEventListener('scroll', fade, { passive: true }); new ResizeObserver(fade).observe(box);
+  }
 }
 function applyProp(initial) {
   for (const b of $('props').querySelectorAll('[role="radio"]')) b.setAttribute('aria-checked', String(b.dataset.key === S.prop));
   const on = $('props').querySelector('[aria-checked="true"]');
   if (on && !initial) on.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   writeCutOutputs();
-  if (!initial) drawLegend();
+  if (!initial) { drawLegend(); writeSecWords(); }
   R.colors = true; R.faces = true; G.texKey = null;
   if (cardMode) refreshCard();
   kick();
@@ -1283,8 +1324,8 @@ function applyFocus(on) {
   document.body.classList.toggle('focus', on);
   for (const e of [$('head'), $('keys'), $('sheet')]) { e.hidden = on; e.inert = on; }
   $('focus-exit').hidden = !on;
-  // the stamp keeps its words, and moves into the caption band as its first line
-  if (on) $('caption').prepend($('stamp')); else $('stamp-home').appendChild($('stamp'));
+  // the About key moves into the caption band as its first child, and back
+  if (on) $('caption').prepend($('btn-about')); else document.querySelector('.hkeys').prepend($('btn-about'));
   if (model) { R.draw = true; R.labels = true; kick(); }
 }
 
@@ -1297,8 +1338,16 @@ function initPointer() {
     if (!$('error').hidden && model && G.cfgWarned) notice('');
     c.setPointerCapture(e.pointerId);
     pts.set(e.pointerId, [e.offsetX, e.offsetY]);
-    if (pts.size === 1) down = { x: e.offsetX, y: e.offsetY, t: performance.now(), moved: false, btn: e.button, shift: e.shiftKey };
-    if (pts.size === 2) { pinch = pinchState(pts); if (down) down.moved = true; }
+    if (pts.size === 1) {
+      down = { x: e.offsetX, y: e.offsetY, t: performance.now(), moved: false, btn: e.button, shift: e.shiftKey };
+      // the section's line: with Draw on, a drag draws it; else a drag that starts on A or A′ moves that end
+      const h = S.section.on && !e.button ? (SEC.armed ? 'draw' : secHandle(e.offsetX, e.offsetY)) : null;
+      if (h) Object.assign(down, { sec: h, p0: mapPoint(e.offsetX, e.offsetY), was: { line: S.section.line, a: S.section.a, b: S.section.b } });
+    }
+    if (pts.size === 2) {
+      pinch = pinchState(pts);
+      if (down) { down.moved = true; if (down.sec) { SEC.drag = null; SEC.lockH = false; setLine(down.was, true); down.sec = null; } }   // two fingers: back to the view
+    }
     kick();
   });
   c.addEventListener('pointermove', (e) => {
@@ -1309,6 +1358,15 @@ function initPointer() {
       const dx = cur[0] - prev[0], dy = cur[1] - prev[1];
       if (Math.hypot(e.offsetX - down.x, e.offsetY - down.y) > 6) down.moved = true;
       if (!down.moved) return;
+      if (down.sec) {
+        const p = mapPoint(cur[0], cur[1]);
+        if (!p) return;
+        if (!down.p0) down.p0 = p;
+        const l = secLine(), xy = (v) => [Math.round(v[0]), Math.round(v[1])];
+        const q = down.sec === 'a' ? { a: p, b: l.b } : down.sec === 'b' ? { a: l.a, b: p } : { a: down.p0, b: p };
+        if (Math.hypot(q.b[0] - q.a[0], q.b[1] - q.a[1]) >= 100) { SEC.drag = true; SEC.lockH = true; setLine({ line: null, a: xy(q.a), b: xy(q.b) }); }
+        return;
+      }
       if (down.btn === 2 || down.shift) pan(dx, dy);
       else { S.cam.theta -= dx * 0.35; S.cam.phi = Math.max(-80, Math.min(88, S.cam.phi + dy * 0.3)); }
       S.cam.fit = false;
@@ -1324,6 +1382,18 @@ function initPointer() {
     if (!pts.has(e.pointerId)) return;
     pts.delete(e.pointerId);
     if (pts.size < 2) pinch = null;
+    if (pts.size === 0 && down && down.sec && down.moved) {
+      const drawn = down.sec === 'draw' && SEC.drag, moved = !!SEC.drag;
+      // the finger is off: the pane fits its section again (it was held while the line moved)
+      SEC.lockH = false; R.section = true;
+      if (e.type === 'pointercancel') setLine(down.was, true);
+      else if (moved && (secCut(), !SEC.geom.n)) { setLine(down.was, true); say('That line misses the field.'); }   // nothing cut: the line it had
+      else {
+        setLine({}, true);
+        if (drawn) { armDraw(false); say(`Section drawn, ${secWords()}.`); }
+      }
+      down = null; return;
+    }
     if (pts.size === 0 && down) {
       if (!down.moved && performance.now() - down.t < 500 && e.type === 'pointerup') {
         const now = e.timeStamp;
@@ -1501,10 +1571,12 @@ function placeCard(fresh = true) {
   const target = Math.min(f.fixed + f.full, cap), least = need(f, 1);
   const put = (right, align, y, h) => {
     card.classList.toggle('right', right);
-    const fits = h - f.fixed;
+    // the full form's rule under rows that continue carries a 4 px margin (.readout-all.more): counted,
+    // so the card ends inside its room (2.2: it overshot by up to 4 px, onto a tapped cell's ring)
+    const fits = h - f.fixed, room = fits - (f.compact ? 0 : 4);
     if (f.full > fits + 0.01) {
-      let end = f.cuts.length ? f.cuts[0] : Math.max(0, fits - 1);
-      for (const c of f.cuts) if (c + 1 <= fits + 0.01) end = c;
+      let end = f.cuts.length ? f.cuts[0] : Math.max(0, room - 1);
+      for (const c of f.cuts) if (c + 1 <= room + 0.01) end = c;
       f.region.style.maxHeight = `${Math.round((end + 1) * 100) / 100}px`; f.region.classList.add('more');   // border-box: the foot rule
     }
     // on a whole pixel, toward the room: down from a top edge, up from a bottom one
@@ -1531,7 +1603,7 @@ function placeCard(fresh = true) {
   if (o) put(o.right, o.s.below ? 'bottom' : 'top', o.s.below ? o.s.b : o.s.t, Math.min(target, Math.max(least, o.h)));
   else put(false, 'top', T, target);
 }
-function closeCard() { cardMode = null; pick = -1; G.cardAt = null; $('readout').hidden = true; R.draw = true; R.labels = true; kick(); }
+function closeCard() { cardMode = null; pick = -1; G.cardAt = null; $('readout').hidden = true; R.draw = true; R.labels = true; R.section = S.section.on; kick(); }
 function cardFigure(p, a) {
   const v = cellValue(D, p.key, shown, a);
   if (p.key === 'ZONE') return zoneName(G.ijk[a * 3 + 2] + 1);
@@ -1578,6 +1650,7 @@ function refreshCard() {
     $('readout-zoom').textContent = 'Zoom to well';
   } else { closeCard(); return; }
   $('readout').hidden = false;
+  R.section = S.section.on;   // the tapped cell's outline in the section
   refreshCardValues();
   R.card = Math.max(R.card, 1); kick();   // its rows changed: placed again on the next frame, where it is if it still fits
 }
@@ -1680,6 +1753,324 @@ function initChartSeek() {
   svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
 }
 
+// ---------------------------------------------------------------- the section A–A′ (js/section.js)
+// A vertical plane through the grid along a line on the field: the line of the field's own (Along,
+// Across) or one drawn on the 3D view. The plane is cut from geometry.bin as loaded, never from new
+// data; each cell it cuts is one block in the 3D view's colors for the shown property and month, on
+// one depth axis (TVD, the model's own depths) stretched as the 3D view is. Layers, bottom to top:
+// the ground and its depth guides, the gaps (no active cell), the cells, the formation tops, the
+// wells within SEC_CORRIDOR of the plane, the tapped cell, the frame and its words. A layer from
+// another source at its own depths (a seismic line along the same A–A′) would go in after the
+// ground, on the same axis (sectionAxis), and nothing else would change.
+const SEC_CORRIDOR = 150;                       // meters either side of the plane: the wells drawn on it
+const SEC_BOX = { l: 46, t: 15, r: 8, b: 15 };  // the plot's margins in the pane: depth words, A and A′, distances
+const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null };
+function secLine() {
+  const q = S.section;
+  return q.line ? G.lines[q.line] : { a: q.a, b: q.b };
+}
+function secCut() {
+  const l = secLine();
+  SEC.geom = cutGrid(G.geom, G.NA, G.ijk, l.a, l.b, G.secTops);
+  SEC.wells = wellsNear(model.wells.map((w) => w.path), SEC.geom.line, SEC_CORRIDOR);
+  SEC.hatchKey = '';
+  G.stats.secCuts = (G.stats.secCuts || 0) + 1; G.stats.secCutMs = (G.stats.secCutMs || 0) + SEC.geom.ms;
+}
+/** Shows or hides the section; the line it had is kept. */
+function setSection(on, byKey) {
+  S.section.on = !!on;
+  SEC.lockH = false;
+  if (!on) armDraw(false);
+  applySection(); save();
+  if (byKey) say(on ? `Section shown, ${secWords()}.` : 'Section hidden.');
+}
+function applySection() {
+  const on = S.section.on;
+  document.body.classList.toggle('sectioned', on);
+  $('section').hidden = !on; $('secline').toggleAttribute('hidden', !on);   // an SVG element has no hidden property
+  $('btn-section').setAttribute('aria-pressed', String(on));
+  for (const b of $('sec-lines').querySelectorAll('[role="radio"]')) b.setAttribute('aria-checked', String(b.dataset.line === S.section.line));
+  R.secGeom = on; R.section = on; R.labels = true; R.draw = true; kick();
+}
+function secWords() {
+  const L = SEC.geom ? SEC.geom.line.L : Math.hypot(secLine().b[0] - secLine().a[0], secLine().b[1] - secLine().a[1]);
+  return `${S.section.line === 'across' ? 'across the field' : S.section.line === 'along' ? 'along the field' : 'on your line'}, ${U.spokenUnits(U.length(L, units))} long`;
+}
+function setLine(patch, final) {
+  Object.assign(S.section, patch);
+  for (const b of $('sec-lines').querySelectorAll('[role="radio"]')) b.setAttribute('aria-checked', String(b.dataset.line === S.section.line));
+  R.secGeom = true; R.labels = true; if (final) { SEC.drag = null; save(); }
+  kick();
+}
+function armDraw(on) {
+  SEC.armed = !!on;
+  $('sec-draw').setAttribute('aria-pressed', String(SEC.armed));
+  document.body.classList.toggle('drawing', SEC.armed);
+}
+/** A point on the plate on the field's top, in model meters [x, y, z]: where the ray from the eye
+ *  through it first meets the reservoir's top surface; off the field, where it meets the level of the
+ *  top's mean depth. The ray in the camera's own basis (the lens shift undone). */
+function mapPoint(x, y) {
+  if (!G.V || !S.cam) return null;
+  const c = $('gl'), V = G.V, k = Math.tan(FOV / 2), asp = c.clientWidth / (c.clientHeight || 1);
+  const u = ((x / c.clientWidth) * 2 - 1 - (S.cam.sx || 0)) * asp * k, v = (1 - (y / c.clientHeight) * 2 - (S.cam.sy || 0)) * k;
+  const d = [0, 1, 2].map((i) => u * V[i * 4] + v * V[i * 4 + 1] - V[i * 4 + 2]), e = eye();
+  // world (X, Y, Z) is model (x, -z * exag, -y)
+  const o = [e[0], -e[2], -e[1] / S.exag], dm = [d[0], -d[2], -d[1] / S.exag];
+  const hit = rayToTop(G.surf, o, dm);
+  if (hit) return hit;
+  if (Math.abs(dm[2]) < 1e-12) return null;
+  const t = (G.surf.topMean - o[2]) / dm[2];
+  return t > 0 ? [o[0] + dm[0] * t, o[1] + dm[1] * t, G.surf.topMean] : null;
+}
+/** The field's top under a map point, or the top's mean depth off the field. */
+function topAt(x, y) { const z = surfAt(G.surf, 'top', x, y); return z === z ? z : G.surf.topMean; }
+/** The line on the 3D view: laid on the field's top (off the field, at the top's level nearby), with a faint
+ *  curtain down to the field's base where the line crosses the field: the plane the section shows. */
+function placeSecLine() {
+  const on = S.section.on && G.PV, svg = $('secline');
+  if (!on) { SEC.ends = null; return; }
+  const l = secLine(), N = 64, top = [], base = [], zt = [];
+  const xy = (i) => [l.a[0] + (l.b[0] - l.a[0]) * i / N, l.a[1] + (l.b[1] - l.a[1]) * i / N];
+  for (let i = 0; i <= N; i++) zt.push(surfAt(G.surf, 'top', ...xy(i)));
+  // off the field the line keeps the level of the field's top where it last was on it (between two
+  // stretches over the field, the straight line between them), so it never drops off the field's edge
+  const over = zt.map((z, i) => (z === z ? i : -1)).filter((i) => i >= 0);
+  for (let i = 0; i <= N; i++) {
+    if (zt[i] === zt[i]) continue;
+    const p = over.filter((k) => k < i).pop(), n = over.find((k) => k > i);
+    zt[i] = p === undefined && n === undefined ? G.surf.topMean : p === undefined ? zt[n] : n === undefined ? zt[p] : zt[p] + (zt[n] - zt[p]) * (i - p) / (n - p);
+  }
+  for (let i = 0; i <= N; i++) {
+    const [x, y] = xy(i), zb = surfAt(G.surf, 'base', x, y);
+    top.push(project([x, y, zt[i]]));
+    base.push(zb === zb ? project([x, y, zb]) : null);
+  }
+  if (!top[0] || !top[N] || top.some((p) => !p)) { svg.style.display = 'none'; SEC.ends = null; return; }
+  svg.style.display = '';
+  const f = (p) => `${Math.round(p[0] * 10) / 10} ${Math.round(p[1] * 10) / 10}`;
+  let cur = '', i = 0;
+  while (i <= N) {   // one closed piece per run of the line over the field
+    if (!base[i]) { i++; continue; }
+    let j = i; while (j + 1 <= N && base[j + 1]) j++;
+    const run = [];
+    for (let k = i; k <= j; k++) run.push(top[k]);
+    for (let k = j; k >= i; k--) run.push(base[k]);
+    cur += `M${run.map(f).join('L')}Z`;
+    i = j + 1;
+  }
+  $('sl-curtain').setAttribute('d', cur);
+  const line = `M${top.map(f).join('L')}`;
+  for (const id of ['sl-halo', 'sl-line']) $(id).setAttribute('d', line);
+  $('sl-a').setAttribute('transform', `translate(${f(top[0])})`);
+  $('sl-b').setAttribute('transform', `translate(${f(top[N])})`);
+  SEC.ends = [top[0], top[N]];
+}
+/** Which end of the line a touch at (x, y) on the plate takes: 'a', 'b' or null (22 px). */
+function secHandle(x, y) {
+  if (!S.section.on || !SEC.ends) return null;
+  const d = SEC.ends.map((p) => Math.hypot(p[0] - x, p[1] - y));
+  return d[0] <= 22 && d[0] <= d[1] ? 'a' : d[1] <= 22 ? 'b' : null;
+}
+function secStyle() {
+  return { ink: css('--ink'), ink2: css('--ink-2'), ink3: css('--ink-3'), line: css('--line'), strong: css('--line-strong'), page: css('--plate'), halo: css('--plate-halo') };
+}
+/** The plot's height the section needs at this plot width (under the model), before --sec-h caps it. */
+function secNeed(bw) { return Math.max(70, Math.ceil(sectionAxis(SEC.geom, { x: 0, y: 0, w: bw, h: 1e9 }, S.exag, 0).y1) + SEC_BOX.t + SEC_BOX.b); }
+/** The section, drawn: in the frame that draws the date, after the color pass. */
+function drawSection() {
+  R.section = false;
+  if (!S.section.on || !model) { R.secGeom = false; return; }
+  const t0 = performance.now(), cv = $('sec-plot'), W = cv.clientWidth, H = cv.clientHeight;
+  if (R.secGeom || !SEC.geom) { secCut(); R.secGeom = false; writeSecWords(); }
+  if (!W || !H) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), cw = Math.round(W * dpr), ch = Math.round(H * dpr);
+  if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
+  const sec = SEC.geom, st = secStyle(), x = cv.getContext('2d');
+  // under the 3D view the pane is as tall as the section needs at this width, up to its cap (--sec-h):
+  // a long, flat section leaves the rest to the model; never resized during a drag
+  const bw = Math.max(40, W - SEC_BOX.l - SEC_BOX.r);
+  if (!SEC.drag && !SEC.lockH && getComputedStyle($('view')).flexDirection === 'column') {
+    const want = `${secNeed(bw)}px`;
+    if (cv.style.height !== want) { cv.style.height = want; R.section = true; return; }   // drawn again at the new size
+  } else if (!SEC.drag && !SEC.lockH && cv.style.height && getComputedStyle($('view')).flexDirection !== 'column') { cv.style.height = ''; R.section = true; return; }
+  const box = { x: SEC_BOX.l, y: SEC_BOX.t, w: bw, h: Math.max(30, H - SEC_BOX.t - SEC_BOX.b) };
+  const ax = SEC.ax = sectionAxis(sec, box, S.exag, model.center[2]);
+  const hk = [W, H, dpr, S.exag, sec.line.a, sec.line.b, st.ink3, st.line].join('|');
+  if (SEC.hatchKey !== hk && !SEC.drag) { SEC.hatch = gapLayer(sec, ax, W, H, dpr, hexToRgb(st.ink3), mkCanvas); SEC.hatchKey = hk; }
+  x.setTransform(dpr, 0, 0, dpr, 0, 0);
+  x.clearRect(0, 0, W, H);
+  x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
+  if (!sec.n) {   // a line off the field cuts nothing: no axis to print, one line in the pane
+    $('sec-key-gap').hidden = true;
+    x.fillStyle = st.ink2; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '400 13.5px "Ysabeau Office", system-ui, sans-serif';
+    x.fillText('This line misses the field.', W / 2, H / 2);
+    G.secStep = G.texStep; return;
+  }
+  // the ground: depth guides across the plot, under everything
+  const dt = depthTicks(ax, units, H < 150 ? 2 : 3);
+  x.strokeStyle = st.line; x.lineWidth = 1; x.beginPath();
+  for (const t of dt) { const y = Math.round(t.y) + 0.5; x.moveTo(ax.x0, y); x.lineTo(ax.x1, y); }
+  x.stroke();
+  // the gaps, the cells, the formation tops
+  if (SEC.hatch && SEC.hatchKey === hk) x.drawImage(SEC.hatch, 0, 0, W, H);
+  $('sec-key-gap').hidden = !(SEC.hatch && SEC.hatch.gapPx / (dpr * dpr) >= 150);   // the gap's key only where a gap shows: 150 CSS px² or more
+  drawCells(x, ax, sec, G.colors, `rgba(${hexToRgb(st.ink)}, 0.28)`, st.strong);
+  drawTops(x, ax, sec, st.ink);
+  // the wells within the corridor, as drawn in the 3D view: a casing, the role's core, injectors dashed
+  x.save(); x.beginPath(); x.rect(ax.x0, box.y, ax.x1 - ax.x0, box.h); x.clip();
+  const names = [];
+  if (S.wells) for (const wn of SEC.wells) {
+    const w = model.wells[wn.i], code = w.state[shown] || 0;
+    if (!(w.firstOpen >= 0 && shown >= w.firstOpen)) continue;
+    const c = wellColor(code);
+    for (const [col, wd, a] of [[st.ink, code ? 4.5 : 3, 0.85], [`rgb(${c.join(',')})`, code ? 2.5 : 1.5, code ? 1 : 0.6]]) {
+      x.strokeStyle = col; x.lineWidth = wd; x.globalAlpha = a; x.lineCap = 'butt'; x.lineJoin = 'round';
+      x.setLineDash(code >= 2 ? [3, 2] : []);
+      x.beginPath();
+      for (const part of wn.parts) { x.moveTo(ax.X(part[0]), ax.Y(part[1])); for (let k = 2; k < part.length; k += 2) x.lineTo(ax.X(part[k]), ax.Y(part[k + 1])); }
+      x.stroke();
+    }
+    x.setLineDash([]); x.globalAlpha = 1;
+    let top = null;
+    for (const part of wn.parts) for (let k = 0; k < part.length; k += 2) if (!top || part[k + 1] < top[1]) top = [part[k], part[k + 1]];
+    names.push({ name: w.name, x: ax.X(top[0]), ty: ax.Y(top[1]), y: Math.max(box.y + 11, ax.Y(top[1]) - 3) });
+  }
+  x.restore();
+  // the tapped cell
+  const pi = cardMode === 'cell' && pick >= 0 ? sec.cells.indexOf(pick) : -1;
+  if (pi >= 0) drawOutline(x, ax, sec, pi, st.ink, st.halo);
+  // the frame: the section's ends, A and A′, depth and distance words, formation names, well names
+  x.strokeStyle = st.strong; x.lineWidth = 1; x.beginPath();
+  for (const e of [ax.x0, ax.x1]) { const xe = Math.round(e) + 0.5; x.moveTo(xe, box.y - 2); x.lineTo(xe, box.y + box.h); }
+  x.stroke();
+  const halo = (t, X, Y, align, font, col) => {
+    x.font = font; x.textAlign = align; x.lineJoin = 'round'; x.lineWidth = 3; x.strokeStyle = st.halo; x.strokeText(t, X, Y); x.fillStyle = col; x.fillText(t, X, Y);
+  };
+  x.textBaseline = 'alphabetic';
+  halo('A', ax.x0, box.y - 3, 'left', '650 11.5px "Ysabeau Office", system-ui, sans-serif', st.ink);
+  halo('A′', ax.x1, box.y - 3, 'right', '650 11.5px "Ysabeau Office", system-ui, sans-serif', st.ink);
+  x.fillStyle = st.ink2; x.textAlign = 'right'; x.textBaseline = 'middle'; x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
+  for (const t of dt) x.fillText(t.text, ax.x0 - 5, Math.round(t.y));   // beside the section, wherever it is centered
+  const xt = distanceTicks(ax, units, W < 300 ? 2 : 3), yb = Math.min(H - 2, ax.y1 + 13);
+  x.textBaseline = 'alphabetic';
+  let lastR = -Infinity;
+  xt.forEach((t, i) => {
+    const wdt = x.measureText(t.text).width, al = i === 0 ? 'left' : i === xt.length - 1 ? 'right' : 'center';
+    const l = al === 'left' ? t.x : al === 'right' ? t.x - wdt : t.x - wdt / 2;
+    if (l < lastR + 8 && i !== xt.length - 1) return;
+    x.textAlign = al; x.fillText(t.text, t.x, yb); lastR = l + wdt;
+  });
+  // names: the wells' over their paths, then the formations'. Each tries its places in turn; a name that
+  // would touch another, A or A′ tries the next. A well's name moved off its path's top gets a hairline
+  // to it; a well left with no place is named in the key under the pane, never dropped.
+  const taken = [[ax.x0 - 2, box.y - 15, ax.x0 + 12, box.y], [ax.x1 - 14, box.y - 15, ax.x1 + 2, box.y]];
+  const place = (t, font, spots, anchor) => {
+    x.font = font;
+    const w = x.measureText(t).width;
+    for (const [l0, y] of spots) {
+      const l = Math.min(Math.max(ax.x0 + 2, l0), ax.x1 - w - 2), r = [l - 2, y - 11, l + w + 2, y + 3];
+      if (y < box.y + 9 || y > box.y + box.h - 1) continue;
+      if (taken.some((q) => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) continue;
+      taken.push(r);
+      if (anchor) {
+        const px = Math.min(Math.max(anchor[0], r[0]), r[2]), py = Math.min(Math.max(anchor[1], r[1]), r[3]);
+        if (Math.hypot(px - anchor[0], py - anchor[1]) > 6) { x.strokeStyle = st.ink2; x.lineWidth = 1; x.beginPath(); x.moveTo(anchor[0], anchor[1]); x.lineTo(px, py); x.stroke(); }
+      }
+      halo(t, l, y, 'left', font, st.ink);
+      return true;
+    }
+    return false;
+  };
+  const WF = '560 10.5px "Ysabeau Office", system-ui, sans-serif', FF = '560 11.5px "Ysabeau Office", system-ui, sans-serif';
+  const named = [], unnamed = [];
+  for (const n of names) {
+    x.font = WF;
+    const w = x.measureText(n.name).width, spots = [[n.x - w / 2, n.y]];
+    for (let k = 0; k < 4; k++) spots.push([n.x + 6, n.y + 13 * k], [n.x - 6 - w, n.y + 13 * k]);
+    (place(n.name, WF, spots, [n.x, Math.max(box.y, n.ty)]) ? named : unnamed).push(n.name);
+  }
+  for (const f of secFormationLabels(sec, ax)) {
+    x.font = FF;
+    const w = x.measureText(f.name).width;
+    place(f.name, FF, [[f.x + 4, f.y + 4], ...f.alt.map(([X, Y, k]) => [X - w * k - (k === 1 ? 4 : 0), Y + 4])]);
+  }
+  SEC.named = named; SEC.unnamed = unnamed;
+  const more = unnamed.length ? `, unlabeled: ${unnamed.join(', ')}` : '';
+  if ($('sec-more').textContent !== more) $('sec-more').textContent = more;
+  G.secStep = G.texStep;
+  G.stats.secDraws = (G.stats.secDraws || 0) + 1; G.stats.secMs = (G.stats.secMs || 0) + performance.now() - t0;
+}
+/** Where each formation's name goes: at the section's left end where the formation shows, at the middle
+ *  of its cells there; else (alt) at the middle, a quarter, three quarters or the right end of its run. */
+function secFormationLabels(sec, ax) {
+  const zones = cfg.zones || [], out = [];
+  zones.forEach((z, zi) => {
+    let s0 = Infinity;
+    for (let i = 0; i < sec.n; i++) if (G.zoneOfK[G.ijk[sec.cells[i] * 3 + 2] + 1] === zi) s0 = Math.min(s0, sec.pts[sec.offs[i] * 2]);
+    if (!Number.isFinite(s0)) return;
+    let zs = 0, n = 0;
+    const lim = s0 + Math.max(ax.L * 0.05, 6 / ax.sx);
+    for (let i = 0; i < sec.n; i++) {
+      if (G.zoneOfK[G.ijk[sec.cells[i] * 3 + 2] + 1] !== zi) continue;
+      for (let k = sec.offs[i]; k < sec.offs[i + 1]; k++) if (sec.pts[k * 2] <= lim) { zs += sec.pts[k * 2 + 1]; n++; }
+    }
+    if (!n) return;
+    // the other places it may go: the formation's middle and its right end along the section
+    let s1 = -Infinity;
+    for (let i = 0; i < sec.n; i++) if (G.zoneOfK[G.ijk[sec.cells[i] * 3 + 2] + 1] === zi) for (let k = sec.offs[i]; k < sec.offs[i + 1]; k++) s1 = Math.max(s1, sec.pts[k * 2]);
+    const at = (s) => {
+      let zz = 0, m = 0;
+      for (let i = 0; i < sec.n; i++) {
+        if (G.zoneOfK[G.ijk[sec.cells[i] * 3 + 2] + 1] !== zi) continue;
+        const o = sec.offs[i], e = sec.offs[i + 1];
+        let lo = Infinity, hi = -Infinity;
+        for (let k = o; k < e; k++) { lo = Math.min(lo, sec.pts[k * 2]); hi = Math.max(hi, sec.pts[k * 2]); }
+        if (s < lo || s > hi) continue;
+        for (let k = o; k < e; k++) { zz += sec.pts[k * 2 + 1]; m++; }
+      }
+      return m ? zz / m : NaN;
+    };
+    const alt = [0.5, 0.25, 0.75, 1].map((f) => { const sa = f === 1 ? Math.max(s0, s1 - Math.max(ax.L * 0.03, 4 / ax.sx)) : s0 + (s1 - s0) * f, za = at(sa); return [ax.X(f === 1 ? s1 : sa), za === za ? ax.Y(za) : -1e9, f === 1 ? 1 : 0.5]; });
+    out.push({ name: z.name, x: ax.X(s0), y: ax.Y(zs / n), alt });
+  });
+  return out;
+}
+function hexToRgb(h) { return isHex(h) ? hex(h).join(', ') : (h.match(/[\d.]+/g) || [0, 0, 0]).slice(0, 3).join(', '); }
+function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+/** The pane's words that change with the line, the units or the stretch, and its description. */
+function writeSecWords() {
+  setText('sec-corridor', `Wells within ${U.length(SEC_CORRIDOR, units)}`);
+  setText('sec-exag', `vertical ${U.times(S.exag)}`);
+  if (!SEC.geom) return;
+  const sec = SEC.geom, d0 = sec.z0 + model.center[2], d1 = sec.z1 + model.center[2], p = propDef(S.prop);
+  const wells = SEC.wells.map((w) => model.wells[w.i].name);
+  if (!sec.n) { $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}: the line misses the field, so no cell is cut.`); return; }
+  $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}, ${sec.n} cells cut, from ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d0, units))} to ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d1, units))} deep, colored by ${p.label}, depth stretched ${U.tick(Math.round(S.exag * 10) / 10)} times. ${wells.length ? `Wells within ${U.spokenUnits(U.length(SEC_CORRIDOR, units))}: ${wells.join(', ')}.` : 'No well comes within ' + U.spokenUnits(U.length(SEC_CORRIDOR, units)) + '.'}`);
+}
+function initSection() {
+  $('btn-section').addEventListener('click', (e) => setSection(!S.section.on, e.detail === 0));
+  $('sec-close').addEventListener('click', (e) => { setSection(false, e.detail === 0); if (e.detail === 0) $('btn-section').focus(); });
+  for (const b of $('sec-lines').querySelectorAll('[role="radio"]')) b.addEventListener('click', () => { armDraw(false); SEC.lockH = false; setLine({ line: b.dataset.line, a: null, b: null }, true); });
+  radioKeys($('sec-lines'));
+  $('sec-draw').addEventListener('click', () => { armDraw(!SEC.armed); if (SEC.armed) say('Drag across the field to draw the section line.'); });
+  const cv = $('sec-plot');
+  let down = null;
+  cv.addEventListener('pointerdown', (e) => { down = { x: e.offsetX, y: e.offsetY, t: performance.now() }; });
+  cv.addEventListener('pointerup', (e) => {
+    if (!down || Math.hypot(e.offsetX - down.x, e.offsetY - down.y) > 8 || !SEC.ax) { down = null; return; }
+    down = null;
+    const i = cellAt(SEC.geom, SEC.ax, e.offsetX, e.offsetY);
+    if (i < 0) { if (cardMode === 'cell') closeCard(); return; }
+    pick = SEC.geom.cells[i]; cardMode = 'cell'; G.hl = -1; refreshCard(); placeCard();
+    const p = propDef(S.prop);
+    say(`${$('readout-where').textContent}. ${p.label} ${U.spokenUnits(cardFigure(p, pick))} on ${U.spokenDate(model.frames[shown])}.`);
+    R.draw = true; R.section = true; kick();
+  });
+  new ResizeObserver(() => { R.section = true; kick(); }).observe(cv);
+  applySection();
+}
+
 // ---------------------------------------------------------------- the test hook
 // Inert: nothing in the app calls it. tools/shoot.mjs reads the app's state through it.
 window.__norne = {
@@ -1700,4 +2091,14 @@ window.__norne = {
   labelHits: () => G.labelHits || [],
   resolveTap: (x, y) => resolveTap(x, y),
   ends: (key) => openEnds(D, propDef(key), G.gasMax),
+  // the section: its state, a cell's middle on the pane (CSS px in the canvas), a model point on the plate
+  secFit: () => { const cv = $('sec-plot'); return SEC.geom ? { set: parseFloat(cv.style.height) || 0, need: secNeed(Math.max(40, cv.clientWidth - SEC_BOX.l - SEC_BOX.r)), h: cv.clientHeight, lock: !!SEC.lockH } : null; },
+  section: () => (SEC.geom ? { on: S.section.on, line: S.section.line, a: [...SEC.geom.line.a], b: [...SEC.geom.line.b], L: SEC.geom.line.L, n: SEC.geom.n, cells: [...SEC.geom.cells], z: [SEC.geom.z0, SEC.geom.z1], wells: SEC.wells.map((w) => model.wells[w.i].name), named: SEC.named || [], unnamed: SEC.unnamed || [], step: G.secStep, gapPx: SEC.hatch ? SEC.hatch.gapPx : null, armed: SEC.armed, ends: SEC.ends, ax: SEC.ax && { x0: SEC.ax.x0, x1: SEC.ax.x1, y0: SEC.ax.y0, y1: SEC.ax.y1, sx: SEC.ax.sx, sz: SEC.ax.sz, zTop: SEC.ax.zTop } } : { on: S.section.on }),
+  secCellPoint: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let s = 0, z = 0, n = 0; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { s += SEC.geom.pts[k * 2]; z += SEC.geom.pts[k * 2 + 1]; n++; } return [SEC.ax.X(s / n), SEC.ax.Y(z / n)]; },
+  secCellBox: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { const X = SEC.ax.X(SEC.geom.pts[k * 2]), Y = SEC.ax.Y(SEC.geom.pts[k * 2 + 1]); x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y); } return [x0, y0, x1, y1]; },
+  secCellAt: (x, y) => (SEC.geom && SEC.ax ? (cellAt(SEC.geom, SEC.ax, x, y) >= 0 ? SEC.geom.cells[cellAt(SEC.geom, SEC.ax, x, y)] : -1) : -1),
+  mapScreen: (p) => project([p[0], p[1], topAt(p[0], p[1])]),
+  mapPoint: (x, y) => mapPoint(x, y),
+  topAt: (p) => surfAt(G.surf, 'top', p[0], p[1]),
+  cellXY: (a) => { let x = 0, y = 0; for (let k = 0; k < 8; k++) { x += G.geom[a * 24 + k * 3] / 8; y += G.geom[a * 24 + k * 3 + 1] / 8; } return [x, y]; },
 };

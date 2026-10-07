@@ -14,12 +14,13 @@
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the scenes to screenshots/*-{light,dark}.png
 //
 // Per theme: boot (the camera's strings by role and name, "Oil saturation" only once every file is in,
-// the credit, the face), text contrast and the tracer, the plate printed per theme, the cut's ink and
-// tint against the page and its column heights against this file's decode, the cut's line, the
-// legend's open ends on Pressure, the card against this file's decode at a tapped cell, the card clear
+// the stamp's line hidden then and the About key shown, the credit in About and not on the front, the
+// face), text contrast and the tracer, the plate printed per theme, the cut's ink and tint against the
+// page and its column heights against this file's decode, the track's value in words, the legend's
+// open ends on Pressure, the card against this file's decode at a tapped cell, the card clear
 // of the tapped point, labels clear of the card and the keys, SI in every visible text node, the
 // scenes as pictures. Once: the real-touch scrub at 2, 8 and 20 steps a second, play, the step keys,
-// the plate holding still while the caption changes, the legend clear of the header and the player at
+// the plate holding still while the dates change, the legend clear of the header and the player at
 // all three stops with the phone's insets emulated (the recorded bug, B1), the grip's names, the units
 // key, focus mode end to end with the camera's way out, hidden, hit targets in both modes, About,
 // Reduce Motion, broken data, and the widths; after the review, the field's framing at every plate
@@ -27,7 +28,12 @@
 // after the final review, the card at every sheet stop, in focus mode and on a phone on its side (a
 // grid of taps on the field, the card clear of each tap, its ring and every key, in the form the plate
 // calls for), every well chosen from the list, a card carried across the stops, and the compact card's
-// hits. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
+// hits. Since 2.2 (plan 0012, package 3.4): the view's share of the screen at every stop with and
+// without the section, the grip held in reach, the stamp's line one line in every state; and the
+// section A–A′: opened by touch, its colors against this file's decode on three properties and in the
+// dark theme, sharp while scrubbed, a tap on a block opening its cell, a line drawn and an end moved by
+// touch under the finger, two fingers handing back to the view, the orbit still one finger, Along and
+// Across, the units and the stretch, hidden, remembered, focus mode, gaps hatched. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite.
 
 import http from 'node:http';
@@ -75,12 +81,6 @@ const NN = ' ', MINUS = '−';
 const MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const group = (n) => { const s = String(Math.round(Math.abs(n))); return (n < 0 && Math.round(n) !== 0 ? MINUS : '') + (s.length > 3 ? s.replace(/\B(?=(\d{3})+$)/g, NN) : s); };
 const dateOf = (iso) => { const [y, m, d] = iso.split('-').map(Number); return `${d} ${MONS[m - 1]} ${y}`; };
-const cutLine = (f, sys) => {
-  const o = F.oil[f], w = F.water[f], l = o + w;
-  if (!(l > 0)) return `The track starts here, at first oil on ${dateOf(model.frames[f])}: nothing lifted yet.`;
-  const q = (v) => (sys === 'US' ? `${group(v * 6.28981)}${NN}bbl/d` : `${group(v)}${NN}Sm³/d`);
-  return `On the track, the month to ${dateOf(model.frames[f])}: oil ${q(o)} (ink), water ${q(w)} (tint), ${Math.round((w / l) * 100)}${NN}% water cut.`;
-};
 const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
 const contrast = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
 const pctl = (a, q) => { if (!a.length) return NaN; const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(q * s.length))]; };
@@ -142,7 +142,7 @@ async function open(scheme, o = {}) {
   await ctx.addInitScript(() => {
     new MutationObserver(() => {
       if (window.__seen || !document.body || !/oil saturation/i.test(document.body.innerText || '')) return;
-      window.__seen = { stamp: document.getElementById('stamp').textContent, shown: window.__norne ? window.__norne.shown() : null };
+      window.__seen = { stamp: document.getElementById('stamp').textContent, stampHidden: document.getElementById('stamp-home').hidden, about: !document.getElementById('btn-about').hidden, shown: window.__norne ? window.__norne.shown() : null };
     }).observe(document, { subtree: true, childList: true, characterData: true });
   });
   const page = await ctx.newPage(), errors = [];
@@ -262,10 +262,12 @@ for (const scheme of schemes) {
     const legend = await page.getByText('Oil saturation', { exact: true }).first().isVisible();
     check(radios.every((n) => n === 1) && buttons.every((n) => n === 1) && slider === 1 && legend,
       `camera: radios Oil, Pressure ${radios.join('/')}; buttons Show the whole field, Play production history, Show more controls, Hide the controls, Zoom in, Zoom out, Wells ${buttons.join('/')}; slider Report date ${slider}; "Oil saturation" visible ${legend}`);
-    check(seen && seen.shown !== null && /^Norne benchmark, OPM Flow \d{4}\.\d\d run$/.test(seen.stamp), `"Oil saturation" first reached the page with every file in (stamp then "${seen && seen.stamp}", report date ${seen && seen.shown})`);
-    const credit = await w(() => document.getElementById('credits').textContent);
-    const cv = await page.locator('#credits').isVisible();
-    check(cv && credit === 'Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0', `the credit line is on screen word for word: "${credit}"`);
+    const edition = await w(() => { const dt = [...document.querySelectorAll('#about-list dt')].find((d) => d.textContent === 'Edition:'); return dt ? dt.nextElementSibling.textContent : null; });
+    check(seen && seen.shown !== null && seen.stampHidden && seen.about && /^Norne benchmark, OPM Flow \d{4}\.\d\d run$/.test(edition || ''),
+      `"Oil saturation" first reached the page with every file in (report date ${seen && seen.shown}); the stamp's line was hidden then and the About key shown (HOUSE 4.2, F2); About's first row "Edition: ${edition}"`);
+    const credit = await w(() => ({ none: !document.getElementById('credits'), first: document.querySelector('#about-body section:nth-of-type(3) p').id, text: document.getElementById('about-credit-line').textContent }));
+    check(credit.none && credit.first === 'about-credit-line' && credit.text === 'Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0',
+      `no #credits on the front; About's first Sources and credits paragraph is the constant, word for word: "${credit.text}" (HOUSE 4.15, F1)`);
     const face = await w(() => document.fonts.check('560 11.5px "Ysabeau Office"') && document.fonts.check('600 21px "Ysabeau Office"') && [...document.fonts].some((f) => f.family.replace(/["']/g, '') === 'Ysabeau Office' && f.status === 'loaded'));
     check(face, 'the face is loaded (document.fonts.check, status loaded) before the model shows');
   }
@@ -276,7 +278,7 @@ for (const scheme of schemes) {
     check(c.worst[0] >= 4.5, `text contrast: ${c.n} text nodes, worst ${c.worst[0]}:1 (${c.worst[1]})`);
     const tracer = await w(() => [...document.querySelectorAll('.words [role="radio"]')].map((b) => [b.textContent, b.getAttribute('aria-checked'), getComputedStyle(b, '::after').content !== 'none' && getComputedStyle(b, '::after').backgroundImage !== 'none']));
     const wrong = tracer.filter(([, on, has]) => (on === 'true') !== has);
-    check(wrong.length === 0 && tracer.filter(([, on]) => on === 'true').length === 2, `the tracer runs under exactly the chosen words (${tracer.filter(([, on]) => on === 'true').map(([t]) => t).join(', ')})${wrong.length ? ': wrong on ' + wrong.map(([t]) => t).join(', ') : ''}`);
+    check(wrong.length === 0 && tracer.filter(([, on]) => on === 'true').map(([t]) => t).join() === 'Oil,Along,Formations', `the tracer runs under exactly the chosen words (one in each group: the properties, the section's lines, the explode) (${tracer.filter(([, on]) => on === 'true').map(([t]) => t).join(', ')})${wrong.length ? ': wrong on ' + wrong.map(([t]) => t).join(', ') : ''}`);
   }
 
   // the plate printed per theme (B7): the clear color is --plate; oil-bearing rock stands further from the
@@ -286,7 +288,7 @@ for (const scheme of schemes) {
     const pr = await A.rect('#plate');
     const p = path.join(OUT, `plate-${scheme}.png`);
     await page.screenshot({ path: p, clip: { x: 0, y: pr.top, width: pr.width - 60, height: pr.height } });
-    const img = decodePng(fs.readFileSync(p)), ground = hexRgb(scheme === 'light' ? '#e8eef0' : '#0c1316');
+    const img = decodePng(fs.readFileSync(p)), ground = hexRgb(scheme === 'light' ? '#ffffff' : '#0c1316');
     let green = [], gray = [], groundPx = 0;
     for (let i = 0; i < img.w * img.h; i += 3) {
       const c = [img.px[i * 4], img.px[i * 4 + 1], img.px[i * 4 + 2]];
@@ -296,7 +298,7 @@ for (const scheme of schemes) {
     }
     const mg = green.reduce((a, b) => a + b, 0) / green.length, my = gray.reduce((a, b) => a + b, 0) / gray.length;
     check(groundPx > 1000 && green.length > 500 && gray.length > 500 && (scheme === 'light' ? mg < my : mg > my),
-      `the plate is printed for the ${scheme} theme: ${groundPx} px of the ground ${scheme === 'light' ? '#e8eef0' : '#0c1316'}; oil-bearing cells mean luminance ${mg.toFixed(3)} against barren rock ${my.toFixed(3)} (${scheme === 'light' ? 'darker' : 'brighter'} is more)`);
+      `the plate is printed for the ${scheme} theme: ${groundPx} px of the ground ${scheme === 'light' ? '#ffffff' : '#0c1316'}; oil-bearing cells mean luminance ${mg.toFixed(3)} against barren rock ${my.toFixed(3)} (${scheme === 'light' ? 'darker' : 'brighter'} is more)`);
   }
 
   // the cut: its ink against the page, its tint where the series says, its columns' heights at five
@@ -304,7 +306,7 @@ for (const scheme of schemes) {
   {
     await setFrame(A, 0);
     const tr = await A.w(() => { const c = document.getElementById('track'); const x = c.getContext('2d'); return { w: c.width, h: c.height, css: c.getBoundingClientRect().width, d: [...x.getImageData(0, 0, c.width, c.height).data] }; });
-    const dpr = tr.w / tr.css, W = tr.css, page8 = hexRgb(scheme === 'light' ? '#e8eef0' : '#141d21'), ink = hexRgb(scheme === 'light' ? '#12150b' : '#eff5e7');
+    const dpr = tr.w / tr.css, W = tr.css, page8 = hexRgb(scheme === 'light' ? '#ffffff' : '#141d21'), ink = hexRgb(scheme === 'light' ? '#12150b' : '#eff5e7');
     const px = (x, y) => tr.d.slice((y * tr.w + x) * 4, (y * tr.w + x) * 4 + 4);
     const xOf = (d) => 10 + ((d - DAYS[0]) / (DAYS[NF - 1] - DAYS[0])) * (W - 20);
     const foot = Math.round(32 * dpr), k = 0.5 / 1000;
@@ -327,10 +329,7 @@ for (const scheme of schemes) {
       cols.push({ f, want: [ho, top], got: [inked, drawn], ok: Math.abs(inked - ho) <= 1 && Math.abs(drawn - top) <= 1 });
     }
     check(cols.every((c) => c.ok), `the cut's columns against this file's decode (oil, liquid with its top line, in device px): ${cols.map((c) => `${model.frames[c.f]} ${c.got.join('/')} (want ${c.want.join('/')})`).join(', ')}`);
-    const lines = [];
-    for (const f of [0, 37, 80, 109]) { await setFrame(A, f); lines.push([f, await w(() => document.getElementById('cutline').textContent)]); }
-    const off = lines.filter(([f, t]) => t !== cutLine(f, 'SI'));
-    check(off.length === 0, `the cut's line equals this file's decode at four dates: "${lines[3][1]}"${off.length ? ' | wrong: ' + off.map(([f, t]) => `${f} "${t}"`).join('; ') : ''}`);
+    await setFrame(A, 109);
     const vt = await w(() => document.getElementById('slider').getAttribute('aria-valuetext'));
     check(vt === '1 December 2006, 9.1 years after first oil. Oil 7361 standard cubic meters a day, water 16251, 69 percent water.', `the track's value in words: "${vt}"`);
   }
@@ -487,7 +486,7 @@ console.log('\n== once (light)');
     const frames = s1.frames - s0.frames, passes = s1.colorPasses - s0.colorPasses;
     check(passes <= adv + 1 && frames > passes, `the color pass runs only on a new date: ${passes} passes for ${adv} dates over ${frames} frames (HOUSE 4.6)`);
     // About holds play still; closing it lets play go on
-    await A.tapEl('#stamp');
+    await A.tapEl('#btn-about');
     await page.waitForTimeout(100);
     const held0 = await w(() => window.__norne.shown());
     await page.waitForTimeout(700);
@@ -514,13 +513,13 @@ console.log('\n== once (light)');
     check(q1.draws === q0.draws && q1.colorPasses === q0.colorPasses && !q1.raf, `at rest the loop asks for no frame: ${q1.frames - q0.frames} frames, ${q1.draws - q0.draws} draws in a second (B11)`);
   }
 
-  // the plate holds still while the caption's words change
+  // the plate holds still while the dates change; the cut's key is one 15 px line (HOUSE 4.15, F4)
   {
     const hs = new Set(), cs = new Set();
-    for (let f = 0; f < NF; f += 9) { await setFrame(A, f); const r = await w(() => [document.getElementById('plate').getBoundingClientRect().height, document.getElementById('cutline').getBoundingClientRect().height]); hs.add(r[0]); cs.add(r[1]); }
-    check(hs.size === 1 && cs.size === 1, `the plate holds still while the cut's line changes: plate ${[...hs].join(', ')} px, the line ${[...cs].join(', ')} px over 13 dates`);
+    for (let f = 0; f < NF; f += 9) { await setFrame(A, f); const r = await w(() => [document.getElementById('plate').getBoundingClientRect().height, document.getElementById('cutkey').getBoundingClientRect().height]); hs.add(r[0]); cs.add(r[1]); }
+    check(hs.size === 1 && cs.size === 1 && [...cs][0] === 15, `the plate holds still over 13 dates: plate ${[...hs].join(', ')} px, the cut's key ${[...cs].join(', ')} px`);
     const ph = [...hs][0];
-    check(ph >= 460, `the plate at 390 × 844 with the sheet closed: ${Math.round(ph)} px (ART.md: at least 460)`);
+    check(ph >= 530, `the plate at 390 × 844 with the sheet closed: ${Math.round(ph)} px (ART.md: at least 530; 480 before the text cut)`);
   }
 
   // the recorded bug (B1): the legend clear of the header and the player at all three sheet stops, with the
@@ -545,8 +544,8 @@ console.log('\n== once (light)');
     await A.tapEl('#btn-units'); await A.frame(); await A.frame();
     await setProp(A, 'PRESSURE');
     await setFrame(A, 109);
-    const us = await w(() => [document.getElementById('btn-units').textContent, document.getElementById('btn-units').getAttribute('aria-label'), [...document.querySelectorAll('#legend-ticks span:not([hidden])')].pop().textContent, document.getElementById('cutline').textContent, document.getElementById('scale-len').textContent]);
-    check(k0 === 'SI' && us[0] === 'US' && /psi$/.test(us[2]) && us[3] === cutLine(109, 'US') && /(ft|mi)$/.test(us[4]), `the units key starts at SI; one press: ${us[0]} ("${us[1]}"), the legend ends "${us[2]}", the scale bar "${us[4]}", the line "${us[3]}"`);
+    const us = await w(() => [document.getElementById('btn-units').textContent, document.getElementById('btn-units').getAttribute('aria-label'), [...document.querySelectorAll('#legend-ticks span:not([hidden])')].pop().textContent, document.getElementById('slider').getAttribute('aria-valuetext'), document.getElementById('scale-len').textContent]);
+    check(k0 === 'SI' && us[0] === 'US' && /psi$/.test(us[2]) && us[3].endsWith(`Oil ${Math.round(F.oil[109] * 6.28981)} barrels a day, water ${Math.round(F.water[109] * 6.28981)}, ${Math.round((F.water[109] / (F.oil[109] + F.water[109])) * 100)} percent water.`) && /(ft|mi)$/.test(us[4]), `the units key starts at SI; one press: ${us[0]} ("${us[1]}"), the legend ends "${us[2]}", the scale bar "${us[4]}", the track in words "${us[3]}"`);
     await A.tapEl('#btn-units'); await A.frame();
     await setProp(A, 'SOIL');
     const back = await w(() => [document.getElementById('btn-units').textContent, localStorage.getItem('norne-viewer:v1:units')]);
@@ -569,13 +568,13 @@ console.log('\n== once (light)');
     await page.waitForTimeout(450);
     const f = await w(() => {
       const gone = ['head', 'keys', 'sheet'].map((id) => { const e = document.getElementById(id); return e.hidden && e.inert; });
-      const stays = ['legend', 'instruments', 'cutline', 'credits', 'player', 'stamp'].map((id) => { const e = document.getElementById(id), r = e.getBoundingClientRect(); return r.height > 0 && !e.closest('[hidden]'); });
-      return { gone, stays, stampIn: document.getElementById('stamp').parentElement.id, ghost: !document.getElementById('focus-exit').hidden, plate: document.getElementById('plate').getBoundingClientRect().height, live: document.getElementById('live').textContent, store: localStorage.getItem('norne-viewer:v1:focus'), active: document.activeElement.id };
+      const stays = ['legend', 'instruments', 'wellkey', 'cutkey', 'player', 'btn-about'].map((id) => { const e = document.getElementById(id), r = e.getBoundingClientRect(); return r.height > 0 && !e.closest('[hidden]'); });
+      return { gone, stays, stampIn: document.getElementById('btn-about').parentElement.id, ghost: !document.getElementById('focus-exit').hidden, plate: document.getElementById('plate').getBoundingClientRect().height, live: document.getElementById('live').textContent, store: localStorage.getItem('norne-viewer:v1:focus'), active: document.activeElement.id };
     });
     const tree = await page.getByRole('button', { name: 'Zoom in', exact: true }).count();
     const legend = await page.getByText('Oil saturation', { exact: true }).first().isVisible();
     check(f.gone.every(Boolean) && tree === 0 && f.stays.every(Boolean) && f.stampIn === 'caption' && f.ghost && legend,
-      `focus mode by touch: the header, the keys and the sheet are hidden and inert (gone from the tree: ${tree === 0}); the legend ("Oil saturation" visible ${legend}), the instruments, the cut's line, the credits, the player and the stamp (now in the caption band) stay`);
+      `focus mode by touch: the header, the keys and the sheet are hidden and inert (gone from the tree: ${tree === 0}); the legend ("Oil saturation" visible ${legend}), the instruments, the wells' and the cut's keys, the player and the About key (now in the caption band) stay`);
     check(f.plate > before && f.plate >= 590, `the plate grew from ${Math.round(before)} to ${Math.round(f.plate)} px (ART.md: at least 590)`);
     check(f.live === 'Controls hidden. Press Escape or the corner key to show them.' && f.store === '1' && f.active !== 'focus-exit', `its sentence ("${f.live}"), norne-viewer:v1:focus = ${f.store}, and no ring after a touch (focus on "${f.active}")`);
     const hf = await hitTargets(w);
@@ -617,17 +616,17 @@ console.log('\n== once (light)');
     check(!h0.playing && h1.frames === h0.frames && !h1.raf && h2.draws > h1.draws, `hidden: play stops and no frame runs (${h1.frames - h0.frames} in 600 ms); the return draws fresh (${h2.draws - h1.draws} draws)`);
   }
 
-  // About: from the stamp, every credit and the font's, Escape, focus back
+  // About: from the About key, every credit and the font's, Escape, focus back
   {
-    await page.focus('#stamp'); await page.keyboard.press('Enter'); await page.waitForTimeout(300);
+    await page.focus('#btn-about'); await page.keyboard.press('Enter'); await page.waitForTimeout(300);
     const ab = await w(() => ({ open: !document.getElementById('about').hidden, text: document.getElementById('about-body').innerText, src: document.getElementById('about-source').textContent, active: document.activeElement.id }));
     await A.shot('about-light');
     await page.keyboard.press('Escape'); await page.waitForTimeout(150);
     const back = await w(() => [document.getElementById('about').hidden, document.activeElement.id]);
     check(ab.open && ab.src === model.source && /License: Open Database License \(ODbL\) 1\.0, opendatacommons\.org\/licenses\/odbl\/1-0\//.test(ab.text)
       && ab.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.')
-      && /not the field’s reported production/.test(ab.text) && back[0] && back[1] === 'stamp',
-    `About opens from the stamp (focus on ${ab.active}): model.json's source verbatim, the license without its scheme, the face's credit, what the cut is not; Escape closes it, focus back on ${back[1]}`);
+      && /not the field’s reported production/.test(ab.text) && /The section shows the model where a vertical plane/.test(ab.text) && back[0] && back[1] === 'btn-about',
+    `About opens from the About key (focus on ${ab.active}): model.json's source verbatim, the license without its scheme, the face's credit, what the cut is not; Escape closes it, focus back on ${back[1]}`);
   }
   check(A.errors.length === 0, `no console error or warning, failed request or request outside the app${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`);
   await A.ctx.close();
@@ -668,8 +667,9 @@ console.log('\n== once (light)');
     override = { [p]: ov };
     const A = await open('light', { noWait: true, expect: new RegExp(`404|Failed to load resource|requestfailed .*${p.replace(/[./]/g, '\\$&')}$`) });
     await A.page.waitForFunction(() => !document.getElementById('error').hidden, null, { timeout: 60000 });
-    const r = await A.w(() => [document.getElementById('error').textContent, document.getElementById('legend-name').textContent, document.getElementById('stamp').textContent]);
-    check(r[0] === want && r[1] === '' && A.errors.length === 0, `${p} ${ov.status ? `answers ${ov.status}` : 'replaced'}: "${r[0]}"; the legend stays empty, so the camera's wait does not pass; the stamp "${r[2]}"${A.errors.length ? ' | ' + A.errors.join(' | ') : ''}`);
+    const r = await A.w(() => [document.getElementById('error').textContent, document.getElementById('legend-name').textContent, document.getElementById('stamp').textContent, !document.getElementById('stamp-home').hidden, document.getElementById('btn-about').hidden, document.getElementById('stamp').getBoundingClientRect().height]);
+    check(r[0] === want && r[1] === '' && r[2] === 'The model could not be read.' && r[3] && r[4] && Math.abs(r[5] - 16) <= 1 && A.errors.length === 0,
+      `${p} ${ov.status ? `answers ${ov.status}` : 'replaced'}: "${r[0]}"; the legend stays empty, so the camera's wait does not pass; the stamp's line shows "${r[2]}" on one line (${r[5]} px), the About key hidden${A.errors.length ? ' | ' + A.errors.join(' | ') : ''}`);
     // the notice sits on the theme's own ground, never on the WebGL context's black (QA, after the pass);
     // the first case also turns the theme to dark and back while broken
     for (const sch of p === cases[0][0] && ov.status ? ['light', 'dark', 'light'] : ['light']) {
@@ -677,7 +677,7 @@ console.log('\n== once (light)');
       await A.page.waitForTimeout(150);
       const pr = await A.rect('#plate'), er = await A.rect('#error'), sp = path.join(OUT, `broken-plate-${sch}.png`);
       await A.page.screenshot({ path: sp, clip: { x: 0, y: pr.top, width: pr.width - 60, height: pr.height } });   // the view's controls column left out, as the plate check does
-      const img = decodePng(fs.readFileSync(sp)), ground = hexRgb(sch === 'light' ? '#e8eef0' : '#0c1316'), sc = img.w / (pr.width - 60);
+      const img = decodePng(fs.readFileSync(sp)), ground = hexRgb(sch === 'light' ? '#ffffff' : '#0c1316'), sc = img.w / (pr.width - 60);
       let n = 0, on = 0;
       for (let y = 0; y < img.h; y += 4) for (let x = 0; x < img.w; x += 4) {
         const X = x / sc, Y = pr.top + y / sc;
@@ -685,7 +685,7 @@ console.log('\n== once (light)');
         const i = (y * img.w + x) * 4; n++;
         if (Math.abs(img.px[i] - ground[0]) + Math.abs(img.px[i + 1] - ground[1]) + Math.abs(img.px[i + 2] - ground[2]) <= 3) on++;
       }
-      check(n > 1000 && on / n >= 0.99, `${p} broken, ${sch} theme: ${(on / n * 100).toFixed(1)} % of ${n} sampled plate pixels outside the notice are the ground ${sch === 'light' ? '#e8eef0' : '#0c1316'}`);
+      check(n > 1000 && on / n >= 0.99, `${p} broken, ${sch} theme: ${(on / n * 100).toFixed(1)} % of ${n} sampled plate pixels outside the notice are the ground ${sch === 'light' ? '#ffffff' : '#0c1316'}`);
     }
     await A.ctx.close();
   }
@@ -708,23 +708,22 @@ console.log('\n== once (light)');
     const A = await open('dark', { w: W, h: H, dpr });
     const side = W > H;
     const r = await A.w(() => ({ sw: document.scrollingElement.scrollWidth, iw: innerWidth, plate: document.getElementById('plate').getBoundingClientRect().height, keys: document.getElementById('keys').getBoundingClientRect().height, row: document.getElementById('plate').classList.contains('keys-row') }));
+    // the keys in the caption and under the section stay on their one line, in both unit systems,
+    // with the section open (beside the model on its side)
+    await A.tapEl('#btn-section'); await A.page.waitForTimeout(400); await A.frame();
     let worst = [0, ''];
     for (const sys of ['SI', 'US']) {
       if ((await A.w(() => window.__norne.units())) !== sys) { await A.tapEl('#btn-units'); await A.frame(); }
-      for (let f = 0; f < NF; f++) {
-        await A.w((k) => window.__norne.setFrame(k), f);
-        if (f % 4 === 3 || f === NF - 1) await A.frame();
-        const o = await A.w(() => { const e = document.getElementById('cutline'); return [e.scrollHeight - e.clientHeight, e.scrollWidth - e.clientWidth, e.textContent]; });
-        const over = Math.max(o[0], o[1]);
-        if (over > worst[0]) worst = [over, o[2]];
-      }
+      const o = await A.w(() => ['cutkey', 'sec-key', 'sec-head'].map((id) => { const e = id === 'sec-head' ? document.querySelector('.sec-head') : document.getElementById(id); return [Math.max(e.scrollHeight - e.clientHeight, e.scrollWidth - e.clientWidth), `${id} "${e.textContent.trim().replace(/\s+/g, ' ')}"`]; }));
+      for (const [over, what] of o) if (over > worst[0]) worst = [over, what];
     }
     if ((await A.w(() => window.__norne.units())) !== 'SI') await A.tapEl('#btn-units');
     await A.frame();
+    const sp = await A.w(() => { const p = document.getElementById('plate').getBoundingClientRect(), q = document.getElementById('section').getBoundingClientRect(); return { beside: q.left >= p.right - 1 && Math.abs(q.top - p.top) < 2, under: q.top >= p.bottom - 1, plate: Math.round(p.height), sec: Math.round(q.height), w: Math.round(q.width) }; });
     const hs = await hitTargets(A.w);
     if (side) await A.shot('landscape-dark', false);
-    check(r.sw <= r.iw && worst[0] <= 1 && hs.bad.length === 0 && (!side || (r.plate >= 220 && r.row && r.keys <= 40)),
-      `${label}: page ${r.sw} of ${r.iw} px wide; the cut's longest line in both systems fits its fixed height${worst[0] > 1 ? ` (over by ${worst[0]} px: "${worst[1]}")` : ''}; ${hs.n} controls at 44 px or more${side ? `; the plate ${Math.round(r.plate)} px tall (at least 220), the keys in a row ${Math.round(r.keys)} px high` : ''}${hs.bad.length ? ': ' + hs.bad.join('; ') : ''}`);
+    check(r.sw <= r.iw && worst[0] <= 1 && hs.bad.length === 0 && (side ? sp.beside : sp.under) && (!side || (r.plate >= 220 && r.row && r.keys <= 40)),
+      `${label}: page ${r.sw} of ${r.iw} px wide; the cut's key, the section's key and its words each fit their line in both systems${worst[0] > 1 ? ` (over by ${worst[0]} px: ${worst[1]})` : ''}; the section ${side ? 'beside' : 'under'} the model (${sp.w} × ${sp.sec} px, the model ${sp.plate} px tall); ${hs.n} controls at 44 px or more with it open${hs.bad.length ? ': ' + hs.bad.join('; ') : ''}${side ? `; the plate ${Math.round(r.plate)} px tall with the sheet closed and the section shut (at least 220), the keys in a row ${Math.round(r.keys)} px tall` : ''}`);
     check(A.errors.length === 0, `${label}: no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
     await A.ctx.close();
   }
@@ -742,7 +741,7 @@ console.log('\n== once (light)');
     const g = await w(() => { const r = (id) => { const e = document.getElementById(id); return e.hidden || e.closest('[hidden]') ? null : e.getBoundingClientRect().toJSON(); }; return { plate: r('plate'), keys: r('keys'), ghost: r('focus-exit'), iw: innerWidth }; });
     const p = path.join(OUT, `frame-${name}.png`);
     await A.page.screenshot({ path: p });
-    const img = decodePng(fs.readFileSync(p)), s = img.w / g.iw, ground = hexRgb('#e8eef0'), pr = g.plate;
+    const img = decodePng(fs.readFileSync(p)), s = img.w / g.iw, ground = hexRgb('#ffffff'), pr = g.plate;
     const skip = [g.keys, g.ghost].filter(Boolean);
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
     for (let y = Math.ceil(pr.top * s); y < Math.floor(pr.bottom * s); y++) for (let x = Math.ceil(pr.left * s); x < Math.floor(pr.right * s); x++) {
@@ -883,16 +882,20 @@ console.log('\n== once (light)');
     }
     const bad = res.filter((r) => wrong(r, wantCompact).length);
     const clipped = res.filter((r) => r.more).length, sz = res.length ? res[0].plate.join(' × ') : '?';
-    check(res.length >= 6 && bad.length === 0, `${label}, plate ${sz}: ${res.length} taps on the field, the card ${wantCompact ? 'compact' : 'full'} each time, clear of the tap, its ring and every key, inside the plate, Close and Zoom in reach, rows whole (${clipped} with more below, each with its rule)${bad.length ? ': ' + bad.map((r) => `(${r.x}, ${r.y}) ${wrong(r, wantCompact).join(', ')}`).join('; ') : ''}`);
+    check(res.length >= 4 && bad.length === 0, `${label}, plate ${sz}: ${res.length} taps on the field, the card ${wantCompact ? 'compact' : 'full'} each time, clear of the tap, its ring and every key, inside the plate, Close and Zoom in reach, rows whole (${clipped} with more below, each with its rule)${bad.length ? ': ' + bad.map((r) => `(${r.x}, ${r.y}) ${wrong(r, wantCompact).join(', ')}`).join('; ') : ''}`);
     return res;
   };
   const A = await open('light');
   await A.w(() => window.__norne.setFrame(60)); await A.frame();
   await scene(A, 'sheet closed', false);
-  await A.tapEl('#grip'); await scene(A, 'sheet at its first stop', true);
-  await A.tapEl('#grip'); await scene(A, 'sheet at its second stop', true);
+  // since 2.2 the view keeps about half the screen with the sheet raised (405 px), so the full card;
+  // the short plate the compact card is for comes with the section open under the model as well
+  await A.tapEl('#grip'); await scene(A, 'sheet at its first stop', false);
+  await A.tapEl('#grip'); await scene(A, 'sheet at its second stop', false);
+  await A.tapEl('#btn-section'); await scene(A, 'the section open, the sheet at its second stop', true);
   await A.shot('card-sheet', false);
-  // every well the list offers, chosen there at the first stop: its head and its name clear of the card
+  // every well the list offers, chosen there at the first stop with the section open: its head and its
+  // name clear of the card
   await A.tapEl('#grip'); await A.tapEl('#grip'); await A.page.waitForTimeout(400); await A.frame();
   const names = await A.w(() => [...document.getElementById('well-pick').options].map((o) => o.value).filter(Boolean));
   const wells = [];
@@ -967,6 +970,309 @@ console.log('\n== once (light)');
   await B.tapEl('#focus-key'); await B.page.waitForTimeout(500);
   await scene(B, 'on its side, focus mode', true);
   check(B.errors.length === 0, `on its side: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
+  await B.ctx.close();
+}
+
+// plan 0012, package 3.4: the view's share of the screen at each sheet stop (the owner: "when expanding
+// the bottom section, the 3d view becomes too small"; 200 px of 844 before), the grip in reach while the
+// sheet scrolls, and the stamp's line one line in every state the app writes into it (HOUSE 7.2, F8)
+{
+  console.log('\n== the view at each stop, the stamp');
+  const A = await open('light');
+  const { w } = A;
+  const size = () => w(() => { const h = (id) => { const e = document.getElementById(id); return e.hidden ? 0 : e.getBoundingClientRect().height; }; return { plate: h('plate'), section: h('section'), sheet: h('sheet') }; });
+  const rows = [];
+  for (const sec of [false, true]) {
+    if (sec) { await A.tapEl('#btn-section'); await A.page.waitForTimeout(500); await A.frame(); }
+    for (let s = 0; s < 3; s++) {
+      await A.frame(); await A.page.waitForTimeout(300);
+      rows.push({ sec, s, ...(await size()), at: await w(() => { const s = document.getElementById('sheet'), g = document.getElementById('grip').getBoundingClientRect(), h = document.querySelector('.stop2 .sheet-head').getBoundingClientRect(); return { top: s.scrollTop, head: Math.round(h.top - g.bottom), shows: h.bottom <= s.getBoundingClientRect().bottom && h.height > 0 }; }) });
+      await A.tapEl('#grip'); await A.page.waitForTimeout(300);
+    }
+  }
+  const H = 844, share = (r) => (r.plate + r.section) / H;
+  const say = (r) => `${r.sec ? 'with the section' : 'the model alone'}, stop ${r.s}: ${Math.round(r.plate)}${r.sec ? ` + ${Math.round(r.section)}` : ''} px (${Math.round(share(r) * 100)} %), the sheet ${Math.round(r.sheet)}`;
+  check(rows.every((r) => share(r) >= 0.47 && r.plate >= 220 && (r.s === 0 || r.sheet >= 175)),
+    `the view keeps about half the screen at every stop (at least 47 %, the model at least 220 px; the raised sheet at least 175 px, scrolling inside itself): ${rows.map(say).join('; ')}`);
+  const st2 = rows.filter((r) => r.s === 2), st1 = rows.filter((r) => r.s === 1);
+  check(st2.every((r) => r.at.shows && Math.abs(r.at.head) <= 2) && st1.every((r) => r.at.top === 0),
+    `the second stop shows what it adds: the sheet scrolls "Cells and view" up under the grip (${st2.map((r) => `${r.at.head} px below it, scrolled ${Math.round(r.at.top)} px`).join('; ')}); the first stop opens at the sheet's top (${st1.map((r) => r.at.top).join(', ')})`);
+  await A.tapEl('#btn-section'); await A.page.waitForTimeout(300);
+  await A.tapEl('#grip'); await A.tapEl('#grip'); await A.page.waitForTimeout(300);
+  const grip = await w(() => { const s = document.getElementById('sheet'); s.scrollTop = s.scrollHeight; return new Promise((res) => requestAnimationFrame(() => { const g = document.getElementById('grip').getBoundingClientRect(), r = s.getBoundingClientRect(); res([Math.round(g.top - r.top), s.scrollTop > 0, document.elementFromPoint(g.left + g.width / 2, g.top + 22) === document.getElementById('grip') || document.getElementById('grip').contains(document.elementFromPoint(g.left + g.width / 2, g.top + 22))]); })); });
+  check(grip[1] && Math.abs(grip[0] - 1) <= 1 && grip[2], `the grip stays at the sheet's top while the sheet scrolls (${grip[0]} px from its top edge, reachable ${grip[2]})`);
+  await A.tapEl('#grip'); await A.page.waitForTimeout(300);
+  const stamps = await w(() => {
+    const home = document.getElementById('stamp-home'), st = document.getElementById('stamp'), was = [home.hidden, st.textContent], out = [];
+    home.hidden = false;
+    for (const t of ['Reading the model… 1 of 7', 'Reading the model… 6 of 7', 'The model could not be read.']) { st.textContent = t; out.push([t, st.getBoundingClientRect().height]); }
+    home.hidden = was[0]; st.textContent = was[1];
+    return out;
+  });
+  check(stamps.every(([, h]) => Math.abs(h - 16) <= 1), `the stamp's line is one line, 16 px, in every state the app writes into it: ${stamps.map(([t, h]) => `"${t}" ${h} px`).join(', ')}`);
+  check(A.errors.length === 0, `no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
+  await A.ctx.close();
+}
+
+// the section A–A′ (plan 0012, package 3.4; D4, D11): opened by touch, the field's own line, its cells in
+// the 3D view's colors for the shown property and month as this file decodes them, sharp while scrubbed,
+// a tap opening the cell's card, a line drawn and an end moved by touch, the orbit still one finger,
+// gaps hatched, the units, the stretch, hidden, remembered, in focus mode
+{
+  console.log('\n== the section');
+  /** config.json's scale as app.js's lut() builds it, and a value's color on it, from this file's decode. */
+  const lutOf = (name, dark) => {
+    const st = ((dark && cfg.colormapsDark[name]) || cfg.colormaps[name]).map(hexRgb), out = [];
+    for (let i = 0; i < 256; i++) { const t = (i / 255) * (st.length - 1), k = Math.min(Math.floor(t), st.length - 2), f = t - k; out.push([0, 1, 2].map((c) => Math.round(st[k][c] * (1 - f) + st[k + 1][c] * f))); }
+    return out;
+  };
+  const colorOf = (key, f, a, dark) => {
+    const p = cfg.properties.find((q) => q.key === key), v = own[key](f, a), r = p.range;
+    const t = Math.max(0, Math.min(1, (v - r[0]) / (r[1] - r[0])));
+    return lutOf(p.colormap, dark)[Math.round(t * 255)];
+  };
+  /** The pane's pixels at the middle of its widest cells, against this file's colors for them. */
+  const colorCheck = async (A, key, f, dark) => {
+    const pick = await A.w(() => {
+      const q = window.__norne.section();
+      return q.cells.map((a) => [a, window.__norne.secCellBox(a)]).filter(([, b]) => b && b[2] - b[0] >= 4 && b[3] - b[1] >= 3).sort((p, r) => (r[1][2] - r[1][0]) * (r[1][3] - r[1][1]) - (p[1][2] - p[1][0]) * (p[1][3] - p[1][1])).slice(0, 30)
+        .map(([a, b]) => [a, (b[0] + b[2]) / 2, (b[1] + b[3]) / 2]).filter(([a, x, y]) => window.__norne.secCellAt(x, y) === a);
+    });
+    const px = await A.w((pts) => { const c = document.getElementById('sec-plot'), k = c.width / c.clientWidth, cp = document.createElement('canvas'); cp.width = c.width; cp.height = c.height; const x = cp.getContext('2d', { willReadFrequently: true }); x.drawImage(c, 0, 0); const d = x.getImageData(0, 0, c.width, c.height).data; return pts.map(([, X, Y]) => { const i = (Math.round(Y * k) * c.width + Math.round(X * k)) * 4; return [d[i], d[i + 1], d[i + 2], d[i + 3]]; }); }, pick);
+    let good = 0; const bad = [];
+    pick.forEach(([a], i) => { const want = colorOf(key, f, a, dark), got = px[i]; if (want.every((v, c) => Math.abs(v - got[c]) <= 3)) good++; else bad.push(`cell ${a} ${got.slice(0, 3)} want ${want}`); });
+    return { n: pick.length, good, bad };
+  };
+  const A = await open('light');
+  const { w, page } = A;
+  await setFrame(A, 60);
+  const p0 = await A.rect('#plate');
+  await A.tapEl('#btn-section'); await page.waitForTimeout(500); await A.frame(); await A.frame();
+  const q = await w(() => window.__norne.section());
+  const st0 = await w(() => ({ pressed: document.getElementById('btn-section').getAttribute('aria-pressed'), pane: !document.getElementById('section').hidden, line: getComputedStyle(document.getElementById('secline')).display, along: document.querySelector('#sec-lines [data-line="along"]').getAttribute('aria-checked'), live: document.getElementById('live').textContent, label: document.getElementById('sec-plot').getAttribute('aria-label') }));
+  const p1 = await A.rect('#plate'), plot = await A.rect('#sec-plot');
+  const ends = q.ends || [];
+  check(st0.pressed === 'true' && st0.pane && st0.line !== 'none' && st0.along === 'true' && q.on && q.line === 'along' && q.n > 1000 && q.step === 60
+    && ends.length === 2 && ends.every((e) => e[0] >= 0 && e[0] <= p1.width && e[1] >= 0 && e[1] <= p1.height) && p1.height < p0.height,
+  `the Section key opens the section under the model: Along, ${Math.round(q.L)} m, ${q.n} cells cut, drawn for report date ${q.step}; the line on the model with A at (${ends.map((e) => e.map(Math.round).join(', ')).join(') and A′ at (')}); the model ${Math.round(p0.height)} then ${Math.round(p1.height)} px; the plot ${Math.round(plot.width)} × ${Math.round(plot.height)} px`);
+  check(/^Section A to A prime, along the field, 8\.\d\d km long, \d+ cells cut, from 2 ?\d{3} meters to 2 ?\d{3} meters deep, colored by Oil saturation, depth stretched 5 times\. Wells within 150 meters: /.test(st0.label.replace(/2(\d{3})/g, '2$1')), `its description: "${st0.label}"`);
+  const ax = q.ax;
+  check(Math.abs(ax.sz / ax.sx - 5) < 1e-9 && ax.y1 <= plot.height + 0.5 && ax.x1 <= plot.width + 0.5, `one depth axis, stretched as the 3D view is: ${(ax.sx * 1000).toFixed(1)} px a kilometer across, ${(ax.sz * 1000).toFixed(1)} down (×${(ax.sz / ax.sx).toFixed(2)}); the section ${Math.round(ax.x1 - ax.x0)} × ${Math.round(ax.y1 - ax.y0)} px inside the plot`);
+  // the colors: the 3D view's property and month, as this file decodes the cells; checked on Across, the
+  // shorter line, whose cells are drawn wider and taller, so their middles are clear of edges and lines
+  await A.tapEl('#sec-lines [data-line="across"]');
+  await A.frame(); await A.frame();
+  for (const [key, f, tab] of [['SOIL', 60, null], ['SOIL', 100, null], ['PRESSURE', 100, 4], ['SWAT', 20, 2]]) {
+    if (tab) { await A.tapEl(`#props [role="radio"]:nth-child(${tab})`); await A.frame(); await A.frame(); }
+    await setFrame(A, f); await A.frame();
+    const c = await colorCheck(A, key, f, false), step = (await w(() => window.__norne.section())).step;
+    check(c.n >= 20 && c.good >= c.n - 1 && step === f, `${key} on ${model.frames[f]}${tab ? ' (by its word)' : ''}, Across: the middles of the ${c.n} widest cells in the section are this file's colors for them in ${c.good} (within 3 of 255 a channel; the section drew date ${step})${c.bad.length ? ': ' + c.bad.slice(0, 3).join('; ') : ''}`);
+  }
+  await page.getByRole('radio', { name: 'Oil', exact: true }).click(); await A.frame();
+  await A.tapEl('#sec-lines [data-line="along"]'); await A.frame(); await A.frame();
+  // sharp while scrubbed: every frame that drew a new date drew the section for that date
+  for (const [rate, from, to] of [[8, 20, 60], [20, 5, 105]]) {
+    await setFrame(A, from);
+    const tr = await A.rect('#slider'), y = tr.top + tr.height / 2;
+    await w(() => window.__norne.log(true));
+    await A.touch('touchStart', trackX(tr, from), y);
+    const t0 = Date.now(), dur = ((to - from) / rate) * 1000;
+    for (;;) { const t = Math.min(dur, Date.now() - t0); await A.touch('touchMove', trackX(tr, from + ((to - from) * t) / dur), y); if (t >= dur) break; await new Promise((r) => setTimeout(r, 16)); }
+    await A.touch('touchEnd'); await A.frame(); await A.frame();
+    const log = await w(() => window.__norne.log(false));
+    const bad = log.filter((e) => e.sec !== e.shown || e.tex !== e.shown);
+    check(log.length > 5 && bad.length === 0 && log[log.length - 1].shown === to, `scrub at ${rate} dates a second with the section open: ${log.length} frames drew a new date, ${bad.length} whose section or texture is another date's; the last draws ${log[log.length - 1].shown}`);
+  }
+  const ms = await ST8(A);
+  console.log(`      the section: ${ms.secDraws} draws at ${(ms.secMs / ms.secDraws).toFixed(1)} ms each, ${ms.secCuts} cuts at ${(ms.secCutMs / ms.secCuts).toFixed(1)} ms (headless SwiftShader on this Mac: a trend, never phone evidence)`);
+  // a tap on a cell in the section opens that cell's card
+  {
+    await setFrame(A, 60);
+    const pt = await w(() => { const q = window.__norne.section(); const a = q.cells[Math.floor(q.cells.length / 2)]; return [a, ...window.__norne.secCellPoint(a)]; });
+    const pr = await A.rect('#sec-plot');
+    await A.tapAt(pr.left + pt[1], pr.top + pt[2]); await page.waitForTimeout(400); await A.frame();
+    const at = await w(([x, y]) => window.__norne.secCellAt(x, y), [pt[1], pt[2]]);
+    const card = await w(() => [document.getElementById('readout').hidden, document.getElementById('readout-where').textContent, document.getElementById('readout-number').textContent]);
+    const ijk = [IJK[at * 3] + 1, IJK[at * 3 + 1] + 1, IJK[at * 3 + 2] + 1];
+    check(!card[0] && card[1].startsWith(`Cell I ${ijk[0]}, J ${ijk[1]}, K ${ijk[2]}, `) && card[2] === own.SOIL(60, at).toFixed(2), `a tap on a cell in the section opens its card: "${card[1]}", ${card[2]} (this file: ${own.SOIL(60, at).toFixed(2)})`);
+    await A.shot(`section-cell-light`, false);
+    await A.tapEl('#readout-close'); await A.frame();
+  }
+  // a line drawn by touch: Draw, then one finger across the field; the camera holds still. First the
+  // mapping: points on the drawn line (it lies on the field's top) map back to where they are on the map
+  {
+    const cam0 = await w(() => window.__norne.cam());
+    const pr = await A.rect('#plate');
+    const back = await w(() => {
+      const q = window.__norne.section(), d = document.getElementById('sl-line').getAttribute('d');
+      const pts = d.slice(1).split('L').map((t) => t.trim().split(/\s+/).map(Number)), out = [];
+      for (let k = 8; k <= 56; k += 4) {
+        const m = [q.a[0] + (q.b[0] - q.a[0]) * k / 64, q.a[1] + (q.b[1] - q.a[1]) * k / 64], hit = window.__norne.mapPoint(pts[k][0], pts[k][1]);
+        if (Number.isNaN(window.__norne.topAt(m))) continue;   // where the line crosses a gap in the field
+        out.push({ k, s: pts[k], err: hit ? Math.hypot(hit[0] - m[0], hit[1] - m[1]) : Infinity });
+      }
+      return out;
+    });
+    const seen = await w(() => {
+      const c = document.getElementById('gl'), W = c.clientWidth, H = c.clientHeight, N = window.__norne, out = [];
+      for (let y = H * 0.1; y < H * 0.95; y += H / 22) for (let x = 12; x < W - 60; x += (W - 72) / 18) {
+        const a = N.pick(x, y); if (a < 0) continue;
+        const hit = N.mapPoint(x, y), m = N.cellXY(a);
+        out.push(hit ? Math.hypot(hit[0] - m[0], hit[1] - m[1]) : 1e9);
+      }
+      return out;
+    });
+    const near = seen.filter((d) => d <= 150).length;
+    check(seen.length > 40 && near >= seen.length * 0.97, `the finger meets the cell it sees: at ${seen.length} points on the model, the point a touch maps to lies within 150 m of the middle of the cell drawn there in ${near} (cells are up to 160 m across; the farthest ${Math.round(Math.max(...seen))} m)`);
+    const good = back.filter((b) => b.err <= 5);
+    check(good.length >= 2, `points on the line where it lies on the field and shows map back to where they lie: ${good.length} of ${back.length} within 5 m (a nearer ridge hides the others: ${back.filter((b) => b.err > 5).map((b) => Math.round(b.err) + ' m').join(', ') || 'none'})`);
+    const P0 = good[0].s, Q0 = good[good.length - 1].s, P = [pr.left + P0[0], pr.top + P0[1]], Q = [pr.left + Q0[0], pr.top + Q0[1]];
+    await A.tapEl('#sec-draw'); await A.frame();
+    const armed = await w(() => [document.getElementById('sec-draw').getAttribute('aria-pressed'), document.getElementById('live').textContent]);
+    await A.touch('touchStart', P[0], P[1]);
+    for (let i = 1; i <= 12; i++) { await A.touch('touchMove', P[0] + ((Q[0] - P[0]) * i) / 12, P[1] + ((Q[1] - P[1]) * i) / 12); await new Promise((r) => setTimeout(r, 16)); }
+    // where the line lies under the finger is read before the lift: once the finger is off, the pane
+    // fits the new section and the model's plate changes height with it
+    await A.frame();
+    const d0 = await w(() => window.__norne.section());
+    const sa = await w((p) => window.__norne.mapScreen(p), d0.a), sb = await w((p) => window.__norne.mapScreen(p), d0.b);
+    await A.touch('touchEnd'); await page.waitForTimeout(300); await A.frame(); await A.frame();
+    const d = await w(() => window.__norne.section()), cam1 = await w(() => window.__norne.cam());
+    check(d.a.join() === d0.a.join() && d.b.join() === d0.b.join(), `the lift keeps the line as drawn (${d.a.join(', ')} to ${d.b.join(', ')})`);
+    await A.frame(); await A.frame();
+    const fit1 = await w(() => window.__norne.secFit());
+    check(!fit1.lock && fit1.set === fit1.need, `after the line is drawn the pane fits its section again: the plot set to ${fit1.set} px, the section needs ${fit1.need} px (shown ${fit1.h} px under --sec-h)`);
+    const after = await w(() => [document.getElementById('sec-draw').getAttribute('aria-pressed'), [...document.querySelectorAll('#sec-lines [role="radio"]')].map((b) => b.getAttribute('aria-checked')).join('/'), document.getElementById('live').textContent]);
+    const off = (s, p) => Math.hypot(s[0] + pr.left - p[0], s[1] + pr.top - p[1]);
+    check(armed[0] === 'true' && armed[1] === 'Drag across the field to draw the section line.' && d.line === null && off(sa, P) <= 2 && off(sb, Q) <= 2 && d.n > 50 && after[0] === 'false' && after[1] === 'false/false' && cam1.theta === cam0.theta && cam1.phi === cam0.phi && /^Section drawn, on your line, [\d.]+ (km|m) long\.$/.test(after[2]),
+      `Draw, then a drag across the field draws the line under the finger: A ${off(sa, P).toFixed(2)} px and A′ ${off(sb, Q).toFixed(2)} px from the touch, ${Math.round(d.L)} m, ${d.n} cells; the camera held still; Draw off again, neither line word chosen; "${after[2]}"`);
+    await A.shot('section-drawn-light', false);
+    // A′ moved by its handle; A stays
+    const mid = await w(() => { const p = document.getElementById('sl-line').getAttribute('d').slice(1).split('L')[24].trim().split(/\s+/).map(Number); return p; });
+    const e = d.ends[1], R2 = [pr.left + mid[0], pr.top + mid[1]];
+    await A.touch('touchStart', pr.left + e[0], pr.top + e[1]);
+    for (let i = 1; i <= 8; i++) { await A.touch('touchMove', pr.left + e[0] + ((R2[0] - pr.left - e[0]) * i) / 8, pr.top + e[1] + ((R2[1] - pr.top - e[1]) * i) / 8); await new Promise((r) => setTimeout(r, 16)); }
+    await A.frame();
+    const d2p = await w(() => window.__norne.section()), sb2 = await w((p) => window.__norne.mapScreen(p), d2p.b);
+    await A.touch('touchEnd'); await A.frame(); await A.frame(); await A.frame();
+    const d2 = await w(() => window.__norne.section()), cam2 = await w(() => window.__norne.cam()), fit2 = await w(() => window.__norne.secFit());
+    check(d2.a.join() === d.a.join() && d2.b.join() === d2p.b.join() && off(sb2, R2) <= 2 && cam2.theta === cam0.theta && !fit2.lock && fit2.set === fit2.need, `a drag on A′ moves that end under the finger (${off(sb2, R2).toFixed(2)} px off) and leaves A where it was; the camera held still; after the lift the pane fits again (${fit2.set} of ${fit2.need} px)`);
+    // two fingers while drawing: back to the view, the line as it was
+    await A.tapEl('#sec-draw');
+    await A.touch('touchStart', P[0], P[1] + 40); await A.touch('touchMove', P[0] + 40, P[1] + 50);
+    await A.cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: P[0] + 40, y: P[1] + 50, id: 0 }, { x: P[0] + 120, y: P[1] + 120, id: 1 }] });
+    await A.cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: P[0] + 30, y: P[1] + 40, id: 0 }, { x: P[0] + 150, y: P[1] + 150, id: 1 }] });
+    await A.touch('touchEnd'); await A.frame(); await A.frame();
+    const d3 = await w(() => window.__norne.section());
+    check(d3.a.join() === d2.a.join() && d3.b.join() === d2.b.join(), `a second finger while drawing gives the touch back to the view, and the line is as it was (${d3.a.join(', ')} to ${d3.b.join(', ')})`);
+    // a line drawn off the field cuts nothing: refused, the line it had kept, and said so
+    {
+      if ((await w(() => document.getElementById('sec-draw').getAttribute('aria-pressed'))) !== 'true') await A.tapEl('#sec-draw');
+      const y0 = pr.top + 12, x0 = pr.left + 30, x1 = pr.left + pr.width - 90;
+      const miss = await w(([a, b, y]) => [window.__norne.mapPoint(a, y), window.__norne.mapPoint(b, y)], [x0 - pr.left, x1 - pr.left, y0 - pr.top]);
+      await A.touch('touchStart', x0, y0);
+      for (let i = 1; i <= 10; i++) { await A.touch('touchMove', x0 + ((x1 - x0) * i) / 10, y0); await new Promise((r) => setTimeout(r, 16)); }
+      await A.frame(); await A.shot('section-offfield-light', false);
+      const mid = await w(() => [window.__norne.section().n, document.getElementById('sec-plot').getAttribute('aria-label')]);
+      await A.touch('touchEnd'); await A.frame(); await A.frame();
+      const q = await w(() => [window.__norne.section(), document.getElementById('live').textContent]);
+      check(mid[0] === 0 && /the line misses the field, so no cell is cut\.$/.test(mid[1]) && q[0].a.join() === d3.a.join() && q[0].b.join() === d3.b.join() && q[0].n > 50 && q[1] === 'That line misses the field.',
+        `a line drawn above the model (${miss.map((m) => (m ? m.slice(0, 2).map(Math.round).join(', ') : 'nothing')).join(' to ')}) cuts no cell while drawn ("${mid[1].slice(0, 60)}…") and is refused on the lift: the line as it was (${q[0].n} cells), "${q[1]}"`);
+    }
+    await A.tapEl('#sec-draw'); await A.frame();   // off again, if the two fingers left it armed
+    if ((await w(() => document.getElementById('sec-draw').getAttribute('aria-pressed'))) === 'true') await A.tapEl('#sec-draw');
+    // with the section open and Draw off, one finger still turns the model
+    await A.touch('touchStart', pr.left + 200, pr.top + pr.height * 0.8);
+    for (let i = 1; i <= 6; i++) await A.touch('touchMove', pr.left + 200 + i * 10, pr.top + pr.height * 0.8);
+    await A.touch('touchEnd'); await A.frame();
+    const cam4 = await w(() => window.__norne.cam()), d4 = await w(() => window.__norne.section());
+    check(cam4.theta !== cam0.theta && d4.a.join() === d3.a.join() && d4.b.join() === d3.b.join(), `with Draw off, a one-finger drag on the model turns it (theta ${Math.round(cam0.theta)} then ${Math.round(cam4.theta)}) and leaves the line alone`);
+    await A.tapEl('#fit'); await page.waitForTimeout(700);
+  }
+  // Across, and Along again, by their words
+  {
+    await A.tapEl('#sec-lines [data-line="across"]'); await A.frame(); await A.frame();
+    const c = await w(() => window.__norne.section());
+    await A.tapEl('#sec-lines [data-line="along"]'); await A.frame(); await A.frame();
+    const l = await w(() => window.__norne.section());
+    const dot = Math.abs(((c.b[0] - c.a[0]) * (l.b[0] - l.a[0]) + (c.b[1] - c.a[1]) * (l.b[1] - l.a[1])) / (c.L * l.L));
+    check(c.line === 'across' && l.line === 'along' && dot < 0.02 && c.L < l.L && c.n > 300, `Across: ${Math.round(c.L)} m, ${c.n} cells, square to Along (|cos| ${dot.toFixed(3)}); Along again: ${Math.round(l.L)} m`);
+  }
+  // the units and the stretch
+  {
+    await A.tapEl('#btn-units'); await A.frame(); await A.frame();
+    const us = await w(() => [document.getElementById('sec-corridor').textContent, document.getElementById('sec-plot').getAttribute('aria-label')]);
+    await A.tapEl('#btn-units'); await A.frame();
+    await w(() => { const e = document.getElementById('exag'); e.value = '10'; e.dispatchEvent(new Event('input')); });
+    await A.frame(); await A.frame();
+    const ex = await w(() => [document.getElementById('sec-exag').textContent, window.__norne.section().ax]);
+    await w(() => { const e = document.getElementById('exag'); e.value = '5'; e.dispatchEvent(new Event('input')); });
+    await A.frame();
+    check(us[0] === `Wells within 492${NN}ft` && /feet deep/.test(us[1]) && ex[0] === 'vertical ×10' && Math.abs(ex[1].sz / ex[1].sx - 10) < 1e-9,
+      `US units: "${us[0]}", depths in feet in its description; at a stretch of 10 the pane says "${ex[0]}" and draws ×${(ex[1].sz / ex[1].sx).toFixed(2)}`);
+  }
+  // SI and the contrast with the pane open, and its controls' hits
+  {
+    const si = await siOf(w), c = await contrastOf(w), h = await hitTargets(w);
+    check(si.bad.length === 0 && c.worst[0] >= 4.5 && h.bad.length === 0, `with the section open: SI in ${si.n} text nodes${si.bad.length ? ': ' + si.bad.join(' | ') : ''}; text contrast worst ${c.worst[0]}:1 (${c.worst[1]}); ${h.n} controls at 44 × 44 or more${h.bad.length ? ': ' + h.bad.join('; ') : ''}`);
+  }
+  await setFrame(A, 80);
+  {
+    const q = await w(() => [window.__norne.section(), document.getElementById('sec-more').textContent]);
+    check(q[0].named.length > 0 && q[0].unnamed.every((n) => q[1].includes(n)) && (q[1] === '') === (q[0].unnamed.length === 0),
+      `${q[0].line}: every well drawn on the section is named, on the pane (${q[0].named.join(', ')}) or in its key (${q[0].unnamed.join(', ') || 'none needed'}); within ${'150 m'}: ${q[0].wells.join(', ')}`);
+  }
+  await A.shot('section-light');
+  // hidden: no section draws; and its key's ✕ hides it, the line with it
+  {
+    await w(() => { Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' }); document.dispatchEvent(new Event('visibilitychange')); });
+    const h0 = await ST8(A); await page.waitForTimeout(500); const h1 = await ST8(A);
+    await w(() => { Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' }); document.dispatchEvent(new Event('visibilitychange')); });
+    await A.frame();
+    check(h1.secDraws === h0.secDraws && h1.frames === h0.frames, `hidden, the section draws nothing (${h1.secDraws - h0.secDraws} draws in 500 ms)`);
+    await A.tapEl('#sec-close'); await page.waitForTimeout(300); await A.frame();
+    const off = await w(() => [document.getElementById('section').hidden, document.getElementById('secline').hasAttribute('hidden'), document.getElementById('btn-section').getAttribute('aria-pressed'), document.getElementById('plate').getBoundingClientRect().height]);
+    check(off[0] && off[1] && off[2] === 'false' && Math.abs(off[3] - p0.height) < 1, `✕ hides the section and its line (the Section key not pressed); the model back to ${Math.round(off[3])} px`);
+  }
+  // remembered: open, reload, it is back with its line
+  {
+    await A.tapEl('#btn-section'); await A.tapEl('#sec-lines [data-line="across"]'); await page.waitForTimeout(600);
+    await page.reload(); await page.waitForFunction(ready, null, { timeout: 180000 }); await A.frame(); await A.frame();
+    const r = await w(() => window.__norne.section());
+    check(r.on && r.line === 'across' && r.n > 300, `the section and its line are remembered over a reload (${r.line}, ${r.n} cells)`);
+    // focus mode: the section stays under the model, its words and ✕ in reach; on Pressure (whose
+    // interior ticks crowd its open end) the legend's labels stay apart once the About key joins its line
+    await A.tapEl('#props button[data-key="PRESSURE"]'); await page.waitForTimeout(200);
+    await A.tapEl('#focus-key'); await page.waitForTimeout(500);
+    const lt = await w(() => { const sp = [...document.querySelectorAll('#legend-ticks span')].filter((e) => !e.hidden), r = sp.map((e) => e.getBoundingClientRect()); let gap = Infinity; for (let i = 1; i < r.length; i++) gap = Math.min(gap, r[i].left - r[i - 1].right); return { t: sp.map((e) => e.textContent), gap }; });
+    check(lt.gap >= 5, `focus mode with the section open, on Pressure: the legend's labels ${lt.t.join(' | ')} stand ${lt.gap.toFixed(1)} px apart at the least`);
+    const f = await w(() => [!document.getElementById('section').hidden, document.getElementById('section').getBoundingClientRect().height, window.__norne.focus()]);
+    const hf = await hitTargets(w);
+    await A.shot('section-focus-light', false);
+    check(f[0] && f[1] > 100 && f[2] && hf.bad.length === 0, `in focus mode the section stays (${Math.round(f[1])} px), its controls at 44 × 44 or more (${hf.n})`);
+    await A.tapEl('#focus-exit'); await page.waitForTimeout(400);
+    await A.tapEl('#props button[data-key="SOIL"]'); await page.waitForTimeout(200);
+  }
+  // gaps: where the plane passes between active cells inside the model, a hatch, and its key
+  {
+    await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('norne-viewer:v1')); s.section = { on: true, line: null, a: [-3337, -2360], b: [663, -675] }; localStorage.setItem('norne-viewer:v1', JSON.stringify(s)); });
+    await page.reload(); await page.waitForFunction(ready, null, { timeout: 180000 }); await A.frame(); await A.frame(); await page.waitForTimeout(300);
+    const g = await w(() => [window.__norne.section(), !document.getElementById('sec-key-gap').hidden]);
+    check(g[0].gapPx / 4 >= 150 && g[1], `a line through inactive cells (${g[0].a.join(', ')} to ${g[0].b.join(', ')}): ${Math.round(g[0].gapPx / 4)} CSS px² of the cut hatched as no active cell, and the key says so`);
+    await A.shot('section-gaps-light', false);
+  }
+  check(A.errors.length === 0, `no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
+  await A.ctx.close();
+  // the dark theme: the print, the same colors as the 3D view's dark scales
+  const B = await open('dark');
+  await B.w(() => window.__norne.setFrame(80)); await B.frame();
+  await B.tapEl('#btn-section'); await B.page.waitForTimeout(500); await B.frame(); await B.frame();
+  await B.shot('section-dark');
+  await B.tapEl('#sec-lines [data-line="across"]');
+  await B.frame(); await B.frame();
+  const cd = await colorCheck(B, 'SOIL', 80, true);
+  check(cd.n >= 20 && cd.good >= cd.n - 1, `dark, Across: the middles of the ${cd.n} widest cells are this file's colors on the dark scale in ${cd.good}${cd.bad.length ? ': ' + cd.bad.slice(0, 3).join('; ') : ''}`);
+  check(B.errors.length === 0, `dark: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
   await B.ctx.close();
 }
 

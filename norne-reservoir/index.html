@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Norne Reservoir</title>
 <link rel="stylesheet" href="./style.css">
@@ -20,13 +20,18 @@
   <h1 translate="no">Norne Reservoir</h1>
   <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the model&hellip;</button></div>
   <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
-  <button class="unitkey" id="btn-units" type="button" aria-label="Change units, now SI: bar, meters, cubic meters a day" translate="no">SI</button>
+  <div class="hkeys">
+    <button class="wordkey" id="btn-about" type="button" aria-haspopup="dialog" hidden>About</button>
+    <button class="unitkey" id="btn-units" type="button" aria-label="Change units, now SI: bar, meters, cubic meters a day" translate="no">SI</button>
+  </div>
   <div class="switcher"><div class="words" id="props" role="radiogroup" aria-label="Property"></div></div>
 </header>
 
+<div class="view" id="view">
 <main class="plate" id="plate">
   <canvas id="gl" role="img" aria-label="The Norne reservoir model in 3D" aria-describedby="gl-desc"></canvas>
   <p class="sr" id="gl-desc">Each cell is colored by the property named under the picture, at the report date in the player. Drag to turn the model, pinch or use the zoom keys to zoom, and drag with two fingers to pan. Tap a cell or a well name for its values. Double-tap a cell to fly to it; double-tap empty space to see the whole field again.</p>
+  <svg class="secline" id="secline" aria-hidden="true" hidden><path class="curtain" id="sl-curtain"/><path class="halo" id="sl-halo"/><path class="line" id="sl-line"/><g id="sl-a"><circle r="7"/><text dy="0.35em">A</text></g><g id="sl-b"><circle r="7"/><text dy="0.35em">A&prime;</text></g></svg>
   <div class="labels" id="labels"></div>
 
   <div class="keys" id="keys">
@@ -37,6 +42,7 @@
     </div>
     <div class="keyplate">
       <button type="button" id="btn-wells" aria-pressed="true" aria-label="Wells"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.75 3.5h12.5M4 3.5v10.75M8 3.5v5.75M12 3.5v8.25"/></svg></button>
+      <button type="button" id="btn-section" aria-pressed="false" aria-label="Section" aria-controls="section"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.25 4.5 13.75 2"/><path d="M2.25 4.5v9.25l11.5-2.5V2"/><path class="fill" d="M2.25 9.5 13.75 7v4.25l-11.5 2.5z" opacity=".45"/></svg></button>
     </div>
     <div class="keyplate">
       <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
@@ -65,9 +71,29 @@
   <div class="error" id="error" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: the property's scale, the instruments, the wells' key, the line that
-     says how to read the cut on the track, and the credit line, on screen in every mode. -->
-<section class="caption" id="caption" aria-label="Scale, instruments, the cut and credits">
+<!-- The section A–A′: a vertical plane through the grid along a line drawn on the field, the cells it
+     cuts as blocks in the property and month the 3D view shows, on one depth axis (js/section.js). -->
+<section class="section" id="section" aria-label="Section A to A prime" hidden>
+  <div class="sec-head">
+    <div class="words sub" id="sec-lines" role="radiogroup" aria-label="Section line">
+      <button type="button" role="radio" aria-checked="true" data-line="along">Along</button>
+      <button type="button" role="radio" aria-checked="false" data-line="across">Across</button>
+    </div>
+    <button type="button" class="textkey sec-draw" id="sec-draw" aria-pressed="false">Draw</button>
+    <button type="button" class="sec-close" id="sec-close" aria-label="Hide the section"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+  </div>
+  <canvas class="sec-plot" id="sec-plot" role="img" aria-label="Section"></canvas>
+  <div class="key sec-key" id="sec-key">
+    <span class="k" id="sec-key-gap" hidden><i class="sw sw-gap" aria-hidden="true"></i>No active cell</span>
+    <span class="k" id="sec-key-wells"><i class="sw sw-well" aria-hidden="true"></i><span id="sec-corridor"></span><span id="sec-more"></span></span>
+    <span class="k sec-exag" id="sec-exag"></span>
+  </div>
+</section>
+</div>
+
+<!-- The caption under the view: the property's scale, the instruments, the wells' key and the cut's
+     key, on screen in every mode. Sources and credits are in About. -->
+<section class="caption" id="caption" aria-label="Scale, instruments and keys">
   <div class="legend" id="legend">
     <span class="legend-title" id="legend-name"></span>
     <div class="legend-scale" id="legend-scale"><canvas class="legend-bar" id="legend-bar" aria-hidden="true"></canvas><div class="legend-ticks" id="legend-ticks"></div></div>
@@ -83,8 +109,11 @@
     <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing dash" d="M1 3h12"/><path class="core dash" data-role="gasInjector" d="M1 3h12"/></svg>Gas injector</span>
     <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing thin" d="M1 3h12"/><path class="core thin" data-role="shut" d="M1 3h12"/></svg>Shut</span>
   </div>
-  <p class="cutline" id="cutline"></p>
-  <p class="credits" id="credits" translate="no"></p>
+  <div class="key cutkey" id="cutkey" role="group" aria-label="The cut, on the track">
+    <span class="k"><i class="sw sw-oil" aria-hidden="true"></i>Oil lifted</span>
+    <span class="k"><i class="sw sw-water" aria-hidden="true"></i>Water lifted</span>
+    <span class="k">on the track</span>
+  </div>
 </section>
 
 <footer class="player" id="player">
@@ -115,7 +144,7 @@
     <div class="chart-key" id="chart-key"></div>
   </div>
   <div class="stop stop2">
-    <h2 class="sheet-head">Section and view</h2>
+    <h2 class="sheet-head">Cells and view</h2>
     <div class="srow"><span class="slabel" id="lab-i">Columns (I)</span><div class="pair"><input class="hslider" id="i0" type="range" min="1" max="46" value="1" aria-label="First column (I)"><input class="hslider" id="i1" type="range" min="1" max="46" value="46" aria-label="Last column (I)"></div><output class="sval" id="iv"></output></div>
     <div class="srow"><span class="slabel" id="lab-j">Rows (J)</span><div class="pair"><input class="hslider" id="j0" type="range" min="1" max="112" value="1" aria-label="First row (J)"><input class="hslider" id="j1" type="range" min="1" max="112" value="112" aria-label="Last row (J)"></div><output class="sval" id="jv"></output></div>
     <div class="srow"><span class="slabel" id="lab-k">Layers (K)</span><div class="pair"><input class="hslider" id="k0" type="range" min="1" max="22" value="1" aria-label="First layer (K)"><input class="hslider" id="k1" type="range" min="1" max="22" value="22" aria-label="Last layer (K)"></div><output class="sval" id="kv"></output></div>
@@ -138,6 +167,8 @@
         <p>The model is the Norne field&rsquo;s reservoir, under the Norwegian Sea, cut into 44&#8239;431 active cells. Each cell is colored by its value on the scale under the picture, at the report date in the player. Where cells go past a scale&rsquo;s end, the end prints open (&le;&#8239;and &ge;) and those cells take the end&rsquo;s color.</p>
         <p>The light on the cells&rsquo; faces and the darker cell edges are part of the drawing, not of the data, and the depth is stretched: the caption under the picture says by how much. Explode pulls the model apart to look inside it (<span id="ab-explode"></span>); those distances are display, not geology.</p>
         <p>The wells&rsquo; paths come from the deck&rsquo;s completions and their roles from its schedule. A producer is a solid line, an injector a dashed one, a shut well thin and faint; a well appears once it first opens.</p>
+        <h3>The section</h3>
+        <p id="ab-section"></p>
         <h3>The cut, on the track</h3>
         <p id="ab-cut"></p>
         <p>It is the simulation&rsquo;s field production: the run of the public deck, driven by the field&rsquo;s historical well controls, averaged over each month. It is not the field&rsquo;s reported production; against the field&rsquo;s own history the model lifts about 7&#8239;% less oil and 43&#8239;% more water. Gas is not in it, because at the surface the field&rsquo;s gas is measured in volumes about 220 times the oil&rsquo;s; gas and injection are in the rates chart under More controls.</p>
@@ -148,6 +179,7 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <p id="about-source"></p>
         <p>License: Open Database License (ODbL) 1.0, opendatacommons.org/licenses/odbl/1-0/</p>
         <p>Checked against the Eclipse 2014.2 summary results that the Open Porous Media initiative publishes for the same deck: at 1 Dec 2006 the run&rsquo;s cumulative oil differs by &minus;0.2&#8239;%, water by +0.4&#8239;%, gas by &minus;0.1&#8239;% and water injected by +0.1&#8239;%, and the average field pressure stays within 0.1&#8239;bar over the run. The published results hold field and well summaries only, no cell data.</p>
@@ -157,6 +189,7 @@
         <h3>How the data gets here</h3>
         <p>The model was built once by the folder&rsquo;s pipeline on a Linux runner and travels inside the app; nothing is fetched. The app re-reads <code translate="no">config.json</code>, its settings file, whenever it comes back to the screen.</p>
         <p>Drag to turn the model, pinch or use the zoom keys to zoom, and drag with two fingers to pan. Tap a cell or a well name for its values; double-tap a cell to fly to it, and double-tap empty space or use Show the whole field to see it all again. On a keyboard, the arrow keys move the track a month at a time and Page Up and Page Down a year.</p>
+        <p>The Section key opens the section under the model. Along and Across choose the field&rsquo;s two lines; Draw, then a drag across the field, draws your own, and a drag on A or A&prime; moves that end. Tap a cell in the section for its values.</p>
       </section>
       <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
     </div>

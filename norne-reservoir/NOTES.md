@@ -6,14 +6,15 @@ What it does:
 
 - Shows the 44 431-cell corner-point grid colored by oil, water or gas saturation, pressure, porosity, horizontal or vertical permeability, net to gross, depth, formation, fault segment or layer, with the property's scale under the picture.
 - Plays the production history from 6 Nov 1997 to 1 Dec 2006 in 110 report dates (monthly after the first), and scrubs it by finger on the player's track.
-- Draws the field's water cut on that track (the signature, "the cut"): each month a column as tall as the liquid the field's wells lifted per day, oil in ink at the foot and water as a paler ink stacked on it, at a fixed 0.5 px per 1 000 Sm³/d. The line under the picture gives the shown month's figures.
+- Draws the field's water cut on that track (the signature, "the cut"): each month a column as tall as the liquid the field's wells lifted per day, oil in ink at the foot and water as a paler ink stacked on it, at a fixed 0.5 px per 1 000 Sm³/d. A key under the picture says which is which; the track's value gives the shown month's figures to VoiceOver, and the rates chart draws them.
 - Draws the 36 wells by what they are doing at the date shown: a producer a solid line, a water or gas injector a dashed one, a shut well thin and faint; their roles are also in the key under the picture. Wells stay hidden until they first open.
 - Explodes the model by formation (Garn, Ile, Tofte, Tilje), by layer or by fault segment; cuts the grid by I, J and K ranges and filters cells by value.
+- Shows a vertical section A–A′ through the grid under the model (beside it on a wide screen or a phone on its side), from the Section key: along the field's long line, across it, or along a line drawn on the model; the cells it cuts as blocks in the shown property and month, never blended, with the formations, the wells within 150 m of it and the inactive gaps hatched, on the model's own depths (TVD) stretched as the 3D view is. A tap on a block opens that cell's card.
 - Tap a cell or a well's name for its values on a card; double-tap a cell to fly to it, double-tap empty space or use Show the whole field to see it all again; the zoom keys zoom without a pinch.
 - Charts the field's or one well's oil, water and gas rates, produced and injected, with a cursor at the date shown (in the controls sheet).
 - Switches every quantity between SI and US units with the key at the top right (bar or psi, meters or feet, Sm³/d or bbl/d for liquids, Sm³/d or Mscf/d for gas; permeability stays mD).
-- Hides its controls (focus mode, Hide the controls; back with Show the controls or Escape), leaving the model, its scale, the caption and the player.
-- Remembers the view, date, property, units and focus mode in `localStorage`. Light and dark themes: the light theme prints the model as a negative (more of a quantity darker), the dark theme as a print (more of it brighter). Works from 320 px wide and on a phone on its side.
+- Hides its controls (focus mode, Hide the controls; back with Show the controls or Escape), leaving the model, the section when it is open, the scale and the keys under them, the About key and the player.
+- Remembers the view, date, property, units, the section and focus mode in `localStorage`. Light and dark themes: the light theme prints the model on white as a negative (more of a quantity darker), the dark theme as a print (more of it brighter). Works from 320 px wide and on a phone on its side.
 
 ## Folder layout
 
@@ -23,6 +24,7 @@ norne-reservoir/
   js/units.js                     every number, unit and date the app writes (SI notation, both unit systems)
   js/data.js                      the data decoded: frames, values, scales and their open ends, the cut's series
   js/track.js                     the player's track and the cut drawn on it
+  js/section.js                   the section A–A′: the cut through the grid, the field's lines and top, its layers
   fonts/                          Ysabeau Office (the house face, a subset) and its license, OFL.txt
   config.json                     editable settings: property list, color scales per theme and ranges, well
                                   colors, formations, explode distances, playback speed (re-read when the
@@ -90,10 +92,10 @@ This creates a virtualenv in `pipeline/work/`, installs `pipeline/requirements.t
 
 ## Code map
 
-- Loading (`app.js`): `main()` fetches `config.json`, `data/model.json` and the binary files, checking each binary's size, and counts them in the stamp; a problem is a sentence on the plate in the file's terms.
+- Loading (`app.js`): `main()` fetches `config.json`, `data/model.json` and the binary files, checking each binary's size, and counts them in the stamp's line, which hides once they are in (About's first row names the edition); a problem is a sentence on the plate in the file's terms.
 - Decoding (`js/data.js`, pure): `fillValues()` and `cellValue()` read a property at a report date; `propRange()`, `norm()` and `openEnds()` place values on their scale; `cutSeries()` and `cutFacts()` build the cut.
 - Color (`app.js`): `updateColors()` writes each cell's color for the shown date into a data texture, through the theme's 256-entry scale (`lut()`).
-- The frame (`app.js`, `loop()`): input records only the wanted report date; each animation frame draws the newest wanted date, then writes everything that carries a date (the time row, the cut's line, the card, the chart's cursor, the track's thumb) from it. The loop asks for frames only while something changed, a flight runs or play is on.
+- The frame (`app.js`, `loop()`): input records only the wanted report date; each animation frame draws the newest wanted date, then writes everything that carries a date (the time row, the card, the section pane, the chart's cursor, the track's thumb) from it. The loop asks for frames only while something changed, a flight runs or play is on.
 - Geometry: `rebuildFaces()` emits only faces that are open to the outside, cut away, across a fault, or split by the explode setting, using the precomputed `neighbours.bin`.
 - Explode: `computeExplode()` groups cells by formation, layer or segment and offsets each group; `buildWellBuffer()` moves well paths with their cells.
 - Wells: screen-space ribbons in `WELL_VS`, a faint see-through pass, a dark casing and the role's core; injectors dashed in the fragment shader, a shut well narrower and faint.
@@ -101,6 +103,7 @@ This creates a virtualenv in `pipeline/work/`, installs `pipeline/requirements.t
 - The card (`placeCard()`): a corner of the room the keys leave, never over the tapped cell's ring or a chosen well's head and name; in its compact form (the place line with its keys, then the figure and the rows scrolling as one) where the plate is too short for the full one, with the sheet raised or the phone on its side.
 - Framing: `fitCam()` fits the field's projected box to the plate, left of the key column or below the key row, with a lens shift to center it there; a camera at the fit is fitted again when the plate changes size.
 - Camera: orbit around `S.cam.target`; `flyTo()` moves on the house's `--draw` curve, ends at its destination on any touch, and is a cut under Reduce Motion; world space is x east, y up (depth times vertical exaggeration), z south.
+- The section (`js/section.js`, drawn by `drawSection()` in `app.js`): `cutGrid()` cuts the plane along A–A′ through each active cell's twelve edges into one polygon per cell; `fieldLines()` finds Along and Across from the grid's columns; `surfaces()` keeps the field's top and base as height fields, where `mapPoint()` meets a finger and the line is laid on the model; `sectionAxis()` is the one scale (distance and depth in meters, depth stretched as the 3D view is) every layer draws on: the gaps (`gapLayer()`), the cells (`drawCells()`, in the 3D view's texture colors), the formation tops, the wells (`wellsNear()`), the frame. The section is drawn in the frame that draws the date. Nothing is new data: it is all cut from `geometry.bin` as loaded.
 - The track (`js/track.js`): the cut drawn once per size, theme and unit system into a cached canvas; each frame copies it and draws the thumb.
 - Numbers (`js/units.js`): U+202F between a number and its unit and in thousands, U+2212 for negatives, dates by hand (`1 Dec 2006`), both unit systems, the spoken forms VoiceOver hears.
 - Test hook: `window.__norne`, which nothing in the app calls; `tools/shoot.mjs` reads the app through it.
@@ -110,15 +113,16 @@ This creates a virtualenv in `pipeline/work/`, installs `pipeline/requirements.t
 ```
 node tools/check.mjs                                           # static: budgets, the ZIP, the face, the data's hashes, SI, US spelling, the camera's strings
 node tools/test_decode.mjs                                     # js/data.js and js/units.js against the test's own decode of data/
+node tools/test_section.mjs                                    # js/section.js's cut, lines, wells and axis against data/
 PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tools/shoot.mjs   # the app driven at 390 × 844 in both themes
 python3 norne-reservoir/tools/art/palette.py [--json]          # from Template/: every color and contrast in ART.md
 ```
 
-Budgets (`tools/check.mjs` prints the truth): app code at most 200 000 bytes (about 162 000 after the house pass and its follow-up), fonts at most 160 000 (40 075), the ZIP at most 19 110 591 bytes (about 15.4 MB).
+Budgets (`tools/check.mjs` prints the truth): app code at most 222 000 bytes, the lead's ruling on the measured 221 794 with 2.2's section (plan 0012 3.4; 200 000 before it, about 162 000 after the house pass and its follow-up), fonts at most 160 000 (40 075), the ZIP at most 19 110 591 bytes (about 15.4 MB).
 
 ## Credits and license
 
-The data in `data/` is a derived database of the Norne benchmark and stays under the Open Database License (ODbL) 1.0; keep `data/ATTRIBUTION.txt` with it. The screen credits it as `Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0`, and About carries the model's own source sentence in full.
+The data in `data/` is a derived database of the Norne benchmark and stays under the Open Database License (ODbL) 1.0; keep `data/ATTRIBUTION.txt` with it. About credits it as `Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0`, the first line under Sources and credits, one tap from every screen and from focus mode by the About key, and carries the model's own source sentence in full after it.
 
 Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
 

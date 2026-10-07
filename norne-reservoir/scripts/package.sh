@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 APP=norne-reservoir
 FILES=(index.html app.js style.css config.json miniapp.json js fonts data)
 # Every runtime file is named here rather than globbed, so a new one is visible in the diff.
-CODE=(index.html app.js style.css js/units.js js/data.js js/track.js)
+CODE=(index.html app.js style.css js/units.js js/data.js js/track.js js/section.js)
 
 # The app runs offline: refuse to package if any runtime code references a URL.
 if grep -nE "https?://" "${CODE[@]}"; then
