@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-06T23:01:22Z",
+ "generatedAt": "2026-10-07T00:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "I’m a physicist who worked on the Nobel-winning neutrino search – here’s how a cubic kilometer of Antarctic ice became a telescope for ghost particles from space",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/im-a-physicist-who-worked-on-the-nobel-winning-neutrino-search-heres-how-a-cubic-kilometer-of-antarctic-ice-became-a-telescope-for-ghost-particles-from-space-293747",
+     "published": "2026-10-06T23:19:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tyce DeYoung, Professor of Physics and Astronomy, Michigan State University"
+    },
+    {
      "title": "Flu season is near – here’s a guide to available vaccines",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Annette Regan, Adjunct Associate Professor of Epidemiology, University of California, Los Angeles"
-    },
-    {
-     "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/columbus-own-writings-reveal-how-tightly-religion-and-conquest-were-intertwined-from-the-start-291332",
-     "published": "2026-10-06T12:22:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peter C. Mancall, Distinguished Professor and Professor of the Humanities, USC Dornsife College of Letters, Arts and Sciences"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "Eva Marie Saint has died age 102: the last star of Hollywood’s Golden Age",
+     "title": "Avant-garde abundance: the deeply infectious art of Australian artist Justene Williams",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/eva-marie-saint-has-died-age-102-the-last-star-of-hollywoods-golden-age-261107",
-     "published": "2026-10-06T22:16:12Z",
+     "link": "https://theconversation.com/avant-garde-abundance-the-deeply-infectious-art-of-australian-artist-justene-williams-290328",
+     "published": "2026-10-06T23:57:51Z",
      "summary": "",
      "stale": false,
-     "author": "Marcus Harmes, Professor in Pathways Education, University of Southern Queensland"
+     "author": "Chari Larsson, Senior Lecturer of Art History, Griffith University"
     },
     {
-     "title": "NZ election poll watch: Opportunity holds as potential kingmaker in tight race",
+     "title": "It’s true, Australia won’t ban ‘sock puppet’ accounts on social media. Here’s why",
      "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-election-poll-watch-opportunity-holds-as-potential-kingmaker-in-tight-race-293706",
-     "published": "2026-10-06T21:57:34Z",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/its-true-australia-wont-ban-sock-puppet-accounts-on-social-media-heres-why-293353",
+     "published": "2026-10-06T23:45:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Daniel Angus, Professor of Digital Communication, Director of QUT Digital Media Research Centre, Queensland University of Technology"
+    },
+    {
+     "title": "Republicans continue to slide in US polls, four weeks before midterm elections",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/republicans-continue-to-slide-in-us-polls-four-weeks-before-midterm-elections-293444",
+     "published": "2026-10-06T23:31:46Z",
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
-     "title": "Why are new wind farms stuck in the doldrums in Australia?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-are-new-wind-farms-stuck-in-the-doldrums-in-australia-292231",
-     "published": "2026-10-06T18:26:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kumuthini Sivathas, Postdoctoral Researcher in Economics, Adelaide University"
-    },
-    {
-     "title": "Truth, evidence and controversy: Richard Dawkins’ The God Delusion at 20",
+     "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/truth-evidence-and-controversy-richard-dawkins-the-god-delusion-at-20-290331",
-     "published": "2026-10-06T18:25:49Z",
+     "link": "https://theconversation.com/we-analysed-30-years-of-debate-on-genetic-modification-this-is-whats-been-missing-292976",
+     "published": "2026-10-06T23:16:03Z",
      "summary": "",
      "stale": false,
-     "author": "Jamie Q. Roberts, Lecturer in Politics and International Relations, University of Sydney"
+     "author": "Sylvia Nissen, Senior Lecturer in Environmental Policy, Lincoln University, New Zealand"
     },
     {
-     "title": "Counterfeit cash is at an 8-year high in Australia, new figures show. Here’s how to spot it",
+     "title": "Eva Marie Saint has died at 102: the last star of Hollywood’s Golden Age",
      "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/counterfeit-cash-is-at-an-8-year-high-in-australia-new-figures-show-heres-how-to-spot-it-290327",
-     "published": "2026-10-06T18:25:33Z",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/eva-marie-saint-has-died-at-102-the-last-star-of-hollywoods-golden-age-261107",
+     "published": "2026-10-06T22:16:12Z",
      "summary": "",
      "stale": false,
-     "author": "Terry Goldsworthy, Associate Professor in Criminal Justice and Criminology, Bond University"
+     "author": "Marcus Harmes, Professor in Pathways Education, University of Southern Queensland"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Flu season is near – here’s a guide to available vaccines",
-   "published": "2026-10-06 21:41 UTC"
+   "title": "I’m a physicist who worked on the Nobel-winning neutrino search – here’s how a cubic kilometer of Antarctic ice became a telescope for ghost particles from space",
+   "published": "2026-10-06 23:19 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Columbus’ own writings reveal how tightly religion and conquest were intertwined from the start",
-   "published": "2026-10-06 12:22 UTC"
+   "title": "Flu season is near – here’s a guide to available vaccines",
+   "published": "2026-10-06 21:41 UTC"
   },
   {
    "region": "Americas",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Eva Marie Saint has died age 102: the last star of Hollywood’s Golden Age",
+   "title": "Avant-garde abundance: the deeply infectious art of Australian artist Justene Williams",
+   "published": "2026-10-06 23:57 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "It’s true, Australia won’t ban ‘sock puppet’ accounts on social media. Here’s why",
+   "published": "2026-10-06 23:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Republicans continue to slide in US polls, four weeks before midterm elections",
+   "published": "2026-10-06 23:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
+   "published": "2026-10-06 23:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Eva Marie Saint has died at 102: the last star of Hollywood’s Golden Age",
    "published": "2026-10-06 22:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ election poll watch: Opportunity holds as potential kingmaker in tight race",
-   "published": "2026-10-06 21:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why are new wind farms stuck in the doldrums in Australia?",
-   "published": "2026-10-06 18:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Truth, evidence and controversy: Richard Dawkins’ The God Delusion at 20",
-   "published": "2026-10-06 18:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Counterfeit cash is at an 8-year high in Australia, new figures show. Here’s how to spot it",
-   "published": "2026-10-06 18:25 UTC"
   },
   {
    "region": "Oceania",
