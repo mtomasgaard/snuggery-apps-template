@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T12:01:53Z",
+ "generatedAt": "2026-10-07T13:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "I’m a physicist who worked on the Nobel-winning neutrino search – here’s how a cubic kilometer of Antarctic ice became a telescope for ghost particles from space",
+     "title": "These state supreme court races could decide abortion access and trans rights",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/im-a-physicist-who-worked-on-the-nobel-winning-neutrino-search-heres-how-a-cubic-kilometer-of-antarctic-ice-became-a-telescope-for-ghost-particles-from-space-293747",
-     "published": "2026-10-06T23:19:54Z",
+     "link": "https://theconversation.com/these-state-supreme-court-races-could-decide-abortion-access-and-trans-rights-292881",
+     "published": "2026-10-07T12:40:42Z",
      "summary": "",
      "stale": false,
-     "author": "Tyce DeYoung, Professor of Physics and Astronomy, Michigan State University"
+     "author": "Rachel Rebouché, Professor of Law, The University of Texas at Austin"
     },
     {
-     "title": "Flu season is near – here’s a guide to available vaccines",
+     "title": "Why your boss matters more than remote or hybrid work when it comes to burnout and job satisfaction",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/flu-season-is-near-heres-a-guide-to-available-vaccines-293480",
-     "published": "2026-10-06T21:41:10Z",
+     "link": "https://theconversation.com/why-your-boss-matters-more-than-remote-or-hybrid-work-when-it-comes-to-burnout-and-job-satisfaction-293319",
+     "published": "2026-10-07T12:12:00Z",
      "summary": "",
      "stale": false,
-     "author": "Annette Regan, Adjunct Associate Professor of Epidemiology, University of California, Los Angeles"
+     "author": "Christos Makridis, Associate Research Professor of Information Systems, Arizona State University; Institute for Humane Studies"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Le Berm, ce mur marocain qui continue de façonner le conflit au Sahara occidental",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/le-berm-ce-mur-marocain-qui-continue-de-faconner-le-conflit-au-sahara-occidental-293362",
+     "published": "2026-10-07T12:22:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joana Castro Pereira, Professor of Politics and International Relations, Universidade do Porto"
+    },
+    {
      "title": "Protest later or push for better planning now? 7 actions South African voters can take before local elections",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Hope Magidimisha-Chipungu, Full Professor, University of KwaZulu-Natal"
-    },
-    {
-     "title": "The global panel on inequality needs African evidence: here’s how it could work",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/the-global-panel-on-inequality-needs-african-evidence-heres-how-it-could-work-292927",
-     "published": "2026-10-06T13:19:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Murray Leibbrandt, UCT Emeritus Professor and Senior Research Scholar; Director of ARUA's African Centre of Excellence for Inequality Research within SALDRU…"
     },
     {
      "title": "‘Ebola takes the people children depend on’: UNICEF",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "I’m a physicist who worked on the Nobel-winning neutrino search – here’s how a cubic kilometer of Antarctic ice became a telescope for ghost particles from space",
-   "published": "2026-10-06 23:19 UTC"
+   "title": "These state supreme court races could decide abortion access and trans rights",
+   "published": "2026-10-07 12:40 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Flu season is near – here’s a guide to available vaccines",
-   "published": "2026-10-06 21:41 UTC"
+   "title": "Why your boss matters more than remote or hybrid work when it comes to burnout and job satisfaction",
+   "published": "2026-10-07 12:12 UTC"
   },
   {
    "region": "Americas",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Protest later or push for better planning now? 7 actions South African voters can take before local elections",
-   "published": "2026-10-06 13:20 UTC"
+   "title": "Le Berm, ce mur marocain qui continue de façonner le conflit au Sahara occidental",
+   "published": "2026-10-07 12:22 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "The global panel on inequality needs African evidence: here’s how it could work",
-   "published": "2026-10-06 13:19 UTC"
+   "title": "Protest later or push for better planning now? 7 actions South African voters can take before local elections",
+   "published": "2026-10-06 13:20 UTC"
   },
   {
    "region": "Africa",
