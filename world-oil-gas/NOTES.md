@@ -20,13 +20,27 @@ version. How the app looks, and why, is **`ART.md`**.
 | --- | --- | --- |
 | Our World in Data, energy dataset (carrying the Energy Institute Statistical Review and The Shift Data Portal) | CC BY 4.0 | "Country production: Energy Institute Statistical Review of World Energy, via Our World in Data (CC BY 4.0)" |
 | Global Energy Monitor, Global Oil and Gas Extraction Tracker, March 2026 | CC BY 4.0 | "Fields: Global Energy Monitor, Global Oil and Gas Extraction Tracker (CC BY 4.0)" |
-| Natural Earth (1:10m countries, 1:10m bathymetry, Natural Earth I shaded relief) | public domain | "Basemap: Natural Earth" |
+| Natural Earth (1:10m countries, Natural Earth I shaded relief) | public domain | "Basemap: Natural Earth" |
+| GEBCO_2026 Grid (the sea floor of Depth shading) | public domain, with acknowledgement | "GEBCO Bathymetric Compilation Group 2026(2026). The GEBCO_2026 Grid - a continuous terrain model for oceans and land at 15 arc-second intervals. NERC EDS British Oceanographic Data Centre NOC. doi:10.5285/4f68d5c7-45eb-f999-e063-7086abc036fa" |
 
-The credit line under the map is built from the same sources (`creditLine()` in `js/data.js`)
-and is shown whole, in every mode, focus mode included:
-`Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor`.
-About gives every source in full: its statement, its license with the license's address, the
-changes made, and every address printed without its scheme. Keep both if you change the app.
+The credit line is built from the same sources (`creditLine()` in `js/data.js`) and is in About,
+first under *Sources and credits*, one tap from the stamp in every mode, focus mode included:
+`Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor` (with
+` · GEBCO` while Depth shading is on). About gives every source in full: its statement, its
+license with the license's address, the changes made, and every address printed without its
+scheme. Keep both if you change the app.
+
+GEBCO's terms (www.gebco.net/data-products/gridded-bathymetry/terms-of-use, read on 2026-10-06),
+word for word: *"The GEBCO Grid is placed in the public domain and may be used free of charge."*
+Users are free to *"Commercially exploit The GEBCO Grid, by, for example, combining it with other
+information, or by including it in their own product or application."* Users must *"Acknowledge
+the source of The GEBCO Grid. A suitable form of attribution is given in the documentation that
+accompanies The GEBCO Grid."*, *"Not use The GEBCO Grid in a way that suggests any official status
+or that GEBCO, or the IHO or IOC, endorses any particular application of The GEBCO Grid."* and
+*"Not mislead others or misrepresent The GEBCO Grid or its source."* The disclaimer: *"The GEBCO
+Grid should NOT be used for navigation or for any other purpose involving safety at sea."* About
+prints the attribution above, the first sentence of the terms, the changes this app made, that
+GEBCO does not endorse it, and the disclaimer.
 
 The face: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
 
@@ -34,20 +48,23 @@ The face: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font 
 
 ```
 data/snapshot.json   annual oil and gas by country, 1900 on, plus ask rows   0.15 MB   yearly build (1 July, 1 September)
-data/world.json      countries, bathymetry bands, the relief block           1.2 MB    yearly build, rarely differs
-data/relief.jpg      Natural Earth I shaded relief, 4096 × 2048 plate carrée 0.8 MB    yearly build, never differs
+data/world.json      countries                                               1.0 MB    yearly build, rarely differs
+data/shade.webp      the sea floor, 4096 × 2048 plate carrée, gray (GEBCO)   0.4 MB    tools/build_shade.py, by hand
+data/shade/land.webp the relief on land, the same grid (Natural Earth I)     0.3 MB    tools/build_shade.py, by hand
+data/shade/*.webp    the sea floor at 30 arc seconds, 17 tiles over seven    0.6 MB    tools/build_shade.py, by hand
+                     oil and gas regions; data/shade.json names them         (3 kB)
 data/fields.json     the tracker's units, production, reserves, outlines     2.5 MB    by hand, when a new tracker release is dropped in
 index.html, style.css, app.js   the page, the house look, the map, the Ledger and the player
 js/data.js           the data contract, the shape checks, the series, the Ledger's partition, the field years and estimate (pure)
 js/units.js          every number, unit and date the app writes (pure)
 js/track.js          the year track, the app's own slider
 fonts/               the house face, ysabeau-office-gw.woff2, and its OFL.txt
-tools/               check.mjs, test_decode.mjs, shoot.mjs, the palette script and DECISIONS.md; not shipped
+tools/               check.mjs, test_decode.mjs, shoot.mjs, build_shade.py, the palette script and DECISIONS.md; not shipped
 ```
 
 **The phone's refresh loop replaces `data/snapshot.json` only.** That is the yearly country
 data, so a phone that refreshes at all sees each new Statistical Review. The fields, the
-basemap and the relief travel in the ZIP and change when you replace the app (see
+basemap and the shading travel in the ZIP and change when you replace the app (see
 `PROMPT.md`). The tracker sits behind a form on GEM's site, so no job can fetch it: the March
 2026 workbook is committed under `raw/manual/`, and the manual step for a newer release is in
 `raw/manual/README.md`. The stamp says `Stale.` when `data/snapshot.json` is more than 400 days
@@ -83,8 +100,15 @@ owns the fields. `tools/test_decode.mjs` checks it against a partition written i
   never in every year; the layers' counts name them apart. 618 units with no coordinates are left
   out by the pipeline, and 1 021 are marked approximate by the tracker.
 - The dissolved states (USSR, Czechoslovakia, Yugoslavia) keep their series under codes of
-  their own and have no outline; their successor states are plain before their own series
-  begin. A country's card names the former state its figure is in.
+  their own and have no outline of their own. In any year a former state has a figure and its
+  largest member (Russia, Czechia, Serbia) has none, the map draws its successor states that
+  report nothing of their own that year (no figure, or zero) together as one shape in its color,
+  with no border inside it, named once by its own name; a tap there opens the former state's card
+  (`The USSR`), in Annual and Cumulative alike. Once the largest member's series begins (Russia in
+  1985, Czechia in 1993, Serbia in 1992) each successor is drawn by its own figure, so no year
+  shows a former state over a member that reports. The Ledger keeps rule B (below), and a
+  successor's own card names the former state it was drawn with. `formerUnions()` in `js/data.js`
+  is the rule; `tools/test_decode.mjs` and `tools/shoot.mjs` check it in 1970 and 1995.
 - Plain is plain: zero and "no figure" are both drawn as plain land, and the card says which.
   The map hatches nothing.
 - In Cumulative a series that has ended keeps its total: 156 series stop in 2016 (the source
@@ -102,18 +126,21 @@ dates built by hand, the same on every locale.
 
 ## Focus mode
 
-`Hide the controls`, the last key on the map, leaves the plate, the Ledger, the caption line,
-the credits, the stamp and the player; the header, the key column and the legend's bar go, hidden
+`Hide the controls`, the last key on the map, leaves the plate, the Ledger, the caption line
+and its key, the stamp and the player; the header, the key column and the legend's bar go, hidden
 and inert. `Show the controls` in the plate's top-right corner, or Escape, brings them back. It is
 remembered as `wog.focus`.
 
 ## Size
 
-Measured by `node tools/check.mjs`: the ZIP is about 2.15 MB (2 068 029 B before the house pass,
-1 670 512 B before the 1:10m coast), against its cap of 2 622 870 B; the app parses 3.8 MB of JSON
-on open, and decodes the relief only when Terrain shading is switched on. App code (the HTML, the
-CSS, `app.js` and `js/`) is held to 200 000 B and `app.js` alone to 150 000 B, both enforced by
-`tools/check.mjs`; `fields.json` (2.5 MB) to 2.6 MB and `world.json` (1 222 141 B) to 1.4 MB,
+Measured by `node tools/check.mjs`: the ZIP is about 2.46 MB (2 147 335 B before the shading,
+2 068 029 B before the house pass, 1 670 512 B before the 1:10m coast), against its cap of
+2 622 870 B; the app parses 3.6 MB of JSON on open, and reads the shading only when Terrain or
+Depth shading is switched on, each image only for its own key: the whole-world level (32 MiB
+decoded for each key that is on), then, for Depth shading past its detail, the tiles in view, at most four tiles' worth (16 MiB each) decoded at once. App code (the HTML, the
+CSS, `app.js` and `js/`) is held to 207 000 B (the lead's ruling on the measured figure, plan 0012 3.2) and
+`app.js` alone to 150 000 B, both enforced by
+`tools/check.mjs`; `fields.json` (2.5 MB) to 2.6 MB and `world.json` (970 387 B) to 1.4 MB,
 enforced by the build, which fails rather than ship over budget.
 
 ## The coast
@@ -130,6 +157,24 @@ Cyprus, Sudan and Brazil (the country that painted that ground at 1:50m, or the 
 own ISO code names); eight open-sea specks and
 Gibraltar are left out, as they were at 1:50m; and the Southern Patagonian Ice Field, which 1:50m
 split between Argentina and Chile, is its own plain outline (About lists it under "Outlines with no
-series"). The shaded relief is still Natural Earth I at 1:50m, so with the relief on, its own water
-edge does not follow the vector fjords. Label points are each country's centroid, so most moved a
-little with the finer outline.
+series"). Label points are each country's centroid, so most moved a little with the finer outline.
+
+## The shading
+
+`tools/build_shade.py` (run from `Template/` with numpy and Pillow) writes `data/shade.webp`,
+`data/shade/` (the land's image and the tiles) and `data/shade.json`, and with `--strip-world` takes the old depth bands and relief
+block out of `data/world.json`. Its inputs are pinned: the GEBCO_2026 subsets (fetched over
+CEDA's THREDDS service) by the SHA-256 of their elevation values, Natural Earth I's zip by its own.
+The land's image is Natural Earth I's relief at 1:50m as luminance, cut to the countries' 1:10m
+rings; the sea's is GEBCO_2026, darker with depth (square root to 11 000 m) and hillshaded
+(the sun in the northwest at 45°, the floor exaggerated eight times), at 4 096 × 2 048 for the
+world and 30 arc seconds over the North Sea and the Norwegian shelf, the Gulf of Mexico, the
+Persian Gulf, West Africa, Brazil's margin, the South China Sea and the Caspian. The Caspian's
+depth is taken from sea level, so its tones run about 28 m deep; its shading is unaffected. Each
+image carries its own half four pixels past the coast, so the browser's smoothing never blends the
+land's luminance into the sea, and each tile's outer 128 pixels (about a degree) ramp into the
+whole-world level's own values, so a region has no edge on the map (the build reports how far the
+decoded edge strays: 0.4 of 255 on average, 10 at most).
+`tools/check.mjs` pins the output; the same inputs and the same Pillow and libwebp (named in
+`data/shade.json`) give the same bytes. The yearly data build (`build_world.py`) must not write
+the depth bands or `data/relief.jpg` back: `check.mjs` fails if it does.

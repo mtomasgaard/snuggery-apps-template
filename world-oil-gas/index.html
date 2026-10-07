@@ -78,16 +78,15 @@
   <div class="error" id="error" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: the Ledger, the scale, how to read the picture, and the credits the
-     sources ask for, on screen in every mode. -->
-<section class="caption" id="caption" aria-label="Shares, scale, caption and credits">
+<!-- The caption under the plate: the Ledger, the scale, the bar's caption and its key. The sources and
+     their credits are in About, one tap from the stamp in every mode. -->
+<section class="caption" id="caption" aria-label="Shares, scale and caption">
   <div class="ledger" id="ledger"><canvas id="ledger-cv" aria-hidden="true"></canvas><p class="sr" id="ledger-say"></p></div>
   <div class="legend" id="legend">
     <span class="legend-title" id="legend-name"></span>
     <div class="legend-scale" id="legend-scale"><div class="legend-bar" id="legend-bar"></div><div class="legend-ticks" id="legend-ticks" aria-hidden="true"></div></div>
   </div>
-  <p class="readline" id="readline"></p>
-  <p class="credits" id="credits" translate="no"></p>
+  <div class="readline" id="readbox"><span id="readline"></span><span class="key" id="rkey"><span class="k"><i class="sw sw-hatch" aria-hidden="true"></i>Under 1&#8239;% each</span><span class="k"><i class="sw sw-plain" aria-hidden="true"></i>No figure</span></span></div>
 </section>
 
 <!-- the sheet's slot: a country's or a field's details, or the map's layers; the plate gives it its rows -->
@@ -120,6 +119,7 @@
         <button type="button" role="radio" data-v="prod" aria-checked="true">Production</button>
         <button type="button" role="radio" data-v="res" aria-checked="false">Reserves</button>
       </div></div>
+      <button type="button" class="lrow" data-layer="rim" aria-pressed="true"><svg class="box" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2"/><path class="tick" d="M4.5 8.25l2.25 2.25 4.75-5"/></svg><span class="what">Rims on the fields</span></button>
       <div class="fkey" id="field-key">
         <span><svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="4" style="fill:var(--s-oil);stroke:var(--s-rim);stroke-width:1"/></svg>oil</span>
         <span><svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"><circle cx="5" cy="5" r="4" style="fill:var(--s-gas);stroke:var(--s-rim);stroke-width:1"/></svg>gas</span>
@@ -133,7 +133,7 @@
       <button type="button" class="textkey" id="hl-clear" hidden>Clear the highlight</button>
     </div>
     <button type="button" class="lrow" data-layer="terrain" aria-pressed="false"><svg class="box" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2"/><path class="tick" d="M4.5 8.25l2.25 2.25 4.75-5"/></svg><span class="what">Terrain shading</span></button>
-    <button type="button" class="lrow" data-layer="depth" aria-pressed="false"><svg class="box" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2"/><path class="tick" d="M4.5 8.25l2.25 2.25 4.75-5"/></svg><span class="what">Depth bands</span></button>
+    <button type="button" class="lrow" data-layer="depth" aria-pressed="false"><svg class="box" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2"/><path class="tick" d="M4.5 8.25l2.25 2.25 4.75-5"/></svg><span class="what">Depth shading</span></button>
     <button type="button" class="lrow" data-layer="labels" aria-pressed="true"><svg class="box" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="1.75" y="1.75" width="12.5" height="12.5" rx="2"/><path class="tick" d="M4.5 8.25l2.25 2.25 4.75-5"/></svg><span class="what">Country names</span></button>
   </div>
 </section>
@@ -168,10 +168,11 @@
     <div class="about-body" id="about-body">
       <section>
         <h3>What the picture is</h3>
-        <p>Each country is colored by its production in the year on the player, in the unit shown, on a continuous log scale between the legend&rsquo;s printed ends. A country left plain has no figure in the file for that year, which is not the same as zero, or produced nothing; its card says which. The map hatches nothing.</p>
+        <p>Each country is colored by its production in the year on the player, in the unit shown, on a continuous log scale between the legend&rsquo;s printed ends. A country left plain has no figure in the file for that year, which is not the same as zero, or produced nothing; its card says which. The map hatches nothing. A former state (the USSR, Czechoslovakia, Yugoslavia) has no outline of its own: in any year it has a figure and its largest member has none, its successor states that report nothing of their own that year (no figure, or zero) are drawn together as one shape in its color, named and opened as the former state; once its largest member&rsquo;s series begins, each is drawn by its own.</p>
         <p>The strip under the map, the Ledger, is the world&rsquo;s output for the year shown laid out as shares: one block per producing country, widest first, each as wide as its figure over the world&rsquo;s (the file&rsquo;s World series, energy-equivalent, as the Energy Institute publishes it), and every producer under 1&#8239;% together in the hatched end. Tap a block for that country&rsquo;s card. In Cumulative each block is the country&rsquo;s total to the year shown. A former state (the USSR, Czechoslovakia, Yugoslavia) gives way to its members in any year its largest member (Russia, Czechia, Serbia) has a figure of its own, so no barrel is counted twice; in Cumulative the former state&rsquo;s block is what it produced until then, and its label says to which year. The Ledger says nothing about reserves, consumption, or who owns the fields.</p>
-        <p>Each field is a disc in its fuel&rsquo;s color. The tracker gives one reported rate per unit, for its newest data year, and no series, so while the fields follow the year a disc&rsquo;s size is this app&rsquo;s estimate: the reported rate scaled by its country&rsquo;s output that year over its output in the rate&rsquo;s year (at most three times; the world&rsquo;s when the country is not matched; unscaled when that year has no figure). A unit appears as a ring in its discovery year and fills from its production start, or from its discovery when no start is given. Units with neither date appear, filled, the year before their data year, where the estimate starts. A pale disc has no rate reported. Every disc has a thin rim, which keeps a gas disc apart from a country of its own lightness. The tracker&rsquo;s outlines are drawn when zoomed in; a ring that does not fall near its own unit is left out.</p>
+        <p>Each field is a disc in its fuel&rsquo;s color. Field sizes are estimates while the fields follow the year. The tracker gives one reported rate per unit, for its newest data year, and no series, so while the fields follow the year a disc&rsquo;s size is this app&rsquo;s estimate: the reported rate scaled by its country&rsquo;s output that year over its output in the rate&rsquo;s year (at most three times; the world&rsquo;s when the country is not matched; unscaled when that year has no figure). A unit appears as a ring in its discovery year and fills from its production start, or from its discovery when no start is given. Units with neither date appear, filled, the year before their data year, where the estimate starts. A pale disc has no rate reported. Every filled disc has a thin rim, which keeps a gas disc apart from a country or a sea of its own lightness; Map layers can turn the rims off. The tracker&rsquo;s outlines are drawn when zoomed in; a ring that does not fall near its own unit is left out.</p>
         <p>Cumulative adds up every year from the first with data to the year shown: a year with no data adds nothing, and a series that has ended keeps its total. Play runs eight years a second.</p>
+        <p>Terrain shading lays the relief on land; Depth shading darkens the sea with depth and lights its floor from the northwest, from a global grid, finer over seven oil and gas regions (the North Sea and the Norwegian shelf, the Gulf of Mexico, the Persian Gulf, West Africa, Brazil&rsquo;s margin, the South China Sea and the Caspian). Both are for orientation, not navigation.</p>
         <div id="about-notes"></div>
       </section>
       <section>
@@ -181,12 +182,15 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <div id="about-sources"></div>
+        <p class="src"><span class="src-name">Sea floor (Depth shading)</span><span>GEBCO Bathymetric Compilation Group 2026(2026). The GEBCO_2026 Grid - a continuous terrain model for oceans and land at 15 arc-second intervals. NERC EDS British Oceanographic Data Centre NOC. doi:10.5285/4f68d5c7-45eb-f999-e063-7086abc036fa</span><span class="src-term">Terms: The GEBCO Grid is placed in the public domain and may be used free of charge (www.gebco.net/data-products/gridded-bathymetry/terms-of-use).</span><span class="src-term">Changes: resampled (every fifth 15 arc-second cell, area-averaged, for the whole world; 30 arc-second averages over the seven regions), masked to the sea by data/world.json&rsquo;s coast, darkened with depth and hillshaded by this app&rsquo;s build into data/shade.webp and data/shade/. Not an official GEBCO product, and not endorsed by GEBCO, the IHO or the IOC. The GEBCO Grid should NOT be used for navigation or for any other purpose involving safety at sea.</span></p>
+        <p class="src"><span class="src-name">Relief on land (Terrain shading)</span><span>Natural Earth I with shaded relief, hypsometric tints and water, 1:50m, as luminance</span><span class="src-term">License: public domain (Natural Earth), www.naturalearthdata.com/</span><span class="src-term">Changes: resampled to 4&#8239;096 &times; 2&#8239;048, grayed and masked to the land of data/world.json in data/shade/land.webp.</span></p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
       </section>
       <section>
         <h3>How the data gets here</h3>
-        <p>A yearly build writes <code translate="no">data/snapshot.json</code> from Our World in Data&rsquo;s energy dataset; <code translate="no">data/world.json</code> and <code translate="no">data/relief.jpg</code> come from Natural Earth, and <code translate="no">data/fields.json</code> from a tracker release dropped in by hand. A scheduled refresh replaces <code translate="no">data/snapshot.json</code>. The map re-reads the three files every time it is opened and whenever new data lands while it is open; the app itself never goes online.</p>
+        <p>A yearly build writes <code translate="no">data/snapshot.json</code> from Our World in Data&rsquo;s energy dataset; <code translate="no">data/world.json</code> comes from Natural Earth, <code translate="no">data/shade.webp</code> and <code translate="no">data/shade/</code> from GEBCO and Natural Earth by a build run by hand, and <code translate="no">data/fields.json</code> from a tracker release dropped in by hand. A scheduled refresh replaces <code translate="no">data/snapshot.json</code>. The map re-reads the three files every time it is opened and whenever new data lands while it is open; the app itself never goes online.</p>
       </section>
       <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
     </div>

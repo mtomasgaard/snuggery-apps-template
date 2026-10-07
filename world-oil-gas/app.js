@@ -23,12 +23,12 @@
  * read `shown`. A frame whose year, view and choices have not changed draws nothing.
  *
  * STATE persisted in localStorage (STORE) is UI state only. NO VALUE EVER REACHES innerHTML: every
- * piece of text is set with textContent. Nothing is fetched but ./data/*.json; the relief is an <img>.
+ * piece of text is set with textContent. Nothing is fetched but ./data/*.json; the shading is <img>s.
  */
 import {
   clamp, isStr, decodePolyline, checkWorld, checkSnapshot, checkFields, lonToX, latToY, yToLat,
   buildProd, cumOf, seriesAt, valueAt, worldAt, seriesSpan, FORMER_STATE, LEAD, historicalLabels, shortName,
-  ledgerAt, fold, countryKey, buildFields, fieldYears, estimate, estRate, estCum, creditLine,
+  ledgerAt, fold, countryKey, buildFields, fieldYears, estimate, estRate, estCum, creditLine, formerUnions, MEMBERS,
 } from './js/data.js';
 import * as U from './js/units.js';
 import { createTrack } from './js/track.js';
@@ -37,7 +37,7 @@ const STORE = {
   view: 'wog.view', units: 'wog.units', mode: 'wog.mode', year: 'wog.year', sel: 'wog.sel',
   fields: 'wog.fields', status: 'wog.status', labels: 'wog.labels',
   follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype',
-  size: 'wog.size', hl: 'wog.hl', depth: 'wog.depth', terrain: 'wog.terrain', focus: 'wog.focus',
+  size: 'wog.size', hl: 'wog.hl', depth: 'wog.depth', terrain: 'wog.terrain', focus: 'wog.focus', rim: 'wog.rim',
 };
 const FILES = { world: 'data/world.json', snapshot: 'data/snapshot.json', fields: 'data/fields.json' };
 const PATH_K = 4096;            // paths are built in world units × PATH_K
@@ -108,21 +108,15 @@ function buildPalette() {
     haloC: rgba(T.halo, T.haloAlpha), selHalo: rgba(T.halo, 0.9),
     // over the relief the countries go on with 'multiply' (light) or 'screen' (dark), so the ramp still reads
     comp: name === 'dark' ? 'screen' : 'multiply', dim: name === 'dark' ? rgba(T.outside, 0.45) : null };
-  bathyStyles = null;
   const s = document.documentElement.style;
   for (const k of ['oil', 'gas', 'both', 'other']) s.setProperty(`--s-${k}`, T.fuel[k]);
-  s.setProperty('--s-rim', P.rimC);
-}
-/* One fill per depth band: 200 m is the first step, 6000 m and deeper the last, linear between. */
-let bathyStyles = null;
-function bathyStyle(depth) {
-  const t = clamp((depth - 200) / 5800, 0, 1), a = rgb(P.deep[0]), b = rgb(P.deep[1]);
-  return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`;
+  s.setProperty('--s-rim', rimOn ? P.rimC : 'transparent');
+  s.setProperty('--s-land', T.land);
 }
 
 /* ── state ───────────────────────────────────────────────────────────────── */
 
-let geo = null;        // { countries: [{ iso3, name, rings, path, bbox, lw, lx, ly }], borders, bathy, relief, source }
+let geo = null;        // { countries: [{ iso3, name, rings, path, bbox, lw, lx, ly }], index, borders, source }
 let prod = null;       // the snapshot and its lookups (js/data.js buildProd)
 let fields = null;     // js/data.js buildFields, or null when the file failed
 let link = null;       // polygon index ↔ series, and the mismatch lists
@@ -136,7 +130,7 @@ let sel = null;        // { kind: 'country', iso3, at? } | { kind: 'field', id }
 let showFields = true, showLabels = true, followYear = true;
 let statusFilter = 'operating', settingFilter = 'all', typeFilter = 'all', sizeBy = 'prod';
 let highlight = null;  // { kind: 'company' | 'basin', name }
-let depthPref = false, terrainPref = false;
+let depthPref = false, terrainPref = false, rimOn = true;
 let playing = false, focusMode = false, fontReady = false;
 const stats = { frames: 0, draws: 0, fills: 0, fieldPasses: 0, ledgerDraws: 0, computes: 0 };
 
@@ -193,34 +187,7 @@ function buildGeo(w) {
     return { iso3: c.iso3, name: c.name, rings, path, bbox: [x0, y0, x1, y1], lw,
       lx: hasC ? lonToX(c.c[0]) : (x0 + x1) / 2, ly: hasC ? latToY(c.c[1]) : (y0 + y1) / 2 };
   });
-  // The sea floor is orientation under the data: broken, it is reported and the countries drawn anyway.
-  let bathy = null, bathyError = '';
-  try { bathy = buildBathy(w); } catch (e) { bathyError = e.message; }
-  const r = w.relief;
-  let rel = null, reliefError = '';
-  if (r != null) {
-    if (r && isStr(r.file) && /^[\w-]+(\.[\w-]+)*\.(jpe?g|png|webp)$/i.test(r.file) && Array.isArray(r.bounds) && String(r.bounds) === '-180,-90,180,90') rel = r;
-    else reliefError = ' has a "relief" block that is not a whole-world image in ./data; it is left out.';
-  }
-  return { countries, borders, bathy, bathyError, relief: rel, reliefError, source: typeof w.source === 'string' ? w.source : '' };
-}
-/* Depth bands, each the area DEEPER than its depth, painted shallowest first so the deepest tint
- * lands on top. One Path2D per band; the painted sea is cached between frames. */
-function buildBathy(w) {
-  if (!Array.isArray(w.bathymetry) || !w.bathymetry.length) return null;
-  return [...w.bathymetry].sort((a, b) => a.depth - b.depth).map((b) => {
-    const path = new Path2D();
-    let points = 0;
-    for (const enc of b.rings) {
-      const ll = decodePolyline(enc, w.factor);
-      if (ll.length < 8) continue;
-      const xy = new Float32Array(ll.length);
-      for (let i = 0; i < ll.length; i += 2) { xy[i] = lonToX(ll[i]); xy[i + 1] = latToY(ll[i + 1]); }
-      addRing(path, xy);
-      points += xy.length / 2;
-    }
-    return { depth: b.depth, path, points };
-  });
+  return { countries, index: new Map(countries.map((c, i) => [c.iso3, i])), borders, source: typeof w.source === 'string' ? w.source : '' };
 }
 function buildLink() {
   if (!geo || !prod) return null;
@@ -241,7 +208,9 @@ function lutIndex(v) {
   return Math.round(clamp(Math.log(v / lo) / Math.log(hi / lo), 0, 1) * 255);
 }
 /* The color of every polygon for one (mode, unit, accumulation, year): idx, a LUT index, and st: 0 a
- * value, 1 zero, 2 no data, +4 partial (a total missing oil or gas). Cached per year. */
+ * value, 1 zero, 2 no data, +4 partial (a total missing oil or gas). A former state holding the figure
+ * colors its members that report nothing of their own (formerUnions): `of` names it per polygon, and
+ * `paths` holds each one's members as one Path2D. Cached per year. */
 const colorCache = new Map();
 function colorsFor(y) {
   const key = `${accum}|${mode}|${units}|${y}`;
@@ -255,7 +224,18 @@ function colorsFor(y) {
     if (r.partial) st[i] = 4;
     if (v <= 0) st[i] |= 1; else idx[i] = lutIndex(v);
   }
-  hit = { idx, st };
+  const of = [], paths = {}, fill = {}, sig = [];
+  for (const u of formerUnions(prod, mode, isCum(), y)) {
+    const v = toUnit(u.v), path = new Path2D();
+    for (const iso of u.members) {
+      const i = geo.index.get(iso);
+      if (i == null) continue;
+      of[i] = u.state; st[i] = v > 0 ? 0 : 1; idx[i] = v > 0 ? lutIndex(v) : 0;
+      path.addPath(geo.countries[i].path);
+    }
+    paths[u.state] = path; fill[u.state] = v > 0 ? lutIndex(v) : -1; sig.push(u.state, ...u.members);
+  }
+  hit = { idx, st, of, paths, fill, sig: sig.join() };
   if (colorCache.size > 1200) colorCache.clear();
   colorCache.set(key, hit);
   return hit;
@@ -497,37 +477,86 @@ function render() {
   drawSelection();
 }
 
-/* The relief: the plate carrée image reprojected to Mercator into an offscreen canvas one destination
- * row at a time, at a power-of-two world width in device pixels (512…4096), for the whole world up to
- * 2048, else the visible window plus a quarter each side; rebuilt when the zoom level changes or the
- * view leaves the window. Its hypsometric tints are not this app's data, so it is drawn as gray
- * shading only (owner call 9): a 'saturation' composite of a gray in the cached sea. */
-const relief = { spec: null, img: null, status: 'none', cache: null, builds: 0, ms: 0 };
-function loadRelief(spec) {
-  if (!spec) { Object.assign(relief, { spec: null, img: null, status: 'none', cache: null }); setProblem('relief', '', null); return; }
-  if (relief.spec && relief.spec.file === spec.file && relief.status !== 'error') { relief.spec = spec; return; }
-  const img = new Image();
-  Object.assign(relief, { spec, img, status: 'loading', cache: null });
-  const done = (ok) => {
-    if (relief.img !== img) return;
-    relief.status = ok && img.naturalWidth > 0 ? 'ok' : 'error';
-    setProblem('relief', `data/${spec.file}`, ok ? null : ' could not be read; the sea is drawn flat.');
-    updateCredits(); syncLayers(); requestRender();
-  };
-  img.onload = () => done(true);
-  img.onerror = () => done(false);
-  img.decoding = 'async';
-  img.src = `./data/${spec.file}`;
+/* The shading (tools/build_shade.py): data/shade.json names two gray images of the whole world and
+ * finer sea tiles over seven oil and gas regions, all plate carrée: 'land', Natural Earth I's relief
+ * as luminance (Terrain shading), and 'file', GEBCO's sea floor, darker with depth and hillshaded
+ * (Depth shading). Nothing is read until a shading is on, each image only when its own key is, and
+ * a tile only once the view is past the whole-world level's detail. Each is reprojected to Mercator
+ * into an offscreen canvas one destination row at a time, at a power-of-two world width in device
+ * pixels, for the whole world up to 2048, else the visible window plus a quarter each side. */
+const shade = { status: 'none', g: null, img: [], tiles: [], gen: 0, builds: 0, ms: 0, c: [null, null] };
+const IMG = /^[\w-]+(\/[\w-]+)?\.(jpe?g|png|webp)$/;
+function image(file, ok, bad) {
+  const im = new Image();
+  im.decoding = 'async';
+  im.onload = () => (im.naturalWidth ? ok() : bad());
+  im.onerror = bad;
+  im.src = `./data/${file}`;
+  return im;
 }
-const reliefOn = () => terrainPref && relief.status === 'ok';
-const depthOn = () => !!(geo && geo.bathy) && depthPref;
-function reliefCanvas() {
-  const lw = clamp(2 ** Math.round(Math.log2(view.scale * dpr)), 512, 4096);
+const shadeFail = (m) => { shade.status = 'error'; setProblem('shade', 'data/shade.json', `${m} The map is drawn without shading.`); syncLayers(); requestRender(); };
+function loadShade() {
+  if (shade.g) return needShade();
+  if (shade.status !== 'none') return;
+  shade.status = 'loading';
+  fetch('./data/shade.json', { cache: 'no-store' }).then((r) => {
+    if (!r.ok) throw new Error(` could not be read (HTTP ${r.status}).`);
+    return r.text();
+  }).then((t) => {
+    const m = parseJson(t), g = m && m.global;
+    if (!g || !IMG.test(g.file) || !IMG.test(g.land) || String(g.bounds) !== '-180,-90,180,90') throw new Error(' does not name the two whole-world images in ./data.');
+    shade.tiles = (Array.isArray(m.tiles) ? m.tiles : []).filter((x) => x && IMG.test(x.file) && Array.isArray(x.bounds) && x.bounds.length === 4 && x.bounds.every(Number.isFinite))
+      .map((x) => ({ file: x.file, b: x.bounds, img: null, used: 0, px: 0 }));
+    shade.g = g;
+    needShade();
+  }).catch((e) => shadeFail(e.message));
+}
+function needShade() {
+  [terrainPref, depthPref].forEach((on, i) => {
+    const f = i ? shade.g.file : shade.g.land, im = on && !shade.img[i] && (shade.img[i] = image(f, () => {
+      im.ok = 1; shade.status = 'ok'; shade.gen++; updateCredits(); syncLayers(); requestRender();
+    }, () => shadeFail(` names data/${f}, which could not be read.`)));
+  });
+}
+const shadeOn = (i) => shade.status === 'ok' && !!(shade.img[i] || {}).ok;
+const terrainOn = () => terrainPref && shadeOn(0);
+const depthOn = () => depthPref && shadeOn(1);
+/* A tile is read when first in view, and at most four tiles' worth of pixels stay decoded. */
+function wantTile(t) {
+  t.img = image(t.file, () => { t.px = t.img.naturalWidth * t.img.naturalHeight; shade.gen++; requestRender(); }, () => { t.bad = true; });
+  const held = shade.tiles.filter((x) => x.px).sort((a, b) => b.used - a.used);
+  for (let n = 0, i = 0; i < held.length; i++) if ((n += held[i].px) > 4 * 2048 * 2048) { held[i].img = null; held[i].px = 0; }
+}
+/* The parts of an image covering [w, e] × [s, n] that fall in the canvas: [sx, sw, dx, dw], copies included. */
+function pieces([w, , e], X0, cw, lw, iw) {
+  const x0 = lonToX(w), x1 = lonToX(e), a0 = X0 / lw, a1 = (X0 + cw) / lw, out = [];
+  for (let k = Math.floor(a0 - x1); k <= Math.ceil(a1 - x0); k++) {
+    const a = Math.max(a0, x0 + k), b = Math.min(a1, x1 + k);
+    if (b > a) out.push([((a - x0 - k) / (x1 - x0)) * iw, ((b - a) / (x1 - x0)) * iw, a * lw - X0, (b - a) * lw]);
+  }
+  return out;
+}
+function paint(g, img, box, X0, Y0, cw, ch, lw) {
+  const iw = img.naturalWidth, ih = img.naturalHeight, [, s, , n] = box, ps = pieces(box, X0, cw, lw, iw);
+  const srow = (py) => ((n - yToLat(clamp(py / lw, 0, 1))) / (n - s)) * ih;
+  let s0 = srow(Y0);
+  for (let j = 0; j < ch; j++) {
+    const s1 = srow(Y0 + j + 1);
+    if (s1 > 0 && s0 < ih) {
+      const sh = Math.max(0.01, Math.min(s1, ih) - Math.max(s0, 0)), sy = clamp(s0, 0, ih - sh);
+      for (const [sx, sw, dx, dw] of ps) g.drawImage(img, sx, sy, sw, sh, dx, j, dw, 1);
+    }
+    s0 = s1;
+  }
+}
+/* Two canvases: the land's whole-world image for the relief, and the sea's with the tiles over it. */
+function shadeCanvas(fine) {
+  const lw = clamp(2 ** Math.round(Math.log2(view.scale * dpr)), 512, fine ? 65536 : 4096);
   const hw = W / (2 * view.scale), hh = H / (2 * view.scale);
   const u0 = (view.cx - hw) * lw, u1 = (view.cx + hw) * lw;
   const v0 = Math.max(0, (view.cy - hh) * lw), v1 = Math.min(lw, (view.cy + hh) * lw);
-  const c = relief.cache;
-  if (c && c.lw === lw && c.img === relief.img) {
+  const c = shade.c[+fine];
+  if (c && c.lw === lw && c.gen === shade.gen) {
     const k = Math.round((c.X0 + c.w / 2 - (u0 + u1) / 2) / lw) * lw;
     if ((c.w >= lw || (c.X0 <= u0 + k && u1 + k <= c.X0 + c.w)) && c.Y0 <= v0 && v1 <= c.Y0 + c.h) return c;
   }
@@ -540,26 +569,21 @@ function reliefCanvas() {
   const t0 = performance.now();
   const cv = c && c.cv.width === w && c.cv.height === h ? c.cv : document.createElement('canvas');
   cv.width = w; cv.height = h;
-  const g = cv.getContext('2d'), img = relief.img, iw = img.naturalWidth, ih = img.naturalHeight;
+  const g = cv.getContext('2d');
   g.imageSmoothingQuality = 'high';
-  const pieces = [], a0 = X0 / lw, a1 = (X0 + w) / lw;
-  for (let k = Math.floor(a0); k < a1; k++) {
-    const a = Math.max(a0, k), b = Math.min(a1, k + 1);
-    if (b > a) pieces.push([(a - k) * iw, (b - a) * iw, a * lw - X0, (b - a) * lw]);
+  paint(g, shade.img[+fine], [-180, -90, 180, 90], X0, Y0, w, h, lw);
+  // past the whole-world level's 4096 px, the tiles in view, each read on first need
+  if (fine && lw > 8192) for (const t of shade.tiles) {
+    if (latToY(t.b[1]) * lw < Y0 || latToY(t.b[3]) * lw > Y0 + h || !pieces(t.b, X0, w, lw, 1).length) continue;
+    t.used = t0;
+    if (t.px) paint(g, t.img, t.b, X0, Y0, w, h, lw); else if (!t.img && !t.bad) wantTile(t);
   }
-  const srow = (py) => ((90 - yToLat(clamp(py / lw, 0, 1))) / 180) * ih;
-  let s0 = srow(Y0);
-  for (let j = 0; j < h; j++) {
-    const s1 = srow(Y0 + j + 1), sh = Math.max(0.01, s1 - s0), sy = clamp(s0, 0, ih - sh);
-    for (const [sx, sw, dx, dw] of pieces) g.drawImage(img, sx, sy, sw, sh, dx, j, dw, 1);
-    s0 = s1;
-  }
-  relief.builds++;
-  relief.ms = performance.now() - t0;
-  return (relief.cache = { cv, lw, X0, Y0, w, h, img });
+  shade.builds++;
+  shade.ms = performance.now() - t0;
+  return (shade.c[+fine] = { cv, lw, X0, Y0, w, h, gen: shade.gen });
 }
-function drawRelief() {
-  const c = reliefCanvas(), f = view.scale * dpr;
+function drawShade(fine) {
+  const c = shadeCanvas(fine), f = view.scale * dpr;
   const xmin = view.cx - W / (2 * view.scale), xmax = view.cx + W / (2 * view.scale);
   const ox = c.X0 / c.lw, ow = c.w / c.lw, dy = (c.Y0 / c.lw - view.cy) * f + (H * dpr) / 2;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -600,65 +624,70 @@ function cached(slot, key, paint) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 function drawSea() {
-  cached('sea', [geo && geo.bathy ? geo.bathy.length : 0, relief.status, reliefOn(), depthOn()], () => {
+  cached('sea', [shade.status, shade.gen, terrainOn(), depthOn()], () => {
     ctx.fillStyle = P.outside;
     ctx.fillRect(0, 0, W, H);
     const top = Math.max(0, worldToScreenY(0)), bottom = Math.min(H, worldToScreenY(1));
     ctx.fillStyle = P.sea;
     ctx.fillRect(0, top, W, bottom - top);
-    if (reliefOn()) {
-      drawRelief();
-      ctx.globalCompositeOperation = 'saturation';
-      ctx.fillStyle = '#808080';
-      ctx.fillRect(0, top, W, bottom - top);
-      ctx.globalCompositeOperation = 'source-over';
-      if (P.dim) { ctx.fillStyle = P.dim; ctx.fillRect(0, top, W, bottom - top); }
-      ctx.globalAlpha = 0.5;
-    }
-    if (depthOn()) drawBathy();
+    // the sea floor: the gray multiplied over the sea color; the land under it is covered by the
+    // countries or, with Terrain shading, by the relief
+    if (depthOn()) { ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha = P.name === 'dark' ? 0.9 : 0.45; drawShade(true); }
+    ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
+    // the relief, on land only: the countries' own rings are its mask
+    if (terrainOn() && geo) {
+      const m = new Path2D(), s = view.scale / PATH_K;
+      for (const k of worldCopies()) m.addPath(geo.borders, new DOMMatrix([dpr * s, 0, 0, dpr * s, dpr * (W / 2 - (view.cx - k) * view.scale), dpr * (H / 2 - view.cy * view.scale)]));
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clip(m);
+      drawShade(false);
+      if (P.dim) { ctx.fillStyle = P.dim; ctx.fillRect(0, 0, W * dpr, H * dpr); }
+      ctx.restore();
+    }
     // the map ends at 85°: a 1 px line where the outside's own tone begins, so the plate never melts into the chrome
     ctx.fillStyle = P.edge;
     if (top > 0) ctx.fillRect(0, top - 1, W, 1);
     if (bottom < H) ctx.fillRect(0, bottom, W, 1);
   });
 }
-function drawBathy() {
-  if (!bathyStyles) bathyStyles = geo.bathy.map((b) => bathyStyle(b.depth));
-  for (const k of worldCopies()) withWorldTransform(k, () => {
-    let last = P.sea;
-    for (let i = 0; i < geo.bathy.length; i++) {
-      const style = bathyStyles[i];
-      if (style === last) continue;          // 7000 m and deeper share the 6000 m tint
-      ctx.fillStyle = style;
-      ctx.fill(geo.bathy[i].path, 'evenodd');
-      last = style;
-    }
-  });
-}
 /* Values go on in the LUT color; zero and "no data" are both plain land: the card says which. */
 function drawCountries() {
   stats.fills++;
-  const cl = prod && link && shown != null ? colorsFor(shown) : null, rel = reliefOn(), cs = geo.countries;
+  const cl = prod && link && shown != null ? colorsFor(shown) : null, rel = terrainOn(), cs = geo.countries;
   for (const k of worldCopies()) withWorldTransform(k, () => {
     if (!rel) { ctx.fillStyle = P.land; for (let i = 0; i < cs.length; i++) ctx.fill(cs[i].path, 'evenodd'); }
     else { ctx.globalCompositeOperation = P.comp; ctx.globalAlpha = 0.8; }
     for (let i = 0; i < cs.length; i++) {
-      if (!cl || (cl.st[i] & 3) !== 0) continue;
+      if (!cl || (cl.st[i] & 3) !== 0 || cl.of[i]) continue;
       ctx.fillStyle = P.lut[cl.idx[i]];
       ctx.fill(cs[i].path, 'evenodd');
     }
+    // a former state's members in one fill, so no seam shows where two of them meet
+    if (cl) for (const u in cl.fill) if (cl.fill[u] >= 0) { ctx.fillStyle = P.lut[cl.fill[u]]; ctx.fill(cl.paths[u]); }
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
   });
-  cached('borders', rel, () => {
+  // a former state's members are one shape: no border inside it, its edge drawn from outside it
+  const un = cl && cl.sig ? cl : null;
+  cached('borders', [rel, un ? un.sig : ''], () => {
     for (const k of worldCopies()) withWorldTransform(k, (s) => {
       ctx.lineJoin = 'round';
       ctx.strokeStyle = P.borderC;
       ctx.lineWidth = 0.6 / s;
+      if (un) { ctx.save(); ctx.clip(outside(Object.values(un.paths)), 'evenodd'); }
       ctx.stroke(geo.borders);
+      if (un) { ctx.lineWidth = 1.2 / s; for (const p of Object.values(un.paths)) ctx.stroke(p); ctx.restore(); }
     });
   });
+}
+/* Everything but the given shapes, for a clip (even-odd, in world units × PATH_K). */
+function outside(paths) {
+  const c = new Path2D();
+  c.rect(-PATH_K, -PATH_K, 3 * PATH_K, 3 * PATH_K);
+  for (const p of paths) c.addPath(p);
+  return c;
 }
 /* The tracker's outlines under the discs, once zoomed in: only units near the view are looked at,
  * and only outlines that meet the view and span OUTLINE_MIN_PX are drawn. */
@@ -689,7 +718,8 @@ function drawOutlines() {
 }
 /* Filled: producing. Ring: found, not yet producing in the year shown (only while the fields follow
  * the year). No figure: pale while following the year, an open ring otherwise. Every filled disc has
- * its rim (owner call 6). With a highlight, the others go first at 15 % and the highlighted on top. */
+ * its rim (owner call 6) unless Map layers turns the rims off. With a highlight, the others go first at
+ * 15 % and the highlighted on top. */
 function drawFields() {
   stats.fieldPasses++;
   const res = sizeBy === 'res', pts = res ? fields.byRes : fields.points, fy = followOn(), dim = !!highlight;
@@ -707,7 +737,7 @@ function drawFields() {
       else if ((res ? p.rv : p.v) == null) {
         if (fy) { ctx.globalAlpha = alpha * P.paleAlpha; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = alpha; }
         else { ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke(); }
-      } else { ctx.fillStyle = col; ctx.fill(); ctx.strokeStyle = P.rimC; ctx.lineWidth = 1; ctx.stroke(); }
+      } else { ctx.fillStyle = col; ctx.fill(); if (rimOn) { ctx.strokeStyle = P.rimC; ctx.lineWidth = 1; ctx.stroke(); } }
     }
   }
   ctx.globalAlpha = 1;
@@ -732,7 +762,7 @@ function exclusions() {
  * on each other or on the plate's controls. Widths are measured in the face, once it is in. */
 let labelOrder = null, placedLabels = [];
 function drawLabels() {
-  const cs = geo.countries;
+  const cs = geo.countries, cl = prod && link && shown != null ? colorsFor(shown) : null;
   if (!labelOrder || labelOrder.geo !== geo) labelOrder = { geo, order: cs.map((c, i) => i).sort((a, b) => cs[b].lw - cs[a].lw) };
   const placed = exclusions().slice(), fixed = placed.length;
   ctx.font = LABEL_FONT;
@@ -743,18 +773,22 @@ function drawLabels() {
   ctx.strokeStyle = P.haloC;
   ctx.fillStyle = P.label;
   for (const i of labelOrder.order) {
-    const c = cs[i], bw = c.lw * view.scale;
+    const c = cs[i], bw = c.lw * view.scale, u = cl && cl.of[i];
     if (bw < 44) break;                                   // sorted: all the rest are smaller
+    // a former state's shape is named once, at its lead member, by its own name
+    if (u && LEAD[u] !== c.iso3) continue;
+    const name = u ? shortName(prod.s, prod.byIso.get(u)) : c.name;
     if (c.tw == null) c.tw = ctx.measureText(c.name).width;
-    if (c.tw > bw * 1.25) continue;
+    const tw = u ? ctx.measureText(name).width : c.tw;
+    if (tw > bw * 1.25) continue;
     const x = worldToScreenX(c.lx), y = worldToScreenY(c.ly);
-    if (x - c.tw / 2 < 4 || x + c.tw / 2 > W - 4 || y < 10 || y > H - 10) continue;
-    const box = [x - c.tw / 2 - 3, y - 8, x + c.tw / 2 + 3, y + 8];
+    if (x - tw / 2 < 4 || x + tw / 2 > W - 4 || y < 10 || y > H - 10) continue;
+    const box = [x - tw / 2 - 3, y - 8, x + tw / 2 + 3, y + 8];
     if (placed.some((b) => b[0] < box[2] && b[2] > box[0] && b[1] < box[3] && b[3] > box[1])) continue;
     box.i = i;
     placed.push(box);
-    ctx.strokeText(c.name, x, y);
-    ctx.fillText(c.name, x, y);
+    ctx.strokeText(name, x, y);
+    ctx.fillText(name, x, y);
   }
   placedLabels = placed.slice(fixed);
 }
@@ -765,10 +799,14 @@ function drawSelection() {
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
   if (sel.kind === 'country') {
-    const g = geo.countries.find((c) => c.iso3 === sel.iso3);
-    if (g) for (const k of worldCopies()) withWorldTransform(k, (s) => {
-      ctx.strokeStyle = P.selHalo; ctx.lineWidth = 3.5 / s; ctx.stroke(g.path);
-      ctx.strokeStyle = P.sel; ctx.lineWidth = 1.5 / s; ctx.stroke(g.path);
+    const g = geo.countries.find((c) => c.iso3 === sel.iso3), u = !g && prod && link && shown != null && colorsFor(shown).paths[sel.iso3];
+    // a former state's shape is traced from outside, so the borders inside it stay hidden
+    if (g || u) for (const k of worldCopies()) withWorldTransform(k, (s) => {
+      const p = g ? g.path : u, f = g ? 1 : 2;
+      if (u) { ctx.save(); ctx.clip(outside([u]), 'evenodd'); }
+      ctx.strokeStyle = P.selHalo; ctx.lineWidth = (3.5 * f) / s; ctx.stroke(p);
+      ctx.strokeStyle = P.sel; ctx.lineWidth = (1.5 * f) / s; ctx.stroke(p);
+      if (u) ctx.restore();
     });
   } else if (fieldsDrawn()) {
     const p = fields.byId.get(sel.id);
@@ -907,13 +945,13 @@ function creditsList() {
   const out = [];
   if (prod) for (const s of prod.s.sources) if (s && isStr(s.attribution)) out.push(s.attribution);
   if (!out.some((a) => /natural earth/i.test(a)) && geo && geo.source) out.push(geo.source);
-  if (depthOn() && !out.some((a) => /bathymetry/i.test(a))) out.push('Bathymetry: Natural Earth');
-  if (reliefOn()) out.push('Relief: Natural Earth I (public domain)');
+  if (depthOn()) out.push('Bathymetry: GEBCO');
+  if (terrainOn()) out.push('Relief: Natural Earth I (public domain)');
   if (fieldsDrawn() && fields.raw.source && isStr(fields.raw.source.attribution)) out.push(fields.raw.source.attribution);
   return out;
 }
-/* The credit line, whole, on screen in every mode (B7); each source in full is in About. */
-function updateCredits() { const l = creditsList(); setText($('credits'), l.length ? creditLine(l) : ''); }
+/* The credit line, first under About's Sources and credits; each source in full follows it there. */
+function updateCredits() { const l = creditsList(); setText($('about-credit-line'), l.length ? creditLine(l) : ''); }
 
 function updateLegend() {
   const spec = unitSpec();
@@ -938,9 +976,10 @@ function updateLegend() {
   for (const [t, p, cls] of labels) { const s = el('span', cls, t); s.style.left = `${p * 100}%`; box.append(s); }
 }
 
-/* The caption line: a note when one applies, then how to read the Ledger and the map; the longest
- * form that fits the line's fixed height, measured in the face (never a third line). */
-let rlW = 300, rlLines = 2;
+/* The caption line: a note when one applies, then the bar's caption with its year, and the key after
+ * them (always drawn); the longest form that fits the line's fixed height with the key, measured in the
+ * face (never a third line). */
+let rlW = 300, rlLines = 2, keyW = 160;
 const wordW = new Map();
 function lineCount(t) {
   measure.font = CAPTION_FONT;
@@ -960,24 +999,22 @@ function captionNote() {
     const bits = [settingFilter, typeFilter].filter((v) => v !== 'all');
     if (bits.length) return `Fields: ${bits.join(', ')} only.`;
   }
-  // a former state holds the figure while its members' outlines are plain
-  for (const st in LEAD) {
-    const h = prod.byIso.get(st), m = h && prod.byIso.get(LEAD[st]);
-    if (h && val(h, mode, shown).v != null && (!m || val(m, mode, shown).v == null)) { const n = shortName(prod.s, h); return `${n === 'USSR' ? 'The USSR' : n}'s lands are plain: its figure is in the bar.`; }
-  }
   return '';
+}
+/* Lines the caption takes with the key after it: on its last line when it fits there, else its own. */
+function withKey(t) {
+  const n = lineCount(t);
+  return n > 1 || widthOf(CAPTION_FONT, t) + 12 + keyW > rlW ? n + 1 : 1;
 }
 function readline() {
   if (!prod) return geo ? 'Plain countries: no production figures could be read.' : '';
   if (!worldAt(prod, mode, shown, isCum()).v) return `No world figure for ${shown}.`;
-  const what = mode === 'total' ? 'oil and gas' : mode, of = whose();
-  const bar = isCum() ? `Bar: shares of all the ${what} produced to ${shown}` : `Bar: shares of ${of} ${what} in ${shown}`;
-  const end = `; hatched, all under 1${U.NNBSP}%.`, plain = ' Plain: no figure, or none.', est = fieldsDrawn() && estOn() ? ' Field sizes are estimates.' : '';
+  const what = mode === 'total' ? 'oil and gas' : mode;
+  const bar = isCum() ? `Bar: shares of all the ${what} produced to ${shown}.` : `Bar: shares of ${whose()} ${what} in ${shown}.`;
   const note = captionNote();
-  // a note leads, then the bar's number (HOUSE 5.2 test 3) and the estimate, where they fit
-  const forms = note ? [`${note} ${bar}${end}${est}`, `${note} Bar: ${end.slice(2)}${est}`, `${note} Bar: ${end.slice(2)}`, `${note} Bar: shares of ${isCum() ? 'everything produced to date' : `${of} output`}, largest first.`, note]
-    : [`${bar}${end}${plain}${est}`, `${bar}${end}${plain}`, `${bar}, largest first${end}${est}`, `${bar}${end}`, `Bar: shares of ${of} ${what}, largest first.`];
-  return forms.find((f) => lineCount(f) <= rlLines) || forms[forms.length - 1];
+  // a note leads, then the bar's caption with its year (HOUSE 5.2 test 3), where it fits beside the key
+  const forms = note ? [`${note} ${bar}`, note] : [bar];
+  return forms.find((f) => withKey(f) <= rlLines) || forms[forms.length - 1];
 }
 /* The lead beside the year: the world's figure, and while the fields are drawn how many produce;
  * the fields' part is read by VoiceOver but dropped from sight when the row has no room for it. */
@@ -1023,16 +1060,22 @@ function rankOf(iso3, y) {
   const i = vals.findIndex((v) => v[0] === iso3);
   return i < 0 ? null : { r: i + 1, n: vals.length };
 }
-/* For a country with no figure of its own in the year shown: the former state it was part of, when
- * that state has one then. Those states have no outline to tap. */
+/* A former state's name as a sentence starts it: "The USSR". */
+const stateName = (c) => { const n = shortName(prod.s, c); return n === 'USSR' ? 'The USSR' : n; };
+/* For a member of a former state with nothing of its own in the year shown: the state it was part of,
+ * when that state has a figure then, and whether the map draws it in that state's color. For the state
+ * itself, the members it is drawn over. */
 function formerStateNote(iso3, y) {
-  const state = FORMER_STATE[iso3], h = state && prod && prod.byIso.get(state);
-  if (!h) return '';
-  const r = val(h, mode, y);
-  if (r.v == null) return '';
-  const label = shortName(prod.s, h), the = /^USSR$/.test(label) ? 'the ' : '';
-  return `No ${isCum() ? `figure of its own up to ${y}` : `${y} figure of its own`}: it was part of ${the}${label} then, which has no outline on this map, and its share is in ${the}${label}'s block. `
-    + `${label}, ${MODES[mode].toLowerCase()}${isCum() ? ' to date' : ''}: ${U.withUnit(U.sig3(toUnit(r.v)), unitSpec().label)}.`;
+  const cl = colorsFor(y), u = cl.paths[iso3] && formerUnions(prod, mode, isCum(), y).find((x) => x.state === iso3);
+  if (u) {
+    const on = (l) => l.filter((x) => geo.index.has(x)).length, n = on(u.members), all = on(MEMBERS[iso3]);
+    return `On the map it is drawn over ${n === all ? 'its' : `${n} of its`} ${all} successor states, which report nothing of their own ${isCum() ? 'to' : 'in'} ${y}.`;
+  }
+  const state = FORMER_STATE[iso3], h = state && prod.byIso.get(state), r = h && val(h, mode, y);
+  if (!r || r.v == null) return '';
+  const name = stateName(h), the = name.replace(/^The /, 'the '), i = geo ? geo.index.get(iso3) : null;
+  return `${i != null && cl.of[i] ? `Drawn as part of ${the} ${isCum() ? 'to' : 'in'} ${y}` : `No figure of its own ${isCum() ? 'to' : 'in'} ${y}: it was part of ${the} then`}. `
+    + `${name}, ${MODES[mode].toLowerCase()}${isCum() ? ' to date' : ''}: ${U.withUnit(U.sig3(toUnit(r.v)), unitSpec().label)}.`;
 }
 const FUEL = { oil: 'Oil', gas: 'Gas', both: 'Oil and gas' };
 function dlRow(dl, k, v) {
@@ -1074,7 +1117,7 @@ function renderCard(announce) {
     if (!prod) { box.hidden = true; return; }
     const g = geo && geo.countries.find((c) => c.iso3 === sel.iso3), c = prod.byIso.get(sel.iso3) || null;
     if (!g && !c) { box.hidden = true; return; }
-    const name = g ? g.name : c.name, span = c && seriesSpan(c);
+    const name = g ? g.name : stateName(c), span = c && seriesSpan(c);
     setText($('card-where'), name);
     const oil = dlRow(rows, 'Oil', '–'), gas = dlRow(rows, 'Gas', '–');
     dlRow(rows, 'Series', !span ? 'none' : span[1] < prod.Y1 ? `${span[0]} to ${span[1]}; later years are not in it` : `${span[0]} to ${span[1]}`);
@@ -1093,7 +1136,7 @@ function renderCard(announce) {
       const notes = [];
       if (!c) notes.push('data/snapshot.json has no series for this country, so it is plain in every year.');
       if (partial) notes.push(`${val(c, 'oil', shown).v == null ? 'Oil' : 'Gas'} has no figure ${cum ? 'up to' : 'for'} ${shown}, so the total counts ${val(c, 'oil', shown).v == null ? 'gas' : 'oil'} only.`);
-      if (v == null) { const fs = formerStateNote(sel.iso3, shown); if (fs) notes.push(fs); }
+      if (!(v > 0) || !g) { const fs = formerStateNote(sel.iso3, shown); if (fs) notes.push(fs); }
       setText(note, notes.join(' '));
       note.hidden = !notes.length;
       return { v, w };
@@ -1237,7 +1280,7 @@ function renderDetails() {
 }
 function countryDetails(b) {
   const g = geo && geo.countries.find((c) => c.iso3 === sel.iso3), c = prod && prod.byIso.get(sel.iso3);
-  setText($('details-title'), g ? g.name : c ? c.name : sel.iso3);
+  setText($('details-title'), g ? g.name : c ? stateName(c) : sel.iso3);
   if (!c) { b.append(el('p', 'sheet-note', 'data/snapshot.json has no series for this country, so it is plain in every year. About lists every outline without a series and every series without an outline.')); trackerSection(b, null, g && g.name); return; }
   const cv = el('canvas', 'chart'), key = el('div', 'chart-key'), ko = el('span', 'oil'), kg = el('span', 'gas');
   cv.setAttribute('role', 'img');
@@ -1350,13 +1393,11 @@ function fieldDetails(b) {
 
 /* ── the Map layers sheet ────────────────────────────────────────────────── */
 
-const LAYER = { fields: () => showFields, follow: () => followYear, terrain: () => terrainPref, depth: () => depthPref, labels: () => showLabels };
+const LAYER = { fields: () => showFields, follow: () => followYear, terrain: () => terrainPref, depth: () => depthPref, labels: () => showLabels, rim: () => rimOn };
 function syncLayers() {
   for (const b of document.querySelectorAll('#layers .lrow')) b.setAttribute('aria-pressed', String(!!LAYER[b.dataset.layer]()));
   const usable = !!fields && fields.available;
   $('field-opts').hidden = !usable || !showFields;
-  document.querySelector('[data-layer="terrain"]').hidden = !(geo && geo.relief);
-  document.querySelector('[data-layer="depth"]').hidden = !(geo && geo.bathy);
   for (const [id, v] of [['status-seg', statusFilter], ['setting-seg', settingFilter], ['type-seg', typeFilter], ['size-seg', sizeBy]]) {
     for (const b of $(id).children) { const on = b.dataset.v === v; b.setAttribute('aria-checked', String(on)); b.tabIndex = on ? 0 : -1; }
   }
@@ -1450,7 +1491,7 @@ function showAbout() {
     const hist = historicalLabels(prod.s), withOutline = prod.s.countries.length - link.noPolygon.length - link.historical.length;
     more.append(el('h4', null, 'Matching countries to outlines'));
     p(more, `Series are matched to Natural Earth outlines by ISO 3166 alpha-3 code: ${withOutline} of ${prod.s.countries.length} series have an outline.`);
-    if (link.historical.length) p(more, `Former states, with no outline, counted in the world total, in ranks and in the Ledger by rule B; their successor states are plain before their own series begin: ${link.historical.map((c) => `${hist[c.iso3]} (${c.iso3})`).join(', ')}.`);
+    if (link.historical.length) p(more, `Former states, with no outline of their own, counted in the world total, in ranks and in the Ledger by rule B: ${link.historical.map((c) => `${hist[c.iso3]} (${c.iso3})`).join(', ')}. In any year a former state has a figure and its largest member none, the map draws its successor states that report nothing of their own (no figure, or zero) as one shape in its color, and a tap there opens it; once its largest member's series begins, each is drawn by its own.`);
     if (link.noPolygon.length) p(more, `Series with no outline at this scale, in the data but not on the map: ${link.noPolygon.map((c) => `${c.name} (${c.iso3})`).join(', ')}.`);
     if (link.noData.length) p(more, `Outlines with no series, always plain: ${link.noData.map((c) => `${c.name} (${c.iso3})`).join(', ')}.`);
   }
@@ -1477,11 +1518,7 @@ function showAbout() {
     if (s) src(s.name || 'Source', [['License', s.licence], ['Attribution', s.attribution], ['Detail', s.detail], ['Address', s.url]],
       'oil and gas series converted from GWh to TWh/yr, kboe/d, PWh and Gboe, added into oil and gas, running totals and shares of the world; the holes listed under Corrections set to no data');
   }
-  if (geo && geo.relief) {
-    src('Relief basemap', [['Source', geo.relief.source || 'Natural Earth I, shaded relief'], ['License', 'public domain (Natural Earth)'], ['Address', 'www.naturalearthdata.com/'],
-      ['Status', relief.status === 'ok' ? `data/${geo.relief.file}, reprojected to Web Mercator on the phone and drawn as gray shading` : relief.status === 'error' ? `data/${geo.relief.file} could not be read; the sea is drawn flat` : 'read when Terrain shading is switched on']]);
-  }
-  if (geo && geo.source) p(srcs, `Outlines${geo.bathy ? ' and sea-floor depth bands' : ''} in data/world.json: ${geo.source}.${geo.bathy ? ` ${geo.bathy.length} depth bands from ${U.int(geo.bathy[0].depth)} to ${U.int(geo.bathy[geo.bathy.length - 1].depth)}${U.NNBSP}m, for orientation only (Map layers, Depth bands).` : ''}`);
+  if (geo && geo.source) p(srcs, `Outlines in data/world.json: ${geo.source}.`);
   if (fields && fields.available && fields.raw.source) {
     const s = fields.raw.source;
     src(s.name || 'Field points', [['Release', s.release], ['File', s.file], ['License', s.licence], ['Attribution', s.attribution], ['Address', s.url]],
@@ -1756,7 +1793,9 @@ function selectAt(sx, sy) {
   const lb = placedLabels.find((b) => sx >= b[0] && sx <= b[2] && sy >= b[1] && sy <= b[3]);
   const i = lb ? lb.i : countryAt(sx, sy), f = !lb && fieldAt(sx, sy, i < 0 || !prod || !prod.byIso.has(geo.countries[i].iso3) || view.scale >= OUTLINE_SCALE);
   if (f) { select({ kind: 'field', id: f.id }, { announce: true }); return; }
-  select(i >= 0 ? { kind: 'country', iso3: geo.countries[i].iso3, at: screenToWorld(sx, sy) } : null, { announce: true });
+  // a successor drawn in its former state's color opens the former state
+  const u = i >= 0 && prod && link && shown != null && colorsFor(shown).of[i];
+  select(i >= 0 ? { kind: 'country', iso3: u || geo.countries[i].iso3, at: screenToWorld(sx, sy) } : null, { announce: true });
 }
 
 /* ── controls ────────────────────────────────────────────────────────────── */
@@ -1817,9 +1856,11 @@ for (const b of document.querySelectorAll('#layers .lrow')) {
     const k = b.dataset.layer;
     if (k === 'fields') { showFields = !showFields; store.set(STORE.fields, showFields ? '1' : '0'); onFields(); return; }
     if (k === 'follow') { setFieldOpt('follow', !followYear); return; }
-    if (k === 'terrain') { terrainPref = !terrainPref; store.set(STORE.terrain, terrainPref ? '1' : '0'); if (terrainPref && geo) loadRelief(geo.relief); }
+    if (k === 'terrain') { terrainPref = !terrainPref; store.set(STORE.terrain, terrainPref ? '1' : '0'); }
     else if (k === 'depth') { depthPref = !depthPref; store.set(STORE.depth, depthPref ? '1' : '0'); }
     else if (k === 'labels') { showLabels = !showLabels; store.set(STORE.labels, showLabels ? '1' : '0'); }
+    else if (k === 'rim') { rimOn = !rimOn; store.set(STORE.rim, rimOn ? '1' : '0'); buildPalette(); }
+    if (terrainPref || depthPref) loadShade();
     updateCredits();
     syncLayers();
     requestRender();
@@ -1868,8 +1909,8 @@ darkMq.addEventListener('change', () => {
 });
 reducedMq.addEventListener('change', () => { if (reduced()) endFly(); });
 
-/* ── focus mode: the plate, the player, the stamp, the Ledger, the caption line and the credits;
- * everything else leaves, hidden and inert. Remembered as wog.focus. ── */
+/* ── focus mode: the plate, the player, the stamp, the Ledger and the caption line; everything else
+ * leaves, hidden and inert. Remembered as wog.focus. ── */
 
 let leaveTimer = 0;
 function setFocus(on, { kbd = false, boot = false } = {}) {
@@ -1932,10 +1973,8 @@ async function loadAll() {
     const [tw, ts, tf] = await Promise.all(Object.values(FILES).map((f) => readText(f).then((t) => ({ t }), (e) => ({ e }))));
     let changed = take('world', tw, checkWorld, 'a world outline file', (w) => {
       geo = buildGeo(w);
-      labelOrder = null; bathyStyles = null; caches.sea = caches.borders = null;
-      setProblem('world', FILES.world, geo.bathyError ? ` has depth bands that could not be decoded (${geo.bathyError}); the sea is drawn flat.` : geo.reliefError || null);
-      loadRelief(null);
-      if (terrainPref) loadRelief(geo.relief);
+      labelOrder = null; colorCache.clear(); caches.sea = caches.borders = null;
+      setProblem('world', FILES.world, null);
     }, (m) => setProblem('world', FILES.world, `${m} ${geo ? 'Showing the outlines as last read.' : 'No country outlines, so nothing can be colored.'}`));
     changed = take('snapshot', ts, checkSnapshot, 'a World Oil & Gas snapshot', (s) => {
       prod = buildProd(s);
@@ -1996,8 +2035,8 @@ function resize() {
   wrap.classList.toggle('keys-row', 5 * 44 + 2 * 8 + 6 + 16 > H);
   if (!view.scale) fitFirst(); else clampView();
   ledgerW = Math.round($('ledger').clientWidth);
-  const rl = $('readline');
-  rlW = rl.clientWidth || 300; rlLines = Math.max(1, Math.round(rl.clientHeight / 15));
+  const rl = $('readbox');
+  rlW = rl.clientWidth || 300; rlLines = Math.max(1, Math.round(rl.clientHeight / 15)); keyW = $('rkey').offsetWidth || keyW;
   // the lead beside the year (or under it, on its side): measured in the face, not read from the year shown
   const row = $('lead').parentElement;
   leadW = Math.max(60, row.clientWidth - (getComputedStyle(row).flexDirection === 'column' ? 8 : widthOf(YEAR_FONT, '2024') + 20));
@@ -2023,6 +2062,7 @@ function resize() {
   const sz = store.get(STORE.size); if (sz === 'prod' || sz === 'res') sizeBy = sz;
   depthPref = store.get(STORE.depth) === '1';
   terrainPref = store.get(STORE.terrain) === '1';
+  rimOn = store.get(STORE.rim) !== '0';
   focusMode = store.get(STORE.focus) === '1';
   try {
     const h = JSON.parse(store.get(STORE.hl) || 'null');
@@ -2052,11 +2092,12 @@ resize();
 const faceIn = () => {
   fontReady = true;
   if (geo) for (const c of geo.countries) c.tw = null;
-  wordW.clear(); track.invalidate(); ledgerKey = ''; updateLegend(); dirtyAll();
+  wordW.clear(); track.invalidate(); ledgerKey = ''; keyW = $('rkey').offsetWidth || keyW; updateLegend(); dirtyAll();
 };
 document.fonts.load(LABEL_FONT).then(faceIn, faceIn);
 document.fonts.addEventListener('loadingdone', faceIn);
 loadAll();
+if (terrainPref || depthPref) loadShade();
 
 /* For tests and a browser console, never for the app itself. */
 window.__wog = {
@@ -2068,8 +2109,8 @@ window.__wog = {
       countries: geo ? geo.countries.length : 0, series: prod ? prod.s.countries.length : 0,
       fields: fields ? { available: fields.available, points: fields.points.length } : null,
       fieldCounts: { ...countFields() }, outlines: { ...outlineStats },
-      depthBands: depthOn(), terrain: terrainPref,
-      relief: { status: relief.status, builds: relief.builds, ms: Math.round(relief.ms * 10) / 10 },
+      depth: depthOn(), terrain: terrainOn(), rim: rimOn,
+      shade: { status: shade.status, builds: shade.builds, ms: Math.round(shade.ms * 10) / 10, tiles: shade.tiles.filter((t) => t.px).map((t) => t.file) },
       estimate: est ? { mode: est.mode, fields: est.n, on: estOn() } : null,
       worldSum: prod && shown != null ? toUnit(worldAt(prod, mode, shown, isCum()).v) : null,
       problems: [...problems.values()] };
@@ -2103,7 +2144,7 @@ window.__wog = {
   pixel(lon, lat) {
     const x = Math.round(worldToScreenX(lonToX(lon)) * dpr), y = Math.round(worldToScreenY(latToY(lat)) * dpr);
     const at = (c) => [...c.getImageData(x, y, 1, 1).data];
-    return { map: at(ctx), sea: caches.sea ? at(caches.sea.c) : null, comp: reliefOn() ? P.comp : 'source-over' };
+    return { map: at(ctx), sea: caches.sea ? at(caches.sea.c) : null, comp: terrainOn() ? P.comp : 'source-over' };
   },
   search(q) { return searchResults(q).map((g) => ({ title: g.title, items: g.items.map((i) => i.main) })); },
   pick(kind, q) { const g = searchResults(q).find((x) => x.title === kind); if (g) g.items[0].pick(); return !!g; },
@@ -2114,5 +2155,5 @@ window.__wog = {
   labels: () => placedLabels.map((p) => p.slice()),
   log(on) { if (on) { logRows = []; return null; } const r = logRows; logRows = null; return r; },
   decodePolyline,
-  get bathy() { return geo && geo.bathy ? geo.bathy.map((b) => ({ depth: b.depth, points: b.points })) : null; },
+  unions: () => (prod && shown != null ? formerUnions(prod, mode, isCum(), shown).map((u) => ({ state: u.state, members: u.members.filter((i) => geo.index.has(i)) })) : []),
 };

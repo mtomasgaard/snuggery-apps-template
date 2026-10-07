@@ -303,7 +303,7 @@ svg .fill { fill: currentColor; stroke: none; }
 }
 .error div + div { margin-top: 6px; }
 
-/* ── the caption band: the Ledger, the legend, how to read the picture, the credits ── */
+/* ── the caption band: the Ledger, the legend, the bar's caption and its key ── */
 
 .caption {
   padding: 6px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left));
@@ -330,12 +330,16 @@ svg .fill { fill: currentColor; stroke: none; }
 .legend-ticks span.last::before { left: auto; right: 0; }
 /* below 640 px the title has its own line, so the bar runs the full width */
 @media (max-width: 639px) { .legend { flex-wrap: wrap; row-gap: 0; } .legend-scale { flex-basis: 100%; padding-top: 2px; } }
-.readline, .credits { margin: 0; }
 /* The caption line has a fixed height, whatever it says: its words change with the year, and a line
-   that grew and shrank would resize the plate on every year of play. Two lines below 640 px; one from 640. */
-.readline { height: 30px; overflow: hidden; }
+   that grew and shrank would resize the plate on every year of play. Two lines below 640 px; one from 640.
+   The key follows the words on their line when it fits there, else on the next (HOUSE 4.15). */
+.readline { display: flex; flex-wrap: wrap; align-content: flex-start; column-gap: 12px; height: 30px; overflow: hidden; }
 @media (min-width: 640px) { .readline { height: 15px; } }
-.credits { font-size: 10.5px; }
+.key { display: flex; gap: 2px 12px; font-size: 11.5px; line-height: 15px; color: var(--ink-2); white-space: nowrap; }
+.key .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
+/* the bar's hatched end, 1 px lines 3 px apart at 45 degrees; plain land as the map paints it, edged as a border */
+.sw-hatch { background: repeating-linear-gradient(135deg, var(--ledger) 0 1px, transparent 1px 3px); }
+.sw-plain { background: var(--s-land); border: 1px solid var(--line-strong); }
 
 /* ── the sheet's slot: details or the map's layers, on the page, under a hairline ── */
 
@@ -509,13 +513,12 @@ svg .fill { fill: currentColor; stroke: none; }
   .stamp { white-space: nowrap; }
   .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
   .hkeys { grid-area: 1 / 3 / 3 / 4; }
-  /* the Ledger and the legend share a row, then the caption line and the credits, each one line */
+  /* the Ledger and the legend share a row, then the caption line and its key, one line */
   .caption { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; padding-top: 4px; padding-bottom: 2px; }
   .caption > .stamp { grid-column: 1 / -1; }
   .ledger { grid-column: 1; margin-bottom: 0; }
   .legend { grid-column: 2; }
-  .readline { grid-column: 1; height: 15px; }
-  .credits { grid-column: 2; }
+  .readline { grid-column: 1 / -1; height: 15px; }
   /* the year, the transport and the track on one row */
   .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
   .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; max-width: 40%; }

@@ -3,7 +3,8 @@
 // this file (Google's polyline algorithm, the series, the Ledger's rule-B partition, the field years) and
 // js/data.js and js/units.js are compared with it, so a bug in the app cannot agree with itself. It also
 // pins the two data bugs this pass fixed: B1 (a cumulative total held past its series' end) and B5
-// (undated fields placed in their data year, never in every year).
+// (undated fields placed in their data year, never in every year), and plan 0012's former states on the
+// map (formerUnions: the USSR's color over its successors in 1970, each successor by its own in 1995).
 //
 //   node tools/test_decode.mjs
 
@@ -224,10 +225,54 @@ const YEARS = [1900, 1920, 1950, 1973, 1985, 1991, 2000, 2016, 2017, 2024];
   `dates by hand, the same on every locale: About "${full}", the stamp "${stamp}" (another day), "${same}" (today), with the year once it is another year`);
 }
 
+/* ── the former states on the map (plan 0012, 3.2): formerUnions against this file's own rule ── */
+{
+  const prod = D.buildProd(snap);
+  const by = new Map(snap.countries.map((c) => [c.iso3, c]));
+  // a figure, written here again: the year's value, or the running total to it from the first figure
+  const fig = (c, m, y, cum) => {
+    if (!c) return null;
+    let t = null;
+    for (let k = cum ? c.y0 : y; k <= y; k++) {
+      const i = k - c.y0;
+      if (i < 0 || i >= c.oil.length) continue;
+      const o = c.oil[i], g = c.gas[i], v = m === 'oil' ? o : m === 'gas' ? g : o == null && g == null ? null : (o || 0) + (g || 0);
+      if (v != null) t = (t || 0) + v;
+    }
+    return t;
+  };
+  const LEAD = { OWID_USS: 'RUS', OWID_CZS: 'CZE', OWID_YGS: 'SRB' };
+  const MEM = {
+    OWID_USS: ['RUS', 'UKR', 'BLR', 'KAZ', 'UZB', 'TKM', 'AZE', 'GEO', 'ARM', 'KGZ', 'TJK', 'MDA', 'LTU', 'LVA', 'EST'],
+    OWID_CZS: ['CZE', 'SVK'], OWID_YGS: ['SRB', 'HRV', 'SVN', 'BIH', 'MKD', 'MNE', 'OWID_KOS', 'KOS'],
+  };
+  // the rule: a former state with a figure whose lead member has none, over the members with no figure above zero
+  const mine = (m, cum, y) => Object.keys(LEAD).filter((st) => fig(by.get(st), m, y, cum) != null && fig(by.get(LEAD[st]), m, y, cum) == null)
+    .map((st) => ({ state: st, v: fig(by.get(st), m, y, cum), members: MEM[st].filter((i) => !(fig(by.get(i), m, y, cum) > 0)) })).filter((u) => u.members.length);
+  let n = 0;
+  const bad = [];
+  for (const cum of [false, true]) for (const m of ['total', 'oil', 'gas']) for (let y = Y0; y <= Y1; y++) {
+    n++;
+    const a = JSON.stringify(D.formerUnions(prod, m, cum, y)), b = JSON.stringify(mine(m, cum, y));
+    if (a !== b) bad.push(`${m} ${cum ? 'cumulative' : 'annual'} ${y}`);
+  }
+  ok(bad.length === 0, `formerUnions equals this file's rule in every year, mode and accumulation (${n} cases)${bad.length ? ': ' + bad.slice(0, 5).join(', ') : ''}`);
+  const u70 = D.formerUnions(prod, 'total', false, 1970), ussr = u70.find((u) => u.state === 'OWID_USS');
+  ok(ussr && ussr.members.length === 15 && ussr.v === fig(by.get('OWID_USS'), 'total', 1970, false) && u70.map((u) => u.state).join() === 'OWID_USS,OWID_CZS,OWID_YGS'
+    && D.formerUnions(prod, 'total', true, 1970).find((u) => u.state === 'OWID_USS').v === fig(by.get('OWID_USS'), 'total', 1970, true),
+  `1970: the USSR holds the figure (${ussr && ussr.v} GWh) over all ${ussr && ussr.members.length} successors, Ukraine's zero gas included; Czechoslovakia and Yugoslavia too; Cumulative 1970 the USSR's total to then`);
+  const u95 = [...D.formerUnions(prod, 'total', false, 1995), ...D.formerUnions(prod, 'total', true, 1995), ...D.formerUnions(prod, 'total', true, 2024)];
+  ok(u95.length === 0 && D.formerUnions(prod, 'total', false, 1984).some((u) => u.state === 'OWID_USS') && !D.formerUnions(prod, 'total', false, 1985).some((u) => u.state === 'OWID_USS')
+    && D.formerUnions(prod, 'total', false, 1992).some((u) => u.state === 'OWID_CZS') && !D.formerUnions(prod, 'total', false, 1993).length,
+  'never over a member that reports: none in 1995 (Annual and Cumulative) or Cumulative 2024; the USSR to 1984 and not from 1985 (Russia\'s first year), Czechoslovakia to 1992');
+}
+
 /* ── the credit line ── */
 {
-  const line = D.creditLine([...snap.sources.map((s) => s.attribution), fieldsFile.source.attribution, 'Bathymetry: Natural Earth', 'Relief: Natural Earth I (public domain)']);
-  ok(line === 'Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor', `creditLine: "${line}" (the stock app's words; Natural Earth once, however many layers credit it)`);
+  const line = D.creditLine([...snap.sources.map((s) => s.attribution), fieldsFile.source.attribution, 'Relief: Natural Earth I (public domain)']);
+  const deep = D.creditLine([...snap.sources.map((s) => s.attribution), fieldsFile.source.attribution, 'Bathymetry: GEBCO']);
+  ok(line === 'Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor' && deep === `${line} · GEBCO`,
+    `creditLine: "${line}" (the stock app's words; Natural Earth once, however many layers credit it); with Depth shading on, "… · GEBCO"`);
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }

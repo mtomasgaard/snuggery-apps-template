@@ -961,3 +961,179 @@ SE-sized phone with a sheet open; the ghost key next to Snuggery's exit control 
 corner; VoiceOver on the track, on a tap, on the Ledger's sentence, in Map layers and in Find; Find's
 16 px field not zooming the page; the phone on its side with a sheet open; the safe areas of every
 band.
+
+---
+
+## Plan 0012, package 3.2 (the builder, 2026-10-06): former states, depth shading, the rims, the text cut
+
+The brief: `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (package 3.2), the change list's World Oil &
+Gas section (`docs/plans/0012-change-lists.md`, items 1 to 4, after the sequencing note), HOUSE.md as
+amended 2026-10-06 (4.15, 13) and the researcher's findings (GEBCO_2026, a merged 4 096 global level and
+30" tiles over seven regions). Version **1.1 → 1.2**. Before pictures and the pre-pass files are in
+`tools/.work/before/`.
+
+### What changed
+
+1. **Former states on the map** (the owner: *"ussr has 39 % in the beginning but does not show up as colors
+   on the map?"*). `formerUnions(prod, mode, cum, y)` in `js/data.js`: a former state holds the figure in a
+   year when it has one and its lead member (Russia, Czechia, Serbia) has none, as the Ledger's rule B; its
+   members that report nothing of their own that year are drawn as one shape in its color. `colorsFor()` gives
+   those polygons the state's color and records them (`of`, one `Path2D` per state); `drawCountries()` fills each
+   union once (separate fills left a hairline seam at every shared edge, seen and fixed), and the borders cache
+   is clipped to outside the unions with the union's edge stroked from outside at 1.2 px, so no border shows
+   inside. A tap anywhere in it, or on its name, opens the former state's card (`The USSR`, its note: *On the
+   map it is drawn over its 15 successor states, which report nothing of their own in 1970.*); the selection is
+   traced from outside; the name is drawn once, at the lead member's label point. Annual and Cumulative alike.
+   The Ledger, its rule B and the bar are untouched. The caption's former-state note (*The USSR's lands are
+   plain…*) is gone. A successor's own card says `Drawn as part of the USSR in 1970` or, 1985 to 1991, `No
+   figure of its own in 1988: it was part of the USSR then` (the old note claimed the USSR's block held its
+   share in 1985 to 1991, when rule B has already replaced the USSR by its members: fixed).
+2. **Depth shading at the researcher's resolution.** `tools/build_shade.py` (pinned, re-runnable; a re-run
+   wrote byte-identical files) builds `data/shade.webp` (4 096 x 2 048, WebP q72: Natural Earth I's relief
+   as luminance on land, GEBCO_2026 depth and hillshade in the sea, land masked by world.json's 1:10m rings),
+   17 tiles in `data/shade/` (30", WebP q50, sea only; land a flat 235 because Terrain draws from the global
+   level only, which saved the 68 840 B an alpha channel cost) and `data/shade.json`; with `--strip-world` it
+   took the eleven Natural Earth depth bands and the relief block out of `world.json` (1 222 141 → 970 386 B)
+   and deleted `data/relief.jpg`. Inputs pinned by the SHA-256 of each GEBCO subset's elevation values (the
+   netCDF files themselves differ per fetch by a header timestamp; a second fetch of the Caspian matched its
+   pin) and of NE1_50M_SR_W.zip. The app reads `data/shade.json` only when Terrain or Depth shading is first on;
+   tiles only past the global level's detail (`lw > 8192`), at most four tiles' worth decoded. Depth shading
+   multiplies the gray over the theme's sea (0.45 light, 0.9 dark); Terrain shading draws the global level
+   clipped to the countries' rings, dimmed in dark as before. `Depth bands` is now `Depth shading`
+   (`wog.depth` kept).
+3. **Rims key**: `Rims on the fields` in Map layers (after `Size fields by`), on by default, `wog.rim`
+   (a new key: `wog.rings` stays retired), both themes; it takes the rim off the map's filled discs and the
+   field key's samples (`--s-rim` transparent).
+4. **The text cut (change list items 1 to 4).** The credit line leaves the front for `#about-credit-line`,
+   first under *Sources and credits* (F1); the caption keeps the bar's caption with its year and a key after
+   it, `Under 1 % each` (the strip's hatch) and `No figure` (plain land, edged), always drawn; `Field sizes are
+   estimates.` moves into About's fields paragraph; `NOTES.md` and `ART.md` say "in About" (F5); version 1.2
+   (F6). The plate gains 30 px (517 → 547 at 390 x 844).
+5. **Credits**: GEBCO's attribution word for word in About (with the terms' first sentence, the changes, no
+   endorsement, the navigation disclaimer), in `NOTES.md` (with the terms quoted) and in `data/shade.json`.
+   The app ships no CREDITS.txt; `NOTES.md`'s table is its credits file. The credit line gains ` · GEBCO`
+   while Depth shading is on.
+
+### Checks changed (F8), named as the list asks
+
+`check.mjs`: the data reads (shade.json, the image loader), `data/` exactly as `shade.json` names it,
+world.json without bands or relief (fails if the yearly build writes them back), the data pins (world.json,
+shade.json, shade.webp, the tiles), miniapp version `1.2`, the credit line in About and no `#credits`,
+GEBCO's words, storage (`wog.rim` added), US spelling (GEBCO's "Centre" allowed in index.html, NOTES.md,
+shade.json). `shoot.mjs`: `.webp` served; boot (no source on the front, About's first paragraph); the plate
+≥ 540 (was 480); focus mode's "stays" (`credits` out, `readbox` and `rkey` in); the caption checks read the
+caption box, and every year's caption is the bar's with its year (no former-state note); the key and its
+plain swatch; the widths check the key instead of the credits; About's middle-dot check skips the credit
+line (which now lives there); new: the former states (1970 colors, one shape, 1995 each its own, a tap opens
+`The USSR` and is spoken, Cumulative), the rims (default, off, remembered, back), the shading (nothing read
+before it is on, no tile at the whole-world view, the North Sea's tiles when zoomed, the sea darker, land
+unchanged by Depth, Terrain on land only). `test_decode.mjs`: `formerUnions` against its own rule in all 750
+year, mode and accumulation cases, 1970 and 1995 pinned; the credit line with GEBCO. `js/data.js`'s
+`checkWorld` no longer validates depth bands (the app reads none).
+
+### Bugs on record
+
+Plan 0009 item 5 (*Cumulative blanks Sweden and Ireland after 2017*), fixed as B1 in plan 0011: still fixed.
+`test_decode.mjs` (B1 on all 159 series that end early) and `shoot.mjs` (*B1: Cumulative 2024 colors France,
+Spain, Sweden and Ireland (states 0, 0, 0, 0)*) pass. DEVICE_TEST_MATRIX rows 157 and 163 are phone rows,
+not run here.
+
+### Measured (this Mac; headless figures are trends, never phone evidence)
+
+- `node tools/check.mjs`: 47 ok, **1 FAIL: app code 206 625 B against 200 000** (index.html 21 078, style.css
+  25 061, app.js 121 026, js/data.js 26 594, track.js 5 938, units.js 6 928); app.js 121 026 of 150 000;
+  fonts 40 075; ZIP 2 519 682 of 2 622 870 (2 147 335 before). **For the lead's ruling; no feature was cut.**
+- `node tools/test_decode.mjs`: 21 ok, all pass. `python3 tools/art/palette.py`: ALL CHECKS PASS (unchanged).
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: 128 ok, all pass, both themes, the scrub at 2, 8
+  and 20 years a second with 0 frames off the year drawn.
+- Driven by touch at 390 x 844, DPR 2 in Chromium (CDP touch) and WebKit (touchscreen taps; drags by mouse,
+  Playwright has no touch move in WebKit): the track, Kazakhstan 1970 → The USSR, Details, Cumulative, 1995
+  → Kazakhstan, the three Map layers keys, double-tap zoom to the North Sea (4 tiles held), a pan, a scrub
+  (0 mismatched frames in both), focus mode, About. No console error in either. Pictures in
+  `tools/.work/b32/drive/`.
+- Rimless discs (`tools/.work/b32/rimless.py`, the 1 982 offshore units, Depth shading on): OKLab dE worst
+  of four visions ≥ 0.137 for 95 % of them in light (gas; the deepest unit 0.080), ≥ 0.298 in dark. WCAG
+  luminance in light: oil 1.90 and gas 2.20 against the flat sea, medians 1.71 and 1.97 on the shading;
+  under 3:1 before this pass too, which the rim answers; dark ≥ 3.09 everywhere.
+
+### Owner calls this pass made (each reversible)
+
+1. A successor that reports **zero** joins its former state's shape (Ukraine's gas is 0 in the data from 1900
+   to 1979, which would otherwise leave a plain Ukraine inside the USSR in 1970).
+2. A former state's shape is named once by its own name (`USSR`) at its lead member's label point.
+3. Depth shading has no legend and no depth figures; the light theme's shading is gentle (0.45) to keep the
+   fields the data.
+4. Terrain shading now leaves the sea in the theme's own color (the relief's own water no longer shows), and
+   the relief stops at the vector coast.
+5. Two toggles kept (Terrain and Depth), not merged, though they share one image.
+6. Rims stay on by default; with them off, light-theme oil and gas discs read by hue more than lightness.
+7. The rims key's words: `Rims on the fields`.
+
+### Not verified here
+
+The phone: decode time and peak memory of the 32 MiB global level plus up to four 16 MiB tiles in
+WKWebView (iOS 18 and current), the clip-to-land cost while panning with Terrain on, WebP decoding on iOS 18
+(supported since Safari 14, not run here), the shading's look in sunlight. These need a DEVICE_TEST_MATRIX row.
+
+### The fixer (2026-10-06): QA's and the reviewer's findings on package 3.2
+
+1. **The code cap (must, both).** Measured by `node tools/check.mjs` after this fix: app code **206 603 B**
+   against 200 000 (index.html 21 083, style.css 25 061, app.js 121 363, js/data.js 26 230, track.js 5 938,
+   units.js 6 928); app.js 121 363 of 150 000. No feature was cut. **For the lead's ruling**; `CODE_CAP` in
+   `check.mjs` and HOUSE.md's row (199 975) are left as they are until it is made. ZIP 2 457 302 B of 2 622 870.
+2. **About named Natural Earth's 1:10m bathymetry (must, both).** About prints `snapshot.json`'s source names
+   as they are. `build_shade.py --strip-world`, which already took the bands out of `world.json` and its
+   `source`, now also takes `, 1:10m bathymetry` out of that one string in `data/snapshot.json`, every other
+   byte kept; About reads `Natural Earth 1:10m admin-0 countries and Natural Earth I shaded relief`, as
+   NOTES.md does. The snapshot's pin moves (adb9e6ee… → f3360b22…), and a new check fails if any snapshot
+   source names bathymetry, so a yearly refresh that writes the old name back is caught. The pipeline's own
+   strings (`scripts/shelf_atlas/build_world.py`, lines 280 and 860) are outside this folder: the lead's.
+3. **The seam at a tile's edge, and the coarse land in the sea (should, reviewer).** The one image held both
+   halves, so at about 10 km a pixel the browser's smoothing carried the land's Natural Earth luminance across
+   the coast as light blocks, east of 16° E along Norway and the Barents coast, and a tile met the whole-world
+   level at a hard edge. Now: two whole-world images, `data/shade.webp` (the sea) and `data/shade/land.webp`
+   (the land), each carrying its own half four pixels past the coast (the `carry()` step, the mean of the
+   known neighbors ring by ring), the rest flat; and each tile's outer 128 pixels (about a degree; the first
+   attempt at 48 still showed a band of changed detail at 30x) ramp, smoothstep, from the whole-world level's
+   own decoded values, bilinear at each pixel's center, into the tile's. The build decodes every tile it writes
+   and reports the edge against the whole-world level: 0.4 of 255 on average, 4 at the 99th percentile, 10 at
+   most (WebP q50), and fails above 16. The app reads each image only when its own key is on (`needShade()`;
+   `shade.img[0]` land, `[1]` sea). Re-shot at 30x on the North Sea tile's 72° N edge, Lofoten at 16° E, the
+   Barents coast at 21° E, 70.6° N and the Gulf of Mexico tile's 80° W edge, Chromium and WebKit light,
+   Chromium dark (`tools/.work/fix32/shots/`): no hard edge, no blocks past the coast. Shading bytes 1 290 424
+   (1 345 020 before). Pins
+   moved: shade.json f31d9498…, shade.webp c261a78c…, land.webp 7d10d311…, the tiles ac37cc51…; two runs
+   gave the same bytes.
+4. **The yearly pipeline would undo the pass (should, reviewer).** Outside this folder: the workflow
+   `.github/workflows/build-world-oil-gas.yml` needs `--no-relief`, and `build_world.py` must stop writing the
+   `bathymetry` block and the old source names. `check.mjs` fails on any of them coming back (world.json's
+   bands and relief, the snapshot's source name). The lead's.
+5. **The phone row (should, reviewer).** `docs/DEVICE_TEST_MATRIX.md` is outside this folder; the row is drafted
+   for the lead in the fixer's report. Memory changed with item 3: with both keys on, two 32 MiB whole-world
+   images are decoded, not one.
+6. **Nits.** `js/data.js`'s header no longer documents world.json's `relief` and `bathymetry` (it points to
+   `data/shade.json`); taken, free (−364 B). The USSR read in 1985 to 1991 (drawn by its members' own figures,
+   so not drawn as one shape): left as built, the lead's to confirm. The union's name at an off-plate lead
+   label point: not taken (code, over the cap).
+
+Checks: `node tools/check.mjs` 49 ok, 1 FAIL (the code cap); `node tools/test_decode.mjs` all pass;
+`SCREENSHOTS=1 node tools/shoot.mjs` 128 ok, 0 FAIL, both themes; driven by touch at 390 x 844, DPR 2, in
+Chromium (light, dark) and WebKit (light) with `tools/.work/fix32/drive.mjs` (the reviewer's script, two views
+added): 0 console errors; 1970 Kazakhstan, Ukraine and Lithuania open The USSR; 1995 Kazakhstan its own.
+
+## The lead's pass on plan 0012 3.2 (2026-10-06)
+
+- **The code cap is 207 000 B,** ruled on the measured 206 603 B. The overage over the house's 200 000 B is
+  the owner's three requests (former states on the map, the shading's tile loader, the rim toggle); nothing
+  was cut, as plan 0011 ruled Milky Way, Snug Kart, Running Dashboard and Power Hours on their measured
+  figures. `check.mjs`, ART.md section 6 and NOTES.md carry it.
+- **The yearly pipeline no longer undoes the pass.** `scripts/shelf_atlas/build_world.py` writes no
+  bathymetry block, no relief block and no `relief.jpg`, and names the Natural Earth source as About does.
+  The two dead builders went with it. Run offline from its cache with the snapshot's own `generatedAt`,
+  it reproduces `snapshot.json` byte for byte and `world.json` byte for byte once the latter carries the
+  trailing newline the pipeline writes (the pass had written it without one). `world.json`'s pin in
+  `check.mjs` follows. `fields.json` was not re-run here (`openpyxl` is not on this Mac; the workflow
+  installs it); the pass did not touch it.
+- **Recorded rather than changed:** the brief's example readout "The USSR, 1985" cannot occur. Under the
+  rule as built, the USSR is drawn only in years before Russia's own series, which begins in 1985.
+

@@ -16,15 +16,11 @@
  *
  * ── data/world.json: Natural Earth 1:10m countries (static) ────────────────
  * { "schema": 1, "factor": 1000, "encoding": "…", "source": "…",
- *   "relief": { "file": "relief.jpg", "width": 4096, "height": 2048,   // optional
- *               "bounds": [-180, -90, 180, 90], "projection": "plate carrée…", "source": "…" },
  *   "countries": [{ "iso3": "NOR", "name": "Norway", "adm0": "NOR",
  *                   "c": [17.8, 68.5],               // label point, lon/lat
- *                   "rings": ["<ring>", …] }, …],    // filled even-odd
- *   "bathymetry": [{ "depth": 10000, "rings": [ … ] }, …, { "depth": 200, "rings": [ … ] }] }
- *   // optional; each band is the area DEEPER than `depth`, so they nest; painted shallowest first.
- * `relief` names a plate carrée image in ./data (x = (lon+180)/360 × width, y = (90−lat)/180 × height),
- * reprojected to Mercator on the phone; it is off unless switched on.
+ *                   "rings": ["<ring>", …] }, …] }   // filled even-odd
+ *   // the shading is not here: data/shade.json names two plate carrée gray images of the whole world
+ *   // ("file", the sea; "land", the relief) and finer sea "tiles" with their "bounds" [w, s, e, n]
  *
  * ── data/snapshot.json: annual production by country (rebuilt yearly) ──────
  * { "schema": 1, "generatedAt": "…", "app": "World Oil & Gas",
@@ -101,15 +97,6 @@ export function checkWorld(w) {
     const c = w.countries[k];
     if (!c || !isStr(c.iso3) || typeof c.name !== 'string') return `countries[${k}] has no iso3 or name`;
     if (!Array.isArray(c.rings) || !c.rings.every(isStr)) return `countries[${k}] (${c.iso3}) has no rings`;
-  }
-  if (w.bathymetry != null) {
-    if (!Array.isArray(w.bathymetry)) return '"bathymetry" is not a list';
-    for (let k = 0; k < w.bathymetry.length; k++) {
-      const b = w.bathymetry[k];
-      if (!b || !(Number.isFinite(b.depth) && b.depth > 0) || !Array.isArray(b.rings) || !b.rings.every(isStr)) {
-        return `bathymetry[${k}] has no positive depth or no rings`;
-      }
-    }
   }
   return '';
 }
@@ -249,11 +236,25 @@ export function seriesSpan(c) {
  * former state by its members in any year its lead has a figure, so no barrel is counted twice. */
 export const FORMER_STATE = {};
 export const LEAD = { OWID_USS: 'RUS', OWID_CZS: 'CZE', OWID_YGS: 'SRB' };
-for (const [state, members] of Object.entries({
+export const MEMBERS = {
   OWID_USS: ['RUS', 'UKR', 'BLR', 'KAZ', 'UZB', 'TKM', 'AZE', 'GEO', 'ARM', 'KGZ', 'TJK', 'MDA', 'LTU', 'LVA', 'EST'],
   OWID_CZS: ['CZE', 'SVK'],
   OWID_YGS: ['SRB', 'HRV', 'SVN', 'BIH', 'MKD', 'MNE', 'OWID_KOS', 'KOS'],
-})) for (const m of members) FORMER_STATE[m] = state;
+};
+for (const [state, members] of Object.entries(MEMBERS)) for (const m of members) FORMER_STATE[m] = state;
+/** The map's former states in year y: each one that holds the figure (it has one and its lead member
+ *  none, as rule B), with the members that report nothing of their own then (no figure, or zero), which
+ *  the map draws together in its color. [{ state, v, members }]; never a year a lead reports. */
+export function formerUnions(prod, m, cum, y) {
+  const out = [], r = { v: null, partial: false };
+  for (const st in LEAD) {
+    const h = prod.byIso.get(st), v = h && valueAt(prod, h, m, y, cum).v;
+    if (v == null || valueAt(prod, prod.byIso.get(LEAD[st]), m, y, cum, r).v != null) continue;
+    const members = MEMBERS[st].filter((iso) => !(valueAt(prod, prod.byIso.get(iso), m, y, cum, r).v > 0));
+    if (members.length) out.push({ state: st, v, members });
+  }
+  return out;
+}
 
 export function historicalLabels(s) {
   const h = s && s.historical, out = {};

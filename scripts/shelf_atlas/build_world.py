@@ -5,9 +5,9 @@
 
 Writes
   world.json     Natural Earth 1:10m countries (v5.1.2, pinned by commit and sha256), simplified for
-                 the app's deepest zoom, packed polylines keyed by ISO 3166-1 alpha-3, plus the
-                 1:10m bathymetry bands and the relief block for data/relief.jpg (Natural Earth I,
-                 plate carrée)
+                 the app's deepest zoom, packed polylines keyed by ISO 3166-1 alpha-3. (Since plan
+                 0012 3.2 no bathymetry bands and no relief raster: the land relief and the GEBCO_2026
+                 sea floor are one shading layer, built once by world-oil-gas/tools/build_shade.py.)
   snapshot.json  annual oil and gas production by country, 1900 -> latest, from Our World in
                  Data's energy dataset (which carries the Energy Institute Statistical Review),
                  plus `ask` rows and the source list the app prints on its attribution screen
@@ -63,13 +63,7 @@ WORLD_FACTOR = 1000          # world.json packed at 3 decimals (~110 m)
 # two at the deepest zoom, nothing at any other) is the finest that keeps the ZIP inside a quarter.
 WORLD_PX_PER_DEG = 120.0
 WORLD_MIN_PX2 = 4.0
-WORLD_BUDGET = 1_400_000     # world.json: 1:10m countries plus the bathymetry bands
-# Natural Earth I: shaded relief with hypsometric tints and water, 1:50m, public domain. The
-# NACIS CDN is the canonical host; the GitHub mirror is tried when it is down.
-NE_RELIEF_URLS = ("https://naciscdn.org/naturalearth/50m/raster/NE1_50M_SR_W.zip",
-                  "https://github.com/nvkelso/natural-earth-raster/raw/master/50m_rasters/NE1_50M_SR_W/NE1_50M_SR_W.tif")
-RELIEF_W, RELIEF_H = 4096, 2048     # equirectangular, 0.088° per pixel; ~0.6 MB as JPEG
-RELIEF_QUALITY = 72
+WORLD_BUDGET = 1_400_000     # world.json: 1:10m countries
 
 # Natural Earth's ISO_A3 is -99 for a handful of countries (France, Norway, Kosovo,
 # Somaliland, N. Cyprus...) because of a disputed-territory convention. ADM0_A3 is
@@ -277,85 +271,12 @@ def build_world_geometry(cache: Cache):
         "schema": 1,
         "factor": WORLD_FACTOR,
         "encoding": "Google polyline, lon then lat, 3 decimals; rings closed",
-        "source": "Natural Earth 1:10m admin-0 countries and 1:10m bathymetry (public domain), simplified",
+        "source": "Natural Earth 1:10m admin-0 countries (public domain), simplified",
         "countries": countries,
-        "bathymetry": build_world_bathymetry(cache),
     }
 
 
-NE_BATHY = [("A", 10000), ("B", 9000), ("C", 8000), ("D", 7000), ("E", 6000), ("F", 5000),
-            ("G", 4000), ("H", 3000), ("I", 2000), ("J", 1000), ("K", 200), ("L", 0)]
 FIELDS_BUDGET = 2_600_000     # fields.json: 7,000 units with production, reserves and outlines
-
-
-def build_world_relief(cache: Cache, out_dir: str):
-    """Natural Earth I (shaded relief, hypsometric tints, water) resampled to RELIEF_W × RELIEF_H
-    in plate carrée and written as data/relief.jpg. The app drapes it under the country fills and
-    reprojects it to Mercator row by row. Returns the metadata block for world.json."""
-    import io
-    import zipfile
-    from PIL import Image
-    Image.MAX_IMAGE_PIXELS = None
-    raw = None
-    errors = []
-    for url in NE_RELIEF_URLS:
-        key = "global/NE1_50M_SR_W." + ("zip" if url.endswith(".zip") else "tif")
-        try:
-            raw = cache.get(key, url)
-            break
-        except BuildError as e:
-            errors.append(f"{url}: {e}")
-    if raw is None:
-        raise BuildError("relief raster: " + " | ".join(errors))
-    if raw[:2] == b"PK":
-        with zipfile.ZipFile(io.BytesIO(raw)) as z:
-            tifs = [n for n in z.namelist() if n.lower().endswith(".tif")]
-            if not tifs:
-                raise BuildError(f"relief zip has no .tif: {z.namelist()[:10]}")
-            raw = z.read(tifs[0])
-    im = Image.open(io.BytesIO(raw))
-    im.load()
-    w0, h0 = im.size
-    if abs(w0 / h0 - 2.0) > 0.01:
-        raise BuildError(f"relief raster is not 2:1 (plate carrée): {w0}×{h0}")
-    im = im.convert("RGB").resize((RELIEF_W, RELIEF_H), Image.LANCZOS)
-    buf = io.BytesIO()
-    im.save(buf, "JPEG", quality=RELIEF_QUALITY, optimize=True)
-    data = buf.getvalue()
-    path = os.path.join(out_dir, "relief.jpg")
-    os.makedirs(out_dir, exist_ok=True)
-    if not (os.path.exists(path) and open(path, "rb").read() == data):
-        with open(path, "wb") as f:
-            f.write(data)
-    log(f"  relief: {w0}×{h0} -> {RELIEF_W}×{RELIEF_H}, {len(data):,} B  {path}")
-    return {"file": "relief.jpg", "width": RELIEF_W, "height": RELIEF_H,
-            "bounds": [-180, -90, 180, 90], "projection": "plate carrée (equirectangular), WGS84",
-            "source": "Natural Earth I with shaded relief, hypsometric tints and water, 1:50m (public domain)"}
-BATHY_MIN_AREA_M2 = 4.0e8      # 400 km² triangles: the ocean floor at world scale, not a coastline
-
-
-def build_world_bathymetry(cache: Cache):
-    """Natural Earth 1:10m bathymetry: one layer per depth step, deepest first, so the app paints
-    them in order and the deepest tint wins. The 0 m layer (the whole ocean) is skipped: the sea
-    is the background."""
-    layers = []
-    for letter, depth in NE_BATHY:
-        if depth == 0:
-            continue
-        name = f"ne_10m_bathymetry_{letter}_{depth}"
-        raw = cache.get(f"global/{name}.geojson", NE.replace("ne_110m_admin_0_countries.geojson", "") + name + ".geojson"
-                        if False else f"https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/{name}.geojson")
-        gj = json.loads(raw.decode("utf-8"))
-        rings = []
-        for f in gj["features"]:
-            g = f["geometry"]
-            polys = [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
-            for poly in polys:
-                outer = simplify([tuple(c) for c in poly[0]], BATHY_MIN_AREA_M2, closed=True)
-                if len(outer) >= 4 and ring_area_m2(outer) > BATHY_MIN_AREA_M2:
-                    rings.append(encode_line(outer, WORLD_FACTOR))
-        layers.append({"depth": depth, "rings": rings})
-    return layers
 
 
 def read_owid(cache: Cache):
@@ -803,15 +724,16 @@ def main():
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--refresh", action="store_true", help="refetch sources even if cached")
     ap.add_argument("--generated-at", default=None, help="ISO timestamp to stamp (default: now)")
-    ap.add_argument("--no-relief", action="store_true", help="skip the shaded-relief raster (needs Pillow and ~90 MB)")
+    ap.add_argument("--no-relief", action="store_true", help="ignored since plan 0012 3.2: no relief raster is built here (see world-oil-gas/tools/build_shade.py)")
     args = ap.parse_args()
     cache = Cache(args.cache, refresh=args.refresh, offline=args.offline)
     generated = args.generated_at or dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     log("world: geometry")
     world = build_world_geometry(cache)
-    if not args.no_relief:
-        world["relief"] = build_world_relief(cache, args.out)
+    # No relief raster and no bathymetry bands since plan 0012 3.2: the land relief and the
+    # GEBCO_2026 sea floor are one shading layer, built once by world-oil-gas/tools/build_shade.py
+    # (data/shade.json, shade.webp, shade/). This yearly refresh never touches them.
     n = len(json.dumps(world, ensure_ascii=False, separators=(",", ":")).encode())
     if n > WORLD_BUDGET:
         raise BuildError(f"world.json would be {n:,} B, over its budget of {WORLD_BUDGET:,}; raise WORLD_MIN_PX2")
@@ -857,7 +779,7 @@ def main():
              "licence": "CC BY 4.0",
              "detail": src or "Energy Institute Statistical Review of World Energy; The Shift Data Portal for years before 1965",
              "attribution": "Country production: Energy Institute Statistical Review of World Energy, via Our World in Data (CC BY 4.0)"},
-            {"name": "Natural Earth 1:10m admin-0 countries, 1:10m bathymetry and Natural Earth I shaded relief", "url": "https://www.naturalearthdata.com/",
+            {"name": "Natural Earth 1:10m admin-0 countries and Natural Earth I shaded relief", "url": "https://www.naturalearthdata.com/",
              "licence": "Public domain", "attribution": "Basemap: Natural Earth"},
         ],
         "world": wrl,

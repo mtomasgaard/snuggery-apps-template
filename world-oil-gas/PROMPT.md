@@ -74,7 +74,7 @@ gh run watch
 
 **The loop refreshes `data/snapshot.json` only**: the country data, which is
 what changes once a year. The fields (`fields.json`), the basemap
-(`world.json`) and the relief (`relief.jpg`) travel in the ZIP: when they
+(`world.json`) and the shading (`shade.webp`, `shade/`) travel in the ZIP: when they
 change, the ZIP is rebuilt, and the app picks them up when you replace it
 (in Safari, the ZIP's address, then Share, then Snuggery, then **Replace the app**).
 
@@ -112,11 +112,16 @@ ships: the ZIP builder leaves it out.
   in Map layers to draw the tracker as it is, one rate per field.
 - **The Ledger.** The strip under the map is `ledgerAt` in `js/data.js`; its
   1 % floor is `LEDGER_FLOOR`, and its rule for former states (counted until
-  their largest member has a figure of its own) is `counted`.
-- **Terrain.** The shaded relief is an optional layer, off by default, drawn as
-  gray shading; the land is plain by design so the color encodings read. `--no-relief` on the
-  build skips the 90 MB download and the app draws exactly the same without
-  the file.
+  their largest member has a figure of its own) is `counted`. The map draws a
+  former state over its successors by the same rule (`formerUnions`).
+- **Shading.** Terrain shading (the relief on land) and Depth shading (the sea
+  floor) are optional layers, off by default, drawn in gray; the land is plain
+  by design so the color encodings read. Both come from gray images built by
+  `world-oil-gas/tools/build_shade.py` (GEBCO_2026 and Natural Earth I, about
+  560 MB of downloads, pinned): widen its `REGIONS` for finer sea floor where
+  you work, at about 0.3 kB per square degree of box in the ZIP (587 312 B
+  for today's 2 017 square degrees). Keep
+  `--no-relief` on the yearly build: the shading replaces `relief.jpg`.
 - **Outlines.** The tracker's own field outlines are drawn at high zoom. The
   build drops the ones that are not in degrees (Poland's are in a projected
   grid) or sit a degree from their unit; the rule is in `goget_units_to_file`.

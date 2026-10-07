@@ -13,7 +13,8 @@
 //   SCRUB=0 node tools/shoot.mjs            skip the three-speed scrub
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the scenes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the camera's strings by role and name, the credit line whole, the face), text contrast
+// Per theme: boot (the camera's strings by role and name, no credit on the front and the credit line first
+// in About, the face), text contrast
 // and the tracer, the Ledger sampler (its drawn ink against the page, its blocks against this file's
 // partition, the hatched end, the chosen country's tracer), the cards of Norway and the United States
 // against this file's decode, the lead, SI in every visible text node, the scenes as pictures. Once: the
@@ -25,7 +26,10 @@
 // Ledger's three widest named every year with no country, the United States and Norway chosen, none of
 // their labels starting in its block's last pixels, a tap on a block and on a drawn name, the producers'
 // reach, the legend's 1 000 tick, plain land in the caption, the caption's "under 1 %" and estimate in
-// every year at 390, 320 and on its side, a snapshot with no world series) and the widths (B18).
+// every year at 390, 320 and on its side, a snapshot with no world series) and the widths (B18). Plan 0012,
+// package 3.2: the former states drawn as one shape in their own color and opened by a tap (1970, Annual
+// and Cumulative; each successor by its own in 1995), the rims' key, and the shading (nothing read until
+// switched on, tiles only once zoomed in, the sea shaded and the land masked).
 // Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png;
 // never screenshots/app.png, the README's composite.
 
@@ -76,16 +80,11 @@ function partition(y, m = 'total') {
   vals.sort((a, b) => b[0] - a[0]);
   return vals.filter(([v]) => v / w >= 0.01).map(([v, iso]) => [iso, v / w]);
 }
-/** The caption's note in year y, oil and gas, annual or to date: a former state holding a figure while its
- *  lead member has none (its lands are plain, its figure in the bar); '' when none applies. */
-function noteIn(y, cum) {
+/** A former state's figure in year y, oil and gas, annual or to date, when it holds the figure on the map
+ *  (a figure, and its lead member none); null otherwise. */
+function holds(st, y, cum) {
   const v = (c) => (!c ? null : cum ? sumTo(c, 'total', y) : at(c, 'total', y));
-  for (const st of Object.keys(LEAD)) {
-    if (!by.has(st) || v(by.get(st)) == null || v(by.get(LEAD[st])) != null) continue;
-    const n = ((snap.historical || {})[st] || '').replace(/\s*\(.*\)$/, '') || by.get(st).name;
-    return `${n === 'USSR' ? 'The USSR' : n}'s lands are plain: its figure is in the bar.`;
-  }
-  return '';
+  return v(by.get(st)) != null && v(by.get(LEAD[st])) == null ? v(by.get(st)) : null;
 }
 /** Fields producing (drawn and filled) in year y with the default filters (operating) and the fields following the year;
  *  with `all`, [on the map, of them undated, producing]. */
@@ -147,10 +146,12 @@ function decodePng(buf) {
 }
 
 /* ── the server: the app folder, with any file replaceable ── */
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.jpg': 'image/jpeg', '.md': 'text/markdown', '.txt': 'text/plain' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.md': 'text/markdown', '.txt': 'text/plain' };
 let override = {};
+const served = [];
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u];
+  served.push(u);
   if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); return; }
   const f = path.join(APP, u === '/' ? 'index.html' : u);
   if (!f.startsWith(APP + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
@@ -275,18 +276,19 @@ for (const scheme of schemes) {
   const PAGE = scheme === 'light' ? [0xe8, 0xee, 0xf0] : [0x14, 0x1d, 0x21];
   const T = JSON.parse(fs.readFileSync(path.join(APP, 'app.js'), 'utf8').match(/^const THEMES = (.*);$/m)[1])[scheme];
 
-  // boot: the camera's strings, the credit line whole, the face, the year it opens on
+  // boot: the camera's strings, no credit on the front and the credit line first in About, the face, the year it opens on
   {
     const buttons = await Promise.all(['Play', 'Previous year', 'Next year', 'Hide the controls', 'Find a field, company, basin or country', 'Zoom in', 'Zoom out', 'Whole world', 'Map layers', 'Change units, now TWh/yr'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
     const radios = await Promise.all(['Oil', 'Gas', 'Oil and gas', 'Annual', 'Cumulative'].map((n) => page.getByRole('radio', { name: n, exact: true }).count()));
     const slider = await page.getByRole('slider', { name: 'Year', exact: true }).count();
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent, whole: c.scrollWidth <= c.clientWidth + 1 && r.height > 0 && r.bottom <= document.getElementById('player').getBoundingClientRect().top + 1, font: document.fonts.check('560 11.5px "Ysabeau Office"'),
+      const first = document.querySelector('#about-body h3 + #about-credit-line');
+      const front = [...document.querySelectorAll('body > :not(#about):not(#find):not(.sheet)')].map((e) => e.textContent).join(' ');
+      return { gone: !document.getElementById('credits'), credits: first ? first.textContent : null, front: /Sources:|Energy Institute|Natural Earth|Global Energy Monitor|GEBCO/.test(front), font: document.fonts.check('560 11.5px "Ysabeau Office"'),
         family: getComputedStyle(document.body).fontFamily, stamp: document.getElementById('stamp').textContent, valid: document.getElementById('valid-time').textContent };
     });
     check(buttons.every((n) => n === 1) && radios.every((n) => n === 1) && slider === 1, `the camera's controls by role and name: buttons ${buttons.join(',')}, radios ${radios.join(',')}, the slider ${slider}`);
-    check(b.credits === 'Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor' && b.whole, `B7: the credit line is on screen whole: "${b.credits}"`);
+    check(b.gone && !b.front && b.credits === 'Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor', `HOUSE 4.15: no #credits and no source named on the front; About's first Sources and credits paragraph is the credit line: "${b.credits}"`);
     check(b.font && /^"?Ysabeau Office"?/.test(b.family), `the face is loaded (${b.family.split(',')[0]})`);
     check(/^Updated (\d\d:\d\d|\d{1,2} \w{3}, \d\d:\d\d), figures to 2024$/.test(b.stamp) && b.valid === String(Y1), `it opens on ${b.valid}; the stamp "${b.stamp}" (B9: built by hand, no middle dot)`);
   }
@@ -473,12 +475,12 @@ console.log('\n== once (light)');
     const hs = new Set(), forms = new Set(), over = [];
     for (const [y, acc] of [[1900, 'annual'], [1920, 'annual'], [2017, 'annual'], [2024, 'annual'], [1950, 'cumulative'], [2024, 'cumulative']]) {
       await w(([k, a]) => { window.__wog.setAccum(a); window.__wog.setYear(k); }, [y, acc]); await A.frame();
-      const r = await w(() => { const e = document.getElementById('readline'); return [document.getElementById('map-wrap').getBoundingClientRect().height, e.textContent, e.scrollHeight <= e.clientHeight + 1]; });
+      const r = await w(() => { const e = document.getElementById('readbox'); return [document.getElementById('map-wrap').getBoundingClientRect().height, document.getElementById('readline').textContent, e.scrollHeight <= e.clientHeight + 1]; });
       hs.add(r[0]); forms.add(r[1]); if (!r[2]) over.push(r[1]);
     }
     await w(() => window.__wog.setAccum('annual'));
-    check(hs.size === 1 && over.length === 0, `the plate holds still while the caption changes: plate ${[...hs].map(Math.round).join(', ')} px over ${forms.size} forms of the line, each inside its two lines${over.length ? ': over ' + over.join(' | ') : ''}`);
-    check([...hs][0] >= 480, `the plate at 390 × 844: ${Math.round([...hs][0])} px (ART.md: at least 480; the stock plate had the legend and credits laid over it)`);
+    check(hs.size === 1 && over.length === 0, `the plate holds still while the caption changes: plate ${[...hs].map(Math.round).join(', ')} px over ${forms.size} forms of the line, each with its key inside its two lines${over.length ? ': over ' + over.join(' | ') : ''}`);
+    check([...hs][0] >= 540, `the plate at 390 × 844: ${Math.round([...hs][0])} px (ART.md: at least 540 since the credit line went to About; the stock plate had the legend and credits laid over it)`);
   }
 
   // B6: names are drawn over the fields: each placed name's ink is the same with the fields on and off
@@ -492,8 +494,8 @@ console.log('\n== once (light)');
     const off = await A.png();
     await w(() => document.querySelector('[data-layer="fields"]').click()); await A.frame();
     const ink = [0x0f, 0x1c, 0x23];
-    // with the fields off the credit line loses a source and the plate grows a line, so each name is
-    // compared at its own place in each picture (the same name, the same box, moved with the map)
+    // each name is compared at its own place in each picture (the same name, the same box, moved with the
+    // map), should the plate ever change height with the fields
     let n = 0, same = 0;
     labels.forEach(([x0, y0, x1, y1], i) => {
       const [ox, oy] = labelsOff[i] ? [labelsOff[i][0] - x0, labelsOff[i][1] - y0] : [0, 0];
@@ -553,6 +555,108 @@ console.log('\n== once (light)');
       `B1: Cumulative 2024 colors France, Spain, Sweden and Ireland (states ${st.join(', ')}); France's card ${c[0]} PWh (this file: ${want}), "${c[1]}", series "${c[2]}"`);
     await A.shot('cumulative-france-light');
     await A.tapEl('#card-close'); await w(() => { window.__wog.setAccum('annual'); window.__wog.home(); });
+  }
+  // plan 0012, 3.2: a former state's successors with no figure of their own are one shape in its color, with
+  // no border inside it, and a tap there opens the former state; once the lead's series begins, each is its own
+  {
+    const lut = (v) => w((x) => window.__wog.lut(x).color, v);
+    const colors = (isos) => w((l) => l.map((i) => window.__wog.countryColor(i)), isos);
+    const USSR = Object.keys(stateOf).filter((m) => stateOf[m] === 'OWID_USS'), CZ = ['CZE', 'SVK'];
+    await w(() => { if (window.__wog.state.showFields) document.querySelector('[data-layer="fields"]').click(); window.__wog.setAccum('annual'); window.__wog.setYear(1970); });
+    await A.frame();
+    const want70 = await lut(holds('OWID_USS', 1970, false) / 1000), c70 = await colors(USSR), cz70 = await colors(CZ), wantCz = await lut(holds('OWID_CZS', 1970, false) / 1000);
+    const u70 = await w(() => window.__wog.unions());
+    check(c70.every((c) => c && c.st === 0 && c.color === want70) && cz70.every((c) => c.color === wantCz) && u70.map((u) => u.state).join() === 'OWID_USS,OWID_CZS,OWID_YGS',
+      `1970, Annual: all ${USSR.length} of the USSR's successors are painted the USSR's color (${want70}, this file's ${(holds('OWID_USS', 1970, false) / 1000).toFixed(0)} TWh/yr), Czechia and Slovakia Czechoslovakia's; Yugoslavia's too`);
+    // one shape: a box across the Russia and Kazakhstan border, wholly inside the union, is one color
+    await w(() => { window.__wog.flyTo(66, 54, 360 * 6); if (window.__wog.state.showFields) document.querySelector('[data-layer="fields"]').click(); });
+    await w(() => { const L = document.querySelector('[data-layer="labels"]'); if (L.getAttribute('aria-pressed') === 'true') L.click(); }); await A.frame(); await page.waitForTimeout(200);
+    const plate = await A.rect('#map-wrap'), [bx0, by0] = await w(() => window.__wog.project(60, 56)), [bx1, by1] = await w(() => window.__wog.project(72, 51));
+    const img = await A.png(), ink = want70.match(/\d+/g).slice(0, 3).map(Number);
+    let inBox = 0, off = 0;
+    for (let x = bx0; x < bx1; x += 0.5) for (let y = by0; y < by1; y += 0.5) { inBox++; const p = img.at(Math.round((plate.left + x) * 2), Math.round((plate.top + y) * 2)); if (Math.max(...p.map((v, i) => Math.abs(v - ink[i]))) > 6) off++; }
+    await setYear(A, 1995); await A.frame();
+    const img95 = await A.png();
+    let off95 = 0;
+    for (let x = bx0; x < bx1; x += 0.5) for (let y = by0; y < by1; y += 0.5) { const p = img95.at(Math.round((plate.left + x) * 2), Math.round((plate.top + y) * 2)); if (Math.max(...p.map((v, i) => Math.abs(v - ink[i]))) > 6) off95++; }
+    check(inBox > 1000 && off === 0 && off95 > inBox * 0.5, `one shape, no border inside it: in 1970 all ${inBox} samples of a box across the Russia and Kazakhstan border are the USSR's color (${off} off it); in 1995, each by its own, ${off95} are not`);
+    await A.shot('ussr-1995-light', false);
+    const c95 = await colors(['RUS', 'KAZ', 'UKR']), want95 = await Promise.all(['RUS', 'KAZ', 'UKR'].map((i) => lut(at(by.get(i), 'total', 1995) / 1000))), u95 = await w(() => window.__wog.unions());
+    check(u95.length === 0 && c95.every((c, i) => c.color === want95[i]), `1995: no former state on the map; Russia, Kazakhstan and Ukraine each in its own color (${want95.join(', ')})`);
+    // a tap on Kazakhstan in 1970 opens the USSR, and VoiceOver hears it named
+    await setYear(A, 1970); await A.frame();
+    const [kx, ky] = await w(() => window.__wog.project(68, 48));
+    await A.tapAt(plate.left + kx, plate.top + ky); await A.frame(); await page.waitForTimeout(250);
+    const card = await w(() => [window.__wog.state.sel && window.__wog.state.sel.iso3, document.getElementById('card-where').textContent, document.getElementById('card-note').textContent, document.getElementById('live').textContent]);
+    check(card[0] === 'OWID_USS' && card[1] === 'The USSR' && /^The USSR\. Oil and gas in 1970: .+ of the world\.$/.test(card[3]) && card[2] === 'On the map it is drawn over its 15 successor states, which report nothing of their own in 1970.',
+      `a tap on Kazakhstan in 1970 opens "${card[1]}" (${card[0]}); VoiceOver hears "${card[3]}"; the card: "${card[2]}"`);
+    await A.shot('ussr-1970-light');
+    // Cumulative: the USSR's total to the year, over the same successors; still a tap opens it
+    await w(() => window.__wog.setAccum('cumulative')); await A.frame();
+    const wantC = await lut(holds('OWID_USS', 1970, true) / 1e6), cC = await colors(USSR);
+    await A.tapEl('#card-close'); await A.frame(); await page.waitForTimeout(330);
+    await A.tapAt(plate.left + kx, plate.top + ky); await A.frame(); await page.waitForTimeout(250);
+    const cc = await w(() => [window.__wog.state.sel && window.__wog.state.sel.iso3, document.getElementById('card-sub').textContent]);
+    check(cC.every((c) => c.color === wantC) && cc[0] === 'OWID_USS' && /^Oil and gas to 1970, /.test(cc[1]), `Cumulative 1970: the successors in the USSR's total to then (${wantC}, this file's ${(holds('OWID_USS', 1970, true) / 1e6).toFixed(2)} PWh), and a tap opens the USSR: "${cc[1]}"`);
+    await A.tapEl('#card-close');
+    await w(() => { window.__wog.setAccum('annual'); window.__wog.setYear(2024); window.__wog.home(); for (const k of ['fields', 'labels']) { const L = document.querySelector(`[data-layer="${k}"]`); if (L.getAttribute('aria-pressed') !== 'true') L.click(); } });
+    await A.frame();
+  }
+  // the rims: on by default, a key in Map layers turns them off in both the map and the field key, remembered
+  {
+    const ghawar = fieldsFile.fields.find((x) => x.name === 'Troll Oil and Gas Field (Norway)');
+    await w(([lo, la]) => window.__wog.flyTo(lo, la, 360 * 40), [ghawar.lon, ghawar.lat]); await setYear(A, Y1); await A.frame();
+    const edge = async () => { const f = await w((id) => { const e = window.__wog.estimate(id); const p = window.__wog.field(id); return [p.x, p.y, e.radius]; }, ghawar.id); const plate = await A.rect('#map-wrap'), img = await A.png(); return img.at(Math.round((plate.left + f[0] + f[2]) * 2), Math.round((plate.top + f[1]) * 2)); };
+    const st0 = await w(() => [window.__wog.state.rim, getComputedStyle(document.querySelector('#field-key circle')).stroke]);
+    const on = await edge();
+    await A.tapEl('#btn-layers'); await A.frame();
+    await A.tapEl('[data-layer="rim"]'); await A.frame();
+    const st1 = await w(() => [window.__wog.state.rim, localStorage.getItem('wog.rim'), document.querySelector('[data-layer="rim"]').getAttribute('aria-pressed'), getComputedStyle(document.querySelector('#field-key circle')).stroke]);
+    await A.shot('rims-off-layers-light', false);
+    await A.tapEl('#layers-close'); await A.frame();
+    const offPx = await edge();
+    await A.shot('rims-off-light');
+    await page.reload(); await page.waitForFunction(ready, null, { timeout: 60000 });
+    const kept = await w(() => window.__wog.state.rim);
+    await w(() => { document.querySelector('[data-layer="rim"]').click(); });
+    const back = await w(() => [window.__wog.state.rim, localStorage.getItem('wog.rim')]);
+    check(st0[0] === true && st0[1] !== 'none' && !/rgba\(0, 0, 0, 0\)|transparent/.test(st0[1]) && on.join() !== offPx.join() && st1[0] === false && st1[1] === '0' && st1[2] === 'false' && /rgba\(0, 0, 0, 0\)|transparent/.test(st1[3]) && kept === false && back[0] === true && back[1] === '1',
+      `the rims: on by default (the key's sample edged ${st0[1]}); "Rims on the fields" turns them off (Troll's edge ${on.join(',')} → ${offPx.join(',')}; the key's edge ${st1[3]}); remembered across a reload (wog.rim = ${st1[1]}), and back on (${back[1]})`);
+    await w(() => window.__wog.home());
+  }
+  // the shading: nothing read until switched on; the whole-world level, then tiles only past its detail;
+  // Depth shading darkens the sea and leaves the land as the countries paint it; Terrain shading only the land
+  {
+    const before = served.length;
+    // read from screenshots with the fields and names off, so nothing but the map is under the point
+    await w(() => { for (const k of ['fields', 'labels']) document.querySelector(`[data-layer="${k}"]`).click(); });
+    const px = async (lon, lat) => { const [x, y] = await w(([a, b]) => window.__wog.project(a, b), [lon, lat]), pl = await A.rect('#map-wrap'), img = await A.png(); const c = img.at(Math.round((pl.left + x) * 2), Math.round((pl.top + y) * 2)); return { sea: c, map: c }; };
+    await w(() => window.__wog.flyTo(3.7, 60.6, 360 * 20)); await A.frame();
+    const sea0 = await px(3.2, 61.5), land0 = await px(8, 61);
+    const none = served.filter((u) => u.startsWith('/data/shade')).length;
+    await w(() => window.__wog.home()); await A.frame();
+    await A.tapEl('#btn-layers'); await A.frame(); await A.tapEl('[data-layer="depth"]'); await A.tapEl('#layers-close');
+    await page.waitForFunction(() => window.__wog.state.shade.status === 'ok', null, { timeout: 30000 }); await A.frame(); await page.waitForTimeout(300); await A.frame();
+    const tilesAtHome = served.slice(before).filter((u) => u.startsWith('/data/shade/'));
+    await A.shot('depth-home-light', false);
+    await w(() => window.__wog.flyTo(3.7, 60.6, 360 * 20)); await page.waitForTimeout(1500); await A.frame();
+    const sea1 = await px(3.2, 61.5), land1 = await px(8, 61);
+    await A.shot('depth-north-sea-light');
+    await w(() => window.__wog.flyTo(3.7, 60.6, 360 * 120)); await page.waitForTimeout(1500); await A.frame();
+    const tilesAtMax = served.slice(before).filter((u) => u.startsWith('/data/shade/')), sh = await w(() => window.__wog.state.shade);
+    await A.shot('depth-max-light');
+    await A.tapEl('#btn-layers'); await A.frame(); await A.tapEl('[data-layer="depth"]'); await A.tapEl('[data-layer="terrain"]'); await A.tapEl('#layers-close');
+    await w(() => window.__wog.flyTo(3.7, 60.6, 360 * 20)); await page.waitForTimeout(500); await A.frame();
+    const sea2 = await px(3.2, 61.5), land2 = await px(8, 61);
+    await A.shot('terrain-north-sea-light', false);
+    await A.tapEl('#btn-layers'); await A.frame(); await A.tapEl('[data-layer="terrain"]'); await A.tapEl('#layers-close');
+    await w(() => { for (const k of ['fields', 'labels']) document.querySelector(`[data-layer="${k}"]`).click(); });
+    const T = JSON.parse(fs.readFileSync(path.join(APP, 'app.js'), 'utf8').match(/^const THEMES = (.*);$/m)[1]).light, flat = hex(T.sea);
+    const darker = sea1.sea.slice(0, 3).every((v, i) => v < flat[i] - 3), same = (a, b) => a.map.slice(0, 3).every((v, i) => Math.abs(v - b.map[i]) <= 1);
+    check(none === 0 && tilesAtHome.length === 0 && sea0.sea.slice(0, 3).join() === flat.join() && darker && same(land0, land1) && tilesAtMax.some((u) => /north_sea/.test(u)) && sh.tiles.length <= 4
+      && sea2.sea.slice(0, 3).join() === flat.join() && !same(land0, land2),
+      `the shading: no data/shade* read until Depth shading is on (${none}); then data/shade.json and data/shade.webp, and no tile at the whole-world view (${tilesAtHome.length}); zoomed in ${tilesAtMax.map((u) => u.split('/').pop()).join(', ')} (${sh.tiles.length} held). The Norwegian Trench reads ${sea1.sea.slice(0, 3).join(',')} against the flat sea's ${flat.join(',')}; Norway's land unchanged by it (${land1.map.slice(0, 3).join(',')}). Terrain shading alone: the sea flat (${sea2.sea.slice(0, 3).join(',')}), the land shaded (${land2.map.slice(0, 3).join(',')})`);
+    await w(() => window.__wog.home());
   }
   // B5: in 1906 no undated unit is drawn, and the lead counts what is
   {
@@ -616,12 +720,12 @@ console.log('\n== once (light)');
     await page.waitForTimeout(450);
     const f = await w(() => {
       const gone = ['head', 'keys', 'legend-scale'].map((id) => { const e = document.getElementById(id); return e.hidden && e.inert; });
-      const stays = ['ledger', 'legend-name', 'readline', 'credits', 'player', 'stamp'].map((id) => { const e = document.getElementById(id); return e.getBoundingClientRect().height > 0 && !e.closest('[hidden]'); });
+      const stays = ['ledger', 'legend-name', 'readbox', 'rkey', 'player', 'stamp'].map((id) => { const e = document.getElementById(id); return e.getBoundingClientRect().height > 0 && !e.closest('[hidden]'); });
       return { gone, stays, stampIn: document.getElementById('stamp').parentElement.id, ghost: !document.getElementById('focus-exit').hidden, plate: document.getElementById('map-wrap').getBoundingClientRect().height, live: document.getElementById('live').textContent, store: localStorage.getItem('wog.focus'), active: document.activeElement.id };
     });
     const tree = await page.getByRole('button', { name: 'Zoom in', exact: true }).count();
     check(f.gone.every(Boolean) && tree === 0 && f.stays.every(Boolean) && f.stampIn === 'caption' && f.ghost,
-      `focus mode by touch: the header, the keys and the legend's bar are hidden and inert (gone from the tree: ${tree === 0}); the Ledger, the legend's title, the caption line, the credits, the player and the stamp (now in the caption band) stay`);
+      `focus mode by touch: the header, the keys and the legend's bar are hidden and inert (gone from the tree: ${tree === 0}); the Ledger, the legend's title, the caption line and its key, the player and the stamp (now in the caption band) stay`);
     check(f.plate > before && f.plate >= 600, `the plate grew from ${before.toFixed(1)} to ${f.plate.toFixed(1)} px (ART.md: at least 600)`);
     check(f.live === 'Controls hidden. Press Escape or the corner key to show them.' && f.store === '1' && f.active !== 'focus-exit', `its sentence ("${f.live}"), wog.focus = ${f.store}, and no ring after a touch (focus on "${f.active || 'body'}")`);
     const hf = await hitTargets(w);
@@ -676,8 +780,11 @@ console.log('\n== once (light)');
   // About: from the stamp, every source's statement and the face's credit, no address with its scheme, Escape
   {
     await A.tapEl('#stamp'); await page.waitForTimeout(300);
-    const a = await w(() => ({ text: document.getElementById('about-body').textContent, focus: document.activeElement.id, inert: document.getElementById('map-wrap').inert }));
+    // the credit line keeps its middle dots (its words are fixed by the sources); it is About's first paragraph under Sources and credits since plan 0012
+    const a = await w(() => ({ text: document.getElementById('about-body').textContent.replace(document.getElementById('about-credit-line').textContent, ''), focus: document.activeElement.id, inert: document.getElementById('map-wrap').inert }));
     const missing = snap.sources.filter((s) => !a.text.includes(s.attribution));
+    const gebco = JSON.parse(fs.readFileSync(path.join(APP, 'data/shade.json'), 'utf8')).attribution;
+    check(a.text.includes(gebco) && a.text.includes('The GEBCO Grid should NOT be used for navigation or for any other purpose involving safety at sea.'), `About carries GEBCO's attribution word for word and its navigation disclaimer`);
     check(a.inert && a.focus === 'about-close' && missing.length === 0 && a.text.includes(fieldsFile.source.attribution) && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.')
       && !/https?:\/\//.test(a.text) && a.text.includes('github.com/owid/energy-data') && a.text.includes('creativecommons.org/licenses/by/4.0/') && /\(UTC([+\u2212]\d+(:\d\d)?)?\)/.test(a.text) && !/\d{1,2}\/\d{1,2}\/\d{4}/.test(a.text)
       && !/hatched (in every|before their|over)/i.test(a.text) && !a.text.includes('·') && !snap.sources.reduce((t, s) => t.split(s.name).join(''), a.text).includes(' — '),
@@ -868,8 +975,10 @@ console.log('\n== once (light)');
     check(ok && rows.length >= 5, `${Y1}, the opening view, the fields on: every Ledger producer with 50 or more grid points (5 px) of its own opens on half of them or more: ${rows.join(', ')}`);
   }
   {
-    const t = await w(() => [[...document.querySelectorAll('#legend-ticks span')].map((s) => s.textContent).join(' / '), document.getElementById('readline').textContent]);
-    check(t[0].includes(`1${NN}000`) && t[1].includes('Plain: no figure, or none.'), `upright at 390: the legend reads "${t[0]}"; the caption says what plain land is: "${t[1]}"`);
+    const t = await w(() => { const k = document.getElementById('rkey'), b = document.getElementById('readbox').getBoundingClientRect(), r = k.getBoundingClientRect(), sw = getComputedStyle(k.querySelector('.sw-plain'));
+      return [[...document.querySelectorAll('#legend-ticks span')].map((s) => s.textContent).join(' / '), k.textContent, r.bottom <= b.bottom + 0.5 && r.height > 0, sw.backgroundColor, sw.borderTopWidth]; });
+    const land = hex(JSON.parse(fs.readFileSync(path.join(APP, 'app.js'), 'utf8').match(/^const THEMES = (.*);$/m)[1]).light.land);
+    check(t[0].includes(`1${NN}000`) && t[1] === `Under 1${NN}% eachNo figure` && t[2] && t[3] === `rgb(${land.join(', ')})` && t[4] === '1px', `upright at 390: the legend reads "${t[0]}"; the key under the caption reads "${t[1]}" inside the caption's height, "No figure" a swatch of plain land (${t[3]}) edged as a border`);
     await setYear(A, Y1);
     await pick(A, 'Fields', 'Nuayyim');
     const heard = await text(A, 'live');
@@ -895,15 +1004,11 @@ console.log('\n== once (light)');
       window.__wog.setAccum('annual');
       return out;
     }, [Y0, Y1]);
-    let notes = 0;
-    const bad = rows.filter(([a, y, t, fit]) => {
-      const n = noteIn(y, a === 'cumulative');
-      if (n) notes++;
-      return !fit || !t.startsWith(n ? `${n} Bar: ` : 'Bar: ') || !t.includes(`under 1${NN}%`) || (upright && !t.includes('Field sizes are estimates.'));
-    });
+    // no former state's note any more (plan 0012: its successors are colored), so every year reads the bar
+    const bad = rows.filter(([a, y, t, fit]) => !fit || t !== (a === 'cumulative' ? `Bar: shares of all the oil and gas produced to ${y}.` : `Bar: shares of the world's oil and gas in ${y}.`));
     const y50 = rows.find(([a, y]) => a === 'annual' && y === 1950)[2];
     check(rows.length === 2 * N && bad.length === 0 && C.errors.length === 0,
-      `${wd} × ${ht}: in all ${N} years, Annual and Cumulative, the caption says "under 1 %"${upright ? ' and "Field sizes are estimates."' : ''} inside its fixed height, led by a former state's note in the ${notes} where this file finds one (1950: "${y50}")${bad.length ? ': ' + bad.slice(0, 3).map((r) => `${r[0]} ${r[1]} "${r[2]}"`).join(' | ') : ''}`);
+      `${wd} × ${ht}: in all ${N} years, Annual and Cumulative, the caption is the bar's caption with its year, with its key inside the fixed height, and no former state's note (1950: "${y50}")${bad.length ? ': ' + bad.slice(0, 3).map((r) => `${r[0]} ${r[1]} "${r[2]}"`).join(' | ') : ''}`);
     await C.ctx.close();
   }
   // a snapshot with no world series: the shares are of the countries listed, and every sentence says so
@@ -924,16 +1029,16 @@ console.log('\n== once (light)');
   for (const [wd, ht, dpr, name] of [[320, 568, 2, '320'], [360, 740, 3, '360'], [375, 667, 2, '375'], [312, 675, 2.5, '125 % zoom'], [844, 390, 3, 'on its side']]) {
     const A = await open('light', { w: wd, h: ht, dpr });
     const r = await A.w(() => ({ sw: document.documentElement.scrollWidth, iw: innerWidth, plate: document.getElementById('map-wrap').getBoundingClientRect().height, keysRow: document.getElementById('map-wrap').classList.contains('keys-row'), keys: document.getElementById('keys').getBoundingClientRect().height,
-      credits: (() => { const c = document.getElementById('credits'); return c.scrollWidth <= c.clientWidth + 1 && c.getBoundingClientRect().bottom <= document.getElementById('player').getBoundingClientRect().top + 1; })() }));
+      key: (() => { const b = document.getElementById('readbox').getBoundingClientRect(), k = document.getElementById('rkey').getBoundingClientRect(); return k.height > 0 && k.bottom <= b.bottom + 0.5 && k.right <= b.right + 0.5; })() }));
     const forms = [];
     for (const [u, y, acc] of [['twh', 1900, 'annual'], ['kboe', 2017, 'annual'], ['twh', 2024, 'cumulative'], ['kboe', 1950, 'cumulative'], ['twh', 2024, 'annual']]) {
       await A.w(([uu, k, a]) => { window.__wog.setUnits(uu); window.__wog.setAccum(a); window.__wog.setYear(k); }, [u, y, acc]); await A.frame();
-      forms.push(await A.w(() => { const e = document.getElementById('readline'), l = document.getElementById('lead'); return [e.scrollHeight <= e.clientHeight + 1 ? '' : e.textContent, l.scrollWidth <= l.clientWidth + 1 ? '' : l.textContent]; }));
+      forms.push(await A.w(() => { const e = document.getElementById('readbox'), l = document.getElementById('lead'); return [e.scrollHeight <= e.clientHeight + 1 ? '' : e.textContent, l.scrollWidth <= l.clientWidth + 1 ? '' : l.textContent]; }));
     }
     const over = forms.flat().filter(Boolean);
     const side = name === 'on its side';
-    check(r.sw <= r.iw && over.length === 0 && r.credits && (!side || (r.plate >= 220 && r.keysRow && r.keys <= 40)),
-      `${name} (${wd} × ${ht}): no horizontal scroll (${r.sw} ≤ ${r.iw}), every caption and lead form inside its box${over.length ? ': over ' + over.join(' | ') : ''}, the credits whole, plate ${Math.round(r.plate)} px${side ? ` (the stock 167), the keys in one row ${Math.round(r.keys)} px high` : ''}`);
+    check(r.sw <= r.iw && over.length === 0 && r.key && (!side || (r.plate >= 220 && r.keysRow && r.keys <= 40)),
+      `${name} (${wd} × ${ht}): no horizontal scroll (${r.sw} ≤ ${r.iw}), every caption and lead form inside its box${over.length ? ': over ' + over.join(' | ') : ''}, the key whole inside the caption, plate ${Math.round(r.plate)} px${side ? ` (the stock 167), the keys in one row ${Math.round(r.keys)} px high` : ''}`);
     if (side) {
       await A.shot('side-light');
       await A.tapEl('#btn-layers'); await A.frame(); await A.page.waitForTimeout(200);

@@ -4,14 +4,19 @@
 //   1. what the ZIP ships stays within Snuggery's limits (count, depth, largest, total, no symlinks);
 //   2. no http:// or https:// in any .html, .css or .js the app ships, not even in a comment (B10);
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
-//   4. data/ holds exactly the four files, js/ the three modules, fonts/ the house face and OFL.txt at
-//      the sha256 HOUSE.md pins; NOTES.md and About credit the face word for word;
-//   5. the data is untouched: each data file's sha256 is the one recorded before the pass;
-//   6. miniapp.json is valid, its name unchanged;
+//   4. data/ holds exactly the data contract's files (the shading's tiles exactly as data/shade.json names
+//      them), js/ the three modules, fonts/ the house face and OFL.txt at the sha256 HOUSE.md pins; NOTES.md
+//      and About credit the face word for word; world.json carries no depth bands or relief block again;
+//   5. the data is as recorded: the fields as before the pass, the snapshot but its Natural Earth source name
+//      (the bands left with the pass; About prints it), world.json and the shading
+//      as tools/build_shade.py writes them (plan 0012, package 3.2);
+//   6. miniapp.json is valid, its name unchanged, its version 1.2 (HOUSE.md 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credit line: creditLine() over the sources gives the stock app's words, written whole to a <p> (B7);
+//   8. the credit line: creditLine() over the sources gives the stock app's words, written first under
+//      About's Sources and credits; no credit on the front (HOUSE.md 4.15); the GEBCO attribution word for
+//      word in About and NOTES.md;
 //   9. the marketing camera's strings (HOUSE.md 7.4) with their roles; every localStorage key wog.*, the
-//      keys read before the pass still read but the two retired, wog.focus added;
+//      keys read before the pass still read but the two retired, wog.focus and wog.rim added;
 //  10. SI: no plain space between a digit and a unit in the strings the app writes; toFixed and
 //      toLocaleString only in js/units.js; no Intl (dates and numbers are built by hand);
 //  11. nothing that carries a year transitions;
@@ -46,7 +51,7 @@ const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if 
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 200000, APP_JS_CAP = 150000, FONT_CAP = 160000, ZIP_CAP = 2622870;
+const CODE_CAP = 207000, APP_JS_CAP = 150000, FONT_CAP = 160000, ZIP_CAP = 2622870;
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -95,8 +100,9 @@ const app = read('app.js'), data = read('js/data.js'), html = read('index.html')
     return !resolved.startsWith(APP + path.sep) || !fs.existsSync(resolved);
   });
   ok(bad.length === 0 && refs.length > 0, `references: ${refs.length} (imports, src, href, url(), fetch(), data paths): ${bad.length ? 'bad or missing: ' + bad.map((b) => `${b[0]} → ${b[1]}`).join('; ') : 'all relative, inside the folder, present'}`);
-  ok(/fetch\(`\.\/\$\{path\}`/.test(app) && /img\.src = `\.\/data\/\$\{spec\.file\}`/.test(app) && /\/\^\[\\w-\]\+\(\\\.\[\\w-\]\+\)\*\\\.\(jpe\?g\|png\|webp\)\$\/i\.test\(r\.file\)/.test(app),
-    'the data reads: the three files of FILES by name, and the relief only by a plain image name inside data/');
+  ok(/fetch\(`\.\/\$\{path\}`/.test(app) && /fetch\('\.\/data\/shade\.json'/.test(app) && /im\.src = `\.\/data\/\$\{file\}`/.test(app) && app.includes("const IMG = /^[\\w-]+(\\/[\\w-]+)?\\.(jpe?g|png|webp)$/;")
+    && /IMG\.test\(g\.file\)/.test(app) && /IMG\.test\(x\.file\)/.test(app),
+    'the data reads: the three files of FILES by name, data/shade.json, and the shading only by a plain image name inside data/ (one folder deep at most)');
 }
 
 // 4. data/, js/ and fonts/ hold exactly the contract's files; the face
@@ -104,7 +110,19 @@ const exactly = (dir, names) => {
   const have = shipped.filter((f) => f.startsWith(dir + '/')).map((f) => f.slice(dir.length + 1)).sort(), want = [...names].sort();
   ok(JSON.stringify(have) === JSON.stringify(want), `${dir}/ holds exactly ${want.join(', ')}${JSON.stringify(have) === JSON.stringify(want) ? '' : `; found ${have.join(', ')}`}`);
 };
-exactly('data', ['fields.json', 'relief.jpg', 'snapshot.json', 'world.json']);
+const shadeMf = JSON.parse(read('data/shade.json'));
+exactly('data', ['fields.json', 'shade.json', 'shade.webp', 'shade/land.webp', 'snapshot.json', 'world.json', ...shadeMf.tiles.map((t) => t.file)]);
+{
+  const w = JSON.parse(read('data/world.json'));
+  ok(!('bathymetry' in w) && !('relief' in w) && !/bathymetry/i.test(w.source || '') && shadeMf.global.file === 'shade.webp' && shadeMf.global.land === 'shade/land.webp' && shadeMf.tiles.length === 17,
+    `world.json carries no depth bands and no relief block (data/shade.webp replaces both; a run of build_world.py that writes them back fails here); data/shade.json names shade.webp (the sea), shade/land.webp (the land) and ${shadeMf.tiles.length} tiles`);
+}
+{
+  // About prints each source's name as the snapshot gives it: none may name the bands the app no longer ships
+  const names = JSON.parse(read('data/snapshot.json')).sources.map((x) => x.name);
+  ok(names.every((n) => !/bathymetry/i.test(n)) && names.includes('Natural Earth 1:10m admin-0 countries and Natural Earth I shaded relief'),
+    `snapshot.json's sources, as About prints them, name no bathymetry (${names[1]}; a refresh by build_world.py that writes the old name back fails here)`);
+}
 exactly('js', ['data.js', 'track.js', 'units.js']);
 exactly('fonts', ['ysabeau-office-gw.woff2', 'OFL.txt']);
 const sha = (f) => crypto.createHash('sha256').update(fs.readFileSync(path.join(APP, f))).digest('hex');
@@ -117,22 +135,32 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no font (is |ships|is loaded)/i.test(read('NOTES.md') + css),
   'the face is credited word for word in NOTES.md and in About ("Type: …"), and nothing says no font ships');
 
-// 5. The data is untouched (the hashes recorded before the pass, ART.md section 8, now tools/DECISIONS.md)
+// 5. The data as recorded: the snapshot and the fields as before the pass (ART.md section 8, now
+// tools/DECISIONS.md); world.json and the shading as tools/build_shade.py writes them (plan 0012, 3.2: the
+// depth bands and the relief block out of world.json, the shading in), byte for byte on a re-run
 const DATA_SHA = {
   'data/fields.json': '19f1a6459a2eaa2a0a37e6682d39a848e052d6aa736938563d887aa0aa44aa23',
-  'data/relief.jpg': 'c92737899f1ee7722f05db2a4bf76cbc8a4419d3f13bbcd8f16f97731e7184c9',
-  'data/snapshot.json': 'adb9e6ee40ba21274c471445c6c3f3ed09648f1263fe83f96739d03821db175c',
-  'data/world.json': '926c3cb93f753f722379f751ba90de427fb05b121f2fe4dcf43958d7e0352c96',
+  'data/snapshot.json': 'f3360b22a2dd85e8c947f5119a5dae3d0ab3f0522dd41c12c2b72f1a4fa7c65f',
+  'data/world.json': 'de083a506cd95967d69321cebd8facd5337a0394e3001670e61c1edba3fb1249',
+  'data/shade.json': 'f31d9498ad6b128cdd94f5a3d27f827f1a085c5fcd46eadc4237fa928db4a784',
+  'data/shade.webp': 'c261a78cf511901a11565f75734cfdd8d568c8548c904e8dd5a1f4a1fe7db0ea',
+  'data/shade/land.webp': '7d10d31111946224dbc58056f41d7f2a7ebad88e9d8a0c31c957a92717c0177e',
 };
-for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… as before the pass`);
+for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… as recorded`);
+{
+  const h = crypto.createHash('sha256');
+  for (const t of [...shadeMf.tiles].sort((a, b) => (a.file < b.file ? -1 : 1))) h.update(fs.readFileSync(path.join(APP, 'data', t.file)));
+  const got = h.digest('hex');
+  ok(got === 'ac37cc51e905dc1c472ed7801cd09c1fa839d8bb4d98dae1bc023ac236310900', `data/shade/: the ${shadeMf.tiles.length} tiles, concatenated in name order, sha256 ${got.slice(0, 8)}… as tools/build_shade.py writes them`);
+}
 
 // 6. miniapp.json
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'World Oil & Gas' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)
@@ -149,9 +177,15 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 {
   const snap = JSON.parse(read('data/snapshot.json')), fl = JSON.parse(read('data/fields.json'));
   const line = creditLine([...snap.sources.map((s) => s.attribution), fl.source.attribution]);
+  const sec = (html.match(/<h3>Sources and credits<\/h3>\s*([\s\S]*?)<\/section>/) || ['', ''])[1];
   ok(line === 'Sources: Energy Institute via Our World in Data · Natural Earth · Global Energy Monitor'
-    && /setText\(\$\('credits'\), l\.length \? creditLine\(l\) : ''\)/.test(app) && /<p class="credits" id="credits" translate="no"><\/p>/.test(html),
-  `the credit line: creditLine(the sources) is "${line}", written whole to the <p id="credits">`);
+    && /setText\(\$\('about-credit-line'\), l\.length \? creditLine\(l\) : ''\)/.test(app) && sec.trim().startsWith('<p id="about-credit-line" translate="no"></p>')
+    && !/id="credits"/.test(html) && !/\$\('credits'\)/.test(app),
+  `the credit line: creditLine(the sources) is "${line}", written first under About's Sources and credits (#about-credit-line); no #credits on the front (HOUSE.md 4.15)`);
+  const GEBCO = 'GEBCO Bathymetric Compilation Group 2026(2026). The GEBCO_2026 Grid - a continuous terrain model for oceans and land at 15 arc-second intervals. NERC EDS British Oceanographic Data Centre NOC. doi:10.5285/4f68d5c7-45eb-f999-e063-7086abc036fa';
+  ok(sec.includes(GEBCO) && read('NOTES.md').includes(GEBCO) && shadeMf.attribution === GEBCO && sec.includes('The GEBCO Grid is placed in the public domain and may be used free of charge')
+    && sec.includes('The GEBCO Grid should NOT be used for navigation or for any other purpose involving safety at sea.') && /not endorsed by GEBCO, the IHO or the IOC/.test(sec),
+  "GEBCO's attribution word for word in About, NOTES.md and data/shade.json, with its terms, the no-endorsement and the navigation disclaimer in About");
 }
 
 // 9. The marketing camera's strings (HOUSE.md 7.4) and the stored keys
@@ -169,8 +203,8 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const unread = Object.entries(before).filter(([n, k]) => store[n] !== k || !new RegExp(`store\\.get\\(STORE\\.${n}\\)`).test(app));
   const retired = ['wog.legend', 'wog.rings'].filter((k) => keys.includes(k) || app.includes(`'${k}'`));
   ok(keys.every((k) => k.startsWith('wog.')) && direct.length === 0 && calls.every((d) => /^STORE\.\w+$/.test(d)) && unread.length === 0 && store.focus === 'wog.focus'
-    && /store\.get\(STORE\.focus\) === '1'/.test(app) && retired.length === 0,
-  `storage: ${keys.length} keys, all wog.*; every call goes through STORE; the 16 read before the pass still read${unread.length ? ` (not: ${unread.map((u) => u[0]).join(', ')})` : ''}; wog.focus added; wog.legend (the legend no longer folds) and wog.rings (the rim is always drawn, owner call 6) retired`);
+    && /store\.get\(STORE\.focus\) === '1'/.test(app) && retired.length === 0 && store.rim === 'wog.rim' && /rimOn = store\.get\(STORE\.rim\) !== '0'/.test(app),
+  `storage: ${keys.length} keys, all wog.*; every call goes through STORE; the 16 read before the pass still read${unread.length ? ` (not: ${unread.map((u) => u[0]).join(', ')})` : ''}; wog.focus added; wog.rim added (plan 0012: the rims on by default, off only once turned off); wog.legend (the legend no longer folds) and wog.rings (the stock app's rings, retired by owner call 6) stay retired`);
 }
 
 // 10. SI notation in what the app writes; toFixed and toLocaleString only in js/units.js; no Intl
@@ -278,7 +312,7 @@ ok(/::-webkit-search-cancel-button \{ appearance: none; -webkit-appearance: none
 const codeFiles = ['index.html', 'style.css', 'app.js', ...shipped.filter((f) => /^js\/[^/]+\.js$/.test(f))];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling on the measured figure, plan 0012 3.2): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 ok(size('app.js') <= APP_JS_CAP, `app.js ${fmt(size('app.js'))} bytes (the app's own cap, ${fmt(APP_JS_CAP)}, as NOTES.md states it)`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)})`);
@@ -300,7 +334,8 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 2,068,0
 // data's words are the sources' and are printed as data: allowed by file and word, nowhere else.
 {
   const BRIT = /\b(judgement|colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|forevery\w*|behaviour\w*|recognis\w*|rasteris\w*|normalis\w*|quantis\w*|organis\w*|synchronis\w*|ellipsis(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|for ever)\b/gi;
-  const ALLOW = { 'data/fields.json': ['Harbour', 'Greys', 'Greymouth', 'Greylock'] };   // operators, owners and places, as the tracker spells them
+  // operators, owners and places as the tracker spells them; GEBCO's attribution as GEBCO gives it ("British Oceanographic Data Centre")
+  const ALLOW = { 'data/fields.json': ['Harbour', 'Greys', 'Greymouth', 'Greylock'], 'index.html': ['Centre'], 'NOTES.md': ['Centre'], 'data/shade.json': ['Centre'] };
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
     const allow = ALLOW[f] || [];

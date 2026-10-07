@@ -62,7 +62,7 @@ Open an app's **Install** link in Safari on the iPhone, then do the three steps 
 | Besseggen | [**Install Besseggen**](https://mtomasgaard.github.io/snuggery-apps-template/zips/besseggen.zip) | 17 MB | nothing |
 | Norne Reservoir | [**Install Norne Reservoir**](https://mtomasgaard.github.io/snuggery-apps-template/zips/norne-reservoir.zip) | 15 MB | nothing |
 | Shelf Atlas | [**Install Shelf Atlas**](https://mtomasgaard.github.io/snuggery-apps-template/zips/shelf-atlas.zip) | ~2 MB | nothing |
-| World Oil & Gas | [**Install World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-oil-gas.zip) | 2.1 MB | nothing (GOGET by hand) |
+| World Oil & Gas | [**Install World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-oil-gas.zip) | 2.5 MB | nothing (GOGET by hand) |
 | Snug Kart | [**Install Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/zips/snug-kart.zip) | 0.6 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/zips/earth-history.zip) | 7 MB | nothing |
 | US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |

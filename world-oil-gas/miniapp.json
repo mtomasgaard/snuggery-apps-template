@@ -3,5 +3,5 @@
   "name": "World Oil & Gas",
   "entryPoint": "index.html",
   "description": "Oil and gas production by country, 1900 to the latest year, on a world map with a year player and the world's output for each year as shares",
-  "version": "1.1"
+  "version": "1.2"
 }
