@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T21:01:35Z",
+ "generatedAt": "2026-10-07T22:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/we-need-to-stop-asking-if-nz-can-afford-its-superannuation-scheme-its-the-wrong-question-293808",
+     "published": "2026-10-07T21:05:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Aaron Gilbert, Professor of Finance, Auckland University of Technology"
+    },
+    {
      "title": "In a society desperate for distraction, a woman performing starvation overcommits",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Nina Hillenberg, Senior Lecturer, Design, Torrens University Australia"
-    },
-    {
-     "title": "Our research found a new reason to keep teachers happy – it’s linked to how well students do",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/our-research-found-a-new-reason-to-keep-teachers-happy-its-linked-to-how-well-students-do-293340",
-     "published": "2026-10-07T18:28:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Theresa Dicke, Professor, Institute for Positive Psychology and Education, Australian Catholic University"
     },
     {
      "title": "What happens to language when machines start talking back?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
+   "published": "2026-10-07 21:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "In a society desperate for distraction, a woman performing starvation overcommits",
    "published": "2026-10-07 18:29 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Beige tones and knit throws? No, we’ve got Scandinavian design all wrong",
-   "published": "2026-10-07 18:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Our research found a new reason to keep teachers happy – it’s linked to how well students do",
    "published": "2026-10-07 18:28 UTC"
   },
   {
