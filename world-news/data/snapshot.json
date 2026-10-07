@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T05:01:21Z",
+ "generatedAt": "2026-10-07T06:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "‘I’m harmed and I don’t think the person who did it knows’: we looked at different responses to uni sexual assault",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/im-harmed-and-i-dont-think-the-person-who-did-it-knows-we-looked-at-different-responses-to-uni-sexual-assault-293095",
+     "published": "2026-10-07T05:30:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Meredith Rossner, Professor of Criminology, Australian National University"
+    },
+    {
+     "title": "What the Australian government’s apology to LGBTQ+ Defence personnel and veterans means",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-the-australian-governments-apology-to-lgbtq-defence-personnel-and-veterans-means-293686",
+     "published": "2026-10-07T04:28:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shirleene Robinson, Visiting Fellow, School of Communication, University of Technology Sydney"
+    },
+    {
      "title": "Electric long-haul trucks could become a reality sooner – if there’s no driver",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Anthony Wiskich, Visiting Fellow in Economics, Australian National University"
-    },
-    {
-     "title": "Yemen is spiralling into another civil war that could swiftly engulf in the entire region",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/yemen-is-spiralling-into-another-civil-war-that-could-swiftly-engulf-in-the-entire-region-293104",
-     "published": "2026-10-07T02:49:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Amin Saikal, Emeritus Professor of Middle Eastern Studies, Australian National University; The University of Western Australia; Victoria University"
-    },
-    {
-     "title": "Why a Greens’ plan for 624 public supermarkets to take on Woolies and Coles just doesn’t add up",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-a-greens-plan-for-624-public-supermarkets-to-take-on-woolies-and-coles-just-doesnt-add-up-293683",
-     "published": "2026-10-07T02:16:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
     },
     {
      "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "‘I’m harmed and I don’t think the person who did it knows’: we looked at different responses to uni sexual assault",
+   "published": "2026-10-07 05:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What the Australian government’s apology to LGBTQ+ Defence personnel and veterans means",
+   "published": "2026-10-07 04:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Electric long-haul trucks could become a reality sooner – if there’s no driver",
    "published": "2026-10-07 03:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Yemen is spiralling into another civil war that could swiftly engulf in the entire region",
-   "published": "2026-10-07 02:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why a Greens’ plan for 624 public supermarkets to take on Woolies and Coles just doesn’t add up",
-   "published": "2026-10-07 02:16 UTC"
   },
   {
    "region": "Oceania",
