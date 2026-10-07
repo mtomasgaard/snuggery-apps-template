@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T02:01:57Z",
+ "generatedAt": "2026-10-07T03:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Yemen is spiralling into another civil war that could swiftly engulf in the entire region",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/yemen-is-spiralling-into-another-civil-war-that-could-swiftly-engulf-in-the-entire-region-293104",
+     "published": "2026-10-07T02:49:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amin Saikal, Emeritus Professor of Middle Eastern Studies, Australian National University; The University of Western Australia; Victoria University"
+    },
+    {
+     "title": "Why a Greens’ plan for 624 public supermarkets to take on Woolies and Coles just doesn’t add up",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-a-greens-plan-for-624-public-supermarkets-to-take-on-woolies-and-coles-just-doesnt-add-up-293683",
+     "published": "2026-10-07T02:16:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
+    },
+    {
      "title": "Conservationists are discovering ‘bright spots’ around the globe. Here’s why they matter",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Bing Lin, Postdoctoral Fellow in the Thriving Oceans Research Hub, School of Geosciences, University of Sydney"
-    },
-    {
-     "title": "Avant-garde abundance: the deeply infectious art of Australian artist Justene Williams",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/avant-garde-abundance-the-deeply-infectious-art-of-australian-artist-justene-williams-290328",
-     "published": "2026-10-06T23:57:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Chari Larsson, Senior Lecturer of Art History, Griffith University"
-    },
-    {
-     "title": "It’s true, Australia won’t ban ‘sock puppet’ accounts on social media. Here’s why",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/its-true-australia-wont-ban-sock-puppet-accounts-on-social-media-heres-why-293353",
-     "published": "2026-10-06T23:45:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel Angus, Professor of Digital Communication, Director of QUT Digital Media Research Centre, Queensland University of Technology"
     },
     {
      "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Yemen is spiralling into another civil war that could swiftly engulf in the entire region",
+   "published": "2026-10-07 02:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Why a Greens’ plan for 624 public supermarkets to take on Woolies and Coles just doesn’t add up",
+   "published": "2026-10-07 02:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Conservationists are discovering ‘bright spots’ around the globe. Here’s why they matter",
    "published": "2026-10-07 00:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Avant-garde abundance: the deeply infectious art of Australian artist Justene Williams",
-   "published": "2026-10-06 23:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "It’s true, Australia won’t ban ‘sock puppet’ accounts on social media. Here’s why",
-   "published": "2026-10-06 23:45 UTC"
   },
   {
    "region": "Oceania",
