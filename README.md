@@ -24,7 +24,7 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Eighteen complete apps. All are examples — none holds anybody's real data. Copy
+Nineteen complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
 **Seven of them cost you nothing to run.** Hello Live, World News, Power Hours,
@@ -36,9 +36,9 @@ is free in the same way but cannot run on its own: the forecast is for wherever
 Dashboard** and **Finances** are the two that need credentials — a Garmin
 sign-in and a bank connection — and until you add them, both show made-up
 data. Finances says so on screen; Running Dashboard is built to look like a
-real copy, so its entry below and its own docs say so instead. **Anatomy** (25 MB), **Norne Reservoir** (15 MB), **Besseggen** (17 MB) and
-**Milky Way** (6.5 MB) are the big ones: a human body, an oil field, a mountain ridge and our galaxy,
-each in 3D. They need
+real copy, so its entry below and its own docs say so instead. **Anatomy** (25 MB), **Norne Reservoir** (15 MB), **Volve** (33 MB),
+**Besseggen** (17 MB) and **Milky Way** (6.5 MB) are the big ones: a human body, two oil fields (one with its
+seismic), a mountain ridge and our galaxy, each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
 pack precisely because of that size — install any of them the same way as every app on this page:
 three taps, just below.
@@ -66,6 +66,7 @@ Open an app's **Install** link in Safari on the iPhone, then do the three steps 
 | Snug Kart | [**Install Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/zips/snug-kart.zip) | 0.6 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/zips/earth-history.zip) | 7 MB | nothing |
 | US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
+| Volve | [**Install Volve**](https://mtomasgaard.github.io/snuggery-apps-template/zips/volve.zip) | 33 MB | nothing |
 | Warming World | [**Install Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
 
 1. **On the iPhone, in Safari**, tap an app's **Install …** link in the table above (or its
@@ -156,6 +157,12 @@ The open Norne oil-field reservoir simulation model in 3D: 44,431 cells colored 
 
 **Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/norne-reservoir.zip) · Make it yours: [`norne-reservoir/NOTES.md`](norne-reservoir/NOTES.md)
 
+### Volve
+
+A second oil field in 3D, this time with its seismic: the open Volve field's reservoir simulation model, 183,545 cells colored by oil, water or gas saturation, pressure or rock property, played through 37 quarterly report dates of its production history, with each well's simulated rates beside the rates the field reported. Open the section under the model and sweep it across the field, inline by inline, crossline by crossline or along the grid: the seismic survey shows at its own depths with the model's cells over it and the reservoir's top and base as interpreted, on one depth axis below sea level, and nothing is shifted to make the two agree. The seismic is drawn the way interpretation software draws it, a smooth variable-density image with zero kept at zero and no automatic gain. Plain WebGL 2, no libraries. **Static**, 64 MB unpacked. The field data travels under its own terms, free and not for sale ([ATTRIBUTION.txt](volve/data/ATTRIBUTION.txt)).
+
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/volve.zip) (33 MB) · Make it yours: [`volve/NOTES.md`](volve/NOTES.md)
+
 ### Shelf Atlas
 
 The North Sea's oil and gas on a map you pan and pinch: every field outline in the Norwegian, UK, Danish and Dutch sectors, the platforms and the pipelines, the median lines between the four shelves, and a month player from January 1971 to the newest month all four regulators have reported. Each field is a disc sized and colored by what it produced that month, drawn inside a thin ink ring at its best month so far: a rising field fills its ring, a declining one sits small inside it, and by 2026 the northern North Sea is a basin of near-empty rings. Tap a field for the month's figure, its best month and its operator; Details opens its history chart and, for a cross-border unit (Statfjord, Frigg, Murchison…), each side's share and the sum. **Live**: rebuilt weekly here from the four regulators' open data — Sodir, NSTA, the Danish Energy Agency and NLOG — plus Natural Earth and Marine Regions.
@@ -208,6 +215,7 @@ The Solar System, the Sun's neighborhood and the Milky Way in one continuous 3D 
 ![Global Weather](global-weather/screenshots/app.png)
 ![Anatomy](anatomy/screenshots/app.png)
 ![Norne Reservoir](norne-reservoir/screenshots/app.png)
+![Volve](volve/screenshots/app.png)
 ![Besseggen](besseggen/screenshots/app.png)
 ![Milky Way](milky-way/screenshots/app.png)
 ![Shelf Atlas](shelf-atlas/screenshots/app.png)
@@ -255,6 +263,7 @@ same app from the same folder, and it shows the data last published here. Open t
 | Snug Kart | [**Open Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/snug-kart/) |
 | Earth's History | [**Open Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/earth-history/) |
 | US Quakes | [**Open US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/us-quakes/) |
+| Volve | [**Open Volve**](https://mtomasgaard.github.io/snuggery-apps-template/volve/) |
 | Warming World | [**Open Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/warming-world/) |
 
 The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
@@ -507,7 +516,8 @@ terms: the US Geological Survey map tiles (public domain), the OpenStreetMap-der
 CC BY 4.0 at source) with its BodyParts3D 4.0 structures (CC BY 4.0 —
 [CREDITS.txt](anatomy/CREDITS.txt)) with its vendored three.js (MIT) and the
 Ysabeau Office typeface (SIL OFL 1.1); the Norne benchmark model in Norne Reservoir (ODbL —
-[ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
+[ATTRIBUTION.txt](norne-reservoir/data/ATTRIBUTION.txt)); the Volve field data in Volve (© Equinor ASA and the former
+Volve license partners, under Equinor's terms, not for sale — [ATTRIBUTION.txt](volve/data/ATTRIBUTION.txt)); Kartverket's DTM1 terrain (NLOD 2.0 / CC BY 4.0), Turrutebasen
 (open), N50 (CC BY 4.0) and SSR (CC BY 4.0) in Besseggen ([CREDITS.txt](besseggen/CREDITS.txt)); in Milky Way, the
 Gaia-derived star, sky and young-star map files (`deep.bin`, `named.json`, the sky JPEG and `young-*.png`; CC BY-NC
 3.0 IGO, so non-commercial use only), the Stellarium files (`sun.jpg`, `moon.jpg`, `constellations.json`) and the

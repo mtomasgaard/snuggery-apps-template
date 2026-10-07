@@ -1,0 +1,753 @@
+/* Volve under the template's house system (ART.md; Template/HOUSE.md): Norne Reservoir's look, carried
+   to a second field, with the seismic in the section.
+
+   The screen is a plate and its caption. The plate is the reservoir model, printed twice: the light
+   theme is the negative (pale rock, more of a quantity darker) on white, the dark theme the print
+   (dark rock, more of a quantity brighter). Under it, when it is open, the section A–A′ with the seismic
+   under the cells; under both
+   the caption band holds the scale, the instruments, the wells' key and the cut's key. Sources and
+   credits are in About. The player's track is the signature, the cut. One face, gray chrome, no
+   accent color, no glass, no shadows, no gradient but the data's scales and the selection tracer. The data's colors live in config.json (written from
+   tools/art/palette.py); nothing here is fetched, and there is no external address in this file. */
+
+@font-face {
+  font-family: 'Ysabeau Office';
+  src: url(fonts/ysabeau-office-gw.woff2) format('woff2');
+  font-weight: 400 650;
+  font-display: block;
+}
+
+:root {
+  --page: #ffffff;            /* header, caption band, player, sheet: white (HOUSE 12, plan 0012 D6) */
+  --sheet: #f6f9fa;           /* key plates, the readout card, About, notices */
+  --ink: #0f1c23;
+  --ink-2: #45555d;
+  --ink-3: #5b6a72;
+  --line: #c9d4d8;
+  --line-strong: #74858c;
+  --draw: cubic-bezier(0.2, 0, 0, 1);
+  --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
+  --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
+  /* this app's own (ART.md section 2) */
+  --plate: #ffffff;           /* the WebGL clear color: the plate is the ground */
+  --plate-halo: rgba(255, 255, 255, 0.85);
+  --cut: #12150b;             /* the signature's ink: crude, an olive near-black */
+  --cut-water-a: 0.30;
+  --chart-oil: #005d38;
+  --chart-water: #4479b8;
+  --chart-gas: #a63430;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #141d21;
+    --sheet: #1c272c;
+    --ink: #e6edee;
+    --ink-2: #a3b1b6;
+    --ink-3: #8b9a9f;
+    --line: #2a373c;
+    --line-strong: #64757b;
+    --plate: #0c1316;
+    --plate-halo: rgba(12, 19, 22, 0.85);
+    --cut: #eff5e7;
+    --cut-water-a: 0.34;
+    --chart-oil: #8ff0b9;
+    --chart-water: #75acef;
+    --chart-gas: #ffa59b;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--page);
+  color: var(--ink);
+  font: 400 13.5px/1.35 var(--face);
+  font-variant-numeric: tabular-nums lining-nums;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+/* the column: header, the view (the plate, and the section when it is open), caption band, player,
+   sheet. The sheet takes what its stop needs of the rest and scrolls inside itself, but never more
+   than leaves the view its share: --view-min, about half of an 844 px screen and never under 200 px,
+   while the sheet keeps at least 180 px on a short phone (plan 0012, package 3.4). */
+body {
+  --view-min: max(200px, min(48dvh, 100dvh - 432px));
+  --sec-h: clamp(202px, calc(26dvh + 32px), 262px);   /* 2.2's cap and the sweep's 32 px row */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(200px, 1fr) auto auto minmax(0, max-content);
+  height: 100vh;
+  height: 100dvh;
+}
+body.raised { grid-template-rows: auto minmax(var(--view-min), 1fr) auto auto minmax(0, max-content); }
+/* with the sheet raised the pane takes what the model can give above its 220 px (the reservoir's minimum
+   share): 185 px at 844, 16 px more than 2.2's cap, so the sweep's row costs the plot 16 px */
+body.sectioned.raised { --sec-h: clamp(150px, calc(var(--view-min) - 220px), 234px); }
+
+button, input, select { font: inherit; color: inherit; }
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.words :focus-visible { outline-offset: -2px; } /* the ring inside a row that scrolls sideways; family-wide, 2026-10-02 */
+svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+svg .fill, svg.fill path { fill: currentColor; stroke: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
+
+/* ── header: the name and the units key, the stamp, the property words ── */
+
+.head {
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto 44px;
+  column-gap: 12px;
+  padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+}
+.head h1 { grid-area: 1 / 1 / 2 / 3; margin: 0; font-size: 15px; font-weight: 650; line-height: 22px; }
+.stamp-home { grid-area: 2 / 1; min-width: 0; padding-bottom: 6px; }
+.stamp {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  text-align: left;
+  font-size: 11.5px;
+  line-height: 16px;
+  color: var(--ink-2);
+}
+/* the stamp opens About: its hit runs up over the name and down into the gap, 44 px in all */
+.stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }
+/* in focus mode it heads the caption: the hit runs down over the caption, never up into the plate */
+.caption > .stamp { z-index: 1; }
+.caption > .stamp::before { inset: -6px 0 -22px 0; }
+/* the About key and the units key close the row of words: a 44 px row holds their hits (HOUSE 4.2, F2) */
+.hkeys { grid-area: 3 / 2; align-self: center; display: flex; gap: 8px; }
+.wordkey, .unitkey {
+  position: relative;
+  min-width: 44px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.wordkey, .unitkey { white-space: nowrap; }
+.wordkey::before, .unitkey::before { content: ''; position: absolute; inset: -9px -4px; }   /* 44 px tall, the gap between the two shared */
+/* in focus mode the About key heads the caption band, where the stamp went, its hit over the legend's */
+.caption > .wordkey { float: right; position: relative; z-index: 1; margin: 4px 0 0 12px; }
+.caption > .wordkey::before { inset: -9px -4px; }   /* from the padding box, inside the 1 px border: 44 px in all */
+
+.switcher { grid-area: 3 / 1; display: flex; align-items: stretch; min-width: 0; margin: 0 0 0 -8px; }
+.words {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-padding: 0 16px;
+  -webkit-overflow-scrolling: touch;
+}
+.words::-webkit-scrollbar { display: none; }
+#props.more { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); }
+.divider { flex: 0 0 1px; align-self: center; height: 14px; margin: 0 4px; background: var(--line); }
+.words button {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+/* the chosen word: weight 620 and a tracer under it, drawn from its tail to its head */
+.words button[aria-checked="true"] { color: var(--ink); font-weight: 620; }
+.words button[aria-checked="true"]::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 9px;
+  height: 4px;
+  background:
+    radial-gradient(circle at calc(100% - 2px) 50%, var(--ink) 1.9px, transparent 2.1px),
+    linear-gradient(90deg, transparent, var(--ink) calc(100% - 3px), transparent calc(100% - 3px)) 0 1px / 100% 2px no-repeat;
+  animation: tracer-in 160ms var(--draw);
+}
+@keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* ── the plate ── */
+
+.view { grid-row: 2; display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.plate {
+  flex: 1 1 auto;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--plate);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#gl { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; }
+
+/* names on the plate: ink on a 3 px halo, no pill. The labels never take a touch themselves (a drag
+   that starts on one still turns the model); app.js reads a tap inside a label's 44 px hit as a tap
+   on its well. They stay buttons for the keyboard and VoiceOver. */
+.labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.wl, .zl {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  font-size: 11.5px;
+  font-weight: 560;
+  line-height: 16px;
+  white-space: nowrap;
+  color: var(--ink);
+  -webkit-text-stroke: 3px var(--plate-halo);
+  paint-order: stroke fill;
+  pointer-events: none;
+}
+.wl svg { flex: 0 0 auto; }
+.pickmark { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border: 1.5px solid var(--ink); border-radius: 50%; outline: 2px solid var(--plate-halo); pointer-events: none; }
+.wl .casing { stroke: var(--plate-halo); stroke-width: 4; stroke-linecap: butt; }
+.wl .core { stroke: var(--c, #6f7274); stroke-width: 2; stroke-linecap: butt; }
+.wl.dash .core, .wl.dash .casing { stroke-dasharray: 3 2; }
+.wl.thin .core { stroke-width: 1.2; opacity: .6; }
+.wl.sel { font-weight: 650; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+
+/* the key column: plates, no shadow; each key a full 44 px hit, the plate 36 px wide */
+.keys {
+  position: absolute;
+  top: 8px;
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.keyplate {
+  width: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--sheet);
+}
+.keyplate button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 -4px;
+  color: var(--ink-2);
+}
+.keyplate button + button::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 0;
+  height: 1px;
+  background: var(--line);
+}
+.keyplate button svg { position: relative; }
+.keyplate button::before { content: ''; position: absolute; inset: 8px; border-radius: 4px; }
+.keyplate button[aria-pressed="true"] { color: var(--ink); }
+.keyplate button[aria-pressed="true"]::before { background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.keyplate button:active::before { background: color-mix(in srgb, currentColor 22%, transparent); }
+/* a plate too short for the column (the sheet raised, a phone on its side): the keys run as a row; where
+   the row does not fit its width either (the section beside the model), two rows, the zoom plate over the
+   other two (150: their 144 px and a little), or the plates side by side, whichever leaves the model larger
+   (layoutKeys) */
+.keys-row .keys, .keys-wrap .keys { flex-direction: row; }
+.keys-wrap .keys { flex-wrap: wrap; justify-content: flex-end; width: 150px; }
+:is(.keys-row, .keys-wrap) .keyplate { display: flex; width: auto; height: 38px; }
+:is(.keys-row, .keys-wrap) .keyplate button { margin: -4px 0; }
+:is(.keys-row, .keys-wrap) .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
+.keys-cols .keys { flex-direction: row; align-items: flex-start; }
+
+/* the ghost key: no plate, a halo under the mark so it reads over any part of the model */
+.ghost {
+  position: absolute;
+  top: calc(8px + env(safe-area-inset-top));
+  right: calc(8px + env(safe-area-inset-right));
+  z-index: 4;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: .72;
+  animation: ghost-in 200ms var(--draw);
+}
+.ghost:focus-visible, .ghost:active { opacity: 1; }
+.ghost .halo { stroke: rgba(246, 249, 250, .6); stroke-width: 3.4; }
+.ghost .halo circle { fill: rgba(246, 249, 250, .6); }
+.ghost .mark { stroke: #0f1c23; stroke-width: 1.4; }
+.ghost .mark .fill { fill: #0f1c23; }
+@media (prefers-color-scheme: dark) {
+  /* 0.70 where the house has 0.45: the print's bright ends need it (ART.md section 2) */
+  .ghost .halo { stroke: rgba(10, 16, 19, .7); }
+  .ghost .halo circle { fill: rgba(10, 16, 19, .7); }
+  .ghost .mark { stroke: #f2f4f1; }
+  .ghost .mark .fill { fill: #f2f4f1; }
+}
+@keyframes ghost-in { from { opacity: 0; } }
+
+/* the tapped cell or well. app.js (placeCard) puts it in a corner of the room the keys and the ghost
+   key leave, clear of the selection's mark: top-left, else bottom-left, else the right-hand side, and
+   sets its top there */
+.readout {
+  position: absolute;
+  left: calc(8px + env(safe-area-inset-left));
+  top: 8px;
+  z-index: 3;
+  width: max-content;
+  min-width: 190px;
+  max-width: min(280px, calc(100% - 76px));
+  display: flex;
+  flex-direction: column;
+  padding: 4px 4px 4px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  animation: card-in 120ms var(--draw);
+}
+@keyframes card-in { from { opacity: 0; transform: translateY(4px); } }
+.readout.right { left: auto; right: calc(8px + env(safe-area-inset-right)); }
+.readout-where { display: flex; align-items: center; justify-content: space-between; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
+.readout-close { flex: 0 0 auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin: -6px 0 -10px; color: var(--ink-2); }
+/* the full form: the body and the head only wrap (the compact form scrolls them as one) */
+.readout-body, .readout-head { display: contents; }
+.readout-value { font-size: 21px; font-weight: 600; line-height: 1.2; padding-right: 8px; }
+.readout-unit { font-size: 13.5px; font-weight: 400; color: var(--ink-2); }
+.readout-sub { font-size: 12.5px; color: var(--ink-2); padding-right: 8px; }
+/* only the rows scroll, and app.js ends them on a row's edge (placeCard); the Zoom key stays in view */
+.readout-all {
+  order: 2;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0 8px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1px 14px;
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+.readout-all dt { color: var(--ink-2); }
+.readout-all dd { margin: 0; text-align: right; font-weight: 560; }
+.readout-all .rule { grid-column: 1 / -1; height: 1px; background: var(--line); margin: 3px 0; }
+.readout-zoom { order: 1; align-self: flex-start; margin: -4px 0 0 -8px; }
+/* the sign that more rows follow: a 1 px --line-strong rule at the foot of what scrolls */
+.readout-all.more, .readout-body.more { border-bottom: 1px solid var(--line-strong); }
+.readout-all.more { margin-bottom: 4px; }
+/* the compact form, on a plate too short for the full one (the sheet raised, a phone on its side):
+   the place line with Zoom and Close on one 24 px row, their 44 px hits reaching over its edges; under
+   it the body, the figure and its line, then the rows, scrolling as one */
+.readout.compact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-rows: 24px minmax(0, auto);
+  max-width: calc(100% - 16px - env(safe-area-inset-left) - env(safe-area-inset-right));
+  padding: 3px 4px 3px 12px;
+}
+.compact .readout-where { display: contents; }
+.compact #readout-where { grid-area: 1 / 1; align-self: center; min-width: 0; padding-right: 8px; }
+.compact .readout-zoom { grid-area: 1 / 2; position: relative; z-index: 1; margin: -8px 0 -12px; }
+.compact .readout-close { grid-area: 1 / 3; position: relative; z-index: 1; margin: -8px 0 -12px; }
+.compact .readout-body { grid-area: 2 / 1 / 3 / 4; display: block; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.compact .readout-head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; padding-right: 8px; }
+.compact .readout-value, .compact .readout-sub { padding-right: 0; }
+.compact .readout-all { overflow: visible; }
+/* a narrow plate (the section made wide beside it, 2.3): the place line, wrapping, beside Close; Zoom under it */
+.narrow .readout { min-width: 0; max-width: calc(100% - 16px); }
+.narrow .readout.compact { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(24px, auto) 24px minmax(0, auto); }
+.narrow .compact .readout-zoom { grid-area: 2 / 1; justify-self: start; margin-left: -8px; }
+.narrow .compact .readout-close { grid-area: 1 / 2; }
+.narrow .compact .readout-body { grid-area: 3 / 1 / 4 / 3; }
+
+/* a problem with the data is a sentence on the plate, never a blank plate */
+.error {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: max-content;
+  max-width: min(300px, calc(100% - 32px));
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--sheet);
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ── the section A–A′, under the 3D view (beside it on a wide screen or a phone on its side) ── */
+
+/* under the model the pane is as tall as the section needs at its width (app.js sets the plot's
+   height), never more than --sec-h */
+.section {
+  position: relative;
+  flex: 0 1 auto;
+  max-height: var(--sec-h);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  padding: 0 calc(12px + env(safe-area-inset-right)) 4px calc(12px + env(safe-area-inset-left));
+  background: var(--plate);
+  border-top: 1px solid var(--line);
+}
+/* the pane's own row: its words and keys, 44 px hits inside the pane */
+.sec-head { position: relative; z-index: 1; flex: 0 0 auto; display: flex; align-items: center; height: 44px; margin: 0 -4px; }
+#sec-lines { flex: 0 1 auto; min-width: 0; margin: 0; }   /* four words: they scroll sideways where the pane is too narrow for them, Draw and Close kept whole */
+#sec-lines.more { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent); }
+.sec-draw { flex: 0 0 auto; color: var(--ink-2); }
+.sec-draw[aria-pressed="true"] { color: var(--ink); font-weight: 620; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.sec-close { flex: 0 0 auto; margin-left: auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.sec-plot { flex: 0 1 auto; display: block; width: 100%; height: 120px; min-height: 0; touch-action: none; }
+.sec-key { flex: 0 0 auto; height: 15px; overflow: hidden; margin-top: 2px; }
+.sec-exag { margin-left: auto; }
+/* the sweep (plan 0012 D14): ‹ the slider › and where the line is */
+/* the row is 32 px and its keys and slider keep their 44 px hits, reaching 6 px over the plot's distance
+   words and the key's top (neither takes a touch there), so the row costs the plot 32 px, not 44 */
+/* a pane too narrow for ‹ › 88 px, the slider 140 and the word 64 on one row (beside the model with the sheet
+   raised: .narrow, set by fitSection from the plot's width): the word takes a line of its own over the
+   track, and the row reaches the pane's padding edge, so the track keeps 140 px */
+.sec-sweep { position: relative; z-index: 1; flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; min-height: 32px; margin: 0 -4px; }
+.sec-sweep .tkey, .sec-sweep .hslider { margin: -6px 0; }
+.sec-sweep .tkey:disabled { opacity: .45; cursor: default; }
+.sec-sweep .hslider { flex: 1 1 0; width: auto; }
+.sec-at { flex: 0 0 auto; min-width: 64px; padding: 0 4px 0 8px; pointer-events: none; }
+.sec-sweep.narrow { margin: 0 -12px; }
+.sec-sweep.narrow .sec-at { order: -1; flex-basis: 100%; min-width: 0; padding: 0; line-height: 15px; text-align: center; }
+/* the pane's edge (D13; js/pane.js): under the model, the head's free stretch between Draw and ✕, its grip
+   on the line between the model and the pane; beside the model, a 44 px strip astride that line. A pane
+   made taller or wider than compact (.grown) takes the size the edge gives it, and its plot the rest. */
+.sec-edge { flex: 1 1 auto; align-self: stretch; min-width: 44px; touch-action: none; cursor: ns-resize; }
+.sec-edge .grip-bar { top: -2.5px; }
+/* under the model the edge's hit reaches 22 px up over the plate's foot, so the grip on the line sits in
+   the middle of it and a finger aimed at the grip takes the edge, not the model */
+.sec-head .sec-edge { margin-top: -22px; position: relative; }
+/* the grip sits over the edge's own hit, at the pane's top line: with four line words the pane's middle can fall
+   on a word, so it is centered on the edge rather than on the pane */
+.sec-head .sec-edge .grip-bar { top: 19.5px; }
+.sec-side { display: none; position: absolute; z-index: 2; left: -22px; top: 44px; bottom: 65px; width: 44px; cursor: ew-resize; }
+.sec-side .grip-bar { left: 19.5px; top: 50%; width: 4px; height: 36px; margin: -18px 0 0; }
+.section.grown { flex: 0 0 var(--pane); max-height: none; }
+.section.grown .sec-plot { flex: 1 1 0; height: auto !important; }
+/* the line on the 3D view: drawn over the model, never under it, so it reads as drawn on the map */
+.secline { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.secline .curtain { fill: color-mix(in srgb, var(--ink) 7%, transparent); stroke: color-mix(in srgb, var(--ink) 35%, transparent); stroke-width: 1; stroke-dasharray: 3 3; }
+.secline .halo { stroke: var(--plate-halo); stroke-width: 5; }
+.secline .line { stroke: var(--ink); stroke-width: 2; }
+.secline circle { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.5; }
+.secline text { fill: var(--ink); stroke: none; font: 650 11.5px var(--face); text-anchor: middle; }
+.drawing #gl { cursor: crosshair; }
+
+/* ── the caption band: the legend, the instruments, the wells' key, the cut's key ── */
+
+.caption {
+  grid-row: 3;
+  padding: 6px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--ink-2);
+}
+.caption > .stamp { margin-bottom: 2px; }
+.legend { display: flex; align-items: flex-start; gap: 12px; min-height: 30px; }
+.legend-title { flex: 0 1 auto; min-width: 0; font-size: 11.5px; font-weight: 600; color: var(--ink); padding-top: 1px; }
+.legend-scale { flex: 1 1 150px; min-width: 150px; padding-top: 5px; }
+.legend-bar { display: block; width: 100%; height: 6px; outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); outline-offset: 0; }
+.legend-ticks { position: relative; height: 15px; font-size: 10.5px; }
+.legend-ticks span { position: absolute; top: 3px; transform: translateX(-50%); white-space: nowrap; line-height: 12px; }
+.legend-ticks span::before { content: ''; position: absolute; left: 50%; top: -3px; width: 1px; height: 3px; background: var(--line-strong); }
+.legend-ticks span.first { transform: none; }
+.legend-ticks span.first::before { left: 0; }
+.legend-ticks span.last { transform: translateX(-100%); }
+.legend-ticks span.last::before { left: auto; right: 0; }
+.swatches { flex: 1 1 auto; display: flex; flex-wrap: wrap; gap: 2px 12px; padding-top: 1px; font-size: 10.5px; }
+.swatches span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.swatches i { width: 10px; height: 10px; background: var(--c); outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); }
+.instruments { display: flex; align-items: center; gap: 14px; height: 20px; }
+.north { display: inline-flex; align-items: center; gap: 2px; font-size: 10.5px; color: var(--ink-2); }
+.north .n { color: var(--ink); }
+.north .s { color: var(--ink-3); }
+.scale { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.scale-bar { display: block; height: 6px; border: 0 solid var(--ink); border-width: 0 1.5px; position: relative; }
+.scale-bar::after { content: ''; position: absolute; left: 0; right: 0; top: 2px; height: 2px; background: var(--ink); }
+.wellkey { display: flex; flex-wrap: wrap; gap: 0 12px; min-height: 15px; font-size: 10.5px; }
+.wellkey span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.wellkey .casing { stroke: var(--ink); stroke-width: 4.5; stroke-linecap: butt; stroke-opacity: .85; }
+.wellkey .core { stroke: var(--c, #6f7274); stroke-width: 2.5; stroke-linecap: butt; }
+.wellkey .dash { stroke-dasharray: 3 2; }
+.wellkey .thin.casing { stroke-width: 3; }
+.wellkey .thin.core { stroke-width: 1.5; opacity: .6; }
+/* a key in place of a sentence (HOUSE 4.15): drawn swatches, each with its word, in one row */
+.key { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+.key .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
+.key .k { white-space: nowrap; }
+.cutkey { height: 15px; overflow: hidden; }
+.sw-oil { background: var(--cut); }
+.sw-water { background: color-mix(in srgb, var(--cut) calc(var(--cut-water-a) * 100%), var(--page)); border-top: 1px solid var(--ink-3); }
+.sw-gap { background: repeating-linear-gradient(135deg, var(--ink-3) 0 1px, transparent 1px 4px); outline: 1px solid var(--line); outline-offset: -1px; }
+.sw-well { background: linear-gradient(90deg, transparent 3px, var(--ink) 3px 7px, transparent 7px); }
+/* the seismic's ramp, end to end (app.js paints it from config.json's stops) */
+.key .sw-seis { width: 22px; margin: 0 4px; border-radius: 1px; outline: 1px solid var(--line); outline-offset: -1px; }
+
+/* ── the player: the date, the transport and the track ── */
+
+.player {
+  grid-row: 4;
+  padding: 2px calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left));
+  background: var(--page);
+  border-top: 1px solid var(--line);
+}
+.focus .player { padding-bottom: env(safe-area-inset-bottom); }
+.time-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 6px 4px 0; }
+.valid { font-size: 21px; line-height: 1; font-weight: 600; white-space: nowrap; min-height: 21px; }
+.lead { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+.controls { display: flex; align-items: flex-start; }
+.tkey { flex: 0 0 auto; width: 44px; height: 44px; margin-top: 7px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.tkey.play { color: var(--page); }
+.shutter { width: 32px; height: 32px; border-radius: 8px; background: var(--ink); display: flex; align-items: center; justify-content: center; }
+.shutter svg { fill: currentColor; stroke: none; }
+.track { position: relative; flex: 1 1 auto; min-width: 0; height: 58px; margin-left: 4px; cursor: pointer; touch-action: none; }
+.track canvas { display: block; width: 100%; height: 58px; }
+.track:focus-visible { outline-offset: -2px; }
+/* no transition, ever, on what carries a step */
+.valid, .lead, .track, .track canvas { transition: none; animation: none; }
+
+/* ── the controls sheet: a grip and two stops ── */
+
+.sheet {
+  grid-row: 5;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 calc(16px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(16px + env(safe-area-inset-left));
+  background: var(--page);
+  border-top: 1px solid var(--line);
+}
+.grip { position: relative; display: block; width: 100%; height: 44px; touch-action: none; color: var(--ink-2); }
+/* the grip stays in reach while the sheet scrolls inside itself */
+.sheet:not(.s0) .grip { position: sticky; top: 0; z-index: 2; background: var(--page); }
+.grip-bar { position: absolute; left: 50%; top: 20px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--line-strong); }
+.grip-chev { position: absolute; right: 0; top: 16px; }
+.s2 .grip-chev { transform: rotate(180deg); }
+.stop { display: none; padding-bottom: 12px; }
+.s1 .stop1, .s2 .stop1, .s2 .stop2 { display: block; }
+.sheet-head { margin: 0; padding: 10px 0 4px; font-size: 13.5px; font-weight: 650; border-top: 1px solid var(--line); }
+.srow { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 5.5em; align-items: center; column-gap: 10px; min-height: 44px; }
+.slabel { font-size: 12.5px; color: var(--ink-2); }
+.sval { font-size: 12.5px; text-align: right; white-space: nowrap; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+.words.sub { margin: 0 -8px; }
+/* house sliders drawn by CSS alone: a 1 px track, the value so far 2 px of ink, a tracer-head thumb */
+.hslider {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: pan-y;
+  --p: 0%;
+}
+.hslider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(var(--ink), var(--ink)) 0 0 / var(--p) 2px no-repeat, linear-gradient(var(--line-strong), var(--line-strong)) 0 0.5px / 100% 1px no-repeat;
+}
+.hslider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -6px; border-radius: 50%; background: var(--ink); border: 3px solid var(--page); }
+.hslider::-moz-range-track { height: 1px; background: var(--line-strong); }
+.hslider::-moz-range-progress { height: 2px; background: var(--ink); }
+.hslider::-moz-range-thumb { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); border: 3px solid var(--page); }
+.hslider:disabled { opacity: .45; cursor: default; }
+.toggles { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; height: 44px; font-size: 12.5px; }
+.tbox { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--ink); }
+.toggle[aria-pressed="false"] .tbox svg { visibility: hidden; }
+.textkey { min-width: 44px; height: 44px; padding: 0 8px; font-size: 12.5px; color: var(--ink); }
+#reset-cut { margin-left: -8px; }
+.chart-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); margin-top: 6px; }
+.chart-head .sheet-head { border: 0; }
+.pick {
+  height: 44px;
+  max-width: 50%;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--page);
+  font-size: 12.5px;
+}
+.chart { display: block; width: 100%; height: 140px; touch-action: none; cursor: pointer; }
+.chart text { font: 10.5px var(--face); fill: var(--ink-2); stroke: none; }
+.chart text.top { fill: var(--ink-3); stroke: var(--page); stroke-width: 3px; stroke-linejoin: round; paint-order: stroke fill; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.ln { fill: none; stroke-width: 1.5; stroke-linecap: butt; }
+.ln.oil { stroke: var(--chart-oil); }
+.ln.water { stroke: var(--chart-water); }
+.ln.gas { stroke: var(--chart-gas); }
+.ln.inj { stroke-dasharray: 4 3; }
+.ln.rep { stroke-width: 1.25; stroke-dasharray: 1 2.5; stroke-linecap: round; }   /* the field's reported rates: dotted */
+.chart .cursor { stroke: var(--ink); stroke-width: 1.5; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 0 12px; font-size: 10.5px; color: var(--ink-2); min-height: 15px; }
+.chart-key span { display: inline-flex; align-items: center; gap: 4px; }
+
+/* ── About: a full-height sheet ── */
+
+.about { position: fixed; inset: 0; z-index: 20; }
+.about-sheet {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--sheet);
+  animation: sheet-in 220ms var(--sheet-in);
+}
+@keyframes sheet-in { from { transform: translateY(100%); } }
+.about-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: env(safe-area-inset-top) calc(8px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
+  border-bottom: 1px solid var(--line);
+}
+.about-head h2 { margin: 0; font-size: 15px; font-weight: 650; }
+.about-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 calc(16px + env(safe-area-inset-right)) calc(16px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+}
+.about-body section { max-width: 62ch; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.about-body h3 { margin: 0 0 6px; font-size: 13.5px; font-weight: 650; }
+.about-body p + h3 { margin-top: 12px; }
+.about-body p { margin: 0 0 8px; line-height: 1.5; }
+.about-body p:last-child { margin-bottom: 0; }
+.about-body code { font: inherit; }
+.about-body dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; line-height: 1.45; }
+.about-body dt { color: var(--ink-2); }
+.about-body dd { margin: 0; overflow-wrap: anywhere; }
+.about-body h4 { margin: 12px 0 6px; font-size: 13.5px; font-weight: 600; }
+.about-body .about-addr { overflow-wrap: anywhere; }
+.about-body #about-changes p.sub { padding-left: 14px; }
+.about-foot { margin-top: 8px; }
+
+/* ── focus mode: the header, the keys and the sheet leave; the plate, the caption and the player stay ── */
+
+.leaving { opacity: 0; transition: opacity 160ms var(--draw); }
+
+@media (hover: hover) {
+  .keyplate button:hover svg { background: color-mix(in srgb, currentColor 7%, transparent); border-radius: 4px; }
+  .words button:hover, .unitkey:hover, .wordkey:hover, .stamp:hover, .textkey:hover, .tkey:hover, .grip:hover, .toggle:hover, .sec-close:hover { color: var(--ink); }
+  .ghost:hover { opacity: 1; }
+}
+@media (min-width: 700px) {
+  .head, .caption, .sheet { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
+}
+
+/* ── a wide screen: the sheet becomes a column at the right ── */
+
+@media (min-width: 820px) and (min-height: 480px) {
+  body, body.raised { grid-template-columns: minmax(0, 1fr) 380px; grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  .head, .view, .caption, .player { grid-column: 1; }
+  .sheet { grid-column: 2; grid-row: 1 / -1; border-top: 0; border-left: 1px solid var(--line); padding-top: env(safe-area-inset-top); }
+  .player { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* at its closed stop the sheet's column is only its grip, a 44 px strip, so the plate keeps the width */
+@media (min-width: 820px) and (min-height: 480px), (orientation: landscape) and (max-height: 500px) {
+  body:has(.sheet.s0) { grid-template-columns: minmax(0, 1fr) 45px; }
+  .sheet.s0 { padding-left: 0; padding-right: 0; overflow: hidden; }
+  .sheet.s0 .grip-bar { display: none; }
+  .sheet.s0 .grip-chev { left: 16px; right: auto; transform: rotate(-90deg); }
+}
+
+/* ── a phone on its side: the header, the caption and the player each give the plate a row ── */
+
+@media (orientation: landscape) and (max-height: 500px) {
+  body, body.raised { grid-template-columns: minmax(0, 1fr) min(340px, 45%); grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  .head, .view, .caption, .player { grid-column: 1; }
+  .sheet { grid-column: 2; grid-row: 1 / -1; border-top: 0; border-left: 1px solid var(--line); padding-top: env(safe-area-inset-top); }
+  .head {
+    grid-template-columns: max-content minmax(0, 1fr) auto;
+    grid-template-rows: 22px 24px;
+    column-gap: 16px;
+    padding-top: env(safe-area-inset-top);
+  }
+  .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
+  .stamp { white-space: nowrap; }
+  .head h1 { grid-area: 1 / 1; }
+  .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
+  .hkeys { grid-area: 1 / 3 / 3 / 4; }
+  /* the legend and the cut's key share a row (the About key at its end in focus mode); the
+     instruments and the wells' key share the next */
+  .caption {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(0, max-content) auto;
+    grid-template-areas: "legend cut about" "inst wells wells";
+    column-gap: 16px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+  }
+  .caption > .wordkey { grid-area: about; float: none; margin: 0; align-self: start; }
+  .legend { grid-area: legend; min-height: 26px; }
+  /* with the sheet open the band is too narrow for the cut's key beside the legend: it takes a row of its
+     own (and wraps rather than be cut off where even that is short) */
+  body:not(:has(.sheet.s0)) .caption { grid-template-areas: "legend legend about" "cut cut cut" "inst wells wells"; }
+  .cutkey { grid-area: cut; align-self: start; padding-top: 1px; height: auto; overflow: visible; }
+  .instruments { grid-area: inst; height: 15px; }
+  .wellkey { grid-area: wells; align-self: center; }
+  .player { display: flex; align-items: center; gap: 8px; padding-top: 0; padding-bottom: env(safe-area-inset-bottom); }
+  .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; }
+  .controls { flex: 1 1 auto; min-width: 0; align-items: center; }
+  .tkey { margin-top: 0; }
+}
+/* a wide screen or a phone on its side: the section stands beside the 3D view */
+@media (min-width: 820px) and (min-height: 480px), (orientation: landscape) and (max-height: 500px) {
+  .view { flex-direction: row; }
+  .section { flex: 0 0 min(46%, 520px); max-height: none; border-top: 0; border-left: 1px solid var(--line); }
+  .sec-plot { flex: 1 1 0; height: auto; }
+  .sec-head .sec-edge { visibility: hidden; }   /* a spacer only: the side is the edge */
+  .sec-side { display: block; }
+  .sectioned .keys { right: 30px; }   /* clear of the side edge's hit, which reaches 22 px into the plate */
+}
+/* focus mode on a wide screen or a phone on its side: the hidden sheet leaves no column behind */
+@media (min-width: 820px) and (min-height: 480px), (orientation: landscape) and (max-height: 500px) {
+  body.focus, body.focus:has(.sheet.s0) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }
+}

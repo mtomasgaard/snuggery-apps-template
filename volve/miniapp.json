@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "name": "Volve",
+  "entryPoint": "index.html",
+  "description": "3D viewer for the open Volve field reservoir model: saturations, pressure and rock through its production history, the seismic along a section swept across the field, wells and their rates.",
+  "version": "1.0"
+}

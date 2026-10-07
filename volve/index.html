@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
+<title>Volve</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<!-- Every address in this app is relative: the model, the seismic, the settings and the face travel
+     inside the folder, and nothing is fetched from anywhere else. The look is ART.md; what the data is
+     and how it was built is NOTES.md and data/ATTRIBUTION.txt. The legend's title is written by app.js
+     once every file is in, and only then: the marketing camera's habit is to wait for it. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Volve</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the model&hellip;</button></div>
+  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+  <div class="hkeys">
+    <button class="wordkey" id="btn-about" type="button" aria-haspopup="dialog" hidden>About</button>
+    <button class="unitkey" id="btn-units" type="button" aria-label="Change units, now SI: bar, meters, cubic meters a day" translate="no">SI</button>
+  </div>
+  <div class="switcher"><div class="words" id="props" role="radiogroup" aria-label="Property"></div></div>
+</header>
+
+<div class="view" id="view">
+<main class="plate" id="plate">
+  <canvas id="gl" role="img" aria-label="The Volve reservoir model in 3D" aria-describedby="gl-desc"></canvas>
+  <p class="sr" id="gl-desc">Each cell is colored by the property named under the picture, at the report date in the player. Drag to turn the model, pinch or use the zoom keys to zoom, and drag with two fingers to pan. Tap a cell or a well name for its values. Double-tap a cell to fly to it; double-tap empty space to see the whole field again.</p>
+  <svg class="secline" id="secline" aria-hidden="true" hidden><path class="curtain" id="sl-curtain"/><path class="halo" id="sl-halo"/><path class="line" id="sl-line"/><g id="sl-a"><circle r="7"/><text dy="0.35em">A</text></g><g id="sl-b"><circle r="7"/><text dy="0.35em">A&prime;</text></g></svg>
+  <div class="labels" id="labels"></div>
+
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11M8 2.5v11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="fit" aria-label="Show the whole field"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.75 5.25v-3.5h3.5M10.75 1.75h3.5v3.5M14.25 10.75v3.5h-3.5M5.25 14.25h-3.5v-3.5"/><path d="M4.75 6h6.5v4h-6.5zM6.9 6v4M9.1 6v4M4.75 8h6.5"/></svg></button>
+    </div>
+    <div class="keyplate">
+      <button type="button" id="btn-wells" aria-pressed="true" aria-label="Wells"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.75 3.5h12.5M4 3.5v10.75M8 3.5v5.75M12 3.5v8.25"/></svg></button>
+      <button type="button" id="btn-section" aria-pressed="false" aria-label="Section" aria-controls="section"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.25 4.5 13.75 2"/><path d="M2.25 4.5v9.25l11.5-2.5V2"/><path class="fill" d="M2.25 9.5 13.75 7v4.25l-11.5 2.5z" opacity=".45"/></svg></button>
+    </div>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
+    </div>
+  </div>
+
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
+    </svg>
+  </button>
+
+  <!-- The card for the tapped cell or well. Full form: the place line, the figure, its line, the Zoom
+       key, then the rows, which alone scroll. Compact form, on a short plate: the place line with
+       Zoom and Close, then the body (the figure, its line and the rows) scrolling under it. -->
+  <div class="readout" id="readout" hidden>
+    <div class="readout-where"><span id="readout-where" translate="no"></span><button class="readout-close" id="readout-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <div class="readout-body" id="readout-body">
+      <div class="readout-head"><div class="readout-value"><span id="readout-number"></span><span class="readout-unit" id="readout-unit"></span></div><div class="readout-sub" id="readout-sub"></div></div>
+      <dl class="readout-all" id="readout-all"></dl>
+    </div>
+    <button type="button" class="textkey readout-zoom" id="readout-zoom">Zoom to cell</button>
+  </div>
+
+  <div class="error" id="error" role="alert" hidden></div>
+</main>
+
+<!-- The section A–A′: a vertical plane along a line on the field: one of the seismic survey's own
+     inlines or crosslines, a line along or across the model's grid, or one drawn. On it, the seismic at
+     its own depths (js/seismic.js) and the cells it cuts as blocks in the property and report date the
+     3D view shows (js/section.js), on one depth axis below sea level. The slider sweeps the line through
+     the survey's lines or the grid's columns or rows; the pane's edge makes it taller or wider (js/pane.js). -->
+<section class="section" id="section" aria-label="Section A to A prime" hidden>
+  <div class="sec-edge sec-side" id="sec-side" role="slider" tabindex="0" aria-label="Section width" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="grip-bar" aria-hidden="true"></span></div>
+  <div class="sec-head">
+    <div class="words sub" id="sec-lines" role="radiogroup" aria-label="Section line">
+      <button type="button" role="radio" aria-checked="true" data-line="inline">Inline</button>
+      <button type="button" role="radio" aria-checked="false" data-line="crossline">Crossline</button>
+      <button type="button" role="radio" aria-checked="false" data-line="along">Along</button>
+      <button type="button" role="radio" aria-checked="false" data-line="across">Across</button>
+    </div>
+    <button type="button" class="textkey sec-draw" id="sec-draw" aria-pressed="false">Draw</button>
+    <div class="sec-edge" id="sec-edge" role="slider" tabindex="0" aria-label="Section height" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="grip-bar" aria-hidden="true"></span></div>
+    <button type="button" class="sec-close" id="sec-close" aria-label="Hide the section"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button>
+  </div>
+  <canvas class="sec-plot" id="sec-plot" role="img" aria-label="Section"></canvas>
+  <div class="sec-sweep">
+    <button type="button" class="tkey" id="sec-prev" aria-label="Previous inline"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M7.5 1 3 6l4.5 5"/></svg></button>
+    <input class="hslider" id="sec-sweep" type="range" min="0" max="1" step="1" value="0" aria-label="Line position">
+    <button type="button" class="tkey" id="sec-next" aria-label="Next inline"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4.5 1 9 6l-4.5 5"/></svg></button>
+    <output class="sval sec-at" id="sec-at" for="sec-sweep" translate="no"></output>
+  </div>
+  <div class="key sec-key" id="sec-key">
+    <span class="k" id="sec-key-seis" role="img"><span id="sec-amp-lo"></span><i class="sw sw-seis" id="sec-ramp" aria-hidden="true"></i><span id="sec-amp"></span></span>
+    <span class="k" id="sec-key-gap" hidden><i class="sw sw-gap" aria-hidden="true"></i>No active cell</span>
+    <span class="k" id="sec-key-wells"><i class="sw sw-well" aria-hidden="true"></i><span id="sec-corridor"></span><span id="sec-more"></span></span>
+    <span class="k sec-exag" id="sec-exag"></span>
+  </div>
+</section>
+</div>
+
+<!-- The caption under the view: the property's scale, the instruments, the wells' key and the cut's
+     key, on screen in every mode. Sources and credits are in About. -->
+<section class="caption" id="caption" aria-label="Scale, instruments and keys">
+  <div class="legend" id="legend">
+    <span class="legend-title" id="legend-name"></span>
+    <div class="legend-scale" id="legend-scale"><canvas class="legend-bar" id="legend-bar" aria-hidden="true"></canvas><div class="legend-ticks" id="legend-ticks"></div></div>
+    <div class="swatches" id="legend-cats" hidden></div>
+  </div>
+  <div class="instruments" id="instruments">
+    <span class="north" id="north" role="img" aria-label="North arrow"><span aria-hidden="true">N</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><g id="needle"><path class="n fill" d="M8 1.5 10.25 8h-4.5z"/><path class="s fill" d="M8 14.5 10.25 8h-4.5z"/></g></svg></span>
+    <span class="scale" id="scale" role="img" aria-label="Scale bar"><span id="scale-len"></span><span class="scale-bar" id="scale-bar"></span><span id="scale-sub"></span></span>
+  </div>
+  <div class="wellkey" id="wellkey" role="group" aria-label="Wells key">
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing" d="M1 3h12"/><path class="core" data-role="producer" d="M1 3h12"/></svg>Producer</span>
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing dash" d="M1 3h12"/><path class="core dash" data-role="waterInjector" d="M1 3h12"/></svg>Water injector</span>
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing dash" d="M1 3h12"/><path class="core dash" data-role="gasInjector" d="M1 3h12"/></svg>Gas injector</span>
+    <span><svg viewBox="0 0 14 6" width="14" height="6" aria-hidden="true"><path class="casing thin" d="M1 3h12"/><path class="core thin" data-role="shut" d="M1 3h12"/></svg>Shut</span>
+  </div>
+  <div class="key cutkey" id="cutkey" role="group" aria-label="The cut, on the track">
+    <span class="k"><i class="sw sw-oil" aria-hidden="true"></i>Oil lifted</span>
+    <span class="k"><i class="sw sw-water" aria-hidden="true"></i>Water lifted</span>
+    <span class="k">on the track</span>
+  </div>
+</section>
+
+<footer class="player" id="player">
+  <div class="time-row">
+    <div class="valid" id="valid"></div>
+    <div class="lead" id="lead"></div>
+  </div>
+  <div class="controls">
+    <button type="button" class="tkey" id="btn-prev" aria-label="Back one report date"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M7.5 1 3 6l4.5 5"/></svg></button>
+    <button type="button" class="tkey play" id="btn-play" aria-label="Play production history"><span class="shutter"><svg id="ico-play" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg><svg id="ico-pause" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" hidden><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg></span></button>
+    <button type="button" class="tkey" id="btn-next" aria-label="Forward one report date"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4.5 1 9 6l-4.5 5"/></svg></button>
+    <div class="track" id="slider" role="slider" tabindex="0" aria-label="Report date" aria-describedby="cut-desc" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"><canvas id="track" aria-hidden="true"></canvas></div>
+  </div>
+</footer>
+
+<section class="sheet s0" id="sheet" aria-label="More controls">
+  <button type="button" class="grip" id="grip" aria-label="Show more controls"><span class="grip-bar" aria-hidden="true"></span><svg class="grip-chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1.5 8 6 3.5 10.5 8"/></svg></button>
+  <div class="stop stop1">
+    <h2 class="sheet-head">Explode</h2>
+    <div class="srow"><label class="slabel" for="explode">Explode amount</label><input class="hslider" id="explode" type="range" min="0" max="100" value="0"><output class="sval" id="exv" for="explode"></output></div>
+    <div class="words sub" id="ex-mode" role="radiogroup" aria-label="Explode by">
+      <button type="button" role="radio" aria-checked="true" data-mode="layers">Layers</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="regions">Regions</button>
+    </div>
+    <div class="chart-head"><h2 class="sheet-head" id="chart-title">Field rates</h2><select class="pick" id="well-pick" aria-label="Show rates for"></select></div>
+    <svg class="chart" id="chart" preserveAspectRatio="none" role="img" aria-label="Production and injection rates over the history"></svg>
+    <div class="chart-key" id="chart-key"></div>
+  </div>
+  <div class="stop stop2">
+    <h2 class="sheet-head">Section</h2>
+    <div class="words sub" id="sec-show" role="radiogroup" aria-label="The section shows">
+      <button type="button" role="radio" aria-checked="false" data-show="seismic">Seismic</button>
+      <button type="button" role="radio" aria-checked="false" data-show="model">Model</button>
+      <button type="button" role="radio" aria-checked="true" data-show="both">Both</button>
+    </div>
+    <div class="srow"><label class="slabel" for="sec-gain">Seismic gain</label><input class="hslider" id="sec-gain" type="range" min="-3" max="3" step="0.25" value="0"><output class="sval" id="sec-gainv" for="sec-gain"></output></div>
+    <div class="srow"><label class="slabel" for="sec-cells">Cells over it</label><input class="hslider" id="sec-cells" type="range" min="0" max="100" step="5" value="60"><output class="sval" id="sec-cellsv" for="sec-cells"></output></div>
+    <div class="words sub" id="sec-colors" role="radiogroup" aria-label="Seismic colors">
+      <button type="button" role="radio" aria-checked="true" data-colors="seismicGray">Gray</button>
+      <button type="button" role="radio" aria-checked="false" data-colors="seismicRedBlue">Red and blue</button>
+    </div>
+    <h2 class="sheet-head">Cells and view</h2>
+    <div class="srow"><span class="slabel" id="lab-i">Columns (I)</span><div class="pair"><input class="hslider" id="i0" type="range" min="1" max="108" value="1" aria-label="First column (I)"><input class="hslider" id="i1" type="range" min="1" max="108" value="108" aria-label="Last column (I)"></div><output class="sval" id="iv"></output></div>
+    <div class="srow"><span class="slabel" id="lab-j">Rows (J)</span><div class="pair"><input class="hslider" id="j0" type="range" min="1" max="100" value="1" aria-label="First row (J)"><input class="hslider" id="j1" type="range" min="1" max="100" value="100" aria-label="Last row (J)"></div><output class="sval" id="jv"></output></div>
+    <div class="srow"><span class="slabel" id="lab-k">Layers (K)</span><div class="pair"><input class="hslider" id="k0" type="range" min="1" max="63" value="1" aria-label="First layer (K)"><input class="hslider" id="k1" type="range" min="1" max="63" value="63" aria-label="Last layer (K)"></div><output class="sval" id="kv"></output></div>
+    <div class="srow"><span class="slabel">Value range</span><div class="pair"><input class="hslider" id="v0" type="range" min="0" max="100" value="0" aria-label="Hide values below"><input class="hslider" id="v1" type="range" min="0" max="100" value="100" aria-label="Hide values above"></div><output class="sval" id="vv"></output></div>
+    <div class="srow"><label class="slabel" for="exag">Vertical exaggeration</label><input class="hslider" id="exag" type="range" min="1" max="15" step="0.5" value="3"><output class="sval" id="exv2" for="exag"></output></div>
+    <div class="toggles">
+      <button type="button" class="toggle" id="t-labels" aria-pressed="true"><span class="tbox" aria-hidden="true"><svg viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 6.25 5 8.75l4.5-5.5"/></svg></span>Well names</button>
+      <button type="button" class="toggle" id="t-edges" aria-pressed="true"><span class="tbox" aria-hidden="true"><svg viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 6.25 5 8.75l4.5-5.5"/></svg></span>Cell edges</button>
+    </div>
+    <button type="button" class="textkey" id="reset-cut">Show all cells</button>
+  </div>
+</section>
+
+<div class="about" id="about" hidden>
+  <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="about-head"><h2 id="about-title">About this data</h2><button type="button" class="textkey" id="about-close">Close</button></div>
+    <div class="about-body" id="about-body">
+      <section>
+        <h3>What the picture is</h3>
+        <p id="ab-model"></p>
+        <p>The light on the cells&rsquo; faces and the darker cell edges are part of the drawing, not of the data, and the depth is stretched: the caption under the picture says by how much. Explode pulls the model apart to look inside it (<span id="ab-explode"></span>); those distances are display, not geology.</p>
+        <p>The wells&rsquo; paths run from the top of the model through the cells the deck completes them in, and their roles come from its schedule. A producer is a solid line, an injector a dashed one, a shut well thin and faint; a well appears once it first opens.</p>
+        <h3>The section</h3>
+        <p id="ab-section"></p>
+        <h3>The seismic in the section</h3>
+        <p id="ab-seismic"></p>
+        <p id="ab-display"></p>
+        <p id="ab-polarity"></p>
+        <p id="ab-depth"></p>
+        <h3>The cut, on the track</h3>
+        <p id="ab-cut"></p>
+        <p id="ab-history"></p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="about-list"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
+        <p id="about-terms"></p>
+        <p class="about-addr" translate="no">Terms: equinoropendata.blob.core.windows.net/disclaimers/HRS%20and%20Terms%20and%20conditions%20for%20license%20to%20data%20-%20Volve.pdf, with a dated copy in data/TERMS-Volve-2026-10-07.txt</p>
+        <p id="about-source"></p>
+        <p id="about-check"></p>
+        <h4>What was changed, as data/ATTRIBUTION.txt states it</h4>
+        <div id="about-changes" translate="no"></div>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>The model, the seismic and the wells were built once by the folder&rsquo;s pipeline (an OPM Flow run of the deck on a Linux runner, and the seismic cut from the survey) and travel inside the app; nothing is fetched. The app re-reads <code translate="no">config.json</code>, its settings file, whenever it comes back to the screen.</p>
+        <p>Drag to turn the model, pinch or use the zoom keys to zoom, and drag with two fingers to pan. Tap a cell or a well name for its values; double-tap a cell to fly to it, and double-tap empty space or use Show the whole field to see it all again. On a keyboard, the arrow keys move the track one report date at a time and Page Up and Page Down <span id="ab-page"></span>.</p>
+        <p>The Section key opens the section under the model. Inline and Crossline choose the survey&rsquo;s own lines; Along and Across the field&rsquo;s two lines through the grid; Draw, then a drag across the field, draws your own, and a drag on A or A&prime; moves that end. Tap a cell in the section for its values. Under More controls, Section chooses what it shows (the seismic, the model or both), the seismic&rsquo;s gain and colors, and how strongly the cells cover the seismic.</p>
+        <p>The slider under the section sweeps the line across the field: an inline or a crossline at a time, from Along through the grid&rsquo;s rows or columns, from Across through the other, with &lsaquo; and &rsaquo; one at a time; a line of your own moves parallel to itself. Drag the pane&rsquo;s edge (the grip on the line above it, or its side when it stands beside the model) to make the section taller or wider, or double-tap it to go between compact and its largest; the 3D view keeps a strip of 120&#8239;px under it, 160&#8239;px beside it. On a keyboard, the arrow keys move the edge.</p>
+      </section>
+      <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+<p class="sr" id="cut-desc"></p>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

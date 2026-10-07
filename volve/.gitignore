@@ -2,3 +2,6 @@
 pipeline/work/
 tools/.work/
 __pycache__/
+# The app's build output and any local tool installs.
+dist/
+tools/node_modules/
