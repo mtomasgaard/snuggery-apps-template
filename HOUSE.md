@@ -16,7 +16,9 @@ Dashboard, Finances, World News, Outdoor Window, Power Hours, Hello Live.
   them, and a citation names the line.
 - **Earth's History, US Quakes and Warming World keep their own directions** (Deep Field Atlas,
   Drum Record, Gray Card), and these passes do not touch them. They share this file's rules for
-  words, numbers, tests and budgets (§6 to §8), never its chrome.
+  words, numbers, tests and budgets (§6 to §8), never its chrome, with two exceptions the owner
+  added on 2026-10-06: the front of the app (§4.15) and versions (§13) bind them too. Their grounds
+  stay their own (§12).
 - **An art pass never touches a pipeline, a snapshot or the refresh loop.** The data half of every
   app stays byte-identical.
 
@@ -64,6 +66,9 @@ shipped text use plain spaces, except in §6.1 and §6.2, where the narrow no-br
 8. Budgets
 9. The generated-page tell list, answered
 10. The final reviewer's checklist
+11. The pane-app register (2026-10-06)
+12. Grounds (2026-10-06)
+13. Versions (2026-10-06)
 
 ---
 
@@ -73,12 +78,47 @@ fix changes them. The record of the pass — the owner calls as they stood, the 
 the "after QA", "after review" and "after the follow-up" sections, the phone checks — lives in
 `tools/DECISIONS.md`, which never ships. A pass that finds history in a shipped `ART.md` moves it.
 
+## The owner's critique of 2026-10-06 (plan 0012)
+
+On 2026-10-06 the owner looked at the family and wrote, among the brief's other items (saved word for
+word in the Snuggery repository, `docs/plans/0012-the-owners-brief-of-2026-10-06.md`):
+
+> Apps/dashboard with a lot of text become a bit messy to read (finqnces, training load / running
+> dashboard, world news, etc) - matbe need more colors, more separation, bigger fonts, contrasts,
+> table instead of lot of text? etc etc
+>
+> Bot all apps need this grey ish background?
+>
+> Milky way can remove some pf the text/subtitles at the «front page». That gows for all actually,
+> data origin/licenses etc shpuld not take up too much space - would be better to have inside the
+> views if we have to show it clearly?
+
+The plan's checks found the pattern behind it: every house app carried three layers of origin text
+on its front (the header's stamp of sources and dates, the caption band's sentences, the footer's
+credit line), and the pane apps set facts as sentences in one face, black on gray (findings 11 and
+12). The owner then decided four things, and this file now carries them. Where they override an
+earlier rule, that rule is amended where it stands and says so, so nothing in this file contradicts
+another part of it.
+
+| What | Decision | Where the rule now is | What it amends |
+| --- | --- | --- | --- |
+| **The front of every app**, all eighteen, the three directed apps included | the brief, package 2 (a) | §4.15 | §1, §4.1, §4.2, §4.5 (the credits on screen, and what the band holds), §4.8 (and its one exception for links a source's terms ask for), §4.10, §4.13, §5.2 test 3 (Norne only, the lead to confirm), §6.5, §7.1, §7.2, §9 row 3, §10 |
+| **The pane-app register**: bigger key numbers, color with one meaning, plates, tables, keys, `Example data.` | D5, the owner's verdict on the picture board, as prototyped | §11 | for the six pane apps only: §2.5's 21 px ceiling, §3.1's no-accent rule, §4.5's band, §4.14's insets (the pane pads its own foot), §9's "content sits on the page between hairlines" (the pane apps' "panes on a page, not cards"), Finances' `ART.md` rule that money's direction is never a color |
+| **The grounds**: white, gray or the app's own, per app | D6, the designer's picks | §12 | §3.1's one `--page` for every app |
+| **Versions mean something** | L4, the lead's call | §13 | §7.1 item 7 |
+
+Every app's change list is `docs/plans/0012-change-lists.md` in the Snuggery repository. The approved
+prototypes are patches in `docs/plans/0012-prototypes/` (Finances' Overview, World News' All, Running
+Dashboard's Now), and the board is `docs/marketing/reference/0012-board-*.png`.
+
 ## 1. The idea, and the rule that governs everything
 
 **The idea.** Each app's screen is printed like a scientific photograph: a plate and its caption.
-The picture runs edge to edge, and under it a short band of plain type says what the picture is,
-how to read it, how old it is and whose data it shows. The picture is the data and nothing else.
-Everything around it is quiet: gray chrome, one typeface, no accent color, no shadows, no glass.
+The picture runs edge to edge, and under it a short band of plain type says what the picture is
+and how to read it; the stamp over it says how old it is, and whose data it shows is one tap away in
+About (the owner, 2026-10-06: §4.15). The picture is the data and nothing else. Everything around it
+is quiet: gray chrome, one typeface, no accent color in the chrome, no shadows, no glass (a pane
+app's data takes the register's colors, §11).
 Exactly one element on the screen is allowed to be bold, and it is made of the data itself. In
 Global Weather it is a field of streaks, each a tracer carried by the forecast's wind, captioned
 with its exposure, `Streaks: 1 s = 24 h of wind at the hour shown`. The dark theme is the print
@@ -95,7 +135,9 @@ lives in L 0.255–0.650 and the streak is a warm white at L 0.960 (ART 154-155)
 "more" stands further from the ground (ART 22-24). Two corollaries follow, and they bind every app:
 
 - **Chrome is gray.** Every chrome token is a near-neutral at OKLCh chroma ≤ 0.024, so every hue a
-  person sees is data (ART 550-551).
+  person sees is data (ART 550-551). The pane-app register's colors (§11, 2026-10-06) are data
+  colors too: they say owned or owed, done or planned, up or down, or which source, and never color a
+  control, a tab, a heading, a plate or the stamp.
 - **Type is one face.** Ysabeau Office, one file, at every size and in every role, canvas text
   included (ART 549).
 
@@ -242,7 +284,7 @@ The rule, in this order:
 | Legend title | 11.5 px | 600 | `--ink` | caption band | ART 86; CSS 340 |
 | Caption line | 11 px / 15 px | 400 | `--ink-2` | caption band | ART 86; CSS 328-336 |
 | Instrument labels | 10.5 px | 400 | `--ink-2`; `now` in `--ink-3` | legend ticks, day labels, `now` | ART 85; CSS 343; TRACK 11 |
-| Credits | 10.5 px / 15 px | 400 | `--ink-2` | caption band | ART 87; CSS 358 |
+| Credits | 10.5 px / 15 px | 400 | `--ink-2` | the caption band until 2026-10-06; now only §4.15's two exceptions, at the data's edge | ART 87; CSS 358 |
 | The one large figure | 21 px / 1 | 600 | `--ink` | the valid time | ART 77; CSS 369 |
 | Lead | 12.5 px | 400 | `--ink-2` | beside the valid time | ART 416; CSS 370 |
 | Readout value | 21 px / 1.2 | 600 | `--ink` | the card | ART 78; CSS 291 |
@@ -265,7 +307,9 @@ scale; the house sets it at 12.5.
 
 - The scale is **10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 / 21 px**, and nothing is larger than 21 px
   (ART 90). A screen has one large figure, at 21 px and 600: the subject's own number (the valid
-  time, the tapped value, a card's headline) (ART 549, 590). Text that is part of a rendered scene
+  time, the tapped value, a card's headline) (ART 549, 590). **Amended 2026-10-06 for the six pane
+  apps only** (§11.1 rules 2 and 3): their scale adds 19 px (tile values and table totals) and 34 px
+  (one key number per pane), both at 650; the key number is a pane's one large figure. Text that is part of a rendered scene
   (a game's countdown on the track) belongs to the scene, is set in this face, and is named with its
   size in the app's `ART.md`.
 - Weights are 400, 560, 600, 620 and 650, all inside the cut's 400–650 axis.
@@ -315,6 +359,14 @@ light page is L 0.945, C 0.007, h 220, a cool film base and not cream; the dark 
 C 0.015, h 227, a slate that leaves room for a darker plate (ART 177-179). The highest chroma of any
 chrome token is 0.0239 (`--ink-2`, light; PAL prints it).
 
+**The white ground (2026-10-06, §12).** Anatomy, Norne Reservoir, Snug Kart and Hello Live set the
+light theme's `--page` to `#ffffff`; every other token keeps the value above, and the dark theme is
+unchanged. *Measured* on `#ffffff` with PAL's `lum` and `cr`: `--ink` 17.35, `--ink-2` 7.75, `--ink-3`
+5.60, `--line` 1.51, `--line-strong` 3.83, `--sheet` 1.06 (against 1.11 on `#e8eef0`). On white a
+plate of `--sheet` reads by its 1 px `--line` edge more than by its fill. That is accepted for key
+plates and the readout card, which hold marks and text with contrast of their own; no control's only
+edge becomes `--line` (the text keys keep their `--line-strong` frame).
+
 **Not a house token.** Global Weather's `--outside` (`#e8eef0` / `#0a1013`, the plate beyond its
 globe; CSS 25, 40) belongs to that app's plate. An app's plate colors are its palette (§3.2), named
 in its own `ART.md`.
@@ -342,16 +394,22 @@ PAL 195-204). Each app measures its own worst case over its own plate (§3.3).
 
 **Rules (must).**
 
-- The tokens are copied as they are, in every app. `html` and `body` get `background: var(--page)`
+- The tokens are copied as they are, in every app (the four white apps' light `--page` is
+  `#ffffff`, §12). `html` and `body` get `background: var(--page)`
   (CSS 48-53; DEC 60-61). Both `theme-color` metas carry `--page`, one per scheme (HTML 7-8;
   CHECK 229-234).
-- No accent color, anywhere. No red or amber in the chrome, not for staleness and not for errors:
-  the words carry the warning, and warm hues belong to data (ART 353-355, 563).
+- No accent color in the chrome, anywhere. No red or amber in the chrome, not for staleness and not
+  for errors: the words carry the warning, and warm hues belong to data (ART 353-355, 563).
+  **Amended 2026-10-06 for the six pane apps only** (§11): the meaning of their data (owned and owed,
+  done and planned, up and down, a coaching tone, a source) takes the register's colors, on figures,
+  marks, swatches and the tone word, never on a control, a tab, a heading, a plate, a hairline or the
+  stamp.
 - No shadows, blur, glass or glow: not on the keys, not on the card, not around a globe or a scene.
   No gradient in the chrome but a data scale and the selection tracer (ART 28-30, 552). Gone from
   every app, as they went from Global Weather's stock look: `box-shadow`, `backdrop-filter`, accent,
   glass and warning tokens, and one big radius on everything (DEC 67-68).
-- Radii by role: 6 px for keys and key plates, 8 px for the card, notices and the Play key, 4 px
+- Radii by role: 6 px for keys and key plates, 8 px for the card, notices, the Play key and a pane
+  app's section plates (§11), 2 px for a key's swatch (§4.15), 4 px
   for the on-plate, 0 for the legend bar. Round only for the thumb's disc and the tracer heads
   (ART 553-554).
 
@@ -426,7 +484,11 @@ run from the template's root; `--json` prints the ramps (PAL 1-11).
   - the ghost key's stroke against its own halo over every base ≥ 3 (PAL 195-204).
 - **Categorical data** (series, zones, categories), the house's extension of the ends rule: every
   pair of categories separates by ΔE ≥ 0.10 under normal vision and the three simulations, inside the
-  band. Beyond five categories, words or direct labels carry identity, never color alone.
+  band. Beyond five categories, words or direct labels carry identity, never color alone. A pane
+  app's direction and tone colors (§11: up and down, on track, watch, act now) are always printed
+  with their sign or their word, so this pairwise check does not bind them, and their text contrast
+  does; §11.2 records their measured separation (up against down under deutan: 0.062 light, 0.024
+  dark) so nobody mistakes the exemption for a pass.
 - **Color is never the only carrier** of a meaning: staleness is a sentence, a value past the scale
   is printed open ("≥ 36 m/s").
 
@@ -442,15 +504,18 @@ layers.
 
 | Kind | Apps | Row of tabs and words | Key column | Caption band | Player | Readout card | Focus mode |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| A map with time | Shelf Atlas, World Oil & Gas (the reference pair too) | views, then layer words | zoom, the whole map, display toggles | legend, caption line, credits | yes | the tapped place | yes |
-| A 3D view with time | Milky Way (dates, at its Solar System scale), Besseggen (the sun's hours), Norne Reservoir (the production history) | scales, views or properties | the view's keys | legend where color is data, caption line, credits | yes | the selected object | yes |
-| A 3D view without time | Anatomy | layers | the view's keys | caption line, credits | no | the selected structure | yes |
-| A game | Snug Kart | racers and tracks, as words | no | credits, in About | no | no | no: the race is already the view |
-| Panes from a pull | Running Dashboard, Finances, World News, Outdoor Window, Power Hours | panes, as tabs | no | per pane: legend, caption line, credits | no (a pane may plot time on an axis) | a tapped bar, hour or item | no |
-| One live card | Hello Live | no | no | caption line, credits | no | no | no |
+| A map with time | Shelf Atlas, World Oil & Gas (the reference pair too) | views, then layer words | zoom, the whole map, display toggles | legend, caption line or key | yes | the tapped place | yes |
+| A 3D view with time | Milky Way (dates, at its Solar System scale), Besseggen (the sun's hours), Norne Reservoir (the production history) | scales, views or properties | the view's keys | legend where color is data, caption line, key | yes | the selected object | yes |
+| A 3D view without time | Anatomy | layers | the view's keys | caption line | no | the selected structure | yes |
+| A game | Snug Kart | racers and tracks, as words | no | none; the credits are in About | no | no | no: the race is already the view |
+| Panes from a pull | Running Dashboard, Finances, World News, Outdoor Window, Power Hours | panes, as tabs | no | none since 2026-10-06: each pane's own keys and one short label (§11) | no (a pane may plot time on an axis) | a tapped bar, hour or item | no |
+| One live card | Hello Live | no | no | none since 2026-10-06: the card's key (§11) | no | no | no |
 
 Every kind carries the header (§4.2), About (§4.8), notices and the live region (§4.9), the motion
-rules (§4.12), landscape (§4.13) and safe areas (§4.14).
+rules (§4.12), landscape (§4.13) and safe areas (§4.14). Since 2026-10-06 every kind also takes the
+front rule (§4.15), and the six pane apps (Finances, World News, Running Dashboard, Outdoor Window,
+Power Hours, Hello Live) the register (§11). The credits column this table had until then is gone:
+no kind carries credits on its front.
 
 ### 4.1 The frame
 
@@ -459,7 +524,7 @@ The layout at 390 × 844 (heights in CSS px; safe-area insets are added outside 
 ```
 ┌──────────────────────────────────────────┐
 │ App name                         [units] │ 22  the name, 15/650; the units key
-│ Updated 04:15, source token              │ 16  the stamp, 11.5, --ink-2 (opens About)
+│ Updated 04:15                            │ 16  the stamp, 11.5, --ink-2, one line (opens About)
 │ View  View │ Word  Word  Word  Word  …   │ 44  tabs, a divider, then words (scrolls inside)
 ├──────────────────────────────────────────┤
 │ [readout card]                     [key] │
@@ -470,7 +535,6 @@ The layout at 390 × 844 (heights in CSS px; safe-area insets are added outside 
 │ Title, level        ▕▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▏    │ 30  the legend: title, bar, ticks
 │                     0   10   20  36 m/s  │
 │ The caption line: what the picture is    │ 30  fixed height, whatever it says
-│ The credits, word for word               │ 15
 ├──────────────────────────────────────────┤
 │ Wed 23 Sep, 11:00         +36 h, 8 d ago │ 28  the one large figure; the lead
 │  ‹   ■▶   ›   ──────●────────·────────── │ 44  the transport; the app's own track
@@ -484,6 +548,8 @@ The layout at 390 × 844 (heights in CSS px; safe-area insets are added outside 
   the frame, so the header and the caption band stay put.
 - Nothing is pasted on the plate but the keys, the tapped readout, a notice and the ghost key
   (ART 25-27).
+- The diagram is the front as amended on 2026-10-06 (§4.15): the stamp is one line with no source
+  token, and the credit line that closed the caption band is in About.
 - Content is left-aligned. The only centered things are a notice's sentence and the Play key's
   glyph (ART 341-342).
 - Side gutters are 16 px plus the safe-area inset, 20 px from 700 px of width; the player's are
@@ -500,17 +566,28 @@ The layout at 390 × 844 (heights in CSS px; safe-area insets are added outside 
   name in `miniapp.json`, by which the marketing camera opens the app (§7.4): never rename an app.
 - **The stamp**, under the name: when the data was made, in words. A `<button>` that opens About,
   with `aria-haspopup="dialog"`, described as *Opens About this data.*, its hit 44 px tall
-  (HTML 21-22; CSS 95-109; DEC 289-295). Its words: `Updated 04:15, GFS 06Z 22 Sep`, or
-  `Updated 22 Sep, 04:15, …` when not today (ART 350-353; APP 1908-1911). A stale or ran-out state
+  (HTML 21-22; CSS 95-109; DEC 289-295). Its words: `Updated 04:15`, or `Updated 22 Sep, 04:15`
+  when not today (ART 350-353; APP 1908-1911). **One line at 390 px in every state, and no source
+  token** (amended 2026-10-06, §4.15): the model run Global Weather wrote after the time
+  (`GFS 06Z 22 Sep`), a feed's name or a retrieval date is About's *This data* (Global Weather's
+  `Model run` line already holds the run). A stale or ran-out state
   leads with a sentence in `--ink` while the rest stays `--ink-2`: `Stale. Updated …`,
   `Forecast ran out 4 d ago. Updated …` (APP 1912-1920). Words, never color. The threshold is stated
   in the app's `DESIGN.md` (Global Weather: 30 hours; APP 135). While loading, the stamp counts with
   a real ellipsis: `Unpacking the forecast… 12 of 41` (ART 468-469).
   - *Data that is built once and never refreshed* (an ephemeris, a terrain, a body, a reservoir
-    model): the stamp names the data's edition in words (its source and date), and still opens
-    About.
+    model): **amended 2026-10-06** (§4.15). Until then the stamp named the data's edition (its
+    source and date). Now the stamp's line shows only while the data loads (its count) or when it
+    fails, and is `hidden` once the data is in, because there is no status left to state; the
+    edition is About's first *This data* line. About opens from a text key named `About` at the
+    header's right, as a game's does, with `aria-haspopup="dialog"` and a 44 px hit; in focus mode
+    that key moves into the caption band as its first line, as the stamp does (§4.10).
   - *No data to date* (a game): no stamp. About opens from a text key named `About` at the header's
     right.
+  - *Example data* (a demo the data marks as one: Finances' `synthetic`, Running Dashboard's
+    `demo-` activity ids, Outdoor Window's `demoPlace`): the stamp leads with `Example data.` in
+    `--ink`, in place of `Stale.` or `Forecast ran out …`, because an example never refreshes
+    (§11.1 rule 8).
 - **The units key**, at the right: a word key, not a pill. The unit (`m/s`, `°C`, `km/h`) in 600 at
   12.5 px inside a 1 px `--line-strong` frame, 28 px tall, 6 px radius, a 44 × 44 hit, its
   accessible name `Change units, now m/s` (ART 344-348; CSS 110-123; APP 2036). Each press cycles
@@ -580,7 +657,11 @@ are separated by 1 px `--line` hairlines inset 4 px (CSS 215-223).
 ### 4.5 The caption band
 
 Under the plate, on `--page`: 11 px at 15 px line height in `--ink-2`, 16 px gutters (CSS 326-336).
-It holds three things, in this order.
+It holds only these, and nothing else (amended 2026-10-06: the front rule, §4.15, which lists the
+same): the legend; the scale or the instrument line (north, a scale bar, a vertical exaggeration);
+the caption line; a key; and, where the app's signature lives in the band, the signature itself
+(World Oil & Gas's Ledger). Each is there only when reading the view needs it. The three numbered
+below are the ones every kind uses.
 
 1. **The legend.** Its title is the quantity the bar measures, from the data (`Wind, 10 m above
    ground`), 600 at 11.5 px in `--ink`. The bar is 6 px tall and takes the remaining width (at
@@ -590,7 +671,9 @@ It holds three things, in this order.
    the last label after U+202F; negatives take U+2212; an end the data went past prints open
    (`≤ −40`, `≥ 36 m/s`) (ART 393-399; CSS 338-349; DEC 327-328; APP 2021-2023). The range is fixed
    and printed, never stretched to what is on screen (ART 564-565).
-2. **The caption line**: what the picture is, in the words a reader needs to read it.
+2. **The caption line**: what the picture is, in the words a reader needs to read it: the
+   signature's caption with its numbers (§5.2 test 3), a scale's words, a state. Never a credit, a
+   method sentence or a sentence a key could replace (§4.15).
    Global Weather's states the exposure, `Streaks: 1 s = 24 h of wind at the hour shown`, adds
    `, faster toward the poles, where the map stretches` once the view passes 45°, and says what the
    arrows mean when they replace the streaks (ART 400-408; DESIGN 252-271). **Its height is fixed**,
@@ -602,12 +685,20 @@ It holds three things, in this order.
      a vertical exaggeration; the viewer's distance (Milky Way's `You are 1.0 AU from the Sun`,
      whose words the camera waits for; CAM 425-435); an explode amount; a projection's stretch;
      what one bar or one dot is in a chart.
-3. **The credits**: the app's credit constant, byte for byte, 10.5 px `--ink-2`, on screen in every
-   mode, focus mode included. Its middle dots stay only because its words are fixed by license
-   (ART 409-411; DEC 23-24).
+3. **A key**, where the picture has marks the legend bar does not explain (a well's role, a ring,
+   a hatched share, a window's frame): 10 px drawn swatches with a 2 px radius, or the marks
+   themselves drawn small, each with its word at 11.5 px `--ink-2`, in one row (§4.15). It replaces
+   the sentence that said the same thing.
 
-*No color scale*: the band holds the caption line and the credits. *A pane app*: the band closes
-each pane. *A game*: the credits live in About.
+**No credits** (amended 2026-10-06). Until then the app's credit constant closed the band, byte for
+byte, 10.5 px `--ink-2`, on screen in every mode, focus mode included (ART 409-411; DEC 23-24). It is
+now the first paragraph of About's *Sources and credits*, byte for byte, its middle dots kept because
+its words are fixed by license (§4.8); §4.15 says how each license is still met, and names the two
+exceptions that stay beside the data.
+
+*No color scale*: the band holds the caption line and a key. *A pane app*: no band (§11.1 rule 1),
+or only a §4.15 exception's one line; each pane carries its own keys and at most one short label. *A game*: no band; the credits live in
+About.
 
 ### 4.6 The player
 
@@ -693,7 +784,9 @@ DEC 269-271). A touch on the track during play stops it and lands on the step un
 
 ### 4.7 The readout card
 
-The one card on the screen, for the thing that was tapped (ART 440-451; CSS 268-305; HTML 65-73).
+The one card on the screen, for the thing that was tapped (ART 440-451; CSS 268-305; HTML 65-73). A
+pane app's section plates (§11.1 rule 4) are sections, not cards: they hold the pane's content, open
+nothing and never float.
 
 - `--sheet`, a 1 px `--line-strong` edge, an 8 px radius, no shadow, no blur. It sits top-left on
   the plate, inset 8 px, at most 280 px wide. When it would cover the point that was tapped, it moves
@@ -723,6 +816,10 @@ The one card on the screen, for the thing that was tapped (ART 440-451; CSS 268-
 A full-height `--sheet` panel that slides up over 220 ms on `--sheet-in` and closes at once
 (ART 453-464; CSS 382-419; HTML 102-129; APP 2208-2229).
 
+- **One tap away on every screen** (2026-10-06): from the stamp, or, where the data was built once
+  or there is none, from the `About` text key at the header's right (§4.2); in focus mode from the
+  same control, moved into the caption band (§4.10). A pane app also ends every pane with the text
+  key *Sources, method and credits are in About.* (§11.1 rule 1).
 - `role="dialog"`, `aria-modal="true"`, labeled by its 15 px, 650 title. `Close` is a text key at
   the top right and again at the foot; Escape closes it; Tab is held inside it; focus returns to
   what opened it; `overscroll-behavior: contain`.
@@ -732,9 +829,17 @@ A full-height `--sheet` panel that slides up over 220 ms on `--sheet-in` and clo
      streak's length and speed on the flat map are not the wind's strength; where streaks gather is
      partly the picture; HTML 107-111; DEC 240-244).
   2. **This data**: `label: value` lines, one per line, no middle dots.
-  3. **Sources and credits**: each source's statement, the license texts as printed text, not
-     links, any address printed without its scheme (no shipped script may contain one; DEC 182-183),
-     and the font's credit line.
+  3. **Sources and credits**: first the app's credit constant, byte for byte, in a paragraph of its
+     own (the line that closed the caption band until 2026-10-06, §4.5); then each source's
+     statement, the license texts as printed text, not links, any address printed without its
+     scheme (no shipped script may contain one; DEC 182-183), and the font's credit line. Every
+     attribution a license requires is here, word for word (§4.15). **One exception (2026-10-06)**:
+     where a source's own terms ask for a link, About carries it as an anchor in `index.html`'s static
+     markup, its visible text the address without its scheme: Outdoor Window's license link,
+     `<a href="https://creativecommons.org/licenses/by/4.0/">creativecommons.org/licenses/by/4.0/</a>`,
+     which Open-Meteo's *"provide a link to the licence"* asks for and which left the footer with
+     §4.15's exception 1. `check.mjs` pins each such anchor by its exact string, and no script writes
+     one.
   4. **How the data gets here.**
 - While About is open, the app draws nothing under it and play waits (DESIGN 288-289).
 
@@ -783,10 +888,12 @@ control it needs (DESIGN 371-400; ART 471-488; APP 2461-2486, 2705-2717, 2791; C
   the header (name, units key, tabs and words), the key column, the legend's bar and ticks, any sheet
   of controls, and an open readout card, which closes on the way in (DESIGN 381-384; APP 2469-2476).
 - **What stays**: the plate with the data as chosen; the player (the time row, the transport and the
-  track) or, without one, the one control the view needs; **the stamp**, moved into the caption band
-  as its first line with its words unchanged, its hit running down over the caption, never up into
-  the plate (DEC 191-195; CSS 109); the caption line; **the credits**; any notice. A tap still opens
-  the readout (DESIGN 385-390; ART 485-488).
+  track) or, without one, the one control the view needs; **the stamp** (or, where there is none,
+  the `About` key, §4.2), moved into the caption band as its first line with its words unchanged, its
+  hit running down over the caption, never up into the plate (DEC 191-195; CSS 109); the caption line
+  and the key; any notice. A tap still opens the readout (DESIGN 385-390; ART 485-488). **The credits
+  no longer stay** (amended 2026-10-06), because they are no longer on the front (§4.15); About
+  stays one tap away through the stamp or the key.
 - **Remembered** between launches under the app's own prefix (`gwe.focus`, `'1'` or `'0'`) and
   restored before the first draw (DESIGN 391-393; APP 2468, 2791).
 - **VoiceOver**: the live region says `Controls hidden. Press Escape or the corner key to show them.`
@@ -855,7 +962,8 @@ At `(orientation: landscape) and (max-height: 500px)` each band gives the plate 
 
 - the header is one 46 px row: the name over the stamp at left, the tabs and words in the middle,
   the units key at right;
-- the caption band sets the legend and the credits side by side, over a one-line caption;
+- the caption band sets the legend and the key side by side, over a one-line caption (until
+  2026-10-06 the credits stood beside the legend; they are in About now, §4.15);
 - the player is one row: the time row stacked at left, then the transport and the track;
 - the key column becomes a row along the plate's top whenever it would not fit the plate's height.
 
@@ -868,8 +976,134 @@ holds it at 220 px or more, the keys in one row at most 40 px high (SHOOT 882-88
 399, 408): the header `6 px + top` and `16 px + left/right`; the caption band `16 px + left/right`;
 the player `12 px + left/right` and `bottom`; the key column `8 px + right`; the readout card
 `8 px + left`, and `8 px + top` in focus mode; the ghost key `8 px + top` and `8 px + right`;
-About's head `top`, its body `16 px + bottom`. Headless Chromium has no safe areas, so these are
-phone checks (DEC 253-255).
+About's head `top`, its body `16 px + bottom`. **A pane app with no band** (2026-10-06, §11.1 rule
+1) pads its pane body's foot itself, `calc(28px + env(safe-area-inset-bottom))`, because the band
+that carried the bottom inset is gone and the pane's last control (the About key) would otherwise
+rest under the home indicator; Outdoor Window, which keeps its one-line footer, leaves the inset on
+the footer. Headless Chromium has no safe areas, so `check.mjs` pins the declaration and the phone
+checks the result (DEC 253-255).
+
+### 4.15 The front of an app (the owner, 2026-10-06)
+
+The owner: *"data origin/licenses etc shpuld not take up too much space - would be better to have
+inside the views if we have to show it clearly?"* It binds all eighteen apps, the three with their
+own directions included, and it overrides every earlier rule that put a source on the front (§4.2's
+edition stamp, §4.5's credit line, §4.10's credits in focus mode, §6.5's "on screen in every mode").
+
+**Rules (must).**
+
+- **The front** is what is on screen when the app opens, and what each tab, view or word shows when it
+  is chosen. It holds the app's name, the view, its controls and **at most one status line**. Nothing
+  else.
+- **The status line is the stamp** (§4.2): when the data was made, and any state that needs a
+  sentence (`Stale.`, `Forecast ran out 4 d ago.`, `Example data.`, a loading count, an error). It is
+  one line at 390 px in every state and names no source. A model run, a feed's name and a retrieval
+  date are About's *This data*. Data built once has no status once it is in (§4.2), so its line hides
+  and an `About` key takes its place at the header's right.
+- **Sources, licenses, retrieval dates and method sentences live in About**, one tap from every
+  screen and every mode. The app's credit constant is the first paragraph under *Sources and
+  credits*, byte for byte; each source's full statement follows (§4.8). Every attribution a license
+  requires stays there word for word. `NOTES.md`, `CREDITS.txt` and `ART.md` say "in About" wherever
+  they said "on screen" or "under every screen".
+- **The caption band keeps only what reading the view needs** (§4.5): the legend; the scale or the
+  instrument line; the caption line (the signature's caption with its numbers, a state); a key; and,
+  where the app's signature lives in the band, the signature itself (World Oil & Gas's Ledger). It
+  holds no credit line, no method sentence and no sentence a key could replace. A sentence that only says what a mark means
+  ("Ink: hours a rule rules out. Green: how much of its limit an hour uses.") becomes a **key**: 10 px
+  drawn swatches with a 2 px radius, or the marks drawn small, each with its word at 11.5 px
+  `--ink-2`, in one row. Where a fixed-height line loses words, its height shrinks to what the longest
+  form still needs at 320 px wide (§4.5's fixed-height rule stands; `shoot.mjs`'s longest-caption check
+  proves it).
+  - *One dated departure, Norne Reservoir* (2026-10-06; plan 0012's package 3.4: *"Cut the caption to
+    the legend and the scale, and move the rest into About"*, after the owner's *"Norne full screen
+    mode has too mich text at the bottom, just above time slider"*). Norne's band keeps its legend,
+    its instrument line (north, the scale, `vertical ×5`), the well key and a key for the cut; the
+    cut's sentence with its month's oil, water and water cut leaves the front. §5.2 test 3 is met for
+    Norne by the cut's key on the track and by the month's figures in the rates chart under More
+    controls, and Norne's `ART.md` records the departure. **The lead confirms, before Norne's build,
+    that the well key and the cut's key read as part of "the legend and the scale"**; until then
+    `docs/plans/0012-change-lists.md`'s Norne item 4 waits.
+- **Text in the view that names what is drawn is the view's own** and stays: a period's name, Earth's
+  History's `This map: Scotese map 49 · …`, a story's source on its own row in World News, a value's
+  basis line where the data writes it (Finances' home index, Norges Bank beside its rate).
+- **Two exceptions, and only these**, each named in the app's `NOTES.md` with the terms quoted, and
+  pinned by `check.mjs` by file and exact string:
+  1. *A source whose own terms require its credit beside the data* keeps only what those terms
+     require there, as one short line at the foot of the drawing or band that shows the data, 10.5 px
+     `--ink-2`. Anything the terms do not require beside the data (the rest of the credit, the
+     license's name and address, the modification sentence) is in About. The lead's ruling of
+     2026-10-06: each source's terms were read at the source that day, and these two require it, in
+     these words:
+     - **Open-Meteo** (Outdoor Window), <https://open-meteo.com/en/licence>: *"You must include a
+       link next to any location Open-Meteo data are displayed, for example:"*
+       `<a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>`. The same page's
+       other requirement, *"Attribution: You must give appropriate credit, provide a link to the
+       licence, and indicate if changes were made. You may do so in any reasonable manner, but not in
+       any way that suggests the licensor endorses you or your use."*, names no place, so the license
+       link and the changes sentence are in About (§4.8 item 3). Outdoor Window's footer holds one
+       line, the anchor `Weather data by Open-Meteo.com`, and nothing else.
+     - **OpenStreetMap** (Running Dashboard: the routes of its template sessions, derived from
+       OpenStreetMap, and the OpenStreetMap tiles a private copy fetches outside Norway and the United
+       States), <https://osmfoundation.org/wiki/Licence/Attribution_Guidelines>: *"Attribution must
+       be presented to anyone who uses, views, accesses, interacts with, or is otherwise exposed to the
+       map or produced work. The attribution format should not require individuals to interact with
+       the map or produced work to see the attribution."*; *"Attribution must be placed in the
+       vicinity of the produced work or in a location where customarily attribution would be expected
+       by the users of the produced work."*; *"Attribution must also make it clear that the data is
+       available under the Open Database License."*; and *"The historical forms of attribution “©
+       OpenStreetMap contributors” or “© OpenStreetMap” are acceptable."* Running Dashboard keeps one
+       line under a route map that OpenStreetMap data drew, and only then: `Route: © OpenStreetMap
+       contributors, ODbL.` (a template session's route), `Map: © OpenStreetMap contributors, ODbL.`
+       (OpenStreetMap tiles under a route of the person's own) or `Route and map: © OpenStreetMap
+       contributors, ODbL.` (both).
+
+     **Map tiles whose terms do not require it are credited in About only**, read the same day:
+     - **USGS The National Map** (Running Dashboard's demo tiles),
+       <https://www.usgs.gov/faqs/what-are-terms-uselicensing-map-services-and-data-national-map>:
+       *"Map services and data downloaded from The National Map are free and in the public domain.
+       There are no restrictions; however, we request that the following acknowledgment statement of
+       the originating agency be included in products and data derived from our map services when
+       citing, copying, or reprinting: "Map services and data available from U.S. Geological Survey,
+       National Geospatial Program.""* A request with no place; About prints the statement word for
+       word.
+     - **Kartverket** (Running Dashboard's tiles in a private copy in Norway; Besseggen's terrain),
+       <https://www.kartverket.no/api-og-data/vilkar-for-bruk>: *"Dette inneber at Kartverkets namn
+       skal visast i alle samanhengar der produkta eller uttrekk av produkta blir brukt, det vere seg
+       applikasjonar, webløysingar, trykte produkt, illustrasjonar eller anna, på følgjande måte: ©
+       Kartverket. Det skal også linkast til nettsidene våre der det er mogleg."* (the name shown
+       wherever the products are used, in applications among others, as `© Kartverket`, with a link
+       where possible). The terms name the application, not a place on the map, and CC BY 4.0's
+       §3(a)(2) allows any reasonable manner, so About, one tap from the map, names Kartverket:
+       Running Dashboard's as `© Kartverket` (`index.html` line 75), Besseggen's by its credit
+       constant, `Terrain, trail, lakes and names: Kartverket, CC BY 4.0`, moved there unchanged.
+
+     So Running Dashboard's `Map tiles: USGS The National Map.` and `Map tiles: © Kartverket.` leave
+     the front for About, whose *Sources and credits* already names every tile source.
+  2. *A use restriction a license attaches to the data shown* is a statement on the pane while it
+     applies, at the pane's head (straight under its title), never a footer: Power Hours' `These prices are licensed for private and internal use
+     only. Do not republish them.` for a zone not on the CC BY list.
+  A safety statement is not a credit and stays where its app puts it (US Quakes' `Not a warning
+  service`, on the map at every sheet height).
+- **No other credit may stand on the front where a source's does not**, the app's own or the font's
+  included. That keeps the older licenses' "at least as prominent as any comparable authorship
+  credit" true by construction (the row for CC BY 2.x and 3.0 below).
+
+**How each license family the apps use is still met.** The quotations are the license texts'; the
+apps' `NOTES.md` quote each source's own terms and win where they ask for more.
+
+| License family | Used by (2026-10-06) | What it asks of the attribution | How it is met now |
+| --- | --- | --- | --- |
+| **CC BY 4.0** | GeoNames (Global Weather, Global Wind), Kartverket (Besseggen; Running Dashboard's own tiles in a copy), Marine Regions and EMODnet (Shelf Atlas), Energy Institute via Our World in Data and Global Energy Monitor (World Oil & Gas), Energy-Charts and SMARD (Power Hours), Open-Meteo (Outdoor Window), Earth's History's sources | §3(a)(1): the creator and attribution parties, a copyright notice, a license notice and disclaimer notice, a link where reasonably practicable, whether the material was modified, and the license's address. §3(a)(2): *"You may satisfy the conditions in Section 3(a)(1) in any reasonable manner based on the medium, means, and context in which You Share the Licensed Material. For example, it may be reasonable to satisfy the conditions by providing a URI or hyperlink to a resource that includes the required information."* | About, one tap from every screen and named there by the stamp or the `About` key, prints the credit constant, each source's attribution, the license's name and address (without its scheme) and the modification sentence (`sampled`, `rounded by this app`, `the scores … are this app's`), word for word. Open-Meteo's own terms ask for more, so its link alone stays beside the data (exception 1); Kartverket's terms name the application, not the map, so `© Kartverket` is in About (exception 1's note). |
+| **CC BY-SA** (2.1 JP, 4.0) and **CC BY 2.x and 3.0** | BodyParts3D (Anatomy, BY-SA 2.1 JP), AT-HYG and adapted textures (Milky Way, BY-SA 4.0), Global Voices (World News, CC BY 3.0: its attribution policy asks to *"give appropriate credit, provide a link to the license, and indicate if changes were made"*) | As CC BY; adaptations under the same license. The 2.x texts (2.1 JP among them) let the credit be given in any reasonable manner, but in an adaptation or collection it must *"at a minimum … appear where any other comparable authorship credit appears and in a manner at least as prominent as such other comparable authorship credit"*; 3.0 says the same of the credits for the other contributing authors. | As CC BY, and nothing else is credited on the front (the rule above), so About is where every comparable credit appears, the font's included. The share-alike notice for the adapted geometry and catalogs stays in About and `CREDITS.txt`, unchanged. World News: each story names its publisher on its own source line, where every publisher's name appears alike (the view's own text), with its author when the feed names one; the headline is the link to the original; About prints the license line with its changes sentence (*the summaries here are the feed's own line, shortened*). Clamping a summary to two lines on All is display only: the words are unchanged and a region's tab shows them whole. |
+| **CC BY-ND 4.0** | The Conversation (World News), as its republishing page (`theconversation.com/au/republishing-and-media`) gives it | *"Credit the author(s) and their institution(s), ideally in the byline"*; *"Credit The Conversation with a link to our homepage or the original article"*; *"You may only edit to provide accurate references to time and place, or to comply with an editorial style. Any other edits need the author's approval."* | Nothing is derived: the headline is carried exactly as written and is the link to the original article, no summary is carried at all (so the two-line clamp never touches its text), and the byline is carried whole, institution included. Joining the byline to the source line (§11.1 rule 10) moves it, word for word, and changes none of it; About prints the license. |
+| **CC BY-NC 3.0 IGO** | Gaia DR3 (Milky Way), as `CREDITS.txt` records it | As CC BY 3.0 for the credit; non-commercial use. | The credit as CC BY 3.0. Moving it changes nothing about the use; the terms stay as `CREDITS.txt` records them. |
+| **ODbL 1.0** | the Norne benchmark model (Norne Reservoir); OpenStreetMap-derived routes (Running Dashboard's template sessions) and OpenStreetMap tiles (Running Dashboard, a private copy outside Norway and the United States) | §4.3: a Produced Work used in public must *"include a notice associated with the Produced Work reasonably calculated to make any Person that uses, views, accesses, interacts with, or is otherwise exposed to the Produced Work aware that Content was obtained from the Database … and that it is available under this License"*. | Norne: About's first *Sources and credits* line is the constant `Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0`, followed by the license's address; About opens from the `About` key on every screen and in focus mode, and `NOTES.md` carries the notice in the ZIP. OpenStreetMap routes and tiles: exception 1, under the map they drew. |
+| **NLOD 2.0** | Statistics Norway's house price index (Finances), Sodir (Shelf Atlas), Kartverket's terrain (Besseggen, NLOD 2.0 / CC BY 4.0) | The licensor credited in the words it asks for (Sodir's, as Shelf Atlas's `NOTES.md` quotes it: *"Contains data under the Norwegian licence for Open Government data (NLOD) distributed by the Norwegian Offshore Directorate"*), a reference to the license, and no suggestion of endorsement. | About prints each licensor's statement word for word, the license's name and address, and the non-endorsement sentence where the app has one. Finances' home value keeps its basis line, which names the index beside the number it produced, as the data writes it. |
+| **Terms of an agency, not a public license** | the North Sea Transition Authority's Open User Licence (Shelf Atlas: commercial exploitation not granted), the Danish Energy Agency and GEUS (no license stated), NLOG (no rights claimed); UN News (World News), whose terms (`un.org/en/about-us/copyright`) say *"News-related material can be used as long as the appropriate credit is given and the United Nations is advised."* | The attribution string each one asks for (Shelf Atlas's `NOTES.md` table); UN News: credit, and advising the UN. | About prints each string word for word, as the data carries it. UN News: each story names `UN News` on its source line, About carries both conditions, and advising the UN is the duty of whoever runs a copy, as World News' `NOTES.md` says. |
+| **SIL OFL 1.1** | Ysabeau Office in every house app; Archivo, Atkinson Hyperlegible, Newsreader and Red Hat Mono in the directed apps | No credit on screen. The license must travel with the font, and the name not be used as a Reserved Font Name. | Unchanged: `fonts/OFL.txt` ships beside the file, and the credit line of §2.5 stays in About, `NOTES.md` and the credits file. |
+| **Public domain** | NOAA GFS (Global Weather, Global Wind), USGS (US Quakes; Running Dashboard's tiles), Natural Earth (every map app), NASA GISS GISTEMP (Warming World), NASA/JPL (Milky Way) | Nothing; the sources ask for courtesies: NOAA that sampled data not be passed off as unaltered NOAA data and that no endorsement be implied, USGS an acknowledgment sentence (The National Map's, quoted under exception 1), NASA no endorsement. | The courtesies are kept word for word in About, as they were; Running Dashboard's `Map tiles: USGS The National Map.` leaves the front. |
+| **Software licenses** (MIT, GPL) | three.js (Milky Way, Besseggen, Anatomy, Snug Kart), the tools behind some data | The notice ships with the software. | Unchanged: `vendor/` keeps the license files, About names the library. |
+| **No license, or not a license** | Garmin Connect and the coaching routine (Running Dashboard), the household's banks (Finances), Norges Bank's rates (Finances), the repository's own job (Hello Live) | Nothing the app can point at. | The words the band carried move to About word for word; Norges Bank stays beside its rate, as `NOTES.md` sets out. |
 
 ---
 
@@ -922,7 +1156,9 @@ A candidate passes only if every answer is yes.
    monotonically, through a printed scale, and on-screen length or speed is never the encoding where
    the projection distorts it (DESIGN 654-657; ART 291-292).
 3. **It is captioned.** The one line that says how to read it is on screen, with its numbers
-   (ART 15-19).
+   (ART 15-19). *One dated departure*: Norne Reservoir's cut is captioned by its key on the track, and
+   its month's figures are in the rates chart under More controls (2026-10-06, §4.15, the lead to
+   confirm before the build).
 4. **It reads.** In both themes, over everything it is drawn on, at the contrast its `ART.md`
    states (§3.2), measured on rendered pixels (§7.2).
 5. **It survives Reduce Motion** in a form that says the same thing: Global Weather draws arrows
@@ -1014,9 +1250,13 @@ Honesty is the metaphor: a flow photograph is a measurement, and its rules are t
   extremes (ART 564-565); an end the data went past prints open (DEC 327-328).
 - **The data's age never leaves the screen**, focus mode included; stale and ran-out states are
   sentences in `--ink`, never a color and never a pulse (ART 350-355, 530-531, 563; DESIGN 386-389).
-- **Credits are kept word for word**, on screen in every mode, and `check.mjs` compares the constant
-  byte for byte (ART 409-411; CHECK 135-139). A license address is printed without its scheme
-  (DEC 182-183).
+  Data built once has no age to keep on screen: its edition is About's first *This data* line (§4.2,
+  2026-10-06).
+- **Credits are kept word for word**, in About, one tap from every screen and every mode, and
+  `check.mjs` compares the constant byte for byte where About prints it (ART 409-411; CHECK 135-139).
+  Until 2026-10-06 this rule said "on screen in every mode"; the owner moved them (§4.15), and the
+  only credits left beside the data are §4.15's two exceptions. A license address is printed without
+  its scheme (DEC 182-183).
 - **Display choices are named as display choices** in About (EH 10-12), and so is what the drawing
   cannot show: Global Weather's grid is sampled every 2°, not averaged, and About says so
   (DEC 249-252).
@@ -1046,7 +1286,10 @@ Every app's check asserts at least these (CHECK 1-31):
    16, no symlinks, the largest file within 128 MiB and the total within 512 MiB (CHECK 51-67).
 2. **No address with an `http` or `https` scheme** in any shipped `.html`, `.css` or `.js`,
    comments included (CHECK 69-72). A vendored library's own files are excepted, and pinned byte
-   for byte to their source instead.
+   for byte to their source instead. So are the links a source's own terms ask for, as static
+   anchors in `index.html` and nowhere else (Outdoor Window's two: the Open-Meteo link in the footer,
+   §4.15 exception 1, and the license link in About, §4.8), each pinned by its exact string and
+   counted once; nothing is ever fetched from them.
 3. **Every reference is relative**, inside the folder, and present: `import`, `src`, `href`,
    `url(`, `fetch(` and every data path the code names (CHECK 74-89).
 4. **The folder contract**: `assets/`, `data/` and `fonts/` hold exactly the files the app lists;
@@ -1057,9 +1300,13 @@ Every app's check asserts at least these (CHECK 1-31):
 6. **The data is untouched**: each data file's sha256 equals the value recorded before the pass,
    or the app's own `.sha256` line (CHECK 110-115).
 7. **`miniapp.json` is valid**: schema 1, the name unchanged, the entry point present, a
-   description of at most 200 characters, a version (CHECK 117-124).
+   description of at most 200 characters, a version of digits and dots that is higher than the
+   version the pass started from (§13; CHECK 117-124).
 8. **No AI vendor or model name** in any shipped text file (§6.4; CHECK 126-133).
-9. **The credits**, word for word, in the constant the app writes to the screen (CHECK 135-139).
+9. **The credits**, word for word, in the constant About prints first under *Sources and credits*,
+   and no element on the front that carries a credit but §4.15's two exceptions, each pinned by file
+   and exact string (CHECK 135-139; amended 2026-10-06 from "the constant the app writes to the
+   screen").
 10. **The camera's strings** (§7.4), each in the markup or the code, with its role (CHECK 141-159).
     Every `localStorage` key keeps the app's existing prefix, every key read today is still read,
     and new keys are only added (DESIGN 27-29; CHECK 147-158).
@@ -1082,7 +1329,8 @@ Every app's check asserts at least these (CHECK 1-31):
     writes but the credit constant; no →, ➤ or `...` in shipped HTML, CSS or script text; both
     `theme-color` metas equal each theme's `--page`; the `@font-face` rule exactly as §2.5 gives it
     (CHECK 210-237). The house adds three: the chrome tokens of §3.1 in both themes with exactly the
-    house values; no other `font-family` and no monospace stack; every font string in a script names
+    house values (the four white apps' light `--page` `#ffffff`, §12; a pane app's register tokens
+    with exactly §11.2's values); no other `font-family` and no monospace stack; every font string in a script names
     `"Ysabeau Office"` first.
 16. **Budgets** (§8), and the ZIP built exactly as `build-zips.yml` builds it, with `index.html` at
     its top and nothing else in it, every size printed (CHECK 239-258).
@@ -1101,8 +1349,9 @@ or extend a run (SHOOT 11-14).
 
 Every app's run asserts, as its kind allows:
 
-- **Boot**: the camera's strings by role and name, the credits visible and word for word, and the
-  face loaded (`document.fonts.check`) before any picture (SHOOT 287-297).
+- **Boot**: the camera's strings by role and name, no credit line on the front (§4.15) and the
+  credit constant word for word as About's first *Sources and credits* paragraph, and the face loaded
+  (`document.fonts.check`) before any picture (SHOOT 287-297).
 - **Text contrast**: every rendered text node at 4.5:1 or more over its composited background, in
   both themes (SHOOT 195-217, 311-314). **The tracer** under exactly the chosen words
   (SHOOT 315-316).
@@ -1132,8 +1381,11 @@ Every app's run asserts, as its kind allows:
   targets inside it; and the camera's way out of a library left in focus mode (SHOOT 656-728).
 - **Hidden**: every loop stops, and the return redraws fresh (SHOOT 750-769).
 - **Hit targets**: every button, slider and tab at 44 × 44 px or more (SHOOT 218-232, 771-775).
-- **About** opens from the stamp, holds the app still, carries every credit and the font's, and
-  closes on Escape (SHOOT 777-785).
+- **The stamp is one line** (2026-10-06, §4.2): at 390 × 844, in every state the app's stamp
+  function can write (fresh, each lead alone, and the longest combination of leads it can join),
+  `#stamp`'s height is one line height (16 px) to within 1 px.
+- **About** opens from the stamp (or the `About` key, §4.2), holds the app still, carries the
+  credit constant first, every credit and the font's, and closes on Escape (SHOOT 777-785).
 - **Reduce Motion**: continuous motion off or in its still form, every animation at 0 s, play in
   whole steps (SHOOT 789-816).
 - **Broken data**: missing, not JSON, the wrong schema, a short file, stale; each gives its sentence,
@@ -1185,6 +1437,12 @@ name and for the word.
 - **If a string must change** (US spelling, §6.3), list it in `tools/DECISIONS.md`; the lead changes
   the camera in the same commit.
 - **Never rename an app**: the Library row is `miniapp.json`'s name.
+- **The front-text cut keeps the camera's strings** (2026-10-06). Five of them sit in elements §4.15
+  edits, and each stays visible where it is: Milky Way's `from the Sun` (the caption line's first
+  sentence), Norne's `Oil saturation` (the legend's title), the stamps' `Updated` (World Oil & Gas,
+  Global Weather, Global Wind), Power Hours' `c/kWh` (the price now, the runs' note and rows, once the
+  band's caption has gone) and Earth's History's `Scotese map 49 ·` (the sheet's head).
+  `docs/plans/0012-change-lists.md` names them per app.
 - **Full screen** is where the camera photographs: no status bar, and the web view under every
   safe-area edge (CAM 139-149). Snuggery's own exit control sits in the top-right corner
   (CAM 159-165, 168-176), the corner the ghost key uses: on the phone, check that both can be
@@ -1263,6 +1521,9 @@ the face it gains — Finances (70 kB) and the loop apps after it — the ZIP ca
 face leaves no room for the house modules, About and the shipped `ART.md`, so the builder applies the
 whole list, cuts nothing, and the lead rules on the measured figure after the build, as every pass over
 a cap has been ruled; the measured ZIP plus a few thousand bytes for the fix stages is the expected cap.
+The front cut and the register (2026-10-06) move bytes both ways; the pane apps that start them within
+about 1 % of a cap (World News, Finances, Outdoor Window, Power Hours, and Running Dashboard's code) are built
+whole and ruled the same way.
 
 **What to do near or over a cap.**
 
@@ -1290,8 +1551,8 @@ answers all fifteen for itself (ART 573-591 is Global Weather's answer).
 | --- | --- |
 | 1. A warm cream ground, a high-contrast serif display, a terracotta accent | A cool film-base ground, `#e8eef0` (OKLCh 0.945, 0.007, 220). One low-contrast Renaissance sans at every size; no display face. No accent: warm hues appear only as data. |
 | 2. A near-black ground with one acid-green or vermilion accent | The dark page is a slate at L 0.224, not a black stand-in. No accent. The one bright thing on a screen is the signature, and it is data. |
-| 3. Broadsheet: hairlines, zero radius, dense columns | One column. Hairlines only where they separate (About's sections, the key separators, the player's top rule). Radii by role: 6, 8 and 4 px, and 0 only on the legend bar. |
-| 4. The SaaS-card kit: identical rounded cards, one radius, one soft shadow, gradient washes | At most one card on a screen (the readout) and one sheet (About). Content sits on the page between hairlines. No shadows. The only gradients are data scales and the selection tracer. |
+| 3. Broadsheet: hairlines, zero radius, dense columns | One column. Hairlines only where they separate (About's sections, the key separators, the player's top rule). Radii by role: 6, 8, 4 and 2 px (a key's swatch, §4.15), and 0 only on the legend bar. |
+| 4. The SaaS-card kit: identical rounded cards, one radius, one soft shadow, gradient washes | At most one card on a screen (the readout) and one sheet (About). Content sits on the page between hairlines. No shadows. The only gradients are data scales and the selection tracer. **A pane app's sections sit on plates** of `--sheet` with a 1 px `--line` edge (§11, amended 2026-10-06): the separation the owner asked for, every plate holding data, with no shadow, no gradient, no hover and no lift. |
 | 5. ALL-CAPS tracked eyebrow labels | None. Sentence case everywhere, `letter-spacing` 0, and no label above a heading. |
 | 6. Meta strings joined with middle dots | Commas, sentences, or one value per line. The one middle dot left is inside a credit line whose words are fixed by license, kept word for word. |
 | 7. "WORD — fragment" labels with a spaced em dash | None. |
@@ -1301,7 +1562,7 @@ answers all fifteen for itself (ART 573-591 is Global Weather's answer).
 | 11. One word accented in a headline | None. The only emphasis is a status sentence (stale, ran out) in `--ink`, and its words carry the meaning. |
 | 12. Unnecessary labels above content | The legend's title is the quantity its bar measures, from the data. Nothing else is labeled from above. |
 | 13. Numbered markers (01 / 02 / 03) | None, unless the content is a sequence, and then an ordered list. |
-| 14. A big number, a small label and a gradient accent | One large figure per screen, at 21 px, the subject's own (the valid time, the tapped value), with no gradient. |
+| 14. A big number, a small label and a gradient accent | One large figure per screen, at 21 px, the subject's own (the valid time, the tapped value), with no gradient. A pane app's key number is 34 px (§11, amended 2026-10-06): the pane's own subject, one per pane, its label above it in words and its change under it, with no gradient, glow or accent behind it. |
 | 15. Scattered fade-and-slide entrances, hover on every card | No entrances. The one continuous motion is the data's own; the small transitions answer a touch. Hover only on controls, and only where the pointer can hover. |
 
 **The web interface guidelines** the QA stage reads apply as written, except where the house writes
@@ -1341,16 +1602,18 @@ what is.
   `unicode-range` names only what it holds.
 - [ ] One family in the CSS, through `--face`; no monospace; every script font string starts with
   `"Ysabeau Office"`; canvas or WebGL text waits for the face.
-- [ ] Nothing larger than 21 px; one large figure per screen; weights within 400–650; no capitals,
-  no small capitals, no letter-spacing; sentence case.
+- [ ] Nothing larger than 21 px (a pane app: §11's 19 and 34 px); one large figure per screen (a
+  pane app: one key number per pane); weights within 400–650; no capitals, no small capitals, no
+  letter-spacing; sentence case.
 - [ ] The credit line is word for word in About, `NOTES.md` and the credits file; the faces the app
   dropped are gone, with their credits.
 
 **Color (§3)**
 
-- [ ] The chrome tokens equal §3.1 in both themes; `body` has `background: var(--page)`; both
-  `theme-color` metas carry `--page`.
-- [ ] No accent, no red or amber in the chrome, no shadow, blur, glass or glow.
+- [ ] The chrome tokens equal §3.1 in both themes (the four white apps' light `--page` `#ffffff`,
+  §12); `body` has `background: var(--page)`; both `theme-color` metas carry `--page`.
+- [ ] No accent, no red or amber in the chrome, no shadow, blur, glass or glow; a pane app's
+  register colors only on data (§11).
 - [ ] `ART.md` states, per theme, the ground, the data band, the signature's color and lightness,
   and the worst measured contrast, and every figure names the command that printed it.
 - [ ] Every data scale is one hue path printed twice, keeps its own color logic inside the band, and
@@ -1367,7 +1630,8 @@ what is.
   play; About holds play; preview frames and handovers are counted where frames can lag.
 - [ ] Focus mode (where the hero is a view): what leaves is `hidden` and `inert`; the ghost key is
   named exactly `Show the controls`, sits under the top safe area, and Escape works; the state is
-  remembered; the stamp and the credits stay; the live region says both sentences.
+  remembered; the stamp (or the `About` key) stays, so About is one tap away; the live region says
+  both sentences.
 - [ ] No opening, or one that runs once, ends on any touch, has `Skip`, and never runs under Reduce
   Motion.
 - [ ] Reduce Motion: every duration 0 s, continuous motion off or in its still form, play in whole
@@ -1389,8 +1653,20 @@ what is.
 - [ ] US spelling passes, and reading the visible strings finds no British spelling the check missed.
 - [ ] The vendor-name check passes over every shipped text file, `ART.md` and `PROMPT.md` included.
 - [ ] Every number on screen traces to the data or to a printed constant; staleness is a sentence;
-  the credits are word for word; About names what the picture is and is not.
+  the credits are word for word in About; About names what the picture is and is not.
 - [ ] Every data file's sha256 is what it was before the pass.
+
+**The front, the register, the ground, the version (2026-10-06)**
+
+- [ ] The front (§4.15) holds the name, the view, the controls and at most one status line, one line
+  at 390 px in every state; nothing on it is a credit, license, retrieval date or method sentence
+  but §4.15's two exceptions, each named in `NOTES.md` with its terms quoted.
+- [ ] About's *Sources and credits* opens with the credit constant, byte for byte, and carries every
+  attribution a license asks for; no shipped file still says the credits are on screen.
+- [ ] A pane app: §11's eleven rules; its register tokens equal §11.2 and its palette script measures
+  them on its ground and on `--sheet` in both themes.
+- [ ] The ground is §12's for this app; a white app's palette script ran with `#ffffff` and passes.
+- [ ] `miniapp.json`'s version is higher than the one the pass started from, by §13's rule.
 
 **The camera (§7.4)**
 
@@ -1413,3 +1689,210 @@ what is.
   return; a delivery of new data while open; focus mode in Snuggery's full screen, with the ghost
   key and Snuggery's own exit control both reachable; VoiceOver on the track and on a tap; the phone
   on its side. Each item names the device and the iOS version it needs.
+
+---
+
+## 11. The pane-app register (2026-10-06)
+
+The owner's verdict on the picture board (plan 0012 D5): Finances' Overview, World News' All and
+Running Dashboard's Now, redrawn in a denser register, were approved as prototyped. The prototypes
+are patches against the template at `b7accea` in the Snuggery repository
+(`docs/plans/0012-prototypes/*.patch`), and the board is `docs/marketing/reference/0012-board-pane-register-*.png`.
+The register binds **the six pane apps only**: Finances, World News, Running Dashboard, Outdoor
+Window, Power Hours and Hello Live, and the owner's private Training Load. Where a rule here departs
+from §2.5, §3.1, §4.5, §4.7, §9 rows 4 and 14 or an app's `ART.md`, this section wins for those six,
+and the rule it replaces says so where it stands.
+
+### 11.1 The eleven rules (must)
+
+1. **The front of a pane app** is the name, one stamp line, the tabs and the pane. The caption band
+   leaves the screen, its caption line and credit line with it; `footer.band` is deleted, unless it
+   holds one of §4.15's exceptions (Outdoor Window's one-line Open-Meteo link), and then it holds
+   only that line and stays among the elements About makes inert. With the band gone, the pane body
+   pads the bottom safe-area inset itself (§4.14). Each pane ends with one text key, `Sources, method and credits are in About.`
+   (World News: `Sources, their terms and credits are in About.`): a `<button>` at 12.5 px
+   `--ink-2`, underlined at a 3 px offset, at least 44 px tall, 14 px under the last section, that
+   opens About. §4.15's two exceptions stay where they are.
+2. **One key number per pane**, at 34 px, weight 650, line height 1.05: the pane's subject (net
+   worth, the week's kilometers, the next window, the price now, the file's time). Its label sits
+   above it at 12.5 px `--ink-2`, and its change or plan right under it at 13.5 px. Tile values and
+   table totals are 19 px, weight 650. A pane with no subject number (World News' headlines, Running
+   Dashboard's Training and Health, Finances' Cash flow and Transactions) has none, and its tiles
+   carry the 19 px figures. The pane apps' scale is **10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 / 19 / 21 /
+   34 px**; 21 px stays for the readout card's value alone (§4.7), and 16 px for a search field (iOS
+   zooms into a smaller one).
+3. **Tables and tiles in place of sentences.** A tile is a label (11.5 px `--ink-2`), a value (19 px,
+   650) and an optional note (11.5 px `--ink-2`), in two columns at 390 px, parted by `--line`
+   hairlines. A table has `th` at 11.5 px, 600, `--ink-2` over a `--line-strong` rule and rows parted
+   by `--line`; its first column is left-aligned and its amounts right-aligned in tabular figures, at
+   12.5 to 15 px and weight 560 to 600. A fact a sentence used to carry goes into one or the other.
+4. **Sections sit on plates**: fill `--sheet`, a 1 px `--line` edge, radius 8 px, padding 12 px, 12 px
+   apart. Section headings are 15 px, weight 650. Halos, casings and dot strokes drawn on a plate
+   take `--sheet`, not `--page`. A drawing whose own marks are drawn in `--sheet` (Outdoor Window's
+   lit windows) stays on the page ground, unplated, because on a plate those marks would vanish.
+5. **Color carries meaning, never decoration.** Each hue means one thing in its app, and an app uses
+   at most four hues besides the inks, all from §11.2, under the names given there, in `:root` and
+   again in the dark block. (The board's rule said three. The approved prototypes carry four:
+   Running Dashboard's done blue and a three-step tone, Finances' owned, owed, up and down. The lead
+   ruled on 2026-10-06 that four stands, as the owner approved them, D5's "as prototyped"; neither
+   app is cut back to three.) An app's existing categorical series (Finances' six fund slots,
+   `--series-1` to `--series-6`) are its palette's, inside its band, and are not meaning colors.
+   Color is never the only carrier: the sign, the word or the key stays. It is never on a control, a
+   tab, a heading, a plate, a hairline or the stamp.
+6. **A key replaces a how-to-read sentence**: 10 px swatches with a 2 px radius, or the marks
+   themselves, each with its word at 11.5 px `--ink-2`, in one row under the drawing (§4.15).
+7. **Every planned outline holds a light fill**: 14 % of its stroke color over `--sheet`
+   (`color-mix(in srgb, var(--ink-2) 14%, var(--sheet))`), in the drawing, in its key and in any bar
+   that shows a plan.
+8. **Example data says so in the stamp**: `Example data.` in `--ink` leads the stamp (§4.2),
+   decided by the data alone (Finances' `synthetic`; Running Dashboard's activity ids, every one
+   `demo-…`, the rule its OpenStreetMap credit already keys on; Outdoor Window's `demoPlace`), in
+   place of `Stale.` or a ran-out lead. Nothing else on the front repeats it, and the long example
+   paragraph is About's *This data*. The owner's private copies, whose data is real, never show it.
+9. **Method sentences leave the pane**: into the section's own fold where the app has folds (Running
+   Dashboard's `How to read it` and `Why the numbers differ`), and otherwise into About. A section
+   keeps at most one short label, one line at 390 px: `Age when the file was made, 1 Oct, 07:01. Log
+   scale.`, `A plus is the agent slower than Garmin.`, `One bar is one week, Monday to Sunday.`
+10. **Long text clamps**: a summary shows two lines on an overview pane (World News' All) and in full
+    on a detail pane (a region); a byline joins its source line instead of taking a line of its own.
+11. **The ground**: the register works on either ground by changing `--page` alone. On white a plate
+    parts by its edge (1.51:1) and a 1.06:1 fill, against 1.11:1 on gray, so gray is the ground
+    wherever plates are used (§12). Hello Live, on white, takes no plates: one card and three short
+    sections parted by hairlines.
+
+### 11.2 The tokens, measured
+
+Contrast is WCAG 2, as text, by PAL's `lum` and `cr`; separation is ΔE in OKLab under normal vision
+and Machado, Oliveira and Fernandes (2009) deutan, protan and tritan at severity 1.0, PAL's method.
+*Measured* 2026-10-06 by package 2's designer with those formulas written out; each app's palette
+script repeats the figures for the tokens it uses and fails if they move.
+
+| Token (and its other names) | Means | Light | Dark | On `#e8eef0` | On `--sheet` light | On `#ffffff` | On `--page` dark | On `--sheet` dark |
+| --- | --- | --- | --- | --: | --: | --: | --: | --: |
+| `--own` (`--src-1`, `--done`, `--cheap`) | owned; the first source; a run done; the day's cheapest prices | `#1f5f99` | `#8cbcf0` | 5.68 | 6.29 | 6.66 | 8.61 | 7.68 |
+| `--owe` (`--src-2`, `--dear`) | owed; the second source; the day's dearest prices | `#a64a1a` | `#f0a070` | 4.96 | 5.49 | 5.81 | 8.12 | 7.24 |
+| `--up` | up; on track | `#17723e` | `#6fd39a` | 5.10 | 5.65 | 5.98 | 9.34 | 8.33 |
+| `--down` | down; act now, stop | `#b42318` | `#ff9a8f` | 5.61 | 6.21 | 6.57 | 8.37 | 7.46 |
+| `--watch` | watch | `#8a5a00` | `#e0a340` | 5.06 | 5.60 | 5.93 | 7.73 | 6.89 |
+| `--src-3` | the third source | `#6d2736` | `#ab8198` | 8.99 | 9.96 | 10.53 | 5.15 | 4.60 |
+
+The lowest figures are `--owe` on the gray page in light (4.96) and `--src-3` on `--sheet` in dark
+(4.60); every token clears 4.5 as text on every ground it is drawn on.
+
+**`--src-3` is not the prototype's** (the lead's ruling, 2026-10-06): World News' third source is
+wine, `#6d2736`, in light and mauve, `#ab8198`, in dark, in place of the board's purple, and World
+News' before/after shows the owner the change. The prototype drew it in `#6b4fa0` /
+`#c3a6f0`, which fails §3.3's categorical check against the first source: ΔE 0.100 normal, 0.022
+deutan, 0.026 protan in light; 0.087, 0.002, 0.039 in dark. The values above were searched for the
+widest separation from both other sources under all four visions, with text contrast of at least
+4.5 on every ground and at least ΔE 0.15 from `--ink`.
+
+| Pair | Light: normal / deutan / protan / tritan | Dark |
+| --- | --- | --- |
+| `--src-1` / `--src-2` (also owned / owed, cheap / dear) | 0.246 / 0.224 / 0.188 / 0.252 | 0.202 / 0.185 / 0.175 / 0.225 |
+| `--src-1` / `--src-3` | 0.208 / 0.159 / 0.194 / 0.230 | 0.171 / 0.143 / 0.180 / 0.195 |
+| `--src-2` / `--src-3` | 0.160 / 0.164 / 0.154 / 0.149 | 0.163 / 0.170 / 0.145 / 0.143 |
+| `--up` / `--down` (always with a sign or a word; §3.3's exemption) | 0.265 / **0.062** / 0.112 / 0.296 | 0.225 / **0.024** / 0.094 / 0.251 |
+| `--up` / `--owe` (Finances: a gain beside a debt; sign and word) | 0.207 / **0.071** / **0.059** / 0.253 | 0.192 / **0.055** / 0.095 / 0.243 |
+
+The categorical pairs all clear 0.10. The figures in bold are below it, and they are allowed only
+because the sign or the word always prints beside the color.
+
+**The planned fill and its outline**: light `#dde2e4` (1.23:1 on `--sheet`), dark `#2f3a3f`
+(1.31:1); the 1.5 px `--ink-2` outline 7.32:1 and 6.92:1 on `--sheet`. **A plate on its ground**:
+`--sheet` on `#e8eef0` 1.11:1, with its `--line` edge 1.29:1 against the page; on `#ffffff` 1.06:1,
+the edge 1.51:1.
+
+### 11.3 Each pane app, in one line
+
+| App | Meaning colors | Key number per pane | Ground (§12) |
+| --- | --- | --- | --- |
+| Finances | `--own` owned, `--owe` owed (the Balance's blocks, `Own` and `Owe`, the sides' heads, a debt's amount); `--up` and `--down` a change in net worth | Overview: net worth; Owned: owned less owed on it; Spending: spent; Savings: invested; Cash flow and Transactions: none | gray |
+| World News | `--src-1` to `--src-3`, by the order of the file's `sources[]`: ticks and swatches; the third is wine / mauve, not the board's purple (§11.2) | none | gray |
+| Running Dashboard | `--done` a run done, a planned week an `--ink-2` outline with the 14 % fill; the tone: `--up` on track, `--watch` watch, `--down` act now and stop | Now: the week's kilometers; Plan: days to race day; a session: its distance or time; Training and Health: none | gray |
+| Outdoor Window | none added: the Shutters' green (`--used`, its palette's) already means how much of a rule's limit an hour uses | Windows: the next window's hours; Hours and Rules: none | gray |
+| Power Hours | `--cheap` the day's cheapest quarter and a run below the mean, `--dear` the dearest quarter and a run above it; the Landing keeps its own `--price` | the price now | gray |
+| Hello Live | none | the file's time | white |
+
+### 11.4 What the register amends where it stands
+
+§2.5's scale and its 21 px ceiling (§11.1 rule 2); §3.1's no-accent rule (rule 5); §4.5's band (rule
+1); §4.14's insets, the pane body padding the bottom inset where the band did (rule 1); §4.7's one card (plates are sections, rule 4); §9 rows 4 and 14; Finances' `ART.md` ("Money's
+direction is never a color: no green gains, no red debts", amended in its pass to this section's
+rule 5); the pane apps' `ART.md` sections that set panes on the page between hairlines (amended in
+each pass to rule 4). Each app's `check.mjs` follows: the type sizes it allows, its no-accent token
+check (the register's tokens allowed by name and value), Finances' B17, and its credits check (§7.1
+item 9).
+
+---
+
+## 12. Grounds (2026-10-06)
+
+The owner asked whether every app needs the gray. D6, the designer's picks, approved on the board
+(`docs/marketing/reference/0012-board-grounds-1.png` and `-2.png`):
+
+| Ground, light theme | Apps | Why |
+| --- | --- | --- |
+| **White** `#ffffff` | Anatomy, Norne Reservoir, Snug Kart, Hello Live | The plate is the ground: the body and the model read as a printed figure on white. Snug Kart's own sky and track carry its screen, and white reads as a game's menu. Hello Live is one card of lines and figures, with nothing that depends on a fill. |
+| **Gray** `#e8eef0` | Finances, World News, Running Dashboard, Outdoor Window, Power Hours | The register's plates need a ground to lift from (§11.1 rule 11). Outdoor Window's lit windows are lighter than the ground and vanish on white. |
+| **Gray** `#e8eef0` | Global Weather, Global Wind, Shelf Atlas, World Oil & Gas | Full-bleed pale maps sit in tone with gray bands, so the frame and the map read as one sheet. |
+| **Gray** `#e8eef0` | Milky Way, Besseggen | White bands around the black sky make the hardest frame on the board; the pale terrain sky and gray bands read as one print. |
+| **Their own** | Earth's History `#eceee9`, US Quakes `#f1f3f4`, Warming World `#f5f5f5` | Each is its direction's. Warming World's visible gray is its card (`#bebebe`), which its diverging scale needs, since the scale's zero (L 0.965) reads only against it. |
+
+**Dark themes are unchanged** in all eighteen.
+
+**What white needs (must).**
+
+- **Tokens.** In the light `:root`: `--page: #ffffff`. Anatomy and Norne also set `--plate: #ffffff`
+  (Norne reads `--plate` into `gl.clearColor`, so its fallback `'#e8eef0'` in `app.js` becomes
+  `'#ffffff'`). The light `theme-color` meta is `#ffffff`. Every other token keeps §3.1's value.
+- **Anything that reads the ground once.** A track, chart or canvas that caches `--page` at boot
+  (players' tracks do) reads it from the stylesheet as before; a literal `#e8eef0` in a script, a
+  `shoot.mjs` constant or a palette script becomes `#ffffff`.
+- **The palette script** runs with its light `page` set to `#ffffff` (Norne's `GROUND['light']` too),
+  ends `ALL CHECKS PASS`, and the app's ramps are pasted from its `--json` if they moved.
+- **Norne's palette is re-checked on white.** Its scales' "nothing" end was tuned to fade into
+  `#e8eef0`, and its `ART.md` records the body off its ground (a salience-0 top face `#cbcec8`, ΔE
+  0.098, 1.36:1 on the old ground). The pass measures both on `#ffffff` and writes the figures into
+  `ART.md`; if any check fails, it stops and reports the figures to the lead before anything ships.
+- **Edges on white.** `--sheet` parts from white by 1.06:1, so a key plate is carried by its 1 px
+  `--line` edge (1.51:1) and the readout card by its `--line-strong` edge (3.83:1); no token changes.
+  Labels drawn with a halo in the ground's color get a white halo; the palette script checks them.
+- **Checks.** `check.mjs`'s chrome-token check expects `--page` `#ffffff` in light for these four, and
+  the theme-color check follows `--page`.
+
+---
+
+## 13. Versions (2026-10-06)
+
+Until plan 0012 every example said `"version": "1.0"` whatever had happened to it, and Snuggery never
+read the field (plan 0012, finding 1). From now on it means something.
+
+- **The form**: digits and dots, `MAJOR.MINOR` or `MAJOR.MINOR.PATCH` (`2.1`, `1.2.1`). Nothing else:
+  no letters, no leading `v`.
+- **What bumps it**: any change that alters what a person sees or can do. **A remake** (the app
+  rebuilt, or its look replaced, as Hello Live's plan 0011 pass replaced the stock card) is a major
+  version: `1.4` to `2.0`. **A pass or a new feature** is a minor one: `1.1` to `1.2`. **A fix** is a
+  patch: `1.2` to `1.2.1`. A data refresh, a new snapshot or a change to `tools/` alone does not bump it.
+- **One bump per published change.** The version after a package is higher than the version the
+  package started from. Two passes inside one package, before anything is published, take one bump,
+  of the larger kind. The plan 0011 passes that left their app at `1.0` are folded into plan 0012's
+  bump; they are not counted again.
+- **How Snuggery reads it.** Snuggery 1.2's update path for its live examples compares versions
+  numerically, segment by segment: `1.10` is newer than `1.9`, and a missing segment counts as 0, so
+  `1.2` equals `1.2.0`. *Install the live examples* offers to update an installed example only when
+  the bundled version is higher; one at the same or a higher version is left alone, because it may be
+  the person's own copy (plan 0012 L5). A batch import shows the versions old and new and never
+  decides by them (D7). So a look that changed without a bump never reaches the people who
+  installed the app before.
+- **Where it is pinned.** The pass's builder bumps `miniapp.json` in the same change as the look.
+  `check.mjs` item 7 compares with the version the pass started from. A check that pins `'1.0'`
+  (Earth's History, US Quakes, Warming World) pins the new value; Warming World's About prints the
+  version (`Version: …`), and its `shoot.mjs` follows. The bundled versions are also written in
+  Snuggery's starter-pack entry table, pinned by its test (L5), and the lead updates them with the
+  pack.
+- **As plan 0012 found them**: Anatomy 4.0, Besseggen 1.2, Earth's History 1.0, Finances 1.0, Global
+  Weather 2.1, Global Wind 1.1, Hello Live 2.0, Milky Way 1.0, Norne Reservoir 2.1, Outdoor Window
+  1.1, Power Hours 1.1, Running Dashboard 1.0, Shelf Atlas 1.1, Snug Kart 1.0, US Quakes 1.0,
+  Warming World 1.0, World News 1.0, World Oil & Gas 1.1. Each app's target is in
+  `docs/plans/0012-change-lists.md`.

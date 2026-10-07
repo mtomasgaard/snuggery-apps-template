@@ -3,5 +3,5 @@
   "name": "World News",
   "entryPoint": "index.html",
   "description": "The latest headlines by region from newsrooms whose terms allow a credited headline and link, each linking out to its publisher",
-  "version": "1.0"
+  "version": "1.1"
 }

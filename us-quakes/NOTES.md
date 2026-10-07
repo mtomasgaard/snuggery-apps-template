@@ -10,7 +10,7 @@ layout is `tools/CONTRACT.md`, the pipeline is `tools/HANDOFF.md`.
   Attu to San Juan, with the record strip's pen in step, then eases to the Lower 48. It happens once;
   any touch or key ends it; it never runs under Reduce Motion or without live data.
 - **Live**: the last day, week or month before the USGS feed's own minute, every size or M 2.5+, with
-  the feed stamp ("USGS feed 16:51 UTC · 40 min ago"; from 3 h "not refreshed since"; from 48 h a
+  the feed stamp ("Feed 16:51 UTC · 40 min ago"; from 3 h the age in bold; from 48 h a
   notice over the map, and the windows named against the feed: "the 30 days to 2026-08-01 16:51 UTC"),
   the record strip (a tap or drag on a stem selects its event and stands the pen on it; nothing else
   moves until the finger leaves, then the sheet lifts and, if the event is off the map, the view flies to
@@ -24,8 +24,9 @@ layout is `tools/CONTRACT.md`, the pipeline is `tools/HANDOFF.md`.
   on the map and print the pipeline's text and sources; three play their sequence a day (or a week) at
   a time, the label naming the exact span.
 - **The map**: pan, pinch, double-tap, keys; nine region chips (a rotation re-fits a marked one); the
-  scale bar at the visible center's latitude; "Not a warning service" on the map's credit line at every
-  sheet height where the map shows. The map runs past the data's edge, to 168° E–55° W and 25° S–81° N,
+  scale bar at the visible center's latitude; "Not a warning service" on the map at every sheet height
+  where the map shows, a key that opens About at its sources (USGS and Natural Earth are credited in
+  About). The map runs past the data's edge, to 168° E–55° W and 25° S–81° N,
   so every chip's framing on a phone is map to its edges, and the view is held inside it; only past it
   (the opening's whole arc, the widest zoom) is the paper hatched, as the strip marks "no record".
 - **A tap** selects the nearest event (or a volcano's triangle when it is as close, or else a fault
@@ -63,6 +64,7 @@ node tools/test_decode.mjs                                # js/data.js against t
 node tools/test_geo.mjs                                   # Mercator, the section maths, the scale bar
 node tools/check.mjs                                      # files, references, budgets, the ZIP
 PLAYWRIGHT_MODULE=…/playwright/index.mjs node tools/shoot.mjs   # headless Chromium, both themes (~4 min)
+PLAYWRIGHT_MODULE=…/playwright/index.mjs node tools/frametime.mjs   # pan, fling, pinch: frame times, Chromium and WebKit
 ```
 
 Never from `file://`: modules and `fetch()` need a server. `shoot.mjs` serves the folder itself,
@@ -76,13 +78,13 @@ written by the script), `screenshots/live-{light,dark}.png`,
 
 | File | Bytes | What |
 | --- | --: | --- |
-| `index.html` | 5,065 | the page |
-| `style.css` | 15,499 | ART.md's tokens (both themes), the fonts, the layout, the controls and hit areas, focus mode, tabular figures |
-| `js/app.js` | 48,271 | boot, state, the scheduler, persistence, selection, section (and its keyboard path), stories, panels, the fit and the re-fit on rotation, focus mode (focus moved only for keys), the opening, arrivals, the legend's units, `window.__uq` |
-| `js/sheet.js` | 16,570 | the heads, bodies, lists, the event, fault and volcano cards |
+| `index.html` | 5,139 | the page |
+| `style.css` | 15,542 | ART.md's tokens (both themes), the fonts, the layout, the controls and hit areas, focus mode, tabular figures |
+| `js/app.js` | 53,001 | boot, state, the scheduler (a move is a CSS transform of what is drawn: the layers drawn past the panel's edges, shifted by whole pixels during a pan, drawn whole at the settle), persistence, selection, section (and its keyboard path), stories, panels, the fit and the re-fit on rotation, focus mode (focus moved only for keys), the opening, arrivals, the legend's units, `window.__uq` |
+| `js/sheet.js` | 16,565 | the heads, bodies, lists, the event, fault and volcano cards |
 | `js/data.js` | 12,067 | the decoders, validation, the capped native inflate, the join, geo.json |
-| `js/gl.js` | 9,614 | the two WebGL2 contexts: relief textures (decoded from their bytes, re-decoded after a loss), the event buffer, draws, context loss |
-| `js/map.js` | 9,176 | the axis, Mercator, the view and its clamp to the basemap, gestures (event-time taps and presses), eased moves, region fit, scale bar |
+| `js/gl.js` | 9,612 | the two WebGL2 contexts: relief textures (decoded from their bytes, re-decoded after a loss), the event buffer, draws, context loss |
+| `js/map.js` | 9,609 | the axis, Mercator, the view and its clamp to the basemap, gestures (read on the panel, which never moves; event-time taps and presses), eased moves, region fit, scale bar |
 | `js/strip.js` | 8,986 | the record strip, Live and History forms, the pen on the opening and on the selected stem (its nib clear of the label), the Live hit test |
 | `js/section.js` | 7,615 | great-circle maths, the corridor, the corridor query, the true-scale plot |
 | `js/shaders.js` | 5,886 | GLSL |
@@ -90,28 +92,28 @@ written by the script), `screenshots/live-{light,dark}.png`,
 | `js/overlay.js` | 4,960 | volcanoes (receding at wide zoom), labels (clear of the foot), the selection ring, glass tabs |
 | `js/layers.js` | 4,892 | the Layers panel, the legend card, the drawn keys |
 | `js/events.js` | 4,547 | floor time indexes, per-year counts, boxes, the grid, largest, the draw order |
-| `js/util.js` | 4,378 | helpers, `nums()` (numbers in mono; prose mode), the localStorage wrapper |
+| `js/util.js` | 4,802 | helpers, the CSS tokens read once a color scheme, `nums()` (numbers in mono; prose mode), the localStorage wrapper |
 | `js/ramp.js` | 3,996 | the depth ramp (OKLab), rims, sizes, the hollow floor, the 2D dot (each hole its own full circle) |
 | `js/about.js` | 3,991 | About |
 | `js/units.js` | 2,564 | SI / US, U+202F grouping, the legend's stops, the fixed depth "10 km (6 mi)", dates |
 | `js/stories.js` | 2,505 | the stories: list, card, windows, sequences |
 | `js/timeline.js` | 2,256 | Live and History windows, labels, Play steps |
-| **App code** | **178,069** | budget 200,000 (`check.mjs`); 21,931 bytes of headroom |
+| **App code** | **184,273** | budget 200,000 (`check.mjs`); 15,727 bytes of headroom |
 
 The budget was raised from 150,000 to 200,000 bytes for the QA pass (by the lead; `check.mjs` says so).
 With it the code is back in two-space indentation, each module has a two-to-four-line header saying
 what it owns, and focus mode fits; the reasoning lives in DESIGN §20–§25. The second fix pass
 (§24) added 11,754 bytes, the lead's pass (§25) 4,581.
 
-## What ships (measured by `tools/check.mjs`, 2026-10-01, after the 1:10m basemap)
+## What ships (measured by `tools/check.mjs`, 2026-10-06, plan 0012 package 3.1)
 
 | File | Raw bytes | As the ZIP stores it |
 | --- | --: | --: |
-| `assets/` (history.bin, geo.json, four relief JPEGs, about, stories, history.json) | 9,452,727 | **6,200,432** (cap 6,340,000; `verify_static.py`, counting deflate streams without entry headers, prints 6,191,803 and 148,197 of headroom) |
+| `assets/` (history.bin, geo.json, four relief JPEGs, about, stories, history.json) | 9,452,727 | **6,200,433** (cap 6,340,000; `verify_static.py`, counting deflate streams without entry headers, prints 6,191,803 and 148,197 of headroom) |
 | `data/snapshot.json` (the demo, the feed of 2026-09-30T23:17:42Z) | 535,106 | 363,628 |
 | `fonts/` (five WOFF2 + OFL.txt) | 68,742 | 65,718 |
-| app code | 178,069 | 65,927 |
-| **The ZIP** (41 files, with CREDITS, NOTES, DESIGN, ART, miniapp.json) | | **6,788,418** (cap 8,000,000) |
+| app code | 184,273 | 68,391 |
+| **The ZIP** (41 files, with CREDITS, NOTES, DESIGN, ART, miniapp.json) | | **6,792,526** (cap 8,000,000) |
 
 The basemap past the axis took 149,533 B of the assets' headroom (`geo.json` 837,552 → 987,085 as the
 ZIP stores it): the January 2027 rebuild fits, and 2028's will need the first of HANDOFF's levers.
@@ -131,6 +133,19 @@ mask lakes with 1:50m (`build_relief.py`, unchanged, byte-identical).
 At run time the history and the snapshot join at the cutoff: 385,071 + 18,350 = 403,421 rows.
 
 ## Measurements (headless Chromium 153 on SwiftShader: a trend, never phone evidence)
+
+**The map's gestures (2026-10-06, `tools/frametime.mjs`, Chromium and WebKit at 390 × 844, DPR 2).** A
+move is now a CSS transform of what is drawn: `#base`, `#lines` and `#gl` are drawn past the panel's
+edges, a layer is drawn again during a move only when its drawing no longer covers the panel (during a
+pan, `#base` and `#lines` are shifted on their canvas and only the uncovered strips drawn), and
+everything is drawn once when the move settles. The pointers are read on the panel, which never moves.
+Before, they were read on the moved `#over`, and the map lagged behind the finger: map/finger 0.82–0.93
+in WebKit for a pan, and 0.50–0.67 for a fling. Now it is 1.00. WebKit, a 3 s pan over California's
+faults: p95 frame interval 62 → 22 ms, frames over 33 ms 13/162 → 1/182. Chromium (SwiftShader): p95
+250–600 → 16.8 ms for every pan. A pinch that doubles the scale still draws the lines whole once, about
+100 ms in WebKit over dense faults. The picture at rest differs from the old build's only within
+antialiasing (WebKit at most 16/255; on the panel's outermost pixel row, strokes are no longer cut by
+their canvas's edge). The full tables are in `tools/DECISIONS.md` (not in the ZIP).
 
 From `tools/shoot.mjs` on 2026-09-30: ready about 150–950 ms after navigation (geo.json decoded, then
 history, indexed; relief textures about 1–2 s). Over a scripted pan and pinch of History All at M 2.5+:
@@ -153,6 +168,14 @@ the first frames, where SwiftShader shows one 1.2 s frame while four textures an
 SwiftShader raster (two rAF round trips, old and new code alike).
 
 ## Owed to the phone (DESIGN §16, the matrix row)
+
+- **The pan, fling and pinch (2026-10-06, plan 0012)**: `tools/frametime.mjs` measured them in headless
+  Chromium and WebKit only. On the phone: a 3 s pan over the Lower 48 and over California, a fling and
+  a pinch, in Live and History All; after each, the readout's second line (*last move … median … p95*,
+  five taps on About's version line), which is the script's `raf` figure; whether the map stays under
+  the finger; any seam where a layer was moved and its uncovered strip drawn; memory with `#base`,
+  `#lines` and `#gl` drawn past the panel's edges (each 1 536 × 2 356 device px at 390 × 844, against
+  780 × 1 600 before).
 
 - `DecompressionStream('deflate')` reads the snapshot (the pure-JS fallback is gone; DESIGN §21).
 - Frame time with both WebGL contexts, memory, first paint; a 30 s pan; the Hawaii section's cost and
@@ -196,8 +219,8 @@ SwiftShader raster (two rAF round trips, old and new code alike).
 - "Near X" lines for rows without a stored place are computed from Natural Earth's place list and say so.
 - Every explanation of a USGS field, fault class or volcano level is about.json's quote, printed with
   "USGS:"; where about.json has none, the bare value is shown. Story text is stories.json's, verbatim.
-- "Not a warning service" leads the map's credit line at every sheet height where the map shows (the
-  Layers panel ends above it) and in focus mode, and opens the Live body and About.
+- "Not a warning service" stands on the map at every sheet height where the map shows (the Layers panel
+  ends above it) and in focus mode, and opens the Live body and About; the sources are credited in About.
 - The relief, rims, fade, trace, corridor dimming and the record strip's ink are display choices
   (About says so, from about.json). Outside a corridor dots are drawn at a quarter of their alpha; over
   dense clusters the stacked dots still read at about half strength.

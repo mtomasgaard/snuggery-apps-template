@@ -1,6 +1,6 @@
 {
  "title": "About US Quakes",
- "version": "1.0",
+ "version": "1.1",
  "intro": "This map is not an earthquake or tsunami warning service. This copy is only as new as its last refresh, shown on the Live sheet. It draws the U.S. Geological Survey’s catalog of earthquakes in four map boxes: the Lower 48, Alaska with the Aleutians, Hawaii, and Puerto Rico with the Virgin Islands. {history} earthquakes from {firstYear} to {lastYear} ship with the app; the last {liveDays} days arrive with each refresh.",
  "reading": [
   {

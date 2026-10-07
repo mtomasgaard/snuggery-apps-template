@@ -71,8 +71,16 @@ export const store = {
   },
 };
 
+// the tokens change only with the color scheme, so each is read once a scheme (a read in the middle of a
+// frame's writes would force the style to be computed again there)
+const tokens = new Map();
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => tokens.clear()); } catch { /* none */ }
 export function cssVar(name) {
-  try { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch { return ''; }
+  if (tokens.has(name)) return tokens.get(name);
+  let v = '';
+  try { v = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch { return ''; }
+  if (v) tokens.set(name, v);
+  return v;
 }
 
 export function sizeCanvas(c, w, h, r) {

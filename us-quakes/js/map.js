@@ -1,7 +1,9 @@
 // The map (DESIGN §4): Web Mercator over the 172° → 296° axis; X = (λ − 172)/360, Y = (m(72°) − m(φ))/2π;
 // screen = (X − cx)·s + w/2. It owns the view, its clamp to the basemap and fits, eased moves and the fling,
 // the gestures (pan, pinch, double-tap, long press, keys) and the scale bar. Pan and zoom are similarity
-// transforms, so the 2D layers and the relief can be CSS-moved during a gesture.
+// transforms, so during a move every layer is CSS-moved from its last drawing (app.js). Pointers are read
+// on `hit`, the map panel, which never moves: read on a moved canvas, a finger would be measured against
+// the drawing it is dragging, and the map would lag behind it.
 
 import { clamp, ease, reducedMotion } from './util.js';
 import { M72, wx, wy } from './data.js';
@@ -14,8 +16,8 @@ export const lonOf = (X) => 172 + X * 360;
 export const latOf = (Y) => (2 * Math.atan(Math.exp(M72 - Y * 2 * Math.PI)) - Math.PI / 2) * 180 / Math.PI;
 const R_KM = 6371.0088;
 
-export function createMap(el, cb) {
-  const M = { v: { cx: BOX_W / 2, cy: BOX_H / 2, s: 1000 }, w: 1, h: 1, ins: { top: 0, right: 0, bottom: 0 }, moving: false };
+export function createMap(el, cb, hit = el) {
+  const M = { v: { cx: BOX_W / 2, cy: BOX_H / 2, s: 1000 }, w: 1, h: 1, ins: { top: 0, right: 0, bottom: 0 }, moving: false, off: false };
   const vis = () => ({ x0: 0, y0: M.ins.top, x1: M.w, y1: M.h - M.ins.bottom });
   M.sx = (X) => (X - M.v.cx) * M.v.s + M.w / 2;
   M.sy = (Y) => (Y - M.v.cy) * M.v.s + M.h / 2;
@@ -77,16 +79,19 @@ export function createMap(el, cb) {
 
   // gestures (DESIGN §4.3)
   const pts = new Map();
-  let g = null, lastTap = null, longTimer = 0;
-  const pos = (e) => { const r = el.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  let g = null, lastTap = null, longTimer = 0, rect = null;
+  const pos = (e) => [e.clientX - rect.left, e.clientY - rect.top];
   const pinchBase = () => {
     const [a, b] = [...pts.values()];
     return { d: Math.hypot(a[0] - b[0], a[1] - b[1]) || 1, c: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], v: { ...M.v } };
   };
   // times are the events' own (e.timeStamp), so a long frame before the handler runs never turns a tap
   // into a press
-  el.addEventListener('pointerdown', (e) => {
-    el.setPointerCapture(e.pointerId);
+  hit.addEventListener('pointerdown', (e) => {
+    if (M.off) return;                                                // no WebGL 2: no map to move (DESIGN §3.2)
+    if (e.target !== hit && (e.target.parentNode !== hit || e.target.tagName !== 'CANVAS')) return;   // the chips, keys and foot are their own
+    hit.setPointerCapture(e.pointerId);
+    rect = hit.getBoundingClientRect();                                // one read a finger, before any write
     const p = pos(e);
     pts.set(e.pointerId, p);
     anim = null;
@@ -96,7 +101,7 @@ export function createMap(el, cb) {
       longTimer = setTimeout(() => { if (g && !g.moved && pts.size === 1) { g.long = true; cb.onLong(p[0], p[1]); } }, 500);
     } else if (pts.size === 2 && g) { g.moved = true; g.pinch = pinchBase(); clearTimeout(longTimer); M.moving = true; }
   });
-  el.addEventListener('pointermove', (e) => {
+  hit.addEventListener('pointermove', (e) => {
     if (!pts.has(e.pointerId) || !g) return;
     const p = pos(e);
     pts.set(e.pointerId, p);
@@ -146,8 +151,8 @@ export function createMap(el, cb) {
     }
     M.moving = false; cb.onSettle();
   };
-  el.addEventListener('pointerup', end);
-  el.addEventListener('pointercancel', end);
+  hit.addEventListener('pointerup', end);
+  hit.addEventListener('pointercancel', end);
   el.addEventListener('keydown', (e) => {
     const k = e.key, v = M.v, r = vis(), c = [M.w / 2, (r.y0 + r.y1) / 2];
     const pan = { ArrowLeft: [-64, 0], ArrowRight: [64, 0], ArrowUp: [0, -64], ArrowDown: [0, 64] }[k];

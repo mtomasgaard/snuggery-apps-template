@@ -240,11 +240,14 @@ drawn over the San Andreas's own earthquakes would cross out the very dots it ex
 
 | # | Canvas | Draws | During a gesture |
 | --- | --- | --- | --- |
-| 1 | `#base`, 2D | sea, the eight depth bands, land, lakes | moved by CSS transform |
-| 2 | `#relief`, WebGL2 | the shaded relief (DESIGN §5.2's shader, alone in its own context) | moved by CSS transform |
-| 3 | `#lines`, 2D | coast, country and state lines, faults | moved by CSS transform |
-| 4 | `#gl`, WebGL2 | the earthquakes, and the play trace | redrawn every frame |
-| 5 | `#over`, 2D | volcanoes, labels, the selection ring, the section line and corridor, the story annotation | moved by CSS transform |
+| 1 | `#base`, 2D | sea, the eight depth bands, land, lakes | drawn past the panel's edges and moved by CSS transform; during a pan, moved on its canvas by whole pixels with only the uncovered strips drawn |
+| 2 | `#relief`, WebGL2 | the shaded relief (DESIGN §5.2's shader, alone in its own context) | redrawn every frame (four textured quads) |
+| 3 | `#lines`, 2D | coast, country and state lines, faults | as `#base` |
+| 4 | `#gl`, WebGL2 | the earthquakes, and the play trace | drawn past the panel's edges and moved by CSS transform; drawn again when it no longer covers the panel or is shown at under half or over twice its scale |
+| 5 | `#over`, 2D | volcanoes, labels, the selection ring, the section line and corridor, the story annotation | moved by CSS transform; drawn again once it leaves 4 px of the panel bare, or its scale is off by half |
+
+Every layer is drawn whole, at the view, once the gesture settles, so the picture at rest is the one a
+redraw gives (DESIGN §5.4).
 
 - **Relief** stays low: `uDark` / `uLight` start at **0.40 / 0.20** light and **0.55 / 0.08**
   dark, down from 0.55 / 0.30 and 0.70 / 0.12. The land is a surface for dots, not a picture of
@@ -380,11 +383,11 @@ key: choosing 5+ says "dots this big and up".
 
 ## The live feed, present but never alarming
 
-- **The stamp**, first in the Live head: "USGS feed **14:05 UTC** · 2 h ago", in Atkinson with the
+- **The stamp**, first in the Live head: "Feed **14:05 UTC** · 2 h ago", in Atkinson with the
   time in mono. **No amber and no red for staleness**: amber is a depth on this map. Age is said in
   words and shown in form:
   - under 3 h, the stamp as above;
-  - from 3 h, "· 5 h ago, not refreshed since", with the age in `--ink` 700 and the strip's hatched
+  - from 3 h, "· **5 h ago**", the age in `--ink` 700, and the strip's hatched
     tail growing;
   - from 48 h, a notice over the map, "This copy is 3 days old. It shows nothing newer than
     2026-09-27 14:05 UTC.", and the same words at the top of the Live body.
@@ -402,9 +405,9 @@ key: choosing 5+ says "dots this big and up".
     or 10 minutes pass;
   - if a new event is the window's largest, the largest row takes it without animation.
   There is no sound, no vibration and no badge. Under Reduce Motion, everything appears at once.
-- **"Not a warning service" is always on screen.** It is the first clause of the map's credit line,
-  "**Not a warning service** · USGS · Natural Earth", in 10.5 px with the first clause in `--ink`
-  700, so it shows at every sheet height where the map shows. At Full, the Live body's first line
+- **"Not a warning service" is always on screen.** It is the map's one line of fine print,
+  "**Not a warning service**", in 10.5 px `--ink` 700, a key that opens About at its sources (USGS and
+  Natural Earth are credited in About), so it shows at every sheet height where the map shows. At Full, the Live body's first line
   says it in full (DESIGN §10.2).
 
 ---
@@ -573,7 +576,8 @@ Each item names the DESIGN section it changed. `DESIGN.md` §19 lists them again
    styled above.
 2. **§3.2 Map panel**: the chips become square-ended tabs; the tools are 36 px glass squares; the
    compact legend is 112 × 6 px with "0 · 35 · 300 km"; the credit line reads "Not a warning
-   service · USGS · Natural Earth"; notices use `--glass`; a new notice appears from 48 h of age.
+   service" (the sources are credited in About, since 2026-10-06); notices use `--glass`; a new notice
+   appears from 48 h of age.
 3. **§3.3 Sheet**: a 6 px radius, a 34 × 4 px grip, no shadow.
 4. **§3.4 Live**: the head is the stamp row, **the record strip (56 px)** and the largest row, with
    the summary moved into the strip's label line. Staleness is shown by words, weight and the hatched
@@ -583,7 +587,8 @@ Each item names the DESIGN section it changed. `DESIGN.md` §19 lists them again
    dot sizes; the window chips are one segmented control.
 6. **§5.1, §5.2, §5.4, §5.5, §5.7 Rendering**: five layers (`#base`, `#relief`, `#lines`, `#gl`,
    `#over`), so that lines sit under the dots. The relief moves to its own WebGL2 context and is
-   CSS-moved during gestures like the 2D layers; both contexts share the loss and restore path. Relief
+   CSS-moved during gestures like the 2D layers (since 2026-10-06 it is drawn again each frame of a
+   gesture instead, "Layers" above); both contexts share the loss and restore path. Relief
    strength drops to 0.40 / 0.20 light and 0.55 / 0.08 dark.
 7. **§6 How an earthquake is drawn**: the new ramp stops; the rim chosen by depth (dark under 60 km,
    light from 60 km, and `.30` light in the section plot); the play trace; the section-corridor

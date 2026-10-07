@@ -43,24 +43,27 @@ setUnits(st.units);
 const A = { st, C: null, I: null, G: null, about: null, stories: null, story: null, pick: null, dpr: Math.min(2, devicePixelRatio || 1),
   sel: null, list: null, vstat: volcanoStatus(null), snapErr: null, win: { label: '', t0: 0, t1: 0 } };
 
-// the map and its five layers
+// the map and its five layers. rv holds the view each layer was last drawn at; MG is the margin the base,
+// the lines and the dots are drawn past the panel's edges (layout), so a pan or pinch shows a transform of
+// what is already drawn
 const mapEl = $('map'), over = $('over');
-const L2 = { base: $('base'), lines: $('lines'), over };
-const rv = {};
-let W = 1, H = 1, sL48 = 1500, chip = null, lastStatic = 0;
+const L2 = { base: $('base'), lines: $('lines'), over }, CV = { ...L2, relief: $('relief'), gl: $('gl') };
+const LAYER = ['gl', 'base', 'relief', 'lines', 'over'], WIDE = { gl: 1, base: 1, lines: 1 };
+const rv = {}, tf = {};
+let W = 1, H = 1, MG = 0, sL48 = 1500, chip = null;
 const M = createMap(over, {
-  onView: () => req('gl', 'move'),
-  onSettle: () => { if (sec.drag) { sec.drag = false; store.set('section', st.section); sec.key = ''; req('sheet'); } req('base', 'relief', 'lines', 'over', 'settle'); },
+  onView: () => req('move'),
+  onSettle: () => { if (sec.drag) { sec.drag = false; store.set('section', st.section); sec.key = ''; req('sheet'); } req(...LAYER, 'settle'); },
   onTap: (px, py, kbd) => (kbd && st.section.on && gl ? secKey(px, py) : tapAt(px, py)),
   onLong: (px, py) => pressAt(px, py),
   onLongEnd: () => pressEnd(),
   onDrag: (g, p) => secDrag(g, p),
-});
+}, mapEl);
 const gl = createGL($('relief'), $('gl'), () => { notices.lost = true; req('notices'); },
   () => { notices.lost = !gl.live(); req('base', 'relief', 'lines', 'over', 'gl', 'notices'); });
 // without WebGL 2 the panel draws no map at all, never half a map (DESIGN §3.2): no base, lines or overlay,
 // no chips, legend or scale bar; the sentence and the credit line stay, and the sheet still lists
-if (!gl) { $('nogl').hidden = false; over.style.pointerEvents = 'none'; for (const id of ['tools', 'chips', 'legend', 'scale']) $(id).hidden = true; }
+if (!gl) { $('nogl').hidden = false; over.style.pointerEvents = 'none'; M.off = true; for (const id of ['tools', 'chips', 'legend', 'scale']) $(id).hidden = true; }
 const notices = { lost: false };
 
 // the frame scheduler: dirty flags, one frame at most, idle otherwise
@@ -78,15 +81,23 @@ function frame(now) {
   if (aT < 1 || arr.lastT < 1) dirty.add('gl').add('timeline');
   arr.lastT = aT;
   const moving = M.moving || M.animating();
-  if (dirty.has('gl') || dirty.has('move')) { time('gl', drawGL); play.shown = true; }
-  const statics = ['base', 'relief', 'lines', 'over'].filter((k) => dirty.has(k));
-  if (moving && now - lastStatic > 250 && lastStatic) statics.push('base', 'relief', 'lines', 'over');
-  if (A.G && gl && statics.length) {
-    lastStatic = now;
-    if (statics.includes('base')) time('base', () => { drawBase(ctx('base'), A.G, M, st.layers); rv.base = { ...M.v }; });
-    if (statics.includes('relief') && gl) time('relief', () => { gl.drawRelief(W, H, A.dpr, { ...M.v, on: st.layers.relief, dark: +cssVar('--relief-dark'), light: +cssVar('--relief-light') }); rv.relief = { ...M.v }; });
-    if (statics.includes('lines')) time('lines', () => { drawLines(ctx('lines'), A.G, M, st.layers); rv.lines = { ...M.v }; });
-    if (statics.includes('over')) time('over', () => { drawOverlay(ctx('over'), A.G, M, st.layers, { volcanoes: A.vstat, sel: selMark(), extra: overlayExtra, avoid: footRects(), pickV: A.pick && A.pick.v ? String(A.pick.v.vnum) : null }); rv.over = { ...M.v }; });
+  let shift = '';
+  // while the view moves, each layer is CSS-moved from its last drawing and only the relief (four textured
+  // quads) is drawn again; another layer is drawn again only when its drawing no longer covers the panel,
+  // one a frame. When the view stops, onSettle draws every layer once at the new view
+  if (dirty.has('move')) {
+    const same = (r) => r && r.s === M.v.s && r.cx === M.v.cx && r.cy === M.v.cy;
+    if (!moving) { for (const k of LAYER) if (!same(rv[k])) dirty.add(k); }
+    else { if (!same(rv.relief)) dirty.add('relief'); if (!['gl', 'base', 'lines', 'over'].some((k) => dirty.has(k))) { const k = ['gl', 'base', 'lines', 'over'].find(stale); if (k) { dirty.add(k); shift = rv[k] && rv[k].s === M.v.s ? k : ''; } } }
+  }
+  if (moving) { if (mv.t && now - mv.t < 200) mv.d.push(now - mv.t); mv.t = now; } else if (mv.t) { perf.move = q2(mv.d); mv.t = 0; mv.d = []; }
+  if (dirty.has('gl')) { time('gl', drawGL); rv.gl = { ...M.v }; play.shown = true; }
+  if (A.G && gl) {
+    const base = (x, V) => drawBase(x, A.G, V, st.layers), lines = (x, V) => drawLines(x, A.G, V, st.layers);
+    if (dirty.has('base')) time('base', () => { if (shift !== 'base' || !shiftLayer('base', base)) { base(ctx('base'), LG('base')); rv.base = { ...M.v }; } });
+    if (dirty.has('relief')) time('relief', () => { gl.drawRelief(W, H, A.dpr, { ...M.v, on: st.layers.relief, dark: +cssVar('--relief-dark'), light: +cssVar('--relief-light') }); rv.relief = { ...M.v }; });
+    if (dirty.has('lines')) time('lines', () => { if (shift !== 'lines' || !shiftLayer('lines', lines)) { lines(ctx('lines'), LG('lines')); rv.lines = { ...M.v }; } });
+    if (dirty.has('over')) time('over', () => { drawOverlay(ctx('over'), A.G, M, st.layers, { volcanoes: A.vstat, sel: selMark(), extra: overlayExtra, avoid: footRects(), pickV: A.pick && A.pick.v ? String(A.pick.v.vnum) : null }); rv.over = { ...M.v }; });
   }
   moveStatics();
   if (dirty.has('move') || dirty.has('settle')) scaleBar();
@@ -101,20 +112,58 @@ function frame(now) {
   if (M.animating() || intro.on || arrT() < 1) req('move');
 }
 const ctx = (k) => { const c = L2[k].getContext('2d'); c.setTransform(A.dpr, 0, 0, A.dpr, 0, 0); return c; };
+// a wide layer is drawn as if the panel were MG larger on every side; its canvas sits at (−MG, −MG)
+const LG = (k) => (WIDE[k] ? { v: M.v, w: W + 2 * MG, h: H + 2 * MG, sMin: M.sMin } : M);
+// each layer moved from the view it was drawn at to the view now; written only when it changes
 function moveStatics() {
-  for (const k of ['base', 'relief', 'lines', 'over']) {
-    const c = k === 'relief' ? $('relief') : L2[k], r = rv[k];
+  for (const k of LAYER) {
+    const r = rv[k];
     if (!r) continue;
-    const s = M.v.s / r.s, tx = W / 2 - s * W / 2 + (r.cx - M.v.cx) * M.v.s, ty = H / 2 - s * H / 2 + (r.cy - M.v.cy) * M.v.s;
-    c.style.transform = Math.abs(s - 1) < 1e-9 && Math.abs(tx) < 0.01 && Math.abs(ty) < 0.01 ? '' : `translate(${tx}px,${ty}px) scale(${s})`;
+    const m = WIDE[k] ? MG : 0, s = M.v.s / r.s, tx = W / 2 + m - s * (W / 2 + m) + (r.cx - M.v.cx) * M.v.s, ty = H / 2 + m - s * (H / 2 + m) + (r.cy - M.v.cy) * M.v.s;
+    const t = Math.abs(s - 1) < 1e-9 && Math.abs(tx) < 0.01 && Math.abs(ty) < 0.01 ? '' : `translate(${tx}px,${ty}px) scale(${s})`;
+    if (tf[k] !== t) CV[k].style.transform = tf[k] = t;
   }
 }
+// a layer must be drawn again during a move when its drawing no longer covers the panel, or is shown at
+// under half or over twice the scale it was drawn at. #over (labels, triangles, the ring, A–A′) is drawn
+// to the panel's edge and costs about 1 ms, so it is drawn again once its drawing leaves 4 px of the panel
+// bare, and when its scale is off by half, so its marks keep their size
+function stale(k) {
+  const r = rv[k];
+  if (!r) return true;
+  const s = M.v.s / r.s, m = WIDE[k] ? MG : 0, dx = (r.cx - M.v.cx) * M.v.s, dy = (r.cy - M.v.cy) * M.v.s, e = m ? 0.5 : 4;
+  if (m ? s > 2 || s < 0.5 : s > 1.5 || s < 2 / 3) return true;
+  const hx = (W / 2 + m) * s, hy = (H / 2 + m) * s;
+  return dx - hx + W / 2 > e || dx + hx + W / 2 < W - e || dy - hy + H / 2 > e || dy + hy + H / 2 < H - e;
+}
+// during a pan (the scale unchanged), a 2D layer that no longer covers the panel is moved on its canvas by
+// whole device pixels, and only the strips it uncovers are drawn, each through a view of its own that culls
+// the geometry to it; the whole layer is drawn again when the view settles
+function shiftLayer(k, draw) {
+  const r = rv[k], d = A.dpr, c = L2[k], Wc = W + 2 * MG, Hc = H + 2 * MG;
+  const dx = Math.round((r.cx - M.v.cx) * r.s * d) / d, dy = Math.round((r.cy - M.v.cy) * r.s * d) / d;
+  if (Math.abs(dx) >= Wc / 2 || Math.abs(dy) >= Hc / 2) return false;
+  const x = c.getContext('2d'), v = { s: r.s, cx: r.cx - dx / r.s, cy: r.cy - dy / r.s }, sx = Math.max(0, dx), sw = Wc - Math.abs(dx);
+  x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = 'copy'; x.drawImage(c, dx * d, dy * d); x.restore();
+  for (const [x0, y0, w, h] of [[dx > 0 ? 0 : Wc + dx, 0, Math.abs(dx), Hc], [sx, dy > 0 ? 0 : Hc + dy, sw, Math.abs(dy)]]) {
+    if (w <= 0 || h <= 0) continue;
+    x.setTransform(d, 0, 0, d, x0 * d, y0 * d);
+    x.save(); x.beginPath(); x.rect(0, 0, w, h); x.clip();
+    draw(x, { v: { s: v.s, cx: v.cx + (x0 + w / 2 - Wc / 2) / v.s, cy: v.cy + (y0 + h / 2 - Hc / 2) / v.s }, w, h, sMin: M.sMin });
+    x.restore();
+  }
+  rv[k] = v;
+  return true;
+}
+// the frame intervals of the last move, for the readout: a finger at rest (no frame for 200 ms) is no lag
+const mv = { t: 0, d: [] };
+const q2 = (d) => { const v = [...d].sort((a, b) => a - b); return v.length ? { n: v.length, med: v[v.length >> 1], p95: v[Math.min(v.length - 1, Math.floor(v.length * 0.95))] } : null; };
 const inkRGB = () => { const h = cssVar('--ink').replace('#', ''); return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255); };
 const kz = () => clamp((M.v.s / sL48) ** 0.2, 1, 2);
 function drawGL() {
   if (!gl) return;
   const F = A.F, a = arr.from != null && A.C && A.C.S;
-  gl.drawPoints(W, H, A.dpr, { ...M.v, k: kz(), ink: inkRGB(), sec: sec.S,
+  gl.drawPoints(W + 2 * MG, H + 2 * MG, A.dpr, { ...M.v, k: kz(), ink: inkRGB(), sec: sec.S,
     t0: F ? F.t0 : 0, t1: F ? (intro.on ? Math.max(F.t0 + 1, Math.min(F.t1, intro.cut)) : F.t1) : 0, floor: F ? F.floor : 255, noMag: F ? F.noMag : false,
     live: A.C ? A.C.liveFrom : 0xffffffff, trace0: play.trace0 == null ? 0xffffffff : play.trace0, fade: st.mode === 'history' && st.histWin === 'all' ? 0 : 1,
     newFrom: a ? arr.from : 0xffffffff, newT: arrT(), newSpan: a ? A.C.S.to - arr.from + 1 : 1 });
@@ -404,7 +453,12 @@ function layout() {
   document.documentElement.style.setProperty('--sheet-h', `${sh}px`);
   W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
   A.dpr = Math.min(2, devicePixelRatio || 1);
-  for (const k of ['base', 'lines', 'over']) sizeCanvas(L2[k], W, H, A.dpr);
+  // the margin: half the short side, at most 196 px and 8 Mpx a canvas, a multiple of 7 so the hatching
+  // past the basemap's edge (7 px apart, diagonal) falls where it would on a canvas the panel's size
+  MG = 7 * Math.floor(Math.min(196, W / 2, H / 2) / 7);
+  while (MG > 0 && (W + 2 * MG) * (H + 2 * MG) * A.dpr ** 2 > 8e6) MG -= 7;
+  for (const k of ['base', 'lines', 'over']) sizeCanvas(L2[k], W + 2 * (WIDE[k] ? MG : 0), H + 2 * (WIDE[k] ? MG : 0), A.dpr);
+  for (const k of ['base', 'lines', 'gl']) CV[k].style.left = CV[k].style.top = `${-MG}px`;
   M.resize(W, H, { top: st.focus ? sat + 4 : 42, right: 0, bottom: sh, key: st.focus ? [W - 52, 0, W, sat + 52] : null });
   if (A.G) sL48 = fit(A.G.views[0]).s;
   if (A.G && W0 > 1 && (W !== W0 || H !== H0)) {
@@ -497,10 +551,11 @@ function drawStrips() {
       played: play.trace0 != null ? [play.trace0, A.F.t1] : null, gap: A.C.gap, stubCount: A.about ? A.about.numbers.before1900 : num(lowerBound(A.C.t, T1900)) });
   }
 }
+const bar = { w: '', t: '' };
 function scaleBar() {
-  const [px, label] = M.scale();
-  $('scale').firstElementChild.style.width = `${Math.round(px)}px`;
-  $('scale').lastElementChild.textContent = label;
+  const [px, label] = M.scale(), w = `${Math.round(px)}px`;
+  if (w !== bar.w) $('scale').firstElementChild.style.width = bar.w = w;
+  if (label !== bar.t) $('scale').lastElementChild.textContent = bar.t = label;
 }
 // the map's description lives on #over (role img, a leaf), never on <main>, whose controls must stay reachable
 function ariaMap() {
@@ -518,8 +573,10 @@ function renderNotices() {
   if (s) n.append(el('p', null, s));
 }
 function perfReadout() {
-  const f = perf.frames.slice(-30), med = (k) => { const v = f.map((q) => q[k] || 0).sort((a, b) => a - b); return v[v.length >> 1].toFixed(1); };
-  $('perf').textContent = `frame ${med('ms')} ms · map ${med('gl')} · base ${med('base')} · over ${med('over')}`;
+  const f = perf.frames.slice(-30), med = (k) => { const v = f.map((q) => q[k] || 0).sort((a, b) => a - b); return v[v.length >> 1].toFixed(1); }, m = perf.move;
+  // the second line is the last move's frame intervals, to compare with tools/frametime.mjs's "raf" line
+  $('perf').textContent = `frame ${med('ms')} ms · map ${med('gl')} · base ${med('base')} · over ${med('over')}\n`
+    + (m ? `last move ${m.n} frames · ${m.med.toFixed(1)} ms median · ${m.p95.toFixed(1)} p95` : 'last move: none yet');
 }
 
 // panels: Layers, the legend card, About
@@ -652,7 +709,7 @@ function buildControls() {
     A.set({ histAt: clamp(at, T1600, A.C.now) });
   });
   $('play').onclick = () => (play.timer ? stopPlay() : startPlay());
-  over.addEventListener('pointerdown', () => { if (chip) { chip = null; syncControls(); } if (!$('layers').hidden) A.toggleLayers(false); if ($('legend-card')) toggleLegend(false); }, true);
+  mapEl.addEventListener('pointerdown', (e) => { if (e.target !== mapEl && (e.target.parentNode !== mapEl || e.target.tagName !== 'CANVAS')) return; if (chip) { chip = null; syncControls(); } if (!$('layers').hidden) A.toggleLayers(false); if ($('legend-card')) toggleLegend(false); }, true);
   for (const t of ['pointerdown', 'keydown']) addEventListener(t, () => endIntro(), true);
   // Escape closes the innermost thing: a panel, then a keyboard A still waiting for its A′, then focus mode
   addEventListener('keydown', (e) => {
@@ -792,6 +849,8 @@ async function boot() {
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { rampBar(sizeCanvas($('legend-ramp'), 112, 6, A.dpr), 0, 0, 112, 6); sec.key = ''; req('base', 'relief', 'lines', 'over', 'gl', 'timeline', 'sheet'); });
   layout();
   const aboutP = loadJSON('assets/about.json').then((a) => { A.about = a; req('sheet', 'timeline'); }).catch(() => {});
+  // About's version line is the manifest's (HOUSE §13), not the pipeline's about.json
+  loadJSON('miniapp.json').then((m) => { if (m && m.version) A.version = String(m.version); }).catch(() => {});
   const storiesP = loadJSON('assets/stories.json').then((s) => { A.stories = s; req('sheet'); }).catch(() => {});
   try {
     const geo = await loadJSON('assets/geo.json');

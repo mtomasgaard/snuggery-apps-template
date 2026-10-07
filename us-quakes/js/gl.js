@@ -41,8 +41,7 @@ function context(canvas, init, onLost, onRestored) {
 }
 function viewport(K, w, h, dpr) {
   const W = Math.max(1, Math.round(w * dpr)), H = Math.max(1, Math.round(h * dpr));
-  if (K.canvas.width !== W || K.canvas.height !== H) { K.canvas.width = W; K.canvas.height = H; }
-  K.canvas.style.width = w + 'px'; K.canvas.style.height = h + 'px';
+  if (K.canvas.width !== W || K.canvas.height !== H) { K.canvas.width = W; K.canvas.height = H; K.canvas.style.width = w + 'px'; K.canvas.style.height = h + 'px'; }
   K.gl.viewport(0, 0, W, H);
   K.gl.clearColor(0, 0, 0, 0); K.gl.clear(K.gl.COLOR_BUFFER_BIT);
 }

@@ -62,10 +62,10 @@ export function stamp(A, p) {
   const S = A.C && A.C.S;
   if (!S) { p.append(A.snapErr ? 'The live data could not be read' : 'No live data in this copy'); return; }
   const ageMs = Date.now() - S.gen;
-  p.append('USGS feed ', el('span', 'mono', `${hhmmUTC(S.gen)} UTC`));
+  p.append('Feed ', el('span', 'mono', `${hhmmUTC(S.gen)} UTC`));
   if (ageMs < 0) return;
   if (ageMs < 3 * 3600e3) p.append(` · ${age(ageMs)} ago`);
-  else p.append(' · ', el('b', null, `${age(ageMs)} ago`), ', not refreshed since');
+  else p.append(' · ', el('b', null, `${age(ageMs)} ago`));   // one line beside Day/Week/Month (HOUSE §4.15)
 }
 export function staleText(A) {
   const S = A.C && A.C.S;

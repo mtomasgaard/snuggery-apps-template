@@ -181,13 +181,17 @@ function labelMatches(s, floorCode) {
   return { ok: !!w && s.label.startsWith(want) && xOk && drawnOk, want: want + (x ? `… in view${tail}` : ''), got: s.label, drawn: s.drawn && { t0: s.drawn.t0, t1: s.drawn.t1, floor: s.drawn.floor }, w };
 }
 const tap = (uq, lon, lat) => uq(([lon, lat]) => { const { M, tapAt } = window.__uq._; tapAt(...M.toScreen(lon < 172 ? lon + 360 : lon, lat)); return window.__uq.settled(); }, [lon, lat]);
-/** The earthquake layer's alpha summed over a screen rectangle, read in the frame that drew it. */
+/**
+ * The earthquake layer's alpha summed over a screen rectangle, read in the frame that drew it. #gl is drawn
+ * past the panel's edges by a margin (it sits at its offsetLeft, offsetTop: minus the margin), so screen
+ * pixels are moved by that offset first (plan 0012, package 3.1).
+ */
 const glAlpha = (uq, rect) => uq((r) => new Promise((res) => {
   window.__uq._.req('gl');
   requestAnimationFrame(() => {
-    const g = document.getElementById('gl'), k = g.width / g.clientWidth, c = document.createElement('canvas');
+    const g = document.getElementById('gl'), k = g.width / g.clientWidth, c = document.createElement('canvas'), ox = -g.offsetLeft, oy = -g.offsetTop;
     c.width = g.width; c.height = g.height; const x = c.getContext('2d'); x.drawImage(g, 0, 0);
-    const d = x.getImageData(Math.round(r[0] * k), Math.round(r[1] * k), Math.round(r[2] * k), Math.round(r[3] * k)).data;
+    const d = x.getImageData(Math.round((r[0] + ox) * k), Math.round((r[1] + oy) * k), Math.round(r[2] * k), Math.round(r[3] * k)).data;
     let a = 0; for (let i = 3; i < d.length; i += 4) a += d[i];
     res(a / 255);
   });
@@ -288,15 +292,20 @@ for (const scheme of schemes) {
   let s = await S(uq);
   const liveN = count(snap.rows.to - 30 * 1440, snap.rows.to + 1, 0), weekN = count(snap.rows.to - 7 * 1440, snap.rows.to + 1, 0);
   const gen = new Date(snap.feed.generated), hm = `${pad(gen.getUTCHours())}:${pad(gen.getUTCMinutes())}`;
-  check(s.label.startsWith(`USGS feed ${hm} UTC`) && s.count === liveN, `Live Month: stamp "${s.label}", ${s.count} earthquakes drawn (this file counts ${liveN} in the 30 days before the feed's minute)`);
+  check(s.label.startsWith(`Feed ${hm} UTC`) && s.count === liveN, `Live Month: stamp "${s.label}", ${s.count} earthquakes drawn (this file counts ${liveN} in the 30 days before the feed's minute)`);
+  const st1 = await uq(() => { const e = document.getElementById('stamp'), lh = parseFloat(getComputedStyle(e).lineHeight); return { h: e.getBoundingClientRect().height, lh, t: e.textContent }; });
+  check(st1.h < st1.lh * 1.5, `the Live stamp is one line at 390 px ("${st1.t}", ${st1.h.toFixed(1)} px at a ${st1.lh.toFixed(1)} px line)`);
   const credit = await uq(() => document.getElementById('credit').textContent);
   check(credit.startsWith('Not a warning service'), `the map's credit line leads with "${credit}"`);
   // the map's description sits on #over (a leaf), not on <main>, whose chips and keys stay reachable;
   // the Live strip is named by its count
   const names = await uq(() => ({ main: document.getElementById('map').getAttribute('role'), over: document.getElementById('over').getAttribute('role'),
     label: document.getElementById('over').getAttribute('aria-label'), strip: document.getElementById('strip-live').getAttribute('aria-label') }));
-  check(names.main === null && names.over === 'img' && names.label.startsWith(`Map of Lower 48, Live, the past 30 days, all sizes, ${nb(liveN)} earthquakes. `)
-    && names.strip.startsWith(`Record strip, the past 30 days: ${nb(liveN)} earthquakes`) && / largest M \d\.\d, /.test(names.strip),
+  // from 48 h the window is named against the feed's minute (DESIGN §3.4), so the demo's words depend on the
+  // day the check runs: worked out here from the feed's time and the clock, as the app is told to
+  const win30 = Date.now() - gen.getTime() >= 48 * 3600e3 ? `the 30 days to ${new Date(EPOCH + snap.rows.to * 60000).toISOString().slice(0, 10)} ${hhmm(snap.rows.to)} UTC` : 'the past 30 days';
+  check(names.main === null && names.over === 'img' && names.label.startsWith(`Map of Lower 48, Live, ${win30}, all sizes, ${nb(liveN)} earthquakes. `)
+    && names.strip.startsWith(`Record strip, ${win30}: ${nb(liveN)} earthquakes`) && / largest M \d\.\d, /.test(names.strip),
     `accessible names: <main> a plain landmark, #over "${names.label.slice(0, 60)}…", the Live strip "${names.strip}"`);
   await page.waitForFunction(() => window.__uq._.perf.load.relief != null, null, { timeout: 10000 });
   const rl = await reliefLand(uq);
@@ -523,7 +532,7 @@ for (const scheme of schemes) {
   for (const q of stories.sources.filter((x) => /oklahoma/.test(x.id))) if (!ab.includes(q.quote)) abMiss.push(q.id);
   if (!ab.includes(about.software.fonts)) abMiss.push('fonts');
   if (!ab.includes(`to ${hj.cutoff}`) || !ab.includes(snap.feed.generated.replace('T', ' ').replace(/(:\d\d)?Z$/, ' UTC'))) abMiss.push('dates');
-  check(abMiss.length === 0 && /SI: km, m/.test(ab) && /Version 1\.0/.test(ab), `About: intro, ${about.notes.length} notes with their quotes, ${about.sources.length + snap.sources.length} sources with licence, attribution and address, the Oklahoma statement, the fonts, the data's dates, units, version${abMiss.length ? ' — missing: ' + abMiss.join(', ') : ''}`);
+  check(abMiss.length === 0 && /SI: km, m/.test(ab) && /Version 1\.1/.test(ab), `About: intro, ${about.notes.length} notes with their quotes, ${about.sources.length + snap.sources.length} sources with licence, attribution and address, the Oklahoma statement, the fonts, the data's dates, units, version${abMiss.length ? ' — missing: ' + abMiss.join(', ') : ''}`);
   await shot('about');
   await contrast('About');
   for (let k = 0; k < 5; k++) await page.click('#about .ver');
@@ -916,9 +925,9 @@ for (const scheme of schemes) {
       const iso = pts.filter(([i, x, y]) => A.hollow(i) && C.m[i] < 40 && pts.every(([j, u, v]) => j === i || Math.hypot(u - x, v - y) > 9));
       req('gl');
       requestAnimationFrame(() => {
-        const g = document.getElementById('gl'), k = g.width / g.clientWidth, c = document.createElement('canvas'); c.width = g.width; c.height = g.height;
+        const g = document.getElementById('gl'), k = g.width / g.clientWidth, c = document.createElement('canvas'), ox = -g.offsetLeft, oy = -g.offsetTop; c.width = g.width; c.height = g.height;
         const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(g, 0, 0);
-        const at = (px, py) => x.getImageData(Math.round(px * k), Math.round(py * k), 1, 1).data[3];
+        const at = (px, py) => x.getImageData(Math.round((px + ox) * k), Math.round((py + oy) * k), 1, 1).data[3];
         res({ n: iso.length, m: iso.slice(0, 5).map(([i, px, py]) => ({ M: (C.m[i] - 20) / 10, centre: at(px - 0.25, py - 0.25), ring: Math.max(at(px + 1.4, py), at(px - 1.4, py), at(px, py + 1.4), at(px, py - 1.4)) })) });
       });
     }));
@@ -955,7 +964,10 @@ for (const scheme of schemes) {
     await uq(() => window.__uq._.A.secSet({ a: null, b: null, hi: null })); await settle();
     await page.focus('#over'); await page.keyboard.press('Enter');
     const kA3 = await uq(() => !!window.__uq._.sec.kA);
-    const dr3 = await uq(() => { const r = document.getElementById('over').getBoundingClientRect(); return [r.left + r.width * 0.3, r.top + r.height * 0.3, r.left + r.width * 0.6, r.top + r.height * 0.35]; });
+    // from 48 h of age the stale notice stands in the foot too and reaches 30 % down the map at Half, so the
+    // drag starts higher, and on the map itself (the element under its first point is one of #map's canvases)
+    const dr3 = await uq(() => { const r = document.getElementById('over').getBoundingClientRect(), p = [r.left + r.width * 0.3, r.top + r.height * 0.2, r.left + r.width * 0.6, r.top + r.height * 0.25], e = document.elementFromPoint(p[0], p[1]); return [...p, e && e.parentNode.id === 'map' && e.tagName === 'CANVAS']; });
+    check(dr3[4], 'the drag below starts on the map, not on the foot\'s glass');
     await page.mouse.move(dr3[0], dr3[1]); await page.mouse.down();
     for (let k = 1; k <= 10; k++) { await page.mouse.move(dr3[0] + ((dr3[2] - dr3[0]) * k) / 10, dr3[1] + ((dr3[3] - dr3[1]) * k) / 10); await page.waitForTimeout(16); }
     await page.mouse.up(); await settle();
@@ -1062,6 +1074,18 @@ for (const scheme of schemes) {
     `without WebGL 2: "${r.nogl}", ${r.rows} list rows, the map's keys, chips, legend and scale bar not on screen (computed: ${r.keys.join(', ')}; shown: ${r.shown.join(', ') || 'none'})`);
   check(r.ink.every((q) => q.endsWith(' 0')) && (r.credit || '').startsWith('Not a warning service'),
     `without WebGL 2: no half map — painted pixels ${r.ink.join(', ')}; the credit line stays ("${r.credit}")`);
+  // a drag and a double tap on the blank panel move no invisible view (History's "in view" follows it)
+  {
+    const v0 = await P.uq(() => ({ ...window.__uq.state().view })), mr = await P.page.locator('#map').boundingBox();
+    const x = mr.x + mr.width / 2, y = mr.y + mr.height * 0.4;
+    await P.page.mouse.move(x, y); await P.page.mouse.down();
+    for (let k = 1; k <= 12; k++) { await P.page.mouse.move(x + 12 * k, y + 6 * k); await P.page.waitForTimeout(16); }
+    await P.page.mouse.up();
+    await P.page.mouse.click(x, y); await P.page.waitForTimeout(80); await P.page.mouse.click(x, y);
+    await P.page.waitForTimeout(400); await P.uq(() => window.__uq.settled());
+    const v1 = await P.uq(() => ({ ...window.__uq.state().view }));
+    check(v1.s === v0.s && v1.cx === v0.cx && v1.cy === v0.cy, `without WebGL 2: a drag and a double tap leave the view as it was (s ${v0.s.toFixed(2)} → ${v1.s.toFixed(2)})`);
+  }
   await P.shot('no-webgl');
   check(P.errors.length === 0, `without WebGL 2: no console error (${P.errors.slice(0, 3).join(' | ')})`);
   await P.ctx.close();

@@ -87,10 +87,10 @@ It is not a warning service, and it says so where a person looks first (§10).
 │   (base canvas · WebGL · overlay)    │  map panel                      ~648 (flex)
 │                                      │
 │ ├──100 km──┤ at 38° N      ▬▬▬ depth │  scale bar · compact legend
-│   Not a warning service · USGS · NE  │  credit line
+│   Not a warning service              │  the safety line (opens About)
 ├──────────────────────────────────────┤
 │ ────  (grip)                         │
-│ USGS feed 14:05 UTC · 2 h ago [D|W|M]│  Live peek                        152
+│ Feed 14:05 UTC · 2 h ago      [D|W|M]│  Live peek                        152
 │ ┊┊│┊┊┊┊│┊┊┊┊┊●┊┊┊┊┊┊│┊┊┊┊┊┊┊┊┊┊┊┊//// │  the record strip (56 px)
 │ M 4.9  48 km S of Sand Point, AK  ›  │
 └──────────────────────────────────────┘  safe-area bottom inset
@@ -126,9 +126,9 @@ Five stacked canvases (§5) and a few HTML controls on `--glass` (a flat 90 % fi
   9; the ramp with all six stops; hollow = automatic; gray = no depth; × = no magnitude; three fault
   weights; the volcano triangles; the play trace), as a card above it. Every key is drawn by the
   app's own renderer.
-- **Credit line**, one 10.5 px line under the legend: "**Not a warning service** · USGS · Natural
-  Earth", the first clause in `--ink` 700; a button to About's sources. It is on screen at every
-  sheet height where the map is.
+- **Credit line**, one 10.5 px line under the legend: "**Not a warning service**", in `--ink` 700;
+  a button to About's sources, described by the hint "Opens the sources in About.". USGS and Natural
+  Earth are credited in About. It is on screen at every sheet height where the map is.
 - **Notices**, one line each on glass, centered above the scale bar when they apply: "Restoring the
   map…" (context loss); "`A—A′` Drag across the map to draw a section" (Section on, no line yet);
   "This copy is 3 days old. It shows nothing newer than {feed time}." (feed older than 48 h).
@@ -157,9 +157,9 @@ finger leaves (§24), so nothing moves under a held finger.
 
 ### 3.4 Live (the default mode)
 **Head** (peek, 136 px under the grip):
-1. The stamp: "USGS feed **14:05 UTC** · 2 h ago" (Atkinson, the time in mono) — the feed's own
+1. The stamp: "Feed **14:05 UTC** · 2 h ago" (Atkinson, the time in mono) — the feed's own
    generation time, and its age by the phone's clock. **No amber, no red** (amber is a depth on this
-   map): from 3 h it reads "· 5 h ago, not refreshed since" with the age in `--ink` 700; from 48 h
+   map): from 3 h the age, "· **5 h ago**", is in `--ink` 700, and the stamp stays one line; from 48 h
    the map's notice (§3.2) and the first line of the body say "This copy is 3 days old…". On the
    right, **Day | Week | Month** (segmented, 28 px).
 2. **The record strip** (56 px, ART.md "The signature control"): one ink stem per earthquake in the
@@ -360,11 +360,20 @@ The fragment shader draws a disc with a 1 device-px anti-aliased edge and rim, a
 device's value is recorded in the phone check, §13).
 
 ### 5.4 During a gesture
-While a finger pans or pinches, **`#gl` redraws every frame** (a uniform change) and `#base`,
-`#relief`, `#lines` and `#over` are **moved with a CSS transform** of their last rendering — exact,
-because pan and zoom are similarity transforms of the screen (§4.1). They are redrawn when the
-gesture settles, and at most every 250 ms during a long one. So the dots are always sharp, and the
-basemap is briefly soft under a pinch. With Section on and a line drawn, `#gl` also redraws per
+While a finger pans or pinches (and during a fling or an eased move), every layer but the relief is
+**moved with a CSS transform** of its last rendering — exact, because pan and zoom are similarity
+transforms of the screen (§4.1) — and the relief, four textured quads, is drawn again each frame.
+`#base`, `#lines` and `#gl` are drawn past the panel's edges by a margin (half the short side, at most
+196 px, a multiple of 7 so the hatching keeps its phase, and at most 8 Mpx a canvas), so a pan or a pinch
+out shows what is already drawn. A layer is drawn again during the move only when its drawing no longer
+covers the panel, or is shown at under half or over twice the scale it was drawn at (`#over`, drawn to the
+panel's edge in about 1 ms, once it leaves 4 px of the panel bare or its scale is off by half), and at most one layer a frame. During a pan, `#base`
+and `#lines` are then moved on their own canvas by whole device pixels and only the strips they uncover
+are drawn, each culled to its strip. Every layer is drawn whole once the move settles. So the basemap
+and the dots are briefly soft under a pinch, and the picture at rest is a redraw's (plan 0012, package
+3.1: before it, `#gl` was drawn every frame and all four other layers at once every 250 ms, and a
+finger was read against the moved `#over`, so the map lagged behind it). Pointers are read on `#map`,
+which never moves. With Section on and a line drawn, `#gl` also redraws per
 frame while the line's end is dragged (the corridor dimming, §9.1).
 
 ### 5.5 Context loss
@@ -725,7 +734,7 @@ A small panel from the Layers tool: switches for **Shaded relief** (on), **Sea d
 ### 10.2 The honesty notes, and where each one is on screen
 | Note | Where |
 | --- | --- |
-| **Not a warning service.** "This map is not an earthquake or tsunami warning service. This copy is only as new as its last refresh, shown above." | the map's credit line, always ("Not a warning service · USGS · Natural Earth"); Live body, first line; About, first paragraph |
+| **Not a warning service.** "This map is not an earthquake or tsunami warning service. This copy is only as new as its last refresh, shown above." | on the map, always ("Not a warning service", a key that opens About at its sources, where USGS and Natural Earth are credited); Live body, first line; About, first paragraph |
 | **More dots mostly means more seismometers.** USGS: "…not because there are more earthquakes, but because there are more seismic instruments…" | under the History chart, always; About |
 | **What the catalog catches.** USGS, verbatim: "For much of the U.S., earthquakes of magnitude 2.5 or larger are located and cataloged…" and, within the conterminous U.S., completeness "is probably in the magnitude 3.0-3.5 range." | the 2.5+ hint (§7.4); About |
 | **Magnitude types differ** and are not converted. | the card's type line; About |
@@ -1146,8 +1155,9 @@ count of events.
   records**, Visvalingam–Whyatt at 50,000 m², 3 decimals: 278,038 vertices, 929,231 B raw with the
   per-line counts, 1,140,969 B with the attribute tables, 513,053 B in the ZIP (**measured**). Chosen
   over one string per line, where each of the 113,301 lines pays for an absolute first point.
-- **Base and overlay moved by CSS transform during gestures** (§5.4), over redrawing 2D paths every
-  frame; the dots stay sharp because WebGL still redraws.
+- **Every layer but the relief moved by CSS transform during gestures** (§5.4), over redrawing 2D
+  paths or 400 000 points every frame; the layers are drawn past the panel's edges so a pan shows what
+  is already drawn, and everything is drawn whole when the gesture settles.
 - **The relief as a translucent shading overlay** in WebGL over a 2D land fill, over triangulating
   land for WebGL (a dependency and a build step for no visible gain).
 - **Stepped, calendar-aligned play** (§7.5) over a continuous slide: the label always names exactly
@@ -1334,7 +1344,8 @@ never phone evidence.
   snapshot's times, the volcano status's), every source with owner, license, the license quote, what
   this app changed, citation, attribution line and address as text, every quoted page, the software
   and fonts notice, the units and the version line. Five taps within 3 s on the version toggle the
-  frame-time readout (median of the last 30 frames: whole frame, map, base, overlay). The credit line
+  frame-time readout (median of the last 30 frames: whole frame, map, base, overlay; and a second
+  line, "last move N frames · X ms median · Y p95", the frame intervals of the last move). The credit line
   opens About at its sources. The magnitude-type table was left out for bytes: each card already names
   its own type from the same table.
 - **The opening** starts when the first snapshot is decoded, stored first (`uq.intro`), only without

@@ -44,8 +44,9 @@ export function aboutPanel(A, box) {
   add(h2('Pages quoted'));
   for (const c of (ab.cited || []).concat(A.stories ? A.stories.sources.filter((s) => s.quote) : [])) src(c.title, c.owner, c.note, c.url, `Retrieved ${c.retrieved}.`);
   add(h2('Software and fonts'), p(ab.software.text, 'note'), p(ab.software.fonts, 'note'));
-  const v = el('button', 'ver', `Version ${ab.version}`);
-  v.setAttribute('aria-label', `Version ${ab.version}. Five taps show the frame-time readout.`);
+  const ver = A.version || ab.version;
+  const v = el('button', 'ver', `Version ${ver}`);
+  v.setAttribute('aria-label', `Version ${ver}. Five taps show the frame-time readout.`);
   let taps = [];
   v.onclick = () => { const t = performance.now(); taps = taps.filter((q) => t - q < 3000).concat(t); if (taps.length >= 5) { taps = []; A.togglePerf(); } };
   add(v);
