@@ -14,12 +14,19 @@
 //     and every drawn point is within it;
 //  6. the axis: one scale for distance, the same times the stretch for depth, the section inside the
 //     box, and the ticks written in SI notation with the unit on the last;
-//  7. the cost of a cut, as a trend (Node on this Mac, never phone evidence).
+//  7. the cost of a cut, as a trend (Node on this Mac, never phone evidence);
+//  8. the sweep (2.3, plan 0012 D14): Along sweeps the grid's columns (I) and Across its rows (J), each
+//     field line in its place among them; every slice's section holds exactly that slice's active cells
+//     (none missed, none from another), each a quad between its own corners' depths, on one path whose
+//     distances run from 0 to its length, A at its west end, the tops on the formations' first layers;
+//     a drawn line's steps are square to it, one slice wide; the wells near a slice's path lie within
+//     the corridor of it; and the own stretch: never under the 3D view's, a round figure, the section
+//     inside its box at it, and the 3D view's where the box has no more room.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cutGrid, wellsNear, fieldLines, sectionAxis, depthTicks, distanceTicks, lineOf } from '../js/section.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, depthTicks, distanceTicks, lineOf, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag, STRETCHES } from '../js/section.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fails = [];
@@ -167,6 +174,74 @@ ok(topBad === 0, `the formation tops: every segment inside its line, A to A′ (
     && x[0].text === '0' && x[x.length - 1].text.endsWith(`${NN}m`) && du[du.length - 1].text.endsWith(`${NN}ft`) && xu[xu.length - 1].text.endsWith(`${NN}ft`)
     && d.every((t) => t.y >= ax.y0 - 1e-6 && t.y <= ax.y1 + 1e-6) && x.every((t) => t.x >= ax.x0 - 1e-6 && t.x <= ax.x1 + 1e-6),
   `the ticks: depth ${d.map((t) => t.text).join(' | ')}; distance ${x.map((t) => t.text).join(' | ')}; in US units ${du[du.length - 1].text} and ${xu[xu.length - 1].text}; each inside the section, the unit on the last (U+202F)`);
+}
+
+// 8. the sweep
+{
+  const cols = columns(geom, NA, ijk, model.NI, model.NJ);
+  const axA = sweepAxis(cols, lines.along.a, lines.along.b), axB = sweepAxis(cols, lines.across.a, lines.across.b);
+  const lA = slices(cols, axA), lB = slices(cols, axB), sA = slot(cols, axA, lA, lines.along), sB = slot(cols, axB, lB, lines.across);
+  const has = { I: new Set(), J: new Set() };
+  for (let c = 0; c < NA; c++) { has.I.add(ijk[c * 3] + 1); has.J.add(ijk[c * 3 + 1] + 1); }
+  ok(axA === 'I' && axB === 'J' && lA.length === has.I.size && lB.length === has.J.size && lA.every((v, i) => !i || v.k > lA[i - 1].k) && sA > 0 && sA < lA.length && sB > 0 && sB < lB.length,
+    `the sweep's families: Along through the ${lA.length} columns (I) with a cell, the field's line between I ${lA[sA - 1].k} and I ${lA[sA].k}; Across through the ${lB.length} rows (J), between J ${lB[sB - 1].k} and J ${lB[sB].k}`);
+  let foreign = 0, missed = 0, badZ = 0, badS = 0, west = 0, total = 0, topBad2 = 0, ms = 0, worstMs = 0;
+  for (const [axis, list] of [['I', lA], ['J', lB]]) for (const { k } of list) {
+    const sec = sliceSection(geom, NA, ijk, axis, k, tops), own = axis === 'I' ? 0 : 1;
+    ms += sec.ms; worstMs = Math.max(worstMs, sec.ms);
+    let want = 0, pinched = 0;
+    for (let c = 0; c < NA; c++) if (ijk[c * 3 + own] === k - 1) { want++; let lo = Infinity, hi = -Infinity; for (let q = 0; q < 4; q++) { lo = Math.min(lo, corner(c, q)[2]); hi = Math.max(hi, corner(c, q + 4)[2]); } if (hi - lo < 1e-3) pinched++; }
+    if (sec.n + pinched < want) missed += want - sec.n - pinched;
+    for (let i = 0; i < sec.n; i++) {
+      const c = sec.cells[i];
+      total++;
+      if (ijk[c * 3 + own] !== k - 1) foreign++;
+      let zlo = Infinity, zhi = -Infinity;
+      for (let q = 0; q < 8; q++) { const z = corner(c, q)[2]; zlo = Math.min(zlo, z); zhi = Math.max(zhi, z); }
+      for (let q = sec.offs[i]; q < sec.offs[i + 1]; q++) {
+        if (sec.pts[q * 2 + 1] < zlo - 1e-3 || sec.pts[q * 2 + 1] > zhi + 1e-3) badZ++;
+        if (sec.pts[q * 2] < -1e-3 || sec.pts[q * 2] > sec.line.L + 1e-3) badS++;
+      }
+    }
+    if (sec.line.a[0] > sec.line.b[0] + 1e-6 || Math.abs(sec.line.s[0]) > 1e-9 || Math.abs(sec.line.s[sec.line.s.length - 1] - sec.line.L) > 1e-6) west++;
+    for (let i = 0; i < sec.tops.length; i += 4) if (sec.tops[i] > sec.tops[i + 2] || sec.tops[i] < -1e-3 || sec.tops[i + 2] > sec.line.L + 1e-3) topBad2++;
+  }
+  ok(foreign === 0 && missed === 0 && badZ === 0 && badS === 0 && west === 0 && topBad2 === 0 && total > 50000,
+    `${lA.length + lB.length} slices, ${total} blocks: every one its slice's own cell (${foreign} not), no active cell of a slice left out but the pinched-out (${missed} missed), each corner between its cell's own shallowest and deepest (${badZ} not) and on the path (${badS} not); A at the west end, the path's distances 0 to its length (${west} not); the tops inside (${topBad2} not); a slice cut in ${(ms / (lA.length + lB.length)).toFixed(2)} ms on average, ${worstMs.toFixed(1)} at most (Node, a trend)`);
+  // a slice's path: lineAt runs along it, and the wells near it are within the corridor of it
+  {
+    const sec = sliceSection(geom, NA, ijk, 'I', lA[sA].k, tops), ln = sec.line;
+    const p0 = lineAt(ln, 0), p1 = lineAt(ln, ln.L), pm = lineAt(ln, ln.s[3]);
+    const near = wellsNearPath(model.wells.map((w) => w.path), ln, 150);
+    let farPts = 0, pts = 0;
+    const dist = (x, y) => { let d = Infinity; for (let g = 1; g < ln.path.length; g++) { const P = ln.path[g - 1], Q = ln.path[g], ex = Q[0] - P[0], ey = Q[1] - P[1], u = Math.max(0, Math.min(1, ((x - P[0]) * ex + (y - P[1]) * ey) / (ex * ex + ey * ey || 1))); d = Math.min(d, Math.hypot(x - P[0] - ex * u, y - P[1] - ey * u)); } return d; };
+    for (const w of near) {
+      for (const part of w.parts) for (let k = 0; k < part.length; k += 2) { pts++; if (part[k] < -1e-6 || part[k] > ln.L + 1e-6) farPts++; }
+      if (w.dmin > 150 + 1e-6) farPts++;
+    }
+    const truly = model.wells.filter((w) => w.path.some((p) => dist(p[0], p[1]) < 149)).length;
+    ok(Math.hypot(p0[0] - ln.path[0][0], p0[1] - ln.path[0][1]) < 1e-6 && Math.hypot(p1[0] - ln.b[0], p1[1] - ln.b[1]) < 1e-6 && Math.hypot(pm[0] - ln.path[3][0], pm[1] - ln.path[3][1]) < 1e-6 && farPts === 0 && near.length >= truly && near.length > 0,
+      `column I ${lA[sA].k}'s path: lineAt runs it end to end; ${near.length} wells drawn within 150 m of it (${truly} have a path point that near), ${pts} points all on the path's length (${farPts} not)`);
+  }
+  // a drawn line's steps
+  {
+    let bad = 0;
+    for (let n = 0; n < 20; n++) {
+      const th = rnd() * Math.PI, a = [-1500 * Math.cos(th), -1500 * Math.sin(th)], b = [1500 * Math.cos(th), 1500 * Math.sin(th)], h = shifts(cols, a, b), ln = lineOf(a, b);
+      if (Math.abs(h.nx * ln.ux + h.ny * ln.uy) > 1e-9 || h.step < 30 || h.step > 100 || h.lo > 0 || h.hi < 0 || h.hi - h.lo < 20) bad++;
+    }
+    ok(bad === 0, `a drawn line's sweep, 20 bearings: steps square to the line, 30 to 100 m (a slice's width across it), over the field either side (${bad} not)`);
+  }
+  // the own stretch
+  {
+    const sec = cutGrid(geom, NA, ijk, lines.along.a, lines.along.b, tops), res = [];
+    for (const [w, h, e] of [[312, 64, 5], [312, 300, 5], [312, 600, 5], [600, 100, 5], [312, 300, 12], [312, 64, 7.5]]) {
+      const box = { x: 46, y: 15, w, h }, x = ownExag(sec, box, e), ax = sectionAxis(sec, box, x, model.center[2]);
+      const inside = ax.y1 <= box.y + box.h + 1e-6 && ax.x1 <= box.x + box.w + 1e-6;
+      res.push([x >= e && (x === e || (STRETCHES.includes(x) && x >= e * 1.2)) && inside, `${w} × ${h} at ×${e}: ×${x}${x === e ? '' : `, ${Math.round(ax.y1 - ax.y0)} of ${h} px tall`}`]);
+    }
+    ok(res.every((r) => r[0]) && res[2][1] !== res[0][1], `the pane's own stretch: never under the 3D view's, a round figure a fifth or more above it, the section inside its box: ${res.map((r) => r[1]).join('; ')}`);
+  }
 }
 
 // 7. the cost

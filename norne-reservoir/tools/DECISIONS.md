@@ -963,3 +963,490 @@ are SwiftShader trends, never phone evidence):
 - **Left as an owner call:** with the section open and the sheet raised, the model keeps 245 px; the
   model and the section together keep 48 % of the screen.
 
+
+## Plan 0012, package 3.4b (2026-10-07): 2.3, a taller section (D13) and a sweep (D14)
+
+The owner after 2.2, 2026-10-07: *"Can the section view be extended taller to optionally take up more
+screen?"* (D13), *"did the explode functionality disappear?"*, and *"I assume we are also making it easy
+to scroll through the sections with sliders etc?"* (D14). The brief: the pane's edge drags from 2.2's
+compact size up to most of the view, the 3D view keeping a slim strip; a double tap toggles compact and
+tall; the size is remembered; the edge a 44 px hit with a grip, a VoiceOver adjustable control and arrow
+keys; live and sharp while dragged; a taller pane uses the room and states its own stretch; a slider
+sweeps the line through the grid's rows and columns, ‹ › one at a time, the line moving on the model,
+sharp while scrubbed; a drawn line swept parallel if simple; the resizing in the pane's own code, for
+Volve. Version 2.2 → 2.3. Pictures: `tools/.work/p23/` (`before/` the screenshots as the pass found
+them, `shots/` the probes' and drives' pictures), logs beside them.
+
+**Explode did not disappear.** It is the first heading of the sheet at its first raised stop, upright
+and on its side, with and without the section open: `tools/.work/p23/probe5.mjs` taps the grip once and
+finds `Explode` heading the stop, the `Explode amount` slider wholly inside the sheet and on top at its
+middle (upright at 154, 735, 136 × 44; on its side at 663, 77, 77 × 44), and `Formations`, `Layers`,
+`Segments` under it (`shots/p5-chromium-*.png`). 2.2's second stop scrolls the sheet to *Cells and view*,
+which is what the before/after picture showed.
+
+### As built
+
+1. **The edge (D13), `js/pane.js`.** One function, `paneEdge()`, owns the resizing: a drag (pointer
+   capture, 4 px slop), a double tap (two lifts within 400 ms and 30 px), the keys (↑ ↓, and on its side
+   ← → by the edge's own direction; Home, End; Enter toggles), an assistive click (detail 0) toggles, and
+   a `ResizeObserver` on the view re-applies the size when the screen changes. The size is one fraction,
+   0 compact to 1 tall, saved as `S.section.size` with the view (`norne-viewer:v1`); the pane takes it as
+   `--pane` with the class `grown` (`style.css`: `.section.grown { flex: 0 0 var(--pane) }`, its plot
+   taking the rest). Compact is measured, never restated: the pane without `grown` is 2.2's pane, so its
+   fit-to-the-section and its caps are unchanged. Volve takes `js/pane.js`, the `.grown` and
+   `.sec-edge`/`.sec-side` rules and the two edge elements, and passes its own pane, view and minimum.
+   - *Where the edge is.* Under the model, the head's free stretch between `Draw` and ✕ (188 × 44 px at
+     390 px), with the house's grip (36 × 4 px, `--line-strong`, the sheet's `.grip-bar`) laid on the
+     line between the model and the pane at the screen's middle. A dedicated strip would have cost the
+     plot 14 to 44 px or taken the plate's foot from the turn and Draw; the head's free stretch costs
+     nothing and is already the pane's top. Beside the model, a 44 px strip astride the line beside the
+     plot (22 px over the plate), the grip upright; the model's keys sit 30 px in from the plate's edge
+     there (`.sectioned .keys`) so the strip never covers them (measured: the hit was 30.75 px wide
+     before).
+   - *The minimum strip:* **120 px** under the pane (its keys in a row, 46 px, and a band of the field
+     under them that still turns by one finger and opens a cell on a tap), **160 px past the screen's
+     left inset** beside it (read from the pane's own left padding, which carries
+     `env(safe-area-inset-left)`), where the three key plates stand side by side (`keys-cols`, 130 ×
+     134 px; new in `layoutKeys()` for a plate both under 302 px tall and 310 px wide).
+   - *Live and sharp.* The pane's and the plate's heights are set in the frame that draws at them:
+     `fitSection()` (the 2.2 fit, split out of `drawSection()`) runs before the 3D view draws, and the
+     loop runs `layoutKeys()` and `reframe()` before every draw, so both canvases take their new size
+     before they draw (2.2's fit returned and drew a frame later). `shoot.mjs` logs every frame of a
+     touch drag past tall and back: no frame with a canvas not at its own size, the pane's top within
+     0.00 px of the finger.
+   - *The room used honestly.* `ownExag()` in `js/section.js`: in a pane made taller than compact, the
+     largest round stretch (1 to 50, `STRETCHES`) at which the whole section still fits, used where it is
+     a fifth or more above the 3D view's; else the 3D view's. The pane's foot prints it (`vertical ×20`)
+     and the canvas's name says `depth stretched 20 times, more than the 3D view's 5`. The depth and
+     distance words come from the one axis at every size, more of them as the pane grows (about one per
+     75 px down, one per 150 px across). The compact pane is untouched (always the 3D view's stretch).
+2. **The sweep (D14).** A row under the plot: `‹` (`tkey`), a house slider (`.hslider`, an `input
+   type=range`, so VoiceOver's adjustable control comes with it), `›`, and where the line is.
+   - *Along sweeps the grid's columns, Across its rows*, in this app's own words: the sheet's cell ranges
+     already say `Columns (I)` and `Rows (J)` and the card `I`, `J`. The brief has it the other way round
+     ("rows (for Along) or columns (for Across)"); by the grid's geometry Along (38°) runs with the I
+     slices' spacing direction (−52.7°) and Across (128°) with the J slices', and `sweepAxis()` picks the
+     family whose step is most square to the line, so any line gets the family it crosses. Called out
+     for the lead.
+   - *A column or row is drawn as the grid's own slice, not as a straight cut.* Measured
+     (`tools/.work/p23/slices.mjs`): Norne's rows are near straight (their column middles 7 to 26 m off a
+     fitted line) but its columns bend (24 to 175 m), and the active J ranges differ from column to
+     column (I 6–19 run J 11–100, I 20–29 J 11–70, I 30–41 J 50–102). The first build swept the field's
+     line parallel to itself through each slice's mean offset: the slices then came out of order
+     (I 41, 40, 38, 39, 29, 37, 28, …) and a straight cut through a column's middle held 14 to 78 % of
+     that column's cells. The second fitted a straight line to each slice: still 14 to 78 % for the
+     columns. As built, `sliceSection()` takes the slice's own active cells, each drawn as the face
+     midway across it (the mean of its two sides' corners), between its back and front boundary, on the
+     path through the middles of the slice's pillars; distance is measured along that path. Every block
+     is the slice's own (`test_section.mjs`: 128 slices, 88 862 blocks, none foreign, none missed but
+     the pinched-out). The line on the model follows the same path (`lineAt()`), and the wells within
+     150 m of the path are drawn at their nearest point on it (`wellsNearPath()`).
+   - *The field's lines keep their place.* Along and Across stay the presets 2.2 chose; on the slider
+     they sit among the slices where their middles fall (Along between I 22 and I 23, Across between
+     J 69 and J 70), so the slider always says where the line is and ‹ › pass through them.
+   - *A drawn line is swept parallel to itself* (the brief's "if that is simple": it was): steps of the
+     slice spacing square to it (`shifts()`, 54 to 92 m by bearing), over the field either side; the pane
+     says how far and which way (`89 m NW`, spoken `your line, moved 89 meters northwest`). Its ends can
+     still be dragged; a moved end starts its sweep afresh.
+   - *Sharp while scrubbed.* Each input records the place and asks for a frame; the frame draws the
+     newest, so a scrub never queues a place already passed. While the finger is down the pane keeps its
+     height (`SEC.lockH`, as 2.2 did for a drawn line) and fits the section on the lift (`change`).
+     A slice is cut in 0.17 ms on average in Node (1.5 at most), its wells in 1 to 7 ms; the last 24
+     slices are kept.
+   - *Words.* Visible: `I 23`, `J 70`, `Along`, `Across`, `Drawn`, `89 m NW`. Spoken (the slider's
+     `aria-valuetext`): `column I 23`, `row J 70`, `the field’s own line, between rows J 69 and J 70`,
+     `your line, as drawn`, `your line, moved 89 meters northwest`; ‹ › (`Previous column`, `Next row`,
+     `Previous step` …) say the new place through the live region. The canvas's name says the slice
+     (`Section A to A prime, column I 23, 5.52 km long, …`).
+3. **About** says it: the how-to paragraph (the slider, ‹ ›, the edge, its double tap, the strips, the
+   keys) and the section paragraph (the taller pane's stretch; what a swept column or row is and how it
+   is drawn; the wells on a path). Its sentence on the field's lines no longer says "grid columns" for
+   the stacks of cells, since the app's columns are the I slices.
+4. **Version (F6/HOUSE 13):** `2.3`; `check.mjs` item 6 pins it, item 4 lists `js/pane.js`, and its SI,
+   middle-dot and module lists take the new file.
+
+### Bugs on record and found, fixed as musts
+
+- *The cut's key cut off on a phone on its side with the sheet raised* (2.2's left-open list said it was
+  fixed at every width `shoot.mjs` runs; it was not at 844 × 390 with the sheet open, where the band's
+  cut column is 216 px and the key needs about 280: `Water lifted` and `on the track` were hidden,
+  `shots/p5-chromium-844x390-sec.png` before). With the sheet open on its side the caption's areas are
+  now `legend legend about / cut cut cut / inst wells wells`, so the key has a row of its own, and it
+  wraps rather than cuts where even that is short.
+- *Distance words colliding in a short plot* (found: `6 08000 m` at the raised sheet's compact pane):
+  the last word, which carries the unit, always stood, so an interior word it overlapped was drawn under
+  it. Now an interior word it would touch gives way.
+- *The lift's click landing on a card opened under the finger* (found on the 160 px strip: the tap
+  opened the card under the finger and the click that follows the lift pressed its `Zoom to cell`).
+  `tap()` makes the card take no click for 350 ms. On a narrow plate the card takes the compact form
+  with the place line wrapping beside Close and Zoom under it (`.narrow`); before, its place line was
+  squeezed to 49 px over three lines and ran into the figure.
+- *A saved sweep place the grid has not* (a hand-edited or stale `at`) falls back to the line itself.
+- The clip reviewers' item (plan 0009 item 5, B1) still passes at all three stops (`shoot.mjs`); matrix
+  row 149 (Snuggery's exit arrows over a mini-app's top-right controls on iOS 18) is Snuggery's, not
+  this folder's.
+
+### Checks that followed the change (F8), named
+
+- `shoot.mjs`, the section's colors on four properties and in the dark theme: run with the pane made
+  tall (End on its edge), since the sweep row took 44 px of the compact plot and the widest cells'
+  middles then fell under formation names (26 of 30 matched, the rest under a label's halo). Tall, the
+  check is as strict as before (30 of 30, or all but one).
+- `shoot.mjs`, *a card carried across the stops*: stop 0's form is no longer pinned to the full one;
+  with the sweep row the compact pane is 44 px taller, the plate 343 px, and the app's own rule gives
+  the compact form there. The raised stops still require the compact form, and every stop the card
+  open, its ring clear, off the keys and inside the plate.
+- `shoot.mjs`, *the finger meets the cell it sees*: 0.95 where it was 0.97. With the plate 44 px
+  shorter the grid of samples lands on two more of the field's walls (74 of 77 within 150 m; the far
+  ones at the field's southwest wall and one at 1 946 m, cell I 33, J 88, K 1), where a ray through a wall
+  meets the top behind it. `mapPoint()` is unchanged; the drawn line still lands under the finger
+  (0.02 and 0.01 px). **The lead may prefer a better wall rule to the looser threshold.**
+
+### New checks
+
+- `shoot.mjs` (*the pane's edge and the sweep (2.3)*): Across sweeps the rows (93 places; `row J 70`,
+  every block in J 70; said `Row J 70.`; the line on the model moved); Along the columns (`column I 22`,
+  every block its own); a fast touch scrub of the slider (every frame drew the slider's place, both
+  canvases at their own size, the pane held while the finger was down and fitted after); a drawn line
+  swept parallel (|cos| 1.000000, 89.0 m, the words); a touch drag on the edge past tall and back (the
+  top under the finger to 0.00 px, no stretched frame, the model's 120 px strip); a double tap to tall
+  and back (`Tall`, `vertical ×20` drawn ×20.00 and said, one finger on the strip turns the model); the
+  keys (`0.3`, `30`) and the size over a reload; hit targets with the pane grown; on its side the side
+  edge under the finger, the model 160 px with its plates side by side.
+- `test_section.mjs` (8): the families and the field lines' places; every slice's blocks its own, on
+  its path, A west; lineAt and the wells on a path; a drawn line's steps; the own stretch.
+
+### The camera (HOUSE 7.4)
+
+No string the camera reads or taps changed: `Oil saturation` (the legend's title, written last),
+`Pressure`, `Oil`, `Show the whole field`, `Play production history`, `Pause`, `Show the controls`, the
+grip's three names. New names: `Line position`, `Previous column` / `Next column` (`row`, `step`),
+`Section height`, `Section width`; on screen `I 23`, `J 70`, `Drawn`, `89 m NW`. A library saved tall
+opens tall; the camera's waits do not depend on the pane.
+
+### Owner calls (taste, each reversible)
+
+1. The edge under the model is the head's free stretch, its grip on the line; not a strip of its own.
+2. The minimum strips: 120 px under, 160 px beside (plus the screen's inset).
+3. Tall is the most the strip allows (the pane 427 of 547 px at 390 × 844, 78 %); a double tap goes
+   there.
+4. **Superseded after review (below): the row is 32 px with 44 px hits and the caps take it.** The sweep row (44 px) sits under the plot inside 2.2's compact caps. Where the section fitted under
+   the cap, the pane grows by the row: Along, the pane 160 → 204 px and the model 387 → 343 px with the
+   sheet closed. Where it was at the cap, the plot gives the row up: Across, the plot 153 → 109 px; with
+   the sheet raised the pane is at its 169 px cap for both lines and the plot 59 px (Along 94, Across
+   103 in 2.2; the model 245 → 236 px for Along). The edge gives the room back on demand; the
+   alternative raises the caps by 44 px and takes it from the model.
+5. A taller pane stretches the section to a round figure that fills it, up to ×50; the alternative
+   keeps the 3D view's stretch and leaves the extra height empty.
+6. Columns (I) for Along and rows (J) for Across, in the app's own words (see 2 above).
+7. A swept column or row follows its own path through the grid (its own cells) rather than a straight
+   line; the field's lines stay straight.
+8. The field's own line sits on the slider among the slices; the alternative drops it from the slider.
+9. Visible place words: `I 23` and `J 70` (the card's letters), `Along`, `Across`, `Drawn`, `89 m NW`.
+10. With the sheet open on its side, the cut's key takes its own row (the plate 15 px shorter there).
+
+### Phone checks (none claimed; for the device matrix)
+
+On an iPhone 16-class device and the iOS 18 floor, in Snuggery's full screen: the edge dragged by
+finger, upright and on its side, both views sharp and the model refitting as it goes (frame time and
+memory with the section tall; the gap hatch is rebuilt each frame of a drag); the double tap on the edge
+not taken by the web view as a zoom; VoiceOver on the edge (its name, `Compact`, `Tall`, the percentage,
+swipe up and down stepping it: WebKit sends the arrow keys for an ARIA slider, which is what the edge
+answers) and on the sweep's slider (`column I 23`, adjustable, ‹ › heard); the sweep scrubbed fast by
+finger on the native range, sharp; the 120 px strip turned and tapped; the 160 px strip beside the pane
+with the notch on the left; the remembered size after a relaunch; Explode at the first stop in both
+orientations.
+
+### Budgets
+
+App code **250 592 B against the 222 000 B the lead ruled for 2.2** (`app.js` 135 020, `style.css`
+35 518, `js/section.js` 33 833, `index.html` 20 205, `js/track.js` 7 840, `js/units.js` 7 225,
+`js/data.js` 6 387, `js/pane.js` 4 564): 2.3 adds 28 798 B: `js/section.js` +10 298 (the columns,
+the slices and their sections, the wells on a path, a drawn line's steps, the own stretch),
+`app.js` +9 630 (the sweep, the edge's wiring, the fit split out before the draw, About's sentences,
+the narrow card and its click guard, the test hook's frame log), `js/pane.js` 4 564, `style.css`
++2 477 and `index.html` +1 829. Nothing was cut
+to fit (the brief); `check.mjs` fails that one line until the lead rules. Fonts 40 075 B of 160 000.
+The ZIP as `build-zips.yml` packs it is 15 392 425 B of its 19 110 591 B cap (15 380 306 at the
+start). `data/` is byte for byte as it was: everything here is code.
+
+### Verified (from `Template/norne-reservoir/`, 2026-10-07, after the last change; headless figures are
+SwiftShader trends on the build Mac, never phone evidence)
+
+- `node tools/check.mjs`: 44 ok, 1 FAIL, the code cap above (exit 1 for that line alone); the seven
+  data files byte-identical to their pins; palette ALL CHECKS PASS; version 2.3; the camera's strings;
+  US spelling; no vendor name (`tools/.work/p23/check-final.log`).
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`: all checks pass (the section's new
+  part 8 above).
+- `python3 norne-reservoir/tools/art/palette.py` from `Template/`: ALL CHECKS PASS.
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: exit 0, 177 ok, both themes
+  (`tools/.work/p23/shoot-final.log`); the section drawn in about 17 ms a draw; `screenshots/*`
+  rewritten, one new (`pane-tall-light.png`), `screenshots/app.png` untouched.
+- `tools/.work/p23/drive.mjs` in Chromium and WebKit, light and dark, 390 × 844 DPR 2 (taps by touch in
+  both; drags by touch in Chromium and by mouse in WebKit, which has no touch drag in Playwright): the
+  sweep by ‹ › and by its slider, a double tap to tall, a tap on a block, focus mode tall, on its side
+  and back; no console error (`drive-final.log`). The probes (`probes-final.log`): the double tap, keys,
+  memory and the side edge; a scrub of the slider in every frame at the newest place, no stretched
+  canvas; a drag past tall, sharp, the strip turning; Explode at the first stop both ways; the card on
+  the narrow strip. One headless note: in one Chromium run a double tap's two taps arrived 347 ms
+  apart and in another over 400 ms (the first frames after the section opens are slow in SwiftShader),
+  so that run took the second double tap; the app's window is 400 ms, as the plate's is 380.
+- `bash scripts/package.sh` names `js/pane.js` in its URL scan (it copies `js/` whole); not run.
+- Not run: anything on a phone.
+
+## Plan 0012, package 3.4b, after QA and review (2026-10-07)
+
+QA passed the build with one should and a nit; the reviewer failed it on one must, with three shoulds and
+four nits. Every must and should is applied; the nits taken are the free ones.
+
+### Applied
+
+- **Must: on a strip, a turn took an end of the line.** `secHandle()` grabbed A or A′ within 22 px, and
+  on the 120 px strip the model is about 79 × 26 px, so 57 to 70 % of its cells lay within an end's hit
+  (the reviewer's 61 %; measured again here with `tools/.work/fix/m1.mjs`, which samples the plate every
+  4 px). Now the ends take a touch only where the model is drawn **90 px or more on its shorter side**
+  (`SEC_GRAB_MIN`, `modelBox()` projects the fit's points: the cells' corners and the well heads, at
+  pointer-down only). Measured at 390 × 844 and 844 × 390: every state where the ends still grab has
+  8 to 12 % of the model's cells within an end (2.2's compact figure); every state where they no longer
+  do had 16 % or more (16 to 80 %). Below it one finger always turns the model, and `Draw` still draws a
+  new line; the ends move again once the model is drawn larger (the pane made smaller, or zoomed in).
+  The reviewer's other option (an end hit shrunk to the 12 px marker on the strip) was not built: on a
+  79 × 26 px model a 12 px disc at each end still covers a large part of it (not measured).
+  The probe's states were sampled while the caps below were being changed, with the sweep row at 44 px;
+  the gate depends on the model's drawn size, not on the caps.
+- **Should: the grip sat on the top boundary of its hit.** Under the model the edge's hit now reaches
+  22 px up over the plate's foot (`.sec-head .sec-edge { margin-top: -22px }`, inside the head's own
+  z-index, under the keys' plates), so the grip is in the middle of a 66 px hit: `elementFromPoint` at
+  the grip's middle −8, −4, 0, +4, +8 px is the edge (`shoot.mjs`), and a drag by touch from 6 px above
+  the grip resizes the pane and does not turn the model (Chromium and WebKit, `drive.mjs`). The plate's
+  bottom 22 px no longer turns the model while the section is open; a line end drawn there is reached
+  with the pane made smaller or the model turned. Two `shoot.mjs` touches that used a plate rectangle
+  read before the pane refitted to a drawn line (the two-finger step and the turn after it) now read the
+  plate as it is.
+- **Should: the raised-sheet compact plot was 59 px.** Taken from both of the reviewer's directions,
+  within the reservoir's minimum share (the model at least 220 px with the sheet up, `shoot.mjs`'s
+  *the view keeps about half the screen*, package 3.4), which the plain alternative (the caps raised by
+  44 px) would have broken: the model 192 px for Across with the sheet up.
+  - The sweep row is **32 px**; its keys and slider keep 44 px hits that reach 6 px over the plot's
+    distance words above and the key's top below (neither takes a touch; the row is over both by its
+    own z-index). `hitTargets()` still finds every control at 44 × 44 or more.
+  - Sheet closed: the cap is `clamp(202px, 26dvh + 32px, 262px)`, 2.2's cap plus the row, so the
+    Across plot is 2.2's again (the model 355 px under Along, 547 px of view).
+  - Sheet raised: the cap is `clamp(150px, var(--view-min) − 220px, 234px)`, what the model can give
+    above its 220 px: 185 px at 844, so the compact plot is **87 px** for both lines (2.2: Along 94,
+    Across 103; the review's 59). The model is 220 px there (236 before). Below the reviewer's "about
+    90" by 3 px; the rest would come from the model's 220 px or the sheet's 187, which are the brief's.
+  - Owner call 4 above is superseded by this; the alternative now is the 44 px row (59 px plot) or the
+    model under 220 px.
+- **Should: the side edge's orientation, with its keys.** `#sec-side` is `aria-orientation="horizontal"`
+  (QA's finding), and the keys follow the slider convention on both edges: ↑ and → larger, ↓ and ←
+  smaller (the reviewer's point: WebKit's increment sends → to a horizontal slider, which used to
+  narrow the pane). Checked in `shoot.mjs` (from tall: ← 90, → 100, ↓ 90, ↑ 100). On a keyboard beside
+  the model, → now widens the pane although its edge moves left; the slider convention is the one
+  assistive technology relies on, so it wins. **For the device row:** VoiceOver's increment on the side
+  edge widens the pane.
+
+### Nits
+
+- Taken: the side edge comes first in the pane's DOM (it is absolutely placed, so nothing moves), so
+  focus meets it where it is drawn, at the pane's left.
+- Taken: distance words thin evenly. Where interior words would touch, every other one gives way (then
+  every third, …) before the last word, which carries the unit, takes the one next to it; before, only
+  the words next to the last gave way (`0 500 1 000 _ _ 2 500 m`).
+- Not taken: the two `vertical ×N` figures on one screen. The brief asked for the pane's own figure at
+  its foot and the 3D view's on the instrument line; `section vertical ×20` does not fit the key row
+  beside the wells at 390 px, and hiding the pane's while it equals the 3D view's makes the figure come
+  and go with the edge. Left to the lead or owner.
+- For the lead: the code cap and the records outside this folder (the device matrix row for 2.3, the
+  manual steps).
+
+### Checks added to `shoot.mjs`
+
+- On the 120 px strip (upright, tall) and the 160 px strip (on its side), a one-finger drag that starts
+  on the model 8 px from A′ turns it and leaves the line's ends as they were.
+- The grip under the model lies inside its edge's hit (±8 px).
+- At the raised sheet's first stop, the compact pane's plot is 86 px or more for Along and Across, the
+  model 220 px.
+- The side edge is a horizontal slider and its keys step it in the slider convention.
+
+### The camera (HOUSE 7.4)
+
+No string the camera waits for or taps changed.
+
+### Budgets after the fixes
+
+App code **252 685 B** against the lead's 222 000 B (the builder's 250 592 B plus 2 093: `app.js`
+136 251 (+1 231: the model's box, the ends' gate, the even distance words, two test hooks),
+`style.css` 36 295 (+777), `js/pane.js` 4 647 (+83), `index.html` 20 207 (+2)). Nothing cut to fit;
+`check.mjs` fails that one line for the lead's ruling. The ZIP 15 393 528 B of 19 110 591. `data/`
+untouched.
+
+### Verified (from `Template/norne-reservoir/`, 2026-10-07, after the last change; headless, never phone evidence)
+
+- `node tools/check.mjs`: 44 ok, 1 FAIL (the code cap above); version 2.3; the camera's strings
+  (`tools/.work/fix/check-final.log`).
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`: all checks pass.
+- `python3 norne-reservoir/tools/art/palette.py` from `Template/`: ALL CHECKS PASS.
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: exit 0, 182 ok, both themes
+  (`tools/.work/fix/shoot-final.log`); `screenshots/app.png` untouched.
+- `tools/.work/fix/drive.mjs` in Chromium (light, drags by CDP touch) and WebKit (dark, taps by touch,
+  drags by mouse) at 390 × 844 DPR 2 and 844 × 390 (`drive.log`): a drag from 6 px above the grip
+  resizes the pane (0 → 0.42) with the model unturned; a double tap to tall (the model 120 px); on the
+  strip a drag from 6 px off A′ and one from 6 px off A each turn the model (theta 62 → 13 → −36) with
+  the line's ends unchanged; a double tap back to compact; Across at the raised sheet's first stop, an
+  87 px plot over a 220 px model, `›` to `J 70`; on its side, tall, a drag from 6 px off A′ on the
+  160 px strip turns the model with A′ unchanged; no console error. Pictures looked at in
+  `tools/.work/fix/shots/`.
+- Not run: anything on a phone.
+
+
+## Plan 0012, package 3.4b, after the final review (2026-10-07)
+
+The final failed 2.3 on one must, with a should and two nits; the lead ruled the code budget the same
+day. Everything below is applied. Probes and logs: `tools/.work/p23c/` (scratch, deleted at the end of
+the pass; the figures are copied here).
+
+### The must: on its side with the sheet raised, the model in a third of its plate
+
+At 844 × 390 with the sheet at its first raised stop and the pane compact, the plate is 272 × 207 px.
+2.3's `layoutKeys()` took `keys-cols` for any plate under 302 px tall and 310 px wide, which fitted the
+model into 94 × 36 px (35 % of the plate's width) and put its line's ends under `SEC_GRAB_MIN`.
+
+- **2.2 measured, not only recalled.** The final's copy of 2.2 (rebuilt from HEAD in the session's
+  scratchpad: `app.js`, `index.html`, `style.css` and `js/section.js` as 2.2 had them; this pass ran no
+  git) driven the same way: plate 272 × 223, `keys-row`, A and A′ at x 33 and 240 (the final's
+  figures exactly), the drag from 6 px off A′ moving it. It also showed what neither record said: 2.2's
+  row there is 286 px in a 272 px plate, so it stood 22 px past the plate's left edge and `Zoom in`
+  was cut in half (its picture). 2.3's `.sectioned .keys { right: 30px }` would have put it 44 px out.
+  So the row cannot simply come back there.
+- **As built.** `layoutKeys()`: the column where the plate is 302 px tall or more; else 2.2's row
+  wherever it fits inside the plate (8 px inset) (every upright state, and on its side with the sheet
+  closed); else, of the forms that fit inside the plate, the one that leaves the larger fitted model:
+  **two rows** (`keys-wrap`, new: the zoom plate over the other two, 150 × 84 px, top right) or the
+  plates side by side (`keys-cols`, 130 × 134). The model's size is worked out from the rooms
+  `fitRooms()` gives the fit, at the field's aspect as last fitted (`G.fitAsp`, written by
+  `fitCam()`), so it costs two style toggles, never a fit; it is worked out again only when the
+  plate's size, the keys' visibility or `.sectioned` change (`G.keysAt`). Measured: at the raised
+  stop the two rows win (model 231 × 81 px, **85 %** of the plate's width, Along and Across, Chromium
+  and WebKit alike); on the 160 px strip only the side-by-side form fits (two rows need 180 px) and it
+  is taken, as before. A first cut of this let the two rows win on the raised 160 px strip by the
+  model's measure while they stood 20 px past the plate's edge (`webkit-dark-844x390-raised-tall`,
+  seen in the picture); a form now has to fit inside the plate to be weighed at all.
+- **The card's `.narrow` form** still follows the plate's width alone (under 310 px): it does not
+  touch the model's fit, and on a 272 px plate the full card would squeeze its place line as on the
+  strip.
+- **The ends' gate moved: `SEC_GRAB_MIN` 90 → 76 px.** At 231 × 81 the old gate (the shorter side
+  90 px or more) still refused the ends, and no layout of a 272 × 207 plate gives a field about three
+  times wider than tall 90 px of height (the room under the two key rows is 81 px). Measured again
+  over the pane's sizes in tenths and fifths, both orientations, sheet closed and raised
+  (`p23c/share.mjs`, the fix pass's method: the plate sampled every 4 px, the share of the model's
+  cells within an end's 22 px):
+
+  | the model's shorter side | its cells within an end's reach |
+  | --- | --- |
+  | 100 px and more | 8 to 15 % |
+  | 80 to 87 px (231 × 81 here; 247 × 80; 244 × 87; 269 × 87) | 16 to 22 % |
+  | 75 px and less (231 × 75, 203 × 72, 190 × 69, 181 × 65, … the strips at 27 to 51) | 21 to 70 %, all but one 24 % and up |
+
+  76 sits between the 80 px states and the 75 px state; every state that still grabs has 22 % or
+  less within an end, every strip the reviewer's must was about (57 to 70 %) still turns the model.
+  The states the fix pass newly refused at 80 to 87 px (a pane grown to 0.6 to 0.8) take the ends
+  again; the margin at the raised stop is 5 px (81 against 76) and does not move with fonts (the
+  room is the plate less the two key rows).
+- **Checked in `shoot.mjs`** (*on its side, the sheet at its first raised stop, the pane compact*):
+  for Along and Across, the model 70 % or more of the plate's width (85 %), the keys inside the plate,
+  and a touch drag from 6 px off A′ moves A′ (1 372 and 1 885 m) and leaves A, the line now drawn.
+
+### The should: the sweep's slider 63 px for 93 places
+
+In the same state the pane's content is 206 px wide, and `‹` 44, the slider and `›` 44 cannot hold
+140 px for the slider in it even with the word gone (127 px). As built: where the plot is under 284 px
+wide (`fitSection()` sets `.narrow` on the row in the frame that draws, from the plot's width, which
+the row's form does not change), the place word takes a 15 px line of its own **over** the track,
+centered, and the row reaches the pane's padding edge (−12 px instead of −4), so the track is
+**143 px** and the plot gives 15 px (110 → 95). Over, not under: the side edge's hit ends 65 px above
+the pane's foot, just over the row's keys, and the word under them would have pushed the keys into it.
+The slider's flex basis is 0, so its keys never wrap. Measured in `shoot.mjs` at 12 states (upright
+and on its side, the sheet at each of its three stops, compact and tall): 222, 199, 470, 175 px, and
+143 px with the word over it on its side at both raised stops compact.
+
+### The nit: the side edge says what it does
+
+`js/pane.js`: `Compact`; `Tall` under the model, `Wide` beside it; between, `77 percent of the view’s
+width` (or `height`). `shoot.mjs` pins `Wide` and the width wording. About's sentence says "between
+compact and its largest" where it said "compact and tall".
+
+### Found while driving, fixed as a must: the double tap's own click
+
+A double tap on the side edge back to compact (Chromium, real touch, the sheet raised) closed the
+section: the second tap's pointerup shrinks the pane, and the click that follows the lift is hit-tested
+where the finger was, by then over the plate's `Section` key (the model, upright). `js/pane.js` takes
+the one click that follows a double-tap toggle (capture phase, within 400 ms), as `tap()` does for a
+card opened under the finger; an assistive click (detail 0) still toggles. `shoot.mjs` checks both
+edges: after the double tap back the section is open and no card opened.
+
+### The lead's ruling, applied
+
+`tools/check.mjs` item 15: `CODE_CAP = 256000`, with a comment naming the ruling (2026-10-07: D13's
+edge and D14's sweep, which the owner asked for and Volve will copy). ART.md and NOTES.md give the
+measured figure.
+
+### The camera (HOUSE 7.4)
+
+No string the camera waits for or taps changed. The edge's value text `Tall` stays under the model;
+beside it the edge now says `Wide` (not a camera string).
+
+### Left for the lead (not changed here)
+
+- On the 160 px strip with the sheet raised (the pane made wide on its side), the plates side by side
+  leave no room the fit accepts, so the model is drawn at the fallback distance behind the key
+  plates (156 × 57 px box; the fix pass's log has the same box). Two rows do not fit there.
+- At the raised stop on its side the pane's foot (`No active cell`, `Wells within 150 m`,
+  `vertical ×5`) is wider than 206 px, and its last word is cut where a gap is in the section.
+  2.2 had the same pane width; `shoot.mjs` checks that foot at its widths with the sheet closed only.
+- The side edge's drag in `shoot.mjs` followed the finger to 0.47 px in this pass's runs (0.00 before);
+  inside the check's 1 px.
+
+### Owner calls (taste, each reversible)
+
+1. Two rows for the keys where the row does not fit and they leave the model larger; the alternative
+   is 2.2's row, cut off past the plate's edge.
+2. The ends take a touch on a model 76 px or more on its shorter side (was 90 in the fix pass).
+3. In a narrow pane the place word sits over the slider; the alternative is the word in the slider's
+   spoken value only (15 px more plot).
+
+### Phone checks (none claimed; for the device matrix)
+
+On an iPhone 16-class device and the iOS 18 floor, on its side with the sheet at its first stop and the
+section open: the keys in two rows inside the plate, an end of the line dragged by finger; the sweep
+scrubbed by finger on its 143 px track with the place word over it; a double tap on the side edge to
+wide and back, the section staying open (iOS's click after a double tap is the case the fix is for);
+VoiceOver on the side edge saying `Wide` and `… percent of the view’s width`.
+
+### Budgets
+
+App code **255 443 B** of the lead's 256 000 (`app.js` 137 645, `style.css` 37 087, `js/section.js`
+33 833, `index.html` 20 214, `js/track.js` 7 840, `js/units.js` 7 225, `js/data.js` 6 387,
+`js/pane.js` 5 212): 2 758 B over the final's 252 685 (the key forms and their choice, the narrow
+sweep row, the click guard, the edge's words). The ZIP 15 394 827 B of 19 110 591. `data/` untouched
+(`check.mjs`: the seven data files byte-identical to their pins).
+
+### Verified (from `Template/norne-reservoir/`, 2026-10-07, after the last change; headless, never phone evidence)
+
+- `node tools/check.mjs`: exit 0, 45 ok, all checks pass (the code 255 443 B of 256 000; version 2.3;
+  the camera's strings; US spelling; the ZIP 15 394 827 B).
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`: exit 0, all checks pass.
+- `python3 norne-reservoir/tools/art/palette.py` from `Template/`: ALL CHECKS PASS.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, then `SCREENSHOTS=1 …` after the last change: exit 0,
+  189 ok, 0 failed, light and dark; `screenshots/app.png` untouched. The screenshots whose bytes
+  changed: `pane-tall-light`, `pressure-light`, `sheet-dark`, each looked at and as before in what they
+  show (none shows the states this section changed).
+- Driven by touch at DPR 2 in Chromium (light; drags by CDP touch) and WebKit (dark; taps by touch,
+  drags by mouse, which Playwright's WebKit has for want of touch drags), at 390 × 844 and 844 × 390,
+  the sheet raised: the keys' form and the model (231 × 81 on its side, 366 × 121 upright), a drag from
+  6 px off A′ moving it in every state, the slider by a tap (I 33), `›` twice (I 35, spoken
+  `column I 35`) and a drag to its end (I 41), focus mode on and off (the keys back in two rows inside
+  the plate), a double tap on the edge to tall or wide and back; no console error. Pictures looked at:
+  the raised states before and after, in both engines, the 160 px strip raised, `pane-raised-side`,
+  `pane-side`, and the three changed screenshots.
+- Not run: anything on a phone.

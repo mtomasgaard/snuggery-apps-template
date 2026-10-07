@@ -154,6 +154,35 @@ export function wellsNear(paths, ln, corridor) {
   return out;
 }
 
+/** The middles of the grid's columns on the map (each column the active cells of one I and J, its middle
+ *  the mean of their corners), with their I and J (from 1), and the grid's two directions on the map:
+ *  dI and dJ, the mean step from a column to its neighbor one I or one J on, as unit vectors, and step.I
+ *  and step.J, those steps' mean lengths in meters. */
+export function columns(geom, NA, ijk, NI, NJ) {
+  const sx = new Float64Array(NI * NJ), sy = new Float64Array(NI * NJ), n = new Uint32Array(NI * NJ);
+  for (let c = 0; c < NA; c++) {
+    const q = ijk[c * 3] + ijk[c * 3 + 1] * NI;
+    for (let k = 0; k < 8; k++) { sx[q] += geom[c * 24 + k * 3]; sy[q] += geom[c * 24 + k * 3 + 1]; }
+    n[q] += 8;
+  }
+  const x = [], y = [], I = [], J = [], d = { I: [0, 0], J: [0, 0] }, cnt = { I: 0, J: 0 };
+  for (let q = 0; q < n.length; q++) {
+    if (!n[q]) continue;
+    x.push(sx[q] / n[q]); y.push(sy[q] / n[q]); I.push(q % NI + 1); J.push(Math.floor(q / NI) + 1);
+    for (const [key, r, ok] of [['I', q + 1, q % NI < NI - 1], ['J', q + NI, q + NI < n.length]]) if (ok && n[r]) { d[key][0] += sx[r] / n[r] - sx[q] / n[q]; d[key][1] += sy[r] / n[r] - sy[q] / n[q]; cnt[key]++; }
+  }
+  const unit = (v) => { const L = Math.hypot(v[0], v[1]) || 1; return [v[0] / L, v[1] / L]; };
+  return { x, y, I, J, m: x.length, dI: unit(d.I), dJ: unit(d.J), step: { I: Math.hypot(...d.I) / (cnt.I || 1), J: Math.hypot(...d.J) / (cnt.J || 1) } };
+}
+/** A line trimmed to the cells it cuts: from the first to the last, in whole meters. */
+export function trimLine(geom, NA, ijk, l) {
+  const sec = cutGrid(geom, NA, ijk, l.a, l.b, null);
+  if (!sec.n) return l;
+  let lo = Infinity, hi = -Infinity;
+  for (let i = 0; i < sec.pts.length; i += 2) { if (sec.pts[i] < lo) lo = sec.pts[i]; if (sec.pts[i] > hi) hi = sec.pts[i]; }
+  const { ux, uy } = sec.line, at = (t) => [Math.round(l.a[0] + ux * t), Math.round(l.a[1] + uy * t)];
+  return { ...l, a: at(lo), b: at(hi) };
+}
 /** The field's own two lines, from the cells themselves. Along: of the straight lines through the
  *  field (every whole degree, offsets every 50 m), the one that passes within `half` meters of the
  *  middles of the most grid columns; Across: of the lines square to it, the one that does. Each runs
@@ -161,15 +190,8 @@ export function wellsNear(paths, ln, corridor) {
  *  on a line running north and south). Columns, not cells: a line is judged by the field it crosses
  *  on the map, whatever the layers below. */
 export function fieldLines(geom, NA, ijk, NI, NJ, half = 60, pad = 150) {
-  const sx = new Float64Array(NI * NJ), sy = new Float64Array(NI * NJ), n = new Uint32Array(NI * NJ);
-  for (let c = 0; c < NA; c++) {
-    const q = ijk[c * 3] + ijk[c * 3 + 1] * NI;
-    for (let k = 0; k < 8; k++) { sx[q] += geom[c * 24 + k * 3]; sy[q] += geom[c * 24 + k * 3 + 1]; }
-    n[q] += 8;
-  }
-  const xs = [], ys = [];
-  for (let q = 0; q < n.length; q++) if (n[q]) { xs.push(sx[q] / n[q]); ys.push(sy[q] / n[q]); }
-  const m = xs.length, mx = xs.reduce((a, b) => a + b, 0) / m, my = ys.reduce((a, b) => a + b, 0) / m;
+  const { x: xs, y: ys, m } = columns(geom, NA, ijk, NI, NJ);
+  const mx = xs.reduce((a, b) => a + b, 0) / m, my = ys.reduce((a, b) => a + b, 0) / m;
   const best = (angles) => {
     let top = null;
     for (const deg of angles) {
@@ -201,16 +223,130 @@ export function fieldLines(geom, NA, ijk, NI, NJ, half = 60, pad = 150) {
     return { a: a.map((v) => Math.round(v)), b: b.map((v) => Math.round(v)), deg: top.deg, columns: top.cnt };
   };
   // each line ends where the cells it cuts end, so its ends lie on the field
-  const trim = (l) => {
-    const sec = cutGrid(geom, NA, ijk, l.a, l.b, null);
-    let lo = Infinity, hi = -Infinity;
-    for (let i = 0; i < sec.pts.length; i += 2) { if (sec.pts[i] < lo) lo = sec.pts[i]; if (sec.pts[i] > hi) hi = sec.pts[i]; }
-    const { ux, uy } = sec.line, at = (t) => [Math.round(l.a[0] + ux * t), Math.round(l.a[1] + uy * t)];
-    return { ...l, a: at(lo), b: at(hi) };
-  };
-  const along = trim(best(Array.from({ length: 180 }, (_, i) => i)));
-  const across = trim(best([(along.deg + 90) % 180]));
+  const along = trimLine(geom, NA, ijk, best(Array.from({ length: 180 }, (_, i) => i)));
+  const across = trimLine(geom, NA, ijk, best([(along.deg + 90) % 180]));
   return { along, across, columns: m };
+}
+
+/* ── the sweep (plan 0012 D14): the line moved across the field, one of the grid's own slices at a time ── */
+
+/** The family a line sweeps through: the grid's columns (I) or its rows (J), whichever family's step from
+ *  one slice to the next lies most nearly square to the line. cols: columns() above. */
+export function sweepAxis(cols, a, b) {
+  const { ux, uy } = lineOf(a, b), dot = (d) => Math.abs(-uy * d[0] + ux * d[1]);
+  return dot(cols.dI) >= dot(cols.dJ) ? 'I' : 'J';
+}
+/** The slices of one family that hold an active cell, in grid order: [{ k, mid }], k from 1, mid the
+ *  middle of its columns' middles on the map. */
+export function slices(cols, axis) {
+  const by = new Map();
+  for (let i = 0; i < cols.m; i++) { const k = cols[axis][i], v = by.get(k) || [0, 0, 0]; v[0] += cols.x[i]; v[1] += cols.y[i]; v[2]++; by.set(k, v); }
+  return [...by.keys()].sort((p, q) => p - q).map((k) => { const v = by.get(k); return { k, mid: [v[0] / v[2], v[1] / v[2]] }; });
+}
+/** Where a line of the field's own (l) sits among a family's slices: the index of the first slice whose
+ *  middle lies beyond the line's middle, going the way the family's index grows; the line takes that
+ *  place in the sweep. */
+export function slot(cols, axis, list, l) {
+  const d = axis === 'I' ? cols.dI : cols.dJ, m = [(l.a[0] + l.b[0]) / 2, (l.a[1] + l.b[1]) / 2];
+  const i = list.findIndex((s) => (s.mid[0] - m[0]) * d[0] + (s.mid[1] - m[1]) * d[1] > 0);
+  return i < 0 ? list.length : i;
+}
+/**
+ * One slice of the grid as a section (plan 0012 D14): the active cells of one column (axis 'I', one I) or
+ * row ('J', one J), each drawn as the block it is, along the slice's own path rather than a straight line.
+ * A cell's block is its face midway across the slice, from its corners: its back side (toward the lower
+ * index along the slice) and its front, top and base. The path runs through the middles of the pillars
+ * between one cell and the next (the mean over the slice's cells at each boundary, a gap in the slice
+ * bridged straight); s is the distance along it from A, its west end. The shape is cutGrid's, so every
+ * layer draws it alike; line.path holds the path on the map and line.s the distance at each point.
+ */
+export function sliceSection(geom, NA, ijk, axis, k, tops) {
+  const t0 = typeof performance === 'object' ? performance.now() : Date.now();
+  const own = axis === 'I' ? 0 : 1, run = 1 - own, along = axis === 'I' ? 2 : 1, across = axis === 'I' ? 1 : 2;
+  const ids = [], bx = new Map();
+  const mid = (p, i, j, c) => (geom[p + i * 3 + c] + geom[p + j * 3 + c]) / 2;
+  const add = (b, x, y) => { const v = bx.get(b) || [0, 0, 0]; v[0] += x; v[1] += y; v[2]++; bx.set(b, v); };
+  for (let c = 0; c < NA; c++) {
+    if (ijk[c * 3 + own] !== k - 1) continue;
+    const p = c * 24, j = ijk[c * 3 + run];
+    ids.push(c);
+    add(j, mid(p, 0, across, 0), mid(p, 0, across, 1));
+    add(j + 1, mid(p, along, along | across, 0), mid(p, along, along | across, 1));
+  }
+  const bs = [...bx.keys()].sort((p, q) => p - q), j0 = bs[0] ?? 0, j1 = bs[bs.length - 1] ?? 0, path = [];
+  for (let j = j0; j <= j1; j++) {
+    if (bx.has(j)) { const v = bx.get(j); path.push([v[0] / v[2], v[1] / v[2]]); continue; }
+    const lo = bs.filter((q) => q < j).pop(), hi = bs.find((q) => q > j), A = bx.get(lo), B = bx.get(hi), t = (j - lo) / (hi - lo);
+    path.push([A[0] / A[2] + (B[0] / B[2] - A[0] / A[2]) * t, A[1] / A[2] + (B[1] / B[2] - A[1] / A[2]) * t]);
+  }
+  if (!path.length) path.push([0, 0], [1, 0]);
+  const flip = path[path.length - 1][0] < path[0][0];
+  if (flip) path.reverse();
+  const sAt = [0];
+  for (let i = 1; i < path.length; i++) sAt.push(sAt[i - 1] + Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]));
+  const L = sAt[sAt.length - 1] || 1, S = (j) => sAt[flip ? j1 - j : j - j0];
+  const cells = [], offs = [0], pts = [], topSeg = [];
+  let z0 = Infinity, z1 = -Infinity;
+  for (const c of ids) {
+    const p = c * 24, j = ijk[c * 3 + run], sb = S(j), sf = S(j + 1);
+    const q = [sb, mid(p, 0, across, 2), sf, mid(p, along, along | across, 2), sf, mid(p, 4 | along, 4 | along | across, 2), sb, mid(p, 4, 4 | across, 2)];
+    if (Math.max(q[7] - q[1], q[5] - q[3]) < 1e-3) continue;   // a pinched-out cell: no height
+    cells.push(c);
+    for (let i = 0; i < 8; i += 2) { pts.push(q[i], q[i + 1]); if (q[i + 1] < z0) z0 = q[i + 1]; if (q[i + 1] > z1) z1 = q[i + 1]; }
+    offs.push(pts.length / 2);
+    if (tops && tops[ijk[c * 3 + 2] + 1]) topSeg.push(...(sb < sf ? [sb, q[1], sf, q[3]] : [sf, q[3], sb, q[1]]));
+  }
+  const line = { ...lineOf(path[0], path[path.length - 1]), L, path, s: sAt, slice: { axis, k } };
+  const t1 = typeof performance === 'object' ? performance.now() : Date.now();
+  return { line, n: cells.length, cells: Int32Array.from(cells), offs: Int32Array.from(offs), pts: Float32Array.from(pts), tops: Float32Array.from(topSeg), z0, z1, ms: t1 - t0 };
+}
+/** The point at distance s along a section's line on the map: on its path where it has one. */
+export function lineAt(ln, s) {
+  if (!ln.path) return [ln.a[0] + ln.ux * s, ln.a[1] + ln.uy * s];
+  const P = ln.path, D = ln.s;
+  let i = 1;
+  while (i < P.length - 1 && D[i] < s) i++;
+  const t = (s - D[i - 1]) / ((D[i] - D[i - 1]) || 1);
+  return [P[i - 1][0] + (P[i][0] - P[i - 1][0]) * t, P[i - 1][1] + (P[i][1] - P[i - 1][1]) * t];
+}
+/** wellsNear() for a section along a path: each well's path, in steps of 10 m or less, against the path's
+ *  segments; a point within `corridor` of the path is drawn at the distance along it of its nearest point. */
+export function wellsNearPath(paths, ln, corridor) {
+  const out = [], P = ln.path, D = ln.s, box = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const q of P) { box[0] = Math.min(box[0], q[0] - corridor); box[1] = Math.min(box[1], q[1] - corridor); box[2] = Math.max(box[2], q[0] + corridor); box[3] = Math.max(box[3], q[1] + corridor); }
+  paths.forEach((path, i) => {
+    if (!path.some((q) => q[0] >= box[0] && q[0] <= box[2] && q[1] >= box[1] && q[1] <= box[3]) && !path.some((q, k) => k && Math.min(q[0], path[k - 1][0]) <= box[2] && Math.max(q[0], path[k - 1][0]) >= box[0] && Math.min(q[1], path[k - 1][1]) <= box[3] && Math.max(q[1], path[k - 1][1]) >= box[1])) return;   // nowhere near
+    const parts = []; let cur = null, dmin = Infinity;
+    for (let k = 0; k + 1 < path.length; k++) {
+      const A = path[k], B = path[k + 1], n = Math.max(1, Math.ceil(Math.hypot(B[0] - A[0], B[1] - A[1], B[2] - A[2]) / 10));
+      for (let m = k ? 1 : 0; m <= n; m++) {
+        const t = m / n, x = A[0] + (B[0] - A[0]) * t, y = A[1] + (B[1] - A[1]) * t, z = A[2] + (B[2] - A[2]) * t;
+        let best = Infinity, bs = 0;
+        for (let g = 1; g < P.length; g++) {
+          const ex = P[g][0] - P[g - 1][0], ey = P[g][1] - P[g - 1][1], e2 = ex * ex + ey * ey || 1;
+          const u = Math.max(0, Math.min(1, ((x - P[g - 1][0]) * ex + (y - P[g - 1][1]) * ey) / e2)), dd = Math.hypot(x - P[g - 1][0] - ex * u, y - P[g - 1][1] - ey * u);
+          if (dd < best) { best = dd; bs = D[g - 1] + (D[g] - D[g - 1]) * u; }
+        }
+        if (best > corridor) { cur = null; continue; }
+        dmin = Math.min(dmin, best);
+        if (!cur) { cur = []; parts.push(cur); }
+        cur.push(bs, z);
+      }
+    }
+    const kept = parts.filter((q) => q.length >= 4);
+    if (kept.length) out.push({ i, parts: kept, dmin });
+  });
+  return out;
+}
+/** A drawn line's sweep, parallel to itself: steps of one slice of the family it crosses (the family's
+ *  mean step, square to the line), over the field's columns. Returns { axis, step, lo, hi, nx, ny }: the
+ *  line at step j is moved j * step meters along (nx, ny), j from lo to hi, 0 the line as drawn. */
+export function shifts(cols, a, b) {
+  const { ux, uy } = lineOf(a, b), nx = -uy, ny = ux, axis = sweepAxis(cols, a, b), d = axis === 'I' ? cols.dI : cols.dJ;
+  const step = Math.max(10, cols.step[axis] * Math.abs(d[0] * nx + d[1] * ny));
+  let lo = Infinity, hi = -Infinity;
+  for (let i = 0; i < cols.m; i++) { const o = (cols.x[i] - a[0]) * nx + (cols.y[i] - a[1]) * ny; lo = Math.min(lo, o); hi = Math.max(hi, o); }
+  return { axis, step, lo: Math.min(0, Math.floor(lo / step)), hi: Math.max(0, Math.ceil(hi / step)), nx, ny };
 }
 
 /* ── the axis: one scale for every layer ── */
@@ -236,6 +372,21 @@ export function sectionAxis(sec, box, exag, datum) {
     X: (s) => x0 + s * sx, Y: (z) => y0 + (z - zTop) * sz,
     S: (x) => (x - x0) / sx, Z: (y) => zTop + (y - y0) / sz,
   };
+}
+
+/** Round stretches, for a section that has more room than the 3D view's stretch fills. */
+export const STRETCHES = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50];
+/**
+ * The section's own vertical stretch in a box (plan 0012 D13): the largest round stretch at which the whole
+ * section still fits the box, where that is a fifth or more above the 3D view's (exag); else the 3D view's.
+ * So a pane made taller fills with the section, and says by how much it is stretched.
+ */
+export function ownExag(sec, box, exag) {
+  if (!sec.n) return exag;
+  const pad = Math.max(10, (sec.z1 - sec.z0) * 0.04), fill = (box.h / (sec.z1 - sec.z0 + 2 * pad)) / (box.w / sec.line.L);
+  let e = 0;
+  for (const s of STRETCHES) if (s <= fill) e = s;
+  return e >= exag * 1.2 ? e : exag;
 }
 
 /* ── the layers, bottom to top; each draws on ctx in CSS px (the caller scales for the DPR) ── */

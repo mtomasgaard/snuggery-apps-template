@@ -76,7 +76,7 @@ html, body {
    while the sheet keeps at least 180 px on a short phone (plan 0012, package 3.4). */
 body {
   --view-min: max(200px, min(48dvh, 100dvh - 432px));
-  --sec-h: clamp(170px, 26dvh, 230px);
+  --sec-h: clamp(202px, calc(26dvh + 32px), 262px);   /* 2.2's cap and the sweep's 32 px row */
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(200px, 1fr) auto auto minmax(0, max-content);
@@ -84,7 +84,9 @@ body {
   height: 100dvh;
 }
 body.raised { grid-template-rows: auto minmax(var(--view-min), 1fr) auto auto minmax(0, max-content); }
-body.sectioned.raised { --sec-h: clamp(150px, 20dvh, 190px); }
+/* with the sheet raised the pane takes what the model can give above its 220 px (the reservoir's minimum
+   share): 185 px at 844, 16 px more than 2.2's cap, so the sweep's row costs the plot 16 px */
+body.sectioned.raised { --sec-h: clamp(150px, calc(var(--view-min) - 220px), 234px); }
 
 button, input, select { font: inherit; color: inherit; }
 button {
@@ -270,11 +272,16 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .keyplate button[aria-pressed="true"] { color: var(--ink); }
 .keyplate button[aria-pressed="true"]::before { background: color-mix(in srgb, var(--ink) 12%, transparent); }
 .keyplate button:active::before { background: color-mix(in srgb, currentColor 22%, transparent); }
-/* a plate too short for the column (the sheet raised, a phone on its side): the keys run as a row */
-.keys-row .keys { flex-direction: row; }
-.keys-row .keyplate { display: flex; width: auto; height: 38px; }
-.keys-row .keyplate button { margin: -4px 0; }
-.keys-row .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
+/* a plate too short for the column (the sheet raised, a phone on its side): the keys run as a row; where
+   the row does not fit its width either (the section beside the model), two rows, the zoom plate over the
+   other two (150: their 144 px and a little), or the plates side by side, whichever leaves the model larger
+   (layoutKeys) */
+.keys-row .keys, .keys-wrap .keys { flex-direction: row; }
+.keys-wrap .keys { flex-wrap: wrap; justify-content: flex-end; width: 150px; }
+:is(.keys-row, .keys-wrap) .keyplate { display: flex; width: auto; height: 38px; }
+:is(.keys-row, .keys-wrap) .keyplate button { margin: -4px 0; }
+:is(.keys-row, .keys-wrap) .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
+.keys-cols .keys { flex-direction: row; align-items: flex-start; }
 
 /* the ghost key: no plate, a halo under the mark so it reads over any part of the model */
 .ghost {
@@ -373,6 +380,12 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .compact .readout-head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 6px; padding-right: 8px; }
 .compact .readout-value, .compact .readout-sub { padding-right: 0; }
 .compact .readout-all { overflow: visible; }
+/* a narrow plate (the section made wide beside it, 2.3): the place line, wrapping, beside Close; Zoom under it */
+.narrow .readout { min-width: 0; max-width: calc(100% - 16px); }
+.narrow .readout.compact { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(24px, auto) 24px minmax(0, auto); }
+.narrow .compact .readout-zoom { grid-area: 2 / 1; justify-self: start; margin-left: -8px; }
+.narrow .compact .readout-close { grid-area: 1 / 2; }
+.narrow .compact .readout-body { grid-area: 3 / 1 / 4 / 3; }
 
 /* a problem with the data is a sentence on the plate, never a blank plate */
 .error {
@@ -398,6 +411,7 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 /* under the model the pane is as tall as the section needs at its width (app.js sets the plot's
    height), never more than --sec-h */
 .section {
+  position: relative;
   flex: 0 1 auto;
   max-height: var(--sec-h);
   display: flex;
@@ -417,6 +431,31 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .sec-plot { flex: 0 1 auto; display: block; width: 100%; height: 120px; min-height: 0; touch-action: none; }
 .sec-key { flex: 0 0 auto; height: 15px; overflow: hidden; margin-top: 2px; }
 .sec-exag { margin-left: auto; }
+/* the sweep (plan 0012 D14): ‹ the slider › and where the line is */
+/* the row is 32 px and its keys and slider keep their 44 px hits, reaching 6 px over the plot's distance
+   words and the key's top (neither takes a touch there), so the row costs the plot 32 px, not 44 */
+/* a pane too narrow for ‹ › 88 px, the slider 140 and the word 64 on one row (beside the model with the sheet
+   raised: .narrow, set by fitSection from the plot's width): the word takes a line of its own over the
+   track, and the row reaches the pane's padding edge, so the track keeps 140 px */
+.sec-sweep { position: relative; z-index: 1; flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; min-height: 32px; margin: 0 -4px; }
+.sec-sweep .tkey, .sec-sweep .hslider { margin: -6px 0; }
+.sec-sweep .tkey:disabled { opacity: .45; cursor: default; }
+.sec-sweep .hslider { flex: 1 1 0; width: auto; }
+.sec-at { flex: 0 0 auto; min-width: 64px; padding: 0 4px 0 8px; pointer-events: none; }
+.sec-sweep.narrow { margin: 0 -12px; }
+.sec-sweep.narrow .sec-at { order: -1; flex-basis: 100%; min-width: 0; padding: 0; line-height: 15px; text-align: center; }
+/* the pane's edge (D13; js/pane.js): under the model, the head's free stretch between Draw and ✕, its grip
+   on the line between the model and the pane; beside the model, a 44 px strip astride that line. A pane
+   made taller or wider than compact (.grown) takes the size the edge gives it, and its plot the rest. */
+.sec-edge { flex: 1 1 auto; align-self: stretch; min-width: 44px; touch-action: none; cursor: ns-resize; }
+.sec-edge .grip-bar { top: -2.5px; }
+/* under the model the edge's hit reaches 22 px up over the plate's foot, so the grip on the line sits in
+   the middle of it and a finger aimed at the grip takes the edge, not the model */
+.sec-head .sec-edge { margin-top: -22px; }
+.sec-side { display: none; position: absolute; z-index: 2; left: -22px; top: 44px; bottom: 65px; width: 44px; cursor: ew-resize; }
+.sec-side .grip-bar { left: 19.5px; top: 50%; width: 4px; height: 36px; margin: -18px 0 0; }
+.section.grown { flex: 0 0 var(--pane); max-height: none; }
+.section.grown .sec-plot { flex: 1 1 0; height: auto !important; }
 /* the line on the 3D view: drawn over the model, never under it, so it reads as drawn on the map */
 .secline { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .secline .curtain { fill: color-mix(in srgb, var(--ink) 7%, transparent); stroke: color-mix(in srgb, var(--ink) 35%, transparent); stroke-width: 1; stroke-dasharray: 3 3; }
@@ -673,7 +712,10 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
   }
   .caption > .wordkey { grid-area: about; float: none; margin: 0; align-self: start; }
   .legend { grid-area: legend; min-height: 26px; }
-  .cutkey { grid-area: cut; align-self: start; padding-top: 1px; }
+  /* with the sheet open the band is too narrow for the cut's key beside the legend: it takes a row of its
+     own (and wraps rather than be cut off where even that is short) */
+  body:not(:has(.sheet.s0)) .caption { grid-template-areas: "legend legend about" "cut cut cut" "inst wells wells"; }
+  .cutkey { grid-area: cut; align-self: start; padding-top: 1px; height: auto; overflow: visible; }
   .instruments { grid-area: inst; height: 15px; }
   .wellkey { grid-area: wells; align-self: center; }
   .player { display: flex; align-items: center; gap: 8px; padding-top: 0; padding-bottom: env(safe-area-inset-bottom); }
@@ -686,6 +728,9 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
   .view { flex-direction: row; }
   .section { flex: 0 0 min(46%, 520px); max-height: none; border-top: 0; border-left: 1px solid var(--line); }
   .sec-plot { flex: 1 1 0; height: auto; }
+  .sec-head .sec-edge { visibility: hidden; }   /* a spacer only: the side is the edge */
+  .sec-side { display: block; }
+  .sectioned .keys { right: 30px; }   /* clear of the side edge's hit, which reaches 22 px into the plate */
 }
 /* focus mode on a wide screen or a phone on its side: the hidden sheet leaves no column behind */
 @media (min-width: 820px) and (min-height: 480px), (orientation: landscape) and (max-height: 500px) {

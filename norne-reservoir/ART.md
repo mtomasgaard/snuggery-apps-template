@@ -418,7 +418,7 @@ more at every stop, with and without the section. Wide screens (≥ 820 x 480) k
 | **Header: About key** | `About`, a word key like the units key, at the right end of the row of words, before the units key | `aria-haspopup="dialog"`; shown once every file is in, hidden on an error (the line says why); opens About from every screen. In focus mode it moves into the caption band, at its right, and back. |
 | **Header: units key** | at the right end of the row of words: `SI`, then `US` (owner call 5) | A word key in a 1 px `--line-strong` frame, 28 px tall, 6 px radius, a 44 x 44 hit, 600 at 12.5 px. Its accessible name says the system and its units: `Change units, now SI: bar, meters, cubic meters a day`. One system for every quantity (pressure bar or psi, depth and the scale bar meters or feet, oil and water Sm³/d or bbl/d, gas Sm³/d or Mscf/d; permeability stays mD in both), a stated departure from the house's one-quantity key, since an engineer switches the system, not a unit. Remembered as `norne-viewer:v1:units`. |
 | **Row of words** | the twelve properties as words in full, `role="radio"` in a `role="radiogroup"` named `Property`, the tracer under the chosen one; a 1 px `--line` divider between the four that change with time and the eight that do not | `Oil`, `Water`, `Gas`, `Pressure` (the camera's words, kept exactly), then `Porosity`, `Permeability`, `Vertical permeability`, `Net to gross`, `Depth`, `Formations`, `Segments`, `Layers`. The stock `Perm X`, `Perm Z`, `NTG` and `Regions` go (words in full; owner call 4 for Segments). Scrolls sideways inside itself, its right edge fading over 22 px while more words lie past it (so it reads as a row that scrolls, not one cut off at the About key); 44 px hits. The stock 3 px gradient underline (`--grad`, a swatch, HOUSE 4.3) goes: the legend shows the scale. One tab stop for the group, the chosen word; the arrow keys move the choice inside it, as in the explode words. |
-| **Key column** | `--sheet` plates on the plate's right edge, inset 8 px: `Zoom in`, `Zoom out`, `Show the whole field` / `Wells`, `Section` / `Hide the controls` | 44 x 44 hits drawn 36 x 44, 16 px marks in 1.5 px strokes, `--ink-2` at rest. Zoom keys move `S.cam.dist` by 0.7 and 1/0.7 through `flyTo` (one-finger and keyboard zoom, WCAG 2.5.1, where the stock app zoomed by pinch or wheel only). `Show the whole field` (the camera's key, the stock round frame button) draws four corner brackets around a small three-by-two block of cells, not the house's Whole world circle. `Wells` (`aria-pressed`, the stock `t-wells` checkbox moved) draws three wellheads on a line, each dropping a stroke of a different length. `Section` (`aria-pressed`) shows and hides the section A–A′: a line over a vertical plane with a block cut out of it. Where six keys do not fit the plate's height (a plate under 302 px: the section open with the sheet raised, a phone on its side), they run as a row along the plate's top. `Show the whole field` fits the field by its projected box (two corners of every fourth cell, as exploded, and the well heads) to both of the plate's axes, in the room left of the key column or below the key row, with 26 px above for the names; a lens shift puts the field's middle at that room's middle. A camera still at the fit is fitted again whenever the plate changes size (focus mode, the sheet's stops, a turn of the phone, the explode, the vertical stretch); one moved by hand keeps its zoom against the fit. On a plate much wider than tall the eye comes down from 36° toward 24°. |
+| **Key column** | `--sheet` plates on the plate's right edge, inset 8 px: `Zoom in`, `Zoom out`, `Show the whole field` / `Wells`, `Section` / `Hide the controls` | 44 x 44 hits drawn 36 x 44, 16 px marks in 1.5 px strokes, `--ink-2` at rest. Zoom keys move `S.cam.dist` by 0.7 and 1/0.7 through `flyTo` (one-finger and keyboard zoom, WCAG 2.5.1, where the stock app zoomed by pinch or wheel only). `Show the whole field` (the camera's key, the stock round frame button) draws four corner brackets around a small three-by-two block of cells, not the house's Whole world circle. `Wells` (`aria-pressed`, the stock `t-wells` checkbox moved) draws three wellheads on a line, each dropping a stroke of a different length. `Section` (`aria-pressed`) shows and hides the section A–A′: a line over a vertical plane with a block cut out of it. Where six keys do not fit the plate's height (a plate under 302 px: the section open with the sheet raised, a phone on its side), they run as a row along the plate's top; where that row does not fit the plate's width either (the section beside the model), they take whichever of two forms fits inside the plate and leaves the model larger, measured against the rooms it is fitted to: two rows in the plate's top right (the zoom plate over the other two; with the sheet raised beside the section at 844 x 390) or the three plates side by side (the 160 px strip). `Show the whole field` fits the field by its projected box (two corners of every fourth cell, as exploded, and the well heads) to both of the plate's axes, in the room left of the key column or below the key row, with 26 px above for the names; a lens shift puts the field's middle at that room's middle. A camera still at the fit is fitted again whenever the plate changes size (focus mode, the sheet's stops, a turn of the phone, the explode, the vertical stretch); one moved by hand keeps its zoom against the fit. On a plate much wider than tall the eye comes down from 36° toward 24°. |
 | **Caption band: the legend** | 30 px: the property's label from `config.json` as the title (`Oil saturation`, 600 at 11.5 px `--ink`), the 6 px bar in the remaining width, ticks at round values, the unit after the last label | Painted from the same 256-entry `lut()` the plate uses, unshaded, over `--page`; 1 px `--line-strong` frame at 60 %, square ends. Open ends as section 2 lists. Log scales tick at decades (`≤ 1`, `10`, `100`, `1 000`, `4 000 mD`). Categories: named swatches in one row (`Garn`, `Ile`, `Tofte`, `Tilje`; `1` to `4` titled `Fault segment`); `Layers` a bar with ticks at `1`, `5`, `12`, `19`, `22` (the four formations' first layers and the last). **This ends the recorded bug B1**: the stock bar stood on the plate, centered on its height, and met the header whenever the plate shrank. |
 | **Caption band: the instrument line** | 20 px: the north mark, then the scale bar and its words | The stock compass and scale bar leave the plate (HOUSE 4.1), as Besseggen's did. North: a 16 px drawn needle in `--ink` (the south arm `--ink-3`) with `N` in 10.5 px; its accessible name kept from the stock app (`North arrow: north is toward the top right of the view.`). Scale: a 2 px `--ink` bar with 4 px end ticks, its length before it (`3 km`) and `vertical ×5` after it in 11 px `--ink-2`. `updateGauge()` moved, not rewritten; written through `units.js`; never transitioned. |
 | **Caption band: the wells key** | 15 px, while `Wells` is on: four drawn samples (solid green, dashed blue, dashed red, thin gray) and `Producer`, `Water injector`, `Gas injector`, `Shut` at 10.5 px | A group named `Wells key`. The stock key left the header, where it sat over the model (B3). |
@@ -438,7 +438,7 @@ more at every stop, with and without the section. Wide screens (≥ 820 x 480) k
 | **Focus mode** | `Hide the controls` alone in the column's last plate; the ghost key `Show the controls` (`aria-keyshortcuts="Escape"`) top-right of the plate, 8 px under the top safe area; Escape | Leaves (`hidden` and `inert`): the header (name, units key, the row of words), the key column, the controls sheet, an open card. Stays: the plate; the section, when it is open, with its own words and Hide; the `About` key, moved into the caption band at its right; **the legend, the instrument line, the wells key** (a stated departure: a false-color model cannot be read without its scale; owner call 7) and the cut's key; the player. A tap still opens the card; the double-tap still flies to a cell. **Remembered** as `norne-viewer:v1:focus` (`'1'` or `'0'`), restored before the first draw. Sentences: `Controls hidden. Press Escape or the corner key to show them.` and `Controls shown.`; focus moves only when the keyboard did it. Fades: chrome out 160 ms, the ghost key in 200 ms, one resize. |
 | **The opening** | none | The arrival is the model appearing once its seven files are in; the stamp's line counts while they load, then hides. The stock overlay and the first-run hint card go (owner call 8); the gestures are in the canvas's description and in About. |
 | **Motion** | HOUSE 4.12 | A camera move that answers a touch (`Show the whole field`, the zoom keys, a double-tap, `Zoom to cell`) keeps its 520 ms (the camera waits 2 s after the first) and takes `--draw`'s curve in place of the stock cubic in-out; any touch ends it at its destination. Under Reduce Motion they are cuts. The render loop requests a frame only while something is dirty, a flight runs or play is on. Hidden: play stops and the loop stops; a return re-reads `config.json`, as the stock app did, and redraws. |
-| **On its side** | HOUSE 4.13 with the sheet as a right column, `min(340px, 45%)`; at the sheet's closed stop the column is only its grip, a 45 px strip with a chevron, on a wide screen too, because the full column left the plate 157 px tall at 844 x 390; in focus mode, here and on a wide screen, one column, the strip gone with the sheet | The header one 46 px row (the name at left, the words, the About and units keys); the section, when open, beside the model; the caption band's legend and the cut's key side by side (the About key after them in focus mode), the instrument line and wells key on the next row; the player one row (the time row stacked at left, the transport, the track); the keys a row along the plate's top. At 844 x 390 the plate must be ≥ 220 px, measured by `shoot.mjs`. The card takes its compact form here. |
+| **On its side** | HOUSE 4.13 with the sheet as a right column, `min(340px, 45%)`; at the sheet's closed stop the column is only its grip, a 45 px strip with a chevron, on a wide screen too, because the full column left the plate 157 px tall at 844 x 390; in focus mode, here and on a wide screen, one column, the strip gone with the sheet | The header one 46 px row (the name at left, the words, the About and units keys); the section, when open, beside the model; the caption band's legend and the cut's key side by side (the About key after them in focus mode), the instrument line and wells key on the next row; with the sheet open, where the band is too narrow for the cut's key beside the legend, the key takes a row of its own under it (2.3: 2.2 cut its words off there); the player one row (the time row stacked at left, the transport, the track); the keys a row along the plate's top, or two rows where the section beside the model leaves the plate too narrow for one. At 844 x 390 the plate must be ≥ 220 px, measured by `shoot.mjs`. The card takes its compact form here. |
 | **Safe areas** | HOUSE 4.14 | Every band pads itself; the sheet pads the bottom inset; the card and the ghost key sit under the top inset in focus mode. Phone checks. |
 
 **Where the card goes, and its compact form** (`placeCard()` in `app.js`; HOUSE 4.7 carried to a
@@ -471,8 +471,11 @@ pure geometry and drawing layers; `tools/test_section.mjs` checks the geometry a
 files.
 
 - **Where.** Under the model in a pane of its own, upright; beside it (`min(46%, 520px)` wide) on a
-  wide screen or a phone on its side. Under the model the pane is as tall as the section needs at its
-  width, up to `clamp(170px, 26dvh, 230px)` (`clamp(150px, 20dvh, 190px)` with the sheet raised), and
+  wide screen or a phone on its side. Compact, under the model the pane is as tall as the section needs
+  at its width, up to `clamp(202px, 26dvh + 32px, 262px)` (2.2's cap and the sweep's 32 px row); with
+  the sheet raised, up to what the model can give above its 220 px (`--view-min` less 220 px, 185 px at
+  844, between 150 and 234 px), so there the sweep's row costs the plot 16 px;
+  its edge makes it taller or wider (2.3, below). It
   it keeps its height while a line is drawn or an end moved, so the model never refits under the
   finger, and fits the new section once the finger lifts. A line that cuts no cell (one drawn off the
   field) is refused when the finger lifts: the line before it stays, and the app says `That line misses
@@ -482,7 +485,10 @@ files.
   (every whole degree, offsets every 50 m), the one that passes within 60 m of the middles of the
   most grid columns (8.5 km at 38°, 176 of the 2 263 columns), and of the lines square to it, the one
   that does (3.7 km); each ends where the cells it cuts end, A at its west end. `Draw`, then one
-  finger across the model, draws one's own; a drag that starts on A or A′ moves that end; a second
+  finger across the model, draws one's own; a drag that starts on A or A′ (within 22 px) moves that
+  end, where the model is drawn 76 px or more on its shorter side; where it is drawn smaller (the
+  strip a tall pane leaves it) the ends would cover a quarter of it or more, so they take no touch there and one
+  finger always turns the model, `Draw` still drawing a new line; a second
   finger hands the touch back to the view and leaves the line as it was; Escape or `Draw` again turns
   drawing off. Otherwise one finger still turns the model. The finger meets the field where it sees
   it: the reservoir's top and base are kept as two height fields (40 m a pixel, read between pixels),
@@ -494,9 +500,9 @@ files.
 - **What is drawn**, bottom to top, each layer its own function over one axis: the ground and its
   depth guides (1 px `--line`); the gaps; the cells; the formation tops; the wells; the tapped cell;
   the frame and its words. The axis (`sectionAxis`) maps distance from A across and depth down, both in
-  meters, depth stretched by the 3D view's own vertical exaggeration (`vertical ×5` printed at the
-  pane's foot, as the instrument line prints it), the whole section fitted to the pane and centered
-  across. It is the only place a scale lives, so data from another source drawn at its own depths (a
+  meters, depth stretched by the 3D view's own vertical exaggeration in the compact pane (`vertical ×5`
+  printed at the pane's foot, as the instrument line prints it) and by its own in a pane made taller
+  (2.3, below), the whole section fitted to the pane and centered across. It is the only place a scale lives, so data from another source drawn at its own depths (a
   seismic line along the same A–A′, in another app) can go in after the ground on the same axis
   without touching the other layers.
 - **The cells are blocks, never samples.** Each active cell the plane cuts is the polygon where the
@@ -540,7 +546,65 @@ files.
   saturation, depth stretched 5 times. Wells within 150 meters: …`). Along and Across are one tab stop
   with the arrow keys inside it; Draw and Hide the section are buttons; the live region says `Section
   shown, …`, `Drag across the field to draw the section line.` and `Section drawn, …`. Drawing a line
-  of one's own needs a pointer; Along and Across are the single-pointer and keyboard way to a section.
+  of one's own needs a pointer; Along and Across, the sweep's slider and its keys are the
+  single-pointer and keyboard way to a section.
+
+### The pane's edge and the sweep (2.3)
+
+The owner, after 2.2: *"Can the section view be extended taller to optionally take up more screen?"*
+and *"I assume we are also making it easy to scroll through the sections with sliders etc?"* (the
+template's plan 0012, D13 and D14). Both live in the pane: the resizing in `js/pane.js` and the
+stylesheet's `.grown` rules, the sweep in `js/section.js` and the pane's row of keys.
+
+- **The edge.** Under the model, the pane's head between `Draw` and ✕ is its top edge: a 44 px hit
+  that reaches 22 px further up over the plate's foot, with the house's grip (a 36 × 4 px
+  `--line-strong` bar, 2 px round) laid on the 1 px line between the model and the pane, at the
+  screen's middle, so the grip sits inside the hit and not on its boundary. Beside the model, its side edge is a 44 px strip
+  astride that line beside the plot, the same grip upright; the model's keys keep 30 px clear of it.
+  A drag moves the edge with the finger, from compact (as 2.2 sized the pane) up to tall, where the
+  3D view keeps a strip of its own: **120 px** under the pane (its keys in a row and the field under
+  them), **160 px** beside it past the screen's left inset (its three key plates side by side). A
+  double tap toggles compact and tall (wide, beside the model); the tap's own click, which follows the
+  lift over whatever the toggle moved under the finger, is taken by the edge. It is a slider for VoiceOver (`Section height`, `Section width`;
+  `Compact`; `Tall` under the model and `Wide` beside it; or a share of the view's height or width in words; increment and decrement step a tenth; the edge
+  under the model is a vertical slider, the one beside it a horizontal one), and on a keyboard ↑ and →
+  step it a tenth larger, ↓ and ← a tenth smaller, on both edges, Home and End go to compact and tall,
+  Enter toggles. The size is kept with the rest of the view and comes back on the next launch.
+- **Live and sharp.** While the edge moves, the section's height and the plate's are set in the frame
+  that draws at them, and both canvases take their new size before they draw, so neither is ever
+  shown stretched; the text in the section is drawn at its own size every frame. A model at the fit is
+  fitted again to the plate as it changes, as at the sheet's stops.
+- **The room used honestly.** A pane made taller than compact fills with the section: it is stretched
+  to the largest round figure (`1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50`) at
+  which the whole section still fits, where that is a fifth or more above the 3D view's, and the
+  pane's foot then prints its own (`vertical ×20`) where it printed the 3D view's; the canvas's name
+  says `depth stretched 20 times, more than the 3D view's 5`. Where the pane has no more room for it
+  (a wide pane, a long flat section) the stretch stays the 3D view's. The depth and distance words are
+  read from the one axis at every size, more of them as the pane grows.
+- **A narrow plate.** The strip beside a pane made wide is narrower than the card: there the card
+  takes its compact form with the place line wrapping beside Close and `Zoom to cell` under it, and a
+  card that must open under the finger takes no click for 350 ms, so the lift's click never lands on
+  its keys.
+- **The sweep.** Under the plot, in a 32 px row whose keys and slider keep 44 px hits (reaching 6 px
+  over the distance words above and the key below, neither of which takes a touch), `‹`, a house
+  slider and `›`, with where the line is at the right. Where the pane is too narrow for all four on one row with the slider at 140 px or more (beside the model with the sheet raised), where the line is takes a 15 px line of its own over the slider, and the row reaches the pane's padding edge. From
+  `Along` the slider steps through the grid's columns (`I 6` to `I 41`, each the cells of one I), from
+  `Across` through its rows (`J 11` to `J 102`), the field's own line in its place among them (`Along`
+  between I 22 and I 23, `Across` between J 69 and J 70), so the slider always says where the line is.
+  A column or a row is drawn as it is in the grid, not as a straight cut through it: its own cells,
+  each the face midway across it (the mean of its two sides' corners), along the path through the
+  middles of the slice's pillars, distance measured along that path; on the model the line follows
+  the same path on the reservoir's top and moves as the slider does. The grid's columns bend (their
+  middles stray 24 to 175 m from a straight line), so a straight line through one would cut its
+  neighbors; the path keeps every block the slice's own. A line of one's own sweeps parallel to
+  itself, a slice's width at a time (the grid's mean step square to it, 54 to 92 m by bearing), the pane saying
+  how far and which way (`89 m NW`). The slider is a range input, adjustable for VoiceOver, its value
+  in words (`row J 70`, `the field's own line, between rows J 69 and J 70`, `your line, moved 89
+  meters northwest`); `‹` and `›` say the new place through the live region.
+- **Sharp while swept.** Each input only records the place; the frame draws the newest one, so a fast
+  scrub never queues a place already passed (`shoot.mjs` logs every frame of a touch scrub: none drew
+  a place other than the slider's). The pane holds its height while the finger is down and fits the
+  section once it lifts. A slice is cut in under 2 ms in Node and the last 24 are kept.
 
 **What does not apply, and why:** a `now` notch and a ran-out sentence (a finished history, not a
 forecast: About names the edition); per-step ticks on the track (110 steps under 2 px apart; year
@@ -599,8 +663,9 @@ README panes) and `MarketingClipsUITests.swift` (clip 2).
 | `Show the controls` (`showControlsIfHidden()`, at the end of `waitForNorne()`) | the ghost key of a remembered focus mode (`norne-viewer:v1:focus`) | the exact name, so a kept library left in focus mode shows `Pressure` and `Show the whole field` again. |
 | what the camera changes | the property (Pressure, then Oil again) | put back with the same words; nothing else it does is remembered. |
 
-2.2 adds `About`, `Section`, `Along`, `Across`, `Draw` and `Hide the section`, none of which is a
-string the camera reads, and none named `Pause`; `Oil saturation` stays the legend's title, written
+2.2 adds `About`, `Section`, `Along`, `Across`, `Draw` and `Hide the section`, and 2.3 `Line
+position`, `Previous column`, `Next column` (`row` and `step` too), `Section height` and `Section
+width`, none of which is a string the camera reads, and none named `Pause`; `Oil saturation` stays the legend's title, written
 last. The stamp's line hides once every file is in; the camera never read it.
 
 The stock app's first-run hint, `Double-tap a spot`, went with owner call 8, and the camera no longer
@@ -633,6 +698,11 @@ stays so. `config.json` was `aacc94ec…6ca9` before the pass, which rewrote its
 before 2.2); fonts 40 075 B of 160 000; the ZIP about 15.4 MB of its 19.11 MB cap. The exact ZIP
 size is in `tools/DECISIONS.md`, since this file's own bytes move it, and so is the plan's code
 ledger, which put the pass at about 110 000 B.
+
+**As built, 2.3** (`node tools/check.mjs`): app code 255 443 B (`app.js` 137 645, `style.css` 37 087,
+`js/section.js` 33 833, `index.html` 20 214, `js/track.js` 7 840, `js/units.js` 7 225, `js/data.js`
+6 387, `js/pane.js` 5 212), 33 649 B more than 2.2 for the edge and the sweep, within the 256 000 B the
+template ruled for 2.3; fonts and the data unchanged; the ZIP about 15.4 MB.
 
 ---
 

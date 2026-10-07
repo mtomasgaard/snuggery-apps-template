@@ -13,7 +13,8 @@
 import * as U from './js/units.js';
 import { buildZones, segmentOf, fillValues, cellValue, propRange, norm, denorm, gasMax, openEnds, cutSeries, cutFacts } from './js/data.js';
 import { createTrack, CUT_SCALE } from './js/track.js';
-import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, drawCells, drawTops, drawOutline, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop } from './js/section.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, drawCells, drawTops, drawOutline, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag } from './js/section.js';
+import { paneEdge } from './js/pane.js';
 
 const $ = (id) => document.getElementById(id);
 const LS_KEY = 'norne-viewer:v1';
@@ -38,7 +39,7 @@ const S = {                                   // the view, saved to localStorage
   cam: null, well: null,
   explode: { mode: 'formations', t: 0 },
   sheet: 0,                                   // the controls sheet: 0 the grip, 1 + explode and rates, 2 + cells and view
-  section: { on: false, line: 'along', a: null, b: null },   // the section A–A′: a line of the field's own, or one drawn (a, b in model meters)
+  section: { on: false, line: 'along', a: null, b: null, at: null, size: 0 },   // the section A–A′: a line of the field's own, or one drawn (a, b in model meters); at: where the sweep took it (a column or row of the grid for the field's lines, a step for a drawn one; null, the line itself); size: the pane, 0 compact to 1 tall
 };
 const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0, section: false, secGeom: true };   // dirty; card: 1 check the card's place, 2 place it afresh
 let pick = -1, cardMode = null, playing = null, wanted = 0, shown = -1, units = 'SI', focus = false, track = null;
@@ -134,6 +135,7 @@ async function main() {
   // the section: the field's own two lines; the field's top and base as height fields, where a finger
   // on the 3D view meets the reservoir and the line lies on it
   G.lines = fieldLines(G.geom, NA, G.ijk, model.NI, model.NJ);
+  G.cols = columns(G.geom, NA, G.ijk, model.NI, model.NJ);   // the sweep's slices: the grid's own columns and rows
   G.surf = surfaces(G.geom, NA);
   initGL();
   initCamera();
@@ -165,7 +167,7 @@ function restore() {
     if (s.explode && ['formations', 'layers', 'segments'].includes(s.explode.mode) && Number.isFinite(s.explode.t)) S.explode = s.explode;
     if (s.section && typeof s.section === 'object') {
       const q = s.section, pt = (v) => Array.isArray(v) && v.length === 2 && v.every(Number.isFinite);
-      S.section = { on: !!q.on, line: ['along', 'across'].includes(q.line) ? q.line : null, a: pt(q.a) ? q.a : null, b: pt(q.b) ? q.b : null };
+      S.section = { on: !!q.on, line: ['along', 'across'].includes(q.line) ? q.line : null, a: pt(q.a) ? q.a : null, b: pt(q.b) ? q.b : null, at: Number.isInteger(q.at) ? q.at : null, size: Number.isFinite(q.size) ? Math.max(0, Math.min(1, q.size)) : 0 };
       if (!S.section.line && !(S.section.a && S.section.b)) S.section.line = 'along';
     }
     if (S.well && !model.wells.some((w) => w.name === S.well)) S.well = null;
@@ -537,6 +539,7 @@ function fitCam(theta, phi, size, pts) {
     const [x0, x1, y0, y1] = box(b);
     const dx = (q.l + q.r) / 2 - W / 2 - (x0 + x1) / 2, dy = (q.t + q.b) / 2 - H / 2 - (y0 + y1) / 2;
     best = { dist: b, sx: 2 * dx / W, sy: -2 * dy / H };
+    if (!size) G.fitAsp = (x1 - x0) / Math.max(1, y1 - y0);
   }
   if (!best) best = { dist: m * 1.6, sx: 0, sy: 0 };
   return { theta, phi, dist: best.dist, target: T, sx: best.sx, sy: best.sy };
@@ -590,9 +593,10 @@ function loop(now) {
     if (S.section.on) R.section = true;   // the section shows the same colors, in the same frame
   }
   if (stepChanged) { shown = step; R.step = true; R.draw = true; R.labels = true; }
+  if (R.section || R.secGeom) fitSection();   // before the draw: the pane's height and the plate's are set in this frame
   if (R.faces) { rebuildFaces(); R.faces = false; R.draw = true; }
   if (R.wells) { buildWellBuffer(); R.wells = false; R.draw = true; }
-  if (R.draw) { draw(); R.draw = false; R.labels = true; }
+  if (R.draw) { layoutKeys(); reframe(); draw(); R.draw = false; R.labels = true; }
   if (R.card) { placeCard(R.card > 1); R.labels = true; }   // after the draw: the mark is where this frame shows it
   if (R.labels) { placeLabels(); updateGauge(); R.labels = false; }
   if (R.legend) { drawLegend(); R.legend = false; }
@@ -600,6 +604,7 @@ function loop(now) {
   if (R.track) { track.draw(shown); R.track = false; }
   if (R.chart) { drawChart(); R.chart = false; }
   if (R.section || R.secGeom) drawSection();
+  if (G.secLog && S.section.on) { const c = $('sec-plot'), g = $('gl'), d = Math.min(window.devicePixelRatio || 1, 2); G.secLog.push({ t: now, v: +$('sec-sweep').value, at: S.section.at, drew: SEC.drawnAt, plot: [c.width, Math.round(c.clientWidth * d), c.height, Math.round(c.clientHeight * d)], gl: [g.width, Math.round(g.clientWidth * d), g.height, Math.round(g.clientHeight * d)], pane: $('section').getBoundingClientRect().height, size: S.section.size }); }
   if (flog && stepChanged) flog.push({ t: now, wanted, shown, tex: G.texStep, sec: S.section.on ? G.secStep : null, label: $('valid').textContent, now: +$('slider').getAttribute('aria-valuenow') });
   if (playing || G.anim || Object.values(R).some(Boolean)) kick();
 }
@@ -971,7 +976,7 @@ function writeAbout() {
   const cross = facts.cross ? ` From the month to ${U.date(facts.cross.iso)} the wells lift more water than oil in ${facts.stays === facts.of ? `all ${facts.of}` : `${facts.stays} of the ${facts.of}`} months left, and the last month is ${U.percent(facts.last.share)} water.` : '';
   $('ab-cut').textContent = `Each column on the player’s track is one report date: its width is the days since the date before, and its height is the liquid the field’s wells lifted per day in that month, at ${scaleWords} (the tick at the track’s left end is ${sc.label}). The oil is the solid ink at the foot and the water the paler ink stacked on it. The liquid peaks at ${U.liquid(facts.peak.liquid, units)} in the month to ${U.date(facts.peak.iso)}, ${U.percent(facts.peak.share)} of it water.${cross}`;
   const lenOf = (l) => U.length(Math.hypot(l.b[0] - l.a[0], l.b[1] - l.a[1]), units), us = units === 'US';
-  $('ab-section').textContent = `The section shows the model where a vertical plane along the line from A to A′ passes through it. Each cell the plane cuts is drawn as the block it cuts, in one color: the cell’s value on the scale under the picture at the report date in the player, unshaded and never blended with its neighbors, since a model cell holds one value. Depth is the model’s own true vertical depth (TVD) in ${us ? 'feet' : 'meters'}, stretched as the 3D view is (Vertical exaggeration, under More controls), and distance runs from A in ${us ? 'feet' : 'meters'}. Lines mark the top of each formation. Hatching marks where the plane passes between active cells inside the model, where inactive cells hold no values. The wells that come within ${U.length(SEC_CORRIDOR, units)} of the plane are drawn on it, moved square onto it, as the 3D view draws them on that date. The explode, the cell ranges and the value range change the 3D view only. Along is the straight line through the field that crosses the most of its grid columns (${lenOf(G.lines.along)}); Across is the one square to it that crosses the most (${lenOf(G.lines.across)}).`;
+  $('ab-section').textContent = `The section shows the model where a vertical plane along the line from A to A′ passes through it. Each cell the plane cuts is drawn as the block it cuts, in one color: the cell’s value on the scale under the picture at the report date in the player, unshaded and never blended with its neighbors, since a model cell holds one value. Depth is the model’s own true vertical depth (TVD) in ${us ? 'feet' : 'meters'}, stretched as the 3D view is (Vertical exaggeration, under More controls); a pane made taller than its section stretches it more, to the round figure that fills it, and says so under it. Distance runs from A in ${us ? 'feet' : 'meters'}. Lines mark the top of each formation. Hatching marks where the plane passes between active cells inside the model, where inactive cells hold no values. The wells that come within ${U.length(SEC_CORRIDOR, units)} of the plane are drawn on it, moved square onto it, as the 3D view draws them on that date. The explode, the cell ranges and the value range change the 3D view only. Along is the straight line through the field, ${lenOf(G.lines.along)} long, that passes over the most of its stacks of cells (each stack the cells of one I and one J); Across is the one square to it that passes over the most (${lenOf(G.lines.across)}). The slider sweeps them through the grid itself: Along through its columns (each the cells of one I), Across through its rows (one J). A column or row is shown as it is in the grid, not as a straight cut: its own cells, each the face midway across it, along the path through the middles of its pillars, with distance measured along that path, and the wells within ${U.length(SEC_CORRIDOR, units)} of it drawn at their nearest point on it. A line of your own is swept parallel to itself, one column’s or row’s width at a time.`;
   $('about-source').textContent = model.source;
   const list = $('about-list'); list.replaceChildren();
   const rows = [
@@ -1052,10 +1057,25 @@ function initSheet() {
   });
   applyStop();
 }
-/** The keys run as a row along the plate's top when the column would not fit its height. */
+/** The keys: a column where the plate is tall enough for it (294 px with the 8 px inset); else a row along
+ *  the plate's top, where the row fits its width (2.2's); else (the section beside the model) whichever of
+ *  two rows (keys-wrap) and the plates side by side (keys-cols) leaves the model the larger, measured by
+ *  the rooms the field is fitted to. Worked out again only when the plate's size or the keys' inset change. */
 function layoutKeys() {
-  const plate = $('plate');
-  plate.classList.toggle('keys-row', plate.clientHeight < 302);   // six keys in three plates: 294 px with the 8 px inset
+  const plate = $('plate'), k = $('keys'), W = plate.clientWidth, H = plate.clientHeight, shown = k.getClientRects().length > 0;
+  const at = `${W} ${H} ${shown} ${document.body.classList.contains('sectioned')}`;
+  if (at === G.keysAt) return;
+  G.keysAt = at;
+  plate.classList.toggle('narrow', W < 310);   // the card takes its compact form, Zoom under the place line
+  const set = (c) => { for (const n of ['keys-row', 'keys-wrap', 'keys-cols']) plate.classList.toggle(n, n === c); };
+  if (H >= 302) { set(''); return; }
+  set('keys-row');
+  const left = plate.getBoundingClientRect().left, fits = (d) => k.getBoundingClientRect().left >= left + d;   // the keys inside the plate
+  if (!shown || fits(8)) return;
+  const asp = G.fitAsp || 3;   // the field's width over its height as last fitted
+  const model = () => { let s = 0, c = 0; for (const q of fitRooms(W, H)) { const w = Math.min(q.r - q.l, (q.b - q.t) * asp); if (w / (q.pref || 1) > c) { c = w / (q.pref || 1); s = w; } } return s; };
+  set('keys-wrap'); const wrap = fits(0) ? model() : -1;   // two rows only where they fit (150 px: not on the 160 px strip)
+  set('keys-cols'); if (wrap > model()) set('keys-wrap');
 }
 
 // ---------------------------------------------------------------- UI
@@ -1220,7 +1240,7 @@ function applyUnits(initial) {
   b.setAttribute('aria-label', units === 'US' ? 'Change units, now US: psi, feet, barrels a day' : 'Change units, now SI: bar, meters, cubic meters a day');
   setTrackModel();
   R.legend = true; R.step = true; R.track = true; R.chart = true; R.labels = true; R.section = true;
-  if (!initial) { writeCutOutputs(); writeAbout(); writeSecWords(); if (cardMode) refreshCard(); }
+  if (!initial) { writeCutOutputs(); writeAbout(); writeSecWords(); if (model) writeSweep(); if (cardMode) refreshCard(); }
   kick();
 }
 
@@ -1342,7 +1362,7 @@ function initPointer() {
       down = { x: e.offsetX, y: e.offsetY, t: performance.now(), moved: false, btn: e.button, shift: e.shiftKey };
       // the section's line: with Draw on, a drag draws it; else a drag that starts on A or A′ moves that end
       const h = S.section.on && !e.button ? (SEC.armed ? 'draw' : secHandle(e.offsetX, e.offsetY)) : null;
-      if (h) Object.assign(down, { sec: h, p0: mapPoint(e.offsetX, e.offsetY), was: { line: S.section.line, a: S.section.a, b: S.section.b } });
+      if (h) Object.assign(down, { sec: h, p0: mapPoint(e.offsetX, e.offsetY), was: { line: S.section.line, a: S.section.a, b: S.section.b, at: S.section.at } });
     }
     if (pts.size === 2) {
       pinch = pinchState(pts);
@@ -1487,6 +1507,9 @@ function resolveTap(x, y) {
 }
 function tap(x, y) {
   G.hl = -1;
+  // a card that must open under the finger (a plate too narrow for it to stand clear) takes no click for a
+  // moment, so the click the lift makes never lands on its Zoom or Close key
+  const card = $('readout'); card.style.pointerEvents = 'none'; setTimeout(() => { card.style.pointerEvents = ''; }, 350);
   const t = resolveTap(x, y), a = t.cell ?? -1;
   if (t.well) { selectWell(t.well, true, [x, y]); return; }
   if (a >= 0) {
@@ -1567,7 +1590,7 @@ function placeCard(fresh = true) {
   // column, so a plate shows one form whatever is tapped; else the compact one
   let f = measure(false);
   const room = Math.max(0, ...stretches(...span(f, false), null).map((s) => s.b - s.t));
-  if (Math.min((room - 20) / 2, cap) < need(f, 2)) f = measure(true);
+  if (Math.min((room - 20) / 2, cap) < need(f, 2) || $('plate').classList.contains('narrow')) f = measure(true);
   const target = Math.min(f.fixed + f.full, cap), least = need(f, 1);
   const put = (right, align, y, h) => {
     card.classList.toggle('right', right);
@@ -1764,17 +1787,62 @@ function initChartSeek() {
 // ground, on the same axis (sectionAxis), and nothing else would change.
 const SEC_CORRIDOR = 150;                       // meters either side of the plane: the wells drawn on it
 const SEC_BOX = { l: 46, t: 15, r: 8, b: 15 };  // the plot's margins in the pane: depth words, A and A′, distances
-const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null };
+const SEC_GRAB_MIN = 76;   // px: the model's shorter side on the plate below which its line's ends take no touch (80 px up: 22 % or less of its cells within an end's reach; 75 down: 21 to 70 %)
+const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null, cuts: new Map(), sweep: null, exag: 0 };
+/** The line the section shows: the field's own or the drawn one, or where the sweep took it (plan 0012
+ *  D14): one of the grid's own columns or rows, cut along its own path, or the drawn line moved parallel
+ *  to itself. A slice's cut is kept (a few), so a sweep back and forth cuts each once. */
 function secLine() {
-  const q = S.section;
-  return q.line ? G.lines[q.line] : { a: q.a, b: q.b };
+  const q = S.section, l = q.line ? G.lines[q.line] : { a: q.a, b: q.b };
+  if (q.at === null) return l;
+  if (!q.line) { const h = shifts(G.cols, l.a, l.b), d = q.at * h.step; return { a: [l.a[0] + h.nx * d, l.a[1] + h.ny * d].map(Math.round), b: [l.b[0] + h.nx * d, l.b[1] + h.ny * d].map(Math.round) }; }
+  const sec = sliceCut(sweepAxis(G.cols, l.a, l.b), q.at);
+  return { a: sec.line.a, b: sec.line.b, path: sec.line.path, s: sec.line.s, L: sec.line.L, sec };
+}
+function sliceCut(axis, k) {
+  const key = axis + k;
+  let c = SEC.cuts.get(key);
+  if (!c) {
+    c = sliceSection(G.geom, G.NA, G.ijk, axis, k, G.secTops);
+    c.wells = wellsNearPath(model.wells.map((w) => w.path), c.line, SEC_CORRIDOR);
+    SEC.cuts.set(key, c);
+    if (SEC.cuts.size > 24) SEC.cuts.delete(SEC.cuts.keys().next().value);
+  }
+  return c;
 }
 function secCut() {
   const l = secLine();
-  SEC.geom = cutGrid(G.geom, G.NA, G.ijk, l.a, l.b, G.secTops);
-  SEC.wells = wellsNear(model.wells.map((w) => w.path), SEC.geom.line, SEC_CORRIDOR);
-  SEC.hatchKey = '';
+  SEC.geom = l.sec || cutGrid(G.geom, G.NA, G.ijk, l.a, l.b, G.secTops);
+  SEC.wells = l.sec ? l.sec.wells : wellsNear(model.wells.map((w) => w.path), SEC.geom.line, SEC_CORRIDOR);
+  SEC.hatchKey = ''; SEC.cutAt = S.section.at;
   G.stats.secCuts = (G.stats.secCuts || 0) + 1; G.stats.secCutMs = (G.stats.secCutMs || 0) + SEC.geom.ms;
+}
+/** The sweep's places for the line as chosen, in order across the field: for a line of the field's own,
+ *  every column (Along) or row (Across) of the grid that holds an active cell, with the line itself in its
+ *  place among them; for a drawn line, steps of one slice either side of it over the field. */
+function sweepOf() {
+  const q = S.section, l = q.line ? G.lines[q.line] : { a: q.a, b: q.b }, key = `${q.line}|${l.a}|${l.b}`;
+  if (SEC.sweep && SEC.sweep.key === key) return SEC.sweep;
+  const axis = sweepAxis(G.cols, l.a, l.b), out = { key, axis, at: [] };
+  if (q.line) {
+    const list = slices(G.cols, axis), i = slot(G.cols, axis, list, l);
+    out.at = list.map((v) => v.k); out.at.splice(i, 0, null);
+  } else {
+    const h = shifts(G.cols, l.a, l.b);
+    for (let j = h.lo; j <= h.hi; j++) out.at.push(j || null);
+    Object.assign(out, { step: h.step, bearing: (Math.atan2(h.nx, h.ny) * 180 / Math.PI + 360) % 360 });
+  }
+  return (SEC.sweep = out);
+}
+const COMPASS = [['north', 'N'], ['northeast', 'NE'], ['east', 'E'], ['southeast', 'SE'], ['south', 'S'], ['southwest', 'SW'], ['west', 'W'], ['northwest', 'NW']];
+/** The sweep's place in words: [on the pane, spoken]. */
+function sweepWords(w, at) {
+  const q = S.section, word = w.axis === 'I' ? 'column' : 'row';
+  if (q.line && at !== null) return [`${w.axis} ${at}`, `${word} ${w.axis} ${at}`];
+  if (q.line) { const i = w.at.indexOf(null), p = w.at[i - 1], n = w.at[i + 1]; return [q.line === 'along' ? 'Along' : 'Across', `the field’s own line, ${p && n ? `between ${word}s ${w.axis} ${p} and ${w.axis} ${n}` : `beyond ${word} ${w.axis} ${p || n}`}`]; }
+  if (at === null) return ['Drawn', 'your line, as drawn'];
+  const d = U.length(Math.abs(at) * w.step, units), b = COMPASS[Math.round(((w.bearing + (at < 0 ? 180 : 0)) % 360) / 45) % 8];
+  return [`${d} ${b[1]}`, `your line, moved ${U.spokenUnits(d)} ${b[0]}`];
 }
 /** Shows or hides the section; the line it had is kept. */
 function setSection(on, byKey) {
@@ -1790,13 +1858,17 @@ function applySection() {
   $('section').hidden = !on; $('secline').toggleAttribute('hidden', !on);   // an SVG element has no hidden property
   $('btn-section').setAttribute('aria-pressed', String(on));
   for (const b of $('sec-lines').querySelectorAll('[role="radio"]')) b.setAttribute('aria-checked', String(b.dataset.line === S.section.line));
+  if (SEC.edge) SEC.edge.apply();
   R.secGeom = on; R.section = on; R.labels = true; R.draw = true; kick();
 }
 function secWords() {
-  const L = SEC.geom ? SEC.geom.line.L : Math.hypot(secLine().b[0] - secLine().a[0], secLine().b[1] - secLine().a[1]);
-  return `${S.section.line === 'across' ? 'across the field' : S.section.line === 'along' ? 'along the field' : 'on your line'}, ${U.spokenUnits(U.length(L, units))} long`;
+  const q = S.section, l = secLine(), L = SEC.geom ? SEC.geom.line.L : l.L || Math.hypot(l.b[0] - l.a[0], l.b[1] - l.a[1]);
+  const where = q.at !== null ? sweepWords(sweepOf(), q.at)[1] : q.line === 'across' ? 'across the field' : q.line === 'along' ? 'along the field' : 'on your line';
+  return `${where}, ${U.spokenUnits(U.length(L, units))} long`;
 }
+/** A new line, or a change to it; a line chosen or drawn anew starts the sweep from the line itself. */
 function setLine(patch, final) {
+  if (!('at' in patch) && ('line' in patch || 'a' in patch)) patch.at = null;
   Object.assign(S.section, patch);
   for (const b of $('sec-lines').querySelectorAll('[role="radio"]')) b.setAttribute('aria-checked', String(b.dataset.line === S.section.line));
   R.secGeom = true; R.labels = true; if (final) { SEC.drag = null; save(); }
@@ -1831,7 +1903,7 @@ function placeSecLine() {
   const on = S.section.on && G.PV, svg = $('secline');
   if (!on) { SEC.ends = null; return; }
   const l = secLine(), N = 64, top = [], base = [], zt = [];
-  const xy = (i) => [l.a[0] + (l.b[0] - l.a[0]) * i / N, l.a[1] + (l.b[1] - l.a[1]) * i / N];
+  const xy = (i) => (l.path ? lineAt(l, l.L * i / N) : [l.a[0] + (l.b[0] - l.a[0]) * i / N, l.a[1] + (l.b[1] - l.a[1]) * i / N]);
   for (let i = 0; i <= N; i++) zt.push(surfAt(G.surf, 'top', ...xy(i)));
   // off the field the line keeps the level of the field's top where it last was on it (between two
   // stretches over the field, the straight line between them), so it never drops off the field's edge
@@ -1866,9 +1938,19 @@ function placeSecLine() {
   $('sl-b').setAttribute('transform', `translate(${f(top[N])})`);
   SEC.ends = [top[0], top[N]];
 }
-/** Which end of the line a touch at (x, y) on the plate takes: 'a', 'b' or null (22 px). */
+/** The model's box on the plate (CSS px): its corners and well heads, projected. */
+function modelBox() {
+  const q = fitPoints(), b = [Infinity, Infinity, -Infinity, -Infinity];
+  for (let i = 0; i < q.length; i += 3) { const p = projectWorld(q[i], q[i + 1], q[i + 2]); if (p) { b[0] = Math.min(b[0], p[0]); b[1] = Math.min(b[1], p[1]); b[2] = Math.max(b[2], p[0]); b[3] = Math.max(b[3], p[1]); } }
+  return b;
+}
+/** Which end of the line a touch at (x, y) on the plate takes: 'a', 'b' or null (22 px). Where the model
+ *  is drawn small (the strip a tall pane leaves it), the ends' hits would cover most of it and a turn
+ *  would take an end instead: there no end is taken, one finger always turns, and Draw draws a new line. */
 function secHandle(x, y) {
   if (!S.section.on || !SEC.ends) return null;
+  const m = modelBox();
+  if (Math.min(m[2] - m[0], m[3] - m[1]) < SEC_GRAB_MIN) return null;
   const d = SEC.ends.map((p) => Math.hypot(p[0] - x, p[1] - y));
   return d[0] <= 22 && d[0] <= d[1] ? 'a' : d[1] <= 22 ? 'b' : null;
 }
@@ -1877,26 +1959,36 @@ function secStyle() {
 }
 /** The plot's height the section needs at this plot width (under the model), before --sec-h caps it. */
 function secNeed(bw) { return Math.max(70, Math.ceil(sectionAxis(SEC.geom, { x: 0, y: 0, w: bw, h: 1e9 }, S.exag, 0).y1) + SEC_BOX.t + SEC_BOX.b); }
+/** The section's cut and the pane's fit, before the 3D view draws: under the 3D view the compact pane is
+ *  as tall as the section needs at this width, up to its cap (--sec-h), so a long, flat section leaves the
+ *  rest to the model; held while a line is drawn or swept, and set in the frame that draws at it, so
+ *  neither canvas is ever shown stretched. */
+function fitSection() {
+  if (!S.section.on || !model) return;
+  if (R.secGeom || !SEC.geom) { secCut(); R.secGeom = false; R.section = true; writeSecWords(); writeSweep(); }
+  const cv = $('sec-plot'), under = getComputedStyle($('view')).flexDirection === 'column';
+  $('sec-sweep').parentNode.classList.toggle('narrow', cv.clientWidth < 284);   // the sweep's row: ‹ › 88, the slider 140, the word 64, less its 8 px reach
+  if (SEC.drag || SEC.lockH) return;
+  const want = under ? `${secNeed(Math.max(40, cv.clientWidth - SEC_BOX.l - SEC_BOX.r))}px` : '';
+  if (cv.style.height !== want) { cv.style.height = want; R.draw = true; R.labels = true; R.card = Math.max(R.card, 1); }
+}
 /** The section, drawn: in the frame that draws the date, after the color pass. */
 function drawSection() {
   R.section = false;
   if (!S.section.on || !model) { R.secGeom = false; return; }
+  if (R.secGeom || !SEC.geom) fitSection();
   const t0 = performance.now(), cv = $('sec-plot'), W = cv.clientWidth, H = cv.clientHeight;
-  if (R.secGeom || !SEC.geom) { secCut(); R.secGeom = false; writeSecWords(); }
   if (!W || !H) return;
   const dpr = Math.min(window.devicePixelRatio || 1, 2), cw = Math.round(W * dpr), ch = Math.round(H * dpr);
   if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
   const sec = SEC.geom, st = secStyle(), x = cv.getContext('2d');
-  // under the 3D view the pane is as tall as the section needs at this width, up to its cap (--sec-h):
-  // a long, flat section leaves the rest to the model; never resized during a drag
   const bw = Math.max(40, W - SEC_BOX.l - SEC_BOX.r);
-  if (!SEC.drag && !SEC.lockH && getComputedStyle($('view')).flexDirection === 'column') {
-    const want = `${secNeed(bw)}px`;
-    if (cv.style.height !== want) { cv.style.height = want; R.section = true; return; }   // drawn again at the new size
-  } else if (!SEC.drag && !SEC.lockH && cv.style.height && getComputedStyle($('view')).flexDirection !== 'column') { cv.style.height = ''; R.section = true; return; }
   const box = { x: SEC_BOX.l, y: SEC_BOX.t, w: bw, h: Math.max(30, H - SEC_BOX.t - SEC_BOX.b) };
-  const ax = SEC.ax = sectionAxis(sec, box, S.exag, model.center[2]);
-  const hk = [W, H, dpr, S.exag, sec.line.a, sec.line.b, st.ink3, st.line].join('|');
+  // a pane made taller than compact fills with the section, at a stretch of its own that it states (D13)
+  const ex = $('section').classList.contains('grown') ? ownExag(sec, box, S.exag) : S.exag;
+  if (ex !== SEC.exag) { SEC.exag = ex; writeSecWords(); }
+  const ax = SEC.ax = sectionAxis(sec, box, ex, model.center[2]);
+  const hk = [W, H, dpr, ex, sec.line.a, sec.line.b, sec.line.L, st.ink3, st.line].join('|');
   if (SEC.hatchKey !== hk && !SEC.drag) { SEC.hatch = gapLayer(sec, ax, W, H, dpr, hexToRgb(st.ink3), mkCanvas); SEC.hatchKey = hk; }
   x.setTransform(dpr, 0, 0, dpr, 0, 0);
   x.clearRect(0, 0, W, H);
@@ -1908,7 +2000,7 @@ function drawSection() {
     G.secStep = G.texStep; return;
   }
   // the ground: depth guides across the plot, under everything
-  const dt = depthTicks(ax, units, H < 150 ? 2 : 3);
+  const dt = depthTicks(ax, units, H < 150 ? 2 : Math.max(3, Math.round(H / 75)));
   x.strokeStyle = st.line; x.lineWidth = 1; x.beginPath();
   for (const t of dt) { const y = Math.round(t.y) + 0.5; x.moveTo(ax.x0, y); x.lineTo(ax.x1, y); }
   x.stroke();
@@ -1952,15 +2044,24 @@ function drawSection() {
   halo('A′', ax.x1, box.y - 3, 'right', '650 11.5px "Ysabeau Office", system-ui, sans-serif', st.ink);
   x.fillStyle = st.ink2; x.textAlign = 'right'; x.textBaseline = 'middle'; x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
   for (const t of dt) x.fillText(t.text, ax.x0 - 5, Math.round(t.y));   // beside the section, wherever it is centered
-  const xt = distanceTicks(ax, units, W < 300 ? 2 : 3), yb = Math.min(H - 2, ax.y1 + 13);
+  const xt = distanceTicks(ax, units, W < 300 ? 2 : Math.max(3, Math.round(W / 150))), yb = Math.min(H - 2, ax.y1 + 13);
   x.textBaseline = 'alphabetic';
-  let lastR = -Infinity;
-  xt.forEach((t, i) => {
+  // the last tick carries the unit, so it always stands; where the words would touch, every other one gives
+  // way (every third, …), so the axis stays even, and a tick the last would touch gives way to it
+  const laid = xt.map((t, i) => {
     const wdt = x.measureText(t.text).width, al = i === 0 ? 'left' : i === xt.length - 1 ? 'right' : 'center';
     const l = al === 'left' ? t.x : al === 'right' ? t.x - wdt : t.x - wdt / 2;
-    if (l < lastR + 8 && i !== xt.length - 1) return;
-    x.textAlign = al; x.fillText(t.text, t.x, yb); lastR = l + wdt;
+    return { t, al, l, r: l + wdt };
   });
+  let kept = [];
+  for (let s = 1; laid.length && s <= Math.max(1, xt.length - 1); s++) {
+    kept = laid.filter((k, i) => i % s === 0 && i < laid.length - 1);
+    const last = laid[laid.length - 1];
+    while (kept.length && last.l < kept[kept.length - 1].r + 8) kept.pop();
+    kept.push(last);
+    if (kept.every((k, i) => i === 0 || k.l >= kept[i - 1].r + 8)) break;
+  }
+  for (const k of kept) { x.textAlign = k.al; x.fillText(k.t.text, k.t.x, yb); }
   // names: the wells' over their paths, then the formations'. Each tries its places in turn; a name that
   // would touch another, A or A′ tries the next. A well's name moved off its path's top gets a hairline
   // to it; a well left with no place is named in the key under the pane, never dropped.
@@ -1998,7 +2099,7 @@ function drawSection() {
   SEC.named = named; SEC.unnamed = unnamed;
   const more = unnamed.length ? `, unlabeled: ${unnamed.join(', ')}` : '';
   if ($('sec-more').textContent !== more) $('sec-more').textContent = more;
-  G.secStep = G.texStep;
+  G.secStep = G.texStep; SEC.drawnAt = SEC.cutAt;
   G.stats.secDraws = (G.stats.secDraws || 0) + 1; G.stats.secMs = (G.stats.secMs || 0) + performance.now() - t0;
 }
 /** Where each formation's name goes: at the section's left end where the formation shows, at the middle
@@ -2041,12 +2142,36 @@ function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = 
 /** The pane's words that change with the line, the units or the stretch, and its description. */
 function writeSecWords() {
   setText('sec-corridor', `Wells within ${U.length(SEC_CORRIDOR, units)}`);
-  setText('sec-exag', `vertical ${U.times(S.exag)}`);
+  const ex = SEC.exag || S.exag;
+  setText('sec-exag', `vertical ${U.times(ex)}`);
   if (!SEC.geom) return;
   const sec = SEC.geom, d0 = sec.z0 + model.center[2], d1 = sec.z1 + model.center[2], p = propDef(S.prop);
   const wells = SEC.wells.map((w) => model.wells[w.i].name);
   if (!sec.n) { $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}: the line misses the field, so no cell is cut.`); return; }
-  $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}, ${sec.n} cells cut, from ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d0, units))} to ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d1, units))} deep, colored by ${p.label}, depth stretched ${U.tick(Math.round(S.exag * 10) / 10)} times. ${wells.length ? `Wells within ${U.spokenUnits(U.length(SEC_CORRIDOR, units))}: ${wells.join(', ')}.` : 'No well comes within ' + U.spokenUnits(U.length(SEC_CORRIDOR, units)) + '.'}`);
+  $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}, ${sec.n} cells cut, from ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d0, units))} to ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d1, units))} deep, colored by ${p.label}, depth stretched ${U.tick(Math.round(ex * 10) / 10)} times${ex !== S.exag ? `, more than the 3D view’s ${U.tick(Math.round(S.exag * 10) / 10)}` : ''}. ${wells.length ? `Wells within ${U.spokenUnits(U.length(SEC_CORRIDOR, units))}: ${wells.join(', ')}.` : 'No well comes within ' + U.spokenUnits(U.length(SEC_CORRIDOR, units)) + '.'}`);
+}
+/** The sweep's slider, its value in words, and the keys either side of it. */
+function writeSweep() {
+  const w = sweepOf(), q = S.section;
+  if (!w.at.includes(q.at)) { q.at = null; R.secGeom = true; kick(); }   // a place the saved state names that the grid has not
+  const i = w.at.indexOf(q.at), el = $('sec-sweep'), [shown, spoken] = sweepWords(w, q.at);
+  const unit = q.line ? (w.axis === 'I' ? 'column' : 'row') : 'step';
+  el.max = String(w.at.length - 1);
+  if (+el.value !== i) el.value = String(i);
+  el.style.setProperty('--p', `${(i / Math.max(1, w.at.length - 1)) * 100}%`);
+  el.setAttribute('aria-valuetext', spoken);
+  setText('sec-at', shown);
+  $('sec-prev').disabled = i <= 0; $('sec-next').disabled = i >= w.at.length - 1;
+  $('sec-prev').setAttribute('aria-label', `Previous ${unit}`); $('sec-next').setAttribute('aria-label', `Next ${unit}`);
+}
+/** The sweep to its i-th place; final once the finger is off (the pane may then fit the section again). */
+function sweepTo(i, final) {
+  const w = sweepOf();
+  i = Math.max(0, Math.min(w.at.length - 1, i));
+  if (w.at[i] !== S.section.at) { armDraw(false); S.section.at = w.at[i]; R.secGeom = true; R.labels = true; }
+  SEC.lockH = !final;
+  if (final) { R.section = true; save(); }
+  writeSweep(); kick();
 }
 function initSection() {
   $('btn-section').addEventListener('click', (e) => setSection(!S.section.on, e.detail === 0));
@@ -2068,6 +2193,21 @@ function initSection() {
     R.draw = true; R.section = true; kick();
   });
   new ResizeObserver(() => { R.section = true; kick(); }).observe(cv);
+  // the sweep (D14): the slider takes the newest place on every input, and the frame draws it, so a fast
+  // scrub never queues a place already passed; the pane holds its height until the finger is off
+  const sw = $('sec-sweep');
+  sw.addEventListener('input', () => sweepTo(+sw.value, false));
+  sw.addEventListener('change', () => sweepTo(+sw.value, true));
+  for (const [id, d] of [['sec-prev', -1], ['sec-next', 1]]) $(id).addEventListener('click', () => { sweepTo(+sw.value + d, true); const t = sweepWords(sweepOf(), S.section.at)[1]; say(`${t[0].toUpperCase()}${t.slice(1)}.`); });
+  // the pane's edge (D13, js/pane.js): the model keeps 120 px under the pane, its keys in a row and the field
+  // under them; beside it, 160 px past the screen's left inset (the pane's own left padding carries it), its
+  // key plates side by side
+  SEC.edge = paneEdge({
+    pane: $('section'), edges: [$('sec-edge'), $('sec-side')], view: $('view'), keep: { up: 120, get side() { return 148 + parseFloat(getComputedStyle($('section')).paddingLeft); } },
+    get: () => S.section.size, set: (f) => { S.section.size = f; },
+    onSize: () => { R.draw = true; R.labels = true; R.card = 2; R.section = true; kick(); }, onEnd: save,
+    label: (side) => (side ? 'Section width' : 'Section height'),
+  });
   applySection();
 }
 
@@ -2088,17 +2228,20 @@ window.__norne = {
   setFrame: (f) => { wanted = Math.max(0, Math.min(G.nf - 1, f | 0)); kick(); },
   setProp: (key) => { if (propDef(key)) { S.prop = key; applyProp(); } },
   log: (on) => { if (on) flog = []; const out = flog; if (!on) flog = null; return out; },
+  secLog: (on) => { const out = G.secLog; G.secLog = on ? [] : null; return out; },
   labelHits: () => G.labelHits || [],
   resolveTap: (x, y) => resolveTap(x, y),
   ends: (key) => openEnds(D, propDef(key), G.gasMax),
   // the section: its state, a cell's middle on the pane (CSS px in the canvas), a model point on the plate
   secFit: () => { const cv = $('sec-plot'); return SEC.geom ? { set: parseFloat(cv.style.height) || 0, need: secNeed(Math.max(40, cv.clientWidth - SEC_BOX.l - SEC_BOX.r)), h: cv.clientHeight, lock: !!SEC.lockH } : null; },
-  section: () => (SEC.geom ? { on: S.section.on, line: S.section.line, a: [...SEC.geom.line.a], b: [...SEC.geom.line.b], L: SEC.geom.line.L, n: SEC.geom.n, cells: [...SEC.geom.cells], z: [SEC.geom.z0, SEC.geom.z1], wells: SEC.wells.map((w) => model.wells[w.i].name), named: SEC.named || [], unnamed: SEC.unnamed || [], step: G.secStep, gapPx: SEC.hatch ? SEC.hatch.gapPx : null, armed: SEC.armed, ends: SEC.ends, ax: SEC.ax && { x0: SEC.ax.x0, x1: SEC.ax.x1, y0: SEC.ax.y0, y1: SEC.ax.y1, sx: SEC.ax.sx, sz: SEC.ax.sz, zTop: SEC.ax.zTop } } : { on: S.section.on }),
+  section: () => (SEC.geom ? { on: S.section.on, line: S.section.line, a: [...SEC.geom.line.a], b: [...SEC.geom.line.b], L: SEC.geom.line.L, n: SEC.geom.n, cells: [...SEC.geom.cells], z: [SEC.geom.z0, SEC.geom.z1], wells: SEC.wells.map((w) => model.wells[w.i].name), named: SEC.named || [], unnamed: SEC.unnamed || [], step: G.secStep, at: S.section.at, drawnAt: SEC.drawnAt, sweep: sweepOf().at, axis: sweepOf().axis, size: S.section.size, exag: SEC.exag, gapPx: SEC.hatch ? SEC.hatch.gapPx : null, armed: SEC.armed, ends: SEC.ends, ax: SEC.ax && { x0: SEC.ax.x0, x1: SEC.ax.x1, y0: SEC.ax.y0, y1: SEC.ax.y1, sx: SEC.ax.sx, sz: SEC.ax.sz, zTop: SEC.ax.zTop } } : { on: S.section.on }),
   secCellPoint: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let s = 0, z = 0, n = 0; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { s += SEC.geom.pts[k * 2]; z += SEC.geom.pts[k * 2 + 1]; n++; } return [SEC.ax.X(s / n), SEC.ax.Y(z / n)]; },
   secCellBox: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { const X = SEC.ax.X(SEC.geom.pts[k * 2]), Y = SEC.ax.Y(SEC.geom.pts[k * 2 + 1]); x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y); } return [x0, y0, x1, y1]; },
   secCellAt: (x, y) => (SEC.geom && SEC.ax ? (cellAt(SEC.geom, SEC.ax, x, y) >= 0 ? SEC.geom.cells[cellAt(SEC.geom, SEC.ax, x, y)] : -1) : -1),
   mapScreen: (p) => project([p[0], p[1], topAt(p[0], p[1])]),
   mapPoint: (x, y) => mapPoint(x, y),
+  modelBox: () => modelBox(),
+  secHandle: (x, y) => secHandle(x, y),
   topAt: (p) => surfAt(G.surf, 'top', p[0], p[1]),
   cellXY: (a) => { let x = 0, y = 0; for (let k = 0; k < 8; k++) { x += G.geom[a * 24 + k * 3] / 8; y += G.geom[a * 24 + k * 3 + 1] / 8; } return [x, y]; },
 };

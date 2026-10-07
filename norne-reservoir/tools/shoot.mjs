@@ -950,7 +950,9 @@ console.log('\n== once (light)');
       });
       seen.push(r);
     }
-    check(seen.every((r, i) => r.open && r.ring && !r.overRing && !r.overKeys && r.inside && r.compact === (i > 0)), `a card carried across the stops is placed again at each: ${seen.map((r, i) => `stop ${i} (plate ${r.h} px) ${r.compact ? 'compact' : 'full'}${r.ring && !r.overRing ? ', ring clear' : ', RING COVERED'}${r.overKeys ? ', OVER A KEY' : ''}${r.inside ? '' : ', PAST THE PLATE'}`).join('; ')}`);
+    // the raised stops give the compact form; closed, the form the plate's room calls for (2.3: with the
+    // sweep row the section's compact pane is 44 px taller, and a 343 px plate takes the compact form too)
+    check(seen.every((r, i) => r.open && r.ring && !r.overRing && !r.overKeys && r.inside && (i === 0 || r.compact)), `a card carried across the stops is placed again at each: ${seen.map((r, i) => `stop ${i} (plate ${r.h} px) ${r.compact ? 'compact' : 'full'}${r.ring && !r.overRing ? ', ring clear' : ', RING COVERED'}${r.overKeys ? ', OVER A KEY' : ''}${r.inside ? '' : ', PAST THE PLATE'}`).join('; ')}`);
     await A.shot('card-carried', false);
     await A.tapEl('#readout-close'); await A.tapEl('#grip'); await A.page.waitForTimeout(400);
   }
@@ -1059,8 +1061,10 @@ console.log('\n== once (light)');
   const ax = q.ax;
   check(Math.abs(ax.sz / ax.sx - 5) < 1e-9 && ax.y1 <= plot.height + 0.5 && ax.x1 <= plot.width + 0.5, `one depth axis, stretched as the 3D view is: ${(ax.sx * 1000).toFixed(1)} px a kilometer across, ${(ax.sz * 1000).toFixed(1)} down (×${(ax.sz / ax.sx).toFixed(2)}); the section ${Math.round(ax.x1 - ax.x0)} × ${Math.round(ax.y1 - ax.y0)} px inside the plot`);
   // the colors: the 3D view's property and month, as this file decodes the cells; checked on Across, the
-  // shorter line, whose cells are drawn wider and taller, so their middles are clear of edges and lines
+  // shorter line, whose cells are drawn wider and taller, so their middles are clear of edges and lines;
+  // in the pane made tall (End on its edge), since 2.3's sweep row took 44 px of the compact plot
   await A.tapEl('#sec-lines [data-line="across"]');
+  await w(() => document.getElementById('sec-edge').focus()); await page.keyboard.press('End');
   await A.frame(); await A.frame();
   for (const [key, f, tab] of [['SOIL', 60, null], ['SOIL', 100, null], ['PRESSURE', 100, 4], ['SWAT', 20, 2]]) {
     if (tab) { await A.tapEl(`#props [role="radio"]:nth-child(${tab})`); await A.frame(); await A.frame(); }
@@ -1069,6 +1073,7 @@ console.log('\n== once (light)');
     check(c.n >= 20 && c.good >= c.n - 1 && step === f, `${key} on ${model.frames[f]}${tab ? ' (by its word)' : ''}, Across: the middles of the ${c.n} widest cells in the section are this file's colors for them in ${c.good} (within 3 of 255 a channel; the section drew date ${step})${c.bad.length ? ': ' + c.bad.slice(0, 3).join('; ') : ''}`);
   }
   await page.getByRole('radio', { name: 'Oil', exact: true }).click(); await A.frame();
+  await w(() => document.getElementById('sec-edge').focus()); await page.keyboard.press('Home'); await w(() => document.activeElement.blur());
   await A.tapEl('#sec-lines [data-line="along"]'); await A.frame(); await A.frame();
   // sharp while scrubbed: every frame that drew a new date drew the section for that date
   for (const [rate, from, to] of [[8, 20, 60], [20, 5, 105]]) {
@@ -1123,7 +1128,9 @@ console.log('\n== once (light)');
       return out;
     });
     const near = seen.filter((d) => d <= 150).length;
-    check(seen.length > 40 && near >= seen.length * 0.97, `the finger meets the cell it sees: at ${seen.length} points on the model, the point a touch maps to lies within 150 m of the middle of the cell drawn there in ${near} (cells are up to 160 m across; the farthest ${Math.round(Math.max(...seen))} m)`);
+    // 0.95 since 2.3 (0.97 before): the plate with the section open is 44 px shorter, and its samples land on
+    // two more of the field's walls, where a finger meets the top behind the wall (mapPoint is unchanged)
+    check(seen.length > 40 && near >= seen.length * 0.95, `the finger meets the cell it sees: at ${seen.length} points on the model, the point a touch maps to lies within 150 m of the middle of the cell drawn there in ${near} (cells are up to 160 m across; the farthest ${Math.round(Math.max(...seen))} m)`);
     const good = back.filter((b) => b.err <= 5);
     check(good.length >= 2, `points on the line where it lies on the field and shows map back to where they lie: ${good.length} of ${back.length} within 5 m (a nearer ridge hides the others: ${back.filter((b) => b.err > 5).map((b) => Math.round(b.err) + ' m').join(', ') || 'none'})`);
     const P0 = good[0].s, Q0 = good[good.length - 1].s, P = [pr.left + P0[0], pr.top + P0[1]], Q = [pr.left + Q0[0], pr.top + Q0[1]];
@@ -1158,10 +1165,13 @@ console.log('\n== once (light)');
     const d2 = await w(() => window.__norne.section()), cam2 = await w(() => window.__norne.cam()), fit2 = await w(() => window.__norne.secFit());
     check(d2.a.join() === d.a.join() && d2.b.join() === d2p.b.join() && off(sb2, R2) <= 2 && cam2.theta === cam0.theta && !fit2.lock && fit2.set === fit2.need, `a drag on A′ moves that end under the finger (${off(sb2, R2).toFixed(2)} px off) and leaves A where it was; the camera held still; after the lift the pane fits again (${fit2.set} of ${fit2.need} px)`);
     // two fingers while drawing: back to the view, the line as it was
+    // (both fingers on the plate as it is now: the pane fitted to the new line takes up to its cap, and the
+    // edge's hit reaches 22 px over the plate's foot)
     await A.tapEl('#sec-draw');
-    await A.touch('touchStart', P[0], P[1] + 40); await A.touch('touchMove', P[0] + 40, P[1] + 50);
-    await A.cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: P[0] + 40, y: P[1] + 50, id: 0 }, { x: P[0] + 120, y: P[1] + 120, id: 1 }] });
-    await A.cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: P[0] + 30, y: P[1] + 40, id: 0 }, { x: P[0] + 150, y: P[1] + 150, id: 1 }] });
+    const pn = await A.rect('#plate'), F = [pn.left + pn.width / 2 - 80, pn.top + pn.height / 2 - 50];
+    await A.touch('touchStart', F[0], F[1]); await A.touch('touchMove', F[0] + 40, F[1] + 10);
+    await A.cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: F[0] + 40, y: F[1] + 10, id: 0 }, { x: F[0] + 120, y: F[1] + 70, id: 1 }] });
+    await A.cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: F[0] + 30, y: F[1], id: 0 }, { x: F[0] + 150, y: F[1] + 90, id: 1 }] });
     await A.touch('touchEnd'); await A.frame(); await A.frame();
     const d3 = await w(() => window.__norne.section());
     check(d3.a.join() === d2.a.join() && d3.b.join() === d2.b.join(), `a second finger while drawing gives the touch back to the view, and the line is as it was (${d3.a.join(', ')} to ${d3.b.join(', ')})`);
@@ -1181,9 +1191,10 @@ console.log('\n== once (light)');
     }
     await A.tapEl('#sec-draw'); await A.frame();   // off again, if the two fingers left it armed
     if ((await w(() => document.getElementById('sec-draw').getAttribute('aria-pressed'))) === 'true') await A.tapEl('#sec-draw');
-    // with the section open and Draw off, one finger still turns the model
-    await A.touch('touchStart', pr.left + 200, pr.top + pr.height * 0.8);
-    for (let i = 1; i <= 6; i++) await A.touch('touchMove', pr.left + 200 + i * 10, pr.top + pr.height * 0.8);
+    // with the section open and Draw off, one finger still turns the model (on the plate as it is now)
+    const pt = await A.rect('#plate');
+    await A.touch('touchStart', pt.left + 200, pt.top + pt.height * 0.7);
+    for (let i = 1; i <= 6; i++) await A.touch('touchMove', pt.left + 200 + i * 10, pt.top + pt.height * 0.7);
     await A.touch('touchEnd'); await A.frame();
     const cam4 = await w(() => window.__norne.cam()), d4 = await w(() => window.__norne.section());
     check(cam4.theta !== cam0.theta && d4.a.join() === d3.a.join() && d4.b.join() === d3.b.join(), `with Draw off, a one-finger drag on the model turns it (theta ${Math.round(cam0.theta)} then ${Math.round(cam4.theta)}) and leaves the line alone`);
@@ -1269,11 +1280,246 @@ console.log('\n== once (light)');
   await B.tapEl('#btn-section'); await B.page.waitForTimeout(500); await B.frame(); await B.frame();
   await B.shot('section-dark');
   await B.tapEl('#sec-lines [data-line="across"]');
+  await B.w(() => document.getElementById('sec-edge').focus()); await B.page.keyboard.press('End');
   await B.frame(); await B.frame();
   const cd = await colorCheck(B, 'SOIL', 80, true);
   check(cd.n >= 20 && cd.good >= cd.n - 1, `dark, Across: the middles of the ${cd.n} widest cells are this file's colors on the dark scale in ${cd.good}${cd.bad.length ? ': ' + cd.bad.slice(0, 3).join('; ') : ''}`);
   check(B.errors.length === 0, `dark: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
   await B.ctx.close();
+}
+
+// 2.3 (plan 0012, package 3.4b; D13, D14): the pane's edge and the sweep. The sweep: the slider steps
+// through the grid's own columns (Along) or rows (Across), each the slice's own cells along its path, the
+// line moving on the model; ‹ › one at a time; a drawn line moved parallel to itself; a fast scrub by
+// touch draws the slider's newest place in every frame, both canvases at their own size, the pane held
+// until the lift. The edge: a drag by touch moves it under the finger with both canvases sharp in every
+// frame; past tall the model keeps its 120 px strip, which still turns by one finger; a double tap
+// toggles compact and tall; the keys step it; the size is remembered; on its side the side edge widens
+// the pane and the key plates stand side by side; the pane taller than its section states its own stretch.
+// A one-finger drag that starts on the model right next to A′ (8 px from it, toward A): on a strip, where the
+// model is drawn small, it must turn the model and leave the line alone.
+async function nearEndDrag(A, pr) {
+  const q0 = await A.w(() => window.__norne.section()), b = q0.ends[1], a = q0.ends[0], L = Math.hypot(a[0] - b[0], a[1] - b[1]);
+  const p = [b[0] + ((a[0] - b[0]) * 8) / L, b[1] + ((a[1] - b[1]) * 8) / L], box = await A.w(() => window.__norne.modelBox());
+  const t0 = (await A.w(() => window.__norne.cam())).theta;
+  await A.touch('touchStart', pr.left + p[0], pr.top + p[1]);
+  for (let i = 1; i <= 6; i++) await A.touch('touchMove', pr.left + p[0] + i * 12, pr.top + p[1]);
+  await A.touch('touchEnd'); await A.frame(); await A.frame();
+  const t1 = (await A.w(() => window.__norne.cam())).theta, q1 = await A.w(() => window.__norne.section());
+  const same = q1.line === q0.line && q1.a.every((v, i) => v === q0.a[i]) && q1.b.every((v, i) => v === q0.b[i]);
+  return { ok: same && t1 !== t0, same, t0, t1, line: q1.line, d: Math.hypot(p[0] - b[0], p[1] - b[1]), box: [Math.round(box[2] - box[0]), Math.round(box[3] - box[1])] };
+}
+{
+  console.log('\n== the pane\'s edge and the sweep (2.3)');
+  const A = await open('light');
+  const { w, page } = A;
+  await setFrame(A, 60);
+  await A.tapEl('#btn-section'); await page.waitForTimeout(500); await A.frame();
+  await A.tapEl('#sec-lines [data-line="across"]'); await A.frame(); await A.frame();
+  const sweepState = () => w(() => { const q = window.__norne.section(), sw = document.getElementById('sec-sweep'); return { q, v: +sw.value, max: +sw.max, text: sw.getAttribute('aria-valuetext'), role: sw.type, shown: document.getElementById('sec-at').textContent, prev: document.getElementById('sec-prev').getAttribute('aria-label'), live: document.getElementById('live').textContent, d: document.getElementById('sl-line').getAttribute('d') }; });
+  const ownSlice = (q, ax, k) => q.cells.filter((a) => IJK[a * 3 + (ax === 'I' ? 0 : 1)] + 1 !== k).length;
+  // Across: the rows of the grid, the field's own line in its place among them
+  {
+    const s0 = await sweepState();
+    const rows = new Set(); for (let a = 0; a < NA; a++) rows.add(IJK[a * 3 + 1] + 1);
+    await A.tapEl('#sec-next'); await A.frame(); await A.frame();
+    const s1 = await sweepState(), k1 = s1.q.at;
+    await A.tapEl('#sec-next'); await A.frame(); await A.frame();
+    const s2 = await sweepState();
+    check(s0.role === 'range' && s0.q.at === null && s0.q.axis === 'J' && s0.max === rows.size && /^the field’s own line, between rows J \d+ and J \d+$/.test(s0.text) && s0.shown === 'Across'
+      && s1.v === s0.v + 1 && s1.text === `row J ${k1}` && s1.shown === `J ${k1}` && ownSlice(s1.q, 'J', k1) === 0 && s1.q.n > 100 && s1.live === `Row J ${k1}.` && s1.d !== s0.d
+      && s2.q.at === k1 + 1 && ownSlice(s2.q, 'J', k1 + 1) === 0 && s2.prev === 'Previous row',
+    `Across sweeps the grid's rows: the slider (an input range, ${s0.max + 1} places: the ${rows.size} rows with a cell and the field's line, "${s0.text}"); › goes to "${s1.text}" (${s1.q.n} cells, every one in row J ${k1}; said "${s1.live}"), › again to J ${s2.q.at} (${s2.q.n} cells, all its own); the line on the model moved`);
+    await A.shot('sweep-row-light', false);
+  }
+  // Along: the grid's columns
+  {
+    await A.tapEl('#sec-lines [data-line="along"]'); await A.frame(); await A.frame();
+    const s0 = await sweepState();
+    await A.tapEl('#sec-prev'); await A.frame(); await A.frame();
+    const s1 = await sweepState();
+    check(s0.q.axis === 'I' && s0.q.at === null && s1.q.at !== null && s1.text === `column I ${s1.q.at}` && ownSlice(s1.q, 'I', s1.q.at) === 0 && s1.q.n > 100 && s1.prev === 'Previous column',
+      `Along sweeps the grid's columns: ‹ from the field's line ("${s0.text}") goes to "${s1.text}", ${s1.q.n} cells, every one in its column, ${Math.round(s1.q.L)} m along its path`);
+  }
+  // a fast scrub by touch on the slider: the newest place in every frame, both canvases at their size, the pane held
+  {
+    await A.tapEl('#sec-lines [data-line="across"]'); await A.frame(); await A.frame();
+    const r = await A.rect('#sec-sweep'), y = r.top + r.height / 2;
+    await w(() => window.__norne.secLog(true));
+    await A.touch('touchStart', r.left + 7, y);
+    for (let i = 1; i <= 30; i++) { await A.touch('touchMove', r.left + 7 + ((r.width - 14) * i) / 30, y); }
+    for (let i = 29; i >= 10; i--) { await A.touch('touchMove', r.left + 7 + ((r.width - 14) * i) / 30, y); }
+    const held = await w(() => window.__norne.secFit());
+    await A.touch('touchEnd'); await A.frame(); await A.frame(); await A.frame();
+    const log = await w(() => window.__norne.secLog(false)), fit = await w(() => window.__norne.secFit()), end = await sweepState();
+    const stale = log.filter((e) => e.drew !== e.at), blur = log.filter((e) => e.plot[0] !== e.plot[1] || e.plot[2] !== e.plot[3] || e.gl[0] !== e.gl[1] || e.gl[2] !== e.gl[3]);
+    const hs = new Set(log.slice(0, -3).map((e) => e.plot[3])), places = new Set(log.map((e) => e.at));
+    check(log.length > 10 && places.size > 10 && stale.length === 0 && blur.length === 0 && hs.size === 1 && held.lock && !fit.lock && fit.set === fit.need && end.q.drawnAt === end.q.at,
+      `a fast scrub of the sweep by touch: ${log.length} frames over ${places.size} places, ${stale.length} whose section is not the slider's place, ${blur.length} with a canvas not at its own size; the plot held at one height while the finger was down (locked ${held.lock}), fitted after the lift (${fit.set} of ${fit.need} px)`);
+  }
+  // a drawn line, moved parallel to itself
+  {
+    await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('norne-viewer:v1')); s.section = { on: true, line: null, a: [-2502, -2327], b: [1690, 947], at: null, size: 0 }; localStorage.setItem('norne-viewer:v1', JSON.stringify(s)); });
+    await page.reload(); await page.waitForFunction(ready, null, { timeout: 180000 }); await A.frame(); await A.frame();
+    const s0 = await sweepState();
+    await A.tapEl('#sec-next'); await A.frame(); await A.frame();
+    const s1 = await sweepState();
+    const u0 = [s0.q.b[0] - s0.q.a[0], s0.q.b[1] - s0.q.a[1]], u1 = [s1.q.b[0] - s1.q.a[0], s1.q.b[1] - s1.q.a[1]], L0 = Math.hypot(...u0), L1 = Math.hypot(...u1);
+    const cos = (u0[0] * u1[0] + u0[1] * u1[1]) / (L0 * L1), off = Math.abs((s1.q.a[0] - s0.q.a[0]) * -u0[1] / L0 + (s1.q.a[1] - s0.q.a[1]) * u0[0] / L0);
+    const said = s1.text.match(/^your line, moved (\d+) meters (north|south|east|west|northeast|northwest|southeast|southwest)$/);
+    check(s0.text === 'your line, as drawn' && s0.shown === 'Drawn' && cos > 0.99999 && Math.abs(L1 - L0) < 2 && off > 50 && off < 120 && !!said && Math.abs(+said[1] - off) <= 1.5,
+      `a drawn line sweeps parallel to itself: › moves it ${off.toFixed(1)} m square to itself (|cos| ${cos.toFixed(6)}, length ${Math.round(L0)} then ${Math.round(L1)} m): "${s1.text}", "${s1.shown}" on the pane`);
+  }
+  // the grip under the model sits inside its edge's hit, not on its boundary; at the raised sheet's first
+  // stop the compact pane keeps a plot that can be read, and the model its 220 px
+  {
+    const g = await w(() => { const bar = document.querySelector('#sec-edge .grip-bar').getBoundingClientRect(), x = bar.left + bar.width / 2, y = bar.top + bar.height / 2; return [-8, -4, 0, 4, 8].map((d) => { const t = document.elementFromPoint(x, y + d); return t && t.closest('#sec-edge') ? 'edge' : (t && t.id) || '?'; }); });
+    check(g.every((t) => t === 'edge'), `the grip under the model lies inside its edge's hit: at its middle −8, −4, 0, +4 and +8 px a touch meets ${g.join(', ')}`);
+    const rows = [];
+    await A.tapEl('#grip'); await page.waitForTimeout(700);
+    for (const line of ['along', 'across']) { await A.tapEl(`#sec-lines [data-line="${line}"]`); await A.frame(); await A.frame(); rows.push(await w((l) => [l, document.getElementById('sec-plot').getBoundingClientRect().height, document.getElementById('plate').getBoundingClientRect().height], line)); }
+    await A.shot('pane-raised-across-light', false);
+    await A.tapEl('#grip'); await page.waitForTimeout(300); await A.tapEl('#grip'); await page.waitForTimeout(700); await A.frame();
+    check(rows.every((r) => r[1] >= 86 && r[2] >= 219.5), `at the raised sheet's first stop the compact pane takes what the model can give above its 220 px: ${rows.map((r) => `${r[0]} a ${Math.round(r[1])} px plot over a ${Math.round(r[2])} px model`).join(', ')}`);
+  }
+  // the edge, dragged by touch past tall and back: under the finger, both canvases sharp in every frame
+  {
+    await A.tapEl('#sec-lines [data-line="along"]'); await A.frame(); await A.frame();
+    const e = await A.rect('#sec-edge'), x = e.left + e.width / 2, y0 = e.top + 22, p0 = await A.rect('#section');
+    await w(() => window.__norne.secLog(true));
+    await A.touch('touchStart', x, y0);
+    const under = [];
+    for (let i = 1; i <= 16; i++) { await A.touch('touchMove', x, y0 - i * 10); await A.frame(); const p = await A.rect('#section'); under.push(Math.abs(p.top - (p0.top - i * 10))); }
+    for (let i = 1; i <= 30; i++) await A.touch('touchMove', x, y0 - 160 - i * 12);
+    await A.frame(); const atMax = await A.w(() => [document.getElementById('plate').getBoundingClientRect().height, document.getElementById('view').getBoundingClientRect().height]);
+    for (let i = 1; i <= 27; i++) await A.touch('touchMove', x, y0 - 520 + i * 20);   // back down past compact
+    await A.touch('touchEnd'); await A.frame(); await A.frame();
+    const log = await w(() => window.__norne.secLog(false));
+    const blur = log.filter((q) => q.plot[0] !== q.plot[1] || q.plot[2] !== q.plot[3] || q.gl[0] !== q.gl[1] || q.gl[2] !== q.gl[3]);
+    const panes = log.map((q) => Math.round(q.pane));
+    const done = await w(() => window.__norne.section().size);
+    check(Math.max(...under) <= 1 && blur.length === 0 && Math.abs(atMax[0] - 120) <= 1 && new Set(panes).size > 10 && done === 0,
+      `a drag on the pane's edge by touch: its top follows the finger to ${Math.max(...under).toFixed(2)} px over 16 steps; ${log.length} frames, ${blur.length} with a canvas not at its own size; dragged past tall, the model keeps ${Math.round(atMax[0])} px of ${Math.round(atMax[1])} (its 120 px strip); the pane took ${new Set(panes).size} heights from ${Math.min(...panes)} to ${Math.max(...panes)} px`);
+  }
+  // a double tap on the edge: tall, the stretch the pane states, the strip still turns the model; again: compact
+  {
+    const e = await A.rect('#sec-edge'), x = e.left + e.width / 2, y = e.top + 22;
+    const c0 = await A.rect('#section');
+    await A.tapAt(x, y); await page.waitForTimeout(100); await A.tapAt(x, y); await page.waitForTimeout(400); await A.frame(); await A.frame();
+    const t = await w(() => ({ plate: document.getElementById('plate').getBoundingClientRect().height, q: window.__norne.section(), ex: document.getElementById('sec-exag').textContent, label: document.getElementById('sec-plot').getAttribute('aria-label'), vt: document.getElementById('sec-edge').getAttribute('aria-valuetext'), now: document.getElementById('sec-edge').getAttribute('aria-valuenow') }));
+    const ax = t.q.ax, n = Number(t.ex.replace(/^vertical ×/, ''));
+    await A.shot('pane-tall-light');
+    const pr = await A.rect('#plate'), cam0 = await w(() => window.__norne.cam());
+    // a spot on the strip under the keys and clear of A and A′ (a drag that starts on one moves that end)
+    const spot = await w(([W, H]) => { const e = window.__norne.section().ends || []; for (let x = 20; x < W - 120; x += 4) { const y = (50 + H) / 2; if (e.every((p) => Math.hypot(p[0] - x, p[1] - y) > 40)) return [x, y]; } return [20, (50 + H) / 2]; }, [pr.width, pr.height]);
+    await A.touch('touchStart', pr.left + spot[0], pr.top + spot[1]);
+    for (let i = 1; i <= 6; i++) await A.touch('touchMove', pr.left + spot[0] + i * 15, pr.top + spot[1]);
+    await A.touch('touchEnd'); await A.frame();
+    const cam1 = await w(() => window.__norne.cam());
+    const nearEnd = await nearEndDrag(A, pr);
+    check(nearEnd.ok, `on the 120 px strip a one-finger drag that starts on the model ${nearEnd.d.toFixed(0)} px from A′ turns it (theta ${nearEnd.t0.toFixed(0)} then ${nearEnd.t1.toFixed(0)}) and leaves the line as it was ("${nearEnd.line}", ${nearEnd.same ? 'the same ends' : 'its ends moved'}): the model is ${nearEnd.box[0]} × ${nearEnd.box[1]} px there, so its ends take no touch`);
+    const e2 = await A.rect('#sec-edge');
+    await A.tapAt(e2.left + e2.width / 2, e2.top + 22); await page.waitForTimeout(100); await A.tapAt(e2.left + e2.width / 2, e2.top + 22); await page.waitForTimeout(400); await A.frame(); await A.frame();
+    const c1 = await A.rect('#section'), sz = await w(() => window.__norne.section().size), noCard = await w(() => document.getElementById('readout').hidden && window.__norne.section().on);
+    check(Math.abs(t.plate - 120) <= 1 && t.q.size === 1 && t.vt === 'Tall' && t.now === '100' && n > 5 && Math.abs(ax.sz / ax.sx - n) < 1e-9 && t.q.exag === n && new RegExp(`depth stretched ${n} times, more than the 3D view’s 5\\.`).test(t.label)
+      && cam1.theta !== cam0.theta && sz === 0 && Math.abs(c1.height - c0.height) < 1 && noCard,
+      `a double tap on the edge: tall (the model ${Math.round(t.plate)} px, "${t.vt}"), the section filling it at its own stretch, "${t.ex}" on the pane and ×${(ax.sz / ax.sx).toFixed(2)} drawn, "…depth stretched ${n} times, more than the 3D view’s 5." said; one finger on the strip turns the model (theta ${cam0.theta.toFixed(0)} then ${cam1.theta.toFixed(0)}); a double tap again: compact (${Math.round(c1.height)} px), the section open and no card opened by the tap's click (${noCard})`);
+  }
+  // the keys, and the size remembered over a reload
+  {
+    await w(() => document.getElementById('sec-edge').focus());
+    await page.keyboard.press('ArrowUp'); await page.keyboard.press('ArrowUp'); await page.keyboard.press('ArrowUp'); await A.frame();
+    const k = await w(() => [window.__norne.section().size, document.getElementById('sec-edge').getAttribute('aria-valuenow'), document.getElementById('section').getBoundingClientRect().height]);
+    await page.keyboard.press('ArrowDown'); await A.frame();
+    const k2 = await w(() => window.__norne.section().size);
+    await page.waitForTimeout(600);
+    await page.reload(); await page.waitForFunction(ready, null, { timeout: 180000 }); await A.frame(); await A.frame();
+    const back = await w(() => [window.__norne.section().size, document.getElementById('section').getBoundingClientRect().height, document.getElementById('section').classList.contains('grown')]);
+    check(k[0] === 0.3 && k[1] === '30' && k2 === 0.2 && back[0] === 0.2 && back[2] && back[1] > 204,
+      `the keys step the edge (three ↑: ${k[0]}, "${k[1]}", ${Math.round(k[2])} px; ↓: ${k2}), and the size is remembered over a reload (${back[0]}, the pane ${Math.round(back[1])} px)`);
+    const h = await hitTargets(w);
+    check(h.bad.length === 0 && h.n >= 20, `with the pane grown: ${h.n} controls at 44 × 44 or more, the edge and the sweep's keys among them${h.bad.length ? ': ' + h.bad.join('; ') : ''}`);
+    await w(() => document.getElementById('sec-edge').focus()); await page.keyboard.press('Home'); await A.frame();
+  }
+  check(A.errors.length === 0, `no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
+  await A.ctx.close();
+  // on its side: the side edge widens the pane, the model keeps 160 px, the key plates side by side
+  {
+    const B = await open('light', { w: 844, h: 390 });
+    await B.tapEl('#btn-section'); await B.page.waitForTimeout(500); await B.frame();
+    const e = await B.rect('#sec-side'), x0 = e.left + e.width / 2, y = e.top + e.height / 2, p0 = await B.rect('#section');
+    await B.touch('touchStart', x0, y);
+    const under = [];
+    for (let i = 1; i <= 10; i++) { await B.touch('touchMove', x0 - i * 10, y); await B.frame(); const p = await B.rect('#section'); under.push(Math.abs(p.left - (p0.left - i * 10))); }
+    for (let i = 1; i <= 20; i++) await B.touch('touchMove', x0 - 100 - i * 30, y);
+    await B.touch('touchEnd'); await B.frame(); await B.frame();
+    const r = await B.w(() => ({ plate: document.getElementById('plate').getBoundingClientRect().toJSON(), keys: document.getElementById('keys').getBoundingClientRect().toJSON(), cls: document.getElementById('plate').className, vt: document.getElementById('sec-side').getAttribute('aria-valuetext') }));
+    const h = await hitTargets(B.w);
+    await B.shot('pane-side-light', false);
+    const nearEnd = await nearEndDrag(B, await B.rect('#plate'));
+    check(nearEnd.ok, `on the 160 px strip beside the pane a one-finger drag that starts on the model ${nearEnd.d.toFixed(0)} px from A′ turns it (theta ${nearEnd.t0.toFixed(0)} then ${nearEnd.t1.toFixed(0)}) and leaves the line as it was (${nearEnd.same ? 'the same ends' : 'its ends moved'}; the model ${nearEnd.box[0]} × ${nearEnd.box[1]} px)`);
+    const keys = await B.w(() => { const e = document.getElementById('sec-side'), k = (key) => e.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true })), v = () => e.getAttribute('aria-valuenow'); const o = [e.getAttribute('aria-orientation')]; k('ArrowLeft'); o.push(v()); o.push(e.getAttribute('aria-valuetext')); k('ArrowRight'); o.push(v()); k('ArrowDown'); o.push(v()); k('ArrowUp'); o.push(v()); return o; });
+    check(keys.slice(0, 2).concat(keys.slice(3)).join() === 'horizontal,90,100,90,100' && /^\d+ percent of the view’s width$/.test(keys[2]), `the side edge is a horizontal slider ("${keys[0]}"), and its keys follow the slider convention VoiceOver's increment relies on: from tall ← ${keys[1]} ("${keys[2]}"), → ${keys[3]}, ↓ ${keys[4]}, ↑ ${keys[5]}`);
+    check(Math.max(...under) <= 1 && Math.abs(r.plate.width - 160) <= 1 && /keys-(cols|wrap)/.test(r.cls) && r.keys.left >= r.plate.left && r.keys.bottom <= r.plate.bottom && r.vt === 'Wide' && h.bad.length === 0,
+      `on its side the side edge follows the finger (to ${Math.max(...under).toFixed(2)} px) and, dragged out, leaves the model ${Math.round(r.plate.width)} px wide ("${r.vt}") with its key plates ${/keys-cols/.test(r.cls) ? 'side by side' : 'in two rows'} inside it (${Math.round(r.keys.width)} × ${Math.round(r.keys.height)} px, the plate ${Math.round(r.plate.height)} px tall); ${h.n} controls at 44 × 44 or more${h.bad.length ? ': ' + h.bad.join('; ') : ''}`);
+    check(B.errors.length === 0, `on its side: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
+    await B.ctx.close();
+  }
+  // on its side with the sheet at its first raised stop and the pane compact (2.2's state; the final review's
+  // must): the keys inside the plate, the model framed by the house rule (70 % of the plate's width or
+  // more, where 2.3's first build left 35 %), and an end of the line still moved by a drag that starts on it
+  {
+    const B = await open('light', { w: 844, h: 390 });
+    await B.tapEl('#btn-section'); await B.page.waitForTimeout(500); await B.frame();
+    await B.tapEl('#grip'); await B.page.waitForTimeout(900); await B.frame(); await B.frame();
+    for (const line of ['along', 'across']) {
+      await B.tapEl(`#sec-lines [data-line="${line}"]`); await B.page.waitForTimeout(300); await B.frame(); await B.frame();
+      const r = await B.w(() => { const p = document.getElementById('plate'), pr = p.getBoundingClientRect(), k = document.getElementById('keys').getBoundingClientRect(), m = window.__norne.modelBox(); return { W: pr.width, H: pr.height, cls: p.className, keys: k.left >= pr.left && k.right <= pr.right && k.bottom <= pr.bottom, m: [m[2] - m[0], m[3] - m[1]], stop: document.querySelector('.sheet').classList.contains('s1'), size: window.__norne.section().size, track: document.getElementById('sec-sweep').getBoundingClientRect().width }; });
+      if (line === 'along') await B.shot('pane-raised-side-light', false);
+      const q0 = await B.w(() => window.__norne.section()), pr = await B.rect('#plate'), e = q0.ends[1], o = q0.ends[0], L = Math.hypot(o[0] - e[0], o[1] - e[1]);
+      const x = pr.left + e[0] + ((o[0] - e[0]) * 6) / L, y = pr.top + e[1] + ((o[1] - e[1]) * 6) / L;
+      await B.touch('touchStart', x, y);
+      for (let i = 1; i <= 6; i++) await B.touch('touchMove', x - i * 6, y + i * 3);
+      await B.touch('touchEnd'); await B.frame(); await B.frame();
+      const q1 = await B.w(() => window.__norne.section());
+      const moved = q1.line === null && Math.hypot(q1.b[0] - q0.b[0], q1.b[1] - q0.b[1]) > 20 && Math.hypot(q1.a[0] - q0.a[0], q1.a[1] - q0.a[1]) < 2;
+      check(r.stop && r.size === 0 && r.keys && r.m[0] >= 0.7 * r.W && moved && r.track >= 140,
+        `${line === 'along' ? 'Along' : 'Across'} on its side, the sheet at its first raised stop, the pane compact: the model ${Math.round(r.m[0])} × ${Math.round(r.m[1])} px on a ${Math.round(r.W)} × ${Math.round(r.H)} px plate (${Math.round((100 * r.m[0]) / r.W)} % of its width; 2.2 about 207 px wide, 2.3's first build 94), the keys inside it (${/keys-(row|wrap|cols)/.exec(r.cls)?.[0] || 'column'}); a drag from 6 px off A′ moves A′ ${Math.round(Math.hypot(q1.b[0] - q0.b[0], q1.b[1] - q0.b[1]))} m and leaves A (the line now "${q1.line}"); the sweep's track ${Math.round(r.track)} px`);
+    }
+    // a double tap on the side edge to wide and one back: the tap's own click, which follows the lift over
+    // whatever the toggle moved under the finger (here the plate's Section key), is taken by the edge
+    await B.tapEl('#sec-lines [data-line="along"]'); await B.frame();
+    const dbl = async () => { const e = await B.rect('#sec-side'), x = e.left + e.width / 2, y = e.top + e.height / 2; await B.tapAt(x, y); await B.page.waitForTimeout(100); await B.tapAt(x, y); await B.page.waitForTimeout(500); await B.frame(); return B.w(() => ({ on: window.__norne.section().on, size: window.__norne.section().size, card: !document.getElementById('readout').hidden, vt: document.getElementById('sec-side').getAttribute('aria-valuetext') })); };
+    const d1 = await dbl(), d2 = await dbl();
+    check(d1.on && d1.size === 1 && d1.vt === 'Wide' && d2.on && d2.size === 0 && d2.vt === 'Compact' && !d1.card && !d2.card,
+      `on its side with the sheet raised, a double tap on the side edge goes to wide ("${d1.vt}") and one more back to compact ("${d2.vt}"); the section stays open (${d2.on}) and no card opens under the finger (${!d1.card && !d2.card})`);
+    check(B.errors.length === 0, `on its side, raised: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
+    await B.ctx.close();
+  }
+  // the sweep's track is 140 px or more wherever the pane is shown: upright and on its side, at each of the
+  // sheet's stops, compact and tall
+  {
+    const seen = [];
+    for (const [W, H] of [[390, 844], [844, 390]]) {
+      const B = await open('light', { w: W, h: H });
+      await B.tapEl('#btn-section'); await B.page.waitForTimeout(500); await B.frame();
+      const edge = W > H ? '#sec-side' : '#sec-edge';
+      for (const stop of [0, 1, 2]) {
+        if (stop) { await B.tapEl('#grip'); await B.page.waitForTimeout(900); }
+        for (const key of ['Home', 'End']) {
+          await B.w(([sel, k]) => { const e = document.querySelector(sel); e.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true })); }, [edge, key]);
+          await B.page.waitForTimeout(150); await B.frame(); await B.frame();
+          const t = await B.w(() => { const r = document.getElementById('sec-sweep').getBoundingClientRect(), s = document.getElementById('section').getBoundingClientRect(); return { w: r.width, shown: r.width > 0 && r.bottom <= innerHeight + 1 && s.width > 0, narrow: document.getElementById('sec-sweep').parentNode.classList.contains('narrow') }; });
+          if (t.shown) seen.push(`${W > H ? 'side' : 'upright'} s${stop} ${key === 'Home' ? 'compact' : 'tall'} ${Math.round(t.w)}${t.narrow ? ' (word over it)' : ''}`);
+          if (t.shown && t.w < 140) seen.push('UNDER 140');
+        }
+      }
+      await B.w((sel) => document.querySelector(sel).dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true })), edge);
+      check(B.errors.length === 0, `the sweep's track at ${W} × ${H}: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
+      await B.ctx.close();
+    }
+    check(seen.length >= 10 && !seen.includes('UNDER 140'), `the sweep's track is 140 px or more wherever the pane is shown (${seen.length} states, px): ${seen.join('; ')}`);
+  }
 }
 
 await browser.close();
