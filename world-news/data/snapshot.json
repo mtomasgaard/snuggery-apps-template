@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T16:01:40Z",
+ "generatedAt": "2026-10-07T17:03:12Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Anmar Pretorius, Professor of Economics, North-West University"
     },
     {
+     "title": "Kenya races to trace all contacts after first Ebola death, WHO official says",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168542",
+     "published": "2026-10-07T12:00:00Z",
+     "summary": "Kenya’s first Ebola death has triggered a race to trace everyone the victim came into contact with, as the United Nations and partners provide full support, the World Health Organization’s (WHO) top official in the…",
+     "stale": false
+    },
+    {
      "title": "‘Ebola takes the people children depend on’: UNICEF",
      "source": "UN News",
      "feed": "un-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168527",
      "published": "2026-10-06T12:00:00Z",
      "summary": "Antibiotics, malaria treatments, painkillers, opioids. More than 250 tonnes of medical products were seized over six years in Central Africa. Behind those numbers is an illicit market that thrives not simply despite the…",
-     "stale": false
-    },
-    {
-     "title": "Sudan: Driver killed in aerial attack on aid trucks in South Kordofan",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168519",
-     "published": "2026-10-05T12:00:00Z",
-     "summary": "The World Food Programme (WFP) has strongly condemned a deadly airstrike on two clearly marked aid trucks in South Kordofan, Sudan, this past weekend.",
      "stale": false
     },
     {
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Kenya races to trace all contacts after first Ebola death, WHO official says",
+   "published": "2026-10-07 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "‘Ebola takes the people children depend on’: UNICEF",
    "published": "2026-10-06 12:00 UTC"
   },
@@ -789,12 +795,6 @@
    "source": "UN News",
    "title": "When streets become pharmacies: Booming illicit markets in Central Africa",
    "published": "2026-10-06 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan: Driver killed in aerial attack on aid trucks in South Kordofan",
-   "published": "2026-10-05 12:00 UTC"
   },
   {
    "region": "Africa",
