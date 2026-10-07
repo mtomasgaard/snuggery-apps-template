@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T18:01:42Z",
+ "generatedAt": "2026-10-07T19:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/07/africas-governments-already-treat-the-internet-as-protest-infrastructure-its-courts-have-not-caught-up/",
+     "published": "2026-10-07T18:02:48Z",
+     "summary": "In 2024 the African Commission itself adopted a resolution on internet shutdowns during elections. The resolution treats a shutdown as a harm to expression and access to information...",
+     "stale": false,
+     "author": "Ephraim Percy Kenyanito"
+    },
+    {
      "title": "Ocean, desert rainfall and a parasitic disease: researchers connect patterns",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/09/30/who-can-speak-on-behalf-of-the-people-the-new-frontiers-of-protest-in-the-sahel/",
-     "published": "2026-09-30T03:37:48Z",
-     "summary": "In central Sahel's countries military juntas claim to restore popular sovereignty. Political parties are dissolved in all three countries, over a thousand civil society organizations have been suspended.",
-     "stale": false,
-     "author": "Jean Sovon"
     }
    ]
   },
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
+     "title": "In a society desperate for distraction, a woman performing starvation overcommits",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/in-a-society-desperate-for-distraction-a-woman-performing-starvation-overcommits-291879",
+     "published": "2026-10-07T18:29:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Julian Novitz, Senior Lecturer, Writing, Department of Media and Communication, Swinburne University of Technology"
+    },
+    {
+     "title": "Beige tones and knit throws? No, we’ve got Scandinavian design all wrong",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/beige-tones-and-knit-throws-no-weve-got-scandinavian-design-all-wrong-293440",
+     "published": "2026-10-07T18:28:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nina Hillenberg, Senior Lecturer, Design, Torrens University Australia"
+    },
+    {
+     "title": "Our research found a new reason to keep teachers happy – it’s linked to how well students do",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/our-research-found-a-new-reason-to-keep-teachers-happy-its-linked-to-how-well-students-do-293340",
+     "published": "2026-10-07T18:28:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Theresa Dicke, Professor, Institute for Positive Psychology and Education, Australian Catholic University"
+    },
+    {
+     "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/microdramas-are-booming-ai-could-make-it-even-harder-to-stop-binge-watching-291962",
      "published": "2026-10-07T17:48:38Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Matthew Addicoat, Senior Lecturer in Functional Materials, Nottingham Trent University"
-    },
-    {
-     "title": "These state supreme court races could decide abortion access and trans rights",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/these-state-supreme-court-races-could-decide-abortion-access-and-trans-rights-292881",
-     "published": "2026-10-07T12:40:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rachel Rebouché, Professor of Law, The University of Texas at Austin"
-    },
-    {
-     "title": "‘I’m harmed and I don’t think the person who did it knows’: we looked at different responses to uni sexual assault",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/im-harmed-and-i-dont-think-the-person-who-did-it-knows-we-looked-at-different-responses-to-uni-sexual-assault-293095",
-     "published": "2026-10-07T05:30:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Meredith Rossner, Professor of Criminology, Australian National University"
-    },
-    {
-     "title": "What the Australian government’s apology to LGBTQ+ Defence personnel and veterans means",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-the-australian-governments-apology-to-lgbtq-defence-personnel-and-veterans-means-293686",
-     "published": "2026-10-07T04:28:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shirleene Robinson, Visiting Fellow, School of Communication, University of Technology Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
+   "published": "2026-10-07 18:02 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Ocean, desert rainfall and a parasitic disease: researchers connect patterns",
    "published": "2026-10-07 13:10 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "The sound of resistance",
    "published": "2026-10-01 20:45 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
-   "published": "2026-09-30 03:37 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "In a society desperate for distraction, a woman performing starvation overcommits",
+   "published": "2026-10-07 18:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Beige tones and knit throws? No, we’ve got Scandinavian design all wrong",
+   "published": "2026-10-07 18:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Our research found a new reason to keep teachers happy – it’s linked to how well students do",
+   "published": "2026-10-07 18:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
    "published": "2026-10-07 17:48 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Nobel prize in chemistry awarded for work on mirror-image molecules",
    "published": "2026-10-07 12:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "These state supreme court races could decide abortion access and trans rights",
-   "published": "2026-10-07 12:40 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘I’m harmed and I don’t think the person who did it knows’: we looked at different responses to uni sexual assault",
-   "published": "2026-10-07 05:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What the Australian government’s apology to LGBTQ+ Defence personnel and veterans means",
-   "published": "2026-10-07 04:28 UTC"
   },
   {
    "region": "Oceania",
