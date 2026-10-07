@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T00:01:27Z",
+ "generatedAt": "2026-10-07T01:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Conservationists are discovering ‘bright spots’ around the globe. Here’s why they matter",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/conservationists-are-discovering-bright-spots-around-the-globe-heres-why-they-matter-289476",
+     "published": "2026-10-07T00:01:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bing Lin, Postdoctoral Fellow in the Thriving Oceans Research Hub, School of Geosciences, University of Sydney"
+    },
+    {
      "title": "Avant-garde abundance: the deeply infectious art of Australian artist Justene Williams",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Daniel Angus, Professor of Digital Communication, Director of QUT Digital Media Research Centre, Queensland University of Technology"
-    },
-    {
-     "title": "Republicans continue to slide in US polls, four weeks before midterm elections",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/republicans-continue-to-slide-in-us-polls-four-weeks-before-midterm-elections-293444",
-     "published": "2026-10-06T23:31:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Conservationists are discovering ‘bright spots’ around the globe. Here’s why they matter",
+   "published": "2026-10-07 00:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Avant-garde abundance: the deeply infectious art of Australian artist Justene Williams",
    "published": "2026-10-06 23:57 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "It’s true, Australia won’t ban ‘sock puppet’ accounts on social media. Here’s why",
    "published": "2026-10-06 23:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Republicans continue to slide in US polls, four weeks before midterm elections",
-   "published": "2026-10-06 23:31 UTC"
   },
   {
    "region": "Oceania",
