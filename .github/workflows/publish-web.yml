@@ -130,33 +130,44 @@ jobs:
             echo "packed $name: $(wc -c < "_site/zips/$name.zip") bytes"
           done
 
-      # Every app's ZIP above in one file, to install them all at once. Snuggery 1.2 and later
-      # import a ZIP whose entries are app ZIPs as a folder of apps; 1.1 imports it as a folder of
-      # .zip files, which is why nothing links to it until 1.2 is out. The members sit in one top
-      # folder, which names the Library folder they land in: importing the next bundle into the same
-      # place asks once about every app, and Replace keeps what each one saved, whatever the
-      # download was renamed to. Stored, not compressed: each member is a ZIP already. Past the
-      # importer's bundle ceilings (64 apps; 20,000 files or 1 GiB unpacked, summed) the app would
-      # refuse it whole, so it is left out with a warning rather than failing the publish.
-      - name: Pack every app's ZIP into one bundle
+      # The apps Snuggery does not install itself, in one file, to add them all at once. Snuggery
+      # 1.2 and later import a ZIP whose entries are app ZIPs as a folder of apps; 1.1 imports it as
+      # a folder of .zip files, which is why nothing links to it until 1.2 is out.
+      # - The seven in IN_APP come with Snuggery (Create → Install the live examples, into a Live
+      #   examples folder), so they stay out. A second copy in another folder would keep its own
+      #   saved data, and a Shortcut that refreshes an app by name updates only the first it finds.
+      # - The members sit in one top folder, which names the Library folder they land in. Importing
+      #   the next bundle into the same place then asks once about every app, and Replace keeps what
+      #   each one saved, whatever the download was renamed to.
+      # - Stored, not compressed: each member is a ZIP already.
+      # - Past the importer's bundle ceilings (64 apps; 20,000 files or 1 GiB unpacked, summed) the
+      #   app would refuse it whole, so it is left out with a warning rather than failing the publish.
+      - name: Pack the apps Snuggery does not install itself into one bundle
         if: steps.pages.outputs.on == 'true'
+        env:
+          IN_APP: hello-live world-news power-hours global-wind outdoor-window running-dashboard finances
         run: |
-          rm -rf _bundle && mkdir -p "_bundle/Snuggery examples"
-          cp _site/zips/*.zip "_bundle/Snuggery examples/"
+          rm -rf _bundle && mkdir -p "_bundle/More examples"
+          for zip in _site/zips/*.zip; do
+            case " $IN_APP " in *" $(basename "$zip" .zip) "*) continue ;; esac
+            cp "$zip" "_bundle/More examples/"
+          done
           fits=0
-          python3 - "_bundle/Snuggery examples" <<'PY' || fits=$?
+          python3 - "_bundle/More examples" <<'PY' || fits=$?
           import pathlib, sys, zipfile
           apps = sorted(pathlib.Path(sys.argv[1]).glob("*.zip"))
           entries = [e for app in apps for e in zipfile.ZipFile(app).infolist()]
           unpacked = sum(e.file_size for e in entries)
           print(f"bundle: {len(apps)} apps, {len(entries)} entries and {unpacked} bytes unpacked")
-          sys.exit(0 if len(apps) <= 64 and len(entries) <= 20000 and unpacked <= 1 << 30 else 3)
+          sys.exit(4 if not apps else 0 if len(apps) <= 64 and len(entries) <= 20000 and unpacked <= 1 << 30 else 3)
           PY
           if [ "$fits" = 0 ]; then
-            (cd _bundle && zip -q -0 -X ../_site/zips/snuggery-examples.zip "Snuggery examples/" "Snuggery examples/"*.zip)
-            echo "bundle: $(wc -c < _site/zips/snuggery-examples.zip) bytes"
+            (cd _bundle && zip -q -0 -X ../_site/zips/more-examples.zip "More examples/" "More examples/"*.zip)
+            echo "bundle: $(wc -c < _site/zips/more-examples.zip) bytes"
           elif [ "$fits" = 3 ]; then
             echo "::warning::The bundle is past what Snuggery imports in one go (64 apps; 20,000 files or 1 GiB unpacked), so only each app's own ZIP was published"
+          elif [ "$fits" = 4 ]; then
+            echo "No app here that Snuggery does not install itself, so no bundle"
           else
             exit "$fits"
           fi
