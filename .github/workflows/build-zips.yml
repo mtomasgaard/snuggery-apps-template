@@ -10,6 +10,8 @@ name: Build app ZIPs
 
 on:
   push:
+    branches: [main]               # never a tag: creating a release pushes one, and these jobs would
+                                    # try to push their result to it, and fail
     paths:
       - '*/**'
       - '!*/data/**'

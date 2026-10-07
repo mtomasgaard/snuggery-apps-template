@@ -19,6 +19,8 @@ on:
     - cron: '20 5 * * *'          # once a day, 05:20 UTC — off the top of the hour
   workflow_dispatch:              # so you can prove it works without waiting a day
   push:
+    branches: [main]               # never a tag: creating a release pushes one, and these jobs would
+                                    # try to push their result to it, and fail
     paths:                        # deliberately NOT the snapshot, or this job
       - 'scripts/world_news.py'   # would retrigger on its own commit, forever
       - '.github/workflows/refresh-world-news.yml'

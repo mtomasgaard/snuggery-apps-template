@@ -16,6 +16,8 @@ on:
     - cron: '7 * * * *'          # hourly-ish, at 7 past — off the top-of-hour stampede
   workflow_dispatch:              # so you can prove it works without waiting an hour
   push:
+    branches: [main]               # never a tag: creating a release pushes one, and these jobs would
+                                    # try to push their result to it, and fail
     paths:                        # deliberately NOT the snapshot, or this job
       - 'scripts/refresh_hello_live.py'   # would retrigger on its own commit,
       - '.github/workflows/refresh-hello-live.yml'   # forever

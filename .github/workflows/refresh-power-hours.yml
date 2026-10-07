@@ -24,6 +24,8 @@ on:
     - cron: '30 16 * * *'         # a second attempt, for the days it did not
   workflow_dispatch:              # so you can prove it works without waiting
   push:
+    branches: [main]               # never a tag: creating a release pushes one, and these jobs would
+                                    # try to push their result to it, and fail
     paths:                        # deliberately NOT the snapshot, or this job
       - 'scripts/power_hours.py'  # would retrigger on its own commit, forever
       - '.github/workflows/refresh-power-hours.yml'
