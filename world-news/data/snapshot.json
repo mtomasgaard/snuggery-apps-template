@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T06:02:21Z",
+ "generatedAt": "2026-10-07T07:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Digital hopes, real power: From connection to collective action",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/07/digital-hopes-real-power-from-connection-to-collective-action/",
+     "published": "2026-10-07T06:20:55Z",
+     "summary": "If the Arab Spring was defined by optimism about what the internet could do, the years since have been marked by a more sober understanding of what it takes to defend it",
+     "stale": false,
+     "author": "Jillian C. York"
+    },
+    {
      "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
      "stale": false,
      "author": "The New Arab"
-    },
-    {
-     "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
-     "published": "2026-09-19T08:01:45Z",
-     "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": false,
-     "author": "Omid Memarian"
     }
    ]
   },
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Digital hopes, real power: From connection to collective action",
+   "published": "2026-10-07 06:20 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
    "published": "2026-10-05 12:00 UTC"
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
    "published": "2026-09-22 19:36 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
-   "published": "2026-09-19 08:01 UTC"
   },
   {
    "region": "Asia",
