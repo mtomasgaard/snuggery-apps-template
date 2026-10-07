@@ -456,6 +456,26 @@ Cap 30 000 B.
 
 ---
 
+### 5.5 `assets/climatology.json` (plan 0012 3.3; `tools/climatology/build_climatology.py`, not the pipeline)
+
+A static file, built once, like `world.json`; the refresh never touches it, and the pipeline's
+`build_static.py` only reads its `credits` block for `CREDITS.txt` (with
+`tools/climatology/pipeline-0012.patch` applied). Keys in this order: `v` (1), `app`
+(`"Warming World"`), `what`, `variable` (`"2 m air temperature"`), `period` (`"1951-1980"`), `grid`
+(as §3.3's), `plane` (`{"offset": -80.0, "step": 0.5, "unit": "°C", "none": 255}`), `encoding`
+(`{"compression": "deflate", "delta": "row", "order": [Jan … Dec, "year"]}`), `method` (the build's
+steps, in words), `globalMeanTenths` (13 integers: each plane's area mean, cos-latitude weights, in
+tenths, for the decode test), `source` (name, owner, licence, attribution, citation, url, use: About's
+block), `credits` (CREDITS.txt's section), `planes` (13 strings).
+
+A plane is the 16 200 cells north first, one byte each, value `offset + step · byte` °C, 255 for none
+(none occur). Each byte is stored minus the byte west of it, mod 256, from 0 at 179° W (a row delta),
+then zlib-compressed and base64-encoded. `js/measure.js` checks the shape (`checkClim`), inflates each
+plane to exactly 16 200 bytes with the snapshot's inflater, undoes the delta and keeps tenths
+(`−800 + 5 · byte`); a 14th plane, the partial year's, is the mean of its months' planes in tenths,
+half away from zero. The year is the plain mean of the 12 months, as GISS's annual anomaly is. Cap
+120 000 B (`tools/check.mjs`); 100 922 B as built on 2026-10-06 (101 349 B before the citation was corrected the same day).
+
 ## 6. Determinism
 
 - `build_static.py` writes `assets/*.json` and `../CREDITS.txt` through `common.write_json()` /

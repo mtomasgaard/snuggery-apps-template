@@ -2,10 +2,11 @@ Warming World: credits and licenses
 ===================================
 
 Every number on the map is NASA GISS's, or this app's annual mean and rounding of GISS's monthly
-values. The data file (data/snapshot.json) is replaced about once a month from GISS's newest release
-and carries its own sources, access date and citations, which the About screen prints. Nothing is
-fetched at runtime: the app has no network. NASA does not endorse this app. It uses NASA's published
-data, as NASA's media guidelines allow for factual use. No NASA insignia or logotype is used.
+values; in Absolute, ERA5's 1951–1980 average (the last section below) is added to them. The data
+file (data/snapshot.json) is replaced about once a month from GISS's newest release and carries its
+own sources, access date and citations, which the About screen prints. Nothing is fetched at
+runtime: the app has no network. NASA does not endorse this app. It uses NASA's published data, as
+NASA's media guidelines allow for factual use. No NASA insignia or logotype is used.
 
 ----------------------------------------------------------------------------------------------------
 NASA GISS SURFACE TEMPERATURE ANALYSIS, VERSION 4 (GISTEMP V4)
@@ -102,5 +103,48 @@ ARCHIVO (TYPEFACE)
              95f4904fc8bcf26d3420fe315560c96417c6dec7, ofl/archivo/Archivo[wdth,wght].ttf
              (658 596 B, sha256 0e094a7d3c7c4c25cf1310c4b30014f1dae9332220b1c2c88f4fa996f0b05053).
     Attribution: Type: Archivo by Héctor Gatti and Omnibus-Type, SIL Open Font License 1.1.
+
+----------------------------------------------------------------------------------------------------
+ERA5-BASED 2 M AIR TEMPERATURE, 1951–1980 AVERAGE (ABSOLUTE)
+
+    Owner: Copernicus Climate Change Service (C3S), implemented by ECMWF; the 1990–2019 climatology
+           read here is WeatherBench 2’s copy of ERA5
+    Used for: The Absolute mode only: each 2° cell’s 1951–1980 average, per calendar month and for
+              the year, to which the app adds GISS’s anomaly (assets/climatology.json, built by
+              tools/climatology/build_climatology.py).
+    URL: https://storage.googleapis.com/weatherbench2/datasets/era5-hourly-climatology/1990-2019_6h_240x121_equiangular_with_poles_conservative.zarr/2m_temperature/
+         https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels
+    License: ERA5: CC BY 4.0 (creativecommons.org/licenses/by/4.0/). The copy read here,
+             WeatherBench 2’s climatology, is published under the Licence to Use Copernicus
+             Products, which its bucket’s LICENSE file quotes.
+    License text: Licence to Use Copernicus Products, 5.1.2: Where the Licensee makes or contributes
+                  to a publication or distribution containing adapted or modified Copernicus
+                  Products, the Licensee shall provide the following or any similar notice: Contains
+                  modified Copernicus Climate Change Service information [Year]. 5.1.3: Any such
+                  publication or distribution covered by clauses 5.1.1 and 5.1.2 shall state that
+                  neither the European Commission nor ECMWF is responsible for any use that may be
+                  made of the Copernicus information or data it contains.
+                  The Climate Data Store’s catalogue record for ERA5 hourly data on single levels:
+                  license CC-BY-4.0.
+    Retrieved: 2026-10-06
+    Changes: Averaged over its four hours and into calendar months; its 61-day smoothing undone for
+             the yearly cycle’s harmonics 1–3; remapped conservatively onto 2° cells; moved from
+             1990–2019 to 1951–1980 by GISTEMP’s own mean anomaly for each cell and calendar month;
+             quantized to 0.5 °C.
+    Cite: Copernicus Climate Change Service (C3S): ERA5 hourly data on single levels from 1940 to
+          present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS), DOI:
+          10.24381/cds.adbb2d47.
+          Hersbach, H., and others, 2020: The ERA5 global reanalysis. Quarterly Journal of the Royal
+          Meteorological Society, 146(730), 1999–2049, doi:10.1002/qj.3803.
+          Read through WeatherBench 2’s ERA5 climatology for 1990–2019, downloaded from WeatherBench
+          2 on 2026-10-06: Rasp, S., and others, 2024: WeatherBench 2: A Benchmark for the Next
+          Generation of Data-Driven Global Weather Models. Journal of Advances in Modeling Earth
+          Systems, 16(6), e2023MS004019, doi:10.1029/2023MS004019.
+    Attribution: Absolute temperatures: the 1951–1980 average 2 m air temperature from ERA5
+                 (Copernicus Climate Change Service, ECMWF), averaged onto GISS’s 2° grid by this
+                 app and moved from 1990–2019 to 1951–1980 by GISTEMP’s own anomalies; GISS’s
+                 anomaly is added to it. Contains modified Copernicus Climate Change Service
+                 information 2026. Neither the European Commission nor ECMWF is responsible for any
+                 use that may be made of the Copernicus information or data it contains.
 
 ----------------------------------------------------------------------------------------------------

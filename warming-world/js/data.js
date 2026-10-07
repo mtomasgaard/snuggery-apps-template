@@ -374,11 +374,15 @@ export function cellOf(lon, lat) {
  * A tie within 1e-9 is a tie: a cap with values in one row only has an exact half-hundredth mean,
  * which floating point lands a hair below (1888 south of 64° S: 0.175 °C, +0.18, not +0.17).
  */
-export function capMean(frames, idx, k, which, rows = 13) {
+export function capMean(frames, idx, k, which, rows = 13, val = null) {
   let s = 0, w = 0, all = 0;
   for (let r = 0; r < rows; r++) {
     const row = which === 'n' ? r : NY - 1 - r, wt = Math.cos(((89 - 2 * row) * Math.PI) / 180), o = k * CELLS + row * NX;
-    for (let c = 0; c < NX; c++) { all += wt; const b = frames[o + c]; if (b !== NONE) { s += wt * idx.tenths[b]; w += wt; } }
+    for (let c = 0; c < NX; c++) {
+      all += wt;
+      const v = val ? val(k, row * NX + c) : frames[o + c] === NONE ? null : idx.tenths[frames[o + c]];   // val: another measure's tenths
+      if (v != null) { s += wt * v; w += wt; }
+    }
   }
   const x = (Math.abs(s) / w) * 10, f = Math.floor(x);
   return { h: w ? Math.sign(s) * (x - f >= 0.5 - 1e-9 ? f + 1 : f) : null, share: all ? w / all : 0 };

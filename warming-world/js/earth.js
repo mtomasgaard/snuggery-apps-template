@@ -10,8 +10,8 @@ export function createEarth(canvas, { onLost, onRestored } = {}) {
   if (!gl) return E;
   E.supported = true;
   const loseExt = gl.getExtension('WEBGL_lose_context');
-  let prog = null, vao = null, dataTex = null, lutTex = null;
-  let frames = null, L = 0, lut = null;
+  let prog = null, vao = null, dataTex = null, lutTex = null, baseTex = null, climTex = null, absTex = null;
+  let frames = null, L = 0, lut = null, base = new Int16Array(16200), clim = new Int16Array(16200 * 14), absLut = null;
   const stats = { uploads: 0, restores: 0, draws: 0 };
 
   function program() {
@@ -42,6 +42,7 @@ export function createEarth(canvas, { onLost, onRestored } = {}) {
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
     E.maxLayers = gl.getParameter(gl.MAX_ARRAY_TEXTURE_LAYERS) || 256;
     if (lut) E.setLut(lut);
+    E.setBase(base); E.setClim(clim); if (absLut) E.setAbsLut(absLut);
     if (frames) {
       // §5.7: one texImage3D of every layer from the CPU copy. Layers not yet decoded are zeros and
       // are never drawn, because a step is only shown once its layer is resident.
@@ -83,22 +84,47 @@ export function createEarth(canvas, { onLost, onRestored } = {}) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, 256, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, bytes);
   };
 
+  /** Integer textures (plan 0012 3.3): R16I, nearest, uploaded whole on a change, never on a scrub. */
+  function int16(unit, target, data, layers) {
+    const t = gl.createTexture();
+    gl.activeTexture(unit); gl.bindTexture(target, t); params(target);
+    if (layers) gl.texImage3D(target, 0, gl.R16I, 180, 90, layers, 0, gl.RED_INTEGER, gl.SHORT, data);
+    else gl.texImage2D(target, 0, gl.R16I, 180, 90, 0, gl.RED_INTEGER, gl.SHORT, data);
+    return t;
+  }
+  /** The chosen baseline: each cell's mean in tenths, −32768 for none (all 0: GISS's own base). */
+  E.setBase = (b) => { base = b; if (E.lost) return; if (baseTex) gl.deleteTexture(baseTex); baseTex = int16(gl.TEXTURE2, gl.TEXTURE_2D, b, 0); };
+  /** The climatology's 14 planes in tenths. */
+  E.setClim = (c) => { clim = c; if (E.lost) return; if (climTex) gl.deleteTexture(climTex); climTex = int16(gl.TEXTURE3, gl.TEXTURE_2D_ARRAY, c, 14); };
+  E.setAbsLut = (bytes) => {
+    absLut = bytes;
+    if (E.lost) return;
+    if (absTex) gl.deleteTexture(absTex);
+    absTex = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, absTex); params(gl.TEXTURE_2D);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, 1024, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, bytes);
+  };
+
   let cssW = 1;
   E.resize = (w, h, dpr) => {
     cssW = w;
     const W = Math.max(1, Math.round(w * dpr)), H = Math.max(1, Math.round(h * dpr));
     if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
   };
-  /** u: the view's uniforms (proj.js, CSS px), layer, card [r, g, b] 0..255. */
-  E.draw = (u, layer, card) => {
-    if (E.lost || !dataTex || !lutTex) return false;
+  /** u: the view's uniforms (proj.js, CSS px), layer, card [r, g, b] 0..255, m: { abs, baseOn, plane }. */
+  E.draw = (u, layer, card, m = {}) => {
+    if (E.lost || !dataTex || !lutTex || !baseTex || !climTex || !absTex) return false;
     const k = canvas.width / cssW;
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.useProgram(prog.p);
     const U = prog.u;
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D_ARRAY, dataTex);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, lutTex);
-    gl.uniform1i(U.uData, 0); gl.uniform1i(U.uLut, 1);
+    gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, baseTex);
+    gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D_ARRAY, climTex);
+    gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, absTex);
+    gl.uniform1i(U.uData, 0); gl.uniform1i(U.uLut, 1); gl.uniform1i(U.uBase, 2); gl.uniform1i(U.uClim, 3); gl.uniform1i(U.uLutAbs, 4);
+    gl.uniform1i(U.uAbs, m.abs ? 1 : 0); gl.uniform1i(U.uBaseOn, m.baseOn ? 1 : 0); gl.uniform1i(U.uClimLayer, m.plane || 0);
     gl.uniform1i(U.uProj, u.proj); gl.uniform1i(U.uLayer, layer);
     gl.uniform2f(U.uCenter, u.cx * k, canvas.height - u.cy * k);
     gl.uniform1f(U.uScale, u.scale * k);
@@ -120,7 +146,7 @@ export function createEarth(canvas, { onLost, onRestored } = {}) {
   canvas.addEventListener('webglcontextlost', (e) => {
     e.preventDefault();
     E.lost = true;
-    prog = vao = dataTex = lutTex = null;               // every GL object is gone with the context
+    prog = vao = dataTex = lutTex = baseTex = climTex = absTex = null;   // every GL object is gone with the context
     if (onLost) onLost();
   });
   canvas.addEventListener('webglcontextrestored', () => {
@@ -131,7 +157,7 @@ export function createEarth(canvas, { onLost, onRestored } = {}) {
   });
   E.loseContext = () => { if (loseExt) loseExt.loseContext(); return !!loseExt; };
   E.restoreContext = () => { if (loseExt) loseExt.restoreContext(); return !!loseExt; };
-  E.stats = () => ({ ...stats, lost: E.lost, layers: L, maxLayers: E.maxLayers, gpuBytes: L * 16200 + 1024 });
+  E.stats = () => ({ ...stats, lost: E.lost, layers: L, maxLayers: E.maxLayers, gpuBytes: L * 16200 + 1024 + 32400 * 15 + 4096 });
 
   setup();
   return E;

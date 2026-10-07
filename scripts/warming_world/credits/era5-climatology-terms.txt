@@ -1,0 +1,38 @@
+ERA5 climatology for Warming World's Absolute mode (plan 0012 package 3.3): the terms, quoted
+Read 2026-10-06 by the plan's researcher; the WeatherBench 2 LICENSE re-read on the same day by the builder.
+warming-world/tools/DECISIONS.md has the reasoning. The CREDITS.txt section is written from assets/climatology.json.
+
+1. The Climate Data Store's catalogue record, ERA5 monthly averaged data on single levels from 1940 to present
+   https://cds.climate.copernicus.eu/api/catalogue/v1/collections/reanalysis-era5-single-levels-monthly-means (HTTP 200)
+   "license":"CC-BY-4.0"
+
+2. The licence file that record links to (cc-byv1_2b61eb0b….md):
+   This dataset is released for use under the CC-BY licence. 
+   Highlights and  key features of the licence are provided [here](https://creativecommons.org/licenses/by/4.0/).
+   Full legal text is provided [here](https://creativecommons.org/licenses/by/4.0/legalcode).
+
+3. WeatherBench 2's bucket, https://storage.googleapis.com/weatherbench2/datasets/era5-hourly-climatology/LICENSE
+   (8 435 B, sha256 ffe05f9653f14ffd23322bf1ebecfd6dd519ba59726280b34593fcf69ccab60e), lines quoted:
+   ECMWF Copernicus License found at https://apps.ecmwf.int/datasets/licences/copernicus/
+   4.1. This Licence is free of charge, worldwide, non-exclusive, royalty free and perpetual.
+   4.2. Access to Copernicus Products is given for any purpose in so far as it is lawful, whereas use may include, but is not limited to: reproduction; distribution; communication to the public; adaptation, modification and combination with other data and information; or any combination of the foregoing.
+   5.1. All users of Copernicus Products must provide clear and visible attribution to the Copernicus programme. The Licensee will communicate to the public the source of the Copernicus Products by crediting the Copernicus Climate Change and Atmosphere Monitoring Services:
+   5.1.1. Where the Licensee communicates or distributes Copernicus Products to the public, the Licensee shall inform the recipients of the source by using the following or any similar notice:
+   'Generated using Copernicus Climate Change Service information [Year]' and/or
+   'Generated using Copernicus Atmosphere Monitoring Service information [Year]'.
+   5.1.2. Where the Licensee makes or contributes to a publication or distribution containing adapted or modified Copernicus Products, the Licensee shall provide the following or any similar notice:
+   'Contains modified Copernicus Climate Change Service information [Year]'; and/or
+   'Contains modified Copernicus Atmosphere Monitoring Service information [Year]'
+   5.1.3. Any such publication or distribution covered by clauses 5.1.1 and 5.1.2 shall state that neither the European Commission nor ECMWF is responsible for any use that may be made of the Copernicus information or data it contains.
+
+4. The WeatherBench 2 paper, from Crossref (api.crossref.org/works/10.1029/2023MS004019, read 2026-10-06):
+   WeatherBench 2: A Benchmark for the Next Generation of Data-Driven Global Weather Models. Journal of Advances
+   in Modeling Earth Systems, 16(6), e2023MS004019, 2024; first authors Rasp S, Hoyer S, Merose A, Langmore I,
+   Battaglia P (18 authors).
+
+5. The ERA5 product WeatherBench 2's climatology is computed from (hourly ERA5; this build did not read the CDS):
+   https://cds.climate.copernicus.eu/api/catalogue/v1/collections/reanalysis-era5-single-levels (HTTP 200, read 2026-10-06
+   by the plan 0012 fixer) "license":"CC-BY-4.0", title "ERA5 hourly data on single levels from 1940 to present";
+   DataCite, api.datacite.org/dois/10.24381/cds.adbb2d47: the same title, publisher Copernicus Climate Change Service
+   (C3S) Climate Data Store (CDS); Crossref, api.crossref.org/works/10.1002/qj.3803: The ERA5 global reanalysis,
+   Quarterly Journal of the Royal Meteorological Society 146(730), 1999-2049, 2020, first author Hersbach H (43 authors).

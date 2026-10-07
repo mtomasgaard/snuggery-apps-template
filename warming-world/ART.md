@@ -14,12 +14,14 @@ over the Atlantic) and `study-focus-dark.png` (focus mode on the partial year). 
 
 A photographer puts a gray card in the frame so that every color can be judged against a known
 neutral. This app has one known neutral too: the 1951–1980 average, the zero every number departs
-from. So the whole interface is built from that neutral.
+from (or the span a person chooses as Base, plan 0012). So the whole interface is built from that
+neutral.
 
 - **Every chrome surface is an exact gray.** It has chroma 0, with no blue bias, no warmth and no
   accent. In an app where blue means colder and red means warmer, any tint in the chrome would be
-  read as a temperature. So **a hue on screen is always a departure from 1951–1980**, and never
-  decoration.
+  read as a temperature. So **a hue on screen is always a measurement**, and never decoration: in
+  Difference a departure from the baseline in use (1951–1980 unless Base chooses another span), in
+  Absolute an estimated temperature on its own scale (below, "The temperature ramp").
 - **The globe sits on a gray card**, a full-width band of mid-gray, in the light theme as well as the
   dark. It is not night and not space. On a white page the near-white "normal" cells would vanish,
   and on black they would glow brighter than the anomalies. On the card the 0 °C cells read as quiet
@@ -210,6 +212,34 @@ at severity 1.0, applied in linear sRGB; the citation is in the script.)
   gray card. It is not the page: in the light theme the page (L 0.970) and the zero (L 0.965) are the
   same lightness. That is why the stripes track has a frame (below), and why the zero is never used
   for chrome.
+
+### The temperature ramp (Absolute, plan 0012)
+
+Absolute shows each cell's 1951–1980 average 2 m air temperature (ERA5, `assets/climatology.json`)
+plus GISS's anomaly: an estimate, said so on the legend, in the year row and in About. It needs its
+own scale, because temperature runs about −64 to +38 °C cell by cell where the anomaly runs ±4, and
+it must never be read as the anomaly map. So it is **sequential, not diverging**: lightness rises
+from the coldest to the warmest, and the hues run violet, indigo, blue, teal, sage and sand. It never
+passes through the anomaly ramp's near-white zero or its brick red, and it uses no orange, yellow or
+signal red, so the warm end reads as sand, not as an alarm. Fixed at −60 … +40 °C, the same in both
+themes, printed in the legend with pointed ends and the count of cells beyond either end. The stops,
+in OKLCh, interpolated in OKLab (`js/ramp.js` `ABS_STOPS`; `tools/check.mjs` asserts this table):
+
+| °C (Absolute) | −60 | −40 | −20 | 0 | +10 | +20 | +30 | +40 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| L (Absolute) | 0.270 | 0.400 | 0.530 | 0.665 | 0.735 | 0.805 | 0.875 | 0.945 |
+| C (Absolute) | 0.080 | 0.120 | 0.120 | 0.085 | 0.070 | 0.070 | 0.075 | 0.050 |
+| h (Absolute) | 305 | 280 | 255 | 220 | 180 | 125 | 95 | 85 |
+| sRGB | `#301a45` | `#3d3c86` | `#376daf` | `#51a0b8` | `#77b8ab` | `#b5c896` | `#e5d69e` | `#fcebc7` |
+
+`node tools/check.mjs` printed (2026-10-06): in sRGB's gamut (0.00000 outside), chroma at least
+0.0500 at every 0.1 °C; lightness rises at every 1 °C under normal, deutan, protan and tritan
+vision; the 10 °C steps' ΔE (OKLab) 0.070–0.095 normal (ratio 1.36), 0.065–0.096 deutan, 0.056–0.084
+protan, 0.065–0.104 tritan (all ≤ 1.75); the ends 0.674–0.694 apart; every value at least 0.076 from
+both hatch grays (0.036–0.099 under the simulations, where the hatch's pattern also tells them
+apart). The light card (`#bebebe`) sits nearest +17 °C (ΔE 0.066) and the dark card nearest
+−56 °C (0.086), so the limb's ring and the map's outline, not the fill, part the Earth from the card
+there, as they do for the anomaly ramp's ends.
 
 **No data** stays DESIGN's hatch: ground `#989898` (L 0.68), lines `#808080` (L 0.60), 45°, a period
 of 6 CSS px, 1.5 px lines, fixed to the screen. On the gray card it reads as darker than the card,
@@ -425,13 +455,16 @@ for, not decoration (DESIGN §11).
 - **Never a color that reads as danger where it means an anomaly.** No orange, yellow or signal red
   in the ramp. No red or amber for staleness, errors or "new data". No pulsing, flashing or
   "record!" treatment for a warm year. The newest year is drawn like every other.
-- **Never an exaggerated scale.** ±4 °C on the map and ±1.5 °C on the stripes, fixed, symmetric and
-  printed. No re-fitting, no zoom into the color scale, no extra saturation for the recent years,
+- **Never an exaggerated scale.** ±4 °C on the map, ±1.5 °C on the stripes and −60 … +40 °C in
+  Absolute, fixed and printed. No re-fitting, no zoom into the color scale, no extra saturation for the recent years,
   and no "stretched" stripes poster mode.
 - **Never invented data over the gray.** The hatch is drawn on top of nothing. No interpolation
   across it, no fade into it, no smoothing of cell edges, and no cross-fade between years (D-4).
-- **Never a temperature where an anomaly is meant.** Every value carries "against … 1951–1980" or
-  sits under a caption that says so. No thermometer icons, no flames, no ice.
+- **Never a temperature where an anomaly is meant, nor an anomaly where a temperature is.** Every
+  difference carries the baseline it is against ("vs. 1951–1980", the bracket's `1991–2020 = 0`) or
+  sits under a caption that says so; every temperature says it is an estimate (the caption's
+  "Estimated temperature", the year row's ±0.5 °C, the card's "estimated"). No thermometer icons, no
+  flames, no ice.
 - **Never the poster on its own.** The stripes always carry their frame, scale, bracket and labels,
   in focus mode too. A full-bleed, unlabeled stripes image is Ed Hawkins's work, and it is not
   reproduced here.
@@ -568,3 +601,46 @@ Each item names the DESIGN section it changes. DESIGN §19 lists them again as d
     the card. The ghost key is back in the top-right corner.
 25. **The canvases' text at the device's own DPR, up to 3** (DESIGN §21 R-9), so "edges snapped to
     device pixels" holds on a 3× iPhone; the WebGL canvas stays capped at 2.
+
+### Plan 0012 (2026-10-06): Absolute, a baseline of one's own, the scale in focus mode, the credit in About
+
+The owner's brief: *"Allow option to show absolute temp rather than differences. On the difference
+mode, allow user to select base/starting point as an average range. Full screen should not remove
+scale"*, and the family's front rule (HOUSE §4.15). What is true of the app now, where it differs
+from the sections above (`tools/DECISIONS.md` has the reasons):
+
+26. **The legend's first row** (on the card, `--card-ink-2`; 40 px, every key's hit area 44 px): the
+    underline switch **Difference | Absolute** (remembered, `ww.measure`) at its left, and the text key
+    **Base 1951–1980** (the span in use, `ww.base`) at its right. Below it the bar and the caption, as
+    before. The legend measures about 88 px at 390 (65 before: its 36 px row in, the credit's 14 out).
+27. **Absolute's legend:** 101 graduated steps of 1 °C from −60 to +40 (2.085 px each), the same
+    pointed ends, ticks every 10 °C and long ones every 20, labels `≤ −60`, `−40`, `−20`, `0`, `+20`,
+    `≥ +40 °C`, the counts beyond either end; the caption `Estimated temperature: each place's
+    1951–1980 average plus GISS's anomaly.` The year row reads `Global mean 14.9 °C (±0.5 °C)`: the
+    climatology's area mean plus GISS's global mean, never a mean of the map's cells. The card prints
+    the cell's temperature to the whole degree (`−2 °C`) with "estimated: the cell's 1951–1980 average
+    plus GISS's +2.5 °C" (GISS's own anomaly against 1951–1980, whatever Base says, so the sum adds
+    up); its chart and its stripes stay the anomaly, which is where change is read. The pole chip:
+    `Map mean north of 64° N: −8 °C, estimated`, made as the year row's figure is: the climatology's
+    mean over the whole cap plus the cap's mean anomaly, so a cap with few cells (the Antarctic before
+    1957) does not read colder or warmer for lack of data.
+28. **Base:** the key opens a sheet in the tap card's place and dress (`--sheet`, 1 px
+    `--line-strong` edge, 3 px radius): `From ‹ 1951 › to ‹ 1980 ›` in 20 px semibold figures with
+    44 px chevron keys that repeat when held, a sentence that says the rule and how many cells it
+    leaves without a baseline, and `Back to GISS's base, 1951–1980` once another span is chosen. As the
+    years move, the bracket under the stripes moves and is labeled with the span (`1991–2020 = 0`,
+    placed first so no year label can hide it), the stripes, the map, the legend's caption and the
+    year row (`Global mean +0.58 °C vs. 1991–2020`) follow at once. Every difference names its
+    baseline: the year row and the pole chip now end `vs. 1951–1980` by default too. The key names
+    the base in use: in Last 24 months it reads `Base 1951–1980` whatever span is chosen (single months
+    stay against GISS's base, and the sheet says the span applies to years); in Absolute its name and
+    the sheet say the map's temperatures do not use it. A one-year span is named as one year (`2021`).
+29. **Focus mode keeps the scale:** the legend's bar and caption stay at the foot of the panel (the
+    switch row goes, inert); the ghost key's name, "Show the controls and the color scale", is kept
+    because the switch and Base come back with it. The card in focus mode docks 6 px above the legend.
+    Entering it says `Controls hidden. The Earth, its scale and the stripes stay.` (HOUSE §4.10's
+    sentence, naming what this app keeps).
+30. **The credit left the legend** (change list item 1): `Data: NASA GISS (GISTEMP v4); annual means
+    and 0.1 °C rounding by this app.` is About's first line under "Sources and citations"
+    (`#about-credit-line`), followed by the climatology's attribution. On a narrow research copy the
+    caption still ends "From an archived copy." where the stamp's tail is hidden.

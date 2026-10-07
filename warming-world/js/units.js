@@ -40,6 +40,10 @@ export function hundredths(h) {
 /** The SI spacing (DESIGN §2) on text the app did not write (the snapshot's credit lines): a number
  *  and °C, km or % joined by U+202F, as the app's own text already is (review R-5). */
 export const si = (t) => String(t).replace(/(\d) (°C|km|%)/g, `$1${NNBSP}$2`);
+/** A temperature from integer tenths: a minus when below zero, never a plus ("14.9", "−4.5"). */
+export const temp = (t) => tenths(t).replace(/^\+/, '');
+/** A temperature in whole degrees, half away from zero ("−2", "27"). */
+export const whole = (t) => { const d = roundDiv(t, 10); return d < 0 ? `${MINUS}${-d}` : String(d); };
 /** °C appended with U+202F. */
 export const degC = (s) => `${s}${NNBSP}°C`;
 /** A snapshot's two-decimal °C figure (GISS's global mean) → its integer hundredths. */

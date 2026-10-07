@@ -6,6 +6,7 @@
 // and five taps on the version line show the frame-time readout (DESIGN §13).
 
 import { el, richText } from './util.js';
+import { creditLine } from './readout.js';
 
 /** A paragraph (or any element) whose proper names a translator leaves alone (util.richText). */
 const rich = (tag, cls, t) => { const e = el(tag, cls); richText(e, t); return e; };
@@ -43,8 +44,6 @@ export function renderAbout(box, o) {
   box.textContent = '';
   const add = (...n) => { for (const e of n) box.append(e); };
   const p = (t, cls) => rich('p', cls, t);
-  // the on-screen credit (DESIGN §9): first, always
-  if (I) add(p(I.attribution, 'ab-credit'));
   if (!ab) { add(p('The text of this page (assets/about.json) could not be read.')); }
   for (const s of (ab && ab.sections) || []) {
     const sec = el('section'); sec.id = `ab-${s.id}`;
@@ -65,15 +64,21 @@ export function renderAbout(box, o) {
       // a copy whose global means come from a newer table than its map (review R-13): said in words
       sec.append(p(`This copy mixes two of GISS’s releases. The map is the one with data to ${monthName(I.release.newestMonth, true)}; the global means and the stripes come from GISS’s table through ${monthName(I.release.tableNewestMonth, true)}, a newer release. So GISS’s own data already run to ${monthName(I.release.tableNewestMonth, true)}.`));
     }
-    if (s.id === 'citations') sources(sec, I, snap, ab);
+    if (s.id === 'citations') {
+      // the credit constant first (HOUSE §4.15: it left the legend in plan 0012), then the climatology's
+      const head = sec.querySelector('h3'), cl = o.clim && o.clim.source;
+      if (cl) head.after(p(cl.attribution, 'ab-credit'));
+      if (I) { const c = p(creditLine(I.attribution), 'ab-credit'); c.id = 'about-credit-line'; c.translate = false; head.after(c); }
+      sources(sec, I, snap, ab, cl);
+    }
     if (s.id === 'this-copy') thisCopy(sec, I, o);
     add(sec);
   }
-  if (!ab) { const sec = el('section'); sources(sec, I, snap, null); thisCopy(sec, I, o); add(sec); }
+  if (!ab) { const sec = el('section'); sources(sec, I, snap, null, o.clim && o.clim.source); thisCopy(sec, I, o); add(sec); }
   return { unknown };
 }
 
-function sources(sec, I, snap, ab) {
+function sources(sec, I, snap, ab, cl) {
   const block = (title, lines) => {
     const d = el('div', 'ab-src');
     d.append(rich('h4', null, si(title)));
@@ -84,6 +89,7 @@ function sources(sec, I, snap, ab) {
     block(s.name, [[s.owner], [s.licence], [s.attribution], ...(s.citation || []).map((c) => [c, 'ab-cite']),
       [s.url, 'ab-addr'], [s.via ? `Read through: ${s.via}.` : null], [s.readAt ? `Read ${utc(s.readAt)}.` : null], [s.use ? `Used for ${s.use}.` : null]]);
   }
+  if (cl) block(cl.name, [[cl.owner], [cl.licence], ...(cl.citation || []).map((c) => [c, 'ab-cite']), [cl.url, 'ab-addr'], [cl.use ? `Used for ${cl.use}.` : null]]);
   for (const s of (ab && ab.static) || []) block(s.name, [[s.credit], [s.licence], [s.url, 'ab-addr']]);
   if (ab && ab.endorsement) {
     const e = el('p', 'ab-endorse'), i = ab.endorsement.indexOf('.') + 1;

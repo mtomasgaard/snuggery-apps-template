@@ -22,11 +22,12 @@ evidence.
   in order. The year's digits roll during play only. Annual | Last 24 months switches the list.
 - The year row prints the step's name, GISS's global mean (`Global mean so far +1.20 °C (7 months)`
   for the partial year) and the area the data cover, all from the snapshot.
-- The legend prints the ±4 °C bar (81 steps of 0.1 °C with pointed ends), the hatch key, the step's
-  count of cells beyond the scale, the "anomaly, not temperature" caption on one line, and the credit
-  in one small line (`Data: NASA GISS (GISTEMP v4); annual means and 0.1 °C rounding by this app.`):
-  65 px at 390 (79 in Last 24 months, whose caption takes a second line). The data's newest month and
-  a research build's "archived copy" are in the top bar's one-line stamp (DESIGN §20 Q-5, §21 R-14).
+- The legend prints, under its row of Difference | Absolute and the Base key (plan 0012), the ±4 °C
+  bar (81 steps of 0.1 °C with pointed ends) or Absolute's −60 … +40 °C bar (101 steps of 1 °C), the
+  hatch key, the step's count of cells beyond the scale, and the caption on one line ("anomaly, not
+  temperature", naming the baseline; or "Estimated temperature"). The credit is in About (plan 0012,
+  HOUSE §4.15): About's first line under "Sources and citations". The data's newest month and a
+  research build's "archived copy" are in the top bar's one-line stamp (DESIGN §20 Q-5, §21 R-14).
 - Drag turns the globe or pans the map, a fling coasts, pinch and the wheel zoom 1–4× about the
   fingers, a double-tap zooms in 2× at zoom 1 and goes home when zoomed, a tap selects a cell (marked, with its card). The mark never covers
   the cell: a frame drawn outside a cell at least 4 px across, an open 9 px ring around a smaller one
@@ -56,7 +57,7 @@ evidence.
   Antarctic in 1888, one row of 40 cells, reads +0.18 °C), and it is the number Snuggery's Ask reads in
   the snapshot's ask rows (`north64AnomalyC`, `south64AnomalyC`; DESIGN §22 L-2, L-3).
 - **About** from `assets/about.json`, every placeholder filled from the snapshot, the credit line
-  first, the count of cells beyond ±4 °C, the sources with citations and addresses as plain text,
+  first under "Sources and citations" (then the climatology's attribution and source block), the count of cells beyond ±4 °C, the sources with citations and addresses as plain text,
   NASA's non-endorsement line, Natural Earth, Archivo's OFL, and "This copy" as label: value lines; five
   taps on the version line show the frame-time readout. The legend's caption and the top bar's stamp
   (`Data to July 2026, archived copy`, one line) are keys into it.
@@ -64,9 +65,10 @@ evidence.
   written behind the index, one chip; any touch, key or wheel ends it and writes the rest (a touch on
   the Earth opens no card); stored before it starts; never under Reduce Motion, in focus mode, or
   twice. Then, once per install, one hint: `Tap any place for its own line since 1880.`
-- **Focus mode** (DESIGN §10): the Earth, the stripes track with ‹ ▶ › and the step's name; everything
-  else hidden and inert, the legend's printed scale included (the owner's call, kept): the scale is one
-  tap away, on the ghost key ("Show the controls and the color scale") or Escape; entered by ART's "what stays" key, left by the ghost key or Escape; focus
+- **Focus mode** (DESIGN §10): the Earth, its legend (the bar and the caption: the owner, plan 0012,
+  "Full screen should not remove scale"), the stripes track with ‹ ▶ › and the step's name; everything
+  else hidden and inert, the legend's switch row included, back on the ghost key ("Show the controls
+  and the color scale") or Escape; entered by ART's "what stays" key, left by the ghost key or Escape; focus
   moves only after a keyboard entry; remembered; the Earth glides to its new seat (radius 187.2 px).
 - Hiding the page stops play and the opening; Escape closes About, else the cell, else focus mode.
 - Every key has a pressed state (a 14 % plate of its own ink, the play ring filled; a pointer-set
@@ -117,22 +119,23 @@ server: it serves the folder over its own scheme, and the app only ever `fetch()
 
 | File | Bytes | Holds |
 | --- | --: | --- |
-| `index.html` | 7 566 | the page; every control is a `<button>` with a label; the card, About and the ghost key; `theme-color` per scheme |
-| `style.css` | 18 214 | ART's gray tokens (both themes), Archivo by `@font-face`, the grid, the switches, the legend, the card, About, focus mode, the pressed and hover plates |
-| `js/app.js` | 52 976 | boot, state, the scheduler, play, turns and the focus glide, the poles, the opening, focus mode, About's wiring, persistence, gestures and keys, the pressed class, failure, refresh, `window.__ww` |
-| `js/data.js` | 20 904 | validation (the first failure as a phrase), the indexes, inflate (native, else Global Weather's decoder), the decode queue, world.json, places.json, the polar cap's mean |
-| `js/card.js` | 18 631 | the tap card: place phrase, value, the chart drawing itself, the cell's stripes, the 24-month bars |
+| `index.html` | 10 143 | the page; every control is a `<button>` with a label; the card, About and the ghost key; `theme-color` per scheme |
+| `style.css` | 19 199 | ART's gray tokens (both themes), Archivo by `@font-face`, the grid, the switches, the legend, the card, About, focus mode, the pressed and hover plates |
+| `js/app.js` | 62 850 | boot, state, the scheduler, play, turns and the focus glide, the poles, the opening, focus mode, About's wiring, persistence, gestures and keys, the pressed class, failure, refresh, `window.__ww` |
+| `js/data.js` | 21 033 | validation (the first failure as a phrase), the indexes, inflate (native, else Global Weather's decoder), the decode queue, world.json, places.json, the polar cap's mean |
+| `js/measure.js` | 7 878 | plan 0012: Difference or Absolute and the chosen baseline, in integer tenths; the climatology's check and decode (no DOM: `test_decode.mjs` imports it) |
+| `js/card.js` | 20 230 | the tap card: place phrase, value, the chart drawing itself, the cell's stripes, the 24-month bars |
 | `js/overlay.js` | 14 283 | the Canvas 2D layer: graticule, borders, coasts and lakes, limb or outline, places, the selected cell's frame or ring, the crosshair |
 | `js/proj.js` | 12 818 | orthographic and Equal Earth forward and inverse, the view (with focus mode's glide offset), `attachGestures` (Earth's History's) |
-| `js/readout.js` | 9 632 | the year row and its rolling twin, the legend and its one-line credit, notices, the error sentence |
+| `js/readout.js` | 10 245 | the year row and its rolling twin, the legend and its one-line credit (plan 0012: no credit; both measures), notices, the error sentence |
 | `js/track.js` | 7 843 | the stripes track: the cached instrument, the thumb, the finger, hover and the keys, the opening's written stripes |
-| `js/about.js` | 8 532 | About from about.json with its placeholders filled; sources; "This copy"; the stamp's text |
-| `js/earth.js` | 6 268 | WebGL2: the program, the array texture, the LUT, the draw, context loss |
+| `js/about.js` | 9 063 | About from about.json with its placeholders filled; sources; "This copy"; the stamp's text |
+| `js/earth.js` | 8 269 | WebGL2: the program, the array texture, the LUT, the draw, context loss |
 | `js/util.js` | 4 708 | helpers, `richText` (proper names `translate="no"`), the `ww.*` localStorage wrapper, the two motion curves |
-| `js/shaders.js` | 3 945 | the GLSL: both inverses, the cell lookup, the hatch |
-| `js/ramp.js` | 3 224 | ART's nine stops, OKLab interpolation, the two scales, the LUT, the hatch grays |
-| `js/units.js` | 3 410 | °C with U+2212 and U+202F, percentages, month names, cell bounds |
-| **app code** | **192 954** | `check.mjs`'s budget is 200 000 (B-2); over DESIGN §13's 160 000 cap, which B-2 replaced |
+| `js/shaders.js` | 4 947 | the GLSL: both inverses, the cell lookup, the hatch |
+| `js/ramp.js` | 4 872 | ART's nine stops, OKLab interpolation, the two scales, the LUT, the hatch grays |
+| `js/units.js` | 3 746 | °C with U+2212 and U+202F, percentages, month names, cell bounds |
+| **app code** | **222 127** | `check.mjs`'s budget is 223 000, the lead's ruling on the measured figure (plan 0012 3.3; 200 000 under B-2 and 192 954 B before the pass; `tools/DECISIONS.md`); over DESIGN §13's 160 000 cap, which B-2 replaced |
 
 Copied, not imported: `inflateRaw`/`unzlib`/`inflateNative` from Global Weather's `app.js`; the
 full-screen triangle, the orthographic formulas, `attachGestures` and the program helper from Earth's
@@ -152,10 +155,10 @@ samplers, the focus keys' keyboard rule) from US Quakes.
 | `fonts/` | 67 202 | 64 666 | Archivo (62 536) and its OFL |
 | the frames in memory | 2 770 200 | | one `Uint8Array`, and the same bytes in the GPU's array texture |
 
-The ZIP, built as `build-zips.yml` builds it (`node tools/check.mjs`, in the lead's pass): **1 171 778 B**
-before this file's last edit (a docs edit moves it by bytes; cap 2 000 000; the plan's target about
-1.3 MB). It stores data/ in 813 476 B, assets/ in 143 510, fonts/ in 64 666, the app code in 68 275 and
-the `.md` files in 75 586.
+The ZIP, built as `build-zips.yml` builds it (`node tools/check.mjs`, in the lead's pass of plan 0012
+3.3): **1 263 108 B** before this file's last edit (a docs edit moves it by bytes; cap 2 000 000; the
+plan's target about 1.3 MB). It stores data/ in 813 810 B, assets/ in 218 722 (with the climatology),
+fonts/ in 64 666, the app code in 77 713 and the `.md` files in 80 469.
 
 ## Verified (2026-10-01, this Mac, Chromium 153 headless on SwiftShader)
 
@@ -247,8 +250,8 @@ both themes and the scrub, exit 0, "all checks pass", 153 checks, 0 failed):
   `rgb(138, 138, 138)`, hover `rgb(79, 79, 79)`, pressed `rgb(22, 22, 22)` (light). A held touch
   (CDP) shows the 14 % plate on About, Arctic and ›. Chromium's emulated touch never sets `:active`
   (probed at 0–600 ms), which is why the pressed state is the pointer-set `.down` class.
-- The legend: caption 13.6 px (one line), credit 13.6 px (one line), legend 65.3 px at 390 × 844 (was
-  about 108); inside its reserve at 320 (65 ≤ 79, 79 ≤ 79, 79 ≤ 79 for a year, the partial year and a
+- The legend: caption 13.6 px (one line), credit 13.6 px (one line; in About since plan 0012), legend
+  65.3 px at 390 × 844 (was about 108); inside its reserve at 320 (65 ≤ 79, 79 ≤ 79, 79 ≤ 79 for a year, the partial year and a
   month), 360 (65 ≤ 65, 65 ≤ 65, 79 ≤ 79) and 375 (65 ≤ 79, 79 ≤ 79, 79 ≤ 79). Before the reserve took
   the beyond-count lead into account, the partial year's legend at 320 was 79 px over a 65 px reserve.
 - The stamp: one line, 44 px tall, "July 2026 release, archived copy" (since the review pass "Data to
@@ -349,10 +352,71 @@ the builders could not reach):
   bottom inset of 21 the docked card's foot was at 379.5 of 390, because the column's two spacer rows
   shared the free 21 px. After: 59, 59, 757–769, 785 and 369.
 
+## Plan 0012, package 3.3 (2026-10-06): version 1.1
+
+What changed (the reasons are in `tools/DECISIONS.md`, which does not ship):
+
+- **Absolute** beside Difference (the legend's first row; remembered). Each cell is its 1951–1980
+  average 2 m air temperature from ERA5 (`assets/climatology.json`, built by
+  `tools/climatology/build_climatology.py` from WeatherBench 2's 1990–2019 climatology, moved to
+  1951–1980 by GISTEMP's own anomalies) plus GISS's anomaly for the step: an estimate, printed to the
+  whole degree on the card, on a fixed −60 … +40 °C sequential scale with its own legend. The year
+  row gives the climatology's area mean plus GISS's global mean, with ±0.5 °C; the pole chip, the
+  climatology's mean over the whole cap plus the cap's mean anomaly. The card's sentence adds GISS's
+  own anomaly against 1951–1980, whatever Base says. A month uses its own month's average, the partial
+  year the average of its months so far.
+- **Base** in Difference: a sheet of two years (`From ‹ › to ‹ ›`) from the first to the last complete
+  year, default GISS's 1951–1980. Each cell is re-expressed against its own mean over the span, where
+  it has a value in two thirds of the years (else no data); GISS's global means and the stripes follow;
+  the bracket under the stripes moves and names the span; every difference on screen says
+  `vs. <span>`. Single months stay against 1951–1980 (the app holds only the last 24 months), so in
+  Last 24 months the key reads `Base 1951–1980`; in Absolute the key's name and the sheet say the map
+  does not use the span. A one-year span is named as one year.
+- **Focus mode keeps the legend's bar and caption.** The switch row hides.
+- **The credit left the legend** for About's "Sources and citations" (HOUSE §4.15; change list item 1).
+- The shader adds the climatology (an R16I array texture, 14 layers) or subtracts the baseline (an R16I
+  texture) in integer tenths, so the card, the counts and the pixels agree to the digit; a step change
+  is still one uniform and one draw.
+
+Measured (2026-10-06, this Mac):
+
+| What | Before (1.0) | Now (1.1) | Command |
+| --- | --: | --: | --- |
+| App code (index.html, style.css, js/) | 192 954 B | 220 396 B, **over the 200 000 B budget** | `node tools/check.mjs` |
+| `assets/climatology.json` | — | 101 349 B (cap 120 000) | `node tools/check.mjs` |
+| `assets/about.json` | 6 510 B | 9 734 B | `ls -l` |
+| The ZIP, as build-zips.yml builds it | 1 172 286 B | 1 260 516 B before this section (cap 2 000 000) | `node tools/check.mjs` |
+| GPU, beyond the frames | 1 024 B (LUT) | + 486 000 B (climatology 453 600, baseline 32 400) + 4 096 B (Absolute's LUT) | `earth.js` `stats()` |
+| CPU | the frames | + 453 600 B (the climatology in tenths) + 32 400 B (a baseline) | `measure.js` |
+
+- `node tools/check.mjs`: every check passes but the app-code budget. `node tools/test_decode.mjs`: all
+  pass, 33 checks, the new ones the climatology's decode against Node's zlib (0 cells differ), its
+  global means against the build's, the partial plane, Absolute and a 1991–2020 baseline against sums
+  written in the test. `node tools/test_proj.mjs`: all pass.
+- `tools/shoot.mjs` (both themes; numbers in DECISIONS' record and the lead's run): Absolute's pixels in
+  the test's own temperature ramp (0 wrong of 12 data cells, worst channel off by 0) in 2025 and in the
+  newest month; a 1991–2020 baseline's pixels at the anomaly minus each cell's own mean (0 wrong); a
+  month against 1951–1980 with a baseline chosen; the sheet by real touches; the scale in focus mode;
+  a reload keeping Absolute and a baseline; real-touch scrubs at 8 steps a second in Absolute and
+  against 1880–1900 with the drawn step under the finger on every frame (0 differ).
+- Driven by hand, 390 × 844, DPR 2, light and dark: Chromium (CDP touches) and WebKit (Playwright's
+  taps; its drags by mouse, the only drag it offers): Absolute, Fairbanks' card (`−2 °C`), Base by
+  taps (1953–1977), scrubs in both measures with 0 frames off the finger, focus mode keeping the scale,
+  no console errors. WebKit draws the integer textures (the same pixel as Chromium).
+
+Phone checks owed (plan 0012): the R16I textures and the integer shader on iOS 18 WebKit (a GPU path no
+earlier pass used); a scrub in Absolute and with a baseline at three speeds by a finger; the stepper
+held to repeat, and lifted after the sheet has grown under the finger; the Base sheet over the globe in
+landscape; Absolute's sand and violet ends on the phone's screen in both themes; memory after switching
+measures and spans for 5 minutes.
+
 ## Honesty caveats
 
-- Every value is an anomaly against each place's 1951–1980 average, never a temperature. The legend's
-  caption says so on every step, and opens About, which says it at length.
+- In Difference every value is an anomaly against each place's 1951–1980 average, or against the span
+  Base names, never a temperature; the legend's caption says so on every step and names the span. In
+  Absolute every value is an estimate: an ERA5-based 1951–1980 average plus GISS's anomaly, never a measured
+  temperature; the caption, the year row's ±0.5 °C, the card and About say so. A single month is
+  always against 1951–1980, because the app holds only the last 24 months.
 - The annual maps and their rounding are this app's (9 of 12 months; the partial year three quarters
   of its months). GISS publishes monthly maps only. The global means and the stripes are GISS's own.
 - The partial year is labeled partial in the year row, its stripe is open, and the legend's caption

@@ -11,15 +11,19 @@ Checks, in order, one printed line each; exits 1 on the first failure:
      build_static's spherical excess).
   2. places.json: 1 251 entries in Natural Earth's order of tiers, the fields, the tier counts
      recomputed from the source's scalerank, sorted by tier then name.
-  3. about.json: DESIGN §3.6's nine sections in order, no unknown placeholder, every quotation (“…”)
+  3. about.json: DESIGN §3.6's nine sections in order, with plan 0012's absolute and baseline after colors, no unknown placeholder, every quotation (“…”)
      found verbatim in credits/gistemp-page-and-faq.txt, the SI rule (no comma or plain space between
      digit groups or before a unit), and every number the prose types re-derived from the demo snapshot
      (CLAIMS below), so a sentence that stops being true fails the build.
   4. CREDITS.txt: the attribution line, both GISS citations as the demo snapshot carries them, the
      endorsement sentence, Natural Earth's credit and the font's licence.
   5. fonts/: exactly archivo-ww.woff2 and OFL.txt, matching sources.ARCHIVO.
-  6. budgets (CONTRACT §7), nothing unclaimed in assets/, no AI vendor name and no control character
+  6. budgets (CONTRACT §7), nothing unclaimed in assets/ (climatology.json is plan 0012's, checked in 7), no AI vendor name and no control character
      in any file checked, no web address in about.json outside the static sources' url fields.
+  7. climatology.json (plan 0012 3.3, built by warming-world/tools/climatology/build_climatology.py, never
+     by this pipeline): 13 planes that inflate to 16 200 bytes, the row delta undone, no byte 255; the
+     1951–1980 global annual mean between 13 and 14.5 °C; Fairbanks' cell −4.5 °C; its credits carry
+     Copernicus's two sentences, and CREDITS.txt carries them.
 Standard library only.
 """
 import base64
@@ -36,7 +40,7 @@ from paths import APP, ASSETS, CACHE, HERE
 from sources import ARCHIVO, GISTEMP, STATIC
 
 CAPS = {'world.json': 420_000, 'places.json': 70_000, 'about.json': 40_000, 'CREDITS.txt': 30_000}
-SECTIONS = ['colors', 'sources', 'coverage', 'partial', 'rounding', 'revisions', 'not-shown', 'citations', 'this-copy']
+SECTIONS = ['colors', 'absolute', 'baseline', 'sources', 'coverage', 'partial', 'rounding', 'revisions', 'not-shown', 'citations', 'this-copy']
 PLACEHOLDER = re.compile(r'\{([^{}]+)\}')
 KNOWN = re.compile(r'^(coverage:(\d{4}|last)|lastComplete|partialLabel|newestMonth|releaseCreated|accessed|firstYear)$')
 VENDORS = re.compile(r'\b(Claude|Anthropic|OpenAI|ChatGPT|GPT-\d|Gemini|Copilot|Llama|Mistral|Bard)\b')
@@ -267,6 +271,10 @@ EXPECTED_NUMBERS = {
     '2', '1951', '1980', '0.0', '4', '1.5', '30', '26 000', '5', '1 200', '64', '38', '1955',
     '93', '1957', '2025', '1946', '1931', '54', '70', '6', '0.3', '9', '12', '0.1', '24', '10', '2010', '2024', '1880', '1900',
     '1950',
+    # plan 0012 3.3, Absolute and the baseline: the climatology's period (1990, 2019), WeatherBench 2's
+    # 61-day window and the researcher's 1.3 °C residual on a test field (tools/DECISIONS.md), the 0.5 °C
+    # steps and GISS's ±0.5 °C, the fixed −60 … +40 °C scale, two thirds of 30 years (20)
+    '1990', '2019', '61', '1.3', '0.5', '60', '40', '20',
 }
 
 
@@ -344,6 +352,43 @@ def check_credits(snap):
        f'citations, Natural Earth, Archivo; no plain space before °C, km or %; {size:,} B ≤ {CAPS["CREDITS.txt"]:,}')
 
 
+COPERNICUS = ('Contains modified Copernicus Climate Change Service information 2026.',
+              'Neither the European Commission nor ECMWF is responsible for any use that may be made of the '
+              'Copernicus information or data it contains.')
+
+
+def check_climatology():
+    path = os.path.join(ASSETS, 'climatology.json')
+    cl = load(path)
+    check(cl.get('v') == 1 and cl['grid'] == {'nx': 180, 'ny': 90, 'lon0': -179, 'lat0': 89, 'dlon': 2, 'dlat': -2, 'cells': True}
+          and cl['plane'] == {'offset': -80.0, 'step': 0.5, 'unit': '°C', 'none': 255} and cl['encoding']['delta'] == 'row'
+          and len(cl['planes']) == 13, 'climatology.json: not 13 planes of 0.5 °C bytes on the 2° grid')
+    w = [math.cos(math.radians(89 - 2 * r)) for r in range(90)]
+    year = None
+    for i, b64 in enumerate(cl['planes']):
+        d = zlib.decompress(base64.b64decode(b64))
+        check(len(d) == 16200, f'climatology plane {i + 1} holds {len(d)} bytes')
+        v = []
+        for r in range(90):
+            acc = 0
+            for c in range(180):
+                acc = (acc + d[r * 180 + c]) % 256
+                check(acc != 255, f'climatology plane {i + 1} has a cell without a value')
+                v.append(-80 + 0.5 * acc)
+        if i == 12:
+            year = v
+    mean = sum(year[k] * w[k // 180] for k in range(16200)) / (180 * sum(w))
+    check(13.0 <= mean <= 14.5 and year[12 * 180 + 16] == -4.5, f'climatology: global annual mean {mean:.3f} °C, Fairbanks {year[12 * 180 + 16]}')
+    for t in COPERNICUS:
+        check(t in cl['credits']['attribution'] and t in cl['source']['attribution'], f'climatology.json lacks Copernicus\'s {t[:40]!r}')
+    with open(os.path.join(APP, 'CREDITS.txt'), encoding='utf-8') as f:
+        flat = re.sub(r' *\n *', ' ', f.read())
+    for t in COPERNICUS + ('CC BY 4.0', 'DOI: 10.24381/cds.adbb2d47', 'doi:10.1002/qj.3803', 'doi:10.1029/2023MS004019'):
+        check(t in flat, f'CREDITS.txt lacks the climatology\'s {t[:40]!r}')
+    ok(f'climatology.json: 13 planes, every cell a value, the 1951–1980 global annual mean {mean:.3f} °C, Fairbanks −4.5 °C; '
+       f'Copernicus\'s notice and the citations in it and in CREDITS.txt; {os.path.getsize(path):,} B')
+
+
 def check_fonts():
     names = sorted(os.listdir(os.path.join(APP, 'fonts')))
     check(names == ['OFL.txt', 'archivo-ww.woff2'], f'fonts/ holds {names}')
@@ -355,7 +400,7 @@ def check_fonts():
 
 def check_shipped_text():
     names = sorted(n for n in os.listdir(ASSETS) if not n.startswith('.'))
-    check(names == ['about.json', 'places.json', 'world.json'], f'assets/ holds {names}: something unclaimed')
+    check(names == ['about.json', 'climatology.json', 'places.json', 'world.json'], f'assets/ holds {names}: something unclaimed')
     total = 0
     for p in [os.path.join(ASSETS, n) for n in names] + [os.path.join(APP, 'CREDITS.txt')]:
         with open(p, encoding='utf-8') as f:
@@ -377,6 +422,7 @@ def main():
         check_credits(snap)
         check_fonts()
         check_shipped_text()
+        check_climatology()
     except Fail as e:
         print(f'FAIL  {e}', flush=True)
         return 1

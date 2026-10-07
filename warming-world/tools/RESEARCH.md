@@ -416,8 +416,19 @@ unnecessary."* Credit given anyway.
 GISTEMP (NASA GISS), GHCNm v4 and ERSST v5 (NOAA NCEI) are US Government works, public domain in the
 United States under 17 U.S.C. §105; GISS asks for its citation, which the app gives. Natural Earth is
 not government work; it is public domain by its authors' dedication. HadCRUT5 (Crown copyright, OGL v3)
-and ERA5 (CC BY 4.0) are not used. Nothing shipped is under a non-commercial or share-alike term. The
-root `LICENSE` carve-out should say: public-domain data, credited in `warming-world/CREDITS.txt`.
+is not used. Nothing shipped is under a non-commercial or share-alike term.
+
+**Amended 2026-10-06 (plan 0012 package 3.3).** ERA5 **is** now used, for Absolute only:
+`assets/climatology.json`, ERA5's 2 m air temperature for 1990–2019 as WeatherBench 2's climatology
+holds it, moved to 1951–1980 by GISTEMP's own anomalies (`tools/climatology/build_climatology.py`,
+pinned by sha256). ERA5 is CC BY 4.0 at the Climate Data Store; WeatherBench 2's copy is published
+under the Licence to Use Copernicus Products (its bucket's `LICENSE`); both allow commercial use and
+ask for the Copernicus notice, which About and `CREDITS.txt` print with the modification sentence.
+The researcher's comparison of sources (Berkeley Earth refused as CC BY-NC; NCEP/NCAR R1 the
+public-domain fallback; GHCN_CAMS unfit for absolute values) is in `tools/DECISIONS.md`. So the root
+`LICENSE` carve-out should now say: public-domain data, except `assets/climatology.json`, which is
+CC BY 4.0 (Copernicus Climate Change Service information, modified), credited in
+`warming-world/CREDITS.txt`.
 
 ---
 

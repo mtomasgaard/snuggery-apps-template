@@ -13,8 +13,8 @@
 // nothing, so a tap meant for the globe behind the card never moves the year (R-8).
 
 import { $, cssVar, setText, richText, reducedMotion, isNum } from './util.js';
-import { rampRGB, css, HATCH_GROUND, HATCH_LINE, MAP_SCALE } from './ramp.js';
-import { tenths, degC, cellBounds, monthName, MINUS, NNBSP } from './units.js';
+import { rampRGB, css, HATCH_GROUND, HATCH_LINE, MAP_SCALE, ABS_LO, ABS_HI } from './ramp.js';
+import { tenths, degC, whole as wholeDeg, cellBounds, monthName, MINUS, NNBSP } from './units.js';
 import { CELLS, NONE, cellOf } from './data.js';
 
 const DRAW_MS = 480;                                       // ART: the cell's line, linear in years
@@ -65,7 +65,7 @@ const placeName = (phrase) => phrase.replace(/^, (?:with|near) /, '');
  * The footnote for the value on screen (R-3, R-4). rules: { minMonths, share (a partial year's cell
  * needs this share of its months), km ("1 200 km", from the snapshot's detail) }; null pieces drop out.
  */
-export function footText(I, layer, rules = {}) {
+export function footText(I, layer, rules = {}, abs = false) {
   const r = rules || {};
   let how = '';
   if (layer >= I.ny) how = 'One month’s value; the line shows annual means.';
@@ -74,22 +74,22 @@ export function footText(I, layer, rules = {}) {
     how = need ? `Mean of at least ${need} of its ${n} months (${I.partialSpan}).` : `Mean of the months so far (${I.partialSpan}).`;
   } else if (isNum(r.minMonths)) how = `Annual mean of at least ${r.minMonths} of 12 months.`;
   const where = r.km ? `Land and sea ice: station anomalies spread up to ${r.km}. Open water: sea-surface anomalies.` : '';
-  return [how, where].filter(Boolean).join(' ');
+  return [how, where, abs ? 'The temperature is an ERA5-based 1951–1980 average plus GISS’s anomaly: an estimate. The chart shows the anomaly.' : ''].filter(Boolean).join(' ');
 }
 
 export function createCard({ onClose, onYear, onRedraw } = {}) {
   const C = { open: false, sel: null };
   const root = $('card'), chart = $('c-chart'), monthsCv = $('c-months');
-  let I = null, frames = null, places = null, dpr = 1, layer = -1, t0 = 0, whole = true, lastP = 1, series = null, mser = null, stats = null, outT = 0, geom = null, rules = null, held = false;
+  let I = null, M = null, frames = null, places = null, dpr = 1, layer = -1, t0 = 0, whole = true, lastP = 1, series = null, mser = null, stats = null, outT = 0, geom = null, rules = null, held = false, cellK = 0;
 
   /** The cell's annual values (tenths, NIL for none) and its months, read from the decoded frames. */
   function readSeries(row, col) {
-    const k = row * 180 + col;
+    const k = cellK = row * 180 + col;
     series = new Int16Array(I.ny); mser = new Int16Array(I.nm);
     let first = -1, lo = null, hi = null;
     for (let i = 0; i < I.ny; i++) {
-      const b = frames[i * CELLS + k];
-      series[i] = b === NONE ? NIL : I.tenths[b];
+      const d = M.diff(i, k);                                 // against the baseline in use (measure.js)
+      series[i] = d == null ? NIL : d;
       if (series[i] === NIL) continue;
       if (first < 0) first = i;
       if (i === I.partial) continue;                          // the extremes are over complete years
@@ -105,26 +105,35 @@ export function createCard({ onClose, onYear, onRedraw } = {}) {
 
   /** The value line, the beyond line, the chart's name: for the step on screen. */
   function writeText() {
-    const months = layer >= I.ny, v = months ? mser[layer - I.ny] : series[layer];
+    const months = layer >= I.ny, abs = M.abs && !!M.clim, v = M.value(layer, cellK);
+    // Absolute's sentence adds GISS's own anomaly (against 1951–1980) to the climatology, never the chart's difference
+    const g = frames[layer * CELLS + cellK], a = g === NONE ? NIL : I.tenths[g];
     const when = months ? `in ${I.name[layer]}`
       : layer === I.partial ? `in ${I.years[layer]} so far (${I.partialSpan})` : `in ${I.years[layer]}`;
-    const val = $('c-value'), sent = $('c-when'), note = $('c-note');
-    if (v === NIL) {
+    const val = $('c-value'), sent = $('c-when'), note = $('c-note'), nob = !abs && M.on(layer) && M.base[cellK] === -32768;
+    if (v == null) {
       val.hidden = true;
-      setText(sent, `No estimate for this cell ${when}.`);
-      setText(note, stats.first < 0 ? 'No year has data.' : `First year with data: ${I.years[stats.first]}.`);
+      if (nob) {
+        let c = 0;
+        for (let i = I.years.indexOf(M.span[0]), e = I.years.indexOf(M.span[1]); i <= e; i++) if (frames[i * CELLS + cellK] !== NONE) c++;
+        setText(sent, `No baseline for this cell in ${M.text()}.`);
+        setText(note, `It has a value in ${c} of those ${M.n} years and needs ${M.need}.`);
+      } else {
+        setText(sent, `No estimate for this cell ${when}.`);
+        setText(note, stats.first < 0 ? 'No year has data.' : `First year with data: ${I.years[stats.first]}.`);
+      }
       note.hidden = false;
       root.classList.add('none');
     } else {
       val.hidden = false; root.classList.remove('none');
-      setText(val, degC(tenths(v)));
-      setText(sent, `${when}, against this cell’s ${I.baseText} average`);
-      const end = MAP_SCALE * 10;
-      note.hidden = Math.abs(v) <= end;
-      if (!note.hidden) setText(note, `Beyond the map’s ${v > 0 ? '+' : MINUS}${MAP_SCALE}${NNBSP}°C end; drawn in the end color.`);
+      setText(val, degC(abs ? wholeDeg(v) : tenths(v)));
+      setText(sent, abs ? `${when}, estimated: the cell’s ${I.baseText} average plus GISS’s ${degC(tenths(a))}` : `${when}, against this cell’s ${M.baseFor(layer)} average`);
+      const lo = abs ? ABS_LO * 10 : -MAP_SCALE * 10, hi = abs ? ABS_HI * 10 : MAP_SCALE * 10;
+      note.hidden = v >= lo && v <= hi;
+      if (!note.hidden) setText(note, `Beyond the map’s ${v > 0 ? `+${hi / 10}` : `${MINUS}${-lo / 10}`}${NNBSP}°C end; drawn in the end color.`);
     }
-    setText($('c-foot'), footText(I, layer, rules));
-    const last = I.lastComplete, span = `from ${I.years[0]} to ${I.years[last]}`;
+    setText($('c-foot'), footText(I, layer, rules, abs));
+    const last = I.lastComplete, span = `from ${I.years[0]} to ${I.years[last]}${M.custom() ? `, against ${M.text()}` : ''}`;
     chart.setAttribute('aria-label', stats.first < 0 || stats.lo == null
       ? `Line chart of this cell’s annual anomaly ${span}. No year has data.`
       : `Line chart of this cell’s annual anomaly ${span}. First year with data ${I.years[stats.first]}. Lowest ${degC(tenths(series[stats.lo]))} in ${I.years[stats.lo]}, highest ${degC(tenths(series[stats.hi]))} in ${I.years[stats.hi]}.`);
@@ -132,7 +141,7 @@ export function createCard({ onClose, onYear, onRedraw } = {}) {
 
   /** Open on a cell: ctx = { idx, frames, places, layer, dpr, rules }. */
   C.show = (sel, ctx) => {
-    I = ctx.idx; frames = ctx.frames; places = ctx.places; dpr = ctx.dpr; layer = ctx.layer; rules = ctx.rules || null;
+    I = ctx.idx; M = ctx.M; frames = ctx.frames; places = ctx.places; dpr = ctx.dpr; layer = ctx.layer; rules = ctx.rules || null;
     const fresh = !C.open || !C.sel || C.sel.row !== sel.row || C.sel.col !== sel.col;
     C.sel = sel; C.open = true;
     readSeries(sel.row, sel.col);
@@ -195,7 +204,7 @@ export function createCard({ onClose, onYear, onRedraw } = {}) {
     const X = (i) => x0 + ((i + 0.5) * (x1 - x0)) / n, Y = (t) => mid - (t / (R * 10)) * (ph / 2);
     geom = { x0, x1, n, top, ph, R };
     // the base period's band, the grid, the zero line, GISS's global mean: at once (the context)
-    const b0 = I.years.indexOf(I.base[0]), b1 = I.years.indexOf(I.base[1]);
+    const bs = M.custom() ? M.span : I.base, b0 = I.years.indexOf(bs[0]), b1 = I.years.indexOf(bs[1]);
     x.globalAlpha = 0.07; x.fillStyle = ink;
     if (b0 >= 0 && b1 >= 0) x.fillRect(X(b0) - (x1 - x0) / n / 2, top, X(b1) - X(b0) + (x1 - x0) / n, ph);
     x.globalAlpha = 1;
@@ -217,7 +226,7 @@ export function createCard({ onClose, onYear, onRedraw } = {}) {
     }
     x.strokeStyle = ink3; x.lineWidth = 1; x.lineJoin = 'round';
     x.beginPath();
-    for (let i = 0; i < n; i++) { const y = Y(I.meanH[i] / 10); if (i) x.lineTo(X(i), y); else x.moveTo(X(i), y); }
+    for (let i = 0; i < n; i++) { const y = Y(M.meanH(i) / 10); if (i) x.lineTo(X(i), y); else x.moveTo(X(i), y); }
     x.stroke();
     // the cell's own line, drawn from the first year at a constant rate; broken where a year has none
     const upto = p >= 1 ? n : Math.floor(p * n);
@@ -266,14 +275,17 @@ export function createCard({ onClose, onYear, onRedraw } = {}) {
     // labels: the first year, the base period under its band, the newest year
     x.fillStyle = ink3; x.textBaseline = 'top';
     const ly = sy + sh + 2, lab = [[String(I.years[0]), x0, 'left']];
-    if (b0 >= 0 && b1 >= 0) lab.push([I.baseText, (X(b0) + X(b1)) / 2, 'center']);
-    lab.push([String(I.years[n - 1]), x1, 'right']);
-    const boxes = [];
-    for (const [t, lx, al] of lab) {
-      x.textAlign = al; x.fillText(t, lx, ly);
-      const w = x.measureText(t).width, a = al === 'left' ? lx : al === 'right' ? lx - w : lx - w / 2;
-      boxes.push([a, a + w]);
+    if (b0 >= 0 && b1 >= 0) {                              // the baseline's years, kept clear of both ends
+      const t = M.text(), w = x.measureText(t).width;
+      lab.push([t, Math.max(x0 + w / 2, Math.min(x1 - w / 2, (X(b0) + X(b1)) / 2)), 'center']);
     }
+    lab.push([String(I.years[n - 1]), x1, 'right']);
+    const boxes = [], at = lab.map(([t, lx, al]) => { const w = x.measureText(t).width, a = al === 'left' ? lx : al === 'right' ? lx - w : lx - w / 2; return [a, a + w]; });
+    lab.forEach(([t, lx, al], i) => {
+      // an end year that would touch the baseline's label gives way to it (the label names the zero)
+      if (lab.length === 3 && i !== 1 && at[i][0] < at[1][1] + 6 && at[i][1] > at[1][0] - 6) return;
+      x.textAlign = al; x.fillText(t, lx, ly); boxes.push(at[i]);
+    });
     // the global mean's key (R-1): a sample of its line, then its name, in the first gap that holds it
     const kt = 'global mean', kw = 12 + 4 + x.measureText(kt).width;
     let kx = null;

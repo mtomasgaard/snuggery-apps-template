@@ -31,6 +31,11 @@
 // a snapshot replaced while open and a broken replacement; missing, broken and stale snapshots (the
 // sentences); no WebGL 2 (the sentence; the track and play still work); widths 320, 360, 375 and
 // 844 × 390, a rotation, and 125 % zoom without horizontal scroll.
+// Plan 0012 package 3.3 added: Absolute (pixels in this file's own temperature ramp at the climatology plus
+// the anomaly, decoded here; the year row's estimate; the card; the pole reading; About's section) and a
+// chosen baseline (pixels at the anomaly minus each cell's mean over the span, worked out here; cells
+// without one hatched; the year row, the caption and the key; the sheet by real touches; a month stays
+// against 1951–1980), the scale kept in focus mode, a reload keeping both, and a real-touch scrub in each.
 // The QA pass added: the selected cell's mark is hollow at 0°, 45°, 64° and 80° on the globe and the
 // map (the cell's ramp color at its centre, the overlay clear of it, the mark's ink on all four sides);
 // pressed, hover and focus on every kind of key, in grays, with a mouse in both themes and by a held
@@ -69,9 +74,10 @@ const cover = (a) => {
   const p = whole === 100 && k < 10000 ? (Math.floor(k / 10) / 10).toFixed(1) : whole === 0 && k > 0 ? (Math.ceil(k / 10) / 10).toFixed(1) : String(whole);
   return `Data cover ${p}${NN}% of Earth’s surface`;
 };
-const meanText = (k) => {
-  const s = ALL[k];
-  return s.partial ? `Global mean so far ${signed2(s.globalMean)}${NN}°C (${s.months} months)` : `Global mean ${signed2(s.globalMean)}${NN}°C`;
+const meanText = (k, base = snap.release.base.replace('-', '–'), shiftH = 0) => {
+  const s = ALL[k], v = signed2((Math.round(s.globalMean * 100) - shiftH) / 100);
+  base = base.replace('–', '–\u2060');                  // the year row never breaks the span at its dash
+  return s.partial ? `Global mean so far ${v}${NN}°C vs.\u00a0${base} (${s.months}\u00a0months)` : `Global mean ${v}${NN}°C vs.\u00a0${base}`;
 };
 const lastComplete = snap.steps.findLastIndex((s) => !s.partial), partial = snap.steps.findIndex((s) => s.partial);
 /* ART.md's stops, interpolated in OKLab, converted with Ottosson's matrices — written here again */
@@ -138,6 +144,64 @@ const siSp = (t) => t.replace(/(\d) (°C|km|%)/g, `$1${NN}$2`);
 const cap2 = (h) => `${h > 0 ? '+' : h < 0 ? MINUS : ''}${Math.floor(Math.abs(h) / 100)}.${String(Math.abs(h) % 100).padStart(2, '0')}${NN}°C`;
 /** A cell's annual series as this file decodes it: tenths, or null. */
 const cellSeries = (row, col) => snap.steps.map((s, k) => { const b = frames[k][row * 180 + col]; return b === 255 ? null : b - 127; });
+/* ── plan 0012 3.3: the climatology and Absolute's ramp, decoded and written here again ── */
+const CLIM = JSON.parse(fs.readFileSync(path.join(APP, 'assets/climatology.json'), 'utf8'));
+const rdiv = (v, d) => { const q = Math.floor((2 * Math.abs(v) + d) / (2 * d)); return v < 0 ? -q : q; };
+const climT = CLIM.planes.map((b64) => { const d = zlib.inflateSync(Buffer.from(b64, 'base64')), t = new Array(16200); for (let r = 0; r < 90; r++) { let a = 0; for (let c = 0; c < 180; c++) { a = (a + d[r * 180 + c]) % 256; t[r * 180 + c] = a === 255 ? null : -800 + 5 * a; } } return t; });
+{ const pm = snap.steps[snap.steps.length - 1].partial ? snap.steps[snap.steps.length - 1].months : 1; climT.push(climT[0].map((_, k) => rdiv(climT.slice(0, pm).reduce((s, t) => s + t[k], 0), pm))); }
+const planeOf = (k) => (k < NY ? (snap.steps[k].partial ? 13 : 12) : +ALL[k].month.slice(5) - 1);
+const absT = (k, cell) => { const b = frames[k][cell]; return b === 255 ? null : climT[planeOf(k)][cell] + b - 127; };
+const climMean = climT.map((t) => { let s = 0, w = 0; t.forEach((v, k) => { const x = Math.cos((89 - 2 * Math.floor(k / 180)) * D); s += v * x; w += x; }); return s / w; });
+const absMeanHere = (k) => rdiv(Math.round(climMean[planeOf(k)] * 10) + Math.round(ALL[k].globalMean * 100), 10);
+/** Absolute's cap reading, written here again: the climatology's mean over the whole cap plus the cap's
+ *  mean anomaly (capHere), both in hundredths half away from zero, then to the whole degree. */
+function absCapHere(k, north) {
+  const a = capHere(k, north), t = climT[planeOf(k)];
+  let sm = 0, w = 0;
+  for (let r = 0; r < 13; r++) { const row = north ? r : 89 - r, wt = Math.cos((89 - 2 * row) * D); for (let c = 0; c < 180; c++) { const v = t[row * 180 + c]; if (v != null) { sm += wt * v; w += wt; } } }
+  const x = (Math.abs(sm) / w) * 10, f = Math.floor(x), c = Math.sign(sm) * (x - f >= 0.5 - 1e-9 ? f + 1 : f);
+  return { d: a.h == null ? null : rdiv(a.h + c, 100), share: a.share };
+}
+const absCapText = (k, north) => { const m = absCapHere(k, north); return `Map mean ${north ? 'north of 64° N' : 'south of 64° S'}: ${m.d < 0 ? MINUS : ''}${Math.abs(m.d)}${NN}°C, estimated${Math.round(m.share * 10000) >= 10000 ? '' : `, data cover ${Math.round(m.share * 100)}${NN}% of it`}`; };
+const tempText = (t) => `${t < 0 ? MINUS : ''}${Math.floor(Math.abs(t) / 10)}.${Math.abs(t) % 10}`;
+const ABS = [[-60, 0.27, 0.08, 305], [-40, 0.4, 0.12, 280], [-20, 0.53, 0.12, 255], [0, 0.665, 0.085, 220], [10, 0.735, 0.07, 180], [20, 0.805, 0.07, 125], [30, 0.875, 0.075, 95], [40, 0.945, 0.05, 85]];
+function absHere(v) {
+  v = Math.max(-60, Math.min(40, v));
+  let i = 0; while (i < ABS.length - 2 && v > ABS[i + 1][0]) i++;
+  const [v0, L0, C0, h0] = ABS[i], [v1, L1, C1, h1] = ABS[i + 1], t = (v - v0) / (v1 - v0);
+  const a = C0 * Math.cos(h0 * D) + (C1 * Math.cos(h1 * D) - C0 * Math.cos(h0 * D)) * t, b = C0 * Math.sin(h0 * D) + (C1 * Math.sin(h1 * D) - C0 * Math.sin(h0 * D)) * t, Lr = L0 + (L1 - L0) * t;
+  const l = (Lr + 0.3963377774 * a + 0.2158037573 * b) ** 3, m = (Lr - 0.1055613458 * a - 0.0638541728 * b) ** 3, s2 = (Lr - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s2, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s2, -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s2]
+    .map((x) => { x = Math.min(1, Math.max(0, x)); return Math.round(255 * (x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055)); });
+}
+/** A chosen baseline worked out here: each cell's mean over [y0, y1] in tenths where it has two thirds of the years. */
+function baseHere(y0, y1) {
+  const i0 = y0 - 1880, n = y1 - y0 + 1, need = Math.ceil((2 * n) / 3 - 1e-9), base = new Array(16200);
+  for (let k = 0; k < 16200; k++) { let sum = 0, c = 0; for (let i = i0; i < i0 + n; i++) { const b = frames[i][k]; if (b !== 255) { sum += b - 127; c++; } } base[k] = c >= need ? rdiv(sum, c) : null; }
+  let h = 0; for (let i = i0; i < i0 + n; i++) h += Math.round(ALL[i].globalMean * 100);
+  return { base, h: rdiv(h, n), lacking: base.filter((v) => v == null).length };
+}
+/** Sample the WebGL frame under the current globe view at cells whose expected color want(cell) gives (null: hatch). */
+async function sampleBy(ww, want, n = 12) {
+  const s = await S(ww), g = s.view.globe, R = s.view.radius, picks = { hatch: [], data: [] };
+  for (let row = 0; row < 90; row++) for (let col = 0; col < 180; col++) {
+    const p = ortho(-179 + 2 * col, 89 - 2 * row, g.lon, g.lat);
+    if (p[2] < 0.6) continue;
+    const w = want(row * 180 + col), kind = w ? 'data' : 'hatch';
+    if (picks[kind].length < 400) picks[kind].push({ w, x: s.view.cx + R * p[0], y: s.view.cy - R * p[1] });
+  }
+  const res = { hatch: [0, 0], data: [0, 0], worst: 0 };
+  for (const kind of ['hatch', 'data']) {
+    const list = picks[kind], step = Math.max(1, Math.floor(list.length / n));
+    for (let i = 0; i < list.length && res[kind][0] < n; i += step) {
+      const q = list[i], px = await ww(([x, y]) => window.__ww.pixel(x, y), [q.x, q.y]);
+      res[kind][0]++;
+      if (kind === 'hatch') { if (!(px.every((c) => c === 152) || px.every((c) => c === 128))) res.hatch[1]++; }
+      else { const d = Math.max(...q.w.map((c, j) => Math.abs(c - px[j]))); res.worst = Math.max(res.worst, d); if (d > 1) res.data[1]++; }
+    }
+  }
+  return res;
+}
 const SHOTS = path.join(APP, 'screenshots');
 fs.mkdirSync(SHOTS, { recursive: true });
 
@@ -283,11 +347,11 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
   check(s.fontAtFirstText === 'loaded' && s.fontNow === 'loaded' && await ww(() => document.fonts.check('600 28px Archivo') && document.fonts.check('semi-condensed 400 10.5px Archivo')),
     `Archivo was ${s.fontAtFirstText} before the first canvas text, and is ${s.fontNow} now`);
   {
-    // the legend (§20 Q-5): the caption on one line, the credit one small line, the whole foot measured
-    const credit = siSp(snap.source.attribution).replace(/^Temperature:\s*/, 'Data: ').replace(' Surface Temperature Analysis (', ' (');
-    const lg = await ww(() => { const h = (id) => document.getElementById(id).getBoundingClientRect().height; return { legend: h('legend'), cap: h('legend-caption'), credit: h('legend-credit'), line: parseFloat(getComputedStyle(document.getElementById('legend-credit')).lineHeight) }; });
-    check(/^Anomaly vs\. each place’s 1951–1980 average, not temperature\.$/.test(s.legendCaption) && s.legendCredit === credit && lg.cap <= lg.line + 0.5 && lg.credit <= lg.line + 0.5 && lg.legend <= 70,
-      `the legend says anomaly, not temperature, on one line (${lg.cap.toFixed(1)} px), and the credit in one line (${lg.credit.toFixed(1)} px): "${s.legendCredit}"; the legend is ${lg.legend.toFixed(1)} px tall (was about 108)`);
+    // the legend (§20 Q-5; plan 0012): Difference | Absolute and the baseline key, the bar, the caption on
+    // one line; no credit on the front (it is About's first line under its sources)
+    const lg = await ww(() => { const h = (id) => document.getElementById(id).getBoundingClientRect().height; return { legend: h('legend'), cap: h('legend-caption'), line: parseFloat(getComputedStyle(document.getElementById('legend-caption')).lineHeight), credit: !!document.querySelector('#legend-credit, #credits, .legend-credit') }; });
+    check(/^Anomaly vs\. each place’s 1951–1980 average, not temperature\.$/.test(s.legendCaption) && !lg.credit && s.legendRow && s.measure === 'diff' && s.baseKey === 'Base 1951–1980' && lg.cap <= lg.line + 0.5 && lg.legend <= 92,
+      `the legend: "${s.baseKey}" and Difference chosen; the caption says anomaly, not temperature, on one line (${lg.cap.toFixed(1)} px); no credit line (${lg.credit}); the legend is ${lg.legend.toFixed(1)} px tall (65 with the credit before plan 0012, plus its 36 px row less the credit's 14)`);
     // the stamp (§20 Q-6): one line, the release, and the research mode in words (or when a live copy was made)
     const d = new Date(snap.generatedAt), want = `Data to ${newestLong}${snap.release.mode === 'research' ? ', archived copy' : `, updated ${MON[d.getMonth()]} ${d.getDate()}`}`;
     const st1 = await ww(() => { const a = document.getElementById('stamp-1').getBoundingClientRect(), b = document.getElementById('stamp-2').getBoundingClientRect(); return { same: Math.abs(a.top - b.top) < 0.5, h: document.getElementById('stamp').getBoundingClientRect().height }; });
@@ -457,8 +521,10 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     {
       // proper names stay out of a page translator's hands (QA nit): the place, GISS, GISTEMP, Archivo
       const tc = await untranslatable(ww, '#card', ['Fairbanks']), tl = await untranslatable(ww, '#legend');
-      check(tc.bad.length === 0 && tl.bad.length === 0 && tc.kept >= 1 && tl.kept >= 1,
-        `translate="no" on the names in the card (${tc.kept}: the place) and the legend (${tl.kept}: GISS); ${tc.bad.length + tl.bad.length} left bare${tc.bad.concat(tl.bad).length ? ': ' + tc.bad.concat(tl.bad).join(', ') : ''}`);
+      // plan 0012: the legend lost its credit line, so in Difference it names no source at all (Absolute's
+      // caption names GISS, kept in translate="no" too)
+      check(tc.bad.length === 0 && tl.bad.length === 0 && tc.kept >= 1,
+        `translate="no" on the names in the card (${tc.kept}: the place) and the legend (${tl.kept}); ${tc.bad.length + tl.bad.length} left bare${tc.bad.concat(tl.bad).length ? ': ' + tc.bad.concat(tl.bad).join(', ') : ''}`);
     }
     await A.shot('card', true);
     // the card follows the step without drawing itself again; the pin stays on the cell
@@ -554,7 +620,7 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const mid = await S(ww);
     await A.settle();
     s = await S(ww);
-    const n = capHere(lastComplete, true), wantN = `Map mean north of 64° N: ${cap2(n.h)}${Math.round(n.share * 10000) >= 10000 ? '' : `, data cover ${Math.round(n.share * 100)}${NN}% of it`}`;
+    const n = capHere(lastComplete, true), wantN = `Map mean north of 64° N: ${cap2(n.h)} vs. ${baseText}${Math.round(n.share * 10000) >= 10000 ? '' : `, data cover ${Math.round(n.share * 100)}${NN}% of it`}`;
     const pressed = await ww(() => [document.getElementById('arctic').getAttribute('aria-pressed'), document.getElementById('antarctic').getAttribute('aria-pressed')]);
     check(mid.turning && mid.view.globe.lat > 20 && mid.view.globe.lat < 72 && Math.abs(s.view.globe.lat - 72) < 1e-6 && Math.abs(s.view.globe.lon + 40) < 1e-6 && s.poleOn === 'n' && pressed.join() === 'true,false' && s.poleRead === wantN,
       `Arctic: turning at 250 ms (latitude ${mid.view.globe.lat.toFixed(1)}), then ${s.view.globe.lat.toFixed(4)}° N at longitude ${s.view.globe.lon.toFixed(4)}; the key on; "${s.poleRead}" (this file's sum: ${cap2(n.h)})`);
@@ -565,12 +631,12 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     await goto(ww, 1880);
     s = await S(ww);
     const n0 = capHere(0, true);
-    check(s.poleRead === `Map mean north of 64° N: ${cap2(n0.h)}, data cover ${Math.round(n0.share * 100)}${NN}% of it`, `the reading follows the step, and says how much of the cap has data: 1880 "${s.poleRead}"`);
+    check(s.poleRead === `Map mean north of 64° N: ${cap2(n0.h)} vs. ${baseText}, data cover ${Math.round(n0.share * 100)}${NN}% of it`, `the reading follows the step, and says how much of the cap has data: 1880 "${s.poleRead}"`);
     await goto(ww, y);
     await ww(() => window.__ww.pole('s')); await A.settle();
     s = await S(ww);
     const sc = capHere(lastComplete, false);
-    check(Math.abs(s.view.globe.lat + 72) < 1e-6 && s.poleOn === 's' && s.poleRead && s.poleRead.startsWith(`Map mean south of 64° S: ${cap2(sc.h)}`), `Antarctic: 72° S, "${s.poleRead}"`);
+    check(Math.abs(s.view.globe.lat + 72) < 1e-6 && s.poleOn === 's' && s.poleRead && s.poleRead.startsWith(`Map mean south of 64° S: ${cap2(sc.h)} vs. ${baseText}`), `Antarctic: 72° S, "${s.poleRead}"`);
     // a drag clears the key
     const cdp = await page.context().newCDPSession(page), pr = await ww(() => document.getElementById('panel').getBoundingClientRect().toJSON());
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: pr.left + 150, y: pr.top + 300 }] });
@@ -606,8 +672,17 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const k = lastComplete, cells = frames[k].reduce((n, b) => n + (b !== 255), 0);
     check(ab.text.includes('NASA does not endorse this app.') && ab.text.includes('Made with Natural Earth') && ab.text.includes('SIL Open Font License 1.1') && ab.text.includes(siSp(snap.source.attribution)) && !/\d (°C|km|%)/.test(ab.text)
       && ab.text.includes(`In ${ALL[k].year}, ${ALL[k].beyondScale.above} of the ${String(cells).replace(/\B(?=(\d{3})+(?!\d))/g, NN)} cells with a value lie above +4${NN}°C`)
-      && (snap.release.mode !== 'research' || ab.text.includes('Internet Archive')) && ab.text.includes('Version: 1.0'),
-    `About carries the credit line, NASA's non-endorsement, Natural Earth, Archivo's OFL, the ±4 °C count (${ALL[k].beyondScale.above} of ${cells} cells in ${ALL[k].year}), the research note and "Version: 1.0"`);
+      && (snap.release.mode !== 'research' || ab.text.includes('Internet Archive')) && ab.text.includes('Version: 1.1'),
+    `About carries the credit line, NASA's non-endorsement, Natural Earth, Archivo's OFL, the ±4 °C count (${ALL[k].beyondScale.above} of ${cells} cells in ${ALL[k].year}), the research note and "Version: 1.1"`);
+    {
+      // plan 0012: the credit constant is the first line under "Sources and citations", then the climatology's
+      // attribution; its source block with every citation; About explains Absolute and the baseline
+      const credit = siSp(snap.source.attribution).replace(/^Temperature:\s*/, 'Data: ').replace(' Surface Temperature Analysis (', ' (');
+      const sec = await ww(() => { const s = document.getElementById('ab-citations'), kids = [...s.children]; return { first: kids[1] && kids[1].id, firstText: kids[1] && kids[1].textContent, second: kids[2] && kids[2].textContent, tr: kids[1] && kids[1].getAttribute('translate'), heads: [...document.querySelectorAll('#about-body h3')].map((h) => h.textContent) }; });
+      check(sec.first === 'about-credit-line' && sec.firstText === credit && sec.tr === 'no' && sec.second === CLIM.source.attribution
+        && CLIM.source.citation.every((c) => ab.text.includes(c)) && ab.addr.includes(CLIM.source.url) && sec.heads.includes('Absolute: an estimated temperature') && sec.heads.includes('A baseline of your own'),
+      `About's sources open with the credit constant (#about-credit-line, translate="no"): "${sec.firstText}", then the climatology's attribution; its ${CLIM.source.citation.length} citations and address; the sections "Absolute: an estimated temperature" and "A baseline of your own"`);
+    }
     {
       const ta = await untranslatable(ww, '#about-body');
       check(ta.bad.length === 0 && ta.kept >= 8, `About: ${ta.kept} proper names (GISS, GISTEMP, Archivo, Natural Earth) in translate="no" spans, ${ta.bad.length} left bare${ta.bad.length ? ': ' + ta.bad.slice(0, 5).join(', ') : ''}`);
@@ -639,17 +714,25 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const gliding = await S(ww), moving = await ww(() => { const t = getComputedStyle(document.getElementById('track-row')).transform; return t === 'none' ? '' : t; });
     await A.settle(); await page.waitForTimeout(350);
     s = await S(ww);
-    const hid = await ww(() => ['top', 'strip', 'legend', 'yearrow', 'mode-seg'].map((id) => { const e = document.getElementById(id); return [id, e.hidden, e.inert, getComputedStyle(e).display]; }));
+    const hid = await ww(() => ['top', 'strip', 'yearrow', 'mode-seg'].map((id) => { const e = document.getElementById(id); return [id, e.hidden, e.inert, getComputedStyle(e).display]; }));
+    // the owner (plan 0012): "Full screen should not remove scale": the bar and its caption stay, the
+    // switch row goes
+    const keep = await ww(() => { const lg = document.getElementById('legend'), bar = document.getElementById('legend-bar').getBoundingClientRect(), row = document.getElementById('legend-row'), p = document.getElementById('panel').getBoundingClientRect(); return { shown: !lg.hidden && getComputedStyle(lg).display !== 'none', bar: bar.height, barIn: bar.top >= p.top && bar.bottom <= p.bottom, cap: document.getElementById('legend-caption').textContent, row: getComputedStyle(row).display, inert: row.inert }; });
     const aria = await page.locator('#app').ariaSnapshot();
     const act = await ww(() => document.activeElement && document.activeElement.id);
     const stored = await ww(() => localStorage.getItem('ww.focus'));
+    const live = await ww(() => document.getElementById('live').textContent);
     check(s.focus && hid.every((h) => h[1] && h[2] && h[3] === 'none') && stored === 'true' && act !== 'focus-exit',
       `focus by a touch: ${hid.map((h) => h[0]).join(', ')} hidden, inert and display none; ww.focus ${stored}; focus not moved (active: ${act || 'body'})`);
+    // HOUSE §4.10's sentence, said for this app: the scale stays, so it says so (ART.md item 29)
+    check(live === 'Controls hidden. The Earth, its scale and the stripes stay.', `focus mode says what stays: "${live}"`);
+    check(keep.shown && keep.bar === 30 && keep.barIn && keep.cap.startsWith('Anomaly vs.') && keep.row === 'none' && keep.inert,
+      `focus mode keeps the scale: the legend's bar (${keep.bar} px, inside the panel) and its caption "${keep.cap.slice(0, 40)}…"; its switch row ${keep.row}, inert ${keep.inert}`);
     const gk = await ww(() => { const p = document.getElementById('panel').getBoundingClientRect(), e = document.getElementById('focus-exit'), g = e.getBoundingClientRect(); return { right: +(p.right - g.right).toFixed(1), top: +(g.top - p.top).toFixed(1), w: g.width, h: g.height, pos: getComputedStyle(e).position }; });
     check(gk.pos === 'absolute' && gk.right >= 0 && gk.right <= 8 && gk.top >= 0 && gk.top <= 8 && gk.w >= 44 && gk.h >= 44,
       `the ghost key sits in the panel's top-right corner (${gk.pos}; ${gk.right} px from the right edge, ${gk.top} px from the top, ${gk.w} × ${gk.h})`);
-    check(/button "Show the controls and the color scale"/.test(aria) && !/About|radio "Globe"|Arctic|Last 24 months/.test(aria) && /slider "Year"/.test(aria),
-      'the accessibility tree has the ghost key, the stripes slider and the transport, and none of the hidden controls');
+    check(/button "Show the controls and the color scale"/.test(aria) && !/button "About"|radio "Globe"|Arctic|Last 24 months|radio "Difference"|Base 1951/.test(aria) && /slider "Year"/.test(aria) && /Anomaly vs/.test(aria),
+      'the accessibility tree has the ghost key, the stripes slider, the transport and the legend\'s caption, and none of the hidden controls');
     check(Math.abs(s.view.H - 732) < 1 && Math.abs(s.view.radius - 187.2) < 0.05 && s.view.factor === 0.48 && s.view.dy === 0 && s.focusName === ALL[lastComplete].label && (gliding.view.dy !== 0 || moving !== ''),
       `the Earth takes the freed rows: panel ${s.view.H} px (was ${before.view.H}), radius ${s.view.radius.toFixed(1)} px (was ${before.view.radius.toFixed(1)}); it glided (centre offset ${gliding.view.dy.toFixed(1)} px at 90 ms, the track ${moving || 'not'} moving); the step's name "${s.focusName}"`);
     await A.shot('focus', true);
@@ -665,8 +748,8 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     s = await S(ww);
     check(s.shown > ALL.findIndex((q) => q.year === 1950) && fn === figure(s.drawn) && flog.every((f) => f.label === figure(f.drawn)), `play in focus: to ${fn}; the step's name is the drawn step`);
     await ww(() => window.__ww.tap(-147.71, 64.84)); await A.settle();
-    const cb = await ww(() => { const p = document.getElementById('panel').getBoundingClientRect(), c = document.getElementById('card').getBoundingClientRect(); return { open: !document.getElementById('card').hidden, gap: Math.round(p.bottom - c.bottom), inPanel: c.top >= p.top }; });
-    check(cb.open && cb.gap === 8 && cb.inPanel, `a tap in focus opens the card over the Earth (${cb.gap} px from the panel's foot)`);
+    const cb = await ww(() => { const p = document.getElementById('panel').getBoundingClientRect(), c = document.getElementById('card').getBoundingClientRect(), l = document.getElementById('legend').getBoundingClientRect(); return { open: !document.getElementById('card').hidden, gap: Math.round(p.bottom - c.bottom), lg: Math.round(p.bottom - l.top), inPanel: c.top >= p.top }; });
+    check(cb.open && cb.gap === cb.lg + 6 && cb.inPanel, `a tap in focus opens the card over the Earth, 6 px above the legend that stays (${cb.gap} px from the panel's foot; the legend ${cb.lg} px)`);
     await page.keyboard.press('Escape');                        // the card first
     s = await S(ww);
     check(!s.card && s.focus, 'Escape closes the card first, and focus mode stays');
@@ -707,6 +790,104 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     check(worst[0] >= 4.5 && cw[1] >= 4.5, `text contrast: lowest ${worst[0].toFixed(2)}:1 over ${texts} rendered texts in ${styles} styles (${worst[1]}); canvas pairs lowest ${cw[1]}:1 (${cw[0]}) — ${runs[0][1].canvas.map((c) => `${c[0]} ${c[1]}`).join('; ')}`);
     const bad = runs.flatMap((r) => r[2].bad.map((b) => `${r[0]}: ${b}`)), nh = runs.reduce((n, r) => n + r[2].n, 0);
     check(bad.length === 0, `hit targets ≥ 44 × 44 px: ${nh} controls checked in ${runs.length} states${bad.length ? '; too small: ' + bad.join('; ') : ''}`);
+  }
+
+  // 12. plan 0012 3.3: Absolute, and a baseline of one's own
+  {
+    const y = ALL[lastComplete].year, cdp = await page.context().newCDPSession(page);
+    const tapAt = async (id) => { const r = await ww((i) => document.getElementById(i).getBoundingClientRect().toJSON(), id); await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: r.left + r.width / 2, y: r.top + r.height / 2 }] }); await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await page.waitForTimeout(120); };
+    await goto(ww, y); await setView(ww, { mode: 'globe', lon: -150, lat: 50, zoom: 1 });
+    const absBtn = await ww(() => { const r = document.querySelector('#measure-seg button[data-s="abs"]').getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: absBtn[0], y: absBtn[1] }] }); await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await A.settle();
+    s = await S(ww);
+    const est = absMeanHere(lastComplete);
+    check(s.measure === 'abs' && s.mean === `Global mean ${tempText(est)}${NN}°C (±0.5${NN}°C)` && s.legendCaption === 'Estimated temperature: each place’s 1951–1980 average plus GISS’s anomaly.' && s.cover === cover(ALL[lastComplete].coverage.area) && (await ww(() => localStorage.getItem('ww.measure'))) === '"abs"',
+      `Absolute, by a real tap: "${s.mean}" (this file: the climatology's ${(climMean[12] / 10).toFixed(3)} °C plus GISS's ${signed2(ALL[lastComplete].globalMean)}), "${s.legendCaption}", "${s.cover}"; stored`);
+    let px = await sampleBy(ww, (cell) => { const t = absT(lastComplete, cell); return t == null ? null : absHere(t / 10); });
+    check(px.data[1] === 0 && px.hatch[1] === 0 && px.data[0] >= 8, `Absolute ${y}: ${px.data[0]} cells drawn in this file's temperature ramp at the climatology plus the anomaly (worst channel off by ${px.worst}), ${px.hatch[0]} hatched, ${px.data[1] + px.hatch[1]} wrong`);
+    let above = 0, below = 0; for (let k = 0; k < 16200; k++) { const t = absT(lastComplete, k); if (t != null && t > 400) above++; if (t != null && t < -600) below++; }
+    check(s.stats.above === above && s.stats.below === below, `Absolute's counts beyond −60 and +40 °C: ${s.stats.below} below, ${s.stats.above} above (this file: ${below}, ${above})`);
+    await ww(() => window.__ww.tap(-147.71, 64.84)); await A.settle();
+    s = await S(ww);
+    const fa = absT(lastComplete, 12 * 180 + 16), fw = rdiv(fa, 10);
+    check(s.card && s.card.value === `${fw < 0 ? MINUS : ''}${Math.abs(fw)}${NN}°C` && s.card.when === `in ${y}, estimated: the cell’s 1951–1980 average plus GISS’s ${tenthsText(frames[lastComplete][12 * 180 + 16] - 127)}` && s.card.foot.endsWith('The chart shows the anomaly.'),
+      `Absolute's card on Fairbanks: "${s.card && s.card.value}" "${s.card && s.card.when}" (this file: ${tempText(fa)} °C to the whole degree)`);
+    { const tl = await untranslatable(ww, '#legend'); check(tl.bad.length === 0 && tl.kept >= 1, `Absolute's caption keeps GISS in translate="no" (${tl.kept}; ${tl.bad.length} bare)`); }
+    await A.shot('absolute', true);
+    await ww(() => window.__ww.clear());
+    await ww(() => window.__ww.pole('n')); await A.settle();
+    s = await S(ww);
+    check(s.poleRead === absCapText(lastComplete, true), `Absolute's Arctic reading: "${s.poleRead}" (this file: the climatology's cap mean plus the cap's mean anomaly)`);
+    // the Antarctic in 1880 and now: the whole cap's climatology, so coverage alone makes no trend (review 0012)
+    { await ww(() => window.__ww.pole('s')); await A.settle(); await goto(ww, 1880); await A.settle();
+      const r0 = (await S(ww)).poleRead; await goto(ww, y); await A.settle();
+      const r1 = (await S(ww)).poleRead, d0 = absCapHere(0, false).d, d1 = absCapHere(lastComplete, false).d;
+      check(r0 === absCapText(0, false) && r1 === absCapText(lastComplete, false) && Math.abs(d1 - d0) <= 3,
+        `Absolute's Antarctic reading, 1880 "${r0}" and ${y} "${r1}": the cap's climatology plus its anomaly, ${d1 - d0} °C apart (a mean of the cells with data read 20 °C apart)`); }
+    await setView(ww, { mode: 'globe', lon: -150, lat: 50, zoom: 1 });
+    const mk = L - 1;
+    await goto(ww, ALL[mk].month); await A.settle();
+    s = await S(ww);
+    px = await sampleBy(ww, (cell) => { const t = absT(mk, cell); return t == null ? null : absHere(t / 10); });
+    check(px.data[1] === 0 && px.hatch[1] === 0 && s.mean === `Global mean ${tempText(absMeanHere(mk))}${NN}°C (±0.5${NN}°C)`, `Absolute ${figure(mk)}: the month's own plane plus its anomaly, ${px.data[0]} cells right (worst ${px.worst}), ${px.data[1] + px.hatch[1]} wrong; "${s.mean}"`);
+    await ww(() => window.__ww.mode('annual')); await goto(ww, y);
+    { const c = await contrastOf(ww), h = await hitTargets(ww);
+      check(c.worst[0] >= 4.5 && h.bad.length === 0, `Absolute: text contrast lowest ${c.worst[0].toFixed(2)}:1 (${c.worst[1]}); ${h.n} controls ≥ 44 × 44 px${h.bad.length ? '; too small: ' + h.bad.join('; ') : ''}`); }
+    await ww(() => window.__ww.measure('diff')); await A.settle();
+    // a baseline: 1991–2020 by the hook, against this file's own means
+    const B9 = baseHere(1991, 2020);
+    await ww(() => window.__ww.base([1991, 2020])); await A.settle();
+    s = await S(ww);
+    px = await sampleBy(ww, (cell) => { const b = frames[lastComplete][cell]; return b === 255 || B9.base[cell] == null ? null : rampHere((b - 127 - B9.base[cell]) / 10); });
+    let a9 = 0; for (let k = 0; k < 16200; k++) { const b = frames[lastComplete][k]; if (b !== 255 && B9.base[k] != null && b - 127 - B9.base[k] > 40) a9++; }
+    check(s.base && s.base.join() === '1991,2020' && s.mean === meanText(lastComplete, '1991–2020', B9.h) && s.legendCaption === 'Anomaly vs. each place’s 1991–2020 average, not temperature.' && s.baseKey === 'Base 1991–2020' && s.stats.above === a9
+      && px.data[1] === 0 && px.hatch[1] === 0 && px.data[0] >= 8,
+      `baseline 1991–2020: "${s.mean}", "${s.legendCaption}", "${s.baseKey}"; ${px.data[0]} cells at the anomaly minus their mean (worst ${px.worst}), ${px.hatch[0]} hatched, ${px.data[1] + px.hatch[1]} wrong; ${s.stats.above} above +4 (this file ${a9}); ${B9.lacking} cells without a baseline`);
+    await ww(() => window.__ww.mode('months')); await A.settle();
+    s = await S(ww);
+    px = await sampleBy(ww, (cell) => { const b = frames[L - 1][cell]; return b === 255 ? null : rampHere((b - 127) / 10); });
+    check(s.mean === meanText(L - 1) && s.legendCaption.startsWith('Anomaly vs. each place’s 1951–1980 average') && s.baseKey === 'Base 1951–1980' && px.data[1] === 0 && px.hatch[1] === 0,
+      `a month stays against 1951–1980 with a baseline chosen: "${s.mean}", the key "${s.baseKey}", ${px.data[0]} cells at GISS's own value, ${px.data[1] + px.hatch[1]} wrong`);
+    await ww(() => window.__ww.mode('annual')); await goto(ww, y);
+    // the sheet, by real taps: the key opens it, ‹ on the last year moves it to 2019, the bracket and the map follow
+    await tapAt('base-key');
+    s = await S(ww);
+    const open1 = s.baseSheet;
+    await tapAt('b1-prev'); await A.settle();
+    s = await S(ww);
+    check(open1 && open1.b0 === '1991' && open1.b1 === '2020' && s.base.join() === '1991,2019' && s.baseSheet.b1 === '2019' && s.baseKey === 'Base 1991–2019' && s.legendCaption.includes('1991–2019'),
+      `the baseline's sheet by real taps: ${open1 && `${open1.b0}–${open1.b1}`}, then ‹ on the last year: ${s.base.join('–')}; the key "${s.baseKey}"; the note "${s.baseSheet.note.slice(0, 70)}…"`);
+    { const c = await contrastOf(ww), h = await hitTargets(ww);
+      check(c.worst[0] >= 4.5 && h.bad.length === 0, `the baseline's sheet: text contrast lowest ${c.worst[0].toFixed(2)}:1 (${c.worst[1]}); ${h.n} controls ≥ 44 × 44 px${h.bad.length ? '; too small: ' + h.bad.join('; ') : ''}`); }
+    await A.shot('baseline', true);
+    await tapAt('base-reset'); await A.settle();
+    s = await S(ww);
+    check(s.base === null && s.baseKey === 'Base 1951–1980' && s.mean === meanText(lastComplete) && (await ww(() => localStorage.getItem('ww.base'))) === null,
+      `"Back to GISS’s base" returns to 1951–1980: "${s.mean}"`);
+    await page.keyboard.press('Escape'); await A.settle();
+    s = await S(ww);
+    check(!s.baseSheet, 'Escape closes the sheet');
+    // Absolute with a chosen baseline: the card's sentence adds GISS's own anomaly, never the chart's difference
+    await ww(() => window.__ww.measure('abs')); await ww(() => window.__ww.base([1980, 2021])); await A.settle();
+    await goto(ww, y); await setView(ww, { mode: 'globe', lon: -150, lat: 50, zoom: 1 });
+    await ww(() => window.__ww.tap(-147.71, 64.84)); await A.settle();
+    s = await S(ww);
+    { const g = frames[lastComplete][12 * 180 + 16] - 127, c = climT[12][12 * 180 + 16], fw = rdiv(c + g, 10);
+      check(s.card && s.card.value === `${fw < 0 ? MINUS : ''}${Math.abs(fw)}${NN}°C` && s.card.when === `in ${y}, estimated: the cell’s 1951–1980 average plus GISS’s ${tenthsText(g)}` && s.baseKey === 'Base 1980–2021',
+        `Absolute with Base 1980–2021, Fairbanks: "${s.card && s.card.value}" "${s.card && s.card.when}" (the climatology ${tempText(c)} plus GISS's own ${tenthsText(g)})`); }
+    await ww(() => window.__ww.clear());
+    await ww(() => window.__ww.base([1880, 1900])); await setView(ww, { mode: 'globe', lon: 0, lat: -72, zoom: 1 }); await A.settle();
+    { const seen = [];
+      for (const [lon, lat] of [[0, -80], [20, -75], [-60, -70], [100, -70]]) {
+        await ww(([a, b]) => window.__ww.tap(a, b), [lon, lat]); await A.settle();
+        const c = (await S(ww)).card, row = Math.floor((90 - lat) / 2), col = Math.floor((lon + 180) / 2), b = frames[lastComplete][row * 180 + col];
+        const want = b === 255 ? null : `in ${y}, estimated: the cell’s 1951–1980 average plus GISS’s ${tenthsText(b - 127)}`;
+        seen.push([lon, lat, c && c.when, !!c && !/3276/.test(`${c.when} ${c.value} ${c.note}`) && (want ? c.when === want : c.value === null)]);
+        await ww(() => window.__ww.clear());
+      }
+      check(seen.every((x) => x[3]), `Absolute with Base 1880–1900 on Antarctic cells: no −3276.8 °C; ${seen.map((x) => `(${x[0]}, ${x[1]}) "${x[2]}"`).join('; ')}`); }
+    await ww(() => window.__ww.base(null)); await ww(() => window.__ww.measure('diff')); await A.settle();
   }
 
   check(A.errors.length === 0, `no console errors or warnings, page errors, failed or outside requests${A.errors.length ? ': ' + A.errors.slice(0, 5).join(' | ') : ''}`);
@@ -764,7 +945,10 @@ console.log('\n== once (light)');
     const rect = await ww(() => document.getElementById('track').getBoundingClientRect().toJSON());
     const n = NY, inner0 = rect.left + 1, innerW = rect.width - 2, xOf = (i) => inner0 + ((i + 0.5) * innerW) / n, y = rect.top + 30;
     const under = (x) => Math.max(0, Math.min(n - 1, Math.floor(((x - inner0) / innerW) * n)));
-    for (const speed of [2, 8, 20]) {
+    for (const [speed, how] of [[2, 'diff'], [8, 'diff'], [20, 'diff'], [8, 'abs'], [8, '1880–1900']]) {
+      // plan 0012: the scrub stays sharp in Absolute and with a chosen baseline as well
+      await ww((h) => window.__ww.measure(h === 'abs' ? 'abs' : 'diff'), how);
+      await ww((h) => window.__ww.base(h === '1880–1900' ? [1880, 1900] : null), how);
       await goto(ww, 1880);
       const T = ((n - 1) / speed) * 1000;
       await ww(() => window.__ww.log(true));
@@ -791,10 +975,12 @@ console.log('\n== once (light)');
       }
       const after = log.find((f, i) => !f.pressed && i > 0 && log[i - 1].pressed);
       const seen = new Set(held.map((f) => f.drawn)).size;
+      const gaps = held.slice(1).map((f, i) => f.t - held[i].t), maxGap = gaps.length ? Math.max(...gaps) : 0;
       const secs = held.length ? (held[held.length - 1].t - held[0].t) / 1000 : 0;
       check(held.length > 0 && mismatch === 0 && labelBad === 0 && after && after.drawn === n - 1,
-        `scrub at ${speed} steps a second (${(T / 1000).toFixed(1)} s, ${sent} touch moves, ${held.length} frames at ${(held.length / Math.max(secs, 1e-3)).toFixed(0)} a second): the drawn step is the step under the finger on every frame (${mismatch} differ${firstBad ? `, first ${JSON.stringify(firstBad)}` : ''}), the label the drawn step (${labelBad} differ); ${seen} of ${n} steps drawn; first frame after the lift draws ${after && figure(after.drawn)}`);
+        `scrub at ${speed} steps a second${how === 'diff' ? '' : how === 'abs' ? ' in Absolute' : ` against ${how}`} (${(T / 1000).toFixed(1)} s, ${sent} touch moves, ${held.length} frames at ${(held.length / Math.max(secs, 1e-3)).toFixed(0)} a second): the drawn step is the step under the finger on every frame (${mismatch} differ${firstBad ? `, first ${JSON.stringify(firstBad)}` : ''}), the label the drawn step (${labelBad} differ); ${seen} of ${n} steps drawn (longest frame gap ${maxGap.toFixed(0)} ms); first frame after the lift draws ${after && figure(after.drawn)}`);
     }
+    await ww(() => window.__ww.measure('diff')); await ww(() => window.__ww.base(null));
     perf = await ww(() => window.__ww.perf());
     console.log(`      __ww.perf() after the scrub (SwiftShader, trend only): earth draw submit median ${perf.earth.median} ms, p95 ${perf.earth.p95}; overlay ${perf.overlay.n ? `median ${perf.overlay.median} ms` : 'not redrawn (a step change never touches it)'}; frame total median ${perf.total.median} ms, p95 ${perf.total.p95}, max ${perf.total.max}`);
   }
@@ -998,6 +1184,16 @@ console.log('\n== once (light)');
     await B.page.waitForFunction(() => window.__ww && window.__ww.ready(), null, { timeout: 60000 });
     s = await S(B.ww);
     check(s.focus && s.focusName === 'Mar 2025' && Math.abs(s.view.H - 732) < 1, `focus mode is restored before the first draw ("${s.focusName}", panel ${s.view.H} px)`);
+    // plan 0012: Absolute and a chosen baseline are remembered (the baseline once every frame is decoded)
+    await B.ww(() => window.__ww.focus(false)); await B.ww(() => window.__ww.mode('annual'));
+    await B.ww(() => window.__ww.measure('abs')); await B.ww(() => window.__ww.base([1961, 1990])); await B.settle();
+    await B.page.reload();
+    await B.page.waitForFunction(() => window.__ww && window.__ww.ready(), null, { timeout: 60000 });
+    await B.settle();
+    s = await S(B.ww);
+    check(s.measure === 'abs' && s.base && s.base.join() === '1961,1990' && s.baseKey === 'Base 1961–1990' && s.mean.startsWith('Global mean ') && s.mean.endsWith(`(±0.5${NN}°C)`),
+      `a reload restores Absolute ("${s.mean}") and the baseline ${s.base && s.base.join('–')} ("${s.baseKey}")`);
+    await B.ww(() => window.__ww.measure('diff')); await B.ww(() => window.__ww.base(null));
     await B.ctx.close();
   }
 
@@ -1084,7 +1280,8 @@ console.log('\n== once (light)');
   for (const scheme of schemes.filter((x) => x !== 'none')) {
     const B = await open(scheme, { desktop: true });
     const controls = [['About', '#about-key', '::before'], ['Arctic', '#arctic', '::before'], ['the stamp', '#stamp', '::before'], ['Map', '#view-seg button[data-v="map"]', '::after'],
-      ['Last 24 months', '#mode-seg button[data-m="months"]', '::after'], ['the legend caption', '#legend-caption', '::after'], ['‹', '#prev', '::before'], ['the focus key', '#focus-key', '::before'], ['▶', '#play', 'circle']];
+      ['Last 24 months', '#mode-seg button[data-m="months"]', '::after'], ['the legend caption', '#legend-caption', '::after'], ['‹', '#prev', '::before'], ['the focus key', '#focus-key', '::before'], ['▶', '#play', 'circle'],
+      ['Absolute', '#measure-seg button[data-s="abs"]', '::after'], ['the baseline key', '#base-key', '::before']];
     const read = (sel, pseudo) => B.ww(([sel, pseudo]) => { const e = document.querySelector(sel), cs = getComputedStyle(e); return { color: cs.color, plate: pseudo === 'circle' ? getComputedStyle(e.querySelector('circle')).fill : getComputedStyle(e, pseudo).backgroundColor, outline: `${cs.outlineStyle} ${cs.outlineWidth}` }; }, [sel, pseudo]);
     const rows = [], bad = [];
     for (const [name, sel, pseudo] of controls) {

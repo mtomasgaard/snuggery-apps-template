@@ -4,18 +4,26 @@
 //   2. no http:// or https:// in any .html, .css or .js the app ships, not even in a comment;
 //   3. every import / src / href / fetch( / url( and every data path the code names is relative, inside
 //      the folder and present;
-//   4. assets/ holds exactly world.json, places.json and about.json; data/ only snapshot.json; fonts/
-//      exactly archivo-ww.woff2 and OFL.txt;
-//   5. miniapp.json is valid;
+//   4. assets/ holds exactly world.json, places.json, about.json and climatology.json (plan 0012 3.3: the
+//      1951–1980 climatology for Absolute, ≤ 120,000 bytes, readable by js/measure.js); data/ only
+//      snapshot.json; fonts/ exactly archivo-ww.woff2 and OFL.txt;
+//   5. miniapp.json is valid, version 1.1 (plan 0012; HOUSE §13);
 //   6. no AI vendor or model name in any shipped text file, DESIGN.md and ART.md included (US Quakes'
 //      list, stored ROT13; the snapshot's base64 maps are skipped, its strings are read);
 //   7. js/ramp.js: its stops equal ART.md's table; DESIGN §7.1's constraints (lightness symmetric within
 //      0.02 at every 0.1 °C to 4, falling from 0 to each end, chroma at 0 ≤ 0.02; under deutan and protan
 //      simulation (Machado 2009) ΔE(OKLab) ≥ 0.15 between −4 and +4, ≥ 0.08 between ±1 and 0, and the
-//      ends ≥ 0.08 from both hatch grays); the map scale ±4 and the stripes scale ±1.5;
+//      ends ≥ 0.08 from both hatch grays); the map scale ±4 and the stripes scale ±1.5; and Absolute's
+//      ramp (ART "The temperature ramp"): its stops equal ART's table, in sRGB's gamut, chroma ≥ 0.05
+//      everywhere, lightness rising at every 1 °C from −60 to +40 under normal, deutan, protan and tritan
+//      vision, its 10 °C steps within a factor 1.75 of each other, its ends ≥ 0.6 apart, and every value
+//      ≥ 0.07 from both hatch grays (≥ 0.03 under the simulations: the hatch is a pattern as well);
+//   7b. the credit (HOUSE §4.15, plan 0012 change list item 1): no credit line on the front
+//      (index.html has no legend-credit or credits element), the constant unchanged in js/readout.js,
+//      and About writes it as #about-credit-line;
 //   8. every chrome color token in style.css, both themes, has OKLCh chroma < 0.001; index.html's two
 //      theme-color metas are each theme's --page;
-//   9. app code (index.html, style.css, js/*.js) ≤ 200,000 bytes; data/snapshot.json ≤ 1,500,000;
+//   9. app code (index.html, style.css, js/*.js) ≤ 223,000 bytes (the lead's ruling, plan 0012 3.3); data/snapshot.json ≤ 1,500,000;
 //      fonts/ ≤ 250,000;
 //  10. the ZIP, built exactly as build-zips.yml builds it, has index.html at its top and is ≤ 2,000,000
 //      bytes (every size printed).
@@ -26,7 +34,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { STOPS, rampLab, oklabToLinear, MAP_SCALE, STRIPES_SCALE, HATCH_GROUND, HATCH_LINE } from '../js/ramp.js';
+import { STOPS, rampLab, oklabToLinear, MAP_SCALE, STRIPES_SCALE, HATCH_GROUND, HATCH_LINE, ABS_STOPS, absLab, ABS_LO, ABS_HI } from '../js/ramp.js';
+import { checkClim } from '../js/measure.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fails = [];
@@ -82,7 +91,11 @@ const exactly = (dir, names) => {
   const want = [...names].sort();
   ok(JSON.stringify(have) === JSON.stringify(want), `${dir}/ holds exactly ${want.length} files: ${want.join(', ')}${JSON.stringify(have) === JSON.stringify(want) ? '' : ` — found ${have.join(', ')}`}`);
 };
-exactly('assets', ['world.json', 'places.json', 'about.json']);
+exactly('assets', ['world.json', 'places.json', 'about.json', 'climatology.json']);
+{
+  const raw = read('assets/climatology.json'), bad = checkClim(JSON.parse(raw));
+  ok(!bad && raw.length <= 120000, `assets/climatology.json ${fmt(Buffer.byteLength(raw))} bytes (cap 120,000), ${bad || 'readable by js/measure.js'}: ${JSON.parse(raw).source.name}`);
+}
 exactly('data', ['snapshot.json']);
 exactly('fonts', ['archivo-ww.woff2', 'OFL.txt']);
 
@@ -91,7 +104,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Warming World' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.0',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -142,6 +155,33 @@ ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped 
     ok(ends >= 0.15 && n1 >= 0.08 && p1 >= 0.08 && hz >= 0.08, `ramp under ${name} vision: ΔE(−4, +4) ${ends.toFixed(3)} (≥ 0.15), ΔE(−1, 0) ${n1.toFixed(3)}, ΔE(+1, 0) ${p1.toFixed(3)} (≥ 0.08), ends to the hatch ${hz.toFixed(3)} (≥ 0.08)`);
   }
   ok(MAP_SCALE === 4 && STRIPES_SCALE === 1.5, `scales: the map ±${MAP_SCALE} °C, the stripes ±${STRIPES_SCALE} °C`);
+  // Absolute's ramp: ART's table, then its constraints
+  const esc = (t) => t.replace(/[()]/g, (c) => `\\${c}`);
+  const arow = (label) => ((read('ART.md').match(new RegExp(`^\\| ${esc(label)} \\|([^\\n]+)`, 'm')) || [, ''])[1]).split('|').map((x) => x.trim()).filter(Boolean)
+    .map((x) => Number(x.replace('−', '-').replace('+', '')));
+  const at = [arow('°C (Absolute)'), arow('L (Absolute)'), arow('C (Absolute)'), arow('h (Absolute)')];
+  ok(at[0].length === ABS_STOPS.length && ABS_STOPS.every((s, i) => s.every((v, j) => Math.abs(v - at[j][i]) < 1e-9)) && ABS_LO === -60 && ABS_HI === 40,
+    `js/ramp.js's ${ABS_STOPS.length} temperature stops equal ART.md's table (°C ${at[0].join(' ')}), the scale ${ABS_LO} to +${ABS_HI} °C`);
+  let gam = 0, minC = 9;
+  for (let v = ABS_LO; v <= ABS_HI + 1e-9; v += 0.1) { const l = absLab(v); minC = Math.min(minC, Math.hypot(l[1], l[2])); gam = Math.max(gam, ...oklabToLinear(...l).map((c) => Math.max(c - 1, -c))); }
+  ok(gam <= 1e-4 && minC >= 0.05, `temperature ramp: in sRGB's gamut (worst ${gam.toFixed(5)} outside), chroma at least ${minC.toFixed(4)} (≥ 0.05) at every 0.1 °C`);
+  for (const [name, m] of Object.entries({ ...CVD, tritan: [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.303900]] })) {
+    const s = (v) => sim(absLab(v), m);
+    let mono = true;
+    for (let v = ABS_LO + 1; v <= ABS_HI; v++) mono = mono && s(v)[0] > s(v - 1)[0];
+    const steps = []; for (let v = ABS_LO; v < ABS_HI; v += 10) steps.push(dE(s(v), s(v + 10)));
+    const hz = Math.min(...Array.from({ length: ABS_HI - ABS_LO + 1 }, (_, i) => Math.min(...hatch.map((h) => dE(s(ABS_LO + i), sim(h, m))))));
+    const ratio = Math.max(...steps) / Math.min(...steps), ends = dE(s(ABS_LO), s(ABS_HI));
+    ok(mono && ratio <= 1.75 && ends >= 0.6 && hz >= (m ? 0.03 : 0.07), `temperature ramp under ${name} vision: lightness rises at every 1 °C ${mono}; 10 °C steps ΔE ${Math.min(...steps).toFixed(3)}–${Math.max(...steps).toFixed(3)} (ratio ${ratio.toFixed(2)} ≤ 1.75); ends ${ends.toFixed(3)} (≥ 0.6); to the hatch ≥ ${hz.toFixed(3)} (≥ ${m ? 0.03 : 0.07})`);
+  }
+}
+
+// 7b. The credit is About's, not the front's (HOUSE §4.15; plan 0012 change list item 1)
+{
+  const html = read('index.html'), rd = read('js/readout.js'), ab = read('js/about.js');
+  const constant = /\.replace\(\/\^Temperature:\\s\*\/, 'Data: '\)\.replace\(\/ Surface Temperature Analysis \\\(\/, ' \('\)/.test(rd);
+  ok(!/legend-credit|id="credits"/.test(html) && !/legend-credit/.test(read('style.css')) && constant && /about-credit-line/.test(ab),
+    'the credit: no credit element on the front (index.html, style.css), the constant unchanged (js/readout.js creditLine), written into About as #about-credit-line');
 }
 
 // 8. The chrome is gray: every color token in style.css, both themes, has OKLCh chroma < 0.001
@@ -177,7 +217,7 @@ ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped 
 }
 const codeFiles = code.filter((f) => f === 'index.html' || f === 'style.css' || /^js\/[^/]+\.js$/.test(f));
 const codeBytes = codeFiles.reduce((n, f) => n + fs.statSync(path.join(APP, f)).size, 0);
-ok(codeBytes <= 200000, `app code ${fmt(codeBytes)} bytes (budget 200,000; DESIGN's estimate 110,000): ${codeFiles.map((f) => `${f} ${fmt(fs.statSync(path.join(APP, f)).size)}`).join(', ')}`);
+ok(codeBytes <= 223000, `app code ${fmt(codeBytes)} bytes (budget 223,000, the lead's ruling on the measured figure, plan 0012 3.3; DESIGN's estimate 110,000): ${codeFiles.map((f) => `${f} ${fmt(fs.statSync(path.join(APP, f)).size)}`).join(', ')}`);
 const snapBytes = fs.statSync(path.join(APP, 'data/snapshot.json')).size;
 ok(snapBytes <= 1500000, `data/snapshot.json ${fmt(snapBytes)} bytes (cap 1,500,000)`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + fs.statSync(path.join(APP, f)).size, 0);

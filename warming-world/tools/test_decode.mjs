@@ -10,7 +10,13 @@
 //      rows in every row, a cap with values in one row rounded exactly as the integers round, About's
 //      placeholders all filled from the snapshot, the card's place phrase;
 //   6. deliberately broken copies fail with the expected sentence: a frame cut by one byte, a frame
-//      one byte long, a wrong nx, a gap in the years, a misnamed partial year, an HTML body.
+//      one byte long, a wrong nx, a gap in the years, a misnamed partial year, an HTML body;
+//   7. plan 0012 3.3: assets/climatology.json decodes through js/measure.js to the bytes Node's zlib and
+//      a row-delta undone here give, its global means equal the build's, the partial plane is the mean
+//      of its months; js/measure.js's numbers against sums written here: Absolute (Fairbanks −4.5 +
+//      2.5 = −2.0 °C), a chosen baseline (each cell's mean over the span where it has two thirds of the
+//      years, GISS's global means re-expressed), 1951–1980 chosen again is GISS's own (no change), and
+//      a month is never re-expressed.
 //
 //   node tools/test_decode.mjs
 
@@ -22,6 +28,7 @@ import { validate, index, decodeAll, decodeFrame, cellOf, capMean, CELLS, NONE, 
 import { fill } from '../js/about.js';
 import { placePhrase } from '../js/card.js';
 import { tenths, percent, hundredths, cellBounds, group, roundDiv } from '../js/units.js';
+import { createMeasure, checkClim, decodeClim, NIL } from '../js/measure.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const raw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
@@ -132,6 +139,52 @@ ok(wj.land.length === 1420 && w.land.n === ringsIn(wj.land) && wj.lakes.length =
   const u2 = []; fill('{coverage:1700} {colour}', idx, u2);
   ok(u2.length === 2, `an unknown placeholder is reported, not filled: ${u2.join(', ')}`);
   ok(placePhrase(pl, 12, 16) === ', with Fairbanks' && placePhrase(pl, 44, 0) === '', `the card's place phrase: 64–66° N, 148–146° W${placePhrase(pl, 12, 16)}; 0–2° N, 180–178° W "${placePhrase(pl, 44, 0)}" (open ocean)`);
+}
+
+// 7. the climatology and the measure (plan 0012 3.3)
+{
+  const cj = JSON.parse(fs.readFileSync(path.join(APP, 'assets/climatology.json'), 'utf8'));
+  ok(checkClim(cj) === null, `assets/climatology.json: ${checkClim(cj) || 'the shape js/measure.js reads'} (${cj.planes.length} planes, ${cj.encoding.order.join(' ')})`);
+  const C = await decodeClim(cj, idx.partialMonths);
+  // the same planes, here: Node's zlib, the row delta undone by a running sum, −80 + 0.5·b in tenths
+  let differ = 0;
+  const own = cj.planes.map((b64) => { const d = zlib.inflateSync(Buffer.from(b64, 'base64')), t = new Int16Array(CELLS); for (let r = 0; r < 90; r++) { let acc = 0; for (let c = 0; c < 180; c++) { acc = (acc + d[r * 180 + c]) % 256; t[r * 180 + c] = acc === 255 ? NIL : -800 + 5 * acc; } } return t; });
+  own.forEach((t, p) => { for (let k = 0; k < CELLS; k++) if (t[k] !== C.t[p * CELLS + k]) differ++; });
+  const gmOk = cj.globalMeanTenths.every((g, p) => Math.round(C.gm[p]) === g);
+  ok(differ === 0 && gmOk, `13 planes decode through js/measure.js equal to Node's zlib and a row delta undone here (${differ} cells differ); global means in tenths ${Array.from(C.gm.slice(0, 13), (g) => Math.round(g)).join(' ')} equal the build's (${gmOk})`);
+  let pd = 0;
+  for (let k = 0; k < CELLS; k++) { let sum = 0; for (let m = 0; m < idx.partialMonths; m++) sum += own[m][k]; if (roundDiv(sum, idx.partialMonths) !== C.t[13 * CELLS + k]) pd++; }
+  ok(pd === 0, `the partial year's plane is the mean of its ${idx.partialMonths} months' planes, half away from zero (${pd} cells differ); its global mean ${(C.gm[13] / 10).toFixed(2)} °C`);
+  const F = 12 * 180 + 16, k25 = idx.years.indexOf(2025);
+  ok(C.t[12 * CELLS + F] === -45 && C.t[F] === -235 && C.t[6 * CELLS + F] === 145, `Fairbanks' cell (row 12, column 16), 1951–1980: year ${tenths(C.t[12 * CELLS + F])}, January ${tenths(C.t[F])}, July ${tenths(C.t[6 * CELLS + F])} °C (the build printed −4.5, −23.5, +14.5)`);
+  const M = createMeasure(); M.clim = C; M.bind(idx, frames, new Uint8Array(idx.L).fill(1));
+  M.abs = true;
+  const a25 = M.value(k25, F), m0 = idx.ny, mm = +idx.monthKeys[0].slice(5) - 1;
+  const want25 = -45 + idx.tenths[frames[k25 * CELLS + F]];
+  ok(a25 === want25 && a25 === -20 && M.value(m0, F) === (frames[m0 * CELLS + F] === NONE ? null : C.t[mm * CELLS + F] + idx.tenths[frames[m0 * CELLS + F]]),
+    `Absolute: Fairbanks in 2025 is ${tenths(a25)} °C (the year's −4.5 plus GISS's ${tenths(idx.tenths[frames[k25 * CELLS + F]])}); in ${idx.monthKeys[0]} its month's plane plus the month's anomaly`);
+  const est = M.absMean(k25), byHand = roundDiv(Math.round(C.gm[12] * 10) + idx.meanH[k25], 10);
+  ok(est === byHand && est >= 140 && est <= 160, `the global estimate for 2025: ${tenths(est)} °C = the climatology's ${(C.gm[12] / 10).toFixed(3)} °C plus GISS's ${hundredths(idx.meanH[k25])} °C`);
+  // a chosen baseline, 1991–2020, against sums written here
+  M.abs = false; M.setSpan([1991, 2020]);
+  const i0 = idx.years.indexOf(1991);
+  let bd = 0, lack = 0;
+  for (let k = 0; k < CELLS; k++) {
+    let sum = 0, n = 0;
+    for (let i = i0; i < i0 + 30; i++) { const b = frames[i * CELLS + k]; if (b !== NONE) { sum += idx.tenths[b]; n++; } }
+    const want = n >= 20 ? roundDiv(sum, n) : NIL;
+    if (want === NIL) lack++;
+    if (M.base[k] !== want) bd++;
+  }
+  let gh = 0; for (let i = i0; i < i0 + 30; i++) gh += idx.meanH[i];
+  ok(M.custom() && bd === 0 && M.lacking === lack && M.need === 20 && M.baseH === roundDiv(gh, 30) && M.meanH(k25) === idx.meanH[k25] - roundDiv(gh, 30),
+    `baseline 1991–2020: every cell's mean equals this file's sum (${bd} differ), ${lack} cells with fewer than 20 of 30 years have none; GISS's 2025 global mean re-expressed ${hundredths(M.meanH(k25))} °C`);
+  const v25 = M.value(k25, F), raw25 = idx.tenths[frames[k25 * CELLS + F]];
+  ok(v25 === raw25 - M.base[F] && M.value(idx.ny, F) === (frames[idx.ny * CELLS + F] === NONE ? null : idx.tenths[frames[idx.ny * CELLS + F]]) && M.meanH(idx.ny) === idx.meanH[idx.ny],
+    `Fairbanks against 1991–2020 in 2025: ${tenths(v25)} °C (${tenths(raw25)} minus its mean ${tenths(M.base[F])}); a month is never re-expressed`);
+  M.setSpan([1951, 1980]);
+  const s25 = M.stats(k25);
+  ok(!M.custom() && M.value(k25, F) === raw25 && s25.above === idx.above[k25] && s25.area === idx.area[k25], 'choosing 1951–1980 again is GISS\'s own base: the values and counts are the snapshot\'s');
 }
 
 // 6. broken copies

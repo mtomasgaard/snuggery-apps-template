@@ -65,3 +65,36 @@ export function buildLut() {
   return lut;
 }
 export const css = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+/* ── Absolute mode (plan 0012 3.3; ART "The temperature ramp"): a sequential ramp, −60 to +40 °C,
+   lightness rising from the coldest to the warmest, the same in both themes. Its hues run violet,
+   indigo, blue, teal, sage, sand: never the anomaly ramp's red and white, so the two maps cannot be
+   read for each other. tools/check.mjs asserts the stops equal ART's table and the constraints. ── */
+export const ABS_STOPS = [
+  [-60, 0.270, 0.080, 305],
+  [-40, 0.400, 0.120, 280],
+  [-20, 0.530, 0.120, 255],
+  [0, 0.665, 0.085, 220],
+  [10, 0.735, 0.070, 180],
+  [20, 0.805, 0.070, 125],
+  [30, 0.875, 0.075, 95],
+  [40, 0.945, 0.050, 85],
+];
+export const ABS_LO = -60, ABS_HI = 40;
+const ALABS = ABS_STOPS.map(([v, L, C, h]) => [v, L, C * Math.cos((h * Math.PI) / 180), C * Math.sin((h * Math.PI) / 180)]);
+/** OKLab of the temperature ramp at v °C (clamped to −60 … +40). */
+export function absLab(v) {
+  v = Math.max(ABS_LO, Math.min(ABS_HI, v));
+  let i = 0;
+  while (i < ALABS.length - 2 && v > ALABS[i + 1][0]) i++;
+  const p = ALABS[i], n = ALABS[i + 1], t = (v - p[0]) / (n[0] - p[0]);
+  return [p[1] + (n[1] - p[1]) * t, p[2] + (n[2] - p[2]) * t, p[3] + (n[3] - p[3]) * t];
+}
+export const absRGB = (v) => oklabToLinear(...absLab(v)).map(encode);
+/** 1024 × 1 RGBA: entry i is the ramp at (i − 600) tenths of a degree, so −60.0 … +40.0 °C at 0.1 °C
+ *  (entries past 1000 repeat the warm end; the shader clamps first). */
+export function buildAbsLut() {
+  const lut = new Uint8Array(1024 * 4);
+  for (let i = 0; i < 1024; i++) lut.set([...absRGB((Math.min(i, 1000) - 600) / 10), 255], i * 4);
+  return lut;
+}

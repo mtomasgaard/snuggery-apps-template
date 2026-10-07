@@ -14,6 +14,8 @@ export const FS = `#version 300 es
 precision highp float;
 precision highp int;
 precision highp sampler2DArray;
+precision highp isampler2D;
+precision highp isampler2DArray;
 uniform highp sampler2DArray uData;   // 180 × 90 × L, R8, row 0 = 88–90° N, column 0 = 180–178° W
 uniform sampler2D uLut;               // 256 × 1 RGBA8: byte → the ramp's color (ramp.js)
 uniform int uProj;                    // 0 globe, 1 map
@@ -24,6 +26,12 @@ uniform float uLam0, uPhi0;           // the view's centre, radians
 uniform float uPanY;                  // the map's vertical pan, Equal Earth units
 uniform float uDpr;                   // device px per CSS px (the hatch is laid out in CSS px)
 uniform vec3 uCard;                   // --card, the ground
+// plan 0012 3.3: a chosen baseline (each cell's mean over the span, tenths, −32768 for none) and the
+// Absolute mode (the 1951–1980 climatology in tenths, 14 layers; its own LUT, −60.0 … +40.0 °C)
+uniform highp isampler2D uBase;       // 180 × 90 R16I
+uniform highp isampler2DArray uClim;  // 180 × 90 × 14 R16I
+uniform sampler2D uLutAbs;            // 1024 × 1 RGBA8: entry i is (i − 600) tenths
+uniform int uBaseOn, uAbs, uClimLayer;
 out vec4 outColor;
 
 const float PI = 3.141592653589793;
@@ -64,13 +72,21 @@ void main() {
   int row = clamp(int(floor((90.0 - degrees(phi)) * 0.5)), 0, 89);
   int b = int(texelFetch(uData, ivec3(col, row, uLayer), 0).r * 255.0 + 0.5);
   vec3 c;
-  if (b == 255) {
+  int v = b - 127, nil = 0;                             // tenths of a degree, integers end to end
+  if (b != 255 && uAbs == 1) {
+    int t = texelFetch(uClim, ivec3(col, row, uClimLayer), 0).r;
+    if (t == -32768) nil = 1; else v += t;
+  } else if (b != 255 && uBaseOn == 1) {
+    int s = texelFetch(uBase, ivec2(col, row), 0).r;
+    if (s == -32768) nil = 1; else v -= s;
+  }
+  if (b == 255 || nil == 1) {
     // No data: a hatch fixed to the screen, 45°, 6 CSS px along a row, lines 1.5 CSS px across
     // (ART's study geometry), so absence is drawn and reads darker than the card.
     float t = mod((gl_FragCoord.x - gl_FragCoord.y) / uDpr, 6.0);
     c = t < 2.1213203 ? HATCH_LINE : HATCH_GROUND;
   } else {
-    c = texelFetch(uLut, ivec2(b, 0), 0).rgb;
+    c = uAbs == 1 ? texelFetch(uLutAbs, ivec2(clamp(v + 600, 0, 1000), 0), 0).rgb : texelFetch(uLut, ivec2(clamp(v + 127, 0, 254), 0), 0).rgb;
   }
   outColor = vec4(mix(uCard, c, inside), 1.0);
 }`;

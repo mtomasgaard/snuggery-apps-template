@@ -1,5 +1,11 @@
 # Warming World — design
 
+**Plan 0012 (2026-10-06).** Version 1.1 adds Absolute (an ERA5-based 1951–1980 average plus GISS's anomaly,
+an estimate), a baseline of one's own in Difference (Base), the legend kept in focus mode, and the
+credit moved from the legend into About. `ART.md` items 26–30 and `NOTES.md` describe them; where
+this file says otherwise (§7.3's credit line, §10's legend hidden in focus mode, "an anomaly, never a
+temperature"), they are what the app does now. `tools/DECISIONS.md` holds the pass's reasons.
+
 The brief is `docs/plans/0010-four-showcase-apps.md`, "Idea 2 — recommendation: Warming World
 (GISTEMP)", with the rules for all four apps under "Recommendation and order" (the art-direction
 stage, SI units, the focus mode, sharp scrubbing; decision log D11, D15, D18, D19, D20). The sources,

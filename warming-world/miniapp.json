@@ -3,5 +3,5 @@
   "name": "Warming World",
   "entryPoint": "index.html",
   "description": "NASA GISS temperature anomalies against 1951–1980 on a globe and an equal-area map, every year since 1880 and the last 24 months. Scrub the warming stripes; tap a cell for its line.",
-  "version": "1.0"
+  "version": "1.1"
 }

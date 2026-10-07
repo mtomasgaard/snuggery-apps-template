@@ -1,0 +1,5 @@
+# tools/climatology/build_climatology.py only (never the app, never the monthly refresh).
+# Pinned as built on 2026-10-06 with /opt/homebrew/bin/python3.12.
+numpy==2.3.3
+numcodecs==0.16.3
+requests==2.34.2   # imported by the pipeline modules whose GISTEMP reader this script reuses

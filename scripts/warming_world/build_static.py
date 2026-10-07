@@ -6,7 +6,7 @@
                          Weather's delta-coded hundredths            -> fragments/basemap.json
     assets/places.json   all 1 251 Natural Earth populated places, four tiers -> fragments/places.json
     (fonts/ checked)     the vendored Archivo cut against its pins   -> fragments/archivo.json
-    assets/about.json    About's nine sections, placeholders filled by the app from the snapshot
+    assets/about.json    About's eleven sections, placeholders filled by the app from the snapshot
     ../CREDITS.txt       assembled from the fragments, gistemp.json included (written by
                          build_snapshot.py --ref, which build_all.sh runs first)
 
@@ -264,9 +264,9 @@ def C(x: str) -> str:
 # (verify_static.py checks every one).
 ABOUT_SECTIONS = [
     ('colors', 'What the colors mean', [
-        'Each cell’s color is how much warmer or colder that 2° cell was than its own 1951–1980 average for '
-        'the same months. It is a temperature anomaly, not a temperature: 0.0 °C means the 1951–1980 '
-        'normal, not freezing.',
+        'In Difference, each cell’s color is how much warmer or colder that 2° cell was than its own 1951–1980 '
+        'average for the same months, or than its average over the years a chosen baseline names. It is a '
+        'temperature anomaly, not a temperature: 0.0 °C means the normal, not freezing.',
         f'The map’s scale runs from {MINUS}4 to +4 °C and never changes, not with the year and not with a new '
         'release. Cells beyond it are drawn in the end colors, and a tap gives their true value. The stripes '
         'under the globe have their own fixed scale, ±1.5 °C, because the global mean never comes near 4 °C. A '
@@ -276,6 +276,45 @@ ABOUT_SECTIONS = [
         'GISS: “Temperature anomalies indicate how much warmer or colder it is than normal for a particular place '
         'and time. For the GISS analysis, normal always means the average over the 30-year period 1951-1980 for '
         'that place and time of year.”',
+    ]),
+    # plan 0012 package 3.3: Absolute and the chosen baseline (warming-world/tools/DECISIONS.md)
+    ('absolute', 'Absolute: an estimated temperature', [
+        'Absolute shows an estimate of the temperature itself: each cell’s 1951–1980 average 2 m air '
+        'temperature plus GISS’s anomaly for the year or month on screen. GISS measures change, not '
+        'temperature, so the average comes from a second source, ERA5, the Copernicus Climate Change '
+        'Service’s reanalysis of the world’s weather. It is an estimate, not a measured map of temperature.',
+        'This app made the average from ERA5’s 2 m air temperature for 1990–2019, as WeatherBench 2’s '
+        'climatology holds it: averaged onto GISS’s 2° cells, then moved back to 1951–1980 cell by cell and '
+        'month by month by taking away GISS’s own mean anomaly for 1990–2019. That climatology is smoothed '
+        'over 61 days; the app undoes the smoothing for the yearly cycle’s first three harmonics, which can '
+        'still leave a month about 1.3 °C off over land. The average is kept in steps of 0.5 °C.',
+        'A year is the average of its 12 months plus the year’s anomaly, a month is that month’s average plus '
+        'its anomaly, and the partial year is the average of its months so far plus its anomaly so far.',
+        'Over land and sea ice the value is air temperature throughout. Over open water GISS’s anomaly is the '
+        'sea surface’s, standing in for the air’s, as GISS itself does: the value is an estimate of the air '
+        'over the sea, not the temperature of the sea.',
+        f'The scale runs from {MINUS}60 to +40 °C and never changes; cells beyond it are drawn in the end '
+        'colors. It runs from violet through blue and teal to sand, a different scale from Difference’s, so '
+        'the two maps cannot be read for each other.',
+        'How sure it is: GISS puts the uncertainty of the world’s absolute average at about 0.5 °C, and '
+        'different sources can disagree by several degrees in a mountain cell. So the card gives a cell’s '
+        'temperature to the whole degree, and its chart shows the change, the anomaly, to 0.1 °C. The year '
+        'row’s global mean is the average’s area mean for that month or year plus GISS’s global mean, with '
+        '±0.5 °C. A mean of the map’s own cells would depend on which cells have data, and the early years '
+        'miss the poles. The Arctic and Antarctic readings in Absolute are made the same way: the average’s '
+        'mean over the whole cap plus the mean anomaly of the cap’s cells with data.',
+    ]),
+    ('baseline', 'A baseline of your own', [
+        'In Difference, Base chooses the years each place is compared with: any span from {firstYear} to '
+        '{lastComplete}. GISS’s own base, 1951–1980, is where it starts.',
+        'With another span, a cell’s value is its anomaly minus its own mean over those years, rounded to '
+        '0.1 °C. A cell needs a value in at least two thirds of them, 20 of 30; one with fewer has no '
+        'baseline and is drawn as no data, and the year row’s coverage counts only cells with both.',
+        'The year row’s global mean and the stripes are GISS’s own global means minus their mean over the '
+        'same years. The bracket under the stripes and every label name the span in use.',
+        'Single months stay against 1951–1980: the app holds GISS’s monthly maps for the last 24 months only, '
+        'so it cannot average a month over other years. Absolute does not depend on the baseline; its card’s '
+        'chart and the stripes do.',
     ]),
     ('sources', 'Where the numbers come from', [
         'Over land: about 26 000 weather stations of NOAA’s Global Historical Climatology Network monthly, '
@@ -334,7 +373,7 @@ ABOUT_SECTIONS = [
     ]),
     ('not-shown', 'What is not shown', [
         'Uncertainty: GISS publishes an ensemble of possible analyses; this app shows the central analysis only.',
-        'Temperatures, seasons, sea ice and causes.',
+        'Measured temperatures (Absolute’s are an estimate), sea ice and causes.',
         'Anything before {firstYear}. GISS: “The analysis is limited to the period since 1880 because of poor '
         'spatial coverage of stations and decreasing data quality prior to that time.”',
     ]),
@@ -411,7 +450,7 @@ def build_credits() -> str:
     lines = ['Warming World: credits and licenses', '=' * 35, '']
     lines += textwrap.wrap(
         'Every number on the map is NASA GISS\'s, or this app\'s annual mean and rounding of GISS\'s monthly '
-        'values. The data file (data/snapshot.json) is replaced about once a month from GISS\'s newest release '
+        'values; in Absolute, ERA5\'s 1951–1980 average (the last section below) is added to them. The data file (data/snapshot.json) is replaced about once a month from GISS\'s newest release '
         'and carries its own sources, access date and citations, which the About screen prints. Nothing is '
         'fetched at runtime: the app has no network. ' + g['endorsement'], 100)
     lines.append('')
@@ -440,6 +479,15 @@ def build_credits() -> str:
         if fr.get('endorsement'):
             lines += _field('Endorsement', fr['endorsement'])
         lines.append('')
+    # plan 0012 3.3: the climatology's section, from the file itself (warming-world/tools/climatology/)
+    with open(os.path.join(ASSETS, 'climatology.json'), encoding='utf-8') as f:
+        cl = json.load(f)['credits']
+    lines += [RULE, cl['title'].upper(), '']
+    for label, key in [('Owner', 'owner'), ('Used for', 'what'), ('URL', 'url'), ('License', 'licence'),
+                       ('License text', 'licence_quote'), ('Retrieved', 'accessed'), ('Changes', 'changes'),
+                       ('Cite', 'citation'), ('Attribution', 'attribution')]:
+        lines += _field(label, cl[key])
+    lines.append('')
     lines += [RULE, '']
     text = '\n'.join(lines)
     data = text.encode('utf-8')
