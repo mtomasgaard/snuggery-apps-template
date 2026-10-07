@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T07:01:35Z",
+ "generatedAt": "2026-10-07T08:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -271,6 +271,15 @@
      "author": "Jillian C. York"
     },
     {
+     "title": "Israeli demolition in East Jerusalem displaces 69 Palestinians",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168539",
+     "published": "2026-10-06T12:00:00Z",
+     "summary": "Sixty-nine Palestinians – more than half of them children – were displaced on Tuesday after Israeli authorities green lit the demolition of their residential building in the At Tur area of East Jerusalem, the UN aid…",
+     "stale": false
+    },
+    {
      "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168509",
      "published": "2026-10-02T12:00:00Z",
      "summary": "Renewed conflict in Yemen has triggered a surge in hunger that could have consequences in the wider region and beyond, the World Food Programme (WFP) warned on Friday.",
-     "stale": false
-    },
-    {
-     "title": "Gaza: WHO appeals for massive aid influx ahead of winter",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168508",
-     "published": "2026-10-02T12:00:00Z",
-     "summary": "Repeated delays in bringing lifesaving medicines, prosthetics and more from Israel into Gaza risk having devastating consequences on Palestinians who urgently need them in the war-torn enclave, the UN World Health…",
      "stale": false
     },
     {
@@ -823,6 +823,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Israeli demolition in East Jerusalem displaces 69 Palestinians",
+   "published": "2026-10-06 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
    "published": "2026-10-05 12:00 UTC"
   },
@@ -836,12 +842,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "Escalating fighting in Yemen deepens food security crisis",
-   "published": "2026-10-02 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Gaza: WHO appeals for massive aid influx ahead of winter",
    "published": "2026-10-02 12:00 UTC"
   },
   {
