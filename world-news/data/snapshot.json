@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T20:01:29Z",
+ "generatedAt": "2026-10-07T21:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Many drugs have mirror chemical structures, one helpful and the other harmful – a Nobel-winning discovery allows chemists to make either on demand",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/many-drugs-have-mirror-chemical-structures-one-helpful-and-the-other-harmful-a-nobel-winning-discovery-allows-chemists-to-make-either-on-demand-293914",
+     "published": "2026-10-07T19:54:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sajish Mathew, Associate Professor of Pharmaceutical Sciences, University of Maryland Eastern Shore"
+    },
+    {
      "title": "From jargon to impact: Teaching undergraduates the art of public communication",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Seth T. Kannarr, Visiting Honors Lecturer, Southern Illinois University Edwardsville"
-    },
-    {
-     "title": "These state supreme court races could decide abortion access and trans rights",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/these-state-supreme-court-races-could-decide-abortion-access-and-trans-rights-292881",
-     "published": "2026-10-07T12:40:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rachel Rebouché, Professor of Law, The University of Texas at Austin"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "From jargon to impact: Teaching undergraduates the art of public communication",
-   "published": "2026-10-07 15:24 UTC"
+   "title": "Many drugs have mirror chemical structures, one helpful and the other harmful – a Nobel-winning discovery allows chemists to make either on demand",
+   "published": "2026-10-07 19:54 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "These state supreme court races could decide abortion access and trans rights",
-   "published": "2026-10-07 12:40 UTC"
+   "title": "From jargon to impact: Teaching undergraduates the art of public communication",
+   "published": "2026-10-07 15:24 UTC"
   },
   {
    "region": "Americas",
