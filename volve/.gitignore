@@ -1,0 +1,4 @@
+# The pipeline's working folders: downloads, the prepared deck, the simulation's output.
+pipeline/work/
+tools/.work/
+__pycache__/

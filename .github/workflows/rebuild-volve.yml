@@ -1,0 +1,80 @@
+name: Rebuild Volve data
+
+# Manual only. Rebuilds volve/data from pinned sources and uploads it as one artifact; it commits
+# nothing. Review the artifact (validation.json first) and commit it yourself.
+#   1. prepare: fetch Equinor's deck, results summary, wells and production from pinned mirrors
+#      (every file checked by sha256), prove the deck against Equinor's own run log and INIT, make
+#      the stated edits, check every keyword against OPM Flow 2026.04, cut the seismic by range
+#      requests, write the well paths and production, run the seismic tests
+#      then compare what prepare wrote with the committed data/ files (logged, never fatal)
+#   2. simulate: OPM Flow 2026.04 in the official Docker image, pinned by digest
+#   3. finish: validate the run against Equinor's Eclipse summary (fails loudly outside the stated
+#      tolerances), then extract the model files as Norne's pipeline does
+on:
+  workflow_dispatch:
+    inputs:
+      processes:
+        description: "MPI processes for OPM Flow (1 runs without MPI)"
+        required: false
+        default: "4"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04   # pinned: OPM's wheels and image are Linux x86_64; move on purpose
+    # Each step has its own budget (40 + 280 + 20 minutes) inside the job's, so a slow simulation
+    # times out as a step and the run logs are still uploaded. Hosted runners allow 360 minutes.
+    timeout-minutes: 345
+    defaults:
+      run:
+        working-directory: volve/pipeline
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Prepare (inputs, checks, deck, seismic, wells, tests)
+        timeout-minutes: 40
+        run: ./build_data.sh prepare
+      - name: Compare prepare's files with the committed ones (logged, not fatal)
+        working-directory: .
+        run: |
+          files="volve/data/seismic.bin volve/data/seismic.json volve/data/horizons.bin volve/data/wellpaths.json volve/data/production.json"
+          sha256sum $files
+          if git diff --quiet --exit-code -- $files; then
+            echo "identical to the committed files at $GITHUB_SHA"
+          else
+            echo "::warning::prepare wrote files that differ from the committed ones; read this before committing anything"
+            git diff --stat -- $files
+          fi
+      - name: Simulate (OPM Flow 2026.04, Docker)
+        timeout-minutes: 280
+        env:
+          VOLVE_FLOW_NP: ${{ inputs.processes }}
+        run: ./build_data.sh simulate
+      - name: Validate against Equinor's run, then extract
+        timeout-minutes: 20
+        run: ./build_data.sh finish
+      - name: Sizes
+        run: |
+          ls -l ../data
+          (cd .. && rm -f "$RUNNER_TEMP/volve-data.zip" && zip -q -r -X -9 "$RUNNER_TEMP/volve-data.zip" data && ls -l "$RUNNER_TEMP/volve-data.zip")
+          sha256sum ../data/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: volve-data
+          path: volve/data
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: volve-run-logs
+          path: |
+            volve/pipeline/work/results/*.PRT
+            volve/pipeline/work/results/*.DBG
+            volve/pipeline/work/deck/EDITS.json
+            volve/data/validation.json
+          if-no-files-found: warn
+          retention-days: 30

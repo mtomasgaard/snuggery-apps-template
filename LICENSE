@@ -42,6 +42,11 @@ the licence above; the first three are described in running-dashboard/TILES.md:
   benchmark case published through the Open Porous Media initiative, and is a
   derived database under the Open Database License (ODbL) 1.0 — see
   norne-reservoir/data/ATTRIBUTION.txt.
+- The field data under volve/data/ is adapted from the Volve field data set,
+  © Equinor ASA and the former Volve licence partners, under Equinor's "Terms and
+  conditions for licence to data - Volve". It is not under the licence above and
+  is not for sale; every adaptation is stated in volve/data/ATTRIBUTION.txt, and
+  a dated copy of the terms is volve/data/TERMS-Volve-2026-10-07.txt.
 - The terrain under besseggen/data/ is derived from Kartverket's Nasjonal
   høydemodell (DTM1), © Kartverket, under NLOD 2.0 and CC BY 4.0; the trail from
   Kartverket's Turrutebasen (open data, no conditions); the lakes, rivers and

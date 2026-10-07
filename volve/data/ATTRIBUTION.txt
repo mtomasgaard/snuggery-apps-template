@@ -1,0 +1,82 @@
+Volve field data
+
+Contains data from the Volve field data set, (c) Equinor ASA and the former Volve licence partners
+ExxonMobil Exploration & Production Norway AS and Bayerngas Norge AS (or their successors), used
+under Equinor's "Terms and conditions for licence to data - Volve":
+https://equinoropendata.blob.core.windows.net/disclaimers/HRS%20and%20Terms%20and%20conditions%20for%20license%20to%20data%20-%20Volve.pdf
+A dated copy of the terms is in this folder: TERMS-Volve-2026-10-07.txt.
+
+This folder is Adapted Material under those terms. It is shared free of charge and is not for sale.
+It is not connected with, sponsored or endorsed by Equinor or the former Volve licence partners.
+Every recipient may use it under the same terms; the template's MIT licence covers its code only,
+never this folder.
+
+Where the files come from
+Equinor now distributes Volve through a Databricks Marketplace listing. These files were built from
+public copies of Equinor's own files, each pinned by commit or URL and by sha256
+(volve/pipeline/sources.json):
+  deck and includes   github.com/tpp-grupo-166/opm-datasets at 1c323c2 (folder volve/), the files as
+                      first mirrored, before that repository's own edits for OPM
+  Equinor's run       github.com/f0nzie/rEcl at 4b187da: VOLVE_2016 SMSPEC, UNSMRY, INIT, RSSPEC
+                      github.com/f0nzie/volve_eclipse_reservoir at 0d34eaf: VOLVE_2016.PRT (Eclipse 2015.1)
+  wells, production   github.com/awgeo/Volve_field_data at 7cdecf1: 21 'ACTUAL' deviation surveys and
+                      'Volve production data.xlsx'
+                      github.com/andymcdgeo/spwla_volve at c293edf: Well_picks_Volve_v1.dat
+  seismic, horizons   OSDU's public test-data bucket (osdu-seismic-test-data, volve/): the ST0202R08 PS
+                      PSDM full-offset depth stack (read in part, by range), Hugin Fm top and base
+The deck is checked against Equinor's own run before use: every line Eclipse echoed into Equinor's
+VOLVE_2016.PRT is found, in order, in the fetched files, and the model OPM builds from them matches
+the depth of all 183,545 active cells in Equinor's VOLVE_2016.INIT to 0.01 m, and its porosity,
+permeability, pore volume and regions.
+
+What we changed (clause 3.2: every adaptation, stated)
+1. The simulation deck (VOLVE_2016.DATA and includes), before our run:
+   - Report settings only: restart files every month (the deck wrote every 4th, then every 3rd);
+     RPTSCHED's RESTART mnemonic removed; WGPT (gas produced per well) added to the summary output.
+   - Lines Eclipse itself discarded when Equinor ran the deck, which OPM rejects instead (each one
+     logged in Equinor's PRT as "SPURIOUS DATA"): the 13th ROCK row and the 13th RSVD table (the deck
+     declares 12 PVT regions), and five producer records at 1 Jan 2015 that have no keyword above
+     them.
+   - What OPM Flow 2026.04 cannot run: the 100 ADDZCORN records (fault throws) are applied to the
+     grid's corner depths in advance, exactly as Eclipse applied them (proved against Equinor's INIT),
+     and the keyword commented out; PRIORITY is removed (the deck has no group production target it
+     could act on); EQLOPTS keeps THPRES and loses QUIESC and MOBILE, which OPM does not have. Without
+     MOBILE, 1,200 cells keep the deck's SOWCR and SOGCR instead of Eclipse's corrected values, and
+     the initial state can differ slightly from Equinor's.
+2. Saturations and pressures (in the model files, once the workflow has made them) come from our
+   own OPM Flow 2026.04 run of that deck (31 Dec 2007 to 1 Oct 2016), not from Equinor's run. It is
+   compared with Equinor's Eclipse 2015.1 summary vectors in validation.json; the model is only
+   extracted when every check there passes.
+3. The model files repack the run: corner coordinates in ED50 / UTM zone 31N (the grid's MAPAXES
+   applied) as float32 relative to a centre point; quarterly frames (the first restart in each
+   calendar quarter, plus the first and last); saturations quantized to 8 bits and pressure to 16.
+4. The seismic (survey ST0202, the 2002 baseline; the PS PSDM full-offset stack in depth, 2008
+   processing) is cropped to the model (reservoir top - 500 m to base + 500 m, footprint + 250 m),
+   low-pass filtered across inlines and crosslines and decimated from 12.5 m to 25 m traces, and
+   quantized to 8 bits with zero at code 128 and a symmetric clip at the 99.9th percentile of
+   |amplitude| (0.104697; 0.1 % of samples reach it). Depth samples are kept at their original
+   5 m interval and original depths: nothing is shifted, stretched or tied to the model.
+5. The Hugin Fm top and base horizons (interpreted on survey ST10010, 2011 processing, and adjusted
+   to the wells) are sampled at the 25 m trace positions.
+6. Well paths are converted from depth below the rotary Kelly bushing to depth below mean sea level,
+   using the KB elevation in Equinor's well picks (54.9 m); production is the monthly sheet,
+   re-encoded; values are rounded to 0.01 m and 0.1 Sm3.
+
+Files
+  model.json       dimensions, map frame (crs, mapaxes), frame dates and steps, wells (path,
+                   completions, role and history targets per frame), rates (Sm3/day, averages between
+                   frames; simulated, and history), the comparison with Equinor's run
+  geometry.bin     float32, 8 corners x (x, y, depth) per active cell, metres, relative to model.center
+  neighbours.bin   int32, 6 face neighbours per active cell (-I, +I, -J, +J, up, down), -1 = open face
+  ijk.bin          uint8, 0-based I, J, K per active cell
+  static.bin       float32 blocks of PORO, PERMX, PERMZ, NTG (1: the deck has none), FIPNUM, DEPTH
+  dynamic.bin      per frame: SWAT uint8 (/255), SGAS uint8 (/255), PRESSURE uint16 scaled to
+                   dynamic.pressureRange
+  validation.json  our run against Equinor's: field and well totals, field pressure, active cells
+  seismic.bin      uint8, inline-major (inline, crossline, depth); amplitude = (code - 128) / 127 * clip
+  seismic.json     the seismic's grid (origin, inline and crossline vectors, corners, depth axis),
+                   clip, polarity, filter, crop and sources
+  horizons.bin     float32, Hugin Fm top then base, depth in metres on the seismic's grid, NaN = no pick
+  wellpaths.json   21 deviation surveys (MD; x, y; depth below sea level) with Equinor's well picks
+  production.json  monthly oil, gas, water, gas and water injection (Sm3) and hours per wellbore
+  TERMS-Volve-2026-10-07.txt   Equinor's terms, as retrieved on 7 Oct 2026

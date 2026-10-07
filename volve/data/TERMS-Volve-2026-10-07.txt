@@ -1,0 +1,588 @@
+Terms and conditions for licence to data - Volve
+A dated copy, kept with the data because the app runs offline (clause 3.3 asks for a notice that refers
+to these terms). The text below is extracted, unedited, from Equinor's own PDF:
+
+  https://equinoropendata.blob.core.windows.net/disclaimers/HRS%20and%20Terms%20and%20conditions%20for%20license%20to%20data%20-%20Volve.pdf
+  retrieved 2026-10-07; 394,582 bytes; sha256 2ed6dc7ea40fd4381dfbec6b89e04226e02c65bbdb80edd659d762f2c20965ee
+  (PDF created 2023-03-22, Last-Modified Tue, 14 Oct 2025 07:38:30 GMT; linked from Equinor's Volve listing)
+
+Equinor's earlier copy on equinor.com has the same clauses word for word (only Exhibit 1 differs):
+  https://www.equinor.com/content/dam/statoil/documents/what-we-do/Equinor-HRS-Terms-and-conditions-for-licence-to-data-Volve.pdf
+  retrieved 2026-10-07; 250,211 bytes; sha256 14672b51cf672f20207ba587af0260cb5e6fdff3d63bdbf11628f504d6c77873 (PDF created 2020-01-10)
+
+The PDF is the authoritative text; this extraction (pdftotext -layout) may differ in line breaks.
+========================================================================================================
+
+THIS IS A HUMAN-READABLE SUMMARY OF AND
+NOT A SUBSTITUTE FOR THE LICENSE
+
+
+
+You are free to:
+    •    Download and use the Licensed Material for non-commercial and
+         commercial purposes
+    •    Create, produce and reproduce Adapted Material
+    •    Share the Licensed Material and/or the Adapted Material
+
+Under the following terms:
+    •    You may not sell the Licensed Material.
+    •    You must give Equinor and the Volve license partners credit, and
+         provide a link to these terms and conditions, as well as a copyright
+         notice if applicable
+    •    You may not share Adapted Material under a license that prevents
+         recipients from complying with these terms and conditions
+    •    You shall not use the Licensed Material in a manner that appears
+         misleading nor present the Licensed Material in a distorted or
+         incorrect manner.
+
+This license is based on CC BY 4.0 license, two important changes are:
+ • The licensed material may not be sold
+ • The license covers all data in the dataset whether or not it is by law covered by copyright
+
+
+
+        TERMS AND CONDITIONS FOR USE OF LICENSE
+                                          TO DATA
+1.1 Equinor and the former Volve license partners own the Volve data village. Equinor and the former
+        Volve license partners have decided to make this Data available for you as Licensed Material,
+        for the purpose of allowing students train on real data, encourage efficient operation, higher
+        productivity and innovation in the industry.
+1.2 By exercising the License and/or downloading the Licensed Material, you accept to be bound by
+        these terms and conditions (“the Terms and Conditions”) as of that same time (“the Effective
+        Date”).
+2          DEFINITIONS
+For the purposes of these Terms and Conditions, the following terms shall have the meaning stated
+below.
+        2.1      Adapted Material shall mean material that is derived from or based upon the
+                 Licensed Material and/or in which the Licensed Material is modified. Changes in
+                 formatting, file types and other changes that do not affect the content of the Licensed
+                 Material shall not result in the material being Adapted Material as the result will
+                 remain as Licensed Material.
+        2.2      Data shall mean qualitative or quantitative data and information, in any form or format,
+                 whether or not it is by law protected by copyright, by Sui Generis Database Rights, or
+                 neither.
+        2.3      Intellectual Property Rights (IPR) shall mean any and all intellectual property rights,
+                 such as patents, utility models, software, source codes, databases, trademarks,
+                 designs, domain names, copyrights, trade secrets or know-how.
+        2.4      Equinor and the former Volve license partners shall mean ExxonMobil Exploration
+                 & Production Norway AS and Bayerngas Norge AS, or their successors or
+                 permitted assignees.
+        2.5      Licensed Material shall mean the Data described in Exhibit 1.
+        2.6      Sui Generis Database Rights shall mean rights other than copyright resulting from
+                 Directive 96/9/EC of the European Parliament and of the Council of 11 March 1996 on
+                 the legal protection of databases, as amended and/or succeeded.
+
+
+3         LICENSE
+        3.1      The License
+
+Subject to these Terms and Conditions, Equinor, ExxonMobil Exploration&Production Norway AS
+and Bayerngas Norge AS grants you a worldwide, royalty-free, non-sublicensable, non-exclusive,
+irrevocable license to download and use the Licensed Material for non-commercial and commercial
+purposes, including to create, produce and reproduce Adapted Material (“the License”).
+
+        3.2      General limitations
+
+You shall not use the Licensed Material in a manner that appears misleading nor present the Licensed Material
+in a distorted or incorrect manner. You may not sell the Licensed Material. To the extent that your use of the
+Licensed Material is permitted by mandatory law, you do not have to comply with these Terms and Conditions.
+
+        3.3      Sharing Licensed Material and/or Adapted Material
+
+You may share the Licensed Material and/or the Adapted Material, either openly or not, as long as Equinor
+and the former Volve license partners are attributed. A notice that refers to these Terms and Conditions
+should be included, and if applicable, a copyright notice. If you share Adapted Material that may be shared
+under an adapter’s license, the adapter’s license must not prevent recipients of the Adapted Material from
+complying with these Terms and Conditions. Every recipient of the Licensed Material and/or Adapted Material
+will automatically receive an offer to exercise the License under these Terms and Conditions.
+
+
+        3.4      Moral rights
+To the extent the Licensed Material contains copyright protected material, moral rights are not licensed under
+these Terms and Conditions. However, to the extent possible by law, Equinor and the former Volve license
+partners waives and/or agrees not to assert any such rights held by Equinor and the former Volve license
+partners to the limited extent necessary to allow you to exercise the License, but not otherwise.
+         3.5      Sui Generis Database Rights
+
+If you include all or a substantial portion of the Licensed Material in a database for which you have Sui Generis
+Database Rights, then that database (but not its individual contents) constitutes Adapted Material.
+
+
+4          NO ENDORSEMENT
+Nothing in these Terms and Conditions constitutes or shall be interpreted as you being, or your use of the
+License being, connected with, sponsored or endorsed by Equinor and the former Volve license partners.
+You may not use Equinor and the former Volve license partners or any of its participating companies'
+names or trademarks to support, recommend or market your use of the License or any products or services
+using or encompassing the License or Licensed Material.
+
+
+5          LIABILITY AND INDEMNITY
+         5.1      No warranties or liability
+
+The Licensed Material is provided “as is” and may contain errors or omissions Equinor and the former Volve
+license partners undertakes no liability for the risks of industrial realisation and commercial exploitation of
+the Licensed Material and Equinor and the former Volve license partners shall have no liability regarding
+the fitness for purpose, quality, non-infringement, accuracy or merchantability of the Licensed Material.
+Equinor and the former Volve license partners provides no warranties, expressed or implied, either relating
+to the content or to the relevance of the Licensed Material. Equinor and the former Volve license partners
+disclaims any liability for errors or defects associated with the Licensed Material to the maximum extent
+permitted by law.
+
+         5.2      Damages
+
+Equinor and the former Volve license partners are not liable for any of your damages, direct, indirect or
+consequential losses as a consequence of your use of the Licensed Material or infringement of third party
+Intellectual Property Rights or other rights.
+
+         5.3      Indemnification
+You shall indemnify Equinor and the former Volve license partners for any and all liability for lawsuits and
+claims by third parties that arise as a consequence of your use of the License or infringement of third party
+Intellectual Property Rights or other rights, insofar as such losses, lawsuits or claims are not a result of Equinor
+and the former Volve license partners’s defect in title, gross negligence or wilful breach.
+
+
+6          TERMINATION
+         6.1      Termination
+If you fail to comply with these Terms and Conditions, then the License terminates automatically. The License
+may be reinstated if you cure the breach of these Terms and Conditions within 30 days of discovering the
+breach, or upon express reinstatement by Equinor and the former Volve license partners.
+
+         6.2      Changes in distribution
+Equinor and the former Volve license partners may decide to offer the Licensed Material under other
+terms and conditions or stop distributing the Licensed Material at any time.
+7         NORWEGIAN LAW AND DISPUTES
+
+These Terms and Conditions shall be governed by and interpreted in accordance with Norwegian
+law.
+
+The parties shall endeavour to resolve disputes concerning these Terms and Conditions through negotiation.
+Disputes which are not resolved by mutual agreement within one month after negotiations
+were requested shall be settled by court proceedings brought before Stavanger District Court
+as legal venue.
+
+
+
+                                                    ***
+
+
+
+
+        These Terms and Conditions are deemed accepted by you by exercising the License
+and/or downloading the Licensed Material. EXHIBIT 1 – LICENSED MATERIAL
+
+Licensed Material includes the following:
+
+
+
+1.1.1            The Volve Data Village data set
+The data set consists of 11 folders with a total of 5 TB and nearly 40,000 files.
+Most folders contain “readme” files.
+Some parts of the data set contains “Scandinavian letters æ,ø,å” A short
+description of the folders:
+
+
+1. Geophysical Interpretations:
+Geophysical interpretations exported from OpenWorks, Faults, Horizons, Well picks
+
+
+Folder Fault_polygons contains fault polygons for Top and Base Hugin (top and base reservoir).
+
+
+Top Hugin consists of 78 polygons (all collected in a single file)
+Base Hugin consists of 71 polygons (all collected in a single file)
+
+
+Each polygon is defined by a (UTMX,UTMY,TWT) point set.
+
+
+Folder Faults contains one file with all official faults
+(fault sticks) for Volve.
+
+
+File format by character in line:
+3-12: UTMX (meter)
+14-24: UTMY (meter)
+26-36: TWT (ms)
+37-47: UNKNOWN (probably 3 columns with color coding)
+50: UNKNOWN
+52: Number on fault stick (1,2,3 for start, middle, end)
+53-100: Fault name
+101 andover: not relevant.
+
+
+projected CRS
+
+
+type : UTM zone :
+UTM Zone 31N
+
+
+
+
+Folder Horizons contains horizon interpretations.
+
+
+Horizons_TWT: Horizons in time
+Official_Horizons: Interpolated versions of key horizons
+Timelapse_Horizons: Horizons used for computing 4D attribute maps. There are different
+versions with different extensions.
+Other_Horizons: Some other relevant horizons
+Multiples: Indicating first and second multiple of strongest horizons, interfering with reservoir.
+Horizons_DEPTH: Horizons in depth
+Official_Horizons: Interpolated versions of key horizons (in depth)
+Other_Horizons: Some other relevant horizons
+
+
+Naming standard for Horizon files:
+Stratigrafic_surface+Seismic_info+Interpreter+Output_Domain.dat Horizon-OW-IO-
+formatfile.xml: Format file used to export horizons from OW, using the "Data Export" utility.
+
+
+The horizon files contain IL, XL, UTMX, UTMY, and TWT or Z.
+
+
+ST0202 and ST10010 survey have different but related IL/XL system:
+
+
+XL(ST10010) = XL(ST0202)
+IL(ST10010) = 2 x IL(ST0202) - 1
+Folder Wells contains the following two files:
+
+
+1) Well_picks_Volve_v1.dat:
+Contains most important well picks for Volve wells.
+Some well picks occur more than 1 time in a single well (indicated with Obs#).
+This is due to the well crossing in and out of a formation several times (e.g. due
+to faults, or horizontal well path).
+
+
+2) Well_perforations_Volve.dat:
+Contains well perforation intervals.
+
+
+2. GeoScience_OW_Archive:
+Contains a backup of OpenWorks database
+
+
+3. Production data:
+Contains daily and monthly production data pr well
+
+
+4. Reports
+Contains two reports.
+Discovery Report
+
+
+PUD (Plan for Utbygging og Drift). The PUD document is unfortunately in Norwegian but is the
+official document approved by NPD as plan for development and operations (PDO)
+
+
+Other reports can be found in folder Well_logs, typically Final Well Reports etc. and in folder for
+well technical data.
+
+
+5. Reservoir_Model-Eclipse_model
+Contains the dynamic fluid simulation models made in Eclipse. It contains both input and result
+data.
+
+The folder contains a powerpoint file “Volve Sim model and HM per jan-16. The file describes
+Volve 2010 model, the drainage strategy, and development from initial PDO interpretation in
+2006.
+6. Reservoir_Model-RMS_model
+Contains Geological Reservoir Model made in RMS.
+It contains both input and result data from two models, PDO 2005 and Full Field 2014.
+
+
+1. VolveGeomodel2003.rms2012.0.4 (Volve PUD::Production::PUD/PDO::2005)
+- RMS model
+- Export_data
+
+
+2. pp04xg03gf01sf01.rms2012.0 (Volve2014: Full Field Geomodel 2014::Production::Reservoir
+Description::2014- RMS project)
+- RMS model
+- Export_data
+
+
+7. Seismic
+Seismic contains seismic data of 2 OBC surveys:
+
+
+ST0202 acquired in 2002
+ST10010 acquired in 2010.
+
+
+ST0202 and ST10010 surveys have different but related IL/XL system:
+
+
+XL(ST10010) = XL(ST0202)
+IL(ST10010) = 2 x IL(ST0202) - 1
+
+
+The subdirectory ST0202 contains 3D processed data for ST0202
+The subdirectory ST10010 contains 3D processed data for ST10010
+The subdirectory ST0202vsST10010_4D contains data from 4D processing of ST0202 and
+ST10010 (matched data).
+
+
+Names used in the files indicating processing:
+
+
+ST0202R08: Survey ST0202 re-processed in 2008 (PZ and PS imaging in depth) with 2008
+velocity model
+ST0202ZC11: Survey ST0202 re-reprocessed in 2011 (PZ imaging in depth), in connection with
+timelapse processing with 2011 velocity model
+ST10010ZC11: Survey ST1010 processed in 2011 (PZ imaging in depth) with the 2011 velocity
+model.
+ST0202ZDC12: Survey ST0202 re-processed in 2012 for 4D purpose
+ST10010ZDC12: Survey ST10010 re-processed in 2012 for 4D purpose
+
+
+
+
+Seismic/VSP contains checkshots for some wells.
+
+
+The checkshots are normal incidence VSP. They are measured in the well. A
+VSI tool is put in the borehole, with 4 receivers. The distance between the
+receivers is 15cm. A source is located right above the VSI receivers
+(in the center). The average TWT of the first arrivals in the 4 receivers is taken. The boat and the
+VSI tool move after every shot.
+
+
+More VSP data is found in the folder Well logs\08.VSP_VELOCITY
+
+
+8. Well_logs
+Well logs contains a variety of logs: mud logs, petrophysical logs, vsp, core, biostrat, geochem
+and corresponding reports from 3 exploration wells and 21 production/injection wells. The data is
+organized by datatype. The folder contains a file “Volve Inventory” with an overview of the data in
+the folder.
+
+
+9. Well_logs_pr_WELL
+This folder contains the same data as in folder 8 but organized by well. The folder contains a file
+“Volve Inventory” with an overview of the data in the folder.
+
+
+10. Well_technical_data
+The data in this folder structure consists of two main parts. First the EDT software export using
+the software from Landmark.
+
+
+EDT_EDM
+CasingSeat
+CasingWear
+Compass
+EDM.XML
+Site
+Site_TemplateSlot
+StressCheck
+Wellcat
+WellPlan
+WellWellbore
+
+
+Secondly Daily Drilling Reports, in HTML, PDF and XML (WITSML) version.
+
+
+11. WITSML Realtime drilling data
+This folder contains folders with WITSML realtime drilling data from the newest wells.
+Unfortunately, there is no realtime drilling data in our systems the oldest wells..
+
+
+NA-NA-15_$47$_9-F-5 15/9-F-5 W-508420
+Norway-Statoil-NO 15_$47$_9-F-1 B NO 15/9-F-1 B fbaff14c-822a-4608-88cd-c76961e2bd63
+Norway-Statoil-NO 15_$47$_9-F-1 C NO 15/9-F-1 C 1bf1cc58-83af-4e13-9696-4fae2f9294ae
+Norway-Statoil-NO 15_$47$_9-F-11 NO 15/9-F-11 da2c7481-6737-4b5e-b430-32d50e69bd9a
+Norway-Statoil-NO 15_$47$_9-F-15 NO 15/9-F-15 dd19bf7b-02a7-4383-9038-ce201cee4d91
+Norway-Statoil-NO 15_$47$_9-F-14 NO 15/9-F-14 cf870b7d-087b-4797-b000-4968e9f1beaf
+Norway-Statoil-NO 15_$47$_9-F-12 NO 15/9-F-12 a82580d7-d94f-4e5a-9a04-be8bcae02998
+Norway-Statoil-NO 15_$47$_9-F-9 NO 15/9-F-9 432612d4-7a1b-464d-b89a-9783d4606a96
+Norway-Statoil-NO 15_$47$_9-F-7 NO 15/9-F-7 5da3aeeb-12c9-4732-a059-e3a8d7c32442
+Norway-Statoil-NO 15_$47$_9-F-5 NO 15/9-F-5 634ead84-2e59-4283-ad38-ae87114be051
+Norway-Statoil-NO 15_$47$_9-F-4 NO 15/9-F-4 5e023a7f-1b34-4948-81ca-286bba72793b
+Norway-NA-15_$47$_9-F-1 15/9-F-1 W-565042
+Norway-NA-15_$47$_9-F-1 C 15/9-F-1 C W-2890722
+Norway-StatoilHydro-15_$47$_9-F-10 15/9-F-10 W-924688
+Norway-NA-15_$47$_9-F-11 B 15/9-F-11 B W-2513775
+Norway-Statoil-15_$47$_9-F-12 15/9-F-12 W-353084
+Norway-StatoilHydro-15_$47$_9-F-14 15/9-F-14 W-353085
+Norway-StatoilHydro-15_$47$_9-F-15 15/9-F-15 W-826806
+Norway-StatoilHydro-15_$47$_9-F-15A 15/9-F-15A W-861401
+Norway-StatoilHydro-15_$47$_9-F-15B 15/9-F-15B W-854763
+Norway-StatoilHydro-15_$47$_9-F-15S 15/9-F-15S W-744206
+Norway-StatoilHydro-15_$47$_9-F-4 15/9-F-4 W-353088
+Norway-StatoilHydro-15_$47$_9-F-5 15/9-F-5 W-555807
+Norway-Statoil-15_$47$_9-F-7 15/9-F-7 W-518456
+Norway-StatoilHydro-15_$47$_9-F-9 15/9-F-9 W-562908
+Norway-NA-15_$47$_9-F-9 A 15/9-F-9 A W-986464
+12. High frequency IMS data from VOLVE
+
+Data contains high frequency data from VOLVE wells and some general facility data (10-12 TB)
+
+
+ Selected(x)        Name             ObjectType     Description                 engunits
+ x                  31-ESDV-3104     PIPoint        MASTER_VALVE_STATUS         On stream [h]
+ x                  31-ESDV-3108     PIPoint        GL_WING_VALVE_STATUS        On stream [h]
+ x                  31-ESDV-3116     PIPoint        WING_VALVE_STATUS           On stream [h]
+ x                  31-ESDV-3204     PIPoint        MASTER_VALVE_STATUS         On stream [h]
+ x                  31-ESDV-3208     PIPoint        GL_WING_VALVE_STATUS        On stream [h]
+ x                  31-ESDV-3216     PIPoint        WING_VALVE_STATUS           On stream [h]
+ x                  31-ESDV-3304     PIPoint        MASTER_VALVE_STATUS         On stream [h]
+ x                  31-ESDV-3308     PIPoint        GL_WING_VALVE_STATUS        On stream [h]
+ x                  31-ESDV-3316     PIPoint        WING_VALVE_STATUS           On stream [h]
+ x                  31-ESDV-4110     PIPoint        WING_VALVE_STATUS           On stream [h]
+ x                  31-ESDV-4120     PIPoint        MASTER_VALVE_STATUS         On stream [h]
+ x                  31-ESDV-4210     PIPoint        WING_VALVE_STATUS           On stream [h]
+ x                  31-ESDV-4220     PIPoint        MASTER_VALVE_STATUS         On stream [h]
+ x                  31-ESDV-4310     PIPoint        WING_VALVE_STATUS           On stream [h]
+ x                  31-ESDV-4320     PIPoint        MASTER_VALVE_STATUS         On stream [h]
+ x                  31-FCV-4101      PIPoint        AVG_CHOKE_SIZE              %
+ x                  31-FCV-4201      PIPoint        AVG_CHOKE_SIZE              %
+ x                  31-FCV-4301      PIPoint        AVG_CHOKE_SIZE              %
+ x                  31-FIC-3812      PIPoint        Prod Utsira water Måler 1   Sm3/d
+ x                  31-FIC-3912      PIPoint        Prod Utsira water Måler 2   Sm3/d
+ x                  31-FIC-4101      PIPoint        inj_water_rate_well
+ x                  31-FIC-4201      PIPoint        inj_water_rate_well
+ x                  31-FIC-4301      PIPoint        inj_water_rate_well
+ x                  31-HCV-3126      PIPoint        AVG_CHOKE_SIZE              %
+ x                  31-HCV-3226      PIPoint        AVG_CHOKE_SIZE              %
+ x                  31-HCV-3326      PIPoint        AVG_CHOKE_SIZE              %
+ x                  31-PI-3102       PIPoint        DOWNHOLE PRESS              barg
+ x                  31-PI-3107       PIPoint        ANNULUS PRESS               barg
+ x                  31-PI-3115       PIPoint        AVG_WH_PRESS                barg
+ x                  31-PI-3125       PIPoint        AVG_WH_USC_PRESS            barg
+ x                  31-PI-3128       PIPoint        AVG_WH_DSC_PRESS            barg
+ x                  31-PI-3202       PIPoint        DOWNHOLE PRESS              barg
+ x                  31-PI-3207       PIPoint        ANNULUS PRESS               barg
+ x                  31-PI-3215       PIPoint        AVG_WH_PRESS                barg
+ x                  31-PI-3225       PIPoint        AVG_WH_USC_PRESS            barg
+ x                  31-PI-3228       PIPoint        AVG_WH_DSC_PRESS            barg
+ x                  31-PI-3302       PIPoint        DOWNHOLE PRESS              barg
+ x                  31-PI-3307       PIPoint        ANNULUS PRESS               barg
+ x                  31-PI-3315       PIPoint        AVG_WH_PRESS                barg
+ x                  31-PI-3325       PIPoint        AVG_WH_USC_PRESS            barg
+ x                  31-PI-3328       PIPoint        AVG_WH_DSC_PRESS            barg
+x   31-PI-3806     PIPoint   Pressure wellhead #1            barg
+x   31-PI-3906     PIPoint   Pressure wellhead #2            barg
+x   31-PI-4105     PIPoint   AVG_WH_PRESS                    barg
+x   31-PI-4112     PIPoint   ANNULUS PRESS                   barg
+x   31-PI-4205     PIPoint   AVG_WH_PRESS                    barg
+x   31-PI-4212     PIPoint   ANNULUS PRESS                   barg
+x   31-PI-4305     PIPoint   AVG_WH_PRESS                    barg
+x   31-PI-4312     PIPoint   ANNULUS PRESS                   barg
+x   31-PI-4810     PIPoint   MANIFOLD Pressure               barg
+x   31-SSSV-3103   PIPoint   DOWNHOLE SEC. VALVE             On stream [h]
+x   31-SSSV-3303   PIPoint   DOWNHOLE SEC. VALVE             On stream [h]
+x   31-SSSV-4122   PIPoint   DOWNHOLE SEC. VALVE             On stream [h]
+x   31-SSSV-4222   PIPoint   DOWNHOLE SEC. VALVE             On stream [h]
+x   31-SSSV-4322   PIPoint   DOWNHOLE SEC. VALVE             On stream [h]
+x   31-TI-3101     PIPoint   DOWNHOLE TEMP                   °C
+x   31-TI-3114     PIPoint   AVG_WH_TEMP                     °C
+x   31-TI-3127     PIPoint   AVG_WH_DSC_TEMP                 °C
+x   31-TI-3201     PIPoint   DOWNHOLE TEMP                   °C
+x   31-TI-3214     PIPoint   AVG_WH_TEMP                     °C
+x   31-TI-3227     PIPoint   AVG_WH_DSC_TEMP                 °C
+x   31-TI-3301     PIPoint   DOWNHOLE TEMP                   °C
+x   31-TI-3314     PIPoint   AVG_WH_TEMP                     °C
+x   31-TI-3327     PIPoint   AVG_WH_DSC_TEMP                 °C
+x   33-FIQ-3117    PIPoint   Vann total volumstrøm           m3/t
+x   33-FIQ-3118    PIPoint   Oil total std volumstrøm        Sm3/t
+x   33-FIQ-3125    PIPoint   Gas total std volumstrøm        Sm3/t
+x   33-PI-3101     PIPoint   TSEP_Pressure                   barg
+x   33-PI-3102     PIPoint   Trykk test separator            Bar
+x   33-TI-3125     PIPoint   Temperature gas outlet          °C
+x   34-FI-3100     PIPoint   Uknown                          Uknown
+x   34-PI-3010     PIPoint   OIL_exp_PRESS                   barg
+x   34-PI-3011     PIPoint   OIL_exp_PRESS                   barg
+x   34-TI-3013     PIPoint   Oil_exp_temp                    °C
+x   37-FIC-3101    PIPoint   GL_RATE Sm3/d                   Sm3/d
+x   37-FIC-3201    PIPoint   GL_RATE Sm3/d                   Sm3/d
+x   37-FIC-3301    PIPoint   GL_RATE Sm3/d                   Sm3/d
+x   38-FIQ-3000    PIPoint   Total std vol gas export 0-24   kSm3/d
+                             yesterday
+x   38-PI-3012     PIPoint   GAS_exp_PRESS                   barg
+x   38-PI-3013     PIPoint   GAS_exp_PRESS                   barg
+x   38-TIC-3010    PIPoint   Gas export temp                 °C
+x   43-FI-3410     PIPoint   °C
+x   43-FIQ-3300    PIPoint   Rate fuel gas                   Sm3/h
+x   44-AI-3323     PIPoint   Mengde olje i vann              mg/l
+x   44-FI-3106     PIPoint   Prod water overbord             Sm3/d
+x   44-TI-3103     PIPoint   AVG_WH_TEMP                     °C
+x   44-TI-3203         PIPoint   AVG_WH_TEMP                      °C
+x   44-TI-3303         PIPoint   AVG_WH_TEMP                      °C
+x   48-FIQ-3200        PIPoint   Std flare prev day               Sm3/d
+x   31-SSSV-3203       PIPoint   DOWNHOLE SEC. VALVE              On stream [h]
+x   43-FIYQ-3300-5-2   PIPoint   acc std vol prev day             SM3
+x   48-FIYQ-3200-5-1   PIPoint   acc std vol prev dey             SM3
+x   45-LT-5062         PIPoint   cur vol 45-T-5060                m3
+x   45-LT-5414         PIPoint   cur vol 45-T-5410                m3
+x   45-LT-5192         PIPoint   cur vol 45-T-5190                m3
+x   45-LT-5152         PIPoint   cur vol 45-T-5150                m3
+x   45-LT-5012         PIPoint   cur vol 45-T-5010                m3
+x   45-LT-5312         PIPoint   cur vol 45-T-5310                m3
+x   45-LT-5262         PIPoint   cur vol 45-T-5260                m3
+x   45-LT-5232         PIPoint   cur vol 45-T-5230                m3
+x   18-HS-100          PIPoint   ukjent                           off/on
+x   38-ESDV-3015       PIPoint   VALVE_STATUS                     off/on
+x   42-FT-554          PIPoint   MEG til SLØ/ Volve               L/H
+x   34-FIYQ-3100A-5    PIPoint   vol prev day                     SM3
+x   38-FI-3000         PIPoint   Actual volume flow               m3/h
+x   38-FIY-3000-1      PIPoint   Standard volume flow             kSm3/h
+x   38-FIY-3000-2      PIPoint   Mass flow                        ton/h
+x   38-FIY-3000-3      PIPoint   Energy flow                      GJ/h
+x   48-FIY-3200-1      PIPoint   Gas to flare, real time value    Sm3/h
+x   43-FIY-3300-1      PIPoint   Fuel gas, real time value        Sm3/h
+x   33-TI-3107         PIPoint   Temperatur test separator        Deg C
+x   34-FIY-3100A       PIPoint   Eksport olje [Sm3/t]             Sm3/h
+x   44-FIC-3111A       PIPoint   VANNINJEKSJONSRATE PUMPE
+                                 A
+x   44-FIC-3111B       PIPoint   VANNINJEKSJONSRATE PUMPE
+                                 B
+x   36-PT-3104         PIPoint   Export Pressure                  barg
+                                 ComprSuctScrub
+x   36-TT-3105         PIPoint   Export Temperature               degc
+                                 ComprSuctScrubber PSD
+x   36-PIT-3104        PIPoint   Export Pressure                  barg
+                                 ComprSuctScrub
+x   36-TIT-3105        PIPoint   Export Temperature               degc
+                                 ComprSuctScrubber PSD
+x   43-FIYQ-3300-5-1   PIPoint   acc mass prev day, Volve Fuel    tonne
+                                 Gas
+x   48-FIYQ-3200-5-2   PIPoint   Acc mass prev day, Volve Flare   kg
+                                 Gas
+x   33-TI-3107         PIPoint   Temperatur test separator        Deg C
+x   31-TI-3401         PIPoint   Down hole T
+x   31-PI-3402         PIPoint   Down hole P
+x   31-SSSV-3403       PIPoint   DHSV
+x   31-PI-3409         PIPoint   Anulus B
+x   31-PI-3407         PIPoint   Anulus A
+x   31-ESDV-3404       PIPoint   HMV
+x   31-ESDV-3416       PIPoint   PWV
+x   31-PI-3415     PIPoint   XMT P
+x   31-TI-3414     PIPoint   XMT T
+x   31-PI-3425     PIPoint   Flowline upstr choke
+x   31-HCV-3426    PIPoint   AVG_CHOKE_SIZE         %
+x   31-FIC-3401    PIPoint   inj_water_rate_well
+x   31-TI-3427     PIPoint   AVG_WH_DSC_TEMP
+x   31-PI-3428     PIPoint   AVG_WH_DSC_PRESS       barg
+x   31-ESDV-3408   PIPoint
+x   31-PI-4324     PIPoint   Down hole P F01        Bar
+x   31-TI-4323     PIPoint   Down hole T F01        C
+x   31-PI-3702     PIPoint   BHP
+x   31-TI-3701     PIPoint   BHT
+x   31-PI-3715     PIPoint   WHP
+x   31-TI-3714     PIPoint   WHT
+x   31-HCV-3726    PIPoint   31-HCV-3726
+x   31-PI-3728     PIPoint   AVH _WH_DSC_PESS
+x   31-TI-3727     PIPoint   AVH _WH_DSC_TEMP
+x   31-pi-3707     PIPoint
+x   31-pi-3725     PIPoint
+x   31-sssv-3703   PIPoint
+x   31-esdv-3704   PIPoint
+x   31-esdv-3716   PIPoint
+x   36-PT-3704     PIPoint   Scrubber pressure      barg
+x   36-TT-3606     PIPoint   Scrubber temp.         degC
+x   36-PI-4005     PIPoint                          barg
+x   36-PI-4008     PIPoint                          barg

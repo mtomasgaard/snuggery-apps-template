@@ -1,0 +1,202 @@
+{
+ "survey": "ST0202 (2002 baseline, 4C ocean-bottom cable; GECO Angler)",
+ "product": "ST0202R08 PS PSDM full-offset stack in depth (converted-wave image, WesternGeco 2008 processing)",
+ "textualHeader": [
+  "C 1 CLIENT=STATOIL,      PROCESSED BY=WESTERNGECO",
+  "C 2 LINE ST0202D04-9985",
+  "C 3 SURVEY:ST0202 ,   AREA: VOLVE 15/9",
+  "C 4 DATAFORMAT: SEG-Y,     DATE:02012008",
+  "C 5 DATATYPE: FINAL PS PSDM STACK FULL OFFSET IN DEPTH",
+  "C 6 DATA SHOT BY/VESSEL:GECO ANGLER,  CABLE LENGTH:6000 M  NO OF GROUPS: 240x4",
+  "C 7 NO OF CABLES 2,      SOURCE:2,  POP INTERVAL 25.0 M (FLIP-FLOP)",
+  "C 8 RCV LINE SPACING: 400 M,    SRC LINE SPACING: 100 M, RECORD LENGTH: 10.2 S",
+  "C 9 GEODETIC DATUM: ED-50,      SPHEROID: INTERNAT., PROJECTION: UTM",
+  "C10 CENTR. MERID.: 03,          UTM ZONE: 31 N, FALSE EASTING: 500000",
+  "C11 FIRST SAMPLE= 0,            LAST SAMPLE= 4500, SAMPLE INTERVAL= 5 M",
+  "C12 DIST. BETWEEN INLINES=12.5M, XLINES=12.5M BIN SIZE (I x X):12.5M x 12.5M",
+  "C13 INLINE DIRECTION (GRID): 284.0000000 DEGREES (CLOCKWISE FROM NORTH);",
+  "C14 X-LINE DIRECTION (GRID): 014.0000000 DEGREES (CLOCKWISE FROM NORTH);",
+  "C15 ORIGO(1.1) UTMX:431955.70E;    UTMY:6348582.15N  ;",
+  "C16 DATA RANGE INLINES=9985-10369, X-LINES=1932-2536",
+  "C17 CORNER1:3D INLINE  9985, 3D XLINE 1932, UTM-X 438727.0, UTM-Y 6475514.4",
+  "C18 CORNER2:3D INLINE  9985, 3D XLINE 2536, UTM-X 431401.3, UTM-Y 6477341.0",
+  "C19 CORNER3:3D INLINE 10369, 3D XLINE 2536, UTM-X 432562.5, UTM-Y 6481998.4",
+  "C20 CORNER4:3D INLINE 10369, 3D XLINE 1932, UTM-X 439888.3, UTM-Y 6480171.9",
+  "C21 LIVE DATA POLYGON: (9985,1932);(9985,2536);(10369,2536);(10369,1932);",
+  "C22 NAVIGATION SOURCE: P1/90 UKOOA BIN CENTER CELL GRID,",
+  "C23 PROCESSING SEQUENCE:",
+  "C24 1) REFORMAT 2) NAVIGATION MERGE 3) TRACE EDITING 4) DESIGNATURE/ZEROPHASE",
+  "C25 5) TIDAL STATICS 6) RESAMPLE 4MS 7) GEOPHONE MATCHING CORRECTION",
+  "C26 8) GEOPHONE ORIENTATION CORRECTION 9) ROTATION TO RADIAL",
+  "C27 10) NOISE BAND EDITING 11) RECEIVER SHEAR STATIC CORRECTION",
+  "C28 12) TAUP DECONVOLUTION 13) 3D KIRCHHOFF DEPTH MIGRATION",
+  "C29 14) VEL ANALYSIS AND RMO CORRECTION 200M X 200M 15) CONVERSION TO PP TWT",
+  "C30 16) PRE-RADON MILD DIP FILTER 17) PARABOLIC RADON TRANSFORM DEMULTIPLE",
+  "C31 18) 3-37 DEGREE ANGLE MUTE 19) STACK 20) CONVERSION TO PS TWT",
+  "C32 21) DECONVOLUTION AFTER STACK 22) INTERPOLATION TO 12.5M X 12.5M",
+  "C33 23) H-MULT DEMULTIPLE 24) INVERSE Q-COMPENSATION 25) TAUP FILTER",
+  "C34 26) CONVERT BACK TO DEPTH 27) 2DB EXP. GAIN CORRECTION 28) OUTPUT SEGY",
+  "C35 HEADER WORD POSITIONS:",
+  "C36 INLINE: 189-192             ;  X-LINE: 193-196;",
+  "C37 BINX (CDPX): 181-184,          BINY (CDPY): 185-188,",
+  "C38 MERID.: 3.0E, SPHEROID: INT.;  ROTATION (AMS): 1245600000,",
+  "C39 A POSITIVE SAMPLE CORRESPONDS TO A INCREASE IN ACOUSTIC IMPEDANCE.",
+  "C40 END EBCDIC."
+ ],
+ "crs": "ED50 / UTM zone 31N (EPSG:23031), metres",
+ "file": "seismic.bin",
+ "dtype": "uint8",
+ "order": "inline-major: for each inline (il.count), each crossline (xl.count), the depth samples (z.count)",
+ "il": {
+  "first": 10038,
+  "last": 10324,
+  "step": 2,
+  "count": 144
+ },
+ "xl": {
+  "first": 2090,
+  "last": 2464,
+  "step": 2,
+  "count": 188
+ },
+ "z": {
+  "first": 2295.0,
+  "step": 5.0,
+  "count": 352,
+  "unit": "m",
+  "positive": "down",
+  "datum": "mean sea level (inferred: the header's processing list includes tidal statics; the header does not state a datum). As delivered: first sample 0 m, 5 m interval, 901 samples; not shifted, stretched or tied to the model."
+ },
+ "origin": [
+  436970.973,
+  6476635.062
+ ],
+ "ilVector": [
+  6.04808,
+  24.257419
+ ],
+ "xlVector": [
+  -24.257392,
+  6.048056
+ ],
+ "spacing": {
+  "il": 25.0,
+  "xl": 25.0,
+  "binIl": 12.5,
+  "binXl": 12.5
+ },
+ "azimuth": {
+  "inlineIncreasing": 14.0001,
+  "crosslineIncreasing": 284.0,
+  "convention": "degrees clockwise from grid north. The header's 'INLINE DIRECTION' (284 degrees) runs along an inline, the direction crossline numbers increase."
+ },
+ "position": "x = origin.x + (il - il.first) / il.step * ilVector.x + (xl - xl.first) / xl.step * xlVector.x; same for y",
+ "corners": [
+  {
+   "il": 10038,
+   "xl": 2090,
+   "x": 436970.973,
+   "y": 6476635.062
+  },
+  {
+   "il": 10038,
+   "xl": 2464,
+   "x": 432434.84,
+   "y": 6477766.049
+  },
+  {
+   "il": 10324,
+   "xl": 2464,
+   "x": 433299.716,
+   "y": 6481234.86
+  },
+  {
+   "il": 10324,
+   "xl": 2090,
+   "x": 437835.848,
+   "y": 6480103.873
+  }
+ ],
+ "fit": {
+  "traces": 150945,
+  "residualMaxM": 0.1655,
+  "residualRmsM": 0.0772,
+  "coordinateScalar": -100,
+  "axesAngleDeg": 90.00004,
+  "note": "one affine grid fitted (exactly, in integers and rationals) to the CDP X/Y (bytes 181-188, scalar bytes 71-72) of every trace read; the headers scatter around it by their export rounding"
+ },
+ "amplitude": {
+  "decode": "a = (code - 128) / 127 * clip",
+  "clip": 0.10469746783081998,
+  "clipPercentile": 99.9,
+  "zeroCode": 128,
+  "codeRange": [
+   1,
+   255
+  ],
+  "clippedFraction": 0.001,
+  "absMax": 0.20457818027759736,
+  "unit": "as delivered (stack amplitude, no unit stated); no AGC or other gain added here",
+  "note": "the header lists '2DB EXP. GAIN CORRECTION' in the contractor's own processing"
+ },
+ "polarity": "A POSITIVE SAMPLE CORRESPONDS TO A INCREASE IN ACOUSTIC IMPEDANCE.",
+ "polaritySource": "what the contractor's textual header states, line C39, verbatim",
+ "polarityNote": "Stated for a converted-wave (PS) image: PS amplitudes respond mainly to shear-impedance and density contrasts, so read this as the SEG sign convention the contractor used, not as an acoustic-impedance polarity.",
+ "depthRelation": "This PS image is positioned in depth by its own converted-wave velocity model, so its reflectors can sit at different depths from the well paths and the well-adjusted horizons, which agree with each other, and from the simulation model, whose completed cells lie on those well paths. Nothing is shifted to hide the difference.",
+ "antiAlias": {
+  "filter": "separable Kaiser-windowed sinc, 61 taps, cutoff 0.225 cycles per bin, beta 4.5335",
+  "passBand": "to 0.20 cycles per 12.5 m bin (0.016 cycles/m, wavelengths of 62.5 m and more) within 0.05 dB",
+  "stopBand": "at least 50 dB down from 0.25 cycles per bin (0.02 cycles/m, the 25 m grid's Nyquist)",
+  "applied": "on the inline and crossline axes before keeping every second trace; depth untouched"
+ },
+ "crop": {
+  "rule": "reservoir top - 500 m to base + 500 m (the model's own depths), footprint + 250 m",
+  "modelTop": 2797.34,
+  "modelBase": 3549.33,
+  "modelActiveCells": 183545,
+  "footprintIl": [
+   10058.78,
+   10302.19
+  ],
+  "footprintXl": [
+   2110.78,
+   2442.38
+  ],
+  "lateralMarginM": 250.0,
+  "verticalMarginM": 500.0,
+  "readPadTraces": 30
+ },
+ "horizons": {
+  "file": "horizons.bin",
+  "dtype": "float32 little-endian, NaN where not picked",
+  "order": "Hugin_Fm_Top then Hugin_Fm_Base, each inline-major on this grid (il.count x xl.count)",
+  "unit": "m depth below mean sea level",
+  "source": "OSDU volve/horizons, interpreted on ST10010ZC11 Near (2011 PZ processing), depth-converted and adjusted to the wells (the file names carry '_adj' and '_adj2'); they agree with Equinor's Hugin top well picks to a median 0.1 m (tools/DECISIONS.md section 7). Not picks on this PS cube, and not tied to it",
+  "Hugin_Fm_Top": {
+   "points": 184066,
+   "onGrid": 24919,
+   "xyOffsetFromTraceGridMax": 0.258,
+   "depthRange": [
+    2802.5,
+    3359.0
+   ]
+  },
+  "Hugin_Fm_Base": {
+   "points": 186756,
+   "onGrid": 24984,
+   "xyOffsetFromTraceGridMax": 0.257,
+   "depthRange": [
+    2850.1,
+    3447.7
+   ]
+  }
+ },
+ "source": {
+  "url": "https://osdu-seismic-test-data.s3.amazonaws.com/volve/seismic/st0202/stacks/ST0202R08-PS_PSDM_FULL_OFFSET_DEPTH.MIG_FIN.POST_Stack.3D.JS-017534.segy",
+  "bytes": 895367300,
+  "etag": "858b187fc551ef35c8c21dd16a2cd4ba-107",
+  "readBytes": 580232580,
+  "readSha256": "008aa30b24176c0854b9a158f44f950d936ecebe09cf99d5eb1353d60c2f0d06",
+  "headerSha256": "f892bff0174fdd701abf6d0e56ef765aec195bc7442fcef732df6bb2114773cc"
+ }
+}
