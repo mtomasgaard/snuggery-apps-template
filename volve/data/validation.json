@@ -1,0 +1,168 @@
+{
+ "pass": true,
+ "opm": "2026.04",
+ "reference": "Equinor's Eclipse 2015.1 run of VOLVE_2016.DATA (summary vectors, mirrored at f0nzie/rEcl)",
+ "tolerances": {
+  "fieldTotalPct": 5.0,
+  "fieldInjectedPct": 2.0,
+  "fieldPathPct": 10.0,
+  "pressureMeanBar": 5.0,
+  "pressureMaxBar": 15.0,
+  "wellOilPct": 15.0,
+  "wellWaterPct": 25.0,
+  "wellInjectedPct": 2.0,
+  "activeCellsPct": 0.5
+ },
+ "field": {
+  "FOPT": {
+   "ours": 9930776.0,
+   "equinor": 9980819.0,
+   "diffPct": -0.501,
+   "pathMaxPct": 1.036,
+   "observed": 10060777.0,
+   "ok": true
+  },
+  "FWPT": {
+   "ours": 15619391.0,
+   "equinor": 15543996.0,
+   "diffPct": 0.485,
+   "pathMaxPct": 1.842,
+   "observed": null,
+   "ok": true
+  },
+  "FGPT": {
+   "ours": 1435775232.0,
+   "equinor": 1443979008.0,
+   "diffPct": -0.568,
+   "pathMaxPct": 1.067,
+   "observed": null,
+   "ok": true
+  },
+  "FWIT": {
+   "ours": 29944376.0,
+   "equinor": 29944376.0,
+   "diffPct": 0.0,
+   "pathMaxPct": 0.0,
+   "observed": null,
+   "ok": true
+  }
+ },
+ "wells": {
+  "I-F-4": {
+   "WWIT": {
+    "ours": 15994217.0,
+    "equinor": 15994217.0,
+    "diffPct": 0.0,
+    "ok": true
+   }
+  },
+  "I-F-5": {
+   "WWIT": {
+    "ours": 13929153.0,
+    "equinor": 13929153.0,
+    "diffPct": 0.0,
+    "ok": true
+   }
+  },
+  "P-F-11B": {
+   "WOPT": {
+    "ours": 1285577.0,
+    "equinor": 1232928.2,
+    "diffPct": 4.27,
+    "ok": true
+   },
+   "WWPT": {
+    "ours": 1027203.4,
+    "equinor": 1103503.0,
+    "diffPct": -6.914,
+    "ok": true
+   }
+  },
+  "P-F-12": {
+   "WOPT": {
+    "ours": 4319022.5,
+    "equinor": 4253531.0,
+    "diffPct": 1.54,
+    "ok": true
+   },
+   "WWPT": {
+    "ours": 7189329.5,
+    "equinor": 7283240.5,
+    "diffPct": -1.289,
+    "ok": true
+   }
+  },
+  "P-F-14": {
+   "WOPT": {
+    "ours": 3937653.5,
+    "equinor": 4108007.8,
+    "diffPct": -4.147,
+    "ok": true
+   },
+   "WWPT": {
+    "ours": 7076564.0,
+    "equinor": 6827675.5,
+    "diffPct": 3.645,
+    "ok": true
+   }
+  },
+  "P-F-1C": {
+   "WOPT": {
+    "ours": 214650.4,
+    "equinor": 216376.5,
+    "diffPct": -0.798,
+    "ok": true
+   }
+  }
+ },
+ "pressure": {
+  "meanAbsBar": 0.31,
+  "maxAbsBar": 0.837,
+  "ok": true
+ },
+ "messages": [],
+ "start": "2007-12-31",
+ "end": "2016-10-01",
+ "static": {
+  "activeCells": {
+   "ours": 183545,
+   "equinor": 183545,
+   "diffPct": 0.0,
+   "ok": true
+  },
+  "DEPTH": {
+   "maxAbsDiff": 0.0,
+   "cells": 183545,
+   "ok": true
+  },
+  "PORO": {
+   "maxAbsDiff": 0.0,
+   "cells": 183545,
+   "ok": true
+  },
+  "TRANX": {
+   "faces": 155674,
+   "relDiffMedian": 2e-06,
+   "within1Pct": 0.998606,
+   "openHereOnly": 3,
+   "openInEquinorOnly": 0,
+   "gate": false
+  },
+  "TRANY": {
+   "faces": 155948,
+   "relDiffMedian": 2e-06,
+   "within1Pct": 0.997993,
+   "openHereOnly": 4,
+   "openInEquinorOnly": 0,
+   "gate": false
+  },
+  "TRANZ": {
+   "faces": 167223,
+   "relDiffMedian": 2e-06,
+   "within1Pct": 0.990821,
+   "openHereOnly": 84,
+   "openInEquinorOnly": 0,
+   "gate": false
+  }
+ }
+}
