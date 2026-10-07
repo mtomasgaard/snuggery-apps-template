@@ -7,7 +7,7 @@
 //      (js/section.js added by plan 0012's package 3.4, js/pane.js by 3.4b);
 //      the face's and OFL.txt's sha256 are the house's; NOTES.md and About credit the face;
 //   5. the data is untouched: each data file's sha256 is the one recorded before the pass;
-//   6. miniapp.json is valid, at version 2.3 (HOUSE 13; plan 0012's package 3.4b from 2.2);
+//   6. miniapp.json is valid, at version 2.3.1 (HOUSE 13; plan 0012's package 3.4b from 2.2, 2.3.1 the play clamp);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
 //   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line, its
 //      first Sources and credits paragraph; no #credits and no other credit on the front (HOUSE 4.15);
@@ -136,7 +136,7 @@ exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js']);
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Norne Reservoir' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.3',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.3.1',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 

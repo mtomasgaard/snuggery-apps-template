@@ -699,9 +699,9 @@ before 2.2); fonts 40 075 B of 160 000; the ZIP about 15.4 MB of its 19.11 MB ca
 size is in `tools/DECISIONS.md`, since this file's own bytes move it, and so is the plan's code
 ledger, which put the pass at about 110 000 B.
 
-**As built, 2.3** (`node tools/check.mjs`): app code 255 443 B (`app.js` 137 645, `style.css` 37 087,
+**As built, 2.3.1** (`node tools/check.mjs`): app code 255 520 B (`app.js` 137 722, `style.css` 37 087,
 `js/section.js` 33 833, `index.html` 20 214, `js/track.js` 7 840, `js/units.js` 7 225, `js/data.js`
-6 387, `js/pane.js` 5 212), 33 649 B more than 2.2 for the edge and the sweep, within the 256 000 B the
+6 387, `js/pane.js` 5 212), 33 726 B more than 2.2 for the edge, the sweep and 2.3.1's play clamp, within the 256 000 B the
 template ruled for 2.3; fonts and the data unchanged; the ZIP about 15.4 MB.
 
 ---

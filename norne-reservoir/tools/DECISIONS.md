@@ -1450,3 +1450,11 @@ sweep row, the click guard, the edge's words). The ZIP 15 394 827 B of 19 110 59
   the raised states before and after, in both engines, the 160 px strip raised, `pane-raised-side`,
   `pane-side`, and the three changed screenshots.
 - Not run: anything on a phone.
+
+## Plan 0012, 2.3.1: the play clamp (2026-10-07, the lead)
+
+Volve's fix pass found that `loop()` could ask for report date −1: a frame's time can precede the
+Play tap's `performance.now()`, so `now - playing.t0` came out negative at the first frame, and
+`Math.floor` of it gave −1 from frame 0. One Chromium run crashed on it ("Start offset −734180").
+Norne carries the same line, so it takes Volve's clamp, `Math.max(0, now - playing.t0)`, as 2.3.1.
+Nothing else changed.

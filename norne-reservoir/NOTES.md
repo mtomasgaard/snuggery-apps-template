@@ -122,7 +122,7 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tools/shoot.mjs   # the app
 python3 norne-reservoir/tools/art/palette.py [--json]          # from Template/: every color and contrast in ART.md
 ```
 
-Budgets (`tools/check.mjs` prints the truth): app code at most 256 000 bytes, the lead's ruling for 2.3's edge and sweep (2026-10-07; 2.3 measures 255 443), 222 000 for 2.2's section (plan 0012 3.4; 200 000 before it, about 162 000 after the house pass and its follow-up). Fonts at most 160 000 (40 075), the ZIP at most 19 110 591 bytes (about 15.4 MB).
+Budgets (`tools/check.mjs` prints the truth): app code at most 256 000 bytes, the lead's ruling for 2.3's edge and sweep (2026-10-07; 2.3.1 measures 255 520), 222 000 for 2.2's section (plan 0012 3.4; 200 000 before it, about 162 000 after the house pass and its follow-up). Fonts at most 160 000 (40 075), the ZIP at most 19 110 591 bytes (about 15.4 MB).
 
 ## Credits and license
 

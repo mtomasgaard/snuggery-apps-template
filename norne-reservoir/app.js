@@ -579,7 +579,7 @@ function loop(now) {
   raf = 0;
   G.stats.frames++;
   if (playing) {
-    const k = playing.from + Math.floor(((now - playing.t0) * (cfg.playbackFramesPerSecond || 6)) / 1000);
+    const k = playing.from + Math.floor((Math.max(0, now - playing.t0) * (cfg.playbackFramesPerSecond || 6)) / 1000);   // a frame's time can precede the tap's: never before the start
     wanted = Math.min(G.nf - 1, k);
     if (k >= G.nf - 1) stop();
   }
