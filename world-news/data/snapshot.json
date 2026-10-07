@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T03:01:26Z",
+ "generatedAt": "2026-10-07T04:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Electric long-haul trucks could become a reality sooner – if there’s no driver",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/electric-long-haul-trucks-could-become-a-reality-sooner-if-theres-no-driver-291166",
+     "published": "2026-10-07T03:30:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anthony Wiskich, Visiting Fellow in Economics, Australian National University"
+    },
+    {
      "title": "Yemen is spiralling into another civil war that could swiftly engulf in the entire region",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Flavio Menezes, Professor of Economics, Director of the Australian Institute for Business and Economics, The University of Queensland"
-    },
-    {
-     "title": "Conservationists are discovering ‘bright spots’ around the globe. Here’s why they matter",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/conservationists-are-discovering-bright-spots-around-the-globe-heres-why-they-matter-289476",
-     "published": "2026-10-07T00:01:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Bing Lin, Postdoctoral Fellow in the Thriving Oceans Research Hub, School of Geosciences, University of Sydney"
     },
     {
      "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Electric long-haul trucks could become a reality sooner – if there’s no driver",
+   "published": "2026-10-07 03:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Yemen is spiralling into another civil war that could swiftly engulf in the entire region",
    "published": "2026-10-07 02:49 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Why a Greens’ plan for 624 public supermarkets to take on Woolies and Coles just doesn’t add up",
    "published": "2026-10-07 02:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Conservationists are discovering ‘bright spots’ around the globe. Here’s why they matter",
-   "published": "2026-10-07 00:01 UTC"
   },
   {
    "region": "Oceania",
