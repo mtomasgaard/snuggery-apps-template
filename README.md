@@ -1,4 +1,4 @@
-# Snuggery live apps
+# Snuggery mini-apps
 
 **Just want an app on your iPhone? There is nothing to copy or set up.** In Safari on the iPhone,
 tap [**Install Milky Way**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) (6.5 MB) — or any app in
@@ -8,12 +8,12 @@ asks, then open the download and choose **Share → Snuggery**.
 **This is a template. Nothing of yours goes here** — tap *Use this template* on GitHub to make
 your own copy, and work in that. What follows describes the copy you will have.
 
-One repository holding every mini-app whose data refreshes on a schedule, and the
-jobs that refresh them.
+One repository of mini-apps: the ones whose data refreshes on a schedule, with the
+jobs that refresh them, and the ones that carry everything they need in the ZIP.
 
-The loop, once it is running: a GitHub Action rewrites a small JSON file here →
-a Shortcut on your phone copies that file into the app → you open the app and
-see today's numbers. Snuggery itself never goes online.
+For the ones that refresh, the loop once it is running: a GitHub Action rewrites
+a small JSON file here → a Shortcut on your phone copies that file into the app →
+you open the app and see today's numbers. Snuggery itself never goes online.
 
 **Click *Use this template* to make your own copy, and make it private** if any
 app here will ever hold something personal. A repository is as private as its

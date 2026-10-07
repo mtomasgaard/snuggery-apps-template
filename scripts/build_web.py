@@ -93,7 +93,7 @@ def page(cards, repo):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Snuggery live apps</title>
+<title>Snuggery mini-apps</title>
 <style>
   :root {{ --bg:{light[0]}; --card:{light[1]}; --ink:{light[2]}; --muted:{light[3]}; --line:{light[4]}; --accent:{light[5]}; }}
   @media (prefers-color-scheme: dark) {{
@@ -126,7 +126,7 @@ def page(cards, repo):
 </head>
 <body>
 <main>
-  <h1>Snuggery live apps</h1>
+  <h1>Snuggery mini-apps</h1>
 {header}  <p class="how">On an iPhone, in Safari: <a href="#apps"><strong>Get the ZIP</strong></a> under any app,
   then <strong>Share</strong>, then <strong>{html.escape(SITE_NAME or "Snuggery")}</strong>.</p>
   <p class="lede">Every app in <a href="{source}">the repository</a>, running in the browser. Each shows the
