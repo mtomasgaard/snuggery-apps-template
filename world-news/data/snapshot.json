@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T19:01:40Z",
+ "generatedAt": "2026-10-07T20:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -459,6 +459,16 @@
      "author": "Theresa Dicke, Professor, Institute for Positive Psychology and Education, Australian Catholic University"
     },
     {
+     "title": "What happens to language when machines start talking back?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/what-happens-to-language-when-machines-start-talking-back-293554",
+     "published": "2026-10-07T18:28:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Celeste Rodriguez Louro, Associate Professor of Linguistics and Director of Language Lab, The University of Western Australia"
+    },
+    {
      "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Johnny Chan, Senior Lecturer, Faculty of Business and Economics, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Nobel prize in chemistry awarded for work on mirror-image molecules",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nobel-prize-in-chemistry-awarded-for-work-on-mirror-image-molecules-293816",
-     "published": "2026-10-07T12:48:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Addicoat, Senior Lecturer in Functional Materials, Nottingham Trent University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
-   "published": "2026-10-07 17:48 UTC"
+   "title": "What happens to language when machines start talking back?",
+   "published": "2026-10-07 18:28 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Nobel prize in chemistry awarded for work on mirror-image molecules",
-   "published": "2026-10-07 12:48 UTC"
+   "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
+   "published": "2026-10-07 17:48 UTC"
   },
   {
    "region": "Oceania",
