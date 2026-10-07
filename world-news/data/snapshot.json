@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-07T17:03:12Z",
+ "generatedAt": "2026-10-07T18:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/microdramas-are-booming-ai-could-make-it-even-harder-to-stop-binge-watching-291962",
+     "published": "2026-10-07T17:48:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Johnny Chan, Senior Lecturer, Faculty of Business and Economics, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "Nobel prize in chemistry awarded for work on mirror-image molecules",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nobel-prize-in-chemistry-awarded-for-work-on-mirror-image-molecules-293816",
+     "published": "2026-10-07T12:48:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matthew Addicoat, Senior Lecturer in Functional Materials, Nottingham Trent University"
+    },
+    {
+     "title": "These state supreme court races could decide abortion access and trans rights",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/these-state-supreme-court-races-could-decide-abortion-access-and-trans-rights-292881",
+     "published": "2026-10-07T12:40:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rachel Rebouché, Professor of Law, The University of Texas at Austin"
+    },
+    {
      "title": "‘I’m harmed and I don’t think the person who did it knows’: we looked at different responses to uni sexual assault",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Shirleene Robinson, Visiting Fellow, School of Communication, University of Technology Sydney"
-    },
-    {
-     "title": "Electric long-haul trucks could become a reality sooner – if there’s no driver",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/electric-long-haul-trucks-could-become-a-reality-sooner-if-theres-no-driver-291166",
-     "published": "2026-10-07T03:30:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anthony Wiskich, Visiting Fellow in Economics, Australian National University"
-    },
-    {
-     "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/we-analysed-30-years-of-debate-on-genetic-modification-this-is-whats-been-missing-292976",
-     "published": "2026-10-06T23:16:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sylvia Nissen, Senior Lecturer in Environmental Policy, Lincoln University, New Zealand"
-    },
-    {
-     "title": "Eva Marie Saint has died at 102: the last star of Hollywood’s Golden Age",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/eva-marie-saint-has-died-at-102-the-last-star-of-hollywoods-golden-age-261107",
-     "published": "2026-10-06T22:16:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Marcus Harmes, Professor in Pathways Education, University of Southern Queensland"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
+   "published": "2026-10-07 17:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Nobel prize in chemistry awarded for work on mirror-image molecules",
+   "published": "2026-10-07 12:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "These state supreme court races could decide abortion access and trans rights",
+   "published": "2026-10-07 12:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "‘I’m harmed and I don’t think the person who did it knows’: we looked at different responses to uni sexual assault",
    "published": "2026-10-07 05:30 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "What the Australian government’s apology to LGBTQ+ Defence personnel and veterans means",
    "published": "2026-10-07 04:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Electric long-haul trucks could become a reality sooner – if there’s no driver",
-   "published": "2026-10-07 03:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "We analysed 30 years of debate on genetic modification. This is what’s been missing",
-   "published": "2026-10-06 23:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Eva Marie Saint has died at 102: the last star of Hollywood’s Golden Age",
-   "published": "2026-10-06 22:16 UTC"
   },
   {
    "region": "Oceania",
