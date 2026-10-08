@@ -179,8 +179,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Milky Way' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1',
+  `miniapp.json: "${mini.name}" ${mini.version} (plan 0012 package 3.5's bump from 1.0, HOUSE.md section 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 8. No AI vendor or model name in shipped text (Global Weather's list, ROT13, copied as it is)
@@ -194,11 +194,19 @@ const texts = [...shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f) &
 const named = texts.filter((f) => namesRe.test((ALLOW[f] || []).reduce((t, w) => t.split(rot13(w)).join(''), read(f))));
 ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files and ART.md${named.length ? ': ' + named.join(', ') : ''}`);
 
-// 9. The credit line
+// 9. The credit line: in About, not on the front (HOUSE.md section 4.15; plan 0012 package 3.5)
 const app = read('app.js');
 const credits = (app.match(/^const CREDITS = '([^']*)';$/m) || [])[1];
-ok(credits === 'NASA/JPL, USGS, ESA/Gaia/DPAC, AT-HYG, LVDB, galstreams, Stellarium' && /\$\('credits'\)\.textContent = CREDITS;/.test(app),
-  `the credit line: CREDITS is "${credits}", written to #credits`);
+{
+  const h = read('index.html'), front = h.slice(0, h.indexOf('<div class="sheet" id="about"'));
+  const inAbout = /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>\s*<div id="about-sources">/.test(h);
+  // nothing on the front names a source: the credit's words, the stamp's old edition, a license
+  const named = ['NASA', 'JPL', 'Gaia', 'USGS', 'AT-HYG', 'LVDB', 'galstreams', 'Stellarium', 'DE430', 'retrieved', 'License', 'CC BY'].filter((t) => front.includes(t));
+  ok(credits === 'NASA/JPL, USGS, ESA/Gaia/DPAC, AT-HYG, LVDB, galstreams, Stellarium' && /\$\('about-credit-line'\)\.textContent = CREDITS;/.test(app)
+    && inAbout && !/id="credits"/.test(h) && !/\$\('credits'\)/.test(app) && !/\.credits\b/.test(read('styles.css')) && named.length === 0
+    && !/\$\('stamp'\)\.textContent = `JPL/.test(app) && /\['Edition', `JPL DE430 and Gaia DR3/.test(app),
+  `the credit line: CREDITS is "${credits}", written to About's #about-credit-line, first under Sources and credits (${inAbout}); no #credits, no .credits rule; the edition is About's first This data row, not the stamp; no source named on the front before About${named.length ? ': ' + named.join(', ') : ''}`);
+}
 
 // 10. The marketing camera's strings and keys
 const html = read('index.html');

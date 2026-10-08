@@ -941,3 +941,157 @@ The items the pass left for the lead, as built (each with its command and output
   Find's field has no browser cross; after a load failure the stamp is inert.
 - **The pipeline's prose is US English** (owner calls 8, 15, 17): see `tools/DECISIONS.md` section 9
   for the rebuild and its proof that only prose changed.
+
+---
+
+## 11. Plan 0012, package 3.5: the text cut (2026-10-07), version 1.1
+
+The owner, 2026-10-06: *"Milky way can remove some of the text/subtitles at the front page … data
+origin/licenses etc should not take up too much space."* Applied: `docs/plans/0012-change-lists.md`,
+*Milky Way*, items 1–7, and HOUSE.md §4.15 (the front), §4.2 (data built once), §12 (the ground stays
+gray, D6), §13 (1.0 → 1.1). No file in `data/` was written; the pipeline was not run.
+
+**What changed.**
+
+1. *The stamp (F2).* `buildAbout()` no longer writes the edition into `#stamp`; it hides
+   `#stamp-home` and shows `#btn-about`. The edition, from the same expression, is About's first
+   *This data* row: `Edition: JPL DE430 and Gaia DR3, retrieved 23 Sep 2026`. The loading count and
+   `The sky could not be read` stay, and the stamp stays one line in all eight states it can say
+   (`shoot.mjs`, 16 px each).
+2. *The About key (F2).* `<div class="hkeys" id="hkeys">` with `#btn-about` at the name's row, right;
+   hidden until the data is in and after a failure. In focus mode it is the caption band's first
+   child, and goes back to `#hkeys` on the way out. Its hit is 44 px: the header has 6 px above the
+   key, so the hit runs 6 px up and 14 px down over the scale row's empty right end (`.hkeys` is
+   `z-index: 1`); at 320 px it overlaps the `Milky Way` scale word's top-right corner by about 4 px,
+   away from that word's center, and every width's hit check passes. In the caption: `display:
+   block`, 5 px above and 4 px below, hit 9 px each way, so it never reaches up into the plate.
+3. *The credit line (F1).* `#credits`, its write and the `.credits` rules (portrait and on its side)
+   are gone; `const CREDITS` is unchanged and written at start into `#about-credit-line`, the first
+   child under *Sources and credits*.
+4. *The caption* is `You are … from the Sun; the screen spans … there.` The Reach's sentence is
+   `#about-reach`, a static first paragraph of `#about-reading` that `buildAbout()` keeps and
+   `solarCensus()` rewrites when the day's census changes (it was rewritten for the caption the
+   same way; `reachSentence` is gone).
+5. *Heights.* `.cap` 45 → 30 px, and 30 → 15 px from 640 px; on its side it stays 15 px. The caption
+   band on its side is no longer a grid (nothing sits beside the Reach), so the Reach spans the band.
+6. *Prose (F5).* `NOTES.md`'s caption and About lines; `ART.md`'s frame diagram, stamp, About key,
+   caption, credits, About, focus mode and on-its-side rows, and signature test 3 (the gap is read in
+   About now). `CREDITS.txt` says nothing about the screen (its only "credit line" is JPL's image
+   policy, quoted), so it is unchanged: it is pipeline output.
+7. *Version (F6):* `miniapp.json` 1.1; `check.mjs` item 7 pins it.
+
+**Beyond the list, each the builder's call (the lead may reverse):**
+
+- *The `Retrieved: 23 Sep 2026` row of This data is gone*: the new `Edition` row carries the same
+  date in the same words, so the list's row would have printed it twice. It also paid 36 B of the
+  code cap. Reversing it costs those bytes back (see Budgets).
+- *The stamp's click listener is gone*: the listeners bind once the data is in, when the stamp is
+  hidden for good, so it could never fire (dead code, 30 B). The stamp's markup, its
+  `aria-haspopup` and its hint are kept as the family has them.
+- *A bug found by driving WebKit, fixed:* the Reach's unit names (`1 AU`, `1 pc`, `1 kpc`, `1 Mpc`)
+  were drawn with `textBaseline = 'top'` at y 21 of the 31 px canvas; WebKit puts `top` lower than
+  Chromium, so their lower part was cut off at the canvas's foot (390 × 844, light and dark, Playwright
+  WebKit 2359). `js/rule.js` now draws them on `'middle'` at y 26, the same em box's center: whole in
+  WebKit and Chromium (pictures in `tools/.work/p0012/drive/reach-crop*.png`). *Corrected after
+  review: not whole. `'middle'` sits about 1 px apart in the two engines, and the descenders were
+  still cut by about 2 px in WebKit and 1 in Chromium. Fixed below.* Not on record before;
+  it is a phone check too (WebKit is the phone's engine).
+- *The paragraph About gains repeats the second one's gap* (`The blank between 160 AU and 1.30 pc is
+  the reach of these catalogs …`), as the list asked. Dropping `#about-reach` would save about
+  250 B; the list's words are kept.
+
+**Checks changed (F8).** `check.mjs` item 9: the constant unchanged, written to `#about-credit-line`
+first under *Sources and credits*, no `#credits` and no `.credits` rule, the edition not in the
+stamp but About's `Edition` row, and no source token (`NASA`, `JPL`, `Gaia`, `USGS`, `AT-HYG`, `LVDB`,
+`galstreams`, `Stellarium`, `DE430`, `retrieved`, `License`, `CC BY`) in `index.html` before About.
+Item 7 pins `1.1`. `shoot.mjs`: the boot check is the front (no `#credits`, the stamp's line hidden,
+the About key on the name's row, About's credit paragraph word for word, This data opening with the
+edition) and the stamp's one-line check over its eight states; `About` joins the camera's
+by-role buttons; the gap check reads `#about-reach` and requires the caption to be the one sentence;
+the taps on `#stamp` (About picture, About holding play, the keyboard check, Reduce Motion) are on
+`#btn-about`; focus mode's "stays" list is `btn-about`, `cap`, `valid`, `slider`, `t-play`,
+`focus-exit`, with the key first in the caption and back in `#hkeys` after; broken data checks the
+key hidden, the stamp one line and About's credit line written; the longest captions lose the
+Reach's sentence.
+
+**Measured (headless Chromium and WebKit, 390 × 844, DPR 2, by touch; layout only, not a phone):**
+
+| | before | after | gain |
+| --- | --: | --: | --: |
+| header | 94 px | 72 px | 22 |
+| caption band | 99 px | 69 px | 30 |
+| plate, Solar System | 546 px | 598 px | **52** |
+| plate, focus mode | 653 px | 664 px | 11 |
+| plate, 844 × 390 | 235 px | 235 px | 0 |
+
+The same in both themes and both engines. On its side the header and caption keep their rows (the
+scale words are 44 px tall; the caption was already one line).
+
+**Budgets.** App code 241 982 B of the 242 000 B cap (241 820 B before; 18 B to spare), ZIP
+6 513 586 B (`node tools/check.mjs`; 6 513 447 B before) of 8 156 512 B.
+
+**Camera.** `from the Sun` kept (the caption's first sentence, written by the frame loop); the scale
+words, `Play`, `Hide the controls`, `Show the controls` unchanged; the new `About` key shares no name
+with them. The caption section's accessible name changed from `Distance ruler, caption and credits`
+to `Distance ruler and caption` (no camera reads it).
+
+**Phone checks owed (matrix row 158 gains):** the About key under the status bar and its 44 px hit
+at the top of the header in Snuggery's full screen; the Reach's unit names whole on the phone; the
+About key at the head of the caption in focus mode.
+
+## After review (2026-10-07)
+
+The reviewer's must and three shoulds are applied; the landscape nit is taken, paid from the bytes
+the second should freed. Figures: headless Chromium and WebKit (Playwright), 390 × 844 and
+844 × 390, DPR 2, by touch, both themes (`tools/.work/fix/drive.mjs`, `drive.log`, `shots/`).
+Layout only, not a phone.
+
+1. *The Reach's unit names, whole (must).* `js/rule.js` draws them on `'alphabetic'`, where both
+   engines measure the same box (ascent 6.91, descent 3.03 for `1 Mpc`; `1 kpc`'s `k` 7.52).
+   The reviewer's fix (y 27 in the 31 px canvas) cleared the descenders, but my pixels showed the
+   1 AU tick (it ends at y 21) running into the apex of the `A`, and the 1 kpc tick into the `k`:
+   the reviewer checked `1 pc` only, and a label is centered on its tick, so the tick always points
+   into the label's middle. A label 9.94 px tall needs 21 + 1 + 9.94 = 31.94 px to clear its tick
+   by 1 px, which 31 px cannot hold. So the canvas is **33 px** (`H`, `.reach`, `.reach canvas`)
+   and the baseline sits 16 px under the bar (y 29): glyphs 21.48 to 32.03 of 33 in both engines,
+   1 px clear of the tick (the `k` 0.5 px), descenders whole. It costs the plate 2 px: **596 px**
+   at the Solar System (598 before this fix; 546 before the pass, a gain of 50, not 52), caption
+   band 71 px; on its side the plate is **233 px** (235; `shoot.mjs` requires ≥ 220). Focus mode
+   hides the Reach, so its plate is unchanged (664 px). The section 11 claim above is corrected.
+   `ART.md`: the Reach is 33 px in the frame table and the diagram, the baseline is stated.
+2. *About states the gap once (should; departs from change list item 4's letter, for the lead).*
+   `#about-reach` and its write in `solarCensus()` are gone; `#about-reading` holds the blocks only.
+   About's second paragraph already prints the day's gap live through `#gap-a`/`#gap-b` (`The blank
+   between 160 AU and 1.30 pc is the reach of these catalogs, not empty space …`), and its first
+   says the bar is inked where the catalogs hold an object, so the list's intent (About says it)
+   is met by text that was already there. `shoot.mjs`'s gap check now reads `#gap-a`/`#gap-b`
+   against its own decode (`160 AU`, `1.30 pc`), and the keyboard About check looks for `The blank
+   between … AU and … pc is the reach`. `ART.md` signature test 3 and the caption row quote that
+   sentence. Reversing it costs about 210 B (the paragraph, its write and the `replaceChildren` term; 332 B came free in all, 125 of them from 3).
+3. *The stamp claims no dialog (should).* `aria-haspopup` and `aria-describedby` are off `#stamp`,
+   and `#stamp-hint` is deleted: the stamp opens nothing in any state, since the data it would open
+   About on hides it. It stays a `<button>` as the family has it (the hint and popup attributes
+   were the false part); the accessibility tree while loading reads `button "Reading the
+   ephemeris… 1 of 6"` with no popup. Making it a `<p>` is the lead's call (family markup).
+4. *The exit control (should): nothing to change in this folder.* The reviewer's overlap of the
+   About key with Snuggery's full-screen exit control on iOS 18 is predicted from
+   `FullScreenControls.swift` and `MiniAppView.swift`, not measured, and it follows from F2's
+   family rule. I cannot write `docs/DEVICE_TEST_MATRIX.md`; the row-158 item is handed to the lead,
+   by name: *in Snuggery's full screen, the About key and Snuggery's exit control both reachable
+   (the key's whole hit opens About, the control's whole hit leaves full screen), iOS 18.5
+   portrait, iOS 26 portrait and landscape.* If the phone confirms it, the ruling is family-wide.
+5. *On its side, the name centers on the scale words (nit, taken).* `styles.css`, landscape:
+   `.head:has(#stamp-home[hidden]) h1 { grid-row: 1 / 3; align-self: center; }`. Only once the
+   stamp's line hides, so while loading the name still sits over the count (measured: name 0-22,
+   stamp 22-38). Measured after load: name and scale words both centered at y 23 of the 46 px
+   header, all four engine and theme pairs. `:has()` is in WebKit since iOS 15.4.
+
+**Budgets.** App code 241 775 B of 242 000 (225 to spare; 241 982 before this round), ZIP
+6 513 607 B of 8 156 512 (`node tools/check.mjs`).
+
+**Camera.** No string the camera waits for or taps changed: `from the Sun`, the scale words,
+`Play`, `About`, `Hide the controls`, `Show the controls`.
+
+**Phone checks owed (for matrix row 158, adding to section 11's list):** the Reach's unit names
+whole and clear of their ticks in the 33 px Reach; the exit-control item in 4 above; the name
+centered on the scale words on its side once the sky is in.

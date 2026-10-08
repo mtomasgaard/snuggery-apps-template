@@ -163,10 +163,9 @@ function solarCensus() {
   farthest = extent(out)[1];
   solarLogs = out.map((d) => Math.log10(d));
   reach.setLists([solarLogs, ...staticLogs]);
-  reachSentence = farthest < starNear ? `The bar is inked where these catalogs hold an object; none lie between ${U.dist(farthest)} and ${U.dist(starNear)}.` : '';
+  // the catalogs' gap on the day shown, in About (HOUSE 4.15)
   text('gap-a', U.dist(farthest)); text('gap-b', U.dist(starNear));
 }
-let reachSentence = '';
 
 // ---------------------------------------------------------------- objects: ids, positions, descriptions
 // Object ids: 'sun', 'earth', 'io' …; 'sb:<index>'; 'star:<row>'; 'gc:<i>', 'sat:<i>', 'stream:<i>',
@@ -810,8 +809,8 @@ function chrome(dSun) {
     if (sc !== 'solar' && S.playing) setPlaying(false);
   }
   solarCensus();
-  // the caption: where you are, how wide the screen is there, and what the Reach shows
-  text('cap', `You are ${U.dist(dSun)} from the Sun; the screen spans ${U.dist(W / pxPerRad * pose.dist)} there.${reachSentence && !S.focus ? ' ' + reachSentence : ''}`);
+  // the caption: where you are, and how wide the screen is there
+  text('cap', `You are ${U.dist(dSun)} from the Sun; the screen spans ${U.dist(W / pxPerRad * pose.dist)} there.`);
   if (!$('reach').hidden) reach.draw(dSun);
   // the card moves to the bottom when it would cover the selected object, a globe's disk included
   const card = $('card');
@@ -830,8 +829,8 @@ function nameReach() {
 }
 
 // ---------------------------------------------------------------- focus mode
-// Everything but the plate, the stamp, the caption, the credits and the player leaves; the ghost key
-// in the corner, or Escape, brings it back. Remembered as milkyway:focus.
+// Everything but the plate, the About key, the caption and the player leaves; the ghost key in the
+// corner, or Escape, brings it back. Remembered as milkyway:focus.
 function setFocus(on, byKey, now) {
   if (S.focus === on && !now) return;
   S.focus = on; store.set('focus', on);
@@ -841,7 +840,7 @@ function setFocus(on, byKey, now) {
     select(null);
     const done = () => {
       for (const e of gone) { e.hidden = true; e.inert = true; e.classList.remove('leaving'); }
-      $('caption').prepend($('stamp-home'));
+      $('caption').prepend($('btn-about'));
       document.body.classList.add('focus');
       $('focus-exit').hidden = false;
       if (byKey) $('focus-exit').focus();
@@ -850,7 +849,7 @@ function setFocus(on, byKey, now) {
     if (!now) say('Controls hidden. Press Escape or the corner key to show them.');
   } else {
     for (const e of gone) { e.hidden = false; e.inert = false; e.classList.remove('leaving'); }
-    $('head').insertBefore($('stamp-home'), $('scales'));
+    $('hkeys').append($('btn-about'));
     document.body.classList.remove('focus');
     $('focus-exit').hidden = true;
     if (byKey) $('focus-key').focus();
@@ -914,6 +913,7 @@ function buildAbout() {
   const blocks = (about && about.blocks) || [];
   const retrieved = blocks.map((b) => b.retrieved || '').sort().pop() || '';
   const list = [
+    ['Edition', `JPL DE430 and Gaia DR3${retrieved ? `, retrieved ${U.isoDay(retrieved)}` : ''}`],
     ['Planets and the Moon', span(eph.range)],
     ['Moons of Mars and the giant planets', `${t.moons}, ${span(eph.moonRange)}`],
     ['Asteroids and comets', U.fixed(small.count)],
@@ -922,7 +922,6 @@ function buildAbout() {
     ['Globular clusters', U.fixed(g.globulars.length)],
     ['Satellite galaxies', `${t.conf} confirmed, ${t.cand} candidates`],
     ['Stellar streams', `${g.streams.length}, ${t.measured} with measured tracks`],
-    ['Retrieved', U.isoDay(retrieved)],
   ];
   $('about-list').replaceChildren(...list.flatMap(([k, v]) => [el('dt', `${k}:`), el('dd', v)]));
   const keep = (b) => b.id !== 'reading-sizes' && b.id !== 'software';
@@ -938,7 +937,8 @@ function buildAbout() {
   };
   $('about-reading').replaceChildren(...blocks.filter((b) => b.id.startsWith('reading-') && keep(b)).flatMap(block));
   $('about-sources').replaceChildren(...(about && about.intro ? [el('p', about.intro)] : []), ...blocks.filter((b) => !b.id.startsWith('reading-') && keep(b)).flatMap(block));
-  $('stamp').textContent = `JPL DE430 and Gaia DR3${retrieved ? `, retrieved ${U.isoDay(retrieved)}` : ''}`;
+  // data built once: the stamp's line hides, the About key shows (HOUSE 4.2)
+  $('stamp-home').hidden = true; $('btn-about').hidden = false;
 }
 let searchIndex = null;
 // Bayer letters spelled out, as a phone keyboard types them: 'α¹ Cen' is also 'alpha1', 'alpha'.
@@ -1043,7 +1043,7 @@ function bindUi() {
   const kb = (e) => e.detail === 0;          // a click made by the keyboard
   $('btn-layers').addEventListener('click', (e) => (S.sheet === 'layers' ? closeSheet() : openSheet('layers', kb(e))));
   $('btn-search').addEventListener('click', (e) => (S.sheet === 'search' ? closeSheet() : openSheet('search', kb(e))));
-  $('stamp').addEventListener('click', (e) => openSheet('about', kb(e)));
+  $('btn-about').addEventListener('click', (e) => openSheet('about', kb(e)));
   for (const b of $$('[data-close]')) b.addEventListener('click', () => closeSheet());
   for (const b of $$('#scales button')) b.addEventListener('click', () => { select(null); goScale(b.dataset.scale); });
   const zoom = (k) => { rig.finish(); if (RM.matches) rig.zoom(Math.exp(k * 1.04)); else rig.vel.zoom = k * 0.004; invalidate(); };
@@ -1116,7 +1116,7 @@ function restoreCamera() {
 }
 
 (async function main() {
-  $('credits').textContent = CREDITS;
+  $('about-credit-line').textContent = CREDITS;
   try {
     createRenderer();
   } catch (e) { fail(e, 'This phone gave no 3D graphics (WebGL 2) just now. Close other apps and open Milky Way again.'); return; }

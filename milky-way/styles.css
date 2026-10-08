@@ -85,21 +85,26 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.5; strok
 svg .fill { fill: currentColor; stroke: none; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
-/* ── header: the name, the stamp, the three scale words ── */
+/* ── header: the name, About, the stamp while loading, the scale words ── */
 
 .head {
   flex: 0 0 auto;
   display: grid;
-  grid-template-rows: auto auto 44px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 22px auto 44px;
   padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));
 }
-.head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
-.stamp-home { min-width: 0; padding-bottom: 6px; }
+.head h1 { grid-area: 1 / 1; font-size: 15px; font-weight: 650; line-height: 22px; }
+.stamp-home { grid-area: 2 / 1 / 3 / 3; min-width: 0; padding-bottom: 6px; }
+.hkeys { grid-area: 1 / 2; align-self: center; display: flex; position: relative; z-index: 1; }
+/* 44 px of hit: down over the scale row's empty end */
+.hkeys .wordkey::before { inset: -6px -1px -14px; }
 .stamp { position: relative; display: block; max-width: 100%; text-align: left; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 .stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }       /* 44 px of hit */
-.caption > .stamp-home { padding-bottom: 2px; }
-.caption > .stamp-home .stamp::before { inset: -6px 0 -22px 0; }                 /* never up into the plate */
-.scales { display: flex; margin: 0 -8px; }
+/* in focus mode it heads the caption; its hit stays in the band */
+.caption > .wordkey { display: block; margin: 5px 0 4px; }
+.caption > .wordkey::before { inset: -9px -1px; }
+.scales { grid-area: 3 / 1 / 4 / 3; display: flex; margin: 0 -8px; }
 .scales button { position: relative; min-width: 44px; height: 44px; padding: 0 8px; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
 /* the chosen word: weight 620 and the tracer under it, drawn from its tail to its head */
 .scales button[aria-pressed="true"] { color: var(--ink); font-weight: 620; }
@@ -247,7 +252,7 @@ svg .fill { fill: currentColor; stroke: none; }
   text-align: center;
 }
 
-/* ── the caption band: the Reach, the caption, the credits ── */
+/* ── the caption band: the Reach and the caption ── */
 
 .caption {
   flex: 0 0 auto;
@@ -256,16 +261,15 @@ svg .fill { fill: currentColor; stroke: none; }
   line-height: 15px;
   color: var(--ink-2);
 }
-.reach { height: 31px; }
-.reach canvas { display: block; height: 31px; }
+.reach { height: 33px; }
+.reach canvas { display: block; height: 33px; }
 /* The caption's height is fixed, whatever it says: its first sentence changes with every move of the
-   view, and a caption that grew and shrank would resize the plate, which moves the view. Three lines
-   below 640 px hold both sentences at 320 px; two from 640 px (tools/shoot.mjs measures the longest). */
-.cap { height: 45px; overflow: hidden; }
+   view, and a caption that grew and shrank would resize the plate, which moves the view. Two lines
+   below 640 px hold it at 320 px; one from 640 px (tools/shoot.mjs measures the longest). */
+.cap { height: 30px; overflow: hidden; }
 /* the last band once the player has gone pads for the home indicator */
 .caption:has(+ [hidden]) { padding-bottom: calc(4px + env(safe-area-inset-bottom)); }
-@media (min-width: 640px) { .cap { height: 30px; } }
-.credits { font-size: 10.5px; }
+@media (min-width: 640px) { .cap { height: 15px; } }
 
 /* ── the player: the date, the transport and the track (the Solar System scale only) ── */
 
@@ -349,7 +353,7 @@ svg .fill { fill: currentColor; stroke: none; }
 .layer-row .s { display: block; font-size: 11.5px; color: var(--ink-2); }
 .sheet-foot { margin-top: 8px; }
 
-/* ── focus mode: the chrome leaves; the plate, the stamp, the caption, the credits and the player stay ── */
+/* ── focus mode: the chrome leaves; the plate, the About key, the caption and the player stay ── */
 
 .leaving { opacity: 0; transition: opacity 160ms var(--draw); }
 
@@ -365,17 +369,14 @@ svg .fill { fill: currentColor; stroke: none; }
 /* ── a phone on its side: each band gives the plate its second row ── */
 
 @media (orientation: landscape) and (max-height: 500px) {
-  .head { grid-template-columns: max-content minmax(0, 1fr); grid-template-rows: 22px 24px; column-gap: 16px; padding-top: env(safe-area-inset-top); }
-  .head h1 { grid-area: 1 / 1; }
+  .head { grid-template-columns: max-content minmax(0, 1fr) auto; grid-template-rows: 22px 24px; column-gap: 16px; padding-top: env(safe-area-inset-top); }
   .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
+  .head:has(#stamp-home[hidden]) h1 { grid-row: 1 / 3; align-self: center; }   /* no stamp: the name centers on the words */
+  .hkeys { grid-area: 1 / 3 / 3 / 4; }
   .stamp { white-space: nowrap; }
   .scales { grid-area: 1 / 2 / 3 / 3; margin: 0; }
-  .caption { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; padding-top: 2px; padding-bottom: 2px; }
-  .caption > .stamp-home, .cap { grid-column: 1 / -1; }
+  .caption { padding-top: 2px; padding-bottom: 2px; }
   .cap { height: 15px; }
-  .credits { grid-column: 2; grid-row: 1; align-self: start; padding-top: 2px; }
-  .caption > .stamp-home + .reach + .cap { grid-row: 3; }
-  .caption > .stamp-home + .reach + .cap + .credits { grid-row: 2; }
   .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
   .time-row { flex: 0 0 auto; height: auto; padding: 0 4px; }
   .controls { flex: 1 1 auto; min-width: 0; align-items: center; }

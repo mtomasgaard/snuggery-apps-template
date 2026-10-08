@@ -71,9 +71,8 @@ python3 -m http.server 8000          # then open localhost:8000 in a browser
   inked wherever these catalogs hold an object on the day shown, with a notch at your own
   distance. Its blank stretch, from the farthest small body (about 160 AU) to the nearest placed
   star (1.30 pc), is the reach of the catalogs, not empty space; About says so.
-- **The caption** says how far you are from the Sun and how wide the screen is there, and names the
-  gap with its numbers (not in focus mode, where the Reach has gone). The credits stay on screen in
-  every mode.
+- **The caption** says how far you are from the Sun and how wide the screen is there. About names
+  the Reach's gap with its numbers on the day shown. The credits are in About.
 - In the Solar System **the player** plays the planets and moons through time: Play, a speed key
   written as an exposure (`1 s = 7 d`: one second of play is a week), the date as the one large
   figure in UTC, **Now**, Previous year and Next year, and the app's own track over the days of the
@@ -82,8 +81,8 @@ python3 -m http.server 8000          # then open localhost:8000 in a browser
   moves in a human lifetime, and the app does not pretend otherwise.
 - **Find** (the lens) searches every named object; **Layers** switches each dataset on and off and
   says what the asteroids' and comets' four colors mean;
-  the stamp under the name opens **About**, with every source, license and accuracy note.
-- **Hide the controls** (the last key) leaves the picture, the caption, the credits and the player;
+  the **About** key at the name's right opens About, with every source, license and accuracy note.
+- **Hide the controls** (the last key) leaves the picture, the About key, the caption and the player;
   the corner key **Show the controls**, or Escape, brings the rest back. The choice is remembered.
 - Reduce Motion: flights become cuts, play jumps one unit of its speed once a second, and every
   transition is instant.

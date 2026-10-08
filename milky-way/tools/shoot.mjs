@@ -14,7 +14,8 @@
 //   SCRUB=0 node tools/shoot.mjs            skip the three-speed scrub (about 45 s)
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the scenes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the camera's strings by role and name, the credits, the face and its supplement
+// Per theme: boot (the camera's strings by role and name, the front without credits or edition, the
+// stamp one line in every state it can say, About's credit line, the face and its supplement
 // loaded, every inner planet on screen labeled), text contrast and the selection tracer, the Reach
 // (its ink against the page; its census against this file's own, on the day shown), the caption band
 // padding itself once the player has gone, the labels' halo on the plate, the card against this file's own decode
@@ -27,7 +28,7 @@
 // Find and Layers (About no wider than the screen). Then the flights frame by frame on a stepped clock
 // (no frame dominated by anything but space and the plate's own light; the Earth in view all the way
 // there), Reduce Motion (the zoom keys' exact factor), broken data (the controls leave with the data,
-// the stamp goes inert), and the widths (the card clear of the globe at each). Pictures: tools/.work/shots/, and
+// the stamp goes inert, the About key stays hidden), and the widths (the card clear of the globe at each). Pictures: tools/.work/shots/, and
 // with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never screenshots/app.png, the README's composite.
 
 import http from 'node:http';
@@ -272,12 +273,30 @@ for (const scheme of schemes) {
   const { page, w } = A;
   await settle(page, 600);
 
-  // boot: the camera's strings and controls, the credits, the face
+  // boot: the camera's strings and controls, the front (HOUSE.md section 4.15), the face
   {
     const s = await ST(w);
-    const roles = await Promise.all(['Solar System', 'Neighborhood', 'Milky Way', 'Play', 'Hide the controls', 'Find', 'Layers', 'Zoom in', 'Zoom out'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
+    const roles = await Promise.all(['Solar System', 'Neighborhood', 'Milky Way', 'Play', 'Hide the controls', 'Find', 'Layers', 'Zoom in', 'Zoom out', 'About'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
     const lowest = await w(() => { const b = [...document.querySelectorAll('button')].filter((e) => e.textContent.trim() === 'Milky Way' || e.getAttribute('aria-label') === 'Milky Way'); return b.length === 1 && b[0].closest('#scales') !== null; });
-    const credits = await w(() => { const e = document.getElementById('credits'), r = e.getBoundingClientRect(); return { t: e.textContent, h: r.height, vis: getComputedStyle(e).visibility }; });
+    // the front: no credit line; the stamp's line hidden once the data is in, the About key in its place
+    // at the name's row; About's first Sources and credits paragraph is the constant
+    const front = await w(() => { const k = document.getElementById('btn-about'), r = k.getBoundingClientRect(), h1 = document.querySelector('#head h1').getBoundingClientRect();
+      const first = document.querySelector('#about h3 + p');
+      return { credits: document.getElementById('credits'), stampHidden: document.getElementById('stamp-home').hidden, key: !k.hidden && r.height > 0 && k.parentElement.id === 'hkeys', keyMid: r.top + r.height / 2, h1Mid: h1.top + h1.height / 2,
+        line: document.getElementById('about-credit-line').textContent, firstIsLine: [...document.querySelectorAll('#about h3')].find((h) => h.textContent === 'Sources and credits').nextElementSibling.id,
+        edition: document.querySelector('#about-list dt').textContent + ' ' + document.querySelector('#about-list dd').textContent, head: document.getElementById('head').getBoundingClientRect().height }; });
+    // HOUSE.md section 7.2: the stamp is one line, 16 px to within 1 px, in every state it can say
+    // (the loading counts and the error, written here again from app.js's words)
+    const lines = await w((nn) => {
+      const home = document.getElementById('stamp-home'), b = document.getElementById('stamp'), keep = [home.hidden, b.textContent], out = [];
+      home.hidden = false;
+      for (const t of ['Reading the sky…', ...['Reading the ephemeris', 'Reading asteroid and comet orbits', 'Reading the planets’ maps', 'Reading the stars', 'Reading the Milky Way', 'Building the scene'].map((m, i) => `${m}… ${i + 1} of 6`), 'The sky could not be read']) {
+        b.textContent = t; out.push([t, b.getBoundingClientRect().height]);
+      }
+      [home.hidden, b.textContent] = keep;
+      return out;
+    }, NN);
+    check(lines.every(([, h]) => Math.abs(h - 16) <= 1), `the stamp is one line in every state at 390 px: ${lines.map(([t, h]) => `${h} px`).join(', ')} (${lines.length} states, the longest "${lines.reduce((a, b) => (a[0].length >= b[0].length ? a : b))[0]}")`);
     const font = await w(() => document.fonts.check('560 11.5px "Ysabeau Office"') && document.fonts.check('600 21px "Ysabeau Office"') && document.fonts.check('560 11.5px "Ysabeau Office"', 'αʻ⁴'));
     const text = await page.getByText('from the Sun', { exact: false }).first().isVisible();
     // the inner planets on screen at boot each carry a label (Venus once lost its place to the Sun's)
@@ -286,7 +305,9 @@ for (const scheme of schemes) {
     check(inner.length >= 3 && inner.every(([, on]) => on), `the inner planets on screen at boot are labeled: ${inner.map(([id, on]) => `${id} ${on ? 'labeled' : 'UNLABELED'}`).join(', ')}`);
     console.log(`  - boot: ready in ${A.ms} ms (headless Chromium); stamp "${await w(() => document.getElementById('stamp').textContent)}"; scale ${s.scale}`);
     check(text && roles.every((n) => n === 1) && lowest && s.scale === 'solar', `the camera's hooks: visible text with "from the Sun" (${text}); one button each named Solar System, Neighborhood, Milky Way, Play, Hide the controls, Find, Layers, Zoom in, Zoom out (${roles.join(', ')}); the only button named Milky Way is the scale word (${lowest})`);
-    check(credits.t === 'NASA/JPL, USGS, ESA/Gaia/DPAC, AT-HYG, LVDB, galstreams, Stellarium' && credits.h > 0 && credits.vis === 'visible', `the credits on screen, words unchanged: "${credits.t}"`);
+    check(front.credits === null && front.stampHidden && front.key && Math.abs(front.keyMid - front.h1Mid) <= 1 && front.line === 'NASA/JPL, USGS, ESA/Gaia/DPAC, AT-HYG, LVDB, galstreams, Stellarium' && front.firstIsLine === 'about-credit-line'
+      && /^Edition: JPL DE430 and Gaia DR3, retrieved \d{1,2} [A-Z][a-z]{2} \d{4}$/.test(front.edition),
+      `the front: no credit line (${front.credits === null}); the stamp's line hidden once the data is in (${front.stampHidden}); the About key in the header on the name's row (${front.key}, centers ${front.keyMid.toFixed(1)} and ${front.h1Mid.toFixed(1)}); header ${front.head.toFixed(0)} px; About's first Sources and credits paragraph is the credit, words unchanged: "${front.line}"; This data opens "${front.edition}"`);
     check(font, 'the face and its supplement are loaded: document.fonts.check(560 11.5px, 600 21px, and α ʻ ⁴ in "Ysabeau Office")');
   }
 
@@ -309,8 +330,9 @@ for (const scheme of schemes) {
     let differ = 0, explained = 0;
     for (let k = 0; k < m.cols; k++) if (+m.mask[k] !== mine.ink[k]) { differ++; if (mine.near[k]) explained++; }
     check(m.cols > 600 && differ === explained, `the Reach's census on JD ${m.jd.toFixed(3)}: ${m.cols} device columns, ${[...m.mask].filter((v) => v === '1').length} inked; ${differ} differ from this file's decode (${explained} where a distance sits on a column's edge); the gap ${sig3(m.farthest)} AU to ${sig3(m.starNear / PC_AU)} pc (this file: ${sig3(c.farthest)} AU, ${sig3(c.starNear / PC_AU)} pc)`);
-    const cap = (await ST(w)).caption;
-    check(cap.includes(`none lie between ${sig3(c.farthest)}${NN}AU and ${sig3(c.starNear / PC_AU)}${NN}pc.`), `the caption names the gap from the data: "${cap.slice(cap.indexOf('The bar'))}"`);
+    const cap = (await ST(w)).caption, reachP = await w(() => ['gap-a', 'gap-b'].map((id) => document.getElementById(id).textContent));
+    check(reachP[0] === `${sig3(c.farthest)}${NN}AU` && reachP[1] === `${sig3(c.starNear / PC_AU)}${NN}pc` && /^You are .+ from the Sun; the screen spans .+ there\.$/.test(cap),
+      `About's reading names the gap from the data: "The blank between ${reachP[0]} and ${reachP[1]}"; the caption only where you are: "${cap}"`);
     // within one year: the census is taken again for the day shown, not kept from the day the year began
     const s0 = await ST(w), follows = [];
     for (const [mo, d] of [[11, 30], [0, 2]]) {
@@ -407,7 +429,7 @@ for (const scheme of schemes) {
     check(f.a === 'none' && blue === 0, `Find's field: its cancel button's appearance is ${f.a}, and its right end holds ${blue} blue-led pixels (the browser's cross is gone)`);
   }
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
-  await A.tapEl('#stamp'); await page.waitForTimeout(400); await A.shot(`about-${scheme}`); await page.keyboard.press('Escape');
+  await A.tapEl('#btn-about'); await page.waitForTimeout(400); await A.shot(`about-${scheme}`); await page.keyboard.press('Escape');
   check(A.errors.length === 0, `${scheme}: no console error or warning, page error, failed request or request outside the app${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`);
   await A.ctx.close();
 }
@@ -478,7 +500,7 @@ console.log('\n== once (light)');
     console.log(`      frame time during play (HEADLESS CHROMIUM, SwiftShader, a trend only): interval median ${pctl(iv, 0.5).toFixed(1)} ms, p95 ${pctl(iv, 0.95).toFixed(1)} ms`);
     check(during.join() === 'none,block,Pause' && paused.join() === 'block,none,Play', `the Play key's mark follows play, by touch: playing ${during.join(', ')}; paused ${paused.join(', ')}`);
     await A.tapEl('#t-play'); await page.waitForTimeout(400);
-    await A.tapEl('#stamp'); await page.waitForTimeout(250);
+    await A.tapEl('#btn-about'); await page.waitForTimeout(250);
     const a0 = await ST(w); await page.waitForTimeout(800); const a1 = await ST(w);
     await page.keyboard.press('Escape'); await page.waitForTimeout(600);
     const a2 = await ST(w);
@@ -548,13 +570,14 @@ console.log('\n== once (light)');
     const f1 = await w(() => {
       const gone = ['head', 'keys', 'reach'].map((id) => { const e = document.getElementById(id); return [id, e.hidden, e.inert]; });
       const vis = (id) => { const e = document.getElementById(id); const r = e.getBoundingClientRect(); return !e.closest('[hidden]') && r.height > 0; };
-      return { gone, stay: ['stamp', 'cap', 'credits', 'valid', 'slider', 't-play', 'focus-exit'].map((id) => [id, vis(id)]), card: document.getElementById('card').hidden,
-        live: document.getElementById('live').textContent, active: document.activeElement && document.activeElement.id, stampIn: document.getElementById('stamp-home').parentElement.id };
+      return { gone, stay: ['btn-about', 'cap', 'valid', 'slider', 't-play', 'focus-exit'].map((id) => [id, vis(id)]), card: document.getElementById('card').hidden,
+        live: document.getElementById('live').textContent, active: document.activeElement && document.activeElement.id, aboutIn: document.getElementById('btn-about').parentElement.id,
+        aboutFirst: document.getElementById('caption').firstElementChild.id, credits: document.getElementById('credits') };
     });
     const tree = await Promise.all([page.getByRole('button', { name: 'Solar System' }).count(), page.getByRole('button', { name: 'Find' }).count(), page.getByRole('button', { name: 'Show the controls' }).count()]);
     const s1 = await ST(w);
-    check(f1.gone.every(([, h, i]) => h && i) && f1.stay.every(([, v]) => v) && f1.stampIn === 'caption' && f1.card && tree[0] === 0 && tree[1] === 0 && tree[2] === 1 && s1.H > H0 && s1.focus,
-      `focus mode by touch: the header, key column and Reach hidden and inert, gone from the accessibility tree (Solar System ${tree[0]}, Find ${tree[1]}); the card closed; the stamp moved into the caption; the caption, credits, date, track, Play and ghost key stay (${f1.stay.filter((x) => !x[1]).map((x) => x[0]).join(', ') || 'all'}); the plate grew ${H0} to ${s1.H} px`);
+    check(f1.gone.every(([, h, i]) => h && i) && f1.stay.every(([, v]) => v) && f1.aboutIn === 'caption' && f1.aboutFirst === 'btn-about' && f1.credits === null && f1.card && tree[0] === 0 && tree[1] === 0 && tree[2] === 1 && s1.H > H0 && s1.focus,
+      `focus mode by touch: the header, key column and Reach hidden and inert, gone from the accessibility tree (Solar System ${tree[0]}, Find ${tree[1]}); the card closed; the About key moved into the caption as its first line; the caption, date, track, Play and ghost key stay, and no credit line (${f1.stay.filter((x) => !x[1]).map((x) => x[0]).join(', ') || 'all'}); the plate grew ${H0} to ${s1.H} px`);
     check(f1.live === 'Controls hidden. Press Escape or the corner key to show them.' && f1.active !== 'focus-exit', `the live region says "${f1.live}"; after a touch, focus stays put (active: ${f1.active})`);
     check(/^You are .+ from the Sun; the screen spans .+ there\.$/.test(s1.caption), `in focus mode the caption says nothing of the Reach, which has gone: "${s1.caption}"`);
     const hf = await hitTargets(w);
@@ -572,7 +595,8 @@ console.log('\n== once (light)');
     check(sc.shown === 20 && pl.shown > 20 && !!rd, `in focus mode a scrub lands on day ${sc.shown} (want 20), play moves on to day ${pl.shown}, and a tap on the plate opens the card (${rd})`);
     await w(() => window.__mw.select(null));
     await A.tapEl('#focus-exit'); await page.waitForTimeout(300);
-    const out1 = await ST(w), live2 = await w(() => document.getElementById('live').textContent);
+    const out1 = await ST(w), live2 = await w(() => document.getElementById('live').textContent), back = await w(() => document.getElementById('btn-about').parentElement.id);
+    check(back === 'hkeys', `out of focus mode the About key is back in the header (${back})`);
     await w(() => document.getElementById('focus-key').focus());
     await page.keyboard.press('Enter'); await page.waitForTimeout(450);
     const k1 = await w(() => ({ focus: window.__mw.S.focus, active: document.activeElement.id }));
@@ -627,14 +651,14 @@ console.log('\n== once (light)');
 
   // About, Find, Layers: dialogs that hold focus, close on Escape and give focus back
   {
-    await w(() => document.getElementById('stamp').focus()); await page.keyboard.press('Enter'); await page.waitForTimeout(400);
+    await w(() => document.getElementById('btn-about').focus()); await page.keyboard.press('Enter'); await page.waitForTimeout(400);
     const ab = await w(() => { const b = document.querySelector('#about .sheet-body'); return { open: !document.getElementById('about').hidden, sheet: window.__mw.S.sheet, text: document.getElementById('about').textContent, active: document.activeElement.textContent, sw: b.scrollWidth, cw: b.clientWidth }; });
     await page.keyboard.press('Escape'); await page.waitForTimeout(200);
     const closed = await w(() => ({ hidden: document.getElementById('about').hidden, active: document.activeElement.id }));
-    check(ab.open && ab.sheet === 'about' && ab.active === 'Close' && closed.hidden && closed.active === 'stamp'
+    check(ab.open && ab.sheet === 'about' && ab.active === 'Close' && closed.hidden && closed.active === 'btn-about'
       && /Ysabeau Office by Christian Thalmann \(Catharsis Fonts\), SIL Open Font License 1\.1; a subset is in fonts\/ with its license\./.test(ab.text)
-      && /NASA Jet Propulsion Laboratory/.test(ab.text) && /not empty space/.test(ab.text) && !/Atkinson|Newsreader|ruler at the bottom left/.test(ab.text),
-    `About opens from the stamp by the keyboard with focus on Close, carries the sources, the face's credit and what the Reach is not, and neither of the two about.json blocks it writes in its own words; Escape closes it and focus returns to the stamp (${closed.active})`);
+      && /NASA Jet Propulsion Laboratory/.test(ab.text) && /not empty space/.test(ab.text) && /The blank between \d[\d.]*\u202FAU and \d[\d.]*\u202Fpc is the reach/.test(ab.text) && !/Atkinson|Newsreader|ruler at the bottom left/.test(ab.text),
+    `About opens from the About key by the keyboard with focus on Close, carries the sources, the face's credit, what the Reach is not and the gap on the day shown, and neither of the two about.json blocks it writes in its own words; Escape closes it and focus returns to the key (${closed.active})`);
     check(ab.sw <= ab.cw, `About scrolls only down: its body ${ab.sw} px wide in ${ab.cw} (the sha256 lines wrap)`);
     await A.tapEl('#btn-search'); await page.waitForTimeout(400);
     await page.fill('#search-q', 'sirius'); await page.waitForTimeout(300);
@@ -718,7 +742,7 @@ console.log('\n== Reduce Motion (dark)');
   const cut = await w(() => !window.__mw.rig.animating);
   await w(() => window.__mw.goScale('solar')); await page.waitForTimeout(300);
   const d = await w(() => getComputedStyle(document.querySelector('#scales button[aria-pressed="true"]'), '::after').animationDuration);
-  await A.tapEl('#stamp'); await page.waitForTimeout(200);
+  await A.tapEl('#btn-about'); await page.waitForTimeout(200);
   const sheet = await w(() => getComputedStyle(document.querySelector('#about .sheet-panel')).animationDuration);
   await page.keyboard.press('Escape'); await page.waitForTimeout(200);
   await w(() => window.__mw.log(true));
@@ -751,12 +775,13 @@ console.log('\n== broken data');
     const A = await open('light', { noWait: true, expect: /physical\.json|404/ });
     await A.page.waitForFunction(() => !document.getElementById('notice').hidden, null, { timeout: 60000 });
     const e = await A.w(() => ({ text: document.getElementById('notice').textContent, stamp: document.getElementById('stamp').textContent, cap: document.getElementById('cap').textContent,
-      gone: ['scales', 'keys', 'player'].every((id) => document.getElementById(id).hidden), credits: document.getElementById('credits').textContent.length > 0,
+      gone: ['scales', 'keys', 'player'].every((id) => document.getElementById(id).hidden), key: document.getElementById('btn-about').hidden, stampH: document.getElementById('stamp').getBoundingClientRect().height,
+      credits: document.getElementById('about-credit-line').textContent === 'NASA/JPL, USGS, ESA/Gaia/DPAC, AT-HYG, LVDB, galstreams, Stellarium',
       inert: (() => { const b = document.getElementById('stamp'); b.focus(); return b.inert && document.activeElement !== b; })() }));
     // the browser's own accessibility tree (Playwright's role engine does not model inert)
     const ax = await A.cdp.send('Accessibility.getFullAXTree');
     const stampRole = ax.nodes.filter((nd) => !nd.ignored && nd.role && nd.role.value === 'button' && nd.name && nd.name.value === e.stamp).length;
-    check(re.test(e.text) && !/from the Sun/.test(e.cap) && e.gone && e.credits && e.inert && stampRole === 0 && A.errors.length === 0, `${name}: "${e.text}"; the stamp says "${e.stamp}", inert (takes no focus; ${stampRole} buttons so named in the accessibility tree), no longer a key to About; no caption claims a distance; the scale words, keys and player leave (${e.gone}), the credits stay${A.errors.length ? '; ' + A.errors.join(' | ') : ''}`);
+    check(re.test(e.text) && !/from the Sun/.test(e.cap) && e.gone && e.key && Math.abs(e.stampH - 16) <= 1 && e.credits && e.inert && stampRole === 0 && A.errors.length === 0, `${name}: "${e.text}"; the stamp says "${e.stamp}", inert (takes no focus; ${stampRole} buttons so named in the accessibility tree), one line (${e.stampH} px), no longer a key to About, and the About key stays hidden (${e.key}); no caption claims a distance; the scale words, keys and player leave (${e.gone}); About's credit line still written${A.errors.length ? '; ' + A.errors.join(' | ') : ''}`);
     await A.ctx.close();
   }
   override = null;
@@ -771,8 +796,8 @@ for (const [w0, h0, dpr, name] of [[320, 568, 2, '320'], [360, 740, 3, '360'], [
   const h = await hitTargets(A.w);
   const fit = await A.w((nn) => {
     const e = document.getElementById('cap'), keep = e.textContent, out = [];
-    for (const t of [`You are 999${nn}900${nn}km from the Sun; the screen spans 999${nn}900${nn}km there. The bar is inked where these catalogs hold an object; none lie between 160${nn}AU and 1.30${nn}pc.`,
-      `You are 19${nn}900${nn}AU from the Sun; the screen spans 0.0999${nn}AU there. The bar is inked where these catalogs hold an object; none lie between 160${nn}AU and 1.30${nn}pc.`]) { e.textContent = t; out.push([e.scrollHeight, e.clientHeight]); }
+    for (const t of [`You are 999${nn}900${nn}km from the Sun; the screen spans 999${nn}900${nn}km there.`,
+      `You are 19${nn}900${nn}AU from the Sun; the screen spans 0.0999${nn}AU there.`]) { e.textContent = t; out.push([e.scrollHeight, e.clientHeight]); }
     e.textContent = keep;
     return out;
   }, NN);

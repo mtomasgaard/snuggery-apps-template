@@ -3,5 +3,5 @@
   "name": "Milky Way",
   "entryPoint": "index.html",
   "description": "The Solar System, the stars around the Sun and the Milky Way in one 3D zoom, from real data only: JPL planets from 1900 to 2099, Gaia stars in 3D, and the galaxy as measured. Offline.",
-  "version": "1.0"
+  "version": "1.1"
 }

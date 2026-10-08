@@ -8,7 +8,7 @@
 import { css, FONT } from './track.js';
 
 export const LO = -3, HI = 12;            // log10 of the distance in AU at the two ends
-const BAR_Y = 7, BAR_H = 6, H = 31;
+const BAR_Y = 7, BAR_H = 6, H = 33;
 const PC = Math.log10(648000 / Math.PI);  // log10 of a parsec in AU
 const UNITS = [[0, '1\u202FAU'], [PC, '1\u202Fpc'], [PC + 3, '1\u202Fkpc'], [PC + 6, '1\u202FMpc']];
 
@@ -63,7 +63,7 @@ export function createReach(canvas) {
     // the graduation: a 4 px tick at every power of ten, a 7 px one and its name at each unit
     ctx.fillStyle = t.ink3;
     for (let l = LO; l <= HI; l++) ctx.fillRect(Math.min(W - 1, Math.round(xOf(l))), BAR_Y + BAR_H + 1, 1, 4);
-    ctx.font = FONT; ctx.textBaseline = 'top';
+    ctx.font = FONT; ctx.textBaseline = 'alphabetic';
     let placed = -Infinity;
     for (const [l, text] of UNITS) {
       const x = Math.round(xOf(l)), w = ctx.measureText(text).width;
@@ -71,7 +71,7 @@ export function createReach(canvas) {
       let left = Math.max(0, x - w / 2);
       if (left + w > W) left = W - w;
       if (left < placed + 6) continue;
-      ctx.textAlign = 'left'; ctx.fillText(text, left, BAR_Y + BAR_H + 8);
+      ctx.textAlign = 'left'; ctx.fillText(text, left, BAR_Y + BAR_H + 16);
       placed = left + w;
     }
     // the notch: a 3 px cut of the page through the bar, a 1.5 px hairline through it

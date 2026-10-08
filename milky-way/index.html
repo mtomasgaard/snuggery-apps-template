@@ -16,8 +16,8 @@
 
 <header class="head" id="head">
   <h1 translate="no">Milky Way</h1>
-  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the sky&hellip;</button></div>
-  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button">Reading the sky&hellip;</button></div>
+  <div class="hkeys" id="hkeys"><button class="wordkey" id="btn-about" type="button" aria-haspopup="dialog" hidden>About</button></div>
   <nav class="scales" id="scales" aria-label="Scale">
     <button type="button" data-scale="solar" aria-pressed="false">Solar System</button>
     <button type="button" data-scale="stars" aria-pressed="false">Neighborhood</button>
@@ -64,12 +64,11 @@
   <div class="notice" id="notice" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: the Reach (how far these catalogs reach, and where you are on it),
-     what the picture is, and the credits, on screen in every mode. -->
-<section class="caption" id="caption" aria-label="Distance ruler, caption and credits">
+<!-- The caption under the plate: the Reach (how far these catalogs reach, and where you are on it)
+     and what the picture is. The credits are in About. -->
+<section class="caption" id="caption" aria-label="Distance ruler and caption">
   <div class="reach" id="reach" role="img" aria-label="A ruler of distance in powers of ten"><canvas id="reach-c" aria-hidden="true"></canvas></div>
   <p class="cap" id="cap"></p>
-  <p class="credits" id="credits" translate="no"></p>
 </section>
 
 <footer class="player" id="player">
@@ -105,6 +104,7 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <div id="about-sources"></div>
         <h4>Software and type</h4>
         <p>three.js r186 renders the scene (MIT License); the copy in vendor/ is byte for byte the one the Anatomy and Besseggen apps carry, with its license.</p>
