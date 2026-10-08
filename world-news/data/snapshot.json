@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T18:01:40Z",
+ "generatedAt": "2026-10-08T19:01:49Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Alibaba sues Pentagon to denounce being classified as a Chinese military affiliate",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/08/alibaba-sues-pentagon-to-denounce-being-classified-as-a-chinese-military-affiliate/",
+     "published": "2026-10-08T18:31:42Z",
+     "summary": "DoD’s public document describes Alibaba as indirectly affiliated with China State Council's supervision body, and a “military-civil fusion contributor to the Chinese defense industrial base”.",
+     "stale": false,
+     "author": "Oiwan Lam"
+    },
+    {
      "title": "Afghanistan: Women face fresh dress code arrests amid record refugee returns",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "Mob violence is rising in Bangladesh as unchecked impunity, weak law enforcement, and social media instigations drive lethal crowd attacks, challenging institutional responses, justice delivery, and overall state…",
      "stale": false,
      "author": "Maksuda Akter"
-    },
-    {
-     "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/09/26/an-exiled-myanmar-journalists-story-echoing-publics-voice-and-resilience/",
-     "published": "2026-09-26T00:00:00Z",
-     "summary": "“When our journalism produces positive outcomes, the sense of fulfilment is difficult to compare with anything else.”",
-     "stale": false,
-     "author": "Exile Hub"
     }
    ]
   },
@@ -431,7 +431,7 @@
     {
      "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/big-political-donations-have-hit-7-4m-this-election-year-are-the-rules-tight-enough-293666",
      "published": "2026-10-08T17:41:26Z",
      "summary": "",
@@ -447,6 +447,16 @@
      "summary": "",
      "stale": false,
      "author": "Tony D Sampson, Reader in Digital Communication, University of Essex"
+    },
+    {
+     "title": "Meet the ‘independent voters’ who will likely decide which party triumphs in the 2026 midterm elections",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/meet-the-independent-voters-who-will-likely-decide-which-party-triumphs-in-the-2026-midterm-elections-292103",
+     "published": "2026-10-08T12:12:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Julio Borquez, Associate Professor of Political Science, University of Michigan-Dearborn"
     },
     {
      "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/many-are-shocked-by-the-domestic-violence-charges-against-sam-wood-but-we-shouldnt-be-293805",
-     "published": "2026-10-08T06:06:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jessica Schaffer, Lecturer in Law, Faculty of Business, Law and Arts, Southern Cross University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Alibaba sues Pentagon to denounce being classified as a Chinese military affiliate",
+   "published": "2026-10-08 18:31 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Afghanistan: Women face fresh dress code arrests amid record refugee returns",
    "published": "2026-10-08 12:00 UTC"
@@ -905,12 +911,6 @@
    "published": "2026-09-27 22:36 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
-   "published": "2026-09-26 00:00 UTC"
-  },
-  {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
@@ -925,6 +925,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Meet the ‘independent voters’ who will likely decide which party triumphs in the 2026 midterm elections",
+   "published": "2026-10-08 12:12 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
    "published": "2026-10-08 07:28 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Grattan on Friday: Unless you’re Pauline Hanson, the migration debate can be a dangerous sinkhole",
    "published": "2026-10-08 07:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
-   "published": "2026-10-08 06:06 UTC"
   },
   {
    "region": "Oceania",
