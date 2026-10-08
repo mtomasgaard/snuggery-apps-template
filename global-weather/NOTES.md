@@ -57,7 +57,7 @@ The moving streaks on the map and the globe are the wind itself. Each is a
 tracer carried by the forecast's wind at the place it is over, for the hour on
 the slider: it moves the way that wind blows, at that wind's speed, times one
 rate the caption prints — *Streaks: 1 s = 24 h of wind at the hour shown*. The
-rate is a rung of a fixed ladder (2 days, 24 h, 12 h, 6 h, 3 h, 90 min, 45 min),
+rate is a rung of a fixed ladder (2 days, 24 h, 12 h, 6 h, 3 h, 90 min, 45 min, 20 min, 10 min),
 chosen so a typical wind moves about 18 points a second at the middle of the
 screen, and it changes only when a zoom needs it.
 
@@ -78,7 +78,10 @@ What they are not:
   streaks keep the printed rate.
 - **No finer than the grid.** The flow reads one value every 2°, so it runs
   smoothly across coasts, straits and mountains smaller than that sampled grid
-  can show.
+  can show. Between grid points the colors, the streaks and a tapped value are
+  blended from the four nearest; at the closest zoom one 2° square spans 240
+  points across, so the picture looks smoother there than the forecast is, and
+  About says so.
 
 Reduce Motion turns the streaks off and draws the arrows in their place, and play
 then moves a whole forecast step at a time. The page stops animating whenever it
@@ -110,14 +113,14 @@ under reads:
 > NOAA data disseminated through NODD are open to the public and can be used as
 > desired.
 
-with two conditions attached, both of which this app honors on screen:
+with two conditions attached, both of which this app honors in About:
 
 > NOAA requests attribution for the use or dissemination of unaltered NOAA data.
 
 and that nobody may claim NOAA's endorsement, or present **modified** data as
 though it were unaltered NOAA data. This app's data *is* modified — the
 0.25-degree forecast is sampled down to a coarser grid and each value is rounded
-to one byte — so the line under the map and the *About this data* panel both say
+to one byte — so the credit line and the full statement in *About this data* both say
 so, in those words. **Keep them.** They are what makes the picture honest as
 well as legal.
 
@@ -135,18 +138,29 @@ face's in `fonts/OFL.txt`.
 | --- | --- | --- |
 | `assets/world.json` | Coastlines and country borders, Natural Earth 1:10m, simplified and delta-encoded (1.5 MB; how, below) | **Natural Earth — public domain.** "All versions of Natural Earth raster + vector map data found on this website are in the public domain." No permission and no credit are required; the app says *Made with Natural Earth* anyway, which is the form Natural Earth suggests. |
 | `fonts/ysabeau-office-gw.woff2` | The app's one face, a Latin subset (35 KB) | **Ysabeau Office, SIL Open Font License 1.1**, by Christian Thalmann (Catharsis Fonts), no Reserved Font Name. `fonts/OFL.txt` carries the license and says how the subset was cut. |
-| `assets/places.json` | About 1 600 city labels, tiered so the map shows a few at world scale and more as you zoom in | **GeoNames — CC BY 4.0.** Attribution is a *condition*, not a courtesy: the credit line under the map and the *About this data* panel both name GeoNames and the license. Do not remove them. Editing the list is fine — add your own places, delete the ones you never look at; it stays the same data under the same license. |
+| `assets/places.json` | About 1 600 city labels, tiered so the map shows a few at world scale and more as you zoom in | **GeoNames — CC BY 4.0.** Attribution is a *condition*, not a courtesy: the credit line and the full statement in *About this data* both name GeoNames and the license. Do not remove them. Editing the list is fine — add your own places, delete the ones you never look at; it stays the same data under the same license. |
 
 ### The coastlines
 
 `assets/world.json` is Natural Earth v5.1.2 at **1:10m** — `ne_10m_land` for the land and its coast,
 `ne_10m_admin_0_boundary_lines_land` for the borders — built by `scripts/world_json.py` from the
-same pinned commit the other apps use, with every download checked against its sha256. The map
-zooms to 80 points a degree of longitude, 0.7 km a point at 60° N, and at 1:50m a fjord was a few
-kilometers of guesswork there: the Sognefjord one smooth inlet, Nordfjord and the outer islands
-gone. Each line is simplified until a point would move it by less than one square point at that
-zoom, and stored in hundredths of a degree (about a kilometer east to west at 60° N, under a point
-on screen). From `Template/`, with any Python 3.10 or newer and nothing to install:
+same pinned commit the other apps use, with every download checked against its sha256. The file
+was built for 80 points a degree of longitude, 0.7 km a point at 60° N, where at 1:50m a fjord was a
+few kilometers of guesswork: the Sognefjord one smooth inlet, Nordfjord and the outer islands gone.
+Each line is simplified until a point would move it by less than one square point at that zoom, and
+stored in hundredths of a degree (about a kilometer east to west at 60° N).
+
+The map zooms on to **120 points a degree** (0.46 km a point at 60° N), and the globe to the radius
+that draws its center at that scale. The limit was measured, not guessed, on Norway's coast: drawn
+around the fjords, Lofoten and Finnmark, this file puts 22–29 % of the coast's length into straight
+runs longer than 8 points at 80 points a degree, 43–50 % at 120 and 64–69 % at 160, where the fjords
+read as polygons. There Natural Earth's own 1:10m, unsimplified, crosses the same half at about
+140–160, so past 120 a closer view of Norway adds no coast, only longer straight lines. Norway is the
+hardest of the coasts measured; elsewhere it is this file's simplification, not the source, that
+sets the limit: at 120 the west of Scotland, the Chilean fjords, the Philippines and the Aegean draw
+24–35 % in straight runs, the unsimplified 1:10m 11–20 %. Above about 75° N the map's stretch shows
+Natural Earth's own straight segments at the deepest zoom (Svalbard 78 % at 120, unsimplified 76 %).
+From `Template/`, with any Python 3.10 or newer and nothing to install:
 
     python3 scripts/world_json.py            # fetch once, build, write both weather apps' copies
     python3 scripts/world_json.py --check    # a second build, compared byte for byte
@@ -315,7 +329,7 @@ dials down first, or cut the layer list to the two or three you actually read.
 
 - **A forecast, not a measurement.** Everything on the map except the first step
   is a model's guess, and the further right the slider goes the more of a guess
-  it is. The header says which model run it came from and how old that run is.
+  it is. The stamp says how old it is, and About which model run it came from.
 - **Wind 10 meters above the ground, temperature at 2 meters**, which are the
   standard heights weather services report. Wind here is not the wind at the top
   of a hill, at sea level in a harbor, or at the height of a sail.
@@ -403,12 +417,12 @@ in.
 
 ## Size, and the checks
 
-| measured 2026-10-01 by `node tools/check.mjs` | bytes | budget |
+| measured 2026-10-07 by `node tools/check.mjs` | bytes | budget |
 | --- | --: | --: |
-| app code: `index.html`, `style.css`, `app.js`, `js/` | 202 560 | 203 000 |
+| app code: `index.html`, `style.css`, `app.js`, `js/` | 205 068 | 205 500 |
 | `fonts/` | 40 075 | 160 000 |
 | `assets/world.json` (stored in the ZIP: 431 665) | 1 538 738 | 1 600 000 |
-| the ZIP, packed as `build-zips.yml` packs it | about 2 788 260 (this file is inside the ZIP, so its own figure moves the last digits) | 2 800 000 |
+| the ZIP, packed as `build-zips.yml` packs it | about 2 790 000 (this file is inside the ZIP, so its own figure moves the last digits) | 2 800 000 |
 
 `tools/` is not in the ZIP. From `global-weather/`:
 

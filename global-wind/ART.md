@@ -9,7 +9,7 @@ folder. What the direction is, in five lines:
 - **The screen is a flow photograph of the air, with its caption.** Each streak
   is a tracer carried by the forecast's wind at its place and hour; the caption
   under the plate states the exposure (`Streaks: 1 s = 24 h of wind at the hour
-  shown`), the scale and the credits.
+  shown`) and the scale; the credits are in About, one tap from the stamp.
 - **Dark theme: the print** (pale tracers on a dark plate). **Light theme: the
   negative** (ink tracers on a pale, faintly cyan film base).
 - **One bold thing, the streaks.** Everything else is quiet: one face (Ysabeau
@@ -19,8 +19,8 @@ folder. What the direction is, in five lines:
   themes, inside a tonal budget so a one-point streak reads over any of it:
   3.0:1 by day and 2.5:1 at night, on the streak's head.
 - **Honesty is the metaphor.** The streaks come from the field and nowhere else,
-  the exposure is printed, and the forecast's age and NOAA's "sampled" never
-  leave the screen.
+  the exposure is printed, the forecast's age never leaves the screen, and
+  NOAA's "sampled" is the credit line's, first in About.
 
 ## How this app differs
 

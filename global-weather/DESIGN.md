@@ -18,8 +18,8 @@ numbers are unknown until the owner's check (§7.3).
 
 **Unchanged:** `data/snapshot.json` and its validation, decoding and staleness rules; the `ask`
 rows (never read by the app); `assets/`; the credit line's three credits — *NOAA GFS, sampled*,
-*Natural Earth*, *GeoNames CC BY 4.0* — on screen under the map in every mode; About's full
-statement; the map (Web Mercator, Path2D coastlines) and the globe (orthographic per-pixel raster);
+*Natural Earth*, *GeoNames CC BY 4.0* — now the first paragraph of About's *Sources and credits*,
+one tap from the stamp in every mode, rather than a line under the map; About's full statement; the map (Web Mercator, Path2D coastlines) and the globe (orthographic per-pixel raster);
 the tapped readout and its numbers; the units cycle with SI first; play at 5 h a second;
 `visibilitychange` re-reading the snapshot; the security rules in `app.js`'s header (no value
 reaches `innerHTML`, nothing fetched but `./data/…` and `./assets/…`).
@@ -102,9 +102,9 @@ A streak's on-screen speed is (wind speed) × (rate in hours of wind per second)
 pixels per meter at that place). The rate is chosen from a fixed ladder so that a typical wind
 reads, and it is **printed**:
 
-| Rung | 48 h | 24 h | 12 h | 6 h | 3 h | 1.5 h | 45 min |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Key text | 1 s = 2 days of wind | 1 s = 24 h of wind | 12 h | 6 h | 3 h | 90 min | 45 min |
+| Rung | 48 h | 24 h | 12 h | 6 h | 3 h | 1.5 h | 45 min | 20 min | 10 min |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Key text | 1 s = 2 days of wind | 1 s = 24 h of wind | 12 h | 6 h | 3 h | 90 min | 45 min | 20 min | 10 min |
 
 - Pixels per meter at the view center: map `map.scale / (2πR) × sec φ_centre`; globe `globe.r / R`.
 - The ideal rate puts a 6 m/s wind (the field's area-weighted mean is 6.18 m/s, median 5.75 —
@@ -113,9 +113,11 @@ reads, and it is **printed**:
   1.6 times away from the current one, so a pinch does not make the key flicker.
 - Worked: the phone's opening map (`map.scale` ≈ 1 193 px for 360°, center on the equator) gives
   2.98 × 10⁻⁵ px/m and rate* = 28 h → **24 h**; the opening globe (r ≈ 187 px) gives 28.4 h →
-  **24 h**; the deepest map zoom (80 px a degree) gives 1.2 h → **1.5 h** (45 min at 60°). At 24 h a
-  second a median wind moves about 15 px a second at the equator and a p99 wind (17.75 m/s) about
-  46 px.
+  **24 h**; the deepest map zoom (120 px a degree) gives 0.8 h → **45 min** at the equator, 0.4 h →
+  **20 min** at 60° and 0.2 h → **10 min** at 75°, and the deepest globe (r = 6 875 px, the same
+  120 px a degree at its center) 45 min. The two shortest rungs exist for that zoom: without them a
+  6 m/s wind at 70° N ran at about 50 px a second there. At 24 h a second a median wind moves about
+  15 px a second at the equator and a p99 wind (17.75 m/s) about 46 px.
 - A rung change clears and prewarms the trails (§1.10), because a streak's length would otherwise
   mix two rates.
 
@@ -231,6 +233,11 @@ canvas backing; at DPR 3 with the flow capped at 2, about 45 MB. A phone check (
   the ratio of `map.scale` before and after — exact, because a Mercator zoom is a similarity of the
   screen. The offset is computed from the view before and after, so the clamp at the top and bottom
   of the world stays exact. If the rung changes, clear and prewarm.
+- **How far the views zoom**: the map to 120 px a degree of longitude, the globe to the radius that
+  draws its center at that scale (`MAX_SCALE / 2π`); `NOTES.md` gives the coast measurement behind
+  the figure. The globe reads land and sea from a 2 048 × 1 024 mask, whose cells would show as
+  squares along a coast once one spans more than 4 px, so from there the globe at rest draws the land
+  of its own window again at about 1.5 px a pixel; while a finger turns it, the mask serves.
 - **Globe drag, pinch and fling**: a rotation is not a similarity of the screen, so no trail can be
   carried. While the globe moves both trail canvases are **cleared and nothing is drawn** (one-frame
   dashes read as speckle, not as wind); the particles stay on the ground, and the first frame after
@@ -384,10 +391,10 @@ Everything but the view and its time track, as the owner asked of every app whos
   closes on the way in (a tap in focus mode opens it again).
 - **What stays**: the canvases with the flow and arrows as chosen; the player — the time row, ‹ ▶ ›
   and the track with its day ticks; **the stamp**, moved into the caption band as its first line with its
-  words unchanged (*Updated 04:15, GFS 06Z 22 Sep*, or the *Stale* and *Forecast ran out* wording),
+  words unchanged (*Updated 04:15*, or the *Stale* and *Forecast ran out* wording),
   because the forecast's age
-  never hides; **the credit line** (a license condition, and NOAA's *sampled*); the
-  flow key; the error box (a problem is never hidden). A tap still opens the readout; its ✕ closes it.
+  never hides, and it opens About, where the credit line is (a license condition, and NOAA's
+  *sampled*); the flow key; the error box (a problem is never hidden). A tap still opens the readout; its ✕ closes it.
 - **Remembered** between launches as `gwe.focus` (`'1'`), restored before the first draw: the house
   rule, and a phone reopened should look as it was left. The camera never enters it; §7.3 names the
   risk of a library left in focus mode.
@@ -455,7 +462,7 @@ check printed as `ok`/`FAIL` with its number, exit 1 on any failure.
    Warming World's list, stored ROT13, model family names included; the snapshot's planes skipped,
    its strings read.
 8. **The three credits**, verbatim in the app code: `NOAA GFS, sampled`, `Natural Earth`,
-   `GeoNames CC BY 4.0`.
+   `GeoNames CC BY 4.0`, written into About's first credits paragraph and nowhere on the front.
 9. **The camera's strings**: `Updated` written into the stamp; tab buttons whose text is `Map` and
    `Globe`; buttons with `aria-label="Zoom in"` and `"Zoom out"`; every `localStorage` key starts
    `gwe.` (Global Wind: `gw.`), and today's keys are all still read.
@@ -477,7 +484,8 @@ request outside the local server. Every figure it asserts is worked out in the s
 shipped files with Node's own `zlib` and formulas written there, never by importing `js/`, so a bug
 in the app cannot agree with itself.
 
-- **Boot**: the stamp reads *Updated* once unpacked; the three credits are visible text; the camera's
+- **Boot**: the stamp reads *Updated* once unpacked; the three credits are About's first credits
+  paragraph and nothing on the front names a source; the camera's
   controls exist by role and name (`Map`, `Globe` tabs; `Zoom in`, `Zoom out` buttons).
 - **The flow, in each theme**: on by default; its canvas changes between two reads 200 ms apart; the
   shown canvas alternates A/B every 2 s; the key's text names the rung. **Direction and speed end to
@@ -496,7 +504,7 @@ in the app cannot agree with itself.
 - **Gestures**: a map pan carries the trails (sampled trail pixels move by the pan ± 1 px); a globe
   drag clears them per frame and they regrow after the release; a zoom across a rung changes the key.
 - **Focus mode**: entered by touch and by Enter; what leaves is `hidden`, `inert` and absent from the
-  accessibility tree; the stamp, the credit line, the flow key and the player stay visible; the
+  accessibility tree; the stamp, the flow key and the player stay visible; the
   canvas grew; a scrub, play and a tap in focus; left by the ghost key and by Escape; a reload keeps
   it; the live region's sentences.
 - **Reduce Motion**: the flow canvases never change over 1 s; arrows drawn when the stored choice was
@@ -627,7 +635,7 @@ file cites are that list's.
 - **The 2° grid near coasts**: a grid point is the 0.25° model's value at that one point, sampled
   every 2° (about 220 km; `scripts/global_weather.py` takes every eighth value, it does not average),
   so a point on a peak or a coast carries that spot's weather. The flow is smooth across coastlines,
-  mountains and straits smaller than the sampled grid, and at the deepest zoom one cell spans 160 px
+  mountains and straits smaller than the sampled grid, and at the deepest zoom one cell spans 240 px
   of interpolated motion. About and `NOTES.md` say so.
 - **Mercator speed**: a polar streak runs faster on the flat map (§1.4); stated on the map and in
   `NOTES.md`; speed is never encoded by length.
@@ -655,7 +663,8 @@ file cites are that list's.
   a data ramp. If any property of a streak — alpha, width, color — encodes speed, it encodes the
   **sampled speed**, monotonically, through the legend's scale, and the legend says so; never
   on-screen length or speed (§1.4).
-- **The three credits** stay on screen in every mode, readable over any weather, words unchanged.
+- **The three credits** stay in About, one tap from every mode, first under *Sources and credits*,
+  words unchanged.
 - **The forecast's age stays on screen** in every mode, with the stale and ran-out words.
 - **The camera's strings** (§0) and the `gwe.*`/`gw.*` keys.
 - **SI** formats only through `js/units.js`.

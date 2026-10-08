@@ -75,15 +75,15 @@
   <div class="error" id="error" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: the scale, the exposure, and the credits the sources ask for, on
-     screen in every mode, because the city labels are CC BY 4.0 and attribution is a condition. -->
-<section class="caption" id="caption" aria-label="Scale, exposure and credits">
+<!-- The caption under the plate: the scale and the exposure. The credits the sources ask for are
+     About's, one tap from every screen and every mode: the city labels are CC BY 4.0, and attribution
+     is a condition, given there in full. -->
+<section class="caption" id="caption" aria-label="Scale and exposure">
   <div class="legend" id="legend">
     <span class="legend-title" id="legend-name"></span>
     <div class="legend-scale" id="legend-scale"><div class="legend-bar" id="legend-bar"></div><div class="legend-ticks" id="legend-ticks"></div></div>
   </div>
   <p class="exposure" id="exposure"></p>
-  <p class="credits" id="credits" translate="no"></p>
 </section>
 
 <footer class="player" id="player">
@@ -108,7 +108,7 @@
         <p>Each streak is a tracer carried by the forecast&rsquo;s wind: it moves the way the wind at that place blows, at its speed, for the hour on the slider. The caption under the map states the exposure. At &ldquo;1&#8239;s = 24&#8239;h&rdquo;, one second of motion is 24 hours of that wind, held still at the hour shown, while play moves the hour on at 5 hours a second.</p>
         <p>On the flat map the same wind runs faster toward the poles, because the map stretches there; on the globe it slows toward the edge, where the sphere turns away. So a streak&rsquo;s length and speed on screen are not a measure of the wind&rsquo;s strength. The colors and a tap are.</p>
         <p>Neither a streak&rsquo;s direction nor its speed is invented. Where streaks gather is partly the air and partly the picture: they bunch where the air converges, but also where the picture shrinks the ground under them (toward the equator on the flat map, toward the edge on the globe), and otherwise their spacing is random.</p>
-        <p>The forecast is the model&rsquo;s value at one point every 2 degrees, about 220&#8239;km apart, sampled from a much finer grid, so the flow runs smoothly across coasts, straits and mountains smaller than this sampled grid can show.</p>
+        <p>The forecast is the model&rsquo;s value at one point every 2 degrees, about 220&#8239;km apart, sampled from a much finer grid, so the flow runs smoothly across coasts, straits and mountains smaller than this sampled grid can show. Between the points, the colors, the streaks and a tapped value are blended from the four nearest, so zoomed in close the picture looks smoother than the forecast is: the detail between points is that blending, not weather.</p>
       </section>
       <section>
         <h3>This forecast</h3>
@@ -116,6 +116,7 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <p id="about-credits"></p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
       </section>

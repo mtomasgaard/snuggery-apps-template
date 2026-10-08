@@ -2,8 +2,8 @@
 
 These travel inside the app so the map can draw without going online. Neither is
 ever rewritten by the refresh job — coastlines and cities do not change daily.
-The app's *About this data* panel prints both credits, and the line under the
-map carries the short form. Keep them: one of the two makes attribution a
+The app's *About this data* panel prints both credits, one tap from every
+screen, the short form first. Keep them: one of the two makes attribution a
 condition, not a courtesy.
 
 ## `world.json` — coastlines and country borders
@@ -45,10 +45,12 @@ CC BY 4.0 also disclaims warranties, and that travels with the data:
 So: the coordinates are good enough to put a dot on a world map and nothing is
 promised beyond that. Do not navigate by them.
 
-The app satisfies the attribution condition in two places, and both should stay:
+The app satisfies the attribution condition in *About this data*, one tap from
+every screen, in two forms, and both should stay:
 
-- the credit line at the bottom of the map — *GeoNames CC BY 4.0*;
-- the *About this data* panel — *City labels: © GeoNames, CC BY 4.0*, with the
+- the credit line, the first paragraph under *Sources and credits* — *GeoNames
+  CC BY 4.0*;
+- the full statement after it — *City labels: © GeoNames, CC BY 4.0*, with the
   two addresses above.
 
 ### Which places, and why these

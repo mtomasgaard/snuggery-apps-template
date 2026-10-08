@@ -41,7 +41,7 @@ resolution suits you there is nothing to set up but the Shortcut row.
   REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
   ```
 - **Read `global-wind/NOTES.md` first.** It carries the terms the app must
-  print on screen, what the streaks are and are not, and the measured size
+  print in About, what the streaks are and are not, and the measured size
   table that step 1 is about.
 
 ## Step 1 — decide how much wind you want
@@ -243,9 +243,9 @@ In rough order of how often people want them:
 
 ## Do not touch
 
-- **The credit line under the map, and the source paragraph in *About this
-  data*.** The city labels are CC BY 4.0 and attribution is a condition of using
-  them, not a courtesy. The sentence saying the wind is sampled and rounded is
+- **The credit line and the source paragraph in *About this data*.** The city
+  labels are CC BY 4.0 and attribution is a condition of using them, not a
+  courtesy. The sentence saying the wind is sampled and rounded is
   there because NOAA asks that modified data is not presented as unaltered NOAA
   data. Both are in `NOTES.md` in full.
 - **The `.idx` range requests.** It would be simpler to download the whole

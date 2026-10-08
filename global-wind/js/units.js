@@ -63,10 +63,6 @@ export function spoken(ms) {
 export function clock(ms) { const d = new Date(ms); return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`; }
 /** "22 Sep". */
 export function dayMonth(ms) { const d = new Date(ms); return `${d.getDate()} ${MONS[d.getMonth()]}`; }
-/** "22 Sep" in UTC, for the model run (its hour is a UTC hour, so its date must be too). */
-export function dayMonthUTC(ms) { const d = new Date(ms); return `${d.getUTCDate()} ${MONS[d.getUTCMonth()]}`; }
-/** "06Z". */
-export const zHour = (ms) => `${pad2(new Date(ms).getUTCHours())}Z`;
 /** "Wed 23" or "Wed": a day tick on the track. */
 export function dayTick(ms, short) { const d = new Date(ms); return short ? DAYS[d.getDay()] : `${DAYS[d.getDay()]} ${d.getDate()}`; }
 /** "Tue 22 Sep 2026, 08:00 (UTC+2)": About's full instants, with the zone named by its offset. */

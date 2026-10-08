@@ -22,8 +22,9 @@ upstream file stops the build instead of changing the apps. Natural Earth is pub
 layer: the pair never drew lakes, and ne_10m_land fills them as land except the Caspian, as the
 1:50m file did (docs/plans/0011-coastlines-research.md §2).
 
-Simplification. Visvalingam-Whyatt in Web Mercator pixels at the apps' maximum zoom (MAX_SCALE =
-360 * 80 in both app.js: 80 CSS px per degree of longitude, 0.695 km a pixel at 60° N): a point is
+Simplification. Visvalingam-Whyatt in Web Mercator pixels at the zoom it was built for (MAX_SCALE =
+360 * 80: 80 CSS px per degree of longitude, 0.695 km a pixel at 60° N; the apps zoom on to 120 since
+plan 0012 3.6, where Norway's fjords begin to show straight runs): a point is
 dropped while its triangle with its neighbors is under TOLERANCE_PX2 = 1 square CSS pixel at that
 zoom, so the tolerance is the same on screen at every latitude. A ring keeps at least 4 points, a line
 2. The research measured 0.25 px² against 1 px² at maximum zoom and could not tell them apart

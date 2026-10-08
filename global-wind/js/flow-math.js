@@ -16,7 +16,7 @@ export const MAX_Z = Math.sin(MAX_LAT * Math.PI / 180);
 export const HIDE_Z = 0.11;                        // behind this on the globe a particle respawns
 export const HALF_LIFE = 0.18;                     // seconds: a trail's alpha halves
 export const TRAIL_S = 0.6;                        // seconds: how long a trail stays visible
-export const LADDER = [48, 24, 12, 6, 3, 1.5, 0.75];   // hours of wind per second of motion
+export const LADDER = [48, 24, 12, 6, 3, 1.5, 0.75, 20 / 60, 10 / 60];   // hours of wind per second of motion
 export const HYSTERESIS = 1.6;
 const TAU = 2 * Math.PI, DEG = Math.PI / 180;
 

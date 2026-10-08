@@ -13,7 +13,7 @@
 //   SCRUB=0 node tools/shoot.mjs              skip the three-speed scrub (about 70 s)
 //   SCREENSHOTS=1 node tools/shoot.mjs        also copy the scenes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the stamp's "Updated", the three credits, the camera's controls by role and name, the
+// Per theme: boot (the stamp's "Updated", the credits in About and not on the front, the camera's controls by role and name, the
 // face loaded), the flow (on by default, moving, the pair alternating, the exposure line), text contrast
 // and the selection tracer, direction and speed end to end at the twelve ask cities on the map and the
 // globe, the streak heads' contrast over all five layers by day and at night, the readout against this
@@ -28,6 +28,9 @@
 // 84.35° S, VoiceOver hears a tap and the step keys, the map opens on the reader's longitude, Reduce
 // Motion plays whole steps, the longest exposure line fits its fixed height at every width, and a phone
 // on its side keeps a plate worth the name.
+// Plan 0012 3.6: the credits are About's (none on the front), the stamp is one line in every state it
+// can write, and the deeper zoom (120 px a degree, the rung over Lofoten, the globe's fine land against
+// world.json's own rings at the deepest radius; deepest-*.png are kept in tools/.work/shots/ only).
 // Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png — never
 // screenshots/app.png, the README's composite, which this script must not touch.
 
@@ -183,6 +186,36 @@ async function open(scheme, o = {}) {
 const S = (w) => w(() => window.__weather.state);
 const FS = (w) => w(() => window.__weather.flow.state());
 const settle = (page, ms = 300) => page.waitForTimeout(ms);
+/* plan 0012 3.6: land or sea at a point by world.json's own rings (even-odd, as the app fills them), and how
+ * far the point is from a coast in px on a globe of radius r, so cells within 2 px of a coast are not judged. */
+const WORLD = JSON.parse(fs.readFileSync(path.join(APP, 'assets/world.json'), 'utf8')).land.flat().map((enc) => {
+  const p = []; let x = 0, y = 0; for (let i = 0; i < enc.length; i += 2) { x += enc[i]; y += enc[i + 1]; p.push([x / 100, y / 100]); }
+  const b = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const [x1, y1] of p) { b[0] = Math.min(b[0], x1); b[1] = Math.min(b[1], y1); b[2] = Math.max(b[2], x1); b[3] = Math.max(b[3], y1); }
+  return { p, b };
+});
+function landAgreement(cells, r) {
+  let n = 0, bad = 0, near = 0;
+  for (const c of cells) {
+    let inside = false, dmin = Infinity;
+    const k = Math.cos(c.lat * D);
+    for (const ring of WORLD) {
+      if (c.lon < ring.b[0] - 0.2 || c.lon > ring.b[2] + 0.2 || c.lat < ring.b[1] - 0.2 || c.lat > ring.b[3] + 0.2) continue;
+      const q = ring.p;
+      for (let i = 0, j = q.length - 1; i < q.length; j = i++) {
+        const [xi, yi] = q[i], [xj, yj] = q[j];
+        if ((yi > c.lat) !== (yj > c.lat) && c.lon < (xj - xi) * (c.lat - yi) / (yj - yi) + xi) inside = !inside;
+        const ax = (xj - xi) * k, ay = yj - yi, px = (c.lon - xi) * k, py = c.lat - yi, L = ax * ax + ay * ay;
+        const t = L ? Math.max(0, Math.min(1, (px * ax + py * ay) / L)) : 0;
+        dmin = Math.min(dmin, Math.hypot(px - t * ax, py - t * ay));
+      }
+    }
+    if (dmin * D * r < 2) { near++; continue; }
+    n++;
+    if (!!c.land !== inside) bad++;
+  }
+  return { n, bad, near };
+}
 /** A cheap fingerprint of the shown flow canvas: the sum of its alpha and how many pixels have any. */
 const flowPrint = (w) => w(() => {
   const st = window.__weather.flow.state(), c = document.getElementById(st.shown === 'A' ? 'flow-a' : 'flow-b');
@@ -288,11 +321,12 @@ for (const scheme of schemes) {
   {
     const roles = await Promise.all([page.getByRole('tab', { name: 'Map', exact: true }).count(), page.getByRole('tab', { name: 'Globe', exact: true }).count(),
       page.getByRole('button', { name: 'Zoom in', exact: true }).count(), page.getByRole('button', { name: 'Zoom out', exact: true }).count()]);
-    const credits = await w(() => { const e = document.getElementById('credits'), r = e.getBoundingClientRect(); return { t: e.textContent, h: r.height, vis: getComputedStyle(e).visibility }; });
+    // plan 0012 (HOUSE §4.15): no credit line on the front; About's first Sources and credits paragraph is the constant
+    const credits = await w(() => { const e = document.getElementById('about-credit-line'), sec = e.parentElement; return { gone: !document.getElementById('credits'), t: e.textContent, first: sec.querySelector('h3').textContent === 'Sources and credits' && sec.children[1] === e }; });
     const font = await w(() => document.fonts.check('560 11.5px "Ysabeau Office"') && document.fonts.check('600 21px "Ysabeau Office"'));
     console.log(`  - boot: ready in ${A.ms} ms (headless Chromium); stamp "${s.stamp}"`);
     check(/(^|\s)Updated /.test(s.stamp) && roles.every((n) => n === 1), `the camera's hooks: the stamp shows "Updated"; one tab named Map, one Globe, one button named Zoom in, one Zoom out (${roles.join(', ')})`);
-    check(credits.t === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0' && credits.h > 0 && credits.vis === 'visible', `the three credits on screen, words unchanged: "${credits.t}"`);
+    check(credits.gone && credits.first && credits.t === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0', `the credits are About's: no #credits on the front, and About's first Sources and credits paragraph is the constant, words unchanged: "${credits.t}"`);
     check(font, 'the face is loaded before any picture: document.fonts.check(560 11.5px and 600 21px "Ysabeau Office")');
   }
 
@@ -666,7 +700,7 @@ console.log('\n== once (light)');
     const f1 = await w(() => {
       const gone = ['head', 'keys', 'legend-scale'].map((id) => { const e = document.getElementById(id); return [id, e.hidden, e.inert]; });
       const vis = (id) => { const e = document.getElementById(id); const r = e.getBoundingClientRect(); return !e.closest('[hidden]') && r.height > 0; };
-      return { gone, stay: ['stamp', 'credits', 'exposure', 'valid-time', 'slider', 'btn-play', 'focus-exit', 'legend-name'].map((id) => [id, vis(id)]),
+      return { gone, stay: ['stamp', 'exposure', 'valid-time', 'slider', 'btn-play', 'focus-exit', 'legend-name'].map((id) => [id, vis(id)]),
                live: document.getElementById('live').textContent, active: document.activeElement && document.activeElement.id, stampIn: document.getElementById('stamp').parentElement.id };
     });
     await settle(page, 100);
@@ -674,7 +708,7 @@ console.log('\n== once (light)');
     const tree = await Promise.all([page.getByRole('tab', { name: 'Globe' }).count(), page.getByRole('button', { name: 'Zoom in' }).count(), page.getByRole('button', { name: 'Show the controls' }).count()]);
     const s1 = await S(w);
     check(f1.gone.every(([, h, i]) => h && i) && f1.stay.every(([, v]) => v) && f1.stampIn === 'caption' && tree[0] === 0 && tree[1] === 0 && tree[2] === 1 && s1.H > H0 && s1.focus,
-      `focus mode by touch: the header, key column and legend bar hidden and inert (${f1.gone.map((g) => g[0]).join(', ')}), gone from the accessibility tree (Globe ${tree[0]}, Zoom in ${tree[1]}); the stamp moved into the caption, the credits, exposure, time row, track, play and ghost key stay; the map grew ${H0} → ${s1.H} px`);
+      `focus mode by touch: the header, key column and legend bar hidden and inert (${f1.gone.map((g) => g[0]).join(', ')}), gone from the accessibility tree (Globe ${tree[0]}, Zoom in ${tree[1]}); the stamp moved into the caption, the exposure, time row, track, play and ghost key stay; the map grew ${H0} → ${s1.H} px`);
     check(live1 === 'Controls hidden. Press Escape or the corner key to show them.' && f1.active !== 'focus-exit', `the live region says "${live1}"; after a touch, focus stays put (active: ${f1.active})`);
     // after QA: the hit targets in focus mode too — the stamp heads the caption band there
     const hf = await hitTargets(w);
@@ -747,6 +781,28 @@ console.log('\n== once (light)');
     check(edge.hit < 0.25 * edge.width, `the whole-world map draws no rule along 84.35° S: ${edge.hit} of ${edge.width} device columns carry the coast's ink within 2 rows of device row ${edge.row} (${edge.dark ? 'dark' : 'light'}; want under a quarter; the ring stroked whole inked every column)`);
   }
 
+  // plan 0012 3.6: the deeper zoom. The map stops at 120 px a degree of longitude, the globe at the radius that
+  // draws its center at that scale; over Lofoten the rate takes the ladder's new 20 min; and the globe at rest
+  // reads the land of its own window, which agrees with world.json's rings at every cell center further than
+  // 2 px from a coast (the 2 048 × 1 024 mask alone drew 0.18° squares along it)
+  {
+    await w(() => window.__weather.setTab('map'));
+    for (let i = 0; i < 9; i++) { await A.tapEl('#zoom-in'); await settle(page, 120); }
+    await w(() => { window.__weather.center(14.3, 68.15); window.__weather.flow.reseed(3); }); await settle(page, 1200);   // centered once zoomed: a whole-world view clamps the latitude
+    const m = await S(w), mr = (await FS(w)).rung;
+    await A.shot('deepest-map-light', false);
+    await w(() => { window.__weather.setTab('globe'); window.__weather.center(6.4, 61.15); });
+    for (let i = 0; i < 9; i++) { await A.tapEl('#zoom-in'); await settle(page, 120); }
+    await settle(page, 800);
+    const g = await S(w);
+    await A.shot('deepest-globe-light', false);
+    const cells = await w(() => { const out = []; for (let i = 0; i < 24; i++) for (let j = 0; j < 40; j++) out.push(window.__weather.globeCell(5.2 + i * 0.1, 60.2 + j * 0.05)); return out; });
+    const cmp = landAgreement(cells, g.globe.r);
+    check(m.map.scale === 360 * 120 && Math.abs(g.globe.r - 360 * 120 / (2 * Math.PI)) < 1e-6 && mr === 20 / 60 && m.exposure.includes(`20${NN}min`) && cells.every((c) => c.fine) && cmp.bad === 0 && cmp.n > 300,
+      `the deepest zoom: the map stops at ${(m.map.scale / 360).toFixed(1)} px a degree, the globe at r ${g.globe.r.toFixed(1)} px (${(g.globe.r * D).toFixed(1)} px a degree at its center); over Lofoten the rung is ${Math.round(mr * 60)} min ("${m.exposure}"); the globe at rest reads the fine land, and ${cmp.n - cmp.bad} of ${cmp.n} cells further than 2 px from a coast agree with world.json's rings (${cmp.near} nearer, not judged)`);
+    await w(() => { document.getElementById('zoom-home').click(); window.__weather.setTab('map'); document.getElementById('zoom-home').click(); }); await settle(page, 400);
+  }
+
   // hidden: the loop stops and the trails clear; visible again: a prewarm, never streaks from before
   {
     await settle(page, 600);
@@ -777,11 +833,12 @@ console.log('\n== once (light)');
   // the About sheet, by touch: focus held inside, Escape closes, the flow paused while it is open
   {
     await A.tapEl('#stamp'); await settle(page, 400);
-    const ab = await w(() => ({ open: !document.getElementById('about').hidden, sup: window.__weather.flow.state().suppressed, text: document.getElementById('about-body').textContent }));
+    const ab = await w(() => ({ open: !document.getElementById('about').hidden, sup: window.__weather.flow.state().suppressed, text: document.getElementById('about-body').textContent, credit: document.querySelector('#about-body section:nth-of-type(3) p').textContent }));
     await page.keyboard.press('Escape'); await settle(page, 200);
     const closed = await w(() => document.getElementById('about').hidden);
-    check(ab.open && ab.sup === 'about' && closed && /Ysabeau Office by Christian Thalmann \(Catharsis Fonts\), SIL Open Font License 1\.1/.test(ab.text) && /www\.geonames\.org/.test(ab.text) && /not unaltered NOAA data/.test(ab.text),
-      `About opens from the stamp, pauses the flow ("${ab.sup}"), carries NOAA's "not unaltered" sentence, GeoNames' license and the font's credit, and closes on Escape`);
+    check(ab.open && ab.sup === 'about' && closed && /Ysabeau Office by Christian Thalmann \(Catharsis Fonts\), SIL Open Font License 1\.1/.test(ab.text) && /www\.geonames\.org/.test(ab.text) && /not unaltered NOAA data/.test(ab.text)
+      && ab.credit === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0',
+      `About opens from the stamp, pauses the flow ("${ab.sup}"), carries the credit line first ("${ab.credit}"), NOAA's "not unaltered" sentence, GeoNames' license and the font's credit, and closes on Escape`);
   }
   await A.ctx.close();
 }
@@ -840,6 +897,29 @@ console.log('\n== snapshots');
     const s = await S(A.w);
     check(/^Stale\. Updated /.test(s.stamp) && A.errors.length === 0, `stale: the stamp leads with the sentence: "${s.stamp}"`);
     await A.ctx.close();
+  }
+  // plan 0012 (HOUSE §4.15, §7.2): the stamp is one line, 16 px tall, in every state its function can write:
+  // fresh today, fresh on another day, each lead alone (stale; ran out), and the longest a lead and a date make
+  {
+    const shifted = (d, firstValid) => { const shift = firstValid - Date.parse(d.steps[0].validTime); for (const st of d.steps) st.validTime = new Date(Date.parse(st.validTime) + shift).toISOString(); d.run = new Date(Date.parse(d.run) + shift).toISOString(); };
+    const now = Date.now(), H1 = 3600e3, span = (d) => Date.parse(d.steps[d.steps.length - 1].validTime) - Date.parse(d.steps[0].validTime);
+    const day28 = new Date(new Date(now).getFullYear(), new Date(now).getMonth() - 1, 28, 23, 59).getTime();
+    const states = [
+      ['fresh today', /^Updated \d\d:\d\d$/, (d) => { shifted(d, now - H1); d.generatedAt = new Date(now - 60e3).toISOString(); }],
+      ['fresh, another day', /^Updated \d+ [A-Z][a-z]{2}, \d\d:\d\d$/, (d) => { shifted(d, now - 24 * H1); d.generatedAt = new Date(now - 26 * H1).toISOString(); }],
+      ['stale', /^Stale\. Updated \d+ [A-Z][a-z]{2}, \d\d:\d\d$/, (d) => { shifted(d, now - 24 * H1); d.generatedAt = new Date(now - 72 * H1).toISOString(); }],
+      ['ran out, the longest', /^Forecast ran out 23\u202Fh ago\. Updated 28 [A-Z][a-z]{2}, 23:59$/, (d) => { shifted(d, now - 23 * H1 - span(d)); d.generatedAt = new Date(day28).toISOString(); }],
+    ];
+    const got = [];
+    for (const [name, re, fn] of states) {
+      snapOverride = { body: variant(fn) };
+      const A = await open('light');
+      const st = await A.w(() => { const e = document.getElementById('stamp'), r = e.getBoundingClientRect(); return { t: e.textContent, h: r.height, lines: e.getClientRects().length }; });
+      got.push([name, st.t, st.h, re.test(st.t) && Math.abs(st.h - 16) <= 1 && A.errors.length === 0]);
+      await A.ctx.close();
+    }
+    snapOverride = null;
+    check(got.every((g) => g[3]), `the stamp is one line at 390 × 844 in every state it can write: ${got.map(([n, t, h]) => `${n} "${t}" ${h.toFixed(1)} px`).join('; ')} (want 16 ± 1 px)`);
   }
   // a replacement while open keeps the view, the step and the flow
   snapOverride = null;

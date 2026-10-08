@@ -1493,8 +1493,8 @@ figures into its `ART.md`.
 
 | App | ZIP today | ZIP cap | App code today | Fonts today |
 | --- | --: | --: | --: | --: |
-| Global Weather (reference) | 2 788 259 (2026-10-02, with the family fixes) | its own, 2 800 000 (CHECK 258) | 202 840 of 203 000 (D5/D6) | 40 075 |
-| Global Wind (reference) | 1 483 107 (with the family fixes of 2026-10-02) | its own, 1 600 000 (ART 621) | 184 653 | 40 075 |
+| Global Weather (reference) | 2 790 238 (2.2, plan 0012 3.6) | its own, 2 800 000 (CHECK 258) | 205 068 of 205 500 (the lead's ruling, plan 0012 3.6) | 40 075 |
+| Global Wind (reference) | 1 484 517 (1.2, plan 0012 3.6) | its own, 1 600 000 (ART 621) | 187 037 | 40 075 |
 | Milky Way | 6 513 447 (after its pass, the record's move and the family fixes of 2026-10-02) | 8 156 512 | 241 820 of 242 000 (the lead's ruling, plan 0011 D9) | 45 695 |
 | Besseggen | 16 854 392 (after its pass, the record's move and the family fixes of 2026-10-02; NOTES.md's own figure is approximate because it ships inside the ZIP) | 21 088 756 | 226 794 of 227 000 (the lead's ruling, D11) | 40 075 |
 | Norne Reservoir | 15 354 835 (after its pass and the family fixes of 2026-10-02) | 19 110 591 | 161 833 | 40 075 |

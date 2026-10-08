@@ -8,10 +8,11 @@
 //      snapshot.sha256; fonts/ the one subset and OFL.txt, the subset's sha256 the one Global
 //      Weather's ART.md names;
 //   5. the data is untouched: data/snapshot.json's SHA-256 equals data/snapshot.sha256's line;
-//   6. miniapp.json is valid;
+//   6. miniapp.json is valid, its version digits and dots and above the 1.1 plan 0012's pass started from;
 //   7. no AI vendor or model name in any shipped text file (Warming World's list, stored ROT13; the
 //      snapshot's planes skipped, its strings read);
-//   8. the three credits, verbatim, in the CREDITS constant;
+//   8. the three credits, verbatim, in the CREDITS constant, written into About's first credits paragraph
+//      (#about-credit-line) and nowhere on the front (plan 0012: no #credits, no source named outside About);
 //   9. the marketing camera's strings: "Updated" written into the stamp, tabs whose text is Map and
 //      Globe, buttons labelled Zoom in and Zoom out, every localStorage key gw.* and the seven keys
 //      Global Wind 1.0 wrote still read;
@@ -120,13 +121,15 @@ ok(/Ysabeau Office/.test(read('fonts/OFL.txt')) && /SIL Open Font License, Versi
   ok(have === want, `data/snapshot.json sha256 ${have.slice(0, 8)}…${have.slice(-6)} equals data/snapshot.sha256's line`);
 }
 
-// 6. miniapp.json
+// 6. miniapp.json (HOUSE §13: compared segment by segment, a missing segment 0)
+const newer = (a, b) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); return false; };
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Global Wind' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string'
+    && /^\d+(\.\d+){1,2}$/.test(mini.version) && newer(mini.version, '1.1'),
+  `miniapp.json: "${mini.name}" ${mini.version} (above the 1.1 this pass started from), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Warming World's list, ROT13, model family names included)
@@ -141,8 +144,15 @@ ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped 
 // 8. The three credits
 const app = read('app.js');
 const credits = (app.match(/^const CREDITS = '([^']*)';$/m) || [])[1];
-ok(credits === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0' && /\$\('credits'\)\.textContent = CREDITS;/.test(app),
-  `the credit line: CREDITS is "${credits}", written to #credits`);
+{
+  const html = read('index.html');
+  const front = html.slice(0, html.indexOf('<div class="about"')).replace(/<!--[\s\S]*?-->/g, '');
+  const firstPara = /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>/.test(html);
+  const written = /\$\('about-credit-line'\)\.textContent = CREDITS;/.test(app) && !/\$\('credits'\)/.test(app);
+  const named = front.match(/NOAA|GFS|GeoNames|Natural Earth|CC BY|Ysabeau|Thalmann/g) || [];
+  ok(credits === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0' && firstPara && written && !/id="credits"/.test(html) && !named.length,
+    `the credit line: CREDITS is "${credits}", written into #about-credit-line, the first paragraph under About's Sources and credits; no #credits in index.html, and no source named on the front${named.length ? ' (found ' + named.join(', ') + ')' : ''}`);
+}
 
 // 9. The marketing camera's strings and keys
 {

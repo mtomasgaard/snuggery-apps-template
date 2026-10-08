@@ -6,10 +6,11 @@
 //   4. assets/ holds exactly world.json, places.json, LICENSES.md; data/ snapshot.json and
 //      snapshot.sha256; fonts/ the one subset and OFL.txt, the subset's sha256 the one ART.md names;
 //   5. the data is untouched: data/snapshot.json's SHA-256 equals data/snapshot.sha256's line;
-//   6. miniapp.json is valid;
+//   6. miniapp.json is valid, its version digits and dots and above the 2.1 plan 0012's pass started from;
 //   7. no AI vendor or model name in any shipped text file (Warming World's list, stored ROT13; the
 //      snapshot's planes skipped, its strings read);
-//   8. the three credits, verbatim, in the CREDITS constant;
+//   8. the three credits, verbatim, in the CREDITS constant, written into About's first credits paragraph
+//      (#about-credit-line) and nowhere on the front (plan 0012: no #credits, no source named outside About);
 //   9. the marketing camera's strings: "Updated" written into the stamp, tabs whose text is Map and
 //      Globe, buttons labelled Zoom in and Zoom out, every localStorage key gwe.* and today's still read;
 //  10. SI: no plain space between a digit and a unit in strings the app writes; toFixed and
@@ -20,7 +21,7 @@
 //  14. the look: no box-shadow, backdrop-filter, `transition: all`, uppercase or letter-spacing in
 //      style.css; no middle dot in a string the app writes but CREDITS; no →, ➤ or "..." in shipped
 //      text; both theme-color metas, each its theme's --page;
-//  15. budgets: app code ≤ 203,000 bytes (200,000 until plan 0011's 1:10m coast needed levels of detail), fonts/ ≤ 160,000, and the ZIP built exactly as
+//  15. budgets: app code ≤ 205,500 bytes (the lead's ruling, plan 0012 3.6: the deeper zoom's fineLand(); 203,000 before it, 200,000 until plan 0011's 1:10m coast needed levels of detail), fonts/ ≤ 160,000, and the ZIP built exactly as
 //      build-zips.yml builds it ≤ 2,800,000 with index.html at its top and nothing else in it;
 //  16. (after review) assets/LICENSES.md credits the face that ships and never says no font does;
 //      no British spelling in any shipped text file (US English for a US audience), the snapshot's
@@ -114,13 +115,15 @@ ok(/Ysabeau Office/.test(read('fonts/OFL.txt')) && /SIL Open Font License, Versi
   ok(have === want, `data/snapshot.json sha256 ${have.slice(0, 8)}…${have.slice(-6)} equals data/snapshot.sha256's line`);
 }
 
-// 6. miniapp.json
+// 6. miniapp.json (HOUSE §13: compared segment by segment, a missing segment 0)
+const newer = (a, b) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); return false; };
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Global Weather' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string'
+    && /^\d+(\.\d+){1,2}$/.test(mini.version) && newer(mini.version, '2.1'),
+  `miniapp.json: "${mini.name}" ${mini.version} (above the 2.1 this pass started from), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Warming World's list, ROT13, model family names included)
@@ -135,8 +138,15 @@ ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped 
 // 8. The three credits
 const app = read('app.js');
 const credits = (app.match(/^const CREDITS = '([^']*)';$/m) || [])[1];
-ok(credits === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0' && /\$\('credits'\)\.textContent = CREDITS;/.test(app),
-  `the credit line: CREDITS is "${credits}", written to #credits`);
+{
+  const html = read('index.html');
+  const front = html.slice(0, html.indexOf('<div class="about"')).replace(/<!--[\s\S]*?-->/g, '');
+  const firstPara = /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>/.test(html);
+  const written = /\$\('about-credit-line'\)\.textContent = CREDITS;/.test(app) && !/\$\('credits'\)/.test(app);
+  const named = front.match(/NOAA|GFS|GeoNames|Natural Earth|CC BY|Ysabeau|Thalmann/g) || [];
+  ok(credits === 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0' && firstPara && written && !/id="credits"/.test(html) && !named.length,
+    `the credit line: CREDITS is "${credits}", written into #about-credit-line, the first paragraph under About's Sources and credits; no #credits in index.html, and no source named on the front${named.length ? ' (found ' + named.join(', ') + ')' : ''}`);
+}
 
 // 9. The marketing camera's strings and keys
 {
@@ -240,7 +250,7 @@ const css = read('style.css');
 const codeFiles = ['index.html', 'style.css', 'app.js', ...shipped.filter((f) => /^js\/[^/]+\.js$/.test(f))];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= 203000, `app code ${fmt(codeBytes)} bytes (budget 203,000): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= 205500, `app code ${fmt(codeBytes)} bytes (budget 205,500, the lead's ruling for plan 0012 3.6): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

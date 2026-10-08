@@ -47,7 +47,7 @@ it, and are willing to pay 2.9 MB a refresh instead of 1.2 MB.
   REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
   ```
 - **Read `global-weather/NOTES.md` first.** It carries the terms the app must
-  print on screen, the byte scales each layer is stored on, and the measured
+  print in About, the byte scales each layer is stored on, and the measured
   size table that step 1 is about.
 
 ## Step 1 — decide how much weather you want
@@ -271,9 +271,9 @@ In rough order of how often people want them:
 
 ## Do not touch
 
-- **The credit line under the map, and the source paragraph in *About this
-  data*.** The city labels are CC BY 4.0 and attribution is a condition of using
-  them, not a courtesy. The sentence saying the weather is sampled and rounded is
+- **The credit line and the source paragraph in *About this data*.** The city
+  labels are CC BY 4.0 and attribution is a condition of using them, not a
+  courtesy. The sentence saying the weather is sampled and rounded is
   there because NOAA asks that modified data is not presented as unaltered NOAA
   data. Both are in `NOTES.md` in full.
 - **The `.idx` range requests.** It would be simpler to download the whole

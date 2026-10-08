@@ -216,10 +216,10 @@ const sampleAt = (tt, lon, lat) => {
 
 /* 8. The rate. */
 {
-  const want = { 48: '2 days', 24: '24 h', 12: '12 h', 6: '6 h', 3: '3 h', 1.5: '90 min', 0.75: '45 min' };
+  const want = { 48: '2 days', 24: '24 h', 12: '12 h', 6: '6 h', 3: '3 h', 1.5: '90 min', 0.75: '45 min', [20 / 60]: '20 min', [10 / 60]: '10 min' };
   const words = F.LADDER.every((h) => F.rungWords(h) === want[h]);
   let bad = 0, cases = 0;
-  for (let scale = 390; scale <= 360 * 80; scale *= 1.07) for (const cy of [0.5, 0.3, 0.2]) {
+  for (let scale = 390; scale <= 360 * 120; scale *= 1.07) for (const cy of [0.5, 0.3, 0.2, 0.15]) {
     const m = { cx: 0.5, cy, scale, W: 390, H: 612 }, star = F.rateStar(F.pxPerMetre('map', m, null));
     const nearest = F.LADDER.reduce((b, h) => (Math.abs(Math.log(star / h)) < Math.abs(Math.log(star / b)) ? h : b), F.LADDER[0]);
     if (F.pickRung(star, 0) !== nearest) bad++;
@@ -228,9 +228,14 @@ const sampleAt = (tt, lon, lat) => {
   // hysteresis: from 24 h, a rate* of 15 h (1.6× away) stays, 14.9 h moves
   const hyst = F.pickRung(24 / 1.59, 24) === 24 && F.pickRung(24 / 1.61, 24) === 12 && F.pickRung(24 * 1.59, 24) === 24 && F.pickRung(24 * 1.61, 24) === 48;
   // the opening views of DESIGN §1.5: map scale ≈ 1 193 px at the equator, globe r ≈ 187 px, the deepest zoom
+  // (plan 0012: 120 px a degree) at the equator, at 60° N and at 75° N, and the deepest globe
   const open = F.pickRung(F.rateStar(F.pxPerMetre('map', { cy: 0.5, scale: 1193 }, null)), 0);
   const glob = F.pickRung(F.rateStar(F.pxPerMetre('globe', null, { r: 187 })), 0);
-  const deep = F.pickRung(F.rateStar(F.pxPerMetre('map', { cy: 0.5, scale: 360 * 80 }, null)), 0);
+  const cyAt = (lat) => 0.5 - Math.log(Math.tan(Math.PI / 4 + lat * D / 2)) / (2 * Math.PI);
+  const deep = F.pickRung(F.rateStar(F.pxPerMetre('map', { cy: 0.5, scale: 360 * 120 }, null)), 0);
+  const deep60 = F.pickRung(F.rateStar(F.pxPerMetre('map', { cy: cyAt(60), scale: 360 * 120 }, null)), 0);
+  const deep75 = F.pickRung(F.rateStar(F.pxPerMetre('map', { cy: cyAt(75), scale: 360 * 120 }, null)), 0);
+  const deepG = F.pickRung(F.rateStar(F.pxPerMetre('globe', null, { r: 360 * 120 / (2 * Math.PI) })), 0);
   // a 10 m/s wind's screen speed = 10 × rate × 3 600 × px/m (one second of frames, at the equator)
   const m = { cx: 0.5, cy: 0.5, scale: 1193, W: 390, H: 612 }, rate = 24, ppm = F.pxPerMetre('map', m, null);
   const P = Float64Array.from(vec(0, 0)), a = F.mapXY(...P, m, [0, 0]);
@@ -238,7 +243,8 @@ const sampleAt = (tt, lon, lat) => {
   const b = F.mapXY(...P, m, [0, 0]), screenSpeed = Math.hypot(b[0] - a[0], b[1] - a[1]), wantSpeed = 10 * rate * 3600 * ppm;
   ok(words && F.exposure(24) === 'Streaks: 1 s = 24 h of wind at the hour shown', `rate: each rung's words are DESIGN §1.5's table (${F.LADDER.map(F.rungWords).join(', ')}); the exposure line "${F.exposure(24)}"`);
   ok(bad === 0 && hyst, `rate: over ${cases} zooms and centres the rung is the nearest on a log scale (${bad} differ); the 1.6× hysteresis holds both ways`);
-  ok(open === 24 && glob === 24 && deep === 1.5, `rate: the opening map is ${open} h, the opening globe ${glob} h, the deepest map zoom ${deep} h (DESIGN §1.5: 24, 24, 1.5)`);
+  ok(open === 24 && glob === 24 && deep === 0.75 && deep60 === 20 / 60 && deep75 === 10 / 60 && deepG === 0.75,
+    `rate: the opening map is ${open} h, the opening globe ${glob} h; the deepest map zoom ${F.rungWords(deep)} at the equator, ${F.rungWords(deep60)} at 60° N, ${F.rungWords(deep75)} at 75° N, the deepest globe ${F.rungWords(deepG)} (DESIGN §1.5: 24 h, 24 h, 45 min, 20 min, 10 min, 45 min)`);
   ok(Math.abs(screenSpeed / wantSpeed - 1) < 1e-5, `rate: a 10 m/s wind at the equator moves ${screenSpeed.toFixed(4)} px in one second of frames = 10 × 24 × 3 600 × px/m = ${wantSpeed.toFixed(4)} (${Math.abs(screenSpeed / wantSpeed - 1).toExponential(1)}, ≤ 1e-5: the step's own chord error at 24 h a second is 1.7e-6, item 3)`);
 }
 

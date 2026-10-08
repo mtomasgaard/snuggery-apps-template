@@ -1,7 +1,7 @@
 /* Global Weather — "Long Exposure" (ART.md).
 
    The screen is a flow photograph of the air and its caption. The plate (the map or the globe) runs
-   edge to edge; under it the caption band states the scale, the exposure and the credits. One face,
+   edge to edge; under it the caption band states the scale and the exposure. One face,
    no accent color, no glass, no shadows, no gradient in the chrome but the data scale and the
    selection tracer. The light theme is the negative (ink tracers on film base), the dark theme the
    print (pale tracers on a dark plate). The data's own colors live in js/ramps.js; nothing here is
@@ -324,7 +324,7 @@ svg.streaks path { stroke-width: 1.25; }
 }
 .error div + div { margin-top: 6px; }
 
-/* ── the caption band: the legend, the exposure, the credits ── */
+/* ── the caption band: the legend and the exposure (the credits are About's) ── */
 
 .caption {
   flex: 0 0 auto;
@@ -348,7 +348,7 @@ svg.streaks path { stroke-width: 1.25; }
 .legend-ticks span.first::before { left: 0; }
 .legend-ticks span.last { transform: translateX(-100%); }
 .legend-ticks span.last::before { left: auto; right: 0; }
-.exposure, .credits { margin: 0; }
+.exposure { margin: 0; }
 /* The exposure line has a fixed height, whatever it says or whether it says anything: its words change
    with the view (the polar clause), the flow key and Reduce Motion, and a caption that grew and shrank
    with them would resize the plate above it, which changes the view, which changes the words (after
@@ -356,7 +356,6 @@ svg.streaks path { stroke-width: 1.25; }
    upright; one line from 640 px. tools/shoot.mjs checks the longest line fits at every width it runs. */
 .exposure { height: 30px; overflow: hidden; }
 @media (min-width: 640px) { .exposure { height: 15px; } }
-.credits { font-size: 10.5px; }
 
 /* ── the player: the valid time, the transport and the track ── */
 
@@ -445,19 +444,8 @@ svg.streaks path { stroke-width: 1.25; }
   .stamp { white-space: nowrap; }
   .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
   .unitkey { grid-area: 1 / 3 / 3 / 4; }
-  /* the legend and the credits share a row; the exposure line runs under them, full width */
-  .caption {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: 16px;
-    padding-top: 4px;
-    padding-bottom: 2px;
-  }
-  .caption > .stamp, .exposure { grid-column: 1 / -1; }
-  .legend { grid-column: 1; }
-  .credits { grid-column: 2; grid-row: span 1; align-self: start; padding-top: 1px; }
-  .caption > .legend + .exposure { grid-row: 2; }
-  .caption > .stamp + .legend + .exposure { grid-row: 3; }
+  /* the legend has the row to itself; the exposure line runs under it, full width */
+  .caption { padding-top: 4px; padding-bottom: 2px; }
   /* the time, the transport and the track on one row */
   .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
   .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; }

@@ -15,7 +15,7 @@
  *     "detail":      "10 m wind from the 0.25° product, sampled to 2°, …",
  *     "licence":     "Public domain — a work of the United States Government",
  *     "attribution": "Wind: NOAA Global Forecast System, sampled to 2°"
- *   },                                           //   printed on screen, see NOTES.md
+ *   },                                           //   printed in About, see NOTES.md
  *   "model": "GFS",
  *   "run":   "2026-09-21T00:00:00Z",             // the model cycle the forecast comes from
  *   "level": "10 m above ground",
@@ -87,7 +87,7 @@
  *   world.json    coastlines and country borders. Natural Earth, public domain.
  *   places.json   [{ "n": "London", "lon": -0.13, "lat": 51.51, "r": 1 }, …] where
  *                 r is the label tier, 1 shown first. GeoNames, CC BY 4.0: the
- *                 credit line under the map is a condition of using it. Edit the
+ *                 credit, in About, is a condition of using it. Edit the
  *                 file freely; the app reads it as it finds it.
  * Both licenses are in assets/LICENSES.md, and NOTES.md has the wind's.
  *
@@ -119,7 +119,7 @@ const HEAT_PX = 3;             // CSS px per color sample, flat map
 const GLOBE_PX = 3;            // CSS px per color sample, globe
 const PLAY_HOURS_PER_SEC = 5;  // playback speed: a day of forecast every ~5 s
 const PATH_K = 4096;           // land paths are built in world units × PATH_K
-const MAX_SCALE = 360 * 80;    // 80 px per degree of longitude
+const MAX_SCALE = 360 * 120;   // 120 px per degree of longitude, as far as the coast holds (NOTES.md)
 const STALE_HOURS = 30;        // a forecast older than this is stamped stale
 const MASK_NX = 2048;          // the globe's land mask, in plate carrée
 const MASK_NY = 1024;
@@ -156,7 +156,7 @@ const BEAUFORT = [
 const COMPASS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
                  'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
 
-/* The line that stays on screen. It says "sampled" because NOAA asks that
+/* The credit line, the first paragraph of About's credits. It says "sampled" because NOAA asks that
  * modified data is not presented as unaltered NOAA data, and it names GeoNames
  * and the license because CC BY 4.0 makes that a condition rather than a
  * courtesy. NOTES.md says to keep both, and means it. */
@@ -164,7 +164,6 @@ const CREDITS = 'NOAA GFS, sampled · Natural Earth · GeoNames CC BY 4.0';
 
 const $ = (id) => document.getElementById(id);
 const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
-const pad2 = (n) => String(n).padStart(2, '0');
 const wrapLon = (lon) => ((lon + 180) % 360 + 360) % 360 - 180;
 
 /* ── color and alpha from a stop table ──────────────────────────────────── */
@@ -1042,7 +1041,7 @@ let gcache = null;
 function syncGlobe() {
   globe.lat = clamp(globe.lat, -89.5, 89.5);
   globe.lon = wrapLon(globe.lon);
-  globe.r = clamp(globe.r, Math.min(W, H) * 0.3, Math.min(W, H) * 12);
+  globe.r = clamp(globe.r, Math.min(W, H) * 0.3, MAX_SCALE / (2 * Math.PI));   // the map's deepest zoom at the equator
   gp.lon = globe.lon * DEG;
   gp.sinLat = Math.sin(globe.lat * DEG); gp.cosLat = Math.cos(globe.lat * DEG);
   gp.sinLon = Math.sin(gp.lon); gp.cosLon = Math.cos(gp.lon);
@@ -1163,11 +1162,11 @@ function drawTop() {
  * and the readout card. A place name is not drawn under them, and neither is an arrow under the ghost
  * key, which has no plate of its own to hide it. */
 function exclusions() {
-  const out = [], pr = wrap.getBoundingClientRect();
+  const out = [];
   for (const el of [focusMode ? $('focus-exit') : $('keys'), $('readout')]) {
-    if (!el || el.hidden) continue;
-    const r = el.getBoundingClientRect();
-    if (r.width && r.height) out.push([r.left - pr.left, r.top - pr.top, r.right - pr.left, r.bottom - pr.top]);
+    // the box as laid out, not as drawn: the card opens with a 4 px slide (card-in), and a box read
+    // during it left the top of a name under the card's top edge
+    if (el && !el.hidden && el.offsetWidth) out.push([el.offsetLeft, el.offsetTop, el.offsetLeft + el.offsetWidth, el.offsetTop + el.offsetHeight]);
   }
   return out;
 }
@@ -1413,7 +1412,7 @@ function drawGlobe() {
  * bilinear sample and a lookup per cell. */
 function globeCells() {
   const key = `${globe.lon.toFixed(3)}|${globe.lat.toFixed(3)}|${globe.r.toFixed(2)}`
-            + `|${W}|${H}|${landMask ? 1 : 0}`;
+            + `|${W}|${H}|${landMask ? 1 : 0}|${gesture && gesture.moved ? 0 : 1}`;
   if (gcache && gcache.key === key) return gcache;
   const x0 = Math.max(0, Math.floor(gp.cx - gp.r));
   const y0 = Math.max(0, Math.floor(gp.cy - gp.r));
@@ -1448,8 +1447,50 @@ function globeCells() {
       }
     }
   }
+  if (landMask && !(gesture && gesture.moved) && gp.r * Math.PI / MASK_NY > 4) fineLand(cell);
   gcache = cell;
   return cell;
+}
+/* Close in, a cell of the land mask spans more than 4 px and the land would show its squares along the
+ * coast. So once the globe is at rest (not while a finger turns it), the land of the view's own window is
+ * drawn again from the same rings, at about 1.5 px a pixel at the center, and the cells read that. */
+function fineLand(cell) {
+  let w = 180, e = -180, s = 90, n = -90;
+  for (let i = 0; i < cell.inside.length; i++) {
+    if (!cell.inside[i]) continue;
+    const d = wrapLon(cell.lon[i] - globe.lon), la = cell.lat[i];
+    w = Math.min(w, d); e = Math.max(e, d); s = Math.min(s, la); n = Math.max(n, la);
+  }
+  const dy = 86 / gp.r, dx = dy / Math.max(0.1, Math.cos(globe.lat * DEG));   // degrees a pixel
+  const nx = Math.ceil((e - w) / dx) + 3, ny = Math.ceil((n - s) / dy) + 3;
+  if (e - w > 120 || nx * ny > 4e6) return;     // a pole in view: the mask serves
+  const c = Object.assign(document.createElement('canvas'), { width: nx, height: ny }).getContext('2d', { willReadFrequently: true });
+  const x0 = globe.lon + w - dx, y0 = n + dy, X0 = lonToX(x0), X1 = lonToX(x0 + nx * dx), Y0 = latToY(y0), Y1 = latToY(y0 - ny * dy);
+  c.fillStyle = '#fff';
+  for (const k of [-1, 0, 1]) {
+    for (const t of lod(3)) {
+      if (t.b[0] + k > X1 || t.b[2] + k < X0 || t.b[1] > Y1 || t.b[3] < Y0) continue;
+      if (!t.d) {                               // the tile's land in degrees, built once
+        t.d = new Path2D();
+        for (const ring of t.land.flat()) {
+          const p = new Path2D();
+          let x = 0, y = 0;
+          for (let i = 0; i < ring.length; i += 2) { x += ring[i]; y += ring[i + 1]; if (i) p.lineTo(x / 100, y / 100); else p.moveTo(x / 100, y / 100); }
+          p.closePath();
+          t.d.addPath(p);
+        }
+      }
+      c.setTransform(1 / dx, 0, 0, -1 / dy, (360 * k - x0) / dx, y0 / dy);
+      c.fill(t.d, 'evenodd');
+    }
+  }
+  const px = c.getImageData(0, 0, nx, ny).data;
+  for (let i = 0; i < cell.inside.length; i++) {
+    if (!cell.inside[i]) continue;
+    const ix = Math.floor((wrapLon(cell.lon[i] - globe.lon) - w + dx) / dx), iy = Math.floor((y0 - cell.lat[i]) / dy);
+    cell.land[i] = cell.lat[i] < ANTARCTIC_EDGE || px[(iy * nx + ix) * 4] > 127 ? 1 : 0;
+  }
+  cell.fine = true;
 }
 
 function drawGlobeSurface() {
@@ -1762,14 +1803,10 @@ function updateStamp() {
   }
   const now = Date.now();
   const when = new Date(snap.generatedAt).getTime();
-  const run = new Date(snap.run).getTime();
   const lastValid = field.steps[field.steps.length - 1].valid;
   const today = new Date(now).toDateString() === new Date(when).toDateString();
-  // the run's label is kept on one line (no-break spaces), so a narrow screen wraps before it
-  const updated = `Updated ${today ? '' : `${U.dayMonth(when)}, `}${U.clock(when)}, `;
-  const runName = document.createElement('span');
-  runName.setAttribute('translate', 'no');   // a model's name and a cycle, never a phrase to translate
-  runName.textContent = `${snap.model || 'GFS'}\u00A0${U.zHour(run)}\u00A0${U.dayMonthUTC(run).replace(' ', '\u00A0')}`;
+  // one line in every state: the model run is About's (This forecast, Model run), not the stamp's
+  const updated = `Updated ${today ? '' : `${U.dayMonth(when)}, `}${U.clock(when)}`;
   let lead = '';
   if (now > lastValid) lead = `Forecast ran out ${U.ago(now - lastValid)}. `;
   else if (now - when > STALE_HOURS * 3600e3) lead = 'Stale. ';
@@ -1780,7 +1817,6 @@ function updateStamp() {
     el.append(s);
   }
   el.append(document.createTextNode(updated));
-  el.append(runName);
   el.title = U.full(when);
 }
 
@@ -1883,15 +1919,16 @@ function updateExposure() {
   if (el.textContent !== text) el.textContent = text;
 }
 
-/* The three sources' credits. The short line stays on screen because CC BY 4.0
- * asks for attribution wherever the material is used; the full statement is one
- * tap away in About, which is what "a reasonable manner" means on a phone map.
+/* The three sources' credits, in About, one tap from every screen and every
+ * mode: the credit line first, word for word, then each source's full
+ * statement. CC BY 4.0 lets attribution be given in any reasonable manner, and
+ * on a phone map that is a page one tap away rather than a line over the map.
  * The sentence about sampling is not decoration either: NOAA asks that modified
  * data is not passed off as unaltered NOAA data, and this is sampled and
  * rounded to a byte a point. */
 function updateCredits() {
   const source = (snap && snap.source) || {};
-  $('credits').textContent = CREDITS;
+  $('about-credit-line').textContent = CREDITS;
   $('about-credits').textContent =
     `${source.attribution || 'Wind: NOAA Global Forecast System'}. `
     + `${source.licence || 'Public domain, a work of the United States Government'}. `
@@ -2619,6 +2656,12 @@ window.__gw = {
   focus: (on, kbd = false) => setFocus(!!on, { kbd }),
   tap(lon, lat) { marker = { lon, lat }; readoutDirty = true; requestTop(); },
   project(lon, lat) { const o = [0, 0, 0]; V().project(lon, lat, o); return o; },
+  /** The globe's cell under a point: land or sea as drawn, the cell's own center, and whether the fine land was read. */
+  globeCell(lon, lat) {
+    const c = globeCells(), o = GLOBE_VIEW.project(lon, lat, [0, 0, 0]);
+    const i = Math.floor((o[1] - c.y0) / GLOBE_PX) * c.cols + Math.floor((o[0] - c.x0) / GLOBE_PX);
+    return { land: c.land[i], lon: c.lon[i], lat: c.lat[i], fine: !!c.fine };
+  },
   view: () => ({ tab, W, H, dpr, map: { ...map }, globe: { ...globe } }),
   flow: {
     state: () => ({ ...flow.state(), live: !!field && flowLive(), choice: flowChoice }),

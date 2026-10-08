@@ -386,3 +386,195 @@ Two reviews, one for honesty and one with a stranger's phone, changed these. The
 
 Each finding, what was done or declined and why, and the commands that checked it are in
 `tools/DECISIONS.md`.
+
+---
+
+# Plan 0012, package 3.6 (2026-10-07): the deeper zoom, the front cut, 2.2
+
+The owner, 2026-10-06: *"Global weather/wind needs further zoom."* The brief: allow further zoom on
+the map and the globe as far as the 1:10m coast still holds, measured rather than guessed, then the
+change list (`docs/plans/0012-change-lists.md`, Global Weather: the credit line into About, the stamp
+one line, the prose, 2.2). Global Wind took the same pass in the same workflow; its record is its own
+`tools/DECISIONS.md`. Scratch work, scripts and pictures are under `tools/.work/p0012/` (not shipped).
+
+## How far the coast holds (measured)
+
+The coast is `assets/world.json`: Natural Earth 1:10m, Visvalingam-Whyatt at 1 px² at 80 px a degree,
+in hundredths of a degree. Around the Norwegian fjords (4.5–8.5° E, 59.5–62.5° N), Lofoten
+(12–16° E, 67.6–68.6° N) and Finnmark (21–26° E, 69.8–71.2° N), the share of the coast's length drawn
+in straight runs longer than 8 CSS px (16 device px at DPR 2), this file / Natural Earth 1:10m
+unsimplified at the same 0.01° (`coast/runs.py`):
+
+| px a degree | 80 | 100 | 120 | 140 | 160 | 240 | 320 |
+| --- | --: | --: | --: | --: | --: | --: | --: |
+| fjords | 22 / 18 % | 33 / 25 % | 43 / 31 % | 56 / 39 % | 64 / 43 % | 86 / 62 % | 93 / 72 % |
+| Lofoten | 23 / 18 % | 37 / 28 % | 44 / 34 % | 56 / 41 % | 68 / 51 % | 86 / 67 % | 98 / 92 % |
+| Finnmark | 29 / 25 % | 41 / 33 % | 50 / 40 % | 66 / 54 % | 69 / 56 % | 88 / 74 % | 97 / 93 % |
+
+Median segment on screen, this file: 3.4–3.9 px at 80, 6.9–7.7 at 160, 10.3–11.6 at 240, 13.7–15.4 at
+320; the unsimplified 1:10m: 1.7–2.5 at 80, 3.4–5.1 at 160 (`coast/measure.py`). The unsimplified
+coast lies within 0.89–1.12 px (p99) of this file at 80, and the gap grows with the scale (1.8–2.2 px
+at 160). The app itself was drawn at 80, 120, 160, 240 and 320 (`coast/coastshots.mjs`, a copy with the
+limits lifted; `coast/cmp-*.png` side by side with the unsimplified coast): at 160 the Sognefjord's
+branches and Lofoten read as polygons in both; at 120 this file still reads as a coast.
+
+**Ruling: 120 px a degree** (`MAX_SCALE = 360 * 120`), where under half of the coast is drawn in
+visible straight runs (43–50 %); past it a closer view adds no coast, only longer straight lines. The
+globe stops at `MAX_SCALE / 2π` (r 6 875.5 px), which draws its center at the map's 120 px a degree of
+the equator; it was 12 × the plate's short side (4 680 px upright at 390 px, 2 808 on its side). On the
+map the Mercator stretch makes high latitudes closer still, so the globe never shows the coast closer
+than the map does.
+
+**Not done, for the lead: a finer world.json.** Built in `.work` by `scripts/world_json.py`'s own
+functions with only its constants overridden (`coast/variants.py`; the pipeline and the committed file
+are unchanged): today's 80 px is 1 538 738 B (431 577 deflated, byte for byte the shipped file); 120 px
+1 839 752 (483 490); 160 px 2 028 021 (511 745); 240 px 2 218 990 (538 675); unsimplified 2 366 894
+(558 203). A 160 build would add about 80 KB to each ZIP: Global Weather's over its 2 800 000 cap
+(2 788 259 → about 2 868 000), Global Wind's within its 1 600 000 (about 1 563 000). It would buy one
+step at most **on Norway's coast**: there, even unsimplified, 43–56 % of the coast is straight runs
+at 160. That is not true elsewhere (the review's measurement, below): on most populated coasts the
+simplification, not the source, is what a deeper view runs into, so a finer file would hold further there.
+
+## Checked at the new maximum
+
+- **Levels of detail.** The map draws level 3 (every point) from 25 600 px a world; 43 200 is level 3.
+  The globe at r 6 875 asks for level 3 too (2πr = 43 200). No new level.
+- **The globe's land, fixed.** The globe reads land and sea from the 2 048 × 1 024 mask: 0.18° cells,
+  14 px at the old limit and 21 px at the new, which drew squares along every coast where the ground
+  shows (Rain, Cloud, calm Wind; `coast/shots-rain/chromium-fjords-globe-120.png`). `fineLand()`: once
+  a mask cell would span more than 4 px and no finger is moving the globe, the land of the view's own
+  window is drawn again from level 3's rings at about 1.5 px a pixel, and the cells read that; a pole in
+  view, or a window over 120° wide, keeps the mask. `shoot.mjs`: at the deepest radius over the fjords,
+  746 of 746 cell centers further than 2 px from a coast agree with world.json's rings (214 nearer, not
+  judged). Cost at rest (`perf.mjs`, the median of five redraws of the deepest globe): 5.1 → 5.5 ms in
+  Chromium, 4 → 8 ms in WebKit, once per view change, never during a drag or play.
+- **Grid labels.** Neither app draws any. The graticule's finest step stays 2°, the forecast's own grid
+  (`lon0` 0, `lat0` 90, 2° apart), so at 120 px a degree its lines are 240 px apart and mark where the
+  data points are. Unchanged.
+- **City labels.** The tiers top out at map scale 7 500 (tier 4); placement is unchanged. Bodø, Ålesund,
+  Bergen and Stavanger draw clear at the deepest zoom (`drive/`).
+- **The flow.** Density is per screen area and the trail is a screen-time constant, so both hold. The
+  speed did not: the ladder ended at 45 min, and over Lofoten at the old 80 px a 6 m/s wind already ran
+  1.7 times the design's 18 px a second (rate* 0.43 h); at 120 and 70° N it would have been 2.8 times
+  (about 50 px a second). `js/flow-math.js`'s `LADDER` gains **20 min** and **10 min** (words "20 min",
+  "10 min", no longer than "45 min", so the exposure line's fixed height holds). The deepest map is
+  45 min at the equator, 20 min at 60° N, 10 min at 75° N; the deepest globe 45 min (`test_flow.mjs`).
+- **Frame times** (`perf.mjs`, headless, a trend only, not phone evidence; the map at its deepest over
+  Lofoten, the start commit's code at its 80 against this at 120): interval medians are unchanged in
+  every case. Chromium (real touch): idle 16.7 / 16.7 ms, pan 16.7 / 16.7 (p95 33.4 / 33.3), play
+  16.7 / 16.7, globe drag 16.7 / 16.7. WebKit (touch-type pointer events dispatched on the canvas;
+  Playwright has no touch driver for WebKit): 20 / 20 in all four. Play moved t 5.0 / 5.0 steps in 3 s.
+- **Reduce Motion** at the deepest zoom: no flow (`suppressed: "reduced"`), the arrows and their line
+  (`Arrows: length and weight grow with wind speed up to 25 m/s`), play in whole steps (t 4 after 3 s),
+  both engines.
+- **The readout.** Bilinear on the 2° grid, as before; at 120 px a degree one cell spans 240 px. About's
+  grid paragraph gains: *"Between the points, the colors, the streaks and a tapped value are blended from
+  the four nearest, so zoomed in close the picture looks smoother than the forecast is: the detail
+  between points is that blending, not weather."* `NOTES.md` and DESIGN §7.3 say the same.
+- **Memory.** Every canvas is plate-sized, so zoom does not change them; the fine land adds one
+  window-sized canvas while it is built and a Path2D in degrees per level-3 tile it has drawn. JS heap
+  after zooming both views to their deepest (Chromium, after a forced GC): 19.9 MB before, 19.8 after.
+  The phone is the owner's check.
+
+## The change list, as built
+
+1. **F1, the credit line.** `#credits` is gone from `#caption` (now *Scale and exposure*); `CREDITS` is
+   unchanged and written into `#about-credit-line`, the first paragraph under *Sources and credits*;
+   the comments say About; `.credits` and its landscape grid are gone (in landscape the legend has its
+   row). `check.mjs` item 8 and `shoot.mjs`'s boot, focus and About checks follow (F8).
+2. **F3, the stamp.** The run's span and the trailing comma are gone: `Updated 1 Oct, 00:41`, one line
+   in every state. The run is About's *Model run*. `js/units.js`'s `zHour` and `dayMonthUTC`, used only
+   there, went with it, and `app.js`'s unused `pad2`.
+3. The exposure line stays, at its fixed two lines.
+4. **F5.** `ART.md`, `DESIGN.md`, `NOTES.md`, `assets/LICENSES.md` say "in About"; `ART.md`'s figure,
+   plate and stamp are made true (590 px of plate upright, 680 in focus mode, 234 on its side: measured
+   in Chromium and WebKit, against 559, 665 and 234 before). `PROMPT.md`'s *Do not touch* line said "the
+   credit line under the map"; it now says "in *About this data*" (not on the list; an owner call).
+5. **F6.** 2.2. `check.mjs` item 6 now pins digits and dots above 2.1 (HOUSE §13).
+
+**F8's new check**: the stamp at 390 × 844 in every state its function can write is one line, 16.0 px:
+fresh today, fresh another day, `Stale.`, and the longest, `Forecast ran out 23 h ago. Updated 28 Sep,
+23:59`.
+
+## Fixed as musts
+
+- **A place name under the readout card.** `shoot.mjs` failed at the start commit: *no place name is
+  left under a card a real tap has just opened: 5, 15, 0 lit device pixels* (`p0012/shoot-before.log`).
+  It did not reproduce alone (`undercard.mjs`). Cause, by reading: `exclusions()` measured the card
+  with `getBoundingClientRect`, which includes `card-in`'s 4 px `translateY`, so a `#top` drawn during
+  the slide kept names off a box 4 px low, and the top of a name stayed under the card's top edge. It
+  now reads the laid-out box (`offsetLeft` … `offsetHeight`, which ignore transforms). Passed in every
+  run after (0, 0, 0). Global Wind shares the code and takes the same fix.
+- Plan 0009's clip bug (the play key never showed Pause) was fixed by B2 on 2026-10-01; `shoot.mjs`'s
+  check passes, and Pause showed in both engines when driven by touch.
+
+## The budget, for the lead's ruling
+
+App code (`check.mjs`): **202 840 B at the start** (the brief's 202 709 was an older count) → **205 068 B**,
+over the 203 000 cap by 2 068 B, a net 2 228 B more. Measured pieces: `fineLand()` is 2 246 B, plus
+about 140 where `globeCells()` calls it and keys on the gesture; the test hook `globeCell` is 402 B;
+About's new sentence 223 B; the ladder 18 B. The front cut (the credit line, its CSS and landscape grid,
+the run's span) and the dead code (`zHour`, `dayMonthUTC`, `pad2`) paid back the rest. Nothing was cut to fit and no comment was shortened (HOUSE §8).
+ZIP: see `NOTES.md`'s table (within 2 800 000).
+
+## Camera strings
+
+`Updated` is kept: the stamp still writes `Updated …` as a text node (`check.mjs` item 9). `Map`, `Globe`,
+`Zoom in`, `Zoom out` and `Show the controls` are unchanged. The camera's two zoom taps from the opening
+fit stay far below the new limit, so its round trip is unchanged.
+
+## Owner calls left open
+
+- **The limit, 120 px a degree.** 160 doubles the old reach but draws the fjords as polygons (64–69 %
+  straight runs); a finer `world.json` would hold a little further at about 80 KB a ZIP and breaks
+  Global Weather's ZIP cap.
+- **The two new rungs**, 20 min and 10 min, and their words.
+- **About's new sentence** on blending.
+- **`PROMPT.md`'s line** moved to About with the credit line.
+
+## The fixer pass after QA and review (2026-10-07)
+
+**The coast measured beyond Norway.** The reviewer's `tools/.work/review/runs_other.py`, rerun here
+(`tools/.work/p0012/fix/runs_other.txt`): share of coast length in straight runs over 8 px, this file /
+Natural Earth 1:10m unsimplified.
+
+| coast | 80 | 100 | 120 | 160 |
+| --- | --: | --: | --: | --: |
+| Lofoten | 23 / 19 % | 37 / 26 % | 44 / 33 % | 68 / 47 % |
+| Norwegian fjords | 22 / 18 % | 33 / 25 % | 43 / 32 % | 64 / 43 % |
+| Scotland, west | 11 / 8 % | 22 / 14 % | 34 / 20 % | 55 / 29 % |
+| Chilean fjords | 10 / 7 % | 21 / 12 % | 35 / 17 % | 57 / 28 % |
+| Philippines | 11 / 7 % | 20 / 10 % | 29 / 14 % | 52 / 20 % |
+| Aegean | 7 / 4 % | 15 / 8 % | 24 / 11 % | 47 / 18 % |
+| SE Alaska | 17 / 15 % | 30 / 21 % | 42 / 27 % | 62 / 39 % |
+| Svalbard (78° N) | 66 / 57 % | 73 / 67 % | 78 / 76 % | 94 / 86 % |
+| Canadian Arctic (74° N) | 51 / 46 % | 62 / 55 % | 75 / 64 % | 82 / 76 % |
+| North Greenland (82° N) | 85 / 86 % | 93 / 91 % | 98 / 94 % | 99 / 97 % |
+
+Norway is the hardest populated coast measured, so 120 is a safe limit for this file everywhere; but
+outside Norway an unsimplified (or 160 px) `world.json` would hold to 160 and past it. Above about 75° N
+the stretch shows Natural Earth's own segments at any build, so a finer file does not help there; a
+limit set in ground scale at the view's center would, and that is a later design call. For the lead and
+the owner before any ruling on `world.json`: about +52 KB a ZIP for a 120 px build, +80 KB for 160, and
+Global Weather's ZIP has about 10 KB of room. `NOTES.md` (both apps) now says the measurement was made
+on Norway's coast, gives the other coasts' figures in one sentence, and the Arctic sentence.
+
+**The code cap.** Not raised here: it is the lead's ruling. `check.mjs` still fails one check, app code
+205 068 B against 203 000. The reviewer recommends 205 100 or 206 000 and keeping `fineLand()` (it fixes
+the 21 px mask squares on the deepest globe) and the `globeCell` hook (it proves 746/746). If the cap
+moves, `check.mjs`'s figure, `NOTES.md`'s row and HOUSE.md §8's rows (Global Weather 205 068, Global
+Wind 187 037) move with it. `NOTES.md`'s row now reads as a plain figure against the cap, without the
+build-process words "for a ruling".
+
+**The ZIP cap and the published copies.** `publish-web.yml` packs each app with that run's data and
+only echoes the size; it does not apply the 2 800 000 cap and cannot fail on it. `ART.md` now says the
+cap is the code ZIP's. The bundle step's own ceilings (64 apps, 20 000 files, 1 GiB unpacked) are far off.
+
+**Not done here, outside this pass's folders:** `scripts/world_json.py` lines 25–27 still say the apps'
+maximum zoom is `MAX_SCALE = 360 * 80`; it is now 120 in both. A comment-only change for the lead, e.g.
+"at 80 px a degree, the zoom it was built for; the apps zoom on to 120 (plan 0012 3.6)"; the output
+stays byte-identical.
+
+**Declined nit:** an `aria-disabled` Zoom in key at the limit. It predates the pass, is not on the change
+list, and adds code over a cap already awaiting a ruling. Device rows 156/157 should add "the globe's land
+at rest vs mid-drag at the deepest zoom" (the lead owns `docs/`).

@@ -23,8 +23,8 @@ shown`.
   faintly cyan ground. In both themes "more" stands further from the ground, and the streaks have
   the far end of the lightness range to themselves (the tonal budget below).
 - **The plate and its caption.** The view runs edge to edge as the plate. Under it, the caption
-  band carries the scale, the exposure and the credits, in one face. Nothing is pasted on the
-  photograph except the map keys and the tapped readout.
+  band carries the scale and the exposure, in one face; the credits are in About, one tap from the
+  stamp. Nothing is pasted on the photograph except the map keys and the tapped readout.
 - **One bold thing: the streaks.** Everything else is quiet: one face, no accent color, no glass,
   no shadows, and no gradients in the chrome. The only gradients are the data scale and the
   selection mark, which is a drawn tracer.
@@ -84,7 +84,6 @@ None of them is a Renaissance sans. The four reasons it was chosen, all measured
 | Stamp | 400, 11.5 px, `--ink-2`; a stale clause in `--ink` | under the app name |
 | Instrument labels | 400, 10.5 px, tabular | legend ticks, day labels, `now` |
 | Caption | 400, 11 px, `--ink-2`; the legend's title 600 at 11.5 px in `--ink` | the caption band |
-| Fine print | 400, 10.5 px, `--ink-2` | the credit line |
 | Place names (canvas) | 560, 11.5 px over a 3 px halo | the map and the globe |
 
 The scale is **10.5 / 11 / 11.5 / 12 / 12.5 / 13.5 / 15 / 21 px** (12 px is the readout's place line, as built). Nothing is larger than 21 px. Nothing
@@ -101,7 +100,10 @@ is set in capitals or small capitals, nothing is letter-spaced, and no label sit
 
 That totals **40 075 bytes** (`cat fonts/*.woff2 fonts/OFL.txt | wc -c`) against the 160 000-byte
 budget. The output's sha256 is `fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262`.
-Two runs were byte-identical (`cmp`).
+Two runs were byte-identical (`cmp`). The whole ZIP is within 1 % of its own cap: about 2 790 000 of
+2 800 000 bytes (2026-10-07, `NOTES.md`'s table), so anything added to it is paid for. The cap
+is the code ZIP's, packed from the committed folder by `build-zips.yml`; the copy published with each
+refresh carries that day's data and is not held to it.
 
 - **Command** (from `Template/`, in any venv with fonttools 4.60.2 and Brotli; the pipeline's venv
   is not used): `python global-weather/tools/art/font_subset.py`.
@@ -310,7 +312,7 @@ The layout at 390 × 844 (heights in CSS px, safe-area insets added outside them
 ```
 ┌──────────────────────────────────────────┐
 │ Global Weather                     [m/s] │ 22  name 15/650; the units key
-│ Updated 22 Sep, 04:15, GFS 06Z 22 Sep    │ 16  stamp 11.5, --ink-2
+│ Updated 22 Sep, 04:15                    │ 16  stamp 11.5, --ink-2, one line
 │ Map  Globe     Wind  Temperature  Rain … │ 40  view switch | layer words (row scrolls)
 ├──────────────────────────────────────────┤
 │ [card]                              [+]  │
@@ -326,7 +328,6 @@ The layout at 390 × 844 (heights in CSS px, safe-area insets added outside them
 │ Wind, 10 m above ground  ▕▔▔▔▔▔▔▔▔▔▔▔▏    │ 28  legend: title, bar, ticks (unit on the last)
 │                          0  10  20 36 m/s│
 │ Streaks: 1 s = 24 h of wind at the hour… │ 30  the exposure, two lines high whatever it says
-│ NOAA GFS, sampled · Natural Earth · Geo… │ 14  the credit line, unchanged
 ├──────────────────────────────────────────┤
 │ Wed 23 Sep, 11:00         +36 h, 8 d ago │ 28  the time row
 │  ‹   ■▶   ›   ──────●────────·─────────  │ 44  transport | the time track
@@ -334,10 +335,11 @@ The layout at 390 × 844 (heights in CSS px, safe-area insets added outside them
 └──────────────────────────────────────────┘
 ```
 
-That leaves 559 px of plate at 390 × 844 (measured by `tools/shoot.mjs`, with the stamp on two
-lines because the demo forecast has run out), against about 657 in the stock app. The caption band
-costs about 85 px of height (about 45 px more of the plate than the overlaid legend it replaced), its exposure line holding two lines' height whatever it says, and in exchange
-the legend and the credits no longer cover the plate (owner call 6).
+That leaves 590 px of plate at 390 × 844 (measured in headless Chromium and WebKit, the stamp on
+one line in every state), and 680 px in focus mode. The caption band costs 70 px of height, its
+exposure line holding two lines' height whatever it says, and in exchange the legend no longer
+covers the plate (owner call 6). The credits are About's: its first paragraph under *Sources and
+credits* is the credit line, word for word.
 Content is left-aligned throughout. The only centered things are the error sentence on the plate
 and the play key's glyph.
 
@@ -347,10 +349,10 @@ sit left. The **units key** is a word key at right: the unit (`m/s`, `°C`, `km/
 accessible name `Change units, now m/s`. It is a key, not a pill: the radius is small, and the frame
 is there because the word is a control.
 
-**The stamp** keeps its words and its rules (DESIGN §3, §4). The separators become commas and
-sentences: `Updated 04:15, GFS 06Z 22 Sep`, or `Updated 22 Sep, 04:15, …` when not today. A stale
-forecast leads with a sentence in `--ink` (the rest of the line stays `--ink-2`): `Forecast ran out
-4 d ago. Updated 22 Sep, 04:15, GFS 06Z 22 Sep` or `Stale. Updated …`. There is no red and no amber:
+**The stamp** is one line in every state and names no source (DESIGN §3, §4): `Updated 04:15`, or
+`Updated 22 Sep, 04:15` when not today. The model run is About's (*This forecast*, `Model run`). A
+stale forecast leads with a sentence in `--ink` (the rest of the line stays `--ink-2`): `Forecast ran
+out 4 d ago. Updated 22 Sep, 04:15` or `Stale. Updated …`. There is no red and no amber:
 the temperature ramp uses those colors, and the words carry the warning. Tapping the stamp opens
 About, as today.
 
@@ -406,9 +408,10 @@ it.
    Under Reduce Motion or with the flow off it reads `Arrows: length and weight grow with wind speed
    up to 25 m/s` (in the unit on screen, a whole number printed whole; when arrows are drawn), or is empty and keeps its
    height.
-3. **The credit line**: the `CREDITS` constant, byte for byte (`NOAA GFS, sampled · Natural Earth ·
-   GeoNames CC BY 4.0`), 10.5 px `--ink-2`. Its middle dots are the one place they stay (owner call
-   4).
+3. **The credit line is not in the band.** The `CREDITS` constant, byte for byte (`NOAA GFS,
+   sampled · Natural Earth · GeoNames CC BY 4.0`), is the first paragraph of About's *Sources and
+   credits*, one tap from the stamp in every mode. Its middle dots are the one place they stay (owner
+   call 4).
 
 **The time row.** The valid time is the one large figure, 600 at 21 px, tabular, built by hand in
 `js/units.js` from the phone's clock, 24-hour and day before month, the same on every locale:
@@ -453,11 +456,13 @@ padding and a 176 px minimum width.
 **About** is a full-height `--sheet` panel that slides up over 220 ms, with `overscroll-behavior:
 contain` and focus held inside it. Its sections, each headed 650 at 13.5 px in sentence case and
 separated by a 1 px `--line` rule (no cards inside):
-1. **What the streaks are**: the exposure, the Mercator stretch, the 2° grid, and that nothing about
-   a streak is invented.
+1. **What the streaks are**: the exposure, the Mercator stretch, the 2° grid (and that zoomed in
+   close, the blending between its points looks smoother than the forecast is), and that nothing
+   about a streak is invented.
 2. **This forecast**: `label: value` lines, one per line, no middle dots.
-3. **Sources and credits**: NOAA's statement and "sampled", Natural Earth, GeoNames with the license
-   text as printed text (not links), and the font's line.
+3. **Sources and credits**: the credit line first, word for word, then NOAA's statement and
+   "sampled", Natural Earth, GeoNames with the license text as printed text (not links), and the
+   font's line.
 4. **How the data gets here.**
 
 The prose is 13.5 / 1.5 within 62 ch. `Close` is a text key at the foot and at the top right, and
@@ -482,15 +487,15 @@ screen each one leads to:
   1.4 px `#0f1c23` stroke over a 3.4 px `rgb(246,249,250)` halo at 60 %. It rests at 72 % opacity
   and is full on hover, focus and press. Over every base the stroke holds 5.28:1 (light) and 4.85:1
   (dark) against its halo (`palette.py`).
-- In focus mode the caption band keeps the exposure and the credit line, and the stamp moves into
-  it as the first line (its words unchanged). The legend's bar and ticks leave (owner call 5). The
+- In focus mode the caption band keeps the exposure, and the stamp moves into it as the first line
+  (its words unchanged), still opening About. The legend's bar and ticks leave (owner call 5). The
   time row, transport and track stay. An open readout card closes on the way in, since it is a
   panel; a tap in focus mode opens it again, inset below the top safe area like the ghost key.
 
 **A phone on its side** (landscape, at most 500 px tall). Each band gives the plate its second row:
 the header is one 46 px row (the name over the stamp at left, the view switch and layer words in
-the middle, the units key at right); the caption puts the legend and the credit line side by side
-over the one-line exposure; the player is one row (the time row stacked at left, then ‹ ▶ › and the
+the middle, the units key at right); the caption puts the legend on its own row over the one-line
+exposure; the player is one row (the time row stacked at left, then ‹ ▶ › and the
 track). At 844 × 390 that is a 234 px plate, against 136 with the upright layout. The key column
 becomes a row along the plate's top whenever the column would not fit the plate's height, so it
 never wraps into a second column over the weather. A plate still too narrow for the row (a 320 px
@@ -564,7 +569,7 @@ was opened on, and play goes on from there.
 - Never an exaggerated scale. The legend ranges are fixed and printed. There is no auto-stretch to
   the visible range, and no extra saturation for extremes.
 - Never NOAA's look: no NOAA emblem, no government web face, and nothing that suggests an official
-  forecast. The credit line's "sampled" stays.
+  forecast. The credit line's "sampled" stays, in About.
 - Never the stock look back: no pills, no blue accent, no system font, no glass cards with one
   shared shadow.
 
@@ -579,7 +584,7 @@ was opened on, and play goes on from there.
 | Broadsheet: hairlines, zero radius, dense columns | One column. Hairlines only where they separate (About's sections, the key separators). Radii are 6 and 8 px by role. |
 | SaaS-card kit: identical rounded cards, one radius, one soft shadow, gradient washes | One card (the tapped readout) and one sheet (About). No shadows. The only gradients are the legend's data scale and the selection tracer, which is drawn on purpose. |
 | ALL-CAPS tracked eyebrow labels | None. Sentence case everywhere, no tracking, and no label above a heading. |
-| Meta strings joined with middle dots | The stamp, the lead, the readout and About use commas, sentences or one value per line. The three-credit line keeps its dots because its text is fixed by license (owner call 4). |
+| Meta strings joined with middle dots | The stamp, the lead, the readout and About use commas, sentences or one value per line. The three-credit line, in About, keeps its dots because its text is fixed by license (owner call 4). |
 | "WORD — fragment" labels with a spaced em dash | None. |
 | Tinted near-black (#0B0B0B, #111) standing in for black | Ink is `#0f1c23`, a stated developer-ink color (L 0.22) used for text and streaks, and the dark page is L 0.224. |
 | A monospace face for small data labels | None. Ysabeau's tabular figures do the aligning. |
