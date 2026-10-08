@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T17:01:45Z",
+ "generatedAt": "2026-10-08T18:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -344,21 +344,21 @@
    "stale": false,
    "items": [
     {
-     "title": "From drought to deluge: ‘Super’ El Niño’s expanding reach",
+     "title": "Afghanistan: Women face fresh dress code arrests amid record refugee returns",
      "source": "UN News",
      "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168537",
-     "published": "2026-10-06T12:00:00Z",
-     "summary": "Across Papua New Guinea, water sources are drying up, crops are failing and food prices are rising months before the worst agricultural impacts are expected. Behind those warning signs is an El Niño whose Pacific Ocean…",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168551",
+     "published": "2026-10-08T12:00:00Z",
+     "summary": "Afghan women and girls are being arrested, detained and threatened with arrest by Taliban authorities, the UN warned on Thursday as record numbers of returnees struggle to rebuild their lives back home.",
      "stale": false
     },
     {
-     "title": "In Islamabad, Guterres calls for end to US-Iran conflict",
+     "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
      "source": "UN News",
      "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168532",
-     "published": "2026-10-06T12:00:00Z",
-     "summary": "The UN Secretary-General appealed on Tuesday for an end to the United States-Iran war and the toll it has taken on global trade, as he began an official visit to Pakistan.",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168550",
+     "published": "2026-10-08T12:00:00Z",
+     "summary": "Years of conflict, displacement, economic disruption and climate shocks in Myanmar have led to the “simultaneous collapse” of shelter, healthcare, schooling and livelihoods affecting millions of people, the UN…",
      "stale": false
     },
     {
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/big-political-donations-have-hit-7-4m-this-election-year-are-the-rules-tight-enough-293666",
+     "published": "2026-10-08T17:41:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Maria Armoudian, Associate Professor, Politics & International Relations; Director, Sustainability Hub, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "The Social Reckoning is a true American horror story",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/the-social-reckoning-is-a-true-american-horror-story-293900",
+     "published": "2026-10-08T14:48:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tony D Sampson, Reader in Digital Communication, University of Essex"
+    },
+    {
      "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Jessica Schaffer, Lecturer in Law, Faculty of Business, Law and Arts, Southern Cross University"
-    },
-    {
-     "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/we-need-to-stop-asking-if-nz-can-afford-its-superannuation-scheme-its-the-wrong-question-293808",
-     "published": "2026-10-07T21:05:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "Aaron Gilbert, Professor of Finance, Auckland University of Technology"
-    },
-    {
-     "title": "What happens to language when machines start talking back?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/what-happens-to-language-when-machines-start-talking-back-293554",
-     "published": "2026-10-07T18:28:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Celeste Rodriguez Louro, Associate Professor of Linguistics and Director of Language Lab, The University of Western Australia"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -865,14 +865,14 @@
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "From drought to deluge: ‘Super’ El Niño’s expanding reach",
-   "published": "2026-10-06 12:00 UTC"
+   "title": "Afghanistan: Women face fresh dress code arrests amid record refugee returns",
+   "published": "2026-10-08 12:00 UTC"
   },
   {
    "region": "Asia",
    "source": "UN News",
-   "title": "In Islamabad, Guterres calls for end to US-Iran conflict",
-   "published": "2026-10-06 12:00 UTC"
+   "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
+   "published": "2026-10-08 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
+   "published": "2026-10-08 17:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The Social Reckoning is a true American horror story",
+   "published": "2026-10-08 14:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
    "published": "2026-10-08 07:28 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
    "published": "2026-10-08 06:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
-   "published": "2026-10-07 21:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What happens to language when machines start talking back?",
-   "published": "2026-10-07 18:28 UTC"
   },
   {
    "region": "Oceania",
