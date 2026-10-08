@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T10:01:38Z",
+ "generatedAt": "2026-10-08T11:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Madagascar : comment un fait divers devient par les réseaux sociaux le symptôme d’une insécurité nationale",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/madagascar-comment-un-fait-divers-devient-par-les-reseaux-sociaux-le-symptome-dune-insecurite-nationale-293028",
+     "published": "2026-10-08T10:32:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fabrice Lollia, Docteur en sciences de l'information et de la communication, chercheur associé laboratoire DICEN Ile de France, Université Gustave Eiffel"
+    },
+    {
      "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrià San José Plana, Recognised Researcher Earth Sciences - Global Health Resilience, Barcelona Supercomputing Center-Centro Nacional de Supercomputación…"
-    },
-    {
-     "title": "Super El Niño – how it could affect South Africa’s maize prices",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/super-el-nino-how-it-could-affect-south-africas-maize-prices-291836",
-     "published": "2026-10-07T13:09:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anmar Pretorius, Professor of Economics, North-West University"
     },
     {
      "title": "Kenya races to trace all contacts after first Ebola death, WHO official says",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Madagascar : comment un fait divers devient par les réseaux sociaux le symptôme d’une insécurité nationale",
+   "published": "2026-10-08 10:32 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
    "published": "2026-10-07 18:02 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "Ocean, desert rainfall and a parasitic disease: researchers connect patterns",
    "published": "2026-10-07 13:10 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Super El Niño – how it could affect South Africa’s maize prices",
-   "published": "2026-10-07 13:09 UTC"
   },
   {
    "region": "Africa",
