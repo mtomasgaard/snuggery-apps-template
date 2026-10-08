@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T05:01:35Z",
+ "generatedAt": "2026-10-08T06:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Some small businesses are paying tax bills with credit cards. What will happen when they can’t?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/some-small-businesses-are-paying-tax-bills-with-credit-cards-what-will-happen-when-they-cant-293930",
+     "published": "2026-10-08T05:31:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Donovan Castelyn, Senior Industry Fellow - Taxation and Director of the UTAS Tax Clinic, University of Tasmania"
+    },
+    {
      "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Toby Murray, Professor of Cybersecurity, School of Computing and Information Systems, The University of Melbourne"
-    },
-    {
-     "title": "Queensland is leading Australia’s fight against illicit tobacco. Should other states follow suit?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/queensland-is-leading-australias-fight-against-illicit-tobacco-should-other-states-follow-suit-293702",
-     "published": "2026-10-08T03:09:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Coral Gartner, Director, NHMRC Centre of Research Excellence on Achieving the Tobacco Endgame and ARC Future Fellow, The University of Queensland"
     },
     {
      "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Some small businesses are paying tax bills with credit cards. What will happen when they can’t?",
+   "published": "2026-10-08 05:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
    "published": "2026-10-08 04:15 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
    "published": "2026-10-08 03:44 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Queensland is leading Australia’s fight against illicit tobacco. Should other states follow suit?",
-   "published": "2026-10-08 03:09 UTC"
   },
   {
    "region": "Oceania",
