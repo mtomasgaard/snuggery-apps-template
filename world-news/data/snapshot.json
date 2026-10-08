@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T13:01:43Z",
+ "generatedAt": "2026-10-08T14:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -177,14 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Madagascar : comment un fait divers devient par les réseaux sociaux le symptôme d’une insécurité nationale",
+     "title": "Zimbabwe’s dinosaurs were different from South Africa’s: new species offers clues",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/madagascar-comment-un-fait-divers-devient-par-les-reseaux-sociaux-le-symptome-dune-insecurite-nationale-293028",
-     "published": "2026-10-08T10:32:30Z",
+     "link": "https://theconversation.com/zimbabwes-dinosaurs-were-different-from-south-africas-new-species-offers-clues-290891",
+     "published": "2026-10-08T13:44:14Z",
      "summary": "",
      "stale": false,
-     "author": "Fabrice Lollia, Docteur en sciences de l'information et de la communication, chercheur associé laboratoire DICEN Ile de France, Université Gustave Eiffel"
+     "author": "Paul Barrett, Individual Merit Researcher, Natural History Museum"
+    },
+    {
+     "title": "Sol Plaatje at 150: why a pioneering South African change-maker still inspires today",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/sol-plaatje-at-150-why-a-pioneering-south-african-change-maker-still-inspires-today-293584",
+     "published": "2026-10-08T13:40:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Janet Remmington, Research Associate, Humanities Research Centre (and African Literature Department, University of the Witwatersrand), University of York"
     },
     {
      "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
@@ -195,16 +205,6 @@
      "summary": "In 2024 the African Commission itself adopted a resolution on internet shutdowns during elections. The resolution treats a shutdown as a harm to expression and access to information...",
      "stale": false,
      "author": "Ephraim Percy Kenyanito"
-    },
-    {
-     "title": "Ocean, desert rainfall and a parasitic disease: researchers connect patterns",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/ocean-desert-rainfall-and-a-parasitic-disease-researchers-connect-patterns-291759",
-     "published": "2026-10-07T13:10:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrià San José Plana, Recognised Researcher Earth Sciences - Global Health Resilience, Barcelona Supercomputing Center-Centro Nacional de Supercomputación…"
     },
     {
      "title": "Kenya races to trace all contacts after first Ebola death, WHO official says",
@@ -769,20 +769,20 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Madagascar : comment un fait divers devient par les réseaux sociaux le symptôme d’une insécurité nationale",
-   "published": "2026-10-08 10:32 UTC"
+   "title": "Zimbabwe’s dinosaurs were different from South Africa’s: new species offers clues",
+   "published": "2026-10-08 13:44 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Sol Plaatje at 150: why a pioneering South African change-maker still inspires today",
+   "published": "2026-10-08 13:40 UTC"
   },
   {
    "region": "Africa",
    "source": "Global Voices",
    "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
    "published": "2026-10-07 18:02 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Ocean, desert rainfall and a parasitic disease: researchers connect patterns",
-   "published": "2026-10-07 13:10 UTC"
   },
   {
    "region": "Africa",
