@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T02:01:47Z",
+ "generatedAt": "2026-10-08T03:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "IceCube is built on decades of research into tiny ‘ghost particles’ – but it was the first to find neutrinos coming from deep space",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/icecube-is-built-on-decades-of-research-into-tiny-ghost-particles-but-it-was-the-first-to-find-neutrinos-coming-from-deep-space-293801",
+     "published": "2026-10-08T02:07:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Doug Cowen, Professor of Physics and Professor of Astronomy and Astrophysics, Penn State"
+    },
+    {
      "title": "Many drugs have mirror chemical structures, one helpful and the other harmful – a Nobel-winning discovery allows chemists to make either on demand",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Sajish Mathew, Associate Professor of Pharmaceutical Sciences, University of Maryland Eastern Shore"
-    },
-    {
-     "title": "From jargon to impact: Teaching undergraduates the art of public communication",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/from-jargon-to-impact-teaching-undergraduates-the-art-of-public-communication-293752",
-     "published": "2026-10-07T15:24:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Seth T. Kannarr, Visiting Honors Lecturer, Southern Illinois University Edwardsville"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Politics with Michelle Grattan: why Victoria’s unpredictable election matters nationally",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-why-victorias-unpredictable-election-matters-nationally-293700",
+     "published": "2026-10-08T02:24:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australia’s top court puts fossil fuel developers on notice",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
-    },
-    {
-     "title": "Thinking of taking melatonin to help you sleep? Here’s what you need to know",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/thinking-of-taking-melatonin-to-help-you-sleep-heres-what-you-need-to-know-291271",
-     "published": "2026-10-08T00:46:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nial Wheate, Professor of Pharmaceutical Chemistry, Macquarie University"
     },
     {
      "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Many drugs have mirror chemical structures, one helpful and the other harmful – a Nobel-winning discovery allows chemists to make either on demand",
-   "published": "2026-10-07 19:54 UTC"
+   "title": "IceCube is built on decades of research into tiny ‘ghost particles’ – but it was the first to find neutrinos coming from deep space",
+   "published": "2026-10-08 02:07 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "From jargon to impact: Teaching undergraduates the art of public communication",
-   "published": "2026-10-07 15:24 UTC"
+   "title": "Many drugs have mirror chemical structures, one helpful and the other harmful – a Nobel-winning discovery allows chemists to make either on demand",
+   "published": "2026-10-07 19:54 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Politics with Michelle Grattan: why Victoria’s unpredictable election matters nationally",
+   "published": "2026-10-08 02:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia’s top court puts fossil fuel developers on notice",
    "published": "2026-10-08 01:41 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "New comedy horror series Gnomes understands just how delightfully daggy good Aussie TV should be",
    "published": "2026-10-08 01:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Thinking of taking melatonin to help you sleep? Here’s what you need to know",
-   "published": "2026-10-08 00:46 UTC"
   },
   {
    "region": "Oceania",
