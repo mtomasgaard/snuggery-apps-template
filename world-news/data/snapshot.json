@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T07:01:41Z",
+ "generatedAt": "2026-10-08T08:01:46Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/andrew-charlton-flags-requiring-ai-companies-to-run-tough-risk-management-systems-293214",
+     "published": "2026-10-08T07:28:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "Grattan on Friday: Unless you’re Pauline Hanson, the migration debate can be a dangerous sinkhole",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-unless-youre-pauline-hanson-the-migration-debate-can-be-a-dangerous-sinkhole-293212",
+     "published": "2026-10-08T07:10:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jessica Schaffer, Lecturer in Law, Faculty of Business, Law and Arts, Southern Cross University"
-    },
-    {
-     "title": "Some small businesses are paying tax bills with credit cards. What will happen when they can’t?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/some-small-businesses-are-paying-tax-bills-with-credit-cards-what-will-happen-when-they-cant-293930",
-     "published": "2026-10-08T05:31:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Donovan Castelyn, Senior Industry Fellow - Taxation and Director of the UTAS Tax Clinic, University of Tasmania"
-    },
-    {
-     "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/pacific-people-pay-exorbitant-prices-for-energy-rich-countries-should-back-their-renewable-transition-293541",
-     "published": "2026-10-08T04:15:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Charles T. Hunt, Professor in Global Security, Social Equity Research Centre, RMIT University"
     },
     {
      "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
+   "published": "2026-10-08 07:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Grattan on Friday: Unless you’re Pauline Hanson, the migration debate can be a dangerous sinkhole",
+   "published": "2026-10-08 07:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
    "published": "2026-10-08 06:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Some small businesses are paying tax bills with credit cards. What will happen when they can’t?",
-   "published": "2026-10-08 05:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
-   "published": "2026-10-08 04:15 UTC"
   },
   {
    "region": "Oceania",
