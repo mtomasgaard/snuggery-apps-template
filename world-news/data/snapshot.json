@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T19:01:49Z",
+ "generatedAt": "2026-10-08T20:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A molecule’s ‘handedness’ can determine whether it’s an effective drug – 4 examples of pharmaceuticals where chirality matters",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/a-molecules-handedness-can-determine-whether-its-an-effective-drug-4-examples-of-pharmaceuticals-where-chirality-matters-293909",
+     "published": "2026-10-08T18:46:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cedric Schaack, Assistant Professor of Chemistry, Wake Forest University"
+    },
+    {
      "title": "Why the assault weapons debate is a culture debate",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Robert Spitzer, Distinguished Service Professor Emeritus of the Political Science Department, State University of New York Cortland"
-    },
-    {
-     "title": "What the law says about armed officers at polling places",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-the-law-says-about-armed-officers-at-polling-places-293150",
-     "published": "2026-10-08T12:13:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Danielle Friedman, Legal Director, State Democracy Research Initiative, University of Wisconsin-Madison"
     },
     {
      "title": "El Niño speeds climate crisis and tests Latin America’s food security",
@@ -197,6 +197,15 @@
      "author": "Janet Remmington, Research Associate, Humanities Research Centre (and African Literature Department, University of the Witwatersrand), University of York"
     },
     {
+     "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168556",
+     "published": "2026-10-08T12:00:00Z",
+     "summary": "More than 700,000 displaced people in Tawila, in Sudan’s war-ravaged Darfur region, face severe shortages of healthcare, food, water and protection, the UN World Health Organization (WHO) warned on Thursday as it called…",
+     "stale": false
+    },
+    {
      "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168531",
      "published": "2026-10-06T12:00:00Z",
      "summary": "The Ebola outbreak in the eastern Democratic Republic of the Congo (DRC) is robbing children of their loved ones – with some succumbing to the deadly disease themselves – the UN Children’s Fund (UNICEF) reported on…",
-     "stale": false
-    },
-    {
-     "title": "When streets become pharmacies: Booming illicit markets in Central Africa",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168527",
-     "published": "2026-10-06T12:00:00Z",
-     "summary": "Antibiotics, malaria treatments, painkillers, opioids. More than 250 tonnes of medical products were seized over six years in Central Africa. Behind those numbers is an illicit market that thrives not simply despite the…",
      "stale": false
     },
     {
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
+     "title": "My son goes to the gym a lot. How can I tell if this is healthy or a sign something is wrong?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/my-son-goes-to-the-gym-a-lot-how-can-i-tell-if-this-is-healthy-or-a-sign-something-is-wrong-293830",
+     "published": "2026-10-08T19:05:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Samuel Cornell, Research Fellow in Public Health, The University of Queensland"
+    },
+    {
+     "title": "Astronomers pinpoint the origin of a 10 billion-year-old millisecond signal from space",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/astronomers-pinpoint-the-origin-of-a-10-billion-year-old-millisecond-signal-from-space-293671",
+     "published": "2026-10-08T19:05:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Themiya Nanayakkara, Senior Lecturer in Astrophysics, University of Sydney"
+    },
+    {
+     "title": "Why do runners get so many injuries? And does strength training really make a difference?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-do-runners-get-so-many-injuries-and-does-strength-training-really-make-a-difference-292788",
+     "published": "2026-10-08T19:05:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Hunter Bennett, Lecturer in Exercise Science, Adelaide University"
+    },
+    {
+     "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/big-political-donations-have-hit-7-4m-this-election-year-are-the-rules-tight-enough-293666",
      "published": "2026-10-08T17:41:26Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Tony D Sampson, Reader in Digital Communication, University of Essex"
-    },
-    {
-     "title": "Meet the ‘independent voters’ who will likely decide which party triumphs in the 2026 midterm elections",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/meet-the-independent-voters-who-will-likely-decide-which-party-triumphs-in-the-2026-midterm-elections-292103",
-     "published": "2026-10-08T12:12:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Julio Borquez, Associate Professor of Political Science, University of Michigan-Dearborn"
-    },
-    {
-     "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/andrew-charlton-flags-requiring-ai-companies-to-run-tough-risk-management-systems-293214",
-     "published": "2026-10-08T07:28:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Grattan on Friday: Unless you’re Pauline Hanson, the migration debate can be a dangerous sinkhole",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-unless-youre-pauline-hanson-the-migration-debate-can-be-a-dangerous-sinkhole-293212",
-     "published": "2026-10-08T07:10:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why the assault weapons debate is a culture debate",
-   "published": "2026-10-08 12:13 UTC"
+   "title": "A molecule’s ‘handedness’ can determine whether it’s an effective drug – 4 examples of pharmaceuticals where chirality matters",
+   "published": "2026-10-08 18:46 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What the law says about armed officers at polling places",
+   "title": "Why the assault weapons debate is a culture debate",
    "published": "2026-10-08 12:13 UTC"
   },
   {
@@ -780,6 +780,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
+   "published": "2026-10-08 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
    "published": "2026-10-07 18:02 UTC"
@@ -794,12 +800,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "‘Ebola takes the people children depend on’: UNICEF",
-   "published": "2026-10-06 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "When streets become pharmacies: Booming illicit markets in Central Africa",
    "published": "2026-10-06 12:00 UTC"
   },
   {
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "My son goes to the gym a lot. How can I tell if this is healthy or a sign something is wrong?",
+   "published": "2026-10-08 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Astronomers pinpoint the origin of a 10 billion-year-old millisecond signal from space",
+   "published": "2026-10-08 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Why do runners get so many injuries? And does strength training really make a difference?",
+   "published": "2026-10-08 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
    "published": "2026-10-08 17:41 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "The Social Reckoning is a true American horror story",
    "published": "2026-10-08 14:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Meet the ‘independent voters’ who will likely decide which party triumphs in the 2026 midterm elections",
-   "published": "2026-10-08 12:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Andrew Charlton flags requiring AI companies to run tough ‘risk management’ systems",
-   "published": "2026-10-08 07:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Grattan on Friday: Unless you’re Pauline Hanson, the migration debate can be a dangerous sinkhole",
-   "published": "2026-10-08 07:10 UTC"
   },
   {
    "region": "Oceania",
