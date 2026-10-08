@@ -1,7 +1,8 @@
-/* Outdoor Window, under the template's house system (ART.md; Template/HOUSE.md).
-   Panes on a page, not cards: one column on --page, sections parted by hairlines, one face, gray chrome, no
-   accent, no shadows, no glass. The one data color is --used, the share of a rule's allowance an hour uses;
-   the one bold thing is the Shutters' ink. Staleness and failure are words, never a hue. */
+/* Outdoor Window, under the template's house system (ART.md; Template/HOUSE.md) and its pane-app register
+   (HOUSE 11): sections on plates on the gray page, the Shutters and the title on the page itself (their lit
+   windows are --sheet, and on a plate would vanish), one face, gray chrome, no shadows, no glass. The one data
+   color is --used, the share of a rule's allowance an hour uses; the register adds none (HOUSE 11.3). The one
+   bold thing is the Shutters' ink. Staleness and failure are words, never a hue. */
 
 @font-face {
   font-family: 'Ysabeau Office';
@@ -59,7 +60,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
 /* ── the header: the name, the stamp, the panes as tabs ── */
-.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+/* the header's sides follow the pane's 760 px column, so on a wide screen the name starts where the plates do */
+.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(max(16px, 50% - 364px) + env(safe-area-inset-right)) 0 calc(max(16px, 50% - 364px) + env(safe-area-inset-left)); }
 .head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
 .stamp-home { min-width: 0; padding-bottom: 6px; }
 .stamp { position: relative; display: block; max-width: 100%; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
@@ -87,16 +89,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 @keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
-/* ── the pane: it scrolls inside the frame, so the header and the caption band stay put ── */
+/* ── the pane: it scrolls inside the frame, so the header and the footer's one line stay put; a 760 px column,
+   centered with the header on a wide screen; the footer under it keeps the bottom inset (HOUSE 4.14) ── */
 .pane { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.panebody { max-width: 760px; padding: 0 calc(16px + env(safe-area-inset-right)) 24px calc(16px + env(safe-area-inset-left)); }
+.panebody { max-width: 760px; margin: 0 auto; padding: 0 calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); padding-top: 4px; padding-bottom: 28px; }
 
 /* statements: sentences on the page, the first words at 620, never a box or a colored edge */
 .statement { padding: 8px 0 2px; line-height: 1.4; max-width: 62ch; }
 .statement b { font-weight: 620; }
 .title { padding-top: 10px; }
-.title h2 { font-size: 13.5px; font-weight: 650; }
+.title h2 { font-size: 15px; font-weight: 650; }
 .title p { font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
+/* one short label under the title (HOUSE 11.1 rule 9) */
+.zone { margin-top: 2px; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 
 /* ── the Shutters: ink blocks on the page, thin --used bars, every window lit (--sheet) and framed in ink. The
    drawing is the hours' slider; a vertical swipe on it scrolls the pane and a pinch zooms the page (app.js) ── */
@@ -123,23 +128,44 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .ro-when b { font-weight: 620; }
 .ro-vals { height: 32px; overflow: hidden; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 
-/* ── sections, facts and lists: rows on the page, parted by hairlines ── */
-.sec { padding: 12px 0 4px; border-top: 1px solid var(--line); }
-.sec > h2 { font-size: 13.5px; font-weight: 650; padding-bottom: 4px; }
-.fig { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; padding-bottom: 6px; }
-.fig b { font-size: 21px; line-height: 1; font-weight: 600; }
-.fig span { font-size: 12.5px; color: var(--ink-2); }
-.facts { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
-.facts dt, .facts dd { padding: 5px 0; border-top: 1px solid var(--line); }
-.facts dt { color: var(--ink-2); }
-.facts dd { font-weight: 560; text-align: right; }
-.facts.wins dt { color: var(--ink); font-weight: 560; }
-.facts.wins dd { color: var(--ink-2); font-weight: 400; }
+/* ── sections on plates (HOUSE 11.1 rule 4): --sheet, a 1 px --line edge, 12 px apart ── */
+.sec { margin-top: 12px; padding: 12px 12px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); }
+.sec > h2 { font-size: 15px; font-weight: 650; padding-bottom: 4px; }
+/* the key number (HOUSE 11.1 rule 2): the label above, the figure at 34 px, the lead under it */
+.headline { padding: 14px 12px 8px; }
+.hl { display: grid; gap: 2px; padding-bottom: 8px; }
+.hl-what { font-size: 12.5px; font-weight: inherit; color: var(--ink-2); }
+.hl-fig { font-size: 34px; font-weight: 650; line-height: 1.05; }
+.hl-lead { font-size: 13.5px; color: var(--ink-2); }
+/* the window's facts as two-column tiles (HOUSE 11.1 rule 3) */
+.tiles { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
+.tile { padding: 8px 0 7px; border-top: 1px solid var(--line); }
+.tile:nth-child(-n+2) { border-top: 0; padding-top: 2px; }
+.tile dt { font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+.tile dd { font-size: 19px; font-weight: 650; line-height: 1.25; }
+/* the later windows as a table: a th over a --line-strong rule, rows parted by --line, the figures right-aligned */
+.wins { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.wins th { padding: 4px 0; font-size: 11.5px; font-weight: 600; color: var(--ink-2); text-align: right; border-bottom: 1px solid var(--line-strong); }
+.wins td { padding: 6px 0; text-align: right; font-weight: 560; border-bottom: 1px solid var(--line); }
+.wins th:first-child, .wins td:first-child { text-align: left; }
+.wins td:first-child { font-weight: 400; }
+.wins tr:last-child td { border-bottom: 0; }
 .sec > p { max-width: 62ch; padding-bottom: 6px; }
 .sec .note { font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
+/* the Shutters' key (HOUSE 4.15, 11.1 rule 6): each mark drawn small, with its word */
+.key { display: flex; flex-wrap: wrap; gap: 2px 12px; padding-bottom: 6px; font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+.key .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
+.sw-blk { background: var(--ink); }
+.sw-used { width: 3px !important; background: var(--used); }
+.sw-ho { border: 1px solid var(--ink); }
+.sw-frame { border-radius: 0 !important; background: var(--sheet); border: solid var(--ink); border-width: 0 1px 2px; }
+/* the key at the end of every pane (HOUSE 11.1 rule 1) */
+.aboutlink { display: block; margin: 14px 0 0; min-height: 44px; font-size: 12.5px; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+.aboutlink:active { color: var(--ink); }
 
 /* the Rules pane: a rule's name and limit, and under them its key and what it did to this file */
 .rule { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.rule:first-child { border-top: 0; padding-top: 0; }
 .rule dt { font-weight: 560; }
 .rule dd:first-of-type { font-weight: 600; text-align: right; white-space: nowrap; }
 .rule dd.note { grid-column: 1 / -1; margin-top: 2px; max-width: 62ch; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
@@ -173,13 +199,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .notice p + p { margin-top: 6px; }
 .notice-lines { font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; text-align: left; }
 
-/* ── the caption band: the pane's caption line, fixed at two lines, and the credits ── */
-.band { flex: 0 0 auto; padding: 6px calc(16px + env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); border-top: 1px solid var(--line); font-size: 11px; line-height: 15px; color: var(--ink-2); }
-.capline { height: 30px; overflow: hidden; }
-.credits { font-size: 10.5px; }
-/* the two credit anchors: ink, underlined, a 44 px hit by padding that moves no text, all of it below the
-   anchor's top, so no hit reaches up over the caption line */
-.credits a { position: relative; color: var(--ink); text-decoration: underline; text-underline-offset: 2px; padding: 0 4px 30px; margin: 0 -4px; }
+/* ── the footer: Open-Meteo's link and nothing else (HOUSE 4.15 exception 1), one 10.5 px line, its sides on the
+   pane's column, the bottom safe-area inset under it. The anchor's 44 px hit lies inside the band, never under the
+   screen's edge and never over the pane (and so never over its About key): the anchor is a block 6 + 15 + 23 px
+   tall, and the band adds only what the inset needs beyond the 19 px of hit under the line, so with an inset it
+   is as tall as before (6 + 15 + 4 px + the inset) and without one it grows to the hit's 44 px ── */
+.band { flex: 0 0 auto; padding: 0 calc(max(16px, 50% - 364px) + env(safe-area-inset-right)) max(0px, calc(env(safe-area-inset-bottom) - 19px)) calc(max(16px, 50% - 364px) + env(safe-area-inset-left)); border-top: 1px solid var(--line); font-size: 10.5px; line-height: 15px; color: var(--ink-2); }
+/* the credit anchor: ink, underlined, a 44 px hit by padding that moves no text: 6 px above the line, 23 px below */
+.credits a { display: block; width: fit-content; max-width: calc(100% + 8px); color: var(--ink); text-decoration: underline; text-underline-offset: 2px; padding: 6px 4px 23px; margin: 0 -4px; }
+.about-body a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ── About: a full-height sheet ── */
 .about { position: fixed; inset: 0; z-index: 20; }
@@ -199,22 +227,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .about-foot { margin-top: 8px; }
 
 @media (hover: hover) {
-  .tabs button:hover, .stamp:hover { color: var(--ink); }
+  .tabs button:hover, .stamp:hover, .aboutlink:hover { color: var(--ink); }
   .textkey:hover::before { background: color-mix(in srgb, currentColor 7%, transparent); }
 }
 @media (max-width: 359px) { .ro-vals { height: 48px; } }
-@media (min-width: 640px) { .capline { height: 15px; } }
-@media (min-width: 700px) {
-  .head, .band, .panebody { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
-}
-/* a phone on its side: the header is one row, the caption band one line over the credits */
+/* a phone on its side: the header is one row */
 @media (orientation: landscape) and (max-height: 500px) {
   .head { grid-template-columns: max-content minmax(0, 1fr); grid-template-rows: 22px 24px; column-gap: 16px; padding-top: env(safe-area-inset-top); }
   .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
   .stamp { white-space: nowrap; }
   .tabs { grid-area: 1 / 2 / 3 / 3; align-self: center; margin: 0; }
-  .band { padding-top: 4px; }
-  .capline { height: 15px; }
+  .band { padding-bottom: max(0px, calc(env(safe-area-inset-bottom) - 21px)); }
+  .credits a { padding-top: 4px; padding-bottom: 25px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }

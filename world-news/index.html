@@ -12,9 +12,10 @@
 </head>
 <body>
 
-<!-- The app reads data/snapshot.json and nothing else. The look is ART.md (the house system and the
-     Datelines); where the headlines come from is NOTES.md. The region tabs are built by app.js once the
-     snapshot parses, so the tab named Europe is the camera's proof of data. -->
+<!-- The app reads data/snapshot.json and nothing else. The look is ART.md (the house system, the pane-app
+     register and the Datelines); where the headlines come from is NOTES.md. The region tabs are built by app.js
+     once the snapshot parses, so the tab named Europe is the camera's proof of data. The front is the name,
+     the stamp, the tabs and the pane: the credit line is About's first paragraph under Sources and credits. -->
 
 <header class="head" id="head">
   <h1 translate="no">World News</h1>
@@ -28,11 +29,6 @@
   <div class="notice" id="notice" role="alert" hidden></div>
   <div class="panebody" id="pane" role="tabpanel"></div>
 </main>
-
-<footer class="band" id="band">
-  <p class="capline" id="capline"></p>
-  <p class="credits" id="credits"></p>
-</footer>
 
 <div class="about" id="about" hidden>
   <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
@@ -49,6 +45,7 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <div id="about-sources"></div>
         <p>Headlines, the publishers&rsquo; own summary lines, bylines and links: nothing else is copied. A tap on a story asks Snuggery to open it in Safari, on the publisher&rsquo;s own site; this app has no way to fetch one.</p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>

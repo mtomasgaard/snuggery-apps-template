@@ -28,6 +28,10 @@ export const count = (n, word, plural = `${word}s`) => `${int(n)} ${n === 1 ? wo
 /** Text the app did not write (a row's value): a number and a known unit joined by U+202F. The committed values
  *  are bare counts, so this changes nothing today. */
 export const si = (t) => String(t).replace(/(\d) (m|km|°C|%|h|min|d|s|hPa|mm|m\/s|kg|kWh|W)(?=$|[\s,.;)])/g, `$1${NB}$2`);
+/** A row's value as the app prints it: a plain digit string of four digits or more (no sign, point or leading zero) is
+ *  a count, grouped with U+202F as HOUSE 6.1 asks ("1000" prints "1 000"; the lead's ruling, 2026-10-08); a leading
+ *  zero marks a code and stays as written; anything else goes through si(). The file's own text is not changed. */
+export const rowValue = (t) => { const s = String(t); return /^[1-9]\d{3,}$/.test(s) ? group(s) : si(s); };
 
 /* ── the phone's clock ── */
 /** "03:59". */

@@ -1,4 +1,4 @@
-// The decode test (HOUSE.md 7.3): data/snapshot.json read with formulas written here, against the app's
+// The decode test (HOUSE.md 7.3): the pinned fixture of data/snapshot.json read with formulas written here, against the app's
 // pure modules js/datelines.js and js/units.js. The art pass changes no decoding; this proves the Datelines
 // and the dates on screen are what the file says (ART.md section 1; tools/DECISIONS.md, item 13).
 //
@@ -12,7 +12,13 @@ import { fileURLToPath } from 'node:url';
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const D = await import(path.join(APP, 'js/datelines.js'));
 const U = await import(path.join(APP, 'js/units.js'));
-const snap = JSON.parse(fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8'));
+// The fixed day: tools/fixtures/snapshot.json, the file of 1 Oct 2026 every figure below was measured on (ART.md).
+// data/snapshot.json is rewritten every hour by the refresh, so it cannot hold these figures (plan 0012 package 4).
+import crypto from 'node:crypto';
+const FIXTURE = path.join(APP, 'tools/fixtures/snapshot.json');
+const FIXTURE_SHA = 'ecb808729f4562dfe98f324aaef3a54ffaeebef03982c62348ab6f8f910c5d2c';
+if (crypto.createHash('sha256').update(fs.readFileSync(FIXTURE)).digest('hex') !== FIXTURE_SHA) { console.log(`FAIL tools/fixtures/snapshot.json is not the pinned file (${FIXTURE_SHA.slice(0, 12)}…)`); process.exit(1); }
+const snap = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
 const fails = [];
 let n = 0;
 const ok = (cond, msg) => { n++; console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if (!cond) fails.push(msg); };
@@ -32,7 +38,8 @@ ok(cross === 3, `stories under more than one region, by link: ${cross} (ART.md: 
 
 /* ── the scale and the clusters, at 390 and 320 px, by the rule in ART.md section 1 ── */
 const LABEL = 73;   // the widest region name, Middle East, at 12.5 px and 620 in the face, plus 10 (ART.md)
-for (const [phone, width, want] of [[390, 358, { W: 279, ticks: 39, shared: 17 }], [320, 288, { W: 209, ticks: 39, shared: 17 }]]) {
+// the Datelines fill their plate's inner width: the phone less the pane's 2 × 16 px and the plate's 2 × 13 px
+for (const [phone, width, want] of [[390, 332, { W: 253, ticks: 39, shared: 17 }], [320, 262, { W: 183, ticks: 39, shared: 17 }]]) {
   const W = Math.min(480, width - LABEL - 6), k = W / Math.log2(1440);
   const x = (h) => LABEL + W - k * Math.log2(Math.min(1440, Math.max(1, h)));
   const mine = snap.regions.map((r, ri) => {
@@ -50,7 +57,7 @@ for (const [phone, width, want] of [[390, 358, { W: 279, ticks: 39, shared: 17 }
   ok(same, `${phone} px: every tick's x, its headlines and their order equal this test's own decode (${mine.flat().length} clusters)`);
   ok(ticks === want.ticks && shared === want.shared && maxParts === 3, `${phone} px: ${ticks} ticks for 48 headlines, ${shared} headlines sharing a tick, at most ${maxParts} parts (ART.md: ${want.ticks}, ${want.shared}, 3)`);
   const six = x(6), day = x(24), week = x(168);
-  if (phone === 390) ok(Math.round(LABEL + W - six) === 69 && Math.round(LABEL + W - day) === 122 && Math.round(LABEL + W - week) === 197, `390 px: 6 h at ${Math.round(LABEL + W - six)} px from the right, 1 d at ${Math.round(LABEL + W - day)}, 7 d at ${Math.round(LABEL + W - week)} (ART.md: 69, 122, 197)`);
+  if (phone === 390) ok(Math.round(LABEL + W - six) === 62 && Math.round(LABEL + W - day) === 111 && Math.round(LABEL + W - week) === 178, `390 px: 6 h at ${Math.round(LABEL + W - six)} px from the right, 1 d at ${Math.round(LABEL + W - day)}, 7 d at ${Math.round(LABEL + W - week)} (ART.md: 62, 111, 178)`);
   ok(!M.lo && !M.hi, `${phone} px: no age past either end in this file, so both end labels print closed`);
 }
 
@@ -155,6 +162,19 @@ for (const [phone, width, want] of [[390, 358, { W: 279, ticks: 39, shared: 17 }
     if (days ? ![+days[1], +days[2]].includes(Math.floor(h / 24)) : h > (gen - Date.parse(`${day}T00:00:00Z`)) / 36e5) wrong++;
   }
   ok(wrong === 0, 'for every minute of the named day, the real age is inside the span said (whole days as spokenAge counts them)');
+}
+
+/* ── the register (plan 0012 package 4): each item carries its source; a region's newest age, floored ── */
+{
+  const M = D.model(snap, 358, 73), all = M.rows.flatMap((r) => r.ticks.flatMap((t) => t.items));
+  const want = snap.regions.flatMap((r, ri) => r.items.map((it, ii) => `${ri}.${ii}:${it.source}`)).sort().join();
+  ok(all.length === 48 && all.every((i) => Object.keys(i).join() === 'ri,ii,h,x,stale,iso,src') && all.map((i) => `${i.ri}.${i.ii}:${i.src}`).sort().join() === want,
+    `the model's ${all.length} items each carry their source as src, the file's own name (the ticks' color by sources[] order)`);
+  const NB2 = '\u202f', got = [0.4, 1, 14.9, 23.99, 24, 47.9, 1439].map(U.ageShort);
+  ok(got.join('|') === [`under 1${NB2}h`, `1${NB2}h`, `14${NB2}h`, `23${NB2}h`, `1${NB2}d`, `1${NB2}d`, `59${NB2}d`].join('|'),
+    `a region's newest age, never rounded up: ${got.map((x) => `"${x}"`).join(', ')}`);
+  const newest = snap.regions.map((r) => U.ageShort(Math.min(...r.items.map((it) => D.ageOf(gen, it.published)))));
+  ok(newest.length === 6 && newest.every((x) => /^(under 1|\d+)\u202f[hd]$/.test(x)), `each region's newest headline on its plate's head: ${snap.regions.map((r, i) => `${r.name} ${newest[i]}`).join(', ')}`);
 }
 
 console.log(fails.length ? `\n${fails.length} of ${n} failed` : `\nall ${n} checks pass`);

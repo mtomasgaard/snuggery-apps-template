@@ -1,5 +1,6 @@
-/* World News, a Snuggery mini-app. The look is ART.md (the house system, Template/HOUSE.md, and the
- * Datelines); every date and count on screen is written by js/units.js, the Datelines by js/datelines.js.
+/* World News, a Snuggery mini-app. The look is ART.md (the house system, Template/HOUSE.md, its pane-app
+ * register, section 11, and the Datelines); every date and count on screen is written by js/units.js, the
+ * Datelines by js/datelines.js.
  *
  * THE SHAPE OF ./data/snapshot.json, written by scripts/world_news.py once a day. Whatever rewrites this
  * app next year will not have read the conversation that made it, so the contract lives here.
@@ -24,13 +25,16 @@
  * textContent, and a link is accepted only when its scheme is http or https.
  */
 
-import { int, count, list, clock, dayMon, stampWhen, full, isDateOnly, itemWhen, spokenItem, spoken } from './js/units.js';
-import { model, hit, label, draw, hollows } from './js/datelines.js';
+import { int, count, list, clock, dayMon, stampWhen, full, isDateOnly, itemWhen, spokenItem, spoken, ageShort } from './js/units.js';
+import { model, hit, label, draw, hollows, SRC, ageOf } from './js/datelines.js';
 
 const DATA_URL = './data/snapshot.json';
 const REFRESH_HOURS = 30;      // the job runs daily; 30 hours is a missed run
 // The credit line's own words around the sources' names, as the file gives them (tools/check.mjs pins them).
-const CREDIT = ['Headlines from ', '; terms in About.'];
+// It is About's first paragraph under Sources and credits (HOUSE 4.15), so it no longer points to About.
+const CREDIT = ['Headlines from ', '.'];
+// The key at the end of every pane (HOUSE 11.1 rule 1), World News' words.
+const ABOUT_KEY = 'Sources, their terms and credits are in About.';
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => {
@@ -115,7 +119,6 @@ function fail(what) {
     $('stamp').textContent = 'No usable data';
     $('tabs').hidden = true;
     $('pane').replaceChildren();
-    $('capline').textContent = '';
     box.classList.remove('kept');
     box.append(el('p', null, `data/snapshot.json ${what}`), el('p', 'notice-lines', 'In Snuggery, Options, then App Files shows what the file holds.'));
   }
@@ -131,7 +134,7 @@ function boot() {
     if (u) others.set(u, [...(others.get(u) || []), r.name]);
   }
   const names = (Array.isArray(snap.sources) ? snap.sources : []).map((s) => s && s.name).filter((s) => typeof s === 'string');
-  $('credits').textContent = `${CREDIT[0]}${names.length ? list(names) : 'the publishers named under each story'}${CREDIT[1]}`;
+  $('about-credit-line').textContent = `${CREDIT[0]}${names.length ? list(names) : 'the publishers named under each story'}${CREDIT[1]}`;
   stamp();
   buildTabs();
   const keep = $('main').scrollTop;
@@ -206,28 +209,76 @@ function choose(key) {
 /* ── the pane: the Datelines, then the stories ────────────────────────── */
 
 function render() {
-  const pane = $('pane');
+  const pane = $('pane'), gen = Date.parse(snap.generatedAt), region = snap.regions.find((x) => keyOf(x) === tab);
   pane.replaceChildren();
-  // A finger lands on a hidden layer over the image. The listener is on their wrapper, so VoiceOver's press
-  // finds it and clicks the image itself, which onTick passes over. A click, so a swipe here picks nothing.
-  const box = $('dl-tpl').content.firstElementChild.cloneNode(true);
+  // The sources, in the file's order, give the ticks and swatches their colors (HOUSE 11.3: --src-1 to --src-3).
+  SRC.clear();
+  (Array.isArray(snap.sources) ? snap.sources : []).forEach((x) => { if (x && typeof x.name === 'string' && !SRC.has(x.name) && SRC.size < 3) SRC.set(x.name, SRC.size + 1); });
+  // The Datelines head the pane on their own plate. A finger lands on a hidden layer over the image. The listener
+  // is on their wrapper, so VoiceOver's press finds it and clicks the image itself, which onTick passes over. A
+  // click, so a swipe here picks nothing.
+  const top = el('section', 'sec lead-sec'), box = $('dl-tpl').content.firstElementChild.cloneNode(true);
   box.addEventListener('click', onTick);
-  pane.append(box);
+  top.append(el('h2', null, 'Every headline by age'), box);
+  pane.append(top);
   drawDatelines();
+  // one short label, what the scale is, on one line (HOUSE 11.1 rule 9); then a key in place of the band's
+  // words (rule 6): on a region's tab its sources' colors, which only its own row takes, and a hollow tick
+  // whenever one is drawn. On All the table of sources is the colors' key.
+  top.append(el('p', 'cap', `Age when the file was made, ${dayMon(gen)}, ${clock(gen)}. Log scale.`));
+  const keys = [];
+  if (region) for (const [name, i] of SRC) if (region.items.some((it) => it.source === name)) keys.push(keyItem(`src-${i}`, name));
+  if (M && hollows(M)) keys.push(keyItem('hollow', 'From an earlier run'));
+  if (keys.length) { const k = el('div', 'key'); k.append(...keys); top.append(k); }
+  if (tab === 'all') top.append(keyTable());
   snap.regions.forEach((r, ri) => {
     if (tab !== 'all' && keyOf(r) !== tab) return;
-    const host = tab === 'all' ? el('section', 'sec') : pane;
-    if (tab === 'all') { host.append(el('h2', null, r.name)); pane.append(host); }
-    host.append(...statements(r));
+    const host = el('section', 'sec'), head = el('div', 'sec-head');
+    const ages = r.items.map((it) => ageOf(gen, it.published)).filter(Number.isFinite);
+    head.append(el('h2', null, r.name), el('span', 'sec-meta', `${count(r.items.length, 'headline')}${ages.length ? `, newest ${ageShort(Math.min(...ages))}` : ''}`));
+    host.append(head, ...statements(r));
     r.items.forEach((it, ii) => host.append(story(it, ri, ii)));
+    pane.append(host);
   });
-  caption();
+  aboutKey(pane);
+}
+
+/** One word of a key (HOUSE 4.15): a 10 px swatch drawing the mark, then its word. */
+function keyItem(mark, word) {
+  const k = el('span', 'k'), sw = el('i', `sw ${mark}`);
+  sw.setAttribute('aria-hidden', 'true');
+  k.append(sw, word);
+  return k;
+}
+
+/** All's table of sources, also the colors' key: a swatch and the name, its headlines, its feeds that answered. */
+function keyTable() {
+  const t = el('table', 'keytab'), head = el('tr'), items = snap.regions.flatMap((r) => r.items);
+  const feeds = Array.isArray(snap.feeds) ? snap.feeds.filter(Boolean) : [];
+  for (const h of ['Source', 'Headlines', 'Feeds']) head.append(el('th', null, h));
+  t.append(head);
+  for (const [name, i] of SRC) {
+    const tr = el('tr'), td = el('td'), fs = feeds.filter((f) => f.source === name);
+    td.append(el('i', `sw src-${i}`), name);
+    tr.append(td, el('td', null, int(items.filter((x) => x.source === name).length)), el('td', null, `${int(fs.filter((f) => f.ok).length)} of ${int(fs.length)}`));
+    t.append(tr);
+  }
+  return t;
+}
+
+/** The key at the end of every pane: a text button that opens About (HOUSE 11.1 rule 1). */
+function aboutKey(host) {
+  const b = el('button', 'aboutlink', ABOUT_KEY);
+  b.type = 'button';
+  b.onclick = () => about(true);
+  host.append(b);
 }
 
 function drawDatelines() {
-  const pane = $('pane'), svg = pane.querySelector('.dl'), cs = getComputedStyle(pane);
+  const svg = $('pane').querySelector('.dl');
   if (!svg) return;
-  const width = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const plate = svg.closest('.sec'), cs = getComputedStyle(plate);   // the Datelines fill their plate's inner width
+  const width = plate.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   M = model(snap, width, labelW);
   const chosen = new Set(snap.regions.map((r, i) => i).filter((i) => tab === 'all' || keyOf(snap.regions[i]) === tab));
   draw(svg, M, chosen, sel);
@@ -270,28 +321,23 @@ function statements(r) {
 }
 
 /** A story: a row whose headline is the link, named by its own words and described by the source line (B12);
- *  the link's ::after covers the row, so a tap anywhere opens it, while the source line, byline and summary
- *  stay text after the link that VoiceOver reaches by swiping. */
+ *  the link's ::after covers the row, so a tap anywhere opens it, while the source line (its byline joined to
+ *  it, HOUSE 11.1 rule 10) and the summary stay text after the link that VoiceOver reaches by swiping. On All
+ *  a summary shows two lines; a region's own tab shows it whole. */
 function story(it, ri, ii) {
   const url = safeLink(it.link), n = el('div', 'story'), hl = el(url ? 'a' : 'span', 'hl', it.title), src = el('span', 'src');
   n.id = `s-${ri}-${ii}`;
   src.id = `${n.id}-m`;
   if (url) { hl.href = url; hl.target = '_blank'; hl.rel = 'noopener noreferrer'; hl.setAttribute('aria-describedby', src.id); }
   if (sel && sel.ri === ri && sel.ii === ii) hl.setAttribute('aria-current', 'true');
-  src.append([it.source || 'Source not named', itemWhen(it.published)].filter(Boolean).join(', '));
+  if (SRC.has(it.source)) src.append(el('i', `sw src-${SRC.get(it.source)}`));
+  src.append([it.source || 'Source not named', itemWhen(it.published), it.author ? `by ${it.author}` : null].filter(Boolean).join(', '));
   if (it.stale) src.append(', ', el('span', 'lead', 'kept from an earlier run'));
   const also = (others.get(url) || []).filter((name) => name !== snap.regions[ri].name);
   if (also.length) src.append(`, also under ${list(also)}`);
   n.append(hl, src);
-  if (it.author) n.append(el('span', 'by', `By ${it.author}`));
-  if (it.summary) n.append(el('span', 'sum', it.summary));
+  if (it.summary) n.append(el('span', tab === 'all' ? 'sum clamp' : 'sum', it.summary));
   return n;
-}
-
-/** The caption band's line (HOUSE 4.5): how to read the Datelines, in two fixed lines. */
-function caption() {
-  const gen = Date.parse(snap.generatedAt), r = snap.regions.find((x) => keyOf(x) === tab);
-  $('capline').textContent = `Ticks: each headline’s age when this file was made, ${dayMon(gen)}, ${clock(gen)}${r ? `; ${r.name} in ink` : ', on a logarithmic scale'}. ${M && hollows(M) ? 'Hollow: from an earlier run.' : 'Tap one to find it.'}`;
 }
 
 /* ── About ────────────────────────────────────────────────────────────── */
@@ -330,7 +376,7 @@ function aboutList() {
 let aboutFrom = null;
 function about(open) {
   $('about').hidden = !open;
-  for (const id of ['head', 'main', 'band']) $(id).inert = open;   // holds Tab inside the sheet
+  for (const id of ['head', 'main']) $(id).inert = open;           // holds Tab inside the sheet
   $('about-list').parentElement.hidden = !snap;                    // with no usable file, its prose stands
   if (open) { aboutFrom = document.activeElement; $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
 }
@@ -338,6 +384,8 @@ $('stamp').onclick = () => about(true);
 $('about-close').onclick = $('about-close-2').onclick = () => about(false);
 document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('about').hidden) about(false); });
 
+// An empty touchstart listener, passive, so iOS draws :active (a story held, a key pressed; plan 0011's owed item).
+document.addEventListener('touchstart', () => {}, { passive: true });
 // A return to the screen reads the file again: the same file redraws only the stamp (load()).
 document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
 // A new width (a phone turned on its side) redraws the Datelines alone.

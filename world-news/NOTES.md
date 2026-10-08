@@ -97,7 +97,8 @@ Europe, Americas, Africa, Middle East, Asia-Pacific.
 That is one sentence with **two** conditions joined by "and", so the app's
 About carries both: *"news-related material may be used as long as
 appropriate credit is given and the United Nations is advised."* Credit is
-given in About, in the credit line under every pane and under each headline. Advising the UN is the condition
+given in About, where the credit line opens *Sources and credits*, and under each headline, whose source line
+names `UN News`. Advising the UN is the condition
 whoever runs a copy has to satisfy for themselves; at the scale of one personal
 dashboard nobody has ever been asked to, but the page says what it says, and it
 is written down here so nobody has to rediscover it.
@@ -132,7 +133,9 @@ and the flag is a license decision rather than a formatting one:
   with an ellipsis, the way the other feeds' are;
 - **no summary line is carried at all**, so nothing of theirs is shortened;
 - the byline is carried whole, institution included, because that is the credit
-  the license asks for.
+  the license asks for. The app joins it to the story's source line
+  (`The Conversation, 1 Oct, 04:49, by Francesco Bailo, Senior Lecturer …`), word for
+  word; nothing in it is changed or cut.
 
 What is left is a headline and a link, which the same page allows explicitly:
 "extracts are fine as long as they're followed by a link back". The app takes at

@@ -2,17 +2,20 @@
 
 How the app looks, moves and speaks under the template's house system (`Template/HOUSE.md`; Power
 Hours, Outdoor Window, World News, Finances and Running Dashboard are the loop apps before it). Hello
-Live is the one app of HOUSE 4.0's last kind, *one live card*: a header, a card of data, a caption
-band, nothing to tap but the stamp. It is the loop's proof (`Template/README.md`, "Install Hello Live
+Live is the one app of HOUSE 4.0's last kind, *one live card*: a header, a card of data on a white
+page, nothing to tap but the stamp and the About key at the foot. Version 2.1 takes the pane apps'
+register as HOUSE 11 gives it to this app: a 34 px key number, a key under the card in place of the
+caption band, the credit in About, no plates, a white ground (HOUSE 12). It is the loop's proof (`Template/README.md`, "Install Hello Live
 first"), and this pass keeps it that: the file it reads, the job that writes it and the Shortcut that
 carries it do not change.
 
 The record of the pass (owner calls, as-built notes, phone checks) is in `tools/DECISIONS.md`, which
 does not ship.
 
-Figures were measured on 2026-10-03 on the data as committed: `data/snapshot.json` (sha256
-`db50d9add6f0d940671235ee12a3fbe7f2a4f7e90e9620e3f6899539f04333a8`, 545 B, made 1 Oct 2026, 01:59:56
-UTC; a headline `01:59 UTC`, a caption, three rows and an `ask` table of three rows). `python3
+Figures were measured on 2026-10-03, and again for 2.1 on 2026-10-08, on one fixed day: the file of 1 Oct
+(sha256 `db50d9add6f0d940671235ee12a3fbe7f2a4f7e90e9620e3f6899539f04333a8`, 545 B, made 1 Oct 2026, 01:59:56
+UTC; a headline `01:59 UTC`, a caption, three rows and an `ask` table of three rows), which the tools keep as
+`tools/fixtures/snapshot.json` because the refresh job rewrites `data/snapshot.json` about every hour. `python3
 hello-live/tools/art/palette.py` (from `Template/`) prints every color figure, 54 checks `ok`, and ends
 `ALL CHECKS PASS` (exit 0). The stock app was read in headless Chromium at 390 × 844, DPR 2, touch,
 both themes, with the clock at Sat 3 Oct 2026, 10:00 UTC (12:00 in Oslo: the ran-out state a fresh
@@ -92,11 +95,11 @@ implementation written in the test):
 - **The rows.** Seven, today's at the top, each labeled at the left in 10.5 px `--ink-2` in the house's
   tick form (`Sat 3`, `Fri 2`, `Wed 30`), the label column 40 px wide (`Wed 30` measures 33.5 px in
   the face). Rows take the pane's free height, in whole pixels from 14 px to 40 (`rowFor()`: the
-  pane's height less everything else on the page, less 38, over seven): 40 at 390 × 844, 35 at
-  375 × 667, 16 at 320 × 568, 14 on a phone on its side, where there is no free height. So the one
+  pane's height less everything else on the page, less 38, over seven): 40 at 390 × 844 and 360 × 740,
+  30 at 375 × 667, 14 at 320 × 568 and on a phone on its side, where there is no free height. So the one
   card fills the screen it has instead of leaving half of it blank. Rows are parted by 1 px `--line`
   hairlines at each row's foot; today's row
-  carries `--ink` at 4 % over the page behind it (`#dfe6e8` / `#1c2529`). Above the rows a 16 px row
+  carries `--ink` at 4 % over the page behind it (`#f5f6f6` / `#1c2529`). Above the rows a 16 px row
   for `now`; under them a 22 px axis row. The drawing is 16 + 7 × the row + 22 px tall: 136 at
   14 px rows, 318 at 40. The day labels sit at the row's middle.
 - **The scale**, printed and the same in every row: hours of the day on the phone's clock, left to
@@ -140,11 +143,12 @@ implementation written in the test):
   these 7 days.`; `no file read` only for an empty record. Nothing in it is a control; a swipe over it scrolls the pane. Test hook:
   `window.__hl.card()` returns the geometry (the row height, px per hour, rows, punches, tails, labels placed and
   dropped), `window.__hl.record()` the record as read.
-- **Caption** (the band's caption line, fixed at two lines below 640 px of width and one from 640;
-  measured 495.9 px at 11 px in the face, inside two lines of 280 px at the 312 px zoom width):
-  `A mark where each file was written, by day; its tail runs to its first reading here. Hours: this
-  phone’s, UTC+2.` The offset is built from the phone's clock by `js/units.js` (`full()`'s zone word),
-  so a phone in another zone prints its own.
+- **The key** (HOUSE 4.15, 11.1 rule 6), under the card, 11.5 px / 15 px `--ink-2`, in place of the
+  band's caption line: `File written` beside a 3 × 10 px ink mark (the punch), `Until it was first
+  read here` beside a 10 × 2 px ink line (the tail), and `Hours: this phone’s, UTC+2` with no mark. Two
+  lines below 640 px of width, one from 640. The offset is built from the phone's clock by
+  `js/units.js` (`offsetWord()`, `full()`'s zone word) and written again each minute, so a phone in
+  another zone prints its own.
 
 **What About says it is not.** Not the job's log: the card holds only files this app parsed on this
 phone, so an hourly job whose files a daily Shortcut carries shows one punch a day, and an empty day
@@ -168,28 +172,29 @@ sentence in `--ink`, a problem is a notice. `palette.py --json` prints the chrom
 `tools/check.mjs` holds `style.css` to them in both themes. The stock's own system-font grays go with
 its cards.
 
-**Chrome**: HOUSE 3.1's tokens as they are, both themes (ink on page 14.80 / 14.43; ink-2 on page
-6.61 / 7.76; ink-3 on page 4.78 / 5.88; the highest chroma 0.0239 light, 0.0223 dark; the page in
-OKLCh L 0.945, C 0.007, h 220 light and L 0.224, C 0.015, h 227 dark).
+**Chrome**: HOUSE 3.1's tokens on a white light ground (HOUSE 12: `--page` `#ffffff`; every other token
+as it is), both themes (ink on page 17.35 / 14.43; ink-2 on page 7.75 / 7.76; ink-3 on page 5.60 / 5.88;
+the highest chroma 0.0239 light, 0.0223 dark; the page in OKLCh L 1.000, C 0.000 light and L 0.224,
+C 0.015, h 227 dark).
 
-| | Light (film base) | Dark (the print) |
+| | Light (white, HOUSE 12) | Dark (the print) |
 | --- | --- | --- |
-| Ground | `--page` `#e8eef0`, L 0.945; today's row `--ink` at 4 % over it, `#dfe6e8` (1.08 against the page); About and notices on `--sheet` | `--page` `#141d21`, L 0.224; today's row `#1c2529` (1.10); `--sheet` |
+| Ground | `--page` `#ffffff`, L 1.000; today's row `--ink` at 4 % over it, `#f5f6f6` (1.08 against the page); About and notices on `--sheet` | `--page` `#141d21`, L 0.224; today's row `#1c2529` (1.10); `--sheet` |
 | Data band | empty: no quantity is carried by color | empty |
 | Signature | the punches and tails: `--ink` `#0f1c23`, L 0.218, C 0.023, opaque | `--ink` `#e6edee`, L 0.941, C 0.008, opaque |
-| A punch on the page | 14.80 | 14.43 |
-| A punch on today's row | 13.73 | 13.16 |
+| A punch on the page | 17.35 | 14.43 |
+| A punch on today's row | 16.02 | 13.16 |
 | A punch across a row's or an hour's hairline (`--line`) | 11.47 | 10.36 |
 | **A punch across the axis baseline (`--line-strong`)** | **4.52** (the lowest signature figure) | **4.05** |
-| Ink against the page under normal, deutan, protan and tritan vision | ΔE 0.723 to 0.729 | 0.715 to 0.718 |
-| The `now` notch (`--ink-2`, a mark) on the page / on today's row | 6.61 / 6.13 | 7.76 / 7.07 |
-| An hour tick (`--ink-3` at 50 %) on the page | 1.98, faint on purpose, as the house track's step ticks | 2.48 |
-| A row hairline on the page / on today's row | 1.29 / 1.20, a separator | 1.39 / 1.27 |
+| Ink against the page under normal, deutan, protan and tritan vision | ΔE 0.775 to 0.784 | 0.715 to 0.718 |
+| The `now` notch (`--ink-2`, a mark) on the page / on today's row | 7.75 / 7.16 | 7.76 / 7.07 |
+| An hour tick (`--ink-3` at 50 %) on the page | 2.10, faint on purpose, as the house track's step ticks | 2.48 |
+| A row hairline on the page / on today's row | 1.51 / 1.40, a separator | 1.39 / 1.27 |
 
-Text: the day labels, the axis hours, the stamp, the lead, the caption line and the credits in `--ink-2`
-(6.61 / 7.76 on the page; today's label 6.13 / 7.07 on its row); `now` in `--ink-3` in its own row
-(4.78 / 5.88); the headline, the row values and a stale sentence in `--ink` (14.80 / 14.43); About and
-a notice on `--sheet` (ink 16.40 / 12.87, ink-2 7.32 / 6.92; a notice's edge 3.27 / 3.56 on the page).
+Text: the day labels, the axis hours, the stamp, the lead, the key and the About key in `--ink-2`
+(7.75 / 7.76 on the page; today's label 7.16 / 7.07 on its row); `now` in `--ink-3` in its own row
+(5.60 / 5.88); the headline, the row values and a stale sentence in `--ink` (17.35 / 14.43); About and
+a notice on `--sheet` (ink 16.40 / 12.87, ink-2 7.32 / 6.92; a notice's edge 3.83 / 3.56 on the page).
 Today's row is told from the others by its `now` notch and label as well as by its tone, so the 4 %
 tint carries nothing alone.
 
@@ -202,7 +207,7 @@ not see; the dim labels 5.28 on the white card; the card against the page 1.08 w
 
 ## 3. The chrome, object by object
 
-HOUSE 4.0's *one live card*: a header, one card that is the data, a fixed caption band. No row of tabs
+HOUSE 4.0's *one live card*: a header and one card that is the data; no footer (HOUSE 4.15). No row of tabs
 and words, no key column, no player, no readout card, no focus mode, no units key, no opening (the
 last item says why).
 
@@ -218,37 +223,40 @@ last item says why).
   the first file cannot be used. The words move once a minute while the page is visible. **No row of
   tabs**: the header is two lines (HOUSE 4.3, *no views and no layers*).
 - **The pane**, scrolling inside the frame under a still header (the stock's page scroll goes; at
-  390 × 844 and 844 × 390 nothing scrolls). Content on the page between hairlines, no cards, no pills,
-  left-aligned, 16 px gutters (20 from 700 px). In order:
-  1. **The headline**: the pane's one large figure, the file's `headline` string as the file gives it,
-     21 px 600 `--ink` (`01:59 UTC`, 95.4 px; the stock's 41.6 px at 640 with −0.02 em of tracking
-     becomes 21 at 600 and 0), `overflow-wrap: anywhere` so a long string can never widen the page;
-     at its right on the same baseline the lead in 12.5 px `--ink-2`, the same instant on the phone's
-     clock: `03:59 on this phone’s clock` (139.7 px; the two fit one line from 320 px). Under them the
-     file's `caption`, 12.5 px `--ink-2`, as the file gives it (`Written by a GitHub Action, copied
-     here by a Shortcut.`), left out when the file has none.
-  2. **The Time Card** (section 1), under a 13.5 px 650 heading `Time card` and a hairline.
-  3. **The rows**: a `dl` under a hairline, one row per entry of `runs[]`, 12.5 px, the label `--ink-2`
-     at the left and the value `--ink` at 560 right-aligned and tabular, 28 px rows parted by `--line`
-     hairlines; the values as the file gives them, passed through `si()` so a value with a known unit
-     gets its U+202F (the committed values are bare numbers). The owner's rule for the pane apps (the
+  390 × 844 and 844 × 390 nothing scrolls). Content on the white page between hairlines, no plates
+  (HOUSE 11.1 rule 11: one card needs none), no pills, a centered column at most 760 px wide with
+  16 px gutters, the header's sides on it (`max(16px, 50% - 364px)` plus the safe area). In order:
+  1. **The headline**, the pane's key number (HOUSE 11.1 rule 2): the file's `headline` string as the
+     file gives it, 34 px 650 `--ink` (`01:59 UTC`; the stock's 41.6 px at 640 with −0.02 em of tracking
+     becomes 34 at 650 and 0), `overflow-wrap: anywhere` so a long string can never widen the page;
+     under it the lead in 13.5 px `--ink-2`, the same instant on the phone's clock: `03:59 on this
+     phone’s clock`. Under them the file's `caption`, 12.5 px `--ink-2`, as the file gives it
+     (`Written by a GitHub Action, copied here by a Shortcut.`), left out when the file has none.
+  2. **The Time Card** (section 1), under a 13.5 px 650 heading `Time card` and a hairline, and its key.
+  3. **The rows**: a `dl` under a hairline, one row per entry of `runs[]`, the label 12.5 px `--ink-2`
+     at the left and the value 15 px 600 `--ink` right-aligned and tabular, 28 px rows parted by `--line`
+     hairlines; the values as the file gives them, with two marks added and nothing else changed: a
+     plain count of four digits or more (digits only, no leading zero) is grouped with U+202F, so the
+     file's `1000` prints `1 000` (HOUSE 6.1), and a value with a known unit gets its U+202F through
+     `si()`. The file itself keeps `1000`. The owner's rule for the pane apps (the
      short facts as a table) is met with the table after the card, since here the facts are the
      headline's instant three more ways (owner call 1).
   Nothing under the rows: the stamp (`Stale. Updated 1 Oct, 03:59`) and About (`Stale after: 6 h`)
   carry staleness, since a sentence there would only repeat the stamp, and the owner asked on
   2026-10-06 for less text on every app's front page (owner call 10).
-- **Caption band** (fixed, on `--page`, 16 px gutters, a 1 px `--line` rule on top): the caption line
-  (section 1), then the credits, 10.5 px / 15 px `--ink-2`, the app's constant, byte for byte, in
-  static markup and compared by `check.mjs`: `Data: this repository’s own refresh job; no outside
-  source.` (251.4 px at 10.5 px: one line at 320). The file names no source and fetches nothing, so the
-  credit says exactly that; the font's credit is in About.
-- **About** (HOUSE 4.8), opened by the stamp (220 ms up, closed at once; `Close` at the head and the foot,
+  4. **The About key** (HOUSE 11.1 rule 1), last: a text button, 12.5 px `--ink-2`, underlined, 44 px
+     tall, `Sources, method and credits are in About.`, which opens About as the stamp does.
+
+  The pane's foot pads the home indicator: `calc(28px + env(safe-area-inset-bottom))`.
+- **About** (HOUSE 4.8), opened by the stamp or the About key (220 ms up, closed at once; `Close` at the head and the foot,
   Escape, Tab held inside the sheet, focus back on the stamp): *What the Time Card is* (section 1's reading and what it
   is not); *This data*, `label: value` lines: `Written: Thu 1 Oct 2026, 03:59 (UTC+2)`, `In the file:
   01:59 UTC`, `Rows: 3`, `Ask table: 3 rows`, `Files read here: 1 file, since 3 Oct` (from the record; with storage
   refused it adds `; storage is unavailable, so the record is this page’s`), `Read before written: 1 file
   (a clock behind the server’s), drawn without a tail` (only when there is one), `Stale after: 6 h`,
-  `Card: 7 days, 13 px an hour at this width`; *Sources and credits*: `The file is
+  `Card: 7 days, 13 px an hour at this width`; *Sources and credits*: the credit, static and byte for
+  byte as `NOTES.md` has it, `Data: this repository’s own refresh job; no outside source.` (the file
+  names no source and fetches nothing, so the credit says exactly that), then `The file is
   written by this repository’s own refresh job, scripts/refresh_hello_live.py, which fetches nothing;
   there is no outside source and nothing to license.`, then `Type: ` and the face's credit line word
   for word; *How the data gets here*: a workflow in the repository rewrites `data/snapshot.json` about
@@ -301,9 +309,9 @@ colon, all in the cut; the stock's midline ellipsis (U+22EF, not in the cut) and
 its help sentence for words (`In Snuggery, Options, then App Files`). **No face is removed**: the stock
 shipped none; its system stack (`-apple-system`, `SF Pro Text`) and its `code` face (`ui-monospace`,
 `SFMono-Regular`, `Menlo`) go, and file names are set in the house face with `translate="no"`. Scale
-10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 / 21 px (the stock's 41.6 px headline becomes 21, its 16.8 px name
-15, its 14.4 and 12.8 px prose 12.5 and 11.5), weights 400, 560, 600, 620, 650 (the stock's 640 and
-700 go), no capitals, no letter-spacing (the stock's −0.02 em on the headline goes). The card's SVG
+10.5 / 11.5 / 12.5 / 13.5 / 15 / 34 px, the pane apps' (the stock's 41.6 px headline becomes the 34 px
+key number, its 16.8 px name 15, its 14.4 and 12.8 px prose 12.5 and 11.5), weights 400, 600, 650 (the
+stock's 640 and 700 go), no capitals, no letter-spacing (the stock's −0.02 em on the headline goes). The card's SVG
 text takes the page's face; the label column and every label's room are measured after
 `document.fonts.load('400 10.5px "Ysabeau Office"')`, and the card is drawn again on `loadingdone`.
 The credit line word for word in About (`Type: `), in `NOTES.md` (new: the app had none) and in the
@@ -333,27 +341,24 @@ one punch. No string is British.
 
 ## 6. Budget
 
-*Measured* by `node tools/check.mjs` (2026-10-06): code as every shipped `.html`, `.css` and `.js`; the
+*Measured* by `node tools/check.mjs` (2026-10-08, version 2.1): code as every shipped `.html`, `.css` and `.js`; the
 ZIP built by `build-zips.yml`'s command (`zip -q -r -X … . -x '.*' '*/.*' 'screenshots/*' 'tools/*'
 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'`), then its size on disk.
 
-| | Before the pass | As built | Cap |
+| | Before 2.1 | As built (2.1) | Cap |
 | --- | --: | --: | --- |
-| App code | 7 281 (`index.html` alone, its CSS and script inline) | 46 888: `index.html` 5 766, `style.css` 8 778, `app.js` 14 940, `js/units.js` 5 426, `js/card.js` 11 978 | 200 000, the house's |
-| Fonts | 0 | 40 075 (the house face 35 372 and its `OFL.txt` 4 703) | 160 000 |
-| ZIP | 3 730 (4 entries) | about 71 850, 11 files (this file's own size moves the last digits): stored, the face and its license 37 510, the code 17 846, this file about 12 900, `NOTES.md` 1 837, the data 231 | 74 000, the lead's ruling (plan 0011 D42); 42 496 by D5 (3 730 × 1.25, rounded down, plus 37 834 for the face) could not hold the face |
-| Data | `data/snapshot.json` `db50d9ad…f04333a8` | the same bytes | pinned by `check.mjs` |
+| App code | 46 888 (7 281 before the house pass, `index.html` alone) | 48 500: `index.html` 6 180, `style.css` 9 199, `app.js` 15 256, `js/units.js` 5 887, `js/card.js` 11 978 | 200 000, the house's |
+| Fonts | 40 075 | 40 075 (the house face 35 372 and its `OFL.txt` 4 703) | 160 000 |
+| ZIP | 71 844 | about 72 750, 11 files (this file's own size and the hour's data move the last digits): stored, the face and its license 37 510, the code 18 531, this file about 13 100, `NOTES.md` 1 830, the data 231 | 89 805, the house rule (71 844 × 1.25, rounded down), above 2.0's 74 000 |
+| Data | `data/snapshot.json`, rewritten by the refresh job | the same | `check.mjs` checks its shape and pins the tools' fixed day |
 
-**The ZIP cap: 74 000 B, the lead's ruling (plan 0011 D42), nothing cut.** This is the smallest stock
-ZIP in the template, a tenth of the face it gains, so D5's formula leaves no room even for the font;
-like the four loop apps before it (Finances 131 000, World News 88 000, Outdoor Window 99 000, Power
-Hours 97 000) it is ruled at the measured figure plus about 3 000 B for the fix stages. **As built it is within 5 % of
-the cap**: about 2 100 B to spare (HOUSE 8, what to do near a cap), so any growth of this file or the
-code needs the lead's eye. The build
-applied the whole list, cut nothing, never minified and never stripped a comment. **The data's hash
-pins the private copy only**: on the public repository the refresh job rewrites `data/snapshot.json`
-about every hour, so the lead's mirror leaves the public `data/` in place and the live check hashes the
-code files inside the downloaded ZIP, as World News' and Power Hours' do. Hello Live also ships inside
+**The ZIP cap: 89 805 B, the house rule for 2.1, nothing cut.** Version 2.0's cap was 74 000 B (plan 0011
+D42); the pane-app pass measured the ZIP before it at 71 844 B, and the house rule, that figure × 1.25,
+is the higher, so the cap rises to it. The build cut nothing, never minified and never stripped a
+comment. **The snapshot is checked by shape, not by hash**: the refresh job rewrites
+`data/snapshot.json` about every hour, so `check.mjs` checks the shape `app.js`'s header documents, the
+tests read the fixed day in `tools/fixtures/`, and the live check hashes the code files inside the
+downloaded ZIP, as World News' and Power Hours' do. Hello Live also ships inside
 Snuggery's starter pack (`Tools/build-starter-pack.sh`, `live/hello-live.zip`): the pack is rebuilt in
 the working tree for the camera and restored after, never committed with the pass (plan 0011 D25).
 
@@ -363,7 +368,7 @@ the working tree for the camera and restored after, never committed with the pas
 
 | Tell | Here |
 | --- | --- |
-| 1. Cream, serif display, terracotta | film base; one sans; no accent: the stock's green goes, and the screen has no hue at all |
+| 1. Cream, serif display, terracotta | a white ground (HOUSE 12); one sans; no accent: the stock's green goes, and the screen has no hue at all |
 | 2. Near-black with an acid accent | the stock's `#131316` ground and mint accent go for the slate print; the bright thing is the card's ink |
 | 3. Broadsheet | one column, hairlines between the headline, the card and the rows, radii by role (8 px on a notice, 6 on a text key) |
 | 4. The SaaS-card kit | the stock's two white cards at a 14 px radius with hairline edges go; the data sits on the page |
@@ -376,7 +381,7 @@ the working tree for the camera and restored after, never committed with the pas
 | 11. One accented word | none; the green `ago` and the red `stale` go; a stale file is a sentence in `--ink` |
 | 12. Labels above content | the card's heading names the thing under it; the rows' labels are the file's own, beside their values |
 | 13. Numbered markers | none |
-| 14. Big number, small label, gradient | the stock's 41.6 px headline becomes the one 21 px figure, with its lead in words and no gradient |
+| 14. Big number, small label, gradient | the stock's 41.6 px headline becomes the register's one 34 px key number, with its lead in words under it and no gradient |
 | 15. Entrances, hover everywhere | none; nothing animates but About; hover only on the stamp and the text keys, under `(hover: hover)` |
 
 ---

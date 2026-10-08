@@ -3,5 +3,5 @@
   "name": "Outdoor Window",
   "entryPoint": "index.html",
   "description": "Scores the next 48 hours of weather against rules you write yourself, and shows when to go out",
-  "version": "1.1"
+  "version": "1.2"
 }

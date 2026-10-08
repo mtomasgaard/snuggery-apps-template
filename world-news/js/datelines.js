@@ -5,6 +5,9 @@
 
 import { ageLabel, count, int, spokenItem } from './units.js';
 
+/** Each source's color slot (1 to 3), by its place in the file's sources[]; app.js fills it before a draw. A tick
+ *  of a source with a slot is classed src-N, which style.css fills in the chosen rows (HOUSE 11.3). */
+export const SRC = new Map();
 export const HOURS = 1440;                  // the scale's left end, 60 days
 export const MARKS = [1, 6, 24, 168, 1440];  // labeled; hairlines through the rows at the middle three
 export const ROW = 18, TOP = 4, TICK = 12, GAP = 3, MAX_PARTS = 4, REACH = 22;
@@ -35,7 +38,7 @@ export function model(data, width, label) {
       if (!Number.isFinite(h)) return;           // a time this app cannot read draws no tick
       if (h < 1) lo = true;
       if (h > HOURS) hi = true;
-      its.push({ ri, ii, h, x: xAt(G, h), stale: !!it.stale, iso: it.published });
+      its.push({ ri, ii, h, x: xAt(G, h), stale: !!it.stale, iso: it.published, src: it.source });
     });
     its.sort((a, b) => a.h - b.h);
     const ticks = [];
@@ -73,7 +76,7 @@ export const hollows = (M) => M.rows.reduce((n, r) => n + r.stale, 0);
 
 /**
  * Draws the model into `svg`. Rows in `chosen` (a Set of region indexes) are ink; the rest --ink-3. `sel` is
- * the selected headline, {ri, ii}, or null: its tick gets a tracer head, a 6 px ink disc ringed in --page,
+ * the selected headline, {ri, ii}, or null: its tick gets a tracer head, a 6 px ink disc ringed in --sheet,
  * inside its own row. A tick past MAX_PARTS headlines is drawn in MAX_PARTS parts with its count beside it.
  */
 export function draw(svg, M, chosen, sel) {
@@ -109,14 +112,14 @@ export function draw(svg, M, chosen, sel) {
   M.rows.forEach((r, ri) => {
     const y = TOP + ri * ROW, g = add(svg, 'g', { class: chosen.has(ri) ? 'row on' : 'row' });
     add(g, 'text', { class: 'rn', x: 0, y: y + 13 }, r.name);
-    // the counts first: a count's --page halo must never cover a tick
+    // the counts first: a count's --sheet halo must never cover a tick
     for (const t of r.ticks) if (t.items.length > MAX_PARTS) add(g, 'text', { class: 'cnt', x: px(t.x) + 3, y: y + 13 }, int(t.items.length));
     for (const t of r.ticks) {
       const parts = t.items.slice(0, MAX_PARTS), k = parts.length, h = (TICK - (k - 1)) / k, x = px(t.x);
       parts.forEach((it, j) => {
         const top = y + 3 + j * (h + 1);
         if (it.stale) add(g, 'rect', { class: 'ho', x: x - 1.5, y: top + 0.5, width: 3, height: h - 1 });
-        else add(g, 'rect', { class: 'tk', x: x - 1, y: top, width: 2, height: h });
+        else add(g, 'rect', { class: SRC.has(it.src) ? `tk src-${SRC.get(it.src)}` : 'tk', x: x - 1, y: top, width: 2, height: h });
       });
       if (sel && t.items.some((it) => it.ri === sel.ri && it.ii === sel.ii)) add(svg, 'circle', { class: 'sel', cx: x, cy: y + 3 + TICK / 2, r: 3.75 });
     }

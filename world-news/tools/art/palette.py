@@ -6,8 +6,12 @@ ART.md quotes. Standard library only. Run from Template/:
     python3 world-news/tools/art/palette.py --json   the tokens per theme, as style.css declares them
                                                      (tools/check.mjs compares; pasted, never retyped)
 
-This app has no data color. Its data is text (headlines, sources, bylines, dates) and the one picture,
-the Datelines, is drawn in ink: the stock look's only hues were an accent blue (the chosen tab, links,
+Plan 0012's pane-app register (HOUSE.md 11, the owner's D5) gives it one meaning color, in three hues:
+which source a headline came from, --src-1 to --src-3 by the order of the file's sources[] (HOUSE 11.2's
+values, taken as measured there and repeated by check 7), on the chosen rows' ticks and the swatches. The
+Datelines and the stories now sit on plates (--sheet), so checks 3 and 4 measure them there. Before the
+register this app had no data color. Its data is text (headlines, sources, bylines, dates) and the one picture,
+the Datelines, was drawn in ink: the stock look's only hues were an accent blue (the chosen tab, links,
 hover), an amber for "cached" and "stale" and a red for errors, and none of them was data, so all three
 go (HOUSE.md 3.1: no accent, no red or amber in the chrome; the words carry staleness). The tonal budget
 is therefore stated over the Datelines' own marks: the chosen rows' ticks in --ink at the far end of
@@ -35,6 +39,16 @@ def cr(a, b): la, lb = sorted((lum(a), lum(b)), reverse=True); return (la + .05)
 def over(fg, a, bg): return tuple(round(f * a + g * (1 - a)) for f, g in zip(fg, bg))
 def lch8(rgb):
     L, a, b = lin2lab(*(dec(c / 255) for c in rgb)); return L, math.hypot(a, b), math.degrees(math.atan2(b, a)) % 360
+# color-vision simulation: Machado, Oliveira and Fernandes (2009) at severity 1.0, in linear sRGB (HOUSE 11.2's
+# method, finances/tools/art/palette.py's matrices, copied)
+CVD = {'protan': [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
+       'deutan': [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.011820, 0.042940, 0.968881]],
+       'tritan': [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.303900]]}
+def sim(rgb, kind):
+    lin = [dec(c / 255) for c in rgb]
+    if kind != 'normal': lin = [min(1, max(0, sum(CVD[kind][i][j] * lin[j] for j in range(3)))) for i in range(3)]
+    return lin2lab(*lin)
+def de(a, b, kind='normal'): return math.dist(sim(a, kind), sim(b, kind))
 
 # -- the house's chrome tokens (HOUSE.md 3.1), copied as they are -----------------------------
 TOK = {
@@ -44,14 +58,30 @@ TOK = {
                line='#2a373c', strong='#64757b'),
 }
 CSS_NAME = dict(page='--page', sheet='--sheet', ink='--ink', ink2='--ink-2', ink3='--ink-3', line='--line',
-                strong='--line-strong')
+                strong='--line-strong', src1='--src-1', src2='--src-2', src3='--src-3')
+
+# -- the register's meaning color (HOUSE 11.2, plan 0012 D5): the source, by the order of sources[]. Not fitted:
+# taken as HOUSE measured them. --src-3 is the lead's wine / mauve, not the board's purple (HOUSE 11.2).
+REGISTER = {
+ 'light': dict(src1='#1f5f99', src2='#a64a1a', src3='#6d2736'),
+ 'dark':  dict(src1='#8cbcf0', src2='#f0a070', src3='#ab8198'),
+}
+FIG = {  # text contrast on (page, sheet), HOUSE 11.2
+ 'light': dict(src1=(5.68, 6.29), src2=(4.96, 5.49), src3=(8.99, 9.96)),
+ 'dark':  dict(src1=(8.61, 7.68), src2=(8.12, 7.24), src3=(5.15, 4.60)),
+}
+PAIRS = {  # dE normal / deutan / protan / tritan, HOUSE 11.2
+ ('src1', 'src2'): {'light': (0.246, 0.224, 0.188, 0.252), 'dark': (0.202, 0.185, 0.175, 0.225)},
+ ('src1', 'src3'): {'light': (0.208, 0.159, 0.194, 0.230), 'dark': (0.171, 0.143, 0.180, 0.195)},
+ ('src2', 'src3'): {'light': (0.160, 0.164, 0.154, 0.149), 'dark': (0.163, 0.170, 0.145, 0.143)},
+}
 # The stock look's tokens that leave (for the record, measured on the stock style.css as it was):
 STOCK_GONE = {'light': dict(accent='#2f6df6', stale='#a87400', critical='#c23b34', ground='#eef0f4'),
               'dark':  dict(accent='#6f9bff', stale='#f2b322', critical='#f07a72', ground='#0b0e13')}
 
 def main():
     if '--json' in sys.argv:
-        print(json.dumps({th: {CSS_NAME[k]: v for k, v in t.items()} for th, t in TOK.items()}, indent=1)); return
+        print(json.dumps({th: {CSS_NAME[k]: v for k, v in {**t, **REGISTER[th]}.items()} for th, t in TOK.items()}, indent=1)); return
     ok = True
     def check(cond, msg):
         nonlocal ok; ok &= bool(cond); print(('ok   ' if cond else 'FAIL ') + msg)
@@ -72,26 +102,26 @@ def main():
         order = (Lp > Lg > L3 > Li) if th == 'light' else (Lp < Lg < L3 < Li)
         check(order, f'{th}: each mark stands further from the page than the one before it, the ink furthest')
 
-    print('\n== 3. the Datelines (the signature) on --page: marks >= 3 (WCAG non-text), labels >= 4.5')
+    print('\n== 3. the Datelines (the signature) on their plate, --sheet: marks >= 3 (WCAG non-text), labels >= 4.5')
     for th, t in TOK.items():
-        P, I, I2, I3, G, S = (parse(t[k]) for k in ('page', 'ink', 'ink2', 'ink3', 'line', 'strong'))
-        check(cr(I, P) >= 3, f'{th}: a tick, 2 px of --ink on the page {cr(I, P):.2f}')
-        check(cr(I, P) >= 3, f'{th}: a hollow tick (kept from an earlier run), a 1 px --ink outline on the page {cr(I, P):.2f}')
-        check(cr(P, I) >= 3, f'{th}: the 1 px page gap that divides a tick shared by two headlines, against its ink {cr(P, I):.2f}')
-        check(cr(I3, P) >= 3, f'{th}: a tick of a row not chosen, --ink-3 on the page {cr(I3, P):.2f}')
+        P, I, I2, I3, G, S = (parse(t[k]) for k in ('sheet', 'ink', 'ink2', 'ink3', 'line', 'strong'))
+        check(cr(I, P) >= 3, f'{th}: a tick, 2 px of --ink on the plate {cr(I, P):.2f}')
+        check(cr(I, P) >= 3, f'{th}: a hollow tick (kept from an earlier run), a 1 px --ink outline on the plate {cr(I, P):.2f}')
+        check(cr(P, I) >= 3, f'{th}: the 1 px plate gap that divides a tick shared by two headlines, against its ink {cr(P, I):.2f}')
+        check(cr(I3, P) >= 3, f'{th}: a tick of a row not chosen, --ink-3 on the plate {cr(I3, P):.2f}')
         check(cr(I3, P) >= 3 and cr(I, I3) >= 1.8, f'{th}: chosen ink against a row not chosen, {cr(I, I3):.2f} (the rows read apart; the names carry it too)')
         check(cr(I, G) >= 3 and cr(I3, G) >= 3, f'{th}: a tick crossing a scale hairline: ink on --line {cr(I, G):.2f}, ink-3 on --line {cr(I3, G):.2f}')
-        check(cr(G, P) < 1.5, f'{th}: the scale hairlines through the rows, --line on page {cr(G, P):.2f} (quiet on purpose, under 1.5)')
-        check(cr(S, P) >= 3, f'{th}: the scale\'s baseline and its 4 px ticks, --line-strong on page {cr(S, P):.2f}')
-        check(cr(I2, P) >= 4.5, f'{th}: the scale\'s labels (1 h, 6 h, 1 d, 7 d, 60 d) and the other rows\' names, --ink-2 on page {cr(I2, P):.2f}')
-        check(cr(I, P) >= 4.5, f'{th}: the chosen row\'s name (620), --ink on page {cr(I, P):.2f}')
+        check(cr(G, P) < 1.5, f'{th}: the scale hairlines through the rows, --line on the plate {cr(G, P):.2f} (quiet on purpose, under 1.5)')
+        check(cr(S, P) >= 3, f'{th}: the scale\'s baseline and its 4 px ticks, --line-strong on the plate {cr(S, P):.2f}')
+        check(cr(I2, P) >= 4.5, f'{th}: the scale\'s labels (1 h, 6 h, 1 d, 7 d, 60 d) and the other rows\' names, --ink-2 on the plate {cr(I2, P):.2f}')
+        check(cr(I, P) >= 4.5, f'{th}: the chosen row\'s name (620), --ink on the plate {cr(I, P):.2f}')
         check(cr(I, P) >= 3, f'{th}: the 4 px ink disc over a tapped tick, and the 2 px ink rule beside its story {cr(I, P):.2f}')
 
-    print('\n== 4. the story list: text on the page, and the pressed row')
+    print('\n== 4. the story list: text on its plate (--sheet), and the pressed row')
     for th, t in TOK.items():
-        P, I, I2 = parse(t['page']), parse(t['ink']), parse(t['ink2'])
-        check(cr(I, P) >= 4.5, f'{th}: a headline, --ink on page {cr(I, P):.2f}')
-        check(cr(I2, P) >= 4.5, f'{th}: source and date, byline, summary, --ink-2 on page {cr(I2, P):.2f}')
+        P, I, I2 = parse(t['sheet']), parse(t['ink']), parse(t['ink2'])
+        check(cr(I, P) >= 4.5, f'{th}: a headline, --ink on the plate {cr(I, P):.2f}')
+        check(cr(I2, P) >= 4.5, f'{th}: source and date, byline, summary, --ink-2 on the plate {cr(I2, P):.2f}')
         held = over(I, 0.07, P)
         check(cr(I, held) >= 4.5 and cr(I2, held) >= 4.5, f'{th}: a row held down ({hx(held)}, --ink at 7 %): headline {cr(I, held):.2f}, meta {cr(I2, held):.2f}')
         on = over(I, 0.12, parse(t['sheet']))
@@ -104,7 +134,25 @@ def main():
         check(cr(I2, Sh) >= 4.5, f'{th}: About\'s terms (label: value), --ink-2 on sheet {cr(I2, Sh):.2f}')
         check(cr(S, P) >= 3, f'{th}: the notice plate\'s edge on the page {cr(S, P):.2f}')
 
-    print('\n== 6. for the record: the stock look this pass replaces (measured, not checked)')
+    print('\n== 6. the register (HOUSE 11.2): each source\'s color as text >= 4.5 on --page and --sheet at the figures')
+    print('     HOUSE measured; as a tick (a 2 px mark) >= 3 on the plate and on a scale hairline; the three apart at dE >=')
+    print('     0.10 under normal vision and the three simulations; each at least 0.15 from --ink')
+    for th, t in TOK.items():
+        F = REGISTER[th]
+        for k, (fp, fs) in FIG[th].items():
+            cp, cs = cr(parse(F[k]), parse(t['page'])), cr(parse(F[k]), parse(t['sheet']))
+            check(cp >= 4.5 and cs >= 4.5 and abs(cp - fp) < 0.006 and abs(cs - fs) < 0.006, f'{th}: --src-{k[-1]} {F[k]} as text on page {cp:.2f}, on sheet {cs:.2f} (HOUSE 11.2: {fp:.2f}, {fs:.2f})')
+            cl = cr(parse(F[k]), parse(t['line']))
+            check(cs >= 3 and cl >= 3, f'{th}: a --src-{k[-1]} tick on the plate {cs:.2f}, and where it crosses a scale hairline (--line) {cl:.2f} (WCAG non-text, 3)')
+            d = de(parse(F[k]), parse(t['ink']))
+            check(d >= 0.15, f'{th}: --src-{k[-1]} against --ink dE {d:.3f} (a colored tick reads apart from an ink one)')
+        for (a, b), want in PAIRS.items():
+            got = tuple(round(de(parse(F[a]), parse(F[b]), kind), 3) for kind in ('normal', 'deutan', 'protan', 'tritan'))
+            same = all(abs(g - w) <= 0.001 for g, w in zip(got, want[th]))
+            check(same and min(got) >= 0.10, f'{th}: --src-{a[-1]}/--src-{b[-1]} dE {" / ".join(f"{g:.3f}" for g in got)} (normal / deutan / protan / tritan; HOUSE 11.2 the same, each >= 0.10)')
+        print(f'     {th}: a plate on the page {cr(parse(t["sheet"]), parse(t["page"])):.2f}:1, its --line edge against the page {cr(parse(t["line"]), parse(t["page"])):.2f}:1')
+
+    print('\n== 7. for the record: the stock look this pass replaces (measured, not checked)')
     for th, g in STOCK_GONE.items():
         acc = lch8(parse(g['accent'])); st = lch8(parse(g['stale'])); cri = lch8(parse(g['critical']))
         print(f'     {th}: accent {g["accent"]} C {acc[1]:.3f}; stale {g["stale"]} C {st[1]:.3f}; critical {g["critical"]} C {cri[1]:.3f} (all leave)')

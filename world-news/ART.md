@@ -1,13 +1,14 @@
 # World News: art direction
 
-How the app looks, moves and speaks under the template's house system (`Template/HOUSE.md`; Running
-Dashboard and Finances are the pane apps before it, whose frame this one follows). `NOTES.md` says
+How the app looks, moves and speaks under the template's house system (`Template/HOUSE.md`) and its
+pane-app register (HOUSE 11: plates, color with one meaning, tables, a key in place of a how-to-read
+sentence, credits in About; Finances is the register's reference). `NOTES.md` says
 where the headlines come from and on what terms; `PROMPT.md` sets a copy up. The record of the pass (its
 change list, the owner calls, the as-built departures, the phone checks) is in `tools/DECISIONS.md`,
 which does not ship.
 
-Figures were measured on 2026-10-02 on `data/snapshot.json` as committed (made 1 Oct 2026, 05:01 UTC;
-sha256 `ecb80872…f910c5d2c`). `python3 world-news/tools/art/palette.py` (from `Template/`) prints
+Figures were measured on the file of 1 Oct 2026 (made 05:01 UTC; sha256 `ecb80872…f910c5d2c`), which the
+tools keep as their fixed day because the hourly refresh rewrites `data/snapshot.json`. `python3 world-news/tools/art/palette.py` (from `Template/`) prints
 every color figure and ends `ALL CHECKS PASS`. Screens were read in headless Chromium at 390 × 844,
 the clock at 1 Oct 2026, 12:00 in Oslo: what the page draws, never how a phone feels.
 
@@ -43,7 +44,8 @@ part of the world's news is, which the list alone hides under eight headlines th
    a desk, not a polygon), the publisher mix per region (three sources, a category bar any app could
    draw), the cross-filing (three stories today; a note, not a picture), a day-by-day grid (a
    contribution calendar, a generated-page pattern, and it crushes the last hours into one cell).
-4. *The house's means.* `--ink` ticks on `--page`, `--ink-3` for the rows not chosen, `--line`
+4. *The house's means.* Ticks on a plate (`--sheet`), each in its source's color on the chosen rows
+   (the register's one meaning color, HOUSE 11.3), `--ink-3` for the rows not chosen, `--line`
    hairlines, `--line-strong` for the scale, 10.5 px and 12.5 px labels, no motion.
 
 **Against the apps before it.** US Quakes' record strip is one linear drum of thirty days with a stem
@@ -60,22 +62,25 @@ player; none is an index of ages.
   `≥ 60 d`). An item published after the file was made (a feed's clock ahead) is under 1 h.
 - **Scale.** `x = right − k × log2(age / 1 h)`, `k = plot width / log2(1440)`. The label column is the
   widest region name in the face at 12.5 px and 620, plus 10 px (73 px for `Middle East`); the plot is
-  the rest of the pane's width less 6 px, at most 480 px. At 390 px: plot 279 px, 26.6 px a doubling
-  (`6 h` at 69 px from the right, `1 d` at 122, `7 d` at 197). At 320 px: 209 px, 19.9 px a doubling.
+  the rest of its plate's inner width (the pane less the plate's 12 px padding and 1 px edge each side)
+  less 6 px, at most 480 px. At 390 px: plot 253 px, 24.1 px a doubling (`6 h` at 62 px from the right,
+  `1 d` at 111, `7 d` at 178). At 320 px: 183 px, 17.4 px a doubling.
 - **Rows** 18 px apart, the region's name at the left in 12.5 px: `--ink` at 620 for the chosen
-  region (every row on `All`), `--ink-2` at 400 for the others. Ticks 2 × 12 px in `--ink` on the
-  chosen rows, `--ink-3` on the others. Vertical `--line` hairlines through all six rows at 6 h, 1 d
+  region (every row on `All`), `--ink-2` at 400 for the others. Ticks 2 × 12 px on the chosen rows in
+  their source's color, by the order of the file's `sources[]`: `--src-1` (Global Voices), `--src-2`
+  (The Conversation), `--src-3` (UN News) in this file, and `--ink` for a source past the third; `--ink-3`
+  on the other rows. Vertical `--line` hairlines through all six rows at 6 h, 1 d
   and 7 d; under the rows a 1 px `--line-strong` baseline with 1 × 4 px `--ink-3` ticks and 10.5 px
   `--ink-2` labels, whose unit follows U+202F (`1 h`). Both end labels always print; a middle one that
   would come within 4 px of another (a plot narrowed by a long region name) is left out.
 - **Ticks that touch.** Two or more headlines whose ticks would be under 3 px apart share one tick at
   the newest one's place, cut by 1 px page gaps into a part for each headline, up to four (Europe's two UN News
   stories of 23 Sep, both stamped 12:00 UTC by their feed, and a Global Voices story filed six hours
-  before them are one tick in three parts). A tick takes an older headline only while it stands under
+  before them are one tick in three parts, each part in its own source's color). A tick takes an older headline only while it stands under
   3 px from the tick's own place, so no headline is drawn 3 px or more from its age (a run of near ages
   never chains). In this file the 48 headlines draw 39 ticks, 17 headlines sharing one, three parts at
   most, at 390 px and at 320 px. A part is never thinner than 2 px: past four headlines the tick is
-  drawn in four parts and its count is printed beside it, 10.5 px `--ink-2` on a 3 px `--page` halo,
+  drawn in four parts and its count is printed beside it, 10.5 px `--ink-2` on a 3 px `--sheet` halo,
   drawn before the row's ticks so the halo never hides one.
 - **Kept from an earlier run** (`stale: true`): the tick is hollow, a 1 px `--ink` outline 4 × 12 px
   (in a shared tick, each part by its own headline), so a desk whose feeds failed shows it by shape, and the pane says it in words.
@@ -83,7 +88,7 @@ player; none is an index of ages.
   selects nothing) picks the nearest tick within 22 px in the tapped row. On `All` or that region's
   pane, the list scrolls (instantly, never animated) to the story; on another region's pane, the tab
   of the tick's region is chosen first. The tick gets the track's tracer head, a 6 px ink disc in a
-  1.5 px `--page` ring centered on the tick, inside its own row (a tick above or below at the same age,
+  1.5 px `--sheet` ring centered on the tick, inside its own row (a tick above or below at the same age,
   as UN News's noon stamps often are, stays clear), the story a 2 px
   ink rule in its left gutter and `aria-current="true"` on its link, until another tap or another pane. The live
   region says, once, with the month in words: `3 headlines at this age. Europe, 23 September:
@@ -101,11 +106,13 @@ player; none is an index of ages.
   and then a sentence a region, ages by the same rule: `Europe: 8 headlines, the newest 1 or 2 days and the oldest 15 days
   20 hours before the file was made.`, ending `; all kept from an earlier run` (or the count kept)
   where it applies, and `Oceania: no headlines.` for an empty region.
-- **Caption** (the pane's caption line, two lines, fixed): `Ticks: each headline's age when this file
-  was made, 1 Oct, 07:01, on a logarithmic scale. Tap one to find it.` On a region's pane `Ticks: each
-  headline's age when this file was made, 1 Oct, 07:01; Europe in ink. Tap one to find it.` Where a
-  hollow tick is drawn, the last sentence is `Hollow: from an earlier run.` Each form fits its two
-  lines at 312 px wide, the house's 125 % text check. Test hook: `window.__wn.datelines()` returns the
+- **Their plate** opens every pane, headed `Every headline by age` (15 px 650). Under the drawing, one
+  label on one line at 390 px, 11 px `--ink-2`: `Age when the file was made, 1 Oct, 07:01. Log scale.`
+  Then a key (10 px swatches, 11.5 px `--ink-2`, one row) where one is needed: on a region's pane its
+  sources' colors (`Global Voices`, `UN News`), which only its own row takes; and `From an earlier run`
+  beside a hollow swatch whenever a hollow tick is drawn. On `All` the table of sources is the colors'
+  key: `Source`, `Headlines`, `Feeds`, one row per source in the file's order with its swatch, its
+  headlines and its feeds that answered (`Global Voices 25 8 of 8`), the figures right-aligned. Test hook: `window.__wn.datelines()` returns the
   plot's geometry and every tick's x and headlines; `window.__wn.selected()` the picked headline.
 
 **What About says it is not.** The age at the file's making, not now (the stamp says how old the file
@@ -119,37 +126,49 @@ Voices files under two regions is a tick in both rows.
 
 ## 2. Palette
 
-This app has no data color. Its data is text and the Datelines are ink. The stock look's three hues
-were chrome, not data, and they go: the accent blue (`#2f6df6` / `#6f9bff`: the chosen tab, links,
-hover), the amber of cached and stale (`#a87400` / `#f2b322`) and the red of errors (`#c23b34` /
-`#f07a72`). `palette.py --json` prints the house tokens as `style.css` declares them; `tools/check.mjs`
-fails while the two differ.
+**One meaning color, in three hues: the source** (HOUSE 11.1 rule 5, 11.2, 11.3). The first, second and
+third entries of the file's `sources[]` take `--src-1`, `--src-2` and `--src-3`: on the chosen rows'
+ticks, the swatch at the head of each source line and in `All`'s table of sources. Nothing else has a
+color: not a control, a tab, a heading, a plate, a hairline or the stamp. Identity is still words (the
+source's name on every story, the region names) and state is shape (hollow) and words; the color never
+carries a fact alone. The stock look's three hues were chrome, not data, and went in the house pass: the
+accent blue (`#2f6df6` / `#6f9bff`), the amber of cached and stale (`#a87400` / `#f2b322`) and the red
+of errors (`#c23b34` / `#f07a72`). `palette.py --json` prints the house tokens and the register's three
+as `style.css` declares them; `tools/check.mjs` fails while the two differ.
+
+| Token | Means | Light | Dark | As text on `--page` / `--sheet`, light | dark |
+| --- | --- | --- | --- | --: | --: |
+| `--src-1` | the first source (Global Voices) | `#1f5f99` | `#8cbcf0` | 5.68 / 6.29 | 8.61 / 7.68 |
+| `--src-2` | the second (The Conversation) | `#a64a1a` | `#f0a070` | 4.96 / 5.49 | 8.12 / 7.24 |
+| `--src-3` | the third (UN News) | `#6d2736` | `#ab8198` | 8.99 / 9.96 | 5.15 / 4.60 |
+
+The three stand apart under normal vision and the three color-vision simulations at ΔE 0.143 or more
+(HOUSE 11.2's pairs, repeated by palette check 6), and each at least 0.18 from `--ink`. The third is
+wine in light and mauve in dark, not the picture board's purple, which failed against the first under
+deutan and protan vision. A tick over a scale hairline keeps at least 3.70:1.
 
 **Chrome**: HOUSE 3.1's tokens as they are, both themes (ink on page 14.80 / 14.43; ink-3 on page 4.78
 / 5.88; highest chroma 0.0239 light, 0.0223 dark).
 
 | | Light (film base) | Dark (the print) |
 | --- | --- | --- |
-| Ground | `--page` `#e8eef0`, L 0.945; notices and About on `--sheet` | `--page` `#141d21`, L 0.224 |
+| Ground | `--page` `#e8eef0`, L 0.945; the plates, notices and About on `--sheet` `#f6f9fa` (1.11:1 on the page, its `--line` edge 1.29:1) | `--page` `#141d21`, L 0.224; `--sheet` `#1c272c` (1.12:1, edge 1.39:1) |
 | The middle of the range | the scale's hairlines `--line` L 0.863; the other rows' ticks `--ink-3` L 0.515 | `--line` L 0.327; `--ink-3` L 0.676 |
-| Signature | the chosen rows' ticks, `--ink` `#0f1c23`, L 0.218, opaque | `--ink` `#e6edee`, L 0.941, opaque |
-| Lowest mark on the ground | 3.27, the scale's baseline (`--line-strong`); ticks not chosen 4.78 | 3.56; ticks not chosen 5.88 |
+| Signature | the chosen rows' ticks in their sources' colors, opaque, 5.49 to 9.96 on the plate | 4.60 to 7.68 on the plate |
+| Lowest mark on the plate | the scale's baseline (`--line-strong`) 3.62; ticks not chosen 5.29 | 3.18; ticks not chosen 5.25 |
 
-Each mark stands further from the page than the one before it, the ink furthest (palette check 2).
-Where a tick crosses a hairline: ink on `--line` 11.47 / 10.36, ink-3 on `--line` 3.71 / 4.22. The
-hairlines are quiet on purpose (1.29 / 1.39 on the page). Text: headlines `--ink`, source, date,
-byline and summary `--ink-2` (6.61 / 7.76); a row held down takes `--ink` at 7 % (`#d9dfe2` /
-`#232c2f`; headline 12.89 / 12.03, meta 5.76 / 6.47). The stock stamp and footer were 4.36:1 and its
-`Terms` links 3.97:1 (palette section 6); every text pair here is 4.5 or more. No hue anywhere, so
-no color-vision check applies: identity is words (the region names) and state is shape (hollow) and
-words.
+Each mark stands further from the ground than the one before it (palette check 2). The hairlines are
+quiet on purpose. Text on the plates: headlines `--ink`, the source line and summary `--ink-2` (7.32 /
+6.92 on `--sheet`); a row held down takes `--ink` at 7 %. Every text pair is 4.5 or more (palette
+sections 1, 4 and 6).
 
 ---
 
 ## 3. The chrome, object by object
 
-HOUSE 4.0's *panes from a pull*, in Finances' frame: header, a pane scrolling inside itself, a fixed
-caption band; no units key, key column, player, focus mode or opening. Not a view: the hero is a list
+HOUSE 4.0's *panes from a pull*, in the register's frame (HOUSE 11.1): the name, one stamp line, the
+tabs and the pane, which scrolls inside itself; no caption band, units key, key column, player, focus
+mode or opening. Not a view: the hero is a list
 of headlines, so no focus mode (HOUSE 4.10). No time player: time is the Datelines' axis.
 
 - **Header.** `<h1 translate="no">World News</h1>`, 15 px 650. The stamp, a `<button>` opening About
@@ -169,41 +188,44 @@ of headlines, so no focus mode (HOUSE 4.10). No time player: time is the Datelin
   focused tab says its own name, so the live region adds nothing. The pane is
   `role="tabpanel"` labeled by the chosen tab. The app opens on `All` and stores nothing (no
   `localStorage`, as today).
-- **The pane**: the Datelines first, then a statement where it applies (on a region's pane, and under
-  each region's heading on `All`), then the stories. On `All`, a section per region headed 13.5 px 650 in the data's words (`Europe`), parted by
-  hairlines. No cards, no surface under the list: rows on the page.
+- **The pane**: sections on plates (HOUSE 11.1 rule 4: `--sheet`, a 1 px `--line` edge, radius 8 px,
+  padding 12 px, 12 px apart), first the Datelines' plate, then one per region (all six on `All`, its own
+  on a region's pane), each headed by its name, 15 px 650, with `8 headlines, newest 2 d` at the right
+  (12.5 px `--ink-2`; the newest age in whole hours or days, never rounded up), then a statement where
+  it applies, then the stories. Its foot pads the home indicator itself, 28 px plus the safe area, and
+  ends with one text key, `Sources, their terms and credits are in About.` (12.5 px `--ink-2`,
+  underlined at a 3 px offset, 44 px tall, 14 px under the last plate), which opens About. On a wide
+  screen the pane is a 760 px column centered with the header, whose name starts where the plates do.
 - **A story** is a row whose headline is its `<a>` (target `_blank`, `rel="noopener noreferrer"`, only
   `http(s)` addresses, as before), named by its own words and described by the source line
   (`aria-describedby`). The link's `::after` covers the row, so a tap anywhere opens the story, while
-  the source line, byline and summary are text after it that VoiceOver reaches by swiping. In order: the headline, 13.5 px / 18 px, 560, `--ink`; the source
-  line, 11.5 px / 16 px `--ink-2`, words joined by commas: `UN News, 23 Sep` where the feed gives a
+  the source line and summary are text after it that VoiceOver reaches by swiping. In order: the headline, 15 px / 20 px, 600, `--ink`; the source
+  line, 12.5 px / 17 px `--ink-2`, opening on an 8 px swatch in the source's color, words joined by commas: `UN News, 23 Sep` where the feed gives a
   date (published exactly 00:00:00 or 12:00:00 UTC; the feed's UTC date), `Global Voices, 28 Sep,
   08:00` where it gives a time (the phone's zone, 24-hour, built by hand), the year added when it is
-  not the phone's; then
+  not the phone's; then the byline joined to it, `, by Elmira Lyapina`, when the feed names one (word for
+  word, an author's institution included); then
   `, kept from an earlier run` in `--ink` where `stale`, and `, also under Middle East` where the same
-  link is in another region; the byline on its own line, `By Elmira Lyapina`, when the feed names one;
-  the summary, 12.5 px / 17 px `--ink-2`, when the feed gives one; each line at most 62 characters
-  wide and a long word broken anywhere, so the page never scrolls sideways. Rows
-  parted by `--line` hairlines, 10 px above and 11 below. A row held down: `--ink` at 7 %. No hover
+  link is in another region; the summary, 12.5 px / 17 px `--ink-2`, when the feed gives one, held to
+  two lines on `All` (display only: the words are the feed's, and a region's pane shows them whole);
+  each line at most 62 characters wide and a long word broken anywhere, so the page never scrolls
+  sideways. Rows parted by `--line` hairlines, 11 px above and 12 below. A row held down: `--ink` at 7 %. No hover
   color. The selected story (from a tick): the 2 px ink rule in the gutter.
 - **Statements**, sentences on the page, 13.5 px `--ink`, the first words at 620: `Europe's feeds did
   not answer on the last run: gv-western-europe, gv-eastern-europe and un-europe (HTTP 503). These 8
   headlines are kept from an earlier run.` When only some failed: `One of Europe's 3 feeds did not
   answer on the last run: …`, and the count of headlines kept. An empty region: `No headlines for
   Oceania on the last run, and none kept from an earlier one.` No badge, dot or color.
-- **Caption band** (fixed, on `--page`, 16 px gutters): the caption line per pane (section 1), 11 px /
-  15 px `--ink-2`, two lines below 640 px and one from 640; then the credits, 10.5 px `--ink-2`, built
-  from the file's `sources[].name` in its order: `Headlines from Global Voices, The Conversation and UN
-  News; terms in About.` The words around the names are the constant `check.mjs` pins; the shoot run
-  checks the built line against its own read of the file. The full attribution and license lines
-  are in About, word for word as the file gives them.
+- **No caption band** (HOUSE 11.1 rule 1). How to read the Datelines is their plate's label and key
+  (section 1); the credit line is About's. Each story names its publisher on its own source line, which
+  is where each publisher's license asks for its credit, and the headline is the link to the original.
 - **Readout card**: none. A tick's readout is its story in the list, which already holds everything
   the item has (a stated departure from HOUSE 4.7: a card would repeat the row it points at). The tap
   rule is the house's: a tap selects, a swipe scrolls.
-- **About** (HOUSE 4.8), opened by the stamp: *What the Datelines are* (section 1, what they show and
+- **About** (HOUSE 4.8), opened by the stamp and by the key at each pane's foot: *What the Datelines are* (section 1, what they show and
   what they do not); *This data*, `label: value` lines: `Updated: Thu 1 Oct 2026, 07:01 (UTC+2)`,
   `Stale after: 30 hours`, `Regions: 6`, `Headlines: 48`, `Dates without a time: 20`, `Feeds: 17 of 17
-  answered on the last run` (and each failed feed's id with its note), `In two regions or more: 3`; *Sources and credits*: per source, its name, then its `attribution` and `licence` lines
+  answered on the last run` (and each failed feed's id with its note), `In two regions or more: 3`; *Sources and credits*: first the credit line, built from the file's `sources[].name` in its order, `Headlines from Global Voices, The Conversation and UN News.` (the words around the names are the constant `check.mjs` pins); then per source, its name, then its `attribution` and `licence` lines
   word for word, then its terms address printed without its scheme and itself the link
   (`creativecommons.org/licenses/by/3.0/`); then the stock footer's two sentences as plain words
   (headlines, the publishers' own summary lines, bylines and links, nothing else copied; a tap on a
@@ -223,8 +245,10 @@ of headlines, so no focus mode (HOUSE 4.10). No time player: time is the Datelin
   updated 07:01.` once.
 - **Motion.** The tracer (160 ms, `clip-path`) and About (220 ms in, out at once). Nothing else moves;
   the scroll to a story is instant. Under Reduce Motion every duration is 0 s.
-- **A phone on its side**: a 46 px header row (name over stamp, tabs beside), a one-line caption band;
-  the Datelines' plot stays at most 480 px. Safe areas as HOUSE 4.14.
+- **A phone on its side**: a 46 px header row (name over stamp, tabs beside); the Datelines' plot stays
+  at most 480 px. Safe areas as HOUSE 4.14, the pane padding the bottom one itself.
+- **Pressed tints**: an empty, passive `touchstart` listener on the document lets iOS draw `:active` (a
+  story held down, a key pressed).
 
 ---
 
@@ -238,9 +262,9 @@ arrows become words). The data's characters today (é í ó – — ‘ ’ “ 
 and come from three publishers in several languages, so a character the cut lacks is set by the
 system face through `--face`'s fallback (HOUSE 2.3 rule 3's exception, for a daily file):
 `check.mjs` lists such characters in the current file as information, never as a failure. The system
-stack, the `code` face and the uppercase eyebrows go. Scale: 10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 px;
-no 21 px figure (the subject is the headlines, and none of them is a number); weights 400, 560, 620,
-650; no capitals, no letter-spacing. The SVG's text takes the page's face; the Datelines measure their
+stack, the `code` face and the uppercase eyebrows go. Scale: the pane apps' (HOUSE 11.1 rule 2), of
+which this app uses 10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 px; no key number at 34 px and no 21 px figure
+(the subject is the headlines, and none of them is a number); weights 400, 560, 600, 620, 650; no capitals, no letter-spacing. The SVG's text takes the page's face; the Datelines measure their
 label column after `document.fonts.load('620 12.5px "Ysabeau Office"')`. The credit line word for word
 in About (`Type: `) and `NOTES.md`.
 
@@ -265,23 +289,21 @@ nothing to put back. **The camera needs no change.** No string is British.
 
 ## 6. Budget
 
-*Measured* 2026-10-02 by `node tools/check.mjs`: code as every shipped `.html`, `.css` and `.js`; the ZIP
+*Measured* 2026-10-08 by `node tools/check.mjs`: code as every shipped `.html`, `.css` and `.js`; the ZIP
 built by `build-zips.yml`'s command (`zip -q -r -X … . -x '.*' '*/.*' 'screenshots/*' 'tools/*'
-'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'`), then its size.
+'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'`), then its size. The data is the refresh's, so the ZIP moves
+with each file by a few hundred bytes.
 
-| | Before the pass | As built | Cap |
-| --- | --: | --: | --: |
-| App code | 21 787 | 46 119 | 200 000, the house's |
-| Fonts | 0 | 40 075 | 160 000 |
-| ZIP | 27 445 | **86 993** | **88 000, the lead's ruling (2026-10-02, plan 0011 D30)**: D5's formula gave 72 140 (27 445 × 1.25 plus 37 834 for the face) until the build had measured 84 990 with nothing cut or minified; the face alone stores 37 510, more than the stock ZIP. The ZIP is within 5 % of it: 1 007 B left (HOUSE 8), so whatever the app gains, it pays for |
-| Data | `data/snapshot.json` `4a26ced7…749018409` | `ecb80872…f910c5d2c`: the same but the two license lines, swept to US English (`tools/DECISIONS.md`) | pinned by `check.mjs` |
+| | Before the house pass | Before the register | As built | Cap |
+| --- | --: | --: | --: | --: |
+| App code | 21 787 | 46 119 | 51 998 | 200 000, the house's |
+| Fonts | 0 | 40 075 | 40 075 | 160 000 |
+| ZIP | 27 445 | 86 024 | **88 954** | **107 530**, the house rule for the register's pass (86 024 × 1.25) |
+| Data | | | any file the refresh writes, checked for its shape and its swept license lines | `check.mjs` item 5 |
 
-**The ZIP is over D5's cap.** Stored in it, the face and its license take 37 510 B, the data 9 156, the
-app code 17 737 (7 602 before the pass), this file about 10 600 and `NOTES.md` and `PROMPT.md`
-10 346; this file's own size moves the last digits, and `node tools/check.mjs` prints the exact
-figure. The formula leaves a 27 kB app about 14 000 B for its code and this file together; the house's
-two modules, the stylesheet, About and the Datelines need more than that, as the art pass's simulation
-foresaw (about 84 000 B).
+Stored in the ZIP: the face and its license 37 510 B, the data about 8 200, the app code 19 678, this
+file about 11 500 and `NOTES.md` and `PROMPT.md` 10 450; this file's own size moves the last
+digits, and `node tools/check.mjs` prints the exact figure.
 
 ---
 
@@ -290,11 +312,11 @@ foresaw (about 84 000 B).
 | Tell | Here |
 | --- | --- |
 | 1. Cream, serif display, terracotta | film base; one sans; no accent |
-| 2. Near-black with an acid accent | slate print; the stock's blue goes; the bright thing is the Datelines' ink |
-| 3. Broadsheet | one column, hairlines between stories and sections, radii by role |
-| 4. The SaaS-card kit | the stock's white region cards with 14 px radii go; rows on the page |
+| 2. Near-black with an acid accent | slate print; the stock's blue goes; the three colors are the sources', each meaning one publisher |
+| 3. Broadsheet | one column of plates, hairlines between stories, radii by role |
+| 4. The SaaS-card kit | the stock's white region cards with 14 px radii and shadows went; the register's plates are `--sheet` with a 1 px edge, no shadow, each a section with one heading |
 | 5. Tracked capitals | none; `EUROPE`, `SOURCES` and `CACHED` go |
-| 6. Middle-dot joins | commas (`UN News, 23 Sep`) and lines (`By …`); the stale stamp's middle dot goes |
+| 6. Middle-dot joins | commas (`UN News, 23 Sep`, `…, by Elmira Lyapina`); the stale stamp's middle dot goes |
 | 7. Spaced em dash | none in the app's own text or the data's license lines; the publishers' words as written |
 | 8. Tinted near-black | ink `#0f1c23` as ink; the stock's `#0b0e13` ground goes |
 | 9. Monospace labels | none; the notice's `code` face goes |

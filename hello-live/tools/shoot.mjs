@@ -2,7 +2,10 @@
 // dark (HOUSE.md section 7.2 as one live card allows: no player, no focus mode, no units key, no readout card;
 // ART.md section 3, "Not here, and why"). The phone's zone is Europe/Oslo. Two clocks from ART.md: Sat 3 Oct 2026,
 // 10:00 UTC (12:00 in Oslo: the committed file run out, what a fresh install and the marketing camera see) and
-// Thu 1 Oct 2026, 02:30 UTC (31 minutes after the committed file was written: the fresh state). Fails on any console
+// Thu 1 Oct 2026, 02:30 UTC (31 minutes after the committed file was written: the fresh state). "The committed file" is
+// the fixed day, tools/fixtures/snapshot.json (the file of 1 Oct; check.mjs pins it), served as data/snapshot.json,
+// because the refresh job rewrites the shipped file about hourly; one stage reads the shipped file as it is (plan 0012
+// package 4). Fails on any console
 // error or warning, page error, failed request, HTTP ≥ 400, or any request outside the local server. Every figure it
 // asserts is worked out here from data/snapshot.json with Node's own tools and formulas written in this file, never
 // by importing js/.
@@ -21,7 +24,9 @@
 // (nothing rebuilt), a new file (a punch added, said once), a broken and a missing replacement (the view kept, Close),
 // hidden (nothing runs), the minute (the stamp turns stale, now moves), storage blocked, the bugs on record at their
 // fixtures (B6 ahead, B7 undated, B16 a long headline), four locales, Reduce Motion, broken data at the start and its
-// recovery, the widths and a phone on its side. Pictures: tools/.work/shots/, and with SCREENSHOTS=1
+// recovery, the widths, a phone on its side and a wide window (the header centered with the pane), the stamp on one
+// line in every state it writes, and the shipped file. Plan 0012's register as this app takes it (HOUSE 11.1): the
+// key number, the card's key, no band, the About key, the white ground. Pictures: tools/.work/shots/, and with SCREENSHOTS=1
 // screenshots/*-{light,dark}.png; never screenshots/app.png, the README's composite, whose hash is checked unchanged.
 
 process.env.TZ = 'Europe/Oslo';   // before any Date: this script's own clock forms are the phone's
@@ -51,10 +56,14 @@ const TZ = 'Europe/Oslo';
 const RANOUT = '2026-10-03T10:00:00Z', FRESH = '2026-10-01T02:30:00Z';
 
 /* ── the file and the card's rule, written here ── */
-const rawSnap = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
+const rawSnap = fs.readFileSync(path.join(APP, 'tools/fixtures/snapshot.json'), 'utf8');   // the fixed day, served as data/snapshot.json
+const liveSnap = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');               // the shipped file, for its own stage
 const snap = JSON.parse(rawSnap);
 const GEN = Date.parse(snap.generatedAt);
 const NN = ' ', MI = '−';
+// a row's value as the app should print it, written here from HOUSE 6.1 and the lead's ruling (2026-10-08), not imported:
+// a plain digit string of four digits or more, with no leading zero, grouped in threes with U+202F
+const grouped = (v) => (/^[1-9]\d{3,}$/.test(v) ? v.replace(/\B(?=(\d{3})+(?!\d))/g, NN) : v);
 const DAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const p2 = (n) => String(n).padStart(2, '0');
@@ -94,7 +103,7 @@ function marks(record, now, pph) {
   }
   return { P, T };
 }
-const CAPTION = (ms) => `A mark where each file was written, by day; its tail runs to its first reading here. Hours: this phone’s, UTC+${-new Date(ms).getTimezoneOffset() / 60}.`;
+const KEY = (ms) => ['File written', 'Until it was first read here', `Hours: this phone’s, UTC+${-new Date(ms).getTimezoneOffset() / 60}`];
 const CREDIT = 'Data: this repository’s own refresh job; no outside source.';
 const FONT_CREDIT = 'Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.';
 const withGen = (iso, extra = {}) => JSON.stringify({ ...snap, generatedAt: iso, ...extra }, null, 2);
@@ -147,9 +156,10 @@ function decodePng(buf) {
 /* ── the server: the app folder, with the data file replaceable, refused or cut off ── */
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.png': 'image/png', '.md': 'text/markdown', '.txt': 'text/plain' };
 let override = {};
+const BASE = { '/data/snapshot.json': { body: rawSnap } };   // what is served when nothing overrides it
 let reads = 0;
 const server = http.createServer((req, res) => {
-  const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u];
+  const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u] || BASE[u];
   if (u === '/data/snapshot.json') reads++;
   if (ov && ov.cut) { req.socket.destroy(); return; }
   if (ov && ov.status) { res.writeHead(ov.status); res.end(); return; }
@@ -167,6 +177,9 @@ console.log(`headless Chromium ${browser.version()}: every load time below is a 
 const fails = [];
 const check = (ok, msg) => { if (!ok) fails.push(msg); console.log(`    ${ok ? 'ok  ' : 'FAIL'} ${msg}`); };
 const ready = () => window.__hl && window.__hl.ready();
+/** The stamp on one line at 16 px (HOUSE 7.2, plan 0012 F8), whatever it says. */
+const stampLine = (A) => A.w(() => { const s = document.getElementById('stamp'), r = s.getBoundingClientRect(); return { h: r.height, text: s.textContent, one: Math.abs(r.height - 16) <= 1 && s.getClientRects().length === 1 }; });
+const stampCheck = async (A, label) => { const s = await stampLine(A); check(s.one, `the stamp on one line, ${Math.round(s.h * 10) / 10} px tall (${label}): "${s.text.replace(/\u202f/g, ' ')}"`); };
 
 async function open(scheme, o = {}) {
   const ctx = await browser.newContext({ viewport: { width: o.w || 390, height: o.h || 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme: scheme, reducedMotion: o.reduced ? 'reduce' : 'no-preference', timezoneId: TZ, locale: o.locale || 'en-US' });
@@ -331,23 +344,29 @@ for (const scheme of schemes) {
     const { page, w } = A, now = Date.parse(time), tag = state === 'run out' ? 'ranout' : 'fresh';
     console.log(`  -- ${state} (${time}); load to the card: ${A.ms} ms (headless)`);
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent, whole: r.height > 0 && r.bottom <= innerHeight + 1, face: document.fonts.check('400 10.5px "Ysabeau Office"'), loaded: [...document.fonts].filter((f) => f.status === 'loaded').length,
+      const sc = document.querySelector('.about-body section:nth-of-type(3)'), first = sc && sc.querySelector('h3 + p');
+      return { credits: first ? first.textContent : null, firstId: first && first.id, footer: !!document.querySelector('footer, #band, #credits, #capline'), face: document.fonts.check('400 10.5px "Ysabeau Office"'), loaded: [...document.fonts].filter((f) => f.status === 'loaded').length,
         stamp: document.getElementById('stamp').textContent, head: document.getElementById('headline').textContent, lead: document.getElementById('lead').textContent, cap: document.getElementById('caption').textContent,
         rows: [...document.querySelectorAll('#rows dt')].map((d, i) => `${d.textContent}=${document.querySelectorAll('#rows dd')[i].textContent}`).join('|'),
-        capline: document.getElementById('capline').textContent, statement: !!document.getElementById('statement'),
+        key: [...document.querySelectorAll('#card-key .k')].map((k) => k.textContent), keyNext: document.getElementById('card').nextElementSibling.id, sw: [...document.querySelectorAll('#card-key .sw')].map((e) => `${e.getBoundingClientRect().width}x${e.getBoundingClientRect().height}`),
+        fig: [getComputedStyle(document.getElementById('headline')).fontSize, getComputedStyle(document.getElementById('headline')).fontWeight, getComputedStyle(document.getElementById('lead')).fontSize, Math.round(document.getElementById('lead').getBoundingClientRect().top - document.getElementById('headline').getBoundingClientRect().bottom)],
+        dd: getComputedStyle(document.querySelector('#rows dd')).fontSize + '/' + getComputedStyle(document.querySelector('#rows dd')).fontWeight, ground: getComputedStyle(document.body).backgroundColor,
+        aboutKey: (() => { const k = document.getElementById('pane').lastElementChild; return k.id === 'about-key' ? k.textContent : null; })(), statement: !!document.getElementById('statement'),
         idle: window.__frames, timer: window.__hl.timer(), record: window.__hl.record(), live: document.querySelectorAll('[aria-live]').length, mainLive: document.getElementById('main').getAttribute('aria-live'),
         h1: document.querySelector('h1').textContent, hint: document.getElementById('stamp').getAttribute('aria-describedby') && document.getElementById(document.getElementById('stamp').getAttribute('aria-describedby')).textContent };
     });
     const camRow = await page.getByRole('heading', { name: 'Hello Live' }).isVisible();
     check(camRow && b.h1 === 'Hello Live', 'the name "Hello Live", the Library row the camera opens (the camera taps nothing inside the app)');
-    check(b.credits === CREDIT && b.whole, `the credits on screen word for word: "${b.credits}"`);
+    check(b.credits === CREDIT && b.firstId === 'about-credit-line' && !b.footer, `the credit in About word for word, its first Sources and credits paragraph: "${b.credits}"; no footer on the front (HOUSE 4.15)`);
+    check(b.fig[0] === '34px' && b.fig[1] === '650' && b.fig[2] === '13.5px' && b.fig[3] >= 0 && b.dd === '15px/600' && b.ground === (scheme === 'light' ? 'rgb(255, 255, 255)' : 'rgb(20, 29, 33)') && b.aboutKey === 'Sources, method and credits are in About.',
+      `the register: the headline at ${b.fig[0]}/${b.fig[1]}, its lead under it (${b.fig[3]} px below) at ${b.fig[2]}; the rows' values ${b.dd}; the ground ${b.ground}; the pane ends with "${b.aboutKey}"`);
+    await stampCheck(A, `${state}, ${scheme}`);
     check(b.face && b.loaded === 1, `the face is loaded before the card is drawn (${b.loaded} face)`);
     check(b.head === snap.headline && b.lead === `${hm(GEN)} on this phone’s clock` && b.cap === snap.caption && b.rows === ROWS, `the file as the file gives it: "${b.head}", the lead "${b.lead}" (the same instant in Oslo), the caption, the rows ${b.rows}`);
     const wantStamp = stampText(GEN, now);
     check(b.stamp === wantStamp && b.hint === 'Opens About this data.', `the stamp: "${b.stamp}" (built here: "${wantStamp}"; B1, B5), described as "${b.hint}"`);
     check(!b.statement, 'no sentence under the rows: the stamp and About carry staleness (owner call 10, the default reversed after review)');
-    check(b.capline === CAPTION(now), `the caption line: "${b.capline}"`);
+    check(JSON.stringify(b.key) === JSON.stringify(KEY(now)) && b.keyNext === 'card-key' && b.sw.join() === '3x10,10x2', `the card's key under it, in place of the band's sentence: ${b.key.join(', ')}; the punch ${b.sw[0]} and the tail ${b.sw[1]} drawn small`);
     check(b.record.length === 1 && b.record[0][0] === GEN && b.record[0][1] === now, `the record: one file, written ${hm(GEN)}, first read here at the faked clock ${hm(now)}`);
     check(b.idle === 0 && b.timer && b.live === 1 && b.mainLive === null, `idle: ${b.idle} animation frames asked for; one timeout waits for the next minute; one polite live region and <main> is not one (B10, B15)`);
     const g = await cardCheck(A, `the Time Card, ${state}`, [[GEN, now]], now, 358);
@@ -358,7 +377,7 @@ for (const scheme of schemes) {
     check(si.bad.length === 0, `SI and the date forms in ${si.n} visible text nodes; no "just now"${si.bad.length ? ': ' + si.bad.slice(0, 5).join(' | ') : ''}`);
     await inkCheck(A, `the one bold thing, ${state}`);
     const hits = await hitTargets(w);
-    check(hits.bad.length === 0 && hits.n === 1, `${hits.n} control on the page (the stamp), 44 × 44 or more${hits.bad.length ? ': ' + hits.bad.join('; ') : ''}`);
+    check(hits.bad.length === 0 && hits.n === 2, `${hits.n} controls on the page (the stamp, the About key), 44 × 44 or more${hits.bad.length ? ': ' + hits.bad.join('; ') : ''}`);
     const side = await w(() => document.documentElement.scrollWidth > innerWidth + 1 || document.getElementById('main').scrollWidth > document.getElementById('main').clientWidth + 1);
     check(!side, 'nothing runs past the page\'s width');
     await A.shot(`card-${tag}-${scheme}`);
@@ -411,7 +430,7 @@ console.log('\n== once (light unless named)');
   {
     await A.tap('#stamp');
     await page.waitForTimeout(400);
-    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main', 'band'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
       text: document.querySelector('.about-body').textContent.replace(/[ \t\n]+/g, ' '),
       list: [...document.querySelectorAll('#about-list dt')].map((d, i) => `${d.textContent} ${document.querySelectorAll('#about-list dd')[i].textContent}`) }));
     const now = Date.parse('2026-10-01T07:58:30Z');
@@ -527,6 +546,7 @@ for (const [label, body, time, want] of [
     extra = await A.w(() => [...document.querySelectorAll('#about-list dt')].map((d, i) => `${d.textContent} ${document.querySelectorAll('#about-list dd')[i].textContent}`).filter((t) => /^(Written|Read before)/.test(t)).join('; '));
   }
   const okExtra = want.before ? extra.includes('Read before written: 1 file (a clock behind the server’s), drawn without a tail') : want.lead ? extra === 'Written: not readable in the file' && s.lead && s.name === 'Time card, 7 days: no file read.' && s.head === 'sometime' : true;
+  await stampCheck(A, label);
   check(s.stamp === want.stamp && s.punches === want.punches && s.tails === want.tails && okExtra, `${label}: "${s.stamp}", ${s.punches} punch(es), ${s.tails} tail(s)${extra ? `; About: ${extra}` : ''}`);
   await closeOut(A, label);
   override = {};
@@ -536,7 +556,7 @@ for (const [label, body, time, want] of [
   const words = [];
   for (const locale of ['en-US', 'en-GB', 'nb-NO', 'ja-JP']) {
     const A = await open('light', { locale });
-    words.push([locale, await A.w(() => [document.getElementById('head').innerText, document.getElementById('pane').innerText, document.getElementById('band').innerText, document.getElementById('card').getAttribute('aria-label')].join('\n'))]);
+    words.push([locale, await A.w(() => [document.getElementById('head').innerText, document.getElementById('pane').innerText, document.getElementById('card').getAttribute('aria-label')].join('\n'))]);
     await closeOut(A, `locale ${locale}`);
   }
   check(words.every(([, x]) => x === words[0][1]), `the same words, letter for letter, under ${words.map(([l]) => l).join(', ')} (${words[0][1].length} characters)`);
@@ -564,7 +584,7 @@ for (const [label, ov, want, expect] of [
   const s = await A.w(() => ({ lines: [...document.querySelectorAll('#notice p')].map((p) => p.textContent), role: document.getElementById('notice').getAttribute('role'), stamp: document.getElementById('stamp').textContent, pane: document.getElementById('pane').hidden, code: document.querySelectorAll('#notice code').length, tick: document.getElementById('notice').textContent.includes('`'), amp: document.getElementById('notice').textContent.includes('&lt;'), face: getComputedStyle(document.querySelector('#notice p')).fontFamily.split(',')[0] }));
   const okLines = want ? JSON.stringify(s.lines) === JSON.stringify(want) : s.lines.length === 3 && /^data\/snapshot\.json could not be read \(.+\)\.$/.test(s.lines[0]) && s.lines[1] === 'Opened from a file, a browser blocks the read: serve the folder with a local web server.' && s.lines[2] === 'In Snuggery, Options, then App Files shows what the file holds.';
   check(okLines && s.role === 'alert' && s.stamp === 'No usable file.' && s.pane && !s.code && !s.tick && !s.amp && /Ysabeau Office/.test(s.face), `B14, broken data, ${label}: "${s.lines.join(' / ')}" on a plate (role alert), no code face, no backtick, the stamp "No usable file."`);
-  if (label === 'a web page') await A.shot('broken-light', false);
+  if (label === 'a web page') { await A.shot('broken-light', false); await stampCheck(A, 'no usable file'); }
   if (label === 'missing') {
     override = {};
     await A.back();
@@ -575,22 +595,25 @@ for (const [label, ov, want, expect] of [
 }
 override = {};
 // the widths: no sideways scroll, the caption inside its lines, the card at its whole px per hour
-for (const [label, wv, hv, inner] of [['320 × 568', 320, 568, 288], ['360 × 740', 360, 740, 328], ['375 × 667', 375, 667, 343], ['390 × 844', 390, 844, 358], ['125 % text (312 × 675)', 312, 675, 280], ['on its side (844 × 390)', 844, 390, 720], ['a tablet (820 × 1180)', 820, 1180, 720]]) {
+for (const [label, wv, hv, inner] of [['320 × 568', 320, 568, 288], ['360 × 740', 360, 740, 328], ['375 × 667', 375, 667, 343], ['390 × 844', 390, 844, 358], ['125 % text (312 × 675)', 312, 675, 280], ['on its side (844 × 390)', 844, 390, 728], ['a tablet (820 × 1180)', 820, 1180, 728], ['wide (1024 × 768)', 1024, 768, 728]]) {
   const A = await open('light', { w: wv, h: hv });
   const r = await A.w(() => {
-    const m = document.getElementById('main'), cap = document.getElementById('capline'), p = document.getElementById('pane'), ps = getComputedStyle(p);
-    return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.scrollHeight <= cap.clientHeight + 1, capH: cap.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+    const m = document.getElementById('main'), key = document.getElementById('card-key'), p = document.getElementById('pane'), ps = getComputedStyle(p);
+    return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, keyH: key.getBoundingClientRect().height, head: document.getElementById('head').getBoundingClientRect().height,
       inner: Math.floor(p.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight)), pph: window.__hl.card().pph, row: window.__hl.card().row, gap: Math.round(m.getBoundingClientRect().bottom - p.getBoundingClientRect().bottom), cardRight: document.getElementById('card').getBoundingClientRect().right, paneRight: p.getBoundingClientRect().right - parseFloat(ps.paddingRight),
-      left: [document.querySelector('#pane .fig').getBoundingClientRect().left, document.querySelector('h1').getBoundingClientRect().left, cap.getBoundingClientRect().left].map(Math.round) };
+      left: [document.querySelector('#pane .fig').getBoundingClientRect().left, document.querySelector('h1').getBoundingClientRect().left, key.getBoundingClientRect().left].map(Math.round) };
   });
   const pph = Math.min(PPH(inner), 24);
   // on its side there is no free height, so the rows stay at their least; upright they fill it, or reach 40 px
-  const land = wv > hv ? r.head <= 47 && r.row === 14 : r.row === 40 || r.gap >= 0 && r.gap <= 6;
+  const land = hv < 500 ? r.head <= 47 && r.row === 14 : r.row === 40 || r.gap >= 0 && r.gap <= 6;
   const hits = await hitTargets(A.w);
-  check(!r.side && r.cap && r.capH === (wv >= 640 ? 15 : 30) && r.inner === inner && r.pph === pph && r.cardRight <= r.paneRight + 0.5 && r.left[0] === r.left[1] && r.left[1] === r.left[2] && land && hits.bad.length === 0,
-    `${label}: no sideways scroll, the caption inside its ${wv >= 640 ? 'one line' : 'two lines'}, the card at ${r.pph} px an hour on a ${r.inner} px pane inside the pane, the rows ${r.row} px (${r.gap} px of the pane left below the page), the left edges together (x ${r.left.join(', ')})${wv > hv ? `, the header ${Math.round(r.head)} px` : ''}, ${hits.n} control(s) at 44 px or more${hits.bad.length ? ': ' + hits.bad.join('; ') : ''}`);
+  const wantLeft = Math.round(Math.max(16, wv / 2 - 364));
+  check(!r.side && r.keyH <= (wv >= 640 ? 15.5 : 32.5) && r.inner === inner && r.pph === pph && r.cardRight <= r.paneRight + 0.5 && r.left[0] === r.left[1] && r.left[1] === r.left[2] && r.left[0] === wantLeft && land && hits.bad.length === 0,
+    `${label}: no sideways scroll, the card's key on ${r.keyH <= 15.5 ? 'one line' : 'two lines'} (${Math.round(r.keyH)} px), the card at ${r.pph} px an hour on a ${r.inner} px pane inside the pane, the rows ${r.row} px (${r.gap} px of the pane left below the page), the left edges together at x ${r.left.join(', ')} (max(16, 50 % − 364) = ${wantLeft}: the header centered with the pane)${hv < 500 ? `, the header ${Math.round(r.head)} px` : ''}, ${hits.n} control(s) at 44 px or more${hits.bad.length ? ': ' + hits.bad.join('; ') : ''}`);
   if (wv === 320) await A.shot('card-320-light', false);
   if (wv > hv && wv < 1000 && hv < 500) await A.shot('card-landscape-light', false);
+  if (wv === 1024) await A.shot('card-wide-light', false);
+  await stampCheck(A, label);
   await closeOut(A, label);
 }
 // B16: a long unbroken headline at 320 px never widens the page
@@ -601,6 +624,44 @@ for (const [label, wv, hv, inner] of [['320 × 568', 320, 568, 288], ['360 × 74
   check(!r.side && r.right <= 320 - 16 + 0.5, `B16, a 40-character unbroken headline and a 70-character caption at 320 px: no sideways scroll, the headline ends at x ${Math.round(r.right)}`);
   await A.shot('long-headline-320-light', false);
   await closeOut(A, 'B16');
+  override = {};
+}
+// a row value of four digits or more, whatever the day the shipped file was made: "1000" and "16380" print grouped with
+// U+202F, a three-digit value and a leading-zero code as written, and the file is not changed (HOUSE 6.1; the lead's
+// ruling, 2026-10-08)
+{
+  const runs = [{ label: 'Day of year', value: '279' }, { label: 'Week', value: '41' }, { label: 'Minute of day', value: '1000' }, { label: 'Count', value: '16380' }, { label: 'Code', value: '0420' }];
+  override = { '/data/snapshot.json': { body: withGen(snap.generatedAt, { runs }) } };
+  for (const wv of [390, 320]) {
+    const A = await open('light', { w: wv, h: 844 });
+    const r = await A.w(() => ({ vals: [...document.querySelectorAll('#rows dd')].map((d) => d.textContent), side: document.documentElement.scrollWidth > innerWidth + 1 }));
+    const want = ['279', '41', `1${NN}000`, `16${NN}380`, '0420'];
+    check(JSON.stringify(r.vals) === JSON.stringify(want) && JSON.stringify(want) === JSON.stringify(runs.map((x) => grouped(x.value))) && !r.side,
+      `the rows at ${wv} px: ${runs.map((x, i) => `"${x.value}" as "${(r.vals[i] || '').replace(/\u202f/g, ' ')}"`).join(', ')} (four digits and up grouped with U+202F; a leading zero is a code), no sideways scroll`);
+    await closeOut(A, `four-digit rows, ${wv} px`);
+  }
+  override = {};
+}
+// the shipped data/snapshot.json as the refresh job last wrote it, at its own clock (31 minutes after it was made)
+{
+  const live = JSON.parse(liveSnap), at = new Date(Date.parse(live.generatedAt) + 31 * 60000).toISOString();
+  override = { '/data/snapshot.json': { body: liveSnap } };
+  for (const scheme of schemes) {
+    const A = await open(scheme, { time: at });
+    const s = await A.w(() => ({ head: document.getElementById('headline').textContent, notice: document.getElementById('notice').hidden, punches: document.querySelectorAll('#card .punch').length, rows: document.querySelectorAll('#rows dt').length, stamp: document.getElementById('stamp').textContent }));
+    const c = await contrastOf(A.w), si = await siOf(A.w);
+    // a row value of four digits or more ("Minute of day" is 1000 to 1439 from 16:40 UTC each day) prints grouped with
+    // U+202F (HOUSE 6.1; the lead's ruling, 2026-10-08), the data as the file writes it
+    const rowVals = await A.w(() => [...document.querySelectorAll('#rows dd')].map((d) => d.textContent));
+    const wantVals = live.runs.map((r) => grouped(String(r.value)));
+    check(JSON.stringify(rowVals) === JSON.stringify(wantVals),
+      `the shipped file, ${scheme}: the rows print ${live.runs.map((r, i) => `${r.label} "${r.value}" as "${(rowVals[i] || '').replace(/\u202f/g, ' ')}"`).join(', ')} (a plain count of four digits or more grouped with U+202F)`);
+    check(s.head === live.headline && s.notice && s.punches === 1 && s.rows === live.runs.length && c.worst[0] >= 4.5 && si.bad.length === 0,
+      `the shipped data/snapshot.json (made ${live.generatedAt}) at ${at.slice(0, 16)}Z, ${scheme}: "${s.head}", one punch, ${s.rows} rows, no notice, the stamp "${s.stamp}"; text contrast ${c.worst[0]}:1 at the lowest; SI clean${si.bad.length ? ': ' + si.bad.join(' | ') : ''}`);
+    await stampCheck(A, `the shipped file, ${scheme}`);
+    await A.shot(`live-${scheme}`, false);
+    await closeOut(A, `the shipped file, ${scheme}`);
+  }
   override = {};
 }
 const after = hashOf(appPng);

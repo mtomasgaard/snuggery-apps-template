@@ -2,14 +2,18 @@
 // dependencies but python3 for tools/art/palette.py; World News's tools/check.mjs in shape, changed for this app:
 //   1. what the ZIP ships stays within Snuggery's limits (count, depth, largest, total, no symlinks);
 //   2. no http:// or https:// in any .html, .css or .js the app ships, not even in a comment, but the two credit
-//      anchors in index.html, allowed by file and exact string (owner call 3);
+//      anchors in index.html, allowed by file and exact string (owner call 3): Open-Meteo's in the footer, the
+//      license's in About (HOUSE 4.15 exception 1, 4.8 item 3);
 //   3. every import / src / href / url( / fetch( is relative, inside the folder, present; the two data reads;
 //   4. js/ holds the three modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and no
 //      supplement; NOTES.md and About credit the face word for word;
-//   5. the data is pinned: data/snapshot.json's and data/rules.json's sha256, byte-identical to before the pass;
-//   6. miniapp.json is valid, its name unchanged;
+//   5. the data is pinned: data/snapshot.json's sha256, the demo refreshed on 2026-10-08 (plan 0012 package 4, plan
+//      0011's owed item 1: Boston Common, fetched by scripts/outdoor_window.py --demo), and data/rules.json's,
+//      byte-identical to before the pass;
+//   6. miniapp.json is valid, its name unchanged, its version 1.2 (plan 0012 package 4; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credits: the stock's static markup, word for word, with its two anchors, in the band and in About;
+//   8. the credits: the footer holds Open-Meteo's link and its words alone; About's first Sources and credits
+//      paragraph is the whole credit, word for word, and the license's address is its anchor (HOUSE 4.15);
 //   9. the marketing camera's strings (HOUSE.md 7.4): Windows and Hours as tabs built after the forecast parses
 //      (B7); nothing else a button by either name; no storage at all;
 //  10. SI and the dates: no plain space between a digit and a unit in the app's strings; toFixed only in
@@ -22,13 +26,16 @@
 //      backdrop-filter, `transition: all`, uppercase, letter-spacing, monospace; one family, and every font
 //      string in a script names "Ysabeau Office" first; no middle dot or em dash in the app's own strings; no
 //      →, ➤, ▸, ▾, ▴, ⓘ or ⋯ in shipped text, the .md files included (B14); both theme-color metas; the
-//      @font-face rule; the page's language and viewport; the type scale, one 21 px figure;
+//      @font-face rule; the page's language and viewport; the pane apps' type scale, one 34 px key number;
 //  15. the scorer's arithmetic in js/score.js, line for line the stock app.js's; and the bugs on record (B1 to
 //      B17, tools/DECISIONS.md) stay fixed in the code;
 //  16. budgets: app code at most 200,000 bytes, fonts/ at most 160,000, the ZIP built exactly as build-zips.yml
-//      builds it at most 99,000 (the lead's ruling on the measured 95,790, plan 0011 D34; D5's 75,257 could not
-//      fit an app smaller than the face it gains);
-//  17. US spelling in every shipped text file; Open-Meteo's address and the quoted CC BY clause keep their words.
+//      builds it at most 123,633 (the house rule for plan 0012 package 4: 98,907 before the pass × 1.25);
+//  17. US spelling in every shipped text file; Open-Meteo's address and the quoted CC BY clause keep their words;
+//  18. the pane-app register (HOUSE 11; plan 0012 P1 to P9): the band holds only Open-Meteo's line; every pane ends
+//      with the About key; the pane's foot pads 28 px; sections on plates, the Shutters on the page; the next
+//      window as the key number; facts as tiles; the later windows as a table; the Shutters' key; Example data. in
+//      the stamp; the header and the footer centered with the pane; a passive touchstart listener.
 //
 //   node tools/check.mjs
 
@@ -44,7 +51,9 @@ const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if 
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 200000, FONT_CAP = 160000, ZIP_CAP = 99000 /* plan 0011 D34: the lead's ruling on the measured 95 790 (ART.md section 6); D5's 75 257 could not fit an app smaller than the face */;
+// ZIP_CAP: the lead's ruling for plan 0012 package 4, the house rule (98 907 B before the pass × 1.25, rounded down), above
+// the app's own 99 000 of plan 0011 D34, so the cap rises to it (tools/DECISIONS.md)
+const CODE_CAP = 200000, FONT_CAP = 160000, ZIP_CAP = 123633;
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -121,9 +130,10 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no fonts?,|No fonts|type is the system's|system font/i.test(read('NOTES.md') + css),
   'the face is credited word for word in NOTES.md (the app\'s credits file) and About ("Type: …"); nothing says no font ships');
 
-// 5. The data is pinned: both files byte-identical to the commit the pass started from
-const DATA = { 'data/snapshot.json': '94071ec5e9cb14dfeb0a6b00df3e3e37002f162929d69fd4241a58a726d1f1f1', 'data/rules.json': 'ac9e029fe5147af3c247d59a173135014b5ae8b3f83a119fc0db0cc7afefc97a' };
-for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is the file committed before the pass (${want.slice(0, 12)}…)`);
+// 5. The data is pinned: the demo forecast as refreshed on 2026-10-08 (plan 0011's owed item 1, re-pinned in plan 0012's
+// pass; it was 94071ec5…a726d1f1f1, Boston Common on 21 Sep), and the rules byte-identical to before the pass
+const DATA = { 'data/snapshot.json': 'e2b09817656ae50edeae8f65cbe6f1da225e38b960a33b7a5b2de59dfa9da255', 'data/rules.json': 'ac9e029fe5147af3c247d59a173135014b5ae8b3f83a119fc0db0cc7afefc97a' };
+for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is ${f.endsWith('snapshot.json') ? 'the demo forecast refreshed on 2026-10-08' : 'the file committed before the pass'} (${want.slice(0, 12)}…)`);
 const snap = JSON.parse(read('data/snapshot.json'));
 
 // 6. miniapp.json
@@ -131,7 +141,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Outdoor Window' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
 }
 
@@ -145,15 +155,16 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files, ART.md, NOTES.md and PROMPT.md included${named.length ? ': ' + named.join(', ') : ''}`);
 }
 
-// 8. The credits: the stock footer's first paragraph, word for word, static markup with its two anchors, in the
-// band (on screen on every pane) and its words again in About's Sources and credits
+// 8. The credits (HOUSE 4.15 exception 1): the footer holds Open-Meteo's link and its words, nothing else, static markup;
+// About's first Sources and credits paragraph is the stock footer's whole sentence, word for word, and the license's
+// address under it is its anchor (HOUSE 4.8 item 3's one exception, a link the source's terms ask for)
 const CREDIT = "Weather data by Open-Meteo.com, under CC\u00a0BY\u00a04.0. The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.";
 {
   const p = (html.match(/<p class="credits" id="credits">([\s\S]*?)<\/p>/) || [])[1] || '';
-  const words = p.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '\u00a0').replace(/[ \t\n]+/g, ' ').trim();
-  const about = htmlText((html.match(/<h3>Sources and credits<\/h3>([\s\S]*?)<\/section>/) || [])[1] || '').replace(/[ \t\n]+/g, ' ');
-  ok(words === CREDIT && p.includes(`${ANCHORS[0]}Weather data by Open-Meteo.com</a>`) && p.includes(`${ANCHORS[1]}CC&nbsp;BY&nbsp;4.0</a>`) && about.includes(CREDIT) && !/getElementById\('credits'\)|\$\('credits'\)/.test(app),
-    `the credits: "${CREDIT.replace(/\u00a0/g, ' ')}" word for word in the band's static markup, its two anchors kept; the words again in About; no script writes them`);
+  const about = (html.match(/<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no">([\s\S]*?)<\/p>/) || [])[1] || '';
+  ok(p === `${ANCHORS[0]}Weather data by Open-Meteo.com</a>` && about.replace(/&nbsp;/g, '\u00a0') === CREDIT && html.includes(`${ANCHORS[1]}creativecommons.org/licenses/by/4.0/</a>`)
+    && !/getElementById\('credits'\)|\$\('credits'\)|capline|function caption\(/.test(code(app, 'x.js')) && !/id="capline"/.test(html),
+    `the credits: the footer holds "Weather data by Open-Meteo.com", Open-Meteo's link alone; "${CREDIT.replace(/\u00a0/g, ' ')}" word for word as About's first Sources and credits paragraph (<p id="about-credit-line">), the license's address its anchor; no script writes them; no caption line`);
 }
 
 // 9. The marketing camera's strings (HOUSE.md 7.4) and storage
@@ -162,7 +173,8 @@ const CREDIT = "Weather data by Open-Meteo.com, under CC\u00a0BY\u00a04.0. The f
   const named = /const TABS = \[\['windows', 'Windows'\], \['hours', 'Hours'\], \['rules', 'Rules'\]\];/.test(app) && /el\('button', null, name\)/.test(build) && /b\.setAttribute\('role', 'tab'\)/.test(build) && !/aria-label/.test(build);
   const afterParse = /const P = parseSnapshot\(a\);\s*if \(P\.problems\) return fail\(P\.problems\);[\s\S]*?if \(!before\) buildTabs\(\);/.test(app) && (app.match(/buildTabs\(\)/g) || []).length === 2;
   const markup = code(html, 'x.html');
-  const others = /aria-label="(Windows|Hours)"|>\s*(Windows|Hours)\s*</.test(markup) || /'(Windows|Hours)'/.test(app.replace(/const TABS = [^\n]*\n/, '')) || /aria-label="Hour"/.test(markup) === false;
+  // the later windows' table heads its column Hours: a <th>, never a button the camera could find
+  const others = /aria-label="(Windows|Hours)"|>\s*(Windows|Hours)\s*</.test(markup) || /'(Windows|Hours)'/.test(app.replace(/const TABS = [^\n]*\n/, '').replace("for (const h of ['Day', 'Hours', 'Length', 'Best score']) head.append(el('th', null, h));", '')) || /aria-label="Hour"/.test(markup) === false;
   ok(named && afterParse && !others && /<nav class="tabs" id="tabs" role="tablist" aria-label="Panes" hidden><\/nav>/.test(html),
     'camera: Windows and Hours are <button role="tab"> named by their visible words, built by buildTabs() only after the forecast parses and validates (B7); the static markup holds no tab; the Shutters are a slider named Hour, nothing else a button named Windows or Hours');
   ok(!/localStorage|sessionStorage|indexedDB/.test(web.map((f) => code(read(f), f)).join('\n')), 'storage: none, as before the pass (the app opens on Windows and stores nothing; the camera has nothing to put back)');
@@ -262,11 +274,11 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html) && /<script type="module" src="\.\/app\.js"><\/script>/.test(html),
     'the page: lang="en-US", viewport-fit=cover without user-scalable, color-scheme light dark, app.js as a module (B16)');
   const px = [...c.matchAll(/font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/g)].map((m) => Number(m[1]));
-  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 21].includes(v));
-  const big = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 21px/g)].map((m) => m[1].trim());
+  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34].includes(v));
+  const big = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 34px/g)].map((m) => m[1].trim()), at21 = px.filter((v) => v === 21);
   const weights = [...c.replace(/@font-face \{[^}]*\}/, '').matchAll(/font-weight:\s*(\d+)|font:\s*(\d{3}) /g)].map((m) => Number(m[1] || m[2]));
-  ok(offScale.length === 0 && JSON.stringify(big) === '[".fig b"]' && weights.every((w) => [400, 560, 600, 620, 650].includes(w)),
-    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the one 21 px figure ${big.join(', ')} (the next window's hours); weights ${[...new Set(weights)].join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
+  ok(offScale.length === 0 && JSON.stringify(big) === '[".hl-fig"]' && at21.length === 0 && weights.every((w) => [400, 560, 600, 620, 650].includes(w)),
+    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the pane apps' scale (HOUSE 11.1 rule 2); the one 34 px key number ${big.join(', ')} (the next window's hours), no 21 px (no readout card); weights ${[...new Set(weights)].join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
 }
 
 // 15. The scorer's arithmetic, line for line the stock app.js's (ART.md item 4), and the bugs on record
@@ -288,7 +300,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   ok(missing.length === 0 && !/function (maxRule|bandRule|scoreHours|findWindows)/.test(app), `js/score.js holds the stock scorer's arithmetic line for line (${STOCK.length} passages: maxRule, bandRule, clamp, localToEpoch, the golden hour, the score, findWindows, both light rules) and app.js no copy of it${missing.length ? '; changed: ' + missing.map((x) => x.trim().slice(0, 40)).join(' | ') : ''}`);
   const B = [
     ['B1 dates built by hand from the phone\'s clock and the place\'s offset', /stampWhen\(s\.ms\)/.test(app) && !/toLocaleTimeString/.test(app)],
-    ['B2 stale and ran out are sentences in ink, never a color', /el\('span', 'lead', lead\)/.test(app) && /'Stale\.'/.test(app) && /Forecast ran out \$\{span\(now - end\)\} ago\./.test(app) && /\.stamp \.lead \{ color: var\(--ink\); \}/.test(css) && !/classList\.(add|toggle)\('stale'/.test(app)],
+    ['B2 stale and ran out are sentences in ink, never a color; the example says Example data. in their place (HOUSE 11.1 rule 8)', /el\('span', 'lead', lead\)/.test(app) && /const lead = S\.place \? 'Example data\.' : S\.ranOut/.test(app) && /'Stale\.'/.test(app) && /Forecast ran out \$\{span\(now - end\)\} ago\./.test(app) && /\.stamp \.lead \{ color: var\(--ink\); \}/.test(css) && !/classList\.(add|toggle)\('stale'/.test(app)],
     ['B3 the stamp is a button opening About; a broken file never empties it once one was read', /<button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">/.test(html) && /\$\('stamp'\)\.onclick = \(\) => about\(true\);/.test(app) && /if \(S\) \{[\s\S]{0,500}Still showing the forecast/.test(app)],
     ['B4 <main> is not a live region; one polite live region', /<main class="pane" id="main">/.test(html) && (html.match(/aria-live/g) || []).length === 1 && /<p class="sr" id="live" aria-live="polite"><\/p>/.test(html)],
     ['B5 a broken replacement keeps the view; the same files redraw only the stamp', /if \(S\) \{(?:(?!\} else \{)[\s\S])*box\.classList\.add\('kept'\);\s*\} else \{/.test(app) && !/if \(S\) \{(?:(?!\} else \{)[\s\S])*(replaceChildren\(\);|tabs'\)\.hidden)/.test(app.slice(app.indexOf('function fail('))) && /a\.text === texts\.snap && rulesText === texts\.rules\) \{ \$\('notice'\)\.hidden = true; refresh\(\); return; \}/.test(app)],
@@ -323,7 +335,7 @@ ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length}
 ok(names.length === shipped.length && names.every((n) => shipped.includes(n)) && !names.some((f) => /^(tools|screenshots|scripts)\//.test(f) || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/ or dotfiles`);
 console.log(`     stored in the ZIP: data ${fmt(stored((n) => n.startsWith('data/')))}, fonts/ ${fmt(stored((n) => n.startsWith('fonts/')))}, app code ${fmt(stored((n) => codeFiles.includes(n)))}, ART.md ${fmt(stored((n) => n === 'ART.md'))}, NOTES.md and PROMPT.md ${fmt(stored((n) => n === 'NOTES.md' || n === 'PROMPT.md'))}`);
-ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: plan 0011 D34, the lead's ruling on the measured 95,790; D5's 75,257 could not fit an app smaller than the face)`);
+ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: the house rule for plan 0012 package 4, 98,907 before the pass × 1.25; it was 99,000, plan 0011 D34)`);
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). NOTES.md keeps
 // Open-Meteo's own address and the CC BY clause it quotes word for word.
@@ -347,6 +359,39 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: plan 00
   const inCut = (cp) => R.some(([a, b]) => cp >= a && cp <= b);
   const own = [...new Set([...[app, html, ...mods.map(read)].map((s, i) => (i === 1 ? htmlText(s) : strings(s).join(' '))).join(' ')].filter((ch) => ch.codePointAt(0) >= 0x20 && !inCut(ch.codePointAt(0))))];
   ok(own.length === 0, `the app's own strings use only characters the cut draws (no supplement)${own.length ? ': ' + own.join(' ') : ''}`);
+}
+
+// 18. The pane-app register (HOUSE 11.1; plan 0012 P1 to P9 and the change list)
+{
+  const c = code(css, 'x.css'), a = code(app, 'x.js');
+  ok(/<footer class="band" id="band">\s*<!--[\s\S]*?-->\s*<p class="credits" id="credits"><a href="https:\/\/open-meteo\.com\/">Weather data by Open-Meteo\.com<\/a><\/p>\s*<\/footer>/.test(html)
+    && /for \(const id of \['head', 'main', 'band'\]\) \$\(id\)\.inert = open;/.test(app) && /\.band \{[^}]*max\(0px, calc\(env\(safe-area-inset-bottom\) - 19px\)\)/.test(c)
+    && /\.credits a \{ display: block; width: fit-content; [^}]*padding: 6px 4px 23px; margin: 0 -4px; \}/.test(c),
+    'the band holds Open-Meteo\'s line and nothing else (HOUSE 4.15 exception 1, 11.1 rule 1), stays among what About makes inert, and keeps the bottom safe-area inset; the anchor a 6 + 15 + 23 px block, so its 44 px hit lies inside the band with or without an inset (shoot.mjs B6 measures it clipped to the viewport)');
+  ok(/const ABOUT_KEY = 'Sources, method and credits are in About\.';/.test(app) && /function aboutKey\(host\) \{\s*const b = el\('button', 'aboutlink', ABOUT_KEY\);\s*b\.type = 'button';\s*b\.onclick = \(\) => about\(true\);\s*host\.append\(b\);\s*\}/.test(app)
+    && /else windowsPane\(pane\);\s*aboutKey\(pane\);/.test(app) && (a.match(/aboutKey\(/g) || []).length === 2
+    && /\.aboutlink \{ display: block; margin: 14px 0 0; min-height: 44px; font-size: 12\.5px; color: var\(--ink-2\); text-decoration: underline; text-underline-offset: 3px; \}/.test(c),
+    'every pane ends with the button "Sources, method and credits are in About.", 12.5 px --ink-2, underlined at 3 px, 44 px tall, opening About (render() adds it after the pane)');
+  ok(/\.panebody \{[^}]*padding-top: 4px; padding-bottom: 28px; \}/.test(c) && (c.match(/(^|\n)\.panebody \{/g) || []).length === 1,
+    'the pane\'s foot: .panebody { padding-top: 4px; padding-bottom: 28px } (the footer under it keeps the inset; HOUSE 4.14, P3)');
+  ok(/\.sec \{ margin-top: 12px; padding: 12px 12px 6px; border: 1px solid var\(--line\); border-radius: 8px; background: var\(--sheet\); \}/.test(c) && /pane\.append\(title\(true\), shuttersBlock\(\)\);/.test(app)
+    && /\.sh \.head \.ring \{ fill: var\(--page\); \}/.test(c),
+    'sections on plates (--sheet, a 1 px --line edge, radius 8 px, padding 12 px, 12 px apart); the title and the Shutters on the page, whose lit windows are --sheet (HOUSE 11.1 rule 4)');
+  ok(/el\('h2', 'hl-what', `\$\{S\.ranOut \? 'First window in this file' : 'Next window'\}, \$\{placeDate\(w\.start\.epoch, off\)\}`\), el\('span', 'hl-fig', hoursOf\(w\)\)/.test(app)
+    && /\.hl-fig \{ font-size: 34px; font-weight: 650; line-height: 1\.05; \}/.test(c) && /const facts = \(pairs\) => \{ const dl = el\('dl', 'tiles'\);/.test(app)
+    && /for \(const h of \['Day', 'Hours', 'Length', 'Best score'\]\)/.test(app) && !/ownForecast|'Example forecast:'/.test(a),
+    'Windows opens on the next window\'s hours at 34 px, its day above and its length and best score under it; the window\'s facts as tiles; the later windows as a table (Day, Hours, Length, Best score); no example statement and no Shortcut note on the pane (About has both)');
+  ok(/export const keyItems = \(M\) => \(!M\.rules\.length \? \[\['frame', 'Window'\]\]/.test(read('js/shutters.js')) && !/export const caption/.test(read('js/shutters.js'))
+    && /key\.replaceChildren\(\.\.\.keyItems\(M\)/.test(app) && /\.sw-used \{[^}]*background: var\(--used\); \}/.test(c) && /\.sw-frame \{[^}]*border-width: 0 1px 2px; \}/.test(c),
+    'the Shutters\' key in place of the band\'s sentence (HOUSE 4.15, 11.1 rule 6): Ruled out, Share of the limit, No value (only when a hollow is drawn), Window, each mark drawn small; Window alone with no rule');
+  ok(/el\('p', 'zone', `Times in \$\{S\.place \? `\$\{S\.place\}’s` : 'the forecast’s'\} own time, /.test(app) && /el\('p', 'zone', 'An hour must clear every rule\.'\)/.test(app)
+    && /<p>Build the Shortcut in <span translate="no">PROMPT\.md<\/span> and the app shows where you are\.<\/p>/.test(html),
+    'one short label under the Hours and Rules titles (HOUSE 11.1 rule 9); the Shortcut sentence first under About\'s How the data gets here');
+  ok(/\.head \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\) 0 calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-left\)\); \}/.test(c) && /\.panebody \{ max-width: 760px; margin: 0 auto;/.test(c)
+    && /\.band \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\)/.test(c),
+    'the pane a centered 760 px column, the header and the footer\'s sides on it: max(16 px, 50 % − 364 px) (plan 0011\'s owed item; shoot.mjs measures it)');
+  ok(/document\.addEventListener\('touchstart', \(\) => \{\}, \{ passive: true \}\);/.test(app),
+    'a passive, empty touchstart listener on the document, so iOS draws the :active tints (plan 0011\'s owed item; a phone row checks it)');
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }

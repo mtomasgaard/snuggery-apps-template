@@ -1,0 +1,962 @@
+{
+ "schema": 1,
+ "generatedAt": "2026-10-01T05:01:21Z",
+ "regions": [
+  {
+   "key": "europe",
+   "name": "Europe",
+   "stale": false,
+   "items": [
+    {
+     "title": "When the right to protest remains, but demonstrating comes at a price",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
+     "stale": false,
+     "author": "Elmira Lyapina"
+    },
+    {
+     "title": "After five years of war, how do Ukrainian small businesses survive?",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/09/28/after-five-years-of-war-how-do-ukrainian-small-businesses-survive/",
+     "published": "2026-09-28T06:00:15Z",
+     "summary": "In this interview, writer and journalist Victoria Belim-Frolova shares her observations about Russia’s war on Ukraine and how it forces “a constant process of adaptation,” especially in women-led small businesses.",
+     "stale": false,
+     "author": "Nevena Borisova"
+    },
+    {
+     "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168416",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "Ukrainian President Volodymyr Zelenskyy on Wednesday called for intensified pressure on Russia to end its war against Ukraine, arguing that Moscow continues to incur massive losses while prolonging a conflict whose…",
+     "stale": false
+    },
+    {
+     "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168410",
+     "published": "2026-09-23T12:00:00Z",
+     "summary": "Five years of war. Another winter closing in. Today, the Security Council once again debates a path to peace – though any resolution still runs up against the veto of Russia, one of its own permanent members, whose…",
+     "stale": false
+    },
+    {
+     "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/09/23/pskovs-medieval-religious-art-is-being-appropriated-by-the-russian-state-to-support-the-invasion-of-ukraine/",
+     "published": "2026-09-23T06:04:03Z",
+     "summary": "In Russia, authorities are leveraging traditional medieval religious art of the once-independent city-state of Pskov to justify its invasion of Ukraine.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
+    {
+     "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/09/21/russian-tiktokers-wanted-to-vote-for-an-anti-war-agenda-putins-farce-elections-did-not-allow-that/",
+     "published": "2026-09-21T13:15:19Z",
+     "summary": "Elections in Russia are a sham. Yet when someone appears genuinely committed to an anti-war agenda, many had seize that hope as a chance to change, including young TikTokers",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
+    {
+     "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
+     "published": "2026-09-19T08:01:45Z",
+     "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
+     "stale": false,
+     "author": "Omid Memarian"
+    },
+    {
+     "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
+     "published": "2026-09-15T08:33:09Z",
+     "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
+     "stale": false,
+     "author": "Guest Contributor"
+    }
+   ]
+  },
+  {
+   "key": "americas",
+   "name": "Americas",
+   "stale": false,
+   "items": [
+    {
+     "title": "FlyDubai incident: Airline safety expert explains how cockpits have become more secure – but only from outside threats",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/flydubai-incident-airline-safety-expert-explains-how-cockpits-have-become-more-secure-but-only-from-outside-threats-293299",
+     "published": "2026-09-30T22:07:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jeff Price, Professor iof Aviation and Aerospace Science, Metropolitan State University of Denver"
+    },
+    {
+     "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/question-of-whether-taxpayers-or-fossil-fuel-companies-pay-for-climate-change-damage-heads-to-supreme-court-292847",
+     "published": "2026-09-30T20:21:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Patrick Parenteau, Professor of Law Emeritus, Vermont Law & Graduate School"
+    },
+    {
+     "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/09/30/in-brazils-capital-residents-grow-their-own-heat-fighting-solutions/",
+     "published": "2026-09-30T14:09:26Z",
+     "summary": "Life in the favelas surrounding Brazil’s capital brings the health risks of extreme heat — a symptom of the global inequities of green space access",
+     "stale": false,
+     "author": "Dialogue Earth"
+    },
+    {
+     "title": "Equating protest with terrorism: A narrative against dissent",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
+     "stale": false,
+     "author": "Civic Media Observatory"
+    },
+    {
+     "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168461",
+     "published": "2026-09-26T12:00:00Z",
+     "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
+     "stale": false
+    },
+    {
+     "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168458",
+     "published": "2026-09-26T12:00:00Z",
+     "summary": "Cuba’s Foreign Minister warned the UN General Assembly on Saturday that escalating military and economic pressure in Latin America and the Caribbean was threatening international law, while accusing the United States of…",
+     "stale": false
+    },
+    {
+     "title": "Haiti at ‘watershed moment’, Prime Minister tells UN, urging full backing for security force",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168453",
+     "published": "2026-09-25T12:00:00Z",
+     "summary": "Haiti is at a “watershed moment” in its struggle against gang violence and needs sustained international support alongside stronger national security institutions, Prime Minister Alix Didier Fils-Aimé told the UN…",
+     "stale": false
+    },
+    {
+     "title": "The commodification of Indigenous cultures and traditions",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/09/21/the-commodification-of-indigenous-cultures-and-traditions/",
+     "published": "2026-09-21T06:21:22Z",
+     "summary": "Too often, resources and meaning flow outward from the community that created them and enrich outsiders — often the same groups that have been oppressing them for centuries.",
+     "stale": false,
+     "author": "Marco Martínez"
+    }
+   ]
+  },
+  {
+   "key": "africa",
+   "name": "Africa",
+   "stale": false,
+   "items": [
+    {
+     "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/franc-cfa-un-nouvel-ouvrage-plaide-pour-une-monnaie-souveraine-au-senegal-292468",
+     "published": "2026-09-30T14:12:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Babo Amadou Ba, enseigant-chercheur, Université Amadou Mahtar MBOW de Dakar"
+    },
+    {
+     "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-public-service-new-laws-aim-to-put-competent-people-in-charge-and-hold-them-to-account-292376",
+     "published": "2026-09-30T13:26:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Busani Ngcaweni, Director: Center for Public Policy and African Studies, University of Johannesburg"
+    },
+    {
+     "title": "Somali families face renewed violence amid worsening hunger crisis",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168495",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "Children have been killed and injured in fresh fighting in Baidoa, in Somalia’s South West State, where families were already facing severe hunger and other overlapping crises.",
+     "stale": false
+    },
+    {
+     "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/09/30/who-can-speak-on-behalf-of-the-people-the-new-frontiers-of-protest-in-the-sahel/",
+     "published": "2026-09-30T03:37:48Z",
+     "summary": "In central Sahel's countries military juntas claim to restore popular sovereignty. Political parties are dissolved in all three countries, over a thousand civil society organizations have been suspended.",
+     "stale": false,
+     "author": "Jean Sovon"
+    },
+    {
+     "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168482",
+     "published": "2026-09-29T12:00:00Z",
+     "summary": "The Security Council met in New York on the Democratic Republic of the Congo (DRC) Tuesday, where clashes between Government forces and M23 rebels continue in the east, despite a series of peace agreements. Ambassadors…",
+     "stale": false
+    },
+    {
+     "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168481",
+     "published": "2026-09-29T12:00:00Z",
+     "summary": "In the Democratic Republic of the Congo (DRC), health workers fighting the country’s largest-ever Ebola outbreak are struggling to overcome critical challenges to patient care, the UN World Health Organization (WHO)…",
+     "stale": false
+    },
+    {
+     "title": "When telcos shut down the internet, they shut down protests for the government",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/09/28/when-telcos-shut-down-the-internet-they-shut-down-protests-for-the-government/",
+     "published": "2026-09-28T18:11:19Z",
+     "summary": "Room to protest is narrowing in Africa, as governments lean on arrests, curfews, and internet blackouts to blunt dissent. When the streets become too dangerous, dissent often migrates online.",
+     "stale": false,
+     "author": "Ranking Digital Rights"
+    },
+    {
+     "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/09/27/what-endsars-left-behind-in-nigeria-a-generation-caught-between-protest-politics-and-departure/",
+     "published": "2026-09-27T08:20:29Z",
+     "summary": "The protests strengthened the political consciousness of some young Nigerians and encouraged greater participation in elections, governance and activism. For others, the experience produced fear, distrust and…",
+     "stale": false,
+     "author": "Guest Contributor"
+    }
+   ]
+  },
+  {
+   "key": "middle-east",
+   "name": "Middle East",
+   "stale": false,
+   "items": [
+    {
+     "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168496",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "UN teams are racing to protect families in Gaza from the coming rainy season, but restricted access to land and shortages of critical supplies are hampering the effort, UN Spokesperson Stéphane Dujarric said on…",
+     "stale": false
+    },
+    {
+     "title": "Lebanon: One in five children goes to bed hungry, says UNICEF",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168490",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "Four in five households in Lebanon struggle to afford basic necessities today, with children increasingly going without food, missing school and being pushed into work as conflict compounds years of economic crisis. \"I…",
+     "stale": false
+    },
+    {
+     "title": "Yemen escalation fuels fears of further cholera, measles spread",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168480",
+     "published": "2026-09-29T12:00:00Z",
+     "summary": "Heavy fighting in Yemen is fuelling concerns of an uptick in cholera, measles and other preventable diseases, as overcrowding at displacement sites threatens to overwhelm the limited healthcare services still open.",
+     "stale": false
+    },
+    {
+     "title": "Equating protest with terrorism: A narrative against dissent",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
+     "stale": false,
+     "author": "Civic Media Observatory"
+    },
+    {
+     "title": "When the right to protest remains, but demonstrating comes at a price",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
+     "stale": false,
+     "author": "Elmira Lyapina"
+    },
+    {
+     "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168464",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "The Security Council met Monday morning with prospects for peace in the Middle East under strain on two fronts. In the West Bank, settler violence and settlement expansion are raising fears for a two-State solution. In…",
+     "stale": false
+    },
+    {
+     "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/09/22/from-north-to-south-protests-sweep-across-tunisia-is-change-at-hand/",
+     "published": "2026-09-22T19:36:26Z",
+     "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
+     "stale": false,
+     "author": "The New Arab"
+    },
+    {
+     "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
+     "published": "2026-09-19T08:01:45Z",
+     "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
+     "stale": false,
+     "author": "Omid Memarian"
+    }
+   ]
+  },
+  {
+   "key": "asia",
+   "name": "Asia",
+   "stale": false,
+   "items": [
+    {
+     "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168491",
+     "published": "2026-09-30T12:00:00Z",
+     "summary": "The UN refugee agency, UNHCR, has voiced concern over Malaysia’s decision to return 1,476 people to Myanmar amid an ongoing civil war and a dire human rights and humanitarian situation.",
+     "stale": false
+    },
+    {
+     "title": "Equating protest with terrorism: A narrative against dissent",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
+     "published": "2026-09-29T00:00:00Z",
+     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
+     "stale": false,
+     "author": "Civic Media Observatory"
+    },
+    {
+     "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/09/1168476",
+     "published": "2026-09-28T12:00:00Z",
+     "summary": "The Democratic People’s Republic of Korea (DPRK) told the UN General Assembly on Monday that its status as a nuclear-armed State was irreversible, arguing that its military capabilities were necessary to safeguard the…",
+     "stale": false
+    },
+    {
+     "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/09/27/beyond-protest-mob-violence-and-the-struggle-for-institutional-response-in-bangladesh/",
+     "published": "2026-09-27T22:36:38Z",
+     "summary": "Mob violence is rising in Bangladesh as unchecked impunity, weak law enforcement, and social media instigations drive lethal crowd attacks, challenging institutional responses, justice delivery, and overall state…",
+     "stale": false,
+     "author": "Maksuda Akter"
+    },
+    {
+     "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/26/an-exiled-myanmar-journalists-story-echoing-publics-voice-and-resilience/",
+     "published": "2026-09-26T00:00:00Z",
+     "summary": "“When our journalism produces positive outcomes, the sense of fulfilment is difficult to compare with anything else.”",
+     "stale": false,
+     "author": "Exile Hub"
+    },
+    {
+     "title": "Movement from behind your gadget",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/25/movement-from-behind-your-gadget/",
+     "published": "2026-09-25T18:58:21Z",
+     "summary": "The growth of online activism has given different colors in the movement agendas. There is a debate on how effective it is, and how it could complement each other.",
+     "stale": false,
+     "author": "Juliana Harsianti"
+    },
+    {
+     "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/09/25/young-japanese-find-new-outlets-for-peace-activism-amid-rising-tensions-in-the-pacific/",
+     "published": "2026-09-25T06:52:28Z",
+     "summary": "GV observed Japanese peace activism shifting from an ideological, often confrontational and hierarchical approach among the older generation to a more individualised, accessible, pop-style approach among young people.",
+     "stale": false,
+     "author": "Jo Carter"
+    },
+    {
+     "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/09/24/bangladesh-protests-can-change-governments-but-can-they-strengthen-democracy/",
+     "published": "2026-09-24T10:41:11Z",
+     "summary": "Bangladesh’s 2024 uprising toppled a government, but two years later, reforms to police, judiciary, cyber laws, and state institutions remain contested, incomplete, and debated, leaving citizens asking whether real…",
+     "stale": false,
+     "author": "Rezwan"
+    }
+   ]
+  },
+  {
+   "key": "oceania",
+   "name": "Oceania",
+   "stale": false,
+   "items": [
+    {
+     "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/meta-wants-people-to-use-ai-agents-to-do-daily-tasks-for-them-heres-why-thats-a-problem-292962",
+     "published": "2026-10-01T02:49:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Francesco Bailo, Senior Lecturer in Data Analytics in the Social Sciences, Deputy Director of the Centre for AI, Trust and Governance, University of Sydney"
+    },
+    {
+     "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nsws-largest-coal-mine-project-is-set-to-expand-heres-what-authorities-got-wrong-about-the-trade-offs-293096",
+     "published": "2026-10-01T02:45:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liz Hicks, Lecturer in Law, The University of Melbourne"
+    },
+    {
+     "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-sapphic-sitcom-answer-to-heated-rivalry-british-spies-and-premium-aussie-drama-what-to-stream-in-october-292696",
+     "published": "2026-10-01T01:01:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dee Jefferson, Deputy Arts + Culture Editor, The Conversation"
+    },
+    {
+     "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/gps-can-now-prescribe-adhd-medication-but-big-barriers-to-treatment-remain-292985",
+     "published": "2026-09-30T22:56:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Steven Lillis, Associate Professor, Division of Health, University of Waikato"
+    },
+    {
+     "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/digger-tries-to-mock-powerful-older-men-but-cant-escape-64-year-old-millionaire-tom-cruise-293276",
+     "published": "2026-09-30T15:03:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alexander Sergeant, Lecturer in Digital Media Production, University of Westminster"
+    },
+    {
+     "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
+     "source": "Global Voices",
+     "feed": "gv-oceania",
+     "link": "https://globalvoices.org/2026/09/14/nest-flix-peregrine-falcons-become-streaming-stars-of-the-34th-floor-in-australia/",
+     "published": "2026-09-14T18:56:04Z",
+     "summary": "\"Get ready to watch as the chicks hatch and their parents raise them high above the hustle and bustle of Melbourne city life.\"",
+     "stale": false,
+     "author": "Kevin Rennie"
+    },
+    {
+     "title": "Thousands of little penguins will be vaccinated against bird flu down under",
+     "source": "Global Voices",
+     "feed": "gv-oceania",
+     "link": "https://globalvoices.org/2026/08/26/thousands-of-little-penguins-will-be-vaccinated-against-bird-flu-down-under/",
+     "published": "2026-08-26T18:45:20Z",
+     "summary": "“These penguins are part of what makes our community so special. We are lucky to share our home with them, and we’re going to do our best to protect them.”",
+     "stale": false,
+     "author": "Kevin Rennie"
+    },
+    {
+     "title": "The bleak picture of how Indigenous youth are treated in Australia’s justice system",
+     "source": "Global Voices",
+     "feed": "gv-oceania",
+     "link": "https://globalvoices.org/2026/08/11/the-bleak-picture-of-how-indigenous-youth-are-treated-in-australias-justice-system/",
+     "published": "2026-08-11T20:37:33Z",
+     "summary": "\"From coast to coast across our lands, Aboriginal and Torres Strait Islander children are being criminalised and imprisoned at alarming rates because of political point-scoring rather than evidence-based reforms.\"",
+     "stale": false,
+     "author": "Kevin Rennie"
+    }
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "attribution": "Headlines, summaries and links from Global Voices, used under CC BY 3.0.",
+   "licence": "Creative Commons Attribution 3.0. Credit the author, link to the license, and indicate changes: the summaries here are the feed's own line, shortened.",
+   "terms": "https://creativecommons.org/licenses/by/3.0/",
+   "name": "Global Voices"
+  },
+  {
+   "attribution": "Headlines, bylines and links from The Conversation.",
+   "licence": "Creative Commons Attribution–NoDerivatives 4.0. Credit the author and their institution and link back. Nothing of theirs is changed here: the headline stands as written and no article text is carried.",
+   "terms": "https://theconversation.com/au/republishing-and-media",
+   "name": "The Conversation"
+  },
+  {
+   "attribution": "Headlines and links from UN News.",
+   "licence": "UN terms of use: news-related material may be used as long as appropriate credit is given and the United Nations is advised.",
+   "terms": "https://www.un.org/en/about-us/copyright",
+   "name": "UN News"
+  }
+ ],
+ "feeds": [
+  {
+   "id": "gv-western-europe",
+   "source": "Global Voices",
+   "region": "Europe",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "gv-eastern-europe",
+   "source": "Global Voices",
+   "region": "Europe",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "un-europe",
+   "source": "UN News",
+   "region": "Europe",
+   "ok": true,
+   "items": 30,
+   "note": null
+  },
+  {
+   "id": "gv-latin-america",
+   "source": "Global Voices",
+   "region": "Americas",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "un-americas",
+   "source": "UN News",
+   "region": "Americas",
+   "ok": true,
+   "items": 30,
+   "note": null
+  },
+  {
+   "id": "tc-us",
+   "source": "The Conversation",
+   "region": "Americas",
+   "ok": true,
+   "items": 50,
+   "note": null
+  },
+  {
+   "id": "gv-africa",
+   "source": "Global Voices",
+   "region": "Africa",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "un-africa",
+   "source": "UN News",
+   "region": "Africa",
+   "ok": true,
+   "items": 30,
+   "note": null
+  },
+  {
+   "id": "tc-africa",
+   "source": "The Conversation",
+   "region": "Africa",
+   "ok": true,
+   "items": 50,
+   "note": null
+  },
+  {
+   "id": "gv-west-asia",
+   "source": "Global Voices",
+   "region": "Middle East",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "un-middle-east",
+   "source": "UN News",
+   "region": "Middle East",
+   "ok": true,
+   "items": 30,
+   "note": null
+  },
+  {
+   "id": "gv-east-asia",
+   "source": "Global Voices",
+   "region": "Asia",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "gv-south-asia",
+   "source": "Global Voices",
+   "region": "Asia",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "un-asia-pacific",
+   "source": "UN News",
+   "region": "Asia",
+   "ok": true,
+   "items": 30,
+   "note": null
+  },
+  {
+   "id": "gv-oceania",
+   "source": "Global Voices",
+   "region": "Oceania",
+   "ok": true,
+   "items": 15,
+   "note": null
+  },
+  {
+   "id": "tc-au",
+   "source": "The Conversation",
+   "region": "Oceania",
+   "ok": true,
+   "items": 50,
+   "note": null
+  },
+  {
+   "id": "tc-nz",
+   "source": "The Conversation",
+   "region": "Oceania",
+   "ok": true,
+   "items": 50,
+   "note": null
+  }
+ ],
+ "ask": [
+  {
+   "region": "Europe",
+   "source": "Global Voices",
+   "title": "When the right to protest remains, but demonstrating comes at a price",
+   "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
+   "title": "After five years of war, how do Ukrainian small businesses survive?",
+   "published": "2026-09-28 06:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "UN News",
+   "title": "Zelenskyy urges stronger pressure on Russia, warns war’s impact is spreading beyond Ukraine",
+   "published": "2026-09-23 12:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "UN News",
+   "title": "Security Council LIVE: World leaders debate ongoing war in Ukraine",
+   "published": "2026-09-23 12:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
+   "title": "Pskov’s medieval religious art is being appropriated by the Russian state to support the invasion of Ukraine",
+   "published": "2026-09-23 06:04 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
+   "title": "Russian TikTokers wanted to vote for an anti-war agenda. Putin’s farce elections did not allow that.",
+   "published": "2026-09-21 13:15 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
+   "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
+   "published": "2026-09-19 08:01 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
+   "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
+   "published": "2026-09-15 08:33 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "FlyDubai incident: Airline safety expert explains how cockpits have become more secure – but only from outside threats",
+   "published": "2026-09-30 22:07 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Question of whether taxpayers or fossil fuel companies pay for climate change damage heads to Supreme Court",
+   "published": "2026-09-30 20:21 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "Global Voices",
+   "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
+   "published": "2026-09-30 14:09 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "Global Voices",
+   "title": "Equating protest with terrorism: A narrative against dissent",
+   "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
+   "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
+   "published": "2026-09-26 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
+   "title": "Cuba warns against ‘law of the jungle’ as Foreign Minister denounces US pressure",
+   "published": "2026-09-26 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
+   "title": "Haiti at ‘watershed moment’, Prime Minister tells UN, urging full backing for security force",
+   "published": "2026-09-25 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "Global Voices",
+   "title": "The commodification of Indigenous cultures and traditions",
+   "published": "2026-09-21 06:21 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Franc CFA : un nouvel ouvrage plaide pour une monnaie souveraine au Sénégal",
+   "published": "2026-09-30 14:12 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s public service: new laws aim to put competent people in charge and hold them to account",
+   "published": "2026-09-30 13:26 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Somali families face renewed violence amid worsening hunger crisis",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "Who can speak on behalf of the people? The new frontiers of protest in the Sahel",
+   "published": "2026-09-30 03:37 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Security Council LIVE: DRC peace deals fail to halt fighting as Ebola deepens crisis",
+   "published": "2026-09-29 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "DRC: Early access to care and oxygen decisive for Ebola patients’ survival – WHO",
+   "published": "2026-09-29 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "When telcos shut down the internet, they shut down protests for the government",
+   "published": "2026-09-28 18:11 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "What #EndSARS left behind in Nigeria: A generation caught between protest, politics, and departure",
+   "published": "2026-09-27 08:20 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "World News in Brief: Storm clouds over Gaza, deadly obstacles face Mexican women rights defenders, Latvia booze ban proves lifesaver",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Lebanon: One in five children goes to bed hungry, says UNICEF",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Yemen escalation fuels fears of further cholera, measles spread",
+   "published": "2026-09-29 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Equating protest with terrorism: A narrative against dissent",
+   "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "Global Voices",
+   "title": "When the right to protest remains, but demonstrating comes at a price",
+   "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Security Council LIVE: Ambassadors meet as West Bank tensions rise, Gaza plan stalls",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "Global Voices",
+   "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
+   "published": "2026-09-22 19:36 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "Global Voices",
+   "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
+   "published": "2026-09-19 08:01 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "Malaysia: UN agency urges safeguards after refugees returned to Myanmar",
+   "published": "2026-09-30 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "Equating protest with terrorism: A narrative against dissent",
+   "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "DPR Korea tells UN its nuclear status is ‘irreversible’, rejects outside pressure",
+   "published": "2026-09-28 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
+   "published": "2026-09-27 22:36 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "An exiled Myanmar journalist’s story: Echoing public’s voice and resilience",
+   "published": "2026-09-26 00:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "Movement from behind your gadget",
+   "published": "2026-09-25 18:58 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "Young Japanese find new outlets for peace activism amid rising tensions in the Pacific",
+   "published": "2026-09-25 06:52 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
+   "title": "Bangladesh: Protests can change governments, but can they strengthen democracy?",
+   "published": "2026-09-24 10:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Meta wants people to use ‘AI agents’ to do daily tasks for them. Here’s why that’s a problem",
+   "published": "2026-10-01 02:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NSW’s largest coal mine project is set to expand. Here’s what authorities got wrong about the trade-offs",
+   "published": "2026-10-01 02:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "A sapphic sitcom answer to Heated Rivalry, British spies and premium Aussie drama: what to stream in October",
+   "published": "2026-10-01 01:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "GPs can now prescribe ADHD medication – but big barriers to treatment remain",
+   "published": "2026-09-30 22:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Digger tries to mock powerful older men – but can’t escape 64-year-old millionaire Tom Cruise",
+   "published": "2026-09-30 15:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "Global Voices",
+   "title": "‘Nest-flix’ peregrine falcons become streaming stars of the 34th floor in Australia",
+   "published": "2026-09-14 18:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "Global Voices",
+   "title": "Thousands of little penguins will be vaccinated against bird flu down under",
+   "published": "2026-08-26 18:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "Global Voices",
+   "title": "The bleak picture of how Indigenous youth are treated in Australia’s justice system",
+   "published": "2026-08-11 20:37 UTC"
+  }
+ ]
+}

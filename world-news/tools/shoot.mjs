@@ -1,7 +1,9 @@
 // Drive World News in headless Chromium at phone size (390 × 844 CSS px, DPR 2, real touch through CDP),
 // light and dark (HOUSE.md section 7.2 as a pane app allows: no player, no focus mode, no units key;
-// tools/DECISIONS.md, item 14). The clock is fixed at Thu 1 Oct 2026, 12:00 in Oslo, so the stamp and the
-// pictures are the same on every run. Fails on any console error or warning, page error, failed request,
+// tools/DECISIONS.md, item 14). The clock is fixed at Thu 1 Oct 2026, 12:00 in Oslo, and the snapshot served is
+// the pinned file of that morning, tools/fixtures/snapshot.json, so the stamp and the pictures are the same on
+// every run whatever the hourly refresh has written into data/snapshot.json (plan 0012 package 4). One stage
+// then opens the app on data/snapshot.json as it stands, two hours after it was made. Fails on any console error or warning, page error, failed request,
 // HTTP ≥ 400, or any request outside the local server. Every figure it asserts is worked out here from
 // data/snapshot.json with Node's own tools, never by importing js/.
 //
@@ -11,18 +13,20 @@
 //   SCHEMES=light node tools/shoot.mjs      one theme for the per-theme part
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the panes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the camera's tabs by role and name, the credits, the face, the stamp), every pane's text
-// contrast, the tracer under exactly the chosen tab, SI and the date forms in every visible text node, hit
-// targets, the caption band's height and words; the Datelines (every tick's x against this file's decode, the
+// Per theme: boot (the camera's tabs by role and name, no credit on the front and the credit first in About, the
+// face, the stamp), every pane's text contrast, the tracer under exactly the chosen tab, SI and the date forms in
+// every visible text node, hit targets, the plates and their label, the About key last; the register on All (the
+// sources' table and colors, the regions' heads, two-line summaries); the Datelines (every tick's x against this file's decode, the
 // ink sampled on rendered pixels, the label for VoiceOver), a tap on a tick on All and across panes, a
 // vertical swipe that starts on them scrolling and picking nothing, VoiceOver's press on the image as WebKit
 // runs it picking nothing, a click on the layer at a tick picking it, a story's link holding its headline
 // alone. Once: the first Tab, the tabs by keyboard, the same words on four locales (B1), About, hidden and
 // back (the same file, then a new one keeping the pane and the scroll), a broken replacement keeping the view
 // (B6), stale at 31 hours, a copy with Europe's feeds kept from an earlier run and Oceania empty (B2, B5), the
-// year on a later clock, broken data at the start and the recovery, Reduce Motion, the widths (to 640 and a
-// tablet, one caption line) and a phone on its side, a crafted copy at 320 px (a long word, a long region
-// name, a tick of six). Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png;
+// year on a later clock, broken data at the start and the recovery, Reduce Motion, the widths (to a tablet and a
+// wide screen, the header centered on the pane's column) and a phone on its side, a crafted copy at 320 px (a long
+// word, a long region name, a tick of six), the stamp on one line in every state it writes, two taps racing (the
+// last one wins; World News has no scrub), the live file. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png;
 // never screenshots/app.png, the README's composite, whose hash is checked unchanged.
 
 import http from 'node:http';
@@ -48,9 +52,12 @@ const hashOf = (f) => (fs.existsSync(f) ? crypto.createHash('sha256').update(fs.
 const appPngHash = hashOf(appPng);
 const NOW = '2026-10-01T10:00:00Z', TZ = 'Europe/Oslo';   // 12:00 CEST, UTC+2 until 25 Oct
 
-/* ── the data, decoded here (app.js's header comment is the contract) ── */
-const raw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
+/* ── the data, decoded here (app.js's header comment is the contract): the pinned fixed day ── */
+const FIXTURE_SHA = 'ecb808729f4562dfe98f324aaef3a54ffaeebef03982c62348ab6f8f910c5d2c';
+const raw = fs.readFileSync(path.join(APP, 'tools/fixtures/snapshot.json'), 'utf8');
+if (crypto.createHash('sha256').update(raw).digest('hex') !== FIXTURE_SHA) { console.error(`tools/fixtures/snapshot.json is not the pinned file (${FIXTURE_SHA.slice(0, 12)}…)`); process.exit(1); }
 const snap = JSON.parse(raw);
+const liveRaw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
 const NN = ' ';
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -62,8 +69,18 @@ const WHEN = `${genO.getUTCDate()} ${MON[genO.getUTCMonth()]}, ${hm(genO)}`;
 const FEEDS = `${snap.feeds.filter((f) => f.ok).length} of ${snap.feeds.length} feeds answered`;
 const STAMP = `Updated ${hm(genO)}, ${FEEDS}`;
 const NAMES = snap.sources.map((s) => s.name);
-const CREDITS = `Headlines from ${NAMES.slice(0, -1).join(', ')} and ${NAMES[NAMES.length - 1]}; terms in About.`;
-const CAPTION = (region, hollow) => `Ticks: each headline’s age when this file was made, ${WHEN}${region ? `; ${region} in ink` : ', on a logarithmic scale'}. ${hollow ? 'Hollow: from an earlier run.' : 'Tap one to find it.'}`;
+const CREDITS = `Headlines from ${NAMES.slice(0, -1).join(', ')} and ${NAMES[NAMES.length - 1]}.`;
+const ABOUT_KEY = 'Sources, their terms and credits are in About.';
+/** The Datelines' plate label (HOUSE 11.1 rule 9): the scale, then a key's words where the band said them. */
+const CAP = `Age when the file was made, ${WHEN}. Log scale.`;
+/** The key under it (HOUSE 11.1 rule 6): on a region's tab its sources, in sources[] order; a hollow tick when one is drawn. */
+const KEY = (region, hollow, data = snap) => [...(region ? data.sources.map((x) => x.name).filter((n) => data.regions.find((r) => r.name === region).items.some((it) => it.source === n)) : []), ...(hollow ? ['From an earlier run'] : [])];
+/** The sources' color slots, by their order in sources[] (HOUSE 11.3), and the tokens they take. */
+const SLOT = new Map(NAMES.map((n, i) => [n, i + 1]));
+const SRC_TOK = { light: ['#1f5f99', '#a64a1a', '#6d2736'], dark: ['#8cbcf0', '#f0a070', '#ab8198'] };
+const rgbOf = (h) => `rgb(${parseInt(h.slice(1, 3), 16)}, ${parseInt(h.slice(3, 5), 16)}, ${parseInt(h.slice(5, 7), 16)})`;
+/** A region's newest age as its plate's head says it: whole hours or days, never rounded up. */
+const ageShort = (h) => (!(h >= 1) ? `under 1${NN}h` : h < 24 ? `${Math.floor(h)}${NN}h` : `${Math.floor(h / 24)}${NN}d`);
 const PANES = ['All', ...snap.regions.map((r) => r.name)];
 const hours = (iso) => (GEN - Date.parse(iso)) / 36e5;
 const spokenAge = (h) => { const d = Math.floor(h / 24), r = Math.floor(h - d * 24); return [d && `${d} day${d === 1 ? '' : 's'}`, r && `${r} hour${r === 1 ? '' : 's'}`].filter(Boolean).join(' '); };
@@ -118,10 +135,11 @@ function decodePng(buf) {
 /* ── the server: the app folder, with the snapshot replaceable ── */
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.png': 'image/png', '.md': 'text/markdown', '.txt': 'text/plain' };
 let override = {}, snapshotReads = 0;
+const BASE = { '/data/snapshot.json': { body: raw } };   // the fixed day, unless a stage overrides it
 const server = http.createServer((req, res) => {
-  const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u];
+  const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u] || BASE[u];
   if (u === '/data/snapshot.json') snapshotReads++;
-  if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); return; }
+  if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } setTimeout(() => { res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); }, ov.delay || 0); return; }
   const f = path.join(APP, u === '/' ? 'index.html' : u);
   if (!f.startsWith(APP + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
@@ -166,6 +184,9 @@ async function open(scheme, o = {}) {
   const pane = async (name) => { await page.getByRole('tab', { name, exact: true }).click(); await page.waitForTimeout(300); };
   return { ctx, page, errors, ms, w, cdp, touch, tapAt, rect, png, shot, pane };
 }
+/** The stamp on one line at 16 px (HOUSE 7.2, plan 0012 F8), whatever it says. */
+const stampLine = (A) => A.w(() => { const s = document.getElementById('stamp'), r = s.getBoundingClientRect(); return { h: r.height, text: s.textContent, one: Math.abs(r.height - 16) <= 1 && s.getClientRects().length === 1 }; });
+const stampCheck = async (A, label) => { const s = await stampLine(A); check(s.one, `the stamp on one line, ${Math.round(s.h * 10) / 10} px tall (${label}): "${s.text}"`); };
 const closeOut = async (A, label) => { check(A.errors.length === 0, `${label}: no console error or warning, failed or outside request${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`); await A.ctx.close(); };
 
 /* Text contrast over every rendered DOM text node (backgrounds composited), and every SVG label's fill on the page. */
@@ -230,11 +251,11 @@ const siOf = (w) => w(() => {
   let n = 0;
   for (let t = walker.nextNode(); t; t = walker.nextNode()) {
     const e = t.parentElement;
-    if (!e || e.closest('[hidden]') || e.closest('script, style, .sr, template, .hl, .sum, .by, #about-sources')) continue;
+    if (!e || e.closest('[hidden]') || e.closest('script, style, .sr, template, .hl, .sum, #about-sources')) continue;
     let s = t.textContent;
     if (!s.trim()) continue;
     n++;
-    if (e.closest('.src')) s = s.replace(/^[^,]*,/, '');   // the source's own name is the file's
+    if (e.closest('.src')) s = s.replace(/^[^,]*,/, '').replace(/, by [^,]*/, '');   // the source's own name and the byline are the file's
     const ungrouped = s.replace(/\b(19|20)\d\d\b/g, '').replace(/\d{1,2}:\d\d/g, '').match(/(?<![\d. ])\d{4,}/);
     if (/(^|[^\w])-\d/.test(s) || /\d (h|d|min|%)(?![\w/])/.test(s) || /\d,\d/.test(s) || /\b(AM|PM)\b|\d+\.\s?(jan|feb|mar|apr|mai|jun|jul|aug|sep|okt|nov|des)|[月日火水木金土]|Sept\b/i.test(s) || ungrouped) bad.push(s.trim().slice(0, 50));
   }
@@ -256,8 +277,8 @@ const geometryOf = (w) => w(() => {
   const c = document.createElement('canvas').getContext('2d');
   c.font = '620 12.5px "Ysabeau Office"';
   const names = [...document.querySelectorAll('.dl .rn')].map((t) => t.textContent);
-  const pane = document.getElementById('pane'), cs = getComputedStyle(pane);
-  return { label: Math.ceil(Math.max(...names.map((n) => c.measureText(n).width))) + 10, width: pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) };
+  const plate = document.querySelector('.lead-sec'), cs = getComputedStyle(plate);   // the Datelines fill their plate
+  return { label: Math.ceil(Math.max(...names.map((n) => c.measureText(n).width))) + 10, width: plate.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) };
 });
 /** The drawn ticks per row: the x of each tick (its rect's centre) and its parts, read from the SVG. */
 const drawnOf = (w) => w(() => [...document.querySelectorAll('.dl g.row')].map((g) => {
@@ -273,26 +294,27 @@ for (const scheme of schemes) {
   const A = await open(scheme);
   const { page, w } = A;
   console.log(`    load to the first pane: ${A.ms} ms (headless)`);
-  const PAGE = scheme === 'light' ? [0xe8, 0xee, 0xf0] : [0x14, 0x1d, 0x21];
+  const SHEET = scheme === 'light' ? [0xf6, 0xf9, 0xfa] : [0x1c, 0x27, 0x2c];   // the Datelines sit on a plate
 
   // boot: the camera's tabs by role and name, the credits, the face, the stamp
   {
     const tabs = await Promise.all(PANES.map((n) => page.getByRole('tab', { name: n, exact: true }).count()));
     const camera = await w(() => ['Europe', 'Americas'].map((n) => [...document.querySelectorAll('button')].filter((b) => b.textContent === n && !b.hasAttribute('aria-label')).map((b) => b.getAttribute('role'))));
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent, whole: r.height > 0 && r.bottom <= innerHeight + 1, face: document.fonts.check('620 12.5px "Ysabeau Office"'),
+      const first = document.querySelector('#about-sources').parentElement.querySelector('h3 + p');
+      return { gone: !document.getElementById('credits') && !document.getElementById('band') && !document.querySelector('footer'), about: first && first.id, credits: first && first.textContent,
+        front: [document.getElementById('head').innerText, document.getElementById('main').innerText].join('\n'), face: document.fonts.check('620 12.5px "Ysabeau Office"'),
         loaded: [...document.fonts].filter((f) => f.status === 'loaded').length, stamp: document.getElementById('stamp').textContent, pane: window.__wn.pane() };
     });
     check(tabs.every((n) => n === 1), `the panes as tabs by name: ${PANES.map((p, i) => `${p} ${tabs[i]}`).join(', ')}`);
     check(camera.every((r) => r.length === 1 && r[0] === 'tab'), 'the camera\'s strings: Europe and Americas, each exactly one <button role="tab"> named by its word, built after the parse');
-    check(b.credits === CREDITS && b.whole, `the credits on screen, built from the file's sources: "${b.credits}"`);
+    check(b.gone && b.about === 'about-credit-line' && b.credits === CREDITS && !/Headlines from|Creative Commons|terms of use|licen[cs]e/i.test(b.front),
+      `no band and no credit line on the front; About's first Sources and credits paragraph is the credit, built from the file's sources: "${b.credits}" (HOUSE 4.15)`);
     check(b.face && b.loaded === 1, `the face is loaded before the Datelines measure their labels (${b.loaded} face)`);
     check(b.stamp === STAMP && b.pane === 'all', `the stamp: "${b.stamp}" (built here: "${STAMP}"); the app opens on All`);
   }
 
-  // every pane: text contrast, the face, the tracer, SI and dates, hit targets, the band's height and words
-  const bandH = [];
+  // every pane: text contrast, the face, the tracer, SI and dates, hit targets, the plates and their label, the About key
   for (const name of PANES) {
     await A.pane(name);
     const t0 = Date.now();
@@ -304,14 +326,56 @@ for (const scheme of schemes) {
     check(si.bad.length === 0, `${name}: SI and the date forms in ${si.n} visible text nodes (B1, B11)${si.bad.length ? ': ' + si.bad.slice(0, 5).join(' | ') : ''}`);
     const hits = await hitTargets(A);
     check(hits.bad.length === 0 && hits.n >= 5, `${name}: ${hits.n} controls, every one 44 × 44 or more (B9)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
-    const g = await w(() => { const m = document.getElementById('main'); return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: document.getElementById('capline').textContent }; });
+    const g = await w(() => { const m = document.getElementById('main'), cap = document.querySelector('.lead-sec .cap');
+      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.textContent, capLines: Math.round(cap.getBoundingClientRect().height / 15),
+        key: [...document.querySelectorAll('.lead-sec .key .k')].map((k) => k.textContent),
+        plates: [...document.querySelectorAll('#pane > *')].map((e) => (e.matches('section.sec') ? (e.querySelector('h2') || {}).textContent : e.className)) }; });
     check(!g.side, `${name}: nothing runs past the pane's width`);
-    check(g.cap === CAPTION(name === 'All' ? null : name, false), `${name}: the caption "${g.cap}"`);
-    bandH.push(await w(() => document.getElementById('band').getBoundingClientRect().height));
+    const want = ['Every headline by age', ...snap.regions.filter((r) => name === 'All' || r.name === name).map((r) => r.name), 'aboutlink'];
+    check(g.cap === CAP && g.capLines === 1 && JSON.stringify(g.key) === JSON.stringify(KEY(name === 'All' ? null : name, false)) && JSON.stringify(g.plates) === JSON.stringify(want),
+      `${name}: the plates in order (${g.plates.join(', ')}); the Datelines' label on one line, "${g.cap}"${g.key.length ? `, its key: ${g.key.join(', ')}` : ''} (HOUSE 11.1 rules 4, 6 and 9)`);
+    const k = await w(() => { const b = document.getElementById('pane').lastElementChild, r = b.getBoundingClientRect(), s = b.previousElementSibling && b.previousElementSibling.getBoundingClientRect(); return { tag: b.tagName, cls: b.className, text: b.textContent, h: r.height, gap: s ? r.top - s.bottom : null }; });
+    check(k.tag === 'BUTTON' && k.cls === 'aboutlink' && k.text === ABOUT_KEY && k.h >= 44 && Math.abs(k.gap - 14) < 0.5, `${name}: the pane ends with the key "${k.text}", ${Math.round(k.h)} px tall, ${k.gap} px under the last plate (HOUSE 11.1 rule 1)`);
     console.log(`      ${name} drawn and checked in ${Date.now() - t0} ms (headless)`);
     await A.shot(`${fileName(name)}-${scheme}`, ['All', 'Europe', 'Americas', 'Oceania'].includes(name));
   }
-  check(new Set(bandH).size === 1, `the caption band holds its height on every pane (${bandH.join(', ')} px): the pane above it never resizes`);
+
+  // the register on All: the sources' table against this file's decode, their colors, the regions' heads, two-line summaries
+  {
+    await A.pane('All');
+    const items = snap.regions.flatMap((r) => r.items);
+    const wantRows = NAMES.map((n) => [n, String(items.filter((x) => x.source === n).length), `${snap.feeds.filter((f) => f.source === n && f.ok).length} of ${snap.feeds.filter((f) => f.source === n).length}`]);
+    const t = await w(() => ({ head: [...document.querySelectorAll('.keytab th')].map((x) => x.textContent), rows: [...document.querySelectorAll('.keytab tr')].slice(1).map((tr) => [...tr.children].map((x) => x.textContent)),
+      sw: [...document.querySelectorAll('.keytab .sw')].map((x) => getComputedStyle(x).backgroundColor), align: [...document.querySelectorAll('.keytab tr:nth-child(2) td')].map((x) => getComputedStyle(x).textAlign) }));
+    check(t.head.join() === 'Source,Headlines,Feeds' && JSON.stringify(t.rows) === JSON.stringify(wantRows) && JSON.stringify(t.sw) === JSON.stringify(SRC_TOK[scheme].map(rgbOf)) && t.align.join() === 'left,right,right',
+      `All's table of sources, also the colors' key: ${t.rows.map((r) => r.join(' ')).join('; ')}; each swatch its token (${SRC_TOK[scheme].join(', ')}), the figures right-aligned (HOUSE 11.1 rule 3, 11.3)`);
+    const fills = await w(() => [...document.querySelectorAll('.dl g.row')].map((g) => [...g.querySelectorAll('rect.tk')].map((r) => [r.getAttribute('class'), getComputedStyle(r).fill])));
+    const ticks = fills.flat(), slotOk = ticks.every(([cls, fill]) => { const m = cls.match(/src-(\d)/); return m && fill === rgbOf(SRC_TOK[scheme][m[1] - 1]); });
+    const byClass = {}; for (const [cls] of ticks) byClass[cls] = (byClass[cls] || 0) + 1;
+    const wantClass = {}; for (const it of items) { const k = `tk src-${SLOT.get(it.source)}`; wantClass[k] = (wantClass[k] || 0) + 1; }
+    const shared = items.length - ticks.length;   // parts of a shared tick past the fourth are not drawn; none in this file
+    check(slotOk && shared === 0 && JSON.stringify(Object.entries(byClass).sort()) === JSON.stringify(Object.entries(wantClass).sort()),
+      `All: every tick in its source's color, ${Object.entries(byClass).sort().map(([k, v]) => `${v} ${k.slice(3)}`).join(', ')}, as this file's sources say`);
+    const heads = await w(() => [...document.querySelectorAll('#pane > .sec:not(.lead-sec)')].map((p) => [p.querySelector('h2').textContent, p.querySelector('.sec-meta').textContent]));
+    const wantHeads = snap.regions.map((r) => [r.name, `${r.items.length} headlines, newest ${ageShort(Math.min(...r.items.map((it) => hours(it.published))))}`]);
+    check(JSON.stringify(heads) === JSON.stringify(wantHeads), `each region's plate heads with its count and its newest headline's age, floored: ${heads.map((h) => h.join(': ')).join('; ')}`);
+    const sums = await w(() => [...document.querySelectorAll('.sum')].map((x) => [x.className, x.getBoundingClientRect().height, x.scrollHeight]));
+    check(sums.length > 10 && sums.every(([c, h]) => c === 'sum clamp' && h <= 34.5) && sums.some(([, h, sh]) => sh > h + 1),
+      `All: ${sums.length} summaries held to two lines (at most ${Math.max(...sums.map((x) => x[1]))} px), ${sums.filter(([, h, sh]) => sh > h + 1).length} of them cut (display only; HOUSE 11.1 rule 10)`);
+    await A.pane('Europe');
+    const full = await w(() => [...document.querySelectorAll('.sum')].map((x) => [x.className, x.scrollHeight - x.clientHeight]));
+    check(full.every(([c, d]) => c === 'sum' && d <= 1), `Europe: its ${full.length} summaries whole`);
+    const sl = await w(() => [...document.querySelectorAll('.story')].map((st) => { const sw = st.querySelector('.src .sw'); return [st.querySelector('.src').textContent, sw ? getComputedStyle(sw).backgroundColor : null]; }));
+    const eu = snap.regions[0], others = new Map();
+    for (const r of snap.regions) for (const it of r.items) others.set(it.link, [...(others.get(it.link) || []), r.name]);
+    const wantSl = eu.items.map((it) => {
+      const d = new Date(Date.parse(it.published)), dateOnly = /T(00|12):00:00Z$/.test(it.published), o = oslo(Date.parse(it.published));
+      const when = dateOnly ? `${d.getUTCDate()} ${MON[d.getUTCMonth()]}` : `${o.getUTCDate()} ${MON[o.getUTCMonth()]}, ${hm(o)}`;
+      const also = others.get(it.link).filter((n) => n !== eu.name);
+      return [[it.source, when, it.author ? `by ${it.author}` : null].filter(Boolean).join(', ') + (also.length ? `, also under ${also.join(', ')}` : ''), rgbOf(SRC_TOK[scheme][SLOT.get(it.source) - 1])];
+    });
+    check(JSON.stringify(sl) === JSON.stringify(wantSl), `Europe: each source line is its swatch in the source's color, the name, the date and the byline joined to it (HOUSE 11.1 rule 10): "${sl[0][0]}"`);
+  }
 
   // the Datelines: every tick against this file's decode, the ink on rendered pixels, the label
   for (const name of ['All', 'Europe']) {
@@ -324,9 +388,9 @@ for (const scheme of schemes) {
     check(same && hookSame && hook.x0 === G.label, `${name}: ${drawn.reduce((s, r) => s + r.length, 0)} ticks in 6 rows, each at its x and in its parts as decoded here (label column ${G.label} px, plot ${Math.min(480, G.width - G.label - 6)} px)`);
     const ticks = await w(() => [...document.querySelectorAll('.dl g.row.on rect.tk')].map((r) => r.getBoundingClientRect().toJSON()));
     const img = await A.png(), samples = [];
-    for (const r of ticks) for (let x = Math.round(r.left * 2) + 1; x < Math.round(r.right * 2) - 1; x++) for (let y = Math.round(r.top * 2) + 1; y < Math.round(r.bottom * 2) - 1; y++) samples.push(contrast(img.at(x, y), PAGE));
+    for (const r of ticks) for (let x = Math.round(r.left * 2) + 1; x < Math.round(r.right * 2) - 1; x++) for (let y = Math.round(r.top * 2) + 1; y < Math.round(r.bottom * 2) - 1; y++) samples.push(contrast(img.at(x, y), SHEET));
     const at3 = samples.filter((s) => s >= 3).length / samples.length;
-    check(samples.length > 100 && at3 >= 0.9, `${name}: the Datelines' ink, ${samples.length} samples inside ${ticks.length} inked parts, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the page (ART.md: ink on page 14.80 light, 14.43 dark; the lowest sample ${Math.min(...samples).toFixed(2)}, an antialiased part's edge)`);
+    check(samples.length > 100 && at3 >= 0.9, `${name}: the chosen rows' ticks, ${samples.length} samples inside ${ticks.length} parts, ${(at3 * 100).toFixed(1)} % at 3:1 or more on their plate (ART.md: the sources' colors on --sheet 4.60 to 9.96; the lowest sample ${Math.min(...samples).toFixed(2)}, an antialiased part's edge)`);
     const lab = await w(() => document.querySelector('.dl').getAttribute('aria-label'));
     const eu = snap.regions[0], byAge = [...eu.items].sort((a, b) => hours(a.published) - hours(b.published));
     check(lab.startsWith(`Datelines. ${eu.name}: ${eu.items.length} headlines, the newest ${spokenItem(byAge[0].published)} and the oldest ${spokenItem(byAge[byAge.length - 1].published)} before the file was made.`) && (lab.match(/: \d+ headlines/g) || []).length === 6,
@@ -430,8 +494,8 @@ for (const scheme of schemes) {
       return { name: a.textContent, title: row.querySelector('.hl').textContent, kids: [...row.children].map((e) => e.className), hit: at === a, link: row.children[0] === a };
     });
     const story = await page.locator('.story').first().ariaSnapshot();
-    check(st.link && st.name === st.title && st.hit && st.kids.join() === ['hl', 'src', ...st.kids.slice(2)].join() && /^- link "/m.test(story) && /^- text: /m.test(story),
-      `a story: the link is its headline alone ("${st.name.slice(0, 32)}…"), a tap on its summary lands on the link, and the source line, byline and summary follow it as text (${st.kids.join(', ')})`);
+    check(st.link && st.name === st.title && st.hit && ['hl,src', 'hl,src,sum'].includes(st.kids.join()) && /^- link "/m.test(story) && /^- text: /m.test(story),
+      `a story: the link is its headline alone ("${st.name.slice(0, 32)}…"), a tap on its summary lands on the link, and the source line (its byline joined) and the summary follow it as text (${st.kids.join(', ')})`);
   }
   await closeOut(A, scheme);
 }
@@ -479,7 +543,8 @@ console.log('\n== once');
     const s = await A.rect('#stamp');
     await A.tapAt(s.left + 20, s.top + s.height / 2);
     await page.waitForTimeout(400);
-    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main', 'band'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+      credit: document.getElementById('about-credit-line').textContent, firstP: document.querySelector('#about-credit-line').previousElementSibling.tagName,
       text: document.querySelector('.about-body').textContent.replace(/[ \t\n]+/g, ' '),
       list: [...document.querySelectorAll('#about-list dt')].map((d, i) => `${d.textContent} ${document.querySelectorAll('#about-list dd')[i].textContent}`),
       links: [...document.querySelectorAll('#about-sources a')].map((x) => [x.textContent, x.getAttribute('href')]) }));
@@ -487,13 +552,44 @@ console.log('\n== once');
     const links = snap.sources.every((src, i) => a.links[i] && a.links[i][1] === src.terms && a.links[i][0] === src.terms.replace(/^https?:\/\//, ''));
     const dateOnly = snap.regions.flatMap((r) => r.items).filter((i) => /T(00|12):00:00Z$/.test(i.published)).length;
     const wantList = ['Updated: Thu 1 Oct 2026, 07:01 (UTC+2)', 'Stale after: 30 hours', `Regions: ${snap.regions.length}`, `Headlines: ${snap.regions.reduce((n, r) => n + r.items.length, 0)}`, `Dates without a time: ${dateOnly}`, `Feeds: ${FEEDS.replace(' feeds answered', '')} answered on the last run`, 'In two regions or more: 3'];
-    check(a.open && a.inert && a.focus === 'about-close' && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.') && words && links,
-      'About opens from the stamp, focus on Close, the rest inert; every source\'s name, attribution and license line word for word, its terms address printed without its scheme as the link; the face\'s credit');
+    check(a.open && a.inert && a.focus === 'about-close' && a.credit === CREDITS && a.firstP === 'H3' && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.') && words && links,
+      `About opens from the stamp, focus on Close, the rest inert; the credit "${a.credit}" first under Sources and credits; every source's name, attribution and license line word for word, its terms address printed without its scheme as the link; the face's credit`);
     check(JSON.stringify(a.list) === JSON.stringify(wantList), `About's This data: ${a.list.join('; ')}`);
     await A.shot('about-light');
     await page.keyboard.press('Escape');
     await page.waitForTimeout(150);
     check(await w(() => document.getElementById('about').hidden && document.activeElement.id === 'stamp' && !document.getElementById('main').inert), 'About closes on Escape; focus returns to the stamp');
+    // the About key at the pane's end, by touch: About opens, and closing it returns focus to the key
+    await w(() => { const m = document.getElementById('main'); m.scrollTop = m.scrollHeight; });
+    await page.waitForTimeout(150);
+    const kb = await A.rect('#pane > .aboutlink');
+    await A.tapAt(kb.left + 30, kb.top + kb.height / 2);
+    await page.waitForTimeout(400);
+    const ok1 = await w(() => !document.getElementById('about').hidden && document.activeElement.id === 'about-close');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(150);
+    check(ok1 && await w(() => document.getElementById('about').hidden && document.activeElement.className === 'aboutlink'), `the key "${ABOUT_KEY}" at the pane's end, tapped: About opens; Escape brings focus back to the key`);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
+  }
+  // two taps racing (World News has no scrub, so this is its race): a tap on Europe's newest tick and, in the same
+  // task, before the page has drawn or said it, one on Oceania's (the first tap scrolls the pane to its story, so the
+  // second is placed on the layer where it then is); the last tap wins, the selection, the marked story and the sentence
+  {
+    await A.pane('All');
+    await w(() => { document.getElementById('live').textContent = ''; });
+    const G = await geometryOf(w), mine = clusters(G.width, G.label);
+    const eu = mine[0][0], oc = mine[5][0];
+    await w(([ex, ox]) => {
+      const click = (x, row) => { const l = document.querySelector('.dlhit'), b = l.getBoundingClientRect(); l.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, clientX: b.left + x, clientY: b.top + 4 + row * 18 + 9, detail: 1 })); };
+      click(ex, 0);
+      click(ox, 5);
+    }, [eu[0].x, oc[0].x]);
+    await page.waitForTimeout(500);
+    const r = await w(() => ({ sel: window.__wn.selected(), cur: [...document.querySelectorAll('[aria-current="true"]')].map((x) => x.closest('.story').id), live: document.getElementById('live').textContent }));
+    const it = snap.regions[5].items[oc[0].ii];
+    check(r.sel && r.sel.ri === 5 && r.sel.ii === oc[0].ii && r.cur.join() === `s-5-${oc[0].ii}` && r.live.startsWith(`${oc.length > 1 ? `${oc.length} headlines at this age. ` : ''}Oceania, `) && r.live.includes(it.title.trim().slice(0, 20)),
+      `two taps racing, Europe's newest tick then Oceania's: the last wins (${JSON.stringify(r.sel)}, ${r.cur.join()}), said once for it: "${r.live.slice(0, 60)}…"`);
+    await A.pane('All');
   }
   // hidden and back: the snapshot is read again; the same file redraws only the stamp
   await A.pane('Africa');
@@ -535,7 +631,7 @@ console.log('\n== once');
   const texts = [];
   for (const locale of ['en-US', 'en-GB', 'nb-NO', 'ja-JP']) {
     const A = await open('light', { locale });
-    texts.push([locale, await A.w(() => [document.getElementById('head').innerText, document.getElementById('pane').innerText, document.getElementById('band').innerText].join('\n'))]);
+    texts.push([locale, await A.w(() => [document.getElementById('head').innerText, document.getElementById('pane').innerText].join('\n'))]);
     await closeOut(A, `locale ${locale}`);
   }
   check(texts.every(([, t]) => t === texts[0][1]), `the same words, letter for letter, under ${texts.map(([l]) => l).join(', ')} (${texts[0][1].length} characters on All)`);
@@ -545,13 +641,15 @@ console.log('\n== once');
   const A = await open('light', { time: new Date(GEN + 31 * 3600e3).toISOString() });
   const s = await A.w(() => ({ text: document.getElementById('stamp').textContent, ink: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color }));
   check(s.text === `Stale. Updated ${WHEN}, ${FEEDS}` && s.ink, `B2: 31 hours on: "${s.text}", the word in ink, never a color`);
+  await stampCheck(A, 'stale');
   await closeOut(A, 'stale');
 }
 // a later year: the stamp and the stories carry their year
 {
   const A = await open('light', { time: '2027-01-05T10:00:00Z' });
   const s = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, src: [...document.querySelectorAll('.src')].map((x) => x.textContent).slice(0, 2) }));
-  check(s.stamp === `Stale. Updated 1 Oct 2026, 07:01, ${FEEDS}` && s.src[0] === 'Global Voices, 29 Sep 2026, also under Middle East' && s.src[1] === 'Global Voices, 28 Sep 2026, 08:00', `on 5 Jan 2027: "${s.stamp}"; "${s.src.join('" "')}"`);
+  check(s.stamp === `Stale. Updated 1 Oct 2026, 07:01, ${FEEDS}` && s.src[0] === 'Global Voices, 29 Sep 2026, by Elmira Lyapina, also under Middle East' && s.src[1] === 'Global Voices, 28 Sep 2026, 08:00, by Nevena Borisova', `on 5 Jan 2027: "${s.stamp}"; "${s.src.join('" "')}"`);
+  await stampCheck(A, 'the longest it writes: stale, with the year');
   await closeOut(A, 'a later year');
 }
 // a copy with Europe's feeds kept from an earlier run, and Oceania empty (B2, B5)
@@ -569,7 +667,7 @@ for (const scheme of schemes) {
     const tab = [...document.querySelectorAll('.tabs button')].find((b) => b.textContent === 'Europe');
     return { name: tab && tab.textContent, desc: tab && document.getElementById(tab.getAttribute('aria-describedby')).textContent, label: tab && tab.getAttribute('aria-label'),
       hollow: document.querySelectorAll('.dl g.row:first-of-type rect.ho').length, ink: document.querySelectorAll('.dl g.row:first-of-type rect.tk').length,
-      st: [...document.querySelectorAll('.statement')].map((p) => p.textContent), src: [...document.querySelectorAll('.src')].map((x) => x.textContent), cap: document.getElementById('capline').textContent, stamp: document.getElementById('stamp').textContent,
+      st: [...document.querySelectorAll('.statement')].map((p) => p.textContent), src: [...document.querySelectorAll('.src')].map((x) => x.textContent), cap: document.querySelector('.lead-sec .cap').textContent, key: [...document.querySelectorAll('.lead-sec .key .k')].map((k) => k.textContent), keyH: (document.querySelector('.lead-sec .key') || { getBoundingClientRect: () => ({ height: 0 }) }).getBoundingClientRect().height, stamp: document.getElementById('stamp').textContent,
       stroke: getComputedStyle(document.querySelector('.dl g.row.on rect.ho')).stroke, ink2: getComputedStyle(document.querySelector('h1')).color };
   });
   const tabCount = await page.getByRole('tab', { name: 'Europe', exact: true }).count();
@@ -577,7 +675,7 @@ for (const scheme of schemes) {
   check(s.hollow === 8 && s.ink === 0 && s.stroke === s.ink2, `Europe's row: ${s.hollow} hollow parts in ink, no filled one (a failed feed shows by its shape)`);
   check(s.st[0] === 'Europe’s feeds did not answer on the last run: gv-western-europe, gv-eastern-europe and un-europe (HTTP 503). These 8 headlines are kept from an earlier run.' && s.src.every((x) => x.includes(', kept from an earlier run')),
     `B2: the statement "${s.st[0]}"; every story says "kept from an earlier run"`);
-  check(s.cap === CAPTION('Europe', true) && s.stamp === `Updated 07:01, ${snap.feeds.length - 3} of ${snap.feeds.length} feeds answered`, `the caption "${s.cap}"; the stamp "${s.stamp}"`);
+  check(s.cap === CAP && JSON.stringify(s.key) === JSON.stringify(KEY('Europe', true, kept)) && s.keyH <= 15.5 && s.stamp === `Updated 07:01, ${snap.feeds.length - 3} of ${snap.feeds.length} feeds answered`, `the Datelines' label "${s.cap}" and its key on one line, ${s.key.join(', ')}; the stamp "${s.stamp}"`);
   await A.shot(`europe-kept-${scheme}`, false);
   await A.pane('Oceania');
   const o = await w(() => [[...document.querySelectorAll('.statement')].map((p) => p.textContent).join(), document.querySelector('.dl').getAttribute('aria-label').endsWith('Oceania: no headlines.')]);
@@ -609,6 +707,7 @@ for (const [label, ov, want] of [
   const s = await A.w(() => ({ first: document.querySelector('#notice p').textContent, next: document.querySelector('#notice .notice-lines').textContent, role: document.getElementById('notice').getAttribute('role'), tabs: document.getElementById('tabs').hidden, stamp: document.getElementById('stamp').textContent, mono: [...document.querySelectorAll('#notice *')].some((e) => /mono/i.test(getComputedStyle(e).fontFamily)), tick: document.getElementById('notice').textContent.includes('`') }));
   check(s.first === want && s.next === 'In Snuggery, Options, then App Files shows what the file holds.' && s.role === 'alert' && s.tabs && s.stamp === 'No usable data' && !s.mono && !s.tick,
     `broken data, ${label}: "${s.first}" on a plate (role alert), no tabs, no monospace, no backtick (B7)`);
+  if (label === 'missing') await stampCheck(A, 'no usable data');
   if (label === 'an error envelope') await A.shot('broken-envelope-light', false);
   const sb = await A.rect('#stamp');
   await A.tapAt(sb.left + 20, sb.top + sb.height / 2);
@@ -624,26 +723,28 @@ for (const [label, ov, want] of [
   await closeOut(A, `broken data, ${label}`);
 }
 override = {};
-// the widths: no sideways scroll, the caption line inside its two lines, the Datelines inside the pane; on its side
-for (const [label, wv, hv, kept] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['125 % text (312 × 675)', 312, 675], ['125 % text with every region kept (312 × 675)', 312, 675, true], ['on its side (844 × 390)', 844, 390], ['640 × 900', 640, 900], ['a tablet (820 × 1180)', 820, 1180]]) {
+// the widths: no sideways scroll, the Datelines inside their plate; on its side; a wide screen with the header
+// centered on the pane's column (plan 0011's owed item)
+for (const [label, wv, hv, kept] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['125 % text (312 × 675)', 312, 675], ['125 % text with every region kept (312 × 675)', 312, 675, true], ['on its side (844 × 390)', 844, 390], ['640 × 900', 640, 900], ['a tablet (820 × 1180)', 820, 1180], ['wide (1024 × 768)', 1024, 768]]) {
   if (kept) { const k = JSON.parse(raw); k.generatedAt = '2026-10-10T05:01:21Z'; for (const r of k.regions) { r.stale = true; for (const it of r.items) it.stale = true; } override = { '/data/snapshot.json': { body: JSON.stringify(k) } }; }
   const A = await open('light', { w: wv, h: hv, time: kept ? '2026-10-10T10:00:00Z' : NOW });
   const r = [];
   for (const name of PANES) {
     await A.pane(name);
     r.push(await A.w(() => {
-      const m = document.getElementById('main'), cap = document.getElementById('capline'), dl = document.querySelector('.dl').getBoundingClientRect(), p = document.getElementById('pane'), ps = getComputedStyle(p);
-      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.scrollHeight <= cap.clientHeight + 1, capH: cap.clientHeight, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
-        dl: dl.right <= p.getBoundingClientRect().right - parseFloat(ps.paddingRight) + 0.5, band: document.getElementById('band').getBoundingClientRect().height };
+      const m = document.getElementById('main'), dl = document.querySelector('.dl').getBoundingClientRect(), plate = document.querySelector('.lead-sec'), pr = plate.getBoundingClientRect(), ps = getComputedStyle(plate);
+      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+        dl: dl.right <= pr.right - parseFloat(ps.paddingRight) + 0.5, at: [document.querySelector('h1').getBoundingClientRect().left, pr.left, pr.right] };
     }));
   }
-  const side = r.filter((x) => x.side).length, cap = r.filter((x) => !x.cap).length, dl = r.every((x) => x.dl);
-  const land = wv > hv ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
-  const lines = r.every((x) => x.capH === (wv >= 640 ? 15 : 30));
-  check(side === 0 && cap === 0 && land && dl && lines && new Set(r.map((x) => x.band)).size === 1, `${label}: no sideways scroll on any pane, the caption line inside its ${wv >= 640 ? 'one line' : 'two lines'} (${r[0].capH} px) on every pane, the Datelines inside the pane${wv > hv ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
+  const side = r.filter((x) => x.side).length, dl = r.every((x) => x.dl);
+  const land = wv > hv && hv < 500 ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
+  const along = r.every((x) => Math.abs(x.at[0] - x.at[1]) < 0.5 && (wv <= 760 || Math.abs((x.at[1] + x.at[2]) / 2 - wv / 2) < 1));
+  check(side === 0 && land && dl && along, `${label}: no sideways scroll on any pane, the Datelines inside their plate, the name starting where the first plate does (${Math.round(r[0].at[0])} and ${Math.round(r[0].at[1])} px${wv > 760 ? `; the column ${Math.round(r[0].at[1])} to ${Math.round(r[0].at[2])} of ${wv} px, centered` : ''})${land && wv > hv && hv < 500 ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
   await A.pane('All');
   if (wv === 320) await A.shot('all-320-light', false);
-  if (wv > hv) await A.shot('all-landscape-light', false);
+  if (wv > hv && hv < 500) await A.shot('all-landscape-light', false);
+  if (wv === 1024) await A.shot('all-wide-light', false);
   await closeOut(A, label);
   override = {};
 }
@@ -669,6 +770,48 @@ for (const [label, wv, hv, kept] of [['320 × 700', 320, 700], ['360 × 740', 36
   check(out.every((o) => !o.side && !o.touch && o.labs >= 2) && out[2].cnt.join() === '6',
     `a crafted copy at 320 px: a 66-letter word wraps (no sideways scroll on All, Europe, Middle East); a long region name leaves ${out[0].labs} scale labels, none touching; a tick of six headlines prints "${out[2].cnt.join()}" beside its four parts`);
   await closeOut(A, 'crafted');
+  override = {};
+}
+// the stamp on its own day and the day after, on one line (HOUSE 7.2, plan 0012 F8); the loading line
+{
+  const A = await open('light', { time: new Date(GEN + 3600e3).toISOString() });
+  await stampCheck(A, 'fresh, the file\'s own day');
+  await closeOut(A, 'stamp fresh');
+  const B = await open('light', { time: new Date(GEN + 24 * 3600e3).toISOString() });
+  check(await B.w(() => document.getElementById('stamp').textContent) === `Updated ${WHEN}, ${FEEDS}`, `the day after: "Updated ${WHEN}, ${FEEDS}"`);
+  await stampCheck(B, 'the day after');
+  await closeOut(B, 'stamp next day');
+  override = { '/data/snapshot.json': { body: raw, delay: 1500 } };   // the file held back, so the loading line can be read
+  const C = await open('light', { noWait: true });
+  check(await C.w(() => document.getElementById('stamp').textContent) === 'Reading the headlines…', 'the loading line, before the file is read');
+  await stampCheck(C, 'loading');
+  await C.page.waitForFunction(ready, null, { timeout: 30000 });
+  await closeOut(C, 'stamp loading');
+  override = {};
+}
+// the live file: data/snapshot.json as the refresh last wrote it, two hours after it was made. Every figure is
+// worked out here from that file; nothing is pinned, so any file the bot writes must pass.
+{
+  // Oslo's wall clock by its zone, not a fixed +2: the live file may be from winter time (tools may use Intl; the app may not)
+  const live = JSON.parse(liveRaw), lg = Date.parse(live.generatedAt);
+  const osl = (ms) => Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: TZ, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(ms)).map((x) => [x.type, x.value]));
+  const g0 = osl(lg), g1 = osl(lg + 2 * 3600e3), liveWhen = `${g0.day === g1.day ? '' : `${g0.day} ${g0.month}, `}${g0.hour}:${g0.minute}`;
+  override = { '/data/snapshot.json': { body: liveRaw } };
+  const A = await open('light', { time: new Date(lg + 2 * 3600e3).toISOString() });
+  const names = live.sources.map((x) => x.name), items = live.regions.flatMap((r) => r.items);
+  const r = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, credit: document.getElementById('about-credit-line').textContent,
+    rows: [...document.querySelectorAll('.keytab tr')].slice(1).map((tr) => [...tr.children].map((x) => x.textContent)), plates: document.querySelectorAll('#pane > section.sec').length,
+    tabs: [...document.querySelectorAll('.tabs button')].map((b) => b.textContent), last: document.getElementById('pane').lastElementChild.className }));
+  const lf = `${live.feeds.filter((f) => f.ok).length} of ${live.feeds.length} feeds answered`;
+  const wantRows = names.slice(0, 3).map((n) => [n, String(items.filter((x) => x.source === n).length), `${live.feeds.filter((f) => f.source === n && f.ok).length} of ${live.feeds.filter((f) => f.source === n).length}`]);
+  check(r.stamp === `Updated ${liveWhen}, ${lf}` && r.credit === `Headlines from ${names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`}.`
+    && JSON.stringify(r.rows) === JSON.stringify(wantRows) && r.plates === live.regions.length + 1 && r.tabs.join() === ['All', ...live.regions.map((x) => x.name)].join() && r.last === 'aboutlink',
+    `the live file (made ${live.generatedAt}): "${r.stamp}"; the credit "${r.credit}"; the sources' table ${r.rows.map((x) => x.join(' ')).join('; ')}; ${r.plates} plates; the About key last`);
+  const c = await contrastOf(A.w);
+  check(c.worst[0] >= 4.5, `the live file: the lowest text contrast ${c.worst[0]}:1 (${c.worst[1]})`);
+  await stampCheck(A, 'the live file');
+  await A.shot('all-live-light', false);
+  await closeOut(A, 'the live file');
   override = {};
 }
 const after = hashOf(appPng);

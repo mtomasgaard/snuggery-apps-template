@@ -146,7 +146,7 @@ Some things worth changing, in rough order of how often people want them:
   euro-cents per kWh. If your tariff is quoted in øre, kronor or something
   else, the conversion is one function, `unitsOf()` in `js/units.js`, which
   writes every number, unit and date the app shows. Whatever you do, keep the
-  "spot price, before grid rent, tax and VAT" caption: the number is not the
+  "spot price, before grid rent, tax and VAT" label under the staircase: the number is not the
   bill, and an app that implies it is will be believed.
 - **More days.** The script asks for today and tomorrow. Energy-Charts serves
   history too (`start`/`end` accept plain dates), so a week back is a small
@@ -157,15 +157,16 @@ Some things worth changing, in rough order of how often people want them:
   `miniapp.json`, add a workflow.
 
 The look follows the template's house system (`ART.md` says how): one
-typeface in `fonts/`, gray chrome, the price's one blue and the run's ink.
+typeface in `fonts/`, gray chrome, the price's one blue and the run's ink,
+and two colors on words that mean cheap and dear.
 A copy that changes the look keeps the face's credit line in `NOTES.md` and
 About.
 
 ## Do not touch
 
-- The credits line under the app. CC BY 4.0 asks for it, and it comes out of
-  the snapshot word for word: removing it is removing the thing that makes the
-  data usable.
+- The credit in About, under Sources and credits. CC BY 4.0 asks for it, and
+  it comes out of the snapshot word for word: removing it is removing the thing
+  that makes the data usable.
 - The rate-limiting in `scripts/power_hours.py`. Two requests a run, a second
   apart, honoring `Retry-After`. The service is free and run by a research
   institute.

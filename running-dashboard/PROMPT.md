@@ -9,8 +9,8 @@ Read it together before starting.
 
 Running Dashboard is five panes — Now, Plan, Training, Health, Sessions — built
 from your Garmin Connect data. The copy you just installed still holds made-up demo data — a made-up runner's nine months,
-with a coaching evaluation written for that runner; nothing on screen says so, because the demo is
-built to look like a real copy. This guide replaces all of it with your own.
+with a coaching evaluation written for that runner; the stamp at the top says `Example data.`, and
+says it no more once your own sessions replace the demo's. This guide replaces all of it with your own.
 
 How the pieces fit — the Garmin connection, the raw store the pull keeps in
 `running-dashboard/raw/`, the map, the coaching text — is in `running-dashboard/NOTES.md`. Read it

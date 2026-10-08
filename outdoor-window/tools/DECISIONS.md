@@ -569,3 +569,145 @@ fixtures in `tools/dst/` written by `tools/dst/make_fixtures.py` from the histor
 autumn 2025 and 2026, Oslo spring 2026, Boston autumn 2025 and 2026 (the 2026 autumn files are the 2025
 replies moved 364 days, weekday for weekday, because those forecasts do not exist yet). The committed
 demo (Boston, 21 Sep) crosses no change, so its `ask` table and the data pins are unchanged.
+
+## Plan 0012 package 4: the pane-app register and the demo refreshed, Outdoor Window 1.2 (the builder, 2026-10-08)
+
+The brief is `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (D5, D6 gray, package 4: "Outdoor Window (with
+its demo refreshed and the fixtures re-pinned, plan 0011's owed item 1)"), `Template/HOUSE.md` §4.15 (exception 1),
+§11, §12, §13, and `docs/plans/0012-change-lists.md` (F, P, *Outdoor Window* items 1 to 14). Finances 1.2 is the
+reference. Bugs on record: none open (plan 0009 item 5 and `docs/review/` name none; rows 168, 172 are phone rows).
+No git command was run; nothing outside this folder was written (`scripts/outdoor_window.py --demo` was run on a
+scratch copy of the script and the rules, and its output copied in).
+
+### The demo refreshed (plan 0011's owed item 1)
+
+`data/snapshot.json` is a fresh `--demo` fetch for Boston Common, made 2026-10-08 12:47:38Z, 48 hours from Thu 8 Oct
+08:00 (UTC−4), sha256 `e2b09817…9dfa9da255`; `python3 -B scripts/outdoor_window.py --check` passes (48 hours, 48 ask
+rows). `data/rules.json` is unchanged. **The weather is windy:** gusts rule out 18 hours and rainfall 2, so the two
+windows are 2 hours each (Thu 12:00–14:00, best 64; Fri 07:00–09:00, best 80), where the old demo of 21 Sep had 12-
+and 11-hour windows. That is real data; a calmer day's re-fetch is an owner call. A copy of the fetch is
+`tools/.work/demo-2026-10-08.json`. **Re-pinned:** `check.mjs` item 5's sha256; `test_shutters.mjs`'s figures (the
+windows, blocks, bars, counts, brackets, axis, description, golden hours, the stamp's forms); `shoot.mjs`'s clocks
+(NOW Thu 8 Oct 16:20Z, 12:20 in Boston and inside the next window, as the old clock was; RANOUT 20 Oct) and every
+literal it held from the old file (the days, the tapped hour, the sunset tile, the description, This data) now worked
+out from the file. One real finding while re-pinning: the new file has a bar exactly on a half pixel (Temperature at
+hour 29, 12 × (1 − comfort) = 3.5 in exact arithmetic); the app's float gives 3.4999999999999996 and draws 3 px, the
+test's own formula 3.5000000000000010. Both are correct to the rounding rule; the test now accepts either rounding
+on an exact tie, and the app is unchanged.
+
+### What changed, by the list
+
+- **Item 1, P1 with exception 1.** `#capline`, `caption()` and its two calls, the `capline` write in `fail()` deleted;
+  the footer holds one line, `<a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>`, static, 10.5 px;
+  the rest of the credit leaves it. About's first *Sources and credits* paragraph is the whole sentence (now
+  `id="about-credit-line" translate="no"`), and the license's address there is an anchor to the deed; each anchor is
+  in `index.html` once. `about()` keeps `['head', 'main', 'band']`. `NOTES.md`'s "How the credit is printed" quotes
+  both requirements and says where each is now; the footer's comment follows. `PROMPT.md`'s license section and
+  "Do not touch" say the same.
+- **Item 2, P8.** `stamp()` leads with `Example data.` when `S.place` is set, in place of ran-out and stale. The
+  `Example forecast:` statement is gone; About's *This data* gains `Example data: Boston Common, 8 to 10 Oct 2026`
+  (the list's row) **above** the existing `Place: Boston Common (an example)`, kept (owner call 1). The ran-out
+  statement still shows only on a reader's own file, as before. `PROMPT.md` step 4 says the stamp loses `Example
+  data.` (it said the example statement goes).
+- **Item 3.** `ownForecast()` and its calls gone; About's *How the data gets here* opens with the sentence.
+- **Item 4.** `js/shutters.js`'s `caption` became `keyItems(M)` (`test_shutters.mjs` imported it, so it could not
+  simply go): `Ruled out`, `Share of the limit`, `No value` only when a hollow is drawn, `Window`; `Window` alone with
+  no rule. `drawShutters()` fills `div.key` under the readout with the marks drawn in CSS (`.sw-blk`, `.sw-used` 3 px,
+  `.sw-ho`, `.sw-frame`: a lit square, 1 px jambs, a 2 px sill).
+- **Items 5 to 8.** The next window is a `headline` plate: `h2.hl-what` `Next window, Thu 8 Oct` (or `First window in
+  this file, …`), `hoursOf(w)` at 34 px, `2 hours, best score 64` at 13.5 px; `facts()` renders tiles; `After that` is
+  a table (`Day`, `Hours`, `Length`, `Best score`) on its own plate; the no-window section is a plate.
+- **Item 9.** Hours: `p.zone` `Times in Boston Common’s own time, UTC−4.` under the title. **Item 10.** Rules:
+  `p.zone` `An hour must clear every rule.`; the rules and `Changing them` each on a plate.
+- **Items 11 to 14.** Plates for every `.sec`; the title and the Shutters on the page; no new color; the About key
+  (P2) via `aboutKey()` once in `render()`; P7 sizes; `miniapp.json` 1.1 → **1.2**.
+- **The column (P9 and a departure for the lead).** Plan 0011 left this app's pane *left-aligned* with the header
+  (D37). The owed item centers the pane with its header, so the pane is now a centered 760 px column (`margin: 0
+  auto`) and the header **and the footer** follow it (`max(16px, 50% - 364px)`); the old 700 px rule is gone. The
+  widths check proves the pane's, the header's and the footer's left edges agree at every width and the column is
+  centered past 760 px.
+- **Passive `touchstart`** listener added. **Finances' readout fix:** already true here: `wireSlider()` follows only
+  the pointer that started (`start.id`), and a second finger is a pinch. **The scrub-race check** has been here since
+  D37 (`window.__fx`); it passes at 2, 8 and 20 hours a second in both themes.
+
+### Checks changed, and why each
+
+`check.mjs`: header; item 5 re-pinned; item 6 pins 1.2; item 8 (the footer's one anchor and words, About's credit
+paragraph and the license anchor); item 9's camera guard ignores the later windows' table head `Hours` (a `<th>`,
+never a button); item 14's scale (34 px only on `.hl-fig`, no 21 px); B2 (the example lead); item 16's ZIP cap
+123 633; new item 18 (the band's one line and inert, the About key, the foot's 28 px, plates with the Shutters on
+the page, the key number, tiles, the table, the key, the labels, the centered column, `touchstart`).
+`shoot.mjs`: as above, plus the boot (the footer one 10.5 px line, About's credit), per pane the label or key and the
+About key last, the Windows words (key number, tiles, table) against the decode, About (the license anchor, the
+Shortcut sentence, the new This data), the About key by touch, `Example data.` for the example seven hours on and run
+out, `Stale.` and the ran-out lead proven on the reader's own file, the stamp on one line in eight states, the widths
+(no caption, the footer one line, the centered column, a wide screen), the loading line. 186 `ok`, 0 failed, both
+themes. `test_shutters.mjs`: 30 pass; `test_dst.mjs`: 50 pass, unchanged.
+
+### Owner calls this leaves
+
+1. The windy demo (above); and `Place: … (an example)` kept under the new `Example data:` row.
+2. The centered column (this app alone had chosen left-aligned).
+3. The Shutters' key words (`Share of the limit` for the green bars).
+
+### Budgets
+
+App code **93 225 B** of 200 000 (89 621 before). ZIP about **101 290 B** of the lead's package-4 cap **123 633**
+(98 907 × 1.25; the app's own 99 000 was tighter, so it rose to the house rule; over the old cap by about 2 300 B).
+Nothing cut.
+
+### The camera
+
+Waits for `Hours`, taps `Windows` and `Hours`: both `<button role="tab">` built by `buildTabs()`, untouched. **No
+camera string changed.** The new About key is named `Sources, method and credits are in About.`
+
+### Phone checks this adds (not claimed here)
+
+The footer's single link above the home indicator in full screen; the key's marks legible at arm's length; the tiles
+at the largest text size; the pressed tint on the About key.
+
+## The final verifier's should, fixed (2026-10-08): the Open-Meteo link's hit inside the band
+
+**What was wrong.** The anchor's 44 px hit was 30 px of padding below the line (`.credits a { padding: 0 4px 30px }`).
+With a bottom safe-area inset the inset held it; with none (Safari's tab bar, a phone without a home indicator, the
+headless runs) the band was 26 px tall and the hit hung 25 px below the viewport, leaving 19 px to tap. The B6 check
+did not see it: `hitTargets()` **skipped** any box that ran past the viewport instead of measuring it.
+
+**The fix, as the lead asked: a 44 px hit inside the band, not over the pane's About key.**
+- `.credits a` is a block, `width: fit-content`, padded 6 px above the line and 23 px below (6 + 15 + 23 = 44), with
+  the same −4 px side margins, so the words sit exactly where they did. The band's own top padding is gone (the
+  anchor carries it) and its bottom padding is `max(0px, calc(env(safe-area-inset-bottom) - 19px))`: with an inset of
+  19 px or more the band is exactly as tall as before (6 + 15 + 4 px + the inset; 59 px plus the rule on an iPhone's
+  34 px), and with none it is the hit's 44 px plus its rule (45 px; was 26). A phone on its side keeps its 4 px over
+  the line (4 + 15 + 25) and takes `inset − 21`: with its 21 px inset, 45 px as before; with none, 45 px (was 24).
+  The heights with an inset are arithmetic from the rules; headless runs have no inset, so they are measured only
+  at zero (45 px), and the phone check below covers the rest.
+- Nothing reaches upward: the hit starts at the band's rule, so it can never cover the pane, and so never the About
+  key at the pane's foot (28 px of the pane's own padding lies between them at the end of the scroll).
+- Considered and not taken: letting the hit reach up over the pane's foot (it would lie over the About key as the
+  pane scrolls past), and a full-width anchor (a blank stretch of the band would open Safari).
+
+**The checks.**
+- `shoot.mjs` B6: each control's box is clipped to the viewport and measured on what is on screen (the run from its
+  clipped center, `elementFromPoint` refusing points off screen); a box wholly off screen is still skipped. The check
+  also requires the footer's anchor among the controls it measured. Mutation-tested on a scratch copy with the old
+  two rules (deleted after): B6 printed `FAIL … A Weather data by Open 160×44 (hit 139.5×19)` on every pane in both
+  themes; with the fix, `ok` with 7, 7 and 6 controls.
+- `shoot.mjs` widths: at every size (320 × 700 to 1024 × 768, and on its side) the anchor's box is 44 px or more,
+  inside the band and on the screen. The footer's "one line" checks (boot and widths) now count the anchor's text
+  lines, since its box is now 44 px of hit, not one 15 px line.
+- `check.mjs` item 18 (the band) requires the new bottom padding and the anchor's rule as written.
+- `ART.md`'s footer paragraph gives the padding and the heights; its budget row gives the measured code, 93 772 B.
+
+**The runs.** `node tools/check.mjs`: all checks pass (code 93 772 B of 200 000; ZIP 101 579 B of 123 633).
+`node tools/test_dst.mjs`: all 50 pass; `node tools/test_shutters.mjs`: all 30 pass; `python3 tools/art/palette.py`:
+ALL CHECKS PASS. `PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (both themes): 186 `ok`, 0 failed; run again with
+`SCREENSHOTS=1` to refresh `screenshots/` (the footer is taller with no inset). Real touch (a scratch script, deleted
+after), Chromium and WebKit at 390 × 844 and 320 × 568, both themes: the link's box 44 px inside the band and the
+screen (800–844 at 844; 524–568 at 568); a tap 2 px under its top and one 3 px above the screen's edge both activate
+the link; on Windows, Hours and Rules scrolled to the end, a tap at the About key's foot (30 px above the band) opens
+About and not the link. 56 `ok`, 0 failed, no console error.
+
+**Phone check this adds (not claimed here):** the link tapped at its lower half in Snuggery's web view on an iPhone
+with a home indicator and on one without (iPhone SE), on iOS 18 and iOS 26.
+

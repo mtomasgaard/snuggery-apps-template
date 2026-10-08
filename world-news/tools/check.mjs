@@ -5,11 +5,14 @@
 //   3. every import / src / href / url( / fetch( is relative, inside the folder, present; the one data read;
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and no
 //      supplement; NOTES.md and About credit the face word for word;
-//   5. the data is pinned: data/snapshot.json's sha256, the file committed before the pass with its two license
-//      lines swept to US English after it (the data follow-up, owner call 2), every other byte the same;
-//   6. miniapp.json is valid, its name unchanged, its description neither "today's" (B13) nor an em dash;
+//   5. the data's shape as scripts/world_news.py writes it, and every source's license line swept to US English
+//      (the data follow-up, owner call 2); any file the hourly refresh writes passes; the fixed day the tests read,
+//      tools/fixtures/snapshot.json, pinned by sha256;
+//   6. miniapp.json is valid, its name unchanged, its description neither "today's" (B13) nor an em dash, its
+//      version 1.2 (plan 0012 package 4's pass, from 1.1; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credits: the constant words around the sources' names, written once into the band;
+//   8. the credits: the constant words around the sources' names, written once into About's first paragraph under
+//      Sources and credits; no credit line on the front (HOUSE 4.15; plan 0012 F1, F8);
 //   9. the marketing camera's strings (HOUSE.md 7.4): Europe and Americas as tabs built from the data's regions
 //      after the snapshot parses, named by their visible words only (B5); no storage at all;
 //  10. SI and the dates: no plain space between a digit and a unit in the app's strings; toFixed and
@@ -17,17 +20,21 @@
 //  11. no transition anywhere, and only the house's two animations (the tracer, About);
 //  12. innerHTML never set (the stock had 6 assignments, 2 of them markup from strings); no insertAdjacentHTML,
 //      outerHTML, document.write, eval or new Function;
-//  13. palette.py passes, and its --json tokens are style.css's;
+//  13. palette.py passes, and its --json tokens are style.css's (the seven chrome tokens and the register's three);
 //  14. the look: the chrome tokens exactly in both themes, no accent, warning or stock token; no box-shadow,
 //      backdrop-filter, `transition: all`, uppercase, letter-spacing, monospace; one family, and every font
 //      string in a script names "Ysabeau Office" first; no middle dot or em dash in the app's own strings; no
 //      →, ➤, ▸, ▾, ▴, ⓘ or ⋯ in shipped text, the .md files included; both theme-color metas; the @font-face
-//      rule; the page's language and viewport; the type scale;
+//      rule; the page's language and viewport; the pane apps' type scale (HOUSE 11.1 rule 2);
 //  15. the bugs on record (B1 to B16, tools/DECISIONS.md) stay fixed in the code;
 //  16. budgets: app code at most 200,000 bytes, fonts/ at most 160,000, the ZIP built exactly as build-zips.yml
-//      builds it at most 72,140 (27,445 × 1.25 plus 37,834 for the face; plan 0011 D5) until the lead rules;
+//      builds it at most 107,530 (the house rule for plan 0012 package 4: 86,024 before the pass × 1.25);
 //  17. US spelling in every shipped text file; the headlines and summaries are the publishers' words and are
 //      read as information, never failed;
+//  18. the pane-app register (HOUSE 11; plan 0012 P1 to P9): no band; every pane ends with the About key; the pane
+//      pads the home indicator; sections on plates, rings and halos in --sheet; the sources' colors on the chosen
+//      rows' ticks and the swatches; the byline joined to the source line; All's summaries clamped; the header
+//      centered with the pane; a passive touchstart listener;
 //  and, as information: any character in today's headlines the face's cut does not draw (HOUSE.md 2.3, rule 3).
 //
 //   node tools/check.mjs
@@ -45,7 +52,9 @@ const info = (msg) => console.log(`info ${msg}`);
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 200000, FONT_CAP = 160000, ZIP_CAP = 88000 /* the lead's ruling on the build's measured 84 990 B (plan 0011 D30; tools/DECISIONS.md); D5's formula gave 72 140 (27 445 × 1.25 + 37 834) */;
+// ZIP_CAP: the lead's ruling for plan 0012 package 4, the house rule (the ZIP before the pass, 86 024 B with that day's
+// data, × 1.25), which is above the app's own 88 000 B of plan 0011 D30, so the cap rises to it (tools/DECISIONS.md)
+const CODE_CAP = 200000, FONT_CAP = 160000, ZIP_CAP = 107530;
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -116,19 +125,55 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no font ships|system font only|No web font/i.test(read('NOTES.md') + css),
   'the face is credited word for word in NOTES.md (the app\'s credits file) and About ("Type: …"); nothing says no font ships');
 
-// 5. The data is pinned: data/snapshot.json as committed before the pass (4a26ced7…749018409), its two license lines
-// then swept to US English from scripts/world_news.py's own table, every other byte the same (the data follow-up,
-// 2026-10-02: tools/DECISIONS.md; ART.md section 6)
-const DATA_SHA = 'ecb808729f4562dfe98f324aaef3a54ffaeebef03982c62348ab6f8f910c5d2c';
-ok(sha('data/snapshot.json') === DATA_SHA, `data/snapshot.json sha256 ${sha('data/snapshot.json').slice(0, 12)}… is the file committed before the pass, its license lines swept (${DATA_SHA.slice(0, 12)}…)`);
+// 5. The data's shape, not its bytes (plan 0012, package 4's "do first"). The hourly refresh rewrites
+// data/snapshot.json, so a sha256 pin (the file committed before plan 0011's pass, its license lines swept)
+// failed on every fresh file. What the pin guarded is checked instead, on any file the bot writes: the shape
+// scripts/world_news.py writes (schema 1, generatedAt, regions[] with their items, sources[], feeds[],
+// ask[] of at most 60 rows), and every source's license line swept (US English, no spaced em dash: the
+// data follow-up of 2026-10-02, owner call 2). tools/fixtures/snapshot.json keeps that pinned file for the
+// tests that need one fixed day (shoot.mjs and test_datelines.mjs pin it by sha256).
 const snap = JSON.parse(read('data/snapshot.json'));
+{
+  const why = [];
+  const str = (v) => typeof v === 'string' && v.length > 0;
+  const iso = (v) => str(v) && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(v) && Number.isFinite(Date.parse(v));
+  if (snap.schema !== 1) why.push('schema is not 1');
+  if (!iso(snap.generatedAt)) why.push('generatedAt is not an ISO 8601 UTC instant');
+  if (JSON.stringify(Object.keys(snap)) !== JSON.stringify(['schema', 'generatedAt', 'regions', 'sources', 'feeds', 'ask'])) why.push(`its keys are ${Object.keys(snap).join(', ')}`);
+  const regions = Array.isArray(snap.regions) ? snap.regions : [];
+  if (!regions.length) why.push('no regions');
+  for (const r of regions) {
+    if (!r || !str(r.key) || !str(r.name) || typeof r.stale !== 'boolean' || !Array.isArray(r.items)) { why.push(`a region is not { key, name, stale, items[] }`); continue; }
+    for (const it of r.items) {
+      if (!it || !str(it.title) || !str(it.source) || !str(it.feed) || !str(it.link) || !iso(it.published) || typeof it.summary !== 'string' || typeof it.stale !== 'boolean'
+        || ('author' in it && typeof it.author !== 'string')) why.push(`an item in ${r.name} is not { title, source, feed, link, published, summary, author?, stale }`);
+    }
+  }
+  const sources = Array.isArray(snap.sources) ? snap.sources : [];
+  if (!sources.length) why.push('no sources');
+  const BRIT_LINE = /\blicence\b|\s\u2014\s/;
+  for (const x of sources) {
+    if (!x || !str(x.name) || !str(x.attribution) || !str(x.licence) || !/^https:\/\//.test(x.terms || '')) why.push(`a source is not { name, attribution, licence, terms (https) }`);
+    else if (BRIT_LINE.test(x.attribution) || BRIT_LINE.test(x.licence)) why.push(`${x.name}'s lines are not swept (a "licence" or a spaced em dash inside them)`);
+  }
+  const used = new Set(regions.flatMap((r) => (r.items || []).map((it) => it.source)));
+  if ([...used].some((n) => !sources.some((x) => x && x.name === n))) why.push('a headline names a source sources[] does not credit');
+  const feeds = Array.isArray(snap.feeds) ? snap.feeds : [];
+  if (!feeds.length || feeds.some((f) => !f || !str(f.id) || !str(f.source) || !str(f.region) || typeof f.ok !== 'boolean' || !Number.isInteger(f.items) || !(f.note === null || typeof f.note === 'string'))) why.push('feeds[] is not { id, source, region, ok, items, note } rows');
+  const ask = Array.isArray(snap.ask) ? snap.ask : null;
+  if (!ask || ask.length > 60 || ask.some((a) => !a || !str(a.region) || !str(a.source) || !str(a.title) || !/^\d{4}-\d\d-\d\d \d\d:\d\d UTC$/.test(a.published || ''))) why.push('ask[] is not at most 60 { region, source, title, published } rows');
+  ok(why.length === 0, `data/snapshot.json: the shape scripts/world_news.py writes (schema 1, made ${snap.generatedAt}, ${regions.length} regions, ${regions.reduce((n, r) => n + ((r && r.items) || []).length, 0)} headlines, ${sources.length} sources, ${feeds.length} feeds, ${ask ? ask.length : 0} ask rows), every source's license line swept; any file the hourly refresh writes passes${why.length ? ': ' + [...new Set(why)].slice(0, 4).join('; ') : ''}`);
+  const FIXTURE_SHA = 'ecb808729f4562dfe98f324aaef3a54ffaeebef03982c62348ab6f8f910c5d2c';
+  ok(fs.existsSync(path.join(APP, 'tools/fixtures/snapshot.json')) && sha('tools/fixtures/snapshot.json') === FIXTURE_SHA,
+    `tools/fixtures/snapshot.json is the pinned file of 1 Oct 2026 (${FIXTURE_SHA.slice(0, 12)}…), the fixed day shoot.mjs and test_datelines.mjs read; it does not ship`);
+}
 
 // 6. miniapp.json
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'World News' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—|today/i.test(mini.description) && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—|today/i.test(mini.description) && mini.version === '1.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, not "today's" (B13), no em dash`);
 }
 
@@ -142,12 +187,19 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files, the snapshot's headlines included${named.length ? ': ' + named.join(', ') : ''}`);
 }
 
-// 8. The credits: the constant words around the file's source names, written once into the band
+// 8. The credits: the constant words around the file's source names, written once into About's first paragraph
+// under Sources and credits (HOUSE 4.15; plan 0012 F1, F8). The one constant a list changed: its closing words
+// pointed to About and meant nothing inside it, so '; terms in About.' became '.'.
 {
-  const CREDIT = "const CREDIT = ['Headlines from ', '; terms in About.'];";
-  const built = /\$\('credits'\)\.textContent = `\$\{CREDIT\[0\]\}\$\{names\.length \? list\(names\) : 'the publishers named under each story'\}\$\{CREDIT\[1\]\}`;/.test(app);
-  ok(app.includes(CREDIT) && built && (app.match(/\$\('credits'\)/g) || []).length === 1 && html.includes('<p class="credits" id="credits"></p>'),
-    `the credits: "Headlines from ${snap.sources.map((s) => s.name).join(', ').replace(/, ([^,]*)$/, ' and $1')}; terms in About." built from the file's sources in order, written once into the band`);
+  const CREDIT = "const CREDIT = ['Headlines from ', '.'];";
+  const built = /\$\('about-credit-line'\)\.textContent = `\$\{CREDIT\[0\]\}\$\{names\.length \? list\(names\) : 'the publishers named under each story'\}\$\{CREDIT\[1\]\}`;/.test(app);
+  const sources = html.slice(html.indexOf('<h3>Sources and credits</h3>'));
+  ok(app.includes(CREDIT) && built && (app.match(/\$\('about-credit-line'\)/g) || []).length === 1 && sources.startsWith('<h3>Sources and credits</h3>\n        <p id="about-credit-line" translate="no"></p>')
+    && !/id="credits"|class="credits"|id="band"|id="capline"/.test(html) && !/\$\('credits'\)|\$\('capline'\)|\$\('band'\)|'band'/.test(code(app, 'x.js')) && !/\.band\b|\.capline\b|\.credits\b/.test(code(css, 'x.css')),
+    `the credits: "Headlines from ${snap.sources.map((s) => s.name).join(', ').replace(/, ([^,]*)$/, ' and $1')}." built from the file's sources in order, written once into <p id="about-credit-line">, About's first paragraph under Sources and credits; no band, caption line or credit line on the front`);
+  // nothing else on the front carries a credit: the stories' source names are the view's own (HOUSE 4.15)
+  const front = code(html.slice(0, html.indexOf('<div class="about"')), 'x.html');
+  ok(!/Global Voices|The Conversation|UN News|Creative Commons|licen[cs]e|Ysabeau/i.test(front), 'nothing on the front\'s static markup names a source, a license or the face (HOUSE 4.15)');
 }
 
 // 9. The marketing camera's strings (HOUSE.md 7.4) and storage
@@ -213,8 +265,12 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   try { PAL = JSON.parse(json.stdout); } catch { PAL = null; }
   const off = [];
   for (const s of ['light', 'dark']) for (const [k, v] of Object.entries((PAL || {})[s] || {})) if (tok(s, k) !== v) off.push(`${s} ${k}`);
-  ok(PAL && off.length === 0 && Object.keys(PAL.light).length === 7 && Object.keys(PAL.dark).length === 7,
-    `style.css's 7 tokens per theme equal palette.py --json (the app has no data color; ART.md section 2)${off.length ? ': differ ' + off.join(', ') : ''}`);
+  ok(PAL && off.length === 0 && Object.keys(PAL.light).length === 10 && Object.keys(PAL.dark).length === 10,
+    `style.css's 10 tokens per theme equal palette.py --json (the seven chrome tokens and the register's --src-1 to --src-3, HOUSE 11.2; ART.md section 2)${off.length ? ': differ ' + off.join(', ') : ''}`);
+  const REG = { light: { '--src-1': '#1f5f99', '--src-2': '#a64a1a', '--src-3': '#6d2736' }, dark: { '--src-1': '#8cbcf0', '--src-2': '#f0a070', '--src-3': '#ab8198' } };
+  const regOff = [];
+  for (const sc of ['light', 'dark']) for (const [k, v] of Object.entries(REG[sc])) if (tok(sc, k) !== v) regOff.push(`${sc} ${k} ${tok(sc, k)}`);
+  ok(regOff.length === 0, `the register's tokens by name and value (HOUSE 11.2; --src-3 the lead's wine / mauve, not the board's purple): ${Object.entries(REG.light).map(([k, v]) => `${k} ${v} / ${REG.dark[k]}`).join(', ')}${regOff.length ? '; differ ' + regOff.join(', ') : ''}`);
 }
 
 // 14. The look
@@ -255,9 +311,10 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html) && /<script type="module" src="\.\/app\.js"><\/script>/.test(html),
     'the page: lang="en-US", viewport-fit=cover without user-scalable, color-scheme light dark, app.js as a module (B16)');
   const px = [...c.matchAll(/font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/g)].map((m) => Number(m[1]));
-  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15].includes(v));
+  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34].includes(v));
   const weights = [...c.replace(/@font-face \{[^}]*\}/, '').matchAll(/font-weight:\s*(\d+)|font:\s*(\d{3}) /g)].map((m) => Number(m[1] || m[2]));
-  ok(offScale.length === 0 && weights.every((w) => [400, 560, 600, 620, 650].includes(w)), `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, no figure at 21 px (the subject is headlines; ART.md section 4); weights ${[...new Set(weights)].join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
+  ok(offScale.length === 0 && !px.some((v) => v === 21 || v === 34 || v === 12) && weights.every((w) => [400, 560, 600, 620, 650].includes(w)),
+    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, on the pane apps' scale (HOUSE 11.1 rule 2); no 12 px, and no key number (34 px) or figure at 21 px: the subject is headlines (HOUSE 11.1 rule 2; ART.md section 4); weights ${[...new Set(weights)].join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
 }
 
 // 15. The bugs on record (the art pass's stranger's run, B1 to B16; tools/DECISIONS.md) stay fixed in the code
@@ -283,7 +340,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 21,787 before the pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 46,119 before plan 0012's pass, 21,787 before plan 0011's): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; none before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });
@@ -298,7 +355,7 @@ ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length}
 ok(names.length === shipped.length && names.every((n) => shipped.includes(n)) && !names.some((f) => /^(tools|screenshots|scripts)\//.test(f) || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/ or dotfiles`);
 console.log(`     stored in the ZIP: data ${fmt(stored((n) => n.startsWith('data/')))}, fonts/ ${fmt(stored((n) => n.startsWith('fonts/')))}, app code ${fmt(stored((n) => codeFiles.includes(n)))}, ART.md ${fmt(stored((n) => n === 'ART.md'))}, NOTES.md and PROMPT.md ${fmt(stored((n) => n === 'NOTES.md' || n === 'PROMPT.md'))}`);
-ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: the lead's ruling on the measured 84,990, plan 0011 D30; D5's formula gave 72,140)`);
+ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: the house rule for plan 0012 package 4, 86,024 before the pass × 1.25; it was 88,000, plan 0011 D30)`);
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The snapshot
 // is checked for the pipeline's own words (sources' lines, region names); its headlines, summaries and bylines
@@ -323,6 +380,30 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: the lea
   ok(hits.length === 0, `US spelling in ${texts.length - 1} shipped text files, the pipeline's own words in the snapshot included${hits.length ? ': ' + hits.slice(0, 14).join(', ') + (hits.length > 14 ? ` and ${hits.length - 14} more` : '') : ''}`);
   const theirs = [...new Set(snap.regions.flatMap((r) => r.items.flatMap((it) => [it.title, it.summary, it.author].join(' ').match(BRIT) || [])))];
   info(`the publishers' own spellings in today's headlines and summaries, shown as written: ${theirs.join(', ') || 'none'}`);
+}
+
+// 18. The pane-app register (HOUSE 11.1; plan 0012 P1 to P9)
+{
+  const c = code(css, 'x.css'), a = code(app, 'x.js');
+  ok(/const ABOUT_KEY = 'Sources, their terms and credits are in About\.';/.test(app) && /function aboutKey\(host\) \{\s*const b = el\('button', 'aboutlink', ABOUT_KEY\);\s*b\.type = 'button';\s*b\.onclick = \(\) => about\(true\);\s*host\.append\(b\);\s*\}/.test(app)
+    && /\n  aboutKey\(pane\);\n\}/.test(app) && (a.match(/aboutKey\(/g) || []).length === 2
+    && /\.aboutlink \{ display: block; margin: 14px 0 0; min-height: 44px; font-size: 12\.5px; color: var\(--ink-2\); text-decoration: underline; text-underline-offset: 3px; \}/.test(c),
+  'every pane ends with the button "Sources, their terms and credits are in About.", 12.5 px --ink-2, underlined at 3 px, 44 px tall, 14 px under the last plate, opening About (render() adds it last, on All and on every region)');
+  ok(/\.panebody \{[^}]*padding-top: 4px; padding-bottom: calc\(28px \+ env\(safe-area-inset-bottom\)\); \}/.test(c) && (c.match(/\.panebody \{/g) || []).length === 1,
+    'the pane pads the home indicator itself: .panebody { padding-top: 4px; padding-bottom: calc(28px + env(safe-area-inset-bottom)) } (HOUSE 4.14, 11.1 rule 1; a phone row checks it)');
+  ok(/\.sec \{ margin-top: 12px; padding: 12px 12px 4px; border: 1px solid var\(--line\); border-radius: 8px; background: var\(--sheet\); \}/.test(c) && /\.dl \.sel \{ stroke: var\(--sheet\);/.test(c) && /\.dl \.cnt \{[^}]*stroke: var\(--sheet\);/.test(c) && !/var\(--page\)/.test(c.replace(/html, body \{[^}]*\}/, ''))
+    && /el\('section', 'sec lead-sec'\)/.test(app) && /const host = el\('section', 'sec'\), head = el\('div', 'sec-head'\);/.test(app),
+    'sections on plates (--sheet, a 1 px --line edge, radius 8 px, padding 12 px, 12 px apart): the Datelines with their label and All\'s source table, then each region; the tapped tick\'s ring and the counts\' halos in --sheet (HOUSE 11.1 rule 4)');
+  ok(/\.dl \.row\.on \.tk\.src-1 \{ fill: var\(--src-1\); \}\n\.dl \.row\.on \.tk\.src-2 \{ fill: var\(--src-2\); \}\n\.dl \.row\.on \.tk\.src-3 \{ fill: var\(--src-3\); \}/.test(c) && !/\.dl \.tk \{[^}]*width/.test(c)
+    && /class: SRC\.has\(it\.src\) \? `tk src-\$\{SRC\.get\(it\.src\)\}` : 'tk', x: x - 1, y: top, width: 2, height: h/.test(read('js/datelines.js'))
+    && /if \(SRC\.has\(it\.source\)\) src\.append\(el\('i', `sw src-\$\{SRC\.get\(it\.source\)\}`\)\);/.test(app),
+    'the sources\' colors: the chosen rows\' ticks (a region\'s tab colors its own row and leaves the others --ink-3), the swatch on each source line and in All\'s table; the ticks stay 2 px wide, as draw() sets them (HOUSE 11.3)');
+  ok(/it\.author \? `by \$\{it\.author\}` : null/.test(app) && !/'by', `By/.test(app) && /el\('span', tab === 'all' \? 'sum clamp' : 'sum', it\.summary\)/.test(app) && /\.sum\.clamp \{ display: -webkit-box; -webkit-line-clamp: 2;/.test(c),
+    'the byline joins its source line, word for word; a summary shows two lines on All and whole on its region (HOUSE 11.1 rule 10; the words are unchanged)');
+  ok(/\.head \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\) 0 calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-left\)\); \}/.test(c) && /\.panebody \{ max-width: 760px; margin: 0 auto; padding: 0 calc\(16px \+ env\(safe-area-inset-right\)\) 0 calc\(16px \+ env\(safe-area-inset-left\)\);/.test(c),
+    'the header centered with the pane: its sides max(16 px, 50 % − 364 px), so the name and the tabs start where the 760 px column\'s plates do (plan 0011\'s owed item; shoot.mjs measures it)');
+  ok(/document\.addEventListener\('touchstart', \(\) => \{\}, \{ passive: true \}\);/.test(app),
+    'a passive, empty touchstart listener on the document, so iOS draws the :active tints (plan 0011\'s owed item; a phone row checks it)');
 }
 
 // Information: characters in today's file that the face's cut does not draw (HOUSE.md 2.2's measured cmap). A

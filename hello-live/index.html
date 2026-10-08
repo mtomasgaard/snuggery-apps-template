@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Hello Live</title>
 <link rel="icon" href="data:,">
@@ -31,19 +31,15 @@
     <section class="sec">
       <h2>Time card</h2>
       <svg class="card" id="card" role="img" aria-label="Time card" focusable="false"></svg>
+      <!-- the card's key, in place of the band's sentence (HOUSE 4.15, 11.1 rule 6); app.js writes the phone's offset -->
+      <div class="key" id="card-key"><span class="k"><i class="sw sw-punch" aria-hidden="true"></i>File written</span><span class="k"><i class="sw sw-tail" aria-hidden="true"></i>Until it was first read here</span><span class="k" id="hours-key">Hours: this phone&rsquo;s</span></div>
     </section>
     <section class="sec" id="rows-sec">
       <dl class="rows" id="rows"></dl>
     </section>
+    <button type="button" class="aboutlink" id="about-key">Sources, method and credits are in About.</button>
   </div>
 </main>
-
-<footer class="band" id="band">
-  <p class="capline" id="capline"></p>
-  <!-- The file names no source and the job fetches nothing, so the credit says exactly that; tools/check.mjs compares
-       it byte for byte with app.js's constant. The face's credit is in About. -->
-  <p class="credits" id="credits">Data: this repository&rsquo;s own refresh job; no outside source.</p>
-</footer>
 
 <div class="about" id="about" hidden>
   <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
@@ -61,6 +57,9 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <!-- The file names no source and the job fetches nothing, so the credit says exactly that; tools/check.mjs
+             compares it byte for byte with NOTES.md's line. -->
+        <p id="about-credit-line">Data: this repository&rsquo;s own refresh job; no outside source.</p>
         <p>The file is written by this repository&rsquo;s own refresh job, <span translate="no">scripts/refresh_hello_live.py</span>, which fetches nothing; there is no outside source and nothing to license.</p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
       </section>

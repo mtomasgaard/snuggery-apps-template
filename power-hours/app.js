@@ -81,13 +81,18 @@
 
 import { NB, int, count, price, priced, ordinal, runLength, spokenLength, stampWhen, full, span, zone, hm, dateFull, isoDate, spokenPrice, spoken } from './js/units.js';
 import * as P from './js/prices.js';
-import { layout, draw as drawSvg, indexAt, caption as captionOf, describe } from './js/staircase.js';
+import { layout, draw as drawSvg, indexAt, scaleLabel, describe } from './js/staircase.js';
 
 const SNAPSHOT_URL = './data/snapshot.json';
 const APPLIANCES_URL = './data/appliances.json';
 const LABEL_FONT = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
 const WHEN_FONT = '620 12.5px "Ysabeau Office", system-ui, sans-serif', VALS_FONT = '400 11.5px "Ysabeau Office", system-ui, sans-serif';   // the readout's two lines, as style.css sets them
 const CREDIT_FALLBACK = 'Day-ahead prices: Energy-Charts (Fraunhofer ISE).';
+// The use restriction a license attaches to a zone's prices, at the pane's head while it applies (HOUSE 4.15
+// exception 2); byte for byte the words the band carried.
+const PRIVATE_USE = 'These prices are licensed for private and internal use only. Do not republish them.';
+// The key at the end of the pane (HOUSE 11.1 rule 1).
+const ABOUT_KEY = 'Sources, method and credits are in About.';
 const AHEAD_OF_CLOCK = 3600000;   // a file made more than an hour after the phone's time says so
 const LANDSCAPE = '(orientation: landscape) and (max-height: 500px)';
 
@@ -207,7 +212,7 @@ async function load() {
 function refresh() {
   const was = D.M, keepStart = follow ? null : was.iv[chosen].start;
   const next = derive(D.data, D.list, D.note);
-  if (next.M.first === was.first && next.M.cur === was.cur && next.M.history === was.history) { D.M.now = next.M.now; stamp(); schedule(); return; }
+  if (next.M.first === was.first && next.M.cur === was.cur && next.M.history === was.history && !!$('pane').querySelector('.made-ahead') === aheadInPane()) { D.M.now = next.M.now; stamp(); schedule(); return; }
   D = next;
   const keep = keepStart == null ? -1 : D.M.iv.findIndex((x) => x.start === keepStart);
   chosen = keep >= 0 ? keep : defaultChosen();
@@ -244,7 +249,6 @@ function fail(problems, unread = false) {
   } else {
     $('stamp').textContent = 'No usable prices';
     $('pane').replaceChildren();
-    $('capline').textContent = '';
     box.classList.remove('kept');
     for (const p of problems) box.append(el('p', null, p));
     box.append(el('p', 'notice-lines', 'In Snuggery, Options, then App Files shows what the file holds.'));
@@ -257,12 +261,19 @@ function fail(problems, unread = false) {
 /** When the prices were made, on the phone's clock, in words. Day-ahead prices are final once published, so a
  *  file is never stale while it holds the present: staleness is coverage, not age (ART.md B4). Every state that
  *  needs saying is a sentence in ink, never a color. */
+/** The file made more than an hour after the phone's time; said in the stamp alone, or, when the stamp already leads
+ *  with ran out or kept, as a statement in the pane, so the stamp stays one line (the lead's ruling, 2026-10-08). */
+const madeAhead = () => D.made !== null && D.made - Date.now() > AHEAD_OF_CLOCK;
+const aheadInPane = () => madeAhead() && !!(D.M.history || D.kept);
+
 function stamp() {
   const M = D.M, now = Date.now(), node = $('stamp'), leads = [];
   if (M.history) leads.push(`Prices ran out ${span(now - (M.iv[M.n - 1].at + M.step))} ago.`);
-  if (D.kept) leads.push('Kept from the run before.');
+  // ran out and kept together: the ran-out lead alone, so the stamp stays one line (HOUSE 4.2); the pane's
+  // statement says the refresh could not reach the price service
+  else if (D.kept) leads.push('Kept from the run before.');
   if (D.made === null) leads.push('Undated file.');
-  else if (D.made - now > AHEAD_OF_CLOCK) leads.push('Made after the phone’s time.');
+  else if (madeAhead() && !leads.length) leads.push('Made after the phone’s time.');
   const words = D.made === null ? null : `Updated ${stampWhen(D.made)}`;
   if (!leads.length) { node.textContent = words; return; }
   node.replaceChildren(el('span', 'lead', leads.join(' ')), ...(words ? [` ${words}`] : []));
@@ -272,12 +283,26 @@ function stamp() {
 
 function render() {
   const pane = $('pane');
-  pane.replaceChildren(zoneTitle(), ...nowSection(), landingBlock(), runsSection(), ...statements());
+  pane.replaceChildren(zoneTitle(), ...privateUse(), ...nowSection(), landingBlock(), runsSection(), ...statements());
+  aboutKey(pane);   // the pane ends with it (HOUSE 11.1 rule 1)
   drawLanding();
   stamp();
-  $('capline').textContent = captionOf(D.M);
   credits();
   aboutList();
+}
+
+/** The key at the end of the pane: a text button that opens About (HOUSE 11.1 rule 1). */
+function aboutKey(host) {
+  const b = el('button', 'aboutlink', ABOUT_KEY);
+  b.type = 'button';
+  b.onclick = () => about(true);
+  host.append(b);
+}
+
+/** The private-use line (HOUSE 4.15 exception 2): straight under the zone's title, while the file's zone is not on
+ *  the CC BY list, a plain statement in ink, never a footer. */
+function privateUse() {
+  return D.data.source && D.data.source.publishable === false ? [el('p', 'statement private-use', PRIVATE_USE)] : [];
 }
 
 const offsetsOf = (M) => [...new Set(M.iv.map((x) => x.off))];
@@ -292,15 +317,19 @@ function zoneTitle() {
   return t;
 }
 
-/** Now, only while the present is in the file: the current interval's price, the pane's one large figure. */
+/** Now, only while the present is in the file: the current interval's price, the pane's key number (HOUSE 11.1
+ *  rule 2), its interval above, its rank under it, the day's cheapest and most expensive quarters in their colors. */
 function nowSection() {
   const M = D.M;
   if (M.cur < 0) return [];
-  const sec = el('section', 'sec now'), fig = el('p', 'fig'), r = P.rankDay(M, M.cur);
-  const a = P.startWall(M, M.cur), b = P.endWall(M, M.cur);
-  const band = r.band === 'cheapest' ? 'in the day’s cheapest quarter' : r.band === 'priciest' ? 'in the day’s most expensive quarter' : 'in the middle half';
+  const sec = el('section', 'sec now headline'), fig = el('p', 'fig'), r = P.rankDay(M, M.cur);
+  const a = P.startWall(M, M.cur), b = P.endWall(M, M.cur), lead = el('p', 'lead');
+  const band = r.band === 'cheapest' ? el('span', 'cheap', 'in the day’s cheapest quarter') : r.band === 'priciest' ? el('span', 'dear', 'in the day’s most expensive quarter') : el('span', null, 'in the middle half');
   fig.append(el('b', null, price(M.iv[M.cur].v)), el('span', 'u', `${NB}${M.u.label}`));
-  sec.append(el('h2', null, 'Now'), fig, el('p', 'lead', `${hm(a)}–${hm(b)}, ${r.rank === 1 ? 'lowest' : `${ordinal(r.rank)} lowest`} of today’s ${count(r.of, M.noun[0], M.noun[1])}, ${band}`));
+  lead.append(`${r.rank === 1 ? 'lowest' : `${ordinal(r.rank)} lowest`} of today’s ${count(r.of, M.noun[0], M.noun[1])}, `, band);
+  const hl = el('div', 'hl');   // as Finances builds it: the label, the figure and the lead in div.hl, so the label is .hl-what's 12.5 px / 400
+  hl.append(el('h2', 'hl-what', `Now, ${hm(a)}–${hm(b)}`), fig, lead);
+  sec.append(hl);
   return [sec];
 }
 
@@ -312,9 +341,16 @@ function landingBlock() {
   box.setAttribute('aria-valuemax', String(Math.max(0, D.M.n - 1)));
   const ro = el('div', 'ro');
   ro.append(el('p', 'ro-when', ''), el('p', 'ro-vals', ''));
-  wrap.append(box, ro);
+  // the scale's label and a key in place of the band's caption (HOUSE 4.15, 11.1 rule 6)
+  const key = el('div', 'key'), k = el('span', 'k'), sw = el('i', 'sw sw-run');
+  sw.setAttribute('aria-hidden', 'true');
+  k.append(sw, 'Chosen run, at its mean');
+  key.append(k);
+  wrap.append(box, ro, el('p', 'note scale', scaleLabel(D.M)), key);
   wireSlider(box);
-  return wrap;
+  const sec = el('section', 'sec landing');   // the Landing on a plate (HOUSE 11.1 rule 4; palette.py check 2 on --sheet)
+  sec.append(wrap);
+  return sec;
 }
 
 /** The appliances sharing the chosen run's intervals, named together at the level's end. */
@@ -326,9 +362,9 @@ function namesOn(run) {
 function drawLanding() {
   const pane = $('pane'), box = $('stair');
   if (!box) return;
-  const cs = getComputedStyle(pane), ctx = document.createElement('canvas').getContext('2d');
+  const plate = box.closest('.sec'), cs = getComputedStyle(plate), ctx = document.createElement('canvas').getContext('2d');   // the drawing fills its plate
   ctx.font = LABEL_FONT;
-  const width = Math.floor(pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
+  const width = Math.floor(plate.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight));
   const a = D.apps[appliance], run = a ? a.run : null;
   L = layout(D.M, run, width, matchMedia(LANDSCAPE).matches ? 96 : 120, (t) => ctx.measureText(t).width, namesOn(run));
   shut = drawSvg(box.querySelector('svg'), L);
@@ -471,7 +507,10 @@ function runsSection() {
     b.type = 'button';
     b.setAttribute('aria-pressed', String(k === appliance));
     const r = a.run, why = r.none === 'long' ? 'longer than the file' : M.history ? 'no unbroken run that long in the file' : 'not enough prices left';
-    b.append(el('span', 'nm', a.name), el('span', 'tm', r.none ? '' : P.runWords(M, r)), el('span', 'sub', `${runLength(a.hours)} run, ${r.none ? why : P.savingWords(M, r)}`));
+    // the saving in its color: --cheap below the mean, --dear above it, none when level or paid to run (HOUSE 11.3)
+    const sub = el('span', 'sub', `${runLength(a.hours)} run, `), p = r.none || r.mean < 0 || !(M.meanAhead > 0) ? 0 : Math.round(((M.meanAhead - r.mean) / M.meanAhead) * 100);
+    sub.append(r.none ? why : el('span', p > 0 ? 'cheap' : p < 0 ? 'dear' : null, P.savingWords(M, r)));
+    b.append(el('span', 'nm', a.name), el('span', 'tm', r.none ? '' : P.runWords(M, r)), sub);
     b.setAttribute('aria-label', r.none ? `${a.name}, ${spokenLength(a.hours)} run, ${why}` : `${a.name}, ${P.runWords(M, r, true)}, ${spokenLength(a.hours)} run, ${P.savingSpoken(M, r)}`);
     b.onclick = () => pick(k);
     list.append(b);
@@ -503,9 +542,8 @@ function statements() {
     }
   }
   if (D.kept) out.push(say('The last refresh could not reach the price service,', `so these are the prices it kept from the run made ${D.made !== null ? stampWhen(D.made) : 'before'}.`));
+  if (aheadInPane()) { const p = say('This file was made after the phone’s time:', `it says ${stampWhen(D.made)}, more than an hour ahead of the phone’s clock.`); p.classList.add('made-ahead'); out.push(p); }
   if (D.note) out.push(el('p', 'statement', D.note));
-  const help = el('p', 'note help', 'The appliances are data/appliances.json: in Snuggery, Options, then App Files. Add a row or change a run length; the app reads it again when it comes back to the screen.');
-  out.push(help);
   return out;
 }
 
@@ -519,10 +557,7 @@ function creditText() {
   return lic ? `${end(attr)} ${end(lic)}` : end(attr);
 }
 function credits() {
-  const t = creditText();
-  $('credits').textContent = t;
-  $('about-credit').textContent = t;
-  $('private').hidden = !(D.data.source && D.data.source.publishable === false);
+  $('about-credit').textContent = creditText();
 }
 
 /* ── About ────────────────────────────────────────────────────────────── */
@@ -549,7 +584,7 @@ function aboutList() {
 let aboutFrom = null;
 function about(open) {
   $('about').hidden = !open;
-  for (const id of ['head', 'main', 'band']) $(id).inert = open;   // holds Tab inside the sheet
+  for (const id of ['head', 'main']) $(id).inert = open;           // holds Tab inside the sheet
   $('about-list').parentElement.hidden = !D;                       // with no usable file, its prose stands
   if (open) { aboutFrom = document.activeElement; $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
 }
@@ -570,6 +605,9 @@ new ResizeObserver(() => {
   if (D && w !== lastW) { lastW = w; drawLanding(); }
 }).observe($('pane'));
 matchMedia(LANDSCAPE).addEventListener('change', () => { if (D) drawLanding(); });
+
+// An empty touchstart listener, passive, so iOS draws :active (a run row or a key pressed; plan 0011's owed item).
+document.addEventListener('touchstart', () => {}, { passive: true });
 
 // The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
 window.__ph = {

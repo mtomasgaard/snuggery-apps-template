@@ -1,7 +1,8 @@
-/* Power Hours, under the template's house system (ART.md; Template/HOUSE.md).
-   One pane on a page, not cards: one column on --page, sections parted by hairlines, one face, gray chrome, no
-   accent, no shadows, no glass. The one data color is --price, the staircase of the day-ahead price; the one bold
-   thing is the Landing's ink. Staleness and failure are words, never a hue. --price is pasted from
+/* Power Hours, under the template's house system (ART.md; Template/HOUSE.md) and its pane-app register (HOUSE 11):
+   one pane of sections on plates on the gray page, one face, gray chrome, no shadows, no glass. The one data color
+   is --price, the staircase of the day-ahead price; the register's two meaning colors are --cheap (the day's
+   cheapest quarter, a run below the mean) and --dear (the most expensive quarter, a run above it), on words alone. The one
+   bold thing is the Landing's ink. Staleness and failure are words, never a hue. --price is pasted from
    tools/art/palette.py --json, never retyped; tools/check.mjs fails while the two differ. */
 
 @font-face {
@@ -20,6 +21,8 @@
   --line: #c9d4d8;
   --line-strong: #74858c;
   --price: #2a67f0;
+  --cheap: #1f5f99;
+  --dear: #a64a1a;
   --draw: cubic-bezier(0.2, 0, 0, 1);
   --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
   --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
@@ -35,6 +38,8 @@
     --line: #2a373c;
     --line-strong: #64757b;
     --price: #3674fe;
+    --cheap: #8cbcf0;
+    --dear: #f0a070;
     color-scheme: dark;
   }
 }
@@ -60,7 +65,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
 /* ── the header: the name and the stamp; no row of tabs (one pane) ── */
-.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+/* the header's sides follow the pane's 760 px column, so on a wide screen the name starts where the plates do */
+.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(max(16px, 50% - 364px) + env(safe-area-inset-right)) 0 calc(max(16px, 50% - 364px) + env(safe-area-inset-left)); }
 .head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
 .stamp-home { min-width: 0; padding-bottom: 6px; }
 .stamp { position: relative; display: block; max-width: 100%; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
@@ -68,35 +74,52 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* the hit runs up over the name (not a control) and down into the gap: 22 + 16 + 6 = 44 px */
 .stamp::before { content: ''; position: absolute; inset: -22px 0 -6px; }
 
-/* ── the pane: it scrolls inside the frame, so the header and the caption band stay put ── */
+/* ── the pane: it scrolls inside the frame, so the header stays put; a 760 px column centered with the header; with
+   no band under it, it pads the home indicator itself (HOUSE 4.14, 11.1 rule 1) ── */
 .pane { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.panebody { max-width: 760px; padding: 0 calc(16px + env(safe-area-inset-right)) 24px calc(16px + env(safe-area-inset-left)); }
+.panebody { max-width: 760px; margin: 0 auto; padding: 0 calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); padding-top: 4px; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
 
 .title { padding-top: 10px; }
-.title h2 { font-size: 13.5px; font-weight: 650; }
+.title h2 { font-size: 15px; font-weight: 650; }
 .title p { font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 
-.sec { padding: 10px 0 4px; border-top: 1px solid var(--line); }
-.sec > h2 { font-size: 13.5px; font-weight: 650; padding-bottom: 2px; }
+/* sections on plates (HOUSE 11.1 rule 4): --sheet, a 1 px --line edge, 12 px apart */
+.sec { margin-top: 12px; padding: 12px 12px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); }
+.sec > h2 { font-size: 15px; font-weight: 650; padding-bottom: 2px; }
 .note { font-size: 11.5px; line-height: 16px; color: var(--ink-2); max-width: 62ch; }
-.title + .sec { margin-top: 10px; }
 
-/* Now: the pane's one large figure, the current interval's price, with its lead in words */
-.fig { padding-top: 2px; }
-.fig b { font-size: 21px; line-height: 1.2; font-weight: 600; }
-.fig .u { font-size: 13.5px; color: var(--ink-2); }
-.now .lead { font-size: 12.5px; color: var(--ink-2); }
+/* Now: the pane's key number (HOUSE 11.1 rule 2), the current interval's price at 34 px, its interval above and its
+   rank under it, all three in div.hl as in Finances (so .sec > h2 does not reach the label, which stays 12.5 px / 400);
+   the day's cheapest and most expensive quarters in their meaning colors, on their words */
+.headline { padding: 14px 12px 12px; }
+.hl { display: grid; gap: 2px; }
+.hl-what { font-size: 12.5px; font-weight: inherit; color: var(--ink-2); }
+.fig b { font-size: 34px; line-height: 1.05; font-weight: 650; }
+.fig .u { font-size: 15px; color: var(--ink-2); }
+.now .lead { font-size: 13.5px; color: var(--ink-2); }
+.cheap { color: var(--cheap); }
+.dear { color: var(--dear); }
+/* the scale's label and the key under the Landing (HOUSE 4.15, 11.1 rule 6) */
+.scale { margin-top: 2px; }
+.key { display: flex; flex-wrap: wrap; gap: 2px 12px; margin-top: 4px; font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+.key .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; }
+.sw-run { height: 3px !important; vertical-align: 2px !important; background: var(--ink); }
+/* the private-use line at the pane's head (HOUSE 4.15 exception 2), in ink */
+.statement.private-use { color: var(--ink); }
+/* the key at the end of the pane (HOUSE 11.1 rule 1) */
+.aboutlink { display: block; margin: 14px 0 0; min-height: 44px; font-size: 12.5px; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+.aboutlink:active { color: var(--ink); }
 
 /* ── the Landing: the price's blue staircase on the page, the chosen run's ink level laid into it. The drawing
    is the slider named Time; a vertical swipe on it scrolls the pane and a pinch zooms the page (app.js) ── */
-.stw { padding-top: 6px; }
+.stw { padding-top: 0; }
 .stair { position: relative; width: fit-content; max-width: 100%; margin: 4px 0 2px; touch-action: pan-y pinch-zoom; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: pointer; }
 .stair svg { display: block; overflow: visible; font-size: 10.5px; }
 .stair:focus-visible { outline-offset: 4px; }
 .stair text { font-size: 10.5px; fill: var(--ink-2); }
 .stair .run { fill: var(--ink); }
 .stair .nowl { fill: var(--ink-3); }
-.stair .halo { paint-order: stroke; stroke: var(--page); stroke-width: 3px; stroke-linejoin: round; }
+.stair .halo { paint-order: stroke; stroke: var(--sheet); stroke-width: 3px; stroke-linejoin: round; }
 .stair .grid, .stair .hair { fill: var(--line); }
 .stair .zero, .stair .base { fill: var(--line-strong); }
 .stair .st { fill: none; stroke: var(--price); stroke-width: 1.5px; }
@@ -106,7 +129,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .stair .lvl, .stair .post, .stair .brk, .stair .head rect, .stair .head circle { fill: var(--ink); }
 /* the landing's rects on whole device pixels: no edge row of ink blended into the blue tread beneath it */
 .stair .lvl, .stair .post, .stair .brk { shape-rendering: crispEdges; }
-.stair .head .ring { fill: var(--page); }
+.stair .head .ring { fill: var(--sheet); }
 .stair .mt, .stair .now { fill: var(--ink-2); }
 .stair .ht { fill: var(--ink-3); opacity: 0.5; }
 .stair .col { fill: var(--ink); fill-opacity: 0.07; }
@@ -117,12 +140,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .ro-when { font-size: 12.5px; line-height: 17px; font-weight: 620; }
 .ro-vals { font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 
-/* the runs: one pressed button per appliance, rows on the page parted by hairlines; the pressed one's name at 620
+/* the runs: one pressed button per appliance, rows on their plate parted by hairlines; the pressed one's name at 620
    with a 2 px ink rule in the gutter, the landing's level turned on its side */
 .runs { margin-top: 6px; }
+.runs button:first-child { border-top: 0; }
 .runs button { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; width: 100%; min-height: 44px; padding: 6px 0; border-top: 1px solid var(--line); }
 .runs .nm { font-weight: 560; }
-.runs .tm { font-weight: 600; text-align: right; white-space: nowrap; }
+.runs .tm { font-size: 15px; font-weight: 600; text-align: right; white-space: nowrap; }
 .runs .sub { grid-column: 1 / -1; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 .runs [aria-pressed="true"] .nm { font-weight: 620; }
 .runs [aria-pressed="true"]::before { content: ''; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 2px; background: var(--ink); }
@@ -130,7 +154,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* statements: sentences on the page, the first words at 620, never a box or a colored edge */
 .statement { padding: 8px 0 2px; line-height: 1.4; max-width: 62ch; }
 .statement b { font-weight: 620; }
-.help { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
 
 /* text keys: a 28 px frame on a 44 px hit */
 .textkey { position: relative; height: 44px; padding: 0 10px; font-size: 12.5px; }
@@ -142,12 +165,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .notice.kept { position: fixed; }
 .notice p + p { margin-top: 6px; }
 .notice-lines { font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; text-align: left; }
-
-/* ── the caption band: the caption line, fixed at two lines, and the credits ── */
-.band { flex: 0 0 auto; padding: 6px calc(16px + env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); border-top: 1px solid var(--line); font-size: 11px; line-height: 15px; color: var(--ink-2); }
-.capline { height: 30px; overflow: hidden; }
-.credits { font-size: 10.5px; }
-.credits.private { color: var(--ink); }
 
 /* ── About: a full-height sheet ── */
 .about { position: fixed; inset: 0; z-index: 20; }
@@ -167,22 +184,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .about-foot { margin-top: 8px; }
 
 @media (hover: hover) {
-  .stamp:hover { color: var(--ink); }
+  .stamp:hover, .aboutlink:hover { color: var(--ink); }
   .runs button:hover .nm { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
   .textkey:hover::before { background: color-mix(in srgb, currentColor 7%, transparent); }
 }
-@media (min-width: 640px) { .capline { height: 15px; } }
-@media (min-width: 700px) {
-  .head, .band, .panebody { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
-}
-/* a phone on its side: the header is one 46 px row block, the caption band one line over the credits, the plot
-   96 px tall (app.js) */
+/* a phone on its side: the header is one 46 px row block, the plot 96 px tall (app.js) */
 @media (orientation: landscape) and (max-height: 500px) {
   .head { grid-template-rows: 22px 24px; padding-top: env(safe-area-inset-top); }
   .stamp-home { padding-bottom: 0; }
   .stamp { white-space: nowrap; }
-  .band { padding-top: 4px; }
-  .capline { height: 15px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }

@@ -13,7 +13,8 @@
 <body>
 
 <!-- The app reads data/snapshot.json and data/appliances.json and nothing else. The look is ART.md (the house
-     system and the Landing); where the prices come from, and on what terms, is NOTES.md. The unit of a price is
+     system, its pane-app register and the Landing); where the prices come from, and on what terms, is NOTES.md;
+     the credit is About's first Sources and credits paragraph. The unit of a price is
      written by app.js only once the snapshot parses, so the camera's wait for it proves the prices are in: this
      file never names it. -->
 
@@ -27,15 +28,6 @@
   <div class="notice" id="notice" role="alert" hidden></div>
   <div class="panebody" id="pane"></div>
 </main>
-
-<footer class="band" id="band">
-  <p class="capline" id="capline"></p>
-  <!-- CC BY 4.0 asks for the attribution wherever the prices are shown. The static words are the fallback, so a
-       broken snapshot cannot take the attribution down; once the snapshot parses, app.js writes the data's own
-       attribution and license words, byte for byte, in their place. -->
-  <p class="credits" id="credits">Day-ahead prices: Energy-Charts (Fraunhofer ISE).</p>
-  <p class="credits private" id="private" hidden>These prices are licensed for private and internal use only. Do not republish them.</p>
-</footer>
 
 <div class="about" id="about" hidden>
   <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
@@ -53,6 +45,10 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <!-- CC BY 4.0 asks for the attribution wherever the prices are shown, in any reasonable manner (its §3(a)(2)):
+             here, one tap from the pane. The static words are the fallback, so a broken snapshot cannot take the
+             attribution down; once the snapshot parses, app.js writes the data's own attribution and license words,
+             byte for byte, in their place. -->
         <p id="about-credit">Day-ahead prices: Energy-Charts (Fraunhofer ISE).</p>
         <p><span translate="no">api.energy-charts.info</span><br><span translate="no">creativecommons.org/licenses/by/4.0</span></p>
         <p>Energy-Charts publishes 16 of the bidding zones it serves under CC&nbsp;BY&nbsp;4.0, from Bundesnetzagentur and SMARD.de, and those may be republished with the credit above; the prices of every other zone are for private and internal use only. <span translate="no">NOTES.md</span> lists them.</p>
@@ -63,6 +59,7 @@
         <p>In the template, a job refreshes <span translate="no">data/snapshot.json</span> after each day&rsquo;s auction, at 13:30 and 16:30 UTC, and a Shortcut carries the file to the phone. Nothing here goes online. The app reads both files again whenever it comes back to the screen.</p>
         <p>Asking a question about this app&rsquo;s data reads a table written when the prices were fetched, which carries the whole day and the stretch that was then still ahead.</p>
         <p>Day-ahead prices are set once a day, in an auction, for every interval of the following day.</p>
+        <p>The appliances are <span translate="no">data/appliances.json</span>: in Snuggery, Options, then App Files. Add a row or change a run length; the app reads it again when it comes back to the screen.</p>
       </section>
       <button type="button" class="textkey about-foot" id="about-close-2">Close</button>
     </div>

@@ -140,8 +140,8 @@ export function indexAt(L, x, clamp = false) {
 /** The center of interval i's column, where the tracer head stands. */
 export const centerOf = (L, i) => (L.G.xs[i] + L.G.xs[i + 1]) / 2;
 
-/** The caption line (two lines below 640 px, one from 640). */
-export const caption = (M) => `${M.u.label}, spot price per ${M.stepMin === 60 ? 'hour' : `${M.stepMin}${NB}min`}, before grid rent, tax and VAT. Ink: the chosen run at its mean price.`;
+/** The scale's label under the Landing's readout: the unit and what it covers (the key says what the ink is). */
+export const scaleLabel = (M) => `${M.u.label}, spot price per ${M.stepMin === 60 ? 'hour' : `${M.stepMin}${NB}min`}, before grid rent, tax and VAT.`;
 
 /** What VoiceOver reads once as the slider's description: the file's span, its lowest and highest, the run. */
 export function describe(M, run, name, hours) {

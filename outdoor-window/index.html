@@ -13,8 +13,10 @@
 <body>
 
 <!-- The app reads data/snapshot.json and data/rules.json and nothing else. The look is ART.md (the house
-     system and the Shutters); where the forecast comes from, and on what terms, is NOTES.md. The pane tabs
-     are built by app.js once the forecast parses, so the tab named Hours is the camera's proof of data. -->
+     system, its pane-app register and the Shutters); where the forecast comes from, and on what terms, is
+     NOTES.md. The pane tabs are built by app.js once the forecast parses, so the tab named Hours is the
+     camera's proof of data. The front is the name, the stamp, the tabs and the pane, and the one line the
+     forecast's terms ask for beside the data; the rest of the credit is About's. -->
 
 <header class="head" id="head">
   <h1 translate="no">Outdoor Window</h1>
@@ -29,17 +31,14 @@
 </main>
 
 <footer class="band" id="band">
-  <p class="capline" id="capline"></p>
-  <!-- Open-Meteo's license asks for this credit next to any place their data is shown, as a link, with a
-       link to the license beside it, and for changes to be indicated. It is static markup rather than
-       something the script draws, so a broken snapshot cannot take the attribution down with it. These two
-       anchors are the only external addresses in the app (an exception tools/check.mjs allows by file and
-       exact string), and nothing is ever fetched from them: a tap is a link activation, which Snuggery
-       names and offers to hand to Safari. -->
-  <p class="credits" id="credits"><a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>, under
-     <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>.
-     The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified;
-     the scores and the ask table beside it are this app's.</p>
+  <!-- Open-Meteo's terms ask for a link to them "next to any location Open-Meteo data are displayed", and this
+       line is that link, and nothing else (HOUSE 4.15 exception 1). The license link and the sentence that says
+       what was changed may be given "in any reasonable manner", so they are in About, with the whole credit.
+       It is static markup rather than something the script draws, so a broken snapshot cannot take the
+       attribution down with it. The app's two anchors (this one, and the license's in About) are its only
+       external addresses (an exception tools/check.mjs allows by file and exact string), and nothing is ever
+       fetched from them: a tap is a link activation, which Snuggery names and offers to hand to Safari. -->
+  <p class="credits" id="credits"><a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a></p>
 </footer>
 
 <div class="about" id="about" hidden>
@@ -58,14 +57,15 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
-        <p>Weather data by Open-Meteo.com, under CC&nbsp;BY&nbsp;4.0. The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.</p>
-        <p><span translate="no">open-meteo.com</span><br><span translate="no">creativecommons.org/licenses/by/4.0/</span></p>
+        <p id="about-credit-line" translate="no">Weather data by Open-Meteo.com, under CC&nbsp;BY&nbsp;4.0. The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.</p>
+        <p><span translate="no">open-meteo.com</span><br><a href="https://creativecommons.org/licenses/by/4.0/">creativecommons.org/licenses/by/4.0/</a></p>
         <p>Open-Meteo gathers its forecasts from national weather services, among them DWD, ECMWF, NOAA NCEP, M&eacute;t&eacute;o-France, JMA, MET Norway and the UK Met Office, each under its own open license; crediting Open-Meteo is the credit their license asks for.</p>
         <p>Forecasts are forecasts: the app scores what was predicted, not what happened.</p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
       </section>
       <section>
         <h3>How the data gets here</h3>
+        <p>Build the Shortcut in <span translate="no">PROMPT.md</span> and the app shows where you are.</p>
         <p>A Shortcut on the phone asks for its location, fetches the forecast for it and writes it into this app as <span translate="no">data/snapshot.json</span>. Nothing here goes online, and the location is never written to any repository; <span translate="no">PROMPT.md</span> has the recipe. The app reads both files again whenever it comes back to the screen.</p>
         <p id="about-ask"></p>
         <p>Air quality is left out on purpose, so the app stays one fetch and one file; <span translate="no">NOTES.md</span> says what adding it would take.</p>

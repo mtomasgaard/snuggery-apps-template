@@ -1,4 +1,4 @@
-// The decode test (HOUSE.md 7.3): data/snapshot.json read with code written here, against the app's pure modules
+// The decode test (HOUSE.md 7.3): the snapshot read with code written here, against the app's pure modules
 // js/prices.js, js/staircase.js and js/units.js; and fixtures written here for what the shipped file cannot show:
 // a two-day file at 23:30 and the next morning, a day below zero, an hourly zone, the spring (92) and autumn
 // (100) clock changes, a missing quarter, lastGood, broken files. The art pass changes no data; this proves the
@@ -16,7 +16,10 @@ const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const P = await import(path.join(APP, 'js/prices.js'));
 const ST = await import(path.join(APP, 'js/staircase.js'));
 const U = await import(path.join(APP, 'js/units.js'));
-const snap = JSON.parse(fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8'));
+// The fixed day: tools/fixtures/snapshot.json, the file of 1 Oct the checks were written against (check.mjs item 5 pins
+// it). data/snapshot.json is rewritten by the refresh twice a day, so its figures cannot be pinned; shoot.mjs runs one
+// stage on it, and check.mjs checks its shape (plan 0012 package 4).
+const snap = JSON.parse(fs.readFileSync(path.join(APP, 'tools/fixtures/snapshot.json'), 'utf8'));
 const apps = JSON.parse(fs.readFileSync(path.join(APP, 'data/appliances.json'), 'utf8')).appliances;
 const fails = [];
 let n = 0;
@@ -129,8 +132,8 @@ const T1020 = Date.parse('2026-10-01T08:20:00Z'), TOUT = Date.parse('2026-10-03T
 {
   const hourly = { ...clone(snap), resolutionMinutes: 60, hours: series(Date.UTC(2026, 9, 1, -2), 24, 60, () => 120, (k) => 50 + ((k * 37) % 23)) };
   const M = P.model(hourly, T1020), r = P.cheapest(M, 1.5);
-  ok(M.n === 24 && M.stepMin === 60 && M.noun[1] === 'hours' && r.need === 2 && ST.caption(M).startsWith(`c/kWh, spot price per hour,`),
-    `an hourly zone: 24 intervals, "${M.noun[1]}", a 1.5 h run takes ${r.need} of them, the caption "${ST.caption(M).slice(0, 34)}…"`);
+  ok(M.n === 24 && M.stepMin === 60 && M.noun[1] === 'hours' && r.need === 2 && ST.scaleLabel(M) === `c/kWh, spot price per hour, before grid rent, tax and VAT.`,
+    `an hourly zone: 24 intervals, "${M.noun[1]}", a 1.5 h run takes ${r.need} of them, the scale label "${ST.scaleLabel(M)}"`);
 
   const gap = clone(snap);
   gap.hours = gap.hours.filter((h) => !h.start.includes('T14:00'));

@@ -1985,3 +1985,160 @@ every pane, so no tap is meant for it, and the block's z-index keeps the thumbs 
 above keeps its 44 px, so nothing overlaps upward. `shoot.mjs` measures the content's top at the block's
 foot, so its checks follow the new height without a change; `ART.md` §3 carries the new figures. Code
 251 775 B of 252 000 after the stylesheet's comment.
+
+## Plan 0012 package 4: the pane-app register, Running Dashboard 1.2 (the builder, 2026-10-08)
+
+The brief is `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (D5, D6 gray, package 4), `Template/HOUSE.md`
+§4.15, §11, §12 and §13 as amended on 2026-10-06 (with §11.3's color rule of 2026-10-08), and
+`docs/plans/0012-change-lists.md`: *Shared steps (F)*, *the six pane apps (P)* and *Running Dashboard* (items 1 to
+17), plus plan 0011's three owed items (P9) and Finances' readout fix. The approved prototype
+(`docs/plans/0012-prototypes/running-dashboard.patch`, the Now pane) was the target picture, built properly.
+Finances 1.2 is the reference (`finances/tools/DECISIONS.md`, *Plan 0012 package 4*). Bugs on record: none open
+(plan 0009 item 5 names none of this app's; nothing under `docs/review/` names it; rows 165 and 174 are phone
+rows not yet run). The data, its pipeline and the 37 data files are byte-identical (`check.mjs` item 5). The
+owner's private Training Load is the lead's to port; nothing outside `Template/running-dashboard/` was touched.
+No git command was run.
+
+### What changed, by the list
+
+- **Item 1, P1, F1.** `footer#band` with `#capline` and `#credits` deleted; `caption()` and its call in `render()`,
+  the `capline` write in `fail()`, the `.band`/`.capline`/`.credits` rules and their 700 px and landscape variants
+  deleted; `about()` makes `['head', 'main']` inert. The credit is static, byte for byte, as `<p
+  id="about-credit-line" translate="no">` first under About's *Sources and credits*.
+- **Item 2, P8.** `stamp()`: `Example data.` leads in place of `Stale.` while every activity id is `demo-…`
+  (`OSM()`, the rule the routes' credit keys on). The template's stamp is `Example data. Updated 30 Sep, 20:20, last
+  session 30 Sep`. `PROMPT.md` and `NOTES.md` said "nothing on screen says so" / "Nothing on screen calls it an
+  example": both now say the stamp does, and that a real pull's ids never show it.
+- **Item 3.** `tile()` sets `data-label`.
+- **Item 4.** The Block's sentence became a key, `Run` and `Planned week to Copenhagen Half Marathon` (a `pkey()`
+  helper, also used by the week's bar).
+- **Item 5.** Now opens on a `headline` plate: `hl-what` (an `h2`, the pane's first heading, as Finances did), the
+  week's kilometers at 34 px from `blockWeeks()`'s column at now, `of 62 km planned`, the `pbar` with its key, then
+  `p.tone` and `p.tone-text`. `blockWeeks()` runs twice per Now render (the headline and the Block), as the list
+  foresaw; it is pure and cheap (16 columns), and no frame log was taken to justify holding it.
+- **Item 6.** The facts are `dl.tiles` on a `tilesec` plate. **The long facts** sit on a plate of their own
+  (`longsec`) after the Block, where the prototype appended them bare to the page (rule 4: sections on plates).
+- **Item 7.** The old `figure()` call for the week and the separate verdict line are gone from Now.
+- **Item 8.** `What to do next` opens on the tone and the plan's headline (`toneLines()`, shared with Now).
+- **Item 9.** The race card keeps `A plus is the agent slower than Garmin.`; the method sentence opens `Why the
+  numbers differ`, its last sentence (the same `A plus …`) not repeated there.
+- **Item 10, P2.** `ABOUT_KEY` and `aboutKey()`, called once by `render()` after the pane (Finances' departure:
+  one call, every pane).
+- **Item 11, P3, P4, P6.** The prototype's CSS block, built into the stylesheet: the four tokens after the data
+  tokens in both themes; plates; `.halo`, `.casing`, `.cdot`, `.dot` and the elevation profile's `.pdot` in
+  `--sheet`; **the slider heads on a plate** (the route's distance window) ring in `--sheet` too, through `--thumb`
+  redefined on `.sec` and a `--ring` for the pressed head (the filters, on the page, keep `--page`); the headline;
+  `.pbar`; `.pkey`; `.tone` with the tone word's color (`.tone.tone-good b`, and `.tone-good .tw` for `verdict()`);
+  tiles as `dl.tiles` (the map's tile layer is also `.tiles`, so the selector is scoped); the Block's `--done`,
+  `--ink-2` fill at 0.14 and outline. `.figure`/`.fig*` and the old Now table's `.tab` rules are deleted.
+- **Item 12.** `figure()` is the key number: on the pane it builds a `headline` plate and returns it (Plan's race
+  day; Plan's verdict joins that plate, or a plate of its own without a race); inside a section it is that section's
+  (a session's distance or time, its label a `span`, not a heading under the session's name).
+- **Item 13.** `verdict(tone, text, before)` colors the tone sentence alone (`b.tw`); a session note's own verdict
+  words lead it in ink.
+- **Item 14.** `howTo(c, text)` puts a sentence into the section's `How to read it` fold (making one where the
+  section has none). Moved, as listed: the evaluation's date line, the plan's, the load chart's totals, VO₂ max's
+  recomputes, Garmin's predictions' basis, the session curves' intro (the paragraph `streamCard()` rewrites with the
+  series, now in the fold), the pace, grade-adjusted and condition-adjusted pace notes, the speed note when its zone
+  clause makes it long, the weigh-ins'. **Beyond the list's line numbers, by its own rule** (a label over 64
+  characters moves): the heart-rate curve's `Heart rate, colored by zone. Dashed lines are the zone floors and the
+  lactate threshold.` (88 characters; each curve's note goes to the fold when longer than 64, in the curves'
+  order); Health's stress label `Each point one sample: under 26 is rest, …` (82; `capOrFold()` puts it under the
+  chart while short and in the fold while long, as the smoothing switch changes it); and the Today group's foot
+  plate `This group is the live end of the app: …` (into the heart-rate chart's fold; the plate it sat alone on is
+  gone). `shoot.mjs` now checks every caption label on every pane is one line at 390 px.
+- **Item 15.** The map's sentence is in its section's fold; under the map one `p.mapcredit` at 10.5 px, `Route:`,
+  `Map:` or `Route and map: © OpenStreetMap contributors, ODbL.` as item 15 gives them, removed from the DOM when
+  OpenStreetMap drew nothing. No `Map tiles:` string remains. `TILE_CREDIT` stays. About's tiles sentence now says a
+  copy credits its tiles there, and OpenStreetMap's also under each map; `NOTES.md` and `TILES.md` say the same
+  (F5). About's Block paragraph said `Each block of ink`: now `Each block, in blue,`.
+- **Item 16.** Tables stay, on their plates. **Item 17, F6.** `miniapp.json` 1.1 → **1.2** (the list's item 17
+  says `1.1`; its heading says 1.1 → 1.2, and 1.1 is HEAD's, so 1.2).
+- **Beyond the list (rule 4):** Today's four facts on Health were a bare `dl` on the page; they are on a plate.
+- **P7.** `check.mjs` had no type-size check; it gains one: the pane apps' scale, 34 px only on `.hl-fig`, 21 px only
+  on the readout's value.
+
+### P9 and Finances' readout fix
+
+1. **The header centered with the pane** (`max(16px, 50% - 364px)`; the 700 px rule gone). `shoot.mjs`'s widths
+   gain `wide (1024 × 768)`: the name starts where the first plate does at every width (148 and 148 px at 1 024,
+   the column 148 to 876, centered).
+2. **A passive, empty `touchstart` listener** on the document (pinned by `check.mjs`; the tint is a phone check).
+3. **The scrub race.** `shoot.mjs` slides a finger along Weekly running volume by CDP touch at 3 px and 9 px a move,
+   waits after every move until the page has received it (`window.__fx`, touch pointers only), then one frame, and
+   checks the column under the finger is the card's; then again at 9 px with a mouse resting on the chart. **The
+   fix it pins:** `readout()` now follows only the pointer that is reading (Finances' fix: `pointermove`,
+   `pointerup`, `pointercancel` and `pointerleave` from another pointer are ignored while a read is down). Run
+   against a scratch copy holding the old `readout()`, the mouse-resting pass printed `FAIL … 1 right, 28 wrong`;
+   on this folder 87/0, 29/0 and 29/0, both themes.
+
+### Checks changed, and why each
+
+`check.mjs`: header; item 6 pins 1.2; item 8 (the credit first in About, static and once; no band, caption or credit
+element, rule or write; the OpenStreetMap line's three forms, its removal, no `Map tiles:`); item 13 counts 21
+`--json` keys and pins the four register tokens by name and value; item 14 gains the type scale; B1 (the example
+lead in place of `Stale.`); item 16's ZIP cap 1 351 307; new item 18 (the About key and its one call, the foot's
+padding, plates with every ring and head in `--sheet`, the week's key number and bar, the tone colors, the tiles,
+the Block's colors and key, the folds, the centered header, `touchstart`, the reading pointer). Against the before
+copy, 18 of them print `FAIL`; the code cap passes there and fails here (below).
+`shoot.mjs`: boot (no band, the credit first in About, the stamp `Example data. …` on one line); every pane's About
+key last and its caption labels one line each; the Block's runs sampled as `--done` on the plate and its fills at
+HOUSE's 1.23 / 1.31, its key; the Block's card clear of the tapped week wherever it sits (it no longer always hangs
+from the foot: the plate is narrower); Now's headline, tone color, bar and tiles against this file's decode (the old
+table check); Plan's tints over the plate; the long fact on its plate after the Block; the camera drag (the pane now
+runs to the screen's foot); About (inert over `head` and `main`, the credit) and the About key by touch; the changed
+file's stamp; the route (its fold, the credit line, no tile credit on the pane, the session's key number at 34 px);
+the stamp in six states (the example, the example two days on, `Stale.` on a copy with `real-` ids, a real copy on
+its own day, loading) each one line; 21 days on reads the headline and the tiles; the widths without the caption and
+with the wide screen; the scrub race. **A harness fix:** `hitTargets()` now skips a control that the filters, held
+over the pane, cover at the scroll step it is measured at (the plates moved two keys on Health under the filters at
+one of the 400 px steps, measured as 59 × 21.75; each passes where it is clear of them). 157 `ok` before, **200
+`ok`, 0 failed** now, both themes. `test_block.mjs`: unchanged, 18 pass. `palette.py`: the register's four in
+`--json`; check 4 measures the Block on its plate in `--done` with the 14 % fill; checks 5 and 8 on `--sheet`; new
+check 9 (HOUSE 11.2's text contrasts, the planned fill's figures, the tone pairs printed): `ALL CHECKS PASS`.
+
+### Owner calls this leaves (each reversible)
+
+1. **The charts' plan tints stay 20 % of their own color** (the owner's six, D32), now over the plate; only the
+   Block and the week's bar take the register's 14 % `--ink-2` fill, as the change list gives. HOUSE 11.1 rule 7
+   read literally would make every planned outline 14 % of its stroke; that would change the owner's 20 % call.
+2. **The extra folds** (the heart-rate curve's note, the stress label, the Today foot) by the list's own rule.
+3. **The long facts' plate** and **Today's facts on a plate** (rule 4).
+4. **Plan's verdict** joins the race-day plate.
+5. **The tone's 15 px** on Now and `What to do next`, 13.5 px elsewhere (as before) on Plan, folds and notes.
+
+### Budgets (`node tools/check.mjs`) — for the lead's ruling
+
+App code **259 002 B**, over its cap of **252 000** (the lead's ruling for the owner's six, plan 0011 D32) by 7 002 B;
+251 775 before the pass. `app.js` 212 316 (+4 386), `style.css` 25 491 (+2 681), `index.html` 7 709 (+160). The
+change list foresaw about 3.5 KB and "the lead rules on the measured figure". Nothing was cut and no comment
+stripped (HOUSE 8). **The lead's ruling (2026-10-08): the code cap is 260 000 B** on the measured 259 002 (was
+252 000, plan 0011 D32). `CODE_CAP` in `tools/check.mjs` says so in its comment and its line, `ART.md` §6 gives the
+measured figures and the new cap, and `check.mjs` passes. `NOTES.md` carries no budget figure; the font sizes it
+gives (35 372 B and 1 216 B) are the files' own. ZIP **1 085 705 B** of the
+lead's package-4 cap, **1 351 307** (1 081 046 × 1.25; the app's own 1 340 193 was tighter, so it rose to the house
+rule).
+
+### The camera
+
+`MarketingShotsUITests.swift` waits for `Health` and taps `Now` and `Health`; `MarketingClipsUITests.swift` drags on
+Now. All untouched (`buildTabs()` unchanged; the drag scrolls the pane, `shoot.mjs`). **No camera string changed.**
+The new About key is a button named `Sources, method and credits are in About.`; nothing waits for it.
+
+### Phone checks this adds (not claimed here; an iPhone on iOS 18 and one on iOS 26)
+
+Row 174 covers the About key above the home indicator. New: the pressed tint on the text keys and the About key
+(`touchstart`); a sideways slide along a chart with an iPad trackpad pointer resting on it; the 34 px week at the
+largest accessibility text size; the tone colors in sunlight; the map's credit line under a route; the route
+window's slider heads on the plate.
+
+### The code cap ruled (the lead, 2026-10-08; the final verifier's must)
+
+`CODE_CAP` is **260 000 B** on the measured 259 002 (was 252 000, plan 0011 D32). `tools/check.mjs` says so in its
+header (item 16), in the constant's comment and in the line it prints; `ART.md` section 6 gives the measured figure
+and the new cap. No app code changed. The runs: `node tools/check.mjs`: all checks pass (`app code 259,002 bytes (cap
+260,000 …)`, ZIP 1 085 709 B of 1 351 307); `node tools/test_block.mjs`: all 18 pass; `python3 tools/art/palette.py`:
+ALL CHECKS PASS; `PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (both themes): 200 `ok`, 0 failed. Real touch (a scratch
+script, deleted after), Chromium and WebKit at 390 × 844 and 320 × 568, both themes: Health and Now selected by a tap,
+the About key opens About; 32 `ok`, 0 failed, no console error.
+

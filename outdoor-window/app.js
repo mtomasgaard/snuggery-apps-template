@@ -102,7 +102,7 @@
 
 import { scoreHours, findWindows, sunTimes, isNumber, localToEpoch, lightRule } from './js/score.js';
 import { int, count, list, num, withUnit, spokenValue, coords, meters, stampWhen, full, span, placeOf, placeZones, placeClock, placeDate, placeFull, placeDays, placeSpan, spokenHour } from './js/units.js';
-import { model as shutterModel, draw as drawSvg, hourAt, nameOf, caption as shutterCaption, describe } from './js/shutters.js';
+import { model as shutterModel, draw as drawSvg, hourAt, nameOf, keyItems, describe } from './js/shutters.js';
 
 const SNAPSHOT_URL = './data/snapshot.json';
 const RULES_URL = './data/rules.json';
@@ -135,6 +135,8 @@ const DEFAULT_RULES = {
 };
 
 const TABS = [['windows', 'Windows'], ['hours', 'Hours'], ['rules', 'Rules']];
+// The key at the end of every pane (HOUSE 11.1 rule 1).
+const ABOUT_KEY = 'Sources, method and credits are in About.';
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => {
@@ -298,7 +300,6 @@ function fail(problems) {
     $('stamp').textContent = 'No usable forecast';
     $('tabs').hidden = true;
     $('pane').replaceChildren();
-    $('capline').textContent = '';
     box.classList.remove('kept');
     for (const p of problems) box.append(el('p', null, p));
     box.append(el('p', 'notice-lines', 'In Snuggery, Options, then App Files shows what the file holds.'));
@@ -308,13 +309,15 @@ function fail(problems) {
 
 /* ── the stamp and the tabs ───────────────────────────────────────────── */
 
-/** When the file was made, on the phone's clock, in words; stale and ran out are sentences in ink, never a color. */
+/** When the file was made, on the phone's clock, in words; stale and ran out are sentences in ink, never a color.
+ *  The example (the file's demoPlace) says so instead, in place of either: an example never refreshes (HOUSE 11.1
+ *  rule 8). */
 function stamp() {
   const s = S.stamp, node = $('stamp');
   if (!s) { node.replaceChildren(el('span', 'lead', 'Undated file.')); return; }
   const words = s.kind === 'exact' ? `Updated ${stampWhen(s.ms)}` : s.kind === 'about' ? `Updated about ${stampWhen(s.ms)}` : `Forecast from ${stampWhen(s.ms)}`;
   const now = Date.now(), end = S.all[S.all.length - 1].epoch + 3600000;
-  const lead = S.ranOut && Number.isFinite(end) ? `Forecast ran out ${span(now - end)} ago.` : now - s.ms > STALE_HOURS * 3600000 ? 'Stale.' : null;
+  const lead = S.place ? 'Example data.' : S.ranOut && Number.isFinite(end) ? `Forecast ran out ${span(now - end)} ago.` : now - s.ms > STALE_HOURS * 3600000 ? 'Stale.' : null;
   node.replaceChildren(...(lead ? [el('span', 'lead', lead), ` ${words}`] : [words]));
 }
 
@@ -368,20 +371,26 @@ function render() {
   if (tab === 'hours') hoursPane(pane);
   else if (tab === 'rules') rulesPane(pane);
   else windowsPane(pane);
+  aboutKey(pane);   // every pane ends with it (HOUSE 11.1 rule 1)
   if (pane.querySelector('.sh')) drawShutters();
   markTabs();
   stamp();
-  caption();
   aboutList();
+}
+
+/** The key at the end of every pane: a text button that opens About (HOUSE 11.1 rule 1). */
+function aboutKey(host) {
+  const b = el('button', 'aboutlink', ABOUT_KEY);
+  b.type = 'button';
+  b.onclick = () => about(true);
+  host.append(b);
 }
 
 /** Sentences on the page, the first words at 620, at the head of every pane. */
 function statements() {
   const out = [], say = (lead, text) => { const p = el('p', 'statement'); p.append(el('b', null, lead), ` ${text}`); return p; };
-  // one line at 390 px, so the Shutters lead the pane (the stamp says when it ran out); the way to a forecast of
-  // one's own closes the Windows pane
-  if (S.place) out.push(say('Example forecast:', `${S.place}, ${placeDays(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.clock)}.`));
-  else if (S.ranOut) {
+  // the example says so in the stamp, and its place and days are About's This data (HOUSE 11.1 rule 8)
+  if (S.ranOut && !S.place) {
     out.push(say('Every hour in this file has ended,', 'so this is history, not a forecast. Run the Shortcut that refreshes the app.'));
   }
   if (S.rulesProblem) out.push(say('data/rules.json could not be used:', `${S.rulesProblem} The built-in rules are in use; the Rules pane shows them.`));
@@ -412,7 +421,8 @@ function shuttersBlock() {
   const ro = el('div', 'ro'), when = el('p', 'ro-when');
   when.append(el('b', null, ''), el('span', null, ''));
   ro.append(when, el('p', 'ro-vals', ''));
-  wrap.append(box, ro);
+  // a key in place of the band's how-to-read sentence (HOUSE 4.15, 11.1 rule 6), filled once the model is drawn
+  wrap.append(box, ro, el('div', 'key'));
   wireSlider(box);
   return wrap;
 }
@@ -428,7 +438,8 @@ function drawShutters() {
   $('sh-desc').textContent = describe(M, S.all, S.windows, S.clock);
   show(chosen);
   holdReadout(pane.querySelector('.ro'));
-  caption();
+  const key = pane.querySelector('.shw .key');
+  if (key) key.replaceChildren(...keyItems(M).map(([mark, word]) => { const k = el('span', 'k'), sw = el('i', `sw sw-${mark}`); sw.setAttribute('aria-hidden', 'true'); k.append(sw, word); return k; }));
 }
 
 /** The readout is a fixed block (ART.md section 3): its first line is held at the tallest it gets for any
@@ -571,7 +582,8 @@ function wireSlider(box) {
 
 const maxOf = (rows, key) => { const v = rows.map((r) => r[key]).filter(isNumber); return v.length ? Math.max(...v) : null; };
 const hoursOf = (w) => placeSpan(w.start.epoch, w.end.epoch + 3600000, S.clock);
-const facts = (pairs, cls = 'facts') => { const dl = el('dl', cls); for (const [k, v] of pairs) dl.append(el('dt', null, k), el('dd', null, v)); return dl; };
+/** Facts as two-column tiles (HOUSE 11.1 rule 3): a label over its value. */
+const facts = (pairs) => { const dl = el('dl', 'tiles'); for (const [k, v] of pairs) { const t = el('div', 'tile'); t.append(el('dt', null, k), el('dd', null, v)); dl.append(t); } return dl; };
 
 function windowsPane(pane) {
   pane.append(title(true), shuttersBlock());
@@ -582,36 +594,41 @@ function windowsPane(pane) {
     sec.append(el('h2', null, S.ranOut ? 'No window in this file' : `No window in the next ${count(S.rows.length, 'hour')}`),
       el('p', null, `Nothing here clears every rule for ${count(need, 'hour')} together.`),
       el('p', 'note', `The closest is ${placeDate(best.epoch, off)}, ${placeClock(best.epoch, off)}, scoring ${best.score}${best.blocked.length ? `, ruled out by ${list(best.blocked)}` : ''}.`));
-    pane.append(sec, ...ownForecast());
+    pane.append(sec);
     return;
   }
-  const w = S.windows[0], fig = el('p', 'fig');
-  fig.append(el('b', null, hoursOf(w)), el('span', null, `${placeDate(w.start.epoch, off)}, ${count(w.hours, 'hour')}, best score ${int(w.best)}`));
+  // the pane's key number (HOUSE 11.1 rule 2): the next window's hours, its day above, its length and best score under
+  const w = S.windows[0], hl = el('div', 'hl');
+  sec.classList.add('headline');
+  hl.append(el('h2', 'hl-what', `${S.ranOut ? 'First window in this file' : 'Next window'}, ${placeDate(w.start.epoch, off)}`), el('span', 'hl-fig', hoursOf(w)),
+    el('span', 'hl-lead', `${count(w.hours, 'hour')}, best score ${int(w.best)}`));
   const or = (v, unit) => withUnit(v, unit) ?? 'not in the file';
   const pairs = [['Warmest', or(maxOf(w.rows, 'temp'), u.temp)], ['Highest chance of rain', or(maxOf(w.rows, 'rainPct'), u.rain)], ['Most rainfall', or(maxOf(w.rows, 'precip'), u.precip)],
     ['Strongest gust', or(maxOf(w.rows, 'gust'), u.gust)], ['Highest dew point', or(maxOf(w.rows, 'dew'), u.dew)]];
   const sun = S.sun.get(w.end.stamp.slice(0, 10));
   if (sun && sun.set > w.end.epoch && sun.set < w.end.epoch + 3600000) pairs.push(['Sunset', placeClock(sun.set, off)]);
-  sec.append(el('h2', null, S.ranOut ? 'First window in this file' : 'Next window'), fig, facts(pairs));
+  sec.append(hl, facts(pairs));
   pane.append(sec);
   if (S.windows.length > 1) {
-    const later = el('section', 'sec');
-    later.append(el('h2', null, 'After that'), facts(S.windows.slice(1).map((x) => [`${placeDate(x.start.epoch, off)}, ${hoursOf(x)}`, `${count(x.hours, 'hour')}, best score ${int(x.best)}`]), 'facts wins'));
+    // the later windows as a table (HOUSE 11.1 rule 3), on a plate of their own
+    const later = el('section', 'sec'), t = el('table', 'wins'), head = el('tr');
+    for (const h of ['Day', 'Hours', 'Length', 'Best score']) head.append(el('th', null, h));
+    const thead = el('thead'), body = el('tbody');
+    thead.append(head);
+    for (const x of S.windows.slice(1)) {
+      const tr = el('tr');
+      tr.append(el('td', null, placeDate(x.start.epoch, off)), el('td', null, hoursOf(x)), el('td', null, count(x.hours, 'hour')), el('td', null, int(x.best)));
+      body.append(tr);
+    }
+    t.append(thead, body);
+    later.append(el('h2', null, 'After that'), t);
     pane.append(later);
   }
-  pane.append(...ownForecast());
-}
-
-/** Under the example forecast's Windows pane: how to get one's own (the statement at the head is one line). */
-function ownForecast() {
-  if (!S.place) return [];
-  const sec = el('section', 'sec');
-  sec.append(el('p', 'note', 'Build the Shortcut in PROMPT.md and the app shows where you are.'));
-  return [sec];
 }
 
 function hoursPane(pane) {
-  pane.append(title(true), shuttersBlock());
+  // the zone under the title, one short label (HOUSE 11.1 rule 9); every column head carries its own unit
+  pane.append(title(true), el('p', 'zone', `Times in ${S.place ? `${S.place}’s` : 'the forecast’s'} own time, ${placeZones(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.clock)}.`), shuttersBlock());
   const u = S.units, off = S.clock, table = el('table', 'hours'), head = el('tr');
   const th = (word, unit) => { const c = el('th', null, word); c.scope = 'col'; if (unit) c.append(el('br'), unit); return c; };
   head.append(th('Time'), th('Light'), th('Air', u.temp), th('Rain chance', u.rain), th('Rainfall', u.precip), th('Gusts', u.gust), th('Dew point', u.dew));
@@ -653,7 +670,7 @@ function hoursPane(pane) {
 
 function rulesPane(pane) {
   const r = S.rules, u = S.units, all = S.all, n = all.length;
-  pane.append(title(false));
+  pane.append(title(false), el('p', 'zone', 'An hour must clear every rule.'));
   const dl = el('dl', 'rules');
   const outOf = (key) => all.filter((h) => h.checks.some((c) => c.key === key && !c.ok)).length;
   const tally = (key) => ` Rules out ${int(outOf(key))} of ${count(n, 'hour')}.`;
@@ -679,22 +696,11 @@ function rulesPane(pane) {
   else row('Light', 'Any hour', `daylight: “any”, “daylight” or “golden”, read ignoring case.${said || ' Left out, so any hour qualifies.'}`);
   const need = isNumber(r.minWindowHours) && r.minWindowHours > 0 ? Math.ceil(r.minWindowHours) : 1;
   row('Shortest window', count(need, 'hour'), 'minWindowHours: a run of open hours shorter than this is not offered as a window.');
-  const sec = el('section', 'sec'), steps = el('ol', 'steps');
+  const sec = el('section', 'sec'), steps = el('ol', 'steps'), rs = el('section', 'sec');
   for (const s of ['In Snuggery, Options, then App Files: data/rules.json.', 'Edit the numbers and save; a rule you leave out is not applied.', 'Come back here; the app reads both files again when it returns to the screen.']) steps.append(el('li', null, s));
   sec.append(el('h2', null, 'Changing them'), steps);
-  pane.append(dl, sec);
-}
-
-/** The caption band's line (HOUSE 4.5), two fixed lines: how to read the pane. */
-function caption() {
-  const c = $('capline'), u = S.units;
-  if (tab === 'windows') { c.textContent = M ? shutterCaption(M) : ''; return; }
-  if (tab === 'hours') {
-    const air = u.temp === u.dew ? `Air and dew point in ${u.temp}` : `Air in ${u.temp}, dew point in ${u.dew}`;
-    c.textContent = `Hours in ${S.place ? `${S.place}’s` : 'the forecast’s'} own time, ${placeZones(S.all[0].epoch, S.all[S.all.length - 1].epoch, S.clock)}. ${air}, rain chance in ${u.rain}, rainfall in ${u.precip}, gusts in ${u.gust}.`;
-    return;
-  }
-  c.textContent = `${S.rulesProblem ? 'The built-in rules: data/rules.json could not be used.' : 'Read from data/rules.json.'} An hour must clear every rule, in the forecast’s own units.`;
+  rs.append(dl);   // the rules on a plate, and the steps on another (HOUSE 11.1 rule 4)
+  pane.append(rs, sec);
 }
 
 /* ── About ────────────────────────────────────────────────────────────── */
@@ -703,6 +709,7 @@ function aboutList() {
   const dl = $('about-list'), s = S.snap, n = S.all.length;
   dl.replaceChildren();
   const add = (k, v) => dl.append(el('dt', null, `${k}:`), el('dd', null, v));
+  if (S.place) add('Example data', `${S.place}, ${placeDays(S.all[0].epoch, S.all[n - 1].epoch, S.clock)}`);
   if (S.place) add('Place', `${S.place} (an example)`);
   if (isNumber(s.latitude) && isNumber(s.longitude)) add('Grid point', `${coords(s.latitude, s.longitude)}${isNumber(s.elevation) ? `, ${meters(s.elevation)}` : ''}`);
   add('Time zone', `${typeof s.timezone === 'string' ? `${s.timezone.replace(/_/g, ' ')}, ` : ''}${placeZones(S.all[0].epoch, S.all[n - 1].epoch, S.clock)}`);
@@ -740,6 +747,9 @@ new ResizeObserver(() => {
   const w = $('pane').clientWidth;
   if (S && w !== lastW) { lastW = w; drawShutters(); }
 }).observe($('pane'));
+
+// An empty touchstart listener, passive, so iOS draws :active (a key pressed; plan 0011's owed item).
+document.addEventListener('touchstart', () => {}, { passive: true });
 
 // The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
 window.__ow = {

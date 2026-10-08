@@ -437,3 +437,133 @@ Left open, each with what the pass does unless the owner says otherwise:
 10. **The sentence under the rows** when the file is stale (`No new file for 2 d. The job writes about
     every hour; a Shortcut carries the file to this phone when it runs.`): it repeats the stamp's fact
     in longer words for a stranger who does not read stamps. The owner may want the stamp alone.
+
+---
+
+## Plan 0012 package 4: the pane-app register, Hello Live 2.1 (the builder, 2026-10-08)
+
+The brief is `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (package 4, last), `Template/HOUSE.md` §4.15, §11
+(rule 11: no plates), §11.3 (no register token), §12 (the white ground), §13, and `docs/plans/0012-change-lists.md`
+(F, P, *Hello Live* items 1 to 9). No git command was run; nothing outside this folder was written.
+
+### The data: a fixed day for the tools
+
+`check.mjs` item 5 pinned `data/snapshot.json` to `db50d9ad…` (the file of 1 Oct); the refresh job has since
+rewritten it (6 Oct 16:40 UTC, `3b027082…`), so check item 5 and `test_card.mjs` failed **at HEAD**, before this pass.
+Fix, the data unchanged: `tools/fixtures/snapshot.json` is the file of 1 Oct byte for byte (from the public
+template's commit `bd8f679`, sha256 `db50d9add6f0…04333a8`), pinned in item 5; `test_card.mjs` reads it; `shoot.mjs`
+serves it as `data/snapshot.json` by default and adds a stage on the shipped file at its own clock (31 minutes after
+it was made), both themes. Item 5 now checks the shipped file's shape (`generatedAt` in UTC, `headline`, optional
+`caption`, `runs[]` of `{ label, value }`, `ask[]` of `{ measure, value }`, at most 60).
+
+**One finding the live stage made, held for the lead, not fixed:** from 16:40 UTC each day the file's `Minute of day`
+is 1000 to 1439, and the app prints the file's words, `1000`, ungrouped; `shoot.mjs`'s SI rule flags four or more
+ungrouped digits. The fixed day (119) never showed it. The app has always printed `runs[].value` as the file gives
+it (through `si()`, which adds U+202F before a unit and groups nothing), so this is not this pass's change;
+`shoot.mjs` prints it as a `HOLD` line. Whether the app groups digits in a file's value, or the rule lets a bare
+four-digit count stand, is the lead's call. *(Ruled and fixed, 2026-10-08: the app groups; see the section at the
+end.)*
+
+### What changed, by the list
+
+- **Item 1, P1.** The band (`#capline`, `#credits`) and its CSS (the 640 px and landscape caption rules with it)
+  are gone; `caption()` is gone. The credit is static as About's first *Sources and credits* paragraph,
+  `<p id="about-credit-line">Data: this repository&rsquo;s own refresh job; no outside source.</p>`, byte for byte,
+  before the paragraph naming the script; `NOTES.md` keeps its line. `about()` inerts `['head', 'main']`.
+- **Item 2, P4.** `.fig` a column; `.fig b` 34 px 650, line height 1.05, `overflow-wrap: anywhere` kept (and
+  `max-width: 100%`); `.fig .lead` under it at 13.5 px; `#caption` stays at 12.5 px.
+- **Item 3, F4.** `div#card-key.key` after `#card`: `File written` (`.sw-punch`, 3 × 10 px ink), `Until it was first
+  read here` (`.sw-tail`, 10 × 2 px ink), `Hours: this phone’s, UTC+2` without a swatch, the offset written by
+  `hoursKey()` with `offsetWord(Date.now())`, called where `caption()` was (render and the minute's refresh). Two
+  lines below 640 px of width, one from 640 (`shoot.mjs` measures it at every width).
+- **Item 4.** `.rows dd` 15 px 600.
+- **Item 5.** No plates; the sections keep their hairlines. `.panebody` `padding-top: 4px; padding-bottom:
+  calc(28px + env(safe-area-inset-bottom))`, pinned by `check.mjs`.
+- **Item 6, P2.** `button#about-key.aboutlink` static after `#rows-sec`, inside `#pane`; it opens About with the
+  stamp's handler.
+- **Items 7 to 9.** Sizes 10.5 / 11.5 / 12.5 / 13.5 / 15 / 34 px; no register token; `--page` `#ffffff`, the light
+  `theme-color` `#ffffff`, `palette.py`'s light page `#ffffff` (54 checks `ok`, `ALL CHECKS PASS`; the figures that
+  moved are in ART.md section 2, and today's row is now `#f5f6f6`); `check.mjs`'s token table; `miniapp.json`
+  2.0 → **2.1**.
+- **Plan 0011's owed items.** The pane is now a centered 760 px column (`margin: 0 auto`) and the header's sides
+  follow it (`max(16px, 50% - 364px)`); the 700 px rule (20 px gutters) is gone, so from 700 px the gutters are 16
+  px, and the card's width on its side and on a tablet is 728 px (was 720; still 24 px an hour). The passive empty
+  `touchstart` listener is added. There is no chart readout and no scrub here, so Finances' readout fix and the
+  scrub-race check have nothing to apply to.
+
+### Checks changed, and why each
+
+`check.mjs`: item 5 (above); item 6 pins 2.1; item 8 reads About's `#about-credit-line` and refuses any band,
+caption line or credit line; item 13/14's light `--page`; item 14's sizes and the one 34 px rule on `.fig b`; B2
+(34 px 650); the caption-line bug row became the key's `hoursKey()`; the card-is-an-image check excludes the
+document's empty `touchstart` listener (it read any `addEventListener('touch…` as a control on the card); item 16's
+cap 89 805; new item 19 (the key number, the key, the rows, no plates, the About key, the foot, the centered header,
+`touchstart`, the white ground). 52 `ok`. `shoot.mjs`: the fixed day as `BASE`; the credit from About; no footer;
+the register (34 px headline, lead under it, rows 15/600, the white ground, the About key last); the key's words
+and marks for the caption line; two controls on the page (the stamp and the About key); About's inert list; the
+locales without the band; the widths without the caption (the key's lines instead), 728 px panes, plus 1024 × 768,
+and the left edges at `max(16, W/2 − 364)`; the stamp on one line in every state (fresh, stale, ahead, undated, no
+usable file, every width, the shipped file); the shipped file's stage. 192 `ok`, 0 failures, 2 `HOLD` (the finding
+above, one per theme). `test_card.mjs` reads the fixture: 55 pass.
+
+### Owner calls this leaves
+
+1. The 56 px the band gave back stays empty at 390 × 844: the card's rows were already at their 40 px ceiling there
+   (`rowFor()`), so the pane's foot has about 113 px free under the About key. Raising the ceiling is a card change
+   the list did not ask for.
+2. `Sources, method and credits are in About.` is the house's sentence; About here holds no method section by that
+   name (*What the Time Card is* is the nearest).
+3. The key wraps to two lines on a phone (one from 640 px).
+
+### Budgets
+
+Code 47 955 B (46 888 before; cap 200 000). ZIP 72 426 B with the hour's data (71 844 before), cap 89 805, the house
+rule (71 844 × 1.25), above 2.0's ruled 74 000, so the cap rises to it. Nothing cut.
+
+### The camera
+
+The camera opens only the Library row `Hello Live` (unchanged). No string it waits for or taps changed.
+
+### Real touch, and phone checks this adds (not claimed here)
+
+Driven by real touch at 390 × 844, DPR 2, in headless Chromium and WebKit on the shipped file: the About key and
+the stamp open About, Close closes it, the card holds one punch, the key reads `Hours: this phone’s, UTC−7` (the
+Mac's zone); no console error in either. In WebKit a tapped button takes no focus, so focus returns to the body
+after Close (as it did from the stamp before this pass). Phone rows for the matrix: in full screen, scrolled to the
+end, the About key wholly above the home indicator; the About key's `:active` tint with the `touchstart` listener;
+the white ground in Snuggery's web view. Each needs the device and iOS version named in the matrix.
+
+## The final verifier's should, fixed under the lead's ruling (2026-10-08): a four-digit row value grouped
+
+**The ruling (HOUSE 6.1, thousands grouped with U+202F from four digits up):** the app groups a row value that is a
+plain digit string of four digits or more, so the live file's `Minute of day` `1000` prints `1 000`. The data and
+the refresh script stay as they are; the file keeps `1000`.
+
+- `js/units.js`: `rowValue(t)`. A value matching `^[1-9]\d{3,}$` is grouped by the module's own `group()` (the one
+  `int()` uses); anything else goes through `si()` as before. `rows()` in `app.js` calls `rowValue()` in place of
+  `si()` (which `app.js` no longer imports).
+- **One reading of "plain digit string", recorded:** a value with a leading zero (`0420`) is left as written, since
+  HOUSE 6.1 never groups codes and a leading zero marks one; a sign, a point or a unit also leaves the string as
+  written (a unit still gets its U+202F from `si()`). The refresh script writes none of these (`Day of year`, `Week`,
+  `Minute of day`, all counts without leading zeros), so this changes nothing the shipped data shows; the lead may
+  drop the leading-zero exception by changing `[1-9]` to `\d` in `rowValue()` and in `shoot.mjs`'s `grouped()`.
+  A year written by a file as a bare row value would be grouped by this rule, as ruled; no file the template ships
+  writes one.
+- `tools/test_card.mjs`: a new check, `rowValue()`: `1000` → `1 000`, `1439` → `1 439`, `16380` → `16 380`; `279`,
+  `41`, `0420`, `-1000`, `12.5` and `''` as written; `10 m` → `10 m` through `si()`.
+- `tools/shoot.mjs`: the `HOLD` branch and the `held` list are gone. The shipped file's stage now checks, in both
+  themes, that every row prints as `grouped()` (written in the test from the rule, not imported) makes of the file's
+  value: today `Minute of day "1000" as "1 000"`, `ok`. A new stage that does not depend on the hour the file was
+  made serves five rows (`279`, `41`, `1000`, `16380`, `0420`) at 390 and 320 px and checks `279`, `41`, `1 000`,
+  `16 380`, `0420`, no sideways scroll: `ok` at both widths. Either prints `FAIL` if the app prints `1000`.
+- `ART.md` section 3 item 3 says what the rows add to the file's values; its budget row gives the measured code
+  (48 500 B) and ZIP (about 72 750 B).
+
+**The runs.** `node tools/check.mjs`: all checks pass (code 48 500 B of 200 000; ZIP 72 747 B of 89 805; the
+ZIP line is `ok`, `ZIP_RULED` was already set, so no `HOLD`). `node tools/test_card.mjs`: all 56 checks pass.
+`python3 tools/art/palette.py`: ALL CHECKS PASS. `PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (both themes): 198 `ok`,
+0 failed, no `HOLD`. The screenshots in `screenshots/` are of the fixed day (`Minute of day` 119), so they do not
+change. Real touch (a scratch script, deleted after), Chromium and WebKit at 390 × 844 and 320 × 568, both themes, on
+the shipped file at 17:11 UTC on 6 Oct: the rows read `Day of year 279, Week 41, Minute of day 1 000`; the stamp
+opens About and Close closes it. 24 `ok`, 0 failed, no console error.
+

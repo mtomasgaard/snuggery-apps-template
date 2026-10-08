@@ -5,11 +5,13 @@
 //   3. every import / src / href / url( / fetch( is relative, inside the folder, present; the one data read;
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and no
 //      supplement; data/ the one file; NOTES.md and About credit the face word for word;
-//   5. the data is pinned: data/snapshot.json's sha256, byte-identical to before the pass (on the public repository
-//      the refresh job rewrites it, so the lead's mirror leaves the public data/ in place);
-//   6. miniapp.json is valid, its name unchanged;
+//   5. the data: data/snapshot.json's shape as the refresh job writes it (the job rewrites it about hourly, so a sha256
+//      pin failed on every fresh file; plan 0012 package 4), and the tests' fixed day, tools/fixtures/snapshot.json
+//      (the file the old pin named), pinned by sha256;
+//   6. miniapp.json is valid, its name unchanged, its version 2.1 (plan 0012 package 4; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credits constant word for word in the band's static markup and in NOTES.md;
+//   8. the credit word for word as About's first Sources and credits paragraph (#about-credit-line) and in NOTES.md;
+//      no band, caption line or credit line on the front (HOUSE 4.15);
 //   9. the marketing camera's string (HOUSE.md 7.4): the Library row's name, miniapp.json's; the one storage key with
 //      the app's prefix, every access in try/catch; the pane scrolls inside the frame;
 //  10. SI and the dates: no plain space between a digit and a unit in the app's strings; toFixed, toLocale* and Intl
@@ -22,14 +24,16 @@
 //      all`, uppercase, letter-spacing, monospace, serif, gradient, sticky; one family, every font string in a
 //      script naming "Ysabeau Office" first; no middle dot or em dash in the app's own strings; no →, ←, ➤, ▸, ▾, ▴,
 //      ⓘ or ⋯ in shipped text, the .md files included, and no "..." in the app's; both theme-color metas; the
-//      @font-face rule; the page's language and viewport; the type scale, one 21 px figure; overflow-wrap on the
-//      headline (B16);
+//      @font-face rule; the page's language and viewport; the pane apps' type scale, one 34 px key number;
+//      overflow-wrap on the headline (B16); the white ground (HOUSE 12);
 //  15. the bugs on record (B1 to B16, ART.md section 8) stay fixed in the code;
 //  16. budgets: app code at most 200,000 bytes, fonts/ at most 160,000, the ZIP built exactly as build-zips.yml
-//      builds it, against D5's 42,496 until the lead rules on the measured figure (plan 0011 D27, D30, D34, D39 for
-//      the loop apps before this one): over it, the line is HELD for the lead, not failed;
+//      builds it at most 89,805 (the house rule for plan 0012 package 4: 71,844 before the pass × 1.25);
 //  17. US spelling in every shipped text file;
-//  18. the app's own strings use only characters the face's cut draws.
+//  18. the app's own strings use only characters the face's cut draws;
+//  19. the pane-app register as this app takes it (HOUSE 11; plan 0012 P1 to P9 and the Hello Live list): the key
+//      number, the card's key, the rows' values, no plates, the About key, the pane's foot, the centered header,
+//      a passive touchstart listener.
 //
 //   node tools/check.mjs
 
@@ -48,8 +52,10 @@ const read = (f) => (fs.existsSync(path.join(APP, f)) ? fs.readFileSync(path.joi
 const CODE_CAP = 200000, FONT_CAP = 160000;
 // D5's formula: 3 730 B before the pass × 1.25, rounded down, plus 37 834 B for the face. The stock ZIP is a tenth of the
 // face it gains, so the lead rules on the measured figure (HOUSE.md 8; ART.md section 6); set ZIP_RULED when it has.
-const ZIP_CAP = 74000, ZIP_RULED = true;   // plan 0011 D42: the lead's ruling on the measured 70 777 (D5's 42 496 could not hold the face)
-const ZIP_BEFORE = 3730;
+// Plan 0012 package 4: the house rule, 71 844 B before the pass (the change list's figure) × 1.25, rounded down, above
+// plan 0011 D42's 74 000, so the cap rises to it (tools/DECISIONS.md)
+const ZIP_CAP = 89805, ZIP_RULED = true;
+const ZIP_BEFORE = 71844;
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -122,16 +128,32 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no fonts?,|No fonts|ships no font|system font|system stack/i.test(read('NOTES.md') + css),
   'the face is credited word for word in NOTES.md (the app\'s credits file) and About ("Type: …"); nothing says no font ships');
 
-// 5. The data is pinned: byte-identical to the commit the pass started from
-const DATA = { 'data/snapshot.json': 'db50d9add6f0d940671235ee12a3fbe7f2a4f7e90e9620e3f6899539f04333a8' };
-for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is the file committed before the pass (${want.slice(0, 12)}…)`);
+// 5. The data. The refresh job rewrites data/snapshot.json about every hour, so its bytes cannot be pinned (the pin to
+// db50d9ad…, the file of 1 Oct, failed on every fresh file): its shape is checked instead, as app.js's header gives it
+// and scripts/refresh_hello_live.py writes it. That file of 1 Oct is the tests' fixed day, tools/fixtures/snapshot.json
+// (from the public template at bd8f679), pinned here.
+{
+  let s = null, why = [];
+  try { s = JSON.parse(read('data/snapshot.json')); } catch (e) { why.push(e.message); }
+  if (s) {
+    const str = (v) => typeof v === 'string' && v.length > 0;
+    if (!str(s.generatedAt) || !Number.isFinite(Date.parse(s.generatedAt)) || !/Z$/.test(s.generatedAt)) why.push('no ISO generatedAt in UTC');
+    if (!str(s.headline)) why.push('no headline');
+    if (s.caption != null && typeof s.caption !== 'string') why.push('caption is not a string');
+    if (!Array.isArray(s.runs) || s.runs.some((r) => !r || typeof r.label !== 'string' || !['string', 'number'].includes(typeof r.value))) why.push('runs[] is not { label, value } rows');
+    if (!Array.isArray(s.ask) || s.ask.length > 60 || s.ask.some((r) => !r || typeof r.measure !== 'string' || typeof r.value !== 'number')) why.push('ask[] is not { measure, value } rows (at most 60)');
+  }
+  ok(why.length === 0, `data/snapshot.json: the shape app.js's header documents (made ${s && s.generatedAt}, headline "${s && s.headline}", ${s && Array.isArray(s.runs) ? s.runs.length : 0} rows, ${s && Array.isArray(s.ask) ? s.ask.length : 0} ask rows); any file the job writes passes${why.length ? ': ' + why.join('; ') : ''}`);
+}
+const DATA = { 'tools/fixtures/snapshot.json': 'db50d9add6f0d940671235ee12a3fbe7f2a4f7e90e9620e3f6899539f04333a8' };
+for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is the file of 1 Oct, the tests' fixed day; it does not ship (${want.slice(0, 12)}…)`);
 
 // 6. miniapp.json
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Hello Live' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '2.1',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
 }
 
@@ -145,12 +167,14 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files, ART.md and NOTES.md included${named.length ? ': ' + named.join(', ') : ''}`);
 }
 
-// 8. The credits: the constant word for word in the band's static markup and in NOTES.md
+// 8. The credit (HOUSE 4.15; plan 0012 F1, F8): static as About's first Sources and credits paragraph, byte for byte as
+// the band held it, and in NOTES.md; nothing on the front carries a credit (this app has no 4.15 exception)
 const CREDIT = 'Data: this repository’s own refresh job; no outside source.';
 {
-  const band = (html.match(/<p class="credits" id="credits">([^<]*)<\/p>/) || [])[1];
-  ok(band != null && band.replace(/&rsquo;/g, '’') === CREDIT && read('NOTES.md').includes(`- ${CREDIT}`) && !/\$\('credits'\)/.test(app),
-    `the credits: "${CREDIT}" static in the band and in NOTES.md; app.js never rewrites it`);
+  const about = (html.match(/<h3>Sources and credits<\/h3>\s*(?:<!--[\s\S]*?-->\s*)?<p id="about-credit-line">([^<]*)<\/p>/) || [])[1];
+  ok(about != null && about.replace(/&rsquo;/g, '’') === CREDIT && read('NOTES.md').includes(`- ${CREDIT}`) && !/\$\('credits'\)|\$\('capline'\)|\$\('about-credit-line'\)|'band'/.test(code(app, 'x.js'))
+    && !/id="credits"|id="band"|id="capline"|<footer/.test(html) && !/\.band\b|\.capline\b|\.credits\b/.test(code(css, 'x.css')),
+    `the credit: "${CREDIT}" static as About's first Sources and credits paragraph and in NOTES.md; app.js never rewrites it; no band, caption line or credit line on the front`);
 }
 
 // 9. The marketing camera's string (HOUSE.md 7.4), storage, the pane
@@ -164,8 +188,8 @@ const CREDIT = 'Data: this repository’s own refresh job; no outside source.';
   const guarded = [...code(app, 'x.js').matchAll(/try \{[^}]*localStorage\.[^}]*\} catch/g)].length;
   ok(/const KEY = 'hello-live\.card';/.test(app) && keys.length === 2 && keys.every((k) => k === 'KEY') && accesses === 2 && guarded === 2 && !/sessionStorage|indexedDB/.test(all),
     `storage: one key, "hello-live.card" (the app's prefix), read once and written once, both inside try/catch (${guarded} of ${accesses}); nothing else stored`);
-  ok(/<svg class="card" id="card" role="img" aria-label="Time card" focusable="false"><\/svg>/.test(html) && /setAttribute\('aria-label', describe\(record, now\)\)/.test(app) && !/addEventListener\('(pointer|touch|click)/.test(read('js/card.js') + app.replace(/\$\('stamp'\)\.onclick|onclick = /g, '')),
-    'the card is an image (role img) with its name from the record; nothing on it is a control');
+  ok(/<svg class="card" id="card" role="img" aria-label="Time card" focusable="false"><\/svg>/.test(html) && /setAttribute\('aria-label', describe\(record, now\)\)/.test(app) && !/addEventListener\('(pointer|touch|click)/.test(read('js/card.js') + app.replace(/\$\('stamp'\)\.onclick|onclick = /g, '').replace("document.addEventListener('touchstart', () => {}, { passive: true });", '')),
+    'the card is an image (role img) with its name from the record; nothing on it is a control (the document\'s empty touchstart listener aside)');
 }
 
 // 10. SI and the dates in what the app writes; no toFixed, toLocale* or Intl
@@ -205,7 +229,7 @@ const CREDIT = 'Data: this repository’s own refresh job; no outside source.';
 
 // 13. palette.py passes, and its --json tokens are style.css's tokens
 const TOK = {
-  light: { '--page': '#e8eef0', '--sheet': '#f6f9fa', '--ink': '#0f1c23', '--ink-2': '#45555d', '--ink-3': '#5b6a72', '--line': '#c9d4d8', '--line-strong': '#74858c' },
+  light: { '--page': '#ffffff', '--sheet': '#f6f9fa', '--ink': '#0f1c23', '--ink-2': '#45555d', '--ink-3': '#5b6a72', '--line': '#c9d4d8', '--line-strong': '#74858c' },
   dark: { '--page': '#141d21', '--sheet': '#1c272c', '--ink': '#e6edee', '--ink-2': '#a3b1b6', '--ink-3': '#8b9a9f', '--line': '#2a373c', '--line-strong': '#64757b' },
 };
 const PAL_KEY = { '--page': 'page', '--sheet': 'sheet', '--ink': 'ink', '--ink-2': 'ink2', '--ink-3': 'ink3', '--line': 'line', '--line-strong': 'strong' };
@@ -260,11 +284,11 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html) && /<script type="module" src="\.\/app\.js"><\/script>/.test(html),
     'the page: lang="en-US", viewport-fit=cover without user-scalable, color-scheme light dark, app.js as a module (B12)');
   const px = [...c.matchAll(/font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/g)].map((m) => Number(m[1]));
-  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 21].includes(v));
-  const big = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 21px/g)].map((m) => m[1].trim());
+  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34].includes(v));
+  const big = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 34px/g)].map((m) => m[1].trim());
   const weights = [...c.replace(/@font-face \{[^}]*\}/, '').matchAll(/font-weight:\s*(\d+)|font:\s*(\d{3}) /g)].map((m) => Number(m[1] || m[2]));
   ok(offScale.length === 0 && JSON.stringify(big) === '[".fig b"]' && weights.every((w) => [400, 560, 600, 620, 650].includes(w)) && !/letter-spacing/.test(c),
-    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the one 21 px figure ${big.join(', ')} (the file's headline; the stock's 41.6 px at 640 with tracking is gone, B2); weights ${[...new Set(weights)].sort().join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
+    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the one 34 px key number ${big.join(', ')} (the file's headline, HOUSE 11.1 rule 2; the stock's 41.6 px at 640 with tracking is gone, B2); weights ${[...new Set(weights)].sort().join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
   ok(/\.fig b \{[^}]*overflow-wrap: anywhere;/.test(c) && /\.cap \{[^}]*overflow-wrap: anywhere;/.test(c), 'the file-controlled headline and caption carry overflow-wrap: anywhere, so a long string can never widen the page (B16)');
 }
 
@@ -273,7 +297,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   const Un = read('js/units.js'), Cd = read('js/card.js'), Ac = code(app, 'x.js'), Uc = code(Un, 'x.js');
   const B = [
     ['B1 staleness is a sentence in ink, never a hue', /if \(now - made >= STALE_MS\) return \{ lead: 'Stale\.', rest \};/.test(Un) && /\.stamp \.lead \{ color: var\(--ink\); \}/.test(css) && !/\.stale|\.age\b/.test(css + Ac)],
-    ['B2 the headline at 21 px 600, the name at 15 px 650, no tracking', /\.fig b \{ font-size: 21px; line-height: 1; font-weight: 600;/.test(css) && /\.head h1 \{ font-size: 15px; font-weight: 650;/.test(css)],
+    ['B2 the headline at 34 px 650 (the key number), the name at 15 px 650, no tracking', /\.fig b \{ font-size: 34px; line-height: 1\.05; font-weight: 650;/.test(css) && /\.head h1 \{ font-size: 15px; font-weight: 650;/.test(css)],
     ['B3 the house face, no monospace', /font: 400 13\.5px\/1\.35 var\(--face\);/.test(css) && !/code\b|monospace/.test(css)],
     ['B4 no card kit: the data on the page between hairlines', !/\.card \{[^}]*border/.test(css) && /\.sec \{ padding: 10px 0 6px; border-top: 1px solid var\(--line\); \}/.test(css) && !/class="card problem"|\.problem[\s,.{]/.test(html + css + Ac)],
     ['B5 the stamp carries the instant on the phone\'s clock, in the header', /export const stampWhen/.test(Un) && /const rest = `Updated \$\{stampWhen\(made, now\)\}`;/.test(Un) && /<div class="stamp-home"><button class="stamp" id="stamp"/.test(html)],
@@ -291,7 +315,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
     ['the card drawn with createElementNS and textContent, replaced once per draw', /document\.createElementNS\(NS, tag\)/.test(Cd) && /svg\.replaceChildren\(\);/.test(Cd) && !/innerHTML|insertAdjacentHTML/.test(Cd)],
     ['the record: one per generatedAt, at most 400, sanitized on read', /export const MAX_RECORD = 400;/.test(Cd) && /if \(record\.some\(\(\[w\]\) => w === written\)\) return record;/.test(Cd) && /record = readRecord\(\);/.test(app) && /return sanitize\(t \? JSON\.parse\(t\) : \[\]\);/.test(app) && /try \{ t = localStorage\.getItem\(KEY\); \} catch \{ storage = false; return \[\]; \}/.test(app)],
     ['the face loaded before the first card, the card drawn again on loadingdone', /await document\.fonts\.load\(LABEL_FONT\);/.test(app) && /document\.fonts\.addEventListener\('loadingdone', \(\) => \{ if \(D\) drawCard\(\); \}\);/.test(app)],
-    ['the caption line fixed at two lines, one from 640 px; the credits static', /\.capline \{ height: 30px; overflow: hidden; \}/.test(css) && /@media \(min-width: 640px\) \{ \.capline \{ height: 15px; \} \}/.test(css)],
+    ['the caption line gone; its offset is the key\'s, written where caption() was called', !/function caption\(|capline/.test(Ac) && /function hoursKey\(\) \{\s*setText\(\$\('hours-key'\), `Hours: this phone’s, \$\{offsetWord\(Date\.now\(\)\)\}`\);\s*\}/.test(app) && (Ac.match(/hoursKey\(\);/g) || []).length === 2],
   ];
   const bad = B.filter(([, okk]) => !okk).map(([nm]) => nm);
   ok(bad.length === 0, `the bugs on record stay fixed in the code: ${B.length} pinned here (tools/test_card.mjs and shoot.mjs drive them)${bad.length ? '; failing: ' + bad.join('; ') : ''}`);
@@ -301,7 +325,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => (fs.existsSync(path.join(APP, f)) ? fs.statSync(path.join(APP, f)).size : 0);
 const codeBytes = codeFiles.reduce((s, f) => s + size(f), 0);
-ok(codeBytes <= CODE_CAP && shipped.filter((f) => /\.(html|css|js|mjs)$/.test(f)).every((f) => codeFiles.includes(f)), `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 7,281 before the pass, index.html alone): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP && shipped.filter((f) => /\.(html|css|js|mjs)$/.test(f)).every((f) => codeFiles.includes(f)), `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 46,888 before plan 0012, 7,281 before plan 0011): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((s, f) => s + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; none before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });
@@ -316,7 +340,7 @@ ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length}
 ok(names.length === shipped.length && names.every((x) => shipped.includes(x)) && !names.some((f) => /^(tools|screenshots|scripts)\//.test(f) || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/ or dotfiles`);
 console.log(`     stored in the ZIP: data ${fmt(stored((x) => x.startsWith('data/')))}, fonts/ ${fmt(stored((x) => x.startsWith('fonts/')))}, app code ${fmt(stored((x) => codeFiles.includes(x)))}, ART.md ${fmt(stored((x) => x === 'ART.md'))}, NOTES.md ${fmt(stored((x) => x === 'NOTES.md'))}`);
-if (zsize <= ZIP_CAP) ok(true, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}${ZIP_RULED ? ', the lead\'s ruling' : ', D5\'s formula'}; ${fmt(ZIP_BEFORE)} before the pass)`);
+if (zsize <= ZIP_CAP) ok(true, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}, the house rule: ${fmt(ZIP_BEFORE)} before plan 0012 × 1.25)`);
 else if (!ZIP_RULED) { const m = `ZIP size ${fmt(zsize)} bytes against D5's ${fmt(ZIP_CAP)} (${fmt(ZIP_BEFORE)} before the pass): the stock ZIP is a tenth of the face it gains, so the lead rules on this measured figure (HOUSE.md 8; plan 0011 D27, D30, D34, D39)`; console.log(`HOLD ${m}`); held.push(m); }
 else ok(false, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}, the lead's ruling)`);
 
@@ -343,6 +367,29 @@ else ok(false, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}, the lead's ru
   const unesc = (s) => s.replace(/\\u([0-9a-f]{4})/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
   const own = [...new Set([...[app, html, ...mods.map(read)].map((s, i) => (i === 1 ? htmlText(s) : unesc(strings(s).join(' ')))).join(' ')].filter((ch) => ch.codePointAt(0) >= 0x20 && !inCut(ch.codePointAt(0))))];
   ok(own.length === 0, `the app's own strings use only characters the cut draws (no supplement; the stock's ⋯ is gone)${own.length ? ': ' + own.join(' ') : ''}`);
+}
+
+// 19. The pane-app register as Hello Live takes it (HOUSE 11.1, 11.3; plan 0012 P1 to P9, the Hello Live list)
+{
+  const c = code(css, 'x.css'), a = code(app, 'x.js'), h = code(html, 'x.html');
+  ok(/\.fig \{ display: flex; flex-direction: column;/.test(c) && /\.fig b \{ font-size: 34px; line-height: 1\.05; font-weight: 650; min-width: 0; max-width: 100%; overflow-wrap: anywhere; \}/.test(c) && /\.fig \.lead \{ font-size: 13\.5px; color: var\(--ink-2\); \}/.test(c)
+    && /\.cap \{[^}]*font-size: 12\.5px;/.test(c),
+    'the key number: the file\'s headline at 34 px 650, the phone\'s clock under it at 13.5 px --ink-2, the data\'s caption under them at 12.5 px (HOUSE 11.1 rule 2)');
+  ok(/<svg class="card" id="card"[^>]*><\/svg>\s*<div class="key" id="card-key"><span class="k"><i class="sw sw-punch" aria-hidden="true"><\/i>File written<\/span><span class="k"><i class="sw sw-tail" aria-hidden="true"><\/i>Until it was first read here<\/span><span class="k" id="hours-key">Hours: this phone&rsquo;s<\/span><\/div>/.test(h)
+    && /\.key \{ display: flex; flex-wrap: wrap; gap: 2px 12px;[^}]*font-size: 11\.5px; line-height: 15px; color: var\(--ink-2\); \}/.test(c) && /\.key \.sw-punch \{ width: 3px; \}/.test(c) && /\.key \.sw-tail \{ height: 2px;/.test(c),
+    'the card\'s key under it, in place of the band\'s sentence: File written (a 3 × 10 px ink mark), Until it was first read here (a 10 × 2 px ink line), Hours: this phone\'s and its offset (HOUSE 4.15, F4)');
+  ok(/\.rows dd \{[^}]*font-size: 15px; font-weight: 600;/.test(c), 'the rows a two-column table, their values at 15 px 600 (HOUSE 11.1 rule 3)');
+  ok(/\.sec \{ padding: 10px 0 6px; border-top: 1px solid var\(--line\); \}/.test(c) && !/\.sec \{[^}]*background/.test(c), 'no plates: the three sections keep their hairlines on the white page (HOUSE 11.1 rule 11)');
+  ok(/<section class="sec" id="rows-sec">[\s\S]*?<\/section>\s*<button type="button" class="aboutlink" id="about-key">Sources, method and credits are in About\.<\/button>\s*<\/div>/.test(h) && /\$\('stamp'\)\.onclick = \$\('about-key'\)\.onclick = \(\) => about\(true\);/.test(app)
+    && /\.aboutlink \{ display: block; margin: 14px 0 0; min-height: 44px; font-size: 12\.5px; color: var\(--ink-2\); text-decoration: underline; text-underline-offset: 3px; \}/.test(c) && /for \(const id of \['head', 'main'\]\) \$\(id\)\.inert = open;/.test(app),
+    'the pane ends with the About key, static after the rows, 12.5 px --ink-2, underlined at 3 px, 44 px tall, opening About as the stamp does; About makes the head and main inert');
+  ok(/\.panebody \{[^}]*padding-top: 4px; padding-bottom: calc\(28px \+ env\(safe-area-inset-bottom\)\); \}/.test(c) && (c.match(/(^|\n)\.panebody \{/g) || []).length === 1,
+    'the pane\'s foot pads the home indicator, calc(28 px + the bottom inset), the band that carried it gone (HOUSE 4.14, P3)');
+  ok(/\.head \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\) 0 calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-left\)\); \}/.test(c) && /\.panebody \{ max-width: 760px; margin: 0 auto;/.test(c) && !/min-width: 700px/.test(c),
+    'the pane a centered 760 px column, the header\'s sides on it: max(16 px, 50 % − 364 px); the old 700 px rule gone (plan 0011\'s owed item; shoot.mjs measures it)');
+  ok(/document\.addEventListener\('touchstart', \(\) => \{\}, \{ passive: true \}\);/.test(app), 'a passive, empty touchstart listener on the document, so iOS draws the :active tints (plan 0011\'s owed item)');
+  ok(tok('light', '--page') === '#ffffff' && /<meta name="theme-color" content="#ffffff" media="\(prefers-color-scheme: light\)">/.test(html) && !/--own|--owe|--up\b|--down\b|--watch|--cheap|--dear/.test(c),
+    'the white ground (HOUSE 12, F7): light --page #ffffff and its theme-color; no register token (HOUSE 11.3: none for this app)');
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed${held.length ? `; ${held.length} held for the lead` : ''}`); process.exit(1); }

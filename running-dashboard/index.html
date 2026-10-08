@@ -13,8 +13,10 @@
 <body>
 
 <!-- Every address here is relative: the app reads data/ and nothing else. The look is ART.md (the
-     house system and the Block); where the data comes from is NOTES.md. The panes are built by
-     app.js once the snapshot parses, so the tab named Health is the camera's proof of data. -->
+     house system, its pane-app register and the Block); where the data comes from is NOTES.md. The panes
+     are built by app.js once the snapshot parses, so the tab named Health is the camera's proof of data.
+     The front is the name, the stamp, the tabs and the pane: the credit line is About's first paragraph
+     under Sources and credits. -->
 
 <header class="head" id="head">
   <h1 translate="no">Running Dashboard</h1>
@@ -43,18 +45,13 @@
   <div class="panebody" id="pane" role="tabpanel"></div>
 </main>
 
-<footer class="band" id="band">
-  <p class="capline" id="capline"></p>
-  <p class="credits" id="credits" translate="no">Data: Garmin Connect. Coaching text: the coaching routine.</p>
-</footer>
-
 <div class="about" id="about" hidden>
   <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
     <div class="about-head"><h2 id="about-title">About Running Dashboard</h2><button type="button" class="textkey" id="about-close">Close</button></div>
     <div class="about-body">
       <section>
         <h3>What the Block is</h3>
-        <p>The strip at the top of Now and Plan is the training block as a coach draws it: one column a week, from twelve weeks back to the race. Each block of ink is one run&rsquo;s running, walk breaks left out, so a week of six runs is six pieces. An outline is the week the plan asks for, as the coaching routine wrote it on <span id="about-plan">the date under This data</span>, lightly tinted where it is still to run; when the plan gives a range, the outline runs to its top and a tick marks its bottom. This week is both: its runs fill its outline from the bottom.</p>
+        <p>The strip at the top of Now and Plan is the training block as a coach draws it: one column a week, from twelve weeks back to the race. Each block, in blue, is one run&rsquo;s running, walk breaks left out, so a week of six runs is six pieces. An outline is the week the plan asks for, as the coaching routine wrote it on <span id="about-plan">the date under This data</span>, lightly tinted where it is still to run; when the plan gives a range, the outline runs to its top and a tick marks its bottom. This week is both: its runs fill its outline from the bottom.</p>
         <p>Past weeks have no outline because the data keeps only today&rsquo;s plan, not the plans that came before it. The scale is fixed: 0.8 pixels a kilometer on Now, 1.2 on Plan, with a line every 20 kilometers. Weeks run Monday to Sunday by the phone&rsquo;s calendar. Other sports are not in it; they are on Training.</p>
       </section>
       <section>
@@ -71,8 +68,9 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no">Data: Garmin Connect. Coaching text: the coaching routine.</p>
         <p>Every session, night and weigh-in comes from the runner&rsquo;s own Garmin Connect account, through the pull; NOTES.md says how. The evaluation, the plan, the race forecast and the session notes are text the coaching routine wrote on the dates under This data.</p>
-        <p>Map tiles: USGS The National Map, public domain; the USGS asks for this acknowledgment: Map services and data available from U.S. Geological Survey, National Geospatial Program. A copy that fetches its own tiles credits &copy; Kartverket (CC BY 4.0) in Norway and &copy; OpenStreetMap contributors elsewhere, under each map.</p>
+        <p>Map tiles: USGS The National Map, public domain; the USGS asks for this acknowledgment: Map services and data available from U.S. Geological Survey, National Geospatial Program. A copy that fetches its own tiles credits them here as well: &copy; Kartverket (CC BY 4.0) for tiles in Norway, and &copy; OpenStreetMap contributors (ODbL) for tiles elsewhere, which is also printed under each map they draw.</p>
         <p id="about-routes" hidden>Routes: &copy; OpenStreetMap contributors, under the Open Database License 1.0 (opendatacommons.org/licenses/odbl/1-0); the route shapes in these sessions are derived from it.</p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
       </section>

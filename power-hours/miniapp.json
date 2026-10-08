@@ -3,5 +3,5 @@
   "name": "Power Hours",
   "entryPoint": "index.html",
   "description": "Tomorrow's electricity prices, and the cheapest hours to run each appliance",
-  "version": "1.1"
+  "version": "1.2"
 }

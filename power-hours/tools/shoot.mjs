@@ -1,6 +1,8 @@
 // Drive Power Hours in headless Chromium at phone size (390 × 844 CSS px, DPR 2, real touch through CDP), light
 // and dark (HOUSE.md section 7.2 as a pane app allows: no player, no focus mode, no units key; tools/DECISIONS.md,
-// item 11). The clock is fixed at Thu 1 Oct 2026, 08:20 UTC (10:20 in Oslo, inside the file) in Oslo's zone, so
+// item 11). The data is the fixed day, tools/fixtures/snapshot.json (the file of 1 Oct; check.mjs pins it), served
+// as data/snapshot.json, because the refresh rewrites the shipped file twice a day; one stage reads the shipped file
+// as it is (plan 0012 package 4). The clock is fixed at Thu 1 Oct 2026, 08:20 UTC (10:20 in Oslo, inside the file) in Oslo's zone, so
 // the stamp and the pictures are the same on every run; other clocks (the file run out on 3 Oct, what a fresh
 // install and the marketing camera see; a two-day file at night and the next morning) are named where they are
 // used. Fails on any console error or warning, page error, failed request, HTTP ≥ 400, or any request outside the
@@ -15,7 +17,7 @@
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the pictures to screenshots/*-{light,dark}.png
 //
 // Per theme: boot (c/kWh, the camera's wait, written only once the snapshot parses; the credits; the face; the
-// stamp), text contrast, SI and the date forms in every visible text node, hit targets, the caption band; the
+// stamp), text contrast, SI and the date forms in every visible text node, hit targets, the scale's label and key; the
 // Landing (the staircase, the level, the mean and the axis against this file's decode; the level's ink against
 // what lies under it and the staircase's blue against the page, on rendered pixels), the slider's value and
 // description, Now, the readout and the runs against the decode, a tap, a pinch, the keys, the scrub by real touch
@@ -25,7 +27,10 @@
 // second pane (Car charging's landing apart from the dishwasher's at 440 × 956, run out), a 404 on a return, the bugs
 // on record at their clocks and fixtures (B1 to B5, B13, B14), the review's fixture (the mean's label off the
 // staircase, a day's name kept beside a run's times), lastGood, private use, the appliance file's cases, four
-// locales, Reduce Motion, hidden, broken data at the start and its recovery, the widths and a phone on its side.
+// locales, Reduce Motion, hidden, broken data at the start and its recovery, the widths, a phone on its side and a
+// wide window (the header centered with the pane), the stamp on one line in every state it writes, and the shipped
+// data/snapshot.json at its own clock. Plan 0012's register (HOUSE 11.1): the plates, the key number, the colors
+// on words, the About key, no footer.
 // After the review every in-plot label is checked against the staircase as drawn, in every state that draws one.
 // Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never screenshots/app.png,
 // the README's composite, whose hash is checked unchanged.
@@ -56,7 +61,8 @@ const NOW = '2026-10-01T08:20:00Z', TZ = 'Europe/Oslo';   // 10:20 in Oslo, insi
 const RANOUT = '2026-10-03T10:00:00Z';                     // what a fresh install and the marketing camera see
 
 /* ── the data, decoded here (app.js's header comment is the contract) ── */
-const rawSnap = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
+const rawSnap = fs.readFileSync(path.join(APP, 'tools/fixtures/snapshot.json'), 'utf8');   // the fixed day, served as data/snapshot.json
+const liveSnap = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');               // the shipped file, for its own stage
 const rawApps = fs.readFileSync(path.join(APP, 'data/appliances.json'), 'utf8');
 const snap = JSON.parse(rawSnap), APPS = JSON.parse(rawApps).appliances;
 const NN = ' ', MI = '−', EN = '–';
@@ -86,7 +92,7 @@ const LO = Math.min(...pts.map((p) => p.v)), HI = Math.max(...pts.map((p) => p.v
 const SCALE = (() => { for (const s of [0.1, 0.2, 0.5, 1, 2, 5, 10]) { const lo = Math.floor(LO / s) * s, hi = Math.ceil(HI / s) * s; if (Math.round((hi - lo) / s) + 1 <= 6) return { lo, hi, s }; } return null; })();
 const yOf = (v) => 16 + (120 * (SCALE.hi - v)) / (SCALE.hi - SCALE.lo);
 const CREDIT = `${snap.source.attribution}. ${snap.source.licenceInfo}.`;
-const CAPTION = `c/kWh, spot price per 15${NN}min, before grid rent, tax and VAT. Ink: the chosen run at its mean price.`;
+const SCALE_LABEL = `c/kWh, spot price per 15${NN}min, before grid rent, tax and VAT.`, KEY = 'Chosen run, at its mean';
 const GEN = Date.parse(snap.generatedAt), osloClock = (ms) => { const d = new Date(ms + 2 * 3600e3); return `${p2(d.getUTCHours())}:${p2(d.getUTCMinutes())}`; };
 const runText = (r, today = true) => `${today ? '' : 'Thu '}${pts[r.from].wall}${EN}${endWall(r.to)}`;
 const pctBelow = (m, mean) => Math.round(((mean - m) / mean) * 100);
@@ -124,9 +130,10 @@ function decodePng(buf) {
 /* ── the server: the app folder, with either data file replaceable or held back ── */
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.woff2': 'font/woff2', '.png': 'image/png', '.md': 'text/markdown', '.txt': 'text/plain' };
 let override = {};
+const BASE = { '/data/snapshot.json': { body: rawSnap } };   // what is served when nothing overrides it
 const reads = { '/data/snapshot.json': 0, '/data/appliances.json': 0 };
 const server = http.createServer(async (req, res) => {
-  const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u];
+  const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u] || BASE[u];
   if (u in reads) reads[u]++;
   if (ov && ov.hold) await ov.hold;
   if (ov && ov.status) { res.writeHead(ov.status); res.end(); return; }
@@ -178,6 +185,9 @@ async function open(scheme, o = {}) {
   };
   return { ctx, page, errors, ms, w, cdp, touch, tapAt, rect, png, frame, shot };
 }
+/** The stamp on one line at 16 px (HOUSE 7.2, plan 0012 F8), whatever it says. */
+const stampLine = (A) => A.w(() => { const s = document.getElementById('stamp'), r = s.getBoundingClientRect(); return { h: r.height, text: s.textContent, one: Math.abs(r.height - 16) <= 1 && s.getClientRects().length === 1 }; });
+const stampCheck = async (A, label) => { const s = await stampLine(A); check(s.one, `the stamp on one line, ${Math.round(s.h * 10) / 10} px tall (${label}): "${s.text.replace(/\u202f/g, ' ')}"`); };
 const closeOut = async (A, label) => { check(A.errors.length === 0, `${label}: no console error or warning, failed or outside request${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`); await A.ctx.close(); };
 
 /* Text contrast over every rendered DOM text node in view (backgrounds composited), and every SVG label's fill. */
@@ -290,20 +300,20 @@ for (const scheme of schemes) {
   const A = await open(scheme);
   const { page, w } = A;
   console.log(`    load to the drawing: ${A.ms} ms (headless)`);
-  const PAGE = scheme === 'light' ? [0xe8, 0xee, 0xf0] : [0x14, 0x1d, 0x21];
+  const PLATE = scheme === 'light' ? [0xf6, 0xf9, 0xfa] : [0x1c, 0x27, 0x2c];   // --sheet: the Landing is on a plate (plan 0012)
 
   // boot: the camera's wait, the credits, the face, the stamp
   {
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent, whole: r.height > 0 && r.bottom <= innerHeight + 1, face: document.fonts.check('400 10.5px "Ysabeau Office"'), loaded: [...document.fonts].filter((f) => f.status === 'loaded').length,
-        stamp: document.getElementById('stamp').textContent, idle: window.__frames, priv: document.getElementById('private').hidden, timer: window.__ph.timer() };
+      return { credits: document.getElementById('about-credit').textContent, footer: !!document.querySelector('footer, #band, #credits, #capline'), face: document.fonts.check('400 10.5px "Ysabeau Office"'), loaded: [...document.fonts].filter((f) => f.status === 'loaded').length,
+        stamp: document.getElementById('stamp').textContent, idle: window.__frames, priv: document.querySelectorAll('.private-use').length, timer: window.__ph.timer() };
     });
     const cam = await page.getByText('c/kWh').first().isVisible();
     check(cam, 'the camera\'s wait: visible text containing "c/kWh"');
-    check(b.credits === CREDIT && b.whole && b.priv, `the credits on screen word for word from the snapshot: "${b.credits}"; no private-use line (NO2 is CC BY)`);
+    check(b.credits === CREDIT && !b.footer && b.priv === 0, `the credit in About word for word from the snapshot: "${b.credits}"; no footer on the front (HOUSE 4.15); no private-use line (NO2 is CC BY)`);
     check(b.face && b.loaded === 1, `the face is loaded before the drawing measures its labels (${b.loaded} face)`);
     check(b.stamp === `Updated ${osloClock(GEN)}`, `the stamp: "${b.stamp}" (built here: "Updated ${osloClock(GEN)}", the phone's clock in Oslo; no "Stale": day-ahead prices are final, B4)`);
+    await stampCheck(A, `inside the file, ${scheme}`);
     check(b.idle === 0 && b.timer, `idle: the page asked for ${b.idle} animation frames after loading; one timeout waits for the next quarter's boundary`);
   }
 
@@ -317,9 +327,19 @@ for (const scheme of schemes) {
   await w(() => { document.getElementById('main').scrollTop = 0; });
   {
     const hits = await hitTargets(A);
-    check(hits.bad.length === 0 && hits.n >= 6, `${hits.n} controls (the stamp, the slider, the four runs), every one 44 × 44 or more (B7: the stock's hours were 13 px)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
-    const g = await w(() => { const m = document.getElementById('main'); return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: document.getElementById('capline').textContent, live: document.querySelectorAll('[aria-live]').length, mainLive: document.getElementById('main').getAttribute('aria-live') }; });
-    check(!g.side && g.cap === CAPTION, `the caption "${g.cap.replace(NN, ' ')}"; nothing runs past the pane's width`);
+    check(hits.bad.length === 0 && hits.n >= 7, `${hits.n} controls (the stamp, the slider, the four runs, the About key), every one 44 × 44 or more (B7: the stock's hours were 13 px)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
+    const g = await w(() => {
+      const m = document.getElementById('main'), sc = document.querySelector('.landing .note.scale'), plate = (e) => e && e.closest('.sec');
+      const secs = [...document.querySelectorAll('#pane > .sec')].map((e) => { const cs = getComputedStyle(e); return [e.className, cs.backgroundColor, cs.borderTopWidth, cs.borderTopLeftRadius]; });
+      const last = document.getElementById('pane').lastElementChild, pb = getComputedStyle(document.querySelector('.panebody')).paddingBottom;
+      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: sc.textContent, capLines: Math.round(sc.getBoundingClientRect().height / parseFloat(getComputedStyle(sc).lineHeight)),
+        key: [...document.querySelectorAll('.landing .key .k')].map((k) => k.textContent), sw: !!document.querySelector('.landing .key .sw-run'), onPlate: !!plate(sc), secs, sheet: getComputedStyle(document.querySelector('.sec')).backgroundColor,
+        about: last.className === 'aboutlink' ? last.textContent : null, pb, live: document.querySelectorAll('[aria-live]').length, mainLive: document.getElementById('main').getAttribute('aria-live') };
+    });
+    check(!g.side && g.cap === SCALE_LABEL && g.capLines === 1 && JSON.stringify(g.key) === JSON.stringify([KEY]) && g.sw && g.onPlate,
+      `the scale's label under the Landing, one line: "${g.cap.replace(NN, ' ')}"; the key: ${g.key.join(', ')}, its ink line drawn; on the Landing's plate (HOUSE 11.1 rule 6); nothing runs past the pane's width`);
+    check(g.secs.length === 3 && g.secs.map((x) => x[0]).join() === 'sec now headline,sec landing,sec' && g.secs.every((x) => x[1] === g.sheet && x[2] === '1px' && x[3] === '8px') && g.about === 'Sources, method and credits are in About.',
+      `the plates: ${g.secs.map((x) => x[0].replace('sec ', '')).join(', ')}, on --sheet (${g.sheet}), a 1 px edge, radius 8 px; the pane ends with "${g.about}"; its foot ${g.pb} (HOUSE 11.1 rules 1 and 4)`);
     check(g.live === 1 && g.mainLive === null, `one polite live region, and <main> is not one (B8)`);
     await A.shot(`landing-${scheme}`);
   }
@@ -367,11 +387,11 @@ for (const scheme of schemes) {
     for (let i = CUR; i < N; i++) {
       if (i >= RUN.from - 1 && i <= RUN.to + 1) continue;
       const cx = Math.round((svg.left + (L.xs[i] + L.xs[i + 1]) / 2) * 2), cy = (svg.top + yOf(pts[i].v)) * 2;
-      tread.push(Math.max(...[-1, 0, 1].map((d) => contrast(a.at(cx, Math.round(cy) + d), PAGE))));
+      tread.push(Math.max(...[-1, 0, 1].map((d) => contrast(a.at(cx, Math.round(cy) + d), PLATE))));
     }
     const at3 = tread.filter((x) => x >= 3).length / tread.length;
-    check(s.length >= 40 && under >= 0.9, `the landing's level: ${s.length} device pixels, ${(under * 100).toFixed(1)} % at 3:1 or more against what lies under them (palette.py: ${scheme === 'light' ? '3.55' : '3.48'} across the staircase, ${scheme === 'light' ? '14.80' : '14.43'} on the page); the lowest ${Math.min(...s).toFixed(2)}, where the level crosses the blue line`);
-    check(tread.length > 30 && at3 >= 0.9, `the staircase's treads ahead: ${tread.length} sampled at their centers, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the page (palette.py: ${scheme === 'light' ? '4.17' : '4.14'}); the lowest ${Math.min(...tread).toFixed(2)}`);
+    check(s.length >= 40 && under >= 0.9, `the landing's level: ${s.length} device pixels, ${(under * 100).toFixed(1)} % at 3:1 or more against what lies under them (palette.py: ${scheme === 'light' ? '3.55' : '3.48'} across the staircase, ${scheme === 'light' ? '16.40' : '12.87'} on the plate); the lowest ${Math.min(...s).toFixed(2)}, where the level crosses the blue line`);
+    check(tread.length > 30 && at3 >= 0.9, `the staircase's treads ahead: ${tread.length} sampled at their centers, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the Landing's plate (palette.py: ${scheme === 'light' ? '4.62' : '3.70'}); the lowest ${Math.min(...tread).toFixed(2)}`);
   }
 
   // the slider, Now, the readout and the runs, against the decode
@@ -385,9 +405,12 @@ for (const scheme of schemes) {
     check(st.when === whenOf(CUR, CUR) && st.vals === wantVals && st.text === `Thursday 1 October, ${pts[CUR].wall} to ${endWall(CUR)}, now, ${f2(pts[CUR].v)} cents a kilowatt hour, ${wantVals.split(', ').slice(1).join(', ')}` && Math.abs(st.head - st.center) < 1e-9 && st.col.join() === st.xs.join(),
       `the readout, as decoded here: "${st.when}" / "${st.vals.replace(NN, ' ')}"; the column and the head on the interval`);
     const dayIdx = range(0, N), rk = rankOf(CUR, dayIdx);
-    const now = await w(() => [document.querySelector('.now .fig').textContent, document.querySelector('.now .lead').textContent, getComputedStyle(document.querySelector('.now .fig b')).fontSize]);
-    check(now[0] === `${f2(pts[CUR].v)}${NN}c/kWh` && now[1] === `${pts[CUR].wall}${EN}${endWall(CUR)}, ${ord(rk)} lowest of today’s 96 quarter hours, in the middle half` && now[2] === '21px',
-      `Now: "${now[0].replace(NN, ' ')}" at 21 px, "${now[1]}": the quarter's price and the quarter's rank (B11)`);
+    const now = await w(() => { const q = (x) => document.querySelector(`.now ${x}`); return [q('.fig').textContent, q('.lead').textContent, getComputedStyle(q('.fig b')).fontSize, q('.hl-what').textContent, getComputedStyle(q('.fig b')).fontWeight, [...document.querySelectorAll('.now .lead span')].map((e) => [e.className, getComputedStyle(e).color]), getComputedStyle(q('.lead')).color, getComputedStyle(q('.hl-what')).fontSize, getComputedStyle(q('.hl-what')).fontWeight, q('.hl-what').parentElement.matches('div.hl') && q('.fig').parentElement === q('.hl-what').parentElement && q('.lead').parentElement === q('.hl-what').parentElement]; });
+    check(now[7] === '12.5px' && now[8] === '400' && now[9] === true,
+      `Now's label "${now[3]}" computes to ${now[7]} / ${now[8]} (want 12.5px / 400, as in Finances, Outdoor Window and Running Dashboard), with the figure and the lead in the same div.hl${now[9] ? '' : ': NOT in one div.hl'}`);
+    check(now[3] === `Now, ${pts[CUR].wall}${EN}${endWall(CUR)}` && now[0] === `${f2(pts[CUR].v)}${NN}c/kWh` && now[1] === `${ord(rk)} lowest of today’s 96 quarter hours, in the middle half` && now[2] === '34px' && now[4] === '650'
+      && now[5].length === 1 && now[5][0][1] === now[6],
+      `Now, the key number: "${now[3]}" over "${now[0].replace(NN, ' ')}" at 34 px/650, "${now[1]}": the quarter's price and the quarter's rank (B11); the middle half in the lead's own ink, no meaning color (HOUSE 11.1 rule 2, 11.2)${now[5].length === 1 && now[5][0][1] === now[6] ? '' : `: spans ${JSON.stringify(now[5])}, the lead ${now[6]}`}`);
     const rows = await w(() => [...document.querySelectorAll('.runs button')].map((b) => [b.querySelector('.nm').textContent, b.querySelector('.tm').textContent, b.querySelector('.sub').textContent, b.getAttribute('aria-pressed')]));
     const wantRows = APPS.map((a, k) => { const r = cheapest(CUR, a.hours), len = a.hours === 1.5 ? `1${NN}h 30${NN}min` : `${a.hours}${NN}h`; return [a.name, runText(r), `${len} run, ${f2(r.mean)}${NN}c/kWh, ${pctBelow(r.mean, MEAN)}${NN}% below the mean ahead`, String(k === 0)]; });
     check(JSON.stringify(rows) === JSON.stringify(wantRows), `the runs, as searched here from 10:15: ${rows.map((r) => `${r[0]} ${r[1]}`).join('; ')}; the first pressed`);
@@ -428,12 +451,16 @@ for (const scheme of schemes) {
     check(seq.join() === [i + 1, i, i - 1, i + 3, i - 1, 0, N - 1, N - 1, N - 2].join() && kl === '', `the keys: → ← ← PageUp PageDown Home End ↑ ↓ give ${seq.join(', ')}; nothing said through the live region`);
   }
 
-  // the scrub by real touch, at 2, 8 and 20 intervals a second, a move every 16 ms (HOUSE 4.6's rule as a slider takes it)
+  // the scrub by real touch, at 2, 8 and 20 intervals a second, a move every 16 ms (HOUSE 4.6's rule as a slider takes it);
+  // then the scrub race (Finances' check, plan 0012 package 4): 8 a second again with a mouse resting where the head
+  // passes, a second pointer the head slides under mid-scrub, whose boundary events must neither move nor end the
+  // finger's read (the slider follows only the pointer that started it). A mutation that ends the scrub on any mouse
+  // event fails this check; with the mouse resting off the head's path it did not, so the place matters.
   if (SCRUB) {
     await w(() => {
       window.__log = [];
       window.__fx = null;
-      document.addEventListener('pointermove', (e) => { window.__fx = e.clientX; }, true);
+      document.addEventListener('pointermove', (e) => { if (e.pointerType === 'touch') window.__fx = e.clientX; }, true);
       const step = () => {
         const st = document.getElementById('stair'), L = window.__ph.staircase();
         if (st && L) {
@@ -445,11 +472,16 @@ for (const scheme of schemes) {
       requestAnimationFrame(step);
     });
     const labelOf = (i) => whenOf(i, CUR);
-    for (const speed of [2, 8, 20]) {
+    for (const [speed, mouse] of [[2, false], [8, false], [20, false], [8, true]]) {
       const a = await pointOf(A, 10), L = a.L, cw = (L.xs[N] - L.xs[0]) / N, moves = speed === 2 ? 90 : 50, dx = (speed * cw * 16) / 1000;
       const idx = (cx) => { const x = cx - a.s.left; let k = 0; while (k < N - 1 && L.xs[k + 1] <= x) k++; return x < L.xs[0] ? 0 : k; };
       await w(() => { window.__log.length = 0; });
       let x = a.x;
+      if (mouse) {   // on the head's own path, three intervals on, so the head slides under the resting mouse mid-scrub
+        const cy = await w(() => +document.querySelector('#stair .head circle:last-child').getAttribute('cy'));
+        await page.mouse.move(a.s.left + (L.xs[13] + L.xs[14]) / 2, a.s.top + cy);
+        await page.waitForTimeout(100);
+      }
       await A.touch('touchStart', Math.round(x), a.y);
       const after = [], seen = []; let lost = 0;
       const t0 = Date.now();
@@ -472,7 +504,8 @@ for (const scheme of schemes) {
       const bad = log.filter((f) => f.i !== f.now || !f.head || f.anims), labelsBad = log.filter((f) => f.when !== labelOf(f.i)).length;
       const inOrder = seen.every((s, k) => k === 0 || s === seen[k - 1] + 1);
       check(lost === 0 && after.length === 0 && bad.length === 0 && labelsBad === 0 && last.chosen === idx(Math.round(x)) && (speed !== 2 || inOrder) && log.length > 10,
-        `the scrub at ${speed} intervals a second (${moves} moves, ${ms.toFixed(1)} ms each in headless): after every move, once the page has it (${lost} never arrived), and one drawn frame, the head, the readout and the value show the interval under the finger (${after.length} differ); over ${log.length} drawn frames ${bad.length + labelsBad} differ and no animation runs on them; ${speed === 2 ? `every interval drawn in order (${seen.join(' ')}); ` : ''}the lift lands on ${last.chosen}`);
+        `${mouse ? 'the scrub race, a mouse resting on the drawing: ' : ''}the scrub at ${speed} intervals a second (${moves} moves, ${ms.toFixed(1)} ms each in headless): after every move, once the page has it (${lost} never arrived), and one drawn frame, the head, the readout and the value show the interval under the finger (${after.length} differ); over ${log.length} drawn frames ${bad.length + labelsBad} differ and no animation runs on them; ${speed === 2 ? `every interval drawn in order (${seen.join(' ')}); ` : ''}the lift lands on ${last.chosen}`);
+      if (mouse) await page.mouse.move(2, 2);
       await page.waitForTimeout(150);
     }
     await w(() => { window.__stop = true; });
@@ -493,6 +526,7 @@ for (const scheme of schemes) {
     check(s.tm === runText(H, false) && s.sub === `2${NN}h run, ${f2(H.mean)}${NN}c/kWh, ${pctBelow(H.mean, hmean)}${NN}% below the file’s mean` && s.st[0] === `These prices have all ended, so this is a past day, not a plan: the last are for ${(([y, m, d]) => { const w = new Date(Date.UTC(y, m - 1, d)); return `${DAYS[w.getUTCDay()].slice(0, 3)} ${d} ${MONTHS[m - 1].slice(0, 3)}`; })(pts[N - 1].date.split('-').map(Number))}, and no newer ones have arrived. The refresh after each day’s auction brings the next.`,
       `history, never a plan (the stock planned "Dishwasher 00:30–02:30" for a day that had ended): "${s.tm}", "${s.sub.replace(/ /g, ' ')}"; "${s.st[0].slice(0, 40)}…"`);
     await clearCheck(B.w, 'run out');
+    await stampCheck(B, `run out, ${scheme}`);
     await B.shot(`history-${scheme}`);
     await closeOut(B, `run out, ${scheme}`);
   }
@@ -528,7 +562,7 @@ console.log('\n== once');
     const s = await A.rect('#stamp');
     await A.tapAt(s.left + 20, s.top + s.height / 2);
     await page.waitForTimeout(400);
-    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main', 'band'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
       text: document.querySelector('.about-body').textContent.replace(/[ \t\n]+/g, ' '), list: [...document.querySelectorAll('#about-list dt')].map((d, i) => `${d.textContent} ${document.querySelectorAll('#about-list dd')[i].textContent}`) }));
     const wantList = ['Zone: NO2, Norway south-west', 'Time zone: Europe/Oslo, UTC+2', 'Prices: Thu 1 Oct 2026, 00:00 to Fri 2 Oct 2026, 00:00, 96 quarter hours', 'Updated: Thu 1 Oct 2026, 06:01 (UTC+2)',
       'Source unit: EUR/MWh, shown divided by 10 as c/kWh, euro-cents per kWh, the unit a household tariff is written in', 'Scale: 13 to 17 c/kWh for the whole file', 'Next day: Fri 2 Oct, not in this file (no prices published for 2026-10-02)',
@@ -593,10 +627,10 @@ console.log('\n== once');
 // the clock crossing a quarter while open: now, Now, the faint quarters and the stretch move on their own
 {
   const A = await open('light', { install: true, time: '2026-10-01T08:29:30Z' });
-  const before = await A.w(() => [document.querySelector('.now .lead').textContent.slice(0, 11), window.__ph.chosen(), document.querySelectorAll('#stair .st.past').length && (document.querySelector('#stair .st.past').getAttribute('d').match(/H/g) || []).length]);
+  const before = await A.w(() => [document.querySelector('.now .hl-what').textContent.slice(5), window.__ph.chosen(), document.querySelectorAll('#stair .st.past').length && (document.querySelector('#stair .st.past').getAttribute('d').match(/H/g) || []).length]);
   await A.page.clock.runFor(45000);
   await A.page.waitForTimeout(300);
-  const after = await A.w(() => [document.querySelector('.now .lead').textContent.slice(0, 11), window.__ph.chosen(), (document.querySelector('#stair .st.past').getAttribute('d').match(/H/g) || []).length, document.querySelector('.runs').previousElementSibling.textContent.slice(0, 26)]);
+  const after = await A.w(() => [document.querySelector('.now .hl-what').textContent.slice(5), window.__ph.chosen(), (document.querySelector('#stair .st.past').getAttribute('d').match(/H/g) || []).length, document.querySelector('.runs').previousElementSibling.textContent.slice(0, 26)]);
   check(before[0] === `10:15${EN}10:30` && before[1] === 41 && after[0] === `10:30${EN}10:45` && after[1] === 42 && after[2] === 42 && after[3] === 'Searched from 10:30 to 24:',
     `the clock crossing 10:30 while open: Now ${before[0]} became ${after[0]}, the chosen interval followed it (${before[1]} to ${after[1]}), ${after[2]} quarters faint, "${after[3]}…"`);
   await closeOut(A, 'the clock');
@@ -678,6 +712,7 @@ console.log('\n== once');
   check(m.stamp === 'Updated 1 Oct, 18:31' && m.when === 'Fri 2 Oct, 08:00–08:15, now' && m.lead.includes('of today’s 96 quarter hours') && !/Today|Tomorrow|okt|fre\./.test(m.text) && m.past === 128 && !m.tm.startsWith('Fri'),
     `B1, B4, B5, B6: the next morning at 08:00 in nb-NO, before the next refresh: "${m.stamp}" (dated, no "Stale"), "${m.when}"; no "Today" or "Tomorrow" anywhere; Thursday and the night faint (${m.past} quarters); the runs from now, "${m.tm}"`);
   await clearCheck(B.w, 'two days, the next morning');
+  await stampCheck(B, 'dated, the next morning');
   await B.shot('two-days-morning-light', false);
   await closeOut(B, 'two days, the next morning');
   // the review's fixture: a Friday whose daytime prices swing through the mean ahead everywhere, read at Fri 08:00, where
@@ -707,10 +742,12 @@ console.log('\n== once');
   kept.source.publishable = false;
   override = { '/data/snapshot.json': { body: JSON.stringify(kept) }, '/data/appliances.json': { body: '{"appliances":[{"name":"Dishwasher","hours":2},{"name":"","hours":1},{"name":"Sauna","hours":30}]}' } };
   const A = await open('light');
-  const s = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, st: [...document.querySelectorAll('.statement')].map((n) => n.textContent), priv: !document.getElementById('private').hidden && document.getElementById('private').textContent, ink: getComputedStyle(document.getElementById('private')).color === getComputedStyle(document.querySelector('h1')).color, rows: document.querySelectorAll('.runs button').length }));
-  check(s.stamp === 'Kept from the run before. Updated 30 Sep, 16:31' && s.st.includes('The last refresh could not reach the price service, so these are the prices it kept from the run made 30 Sep, 16:31.') && s.priv === 'These prices are licensed for private and internal use only. Do not republish them.' && s.ink
+  const s = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, st: [...document.querySelectorAll('.statement')].map((n) => n.textContent), priv: (document.querySelector('.private-use') || {}).textContent, ink: !!document.querySelector('.private-use') && getComputedStyle(document.querySelector('.private-use')).color === getComputedStyle(document.querySelector('h1')).color,
+    under: !!document.querySelector('.private-use') && document.querySelector('.private-use').previousElementSibling === document.querySelector('#pane > :first-child'), rows: document.querySelectorAll('.runs button').length }));
+  check(s.stamp === 'Kept from the run before. Updated 30 Sep, 16:31' && s.st.includes('The last refresh could not reach the price service, so these are the prices it kept from the run made 30 Sep, 16:31.') && s.priv === 'These prices are licensed for private and internal use only. Do not republish them.' && s.ink && s.under
     && s.st.includes('2 rows in data/appliances.json were skipped: each needs a name and a run length between 0 and 24 hours.') && s.rows === 1,
-    `lastGood: "${s.stamp}" and its sentence; private use: the second credits line in ink; two of three appliance rows skipped, said so`);
+    `lastGood: "${s.stamp}" and its sentence; private use: the line in ink straight under the zone's title (HOUSE 4.15 exception 2); two of three appliance rows skipped, said so`);
+  await stampCheck(A, 'kept from the run before');
   await closeOut(A, 'lastGood and private use');
   override = { '/data/appliances.json': { body: '{ "appliances": [ ] , }' } };
   const B = await open('light');
@@ -719,12 +756,42 @@ console.log('\n== once');
   await closeOut(B, 'a broken appliance file');
   override = {};
 }
+// the stamp's leads together (plan 0012 change list, Power Hours item 10): every combination app.js can join, on one
+// line at 390 and at 320 px; ran out and kept together leads with the ran-out sentence alone
+{
+  const kept = (made) => { const k = JSON.parse(rawSnap); k.lastGood = { days: k.days, hours: k.hours }; if (made) k.lastGood.generatedAt = made; k.hours = []; return k; };
+  const future = (t) => { const k = JSON.parse(rawSnap); k.generatedAt = t; return k; };
+  const undated = () => { const k = JSON.parse(rawSnap); delete k.generatedAt; return k; };
+  // the lead's ruling (2026-10-08): with ran out or kept leading, "Made after the phone's time." leaves the stamp and is
+  // said as a statement in the pane, so the stamp stays one line; alone, it stays in the stamp and the pane says nothing
+  const AHEAD = (when) => `This file was made after the phone’s time: it says ${when}, more than an hour ahead of the phone’s clock.`;
+  const cases = [
+    ['kept, made after the phone\'s time', kept('2026-10-02T12:00:00Z'), NOW, 'Kept from the run before. Updated 2 Oct, 14:00', AHEAD('2 Oct, 14:00')],
+    ['made after the phone\'s time, alone', future('2026-10-02T12:00:00Z'), NOW, 'Made after the phone’s time. Updated 2 Oct, 14:00', null],
+    ['kept, undated', kept(null), NOW, 'Kept from the run before. Undated file.', null],
+    ['ran out and kept', kept('2026-09-30T14:31:00Z'), RANOUT, `Prices ran out 36${NN}h ago. Updated 30 Sep, 16:31`, null],
+    ['ran out, made after the phone\'s time', future('2026-10-04T12:00:00Z'), RANOUT, `Prices ran out 36${NN}h ago. Updated 4 Oct, 14:00`, AHEAD('4 Oct, 14:00')],
+    ['ran out, undated', undated(), RANOUT, `Prices ran out 36${NN}h ago. Undated file.`, null],
+  ];
+  for (const [label, body, time, want, wantSaid] of cases) for (const wv of [390, 320]) {
+    override = { '/data/snapshot.json': { body: JSON.stringify(body) } };
+    const A = await open('light', { time, w: wv, h: 844 });
+    const s = await stampLine(A);
+    const room = await A.w(() => { const n = document.getElementById('stamp'), r = n.getBoundingClientRect(); n.style.whiteSpace = 'nowrap'; n.style.maxWidth = 'none'; n.style.display = 'inline-block'; const wd = n.getBoundingClientRect().width; n.style.cssText = ''; return [Math.round(wd), Math.round(n.parentElement.getBoundingClientRect().width)]; });
+    const said = await A.w(() => [...document.querySelectorAll('#pane .statement')].map((n) => n.textContent).filter((t) => /phone’s (time|clock)/.test(t)));
+    const saidOk = wantSaid ? said.length === 1 && said[0] === wantSaid : said.length === 0;
+    check(s.text === want && s.one && saidOk,
+      `the stamp, ${label}, at ${wv} px: "${s.text.replace(/\u202f/g, ' ')}", ${s.one ? 'one line' : `${Math.round(s.h)} px tall`} (${room[0]} px of text, ${room[1]} px of room); ${wantSaid ? `the pane says "${said.join(' | ')}"` : `the pane says nothing of the phone's time${said.length ? `: "${said.join(' | ')}"` : ''}`}`);
+    await closeOut(A, `the stamp, ${label}, ${wv} px`);
+  }
+  override = {};
+}
 // the same words on every locale: dates and times built by hand (B6)
 {
   const words = [];
   for (const locale of ['en-US', 'en-GB', 'nb-NO', 'ja-JP']) {
     const A = await open('light', { locale });
-    words.push([locale, await A.w(() => [document.getElementById('head').innerText, document.getElementById('pane').innerText, document.getElementById('band').innerText].join('\n'))]);
+    words.push([locale, await A.w(() => [document.getElementById('head').innerText, document.getElementById('pane').innerText].join('\n'))]);
     await closeOut(A, `locale ${locale}`);
   }
   check(words.every(([, x]) => x === words[0][1]), `the same words, letter for letter, under ${words.map(([l]) => l).join(', ')} (${words[0][1].length} characters)`);
@@ -746,6 +813,7 @@ console.log('\n== once');
   const A = await open('light', { noWait: true });
   await A.page.waitForTimeout(800);
   const before = await A.w(() => [document.body.innerText.includes('c/kWh'), document.getElementById('stamp').textContent]);
+  await stampCheck(A, 'while the snapshot is read');
   release();
   await A.page.waitForFunction(() => window.__ph && window.__ph.ready(), null, { timeout: 10000 });
   const after = await A.w(() => document.body.innerText.includes('c/kWh'));
@@ -768,7 +836,7 @@ for (const [label, ov, want] of [
   const s = await A.w(() => ({ lines: [...document.querySelectorAll('#notice p')].map((p) => p.textContent), role: document.getElementById('notice').getAttribute('role'), stamp: document.getElementById('stamp').textContent, tick: document.getElementById('notice').textContent.includes('`'), amp: document.getElementById('notice').textContent.includes('&lt;'), cam: document.body.innerText.includes('c/kWh') }));
   check(JSON.stringify(s.lines) === JSON.stringify([want, 'In Snuggery, Options, then App Files shows what the file holds.']) && s.role === 'alert' && s.stamp === 'No usable prices' && !s.tick && !s.amp && !s.cam,
     `B14, broken data, ${label}: "${s.lines[0]}" on a plate (role alert), no backtick, no escaped entity, words for the menu; no c/kWh, so the camera's wait does not pass`);
-  if (label === 'a web page') await A.shot('broken-light', false);
+  if (label === 'a web page') { await A.shot('broken-light', false); await stampCheck(A, 'no usable prices'); }
   if (label === 'missing') {
     override = {};
     await A.w(() => document.dispatchEvent(new Event('visibilitychange')));
@@ -779,28 +847,50 @@ for (const [label, ov, want] of [
 }
 override = {};
 // the widths: no sideways scroll, the caption inside its lines, the drawing inside the pane, the readout held
-for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['390 × 844', 390, 844], ['125 % text (312 × 675)', 312, 675], ['on its side (844 × 390)', 844, 390], ['640 × 900', 640, 900], ['a tablet (820 × 1180)', 820, 1180]]) {
+for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['390 × 844', 390, 844], ['125 % text (312 × 675)', 312, 675], ['on its side (844 × 390)', 844, 390], ['640 × 900', 640, 900], ['a tablet (820 × 1180)', 820, 1180], ['wide (1024 × 768)', 1024, 768]]) {
   const A = await open('light', { w: wv, h: hv });
   const r = await A.w(() => {
-    const m = document.getElementById('main'), cap = document.getElementById('capline'), p = document.getElementById('pane'), ps = getComputedStyle(p), sv = document.querySelector('#stair svg');
-    return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.scrollHeight <= cap.clientHeight + 1, capH: cap.clientHeight, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+    const m = document.getElementById('main'), cap = document.querySelector('.landing .note.scale'), p = document.getElementById('pane'), ps = getComputedStyle(p), sv = document.querySelector('#stair svg');
+    const stamp = document.getElementById('stamp');
+    return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, capH: cap.getBoundingClientRect().height, capLH: parseFloat(getComputedStyle(cap).lineHeight), pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+      right: [document.querySelector('#pane > .sec').getBoundingClientRect().right, stamp.parentElement.getBoundingClientRect().right].map(Math.round),
       inside: sv.getBoundingClientRect().right <= p.getBoundingClientRect().right - parseFloat(ps.paddingRight) + 0.5, plot: window.__ph.staircase().G.plotH,
-      left: [document.querySelector('#pane > *').getBoundingClientRect().left, document.querySelector('h1').getBoundingClientRect().left, cap.getBoundingClientRect().left].map(Math.round) };
+      left: [document.querySelector('#pane > *').getBoundingClientRect().left, document.querySelector('h1').getBoundingClientRect().left].map(Math.round) };
   });
   await A.w(() => document.getElementById('stair').focus());
   await A.page.keyboard.press('Home');
   const held = new Set();
   for (let i = 0; i < N; i++) {
-    held.add(await A.w(() => { const ro = document.querySelector('.ro'), nx = document.querySelector('.stw').nextElementSibling; return `${Math.round(ro.getBoundingClientRect().height)}/${Math.round(nx.getBoundingClientRect().top)}`; }));
+    held.add(await A.w(() => { const ro = document.querySelector('.ro'), nx = document.querySelector('.landing').nextElementSibling; return `${Math.round(ro.getBoundingClientRect().height)}/${Math.round(nx.getBoundingClientRect().top)}`; }));
     await A.page.keyboard.press('ArrowRight');
   }
   const hits = await hitTargets(A);
-  const land = wv > hv ? r.head <= 47 && r.pane >= 220 && r.plot === 96 : r.plot === 120;
-  check(!r.side && r.cap && r.capH === (wv >= 640 ? 15 : 30) && r.inside && held.size === 1 && r.left[0] === r.left[1] && r.left[1] === r.left[2] && land && hits.bad.length === 0,
-    `${label}: no sideways scroll, the caption inside its ${wv >= 640 ? 'one line' : 'two lines'}, the drawing inside the pane (plot ${r.plot} px), the readout held at ${[...held][0].split('/')[0]} px with what follows at one top over all ${N} intervals (${held.size} seen), the pane's left edge with the header's and the band's (x ${r.left.join(', ')}), ${hits.n} controls at 44 px or more${wv > hv ? `, the header ${Math.round(r.head)} px, the pane ${Math.round(r.pane)} px tall` : ''}${hits.bad.length ? ': ' + hits.bad.join('; ') : ''}`);
+  const land = hv < 500 ? r.head <= 47 && r.pane >= 220 && r.plot === 96 : r.plot === 120;
+  const capLines = Math.round(r.capH / r.capLH), wantLeft = Math.round(Math.max(16, wv / 2 - 364));
+  check(!r.side && capLines === (wv >= 360 ? 1 : 2) && r.inside && held.size === 1 && r.left[0] === r.left[1] && r.left[0] === wantLeft && land && hits.bad.length === 0,
+    `${label}: no sideways scroll, the scale's label on ${capLines === 1 ? 'one line' : `${capLines} lines`}, the drawing inside the pane (plot ${r.plot} px), the readout held at ${[...held][0].split('/')[0]} px with what follows at one top over all ${N} intervals (${held.size} seen), the pane's left edge with the header's at x ${r.left.join(', ')} (max(16, 50 % − 364) = ${wantLeft}: the header centered with the pane), ${hits.n} controls at 44 px or more${hv < 500 ? `, the header ${Math.round(r.head)} px, the pane ${Math.round(r.pane)} px tall` : ''}${hits.bad.length ? ': ' + hits.bad.join('; ') : ''}`);
+  await stampCheck(A, label);
   if (wv === 320) await A.shot('landing-320-light', false);
-  if (wv > hv) await A.shot('landing-landscape-light', false);
+  if (wv > hv && wv < 1000) await A.shot('landing-landscape-light', false);
+  if (wv === 1024) await A.shot('landing-wide-light', false);
   await closeOut(A, label);
+}
+// the shipped data/snapshot.json as the refresh last wrote it, at its own clock (an hour after it was made): it boots,
+// the camera's wait passes, the stamp is one line, the plates and the scale's label are there (check.mjs checks its shape)
+{
+  const live = JSON.parse(liveSnap), at = new Date(Date.parse(live.generatedAt) + 3600e3).toISOString();
+  override = { '/data/snapshot.json': { body: liveSnap } };
+  for (const scheme of schemes) {
+    const A = await open(scheme, { time: at });
+    const s = await A.w(() => ({ cam: document.body.innerText.includes('c/kWh'), notice: document.getElementById('notice').hidden, secs: document.querySelectorAll('#pane > .sec').length, scale: (document.querySelector('.landing .note.scale') || {}).textContent, now: (document.querySelector('.now .hl-what') || {}).textContent, stamp: document.getElementById('stamp').textContent }));
+    const c = await contrastOf(A.w), si = await siOf(A.w);
+    check(s.cam && s.notice && s.secs >= 2 && /^c\/kWh, spot price per 15\u202fmin, before grid rent, tax and VAT\.$/.test(s.scale || '') && c.worst[0] >= 4.5 && si.bad.length === 0,
+      `the shipped data/snapshot.json (zone ${live.zone}, made ${live.generatedAt}, ${live.hours.length} intervals) at ${at.slice(0, 16)}Z, ${scheme}: "c/kWh" in view, no notice, ${s.secs} plates, ${s.now ? `"${s.now}", ` : ''}the stamp "${s.stamp}"; text contrast ${c.worst[0]}:1 at the lowest; SI clean${si.bad.length ? ': ' + si.bad.join(' | ') : ''}`);
+    await stampCheck(A, `the shipped file, ${scheme}`);
+    await A.shot(`live-${scheme}`, false);
+    await closeOut(A, `the shipped file, ${scheme}`);
+  }
+  override = {};
 }
 const after = hashOf(appPng);
 check(after === appPngHash, `screenshots/app.png, the README's composite, untouched (${appPngHash ? appPngHash.slice(0, 12) + '…' : 'absent'})`);

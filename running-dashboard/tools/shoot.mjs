@@ -11,13 +11,15 @@
 //   SCHEMES=light node tools/shoot.mjs      one theme for the per-theme part
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the panes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the camera's tabs by role and name, the credits, the face and its ₂ supplement, the
-// stamp), every pane's text contrast and SVG labels, the tracer under exactly the chosen words, the Block
+// Per theme: boot (the camera's tabs by role and name, no credit on the front and the credit first in About,
+// the face and its ₂ supplement, the stamp led by Example data.), every pane's text contrast and SVG labels,
+// the About key last on every pane, every caption label one line, the tracer under exactly the chosen words, the Block
 // (its blocks against this file's decode, its ink and its planned weeks' tint sampled on rendered pixels,
 // its card and sentence), a chart's card against this file's sums and clear of the tapped bar, fifteen taps
 // along that chart with no column under its card, each card's ✕ inside its button, a vertical drag on a chart
 // scrolling with no card, SI in every visible text node, hit targets on every pane, the pictures; and the
-// owner's six (2026-10-03): the Now table at the pane's head and a long fact below the verdict, the filters
+// register (plan 0012 package 4): Now's key number against this file's week and plan, its bar, the tone word
+// in its color, the tiles; and the owner's six (2026-10-03): a long fact on its plate after the Block, the filters
 // held under the tabs with the sport and equipment row going and coming back with the scroll, the thumbs
 // with nothing painted behind them, Plan's running chart (its place, legend, table, card and race name) and
 // a planned bar's tint in every chart on Plan. Once: the loop clip's drag
@@ -25,7 +27,10 @@
 // Motion, hidden and back (the same file, then a changed one, keeping the open folds and the scroll),
 // broken data (missing, not JSON, the wrong shape, a broken replacement keeping the view and its plate's
 // Close key), the route map (its card, the ramp's minimum span on a steady run, a vertical swipe across
-// it, twenty points along it with no marker under its card), the widths and a phone on its side.
+// it, twenty points along it with no marker under its card, OpenStreetMap's line under it and the map's
+// sentence in its fold), a slide along a chart racing the page (a finger's card follows only that finger), the
+// stamp on one line in every state it writes and Stale. proven on a copy whose ids are not the example's, the
+// widths with a wide screen whose header is centered on the pane's column, and a phone on its side.
 // Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite, whose hash is checked unchanged.
 
@@ -67,13 +72,18 @@ const hm = (d) => `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTC
 const gen = cest(snap.pulledAt || snap.generatedAt);
 const lastDay = snap.dataThrough.split('-').map(Number);
 const STAMP = `Updated ${gen.getUTCDate()} ${MON[gen.getUTCMonth()]}, ${hm(gen)}, last session ${lastDay[2]} ${MON[lastDay[1] - 1]}`;
+// the template's sessions are the generator's own (every id demo-…), so the stamp leads with Example data. (HOUSE 11.1 rule 8)
+const EXAMPLE = snap.activities.every((a) => String(a.id).startsWith('demo-'));
 const CREDITS = 'Data: Garmin Connect. Coaching text: the coaching routine.';
+const ABOUT_KEY = 'Sources, method and credits are in About.';
+/** A real pull's copy of this file: every demo- id rewritten real-, so no example lead (the streams are fetched by id, so open no session on it). */
+const realCopy = () => raw.replace(/"demo-/g, '"real-');
 const NN = '\u202F';
 
 const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
 const contrast = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
 /* The plan's tint: its token at 20 % over the page (tools/art/palette.py, TINT), as the browser composites it. */
-const TINT = 0.2, over = (c, a, g) => c.map((v, i) => Math.round(v * a + g[i] * (1 - a)));
+const TINT = 0.2, PLAN_FILL = 0.14, over = (c, a, g) => c.map((v, i) => Math.round(v * a + g[i] * (1 - a)));
 const near = (p, q, d = 2) => p.every((v, i) => Math.abs(v - q[i]) <= d);
 const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const dateOf = (s) => `${Number(s.slice(8))} ${MON[Number(s.slice(5, 7)) - 1]} ${s.slice(0, 4)}`;
@@ -112,7 +122,7 @@ let override = {}, snapshotReads = 0;
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u];
   if (u === '/data/snapshot.json') snapshotReads++;
-  if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); return; }
+  if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } setTimeout(() => { res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); }, ov.delay || 0); return; }
   const f = path.join(APP, u === '/' ? 'index.html' : u);
   if (!f.startsWith(APP + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
@@ -158,6 +168,9 @@ async function open(scheme, o = {}) {
   const pane = async (name) => { await page.getByRole('tab', { name, exact: true }).click(); await page.waitForTimeout(350); };
   return { ctx, page, errors, ms, w, cdp, touch, tapAt, rect, png, shot, pane };
 }
+/** The stamp on one line at 16 px (HOUSE 7.2, plan 0012 F8), whatever it says. */
+const stampLine = (A) => A.w(() => { const s = document.getElementById('stamp'), r = s.getBoundingClientRect(); return { h: r.height, text: s.textContent, one: Math.abs(r.height - 16) <= 1 && s.getClientRects().length === 1 }; });
+const stampCheck = async (A, label) => { const s = await stampLine(A); check(s.one, `the stamp on one line, ${Math.round(s.h * 10) / 10} px tall (${label}): "${s.text}"`); };
 const closeOut = async (A, label) => { check(A.errors.length === 0, `${label}: no console error or warning, failed or outside request${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`); await A.ctx.close(); };
 
 /* Text contrast over every rendered DOM text node (backgrounds composited), and every SVG label's fill on the page. */
@@ -202,6 +215,9 @@ const hitTargets = async (A) => {
         if (r.left < -1 || r.top < -1 || r.right > innerWidth + 1 || r.bottom > innerHeight + 1 || !on(cx, cy)) continue;
         // wholly inside every scroller it sits in (the row of words, the session list, the pane under the header and the band)
         if ([...document.querySelectorAll('.tabs, .words, .sesslist, .pane')].some((sc) => { if (!sc.contains(e)) return false; const s = sc.getBoundingClientRect(); return r.left < s.left - 1 || r.right > s.right + 1 || r.top < s.top - 1 || r.bottom > s.bottom + 1; })) continue;
+        // and not under the filters held over the pane (they cover what scrolls beneath them, by design): measured where it is clear of them
+        const fl = document.getElementById('filters');
+        if (!fl.hidden && !fl.contains(e) && r.top < fl.getBoundingClientRect().bottom + 1) continue;
         const id = `${e.tagName} ${(e.getAttribute('aria-label') || e.textContent).trim().slice(0, 20)}`;
         out.seen.push(id);
         const run = (dx, dy) => { let n = 0; for (const s of [-1, 1]) for (let k = 1; k < 280 && on(cx + (s * k * dx) / 4, cy + (s * k * dy) / 4); k++) n++; return n / 4; };
@@ -248,25 +264,30 @@ for (const scheme of schemes) {
   const { page, w } = A;
   console.log(`    load to the first pane: ${A.ms} ms (headless)`);
   const PAGE = scheme === 'light' ? [0xe8, 0xee, 0xf0] : [0x14, 0x1d, 0x21];
+  const SHEET = scheme === 'light' ? [0xf6, 0xf9, 0xfa] : [0x1c, 0x27, 0x2c];   // every chart is on a plate
+  const REG = scheme === 'light' ? { done: '#1f5f99', up: '#17723e', watch: '#8a5a00', down: '#b42318' } : { done: '#8cbcf0', up: '#6fd39a', watch: '#e0a340', down: '#ff9a8f' };
+  const rgbS = (h) => `rgb(${hexRgb(h).join(', ')})`;
   await A.pane('Now');
 
   // boot: the camera's tabs by role and name, the credits, the face and its supplement, the stamp
   {
     const tabs = await Promise.all(PANES.map((n) => page.getByRole('tab', { name: n, exact: true }).count()));
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent, whole: c.scrollWidth <= c.clientWidth + 1 && r.height > 0 && r.bottom <= innerHeight + 1,
+      const first = [...document.querySelectorAll('.about-body h3')].find((h) => h.textContent === 'Sources and credits').nextElementSibling;
+      return { credits: first.textContent, id: first.id, gone: !document.getElementById('credits') && !document.getElementById('band') && !document.querySelector('footer'),
+        front: [document.getElementById('head').innerText, document.getElementById('main').innerText].join('\n'),
         face: document.fonts.check('600 12.5px "Ysabeau Office"'), sub: document.fonts.check('400 12.5px "Ysabeau Office"', '\u2082'),
         loaded: [...document.fonts].filter((f) => f.status === 'loaded').length, stamp: document.getElementById('stamp').textContent, pane: window.__rd.pane() };
     });
     check(tabs.every((n) => n === 1), `the camera's panes as tabs by name: ${PANES.map((p, i) => `${p} ${tabs[i]}`).join(', ')}`);
-    check(b.credits === CREDITS && b.whole, `the credits on screen whole: "${b.credits}"`);
+    check(b.gone && b.id === 'about-credit-line' && b.credits === CREDITS && !/Garmin Connect\. Coaching text|Map tiles:/.test(b.front),
+      `no band and no credit line on the front; About's first Sources and credits paragraph is the credit: "${b.credits}" (HOUSE 4.15)`);
     check(b.face && b.sub && b.loaded === 2, `the face is loaded, and its ₂ supplement (${b.loaded} faces loaded)`);
-    check(b.stamp === STAMP, `the stamp: "${b.stamp}" (built by hand: "${STAMP}")`);
+    check(EXAMPLE && b.stamp === `Example data. ${STAMP}`, `the stamp: "${b.stamp}" (built by hand: "Example data. ${STAMP}"; every session id here the generator's demo-, HOUSE 11.1 rule 8)`);
+    await stampCheck(A, 'the example');
   }
 
-  // every pane: text contrast and the SVG labels, the face, the tracer, SI, hit targets, the picture
-  const bandH = [];
+  // every pane: text contrast and the SVG labels, the face, the tracer, SI, hit targets, the About key, the picture
   for (const name of PANES) {
     await A.pane(name);
     const t0 = Date.now();
@@ -280,11 +301,16 @@ for (const scheme of schemes) {
     check(si.bad.length === 0, `${name}: SI in ${si.n} visible text nodes${si.bad.length ? ': ' + si.bad.slice(0, 5).join(' | ') : ''}`);
     const hits = await hitTargets(A);
     check(hits.bad.length === 0 && hits.n > 6, `${name}: ${hits.n} controls, every one 44 × 44 or more (B17)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
-    bandH.push(await w(() => document.getElementById('band').getBoundingClientRect().height));
+    const k = await w(() => { const b = document.getElementById('pane').lastElementChild, r = b.getBoundingClientRect(), s = b.previousElementSibling && b.previousElementSibling.getBoundingClientRect(); return { tag: b.tagName, cls: b.className, text: b.textContent, h: r.height, gap: s ? r.top - s.bottom : null }; });
+    check(k.tag === 'BUTTON' && k.cls === 'aboutlink' && k.text === ABOUT_KEY && k.h >= 44 && Math.abs(k.gap - 14) < 0.5, `${name}: the pane ends with the key "${k.text}", ${Math.round(k.h)} px tall, ${k.gap} px under the last section (HOUSE 11.1 rule 1)`);
+    // a section keeps at most one short label, one line at 390 px (HOUSE 11.1 rule 9): every caption label on the pane
+    const caps = await w(() => [...document.querySelectorAll('#pane .sec > p.cap, #pane .sec div > p.cap')].filter((p) => p.textContent && p.getBoundingClientRect().height && !p.closest('.sx, .srow, .sessdetail .sec:first-child'))
+      .map((p) => [p.textContent, Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight))]));
+    const long = caps.filter(([, n]) => n > 1);
+    check(long.length === 0, `${name}: ${caps.length} caption labels, each one line at 390 px (HOUSE 11.1 rule 9; the method sentences are in How to read it)${long.length ? ': ' + long.map(([x, n]) => `${n} lines "${x.slice(0, 40)}"`).join('; ') : ''}`);
     console.log(`      ${name} drawn and checked in ${Date.now() - t0} ms (headless)`);
     await A.shot(`${name.toLowerCase()}-${scheme}`);
   }
-  check(new Set(bandH).size === 1, `the caption band holds its height on every pane (${bandH.join(', ')} px): the pane above it never resizes`);
 
   // the Block: its blocks against this file's decode, its ink on rendered pixels, its card and its sentence
   await A.pane('Now');
@@ -304,20 +330,24 @@ for (const scheme of schemes) {
       `the Block: ${cols.length} weeks ${cols[0]} to ${cols[cols.length - 1]}, every column's ink as tall as this file's running kilometers at 0.8 px per km (this week ${sums[B.now].toFixed(1)} km), the outlines the plan's ${B.columns.filter((c) => c.target != null).map((c) => c.target).join(', ')} km`);
     const sv = await A.rect('.blocksec svg'), img = await A.png();
     const samples = [];
-    for (const [x, y, wd, h] of B.points) for (let xx = x + 1.5; xx < x + wd - 1; xx += 2) for (let yy = y + 0.75; yy < y + h - 0.5; yy += 1.5) samples.push(contrast(img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)), PAGE));
+    const DONE = hexRgb(REG.done), runs = [];
+    for (const [x, y, wd, h] of B.points) for (let xx = x + 1.5; xx < x + wd - 1; xx += 2) for (let yy = y + 0.75; yy < y + h - 0.5; yy += 1.5) { const px = img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)); samples.push(contrast(px, SHEET)); runs.push(near(px, DONE, 3)); }
     const at3 = samples.filter((s) => s >= 3).length / samples.length;
     const edges = [];
-    for (const [x, y, wd, h] of B.outlines) for (let yy = y + 3; yy < y + h - 3; yy += 2) edges.push(contrast(img.at(Math.round((sv.left + x + 0.75) * 2), Math.round((sv.top + yy) * 2)), PAGE));
-    const e3 = edges.filter((s) => s >= 3).length / edges.length;
-    check(at3 >= 0.9 && e3 >= 0.9, `the Block's ink: ${samples.length} samples inside its blocks, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the page (lowest ${Math.min(...samples).toFixed(2)}, a block's antialiased edge); its outlines' 1.5 px strokes ${(e3 * 100).toFixed(1)} % (lowest ${Math.min(...edges).toFixed(2)})`);
-    // the plan's tint inside the outlines (the owner, 2026-10-03): from each outline's top down to the ink, the
-    // ink at 20 % over the page, light, and apart from the ink; this week's only above what was run
-    const INKC = scheme === 'light' ? [0x0f, 0x1c, 0x23] : [0xe6, 0xed, 0xee], tint = over(INKC, TINT, PAGE), tints = [];
+    for (const [x, y, wd, h] of B.outlines) for (let yy = y + 3; yy < y + h - 3; yy += 2) edges.push(contrast(img.at(Math.round((sv.left + x + 0.75) * 2), Math.round((sv.top + yy) * 2)), SHEET));
+    const e3 = edges.filter((s) => s >= 3).length / edges.length, inDone = runs.filter(Boolean).length / runs.length;
+    check(at3 >= 0.9 && e3 >= 0.9 && inDone >= 0.9, `the Block's runs: ${samples.length} samples inside its blocks, ${(inDone * 100).toFixed(1)} % in --done ${REG.done} and ${(at3 * 100).toFixed(1)} % at 3:1 or more on their plate (lowest ${Math.min(...samples).toFixed(2)}, a block's antialiased edge); its --ink-2 outlines' 1.5 px strokes ${(e3 * 100).toFixed(1)} % (lowest ${Math.min(...edges).toFixed(2)})`);
+    // the planned fill inside the outlines (HOUSE 11.1 rule 7): from each outline's top down to the runs, --ink-2 at
+    // 14 % over the plate, light, and apart from the runs; this week's only above what was run
+    const INKC = scheme === 'light' ? [0x45, 0x55, 0x5d] : [0xa3, 0xb1, 0xb6], tint = over(INKC, PLAN_FILL, SHEET), tints = [];
     const BT = B.tints || [], okT = BT.length === B.outlines.length && BT.every(([x, y, wd, h], k) => { const o = B.outlines[k], i = B.columns.findIndex((c) => c.target != null) + k, ink = B.base - Math.round(sums[i] * B.scale); return x === o[0] && y === o[1] && wd === o[2] && h === Math.min(o[3], ink - o[1]); });
     for (const [x, y, wd, h] of BT) for (let xx = x + 3; xx < x + wd - 3; xx += 2) for (let yy = y + 3; yy < y + h - 2; yy += 2) tints.push(img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)));
     const atT = tints.filter((p) => near(p, tint)).length / (tints.length || 1);
-    check(okT && atT >= 0.9 && contrast(tint, PAGE) >= 1.2 && contrast(tint, PAGE) < 2 && contrast(INKC, tint) >= 3,
-      `the Block's planned weeks: ${BT.length} tints from each outline's top down to the ink (this week's ${(BT.find((tn) => tn[0] === B.outlines[0][0]) || [])[3]} px above its ${sums[B.now].toFixed(1)} km); ${tints.length} samples inside them, ${(atT * 100).toFixed(1)} % at the tint rgb(${tint}) (the race's rule crosses one), ${contrast(tint, PAGE).toFixed(2)}:1 on the page, the ink ${contrast(INKC, tint).toFixed(2)}:1 against it`);
+    check(okT && atT >= 0.9 && contrast(tint, SHEET) >= 1.2 && contrast(tint, SHEET) < 2 && contrast(DONE, tint) >= 3,
+      `the Block's planned weeks: ${BT.length} fills from each outline's top down to the runs (this week's ${(BT.find((tn) => tn[0] === B.outlines[0][0]) || [])[3]} px above its ${sums[B.now].toFixed(1)} km); ${tints.length} samples inside them, ${(atT * 100).toFixed(1)} % at the fill rgb(${tint}) (the race's rule crosses one), ${contrast(tint, SHEET).toFixed(2)}:1 on the plate (HOUSE 11.2: ${scheme === 'light' ? '1.23' : '1.31'}), the runs ${contrast(DONE, tint).toFixed(2)}:1 against it`);
+    const bk = await w(() => [...document.querySelectorAll('.blocksec .pkey span')].map((x) => [x.className, x.textContent]));
+    check(JSON.stringify(bk) === JSON.stringify([['k-done', 'Run'], ['k-plan', `Planned week to ${snap.plan.goal.race.name}`]]) && !(await w(() => document.querySelector('.blocksec').textContent.includes('ink is a run'))),
+      `the Block's key in place of its sentence: ${bk.map((x) => x[1]).join(', ')} (HOUSE 11.1 rule 6)`);
     const label = await w(() => document.querySelector('.blocksec svg').getAttribute('aria-label'));
     check(label.includes(`the latest ${weekKm('2026-09-14').toFixed(1)}, ${weekKm('2026-09-21').toFixed(1)} and so far ${weekKm(now).toFixed(1)} kilometers`) && label.includes(snap.plan.goal.race.name),
       `the Block's label for VoiceOver: "${label.slice(0, 90)}…"`);
@@ -330,25 +360,39 @@ for (const scheme of schemes) {
     const want14 = weekKm('2026-09-14');
     const xb = await xInside(w);
     check(xb && xb.ok, `the Block's card: its ✕ drawn inside its button (mark at ${xb && xb.at}, button at ${xb && xb.btn})`);
-    check(card.c && card.c.place === 'Week of 14 Sep 2026' && card.c.value === want14.toFixed(1) && card.live === `Week of 14 September 2026. ${want14.toFixed(1)} kilometers in 6 runs, longest 24.0 kilometers.` && card.r.top >= sv.bottom - 1,
-      `the Block's card: "${card.c && card.c.place}", ${card.c && card.c.value} km (this file ${want14.toFixed(1)}), hung from the chart's foot, said once: "${card.live}"`);
+    const colR = await w(() => { const c = [...document.querySelectorAll('.blocksec svg rect')].find((r) => r.getAttribute('opacity') === '0.07'); return c && c.getBoundingClientRect().toJSON(); });
+    const clear = colR && !(card.r.left < colR.right && colR.left < card.r.right && card.r.top < colR.bottom && colR.top < card.r.bottom);
+    check(card.c && card.c.place === 'Week of 14 Sep 2026' && card.c.value === want14.toFixed(1) && card.live === `Week of 14 September 2026. ${want14.toFixed(1)} kilometers in 6 runs, longest 24.0 kilometers.` && clear,
+      `the Block's card: "${card.c && card.c.place}", ${card.c && card.c.value} km (this file ${want14.toFixed(1)}), clear of the tapped week (HOUSE 4.7; ${card.r.top >= sv.bottom - 1 ? 'hung from the chart\'s foot' : 'inside the chart'}), said once: "${card.live}"`);
     await A.shot(`block-card-${scheme}`, false);
     await A.tapAt(5, 300);
   }
 
-  // the Now table (the owner, 2026-10-03): the short facts are the pane's first section, the app's four and
-  // the evaluation's short metrics, their values on one left edge; the Block follows; nothing long in the demo
+  // Now opens on the week (HOUSE 11.1 rule 2): its kilometers at 34 px against the plan, as this file sums them, a bar
+  // and its key, the tone word in its color with the verdict under it; then the facts as tiles; then the Block
   {
+    const now = monday('2026-10-01'), h = snap.plan.horizon.find((x) => x.w === now), km = weekKm(now), a = snap.assessment;
     const n = await w(() => {
-      const t = document.querySelector('#pane > .sec:first-child > dl.tab');
-      return { t: !!t, block: !!document.querySelector('#pane > .sec:nth-child(2).blocksec'), labels: t ? [...t.querySelectorAll('dt')].map((d) => d.textContent) : [],
-        v: t ? t.querySelector('dd').textContent : '', lefts: t ? [...t.querySelectorAll('dd')].map((d) => Math.round(d.getBoundingClientRect().left)) : [], long: document.querySelectorAll('#pane dl.long .fact').length };
+      const kids = [...document.querySelectorAll('#pane > *')].map((e) => e.className), hd = document.querySelector('#pane > .headline');
+      const tone = hd.querySelector('.tone b'), bar = hd.querySelector('.pbar i'), t = document.querySelector('#pane > .tilesec > dl.tiles');
+      return { kids: kids.slice(0, 3), what: hd.querySelector('.hl-what').textContent, tag: hd.querySelector('.hl-what').tagName, fig: hd.querySelector('.hl-fig').textContent, figPx: getComputedStyle(hd.querySelector('.hl-fig')).fontSize,
+        lead: (hd.querySelector('.hl-lead') || {}).textContent, bar: bar && bar.getBoundingClientRect().width / bar.parentElement.getBoundingClientRect().width, barColor: bar && getComputedStyle(bar).backgroundColor,
+        key: [...hd.querySelectorAll('.pkey span')].map((x) => x.textContent), tone: tone && tone.textContent, toneColor: tone && getComputedStyle(tone).color, text: (hd.querySelector('.tone-text') || {}).textContent,
+        rest: tone && getComputedStyle(tone.parentElement).color, labels: t ? [...t.querySelectorAll('dt')].map((d) => d.textContent) : [], v: t ? t.querySelector('dd b').textContent : '', vPx: t && getComputedStyle(t.querySelector('dd b')).fontSize,
+        lefts: t ? [...new Set([...t.querySelectorAll('dd')].map((d) => Math.round(d.getBoundingClientRect().left)))] : [], long: document.querySelectorAll('#pane dl.long .fact').length };
     });
+    const toneWord = { good: 'On track.', warning: 'Watch.', serious: 'Act now.', critical: 'Stop.', neutral: 'Note.' }[a.tone], toneTok = { good: REG.up, warning: REG.watch, serious: REG.down, critical: REG.down }[a.tone];
     const pd = `${Number(snap.dataThrough.slice(8))} ${MON[Number(snap.dataThrough.slice(5, 7)) - 1]}`, d0 = ymd(t(snap.dataThrough) - 6 * DAY);
-    const run7 = snap.activities.filter((a) => a.sport === 'run' && a.d >= d0 && a.d <= snap.dataThrough).reduce((s, a) => s + running(a), 0);
-    const want = [`Run, 7 days to ${pd}`, `Run, 28 days to ${pd}`, 'Garmin status', 'VO₂ max', ...snap.assessment.metrics.map((m) => siLabel(m.label))];
-    check(n.t && n.block && JSON.stringify(n.labels) === JSON.stringify(want) && n.v.startsWith(`${run7.toFixed(1)}${NN}km`) && new Set(n.lefts).size === 1 && n.long === 0,
-      `Now: the pane opens on a table of ${n.labels.length} short facts (${n.labels.join('; ')}), the first ${run7.toFixed(1)} km as this file sums it, every value at x ${n.lefts[0]}; the Block second; no long fact in this snapshot`);
+    const run7 = snap.activities.filter((x) => x.sport === 'run' && x.d >= d0 && x.d <= snap.dataThrough).reduce((q, x) => q + running(x), 0);
+    const want = [`Run, 7 days to ${pd}`, `Run, 28 days to ${pd}`, 'Garmin status', 'VO₂ max', ...a.metrics.map((m) => siLabel(m.label))];
+    check(JSON.stringify(n.kids) === JSON.stringify(['sec headline', 'sec tilesec', 'sec blocksec']) && n.tag === 'H2' && n.what === `Week of 28 Sep, data to ${pd}` && n.fig === `${km.toFixed(1)}${NN}km` && n.figPx === '34px'
+      && n.lead === `of ${h.km}${NN}km planned` && Math.abs(n.bar - Math.min(1, km / h.km)) < 0.01 && n.barColor === rgbS(REG.done) && n.key.join() === 'Done,Planned',
+      `Now opens on the week: "${n.what}" (its label the pane's first heading), ${n.fig} at ${n.figPx} (this file ${km.toFixed(1)} km), "${n.lead}" (the plan's ${h.km}), a bar ${Math.round(n.bar * 100)} % in --done, its key ${n.key.join(', ')}; then the tiles, then the Block`);
+    const inkC = await w(() => getComputedStyle(document.querySelector('h1')).color);
+    check(n.tone === toneWord && n.toneColor === rgbS(toneTok) && n.rest === inkC && n.text === a.headline,
+      `the tone under it: "${n.tone}" in ${toneTok} (HOUSE 11.3), the verdict's sentence after it in ink: "${(n.text || '').slice(0, 50)}…"`);
+    check(JSON.stringify(n.labels) === JSON.stringify(want) && n.v === `${run7.toFixed(1)}${NN}km` && n.vPx === '19px' && n.lefts.length === 2 && n.long === 0,
+      `the facts as two-column tiles (${n.labels.length}: ${n.labels.join('; ')}), the first ${n.v} at ${n.vPx} as this file sums it, values on two left edges (${n.lefts.join(', ')} px); no long fact in this snapshot`);
   }
 
   // a chart's card on Training: this week's running against this file's sum, clear of the tapped bar
@@ -544,10 +588,10 @@ for (const scheme of schemes) {
       if (!q) { check(false, `${title}: a planned segment to sample`); continue; }
       await page.waitForTimeout(120);
       // four points inside it, the best taken (a race's rule or an average's line may cross one)
-      const img = await A.png(), want = over(q.fill, TINT, PAGE), [bx, by, bw, bh] = q.b;
+      const img = await A.png(), want = over(q.fill, TINT, SHEET), [bx, by, bw, bh] = q.b;
       const px = [[0.3, 0.4], [0.7, 0.4], [0.3, 0.6], [0.7, 0.6]].map(([fx, fy]) => img.at(Math.round((bx + bw * fx) * 2), Math.round((by + bh * fy) * 2))).sort((m, k) => Math.max(...m.map((v, i) => Math.abs(v - want[i]))) - Math.max(...k.map((v, i) => Math.abs(v - want[i]))))[0];
       const ok = near(px, want) && contrast(q.fill, px) >= 3 && q.done;
-      check(ok, `${title}: a planned segment ${Math.round(q.h)} px tall, inside rgb(${px}) for rgb(${want}) (its rgb(${q.fill}) at 20 % over the page), ${contrast(px, PAGE).toFixed(2)}:1 on the page; the done segment of its color ${contrast(q.fill, px).toFixed(2)}:1 against it`);
+      check(ok, `${title}: a planned segment ${Math.round(q.h)} px tall, inside rgb(${px}) for rgb(${want}) (its rgb(${q.fill}) at 20 % over its plate), ${contrast(px, SHEET).toFixed(2)}:1 on the plate; the done segment of its color ${contrast(q.fill, px).toFixed(2)}:1 against it`);
     }
     const zb = await w(() => { const s = document.querySelector('.zbar.plan span'), l = document.querySelector('.legend i.plan'); return [s && getComputedStyle(s).backgroundColor, l && getComputedStyle(l).backgroundColor]; });
     check(zb.every((c2) => c2 && /\/ 0\.2\)|, 0\.2\)$/.test(c2)), `the plan's zone bars in the week rows and the legend's planned swatch: their outline's color at 20 % inside (${zb.join('; ')})`);
@@ -555,21 +599,21 @@ for (const scheme of schemes) {
   }
   await closeOut(A, scheme);
 
-  // a long fact (a metric whose note runs on, as the owner's coaching routine writes them) stays below, under
-  // the verdict, as a label over its prose, left-aligned and wrapped, never right-aligned prose in the table
+  // a long fact (a metric whose note runs on, as the owner's coaching routine writes them) goes on its own plate
+  // after the Block, as a label over its prose, left-aligned and wrapped, never a tile
   {
     const s = JSON.parse(raw), LONG = 'The down week, as it closed';
     s.assessment.metrics.push({ label: LONG, value: '45.9 km', note: 'Against the 46 km written: on target to the kilometer. The long run moved to Saturday, so the week ended a day early, and by load it reads as written.' });
     override = { '/data/snapshot.json': { body: JSON.stringify(s) } };
     const L = await open(scheme);
     const q = await L.w((label) => {
-      const lg = document.querySelector('#pane > dl.long'), f = lg && [...lg.querySelectorAll('.fact')].find((x) => x.querySelector('dt').textContent === label), dd = f && f.querySelector('dd');
-      const tab = [...document.querySelectorAll('#pane dl.tab dt')].map((d) => d.textContent), pr = document.getElementById('pane').getBoundingClientRect(), r = dd && dd.getBoundingClientRect();
-      return { found: !!dd, after: lg && lg.previousElementSibling && lg.previousElementSibling.matches('p.verdict'), inTab: tab.includes(label), n: tab.length,
-        align: dd && getComputedStyle(dd).textAlign, lines: r ? Math.round(r.height / parseFloat(getComputedStyle(dd).lineHeight)) : 0, inside: r && r.right <= pr.right - 15 && r.left >= pr.left + 15 };
+      const lg = document.querySelector('#pane > .longsec > dl.long'), f = lg && [...lg.querySelectorAll('.fact')].find((x) => x.querySelector('dt').textContent === label), dd = f && f.querySelector('dd');
+      const tab = [...document.querySelectorAll('#pane dl.tiles dt')].map((d) => d.textContent), pr = lg && lg.parentElement.getBoundingClientRect(), r = dd && dd.getBoundingClientRect();
+      return { found: !!dd, after: lg && lg.parentElement.previousElementSibling && lg.parentElement.previousElementSibling.matches('.blocksec'), inTab: tab.includes(label), n: tab.length,
+        align: dd && getComputedStyle(dd).textAlign, lines: r ? Math.round(r.height / parseFloat(getComputedStyle(dd).lineHeight)) : 0, inside: r && r.right <= pr.right - 12 && r.left >= pr.left + 12 };
     }, LONG);
     check(q.found && q.after && !q.inTab && q.n === 8 && q.align === 'left' && q.lines >= 2 && q.inside,
-      `a long fact ("${LONG}…"): below the verdict, not in the table (still ${q.n} short facts), a label over ${q.lines} lines of left-aligned prose inside the pane's gutters`);
+      `a long fact ("${LONG}…"): on its own plate after the Block, not a tile (still ${q.n} tiles), a label over ${q.lines} lines of left-aligned prose inside its plate's padding`);
     await L.shot(`now-long-fact-${scheme}`, false);
     override = {};
     await closeOut(L, `${scheme}, a long fact`);
@@ -589,8 +633,8 @@ console.log('\n== once');
     for (let y = 633; y >= 295; y -= 13) { await A.touch('touchMove', 195, y); await page.waitForTimeout(16); }
     await A.touch('touchEnd');
     await page.waitForTimeout(400);
-    const after = await w(() => [document.getElementById('main').scrollTop, scrollY, document.getElementById('head').getBoundingClientRect().top, document.getElementById('band').getBoundingClientRect().bottom]);
-    check(after[0] > before[0] + 150 && after[1] === 0 && after[2] === 0 && Math.abs(after[3] - 844) < 1, `the camera's drag (75 % to 35 %) scrolls the pane by ${after[0] - before[0]} px; the page stays, the header and the caption band hold`);
+    const after = await w(() => [document.getElementById('main').scrollTop, scrollY, document.getElementById('head').getBoundingClientRect().top, document.getElementById('main').getBoundingClientRect().bottom]);
+    check(after[0] > before[0] + 150 && after[1] === 0 && after[2] === 0 && Math.abs(after[3] - 844) < 1, `the camera's drag (75 % to 35 %) scrolls the pane by ${after[0] - before[0]} px; the page stays, the header holds and the pane runs to the screen's foot (${after[3]} px)`);
     await w(() => { document.getElementById('main').scrollTop = 0; });
   }
   // the tabs by keyboard: an arrow chooses the next pane and says its name once
@@ -606,15 +650,26 @@ console.log('\n== once');
     const s = await A.rect('#stamp');
     await A.tapAt(s.left + 20, s.top + s.height / 2);
     await page.waitForTimeout(400);
-    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main', 'band'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id, credit: document.getElementById('about-credit-line').textContent,
       text: document.querySelector('.about-body').textContent.replace(/\s+/g, ' '), routes: !document.getElementById('about-routes').hidden && document.getElementById('about-routes').textContent.startsWith('Routes: © OpenStreetMap contributors, under the Open Database License 1.0'), list: [...document.querySelectorAll('#about-list dt')].map((d) => d.textContent) }));
     check(a.open && a.inert && a.focus === 'about-close' && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.')
-      && a.text.includes('Map services and data available from U.S. Geological Survey, National Geospatial Program.') && a.text.includes('as the coaching routine wrote it on 30 Sep 2026') && a.list.includes('Stale after:') && a.routes,
-      `About opens from the stamp, focus on Close, the rest inert; the font's, the tiles' and the demo routes' OpenStreetMap credits (the lead's ruling), the plan's date, This data (${a.list.length} lines)`);
+      && a.text.includes('Map services and data available from U.S. Geological Survey, National Geospatial Program.') && a.text.includes('as the coaching routine wrote it on 30 Sep 2026') && a.list.includes('Stale after:') && a.routes && a.credit === CREDITS,
+      `About opens from the stamp, focus on Close, the rest inert; the credit "${a.credit}" first under Sources and credits; the font's, the tiles' and the demo routes' OpenStreetMap credits (the lead's ruling), the plan's date, This data (${a.list.length} lines)`);
     await A.shot('about-light');
     await page.keyboard.press('Escape');
     await page.waitForTimeout(150);
     check(await w(() => document.getElementById('about').hidden && document.activeElement.id === 'stamp' && !document.getElementById('main').inert), 'About closes on Escape; focus returns to the stamp');
+    // the About key at the pane's end, by touch: About opens, and closing it returns focus to the key
+    await w(() => { const m = document.getElementById('main'); m.scrollTop = m.scrollHeight; });
+    await page.waitForTimeout(200);
+    const kb = await A.rect('#pane > .aboutlink');
+    await A.tapAt(kb.left + 30, kb.top + kb.height / 2);
+    await page.waitForTimeout(400);
+    const ok1 = await w(() => !document.getElementById('about').hidden && document.activeElement.id === 'about-close');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(150);
+    check(ok1 && await w(() => document.getElementById('about').hidden && document.activeElement.className === 'aboutlink'), `the key "${ABOUT_KEY}" at the pane's end, tapped: About opens; Escape brings focus back to the key`);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
   }
   // hidden and back: the snapshot is read again and the pane stays
   {
@@ -641,7 +696,7 @@ console.log('\n== once');
     await page.waitForTimeout(600);
     const s = await w(() => ({ redrawn: !document.querySelector('#pane [data-old]'), stamp: document.getElementById('stamp').textContent, top: document.getElementById('main').scrollTop,
       open: [...document.querySelectorAll('#pane details[open]')].map((d) => d.firstChild.textContent) }));
-    check(s.redrawn && s.stamp.startsWith('Updated 30 Sep, 21:20') && JSON.stringify(s.open) === JSON.stringify(open) && Math.abs(s.top - 300) < 2,
+    check(s.redrawn && s.stamp.startsWith('Example data. Updated 30 Sep, 21:20') && JSON.stringify(s.open) === JSON.stringify(open) && Math.abs(s.top - 300) < 2,
       `back on screen with a changed file ("${s.stamp}"): the pane drawn again (${s.redrawn}), its ${s.open.length} open folds kept by their words (${s.open.map((x) => `"${x.slice(0, 18)}"`).join(', ')}) and its scroll (${s.top} px)`);
     override = {};
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
@@ -670,11 +725,17 @@ console.log('\n== once');
     await A.pane('Sessions');
     await page.locator('.sess', { hasText: 'Easy run' }).first().click();   // the newest session with a route (Intervals has no record stream)
     await page.waitForTimeout(900);
-    const m = await w(() => ({ svg: !!document.querySelector('.mapwrap svg path'), words: [...document.querySelectorAll('[aria-label="Route colors"] button')].map((b) => b.textContent),
-      cap: [...document.querySelectorAll('.sec .cap')].map((c) => c.textContent).find((x) => x.startsWith('Start is the filled dot')) || '', fig: document.querySelector('.sessdetail .fig').textContent }));
+    const m = await w(() => {
+      const sec = document.querySelector('.mapwrap').closest('.sec'), fold = sec.querySelector('.howto'), credit = sec.querySelector('.mapcredit');
+      return { svg: !!document.querySelector('.mapwrap svg path'), words: [...document.querySelectorAll('[aria-label="Route colors"] button')].map((b) => b.textContent),
+        cap: fold ? [...fold.querySelectorAll('p')].map((c) => c.textContent).find((x) => x.startsWith('Start is the filled dot')) || '' : '', fig: document.querySelector('.sessdetail .hl-fig').textContent, figPx: getComputedStyle(document.querySelector('.sessdetail .hl-fig')).fontSize,
+        credit: credit && credit.textContent, after: credit && credit.previousElementSibling && credit.previousElementSibling.classList.contains('mapwrap'), creditPx: credit && getComputedStyle(credit).fontSize,
+        creditH: credit && credit.getBoundingClientRect().height / parseFloat(getComputedStyle(credit).lineHeight), tiles: /Map tiles/.test(document.getElementById('pane').innerText) };
+    });
     const a = [...snap.activities].reverse().find((x) => x.name === 'Easy run');
-    check(m.svg && m.words[0] === 'Heart-rate zone' && m.words.includes('Pace') && m.fig === `${running(a).toFixed(1)}${NN}km` && m.cap.endsWith('Map tiles: USGS The National Map. Route: © OpenStreetMap contributors, ODbL.'),
-      `the route: ${m.words.join(', ')}; the session's figure ${m.fig} (this file ${running(a).toFixed(1)} km); its caption ends "${m.cap.slice(-75)}"`);
+    check(m.svg && m.words[0] === 'Heart-rate zone' && m.words.includes('Pace') && m.fig === `${running(a).toFixed(1)}${NN}km` && m.figPx === '34px' && m.cap.startsWith('Start is the filled dot')
+      && m.credit === 'Route: © OpenStreetMap contributors, ODbL.' && m.after && m.creditPx === '10.5px' && m.creditH < 1.5 && !m.tiles,
+      `the route: ${m.words.join(', ')}; the session's key number ${m.fig} at ${m.figPx} (this file ${running(a).toFixed(1)} km); How to read it holds "${m.cap.slice(0, 40)}…"; under the map one ${m.creditPx} line (${m.creditH.toFixed(2)} lines tall), "${m.credit}", and no Map tiles credit on the pane (HOUSE 4.15 exception 1)`);
     await page.getByRole('button', { name: 'Pace', exact: true }).click();
     await page.waitForTimeout(300);
     const r = await w(() => [...document.querySelectorAll('.ramp span')].map((s) => s.textContent));
@@ -691,7 +752,7 @@ console.log('\n== once');
       const mmss = (m) => { let mm = Math.floor(m), s = Math.round((m - mm) * 60); if (s === 60) { mm++; s = 0; } return `${mm}:${String(s).padStart(2, '0')}`; };
       const g = await w(() => ({ stops: getComputedStyle(document.querySelector('.ramp i')).backgroundImage.match(/rgb\([^)]+\)/g).map((c) => c.match(/\d+/g).map(Number)),
         segs: [...document.querySelectorAll('.mapwrap > svg path[stroke-width="4"]')].map((p) => [p.getAttribute('stroke').match(/\d+/g).map(Number), (p.getAttribute('d').match(/L/g) || []).length]),
-        cap: [...document.querySelectorAll('.sec .cap')].map((c) => c.textContent).find((x) => x.startsWith('Start is the filled dot')) || '' }));
+        cap: [...document.querySelectorAll('.sec .howto p')].map((c) => c.textContent).find((x) => x.startsWith('Start is the filled dot')) || '' }));
       // each drawn color's place on the ramp: projected onto the nearest of its eight sRGB segments, then the nearest stop
       const at = (c) => {
         let best = [Infinity, 0];
@@ -759,12 +820,33 @@ console.log('\n== once');
   }
   await closeOut(A, 'once');
 }
-// the stale stamp: two days after the snapshot, a sentence in ink, never a color (B1)
+// the stamp: Example data. on the template's own sessions whatever the clock, in place of Stale. (HOUSE 11.1 rule 8);
+// Stale. proven on a copy whose ids are a real pull's (demo- rewritten real-), two days on, a sentence in ink (B1);
+// each form on one line (HOUSE 7.2). The real copy's streams do not exist under their new ids, so no session is opened.
 {
   const A = await open('light', { time: '2026-10-03T12:00:00Z' });
   const s = await A.w(() => { const e = document.querySelector('#stamp .stale'); return { text: document.getElementById('stamp').textContent, ink: e && getComputedStyle(e).color === getComputedStyle(document.querySelector('h1')).color }; });
-  check(s.text === `Stale. ${STAMP}` && s.ink, `B1: more than 48 hours on, the stamp reads "${s.text}", the word in ink`);
-  await closeOut(A, 'stale');
+  check(s.text === `Example data. ${STAMP}` && s.ink, `the example two days on: "${s.text}", Example data. in ink in place of Stale. (an example never refreshes)`);
+  await stampCheck(A, 'the example, two days on');
+  await closeOut(A, 'example, two days on');
+  override = { '/data/snapshot.json': { body: realCopy() } };
+  const B = await open('light', { time: '2026-10-03T12:00:00Z' });
+  const r = await B.w(() => { const e = document.querySelector('#stamp .stale'); return { text: document.getElementById('stamp').textContent, ink: e && getComputedStyle(e).color === getComputedStyle(document.querySelector('h1')).color }; });
+  check(r.text === `Stale. ${STAMP}` && r.ink, `B1: a real pull's copy more than 48 hours on: "${r.text}", the word in ink`);
+  await stampCheck(B, 'stale, a real copy');
+  await closeOut(B, 'stale, a real copy');
+  const C = await open('light', { time: '2026-09-30T19:00:00Z' });
+  const f = await C.w(() => document.getElementById('stamp').textContent);
+  check(f === `Updated ${hm(gen)}, last session ${lastDay[2]} ${MON[lastDay[1] - 1]}`, `a real copy on the pull's own day: "${f}"`);
+  await stampCheck(C, 'fresh, a real copy');
+  await closeOut(C, 'fresh, a real copy');
+  override = { '/data/snapshot.json': { body: realCopy(), delay: 1500 } };
+  const D = await open('light', { noWait: true });
+  check(await D.w(() => document.getElementById('stamp').textContent) === 'Reading the data…', 'the loading line, before the file is read');
+  await stampCheck(D, 'loading');
+  await D.page.waitForFunction(ready, null, { timeout: 30000 });
+  await closeOut(D, 'stamp loading');
+  override = {};
 }
 // three weeks after the pull: days the data never saw are not shown as days without running
 {
@@ -772,13 +854,13 @@ console.log('\n== once');
   const { w } = A;
   const pullDay = ymd(gen.getTime()), d0 = ymd(t(pullDay) - 6 * DAY);
   const run7 = snap.activities.filter((a) => a.sport === 'run' && a.d >= d0 && a.d <= pullDay).reduce((s, a) => s + running(a), 0);
-  const n = await w(() => ({ fig: document.querySelector('.figure .fig-what').textContent, f1: document.querySelector('.fact').textContent, B: window.__rd.block() }));
+  const n = await w(() => ({ fig: document.querySelector('.headline .hl-what').textContent, f1: document.querySelector('.tilesec .fact').textContent, B: window.__rd.block() }));
   const pd = `${Number(pullDay.slice(8))} ${MON[Number(pullDay.slice(5, 7)) - 1]}`;
   const later = n.B.columns.slice(n.B.now + 1).map((c) => c.week), plan = snap.plan.horizon.map((h) => h.w);
   check(n.fig === `Week of 28 Sep, data to ${pd}` && n.f1.startsWith(`Run, 7 days to ${pd}${run7.toFixed(1)}`) && n.B.columns[n.B.now].week === monday(pullDay) && later.every((x) => plan.includes(x)) && n.B.columns.slice(0, n.B.now + 1).every((c) => c.target == null || c.week === monday(pullDay)),
     `21 days on: "${n.fig}", "${n.f1.slice(0, 40)}" (this file ${run7.toFixed(1)} km), the Block's last ink in the pull's week (${n.B.columns[n.B.now].week}), every later column the plan's`);
   await A.pane('Plan');
-  const p = await w(() => document.querySelector('.figure').textContent);
+  const p = await w(() => document.querySelector('.headline .hl').textContent);
   const days = Math.round((t(snap.plan.goal.race.date) - t('2026-10-21')) / DAY);
   check(p.startsWith(`Race day${days} days`), `21 days on, race day still counts from the phone: "${p.slice(0, 20)}" (${days} days)`);
   await A.pane('Health');
@@ -809,21 +891,26 @@ for (const [label, ov, want] of [
   await closeOut(A, `broken data, ${label}`);
 }
 override = {};
-// the widths: no sideways scroll, the caption line inside its fixed height, a phone on its side
-for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['125 % text (312 × 675)', 312, 675], ['on its side (844 × 390)', 844, 390]]) {
+// the widths: no sideways scroll, a phone on its side, a wide screen with the header centered on the pane's column
+for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['125 % text (312 × 675)', 312, 675], ['on its side (844 × 390)', 844, 390], ['wide (1024 × 768)', 1024, 768]]) {
   const A = await open('light', { w: wv, h: hv });
   const r = [];
   for (const name of PANES) {
     await A.pane(name);
     r.push(await A.w(() => {
-      const m = document.getElementById('main'), cap = document.getElementById('capline');
-      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.scrollHeight <= cap.clientHeight + 1, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height };
+      const m = document.getElementById('main'), plate = document.querySelector('#pane > .sec');
+      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+        at: [document.querySelector('h1').getBoundingClientRect().left, plate.getBoundingClientRect().left, plate.getBoundingClientRect().right] };
     }));
   }
-  const side = r.filter((x) => x.side).length, cap = r.filter((x) => !x.cap).length;
-  const land = wv > hv ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
-  check(side === 0 && cap === 0 && land, `${label}: no sideways scroll on any pane, the caption line inside its height on every pane${wv > hv ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
-  if (wv > hv) {
+  const side = r.filter((x) => x.side).length;
+  const land = wv > hv && hv < 500 ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
+  const along = r.every((x) => Math.abs(x.at[0] - x.at[1]) < 0.5 && (wv <= 760 || Math.abs((x.at[1] + x.at[2]) / 2 - wv / 2) < 1));
+  check(side === 0 && land && along, `${label}: no sideways scroll on any pane, the name starting where the pane's first plate does (${Math.round(r[0].at[0])} and ${Math.round(r[0].at[1])} px${wv > 760 ? `; the column ${Math.round(r[0].at[1])} to ${Math.round(r[0].at[2])} of ${wv} px, centered` : ''})${land && wv > hv && hv < 500 ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
+  await A.pane('Now');
+  if (wv === 320) await A.shot('now-320-light', false);
+  if (wv === 1024) await A.shot('now-wide-light', false);
+  if (wv > hv && hv < 500) {
     await A.shot('now-landscape-light', false);
     // the filters held over a pane on its side: they count against it as the header does
     await A.pane('Training');
@@ -833,6 +920,44 @@ for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740
     await A.shot('training-landscape-light', false);
   }
   await closeOut(A, label);
+}
+// the scrub race (plan 0011's owed item; Finances' check): a finger slides along Weekly running volume by real touch,
+// 3 px and then 9 px a move; after every move the page must have received it (window.__fx) before the card is read,
+// then one frame; the card names the week under the finger every time. Run again with a mouse resting on the chart, a
+// second pointer that must neither move nor end the finger's read (a chart follows only the pointer reading it).
+{
+  const A = await open('light');
+  const { page, w } = A;
+  await A.pane('Training');
+  await w(() => { document.querySelector('.sec .chartwrap svg').scrollIntoView({ block: 'center' }); });
+  await page.waitForTimeout(250);
+  const s = await A.rect('.sec .chartwrap svg');
+  const weekAt = async () => w(() => {
+    const col = document.querySelector('.sec .chartwrap svg rect[opacity="0.07"]'), c = window.__rd.card();
+    const r = col && col.getBoundingClientRect();
+    return { l: r ? r.left : null, r: r ? r.right : null, place: c && c.place };
+  });
+  for (const [step, mouse] of [[3, false], [9, false], [9, true]]) {
+    await w(() => { window.__fx = null; if (!window.__fxOn) { window.__fxOn = 1; document.addEventListener('pointermove', (e) => { if (e.pointerType === 'touch') window.__fx = e.clientX; }, true); } });
+    if (mouse) { await page.mouse.move(s.left + s.width * 0.5, s.top + 20); await page.waitForTimeout(100); }
+    const y = s.top + s.height * 0.6, x0 = s.left + 50, x1 = s.right - 14;
+    let right = 0, wrong = [], late = 0;
+    await A.touch('touchStart', x0, y);
+    for (let x = x0 + 10; x <= x1; x += step) {
+      await A.touch('touchMove', x, y);
+      const got = await w((v) => new Promise((res) => { const t0 = performance.now(), go = () => (window.__fx === v ? res(true) : performance.now() - t0 > 500 ? res(false) : requestAnimationFrame(go)); go(); }), x);
+      if (!got) { late++; continue; }
+      await w(() => new Promise((r) => requestAnimationFrame(r)));
+      const q = await weekAt();
+      if (q.l != null && q.place && x >= q.l - 1 && x <= q.r + 1) right++; else wrong.push(`${Math.round(x)}:${q.place}`);
+    }
+    await A.touch('touchEnd');
+    await page.waitForTimeout(200);
+    check(wrong.length === 0 && late === 0 && right > 10, `the scrub race, ${step} px a move${mouse ? ', a mouse resting on the chart' : ''}: ${right} right, ${wrong.length} wrong, ${late} moves the page never received${wrong.length ? ': ' + wrong.slice(0, 4).join(' ') : ''}`);
+    await A.tapAt(5, 300);
+    await page.waitForTimeout(150);
+  }
+  await closeOut(A, 'the scrub race');
 }
 
 const after = hashOf(appPng);

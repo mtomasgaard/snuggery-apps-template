@@ -2,7 +2,8 @@
 // against the app's pure modules js/score.js, js/shutters.js and js/units.js. The art pass changes no scoring;
 // this proves it, and it is the guard PROMPT.md asked for: the app's scorer compared, row by row, with the
 // snapshot's `ask` table that scripts/outdoor_window.py wrote, without touching the pipeline (ART.md
-// section 1; tools/DECISIONS.md, item 13).
+// section 1; tools/DECISIONS.md, item 13). The figures pinned below are the demo forecast's as refreshed on 2026-10-08
+// (Boston Common, Thu 8 to Sat 10 Oct; plan 0012 package 4, plan 0011's owed item 1).
 //
 //   node tools/test_shutters.mjs
 
@@ -80,13 +81,13 @@ const app = SC.scoreHours(snap, rules), here = mine(snap, rules);
   ok(keys === 'rain,rainfall,gust,temp,dew,light' && app.every((r) => r.checks.length === 6 && r.checks.every((c) => !c.missing)), `each row's checks, in the scorer's order: ${keys}; no value missing in the shipped file`);
 }
 
-/* ── the windows, the whole file (it has run out) and from Mon 21 Sep, 12:00 in Boston ── */
+/* ── the windows, the whole file (it has run out) and from Thu 8 Oct, 12:00 in Boston ── */
 {
   const W = SC.findWindows(app, rules.minWindowHours);
   const say = (w) => `${U.placeDate(w.start.epoch, off, Date.UTC(2026, 9, 2))} ${U.placeClock(w.start.epoch, off)}–${U.placeClock(w.end.epoch + 3600e3, off)}, ${w.hours} h, best ${w.best}`;
-  ok(W.length === 2 && say(W[0]) === 'Mon 21 Sep 07:00–19:00, 12 h, best 78' && say(W[1]) === 'Tue 22 Sep 08:00–19:00, 11 h, best 85', `the whole file's windows: ${W.map(say).join('; ')} (ART.md: Mon 07:00 to 19:00, 12 hours, best 78; Tue 08:00 to 19:00, 11 hours, best 85)`);
-  const noon = Date.parse('2026-09-21T16:00:00Z'), left = app.filter((r) => r.epoch + 3600e3 > noon), W2 = SC.findWindows(left, rules.minWindowHours);
-  ok(left.length === 41 && W2.length === 2 && W2[0].start.index === 7 && W2[0].hours === 7, `at noon in Boston: ${left.length} hours left, the next window from hour ${W2[0].start.index} for ${W2[0].hours} hours`);
+  ok(W.length === 2 && say(W[0]) === 'Thu 8 Oct 12:00–14:00, 2 h, best 64' && say(W[1]) === 'Fri 9 Oct 07:00–09:00, 2 h, best 80', `the whole file's windows: ${W.map(say).join('; ')} (ART.md: Thu 12:00 to 14:00, 2 hours, best 64; Fri 07:00 to 09:00, 2 hours, best 80)`);
+  const noon = Date.parse('2026-10-08T16:00:00Z'), left = app.filter((r) => r.epoch + 3600e3 > noon), W2 = SC.findWindows(left, rules.minWindowHours);
+  ok(left.length === 44 && W2.length === 2 && W2[0].start.index === 4 && W2[0].hours === 2, `at noon in Boston: ${left.length} hours left, the next window from hour ${W2[0].start.index} for ${W2[0].hours} hours`);
 }
 
 /* ── the Shutters, recomputed here: at 390 and 320 px, and on a phone on its side ── */
@@ -95,7 +96,7 @@ const runsOf = (test) => { const out = []; for (let i = 0; i < 48; i++) if (test
 for (const [phone, width, ph, W] of [['390 px', 358, 5, 240], ['320 px', 288, 4, 192], ['on its side', 760, 12, 576], ['125 % text', 280, 4, 192], ['a 72-hour file at 390 px', 358, 274 / 72, 274]]) {
   const long = phone.startsWith('a 72');
   const rowsHere = long ? Array.from({ length: 72 }, (_, i) => ({ ...app[i % 48], epoch: app[0].epoch + i * 3600e3 })) : app;
-  const M = SH.model({ rows: rowsHere, windows: long ? [] : SC.findWindows(app, rules.minWindowHours), offset: off, now: Date.parse('2026-10-02T10:00:00Z'), width, label: LABEL, ranOut: true });
+  const M = SH.model({ rows: rowsHere, windows: long ? [] : SC.findWindows(app, rules.minWindowHours), offset: off, now: Date.parse('2026-10-20T10:00:00Z'), width, label: LABEL, ranOut: true });
   const fit = M.G.x0 + M.G.W + M.G.countW <= width + 1e-9;
   ok(Math.abs(M.G.ph - ph) < 1e-9 && Math.abs(M.G.W - W) < 1e-9 && M.G.x0 === LABEL && fit, `${phone}: ${+M.G.ph.toFixed(3)} px an hour, a ${+M.G.W.toFixed(1)} px plot from x ${M.G.x0}, the count column ${M.G.countW} px, ${+M.G.width.toFixed(1)} px in all inside ${width} (ART.md: ${long ? 'below 4 px an hour, the fraction that fits beside a 20 px count column' : `${ph}, ${W}`})`);
   if (phone !== '390 px') continue;
@@ -104,33 +105,40 @@ for (const [phone, width, ph, W] of [['390 px', 358, 5, 240], ['320 px', 288, 4,
   const H2 = here;
   const blocksOk = M.rules.every((r, k) => JSON.stringify(r.blocks.map((b) => [b.from, b.to])) === JSON.stringify(runsOf((i) => !H2[i].ok[k])) && r.hollows.length === 0);
   const day = M.rules[5].blocks.map((b) => `${b.from}–${b.to}`).join(', '), gust = M.rules[2].blocks.map((b) => `${b.from}–${b.to}`).join(', ');
-  ok(blocksOk && day === '0–1, 14–25, 38–47' && gust === '22–26, 45–45', `blocks: every rule's runs of ruled-out hours as found here; Daylight ${day} (three night slabs, 24 h), Gusts ${gust} (6 h)`);
+  ok(blocksOk && day === '11–22, 35–46' && gust === '0–3, 6–9, 25–34', `blocks: every rule's runs of ruled-out hours as found here; Daylight ${day} (two night slabs, 24 h), Gusts ${gust} (18 h)`);
+  // a bar exactly on a half pixel (12 × (1 − comfort) = n + 0.5 in exact arithmetic) may round either way by the last bit of
+  // floating point: the refreshed demo of 2026-10-08 has one, Temperature at hour 29 (3.5 px, drawn 3)
   const barsOk = M.rules.every((r, k) => {
-    const want = []; for (let i = 0; i < 48; i++) if (H2[i].ok[k]) { const h = Math.round(12 * (1 - H2[i].comfort[k])); if (h >= 1) want.push([i, h]); }
-    return JSON.stringify(r.bars.map((b) => [b.i, b.h])) === JSON.stringify(want);
+    const got = new Map(r.bars.map((b) => [b.i, b.h]));
+    for (let i = 0; i < 48; i++) {
+      const raw = H2[i].ok[k] ? 12 * (1 - H2[i].comfort[k]) : null, tie = raw != null && Math.abs((raw % 1) - 0.5) < 1e-9;
+      const want = raw == null ? [0] : tie ? [Math.floor(raw), Math.ceil(raw)] : [Math.round(raw)];
+      if (!want.includes(got.has(i) ? got.get(i) : 0)) return false;
+    }
+    return [...got.keys()].every((i) => H2[i].ok[k]);
   });
   const hist = (r) => r.bars.reduce((a, b) => ({ ...a, [b.h]: (a[b.h] || 0) + 1 }), {});
   const g = hist(M.rules[2]);
-  ok(barsOk && M.rules.map((r) => r.bars.length).join() === '1,0,42,40,47,0' && g[11] === 8 && g[12] === 2 && Math.max(...M.rules[4].bars.map((b) => b.h)) === 8 && Math.max(...M.rules[3].bars.map((b) => b.h)) === 5,
-    `bars, round(12 × (1 − comfort)) px: ${M.rules.map((r) => `${r.name} ${r.bars.length}`).join(', ')}; Gusts 8 at 11 px and 2 at 12 px; Dew point up to 8, Temperature up to 5 (ART.md)`);
+  ok(barsOk && M.rules.map((r) => r.bars.length).join() === '4,0,30,45,37,0' && g[7] === 9 && g[12] === 2 && Math.max(...M.rules[4].bars.map((b) => b.h)) === 10 && Math.max(...M.rules[3].bars.map((b) => b.h)) === 7,
+    `bars, round(12 × (1 − comfort)) px: ${M.rules.map((r) => `${r.name} ${r.bars.length}`).join(', ')}; Gusts 9 at 7 px and 2 at 12 px; Dew point up to 10, Temperature up to 7 (ART.md)`);
   const bw = [[4, 2, 0], [5, 2, 1], [12, 4, 3]].every(([p, w, x]) => { const G = SH.geometry(LABEL + p * 48 + 26, LABEL, 48, 6); return G.ph === p && G.bw === w && G.bx === x && x + w <= p - 1 && Math.abs(x + w / 2 - (p - 1) / 2) <= 0.5; });
   ok(M.rules.every((r) => r.bars.every((b) => b.h <= 12)) && SH.ROW === 16 && SH.BAR === 12 && bw, 'a bar is never as tall as a block, at most 12 px against a 16 px block; and thin, 2 px wide at 4 and 5 px an hour and 4 px at 12, centered on its hour under the tracer head');
   const sum = app.every((row, i) => { const marks = row.checks.map((c, k) => (c.ok ? 12 * (1 - c.comfort) : 12)); return Math.abs(100 - (100 * marks.reduce((a, b) => a + b, 0)) / (12 * marks.length) - (100 * row.checks.reduce((a, c) => a + c.comfort, 0)) / row.checks.length) < 1e-9; });
   ok(sum, 'every hour\'s score is 100 minus the mean of its column\'s marks as shares of 12 px, a block counting as all of them (the sentence About prints)');
-  ok(M.rules.map((r) => r.out).join() === '0,0,6,0,0,24' && M.brackets.map((b) => `${b.from}–${b.to}`).join() === '2–13,27–37', `counts at the right ${M.rules.map((r) => r.out).join(', ')}; brackets at hours ${M.brackets.map((b) => `${b.from}–${b.to}`).join(', ')}`);
-  ok(M.mids.join() === '19,43' && M.quarters.join() === '1,7,13,25,31,37' && M.nowAt === null && M.past.every((p) => !p), `the axis: midnights at hours ${M.mids.join(', ')}, 06:00, 12:00 and 18:00 at ${M.quarters.join(', ')}; the file has run out, so no now and no faint hour`);
+  ok(M.rules.map((r) => r.out).join() === '0,2,18,0,0,24' && M.brackets.map((b) => `${b.from}–${b.to}`).join() === '4–5,23–24', `counts at the right ${M.rules.map((r) => r.out).join(', ')}; brackets at hours ${M.brackets.map((b) => `${b.from}–${b.to}`).join(', ')}`);
+  ok(M.mids.join() === '16,40' && M.quarters.join() === '4,10,22,28,34,46' && M.nowAt === null && M.past.every((p) => !p), `the axis: midnights at hours ${M.mids.join(', ')}, 06:00, 12:00 and 18:00 at ${M.quarters.join(', ')}; the file has run out, so no now and no faint hour`);
   const desc = SH.describe(M, app, SC.findWindows(app, rules.minWindowHours), off);
-  ok(desc === '48 hours from Monday 21 September, 05:00. Daylight rules out 24 hours and gusts 6; rain chance, rainfall, temperature and dew point none. Windows: Monday 07:00 to 19:00, 12 hours; Tuesday 08:00 to 19:00, 11 hours.', `VoiceOver's description: "${desc}"`);
-  ok(SH.caption(M) === 'Ink: hours a rule rules out. Green: how much of its limit an hour uses. Framed gaps are windows.', `the caption: "${SH.caption(M)}"`);
+  ok(desc === '48 hours from Thursday 8 October, 08:00. Daylight rules out 24 hours, gusts 18 and rainfall 2; rain chance, temperature and dew point none. Windows: Thursday 12:00 to 14:00, 2 hours; Friday 07:00 to 09:00, 2 hours.', `VoiceOver's description: "${desc}"`);
+  ok(JSON.stringify(SH.keyItems(M)) === JSON.stringify([['blk', 'Ruled out'], ['used', 'Share of the limit'], ['frame', 'Window']]), `the key under the Shutters, in place of the band's sentence: ${SH.keyItems(M).map((k) => k[1]).join(', ')}`);
   ok(M.G.top === 1 && M.G.rb === 1 + 6 * 19 - 3 && M.G.brY === M.G.rb + 4 && M.G.base === M.G.brY + 9, `with no present in the file the rows start at y ${M.G.top}: six 16 px rows 3 px apart, their foot at ${M.G.rb}, the sills at ${M.G.brY}, the axis at ${M.G.base}`);
   ok(SH.hourAt(M, LABEL + 7 * 5 + 2) === 7 && SH.hourAt(M, LABEL - 20) === null && SH.hourAt(M, LABEL - 20, true) === 0 && SH.hourAt(M, 999, true) === 47, 'the hour under x: inside the plot its hour; on the labels nothing for a tap, the first hour for a drag; past the end the last');
 }
-// inside the file: Mon 21 Sep, 16:00 UTC, noon in Boston
+// inside the file: Thu 8 Oct, 16:00 UTC, noon in Boston
 {
-  const now = Date.parse('2026-09-21T16:00:00Z'), left = app.filter((r) => r.epoch + 3600e3 > now);
+  const now = Date.parse('2026-10-08T16:00:00Z'), left = app.filter((r) => r.epoch + 3600e3 > now);
   const M = SH.model({ rows: app, windows: SC.findWindows(left, rules.minWindowHours), offset: off, now, width: 358, label: LABEL, ranOut: false });
   const faint = M.past.filter(Boolean).length, split = M.rules[5].blocks.filter((b) => b.past).length;
-  ok(M.nowAt === 7 && faint === 7 && split === 1 && M.labels.some((l) => l.text === 'Tue 22') && M.brackets[0].from === 7 && M.G.top === 17, `at noon in Boston: now at hour ${M.nowAt}, in its own row over the stack (the rows from y ${M.G.top}), ${faint} hours faint, the first night slab drawn faint, the first window from hour ${M.brackets[0].from}; axis labels ${M.labels.map((l) => l.text).join(', ')}`);
+  ok(M.nowAt === 4 && faint === 4 && split === 0 && M.labels.some((l) => l.text === 'Fri 9') && M.brackets[0].from === 4 && M.G.top === 17, `at noon in Boston: now at hour ${M.nowAt}, in its own row over the stack (the rows from y ${M.G.top}), ${faint} hours faint (the morning, in daylight, so no night slab faint), the first window from hour ${M.brackets[0].from}; axis labels ${M.labels.map((l) => l.text).join(', ')}`);
 }
 
 /* ── a reader's own file, fetched at every hour of the day (a Shortcut's file starts at the fetch hour), in Oslo
@@ -164,9 +172,9 @@ for (const [phone, width, ph, W] of [['390 px', 358, 5, 240], ['320 px', 288, 4,
 {
   const A = SC.scoreHours(snap, { maxRainChancePct: 100 }), W = SC.findWindows(A, 2), M = SH.model({ rows: A, windows: W, offset: off, now: 0, width: 358, label: LABEL, ranOut: true });
   const d = SH.describe(M, A, W, off);
-  ok(W.length === 1 && U.placeSpan(W[0].start.epoch, W[0].end.epoch + 3600e3, off) === '05:00 to Wed 05:00' && d.endsWith('Windows: Monday 05:00 to Wednesday 05:00, 48 hours.'), `one rule that rules out nothing: one window over the whole file, "${U.placeSpan(W[0].start.epoch, W[0].end.epoch + 3600e3, off)}"; VoiceOver: "${d.slice(d.indexOf('Windows'))}"`);
+  ok(W.length === 1 && U.placeSpan(W[0].start.epoch, W[0].end.epoch + 3600e3, off) === '08:00 to Sat 08:00' && d.endsWith('Windows: Thursday 08:00 to Saturday 08:00, 48 hours.'), `one rule that rules out nothing: one window over the whole file, "${U.placeSpan(W[0].start.epoch, W[0].end.epoch + 3600e3, off)}"; VoiceOver: "${d.slice(d.indexOf('Windows'))}"`);
   const M0 = SH.model({ rows: SC.scoreHours(snap, {}), windows: [], offset: off, now: 0, width: 358, label: LABEL, ranOut: true });
-  ok(M0.rules.length === 0 && SH.caption(M0) === 'No rule is in use, so every hour is open. Framed gaps are windows.', `no rule in use: no row, and the caption says so: "${SH.caption(M0)}"`);
+  ok(M0.rules.length === 0 && JSON.stringify(SH.keyItems(M0)) === JSON.stringify([['frame', 'Window']]), `no rule in use: no row, and the key is the window alone: ${SH.keyItems(M0).map((k) => k[1]).join(', ')}`);
 }
 
 /* ── rules files with keys left out, a band missing an end, "Golden", a value missing ── */
@@ -179,14 +187,14 @@ for (const [phone, width, ph, W] of [['390 px', 358, 5, 240], ['320 px', 288, 4,
   const r2 = { ...rules, daylight: 'Golden' }, B = SC.scoreHours(snap, r2), mineB = mine(snap, r2);
   const M2 = SH.model({ rows: B, windows: [], offset: off, now: 0, width: 358, label: LABEL, ranOut: true });
   const gold = B.filter((r) => r.light === 'golden').map((r) => r.stamp.slice(11, 16)).join(' ');
-  ok(M2.rules[5].name === 'Golden hour' && B.every((r, i) => r.pass === mineB[i].pass && r.score === mineB[i].score) && SC.lightRule(r2) === 'golden' && gold === '07:00 18:00 07:00 18:00',
+  ok(M2.rules[5].name === 'Golden hour' && B.every((r, i) => r.pass === mineB[i].pass && r.score === mineB[i].score) && SC.lightRule(r2) === 'golden' && gold === '08:00 17:00 18:00 07:00 08:00 17:00 18:00 07:00',
     `"daylight": "Golden" is read ignoring case: the row is Golden hour, the golden hours ${gold}, every score as found here (B12)`);
   const s3 = clone(snap);
   s3.hourly.wind_gusts_10m[10] = null;
   s3.hourly.wind_gusts_10m[11] = null;
   const C = SC.scoreHours(s3, rules), M3 = SH.model({ rows: C, windows: [], offset: off, now: 0, width: 358, label: LABEL, ranOut: true });
-  ok(C[10].checks[2].missing && !C[10].pass && JSON.stringify(M3.rules[2].hollows.map((b) => [b.from, b.to])) === '[[10,11]]' && !M3.rules[2].blocks.some((b) => b.from <= 11 && b.to >= 10) && SH.caption(M3).includes('Hollow: no value in the file.'),
-    'a gust missing for two hours: those hours are ruled out (no data is not a pass) and drawn as one hollow block, never ink; the caption says "Hollow: no value in the file."');
+  ok(C[10].checks[2].missing && !C[10].pass && JSON.stringify(M3.rules[2].hollows.map((b) => [b.from, b.to])) === '[[10,11]]' && !M3.rules[2].blocks.some((b) => b.from <= 11 && b.to >= 10) && SH.keyItems(M3).some((k) => k[0] === 'ho' && k[1] === 'No value'),
+    'a gust missing for two hours: those hours are ruled out (no data is not a pass) and drawn as one hollow block, never ink; the key adds "No value"');
 }
 
 /* ── units: every form the screen uses ── */
@@ -201,9 +209,9 @@ for (const [phone, width, ph, W] of [['390 px', 358, 5, 240], ['320 px', 288, 4,
     [U.placeDate(Date.parse('2026-09-22T12:00:00Z'), off, Date.parse('2026-10-02T10:00:00Z')), 'Tue 22 Sep'],
     [U.placeDate(Date.parse('2026-09-22T12:00:00Z'), off, Date.parse('2027-01-05T10:00:00Z')), 'Tue 22 Sep 2026'],
     [U.spokenHour(Date.parse('2026-09-21T11:00:00Z'), off), 'Monday 21 September, 07:00'],
-    [U.stampWhen(Date.parse(snap.generatedAt), Date.parse('2026-09-21T16:00:00Z')), '11:35'],
-    [U.stampWhen(Date.parse(snap.generatedAt), Date.parse('2026-10-02T10:00:00Z')), '21 Sep, 11:35'],
-    [U.full(Date.parse(snap.generatedAt)), 'Mon 21 Sep 2026, 11:35 (UTC+2)'],
+    [U.stampWhen(Date.parse(snap.generatedAt), Date.parse('2026-10-08T16:00:00Z')), '14:47'],
+    [U.stampWhen(Date.parse(snap.generatedAt), Date.parse('2026-10-20T10:00:00Z')), '8 Oct, 14:47'],
+    [U.full(Date.parse(snap.generatedAt)), 'Thu 8 Oct 2026, 14:47 (UTC+2)'],
     [U.spokenValue(-3.5, '°C'), 'minus 3.5 degrees Celsius'], [U.spokenValue(29.2, 'km/h'), '29.2 kilometers an hour'],
     [U.placeSpan(Date.parse('2026-09-21T11:00:00Z'), Date.parse('2026-09-21T23:00:00Z'), off), '07:00–19:00'],
     [U.placeSpan(Date.parse('2026-09-22T00:00:00Z'), Date.parse('2026-09-22T04:00:00Z'), off), '20:00–24:00'],

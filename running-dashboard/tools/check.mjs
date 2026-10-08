@@ -8,9 +8,11 @@
 //      sha256 HOUSE.md and NOTES.md pin; NOTES.md, TILES.md and About credit the face word for word;
 //   5. the data is pinned: each of the 37 data files' sha256 and their concatenation's, as the data follow-up
 //      rebuilt them (scripts/make_demo_running_dashboard.py --check rebuilds them byte for byte);
-//   6. miniapp.json is valid, its name unchanged;
+//   6. miniapp.json is valid, its name unchanged, its version 1.2 (plan 0012 package 4's pass; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credits, word for word, in the band on every pane;
+//   8. the credits, word for word, as About's first paragraph under Sources and credits; no band, caption or
+//      credit line on the front; OpenStreetMap's line under a map its data drew, and no other tile credit there
+//      (HOUSE 4.15 exception 1);
 //   9. the marketing camera's strings (HOUSE.md 7.4): the panes Now and Health as tabs built after the
 //      snapshot parses, never in the static markup; the stored keys kept;
 //  10. SI: no plain space between a digit and a unit in the strings the app writes; toFixed and
@@ -18,16 +20,24 @@
 //  11. no transition anywhere, and only the house's three animations (the tracer, the card, About);
 //  12. innerHTML only ever empties (the app had 15 other uses; the pass took Global Weather's rule);
 //      no insertAdjacentHTML, outerHTML, document.write, eval or new Function;
-//  13. style.css's zone and series tokens and js/palette.js's ramp equal palette.py --json, which passes;
+//  13. style.css's zone and series tokens, the register's four (HOUSE 11.2) and js/palette.js's ramp equal
+//      palette.py --json, which passes;
 //  14. the look: the chrome tokens exactly in both themes, no accent, warning or shadow token; no
 //      box-shadow, backdrop-filter, `transition: all`, uppercase, letter-spacing, monospace; one family;
 //      no middle dot or em dash in the app's own strings; no →, ➤, ▸, ▾, ▴, ⓘ, Δ, ≈, ↑, ↓ or "..." in
-//      shipped text; both theme-color metas; the two @font-face rules; the page's language and viewport;
+//      shipped text; both theme-color metas; the two @font-face rules; the page's language and viewport; the
+//      pane apps' type scale (HOUSE 11.1 rule 2);
 //  15. the bugs on record (ART.md B1 to B17) stay fixed in the code;
-//  16. budgets: app code at most 252,000 bytes (the lead's ruling for the owner's six, plan 0011 D32, after
-//      D24's 245,000, D23's 244,000 and the 236,521 held before the build, HOUSE.md 8 and D5), fonts/ at
-//      most 160,000, the ZIP built exactly as build-zips.yml builds it at most 1,340,193 (1,072,155 × 1.25;
-//      the face replaces Geist);
+//  16. budgets: app code at most 260,000 bytes (the lead's ruling of 2026-10-08 for plan 0012 package 4, on the
+//      measured 259,002; after plan 0011 D32's 252,000 for the owner's six, D24's 245,000, D23's 244,000 and
+//      the 236,521 held before the build, HOUSE.md 8 and D5), fonts/ at
+//      most 160,000, the ZIP built exactly as build-zips.yml builds it at most 1,351,307 (the house rule for plan
+//      0012 package 4: 1,081,046 before the pass × 1.25, above the 1,340,193 of plan 0011);
+//  18. the pane-app register (HOUSE 11; plan 0012 P1 to P9 and the change list): every pane ends with the About
+//      key; the pane pads the home indicator; plates, with halos, casings, dots and slider heads in --sheet; the
+//      week's key number, its bar and key; the tone word in its color; Now's tiles; the Block in --done with the
+//      planned fill; method sentences in folds; Example data. in the stamp; the header centered with the pane;
+//      a passive touchstart listener; a chart follows only the pointer reading it;
 //  17. US spelling in every shipped text file, the data's own words allowed by file and word.
 //
 //   node tools/check.mjs
@@ -44,7 +54,7 @@ const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if 
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 252000, FONT_CAP = 160000, ZIP_CAP = 1340193; // CODE_CAP: the lead's ruling for the owner's six (plan 0011 D32; tools/DECISIONS.md, "The owner's six"): the owner's features take precedence over the house budget, for exactly those six; 245 000 for the follow-up (D24), 244 000 after the build (D23), 236 521 held before it
+const CODE_CAP = 260000, FONT_CAP = 160000, ZIP_CAP = 1351307; // ZIP_CAP: the lead's ruling for plan 0012 package 4, the house rule (1 081 046 B before the pass × 1.25, rounded down), above the app's own 1 340 193, so the cap rises to it (tools/DECISIONS.md). CODE_CAP: the lead's ruling of 2026-10-08 for plan 0012 package 4, 260 000 on the register's measured 259 002 (tools/DECISIONS.md); 252 000 before it, the lead's ruling for the owner's six (plan 0011 D32; tools/DECISIONS.md, "The owner's six"): the owner's features take precedence over the house budget, for exactly those six; 245 000 for the follow-up (D24), 244 000 after the build (D23), 236 521 held before it
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -172,7 +182,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Running Dashboard' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -186,12 +196,19 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files${named.length ? ': ' + named.join(', ') : ''}`);
 }
 
-// 8. The credits, word for word, on every pane
+// 8. The credits, word for word, as About's first Sources and credits paragraph (HOUSE 4.15; plan 0012 F1, F8)
 const CREDITS = 'Data: Garmin Connect. Coaching text: the coaching routine.';
-ok(html.includes(`<p class="credits" id="credits" translate="no">${CREDITS}</p>`) && !/\$\('credits'\)|getElementById\('credits'\)/.test(app),
-  `the credits: "${CREDITS}" in the band's static markup, written once and never changed by the code`);
-ok(/<p id="about-routes" hidden>Routes: &copy; OpenStreetMap contributors, under the Open Database License 1\.0/.test(html) && /const OSM = \(a\) => String\(a\.id\)\.startsWith\('demo-'\);/.test(app) && /Route: \$\{TILE_CREDIT\.osm\}, ODbL\./.test(app),
-  "the routes' OpenStreetMap credit (the lead's ruling, owner call 4): under every route drawn from the template's own courses and in About, keyed on the generator's demo- ids, never the word demo on screen");
+{
+  const src = html.slice(html.indexOf('<h3>Sources and credits</h3>'));
+  ok(src.startsWith(`<h3>Sources and credits</h3>\n        <p id="about-credit-line" translate="no">${CREDITS}</p>`) && html.split(CREDITS).length === 2
+    && !/id="credits"|class="credits"|id="band"|id="capline"|<footer/.test(html) && !/\$\('credits'\)|getElementById\('credits'\)|\$\('capline'\)|\$\('band'\)|'band'|function caption\(/.test(code(app, 'x.js')) && !/\.band\b|\.capline\b|\.credits\b/.test(code(css, 'x.css')),
+    `the credits: "${CREDITS}" static, byte for byte, as About's first paragraph under Sources and credits (<p id="about-credit-line">); no band, caption line or credit line on the front, nothing in the code writes one`);
+}
+ok(/<p id="about-routes" hidden>Routes: &copy; OpenStreetMap contributors, under the Open Database License 1\.0/.test(html) && /const OSM = \(a\) => String\(a\.id\)\.startsWith\('demo-'\);/.test(app)
+  && /mapcredit\.textContent = osmRoute && osmTiles \? `Route and map: \$\{TILE_CREDIT\.osm\}, ODbL\.` : osmRoute \? `Route: \$\{TILE_CREDIT\.osm\}, ODbL\.` : osmTiles \? `Map: \$\{TILE_CREDIT\.osm\}, ODbL\.` : '';/.test(app)
+  && /const osmRoute = OSM\(a\), osmTiles = drawn && sources\.has\('osm'\);/.test(app) && /if \(mapcredit\.textContent\) wrap\.after\(mapcredit\); else mapcredit\.remove\(\);/.test(app)
+  && !/Map tiles:/.test(strings(app).join('\n')) && /\.mapcredit \{ margin-top: 4px; font-size: 10\.5px; color: var\(--ink-2\); \}/.test(css),
+  "OpenStreetMap's credit (HOUSE 4.15 exception 1, owner call 4): one 10.5 px line at the foot of a map its data drew, Route:, Map: or Route and map: © OpenStreetMap contributors, ODbL., and no element otherwise; keyed on the generator's demo- ids and the tiles' own sources; no Map tiles: credit on the front (USGS and Kartverket are in About); the routes' credit also in About");
 
 // 9. The marketing camera's strings (HOUSE.md 7.4) and the stored keys
 {
@@ -250,8 +267,12 @@ let PAL = null;
   for (const s of ['light', 'dark']) for (const [k, v] of Object.entries((PAL || {})[s] || {})) if (k !== 'ramp' && k !== 'tint' && (block(s).match(new RegExp(`--${k}:\\s*(#[0-9a-f]{6})`)) || [])[1] !== v) off.push(`${s} --${k}`);
   let ramp = null;
   try { ramp = JSON.parse((read('js/palette.js').match(/export const RAMP = (\{.*\});/) || [])[1]); } catch { /* reported below */ }
-  ok(PAL && off.length === 0 && ramp && JSON.stringify(ramp) === JSON.stringify({ light: PAL.light.ramp, dark: PAL.dark.ramp }) && Object.keys(PAL.light).length === 17,
-    `style.css's 15 data tokens per theme (--amount, the single-quantity slate, among them) and js/palette.js's 9 ramp stops per theme equal palette.py --json${off.length ? ': differ ' + off.join(', ') : ''}`);
+  ok(PAL && off.length === 0 && ramp && JSON.stringify(ramp) === JSON.stringify({ light: PAL.light.ramp, dark: PAL.dark.ramp }) && Object.keys(PAL.light).length === 21,
+    `style.css's 15 data tokens and the register's 4 per theme (--amount, the single-quantity slate, and --done, --up, --watch, --down, HOUSE 11.2) and js/palette.js's 9 ramp stops per theme equal palette.py --json${off.length ? ': differ ' + off.join(', ') : ''}`);
+  const REG = { light: { done: '#1f5f99', up: '#17723e', watch: '#8a5a00', down: '#b42318' }, dark: { done: '#8cbcf0', up: '#6fd39a', watch: '#e0a340', down: '#ff9a8f' } };
+  const regOff = [];
+  for (const sc of ['light', 'dark']) for (const [k, v] of Object.entries(REG[sc])) if ((block(sc).match(new RegExp(`--${k}:\\s*(#[0-9a-f]{6})`)) || [])[1] !== v) regOff.push(`${sc} --${k}`);
+  ok(regOff.length === 0, `the register's four meaning colors by name and value (HOUSE 11.2): ${Object.entries(REG.light).map(([k, v]) => `--${k} ${v} / ${REG.dark[k]}`).join(', ')}${regOff.length ? '; differ ' + regOff.join(', ') : ''}`);
   // the plan's tint (the owner's six, 2026-10-03): one strength for both themes, in its two CSS forms
   const tint = PAL && PAL.light.tint === PAL.dark.tint ? PAL.light.tint : null;
   const mixes = (c.match(/color-mix\(in srgb, var\(--c\) (\d+)%, transparent\)/g) || []).map((m) => Number(m.match(/(\d+)%/)[1]));
@@ -303,12 +324,17 @@ let PAL = null;
     && (css.match(/@font-face/g) || []).length === 2, "@font-face: the house rule word for word, and the supplement's with unicode-range U+2082 only");
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html) && /<script type="module" src="\.\/app\.js"><\/script>/.test(html),
     'the page: lang="en-US", viewport-fit=cover without user-scalable, color-scheme light dark, app.js as a module');
+  const px = [...c.matchAll(/font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/g)].map((m) => Number(m[1]));
+  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34].includes(v));
+  const at34 = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 34px/g)].map((m) => m[1].trim()), at21 = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 21px/g)].map((m) => m[1].trim());
+  ok(offScale.length === 0 && JSON.stringify(at34) === '[".hl-fig"]' && JSON.stringify(at21) === '[".readout-value"]',
+    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the pane apps' scale (HOUSE 11.1 rule 2); 34 px only on the key number (.hl-fig), 21 px only on the readout card's value${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
 }
 
 // 15. The bugs on record (ART.md: B1 to B17) stay fixed in the code (most are also driven by tools/shoot.mjs)
 {
   const B = [
-    ['B1 stale is a sentence', /el\('span', 'stale', 'Stale\.'\)/.test(app) && /\.stamp \.stale \{ color: var\(--ink\); \}/.test(css)],
+    ['B1 stale is a sentence; an example says so in its place (HOUSE 11.1 rule 8)', /const lead = example \? 'Example data\.' : stale \? 'Stale\.' : null;/.test(app) && /el\('span', 'stale', lead\)/.test(app) && /const example = DATA\.activities\.length && DATA\.activities\.every\(\(a\) => OSM\(a\)\);/.test(app) && /\.stamp \.stale \{ color: var\(--ink\); \}/.test(css)],
     ['B2 <main> is not a live region; one polite live region', !/<main[^>]*aria-live/.test(html) && (html.match(/aria-live/g) || []).length === 1 && /<p class="sr" id="live" aria-live="polite"><\/p>/.test(html)],
     ['B3 a broken replacement keeps the data', /if \(DATA\) \{[\s\S]{0,300}Still showing the data from/.test(app)],
     ['B4 no monospace box, no Georgia key', !/<code|monospace|Georgia|ensureInfo/.test(app + css)],
@@ -331,7 +357,7 @@ let PAL = null;
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling for the owner's six, plan 0011 D32; 245,000 before them, D24): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling of 2026-10-08 for plan 0012 package 4 on the measured 259,002; 252,000 before it, plan 0011 D32): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; Geist's 74,128 before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });
@@ -346,7 +372,7 @@ ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length}
 ok(names.length === shipped.length && names.every((n) => shipped.includes(n)) && !names.some((f) => /^(tools|screenshots|raw)\//.test(f) || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/, raw/ or dotfiles`);
 console.log(`     stored in the ZIP: data/ ${fmt(stored((n) => n.startsWith('data/')))}, fonts/ ${fmt(stored((n) => n.startsWith('fonts/')))}, app code ${fmt(stored((n) => codeFiles.includes(n)))}, *.md ${fmt(stored((n) => n.endsWith('.md') && !n.includes('/')))}`);
-ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 1,072,155 before the pass × 1.25)`);
+ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: the house rule for plan 0012 package 4, 1,081,046 before the pass × 1.25; 1,340,193 before it)`);
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The
 // demo's coaching text is US English since the data follow-up; its keys keep the spelling the code reads.
@@ -363,6 +389,46 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 1,072,1
     });
   }
   ok(hits.length === 0, `US spelling in ${texts.length - 1} shipped text files, the data's own words allowed by file${hits.length ? ': ' + hits.slice(0, 14).join(', ') + (hits.length > 14 ? ` and ${hits.length - 14} more` : '') : ''}`);
+}
+
+// 18. The pane-app register (HOUSE 11.1; plan 0012 P1 to P9 and the change list's items 2 to 16)
+{
+  const c = code(css, 'x.css'), a = code(app, 'x.js');
+  ok(/const ABOUT_KEY = 'Sources, method and credits are in About\.';/.test(app) && /function aboutKey\(host\) \{\s*const b = el\('button', 'aboutlink', ABOUT_KEY\);\s*b\.type = 'button';\s*b\.onclick = \(\) => about\(true\);\s*host\.append\(b\);\s*\}/.test(app)
+    && /PANES\(\)\[state\.tab\]\(pane\);\s*aboutKey\(pane\);/.test(app) && (a.match(/aboutKey\(/g) || []).length === 2
+    && /\.aboutlink \{ display: block; margin: 14px 0 0; min-height: 44px; font-size: 12\.5px; color: var\(--ink-2\); text-decoration: underline; text-underline-offset: 3px; \}/.test(c),
+  'every pane ends with the button "Sources, method and credits are in About.", 12.5 px --ink-2, underlined at 3 px, 44 px tall, opening About (render() adds it after the pane)');
+  ok(/\.panebody \{ padding-top: 4px; padding-bottom: calc\(28px \+ env\(safe-area-inset-bottom\)\); \}/.test(c) && (c.match(/(^|\n)\.panebody \{/g) || []).length === 1,
+    'the pane pads the home indicator itself: .panebody { padding-top: 4px; padding-bottom: calc(28px + env(safe-area-inset-bottom)) } (HOUSE 4.14, 11.1 rule 1; a phone row checks it)');
+  ok(/\.sec \{ position: relative; margin-top: 12px; padding: 12px 12px 6px; border: 1px solid var\(--line\); border-radius: 8px; background: var\(--sheet\);/.test(c)
+    && ['halo', 'casing', 'cdot', 'dot'].every((k) => new RegExp(`\\.${k} \\{[^}]*stroke: var\\(--sheet\\)`).test(c)) && /\.pdot \{[^}]*border: 2px solid var\(--sheet\)/.test(c)
+    && /\.sec \{[^}]*--thumb: radial-gradient\(circle, var\(--ink\) 3\.6px, var\(--sheet\) 4px 6\.6px/.test(c) && /\.sec \.dual \{ --ring: var\(--sheet\); \}/.test(c) && !/stroke: 'var\(--page\)'/.test(app),
+    'sections on plates (--sheet, a 1 px --line edge, radius 8 px, padding 12 px, 12 px apart); every halo, casing, cursor dot, sports dot, the profile\'s dot and the map slider\'s heads on a plate take --sheet (HOUSE 11.1 rule 4)');
+  ok(/const Bw = blockWeeks\(DATA\.activities, DATA\.plan, today\), wk0 = Bw\.columns\[Bw\.now\];/.test(app) && /row\.append\(el\('span', 'hl-fig', kmU\(wk0\.km\)\)\);/.test(app)
+    && /done\.style\.width = `\$\{Math\.min\(100, \(wk0\.km \/ wk0\.target\) \* 100\)\}%`;/.test(app) && /\.hl-fig \{ font-size: 34px; font-weight: 650; line-height: 1\.05; \}/.test(c)
+    && /\.pbar \{[^}]*border: 1\.5px solid var\(--ink-2\);[^}]*background: color-mix\(in srgb, var\(--ink-2\) 14%, var\(--sheet\)\);/.test(c) && /\.pbar i \{[^}]*background: var\(--done\); \}/.test(c)
+    && /function figure\(host, what, value, lead\)/.test(app) && !/'fig-what'|'fig-lead'|\.figure \{/.test(app + c),
+    'Now opens on the week: its kilometers at 34 px (blockWeeks()\'s column at now, the Block\'s own figure) against the plan, a 10 px bar (--done inside an --ink-2 outline holding the 14 % fill) and its key; figure() is the key number everywhere (Plan\'s race day, a session\'s distance or time)');
+  ok(/\.tone\.tone-good b, \.tone-good \.tw \{ color: var\(--up\); \}/.test(c) && /\.tone\.tone-warning b, \.tone-warning \.tw \{ color: var\(--watch\); \}/.test(c)
+    && /\.tone\.tone-serious b, \.tone\.tone-critical b, \.tone-serious \.tw, \.tone-critical \.tw \{ color: var\(--down\); \}/.test(c)
+    && /v\.append\(el\('b', null, toneSentence\(tone\)\)/.test(app) && /p\.append\(el\('b', 'tw', toneSentence\(tone\)\)/.test(app) && !/var\(--(up|watch|down)\)/.test(c.replace(/\.tone[^{]*\{[^}]*\}/g, '')),
+    'the tone: only its word takes its color (--up on track, --watch watch, --down act now and stop; a note stays ink), never alone (the word says it); nothing else takes --up, --watch or --down (HOUSE 11.3)');
+  ok(/const top = card\(null\), t = el\('dl', 'tiles'\), long = el\('dl', 'long'\);/.test(app) && /top\.classList\.add\('tilesec'\);/.test(app) && /r\.dataset\.label = label;/.test(app)
+    && /dl\.tiles \{ display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; \}/.test(c) && /dl\.tiles dd b \{ display: block; font-size: 19px; font-weight: 650; line-height: 1\.25; \}/.test(c),
+    'Now\'s facts as two-column tiles on their own plate, each value at 19 px 650 (HOUSE 11.1 rule 3); the long facts on a plate after the Block');
+  ok(/\.blocksec \.ink:not\(\.tint\) \{ fill: var\(--done\); \}/.test(c) && /\.blocksec \.tint \{ fill: var\(--ink-2\); fill-opacity: 0\.14; \}/.test(c) && /\.blocksec \.outline \{ stroke: var\(--ink-2\); \}/.test(c)
+    && /c\.append\(pkey\(\['k-done', 'Run'\], \['k-plan', B\.planned \? `Planned week\$\{race\}` : 'No plan in this snapshot'\]\)\);/.test(app) && !/ink is a run, an outline the plan/.test(app),
+    'the Block: a run in --done, a planned week an --ink-2 outline holding its 14 % fill (HOUSE 11.1 rule 7), a key (Run, Planned week) in place of its sentence');
+  ok(/function howTo\(c, text\)/.test(app) && ['Written ${a.updated', 'Plan written ${p.updated', 'The axis starts below the lowest reading', 'Derived from the VO₂ max estimate', 'From the watch’s record, averaged', 'weigh-in\')}, ${dayMon(rows[0].d)}'].every((w) => new RegExp(`howTo\\([a-z0-9]+, \\\`?'?[^\\n]*${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).test(app))
+    && /const note = \(text\) => \{ if \(text\.length > 64\) said\.push\(el\('p', null, text\)\); else area\.append\(help\(text\)\); \};/.test(app)
+    && /c\.append\(help\('A plus is the agent slower than Garmin\.'\)\);/.test(app) && /body\.append\(el\('p', null, `Garmin’s times come from its VO₂ max estimate/.test(app),
+    'method sentences into their section\'s How to read it fold (HOUSE 11.1 rule 9): the evaluation\'s and the plan\'s dates, the load chart\'s, VO₂ max\'s, Garmin\'s predictions, the session curves\' and each curve\'s long note, the weigh-ins\', the map\'s; the race method opens Why the numbers differ, the card keeps A plus is the agent slower than Garmin.');
+  ok(/\.head \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\) 0 calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-left\)\); \}/.test(c) && /\.filters, \.panebody \{ max-width: 760px; margin: 0 auto; padding: 0 calc\(16px \+ env\(safe-area-inset-right\)\) 0 calc\(16px \+ env\(safe-area-inset-left\)\); \}/.test(c),
+    'the header centered with the pane: its sides max(16 px, 50 % − 364 px), so the name and the tabs start where the 760 px column\'s plates do (plan 0011\'s owed item; shoot.mjs measures it)');
+  ok(/document\.addEventListener\('touchstart', \(\) => \{\}, \{ passive: true \}\);/.test(app),
+    'a passive, empty touchstart listener on the document, so iOS draws the :active tints (plan 0011\'s owed item; a phone row checks it)');
+  ok(/const other = \(ev\) => down && ev\.pointerId !== id;/.test(app) && (app.match(/if \(other\(ev\)\) return;/g) || []).length === 4,
+    'a chart\'s readout follows only the pointer that is reading it: another pointer neither moves nor ends the read (Finances\' fix, plan 0012)');
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }

@@ -36,14 +36,21 @@ account, no key, no sign-up.
   (mostly CC BY, the UK Met Office's CC BY-SA). Crediting Open-Meteo is the credit their license
   asks of us; the full list is on their license page.
 
-**How the credit is printed.** The license asks for the credit as a *link*, with a link to the
-license beside it, so the caption band at the foot of every pane carries two real anchors, `open-meteo.com` and the CC BY 4.0
-deed, on every screen, in `index.html` as static markup rather than in JavaScript, so that a
-broken data file cannot take the attribution down with it. Those two addresses are the only
-external URLs anywhere in the app, and nothing is ever *fetched* from them: the convention this
-repository follows forbids external **resources** (fonts, scripts, images, tiles), not links out.
-A tap on one is a link activation, which Snuggery does not follow in place — it names the
-address and offers to hand it to Safari. `world-news` does the same with its headlines.
+**How the credit is printed.** Open-Meteo's terms put one thing beside the data, in their words:
+*"You must include a link next to any location Open-Meteo data are displayed"*. So the line at the
+foot of every pane is that link and nothing else: `Weather data by Open-Meteo.com`, an anchor to
+`open-meteo.com`. The same page's other requirement, *"Attribution: You must give appropriate
+credit, provide a link to the licence, and indicate if changes were made. You may do so in any
+reasonable manner, but not in any way that suggests the licensor endorses you or your use."*, names
+no place, so the whole credit line, the license's link (an anchor to the CC BY 4.0 deed) and the
+sentence that says what was changed are in About, the first paragraphs of its *Sources and
+credits*, one tap from every screen. Both anchors are in `index.html` as static markup rather than
+in JavaScript, so that a broken data file cannot take the attribution down with it. Those two
+addresses are the only external URLs anywhere in the app, and nothing is ever *fetched* from them:
+the convention this repository follows forbids external **resources** (fonts, scripts, images,
+tiles), not links out. A tap on one is a link activation, which Snuggery does not follow in place —
+it names the address and offers to hand it to Safari. `world-news` does the same with its
+headlines.
 
 ## What is in the app, and what is not
 
@@ -55,7 +62,8 @@ address and offers to hand it to Safari. `world-news` does the same with its hea
   There is nothing else here under anybody else's license except the data above.
 - **No network.** The app fetches `./data/snapshot.json` and `./data/rules.json` and nothing
   else, ever. The only `http` addresses in `index.html`, `app.js`, `js/` or `style.css` are the two
-  attribution anchors in the caption band, and an anchor is not a fetch: nothing is loaded from them
+  attribution anchors, Open-Meteo's at the foot of every pane and the license's in About, and an
+  anchor is not a fetch: nothing is loaded from them
   unless the reader taps one and Snuggery hands it to Safari.
 - **No `innerHTML` at all.** Every value from either file goes in through `textContent` or an
   attribute; `innerHTML` is never assigned, and `tools/check.mjs` fails if it is.

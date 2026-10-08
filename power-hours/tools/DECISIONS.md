@@ -463,3 +463,178 @@ exit control; the phone on its side. Each names the device and iOS version it ne
    camera's width; then the lead either keeps one pane or changes `readme-power-hours-2`'s gesture in
    the same commit. The README sentence for the Landing is the lead's.
 10. **The scale starts near the lowest price**, not at zero (zero drawn when inside); About says so.
+
+---
+
+## Plan 0012 package 4: the pane-app register, Power Hours 1.2 (the builder, 2026-10-08)
+
+The brief is `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (package 4), `Template/HOUSE.md` §4.15 (exception
+2), §11, §12, §13, and `docs/plans/0012-change-lists.md` (F, P, *Power Hours* items 1 to 12). Finances 1.2 is the
+reference. No git command was run by this pass's tools; nothing outside this folder was written. (One read-only
+`git log` on `data/snapshot.json` was run by mistake while finding the fixed day; reported to the lead.)
+
+### The data: a fixed day for the tools (the same fault World News had)
+
+`check.mjs` item 5 pinned `data/snapshot.json` to `cd7b0f7d…` (the file of 1 Oct), and `test_prices.mjs` and
+`shoot.mjs` worked their figures out from whatever the file held while asserting 1 Oct's literals. The refresh has
+since rewritten the file (6 to 7 Oct, `d83e36…`), so check item 5 and `test_prices.mjs` failed **at HEAD**, before
+this pass touched anything. Fix, the data unchanged: `tools/fixtures/snapshot.json` is the file of 1 Oct byte for
+byte (fetched from the public template's commit `bd8f679`, sha256 `cd7b0f7da4b9…37e6d0`), pinned in check item 5;
+`test_prices.mjs` reads it; `shoot.mjs` serves it as `data/snapshot.json` by default (a `BASE` the stages' overrides
+replace) and adds one stage on the shipped file at its own clock (an hour after `generatedAt`), both themes. Check
+item 5 now checks the shipped file's **shape** as `scripts/power_hours.py` writes it (schema 1, generatedAt, zone,
+timezone, unit, resolution, source with attribution, license words and `publishable`, hours, days, lastGood, ask ≤ 60)
+and keeps `data/appliances.json`'s pin.
+
+### What changed, by the list
+
+- **Item 1, P1.** The band, `#capline`, `#credits`, `#private` and their writes are gone; `credits()` writes only
+  `#about-credit` (the id kept), whose static words are `CREDIT_FALLBACK`'s.
+- **Item 2.** `PRIVATE_USE` and `privateUse()` as the list gives them; `render()` puts it straight after the zone's
+  title. `.statement.private-use` is `--ink`.
+- **Item 3.** `js/staircase.js`'s `caption()` became `scaleLabel(M)` (`test_prices.mjs` imported it; it now tests
+  `scaleLabel`): `c/kWh, spot price per 15 min, before grid rent, tax and VAT.`; `landingBlock()` writes it under the
+  readout as `p.note.scale`, then `div.key` with one item, `Chosen run, at its mean`, a 10 × 3 px ink bar.
+- **Item 4, P4.** `nowSection()`: `h2.hl-what` `Now, 10:15–10:30`, `.fig b` 34 px 650, `.u` 15 px, the rank at
+  13.5 px; the band's words in `span.cheap` / `span.dear`, the middle half uncolored. *(Corrected after the final
+  verifier, 2026-10-08: this said the heading rendered at 15 px 650 "exactly as in Finances 1.2". It did render at
+  15 px 650, because `.sec > h2` (0,1,1) outranks `.hl-what` (0,1,0), but that is not Finances: Finances, Outdoor
+  Window and Running Dashboard put the label, figure and lead in `div.hl`, out of `.sec > h2`'s reach, and the label
+  is 12.5 px 400 there. Now built the same way; see the section at the end.)*
+- **Item 5.** Runs on a plate, `.tm` 15 px 600; the saving words in `--cheap` below the mean ahead, `--dear` above,
+  uncolored when level or paid to run; the `aria-label`s unchanged.
+- **Item 6.** The help note left `statements()`; its words are a paragraph of About's *How the data gets here*.
+- **Items 7 and 8.** Plates for Now, the Landing (`section.sec.landing` around `.stw`) and the runs; the halos and
+  the head's ring in `--sheet`; `drawLanding()` measures the plate's inner width. `palette.py` checks 2 to 4 run on
+  both grounds (the Landing passes on `--sheet`: the staircase 4.62 / 3.70, the level across it 3.55 / 3.48), so
+  the list's fallback (the Landing unplated) was not needed. `--cheap` / `--dear` with `--own` / `--owe`'s values;
+  `palette.py` check 6 measures them as text on both grounds and `--json` prints them.
+- **Item 9.** The About key last in the pane; P7 sizes: the scale is 10.5 / 11.5 / 12.5 / 13.5 / 15 / 34 px.
+- **Item 10, the stamp.** When ran out and kept hold together the stamp leads with `Prices ran out … ago.` alone.
+  `shoot.mjs` now writes every combination `stamp()` can join, at 390 and 320 px. **Two are still two lines, and
+  per the list I stopped and report them, unfixed:** `Kept from the run before. Made after the phone’s time. Updated
+  2 Oct, 14:00` measures 371 px of text against 358 px of room at 390 (288 at 320); `Prices ran out 36 h ago. Made
+  after the phone’s time. Updated 4 Oct, 14:00` measures 359 px against 358. Both need the phone's clock behind the
+  file's by over an hour. `shoot.mjs` prints them as `HOLD` lines for the lead, not failures. Every other state is
+  one line, 16 px, at every width tested (the normal, run-out, kept, undated, dated-next-morning, loading and
+  no-usable-prices stamps, 320 to 1024 px, and on the shipped file).
+- **Item 11, prose.** `NOTES.md` (the CC BY paragraph and the Credits list) and `PROMPT.md` (*Do not touch*, the
+  scale label, the look) say the credit is in About, one tap away.
+- **Item 12.** `miniapp.json` 1.1 → **1.2**.
+- **Plan 0011's owed items.** The header follows the centered pane (`max(16px, 50% - 364px)` plus the inset); the
+  old 700 px rule went with the band; the widths check proves the pane's and the header's left edges equal
+  `max(16, W/2 − 364)` from 312 to 1024 px. The passive empty `touchstart` listener is added. **The scrub-race
+  check** was already here (`window.__fx`, one frame, then the check); it passes at 2, 8 and 20 intervals a second
+  in both themes. **Finances' readout fix** was already true: `wireSlider()` follows only `start.id`, and a second
+  finger ends a scrub.
+- **US English.** Two code comments said "dearest"; check item 17 bans the word; they say "most expensive".
+
+### Checks changed, and why each
+
+`check.mjs`: item 5 (above); item 6 pins version 1.2; item 8 reads About's `#about-credit`, `CREDIT_FALLBACK`,
+`PRIVATE_USE` and `privateUse()` at the pane's head, and refuses any band, caption line or credit line; item 13
+compares `--cheap` and `--dear` with `palette.py --json` and with HOUSE 11.2 by value; item 14's sizes allow the pane
+apps' scale and require the one 34 px rule to be `.fig b`; B11's pattern follows `sec now headline`; item 16's
+`ZIP_CAP` 120 785; new item 18 (About key, the foot, plates and the Landing's `--sheet` halos and ring, Now, the
+scale's label and key, the centered header, `touchstart`). 51 `ok`. `shoot.mjs`: the fixed day as `BASE`; the
+credit read from About; no footer; `.private-use` under the title in ink; the scale's label and key for the
+caption; the plates and the About key; Now at 34 px with its heading and uncolored middle half; About's inert list
+`['head', 'main']`; the clock-crossing check reads the heading; the treads' contrast against the plate; locales
+without the band; widths without the caption, plus 1024 × 768; the stamp on one line in every state; the stamp
+combinations; the shipped file's stage. 204 `ok`, 0 failures, 4 `HOLD`.
+
+### Owner calls this leaves
+
+1. The appliance names' label on the Landing (`Dishwasher, Tumble dryer`) is now left out at 390 px on 1 Oct at
+   10:20: the plate's 24 px less width leaves no clear spot by the placement rule, which drops a label rather than
+   run it through the staircase. It still shows where there is room (run out, the shipped file).
+2. The saving's price and percentage colored together (`14.19 c/kWh, 8 % below the mean ahead`), as the list's
+   span holds `savingWords()` whole.
+3. ~~The plate heading `Now, 10:15–10:30` at 15 px (Finances' cascade) rather than the 12.5 px `.hl-what` declares.~~
+   Withdrawn: it was not Finances' cascade. The label is 12.5 px 400 in `div.hl`, as in Finances (the fix below).
+
+### Budgets
+
+Code 87 779 B (84 587 before; cap 200 000). ZIP 98 544 B with today's data (96 628 before), cap 120 785, the house
+rule (96 628 × 1.25), which is above 1.1's ruled 97 000, so the cap rises to it. Nothing cut.
+
+### The camera
+
+`c/kWh` stays visible (Now's unit, the readout, the runs, the scale's label); `Car charging` in the runs' names
+untouched. At 440 × 956 run out, Car charging's landing `Thu 00:00–04:00` is 31 px longer than the dishwasher's
+(30 px). No string the camera waits for or taps changed.
+
+### Phone checks this adds (not claimed here)
+
+The `:active` tint on a run row with the `touchstart` listener; the About key's tap; the private-use line on a
+non-CC zone's file; the Landing on its plate in both themes in Snuggery's web view. Each needs the device and iOS
+version named in the matrix.
+
+### Real touch
+
+Driven by real touch at 390 × 844, DPR 2, in headless Chromium and WebKit on the shipped file at today's clock
+(8 Oct, so the file of 6 to 7 Oct has run out): Car charging pressed moves the landing and is said once
+(`Car charging: Tuesday 11:15 to 15:15, 13.48 cents a kilowatt hour.`); a tap on the staircase picks its interval;
+the About key and the stamp open About, whose first credit paragraph is the data's own words; Close closes it; no
+console error in either engine.
+
+### The scrub race with a resting pointer (QA's should, plan 0012 package 4)
+
+QA found the line above overstated: Power Hours had the per-speed scrub check, but no run with a second pointer
+resting on the drawing, which is the Finances bug class (a `pointerleave` from an unrelated pointer ended the
+finger's read). `wireSlider()` was safe by inspection (every handler checks `e.pointerId !== start.id`, and there is
+no leave handler), but nothing tested it. `shoot.mjs` now adds a fourth scrub, 8 intervals a second, with
+Playwright's mouse resting on the head's own path three intervals ahead, so the head slides under the mouse mid-scrub;
+the `window.__fx` listener now takes touch moves only. In both themes: 0 moves lost, 0 frames differ, the lift
+lands under the finger, the head back to 8 px.
+
+The check was mutation-tested on a scratch copy (deleted after): with a handler that ends the scrub on any mouse
+boundary or move event, the new check fails in both themes, and the mouse got exactly one event. With the mouse
+resting mid-chart, off the head's path, the same mutation passed, because no event reached the mouse. So where the
+mouse rests matters, and the check puts it where the head passes. No app code changed; check.mjs and the ZIP are
+unaffected. `shoot.mjs`: 206 `ok`, 0 failures, 4 `HOLD` (the same four).
+
+## The final verifier's two shoulds, fixed under the lead's rulings (2026-10-08)
+
+### Now's label, built as Finances builds it
+
+The verifier measured `Now, 10:15–10:30` at 15 px / 650: `.sec > h2` (0,1,1) beat `.hl-what` (0,1,0). In Finances,
+Outdoor Window and Running Dashboard the label sits in `div.hl` with the figure and the lead, and computes to
+12.5 px / 400. `nowSection()` now builds `section.sec.now.headline > div.hl > h2.hl-what + p.fig + p.lead`; the
+stylesheet adds Finances' `.hl { display: grid; gap: 2px; }`, and the 2 px that `.fig`'s padding and the lead's
+margin gave are now the grid's gap, so the plate keeps its rhythm (the figure stays `.fig b`, 34 px 650, so B11 and
+the 34 px rule are unchanged). `ART.md` section 3 item 2 says 12.5 px `--ink-2`.
+- `check.mjs` item 18 (Now) requires the `div.hl` wrap, the `.hl` grid and `.hl-what`'s rule as written.
+- `shoot.mjs` adds a check in both themes: the label computes to `12.5px` / `400`, and the figure and the lead share
+  its `div.hl`. Both print `ok`.
+
+### The stamp stays one line: "Made after the phone's time." moves to the pane when another lead is there
+
+The two combinations held for the lead (`Kept from the run before. Made after the phone's time. Updated …`, 371 px
+against 358; `Prices ran out 36 h ago. Made after the phone's time. Updated …`, 359 against 358) wrapped to two lines.
+**The lead's ruling:** when another lead is in the stamp (ran out or kept), `Made after the phone's time.` leaves the
+stamp and is said as a statement in the pane, so the stamp stays one line.
+- `app.js`: `madeAhead()` (the file more than `AHEAD_OF_CLOCK`, an hour, after the phone's time) and `aheadInPane()`
+  (that, with ran out or kept leading). `stamp()` pushes `Made after the phone's time.` only when no other lead is
+  there; `statements()` adds, last, `This file was made after the phone's time: it says 2 Oct, 14:00, more than an
+  hour ahead of the phone's clock.` (`p.statement.made-ahead`, the first words at 620 like the others). Alone, the
+  lead stays in the stamp and the pane says nothing of it.
+- `refresh()` (the clock's tick, which rewrites only the stamp) now also redraws the pane when the statement's
+  presence would change, so the stamp and the pane never disagree as the phone's clock catches up with the file.
+- `shoot.mjs`: the `HOLD` branch and the `held` list are gone; every combination is an `ok` or `FAIL` line, at 390
+  and 320 px, and each checks the pane too: `kept, made after` and `ran out, made after` print the stamp on one line
+  (230 and 219 px of text) with the statement in the pane; a new case, `made after the phone's time, alone`, keeps
+  it in the stamp (245 px) with no statement; the other three say nothing of the phone's time.
+- `ART.md`'s header paragraph and its statements item say when each form shows.
+
+### The runs
+
+`node tools/check.mjs`: all checks pass (code 88 696 B of 200 000; ZIP 98 950 B of 120 785; `ART.md` section 6 updated
+to about 88 700 and about 99 000, and its doubled header row removed). `node tools/test_prices.mjs`: 51 checks, all
+pass. `python3 tools/art/palette.py`: ALL CHECKS PASS. `PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (both themes): 216
+`ok`, 0 failed, no `HOLD`; run again with `SCREENSHOTS=1` to refresh `screenshots/landing-*`, `history-*` and
+`about-light` (the label's size changed). Real touch (a scratch script, deleted after), Chromium and WebKit at
+390 × 844 and 320 × 568, both themes, on the fixed day: the label at 12.5px / 400 in `div.hl`, a tap on the third run
+presses it, the About key opens About and Close closes it; on the kept file made after the phone's time: the stamp
+one 16 px line, the statement in the pane, the stamp opens About. 56 `ok`, 0 failed, no console error.
+

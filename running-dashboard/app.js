@@ -1,4 +1,5 @@
-/* Running Dashboard, a Snuggery mini-app. The look is ART.md (the house system and the Block).
+/* Running Dashboard, a Snuggery mini-app. The look is ART.md (the house system, its pane-app register,
+ * Template/HOUSE.md section 11, and the Block).
  *
  * ---------------------------------------------------------------------------
  * SHAPE OF ./data/snapshot.json
@@ -386,19 +387,23 @@ const isPinned = (wrap) => pin.wrap === wrap;
 /** Hover, scrub and tap-to-pin on a chart's hit layer. A mouse reads on the press; a finger waits:
  *  a tap pins the card and says it once, a sideways slide scrubs, a scroll (pointercancel) leaves none. */
 function readout(hit, wrap, show, hide) {
-  let down = 0, at = null;   // at: a finger's first point
-  const open = (ev) => { down = 1; at = null; show(ev); pinTo(wrap, () => hide()); };
+  let down = 0, at = null, id = null;   // at: a finger's first point; id: the pointer that is reading
+  const open = (ev) => { down = 1; at = null; id = ev.pointerId; show(ev); pinTo(wrap, () => hide()); };
   const say = () => { if (openCard && openCard.wrap === wrap) announce(sayCard(openCard.card)); };
   const on = (type, f) => hit.addEventListener(type, f);
   on('pointerdown', (ev) => { if (ev.pointerType === 'touch') at = [ev.clientX, ev.clientY]; else { open(ev); say(); } });
+  // while one pointer reads, another (a trackpad's, a second finger) neither moves its card nor ends it
+  // (Finances' fix of plan 0012: a resting mouse that a card moved under froze a finger's slide)
+  const other = (ev) => down && ev.pointerId !== id;
   on('pointermove', (ev) => {
+    if (other(ev)) return;
     if (!at) { if (down || !isPinned(wrap)) show(ev); return; }
     const dx = Math.abs(ev.clientX - at[0]);
     if (dx > 8 && dx > Math.abs(ev.clientY - at[1])) open(ev);
   });
-  on('pointerup', (ev) => { if (at) { open(ev); say(); } down = 0; at = null; });
-  on('pointercancel', () => { if (down && isPinned(wrap)) unpin(); down = 0; at = null; });
-  on('pointerleave', () => { down = 0; if (!isPinned(wrap)) hide(); });
+  on('pointerup', (ev) => { if (other(ev)) return; if (at) { open(ev); say(); } down = 0; at = null; });
+  on('pointercancel', (ev) => { if (other(ev)) return; if (down && isPinned(wrap)) unpin(); down = 0; at = null; });
+  on('pointerleave', (ev) => { if (other(ev)) return; down = 0; if (!isPinned(wrap)) hide(); });
 }
 
 /* ------------------------------------------------------------------ loading */
@@ -480,7 +485,6 @@ function fail(what, raw, hint, lines) {
   $('tabs').hidden = true;
   $('filters').hidden = true;
   $('pane').replaceChildren();
-  $('capline').textContent = '';
   box.classList.remove('kept');
   box.append(el('p', null, `data/snapshot.json ${what}`));
   if (lines) box.append(el('p', 'notice-lines', lines.join('\n')));
@@ -530,7 +534,12 @@ function stamp() {
   const today = new Date().toDateString();
   const when = new Date(pulled).toDateString() === today ? clock(pulled) : `${dayOf(pulled)}, ${clock(pulled)}`;
   const tail = `Updated ${when}${DATA.dataThrough ? `, last session ${dayMon(DATA.dataThrough)}` : ''}`;
-  $('stamp').replaceChildren(...(stale ? [el('span', 'stale', 'Stale.'), ` ${tail}`] : [tail]));
+  // Example data (HOUSE 11.1 rule 8): every activity id the generator's own demo-…, the rule the OpenStreetMap
+  // credit keys on. It leads in place of Stale., never beside it: an example never refreshes. A real pull's ids
+  // never show it.
+  const example = DATA.activities.length && DATA.activities.every((a) => OSM(a));
+  const lead = example ? 'Example data.' : stale ? 'Stale.' : null;
+  $('stamp').replaceChildren(...(lead ? [el('span', 'stale', lead), ` ${tail}`] : [tail]));
 }
 
 const TABS = [
@@ -1142,8 +1151,30 @@ function card(title, sub) {
   }
   return c;
 }
-/** A caption line under a chart: what one bar or point is. */
+/** A caption line under a chart: what one bar or point is, one line at 390 px (HOUSE 11.1 rule 9). */
 const help = (text) => el('p', 'cap', text);
+/** A method sentence into its section's `How to read it` fold, after whatever the fold already says (HOUSE
+ *  11.1 rule 9); returns the paragraph, so words written later (a stream's series) land in it. */
+function howTo(c, text) {
+  let d = c.keys.querySelector(':scope > .howto');
+  if (!d) { d = el('details', 'howto'); d.append(el('summary', null, 'How to read it')); c.keys.prepend(d); }
+  const p = el('p', null, text);
+  d.append(p);
+  return p;
+}
+/** A label whose words change: one line under the drawing, or, past 64 characters (one line of 11 px type at
+ *  390 px), in the section's fold instead (HOUSE 11.1 rule 9). */
+function capOrFold(c) {
+  const cap = help(''), fold = howTo(c, '');
+  cap.hidden = fold.hidden = true;
+  return { cap, say(text) { const long = text.length > 64; cap.textContent = long ? '' : text; fold.textContent = long ? text : ''; cap.hidden = long; fold.hidden = !long; } };
+}
+/** The key in place of a how-to-read sentence (HOUSE 11.1 rule 6): a swatch and a word for each mark. */
+function pkey(...items) {
+  const k = el('div', 'pkey');
+  for (const [cls, word] of items) k.append(el('span', cls, word));
+  return k;
+}
 
 function legend(items) {
   const l = el('div', 'legend');
@@ -1195,6 +1226,7 @@ function table(headers, rows) {
  *  with its unit, the note after it. */
 function tile(label, value, note, unit) {
   const r = el('div', 'fact');
+  r.dataset.label = label;
   const dd = el('dd');
   dd.append(el('b', null, unit ? u(value, unit) : String(value)));
   if (note) dd.append(el('span', /^per /.test(note) ? 'per' : null, note));   // "7.7 h per night"
@@ -1207,11 +1239,29 @@ function toneWord(t) {
   return { good: 'on track', warning: 'watch', serious: 'act now', critical: 'stop', neutral: 'note' }[t] || t;
 }
 const toneSentence = (t) => { const w = toneWord(t || 'neutral'); return `${w.charAt(0).toUpperCase()}${w.slice(1)}.`; };
-/** The tone word in --ink 620 leading the data's own sentence. */
-function verdict(lead, text) {
-  const p = el('p', 'verdict said');
-  p.append(el('b', null, lead), text ? ` ${text}` : '');
+/** The tone sentence in its color, leading the data's own words (HOUSE 11.3: --up on track, --watch watch,
+ *  --down act now and stop; a note stays ink). Words before it (a session's own verdict) stay ink; the color
+ *  never carries the tone alone, the word does. */
+function verdict(tone, text, before) {
+  const p = el('p', `verdict said tone-${tone || 'neutral'}`);
+  if (before) p.append(el('b', null, before), ' ');
+  p.append(el('b', 'tw', toneSentence(tone)), text ? ` ${text}` : '');
   return p;
+}
+/** A tone and its sentence as the register sets them (HOUSE 11.1 rules 2 and 5): the tone sentence in its color,
+ *  the data's verdict after it in ink, over a rule; then the headline under it. */
+function toneLines(tone, verdictWords, headline) {
+  const v = el('p', `tone said tone-${tone || 'neutral'}`);   // said: the coaching routine's words, shown as written
+  v.append(el('b', null, toneSentence(tone)), verdictWords && verdictWords.toLowerCase() !== toneWord(tone || 'neutral') ? ` ${verdictWords}.` : '');
+  return [v, el('p', 'tone-text said', headline || '')];
+}
+/** The key at the end of every pane (HOUSE 11.1 rule 1). */
+const ABOUT_KEY = 'Sources, method and credits are in About.';
+function aboutKey(host) {
+  const b = el('button', 'aboutlink', ABOUT_KEY);
+  b.type = 'button';
+  b.onclick = () => about(true);
+  host.append(b);
 }
 
 /* ------------------------------------------------------------------ panes */
@@ -1234,26 +1284,10 @@ function render() {
   headTag = 'h2';
   syncFilterVisibility();
   PANES()[state.tab](pane);
+  aboutKey(pane);   // every pane ends with it (HOUSE 11.1 rule 1)
   for (const [k, d] of folds()) if (was.has(k)) d.open = was.get(k).open;
   main.scrollTop = keep;
   pane.style.minHeight = '';
-  caption();
-}
-
-/** The caption band's line (HOUSE 4.5): what the pane is showing, two fixed lines. */
-function caption() {
-  const [a, b] = windowRange(), p = DATA.plan, as = DATA.assessment;
-  const pulled = pulledMs();
-  const filt = [state.sport === 'all' ? 'all sports' : SPORTS.find((s) => s.key === state.sport).label.toLowerCase(),
-    state.gear === 'all' ? 'any equipment' : $('gearSelect').selectedOptions[0].textContent.replace(/, [\d ]+ km$/, '')].join(', ');
-  const race = p && p.goal && p.goal.race;
-  $('capline').textContent = {
-    now: `Updated ${dayOf(pulled)}, ${clock(pulled)}.${as && as.updated ? ` Evaluation${p && p.updated === as.updated ? ' and plan' : ''} written ${dayMon(as.updated)}.` : ''}${p && p.updated && (!as || p.updated !== as.updated) ? ` Plan written ${dayMon(p.updated)}.` : ''}`,
-    plan: p ? `The plan the coaching routine wrote on ${dayMon(p.updated || DATA.generatedAt.slice(0, 10))}${race ? `, to ${race.name} on ${dayMon(race.date)}` : ''}.` : 'No plan in this snapshot.',
-    training: `Weeks of ${spanDates(a, b)}, ${filt}.`,
-    health: `Weeks of ${spanDates(a, b)}. Today is the last 24 hours the watch handed over.`,
-    sessions: `${plural(selected().length, 'session')} in the window, ${filt}, newest first.`,
-  }[state.tab];
 }
 
 /** A heading between the groups of a long pane, sentence case (B12). */
@@ -1347,17 +1381,22 @@ function blockSection(main, scale) {
   draw();
   new ResizeObserver(() => draw()).observe(wrap);
   const race = B.race ? ` to ${B.race.name}` : '';
-  c.append(help(B.planned ? `Weeks of running${race}: ink is a run, an outline the plan’s week.` : 'Weeks of running: each block is a run. No plan in this snapshot.'));
+  c.append(pkey(['k-done', 'Run'], ['k-plan', B.planned ? `Planned week${race}` : 'No plan in this snapshot']));   // a key, not a sentence
   tableToggle(c, 'block', () => table(['Week', 'Run km', 'Runs', 'Longest', 'Plan'],
     B.columns.map((col, i) => [date(col.week), i > B.now ? '–' : f1(col.km), i > B.now ? '–' : String(col.runs.length), col.runs.length ? f1(col.longest) : '–', col.range || (col.target != null ? f0(col.target) : '–')])));
   return B;
 }
 
-/** The one large figure of a pane (21 px, 600): the subject's own number, its lead beside it. */
-function figure(main, what, value, lead) {
-  const f = el('div', 'figure');
-  f.append(el('span', 'fig-what', what), el('span', 'fig', value), el('span', 'fig-lead', lead || ''));
-  main.append(f);
+/** The pane's key number (HOUSE 11.1 rule 2): its label above at 12.5 px, the figure at 34 px, its lead under it
+ *  at 13.5 px. On the pane it opens a plate of its own, which it returns; inside a section it is that section's. */
+function figure(host, what, value, lead) {
+  const plate = host === $('pane') ? card(null) : null, f = el('div', 'hl');
+  if (plate) plate.classList.add('headline');
+  f.append(el(plate ? 'h2' : 'span', 'hl-what', what), el('span', 'hl-fig', value));
+  if (lead) f.append(el('span', 'hl-lead', lead));
+  (plate || host).append(f);
+  if (plate) host.append(plate);
+  return plate;
 }
 
 /* --- Now ---------------------------------------------------------------- */
@@ -1386,9 +1425,28 @@ function paneNow(main) {
 
   const a = DATA.assessment;
   const gn = DATA.garminNow || {};
-  // The short facts first, as a table, so the numbers are what the eye meets (the owner, 2026-10-03); a
-  // metric whose words run on (over 64 characters, or a second sentence) is the evaluation's, below its verdict.
-  const top = card(null), t = el('dl', 'tab'), long = el('dl', 'long');
+  // The week first, against its plan (HOUSE 11.1 rule 2), with the verdict under it; then the facts as tiles
+  // (rule 3); a metric whose words run on (over 64 characters, or a second sentence) is the evaluation's, after
+  // the Block. The week is blockWeeks()'s column at now, the figure the Block draws.
+  const Bw = blockWeeks(DATA.activities, DATA.plan, today), wk0 = Bw.columns[Bw.now];
+  const head = card(null), hl = el('div', 'hl'), row = el('div', 'hl-row');
+  head.classList.add('headline');
+  hl.append(el('h2', 'hl-what', past ? `Week of ${dayMon(wk0.week)}, data to ${dayMon(today)}` : `This week, ${dayMon(wk0.week)} to ${dayMon(plusDays(wk0.week, 6))}`));
+  row.append(el('span', 'hl-fig', kmU(wk0.km)));
+  if (wk0.target != null) row.append(el('span', 'hl-lead', `of ${wk0.range || u(f0(wk0.target), 'km')} planned`));
+  hl.append(row);
+  if (wk0.target) {
+    const bar = el('div', 'pbar'), done = el('i', 'pdone');
+    bar.setAttribute('aria-hidden', 'true');
+    done.style.width = `${Math.min(100, (wk0.km / wk0.target) * 100)}%`;
+    bar.append(done);
+    hl.append(bar, pkey(['k-done', 'Done'], ['k-plan', 'Planned']));
+  }
+  head.append(hl);
+  if (a) head.append(...toneLines(a.tone, a.verdict, a.headline));
+  main.append(head);
+  const top = card(null), t = el('dl', 'tiles'), long = el('dl', 'long');
+  top.classList.add('tilesec');
   t.append(tile(`Run, ${last(7)}`, f1(km(w1)), `${plural(runsIn(w1).length, 'run')}${walkNote(w1)}`, 'km'));
   t.append(tile(`Run, ${last(28)}`, f1(km4), note28 + walkNote(w4), 'km'));
   t.append(tile('Garmin status', (gn.trainingStatus || '–').replace(/_\d+$/, '').replace(/_/g, ' ').toLowerCase(),
@@ -1398,20 +1456,18 @@ function paneNow(main) {
   top.append(t);
   main.append(top);
 
-  const B = blockSection(main, SCALE.now);
-  const wk = B.columns[B.now];
-  figure(main, past ? `Week of ${dayMon(wk.week)}, data to ${dayMon(today)}` : `This week, ${dayMon(wk.week)} to ${dayMon(plusDays(wk.week, 6))}`, kmU(wk.km),
-    wk.target != null ? `of ${wk.range || u(f0(wk.target), 'km')} planned` : '');
+  blockSection(main, SCALE.now);
 
   if (!a) {
     const c = card('Evaluation');
     c.append(el('p', null, 'No assessment in this snapshot. The data pull does not write one; the optional daily coaching routine does. If that is set up and this stays empty, the routine is not completing.'));
     main.append(c);
-  } else {
-    // the verdict and the long facts behind it, then what to do about it, then the reasoning, folded
-    const lead = toneSentence(a.tone) + (a.verdict && a.verdict.toLowerCase() !== toneWord(a.tone || 'neutral') ? ` ${a.verdict}.` : '');
-    main.append(verdict(lead, a.headline || ''));
-    if (long.children.length) main.append(long);
+  } else if (long.children.length) {
+    // the long facts behind the verdict, on their own plate
+    const lc = card(null);
+    lc.classList.add('longsec');
+    lc.append(long);
+    main.append(lc);
   }
   planPointer(main);
 
@@ -1433,7 +1489,7 @@ function paneNow(main) {
     d.append(sec);
     ev.append(d);
   }
-  ev.append(help(`Written ${a.updated ? date(a.updated) : 'with this snapshot'}, from the full history, and rewritten by each run of the coaching routine so it moves with the training rather than describing one good week.`));
+  howTo(ev, `Written ${a.updated ? date(a.updated) : 'with this snapshot'}, from the full history, and rewritten by each run of the coaching routine so it moves with the training rather than describing one good week.`);
   main.append(ev);
 }
 
@@ -1449,7 +1505,7 @@ function planPointer(main) {
   const p = DATA.plan;
   if (!p) return;
   const c = card('What to do next');
-  c.append(verdict(toneSentence(p.tone), p.headline || ''));
+  c.append(...toneLines(p.tone, null, p.headline));
   if (p.goal && p.goal.race) c.append(help(`Planned around ${p.goal.race.name}, ${date(p.goal.race.date)}.`));
   const b = el('button', 'textkey', 'Open the plan');
   b.onclick = () => choose('plan');
@@ -1517,7 +1573,9 @@ function paneToday(main) {
   t.append(tile('Stress', lastSt ? String(lastSt[1]) : '–', lastSt ? `${stressWord(lastSt[1])}, at ${at(lastSt[0])}` : 'not recorded'));
   const hrs = hr.map((p) => p[1]);
   t.append(tile('24\u202Fh range', `${Math.min(...hrs)}–${Math.max(...hrs)}`, `${hr.length} samples`, 'bpm'));
-  main.append(t);
+  const tc = card(null);   // on a plate, as every section (HOUSE 11.1 rule 4)
+  tc.append(t);
+  main.append(tc);
 
   const hourTicks = [];
   for (let s = Math.ceil(t0 / 3600) * 3600; s <= tEnd; s += 3600) {
@@ -1567,8 +1625,8 @@ function paneToday(main) {
   }
   if (st.length > 1) {
     const c3 = card('Stress', 'Heart-rate variability read as stress, 0 to 100. Under 25 is rest, over 50 is worth noticing if it is not exercise. Samples during activity are left out. Follows the sample switch above.');
-    const area3 = el('div'), cap3 = help('');
-    c3.append(area3, cap3);
+    const area3 = el('div'), cap3 = capOrFold(c3);
+    c3.append(area3, cap3.cap);
     main.append(c3);
     const sStRaw = daySeries(st, t0, 30 * 60);
     drawSt = () => {
@@ -1580,13 +1638,12 @@ function paneToday(main) {
         tip: (i) => ({ place: at(t0 + sSt.t[i]), value: sSt.v[i] == null ? '–' : f0(sSt.v[i]),
           rows: sSt.v[i] == null ? [] : [['Level', stressWord(sSt.v[i])], ...(todaySmooth ? [['Mean of', u(stWin, 'min')]] : [])] }),
       });
-      cap3.textContent = todaySmooth ? `Each point the mean of five samples, about ${u(stWin, 'min')}.` : 'Each point one sample: under 26 is rest, under 51 low, under 76 medium, then high.';
+      cap3.say(todaySmooth ? `Each point the mean of five samples, about ${u(stWin, 'min')}.` : 'Each point one sample: under 26 is rest, under 51 low, under 76 medium, then high.');
     };
     drawSt();
   }
-  const foot = card(null);
-  foot.append(el('p', 'cap', 'This group is the live end of the app: the pull runs every hour and replaces these 24 hours each time, while the rest of the app changes only when a session is logged or the morning text is written.'));
-  main.append(foot);
+  // how the group refreshes is a method sentence: the group's first chart's fold holds it (HOUSE 11.1 rule 9)
+  howTo(c1, 'This group is the live end of the app: the pull runs every hour and replaces these 24 hours each time, while the rest of the app changes only when a session is logged or the morning text is written.');
 }
 
 /* --- Plan --------------------------------------------------------------- */
@@ -1604,11 +1661,13 @@ function panePlan(main) {
   blockSection(main, SCALE.plan);
 
   const g = p.goal || {}, phone = phoneIso();
+  let head = null;
   if (g.race && g.race.date >= phone) {
     const n = ago(phone, g.race.date);
-    figure(main, 'Race day', n ? plural(n, 'day') : 'Today', `to ${g.race.name}, ${dayMon(g.race.date)}${g.race.start ? `, ${g.race.start}` : ''}`);
+    head = figure(main, 'Race day', n ? plural(n, 'day') : 'Today', `to ${g.race.name}, ${dayMon(g.race.date)}${g.race.start ? `, ${g.race.start}` : ''}`);
   }
-  main.append(verdict(toneSentence(p.tone), p.headline || ''));
+  if (!head) { head = card(null); main.append(head); }   // the plan's verdict on a plate either way
+  head.append(verdict(p.tone, p.headline || ''));
 
   if (g.race) {
     const c = card(`Goal: ${g.race.name}`);
@@ -1649,7 +1708,7 @@ function panePlan(main) {
   fold('Why this shape', [p.why]);
   fold('After that', [p.after]);
   if (p.guardrails && p.guardrails.length) fold('Stop signs', [list(p.guardrails)], true);
-  about.append(help(`Plan written ${p.updated ? date(p.updated) : 'with this snapshot'} from the load, recovery, session notes and history, and the Garmin calendar. The coaching routine rewrites it each time it runs; a race added to Garmin Connect reshapes it on the routine’s next run.`));
+  howTo(about, `Plan written ${p.updated ? date(p.updated) : 'with this snapshot'} from the load, recovery, session notes and history, and the Garmin calendar. The coaching routine rewrites it each time it runs; a race added to Garmin Connect reshapes it on the routine’s next run.`);
   main.append(about);
 }
 
@@ -2097,9 +2156,9 @@ function dayChart(main, p, today, mode = 'km') {
   c.append(legend((asLoad ? (isSport() ? SPORTS : isMuscle() ? MUSCLE_MIX : ZONES) : [BELOW].concat(ZONES)).map((z) => ({ color: z.color, label: z.label })).concat({ color: INK, label: 'Planned', plan: true })));
   const ranKm = rows.filter((r) => r.acts.length).reduce((s, r) => s + r.total, 0);
   const planKm = rows.filter((r) => !r.acts.length && r.pl && r.key >= today).reduce((s, r) => s + r.total, 0);
-  c.append(help(asLoad
+  howTo(c, asLoad
     ? `${u(f0(ranKm), unit)} done so far across the two weeks, about ${u(f0(planKm), unit)} still planned.`
-    : `${kmU(ranKm)} run so far across the two weeks, ${kmU(planKm)} still planned. The list below has the same days with the reasoning behind each.`));
+    : `${kmU(ranKm)} run so far across the two weeks, ${kmU(planKm)} still planned. The list below has the same days with the reasoning behind each.`);
   main.append(c);
 }
 
@@ -2679,7 +2738,7 @@ function vo2Card(main) {
     tip: (r, i) => ({ place: weekly ? weekPlace(buckets[i].key) : date(buckets[i].key), value: vals[i] == null ? '–' : f1(vals[i]), unit: vals[i] == null ? '' : 'ml/kg/min',
       rows: vals[i] == null ? [['Estimate', 'none yet']] : measured[i] == null ? [['Estimate', 'carried forward']] : [] }),
   });
-  c3.append(help(`${plural(src.length, 'recompute')}, ${date(src[0].d)} to ${date(src[src.length - 1].d)}: ${f1(lo)} to ${f1(hi)}. The axis starts below the lowest reading rather than at zero, which is legitimate for a line and would not be for bars.`));
+  howTo(c3, `${plural(src.length, 'recompute')}, ${date(src[0].d)} to ${date(src[src.length - 1].d)}: ${f1(lo)} to ${f1(hi)}. The axis starts below the lowest reading rather than at zero, which is legitimate for a line and would not be for bars.`);
   tableToggle(c3, 'vo2', () => table(['Date', 'VO₂ max'], src.slice().reverse().map((d) => [date(d.d), f1(d.v)])));
   main.append(c3);
 }
@@ -2716,18 +2775,20 @@ function raceCard(main, gn) {
   }
   c.append(t);
   if (!rc) {
-    c.append(help('Derived from the VO₂ max estimate rather than from any race you actually ran, so treat them as a fitness index with time units, not a plan.'));
+    howTo(c, 'Derived from the VO₂ max estimate rather than from any race you actually ran, so treat them as a fitness index with time units, not a plan.');
     main.append(c); return;
   }
 
   const b = rc.basis || {};
-  c.append(help(`Garmin’s times come from its VO₂ max estimate and assume the training to use it. The agent’s are anchored on your actual races and capped by the current base. ` +
-    `The agent’s estimate is from ${date(rc.updated)}${rc.kind === 'nudge' ? ' (nudged, not re-analyzed)' : ''}, on VO₂ max ${f1(b.vo2)}, ` +
-    `${kmU(b.runKm28)} run in the previous 28 days and a longest run of ${kmU(b.longestRunKm90)} in three months; it moves only when the evidence does. A plus is the agent slower than Garmin.`));
+  c.append(help('A plus is the agent slower than Garmin.'));
 
+  // the method sentence opens the fold (HOUSE 11.1 rule 9); the card keeps its one short label
   const more = el('details', 'fold');
   more.append(el('summary', null, 'Why the numbers differ'));
   const body = el('div', 'section said');
+  body.append(el('p', null, `Garmin’s times come from its VO₂ max estimate and assume the training to use it. The agent’s are anchored on your actual races and capped by the current base. ` +
+    `The agent’s estimate is from ${date(rc.updated)}${rc.kind === 'nudge' ? ' (nudged, not re-analyzed)' : ''}, on VO₂ max ${f1(b.vo2)}, ` +
+    `${kmU(b.runKm28)} run in the previous 28 days and a longest run of ${kmU(b.longestRunKm90)} in three months; it moves only when the evidence does.`));
   if (rc.summary) body.append(el('p', null, rc.summary));
   for (const p of rc.predictions) {
     if (!p.why) continue;
@@ -2883,7 +2944,7 @@ function renderSession(host, a) {
 
   if (a.note) {
     const n = card(null);
-    n.append(verdict(`${a.note.verdict || 'Evaluation'}. ${toneSentence(a.note.tone)}`));
+    n.append(verdict(a.note.tone, '', `${a.note.verdict || 'Evaluation'}.`));
     for (const para of a.note.body || []) n.append(el('p', 'said', para));
     if (a.note.written) n.append(help(`Written ${date(a.note.written)}, on the refresh that first saw this session.`));
     host.append(n);
@@ -3108,7 +3169,10 @@ function mapCard(a) {
     const chips = el('div');
     const wrap = el('div', 'mapwrap chartwrap');
     const legendHost = el('div');
-    const sub = help('');
+    const sub = howTo(c, '');   // how to read the map, in the section's fold
+    // OpenStreetMap's credit stays under a map its data drew, one line at its foot (HOUSE 4.15 exception 1)
+    const mapcredit = el('p', 'mapcredit');
+    mapcredit.setAttribute('translate', 'no');
     // Distance window: two thumbs on one track, indexes into the positioned bins.
     let lo = 0, hi = pts.length - 1;
     const rangeRow = el('div', 'maprange');
@@ -3197,7 +3261,7 @@ function mapCard(a) {
     fromR.oninput = () => { lo = +fromR.value; if (lo > hi) hi = lo; syncRange(); drawTrack(); };
     toR.oninput = () => { hi = +toR.value; if (hi < lo) lo = hi; syncRange(); drawTrack(); };
     syncRange();
-    holder.append(chips, wrap, rangeRow, legendHost, sub);
+    holder.append(chips, wrap, rangeRow, legendHost);
 
     const render = () => {
       chips.replaceChildren(words('Route colors', modes, mapColor, (key) => { mapColor = key; render(); }));
@@ -3304,7 +3368,12 @@ function mapCard(a) {
       };
       drawTrack();
       legendHost.replaceChildren(legendEl);
-      sub.textContent = `Start is the filled dot, finish the ring. Colored by ${modes.find((x) => x[0] === mapColor)[1].toLowerCase()}${pair ? ` between this session’s own 5th and 95th percentile, at least ${pair[2]} apart, whatever the slider shows` : ''}. Tap the map, or slide sideways, to read points along the track; the two thumbs narrow the shown distance.${s.map ? '' : ' The streets for this session are not bundled yet; they come with the next data pull.'}${drawn ? ` Map tiles: ${[...sources].map((k) => TILE_CREDIT[k] || k).join(', ')}.` : ''}${OSM(a) ? ` Route: ${TILE_CREDIT.osm}, ODbL.` : ''}`;
+      sub.textContent = `Start is the filled dot, finish the ring. Colored by ${modes.find((x) => x[0] === mapColor)[1].toLowerCase()}${pair ? ` between this session’s own 5th and 95th percentile, at least ${pair[2]} apart, whatever the slider shows` : ''}. Tap the map, or slide sideways, to read points along the track; the two thumbs narrow the shown distance.${s.map ? '' : ' The streets for this session are not bundled yet; they come with the next data pull.'}`;
+      // the tiles' other sources (USGS The National Map, Kartverket) are credited in About, whose terms ask for the
+      // credit, not for a place on the map (HOUSE 4.15)
+      const osmRoute = OSM(a), osmTiles = drawn && sources.has('osm');
+      mapcredit.textContent = osmRoute && osmTiles ? `Route and map: ${TILE_CREDIT.osm}, ODbL.` : osmRoute ? `Route: ${TILE_CREDIT.osm}, ODbL.` : osmTiles ? `Map: ${TILE_CREDIT.osm}, ODbL.` : '';
+      if (mapcredit.textContent) wrap.after(mapcredit); else mapcredit.remove();   // no element when OpenStreetMap drew nothing
 
       unmark = () => { hideCard(wrap); dot.setAttribute('opacity', 0); if (profile.place) profile.place(null); };
       mark = (k) => {
@@ -3343,9 +3412,12 @@ let paceByZone = false;
 function streamCard(a, tilesHost) {
   const bike = a.sport === 'bike';
   const c = card('Session curves');
-  const intro = help('From the watch’s record, averaged into bins of a few seconds. Tap to read a point; tap outside to release.');
+  // how to read the curves lives in the section's fold (HOUSE 11.1 rule 9): what they are, then each long note
+  const intro = howTo(c, 'From the watch’s record, averaged into bins of a few seconds. Tap to read a point; tap outside to release.');
+  const notes = el('div');
+  intro.after(notes);
   const holder = el('div');
-  c.append(intro, holder);
+  c.append(holder);
   loadStream(a.id).then((s) => {
     if (!s || !s.t || s.t.length < 10) { holder.append(el('p', 'cap', 'The record stream for this session is not on the phone yet. Recent sessions arrive with the next data refresh; older ones come with the app ZIP.')); return; }
     const has = (arr) => Array.isArray(arr) && arr.some((v) => v);
@@ -3372,17 +3444,19 @@ function streamCard(a, tilesHost) {
       const tip = (key) => (i) => streamPoint(s, i, bike, key, streamX === 'dist');
       const paceColor = paceByZone ? (i) => zoneColor(s.hr[i] || 0) : AMOUNT;
       area.replaceChildren();
+      const said = [];   // the long notes, into the fold in the curves' order
+      const note = (text) => { if (text.length > 64) said.push(el('p', null, text)); else area.append(help(text)); };
       streamChart(area, s, {
         height: 170, xMode: streamX, value: (i) => s.hr[i], color: (i, v) => zoneColor(v),
         yMin: Math.max(60, floors[0] - 15),
         rules: [...floors.slice(1).map((f, k) => ({ at: f, label: `Z${k + 2}` })), { at: DATA.athlete.lthr, label: `threshold ${DATA.athlete.lthr}` }],
         aria: 'Heart rate through the session', yLabel: 'bpm', tip: tip('hr'),
       });
-      area.append(help('Heart rate, colored by zone. Dashed lines are the zone floors and the lactate threshold.'));
+      note('Heart rate, colored by zone. Dashed lines are the zone floors and the lactate threshold.');
       if (bike) {
         if (has(s.v)) {
           streamChart(area, s, { height: 150, xMode: streamX, value: (i) => (s.v ? s.v[i] : null), color: paceColor, yMin: 0, aria: 'Speed through the ride', yLabel: 'km/h', tip: tip('pace') });
-          area.append(help(`Speed in km/h${paceByZone ? ', colored by the heart-rate zone at that moment' : ''}. Stops are left as gaps.`));
+          note(`Speed in km/h${paceByZone ? ', colored by the heart-rate zone at that moment' : ''}. Stops are left as gaps.`);
         }
       } else {
         // Anything slower than 8:30 /km is a shuffle into or out of a walk break; as
@@ -3391,28 +3465,29 @@ function streamCard(a, tilesHost) {
         const paceOf = (arr) => (i) => (arr[i] && arr[i] <= paceCap ? arr[i] : null);
         const zoneNote = paceByZone ? ', colored by the heart-rate zone at that moment' : '';
         streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.p), color: paceColor, invert: true, yFmt: pace, aria: 'Pace through the session', yLabel: 'min/km, faster is higher', tip: tip('pace'), emptyText: 'No running pace recorded.' });
-        area.append(help(`Pace in min/km, faster is higher${zoneNote}. ${a.sport === 'walk' ? 'Standstills' : 'Walk breaks'} are left as gaps.`));
+        note(`Pace in min/km, faster is higher${zoneNote}. ${a.sport === 'walk' ? 'Standstills' : 'Walk breaks'} are left as gaps.`);
         if (has(s.gap)) {
           streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.gap), color: paceColor, invert: true, yFmt: pace, aria: 'Grade-adjusted pace through the session', yLabel: 'grade-adjusted min/km', tip: tip('gap') });
-          area.append(help(`Grade-adjusted pace: the flat-ground pace that would cost the same effort, from the slope of the smoothed altitude and the running-cost curve${zoneNote}.`));
+          note(`Grade-adjusted pace: the flat-ground pace that would cost the same effort, from the slope of the smoothed altitude and the running-cost curve${zoneNote}.`);
         }
         if (has(s.cap)) {
           streamChart(area, s, { height: 150, xMode: streamX, value: paceOf(s.cap), color: paceColor, invert: true, yFmt: pace, aria: 'Condition-adjusted pace through the session', yLabel: 'condition-adjusted min/km', tip: tip('cap') });
-          area.append(help(`Condition-adjusted pace: the same, then corrected for the wind along your direction of travel (one station reading at the start, ${wxLine(a.wx)}) and the day’s heat${zoneNote}. Read it as the flat, still-air, cool-day pace this effort would have bought.`));
+          note(`Condition-adjusted pace: the same, then corrected for the wind along your direction of travel (one station reading at the start, ${wxLine(a.wx)}) and the day’s heat${zoneNote}. Read it as the flat, still-air, cool-day pace this effort would have bought.`);
         }
       }
       if (has(s.cad)) {
         streamChart(area, s, { height: 110, xMode: streamX, value: (i) => (s.cad[i] && (bike ? s.v && s.v[i] : s.p[i]) ? s.cad[i] : null), color: AMOUNT, aria: 'Cadence', yLabel: bike ? 'rpm' : 'steps per minute', tip: tip('cad') });
-        area.append(help(bike ? 'Cadence in rpm, while moving.' : 'Cadence in steps per minute, running only.'));
+        note(bike ? 'Cadence in rpm, while moving.' : 'Cadence in steps per minute, running only.');
       }
       if (has(s.pw)) {
         streamChart(area, s, { height: 120, xMode: streamX, value: (i) => s.pw[i] || null, color: AMOUNT, yMin: 0, aria: 'Power', yLabel: 'watts', tip: tip('pw') });
-        area.append(help(bike ? 'Power in watts.' : 'Running power in watts, as the watch estimates it.'));
+        note(bike ? 'Power in watts.' : 'Running power in watts, as the watch estimates it.');
       }
       if (has(s.alt)) {
         streamChart(area, s, { height: 100, xMode: streamX, value: (i) => s.alt[i], color: AMOUNT, area: true, aria: 'Elevation', yLabel: 'meters above sea level', tip: tip('alt') });
-        area.append(help('Elevation in meters.'));
+        note('Elevation in meters.');
       }
+      notes.replaceChildren(...said);
     };
     render();
     holder.append(chips, area);
@@ -3841,7 +3916,7 @@ function weightCard(main, weight, grid, weekly) {
     yLabel: 'kg',
     tip,
   });
-  c.append(help(`${inWindow ? '' : 'Fewer than two weigh-ins in this window, so the last '}${plural(rows.length, 'weigh-in')}, ${dayMon(rows[0].d)} to ${dayMon(rows[rows.length - 1].d)}: ${u(f1(kg[0]), 'kg')} to ${u(f1(kg[kg.length - 1]), 'kg')}.`));
+  howTo(c, `${inWindow ? '' : 'Fewer than two weigh-ins in this window, so the last '}${plural(rows.length, 'weigh-in')}, ${dayMon(rows[0].d)} to ${dayMon(rows[rows.length - 1].d)}: ${u(f1(kg[0]), 'kg')} to ${u(f1(kg[kg.length - 1]), 'kg')}.`);
   tableToggle(c, 'weight', () => table(['Date', 'kg', 'BMI'], rows.slice().reverse().map((w) => [date(w.d), f1(w.kg), w.bmi ? f1(w.bmi) : '–'])));
   main.append(c);
 }
@@ -3870,12 +3945,15 @@ function aboutList() {
 let aboutFrom = null;
 function about(open) {
   $('about').hidden = !open;
-  for (const id of ['head', 'main', 'band']) $(id).inert = open;
+  for (const id of ['head', 'main']) $(id).inert = open;
   if (open) { aboutFrom = document.activeElement; $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
 }
 $('stamp').onclick = () => about(true);
 $('about-close').onclick = $('about-close-2').onclick = () => about(false);
 document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('about').hidden) about(false); });
+
+// An empty touchstart listener, passive, so iOS draws :active (a key or a word pressed; plan 0011's owed item).
+document.addEventListener('touchstart', () => {}, { passive: true });
 
 // The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
 window.__rd = {

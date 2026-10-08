@@ -5,12 +5,14 @@
 //   3. every import / src / href / url( / fetch( is relative, inside the folder, present; the two data reads;
 //   4. js/ holds the three modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and no
 //      supplement; NOTES.md and About credit the face word for word;
-//   5. the data is pinned: data/snapshot.json's and data/appliances.json's sha256, byte-identical to before the
-//      pass (on the public repository the refresh job rewrites the snapshot, so the lead's mirror leaves its data/);
-//   6. miniapp.json is valid, its name unchanged;
+//   5. the data: data/snapshot.json's shape as scripts/power_hours.py writes it (the refresh rewrites it twice a day,
+//      so a sha256 pin failed on every fresh file; plan 0012 package 4), data/appliances.json pinned by sha256, and the
+//      tests' fixed day, tools/fixtures/snapshot.json (the file the old pin named), pinned by sha256;
+//   6. miniapp.json is valid, its name unchanged, its version 1.2 (plan 0012 package 4; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credits: the static fallback word for word in the band and About and in app.js; the data's own words
-//      written by app.js, never typed into it;
+//   8. the credits: the static fallback word for word as About's first Sources and credits paragraph (#about-credit)
+//      and in app.js; the data's own words written by app.js, never typed into it; no band; the private-use line
+//      as app.js's PRIVATE_USE, at the pane's head (HOUSE 4.15 exceptions);
 //   9. the marketing camera's string (HOUSE.md 7.4): c/kWh never in index.html, so it appears only once the
 //      snapshot parses, and written from js/units.js; the pane scrolls inside the frame (the camera's swipe); no
 //      storage at all;
@@ -18,18 +20,22 @@
 //      js/units.js, toLocale* and Intl nowhere (B5, B6, B15);
 //  11. no transition anywhere, and only the house's one animation here (About);
 //  12. innerHTML never set; no insertAdjacentHTML, outerHTML, document.write, eval or new Function;
-//  13. palette.py passes, and its --json price is style.css's --price in both themes;
+//  13. palette.py passes, and its --json price, cheap and dear are style.css's in both themes (HOUSE 11.2);
 //  14. the look: the chrome tokens exactly in both themes, no accent, warning or stock token; no box-shadow,
 //      backdrop-filter, `transition: all`, uppercase, letter-spacing, monospace; one family, and every font
 //      string in a script names "Ysabeau Office" first; no middle dot or em dash in the app's own strings; no
 //      →, ➤, ▸, ▾, ▴, ⓘ or ⋯ in shipped text, the .md files included (B17); both theme-color metas; the
-//      @font-face rule; the page's language and viewport; the type scale, one 21 px figure;
+//      @font-face rule; the page's language and viewport; the pane apps' type scale, one 34 px key number;
 //  15. the bugs on record (B1 to B18, ART.md section 8, now tools/DECISIONS.md) stay fixed in the code;
 //  16. budgets: app code at most 200,000 bytes, fonts/ at most 160,000, the ZIP built exactly as build-zips.yml
-//      builds it, against D5's 70,305 until the lead rules on the measured figure (plan 0011 D27, D30, D34 for
-//      the loop apps before this one): over it, the line is HELD for the lead, not failed;
+//      builds it at most 120,785 (the house rule for plan 0012 package 4: 96,628 before the pass, with that day's
+//      data, × 1.25);
 //  17. US spelling in every shipped text file; the data's keys licence and licenceInfo, the API's quoted
-//      "honour" and the zone codes IT-Centre-North and IT-Centre-South keep their words.
+//      "honour" and the zone codes IT-Centre-North and IT-Centre-South keep their words;
+//  18. the pane-app register (HOUSE 11; plan 0012 P1 to P9): the About key last; the pane's foot pads the home
+//      indicator; plates, the Landing's halos and ring in --sheet; the price now as the key number; the meaning
+//      colors on words alone; the scale's label and key; the help note in About; the header centered with the
+//      pane; a passive touchstart listener.
 //
 //   node tools/check.mjs
 
@@ -48,7 +54,9 @@ const read = (f) => (fs.existsSync(path.join(APP, f)) ? fs.readFileSync(path.joi
 const CODE_CAP = 200000, FONT_CAP = 160000;
 // D5's formula: 25 977 B before the pass × 1.25, rounded down, plus 37 834 B for the face. The stock ZIP is smaller
 // than the face it gains, so the lead rules on the measured figure (HOUSE.md 8); set ZIP_RULED when it has.
-const ZIP_CAP = 97000, ZIP_RULED = true;   // plan 0011 D39: the lead's ruling on the build's measured 93 754 (D5's 70 305 could not fit an app smaller than the face it gains)
+// the lead's ruling for plan 0012 package 4, the house rule (96 628 B before the pass × 1.25, rounded down), above the
+// app's own 97 000 of plan 0011 D39, so the cap rises to it (tools/DECISIONS.md)
+const ZIP_CAP = 120785, ZIP_RULED = true;
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -122,16 +130,35 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}`) && !/no fonts?,|No fonts|ships no font|system font|system stack/i.test(read('NOTES.md') + css),
   'the face is credited word for word in NOTES.md (the app\'s credits file) and About ("Type: …"); nothing says no font ships');
 
-// 5. The data is pinned: both files byte-identical to the commit the pass started from
-const DATA = { 'data/snapshot.json': 'cd7b0f7da4b92fd7ecbc732afd6ab81dbdbd149d3eba4c6ee0f98c2d7237e6d0', 'data/appliances.json': 'f308ce89d63af77f3cbc197df84e4cc2adf1c86543af1429b48b0db966063fe1' };
-for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is the file committed before the pass (${want.slice(0, 12)}…)`);
+// 5. The data. The refresh rewrites data/snapshot.json after each day's auction, so its bytes cannot be pinned (the pin
+// to cd7b0f7d…, the file of 1 Oct, failed on every fresh file): its shape is checked instead, as
+// scripts/power_hours.py writes it. That file of 1 Oct is the tests' fixed day, tools/fixtures/snapshot.json (from the
+// public template at bd8f679), pinned here; data/appliances.json is pinned as before.
+{
+  const s = JSON.parse(read('data/snapshot.json')), why = [];
+  const str = (v) => typeof v === 'string' && v.length > 0, num = (v) => typeof v === 'number' && Number.isFinite(v);
+  if (s.schema !== 1) why.push('schema is not 1');
+  if (!str(s.generatedAt) || !Number.isFinite(Date.parse(s.generatedAt))) why.push('no generatedAt');
+  if (!str(s.zone) || !str(s.timezone) || !str(s.unit) || ![15, 60].includes(s.resolutionMinutes)) why.push('zone, timezone, unit or resolutionMinutes missing');
+  const src = s.source || {};
+  if (!str(src.attribution) || !(str(src.licenceInfo) || str(src.licence)) || typeof src.publishable !== 'boolean') why.push('source has no attribution, license words or publishable flag');
+  const hrs = Array.isArray(s.hours) ? s.hours : null;
+  if (!hrs || hrs.some((h) => !h || !str(h.start) || !Number.isFinite(Date.parse(h.start)) || !num(h.price))) why.push('hours[] is not { start, price } rows');
+  if (!Array.isArray(s.days) || s.days.some((d) => !d || !/^\d{4}-\d\d-\d\d$/.test(d.date || '') || !str(d.source))) why.push('days[] is not { date, source } rows');
+  if (!(s.lastGood === null || (typeof s.lastGood === 'object' && Array.isArray(s.lastGood.hours)))) why.push('lastGood is neither null nor a kept run');
+  if (!Array.isArray(s.ask) || s.ask.length > 60) why.push('ask[] missing or over 60 rows');
+  if (hrs && !hrs.length && !s.lastGood) why.push('no prices and no lastGood');
+  ok(why.length === 0, `data/snapshot.json: the shape scripts/power_hours.py writes (schema 1, made ${s.generatedAt}, zone ${s.zone}, ${hrs ? hrs.length : 0} intervals, ${(s.days || []).length} days, ${(s.ask || []).length} ask rows); any file the refresh writes passes${why.length ? ': ' + why.join('; ') : ''}`);
+}
+const DATA = { 'tools/fixtures/snapshot.json': 'cd7b0f7da4b92fd7ecbc732afd6ab81dbdbd149d3eba4c6ee0f98c2d7237e6d0', 'data/appliances.json': 'f308ce89d63af77f3cbc197df84e4cc2adf1c86543af1429b48b0db966063fe1' };
+for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is ${f.startsWith('tools/') ? 'the file of 1 Oct, the tests\' fixed day (it does not ship)' : 'the file committed before the pass'} (${want.slice(0, 12)}…)`);
 
 // 6. miniapp.json
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Power Hours' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
 }
 
@@ -145,16 +172,18 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files, ART.md, NOTES.md and PROMPT.md included${named.length ? ': ' + named.join(', ') : ''}`);
 }
 
-// 8. The credits: the static fallback in the band and About, the same constant in app.js; the data's words written
-// by app.js from source.attribution and source.licenceInfo (or licence), never typed
+// 8. The credits (HOUSE 4.15): the static fallback as About's first Sources and credits paragraph (#about-credit, its id
+// kept), the same constant in app.js; the data's words written by app.js from source.attribution and
+// source.licenceInfo (or licence), never typed; no band; the private-use line as PRIVATE_USE, at the pane's head
 const CREDIT = 'Day-ahead prices: Energy-Charts (Fraunhofer ISE).';
 {
-  const band = (html.match(/<p class="credits" id="credits">([^<]*)<\/p>/) || [])[1];
-  const about = (html.match(/<p id="about-credit">([^<]*)<\/p>/) || [])[1];
-  const priv = /<p class="credits private" id="private" hidden>These prices are licensed for private and internal use only\. Do not republish them\.<\/p>/.test(html);
-  ok(band === CREDIT && about === CREDIT && app.includes(`const CREDIT_FALLBACK = '${CREDIT}';`) && /\$\('credits'\)\.textContent = t;/.test(app) && /\$\('about-credit'\)\.textContent = t;/.test(app)
-    && /s\.licenceInfo/.test(app) && /s\.attribution/.test(app) && !/Bundesnetzagentur \| SMARD/.test(app.replace(/\/\*[\s\S]*?\*\//g, '')) && priv,
-    `the credits: "${CREDIT}" static in the band and About and as app.js's fallback; the data's attribution and license words written by app.js; the private-use line static (shown when publishable is false)`);
+  const about = (html.match(/<h3>Sources and credits<\/h3>\s*(?:<!--[\s\S]*?-->\s*)?<p id="about-credit">([^<]*)<\/p>/) || [])[1];
+  ok(about === CREDIT && app.includes(`const CREDIT_FALLBACK = '${CREDIT}';`) && /\$\('about-credit'\)\.textContent = creditText\(\);/.test(app)
+    && /s\.licenceInfo/.test(app) && /s\.attribution/.test(app) && !/Bundesnetzagentur \| SMARD/.test(app.replace(/\/\*[\s\S]*?\*\//g, ''))
+    && !/id="band"|id="credits"|id="capline"|id="private"|<footer/.test(html) && !/\$\('credits'\)|\$\('capline'\)|\$\('private'\)|'band'/.test(code(app, 'x.js')) && !/\.band\b|\.capline\b|\.credits\b/.test(code(css, 'x.css'))
+    && app.includes("const PRIVATE_USE = 'These prices are licensed for private and internal use only. Do not republish them.';") && /el\('p', 'statement private-use', PRIVATE_USE\)/.test(app)
+    && /pane\.replaceChildren\(zoneTitle\(\), \.\.\.privateUse\(\), \.\.\.nowSection\(\)/.test(app),
+    `the credits: "${CREDIT}" static as About's first Sources and credits paragraph and as app.js's fallback; the data's attribution and license words written by app.js; no band, caption line or credit line on the front; the private-use line app.js's PRIVATE_USE, straight under the zone's title (HOUSE 4.15 exception 2)`);
 }
 
 // 9. The marketing camera's string (HOUSE.md 7.4) and storage
@@ -215,8 +244,10 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   ok(run.status === 0 && /ALL CHECKS PASS/.test(run.stdout), `tools/art/palette.py exits ${run.status}: ${(run.stdout.trim().split('\n').pop() || run.stderr.trim()).slice(0, 80)}`);
   let PAL = null;
   try { PAL = JSON.parse(json.stdout); } catch { PAL = null; }
-  const pairs = PAL ? ['light', 'dark'].map((s) => [s, PAL[s].price, tok(s, '--price')]) : [];
-  ok(PAL && pairs.every(([, a, b]) => a === b), `style.css's --price equals palette.py --json in both themes (${pairs.map(([s, a, b]) => `${s} ${b}${a === b ? '' : ` against ${a}`}`).join(', ')}): the one data color, the stock's blue fitted to the band`);
+  const pairs = PAL ? ['light', 'dark'].flatMap((s) => ['price', 'cheap', 'dear'].map((n) => [`${s} --${n}`, PAL[s][n], tok(s, `--${n}`)])) : [];
+  ok(PAL && pairs.length === 6 && pairs.every(([, a, b]) => a === b), `style.css's --price, --cheap and --dear equal palette.py --json in both themes (${pairs.map(([s, a, b]) => `${s} ${b}${a === b ? '' : ` against ${a}`}`).join(', ')}): the one data color, and the register's two meaning colors (HOUSE 11.2: --own, --owe)`);
+  const reg = { light: { '--cheap': '#1f5f99', '--dear': '#a64a1a' }, dark: { '--cheap': '#8cbcf0', '--dear': '#f0a070' } };
+  ok(['light', 'dark'].every((s) => Object.entries(reg[s]).every(([n, v]) => tok(s, n) === v)), '--cheap and --dear are HOUSE 11.2\'s values by value: #1f5f99 / #8cbcf0 and #a64a1a / #f0a070');
 }
 
 // 14. The look
@@ -257,11 +288,11 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html) && /<script type="module" src="\.\/app\.js"><\/script>/.test(html),
     'the page: lang="en-US", viewport-fit=cover without user-scalable, color-scheme light dark, app.js as a module');
   const px = [...c.matchAll(/font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/g)].map((m) => Number(m[1]));
-  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 21].includes(v));
-  const big = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 21px/g)].map((m) => m[1].trim());
+  const offScale = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34].includes(v));
+  const big = [...c.matchAll(/([^{}]+)\{[^}]*font-size: 34px/g)].map((m) => m[1].trim());
   const weights = [...c.replace(/@font-face \{[^}]*\}/, '').matchAll(/font-weight:\s*(\d+)|font:\s*(\d{3}) /g)].map((m) => Number(m[1] || m[2]));
   ok(offScale.length === 0 && JSON.stringify(big) === '[".fig b"]' && weights.every((w) => [400, 560, 600, 620, 650].includes(w)),
-    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the one 21 px figure ${big.join(', ')} (Now's price); weights ${[...new Set(weights)].join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
+    `type: sizes ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the one 34 px key number ${big.join(', ')} (Now's price, HOUSE 11.1 rule 2); weights ${[...new Set(weights)].join(', ')}${offScale.length ? ': off the scale ' + offScale.join(', ') : ''}`);
 }
 
 // 15. The bugs on record (ART.md section 8, tools/DECISIONS.md), each a must, stay fixed in the code
@@ -277,7 +308,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
     ['B8 <main> is not a live region; one polite live region', /<main class="pane" id="main">/.test(html) && (html.match(/aria-live/g) || []).length === 1 && /<p class="sr" id="live" aria-live="polite"><\/p>/.test(html)],
     ['B9 axis labels placed by priority with a 4 px gap', /LABEL_GAP = 4/.test(S) && /labels\.some\(\(p\) => a < p\.b \+ LABEL_GAP && p\.a < b \+ LABEL_GAP\)/.test(S)],
     ['B10 no hourly means: one tread per interval', !/hourlyMeans|buckets/.test(Pc + Ac + code(S, 'x.js'))],
-    ['B11 Now\'s rank is its own interval\'s', /const sec = el\('section', 'sec now'\), fig = el\('p', 'fig'\), r = P\.rankDay\(M, M\.cur\);/.test(app)],
+    ['B11 Now\'s rank is its own interval\'s', /const sec = el\('section', 'sec now headline'\), fig = el\('p', 'fig'\), r = P\.rankDay\(M, M\.cur\);/.test(app)],
     ['B12 intervals by instant and index, never by wall-clock hour', !/posOf|findIndex\(\(h\) => h\.hour/.test(Ac) && /\.sort\(\(a, b\) => a\.at - b\.at\)/.test(P)],
     ['B13 a broken replacement keeps the view', /if \(D\) \{(?:(?!\} else \{)[\s\S])*box\.classList\.add\('kept'\);\s*\} else \{/.test(app) && /Still showing the prices/.test(app)],
     ['B14 notices: plain sentences set as text, no backticks, no filesystem hint', !/`[^`]*\\`/.test(app) && !/filesystem|http\.server/.test(Ac) && !/esc\(/.test(Ac) && /In Snuggery, Options, then App Files shows what the file holds\./.test(app)],
@@ -291,7 +322,7 @@ const tok = (scheme, name) => (blockOf(scheme).match(new RegExp(`${name}:\\s*(#[
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => (fs.existsSync(path.join(APP, f)) ? fs.statSync(path.join(APP, f)).size : 0);
 const codeBytes = codeFiles.reduce((s, f) => s + size(f), 0);
-ok(codeBytes <= CODE_CAP && shipped.filter((f) => /\.(html|css|js|mjs)$/.test(f)).every((f) => codeFiles.includes(f)), `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 46,466 before the pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP && shipped.filter((f) => /\.(html|css|js|mjs)$/.test(f)).every((f) => codeFiles.includes(f)), `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 84,587 before plan 0012, 46,466 before plan 0011): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((s, f) => s + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; none before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });
@@ -306,7 +337,7 @@ ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length}
 ok(names.length === shipped.length && names.every((x) => shipped.includes(x)) && !names.some((f) => /^(tools|screenshots|scripts)\//.test(f) || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/ or dotfiles`);
 console.log(`     stored in the ZIP: data ${fmt(stored((x) => x.startsWith('data/')))}, fonts/ ${fmt(stored((x) => x.startsWith('fonts/')))}, app code ${fmt(stored((x) => codeFiles.includes(x)))}, ART.md ${fmt(stored((x) => x === 'ART.md'))}, NOTES.md and PROMPT.md ${fmt(stored((x) => x === 'NOTES.md' || x === 'PROMPT.md'))}`);
-if (zsize <= ZIP_CAP) ok(true, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}${ZIP_RULED ? ', the lead\'s ruling' : ', D5\'s formula'}; 25,977 before the pass)`);
+if (zsize <= ZIP_CAP) ok(true, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}, the house rule: 96,628 before plan 0012 × 1.25)`);
 else if (!ZIP_RULED) { const m = `ZIP size ${fmt(zsize)} bytes against D5's ${fmt(ZIP_CAP)} (25,977 before the pass): the stock ZIP is smaller than the face it gains, so the lead rules on this measured figure (HOUSE.md 8; plan 0011 D27, D30, D34)`; console.log(`HOLD ${m}`); held.push(m); }
 else ok(false, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}, the lead's ruling)`);
 
@@ -334,6 +365,31 @@ else ok(false, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}, the lead's ru
   const unesc = (s) => s.replace(/\\u([0-9a-f]{4})/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
   const own = [...new Set([...[app, html, ...mods.map(read)].map((s, i) => (i === 1 ? htmlText(s) : unesc(strings(s).join(' ')))).join(' ')].filter((ch) => ch.codePointAt(0) >= 0x20 && !inCut(ch.codePointAt(0))))];
   ok(own.length === 0, `the app's own strings use only characters the cut draws (no supplement)${own.length ? ': ' + own.join(' ') : ''}`);
+}
+
+// 18. The pane-app register (HOUSE 11.1; plan 0012 P1 to P9 and the change list)
+{
+  const c = code(css, 'x.css'), a = code(app, 'x.js'), S = read('js/staircase.js');
+  ok(/const ABOUT_KEY = 'Sources, method and credits are in About\.';/.test(app) && /function aboutKey\(host\) \{\s*const b = el\('button', 'aboutlink', ABOUT_KEY\);\s*b\.type = 'button';\s*b\.onclick = \(\) => about\(true\);\s*host\.append\(b\);\s*\}/.test(app)
+    && /\.\.\.statements\(\)\);\s*aboutKey\(pane\);/.test(app) && (a.match(/aboutKey\(/g) || []).length === 2
+    && /\.aboutlink \{ display: block; margin: 14px 0 0; min-height: 44px; font-size: 12\.5px; color: var\(--ink-2\); text-decoration: underline; text-underline-offset: 3px; \}/.test(c),
+    'the pane ends with the button "Sources, method and credits are in About.", 12.5 px --ink-2, underlined at 3 px, 44 px tall, opening About');
+  ok(/\.panebody \{[^}]*padding-top: 4px; padding-bottom: calc\(28px \+ env\(safe-area-inset-bottom\)\); \}/.test(c) && /for \(const id of \['head', 'main'\]\) \$\(id\)\.inert = open;/.test(app),
+    'no footer: the pane\'s foot pads the home indicator, calc(28 px + the bottom inset); About makes the head and main inert (HOUSE 4.14, P3)');
+  ok(/\.sec \{ margin-top: 12px; padding: 12px 12px 6px; border: 1px solid var\(--line\); border-radius: 8px; background: var\(--sheet\); \}/.test(c) && /el\('section', 'sec landing'\)/.test(app)
+    && /\.stair \.halo \{[^}]*stroke: var\(--sheet\);/.test(c) && /\.stair \.head \.ring \{ fill: var\(--sheet\); \}/.test(c),
+    'Now, the Landing and the runs on plates (--sheet, a 1 px --line edge, radius 8 px, 12 px apart); the Landing\'s label halos and the head\'s ring in --sheet, the plate it sits on (palette.py checks 2 to 4 on both grounds)');
+  ok(/const hl = el\('div', 'hl'\);[^\n]*\n  hl\.append\(el\('h2', 'hl-what', `Now, \$\{hm\(a\)\}–\$\{hm\(b\)\}`\), fig, lead\);\n  sec\.append\(hl\);/.test(app)
+    && /\.hl \{ display: grid; gap: 2px; \}/.test(c) && /\.hl-what \{ font-size: 12\.5px; font-weight: inherit; color: var\(--ink-2\); \}/.test(c) && /\.fig b \{ font-size: 34px; line-height: 1\.05; font-weight: 650; \}/.test(c)
+    && /el\('span', 'cheap', 'in the day’s cheapest quarter'\)/.test(app) && /el\('span', 'dear', 'in the day’s most expensive quarter'\)/.test(app)
+    && /\.cheap \{ color: var\(--cheap\); \}/.test(c) && /\.dear \{ color: var\(--dear\); \}/.test(c),
+    'Now opens the pane: its interval above, the price at 34 px, its rank under it, all three in div.hl as in Finances (the label 12.5 px, out of .sec > h2\'s reach); the cheapest and most expensive quarters in --cheap and --dear on their words alone (HOUSE 11.1 rule 2, 11.2)');
+  ok(/export const scaleLabel = /.test(S) && !/export const caption/.test(S) && /el\('p', 'note scale', scaleLabel\(D\.M\)\)/.test(app) && /k\.append\(sw, 'Chosen run, at its mean'\);/.test(app),
+    'the Landing\'s scale named under it ("c/kWh, spot price per 15 min, before grid rent, tax and VAT." and its kin) and a key, Chosen run, at its mean, in place of the band\'s caption (HOUSE 4.15, 11.1 rule 6)');
+  ok(/\.head \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\) 0 calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-left\)\); \}/.test(c) && /\.panebody \{ max-width: 760px; margin: 0 auto;/.test(c),
+    'the pane a centered 760 px column, the header\'s sides on it: max(16 px, 50 % − 364 px) (plan 0011\'s owed item; shoot.mjs measures it)');
+  ok(/document\.addEventListener\('touchstart', \(\) => \{\}, \{ passive: true \}\);/.test(app),
+    'a passive, empty touchstart listener on the document, so iOS draws the :active tints (plan 0011\'s owed item; a phone row checks it)');
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed${held.length ? `; ${held.length} held for the lead` : ''}`); process.exit(1); }

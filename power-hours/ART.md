@@ -4,16 +4,19 @@ How the app looks, moves and speaks under the template's house system (`Template
 Dashboard, Finances, World News and Outdoor Window are the pane apps before it, whose frame this one
 follows). `NOTES.md` says where the prices come from and on what terms; `PROMPT.md` sets a copy up.
 
-This file holds the look as built (HOUSE, "What ships and what does not"). The record of the pass
+This file holds the look as built (HOUSE, "What ships and what does not"), as of version 1.2, which
+takes the pane apps' register (HOUSE 11: plates, a key number, meaning colors on words, a key in place
+of the caption, credits in About). The record of the pass
 (the change list and the eighteen faults it fixed, the owner calls, the builder's as-built notes, the
 measured budget and the phone checks) is `tools/DECISIONS.md`, which does not ship.
 
-Figures were measured on 2026-10-03 on the data as committed: `data/snapshot.json` (sha256
-`cd7b0f7da4b92fd7ecbc732afd6ab81dbdbd149d3eba4c6ee0f98c2d7237e6d0`, made 1 Oct 2026, 04:01 UTC, 96
-quarter hours for NO2 on Thu 1 Oct, Europe/Oslo, UTC+2; tomorrow `pending`) and `data/appliances.json`
-(sha256 `f308ce89d63af77f3cbc197df84e4cc2adf1c86543af1429b48b0db966063fe1`). `python3
-power-hours/tools/art/palette.py` (from `Template/`) prints every color figure, 72 checks `ok`, and
-ends `ALL CHECKS PASS` (exit 0). The stock app was read in headless Chromium at 390 × 844, DPR 2,
+Figures were measured on 2026-10-03, and again for 1.2 on 2026-10-08, on one fixed day: the file of 1 Oct
+(sha256 `cd7b0f7da4b92fd7ecbc732afd6ab81dbdbd149d3eba4c6ee0f98c2d7237e6d0`, made 1 Oct 2026, 04:01 UTC, 96
+quarter hours for NO2 on Thu 1 Oct, Europe/Oslo, UTC+2; tomorrow `pending`), which the tools keep as
+`tools/fixtures/snapshot.json` because the refresh rewrites `data/snapshot.json` twice a day, and
+`data/appliances.json` (sha256 `f308ce89d63af77f3cbc197df84e4cc2adf1c86543af1429b48b0db966063fe1`).
+`python3 power-hours/tools/art/palette.py` (from `Template/`) prints every color figure, on the page and
+on the plate, 126 checks `ok`, and ends `ALL CHECKS PASS` (exit 0). The stock app was read in headless Chromium at 390 × 844, DPR 2,
 touch, both themes, with the clock at Thu 1 Oct 2026, 08:20 UTC (10:20 in Oslo, inside the file), at
 Sat 3 Oct 2026, 10:00 UTC (the file run out: what a fresh install and the marketing camera see), and
 with a two-day fixture (the shipped day plus a made-up Fri 2 Oct with a trough below zero, served by
@@ -58,7 +61,7 @@ stairs: when, and how much lower.
    of hours by price (color would carry the meaning, and the Shutters and the Datelines already own
    strips of time).
 4. *The house's means.* One data hue for the price, ink for the answer, 10.5 px labels on a 3 px
-   `--page` halo, `--line` hairlines at midnight, the house track's `now` and tracer head, no motion.
+   `--sheet` halo (the plate the drawing sits on), `--line` hairlines at midnight, the house track's `now` and tracer head, no motion.
 
 **Against the apps before it.** World News' Datelines are ticks of age on a log scale; Outdoor
 Window's Shutters are rows of ink blocks over hours, the window the gap between them; Running
@@ -138,7 +141,7 @@ proves them against an implementation written in the test):
 - **The chosen interval.** One interval is always chosen: the current one while the present is in
   the file, else the landing's first. Its column carries `--ink` at 7 % behind the plot's rows (never
   the `now` row), and the axis carries the house's tracer head under it: an 8 px `--ink` disc with a
-  3 px `--page` ring and a 1.5 × 18 px `--ink` rule, an instant change, never a glide.
+  3 px `--sheet` ring and a 1.5 × 18 px `--ink` rule, an instant change, never a glide.
 - **Input.** The drawing is one slider named `Time`: `role="slider"`, `tabindex="0"`,
   `aria-valuemin` 0, `aria-valuemax` the last interval's index, `aria-valuenow` the chosen one,
   `aria-valuetext` the readout in words (`Thursday 1 October, 14:15 to 14:30, 13.69 cents a kilowatt
@@ -152,10 +155,11 @@ proves them against an implementation written in the test):
   built from the data): `96 quarter hours from Thursday 1 October, 00:00. Lowest 13.62 at 01:00,
   highest 16.12 at 08:15. Dishwasher: cheapest 2 hours ahead 13:30 to 15:30, mean 14.19 cents a
   kilowatt hour, 8 percent below the mean ahead.`
-- **Caption** (the band's caption line, two lines below 640 px, one from 640, measured to fit two
-  lines at 312 px): `c/kWh, spot price per 15 min, before grid rent, tax and VAT. Ink: the chosen run
-  at its mean price.` (`per hour` for an hourly zone; the source's own unit, as `units()` returns it,
-  in place of `c/kWh` for a source not in EUR/MWh.) Test hook: `window.__ph.staircase()` returns the
+- **The scale's label and key** (HOUSE 11.1 rule 6), under the readout on the Landing's plate, 11.5 px
+  `--ink-2`: `c/kWh, spot price per 15 min, before grid rent, tax and VAT.` (one line from 360 px wide,
+  two below; `per hour` for an hourly zone; the source's own unit, as `units()` returns it, in place of
+  `c/kWh` for a source not in EUR/MWh), then a key of one item, a short ink rule drawn small:
+  `Chosen run, at its mean`. Test hook: `window.__ph.staircase()` returns the
   geometry (intervals, scale, landing, mean, labels placed and dropped); `window.__ph.chosen()` the
   chosen interval.
 
@@ -175,18 +179,22 @@ window's bars), moves to the price itself; hue 263 and chroma 0.216 kept, only l
 theme (HOUSE 3.2). The stock's neutral price bar (`--bar`, which under the house would read as chrome),
 its three semantic colors (`--good` for the cheap badge and the saving, `--warning` for the stale stamp
 and the kept-curve bar, `--critical` for the dear badge and the problem card) and its shadow and ring
-tokens go: words carry what they carried. `palette.py --json` prints `--price` per theme;
-`tools/check.mjs` fails while `style.css` differs.
+tokens go: words carry what they carried. Two meaning colors, HOUSE 11.2's, color words, never a mark
+in the drawing: `--cheap` (the register's `--own`, `#1f5f99` / `#8cbcf0`) on `in the day's cheapest
+quarter` and on a run's saving below the mean, `--dear` (`--owe`, `#a64a1a` / `#f0a070`) on `in the
+day's most expensive quarter` and on a run above it; as text 5.68 / 6.29 and 4.96 / 5.49 on page and
+plate (light), 8.61 / 7.68 and 8.12 / 7.24 (dark). `palette.py --json` prints `--price`, `--cheap` and
+`--dear` per theme; `tools/check.mjs` fails while `style.css` differs.
 
 **Chrome**: HOUSE 3.1's tokens as they are, both themes (ink on page 14.80 / 14.43; ink-3 on page
 4.78 / 5.88; the highest chroma 0.0239 light, 0.0223 dark).
 
 | | Light (film base) | Dark (the print) |
 | --- | --- | --- |
-| Ground | `--page` `#e8eef0`, L 0.945; About and notices on `--sheet` | `--page` `#141d21`, L 0.224; `--sheet` |
+| Ground | `--page` `#e8eef0`, L 0.945; the plates, About and notices on `--sheet` `#f6f9fa` | `--page` `#141d21`, L 0.224; `--sheet` `#1c272c` |
 | Data band | one point: `--price` `#2a67f0`, L 0.559, C 0.216, h 263 | `--price` `#3674fe`, L 0.599, C 0.216, h 263 |
 | Signature | the landing, its posts and bracket: `--ink` `#0f1c23`, L 0.218, opaque | `--ink` `#e6edee`, L 0.941, opaque |
-| Staircase on the page | 4.17 | 4.14 |
+| Staircase on the page / on the Landing's plate, where it is drawn | 4.17 / 4.62 | 4.14 / 3.70 |
 | Staircase on the chosen column (ink at 7 %) | 3.63 | 3.45 |
 | Staircase on its fill below zero (price at 16 %: `#cad8f0` / `#192b44`) | 3.40 | 3.46 |
 | Staircase across a midnight hairline | 3.23 | 2.97 |
@@ -208,7 +216,7 @@ row because `--ink-3` on the chosen column is 4.16 in the light theme; values an
 `--ink`. The mean-ahead rule is `--ink-3` (4.78 / 5.88 on the page; against the landing 3.10 / 2.45,
 told apart by weight, solid against dashed, and its label). Color never carries a meaning alone: the
 landing is ink and level, the price is a line, below zero is under a labeled `0`, cheap and dear are
-words.
+words, colored as well as said.
 
 **What the stock measured** (palette section 6): a price bar against the window's blue 1.23:1 light,
 1.55 dark (the window told from the rest by hue alone); the muted 11 px words on their ground 4.36
@@ -218,8 +226,8 @@ words.
 
 ## 3. The chrome, object by object
 
-HOUSE 4.0's *panes from a pull*, with one pane: a header, a pane that scrolls inside the frame, a
-fixed caption band. No units key, key column, player, focus mode or opening (the last item says why).
+HOUSE 4.0's *panes from a pull*, with one pane: a header and a pane that scrolls inside the frame, a
+centered column at most 760 px wide; no footer (HOUSE 4.15). No units key, key column, player, focus mode or opening (the last item says why).
 
 - **Header.** `<h1 translate="no">Power Hours</h1>`, 15 px 650, and the stamp: a `<button>` opening
   About (`aria-haspopup="dialog"`, described as *Opens About this data.*, a 44 px hit), built by hand
@@ -230,22 +238,28 @@ fixed caption band. No units key, key column, player, focus mode or opening (the
   `--ink-2`: `Prices ran out 36 h ago. Updated 1 Oct, 06:01` once every interval has ended (the camera's
   case); `Kept from the run before. Updated 30 Sep, 16:31` when `lastGood` is drawn (the stamp ages the
   kept prices, as the stock did); `Made after the phone's time. Updated …` when the file is more than
-  an hour ahead of the clock; `Undated file.`; `Reading the prices…` while loading; `No usable prices`
+  an hour ahead of the clock and nothing else leads the stamp (beside `Prices ran out …` or `Kept from the
+  run before.` it would take a second line, so the pane says it as a statement instead); `Undated file.`; `Reading the prices…` while loading; `No usable prices`
   when the first file cannot be used. A problem with a later file never empties the stamp. **No row of
   tabs**: the stock's `Today` and `Tomorrow` tabs go (B1 to B3 in `tools/DECISIONS.md`); the header is two lines (HOUSE 4.3, *no
   views and no layers*).
 - **The pane**, scrolling inside the frame under a still header (the stock's sticky, blurred header
-  and its page scroll go; a vertical swipe scrolls the pane, section 1). Sections between `--line`
-  hairlines, headed 13.5 px 650 in sentence case; rows on the page, no cards, no pills. In order:
+  and its page scroll go; a vertical swipe scrolls the pane, section 1). Now, the Landing and the runs
+  on plates (HOUSE 11.1 rule 4): `--sheet`, a 1 px `--line` edge, radius 8 px, 12 px padding, 12 px
+  apart, no shadow; headed 15 px 650 in sentence case; the zone's title and the statements on the page;
+  no pills. In order:
   1. **The zone**: the heading is `zoneName` (`Norway south-west`), under it 11.5 px `--ink-2`:
      `Bidding zone NO2, day-ahead prices, Oslo time (UTC+2)` (the city from `timezone`, the offset
-     from the intervals' own strings; both offsets when the file crosses a clock change).
-  2. **Now**, only while the present is in the file: `Now`, then the pane's one large figure, the
-     current interval's price `15.84` at 21 px 600 with `c/kWh` at 13.5 px `--ink-2` after U+202F, and
-     the lead in 12.5 px `--ink-2`: `10:15–10:30, 68th lowest of today's 96 quarter hours, in the
-     middle half`, (`in the day's cheapest quarter` at rank 24 or lower, `in the day's most
-     expensive quarter` above 72, scaled to the day's count). Price and rank are the same interval's (the stock
-     printed a quarter's price beside its hour's rank).
+     from the intervals' own strings; both offsets when the file crosses a clock change). When the
+     file's `source.publishable` is `false`, straight under it in `--ink` 13.5 px: `These prices are
+     licensed for private and internal use only. Do not republish them.` (HOUSE 4.15 exception 2).
+  2. **Now**, only while the present is in the file, the pane's key number (HOUSE 11.1 rule 2), on
+     its plate: `Now, 10:15–10:30`, its label at 12.5 px `--ink-2`, then the current interval's price `15.84` at
+     34 px 650 with `c/kWh` at 15 px `--ink-2` after U+202F, and the lead in 13.5 px `--ink-2`: `68th
+     lowest of today's 96 quarter hours, in the middle half` (`in the day's cheapest quarter`, in
+     `--cheap`, at rank 24 or lower; `in the day's most expensive quarter`, in `--dear`, above 72; scaled
+     to the day's count). Price and rank are the same interval's (the stock printed a quarter's price
+     beside its hour's rank).
   3. **The Landing** (section 1) and under it **the readout**, a fixed block, not a floating card (a
      stated departure from HOUSE 4.7, as Outdoor Window's: a card over the staircase would hide what it
      explains): line one 12.5 px 620 `--ink`, `Thu 1 Oct, 14:15–14:30` (`, now` for the current
@@ -259,8 +273,8 @@ fixed caption band. No units key, key column, player, focus mode or opening (the
   4. **Cheapest runs ahead** (or `Cheapest runs in this file` in history mode), under it 11.5 px
      `--ink-2`: `Searched from 10:15 to 24:00; mean 15.36 c/kWh`. One row per appliance,
      each a `<button aria-pressed>` at least 44 px tall: the name 13.5 px 560 left, the run's times
-     13.5 px 600 right (the landing's words); second line 11.5 px `--ink-2`: `2 h run, 14.19 c/kWh,
-     8 % below the mean ahead` (`1 % above` when so; `paid to run it, −3.31 c/kWh` when the run's mean is
+     15 px 600 right (the landing's words); second line 11.5 px `--ink-2`: `2 h run, 14.19 c/kWh,
+     8 % below the mean ahead`, the price and the saving in `--cheap` (`1 % above`, in `--dear`, when so; `paid to run it, −3.31 c/kWh` when the run's mean is
      below zero; the percentage left out when the mean ahead is zero or below, as the stock did);
      in history mode `9 % below the file's mean`; `not enough prices left` (in history, `no unbroken run
      that long in the file`) or `longer than the file` with no run. The pressed row's name at 620 in
@@ -280,32 +294,34 @@ fixed caption band. No units key, key column, player, focus mode or opening (the
      at 06:01. The auction publishes them about 13:00 Central European time; the refresh after that brings
      them.` (the auction's hour is Central European wherever the zone is, so the zone's city is not named)`;
      `lastGood`: `The last refresh could not reach the price service, so these are the prices it kept
-     from the run made 30 Sep, 16:31.`; `carried`: `Fri 2 Oct's prices were kept from an earlier run;
+     from the run made 30 Sep, 16:31.`; a file more than an hour ahead of the phone's clock while the stamp
+     already leads with ran out or kept: `This file was made after the phone's time: it says 2 Oct, 14:00,
+     more than an hour ahead of the phone's clock.`; `carried`: `Fri 2 Oct's prices were kept from an earlier run;
      the last refresh did not get them.`; the appliance file's three cases (skipped rows, no usable
-     rows, unreadable), as the stock's sentences without backticks; then always, 11.5 px `--ink-2`
-     under a hairline: `The appliances are data/appliances.json: in Snuggery, Options, then App Files.
-     Add a row or change a run length; the app reads it again when it comes back to the screen.`
-- **Caption band** (fixed, on `--page`, 16 px gutters): the caption line (section 1), then the
-  credits, 10.5 px / 15 px `--ink-2`: `source.attribution` and `source.licenceInfo` (or `licence`)
-  from the snapshot, byte for byte, joined by `. ` (the stock joined them with a spaced em dash):
-  `Day-ahead prices: Energy-Charts (Fraunhofer ISE). CC BY 4.0 (creativecommons.org/licenses/by/4.0)
-  from Bundesnetzagentur | SMARD.de.` Static markup holds the fallback, `Day-ahead prices:
-  Energy-Charts (Fraunhofer ISE).`, so a broken snapshot cannot take the attribution down; the data's
-  words replace it once parsed. When `source.publishable` is `false`, a second line in `--ink`:
-  `These prices are licensed for private and internal use only. Do not republish them.` (both lines on
-  screen in every state). The stock footer's auction sentence moves to About.
-- **About** (HOUSE 4.8), opened by the stamp: *What the Landing is* (section 1's reading and what it is
+     rows, unreadable), as the stock's sentences without backticks.
+  6. **The About key** (HOUSE 11.1 rule 1), last: a text button, 12.5 px `--ink-2`, underlined, 44 px
+     tall, `Sources, method and credits are in About.`, which opens About.
+
+  The pane's foot pads the home indicator: `calc(28px + env(safe-area-inset-bottom))`.
+- **About** (HOUSE 4.8), opened by the stamp or the About key: *What the Landing is* (section 1's reading and what it is
   not); *This data*, `label: value` lines: `Zone: NO2, Norway south-west`, `Time zone: Europe/Oslo,
   UTC+2`, `Prices: Thu 1 Oct 2026, 00:00 to Fri 2 Oct 2026, 00:00, 96 quarter hours`, `Updated: Thu 1
   Oct 2026, 06:01 (UTC+2)`, `Source unit: EUR/MWh, shown divided by 10 as c/kWh, euro-cents per kWh,
   the unit a household tariff is written in`, `Scale: 13 to 17 c/kWh for the whole file`, `Next day:
   Fri 2 Oct, not in this file (no prices published for 2026-10-02)` (the day in the house's words first,
   the file's own note after it), `Appliances: data/appliances.json, 4 rows`,
-  `Ask table: 32 rows`; *Sources and credits*: the two credit sentences, `api.energy-charts.info` and
+  `Ask table: 32 rows`; *Sources and credits*: the credit, `source.attribution` and
+  `source.licenceInfo` (or `licence`) from the snapshot, byte for byte, joined by `. ` (the stock joined
+  them with a spaced em dash): `Day-ahead prices: Energy-Charts (Fraunhofer ISE). CC BY 4.0
+  (creativecommons.org/licenses/by/4.0) from Bundesnetzagentur | SMARD.de.`, whose static markup holds
+  the fallback `Day-ahead prices: Energy-Charts (Fraunhofer ISE).`, so a broken snapshot cannot take
+  the attribution down (CC BY 4.0 allows the credit one tap away, in any reasonable manner); then `api.energy-charts.info` and
   `creativecommons.org/licenses/by/4.0` printed without a scheme, which 16 zones are CC BY and that
   the rest are private use (from `NOTES.md`, one sentence), then `Type: ` and the face's credit line;
   *How the data gets here*: in the template, a job refreshes the file after each day's auction (13:30
-  and 16:30 UTC), and a Shortcut carries it to the phone; nothing here goes online; the stock's ask
+  and 16:30 UTC), and a Shortcut carries it to the phone; the appliances are `data/appliances.json`, in
+  Snuggery, Options, then App Files, read again when the app comes back to the screen; nothing here goes
+  online; the stock's ask
   sentence (the table written when the prices were fetched carries the whole day and the stretch then
   ahead); `Day-ahead prices are set once a day, in an auction, for every interval of the following
   day.`
@@ -336,9 +352,9 @@ fixed caption band. No units key, key column, player, focus mode or opening (the
   player (time is the staircase's axis; the slider is the one control on it), no focus mode (the hero
   is a pane of answers, not a view, as for the four pane apps before it), no opening (HOUSE 4.11's
   default).
-- **A phone on its side** (HOUSE 4.13): a 46 px header row (name over stamp), a one-line caption, the
-  plot 96 px tall over the width; the pane left-aligned, 20 px gutters from 700 px wide. Safe areas
-  as HOUSE 4.14.
+- **A phone on its side** (HOUSE 4.13): a 46 px header row (name over stamp), the plot 96 px tall over
+  the width. **Wide windows**: the pane a centered column at most 760 px wide, the header's sides on it
+  (`max(16px, 50% - 364px)` plus the safe area). Safe areas as HOUSE 4.14.
 
 ---
 
@@ -354,8 +370,8 @@ its help sentences for words (`in Snuggery, Options, then App Files`), in `app.j
 (the data file's own `_comment` keeps them: data is not the pass's). **No face is removed**: the
 stock shipped none; its system stack (`-apple-system`, `SF Pro Text`, `Segoe UI`) and its `code` face
 (`ui-monospace`, `SFMono-Regular`, `Menlo`) go, and file names are set in the house face with
-`translate="no"`. Scale 10.5 / 11 / 11.5 / 12.5 / 13.5 / 15 / 21 px (the stock's 32 px price becomes
-21; its 8.5 to 9.5 px chart text, scaled further by the SVG's `viewBox` to about 7.6 px at 320 px
+`translate="no"`. Scale 10.5 / 11.5 / 12.5 / 13.5 / 15 / 34 px, the pane apps' (the stock's 32 px price
+becomes the 34 px key number; its 8.5 to 9.5 px chart text, scaled further by the SVG's `viewBox` to about 7.6 px at 320 px
 wide, becomes 10.5 px drawn in CSS pixels), weights 400, 560, 600, 620, 650 (the stock's 640 and 660
 go), no capitals, no letter-spacing (the stock's uppercase eyebrows at 0.04 em and the h1's −0.012 em
 go). The drawing's SVG text takes the page's face; the tick column and every label's room are measured
@@ -375,14 +391,14 @@ button whose label contains `Car charging`** (line 373, `app.buttons.matching(la
 
 | String or gesture | Where | Kept |
 | --- | --- | --- |
-| `c/kWh` in visible text | Now's unit, the readout, the runs' second lines, the caption line; written only after the snapshot parses, and **never in `index.html`**, so the wait still proves the data is in (`check.mjs` asserts the static markup holds none; `shoot.mjs` asserts none is in the DOM while the snapshot is held back) | kept |
-| a tap on the button whose label contains `Car charging` | the runs list's third row, a `<button aria-pressed>` whose accessible name begins `Car charging, ` (its visible name, then its run in words); pressing it moves the landing | kept (`shoot.mjs` taps it at the camera's 440 × 956 in the run-out state: the level `Thu 00:00–04:00`, 32 px longer than the dishwasher's `Thu 00:30–02:30`, which is 33 px long) |
+| `c/kWh` in visible text | Now's unit, the readout, the runs' second lines, the scale's label; written only after the snapshot parses, and **never in `index.html`**, so the wait still proves the data is in (`check.mjs` asserts the static markup holds none; `shoot.mjs` asserts none is in the DOM while the snapshot is held back) | kept |
+| a tap on the button whose label contains `Car charging` | the runs list's third row, a `<button aria-pressed>` whose accessible name begins `Car charging, ` (its visible name, then its run in words); pressing it moves the landing | kept (`shoot.mjs` taps it at the camera's 440 × 956 in the run-out state: the level `Thu 00:00–04:00`, 31 px longer than the dishwasher's `Thu 00:30–02:30`, which is 30 px long, on the plate) |
 
 The app stores nothing, so the camera has nothing to put back. No string is British. The pane's room to
-scroll, *measured* by `shoot.mjs` (`scrollHeight − clientHeight`): 69 px at 390 × 844 inside the file; 0
+scroll, *measured* by `shoot.mjs` (`scrollHeight − clientHeight`): 102 px at 390 × 844 inside the file; 0
 at 390 × 844 run out; 0 at the camera's 440 × 956, inside the file or run out. So the second pane is a
 tap, not the stock's swipe, which moved nothing there. The washing machine, tapped first, lands
-`Thu 01:00–02:30` in the run-out state, 8 px from the dishwasher's left end and on its right end: a
+`Thu 01:00–02:30` in the run-out state, 7 px from the dishwasher's left end and on its right end: a
 repeat of the first pane with another row pressed. The car's `Thu 00:00–04:00` is another landing.
 
 ---
@@ -393,20 +409,18 @@ repeat of the first pane with another row pressed. The car's `Thu 00:00–04:00`
 `build-zips.yml`'s command (`zip -q -r -X … . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*'
 'scripts/*' 'dist/*' 'raw/*'`), then its size on disk.
 
-| | Before the pass | As built | Cap |
+| | Before 1.2 | As built (1.2) | Cap |
 | --- | --: | --: | --- |
-| App code | 46 466 (`index.html` 808, `style.css` 9 234, `app.js` 36 424) | about 84 500 (`index.html`, `style.css`, `app.js` and the three modules in `js/`; `check.mjs` prints each) | 200 000, the house's |
-| Fonts | 0 | 40 075 (the house face and its `OFL.txt`) | 160 000 |
-| ZIP | 25 977 (9 entries) | about 96 000 (14 entries; the face and license store 37 510; this file's own size moves the last digits) | 97 000, the lead's ruling (plan 0011 D39); 70 305 by D5 (25 977 × 1.25, rounded down, plus 37 834 for the face) could not fit an app smaller than the face it gains |
-| Data | `data/snapshot.json` `cd7b0f7d…2d7237e6d0`; `data/appliances.json` `f308ce89…b966063fe1` | the same bytes | pinned by `check.mjs` |
+| App code | 84 587 | about 88 700 (`index.html`, `style.css`, `app.js` and the three modules in `js/`; `check.mjs` prints each) | 200 000, the house's |
+| Fonts | 40 075 | 40 075 (the house face and its `OFL.txt`) | 160 000 |
+| ZIP | 96 628 | about 99 000 (14 entries; the face and license store 37 510; this file's own size and the day's data move the last digits) | 120 785, the house rule (96 628 × 1.25, rounded down), above 1.1's 97 000 |
+| Data | `data/snapshot.json`, rewritten by the refresh; `data/appliances.json` `f308ce89…b966063fe1` | the same | `check.mjs` checks the snapshot's shape and pins the appliances and the tools' fixed day |
 
-**The ZIP cap: 97 000 B, the lead's ruling (plan 0011 D39), nothing cut.** The stock ZIP is smaller than
-the face it gains, the case HOUSE 8 names for the loop apps (D27, D30, D34: Finances ruled 131 000,
-World News 88 000, Outdoor Window 99 000). The build applied the whole list, cut nothing and never
-minified or stripped a comment, and measured 93 754 B; the raise leaves about 3 000 B for the fix
-stages, and `check.mjs` carries the cap as `ZIP_CAP` with `ZIP_RULED` set. **The data's hashes pin the private copy**: on the public repository the refresh
-job rewrites `data/snapshot.json` twice a day, so the lead's mirror leaves the public `data/` in place,
-as for World News.
+**The ZIP cap: 120 785 B, the house rule for 1.2, nothing cut.** Version 1.1's cap was 97 000 B (plan
+0011 D39); the pane-app pass measured the ZIP before it at 96 628 B, and the house rule, that figure
+× 1.25, is the higher, so the cap rises to it. **The snapshot is checked by shape, not by hash**: the
+refresh rewrites `data/snapshot.json` twice a day, so `check.mjs` checks what `scripts/power_hours.py`
+writes, and the tests read the fixed day in `tools/fixtures/`.
 
 ---
 
@@ -416,18 +430,18 @@ as for World News.
 | --- | --- |
 | 1. Cream, serif display, terracotta | film base; one sans; no accent: the one hue is the price's blue |
 | 2. Near-black with an acid accent | the stock's `#0b0e13` ground and electric-blue accent go for the slate print; the bright thing is the landing's ink |
-| 3. Broadsheet | one column, hairlines between sections, radii by role |
-| 4. The SaaS-card kit | the stock's four white cards at a 16 px radius with a two-layer shadow, and its pill badges, go; sections on the page |
+| 3. Broadsheet | one column, sections on plates, hairlines between rows, radii by role |
+| 4. The SaaS-card kit | the stock's four white cards at a 16 px radius with a two-layer shadow, and its pill badges, go; the register's plates are flat, `--sheet` with a 1 px hairline at 8 px, no shadow |
 | 5. Tracked capitals | none; `RIGHT NOW`, `CHEAPEST WINDOW · FROM 10:15` and `READING THESE NUMBERS` go |
 | 6. Middle-dot joins | commas and lines; the stock's dots in the zone line, the readout, the runs' prices and the section heads go; the one `|` left is inside the license's own words |
 | 7. Spaced em dash | none in the app's own text; the stock's in the credits join, the notes, the kept-curve bar and the problem hint become full stops, colons and commas |
 | 8. Tinted near-black | ink `#0f1c23` as ink; no `#0b0e13` or `#151a22` ground |
 | 9. Monospace labels | none; the `code` face goes |
 | 10. Arrows on buttons | none; the stock's `⋯ menu → App Files` becomes words, in the app and `PROMPT.md` |
-| 11. One accented word | none; the green `−6% vs mean`, the blue chosen name, the amber stamp and the red problem title go |
+| 11. One accented word | the green `−6% vs mean`, the blue chosen name, the amber stamp and the red problem title go; color on words only where it means cheap or dear, `--cheap` and `--dear` (HOUSE 11.2), and the words say it too |
 | 12. Labels above content | the eyebrows go; headings are the zone's name and the sections' subjects |
 | 13. Numbered markers | none |
-| 14. Big number, small label, gradient | the stock's 32 px price over a `RIGHT NOW` eyebrow with a colored badge becomes one 21 px figure with a lead in words |
+| 14. Big number, small label, gradient | the stock's 32 px price over a `RIGHT NOW` eyebrow with a colored badge becomes the register's one 34 px key number under its interval, with a lead in words, no gradient |
 | 15. Entrances, hover everywhere | none; the stock's color transitions go; hover only where the pointer can hover |
 
 ---

@@ -133,8 +133,11 @@ inside the app's ZIP, under `data/tiles/`, because the app cannot fetch anything
 
 `scripts/garmin_pull.py` fetches them, trying three sources in order
 (`TILE_SOURCES`). Each answers only inside its own coverage, so a route falls
-through to the first that has it, and the app credits whichever drew. What the
-terms mean for your own copy:
+through to the first that has it. About credits each source; OpenStreetMap's
+attribution guidelines also ask for the credit in the map's vicinity, so a map
+its tiles drew carries one line under it (`Map: © OpenStreetMap contributors,
+ODbL.`), as a route derived from its data does (`Route: …`). What the terms mean
+for your own copy:
 
 - **Kartverket** (the Norwegian Mapping Authority), Norway — open data under
   **CC BY 4.0**, credited "© Kartverket". Its terms add that the detail at
@@ -208,9 +211,12 @@ rules that make its words read like the rest of the app (US spelling, dates as
 
 The demo's evaluation, plan, race forecast and session notes were written for
 the demo runner from the demo's own numbers, to show what the routine's output
-looks like when it is there. Nothing on screen calls it an example, because the
-demo's job is to look like a real copy; this file, `PROMPT.md` and the caption
-under Snuggery's *Install the live examples* button are where that is said.
+looks like when it is there. The stamp says so, `Example data.`, while every
+session in the file is the demo's (their ids all start `demo-`, the rule the
+routes' OpenStreetMap credit keys on too); a real pull's ids are Garmin's, so
+your own copy never shows it. Otherwise the demo looks like a real copy; this
+file, `PROMPT.md` and the caption under Snuggery's *Install the live examples*
+button say more.
 
 ## Nothing here is anybody's
 

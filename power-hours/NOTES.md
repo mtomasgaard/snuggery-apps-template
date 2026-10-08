@@ -48,10 +48,11 @@ Every answer also carries the license for the zone it just returned, in a
 > SMARD.de
 
 **This demo uses NO2, southern Norway, which is on the CC BY list.** The app
-prints the attribution in its credits line, under every screen, which is what
-CC BY 4.0 asks for. Keep that line.
+prints the attribution in About, under Sources and credits, one tap from every
+screen (the stamp and the line at the foot of the pane open it), which is what
+CC BY 4.0 asks for: credit in any reasonable manner. Keep that paragraph.
 
-The credits line prints that `license_info` **verbatim**, license address and
+The credit prints that `license_info` **verbatim**, license address and
 all, rather than a sentence typed into the app: the script stores the field as
 `source.licenceInfo` in the snapshot (the snapshot's own key, spelled as the
 pipeline wrote it), and the app prefers it over the job's constant
@@ -147,7 +148,7 @@ Action, and a Shortcut carries the file in.
 ## Credits
 
 - Day-ahead prices: Energy-Charts (Fraunhofer ISE), under the license each
-  answer states (above), printed in the app's credits line word for word.
+  answer states (above), printed in the app's About word for word.
 - Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
   The subset is the template's house file, copied byte for byte from
   `global-weather/fonts/` (sha256 `fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262`).

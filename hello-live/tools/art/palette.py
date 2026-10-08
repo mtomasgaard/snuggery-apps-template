@@ -56,7 +56,7 @@ def de(a, b, kind='normal'): return math.dist(sim(a, kind), sim(b, kind))
 
 # -- the house's chrome tokens (HOUSE.md 3.1), copied as they are -----------------------------
 TOK = {
- 'light': dict(page='#e8eef0', sheet='#f6f9fa', ink='#0f1c23', ink2='#45555d', ink3='#5b6a72',
+ 'light': dict(page='#ffffff', sheet='#f6f9fa', ink='#0f1c23', ink2='#45555d', ink3='#5b6a72',
                line='#c9d4d8', strong='#74858c'),
  'dark':  dict(page='#141d21', sheet='#1c272c', ink='#e6edee', ink2='#a3b1b6', ink3='#8b9a9f',
                line='#2a373c', strong='#64757b'),
@@ -117,7 +117,7 @@ def main():
     print('\n== 4. text on the page, the card and About (all >= 4.5)')
     for th, t in TOK.items():
         P = {k: parse(v) for k, v in t.items()}; today = over(P['ink'], TODAY, P['page'])
-        c = cr(P['ink2'], P['page']); check(c >= 4.5, f'{th}: day labels, axis hours, the stamp, the lead, the caption line, the credits, ink-2 on page {c:.2f}')
+        c = cr(P['ink2'], P['page']); check(c >= 4.5, f'{th}: day labels, axis hours, the stamp, the lead, the key, ink-2 on page {c:.2f}')
         c = cr(P['ink2'], today); check(c >= 4.5, f'{th}: today\'s day label, ink-2 on today\'s row {c:.2f}')
         c = cr(P['ink3'], P['page']); check(c >= 4.5, f'{th}: `now` in its own row, ink-3 on page {c:.2f}')
         c = cr(P['ink'], P['page']); check(c >= 4.5, f'{th}: the headline, the row values, a stale sentence, ink on page {c:.2f}')

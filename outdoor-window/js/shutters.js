@@ -101,9 +101,11 @@ export function hourAt(M, x, clampIt = false) {
 /** The center of an hour's column, where the tracer head stands. */
 export const centerOf = (M, i) => M.G.x0 + i * M.G.ph + (M.G.ph - 1) / 2;
 
-/** The caption line under the Windows pane (two lines below 640 px; ART.md section 1). */
-export const caption = (M) => (!M.rules.length ? 'No rule is in use, so every hour is open. Framed gaps are windows.'
-  : `Ink: hours a rule rules out. ${M.rules.some((r) => r.hollows.length) ? 'Hollow: no value in the file.' : 'Green: how much of its limit an hour uses.'} Framed gaps are windows.`);
+/** The key under the Shutters (HOUSE 4.15, 11.1 rule 6; ART.md section 1), in place of the band's how-to-read
+ *  sentence: each mark drawn small with its word, as [mark, word]. A hollow block only when one is drawn; with no
+ *  rule in use, the window's frame alone (the pane's statement says no rule is in use). */
+export const keyItems = (M) => (!M.rules.length ? [['frame', 'Window']]
+  : [['blk', 'Ruled out'], ['used', 'Share of the limit'], ...(M.rules.some((r) => r.hollows.length) ? [['ho', 'No value']] : []), ['frame', 'Window']]);
 
 /** What VoiceOver reads as the slider's description, once: the file's span, what each rule cost, the windows. */
 export function describe(M, rows, windows, offset) {

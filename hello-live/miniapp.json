@@ -3,5 +3,5 @@
   "name": "Hello Live",
   "entryPoint": "index.html",
   "description": "Proves the refresh loop end to end, before you build anything real",
-  "version": "2.0"
+  "version": "2.1"
 }

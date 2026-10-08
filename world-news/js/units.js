@@ -79,3 +79,5 @@ export const spokenItem = (gen, iso) => (isDateOnly(iso) ? spokenDated(gen, iso)
 /** The app's short dates in words, for the live region: "23 Sep" to "23 September". */
 export const spoken = (text) => String(text).replace(/\u202f/g, ' ')
   .replace(/\b(\d{1,2}) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (_, d, m) => `${d} ${MONTHS[MONS.indexOf(m)]}`);
+/** A region's newest age, short and never rounded up: "under 1 h", "14 h", "2 d" (whole hours and days, floored). */
+export const ageShort = (h) => (!(h >= 1) ? `under 1${NB}h` : h < 24 ? `${int(Math.floor(h))}${NB}h` : `${int(Math.floor(h / 24))}${NB}d`);

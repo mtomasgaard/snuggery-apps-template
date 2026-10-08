@@ -1,4 +1,4 @@
-// The decode and card test (HOUSE.md 7.3; ART.md section 1): data/snapshot.json read with code written here, against
+// The decode and card test (HOUSE.md 7.3; ART.md section 1): the snapshot read with code written here, against
 // the app's pure modules js/units.js and js/card.js, with the Time Card's rule re-implemented in this file (px per
 // hour, the punch x of fixed instants in Europe/Oslo, both 2026 clock-change days, tails across one and two
 // midnights, a tail under 1 px, a reading before the writing, the record's dedupe and its 400 cap, the stamp's five
@@ -15,7 +15,10 @@ import { fileURLToPath } from 'node:url';
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const C = await import(path.join(APP, 'js/card.js'));
 const U = await import(path.join(APP, 'js/units.js'));
-const raw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
+// The fixed day: tools/fixtures/snapshot.json, the file of 1 Oct the figures here were worked out against (check.mjs
+// item 5 pins it). data/snapshot.json is rewritten by the refresh job about hourly, so it cannot be pinned; shoot.mjs
+// runs one stage on it, and check.mjs checks its shape (plan 0012 package 4).
+const raw = fs.readFileSync(path.join(APP, 'tools/fixtures/snapshot.json'), 'utf8');
 const snap = JSON.parse(raw);
 const fails = [];
 let n = 0;
@@ -183,6 +186,9 @@ const SAT = T('2026-10-03T10:00:00Z');   // 12:00 in Oslo on 3 Oct: what a fresh
   ok(U.offsetWord(GEN) === 'UTC+2' && U.offsetWord(T('2026-12-01T12:00:00Z')) === 'UTC+1' && U.offsetWord(T('2026-10-25T01:30:00Z')) === 'UTC+1', 'the offset word: UTC+2 in summer, UTC+1 after 25 Oct 03:00');
   ok(U.span(SAT - GEN) === `2${NB}d` && U.span(6 * 3600e3) === `6${NB}h` && U.span(59 * 60000 + 59000) === `59${NB}min` && U.span(47 * 3600e3 + 59 * 60000) === `47${NB}h`, `spans: ${[U.span(SAT - GEN), U.span(6 * 3600e3), U.span(59 * 60000), U.span(47 * 3600e3)].join(', ').replace(/ /g, ' ')} (whole units, rounded down)`);
   ok(U.si('10 m') === `10${NB}m` && U.si('274') === '274' && U.si('5 h ago') === `5${NB}h ago` && U.si('40 weeks') === '40 weeks', 'si(): U+202F before a known unit, a bare count untouched');
+  ok(U.rowValue('1000') === `1${NB}000` && U.rowValue('1439') === `1${NB}439` && U.rowValue('16380') === `16${NB}380` && U.rowValue('279') === '279' && U.rowValue('41') === '41'
+    && U.rowValue('0420') === '0420' && U.rowValue('-1000') === '-1000' && U.rowValue('12.5') === '12.5' && U.rowValue('10 m') === `10${NB}m` && U.rowValue('') === '',
+    `rowValue(): a plain digit string of four digits or more grouped with U+202F (1000 → ${U.rowValue('1000').replace(NB, ' ')}, 16380 → ${U.rowValue('16380').replace(NB, ' ')}), three digits as written, a leading zero, a sign or a point left as written, a known unit through si() (HOUSE 6.1; the lead's ruling, 2026-10-08)`);
   ok(U.int(16380) === `16${NB}380` && U.int(-3) === `${MI}3` && U.count(1, 'file') === '1 file' && U.count(400, 'file') === '400 files', 'int() groups from four digits with U+202F and uses the true minus; count() pluralizes');
   ok(U.dayTick(SAT) === 'Sat 3' && U.dayTick(T('2026-09-30T10:00:00Z')) === 'Wed 30' && U.dayMon(GEN, SAT) === '1 Oct' && U.dayMon(T('2025-10-01T01:59:56Z'), SAT) === '1 Oct 2025', 'the tick form and the stamp\'s day');
   ok(U.spoken(GEN) === 'Thursday 1 October, 03:59' && U.stampWhen(GEN, GEN + 60000) === '03:59' && U.stampWhen(GEN, SAT) === '1 Oct, 03:59', 'spoken() and stampWhen()');

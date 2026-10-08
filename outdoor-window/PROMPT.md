@@ -164,7 +164,7 @@ Open the app. Three things say it worked:
 
 - the stamp under the app's name says when your file was made, not the demo's,
 - the line under the Windows pane's heading shows your own coordinates rather than *Boston
-  Common*, and the example statement at the top of each pane is gone,
+  Common*, and the stamp no longer starts with *Example data.*,
 - the hours start at the current hour.
 
 If instead you get a notice, read it — it names the specific thing that is wrong: a missing
@@ -201,7 +201,7 @@ which is why it works perfectly on a raw reply. The gap is only in Ask. Three ho
 
 ## The license line to keep
 
-The app prints this in the caption band at the foot of every pane, word for word:
+The app prints this in About, first under *Sources and credits*, word for word:
 
 > Weather data by Open-Meteo.com, under CC BY 4.0. The free API is for non-commercial use. The
 > forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.
@@ -209,11 +209,12 @@ The app prints this in the caption band at the foot of every pane, word for word
 *If this ever disagrees with `index.html`, `index.html` is right* — do not normalize the credit line
 to match a quote in a document.
 
-Two of those words are **links** in the markup: *Open-Meteo.com* points at `open-meteo.com`, and
-*CC BY 4.0* at the license deed. They are the only external addresses in the whole app, and
-nothing is loaded from them; a tap is a link activation, which Snuggery names and offers to hand
-to Safari. The license asks for the credit as a link and for a link to the license, so both
-anchors are conditions, not decoration — keep them anchors.
+The foot of every pane carries Open-Meteo's link, *Weather data by Open-Meteo.com*, pointing at
+`open-meteo.com`, because their terms ask for it next to the data; About carries the license
+deed's address as a link. They are the only external addresses in the whole app, and nothing is
+loaded from them; a tap is a link activation, which Snuggery names and offers to hand to Safari.
+The license asks for the credit as a link and for a link to the license, so both anchors are
+conditions, not decoration — keep them anchors.
 
 The whole attribution is a condition of using the data, so it stays in `index.html` whatever else
 you change, in the markup rather than in JavaScript so a broken data file cannot take it down.
@@ -226,7 +227,7 @@ there is a paid tier for the other kind.
 - `outdoor-window/app.js`, `js/`, `style.css`, `index.html`, `fonts/` — the app. Change
   `data/rules.json`, not the code. The shape of both data files is documented in the header
   comment at the top of `app.js`; read that before changing anything here.
-- The attribution line in the caption band.
+- The attribution: Open-Meteo's line at the foot of every pane, and About's credit and license link.
 - The scoring arithmetic in **one** place only: `js/score.js` and `scripts/outdoor_window.py`
   mirror each other deliberately, because the app must score a raw reply and the script must
   write the demo's `ask` rows. Change one, change the other, and run both guards:

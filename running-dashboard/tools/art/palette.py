@@ -1,5 +1,7 @@
-"""Running Dashboard's palette under the house system (ART.md section 2): the house's chrome tokens,
-the app's data colors fitted into each theme's band (the heart-rate zones in Garmin's own hues, the
+"""Running Dashboard's palette under the house system (ART.md section 2) and its pane-app register (HOUSE.md
+11, plan 0012): the house's chrome tokens, the register's four meaning colors (--done, --up, --watch,
+--down, taken as HOUSE 11.2 measured them and checked by check 9), the app's data colors fitted into each
+theme's band (the heart-rate zones in Garmin's own hues, the
 eight series, Garmin's training statuses, the route's cool-to-warm ramp), the Block's ink (the
 signature), the ink lines on their casings, and every contrast figure ART.md quotes. Standard
 library only. Run from Template/:
@@ -126,6 +128,20 @@ AMOUNT = {'light': (0.500, 0.065, 255), 'dark': (0.740, 0.050, 250)}
 # (solid) and planned (tinted, outlined) stay apart; the tint itself stays under 2:1 on the page (light).
 # Check 8 prints each. style.css carries it as `.tint { fill-opacity: 0.2; }` and `20%` in color-mix().
 TINT = 0.20
+# The register (HOUSE 11.2, plan 0012 D5): one meaning each in this app. --done a run done (the Block's runs,
+# the week's bar on Now), --up on track, --watch watch, --down act now and stop (the tone word alone; the
+# word always says it). Not fitted: HOUSE's values and its measured text contrasts, repeated by check 9.
+REGISTER = {
+ 'light': {'done': '#1f5f99', 'up': '#17723e', 'watch': '#8a5a00', 'down': '#b42318'},
+ 'dark':  {'done': '#8cbcf0', 'up': '#6fd39a', 'watch': '#e0a340', 'down': '#ff9a8f'},
+}
+FIG = {  # text contrast on (page, sheet), HOUSE 11.2
+ 'light': {'done': (5.68, 6.29), 'up': (5.10, 5.65), 'watch': (5.06, 5.60), 'down': (5.61, 6.21)},
+ 'dark':  {'done': (8.61, 7.68), 'up': (9.34, 8.33), 'watch': (7.73, 6.89), 'down': (8.37, 7.46)},
+}
+# The register's planned fill (HOUSE 11.1 rule 7, 11.2): 14 % of the outline's color (--ink-2) over --sheet,
+# in the Block, the week's bar and their keys. HOUSE: light #dde2e4 1.23:1 on --sheet, dark #2f3a3f 1.31:1.
+PLAN_FILL = 0.14
 PLANNED = ['zone-1', 'zone-2', 'zone-3', 'zone-4', 'zone-5', 'series-1', 'series-3', 'series-6']   # and --ink
 
 RAMP = [(0.00, 0.120, 245), (0.25, 0.150, 285), (0.50, 0.170, 330), (0.75, 0.170, 15), (1.00, 0.160, 45)]
@@ -160,7 +176,7 @@ def ramp_stops(th, n=9):
 def main():
     F = {th: fit(th) for th in BAND}
     if '--json' in sys.argv:
-        print(json.dumps({th: {**F[th], 'ramp': ramp_stops(th), 'tint': TINT} for th in BAND}, indent=1)); return
+        print(json.dumps({th: {**F[th], **REGISTER[th], 'ramp': ramp_stops(th), 'tint': TINT} for th in BAND}, indent=1)); return
     ok = True
     def check(cond, msg):
         nonlocal ok; ok &= bool(cond); print(('ok   ' if cond else 'FAIL ') + msg)
@@ -212,24 +228,27 @@ def main():
     print('     Beyond five categories (zones, series, statuses) every legend and readout names its category,')
     print('     so identity never rests on color alone (HOUSE.md 3.3).')
 
-    print('\n== 4. the signature: the Block, --ink on --page, and the far end of the range')
+    print('\n== 4. the signature: the Block on its plate (--sheet), its runs in --done, a planned week an --ink-2')
+    print('     outline holding its 14 % fill (HOUSE 11.1 rule 7), and the far end of the range')
     for th in BAND:
-        t = TOK[th]; ink = parse(t['ink']); L, C, h = lch8(ink)
+        t = TOK[th]; ink = parse(t['ink']); L, C, h = lch8(ink); sh = parse(t['sheet']); done = parse(REGISTER[th]['done']); i2 = parse(t['ink2'])
         check(C <= 0.024, f'{th}: the ink {t["ink"]} is a near-neutral (L {L:.3f}, C {C:.4f})')
-        check(cr(ink, parse(t['page'])) >= 3, f'{th}: a run block and a plan outline, ink on page {cr(ink, parse(t["page"])):.2f} (target 3.0, a mark)')
+        check(cr(done, sh) >= 3, f'{th}: a run block, --done {REGISTER[th]["done"]} on the plate {cr(done, sh):.2f} (target 3.0, a mark)')
+        check(cr(i2, sh) >= 3, f'{th}: a plan outline, --ink-2 on the plate {cr(i2, sh):.2f}')
+        fill = over(i2, PLAN_FILL, sh)
+        check(cr(done, fill) >= 3 and cr(i2, fill) >= 3, f'{th}: this week\'s runs inside its planned fill {hx(fill)}: --done against it {cr(done, fill):.2f}, the outline {cr(i2, fill):.2f}')
         far = (L < BAND[th][0]) if th == 'light' else (L > BAND[th][1])
         check(far, f'{th}: the ink keeps the far end (L {L:.3f}; band {BAND[th][0]:.3f}-{BAND[th][1]:.3f})')
-        gap = over(parse(t['page']), 1.0, parse(t['page']))
-        check(cr(ink, gap) >= 3, f'{th}: the 1 px gap between two runs in a week is the page, {cr(ink, gap):.2f} against the ink')
-        check(cr(parse(t['ink3']), parse(t['page'])) >= 4.5, f'{th}: the Block\'s labels (now, the months), ink-3 on page {cr(parse(t["ink3"]), parse(t["page"])):.2f}')
-        check(cr(parse(t['line']), parse(t['page'])) < 1.5, f'{th}: the 20 km hairlines, --line on page {cr(parse(t["line"]), parse(t["page"])):.2f} (quiet on purpose, under 1.5)')
+        check(cr(done, sh) >= 3, f'{th}: the 1 px gap between two runs in a week is the plate, {cr(done, sh):.2f} against --done')
+        check(cr(parse(t['ink3']), sh) >= 4.5, f'{th}: the Block\'s labels (now, the months), ink-3 on the plate {cr(parse(t["ink3"]), sh):.2f}')
+        check(cr(parse(t['line']), sh) < 1.5, f'{th}: the 20 km hairlines, --line on the plate {cr(parse(t["line"]), sh):.2f} (quiet on purpose, under 1.5)')
 
-    print('\n== 5. ink lines over the data (the averages, the cursor): on a 4 px --page casing')
+    print('\n== 5. ink lines over the data (the averages, the cursor): on a 4 px --sheet casing, every chart on a plate')
     for th in BAND:
         t = TOK[th]; ink = parse(t['ink'])
         worst = min((cr(ink, parse(F[th][k])), k) for k in ZONES + SERIES + ['amount'])
         print(f'     {th}: without the casing, ink over the closest data color ({worst[1]}) would be {worst[0]:.2f}')
-        check(cr(ink, parse(t['page'])) >= 3, f'{th}: ink on its --page casing {cr(ink, parse(t["page"])):.2f}')
+        check(cr(ink, parse(t['sheet'])) >= 3, f'{th}: ink on its --sheet casing {cr(ink, parse(t["sheet"])):.2f}')
 
     print('\n== 6. the route ramp: one path, salience monotone, every stop >= 3:1 on its --sheet casing')
     for th in BAND:
@@ -260,16 +279,32 @@ def main():
         check(cr(parse(t['strong']), parse(t['page'])) >= 3, f'{th}: the card\'s edge on the page {cr(parse(t["strong"]), parse(t["page"])):.2f}')
         check(cr(parse(t['ink2']), parse(t['sheet'])) >= 4.5, f'{th}: the card\'s labels, ink-2 on sheet {cr(parse(t["ink2"]), parse(t["sheet"])):.2f}')
 
-    print(f'\n== 8. the plan\'s tint: each planned token at {TINT:.2f} over --page inside its own 1.5 px outline;')
-    print('     the tint seen (1.2:1 or more on the page) and light (under 2:1), done and planned apart (the')
-    print('     solid token at 3:1 or more against its tint, which is also its outline on the tint)')
+    print(f'\n== 8. the plan\'s tint in the charts: each planned token at {TINT:.2f} over its plate (--sheet) inside its')
+    print('     own 1.5 px outline; the tint seen (1.2:1 or more on the plate) and light (under 2:1), done and planned')
+    print('     apart (the solid token at 3:1 or more against its tint, which is also its outline on the tint)')
     for th in BAND:
-        t = TOK[th]; page = parse(t['page']); seen = []
-        for k in PLANNED + ['ink']:
-            c = parse(t['ink'] if k == 'ink' else F[th][k]); tint = over(c, TINT, page)
+        t = TOK[th]; page = parse(t['sheet']); seen = []
+        for k in PLANNED:
+            c = parse(F[th][k]); tint = over(c, TINT, page)
             s, a = cr(tint, page), cr(c, tint); seen.append(s)
-            check(1.2 <= s < 2 and a >= 3, f'{th}: {k:8} {hx(c)} tinted {hx(tint)}: on page {s:.2f}; the token against it {a:.2f}')
-        print(f'     {th}: the tints stand {min(seen):.2f} to {max(seen):.2f} on the page')
+            check(1.2 <= s < 2 and a >= 3, f'{th}: {k:8} {hx(c)} tinted {hx(tint)}: on the plate {s:.2f}; the token against it {a:.2f}')
+        print(f'     {th}: the tints stand {min(seen):.2f} to {max(seen):.2f} on the plate')
+
+    print('\n== 9. the register (HOUSE 11.2): each meaning color as text >= 4.5 on --page and --sheet at the figures')
+    print('     HOUSE measured; the planned fill at HOUSE\'s figures; the tone colors always beside their word')
+    for th in BAND:
+        t = TOK[th]; R = REGISTER[th]
+        for k, (fp, fs) in FIG[th].items():
+            cp, cs = cr(parse(R[k]), parse(t['page'])), cr(parse(R[k]), parse(t['sheet']))
+            check(cp >= 4.5 and cs >= 4.5 and abs(cp - fp) < 0.006 and abs(cs - fs) < 0.006, f'{th}: --{k:5} {R[k]} as text on page {cp:.2f}, on sheet {cs:.2f} (HOUSE 11.2: {fp:.2f}, {fs:.2f})')
+        fill = over(parse(t['ink2']), PLAN_FILL, parse(t['sheet']))
+        want = {'light': ('#dde2e4', 1.23, 7.32), 'dark': ('#2f3a3f', 1.31, 6.92)}[th]
+        check(hx(fill) == want[0] and abs(cr(fill, parse(t['sheet'])) - want[1]) < 0.006 and abs(cr(parse(t['ink2']), parse(t['sheet'])) - want[2]) < 0.006,
+              f'{th}: the planned fill {hx(fill)} {cr(fill, parse(t["sheet"])):.2f}:1 on --sheet, its --ink-2 outline {cr(parse(t["ink2"]), parse(t["sheet"])):.2f}:1 (HOUSE 11.2: {want[0]}, {want[1]:.2f}, {want[2]:.2f})')
+        for a, b in (('up', 'watch'), ('watch', 'down'), ('up', 'down')):
+            got = [de(parse(R[a]), parse(R[b]), kind) for kind in ('normal', 'deutan', 'protan', 'tritan')]
+            print(f'     {th}: --{a}/--{b} dE {" / ".join(f"{g:.3f}" for g in got)} (normal / deutan / protan / tritan){"; under 0.10, always beside its word" if min(got) < 0.10 else ""}')
+        print(f'     {th}: a plate on the page {cr(parse(t["sheet"]), parse(t["page"])):.2f}:1, its --line edge against the page {cr(parse(t["line"]), parse(t["page"])):.2f}:1')
 
     print('\nALL CHECKS PASS' if ok else '\nSOME CHECKS FAIL')
     sys.exit(0 if ok else 1)

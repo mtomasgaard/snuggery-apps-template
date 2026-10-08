@@ -1,8 +1,9 @@
-/* Running Dashboard, under the template's house system (ART.md; Template/HOUSE.md).
-   Panes on a page, not cards: one column on --page, sections parted by hairlines, one face, gray
-   chrome, no accent, no shadows, no glass. Hues are data only (the zones, the sports, the shoes,
-   Garmin's statuses, the route's ramp), fitted to a lightness band per theme by
-   tools/art/palette.py. The one bold thing is the Block, all ink. */
+/* Running Dashboard, under the template's house system (ART.md; Template/HOUSE.md) and its pane-app
+   register (HOUSE 11): sections on plates on the gray page, one face, gray chrome, no shadows, no glass.
+   The data's hues (the zones, the sports, the shoes, Garmin's statuses, the route's ramp) are fitted to a
+   lightness band per theme by tools/art/palette.py. The register's four meaning colors (HOUSE 11.3):
+   --done a run done (the Block's runs, the week's bar), --up on track, --watch watch, --down act now and
+   stop, on the tone word alone. */
 
 @font-face {
   font-family: 'Ysabeau Office';
@@ -29,6 +30,8 @@
   --zone-0: #81898e; --zone-1: #5f676b; --zone-2: #0061af; --zone-3: #115702; --zone-4: #965a01; --zone-5: #d7352f;
   --series-1: #0541c8; --series-2: #ca430e; --series-3: #007651; --series-4: #b47b06; --series-5: #a33c6a; --series-6: #785bce; --series-7: #0b8d9e; --series-8: #6a3a02;
   --amount: #4a6588;
+  /* the register's meaning colors (HOUSE 11.2, taken as measured there) */
+  --done: #1f5f99; --up: #17723e; --watch: #8a5a00; --down: #b42318;
   --thumb: radial-gradient(circle, var(--ink) 3.6px, var(--page) 4px 6.6px, transparent 7px), linear-gradient(var(--ink), var(--ink)) center / 1.5px 18px no-repeat;
 }
 @media (prefers-color-scheme: dark) {
@@ -44,6 +47,7 @@
     --zone-0: #6e767a; --zone-1: #9ca5a9; --zone-2: #66affe; --zone-3: #8dec7e; --zone-4: #dc8602; --zone-5: #e5443b;
     --series-1: #9cbeff; --series-2: #e1592c; --series-3: #36c18c; --series-4: #9b6901; --series-5: #e678a5; --series-6: #9377ed; --series-7: #0092a4; --series-8: #fdc493;
     --amount: #93aeca;
+    --done: #8cbcf0; --up: #6fd39a; --watch: #e0a340; --down: #ff9a8f;
   }
 }
 
@@ -69,7 +73,8 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
 /* ── the header: the name, the stamp, the panes as tabs ── */
-.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+/* the header's sides follow the pane's 760 px column, so on a wide screen the name starts where the plates do */
+.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(max(16px, 50% - 364px) + env(safe-area-inset-right)) 0 calc(max(16px, 50% - 364px) + env(safe-area-inset-left)); }
 .head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
 .stamp-home { min-width: 0; padding-bottom: 6px; }
 .stamp { position: relative; display: block; max-width: 100%; text-align: left; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
@@ -99,13 +104,14 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
 }
 @keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
-/* ── the pane: it scrolls inside the frame, so the header and the caption band stay put ── */
+/* ── the pane: it scrolls inside the frame, so the header stays put; with no band under it, it pads the home
+   indicator itself (HOUSE 4.14, 11.1 rule 1) ── */
 .pane { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .filters, .panebody { max-width: 760px; margin: 0 auto; padding: 0 calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
 /* the filters stay under the tabs and the pane scrolls beneath them; in the flow, so at rest they cover
    nothing; tucked() in app.js lifts the sport and equipment row out with a scroll down (the owner, 2026-10-03) */
 .filters { position: sticky; top: 0; z-index: 4; background: var(--page); }
-.panebody { padding-bottom: 24px; }
+.panebody { padding-top: 4px; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
 .frow { display: flex; flex-wrap: wrap; align-items: center; column-gap: 12px; }
 .winlabel { font-size: 12.5px; }
 
@@ -118,7 +124,9 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
 .dual-fill { position: absolute; top: -0.5px; height: 2px; background: var(--ink); }
 .dual-fill::before, .dual-fill::after { content: ''; position: absolute; top: -8px; left: -9px; width: 18px; height: 18px; border-radius: 50%; background: var(--thumb); }
 .dual-fill::after { left: auto; right: -9px; }
-.dual:has(input:nth-of-type(1):active) .dual-fill::before, .dual:has(input:nth-of-type(2):active) .dual-fill::after { background: radial-gradient(circle, var(--ink) 4.6px, var(--page) 5px 7.6px, transparent 8px), linear-gradient(var(--ink), var(--ink)) center / 1.5px 18px no-repeat; }
+.dual { --ring: var(--page); }
+.sec .dual { --ring: var(--sheet); }
+.dual:has(input:nth-of-type(1):active) .dual-fill::before, .dual:has(input:nth-of-type(2):active) .dual-fill::after { background: radial-gradient(circle, var(--ink) 4.6px, var(--ring) 5px 7.6px, transparent 8px), linear-gradient(var(--ink), var(--ink)) center / 1.5px 18px no-repeat; }
 .dual:has(input:nth-of-type(1):focus-visible) .dual-fill::before, .dual:has(input:nth-of-type(2):focus-visible) .dual-fill::after { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dual input { position: absolute; inset: 0; width: 100%; height: 44px; margin: 0; opacity: 0; pointer-events: none; appearance: none; -webkit-appearance: none; }
 .dual input::-webkit-slider-runnable-track { height: 44px; }
@@ -127,10 +135,11 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
 .picks { display: flex; gap: 8px; padding-top: 4px; }
 .pick { flex: 1 1 0; min-width: 0; height: 44px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 6px; font-size: 12.5px; font-weight: 560; appearance: none; -webkit-appearance: none; text-overflow: ellipsis; }
 
-/* ── sections, not cards ── */
-.sec { position: relative; padding: 16px 0 4px; border-top: 1px solid var(--line); }
-.panebody > .sec:first-child, .group + .sec { border-top: 0; }
-.sec > h2, .sec > h3 { font-size: 13.5px; font-weight: 650; margin-bottom: 6px; }
+/* ── sections on plates (HOUSE 11.1 rule 4): a --sheet fill, a 1 px --line edge, 12 px apart; a slider's head
+   on a plate rings in --sheet ── */
+.sec { position: relative; margin-top: 12px; padding: 12px 12px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet);
+  --thumb: radial-gradient(circle, var(--ink) 3.6px, var(--sheet) 4px 6.6px, transparent 7px), linear-gradient(var(--ink), var(--ink)) center / 1.5px 18px no-repeat; }
+.sec > h2, .sec > h3 { font-size: 15px; font-weight: 650; margin-bottom: 6px; }
 .group { font-size: 15px; font-weight: 650; padding: 28px 0 0; }
 .cap { margin-top: 6px; max-width: 62ch; font-size: 11px; line-height: 15px; color: var(--ink-2); }
 .sec p:not(.cap):not(.empty), .section { line-height: 1.5; max-width: 62ch; }
@@ -141,11 +150,40 @@ button, select { font: inherit; color: inherit; background: none; border: 0; pad
 .empty { padding: 12px 0; font-size: 12.5px; color: var(--ink-2); }
 .verdict { padding: 12px 0 4px; line-height: 1.5; max-width: 62ch; }
 .verdict b { font-weight: 620; }
-.figure { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 12px; padding: 14px 0 2px; }
-.fig-what { font-size: 12.5px; color: var(--ink-2); }
-.fig { justify-self: end; font-size: 21px; font-weight: 600; line-height: 1; white-space: nowrap; }
-.fig-lead { grid-column: 2; text-align: right; font-size: 12.5px; color: var(--ink-2); padding-top: 3px; }
-.fig-lead:empty { display: none; }
+/* the key number (HOUSE 11.1 rule 2): the label above, the figure at 34 px, the plan or lead under it */
+.headline { padding: 14px 12px 12px; }
+.hl { display: grid; gap: 2px; }
+.hl-what { font-size: 12.5px; font-weight: inherit; color: var(--ink-2); }
+.hl-row { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+.hl-fig { font-size: 34px; font-weight: 650; line-height: 1.05; }
+.hl-lead { font-size: 13.5px; color: var(--ink-2); }
+.sec .hl + .facts { margin-top: 6px; }
+/* the week against its plan: the outline holds a 14 % fill (HOUSE 11.1 rule 7), the run inside it in --done */
+.pbar { position: relative; height: 10px; margin-top: 8px; border: 1.5px solid var(--ink-2); border-radius: 3px; background: color-mix(in srgb, var(--ink-2) 14%, var(--sheet)); overflow: hidden; }
+.pbar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--done); }
+.pkey { display: flex; flex-wrap: wrap; gap: 2px 14px; margin-top: 5px; font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+.pkey span::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 5px; vertical-align: -1px; border-radius: 2px; }
+.k-done::before { background: var(--done); }
+.k-plan::before { box-sizing: border-box; border: 1.5px solid var(--ink-2); background: color-mix(in srgb, var(--ink-2) 14%, var(--sheet)); }
+/* the tone: its word in its meaning color, never the only carrier (the word says it) */
+.tone { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 15px; }
+.tone b { font-weight: 650; }
+.tone.tone-good b, .tone-good .tw { color: var(--up); }
+.tone.tone-warning b, .tone-warning .tw { color: var(--watch); }
+.tone.tone-serious b, .tone.tone-critical b, .tone-serious .tw, .tone-critical .tw { color: var(--down); }
+.tone-text { margin-top: 2px; line-height: 1.45; max-width: 62ch; }
+/* Now's facts as tiles (HOUSE 11.1 rule 3): two columns, a label, a 19 px value, a note */
+dl.tiles { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; }
+dl.tiles .fact { display: block; padding: 8px 0 7px; border-top: 1px solid var(--line); font-size: 13.5px; }
+dl.tiles .fact:nth-child(-n+2) { border-top: 0; padding-top: 2px; }
+dl.tiles dt { font-size: 11.5px; color: var(--ink-2); }
+dl.tiles dd { margin: 0; text-align: left; }
+dl.tiles dd b { display: block; font-size: 19px; font-weight: 650; line-height: 1.25; }
+dl.tiles dd span { display: block; font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+dl.tiles dd span::before { content: none; }
+/* the key at the end of every pane (HOUSE 11.1 rule 1) */
+.aboutlink { display: block; margin: 14px 0 0; min-height: 44px; font-size: 12.5px; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+.aboutlink:active { color: var(--ink); }
 
 /* text keys: a 28 px frame on a 44 px hit; disclosures with a drawn chevron that turns at once */
 .keys { display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: 8px; margin-top: 2px; }
@@ -176,13 +214,9 @@ summary::-webkit-details-marker { display: none; }
 .fact dd span::before { content: ', '; }
 .fact dd .per::before { content: ' '; }
 @media (min-width: 560px) { .facts { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; } .facts .fact:nth-child(2) { border-top: 0; } }
-/* Now's short facts, a table at the pane's head: the labels a column as wide as the longest (at most
-   half), the values left-aligned so a note wraps under its value; a long fact, a label over its prose */
-.tab { display: grid; grid-template-columns: fit-content(50%) minmax(0, 1fr); column-gap: 12px; }
-.tab .fact { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; }
-.tab .fact:first-child, .long .fact:first-child { border-top: 0; }
-.tab dd, .long dd { margin: 0; text-align: left; text-wrap: pretty; }
-.long { padding-top: 8px; }
+/* a long fact, a label over its prose, on its own plate after the Block */
+.long .fact:first-child { border-top: 0; }
+.long dd { margin: 0; text-align: left; text-wrap: pretty; }
 .long .fact { display: block; }
 .long dd { margin-top: 2px; line-height: 1.5; max-width: 62ch; }
 
@@ -191,17 +225,21 @@ summary::-webkit-details-marker { display: none; }
 .chartwrap svg { display: block; overflow: visible; touch-action: pan-y; }
 .chartwrap text { font-size: 10.5px; fill: var(--ink-2); }
 .chartwrap .mk { fill: var(--ink-3); }
-.halo { paint-order: stroke; stroke: var(--page); stroke-width: 3px; stroke-linejoin: round; }
+.halo { paint-order: stroke; stroke: var(--sheet); stroke-width: 3px; stroke-linejoin: round; }
 .grid { stroke: var(--line); }
 .base { stroke: var(--line-strong); }
 .rule { stroke: var(--ink-2); stroke-dasharray: 3 3; }
 .mark { stroke: var(--line-strong); stroke-dasharray: 3 3; }
 .mark.race, .racerule, .lowtick { stroke: var(--ink); stroke-dasharray: none; }
 .notch { stroke: var(--ink-2); }
-.casing { fill: none; stroke: var(--page); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
-.cdot { fill: var(--ink); stroke: var(--page); stroke-width: 2; }
-.dot { stroke: var(--page); stroke-width: 2; }
+.casing { fill: none; stroke: var(--sheet); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+.cdot { fill: var(--ink); stroke: var(--sheet); stroke-width: 2; }
+.dot { stroke: var(--sheet); stroke-width: 2; }
 .ink { fill: var(--ink); }
+/* the Block (HOUSE 11.3): a run done in --done, a planned week an --ink-2 outline with its 14 % fill */
+.blocksec .ink:not(.tint) { fill: var(--done); }
+.blocksec .tint { fill: var(--ink-2); fill-opacity: 0.14; }
+.blocksec .outline { stroke: var(--ink-2); }
 .outline { fill: none; stroke: var(--ink); stroke-width: 1.5; }
 /* the plan, wherever it is drawn: its outline holds a 20 % tint of its own color (palette.py check 8) */
 .tint { fill-opacity: 0.2; }
@@ -261,6 +299,8 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .zbar.empty { background: var(--line); }
 .spark { margin-top: 8px; }
 .mapwrap { border-radius: 8px; background: var(--sheet); margin-top: 8px; }
+/* OpenStreetMap's credit at the map's foot, only when its data drew the map (HOUSE 4.15 exception 1) */
+.mapcredit { margin-top: 4px; font-size: 10.5px; color: var(--ink-2); }
 .mapwrap .tiles { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; }
 .mapwrap .tiles img { position: absolute; display: block; pointer-events: none; user-select: none; }
 .mapwrap .tiles.dark { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92); }
@@ -276,7 +316,7 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .profile .ymax, .profile .ymin { position: absolute; right: 24px; font-size: 10.5px; color: var(--ink-2); pointer-events: none; }
 .profile .ymax { top: 0; }
 .profile .ymin { bottom: 2px; }
-.pdot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--ink); border: 2px solid var(--page); transform: translate(-50%, -50%); pointer-events: none; }
+.pdot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--ink); border: 2px solid var(--sheet); transform: translate(-50%, -50%); pointer-events: none; }
 .ramp { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 10.5px; color: var(--ink-2); }
 .ramp i { flex: 1 1 auto; height: 6px; outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); }
 
@@ -284,11 +324,6 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .notice { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 5; width: max-content; max-width: min(300px, calc(100% - 32px)); padding: 10px 14px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--sheet); line-height: 1.4; text-align: center; }
 .notice.kept { position: fixed; }
 .notice-lines { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere; text-align: left; }
-
-/* ── the caption band: the pane's caption line, fixed at two lines, and the credits ── */
-.band { flex: 0 0 auto; padding: 6px calc(16px + env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); border-top: 1px solid var(--line); font-size: 11px; line-height: 15px; color: var(--ink-2); }
-.capline { height: 30px; overflow: hidden; }
-.credits { font-size: 10.5px; }
 
 /* ── About: a full-height sheet ── */
 .about { position: fixed; inset: 0; z-index: 20; }
@@ -308,20 +343,15 @@ th:first-child, td:first-child { text-align: left; padding-left: 0; }
 .about-foot { margin-top: 8px; }
 
 @media (hover: hover) {
-  .tabs button:hover, .words button:hover, .wordrow > button:hover, .stamp:hover, .howto > summary:hover, .readout-close:hover { color: var(--ink); }
+  .tabs button:hover, .words button:hover, .wordrow > button:hover, .stamp:hover, .howto > summary:hover, .readout-close:hover, .aboutlink:hover { color: var(--ink); }
   .textkey:hover::before, .sess:hover { background: color-mix(in srgb, currentColor 7%, transparent); }
 }
-@media (min-width: 700px) {
-  .head, .band { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
-}
-/* a phone on its side: the header is one row, the caption band two */
+/* a phone on its side: the header is one row */
 @media (orientation: landscape) and (max-height: 500px) {
   .head { grid-template-columns: max-content minmax(0, 1fr); grid-template-rows: 22px 24px; column-gap: 16px; padding-top: env(safe-area-inset-top); }
   .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
   .stamp { white-space: nowrap; }
   .tabs { grid-area: 1 / 2 / 3 / 3; align-self: center; margin: 0; }
-  .band { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; padding-top: 4px; }
-  .capline { height: 15px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }

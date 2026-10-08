@@ -1,7 +1,7 @@
-/* World News, under the template's house system (ART.md; Template/HOUSE.md).
-   Panes on a page, not cards: one column on --page, stories parted by hairlines, one face, gray chrome, no
-   accent, no shadows, no glass. The app has no data color: the one bold thing is the Datelines, in ink.
-   Staleness and failure are words and a hollow tick, never a hue. */
+/* World News, under the template's house system (ART.md; Template/HOUSE.md) and its pane-app register
+   (HOUSE 11): sections on plates on the gray page, one face, gray chrome, no shadows, no glass. Color has one
+   meaning here: which source a headline came from (--src-1 to --src-3, by the order of the file's sources[]),
+   on the Datelines' ticks and the swatches. Staleness and failure are words and a hollow tick, never a hue. */
 
 @font-face {
   font-family: 'Ysabeau Office';
@@ -18,6 +18,9 @@
   --ink-3: #5b6a72;
   --line: #c9d4d8;
   --line-strong: #74858c;
+  --src-1: #1f5f99;
+  --src-2: #a64a1a;
+  --src-3: #6d2736;
   --draw: cubic-bezier(0.2, 0, 0, 1);
   --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
   --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
@@ -32,6 +35,9 @@
     --ink-3: #8b9a9f;
     --line: #2a373c;
     --line-strong: #64757b;
+    --src-1: #8cbcf0;
+    --src-2: #f0a070;
+    --src-3: #ab8198;
     color-scheme: dark;
   }
 }
@@ -57,7 +63,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 
 /* ── the header: the name, the stamp, the regions as tabs ── */
-.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+/* the header's sides follow the pane's 760 px column, so on a wide screen the name starts where the plates do */
+.head { flex: 0 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); padding: calc(6px + env(safe-area-inset-top)) calc(max(16px, 50% - 364px) + env(safe-area-inset-right)) 0 calc(max(16px, 50% - 364px) + env(safe-area-inset-left)); }
 .head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
 .stamp-home { min-width: 0; padding-bottom: 6px; }
 .stamp { position: relative; display: block; max-width: 100%; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
@@ -86,13 +93,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 @keyframes tracer-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 
-/* ── the pane: it scrolls inside the frame, so the header and the caption band stay put ── */
+/* ── the pane: it scrolls inside the frame, so the header stays put; with no band under it, it pads the home
+   indicator itself (HOUSE 4.14, 11.1 rule 1) ── */
 .pane { position: relative; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.panebody { max-width: 760px; margin: 0 auto; padding: 0 calc(16px + env(safe-area-inset-right)) 24px calc(16px + env(safe-area-inset-left)); }
+.panebody { max-width: 760px; margin: 0 auto; padding: 0 calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); padding-top: 4px; padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
 
-/* ── the Datelines: ink ticks on the page, the chosen rows in ink, the others in --ink-3. The picture is a
-   plain image; a hidden layer over it takes the taps (app.js, render) ── */
-.dlw { position: relative; width: fit-content; margin: 10px 0 8px; }
+/* ── the Datelines, on their plate: the chosen rows' ticks in their source's color (ink for a source past the
+   third), the other rows' in --ink-3. The picture is a plain image; a hidden layer over it takes the taps
+   (app.js, render) ── */
+.dlw { position: relative; width: fit-content; margin: 6px 0 2px; }
 .dl { display: block; overflow: visible; }
 .dlhit { position: absolute; inset: 0; touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .dl text { fill: var(--ink-2); }
@@ -101,33 +110,60 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .dl .on .rn { fill: var(--ink); font-weight: 620; }
 .dl .tk { fill: var(--ink-3); }
 .dl .on .tk, .dl .sel { fill: var(--ink); }
-.dl .sel { stroke: var(--page); stroke-width: 1.5; }
-.dl .cnt { font-size: 10.5px; stroke: var(--page); stroke-width: 3px; paint-order: stroke; }
+.dl .row.on .tk.src-1 { fill: var(--src-1); }
+.dl .row.on .tk.src-2 { fill: var(--src-2); }
+.dl .row.on .tk.src-3 { fill: var(--src-3); }
+.dl .sel { stroke: var(--sheet); stroke-width: 1.5; }
+.dl .cnt { font-size: 10.5px; stroke: var(--sheet); stroke-width: 3px; paint-order: stroke; }
 .dl .ho { fill: none; stroke: var(--ink-3); stroke-width: 1; }
 .dl .on .ho { stroke: var(--ink); }
 .dl .hair { stroke: var(--line); }
 .dl .scale { stroke: var(--line-strong); }
 .dl .mark { stroke: var(--ink-3); }
 
-/* ── sections and stories: rows on the page, parted by hairlines ── */
-.sec { padding-top: 14px; border-top: 1px solid var(--line); }
-.sec > h2 { font-size: 13.5px; font-weight: 650; padding-bottom: 4px; }
+/* ── sections on plates (HOUSE 11.1 rule 4), stories inside them parted by hairlines ── */
+.sec { margin-top: 12px; padding: 12px 12px 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--sheet); }
+.sec > h2, .sec-head h2 { font-size: 15px; font-weight: 650; padding-bottom: 2px; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding-bottom: 2px; }
+.sec-meta { flex: 0 0 auto; font-size: 12.5px; color: var(--ink-2); }
+.lead-sec { padding-bottom: 10px; }
+.cap { font-size: 11px; line-height: 15px; color: var(--ink-2); }
+/* a key in place of a how-to-read sentence (HOUSE 4.15, 11.1 rule 6): the marks drawn small, each with its word */
+.key { display: flex; flex-wrap: wrap; gap: 2px 12px; margin-top: 4px; font-size: 11.5px; line-height: 15px; color: var(--ink-2); }
+.key .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; }
+.sw.hollow { background: none; border: 1px solid var(--ink); }
+/* All's sources: the colors' key and a table (HOUSE 11.1 rule 3) */
+.keytab { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 13.5px; }
+.keytab th { padding: 4px 0; font-size: 11.5px; font-weight: 600; color: var(--ink-2); text-align: right; border-bottom: 1px solid var(--line-strong); }
+.keytab th:first-child, .keytab td:first-child { text-align: left; }
+.keytab td { padding: 6px 0; text-align: right; border-bottom: 1px solid var(--line); font-weight: 560; }
+.keytab td:first-child { font-weight: 400; }
+.keytab tr:last-child td { border-bottom: 0; }
+.sw { display: inline-block; width: 10px; height: 10px; margin-right: 7px; border-radius: 2px; vertical-align: -0.5px; background: var(--ink-3); }
+.sw.src-1 { background: var(--src-1); }
+.sw.src-2 { background: var(--src-2); }
+.sw.src-3 { background: var(--src-3); }
+.src .sw { width: 8px; height: 8px; margin-right: 5px; }
 .statement { padding: 8px 0 10px; line-height: 1.4; max-width: 62ch; }
 .statement b { font-weight: 620; }
-.story { position: relative; display: block; padding: 10px 0 11px; border-top: 1px solid var(--line); color: inherit; text-decoration: none; }
-.sec > h2 + .story, .statement + .story, .dlw + .story { border-top: 0; }
+.story { position: relative; display: block; padding: 11px 0 12px; border-top: 1px solid var(--line); color: inherit; text-decoration: none; }
+.sec-head + .story, .statement + .story { border-top: 0; }
 /* the headline is the link; its ::after stretches over the row, so a tap anywhere opens the story */
 .story a::after { content: ''; position: absolute; inset: 0; }
 .story a:focus-visible { outline: 0; }
 .story a:focus-visible::after { outline: 2px solid var(--ink); outline-offset: 2px; }
 .story:has(a:active) { background: color-mix(in srgb, var(--ink) 7%, transparent); }
 .story:has(> [aria-current="true"])::before { content: ''; position: absolute; left: -10px; top: 10px; bottom: 11px; width: 2px; background: var(--ink); }
-.hl, .src, .by, .sum { max-width: 62ch; overflow-wrap: anywhere; }
-.hl { display: block; font-size: 13.5px; line-height: 18px; font-weight: 560; color: inherit; text-decoration: none; }
-.src, .by { display: block; margin-top: 3px; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
+.hl, .src, .sum { max-width: 62ch; overflow-wrap: anywhere; }
+.hl { display: block; font-size: 15px; line-height: 20px; font-weight: 600; color: inherit; text-decoration: none; }
+.src { display: block; margin-top: 4px; font-size: 12.5px; line-height: 17px; color: var(--ink-2); }
 .src .lead { color: var(--ink); }
-.by { margin-top: 0; }
 .sum { display: block; margin-top: 4px; font-size: 12.5px; line-height: 17px; color: var(--ink-2); }
+/* on All a summary shows two lines (HOUSE 11.1 rule 10); a region's tab shows it whole. Display only: the words are the feed's */
+.sum.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* the key at the end of every pane (HOUSE 11.1 rule 1) */
+.aboutlink { display: block; margin: 14px 0 0; min-height: 44px; font-size: 12.5px; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+.aboutlink:active { color: var(--ink); }
 
 /* text keys: a 28 px frame on a 44 px hit */
 .textkey { position: relative; height: 44px; padding: 0 10px; font-size: 12.5px; }
@@ -138,11 +174,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .notice { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); z-index: 5; width: max-content; max-width: min(300px, calc(100% - 32px)); padding: 10px 14px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--sheet); line-height: 1.4; text-align: center; }
 .notice.kept { position: fixed; }
 .notice-lines { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; text-align: left; }
-
-/* ── the caption band: the pane's caption line, fixed at two lines, and the credits ── */
-.band { flex: 0 0 auto; padding: 6px calc(16px + env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left)); border-top: 1px solid var(--line); font-size: 11px; line-height: 15px; color: var(--ink-2); }
-.capline { height: 30px; overflow: hidden; }
-.credits { font-size: 10.5px; }
 
 /* ── About: a full-height sheet ── */
 .about { position: fixed; inset: 0; z-index: 20; }
@@ -155,7 +186,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .about-body section { max-width: 62ch; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .about-body h3 { margin-bottom: 6px; font-size: 13.5px; font-weight: 650; }
 .about-body p { line-height: 1.5; }
-.about-body p + p, .about-body div + p { margin-top: 8px; }
+.about-body p + p, .about-body div + p, .about-body p + div { margin-top: 8px; }
 .about-body a { color: var(--ink); }
 .about-body .src-name { font-weight: 620; }
 .about-body dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; line-height: 1.45; }
@@ -164,21 +195,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .about-foot { margin-top: 8px; }
 
 @media (hover: hover) {
-  .tabs button:hover, .stamp:hover { color: var(--ink); }
+  .tabs button:hover, .stamp:hover, .aboutlink:hover { color: var(--ink); }
   .textkey:hover::before { background: color-mix(in srgb, currentColor 7%, transparent); }
 }
-@media (min-width: 640px) { .capline { height: 15px; } }
-@media (min-width: 700px) {
-  .head, .band { padding-left: calc(20px + env(safe-area-inset-left)); padding-right: calc(20px + env(safe-area-inset-right)); }
-}
-/* a phone on its side: the header is one row, the caption band one line over the credits */
+/* a phone on its side: the header is one row */
 @media (orientation: landscape) and (max-height: 500px) {
   .head { grid-template-columns: max-content minmax(0, 1fr); grid-template-rows: 22px 24px; column-gap: 16px; padding-top: env(safe-area-inset-top); }
   .stamp-home { grid-area: 2 / 1; padding-bottom: 0; }
   .stamp { white-space: nowrap; }
   .tabs { grid-area: 1 / 2 / 3 / 3; align-self: center; margin: 0; }
-  .band { padding-top: 4px; }
-  .capline { height: 15px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0s !important; transition-duration: 0s !important; scroll-behavior: auto !important; }

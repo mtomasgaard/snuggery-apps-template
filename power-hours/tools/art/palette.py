@@ -84,6 +84,13 @@ L_PRICE = {'light': 0.560, 'dark': 0.600}
 NEG_FILL = 0.16     # --price over --page between the zero rule and a price below zero
 PAST = 0.40         # the opacity of quarters that have ended (still data, no longer a choice)
 CHOSEN = 0.07       # --ink over --page behind the chosen quarter's column
+GROUND_WORD = {'page': 'the page', 'sheet': 'the plate'}
+# -- the register's meaning colors (HOUSE 11.2, plan 0012 D5), with --own's and --owe's values: --cheap the day's
+# cheapest quarter and a run below the mean, --dear the dearest quarter and a run above it. Not fitted: HOUSE's
+# values and its measured text contrasts, repeated by check 6; always beside their words.
+REGISTER = {'light': {'cheap': '#1f5f99', 'dear': '#a64a1a'}, 'dark': {'cheap': '#8cbcf0', 'dear': '#f0a070'}}
+FIG = {'light': {'cheap': (5.68, 6.29), 'dear': (4.96, 5.49)}, 'dark': {'cheap': (8.61, 7.68), 'dear': (8.12, 7.24)}}
+PAIR = {'light': (0.246, 0.224, 0.188, 0.252), 'dark': (0.202, 0.185, 0.175, 0.225)}
 
 def fit(th):
     _, C, h = lch8(parse(SOURCE['price']))
@@ -100,7 +107,7 @@ STOCK = {
 def main():
     F = {th: fit(th) for th in BAND}
     if '--json' in sys.argv:
-        print(json.dumps(F, indent=1)); return
+        print(json.dumps({th: {**F[th], **REGISTER[th]} for th in BAND}, indent=1)); return
     ok = True
     def check(cond, msg):
         nonlocal ok; ok &= bool(cond); print(('ok   ' if cond else 'FAIL ') + msg)
@@ -115,57 +122,68 @@ def main():
         held = over(parse(t['ink']), CHOSEN, parse(t['page']))
         check(cr(parse(t['ink2']), held) >= 4.5, f'{th}: ink-2 on a row held down ({hx(held)}, ink at 7 % on page) {cr(parse(t["ink2"]), held):.2f}')
 
-    print('\n== 2. --price, fitted per theme: in the band, hue and chroma kept, a mark at >= 3:1')
-    for th in BAND:
+    print('\n== 2. --price, fitted per theme: in the band, hue and chroma kept, a mark at >= 3:1, on the page and on the\n     Landing\'s plate (--sheet; plan 0012 puts the Landing on a plate)')
+    for th, G in [(th, G) for th in BAND for G in ('page', 'sheet')]:
         t = {k: parse(v) for k, v in TOK[th].items()}; p = parse(F[th]['price'])
         L, C, h = lch8(p); L0, C0, h0 = lch8(parse(SOURCE['price']))
         inband = BAND[th][0] - 0.002 <= L <= BAND[th][1] + 0.002
-        check(inband, f'{th}: price {SOURCE["price"]} -> {F[th]["price"]}  L {L0:.3f} -> {L:.3f} (band {BAND[th][0]:.3f}-{BAND[th][1]:.3f}), C {C0:.3f} -> {C:.3f}, h {h0:.0f} -> {h:.0f}')
-        check(abs(h - h0) < 2 and C >= C0 - 0.005, f'{th}: hue and chroma kept (h {h:.0f}, C {C:.3f})')
-        check(cr(p, t['page']) >= 3, f'{th}: the staircase on the page {cr(p, t["page"]):.2f}')
-        col = over(t['ink'], CHOSEN, t['page'])
-        check(cr(p, col) >= 3, f'{th}: the staircase on the chosen column ({hx(col)}) {cr(p, col):.2f}')
-        check(cr(p, t['line']) >= 2, f'{th}: the staircase across a midnight hairline {cr(p, t["line"]):.2f} (>= 2)')
-        neg = over(p, NEG_FILL, t['page'])
-        check(cr(p, neg) >= 3, f'{th}: the staircase on its own fill below zero ({hx(neg)}, price at 16 %) {cr(p, neg):.2f}')
-        check(cr(t['strong'], neg) >= 2, f'{th}: the zero rule (--line-strong) against that fill {cr(t["strong"], neg):.2f} (>= 2; it is also against the page, {cr(t["strong"], t["page"]):.2f})')
-        past = over(p, PAST, t['page'])
-        print(f'     {th}: a quarter that has ended, price at 40 % ({hx(past)}) on the page {cr(past, t["page"]):.2f}: faint on purpose, not held to 3:1 (the readout still reads it)')
+        check(inband, f'{th}, on {GROUND_WORD[G]}: price {SOURCE["price"]} -> {F[th]["price"]}  L {L0:.3f} -> {L:.3f} (band {BAND[th][0]:.3f}-{BAND[th][1]:.3f}), C {C0:.3f} -> {C:.3f}, h {h0:.0f} -> {h:.0f}')
+        check(abs(h - h0) < 2 and C >= C0 - 0.005, f'{th}, on {GROUND_WORD[G]}: hue and chroma kept (h {h:.0f}, C {C:.3f})')
+        check(cr(p, t[G]) >= 3, f'{th}, on {GROUND_WORD[G]}: the staircase on {GROUND_WORD[G]} {cr(p, t[G]):.2f}')
+        col = over(t['ink'], CHOSEN, t[G])
+        check(cr(p, col) >= 3, f'{th}, on {GROUND_WORD[G]}: the staircase on the chosen column ({hx(col)}) {cr(p, col):.2f}')
+        check(cr(p, t['line']) >= 2, f'{th}, on {GROUND_WORD[G]}: the staircase across a midnight hairline {cr(p, t["line"]):.2f} (>= 2)')
+        neg = over(p, NEG_FILL, t[G])
+        check(cr(p, neg) >= 3, f'{th}, on {GROUND_WORD[G]}: the staircase on its own fill below zero ({hx(neg)}, price at 16 %) {cr(p, neg):.2f}')
+        check(cr(t['strong'], neg) >= 2, f'{th}, on {GROUND_WORD[G]}: the zero rule (--line-strong) against that fill {cr(t["strong"], neg):.2f} (>= 2; it is also against the page, {cr(t["strong"], t[G]):.2f})')
+        past = over(p, PAST, t[G])
+        print(f'     {th}, on {GROUND_WORD[G]}: a quarter that has ended, price at 40 % ({hx(past)}) on {GROUND_WORD[G]} {cr(past, t[G]):.2f}: faint on purpose, not held to 3:1 (the readout still reads it)')
 
     print('\n== 3. the signature: the Landing, --ink, at the far end of the range, apart from --price')
-    for th in BAND:
+    for th, G in [(th, G) for th in BAND for G in ('page', 'sheet')]:
         t = {k: parse(v) for k, v in TOK[th].items()}; ink = t['ink']; p = parse(F[th]['price'])
         L, C, h = lch8(ink)
-        check(C <= 0.024, f'{th}: the ink {TOK[th]["ink"]} is a near-neutral (L {L:.3f}, C {C:.4f})')
+        check(C <= 0.024, f'{th}, on {GROUND_WORD[G]}: the ink {TOK[th]["ink"]} is a near-neutral (L {L:.3f}, C {C:.4f})')
         far = (L < BAND[th][0]) if th == 'light' else (L > BAND[th][1])
-        check(far, f'{th}: the ink keeps the far end (L {L:.3f}; band {BAND[th][0]:.3f}-{BAND[th][1]:.3f})')
-        check(cr(ink, t['page']) >= 3, f'{th}: the level, its posts and its bracket, ink on page {cr(ink, t["page"]):.2f}')
-        check(cr(ink, p) >= 3, f'{th}: the level across the staircase, ink against price {cr(ink, p):.2f} (the lowest signature figure)')
+        check(far, f'{th}, on {GROUND_WORD[G]}: the ink keeps the far end (L {L:.3f}; band {BAND[th][0]:.3f}-{BAND[th][1]:.3f})')
+        check(cr(ink, t[G]) >= 3, f'{th}, on {GROUND_WORD[G]}: the level, its posts and its bracket, ink on {GROUND_WORD[G]} {cr(ink, t[G]):.2f}')
+        check(cr(ink, p) >= 3, f'{th}, on {GROUND_WORD[G]}: the level across the staircase, ink against price {cr(ink, p):.2f} (the lowest signature figure)')
         for kind in ('normal', 'deutan', 'protan', 'tritan'):
-            d = de(ink, p, kind); check(d >= 0.10, f'{th}: ink against price, {kind}, dE {d:.3f}')
-        past = over(p, PAST, t['page'])
-        check(cr(ink, past) >= 3, f'{th}: the level across an ended quarter (history mode) {cr(ink, past):.2f}')
-        neg = over(p, NEG_FILL, t['page'])
-        check(cr(ink, neg) >= 3, f'{th}: the level inside the fill below zero {cr(ink, neg):.2f}')
-        col = over(ink, CHOSEN, t['page'])
-        check(cr(ink, col) >= 3, f'{th}: the level on the chosen column {cr(ink, col):.2f}')
-        check(cr(t['page'], ink) >= 3, f'{th}: the tracer head\'s --page ring against its ink {cr(t["page"], ink):.2f}')
-        check(cr(ink, t['line']) >= 3, f'{th}: a post across a midnight hairline {cr(ink, t["line"]):.2f}')
+            d = de(ink, p, kind); check(d >= 0.10, f'{th}, on {GROUND_WORD[G]}: ink against price, {kind}, dE {d:.3f}')
+        past = over(p, PAST, t[G])
+        check(cr(ink, past) >= 3, f'{th}, on {GROUND_WORD[G]}: the level across an ended quarter (history mode) {cr(ink, past):.2f}')
+        neg = over(p, NEG_FILL, t[G])
+        check(cr(ink, neg) >= 3, f'{th}, on {GROUND_WORD[G]}: the level inside the fill below zero {cr(ink, neg):.2f}')
+        col = over(ink, CHOSEN, t[G])
+        check(cr(ink, col) >= 3, f'{th}, on {GROUND_WORD[G]}: the level on the chosen column {cr(ink, col):.2f}')
+        check(cr(t[G], ink) >= 3, f'{th}, on {GROUND_WORD[G]}: the tracer head\'s ring (the ground it stands on) against its ink {cr(t[G], ink):.2f}')
+        check(cr(ink, t['line']) >= 3, f'{th}, on {GROUND_WORD[G]}: a post across a midnight hairline {cr(ink, t["line"]):.2f}')
         # The mean ahead: a 1 px --ink-3 rule, dashed 3 on 3. A reference line, not the signature.
-        print(f'     {th}: the mean-ahead rule, ink-3 on page {cr(t["ink3"], t["page"]):.2f}, against the level {cr(t["ink3"], ink):.2f} (told apart by weight, solid against dashed, and its label)')
+        print(f'     {th}, on {GROUND_WORD[G]}: the mean-ahead rule, ink-3 on {GROUND_WORD[G]} {cr(t["ink3"], t[G]):.2f}, against the level {cr(t["ink3"], ink):.2f} (told apart by weight, solid against dashed, and its label)')
 
     print('\n== 4. text on the plate and the pane (all >= 4.5)')
-    for th in BAND:
+    for th, G in [(th, G) for th in BAND for G in ('page', 'sheet')]:
         t = {k: parse(v) for k, v in TOK[th].items()}
         # Text that can sit over the chosen quarter's column (the plot's rows only) is --ink-2 or --ink:
         # --ink-3 on that column is 4.16 in the light theme, so `now` keeps its own row above the plot,
         # where the column's tint never reaches, and the mean-ahead label is --ink-2.
-        col = over(t['ink'], CHOSEN, t['page'])
-        c = cr(t['ink2'], t['page']); check(c >= 4.5, f'{th}: axis and day labels, the Landing\'s and the mean\'s labels, the readout\'s values, ink2 on page {c:.2f}')
-        c = cr(t['ink2'], col); check(c >= 4.5, f'{th}: ink2 on the chosen column {c:.2f}')
-        c = cr(t['ink3'], t['page']); check(c >= 4.5, f'{th}: `now` in its own row, ink3 on page {c:.2f}')
-        print(f'     {th}: ink3 on the chosen column {cr(t["ink3"], col):.2f}: never set there (the reason `now` has its own row)')
-        c = cr(t['ink'], t['page']); check(c >= 4.5, f'{th}: values, the large figure, ink on page {c:.2f}')
+        col = over(t['ink'], CHOSEN, t[G])
+        c = cr(t['ink2'], t[G]); check(c >= 4.5, f'{th}, on {GROUND_WORD[G]}: axis and day labels, the Landing\'s and the mean\'s labels, the readout\'s values, ink2 on {GROUND_WORD[G]} {c:.2f}')
+        c = cr(t['ink2'], col); check(c >= 4.5, f'{th}, on {GROUND_WORD[G]}: ink2 on the chosen column {c:.2f}')
+        c = cr(t['ink3'], t[G]); check(c >= 4.5, f'{th}, on {GROUND_WORD[G]}: `now` in its own row, ink3 on {GROUND_WORD[G]} {c:.2f}')
+        print(f'     {th}, on {GROUND_WORD[G]}: ink3 on the chosen column {cr(t["ink3"], col):.2f}: never set there (the reason `now` has its own row)')
+        c = cr(t['ink'], t[G]); check(c >= 4.5, f'{th}, on {GROUND_WORD[G]}: values, the large figure, ink on {GROUND_WORD[G]} {c:.2f}')
+
+    print('\n== 6. the register (HOUSE 11.2): --cheap and --dear as text >= 4.5 on --page and --sheet at the figures')
+    print('     HOUSE measured, apart from each other under all four visions; apart from --price, which they never touch')
+    for th in BAND:
+        t = TOK[th]; R = REGISTER[th]
+        for k, (fp, fs) in FIG[th].items():
+            cp, cs = cr(parse(R[k]), parse(t['page'])), cr(parse(R[k]), parse(t['sheet']))
+            check(cp >= 4.5 and cs >= 4.5 and abs(cp - fp) < 0.006 and abs(cs - fs) < 0.006, f'{th}: --{k} {R[k]} as text on page {cp:.2f}, on sheet {cs:.2f} (HOUSE 11.2: {fp:.2f}, {fs:.2f})')
+        got = tuple(round(de(parse(R['cheap']), parse(R['dear']), kind), 3) for kind in ('normal', 'deutan', 'protan', 'tritan'))
+        check(all(abs(g - w) <= 0.001 for g, w in zip(got, PAIR[th])) and min(got) >= 0.10, f'{th}: --cheap/--dear dE {" / ".join(f"{g:.3f}" for g in got)} (normal / deutan / protan / tritan; HOUSE 11.2 the same)')
+        print(f'     {th}: --cheap against --price dE {de(parse(R["cheap"]), parse(F[th]["price"])):.3f}: text beside the drawing, never a mark in it')
 
     print('\n== 5. notices and About (--sheet, a 1 px --line-strong edge)')
     for th in BAND:
@@ -173,7 +191,7 @@ def main():
         check(cr(t['strong'], t['page']) >= 3, f'{th}: a notice\'s edge on the page {cr(t["strong"], t["page"]):.2f}')
         check(cr(t['ink'], t['sheet']) >= 4.5 and cr(t['ink2'], t['sheet']) >= 4.5, f'{th}: About\'s text, ink {cr(t["ink"], t["sheet"]):.2f}, ink-2 {cr(t["ink2"], t["sheet"]):.2f} on sheet')
 
-    print('\n== 6. the stock look, for the record (not checked: what this pass replaces)')
+    print('\n== 7. the stock look, for the record (not checked: what this pass replaces)')
     for th, s in STOCK.items():
         P = lambda k: parse(s[k])
         print(f'     {th}: a price bar on its card {cr(P("bar"), P("card")):.2f}; the window\'s blue on the card {cr(P("accent"), P("card")):.2f}; bar against window blue {cr(P("bar"), P("accent")):.2f}')

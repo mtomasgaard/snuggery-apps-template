@@ -25,7 +25,7 @@
  * ---------------------------------------------------------------------------
  */
 
-import { NB, int, count, si, stampWhen, full, offsetWord, dayMon, localLead, stamp as stampOf } from './js/units.js';
+import { NB, int, count, rowValue, stampWhen, full, offsetWord, dayMon, localLead, stamp as stampOf } from './js/units.js';
 import { layout, rowFor, geometry, describe, draw, remember, sanitize, DAYS_SHOWN } from './js/card.js';
 
 const DATA_URL = './data/snapshot.json';
@@ -108,11 +108,11 @@ async function load() {
 }
 
 /** The same file on a return, or the clock at a whole minute: only what the clock moves is written again (the stamp,
- *  the now notch and the rows, the caption's offset). */
+ *  the now notch and the rows, the key's offset). */
 function refresh() {
   stamp();
   drawCard();
-  caption();
+  hoursKey();
   aboutList();
   schedule();
 }
@@ -141,7 +141,6 @@ function fail(S) {
   } else {
     $('stamp').textContent = 'No usable file.';
     $('pane').hidden = true;
-    $('capline').textContent = '';
     box.classList.remove('kept');
     for (const p of S.problems) box.append(el('p', null, p));
     if (S.hint) box.append(el('p', 'notice-lines', S.hint));
@@ -171,19 +170,20 @@ function render() {
   rows(d.runs);
   stamp();
   drawCard();
-  caption();
+  hoursKey();
   aboutList();
 }
 
 /** The file's runs[] as a dl: rebuilt only when the row count or the labels change; the values updated in place and
- *  passed through si(), so a value with a known unit gets its U+202F. */
+ *  passed through rowValue(): a count of four digits or more grouped with U+202F, a value with a known unit given
+ *  its U+202F (HOUSE 6.1). */
 function rows(runs) {
   const dl = $('rows'), list = Array.isArray(runs) ? runs.filter((r) => r && typeof r === 'object') : [];
   $('rows-sec').hidden = !list.length;
   const labels = list.map((r) => String(r.label ?? ''));
   const have = [...dl.querySelectorAll('dt')].map((t) => t.textContent);
   if (labels.join('\n') !== have.join('\n') || have.length !== labels.length) dl.replaceChildren(...labels.flatMap((l) => [el('dt', null, l), el('dd', null, '')]));
-  [...dl.querySelectorAll('dd')].forEach((dd, i) => setText(dd, si(String(list[i].value ?? ''))));
+  [...dl.querySelectorAll('dd')].forEach((dd, i) => setText(dd, rowValue(String(list[i].value ?? ''))));
 }
 
 /** The Time Card drawn for the pane's width at the present, its accessible name from the record. Its rows take the
@@ -203,9 +203,10 @@ function drawCard() {
   $('card').setAttribute('aria-label', describe(record, now));
 }
 
-/** The caption line (ART.md section 1): how to read the card, with the phone's offset. */
-function caption() {
-  setText($('capline'), `A mark where each file was written, by day; its tail runs to its first reading here. Hours: this phone’s, ${offsetWord(Date.now())}.`);
+/** The card key's last item (ART.md section 1): the card's hours are the phone's, named by its offset now, written
+ *  where the band's caption was (plan 0012; the key's two marks are static in index.html). */
+function hoursKey() {
+  setText($('hours-key'), `Hours: this phone’s, ${offsetWord(Date.now())}`);
 }
 
 /* ── About ──────────────────────────────────────────────────────────────── */
@@ -227,11 +228,11 @@ function aboutList() {
 let aboutFrom = null;
 function about(open) {
   $('about').hidden = !open;
-  for (const id of ['head', 'main', 'band']) $(id).inert = open;   // holds Tab inside the sheet
+  for (const id of ['head', 'main']) $(id).inert = open;           // holds Tab inside the sheet
   $('about-data').hidden = !D;                                      // with no usable file, its prose stands
   if (open) { aboutFrom = document.activeElement; $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
 }
-$('stamp').onclick = () => about(true);
+$('stamp').onclick = $('about-key').onclick = () => about(true);
 $('about-close').onclick = $('about-close-2').onclick = () => about(false);
 document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('about').hidden) about(false); });
 // Tab is held inside the sheet: inert keeps the page out, and this turns the last key's Tab back to the first.
@@ -256,6 +257,9 @@ new ResizeObserver(() => {
 matchMedia(LANDSCAPE).addEventListener('change', () => { if (D) drawCard(); });
 // The face arriving after the first card: its labels are measured again.
 document.fonts.addEventListener('loadingdone', () => { if (D) drawCard(); });
+// An empty touchstart listener, passive, so iOS draws :active (the About key and the notice's Close pressed; plan
+// 0011's owed item).
+document.addEventListener('touchstart', () => {}, { passive: true });
 
 // The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
 window.__hl = {

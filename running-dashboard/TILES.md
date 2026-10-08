@@ -12,8 +12,8 @@ domain, with no restrictions on use or redistribution. The USGS asks for this ac
 
 > Map services and data available from U.S. Geological Survey, National Geospatial Program.
 
-The app credits them as *USGS The National Map* under every map it draws with them, and this file
-carries the acknowledgment in full.
+The app credits them in About, which prints the acknowledgment word for word (the USGS asks for the
+statement, not for a place on the map), and this file carries it in full.
 
 They cover the three US course segments below. The other three sessions draw their route on a
 plain background: no free basemap outside the United States and Norway may be redistributed
@@ -21,8 +21,9 @@ inside a downloadable archive (OpenStreetMap's tile policy covers live fetching 
 Kartverket's cache at these zooms shows partner data that needs permission to copy), and the demo
 would rather show the app drawing without one than ship a tile it has no right to. Your own
 copy fetches its own tiles for your own runs — Kartverket in Norway, USGS in the US,
-OpenStreetMap elsewhere — and the app credits whichever drew; `NOTES.md` says what each source's
-terms allow there.
+OpenStreetMap elsewhere — and the app credits each in About, and OpenStreetMap's under every map its
+tiles drew as well, as its attribution guidelines ask; `NOTES.md` says what each source's terms allow
+there.
 
 ## The routes: segments of six marathon courses (OpenStreetMap, ODbL)
 

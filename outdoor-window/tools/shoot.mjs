@@ -1,8 +1,8 @@
 // Drive Outdoor Window in headless Chromium at phone size (390 × 844 CSS px, DPR 2, real touch through CDP),
 // light and dark (HOUSE.md section 7.2 as a pane app allows: no player, no focus mode, no units key;
-// tools/DECISIONS.md, item 14). The clock is fixed at Mon 21 Sep 2026, 14:20 UTC (10:20 in Boston, inside the
-// file) in Oslo's zone, so the stamp and the pictures are the same on every run; other clocks are named where
-// they are used. Fails on any console error or warning, page error, failed request, HTTP ≥ 400, or any request
+// tools/DECISIONS.md, item 14). The clock is fixed at Thu 8 Oct 2026, 16:20 UTC (12:20 in Boston, inside the
+// demo forecast refreshed that morning and inside its next window, plan 0012 package 4) in Oslo's zone, so the stamp and the pictures are the
+// same on every run; other clocks are named where they are used. Fails on any console error or warning, page error, failed request, HTTP ≥ 400, or any request
 // outside the local server. Every figure it asserts is worked out here from the data files with Node's own
 // tools, never by importing js/.
 //
@@ -13,15 +13,17 @@
 //   SCRUB=0 node tools/shoot.mjs            leave out the three-speed scrub
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the panes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the camera's tabs by role and name, built after the parse; the credits; the face; the stamp),
-// every pane's text contrast, the tracer under exactly the chosen tab, SI and the date forms in every visible
-// text node, hit targets, the caption band's height and words; the Shutters (every block, bar and window frame
+// Per theme: boot (the camera's tabs by role and name, built after the parse; the footer's one Open-Meteo line and
+// the credit first in About; the face; the stamp led by Example data.), every pane's text contrast, the tracer under
+// exactly the chosen tab, SI and the date forms in every visible text node, hit targets, the plates and the About key
+// last, the Shutters' key; the Shutters (every block, bar and window frame
 // against this file's decode, the ink and the green sampled on rendered pixels, the slider's value and
 // description), the readout against the decode, a tap, a vertical swipe that scrolls and picks nothing, the
 // keys, the scrub by real touch at 2, 8 and 20 hours a second. Once: the first Tab, the tabs by keyboard, About,
 // the Hours pane's table and its scroll to a tapped hour, hidden and back (the same files, a new forecast, a
 // broken replacement, new rules), a broken rules file, four locales (B1), stale, run out, a reader's own file,
-// a missing value, broken data at the start and its recovery, Reduce Motion, the widths and a phone on its side.
+// a missing value, broken data at the start and its recovery, Reduce Motion, the widths with the header, the pane and
+// the footer on one centered column, a phone on its side, the stamp on one line in every state it writes.
 // Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite, whose hash is checked unchanged.
 
@@ -47,8 +49,8 @@ const schemes = (process.env.SCHEMES || 'light,dark').split(',').filter((s) => s
 const appPng = path.join(SHOTS, 'app.png');
 const hashOf = (f) => (fs.existsSync(f) ? crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex') : null);
 const appPngHash = hashOf(appPng);
-const NOW = '2026-09-21T14:20:00Z', TZ = 'Europe/Oslo';   // 10:20 in Boston (UTC−4), 16:20 in Oslo (UTC+2)
-const RANOUT = '2026-10-02T10:00:00Z';                     // what a fresh install and the marketing camera see
+const NOW = '2026-10-08T16:20:00Z', TZ = 'Europe/Oslo';   // 12:20 in Boston (UTC−4), inside the next window; 18:20 in Oslo (UTC+2)
+const RANOUT = '2026-10-20T10:00:00Z';                     // what a fresh install and the marketing camera see, days on
 
 /* ── the data, decoded here (app.js's header comment is the contract) ── */
 const rawSnap = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
@@ -67,9 +69,11 @@ const spokenAt = (ms) => { const d = local(ms); return `${DAYS[d.getUTCDay()]} $
 const v = (x, u) => `${x < 0 ? MI : ''}${Math.abs(x)}${NN}${u}`;
 const GEN = Date.parse(snap.generatedAt), osloClock = (ms) => { const d = new Date(ms + 2 * 3600e3); return `${p2(d.getUTCHours())}:${p2(d.getUTCMinutes())}`; };
 const CREDIT = "Weather data by Open-Meteo.com, under CC\u00a0BY\u00a04.0. The free API is for non-commercial use. The forecast is Open-Meteo's, unmodified; the scores and the ask table beside it are this app's.";
-const CAP = { Windows: 'Ink: hours a rule rules out. Green: how much of its limit an hour uses. Framed gaps are windows.',
-  Hours: 'Hours in Boston Common’s own time, UTC−4. Air and dew point in °C, rain chance in %, rainfall in mm, gusts in km/h.',
-  Rules: 'Read from data/rules.json. An hour must clear every rule, in the forecast’s own units.' };
+const FOOT = 'Weather data by Open-Meteo.com';   // the footer's one line, Open-Meteo's link (HOUSE 4.15 exception 1)
+const ABOUT_KEY = 'Sources, method and credits are in About.';
+/** Each pane's short label under its title (HOUSE 11.1 rule 9); Windows has the Shutters' key instead. */
+const LABEL = { Windows: null, Hours: 'Times in Boston Common’s own time, UTC−4.', Rules: 'An hour must clear every rule.' };
+const KEY = ['Ruled out', 'Share of the limit', 'Window'];
 const PANES = ['Windows', 'Hours', 'Rules'];
 /** The scorer, written here from js/score.js's header comment: per hour, each rule's [label, ok, comfort]. */
 function score(s = snap, r = rules) {
@@ -146,7 +150,7 @@ const reads = { '/data/snapshot.json': 0, '/data/rules.json': 0 };
 const server = http.createServer((req, res) => {
   const u = decodeURIComponent(new URL(req.url, 'http://x').pathname), ov = override[u];
   if (u in reads) reads[u]++;
-  if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); return; }
+  if (ov) { if (ov.status) { res.writeHead(ov.status); res.end(); return; } setTimeout(() => { res.writeHead(200, { 'content-type': TYPES[path.extname(u)] || 'application/octet-stream' }); res.end(ov.body); }, ov.delay || 0); return; }
   const f = path.join(APP, u === '/' ? 'index.html' : u);
   if (!f.startsWith(APP + path.sep) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
@@ -194,6 +198,9 @@ async function open(scheme, o = {}) {
   const pane = async (name) => { await page.getByRole('tab', { name, exact: true }).click(); await page.waitForTimeout(250); };
   return { ctx, page, errors, ms, w, cdp, touch, tapAt, rect, png, frame, shot, pane };
 }
+/** The stamp on one line at 16 px (HOUSE 7.2, plan 0012 F8), whatever it says. */
+const stampLine = (A) => A.w(() => { const s = document.getElementById('stamp'), r = s.getBoundingClientRect(); return { h: r.height, text: s.textContent, one: Math.abs(r.height - 16) <= 1 && s.getClientRects().length === 1 }; });
+const stampCheck = async (A, label) => { const s = await stampLine(A); check(s.one, `the stamp on one line, ${Math.round(s.h * 10) / 10} px tall (${label}): "${s.text}"`); };
 const closeOut = async (A, label) => { check(A.errors.length === 0, `${label}: no console error or warning, failed or outside request${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`); await A.ctx.close(); };
 
 /* Text contrast over every rendered DOM text node (backgrounds composited), and every SVG label's fill on the page. */
@@ -234,9 +241,13 @@ const hitTargets = async (A) => {
       for (const e of document.querySelectorAll('button, [role="tab"], [role="slider"], a, input')) {
         const r = e.getBoundingClientRect();
         if (!r.width || !r.height || e.closest('[hidden]') || e.closest('[inert]') || e.disabled) continue;
-        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        const on = (x, yy) => { const h = document.elementFromPoint(x, yy); return h && (h === e || e.contains(h)); };
-        if (r.left < -1 || r.top < -1 || r.right > innerWidth + 1 || r.bottom > innerHeight + 1 || !on(cx, cy)) continue;
+        // each box clipped to the viewport: a hit that hangs off the screen's edge counts only for what is on it (an
+        // anchor whose padding ran 25 px under the bottom edge used to be skipped here, not measured)
+        const cl = { left: Math.max(r.left, 0), top: Math.max(r.top, 0), right: Math.min(r.right, innerWidth), bottom: Math.min(r.bottom, innerHeight) };
+        if (cl.right - cl.left < 1 || cl.bottom - cl.top < 1) continue;
+        const cx = (cl.left + cl.right) / 2, cy = (cl.top + cl.bottom) / 2;
+        const on = (x, yy) => { if (x < 0 || yy < 0 || x >= innerWidth || yy >= innerHeight) return false; const h = document.elementFromPoint(x, yy); return h && (h === e || e.contains(h)); };
+        if (!on(cx, cy)) continue;
         if ([...document.querySelectorAll('.tabs, .pane')].some((sc) => { if (!sc.contains(e)) return false; const s = sc.getBoundingClientRect(); return r.left < s.left - 1 || r.right > s.right + 1 || r.top < s.top - 1 || r.bottom > s.bottom + 1; })) continue;
         const id = `${e.tagName} ${(e.getAttribute('aria-label') || e.textContent).trim().slice(0, 20)}`;
         out.seen.push(id);
@@ -248,7 +259,7 @@ const hitTargets = async (A) => {
     r.seen.forEach((s) => seen.add(s)); r.bad.forEach((b) => bad.add(b));
   }
   await A.w(() => { document.getElementById('main').scrollTop = 0; });
-  return { n: seen.size, bad: [...bad] };
+  return { n: seen.size, bad: [...bad], seen: [...seen] };
 };
 /** Every visible text node the app wrote: a hyphen-minus before a digit, a plain space between a number and a
  *  unit, a decimal comma, four or more digits ungrouped, a 12-hour clock or a locale's date form (B1, B10). */
@@ -306,20 +317,22 @@ for (const scheme of schemes) {
     const tabs = await Promise.all(PANES.map((n) => page.getByRole('tab', { name: n, exact: true }).count()));
     const cam = await w(() => ['Windows', 'Hours'].map((n) => [...document.querySelectorAll('button, [role], a')].filter((b) => (b.getAttribute('aria-label') || b.textContent.trim()) === n).map((b) => `${b.tagName} ${b.getAttribute('role')}`)));
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent.replace(/[ \t\n]+/g, ' ').trim(), anchors: [...c.querySelectorAll('a')].map((a) => a.getAttribute('href')), whole: r.height > 0 && r.bottom <= innerHeight + 1, face: document.fonts.check('400 10.5px "Ysabeau Office"'),
+      const c = document.getElementById('credits'), r = c.getBoundingClientRect(), band = document.getElementById('band');
+      return { credits: c.textContent.replace(/[ \t\n]+/g, ' ').trim(), anchors: [...c.querySelectorAll('a')].map((a) => a.getAttribute('href')), whole: r.height > 0 && r.bottom <= innerHeight + 1, lines: (() => { const rg = document.createRange(); rg.selectNodeContents(c.querySelector('a')); return new Set([...rg.getClientRects()].map((q) => Math.round(q.bottom))).size; })(),   // the anchor's text lines (its block is 44 px of hit)
+        bandKids: band.children.length, size: getComputedStyle(c).fontSize, about: document.getElementById('about-credit-line').textContent, first: document.getElementById('about-credit-line').previousElementSibling.tagName, face: document.fonts.check('400 10.5px "Ysabeau Office"'),
         loaded: [...document.fonts].filter((f) => f.status === 'loaded').length, stamp: document.getElementById('stamp').textContent, pane: window.__ow.pane(), idle: window.__frames };
     });
     check(tabs.every((n) => n === 1), `the panes as tabs by name: ${PANES.map((p, i) => `${p} ${tabs[i]}`).join(', ')}`);
     check(cam.every((r) => r.length === 1 && r[0] === 'BUTTON tab'), `the camera's strings: Windows and Hours, each exactly one <button role="tab"> named by its word (${cam.map((r) => r.join('/')).join(', ')}), built after the parse`);
-    check(b.credits === CREDIT && b.anchors.join() === 'https://open-meteo.com/,https://creativecommons.org/licenses/by/4.0/' && b.whole, 'the credits on screen word for word, with their two anchors');
+    check(b.credits === FOOT && b.anchors.join() === 'https://open-meteo.com/' && b.whole && b.lines === 1 && b.bandKids === 1 && b.size === '10.5px' && b.about === CREDIT && b.first === 'H3',
+      `the footer holds one ${b.size} line, "${b.credits}", Open-Meteo's link and nothing else (HOUSE 4.15 exception 1); About's first Sources and credits paragraph is the whole credit word for word`);
     check(b.face && b.loaded === 1, `the face is loaded before the Shutters measure their labels (${b.loaded} face)`);
-    check(b.stamp === `Updated ${osloClock(GEN)}` && b.pane === 'windows', `the stamp: "${b.stamp}" (built here: "Updated ${osloClock(GEN)}", the phone's clock in Oslo); the app opens on Windows`);
+    check(b.stamp === `Example data. Updated ${osloClock(GEN)}` && b.pane === 'windows', `the stamp: "${b.stamp}" (built here: "Example data. Updated ${osloClock(GEN)}", the phone's clock in Oslo; the file's demoPlace, HOUSE 11.1 rule 8); the app opens on Windows`);
+    await stampCheck(A, 'the example');
     check(b.idle === 0, `idle: the page asked for ${b.idle} animation frames after loading (nothing runs while nothing is touched)`);
   }
 
-  // every pane: text contrast, the face, the tracer, SI and dates, hit targets, the band's height and words
-  const bandH = [];
+  // every pane: text contrast, the face, the tracer, SI and dates, hit targets, its label or key, the About key last
   for (const name of PANES) {
     await A.pane(name);
     const c = await contrastOf(w);
@@ -329,14 +342,16 @@ for (const scheme of schemes) {
     const si = await siOf(w);
     check(si.bad.length === 0, `${name}: SI and the date forms in ${si.n} visible text nodes (B1, B10)${si.bad.length ? ': ' + si.bad.slice(0, 5).join(' | ') : ''}`);
     const hits = await hitTargets(A);
-    check(hits.bad.length === 0 && hits.n >= 6, `${name}: ${hits.n} controls (the stamp, the tabs, the slider, the credit anchors), every one 44 × 44 or more (B6)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
-    const g = await w(() => { const m = document.getElementById('main'); return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: document.getElementById('capline').textContent }; });
+    check(hits.bad.length === 0 && hits.n >= 5 && hits.seen.some((x) => x.startsWith('A Weather data')), `${name}: ${hits.n} controls (the stamp, the tabs, the slider, the footer's anchor, the About key), every one 44 × 44 or more (B6)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
+    const g = await w(() => { const m = document.getElementById('main'), z = document.querySelector('#pane > .zone'); return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1,
+      label: z && z.textContent, lines: z ? Math.round(z.getBoundingClientRect().height / parseFloat(getComputedStyle(z).lineHeight)) : 0, key: [...document.querySelectorAll('.shw .key .k')].map((k) => k.textContent), capline: !!document.getElementById('capline') }; });
     check(!g.side, `${name}: nothing runs past the pane's width`);
-    check(g.cap === CAP[name], `${name}: the caption "${g.cap}"`);
-    bandH.push(await w(() => document.getElementById('band').getBoundingClientRect().height));
+    check(!g.capline && g.label === LABEL[name] && (g.label == null || g.lines === 1) && JSON.stringify(g.key) === JSON.stringify(name === 'Rules' ? [] : KEY),
+      `${name}: no caption line; ${g.label ? `the label "${g.label}" on one line` : 'no label'}${g.key.length ? `; the Shutters' key ${g.key.join(', ')}` : ''} (HOUSE 11.1 rules 6 and 9)`);
+    const k = await w(() => { const b = document.getElementById('pane').lastElementChild, r = b.getBoundingClientRect(), p = b.previousElementSibling && b.previousElementSibling.getBoundingClientRect(); return { tag: b.tagName, cls: b.className, text: b.textContent, h: r.height, gap: p ? r.top - p.bottom : null }; });
+    check(k.tag === 'BUTTON' && k.cls === 'aboutlink' && k.text === ABOUT_KEY && k.h >= 44 && Math.abs(k.gap - 14) < 0.5, `${name}: the pane ends with the key "${k.text}", ${Math.round(k.h)} px tall, ${k.gap} px under what precedes it (HOUSE 11.1 rule 1)`);
     await A.shot(`${name.toLowerCase()}-${scheme}`);
   }
-  check(new Set(bandH).size === 1, `the caption band holds its height on every pane (${bandH.join(', ')} px): the pane above it never resizes`);
 
   // the Shutters: every block, bar and window against this file's decode
   await A.pane('Windows');
@@ -371,15 +386,20 @@ for (const scheme of schemes) {
     }
     // the frame and the light inside it, on pixels: each jamb's center column ink, each opening --sheet in the gaps between rows
     const jamb = marks.jb.map((r) => { let n = 0, k = 0; for (let y = Math.round(r.top * 2) + 2; y < Math.round(r.bottom * 2) - 2; y++, n++) if (contrast(img.at(Math.round(r.left * 2) + 1, y), PAGE) >= 3) k++; return k / n; });
-    const glow = marks.lit.map((r) => { const rowGap = (q) => Math.round((r.top + 16 + q * 19 + 1.5) * 2); let n = 0, k = 0; for (let x = Math.round(r.left * 2) + 2; x < Math.round(r.right * 2) - 2; x++) for (let q = 0; q < 5; q++, n++) { const c = img.at(x, rowGap(q)); if (Math.abs(c[0] - SHEET[0]) + Math.abs(c[1] - SHEET[1]) + Math.abs(c[2] - SHEET[2]) <= 6) k++; } return k / n; });
+    // the chosen hour's 7 % ink column is left out (in a two-hour window it is half the opening)
+    const col = await w(() => document.querySelector('#sh rect.col').getBoundingClientRect().toJSON());
+    const glow = marks.lit.map((r) => { const rowGap = (q) => Math.round((r.top + 16 + q * 19 + 1.5) * 2); let n = 0, k = 0; for (let x = Math.round(r.left * 2) + 2; x < Math.round(r.right * 2) - 2; x++) { if (x >= col.left * 2 - 1 && x <= col.right * 2 + 1) continue; for (let q = 0; q < 5; q++, n++) { const c = img.at(x, rowGap(q)); if (Math.abs(c[0] - SHEET[0]) + Math.abs(c[1] - SHEET[1]) + Math.abs(c[2] - SHEET[2]) <= 6) k++; } } return k / n; });
     check(jamb.length === 2 * WIN.length && jamb.every((f) => f >= 0.97) && glow.every((f) => f >= 0.85), `the windows on rendered pixels: ${jamb.length} jambs, ${jamb.map((f) => `${(f * 100).toFixed(0)} %`).join(', ')} of each one's height at 3:1 or more on the page; the openings ${glow.map((f) => `${(f * 100).toFixed(0)} %`).join(', ')} --sheet in the gaps between the rows (the rest a midnight hairline or the chosen column)`);
     // the slider's value and description, and the readout, against the decode
     const ch = WIN[0][0], st = await stateOf(w), desc = await w(() => document.getElementById('sh-desc').textContent);
     const named = await w(() => { const s = document.getElementById('sh'); return [s.getAttribute('role'), s.getAttribute('aria-label'), s.getAttribute('aria-valuemin'), s.getAttribute('aria-valuemax'), s.tabIndex, s.getAttribute('aria-describedby')]; });
     const outs = S0[0].c.map((_, k) => [S0[0].c[k][0], S0.filter((r) => !r.c[k][1]).length]).filter((x) => x[1]).sort((a, b) => b[1] - a[1]);
-    const wantDesc = `48 hours from ${spokenAt(S0[0].at)}. ${outs[0][0][0].toUpperCase()}${outs[0][0].slice(1)} rules out ${outs[0][1]} hours and ${outs[1][0]} ${outs[1][1]}; rain chance, rainfall, temperature and dew point none. Windows: ${WIN.map((x) => `${spokenAt(x[0].at).split(' ')[0]} ${clockAt(x[0].at)} to ${clockAt(x[x.length - 1].at + 3600e3)}, ${x.length} hours`).join('; ')}.`;
+    // what each rule cost, as describe() words it: the costliest named first, the rest after commas and "and"; the free ones "none"
+    const free = S0[0].c.map((_, k) => [S0[0].c[k][0], S0.filter((r) => !r.c[k][1]).length]).filter((x) => !x[1]).map((x) => x[0]);
+    const cost = outs.map(([l, n], j) => (j ? `${l} ${n}` : `${l[0].toUpperCase()}${l.slice(1)} rules out ${n} hours`)).join(outs.length > 2 ? ', ' : ' and ').replace(/, ([^,]*)$/, ' and $1');
+    const wantDesc = `48 hours from ${spokenAt(S0[0].at)}. ${cost}${free.length ? `; ${list(free)} none` : ''}. Windows: ${WIN.map((x) => `${spokenAt(x[0].at).split(' ')[0]} ${clockAt(x[0].at)} to ${clockAt(x[x.length - 1].at + 3600e3)}, ${x.length} hours`).join('; ')}.`;
     check(named.join() === 'slider,Hour,0,47,0,sh-desc' && st.chosen === ch.i && st.now === ch.i && st.text === valueOf(ch, nowMs) && isNowHour(ch, nowMs) && desc === wantDesc,
-      `the slider: role slider, named Hour, 0 to 47, at the next window's first hour (${st.now}), its value "${st.text}"; described once: "${desc.slice(0, 80)}…"`);
+      `the slider: role slider, named Hour, 0 to 47, at the next window's first hour (${st.now}), its value "${st.text}"; described once: "${desc}"${desc === wantDesc ? '' : ` (built here: "${wantDesc}")`}`);
     check(st.when === `${dateAt(ch.at)}, ${clockAt(ch.at)}` && st.verdict === ` ${said(ch, nowMs)}` && st.vals === valuesOf(ch, nowMs) && Math.abs(st.head - st.center) < 1e-9,
       `the readout, as decoded here: "${st.when}${st.verdict}" (the present hour says now) / "${st.vals}"; the head on its column`);
     // a pinch that starts on the Shutters belongs to the page: the drawing allows it, and two fingers never scrub
@@ -391,15 +411,15 @@ for (const scheme of schemes) {
     await page.waitForTimeout(250);
     const pinched = await w(() => ({ chosen: window.__ow.chosen(), pressed: document.querySelector('#sh .head circle:last-child').getAttribute('r'), scale: visualViewport.scale }));
     check(ta === 'pan-y pinch-zoom' && pinched.chosen === before && pinched.pressed === '4', `a pinch that starts on the Shutters: touch-action "${ta}", so the page may zoom (headless Chromium's visual viewport ended at a scale of ${pinched.scale.toFixed(2)}; the phone check is in tools/DECISIONS.md); two fingers moving apart sideways leave the hour where it was (${pinched.chosen})`);
-    // a tap on the Shutters: Tuesday 11:00, said once
-    const tue = S0.find((r) => dateAt(r.at) === 'Tue 22 Sep' && clockAt(r.at) === '11:00'), p = await xOfHour(A, tue.i);
+    // a tap on the Shutters: the file's second day at 11:00, said once
+    const tue = S0.find((r) => dateAt(r.at) === dateAt(S0[0].at + 864e5) && clockAt(r.at) === '11:00'), p = await xOfHour(A, tue.i);
     await w(() => { document.getElementById('live').textContent = ''; });
     await A.tapAt(p.x + 1, p.y);
     await page.waitForTimeout(300);
     const s2 = await stateOf(w);
     const sayVals = valuesOf(tue).replace(/\u202f°C/g, ' degrees Celsius').replace(/\u202fkm\/h/g, ' kilometers an hour').replace(/\u202f%/g, ' percent').replace(/\u202fmm/g, ' millimeters');
-    check(s2.chosen === tue.i && s2.now === tue.i && s2.when === 'Tue 22 Sep, 11:00' && s2.vals === valuesOf(tue, nowMs) && Math.abs(s2.head - s2.center) < 1e-9 && s2.live === `${spokenAt(tue.at)}: ${verdict(tue)}. ${sayVals}.`,
-      `a tap on Tuesday 11:00's column picks it: the head, the readout ("${s2.when}${s2.verdict}") and the value move; said once: "${s2.live.slice(0, 90)}…"`);
+    check(s2.chosen === tue.i && s2.now === tue.i && s2.when === `${dateAt(tue.at)}, 11:00` && s2.vals === valuesOf(tue, nowMs) && Math.abs(s2.head - s2.center) < 1e-9 && s2.live === `${spokenAt(tue.at)}: ${verdict(tue)}. ${sayVals}.`,
+      `a tap on ${dateAt(tue.at)}, 11:00's column picks it: the head, the readout ("${s2.when}${s2.verdict}") and the value move; said once: "${s2.live.slice(0, 90)}…"`);
     await A.shot(`tapped-${scheme}`, false);
     const lc = await A.rect('#sh svg');
     await A.tapAt(lc.left + 10, p.y);
@@ -508,18 +528,21 @@ console.log('\n== once');
     const h = await w(() => [window.__ow.pane(), document.activeElement.textContent]);
     check(k.join() === 'hours,Hours,' && e.join() === 'rules,Rules' && h.join() === 'windows,Windows', `the tabs by keyboard: ArrowRight chooses ${k[1]}, End ${e[1]}, Home ${h[1]}; focus follows, the live region adds nothing`);
   }
-  // the Windows pane's words, as decoded here
+  // the Windows pane's words, as decoded here: the key number, its tiles, the later windows' table (HOUSE 11.1 rules 2, 3)
   {
-    const x = WIN[0], wd = await w(() => ({ h2: [...document.querySelectorAll('.sec > h2')].map((n) => n.textContent), fig: document.querySelector('.fig').textContent, facts: [...document.querySelectorAll('.facts')].map((d) => [...d.children].map((n) => n.textContent).join('|')),
-      st: [...document.querySelectorAll('.statement')].map((n) => n.textContent), title: document.querySelector('.title').textContent }));
-    const mx = (k) => Math.max(...x.map((r) => H[k][r.i]));
-    const wantFacts = [`Warmest|${v(mx('temperature_2m'), '°C')}|Highest chance of rain|${v(mx('precipitation_probability'), '%')}|Most rainfall|${v(mx('precipitation'), 'mm')}|Strongest gust|${v(mx('wind_gusts_10m'), 'km/h')}|Highest dew point|${v(mx('dew_point_2m'), '°C')}|Sunset|18:43`,
-      WIN.slice(1).map((y) => `${dateAt(y[0].at)}, ${clockAt(y[0].at)}–${clockAt(y[y.length - 1].at + 3600e3)}|${y.length} hours, best score ${Math.max(...y.map((r) => r.score))}`).join('|')];
-    check(wd.h2.join() === 'Next window,After that' && wd.fig === `${clockAt(x[0].at)}–${clockAt(x[x.length - 1].at + 3600e3)}${dateAt(x[0].at)}, ${x.length} hours, best score ${Math.max(...x.map((r) => r.score))}` && JSON.stringify(wd.facts) === JSON.stringify(wantFacts),
-      `Windows: "${wd.fig}"; ${wd.facts[0].split('|').join(' ')}; after that ${wd.facts[1].replace('|', ', ')} (the window's last hour runs past the sunset, so the sunset is printed)`);
-    const foot = await w(() => { const n = [...document.querySelectorAll('#pane > .sec')].pop().querySelector('.note'); return [n && n.textContent, document.querySelector('.statement').getBoundingClientRect().height]; });
-    check(wd.st.join() === 'Example forecast: Boston Common, 21 to 23 Sep 2026.' && foot[1] <= 30 && wd.title === `A walk outsideBoston Common, 42.37°${NN}N, 71.06°${NN}W` && foot[0] === 'Build the Shortcut in PROMPT.md and the app shows where you are.',
-      `the statement on one line (${Math.round(foot[1])} px), "${wd.st[0]}", so the Shutters lead; the heading "${rules.activity}" over "Boston Common, 42.37° N, 71.06° W"; the pane closes with "${foot[0]}"`);
+    const x = WIN[0], wd = await w(() => ({ plates: [...document.querySelectorAll('#pane > section')].map((n) => n.className), what: document.querySelector('.hl-what').textContent, fig: document.querySelector('.hl-fig').textContent,
+      figPx: getComputedStyle(document.querySelector('.hl-fig')).fontSize, lead: document.querySelector('.hl-lead').textContent, tiles: [...document.querySelectorAll('.tiles .tile')].map((n) => `${n.children[0].textContent}|${n.children[1].textContent}`),
+      wins: [...document.querySelectorAll('table.wins tr')].map((tr) => [...tr.children].map((n) => n.textContent).join('|')), st: [...document.querySelectorAll('.statement')].map((n) => n.textContent), title: document.querySelector('.title').textContent,
+      note: [...document.querySelectorAll('#pane .note')].map((n) => n.textContent) }));
+    const mx = (k) => Math.max(...x.map((r) => H[k][r.i])), lastHour = x[x.length - 1], sunset = lastHour.set > lastHour.at && lastHour.set < lastHour.at + 3600e3;
+    const wantTiles = [`Warmest|${v(mx('temperature_2m'), '°C')}`, `Highest chance of rain|${v(mx('precipitation_probability'), '%')}`, `Most rainfall|${v(mx('precipitation'), 'mm')}`, `Strongest gust|${v(mx('wind_gusts_10m'), 'km/h')}`, `Highest dew point|${v(mx('dew_point_2m'), '°C')}`, ...(sunset ? [`Sunset|${clockAt(lastHour.set)}`] : [])];
+    const span = (y) => `${clockAt(y[0].at)}–${clockAt(y[y.length - 1].at + 3600e3)}`;
+    const wantWins = ['Day|Hours|Length|Best score', ...WIN.slice(1).map((y) => `${dateAt(y[0].at)}|${span(y)}|${y.length} hours|${Math.max(...y.map((r) => r.score))}`)];
+    check(wd.plates.join() === (WIN.length > 1 ? 'sec headline,sec' : 'sec headline') && wd.what === `Next window, ${dateAt(x[0].at)}` && wd.fig === span(x) && wd.figPx === '34px' && wd.lead === `${x.length} hours, best score ${Math.max(...x.map((r) => r.score))}`
+      && JSON.stringify(wd.tiles) === JSON.stringify(wantTiles) && JSON.stringify(wd.wins) === JSON.stringify(WIN.length > 1 ? wantWins : []),
+      `Windows opens on "${wd.what}", ${wd.fig} at ${wd.figPx}, "${wd.lead}"; ${wd.tiles.length} tiles (${wd.tiles.map((t) => t.replace('|', ' ')).join('; ')}); after that a table: ${wd.wins.slice(1).join('; ')}`);
+    check(wd.st.length === 0 && wd.title === `A walk outsideBoston Common, 42.37°${NN}N, 71.06°${NN}W` && wd.note.length === 0,
+      `no example statement and no Shortcut note on the pane (the stamp and About carry them); the heading "${rules.activity}" over "Boston Common, 42.37° N, 71.06° W"`);
   }
   // the Rules pane, as rules.json gives it
   {
@@ -539,17 +562,33 @@ console.log('\n== once');
     await A.tapAt(s.left + 20, s.top + s.height / 2);
     await page.waitForTimeout(400);
     const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main', 'band'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+      license: [...document.querySelectorAll('.about-body a')].map((x) => [x.textContent, x.getAttribute('href')]), shortcut: [...document.querySelectorAll('.about-body h3')].find((h) => h.textContent === 'How the data gets here').nextElementSibling.textContent,
       text: document.querySelector('.about-body').textContent.replace(/[ \t\n]+/g, ' '),
       list: [...document.querySelectorAll('#about-list dt')].map((d, i) => `${d.textContent} ${document.querySelectorAll('#about-list dd')[i].textContent}`) }));
-    const wantList = ['Place: Boston Common (an example)', `Grid point: 42.37°${NN}N, 71.06°${NN}W, 16${NN}m`, `Time zone: America/New York, UTC${MI}4`, 'Forecast: Mon 21 Sep 2026, 05:00 to Wed 23 Sep 2026, 05:00, 48 hours',
-      'Updated: Mon 21 Sep 2026, 11:35 (UTC+2), from the file’s own time', 'Stale after: 6 hours', 'Rules: data/rules.json', 'Ask table: 48 rows'];
-    check(a.open && a.inert && a.focus === 'about-close' && a.text.includes(CREDIT) && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.') && a.text.includes('open-meteo.com') && a.text.includes('creativecommons.org/licenses/by/4.0/') && !/https?:/.test(a.text),
-      'About opens from the stamp, focus on Close, the rest inert; the credit word for word, both addresses printed without their scheme, the face\'s credit');
+    const full = (ms) => { const d = local(ms); return `${DAY[d.getUTCDay()]} ${d.getUTCDate()} ${MON[d.getUTCMonth()]} ${d.getUTCFullYear()}, ${clockAt(ms)}`; };
+    const g = new Date(GEN + 2 * 3600e3), first = local(S0[0].at), last = local(S0[N - 1].at);
+    const days = first.getUTCMonth() === last.getUTCMonth() ? `${first.getUTCDate()} to ${last.getUTCDate()} ${MON[last.getUTCMonth()]} ${last.getUTCFullYear()}` : `${first.getUTCDate()} ${MON[first.getUTCMonth()]} to ${last.getUTCDate()} ${MON[last.getUTCMonth()]} ${last.getUTCFullYear()}`;
+    const wantList = [`Example data: Boston Common, ${days}`, 'Place: Boston Common (an example)', `Grid point: 42.37°${NN}N, 71.06°${NN}W, 16${NN}m`, `Time zone: America/New York, UTC${MI}4`, `Forecast: ${full(S0[0].at)} to ${full(S0[N - 1].at + 3600e3)}, 48 hours`,
+      `Updated: ${DAY[g.getUTCDay()]} ${g.getUTCDate()} ${MON[g.getUTCMonth()]} ${g.getUTCFullYear()}, ${osloClock(GEN)} (UTC+2), from the file’s own time`, 'Stale after: 6 hours', 'Rules: data/rules.json', 'Ask table: 48 rows'];
+    check(a.open && a.inert && a.focus === 'about-close' && a.text.includes(CREDIT) && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.') && a.text.includes('open-meteo.com') && a.text.includes('creativecommons.org/licenses/by/4.0/') && !/https?:/.test(a.text)
+      && JSON.stringify(a.license) === JSON.stringify([['creativecommons.org/licenses/by/4.0/', 'https://creativecommons.org/licenses/by/4.0/']]) && a.shortcut === 'Build the Shortcut in PROMPT.md and the app shows where you are.',
+      'About opens from the stamp, focus on Close, the rest inert; the credit word for word, both addresses printed without their scheme, the license\'s its anchor (HOUSE 4.8 item 3); the Shortcut sentence first under How the data gets here; the face\'s credit');
     check(JSON.stringify(a.list) === JSON.stringify(wantList), `About's This data: ${a.list.join('; ').replace(/\u202f/g, ' ')}`);
     await A.shot('about-light');
     await page.keyboard.press('Escape');
     await page.waitForTimeout(150);
     check(await w(() => document.getElementById('about').hidden && document.activeElement.id === 'stamp' && !document.getElementById('main').inert), 'About closes on Escape; focus returns to the stamp');
+    // the About key at the pane's end, by touch: About opens, and closing it returns focus to the key
+    await w(() => { const m = document.getElementById('main'); m.scrollTop = m.scrollHeight; });
+    await page.waitForTimeout(150);
+    const kb = await A.rect('#pane > .aboutlink');
+    await A.tapAt(kb.left + 30, kb.top + kb.height / 2);
+    await page.waitForTimeout(400);
+    const ok1 = await w(() => !document.getElementById('about').hidden && document.activeElement.id === 'about-close');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(150);
+    check(ok1 && await w(() => document.getElementById('about').hidden && document.activeElement.className === 'aboutlink'), `the key "${ABOUT_KEY}" at the pane's end, tapped: About opens; Escape brings focus back to the key`);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
   }
   // the Hours pane: the table from the present hour, a row tapped, the Shutters tapped scrolling the table to the row
   {
@@ -557,7 +596,7 @@ console.log('\n== once');
     const tb = await w(() => ({ first: document.querySelector('tr.h td').textContent, rows: document.querySelectorAll('tr.h').length, days: [...document.querySelectorAll('tr.day th')].map((n) => n.textContent),
       head: [...document.querySelectorAll('thead th')].map((n) => n.textContent), win: document.querySelectorAll('tr.h.win').length, why: [...document.querySelectorAll('tr.why td:last-child')].map((n) => n.textContent) }));
     const wantWhy = left.filter((r) => !r.pass).map((r) => `ruled out by ${list(r.blocked)}`);
-    check(tb.first === clockAt(left[0].at) && tb.rows === left.length && tb.days.join() === 'Mon 21 Sep,Tue 22 Sep,Wed 23 Sep' && tb.head.join('|') === 'Time|Light|Air°C|Rain chance%|Rainfallmm|Gustskm/h|Dew point°C' && tb.win === WIN.reduce((n, x) => n + x.length, 0) && JSON.stringify(tb.why) === JSON.stringify(wantWhy),
+    check(tb.first === clockAt(left[0].at) && tb.rows === left.length && tb.days.join() === [...new Set(left.map((r) => dateAt(r.at)))].join() && tb.head.join('|') === 'Time|Light|Air°C|Rain chance%|Rainfallmm|Gustskm/h|Dew point°C' && tb.win === WIN.reduce((n, x) => n + x.length, 0) && JSON.stringify(tb.why) === JSON.stringify(wantWhy),
       `Hours: ${tb.rows} rows from ${tb.first}, under ${tb.days.join(', ')}; columns ${tb.head.join(', ')} (rainfall shown, B17); ${tb.win} rows ruled as window hours; every failing hour's rules on its own line, "${tb.why[0]}"`);
     const row = await w(() => { const r = document.querySelectorAll('tr.h')[3]; r.scrollIntoView({ block: 'center' }); return +r.dataset.i; });
     const rr = await A.rect(`tr.h[data-i="${row}"]`);
@@ -588,14 +627,14 @@ console.log('\n== once');
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
     await page.waitForTimeout(700);
     const t2 = await w(() => ({ redrawn: !document.querySelector('#pane [data-old]'), stamp: document.getElementById('stamp').textContent, top: document.getElementById('main').scrollTop, pane: window.__ow.pane(), chosen: window.__ow.chosen(), live: document.getElementById('live').textContent }));
-    check(t2.redrawn && t2.stamp === `Updated ${osloClock(GEN + 3600e3)}` && t2.pane === 'hours' && Math.abs(t2.top - 300) < 2 && t2.chosen === 44 && t2.live === `New forecast, updated ${osloClock(GEN + 3600e3)}.`,
+    check(t2.redrawn && t2.stamp === `Example data. Updated ${osloClock(GEN + 3600e3)}` && t2.pane === 'hours' && Math.abs(t2.top - 300) < 2 && t2.chosen === 44 && t2.live === `New forecast, updated ${osloClock(GEN + 3600e3)}.`,
       `back on screen with a new forecast ("${t2.stamp}"): drawn again in place, the pane, its scroll and the hour kept; said once: "${t2.live}"`);
     // a broken replacement keeps the view and says so (B5)
     override = { '/data/snapshot.json': { body: '<!doctype html><title>502</title>' } };
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
     await page.waitForTimeout(600);
     const b = await w(() => ({ notice: document.getElementById('notice').hidden ? '' : document.querySelector('#notice p').textContent, blocks: document.querySelectorAll('#sh rect.blk').length, rows: document.querySelectorAll('tr.h').length, stamp: document.getElementById('stamp').textContent, tabs: !document.getElementById('tabs').hidden }));
-    check(b.notice === `A new data/snapshot.json arrived and cannot be used. data/snapshot.json is not valid JSON; it looks like an error page was written over it, which a Shortcut does without noticing. Still showing the forecast updated ${osloClock(GEN + 3600e3)}.` && b.blocks > 0 && b.rows === left.length && b.tabs && b.stamp.startsWith('Updated'),
+    check(b.notice === `A new data/snapshot.json arrived and cannot be used. data/snapshot.json is not valid JSON; it looks like an error page was written over it, which a Shortcut does without noticing. Still showing the forecast updated ${osloClock(GEN + 3600e3)}.` && b.blocks > 0 && b.rows === left.length && b.tabs && b.stamp.startsWith('Example data. Updated'),
       `B5: a broken replacement while open: "${b.notice.slice(0, 70)}…"; the Shutters (${b.blocks} blocks), the table, the tabs and the stamp kept`);
     await A.shot('broken-replacement-light', false);
     const kb = await A.rect('#notice .textkey');
@@ -619,15 +658,15 @@ console.log('\n== once');
   }
   await closeOut(A, 'once');
 }
-// a rules file that cannot be read: the built-in rules, said in a statement and in the caption
+// a rules file that cannot be read: the built-in rules, said in a statement at the pane's head and in About
 {
   override = { '/data/rules.json': { body: '{ "maxGustKmh": 35, }' } };
   const A = await open('light');
-  const s = await A.w(() => ({ st: [...document.querySelectorAll('.statement')].map((n) => n.textContent)[1], about: [...document.querySelectorAll('#about-list dd')].map((n) => n.textContent) }));
+  const s = await A.w(() => ({ st: [...document.querySelectorAll('.statement')].map((n) => n.textContent)[0], about: [...document.querySelectorAll('#about-list dd')].map((n) => n.textContent) }));
   await A.pane('Rules');
-  const cap = await A.w(() => document.getElementById('capline').textContent);
-  check(s.st === 'data/rules.json could not be used: it is not valid JSON; a trailing comma or a missing quote will do it, and JSON allows neither, nor comments. The built-in rules are in use; the Rules pane shows them.' && cap.startsWith('The built-in rules: data/rules.json could not be used.') && s.about.includes('built in, because data/rules.json could not be used'),
-    `a broken rules file: "${s.st.slice(0, 60)}…"; the Rules caption "${cap.slice(0, 50)}…"`);
+  const r = await A.w(() => [...document.querySelectorAll('.statement')].map((n) => n.textContent)[0]);
+  check(s.st === 'data/rules.json could not be used: it is not valid JSON; a trailing comma or a missing quote will do it, and JSON allows neither, nor comments. The built-in rules are in use; the Rules pane shows them.' && r === s.st && s.about.includes('built in, because data/rules.json could not be used'),
+    `a broken rules file: "${s.st.slice(0, 60)}…", on Windows and on Rules; About says the built-in rules are in use`);
   await closeOut(A, 'broken rules');
   override = {};
 }
@@ -643,22 +682,25 @@ console.log('\n== once');
   }
   check(words.every(([, x]) => x === words[0][1]), `the same words, letter for letter, on every pane under ${words.map(([l]) => l).join(', ')} (${words[0][1].length} characters)`);
 }
-// stale: past six hours on the phone's clock, "Stale." in ink
+// the example seven hours on: Example data. in place of Stale. (an example never refreshes; HOUSE 11.1 rule 8)
 {
   const A = await open('light', { time: new Date(GEN + 7 * 3600e3).toISOString() });
   const s = await A.w(() => ({ text: document.getElementById('stamp').textContent, ink: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color, rest: getComputedStyle(document.getElementById('stamp')).color !== getComputedStyle(document.querySelector('h1')).color }));
-  check(s.text === `Stale. Updated ${osloClock(GEN)}` && s.ink && s.rest, `B2: seven hours on: "${s.text}", the word in ink and the rest in --ink-2, never a color`);
-  await closeOut(A, 'stale');
+  check(s.text === `Example data. Updated ${osloClock(GEN)}` && s.ink && s.rest, `B2: the example seven hours on: "${s.text}", the lead in ink and the rest in --ink-2, never a color`);
+  await stampCheck(A, 'the example, seven hours on');
+  await closeOut(A, 'the example, seven hours on');
 }
 // run out: what a fresh install and the marketing camera see today
 for (const scheme of schemes) {
   const A = await open(scheme, { time: RANOUT });
   const end = S0[N - 1].at + 3600e3, days = Math.floor((Date.parse(RANOUT) - end) / 864e5);
-  const s = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, st: document.querySelector('.statement').textContent, h2: document.querySelector('.sec > h2').textContent, now: !!document.querySelector('#sh rect.now'), past: document.querySelectorAll('#sh .past').length, chosen: window.__ow.chosen(), br: window.__ow.shutters().brackets.map((b) => `${b.from}–${b.to}`).join() }));
+  const s = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, st: (document.querySelector('.statement') || { textContent: null }).textContent, h2: document.querySelector('.hl-what').textContent, now: !!document.querySelector('#sh rect.now'), past: document.querySelectorAll('#sh .past').length, chosen: window.__ow.chosen(), br: window.__ow.shutters().brackets.map((b) => `${b.from}–${b.to}`).join() }));
   const all = windowsOf(S0);
   const top = await A.w(() => [window.__ow.shutters().G.top, document.querySelectorAll('#sh text.nowl').length, document.querySelector('.ro-when').textContent]);
-  check(s.stamp === `Forecast ran out ${days}${NN}d ago. Updated 21 Sep, ${osloClock(GEN)}` && s.st === 'Example forecast: Boston Common, 21 to 23 Sep 2026.' && s.h2 === 'First window in this file' && !s.now && top[0] === 1 && top[1] === 0 && !top[2].includes('now') && s.past === 0 && s.chosen === all[0][0].i && s.br === all.map((x) => `${x[0].i}–${x[x.length - 1].i}`).join(),
-    `run out, ${scheme}: "${s.stamp.replace(NN, ' ')}" (the stamp says it ran out; the statement stays one line); "${s.h2}" (B11); every hour at full ink, no now and no row for it; the windows ${s.br}`);
+  const gd = new Date(GEN + 2 * 3600e3);
+  check(s.stamp === `Example data. Updated ${gd.getUTCDate()} ${MON[gd.getUTCMonth()]}, ${osloClock(GEN)}` && s.st === null && s.h2.startsWith('First window in this file, ') && !s.now && top[0] === 1 && top[1] === 0 && !top[2].includes('now') && s.past === 0 && s.chosen === all[0][0].i && s.br === all.map((x) => `${x[0].i}–${x[x.length - 1].i}`).join(),
+    `run out, ${scheme}: "${s.stamp.replace(NN, ' ')}" (the example says so in place of the ran-out lead); no statement on the pane; "${s.h2}" (B11); every hour at full ink, no now and no row for it; the windows ${s.br}`);
+  await stampCheck(A, `the example, run out, ${scheme}`);
   await A.shot(`windows-ranout-${scheme}`, false);
   await closeOut(A, `run out, ${scheme}`);
 }
@@ -671,14 +713,24 @@ for (const scheme of schemes) {
   const A = await open('light');
   const s = await A.w(() => ({ stamp: document.getElementById('stamp').textContent, st: document.querySelectorAll('.statement').length, title: document.querySelector('.title p').textContent, about: [...document.querySelectorAll('#about-list dt')].map((d, i) => `${d.textContent} ${document.querySelectorAll('#about-list dd')[i].textContent}`), ask: document.getElementById('about-ask').textContent }));
   await A.pane('Hours');
-  const cap = await A.w(() => document.getElementById('capline').textContent);
-  check(s.stamp === `Updated about ${osloClock(cur)}` && s.st === 0 && s.title === `42.37°${NN}N, 71.06°${NN}W` && s.about.includes('Ask table: none: the file came straight from the weather service') && !s.about.some((x) => x.startsWith('Place')) && s.ask.startsWith('This file came straight from the weather service')
-    && cap.startsWith('Hours in the forecast’s own time, UTC−4.'),
-    `a reader's own file: "${s.stamp}" (the service's time to the quarter hour); no example statement; the place line its coordinates; About: no ask table; the Hours caption "${cap.slice(0, 45)}…"`);
+  const cap = await A.w(() => document.querySelector('#pane > .zone').textContent);
+  check(s.stamp === `Updated about ${osloClock(cur)}` && s.st === 0 && s.title === `42.37°${NN}N, 71.06°${NN}W` && s.about.includes('Ask table: none: the file came straight from the weather service') && !s.about.some((x) => x.startsWith('Place') || x.startsWith('Example')) && s.ask.startsWith('This file came straight from the weather service')
+    && cap === 'Times in the forecast’s own time, UTC−4.',
+    `a reader's own file: "${s.stamp}" (the service's time to the quarter hour); no example lead or statement; the place line its coordinates; About: no ask table; the Hours label "${cap}"`);
+  await stampCheck(A, 'a reader\'s own file');
   await closeOut(A, 'a reader\'s own file');
+  // Stale. and the ran-out lead, proven on the reader's own file (the example says Example data. in their place)
+  const S7 = await open('light', { time: new Date(cur + 7 * 3600e3).toISOString() });
+  const st = await S7.w(() => ({ text: document.getElementById('stamp').textContent, ink: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color }));
+  check(st.text === `Stale. Updated about ${osloClock(cur)}` && st.ink, `B2: a reader's own file seven hours on: "${st.text}", the word in ink`);
+  await stampCheck(S7, 'stale, a reader\'s own file');
+  await closeOut(S7, 'a reader\'s own file, stale');
   const B = await open('light', { time: RANOUT });
-  const r = await B.w(() => document.querySelector('.statement').textContent);
-  check(r === 'Every hour in this file has ended, so this is history, not a forecast. Run the Shortcut that refreshes the app.', `a reader's own file run out: "${r}"`);
+  const r = await B.w(() => ({ st: document.querySelector('.statement').textContent, stamp: document.getElementById('stamp').textContent, ink: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color }));
+  const end = S0[N - 1].at + 3600e3, days = Math.floor((Date.parse(RANOUT) - end) / 864e5), cd = new Date(cur + 2 * 3600e3);
+  check(r.st === 'Every hour in this file has ended, so this is history, not a forecast. Run the Shortcut that refreshes the app.' && r.stamp === `Forecast ran out ${days}${NN}d ago. Updated about ${cd.getUTCDate()} ${MON[cd.getUTCMonth()]}, ${osloClock(cur)}` && r.ink,
+    `a reader's own file run out: "${r.stamp.replace(NN, ' ')}", the lead in ink; "${r.st}"`);
+  await stampCheck(B, 'run out, a reader\'s own file');
   await closeOut(B, 'a reader\'s own file, run out');
   override = {};
 }
@@ -708,10 +760,10 @@ for (const scheme of schemes) {
 {
   override = { '/data/rules.json': { body: '{ "activity": "A walk outside" }' } };
   const A = await open('light');
-  const s = await A.w(() => ({ st: [...document.querySelectorAll('.statement')].map((n) => n.textContent), cap: document.getElementById('capline').textContent, fig: document.querySelector('.fig b').textContent, lead: document.querySelector('.fig span').textContent }));
-  const left0 = S0.filter((r) => r.at + 3600e3 > nowMs)[0];
-  check(s.st[1] === 'No rule is in use, so every hour clears and scores 0. The Rules pane says how to add one.' && s.cap === 'No rule is in use, so every hour is open. Framed gaps are windows.' && s.fig === `${clockAt(left0.at)} to Wed 05:00` && s.lead.startsWith(`${dateAt(left0.at)}, 43 hours`),
-    `no rule in use: "${s.st[1]}"; the caption "${s.cap}"; the window runs past two midnights and reads "${s.fig}", "${s.lead}"`);
+  const s = await A.w(() => ({ st: [...document.querySelectorAll('.statement')].map((n) => n.textContent), key: [...document.querySelectorAll('.shw .key .k')].map((k) => k.textContent), fig: document.querySelector('.hl-fig').textContent, what: document.querySelector('.hl-what').textContent, lead: document.querySelector('.hl-lead').textContent }));
+  const left0 = S0.filter((r) => r.at + 3600e3 > nowMs), endAt = local(S0[N - 1].at + 3600e3);
+  check(s.st[0] === 'No rule is in use, so every hour clears and scores 0. The Rules pane says how to add one.' && s.key.join() === 'Window' && s.fig === `${clockAt(left0[0].at)} to ${DAY[endAt.getUTCDay()]} ${clockAt(S0[N - 1].at + 3600e3)}` && s.what === `Next window, ${dateAt(left0[0].at)}` && s.lead.startsWith(`${left0.length} hours`),
+    `no rule in use: "${s.st[0]}"; the key Window alone; the window runs past two midnights and reads "${s.fig}", "${s.lead}"`);
   await closeOut(A, 'no rule in use');
   override = {};
 }
@@ -726,9 +778,9 @@ for (const scheme of schemes) {
     const p = await xOfHour(A, 30);
     await A.tapAt(p.x, p.y);
     await A.page.waitForTimeout(250);
-    const s = await A.w(() => ({ ho: [...document.querySelectorAll('#sh rect.ho')].map((r) => [r.getAttribute('x'), r.getAttribute('width'), getComputedStyle(r).stroke, getComputedStyle(r).fill]), cap: document.getElementById('capline').textContent, vals: document.querySelector('.ro-vals').textContent, v: document.querySelector('.ro-when span').textContent, ink: getComputedStyle(document.querySelector('h1')).color }));
-    check(s.ho.length === 1 && +s.ho[0][0] === 64 + 30 * 5 + 0.5 && +s.ho[0][1] === 8 && s.ho[0][2] === s.ink && s.ho[0][3] === 'none' && s.cap === 'Ink: hours a rule rules out. Hollow: no value in the file. Framed gaps are windows.' && s.vals.includes('gusts not in the file') && s.v.includes('ruled out by gusts'),
-      `a missing value, ${scheme}: one hollow block over hours 30 and 31 in the Gusts row, a 1 px ink outline; the caption says "Hollow: no value in the file."; the readout "${s.v.trim()}", "gusts not in the file"`);
+    const s = await A.w(() => ({ ho: [...document.querySelectorAll('#sh rect.ho')].map((r) => [r.getAttribute('x'), r.getAttribute('width'), getComputedStyle(r).stroke, getComputedStyle(r).fill]), key: [...document.querySelectorAll('.shw .key .k')].map((k) => k.textContent), vals: document.querySelector('.ro-vals').textContent, v: document.querySelector('.ro-when span').textContent, ink: getComputedStyle(document.querySelector('h1')).color }));
+    check(s.ho.length === 1 && +s.ho[0][0] === 64 + 30 * 5 + 0.5 && +s.ho[0][1] === 8 && s.ho[0][2] === s.ink && s.ho[0][3] === 'none' && s.key.join() === 'Ruled out,Share of the limit,No value,Window' && s.vals.includes('gusts not in the file') && s.v.includes('ruled out by gusts'),
+      `a missing value, ${scheme}: one hollow block over hours 30 and 31 in the Gusts row, a 1 px ink outline; the key adds No value; the readout "${s.v.trim()}", "gusts not in the file"`);
     await A.shot(`hollow-${scheme}`, false);
     await closeOut(A, `a missing value, ${scheme}`);
   }
@@ -772,19 +824,20 @@ for (const [label, ov, want] of [
 }
 override = {};
 // the widths: no sideways scroll, the caption inside its lines, the Shutters inside the pane, the readout inside its lines
-for (const [label, wv, hv, ph] of [['320 × 700', 320, 700, 4], ['360 × 740', 360, 740, 4], ['375 × 667', 375, 667, 5], ['390 × 844', 390, 844, 5], ['125 % text (312 × 675)', 312, 675, 4], ['on its side (844 × 390)', 844, 390, 12], ['640 × 900', 640, 900, 10], ['a tablet (820 × 1180)', 820, 1180, 12]]) {
+for (const [label, wv, hv, ph] of [['320 × 700', 320, 700, 4], ['360 × 740', 360, 740, 4], ['375 × 667', 375, 667, 5], ['390 × 844', 390, 844, 5], ['125 % text (312 × 675)', 312, 675, 4], ['on its side (844 × 390)', 844, 390, 12], ['640 × 900', 640, 900, 10], ['a tablet (820 × 1180)', 820, 1180, 12], ['wide (1024 × 768)', 1024, 768, 12]]) {
   const A = await open('light', { w: wv, h: hv });
   const r = [];
   for (const name of PANES) {
     await A.pane(name);
     r.push(await A.w(() => {
-      const m = document.getElementById('main'), cap = document.getElementById('capline'), p = document.getElementById('pane'), ps = getComputedStyle(p), sh = document.querySelector('#sh svg');
-      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.scrollHeight <= cap.clientHeight + 1, capH: cap.clientHeight, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+      const m = document.getElementById('main'), cr = document.getElementById('credits'), p = document.getElementById('pane'), ps = getComputedStyle(p), sh = document.querySelector('#sh svg');
+      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, foot: (() => { const rg = document.createRange(); rg.selectNodeContents(cr.querySelector('a')); return new Set([...rg.getClientRects()].map((q) => Math.round(q.bottom))).size; })(),
+        // the anchor's hit: 44 px or more, inside the band and on the screen (the final's should, 2026-10-08)
+        hit: (() => { const a = cr.querySelector('a').getBoundingClientRect(), bd = document.getElementById('band').getBoundingClientRect(); return a.height >= 43.5 && a.top >= bd.top - 0.5 && a.bottom <= bd.bottom + 0.5 && a.bottom <= innerHeight + 0.5 ? null : `${Math.round(a.top)}–${Math.round(a.bottom)} in the band ${Math.round(bd.top)}–${Math.round(bd.bottom)}, the screen ${innerHeight}`; })(), pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
         sh: !sh || sh.getBoundingClientRect().right <= p.getBoundingClientRect().right - parseFloat(ps.paddingRight) + 0.5, ph: window.__ow.shutters() ? window.__ow.shutters().G.ph : null, band: document.getElementById('band').getBoundingClientRect().height,
-        // the pane's text starts where the header's and the band's do (HOUSE 4.1: left-aligned, one gutter)
-        left: [document.querySelector('#pane > *').getBoundingClientRect().left, document.querySelector('h1').getBoundingClientRect().left, cap.getBoundingClientRect().left].map(Math.round),
-        // no credit anchor's hit reaches over the caption line: every point of the caption's box is the caption's
-        capHit: (() => { const c = cap.getBoundingClientRect(); let n = 0; for (let y = c.top + 0.5; y < c.bottom - 0.5; y += 1) for (let x = c.left + 1; x < c.right; x += 3) { const e = document.elementFromPoint(x, y); if (e && e.closest('a')) n++; } return n; })() };
+        // the pane's text starts where the header's and the footer's do, one centered column on a wide screen (plan 0011's owed item)
+        left: [document.querySelector('#pane > *').getBoundingClientRect().left, document.querySelector('h1').getBoundingClientRect().left, cr.getBoundingClientRect().left].map(Math.round),
+        right: p.getBoundingClientRect().right };
     }));
   }
   // the readout never outgrows its two lines: every hour, by the keys
@@ -798,15 +851,25 @@ for (const [label, wv, hv, ph] of [['320 × 700', 320, 700, 4], ['360 × 740', 3
     if (m.over) over++; held.add(m.held);
     await A.page.keyboard.press('ArrowRight');
   }
-  const side = r.filter((x) => x.side).length, cap = r.filter((x) => !x.cap).length;
-  const land = wv > hv ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
-  const lines = r.every((x) => x.capH === (wv >= 640 ? 15 : 30));
-  const aligned = r.every((x) => x.left[0] === x.left[1] && x.left[1] === x.left[2]), capHit = r.reduce((n, x) => n + x.capHit, 0);
-  check(side === 0 && cap === 0 && land && r.every((x) => x.sh) && lines && new Set(r.map((x) => x.band)).size === 1 && r[0].ph === ph && over === 0 && held.size === 1 && aligned && capHit === 0,
-    `${label}: no sideways scroll on any pane, the caption line inside its ${wv >= 640 ? 'one line' : 'two lines'} on every pane, the Shutters inside the pane at ${r[0].ph} px an hour, the readout inside its ${wv < 360 ? 'three' : 'two'} lines for all ${N} hours (${over} over) with its first line held at ${[...held][0].split('/')[0]} px and what follows at one top (${held.size} seen), the pane's left edge with the header's and the band's (x ${r[0].left.join(', ')}), no credit hit over the caption (${capHit} points)${wv > hv ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
+  const side = r.filter((x) => x.side).length;
+  const land = wv > hv && hv < 500 ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
+  const aligned = r.every((x) => x.left[0] === x.left[1] && x.left[1] === x.left[2]), centered = wv <= 760 || r.every((x) => Math.abs((x.left[0] - 16 + x.right) / 2 - wv / 2) < 1);
+  check(side === 0 && land && r.every((x) => x.sh) && r.every((x) => x.foot === 1) && r.every((x) => x.hit === null) && new Set(r.map((x) => x.band)).size === 1 && r[0].ph === ph && over === 0 && held.size === 1 && aligned && centered,
+    `${label}: no sideways scroll on any pane, the footer one line, its anchor's 44 px hit inside the band and on the screen${r.some((x) => x.hit) ? ` (NOT: ${r.find((x) => x.hit).hit})` : ''}, the Shutters inside the pane at ${r[0].ph} px an hour, the readout inside its ${wv < 360 ? 'three' : 'two'} lines for all ${N} hours (${over} over) with its first line held at ${[...held][0].split('/')[0]} px and what follows at one top (${held.size} seen), the pane's left edge with the header's and the footer's (x ${r[0].left.join(', ')})${wv > 760 ? ', the column centered' : ''}${land && wv > hv ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
   if (wv === 320) await A.shot('windows-320-light', false);
-  if (wv > hv) await A.shot('windows-landscape-light', false);
+  if (wv === 1024) await A.shot('windows-wide-light', false);
+  if (wv > hv && hv < 500) await A.shot('windows-landscape-light', false);
   await closeOut(A, label);
+}
+// the loading line, before the files are read, on one line (HOUSE 7.2)
+{
+  override = { '/data/snapshot.json': { body: rawSnap, delay: 1500 } };
+  const A = await open('light', { noWait: true });
+  check(await A.w(() => document.getElementById('stamp').textContent) === 'Reading the forecast…', 'the loading line, before the file is read');
+  await stampCheck(A, 'loading');
+  await A.page.waitForFunction(() => window.__ow && window.__ow.ready(), null, { timeout: 30000 });
+  await closeOut(A, 'stamp loading');
+  override = {};
 }
 const after = hashOf(appPng);
 check(after === appPngHash, `screenshots/app.png, the README's composite, untouched (${appPngHash ? appPngHash.slice(0, 12) + '…' : 'absent'})`);

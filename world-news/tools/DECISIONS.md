@@ -695,3 +695,147 @@ Mac, never phone evidence):
 **For the lead, outside this folder:** HOUSE §8's World News row (86 948), `docs/CURRENT_STATE.md` and plan
 0011 D31 quote the old ZIP figure; it is now 86 993 of 88 000. The starter pack's `world-news.zip` carries
 the data and `ART.md`. Owner call 2 is closed.
+
+## Plan 0012 package 4: the pane-app register, World News 1.2 (the builder, 2026-10-08)
+
+The brief is `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (D5, D6 gray, package 4), `Template/HOUSE.md`
+§4.15, §11, §12 and §13 as amended on 2026-10-06 (§11.3's color rule for a signed change of 2026-10-08 has
+nothing to apply to here: no figure is printed with a sign), and `docs/plans/0012-change-lists.md`: *Shared steps,
+every app (F)*, *the six pane apps (P)* and *World News* (items 1 to 10 and the lead's "do first"), plus plan
+0011's three owed items (P9). The approved prototype (`docs/plans/0012-prototypes/world-news.patch`, the All
+pane) was the target picture, built properly: the band deleted, not hidden. Finances 1.2 is the reference
+(`finances/tools/DECISIONS.md`, *Plan 0012 package 4*). Bugs on record: none open (plan 0009 item 5 names no
+World News bug, nothing under `docs/review/` names the app, matrix rows 167 and 174 are phone rows not yet run).
+The data pipeline and `data/snapshot.json` are untouched. No git command was run.
+
+### Do first: the stale pin (the lead's finding of 2026-10-06)
+
+`check.mjs` item 5 pinned `data/snapshot.json`'s sha256 to the file committed before plan 0011's pass, so every
+hourly refresh failed it (it failed on the bot's 6 Oct 17:01Z copy that package 1 pulled in). It now checks what
+the pin guarded, on any file the bot writes: the shape `scripts/world_news.py` writes (the top-level keys in
+order, `schema` 1, `generatedAt` ISO UTC, each region `{ key, name, stale, items[] }`, each item `{ title,
+source, feed, link, published, summary, author?, stale }`, `sources[]` `{ name, attribution, licence, terms
+(https) }`, every headline's source credited there, `feeds[]` rows, `ask[]` at most 60 rows with the readable
+minute), and every source's attribution and license line swept (no `licence` and no spaced em dash inside them,
+owner call 2). Proved both ways: it passes on the live file and on the old pinned one; on the pre-sweep file
+(`tools/.work/data-followup/orig/snapshot.json`) it fails naming Global Voices' line, and with `ask` deleted it
+fails naming the keys.
+
+**The tests' fixed day.** `shoot.mjs` and `test_datelines.mjs` read figures off one file (1 Oct 2026, Europe's
+23 Sep tick of three, `In two regions or more: 3`, …), so on the bot's file they failed too: the baseline run of
+`shoot.mjs` on HEAD stopped with a TypeError after 53 `ok` (`tools/.work/shoot-before.log`), and
+`test_datelines.mjs` failed 9 of 34. The pinned file now lives in `tools/fixtures/snapshot.json` (sha256
+`ecb80872…f910c5d2c`, the file the old pin named; `tools/` does not ship), pinned by `check.mjs` and by both
+tests. `shoot.mjs` serves it as `data/snapshot.json` by default and then opens the app once on the live file,
+two hours after it was made, checking every figure there against its own read of that file (the stamp with
+Oslo's wall clock by zone, so it holds after 25 Oct; the credit; the sources' table; the plates; contrast).
+
+### What changed, by the list
+
+- **P1, F1, item 1.** `footer#band` with `#capline` and `#credits` deleted; `caption()`, the `capline` write in
+  `fail()`, the `.band`/`.capline`/`.credits` rules and their 640 px, 700 px and landscape variants deleted;
+  `about()` makes `['head', 'main']` inert. `CREDIT` is `['Headlines from ', '.']` (the one constant a list
+  changes) and `boot()` writes the same expression into `<p id="about-credit-line" translate="no">`, About's first
+  paragraph under *Sources and credits*: `Headlines from Global Voices, The Conversation and UN News.`
+- **Items 2, 3.** `js/datelines.js` exports `SRC`; the model's items carry `src`; an unstale tick is classed
+  `tk src-N`. `render()` rebuilds `SRC` from `sources[]` in order (at most three slots; a fourth source would draw
+  in ink), puts the Datelines on a plate headed `Every headline by age`, writes the label, and on All the
+  `table.keytab` (`Source`, `Headlines`, `Feeds`).
+- **Item 4.** Each region is a plate on All and on its own tab, `div.sec-head` with the `h2` and `8 headlines,
+  newest 2 d`. **Departure:** the change list said `ageLabel(min age)`; `ageLabel()` rounds (`23.6 h` prints
+  `24 h`, `2.6 d` prints `3 d`) and prints `0 h` under an hour, which would put a number on screen the data does
+  not hold. A new `ageShort()` in `js/units.js` floors (`14 h`, `2 d`) and says `under 1 h`; `test_datelines`
+  pins it.
+- **Item 5.** The source line opens on an 8 px swatch and joins the byline, `…, by Elmira Lyapina`; the
+  `span.by` line is gone. Summaries are `sum clamp` on All and `sum` on a region. **Order:** the list said the line
+  "ends with" the byline; the prototype, the approved picture, puts it after the date and before `kept from an
+  earlier run` and `also under …`, and so does the build (`Global Voices, 29 Sep, by Elmira Lyapina, also under
+  Middle East`), which reads as one credit followed by the item's state.
+- **Item 6, P2.** `ABOUT_KEY = 'Sources, their terms and credits are in About.'` and `aboutKey()` as the list
+  gives it, called once at the end of `render()` (every pane, as in Finances).
+- **Item 7, P3, P6.** The CSS block with the list's corrections: HOUSE §11.2's tokens with `--src-3` wine /
+  mauve; `.src` 12.5 px; no `.dl .tk { width }`; tick fills scoped to `.row.on`; plates; `.dl .sel` and `.cnt`
+  stroked in `--sheet`; `.keytab`; `.sw`; `.story` 11/12 px; `.hl` 15/20 600; `.sum` 12.5/17; `.sum.clamp`;
+  `.aboutlink`; `.panebody` padding as P3 gives it. `drawDatelines()` now measures its plate's inner width (the
+  plot is 253 px at 390, was 279 on the page); ART and `test_datelines` carry the new figures (6 h at 62 px
+  from the right, 1 d at 111, 7 d at 178; still 39 ticks, 17 headlines sharing, three parts at most).
+- **The label and its key (a departure, for the lead).** The list's label adds ` Hollow: from an earlier run.`
+  and, on a region's tab, ` Middle East in color.` Measured at 390 px, `Age when the file was made, 1 Oct, 07:01.
+  Log scale. Middle East in color.` takes two lines, which breaks §11.1 rule 9 (one line at 390 px). So the label
+  is the first sentence alone, and the rest became a key (rule 6, F4's markup and CSS) on one row under it: on a
+  region's tab its sources' swatches and names (the region's row is the one in color), and `From an earlier run`
+  with a hollow swatch whenever a hollow tick is drawn. On All the sources' table is the colors' key. Reversible
+  by putting the two clauses back into the label.
+- **Item 8.** No key number; `check.mjs` still fails a 21 px or 34 px size.
+- **Item 9, F5.** `ART.md` rewritten where the register changed what it describes (sections 1 to 4, 6, 7);
+  `NOTES.md`'s UN News sentence ("in the credit line under every pane") now says About and each story's source
+  line, and its Conversation paragraph says the byline is joined to the source line word for word. `PROMPT.md`
+  needed nothing (it names no band or credit place).
+- **Item 10, F6.** `miniapp.json` 1.1 → **1.2**; `check.mjs` item 6 pins `'1.2'`.
+- **P7.** Allowed sizes are the pane apps' scale; 12 px, 21 px and 34 px fail.
+- **P8.** Not applicable: World News has no example data.
+
+### P9, plan 0011's three owed items
+
+1. **The header centered with the pane**: `.head`'s sides are `calc(max(16px, 50% - 364px) + env(…))`, the 700 px
+   rule's 20 px gone. `shoot.mjs`'s widths gain `wide (1024 × 768)`: the name starts where the first plate does at
+   every width (148 and 148 px at 1 024, the column 148 to 876, centered).
+2. **A passive `touchstart` listener**, empty, on the document (a story held, a key pressed: `:active`). Pinned by
+   `check.mjs`; the tint is a phone check.
+3. **The scrub-race check.** World News has no scrub or time player. Its one race is two taps: `shoot.mjs` now
+   clicks the taps' layer at Europe's newest tick and, in the same task, at Oceania's (the first tap scrolls the
+   pane to its story, so the second is placed where the layer then is), and checks the last tap wins: the
+   selection, the one `aria-current` story and the sentence said. Passes in both themes.
+
+### Checks changed, and why each
+
+`check.mjs`: item 5 (the shape, the sweep and the fixture, above); item 6 pins 1.2; item 8 (the credit into
+`#about-credit-line`, first under *Sources and credits*; no band, caption or credit element or rule; nothing on
+the front's static markup names a source, a license or the face); item 13 counts 10 tokens and pins the
+register's three by name and value; item 14's sizes (P7, no 12, 21 or 34 px; weight 600 allowed); item 16's ZIP cap
+107 530; new item 18 (the About key and its single call, the pane's foot, plates and `--sheet` strokes, tick
+colors scoped to the chosen rows and the 2 px width left to `draw()`, the byline join and the clamp, the centered
+header, `touchstart`). Run against the before copy (`tools/.work/before/world-news`), eleven of them print
+`FAIL` (the version, the credits, the tokens twice, the key, the foot, the plates, the colors, the byline and
+clamp, the header, `touchstart`); item 5 and item 14's sizes pass there too, as they should.
+`shoot.mjs`: the fixture and the live stage (above); boot (no band, the credit first in About); per pane the
+plates in order, the label on one line and its key, the About key last (44 px, 14 px under the last plate);
+All's sources' table against this file's decode with each swatch's computed color, every tick's fill by its
+source, each region's head, the summaries held to two lines and whole on Europe, Europe's source lines with
+swatches and bylines; the ticks sampled against `--sheet`; About's credit and inert list; the About key by
+touch; the two-tap race; the locales without the band; the kept copy's label and key; the stamp on one line in
+seven states (fresh, the day after, stale, stale with the year, loading, no usable data, the live file); the
+widths with the wide screen and the Datelines inside their plate; the band-height and caption checks deleted.
+53 `ok` then a crash before (on the live data); **245 `ok`, 0 failed** now, both themes. `test_datelines.mjs`:
+the fixture, the plate's widths, three new checks (items carry `src`, `ageShort`, each region's newest): 37 pass.
+`palette.py`: the register's three tokens in `--json`, check 6 (contrast at HOUSE §11.2's figures, a tick on the
+plate and over a hairline at 3 or more, ΔE pairs at HOUSE's figures under four visions, each from `--ink`),
+checks 3 and 4 measured on `--sheet`: 80 `ok`, `ALL CHECKS PASS`.
+
+### Owner calls this leaves (each reversible)
+
+1. **The label's key** in place of the list's two trailing clauses (above).
+2. **The byline's place** in the source line, as the prototype has it (above).
+3. **`ageShort`** floors the newest age (`2 d` for 2 d 22 h).
+4. **A fourth source** (none today) would draw its ticks and swatch in ink and its row in the table without a
+   color, since HOUSE §11.2 gives three.
+
+### Budgets (`node tools/check.mjs`)
+
+App code **51 998 B** of 200 000 (46 119 before: `index.html` 4 623, `style.css` 12 740, `app.js` 22 435,
+`js/units.js` 5 255, `js/datelines.js` 6 945; the check prints each). **ZIP 88 954 B** with today's data (86 024
+before the pass, with the same data), inside the lead's ruled cap for package 4, **107 530 B** (86 024 × 1.25;
+the app's own 88 000 of plan 0011 D30 was tighter, so it rose to the house rule; `ZIP_CAP` set with that reason).
+Over the old 88 000 by 954 B. Nothing cut.
+
+### The camera
+
+`MarketingShotsUITests.swift` waits for the button `Europe` and taps `Europe` and `Americas`: both are still
+`<button role="tab">` built by `buildTabs()`, untouched. **The camera needs no change; no camera string changed.**
+The new About key is a button named `Sources, their terms and credits are in About.`; nothing waits for it.
+
+### Phone checks this adds (not claimed here; an iPhone on iOS 18 and one on iOS 26)
+
+Row 174 covers the About key above the home indicator. New: a story held shows its pressed tint (the
+`touchstart` listener); the three source colors on the ticks at arm's length in both themes (the wine and the
+mauve against the blue); VoiceOver reading the joined byline once; the two-line clamp on All in WKWebView.
