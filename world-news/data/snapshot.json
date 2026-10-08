@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T06:01:43Z",
+ "generatedAt": "2026-10-08T07:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/many-are-shocked-by-the-domestic-violence-charges-against-sam-wood-but-we-shouldnt-be-293805",
+     "published": "2026-10-08T06:06:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jessica Schaffer, Lecturer in Law, Faculty of Business, Law and Arts, Southern Cross University"
+    },
+    {
      "title": "Some small businesses are paying tax bills with credit cards. What will happen when they can’t?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Charles T. Hunt, Professor in Global Security, Social Equity Research Centre, RMIT University"
-    },
-    {
-     "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/apples-new-age-verification-is-a-game-changer-for-kids-safety-online-we-need-the-rest-of-big-tech-to-follow-293838",
-     "published": "2026-10-08T03:44:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Toby Murray, Professor of Cybersecurity, School of Computing and Information Systems, The University of Melbourne"
     },
     {
      "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Many are shocked by the domestic violence charges against Sam Wood, but we shouldn’t be",
+   "published": "2026-10-08 06:06 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Some small businesses are paying tax bills with credit cards. What will happen when they can’t?",
    "published": "2026-10-08 05:31 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
    "published": "2026-10-08 04:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
-   "published": "2026-10-08 03:44 UTC"
   },
   {
    "region": "Oceania",
