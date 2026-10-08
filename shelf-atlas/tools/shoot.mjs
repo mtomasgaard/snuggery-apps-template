@@ -249,12 +249,18 @@ for (const scheme of schemes) {
     const radios = await Promise.all(['Rate', 'Cumulative', 'Liquids', 'Gas', 'Oil equivalent'].map((n) => page.getByRole('radio', { name: n, exact: true }).count()));
     const slider = await page.getByRole('slider', { name: 'Month', exact: true }).count();
     const b = await w(() => {
-      const c = document.getElementById('credits');
-      return { credits: c.textContent, whole: c.scrollWidth <= c.clientWidth + 1 && c.scrollHeight <= c.clientHeight + 1 && c.getBoundingClientRect().height > 0, font: document.fonts.check('560 11.5px "Ysabeau Office"'),
+      const c = document.getElementById('about-credit-line');
+      // the stamp is one line, 16 px, in every state updateStamp() can write (HOUSE.md 7.2), the longest included
+      const st = document.getElementById('stamp'), was = [...st.childNodes];
+      const lines = ['Reading the data\u2026 1 of 2', 'No data could be read', 'Updated 05:34, figures to Jun 2026', 'Map only. Updated 22 Sep, 05:34', 'Stale. Updated 22 Sep, 05:34, figures to Jun 2026', 'Stale. Map only. Updated 22 Sep, 05:34']
+        .map((t) => { st.textContent = t; return [t, st.getBoundingClientRect().height]; });
+      st.replaceChildren(...was);
+      return { lines, credits: c.textContent, whole: !document.getElementById('credits') && c.previousElementSibling.textContent === 'Sources and credits', font: document.fonts.check('560 11.5px "Ysabeau Office"'),
         family: getComputedStyle(document.body).fontFamily, stamp: document.getElementById('stamp').textContent, valid: document.getElementById('valid-time').textContent };
     });
     check(buttons.every((n) => n === 1) && radios.every((n) => n === 1) && slider === 1, `the camera's controls by role and name: buttons ${buttons.join(',')}, radios ${radios.join(',')}, the slider ${slider}`);
-    check(b.credits === 'Natural Earth · Marine Regions CC BY · EMODnet CC BY · Sodir NLOD · NSTA · Danish Energy Agency · NLOG' && b.whole, `the credit line is on screen whole (B3): "${b.credits}"`);
+    check(b.credits === 'Natural Earth · Marine Regions CC BY · EMODnet CC BY · Sodir NLOD · NSTA · Danish Energy Agency · NLOG' && b.whole, `no #credits on the front; the credit line is About's first Sources and credits paragraph, whole: "${b.credits}"`);
+    check(b.lines.every(([, h]) => Math.abs(h - 16) <= 1), `the stamp is one line in every state it can show: ${b.lines.map(([t, h]) => `"${t}" ${h.toFixed(0)} px`).join(', ')}`);
     check(b.font && /^"?Ysabeau Office"?/.test(b.family), `the face is loaded (${b.family.split(',')[0]})`);
     check(b.stamp.startsWith('Updated') && b.stamp.endsWith(`figures to ${mon(COMMON)}`) && b.valid === mon(COMMON), `it opens on ${b.valid}, the newest month every country has reported (B2); the stamp "${b.stamp}"`);
   }
@@ -605,18 +611,33 @@ console.log('\n== once (light)');
   // hit targets, and focus mode end to end
   {
     const h0 = await hitTargets(w);
+    // the key: the map's own marks drawn small, in the map's colors, after the notes (HOUSE 4.15)
+    {
+      const TH = JSON.parse(fs.readFileSync(path.join(APP, 'app.js'), 'utf8').match(/^const THEMES = (.*);$/m)[1])[await w(() => (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))];
+      const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      const keyOf = () => w(() => [...document.querySelectorAll('#readline .k')].map((k) => { const i = k.querySelector('.sw'), cs = getComputedStyle(i); return [i.className.replace('sw sw-', ''), k.textContent, cs.backgroundColor, cs.borderTopColor, cs.borderTopWidth]; }));
+      await setMonth(A, COMMON);
+      const k1 = await keyOf();
+      await page.getByRole('radio', { name: 'Cumulative', exact: true }).click(); await A.frame();
+      const k2 = await keyOf();
+      await page.getByRole('radio', { name: 'Rate', exact: true }).click(); await A.frame();
+      const disc = `rgba(${hex(TH.ramp[8]).join(', ')}, ${TH.circleAlpha})`, ring = `rgb(${hex(TH.ring).join(', ')})`, shut = `rgba(${hex(TH.shutFill).join(', ')}, ${TH.shutAlpha})`;
+      check(k1.length === 2 && k1[0][0] === 'rate' && k1[0][1] === 'The month\u2019s rate' && k1[0][2] === disc && k1[1][0] === 'best' && /^Best month so far, from \d{1,3}(\u202f\d{3})*\u202fSm³\/d$/.test(k1[1][1]) && k1[1][3] === ring && k1[1][4] === '1px'
+        && k2.length === 2 && k2[0][1] === 'Produced to date' && k2[0][2] === disc && k2[1][1] === 'Shut down' && k2[1][2] === shut,
+      `the key in the map's own marks: Rate ${k1.map((k) => `"${k[1]}" (${k[2] !== 'rgba(0, 0, 0, 0)' ? k[2] : `${k[4]} ${k[3]}`})`).join(', ')}; Cumulative ${k2.map((k) => `"${k[1]}" (${k[2]})`).join(', ')}`);
+    }
     check(h0.bad.length === 0 && h0.n >= 15, `hit targets: ${h0.n} controls, all at least 44 × 44 (B4)${h0.bad.length ? ': ' + h0.bad.join('; ') : ''}`);
     const before = await w(() => document.getElementById('map-wrap').getBoundingClientRect().height);
     await A.tapEl('#focus-key');
     await page.waitForTimeout(450);
     const f = await w(() => {
       const gone = ['head', 'keys', 'legend-scale'].map((id) => { const e = document.getElementById(id); return e.hidden && e.inert; });
-      const stays = ['legend-name', 'readline', 'credits', 'player', 'stamp'].map((id) => { const e = document.getElementById(id); return e.getBoundingClientRect().height > 0 && !e.closest('[hidden]'); });
+      const stays = ['legend-name', 'readline', 'player', 'stamp'].map((id) => { const e = document.getElementById(id); return e.getBoundingClientRect().height > 0 && !e.closest('[hidden]'); });
       return { gone, stays, stampIn: document.getElementById('stamp').parentElement.id, ghost: !document.getElementById('focus-exit').hidden, plate: document.getElementById('map-wrap').getBoundingClientRect().height, live: document.getElementById('live').textContent, store: localStorage.getItem('sa.focus'), active: document.activeElement.id, rings: window.__sa.stats().rings };
     });
     const tree = await page.getByRole('button', { name: 'Zoom in', exact: true }).count();
     check(f.gone.every(Boolean) && tree === 0 && f.stays.every(Boolean) && f.stampIn === 'caption' && f.ghost,
-      `focus mode by touch: the header, the keys and the legend's bar are hidden and inert (gone from the tree: ${tree === 0}); the legend's title, the caption line, the credits, the player and the stamp (now in the caption band) stay`);
+      `focus mode by touch: the header, the keys and the legend's bar are hidden and inert (gone from the tree: ${tree === 0}); the legend's title, the caption line, the player and the stamp (now in the caption band) stay`);
     check(f.plate > before && f.plate >= 645 && f.rings > 100, `the plate grew from ${before.toFixed(1)} to ${f.plate.toFixed(1)} px (ART.md: at least 645), the rings still drawn (${f.rings} in view)`);
     check(f.live === 'Controls hidden. Press Escape or the corner key to show them.' && f.store === '1' && f.active !== 'focus-exit', `its sentence ("${f.live}"), sa.focus = ${f.store}, and no ring after a touch (focus on "${f.active || 'body'}")`);
     const hf = await hitTargets(w);

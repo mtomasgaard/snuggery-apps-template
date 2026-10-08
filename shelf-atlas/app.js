@@ -281,6 +281,8 @@ function buildPalette() {
   const st = document.documentElement.style;
   const sample = { prod: P.prod, idle: T.idle, shut: P.shut, fac: T.fac, sub: T.sub, oil: T.pipes[0], gas: T.pipes[1], other: T.pipes[2], border: T.border };
   for (const k in sample) st.setProperty(`--s-${k}`, sample[k]);
+  // the caption's key: a disc in the ramp's middle at the discs' own alpha, the ring's 1 px stroke, a shut disc
+  st.setProperty('--k-rate', rgba(T.ramp[8], T.circleAlpha)); st.setProperty('--k-best', T.ring); st.setProperty('--k-shut', P.shut);
 }
 
 /* ── the month ───────────────────────────────────────────────────────────── */
@@ -958,7 +960,7 @@ function hitTest(sx, sy) {
   return null;
 }
 
-/* ── the stamp, the legend, the caption line, the credits ────────────────── */
+/* ── the stamp, the legend, the caption line ───────────────────────────────── */
 
 function setProblem(key, msg) {
   if (msg) problems.set(key, msg); else problems.delete(key);
@@ -1016,21 +1018,37 @@ function updateLegend() {
   }
 }
 
-/** The caption line for month m: what the picture is, led by what is missing that month. */
+/** The caption line for month m: the notes on what is missing that month, then the key to the marks
+ *  as [swatch, word] pairs (HOUSE 4.15). */
 function readline(m) {
-  if (!model || !model.fields.length) return '';
+  if (!model || !model.fields.length) return ['', []];
   const on = CC.filter((c) => ccOn[c]);
-  if (!on.length) return 'No country is shown; turn one on in Map layers.';
+  if (!on.length) return ['No country is shown; turn one on in Map layers.', []];
   const cum = mode === 'cum', rings = !cum && layerOn.peaks;
   const late = on.filter((c) => model.ccLast[c] != null && m > model.ccLast[c]);
   const early = on.filter((c) => model.ccFirst[c] != null && m < model.ccFirst[c]).sort((a, b) => model.ccFirst[a] - model.ccFirst[b]);
   let note = late.length ? `No ${orList(late)} figures for ${U.month(m)} yet. ` : '';
   if (early.length === 1) note += `${CC_ADJ[early[0]]} figures start in ${U.month(model.ccFirst[early[0]])}. `;
   else if (early.length) note += `No ${orList(early.map((c) => CC_ADJ[c]))} figures yet. `;
-  if (note) return note + (cum ? 'Circles: produced to date.' : rings ? 'Circles: the month\'s rate; rings: best month so far.' : 'Circles: the month\'s rate.');
-  if (cum) return 'Circles: what each field has produced to date; gray ones have shut down. Rings show with Rate.';
-  if (!rings) return 'Circles: the month\'s rate of each field.';
-  return `Circles: the month's rate. Rings: each field's best month so far, drawn from a best of ${U.amount(model.hi[qty] * RING_FLOOR, qty, sys, false)}.`;
+  if (cum) return [note, [['rate', 'Produced to date'], ['shut', 'Shut down']]];
+  const key = [['rate', 'The month\u2019s rate']];
+  if (rings) key.push(['best', `Best month so far, from ${U.amount(model.hi[qty] * RING_FLOOR, qty, sys, false)}`]);
+  return [note, key];
+}
+/** Writes the notes and the key into the caption line, and nothing while both are unchanged. */
+function setReadline([note, key]) {
+  const e = $('readline'), sig = note + key.join('|');
+  if (e.dataset.sig === sig) return;
+  e.dataset.sig = sig;
+  // an item may wrap between its words, so a note and the key keep to two lines at 320 px; the swatch
+  // stays with its first word
+  e.replaceChildren(note, ...key.flatMap(([sw, word], j) => {
+    const k = el('span', 'k'), nb = el('span', 'nb'), i = el('i', `sw sw-${sw}`), cut = word.indexOf(' ');
+    i.setAttribute('aria-hidden', 'true');
+    nb.append(i, cut < 0 ? word : word.slice(0, cut));
+    k.append(nb, cut < 0 ? '' : word.slice(cut));
+    return j ? [' ', k] : [k];   // a space between items, so a screen reader hears two
+  }));
 }
 function lead(m) {
   if (!model || !model.fields.length) return '';
@@ -1057,12 +1075,12 @@ function syncTime() {
   if (!hasFigures()) {
     setText($('valid-time'), '–');
     setText($('lead'), '');
-    setText($('readline'), base ? 'No production figures to show; the notice above says why.' : '');
+    setReadline([base ? 'No production figures to show; the notice above says why.' : '', []]);
     return;
   }
   setText($('valid-time'), U.month(shown));
   setText($('lead'), lead(shown));
-  setText($('readline'), readline(shown));
+  setReadline(readline(shown));
   slider.setAttribute('aria-valuenow', String(shown));
   const late = missing(shown);
   slider.setAttribute('aria-valuetext', `${U.monthLong(shown)}${late.length ? `, no ${orList(late)} figures yet` : ''}`);
@@ -1869,8 +1887,8 @@ darkMq.addEventListener('change', () => {
 });
 reducedMq.addEventListener('change', () => { if (reduced()) endFly(); });
 
-/* ── focus mode: the plate, the player, the stamp, the caption line and the
- * credits; everything else leaves, hidden and inert. Remembered as sa.focus. ── */
+/* ── focus mode: the plate, the player, the stamp and the caption line;
+ * everything else leaves, hidden and inert. Remembered as sa.focus. ── */
 
 let leaveTimer = 0;
 function setFocus(on, { kbd = false, boot = false } = {}) {
@@ -1964,7 +1982,7 @@ async function loadAll() {
         sel = null;
         const r = resolveSel(keep);
         if (r) select(r, { keepSheet: true }); else closeSheets();
-        $('credits').textContent = creditLine(snap);
+        $('about-credit-line').textContent = creditLine(snap);
       } catch (e) { setProblem('snapshot', `data/snapshot.json is not a Shelf Atlas snapshot: ${e.message}.`); }
     }
   } else if (sr.status === 'fulfilled' && model) {
@@ -1972,7 +1990,7 @@ async function loadAll() {
   }
   if (baseChanged && !loaded) { computeFit(); restoreView(); }
   if (base || model) loaded = true;
-  if (!snap) $('credits').textContent = creditLine(null);
+  if (!snap) $('about-credit-line').textContent = creditLine(null);
   updateStamp();
   updateLegend();
   timeDirty = true;

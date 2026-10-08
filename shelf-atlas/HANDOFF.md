@@ -118,5 +118,5 @@ and the world app shows only the country choropleth, with the reason on its laye
   3 world), monthly series as base64 uint16 with a per-series scale; contract in
   `scripts/shelf_atlas/SCHEMA.md`.
 - Budgets: `geo.json` ≤ 2 MB, `snapshot.json` ≤ 2.5 MB, app code ≤ 150 KB.
-- Sources and licenses are listed on the app's attribution screen and in `LICENSE`; attribution
+- Sources and licenses are listed in the app's About, after the credit line, and in `LICENSE`; attribution
   strings are the ones the licenses require (NLOD, NSTA, CC BY 4.0).

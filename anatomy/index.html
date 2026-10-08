@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
 <title>Anatomy</title>
 <link rel="stylesheet" href="./styles.css">
@@ -23,6 +23,7 @@
   <div class="hkeys">
     <button class="wordkey" id="btn-layers" type="button" aria-expanded="false" aria-controls="layers">Layers</button>
     <button class="wordkey" id="btn-find" type="button" aria-haspopup="dialog" aria-label="Find a structure">Find</button>
+    <button class="wordkey" id="btn-about" type="button" aria-haspopup="dialog" hidden>About</button>
   </div>
   <div class="row" id="row">
     <div class="words" id="depth" role="radiogroup" aria-label="Show the body from"></div>
@@ -94,11 +95,9 @@
   <div class="notice" id="notice" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: the line that says how to read the Levels, and the credit line, on
-     screen in every mode. -->
-<section class="caption" id="caption" aria-label="Caption and credits">
+<!-- The caption under the plate: the line that says how to read the Levels. The credits are in About. -->
+<section class="caption" id="caption" aria-label="Caption">
   <p class="capline" id="capline"></p>
-  <p class="credits" id="credits" translate="no"></p>
 </section>
 
 <section class="layers" id="layers" aria-labelledby="layers-title" hidden>
@@ -151,6 +150,7 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <div id="ab-sources"></div>
         <p>Rendering: three.js r186, MIT License (its text is in vendor/three-LICENSE.txt).</p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>

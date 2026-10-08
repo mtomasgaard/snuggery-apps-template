@@ -1,7 +1,7 @@
 // Focus mode (HOUSE.md section 4.10): the mountain on its own. The header, the key column, the legend
 // rows, the controls sheet, an open card and any open sheet leave, hidden and inert; the plate, the
-// stamp (moved into the caption band), the instrument line, the caption, the credits and the player
-// stay. In by the key named Hide the controls, the F key or a double-tap on the view (app.js owns the
+// About key (moved into the caption band), the instrument line, the caption and the player stay.
+// In by the key named Hide the controls, the F key or a double-tap on the view (app.js owns the
 // tap timing); out by the ghost key named Show the controls, Escape (app.js), F or the double-tap.
 // Remembered as besseggen:focus and restored before the first draw.
 
@@ -21,7 +21,7 @@ export function setupFocus({ onChange, toolActive, say, dialogOpen }) {
     if (on) {
       const done = () => {
         for (const e of gone()) { e.hidden = true; e.inert = true; e.classList.remove('leaving'); }
-        $('caption').prepend($('stamp-home'));
+        $('caption').prepend($('btn-about'));
         document.body.classList.add('focus');
         $('focus-exit').hidden = false;
         if (byKey) $('focus-exit').focus();
@@ -30,7 +30,7 @@ export function setupFocus({ onChange, toolActive, say, dialogOpen }) {
       if (!now) say('Controls hidden. Press Escape or the corner key to show them.');
     } else {
       for (const e of gone()) { e.hidden = false; e.inert = false; e.classList.remove('leaving'); }
-      $('head').append($('stamp-home'));
+      $('hkeys').append($('btn-about'));
       document.body.classList.remove('focus');
       $('focus-exit').hidden = true;
       if (byKey) $('focus-key').focus();

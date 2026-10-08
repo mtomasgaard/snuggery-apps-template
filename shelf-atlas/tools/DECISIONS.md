@@ -913,3 +913,90 @@ Nothing was written into `world-oil-gas/`.
 
 The lead re-ran the three tools (`node tools/check.mjs`, `node tools/test_decode.mjs`, `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`: all pass, no FAIL line), counted `Ã` in `data/geo.json` (0) and read `ÅSGARD ERB` from it, and checked the three sha256 values above. The `repairText` comment in `js/data.js` was describing the Latin-1 read as current; it now says the read was fixed on 2026-10-02 and that the guard stays for a data file built before the fix. With that comment the app code is **183 869 B** and the ZIP **1 980 292 B** (`node tools/check.mjs`); `ART.md` section 6 and `HOUSE.md`'s budget row carry these. The README panes, the composite and the before/after picture were shot before the data copy and show the opening on Jun 2026 with the old figures; they stand, because the weekly build moves the data every Monday anyway and the pictures describe a date, as every live app's do. The public repository's log shows no weekly data commit for Shelf Atlas since the app landed on 2026-09-26, so the lead checked the workflow's runs separately (recorded in plan 0011 and CURRENT_STATE).
 
+
+## Plan 0012 package 3.7: the text cut, 1.2 (2026-10-07)
+
+The change list in `docs/plans/0012-change-lists.md` (Shelf Atlas), applied in full. The ground stays
+gray (D6). The bugs on record: plan 0009 item 5, `docs/review/` and the matrix (row 162, the phone
+pass) name none open; B1 to B14 stay fixed (B3, the credit line cut off, is now moot: it is in About,
+whole).
+
+- **The credit line (F1).** `#credits` and both writes are gone (the band's label loses "and
+  credits"); `creditLine()` is unchanged and its result is written into
+  `<p id="about-credit-line" translate="no">`, first under *Sources and credits*, where the two writes
+  were (for a snapshot, and for none). `#about-sources` still prints every source's statement.
+- **The read line becomes notes and a key (F4).** `readline(m)` returns the notes (the missing or late
+  countries; `No country is shown; turn one on in Map layers.`) and the key as [swatch, word] pairs;
+  `setReadline()` writes them, and nothing while both are unchanged (a signature in `data-sig`):
+  - Rate: a disc, `The month’s rate`; with the Peaks, a ring, `Best month so far, from 4 180 Sm³/d`
+    (the figure as before, `U.amount(model.hi[qty] * RING_FLOOR, …)`).
+  - Cumulative: the disc, `Produced to date`; a shut disc, `Shut down`. `Rings show with Rate.` goes
+    from the line (the Peaks key's description says it).
+  - **The key is drawn in the map's own marks** (the list's risk): `applyTheme()` sets `--k-rate` (the
+    ramp's middle stop, `ramp[8]`, at the discs' `circleAlpha`), `--k-best` (`ring`, as a 1 px border)
+    and `--k-shut` (`P.shut`, the shut fill at its alpha), so they follow the theme with the plate.
+    `shoot.mjs` compares the computed swatch colors with `THEMES`.
+  - The items are separated by a space as well as their 9 px margin: driven in WebKit, the line's text
+    read `The month’s rateBest month so far…`, one word to a screen reader.
+  - **Departure, measured:** the key's items wrap between their words (each swatch glued to its first
+    word in a `nowrap` span). With every item `nowrap`, the longest note plus both items took three
+    lines at 320 and 312 px (`No Norwegian, Danish, UK or Dutch figures yet.`, and `No NO, UK or NL
+    figures for Aug 2026 yet.` in bbl/d). As built every form fits the fixed 30 px at every width
+    `shoot.mjs` opens, and the height rule (30 px, 15 from 640) is unchanged.
+- **On its side** the caption band is plain flow: the legend, then the line (the credits' second
+  column is gone). The plate is 234 px (233 before).
+- **Prose (F5):** `NOTES.md` (what the app prints; the credit line in About), `HANDOFF.md` (sources in
+  About), `ART.md` (the Peaks' caption test, the wireframe, the caption line's key, the credits row,
+  About, focus mode, on its side, the plate figures).
+- **Version (F6):** 1.2; `check.mjs` item 6 pins it.
+
+**Checks changed (F8).** `check.mjs` item 8: `creditLine(snap)` and `creditLine(null)` into
+`#about-credit-line`, the paragraph first under the head, no `#credits`, and no source name on the
+front of `index.html`; item 6 pins 1.2. `shoot.mjs`: the boot check reads the credit in About (was:
+on screen whole, B3); new, the stamp one 16 px line in six states (loading, the failure, fresh, map
+only, and the stale forms); focus mode's "stays" list drops `credits`; new, the key's words and swatch
+colors against `THEMES` in Rate and Cumulative. The caption checks (the plate holding still, every form
+inside its height, the late month's note) run unchanged on the new form.
+
+**Not this pass's, for the lead:** `check.mjs` item 5 fails on `data/geo.json` and
+`data/snapshot.json`, whose sha256 pins are the 2026-10-02 follow-up's while the weekly build rewrote
+both on 2026-10-06 (`generatedAt` 2026-10-05T12:34:51Z); and `tools/test_decode.mjs` fails one
+assertion, `M.defaultMonth === Jul 2026`, because that data opens on Jun 2026. Both read the data
+alone, which this pass did not touch (the files' mtimes are 2026-10-06), and the change list forbids
+touching data, so the pins are left for the lead to re-pin or to derive from
+the data. Every other check passes.
+
+**Measured** (headless Chromium): the plate 560 → 590 px at 390 × 844 (+30, as the list said), 650 →
+680 in focus mode, 234 on its side. App code 184 934 B of 200 000; ZIP 1 980 049 B.
+
+**Camera strings:** none changed (`Play`, `Back one year`, `Forward one year`, `Cumulative`, `Rate`).
+
+### Plan 0012 3.7, the fixer's pass on QA's finding (2026-10-07)
+
+- **`tools/test_decode.mjs`, section 3:** the opening-month assertion no longer pins Jul 2026. It
+  works the month out from this file's own decode (`common`, the earliest of the four countries'
+  last reported months, no later than `lastMonth`) and checks `M.defaultMonth` and `commonMonth`
+  against it, as the 2026-10-02 follow-up recommended. On the 2026-10-05 weekly build it reads
+  Jun 2026 (UK last Jun 2026, NO and NL Jul 2026, DK Aug 2026). `node tools/test_decode.mjs`:
+  `all checks pass`. The Peaks' checks at Jun 1985, Jun 2000 and Jul 2026 stay pinned: they check
+  dated figures in ART.md, not the opening month, and they pass on this data.
+- **`tools/check.mjs` item 5, the data hashes: not re-pinned here.** They guard the committed data,
+  and re-pinning them to the 2026-10-05 build (`geo.json` 5fc27bb1…, `snapshot.json` 43429ac9…) is
+  the lead's call. Both files read clean (0 `Ã`; `ÅSGARD ERB` spelled right). Note for the lead: the
+  UK's newest month went *back* from Jul 2026 (10-02 data) to Jun 2026 (10-05 build), which is why the
+  app now opens a month earlier; ART.md's opening-view figures are the 2026-10-02 data's at Jul 2026.
+
+## The lead after package 3.7 (2026-10-07): the data re-pinned, the UK's July
+
+- `check.mjs` item 5 failed on stale pins, from before 3.7: `data/geo.json` and `data/snapshot.json`
+  in Template/ are the public template's weekly build of 2026-10-05 (`c52cfcf`, generatedAt
+  2026-10-05T12:34:51Z), byte for byte, pulled in by plan 0012's package 1. They are pinned now
+  (5fc27bb1… and 43429ac9…).
+- **The UK's July 2026 left the source between the builds.** On 2026-10-02, 179 UK fields reported
+  July; on 2026-10-05 the UK's newest month is June (176 fields), while Norway and the Netherlands
+  still end in July and Denmark in August. So the app now opens on Jun 2026, the newest month every
+  shown country has reported (`M.defaultMonth`), which is correct for the data it has.
+  - Recheck on the next weekly build. If July does not come back, or months keep vanishing, look at
+    the NSTA fetch before the source.
+- ART.md's opening figures are dated (2026-10-02's data) rather than re-measured. test_decode now
+  derives the opening month from the data, the fixer's change, so it no longer pins Jul 2026.

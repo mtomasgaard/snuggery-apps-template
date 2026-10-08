@@ -71,7 +71,7 @@ const timings = { shadowMs: 0, viewshedMs: 0, selectMs: 0, frameMs: 0 };
 // A problem is a sentence on the plate, never a blank screen (HOUSE.md section 4.9).
 function fail(msg) {
   $('notice').textContent = msg; $('notice').hidden = false;
-  text('stamp', 'Besseggen could not start.');
+  text('stamp', 'Besseggen could not start.'); $('stamp-home').hidden = false;
   for (const id of ['keys', 'sheet', 'player']) $(id).hidden = true;
 }
 
@@ -227,7 +227,7 @@ function computeBurn() {
   const sp = spells(burn), date = U.date(y, mo, d);
   const words = !burn.totalMinutes ? null : sp.length > 2
     ? ` in ${sp.length} spells from ${U.span(sp[0][0], sp[sp.length - 1][1])}` : `, ${sp.map(([a, b]) => U.span(a, b)).join(' and ')}`;
-  text('cap', words ? `The burn: direct sun at the marker${markName ? `, ${markName}` : ''}${words} (${U.hm(burn.totalMinutes / 60)}). Terrain shadow only; no cloud.`
+  text('cap', words ? `The burn: direct sun at the marker${markName ? `, ${markName}` : ''}${words} (${U.hm(burn.totalMinutes / 60)}).`
     : `No direct sun reaches the marker${markName ? ` at ${markName}` : ''} on ${date}: the sun climbs to ${U.deg(events.maxAlt)} and the terrain hides it.`);
   text('burn-desc', words ? `Direct sun on the marker from ${sp.map(([a, b]) => U.span(a, b)).join(' and ')}, ${U.hm(burn.totalMinutes / 60, 1)}.` : `No direct sun on the marker on ${U.date(y, mo, d, 0, 1)}.`);
   if (S.card === 'point') showPoint();
@@ -398,7 +398,8 @@ async function boot() {
   new ResizeObserver(onResize).observe($('plate'));
   onResize();
   applyTime();
-  text('stamp', `${(data.edit.about.terrain || {}).owner || 'Kartverket'} data, retrieved ${U.iso((data.edit.about.terrain || {}).retrieved || data.manifest.source.retrieved)}`);
+  // data built once: the stamp's line hides, the About key shows (HOUSE 4.2)
+  $('stamp-home').hidden = true; $('btn-about').hidden = false;
   for (const e of $$('[data-boot]')) e.removeAttribute('hidden');
   $('player').inert = false;
   // Canvas text and the labels' widths wait for the face.
@@ -538,7 +539,7 @@ function setCursor(i, fromProfile, persist = true) {
   const upto = S.reversed
     ? { up: r.descent - r.descentTo[S.cursor], down: r.ascent - r.ascentTo[S.cursor] }
     : { up: r.ascentTo[S.cursor], down: r.descentTo[S.cursor] };
-  text('s-updown', `${U.m(upto.up)} up and ${U.m(upto.down)} down so far, of ${U.m(r.props.ascentM ?? r.ascent)} up in all. Red: 25${U.NN}% or steeper.`);
+  text('s-updown', `${U.m(upto.up)} up and ${U.m(upto.down)} down so far, of ${U.m(r.props.ascentM ?? r.ascent)} up in all.`);
   if (rig && rig.mode !== 'orbit' && !rig.flying && fromProfile) {
     // routeT is measured along the direction being walked, so it mirrors with the direction.
     rig.placeOnRoute(r, S.reversed ? 1 - r.cum[S.cursor] / r.length : r.cum[S.cursor] / r.length, S.reversed, rig.eyeM, true);
@@ -1027,7 +1028,7 @@ function buildAbout() {
   text('ab-lead', a.notNavigation || 'This is a planning tool. It has no position fix and no live weather.');
   text('ab-boat', a.boat || 'Most people take the MS Gjende boat one way. No timetable is shown here; it changes every season.');
   $('ab-gen').innerHTML = '<section><h3>This data</h3>'
-    + dl([['Terrain', t.name || src.terrain], ['Source resolution', t.resolutionM && U.m(t.resolutionM)],
+    + dl([['Edition', `${t.owner || 'Kartverket'} data, retrieved ${U.iso(t.retrieved || src.retrieved)}`], ['Terrain', t.name || src.terrain], ['Source resolution', t.resolutionM && U.m(t.resolutionM)],
       ['Model resolution', `${U.m(t.modelResolutionM || 2)} along the route, ${U.m(m.levels[0].res)} at the horizon`],
       ['Surveyed', (t.projects || []).join(', ')], ['Elevation range', r]])
     + p(t.accuracy)
@@ -1040,7 +1041,7 @@ function buildAbout() {
       + (l.n50Hoyde != null && Math.abs(l.n50Hoyde - l.levelM) > 0.15 ? ` (N50: ${U.m(l.n50Hoyde)})` : '')).join(', '))}.</p>` : '')
     + dl([['Coordinates', (a.app || {}).crs || 'EPSG:25833'], ['Projection check', `${U.unit(U.fixed(projErr, 1), 'mm')} worst error against the manifest’s checkpoints`],
       ['Grid convergence', `${U.deg(frame.convergence, 2)} from true north`], ['Built', (a.app || {}).built]])
-    + '</section><section><h3>Sources and credits</h3>'
+    + `</section><section><h3>Sources and credits</h3><p id="about-credit-line" translate="no">${escapeHtml(CREDITS)}</p>`
     + [t, tr, md, pn].map((b) => `<h4 translate="no">${escapeHtml(b.name || '')}</h4>${dl([['Owner', b.owner], ['License', b.licence], ['Retrieved', b.retrieved], ['Updated', b.sourceUpdated]])}${p(b.note)}${p(b === tr ? b.accuracy : '')}`).join('')
     + '<p>three.js r186 renders the scene (MIT License); the copy in vendor/ is byte for byte the one the Anatomy app carries, with its license.</p>'
     + '<p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p></section>';
@@ -1122,7 +1123,7 @@ function wireUI() {
     if (e.key === 'ArrowDown') { e.preventDefault(); setStop(S.sheet - 1); }
   });
 
-  $('stamp').addEventListener('click', () => openDialog('about'));
+  for (const k of ['stamp', 'btn-about']) $(k).addEventListener('click', () => openDialog('about'));
   $('btn-layers').addEventListener('click', () => (S.dialog === 'layers' ? closeDialog() : openDialog('layers')));
   for (const b of $$('[data-close]')) b.addEventListener('click', () => closeDialog());
   // ignore the synthesized click of the tap that opened the card
@@ -1279,7 +1280,6 @@ function updateDirLabel() {
 }
 
 // Started last, so every const in this module is initialized before the first await returns.
-$('credits').textContent = CREDITS;
 try {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));

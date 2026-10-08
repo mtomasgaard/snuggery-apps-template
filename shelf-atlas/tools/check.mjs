@@ -6,11 +6,12 @@
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
 //   4. data/ holds exactly geo.json, snapshot.json, bathy.png; js/ the three modules; fonts/ the house
 //      face and OFL.txt, both at the sha256 HOUSE.md pins; NOTES.md credits the face;
-//   5. the data is the data follow-up's rebuild: each data file's sha256 is the one tools/DECISIONS.md records;
-//   6. miniapp.json is valid, its name unchanged;
+//   5. the data is the weekly build of 2026-10-05: each data file's sha256 is pinned below;
+//   6. miniapp.json is valid, its name unchanged, at 1.2 (plan 0012's text cut; 1.1 when it began, HOUSE.md 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credit line: built from the snapshot's sources by creditLine(), written to #credits, and for
-//      the shipped snapshot exactly the stock app's words;
+//   8. the credit line: built from the snapshot's sources by creditLine(), written to About's
+//      #about-credit-line, first under Sources and credits (HOUSE.md 4.15), and for the shipped snapshot
+//      exactly the stock app's words; no #credits and no source named on the front;
 //   9. the marketing camera's strings (HOUSE.md 7.4) with their roles; every localStorage key sa.*, the
 //      keys read before the pass still read, sa.focus and the rings' `peaks` added, two retired;
 //  10. SI: no plain space between a digit and a unit in the strings the app writes; toFixed and
@@ -112,22 +113,23 @@ const FONT_CREDIT = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL
 ok(read('NOTES.md').includes(FONT_CREDIT) && read('index.html').includes(`Type: ${FONT_CREDIT}`) && !/no font (is |ships|is loaded)/i.test(read('NOTES.md') + read('style.css')),
   'the face is credited word for word in NOTES.md and in About ("Type: …"), and nothing says no font ships');
 
-// 5. The data is the data follow-up's rebuild (2026-10-02, tools/DECISIONS.md): the pipeline reading each DBF in its
-// declared encoding, the fetchers' prose in US English, and the sources as they stood that day. The pass left the
-// data untouched; the hashes it recorded before it began are in tools/DECISIONS.md.
+// 5. The data is the weekly build of 2026-10-05 (generatedAt 2026-10-05T12:34:51Z, the public template's
+// c52cfcf), pulled into Template/ on 2026-10-06 (plan 0012 package 1) and re-pinned by the lead after package 3.7:
+// the data follow-up's pipeline of 2026-10-02 (each DBF in its declared encoding, the fetchers' prose in US
+// English), run on the sources as they stood that week. bathy.png is unchanged.
 const DATA_SHA = {
   'data/bathy.png': 'a97b5bf5e64900ca241628c0f8b10c90256f3bf7c5b75929288d206eb9fb4b51',
-  'data/geo.json': '4dc10f498ef23a2a5c441386b40e839ae222a8df5fe6df96cd1235895b0b1448',
-  'data/snapshot.json': 'ea6c01e73f4370b756e0193d9982bc35c676a7a042814918150951b153b11932',
+  'data/geo.json': '5fc27bb1af13bcd4ad968825a16dc1ab1913f1c386e6c798f76d361037ce3a6a',
+  'data/snapshot.json': '43429ac9a640fbcc7478b95f07191fc320f835917cb34b54fed719289475b8b1',
 };
-for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… is the data follow-up's rebuild`);
+for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… is the weekly build of 2026-10-05`);
 
 // 6. miniapp.json
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Shelf Atlas' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -144,9 +146,12 @@ const app = read('app.js'), data = read('js/data.js');
 {
   const snap = JSON.parse(read('data/snapshot.json'));
   const line = creditLine(snap);
+  const html = read('index.html'), front = html.replace(/<div class="panel" id="about"[\s\S]*$/, '');
+  const onFront = ['Natural Earth', 'Marine Regions', 'EMODnet', 'Sodir', 'NSTA', 'NLOG', 'CC BY', 'Ysabeau'].filter((w) => front.includes(w));
   ok(line === 'Natural Earth · Marine Regions CC BY · EMODnet CC BY · Sodir NLOD · NSTA · Danish Energy Agency · NLOG'
-    && /\$\('credits'\)\.textContent = creditLine\(snap\);/.test(app) && /<p class="credits" id="credits" translate="no"><\/p>/.test(read('index.html')),
-  `the credit line: creditLine(snapshot) is "${line}", written whole to the <p id="credits"> (B3: it was a cut-off button)`);
+    && /\$\('about-credit-line'\)\.textContent = creditLine\(snap\);/.test(app) && /\$\('about-credit-line'\)\.textContent = creditLine\(null\);/.test(app)
+    && /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>/.test(html) && !/id="credits"/.test(html) && !/\$\('credits'\)/.test(app) && onFront.length === 0,
+  `the credit line: creditLine(snapshot) is "${line}", written whole as About's first Sources and credits paragraph (#about-credit-line); no #credits, and no source on the front${onFront.length ? ': ' + onFront.join(', ') : ''}`);
 }
 
 // 9. The marketing camera's strings (HOUSE.md 7.4) and the stored keys

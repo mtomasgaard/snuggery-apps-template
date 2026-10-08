@@ -80,15 +80,14 @@
   <div class="error" id="error" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: the scale, how to read the picture, and the credits the sources ask
-     for, on screen in every mode. -->
-<section class="caption" id="caption" aria-label="Scale, caption and credits">
+<!-- The caption under the plate: the scale, and the notes and the key that read the picture. The
+     credits the sources ask for are in About. -->
+<section class="caption" id="caption" aria-label="Scale and caption">
   <div class="legend" id="legend">
     <span class="legend-title" id="legend-name"></span>
     <div class="legend-scale" id="legend-scale"><div class="legend-bar" id="legend-bar"></div><div class="legend-ticks" id="legend-ticks" aria-hidden="true"></div></div>
   </div>
   <p class="readline" id="readline"></p>
-  <p class="credits" id="credits" translate="no"></p>
 </section>
 
 <!-- the sheet's slot: a field's details, or the map's layers; the plate gives it its rows -->
@@ -160,6 +159,7 @@
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <div id="about-sources"></div>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
       </section>

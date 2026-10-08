@@ -15,8 +15,8 @@ pipeline; this file is the short version. How the app looks, and why, is **`ART.
 
 ## What the app must print, and does
 
-The regulators' terms ask for attribution and, in one case, forbid a use. The credit line
-under the map and the About screen carry these strings; keep them if you change the app.
+The regulators' terms ask for attribution and, in one case, forbid a use. About carries these
+strings, after the credit line; keep them if you change the app.
 
 | Source | License | The attribution string the snapshot carries and the app prints |
 | --- | --- | --- |
@@ -30,8 +30,9 @@ under the map and the About screen carry these strings; keep them if you change 
 
 These strings live in `snapshot.sources` (written by the build) and the app prints them as
 they are; change them in the fetchers under `scripts/shelf_atlas/`, not in the app. The credit
-line on screen is built from the same sources (`creditLine()` in `js/data.js`) and is shown
-whole, in every mode, focus mode included:
+line in About, its first paragraph under *Sources and credits*, is built from the same sources
+(`creditLine()` in `js/data.js`) and is shown whole; About opens from the stamp on every screen,
+focus mode included:
 `Natural Earth · Marine Regions CC BY · EMODnet CC BY · Sodir NLOD · NSTA · Danish Energy Agency · NLOG`.
 
 The face: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.

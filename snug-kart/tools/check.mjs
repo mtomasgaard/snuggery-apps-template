@@ -7,7 +7,7 @@
 //   4. data/, fonts/ and vendor/ hold exactly their files; the face's and OFL.txt's sha256 are the
 //      house's; NOTES.md credits the face and never says no font ships;
 //   5. the data is untouched: both data files' sha256 are the values recorded before the pass;
-//   6. miniapp.json is valid and still names "Snug Kart";
+//   6. miniapp.json is valid and still names "Snug Kart", at 1.1 (plan 0012's white ground; 1.0 before, HOUSE.md 13);
 //   7. no borrowed names (the game's own list) and no AI vendor or model name (the house list), both
 //      stored ROT13 so neither appears here;
 //   8. the credits, word for word: three.js and the face in About, NOTES.md and DESIGN.md;
@@ -119,7 +119,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Snug Kart' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -226,7 +226,7 @@ const css = read('style.css'), c = code(css, 'x.css');
   const found = banned.filter(([re]) => re.test(c)).map(([, n]) => n);
   ok(found.length === 0, `style.css: no box-shadow, text-shadow, drop-shadow, backdrop-filter, transition: all, text-transform, letter-spacing or monospace${found.length ? ': ' + found.join(', ') : ''}`);
   const TOK = {
-    light: { page: '#e8eef0', sheet: '#f6f9fa', ink: '#0f1c23', 'ink-2': '#45555d', 'ink-3': '#5b6a72', line: '#c9d4d8', 'line-strong': '#74858c' },
+    light: { page: '#ffffff', sheet: '#f6f9fa', ink: '#0f1c23', 'ink-2': '#45555d', 'ink-3': '#5b6a72', line: '#c9d4d8', 'line-strong': '#74858c' },
     dark: { page: '#141d21', sheet: '#1c272c', ink: '#e6edee', 'ink-2': '#a3b1b6', 'ink-3': '#8b9a9f', line: '#2a373c', 'line-strong': '#64757b' },
   };
   const light = c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)'));

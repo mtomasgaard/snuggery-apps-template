@@ -302,7 +302,7 @@ svg .fill { fill: currentColor; stroke: none; }
 }
 .error div + div { margin-top: 6px; }
 
-/* ── the caption band: the legend, how to read the picture, the credits ── */
+/* ── the caption band: the legend, the notes and the key that read the picture ── */
 
 .caption {
   padding: 6px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left));
@@ -324,13 +324,19 @@ svg .fill { fill: currentColor; stroke: none; }
 .legend-ticks span.first::before { left: 0; }
 .legend-ticks span.last { transform: translateX(-100%); }
 .legend-ticks span.last::before { left: auto; right: 0; }
-.readline, .credits { margin: 0; }
+.readline { margin: 0; }
 /* The caption line has a fixed height, whatever it says: its words change with the month, the mode and
    the countries, and a line that grew and shrank would resize the plate on every month of play.
    Two lines hold its longest form on any phone held upright; one line from 640 px. */
 .readline { height: 30px; overflow: hidden; }
 @media (min-width: 640px) { .readline { height: 15px; } }
-.credits { font-size: 10.5px; }
+/* the key: the map's own marks drawn small, each with its word (HOUSE 4.15), after the notes */
+.readline .k { margin-right: 9px; color: var(--ink-2); }
+.readline .nb { white-space: nowrap; }
+.readline .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 50%; vertical-align: -1px; }
+.sw-rate { background: var(--k-rate); }
+.sw-best { border: 1px solid var(--k-best); }
+.sw-shut { background: var(--k-shut); }
 
 /* ── the sheet's slot: a field's details or the map's layers, on the page, under a hairline ── */
 
@@ -498,14 +504,9 @@ svg .fill { fill: currentColor; stroke: none; }
   .stamp { white-space: nowrap; }
   .switcher { grid-area: 1 / 2 / 3 / 3; margin: 0; }
   .hkeys { grid-area: 1 / 3 / 3 / 4; }
-  /* the legend and the credits share a row; the caption line runs under them, one line */
-  .caption { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; padding-top: 4px; padding-bottom: 2px; }
-  .caption > .stamp, .readline { grid-column: 1 / -1; }
+  /* the legend, and the caption line under it, one line */
+  .caption { padding-top: 4px; padding-bottom: 2px; }
   .readline { height: 15px; }
-  .legend { grid-column: 1; }
-  .credits { grid-column: 2; align-self: start; padding-top: 1px; }
-  .caption > .legend + .readline { grid-row: 2; }
-  .caption > .stamp + .legend + .readline { grid-row: 3; }
   /* the month, the transport and the track on one row */
   .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
   .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; }

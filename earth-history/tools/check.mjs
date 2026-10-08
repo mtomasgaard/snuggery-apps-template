@@ -4,7 +4,7 @@
 //   3. every import / src / href / url( target and every data file the code names is relative,
 //      inside the folder, and exists;
 //   4. data/ holds exactly the fixed names of tools/CONTRACT.md plus the maps the manifest names;
-//   5. miniapp.json is valid;
+//   5. miniapp.json is valid, at 1.1 (plan 0012; 1.0 before, HOUSE.md 13);
 //   6. no AI vendor or product name in any shipped text file (the list is stored ROT13);
 //   7. the app code is within its 250,000-byte budget (DESIGN §10);
 //   8. the ZIP, built exactly as the template's build-zips.yml builds it, has index.html at its top and
@@ -78,7 +78,7 @@ let mini = null;
 try { mini = JSON.parse(fs.readFileSync(path.join(APP, 'miniapp.json'), 'utf8')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Earth\'s History' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.0',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 

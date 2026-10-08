@@ -950,7 +950,7 @@ added effect is a display choice that About names.
   Atkinson small caps, tile values are Newsreader, and event titles are Newsreader. "Then and now"
   is a ruled ledger (hairline rules, no rounded cards). The body no longer repeats the head's range:
   it adds only the chart's boundary uncertainties ("Today's chart: start ± 0.024, end ± 0.2 million
-  years"), and "This map" quotes the chart's Period · Epoch · Age only beside a note where the chart
+  years"), after the period's text and its source line (since 1.1, so the peek shows the text), and "This map" quotes the chart's Period · Epoch · Age only beside a note where the chart
   and Scotese's label disagree (the age row names them already).
 - *Find and About* make the page behind inert while open, and Escape closes them wherever focus is.
 

@@ -23,7 +23,8 @@ headless Chromium (SwiftShader on the build Mac) are a trend, never phone eviden
 
 Snug Kart is HOUSE 4.0's *game*: racers and tracks as words, no key column, no player, no readout
 card in the house's sense, no focus mode (the race is already the view), and the credits in About.
-It takes the rest of the house whole: one face, gray chrome, the tracer under what is chosen, the
+It takes the rest of the house whole: one face, the house chrome on a white ground in the light
+theme (HOUSE 12, plan 0012 D6), the tracer under what is chosen, the
 caption band, notices on plates, About, SI and the no-tells rules. What is its own is the scene,
 which keeps each track's one appearance in both themes, and one signature.
 
@@ -190,24 +191,26 @@ color is the scene's (below).
 
 | Token | Light | Dark | On `--page` | On `--sheet` |
 | --- | --- | --- | --: | --: |
-| `--ink` | `#0f1c23` | `#e6edee` | 14.80 / 14.43 | 16.40 / 12.87 |
-| `--ink-2` | `#45555d` | `#a3b1b6` | 6.61 / 7.76 | 7.32 / 6.92 |
-| `--ink-3` | `#5b6a72` | `#8b9a9f` | 4.78 / 5.88 | 5.29 / 5.25 |
-| `--line-strong` | `#74858c` | `#64757b` | 3.27 / 3.56 | 3.62 / 3.18 |
+| `--ink` | `#0f1c23` | `#e6edee` | 17.35 / 14.43 | 16.40 / 12.87 |
+| `--ink-2` | `#45555d` | `#a3b1b6` | 7.75 / 7.76 | 7.32 / 6.92 |
+| `--ink-3` | `#5b6a72` | `#8b9a9f` | 5.60 / 5.88 | 5.29 / 5.25 |
+| `--line-strong` | `#74858c` | `#64757b` | 3.83 / 3.56 | 3.62 / 3.18 |
+
+`--page` is `#ffffff` in the light theme, every other token the house's (HOUSE 12).
 
 The on-plate (`--ink` at 12 % over `--sheet`: `#dadee0` / `#343f43`) carries the player's row in the
 results and a key that is on: `--ink` on it 12.81 / 9.14, `--ink-2` 5.72 / 4.91. A `--page` word on an
-`--ink` key (Race, Resume, Race again, a charged Drift): 14.80 / 14.43. The highest chroma of any
+`--ink` key (Race, Resume, Race again, a charged Drift): 17.35 / 14.43. The highest chroma of any
 chrome token: 0.0239 (light), 0.0223 (dark).
 
 ### The tonal budget
 
-| | Light (film base) | Dark (the print) |
+| | Light (white) | Dark (the print) |
 | --- | --- | --- |
-| Ground | `--sheet` `#f6f9fa` (L 0.980) under the chart, the race card, the track map and the keys; `--page` `#e8eef0` (L 0.945) under the title's rings | `--sheet` `#1c272c` (L 0.265); `--page` `#141d21` (L 0.224) |
+| Ground | `--sheet` `#f6f9fa` (L 0.980) under the chart, the race card, the track map and the keys; `--page` `#ffffff` (L 1.000) under the title's rings | `--sheet` `#1c272c` (L 0.265); `--page` `#141d21` (L 0.224) |
 | Data band (the racers' tones) | L 0.380–0.620 | L 0.620–0.860 |
 | Signature | your line, `--ink` `#0f1c23` (L 0.218, C 0.0228), opaque, on a 6 px `--sheet` casing | `--ink` `#e6edee` (L 0.941, C 0.0076), opaque, on its casing |
-| Worst measured case | ink on its casing 16.40; the lowest tone on its ground 3.13 (Wren on `--page`) | ink on its casing 12.87; the lowest tone 4.22 (Ines on `--sheet`) |
+| Worst measured case | ink on its casing 16.40; the lowest tone on its ground 3.47 (Wren on `--sheet`) | ink on its casing 12.87; the lowest tone 4.22 (Ines on `--sheet`) |
 
 The band sits below the grounds in the light theme and above them in the dark, and the ink keeps the
 far end of the range in both (check 4: L 0.218 under 0.380; L 0.941 over 0.860).
@@ -234,14 +237,14 @@ the same chroma, at a lightness fitted into the theme's band.
 
 | Racer | Data | Light tone | L | On `--page` / `--sheet` | Dark tone | L | On `--page` / `--sheet` |
 | --- | --- | --- | --: | --: | --- | --: | --: |
-| Ines | `#3A3F47` | `#3e434b` | 0.381 | 8.50 / 9.41 | `#818790` | 0.621 | 4.73 / 4.22 |
-| Otto | `#7D3C98` | `#692883` | 0.414 | 8.03 / 8.89 | `#b370d0` | 0.654 | 5.01 / 4.47 |
-| Pip | `#F28C28` | `#7f4302` | 0.448 | 6.62 / 7.33 | `#e27d0a` | 0.688 | 5.84 / 5.21 |
-| Soren | `#4A6FA5` | `#3b5f94` | 0.484 | 5.51 / 6.11 | `#80a7e1` | 0.722 | 6.95 / 6.20 |
-| Tuck | `#5B8C3A` | `#477724` | 0.517 | 4.56 / 5.05 | `#8ec26e` | 0.758 | 8.22 / 7.33 |
-| Mabel | `#E0607E` | `#bb3e60` | 0.550 | 4.51 / 5.00 | `#ff98ac` | 0.792 | 8.42 / 7.51 |
-| Juno | `#17A3A0` | `#088e8c` | 0.585 | 3.41 / 3.77 | `#65dcd8` | 0.825 | 10.41 / 9.29 |
-| Wren | `#D9A21B` | `#ab7e09` | 0.621 | 3.13 / 3.47 | `#ffc854` | 0.861 | 11.11 / 9.91 |
+| Ines | `#3A3F47` | `#3e434b` | 0.381 | 9.96 / 9.41 | `#818790` | 0.621 | 4.73 / 4.22 |
+| Otto | `#7D3C98` | `#692883` | 0.414 | 9.41 / 8.89 | `#b370d0` | 0.654 | 5.01 / 4.47 |
+| Pip | `#F28C28` | `#7f4302` | 0.448 | 7.76 / 7.33 | `#e27d0a` | 0.688 | 5.84 / 5.21 |
+| Soren | `#4A6FA5` | `#3b5f94` | 0.484 | 6.46 / 6.11 | `#80a7e1` | 0.722 | 6.95 / 6.20 |
+| Tuck | `#5B8C3A` | `#477724` | 0.517 | 5.34 / 5.05 | `#8ec26e` | 0.758 | 8.22 / 7.33 |
+| Mabel | `#E0607E` | `#bb3e60` | 0.550 | 5.29 / 5.00 | `#ff98ac` | 0.792 | 8.42 / 7.51 |
+| Juno | `#17A3A0` | `#088e8c` | 0.585 | 3.99 / 3.77 | `#65dcd8` | 0.825 | 10.41 / 9.29 |
+| Wren | `#D9A21B` | `#ab7e09` | 0.621 | 3.67 / 3.47 | `#ffc854` | 0.861 | 11.11 / 9.91 |
 
 Every tone stands at 3:1 or more on both grounds, the target for a mark (check 2). The tones are
 marks, never text: a racer's name is always `--ink-2` or `--ink`.
@@ -698,7 +701,7 @@ Nothing is minified and no comment is stripped. The code is within 5 % of its ca
 
 | Tell | Snug Kart |
 | --- | --- |
-| 1. Cream ground, high-contrast serif display, terracotta accent | The film base `#e8eef0` and the slate `#141d21`, one Renaissance sans at every size, no display face, no accent. Orange appears only as Pip's kart and Pip's tone. The stock game had exactly this tell: cream `#FFF8EC` panels, a 46 px rounded wordmark with an orange `#E0673A` drop, an orange Race button. |
+| 1. Cream ground, high-contrast serif display, terracotta accent | White `#ffffff` (HOUSE 12) and the slate `#141d21`, one Renaissance sans at every size, no display face, no accent. Orange appears only as Pip's kart and Pip's tone. The stock game had exactly this tell: cream `#FFF8EC` panels, a 46 px rounded wordmark with an orange `#E0673A` drop, an orange Race button. |
 | 2. Near-black ground with one acid accent | The loading screen's `#10131C` goes; the dark page is the house slate (L 0.224). The bright things are the scene and, on the results, your ink line. |
 | 3. Broadsheet hairlines and zero radius | One column of bands; hairlines only above the record row and between About's sections; radii by role (6 keys' small plates, 8 the card, the panels, the notices and the large keys, 4 the on-plate). |
 | 4. The SaaS card kit: one radius, soft shadow, gradient wash | Plates and panels with a 1 px edge and no shadow, no blur, no gradient but the tracer (the stock game: 22 px panels with a 40 px shadow and a backdrop blur, 999 px pills, a 3D button shadow). |

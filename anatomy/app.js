@@ -341,7 +341,8 @@ function applyAnatomy(a) {
   }
   V = LV.vertebrae(a, geoMeta);
   B = LV.bands(V);
-  stamp.replaceChildren(h('span', { translate: 'no', text: EDITION }), `, ${U.count(parts.size, 'structure')}`);
+  // data built once: the stamp's line hides, the About key shows (HOUSE 4.2)
+  $('stamp-home').hidden = true; $('btn-about').hidden = false;
   computeExplodeVectors();
   buildDepth();
   buildLayerRows();
@@ -1063,7 +1064,7 @@ for (const d of [findDlg, aboutDlg]) d.addEventListener('keydown', (e) => {
 });
 $('btn-find').addEventListener('click', (e) => openDialog(findDlg, e.detail === 0));
 $('find-close').addEventListener('click', () => closeDialog(findDlg));
-stamp.addEventListener('click', (e) => { if (started) openDialog(aboutDlg, e.detail === 0); });
+for (const k of [stamp, $('btn-about')]) k.addEventListener('click', (e) => { if (started) openDialog(aboutDlg, e.detail === 0); });
 $('about-close').addEventListener('click', () => closeDialog(aboutDlg));
 $('about-close-2').addEventListener('click', () => closeDialog(aboutDlg));
 document.addEventListener('keydown', (e) => {
@@ -1189,6 +1190,7 @@ function buildAbout() {
   const skin = restSpan(anat.parts.filter((p) => p.layer === 'skin').map((p) => p.id));
   const files = geoMeta.files || [];
   const rows = [
+    ['Edition', `${EDITION}, ${U.count(parts.size, 'structure')}`],
     ['Structures', U.int(parts.size)],
     ...anat.layers.filter((l) => layerCount(l.id)).map((l) => [l.name, U.int(layerCount(l.id))]),
     ['Triangles', `${U.int(geoMeta.triangles)}, simplified from the source data`],
@@ -1314,8 +1316,9 @@ function applyFocus(on) {
   document.body.classList.toggle('focus', on);
   for (const e of [$('head'), $('keys'), layersSheet, $('drow-explode')]) { e.hidden = on || (e === layersSheet && $('btn-layers').getAttribute('aria-expanded') !== 'true'); e.inert = on; }
   $('focus-exit').hidden = !on;
-  // the stamp keeps its words, and moves into the caption band as its first line
-  if (on) $('caption').prepend(stamp); else $('stamp-home').appendChild(stamp);
+  // the About key moves into the caption band as its first line; the stamp's line goes with it, so a
+  // count while the model loads stays on screen
+  if (on) $('caption').prepend($('stamp-home'), $('btn-about')); else { $('head').append($('stamp-home')); $('btn-find').after($('btn-about')); }
   requestRender();
 }
 $('focus-key').addEventListener('click', (e) => setFocus(true, e.detail === 0));
@@ -1346,7 +1349,7 @@ addEventListener('pagehide', () => { if (raf) cancelAnimationFrame(raf); raf = 0
 
 /* ---------- start ---------- */
 function start() {
-  $('credits').textContent = CREDIT;
+  $('about-credit-line').textContent = CREDIT;
   for (const b of $('ex-by').querySelectorAll('button')) b.setAttribute('aria-checked', String(b.dataset.level === S.level));
   radioTabs($('ex-by'));
   if (S.isolate && !idsOf(S.isolate).length) S.isolate = null;
@@ -1374,7 +1377,6 @@ function start() {
 
 focus = (() => { try { return localStorage.getItem(FOCUS_KEY) === '1'; } catch { return false; } })();
 if (focus) applyFocus(true);
-$('credits').textContent = CREDIT;
 
 /* ---------- the test hook: inert, read by tools/shoot.mjs, never called by the app ---------- */
 window.__anatomy = {

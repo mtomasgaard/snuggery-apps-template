@@ -923,3 +923,68 @@ labels and halo on the phone's display in both themes; the search field not zoom
 focus; focus mode in Snuggery's full screen, with the ghost key and Snuggery's own exit control both
 reachable; VoiceOver on the depth words, the step keys, the card and a tap; the phone on its side;
 background and return (the loop stops, `anatomy.json` re-read).
+
+## Plan 0012 package 3.7: the text cut and the white ground, 4.1 (2026-10-07)
+
+The change list in `docs/plans/0012-change-lists.md` (Anatomy), applied in full. The bugs on record:
+plan 0009 item 5, `docs/review/` and the matrix (rows 150, 161) name no open Anatomy bug; section 9's
+owner calls stay open (call 2, the light plate, is now decided by D6: white).
+
+- **The ground (F7, D6): white.** `styles.css` light `--page` and `--plate` `#ffffff`; the light
+  `theme-color` `#ffffff`; `tools/art/palette.py` line 67 `page='#ffffff'`, whose `--json` moved the two
+  halos to `rgba(255, 255, 255, 0.85)` and `0.90` (pasted). `ALL CHECKS PASS`. **The body off its
+  ground, re-checked on white** (the list's risk): the worst part's dE rose 0.123 → 0.177 (the eye,
+  `#f2f0ea`), and the parts whose median face is within dE 0.06 of the ground fell 298 → 48 of 1 752.
+  Every other figure moved up with white (ink on page 17.35, the Levels' ink 18.50 bare and 13.64 worst
+  on its halo, the outline 14.18, the Layers swatches' edge 3.62 → `palette.py`'s output in
+  `tools/.work/palette-white.txt`). Nothing failed, so nothing stopped for the lead. `shoot.mjs`'s
+  `PAGE.light` is `#ffffff`. Dark unchanged.
+- **The stamp (F2).** `applyAnatomy()` hides `#stamp-home` and shows `#btn-about` where it wrote the
+  edition; the loading counts and `The model could not be read.` still write `#stamp`, which is never
+  hidden before the model is in. The edition (`EDITION`, then the count) is About's first *This data*
+  row, `Edition`.
+- **The About key (F2).** `<button class="wordkey" id="btn-about">` after `#btn-find`, hidden until
+  the model is in (the `started` guard stays on the shared handler). **Beyond the list:** in focus mode
+  `applyFocus()` moves `#stamp-home` together with the key (the key first in reading order after it,
+  the line hidden once the model is in), because focus mode is restored before the model loads and the
+  loading count would otherwise sit in the hidden header. On the way out the line goes back to the
+  header and the key after `#btn-find`.
+- **The header** with the line hidden: the name centers on the keys (`:has(#stamp-home[hidden])`), and
+  the keys sit in a 39 px band whose hit runs 13 px up into the top pad and 7 px down, so each key keeps
+  a 44 px hit without reaching the row of words (measured: the first try, a 28 px band, gave 33 px hits;
+  the word buttons below are positioned and win the overlap). On its side the band is the old 46 px row
+  and the inset the old one. The header is 89 px (94 before).
+- **The credit line (F1).** `#credits`, its two writes and the `.credits` rules (portrait and on its
+  side) are gone; `CREDIT` is unchanged and is written into `<p id="about-credit-line" translate="no">`,
+  first under *Sources and credits*, in `start()`.
+- **Prose (F5):** `NOTES.md` (Find and About; focus mode). `ART.md` made true: the ground and the
+  body's figures on white, the tokens, the wireframe, the header rows, the credits row, About, focus mode,
+  on its side, the measured plates and spine heights. `CREDITS.txt` placed nothing on screen.
+- **Version (F6):** 4.1, pinned by `check.mjs` item 6.
+
+**Checks changed (F8).** `check.mjs`: item 8 (the constant into `#about-credit-line` only; the static
+paragraph first under the head; no `#credits`; no source, license or type credit on the front of
+`index.html`); the edition's pin now reads About's `Edition` row; the light `--page` token `#ffffff`
+(which the theme-color check follows); item 6 pins 4.1. `shoot.mjs`: the boot check reads the credit in
+About and `About` among the controls by role; new, the stamp's line hidden with the model in and the
+`Edition` row, and the line one 16 px line in its four states (measured as while loading, with the key
+hidden); the SI pass and the About check open About from `#btn-about`, and focus comes back to it; focus
+mode's "stays" list (`btn-about` for `stamp` and `credits`, the key the caption's first visible child).
+**Two the list did not name, by F8's rule or because the gain changed their premise:** the later-read
+check read the edition from `#stamp` (now About's first `dd`); the 375 × 667 card check assumed a plate
+under 420 px (410 before), and the plate there is now 447, so the card is full: the check now asks that
+the card's form follows the 420 px rule, with its actions on one row and its Levels row in view (both
+held).
+- One run measured 2 device pixels of the selection outline inside the eroded silhouette in the chest
+  tap test (header band 38 px; evidence `tools/.work/evidence-tap-outline.png`: the outline where the
+  latissimus covers the oblique's edge). With the final 39 px band the test reads 0 and is unchanged;
+  it is geometry-sensitive at the pixel level, which the lead may want to know.
+
+**Measured** (headless Chromium, `shoot.mjs`): the plate 587 → 624 px at 390 × 844 (+37; the list
+estimated 52, the header keeps 89 px for the keys' hits), 707 → 719 in focus mode, 263 → 278 on its
+side. App code 117 398 B of 200 000; ZIP 24 553 311 B.
+
+**Taste calls for the owner:** the white ground (D6, as chosen); the three word keys now carry About.
+
+**Camera strings:** none changed (`Every layer is showing`, `Remove the…`, `Explode amount`, `Bring back
+the…` untouched).

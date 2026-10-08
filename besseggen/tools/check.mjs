@@ -10,9 +10,11 @@
 //   6. the data is as recorded: each file's sha256 as NOTES.md tables it, combined 97d6b944…2cd3
 //      (about.json and colors.json rebuilt by the pipeline follow-up of 2026-10-01; the other fifteen
 //      byte for byte as before the pass, whose digest was 047cc6a1…a01e);
-//   7. miniapp.json is valid (name unchanged, description at most 200 characters);
+//   7. miniapp.json is valid (name unchanged, description at most 200 characters), at 1.3 (plan 0012's
+//      text cut; 1.2 when it began, HOUSE.md section 13);
 //   8. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   9. the credit line, word for word, in the CREDITS constant written to #credits;
+//   9. the credit line, word for word, in the CREDITS constant written to About's #about-credit-line,
+//      first under Sources and credits (HOUSE.md section 4.15); no #credits, and no credit on the front;
 //  10. the marketing camera's strings (HOUSE.md section 7.4; ART.md section 5): CEST and CET written
 //      only by the time row, never in static text outside About; the grip's three names; Fit the route,
 //      Fly the route and Stop; the viewpoint keys as buttons named from data/viewpoints.json; the
@@ -172,7 +174,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Besseggen' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version,
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.3',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -184,11 +186,16 @@ const texts = [...shipped.filter((f) => /\.(html|css|js|json|geojson|md|txt)$/.t
 const named = texts.filter((f) => namesRe.test(read(f)));
 ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files and ART.md${named.length ? ': ' + named.join(', ') : ''}`);
 
-// 9. The credit line
+// 9. The credit line, in About (HOUSE.md section 4.15)
 const app = read('app.js');
 const credits = (app.match(/^const CREDITS = '([^']*)';$/m) || [])[1];
-ok(credits === 'Terrain, trail, lakes and names: Kartverket, CC BY 4.0' && /\$\('credits'\)\.textContent = CREDITS;/.test(app),
-  `the credit line: CREDITS is "${credits}", written to #credits (owner call 8)`);
+{
+  const front = read('index.html').replace(/<div class="dlg" id="about"[\s\S]*?\n<\/div>\n/, '');
+  const onFront = ['Kartverket', 'CC BY', 'License', 'retrieved', 'Ysabeau'].filter((w) => front.includes(w));
+  ok(credits === 'Terrain, trail, lakes and names: Kartverket, CC BY 4.0' && /<h3>Sources and credits<\/h3><p id="about-credit-line" translate="no">\$\{escapeHtml\(CREDITS\)\}<\/p>/.test(app)
+    && (app.match(/\bCREDITS\b/g) || []).length === 2 && !/id="credits"/.test(read('index.html')) && !/\$\('credits'\)/.test(app + read('js/focus.js')) && onFront.length === 0,
+    `the credit line: CREDITS is "${credits}", written whole as About's first Sources and credits paragraph (#about-credit-line) and nowhere else; no #credits, and no credit on the front of index.html${onFront.length ? ': ' + onFront.join(', ') : ''}`);
+}
 
 // 10. The marketing camera's strings and keys
 const html = read('index.html');

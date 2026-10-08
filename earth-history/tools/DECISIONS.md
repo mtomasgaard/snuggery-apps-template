@@ -251,3 +251,28 @@ differs from them, this list says so.
 19. **Screenshots**: `SCREENSHOTS=1 node tools/shoot.mjs` writes `screenshots/app.png` (780 × 1688:
     map 49, the globe centred on 15° E 5° N, Coasts on, the sheet at peek) and nine named scenes beside
     it; without the variable nothing is written into the app folder.
+
+## Plan 0012 package 3.7: the text cut, 1.1 (2026-10-07)
+
+The change list in `docs/plans/0012-change-lists.md` (Earth's History), applied in full. Its own
+direction (Deep Field Atlas) and its own ground `#eceee9` are kept (D6). The bugs on record: plan 0009
+item 5, `docs/review/` and the matrix (row 153, the phone pass) name none open.
+
+- **The chart's uncertainty leaves the peek.** `js/sheet.js` `render()`: the period card appends its
+  text and its source line first, then `Today's chart: start ± …, end ± … million years` (`periodUnc`),
+  so the peek shows the period's text under the two head lines. `DESIGN.md`'s sheet note says so.
+- **What stays:** the head's two lines (the period with its range, and `This map: Scotese map N · …`,
+  the view's own words and the camera's wait); each card's source line, inside the sheet; the closing
+  card's pointer to About. The front holds no credit, license or retrieval date (HOUSE 4.15).
+- **Version:** 1.1; `check.mjs` item 5 pins it (was `'1.0'`).
+- **Checks:** `check.mjs` item 5 as above. `shoot.mjs` gains one check, at map 49 at peek: the period
+  card's first child is the text (`sh-text`), and the chart's line comes after the source line
+  (measured: `sh-text, sh-src, sh-meta`).
+- **Measured:** the view gains 0 px, as the list says; at peek the period's text is now the third
+  line of the sheet (the before/after: `screenshots/globe-49-light.png` against the same file at the start commit).
+  App code 213 928 B of 250 000; ZIP 6 960 003 B of 8 000 000.
+- **Runs:** `node tools/check.mjs`, `node tools/test_plates.mjs`, `node tools/test_proj.mjs`,
+  `tools/.venv/bin/python tools/verify_data.py --cross-only` (data untouched), and `shoot.mjs` in both
+  themes: all pass.
+
+**Camera strings:** none changed (`Skip`, `Globe`, `One map older`, `Temperature`, `Scotese map 49 ·`).

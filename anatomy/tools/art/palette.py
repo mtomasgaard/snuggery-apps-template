@@ -64,7 +64,7 @@ def shade(rgb, f): return tuple(min(255, round(c * f)) for c in rgb)   # the mea
 
 # ── the house chrome tokens (HOUSE 3.1), copied exactly ──────────────────────
 TOK = {
- 'light': dict(page='#e8eef0', sheet='#f6f9fa', ink='#0f1c23', ink2='#45555d', ink3='#5b6a72',
+ 'light': dict(page='#ffffff', sheet='#f6f9fa', ink='#0f1c23', ink2='#45555d', ink3='#5b6a72',
                line='#c9d4d8', strong='#74858c'),
  'dark':  dict(page='#141d21', sheet='#1c272c', ink='#e6edee', ink2='#a3b1b6', ink3='#8b9a9f',
                line='#2a373c', strong='#64757b'),

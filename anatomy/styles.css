@@ -1,11 +1,11 @@
 /* Anatomy under the template's house system (ART.md; Template/HOUSE.md).
 
    The screen is a plate and its caption. The plate is the body in the colors data/anatomy.json gives
-   it, the same in both themes, on the theme's own ground; at its left edge stands the Levels, this
-   body's vertebrae drawn as a rule. Under it the caption band holds the line that reads the Levels and
-   the credits, and the dissection band holds the keys that take the body apart. One face, gray
-   chrome, no accent color, no glass, no shadows, no gradient but the selection tracer. Nothing here is
-   fetched, and there is no external address in this file. */
+   it, the same in both themes, on the theme's own ground (white in light, HOUSE.md section 12); at its
+   left edge stands the Levels, this body's vertebrae drawn as a rule. Under it the caption band holds
+   the line that reads the Levels (the credits are in About), and the dissection band holds the keys
+   that take the body apart. One face, no accent color, no glass, no shadows, no gradient but the
+   selection tracer. Nothing here is fetched, and there is no external address in this file. */
 
 @font-face {
   font-family: 'Ysabeau Office';
@@ -15,7 +15,7 @@
 }
 
 :root {
-  --page: #e8eef0;            /* header, caption band, dissection band, the plate itself */
+  --page: #ffffff;            /* header, caption band, dissection band, the plate itself */
   --sheet: #f6f9fa;           /* key plates, the card, the status plate, About, Find, notices */
   --ink: #0f1c23;
   --ink-2: #45555d;
@@ -26,10 +26,10 @@
   --sheet-in: cubic-bezier(0.32, 0.72, 0, 1);
   --face: 'Ysabeau Office', system-ui, -apple-system, sans-serif;
   /* this app's own, pasted from tools/art/palette.py --json (ART.md section 2) */
-  --plate: #e8eef0;
+  --plate: #ffffff;
   --level: #15121c;
-  --level-halo: rgba(232, 238, 240, 0.85);
-  --select-halo: rgba(232, 238, 240, 0.90);
+  --level-halo: rgba(255, 255, 255, 0.85);
+  --select-halo: rgba(255, 255, 255, 0.90);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -117,7 +117,7 @@ code { font: inherit; }
 .textkey[aria-pressed] { position: relative; isolation: isolate; }
 .textkey[aria-pressed="true"]::before { content: ''; position: absolute; inset: 8px 2px; z-index: -1; border-radius: 4px; background: color-mix(in srgb, var(--ink) 12%, transparent); }
 
-/* ── header: the name and the two word keys, the stamp, the row of words ── */
+/* ── header: the name and the word keys, the stamp while loading, the row of words ── */
 
 .head {
   grid-row: 1;
@@ -129,13 +129,18 @@ code { font: inherit; }
   background: var(--page);
 }
 .head h1 { grid-area: 1 / 1; font-size: 15px; font-weight: 650; line-height: 22px; }
+.head:has(#stamp-home[hidden]) h1 { grid-row: 1 / 3; align-self: center; }
+/* the line hidden: the keys keep a 44 px hit in a 39 px band, up into the top pad, never down into the row */
+.head:has(#stamp-home[hidden]) .hkeys { margin: 5px 0 6px; }
+.head:has(#stamp-home[hidden]) .hkeys .wordkey::before { inset: -13px -1px -7px; }
 .stamp-home { grid-area: 2 / 1; min-width: 0; padding-bottom: 6px; }
 .stamp { position: relative; display: block; max-width: 100%; text-align: left; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 /* the stamp opens About: its hit runs up over the name and down into the gap, 44 px in all */
 .stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }
-/* in focus mode it heads the caption: the hit runs down over the caption, never up into the plate */
-.caption > .stamp { z-index: 1; margin-bottom: 2px; }
-.caption > .stamp::before { inset: -6px 0 -22px 0; }
+/* in focus mode they head the caption: the hits run down over the caption, never up into the plate */
+.caption > .stamp-home { position: relative; z-index: 1; padding-bottom: 2px; }
+.caption > .stamp-home .stamp::before { inset: -6px 0 -22px 0; }
+.caption > .wordkey { display: block; margin: 2px 0 8px; }
 .hkeys { grid-area: 1 / 2 / 3 / 3; align-self: center; display: flex; gap: 8px; }
 
 .row {
@@ -341,7 +346,7 @@ code { font: inherit; }
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-/* ── the caption band: the line that reads the Levels, the credits ── */
+/* ── the caption band: the line that reads the Levels ── */
 
 .caption {
   grid-row: 3;
@@ -354,7 +359,6 @@ code { font: inherit; }
 /* The caption line has a fixed height, whatever it says: two lines below 640 px, one from 640 px, so
    the plate above it never resizes when its words change. tools/shoot.mjs measures every sentence. */
 .capline { height: 30px; overflow: hidden; }
-.credits { font-size: 10.5px; margin-top: 2px; }
 @media (min-width: 640px) { .capline { height: 15px; } }
 
 /* ── the Layers sheet: one row per layer, its three modes as words ── */
@@ -549,10 +553,11 @@ code { font: inherit; }
   .stamp { white-space: nowrap; }
   .row { grid-area: 1 / 2 / 3 / 3; margin: 0; }
   .hkeys { grid-area: 1 / 3 / 3 / 4; }
-  /* the caption line on one line across the band, the credits under it */
+  .head:has(#stamp-home[hidden]) .hkeys { margin: 0; }
+  .head:has(#stamp-home[hidden]) .hkeys .wordkey::before { inset: -9px -1px; }
+  /* the caption line on one line across the band */
   .caption { padding-top: 3px; padding-bottom: 3px; }
   .capline { height: 15px; }
-  .credits { margin-top: 0; }
   .dissect { display: flex; align-items: center; gap: 12px; }
   .drow { flex: 1 1 auto; min-width: 0; }
   .drow:first-child { flex: 0 0 auto; }

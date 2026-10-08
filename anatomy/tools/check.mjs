@@ -10,9 +10,10 @@
 //      About, NOTES.md and CREDITS.txt, and the faces this pass removed are gone, the data included;
 //   5. the data and vendor/ are untouched: each file's sha256 is its pin (nine data files as recorded
 //      before the pass, anatomy.json as the follow-up's data text pass rebuilt it; tools/DECISIONS.md);
-//   6. miniapp.json is valid;
+//   6. miniapp.json is valid, at 4.1 (plan 0012's text cut; 4.0 when it began, HOUSE.md section 13);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
-//   8. the credit line, word for word, in the CREDIT constant written to #credits; About prints the
+//   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line,
+//      first under Sources and credits, and no #credits or other credit on the front (HOUSE 4.15); About prints the
 //      data's first two source paragraphs verbatim, and the third, which is the app's own rendering and
 //      type credit, equals the two lines index.html writes (B13); the second's count of structures both
 //      releases share is the measurement file's (tools/source/bodymap_pairs.json);
@@ -162,7 +163,7 @@ const TYPE_LINE = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL O
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Anatomy' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string' && mini.version
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '4.1'
     && !/\d,\d{3}/.test(mini.description),
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters (at most 200), no comma grouping`);
 }
@@ -180,8 +181,12 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 // 8. The credit line, and About's sources
 {
   const credit = (app.match(/^const CREDIT = '([^']*)';$/m) || [])[1];
-  ok(credit === 'BodyParts3D, © The Database Center for Life Science, CC BY-SA 2.1 JP and CC BY 4.0' && /\$\('credits'\)\.textContent = CREDIT;/.test(app),
-    `the credit line: CREDIT is "${credit}", written to #credits`);
+  const front = html.replace(/<div class="dialog" id="about"[\s\S]*$/, '');
+  const onFront = ['BodyParts3D', 'Database Center', 'CC BY', 'License', 'Ysabeau', 'three.js'].filter((w) => front.includes(w));
+  ok(credit === 'BodyParts3D, © The Database Center for Life Science, CC BY-SA 2.1 JP and CC BY 4.0' && /\$\('about-credit-line'\)\.textContent = CREDIT;/.test(app)
+    && (app.match(/\bCREDIT\b/g) || []).length === 2 && /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>/.test(html)
+    && !/id="credits"/.test(html) && !/\$\('credits'\)/.test(app) && onFront.length === 0,
+    `the credit line: CREDIT is "${credit}", written to About's first Sources and credits paragraph (#about-credit-line) and nowhere else; no #credits, and no credit on the front${onFront.length ? ': ' + onFront.join(', ') : ''}`);
   const src = (anat.about && anat.about.sources) || [];
   const RENDER = 'Rendering: three.js r186, MIT License (its text is in vendor/three-LICENSE.txt).';
   ok(src.length === 3 && src[2] === `${RENDER} Type: ${TYPE_LINE}` && /\(ab\.sources \|\| \[\]\)\.slice\(0, 2\)\.map\(\(t\) => h\('p', \{ text: t \}\)\)/.test(app)
@@ -190,8 +195,8 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const shared = new Set(JSON.parse(read('tools/source/bodymap_pairs.json')).map((p) => p[0])).size;
   const said = ((src[1] || '').match(/from the (\d+) structures both releases share/) || [])[1];
   ok(Number(said) === shared, `the data's second source paragraph says the 4.0 structures were placed by a correction measured from ${said} structures; tools/source/bodymap_pairs.json holds ${shared}`);
-  ok(/EDITION = 'BodyParts3D 3\.0 and 4\.0'/.test(app) && /BodyParts3D 3\.0/.test(geo.source) && /BodyParts3D 4\.0/.test(geo.source),
-    `the stamp's edition "BodyParts3D 3.0 and 4.0" matches geometry.json's source ("${geo.source}")`);
+  ok(/EDITION = 'BodyParts3D 3\.0 and 4\.0'/.test(app) && /\['Edition', `\$\{EDITION\}, \$\{U\.count\(parts\.size, 'structure'\)\}`\],\n\s*\['Structures'/.test(app) && /BodyParts3D 3\.0/.test(geo.source) && /BodyParts3D 4\.0/.test(geo.source),
+    `About's first This data row, the edition "BodyParts3D 3.0 and 4.0", matches geometry.json's source ("${geo.source}")`);
 }
 
 // 9. The marketing camera's strings (HOUSE 7.4) and the stored keys
@@ -288,7 +293,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const light = c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)')), dark = c.slice(c.indexOf('@media (prefers-color-scheme: dark)'));
   const tok = (block, name) => ((block.match(new RegExp(`--${name}:\\s*([^;]+);`)) || [])[1] || '').trim();
   const HOUSE = {
-    light: { page: '#e8eef0', sheet: '#f6f9fa', ink: '#0f1c23', 'ink-2': '#45555d', 'ink-3': '#5b6a72', line: '#c9d4d8', 'line-strong': '#74858c' },
+    light: { page: '#ffffff', sheet: '#f6f9fa', ink: '#0f1c23', 'ink-2': '#45555d', 'ink-3': '#5b6a72', line: '#c9d4d8', 'line-strong': '#74858c' },
     dark: { page: '#141d21', sheet: '#1c272c', ink: '#e6edee', 'ink-2': '#a3b1b6', 'ink-3': '#8b9a9f', line: '#2a373c', 'line-strong': '#64757b' },
   };
   const offT = [];

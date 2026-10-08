@@ -3,5 +3,5 @@
   "name": "Besseggen",
   "entryPoint": "index.html",
   "description": "The Besseggen ridge in 3D from Kartverket's elevation data: the marked trail, real sun and shadows, the hours of direct sun on any point, viewsheds and a walking-time profile, offline.",
-  "version": "1.2"
+  "version": "1.3"
 }

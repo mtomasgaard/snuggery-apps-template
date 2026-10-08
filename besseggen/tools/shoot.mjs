@@ -14,7 +14,7 @@
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the scenes to screenshots/*-{light,dark}.png
 //
 // Per theme: boot (the camera's strings by role and name, CEST only once the terrain is in, the
-// credits, the face), text contrast and the selection tracer, the Burn's ink against the page, the
+// credits in About, the stamp's line one line in every state), the face, text contrast and the selection tracer, the Burn's ink against the page, the
 // trail against its casing, the Burn against tools/decode.mjs at two waypoints on three dates, the card
 // against this file's decode at a tapped point, SI in every visible text node, labels clear of the card
 // and the keys, the profile's names, the scenes as pictures. Once: the real-touch scrub at 2, 8 and 20
@@ -114,11 +114,11 @@ const ready = () => window.__besseggen && /CES?T/.test(document.getElementById('
 async function open(scheme, o = {}) {
   const ctx = await browser.newContext({ viewport: { width: o.w || 390, height: o.h || 844 }, deviceScaleFactor: o.dpr || 2, isMobile: true, hasTouch: true, colorScheme: scheme, reducedMotion: o.reduced ? 'reduce' : 'no-preference' });
   if (o.focus !== undefined) await ctx.addInitScript((f) => { try { localStorage.setItem('besseggen:focus', JSON.stringify(f)); } catch { /* fine */ } }, o.focus);
-  // record the first moment any CEST or CET reaches the page, and what the stamp said then
+  // record the first moment any CEST or CET reaches the page, and what the stamp's line was then
   await ctx.addInitScript(() => {
     new MutationObserver(() => {
       if (window.__zoneSeen || !document.body || !/CES?T/.test(document.getElementById('t-zone') ? document.getElementById('t-zone').textContent : '')) return;
-      window.__zoneSeen = { stamp: document.getElementById('stamp').textContent, hook: !!window.__besseggen };
+      window.__zoneSeen = { stamp: document.getElementById('stamp').textContent, home: document.getElementById('stamp-home').hidden, about: !document.getElementById('btn-about').hidden, hook: !!window.__besseggen };
     }).observe(document, { subtree: true, childList: true, characterData: true });
   });
   const page = await ctx.newPage(), errors = [];
@@ -251,19 +251,31 @@ for (const scheme of schemes) {
   const A = await open(scheme);
   const { page, w } = A;
 
-  // boot: the camera's strings and controls, the zone only once the terrain is in, the credits, the face
+  // boot: the camera's strings and controls, the zone only once the terrain is in, the credits in About, the face
   {
     const seen = await w(() => window.__zoneSeen);
-    const names = ['Show more controls', 'Fit the route', 'Zoom in', 'Zoom out', 'Layers', 'Hide the controls', 'Play', 'Previous day', 'Next day'];
+    const names = ['About', 'Show more controls', 'Fit the route', 'Zoom in', 'Zoom out', 'Layers', 'Hide the controls', 'Play', 'Previous day', 'Next day'];
     const roles = await Promise.all(names.map((n) => page.getByRole('button', { name: n, exact: true }).count()));
     const slider = await page.getByRole('slider', { name: 'Time of day', exact: true }).count();
     const zone = await page.getByText('CEST', { exact: false }).first().isVisible();
-    const credits = await w(() => { const e = document.getElementById('credits'), r = e.getBoundingClientRect(); return { t: e.textContent, h: r.height }; });
+    const credits = await w(() => ({ gone: !document.getElementById('credits'), t: document.getElementById('about-credit-line').textContent,
+      first: document.querySelector('#ab-gen h3 + #about-credit-line') === document.getElementById('about-credit-line') && document.getElementById('about-credit-line').previousElementSibling.textContent === 'Sources and credits',
+      ed: [...document.querySelectorAll('#ab-gen dl')][0].firstElementChild.textContent + ': ' + [...document.querySelectorAll('#ab-gen dl')][0].children[1].textContent }));
+    // the stamp's line is one line, 16 px, in every state its writers can put in it (HOUSE.md section 7.2)
+    const lines = await w(() => {
+      const home = document.getElementById('stamp-home'), st = document.getElementById('stamp'), was = [home.hidden, st.textContent];
+      home.hidden = false;
+      const out = ['Reading the terrain\u2026', 'Reading the terrain\u2026 4 of 4', 'Reading the trail and the names\u2026', 'Besseggen could not start.'].map((t) => { st.textContent = t; return [t, st.getBoundingClientRect().height]; });
+      [home.hidden, st.textContent] = was;
+      return out;
+    });
     const font = await w(() => document.fonts.check('560 11.5px "Ysabeau Office"') && document.fonts.check('600 21px "Ysabeau Office"'));
     console.log(`  - boot: ready in ${A.ms} ms (headless Chromium); stamp "${await w(() => document.getElementById('stamp').textContent)}"`);
-    check(zone && seen && seen.hook && /^Kartverket data, retrieved \d+ \w{3} \d{4}$/.test(seen.stamp), `the camera's wait: CEST visible, and the first moment any CEST or CET reached the page the terrain was in (the stamp said "${seen && seen.stamp}")`);
+    check(zone && seen && seen.hook && seen.home && seen.about, `the camera's wait: CEST visible, and the first moment any CEST or CET reached the page the terrain was in (the stamp's line hidden ${seen && seen.home}, the About key shown ${seen && seen.about})`);
+    check(/^Edition: Kartverket data, retrieved \d+ \w{3} \d{4}$/.test(credits.ed), `the edition is About's first This data row: "${credits.ed}"`);
+    check(lines.every(([, h]) => Math.abs(h - 16) <= 1), `the stamp's line is one line in every state it can show: ${lines.map(([t, h]) => `"${t}" ${h.toFixed(0)} px`).join(', ')}`);
     check(roles.every((n) => n === 1) && slider === 1, `the camera's and the house's controls by role and name, one each: ${names.map((n, i) => `${n} ${roles[i]}`).join(', ')}; slider "Time of day" ${slider}`);
-    check(credits.t === 'Terrain, trail, lakes and names: Kartverket, CC BY 4.0' && credits.h > 0, `the credits on screen, word for word: "${credits.t}"`);
+    check(credits.gone && credits.first && credits.t === 'Terrain, trail, lakes and names: Kartverket, CC BY 4.0', `no #credits on the front; About's first Sources and credits paragraph is the credit, word for word: "${credits.t}"`);
     check(font, 'the face is loaded: document.fonts.check(560 11.5px and 600 21px "Ysabeau Office")');
     const o = await w(() => ({ mark: (document.querySelector('#labels .lbl.mark') || {}).textContent, cap: document.getElementById('cap').textContent, walk: document.querySelector('.walk').textContent }));
     check(/^Gjendesheim, \d+\u202fm$/.test(o.mark || '') && o.cap.startsWith('The burn: direct sun at the marker, Gjendesheim, ') && /^\S+\u202fm walked, at \S+\u202fm, \S+\u202f% grade, /.test(o.walk), `on opening the marker is named on the plate ("${o.mark}") and in the caption ("${o.cap.slice(0, 60)}…"); the walk line's figures each with a word ("${o.walk}")`);
@@ -390,7 +402,7 @@ for (const scheme of schemes) {
   await A.tapEl('#grip'); await page.waitForTimeout(300); await A.shot(`stop1-${scheme}`);
   await A.tapEl('#grip'); await page.waitForTimeout(300); await A.shot(`stop2-${scheme}`);
   await A.tapEl('#grip'); await page.waitForTimeout(200);
-  await A.tapEl('#stamp'); await page.waitForTimeout(400); await A.shot(`about-${scheme}`);
+  await A.tapEl('#btn-about'); await page.waitForTimeout(400); await A.shot(`about-${scheme}`);
   const fa = await w(() => document.activeElement.closest('#about') && document.activeElement.textContent); await page.keyboard.press('Escape');
   await A.tapEl('#btn-layers'); await page.waitForTimeout(400); await A.shot(`layers-${scheme}`);
   const fl = await w(() => document.activeElement.closest('#layers') && document.activeElement.textContent); await page.keyboard.press('Escape');
@@ -477,7 +489,7 @@ console.log('\n== once (light)');
     console.log(`      frame interval during play (HEADLESS CHROMIUM, SwiftShader, a trend only): median ${pctl(iv, 0.5).toFixed(0)} ms, p95 ${pctl(iv, 0.95).toFixed(0)} ms`);
     check(during === 'ico-play hidden none, ico-pause shown block, Pause' && paused === 'ico-play shown block, ico-pause hidden none, Play', `the Play key's mark follows play, by touch, as drawn: playing ${during}; paused ${paused}`);
     await A.tapEl('#t-play'); await page.waitForTimeout(400);
-    await A.tapEl('#stamp'); await page.waitForTimeout(250);
+    await A.tapEl('#btn-about'); await page.waitForTimeout(250);
     const a0 = await ST(A); await page.waitForTimeout(800); const a1 = await ST(A);
     await page.keyboard.press('Escape'); await page.waitForTimeout(700);
     const a2 = await ST(A);
@@ -543,11 +555,11 @@ console.log('\n== once (light)');
     const f1 = await w(() => {
       const gone = ['head', 'keys', 'legends', 'sheet'].map((id) => { const e = document.getElementById(id); return [id, e.hidden, e.inert]; });
       const vis = (id) => { const e = document.getElementById(id); const r = e.getBoundingClientRect(); return !e.closest('[hidden]') && r.height > 0; };
-      return { gone, stay: ['stamp', 'compass', 'cap', 'credits', 't-date', 'slider', 't-play', 'focus-exit'].map((id) => [id, vis(id)]), live: document.getElementById('live').textContent, active: document.activeElement && document.activeElement.id, stampIn: document.getElementById('stamp-home').parentElement.id, plate: document.getElementById('plate').getBoundingClientRect().height };
+      return { gone, stay: ['btn-about', 'compass', 'cap', 't-date', 'slider', 't-play', 'focus-exit'].map((id) => [id, vis(id)]), live: document.getElementById('live').textContent, active: document.activeElement && document.activeElement.id, stampIn: document.getElementById('btn-about').parentElement.id, first: document.getElementById('caption').firstElementChild.id, plate: document.getElementById('plate').getBoundingClientRect().height };
     });
     const tree = await Promise.all(['Show more controls', 'Fit the route', 'Show the controls'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
-    check(f1.gone.every(([, h, i]) => h && i) && f1.stay.every(([, v]) => v) && f1.stampIn === 'caption' && tree[0] === 0 && tree[1] === 0 && tree[2] === 1 && f1.plate >= 640,
-      `focus mode by touch: the header, keys, legend rows and sheet hidden and inert (the grip ${tree[0]}, Fit the route ${tree[1]} in the accessibility tree); the stamp moved into the caption; the instrument line, caption, credits, time, track, Play and ghost key stay (${f1.stay.filter((x) => !x[1]).map((x) => x[0]).join(', ') || 'all'}); the plate ${plate0.toFixed(0)} to ${f1.plate.toFixed(0)} px (≥ 640)`);
+    check(f1.gone.every(([, h, i]) => h && i) && f1.stay.every(([, v]) => v) && f1.stampIn === 'caption' && f1.first === 'btn-about' && tree[0] === 0 && tree[1] === 0 && tree[2] === 1 && f1.plate >= 640,
+      `focus mode by touch: the header, keys, legend rows and sheet hidden and inert (the grip ${tree[0]}, Fit the route ${tree[1]} in the accessibility tree); the About key moved into the caption, its first line; the instrument line, caption, time, track, Play and ghost key stay (${f1.stay.filter((x) => !x[1]).map((x) => x[0]).join(', ') || 'all'}); the plate ${plate0.toFixed(0)} to ${f1.plate.toFixed(0)} px (≥ 640)`);
     check(f1.live === 'Controls hidden. Press Escape or the corner key to show them.' && f1.active !== 'focus-exit', `the live region says "${f1.live}"; after a touch, focus stays put (active: ${f1.active || 'body'})`);
     const hf = await hitTargets(w);
     check(hf.bad.length === 0 && hf.n >= 5, `focus mode's hit targets ≥ 44 × 44 px: ${hf.n} controls${hf.bad.length ? '; too small: ' + hf.bad.join('; ') : ''}`);
@@ -616,13 +628,13 @@ console.log('\n== once (light)');
 
   // About: from the stamp, every source and the face's credit, Escape closes it
   {
-    await A.tapEl('#stamp'); await page.waitForTimeout(400);
+    await A.tapEl('#btn-about'); await page.waitForTimeout(400);
     const ab = await w(() => ({ text: document.getElementById('about').textContent, open: !document.getElementById('about').hidden }));
     await page.keyboard.press('Escape'); await page.waitForTimeout(200);
     const closed = await w(() => document.getElementById('about').hidden);
     const want = ['Not a navigation tool.', 'Nasjonal høydemodell DTM1', 'Turrutebasen', 'N50 Kartdata', 'Sentralt stedsnavnregister', 'three.js r186', 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.', 'sunshine recorder', 'not a forecast', 'Gjende 985.1'];
     const missing = want.filter((t) => !ab.text.includes(t));
-    check(ab.open && closed && missing.length === 0, `About opens from the stamp with every source, the face's credit and what the Burn is and is not, and closes on Escape${missing.length ? '; MISSING: ' + missing.join(', ') : ''}`);
+    check(ab.open && closed && missing.length === 0, `About opens from the About key with every source, the face's credit and what the Burn is and is not, and closes on Escape${missing.length ? '; MISSING: ' + missing.join(', ') : ''}`);
   }
   check(A.errors.length === 0, `once: no console error or warning, page error, failed request or request outside the app${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`);
   await A.ctx.close();
@@ -663,9 +675,9 @@ console.log('\n== broken data');
     await A.page.waitForFunction(() => !document.getElementById('notice').hidden || (window.__besseggen && /CES?T/.test(document.getElementById('t-zone').textContent)), null, { timeout: 120000 });
     await A.page.waitForTimeout(500);
     const e = await A.w(() => ({ notice: document.getElementById('notice').textContent, hidden: document.getElementById('notice').hidden, stamp: document.getElementById('stamp').textContent,
-      ready: !!window.__besseggen, gone: ['keys', 'sheet', 'player'].every((id) => document.getElementById(id).hidden), boot: [...document.querySelectorAll('[data-boot]')].every((x) => x.hasAttribute('hidden')), credits: document.getElementById('credits').textContent.length > 0 }));
+      ready: !!window.__besseggen, gone: ['keys', 'sheet', 'player'].every((id) => document.getElementById(id).hidden), boot: [...document.querySelectorAll('[data-boot]')].every((x) => x.hasAttribute('hidden')), home: !document.getElementById('stamp-home').hidden }));
     const errs = A.errors.filter((x) => !(name.startsWith('a missing') && /^error: Error: data\/terrain-L3\.bin/.test(x)));
-    check(good(e) && e.credits && errs.length === 0, `${name}: ${e.hidden ? 'no notice' : `"${e.notice}"`}; the stamp says "${e.stamp}"; the app ${e.ready ? 'runs' : 'stops, its keys, sheet and player gone'}${errs.length ? '; ' + errs.join(' | ') : ''}`);
+    check(good(e) && (e.ready || e.home) && errs.length === 0, `${name}: ${e.hidden ? 'no notice' : `"${e.notice}"`}; the stamp's line shows "${e.stamp}"; the app ${e.ready ? 'runs' : 'stops, its keys, sheet and player gone'}${errs.length ? '; ' + errs.join(' | ') : ''}`);
     await A.ctx.close();
   }
   override = {};
@@ -688,6 +700,11 @@ for (const [w0, h0, dpr, name] of [[320, 568, 2, '320'], [360, 780, 3, '360'], [
   }
   const longest = fit.reduce((a, b) => (b[2] > a[2] ? b : a));
   check(fit.every(([sh, ch]) => sh <= ch), `${name}: the caption at six waypoints on four dates fits its fixed height (the longest, ${longest[2]} characters, ${longest[0]} in ${longest[1]} px)`);
+  // the sheet's foot: the totals with the steep key, beside the direction key, no taller than the sentence it replaced
+  // (measured 2026-10-07: "… Red: 25 % or steeper." took 45 px, three lines, in a sheet 320 and 360 px wide, 30 at 390); the key's swatch is the profile's steep stroke
+  const ft = await A.w(() => { const f = document.querySelector('.foot'), k = f.querySelector('.k'), sw = getComputedStyle(k.querySelector('.sw')).backgroundColor, ps = document.querySelector('#profile .psteep');
+    return { h: f.getBoundingClientRect().height, kh: k.getBoundingClientRect().height, t: k.textContent, same: !!ps && getComputedStyle(ps).stroke === sw, sw: document.getElementById('sheet').getBoundingClientRect().width, p: document.getElementById('s-updown').parentElement.getBoundingClientRect().height }; });
+  check(ft.h <= (ft.sw < 389 ? 45.5 : 44.5) && ft.kh <= 16 && ft.t === '25\u202f% or steeper' && ft.same, `${name}: the sheet's foot ${ft.h.toFixed(0)} px (its words ${ft.p.toFixed(0)} px), the steep key "${ft.t}" on one line in the profile's own red (${ft.same})`);
   // the instrument line's words whole, never an ellipsis (QA 2026-10-01: at 844 x 390 they ran into the credits)
   check(m.sub[1] <= m.sub[2], `${name}: the scale's words whole, "${m.sub[0]}" ${m.sub[1]} px in ${m.sub[2]}`);
   // every label the profile shows inside its strip, the top edge included (the final review: "1 900 m" was cut at the top)
@@ -703,11 +720,11 @@ for (const [w0, h0, dpr, name] of [[320, 568, 2, '320'], [360, 780, 3, '360'], [
   check(m.sw <= m.iw && m.player <= m.ih + 0.5 && m.plate >= 120 && h.bad.length === 0 && A.errors.length === 0,
     `${name}: page ${m.sw} px wide in ${m.iw}; the player ends at ${m.player.toFixed(0)} of ${m.ih}; the plate ${m.plate.toFixed(0)} px tall; ${h.n} hit targets ≥ 44${h.bad.length ? '; too small: ' + h.bad.join('; ') : ''}${A.errors.length ? '; ' + A.errors.join(' | ') : ''}`);
   if (w0 > h0) {
-    // focus mode where the sheet is a column: the plate grows, and the stamp, the caption and the credits stay on screen
+    // focus mode where the sheet is a column: the plate grows, and the About key, the caption and the time stay on screen
     await A.w(() => window.__besseggen.setFocus(true)); await A.page.waitForTimeout(450);
-    const f = await A.w(() => ({ plate: document.getElementById('plate').getBoundingClientRect().height, out: ['stamp', 'cap', 'credits', 't-date'].filter((id) => { const r = document.getElementById(id).getBoundingClientRect(); return !(r.width > 0 && r.left >= 0 && r.right <= innerWidth + 0.5 && r.top >= 0 && r.bottom <= innerHeight + 0.5); }) }));
+    const f = await A.w(() => ({ plate: document.getElementById('plate').getBoundingClientRect().height, out: ['btn-about', 'cap', 't-date'].filter((id) => { const r = document.getElementById(id).getBoundingClientRect(); return !(r.width > 0 && r.left >= 0 && r.right <= innerWidth + 0.5 && r.top >= 0 && r.bottom <= innerHeight + 0.5); }) }));
     await A.shot(`focus-${w0}x${h0}`, false);
-    check(f.plate > m.plate && f.out.length === 0, `${name} in focus mode: the plate ${m.plate.toFixed(0)} to ${f.plate.toFixed(0)} px; the stamp, the caption, the credits and the time on screen${f.out.length ? '; OFF SCREEN: ' + f.out.join(', ') : ''}`);
+    check(f.plate > m.plate && f.out.length === 0, `${name} in focus mode: the plate ${m.plate.toFixed(0)} to ${f.plate.toFixed(0)} px; the About key, the caption and the time on screen${f.out.length ? '; OFF SCREEN: ' + f.out.join(', ') : ''}`);
     await A.w(() => window.__besseggen.setFocus(false)); await A.page.waitForTimeout(300);
   }
   if (name === '320') await A.shot('narrow-light', false);

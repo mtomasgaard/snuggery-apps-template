@@ -78,7 +78,10 @@ const M = D.buildModel(snap);
   ok(JSON.stringify(M.ccLast) === JSON.stringify(Object.fromEntries(Object.keys(M.ccLast).map((c) => [c, last[c]])))
     && Object.keys(first).every((c) => M.ccFirst[c] === first[c]),
   `reporting months: ${D.CC.map((c) => `${c} ${mon(M.ccFirst[c])} to ${mon(M.ccLast[c])}`).join(', ')}`);
-  ok(M.ccFirst.UK === (1975 - 1971) * 12 + 5 && M.ccFirst.NL === (2003 - 1971) * 12 && M.defaultMonth === (2026 - 1971) * 12 + 6 && D.commonMonth(M, { NO: true, UK: true, DK: true, NL: true }) === M.defaultMonth,
+  // the opening month is the newest one all four regulators have reported, worked out here from this file's own
+  // decode rather than pinned: the weekly build moves it (Jul 2026 on the 2026-10-02 data, Jun 2026 on 2026-10-05's)
+  const common = Math.min(snap.lastMonth, ...D.CC.map((c) => last[c]));
+  ok(M.ccFirst.UK === (1975 - 1971) * 12 + 5 && M.ccFirst.NL === (2003 - 1971) * 12 && M.defaultMonth === common && D.commonMonth(M, { NO: true, UK: true, DK: true, NL: true }) === M.defaultMonth,
     `About's claims hold: the UK series starts in ${mon(M.ccFirst.UK)}, the Dutch in ${mon(M.ccFirst.NL)}; the player opens and play stops at ${mon(M.defaultMonth)}`);
   const dk = snap.fields.filter((f) => D.isInt(f.monthlyFrom));
   ok(dk.length > 0 && dk.every((f) => f.country === 'DK' && f.monthlyFrom === (2018 - 1971) * 12), `About's claim holds: ${dk.length} fields carry monthlyFrom, all Danish, all ${mon((2018 - 1971) * 12)}`);

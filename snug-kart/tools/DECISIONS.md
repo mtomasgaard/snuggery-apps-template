@@ -739,3 +739,31 @@ band with the status bar showing.
 
 `screenshots/app.png`, the README's picture, was recomposed by the lead from the marketing camera's two panes (the title and a race, `Tools/compose-readme.py snug-kart`), so `check.mjs` item 18 now pins the new file's sha256 (`3d369cbe…`); the pin says so. The family-wide spelling check also learned `judgement` (Running Dashboard's final found the word; no shipped text of this app carries it).
 
+
+## Plan 0012 package 3.7: the white ground, 1.1 (2026-10-07)
+
+The change list in `docs/plans/0012-change-lists.md` (Snug Kart), applied in full. The bugs on record:
+none (plan 0009 item 5, `docs/review/`, the matrix's rows 152 and 164 are phone passes).
+
+- **No text moves.** The front already holds no source, license, retrieval date or method sentence;
+  the credits are in About, which opens from its own `About` key; the track's caption and the racer's
+  line are the game's own words about what is drawn (HOUSE 4.15).
+- **The ground (F7, D6): white.** `style.css` light `--page: #ffffff`; the light `theme-color`
+  `#ffffff`; `tools/art/palette.py` line 63 `page='#ffffff'`. `ALL CHECKS PASS`, and its `--json` (the
+  racers' tones) did not move: the tones are fitted to the band, not to the page. On white every chrome
+  contrast rose (ink 17.35, ink-2 7.75, ink-3 5.60, line-strong 3.83 on `--page`), and the lowest racer
+  tone on its ground is now Wren on `--sheet`, 3.47 (Wren on `--page` 3.13 → 3.67). The lap chart's
+  ground is `--sheet` and does not change; the scene's sky and track are the scene's. `ART.md`'s tables
+  carry the new figures. `shoot.mjs` holds no `PAGE` constant, so it is unchanged.
+- **Version (F6):** 1.1; `check.mjs` item 6 now pins it.
+- **Checks:** `check.mjs`'s chrome-token table (light `page` `#ffffff`), which the theme-color check
+  follows; item 6. The title caption check is unchanged.
+- **Measured:** 0 px, as the list says. App code 242 798 B of the 244 000 B cap (unchanged); ZIP
+  619 450 B.
+- **Runs:** `node tools/check.mjs`, `node tools/test_chart.mjs`, `node tools/sim.mjs`,
+  `node tools/items.mjs`, `node tools/art/measure_lapchart.mjs`, and `shoot.mjs` in both themes: all
+  pass.
+
+**Taste call for the owner:** the title's bands on white (D6, as chosen); dark is unchanged.
+
+**Camera strings:** none changed (`Race`, the wait and the tap).

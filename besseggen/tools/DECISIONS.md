@@ -557,3 +557,64 @@ headless Chromium probe at phone size where a width is quoted: a trend, never ph
   the marker named on a waypoint, notices at the plate's foot, play held while About or Layers is
   open, and a phone on its side. Section 5 records the camera guard as already in place. Sections 2,
   6 and 9 carry the new colors, the new digest, and calls 10 and 11 as settled.
+
+## Plan 0012 package 3.7: the text cut, 1.3 (2026-10-07)
+
+The change list in `docs/plans/0012-change-lists.md` (Besseggen), applied in full. The ground stays
+gray (D6). The bugs on record: plan 0009 item 5, `docs/review/` and the matrix (rows 149, 159, 171)
+name no open Besseggen bug this pass can fix in the app; row 149's overlap of Snuggery's exit control
+with the app's top-right keys is Snuggery's (a 1.2 candidate), and row 159 is the owner's phone pass.
+
+- **The stamp (F2).** Its line shows only while the data loads or when the start fails, and hides once
+  the terrain is in. The edition, `Kartverket data, retrieved 22 Sep 2026`, from the same expression,
+  is About's first *This data* row (`Edition`). `fail()` shows the line again with its words.
+- **The About key (F2).** `#btn-about` in `.hkeys` at the header's right across its two rows, shown
+  when the data is in (the guard: hidden before), opening About with the stamp's handler. **Departure
+  from the list's markup:** it is `class="textkey framed"`, the app's own framed text key (the direction
+  key's style: 12.5 px in a 28 px `--line-strong` frame, 44 px hit), not a new `.wordkey` class; same
+  look, about 300 B less CSS under a cap with 142 B to spare. In focus mode it moves into `#caption`
+  as its first child (`js/focus.js`), and back into `.hkeys`; the stamp no longer moves (it is hidden
+  once the data is in, and focus mode is set up only after that).
+- **The header** is a grid now: the name, the stamp's line under it while loading, the key at the right.
+  Once the line hides, the name centers on the key: 40 px (6 + 28 + 6), was 50.
+- **The credit line (F1).** `#credits` and its write are gone; `CREDITS` is unchanged and is written,
+  escaped, as `<p id="about-credit-line" translate="no">` first under *Sources and credits* in
+  `buildAbout()`. On a failed start About has no data section and no credit, and no data is drawn.
+- **The burn's caption** drops ` Terrain shadow only; no cloud.` (About's *What the picture is* says it).
+  `.capbox` is now 30 px (two lines) at every width: the longest caption the data writes (110
+  characters) measures 30 px at 320 px (`shoot.mjs`), so HOUSE 4.15's "shrinks to what the longest
+  form needs at 320" takes the 45 px it had below 360 px. Change list item 4 said keep two lines; this
+  is two lines everywhere.
+- **The steep key (F4)** follows the totals sentence inside the same paragraph (`#s-updown` is now a
+  span): a 10 px swatch in `var(--trail)` (the profile's `.psteep` stroke, which `shoot.mjs` compares
+  computed) and `25 % or steeper`, `nowrap`. Inline rather than a separate `div.key` row so the foot
+  keeps its height: measured, the foot is 45 px (three lines) in a sheet 320 and 360 px wide and 30 at
+  390, exactly what the old sentence `… Red: 25 % or steeper.` took (the change list's risk; the row's
+  `min-height` is 44, so 1 px over, as before).
+- **On its side** the caption band is plain flow (the credits' second column is gone).
+- **Prose (F5):** `NOTES.md` (the look, focus mode); `CREDITS.txt` placed nothing on screen. `ART.md`
+  made true: the wireframe, the header rows, the caption, the credits row, About, the steep key, focus
+  mode, on its side, the plate figures.
+- **Version (F6):** 1.3; `check.mjs` item 7 now pins it.
+
+**Checks changed (F8).** `check.mjs` item 9: the constant unchanged, written as About's first
+Sources-and-credits paragraph and nowhere else, no `#credits`, no `$('credits')`, and none of
+`Kartverket`, `CC BY`, `License`, `retrieved`, `Ysabeau` in `index.html` outside About; item 7 pins
+1.3. `shoot.mjs`: the zone observer records the stamp's line hidden and the About key shown at the
+first CEST (was: the stamp read `Kartverket data, retrieved …`); the edition row; the stamp one line
+(16 px) in each of its four states; `About` among the controls by role; the credit in About, word for
+word, and no `#credits`; every tap that opened About taps `#btn-about`; focus mode's "stays" lists
+(`btn-about` for `stamp` and `credits`, the key the caption's first child); the broken-data cases ask
+for the stamp's line shown only when the app stops (was: the credits on screen); new, at every width:
+the foot's height against the measured old one and the key one line in the profile's red.
+
+**Measured** (headless Chromium, 390 × 844): the plate 422 → 447 px at the first stop (+25; the list
+estimated 37: the header keeps 40 px for the key), 658 → 663 in focus mode; on its side 227 px, 244
+in focus mode (255 before: the About key's line, 30 px, replaces the stamp's 18 and the credits that
+sat beside the instrument line). App code 226 858 B of the 227 000 B cap (142 to spare; 226 794
+before). ZIP 16 854 750 B.
+
+**Taste calls for the owner:** the About key in Besseggen's framed-text style rather than the 600-weight
+word key; the key's own line in focus mode costs 11 px of plate on a phone on its side.
+
+**Camera strings:** none changed. `CEST`/`CET` still appear only once the terrain is in.

@@ -1,5 +1,5 @@
 /* Snug Kart under the house system (ART.md; Template/HOUSE.md). The 3D scene is the plate and keeps
-   each track's one appearance in both themes; the chrome follows the theme. One face, gray chrome,
+   each track's one appearance in both themes; the chrome follows the theme, on white in light (HOUSE.md 12). One face,
    no accent, no shadows, no blur; every sentence over the scene sits on a plate. The racers' tones
    live in js/palette.js. */
 
@@ -11,7 +11,7 @@
 }
 
 :root {
-  --page: #e8eef0;
+  --page: #ffffff;
   --sheet: #f6f9fa;
   --ink: #0f1c23;
   --ink-2: #45555d;

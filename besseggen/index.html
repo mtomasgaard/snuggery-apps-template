@@ -18,6 +18,7 @@
   <h1 translate="no">Besseggen</h1>
   <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the terrain&hellip;</button></div>
   <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+  <div class="hkeys" id="hkeys"><button class="textkey framed" id="btn-about" type="button" aria-haspopup="dialog" hidden>About</button></div>
 </header>
 
 <main class="plate" id="plate">
@@ -54,9 +55,9 @@
   <div class="notice" id="notice" role="alert" hidden></div>
 </main>
 
-<!-- The caption under the plate: north and the scale, the legend rows of a colored layer, what the
-     picture is (the Burn's sentence), and the credits, on screen in every mode. -->
-<section class="caption" id="caption" aria-label="Caption and credits">
+<!-- The caption under the plate: north and the scale, the legend rows of a colored layer, and what
+     the picture is (the Burn's sentence). The credits are in About. -->
+<section class="caption" id="caption" aria-label="Caption">
   <div class="inst" data-boot hidden>
     <svg id="compass" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Compass"><path id="gridn" class="gn" d="M12 12V3"/><g id="needle"><path class="fill" d="M12 5.5l2.2 6.5h-4.4z"/><path class="tail" d="M12 12v5"/></g><text id="cn" x="12" y="2.5">N</text></svg>
     <span id="scale-len"></span><span class="sbar" id="scale-bar"></span><span id="scale-sub"></span>
@@ -67,7 +68,6 @@
     <div class="legend" id="lg-view" hidden><span class="lt" id="lt-view">Viewshed</span><div class="ls"><div class="lb" id="lb-view"></div><div class="lk"><span style="left:25%">seen</span><span style="left:75%">hidden</span></div></div></div>
   </div>
   <div class="capbox"><p id="cap"></p><p id="cap-tool"></p></div>
-  <p class="credits" id="credits" translate="no"></p>
 </section>
 
 <footer class="player" id="player" inert>
@@ -88,7 +88,7 @@
   <button type="button" class="grip" id="grip" aria-label="Show more controls"><span class="bar"></span><svg class="chev" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 8l4-4 4 4"/></svg></button>
   <p class="walk" data-boot hidden><b id="s-dist"></b> walked, at <b id="s-elev"></b>, <b id="s-grad"></b> grade, <b id="s-time"></b> left</p>
   <svg id="profile" data-boot hidden preserveAspectRatio="none" role="slider" tabindex="0" aria-label="Elevation profile. Drag to move the marker on the terrain." aria-valuemin="0" aria-valuenow="0"></svg>
-  <div class="foot" data-boot hidden><p id="s-updown"></p><button type="button" class="textkey framed" id="btn-dir" translate="no"></button></div>
+  <div class="foot" data-boot hidden><p><span id="s-updown"></span> <span class="k"><i class="sw" aria-hidden="true"></i>25&#8239;% or steeper</span></p><button type="button" class="textkey framed" id="btn-dir" translate="no"></button></div>
 
   <section id="more1" data-boot hidden>
     <h2>Sun and shadow</h2>

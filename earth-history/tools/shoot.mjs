@@ -418,6 +418,10 @@ for (const [si, scheme] of schemes.entries()) {
       check(h0.st === 0 && h0.earth === 498 && h0.sheet === 112 && h0.curves, `peek: Earth ${h0.earth} px, sheet ${h0.sheet} px, curves shown`);
       const head = await eh(() => window.__eh.sheetHead());
       check(head[0] === 'Triassic · 251.902–201.4 million years ago' && head[1] === `This map: Scotese map 49 · ${sl.label}`, `peek lines: "${head[0]}" / "${head[1]}"`);
+      // plan 0012: the period card opens with its text, so the peek shows it; the chart's uncertainty follows its source line
+      const card = await eh(() => [...document.querySelector('.sh-card').children].map((e) => [e.className, e.textContent.slice(0, 40)]));
+      const ui = card.findIndex((c) => c[0] === 'sh-meta' && c[1].startsWith('Today')), si = card.findIndex((c) => c[0] === 'sh-src');
+      check(card[0] && card[0][0] === 'sh-text' && ui > si && si > 0, `the period card at peek opens with its text ("${card[0] && card[0][1]}…"), the chart's line after its source line (${card.map((c) => c[0]).join(', ')})`);
       await page.click('#sheet-grip');
       const h1 = await heights();
       check(h1.st === 1 && h1.earth === 314 && h1.sheet === 380 && !h1.curves, `a tap on the grip → half: Earth ${h1.earth} px, sheet ${h1.sheet} px, curves hidden`);

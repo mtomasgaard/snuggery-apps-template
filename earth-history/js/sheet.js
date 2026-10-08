@@ -181,11 +181,12 @@ export function createSheet(els, D, h) {
     els.head.append(title, el('p', 'sh-map', `This map: Scotese map ${s.map} · ${s.label}`));
 
     const body = [];
-    // 1. The period card
+    // 1. The period card: its text first, so the peek shows it under the two head lines; the chart's
+    // boundary uncertainties after the text and its source line (plan 0012).
     const c1 = section(null, 'sh-card');
+    if (card) c1.append(el('p', 'sh-text', card.text), srcLine(card.sources, used));
     const unc = periodUnc(per);
     if (unc) c1.append(el('p', 'sh-meta', unc));
-    if (card) c1.append(el('p', 'sh-text', card.text), srcLine(card.sources, used));
     body.push(c1);
     if (s.ics.period === 'Tonian') {
       const pr = section(story.prologue.title, 'sh-card');

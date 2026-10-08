@@ -15,7 +15,7 @@
 //
 // There is no time player in this app, so there is no scrub to run (HOUSE 4.0: a 3D view without time).
 // Per theme: boot (the camera's strings by role and name, "Every layer is showing" only once the model
-// is in, the credit, the face before the Levels' first draw), text contrast and the tracer, the Levels
+// is in, the credit in About, the stamp one line, the face before the Levels' first draw), text contrast and the tracer, the Levels
 // against this file's own projection of the data at the first-run view, in the front view and pulled
 // apart, the column hidden from the top and from far away, eleven structures found by name with their
 // card, bar and caption, the found kidney in its own color under X-ray, the signature sampler, the
@@ -84,7 +84,7 @@ const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03
 const contrast = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
 const pctl = (a, q) => { if (!a.length) return NaN; const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(q * s.length))]; };
 const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
-const INK = { light: '#0f1c23', dark: '#e6edee' }, PAGE = { light: '#e8eef0', dark: '#141d21' };
+const INK = { light: '#0f1c23', dark: '#e6edee' }, PAGE = { light: '#ffffff', dark: '#141d21' };
 
 /** A PNG (8-bit RGB or RGBA, not interlaced, as Chromium writes them) to RGBA pixels. */
 function decodePng(buf) {
@@ -321,20 +321,32 @@ for (const scheme of schemes) {
   const { page, w } = A;
   console.log(`    load to the first frame: ${A.ms} ms (headless)`);
 
-  // boot: the camera's strings and controls, "Every layer is showing" only once the model is in, the credit, the face
+  // boot: the camera's strings and controls, "Every layer is showing" only once the model is in, the credit in About, the face
   {
     const seen = await w(() => window.__seen);
     const peel = await page.getByRole('button', { name: /^Remove the/ }).count();
     const peelName = await w(() => document.getElementById('btn-peel').getAttribute('aria-label'));
     const slider = await page.getByRole('slider', { name: 'Explode amount', exact: true }).count();
-    const buttons = await Promise.all(['Hide the controls', 'Zoom in', 'Zoom out', 'Show the whole body', 'Layers', 'Find a structure', 'Explode'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
+    const buttons = await Promise.all(['About', 'Hide the controls', 'Zoom in', 'Zoom out', 'Show the whole body', 'Layers', 'Find a structure', 'Explode'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
     const radios = await Promise.all(['Skin', 'Bone', 'Part', 'Group', 'Region'].map((n) => page.getByRole('radio', { name: n, exact: true }).count()));
     const views = await Promise.all(['Front', 'Back', 'Left', 'Right', 'Top'].map((n) => page.getByRole('button', { name: n, exact: true }).count()));
-    const credit = await w(() => [document.getElementById('credits').textContent, document.getElementById('credits').getBoundingClientRect().height > 0]);
+    const credit = await w(() => { const c = document.getElementById('about-credit-line'), dl = document.getElementById('about-list');
+      return [c.textContent, !document.getElementById('credits') && c.previousElementSibling.textContent === 'Sources and credits', `${dl.children[0].textContent}: ${dl.children[1].textContent}`, document.getElementById('stamp-home').hidden]; });
+    // the stamp's line is one line, 16 px, in every state its writers can put in it (HOUSE.md section 7.2)
+    const lines = await w(() => {
+      // as while loading or after a failure: the line shown, the About key not yet
+      const home = document.getElementById('stamp-home'), st = document.getElementById('stamp'), key = document.getElementById('btn-about'), was = [home.hidden, [...st.childNodes]];
+      home.hidden = false; key.hidden = true;
+      const out = ['Reading the model\u2026', 'Reading the geometry\u2026 32 of 32.0\u202fMB', 'Building the structures\u2026 1\u202f752 of 1\u202f752', 'The model could not be read.'].map((t) => { st.textContent = t; return [t, st.getBoundingClientRect().height]; });
+      home.hidden = was[0]; key.hidden = false; st.replaceChildren(...was[1]);
+      return out;
+    });
     check(seen && seen.ready && seen.font, `"Every layer is showing" first appears with the model in (ready ${seen && seen.ready}) and the face loaded before the Levels' first draw (${seen && seen.font})`);
     check(peel === 1 && peelName === 'Remove the skin and hair layer' && slider === 1 && buttons.every((n) => n === 1) && radios.every((n) => n === 1) && views.every((n) => n === 1),
       `camera's controls: one button named "${peelName}", the slider "Explode amount", ${buttons.length} keys, ${radios.length} words and the five views by role and exact name`);
-    check(credit[0] === 'BodyParts3D, © The Database Center for Life Science, CC BY-SA 2.1 JP and CC BY 4.0' && credit[1], `the credit on screen, word for word: "${credit[0]}"`);
+    check(credit[0] === 'BodyParts3D, © The Database Center for Life Science, CC BY-SA 2.1 JP and CC BY 4.0' && credit[1], `no #credits on the front; About's first Sources and credits paragraph is the credit, word for word: "${credit[0]}"`);
+    check(credit[3] && /^Edition: BodyParts3D 3\.0 and 4\.0, 1\u202f752 structures$/.test(credit[2]), `the stamp's line hidden once the model is in (${credit[3]}); About's first This data row "${credit[2]}"`);
+    check(lines.every(([, h]) => Math.abs(h - 16) <= 1), `the stamp's line is one line in every state it can show: ${lines.map(([t, h]) => `"${t}" ${h.toFixed(0)} px`).join(', ')}`);
   }
 
   // text contrast and the tracer
@@ -550,7 +562,7 @@ for (const scheme of schemes) {
     await find(A, 'Right kidney');
     const s1 = await siOf(w);
     await A.tapEl('#c-close');
-    await A.tapEl('#stamp'); await page.waitForTimeout(300);
+    await A.tapEl('#btn-about'); await page.waitForTimeout(300);
     const s2 = await siOf(w);
     await page.keyboard.press('Escape'); await page.waitForTimeout(100);
     check(s1.bad.length + s2.bad.length === 0, `SI: ${s1.n + s2.n} visible text nodes with the card and About open: no hyphen-minus before a digit, U+202F before every unit, thousands grouped${s1.bad.concat(s2.bad).length ? ': ' + s1.bad.concat(s2.bad).join(' | ') : ''}`);
@@ -692,16 +704,16 @@ for (const scheme of schemes) {
     await page.waitForFunction(() => document.getElementById('live').textContent.length > 0, null, { timeout: 8000 }).catch(() => {});
     const f = await w(() => {
       const gone = ['head', 'keys'].map((id) => { const e = document.getElementById(id); return e.hidden && e.inert; });
-      const stays = ['capline', 'credits', 'dissect', 'stamp', 'levels'].map((id) => { const e = document.getElementById(id), r = e.getBoundingClientRect(); return r.height > 0 && !e.closest('[hidden]'); });
-      return { gone, stays, stampIn: document.getElementById('stamp').parentElement.id, ghost: !document.getElementById('focus-exit').hidden, plate: document.getElementById('plate').getBoundingClientRect().height, live: document.getElementById('live').textContent, store: localStorage.getItem('skeleton-viewer:focus'), active: document.activeElement.id };
+      const stays = ['capline', 'dissect', 'btn-about', 'levels'].map((id) => { const e = document.getElementById(id), r = e.getBoundingClientRect(); return r.height > 0 && !e.closest('[hidden]'); });
+      return { gone, stays, stampIn: document.getElementById('btn-about').parentElement.id, first: [...document.getElementById('caption').children].find((e) => !e.hidden).id, ghost: !document.getElementById('focus-exit').hidden, plate: document.getElementById('plate').getBoundingClientRect().height, live: document.getElementById('live').textContent, store: localStorage.getItem('skeleton-viewer:focus'), active: document.activeElement.id };
     });
     const tree = await page.getByRole('button', { name: 'Zoom in', exact: true }).count();
     const steps = await page.getByRole('button', { name: /^Remove the/ }).count();
     const explodeRow = await w(() => { const e = document.getElementById('drow-explode'); return e.hidden && e.inert; });
     const track = await page.getByRole('slider').count() + await page.getByRole('radio').count() + await page.getByRole('button', { name: 'Explode', exact: true }).count();
     const shown = await w(() => [...document.querySelectorAll('button, input, [role="slider"]')].filter((e) => e.getBoundingClientRect().height > 0 && !e.closest('[hidden]') && !e.closest('[inert]')).map((e) => e.getAttribute('aria-label') || e.textContent.trim()));
-    check(f.gone.every(Boolean) && tree === 0 && f.stays.every(Boolean) && f.stampIn === 'caption' && f.ghost && steps === 1 && explodeRow && track === 0,
-      `focus mode by touch: the header, the keys and the explode row are hidden and inert (none in the tree: ${tree + track === 0}); the Levels, the caption line, the credits, the stamp (now in the caption band) and the one control, the step keys, stay. Controls left: ${shown.join(', ')}`);
+    check(f.gone.every(Boolean) && tree === 0 && f.stays.every(Boolean) && f.stampIn === 'caption' && f.first === 'btn-about' && f.ghost && steps === 1 && explodeRow && track === 0,
+      `focus mode by touch: the header, the keys and the explode row are hidden and inert (none in the tree: ${tree + track === 0}); the Levels, the caption line, the About key (now the caption band's first line) and the one control, the step keys, stay. Controls left: ${shown.join(', ')}`);
     check(before >= 540 && f.plate >= 700, `the plate is ${Math.round(before)} px tall (ART.md: at least 540) and grew to ${Math.round(f.plate)} px in focus mode (at least 700)`);
     await A.shot('focus-light');
     check(f.live === 'Controls hidden. Press Escape or the corner key to show them.' && f.store === '1' && f.active !== 'focus-exit', `its sentence ("${f.live}"), skeleton-viewer:focus = ${f.store}, and no ring after a touch (focus on "${f.active}")`);
@@ -783,10 +795,10 @@ for (const scheme of schemes) {
     await A.tapEl('#btn-explode'); await A.idle();
   }
 
-  // About: from the stamp, every credit and the type's, never the data's third paragraph, Escape, focus back
+  // About: from the About key, every credit and the type's, never the data's third paragraph, Escape, focus back
   {
     await A.tapEl('#views [data-view="front"]'); await A.idle(); await A.frame();
-    await page.focus('#stamp'); await page.keyboard.press('Enter');
+    await page.focus('#btn-about'); await page.keyboard.press('Enter');
     await page.waitForFunction(() => !document.getElementById('about').hidden && document.querySelector('#about .dialog-sheet').getAnimations().length === 0, null, { timeout: 5000 });
     const ab = await w(() => { const b = document.querySelector('.about-body'); const t = b.scrollTop; b.scrollTop = 400; const sc = b.scrollTop > t; b.scrollTop = 0; return { open: !document.getElementById('about').hidden, text: document.getElementById('about').innerText, active: document.activeElement.id, sc }; });
     await w(() => document.activeElement && document.activeElement.blur());   // no focus ring in the picture
@@ -798,8 +810,8 @@ for (const scheme of schemes) {
     const times = (t) => ab.text.split(t).length - 1;
     check(ab.open && ab.text.includes(src[0]) && ab.text.includes(src[1]) && anat.about.gaps.every((g) => ab.text.includes(g))
       && times('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.') === 1
-      && times('Rendering: three.js r186, MIT License') === 1 && !/Atkinson|Newsreader/.test(ab.text) && /not a spinal cord segment/.test(ab.text) && ab.text.includes(`3${NN}448${NN}950`) && back[0] && back[1] === 'stamp' && ab.sc,
-    `About opens from the stamp (focus on ${ab.active}) and scrolls inside itself (${ab.sc}): the data's two source paragraphs and its gaps verbatim; the rendering and type lines once each (the data's third paragraph is the same credit, not printed twice); what the Levels are not; 3${NN}448${NN}950 triangles; Escape closes it, focus back on ${back[1]}`);
+      && times('Rendering: three.js r186, MIT License') === 1 && !/Atkinson|Newsreader/.test(ab.text) && /not a spinal cord segment/.test(ab.text) && ab.text.includes(`3${NN}448${NN}950`) && back[0] && back[1] === 'btn-about' && ab.sc && ab.text.includes('BodyParts3D, © The Database Center for Life Science, CC BY-SA 2.1 JP and CC BY 4.0'),
+    `About opens from the About key with the credit line (focus on ${ab.active}) and scrolls inside itself (${ab.sc}): the data's two source paragraphs and its gaps verbatim; the rendering and type lines once each (the data's third paragraph is the same credit, not printed twice); what the Levels are not; 3${NN}448${NN}950 triangles; Escape closes it, focus back on ${back[1]}`);
   }
   check(A.errors.length === 0, `no console error or warning, failed request or request outside the app${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`);
   await A.ctx.close();
@@ -864,7 +876,7 @@ for (const scheme of schemes) {
     override = { '/data/anatomy.json': { body: '{ "parts": [' } };
     await A.w(() => window.dispatchEvent(new Event('focus')));
     await A.page.waitForFunction(() => !document.getElementById('notice').hidden, null, { timeout: 10000 });
-    const r = await A.w(() => [document.getElementById('notice').textContent, document.getElementById('stamp').textContent, document.querySelectorAll('#depth button').length]);
+    const r = await A.w(() => [document.getElementById('notice').textContent, document.querySelector('#about-list dd').textContent, document.querySelectorAll('#depth button').length]);
     override = {};
     check(r[0] === 'data/anatomy.json is not valid JSON. The text already loaded stays.' && /1.752 structures/.test(r[1]) && r[2] === 8, `a broken data/anatomy.json on a later read: "${r[0]}", the model kept ("${r[1]}", ${r[2]} depth words)`);
     check(A.errors.length === 0, `no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
@@ -895,7 +907,8 @@ for (const scheme of schemes) {
       check(L.drawn && L.blocks.length >= 20 && cap === RULE, `${label}: the Levels at the opening, ${L.blocks.length} blocks, the rule ${Math.round(own.tall)} px tall on a ${Math.round(r.plate)} px plate; the caption "${cap}"`);
     }
     if (W === 375) {
-      // a plate under 420 px: the compact card, its four actions on one row, its Levels row in view
+      // the card's form follows the plate (compact under 420 px, app.js): since plan 0012's text cut the plate
+      // at 375 x 667 is over 420, so the full card; its four actions on one row, its Levels row in view either way
       await find(A, 'Right kidney');
       const c = await A.w(() => {
         const acts = [...document.querySelectorAll('.card-actions button')].map((b) => b.getBoundingClientRect().top);
@@ -904,7 +917,7 @@ for (const scheme of schemes) {
       });
       await A.shot('w375-card-dark', false);
       await A.tapEl('#c-close'); await A.idle();
-      check(c.compact && c.rows === 1 && c.levelsIn, `${label}: on a ${Math.round(c.plate)} px plate the card is compact, its four actions on ${c.rows} row, its Levels row in view`);
+      check(c.compact === c.plate < 420 && c.rows === 1 && c.levelsIn, `${label}: on a ${Math.round(c.plate)} px plate the card is ${c.compact ? 'compact' : 'full'}, its four actions on ${c.rows} row, its Levels row in view`);
     }
     if (side) await A.shot('landscape-dark', false); else if (W === 320) await A.shot('w320-dark', false);
     check(r.sw <= r.iw && over.length === 0 && hs.bad.length === 0 && v45 >= 42 && v45 <= 46 && v0 === 0 && (!side || r.plate >= 220),

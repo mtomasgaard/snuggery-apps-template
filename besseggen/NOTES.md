@@ -66,7 +66,10 @@ something changed, and the scheduler stops as soon as nothing is animating. Ever
 The app is on the template's house system (`Template/HOUSE.md`); `ART.md` is its direction, and
 `tools/DECISIONS.md` the owner calls and the record of the pass. One face (Ysabeau Office), gray
 chrome, the caption band under the plate (north and the scale bar, a legend row for each layer read
-through a color, the caption, the credits), the player with its own track, focus mode, SI.
+through a color, the caption), the player with its own track, focus mode, SI. The credit line,
+`Terrain, trail, lakes and names: Kartverket, CC BY 4.0`, is in About, first under Sources and
+credits, with every source in full; the data's edition is About's first line, and an `About` key at
+the header's right opens it.
 
 **The plate keeps one daylight appearance in both themes.** The terrain is drawn from
 `data/colors.json`'s light block whatever the phone's theme; a dark version turned the lit faces dark
@@ -95,8 +98,8 @@ Reduce Motion.
 
 **Hide the controls** (the key column's last key), the **F key** or a **double-tap on the view**
 hides the header, the keys, the legend rows and the controls sheet, each `hidden` and `inert`; the
-plate, the stamp (moved into the caption band), north and the scale, the caption, the credits and
-the player stay. The ghost key at the plate's top right, **Show the controls**, Escape, F or a
+plate, the `About` key (moved into the caption band), north and the scale, the caption and the
+player stay. The ghost key at the plate's top right, **Show the controls**, Escape, F or a
 double-tap bring them back. It is remembered between launches (`besseggen:focus`); the ghost key is
 the answer to the stock app's reason for forgetting it. While an analysis tool is waiting for points
 the double-tap stands down: two quick taps near one spot is somebody correcting a pick. The double-tap

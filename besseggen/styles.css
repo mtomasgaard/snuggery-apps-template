@@ -63,15 +63,16 @@ svg .fill { fill: currentColor; stroke: none; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin: -1px; }
 .note { font-size: 11.5px; color: var(--ink-2); }
 
-/* ── header: the name and the stamp ── */
+/* ── header: the name, the stamp while loading, About ── */
 .head, .caption, .player { flex: 0 0 auto; }
-.head { padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left)); }
+.head { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: calc(6px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 6px calc(16px + env(safe-area-inset-left)); }
 .head h1 { font-size: 15px; font-weight: 650; line-height: 22px; }
-.stamp-home { min-width: 0; padding-bottom: 6px; }
+.head:has(#stamp-home[hidden]) h1 { grid-row: 1 / 3; align-self: center; }
+.stamp-home { min-width: 0; }
+.hkeys { grid-area: 1 / 2 / 3 / 3; align-self: center; margin: -8px -8px -8px 0; }
+.caption > .textkey { display: block; margin: -7px 0 -8px -8px; }
 .stamp { position: relative; display: block; max-width: 100%; text-align: left; font-size: 11.5px; line-height: 16px; color: var(--ink-2); }
 .stamp::before { content: ''; position: absolute; inset: -22px 0 -6px 0; }
-.caption > .stamp-home { padding-bottom: 2px; }
-.caption > .stamp-home .stamp::before { inset: -6px 0 -22px 0; }     /* never up into the plate */
 
 /* ── the plate: the terrain, edge to edge ── */
 .plate { position: relative; flex: 1 1 auto; min-height: 180px; overflow: hidden; background: #dfe7ef; user-select: none; -webkit-user-select: none; }
@@ -193,7 +194,7 @@ svg .fill { fill: currentColor; stroke: none; }
   pointer-events: none;
 }
 
-/* ── the caption band: north and the scale, the legend rows, the caption, the credits ── */
+/* ── the caption band: north and the scale, the legend rows, the caption ── */
 .caption { padding: 4px calc(16px + env(safe-area-inset-right)) 4px calc(16px + env(safe-area-inset-left)); font-size: 11px; line-height: 15px; color: var(--ink-2); }
 .inst { display: flex; align-items: center; gap: 6px; height: 24px; white-space: nowrap; overflow: hidden; }
 #compass { flex: 0 0 auto; overflow: visible; color: var(--ink); }
@@ -215,11 +216,11 @@ svg .fill { fill: currentColor; stroke: none; }
 .lk .last { right: 0; transform: none; }
 .lk .last::before { left: auto; right: 0; }
 /* fixed height, whatever it says, so the plate never resizes (shoot.mjs measures the longest) */
-.capbox { height: 45px; overflow: hidden; }
-@media (min-width: 360px) { .capbox { height: 30px; } }
+.capbox { height: 30px; overflow: hidden; }
 #cap-tool:empty { display: none; }
 #cap-tool { color: var(--ink); }
-.credits { font-size: 10.5px; }
+#s-updown + .k { white-space: nowrap; }
+.k .sw { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; vertical-align: -1px; background: var(--trail); }
 
 /* ── the player: the time row, the transport and the track with the Burn ── */
 .player { padding: 2px calc(12px + env(safe-area-inset-right)) 0 calc(12px + env(safe-area-inset-left)); border-top: 1px solid var(--line); }
@@ -317,7 +318,7 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14p
 #layer-note { padding: 8px 0; }
 .dlg-foot { margin-top: 8px; }
 
-/* ── focus mode: the chrome leaves; the plate, the stamp, the caption and the player stay ── */
+/* ── focus mode: the chrome leaves; the plate, About, the caption and the player stay ── */
 .leaving { opacity: 0; transition: opacity 160ms var(--draw); }
 
 @media (hover: hover) {
@@ -342,13 +343,9 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14p
 }
 @media (orientation: landscape) and (max-height: 500px) {
   body { grid-template-columns: minmax(0, 1fr) min(330px, 46%); }
-  .head { display: flex; flex-direction: column; justify-content: center; height: calc(46px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); }
-  .stamp-home { padding-bottom: 0; }
+  .head { align-content: center; height: calc(46px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); padding-bottom: 0; }
   .stamp { white-space: nowrap; }
-  .caption { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 16px; padding-top: 2px; padding-bottom: 2px; }
-  .caption > :not(.inst):not(.credits) { grid-column: 1 / -1; }
-  .credits { grid-column: 2; grid-row: 1; align-self: center; max-width: 150px; line-height: 12px; text-wrap: balance; }
-  .caption > .stamp-home + .inst + #legends + .capbox + .credits { grid-row: 2; }
+  .caption { padding-top: 2px; padding-bottom: 2px; }
   .stamp::before { inset: -26px 0 -2px 0; }
   .player { display: flex; align-items: center; gap: 8px; padding-top: 0; }
   .time-row { flex: 0 0 auto; flex-direction: column; align-items: flex-start; gap: 3px; padding: 0 4px; }
