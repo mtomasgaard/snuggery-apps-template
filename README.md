@@ -47,6 +47,11 @@ three taps, just below.
 
 Open an app's **Install** link in Safari on the iPhone, then do the three steps under the table.
 
+**Or get them all at once:** [**Get them all**](https://mtomasgaard.github.io/snuggery-apps-template/zips/more-examples.zip)
+(about 120 MB) is every app below that Snuggery does not install itself, in one file that opens as
+one folder, *More examples*. It needs Snuggery 1.2 or later; 1.1 opens it as a folder of ZIPs. The
+seven live examples come with the app: Create → *Install the live examples*.
+
 | App | Link | Size | Needs |
 | --- | --- | --- | --- |
 | Milky Way | [**Install Milky Way**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) | 6.5 MB | nothing |
