@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T01:01:29Z",
+ "generatedAt": "2026-10-08T02:01:47Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
+     "title": "Australia’s top court puts fossil fuel developers on notice",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/australias-top-court-puts-fossil-fuel-developers-on-notice-293680",
+     "published": "2026-10-08T01:41:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nina Araneta-Alana, Research fellow, Laureate Program on Global Corporate Climate Accountability, The University of Melbourne"
+    },
+    {
+     "title": "New comedy horror series Gnomes understands just how delightfully daggy good Aussie TV should be",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/new-comedy-horror-series-gnomes-understands-just-how-delightfully-daggy-good-aussie-tv-should-be-292592",
+     "published": "2026-10-08T01:24:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
+    },
+    {
+     "title": "Thinking of taking melatonin to help you sleep? Here’s what you need to know",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/thinking-of-taking-melatonin-to-help-you-sleep-heres-what-you-need-to-know-291271",
+     "published": "2026-10-08T00:46:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nial Wheate, Professor of Pharmaceutical Chemistry, Macquarie University"
+    },
+    {
+     "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/we-need-to-stop-asking-if-nz-can-afford-its-superannuation-scheme-its-the-wrong-question-293808",
      "published": "2026-10-07T21:05:05Z",
      "summary": "",
      "stale": false,
      "author": "Aaron Gilbert, Professor of Finance, Auckland University of Technology"
-    },
-    {
-     "title": "In a society desperate for distraction, a woman performing starvation overcommits",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/in-a-society-desperate-for-distraction-a-woman-performing-starvation-overcommits-291879",
-     "published": "2026-10-07T18:29:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Julian Novitz, Senior Lecturer, Writing, Department of Media and Communication, Swinburne University of Technology"
-    },
-    {
-     "title": "Beige tones and knit throws? No, we’ve got Scandinavian design all wrong",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/beige-tones-and-knit-throws-no-weve-got-scandinavian-design-all-wrong-293440",
-     "published": "2026-10-07T18:28:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nina Hillenberg, Senior Lecturer, Design, Torrens University Australia"
     },
     {
      "title": "What happens to language when machines start talking back?",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Celeste Rodriguez Louro, Associate Professor of Linguistics and Director of Language Lab, The University of Western Australia"
-    },
-    {
-     "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/microdramas-are-booming-ai-could-make-it-even-harder-to-stop-binge-watching-291962",
-     "published": "2026-10-07T17:48:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Johnny Chan, Senior Lecturer, Faculty of Business and Economics, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia’s top court puts fossil fuel developers on notice",
+   "published": "2026-10-08 01:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "New comedy horror series Gnomes understands just how delightfully daggy good Aussie TV should be",
+   "published": "2026-10-08 01:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Thinking of taking melatonin to help you sleep? Here’s what you need to know",
+   "published": "2026-10-08 00:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
    "published": "2026-10-07 21:05 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "In a society desperate for distraction, a woman performing starvation overcommits",
-   "published": "2026-10-07 18:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Beige tones and knit throws? No, we’ve got Scandinavian design all wrong",
-   "published": "2026-10-07 18:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "What happens to language when machines start talking back?",
    "published": "2026-10-07 18:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Microdramas are booming. AI could make it even harder to stop binge-watching",
-   "published": "2026-10-07 17:48 UTC"
   },
   {
    "region": "Oceania",
