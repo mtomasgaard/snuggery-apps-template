@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T03:01:33Z",
+ "generatedAt": "2026-10-08T04:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/apples-new-age-verification-is-a-game-changer-for-kids-safety-online-we-need-the-rest-of-big-tech-to-follow-293838",
+     "published": "2026-10-08T03:44:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Toby Murray, Professor of Cybersecurity, School of Computing and Information Systems, The University of Melbourne"
+    },
+    {
+     "title": "Queensland is leading Australia’s fight against illicit tobacco. Should other states follow suit?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/queensland-is-leading-australias-fight-against-illicit-tobacco-should-other-states-follow-suit-293702",
+     "published": "2026-10-08T03:09:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Coral Gartner, Director, NHMRC Centre of Research Excellence on Achieving the Tobacco Endgame and ARC Future Fellow, The University of Queensland"
+    },
+    {
      "title": "Politics with Michelle Grattan: why Victoria’s unpredictable election matters nationally",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Australia’s top court puts fossil fuel developers on notice",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australias-top-court-puts-fossil-fuel-developers-on-notice-293680",
-     "published": "2026-10-08T01:41:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nina Araneta-Alana, Research fellow, Laureate Program on Global Corporate Climate Accountability, The University of Melbourne"
-    },
-    {
-     "title": "New comedy horror series Gnomes understands just how delightfully daggy good Aussie TV should be",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/new-comedy-horror-series-gnomes-understands-just-how-delightfully-daggy-good-aussie-tv-should-be-292592",
-     "published": "2026-10-08T01:24:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
     },
     {
      "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
+   "published": "2026-10-08 03:44 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Queensland is leading Australia’s fight against illicit tobacco. Should other states follow suit?",
+   "published": "2026-10-08 03:09 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Politics with Michelle Grattan: why Victoria’s unpredictable election matters nationally",
    "published": "2026-10-08 02:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australia’s top court puts fossil fuel developers on notice",
-   "published": "2026-10-08 01:41 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "New comedy horror series Gnomes understands just how delightfully daggy good Aussie TV should be",
-   "published": "2026-10-08 01:24 UTC"
   },
   {
    "region": "Oceania",
