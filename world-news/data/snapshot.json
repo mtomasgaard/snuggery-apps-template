@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-08T04:01:43Z",
+ "generatedAt": "2026-10-08T05:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "El Niño speeds climate crisis and tests Latin America’s food security",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/08/el-nino-speeds-climate-crisis-and-tests-latin-americas-food-security/",
+     "published": "2026-10-08T05:00:54Z",
+     "summary": "From droughts to floods and fires, El Niño is exposing vulnerabilities in Latin America’s food systems by putting farmers, food supplies and household budgets under growing pressure across the region.",
+     "stale": false,
+     "author": "Connectas"
+    },
+    {
      "title": "IceCube is built on decades of research into tiny ‘ghost particles’ – but it was the first to find neutrinos coming from deep space",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -149,16 +159,6 @@
      "summary": "Life in the favelas surrounding Brazil’s capital brings the health risks of extreme heat — a symptom of the global inequities of green space access",
      "stale": false,
      "author": "Dialogue Earth"
-    },
-    {
-     "title": "Equating protest with terrorism: A narrative against dissent",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
-     "published": "2026-09-29T00:00:00Z",
-     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": false,
-     "author": "Civic Media Observatory"
     },
     {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/pacific-people-pay-exorbitant-prices-for-energy-rich-countries-should-back-their-renewable-transition-293541",
+     "published": "2026-10-08T04:15:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Charles T. Hunt, Professor in Global Security, Social Equity Research Centre, RMIT University"
+    },
+    {
      "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Coral Gartner, Director, NHMRC Centre of Research Excellence on Achieving the Tobacco Endgame and ARC Future Fellow, The University of Queensland"
-    },
-    {
-     "title": "Politics with Michelle Grattan: why Victoria’s unpredictable election matters nationally",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-why-victorias-unpredictable-election-matters-nationally-293700",
-     "published": "2026-10-08T02:24:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "We need to stop asking if NZ can afford its superannuation scheme. It’s the wrong question",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "El Niño speeds climate crisis and tests Latin America’s food security",
+   "published": "2026-10-08 05:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "IceCube is built on decades of research into tiny ‘ghost particles’ – but it was the first to find neutrinos coming from deep space",
    "published": "2026-10-08 02:07 UTC"
@@ -753,12 +759,6 @@
    "source": "Global Voices",
    "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
    "published": "2026-09-30 14:09 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Equating protest with terrorism: A narrative against dissent",
-   "published": "2026-09-29 00:00 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Pacific people pay exorbitant prices for energy. Rich countries should back their renewable transition",
+   "published": "2026-10-08 04:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Apple’s new age verification is a game-changer for kids’ safety online. We need the rest of big tech to follow",
    "published": "2026-10-08 03:44 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Queensland is leading Australia’s fight against illicit tobacco. Should other states follow suit?",
    "published": "2026-10-08 03:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: why Victoria’s unpredictable election matters nationally",
-   "published": "2026-10-08 02:24 UTC"
   },
   {
    "region": "Oceania",
