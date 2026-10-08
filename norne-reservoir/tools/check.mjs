@@ -7,7 +7,7 @@
 //      (js/section.js added by plan 0012's package 3.4, js/pane.js by 3.4b);
 //      the face's and OFL.txt's sha256 are the house's; NOTES.md and About credit the face;
 //   5. the data is untouched: each data file's sha256 is the one recorded before the pass;
-//   6. miniapp.json is valid, at version 2.3.1 (HOUSE 13; plan 0012's package 3.4b from 2.2, 2.3.1 the play clamp);
+//   6. miniapp.json is valid, at version 2.4 (HOUSE 13; plan 0012's package 3.4b from 2.2, 2.3.1 the play clamp, 2.4 D16 and D17);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
 //   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line, its
 //      first Sources and credits paragraph; no #credits and no other credit on the front (HOUSE 4.15);
@@ -20,7 +20,8 @@
 //  11. no transition or animation on the track, the time row or the lead;
 //  12. innerHTML only ever `= ''`; no insertAdjacentHTML, outerHTML, document.write, eval, new Function;
 //  13. config.json's colormaps, colormapsDark and wellColors and style.css's chart, cut and plate tokens
-//      equal tools/art/palette.py's, and palette.py passes;
+//      equal tools/art/palette.py's, and palette.py passes; plan 0012 D16's plasma and viridis in both themes,
+//      every other scale as 2.3.1 stored it; D17's compass in the plate, the instrument line down to the scale;
 //  14. the tells: no box-shadow, backdrop-filter, text-shadow, `transition: all`, uppercase or
 //      letter-spacing; no middle dot, →, ➤ or "..." in what the app writes; both theme-color metas;
 //      the @font-face rule word for word; the house's chrome tokens in both themes; one family, no
@@ -136,7 +137,7 @@ exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js']);
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Norne Reservoir' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.3.1',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.4',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -233,6 +234,18 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const cfg = JSON.parse(read('config.json'));
   const same = pal && ['colormaps', 'colormapsDark', 'wellColors'].every((k) => JSON.stringify(cfg[k]) === JSON.stringify(pal[k]));
   ok(!!same, `config.json's colormaps, colormapsDark and wellColors equal palette.py --json (${pal ? Object.keys(pal.colormaps).length : 0} scales, ${pal ? Object.values(pal.colormaps).concat(Object.values(pal.colormapsDark)).reduce((n, s) => n + s.length, 0) : 0} stops)`);
+  // plan 0012 D16: plasma for pressure and viridis for the rock, matplotlib's tables, the same stops in both themes;
+  // the saturations, the categories, the layers exactly as 2.3.1 stored them (their sha256)
+  const D16 = ['pressure', 'rock', 'sand', 'depth'], ENDS = { plasma: ['#0d0887', '#f0f921'], viridis: ['#440154', '#fde725'] };
+  const d16 = D16.every((k) => { const s = cfg.colormaps[k], e = ENDS[k === 'pressure' ? 'plasma' : 'viridis']; return s && s.length === 33 && JSON.stringify(s) === JSON.stringify(cfg.colormapsDark[k]) && s[0] === e[0] && s[32] === e[1]; });
+  const keptKeys = Object.keys(cfg.colormaps).filter((k) => !D16.includes(k));
+  const kept = crypto.createHash('sha256').update(JSON.stringify(keptKeys.map((k) => [k, cfg.colormaps[k], cfg.colormapsDark[k]]))).digest('hex');
+  ok(d16 && kept === '3e57d70a4d1ec01ce2a88ed0b6705cb92d722c9124b4edd747b75df95c686201',
+    `D16: ${D16.join(', ')} are plasma (pressure) and viridis, 33 stops, one set for both themes; ${keptKeys.join(', ')} as 2.3.1 stored them (sha256 ${kept.slice(0, 12)})`);
+  const plate = html.slice(html.indexOf('<main class="plate"'), html.indexOf('</main>')), inst = (html.match(/<div class="instruments" id="instruments">([\s\S]*?)<\/div>/) || [])[1] || '';
+  ok(/<span class="compass" id="north" role="img" aria-label="North arrow"><svg[^>]*aria-hidden="true"><circle[^>]*\/><g id="needle"><path class="n"[^>]*\/><path[^>]*\/><\/g><text id="north-n">N<\/text><\/svg><\/span>/.test(plate) && !/north|needle/.test(inst) && /id="scale"/.test(inst)
+    && /keepOut\(\) \{\n  const out = \[\];\n  for \(const id of \['readout', 'keys', 'focus-exit', 'north'\]\)/.test(app) && /\$\('focus-exit'\), \$\('north'\)\]\)/.test(app),
+    'D17: the compass in the plate (its disc, a two-tone needle, the N), named "North arrow" until app.js says where north is; the instrument line holds the scale alone; labels and the card keep off the compass');
   const c = code(css, 'x.css'), light = c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)')), dark = c.slice(c.indexOf('@media (prefers-color-scheme: dark)'));
   const tok = (block, name) => ((block.match(new RegExp(`--${name}:\\s*([^;]+);`)) || [])[1] || '').trim().toLowerCase();
   const sig = run.stdout.match(/light: ink (#[0-9a-f]{6})[\s\S]*?water \(ink at ([\d.]+)\)[\s\S]*?dark: ink (#[0-9a-f]{6})[\s\S]*?water \(ink at ([\d.]+)\)/);

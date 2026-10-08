@@ -4,17 +4,18 @@ An offline 3D viewer for the Volve oil field's reservoir simulation model (North
 
 What it does:
 
-- Shows the 183 545-cell corner-point grid colored by oil, water or gas saturation, pressure, porosity, horizontal or vertical permeability, depth, fluid-in-place region or layer, with the property's scale under the picture. (The deck has no net to gross and names no formations, so neither is offered.)
+- Shows the 183 545-cell corner-point grid colored by oil, water or gas saturation, pressure, porosity, horizontal or vertical permeability, depth, fluid-in-place region or layer, with the property's scale under the picture. (The deck has no net to gross and names no formations, so neither is offered.) Pressure is drawn in plasma and the rock (porosity, both permeabilities, depth) in viridis, the same in both themes; the saturations keep their green, blue and red.
+- Shows a compass at the plate's top left that turns with the model: its needle points where north lies in the view, shortening as north leans away, and VoiceOver says which way that is.
 - Plays the run from 31 Dec 2007 to 1 Oct 2016 in 37 report dates: an 11-day first step, then a quarter apart (86 to 100 days). Every word for a period (the cut's, the cards', About's) is read from the dates themselves.
 - Draws the field's water cut on the player's track (the signature, "the cut"): each report date a column as wide as its interval and as tall as the liquid the field's wells lifted per day over it, oil in ink at the foot and water as a paler ink stacked on it, at 1.5 px per 1 000 Sm³/d.
 - Draws the wells by what they are doing at the date shown: a producer a solid line, an injector a dashed one, a shut well thin and faint. A well's card gives the simulated rates, the rates the field reported over the same interval, and the rates the deck sets from that date; the rates chart under More controls draws the simulated rates and, dotted, the reported ones.
 - Explodes the model by layer or by region; cuts the grid by I, J and K ranges and filters cells by value.
 - Shows a vertical section A–A′ under the model (beside it on a wide screen or a phone on its side), from the Section key: along an **inline** or a **crossline** of the seismic survey (its own traces, 25 m apart), **along** or **across** the field through the grid, or along a line **drawn** on the model. On it, the seismic at its own depths and the cells the plane cuts as blocks in the shown property and report date, with the Hugin Formation's top and base as interpreted, the wells within 150 m and the inactive gaps hatched, on one depth axis in meters below mean sea level. Under More controls, Section chooses what it shows (the seismic, the model or both), the seismic's gain and ramp (gray, or red and blue), and how strongly the cells cover the seismic.
-- Sweeps that line across the field with the slider under the section (‹ › one step at a time): through every inline or crossline of the survey, from Along or Across through the grid's rows or columns, or a drawn line parallel to itself; the line moves on the model, and the section stays sharp while scrubbed.
-- Makes the section taller (beside the model, wider) by dragging the pane's edge or double-tapping it; a taller pane stretches the section to fill it and says by how much.
+- Sweeps that line across the field with the slider under the section (‹ › one step at a time): through every inline or crossline of the survey, from Along or Across through the grid's rows or columns, or a drawn line parallel to itself; the line moves on the model, and the section follows the slider, the newest place first.
+- Makes the section taller (beside the model, wider) by dragging the pane's edge or double-tapping it; a taller pane stretches the section to fill it and says by how much (the stretch is held while the edge is dragged and set when it is let go).
 - Tap a cell or a well's name for its values on a card; double-tap a cell to fly to it; the zoom keys zoom without a pinch.
 - Switches every quantity between SI and US units with the key at the top right.
-- Hides its controls (focus mode), remembers the view, date, property, units, the section and its display in `localStorage`, and has light and dark themes. Works from 320 px wide and on a phone on its side.
+- Hides its controls (focus mode; the model keeps its compass), remembers the view, date, property, units, the section and its display in `localStorage`, and has light and dark themes. Works from 320 px wide and on a phone on its side.
 
 ## The seismic, and how it is drawn
 
@@ -24,6 +25,7 @@ On the section (`js/seismic.js`, tested by `tools/test_seismic_display.mjs`):
 
 - Across the survey the display is bilinear between the four traces around each point; on an inline or a crossline that is the line's own traces and the blend between neighbors. Where the screen's columns lie farther apart than half a trace, each column averages points across its width first.
 - In depth it is a windowed sinc (Kaiser, six samples either side), widened to the rows' own Nyquist where the screen's rows lie farther apart than the samples, so nothing aliases.
+- That is the section at rest, at the screen's own pixels. While the view is dragged, resized or scrubbed, the seismic is drawn from its own samples (a column every 25 m along the line, a row every 5 m) or from its last full image laid on the new plot, scaled and smoothed by the screen; 150 ms after the finger is up it is resampled as above again. About says so.
 - The amplitude is multiplied by the gain and drawn through a ramp symmetric about zero; no automatic gain control. The key under the section prints the signed amplitude at each end of the ramp, negative at the left. In gray, positive is dark on a light page and bright on a dark one; in red and blue, positive is red. About says so beside the polarity line.
 - The model's cells are not samples: each is the block it is, never interpolated. Seismic and model each sit at their own depths on the one axis: nothing is shifted, stretched or tied.
 
@@ -117,8 +119,11 @@ As Norne Reservoir's (its `NOTES.md`), with these differences:
 
 - Loading (`app.js`): `main()` also reads `data/seismic.json`, `seismic.bin`, `horizons.bin`, `validation.json` and `ATTRIBUTION.txt`, checking each binary's size against the grid it describes.
 - The section's families (`secLine()`, `sweepOf()`): the survey's lines come from `surveyLine()` and `surveyNumbers()` in `js/seismic.js`; Along, Across, Draw and the grid's slices are Norne's.
-- The seismic layer (`seisLayer()`): one image at the plot's own device pixels from `colPlan()` (bilinear across), `rowPlan()` (the windowed sinc in depth) and `render()`, drawn 1:1 and kept while the line, size, stretch, gain and ramp stay; a new report date redraws only the cells over it.
+- The seismic layer (`seisJob()`, `seisStep()`, `seisWork()`): one image at the plot's own device pixels (the screen's, up to three a point: `secDpr()`) from `colPlan()` (bilinear across), `rowPlan()` (the windowed sinc in depth) and `renderCols()`, made at rest a few columns a frame (about 6 ms of each), drawn 1:1 and kept while the line, plot, gain and ramp stay; a new report date redraws only the cells over it.
+- While the view moves (`moving()`: the edge, the sweep, a line or its end), `drawSection()` never starts that render: it lays the last full image on the new plot by distance and depth (`relay()`), or on a new line draws `seisPreview()` (the seismic's own traces and 5 m samples, scaled by the canvas). The cells are drawn anew on a new line and laid on anew on the same one; the gaps and the outline are laid on anew on the same line and left off on a new one. The pane's stretch is held while its edge is dragged. 150 ms after the finger is up and nothing has changed (`SEC_REST`), everything is drawn in full again.
 - The depth window (`secWindow()`): with the seismic shown, the cut's depths and 150 m above and below; with the model alone, Norne's padding.
+- Color: `config.json`'s `colormaps` and `colormapsDark`, which `tools/art/palette.py` writes; pressure and the rock from matplotlib's plasma and viridis tables, the same stops in both themes.
+- The compass (`updateGauge()`, as Norne Reservoir 2.4's): north projected at the camera's target turns and shortens its needle, places its N and names the direction; the card and the well names keep off it.
 - The horizons (`horizonRuns()`, `horizonAt()`): bilinear on the interpretation's grid, broken where a node around has no pick.
 - About (`writeAbout()`, `writeChanges()`): every figure from `model.json`, `seismic.json`, `validation.json`, and ATTRIBUTION's own statement of the changes, word for word.
 - Test hook: `window.__volve`.
@@ -134,11 +139,13 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tools/shoot.mjs   # the app
 python3 volve/tools/art/palette.py [--json]                    # from Template/: every color and contrast in ART.md
 ```
 
-Budgets (`tools/check.mjs` prints the truth): app code at most 312 000 bytes (311 642 measured), the ZIP at most 33 600 000 bytes (about 33.4 MB measured), fonts at most 160 000 bytes.
+Budgets (`tools/check.mjs` prints the truth): app code at most 322 500 bytes (321 958 measured in 1.1), the ZIP at most 33 600 000 bytes (about 33.4 MB measured), fonts at most 160 000 bytes.
 
 ## Credits and license
 
 The data in `data/` comes from the Volve field data set, © Equinor ASA and the former Volve license partners, under Equinor's "Terms and conditions for licence to data - Volve" (`data/TERMS-Volve-2026-10-07.txt`); keep `data/ATTRIBUTION.txt` with it. It is shared free, not for sale, and not connected with, sponsored or endorsed by Equinor or the partners. Their names belong in the app's About and in ATTRIBUTION only, never in anything that markets Snuggery (clause 4). About credits the data as its first line under Sources and credits, one tap from every screen and from focus mode by the About key, and states every adaptation as ATTRIBUTION does.
+
+Plasma and viridis are the colormaps Nathaniel Smith and Stéfan van der Walt made for matplotlib (viridis with Eric Firing); `config.json`'s stops for pressure and the rock are sampled from matplotlib 3.9.4's tables.
 
 Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
 

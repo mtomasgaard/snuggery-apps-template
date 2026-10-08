@@ -262,7 +262,8 @@ and the section's cells draw it, the end is dE 0.027 to 0.039 from white (1.06 t
 0.086), about as on the gray (0.030 to 0.044, 1.08 to 1.09:1), and not enough to see a pale cell's
 edge by: so the legend's bar keeps its `--line-strong` frame at 60 %, and the section strokes a 1.5 px
 `--line-strong` rim under its cells, whose outer half (3.83:1 on white) outlines the cut and its gaps.
-The scales themselves did not move: `palette.py --json` prints the same stops on white, and
+Since 2.4 this paragraph is about the house ramps alone (the saturations and the layers): pressure and
+the rock start dark (D16, below). The scales themselves did not move: `palette.py --json` prints the same stops on white, and
 `config.json` is unchanged.
 
 **The ten scales** (`palette.py` prints each one's stops; every one is monotone in lightness, its two
@@ -275,16 +276,50 @@ the OKLab path):
 | `oil` | Oil saturation, 0 to 1 | oil green, the reservoir-display convention the stock app used | `#f5f8f1` to `#005d38` | `#343631` to `#8ff0b9` |
 | `water` | Water saturation, 0 to 1 | water blue | `#f1f8fd` to `#234993` | `#31363a` to `#c3d8ff` |
 | `gas` | Gas saturation, 0 to 0.90 | gas red | `#fdf5f1` to `#8d1920` | `#3a3431` to `#ffc8c3` |
-| `pressure` | Pressure, 200 to 450 bar | magma's violet through rose to orange | `#f8f5ff` to `#773a00` | `#383243` to `#ffcba9` |
-| `rock` | Porosity, 0.13 to 0.35; both permeabilities, log | viridis's hue path, violet through blue and teal to green | `#f7f5ff` to `#305a12` | `#363243` to `#b8e89e` |
-| `sand` | Net to gross, 0 to 1 | new: sand, since net to gross is the clean-sand share of the rock (the stock cividis carried no meaning of its own) | `#fbf6ee` to `#6d4201` | `#39352f` to `#ffcd98` |
-| `depth` | Depth, the model's own 2 467 to 3 062 m | blue as charted water depth | `#e1fefd` to `#31478e` | `#223a3a` to `#c7d7ff` |
+| `pressure` | Pressure, 200 to 450 bar | since 2.4 matplotlib's **plasma** (plan 0012 D16): blue-violet through magenta and orange to yellow, dark to light in both themes; magma's violet-to-orange path printed twice before | `#0d0887` to `#f0f921` | the same stops |
+| `rock` | Porosity, 0.13 to 0.35; both permeabilities, log | since 2.4 matplotlib's **viridis** (D16): violet through blue and teal to green and yellow, dark to light in both themes; viridis's hue path printed twice before | `#440154` to `#fde725` | the same stops |
+| `sand` | Net to gross, 0 to 1 | since 2.4 **viridis**, as the rock (D16); a sand path, `#fbf6ee` to `#6d4201` light, before | `#440154` to `#fde725` | the same stops |
+| `depth` | Depth, the model's own 2 467 to 3 062 m | since 2.4 **viridis** (D16), the shallowest violet and the deepest yellow; blue as charted water depth before | `#440154` to `#fde725` | the same stops |
 | `layers` | Layer (K), 1 to 22 | new: a stone sequence, since K is ordered and 22 categorical colors could not be told apart | `#f1e2cf` to `#723c2e` | `#4d4232` to `#ffc9bb` |
 
-**What was given up, plainly.** In the light theme the high ends of viridis and magma are no longer
-yellow: a yellow cannot be dark, and the negative prints "more" darker, so the rock scale ends in a
-deep green and pressure in a burnt orange. In the dark theme the scales read as their originals did.
-A value has one color per theme (HOUSE 3.2), and the legend under the plate is always the theme's.
+**Plan 0012 D16: plasma and viridis, the owner's exception (2.4).** The owner did not like the pale
+single-hue ramps for pressure, porosity, permeability and the like (*"i dont like the colortables for
+pressure, porosity, permeability etc"*), shown against Turbo, plasma and viridis, and Jet on Volve
+(`docs/marketing/reference/0012-ramps-board.png`), and chose plasma for pressure and viridis for the
+rock: porosity, both permeabilities, net to gross and depth. The stops are matplotlib 3.9.4's own
+256-entry tables sampled at the 33 places `lut()` reads (`palette.py`'s `MPL`, its source file and
+hash named there), the same in both themes. The saturations keep their own ramps exactly, at the
+owner's word (*"keep the original ones for the saturations"*), and so do the layers, the formations,
+the segments and the wells' colors; `check.mjs` pins those scales as 2.3.1 stored them. **This is the owner's
+exception to the tonal budget for data colors** (HOUSE 3.2, its dated line): these four scales run dark
+to light in both themes, so they are not printed twice, do not live in the data band, and in the light
+theme "more" pressure or porosity is the lightest color, nearest white in lightness. What the band was
+for is measured on them directly (`palette.py`, the block headed D16 and every block over all bases):
+
+- **The darkest end on the dark plate** (`#0c1316`): plasma's `#0d0887` stands off it by dE 0.211
+  (1.25:1) unshaded, viridis's `#440154` by 0.173 (1.23:1); on a top face from the default camera
+  (0.83) by 0.172 and 0.140; on a face turned from both lamps (0.42) by 0.092 and 0.083 at 1.04:1, and
+  at a cell edge (a further 0.55) by 0.081 and 0.084. So a low-pressure or tight cell's sides read as
+  a deep violet on the slate by hue, hardly by lightness; its top faces and the lit model around it
+  carry the shape. Few cells sit there: pressure under 200 bar and porosity at the scale's foot.
+- **The light end on white**: plasma's `#f0f921` stands off `#ffffff` by dE 0.212 at 1.15:1 unshaded,
+  viridis's `#fde725` by 0.203 at 1.26:1; on a top face by 0.252 and 0.258 (1.70 and 1.86:1), at the
+  brightest face by 0.217 and 0.214 (1.29 and 1.41:1). A strong yellow on white, told by hue and by
+  the cell edges; the legend's bar keeps its `--line-strong` frame at 60 % and the section its 1.5 px
+  `--line-strong` rim (3.83:1), so the bar's and the section's light ends have an edge. The other two
+  pairs are far apart: the light ends on the dark plate 14.85 and 16.31:1, the dark ends on white
+  15.24 and 14.98:1.
+- **Over every stop of the new tables**, at every light factor: the labels' ink on its halo worst
+  12.38:1 light and 10.62:1 dark; a well's core on its casing worst 4.17 and 4.31; the ghost key 3.76
+  and 4.43; the compass (section 3) 3.55 and 3.64 for its fainter arm.
+- Both tables are monotone in OKLab lightness (plasma L 0.293 to 0.944, viridis 0.285 to 0.918), their
+  ends apart by dE 0.626 or more in all four visions, every eighth a step of 0.080 or more on a top
+  face, and the stored stops within dE 0.0038 of the table as `lut()` interpolates them.
+
+What was given up, plainly: the house's rule that "more" stands further from the ground in both
+themes, for these four scales; and a value of pressure or rock now has one color in both themes,
+where the house prints it twice. The saturations, the layers and the categories are as they were, and
+the legend under the plate is always the scale the plate uses.
 
 **Ends the data goes past, printed open.** Measured over all 110 report dates
 (`python3 tools/.work/ranges.py`): pressure spans 56.4 to 612.5 bar against the scale's 200 to 450,
@@ -319,7 +354,7 @@ injector red, a shut well gray), fitted so each core stands off its casing over 
 | --- | --- | --- | --- |
 | Producer | `#90faa8` | light 8.59, dark 13.70 on the bare casing (over the white ground since 2.2); worst 4.17 or more over any base | a solid line |
 | Water injector | `#7cc2fd` | 5.75, 9.17 | a dashed line |
-| Gas injector | `#ef806f` | 4.17, 6.66; worst over any base 4.17 (light, over white) and 4.37 (dark) | a dashed line |
+| Gas injector | `#ef806f` | 4.17, 6.66; worst over any base 4.17 (light, over white) and 4.31 (dark, over plasma's yellow; 4.37 before 2.4) | a dashed line |
 | Shut | `#6f7274` | 2.27, 3.62: faint on purpose | 60 % of the width, half see-through |
 
 The casing is the stock dark outline (`#0f1c23` at 0.85, 1.25 px each side), kept. Roles separate by
@@ -331,11 +366,11 @@ the green oil); the new cores are all lighter than any data color's dark end and
 
 **Labels on the plate** (well names, formation names when exploded, and the section's names): `--ink`
 on a 3 px halo at 0.85 of the theme's ground (`#ffffff` light since 2.2, `#f6f9fa` before; the plate
-ground `#0c1316` dark): worst 12.63:1 and 10.83:1 over every base (text, ≥ 4.5).
+ground `#0c1316` dark): worst 12.38:1 and 10.62:1 over every base (text, ≥ 4.5; 12.63 and 10.83 before 2.4's plasma and viridis).
 
 **The ghost key** (focus mode): a 1.4 px stroke at rest (72 %) over a 3.4 px halo: light `#0f1c23`
-over `rgb(246,249,250)` at 0.60, worst 3.91:1; dark `#f2f4f1` over `rgb(10,16,19)` at **0.70** (the
-house's 0.45 measured 2.44:1 over the print's bright ends), worst 4.68:1.
+over `rgb(246,249,250)` at 0.60, worst 3.76:1 (3.91 before 2.4); dark `#f2f4f1` over `rgb(10,16,19)` at **0.70** (the
+house's 0.45 measured 2.44:1 over the print's bright ends), worst 4.43:1 (4.68 before 2.4).
 
 **The rates chart** (in the controls sheet, on `--page`): oil at its scale's far end, water a step
 nearer the page, gas at 0.85, produced solid and injected dashed: light `#005d38` 8.01, `#4479b8`
@@ -365,8 +400,8 @@ areas outside):
 |                                          |     only while the files load or on an error)
 | Oil  Water  Gas  Pressure | Por [About][SI] | 44  the property words; About; the units key
 +------------------------------------------+
-| [card]                              [+]  |
-|                                     [-]  |     the plate: the grid, printed per theme,
+| (N)                                 [+]  |     the compass, top left (2.4);
+| [card]                              [-]  |     the plate: the grid, printed per theme,
 |                                     [#]  |     wells on their casing, names on halos;
 |                                     ---  |     keys: Zoom in, Zoom out, Show the whole
 |                                     [W]  |     field / Wells, Section / Hide the controls
@@ -383,7 +418,7 @@ areas outside):
 +------------------------------------------+
 | Oil saturation    |=================|    | 30  the legend: title, bar, ticks, open ends
 |                   0  0.25  0.5  0.75  1  |
-| (N)  3 km |------| vertical x5           | 20  the instrument line
+| 3 km |------| vertical x5                | 20  the instrument line: the scale
 | - producer  -- water inj.  -- gas  . shut| 15  the wells key (while Wells is on)
 | [#] Oil lifted  [ ] Water lifted  on the track | 15  the cut's key
 +------------------------------------------+
@@ -420,7 +455,8 @@ more at every stop, with and without the section. Wide screens (≥ 820 x 480) k
 | **Row of words** | the twelve properties as words in full, `role="radio"` in a `role="radiogroup"` named `Property`, the tracer under the chosen one; a 1 px `--line` divider between the four that change with time and the eight that do not | `Oil`, `Water`, `Gas`, `Pressure` (the camera's words, kept exactly), then `Porosity`, `Permeability`, `Vertical permeability`, `Net to gross`, `Depth`, `Formations`, `Segments`, `Layers`. The stock `Perm X`, `Perm Z`, `NTG` and `Regions` go (words in full; owner call 4 for Segments). Scrolls sideways inside itself, its right edge fading over 22 px while more words lie past it (so it reads as a row that scrolls, not one cut off at the About key); 44 px hits. The stock 3 px gradient underline (`--grad`, a swatch, HOUSE 4.3) goes: the legend shows the scale. One tab stop for the group, the chosen word; the arrow keys move the choice inside it, as in the explode words. |
 | **Key column** | `--sheet` plates on the plate's right edge, inset 8 px: `Zoom in`, `Zoom out`, `Show the whole field` / `Wells`, `Section` / `Hide the controls` | 44 x 44 hits drawn 36 x 44, 16 px marks in 1.5 px strokes, `--ink-2` at rest. Zoom keys move `S.cam.dist` by 0.7 and 1/0.7 through `flyTo` (one-finger and keyboard zoom, WCAG 2.5.1, where the stock app zoomed by pinch or wheel only). `Show the whole field` (the camera's key, the stock round frame button) draws four corner brackets around a small three-by-two block of cells, not the house's Whole world circle. `Wells` (`aria-pressed`, the stock `t-wells` checkbox moved) draws three wellheads on a line, each dropping a stroke of a different length. `Section` (`aria-pressed`) shows and hides the section A–A′: a line over a vertical plane with a block cut out of it. Where six keys do not fit the plate's height (a plate under 302 px: the section open with the sheet raised, a phone on its side), they run as a row along the plate's top; where that row does not fit the plate's width either (the section beside the model), they take whichever of two forms fits inside the plate and leaves the model larger, measured against the rooms it is fitted to: two rows in the plate's top right (the zoom plate over the other two; with the sheet raised beside the section at 844 x 390) or the three plates side by side (the 160 px strip). `Show the whole field` fits the field by its projected box (two corners of every fourth cell, as exploded, and the well heads) to both of the plate's axes, in the room left of the key column or below the key row, with 26 px above for the names; a lens shift puts the field's middle at that room's middle. A camera still at the fit is fitted again whenever the plate changes size (focus mode, the sheet's stops, a turn of the phone, the explode, the vertical stretch); one moved by hand keeps its zoom against the fit. On a plate much wider than tall the eye comes down from 36° toward 24°. |
 | **Caption band: the legend** | 30 px: the property's label from `config.json` as the title (`Oil saturation`, 600 at 11.5 px `--ink`), the 6 px bar in the remaining width, ticks at round values, the unit after the last label | Painted from the same 256-entry `lut()` the plate uses, unshaded, over `--page`; 1 px `--line-strong` frame at 60 %, square ends. Open ends as section 2 lists. Log scales tick at decades (`≤ 1`, `10`, `100`, `1 000`, `4 000 mD`). Categories: named swatches in one row (`Garn`, `Ile`, `Tofte`, `Tilje`; `1` to `4` titled `Fault segment`); `Layers` a bar with ticks at `1`, `5`, `12`, `19`, `22` (the four formations' first layers and the last). **This ends the recorded bug B1**: the stock bar stood on the plate, centered on its height, and met the header whenever the plate shrank. |
-| **Caption band: the instrument line** | 20 px: the north mark, then the scale bar and its words | The stock compass and scale bar leave the plate (HOUSE 4.1), as Besseggen's did. North: a 16 px drawn needle in `--ink` (the south arm `--ink-3`) with `N` in 10.5 px; its accessible name kept from the stock app (`North arrow: north is toward the top right of the view.`). Scale: a 2 px `--ink` bar with 4 px end ticks, its length before it (`3 km`) and `vertical ×5` after it in 11 px `--ink-2`. `updateGauge()` moved, not rewritten; written through `units.js`; never transitioned. |
+| **The compass** (2.4, plan 0012 D17) | the plate's top left, 8 px in (8 px under the top safe area in focus mode): a 36 px disc of `--plate` at 0.80 with a 1 px `--line` rim; a two-tone needle 17 px long and 6.4 px across, the north arm `--ink`, the south `--ink-3`; `N` at the north tip, 11 px 650 `--ink`, upright | The owner: *"And the north arrow seems to have gotten lost?"* The house pass had moved the stock compass into the instrument line as a 16 px needle, which, turned and foreshortened, read as a smudge. Top left, because Snuggery's full-screen exit control sits top right and the keys run down the right. It turns with the model from the projection `updateGauge()` already made: rotated to north at the camera's target and shortened as north leans into the view (north's screen length against east's), never under half its length and never narrower; the N moves with the tip. It takes no touch (a drag on it turns the model). Its name is the one the needle had: `North arrow: north is toward the right of the view.` Shown in every state, focus mode and on its side included; the card goes below it, 4 px clear (6 px from a key, whose hit the card's Close must not meet; the compass takes no touch), the well names and their 44 px hits keep off it, and a tapped cell's ring under it hides. 36 px and not 38: at the sheet's raised stops (a 405 px plate) the full card still fits beside a cell anywhere below it, with 1.7 px to spare; 38 px and 6 px left it 0.3 px short and the card compact. Over every base at 0.80 (`palette.py`): the north arm and the N worst 10.99:1 light and 8.92:1 dark, the south arm 3.55 and 3.64 (marks, ≥ 3); the arms 3.10 and 2.45:1 apart. `shoot.mjs` checks it at rest, turning, at every sheet stop, with the section, in focus mode, on its side and under every card. |
+| **Caption band: the instrument line** | 20 px: the scale bar and its words | The stock compass and scale bar left the plate (HOUSE 4.1), as Besseggen's did; from the house pass to 2.3.1 north was a 16 px needle here, and since 2.4 it is the compass on the plate (above). Scale: a 2 px `--ink` bar with 4 px end ticks, its length before it (`3 km`) and `vertical ×5` after it in 11 px `--ink-2`. `updateGauge()` moved, not rewritten; written through `units.js`; never transitioned. |
 | **Caption band: the wells key** | 15 px, while `Wells` is on: four drawn samples (solid green, dashed blue, dashed red, thin gray) and `Producer`, `Water injector`, `Gas injector`, `Shut` at 10.5 px | A group named `Wells key`. The stock key left the header, where it sat over the model (B3). |
 | **Caption band: the cut's key** | one 15 px line at 11.5 px `--ink-2`: a 10 px swatch of the cut's ink and `Oil lifted`, a swatch of its water tint (with the 1 px `--ink-3` top the track draws) and `Water lifted`, then `on the track` | Since 2.2, in place of the caption line that said the month's figures (section 1, test 3; HOUSE 4.15's dated Norne departure). The caption band holds no credit: `Data: Norne benchmark, Equinor and the Norne partners via the Open Porous Media initiative, ODbL 1.0` (owner call 6) is About's first *Sources and credits* paragraph, word for word, with `model.json`'s `source` sentence and the license after it. |
 | **Player: time row** | the one large figure `1 Dec 2006` (600 at 21 px); the lead at right, 12.5 px `--ink-2`: `9.1 years after first oil`, `25 days after first oil`, or `First oil` at the first report date | Report dates are instants (the restart's date), so the figure carries the day; the first is `6 Nov 1997`. By hand in `js/units.js`, day before month, the same on every locale. VoiceOver hears `1 December 2006`. Below 60 days the lead counts days, then years to one decimal. Empty until boot completes. Nothing in the row transitions. The stock 30 px condensed date at the header's top right goes, which also ends its overlap with Snuggery's full-screen exit control on iOS 18 (B2). |
@@ -442,7 +478,7 @@ more at every stop, with and without the section. Wide screens (≥ 820 x 480) k
 | **Safe areas** | HOUSE 4.14 | Every band pads itself; the sheet pads the bottom inset; the card and the ghost key sit under the top inset in focus mode. Phone checks. |
 
 **Where the card goes, and its compact form** (`placeCard()` in `app.js`; HOUSE 4.7 carried to a
-short plate). The card goes to a corner of the room the keys and the ghost key leave, 6 px clear of
+short plate). The card goes to a corner of the room the keys, the ghost key and (since 2.4) the compass leave, 6 px clear of
 their hits, and never within 10 px of the selection's mark (since 2.2 counting the 4 px under a clipped card's foot rule, which had let the card reach up to 4 px past its room): the tapped cell's ring (18 px with its
 outline), the spot the finger touched, or a well's head with its name over it. The corners are tried
 in the house's order, top-left, then bottom-left, then the right-hand side, top or bottom; the first
@@ -704,6 +740,12 @@ ledger, which put the pass at about 110 000 B.
 6 387, `js/pane.js` 5 212), 33 726 B more than 2.2 for the edge, the sweep and 2.3.1's play clamp, within the 256 000 B the
 template ruled for 2.3; fonts and the data unchanged; the ZIP about 15.4 MB.
 
+
+**As built, 2.4** (`node tools/check.mjs`; plan 0012 D16 and D17): app code 255 990 B of the 256 000
+(`app.js` 137 806, `style.css` 37 482, `js/section.js` 33 833, `index.html` 20 205, `js/track.js` 7 840,
+`js/units.js` 7 225, `js/data.js` 6 387, `js/pane.js` 5 212), 470 B more than 2.3.1 for the compass,
+its keep-outs and the needle's removal from the instrument line, with three comments shortened to fit;
+the colors are `config.json`'s, not code. Fonts and the data unchanged.
 ---
 
 ## 7. The generated-page tells, answered

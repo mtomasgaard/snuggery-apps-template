@@ -11,9 +11,9 @@
  * pane: the pane; edges: the elements that are its edge (role="slider"; the one shown is used); view:
  * the flex box it shares (a column under, a row beside); keep: { up, side } the other view's minimum;
  * get() and set(f): the saved fraction; onSize(): the size changed (redraw); onEnd(): a change is done
- * (save); label(side): the edge's name.
+ * (save); onDrag(on): a finger began or ended a drag of the edge; label(side): the edge's name.
  */
-export function paneEdge({ pane, edges, view, keep, get, set, onSize, onEnd, label }) {
+export function paneEdge({ pane, edges, view, keep, get, set, onSize, onEnd, onDrag = () => {}, label }) {
   const side = () => getComputedStyle(view).flexDirection === 'row';
   /** Compact and tall in px, along the edge's direction, as the view stands now. */
   const range = () => {
@@ -61,6 +61,7 @@ export function paneEdge({ pane, edges, view, keep, get, set, onSize, onEnd, lab
       if (!drag) return;
       const d = drag.at - (drag.r.s ? e.clientX : e.clientY);   // up, or to the left: larger
       if (!drag.moved && Math.abs(d) < 4) return;
+      if (!drag.moved) onDrag(true);
       drag.moved = true;
       const r = drag.r, p = Math.min(r.m, Math.max(r.c, drag.p + d));
       if (r.m > r.c) to((p - r.c) / (r.m - r.c), r);
@@ -69,7 +70,7 @@ export function paneEdge({ pane, edges, view, keep, get, set, onSize, onEnd, lab
       const d = drag;
       drag = null;
       if (!d) return;
-      if (d.moved) { onEnd(); return; }
+      if (d.moved) { onDrag(false); onEnd(); return; }
       if (e.type !== 'pointerup') return;
       if (lastTap && e.timeStamp - lastTap.t < 400 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) { lastTap = null; toggle(); eatClick(); }
       else lastTap = { t: e.timeStamp, x: e.clientX, y: e.clientY };

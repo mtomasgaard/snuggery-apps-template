@@ -10,6 +10,10 @@ built, and the choices an owner may want to reverse, are in `tools/DECISIONS.md`
 
 **Version 1.0 (2026-10-07, the template's plan 0012).** Measured on the build Mac with the commands
 named. Load, frame and memory figures are headless WebKit and Chromium: a trend, never phone evidence.
+**Version 1.1** takes Norne Reservoir 2.4's two changes of plan 0012: plasma and viridis for pressure and
+the rock (D16) and the compass back on the plate (D17), recorded below with Volve's own measurements,
+and makes the section follow the finger: drawn from what it has while the view moves and in full at rest
+(section 2, *The seismic's drawing*).
 
 ---
 
@@ -19,8 +23,9 @@ The house chrome whole: one face, gray chrome, the row of words, the key column,
 the player and the app's own track, the readout card, About, focus mode, SI and the no-tells rules.
 The ground is white (`#ffffff`, Norne's, HOUSE 12); the front holds the name, the view and its
 controls, and the sources, credits and edition are in About, which the `About` key opens from every
-screen and from focus mode. The caption band keeps the legend, the instrument line (north, the scale,
-the vertical stretch), the wells key and the cut's key.
+screen and from focus mode. The caption band keeps the legend, the instrument line (the scale and
+the vertical stretch; north was a 16 px needle there until 1.1, and is now the compass at the plate's
+top left, as Norne 2.4's), the wells key and the cut's key.
 
 **The signature is the cut**, on the player's track, as Norne's: each report date a column over its
 own interval on a linear day axis, as tall as the liquid the field's wells lifted per day over that
@@ -39,19 +44,41 @@ darker), the dark theme a print (more of it brighter), lit by the same shader.
 ## 1. Palette (`python3 volve/tools/art/palette.py`, from `Template/`, ends `ALL CHECKS PASS`)
 
 Norne's tokens, scales, wells, casing, chart colors, labels and ghost key, unchanged, and checked
-again for Volve:
+again for Volve; since 1.1, Norne 2.4's plasma and viridis for pressure and the rock, and its compass:
 
 - **Chrome tokens**: the house's seven per theme; ink on page 17.35:1 (light) and 14.43:1 (dark);
   highest chroma 0.0239.
 - **The cut**: `#12150b` light and `#eff5e7` dark, beyond `--ink`; oil on the page 18.46:1 and
   15.39:1; the water's tint 1.97:1 and 2.90:1, faint on purpose, its top line carrying the edge.
 - **The plate**: white light, `#0c1316` dark. A salience-0 top face `#cbcec8` stands off white by
-  ΔE 0.153 (1.59:1); the scales' "nothing" ends, lit at the brightest face the shader reaches, by
+  ΔE 0.153 (1.59:1); the house ramps' "nothing" ends (the saturations' and the layers'), lit at the brightest face the shader reaches, by
   0.062 at the least (water); unshaded, the section's 1.5 px `--line-strong` rim (3.83:1) carries
   the pale cells' edge.
 - **The scales**: oil, water, gas, pressure, rock, depth and layers, each monotone in lightness,
-  ends apart by ΔE 0.50 or more in four visions. Norne's sand scale (net to gross) is not carried:
+  ends apart by ΔE 0.475 or more in four visions. Norne's sand scale (net to gross) is not carried:
   Volve's deck has no net to gross.
+- **Plasma and viridis (1.1, plan 0012 D16, the owner's exception to HOUSE 3.2's tonal budget).** The
+  owner chose them on Volve itself (`docs/marketing/reference/0012-ramps-board.png`): plasma for
+  pressure, viridis for the rock (porosity, both permeabilities) and depth, matplotlib 3.9.4's tables
+  sampled at 33 stops (`palette.py`'s `MPL`), the same in both themes. The saturations, the layers, the
+  regions, the wells' colors and the seismic's two ramps are exactly as 1.0 stored them (`check.mjs`
+  pins their sha256). These scales run dark to light whatever the theme, so they are not printed twice
+  and live outside the data band, and in the light theme "more" pressure or porosity is the lightest
+  color. Measured instead (`palette.py`): the darkest ends on the dark plate stand off it by ΔE 0.211
+  (plasma `#0d0887`, 1.25:1) and 0.173 (viridis `#440154`, 1.23:1) unshaded, 0.172 and 0.140 on a top
+  face, 0.092 and 0.083 (1.04:1) on a face turned from both lamps: a low-pressure or tight cell's sides
+  read as deep violet on the slate by hue, hardly by lightness. The light ends on white stand off it by
+  ΔE 0.212 (`#f0f921`, 1.15:1) and 0.203 (`#fde725`, 1.26:1) unshaded and 1.70 and 1.86:1 on a top face:
+  a strong yellow, told by hue and the cell edges, the legend's bar and the section keeping their
+  `--line-strong` frame and rim. Over every stop of the two tables the labels stay at 12.38:1 (light)
+  and 10.62:1 (dark), the wells' cores on their casing at 4.17 and 4.31, the ghost key at 3.76 and 4.43.
+  Both tables are monotone in lightness and their ends apart by ΔE 0.626 or more in four visions.
+- **The compass (1.1, plan 0012 D17)**: Norne 2.4's (its `ART.md`, section 3): the plate's top left, a
+  36 px disc of `--plate` at 0.80, a two-tone needle (`--ink` north, `--ink-3` south) turning with the
+  model and never under half its length, `N` upright at its tip, named `North arrow: north is toward …
+  of the view.`; the card goes below it and the well names and their hits keep off it. Over every base,
+  the seismic's stops not among them since the compass is on the 3D view: north arm and N 10.99:1
+  light and 8.92:1 dark, south arm 3.55 and 3.64.
 - **Regions**: the eleven fluid-in-place regions take Norne's four segment colors (`#e1ca74`,
   `#37a1b8`, `#bc5243`, `#5a478b`; worst pair ΔE 0.161, deutan), assigned so that none of the 21
   pairs of regions whose columns touch on the map shares one. The legend and the card name each
@@ -91,10 +118,26 @@ the seismic alone. The seismic is never blended into the cells' colors and the c
 interpolated: each is the block it is (the cells' color at a block's middle is 60 % of its own over
 the seismic's pixel there, measured by `tools/shoot.mjs`).
 
-**The seismic's drawing** is an image at the plot's own device pixels, drawn 1:1, so nothing
-resamples it after `js/seismic.js`: bilinear across the survey, a windowed sinc in depth widened to
-the rows' Nyquist where the rows outrun the samples, and the ramp. It is kept while the line, the
-size, the stretch, the gain and the ramp stay, so a new report date redraws only the cells over it.
+**Plasma and viridis over the seismic (1.1).** At the default 60 % over the gray ramp, pressure's
+plasma reads as a muted rose to orange and the rock's viridis as teal through green to olive, in both
+themes, with the reflectors still showing through and the horizons' dashes and the wells' names over
+them (looked at on inline 10174, Pressure, Porosity and Permeability, light and dark). They read
+duller than the legend's bar, which is drawn at full strength: the same is true of the saturations,
+and *Cells over it* at 100 % shows the scale's own colors. Their dark ends over the seismic's dark
+peaks are the closest pair in the plot; the cut's outline, drawn in full at any share, keeps each
+block's edge.
+
+**The seismic's drawing** at rest is an image at the plot's own device pixels (the screen's, two or
+three a point), drawn 1:1, so nothing resamples it after `js/seismic.js`: bilinear across the survey,
+a windowed sinc in depth widened to the rows' Nyquist where the rows outrun the samples, and the ramp.
+It is kept while the line, the plot, the gain and the ramp stay, so a new report date redraws only the
+cells over it. **While the view moves (1.1)**, an edge dragged, the sweep scrubbed or a line's end
+moved, the plot is drawn from what it has: on the same line, the last full image laid on the new plot
+by distance and depth; on a new line, the seismic's own samples (a column every 25 m along the line,
+a row every 5 m), both scaled and smoothed by the canvas, D11's variable-density display. The cells
+are drawn anew on a new line and laid on anew on the same one; the gaps' hatch and the cut's outline
+wait for rest. About says so. With the finger up and nothing changed for 150 ms, everything is drawn
+in full again, the seismic a few columns a frame, and the newest place always wins.
 
 **One depth axis.** Depth in meters below mean sea level (feet in US units), the figures alone beside
 the plot and **one title along it**: `Depth, m below mean sea level`, on two lines where the plot is
@@ -162,12 +205,19 @@ report date`.
 
 ## 6. Budgets
 
-`node tools/check.mjs` prints the truth. The template's caps for Volve: 312 000 B of app code and
+`node tools/check.mjs` prints the truth. The template's caps for Volve: 322 500 B of app code and
 33 600 000 B of ZIP. App code 311 642 B (`app.js` 175 365, `style.css`
 38 244, `js/section.js` 35 780, `index.html` 21 597, `js/seismic.js` 12 485, `js/track.js` 8 149,
 `js/units.js` 7 778, `js/data.js` 7 032, `js/pane.js` 5 212): Norne 2.3's 255 443 B and more for the
 seismic, the survey's lines, the horizons, the display controls, the sub-pixel cells' drawing, the
-frame's words and About's seismic and terms. Fonts 40 075 B of 160 000. The ZIP is about 33.4 MB, of which
+frame's words and About's seismic and terms. **1.1** (plan 0012 D16 and D17): app code
+311 984 B (`app.js` 175 321, `style.css` 38 639, `index.html` 21 588, the modules unchanged), 342 B more
+than 1.0 for the compass, its keep-outs and the needle's removal from the instrument line, with three
+comments shortened and one dropped that was Norne's history, not Volve's (a retired `:hint` key Volve
+never wrote); 16 B were left under the cap. The colors are `config.json`'s, not code. **The section's
+speed, the same 1.1:** app code 321 958 B (`app.js` 183 615, `js/section.js` 36 774, `js/seismic.js`
+13 044, `js/pane.js` 5 339, the rest as before), 9 974 B more for the drawing while the view moves, the
+render in slices, the exact cheaper fit and cut, and About's sentence; within the 322 500 B cap the lead ruled for 1.1, nothing cut. Fonts 40 075 B of 160 000. The ZIP is about 33.4 MB, of which
 the data, which the pipeline owns, is 33 234 794 B deflated (64.5 MB unpacked, 29 files).
 
 ## 7. The generated-page tells, answered

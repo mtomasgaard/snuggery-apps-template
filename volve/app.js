@@ -15,14 +15,13 @@
 import * as U from './js/units.js';
 import { regionOf, regionCount, fillValues, cellValue, propRange, norm, denorm, gasMax, openEnds, cutSeries, cutFacts, periods } from './js/data.js';
 import { createTrack, CUT_SCALE } from './js/track.js';
-import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, rimLayer, drawCells, drawOutline, cellPx, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag } from './js/section.js';
-import { grid, uvOf, ilAt, xlAt, surveyLine, surveyNumbers, nearestNumber, colPlan, rowPlan, render, ramp, horizonAt } from './js/seismic.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, rimLayer, cutPath, drawCells, drawOutline, cellPx, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag } from './js/section.js';
+import { grid, uvOf, ilAt, xlAt, surveyLine, surveyNumbers, nearestNumber, colPlan, rowPlan, render, renderCols, ramp, horizonAt } from './js/seismic.js';
 import { paneEdge } from './js/pane.js';
 
 const $ = (id) => document.getElementById(id);
 const LS_KEY = 'volve-viewer:v1';
 const STORE = { state: LS_KEY, focus: `${LS_KEY}:focus`, units: `${LS_KEY}:units` };
-// Retired: `${LS_KEY}:hint`, the first-run hint's flag (the hint went in the house pass; owner call 8, in tools/DECISIONS.md).
 const CREDIT = 'Data: the Volve field data set, © Equinor ASA and the former Volve license partners, under Equinor’s Terms and conditions for licence to data - Volve; not connected with, sponsored or endorsed by them';
 const TEX_W = 1024;
 const FOV = 40 * Math.PI / 180;
@@ -45,7 +44,7 @@ const S = {                                   // the view, saved to localStorage
   section: { on: false, line: 'inline', a: null, b: null, at: null, size: 0 },   // the section A–A′: a survey line (inline, crossline), a line of the field's own (along, across), or one drawn (a, b in model meters); at: the survey line's number, or where the sweep took a line (a column or row of the grid for the field's lines, a step for a drawn one; null, the line itself); size: the pane, 0 compact to 1 tall
   seis: { show: 'both', colors: 'seismicGray', gain: 0, cells: 60 },   // the section's display: seismic, model or both; the ramp; the gain as a power of two; the cells' cover over the seismic, percent
 };
-const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0, section: false, secGeom: true };   // dirty; card: 1 check the card's place, 2 place it afresh
+const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0, section: false, secGeom: true, seisWork: false };   // dirty; card: 1 check the card's place, 2 place it afresh
 let pick = -1, cardMode = null, playing = null, wanted = 0, shown = -1, units = 'SI', focus = false, track = null;
 let raf = 0, flog = null;
 const dark = matchMedia('(prefers-color-scheme: dark)');
@@ -251,7 +250,7 @@ function updateColors(f) {
   gl.bindTexture(gl.TEXTURE_2D, G.tex);
   gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, TEX_W, G.texH, gl.RGBA, gl.UNSIGNED_BYTE, col);
   G.stats.colorPasses++; G.stats.colorMs += performance.now() - t0;
-  G.texStep = f; G.texKey = colorKey(f);
+  G.texStep = f; G.texKey = colorKey(f); G.colorsN = (G.colorsN || 0) + 1;
 }
 /** What the texture must hold for report date f: a static property's colors do not change with it. */
 function colorKey(f) { const p = propDef(S.prop); return `${S.prop}|${isDynamic(p) ? f : '-'}|${dark.matches ? 'd' : 'l'}`; }
@@ -493,15 +492,17 @@ function nrm(a) { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l,
    room it was fitted to, so turning the model still turns it about its own middle. */
 const FIT_PAD = { l: 12, t: 26, r: 12, b: 12 };
 function fitPoints() {
-  const g = G.geom, ex = G.exOn, gOf = G.gOf, off = G.gOff, out = [];
+  const g = G.geom, ex = G.exOn, gOf = G.gOf, off = G.gOff, out = new Float64Array(Math.ceil(G.NA / 4) * 6 + model.wells.length * 3);
+  let n = 0;
+  const put = (x, y, z) => { out[n++] = x; out[n++] = y; out[n++] = z; };
   for (let a = 0; a < G.NA; a += 4) {
     const o = ex ? gOf[a] * 3 : -1;
     for (const c of [0, 21]) {
       const x = g[a * 24 + c] + (o >= 0 ? off[o] : 0), y = g[a * 24 + c + 1] + (o >= 0 ? off[o + 1] : 0), z = g[a * 24 + c + 2] + (o >= 0 ? off[o + 2] : 0);
-      out.push(x, -z * S.exag, -y);
+      put(x, -z * S.exag, -y);
     }
   }
-  model.wells.forEach((w, i) => { const p = G.wellHeads && G.wellHeads[i] || w.path[0]; out.push(p[0], -p[2] * S.exag, -p[1]); });
+  model.wells.forEach((w, i) => { const p = G.wellHeads && G.wellHeads[i] || w.path[0]; put(p[0], -p[2] * S.exag, -p[1]); });
   return out;
 }
 /** The rooms the field may be fitted to, in the plate's CSS px: the plate less its margins, and with
@@ -536,21 +537,37 @@ function fitCam(theta, phi, size, pts) {
     A[i] = dot(r, x); B[i] = dot(r, y); C[i] = dot(r, z); cMax = Math.max(cMax, C[i]);
   }
   const f = (H / 2) / Math.tan(FOV / 2);
-  const box = (d) => {
+  const box = (d, idx) => {
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
-    for (let i = 0; i < n; i++) { const D = d - C[i], X = f * A[i] / D, Y = -f * B[i] / D; if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y; }
+    for (let k = 0, N = idx ? idx.length : n; k < N; k++) { const i = idx ? idx[k] : k, D = d - C[i], X = f * A[i] / D, Y = -f * B[i] / D; if (X < x0) x0 = X; if (X > x1) x1 = X; if (Y < y0) y0 = Y; if (Y > y1) y1 = Y; }
     return [x0, x1, y0, y1];
+  };
+  // the points that can still be the box's edge for some distance in [a, b] (each one's A / (d - C) and
+  // B / (d - C) move one way as d does, so each lies between its values at a and b): the same box, exactly,
+  // from far fewer points once the search has narrowed; the plate is fitted every frame its edge is dragged
+  const only = (a, b) => {
+    const keep = new Uint8Array(n), P = new Float64Array(n), Q = new Float64Array(n);
+    let m = 0;
+    for (const V of [A, B]) {
+      let lo = -Infinity, hi = Infinity;
+      for (let i = 0; i < n; i++) { const p = V[i] / (a - C[i]), q = V[i] / (b - C[i]); P[i] = Math.min(p, q); Q[i] = Math.max(p, q); if (P[i] > lo) lo = P[i]; if (Q[i] < hi) hi = Q[i]; }
+      for (let i = 0; i < n; i++) if (!keep[i] && (Q[i] >= lo || P[i] <= hi)) { keep[i] = 1; m++; }
+    }
+    const idx = new Int32Array(m);
+    for (let i = 0, k = 0; i < n; i++) if (keep[i]) idx[k++] = i;
+    return idx;
   };
   const m = Math.hypot(...model.extent);
   let best = null;
   for (const q of fitRooms(W, H, !!size)) {
-    let a = Math.max(cMax * 1.02, m * 0.05), b = m * 30;
+    let a = Math.max(cMax * 1.02, m * 0.05), b = m * 30, idx = null;
     for (let it = 0; it < 36; it++) {
-      const d = Math.sqrt(a * b), [x0, x1, y0, y1] = box(d);
+      if (it === 8) idx = only(a, b);
+      const d = Math.sqrt(a * b), [x0, x1, y0, y1] = box(d, idx);
       if (x1 - x0 <= q.r - q.l && y1 - y0 <= q.b - q.t) b = d; else a = d;
     }
     if (best && best.dist <= b * (q.pref || 1)) continue;
-    const [x0, x1, y0, y1] = box(b);
+    const [x0, x1, y0, y1] = box(b, idx);
     const dx = (q.l + q.r) / 2 - W / 2 - (x0 + x1) / 2, dy = (q.t + q.b) / 2 - H / 2 - (y0 + y1) / 2;
     best = { dist: b, sx: 2 * dx / W, sy: -2 * dy / H };
     if (!size) G.fitAsp = (x1 - x0) / Math.max(1, y1 - y0);
@@ -560,10 +577,10 @@ function fitCam(theta, phi, size, pts) {
 }
 /** The whole field: theta 62 and phi 36 on an upright plate; on a plate much wider than tall the eye
  *  comes down toward the horizon, so the flat field fills more of the width. */
-function defaultCam() {
+function defaultCam(pts) {
   const c = $('gl'), asp = (c.clientWidth || 1) / (c.clientHeight || 1);
   const phi = asp <= 1.6 ? 36 : Math.max(24, 36 - (asp - 1.6) * 7);
-  return { ...fitCam(62, Math.round(phi * 10) / 10), fit: true };
+  return { ...fitCam(62, Math.round(phi * 10) / 10, undefined, pts), fit: true };
 }
 /** After the plate changes size (focus mode, the sheet's stops, a turn of the phone): a camera still at
  *  the fit is fitted again; any other keeps its zoom against the fit, so the field neither crops nor
@@ -575,7 +592,7 @@ function reframe() {
   if (old && old[0] === wh[0] && old[1] === wh[1]) return;
   const pts = fitPoints();
   for (const cam of G.anim ? [S.cam, G.anim.to] : [S.cam]) {
-    if (cam.fit) Object.assign(cam, defaultCam());
+    if (cam.fit) Object.assign(cam, defaultCam(pts));
     else if (old) { const a = fitCam(cam.theta, cam.phi, old, pts), b = fitCam(cam.theta, cam.phi, wh, pts); cam.dist = clampDist(cam.dist * b.dist / a.dist); }
   }
   R.draw = true; R.labels = true;
@@ -617,8 +634,9 @@ function loop(now) {
   if (R.step) { writeStep(); R.step = false; R.track = true; }
   if (R.track) { track.draw(shown); R.track = false; }
   if (R.chart) { drawChart(); R.chart = false; }
+  if (R.seisWork) seisWork();
   if (R.section || R.secGeom) drawSection();
-  if (G.secLog && S.section.on) { const c = $('sec-plot'), g = $('gl'), d = Math.min(window.devicePixelRatio || 1, 2); G.secLog.push({ t: now, v: +$('sec-sweep').value, at: S.section.at, drew: SEC.drawnAt, seis: SEC.seisAt, line: S.section.line, cutLine: SEC.cutLine, plot: [c.width, Math.round(c.clientWidth * d), c.height, Math.round(c.clientHeight * d)], gl: [g.width, Math.round(g.clientWidth * d), g.height, Math.round(g.clientHeight * d)], pane: $('section').getBoundingClientRect().height, size: S.section.size }); }
+  if (G.secLog && S.section.on) { const c = $('sec-plot'), g = $('gl'), d = Math.min(window.devicePixelRatio || 1, 2), e = secDpr(); G.secLog.push({ t: now, v: +$('sec-sweep').value, at: S.section.at, drew: SEC.drawnAt, seis: SEC.seisAt, line: S.section.line, cutLine: SEC.cutLine, plot: [c.width, Math.round(c.clientWidth * e), c.height, Math.round(c.clientHeight * e)], gl: [g.width, Math.round(g.clientWidth * d), g.height, Math.round(g.clientHeight * d)], pane: $('section').getBoundingClientRect().height, size: S.section.size, mv: moving(), full: !!SEC.full, renders: G.stats.seisRenders || 0, slices: G.stats.seisSlices || 0, exag: SEC.exag }); }
   if (flog && stepChanged) flog.push({ t: now, wanted, shown, tex: G.texStep, sec: S.section.on ? G.secStep : null, label: $('valid').textContent, now: +$('slider').getAttribute('aria-valuenow') });
   if (playing || G.anim || Object.values(R).some(Boolean)) kick();
 }
@@ -776,11 +794,11 @@ function buildLabels() {
   box.appendChild(G.pickMark);
   G.labelW = null;
 }
-/** Rectangles labels keep out of, in the plate's coordinates: the card, the keys, the ghost key. Their
- *  layout boxes, so the card's 4 px rise as it appears never moves what is kept out of it. */
+/** What labels keep out of, in the plate's px: the card, the keys, the ghost key, the compass. Layout boxes,
+ *  so the card's 4 px rise never moves them. */
 function keepOut() {
   const out = [];
-  for (const id of ['readout', 'keys', 'focus-exit']) {
+  for (const id of ['readout', 'keys', 'focus-exit', 'north']) {
     const e = $(id);
     if (e.hidden || e.closest('[hidden]')) continue;
     if (e.offsetWidth) out.push({ x: e.offsetLeft - 4, y: e.offsetTop - 4, w: e.offsetWidth + 8, h: e.offsetHeight + 8 });
@@ -802,7 +820,7 @@ function placeLabels() {
     if (ok) m.style.transform = `translate(${Math.round(p[0])}px, ${Math.round(p[1])}px)`;
   }
   if (!G.labelW) G.labelW = G.labels.map((el) => { el.style.display = ''; return el.offsetWidth || 40; });
-  const placed = [], items = [], show = S.wells && S.labels;
+  const placed = [], items = [], show = S.wells && S.labels, cmp = $('north'), cR = cmp.offsetLeft + 40, cB = cmp.offsetTop + 40;
   G.labelHits = [];
   model.wells.forEach((w, i) => {
     const el = G.labels[i], code = w.state[f] || 0;
@@ -821,7 +839,7 @@ function placeLabels() {
   items.sort((a, b) => (b.sel - a.sel) || (a.y - b.y));
   for (const it of items) {
     const wdt = G.labelW[it.i], hgt = 16, x = Math.round(it.x - 7);
-    const taken = (y) => y < 2 || !clear(x, y, wdt, hgt) || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
+    const taken = (y) => y < 2 || !clear(x, y, wdt, hgt) || (x + wdt / 2 - Math.max(44, wdt) / 2 < cR && y - 24 < cB) || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
     let y = Math.round(it.y - hgt - 4), hit = taken(y);
     // the chosen well's name is always drawn: under its head when the card or the keys hold the place over it
     if (hit && it.sel && !taken(Math.round(it.y + 6))) { y = Math.round(it.y + 6); hit = false; }
@@ -849,15 +867,12 @@ function labelAt(x, y, inner) {
   return best;
 }
 
-// ---------------------------------------------------------------- north arrow + scale (the instrument line)
+// ---------------------------------------------------------------- the compass + the scale
 const SCALE_PX = 96;
 const DIRS = ['the top', 'the top right', 'the right', 'the bottom right', 'the bottom', 'the bottom left', 'the left', 'the top left'];
-// Both readings come from the live view matrix, measured at the camera target.
-//   north  data/model.json center is easting, northing, depth, and geometry.bin is x, y, depth
-//          relative to it, so model +y is north. The grid shader maps a model point to world
-//          (x, -depth * exag, -y), so north is world (0, 0, -1).
-//   scale  M4.look builds the camera's right axis as cross(world up, view direction), so it is always
-//          horizontal in world space and across the screen: the honest direction to measure along.
+// Both from the live view matrix at the camera target. North: model +y (geometry.bin is x east, y north,
+// depth), world (0, 0, -1) in the grid shader. Scale: M4.look's right axis is cross(world up, view), so
+// level and across the screen, the honest direction to measure along.
 function updateGauge() {
   if (!G.PV || !G.V) return;
   const V = G.V, T = S.cam.target, d = Math.max(1, S.cam.dist * 0.02);
@@ -879,8 +894,10 @@ function updateGauge() {
   }
   const nx = pN[0] - p0[0], ny = pN[1] - p0[1], nl = Math.hypot(nx, ny);
   if (nl > 0.01) G.north = Math.atan2(nx, -ny) * 180 / Math.PI;
-  const a = G.north || 0, k = Math.max(0.3, acrossPx > 0 ? Math.min(1, nl / acrossPx) : 1);
-  $('needle').setAttribute('transform', `translate(8 8) rotate(${Math.round(a * 10) / 10}) scale(1 ${Math.round(k * 1000) / 1000}) translate(-8 -8)`);
+  // the needle shortens as north leans into the view, never under half; the N at its tip
+  const a = G.north || 0, k = Math.max(0.5, acrossPx > 0 ? Math.min(1, nl / acrossPx) : 1), r = a * Math.PI / 180, q = 8.5 * k + 5.5;
+  $('needle').setAttribute('transform', `rotate(${Math.round(a * 10) / 10}) scale(1 ${Math.round(k * 1000) / 1000})`);
+  $('north-n').setAttribute('transform', `translate(${Math.round(q * Math.sin(r))} ${Math.round(-q * Math.cos(r))})`);
   $('north').setAttribute('aria-label', `North arrow: north is toward ${DIRS[((Math.round(a / 45) % 8) + 8) % 8]} of the view.`);
 }
 
@@ -995,7 +1012,7 @@ function writeAbout() {
   // the pass band as seismic.json states it (0.20 cycles a bin: wavelengths of five bins and more)
   const passM = Number((/wavelengths of ([\d.]+) m/.exec(aa.passBand) || [])[1]) || sm.spacing.binIl / 0.2;
   $('ab-seismic').textContent = `The seismic is survey ${sm.survey}: the ${sm.product}. It was cut to the model, from ${ft(cr.verticalMarginM)} above its shallowest cell to ${ft(cr.verticalMarginM)} below its deepest and ${len(cr.lateralMarginM)} past its edge: inlines ${U.int(sm.il.first)} to ${U.int(sm.il.last)} and crosslines ${U.int(sm.xl.first)} to ${U.int(sm.xl.last)}, every second one of the survey’s ${U.exactLength(sm.spacing.binIl, units)} lines, and depths ${ft(sm.z.first)} to ${ft(zEnd)}. Before every second line was dropped, a low-pass filter ran across the inlines and the crosslines (${aa.filter}), passing wavelengths of ${U.exactLength(passM, units)} and longer within 0.05${U.NNBSP}dB and holding those at the new spacing’s Nyquist (${len(2 * sm.spacing.il)}) and shorter at least 50${U.NNBSP}dB down, so the traces now ${len(sm.spacing.il)} apart carry no dip that ${len(sm.spacing.il)} cannot. Depth keeps its ${len(sm.z.step)} samples at their original depths. The amplitudes are stored in 8 bits with zero at code ${a.zeroCode} and a symmetric clip at the ${U.fixed(a.clipPercentile, 1)}th percentile of |amplitude|, ${U.fixed(a.clip, 4)}, which ${U.withUnit(U.tick(Math.round(a.clippedFraction * 1000) / 10), '%')} of the samples reach (the largest is ${U.fixed(a.absMax, 4)}): amplitude = (code ${U.MINUS} ${a.zeroCode}) / 127 × the clip, ${a.unit}.`;
-  $('ab-display').textContent = `On the section the seismic is drawn at the screen’s own pixels. Along an inline or a crossline the traces are the survey’s own, ${len(sm.spacing.il)} apart, and the display blends between neighbors as a variable-density display does; along any other line each point is bilinear between the four traces around it. Where the screen’s columns lie farther apart than half a trace spacing, each column averages points across its own width. Between samples in depth the value is a windowed sinc (a Kaiser window six samples either side), widened to the screen rows’ own Nyquist where the rows lie farther apart than the samples, so nothing aliases. The amplitude is multiplied by the gain (Seismic gain, under More controls; ×1 puts the clip at the ramp’s ends) and drawn through a ramp symmetric about zero, gray or red and blue; no automatic gain control is applied. ${polarityWords()} The key under the section gives the signed amplitude at each end of the ramp, negative at its left and positive at its right.`;
+  $('ab-display').textContent = `On the section the seismic is drawn at the screen’s own pixels. Along an inline or a crossline the traces are the survey’s own, ${len(sm.spacing.il)} apart, and the display blends between neighbors as a variable-density display does; along any other line each point is bilinear between the four traces around it. Where the screen’s columns lie farther apart than half a trace spacing, each column averages points across its own width. Between samples in depth the value is a windowed sinc (a Kaiser window six samples either side), widened to the screen rows’ own Nyquist where the rows lie farther apart than the samples, so nothing aliases. While the section is dragged, resized or scrubbed, the seismic is drawn instead from its own samples, one column for every ${len(sm.spacing.il)} along the line and one row for every ${len(sm.z.step)} of depth, and smoothed by the screen; once it rests, it is resampled as above, with the windowed sinc at the screen’s own pixels. The amplitude is multiplied by the gain (Seismic gain, under More controls; ×1 puts the clip at the ramp’s ends) and drawn through a ramp symmetric about zero, gray or red and blue; no automatic gain control is applied. ${polarityWords()} The key under the section gives the signed amplitude at each end of the ramp, negative at its left and positive at its right.`;
   $('ab-polarity').textContent = `Polarity, as the contractor’s textual header states it (${sm.polaritySource.replace(/^what the contractor's textual header states, /, '')}): “${sm.polarity}” ${sm.polarityNote}`;
   $('ab-depth').textContent = `One depth axis serves both, in ${us ? 'feet' : 'meters'} below mean sea level, positive down. The model is at its own grid depths: its deck states no datum, and the pipeline measured that the cells its wells are completed in lie on the wells’ surveyed paths taken below sea level. The seismic is at its own depths as delivered: its header states no datum either, and sea level is inferred from the tidal statics in its processing list. ${sm.depthRelation} So the seismic and the model are shown as delivered, each at its own depths on the one axis, not tied to each other. The Hugin Formation’s top and base are interpretations made on another survey (ST10010, 2011 processing), converted to depth and adjusted to the wells; they agree with the Hugin top picked in the wells, are not picks on this image, and are not tied to it.`;
   // this data, the check against Equinor's run, the terms and what was changed
@@ -1605,10 +1622,10 @@ function placeCard(fresh = true) {
   const L = parseFloat(getComputedStyle(card).left) || 8, Rm = parseFloat(getComputedStyle($('keys')).right) || 8;
   const T = focus ? $('focus-exit').offsetTop : 8, B = H - 8, cap = H * (S.sheet === 0 || focus ? 0.55 : 0.5);
   const keep = [];                    // the keys' and the ghost key's hits; the card's Close hit reaches 4 px over its top
-  for (const e of [...$('keys').querySelectorAll('button'), $('focus-exit')]) {
+  for (const e of [...$('keys').querySelectorAll('button'), $('focus-exit'), $('north')]) {
     if (e.hidden || e.closest('[hidden]')) continue;
-    const r = e.getBoundingClientRect();
-    if (r.width) keep.push({ l: r.left - pr.left - 6, t: r.top - pr.top - 6, r: r.right - pr.left + 6, b: r.bottom - pr.top + 6 });
+    const r = e.getBoundingClientRect(), m = e.id == 'north' ? 4 : 6;
+    if (r.width) keep.push({ l: r.left - pr.left - m, t: r.top - pr.top - m, r: r.right - pr.left + m, b: r.bottom - pr.top + m });
   }
   /** The free stretches of the column x0..x1, top to bottom, beside the keys and the mark. */
   const stretches = (x0, x1, mark) => {
@@ -1855,7 +1872,13 @@ const SEC_GRAB_MIN = 76;   // px: the model's shorter side on the plate below wh
 const SEC_MARGIN = 150;    // meters of seismic shown above the model's shallowest cut cell and below its deepest
 const SURVEY = ['inline', 'crossline'];
 const SHOWS = ['seismic', 'model', 'both'];
-const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null, cuts: new Map(), sweep: null, exag: 0, seis: null, seisKey: '', seisAt: undefined };
+const SEC_REST = 150;      // ms with the finger up and nothing changed before the section is drawn in full again
+const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null, cuts: new Map(), sweep: null, exag: 0, seis: null, seisKey: '', seisAt: undefined, viewKey: '', changed: 0 };
+/** A drag on the pane's edge, a line or its end, or the sweep's slider is under way: the section shows its
+ *  layers as last drawn, laid on anew, and the seismic from its own samples; the full drawing waits for rest. */
+const moving = () => !!(SEC.drag || SEC.lockH || SEC.edgeDrag);
+/** The section's canvas at the screen's own pixels (a phone's 2 or 3 a point; the 3D view keeps its 2). */
+const secDpr = () => Math.min(window.devicePixelRatio || 1, 3);
 const survey = () => SURVEY.includes(S.section.line);
 const seisOn = () => S.seis.show !== 'model';
 const cellsOn = () => S.seis.show !== 'seismic';
@@ -1883,9 +1906,14 @@ function sliceCut(axis, k) {
   return c;
 }
 function secCut() {
-  const l = secLine();
-  SEC.geom = l.sec || cutGrid(G.geom, G.NA, G.ijk, l.a, l.b, null);
-  SEC.wells = l.sec ? l.sec.wells : wellsNear(model.wells.map((w) => w.path), SEC.geom.line, SEC_CORRIDOR);
+  const l = secLine(), key = survey() ? S.section.line + S.section.at : '';   // a survey line's cut is kept as a slice's is
+  let c = l.sec || SEC.cuts.get(key);
+  if (!c) {
+    c = cutGrid(G.geom, G.NA, G.ijk, l.a, l.b, null);
+    c.wells = wellsNear(model.wells.map((w) => w.path), c.line, SEC_CORRIDOR);
+    if (key) { SEC.cuts.set(key, c); if (SEC.cuts.size > 24) SEC.cuts.delete(SEC.cuts.keys().next().value); }
+  }
+  SEC.geom = c; SEC.wells = c.wells;
   SEC.hatchKey = ''; SEC.cutAt = S.section.at; SEC.cutLine = S.section.line;
   G.stats.secCuts = (G.stats.secCuts || 0) + 1; G.stats.secCutMs = (G.stats.secCutMs || 0) + SEC.geom.ms;
 }
@@ -2071,22 +2099,67 @@ function fitSection() {
 /** The seismic along the section as one image at the canvas's own pixels (js/seismic.js): each column a
  *  point (or, where columns outrun the traces, points across its width) on the line, bilinear between the
  *  four traces around it; each row a depth, a windowed sinc between the samples; the amplitude times the
- *  gain over the clip, through the chosen ramp. Drawn 1:1, so nothing resamples it again. */
-function seisLayer(ax, dpr) {
+ *  gain over the clip, through the chosen ramp. Drawn 1:1, so nothing resamples it again. Made at rest only,
+ *  a few columns a frame (seisStep), so it never holds the page; the newest place always wins. */
+function seisJob(ax, dpr, sk, lk, dk) {
   const l = SEC.geom.line, g = G.sg;
   const x0 = Math.round(ax.x0 * dpr), x1 = Math.round(ax.x1 * dpr), y0 = Math.round(ax.y0 * dpr), y1 = Math.round(ax.y1 * dpr);
   const cols = Math.max(1, x1 - x0), rows = Math.max(1, y1 - y0);
   const ds = 1 / (dpr * ax.sx), k = ds > g.spacing / 2 ? Math.ceil(ds / (g.spacing / 2)) : 1;
   const sAt = (c, j) => Math.max(0, Math.min(l.L, ax.S((x0 + c + (j + 0.5) / k) / dpr)));
-  const cp = colPlan(g, cols, (c) => Array.from({ length: k }, (_, j) => lineAt(l, sAt(c, j))));
   const depths = new Float64Array(rows);
   for (let r = 0; r < rows; r++) depths[r] = ax.Z((y0 + r + 0.5) / dpr) + ax.datum;
-  const rp = rowPlan(g, depths, 1 / (dpr * ax.sz));
-  const out = render(g, G.seis, cp, rp, ramp(stopsOf(S.seis.colors)), 2 ** S.seis.gain, cols, rows);
-  const c = mkCanvas(cols, rows), cx = c.getContext('2d'), img = cx.createImageData(cols, rows);
-  img.data.set(out.px); cx.putImageData(img, 0, 0);
+  return { sk, lk, dk, ax, dpr, x0, y0, cols, rows, k, pts: (c) => Array.from({ length: k }, (_, j) => lineAt(l, sAt(c, j))), depths, rp: null, cp: { taps: new Array(cols), inside: new Uint8Array(cols) }, px: new Uint8ClampedArray(cols * rows * 4), cache: new Map(), c: 0, ms: 0, lut: ramp(stopsOf(S.seis.colors)), gain: 2 ** S.seis.gain };
+}
+/** Up to budget ms of a job's columns; the image once its last column is in. */
+function seisStep(j, budget) {
+  const t0 = performance.now(), g = G.sg;
+  if (!j.rp) j.rp = rowPlan(g, j.depths, 1 / (j.dpr * j.ax.sz));
+  while (j.c < j.cols && performance.now() - t0 < budget) {
+    const c1 = Math.min(j.cols, j.c + 12);
+    colPlan(g, j.cols, j.pts, j.c, c1, j.cp);
+    renderCols(g, G.seis, j.cp, j.rp, j.lut, j.gain, j.cols, j.rows, j.px, j.c, c1, j.cache);
+    j.c = c1;
+  }
+  j.ms += performance.now() - t0; G.stats.seisSlices = (G.stats.seisSlices || 0) + 1;
+  if (j.c < j.cols) return null;
+  const c = mkCanvas(j.cols, j.rows);
+  c.getContext('2d').putImageData(new ImageData(j.px, j.cols, j.rows), 0, 0);
+  let inside = 0; for (const v of j.cp.inside) inside += v;
+  return Object.assign(c, { x0: j.x0, y0: j.y0, cols: j.cols, rows: j.rows, ms: j.ms, traces: j.cache.size, inside, k: j.k, fc: j.rp.fc, sk: j.sk, lk: j.lk, dk: j.dk, at: j.ax, ox: j.x0, oy: j.y0, pk: j.dpr });
+}
+/** The frame's share of the full seismic, at rest; never while the view moves. */
+function seisWork() {
+  const j = SEC.job;
+  R.seisWork = false;
+  if (!j || moving() || !S.section.on) return;
+  const img = seisStep(j, 6);
+  if (!img) { R.seisWork = true; return; }
+  SEC.job = null; SEC.seis = img; R.section = true;
+  G.stats.seisRenders = (G.stats.seisRenders || 0) + 1; G.stats.seisMs = (G.stats.seisMs || 0) + img.ms;
+}
+/** The seismic from its own samples, as the screen shows it while the view moves (D11's variable-density
+ *  display): a column every trace spacing along the line, bilinear between the four traces around it (on a
+ *  survey line, its own traces), and a row for each 5 m sample at its own depth; no supersampling and no sinc.
+ *  The canvas lays it on the plot with its own bilinear filtering (relay). */
+function seisPreview(ax, lk, dk) {
+  const l = SEC.geom.line, g = G.sg, n = Math.max(2, Math.round(l.L / g.spacing) + 1), ds = l.L / (n - 1);
+  const k0 = Math.max(0, Math.floor((ax.zTop + ax.datum - g.z0) / g.dz)), k1 = Math.min(g.nz - 1, Math.ceil((ax.zBot + ax.datum - g.z0) / g.dz)), rows = Math.max(1, k1 - k0 + 1);
+  const cp = colPlan(g, n, (c) => [lineAt(l, c * ds)]), rp = { start: Int32Array.from({ length: rows }, (_, r) => k0 + r), n: new Uint8Array(rows).fill(1), w: new Float32Array(rows).fill(1), width: 1 };
+  const out = render(g, G.seis, cp, rp, ramp(stopsOf(S.seis.colors)), 2 ** S.seis.gain, n, rows), c = mkCanvas(n, rows);
+  c.getContext('2d').putImageData(new ImageData(out.px, n, rows), 0, 0);
   let inside = 0; for (const v of cp.inside) inside += v;
-  return Object.assign(c, { x0, y0, cols, rows, ms: out.ms, traces: out.traces, inside, k, fc: rp.fc });
+  G.stats.seisPreviews = (G.stats.seisPreviews || 0) + 1;
+  return Object.assign(c, { lk, dk, inside, ox: 0, oy: 0, pk: 1, at: { x0: 0.5, sx: 1 / ds, y0: 0.5, sz: 1 / g.dz, zTop: g.z0 + k0 * g.dz - ax.datum } });
+}
+/** A layer drawn under one axis (img.at, img.pk px a CSS px, from device px img.ox, img.oy) laid on the plot
+ *  under another (ax), by the section's own coordinates (distance along the line and depth), scaled and
+ *  smoothed by the canvas. */
+function relay(x, img, ax, dpr) {
+  const at = img.at, a = ax.sx / at.sx, c = ax.sz / at.sz, b = ax.x0 - at.x0 * a, d = ax.y0 + (at.zTop - ax.zTop) * ax.sz - at.y0 * c;
+  x.save(); x.setTransform(dpr * a, 0, 0, dpr * c, dpr * b, dpr * d); x.imageSmoothingEnabled = true; x.imageSmoothingQuality = 'high';
+  x.drawImage(img, img.ox / img.pk, img.oy / img.pk, img.width / img.pk, img.height / img.pk);
+  x.restore();
 }
 /** The Hugin top or base along the section, as runs of [x, y] on the plot (CSS px): the interpretation's
  *  depths at the line's points every 3 px and at A′, bilinear on its grid, broken where it has no pick. */
@@ -2184,13 +2257,13 @@ function drawSection() {
   if (R.secGeom || !SEC.geom) fitSection();
   const t0 = performance.now(), cv = $('sec-plot'), W = cv.clientWidth, H = cv.clientHeight;
   if (!W || !H) return;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2), cw = Math.round(W * dpr), ch = Math.round(H * dpr);
+  const dpr = secDpr(), cw = Math.round(W * dpr), ch = Math.round(H * dpr);
   if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
   const sec = SEC.geom, st = secStyle(), x = cv.getContext('2d'), seis = seisOn(), cells = cellsOn();
   const bw = Math.max(40, W - SEC_BOX.l - SEC_BOX.r);
   const box = { x: SEC_BOX.l, y: SEC_BOX.t, w: bw, h: Math.max(30, H - SEC_BOX.t - SEC_BOX.b) }, win = secWindow(sec);
   // a pane made taller than compact fills with the section, at a stretch of its own that it states (D13)
-  const ex = $('section').classList.contains('grown') ? ownExag(sec, box, S.exag, win) : S.exag;
+  const ex = SEC.edgeDrag && SEC.exag ? SEC.exag : $('section').classList.contains('grown') ? ownExag(sec, box, S.exag, win) : S.exag;   // held while the edge is dragged (it steps between round figures)
   if (ex !== SEC.exag) { SEC.exag = ex; writeSecWords(); }
   // the frame's words laid out first: numbers with no room by either end go in a key right of the plot, moved for it
   const en = SEC.endNums = [endNumbers(lineAt(sec.line, 0)), endNumbers(lineAt(sec.line, sec.line.L))];
@@ -2208,18 +2281,32 @@ function drawSection() {
   x.setTransform(dpr, 0, 0, dpr, 0, 0);
   x.clearRect(0, 0, W, H);
   x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
-  // the seismic, at the canvas's own pixels, kept while the line, the size, the stretch, the gain and the
-  // ramp stay (a new report date redraws the cells over it, never the seismic)
-  const lk = [S.section.line, S.section.at, sec.line.a, sec.line.b, sec.line.L].join('|');
-  const sk = [lk, W, H, dpr, ax.x0, ax.y0, ax.sx, ax.sz, ax.zTop, S.seis.gain, S.seis.colors, dark.matches].join('|');
-  if (seis && SEC.seisKey !== sk) { SEC.seis = seisLayer(ax, dpr); SEC.seisKey = sk; SEC.seisLine = lk; G.stats.seisRenders = (G.stats.seisRenders || 0) + 1; G.stats.seisMs = (G.stats.seisMs || 0) + SEC.seis.ms; }
-  const seen = seis && SEC.seis && SEC.seis.inside > 0;
+  // the seismic, at the canvas's own pixels, kept while the line, the plot, the gain and the ramp stay (a new
+  // report date redraws the cells over it, never the seismic); while the view moves, the last full image laid
+  // on anew (the same line) or the line's own samples (a new one); in full again at rest
+  const lk = [S.section.line, S.section.at, sec.line.a, sec.line.b, sec.line.L].join('|'), dk = [S.seis.gain, S.seis.colors, dark.matches].join('|');
+  const sk = [lk, dpr, ax.x0, ax.y0, ax.sx, ax.sz, ax.zTop, dk].join('|'), now = performance.now();
+  if (SEC.viewKey !== sk) { SEC.viewKey = sk; SEC.changed = now; }
+  const still = !moving() && now - SEC.changed >= SEC_REST, full = SEC.seis;
+  let img = null;
+  if (seis) {
+    img = full && full.sk === sk ? full : full && full.lk === lk && full.dk === dk ? full : SEC.prev && SEC.prev.lk === lk && SEC.prev.dk === dk && SEC.prev.zt === ax.zTop ? SEC.prev : (SEC.prev = Object.assign(seisPreview(ax, lk, dk), { zt: ax.zTop }));
+    if (img !== full || full.sk !== sk) {
+      if (still) { if (!SEC.job || SEC.job.sk !== sk) SEC.job = seisJob(ax, dpr, sk, lk, dk); R.seisWork = true; }
+      else SEC.job = null;
+    }
+  }
+  const seen = seis && img && img.inside > 0;
+  if (seen !== SEC.seen) { SEC.seen = seen; writeSecWords(); }   // the plot's spoken label says whether the line meets the seismic
+  // not all in full yet with the finger up, but less than SEC_REST ago: the frame after it
+  const later = () => { if (!SEC.full && !moving() && !still) { clearTimeout(SEC.restT); SEC.restT = setTimeout(() => { R.section = true; kick(); }, SEC_REST + SEC.changed - now + 1); } };
+  SEC.full = !(seis && img.sk !== sk);
   if (!sec.n && !seen) {   // a line off the field and the cube cuts nothing: no axis to print, one line in the pane
     for (const id of ['sec-key-gap', 'sec-key-seis']) $(id).hidden = true;   // the horizons are named in the plot itself
     x.fillStyle = st.ink2; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '400 13.5px "Ysabeau Office", system-ui, sans-serif';
     x.fillText(seis ? 'This line misses the field and the seismic.' : 'This line misses the field.', W / 2, H / 2);
     SEC.endWords = ['', '']; SEC.endForm = null; SEC.hzNamed = []; SEC.hzBoxes = [];
-    G.secStep = G.texStep; SEC.drawnAt = SEC.cutAt; SEC.seisAt = SEC.cutAt; return;
+    G.secStep = G.texStep; SEC.drawnAt = SEC.cutAt; SEC.seisAt = SEC.cutAt; later(); return;
   }
   // the ground: depth guides across the plot, under everything; with the seismic over them, ticks at its edge
   const dt = fr.dt;
@@ -2228,29 +2315,45 @@ function drawSection() {
   x.stroke();
   $('sec-key-seis').hidden = !seen;
   if (seen) {
-    x.imageSmoothingEnabled = false;
-    x.drawImage(SEC.seis, SEC.seis.x0 / dpr, SEC.seis.y0 / dpr, SEC.seis.cols / dpr, SEC.seis.rows / dpr);
+    if (img.sk === sk) { x.imageSmoothingEnabled = false; x.drawImage(img, img.x0 / dpr, img.y0 / dpr, img.cols / dpr, img.rows / dpr); }
+    else {   // where the full image would lie, in whole device px
+      const X0 = Math.round(ax.x0 * dpr) / dpr, Y0 = Math.round(ax.y0 * dpr) / dpr;
+      x.save(); x.beginPath(); x.rect(X0, Y0, Math.round(ax.x1 * dpr) / dpr - X0, Math.round(ax.y1 * dpr) / dpr - Y0); x.clip(); relay(x, img, ax, dpr); x.restore();
+    }
     x.strokeStyle = st.strong; x.beginPath();
     for (const t of dt) { const y = Math.round(t.y) + 0.5; x.moveTo(ax.x0 - 4, y); x.lineTo(ax.x0, y); }
     x.stroke();
   }
   SEC.seisAt = seen ? SEC.cutAt : null;
-  // the gaps and the cells (where the model is shown), then the Hugin horizons
-  const hk = [W, H, dpr, ex, sec.line.a, sec.line.b, sec.line.L, ax.zTop, ax.x0, ax.sx, st.ink3, st.line].join('|');
-  if (cells && SEC.hatchKey !== hk && !SEC.drag) { SEC.hatch = gapLayer(sec, ax, W, H, dpr, hexToRgb(st.ink3), mkCanvas); SEC.rim = rimLayer(sec, ax, W, H, dpr, st.strong, mkCanvas); SEC.hatchKey = hk; }
-  if (cells && SEC.hatch && SEC.hatchKey === hk) x.drawImage(SEC.hatch, 0, 0, W, H);
+  // the gaps and the cells (where the model is shown), then the Hugin horizons; the gaps and the outline are
+  // drawn afresh at rest only, and laid on anew while the view moves on the same line (on a new one, left off)
+  const hk = [W, H, dpr, ex, lk, ax.zTop, ax.x0, ax.y0, ax.sx, st.ink3, st.line].join('|'), lay = (l) => { const a = { at: ax, pk: dpr, ox: 0, oy: 0, lk }; return Object.assign(l, a); };
+  if (cells && SEC.hatchKey !== hk && still) { const p = cutPath(sec, ax); SEC.hatch = lay(gapLayer(sec, ax, W, H, dpr, hexToRgb(st.ink3), mkCanvas, p)); SEC.rim = lay(rimLayer(sec, ax, W, H, dpr, st.strong, mkCanvas, p)); SEC.hatchKey = hk; }
+  const hx = SEC.hatch && SEC.hatchKey === hk, hs = SEC.hatch && SEC.hatch.lk === lk;
+  if (cells && hx) x.drawImage(SEC.hatch, 0, 0, W, H); else if (cells && hs) relay(x, SEC.hatch, ax, dpr);
   $('sec-key-gap').hidden = !(cells && SEC.hatch && SEC.hatch.gapPx / (dpr * dpr) >= 150);   // the gap's key only where a gap shows: 150 CSS px² or more
+  let relaid = false;
   if (cells) {
     // the cells in a layer of their own, laid on at their cover (60 % over the seismic by default, whole
     // with the model alone), so a block's color is one alpha over the seismic however its edges fall; then
     // the cut's outline over them, whole at any cover
-    const cl = SEC.cellLayer && SEC.cellLayer.width === cw && SEC.cellLayer.height === ch ? SEC.cellLayer : (SEC.cellLayer = mkCanvas(cw, ch)), cx = cl.getContext('2d');
-    cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cw, ch); cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawCells(cx, ax, sec, G.colors, `rgba(${hexToRgb(st.ink)}, 0.28)`);
-    x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = seis ? S.seis.cells / 100 : 1; x.drawImage(cl, 0, 0); x.globalAlpha = 1;
-    if (SEC.rim && SEC.hatchKey === hk) x.drawImage(SEC.rim, 0, 0);
+    let cl = SEC.cellLayer;
+    const ck = [lk, G.colorsN, st.ink].join('|'), keep = relaid = !still && !!cl && cl.ck === ck;
+    if (!keep) {
+      if (!cl || cl.width !== cw || cl.height !== ch) cl = SEC.cellLayer = mkCanvas(cw, ch);
+      const cx = cl.getContext('2d');
+      cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cw, ch); cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawCells(cx, ax, sec, G.colors, `rgba(${hexToRgb(st.ink)}, 0.28)`);
+      Object.assign(lay(cl), { ck });
+    }
+    x.save(); x.globalAlpha = seis ? S.seis.cells / 100 : 1;
+    if (keep) relay(x, cl, ax, dpr); else { x.setTransform(1, 0, 0, 1, 0, 0); x.drawImage(cl, 0, 0); }
+    x.globalAlpha = 1;
+    if (hx) { x.setTransform(1, 0, 0, 1, 0, 0); x.drawImage(SEC.rim, 0, 0); } else if (hs) relay(x, SEC.rim, ax, dpr);
     x.restore();
   }
+  SEC.full = SEC.full && !(cells && !hx) && !relaid;
+  later();
   const hz = [0, 1].map((w) => horizonRuns(ax, w));
   x.save(); x.beginPath(); x.rect(ax.x0, box.y, ax.x1 - ax.x0, box.h); x.clip();
   SEC.hz = hz;
@@ -2480,7 +2583,7 @@ function writeSecWords() {
   if (!SEC.geom) return;
   const sec = SEC.geom, p = propDef(S.prop), win = secWindow(sec), dz = model.center[2];
   const wells = SEC.wells.map((w) => model.wells[w.i].name);
-  if (!sec.n && !(seisOn() && SEC.seis && SEC.seis.inside)) { $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}: the line misses the field, so no cell is cut.`); return; }
+  if (!sec.n && !(seisOn() && SEC.seen)) { $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}: the line misses the field, so no cell is cut.`); return; }
   const ends = [endNumbers(lineAt(sec.line, 0)), endNumbers(lineAt(sec.line, sec.line.L))].map((n) => (n ? `inline ${n[0]}, crossline ${n[1]}` : 'off the survey'));
   const depth = (z) => U.spokenUnits(U.valueWithUnit({ unit: 'm' }, z + dz, units));
   const what = S.seis.show === 'seismic' ? 'the seismic' : S.seis.show === 'model' ? `the model's cells colored by ${p.label}` : `the seismic with the model's cells over it, colored by ${p.label}`;
@@ -2570,6 +2673,7 @@ function initSection() {
     pane: $('section'), edges: [$('sec-edge'), $('sec-side')], view: $('view'), keep: { up: 120, get side() { return 148 + parseFloat(getComputedStyle($('section')).paddingLeft); } },
     get: () => S.section.size, set: (f) => { S.section.size = f; },
     onSize: () => { R.draw = true; R.labels = true; R.card = 2; R.section = true; kick(); }, onEnd: save,
+    onDrag: (on) => { SEC.edgeDrag = on; R.section = true; kick(); },
     label: (side) => (side ? 'Section width' : 'Section height'),
   });
   applySection();
@@ -2598,6 +2702,7 @@ window.__volve = {
   resolveTap: (x, y) => resolveTap(x, y),
   ends: (key) => openEnds(D, propDef(key), G.gasMax),
   // the section: its state, a cell's middle on the pane (CSS px in the canvas), a model point on the plate
+  settled: () => (moving() ? 'moving' : !S.section.on || (SEC.full && !R.section && !R.secGeom && !R.seisWork)),
   secFit: () => { const cv = $('sec-plot'); return SEC.geom ? { set: parseFloat(cv.style.height) || 0, need: secNeed(Math.max(40, cv.clientWidth - SEC_BOX.l - SEC_BOX.r)), h: cv.clientHeight, lock: !!SEC.lockH } : null; },
   section: () => (SEC.geom ? { hz: SEC.hz, words: SEC.taken, show: S.seis.show, seis: SEC.seis && { inside: SEC.seis.inside, traces: SEC.seis.traces, ms: SEC.seis.ms, k: SEC.seis.k, fc: SEC.seis.fc, x0: SEC.seis.x0, y0: SEC.seis.y0, cols: SEC.seis.cols, rows: SEC.seis.rows }, seisAt: SEC.seisAt, endWords: SEC.endWords, endNums: SEC.endNums, endForm: SEC.endForm, axisTitle: SEC.axisTitle, hzNamed: SEC.hzNamed, hzBoxes: SEC.hzBoxes, distWords: SEC.distWords, keyCompact: !!SEC.keyCompact, datum: model.center[2], on: S.section.on, line: S.section.line, a: [...SEC.geom.line.a], b: [...SEC.geom.line.b], L: SEC.geom.line.L, n: SEC.geom.n, cells: [...SEC.geom.cells], z: [SEC.geom.z0, SEC.geom.z1], wells: SEC.wells.map((w) => model.wells[w.i].name), named: SEC.named || [], unnamed: SEC.unnamed || [], step: G.secStep, at: S.section.at, drawnAt: SEC.drawnAt, sweep: sweepOf().at, axis: sweepOf().axis, size: S.section.size, exag: SEC.exag, gapPx: SEC.hatch ? SEC.hatch.gapPx : null, armed: SEC.armed, ends: SEC.ends, ax: SEC.ax && { x0: SEC.ax.x0, x1: SEC.ax.x1, y0: SEC.ax.y0, y1: SEC.ax.y1, sx: SEC.ax.sx, sz: SEC.ax.sz, zTop: SEC.ax.zTop } } : { on: S.section.on }),
   secCellPoint: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let s = 0, z = 0, n = 0; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { s += SEC.geom.pts[k * 2]; z += SEC.geom.pts[k * 2 + 1]; n++; } return [SEC.ax.X(s / n), SEC.ax.Y(z / n)]; },

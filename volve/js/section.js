@@ -49,14 +49,24 @@ function clipS(p, s0, s1) {
  * pts (Float32Array of s, z), tops (Float32Array of s0, z0, s1, z1 per formation top), z0, z1 (the
  * shallowest and deepest z cut), ms }.
  */
+const REACH = new WeakMap();
 export function cutGrid(geom, NA, ijk, a, b, tops) {
   const t0 = typeof performance === 'object' ? performance.now() : Date.now();
   const ln = lineOf(a, b), { L, ux, uy, nx, ny } = ln, ax = a[0], ay = a[1];
   const cells = [], offs = [0], pts = [], topSeg = [];
   const d = new Float64Array(8), s = new Float64Array(8);
   let z0 = Infinity, z1 = -Infinity;
+  // the farthest any cell's corner lies from its first, across the map (once per grid): a cell whose first
+  // corner is farther than that (and a meter) from the plane has every corner on one side, so is not cut
+  if (!REACH.has(geom)) {
+    let r = 0;
+    for (let p = 0; p < NA * 24; p += 24) for (let k = 1; k < 8; k++) r = Math.max(r, Math.hypot(geom[p + k * 3] - geom[p], geom[p + k * 3 + 1] - geom[p + 1]));
+    REACH.set(geom, r + 1);
+  }
+  const reach = REACH.get(geom);
   for (let c = 0; c < NA; c++) {
-    const p = c * 24;
+    const p = c * 24, d0 = (geom[p] - ax) * nx + (geom[p + 1] - ay) * ny;
+    if (d0 > reach || d0 < -reach) continue;
     let neg = false, pos = false, smin = Infinity, smax = -Infinity;
     for (let k = 0; k < 8; k++) {
       const x = geom[p + k * 3] - ax, y = geom[p + k * 3 + 1] - ay;
@@ -430,16 +440,18 @@ export function medianCellPx(sec, ax) {
  * column, the parts no cell covers (an inactive layer, an inactive cell, a gap in the grid). Drawn
  * once per line, size and stretch into a canvas of its own (make(w, h) gives one), as a hatch.
  */
-export function gapLayer(sec, ax, W, H, dpr, color, make) {
+export function gapLayer(sec, ax, W, H, dpr, color, make, path = cutPath(sec, ax)) {
   const cw = Math.max(1, Math.round(W * dpr)), ch = Math.max(1, Math.round(H * dpr));
-  const cov = make(cw, ch), c = cov.getContext('2d', { willReadFrequently: true });
+  // read back once, so drawn by the canvas's own (GPU) rasterizer: WebKit's CPU canvas, which
+  // willReadFrequently asks for, took about a second to stroke Volve's few thousand cells (tools/DECISIONS.md)
+  const cov = make(cw, ch), c = cov.getContext('2d');
   c.setTransform(dpr, 0, 0, dpr, 0, 0);
   // every cell in one path, filled once: neighbors that share an edge leave no seam, and a real gap
   // (an inactive layer a few meters thick) stays a gap down to a pixel
   // and stroked 1 px wide: cells under a pixel thick (Volve's layers on a section) leave anti-aliased seams
   // between them that would read as gaps; a gap narrower than a pixel cannot be shown anyway
   c.fillStyle = c.strokeStyle = '#000'; c.lineWidth = 1; c.lineJoin = 'round';
-  c.beginPath(); tracePolys(c, ax, sec, Array.from({ length: sec.n }, (_, i) => i)); c.fill(); c.stroke();
+  c.fill(path); c.stroke(path);
   const px = c.getImageData(0, 0, cw, ch).data;
   const out = make(cw, ch), o = out.getContext('2d'), img = o.createImageData(cw, ch), d = img.data;
   const rgb = color.match(/[\d.]+/g).map(Number);
@@ -490,17 +502,24 @@ export function drawCells(ctx, ax, sec, colors, edge) {
  *  scale needs on a white ground): every cell stroked, then every cell's inside erased in one path, so only
  *  what lies outside all of them stays, however thin the cells. Drawn once per line, size and stretch into a
  *  canvas of its own (make(w, h) gives one). */
-export function rimLayer(sec, ax, W, H, dpr, color, make) {
-  const out = make(Math.max(1, Math.round(W * dpr)), Math.max(1, Math.round(H * dpr))), c = out.getContext('2d'), all = Array.from({ length: sec.n }, (_, i) => i);
+export function rimLayer(sec, ax, W, H, dpr, color, make, path = cutPath(sec, ax)) {
+  const out = make(Math.max(1, Math.round(W * dpr)), Math.max(1, Math.round(H * dpr))), c = out.getContext('2d');
   c.setTransform(dpr, 0, 0, dpr, 0, 0);
   // a 2.5 px line, the cells' insides then erased in one path and 1 px wider (sealed as gapLayer's mask is),
   // so 0.75 px stays outside the cut, as Norne's 1.5 px line under the fills left, and nothing between cells
   c.strokeStyle = color; c.lineWidth = 2.5; c.lineJoin = 'round';
-  c.beginPath(); tracePolys(c, ax, sec, all); c.stroke();
+  c.stroke(path);
   c.globalCompositeOperation = 'destination-out';
   c.fillStyle = c.strokeStyle = '#000'; c.lineWidth = 1;
-  c.fill(); c.stroke();
+  c.fill(path); c.stroke(path);
   return out;
+}
+/** Every cell of the cut in one path (CSS px), which gapLayer and rimLayer share (in Chromium, building
+ *  a path of a few thousand cells costs more than filling it). */
+export function cutPath(sec, ax) {
+  const p = new Path2D();
+  tracePolys(p, ax, sec, Array.from({ length: sec.n }, (_, i) => i));
+  return p;
 }
 /** One cell's outline, for the tapped cell. */
 export function drawOutline(ctx, ax, sec, idx, color, halo) {

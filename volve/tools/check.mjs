@@ -8,7 +8,7 @@
 //      the face's and OFL.txt's sha256 are the house's; NOTES.md and About credit the face;
 //   5. the data is untouched: each data file's sha256 is the one the pipeline committed (the app never
 //      writes data/), and the facts About states from seismic.json are still what it says;
-//   6. miniapp.json is valid, "Volve" at version 1.0 (HOUSE 13), its description naming neither Equinor nor
+//   6. miniapp.json is valid, "Volve" at version 1.1 (HOUSE 13; plan 0012 D16 and D17, and the section's speed), its description naming neither Equinor nor
 //      a former partner (Equinor's terms, clause 4);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
 //   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line, its
@@ -34,7 +34,7 @@
 //      monospace; every script font string names "Ysabeau Office" first;
 //  15. budgets: app code ≤ CODE_CAP, fonts/ ≤ 160,000, the ZIP built exactly as build-zips.yml builds it ≤
 //      ZIP_CAP, with index.html at its top and nothing else in it. Both caps are the lead's rulings of
-//      2026-10-07 (plan 0012 3.4c): code 312 000 B (310 000 before the final's fixes), ZIP 33 600 000 B;
+//      2026-10-07 (plan 0012 3.4c): code 322 500 B (the 2026-10-08 ruling for 1.1; 312 000 for 1.0), ZIP 33 600 000 B;
 //  16. US spelling in every shipped text file, the data's own words (data/) excepted, and the title of
 //      Equinor's terms quoted exactly.
 //
@@ -163,7 +163,7 @@ const PARTNERS = /equinor|statoil|exxon|bayerngas|licen[cs]e partners/i;   // Eq
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Volve' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.0' && !PARTNERS.test(mini.description),
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1' && !PARTNERS.test(mini.description),
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, naming neither Equinor nor a former partner`);
 }
 
@@ -280,6 +280,18 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const cfg = JSON.parse(read('config.json'));
   const same = pal && ['colormaps', 'colormapsDark', 'wellColors'].every((k) => JSON.stringify(cfg[k]) === JSON.stringify(pal[k]));
   ok(!!same, `config.json's colormaps, colormapsDark and wellColors equal palette.py --json (${pal ? Object.keys(pal.colormaps).length : 0} scales, ${pal ? Object.values(pal.colormaps).concat(Object.values(pal.colormapsDark)).reduce((n, s) => n + s.length, 0) : 0} stops)`);
+  // plan 0012 D16: plasma for pressure and viridis for the rock, matplotlib's tables, the same stops in both themes;
+  // the saturations, the categories, the layers and the seismic exactly as 1.0 stored them (their sha256)
+  const D16 = ['pressure', 'rock', 'depth'], ENDS = { plasma: ['#0d0887', '#f0f921'], viridis: ['#440154', '#fde725'] };
+  const d16 = D16.every((k) => { const s = cfg.colormaps[k], e = ENDS[k === 'pressure' ? 'plasma' : 'viridis']; return s && s.length === 33 && JSON.stringify(s) === JSON.stringify(cfg.colormapsDark[k]) && s[0] === e[0] && s[32] === e[1]; });
+  const keptKeys = Object.keys(cfg.colormaps).filter((k) => !D16.includes(k));
+  const kept = crypto.createHash('sha256').update(JSON.stringify(keptKeys.map((k) => [k, cfg.colormaps[k], cfg.colormapsDark[k]]))).digest('hex');
+  ok(d16 && kept === '931a2947bfe9bfcb9dd35c4dfdbfce74157f0bd006868ae582ddf18558e18c6e',
+    `D16: ${D16.join(', ')} are plasma (pressure) and viridis, 33 stops, one set for both themes; ${keptKeys.join(', ')} as 1.0 stored them (sha256 ${kept.slice(0, 12)})`);
+  const plate = html.slice(html.indexOf('<main class="plate"'), html.indexOf('</main>')), inst = (html.match(/<div class="instruments" id="instruments">([\s\S]*?)<\/div>/) || [])[1] || '';
+  ok(/<span class="compass" id="north" role="img" aria-label="North arrow"><svg[^>]*aria-hidden="true"><circle[^>]*\/><g id="needle"><path class="n"[^>]*\/><path[^>]*\/><\/g><text id="north-n">N<\/text><\/svg><\/span>/.test(plate) && !/north|needle/.test(inst) && /id="scale"/.test(inst)
+    && /keepOut\(\) \{\n  const out = \[\];\n  for \(const id of \['readout', 'keys', 'focus-exit', 'north'\]\)/.test(app) && /\$\('focus-exit'\), \$\('north'\)\]\)/.test(app),
+    'D17: the compass in the plate (its disc, a two-tone needle, the N), named "North arrow" until app.js says where north is; the instrument line holds the scale alone; labels and the card keep off the compass');
   const c = code(css, 'x.css'), light = c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)')), dark = c.slice(c.indexOf('@media (prefers-color-scheme: dark)'));
   const tok = (block, name) => ((block.match(new RegExp(`--${name}:\\s*([^;]+);`)) || [])[1] || '').trim().toLowerCase();
   const sig = run.stdout.match(/light: ink (#[0-9a-f]{6})[\s\S]*?water \(ink at ([\d.]+)\)[\s\S]*?dark: ink (#[0-9a-f]{6})[\s\S]*?water \(ink at ([\d.]+)\)/);
@@ -343,8 +355,8 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   // Volve's caps, the lead's rulings of 2026-10-07 (plan 0012 3.4c): Norne Reservoir 2.3's code (255 443 B,
   // cap 256 000) plus js/seismic.js, the section's survey lines, seismic layer and horizons, About's seismic
   // and terms; nothing cut to fit. Past a cap, the figure is reported, never cut to.
-  const CODE_CAP = 312000;   // the lead's second ruling, 2026-10-07: 298 268 B at the build, 306 001 B after the review's fixes, 311 642 B after the final's (310 000 before it)
-  ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling of 2026-10-07; Norne Reservoir 2.3's code is 255,443 of its 256,000): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+  const CODE_CAP = 322500;   // the lead's third ruling, 2026-10-08: 321 958 B after 1.1's section speed (D16, D17 and the progressive render); 312 000 for 1.0
+  ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling for 1.1 of 2026-10-08; Norne Reservoir 2.4's code is 255,990 of its 256,000): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
   const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
   ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000; 0 before the pass)`);
   const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

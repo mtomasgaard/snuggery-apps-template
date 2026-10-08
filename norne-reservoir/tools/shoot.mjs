@@ -33,7 +33,10 @@
 // section A–A′: opened by touch, its colors against this file's decode on three properties and in the
 // dark theme, sharp while scrubbed, a tap on a block opening its cell, a line drawn and an end moved by
 // touch under the finger, two fingers handing back to the view, the orbit still one finger, Along and
-// Across, the units and the stretch, hidden, remembered, focus mode, gaps hatched. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
+// Across, the units and the stretch, hidden, remembered, focus mode, gaps hatched. Since 2.4 (plan 0012
+// D16, D17): the section's and the legend's colors follow config.json's plasma and viridis as before; the
+// compass at rest in both themes, in every state the card is checked in, under the card, and turning with
+// the model. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite.
 
 import http from 'node:http';
@@ -246,6 +249,56 @@ const siOf = (w) => w(() => {
   return { n, bad };
 });
 
+/* The compass (plan 0012 D17), in the plate's coordinates: shown, 32 px or more, in the plate's top-left
+ * corner, its N where north projects at the camera's target (worked out here from the camera's own numbers,
+ * its eye, the 40° lens and the lens shift, never from app.js's matrices), the needle never under half its
+ * length (8.5 px a side) and never narrower than its 6.4 px, its name saying where north is, and over none
+ * of: a key, the ghost key, the card, a well's drawn name or its 44 px hit, a formation's name, the tapped
+ * cell's ring, the section's A and A′. */
+const DIRS = ['the top', 'the top right', 'the right', 'the bottom right', 'the bottom', 'the bottom left', 'the left', 'the top left'];
+const compassOf = (w) => w((D) => {
+  const N = window.__norne, e = document.getElementById('north'), pr = document.getElementById('plate').getBoundingClientRect();
+  const rel = (q) => ({ l: q.left - pr.left, t: q.top - pr.top, r: q.right - pr.left, b: q.bottom - pr.top });
+  const over = (a, b) => a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t, r = e.getBoundingClientRect(), c = rel(r), cs = getComputedStyle(e);
+  const cam = N.cam(), gl = document.getElementById('gl'), W = gl.clientWidth, H = gl.clientHeight, T = cam.target;
+  const th = cam.theta * Math.PI / 180, ph = cam.phi * Math.PI / 180;
+  const eye = [T[0] + cam.dist * Math.cos(ph) * Math.sin(th), T[1] + cam.dist * Math.sin(ph), T[2] + cam.dist * Math.cos(ph) * Math.cos(th)];
+  const sub = (a, b) => a.map((v, i) => v - b[i]), dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2], unit = (a) => { const l = Math.hypot(...a); return a.map((v) => v / l); };
+  const z = unit(sub(eye, T)), x = unit([z[2], 0, -z[0]]), y = [z[1] * x[2] - z[2] * x[1], z[2] * x[0] - z[0] * x[2], z[0] * x[1] - z[1] * x[0]];
+  const f = 1 / Math.tan(20 * Math.PI / 180);
+  const scr = (p) => { const d = sub(p, eye), cz = -dot(z, d); return [((f * H / W) * dot(x, d) / cz + (cam.sx || 0)) * 0.5 * W, -(f * dot(y, d) / cz + (cam.sy || 0)) * 0.5 * H]; };
+  const p0 = scr(T), p1 = scr([T[0], T[1], T[2] - cam.dist * 0.01]);   // model +y, north, is world -z
+  const want = Math.atan2(p1[0] - p0[0], -(p1[1] - p0[1])) * 180 / Math.PI;
+  const n = document.getElementById('north-n').getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const got = Math.atan2(n.left + n.width / 2 - cx, -(n.top + n.height / 2 - cy)) * 180 / Math.PI;
+  const off = ((got - want + 540) % 360) - 180;
+  const m = document.querySelector('#needle .n').getScreenCTM(), at = (u, v) => new DOMPoint(u, v).matrixTransform(m);
+  const o = at(0, 0), tip = at(0, -8.5), b1 = at(3.2, 0), b2 = at(-3.2, 0);
+  const label = e.getAttribute('aria-label'), sector = (a) => ((Math.round(a / 45) % 8) + 8) % 8;
+  const near = Math.abs(((want / 45 % 1) + 1) % 1 - 0.5) < 0.09;   // within 4° of a boundary between two words, either word
+  const said = [sector(want), ...(near ? [sector(want - 4), sector(want + 4)] : [])].some((i) => label === `North arrow: north is toward ${D[i]} of the view.`);
+  const things = [];
+  for (const k of [...document.querySelectorAll('#keys button'), document.getElementById('focus-exit'), document.getElementById('readout')]) if (!k.hidden && !k.closest('[hidden]') && k.getBoundingClientRect().width) things.push([k.id || 'a key', rel(k.getBoundingClientRect())]);
+  for (const k of document.querySelectorAll('#labels .wl, #labels .zl, #labels .pickmark')) if (k.style.display !== 'none' && k.style.transform && k.getBoundingClientRect().width) things.push([`${k.className.split(' ')[0]} ${k.textContent}`, rel(k.getBoundingClientRect())]);
+  for (const h of N.labelHits()) things.push([`the hit of ${h.name}`, { l: h.x, t: h.y, r: h.x + h.w, b: h.y + h.h }]);
+  if (!document.getElementById('secline').hidden) for (const id of ['sl-a', 'sl-b']) { const q = document.getElementById(id).getBoundingClientRect(); if (q.width) things.push([id, rel(q)]); }
+  return {
+    shown: !e.hidden && !e.closest('[hidden]') && cs.display !== 'none' && cs.visibility !== 'hidden' && +cs.opacity > 0.9,
+    size: Math.round(Math.min(r.width, r.height)), at: `${Math.round(c.l)}, ${Math.round(c.t)}`,
+    corner: c.l >= 0 && c.t >= 0 && c.l <= 60 && c.t <= 60 && c.r <= pr.width / 2 && c.b <= pr.height / 2,
+    want: Math.round(want), got: Math.round(got), off: Math.round(off), theta: Math.round(cam.theta), phi: Math.round(cam.phi),
+    len: Math.round(Math.hypot(tip.x - o.x, tip.y - o.y) * 10) / 10, width: Math.round(Math.hypot(b1.x - b2.x, b1.y - b2.y) * 10) / 10,
+    label, said, n: things.length, over: things.filter(([, q]) => over(c, q)).map(([what]) => what),
+  };
+}, DIRS);
+const compassCheck = async (A, label) => {
+  const k = await compassOf(A.w);
+  const bad = [!k.shown && 'not shown', k.size < 32 && `${k.size} px`, !k.corner && 'not in the top-left corner', Math.abs(k.off) > 6 && `the N ${k.off}° off north`,
+    !k.said && `named "${k.label}"`, k.len < 4.2 && 'the needle under half its length', k.width < 6.3 && 'the needle narrowed', k.over.length && `over ${k.over.join(', ')}`].filter(Boolean);
+  check(bad.length === 0, `the compass, ${label}: ${k.size} px at (${k.at}) in the plate, its N at ${k.got}° where north projects to ${k.want}° (camera theta ${k.theta}°, phi ${k.phi}°), the needle ${k.len} px a side and ${k.width} px across, "${k.label}", clear of all ${k.n} marks and keys on the plate${bad.length ? ': ' + bad.join('; ') : ''}`);
+  return k;
+};
+
 /* ════════════════════════════════════ per theme ════════════════════════════════════ */
 for (const scheme of schemes) {
   console.log(`\n== ${scheme}`);
@@ -271,6 +324,8 @@ for (const scheme of schemes) {
     const face = await w(() => document.fonts.check('560 11.5px "Ysabeau Office"') && document.fonts.check('600 21px "Ysabeau Office"') && [...document.fonts].some((f) => f.family.replace(/["']/g, '') === 'Ysabeau Office' && f.status === 'loaded'));
     check(face, 'the face is loaded (document.fonts.check, status loaded) before the model shows');
   }
+
+  await compassCheck(A, `${scheme}, at rest, Oil`);
 
   // text contrast and the tracer
   {
@@ -864,13 +919,15 @@ console.log('\n== once (light)');
     const sliced = parts.filter((e) => { const r = e.getBoundingClientRect(); return r.top < end - 0.5 && r.bottom > end + 0.5; }).length;
     const more = region.scrollHeight > region.clientHeight + 1;
     const sign = !more || (region.classList.contains('more') && cs.borderBottomStyle === 'solid' && cs.borderBottomWidth === '1px' && cs.borderBottomColor === getComputedStyle(card).borderTopColor);
-    return { open: !card.hidden, c, ring, compact, overTap: over(c, { l: X - 9, t: Y - 9, r: X + 9, b: Y + 9 }), overRing: !!ring && over(c, { l: ring.l - 2, t: ring.t - 2, r: ring.r + 2, b: ring.b + 2 }), overKeys: keys.some((k) => over(c, k)), inside: c.l >= -0.5 && c.t >= -0.5 && c.r <= pr.width + 0.5 && c.b <= pr.height + 0.5, reach, sliced, more, sign, plate: [Math.round(pr.width), Math.round(pr.height)] };
+    const cmp = rel(document.getElementById('north').getBoundingClientRect());
+    return { open: !card.hidden, c, ring, compact, overCompass: over(c, cmp), overTap: over(c, { l: X - 9, t: Y - 9, r: X + 9, b: Y + 9 }), overRing: !!ring && over(c, { l: ring.l - 2, t: ring.t - 2, r: ring.r + 2, b: ring.b + 2 }), overKeys: keys.some((k) => over(c, k)), inside: c.l >= -0.5 && c.t >= -0.5 && c.r <= pr.width + 0.5 && c.b <= pr.height + 0.5, reach, sliced, more, sign, plate: [Math.round(pr.width), Math.round(pr.height)] };
   }, [x, y]);
-  const wrong = (r, wantCompact) => [!r.open && 'closed', r.compact !== wantCompact && (r.compact ? 'compact' : 'full'), r.overTap && 'over the tap', !r.ring && 'ring hidden', r.overRing && 'over the ring', r.overKeys && 'over a key', !r.inside && 'past the plate', !r.reach.every(Boolean) && 'Close or Zoom out of reach', r.sliced && 'a row sliced', !r.sign && 'no rule at the foot'].filter(Boolean);
+  const wrong = (r, wantCompact) => [!r.open && 'closed', r.compact !== wantCompact && (r.compact ? 'compact' : 'full'), r.overTap && 'over the tap', !r.ring && 'ring hidden', r.overRing && 'over the ring', r.overKeys && 'over a key', r.overCompass && 'over the compass', !r.inside && 'past the plate', !r.reach.every(Boolean) && 'Close or Zoom out of reach', r.sliced && 'a row sliced', !r.sign && 'no rule at the foot'].filter(Boolean);
   /** Taps a 3 x 3 grid over the field's drawn rows, the card checked after each. */
   const scene = async (A, label, wantCompact) => {
     await A.frame(); await A.page.waitForTimeout(400); await A.frame();
     const pr = await A.rect('#plate');
+    await compassCheck(A, label);
     const rows = await A.w(([W, H]) => { const out = []; for (let y = 12; y < H - 12; y += 12) { const xs = []; for (let x = 12; x < W - 12; x += 12) if (window.__norne.pick(x, y) >= 0) xs.push(x); if (xs.length > 2) out.push([y, xs[0], xs[xs.length - 1]]); } return out; }, [Math.round(pr.width), Math.round(pr.height)]);
     const res = [];
     for (const fy of [0.1, 0.5, 0.9]) for (const fx of [0.12, 0.5, 0.88]) {
@@ -882,7 +939,7 @@ console.log('\n== once (light)');
     }
     const bad = res.filter((r) => wrong(r, wantCompact).length);
     const clipped = res.filter((r) => r.more).length, sz = res.length ? res[0].plate.join(' × ') : '?';
-    check(res.length >= 4 && bad.length === 0, `${label}, plate ${sz}: ${res.length} taps on the field, the card ${wantCompact ? 'compact' : 'full'} each time, clear of the tap, its ring and every key, inside the plate, Close and Zoom in reach, rows whole (${clipped} with more below, each with its rule)${bad.length ? ': ' + bad.map((r) => `(${r.x}, ${r.y}) ${wrong(r, wantCompact).join(', ')}`).join('; ') : ''}`);
+    check(res.length >= 4 && bad.length === 0, `${label}, plate ${sz}: ${res.length} taps on the field, the card ${wantCompact ? 'compact' : 'full'} each time, clear of the tap, its ring, every key and the compass, inside the plate, Close and Zoom in reach, rows whole (${clipped} with more below, each with its rule)${bad.length ? ': ' + bad.map((r) => `(${r.x}, ${r.y}) ${wrong(r, wantCompact).join(', ')}`).join('; ') : ''}`);
     return res;
   };
   const A = await open('light');
@@ -973,6 +1030,32 @@ console.log('\n== once (light)');
   await scene(B, 'on its side, focus mode', true);
   check(B.errors.length === 0, `on its side: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
   await B.ctx.close();
+}
+
+// the compass turns with the model (plan 0012 D17): one-finger turns and tilts, the N where north projects
+// each time and the needle never under half its length, then Show the whole field
+{
+  console.log('\n== the compass turns with the model');
+  const A = await open('dark');
+  const pr = await A.rect('#plate');
+  const drag = async (dx, dy) => {
+    const x = pr.left + pr.width * 0.45, y = pr.top + pr.height * 0.62;
+    await A.touch('touchStart', x, y);
+    for (let i = 1; i <= 10; i++) { await A.touch('touchMove', x + (dx * i) / 10, y + (dy * i) / 10); await new Promise((r) => setTimeout(r, 16)); }
+    await A.touch('touchEnd'); await A.page.waitForTimeout(200); await A.frame(); await A.frame();
+  };
+  const seen = [await compassCheck(A, 'dark, at rest')];
+  for (const [dx, dy, what] of [[90, 0, 'turned'], [110, 0, 'turned further'], [0, 140, 'tilted'], [0, -300, 'tilted the other way'], [-160, 0, 'turned back']]) {
+    await drag(dx, dy); seen.push(await compassCheck(A, `dark, ${what}`));
+    if (what === 'tilted the other way') await A.shot('compass-tilted-dark', false);
+  }
+  const angles = seen.map((k) => k.got), lens = seen.map((k) => k.len);
+  check(new Set(angles.map((a) => Math.round(a / 15))).size >= 3 && Math.max(...lens) - Math.min(...lens) > 0.5,
+    `the needle turned with the model (N at ${angles.join('°, ')}°) and shortened as north leaned into the view (${lens.join(', ')} px a side; 8.5 at most, 4.25 at least)`);
+  await A.tapEl('#fit'); await A.page.waitForTimeout(1200); await A.frame();
+  await compassCheck(A, 'dark, the whole field again');
+  check(A.errors.length === 0, `the compass turning: no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
+  await A.ctx.close();
 }
 
 // plan 0012, package 3.4: the view's share of the screen at each sheet stop (the owner: "when expanding

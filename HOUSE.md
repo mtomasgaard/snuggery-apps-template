@@ -447,6 +447,7 @@ Every app's `ART.md` states, for each theme:
   lightness the band cannot give (the radar convention's yellow sits at L ≈ 0.85, where no streak
   of either theme can read), the logic gives way and `ART.md` says plainly what was given up
   (ART 260-263; DEC 19-22).
+- *One dated exception, Norne Reservoir and Volve* (the owner, 2026-10-07, plan 0012 D16): pressure takes matplotlib's plasma and the rock (porosity, the permeabilities, depth, Norne's net to gross) its viridis, one table for both themes, outside the band and not printed twice; the saturations, the categories, the wells and the seismic keep the rules above, and each app's `palette.py` measures what the band guaranteed (the tables' ends on each ground, and the labels, wells, ghost key and compass over every stop).
 - **The signature encodes nothing by its color.** It is a near-neutral (Global Weather's streaks
   have chroma ≤ 0.021) and never a hue of any data scale (ART 272-274).
 - **A subject with one true appearance** (a night sky, a rendered body, a terrain under the real

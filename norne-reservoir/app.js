@@ -755,11 +755,11 @@ function buildLabels() {
   box.appendChild(G.pickMark);
   G.labelW = null;
 }
-/** Rectangles labels keep out of, in the plate's coordinates: the card, the keys, the ghost key. Their
- *  layout boxes, so the card's 4 px rise as it appears never moves what is kept out of it. */
+/** What labels keep out of, in the plate's px: the card, the keys, the ghost key, the compass. Layout boxes,
+ *  so the card's 4 px rise never moves them. */
 function keepOut() {
   const out = [];
-  for (const id of ['readout', 'keys', 'focus-exit']) {
+  for (const id of ['readout', 'keys', 'focus-exit', 'north']) {
     const e = $(id);
     if (e.hidden || e.closest('[hidden]')) continue;
     if (e.offsetWidth) out.push({ x: e.offsetLeft - 4, y: e.offsetTop - 4, w: e.offsetWidth + 8, h: e.offsetHeight + 8 });
@@ -796,7 +796,7 @@ function placeLabels() {
     if (ok) m.style.transform = `translate(${Math.round(p[0])}px, ${Math.round(p[1])}px)`;
   }
   if (!G.labelW) G.labelW = G.labels.map((el) => { el.style.display = ''; return el.offsetWidth || 40; });
-  const placed = [], items = [], show = S.wells && S.labels;
+  const placed = [], items = [], show = S.wells && S.labels, cmp = $('north'), cR = cmp.offsetLeft + 40, cB = cmp.offsetTop + 40;
   G.labelHits = [];
   model.wells.forEach((w, i) => {
     const el = G.labels[i], code = w.state[f] || 0;
@@ -815,7 +815,7 @@ function placeLabels() {
   items.sort((a, b) => (b.sel - a.sel) || (a.y - b.y));
   for (const it of items) {
     const wdt = G.labelW[it.i], hgt = 16, x = Math.round(it.x - 7);
-    const taken = (y) => y < 2 || !clear(x, y, wdt, hgt) || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
+    const taken = (y) => y < 2 || !clear(x, y, wdt, hgt) || (x + wdt / 2 - Math.max(44, wdt) / 2 < cR && y - 24 < cB) || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
     let y = Math.round(it.y - hgt - 4), hit = taken(y);
     // the chosen well's name is always drawn: under its head when the card or the keys hold the place over it
     if (hit && it.sel && !taken(Math.round(it.y + 6))) { y = Math.round(it.y + 6); hit = false; }
@@ -843,15 +843,12 @@ function labelAt(x, y, inner) {
   return best;
 }
 
-// ---------------------------------------------------------------- north arrow + scale (the instrument line)
+// ---------------------------------------------------------------- the compass + the scale
 const SCALE_PX = 96;
 const DIRS = ['the top', 'the top right', 'the right', 'the bottom right', 'the bottom', 'the bottom left', 'the left', 'the top left'];
-// Both readings come from the live view matrix, measured at the camera target.
-//   north  data/model.json center is easting, northing, depth, and geometry.bin is x, y, depth
-//          relative to it, so model +y is north. The grid shader maps a model point to world
-//          (x, -depth * exag, -y), so north is world (0, 0, -1).
-//   scale  M4.look builds the camera's right axis as cross(world up, view direction), so it is always
-//          horizontal in world space and across the screen: the honest direction to measure along.
+// Both from the live view matrix at the camera target. North: model +y (geometry.bin is x east, y north,
+// depth), world (0, 0, -1) in the grid shader. Scale: M4.look's right axis is cross(world up, view), so
+// level and across the screen, the honest direction to measure along.
 function updateGauge() {
   if (!G.PV || !G.V) return;
   const V = G.V, T = S.cam.target, d = Math.max(1, S.cam.dist * 0.02);
@@ -873,8 +870,10 @@ function updateGauge() {
   }
   const nx = pN[0] - p0[0], ny = pN[1] - p0[1], nl = Math.hypot(nx, ny);
   if (nl > 0.01) G.north = Math.atan2(nx, -ny) * 180 / Math.PI;
-  const a = G.north || 0, k = Math.max(0.3, acrossPx > 0 ? Math.min(1, nl / acrossPx) : 1);
-  $('needle').setAttribute('transform', `translate(8 8) rotate(${Math.round(a * 10) / 10}) scale(1 ${Math.round(k * 1000) / 1000}) translate(-8 -8)`);
+  // the needle shortens as north leans into the view, never under half; the N at its tip
+  const a = G.north || 0, k = Math.max(0.5, acrossPx > 0 ? Math.min(1, nl / acrossPx) : 1), r = a * Math.PI / 180, q = 8.5 * k + 5.5;
+  $('needle').setAttribute('transform', `rotate(${Math.round(a * 10) / 10}) scale(1 ${Math.round(k * 1000) / 1000})`);
+  $('north-n').setAttribute('transform', `translate(${Math.round(q * Math.sin(r))} ${Math.round(-q * Math.cos(r))})`);
   $('north').setAttribute('aria-label', `North arrow: north is toward ${DIRS[((Math.round(a / 45) % 8) + 8) % 8]} of the view.`);
 }
 
@@ -1557,10 +1556,10 @@ function placeCard(fresh = true) {
   const L = parseFloat(getComputedStyle(card).left) || 8, Rm = parseFloat(getComputedStyle($('keys')).right) || 8;
   const T = focus ? $('focus-exit').offsetTop : 8, B = H - 8, cap = H * (S.sheet === 0 || focus ? 0.55 : 0.5);
   const keep = [];                    // the keys' and the ghost key's hits; the card's Close hit reaches 4 px over its top
-  for (const e of [...$('keys').querySelectorAll('button'), $('focus-exit')]) {
+  for (const e of [...$('keys').querySelectorAll('button'), $('focus-exit'), $('north')]) {
     if (e.hidden || e.closest('[hidden]')) continue;
-    const r = e.getBoundingClientRect();
-    if (r.width) keep.push({ l: r.left - pr.left - 6, t: r.top - pr.top - 6, r: r.right - pr.left + 6, b: r.bottom - pr.top + 6 });
+    const r = e.getBoundingClientRect(), m = e.id == 'north' ? 4 : 6;
+    if (r.width) keep.push({ l: r.left - pr.left - m, t: r.top - pr.top - m, r: r.right - pr.left + m, b: r.bottom - pr.top + m });
   }
   /** The free stretches of the column x0..x1, top to bottom, beside the keys and the mark. */
   const stretches = (x0, x1, mark) => {

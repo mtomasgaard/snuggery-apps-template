@@ -35,7 +35,11 @@
 // section A–A′: opened by touch, its colors against this file's decode on three properties and in the
 // dark theme, sharp while scrubbed, a tap on a block opening its cell, a line drawn and an end moved by
 // touch under the finger, two fingers handing back to the view, the orbit still one finger, Along and
-// Across, the units and the stretch, hidden, remembered, focus mode, gaps hatched. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
+// Across, the units and the stretch, hidden, remembered, focus mode, gaps hatched. Since 1.1 (plan 0012
+// D16, D17): the section's and the legend's colors follow config.json's plasma and viridis as before; the
+// compass at rest in both themes, in every state the card is checked in, under the card, and turning with
+// the model. Since 1.1's section pass: the section's speed by a finger in both engines (its block at the end
+// says what it checks and the budgets). Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite.
 
 import http from 'node:http';
@@ -166,7 +170,12 @@ async function open(scheme, o = {}) {
   const rect = (sel) => w((s) => document.querySelector(s).getBoundingClientRect().toJSON(), sel);
   // a word in a row of words that scrolls is brought into view first, as a finger would scroll it
   const tapEl = async (sel) => { await w((s) => { const e = document.querySelector(s); if (e && e.closest('.words')) e.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }, sel); const r = await rect(sel); await tapAt(r.left + r.width / 2, r.top + r.height / 2); };
-  const frame = () => w(() => new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(res))));
+  // two frames, and then, with no finger on the view, until the section is drawn in full again (1.1: while the
+  // view moves the section is laid on from its last layers and the seismic's own samples, in full at rest)
+  const frame = async () => {
+    await w(() => new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(res))));
+    await page.waitForFunction(() => !window.__volve || window.__volve.settled() !== false, null, { timeout: 5000, polling: 'raf' }).catch(() => {});
+  };
   const shot = async (name, keep = true) => {
     await page.waitForTimeout(250);
     const p = path.join(OUT, `${name}.png`);
@@ -250,6 +259,56 @@ const siOf = (w) => w(() => {
   return { n, bad };
 });
 
+/* The compass (plan 0012 D17), in the plate's coordinates: shown, 32 px or more, in the plate's top-left
+ * corner, its N where north projects at the camera's target (worked out here from the camera's own numbers,
+ * its eye, the 40° lens and the lens shift, never from app.js's matrices), the needle never under half its
+ * length (8.5 px a side) and never narrower than its 6.4 px, its name saying where north is, and over none
+ * of: a key, the ghost key, the card, a well's drawn name or its 44 px hit, a formation's name, the tapped
+ * cell's ring, the section's A and A′. */
+const DIRS = ['the top', 'the top right', 'the right', 'the bottom right', 'the bottom', 'the bottom left', 'the left', 'the top left'];
+const compassOf = (w) => w((D) => {
+  const N = window.__volve, e = document.getElementById('north'), pr = document.getElementById('plate').getBoundingClientRect();
+  const rel = (q) => ({ l: q.left - pr.left, t: q.top - pr.top, r: q.right - pr.left, b: q.bottom - pr.top });
+  const over = (a, b) => a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t, r = e.getBoundingClientRect(), c = rel(r), cs = getComputedStyle(e);
+  const cam = N.cam(), gl = document.getElementById('gl'), W = gl.clientWidth, H = gl.clientHeight, T = cam.target;
+  const th = cam.theta * Math.PI / 180, ph = cam.phi * Math.PI / 180;
+  const eye = [T[0] + cam.dist * Math.cos(ph) * Math.sin(th), T[1] + cam.dist * Math.sin(ph), T[2] + cam.dist * Math.cos(ph) * Math.cos(th)];
+  const sub = (a, b) => a.map((v, i) => v - b[i]), dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2], unit = (a) => { const l = Math.hypot(...a); return a.map((v) => v / l); };
+  const z = unit(sub(eye, T)), x = unit([z[2], 0, -z[0]]), y = [z[1] * x[2] - z[2] * x[1], z[2] * x[0] - z[0] * x[2], z[0] * x[1] - z[1] * x[0]];
+  const f = 1 / Math.tan(20 * Math.PI / 180);
+  const scr = (p) => { const d = sub(p, eye), cz = -dot(z, d); return [((f * H / W) * dot(x, d) / cz + (cam.sx || 0)) * 0.5 * W, -(f * dot(y, d) / cz + (cam.sy || 0)) * 0.5 * H]; };
+  const p0 = scr(T), p1 = scr([T[0], T[1], T[2] - cam.dist * 0.01]);   // model +y, north, is world -z
+  const want = Math.atan2(p1[0] - p0[0], -(p1[1] - p0[1])) * 180 / Math.PI;
+  const n = document.getElementById('north-n').getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  const got = Math.atan2(n.left + n.width / 2 - cx, -(n.top + n.height / 2 - cy)) * 180 / Math.PI;
+  const off = ((got - want + 540) % 360) - 180;
+  const m = document.querySelector('#needle .n').getScreenCTM(), at = (u, v) => new DOMPoint(u, v).matrixTransform(m);
+  const o = at(0, 0), tip = at(0, -8.5), b1 = at(3.2, 0), b2 = at(-3.2, 0);
+  const label = e.getAttribute('aria-label'), sector = (a) => ((Math.round(a / 45) % 8) + 8) % 8;
+  const near = Math.abs(((want / 45 % 1) + 1) % 1 - 0.5) < 0.09;   // within 4° of a boundary between two words, either word
+  const said = [sector(want), ...(near ? [sector(want - 4), sector(want + 4)] : [])].some((i) => label === `North arrow: north is toward ${D[i]} of the view.`);
+  const things = [];
+  for (const k of [...document.querySelectorAll('#keys button'), document.getElementById('focus-exit'), document.getElementById('readout')]) if (!k.hidden && !k.closest('[hidden]') && k.getBoundingClientRect().width) things.push([k.id || 'a key', rel(k.getBoundingClientRect())]);
+  for (const k of document.querySelectorAll('#labels .wl, #labels .zl, #labels .pickmark')) if (k.style.display !== 'none' && k.style.transform && k.getBoundingClientRect().width) things.push([`${k.className.split(' ')[0]} ${k.textContent}`, rel(k.getBoundingClientRect())]);
+  for (const h of N.labelHits()) things.push([`the hit of ${h.name}`, { l: h.x, t: h.y, r: h.x + h.w, b: h.y + h.h }]);
+  if (!document.getElementById('secline').hidden) for (const id of ['sl-a', 'sl-b']) { const q = document.getElementById(id).getBoundingClientRect(); if (q.width) things.push([id, rel(q)]); }
+  return {
+    shown: !e.hidden && !e.closest('[hidden]') && cs.display !== 'none' && cs.visibility !== 'hidden' && +cs.opacity > 0.9,
+    size: Math.round(Math.min(r.width, r.height)), at: `${Math.round(c.l)}, ${Math.round(c.t)}`,
+    corner: c.l >= 0 && c.t >= 0 && c.l <= 60 && c.t <= 60 && c.r <= pr.width / 2 && c.b <= pr.height / 2,
+    want: Math.round(want), got: Math.round(got), off: Math.round(off), theta: Math.round(cam.theta), phi: Math.round(cam.phi),
+    len: Math.round(Math.hypot(tip.x - o.x, tip.y - o.y) * 10) / 10, width: Math.round(Math.hypot(b1.x - b2.x, b1.y - b2.y) * 10) / 10,
+    label, said, n: things.length, over: things.filter(([, q]) => over(c, q)).map(([what]) => what),
+  };
+}, DIRS);
+const compassCheck = async (A, label) => {
+  const k = await compassOf(A.w);
+  const bad = [!k.shown && 'not shown', k.size < 32 && `${k.size} px`, !k.corner && 'not in the top-left corner', Math.abs(k.off) > 6 && `the N ${k.off}° off north`,
+    !k.said && `named "${k.label}"`, k.len < 4.2 && 'the needle under half its length', k.width < 6.3 && 'the needle narrowed', k.over.length && `over ${k.over.join(', ')}`].filter(Boolean);
+  check(bad.length === 0, `the compass, ${label}: ${k.size} px at (${k.at}) in the plate, its N at ${k.got}° where north projects to ${k.want}° (camera theta ${k.theta}°, phi ${k.phi}°), the needle ${k.len} px a side and ${k.width} px across, "${k.label}", clear of all ${k.n} marks and keys on the plate${bad.length ? ': ' + bad.join('; ') : ''}`);
+  return k;
+};
+
 /* ════════════════════════════════════ per theme ════════════════════════════════════ */
 for (const scheme of schemes) {
   console.log(`\n== ${scheme}`);
@@ -275,6 +334,8 @@ for (const scheme of schemes) {
     const face = await w(() => document.fonts.check('560 11.5px "Ysabeau Office"') && document.fonts.check('600 21px "Ysabeau Office"') && [...document.fonts].some((f) => f.family.replace(/["']/g, '') === 'Ysabeau Office' && f.status === 'loaded'));
     check(face, 'the face is loaded (document.fonts.check, status loaded) before the model shows');
   }
+
+  await compassCheck(A, `${scheme}, at rest, Oil`);
 
   // text contrast and the tracer
   {
@@ -900,13 +961,15 @@ console.log('\n== once (light)');
     const sliced = parts.filter((e) => { const r = e.getBoundingClientRect(); return r.top < end - 0.5 && r.bottom > end + 0.5; }).length;
     const more = region.scrollHeight > region.clientHeight + 1;
     const sign = !more || (region.classList.contains('more') && cs.borderBottomStyle === 'solid' && cs.borderBottomWidth === '1px' && cs.borderBottomColor === getComputedStyle(card).borderTopColor);
-    return { open: !card.hidden, c, ring, compact, overTap: over(c, { l: X - 9, t: Y - 9, r: X + 9, b: Y + 9 }), overRing: !!ring && over(c, { l: ring.l - 2, t: ring.t - 2, r: ring.r + 2, b: ring.b + 2 }), overKeys: keys.some((k) => over(c, k)), inside: c.l >= -0.5 && c.t >= -0.5 && c.r <= pr.width + 0.5 && c.b <= pr.height + 0.5, reach, sliced, more, sign, plate: [Math.round(pr.width), Math.round(pr.height)] };
+    const cmp = rel(document.getElementById('north').getBoundingClientRect());
+    return { open: !card.hidden, c, ring, compact, overCompass: over(c, cmp), overTap: over(c, { l: X - 9, t: Y - 9, r: X + 9, b: Y + 9 }), overRing: !!ring && over(c, { l: ring.l - 2, t: ring.t - 2, r: ring.r + 2, b: ring.b + 2 }), overKeys: keys.some((k) => over(c, k)), inside: c.l >= -0.5 && c.t >= -0.5 && c.r <= pr.width + 0.5 && c.b <= pr.height + 0.5, reach, sliced, more, sign, plate: [Math.round(pr.width), Math.round(pr.height)] };
   }, [x, y]);
-  const wrong = (r, wantCompact) => [!r.open && 'closed', r.compact !== wantCompact && (r.compact ? 'compact' : 'full'), r.overTap && 'over the tap', !r.ring && 'ring hidden', r.overRing && 'over the ring', r.overKeys && 'over a key', !r.inside && 'past the plate', !r.reach.every(Boolean) && 'Close or Zoom out of reach', r.sliced && 'a row sliced', !r.sign && 'no rule at the foot'].filter(Boolean);
+  const wrong = (r, wantCompact) => [!r.open && 'closed', r.compact !== wantCompact && (r.compact ? 'compact' : 'full'), r.overTap && 'over the tap', !r.ring && 'ring hidden', r.overRing && 'over the ring', r.overKeys && 'over a key', r.overCompass && 'over the compass', !r.inside && 'past the plate', !r.reach.every(Boolean) && 'Close or Zoom out of reach', r.sliced && 'a row sliced', !r.sign && 'no rule at the foot'].filter(Boolean);
   /** Taps a 3 x 3 grid over the field's drawn rows, the card checked after each. */
   const scene = async (A, label, wantCompact) => {
     await A.frame(); await A.page.waitForTimeout(400); await A.frame();
     const pr = await A.rect('#plate');
+    await compassCheck(A, label);
     const rows = await A.w(([W, H]) => { const out = []; for (let y = 12; y < H - 12; y += 12) { const xs = []; for (let x = 12; x < W - 12; x += 12) if (window.__volve.pick(x, y) >= 0) xs.push(x); if (xs.length > 2) out.push([y, xs[0], xs[xs.length - 1]]); } return out; }, [Math.round(pr.width), Math.round(pr.height)]);
     const res = [];
     for (const fy of [0.1, 0.5, 0.9]) for (const fx of [0.12, 0.5, 0.88]) {
@@ -918,7 +981,7 @@ console.log('\n== once (light)');
     }
     const bad = res.filter((r) => wrong(r, wantCompact).length);
     const clipped = res.filter((r) => r.more).length, sz = res.length ? res[0].plate.join(' × ') : '?';
-    check(res.length >= 4 && bad.length === 0, `${label}, plate ${sz}: ${res.length} taps on the field, the card ${wantCompact ? 'compact' : 'full'} each time, clear of the tap, its ring and every key, inside the plate, Close and Zoom in reach, rows whole (${clipped} with more below, each with its rule)${bad.length ? ': ' + bad.map((r) => `(${r.x}, ${r.y}) ${wrong(r, wantCompact).join(', ')}`).join('; ') : ''}`);
+    check(res.length >= 4 && bad.length === 0, `${label}, plate ${sz}: ${res.length} taps on the field, the card ${wantCompact ? 'compact' : 'full'} each time, clear of the tap, its ring, every key and the compass, inside the plate, Close and Zoom in reach, rows whole (${clipped} with more below, each with its rule)${bad.length ? ': ' + bad.map((r) => `(${r.x}, ${r.y}) ${wrong(r, wantCompact).join(', ')}`).join('; ') : ''}`);
     return res;
   };
   const A = await open('light');
@@ -1009,6 +1072,32 @@ console.log('\n== once (light)');
   await scene(B, 'on its side, focus mode', true);
   check(B.errors.length === 0, `on its side: no console error${B.errors.length ? ': ' + B.errors.join(' | ') : ''}`);
   await B.ctx.close();
+}
+
+// the compass turns with the model (plan 0012 D17): one-finger turns and tilts, the N where north projects
+// each time and the needle never under half its length, then Show the whole field
+{
+  console.log('\n== the compass turns with the model');
+  const A = await open('dark');
+  const pr = await A.rect('#plate');
+  const drag = async (dx, dy) => {
+    const x = pr.left + pr.width * 0.45, y = pr.top + pr.height * 0.62;
+    await A.touch('touchStart', x, y);
+    for (let i = 1; i <= 10; i++) { await A.touch('touchMove', x + (dx * i) / 10, y + (dy * i) / 10); await new Promise((r) => setTimeout(r, 16)); }
+    await A.touch('touchEnd'); await A.page.waitForTimeout(200); await A.frame(); await A.frame();
+  };
+  const seen = [await compassCheck(A, 'dark, at rest')];
+  for (const [dx, dy, what] of [[90, 0, 'turned'], [110, 0, 'turned further'], [0, 140, 'tilted'], [0, -300, 'tilted the other way'], [-160, 0, 'turned back']]) {
+    await drag(dx, dy); seen.push(await compassCheck(A, `dark, ${what}`));
+    if (what === 'tilted the other way') await A.shot('compass-tilted-dark', false);
+  }
+  const angles = seen.map((k) => k.got), lens = seen.map((k) => k.len);
+  check(new Set(angles.map((a) => Math.round(a / 15))).size >= 3 && Math.max(...lens) - Math.min(...lens) > 0.5,
+    `the needle turned with the model (N at ${angles.join('°, ')}°) and shortened as north leaned into the view (${lens.join(', ')} px a side; 8.5 at most, 4.25 at least)`);
+  await A.tapEl('#fit'); await A.page.waitForTimeout(1200); await A.frame();
+  await compassCheck(A, 'dark, the whole field again');
+  check(A.errors.length === 0, `the compass turning: no console error${A.errors.length ? ': ' + A.errors.join(' | ') : ''}`);
+  await A.ctx.close();
 }
 
 // plan 0012, package 3.4: the view's share of the screen at each sheet stop (the owner: "when expanding
@@ -1583,8 +1672,11 @@ async function nearEndDrag(A, pr) {
     await B.tapEl('#sec-lines [data-line="along"]'); await B.frame();
     await B.w(() => document.getElementById('sec-side').dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }))); await B.frame();   // compact first: a drag near A′ above may have met the side edge
     // each double tap starts with the app at rest: a headless frame at a new pane size takes most of a second
-    // here (SwiftShader), and a tap queued behind it would reach the edge late and read as a single tap
-    const dbl = async () => { await B.page.waitForFunction(() => !window.__volve.stats().raf, null, { timeout: 20000 }); await B.page.waitForTimeout(200); const e = await B.rect('#sec-side'), x = e.left + e.width / 2, y = e.top + e.height / 2; await B.tapAt(x, y); await B.page.waitForTimeout(100); await B.tapAt(x, y); await B.page.waitForTimeout(500); await B.frame(); return B.w(() => ({ on: window.__volve.section().on, size: window.__volve.section().size, card: !document.getElementById('readout').hidden, vt: document.getElementById('sec-side').getAttribute('aria-valuetext') })); };
+    // here (SwiftShader), and a tap queued behind it would reach the edge late and read as a single tap; so
+    // the section in full, and then three frames in a row under 40 ms apart (the GPU's queue drained: 1.0's
+    // wait alone let the first tap wait 0.3 to 0.6 s behind it in some runs, before 1.1's pass and after)
+    const dbl = async () => { await B.page.waitForFunction(() => !window.__volve.stats().raf && window.__volve.settled() === true, null, { timeout: 20000 }); await B.page.waitForTimeout(200);
+      await B.w(() => new Promise((res) => { let last = 0, n = 0; const f = (t) => { n = last && t - last < 40 ? n + 1 : 0; last = t; if (n >= 3) res(); else requestAnimationFrame(f); }; requestAnimationFrame(f); })); const e = await B.rect('#sec-side'), x = e.left + e.width / 2, y = e.top + e.height / 2; await B.tapAt(x, y); await B.page.waitForTimeout(100); await B.tapAt(x, y); await B.page.waitForTimeout(500); await B.frame(); return B.w(() => ({ on: window.__volve.section().on, size: window.__volve.section().size, card: !document.getElementById('readout').hidden, vt: document.getElementById('sec-side').getAttribute('aria-valuetext') })); };
     const d1 = await dbl(), d2 = await dbl();
     check(d1.on && d1.size === 1 && d1.vt === 'Wide' && d2.on && d2.size === 0 && d2.vt === 'Compact' && !d1.card && !d2.card,
       `on its side with the sheet raised, a double tap on the side edge goes to wide ("${d1.vt}") and one more back to compact ("${d2.vt}"); the section stays open (${d2.on}) and no card opens under the finger (${!d1.card && !d2.card})`);
@@ -1892,6 +1984,131 @@ for (const kind of ['webkit', 'chromium']) {
   console.log(`      ${kind}: the page in ${load} ms to its first frame with every file in; the browser's processes ${(r0 / 2 ** 20).toFixed(0)} MB resident before it and ${(r1 / 2 ** 20).toFixed(0)} MB after the model, the seismic and the section swept (${((r1 - r0) / 2 ** 20).toFixed(0)} MB more)${heap}; the seismic drawn ${st.s.seisRenders} times at ${(st.s.seisMs / st.s.seisRenders).toFixed(1)} ms each (headless on this Mac: a trend, never phone evidence)`);
   check(fam[0][0] === 'crossline' && fam[1][0] === 'inline' && fam.every((f) => f[2] > 100) && st.q.at === fam[1][1] + 20 && st.q.seisAt === st.q.at && played > 0 && errors.length === 0,
     `${kind}, by touch: Crossline then Inline by their words (${fam.map((f) => `${f[0]} ${f[1]}, ${f[2]} columns of seismic`).join('; ')}), › ten times to inline ${st.q.at} with the seismic drawn there, play to report date ${played}${errors.length ? ': ' + errors.slice(0, 4).join(' | ') : '; no console error, no request outside the app'}`);
+  await B.close();
+}
+
+// The section's speed (1.1): the section follows a finger at frame rate, drawn in full only at rest. By a
+// finger in Chromium (CDP touch) and by the mouse in WebKit (Playwright has no touch drag there; the mouse's
+// pointer events take the same path in the app), each move sent on a 16 ms cadence without waiting for the
+// page, as a finger moves whether the page keeps up or not. For an edge drag from compact to tall and back,
+// a fast scrub of the sweep on each family, a drag of a line's end and a turn of the model:
+//   - no full seismic render while a finger is on the view (no slice of one in any frame the app logs while
+//     it moves, and the count of finished ones unchanged until the lift);
+//   - the edge under the finger in every frame (the pane's top where the last move put it, within 1 px), each
+//     move on screen within SPEED.lag ms of its event, and the stretch held while the edge moves;
+//   - the main thread's time per frame (every rAF callback, input listener, ResizeObserver callback and timer,
+//     timed in the page) within SPEED.p95 ms at the 95th percentile, and no single task over SPEED.long ms;
+//   - after the lift, the section in full within 1 s, and pixel for pixel the section a fresh page draws at
+//     the same state (read back from the canvas, hashed).
+// Budgets: a 60 Hz frame is 16.7 ms; measured here (tools/DECISIONS.md) WebKit's worst 95th percentile is
+// about 20 ms and Chromium's about 30 (its canvas builds the cells' paths slowly), and before 1.1 single
+// frames took 0.5 to 2.5 s. Chromium runs on the Mac's GPU (ANGLE on Metal): SwiftShader's software GL would
+// time the 3D view's resizing instead. HEADLESS ON THIS MAC: a trend, never phone evidence.
+const SPEED = { p95: { webkit: 30, chromium: 45 }, long: 75, lag: 80 };
+const instrument = () => {
+  const now = () => performance.now(), P = (window.__perf = { tasks: [], frames: [], moves: [], on: false });
+  const time = (fn, kind) => function (...a) { const t = now(); try { return fn.apply(this, a); } finally { if (P.on) P.tasks.push([t, now() - t, kind]); } };
+  const raf = window.requestAnimationFrame.bind(window), st = window.setTimeout.bind(window), ael = EventTarget.prototype.addEventListener, done = new WeakMap();
+  window.requestAnimationFrame = (cb) => raf(time(cb, 'raf'));
+  window.setTimeout = (cb, ms, ...a) => st(typeof cb === 'function' ? time(cb, 'timer') : cb, ms, ...a);
+  EventTarget.prototype.addEventListener = function (type, fn, o) {
+    if (typeof fn !== 'function' || !/^(pointer|input|change|touch|click|scroll|wheel)/.test(type)) return ael.call(this, type, fn, o);
+    if (!done.has(fn)) done.set(fn, time(fn, type));
+    return ael.call(this, type, done.get(fn), o);
+  };
+  const RO = window.ResizeObserver;
+  window.ResizeObserver = class extends RO { constructor(cb) { super(time(cb, 'resize')); } };
+  ael.call(window, 'pointermove', (e) => { if (P.on) P.moves.push([e.timeStamp, now(), e.clientX, e.clientY]); }, { capture: true });
+  const tick = (t) => { if (P.on) { const s = document.getElementById('section'); P.frames.push([t, now(), s ? s.getBoundingClientRect().top : 0]); } raf(tick); };
+  raf(tick);
+};
+for (const kind of ['webkit', 'chromium']) {
+  console.log(`\n== ${kind}: the section's speed`);
+  const B = await pw[kind].launch(kind === 'chromium' ? { args: ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] } : {});
+  const ctx = await B.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: kind === 'chromium', colorScheme: 'light' });
+  await ctx.addInitScript(instrument);
+  const page = await ctx.newPage(), errors = [];
+  page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !NOISE.test(m.text())) errors.push(`${m.type()}: ${m.text()}`); });
+  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  const w = (fn, a) => page.evaluate(fn, a), sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const rect = (s) => w((q) => document.querySelector(q).getBoundingClientRect().toJSON(), s);
+  const tap = async (s) => { const r = await rect(s); await page.touchscreen.tap(r.left + r.width / 2, r.top + r.height / 2); };
+  const settle = async () => { const t = Date.now(); await page.waitForFunction(() => window.__volve.settled() === true, null, { timeout: 5000, polling: 'raf' }).catch(() => {}); return Date.now() - t; };
+  const plot = () => w(() => { const c = document.getElementById('sec-plot'), cp = document.createElement('canvas'); cp.width = c.width; cp.height = c.height; const x = cp.getContext('2d', { willReadFrequently: true }); x.drawImage(c, 0, 0); const d = new Uint32Array(x.getImageData(0, 0, c.width, c.height).data.buffer); let h = 2166136261; for (let i = 0; i < d.length; i++) h = Math.imul(h ^ d[i], 16777619); return `${c.width}×${c.height} ${(h >>> 0).toString(16)}`; });
+  const load = async () => { await page.goto(`${origin}index.html`); await page.waitForFunction(ready, null, { timeout: 180000 }); await settle(); };
+  await load();
+  const cdp = kind === 'chromium' ? await ctx.newCDPSession(page) : null;
+  const finger = async (pts) => {
+    const send = cdp ? (type, p) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: type === 'touchEnd' ? [] : [{ x: p[0], y: p[1] }] })
+      : (type, p) => (type === 'touchStart' ? page.mouse.move(p[0], p[1]).then(() => page.mouse.down()) : type === 'touchEnd' ? page.mouse.up() : page.mouse.move(p[0], p[1]));
+    await send('touchStart', pts[0]);
+    const sent = [];
+    for (let i = 1; i < pts.length; i++) { await sleep(16); sent.push(send('touchMove', pts[i])); }
+    await Promise.all(sent); await sleep(16); await send('touchEnd');
+  };
+  await tap('#btn-section'); await sleep(300); await settle();
+  const pc = (a, q) => (a.length ? [...a].sort((x, y) => x - y)[Math.min(a.length - 1, Math.floor(q * a.length))] : 0);
+  const run = async (name, pts, edge) => {
+    const s0 = await w(() => { window.__volve.secLog(true); const P = window.__perf; P.tasks = []; P.frames = []; P.moves = []; P.on = true; return window.__volve.stats(); });
+    const top0 = edge ? (await rect('#section')).top : 0;
+    await finger(pts);
+    const lift = await w(() => performance.now()), s1 = await w(() => window.__volve.stats());
+    const toFull = await settle();
+    const P = await w(() => { window.__perf.on = false; return window.__perf; }), log = await w(() => window.__volve.secLog(false));
+    const fr = P.frames.filter((f) => f[1] <= lift), per = fr.slice(1).map((f, i) => P.tasks.filter((t) => t[0] >= fr[i][1] && t[0] < f[1]).reduce((n, t) => n + t[1], 0));
+    const longest = Math.max(0, ...P.tasks.filter((t) => t[0] <= lift).map((t) => t[1]));
+    const mv = log.filter((e) => e.mv), sliced = mv.filter((e) => e.slices !== s0.seisSlices || e.renders !== s0.seisRenders).length;
+    const lags = P.moves.map((m) => { const f = P.frames.find((q) => q[1] >= m[1]); return f ? f[0] - m[0] : 0; });
+    let off = 0, held = '';
+    if (edge) {
+      const tall = Math.min(...fr.map((f) => f[2]));
+      for (const f of fr) { const m = P.moves.filter((q) => q[1] <= f[1]).pop(); if (m) off = Math.max(off, Math.abs(f[2] - Math.max(tall, Math.min(top0, top0 + (m[3] - pts[0][1]))))); }
+      held = [...new Set(mv.map((e) => e.exag))].join(' ');
+    }
+    const at = await plot(), st = await w(() => ({ line: window.__volve.section().line, at: window.__volve.section().at, size: window.__volve.section().size }));
+    const r = { name, frames: fr.length, p95: pc(per, 0.95), longest, lag: Math.max(0, ...lags), sliced, renders: s1.seisRenders - s0.seisRenders, moving: mv.length, toFull, off, held, at, st };
+    console.log(`      ${kind} ${name}: ${r.frames} frames, the main thread ${pc(per, 0.5).toFixed(1)} ms a frame at the median and ${r.p95.toFixed(1)} at the 95th percentile, the longest task ${r.longest.toFixed(1)} ms, a move on screen within ${r.lag.toFixed(0)} ms; ${r.moving} frames moving, ${r.sliced} with a full render's slice; in full ${r.toFull} ms after the lift${edge ? `; the edge at most ${off.toFixed(1)} px from the finger, the stretch ×${held} throughout` : ''}`);
+    return r;
+  };
+  const results = [];
+  { // the edge, compact to tall and back
+    const e = await rect('#sec-edge'), x = e.left + e.width / 2, y0 = e.top + 22, pts = [[x, y0]];
+    for (let i = 1; i <= 60; i++) pts.push([x, y0 - i * 9]);
+    for (let i = 59; i >= 0; i--) pts.push([x, y0 - i * 9]);
+    results.push(await run('an edge drag from compact to tall and back', pts, true));
+  }
+  for (const line of ['inline', 'crossline', 'along', 'across']) {
+    await tap(`#sec-lines [data-line="${line}"]`); await sleep(300); await settle();
+    const s = await rect('#sec-sweep'), y = s.top + s.height / 2, pts = [];
+    for (let i = 0; i <= 40; i++) pts.push([s.left + 7 + ((s.width - 14) * i) / 40, y]);
+    for (let i = 39; i >= 10; i--) pts.push([s.left + 7 + ((s.width - 14) * i) / 40, y]);
+    results.push(await run(`a fast scrub on ${line[0].toUpperCase()}${line.slice(1)}`, pts));
+  }
+  { // Along's A, moved about on the plate
+    await tap('#sec-lines [data-line="along"]'); await sleep(300); await settle();
+    const ends = await w(() => window.__volve.section().ends), pr = await rect('#gl'), a = [pr.left + ends[0][0], pr.top + ends[0][1]], pts = [a];
+    for (let i = 1; i <= 50; i++) pts.push([a[0] + Math.sin(i / 8) * 40, a[1] + i * 1.6]);
+    results.push(await run("a drag of the line's end", pts));
+  }
+  { // a turn: one finger on the plate, clear of the line's ends
+    const pr = await rect('#gl'), p = [pr.left + 60, pr.top + pr.height * 0.6], pts = [p];
+    for (let i = 1; i <= 50; i++) pts.push([p[0] + i * 4, p[1] + Math.sin(i / 6) * 10]);
+    results.push(await run('a turn of the model', pts));
+  }
+  // each state at rest against a fresh page at the same state (the view is saved as it is left)
+  const fresh = [];
+  for (const r of results) {
+    if (r.name === 'a turn of the model') continue;
+    await w((q) => { const s = JSON.parse(localStorage.getItem('volve-viewer:v1')); Object.assign(s.section, q); localStorage.setItem('volve-viewer:v1', JSON.stringify(s)); }, r.st);
+    await load();
+    fresh.push([r.name, r.at, await plot()]);
+  }
+  const p95 = SPEED.p95[kind], bad = results.filter((r) => r.p95 > p95 || r.longest > SPEED.long || r.lag > SPEED.lag || r.sliced || r.renders || r.toFull > 1000 || (r.moving < 5 && r.name !== 'a turn of the model'));
+  const edge = results[0];
+  check(bad.length === 0 && edge.off <= 1 && edge.held && !/ /.test(edge.held) && errors.length === 0,
+    `${kind}, the section by a finger: ${results.length} interactions, none with a full render while moving (${results.map((r) => r.sliced + r.renders).join(', ')}), the main thread's 95th percentile within ${p95} ms a frame (worst ${Math.max(...results.map((r) => r.p95)).toFixed(1)}), no task over ${SPEED.long} ms (worst ${Math.max(...results.map((r) => r.longest)).toFixed(1)}), every move on screen within ${SPEED.lag} ms (worst ${Math.max(...results.map((r) => r.lag)).toFixed(0)}), in full within 1 s of the lift (worst ${Math.max(...results.map((r) => r.toFull))} ms); the edge within ${edge.off.toFixed(1)} px of the finger in every frame, the stretch held at ×${edge.held}${bad.length ? `; over: ${bad.map((r) => r.name).join(', ')}` : ''}${errors.length ? `; ${errors.slice(0, 3).join(' | ')}` : ''}`);
+  const differ = fresh.filter((f) => f[1] !== f[2]);
+  check(fresh.length === 6 && differ.length === 0, `${kind}, at rest after each interaction the section is pixel for pixel what a fresh page draws at the same state: ${fresh.map((f) => `${f[0]} ${f[1] === f[2] ? 'the same' : `${f[1]} against ${f[2]}`}`).join('; ')}`);
   await B.close();
 }
 

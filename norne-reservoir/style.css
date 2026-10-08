@@ -232,6 +232,14 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .wl.thin .core { stroke-width: 1.2; opacity: .6; }
 .wl.sel { font-weight: 650; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 
+/* the compass (D17): top left, clear of the keys and the host's exit; no touch */
+.compass { position: absolute; left: calc(8px + env(safe-area-inset-left)); top: 8px; z-index: 2; pointer-events: none; }
+.focus .compass { top: calc(8px + env(safe-area-inset-top)); }
+.compass svg { fill: var(--ink-3); stroke: none; }
+.compass circle { fill: var(--plate); fill-opacity: .8; stroke: var(--line); stroke-width: 1; }
+.compass .n, .compass text { fill: var(--ink); }
+.compass text { font-size: 11px; font-weight: 650; text-anchor: middle; dominant-baseline: central; }
+
 /* the key column: plates, no shadow; each key a full 44 px hit, the plate 36 px wide */
 .keys {
   position: absolute;
@@ -491,9 +499,6 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .swatches span { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
 .swatches i { width: 10px; height: 10px; background: var(--c); outline: 1px solid color-mix(in srgb, var(--line-strong) 60%, transparent); }
 .instruments { display: flex; align-items: center; gap: 14px; height: 20px; }
-.north { display: inline-flex; align-items: center; gap: 2px; font-size: 10.5px; color: var(--ink-2); }
-.north .n { color: var(--ink); }
-.north .s { color: var(--ink-3); }
 .scale { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .scale-bar { display: block; height: 6px; border: 0 solid var(--ink); border-width: 0 1.5px; position: relative; }
 .scale-bar::after { content: ''; position: absolute; left: 0; right: 0; top: 2px; height: 2px; background: var(--ink); }

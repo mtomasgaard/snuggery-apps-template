@@ -1458,3 +1458,132 @@ Play tap's `performance.now()`, so `now - playing.t0` came out negative at the f
 `Math.floor` of it gave −1 from frame 0. One Chromium run crashed on it ("Start offset −734180").
 Norne carries the same line, so it takes Volve's clamp, `Math.max(0, now - playing.t0)`, as 2.3.1.
 Nothing else changed.
+
+## Plan 0012 D16 and D17: plasma and viridis, and the compass back on the plate (2.4, 2026-10-07)
+
+The owner, 2026-10-07: *"And i dont like the colortables for pressure, porosity, permeability etc"*,
+then, of the board (`docs/marketing/reference/0012-ramps-board.png`: the house's ramps against Turbo,
+plasma/viridis and Jet on Volve), plasma/viridis, with *"i meant keep the original ones for the
+saturations"*; and *"And the north arrow seems to have gotten lost?"*. Built here and in Volve 1.1 in
+one pass. Version 2.3.1 to 2.4.
+
+### D16: the ramps
+
+- **The source.** matplotlib 3.9.4's own tables, `_plasma_data` and `_viridis_data` in
+  `lib/matplotlib/_cm_listed.py`, read from the copy on the build machine
+  (`build/venv-decks/lib/python3.9/site-packages/`, sha256 `86980cc7…05e64e3`), 256 entries each,
+  rounded to 8 bits and pasted into `tools/art/palette.py` as `MPL`. The polynomial fits in the run's
+  scratchpad were not needed. The file carries no license note of its own; the colormaps' authors
+  (Nathaniel Smith and Stéfan van der Walt, viridis with Eric Firing) are named in `NOTES.md`'s
+  credits without a license line, for the lead to settle (see Left for the lead).
+- **The mapping.** `pressure` takes plasma; `rock` (porosity, both permeabilities), `sand` (net to
+  gross) and `depth` take viridis. The keys stay, so `config.json`'s properties are untouched. Each is
+  33 stops sampled at `k / 32` of the table with straight sRGB interpolation between its two nearest
+  entries, the shape `lut()` has always read, and `colormaps` and `colormapsDark` hold the same stops.
+  Low values at the dark end in both themes (pressure 200 bar `#0d0887`, 450 bar `#f0f921`; the rock's
+  foot `#440154`, its top `#fde725`; the shallowest depth violet, the deepest yellow).
+- **Kept exactly**: `oil`, `water`, `gas`, `layers`, `formations`, `segments` and `wellColors`
+  (`palette.py --json` prints them byte-identical; `check.mjs` pins the six scales by a sha256 of
+  2.3.1's stops, `3e57d70a4d1e…`). Only those four scales' 264 stops changed in `config.json`.
+- **One source still.** `palette.py` writes all of it; the four house paths it replaces left `RAMPS`
+  (2.3.1's stops are in git and in ART.md's history: pressure `#f8f5ff`..`#773a00` light,
+  `#383243`..`#ffcba9` dark; rock `#f7f5ff`..`#305a12`, `#363243`..`#b8e89e`; sand `#fbf6ee`..`#6d4201`,
+  `#39352f`..`#ffcd98`; depth `#e1fefd`..`#31478e`, `#223a3a`..`#c7d7ff`). Its docstring and the
+  `PUBLISHED` block record the exception.
+- **The checks kept and changed.** Kept: the chrome, the Cut, the plate's body, the categories, the
+  wells, the chart, the labels, the ghost key, all over every stop of every scale (the new tables
+  included). The scales' block keeps monotone lightness (falling with the value in the light theme for
+  the house ramps, rising in both themes for the tables), the ends apart in four visions, the step per
+  eighth and `lut()` against the path (for the tables, against the table). The "nothing end on white"
+  block now runs over the house ramps only, since the tables start dark. New: a D16 block measuring
+  each table's ends on each theme's ground, unshaded and at the shader's light factors and a cell edge,
+  and a compass block. No symmetry check concerns these scales (Volve's seismic ramps carry theirs).
+- **Where it shows.** Everything reads `lut()`: the 3D view's texture, the section's cells (the
+  texture's own colors) and the legend's bar. The card has no color swatch (`index.html` and
+  `placeCard()` draw none; it prints the figure), and the legend's category swatches are unchanged. The track draws the cut in its own ink, no
+  scale. About's words (*"Each cell is colored by its value on the scale under the picture…"*) stay
+  true and name no ramp, so the code budget paid nothing for words; `NOTES.md` names them.
+- **The two ends, as the brief asked.** On the dark plate `#0c1316` the darkest stops stand off by dE
+  0.211 (plasma `#0d0887`, 1.25:1) and 0.173 (viridis `#440154`, 1.23:1) unshaded; on a top face
+  (0.83) 0.172 and 0.140; on a face turned from both lamps (0.42) 0.092 and 0.083 at 1.04:1; at a cell
+  edge (×0.55 more) 0.081 and 0.084. A deep violet on the slate, by hue rather than lightness; few cells
+  sit there (pressure at or under 200 bar, porosity at the scale's foot). On white the lightest stops
+  stand off by 0.212 (`#f0f921`, 1.15:1) and 0.203 (`#fde725`, 1.26:1) unshaded, 1.70 and 1.86:1 on a
+  top face, 1.29 and 1.41:1 at the brightest face: a strong yellow, with the cell edges, the legend
+  bar's 60 % `--line-strong` frame and the section's 1.5 px rim (3.83:1) giving it an edge.
+- **What moved in the existing checks**: labels worst 12.38 and 10.62:1 (12.63 and 10.83 before), the
+  ghost key 3.76 and 4.43 (3.91 and 4.68), the gas injector's core over any base 4.31 dark (4.37).
+  All above their floors.
+
+### D17: the compass
+
+- **Where and what.** `<span class="compass" id="north" role="img">` in the plate, after the labels'
+  layer: top left, 8 px in (8 px under the top safe area in focus mode), z-index 2, no touch. A 36 px
+  SVG: a disc of `--plate` at 0.80 with a 1 px `--line` rim, a kite needle (each arm 8.5 px long,
+  6.4 px across at the middle), the north arm `--ink`, the south `--ink-3`, and `N` (11 px, 650,
+  `--ink`) upright at the north tip. The instrument line's 16 px needle and its CSS went; the scale
+  bar stays.
+- **Turning.** `updateGauge()` already projected north and east at the camera's target; it now rotates
+  the needle to north, scales it along its length by north's screen length over east's (floor 0.5, so
+  never under half; the old needle's floor was 0.3), never across, and moves the N to 8.5k + 5.5 px
+  from the middle along north, rounded to a pixel. The VoiceOver name is the needle's, unchanged:
+  `North arrow: north is toward the right of the view.` (eight directions).
+- **Keeping clear.** `keepOut()` lists the compass, so well and formation names, and the tapped cell's
+  ring, keep off it; a name whose 44 px hit (grown upward) would reach the compass's box plus 4 px is
+  not drawn there either (the chosen well's name still is, under its head first, as before).
+  `placeCard()` counts it like a key but 4 px clear, not 6: the 6 px kept the card's Close hit off a
+  key's hit, and the compass takes no touch. **Why 36 px, not 38**: at the sheet's raised stops the
+  plate is 405 px and the full card needs 162.8 px beside a mark anywhere in its column; a 38 px
+  compass 6 px clear left 162.5 and the first `shoot.mjs` run failed there (the card compact at stops
+  1 and 2). 36 px 4 px clear leaves 164.5. The brief said about 36.
+- **The code budget.** 2.4 is 255 990 B of the 256 000 (2.3.1: 255 520): the compass's markup, CSS and
+  keep-outs, less the old needle, and three comments shortened (the north-and-scale note, `keepOut`'s,
+  the section header) to fit. 10 B are left; anything more in 2.4 needs the lead's ruling.
+
+### The checks
+
+- `check.mjs`: version 2.4; two new checks: D16 (the four scales are plasma and viridis, 33 stops,
+  one set for both themes; the kept scales hash as 2.3.1's) and D17 (the compass's markup in the
+  plate, the instrument line down to the scale, the compass in `keepOut()` and `placeCard()`'s keep).
+- `shoot.mjs`: `compassOf()` works out north's screen direction from the camera's own numbers (eye,
+  the 40° lens, the lens shift), not app.js's matrices, and checks the compass shown, 32 px or more,
+  in the plate's top-left, its N within 6° of north, its needle not under half its length or narrower
+  than 6.4 px, its name's direction, and over none of the keys, the ghost key, the card, a drawn name
+  or its hit, a formation's name, the tapped cell's ring or the section's A and A′. It runs at rest in
+  both themes, at the start of every scene of "the card at every stop" (closed, both raised stops,
+  the section open, focus mode, on its side closed, raised and in focus mode), under every card those
+  scenes open (`cardAt` gains "over the compass"), and in a new block turning and tilting the model
+  by touch in the dark theme. The colors' checks needed no change: the section's colors are checked
+  against `config.json` as read, and the plate check is on Oil.
+
+### Left for the lead
+
+- **The code budget**: 10 B under 256 000. Volve has 16 B under its 312 000, and a later agent makes
+  its section fast under 1.1: that needs a ruling.
+- **The colormaps' license**: matplotlib 3.9.4's copy carries no note on them; NOTES credits their
+  authors only. The lead to settle whether a license line is wanted.
+- **HOUSE.md 4.15's Norne departure** still lists the instrument line as "north, the scale,
+  `vertical ×5`": north is now on the plate. Only D16's line was written to HOUSE.md, as briefed.
+- **The marketing camera**: `screenshots/app.png` untouched (`23c808ceee59…`), for the 5b camera.
+
+### Phone checks (none claimed)
+
+The compass in Snuggery's own full-screen mode beside the host's exit control, under the notch's
+inset in focus mode and on its side; VoiceOver reading `North arrow: north is toward … of the view.`
+as the model turns; plasma's and viridis's dark ends on the dark plate and the yellow ends on white
+on the phone's own display; the full card at the raised stops in WebKit's own text metrics (1.7 px to
+spare in Chromium).
+
+### Verified (from `Template/norne-reservoir/` unless named, 2026-10-07/08; headless, never phone evidence)
+
+- `python3 norne-reservoir/tools/art/palette.py` from `Template/`: exit 0, ALL CHECKS PASS.
+- `node tools/check.mjs`: exit 0, all checks pass (app code 255 990 of 256 000; version 2.4; D16; D17).
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`: all checks pass.
+- `SCREENSHOTS=1 PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (log `tools/.work/shoot-d16.log`): exit 0,
+  208 ok, 0 failed, `all checks pass`; `screenshots/app.png` untouched. A first run with a 38 px compass
+  6 px clear of the card failed the full card at both raised stops; that is what made it 36 px.
+- Pictures looked at: `pressure-light` and `-dark`, `cell-light`, `section-light` and `-dark`,
+  `card-sheet`, `landscape-dark`, the focus mode on its side, the tilted compass, and the section on
+  Pressure and Porosity in both themes (a separate look script): the section's cells, tops and names
+  read on plasma and viridis.
+- Not run: anything on a phone.

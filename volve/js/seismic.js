@@ -122,11 +122,12 @@ export function traceRows(g, bytes, t, plan, out) {
  * the columns lie more than half a trace apart) and, per point, its four traces and bilinear weights;
  * a point outside the cube takes nothing. pointsOf(c) gives a column's points as [x, y] (model meters).
  * Returns { taps: per column an array of [traceIndex, weight] (weights summing to 1 over the column's
- * points inside the cube), inside: Uint8Array (1 where the column holds data) }.
+ * points inside the cube), inside: Uint8Array (1 where the column holds data) }. With c0, c1 and a plan
+ * (out), only columns c0 to c1 - 1 are planned, into it: a render sliced across frames plans as it goes.
  */
-export function colPlan(g, cols, pointsOf) {
-  const taps = new Array(cols), inside = new Uint8Array(cols);
-  for (let c = 0; c < cols; c++) {
+export function colPlan(g, cols, pointsOf, c0 = 0, c1 = cols, out = { taps: new Array(cols), inside: new Uint8Array(cols) }) {
+  const { taps, inside } = out;
+  for (let c = c0; c < c1; c++) {
     const pts = pointsOf(c), acc = new Map();
     let used = 0;
     for (const [x, y] of pts) {
@@ -148,7 +149,7 @@ export function colPlan(g, cols, pointsOf) {
     inside[c] = 1;
     taps[c] = [...acc].map(([t, wt]) => [t, wt / used]);
   }
-  return { taps, inside };
+  return out;
 }
 
 /** The display ramp: 511 RGBA entries over -1..1 (index 255 is zero), from stops evenly spaced over the
@@ -171,11 +172,19 @@ export function ramp(stops) {
  */
 export function render(g, bytes, cp, rp, lut, gain, cols, rows, px = new Uint8ClampedArray(cols * rows * 4)) {
   const t0 = typeof performance === 'object' ? performance.now() : Date.now();
-  const cache = new Map(), k = gain / 127;   // code units to the ramp's -1..1
-  const rowsOf = (t) => { let r = cache.get(t); if (!r) { r = traceRows(g, bytes, t, rp, new Float32Array(rows)); cache.set(t, r); } return r; };
+  const cache = new Map();
   px.fill(0);
+  renderCols(g, bytes, cp, rp, lut, gain, cols, rows, px, 0, cols, cache);
+  const t1 = typeof performance === 'object' ? performance.now() : Date.now();
+  return { px, traces: cache.size, ms: t1 - t0 };
+}
+/** render()'s columns c0 to c1 - 1 into px (zero, transparent, as it is made), with the traces' rows kept in
+ *  cache across calls: the app slices a render across frames this way, column for column the same pixels. */
+export function renderCols(g, bytes, cp, rp, lut, gain, cols, rows, px, c0, c1, cache) {
+  const k = gain / 127;   // code units to the ramp's -1..1
+  const rowsOf = (t) => { let r = cache.get(t); if (!r) { r = traceRows(g, bytes, t, rp, new Float32Array(rows)); cache.set(t, r); } return r; };
   const col = new Float32Array(rows);
-  for (let c = 0; c < cols; c++) {
+  for (let c = c0; c < c1; c++) {
     if (!cp.inside[c]) continue;
     col.fill(0);
     for (const [t, wt] of cp.taps[c]) { const r = rowsOf(t); for (let y = 0; y < rows; y++) col[y] += wt * r[y]; }
@@ -188,8 +197,6 @@ export function render(g, bytes, cp, rp, lut, gain, cols, rows, px = new Uint8Cl
       px[o] = lut[l]; px[o + 1] = lut[l + 1]; px[o + 2] = lut[l + 2]; px[o + 3] = 255;
     }
   }
-  const t1 = typeof performance === 'object' ? performance.now() : Date.now();
-  return { px, traces: cache.size, ms: t1 - t0 };
 }
 /** The same columns' amplitudes (not colors), for the tests: rows x cols Float32Array of amplitude. */
 export function amplitudes(g, bytes, cp, rp, cols, rows) {

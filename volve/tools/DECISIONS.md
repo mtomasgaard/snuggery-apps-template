@@ -546,3 +546,267 @@ The final verifier's one must was check.mjs failing on code: 311 642 B against t
 after the second fix pass added 5 641 B for the end words, the key, the own-line test for horizon
 names and the ticks' fallback. Those are fixes the final asked for, so the cap is 312 000 B. Nothing
 was cut. The verifier's other findings are nits, recorded above and left as they are.
+
+## Plan 0012 D16 and D17 in Volve 1.1 (2026-10-07/08)
+
+Norne Reservoir 2.4's two changes, built in the same pass (Norne's `tools/DECISIONS.md` has the full
+record; this is what differs for Volve). Version 1.0 to 1.1; a later agent makes the section fast
+under the same 1.1, and this pass touched only the colors and the compass.
+
+### D16: the ramps
+
+- **The same tables**: matplotlib 3.9.4's `_plasma_data` and `_viridis_data`, read from the build
+  machine's copy (sha256 `86980cc7…05e64e3`), in `tools/art/palette.py`'s `MPL`; not the scratchpad's
+  polynomial fits. `pressure` takes plasma, `rock` (porosity, both permeabilities) and `depth` viridis,
+  33 stops, the same in `colormaps` and `colormapsDark`. Only those three scales' 198 stops changed in
+  `config.json`.
+- **Kept exactly**: `oil`, `water`, `gas`, `layers`, `regions`, `seismicGray`, `seismicRedBlue` and
+  `wellColors`; `check.mjs` pins the seven scales by a sha256 of 1.0's stops (`931a2947bfe9…`).
+- **palette.py**: as Norne's (the D16 block, the tables' monotone lightness rising in both themes, the
+  house ramps' "nothing end" alone on white, the compass block). The seismic ramps' symmetry checks are
+  untouched and pass. The wells and the labels are still checked over the seismic's stops as well as
+  every scale's: wells' cores on their casing worst 4.17 (light) and 4.31 (dark, over plasma's
+  yellow), labels 12.38 and 10.62:1, the ghost key 3.76 and 4.43. The ends: as Norne's (the same
+  tables on the same grounds): dark ends on the dark plate dE 0.211 and 0.173 unshaded, 0.092 and
+  0.083 (1.04:1) on a face from both lamps; light ends on white 1.15 and 1.26:1 unshaded, 1.70 and
+  1.86:1 on a top face.
+- **The section's cells over the seismic** at 60 % (the default): plasma comes out a muted rose to
+  orange and viridis teal to olive, both themes; the reflectors show through and the horizons and
+  names read over them. Duller than the legend's bar, as the saturations always were; `ART.md`
+  section 2 says so. Looked at on inline 10174 for Pressure, Porosity and Permeability in both themes.
+- **ART.md's figure corrected**: it said the scales' ends are apart by ΔE 0.50 or more; `palette.py`
+  prints 0.475 (the layers, dark), unchanged since 1.0. It now says 0.475.
+
+### D17: the compass
+
+Norne 2.4's, the same markup, CSS and `app.js` lines (`updateGauge()`, `keepOut()`, `placeCard()`'s
+keep, the names' hits): top left, 36 px, the two-tone needle never under half its length, `N` at its
+tip, `North arrow: north is toward … of the view.`, the card 4 px below it, the names and their hits
+off it. The instrument line's 16 px needle went. At the raised stops Volve's full card fits beside a
+cell anywhere below the compass as Norne's does (`shoot.mjs`: full at both stops).
+
+### The code cap
+
+311 984 B of the 312 000 (1.0: 311 642): 342 B for the compass. To fit, three comments were shortened
+as in Norne and one dropped: `// Retired: ${LS_KEY}:hint …`, Norne's history, carried in by the port;
+Volve never wrote that key (`check.mjs` still asserts no `:hint` in the code). **16 B are left, and a
+later agent makes the section fast under the same 1.1: that needs the lead's ruling on the cap.**
+
+### The checks
+
+`check.mjs`: version 1.1, and the D16 and D17 checks as Norne's (the kept scales' sha256 is 1.0's).
+`shoot.mjs`: Norne's `compassOf()` and `compassCheck()` (reading `window.__volve`), at rest in both
+themes, at the start of every scene of the card at every stop, under every card (`over the compass`),
+and the turning block. Pictures: `SCREENSHOTS=1 APP_PNG=1`, so `screenshots/app.png` is the app as
+it ships, as at 1.0 (the tools make it).
+
+### Left for the lead
+
+- The code cap (above).
+- The colormaps' license line, as in Norne's record.
+- HOUSE.md 4.15's mention of the instrument line's north concerns Norne; Volve's ART.md is updated.
+
+### Phone checks (none claimed)
+
+As Norne 2.4's: the compass beside Snuggery's exit control and under the insets; VoiceOver's
+direction as the model turns; the tables' ends on the phone's display; and the section's cells in
+plasma and viridis at 60 % over the seismic on the phone.
+
+### Verified (from `Template/volve/` unless named, 2026-10-07/08; headless, never phone evidence)
+
+- `python3 volve/tools/art/palette.py` from `Template/`: exit 0, ALL CHECKS PASS.
+- `node tools/check.mjs`: exit 0, all checks pass (app code 311 984 of 312 000; version 1.1; D16; D17).
+- `node tools/test_decode.mjs`, `test_section.mjs`, `test_seismic_display.mjs`: all checks pass.
+- `SCREENSHOTS=1 APP_PNG=1 PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, twice (logs
+  `tools/.work/shoot-d16-run1.log` and `shoot-d16.log`): exit 1 both times, 244 ok and **1 failed**,
+  the same one: *the seismic's key … in red and blue*, where the tap on `Red and blue` after two quick
+  grip taps misses because the sheet has not scrolled the word into view (the picture shows the sheet
+  unscrolled; shoot.mjs's own comment calls where it settles frame-time dependent). **It is not this
+  pass's**: a copy of 1.0 in the scratchpad (1.0's `app.js`, `index.html`, `style.css`, `config.json`
+  and `shoot.mjs`, this pass's edits reversed) fails the same check on this Mac in the same place, and
+  the steps alone, run three times in a fresh browser, pick `Red and blue` every time. Every compass,
+  card, color and section check passed. Left for the lead or the section-speed pass.
+- Pictures looked at: `pressure-light`, `cell-dark`, `section-dark`, `app.png` (rewritten by
+  `APP_PNG=1`, as the tools make it), the sheet's state at the failing check, and the section on
+  Pressure, Porosity and Permeability in both themes.
+- Not run: anything on a phone.
+
+## The section's speed in Volve 1.1 (2026-10-08)
+
+The owner, on the phone (2026-10-07): *"The seismic seems to be a stretch - the whole section view becomes
+very slow … resizing etc the view is super slow and unstable."* Same version, 1.1 (D16 and D17 came first).
+Every figure here is headless on this Mac (Apple M4, Playwright 1.63's WebKit and Chromium, Chromium on the
+Mac's GPU through ANGLE on Metal unless it says SwiftShader): a trend, never phone evidence.
+
+### What was slow, measured (it was not the seismic)
+
+Measured with a scratch harness (`tools/.work/perf/`, deleted after): every rAF callback, input listener,
+ResizeObserver callback and timer timed in the page, the frames from a ticker, and the app's own functions
+timed in an instrumented copy; Chromium's CPU profile besides.
+
+- **The gaps' mask, `gapLayer()`: 0.5 to 1.0 s a call in WebKit** (45 ms in Chromium), rebuilt on every
+  change of size, stretch or line, so on every frame of an edge drag and every step of the sweep. The 1.0
+  final sealed the mask with a 1 px stroke of every cell (section 9 of "What changed" above) on a canvas
+  asked for with `willReadFrequently`, which WebKit draws on the CPU: filling the 4 256 cells there takes
+  8 ms, stroking them 0.9 to 1.0 s (round, bevel or miter joins alike). Norne fills only, so never paid it.
+- **The seismic itself was cheap**: 2 to 4 ms a render at the compact pane, 6 to 17 ms tall. The lead's
+  premise of 1.4 million pixels at DPR 3 did not hold: the section's canvas was capped at 2× (as the 3D
+  view's is), so it was 0.3 to 0.7 million.
+- **"Unstable"**: (1) those long tasks coalesced the finger: in WebKit an edge drag of 120 moves reached the
+  app as 30, and a move took up to 1.03 s to reach the screen, so the edge jumped; (2) the pane's own
+  stretch stepped between round figures mid-drag (×3, 4, 5, 6 and back), so the section jumped in scale
+  under the finger. Layout read and written in one frame was measured and is not a cause (one forced
+  layout a move, under a millisecond).
+- **The 3D view's refit** on every frame of an edge drag: 11 ms (WebKit) to 17 ms (Chromium) a frame,
+  `fitCam()` over 91 787 points, 36 steps, two rooms, after `fitPoints()` twice.
+- **The cut**, `cutGrid()` over 183 545 cells for every new survey or drawn line: 5 ms (WebKit, median
+  when warm) and 4.6 ms (Chromium).
+
+### What changed
+
+1. **Progressive drawing (the lead's design).** While a finger is on the pane's edge, the sweep or a line
+   (`moving()`), the full seismic never runs. On the same line, the last full image is laid on the new
+   plot by distance and depth (`relay()`, the canvas's smoothing at high quality); on a new line,
+   `seisPreview()` draws the line's own samples (a column every 25 m: `colPlan()` with one point and no
+   supersampling, so the survey's own traces on a survey line; a row for each 5 m sample at its own depth,
+   no sinc) and the canvas scales it. At rest (the finger up and nothing changed for 150 ms, `SEC_REST`),
+   the full render runs as before and is swapped in; a newer state drops a pending one, so the newest
+   always wins, never a queue. The rule holds for taps and keys too (a tap on › shows the samples, then
+   the full image 150 ms on), as the lead wrote it.
+2. **The full render sliced across frames** (`seisJob()`, `seisStep()`, `seisWork()`): about 6 ms of
+   columns a frame, through `renderCols()`, which `render()` now calls for all its columns, so the at-rest
+   image is the same code column for column. Measured: one to three slices (5 to 17 ms in all, WebKit, the
+   plot compact to tall at 3×). **Not a Web Worker**: no mini-app has yet shown a worker loaded over
+   `snuggery-app://` in WKWebView, which can only be shown on a phone, and `check.mjs` pins the six
+   modules; slicing needs neither and keeps one copy of the 9.5 MB cube.
+3. **The cells, the gaps and the outline.** While moving on the same line, the last rasters are laid on
+   anew (`relay()`); on a new line the cells are drawn afresh (they must be the new line's: the sweep's
+   check of 0 stale frames stands) and the gaps' hatch and the outline are left off until rest, as 1.0
+   already did while a line was dragged. At rest all three are drawn afresh, as before.
+4. **The stretch held while the edge is dragged** (`onDrag` in `js/pane.js`, `SEC.edgeDrag`), and set to
+   its round figure on the lift, as the sweep holds the pane's height.
+5. **The gaps' mask on the canvas's own rasterizer** (no `willReadFrequently`): 10 ms in WebKit with its
+   one read back. Against 1.0's CPU mask 164 of 7 738 mask pixels differ (2.1 %, anti-aliasing at the
+   cells' edges); a JavaScript dilation in place of the stroke differed by 253, so the GPU's stroke is the
+   nearer. `cutPath()` gives the gaps and the outline one shared `Path2D` (Chromium spends about 28 ms
+   building a path of 4 256 cells, WebKit 2).
+6. **The 3D refit exactly cheaper.** `fitCam()` drops, after 8 of its 36 steps, every point that cannot
+   be the box's edge anywhere in the narrowed range (each point's A / (d − C) is monotone in d, so it lies
+   between its values at the range's ends): the same fit from far fewer points. Checked against 1.1's
+   `fitCam()` on 252 cases (6 headings × 6 tilts × 7 plate sizes) in both engines: 0 differ in distance or
+   shift; 4.4 to 2.2 ms (WebKit), 8.5 to 3.0 ms (Chromium). `fitPoints()` fills a Float64Array and runs
+   once a refit, not twice.
+7. **The cut exactly cheaper.** `cutGrid()` skips a cell whose first corner lies farther from the plane
+   than any cell's corners spread (127 m, measured once per grid, plus a meter): all its corners are on one
+   side. Checked against 1.1's on 200 lines: identical cells, offsets, points and depths; WebKit 5.0 to
+   3.0 ms (median, warm), Chromium 4.6 to 2.7. (Precomputing the corners' angles for the sort made JSC
+   six times slower and was not kept.) A survey line's cut is kept, as a slice's is (24 in all).
+8. **The section at the screen's own pixels on a 3× phone** (`secDpr()`, up to 3). The lead allowed a 2×
+   render on DPR 3 only if measurement showed it needed; it does not (a full render at 3× is 5 to 17 ms in
+   WebKit, 5 to 12 in Chromium), so the cap the section had carried from Norne is lifted to 3 and About's
+   "the screen's own pixels" is now true on a 3× phone. The 3D view keeps its 2×. The canvases' memory at
+   3× is about 2.25 times 2×'s (worked out, not measured: some 40 MB for the plot, cells, gaps and outline
+   canvases and the seismic's image and buffer with the pane tall, against some 17 MB at 2×): a phone check.
+9. **About** (`ab-display`), after the sinc sentence: *While the section is dragged, resized or scrubbed,
+   the seismic is drawn instead from its own samples, one column for every 25 m along the line and one row
+   for every 5 m of depth, and smoothed by the screen; once it rests, it is resampled as above, with the
+   windowed sinc at the screen’s own pixels.* `test_seismic_display.mjs` runs `render()`, the at-rest path,
+   unchanged and passes.
+10. **The plot's spoken label** reads whether the line meets the seismic from the image drawn for it
+    (`SEC.seen`), not from the last full image, which while drawing is the previous line's (shoot's
+    off-field check caught it).
+
+### Before and after (headless, this Mac; the main thread's time a frame at the 95th percentile, the longest task, full seismic renders during the interaction)
+
+| | edge drag | scrub Inline | scrub Crossline | scrub Along | scrub Across | end drag | turn |
+|---|---|---|---|---|---|---|---|
+| WebKit 2×, before | 1 017 ms, 1 040, 3 | 1 091, 1 091, 6 | 2 011, 2 011, 9 | 1 303, 1 303, 5 | 717, 717, 8 | 21, 34, 44 | 2, 3, 0 |
+| WebKit 2×, after | 18, 46, 0 | 16, 20, 0 | 7, 9, 0 | 5, 11, 0 | 5, 8, 0 | 21, 29, 0 | 2, 2, 0 |
+| WebKit 3×, before | 509, 1 022, 3 | 1 145, 1 145, 8 | 1 523, 1 523, 9 | 1 260, 1 260, 5 | 372, 372, 8 | 20, 30, 42 | 3, 3, 0 |
+| WebKit 3×, after | 18, 37, 0 | 15, 18, 0 | 7, 9, 0 | 6, 10, 0 | 6, 7, 0 | 21, 28, 0 | 2, 2, 0 |
+| Chromium 2×, before | 105, 138, 9 | 118, 129, 22 | 73, 75, 28 | 102, 156, 15 | 46, 52, 33 | 15, 37, 47 | 1.6, 2, 0 |
+| Chromium 2×, after | 10.5, 31, 0 | 30, 39, 0 | 22, 25, 0 | 26, 38, 0 | 15, 15, 0 | 11.5, 49, 0 | 1.6, 1.5, 0 |
+| Chromium 3×, before | 105, 130, 11 | 121, 129, 22 | 71, 74, 28 | 92, 93, 19 | 47, 51, 32 | 16, 48, 47 | 1.7, 2, 0 |
+| Chromium 3×, after | 14, 31, 0 | 31, 38, 0 | 21, 23, 0 | 26, 37, 0 | 15, 16, 0 | 11, 49, 0 | 1.6, 1.8, 0 |
+| Chromium 2×, CPU ÷4, before | 431, 434, 5 | 523, 523, 9 | 310, 310, 9 | 620, 620, 6 | 176, 205, 14 | 88, 387, 16 | 1.5, 1.8, 0 |
+| Chromium 2×, CPU ÷4, after | 36, 59, 0 | 106, 127, 0 | 83, 92, 0 | 105, 136, 0 | 44, 65, 0 | 32, 86, 0 | 1.7, 2.1, 0 |
+
+- **The edge under the finger.** Each move from its event to the frame that shows it, at most: WebKit 2×
+  1 030 → 50 ms, 3× 935 → 30; Chromium 2× 206 → 51, 3× 257 → 62, CPU ÷4 482 → 86. In every frame the pane's
+  top is where the last move put it, within 0.8 px (its rounding), before and after: the old edge did not
+  lag in place, it froze for whole long tasks. The stretch: ×3, 6 (WebKit) and ×3, 4, 5, 6 (Chromium)
+  mid-drag before, ×3 throughout after.
+- **Frame intervals** (WebKit draws at 50 Hz headless, so 20 ms is its floor): edge drag 1 031 → 23 ms at
+  the 95th percentile (WebKit 2×), 100 → 16.8 (Chromium 2×).
+- **After the lift**, one task of the full drawing: WebKit 13 to 26 ms; Chromium 35 to 62 ms (its paths), 87
+  to 158 at CPU ÷4.
+- **Where the rest goes now**: WebKit's end drag is the cut (3 to 9 ms) and the cells; Chromium's scrubs are
+  its canvas building the new line's cells' paths (8 ms a line, 35 at most). Both draw every new line's
+  cells, which they must.
+- **SwiftShader** (the Chromium the rest of `shoot.mjs` uses): the 3D view's software GL dominates every
+  frame of an edge drag (333 ms at the 95th percentile after, 1 410 before), and the gaps' mask, now read
+  back from that GL, waits for it: 0.6 to 1.1 s after a lift, where 1.0's CPU mask did not. Headless only;
+  WebKit and Chromium on a GPU read it back in 10 to 60 ms.
+
+### shoot.mjs
+
+- `frame()` waits, after its two frames, until the section is drawn in full again (`window.__volve.settled()`:
+  `true`, `false`, or `'moving'` while a finger is on it), so every pixel check reads the at-rest drawing; the
+  side edge's double taps wait for rest as well.
+- A new block at the end, **the section's speed**, in WebKit and in Chromium on the GPU, at 390 × 844, 2×:
+  an edge drag compact to tall and back, a fast scrub on each of the four families, a drag of Along's A and
+  a turn, by a finger in Chromium (CDP touch) and by the mouse in WebKit (Playwright has no touch drag in
+  WebKit; the mouse's pointer events take the same path in the app), each move sent every 16 ms without
+  waiting for the page. Checks: no slice of a full render in any frame while moving and no finished one
+  until the lift; the edge within 1 px of the finger in every frame and the stretch one figure throughout;
+  **budgets**: the main thread's time a frame at the 95th percentile within 30 ms (WebKit) and 45 ms
+  (Chromium), no task over 75 ms, every move on screen within 80 ms, in full within 1 s of the lift
+  (about 1.5 times the worst measured; a 60 Hz frame is 16.7 ms, and before 1.1 single frames took 0.5 to
+  2 s). Then each interaction's end state against a fresh page loaded at that state: the section's canvas
+  read back and hashed, pixel for pixel the same (6 of 6, both engines).
+
+### The code cap
+
+App code **321 958 B against the 312 000 B cap: 9 958 B over** (1.1's colors pass left 311 984). `app.js`
+183 615 (+8 294), `js/section.js` 36 774 (+994), `js/seismic.js` 13 044 (+559), `js/pane.js` 5 339 (+127).
+`check.mjs` fails on it, as it should; nothing was cut, by the lead's instruction (the owner is reconsidering
+the caps). The ZIP is 33 401 677 B, within its 33 600 000.
+
+### Strings
+
+None of the marketing camera's strings changed, and no control's name. About's display paragraph gained the
+one sentence above; the plot's spoken label is the same words, now read for the line it shows.
+
+### Left for the lead
+
+- The code cap (above).
+- Norne draws no seismic and was not touched, but carries the same `gapLayer()` (fill only, so not the
+  second's cost) and the same `fitCam()`; the exact pruning could be ported if its edge drag wants it.
+- `MANUAL_STEPS` and the device matrix are outside this pass's write scope: the phone rows below.
+
+### Phone checks (none claimed)
+
+- The owner's own test again: the edge dragged, the sweep scrubbed on all four families, an end moved, on
+  the phone, with the seismic shown; whether the edge stays under the finger and the section keeps up.
+- The section at 3× on a 3× phone: its memory (worked out above, not measured), and that it reads sharper.
+- The gaps' mask read back from the GPU at rest (10 ms in headless WebKit on this Mac): its cost on the phone.
+- The moving view's look: the seismic from its samples while scrubbing, and the step to the full image.
+
+### Verified (from `Template/volve/`, 2026-10-08; headless on this Mac, never phone evidence)
+
+- `node tools/check.mjs`: exit 1, one failure, the code cap (321 958 of 312 000); everything else passes,
+  ZIP 33 401 677 B.
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`, `node tools/test_seismic_display.mjs`: all
+  checks pass (the last unchanged in its figures: the at-rest path is `render()`).
+- `SCREENSHOTS=1 APP_PNG=1 PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, both themes: **exit 0, all checks
+  pass, 249 ok** (log `tools/.work/shoot-speed-3.log`). Two runs before it failed, and were fixed: the
+  off-field line's spoken label (item 10 above), and the side edge's double taps, where the first tap waited
+  0.3 to 0.6 s behind SwiftShader's frame at the new pane size; a scratch repro showed 1.1's own code before
+  this pass failing the same way (2 of 4 double taps), so the wait now also lets the frames run quiet. The
+  "Red and blue" key check the colors pass saw fail passed in all three runs.
+- Pictures looked at: `screenshots/section-light.png`, `section-dark.png`, `pane-tall-light.png`, `app.png`,
+  and, by touch (Chromium) and mouse (WebKit) at 3×, the section at rest, mid-scrub (the seismic from its
+  samples, no hatch or outline), just lifted, and back at rest, and mid edge drag (the stretch held at ×3)
+  and after it (×8, laid on, then drawn in full).
+- The exactness checks (scratch, deleted): `fitCam()` new against old on 252 cases in both engines, 0
+  differ; `cutGrid()` new against old on 200 lines, 0 differ.

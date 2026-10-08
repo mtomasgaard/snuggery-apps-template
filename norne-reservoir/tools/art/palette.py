@@ -17,6 +17,17 @@ The plate is lit (app.js GRID_FS): the shader multiplies the cell's sRGB color b
 0.42 + 0.5 lambert + 0.14 fill, so 0.42 on a face turned from both lights, about 0.83 on a top face
 from the default camera and at most 1.06 (clamped); cell edges multiply by 0.55. Every plate check
 runs over the base colors at FACTORS, and tools/shoot.mjs samples the rendered frames.
+
+Plan 0012 D16 (the owner, 2026-10-07: "i dont like the colortables for pressure, porosity,
+permeability etc"): pressure takes matplotlib's plasma and the rock (porosity, both permeabilities, depth and net to gross)
+its viridis, the published 256-entry tables (PUBLISHED below), one table for both themes. This is the
+owner's exception to the house's tonal budget for data colors (HOUSE 3.2), in this app and its sibling
+only: these scales run dark to light in both themes, so they are not printed twice and do not live in
+BAND. What the band guaranteed is measured on them directly instead: each table monotone in lightness,
+its ends on each theme's ground (the dark end on the dark plate, the light end on white), and the
+wells, the labels, the ghost key and the compass over every one of their stops. The saturations (oil,
+water, gas), the categories and the layers keep the house's ramps exactly. Plan 0012 D17: the compass
+back in the 3D view, checked here over every base like the ghost key.
 """
 import json, math, sys
 
@@ -101,13 +112,62 @@ RAMPS = {
  'oil':      [(0, 0, 0.010, 125), (0.25, 0.28, 0.060, 135), (0.5, 0.54, 0.100, 142), (0.75, 0.78, 0.120, 150), (1, 1, 0.120, 158)],
  'water':    [(0, 0, 0.010, 235), (0.25, 0.28, 0.050, 240), (0.5, 0.54, 0.090, 248), (0.75, 0.78, 0.120, 255), (1, 1, 0.130, 262)],
  'gas':      [(0, 0, 0.010, 45), (0.25, 0.28, 0.070, 40), (0.5, 0.54, 0.120, 33), (0.75, 0.78, 0.150, 28), (1, 1, 0.150, 24)],
- 'pressure': [(0, 0, 0.030, 300), (0.25, 0.28, 0.080, 320), (0.5, 0.54, 0.120, 350), (0.75, 0.78, 0.140, 25), (1, 1, 0.130, 55)],
- 'rock':     [(0, 0, 0.030, 295), (0.25, 0.28, 0.070, 275), (0.5, 0.54, 0.090, 225), (0.75, 0.78, 0.100, 175), (1, 1, 0.110, 135)],
- 'sand':     [(0, 0, 0.012, 80), (0.5, 0.54, 0.070, 75), (1, 1, 0.110, 68)],
- 'depth':    [(0, 0, 0.030, 195), (0.5, 0.54, 0.080, 230), (1, 1, 0.120, 268)],
  'layers':   [(0, 0.10, 0.030, 75), (0.5, 0.55, 0.060, 55), (1, 1, 0.080, 35)],
 }
 N_STOPS = 33                                     # evenly spaced stops in config.json, as lut() reads them
+
+# ── plan 0012 D16: plasma and viridis, the owner's exception to the tonal budget ──
+# The published tables: matplotlib 3.9.4, lib/matplotlib/_cm_listed.py, _plasma_data and _viridis_data
+# (Nathaniel Smith and Stefan van der Walt's colormaps, viridis with Eric Firing; the file carries no
+# license note of its own; matplotlib's is the PSF-style Matplotlib License), 256 sRGB entries each, rounded
+# here to 8 bits. Read from the copy on the build machine (build/venv-decks/lib/python3.9/site-packages/
+# matplotlib/_cm_listed.py, sha256 86980cc7b6e3c49c799e5d4f6d0bda0835011d07fc9e3691accda231a05e64e3).
+# Low values at entry 0 (the dark end), high at entry 255 (the light end), in both themes.
+MPL = {
+ 'plasma': ('0d088710078813078916078a19068c1b068d1d068e20068f2206902406912605912805922a05932c05942e05952f0596'
+    '31059733059735049837049938049a3a049a3c049b3e049c3f049c41049d43039e44039e46039f48039f4903a04b03a1'
+    '4c02a14e02a25002a25102a35302a35502a45601a45801a45901a55b01a55c01a65e01a66001a66100a76300a76400a7'
+    '6600a76700a86900a86a00a86c00a86e00a86f00a87100a87201a87401a87501a87701a87801a87a02a87b02a87d03a8'
+    '7e03a88004a88104a78305a78405a78606a68707a68808a68a09a58b0aa58d0ba58e0ca48f0da4910ea3920fa39410a2'
+    '9511a19613a19814a099159f9a169f9c179e9d189d9e199da01a9ca11b9ba21d9aa31e9aa51f99a62098a72197a82296'
+    'aa2395ab2494ac2694ad2793ae2892b02991b12a90b22b8fb32c8eb42e8db52f8cb6308bb7318ab83289ba3388bb3488'
+    'bc3587bd3786be3885bf3984c03a83c13b82c23c81c33d80c43e7fc5407ec6417dc7427cc8437bc9447aca457acb4679'
+    'cc4778cc4977cd4a76ce4b75cf4c74d04d73d14e72d24f71d35171d45270d5536fd5546ed6556dd7566cd8576bd9586a'
+    'da5a6ada5b69db5c68dc5d67dd5e66de5f65de6164df6263e06363e16462e26561e26660e3685fe4695ee56a5de56b5d'
+    'e66c5ce76e5be76f5ae87059e97158e97257ea7457eb7556eb7655ec7754ed7953ed7a52ee7b51ef7c51ef7e50f07f4f'
+    'f0804ef1814df1834cf2844bf3854bf3874af48849f48948f58b47f58c46f68d45f68f44f79044f79143f79342f89441'
+    'f89540f9973ff9983ef99a3efa9b3dfa9c3cfa9e3bfb9f3afba139fba238fca338fca537fca636fca835fca934fdab33'
+    'fdac33fdae32fdaf31fdb130fdb22ffdb42ffdb52efeb72dfeb82cfeba2cfebb2bfebd2afebe2afec029fdc229fdc328'
+    'fdc527fdc627fdc827fdca26fdcb26fccd25fcce25fcd025fcd225fbd324fbd524fbd724fad824fada24f9dc24f9dd25'
+    'f8df25f8e125f7e225f7e425f6e626f6e826f5e926f5eb27f4ed27f3ee27f3f027f2f227f1f426f1f525f0f724f0f921'),
+ 'viridis': ('44015444025645045745055946075a46085c460a5d460b5e470d60470e61471063471164471365481467481668481769'
+    '48186a481a6c481b6d481c6e481d6f481f70482071482173482374482475482576482677482878482979472a7a472c7a'
+    '472d7b472e7c472f7d46307e46327e46337f463480453581453781453882443983443a83443b84433d84433e85423f85'
+    '4240864241864142874144874045884046883f47883f48893e49893e4a893e4c8a3d4d8a3d4e8a3c4f8a3c508b3b518b'
+    '3b528b3a538b3a548c39558c39568c38588c38598c375a8c375b8d365c8d365d8d355e8d355f8d34608d34618d33628d'
+    '33638d32648e32658e31668e31678e31688e30698e306a8e2f6b8e2f6c8e2e6d8e2e6e8e2e6f8e2d708e2d718e2c718e'
+    '2c728e2c738e2b748e2b758e2a768e2a778e2a788e29798e297a8e297b8e287c8e287d8e277e8e277f8e27808e26818e'
+    '26828e26828e25838e25848e25858e24868e24878e23888e23898e238a8d228b8d228c8d228d8d218e8d218f8d21908d'
+    '21918c20928c20928c20938c1f948c1f958b1f968b1f978b1f988b1f998a1f9a8a1e9b8a1e9c891e9d891f9e891f9f88'
+    '1fa0881fa1881fa1871fa28720a38620a48621a58521a68522a78522a88423a98324aa8325ab8225ac8226ad8127ad81'
+    '28ae8029af7f2ab07f2cb17e2db27d2eb37c2fb47c31b57b32b67a34b67935b77937b87838b9773aba763bbb753dbc74'
+    '3fbc7340bd7242be7144bf7046c06f48c16e4ac16d4cc26c4ec36b50c46a52c56954c56856c66758c7655ac8645cc863'
+    '5ec96260ca6063cb5f65cb5e67cc5c69cd5b6ccd5a6ece5870cf5773d05675d05477d1537ad1517cd2507fd34e81d34d'
+    '84d44b86d54989d5488bd6468ed64590d74393d74195d84098d83e9bd93c9dd93ba0da39a2da37a5db36a8db34aadc32'
+    'addc30b0dd2fb2dd2db5de2bb8de29bade28bddf26c0df25c2df23c5e021c8e020cae11fcde11dd0e11cd2e21bd5e21a'
+    'd8e219dae319dde318dfe318e2e418e5e419e7e419eae51aece51befe51cf1e51df4e61ef6e620f8e621fbe723fde725'),
+}
+PUBLISHED = {'pressure': 'plasma', 'rock': 'viridis', 'sand': 'viridis', 'depth': 'viridis'}
+SCALES = ('oil', 'water', 'gas', 'pressure', 'rock', 'sand', 'depth', 'layers')                     # config.json's order
+def mpl(name, t):
+    # the table at t, straight sRGB interpolation between its two nearest entries
+    s = MPL[name]; x = max(0.0, min(1.0, t)) * 255; k = min(int(x), 254); f = x - k
+    a, b = (tuple(int(s[6 * i + 2 * c:6 * i + 2 * c + 2], 16) for c in range(3)) for i in (k, k + 1))
+    return tuple(round(a[c] * (1 - f) + b[c] * f) for c in range(3))
+
+# The compass (plan 0012 D17): a 36 px disc of the plate's ground at DISC_A, the north arm --ink, the south
+# arm --ink-3, the N --ink at 11 px 650, over any part of the model.
+DISC_A = 0.80
 
 # Categories: one set for both themes, inside both bands' overlap (L 0.42 to 0.88). Formations in
 # the deck's order (Not is a shale with no active cell in this grid, so it is never drawn; it is
@@ -138,6 +198,7 @@ GHOST = {'light': dict(stroke='#0f1c23', halo=(246, 249, 250), halo_a=0.60), 'da
 
 def nrm3(v): l = math.sqrt(sum(x * x for x in v)); return tuple(x / l for x in v)
 def ramp_rgb(key, th, t):
+    if key in PUBLISHED: return mpl(PUBLISHED[key], t), True
     st = RAMPS[key]; t = max(0.0, min(1.0, t))
     for (t0, s0, c0, h0), (t1, s1, c1, h1) in zip(st, st[1:]):
         if t0 <= t <= t1:
@@ -155,7 +216,7 @@ def lut(hexes):
 
 def json_out():
     out = {'colormaps': {}, 'colormapsDark': {}}
-    for key in RAMPS:
+    for key in SCALES:
         out['colormaps'][key] = stops(key, 'light'); out['colormapsDark'][key] = stops(key, 'dark')
     for key, cats in CATS.items():
         out['colormaps'][key] = out['colormapsDark'][key] = [hx(c) for _, c in cats]
@@ -212,7 +273,8 @@ def main():
     # The view's cell edges and the section's 1.5 px --line-strong rim carry the body's edge.
     L1, L2 = nrm3((0.35, 0.75, 0.55)), nrm3((-0.6, -0.2, 0.8))
     brightest = 0.42 + math.sqrt(0.5 ** 2 + 0.14 ** 2 + 2 * 0.5 * 0.14 * abs(sum(a * b for a, b in zip(L1, L2))))
-    print(f'== the scales\' nothing end on the light ground {hx(GROUND["light"])}: unshaded, and lit at a top face ({TOP}) and at the brightest face ({brightest:.3f})')
+    print('== the house ramps\' nothing end on the light ground (the D16 tables are measured in their own block below)')
+    print(f'   {hx(GROUND["light"])}: unshaded, and lit at a top face ({TOP}) and at the brightest face ({brightest:.3f})')
     worst = (9, '')
     for key in RAMPS:
         c0 = ramp_rgb(key, 'light', 0)[0]
@@ -226,12 +288,13 @@ def main():
     print(f'    worst lit: {worst[0]:.3f} ({worst[1]}){need(worst[0] >= 0.03, "nothing end lit, off the ground")}; '
           f'unshaded, the section\'s rim (--line-strong) on the ground {rim:.2f}:1{need(rim >= 3, "section rim")}')
 
-    print('== the scales: gamut, salience order, color-vision ends, steps per eighth as rendered on a top face')
-    for key in RAMPS:
+    print('== the scales: gamut, lightness order, color-vision ends, steps per eighth as rendered on a top face')
+    print('   (the house ramps: lightness falls with the value in the light theme and rises in the dark; the D16 tables rise in both)')
+    for key in SCALES:
         for th in BAND:
             cols = [ramp_rgb(key, th, k / 96) for k in range(97)]
             gam = sum(1 for _, g in cols if not g); Ls = [lab8(c)[0] for c, _ in cols]
-            mono = all((b <= a + 1e-3) if th == 'light' else (b >= a - 1e-3) for a, b in zip(Ls, Ls[1:]))
+            mono = all((b <= a + 1e-3) if th == 'light' and key not in PUBLISHED else (b >= a - 1e-3) for a, b in zip(Ls, Ls[1:]))
             e0, e1 = cols[0][0], cols[-1][0]
             sep = {k: dE(e0, e1, k) for k in VISIONS}
             seen = [shade(c, TOP) for c, _ in cols]
@@ -242,6 +305,21 @@ def main():
             print(f'  {key:8s} {th:5s} chroma-limited {gam:2d}  L {min(Ls):.3f}..{max(Ls):.3f} monotone {mono}  ends dE ' +
                   ' '.join(f'{k} {v:.3f}' for k, v in sep.items()) + f'  min step per 1/8 {min(body):.3f}  lut vs path {worst:.4f}'
                   + need(mono and min(sep.values()) >= 0.10 and min(body) >= 0.02 and worst <= 0.01, key))
+
+    print('== D16: the published tables\' ends on each theme\'s ground (no band binds them; HOUSE 3.2, the owner\'s exception)')
+    print(f'   unshaded (the legend\'s bar, the section\'s cells), and lit: a face from both lamps (0.42), a top face ({TOP}), the brightest ({brightest:.3f}); a cell edge multiplies by 0.55 more')
+    for name in sorted(set(PUBLISHED.values())):
+        lo, hi = mpl(name, 0), mpl(name, 1)
+        for th, end, fs in (('dark', lo, (1.0, 0.42, 0.42 * 0.55, TOP)), ('light', hi, (1.0, TOP, brightest)), ('dark', hi, (1.0, TOP)), ('light', lo, (1.0, 0.42 * 0.55))):
+            g = GROUND[th]; row = []; worst = 9
+            for f in fs:
+                c = end if f == 1.0 else shade(end, f); d = dE(c, g); worst = min(worst, d)
+                row.append(f'{f:.3f} {hx(c)} dE {d:.3f} {cr(c, g):.2f}:1')
+            which = 'dark end' if end == lo else 'light end'
+            print(f'  {name:7s} {which:9s} on the {th:5s} ground {hx(g)}: ' + '; '.join(row) + need(worst >= 0.03, f'{name} {which} off the {th} ground'))
+    for th in BAND:
+        r = cr(parse(TOK[th]['strong']), GROUND[th])
+        print(f'  {th}: where an end sits near the ground the legend\'s bar keeps its --line-strong frame at 60 % and the section its 1.5 px --line-strong rim ({r:.2f}:1 on the plate)')
 
     print('== categories: pairwise dE in four visions (>= 0.10), each off both grounds')
     for key, cats in CATS.items():
@@ -265,7 +343,7 @@ def main():
             c = cr(WELLS[n], cas); res.append(f'{n} {hx(WELLS[n])} on casing {c:.2f}' + (need(c >= 3, n) if n in DRAWN_FULL else ' (faint on purpose)'))
         print(f'  {th}: ' + '; '.join(res))
         worst = (99, '')
-        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in RAMPS for i in range(33) for f in FACTORS]
+        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in SCALES for i in range(33) for f in FACTORS]
         bases += [shade(c, f) for cats in CATS.values() for _, c in cats for f in FACTORS] + [GROUND[th]]
         for b in bases:
             cs = over(parse(CASING[0]), CASING[1], b)
@@ -294,7 +372,7 @@ def main():
     print('== labels on the plate (well and formation names): ink on a 3 px halo at 0.85, over every base (text >= 4.5)')
     for th in BAND:
         lb = LABEL[th]; worst = (99, '')
-        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in RAMPS for i in range(33) for f in FACTORS]
+        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in SCALES for i in range(33) for f in FACTORS]
         bases += [shade(c, f) for cats in CATS.values() for _, c in cats for f in FACTORS] + [GROUND[th]]
         for b in bases:
             halo = over(parse(lb['halo']), lb['halo_a'], b); x = cr(parse(lb['ink']), halo)
@@ -304,13 +382,27 @@ def main():
     print('== the ghost key (focus mode): a 1.4 px stroke at rest (72 %) over a 3.4 px halo, over every base (>= 3)')
     for th in BAND:
         G = GHOST[th]; low = 99
-        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in RAMPS for i in range(33) for f in FACTORS] + [GROUND[th]]
+        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in SCALES for i in range(33) for f in FACTORS] + [GROUND[th]]
         for b in bases:
             halo = over(G['halo'], G['halo_a'], b); stroke = over(parse(G['stroke']), 0.72, halo); low = min(low, cr(stroke, halo))
         print(f'  {th}: worst {low:.2f}{need(low >= 3, "ghost")}')
 
+    print(f'== the compass (D17): a disc of the plate\'s ground at {DISC_A} under the needle, over every base the plate shows (arms >= 3, the N >= 4.5)')
+    for th in BAND:
+        t = TOK[th]; low = {'north arm (--ink)': 99, 'south arm (--ink-3)': 99, 'N (--ink)': 99}; at = {}
+        bases = [shade(ramp_rgb(k, th, i / 32)[0], f) for k in SCALES for i in range(33) for f in FACTORS]
+        bases += [shade(c, f) for cats in CATS.values() for _, c in cats for f in FACTORS] + [GROUND[th]]
+        for b in bases:
+            disc = over(GROUND[th], DISC_A, b)
+            for n, tok in (('north arm (--ink)', 'ink'), ('south arm (--ink-3)', 'ink3'), ('N (--ink)', 'ink')):
+                x = cr(parse(t[tok]), disc)
+                if x < low[n]: low[n] = x; at[n] = hx(b)
+        two = cr(parse(t['ink']), parse(t['ink3']))
+        print(f'  {th}: ' + ', '.join(f'{n} worst {v:.2f} over {at[n]}' + need(v >= (4.5 if n.startswith('N') else 3), 'compass ' + n) for n, v in low.items())
+              + f'; the arms apart, --ink against --ink-3, {two:.2f}:1 (the outline and the N tell them apart too)')
+
     print('== the scales as stops (sRGB), per theme: t 0, 0.25, 0.5, 0.75, 1')
-    for key in RAMPS:
+    for key in SCALES:
         for th in BAND:
             print(f'  {key:8s} {th:5s} ' + ' '.join(hx(ramp_rgb(key, th, t)[0]) for t in (0, 0.25, 0.5, 0.75, 1)))
     print('ALL CHECKS PASS' if ok else 'SOME CHECKS FAIL')
