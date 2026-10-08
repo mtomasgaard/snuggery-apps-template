@@ -11,17 +11,22 @@
 //   SCHEMES=light node tools/shoot.mjs      one theme for the per-theme part
 //   SCREENSHOTS=1 node tools/shoot.mjs      also copy the panes to screenshots/*-{light,dark}.png
 //
-// Per theme: boot (the camera's tabs by role and name, the credits, the face, the stamp), every pane's text
-// contrast and SVG labels, the tracer under exactly the chosen words, SI in every visible text node, hit
-// targets, the caption band's height; the Balance (its blocks against this file's decode, its ink sampled on
-// rendered pixels, its figure, its VoiceOver label, its cards on the home, the run of shallow blocks and the
-// hollow, each clear of the tapped point and said once); Cash flow's card against this file's sums, fifteen
-// taps with no column under the card; a vertical drag on every chart and on the Balance scrolling the pane
-// and opening nothing. Once: the tabs by keyboard, About, hidden and back (the same file, then a changed one,
+// Per theme: boot (the camera's tabs by role and name, no credit on the front and the credit constant first
+// in About's Sources and credits, the face, the stamp on one line), every pane's text contrast and SVG labels,
+// the tracer under exactly the chosen words, SI in every visible text node, hit targets, the About key last on
+// every pane; the pane-app register on Overview (plan 0012 D5: net worth at 34 px with its two changes in --up
+// or --down by their sign, the Balance's sides and rows against this file's decode, To pay before the chart,
+// a debt's amount in --owe, no example sentence on the pane); the Balance (its blocks against this file's
+// decode, its colors sampled on rendered pixels, its figure, its VoiceOver label, its cards on the home, the run
+// of shallow blocks and the hollow, each clear of the tapped point and said once); the scrub by real touch
+// along the net-worth line, the day under the finger after every move once the page has it (plan 0011's
+// scrub race); Cash flow's card against this file's sums, fifteen taps with no column under the card; a
+// vertical drag on every chart and on the Balance scrolling the pane and opening nothing. Once: the tabs by keyboard, About, hidden and back (the same file, then a changed one,
 // keeping the pane and the scroll), a broken replacement keeping the view, storage blocked, the clock at
 // 00:30 in Oslo, a stale copy of real data, Reduce Motion, the search field, a richer snapshot (pension,
 // shares, a second fund, consent ending, a failed source), broken data at the start, the widths and a phone
-// on its side, Savings' chart dragged at 375 × 667 where its pane has room to scroll. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
+// on its side, a wide screen with the header centered on the pane's column, the stamp on one line in every state
+// it can write, Savings' chart dragged at 375 × 667 where its pane has room to scroll. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite, whose hash is checked unchanged.
 
 import http from 'node:http';
@@ -69,6 +74,20 @@ const ownItems = [
 const oweItems = [...snap.accounts.filter((a) => a.balance < 0).map((a) => [a.name, -a.balance]), ...snap.loans.map((l) => [l.name, -l.balance]).sort((a, b) => a[1] - b[1])];
 const OWNED = ownItems.reduce((t, [, v]) => t + v, 0), OWED = oweItems.reduce((t, [, v]) => t + v, 0);
 const SCALE = 50000;   // the first rung that keeps 5.7 million within 160 px
+// the Balance's two sides as rows (plan 0012 item 8): owned by kind, each property by its name; owed by name
+const ownRows = (() => {
+  const g = new Map(), add = (k, label, v) => { if (!g.has(k)) g.set(k, [label, 0]); g.get(k)[1] += v; };
+  for (const a of snap.accounts.filter((x) => x.balance > 0)) add('account', 'Bank accounts', a.balance);
+  for (const f of snap.investments.funds) add('fund', 'Funds', f.value);
+  for (const a of snap.assets.filter((x) => x.kind === 'vehicle')) add('vehicle', 'Vehicles', a.value);
+  for (const a of snap.assets.filter((x) => x.kind === 'property')) add(`p:${a.name}`, a.name, a.value);
+  return [...g.values()].map(([l, v]) => `${l}${kr(v)}`);
+})();
+const oweRows = oweItems.map(([n, v]) => `${n}${kr(v)}`);
+const ABOUT_KEY = 'Sources, method and credits are in About.';
+const signedKr = (n) => `${Math.round(n) > 0 ? '+' : ''}${kr(n)}`;
+const TOKENS = { light: { sheet: [0xf6, 0xf9, 0xfa], own: [0x1f, 0x5f, 0x99], owe: [0xa6, 0x4a, 0x1a], up: 'rgb(23, 114, 62)', down: 'rgb(180, 35, 24)', oweText: 'rgb(166, 74, 26)' },
+  dark: { sheet: [0x1c, 0x27, 0x2c], own: [0x8c, 0xbc, 0xf0], owe: [0xf0, 0xa0, 0x70], up: 'rgb(111, 211, 154)', down: 'rgb(255, 154, 143)', oweText: 'rgb(240, 160, 112)' } };   // HOUSE 3.1, 11.2
 
 const lum = (c) => { const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
 const contrast = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
@@ -152,6 +171,9 @@ async function open(scheme, o = {}) {
   const pane = async (name) => { await page.getByRole('tab', { name, exact: true }).click(); await page.waitForTimeout(350); };
   return { ctx, page, errors, ms, w, cdp, touch, tapAt, rect, png, shot, pane };
 }
+/** The stamp on one line at 16 px (HOUSE 7.2, plan 0012 F8), whatever it says. */
+const stampLine = (A) => A.w(() => { const s = document.getElementById('stamp'), r = s.getBoundingClientRect(); return { h: r.height, text: s.textContent, one: Math.abs(r.height - 16) <= 1 && s.getClientRects().length === 1 }; });
+const stampCheck = async (A, label) => { const s = await stampLine(A); check(s.one, `the stamp on one line, ${Math.round(s.h * 10) / 10} px tall (${label}): "${s.text}"`); };
 const closeOut = async (A, label) => { check(A.errors.length === 0, `${label}: no console error or warning, failed or outside request${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`); await A.ctx.close(); };
 
 /* Text contrast over every rendered DOM text node (backgrounds composited), and every SVG label's fill on the page. */
@@ -217,7 +239,7 @@ const siOf = (w) => w(() => {
   let n = 0;
   for (let t = walker.nextNode(); t; t = walker.nextNode()) {
     const e = t.parentElement;
-    if (!e || e.closest('[hidden]') || e.closest('script, style, .sr, .nm, .data, #credits, .notice-lines')) continue;
+    if (!e || e.closest('[hidden]') || e.closest('script, style, .sr, .nm, .data, .notice-lines')) continue;
     const s = t.textContent;
     if (!s.trim()) continue;
     n++;
@@ -234,9 +256,9 @@ const xInside = (w) => w(() => {
 });
 /** The Balance's selection mark and where its card is (after review, finding 3): the mark's rects in drawing
  *  coordinates, and whether the card's box meets the T (both columns, crossbar to foot) on screen. */
-const markOf = (w) => w(() => {
+const markOf = (w) => w(() => {   // the ring is drawn in the plate's color, --sheet (plan 0012 P3)
   const svg = document.querySelector('.balsec svg'), B = window.__fin.balance(), s = svg.getBoundingClientRect(), c = document.querySelector('.balsec .readout:not([hidden])');
-  const marks = [...svg.querySelectorAll('g.sel rect')].map((r) => ['x', 'y', 'width', 'height'].map((k) => Number(r.getAttribute(k))).concat(r.getAttribute('stroke') === 'var(--page)' ? 'ring' : 'tick'));
+  const marks = [...svg.querySelectorAll('g.sel rect')].map((r) => ['x', 'y', 'width', 'height'].map((k) => Number(r.getAttribute(k))).concat(r.getAttribute('stroke') === 'var(--sheet)' ? 'ring' : 'tick'));
   const x0 = s.left + B.own[0].rect[0], x1 = s.left + B.owe[0].rect[0] + B.owe[0].rect[2], y0 = s.top + B.top - 2, y1 = s.top + B.foot;
   const r = c && c.getBoundingClientRect();
   return { marks, covers: !!r && r.left < x1 && x0 < r.right && r.top < y1 && y0 < r.bottom };
@@ -264,27 +286,55 @@ for (const scheme of schemes) {
   const A = await open(scheme);
   const { page, w } = A;
   console.log(`    load to the first pane: ${A.ms} ms (headless)`);
-  const PAGE = scheme === 'light' ? [0xe8, 0xee, 0xf0] : [0x14, 0x1d, 0x21];
+  const K = TOKENS[scheme];
   await A.pane('Overview');
 
-  // boot: the camera's tabs by role and name, the credits, the face, the stamp
+  // boot: the camera's tabs by role and name, no credit on the front and the credit first in About, the face, the stamp
   {
     const tabs = await Promise.all(PANES.map((n) => page.getByRole('tab', { name: n, exact: true }).count()));
     const camera = await w(() => ['Overview', 'Spending'].map((n) => [...document.querySelectorAll('#tabs button')].filter((b) => b.textContent === n && b.getAttribute('role') === 'tab').length));
     const b = await w(() => {
-      const c = document.getElementById('credits'), r = c.getBoundingClientRect();
-      return { credits: c.textContent, whole: r.height > 0 && r.bottom <= innerHeight + 1, face: document.fonts.check('600 21px "Ysabeau Office"'),
+      const src = [...document.querySelectorAll('.about-body section')].find((s) => s.querySelector('h3').textContent === 'Sources and credits');
+      return { credits: src.querySelector('p').textContent, first: src.querySelector('p').id, front: !!document.getElementById('credits') || !!document.getElementById('band') || /Statistics Norway|Enable Banking|invented for this example/.test(document.getElementById('head').textContent + document.getElementById('main').textContent),
+        face: document.fonts.check('600 21px "Ysabeau Office"'),
         loaded: [...document.fonts].filter((f) => f.status === 'loaded').length, stamp: document.getElementById('stamp').textContent, lead: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color };
     });
     check(tabs.every((n) => n === 1), `the panes as tabs by name: ${PANES.map((p, i) => `${p} ${tabs[i]}`).join(', ')}`);
     check(camera.every((n) => n === 1), 'the camera\'s strings: Overview and Spending, each a <button role="tab"> as before the pass, built after the parse');
-    check(b.credits === CREDITS && b.whole, `the credits on screen, word for word: "${b.credits}"`);
+    check(b.credits === CREDITS && b.first === 'about-credit-line' && !b.front, `no #credits and no band on the front, no credit in the header or the pane; About's first Sources and credits paragraph, word for word: "${b.credits}"`);
     check(b.face && b.loaded === 1, `the face is loaded before the first pane is drawn (${b.loaded} face)`);
     check(b.stamp === STAMP && b.lead, `the stamp: "${b.stamp}", "Example data." in ink (built here: "${STAMP}")`);
+    await stampCheck(A, 'the example, fresh');
   }
 
-  // every pane: text contrast, the face, the tracer, SI, hit targets, the band's height, the picture
-  const bandH = [];
+  // the register on Overview (plan 0012 D5; HOUSE 11): the key number and its changes, the Balance's sides, the order
+  {
+    const n = snap.netWorth;
+    const o = await w(() => {
+      const hl = document.querySelector('#pane > .sec.headline'), chg = [...hl.querySelectorAll('.hl-chg .chg')];
+      const side = (c) => ({ what: c.querySelector('.side-what').textContent, color: getComputedStyle(c.querySelector('.side-what')).color, total: c.querySelector('.side-total').textContent, rows: [...c.querySelectorAll('.side-rows div')].map((d) => d.textContent) });
+      const heads = [...document.querySelectorAll('#pane > .sec')].map((s) => (s.classList.contains('headline') ? 'headline' : s.classList.contains('balsec') ? 'Balance' : s.querySelector('h2') ? s.querySelector('h2').textContent : 'statements'));
+      const debt = [...document.querySelectorAll('#pane .row.debt .amt')].map((a) => [a.firstChild.textContent, getComputedStyle(a).color]);
+      return { what: hl.querySelector('.hl-what').textContent, fig: hl.querySelector('.hl-fig').textContent, size: getComputedStyle(hl.querySelector('.hl-fig')).fontSize, weight: getComputedStyle(hl.querySelector('.hl-fig')).fontWeight,
+        chg: chg.map((c) => [c.textContent, c.querySelector('b') && c.querySelector('b').className, c.querySelector('b') && getComputedStyle(c.querySelector('b')).color]),
+        own: side(document.querySelector('.side-own')), owe: side(document.querySelector('.side-owe')), heads, debt,
+        words: [...document.querySelectorAll('.balsec text.own-word, .balsec text.owe-word')].map((t) => getComputedStyle(t).fill),
+        statements: [...document.querySelectorAll('#pane .statement')].map((p) => p.textContent), last: document.getElementById('pane').lastElementChild.textContent };
+    });
+    const want = [`${signedKr(n.change30d)} in 30 days`, `${signedKr(n.change365d)} in a year`];
+    check(o.what === 'Net worth, 21 Sep' && o.fig === kr(n.total) && o.size === '34px' && o.weight === '650'
+      && JSON.stringify(o.chg.map((c) => c[0])) === JSON.stringify(want) && o.chg.every((c) => c[1] === (n.change30d > 0 ? 'up' : 'down') && c[2] === K[c[1]]),
+      `the key number: "${o.what}" "${o.fig}" at ${o.size}, ${o.weight}; its changes ${o.chg.map((c) => `"${c[0]}" in --${c[1]} (${c[2]})`).join(', ')} (built here: ${want.join(', ')})`);
+    check(o.own.what === 'Owned' && o.own.total === kr(OWNED) && o.own.color === `rgb(${K.own.join(', ')})` && JSON.stringify(o.own.rows) === JSON.stringify(ownRows)
+      && o.owe.what === 'Owed' && o.owe.total === kr(OWED) && o.owe.color === K.oweText && JSON.stringify(o.owe.rows) === JSON.stringify(oweRows),
+      `the Balance's sides as a table: Owned ${o.own.total} in --own (${o.own.rows.join('; ')}), Owed ${o.owe.total} in --owe (${o.owe.rows.join('; ')}), every figure as decoded here`);
+    check(o.words.join() === [`rgb(${K.own.join(', ')})`, K.oweText].join(), `the Balance's head words Own and Owe in --own and --owe (${o.words.join(', ')})`);
+    check(o.heads.join(',') === 'headline,Balance,To pay,Net worth over time,Accounts' && o.statements.every((s) => !snap.notes.some((x) => s.includes(x.slice(0, 30)))) && o.last === ABOUT_KEY,
+      `Overview's plates in order: ${o.heads.join(', ')}; the example sentence not on the pane (${o.statements.length} statements); the About key last`);
+    check(o.debt.length === 1 && o.debt[0][0] === `${MINUS}8${NN}761${NN}kr` && o.debt[0][1] === K.oweText, `a debt's amount in --owe, its minus kept: ${o.debt.map((d) => `"${d[0]}" ${d[1]}`).join(', ')}`);
+  }
+
+  // every pane: text contrast, the face, the tracer, SI, hit targets, the About key last, the picture
   for (const name of PANES) {
     await A.pane(name);
     const t0 = Date.now();
@@ -299,11 +349,11 @@ for (const scheme of schemes) {
     check(hits.bad.length === 0 && hits.n >= 6, `${name}: ${hits.n} controls, every one 44 × 44 or more (B6)${hits.bad.length ? ': ' + hits.bad.slice(0, 5).join('; ') : ''}`);
     const side = await w(() => { const m = document.getElementById('main'); return document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1; });
     check(!side, `${name}: nothing runs past the pane's width (B9)`);
-    bandH.push(await w(() => document.getElementById('band').getBoundingClientRect().height));
+    const k = await w(() => { const b = document.getElementById('pane').lastElementChild, r = b.getBoundingClientRect(), s = b.previousElementSibling && b.previousElementSibling.getBoundingClientRect(); return { tag: b.tagName, cls: b.className, text: b.textContent, h: r.height, gap: s ? r.top - s.bottom : null }; });
+    check(k.tag === 'BUTTON' && k.cls === 'aboutlink' && k.text === ABOUT_KEY && k.h >= 44 && Math.abs(k.gap - 14) < 0.5, `${name}: the pane ends with the key "${k.text}", ${Math.round(k.h)} px tall, ${k.gap} px under the last section (HOUSE 11.1 rule 1)`);
     console.log(`      ${name} drawn and checked in ${Date.now() - t0} ms (headless)`);
     await A.shot(`${fileName(name)}-${scheme}`);
   }
-  check(new Set(bandH).size === 1, `the caption band holds its height on every pane (${bandH.join(', ')} px): the pane above it never resizes`);
 
   // the Balance: its blocks against this file's decode, its ink on rendered pixels, its figure and label, its cards
   await A.pane('Overview');
@@ -315,12 +365,13 @@ for (const scheme of schemes) {
       `the Balance: ${B.own.length} blocks owned and ${B.owe.length} owed at ${SCALE} kr a pixel, each block's rows as decoded here (the home ${B.own[B.own.length - 1].y0} to ${B.own[B.own.length - 1].y1}); owned less owed is netWorth.total`);
     const sv = await A.rect('.balsec svg'), img = await A.png();
     const samples = [];
-    for (const b of [...B.own, ...B.owe]) { const [x, y, wd, h] = b.rect; if (h < 3) continue; for (let xx = x + 1.5; xx < x + wd - 1; xx += 2) for (let yy = y + 0.75; yy < y + h - 0.5; yy += 1.5) samples.push(contrast(img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)), PAGE)); }
+    let hue = 0;
+    for (const [side, items] of [['own', B.own], ['owe', B.owe]]) for (const b of items) { const [x, y, wd, h] = b.rect; if (h < 3) continue; for (let xx = x + 1.5; xx < x + wd - 1; xx += 2) for (let yy = y + 0.75; yy < y + h - 0.5; yy += 1.5) { const px = img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)); samples.push(contrast(px, K.sheet)); if (px.every((v, i) => Math.abs(v - K[side][i]) <= 2)) hue++; } }
     const at3 = samples.filter((s) => s >= 3).length / samples.length;
-    check(at3 >= 0.9, `the Balance's ink: ${samples.length} samples inside its blocks, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the page (ART.md: ink on page 14.80 light, 14.43 dark; the lowest sample ${Math.min(...samples).toFixed(2)})`);
+    check(at3 >= 0.9 && hue / samples.length >= 0.9, `the Balance's blocks: ${samples.length} samples inside them, ${(at3 * 100).toFixed(1)} % at 3:1 or more on the plate, ${(hue / samples.length * 100).toFixed(1)} % the side's own token, --own or --owe (palette.py: 6.29 and 5.49 light, 7.68 and 7.24 dark; the lowest sample ${Math.min(...samples).toFixed(2)})`);
     const t = await w(() => ({ fig: document.querySelector('.balsec .nw-fig').textContent, what: document.querySelector('.balsec .nw-what').textContent, label: document.querySelector('.balsec svg').getAttribute('aria-label'),
       labels: [...document.querySelectorAll('.balsec svg text.halo')].map((x) => [...x.children].map((sp) => sp.textContent).join(' ')), size: getComputedStyle(document.querySelector('.balsec .nw-fig')).fontSize }));
-    check(t.fig === kr(snap.netWorth.total) && t.what === 'Net worth' && t.size === '21px', `the hollow's figure: "${t.what}" "${t.fig}" at ${t.size} (this file ${kr(snap.netWorth.total)})`);
+    check(t.fig === kr(snap.netWorth.total) && t.what === 'Net worth' && t.size === '15px', `the hollow's figure: "${t.what}" "${t.fig}" at ${t.size}, the key number above carrying it at 34 px (this file ${kr(snap.netWorth.total)})`);
     check(t.label === `Balance on 21 September 2026: owned ${Math.round(OWNED)} kroner, the home ${Math.round(ownItems[ownItems.length - 1][1])} of it; owed ${Math.round(OWED)} kroner, the home loan ${Math.round(oweItems[oweItems.length - 1][1])} of it; net worth ${Math.round(snap.netWorth.total)} kroner.`,
       `the Balance's label for VoiceOver: "${t.label}"`);
     check(t.labels.join('|') === '3 accounts, 1 fund, 2 vehicles|Home|Credit card, Car loan|Home loan', `its labels: ${t.labels.join(' | ')}`);
@@ -339,7 +390,7 @@ for (const scheme of schemes) {
     check(xb && xb.ok, "the card's ✕ is drawn inside its 44 × 44 button");
     let m = await markOf(w);
     check(m.marks.length === 1 && m.marks[0][4] === 'ring' && m.marks[0][0] === home[0] + 1.5 && m.marks[0][1] === home[1] + 1.5 && m.marks[0][3] === home[3] - 3 && !m.covers,
-      `the home tapped: a 1 px page ring inset in its block (${m.marks.map((x) => x.join(' ')).join('; ')}); its card hangs clear of the T`);
+      `the home tapped: a 1 px plate ring inset in its block (${m.marks.map((x) => x.join(' ')).join('; ')}); its card hangs clear of the T`);
     await A.shot(`balance-card-${scheme}`, false);
     // the run of six shallow blocks, and the hollow
     await A.tapAt(sv.left + home[0] + home[2] / 2, sv.top + B.top + 6);
@@ -391,6 +442,48 @@ for (const scheme of schemes) {
     check(got.every((g) => g[2]), `the net-worth line's end at every range (${got.map((g) => `${g[0]} ${g[1]} days`).join(', ')}): its casing under the line, the dot on the last vertex, no day erased`);
   }
 
+  // the scrub by real touch along the net-worth line (plan 0011's owed item, the race its siblings found): CDP's
+  // touch call can return before headless Chromium hands the move to the page, so "after every move" means after
+  // the page has it; then one frame, and the cursor and the card name the day under the finger
+  {
+    const sel = '.sec:not(.balsec) .chartwrap svg', d = snap.history.days.slice(-90), nd = d.length;
+    const MONS = MON, DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayOf = (s) => { const [y, m, dd] = s.split('-').map(Number); return `${DAYS[new Date(Date.UTC(y, m - 1, dd)).getUTCDay()]} ${dd} ${MONS[m - 1]} ${y}`; };
+    await w((s) => {
+      const m = document.getElementById('main'); m.scrollTop = 0; document.querySelector(s).scrollIntoView({ block: 'center' });
+      window.__fx = null; if (!window.__fxOn) { window.__fxOn = 1; document.addEventListener('pointermove', (e) => { window.__fx = e.clientX; }, true); }
+      document.getElementById('live').textContent = '';
+    }, sel);
+    await page.waitForTimeout(200);
+    const r = await A.rect(sel), W = r.width, iw = W - 46, y = r.top + r.height / 2;
+    const idx = (x) => Math.max(0, Math.min(nd - 1, Math.round(((x - r.left - 38) / iw) * (nd - 1))));
+    for (const [step, moves] of [[3, 80], [9, 28]]) {
+      let x = Math.round(r.left + 44);
+      await A.touch('touchStart', x, y);
+      const bad = []; let lost = 0, seen = 0;
+      const t0 = Date.now();
+      for (let k = 0; k < moves; k++) {
+        x += k === 0 ? 10 : step;   // past the 8 px that tells a sideways slide from a tap
+        await A.touch('touchMove', x, y + (k % 3) - 1);
+        const got = await w((v) => new Promise((res) => { const t = performance.now(), go = () => (window.__fx === v ? res(true) : performance.now() - t > 500 ? res(false) : requestAnimationFrame(go)); go(); }), x);
+        if (!got) lost++;
+        await w(() => new Promise((res) => requestAnimationFrame(() => res())));
+        const want = idx(x), st = await w((s) => { const c = window.__fin.card(), rule = document.querySelector(s).querySelector('line[pointer-events="none"]'); return { place: c && c.place, rx: rule && Number(rule.getAttribute('x1')), op: rule && rule.getAttribute('opacity') }; }, sel);
+        const rx = Math.round((38 + (want / (nd - 1)) * iw) * 10) / 10 + 0.5;
+        if (st.place !== dayOf(d[want]) || Math.abs(st.rx - rx) > 0.06 || st.op !== '0.5') bad.push(`${want}:${st.place}`);
+        else seen++;
+      }
+      const ms = (Date.now() - t0) / moves;
+      await A.touch('touchEnd');
+      await page.waitForTimeout(250);
+      const end = await w(() => [window.__fin.card() && window.__fin.card().place, document.getElementById('live').textContent]);
+      check(lost === 0 && bad.length === 0 && end[0] === dayOf(d[idx(x)]) && end[1] === '',
+        `the scrub along the net-worth line, ${step} px a move (${moves} moves, ${ms.toFixed(1)} ms each in headless): after every move, once the page has it (${lost} never arrived) and one frame, the cursor and the card name the day under the finger (${seen} right, ${bad.length} wrong${bad.length ? ': ' + bad.slice(0, 4).join(', ') : ''}); the lift leaves the card pinned on ${end[0]}; nothing said through the live region, per move or at the lift (a tap says it once)`);
+      await A.tapAt(5, 120);
+      await page.waitForTimeout(150);
+    }
+  }
+
   // Overview's chart, Owned's chart and Savings' chart: a vertical drag scrolls, nothing opens
   for (const [p, sel] of [['Overview', '.sec:not(.balsec) .chartwrap svg'], ['Owned', '.chartwrap svg'], ['Savings', '.sec:last-of-type .chartwrap svg']]) {
     await A.pane(p);
@@ -438,8 +531,21 @@ for (const scheme of schemes) {
   {
     const s = snap.spending, f = new Date(Date.parse(`${s.from}T00:00:00Z`) + 864e5), t = s.to.split('-').map(Number);
     const want = `Spent, ${f.getUTCDate()} ${MON[f.getUTCMonth()]} to ${t[2]} ${MON[t[1] - 1]} ${t[0]}`;
-    const got = await w(() => [document.querySelector('.fig-what').textContent, document.querySelector('.fig').textContent]);
-    check(got[0] === want && got[1] === kr(s.total), `Spending: "${got[0]}" (built here: "${want}"), ${got[1]} (this file ${kr(s.total)})`);
+    const got = await w(() => [document.querySelector('.hl-what').textContent, document.querySelector('.hl-fig').textContent, getComputedStyle(document.querySelector('.hl-fig')).fontSize]);
+    check(got[0] === want && got[1] === kr(s.total) && got[2] === '34px', `Spending's key number: "${got[0]}" (built here: "${want}"), ${got[1]} at ${got[2]} (this file ${kr(s.total)})`);
+  }
+  // a change printed with its sign under a key number takes its direction's color on every pane, not only on
+  // Overview (plan 0012's review: Owned's and Savings' leads were ink while the same figure in a row was green)
+  for (const name of ['Owned', 'Savings']) {
+    await A.pane(name);
+    const l = await w(() => {
+      const lead = document.querySelector('#pane > .sec.headline .hl-lead'), b = lead && lead.querySelector('b');
+      return lead && { text: lead.textContent, fig: b && b.textContent, cls: b && b.className, color: b && getComputedStyle(b).color, rest: getComputedStyle(lead).color };
+    });
+    const yr = (snap.assets || []).reduce((a, i) => a + (Number.isFinite(i.change365d) ? i.change365d : 0), 0);
+    const sign = l && l.fig ? (l.fig.startsWith('+') ? 'up' : l.fig.startsWith(MINUS) ? 'down' : null) : null;
+    check(l && sign && l.cls === sign && l.color === K[sign] && l.rest !== l.color && (name !== 'Owned' || l.fig === signedKr(yr)),
+      `${name}'s lead under its key number: "${l && l.text}", the signed amount "${l && l.fig}" in --${l && l.cls} (${l && l.color}), its words plain (${l && l.rest})${name === 'Owned' ? ` (built here: ${signedKr(yr)})` : ''}`);
   }
   await closeOut(A, scheme);
 }
@@ -453,7 +559,7 @@ console.log('\n== once');
   // the credit card's row: no repeated words, its sign kept; the bill as To pay, due in 15 days (B10, B15)
   {
     const r = await w(() => ({ rows: [...document.querySelectorAll('.sec .row')].map((x) => x.textContent), due: [...document.querySelectorAll('.sec')].find((s) => s.querySelector('h2') && s.querySelector('h2').textContent === 'To pay') }));
-    const cardRow = r.rows.find((x) => x.startsWith('Credit card'));
+    const cardRow = r.rows.find((x) => x.startsWith('Credit card') && !x.includes('Due '));   // Accounts' row; To pay's now comes first
     check(cardRow === `Credit cardending 3388${MINUS}8${NN}761${NN}kr51${NN}239${NN}kr available` && r.rows.some((x) => x === `Credit cardDue Tue 6 Oct, in 15 days8${NN}761${NN}kr15${NN}% of the 60${NN}000${NN}kr limit`),
       `B10, B15: the card's row "${cardRow}" and its bill under To pay, due in 15 days`);
   }
@@ -500,20 +606,34 @@ console.log('\n== once');
     await page.getByRole('button', { name: 'All dwellings', exact: true }).click();
     await page.waitForTimeout(300);
   }
-  // About: opens from the stamp, holds the rest inert, carries the credits, closes on Escape back to the stamp
+  // About: opens from the stamp, holds the rest inert, carries the credits first in Sources and credits and the
+  // example's own sentence first in This data, closes on Escape back to the stamp
   {
     const s = await A.rect('#stamp');
     await A.tapAt(s.left + 20, s.top + s.height / 2);
     await page.waitForTimeout(400);
-    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main', 'band'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+    const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id,
+      credit: document.getElementById('about-credit-line').textContent, example: document.getElementById('about-example').hidden ? '' : document.getElementById('about-example').textContent,
       text: document.querySelector('.about-body').textContent.replace(/[ \t\n]+/g, ' '), list: [...document.querySelectorAll('#about-list dt')].map((d) => d.textContent) }));
     check(a.open && a.inert && a.focus === 'about-close' && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.')
-      && a.text.includes(`50${NN}000${NN}kr a pixel here`) && a.text.includes('data.norge.no/nlod/en') && a.list.includes('Stale after:') && a.list.includes('Example data:') && a.list.includes('Updated:'),
-      `About opens from the stamp, focus on Close, the rest inert; the scale, the index's license, the font's credit; This data (${a.list.join(' ')})`);
+      && a.text.includes(`50${NN}000${NN}kr a pixel here`) && a.text.includes('data.norge.no/nlod/en') && a.list.includes('Stale after:') && a.list.includes('Example data:') && a.list.includes('Updated:')
+      && a.credit === CREDITS && a.example === snap.notes.join(' '),
+      `About opens from the stamp, focus on Close, the rest inert; the credit "${a.credit.slice(0, 40)}…" first in Sources and credits; This data opens on the example's sentence "${a.example.slice(0, 40)}…", then ${a.list.join(' ')}; the scale, the index's license, the font's credit`);
     await A.shot('about-light');
     await page.keyboard.press('Escape');
     await page.waitForTimeout(150);
     check(await w(() => document.getElementById('about').hidden && document.activeElement.id === 'stamp' && !document.getElementById('main').inert), 'About closes on Escape; focus returns to the stamp');
+    // the About key at the pane's end, by touch: About opens, and closing it returns focus to the key
+    await w(() => { const m = document.getElementById('main'); m.scrollTop = m.scrollHeight; });
+    await page.waitForTimeout(150);
+    const kb = await A.rect('#pane > .aboutlink');
+    await A.tapAt(kb.left + 30, kb.top + kb.height / 2);
+    await page.waitForTimeout(400);
+    const ok1 = await w(() => !document.getElementById('about').hidden && document.activeElement.id === 'about-close');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(150);
+    check(ok1 && await w(() => document.getElementById('about').hidden && document.activeElement.className === 'aboutlink'), `the key "${ABOUT_KEY}" at the pane's end, tapped: About opens; Escape brings focus back to the key`);
+    await w(() => { document.getElementById('main').scrollTop = 0; });
   }
   // hidden and back: the snapshot is read again; the same file redraws nothing
   await A.pane('Transactions');
@@ -577,7 +697,18 @@ console.log('\n== once');
   const A = await open('light', { time: '2026-09-21T22:30:00Z' });
   const due = await A.w(() => [...document.querySelectorAll('.sec .row')].map((x) => x.textContent).find((x) => x.includes('Due ')));
   check(due && due.includes('Due Tue 6 Oct, in 14 days'), `B3: at 00:30 in Oslo on 22 Sep the card is due "in 14 days" ("${due && due.slice(11, 40)}")`);
+  await stampCheck(A, "a copy's own data, the next night");
   await closeOut(A, 'the clock at 00:30');
+  override = {};
+}
+// a copy's own data on its own day: the stamp is the time alone, on one line (HOUSE 7.2, plan 0012 F8)
+{
+  override = { '/data/snapshot.json': { body: raw.replace('"synthetic": true', '"synthetic": false').replace('"synthetic":true', '"synthetic":false') } };
+  const A = await open('light');
+  const s = await stampLine(A);
+  check(s.text === 'Updated 07:12', `a copy's own data, read the same day: "${s.text}"`);
+  await stampCheck(A, "a copy's own data, fresh");
+  await closeOut(A, 'fresh real data');
   override = {};
 }
 // the example on 1 Mar 2027: every relative day from the snapshot's own day, the stamp with its year (finding 1)
@@ -586,6 +717,7 @@ console.log('\n== once');
   const s = await A.w(() => ({ st: [...document.querySelectorAll('.statement')].map((p) => p.textContent), due: [...document.querySelectorAll('.sec .row')].map((x) => x.textContent).find((x) => x.includes('Due ')), stamp: document.getElementById('stamp').textContent }));
   check(!s.st.some((x) => /consent|BankID/.test(x)) && s.due && s.due.includes('in 15 days') && !/ago/.test(s.due) && s.stamp === 'Example data. Updated 21 Sep 2026, 07:12',
     `the example on 1 Mar 2027: no consent sentence (${s.st.length} statements), the bill "${s.due && s.due.slice(11, 35)}", the stamp "${s.stamp}"`);
+  await stampCheck(A, 'the longest it writes: the example in another year');
   await closeOut(A, 'the example months on');
 }
 // debts beyond what is owned: the words carry the sign, the figure none (a nit)
@@ -611,8 +743,9 @@ console.log('\n== once');
 {
   override = { '/data/snapshot.json': { body: raw.replace('"synthetic": true', '"synthetic": false').replace('"synthetic":true', '"synthetic":false') } };
   const A = await open('light', { time: '2026-09-23T12:00:00Z' });
-  const s = await A.w(() => ({ text: document.getElementById('stamp').textContent, ink: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color, credits: document.getElementById('credits').textContent }));
-  check(s.text === 'Stale. Updated 21 Sep, 07:12' && s.ink && s.credits === CREDITS_REAL, `B4: real data two days on: "${s.text}", the word in ink; the credits "${s.credits}"`);
+  const s = await A.w(() => ({ text: document.getElementById('stamp').textContent, ink: getComputedStyle(document.querySelector('#stamp .lead')).color === getComputedStyle(document.querySelector('h1')).color, credits: document.getElementById('about-credit-line').textContent }));
+  check(s.text === 'Stale. Updated 21 Sep, 07:12' && s.ink && s.credits === CREDITS_REAL, `B4: real data two days on: "${s.text}", the word in ink; About's credit for real data "${s.credits}"`);
+  await stampCheck(A, 'Stale.');
   await closeOut(A, 'stale');
   override = {};
 }
@@ -641,7 +774,8 @@ console.log('\n== once');
   const A = await open('light');
   const st = await A.w(() => [...document.querySelectorAll('.statement')].map((p) => p.textContent));
   check(st.includes('Bank: consent ends in 5 days. Authorize again with BankID before then.') && st.some((x) => x.startsWith('Second card: the bank answered 401. Last good read 2 days ago.')),
-    `statements on Overview: "${st.filter((x) => !x.startsWith('Example')).join('" "')}"`);
+    `statements on Overview: "${st.join('" "')}"`);
+  check(!st.some((x) => x.startsWith('Example')), 'no example sentence among them: the snapshot\'s notes are in About (plan 0012 item 10)');
   const B = await A.w(() => window.__fin.balance());
   check(Math.abs(B.owned - B.owed - rich.netWorth.total) < 0.01 && B.own.some((b) => b.name === 'Share plan') && B.own.some((b) => b.name === 'Pension'), `the Balance counts the share plan and the pension: owned less owed is the richer netWorth.total (${Math.round(B.owned - B.owed)})`);
   await A.pane('Savings');
@@ -667,6 +801,7 @@ for (const [label, ov, want] of [
   await A.page.waitForSelector('#notice:not([hidden])', { timeout: 15000 });
   const s = await A.w(() => ({ first: document.querySelector('#notice p').textContent, role: document.getElementById('notice').getAttribute('role'), tabs: document.getElementById('tabs').hidden, stamp: document.getElementById('stamp').textContent, mono: [...document.querySelectorAll('#notice *')].some((e) => /mono/i.test(getComputedStyle(e).fontFamily)) }));
   check(s.first === want && s.role === 'alert' && s.tabs && s.stamp === 'No usable data' && !s.mono, `broken data, ${label}: "${s.first}" on a plate (role alert), no tabs, no monospace (B12)`);
+  if (label === 'missing') await stampCheck(A, 'no usable data');
   const sb = await A.rect('#stamp');
   await A.tapAt(sb.left + 20, sb.top + sb.height / 2);
   await A.page.waitForTimeout(300);
@@ -677,22 +812,23 @@ for (const [label, ov, want] of [
   await closeOut(A, `broken data, ${label}`);
 }
 override = {};
-// the widths: no sideways scroll, the caption line inside its fixed height, a phone on its side
-for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['125 % text (312 × 675)', 312, 675], ['on its side (844 × 390)', 844, 390]]) {
+// the widths: no sideways scroll, a phone on its side, a wide screen with the header centered on the pane's column
+for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740], ['375 × 667', 375, 667], ['125 % text (312 × 675)', 312, 675], ['on its side (844 × 390)', 844, 390], ['wide (1024 × 768)', 1024, 768]]) {
   const A = await open('light', { w: wv, h: hv });
   const r = [];
   for (const name of PANES) {
     await A.pane(name);
     r.push(await A.w(() => {
-      const m = document.getElementById('main'), cap = document.getElementById('capline'), svg = document.querySelector('.balsec svg');
+      const m = document.getElementById('main'), svg = document.querySelector('.balsec svg'), plate = document.querySelector('#pane > .sec, #pane > .search');
       const fig = svg && svg.querySelector('.nw-fig').getBBox();
-      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, cap: cap.scrollHeight <= cap.clientHeight + 1, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
-        fig: !fig || (fig.x >= -0.5 && fig.x + fig.width <= svg.getBoundingClientRect().width + 0.5) };
+      return { side: document.documentElement.scrollWidth > innerWidth + 1 || m.scrollWidth > m.clientWidth + 1, pane: m.clientHeight, head: document.getElementById('head').getBoundingClientRect().height,
+        at: [document.querySelector('h1').getBoundingClientRect().left, plate.getBoundingClientRect().left, plate.getBoundingClientRect().right, document.getElementById('tabs').getBoundingClientRect().right + 8],
+        fig: !fig || (fig.x >= -0.5 && fig.x + fig.width <= svg.getBoundingClientRect().width + 0.5 && svg.getBoundingClientRect().right <= svg.closest('.sec').getBoundingClientRect().right - 12.5) };
     }));
   }
-  const side = r.filter((x) => x.side).length, cap = r.filter((x) => !x.cap).length, fig = r.every((x) => x.fig);
-  const land = wv > hv ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
-  check(side === 0 && cap === 0 && land && fig, `${label}: no sideways scroll on any pane, the caption line inside its height on every pane, the Balance's figure inside its drawing${wv > hv ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
+  const side = r.filter((x) => x.side).length, fig = r.every((x) => x.fig), along = r.every((x) => Math.abs(x.at[0] - x.at[1]) < 0.5 && (wv <= 760 || Math.abs((x.at[1] + x.at[2]) / 2 - wv / 2) < 1));
+  const land = wv > hv && hv < 500 ? r.every((x) => x.head <= 47 && x.pane >= 220) : true;
+  check(side === 0 && land && fig && along, `${label}: no sideways scroll on any pane, the Balance and its figure inside the drawing and the drawing inside its plate, the name starting where the pane's first plate does (${Math.round(r[0].at[0])} and ${Math.round(r[0].at[1])} px${wv > 760 ? `; the column ${Math.round(r[0].at[1])} to ${Math.round(r[0].at[2])} of ${wv} px, centered` : ''})${land && wv > hv && hv < 500 ? `, the header one ${Math.round(r[0].head)} px row, the pane ${Math.round(Math.min(...r.map((x) => x.pane)))} px tall` : ''}`);
   if (wv === 375) {   // at 844 px tall Savings has about 10 px to scroll, too little to prove B14; on a 667 px screen its chart's drag has room
     await A.pane('Savings');
     const d = await dragOn(A, '.sec:last-of-type .chartwrap svg');
@@ -700,7 +836,8 @@ for (const [label, wv, hv] of [['320 × 700', 320, 700], ['360 × 740', 360, 740
   }
   await A.pane('Overview');
   if (wv === 320) await A.shot('overview-320-light', false);
-  if (wv > hv) await A.shot('overview-landscape-light', false);
+  if (wv > hv && hv < 500) await A.shot('overview-landscape-light', false);
+  if (wv === 1024) await A.shot('overview-wide-light', false);
   await closeOut(A, label);
 }
 const after = hashOf(appPng);

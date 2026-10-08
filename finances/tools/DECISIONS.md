@@ -607,3 +607,220 @@ rows at the largest accessibility text size (each name now longer); VoiceOver re
 text: every account, …` as one statement; Owned's `Apartments` valuation word at the largest text size; on a
 real copy, a stale or failed source's message with its new punctuation (`Bank: the consent has expired;
 authorize again with BankID.`).
+
+---
+
+## Plan 0012 package 4: the pane-app register, the pilot (the builder, 2026-10-08)
+
+The brief is `docs/plans/0012-the-owners-brief-of-2026-10-06.md` (D5, *"Yes, as prototyped"*; D6, gray),
+`Template/HOUSE.md` §4.15, §11, §12 and §13 as amended on 2026-10-06, and `docs/plans/0012-change-lists.md`:
+*Shared steps, every app (F)*, *the six pane apps (P)* and *Finances* (items 1 to 19), plus plan 0011's three
+owed items (P9). The approved prototype (`docs/plans/0012-prototypes/finances.patch`) was the target picture,
+built properly rather than pasted: the band deleted, not hidden; the checks moved where the register moved
+what they pin. Bugs on record: none open (plan 0009 item 5 names no Finances bug, nothing under
+`docs/review/` names the app, matrix rows 166 and 174 are phone rows, not yet run); B1 to B25 stay fixed and
+`check.mjs` still pins them. The data, its pipeline and the four data files are byte-identical (`check.mjs`
+item 5). No git command was run.
+
+### What changed, by the list
+
+- **F1, P1. The band goes.** `footer#band` with `#capline` and `#credits` deleted from `index.html`;
+  `caption()` and its call in `render()`, the `capline` write in `fail()`, the `.band`, `.capline` and
+  `.credits` rules (and their 700 px and landscape variants), and `'band'` from `about()`'s inert list. The two
+  credit constants are unchanged and written once, in `boot()`, into `<p id="about-credit-line"
+  translate="no">`, the first child of About's *Sources and credits*.
+- **F5.** `NOTES.md`: "the credits under every pane" → "the credits in About". `PROMPT.md` (ships): the same,
+  and "the file's own Example text note is on Overview" → "opens About's This data"; its Overview sentence now
+  starts on the net worth. `ART.md` rewritten where the register changed what it describes (item 18).
+- **F6.** `miniapp.json` 1.1 → **1.2**; `check.mjs` item 6 now pins `'1.2'` (it pinned no version before).
+- **F8.** `shoot.mjs`: no `#credits` and no band on the front, About's first *Sources and credits* paragraph
+  equals the constant; the band-height check deleted; the stale case reads the real constant from About; the
+  widths stage's caption-height check deleted. The stamp is measured one line, 16 px, in every state it
+  writes: the example (`Example data. Updated 07:12`), the longest (`Example data. Updated 21 Sep 2026,
+  07:12`), a copy's own data fresh (`Updated 07:12`) and the next night (`Updated 21 Sep, 07:12`), `Stale.
+  Updated 21 Sep, 07:12` and `No usable data`.
+- **P2.** `ABOUT_KEY` and `aboutKey()` as the list gives them. **Departure:** called once, by `render()`, right
+  after the pane is built, instead of at the end of each of the six pane functions and `empty()`: the same
+  result (every pane and every empty pane ends with it), one call instead of seven. `check.mjs` item 18 pins
+  that call; `shoot.mjs` checks on every pane that the key is the last child, at least 44 px tall and 14 px
+  under the last section, and that a tap on it opens About and Escape gives focus back to it.
+- **P3. Plates.** `.sec` as the list (bottom padding 8 px: the last row pads itself); headings 15 px 650; the
+  hairline between sections gone; `.panebody` pads `calc(28px + env(safe-area-inset-bottom))` (one
+  declaration, pinned). Every halo, casing, dot ring and the Balance's selection ring take `--sheet`, in the
+  CSS and in the two `stroke` attributes `app.js` wrote as `var(--page)` (the line's casing, the Balance's
+  ring); `shoot.mjs`'s `markOf()` reads the ring by `var(--sheet)`.
+- **P4, item 14. The key number.** `figure()` now builds a plate (`sec(null)` with class `headline`) holding
+  `.hl`: `.hl-what` 12.5 px, `.hl-fig` 34 px 650 line 1.05, `.hl-lead` (or a node, Overview's `.hl-chg`) at
+  13.5 px, and returns the plate, so Owned's and Savings' tiles sit on the same plate. **Departure:** the
+  list kept the old class names `.fig`, `.fig-what`, `.fig-lead` restyled; one set of names for Overview and
+  the other panes is less CSS, so `.figure`/`.fig*` are gone and `shoot.mjs`'s Spending check reads `.hl-*`.
+- **P5, item 15. Tiles.** `.facts` a two-column grid, 14 px apart; a tile's label 11.5 px `--ink-2`, its value
+  19 px 650, its note on its own line at 11.5 px; parted by `--line`.
+- **P6, item 4.** `--own`, `--owe`, `--up`, `--down` after `--amount`, light and dark, HOUSE §11.2's values.
+  `palette.py` emits them in `--json` (11 tokens a theme; `check.mjs` item 13 pins 11) and gains check 7:
+  text contrast on both grounds equal to HOUSE §11.2's figures, owned/owed apart under all four visions, the
+  direction pairs equal to HOUSE's and printed as allowed only beside a sign. Its checks 4 to 6 now measure
+  the Balance on its plate (blocks 6.29 / 5.49 light, 7.68 / 7.24 dark; the ring against each).
+  `ALL CHECKS PASS`.
+- **P7.** Allowed sizes 10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34 and the search field's 16; 34 px only on
+  `.hl-fig`, 21 px only on the card's value (pinned).
+- **P8.** Already true: `Example data.` leads the stamp in place of `Stale.`; `Stale.` is proven on a copy of
+  the data with `synthetic: false` (`B4: real data two days on`).
+- **Items 6 to 13 (Overview, as the prototype).** The headline plate (`Net worth, 21 Sep`, `2 720 264 kr`,
+  `+16 492 kr in 30 days`, `+395 314 kr in a year`; `Change: not enough history yet` when there is no 30-day
+  change, as the old facts row said); the Balance's blocks `blk-own`/`blk-owe`, its head words in their
+  colors, its figure at 15 px, its method sentence deleted; the sides table (`OWN_GROUP`, `sideRows()`), the
+  four facts and the Balance's `Show the table` deleted; To pay moved straight after the Balance; the notes
+  loop deleted from `statements()` and `snap.notes` written into `<p id="about-example" hidden>` before This
+  data's list (hidden when the file has none); the net-worth chart's caption and toggle deleted; Accounts'
+  meta type first, then the mask, no source label (`sourceLabel()` deleted, it had no other use), a debt's row
+  `debt` with its amount in `--owe`, the empty state kept; rows 9 px, amounts 15 px 600.
+- **Item 16. The captions.** Deleted as listed; moved to About's *How the numbers are made*: `On Owned's chart,
+  every debt counts the card too; the gap is net worth less cash and savings.` (after the paragraph on the
+  home and the loans; "On Owned's chart," added so the sentence reads without the chart beside it),
+  `Repeating lists the charges that landed on a regular rhythm, as the bank writes them.` (after Cash flow)
+  and `Employee shares still to vest are valued at today's price; what they are worth depends on the price on
+  the day, and tax comes off it.` (its own paragraph). Kept: the NAV line, the share price and Norges Bank's
+  rate, the pension's state line.
+- **Item 17.** `tone()` and `signedFig()`: a figure `krs()` prints with its sign takes `up` or `down` by
+  its rounded sign, zero neither. Used by the headline's changes and by `changeSub()`, the sub line of an owned
+  item, a fund and a pension account (`+559 605 kr, +12 %`, the amount colored, the percentage not). The pair
+  charts keep `--series-1`/`-2`; nothing else gains a color.
+- **Item 18.** `ART.md`: the rule "Money's direction is never a color" replaced by the meaning-color table
+  (HOUSE §11.1 rule 5, §11.2's figures); section 1 (colors, the plate, the 15 px figure, the sides table in
+  place of the caption), section 2, section 3 (plates, the key number, tiles, rows, statements, Overview's
+  order, the About key, About's contents, the centered header, the slide), section 4 (the scale), section 6
+  (the budget), section 7 (tells 1, 3, 12, 14). The intro says the register binds it.
+- **About's Balance paragraph** said "The T at the top of Overview … Each block of ink"; it now says "The T on
+  Overview, under the net worth, … what is owned on the left, in blue, and what is owed on the right, in
+  orange. Each block is …". About's `p + dl` gains the 8 px its `p + p` has.
+
+### P9, plan 0011's three owed items
+
+1. **The pane centered with its header on wide screens.** `.head`'s sides are `calc(max(16px, 50% - 364px) +
+   env(safe-area-inset-…))`, so on a screen wider than 760 px the name and the tabs start where the pane's
+   760 px column puts its plates (the old 700 px rule's 20 px is gone, which also aligned them from 700 to
+   760 px). `shoot.mjs`'s widths stage gains `wide (1024 × 768)` and checks at every width that the name starts
+   where the first plate does, and above 760 px that the column is centered: 148 and 148 px, the column 148 to
+   876 of 1 024.
+2. **A passive `touchstart` listener**, empty, on the document, so iOS draws `:active` (the text keys'
+   pressed tint; the About key's `:active` ink, new). Pinned by `check.mjs`; the tint itself is a phone check.
+3. **The scrub-race check.** Finances has no time player; its scrub is the sideways slide along a chart. Per
+   theme, `shoot.mjs` slides along Overview's net-worth line by CDP touch at 3 px and at 9 px a move, and after
+   every move waits until the page has received it (`window.__fx`, as Outdoor Window's and Power Hours' do),
+   then one frame, then checks that the cursor and the card name the day under the finger; the lift leaves the
+   card pinned and says nothing (a tap still says it once).
+   **It found a bug, fixed here.** On the first run the card froze on one day (`25 Jul`) a third of the way
+   along and stayed there, the lift included. The trace: the earlier range clicks had left Playwright's mouse
+   resting on `90 days`; when the card moved to the plate's lower left it slid under that resting mouse, the
+   chart's hit layer got the *mouse's* `pointerleave`, and `readout()` reset `down` for the finger's slide.
+   Any second pointer can do that (an iPad's trackpad pointer resting on a chart). `readout()` now records the
+   reading pointer's id in `open()` and a `pointerleave` from any other pointer while it reads is ignored. The
+   new check, run against a scratch copy holding the old handler, printed `FAIL … 29 right, 51 wrong: 32:Sat
+   25 Jul 2026 …` and the 9 px pass `11 right, 17 wrong`; on this folder `80 right, 0 wrong` and `28 right, 0
+   wrong`, both themes.
+
+### Found while looking, fixed
+
+- **The Balance overflowed its plate at 320 px.** Its floor of 280 px fitted the bare page (288 px) but not a
+  plate (262 px): the figure under the double rule ran 18 px past the plate's edge
+  (`tools/.work/shots/overview-320-light.png` before the fix). The floor is now 240 px (`js/balance.js`'s
+  layout already narrows its columns under 340 px; test_balance tests 288 and 358). The widths check now
+  also requires the drawing inside its plate.
+- **Transactions' days on plates** (beyond the list): each day's rows are a plate under its date heading,
+  as Savings' sections sit under their group heads; without it the busiest pane was the one without plates.
+
+### Checks changed, and why each
+
+`check.mjs`: item 6 pins 1.2; item 8 rewritten (F8; also: no credit words in `index.html` before About, and
+in `app.js` only inside the two constants); item 13 counts 11 tokens; item 14's type sizes (P7); B17 (the
+register's rule: `'up'`/`'down'` only in `tone()`, `tone(` only in `signedFig()`, `--up`/`--down` only on
+`.up`/`.down`, a debt's `--owe`); B18 extended to `#about-example` and the notes read once, in `boot()`; item
+16's cap; new item 18 (the About key, the pane's foot, plates and `--sheet` strokes, the centered header,
+`touchstart`). Each new or changed check was run against the before copy (`tools/.work/before/finances`): ten
+lines print `FAIL` there (version, credits, tokens, sizes, B17/B18, the key, the foot, the plates, the header,
+`touchstart`). `shoot.mjs`: as F8 above, plus the register on Overview (the key number at 34 px with its
+changes in `--up`, the sides' totals and rows against this file's decode, their head colors, the plates'
+order, no example sentence on the pane, a debt in `--owe`), the Balance's pixels sampled as `--own`/`--owe` on
+the plate (was ink on the page), its figure 15 px, the ring `--sheet`, About's credit and example paragraph,
+the About key by touch, the scrub, the stamp's line, the wide screen; B10's row picked from Accounts, since
+To pay's row with the same name now comes first. 177 `ok` before, 214 now.
+
+### Owner calls this leaves (each reversible)
+
+1. **About's This data says the example twice**: the data's own `Example text: …` paragraph (item 10) and the
+   list's `Example data: …` line (B18). Dropping the list line would also drop B18's pin on it.
+2. **A real copy's job notes** (`House-price index unavailable; …`) now read in About, not on Overview (item
+   10 applies to every note, not only the example's). The home's basis line on Owned still says the
+   fallback where the number is.
+3. **Transactions' days on plates** (above).
+4. **A slide's lift says nothing**, as before the pass; a tap says the card once.
+5. **The prototype's choices kept**: `Bank accounts` for one account or several; the depreciation of a car
+   in `--down` (`−149 927 kr, −44 %`), which is true and reads as a loss.
+6. **The pointer fix** changes nothing a single finger or a single mouse does.
+
+### Budgets (`node tools/check.mjs`)
+
+App code **126 632 B** of 200 000 (123 706 before: `index.html` 6 084, `style.css` 16 246, `app.js` 87 048,
+`js/units.js` 7 867, `js/balance.js` 9 387). Fonts 40 075 B of 160 000. **ZIP 133 193 B** (130 333 before),
+inside the lead's ruled cap for package 4, **162 916 B** (130 333 × 1.25, rounded down; the app's own 131 000
+of plan 0011 D27 was tighter, so it rose to the house rule; `ZIP_CAP` set with that reason). Stored in the
+ZIP: data and the three JSON files 29 552, fonts 37 510, app code 43 272, `.md` files 20 912. Nothing cut.
+
+### The camera
+
+`MarketingShotsUITests.swift` 340-344 opens `Finances`, waits for the button `Overview` and taps `Overview` and
+`Spending`: all three untouched (`buildTabs()` was not changed). **The camera needs no change.** The new
+About key is a button named `Sources, method and credits are in About.`; nothing waits for it.
+
+### Phone checks this adds (not claimed here; an iPhone on iOS 18 and one on iOS 26)
+
+Matrix row 174 (the About key above the home indicator in full screen, both orientations) covers the foot.
+New: the pressed tint on `Show the table` and on the About key when held (the `touchstart` listener); a
+sideways slide along the net-worth line reading every day under the finger, and on an iPad with a trackpad
+pointer resting on the chart; the plates' edges and the meaning colors in sunlight in both themes; the
+headline's 34 px figure at the largest accessibility text size; Overview at 320 px wide (iPhone SE in
+Display Zoom) with the Balance inside its plate.
+
+## Plan 0012 package 4: the fixer's pass on QA's and the reviewer's findings (2026-10-08)
+
+### Taken
+
+- **A signed change under a key number is colored on every pane** (the reviewer's should, option (a)). Owned's
+  lead (`+118 400 kr in value over a year, before the loans moved`) and Savings' (`+18 504 kr, +18.3 % on
+  what was paid in`, and the granted-shares form `… above what was paid; …`) are now built by `changeLine()`
+  as net worth's are: the amount through `signedFig()` in `--up`/`--down`, the words and the percentage plain.
+  Before, Savings showed `+18 504 kr` in ink in the lead and in green on the fund row of the same first screen.
+  Option (a) over (b) because it is the smaller change and matches HOUSE 11.1 rule 2 (a key number's change
+  sits right under it), and B17's rule is untouched: `up`/`down` still come only from `tone()`, `tone(` only
+  from `signedFig()`. Spending's comparison (`1 234 kr less than the 30 days before`) is words, unsigned, so
+  it stays ink. `ART.md`'s `--up` row and its key-number paragraph say so. `shoot.mjs` gains one check per
+  theme: each lead's amount in its direction's token, its words in ink, Owned's figure against this file's
+  sum of `change365d` (two checks a theme: 214 `ok` became 218).
+- **Another pointer no longer moves or ends a read** (the reviewer's nit, free). `readout()`'s guard covered
+  `pointerleave` only; `pointermove`, `pointerup` and `pointercancel` from a pointer other than the reading one
+  are now ignored while a read is down. Checked in WebKit and Chromium with synthetic pointer events (mouse 1
+  reads, pointer 2 moves to 80 %, lifts and cancels: the card holds, then follows pointer 1 again); the scrub
+  check is unchanged (80/0 and 28/0 in both themes).
+- **The key number's label is the pane's first heading** (the reviewer's nit, free). `.hl-what` is an `h2` at
+  its old size and weight (`font-weight: inherit`), so VoiceOver's heading rotor starts at `Net worth, 21 Sep`,
+  `Owned, less what is owed on it`, `Invested` or `Spent, …`, not at `To pay`. Pixels unchanged (WebKit
+  and Chromium, both themes, read by eye).
+
+### Declined here, and why
+
+- **Matrix rows, HOUSE §8's budget row, HOUSE §11.3's Finances line, the starter pack's version** (QA's should,
+  the reviewer's second should): all outside this folder, which is the only place this pass may write. Handed
+  to the lead with the figures below.
+- **Display rounding** (Owned's tile 3 007 167 kr against rows that sum to 3 007 168; `+18.3 %` against `+18 %`):
+  optional, existed before the pass, each figure correctly rounded. Recorded, not changed.
+- **A debt's `--owe` on Overview but not on Owned's Loans, and the Balance left of center on a wide screen**: the
+  reviewer asked for no change in the pilot; a family rule for the lead.
+
+### Budgets after this pass (`node tools/check.mjs`)
+
+App code **127 140 B** of 200 000 (`app.js` 87 534, `style.css` 16 268). ZIP **133 546 B** of the ruled 162 916.
+
+### The camera
+
+`Overview` and `Spending` untouched (`buildTabs()` unchanged); nothing the camera waits for moved.

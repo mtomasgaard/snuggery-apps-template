@@ -261,6 +261,8 @@ const CREDITS = {
   example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).',
   real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).',
 };
+// The text key every pane ends with (HOUSE 11.1 rule 1): the credits, the sources and the method are in About.
+const ABOUT_KEY = 'Sources, method and credits are in About.';
 
 /* Categorical slots, fixed order, never cycled, read from the stylesheet so light and dark each get their
    own fitted step (ART.md section 2). Used only where identity is the job: a pair's two series and the
@@ -402,19 +404,24 @@ const isPinned = (wrap) => pin.wrap === wrap;
  *  pins the card and says it once, a sideways slide reads along the chart, a vertical drag is a scroll
  *  (the browser takes it and sends pointercancel) and opens nothing. */
 function readout(hit, wrap, show, hide) {
-  let down = 0, at = null;   // at: a finger's first point
-  const open = (ev) => { down = 1; at = null; show(ev); pinTo(wrap, () => hide()); };
+  let down = 0, at = null, id = null;   // at: a finger's first point; id: the pointer that is reading
+  const open = (ev) => { down = 1; at = null; id = ev.pointerId; show(ev); pinTo(wrap, () => hide()); };
   const say = () => { if (openCard && openCard.wrap === wrap) announce(sayCard(openCard.card)); };
   const on = (type, f) => hit.addEventListener(type, f);
   on('pointerdown', (ev) => { if (ev.pointerType === 'touch') at = [ev.clientX, ev.clientY]; else { open(ev); say(); } });
+  // while one pointer reads, another (a trackpad's, a second finger) neither moves its card nor ends it
+  const other = (ev) => down && ev.pointerId !== id;
   on('pointermove', (ev) => {
+    if (other(ev)) return;
     if (!at) { if (down || !isPinned(wrap)) show(ev); return; }
     const dx = Math.abs(ev.clientX - at[0]);
     if (dx > 8 && dx > Math.abs(ev.clientY - at[1])) open(ev);
   });
-  on('pointerup', (ev) => { if (at) { open(ev); say(); } down = 0; at = null; });
-  on('pointercancel', () => { if (down && isPinned(wrap)) unpin(); down = 0; at = null; });
-  on('pointerleave', () => { down = 0; if (!isPinned(wrap)) hide(); });
+  on('pointerup', (ev) => { if (other(ev)) return; if (at) { open(ev); say(); } down = 0; at = null; });
+  on('pointercancel', (ev) => { if (other(ev)) return; if (down && isPinned(wrap)) unpin(); down = 0; at = null; });
+  // only the pointer that is reading ends its read by leaving: a resting mouse that the card moved under left the
+  // chart mid-slide and froze a finger's card on one day (found by shoot.mjs's scrub check, plan 0012)
+  on('pointerleave', (ev) => { if (other(ev)) return; down = 0; if (!isPinned(wrap)) hide(); });
 }
 
 /* ── loading and validation ───────────────────────────────────────────── */
@@ -489,7 +496,6 @@ function fail(what, raw, hint, lines) {
   $('stamp').textContent = 'No usable data';
   $('tabs').hidden = true;
   $('pane').replaceChildren();
-  $('capline').textContent = '';
   box.classList.remove('kept');
   box.append(el('p', null, `data/snapshot.json ${what}`));
   if (lines) box.append(el('p', 'notice-lines', lines.join('\n')));
@@ -593,7 +599,12 @@ function boot() {
     const t = stored(STORE_TAB, 'overview');
     if (TABS.some(([k]) => k === t)) tab = t;
   }
-  $('credits').textContent = snap.synthetic ? CREDITS.example : CREDITS.real;
+  // the credit constant opens About's Sources and credits (HOUSE 4.15); the snapshot's own notes (on the
+  // example, what was invented) are This data's first paragraph (HOUSE 11.1 rule 8)
+  $('about-credit-line').textContent = snap.synthetic ? CREDITS.example : CREDITS.real;
+  const notes = (Array.isArray(snap.notes) ? snap.notes : []).map(String).join(' ');
+  $('about-example').textContent = notes;
+  $('about-example').hidden = !notes;
   stamp();
   buildTabs();
   render();
@@ -683,27 +694,12 @@ function render() {
   pane.replaceChildren();
   shownTab = tab;
   PANES()[tab](pane);
+  aboutKey(pane);   // every pane ends with it, an empty one too (HOUSE 11.1 rule 1)
   main.scrollTop = keep;
   pane.style.minHeight = '';
-  caption();
 }
 
-/** The caption band's line (HOUSE 4.5): what the pane is showing, in two fixed lines. */
-function caption() {
-  const s = snap.spending, cf = snap.cashflow, tx = Array.isArray(snap.transactions) ? snap.transactions : [];
-  const inv = snap.investments, day = date(lastIso());
-  const months = cf && Array.isArray(cf.months) ? cf.months.slice(-12) : [];
-  $('capline').textContent = {
-    overview: `Accounts as read on ${day}; what no bank reports is estimated, each by the method Owned names.`,
-    owned: `Values on ${day}, each moved from a value set by hand, by the method named under it; estimates, not valuations.`,
-    spending: s && s.from && s.to ? `Payments out, ${span(plusDays(s.from, 1), s.to)}; moves between own accounts, savings and income left out.` : 'No spending breakdown in this snapshot.',
-    flow: months.length ? `Money in and out by month, ${month(months[0])} to ${month(months[months.length - 1])}; moves between own accounts left out.` : 'No monthly cash flow in this snapshot.',
-    savings: inv && inv.funds && inv.funds[0] && inv.funds[0].navDate ? `Funds priced at the NAV of ${date(inv.funds[0].navDate)}${inv.anchoredAt ? `; units counted from the transfers that bought them since ${date(inv.anchoredAt)}` : ''}.` : `Holdings on ${day}.`,
-    txns: tx.length ? `The ${fixed(tx.length, 0)} newest transactions, ${span(tx[tx.length - 1].date, tx[0].date)}, as the banks wrote them.` : 'No transactions in this snapshot.',
-  }[tab];
-}
-
-/* Pieces every pane is built from. */
+/* Pieces every pane is built from. A section is a plate (HOUSE 11.1 rule 4). */
 function sec(title, tag = 'h2') {
   const c = el('section', 'sec');
   if (title) c.append(el(tag, null, title));
@@ -711,14 +707,42 @@ function sec(title, tag = 'h2') {
 }
 const help = (text) => el('p', 'cap', text);
 const empty = (main, text) => main.append(el('p', 'empty', text));
-/** The one large figure of a pane (21 px, 600): the subject's own number, its lead under it. */
+/** The pane's key number on its own plate (HOUSE 11.1 rule 2): its label above, the figure at 34 px, its
+ *  change or plan under it (words, or a node of changes). Returns the plate, so the pane's tiles can follow. */
 function figure(main, what, value, lead) {
-  const f = el('div', 'figure');
-  f.append(el('span', 'fig-what', what), el('span', 'fig', value), el('span', 'fig-lead', lead || ''));
-  main.append(f);
+  const c = sec(null), f = el('div', 'hl');
+  c.classList.add('headline');
+  f.append(el('h2', 'hl-what', what), el('span', 'hl-fig', value));
+  if (lead) f.append(typeof lead === 'string' ? el('span', 'hl-lead', lead) : lead);
+  c.append(f);
+  main.append(c);
+  return c;
+}
+/** The key to About at the end of every pane (HOUSE 11.1 rule 1). */
+function aboutKey(host) {
+  const b = el('button', 'aboutlink', ABOUT_KEY);
+  b.type = 'button';
+  b.onclick = () => about(true);
+  host.append(b);
+}
+/** A signed amount in its direction's color (HOUSE 11.1 rule 5): --up or --down, and only ever on a figure
+ *  krs() prints with its sign, so the sign still says it without the color (B17). Zero takes neither. */
+const tone = (v) => (Math.round(v) > 0 ? 'up' : Math.round(v) < 0 ? 'down' : null);
+const signedFig = (tag, v) => el(tag, tone(v), krs(v));
+/** A change under a key number: the signed amount in its direction's color, then its words, plain. */
+function changeLine(v, what, cls = 'chg', sep = ' ') {
+  const s = el('span', cls);
+  s.append(signedFig('b', v), `${sep}${what}`);
+  return s;
+}
+/** A row's change line: the signed amount in its direction's color, then its percentage, uncolored. */
+function changeSub(v, base) {
+  const s = el('span');
+  s.append(signedFig('span', v), `, ${pctSigned(v / base)}`);
+  return s;
 }
 const facts = () => el('dl', 'facts');
-/** A fact as a row: the quantity in words at the left, the value at the right, a note after it. */
+/** A fact as a tile (HOUSE 11.1 rule 3): the quantity in words, the value at 19 px, a note under it. */
 function fact(label, value, note) {
   const r = el('div', 'fact'), dd = el('dd');
   dd.append(el('b', null, value));
@@ -749,7 +773,7 @@ function row(name, metaText, amount, sub) {
   const r = el('div', 'row'), left = el('div'), right = el('div', 'amt', amount);
   left.append(el('div', 'nm', name));
   if (metaText) left.append(el('div', 'meta', metaText));
-  if (sub) right.append(el('span', 'sm', sub));
+  if (sub) { const s = el('span', 'sm'); s.append(sub); right.append(s); }   // words, or a change line
   r.append(left, right);
   return r;
 }
@@ -846,7 +870,7 @@ function lineChart(host, spec) {
     // the end mark's 4 px page casing goes under the line: it clears the gridlines from the dot, never the
     // line's last days (after review, finding 2); the dot's own 2 px page ring sits on the line's end
     const endAt = spec.endDot ? [r1(X(n - 1)), r1(Y(spec.series[0].values[n - 1]))] : null;
-    if (endAt) svg.append(svgEl('circle', { cx: endAt[0], cy: endAt[1], r: 5.5, fill: 'none', stroke: 'var(--page)', 'stroke-width': 4, class: 'casing' }));
+    if (endAt) svg.append(svgEl('circle', { cx: endAt[0], cy: endAt[1], r: 5.5, fill: 'none', stroke: 'var(--sheet)', 'stroke-width': 4, class: 'casing' }));
     for (const s of spec.series) {
       svg.append(svgEl('polyline', { points: s.values.map((v, i) => `${r1(X(i))},${r1(Y(v))}`).join(' '), fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
     }
@@ -924,8 +948,9 @@ function balanceSection(main) {
   main.append(c);
   const cur = unitOf(snap.currency), word = cur === 'kr' ? 'kroner' : cur;
   const draw = () => {
-    // at most 420 px wide, left-aligned: on a wide screen the T keeps its ruler beside it
-    const W = Math.max(280, Math.min(420, wrap.clientWidth || 320));
+    // at most 420 px wide, left-aligned: on a wide screen the T keeps its ruler beside it; never wider than
+    // its plate, which leaves it 262 px at 320 (the floor was 280 when the T sat on the page)
+    const W = Math.max(240, Math.min(420, wrap.clientWidth || 320));
     wrap.querySelectorAll('svg').forEach((s) => s.remove());
     const svg = svgEl('svg', { width: W, role: 'img', 'aria-label': sayBalance(B, dateWords(lastIso()), word) });
     wrap.prepend(svg);
@@ -946,12 +971,13 @@ function balanceSection(main) {
     }
     add('rect', { x: L.ruler.x, y: L.top, width: 1, height: L.foot - L.top, class: 'ruler' });
     // the T: Own and Owe over a 2 px crossbar, the stem, every block, the double rule
-    add('text', { x: L.own.x1, y: 14, 'text-anchor': 'end', class: 'head-word' }, 'Own');
-    add('text', { x: L.owe.x0, y: 14, class: 'head-word' }, 'Owe');
+    add('text', { x: L.own.x1, y: 14, 'text-anchor': 'end', class: 'head-word own-word' }, 'Own');
+    add('text', { x: L.owe.x0, y: 14, class: 'head-word owe-word' }, 'Owe');
     const [bx, by, bw, bh] = L.bar;
     add('rect', { x: bx, y: by, width: bw, height: bh, class: 'ink' });
     add('rect', { x: L.stem, y: L.top, width: 1, height: L.rules[1] + 1 - L.top, class: 'ink' });
-    for (const s of [L.own, L.owe]) for (const b of s.blocks) add('rect', { x: b.rect[0], y: b.rect[1], width: b.rect[2], height: b.rect[3], class: 'ink' });
+    // every block in its side's color (HOUSE 11.3: --own owned, --owe owed); the crossbar, stem and rules stay ink
+    for (const s of [L.own, L.owe]) for (const b of s.blocks) add('rect', { x: b.rect[0], y: b.rect[1], width: b.rect[2], height: b.rect[3], class: s === L.own ? 'blk-own' : 'blk-owe' });
     for (const y of L.rules) add('rect', { x: x0, y, width: x1 - x0, height: 1, class: 'ink' });
     // the balancing figure: the hollow bracketed, its words beside it or under the double rule
     const h = L.hollow, tall = h.y1 > h.y0;
@@ -978,14 +1004,14 @@ function balanceSection(main) {
         bottom = box.y + box.height;
       }
     }
-    // the selection mark (after review, finding 3): a 1 px page ring inset in a block 6 px or deeper; for a
+    // the selection mark (after review, finding 3): a 1 px plate ring inset in a block 5 px or deeper; for a
     // run of shallow blocks, a thin one, or the hollow, a 2 px ink tick outside the column along its rows
     const mark = svgEl('g', { class: 'sel', 'pointer-events': 'none' }), hit = svgEl('rect', { x: 0, y: 0, width: W, height: L.height, fill: 'transparent' });
     svg.append(mark, hit);
     const select = (at) => {
       if (!at) return mark.replaceChildren();
       const s = (at.hollow ? L.hollow.side : at.side) === 'own' ? L.own : L.owe, one = !at.hollow && at.group.items.length === 1 && at.group.items[0].rect;
-      if (one && one[3] >= 5) return mark.replaceChildren(svgEl('rect', { x: one[0] + 1.5, y: one[1] + 1.5, width: one[2] - 3, height: one[3] - 3, fill: 'none', stroke: 'var(--page)', 'stroke-width': 1 }));
+      if (one && one[3] >= 5) return mark.replaceChildren(svgEl('rect', { x: one[0] + 1.5, y: one[1] + 1.5, width: one[2] - 3, height: one[3] - 3, fill: 'none', stroke: 'var(--sheet)', 'stroke-width': 1 }));
       const [y0, y1] = at.hollow ? [L.hollow.y0, L.hollow.y1] : [at.group.y0, at.group.y1];
       mark.replaceChildren(svgEl('rect', { x: s === L.own ? s.x0 - 4 : s.x1 + 2, y: y0, width: 2, height: Math.max(6, y1 - y0), class: 'ink' }));   // at least 6 px, to be seen
     };
@@ -1000,9 +1026,6 @@ function balanceSection(main) {
     readout(hit, wrap, show, () => { hideCard(wrap); select(null); });
   };
   watch(wrap, draw);
-  c.append(help(B.total < 0
-    ? `Owned against owed on ${date(lastIso())}, one block per account, holding or loan, to one scale; the space under what is owned is owed beyond it.`
-    : `Owned against owed on ${date(lastIso())}, one block per account, holding or loan, to one scale; the space under the debts is net worth.`));
   return { B, c };
 }
 /** One label, wrapped by words onto as many lines as its room needs (three at most), centered on y. */
@@ -1046,21 +1069,47 @@ function hollowCard(B) {
 /* ── Overview ─────────────────────────────────────────────────────────── */
 
 const TYPE_WORD = { current: 'current account', savings: 'savings account', credit: 'credit card', other: 'account' };
-const sourceLabel = (id) => { const s = (snap.sources || []).find((x) => x.id === id); return s ? s.label : id; };
 const masked = (m) => (m && /\d/.test(m) ? `ending ${m.replace(/\D/g, '')}` : null);   // the data's •• is not in the face (B24)
 
+/** The Balance's two sides as rows under it: owned by kind (each property by its name), owed by name. */
+const OWN_GROUP = { account: 'Bank accounts', fund: 'Funds', shares: 'Employee shares', pension: 'Pension', vehicle: 'Vehicles', other: 'Other', rest: 'Other' };
+function sideRows(items, own) {
+  const by = new Map();
+  for (const i of items) {
+    const key = !own ? `n:${i.name}` : i.kind === 'property' ? `p:${i.name}` : i.kind === 'rest' ? 'other' : i.kind;
+    if (!by.has(key)) by.set(key, { label: own && i.kind !== 'property' ? OWN_GROUP[i.kind] || i.kind : i.name, value: 0 });
+    by.get(key).value += i.value;
+  }
+  return [...by.values()];
+}
+
 function paneOverview(main) {
-  const { B, c: bal } = balanceSection(main), n = snap.netWorth, f = facts();
-  f.append(fact('Owned', kr(B.owned)), fact('Owed', kr(B.owed)));
-  if (num(n.change30d)) f.append(fact('Change in 30 days', krs(n.change30d)));
-  if (num(n.change365d)) f.append(fact('Change in a year', krs(n.change365d)));
-  if (!num(n.change30d)) f.append(fact('Change', 'not enough history yet'));
-  bal.append(f);
-  tableToggle(bal, 'balance', ['Item', 'Side', 'Amount', 'Share'], () => [
-    ...B.own.map((i) => [i.name, 'Own', kr(i.value), pct(i.value / B.owned)]),
-    ...B.owe.map((i) => [i.name, 'Owe', kr(i.value), pct(i.value / B.owed)]),
-    ['Net worth', '', kr(B.total), ''],
-  ]);
+  const n = snap.netWorth;
+  // the key number: net worth, and how it moved (the old facts row's rule: no 30 days, no change yet)
+  const ch = el('div', 'hl-chg');
+  if (num(n.change30d)) ch.append(changeLine(n.change30d, 'in 30 days'));
+  if (num(n.change365d)) ch.append(changeLine(n.change365d, 'in a year'));
+  if (!num(n.change30d)) ch.append(el('span', 'chg', 'Change: not enough history yet'));
+  figure(main, `Net worth, ${dayMon(lastIso())}`, kr(n.total), ch);
+
+  // the Balance, then its numbers: each side's total and its rows, in the side's color at the head
+  const { B, c: bal } = balanceSection(main), grid = el('div', 'sides');
+  for (const [own, items, total] of [[true, B.own, B.owned], [false, B.owe, B.owed]]) {
+    const col = el('div', `side side-${own ? 'own' : 'owe'}`), dl = el('dl', 'side-rows');
+    col.append(el('div', 'side-what', own ? 'Owned' : 'Owed'), el('div', 'side-total', kr(total)), dl);
+    for (const g of sideRows(items, own)) { const r = el('div'); r.append(el('dt', null, g.label), el('dd', null, kr(g.value))); dl.append(r); }
+    grid.append(col);
+  }
+  bal.append(grid);
+
+  // the card bill: the one number with a deadline, on the first screen
+  const card = snap.accounts.find((a) => a.type === 'credit' && a.dueDate);
+  if (card) {
+    const t = sec('To pay'), left = daysBetween(today(), card.dueDate);
+    const limit = num(card.creditLimit) && card.creditLimit > 0 ? `${pct(Math.abs(card.balance) / card.creditLimit, 0)} of the ${kr(card.creditLimit)} limit` : null;
+    t.append(row(card.name, `Due ${dowDate(card.dueDate)}, ${days(left)}`, kr(Math.abs(num(card.dueAmount) ? card.dueAmount : card.balance)), limit));
+    main.append(t);
+  }
   statements(main);
 
   // net worth over the chosen range
@@ -1071,36 +1120,27 @@ function paneOverview(main) {
     main.append(c);
     lineChart(c, { days: d, series: [{ values: v, color: AMOUNT }], endDot: true, aria: `Net worth each day, ${span(d[0], d[d.length - 1])}`,
       tip: (i) => ({ place: dowDateYear(d[i]), value: fixed(v[i], 0), unit: unitOf(snap.currency), rows: [] }) });
-    c.append(help(`Net worth each day, ${span(d[0], d[d.length - 1])}; the dot is the latest.`));
-    tableToggle(c, 'networth', ['Day', 'Net worth'], () => monthEnds(d).reverse().map((i) => [date(d[i]), kr(v[i])]));
   }
 
-  // accounts, heaviest first, cards last because they read as debt
+  // accounts, heaviest first, cards last because they read as debt; the type first, then the mask (About
+  // names the banks); a debt's amount in the owed color, its sign kept
   const c = sec('Accounts');
   const accs = [...snap.accounts].sort((a, b) => (a.type === 'credit') - (b.type === 'credit') || b.balance - a.balance);
   if (!accs.length) c.append(el('p', 'empty', 'No accounts in this snapshot.'));
   for (const a of accs) {
     const name = a.name || 'Account';
     const avail = num(a.available) && Math.abs(a.available - a.balance) > 0.5 ? `${kr(a.available)} available` : null;
-    c.append(row(name, meta(name, [masked(a.mask), sourceLabel(a.source), TYPE_WORD[a.type] || a.type]), kr(a.balance), avail));
+    const r = row(name, meta(name, [TYPE_WORD[a.type] || a.type, masked(a.mask)]), kr(a.balance), avail);
+    if (a.balance < 0) r.classList.add('debt');
+    c.append(r);
   }
   main.append(c);
-
-  // the card bill: the one number with a deadline
-  const card = snap.accounts.find((a) => a.type === 'credit' && a.dueDate);
-  if (card) {
-    const t = sec('To pay'), left = daysBetween(today(), card.dueDate);
-    const limit = num(card.creditLimit) && card.creditLimit > 0 ? `${pct(Math.abs(card.balance) / card.creditLimit, 0)} of the ${kr(card.creditLimit)} limit` : null;
-    t.append(row(card.name, `Due ${dowDate(card.dueDate)}, ${days(left)}`, kr(Math.abs(num(card.dueAmount) ? card.dueAmount : card.balance)), limit));
-    main.append(t);
-  }
 }
 
-/** The snapshot's own notes, a source that failed or is stale, consent about to end: sentences on the page
- *  (B18). The app's own example sentence is in About and the stamp. */
+/** A source that failed or is stale, consent about to end: sentences on the page (B18). The snapshot's own
+ *  notes (the example's sentence among them) are in About's This data, and the stamp says Example data. */
 function statements(main) {
   const out = [];
-  for (const note of Array.isArray(snap.notes) ? snap.notes : []) out.push(Object.assign(statement(null, String(note)), { className: 'statement data' }));
   for (const s of Array.isArray(snap.sources) ? snap.sources : []) {
     if (s.status === 'ok' || s.status === 'derived') {
       // Consent that is about to lapse is the one thing worth saying early: once it does, the feed goes quiet.
@@ -1129,10 +1169,10 @@ function paneOwned(main) {
   if (!items.length && !loans.length) return empty(main, 'Nothing is listed in assets.json yet; add the home, a car or anything else owned, and it appears here.');
   const worth = items.reduce((a, i) => a + (i.value || 0), 0), owed = loans.reduce((a, l) => a + (l.balance || 0), 0);
   const known = items.some((i) => num(i.change365d)), yr = items.reduce((a, i) => a + (num(i.change365d) ? i.change365d : 0), 0);
-  figure(main, 'Owned, less what is owed on it', kr(worth + owed), known ? `${krs(yr)} in value over a year, before the loans moved` : '');
+  const top = figure(main, 'Owned, less what is owed on it', kr(worth + owed), known ? changeLine(yr, 'in value over a year, before the loans moved', 'hl-lead chg') : '');
   const f = facts();
   f.append(fact('Value', kr(worth)), fact('Owed on it', kr(-owed)));
-  main.append(f);
+  top.append(f);
 
   const h = snap.history;
   if (Array.isArray(h.assets) && h.assets.length === h.days.length && Array.isArray(h.liabilities)) {
@@ -1141,15 +1181,13 @@ function paneOwned(main) {
     lineChart(c, { days: h.days, zero: true, series: [{ values: own, color: SERIES(1) }, { values: owe, color: SERIES(2) }], aria: 'Value of what is owned against every debt, by day',
       tip: (i) => ({ place: `${dowDateYear(h.days[i])}, value less every debt`, value: fixed(own[i] - owe[i], 0), unit: unitOf(snap.currency), rows: [['Value', kr(own[i])], ['Every debt', kr(owe[i])]] }) });
     c.append(legend([{ color: SERIES(1), label: `Value, ${kr(own[n - 1])}`, line: 1 }, { color: SERIES(2), label: `Every debt, ${kr(owe[n - 1])}`, line: 1 }]));
-    c.append(help(`${span(h.days[0], h.days[n - 1])}. Every debt counts the card too; the gap is net worth less cash and savings.`));
     tableToggle(c, 'owned', ['Day', 'Value', 'Every debt'], () => monthEnds(h.days).reverse().map((i) => [date(h.days[i]), kr(own[i]), kr(owe[i])]));
   }
 
   if (items.length) {
     const c = sec('What is owned');
-    c.append(help('Each moved from a value set by hand, by the method named under it.'));
     for (const i of [...items].sort((a, b) => b.value - a.value)) {
-      const sub = num(i.changeSinceAnchor) && i.anchorValue ? `${krs(i.changeSinceAnchor)}, ${pctSigned(i.changeSinceAnchor / i.anchorValue)}` : null;
+      const sub = num(i.changeSinceAnchor) && i.anchorValue ? changeSub(i.changeSinceAnchor, i.anchorValue) : null;
       const r = row(i.name, meta(i.name, [KIND_LABEL[i.kind] || i.kind, i.anchorDate ? `set ${month(i.anchorDate)}` : null]), kr(i.value), sub);
       // The method is the caveat, so it is on screen rather than in a file; for the home it is also the
       // index's attribution, which NLOD asks for (NOTES.md).
@@ -1219,7 +1257,6 @@ function paneSpending(main) {
   const merch = Array.isArray(s.merchants) ? s.merchants : [];
   if (merch.length) {
     const m = sec('Where it went');
-    m.append(help('The largest counterparties in the window.'));
     for (const x of merch.slice(0, 12)) m.append(row(x.label, count(x.count, 'payment'), kr(x.amount)));
     main.append(m);
   }
@@ -1240,12 +1277,10 @@ function paneFlow(main) {
       tip: (i) => ({ place: `${month(keys[i])}, in less out`, value: signed(ins[i] - outs[i], 0), unit: unitOf(snap.currency), rows: [['In', kr(ins[i])], ['Out', kr(outs[i])]] }) });
     const avg = (a) => a.reduce((x, y) => x + y, 0) / n;
     c.append(legend([{ color: SERIES(1), label: `In, ${kr(avg(ins))} a month on average` }, { color: SERIES(2), label: `Out, ${kr(avg(outs))} a month on average` }]));
-    c.append(help(`${month(keys[0])} to ${month(keys[n - 1])}, one pair of bars a month; out is drawn upward.`));
     tableToggle(c, 'flow', ['Month', 'In', 'Out', 'Net'], () => keys.map((k, i) => [month(k), kr(ins[i]), kr(outs[i]), krs(ins[i] - outs[i])]).reverse());
   }
   if (rec.length) {
     const c = sec('Repeating');
-    c.append(help('Charges that landed on a regular rhythm, as the bank writes them.'));
     for (const r of rec) {
       const when = r.nextExpected ? `next ${dayMon(r.nextExpected)}` : r.lastSeen ? `last ${dayMon(r.lastSeen)}` : null;
       c.append(row(r.label, meta(r.label, [r.cadence || 'repeating', when]), krs(r.amount)));
@@ -1275,16 +1310,18 @@ function paneSavings(main) {
   // A percentage return means something only if everything in the total was bought. Granted shares were not,
   // so once they are in it, "91 % on what was paid in" would be an artifact of dividing by a cost never paid.
   const granted = hasEquity && eq.grants.some((g) => (g.vestedShares || 0) + (g.unvestedShares || 0) > 0 && !(g.costBasis > 0));
+  // the gain is a change printed with its sign, so it takes its direction's color as net worth's does (the percentage
+  // stays plain, as on a row's change line)
   const lead = cost > 0 && !granted
-    ? `${krs(gain)}, ${pctSigned(gain / cost, 1)} on what was paid in${unknownCost > 0 ? `, on all but the ${kr(unknownCost)} of pension whose contributions are not recorded here` : ''}`
-    : cost > 0 ? `${krs(gain)} above what was paid; some of these shares were granted, not bought` : 'All of this was granted rather than bought.';
-  figure(main, 'Invested', kr(fundsTotal + eqTotal + penTotal), lead);
+    ? changeLine(gain, `${pctSigned(gain / cost, 1)} on what was paid in${unknownCost > 0 ? `, on all but the ${kr(unknownCost)} of pension whose contributions are not recorded here` : ''}`, 'hl-lead chg', ', ')
+    : cost > 0 ? changeLine(gain, 'above what was paid; some of these shares were granted, not bought', 'hl-lead chg') : 'All of this was granted rather than bought.';
+  const top = figure(main, 'Invested', kr(fundsTotal + eqTotal + penTotal), lead);
   const f = facts();
   if (hasFunds) f.append(fact('Funds', kr(fundsTotal)));
   if (hasPension) f.append(fact('Pension', kr(penTotal), pen.includeInNetWorth === false ? 'not counted in net worth' : null));
   if (hasEquity) f.append(fact('Shares', kr(eqTotal)));
   f.append(fact('Paid in', kr(cost)));
-  main.append(f);
+  top.append(f);
 
   const several = [hasFunds, hasEquity, hasPension].filter(Boolean).length > 1, tag = several ? 'h3' : 'h2';
   if (hasPension) pensionSection(main, pen, several, tag);
@@ -1333,7 +1370,7 @@ function fundsSection(main, inv, several, tag) {
     if (ok) bits.push(`NAV ${kr(fd.nav, 2)}`);
     bits.push(NAV_WORD[fd.navSource]);
     // An unpriced fund is not a fund that lost everything, so neither "0 kr" nor "−100 %" is drawn.
-    const sub = !ok ? null : num(fd.costBasis) && fd.costBasis > 0 ? `${krs(fd.value - fd.costBasis)}, ${pctSigned((fd.value - fd.costBasis) / fd.costBasis)}` : null;
+    const sub = !ok ? null : num(fd.costBasis) && fd.costBasis > 0 ? changeSub(fd.value - fd.costBasis, fd.costBasis) : null;
     c.append(row(fd.name, meta(fd.name, bits), ok ? kr(fd.value) : 'not counted', sub));
   }
   main.append(c);
@@ -1346,7 +1383,6 @@ function fundsSection(main, inv, several, tag) {
     lineChart(g, { days: d, zero: true, series: [{ values: v, color: SERIES(1) }, ...(con ? [{ values: con, color: SERIES(2) }] : [])], aria: 'Value of the funds against the money paid in',
       tip: (i) => ({ place: dowDateYear(d[i]), value: fixed(v[i], 0), unit: unitOf(snap.currency), rows: con ? [['Paid in', kr(con[i])], ['Gain', krs(v[i] - con[i])]] : [] }) });
     g.append(legend([{ color: SERIES(1), label: `Value, ${kr(v[n - 1])}`, line: 1 }, ...(con ? [{ color: SERIES(2), label: `Paid in, ${kr(con[n - 1])}`, line: 1 }] : [])]));
-    g.append(help(`${span(d[0], d[n - 1])}.`));
     tableToggle(g, 'funds', con ? ['Day', 'Value', 'Paid in'] : ['Day', 'Value'], () => monthEnds(d).reverse().map((i) => [date(d[i]), kr(v[i]), ...(con ? [kr(con[i])] : [])]));
   }
 }
@@ -1399,7 +1435,6 @@ function equitySection(main, eq, several, tag) {
   const up = Array.isArray(eq.upcoming) ? eq.upcoming : [];
   if (up.length) {
     const v = sec('Still to vest', tag);
-    v.append(help('Valued at today’s price; what it is worth depends on the price on the day, and tax comes off it.'));
     for (const x of up) v.append(row(dowDateYear(x.date), meta('', [count(x.shares, 'share'), x.label, days(daysBetween(today(), x.date))]), kr(x.value)));
     main.append(v);
   }
@@ -1416,7 +1451,7 @@ function pensionSection(main, pen, several, tag) {
   c.append(help(sub.join(' ')));
   for (const a of [...pen.accounts].sort((x, y) => (y.value || 0) - (x.value || 0))) {
     const name = a.label || a.id;
-    const sub2 = a.costBasis > 0 ? `${krs((a.value || 0) - a.costBasis)}, ${pctSigned(((a.value || 0) - a.costBasis) / a.costBasis)}` : null;
+    const sub2 = a.costBasis > 0 ? changeSub((a.value || 0) - a.costBasis, a.costBasis) : null;
     const r = row(name, meta(name, [a.provider, a.accruedSince ? `${count(a.accruedSince, 'payment')} since the anchor` : null, a.note]), kr(a.value), sub2);
     if (a.basis) r.append(el('div', 'basis data', a.basis));
     c.append(r);
@@ -1448,10 +1483,11 @@ function txList(list, all) {
   const q = txQuery.trim().toLowerCase();
   const rows = q ? all.filter((t) => `${t.text} ${t.account} ${t.category} ${catLabel(t.category)} ${t.source}`.toLowerCase().includes(q)) : all;
   if (!rows.length) { list.append(el('p', 'empty', `Nothing matches “${txQuery}”.`)); return; }
-  let day = null;
+  // each day's rows on a plate under its date, as a group's sections sit under its heading (HOUSE 11.1 rule 4)
+  let day = null, plate = null;
   for (const t of rows.slice(0, txShown)) {
-    if (t.date !== day) { day = t.date; list.append(el('h3', 'day', dowDateYear(day))); }
-    list.append(row(t.text, meta(t.text, [t.account, catLabel(t.category)]), krs(t.amount, 2)));
+    if (t.date !== day) { day = t.date; plate = el('div', 'sec daysec'); list.append(el('h3', 'day', dowDateYear(day)), plate); }
+    plate.append(row(t.text, meta(t.text, [t.account, catLabel(t.category)]), krs(t.amount, 2)));
   }
   if (rows.length > txShown) {
     const more = el('button', 'textkey', `Show ${fixed(Math.min(100, rows.length - txShown), 0)} more of ${fixed(rows.length, 0)}`);
@@ -1484,7 +1520,7 @@ function aboutList() {
 let aboutFrom = null;
 function about(open) {
   $('about').hidden = !open;
-  for (const id of ['head', 'main', 'band']) $(id).inert = open;
+  for (const id of ['head', 'main']) $(id).inert = open;
   // with no usable data, About still opens: its prose and credits stand; This data has nothing to list
   $('about-list').parentElement.hidden = !snap;
   if (open) { aboutFrom = document.activeElement; if (snap) aboutList(); $('about-close').focus(); } else if (aboutFrom) aboutFrom.focus();
@@ -1492,6 +1528,9 @@ function about(open) {
 $('stamp').onclick = () => about(true);
 $('about-close').onclick = $('about-close-2').onclick = () => about(false);
 document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && !$('about').hidden) about(false); });
+// iOS draws :active (the text keys' pressed tint) only where a touch listener is registered: an empty passive
+// one, which never delays a scroll (plan 0011's owed item, plan 0012 P9)
+document.addEventListener('touchstart', () => {}, { passive: true });
 
 // The test hook (tools/shoot.mjs): inert, nothing in the app calls it.
 window.__fin = {

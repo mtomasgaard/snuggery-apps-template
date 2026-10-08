@@ -1504,7 +1504,7 @@ figures into its `ART.md`.
 | World Oil & Gas | 2 147 335 (after its pass and the family fixes of 2026-10-02) | 2 622 870 | 199 975 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
 | Snug Kart | 619 403 (after its pass and the family fixes of 2026-10-02) | 720 806 | 242 778 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
 | Running Dashboard | 1 081 046 (after its pass, the data follow-up, the family fixes and the owner's six and seventh of 2026-10-03) | 1 340 193 | 251 775 of 252 000 (the lead's rulings, plan 0011 D23–D24 and D32 for the owner's six; held at 236 521 before them) | 41 291 |
-| Finances | about 129 800 (after its pass; `ART.md`'s own size moves the last digits) | 131 000 (the lead's ruling, plan 0011 D27; 125 304 by D5's formula) | 123 733 of 200 000 | 40 075 |
+| Finances | 133 546 (1.2, plan 0012 package 4) | 162 916 (the house rule for package 4: 130 333 before the pass × 1.25; 131 000 before it, plan 0011 D27) | 127 140 of 200 000 | 40 075 |
 | World News | 86 993 (after its pass and the data follow-up of 2026-10-02; `ART.md`'s own size moves the last digits) | 88 000 (the lead's ruling, plan 0011 D30; 72 140 by D5's formula) | 46 119 of 200 000 | 40 075 |
 | Outdoor Window | 98 073 (after its pass and the lead's fix of the final's should, 2026-10-03; `ART.md`'s own size moves the last digits) | 99 000 (the lead's ruling, plan 0011 D34; 75 257 by D5's formula) | 87 647 of 200 000 | 40 075 |
 | Power Hours | 95 506 (after its pass, 2026-10-03; `ART.md`'s own size moves the last digits) | 97 000 (the lead's ruling, plan 0011 D39; 70 305 by D5's formula) | 84 497 of 200 000 | 40 075 |
@@ -1808,12 +1808,14 @@ the edge 1.51:1.
 
 | App | Meaning colors | Key number per pane | Ground (§12) |
 | --- | --- | --- | --- |
-| Finances | `--own` owned, `--owe` owed (the Balance's blocks, `Own` and `Owe`, the sides' heads, a debt's amount); `--up` and `--down` a change in net worth | Overview: net worth; Owned: owned less owed on it; Spending: spent; Savings: invested; Cash flow and Transactions: none | gray |
+| Finances | `--own` owned, `--owe` owed (the Balance's blocks, `Own` and `Owe`, the sides' heads, a debt's amount); `--up` and `--down` a signed change: net worth's, and the one under Owned's and Savings' key numbers and in a row's change line | Overview: net worth; Owned: owned less owed on it; Spending: spent; Savings: invested; Cash flow and Transactions: none | gray |
 | World News | `--src-1` to `--src-3`, by the order of the file's `sources[]`: ticks and swatches; the third is wine / mauve, not the board's purple (§11.2) | none | gray |
 | Running Dashboard | `--done` a run done, a planned week an `--ink-2` outline with the 14 % fill; the tone: `--up` on track, `--watch` watch, `--down` act now and stop | Now: the week's kilometers; Plan: days to race day; a session: its distance or time; Training and Health: none | gray |
 | Outdoor Window | none added: the Shutters' green (`--used`, its palette's) already means how much of a rule's limit an hour uses | Windows: the next window's hours; Hours and Rules: none | gray |
 | Power Hours | `--cheap` the day's cheapest quarter and a run below the mean, `--dear` the dearest quarter and a run above it; the Landing keeps its own `--price` | the price now | gray |
 | Hello Live | none | the file's time | white |
+
+**The color rule for a change (the owner, 2026-10-08, on Finances' pilot):** a figure printed with its sign under a key number takes `--up` or `--down`, the amount only; the words and any percentage after it stay ink. Every pane app follows it.
 
 ### 11.4 What the register amends where it stands
 

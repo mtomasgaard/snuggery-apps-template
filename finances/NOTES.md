@@ -127,7 +127,7 @@ Every account, balance, transaction, merchant, fund, car and loan in
 `data/snapshot.json` was invented by `scripts/make_demo_finances.py` from a
 fixed seed. There is no household. The app says so on screen, the file says so
 in its `notes`, and `synthetic: true` is what makes the stamp read *Example
-data.* and the credits under every pane say the accounts were invented. Prove it
+data.* and the credits in About say the accounts were invented. Prove it
 for yourself:
 
 ```

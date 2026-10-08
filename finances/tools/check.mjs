@@ -7,9 +7,11 @@
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and
 //      no supplement; NOTES.md and About credit the face word for word;
 //   5. the data is pinned: the four data files' sha256 as the data follow-up rebuilt them (2026-10-02);
-//   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25);
+//   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25), its version 1.2
+//      (HOUSE 13: 1.1 when plan 0012's register pass started);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
-//   8. the credits, word for word: the two constants, one written to the band on every pane;
+//   8. the credits, word for word: the two constants, one written into About's first Sources and credits
+//      paragraph; no caption band, and no credit anywhere on the front (HOUSE 4.15, 11.1 rule 1; plan 0012 F1, P1);
 //   9. the marketing camera's strings (HOUSE.md 7.4): the panes Overview and Spending as tabs built after
 //      the snapshot parses, never in the static markup; the three stored keys kept, every access in try (B13);
 //  10. SI: no plain space between a digit and a unit in the strings the app writes; toFixed and
@@ -17,14 +19,18 @@
 //  11. no transition anywhere, and only the house's three animations (the tracer, the card, About);
 //  12. innerHTML never set (the app had 36 assignments, 2 of them markup from strings); no insertAdjacentHTML,
 //      outerHTML, document.write, eval or new Function;
-//  13. style.css's data tokens equal palette.py --json, which passes;
+//  13. style.css's data tokens and the register's four meaning colors equal palette.py --json, which passes;
 //  14. the look: the chrome tokens exactly in both themes, no accent, warning, shadow or stock token; no
 //      box-shadow, backdrop-filter, `transition: all`, uppercase, letter-spacing, monospace; one family; no
 //      middle dot, em dash or bullet in the app's own strings; no →, ➤, ▸, ▾, ▴ or "..." in shipped text,
 //      PROMPT.md included (B23); both theme-color metas; the @font-face rule; the page's language and viewport;
-//  15. the bugs on record (ART.md's B1 to B25, now in tools/DECISIONS.md) stay fixed in the code;
+//  15. the bugs on record (ART.md's B1 to B25, now in tools/DECISIONS.md) stay fixed in the code, B17 and B18 as
+//      the register restates them;
 //  16. budgets: app code at most 200,000 bytes (the house's), fonts/ at most 160,000, the ZIP built exactly
-//      as build-zips.yml builds it at most 125,304 (69,976 × 1.25 plus 37,834 for the face; plan 0011 D5, D26);
+//      as build-zips.yml builds it at most 162,916 (130,333 before plan 0012's pass × 1.25: the lead's ruling for
+//      package 4, the house rule over the app's tighter 131,000 of plan 0011 D27);
+//  18. the pane-app register (HOUSE 11; plan 0012 P2, P3, P9): every pane ends with the About key; the pane pads the
+//      home indicator itself; the header centered with the pane on a wide screen; the passive touchstart listener.
 //  17. US spelling in every shipped text file, the data's own words included since the data follow-up.
 //
 //   node tools/check.mjs
@@ -41,7 +47,7 @@ const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if 
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 200000, FONT_CAP = 160000, ZIP_CAP = 131000 /* the lead's ruling on the build's measured 128 025 B (plan 0011 D27; tools/DECISIONS.md); 125 304 by D5's formula before it */;
+const CODE_CAP = 200000, FONT_CAP = 160000, ZIP_CAP = 162916 /* plan 0012 package 4, the lead's ruling: the ZIP before the pass (130 333 B) × 1.25, rounded down, where the app's own cap (131 000 B, plan 0011 D27) was tighter */;
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -131,8 +137,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Finances' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && typeof mini.version === 'string' && mini.version,
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash (B25)`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash (B25)`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)
@@ -145,14 +151,23 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped text files${named.length ? ': ' + named.join(', ') : ''}`);
 }
 
-// 8. The credits, word for word: two constants (owner call 6), one written to the band, and the band only by them
+// 8. The credits, word for word: two constants (owner call 6), unchanged, written once into About's first Sources and
+// credits paragraph (HOUSE 4.8, 4.15; plan 0012 F1). The caption band is gone (P1), and no credit stands on the front:
+// the credit words are in the app's code only inside the two constants, and in index.html only inside About. The
+// view's own text stays (HOUSE 4.15): Norges Bank beside its rate, the SSB basis line the data writes under the home.
 const CREDITS = {
   example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).',
   real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).',
 };
-ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) && /\$\('credits'\)\.textContent = snap\.synthetic \? CREDITS\.example : CREDITS\.real;/.test(app)
-  && (app.match(/\$\('credits'\)/g) || []).length === 1 && html.includes('<p class="credits" id="credits"></p>'),
-  `the credits: "${CREDITS.example}" on the example data, "${CREDITS.real}" on a copy's own, written once into the band`);
+{
+  const front = code(html.slice(0, html.indexOf('<div class="about"')), 'x.html'), CREDIT_WORDS = /Statistics Norway|NLOD|Enable Banking|PSD2|invented for this example|Catharsis|Open Font License/;
+  const inCode = strings(app).filter((s) => CREDIT_WORDS.test(s));
+  ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) && /\$\('about-credit-line'\)\.textContent = snap\.synthetic \? CREDITS\.example : CREDITS\.real;/.test(app)
+    && (app.match(/\$\('about-credit-line'\)/g) || []).length === 1 && /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>/.test(html)
+    && !/id="(credits|band|capline)"/.test(html) && !/\$\('(credits|band|capline)'\)|'band'|function caption\b/.test(app) && !/\.(band|capline|credits)\b/.test(code(css, 'x.css'))
+    && !CREDIT_WORDS.test(htmlText(front)) && inCode.length === 2 && inCode.every((s) => s === `'${CREDITS.example}'` || s === `'${CREDITS.real}'`),
+  `the credits: "${CREDITS.example}" on the example data, "${CREDITS.real}" on a copy's own, written once into About's first Sources and credits paragraph; no caption band, no credit on the front (${inCode.length} credit strings in app.js, both the constants)`);
+}
 
 // 9. The marketing camera's strings (HOUSE.md 7.4) and the stored keys
 {
@@ -211,8 +226,8 @@ ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) 
   const block = (scheme) => (scheme === 'light' ? c.slice(c.indexOf(':root {'), c.indexOf('@media (prefers-color-scheme: dark)')) : c.slice(c.indexOf('@media (prefers-color-scheme: dark)'), c.indexOf('* { box-sizing')));
   const off = [];
   for (const s of ['light', 'dark']) for (const [k, v] of Object.entries((PAL || {})[s] || {})) if ((block(s).match(new RegExp(`--${k}:\\s*(#[0-9a-f]{6})`)) || [])[1] !== v) off.push(`${s} --${k}`);
-  ok(PAL && off.length === 0 && Object.keys(PAL.light).length === 7 && Object.keys(PAL.dark).length === 7,
-    `style.css's 7 data tokens per theme (--series-1 to -6, --amount) equal palette.py --json${off.length ? ': differ ' + off.join(', ') : ''}`);
+  ok(PAL && off.length === 0 && Object.keys(PAL.light).length === 11 && Object.keys(PAL.dark).length === 11 && ['own', 'owe', 'up', 'down'].every((k) => k in PAL.light && k in PAL.dark),
+    `style.css's 11 tokens per theme (the data's --series-1 to -6 and --amount; the register's --own, --owe, --up, --down, HOUSE 11.2) equal palette.py --json${off.length ? ': differ ' + off.join(', ') : ''}`);
 }
 
 // 14. The look
@@ -260,9 +275,10 @@ ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) 
   ok(/<html lang="en-US">/.test(html) && /viewport-fit=cover/.test(html) && !/user-scalable/.test(html) && /<meta name="color-scheme" content="light dark">/.test(html) && /<script type="module" src="\.\/app\.js"><\/script>/.test(html),
     'the page: lang="en-US", viewport-fit=cover without user-scalable, color-scheme light dark, app.js as a module (B21)');
   const px = [...c.matchAll(/font(?:-size)?:[^;]*?(\d+(?:\.\d+)?)px/g)].map((m) => Number(m[1]));
-  const off2 = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 21, 16].includes(v));
-  ok(off2.length === 0 && /\.search \{[^}]*font-size: 16px;/.test(c) && (c.match(/font-size: 16px/g) || []).length === 1,
-    `type sizes: ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the house scale and the search field's 16 px (iOS zooms into a smaller field)${off2.length ? ': off the scale ' + off2.join(', ') : ''}`);
+  const off2 = px.filter((v) => ![10.5, 11, 11.5, 12.5, 13.5, 15, 19, 21, 34, 16].includes(v));
+  ok(off2.length === 0 && /\.search \{[^}]*font-size: 16px;/.test(c) && (c.match(/font-size: 16px/g) || []).length === 1 && /\.hl-fig \{ font-size: 34px; font-weight: 650; line-height: 1\.05; \}/.test(c)
+    && (c.match(/font-size: 34px/g) || []).length === 1 && /\.readout-value \{ font-size: 21px;/.test(c) && (c.match(/font-size: 21px/g) || []).length === 1,
+    `type sizes: ${[...new Set(px)].sort((a, b) => a - b).join(', ')} px, the pane apps' scale (HOUSE 11.1 rule 2: 34 px for the key number alone, 21 px for the card's value alone) and the search field's 16 px (iOS zooms into a smaller field)${off2.length ? ': off the scale ' + off2.join(', ') : ''}`);
 }
 
 // 15. The bugs on record (ART.md's change list, now in tools/DECISIONS.md: B1 to B25) stay fixed in the code
@@ -276,8 +292,16 @@ ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) 
     ['B12 a broken replacement keeps the data', /if \(snap\) \{[\s\S]{0,300}Still showing the data from/.test(app) && !/\$\('main'\)\.hidden = true/.test(app)],
     ['B14 a finger waits: tap or slide, never on pointerdown', /if \(ev\.pointerType === 'touch'\) at = \[ev\.clientX, ev\.clientY\]/.test(app) && /\.chartwrap svg \{[^}]*touch-action: pan-y;/.test(css) && !/attachHover|\.tip \{|'tip'/.test(app + css)],
     ['B15 plurals', !/\$\{[^}]+\} days`|days ago`/.test(app) && /export function days\(n\)/.test(read('js/units.js'))],
-    ['B17 no color for direction', !/'pos'|'neg'|var\(--(pos|neg)\)|style\.color/.test(app)],
-    ['B18 the example sentence in About and the stamp, not on Overview', !/These are example numbers shipped with the app/.test(app) && /add\('Example data'/.test(app) && /'Example data\.'/.test(app)],
+    // B17 as the register restates it (HOUSE 11.1 rule 5): direction takes only --up and --down, through one
+    // function, on a figure krs() prints with its sign; a debt's amount takes --owe, its minus kept
+    ['B17 direction is --up or --down on a signed figure only', !/'pos'|'neg'|var\(--(pos|neg)\)|style\.color/.test(app) && (code(app, 'x.js').match(/'up'|'down'/g) || []).length === 2
+      && /const tone = \(v\) => \(Math\.round\(v\) > 0 \? 'up' : Math\.round\(v\) < 0 \? 'down' : null\);/.test(app) && /const signedFig = \(tag, v\) => el\(tag, tone\(v\), krs\(v\)\);/.test(app)
+      && (code(app, 'x.js').match(/\btone\(/g) || []).length === 1 && /\.up \{ color: var\(--up\); \}/.test(css) && /\.down \{ color: var\(--down\); \}/.test(css) && (code(css, 'x.css').match(/var\(--(up|down)\)/g) || []).length === 2
+      && /if \(a\.balance < 0\) r\.classList\.add\('debt'\);/.test(app) && /\.row\.debt \.amt \{ color: var\(--owe\); \}/.test(css)],
+    // B18 (HOUSE 11.1 rule 8): Example data. in the stamp, the example's own sentence (the snapshot's notes) in About's
+    // This data, nothing of it on Overview
+    ['B18 the example sentence in About and the stamp, not on Overview', !/These are example numbers shipped with the app/.test(app) && /add\('Example data'/.test(app) && /'Example data\.'/.test(app)
+      && /\$\('about-example'\)\.textContent = notes;/.test(app) && (code(app, 'x.js').match(/snap\.notes/g) || []).length === 2 && /const notes = \(Array\.isArray\(snap\.notes\) \? snap\.notes : \[\]\)\.map\(String\)\.join\(' '\);/.test(app) && /<h3>This data<\/h3>\s*<p id="about-example" hidden><\/p>\s*<dl id="about-list"><\/dl>/.test(html)],
     ['B19 no title attribute for information, no disclosure triangles', !/\.title = |\btitle=|<details|<summary/.test(app + html)],
     ['B22 consent in US English', /'Authorize again with BankID before then\.'/.test(app) && !/authoris/i.test(app + html)],
     ['B25 miniapp.json without the em dash', mini && !/—/.test(mini.description)],
@@ -290,7 +314,7 @@ ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) 
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 103,178 before the pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the house's; 103,178 before plan 0011's pass, 123,706 before plan 0012's): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; none before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });
@@ -305,7 +329,7 @@ ok(names.includes('index.html'), `ZIP has index.html at its top (${names.length}
 ok(names.length === shipped.length && names.every((n) => shipped.includes(n)) && !names.some((f) => /^(tools|screenshots|scripts)\//.test(f) || f.split('/').some((p) => p.startsWith('.'))),
   `ZIP holds exactly the ${shipped.length} shipped files: no tools/, screenshots/ or dotfiles`);
 console.log(`     stored in the ZIP: data and the three JSON files ${fmt(stored((n) => n.endsWith('.json') && n !== 'miniapp.json'))}, fonts/ ${fmt(stored((n) => n.startsWith('fonts/')))}, app code ${fmt(stored((n) => codeFiles.includes(n)))}, *.md ${fmt(stored((n) => n.endsWith('.md') && !n.includes('/')))}`);
-ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 69,976 before the pass × 1.25 plus 37,834 for the face, plan 0011 D5; the lead's ruling on the measured 128,025, D27)`);
+ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 130,333 before plan 0012's pass × 1.25, the lead's ruling for package 4; 131,000 before it, plan 0011 D27)`);
 
 // 17. US spelling in every shipped text file (fonts/OFL.txt is the upstream license, quoted whole). The data's
 // own words included: the data follow-up (owner call 2) swept them, so no file is allowed a word any more.
@@ -323,6 +347,23 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 69,976 
     });
   }
   ok(hits.length === 0, `US spelling in ${texts.length - 1} shipped text files, the data's own words included (B22; the data follow-up)${hits.length ? ': ' + hits.slice(0, 14).join(', ') + (hits.length > 14 ? ` and ${hits.length - 14} more` : '') : ''}`);
+}
+
+// 18. The pane-app register (HOUSE 11.1 rules 1 and 4; plan 0012 P2, P3 and P9)
+{
+  const c = code(css, 'x.css');
+  ok(/const ABOUT_KEY = 'Sources, method and credits are in About\.';/.test(app) && /function aboutKey\(host\) \{\s*const b = el\('button', 'aboutlink', ABOUT_KEY\);\s*b\.type = 'button';\s*b\.onclick = \(\) => about\(true\);\s*host\.append\(b\);\s*\}/.test(app)
+    && /PANES\(\)\[tab\]\(pane\);\s*aboutKey\(pane\);/.test(app) && (code(app, 'x.js').match(/aboutKey\(/g) || []).length === 2
+    && /\.aboutlink \{ display: block; margin: 14px 0 0; min-height: 44px; font-size: 12\.5px; color: var\(--ink-2\); text-decoration: underline; text-underline-offset: 3px; \}/.test(c),
+  'every pane ends with the button "Sources, method and credits are in About.", 12.5 px --ink-2, underlined at 3 px, 44 px tall, 14 px under the last section, opening About (an empty pane too: render() adds it after the pane)');
+  ok(/\.panebody \{[^}]*padding-top: 4px; padding-bottom: calc\(28px \+ env\(safe-area-inset-bottom\)\); \}/.test(c) && (c.match(/\.panebody \{/g) || []).length === 1,
+    'the pane pads the home indicator itself: .panebody { padding-top: 4px; padding-bottom: calc(28px + env(safe-area-inset-bottom)) } (HOUSE 4.14, 11.1 rule 1; a phone row checks it)');
+  ok(/\.sec \{ position: relative; margin-top: 12px; padding: 12px 12px 8px; border: 1px solid var\(--line\); border-radius: 8px; background: var\(--sheet\); \}/.test(c) && /\.halo \{[^}]*stroke: var\(--sheet\)/.test(c) && /\.casing \{[^}]*stroke: var\(--sheet\)/.test(c) && /\.cdot \{[^}]*stroke: var\(--sheet\)/.test(c) && !/stroke: 'var\(--page\)'|stroke: var\(--page\)/.test(app + c),
+    'sections on plates (--sheet, a 1 px --line edge, radius 8 px, padding 12 px, 12 px apart); every halo, casing and ring drawn on a plate takes --sheet (HOUSE 11.1 rule 4)');
+  ok(/\.head \{[^}]*calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-right\)\) 0 calc\(max\(16px, 50% - 364px\) \+ env\(safe-area-inset-left\)\); \}/.test(c) && /\.panebody \{ max-width: 760px; margin: 0 auto; padding: 0 calc\(16px \+ env\(safe-area-inset-right\)\) 0 calc\(16px \+ env\(safe-area-inset-left\)\);/.test(c),
+    'the header centered with the pane: its sides max(16 px, 50 % − 364 px), so the name and the tabs start where the 760 px column\'s plates do (plan 0011\'s owed item; shoot.mjs measures it)');
+  ok(/document\.addEventListener\('touchstart', \(\) => \{\}, \{ passive: true \}\);/.test(app),
+    'a passive, empty touchstart listener on the document, so iOS draws the :active tints (plan 0011\'s owed item; a phone row checks it)');
 }
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }

@@ -28,32 +28,30 @@
   <div class="panebody" id="pane" role="tabpanel"></div>
 </main>
 
-<footer class="band" id="band">
-  <p class="capline" id="capline"></p>
-  <p class="credits" id="credits"></p>
-</footer>
-
 <div class="about" id="about" hidden>
   <div class="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-title">
     <div class="about-head"><h2 id="about-title">About Finances</h2><button type="button" class="textkey" id="about-close">Close</button></div>
     <div class="about-body">
       <section>
         <h3>What the Balance is</h3>
-        <p>The T at the top of Overview is the household&rsquo;s balance sheet as an accountant draws it: what is owned on the left, what is owed on the right. Each block of ink is one account, fund, vehicle, home or loan, as deep as its value at the scale the ruler prints, <span id="about-scale">one pixel for a fixed amount</span>; the most liquid hang first. Both sides close on a double rule. The empty space under the debts, down to that rule, is what would be left if everything owed were paid from everything owned: the net worth. When more is owed than owned, the space is under what is owned instead, and says so.</p>
+        <p>The T on Overview, under the net worth, is the household&rsquo;s balance sheet as an accountant draws it: what is owned on the left, in blue, and what is owed on the right, in orange. Each block is one account, fund, vehicle, home or loan, as deep as its value at the scale the ruler prints, <span id="about-scale">one pixel for a fixed amount</span>; the most liquid hang first. Both sides close on a double rule. The empty space under the debts, down to that rule, is what would be left if everything owed were paid from everything owned: the net worth. When more is owed than owned, the space is under what is owned instead, and says so.</p>
         <p>It shows the values in this file and nothing else. It leaves out what no file lists, such as furniture or a debt to a friend; a pension or unvested shares when the snapshot does not count them; and tax that selling anything would cost. The home, the vehicles and the loans are estimates by the methods Owned names, not prices anyone has paid. A block under one pixel deep is drawn one pixel deep, so a small account still shows; its label and its card give its value.</p>
       </section>
       <section>
         <h3>This data</h3>
+        <p id="about-example" hidden></p>
         <dl id="about-list"></dl>
       </section>
       <section>
         <h3>How the numbers are made</h3>
         <p>Balances and transactions come from the banks over PSD2 account information, read once a day. Fund units are counted from the transfers that bought them and priced at the fund&rsquo;s published net asset value (NAV); they drift from the provider&rsquo;s own count until they are set from it again, and Savings says how long ago that was.</p>
-        <p>No one reports the home, the vehicles or the loans. Each starts from a value set by hand in assets.json on a date, then moves: the home by Statistics Norway&rsquo;s price index for existing dwellings, a vehicle by a depreciation curve for its age, a loan as an annuity paid down month by month at its stated rate. Each says under its value which method it used.</p>
-        <p>Spending counts payments out over the window, leaving out moves between the household&rsquo;s own accounts, money put into its own savings and income. Cash flow counts every payment in and out by calendar month, leaving out moves between its own accounts, and stops at the last whole month.</p>
+        <p>No one reports the home, the vehicles or the loans. Each starts from a value set by hand in assets.json on a date, then moves: the home by Statistics Norway&rsquo;s price index for existing dwellings, a vehicle by a depreciation curve for its age, a loan as an annuity paid down month by month at its stated rate. Each says under its value which method it used. On Owned&rsquo;s chart, every debt counts the card too; the gap is net worth less cash and savings.</p>
+        <p>Spending counts payments out over the window, leaving out moves between the household&rsquo;s own accounts, money put into its own savings and income. Cash flow counts every payment in and out by calendar month, leaving out moves between its own accounts, and stops at the last whole month. Repeating lists the charges that landed on a regular rhythm, as the bank writes them.</p>
+        <p>Employee shares still to vest are valued at today&rsquo;s price; what they are worth depends on the price on the day, and tax comes off it.</p>
       </section>
       <section>
         <h3>Sources and credits</h3>
+        <p id="about-credit-line" translate="no"></p>
         <p>Home index: Statistics Norway (SSB), table 07221, the price index for existing dwellings, under NLOD, Norway&rsquo;s license for open government data (data.norge.no/nlod/en). The cut followed is printed under the home&rsquo;s value. SSB does not endorse this app.</p>
         <p>Accounts and transactions: the household&rsquo;s own banks, through Enable Banking, a licensed PSD2 account-information provider. Exchange rates, where a holding is quoted in another currency: Norges Bank&rsquo;s daily reference rates, credited beside the rate. Fund prices: as holdings.json sets them; NOTES.md says on what terms.</p>
         <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>

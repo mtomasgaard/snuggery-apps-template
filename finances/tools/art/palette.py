@@ -1,8 +1,10 @@
 """Finances' palette under the house system (ART.md section 2): the house's chrome tokens, the app's
 data colors fitted into each theme's band (the six categorical slots: every two-series chart's pair
-and the funds of the allocation strip; --amount, the tone of every chart of one quantity), the
-Balance's ink (the signature), the ink marks over data on their casings, and every contrast figure
-ART.md quotes. Standard library only. Run from Template/:
+and the funds of the allocation strip; --amount, the tone of every chart of one quantity), the pane-app
+register's four meaning colors (HOUSE 11.2: --own, --owe, --up, --down, taken as HOUSE gives them and
+their measured figures repeated here), the Balance in --own and --owe on its plate (the signature), the
+ink marks over data on their casings, and every contrast figure ART.md quotes. Standard library only.
+Run from Template/:
 
     python3 finances/tools/art/palette.py          the checks; ends ALL CHECKS PASS or SOME CHECKS FAIL
     python3 finances/tools/art/palette.py --json   the fitted tokens per theme, for style.css (pasted,
@@ -104,6 +106,24 @@ STEP = {'series-1': 0.95, 'series-2': 0.00, 'series-3': 0.25, 'series-4': 0.95, 
 # one family. (L, C, h) per theme, inside the band, 3:1 or more on both grounds (check 2).
 AMOUNT = {'light': (0.500, 0.065, 255), 'dark': (0.740, 0.050, 250)}
 
+# -- the pane-app register's meaning colors (HOUSE 11.2, plan 0012 D5): not fitted, taken as the house
+# measured them; one meaning each in this app: --own what is owned (the Balance's Own side, its blocks,
+# head word and the Owned column's head), --owe what is owed (the Owe side, a debt's amount), --up and
+# --down a change printed with its sign. FIG is HOUSE 11.2's table, which check 7 repeats and pins.
+REGISTER = {
+ 'light': {'own': '#1f5f99', 'owe': '#a64a1a', 'up': '#17723e', 'down': '#b42318'},
+ 'dark':  {'own': '#8cbcf0', 'owe': '#f0a070', 'up': '#6fd39a', 'down': '#ff9a8f'},
+}
+FIG = {  # text contrast on (page, sheet)
+ 'light': {'own': (5.68, 6.29), 'owe': (4.96, 5.49), 'up': (5.10, 5.65), 'down': (5.61, 6.21)},
+ 'dark':  {'own': (8.61, 7.68), 'owe': (8.12, 7.24), 'up': (9.34, 8.33), 'down': (8.37, 7.46)},
+}
+PAIRS = {  # dE normal / deutan / protan / tritan
+ ('own', 'owe'): {'light': (0.246, 0.224, 0.188, 0.252), 'dark': (0.202, 0.185, 0.175, 0.225)},
+ ('up', 'down'): {'light': (0.265, 0.062, 0.112, 0.296), 'dark': (0.225, 0.024, 0.094, 0.251)},
+ ('up', 'owe'):  {'light': (0.207, 0.071, 0.059, 0.253), 'dark': (0.192, 0.055, 0.095, 0.243)},
+}
+
 def fit(th):
     b0, b1 = BAND[th]
     out = {}
@@ -113,6 +133,7 @@ def fit(th):
         L = (b1 - (b1 - b0) * s) if th == 'light' else (b0 + (b1 - b0) * s)
         out[k] = hx(gamut_map(L, C, h))
     out['amount'] = hx(gamut_map(*AMOUNT[th]))
+    out.update(REGISTER[th])
     return out
 
 def main():
@@ -170,32 +191,49 @@ def main():
         d = min(de(parse(F[th]['amount']), parse(F[th][k])) for k in SERIES)
         print(f'     {th}: --amount against the nearest slot dE {d:.3f} (never on one chart with a slot; printed for the record)')
 
-    print('\n== 4. the signature: the Balance, --ink on --page, at the far end of the range')
+    print('\n== 4. the signature: the Balance on its plate, the blocks in --own and --owe, the T\'s rules in --ink')
     for th in BAND:
-        t = TOK[th]; ink = parse(t['ink']); L, C, h = lch8(ink)
-        check(C <= 0.024, f'{th}: the ink {t["ink"]} is a near-neutral (L {L:.3f}, C {C:.4f})')
-        check(cr(ink, parse(t['page'])) >= 3, f'{th}: a block of what is owned or owed, ink on page {cr(ink, parse(t["page"])):.2f} (target 3.0, a mark)')
-        far = (L < BAND[th][0]) if th == 'light' else (L > BAND[th][1])
-        check(far, f'{th}: the ink keeps the far end (L {L:.3f}; band {BAND[th][0]:.3f}-{BAND[th][1]:.3f})')
-        check(cr(ink, parse(t['page'])) >= 3, f'{th}: the 1 px gap between two blocks, and the empty balancing space, are the page itself: {cr(ink, parse(t["page"])):.2f} against the ink')
-        check(cr(parse(t['ink2']), parse(t['page'])) >= 4.5, f'{th}: the blocks\' names and the depth values, ink-2 on page {cr(parse(t["ink2"]), parse(t["page"])):.2f}')
-        check(cr(parse(t['ink3']), parse(t['page'])) >= 4.5, f'{th}: the scale\'s values, ink-3 on page {cr(parse(t["ink3"]), parse(t["page"])):.2f}')
-        check(cr(parse(t['line']), parse(t['page'])) < 1.5, f'{th}: the depth hairlines, --line on page {cr(parse(t["line"]), parse(t["page"])):.2f} (quiet on purpose, under 1.5)')
-        # The tapped block is marked by a 1 px --page ring inset inside its ink (the house's selection
-        # is ink, never a hue): the ring against the ink it is cut into.
-        check(cr(parse(t['page']), ink) >= 3, f'{th}: the tapped block\'s inset --page ring against its ink {cr(parse(t["page"]), ink):.2f}')
+        t = TOK[th]; ink = parse(t['ink']); L, C, h = lch8(ink); sh = parse(t['sheet'])
+        check(C <= 0.024, f'{th}: the ink {t["ink"]} (crossbar, stem, double rule, bracket) is a near-neutral (L {L:.3f}, C {C:.4f})')
+        check(cr(ink, sh) >= 3, f'{th}: the T\'s rules, ink on the plate {cr(ink, sh):.2f} (target 3.0, a mark)')
+        for k in ('own', 'owe'):
+            c = parse(F[th][k])
+            check(cr(c, sh) >= 3, f'{th}: a block of what is {"owned" if k == "own" else "owed"}, --{k} {F[th][k]} on the plate {cr(c, sh):.2f} (target 3.0, a mark); the 1 px gap between two blocks and the empty balancing space are the plate itself')
+            # The tapped block is marked by a 1 px --sheet ring inset in its color: the ring against it.
+            check(cr(sh, c) >= 3, f'{th}: the tapped block\'s inset --sheet ring against --{k} {cr(sh, c):.2f}')
+        check(cr(parse(t['ink2']), sh) >= 4.5, f'{th}: the blocks\' names and the depth values, ink-2 on the plate {cr(parse(t["ink2"]), sh):.2f}')
+        check(cr(parse(t['ink3']), sh) >= 4.5, f'{th}: the scale\'s values, ink-3 on the plate {cr(parse(t["ink3"]), sh):.2f}')
+        check(cr(parse(t['line']), sh) < 1.5, f'{th}: the depth hairlines, --line on the plate {cr(parse(t["line"]), sh):.2f} (quiet on purpose, under 1.5)')
+        d = min((de(parse(F[th][a]), parse(F[th][b])), a, b) for a in ('own', 'owe') for b in PAIR)
+        print(f'     {th}: --own/--owe against the nearest pair slot ({d[1]}/{d[2]}) dE {d[0]:.3f}: the same blue and orange family, never on one drawing')
 
-    print('\n== 5. ink over the data (a cursor\'s discs, the net-worth line\'s end dot): on a 2 px --page ring')
+    print('\n== 5. ink over the data (a cursor\'s discs, the net-worth line\'s end dot): on a 2 px --sheet ring, the plate they are drawn on')
     for th in BAND:
         t = TOK[th]; ink = parse(t['ink'])
         worst = min((cr(ink, parse(F[th][k])), k) for k in SERIES + ['amount'])
         print(f'     {th}: without the ring, ink over the closest data color ({worst[1]}) would be {worst[0]:.2f}')
-        check(cr(ink, parse(t['page'])) >= 3, f'{th}: ink on its --page ring {cr(ink, parse(t["page"])):.2f}')
+        check(cr(ink, parse(t['sheet'])) >= 3, f'{th}: ink on its --sheet ring (every chart is on a plate) {cr(ink, parse(t["sheet"])):.2f}')
 
     print('\n== 6. the readout card and notices (--sheet, a 1 px --line-strong edge)')
     for th, t in TOK.items():
-        check(cr(parse(t['strong']), parse(t['page'])) >= 3, f'{th}: the card\'s edge on the page {cr(parse(t["strong"]), parse(t["page"])):.2f}')
+        check(cr(parse(t['strong']), parse(t['page'])) >= 3 and cr(parse(t['strong']), parse(t['sheet'])) >= 3, f'{th}: the card\'s edge on the page {cr(parse(t["strong"]), parse(t["page"])):.2f} and on a plate {cr(parse(t["strong"]), parse(t["sheet"])):.2f}')
         check(cr(parse(t['ink2']), parse(t['sheet'])) >= 4.5, f'{th}: the card\'s labels, ink-2 on sheet {cr(parse(t["ink2"]), parse(t["sheet"])):.2f}')
+
+    print('\n== 7. the register (HOUSE 11.2): each meaning color as text at >= 4.5 on --page and --sheet, at the')
+    print('     figures HOUSE measured; owned and owed apart under all four visions; the direction pairs below 0.10')
+    print('     only where the sign always prints beside the color (HOUSE 11.2\'s exemption), printed "sign"')
+    for th in BAND:
+        t = TOK[th]
+        for k, (fp, fs) in FIG[th].items():
+            cp, cs = cr(parse(F[th][k]), parse(t['page'])), cr(parse(F[th][k]), parse(t['sheet']))
+            check(cp >= 4.5 and cs >= 4.5 and abs(cp - fp) < 0.006 and abs(cs - fs) < 0.006, f'{th}: --{k} {F[th][k]} as text on page {cp:.2f}, on sheet {cs:.2f} (HOUSE 11.2: {fp:.2f}, {fs:.2f})')
+        # the plate on its ground, and its edge (HOUSE 11.2)
+        print(f'     {th}: a plate on the page {cr(parse(t["sheet"]), parse(t["page"])):.2f}:1, its --line edge against the page {cr(parse(t["line"]), parse(t["page"])):.2f}:1')
+        for (a, b), want in PAIRS.items():
+            got = tuple(round(de(parse(F[th][a]), parse(F[th][b]), kind), 3) for kind in ('normal', 'deutan', 'protan', 'tritan'))
+            same = all(abs(g - w) <= 0.001 for g, w in zip(got, want[th]))
+            if (a, b) == ('own', 'owe'): check(same and min(got) >= 0.10, f'{th}: --own/--owe dE {" / ".join(f"{g:.3f}" for g in got)} (normal / deutan / protan / tritan; HOUSE 11.2 the same)')
+            else: check(same, f'{th}: --{a}/--{b} dE {" / ".join(f"{g:.3f}" for g in got)} (HOUSE 11.2 the same){"; sign: under 0.10, always beside a sign" if min(got) < 0.10 else ""}')
 
     print('\nALL CHECKS PASS' if ok else '\nSOME CHECKS FAIL')
     sys.exit(0 if ok else 1)
