@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-24.04   # pinned: ubuntu-latest becomes Ubuntu 26 from 2026-10-19; move on purpose, after a test run
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy-again.outputs.page_url }}
     steps:
       - name: Is Pages turned on, from Actions?
         id: pages
@@ -178,6 +178,19 @@ jobs:
         with:
           path: _site
 
+      # The deploy can ask for the artifact before GitHub has finished registering it: "Found 0
+      # artifact(s)" with the artifact uploaded a moment earlier (2026-10-09, a 380 MB site). So one
+      # pause and a second try, and a passing hiccup does not fail the run; a real failure fails both
+      # tries and still fails the run.
       - id: deploy
         if: steps.pages.outputs.on == 'true'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait, then deploy again if the first try missed the artifact
+        if: steps.pages.outputs.on == 'true' && steps.deploy.outcome == 'failure'
+        run: sleep 45
+
+      - id: deploy-again
+        if: steps.pages.outputs.on == 'true' && steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
