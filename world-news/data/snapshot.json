@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T08:01:24Z",
+ "generatedAt": "2026-10-09T09:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "La nouvelle Constitution de la Guinée-Bissau renforce les pouvoirs du président : ce que cela change pour l’équilibre politique",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/la-nouvelle-constitution-de-la-guinee-bissau-renforce-les-pouvoirs-du-president-ce-que-cela-change-pour-lequilibre-politique-290859",
+     "published": "2026-10-09T08:11:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "João Espírito Santo, enseignant-chercheur, Universidade de Lisboa"
+    },
+    {
      "title": "Zimbabwe’s dinosaurs were different from South Africa’s: new species offers clues",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Paul Barrett, Individual Merit Researcher, Natural History Museum"
-    },
-    {
-     "title": "Sol Plaatje at 150: why a pioneering South African change-maker still inspires today",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/sol-plaatje-at-150-why-a-pioneering-south-african-change-maker-still-inspires-today-293584",
-     "published": "2026-10-08T13:40:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Janet Remmington, Research Associate, Humanities Research Centre (and African Literature Department, University of the Witwatersrand), University of York"
     },
     {
      "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Zimbabwe’s dinosaurs were different from South Africa’s: new species offers clues",
-   "published": "2026-10-08 13:44 UTC"
+   "title": "La nouvelle Constitution de la Guinée-Bissau renforce les pouvoirs du président : ce que cela change pour l’équilibre politique",
+   "published": "2026-10-09 08:11 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Sol Plaatje at 150: why a pioneering South African change-maker still inspires today",
-   "published": "2026-10-08 13:40 UTC"
+   "title": "Zimbabwe’s dinosaurs were different from South Africa’s: new species offers clues",
+   "published": "2026-10-08 13:44 UTC"
   },
   {
    "region": "Africa",
