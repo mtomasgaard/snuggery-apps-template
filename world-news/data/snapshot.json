@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T15:01:40Z",
+ "generatedAt": "2026-10-09T16:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,24 @@
    "stale": false,
    "items": [
     {
+     "title": "Amid heartache of Nepal flooding disaster, fear remains",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
+     "published": "2026-10-09T12:00:00Z",
+     "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
+     "stale": false
+    },
+    {
+     "title": "Security Council LIVE: Yemen in spotlight as Houthi attacks on Saudi Arabia escalate",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168559",
+     "published": "2026-10-09T12:00:00Z",
+     "summary": "The Security Council meets top of the hour to discuss Yemen, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
+     "stale": false
+    },
+    {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -296,24 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168539",
      "published": "2026-10-06T12:00:00Z",
      "summary": "Sixty-nine Palestinians – more than half of them children – were displaced on Tuesday after Israeli authorities green lit the demolition of their residential building in the At Tur area of East Jerusalem, the UN aid…",
-     "stale": false
-    },
-    {
-     "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168530",
-     "published": "2026-10-05T12:00:00Z",
-     "summary": "Three years after Hamas and other Palestinian armed groups attacked Israel, UN Secretary-General António Guterres has said nothing can justify the atrocities of 7 October – calling for an end to the suffering of…",
-     "stale": false
-    },
-    {
-     "title": "More than 184,000 displaced as fighting intensifies in Yemen",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168528",
-     "published": "2026-10-05T12:00:00Z",
-     "summary": "Intense fighting in Yemen has forced more than 184,000 people from their homes since the start of August, most of them since early September, the UN migration agency (IOM) said on Monday.",
      "stale": false
     },
     {
@@ -816,6 +816,18 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "Amid heartache of Nepal flooding disaster, fear remains",
+   "published": "2026-10-09 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Security Council LIVE: Yemen in spotlight as Houthi attacks on Saudi Arabia escalate",
+   "published": "2026-10-09 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
    "published": "2026-10-09 06:15 UTC"
@@ -837,18 +849,6 @@
    "source": "UN News",
    "title": "Israeli demolition in East Jerusalem displaces 69 Palestinians",
    "published": "2026-10-06 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "‘Nothing can justify these atrocities,’ says Guterres three years on from 7 October attacks",
-   "published": "2026-10-05 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "More than 184,000 displaced as fighting intensifies in Yemen",
-   "published": "2026-10-05 12:00 UTC"
   },
   {
    "region": "Middle East",
