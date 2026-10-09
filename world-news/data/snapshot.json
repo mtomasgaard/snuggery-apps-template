@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T19:01:35Z",
+ "generatedAt": "2026-10-09T20:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
+     "published": "2026-10-09T19:22:38Z",
+     "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
+     "stale": false,
+     "author": "EngageMedia"
+    },
+    {
+     "title": "Why fall yard care could start with doing less – but not nothing",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/why-fall-yard-care-could-start-with-doing-less-but-not-nothing-293924",
+     "published": "2026-10-09T18:41:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Manjot Kaur Sidhu, Assistant Extension Professor of Horticulture and Ornamental Horticulture Specialist, University of Maine"
+    },
+    {
      "title": "How Hurricane Isaias broke through to become the first Atlantic hurricane in an eerily quiet 2026 season",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Christopher Davis, Professor of Earth, Geographic, and Climate Sciences, UMass Amherst"
-    },
-    {
-     "title": "What we talk about when we talk about US strategic ‘credibility’ – from Vietnam to Iran",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-we-talk-about-when-we-talk-about-us-strategic-credibility-from-vietnam-to-iran-289065",
-     "published": "2026-10-09T12:33:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christopher Nichols, Professor of History, Hayes Chair National Security Studies, The Ohio State University"
     },
     {
      "title": "El Niño speeds climate crisis and tests Latin America’s food security",
@@ -149,16 +159,6 @@
      "published": "2026-10-01T12:00:00Z",
      "summary": "The UN human rights chief and nine independent rights experts on Thursday called on authorities in Tennessee not to pursue any further attempts to execute Christa Pike, saying her case highlights multiple concerns…",
      "stale": false
-    },
-    {
-     "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/09/30/in-brazils-capital-residents-grow-their-own-heat-fighting-solutions/",
-     "published": "2026-09-30T14:09:26Z",
-     "summary": "Life in the favelas surrounding Brazil’s capital brings the health risks of extreme heat — a symptom of the global inequities of green space access",
-     "stale": false,
-     "author": "Dialogue Earth"
     },
     {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
+     "published": "2026-10-09T19:22:38Z",
+     "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
+     "stale": false,
+     "author": "EngageMedia"
+    },
+    {
      "title": "Amid heartache of Nepal flooding disaster, fear remains",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
      "stale": false,
      "author": "Civic Media Observatory"
-    },
-    {
-     "title": "When the right to protest remains, but demonstrating comes at a price",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
-     "published": "2026-09-29T00:00:00Z",
-     "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": false,
-     "author": "Elmira Lyapina"
     }
    ]
   },
@@ -343,6 +343,16 @@
    "name": "Asia",
    "stale": false,
    "items": [
+    {
+     "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
+     "published": "2026-10-09T19:22:38Z",
+     "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
+     "stale": false,
+     "author": "EngageMedia"
+    },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
      "source": "Global Voices",
@@ -380,16 +390,6 @@
      "published": "2026-10-08T12:00:00Z",
      "summary": "Years of conflict, displacement, economic disruption and climate shocks in Myanmar have led to the “simultaneous collapse” of shelter, healthcare, schooling and livelihoods affecting millions of people, the UN…",
      "stale": false
-    },
-    {
-     "title": "How Cambodia’s law on ‘freedom parks’ curtailed people’s right to protest",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/02/how-cambodias-law-on-freedom-parks-curtailed-the-peoples-right-to-protest/",
-     "published": "2026-10-02T08:10:31Z",
-     "summary": "\"It has not only been used to confine peaceful gatherings and demonstrations to Freedom Park, but increasingly, the very use of Freedom Park has been restricted and denied.\"",
-     "stale": false,
-     "author": "Mong Palatino"
     },
     {
      "title": "The sound of resistance",
@@ -720,15 +720,21 @@
   },
   {
    "region": "Americas",
-   "source": "The Conversation",
-   "title": "How Hurricane Isaias broke through to become the first Atlantic hurricane in an eerily quiet 2026 season",
-   "published": "2026-10-09 12:38 UTC"
+   "source": "Global Voices",
+   "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
+   "published": "2026-10-09 19:22 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What we talk about when we talk about US strategic ‘credibility’ – from Vietnam to Iran",
-   "published": "2026-10-09 12:33 UTC"
+   "title": "Why fall yard care could start with doing less – but not nothing",
+   "published": "2026-10-09 18:41 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "How Hurricane Isaias broke through to become the first Atlantic hurricane in an eerily quiet 2026 season",
+   "published": "2026-10-09 12:38 UTC"
   },
   {
    "region": "Americas",
@@ -753,12 +759,6 @@
    "source": "UN News",
    "title": "No more execution attempts on Christa Pike: UN rights chief",
    "published": "2026-10-01 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "In Brazil’s capital, residents grow their own heat-fighting solutions",
-   "published": "2026-09-30 14:09 UTC"
   },
   {
    "region": "Americas",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
+   "published": "2026-10-09 19:22 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Amid heartache of Nepal flooding disaster, fear remains",
    "published": "2026-10-09 12:00 UTC"
@@ -857,10 +863,10 @@
    "published": "2026-09-29 00:00 UTC"
   },
   {
-   "region": "Middle East",
+   "region": "Asia",
    "source": "Global Voices",
-   "title": "When the right to protest remains, but demonstrating comes at a price",
-   "published": "2026-09-29 00:00 UTC"
+   "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
+   "published": "2026-10-09 19:22 UTC"
   },
   {
    "region": "Asia",
@@ -885,12 +891,6 @@
    "source": "UN News",
    "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
    "published": "2026-10-08 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "How Cambodia’s law on ‘freedom parks’ curtailed people’s right to protest",
-   "published": "2026-10-02 08:10 UTC"
   },
   {
    "region": "Asia",
