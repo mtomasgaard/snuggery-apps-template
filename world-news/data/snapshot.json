@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T20:01:27Z",
+ "generatedAt": "2026-10-09T21:01:34Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Security Council LIVE: Emergency meeting as Russia launches deadly wave of attacks on Ukraine",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168564",
+     "published": "2026-10-09T12:00:00Z",
+     "summary": "Escalating violence and human rights violations in the four-year-old Russia-Ukraine war are in the spotlight in the Security Council on Friday following a spate of Russian attacks against civilian targets and…",
+     "stale": false
+    },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
      "source": "Global Voices",
@@ -24,15 +33,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168548",
      "published": "2026-10-07T12:00:00Z",
      "summary": "The UN Humanitarian Coordinator for Ukraine on Wednesday called for an end to attacks against civilians following further overnight strikes by Russian forces that reportedly killed at least 19 in the Chernihiv Region.",
-     "stale": false
-    },
-    {
-     "title": "‘No plague case’ in Siberia, Russia tells WHO as assessments continue",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168547",
-     "published": "2026-10-07T12:00:00Z",
-     "summary": "Health authorities in Russia say there is “no plague case” in Siberia following reports last week that a lab technician had died of pneumonia of an unknown origin in the region, World Health Organization (WHO) officials…",
      "stale": false
     },
     {
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Anne Carson’s Nobel-winning, genre-defying work bridges the gap between ancient Greek literature and modern life",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/anne-carsons-nobel-winning-genre-defying-work-bridges-the-gap-between-ancient-greek-literature-and-modern-life-294020",
+     "published": "2026-10-09T20:08:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amy Cannon, Associate Professor of Writing, USC Dornsife College of Letters, Arts and Sciences"
+    },
+    {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Manjot Kaur Sidhu, Assistant Extension Professor of Horticulture and Ornamental Horticulture Specialist, University of Maine"
-    },
-    {
-     "title": "How Hurricane Isaias broke through to become the first Atlantic hurricane in an eerily quiet 2026 season",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/how-hurricane-isaias-broke-through-to-become-the-first-atlantic-hurricane-in-an-eerily-quiet-2026-season-294028",
-     "published": "2026-10-09T12:38:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christopher Davis, Professor of Earth, Geographic, and Climate Sciences, UMass Amherst"
     },
     {
      "title": "El Niño speeds climate crisis and tests Latin America’s food security",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Some climate tipping points are being studied far more than others – new research",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/some-climate-tipping-points-are-being-studied-far-more-than-others-new-research-293614",
+     "published": "2026-10-09T08:17:04Z",
+     "summary": "",
+     "stale": false,
+     "author": "Asaf Tzachor, Research Affiliate, Centre for the Study of Existential Risks, University of Cambridge"
+    },
+    {
      "title": "The war on terror failed Afghanistan. But the people’s hopes for democracy live on",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -459,24 +469,14 @@
      "author": "Triss Niemi, Casual Academic, College of Business, Creative Arts, Law and Social Sciences, Flinders University"
     },
     {
-     "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
+     "title": "Is this the ‘mathocalypse’? Why OpenAI’s latest results dump has left mathematicians in shock",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-nursing-squeeze-is-an-election-issue-is-it-time-for-compulsory-patient-ratios-293435",
-     "published": "2026-10-09T00:39:41Z",
+     "link": "https://theconversation.com/is-this-the-mathocalypse-why-openais-latest-results-dump-has-left-mathematicians-in-shock-293837",
+     "published": "2026-10-09T03:25:51Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Jull, Professor of Nursing, Faculty of Medical and Health Sciences, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Once the envy of the world, where has Australia’s batting talent gone?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/once-the-envy-of-the-world-where-has-australias-batting-talent-gone-291873",
-     "published": "2026-10-09T00:20:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Vaughan Cruickshank, Senior Lecturer in Health and Physical Education, University of Tasmania"
+     "author": "Melissa Lee, Senior Lecturer, School of Mathematics, Monash University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Security Council LIVE: Emergency meeting as Russia launches deadly wave of attacks on Ukraine",
+   "published": "2026-10-09 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
    "published": "2026-10-09 06:15 UTC"
@@ -680,12 +686,6 @@
    "region": "Europe",
    "source": "UN News",
    "title": "Ukraine: UN condemns latest attacks and calls for civilian protection",
-   "published": "2026-10-07 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "‘No plague case’ in Siberia, Russia tells WHO as assessments continue",
    "published": "2026-10-07 12:00 UTC"
   },
   {
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Anne Carson’s Nobel-winning, genre-defying work bridges the gap between ancient Greek literature and modern life",
+   "published": "2026-10-09 20:08 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Why fall yard care could start with doing less – but not nothing",
    "published": "2026-10-09 18:41 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "How Hurricane Isaias broke through to become the first Atlantic hurricane in an eerily quiet 2026 season",
-   "published": "2026-10-09 12:38 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Some climate tipping points are being studied far more than others – new research",
+   "published": "2026-10-09 08:17 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The war on terror failed Afghanistan. But the people’s hopes for democracy live on",
    "published": "2026-10-09 05:35 UTC"
   },
@@ -931,14 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
-   "published": "2026-10-09 00:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Once the envy of the world, where has Australia’s batting talent gone?",
-   "published": "2026-10-09 00:20 UTC"
+   "title": "Is this the ‘mathocalypse’? Why OpenAI’s latest results dump has left mathematicians in shock",
+   "published": "2026-10-09 03:25 UTC"
   },
   {
    "region": "Oceania",
