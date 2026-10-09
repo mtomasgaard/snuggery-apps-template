@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T22:01:32Z",
+ "generatedAt": "2026-10-09T23:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -8,7 +8,7 @@
    "stale": false,
    "items": [
     {
-     "title": "Security Council LIVE: Emergency meeting as Russia launches deadly wave of attacks on Ukraine",
+     "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
      "source": "UN News",
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168564",
@@ -673,7 +673,7 @@
   {
    "region": "Europe",
    "source": "UN News",
-   "title": "Security Council LIVE: Emergency meeting as Russia launches deadly wave of attacks on Ukraine",
+   "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
    "published": "2026-10-09 12:00 UTC"
   },
   {
