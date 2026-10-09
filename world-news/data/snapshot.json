@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T00:01:37Z",
+ "generatedAt": "2026-10-09T01:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Anne Carson has won the Nobel Prize for Literature for her bold, inventive, breathtaking work",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/anne-carson-has-won-the-nobel-prize-for-literature-for-her-bold-inventive-breathtaking-work-293990",
+     "published": "2026-10-09T00:41:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alexander Howard, Senior Lecturer, Discipline of English and Writing, University of Sydney"
+    },
+    {
+     "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nzs-nursing-squeeze-is-an-election-issue-is-it-time-for-compulsory-patient-ratios-293435",
+     "published": "2026-10-09T00:39:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Jull, Professor of Nursing, Faculty of Medical and Health Sciences, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "Once the envy of the world, where has Australia’s batting talent gone?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/once-the-envy-of-the-world-where-has-australias-batting-talent-gone-291873",
+     "published": "2026-10-09T00:20:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Vaughan Cruickshank, Senior Lecturer in Health and Physical Education, University of Tasmania"
+    },
+    {
      "title": "My son goes to the gym a lot. How can I tell if this is healthy or a sign something is wrong?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,44 +469,14 @@
      "author": "Samuel Cornell, Research Fellow in Public Health, The University of Queensland"
     },
     {
-     "title": "Astronomers pinpoint the origin of a 10 billion-year-old millisecond signal from space",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/astronomers-pinpoint-the-origin-of-a-10-billion-year-old-millisecond-signal-from-space-293671",
-     "published": "2026-10-08T19:05:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Themiya Nanayakkara, Senior Lecturer in Astrophysics, University of Sydney"
-    },
-    {
-     "title": "Why do runners get so many injuries? And does strength training really make a difference?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-do-runners-get-so-many-injuries-and-does-strength-training-really-make-a-difference-292788",
-     "published": "2026-10-08T19:05:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hunter Bennett, Lecturer in Exercise Science, Adelaide University"
-    },
-    {
-     "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
+     "title": "The American mood is turning dark, and Republicans are likely to pay the price at the midterms",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/big-political-donations-have-hit-7-4m-this-election-year-are-the-rules-tight-enough-293666",
-     "published": "2026-10-08T17:41:26Z",
+     "link": "https://theconversation.com/the-american-mood-is-turning-dark-and-republicans-are-likely-to-pay-the-price-at-the-midterms-293679",
+     "published": "2026-10-08T19:03:30Z",
      "summary": "",
      "stale": false,
-     "author": "Maria Armoudian, Associate Professor, Politics & International Relations; Director, Sustainability Hub, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "The Social Reckoning is a true American horror story",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-social-reckoning-is-a-true-american-horror-story-293900",
-     "published": "2026-10-08T14:48:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tony D Sampson, Reader in Digital Communication, University of Essex"
+     "author": "Bruce Wolpe, Non-resident Senior Fellow, United States Study Centre, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Anne Carson has won the Nobel Prize for Literature for her bold, inventive, breathtaking work",
+   "published": "2026-10-09 00:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
+   "published": "2026-10-09 00:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Once the envy of the world, where has Australia’s batting talent gone?",
+   "published": "2026-10-09 00:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "My son goes to the gym a lot. How can I tell if this is healthy or a sign something is wrong?",
    "published": "2026-10-08 19:05 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Astronomers pinpoint the origin of a 10 billion-year-old millisecond signal from space",
-   "published": "2026-10-08 19:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why do runners get so many injuries? And does strength training really make a difference?",
-   "published": "2026-10-08 19:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Big political donations have hit $7.4m this election year. Are the rules tight enough?",
-   "published": "2026-10-08 17:41 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Social Reckoning is a true American horror story",
-   "published": "2026-10-08 14:48 UTC"
+   "title": "The American mood is turning dark, and Republicans are likely to pay the price at the midterms",
+   "published": "2026-10-08 19:03 UTC"
   },
   {
    "region": "Oceania",
