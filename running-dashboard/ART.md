@@ -533,13 +533,13 @@ the tiles; the Block is the first scroll.
     `--line-strong` frame, 6 px radius, 44 px tall, no chevron glyph and no fill, 4 px under the tabs.
     Named `Activity type` and `Equipment`. Whether iOS zooms the page when one is focused (its text is
     under 16 px) is a phone check (`tools/DECISIONS.md`). **This row tucks** (the owner: "can be hidden
-    when moving down"): a scroll down carries it up and out with the pane, pixel for pixel, gone after
-    its 48 px; a scroll up brings it back the same way, whole after 48 px; at the top it is always there.
-    `tucked()` in `app.js` sets the block's `translateY` to the scroll moved since the direction last
-    changed, held between 0 and the row's height and never more than the scroll itself, so no gap opens
-    at the top. It moves only with the pane, never on a timer: no transition, nothing for Reduce Motion
-    to stop. A key that focuses a control in the block brings the row back; a finger on a thumb does
-    not, so the track never moves under a drag (`shoot.mjs` drags the window's end with the row tucked:
+    when moving down"; and in 1.2.1, "I do not want them to pop up until we are at the top"): a scroll
+    down carries it up and out with the pane, pixel for pixel, gone after its 48 px, and a scroll up
+    leaves it out until the pane is back within 48 px of its top, where it slides back in the same way.
+    `tucked()` in `app.js` sets the block's `translateY` to the scroll itself, held between 0 and the
+    row's height, so no gap opens at the top. It moves only with the pane, never on a timer: no
+    transition, nothing for Reduce Motion to stop. A key that focuses a control in the row takes the pane
+    back to its top, where the row is; a finger on a thumb does not, so the track never moves under a drag (`shoot.mjs` drags the window's end with the row tucked:
     the track holds at one height through all ten moves). A session picked on Sessions scrolls to 8 px
     under the block as it stands once tucked.
   - *The window*: `3 months`, `6 months`, `1 year`, `All` as words, `aria-pressed` buttons in a

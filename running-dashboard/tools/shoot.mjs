@@ -452,7 +452,8 @@ for (const scheme of schemes) {
 
   // the filters held under the tabs (the owner, 2026-10-03): in the flow, so at rest the pane's content begins
   // at their foot and nothing is covered; the sport and equipment row above the window goes up and out with
-  // a scroll down and comes back with a scroll up, moving with the pane; the window and its track stay
+  // a scroll down and stays out until the pane is back at its top (the owner, 2026-10-08), moving with the
+  // pane; the window and its track stay
   {
     const at = () => w(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => {
       const g = (id) => document.getElementById(id).getBoundingClientRect(), m = g('main').top;
@@ -474,12 +475,15 @@ for (const scheme of schemes) {
     await page.getByRole('button', { name: '1 year', exact: true }).click();
     await page.waitForTimeout(300);
     await to(140); const s2 = await at();
+    await to(24); const s2b = await at();
     await to(0); const s3 = await at();
     check(s0.content === s0.h && s0.first >= s0.foot && s0.picks[0] === 0, `Training: the filters under the tabs, ${s0.h} px (the sport and equipment row ${s0.row} px above the window's words and track, ${s0.h - s0.row} px); the pane's content begins ${s0.content} px down, at their foot, so at rest they cover nothing`);
     check(s1.picks[1] <= 0.5 && Math.abs(s1.time) < 0.5 && s1.foot === s0.h - s0.row, `scrolled 200 px down: the sport and equipment row gone above the pane (its foot at ${s1.picks[1]} px), the window's words at the top, ${s1.foot} px of filters held over the pane`);
-    check(Math.abs(s2.picks[0]) < 0.5 && s2.foot === s0.h, `60 px back up (at ${s2.top} px): the row back whole (its top at ${s2.picks[0]} px), the filters ${s2.foot} px`);
+    check(s2.picks[1] <= 0.5 && Math.abs(s2.time) < 0.5 && s2.foot === s0.h - s0.row, `60 px back up (at ${s2.top} px): the row still out (its foot at ${s2.picks[1]} px), it does not come back until the top (the owner, 2026-10-08)`);
+    check(Math.abs(s2b.picks[0] + Math.min(s0.row, s2b.top)) < 0.5, `24 px from the top: the row sliding back with the pane, pixel for pixel (its top at ${s2b.picks[0]} px)`);
     check(Math.abs(s3.picks[0]) < 0.5 && s3.foot === s0.h && s3.content === s0.h, `back at the top: the filters as at rest (${s3.foot} px), the content at their foot`);
-    // the same by touch: a drag up tucks the row, a drag down brings it back; the window stays at the top
+    // the same by touch: a drag up tucks the row, a drag down that stops short of the top leaves it out,
+    // and the top brings it back; the window stays at the top
     await A.touch('touchStart', 200, 640);
     for (let k = 1; k <= 20; k++) { await A.touch('touchMove', 200, 640 - 13 * k); await page.waitForTimeout(16); }
     await A.touch('touchEnd'); await page.waitForTimeout(500);
@@ -489,8 +493,9 @@ for (const scheme of schemes) {
     for (let k = 1; k <= 8; k++) { await A.touch('touchMove', 200, 400 + 12 * k); await page.waitForTimeout(16); }
     await A.touch('touchEnd'); await page.waitForTimeout(500);
     const t2 = await at();
-    check(t1.top > 150 && t1.picks[1] <= 0.5 && Math.abs(t1.time) < 0.5 && t2.top < t1.top - 48 && Math.abs(t2.picks[0]) < 0.5 && Math.abs(t2.time - s0.row) < 0.5,
-      `by touch: a drag up scrolls the pane to ${t1.top} px with the row tucked and the window's words on top; a drag down back to ${t2.top} px brings the row back`);
+    const t3 = await (async () => { await w(() => { document.getElementById('main').scrollTop = 0; }); return at(); })();
+    check(t1.top > 150 && t1.picks[1] <= 0.5 && Math.abs(t1.time) < 0.5 && t2.top < t1.top - 48 && t2.top > s0.row && t2.picks[1] <= 0.5 && Math.abs(t2.time) < 0.5 && Math.abs(t3.picks[0]) < 0.5,
+      `by touch: a drag up scrolls the pane to ${t1.top} px with the row tucked; a drag down to ${t2.top} px leaves it out; at the top it is back (its top at ${t3.picks[0]} px)`);
     await w(() => { document.getElementById('main').scrollTop = 0; });
     await A.pane('Health');
     await to(200);

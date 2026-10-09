@@ -8,7 +8,7 @@
 //      sha256 HOUSE.md and NOTES.md pin; NOTES.md, TILES.md and About credit the face word for word;
 //   5. the data is pinned: each of the 37 data files' sha256 and their concatenation's, as the data follow-up
 //      rebuilt them (scripts/make_demo_running_dashboard.py --check rebuilds them byte for byte);
-//   6. miniapp.json is valid, its name unchanged, its version 1.2 (plan 0012 package 4's pass; HOUSE 13);
+//   6. miniapp.json is valid, its name unchanged, its version 1.2.1 (plan 0012 package 4's pass, then the owner's filters; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word, as About's first paragraph under Sources and credits; no band, caption or
 //      credit line on the front; OpenStreetMap's line under a map its data drew, and no other tile credit there
@@ -182,7 +182,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Running Dashboard' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2.1',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 

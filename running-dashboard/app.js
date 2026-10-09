@@ -689,17 +689,19 @@ function syncFilterVisibility() {
 }
 
 // The filters stay under the tabs while the pane scrolls beneath them (the owner, 2026-10-03). The sport
-// and equipment row at their top goes up and out with a scroll down and comes back with a scroll up,
-// as a browser's bar does: it moves with the pane, pixel for pixel, never on a timer.
-let tuck = 0, lastTop = 0;
+// and equipment row at their top goes up and out with a scroll down and stays out until the pane is back
+// at its top (the owner, 2026-10-08: "I do not want them to pop up until we are at the top"). It is held
+// to the scroll itself, pixel for pixel, so it slides back only over the last of its own height; never on
+// a timer. A key that focuses a control in the row takes the pane back to the top, where the row is.
 function tucked() {
-  const s = $('main').scrollTop, p = $('picksRow'), h = $('filters').hidden ? 0 : p.offsetHeight;
-  tuck = Math.max(0, Math.min(h, tuck + s - lastTop, s));
-  lastTop = s;
+  const s = $('main').scrollTop, h = $('filters').hidden ? 0 : $('picksRow').offsetHeight;
+  const tuck = Math.max(0, Math.min(h, s));
   $('filters').style.transform = tuck ? `translateY(${-tuck}px)` : '';
 }
 $('main').addEventListener('scroll', tucked, { passive: true });
-$('filters').addEventListener('focusin', (ev) => { if (ev.target.matches(':focus-visible')) { tuck = 0; tucked(); } });   // a key, never a finger on a thumb
+$('filters').addEventListener('focusin', (ev) => {   // a key, never a finger on a thumb
+  if (ev.target.matches(':focus-visible') && $('picksRow').contains(ev.target)) $('main').scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' });
+});
 
 /* -------------------------------------------------------------- filtering */
 

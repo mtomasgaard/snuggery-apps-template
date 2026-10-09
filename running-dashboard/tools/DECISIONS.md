@@ -2142,3 +2142,18 @@ ALL CHECKS PASS; `PLAYWRIGHT_MODULE=… node tools/shoot.mjs` (both themes): 200
 script, deleted after), Chromium and WebKit at 390 × 844 and 320 × 568, both themes: Health and Now selected by a tap,
 the About key opens About; 32 `ok`, 0 failed, no console error.
 
+
+## 1.2.1: the filters stay out until the top (the owner, 2026-10-08)
+
+The owner, after reviewing 1.2: *"on the training pane i would like the sports and equipment filters to be
+locked at the top, but disappear when we go down. Currently they disappear when scrolling down which is
+good, but they pop up when scrolling up. I do not want them to pop up until we are at the top."*
+
+- `tucked()` no longer follows the scroll's direction like a browser's bar. The row's lift is the scroll
+  itself, held between 0 and the row's height, so a scroll up leaves it out until the pane is within
+  48 px of its top, where it slides back in pixel for pixel.
+- A key that focuses a control in the row now takes the pane to its top, where the row is, rather than
+  pulling the row down over the content.
+- shoot.mjs: 60 px back up (at 140 px) the row is still out; at 24 px it is half back; a touch drag down
+  that stops short of the top leaves it out; the top brings it back.
+- Version 1.2 to 1.2.1. The same change goes to the owner's private Training Load.
