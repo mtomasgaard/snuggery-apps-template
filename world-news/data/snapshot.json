@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T04:01:29Z",
+ "generatedAt": "2026-10-09T05:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "What makes an Olympic emblem memorable – and does Brisbane’s new design fit the bill?",
+     "title": "Albanese government partially retreats on credit card issue after small business revolt",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/what-makes-an-olympic-emblem-memorable-and-does-brisbanes-new-design-fit-the-bill-293810",
-     "published": "2026-10-09T03:41:24Z",
+     "link": "https://theconversation.com/albanese-government-partially-retreats-on-credit-card-issue-after-small-business-revolt-293215",
+     "published": "2026-10-09T04:17:58Z",
      "summary": "",
      "stale": false,
-     "author": "Nina Hillenberg, Senior Lecturer, Design, Torrens University Australia"
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
-     "title": "Is this the ‘mathocalypse’? Why OpenAI’s latest results dump has left mathematicians in shock",
+     "title": "Grief, community and memory: Log Boy is a wickedly intelligent post-AIDS play",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/is-this-the-mathocalypse-why-openais-latest-results-dump-has-left-mathematicians-in-shock-293837",
-     "published": "2026-10-09T03:25:51Z",
+     "link": "https://theconversation.com/grief-community-and-memory-log-boy-is-a-wickedly-intelligent-post-aids-play-293948",
+     "published": "2026-10-09T04:04:52Z",
      "summary": "",
      "stale": false,
-     "author": "Melissa Lee, Senior Lecturer, School of Mathematics, Monash University"
+     "author": "Triss Niemi, Casual Academic, College of Business, Creative Arts, Law and Social Sciences, Flinders University"
     },
     {
-     "title": "After Firmus shelved the biggest ASX listing in 30 years, what does it say to investors about AI hype?",
+     "title": "‘We will not be sacrificed’: Pacific climate voices were clear and strong this week - and we’re listening",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/after-firmus-shelved-the-biggest-asx-listing-in-30-years-what-does-it-say-to-investors-about-ai-hype-294043",
-     "published": "2026-10-09T03:14:12Z",
+     "link": "https://theconversation.com/we-will-not-be-sacrificed-pacific-climate-voices-were-clear-and-strong-this-week-and-were-listening-294040",
+     "published": "2026-10-09T03:57:56Z",
      "summary": "",
      "stale": false,
-     "author": "Marta Khomyn, Senior Lecturer, Finance and Data Analytics, Adelaide University"
+     "author": "Kathryn Bowen, Director, Melbourne Climate Futures and Professor - Environment, Climate and Global Health at Melbourne Climate Futures and Melbourne School of…"
     },
     {
      "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What makes an Olympic emblem memorable – and does Brisbane’s new design fit the bill?",
-   "published": "2026-10-09 03:41 UTC"
+   "title": "Albanese government partially retreats on credit card issue after small business revolt",
+   "published": "2026-10-09 04:17 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Is this the ‘mathocalypse’? Why OpenAI’s latest results dump has left mathematicians in shock",
-   "published": "2026-10-09 03:25 UTC"
+   "title": "Grief, community and memory: Log Boy is a wickedly intelligent post-AIDS play",
+   "published": "2026-10-09 04:04 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "After Firmus shelved the biggest ASX listing in 30 years, what does it say to investors about AI hype?",
-   "published": "2026-10-09 03:14 UTC"
+   "title": "‘We will not be sacrificed’: Pacific climate voices were clear and strong this week - and we’re listening",
+   "published": "2026-10-09 03:57 UTC"
   },
   {
    "region": "Oceania",
