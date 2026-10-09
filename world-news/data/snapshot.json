@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T06:01:33Z",
+ "generatedAt": "2026-10-09T07:01:29Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
+     "published": "2026-10-09T06:15:45Z",
+     "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
     {
      "title": "Ukraine: UN condemns latest attacks and calls for civilian protection",
      "source": "UN News",
@@ -54,16 +64,6 @@
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
      "stale": false,
      "author": "Elmira Lyapina"
-    },
-    {
-     "title": "After five years of war, how do Ukrainian small businesses survive?",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/09/28/after-five-years-of-war-how-do-ukrainian-small-businesses-survive/",
-     "published": "2026-09-28T06:00:15Z",
-     "summary": "In this interview, writer and journalist Victoria Belim-Frolova shares her observations about Russia’s war on Ukraine and how it forces “a constant process of adaptation,” especially in women-led small businesses.",
-     "stale": false,
-     "author": "Nevena Borisova"
     },
     {
      "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
+     "published": "2026-10-09T06:15:45Z",
+     "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "Critical funding gap threatens health response in Yemen",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
      "stale": false,
      "author": "Elmira Lyapina"
-    },
-    {
-     "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/09/22/from-north-to-south-protests-sweep-across-tunisia-is-change-at-hand/",
-     "published": "2026-09-22T19:36:26Z",
-     "summary": "Protests over jobs, development and dignity are spreading across Tunisia, raising questions about growing links between social and political mobilisations.",
-     "stale": false,
-     "author": "The New Arab"
     }
    ]
   },
@@ -343,6 +343,16 @@
    "name": "Asia",
    "stale": false,
    "items": [
+    {
+     "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
+     "published": "2026-10-09T06:15:45Z",
+     "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
     {
      "title": "Alibaba sues Pentagon to denounce being classified as a Chinese military affiliate",
      "source": "Global Voices",
@@ -392,16 +402,6 @@
      "author": "Sydney Allen"
     },
     {
-     "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/01/west-to-east-energy-east-to-west-computing-the-uyghur-costs-of-chinas-digital-order/",
-     "published": "2026-10-01T07:34:18Z",
-     "summary": "Beijing is carrying an older geography of extraction into the AI era, turning Uyghur land, energy and labour into computing power while remaining silent about coercion and surveillance.",
-     "stale": false,
-     "author": "Asiye Uyghur"
-    },
-    {
      "title": "Equating protest with terrorism: A narrative against dissent",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The war on terror failed Afghanistan. But the people’s hopes for democracy live on",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-war-on-terror-failed-afghanistan-but-the-peoples-hopes-for-democracy-live-on-291143",
+     "published": "2026-10-09T05:35:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Safiullah Taye, Researcher and sessional academic, Australian Catholic University"
+    },
+    {
      "title": "Albanese government partially retreats on credit card issue after small business revolt",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Triss Niemi, Casual Academic, College of Business, Creative Arts, Law and Social Sciences, Flinders University"
-    },
-    {
-     "title": "‘We will not be sacrificed’: Pacific climate voices were clear and strong this week – and we’re listening",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/we-will-not-be-sacrificed-pacific-climate-voices-were-clear-and-strong-this-week-and-were-listening-294040",
-     "published": "2026-10-09T03:57:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kathryn Bowen, Director, Melbourne Climate Futures and Professor - Environment, Climate and Global Health at Melbourne Climate Futures and Melbourne School of…"
     },
     {
      "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
+   "published": "2026-10-09 06:15 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Ukraine: UN condemns latest attacks and calls for civilian protection",
    "published": "2026-10-07 12:00 UTC"
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "When the right to protest remains, but demonstrating comes at a price",
    "published": "2026-09-29 00:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "After five years of war, how do Ukrainian small businesses survive?",
-   "published": "2026-09-28 06:00 UTC"
   },
   {
    "region": "Europe",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
+   "published": "2026-10-09 06:15 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Critical funding gap threatens health response in Yemen",
    "published": "2026-10-07 12:00 UTC"
@@ -857,10 +863,10 @@
    "published": "2026-09-29 00:00 UTC"
   },
   {
-   "region": "Middle East",
+   "region": "Asia",
    "source": "Global Voices",
-   "title": "From north to south, protests sweep across Tunisia: Is change at hand?",
-   "published": "2026-09-22 19:36 UTC"
+   "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
+   "published": "2026-10-09 06:15 UTC"
   },
   {
    "region": "Asia",
@@ -895,12 +901,6 @@
   {
    "region": "Asia",
    "source": "Global Voices",
-   "title": "West-to-east energy, east-to-west computing: The Uyghur costs of China’s digital order",
-   "published": "2026-10-01 07:34 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
    "title": "Equating protest with terrorism: A narrative against dissent",
    "published": "2026-09-29 00:00 UTC"
   },
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The war on terror failed Afghanistan. But the people’s hopes for democracy live on",
+   "published": "2026-10-09 05:35 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Albanese government partially retreats on credit card issue after small business revolt",
    "published": "2026-10-09 04:17 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Grief, community and memory: Log Boy is a wickedly intelligent post-AIDS play",
    "published": "2026-10-09 04:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘We will not be sacrificed’: Pacific climate voices were clear and strong this week – and we’re listening",
-   "published": "2026-10-09 03:57 UTC"
   },
   {
    "region": "Oceania",
