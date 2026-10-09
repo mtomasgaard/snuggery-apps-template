@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T16:01:35Z",
+ "generatedAt": "2026-10-09T17:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -270,12 +270,12 @@
      "stale": false
     },
     {
-     "title": "Security Council LIVE: Yemen in spotlight as Houthi attacks on Saudi Arabia escalate",
+     "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
      "source": "UN News",
      "feed": "un-middle-east",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168559",
      "published": "2026-10-09T12:00:00Z",
-     "summary": "The Security Council meets top of the hour to discuss Yemen, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
+     "summary": "The Security Council met to discuss the crisis in Yemen Friday, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
      "stale": false
     },
     {
@@ -823,7 +823,7 @@
   {
    "region": "Middle East",
    "source": "UN News",
-   "title": "Security Council LIVE: Yemen in spotlight as Houthi attacks on Saudi Arabia escalate",
+   "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
    "published": "2026-10-09 12:00 UTC"
   },
   {
