@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T03:01:32Z",
+ "generatedAt": "2026-10-09T04:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Which is more filling, protein or fibre?",
+     "title": "What makes an Olympic emblem memorable – and does Brisbane’s new design fit the bill?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/which-is-more-filling-protein-or-fibre-290064",
-     "published": "2026-10-09T01:39:58Z",
+     "link": "https://theconversation.com/what-makes-an-olympic-emblem-memorable-and-does-brisbanes-new-design-fit-the-bill-293810",
+     "published": "2026-10-09T03:41:24Z",
      "summary": "",
      "stale": false,
-     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
+     "author": "Nina Hillenberg, Senior Lecturer, Design, Torrens University Australia"
     },
     {
-     "title": "‘A hard, hard book to write’: Magda Szubanski on trauma, cancer and the cost of coming out",
+     "title": "Is this the ‘mathocalypse’? Why OpenAI’s latest results dump has left mathematicians in shock",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/a-hard-hard-book-to-write-magda-szubanski-on-trauma-cancer-and-the-cost-of-coming-out-292983",
-     "published": "2026-10-09T01:16:31Z",
+     "link": "https://theconversation.com/is-this-the-mathocalypse-why-openais-latest-results-dump-has-left-mathematicians-in-shock-293837",
+     "published": "2026-10-09T03:25:51Z",
      "summary": "",
      "stale": false,
-     "author": "Kate Cantrell, Senior Lecturer in Humanities, University of Southern Queensland"
+     "author": "Melissa Lee, Senior Lecturer, School of Mathematics, Monash University"
     },
     {
-     "title": "Anne Carson has won the Nobel Prize for Literature for her bold, inventive, breathtaking work",
+     "title": "After Firmus shelved the biggest ASX listing in 30 years, what does it say to investors about AI hype?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/anne-carson-has-won-the-nobel-prize-for-literature-for-her-bold-inventive-breathtaking-work-293990",
-     "published": "2026-10-09T00:41:12Z",
+     "link": "https://theconversation.com/after-firmus-shelved-the-biggest-asx-listing-in-30-years-what-does-it-say-to-investors-about-ai-hype-294043",
+     "published": "2026-10-09T03:14:12Z",
      "summary": "",
      "stale": false,
-     "author": "Alexander Howard, Senior Lecturer, Discipline of English and Writing, University of Sydney"
+     "author": "Marta Khomyn, Senior Lecturer, Finance and Data Analytics, Adelaide University"
     },
     {
      "title": "NZ’s nursing squeeze is an election issue. Is it time for compulsory patient ratios?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Which is more filling, protein or fibre?",
-   "published": "2026-10-09 01:39 UTC"
+   "title": "What makes an Olympic emblem memorable – and does Brisbane’s new design fit the bill?",
+   "published": "2026-10-09 03:41 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "‘A hard, hard book to write’: Magda Szubanski on trauma, cancer and the cost of coming out",
-   "published": "2026-10-09 01:16 UTC"
+   "title": "Is this the ‘mathocalypse’? Why OpenAI’s latest results dump has left mathematicians in shock",
+   "published": "2026-10-09 03:25 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Anne Carson has won the Nobel Prize for Literature for her bold, inventive, breathtaking work",
-   "published": "2026-10-09 00:41 UTC"
+   "title": "After Firmus shelved the biggest ASX listing in 30 years, what does it say to investors about AI hype?",
+   "published": "2026-10-09 03:14 UTC"
   },
   {
    "region": "Oceania",
