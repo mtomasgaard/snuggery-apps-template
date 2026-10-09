@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T12:01:33Z",
+ "generatedAt": "2026-10-09T13:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Sexual assault survivors’ stories may shift over time – a psychologist explains why it doesn’t mean they’re lying",
+     "title": "When abortion and surrogacy law collide, contracts can’t answer the hardest questions",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/sexual-assault-survivors-stories-may-shift-over-time-a-psychologist-explains-why-it-doesnt-mean-theyre-lying-293766",
-     "published": "2026-10-09T00:47:27Z",
+     "link": "https://theconversation.com/when-abortion-and-surrogacy-law-collide-contracts-cant-answer-the-hardest-questions-291832",
+     "published": "2026-10-09T12:10:00Z",
      "summary": "",
      "stale": false,
-     "author": "Michele Patterson Ford, Senior Lecturer in Psychology, Dickinson College"
+     "author": "Sonia Suter, Professor of Law, George Washington University"
     },
     {
-     "title": "A molecule’s ‘handedness’ can determine whether it’s an effective drug – 4 examples of pharmaceuticals where chirality matters",
+     "title": "The oil market that sets today’s gas prices was invented in western Pennsylvania",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/a-molecules-handedness-can-determine-whether-its-an-effective-drug-4-examples-of-pharmaceuticals-where-chirality-matters-293909",
-     "published": "2026-10-08T18:46:45Z",
+     "link": "https://theconversation.com/the-oil-market-that-sets-todays-gas-prices-was-invented-in-western-pennsylvania-292855",
+     "published": "2026-10-09T12:09:42Z",
      "summary": "",
      "stale": false,
-     "author": "Cedric Schaack, Assistant Professor of Chemistry, Wake Forest University"
+     "author": "Brian C. Black, Distinguished Professor of History and Environmental Studies, Penn State"
     },
     {
      "title": "El Niño speeds climate crisis and tests Latin America’s food security",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Sexual assault survivors’ stories may shift over time – a psychologist explains why it doesn’t mean they’re lying",
-   "published": "2026-10-09 00:47 UTC"
+   "title": "When abortion and surrogacy law collide, contracts can’t answer the hardest questions",
+   "published": "2026-10-09 12:10 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A molecule’s ‘handedness’ can determine whether it’s an effective drug – 4 examples of pharmaceuticals where chirality matters",
-   "published": "2026-10-08 18:46 UTC"
+   "title": "The oil market that sets today’s gas prices was invented in western Pennsylvania",
+   "published": "2026-10-09 12:09 UTC"
   },
   {
    "region": "Americas",
