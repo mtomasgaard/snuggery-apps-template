@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-10T03:01:26Z",
+ "generatedAt": "2026-10-10T04:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/10/how-ecuador-is-fighting-to-keep-industrial-trans-fats-off-the-food-shelf/",
+     "published": "2026-10-10T04:00:43Z",
+     "summary": "As health advocates push for tighter controls, Ecuador confronts the gap between regulating trans fats and enforcing those rules.",
+     "stale": false,
+     "author": "Carlos E. Flores"
+    },
+    {
      "title": "Anne Carson’s Nobel-winning, genre-defying work bridges the gap between ancient Greek literature and modern life",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -131,16 +141,6 @@
      "summary": "From droughts to floods and fires, El Niño is exposing vulnerabilities in Latin America’s food systems by putting farmers, food supplies and household budgets under growing pressure across the region.",
      "stale": false,
      "author": "Connectas"
-    },
-    {
-     "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/06/young-people-are-bridging-the-climate-divide-for-oceania-and-the-caribbean/",
-     "published": "2026-10-06T08:05:24Z",
-     "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
-     "stale": false,
-     "author": "Guest Contributor"
     },
     {
      "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
+   "published": "2026-10-10 04:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Anne Carson’s Nobel-winning, genre-defying work bridges the gap between ancient Greek literature and modern life",
    "published": "2026-10-09 20:08 UTC"
@@ -741,12 +747,6 @@
    "source": "Global Voices",
    "title": "El Niño speeds climate crisis and tests Latin America’s food security",
    "published": "2026-10-08 05:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
-   "published": "2026-10-06 08:05 UTC"
   },
   {
    "region": "Americas",
