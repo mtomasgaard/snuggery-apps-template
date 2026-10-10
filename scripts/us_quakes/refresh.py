@@ -68,7 +68,7 @@ from decimal import Decimal
 from common import (EPOCH_ISO, BuildError, depth_code, half_up, http_get, iso_of_minutes, log, minutes_of_date,
                     parse_time_ms, sha256_bytes, sha256_of, unwrap_lon, write_json)
 from paths import APP, ASSETS, CACHE, DATA
-from sources import COMCAT, CREDIT, FEEDS, VOLCANOES
+from sources import COMCAT, CREDIT, FEEDS, VOLCANOES, same_major
 
 SCHEMA = 1
 APP_NAME = 'US Quakes'
@@ -237,8 +237,10 @@ def parse_feed(body: bytes):
     except ValueError as e:
         raise BuildError(f'all_month.geojson is not JSON: {e}')
     meta = doc.get('metadata') or {}
-    if meta.get('api') != FEEDS['api_version']:
+    if not same_major(meta.get('api'), FEEDS['api_version']):
         raise BuildError(f'feed metadata.api is {meta.get("api")!r}; the contract is {FEEDS["api_version"]}')
+    if meta.get('api') != FEEDS['api_version']:
+        print(f'::notice::USGS summary feed metadata.api is {meta.get("api")}; the contract was written for {FEEDS["api_version"]}, and its checks still hold')
     feats = doc.get('features')
     if not isinstance(feats, list) or not feats:
         raise BuildError('feed has no features')
@@ -359,8 +361,10 @@ def fdsn_query(from_date: str, to_iso: str) -> dict:
     """Query every box, cache each answer in cache/live/, write the marker; return the marker."""
     pace()
     version = http_get(COMCAT['base'] + '/version', timeout=60).decode().strip()
-    if version != COMCAT['api_version']:
+    if not same_major(version, COMCAT['api_version']):
         raise BuildError(f'FDSN event service version {version}; the contract is {COMCAT["api_version"]}')
+    if version != COMCAT['api_version']:
+        print(f'::notice::FDSN event service version {version}; the contract was written for {COMCAT["api_version"]}, and its column and count checks still hold')
     start = dt.datetime.fromisoformat(from_date).replace(tzinfo=dt.timezone.utc)
     end = dt.datetime.fromisoformat(to_iso.replace('Z', '+00:00'))
     queried_at = iso(utc_now())
@@ -832,9 +836,9 @@ def validate(snap: dict, rows: list, data: bytes):
         age_h = (unix_of_iso(feed['generated']) - unix_of_iso(feed['newest'])) / 3600
         if age_h >= FRESH_HOURS:
             fail.append(f'the newest in-box earthquake is {age_h:.1f} h older than the feed (≥ {FRESH_HOURS} h)')
-    if feed['api'] != FEEDS['api_version']:
+    if not same_major(feed['api'], FEEDS['api_version']):
         fail.append(f'feed api {feed["api"]}')
-    if snap['fdsn']['api'] != COMCAT['api_version']:
+    if not same_major(snap['fdsn']['api'], COMCAT['api_version']):
         fail.append(f'FDSN api {snap["fdsn"]["api"]}')
     if any(q['rows'] != q['count'] for q in snap['fdsn']['queries']):
         fail.append('an FDSN query\'s rows differ from its count')

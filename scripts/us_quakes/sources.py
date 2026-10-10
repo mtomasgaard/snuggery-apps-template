@@ -295,3 +295,11 @@ CREDIT = {
     },
 }
 CREDIT_ORDER = ['comcat', 'relief', 'qfaults', 'volcano-list', 'naturalearth']
+
+
+def same_major(seen: str, pinned: str) -> bool:
+    """A USGS service version against the one the contract was written for. A minor or patch release
+    (2.7.0 to 2.8.1, 2026-10-10) keeps the contract; what it guards (the CSV's columns, the feed's
+    properties and geometry, rows equal to the count) is checked directly on every run. A new major
+    version stops the run."""
+    return str(seen).split('.')[0] == str(pinned).split('.')[0]

@@ -31,7 +31,7 @@ from array import array
 from decimal import ROUND_HALF_UP, Decimal
 
 from paths import APP, ASSETS, CACHE
-from sources import COMCAT, FEEDS, VOLCANOES
+from sources import COMCAT, FEEDS, VOLCANOES, same_major
 
 BUDGET = 1_500_000
 ASK_MAX = 200
@@ -172,8 +172,8 @@ def run(a):
 
     # ---- feed / fdsn blocks
     feed, fdsn = s['feed'], s['fdsn']
-    check(feed['api'] == FEEDS['api_version'], f'feed api {feed["api"]}')
-    check(fdsn['api'] == COMCAT['api_version'], f'FDSN api {fdsn["api"]}')
+    check(same_major(feed['api'], FEEDS['api_version']), f'feed api {feed["api"]} (the same major version as the contract\'s {FEEDS["api_version"]})')
+    check(same_major(fdsn['api'], COMCAT['api_version']), f'FDSN api {fdsn["api"]} (the same major version as the contract\'s {COMCAT["api_version"]})')
     check(all(q['rows'] == q['count'] for q in fdsn['queries']), 'an FDSN query rows != count')
     gen = parse_iso(feed['generated'])
     newest = parse_iso(feed['newest'])
@@ -235,7 +235,7 @@ def run(a):
         md = fdoc['metadata']
         gen_ms = ms_since_epoch_of_unix(int(md['generated']))
         check(gen_ms // 1000 == int((gen - EPOCH).total_seconds()), 'cached feed is not the one this snapshot used')
-        check(md['api'] == FEEDS['api_version'], 'cached feed api')
+        check(same_major(md['api'], FEEDS['api_version']), 'cached feed api')
         want_props = set(FEEDS['properties'])
         for ft in fdoc['features']:
             check(set(ft['properties']) == want_props, f'feed feature {ft["id"]}: properties differ')
