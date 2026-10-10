@@ -4,11 +4,11 @@
 //   2. no http:// or https:// in any .html, .css or .js the app ships, not even in a comment;
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
 //   4. data/ holds exactly the fourteen files the pipeline writes (Equinor's dated terms among them), fonts/
-//      the house face and OFL.txt, js/ the six modules (js/seismic.js Volve's own);
+//      the house face and OFL.txt, js/ the seven modules (js/seismic.js Volve's own; js/gesture.js since 1.2, D18);
 //      the face's and OFL.txt's sha256 are the house's; NOTES.md and About credit the face;
 //   5. the data is untouched: each data file's sha256 is the one the pipeline committed (the app never
 //      writes data/), and the facts About states from seismic.json are still what it says;
-//   6. miniapp.json is valid, "Volve" at version 1.1 (HOUSE 13; plan 0012 D16 and D17, and the section's speed), its description naming neither Equinor nor
+//   6. miniapp.json is valid, "Volve" at version 1.2 (HOUSE 13; plan 0012 D18 to D20: the section's zoom, the axes' lock, the tall stop), its description naming neither Equinor nor
 //      a former partner (Equinor's terms, clause 4);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
 //   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line, its
@@ -112,7 +112,7 @@ const exactly = (dir, names) => {
 };
 exactly('data', ['ATTRIBUTION.txt', 'TERMS-Volve-2026-10-07.txt', 'dynamic.bin', 'geometry.bin', 'horizons.bin', 'ijk.bin', 'model.json', 'neighbours.bin', 'production.json', 'seismic.bin', 'seismic.json', 'static.bin', 'validation.json', 'wellpaths.json']);
 exactly('fonts', ['ysabeau-office-gw.woff2', 'OFL.txt']);
-exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js', 'seismic.js']);
+exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js', 'seismic.js', 'gesture.js']);
 {
   const FONT_SHA = 'fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262';
   const OFL_SHA = 'd1adfffd83f9e896bcc17e6067c7f57f6824083fdd8d6951acbfca5b29be6269';
@@ -163,7 +163,7 @@ const PARTNERS = /equinor|statoil|exxon|bayerngas|licen[cs]e partners/i;   // Eq
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Volve' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1' && !PARTNERS.test(mini.description),
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2' && !PARTNERS.test(mini.description),
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, naming neither Equinor nor a former partner`);
 }
 
@@ -195,7 +195,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   // where Equinor's name may stand: About (app.js's writeAbout and CREDIT, index.html after the About div), the data, NOTES.md and ART.md (the folder's
   // documentation); nowhere else the app writes, and not in the README's lines for Volve
   const named = [];
-  for (const f of ['js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/seismic.js', 'style.css', 'config.json']) if (PARTNERS.test(code(read(f), f))) named.push(f);
+  for (const f of ['js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/seismic.js', 'js/gesture.js', 'style.css', 'config.json']) if (PARTNERS.test(code(read(f), f))) named.push(f);
   const readme = fs.existsSync(path.join(APP, '..', 'README.md')) ? fs.readFileSync(path.join(APP, '..', 'README.md'), 'utf8') : '';
   const entry = (readme.match(/### Volve\n[\s\S]*?(?=\n### |\n---)/) || [''])[0], row = (readme.match(/^\| Volve \|.*$/gm) || []).join('\n');
   if (PARTNERS.test(entry.replace(/\[`?volve\/[^\]]*\]\([^)]*\)/g, ''))) named.push("README.md's Volve entry");
@@ -207,8 +207,8 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 {
   const seis = read('js/seismic.js');
   ok(/export const depthOf = \(g, k\) => g\.z0 \+ k \* g\.dz;/.test(seis) && /const t = \(depths\[r\] - g\.z0\) \/ g\.dz;/.test(seis) && /ox: meta\.origin\[0\] - center\[0\], oy: meta\.origin\[1\] - center\[1\]/.test(seis)
-    && /depths\[r\] = ax\.Z\(\(y0 \+ r \+ 0\.5\) \/ dpr\) \+ ax\.datum;/.test(app) && /sectionAxis\(sec, box, ex, model\.center\[2\], win\)/.test(app) && !/\b(tie|shift|offset)Depth|datumShift|seisShift/i.test(code(app, 'app.js') + code(seis, 'x.js')),
-  "depths as delivered: a sample's depth is z.first + k z.step, a row's is the axis's own (the model's datum, center[2], the one constant), the traces' map points the survey's grid less the model's center; no shift, tie or offset term anywhere");
+    && /depths\[r\] = ax\.Z\(\(y0 \+ r \+ 0\.5\) \/ dpr\) \+ ax\.datum;/.test(app) && /sectionAxis\(sec, box, fitEx, model\.center\[2\], win\)/.test(app) && /viewAxis\(sec, b, v, model\.center\[2\], place, lim\)/.test(app) && /viewAxis\(sec, SEC\.fbox, SEC\.home, model\.center\[2\], SEC\.place, SEC\.lim\)/.test(app) && !/\b(tie|shift|offset)Depth|datumShift|seisShift/i.test(code(app, 'app.js') + code(seis, 'x.js')),
+  "depths as delivered: a sample's depth is z.first + k z.step, a row's is the axis's own, fitted or held (the model's datum, center[2], the one constant), the traces' map points the survey's grid less the model's center; no shift, tie or offset term anywhere");
 }
 
 // 9. The marketing camera's strings (HOUSE 7.4) and the stored keys
@@ -241,7 +241,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 // 10. SI notation in what the app writes; toFixed and toLocaleString only in js/units.js
 {
   const UNIT = /\d (bar|psi|m|ft|km|mi|mD|Sm³\/d|bbl\/d|Mscf\/d|%|px)(?![\w/])/;
-  const files = ['index.html', 'app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/seismic.js'];
+  const files = ['index.html', 'app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/seismic.js', 'js/gesture.js'];
   const hits = [];
   for (const f of files) {
     const lits = f.endsWith('.html') ? [code(read(f), f).replace(/<[^>]+>/g, ' ')] : strings(read(f));
@@ -312,7 +312,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   ok(sizes.every((s) => [10.5, 11, 11.5, 12.5, 13.5, 15, 21].includes(s)) && weights.every((w) => [400, 560, 600, 620, 650].includes(w)),
     `type: every size on the house scale (${[...new Set(sizes)].sort((a, b) => a - b).join(', ')} px), every weight in the cut (${[...new Set(weights)].sort().join(', ')})`);
   const dots = [], arrows = [];
-  for (const f of ['app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/seismic.js']) for (const s of strings(read(f))) if (s.includes('·')) dots.push(`${f}: ${s.slice(0, 50)}`);
+  for (const f of ['app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/seismic.js', 'js/gesture.js']) for (const s of strings(read(f))) if (s.includes('·')) dots.push(`${f}: ${s.slice(0, 50)}`);
   if (code(html, 'index.html').replace(/<[^>]+>/g, ' ').includes('·')) dots.push('index.html');
   ok(dots.length === 0, `no middle dot in any string the app writes${dots.length ? ': ' + dots.join(' | ') : ''}`);
   for (const f of web) {
@@ -355,8 +355,8 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   // Volve's caps, the lead's rulings of 2026-10-07 (plan 0012 3.4c): Norne Reservoir 2.3's code (255 443 B,
   // cap 256 000) plus js/seismic.js, the section's survey lines, seismic layer and horizons, About's seismic
   // and terms; nothing cut to fit. Past a cap, the figure is reported, never cut to.
-  const CODE_CAP = 322500;   // the lead's third ruling, 2026-10-08: 321 958 B after 1.1's section speed (D16, D17 and the progressive render); 312 000 for 1.0
-  ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling for 1.1 of 2026-10-08; Norne Reservoir 2.4's code is 255,990 of its 256,000): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+  const CODE_CAP = 370000;   // the lead's fourth ruling, 2026-10-10: 369 523 B after 1.2's D18 to D20 (zoom, the lock, the tall stop); 322 500 for 1.1, 312 000 for 1.0
+  ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling for 1.2 of 2026-10-10; Norne Reservoir 2.5's code is 299,880 of its 300,500): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
   const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
   ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000; 0 before the pass)`);
   const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

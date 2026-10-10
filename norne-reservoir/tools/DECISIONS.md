@@ -1587,3 +1587,262 @@ spare in Chromium).
   Pressure and Porosity in both themes (a separate look script): the section's cells, tops and names
   read on plasma and viridis.
 - Not run: anything on a phone.
+
+## Plan 0012 D18, D19 and D20: zoom in the section, the axes' lock, a fourth stop (2.5, 2026-10-10)
+
+The owner, reviewing TestFlight 48 (plan 0012 records the words): zoom in the sections; axes that can
+be locked on the whole view, *"just show data where it is, but keep axis extended"*, held, *"Just not
+have it automatically adjusting the limits/grid"*, and still moved by hand; and *"one more layer"* on
+the sheet for Cells and view. Built here first; Volve takes it next.
+
+### Where the code is (for Volve)
+
+- `js/section.js`, pure, run by `tools/test_section.mjs`: `viewOfAxis`, `fitWindow`, `viewAxis` (a held
+  view's axis, with `sectionAxis`'s fields plus `held`, `box`, `xa`/`xb`, `dX`, the tick ranges),
+  `zoomAt`, `panBy`, `keepIn`, `restretch`, `readableScale` (the zoom's limit), `fieldDepths` (the
+  locked window's depths), `commonFrame` (a family on one distance), `slicePaths` (every slice's path in
+  one pass; `sliceSection` now builds its path through the same `slicePath`, so the two cannot differ),
+  `stretchFor` (`ownExag`'s rule for any window). `depthTicks` and `distanceTicks` take a held axis and
+  give the ticks of the window; on a fit axis they are 2.4's, number for number (the tests' tick lines
+  are unchanged).
+- `js/gesture.js`: `plotGestures(el, { tap, double, move, free, start, end })`, no app state.
+- `app.js`: `secFamily()`, `secAxis()` (which view this frame draws, and the limits), `secZoom()`,
+  `secFit()`, `secLayers()` (the data's layers, drawn into the snapshot), `drawSection()` (full, or the
+  preview), `writeSecKeys()`, `secKeysBox()`; `fitSection()` holds the locked plot's height
+  (`SEC.lockedPx`); `secCut()` drops an unlocked zoom when the section changes. The sheet:
+  `measureTall()`, `shownStop()`, `applyStop(hand)`, `setStop()`, `initSheet()`.
+- Volve's seismic: its preview can take the same snapshot (the seismic is a layer under the cells), and
+  its own previews-then-full path at rest; the inline and crossline families are straight parallel
+  lines, which `commonFrame` places exactly (from one baseline square to them).
+
+### The calls (the owner may reverse any)
+
+1. **The keys over the plot's top right**, the 3D view's plates in a row: Fit, Zoom out, Zoom in in one
+   plate, the lock in its own. The pane's head has no room for four more 44 px keys (at 312 px wide it
+   has 110 px free, and Volve's head is full with four line words), and the sweep row's slider must keep
+   140 px. So the keys sit over the data, as the 3D view's do. Cost: at rest (the fit) they are two
+   keys, 98 × 38 px of a 366 × 94 compact plot; zoomed, four, 188 × 38. Names, A and A′ keep off them,
+   A′ moving below them on its own rule. In the narrow pane (beside the model with the sheet raised,
+   232 px) four keys cover most of the plot's width: an owner check.
+2. **Fit and Zoom out show only where they would change something**, at the plate's left, so no key
+   moves under a finger; a key that goes hands the keyboard focus to Zoom in.
+3. **The zoom's limit**: the 5th percentile of the active cells' thickness (1.81 m, each cell's four
+   upright edges averaged) drawn 24 px tall; about 72 times Along's compact fit at ×5. Out: the fit.
+4. **A move keeps 48 px of the section** (or all of it, where smaller) in the plot each way.
+5. **The keys and a double tap zoom two times**; the keys about the plot's middle, a double tap where it
+   lands. A wheel: `exp(−deltaY × 0.0015)`, `× 0.01` with ctrlKey (a trackpad's pinch).
+6. **A and A′ off the plot are left out** (letter and rule); the distance words say where the plot is.
+7. **A held view on a resize holds its scale and its top-left corner**, locked or zoomed unlocked. The
+   stretch slider is a manual setting: it keeps the scale across and the depth at the plot's middle (a
+   locked view still at the field's window fits the window again at the new stretch).
+8. **The locked stretch**: the stretch the pane would give the field's window when locking or Fit is
+   pressed (the 3D view's in the compact pane; `stretchFor` in a grown one), then held; the pane's
+   `vertical ×N` and the canvas's name state the one drawn.
+9. **The locked compact plot's height** is the field's window's need at the pane's width, set at lock
+   and at Fit, then held (no section, family or stretch changes it): at 390 × 844 the plot is 147 px
+   where Along's own fit is 94, so locking takes 53 px from the 3D view. By hand, so allowed; an owner
+   check.
+10. **The common distance.** Along's and Across's families: the line itself and every column or row its
+    slider goes through; each placed by where its start (its west end) falls along the line's direction,
+    from a baseline square to the line through the family's first end, keeping its own length along its
+    path (Along's family 9 394 m against the line's 8 513; Across's 4 504 against 3 686). No slice in
+    Norne's grid runs against the line (the test checks all 128); `commonFrame` would place one that did
+    with its distance reversed. A drawn line's steps are square to it, so every one starts at 0 and the
+    family is the line's own length, from A. The zero reads `West end` (`North end` on a family running
+    due north, which Norne has not); where it is out of view the unit's tick reads `… m from the west
+    end`. Unlocked, distance stays from A.
+11. **A section outside a held window is not chased** (another family, a drawn line far off): the window
+    stays and Fit shows the field. Nothing says so on the plot; Fit is shown.
+12. **The lock is remembered; the zoom is not.** A reload opens a locked pane on the field's window, an
+    unlocked one at the fit. A state saved before 2.5 has no `lock`: unlocked.
+13. **The fourth stop, the tall one**: the sheet's `max-height` is the grip and all of Cells and view; the
+    view keeps 120 px (the strip under a grown pane), 270 px with the section open (the 3D view's 120 and
+    the pane at its 150 px floor). Measured below. Where it would raise the sheet less than 44 px past the
+    second stop (375 × 667 with the section open, where the view already keeps only 235 px at the second),
+    and in the side column, there is no fourth stop (the brief's "skip it there"); a saved fourth opens as
+    the second there and as the fourth where it fits.
+14. **The grip's names**: the stock three stay; the second stop is named `Show Cells and view in full` where
+    the tall stop follows it, and keeps `Hide the extra controls` where none does. The chevron turns down
+    on the top stop of either. `check.mjs`'s pin on the `GRIP` constant still holds (the new name is
+    `GRIP_TALL`).
+15. **The preview** is the last full drawing's data layers (the gaps, the cells, the tops, the wells, the
+    tapped cell) kept in a canvas of their own and drawn moved and scaled; the depth guides, the words,
+    A, A′ and the names are drawn afresh each frame. Only for the same section, month, colors, size and
+    stretch; else a full drawing at once. Zooming out in a preview leaves blank what the last drawing did
+    not cover until the lift.
+16. **Labels in a held view**: a formation's name at the left end of its run in view, its depth from the
+    cells that span that point; a well's at the top of the part of its path in view, and a well wholly
+    out of view is neither drawn nor listed as unlabeled.
+17. **Focus mode keeps the section's keys** (they are the pane's, as its head is).
+
+### Fixed on the way
+
+- The sheet opened at its second stop (saved) sat 14 px off `Cells and view`: the rates chart's key fills
+  in after the first frame and takes a second line above it. A raised stop now scrolls again when the
+  first stop changes size (2.4 had the same 14 px at a saved second stop).
+- `setPointerCapture` on a pointer the browser no longer knows (WebKit throws for dispatched ones) is
+  caught.
+
+### Measured (headless on this Mac; never phone evidence)
+
+- Pinch and move, 390 × 844 DPR 2, the main thread's time per frame: WebKit (dispatched PointerEvents)
+  pinch median 2 to 3 ms, 95th percentile 3 to 6 ms over four runs, move 1 ms and 2 to 3 ms; Chromium
+  (CDP touch, SwiftShader) pinch 0.5 and 0.7 to 0.8 ms, move 0.5 and 0.7 ms. No full drawing while a
+  finger moved, every frame the newest view. The full drawing at rest: 5 to 7 ms in WebKit, 35 to 44 ms
+  in Chromium (`shoot.mjs` prints each run's figure). Norne's gap layer still reads back on a CPU canvas
+  (`willReadFrequently`); at rest it runs once, and it never runs in a gesture's frame.
+- The tall stop: 390 × 844, the sheet 398 px and the model 194, all of Cells and view in view; 430 × 932,
+  398 and 282, all in view; 375 × 667, 295 and 120, 91 px short (one scroll); 390 × 844 with the section,
+  the model 120, the pane 150, the sheet 322, 64 px short; 430 × 932 with the section, 132, 150 and 398,
+  all in view. The strip touchable (a touch at its foot meets the 3D view) at each.
+
+### Left for the lead
+
+- **The code budget**: 2.5 measures 290 281 B against the 256 000 B cap (`app.js` 156 100, `js/section.js`
+  42 665, `style.css` 39 100, `index.html` 21 903, `js/gesture.js` 3 849, the rest as 2.4), 34 291 B over;
+  nothing was cut, as briefed, so `check.mjs` fails that one line until the lead rules.
+- **DEVICE_TEST_MATRIX rows 188 and 189** want the phone's checks below; this build writes only under
+  `Template/norne-reservoir/`.
+
+### Phone checks (none claimed)
+
+A real two-finger pinch on the section in Snuggery's WebKit (the headless WebKit pinch was dispatched
+PointerEvents); a pan and a double tap with no page scroll or system zoom; the at-rest drawing's time
+after a pinch on an iPhone (the gap layer's read-back); VoiceOver on the four keys and the lock's
+pressed state; the tall stop on the phone with its bottom inset (the measure is on the sheet's own
+height, so the inset is in it); the keys over the narrow pane on a phone on its side.
+
+### Verified (from `Template/norne-reservoir/`, 2026-10-10; headless on this Mac, never phone evidence)
+
+- `node tools/check.mjs`: every check passes but the code budget (app code 290 281 of 256 000, above);
+  version 2.5; js/ holds the six modules; the camera's strings and the `GRIP` pin hold.
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs`: all checks pass (section 9 new).
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, both themes (log `tools/.work/d18/shoot4.log`): exit 0, 236
+  ok, 0 failed, `all checks pass`, with the 2.5 block in WebKit and Chromium; `screenshots/app.png`
+  untouched. The existing checks that stepped the grip three times to close the sheet now go to a stop
+  by name (`toStop`), and the stop-by-stop checks take the fourth.
+- Pictures looked at: the zoom and the lock at 390 × 844 (fit, zoomed twice, locked, five steps,
+  locked and zoomed, unlocked), a pinch in WebKit, the tall stop at the three sizes with and without the
+  section, the locked pane on its side with the sheet raised, dark, a grown pane zoomed, and the run's
+  `section-light`, `section-dark`, `sheet-light`, `section-focus-light` and `pane-side-light`.
+- Not run: anything on a phone.
+
+## Plan 0012 D18 to D20: the QA's and the review's findings, fixed (2.5, 2026-10-10)
+
+The QA pass and the review of 2.5's first build each failed it. Every must and should is taken here and in
+Volve 1.2 alike (one rule for both apps); the nits taken are those that came free. Version stays 2.5 (not
+shipped yet).
+
+### The musts
+
+- **A pinch out left the plot empty until the lift** (the review: zoomed four times, a pinch out showed only
+  the last drawing's rectangle; back to the fit, a postage stamp). The preview now lays two layers under the
+  last full drawing: the whole view's (the fit's drawing itself, kept as it is made; or, after a zoomed
+  drawing, the fit's or the locked field's window drawn at rest) and a wide one (the view zoomed out four
+  times about its middle, drawn at rest), so the section shows at once wherever the last drawing did not
+  reach, coarse until the lift, and the fit's few pixels are not blown up thirty times where the hand has only
+  begun to zoom out. Both are drawn 250 ms after the last full drawing, each in a task of its own (a scrub or
+  a play never meets them), without the gaps' hatch (the full drawing's alone). `secBase()`, `secRelay()`.
+  `shoot.mjs` now pinches out from four times further in and measures the data's cover of the plot's box
+  mid-gesture against the drawing at rest at the same view (it must be at least 90 % of it).
+- **The keys hid data** (2.4's Along beyond 5 700 m under the plate). The keys now stand in a strip at the
+  plot's right, outside the data's box (the review's option a), the 3D view's plates stood upright: the lock
+  over Zoom in in one plate (two 44 px keys, their hits 89 px from the plot's top); Fit and Zoom out, when shown, in a second
+  under it (plot 186 px tall or more) or beside it on its left while zoomed (89 px or more). The box ends 6 px
+  before the strip (`secStrip`, `secR`, `secFitW`), so A′, the names and the ticks are inside it; the compact
+  pane is at least 94 px tall where the strip stands (two keys and the 6 px the sweep's keys reach up over the
+  plot's foot), and the sweep's word is 94 px wide where the row has room (64 at the least, the slider keeping
+  140), so › stops left of the strip's second column and no two hits meet. With the sheet raised the pane's key row
+  gives its 2 px top margin to the plot, so the plot a raised sheet leaves at 390 × 844 is 89 px and keeps its keys. Where the plot is shorter
+  than 89 px or its box would be under 150 px wide, the keys **step aside**: out of sight
+  (`clip-path`), still in the keyboard's order and to VoiceOver, shown over the plot's top right while they
+  hold the keyboard, and `Axes locked` in the key row says the lock's state. Volve takes the same rule, so the
+  two apps no longer differ (the QA's must). `shoot.mjs` checks the keys over the box at the fit, zoomed and
+  locked (none), and at the tall stop with the section, the keys aside and still a 44 × 44 key on focus.
+- **The code caps**: not cut, measured below for the lead.
+
+### The shoulds
+
+- **D20's tall stop now shows all of Cells and view at every size.** Three changes: `Show all cells` shares
+  the toggles' row (93 + 16 + 86 + 16 + 85 px, which fits at 320 px), saving a 44 px row at every stop; the
+  tall stop scrolls Cells and view's heading up under the grip, as the second stop scrolls Explode (the brief
+  lists the rows, the toggles and Show all cells, not the heading), its height the rows' (`--cv-h`); and the
+  3D view's strip there is 104 px (its keys' row and 58 px of the model) in place of 120. Measured below.
+- **Playback inside a gesture** (the review: 9 full drawings with the gap layer's CPU read-back in a second of
+  pinch): the gap layer is never made while a gesture lasts; a drawing that cannot preview (a new month) lays
+  the last gap layer moved (`secRelay`) and draws only the cells, tops and wells. `G.stats.secGaps` counts the
+  gap layers: 0 during the probe's 60-move pinch with Play on, in both engines.
+- **DEVICE_TEST_MATRIX**: rows proposed to the lead (this pass writes only under the two apps).
+
+### Measured (headless on this Mac, 390 × 844 DPR 2; never phone evidence)
+
+- `shoot.mjs` (WebKit by dispatched PointerEvents on the plot, Chromium by CDP touch): the pinch's main-thread
+  time a frame, median and 95th percentile, WebKit 3.0 and 4.0 to 6.0 ms, Chromium 0.5 to 0.6 and 0.6 to 0.8;
+  the one-finger move WebKit 2.0 and 2.0 to 3.0, Chromium 0.5 to 0.6 and 0.7 to 0.8; the full drawing at rest
+  7 to 12 ms (WebKit), 33 to 43 (Chromium). The anchor under the fingers 0.00 px off; a double tap 0.00 to
+  0.80 px off.
+- The pinch out from four times further in: the data covers 100 % of the box mid-gesture (the underlays)
+  against 69 to 71 % at rest (the gaps' hatch is sparse), in 46 to 50 frames with the underlay.
+- Playback with a 60-move pinch (the review's probe): no gap layer made in the gesture (`secGaps` 0), 8 to 9
+  month drawings of the cells, 46 ms in all (WebKit), 301 ms (Chromium); frame p95 22 and 33 ms.
+- The tall stop: the sheet 311 px and all of Cells and view in view at all five sizes; the model 104 to 105 px
+  at 375 × 667, 281 to 282 at 390 × 844, 369 to 370 at 430 × 932; with the section, 131 to 132 and the pane 150
+  at 390 × 844, 219 to 220 and 150 at 430 × 932.
+- The keys over the data's box: none, at the fit, zoomed and locked; at 390 × 844 the strip shows with the
+  sheet closed (plot 94 px), and raised (89 px).
+
+### The nits taken
+
+- The locked zero is named by the compass, Volve's rule: `Southwest end` on Along (bearing 52°),
+  `Northwest end` on Across (142°); ` from the southwest end` where the zero is out of view.
+- The lock key's shackle is open when unlocked and shut when locked (the fill stays too).
+
+### Found on the way
+
+- The plot's spoken name said a pane's own stretch was *more than* the 3D view's even when less; it now says
+  `less than` where it is (the locked compact stretch below can be less).
+
+### The calls (the owner may reverse any)
+
+1. **The strip** costs the compact plot 42 px of width at the fit (its box 270 px at 390 × 844, 2.4's 312),
+   so Along's compact section is drawn about 13 % smaller (its plot 94 px tall, the 94 px floor); zoomed in a
+   plot under 186 px the strip takes a second column, the box then 46 px narrower still (the zoomed window shows
+   less, by hand). The sweep's slider is 192 px at 390 (2.4's about 210).
+2. **Where the keys step aside** (a plot under 89 px or a box under 150 px wide: the tall stop with the
+   section, the raised sheet on a 375 × 667 or 320 × 640 phone, the narrow pane beside the model), a pinch, a
+   double tap and a wheel still zoom, and the keyboard and VoiceOver reach the keys; a finger has no zoom-out
+   key there.
+3. **The tall stop's strip is 104 px**, under 2.3's 120 px strip under a grown pane, so 375 × 667 shows all of
+   Cells and view. The model is then 58 px tall under the 3D view's keys.
+4. **Show all cells on the toggles' row**, at every stop.
+5. **The locked compact stretch** where the pane's cap holds the plot below the field's window's need: the
+   largest round stretch under the 3D view's at which the window fills the plot's width (`fillStretch`,
+   js/section.js, tested), stated as the pane's own; else (Norne's compact pane, sheet closed, at 390 × 844) the
+   3D view's, as before. Measured: ×5 kept at 390 × 844 with the sheet closed; ×2.5 with the sheet at its second
+   stop (a 59 px box); ×4 at 375 × 667 (a 79 px box); the window fills the box's width in each. The alternative is the 3D view's stretch with the window narrower than
+   the plot (Volve's first build: half its width).
+6. **The preview's layers** are drawn without the gaps' hatch; a gap shows hatched only at rest.
+
+### Strings changed (shipped)
+
+- New: `Axes locked` (the key row, only where the keys have stepped aside and the axes are locked).
+- Changed: the locked zero `West end` becomes `Southwest end` or `Northwest end` (and ` from the southwest
+  end`); About's `The keys over the section zoom in and out and fit it again.` becomes `The keys beside the
+  section zoom in and out and fit it again; where the section is too short for them, the keyboard still
+  reaches them.`; the plot's spoken stretch `more than the 3D view’s` becomes `less than` where it is less.
+- Unchanged: the camera's strings (`Norne Reservoir`, `Play production history`, `Pressure`, the 3D view's
+  keys), the four keys' names, the grip's four names.
+
+### Budgets
+
+- App code **299 880 B** against the 256 000 B cap (the first 2.5 build 290 281; 2.4 255 990): `app.js` 163 265,
+  `js/section.js` 43 228, `style.css` 40 733, `index.html` 22 141, the rest as 2.4 and `js/gesture.js` 3 849. These
+  fixes add 9 599 B. Nothing was cut; `check.mjs` fails that one line until the lead rules. The ZIP 15 415 172 B
+  of its 19 110 591.
+
+### Phone checks (none claimed)
+
+All of 2.5's earlier list, and: a pinch out from deep in on a phone (the coarse layers under it, and how soon the
+sharp drawing follows the lift); the keys in their strip at the 390 px raised stop (an 89 px plot); the keys
+stepped aside reached by VoiceOver and by a keyboard; the tall stop's 104 px strip on a 375 × 667 phone with its
+bottom inset.

@@ -25,11 +25,18 @@
 //     a drawn line's steps are square to it, one slice wide; the wells near a slice's path lie within
 //     the corridor of it; and the own stretch: never under the 3D view's, a round figure, the section
 //     inside its box at it, and the 3D view's where the box has no more room.
+//  9. the zoom and the axes' lock (1.2, plan 0012 D18, D19): slicePaths the paths sliceSection draws; the common
+//     distance of the inlines and the crosslines (from the survey's edge), of Along's and Across's families (each
+//     start where it lies, a slice that runs against the line laid the other way) and of a drawn line's steps;
+//     the field's window and the seismic's margin inside the cube; a view's zoom, move, limits, kept section and
+//     stretch; the ticks of a zoomed and a locked axis within the plot and the data; five locked sweep steps on
+//     one scale, the data moving; the zoom's limit from the cells' thickness.
 
 import fs from 'node:fs';
+import * as U from '../js/units.js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cutGrid, wellsNear, fieldLines, sectionAxis, depthTicks, distanceTicks, lineOf, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag, STRETCHES } from '../js/section.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, depthTicks, distanceTicks, lineOf, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag, STRETCHES, slicePaths, commonFrame, fieldDepths, readableScale, fitWindow, viewOfAxis, viewAxis, zoomAt, panBy, keepIn, restretch, fillStretch } from '../js/section.js';
 import { grid, xyOf, uvOf, surveyLine, surveyNumbers, nearestNumber, horizonAt } from '../js/seismic.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -275,8 +282,153 @@ ok(dup === 0 && outS === 0 && outZ === 0 && convexBad === 0 && flat === 0 && pol
   }
 }
 
+// 9. the zoom and the axes' lock (1.2, plan 0012 D18, D19): the window, the common distance and the ticks
+{
+  const datum = model.center[2], box = { x: 60, y: 15, w: 306, h: 110 }, cols = columns(geom, NA, ijk, model.NI, model.NJ);
+  const meta = JSON.parse(fs.readFileSync(path.join(APP, 'data/seismic.json'), 'utf8')), g = grid(meta, model.center);
+  // slicePaths: the very paths sliceSection draws, for every slice of both families, in one pass
+  {
+    let bad = 0, n = 0;
+    for (const axis of ['I', 'J']) for (const [k, m] of slicePaths(geom, NA, ijk, axis)) {
+      const ln = sliceSection(geom, NA, ijk, axis, k, null).line, P = ln.path;
+      n++;
+      if (Math.hypot(m.p0[0] - P[0][0], m.p0[1] - P[0][1]) > 1e-9 || Math.hypot(m.p1[0] - P[P.length - 1][0], m.p1[1] - P[P.length - 1][1]) > 1e-9 || Math.abs(m.L - ln.L) > 1e-9) bad++;
+    }
+    ok(bad === 0 && n === slices(cols, 'I').length + slices(cols, 'J').length, `slicePaths: ${n} slices' paths, ends and lengths those sliceSection draws (${bad} not)`);
+  }
+  // the common distance of the survey's own lines: straight and parallel, each at its own distance along them
+  // from one baseline square to them, which on the survey's grid is its edge, where every one starts
+  const survey = (kind) => surveyNumbers(g, kind).map((n) => { const l = surveyLine(g, kind, n); return { key: n, p0: l.a, p1: l.b, L: Math.hypot(l.b[0] - l.a[0], l.b[1] - l.a[1]) }; });
+  const fams = {};
+  for (const kind of ['inline', 'crossline']) {
+    const members = survey(kind), mid = surveyLine(g, kind, nearestNumber(g, kind, 0, 0)), ln = lineOf(mid.a, mid.b), f = commonFrame(members, [ln.ux, ln.uy]);
+    let bad = 0, worst = 0;
+    for (const m of members) {
+      const p = f.at.get(m.key);
+      // every point of the line at distance s along it lies at off + s along the family's direction from the baseline
+      for (const t of [0, 0.5, 1]) { const q = [m.p0[0] + (m.p1[0] - m.p0[0]) * t, m.p0[1] + (m.p1[1] - m.p0[1]) * t], base = Math.min(...members.map((o) => o.p0[0] * ln.ux + o.p0[1] * ln.uy)); const e = Math.abs(p.off + p.sgn * m.L * t - (q[0] * ln.ux + q[1] * ln.uy - base)); worst = Math.max(worst, e); if (e > 1e-6) bad++; }
+      if (p.sgn !== 1) bad++;
+    }
+    const offs = [...f.at.values()].map((p) => p.off);
+    fams[kind] = { f, members, ln };
+    ok(bad === 0 && Math.abs(f.L - members[0].L) < 0.05, `the common distance, the ${kind}s: all ${members.length} on one distance from the survey's edge, each point at its own distance along them (worst ${worst.toExponential(1)} m), every start within ${Math.max(...offs).toFixed(3)} m of the edge (the grid is square), the family ${f.L.toFixed(2)} m, the line's own ${members[0].L.toFixed(2)}`);
+  }
+  // the field's own lines' families (the line and every row or column its sweep goes through); a slice whose path
+  // runs against the line is laid with its distance the other way, its start where it lies
+  for (const name of ['along', 'across']) {
+    const l = lines[name], axis = sweepAxis(cols, l.a, l.b), ln = lineOf(l.a, l.b), members = [{ key: null, p0: l.a, p1: l.b, L: ln.L }];
+    for (const [k, m] of slicePaths(geom, NA, ijk, axis)) members.push({ key: k, ...m });
+    const f = commonFrame(members, [ln.ux, ln.uy]);
+    let bad = 0, lo = Infinity, hi = -Infinity, base = Infinity, against = 0;
+    for (const m of members) base = Math.min(base, m.p0[0] * ln.ux + m.p0[1] * ln.uy, m.p1[0] * ln.ux + m.p1[1] * ln.uy);
+    for (const m of members) {
+      const p = f.at.get(m.key), a = p.off, b = p.off + p.sgn * m.L, way = (m.p1[0] - m.p0[0]) * ln.ux + (m.p1[1] - m.p0[1]) * ln.uy;
+      lo = Math.min(lo, a, b); hi = Math.max(hi, a, b);
+      // the end nearer the baseline at its own distance along the line (the start running with it, the end against it)
+      const near = p.sgn > 0 ? [a, m.p0] : [b, m.p1];
+      if (Math.abs(near[0] - (near[1][0] * ln.ux + near[1][1] * ln.uy - base)) > 1e-6 || p.sgn !== (way < 0 ? -1 : 1)) bad++;
+      if (p.sgn < 0) against++;
+    }
+    const p = f.at.get(null);
+    for (let i = 0; i <= 10; i++) { const s = ln.L * i / 10, q = [l.a[0] + ln.ux * s, l.a[1] + ln.uy * s]; if (Math.abs(p.off + s - (q[0] * ln.ux + q[1] * ln.uy - base)) > 1e-6) bad++; }
+    fams[name] = { f, members, ln, axis };
+    ok(bad === 0 && Math.abs(lo) < 1e-9 && Math.abs(hi - f.L) < 1e-9 && f.L >= ln.L,
+      `the common distance, ${name[0].toUpperCase()}${name.slice(1)}'s family: ${members.length - 1} ${axis === 'I' ? 'columns' : 'rows'} and the line, each one's end nearer the baseline square to the line at its own distance along it, the line's points exactly, every member inside 0 to ${Math.round(f.L)} m (the line ${Math.round(ln.L)} m); ${against} laid against the line, each the way its own path runs (${bad} not)`);
+  }
+  {
+    const a = [-2000, -900], b = [1800, 1300], h = shifts(cols, a, b), ln = lineOf(a, b), members = [];
+    for (let j = h.lo; j <= h.hi; j++) { const d = j * h.step, A = [a[0] + h.nx * d, a[1] + h.ny * d], Bp = [b[0] + h.nx * d, b[1] + h.ny * d]; members.push({ key: j, p0: A, p1: Bp, L: Math.hypot(Bp[0] - A[0], Bp[1] - A[1]) }); }
+    const f = commonFrame(members, [ln.ux, ln.uy]);
+    ok(Math.abs(f.L - ln.L) < 1e-6 && members.every((m) => Math.abs(f.at.get(m.key).off) < 1e-6), `the common distance, a drawn line's ${members.length} steps: each at 0, the family's length its own ${Math.round(ln.L)} m (${Math.round(f.L)})`);
+  }
+  // the field's window: every active cell's depths, padded as a section's, and unpadded for the seismic's margin
+  const win = fieldDepths(geom, NA);
+  {
+    let z0 = Infinity, z1 = -Infinity;
+    for (let i = 0; i < NA * 8; i++) { z0 = Math.min(z0, geom[i * 3 + 2]); z1 = Math.max(z1, geom[i * 3 + 2]); }
+    const pad = Math.max(10, (z1 - z0) * 0.04), L = fams.inline.f.L, v = fitWindow(L, win.z0 - 150, win.z1 + 150, box, 3), ax = viewAxis({ line: { L } }, box, v, datum);
+    const cubeTop = g.z0 - datum, cubeBot = g.z0 + (g.nz - 1) * g.dz - datum;
+    ok(win.z0 === z0 && win.z1 === z1 && Math.abs(win.top - (z0 - pad)) < 1e-9 && Math.abs(win.bot - (z1 + pad)) < 1e-9 && z0 - 150 > cubeTop && z1 + 150 < cubeBot && Math.abs(ax.Y(win.z0 - 150) - box.y) < 1e-9 && ax.Y(win.z1 + 150) <= box.y + box.h + 1e-9 && ax.dX(L) <= box.x + box.w + 1e-9 && Math.abs((ax.dX(0) - box.x) - (box.x + box.w - ax.dX(L))) < 1e-9,
+      `the field's window: ${U.int(z0 + datum)} to ${U.int(z1 + datum)} m below sea level, and the locked window 150 m beyond each, ${U.int(z0 - 150 + datum)} to ${U.int(z1 + 150 + datum)} m, inside the seismic's ${U.int(g.z0)} to ${U.int(g.z0 + (g.nz - 1) * g.dz)} m; fitted to ${box.w} × ${box.h} at ×3 with the inlines' ${Math.round(L)} m, the whole of it inside, centered across`);
+  }
+  // a view: X and S invert, a zoom keeps the meters under the fingers, a move moves by the finger, the
+  // section kept in view, the stretch slider keeps the scale and the middle
+  {
+    const l = surveyLine(g, 'inline', nearestNumber(g, 'inline', 0, 0)), sec = cutGrid(geom, NA, ijk, l.a, l.b, tops), fit = sectionAxis(sec, box, 3, datum), v0 = viewOfAxis(fit, box), a0 = viewAxis(sec, box, v0, datum);
+    let bad = 0;
+    for (const s of [0, 1000, sec.line.L]) if (Math.abs(a0.X(s) - fit.X(s)) > 1e-9) bad++;
+    for (const z of [sec.z0, sec.z1]) if (Math.abs(a0.Y(z) - fit.Y(z)) > 1e-9) bad++;
+    const lo = fit.sx, hi = readableScale(geom, NA).sz / 3, x = 150, y = 40, before = [a0.S(x), a0.Z(y)];
+    const v1 = zoomAt(v0, 3.7, x, y, box, lo, hi), a1 = viewAxis(sec, box, v1, datum);
+    const anchor = Math.hypot(a1.X(before[0]) - x, a1.Y(before[1]) - y);
+    const v2 = panBy(v1, 25, -12), a2 = viewAxis(sec, box, v2, datum), moved = [a2.X(before[0]) - a1.X(before[0]), a2.Y(before[1]) - a1.Y(before[1])];
+    const v3 = zoomAt(v1, 1e6, x, y, box, lo, hi), v4 = zoomAt(v1, 1e-6, x, y, box, lo, hi);
+    const far = keepIn({ ...v1, sL: 1e6 }, box, { s0: 0, s1: sec.line.L, z0: sec.z0, z1: sec.z1 }), af = viewAxis(sec, box, far, datum);
+    const kept = Math.min(af.x1, box.x + box.w) - Math.max(af.x0, box.x);
+    const v5 = restretch(v1, 10, box), a5 = viewAxis(sec, box, v5, datum), zm = a1.Z(box.y + box.h / 2);
+    // a section laid against its family (sgn -1): its distance runs right to left, and S still inverts X
+    const ar = viewAxis(sec, box, v1, datum, { off: 5000, sgn: -1 }), inv = Math.abs(ar.S(ar.X(1234)) - 1234) + Math.abs(ar.X(0) - ar.dX(5000)) + Math.abs(ar.X(100) - ar.dX(4900));
+    ok(bad === 0 && anchor < 1e-6 && Math.abs(moved[0] - 25) < 1e-6 && Math.abs(moved[1] + 12) < 1e-6 && Math.abs(v3.sx - hi) < 1e-12 && Math.abs(v4.sx - lo) < 1e-12 && kept >= 48 - 1e-6 && Math.abs(a1.sz / a1.sx - 3) < 1e-9 && v5.sx === v1.sx && Math.abs(a5.Y(zm) - (box.y + box.h / 2)) < 1e-6 && inv < 1e-6 && ar.xb < ar.xa,
+      `a view, on inline ${l.n}: the fit as a view draws as the fit (${bad} not); zoomed ×3.7 the meters under (${x}, ${y}) stay there (${anchor.toExponential(1)} px off), a move moves them by the finger, the scale held within the fit and the limit, ${Math.round(kept)} px of the section kept in view when moved far off, the stretch ×3 through the zoom; the slider's ×10 keeps the scale and the depth at the middle; laid against its family, A′ left of A and S the inverse of X`);
+  }
+  // the ticks of a zoomed axis and of a locked one, against the data
+  {
+    const l = surveyLine(g, 'inline', nearestNumber(g, 'inline', 0, 0)), sec = cutGrid(geom, NA, ijk, l.a, l.b, tops), fit = sectionAxis(sec, box, 3, datum), lim = { d0: 0, d1: sec.line.L, z0: fit.zTop, z1: fit.zBot };
+    const res = [];
+    let bad = 0;
+    for (const k of [1.5, 4, 12, 40]) {
+      const v = zoomAt(viewOfAxis(fit, box), k, 200, 40, box, fit.sx, 1e9), ax = viewAxis(sec, box, v, datum, undefined, lim);
+      const xt = distanceTicks(ax, 'SI', 3), dt = depthTicks(ax, 'SI', 2), s0 = ax.S(box.x), s1 = ax.S(box.x + box.w);
+      const steps = new Set(xt.slice(1).map((t, i) => Math.round((t.v - xt[i].v) * 1e6) / 1e6));
+      if (!xt.length || xt.some((t) => t.v < Math.max(0, s0) - 1e-6 || t.v > Math.min(sec.line.L, s1) + 1e-6 || t.x < box.x - 1e-6 || t.x > box.x + box.w + 1e-6) || steps.size > 1) bad++;
+      if (!dt.length || dt.some((t) => t.y < box.y - 1e-6 || t.y > box.y + box.h + 1e-6 || t.v < fit.zTop + datum - 1e-6 || t.v > fit.zBot + datum + 1e-6)) bad++;
+      if (!/\u202fm$/.test(xt[xt.length - 1].text)) bad++;   // the unit after a narrow no-break space (SI)
+      res.push(`×${k}: ${xt.map((t) => t.text).join(' | ')}; ${dt.map((t) => t.text).join(' | ')}`);
+    }
+    // locked: the inlines on their common distance, the window on the field and the seismic's margin
+    const { f } = fams.inline, wz = { top: win.z0 - 150, bot: win.z1 + 150 }, home = fitWindow(f.L, wz.top, wz.bot, box, 3), place = f.at.get(l.n);
+    const lax = viewAxis(sec, box, home, datum, place, { d0: 0, d1: f.L, z0: wz.top, z1: wz.bot }), lt = distanceTicks(lax, 'SI', 3), ld = depthTicks(lax, 'SI', 2);
+    if (lt[0].v !== 0 || lt.some((t) => t.v > f.L + 1e-6) || lt[lt.length - 1].v - lt[0].v < f.L * 0.7 || ld.some((t) => t.v < wz.top + datum - 1e-6 || t.v > wz.bot + datum + 1e-6) || Math.abs(lax.xa - lax.dX(place.off)) > 1e-9) bad++;
+    res.push(`locked on the field: ${lt.map((t) => t.text).join(' | ')}; ${ld.map((t) => t.text).join(' | ')}`);
+    // five steps of each sweep, locked: one scale and one set of ticks; each section where it lies
+    const sweeps = [];
+    for (const name of ['inline', 'across']) {
+      const fam = fams[name], xs = [];
+      const keys = name === 'inline' ? surveyNumbers(g, 'inline').slice(70, 75) : slices(cols, fam.axis).slice(40, 45).map((s) => s.k);
+      for (const k of keys) {
+        const sl = name === 'inline' ? (() => { const q = surveyLine(g, 'inline', k); return cutGrid(geom, NA, ijk, q.a, q.b, tops); })() : sliceSection(geom, NA, ijk, fam.axis, k, tops);
+        const hm = fitWindow(fam.f.L, wz.top, wz.bot, box, 3), ax = viewAxis(sl, box, hm, datum, fam.f.at.get(k), { d0: 0, d1: fam.f.L, z0: wz.top, z1: wz.bot });
+        xs.push([ax.sx, ax.sz, ax.xa, ax.xb, distanceTicks(ax, 'SI', 3).map((t) => t.text).join(' '), depthTicks(ax, 'SI', 2).map((t) => t.text).join(' '), sl.cells.slice(0, 3).join(' ')]);
+      }
+      const one = xs.every((q) => q[0] === xs[0][0] && q[1] === xs[0][1] && q[4] === xs[0][4] && q[5] === xs[0][5]), data = new Set(xs.map((q) => q[6])).size, ends = new Set(xs.map((q) => `${q[2].toFixed(2)} ${q[3].toFixed(2)}`)).size;
+      if (!one || data !== 5 || (name === 'across' && ends !== 5)) bad++;
+      sweeps.push(`${name}: one scale and ticks (${xs[0][4]}; ${xs[0][5]}), ${data} different cuts, A at ${xs.map((q) => q[2].toFixed(1)).join(', ')} px`);
+    }
+    ok(bad === 0, `the ticks: zoomed, each within the plot and within the data (the inline's 0 to ${Math.round(sec.line.L)} m, the window's depths), one round step, chosen afresh, the unit on the last: ${res.join('; ')}; five sweep steps locked: ${sweeps.join('; ')}`);
+  }
+  // how far in: the thin cells read plainly
+  {
+    const r = readableScale(geom, NA), t = [];
+    for (let c = 0; c < NA; c++) { let h = 0; for (let k = 0; k < 4; k++) h += geom[c * 24 + (k + 4) * 3 + 2] - geom[c * 24 + k * 3 + 2]; t.push(h / 4); }
+    t.sort((a, b) => a - b);
+    const p05 = t[Math.floor(0.05 * (NA - 1))], l = surveyLine(g, 'inline', nearestNumber(g, 'inline', 0, 0)), fit = sectionAxis(cutGrid(geom, NA, ijk, l.a, l.b, tops), box, 3, datum);
+    ok(Math.abs(r.t - p05) < 1e-4 && Math.abs(r.t * r.sz - 24) < 1e-9, `the zoom's limit: the 5th percentile of the active cells' thickness, ${r.t.toFixed(2)} m, drawn 24 px tall (${r.sz.toFixed(2)} px a meter down; at ×3 the inline's fit at ${box.w} px zooms in ${Math.round(r.sz / 3 / fit.sx)} times)`);
+  }
+}
+
 // 7. the cost
 ok(true, `a cut takes ${(msSum / tests.length).toFixed(1)} ms on average over ${tests.length} lines (Node on this Mac: a trend, never phone evidence)`);
+
+// the locked window's stretch in a capped compact pane (D19, the review of 2.5): the 3D view's where the window fills
+// the plot's width at it; else the largest round stretch under it that does, so the axes cover the plot across
+{
+  const box = { x: 0, y: 0, w: 256, h: 123 }, cases = [[4675, 1052, 3], [8513, 651, 5], [4675, 1052, 1], [1000, 5000, 5]];
+  const got = cases.map(([L, span, ex]) => fillStretch(L, span, box, ex));
+  const fills = cases.map(([L, span], i) => { const e = got[i], sx = Math.min(box.w / L, box.h / (span * e)); return Math.abs(sx * L - box.w) < 1e-9; });
+  const roundUnder = cases.every(([L, span, ex], i) => got[i] <= ex && STRETCHES.includes(got[i]) && (got[i] === ex || !STRETCHES.some((s) => s > got[i] && s < ex && (box.h / span) / (box.w / L) >= s)));
+  ok(got.join() === '2,5,1,1' && fills.slice(0, 3).every(Boolean) && roundUnder,
+    `the locked stretch where the pane's cap holds the plot (fillStretch, a 256 × 123 px box): a 4 675 m family 1 052 m deep at ×3 takes ×${got[0]}, filling the width; 8 513 m and 651 m at ×5 keeps ×${got[1]}; at ×1 stays ×${got[2]}; a window too deep to fill it even at ×1 takes ×${got[3]}, the least; each a round stretch, the largest under the 3D view's that fills`);
+}
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }
 console.log('\nall checks pass');

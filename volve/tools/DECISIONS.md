@@ -810,3 +810,267 @@ one sentence above; the plot's spoken label is the same words, now read for the 
   and after it (×8, laid on, then drawn in full).
 - The exactness checks (scratch, deleted): `fitCam()` new against old on 252 cases in both engines, 0
   differ; `cutGrid()` new against old on 200 lines, 0 differ.
+
+## Plan 0012 D18, D19 and D20 in Volve 1.2: zoom in the section, the axes' lock, a fourth stop (2026-10-10)
+
+The owner, reviewing TestFlight 48 (plan 0012 records the words): zoom in the sections of the reservoir
+apps; axes that can be locked on the whole view, *"just show data where it is, but keep axis extended"*,
+held, *"Just not have it automatically adjusting the limits/grid"*, and still moved by hand; and *"one
+more layer"* on the sheet for Cells and view. Built in Norne Reservoir 2.5 first (its `tools/DECISIONS.md`
+has the full record and the 17 calls); taken into Volve here, ported change by change onto Volve's own code
+(1.0 was built from Norne 2.3 and has since grown the seismic, the four families, quarterly dates and 1.1's
+progressive drawing), never by copying Norne's files. Version 1.1 to 1.2. Everything below is what differs
+for Volve, or what Volve's data gives.
+
+### What was ported, and where
+
+- `js/section.js`: Norne 2.5's `slicePath` (shared by `sliceSection` and `slicePaths`), `stretchFor`
+  (`ownExag` now calls it, keeping Volve's `win`), `viewOfAxis`, `fitWindow`, `viewAxis`, `zoomAt`,
+  `panBy`, `keepIn`, `restretch`, `readableScale`, `fieldDepths` (which also returns the unpadded `z0`,
+  `z1`) and `commonFrame` (changed for Volve, call 4); `depthTicks` and `distanceTicks` take a held axis
+  (Volve's depth figures still stand alone, the unit in the axis's title).
+- `js/gesture.js`: Norne 2.5's module, unchanged but for its first line (check.mjs now pins seven modules).
+- `app.js`: `secFamily()`, `secLockWin()`, `secAxis()`, `secHome()`, `secAny()`, `secZoom()`, `secFit()`,
+  `secViewKey()`, `secKeysBox()`, `writeSecKeys()`; `secCut()` drops an unlocked zoom when the section
+  changes; `fitSection()` holds the locked plot's height; `moving()` counts a pinch, a move or a wheel;
+  `secFrame()` lays out A, A′ and their numbers where they lie, off the keys; `drawSection()` draws on the
+  held axis, clips the data to the plot, and gives the seismic its clip; `seisJob(…, clip)`,
+  `seisPreview(…, wz)`, `relay()` (distance 0 at `xa`, and a section laid against its family),
+  `horizonRuns(ax, which, x0, x1)`; the sheet's `measureTall()`, `shownStop()`, `applyStop(hand)`,
+  `setStop()` and `initSheet()`; `restore()` reads `lock` and a fourth stop; About's two paragraphs.
+- `index.html`: the four keys over the plot (Norne's markup), `id="cv-head"` on Cells and view's heading,
+  and About's how-to paragraph. `style.css`: Norne's `.sec-keys`, `body.tall` and `.sheet.s3` rules (the
+  last from `--cv-h`, Cells and view's own height), the chevron by `.top`.
+
+### The calls (the owner may reverse any; Norne's 17 hold unless named here)
+
+1. **The locked window's depths**: every active cell's corners, 2 797 to 3 549 m below sea level, with
+   `SEC_MARGIN`'s 150 m of seismic above and below inside the cube (2 647 to 3 699 m; the cube is 2 295 to
+   4 050 m), **whatever the section shows**. Norne pads 4 %; Volve's seismic window is the 150 m. Held
+   fixed so that switching Seismic, Model and Both (a display, like a property) never moves a locked
+   window; with the model alone the locked window shows 150 m of empty ground above and below.
+2. **The survey's families' common distance**: every inline (or crossline) of the cube is straight, parallel
+   and starts at the survey's edge, so each is placed at its own distance along them from a baseline square
+   to them there (`commonFrame`, test 9: every point within 2e-12 m of its true distance; every start within
+   3 mm of the edge, the grid being square). The family is the line's own length: inlines 4 675 m,
+   crosslines 3 575 m. So on Inline and Crossline the lock holds the depth and the scale and the data moves
+   in depth and content, not sideways.
+3. **The zero's name, by the compass**: Norne's `West end` or `North end` generalized to the eight words of
+   the direction from the family's middle to its first end: `West end` (inlines, bearing 104°; Along, 74°),
+   `South end` (crosslines, 14°), `North end` (Across, 164°). A drawn line's distance runs from A.
+4. **A slice whose path runs against its family** (25 of Across's 87 columns: their paths, laid west to
+   east by `sliceSection`, run north to south against Across's south-southeast): laid with its distance the
+   other way (A′ to the left of A), and placed by **its end nearer the family's first end**, so the zero
+   names a real end of the field and nothing falls short of it. Norne's `commonFrame` placed every member by
+   its start, which for such a slice put the zero at a point no section reaches; Norne has no such slice
+   (all 128 run with their lines), so Volve's rule gives Norne's results exactly there. Families: Along's
+   4 600 m (the line 4 340), Across's 3 244 m (the line 2 931).
+5. **The seismic while a finger moves**: 1.1's rule, with the gesture counted as moving: the last full
+   image, cells, gaps and outline laid on the newest view by distance and depth; where the last image does
+   not cover what the plot now shows (a zoom out, a move), the line's own samples (a column every 25 m, a
+   row every 5 m over the window's depths, kept per line, display and window) go under it, so nothing is
+   left blank of the seismic. The cells, gaps and outline are left blank there until rest (Norne's rule).
+6. **The seismic at rest**: rendered as 1.1 renders it (a few columns a frame, the screen's own pixels,
+   the sinc in depth, bilinear across), for exactly the part of the plot the line and the window cover
+   (`clip`), so a zoom costs no more than the fit: 596 × 246 device px at 7× on the inline, as at the fit.
+   Its key adds the clip, so a move draws afresh at rest.
+7. **The ends' numbers** (`IL n, XL n`): zoomed or locked, beside a letter only where its end lies on the
+   plot; the key to the plot's right (the fit's last resort, which narrows the plot) is not used in a held
+   view, which keeps its box, so where no place by the letter is free the numbers are left out. A′ under
+   the keys moves below them (Norne's rule), its numbers with it, haloed in the plot.
+8. **The zoom's limit**: Norne's rule on Volve's cells: the 5th percentile of the active cells' thickness,
+   0.42 m (Volve's layers are thin; the median is 1.10 m), drawn 24 px tall, 57.2 px a meter down: about
+   350 times the inline's compact fit on a 390 px screen. There a trace spacing is about 477 px, so the
+   seismic shows only the blend between two traces, which is all the survey holds: an owner check whether
+   the limit should stop sooner for the seismic's sake.
+9. **The keys show for a line with seismic but no cut cell** (an inline past the field): zooming there zooms
+   the seismic. They hide only where the line misses both.
+10. **The tall stop's height** is the grip and Cells and view from its heading to `Show all cells`
+    (`--cv-h`); in Volve the second stop's sheet also holds the section's display (`Section`) above Cells
+    and view, so the tall stop scrolls to Cells and view's heading and the display scrolls away under the
+    grip, as Explode does at the second stop. The second stop still opens on `Section`.
+11. **The keys stand over the plot only where it has room for them**: a plot canvas 240 px wide and 80 px
+    tall or more. Not on the 52 px plot a raised sheet leaves at 320 × 640 or 375 × 667, nor on the 207 × 95 px
+    pane beside the model on its side with the sheet raised: there the plate (98 × 38 px at the fit) covered
+    most of the plot and pushed 1.1's end numbers and distance words off it (`shoot.mjs`'s 52-state check of
+    the words, which 1.1 passes, failed in 21 states). There a pinch, a double tap and a wheel still zoom, the
+    lock stays as it was, and growing the pane (its edge, a slider to the keyboard and VoiceOver) brings the
+    keys back; a key that had the keyboard hands it to the edge. **Norne 2.5 shows its keys in all of these
+    states**, so the two apps differ here: the lead may want Norne to take the same rule.
+12. **Chromium for the new shoot block runs on the Mac's GPU** (Metal), as 1.1's speed block does, so the
+    frame times compare with 1.1's; the rest of `shoot.mjs` stays on SwiftShader.
+
+### Found and fixed on the way
+
+- The first full `shoot.mjs` run failed the 52-state words check (end numbers and distance words under the
+  keys at 320 px raised and on its side raised): call 11.
+
+- Volve's `check.mjs` 8b pinned the depth axis's call as `sectionAxis(sec, box, ex, model.center[2], win)`;
+  the call is now `secAxis()`'s `sectionAxis(sec, box, fitEx, model.center[2], win)` and, held,
+  `viewAxis(sec, box, v, model.center[2], place, lim)`, both pinned: the datum is still the one constant.
+- In `shoot.mjs`'s new block, WebKit's touch lands on whole CSS pixels, and Volve's cells at 7× are 2 to 4 px
+  thick with gaps between some, so a tap aimed at a cell's exact middle could land in a gap: the zoomed tap
+  picks a cell at whole-pixel coordinates (the app was right; the check was not).
+- The zero-at-code-128 check found 3 of 20 627 sampled pixels off the ramp's zero: A′'s numbers, moved under the
+  keys into the plot, had a box that left out a comma's tail and its halo. A number's box inside the plot now
+  runs 4 px lower.
+- Zoomed in four times, the horizons' neutral dashes run within a few px of the flat reflector's row, and the
+  darkest-row reading took them for it (3 px off): that state skips the columns where a horizon crosses within
+  10 px of the row (the others read as 1.1 reads them); the reflector itself sits within 0.00 device px.
+
+### Shoot checks
+
+- Every place that stepped the grip a fixed number of times (closing by a third tap) now goes to a stop by
+  name (`toStop()`, as Norne 2.5's); the B1 loop and the view at each stop take the fourth stop; SI and the
+  hit targets are checked at the last (the tall) stop.
+- The flat reflector at 3 000 m: also on an inline zoomed in four times and on the inlines locked, on the
+  axis's own row.
+- A new block, Norne 2.5's with Volve's seismic: see the run's lines.
+
+### Measured (headless on this Mac, 390 × 844 DPR 2; a trend, never phone evidence)
+
+- **Pinch on the inline** (31 moves, 16 ms apart, fingers 40 to 280 px apart), the main thread's time a frame:
+  WebKit (PointerEvents dispatched on the plot) median 1.0 to 2.0 ms, 95th percentile 2.0 to 4.0, longest task
+  2.0 to 4.0; Chromium on the GPU (CDP touch) 2.2 to 2.6, 2.9 to 4.2, longest 4.6 to 5.8 (several runs). Against 1.1's edge drag, 18 ms at
+  the 95th percentile in WebKit and 10.5 in Chromium. Zoom 7.00 times, the point under the fingers 0.00 px off;
+  26 to 30 frames previewed, no full drawing and no seismic render or slice while the fingers moved, no
+  frame drawing an older view than the newest.
+- **One finger, zoomed in**: WebKit 1.0 to 2.0 ms median, 1.0 to 3.0 at the 95th; Chromium 0.9 and 1.3.
+- **At rest after a pinch**: the cells, gaps and outline drawn in full in 5.5 to 14.5 ms (WebKit) and 26 to 41
+  ms (Chromium, its paths); the seismic in its slices 3.0 to 7.0 ms (WebKit) and 2.4 to 2.5 (Chromium), an
+  image of 596 × 246 device px, the part of the line in view.
+- **1.1's speed block with the keys and the lock in**: WebKit worst 21.0 ms at the 95th percentile; Chromium
+  first 32 to 36 ms with its longest task 41 to 47 and a move on screen in 45 to 80 ms (one run touched the 80 ms
+  budget), with the keys rewritten every frame; `writeSecKeys()` now writes only when they change, and three runs
+  of the block then gave 27.0 to 31.1 ms, longest 38 to 40, moves on screen in 49 to 64 ms (1.1 measured 30,
+  39). Keeping the keys' box from the layout as well (`secKeysBox()` read once per size) let WebKit's pane edge
+  fall 9.4 px behind the finger in two of three runs (its layout read each frame is what keeps the edge with the
+  finger, as 1.1's own reads did), so the box is still read every frame: the edge within 0.8 px in three of three. No full render while moving; every
+  interaction's end state pixel for pixel a fresh page's.
+- **The tall stop**: 390 × 844, the sheet 399 px and the model 193 to 194, all of Cells and view in view;
+  375 × 667, 295 to 296 and 120, 91 px short (one scroll); 430 × 932, 399 and 281 to 282, all in view; with
+  the section open, 390 × 844: the model 120, the pane 150, the sheet 322 to 323 (64 px short); 430 × 932:
+  131 to 132, 150 and 399, all in view. The strip touchable at each. At the tall stop with the section open
+  the plot is 52 px tall, so the zoom keys step aside there (call 11).
+- **Sizes** (`node tools/check.mjs`): app code 360 728 B against the 322 500 B cap, **38 228 B over** (1.1:
+  321 958; +38 770): `app.js` 206 001 (+22 386), `js/section.js` 45 904 (+9 130), `style.css` 40 291 (+1 652),
+  `index.html` 23 299 (+1 711), `js/gesture.js` 3 891 (new), the rest unchanged. Nothing was cut;
+  `check.mjs` fails that one line until the lead rules. The ZIP is about 33 417 700 B (its last bytes move with these notes), within its 33 600 000.
+
+### Strings (shipped)
+
+New: `Fit the section`, `Fit the field’s depth and length`, `Zoom the section out`, `Zoom the section in`,
+`Lock the axes` (with `aria-pressed`), the grip's `Show Cells and view in full`; the locked zero `West end`,
+`South end` or `North end` and a unit tick's ` from the west end` (the end's name); the live region's `The
+field’s whole depth and length.`, `The whole section.`, `Axes locked: the field’s whole depth and length,
+held while the section changes.` and `Axes unlocked: each section fits the pane.`; About's section paragraph
+(new sentences on the zoom, its limit and the lock's window and common distance), its display paragraph
+(`dragged, resized, scrubbed or zoomed by hand`), and a how-to paragraph. `miniapp.json` 1.2. Unchanged: every
+string the marketing camera reads (`Oil saturation`, `Show the whole field`, `Play production history`,
+`Pause`, `Pressure`, `Oil`, `Show the controls`) and the grip's three stock names.
+
+### Left for the lead
+
+- The code cap (above).
+- Norne 2.5 differs from Volve 1.2 in two places the lead may want to bring into line: Volve hides the zoom
+  keys where the plot has no room (call 11; Norne shows them over a 52 px plot), and Volve's `commonFrame`
+  places a slice that runs against its family by its nearer end (call 4; gives Norne's results exactly on
+  Norne's data, where no slice does).
+- DEVICE_TEST_MATRIX rows for the phone checks below; this build writes only under `Template/volve/`.
+
+### Phone checks (none claimed)
+
+A real two-finger pinch, a move and a double tap on the section in Snuggery's WebKit with no page scroll or
+system zoom (headless WebKit's pinch was dispatched PointerEvents); the frame times of a pinch with the
+seismic and the at-rest render on an iPhone; the seismic at the zoom's limit (a trace some 477 px wide);
+VoiceOver on the four keys and the lock's pressed state, and the keyboard handed to the edge where the keys
+step aside; the tall stop with the phone's bottom inset; the locked pane on Across (A′ left of A on 25
+columns) read by the owner.
+
+### Verified (from `Template/volve/`, 2026-10-10; headless on this Mac, never phone evidence)
+
+- `node tools/check.mjs`: every check passes but the code budget (app code 360 728 of 322 500, above); version
+  1.2; js/ holds the seven modules; the data's fourteen pins, clause 4's names, the depths-as-delivered pins,
+  SI and US spelling hold; ZIP about 33 417 700 B of 33 600 000.
+- `node tools/test_decode.mjs`, `node tools/test_section.mjs` (section 9 new), `node tools/test_seismic_display.mjs`:
+  all checks pass.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, both themes (log `tools/.work/d18/shoot8.log`): **exit 0, 284 ok,
+  all checks pass**, with the new block in WebKit and Chromium; `screenshots/app.png` untouched. Seven runs
+  before it failed and were fixed as above: the 52-state words (call 11), the reflector zoomed (the check), the
+  in-plot numbers' box, the speed block's Chromium lag (the keys' writes) and WebKit's edge (the keys' box kept;
+  undone). Run 7 also failed once on Chromium's fresh-page comparison after the fast Inline scrub (the plot 144
+  CSS px tall against a fresh page's 153: the pane not refitted at the lift); four runs of the speed block and
+  run 8 then passed it, and its cause was not established.
+- Pictures looked at: the inline at the fit, zoomed 2 and 8 times and locked, five locked steps, locked on
+  Across, a pinch in WebKit, the tall stop, 320 and 844 raised against 1.1, the reflector zoomed, and the run's
+  `section-dark`, `pane-raised-side-light`, `section-focus-light`.
+- Not run: anything on a phone.
+
+## Plan 0012 D18 to D20 in Volve 1.2: the QA's and the review's findings, fixed (2026-10-10)
+
+Taken with Norne Reservoir 2.5's fixes (its `tools/DECISIONS.md`, the section of the same name, has the
+shared record and the owner calls); here what differs for Volve or what Volve's data gives. Version stays 1.2.
+
+### The musts
+
+- **A pinch out left the plot blank of seismic and cells.** The seismic's own samples were meant to go under
+  the last full image (call 5 above) but never drew: the preview's cache key was stored as `pk`, the very field
+  `relay()` reads as the image's pixels a CSS px, so `drawImage` got a string and drew nothing (found by reading
+  the preview's pixels back mid-gesture: present in the image, absent on the plot). Renamed `wk`. The cells
+  take Norne's two underlays: the whole view's (the fit's layer, kept as it is drawn, or the fit's or locked
+  window's drawn at rest after a zoomed drawing) and a wide one (the view zoomed out four times), drawn 250 ms
+  after the last full drawing, each in a task of its own (`secCellBase()`). They are laid only outside what the
+  last cell layer covers (`relayBox()`, an even-odd clip), so each cell is still one alpha over the seismic.
+  `shoot.mjs` measures the cover of the plot's box mid-gesture against rest (the seismic covers it whole in
+  both, 100 %, where the bug left most of it empty) and counts the frames with the cells' underlay.
+- **The keys over the plot, and Volve's rule against Norne's.** Volve now has Norne's strip, exactly: outside
+  the data's box, the lock over Zoom in, Fit and Zoom out under them (186 px) or beside them while zoomed
+  (89 px); stepped aside, focusable and to VoiceOver, with `Axes locked` in the key row, where the plot is under
+  89 px or its box under 150 px wide. Call 11 above (hidden under 240 × 80) is withdrawn. The ends' numbers keep
+  off the strip (`secFrame`'s right limit `RW`), so the 52-state words check holds without hiding the keys.
+- **The code cap**: measured below for the lead, nothing cut.
+
+### The shoulds
+
+- **Locked in the compact pane the data filled half the plot.** The field's window needs 231 px of plot at ×3
+  and the pane's cap gives 153, so the window was fitted by its depth. Locked in the compact pane the stretch is
+  now `fillStretch`'s (js/section.js, tested): the 3D view's where the window fills the plot's width at it, else
+  the largest round stretch under it that does, stated as the pane's own (`vertical ×2` at 390 × 844 with the
+  sheet closed, the inline family 256 px across a 256 px box; ×1 with the sheet raised, 256 px across a 59 px tall
+  box, and on a 375 × 667 phone, 241 across 241). The reviewer's other option, a taller locked plot, is
+  already at the cap here.
+- **The tall stop** shows all of Cells and view at every size (Norne's three changes: Show all cells on the
+  toggles' row, the heading scrolled under the grip, a 104 px strip). The second stop still opens on `Section`.
+- **The keys hidden where the plot is small**: replaced by the step-aside rule above (keyboard, VoiceOver and
+  the visible `Axes locked`).
+- **DEVICE_TEST_MATRIX**: rows proposed to the lead.
+
+### Found on the way
+
+- The plot's spoken name said `more than the 3D view’s 3` of a locked ×2; it says `less than` now.
+- `check.mjs`'s depths-as-delivered pin follows the held axis's call, `viewAxis(sec, b, v, model.center[2],
+  place, lim)`, and pins the underlay's, `viewAxis(sec, SEC.fbox, SEC.home, model.center[2], SEC.place,
+  SEC.lim)`: the datum is still the one constant.
+
+### The calls (the owner may reverse any; Norne's hold)
+
+1. The locked compact stretch above (×2 at 390 × 844), in place of the 3D view's ×3 with half the plot empty.
+2. At 320 px the plot's box beside a zoomed strip would be under 150 px (Volve's depth title takes 60 px), so on
+   a 320 px phone the keys step aside.
+
+### Strings changed (shipped)
+
+New `Axes locked`; About's `The keys over the section …` sentence becomes `The keys beside the section zoom in
+and out and fit it again; where the section is too short for them, the keyboard still reaches them.`; the plot's
+spoken stretch says `less than` where it is less. Unchanged: the camera's strings, the four keys' names, the
+locked zeros (`West end`, `South end`, `North end`), the grip's four names.
+
+### Budgets
+
+- App code **369 523 B** against the 322 500 B cap (the first 1.2 build 360 728; 1.1 321 958): `app.js` 212 396,
+  `js/section.js` 46 467, `style.css` 41 890, `index.html` 23 537, the rest as before. These fixes add 8 795 B.
+  Nothing was cut; `check.mjs` fails that one line until the lead rules. The ZIP 33 420 723 B of 33 600 000.
+
+### Phone checks (none claimed)
+
+As Norne's, and the seismic's samples under a pinch out on a phone.

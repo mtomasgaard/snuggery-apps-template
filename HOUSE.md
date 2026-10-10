@@ -1498,7 +1498,8 @@ figures into its `ART.md`.
 | Global Wind (reference) | 1 484 517 (1.2, plan 0012 3.6) | its own, 1 600 000 (ART 621) | 187 037 | 40 075 |
 | Milky Way | 6 513 447 (after its pass, the record's move and the family fixes of 2026-10-02) | 8 156 512 | 241 820 of 242 000 (the lead's ruling, plan 0011 D9) | 45 695 |
 | Besseggen | 16 854 392 (after its pass, the record's move and the family fixes of 2026-10-02; NOTES.md's own figure is approximate because it ships inside the ZIP) | 21 088 756 | 226 794 of 227 000 (the lead's ruling, D11) | 40 075 |
-| Norne Reservoir | 15 354 835 (after its pass and the family fixes of 2026-10-02) | 19 110 591 | 161 833 | 40 075 |
+| Norne Reservoir | 15 415 283 (2.5, plan 0012 D18–D20) | 19 110 591 | 299 880 of 300 500 (the lead's ruling, plan 0012 D18–D20) | 40 075 |
+| Volve | 33 420 825 (1.2, plan 0012 D18–D20) | its own, 33 600 000 (the lead's ruling, 2026-10-07: the data is 33.2 MB of it) | 369 523 of 370 000 (the lead's ruling, plan 0012 D18–D20) | 40 075 |
 | Anatomy | 24 552 816 (after its pass and the family fixes of 2026-10-02) | 30 692 577 | 116 467 | 40 075 |
 | Shelf Atlas | 1 980 340 (after its pass, the data follow-up and the family fixes of 2026-10-02) | 2 413 130 | 184 002 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
 | World Oil & Gas | 2 147 335 (after its pass and the family fixes of 2026-10-02) | 2 622 870 | 199 975 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |

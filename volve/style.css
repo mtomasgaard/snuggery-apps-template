@@ -89,6 +89,14 @@ body.raised { grid-template-rows: auto minmax(var(--view-min), 1fr) auto auto mi
 /* with the sheet raised the pane takes what the model can give above its 220 px (the reservoir's minimum
    share): 185 px at 844, 16 px more than 2.2's cap, so the sweep's row costs the plot 16 px */
 body.sectioned.raised { --sec-h: clamp(150px, calc(var(--view-min) - 220px), 234px); }
+/* the tall stop (plan 0012 D20): the sheet rises until all of Cells and view's rows show under the grip (its own
+   max-height, from the rows' height that app.js measures: --cv-h; the heading scrolls up under the grip as Explode
+   does at the second stop), and the view keeps a strip it never loses, 104 px (the 3D view's keys and 58 px of the
+   model under them); with the section open, 254 px: the strip and the pane at its 150 px floor. Never more than
+   the second stop leaves it. */
+body.tall { --view-tall: min(var(--view-min), 104px); grid-template-rows: auto minmax(var(--view-tall), 1fr) auto auto minmax(0, max-content); }
+body.tall.sectioned { --view-tall: min(var(--view-min), 254px); --sec-h: 150px; }
+.sheet.s3 { max-height: calc(var(--cv-h, 264px) + 45px + env(safe-area-inset-bottom)); }
 
 button, input, select { font: inherit; color: inherit; }
 button {
@@ -441,6 +449,9 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .sec-close { flex: 0 0 auto; margin-left: auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
 .sec-plot { flex: 0 1 auto; display: block; width: 100%; height: 120px; min-height: 0; touch-action: none; }
 .sec-key { flex: 0 0 auto; height: 15px; overflow: hidden; margin-top: 2px; }
+/* with the sheet raised the pane is held at its cap, and the key's 2 px go to the plot: 89 px at 390 × 844, the
+   height the zoom keys' strip needs (D18) */
+body.raised .sec-key { margin-top: 0; }
 .sec-exag { margin-left: auto; }
 /* the sweep (plan 0012 D14): ‹ the slider › and where the line is */
 /* the row is 32 px and its keys and slider keep their 44 px hits, reaching 6 px over the plot's distance
@@ -452,7 +463,9 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .sec-sweep .tkey, .sec-sweep .hslider { margin: -6px 0; }
 .sec-sweep .tkey:disabled { opacity: .45; cursor: default; }
 .sec-sweep .hslider { flex: 1 1 0; width: auto; }
-.sec-at { flex: 0 0 auto; min-width: 64px; padding: 0 4px 0 8px; pointer-events: none; }
+/* the word 94 px where the row has room (64 at the least): › then stops left of the keys' strip's second column, so
+   its hit, reaching up over the plot's foot, never meets a key's (D18) */
+.sec-at { flex: 0 0 auto; min-width: max(64px, min(94px, 100% - 230px)); padding: 0 4px 0 8px; pointer-events: none; }
 .sec-sweep.narrow { margin: 0 -12px; }
 .sec-sweep.narrow .sec-at { order: -1; flex-basis: 100%; min-width: 0; padding: 0; line-height: 15px; text-align: center; }
 /* the pane's edge (D13; js/pane.js): under the model, the head's free stretch between Draw and ✕, its grip
@@ -468,6 +481,26 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .sec-head .sec-edge .grip-bar { top: 19.5px; }
 .sec-side { display: none; position: absolute; z-index: 2; left: -22px; top: 44px; bottom: 65px; width: 44px; cursor: ew-resize; }
 .sec-side .grip-bar { left: 19.5px; top: 50%; width: 4px; height: 36px; margin: -18px 0 0; }
+/* the section's keys (plan 0012 D18, D19) in a strip at the plot's right, outside the data's box (app.js leaves
+   their room: secStrip), the 3D view's plates stood upright: the lock and Zoom in in one, Fit and Zoom out (only
+   where they would change something) in a second, under the first where the plot is tall enough (.col), else
+   beside it on its left (.c2), so no key moves under a finger. Where the plot is too short or too narrow for the
+   strip (.aside), the keys step aside: out of sight, still in the keyboard's order and to VoiceOver, shown over
+   the plot's top right while they hold the keyboard */
+.sec-keys { position: absolute; z-index: 1; top: 44px; right: calc(15px + env(safe-area-inset-right)); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.sec-keys .keyplate { display: flex; flex-direction: column; }
+.sec-keys .keyplate button:last-child { margin-bottom: -2px; }   /* the lower key over the plate's foot: two keys, 89 px of hits from the plot's top */
+.sec-keys .keyplate + .keyplate { flex-direction: column-reverse; }
+.sec-keys.c2 { flex-direction: row-reverse; align-items: flex-start; }
+.sec-keys.c2 .keyplate + .keyplate { flex-direction: column; }
+.sec-keys .keyplate button:disabled { opacity: .45; cursor: default; }
+.sec-keys:not(.c2):not(.aside) .keyplate + .keyplate button + button::after { top: auto; bottom: 0; }
+#sec-lock[aria-pressed="true"] .open, #sec-lock:not([aria-pressed="true"]) .shut { display: none; }
+.sec-keys.aside { top: 48px; flex-direction: row-reverse; }
+.sec-keys.aside .keyplate { flex-direction: row; width: auto; height: 38px; }
+.sec-keys.aside .keyplate button { margin: -4px 0; }
+.sec-keys.aside .keyplate button + button::after { left: 0; right: auto; top: 8px; bottom: 8px; width: 1px; height: auto; }
+.sec-keys.aside:not(:focus-within) { clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; white-space: nowrap; }
 .section.grown { flex: 0 0 var(--pane); max-height: none; }
 .section.grown .sec-plot { flex: 1 1 0; height: auto !important; }
 /* the line on the 3D view: drawn over the model, never under it, so it reads as drawn on the map */
@@ -550,7 +583,7 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 /* no transition, ever, on what carries a step */
 .valid, .lead, .track, .track canvas { transition: none; animation: none; }
 
-/* ── the controls sheet: a grip and two stops ── */
+/* ── the controls sheet: a grip and three raised stops (the third, the tall one, in the column only: D20) ── */
 
 .sheet {
   grid-row: 5;
@@ -566,9 +599,9 @@ svg .fill, svg.fill path { fill: currentColor; stroke: none; }
 .sheet:not(.s0) .grip { position: sticky; top: 0; z-index: 2; background: var(--page); }
 .grip-bar { position: absolute; left: 50%; top: 20px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: var(--line-strong); }
 .grip-chev { position: absolute; right: 0; top: 16px; }
-.s2 .grip-chev { transform: rotate(180deg); }
+.sheet.top .grip-chev { transform: rotate(180deg); }
 .stop { display: none; padding-bottom: 12px; }
-.s1 .stop1, .s2 .stop1, .s2 .stop2 { display: block; }
+.s1 .stop1, .s2 .stop1, .s2 .stop2, .s3 .stop1, .s3 .stop2 { display: block; }
 .sheet-head { margin: 0; padding: 10px 0 4px; font-size: 13.5px; font-weight: 650; border-top: 1px solid var(--line); }
 .srow { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 5.5em; align-items: center; column-gap: 10px; min-height: 44px; }
 .slabel { font-size: 12.5px; color: var(--ink-2); }

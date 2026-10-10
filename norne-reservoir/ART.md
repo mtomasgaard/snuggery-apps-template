@@ -467,7 +467,7 @@ more at every stop, with and without the section. Wide screens (≥ 820 x 480) k
 | **Labels on the plate** | well names 11.5/560 `--ink` on the 3 px halo, a 10 px sample of the well's role line before the name; formation names (exploded by formation) 11.5/560 on the same halo; no pill, border or background | Each well label stays a `<button>` (tap to select). As built, the labels take no touch themselves (a drag that starts on one still turns the model): `app.js` reads a tap on a name's own text, padded to 24 px tall (WCAG 2.5.8), as a tap on its well; its 44 x 44 box, grown upward from the text and away from the rock under the well head, counts only where no cell is under the finger, and the labels stay buttons for VoiceOver and the keyboard. Widths measured in `"Ysabeau Office"` after `document.fonts.load`. Labels are kept out of the card's, the key column's and the ghost key's rectangles (HOUSE 4.7) as well as each other's (the stock collision pass, extended). The chosen well's name is always drawn, under its head when the card or the keys hold the place over it. If WebKit does not paint `paint-order: stroke fill` under HTML text (a phone check), eight zero-blur 1.5 px `text-shadow` offsets in the halo color are the fallback, as Milky Way's. |
 | **The wells** | the stock three passes (see-through, casing, core), with injectors dashed and a shut well thin and faint | `WELL_VS` gains a per-vertex distance along the path; the fragment shader discards the dash's gaps for codes 2 and 3 (a dash of about 8 px on screen, its world length from `S.cam.dist`). A shut well: 60 % of the width, alpha 0.5, as the stock alpha already was. |
 | **About** | a full-height `--sheet` panel from the `About` key: `role="dialog"`, `aria-modal`, slides up 220 ms on `--sheet-in`, closes at once, `Close` at the top right and at the foot, Escape, focus held and returned | New; the stock app had none. **1. What the picture is**: each cell colored by its value on the scale under the plate, at the report date shown; the light on the faces and the darker cell edges are display, not data; the depth stretched ×5 by default; ends the data goes past printed open; the explode a display distance (110 m between formations, 22 m between layers, segments spread by 0.4); the Cut, what it shows and what it does not (section 1, test 6); the wells' paths from the deck's completions, their roles from the schedule. The section: what it shows and what it does not (section 3, *The section A–A′*). **2. This data**: `label: value` lines: the edition (`Norne benchmark, OPM Flow 2026.04 run`), the grid (46 by 112 by 22, 44 431 active cells), the report dates (110, 6 Nov 1997 to 1 Dec 2006), the wells (36), the storage (saturations to 1/255, pressure to 0.0085 bar over 56 to 613 bar), the rates (Sm³ a day, averaged over the month to each date). **3. Sources and credits**: the credit line, `CREDIT`, word for word; `model.json`'s `source`, verbatim; the license as `ATTRIBUTION.txt` names it, under a US-spelled label: `License: Open Database License (ODbL) 1.0, opendatacommons.org/licenses/odbl/1-0/` (the address without its scheme); the check against the published reference results; `Type: Ysabeau Office by …` (section 4). **4. How the data gets here**: built once by `pipeline/` on a Linux runner; nothing is fetched; `config.json` is re-read on return; how to move around (the gestures and the keys). The Norwegian Sea is named here. |
-| **Controls sheet** | three stops, on `--page` with a 1 px `--line` rule on top | **Grip**: a 36 x 4 px `--line-strong` bar centered and a drawn chevron 1.5 px `--ink-2` at the right, a 44 px hit (the stock 22 px), its names exactly the stock three (`Show more controls`, `Show all controls`, `Hide the extra controls`). **Stop 0**: the grip alone. **Stop 1**: `Explode` (a house slider) with `Formations`, `Layers`, `Segments` as words with the tracer (`role="radio"`; the stock `select` goes); `Rates` (the chart, below) with the well picker. **Stop 2**: `Cells and view` (named `Section and view` before 2.2, when there was no section): `Columns (I)`, `Rows (J)`, `Layers (K)` and `Value range` as pairs of house sliders with their outputs (`1 to 46`), `Vertical exaggeration` (`×5`), `Well names` and `Cell edges` as house toggle rows (`aria-pressed`, a 28 x 28 key drawn on or off), `Show all cells`. The stock `Reset view` goes (it did what `Show the whole field` does; owner call 9). Sliders are the native range inputs drawn by CSS alone (a 1 px `--line-strong` track, the value so far 2 px `--ink`, an 8 px `--ink` thumb with a 3 px `--page` ring), labels 12.5 px `--ink-2`, values 12.5 px tabular, right-aligned. Section heads 13.5/650 sentence case between 1 px `--line` rules. Stop changes are instant. At stop 2 the sheet scrolls `Cells and view` up under the grip, since both raised stops are one height (smoothly, or at once under Reduce Motion); stop 1 opens at the sheet's top. Raised, the sheet takes no more than leaves the view about half the screen (the paragraph under the frame), and the grip stays at its top while it scrolls. |
+| **Controls sheet** | three stops, four in the column since 2.5 (the tall stop, below), on `--page` with a 1 px `--line` rule on top | **Grip**: a 36 x 4 px `--line-strong` bar centered and a drawn chevron 1.5 px `--ink-2` at the right (turned down where the next step hides), a 44 px hit (the stock 22 px), its names the stock three (`Show more controls`, `Show all controls`, `Hide the extra controls`) and, since 2.5, `Show Cells and view in full` at the second stop where the tall one follows. **Stop 0**: the grip alone. **Stop 1**: `Explode` (a house slider) with `Formations`, `Layers`, `Segments` as words with the tracer (`role="radio"`; the stock `select` goes); `Rates` (the chart, below) with the well picker. **Stop 2**: `Cells and view` (named `Section and view` before 2.2, when there was no section): `Columns (I)`, `Rows (J)`, `Layers (K)` and `Value range` as pairs of house sliders with their outputs (`1 to 46`), `Vertical exaggeration` (`×5`), `Well names` and `Cell edges` as house toggle rows (`aria-pressed`, a 28 x 28 key drawn on or off), `Show all cells`. The stock `Reset view` goes (it did what `Show the whole field` does; owner call 9). Sliders are the native range inputs drawn by CSS alone (a 1 px `--line-strong` track, the value so far 2 px `--ink`, an 8 px `--ink` thumb with a 3 px `--page` ring), labels 12.5 px `--ink-2`, values 12.5 px tabular, right-aligned. Section heads 13.5/650 sentence case between 1 px `--line` rules. Stop changes are instant. At stop 2 the sheet scrolls `Cells and view` up under the grip, since both raised stops are one height (smoothly, or at once under Reduce Motion); stop 1 opens at the sheet's top. Raised, the sheet takes no more than leaves the view about half the screen (the paragraph under the frame), and the grip stays at its top while it scrolls. |
 | **The rates chart** | the stock SVG, redrawn: `Field rates` or `C-4H rates` as its title (13.5/650); the liquids panel and the gas panel; series in `--chart-oil`, `--chart-water`, `--chart-gas`, 1.5 px, injected dashed; gridlines 1 px `--line`; each panel's top value in full figures with its unit (the field's `50 000 Sm³/d` and `10 000 000 Sm³/d`) at 10.5 px `--ink-3` on a 3 px `--page` halo, the cursor passing under it; years at 10.5 px `--ink-2`; the cursor a 1.5 px `--ink` line at the shown step; a drawn key (line samples, `Oil produced`, `Water produced`, `Water injected`, `Gas produced`, `Gas injected`) | The stock `50 k` and `10 M` labels go (SI, B5). The well picker stays a native `select` (36 wells; a stated departure from the house's words, since a native list is the right control for 36 names), restyled: 44 px tall, a 1 px `--line-strong` frame, 6 px radius, its options built as DOM nodes, not markup. Tapping or dragging the chart seeks, through `wanted`. |
 | **Notices** | a `--sheet` plate centered on the plate, `role="alert"`, 13.5 px, at most 300 px, no icon | In the file's terms, no apology: `data/model.json could not be read (HTTP 404).`, `data/dynamic.bin holds 19 549 000 bytes; 110 report dates need 19 549 640.`, `This phone gave no WebGL 2, which the 3D view needs.`, and, opened from a file: `This app reads its data over Snuggery's own server; opened as a file, the browser blocks it.` A broken `config.json` on a later read keeps the settings already loaded, as the stock app did, and says so once. The stock loading overlay, its progress bar and its `Could not open the model:` box go. |
 | **Live region** | one `<p class="sr" aria-live="polite">` | A tap's sentence; a step key's new date; focus mode's two sentences. Never per frame. The stock `aria-live` on the date (it spoke every step of play) and on the card (it spoke every rebuild) go (B4). |
@@ -642,6 +642,95 @@ stylesheet's `.grown` rules, the sweep in `js/section.js` and the pane's row of 
   a place other than the slider's). The pane holds its height while the finger is down and fits the
   section once it lifts. A slice is cut in under 2 ms in Node and the last 24 are kept.
 
+### Zoom in the section, the axes' lock, and the tall stop (2.5)
+
+The owner, reviewing TestFlight 48: *"I want to be able to zoom in the sections of the reservoir apps"*,
+*"Also want the axes to have the option to be locked to cover the whole displayed area/view (just show
+data where it is, but keep axis extended)"*, *"But when i say locked, i still want to be able to manually
+adjust the view. Just not have it automatically adjusting the limits/grid"* and *"the menu at the bottom
+is too small when looking at the slices (cells and view), but works for the explode. Maybe add one more
+layer tp the menu to expand it a bit more when using that?"* (the template's plan 0012, D18 to D20). The
+view's arithmetic is in `js/section.js` (`viewAxis`, `zoomAt`, `panBy`, `keepIn`, `fitWindow`,
+`commonFrame`), the gestures in `js/gesture.js`, the rest in `app.js` (`secAxis`, `secZoom`).
+
+- **Zoom.** Two fingers on the plot zoom about their midpoint and carry it with them, so the point under
+  the fingers stays under them; one finger moves the view once it is zoomed in, and at the fit a drag
+  does nothing (the plot never scrolls the page). A tap, 8 px or less, still shows its cell at once; a
+  second tap within 380 ms and 30 px zooms in two times where it lands, as the 3D view's double tap
+  focuses where it lands. A mouse wheel or a trackpad's pinch zooms about the pointer. The zoom is
+  uniform, so the stretch the pane states is the one drawn. It goes out to the fit and no further, and
+  in to where the field's thin cells read plainly: the 5th percentile of the active cells' thickness
+  (1.81 m) drawn 24 px tall, about 72 times Along's compact fit at ×5. A move keeps 48 px of the
+  section in view (all of it where it is smaller).
+- **Everything follows.** The cells, their edges (fading in as the cells widen, the 2.2 rule), the
+  formation tops, the wells and their names, the gaps, the tapped cell's outline and A and A′ all draw on
+  the one held axis. Zoomed in, the depth words stand at the plot's left edge and the distance words at
+  its foot, re-chosen for the depths and distances in view, never past the data's own (the section's,
+  unlocked; the field's, locked); the data is drawn inside the plot. An end off the plot is left out
+  (its letter and its rule), and the distance words say where the plot is. Names stay on the part of
+  the section in view; a well wholly out of view is not named.
+- **Fast.** While a pinch, a move or a wheel lasts, the plot shows the last full drawing of its data
+  moved and scaled to the newest view, under depth and distance words, A, A′ and names drawn for that
+  view; the frame after the fingers lift draws in full, the gaps' hatch included, at the newest view.
+  Under that drawing lies the whole view's own (the fit's, or locked, the field's window: the cells, tops,
+  wells and tapped cell, kept from the last drawing at the fit, or drawn at rest 250 ms after a zoomed
+  one), so a pinch out or a move past what the last drawing covered shows the section at once, coarse
+  until the lift, never an empty plot. A preview is only of the same section, month and colors; anything
+  else draws in full at once, and while the fingers move even that leaves the gaps' hatch as it was,
+  moved, so no gesture's frame waits on it.
+- **The keys** stand in a strip at the plot's right, outside the data: the plot's box ends 6 px before
+  them, so no key ever covers a cell. They are the 3D view's plates stood upright (44 × 44 hits drawn
+  36 × 44): `Lock the axes` (`aria-pressed`; a pair of axes with a padlock, its shackle open when
+  unlocked) over `Zoom the section in` in one plate, and `Fit the section` (four corner brackets around
+  a slanting band) and `Zoom the section out` in a second, shown only where they would change
+  something. Where the plot is 186 px tall or more the second plate stands under the first; under that,
+  from 89 px, it stands to the first's left while zoomed (the box then 46 px narrower), so no key moves
+  under a finger. At 390 × 844 the compact plot's box is 270 px wide at the fit (2.4's 312), the plot at
+  least 94 px tall, and the sweep's word 94 px wide so that › stays clear of the strip. Where the plot is
+  shorter than 89 px, or its box would be under 150 px wide (the tall stop with the section open, a
+  raised sheet on a 375 or 320 px phone, the narrow pane beside the model),
+  the keys step aside: out of sight, still in the keyboard's order and to VoiceOver, shown over the
+  plot's top right while they hold the keyboard, and `Axes locked` says so in the key under the pane
+  when they are. Locked, Fit is named `Fit the field’s depth and length`. The keys zoom two times about
+  the plot's middle.
+- **Unlocked** the pane is 2.4's at the fit: the scales hug the section, the depth words beside it,
+  distance from A to A′. A zoom by hand holds until the section changes (a sweep step, Along or Across,
+  a line drawn or an end moved); then it fits again. A resize holds the scale and the top-left corner;
+  the stretch slider under More controls keeps the scale and the depth at the plot's middle.
+- **Locked** the window opens on the whole field: every active cell's depths (2 439 to 3 090 m, with the
+  4 % pad a section takes) and the full length of the line's family at one scale, at the stretch the
+  pane would give that window (the 3D view's compact, or, where the pane's cap holds the plot under the
+  window's need, the largest round stretch under it that fills the plot's width; its own when grown),
+  its plot height set then and held. The depth guides run across the whole plot and the distance words along its whole foot. The
+  family's distance: for Along and Across, the line and every column or row its slider goes through,
+  each placed by where its start falls along the line, measured from a baseline square to the line
+  through the family's first end, and keeping its own length along its path (Along's family 9.39 km,
+  Across's 4.50 km); its zero names that end by the compass, `Southwest end` on Along and `Northwest
+  end` on Across, and where the zero is out of view the unit's tick says `from the southwest end`. A line of one's own steps square to itself, so its family is
+  its own length, from A. A step through the sweep moves the cells and never the scale. While locked
+  nothing moves the window by itself: not a step, not another line or family, not a property or a
+  month, not the pane's size; only a pinch, a move, the keys, a double tap, a wheel and the stretch
+  slider (a manual setting, which keeps the scale and the middle depth). A section that falls outside a
+  held window is not chased: the window stays, and Fit shows it. Unlocking returns to the fit of the
+  section shown. The lock is kept with the rest of the view; a state saved before 2.5 opens unlocked,
+  and a reload opens a locked pane on the field's window.
+- **The tall stop.** The sheet has a fourth stop in the column: above `Explode`'s and the scrolled
+  `Cells and view`, it raises the sheet until all of `Cells and view` shows under the grip (its five
+  slider rows, the two toggles and `Show all cells`, which since 2.5 shares the toggles' row), its
+  heading scrolled up under the grip as `Explode` is at the second stop; the 3D view keeps a strip it
+  never loses, 104 px (its keys' row and 58 px of the model under it); with the section open the view
+  keeps 254 px, the strip and the pane at its 150 px floor, and the sheet takes the rest. Never more than the second
+  stop leaves. Where the stop would raise the sheet less than 44 px past the second (375 × 667 with the
+  section open), and where the sheet is a column at the side (a phone on its side, a wide screen),
+  which shows everything already, there is no fourth stop: the grip steps through three, and a saved
+  fourth opens as the second there and as the fourth where it fits. The grip's names say what the next
+  step does: `Show more controls`, `Show all controls`, `Show Cells and view in full`, `Hide the extra
+  controls` (the third stop's name is `Hide the extra controls` where no fourth follows). Tap cycles,
+  a drag steps a stop at a time, ↑ and ↓ step, VoiceOver activates it as a button. Measured (headless):
+  the sheet 311 px at each size, all of Cells and view in view at each; the model 281 to 282 px at
+  390 × 844, 369 to 370 at 430 × 932, 104 to 105 at 375 × 667; with the section open, the model 131 to
+  132 and the pane 150 at 390 × 844, 219 to 220 and 150 at 430 × 932.
+
 **What does not apply, and why:** a `now` notch and a ran-out sentence (a finished history, not a
 forecast: About names the edition); per-step ticks on the track (110 steps under 2 px apart; year
 ticks instead); an opening (section 3); a second large figure (the card's value is the only other
@@ -701,7 +790,7 @@ README panes) and `MarketingClipsUITests.swift` (clip 2).
 
 2.2 adds `About`, `Section`, `Along`, `Across`, `Draw` and `Hide the section`, and 2.3 `Line
 position`, `Previous column`, `Next column` (`row` and `step` too), `Section height` and `Section
-width`, none of which is a string the camera reads, and none named `Pause`; `Oil saturation` stays the legend's title, written
+width`, and 2.5 `Fit the section`, `Fit the field’s depth and length`, `Zoom the section in`, `Zoom the section out`, `Lock the axes` and the grip's `Show Cells and view in full`, none of which is a string the camera reads, and none named `Pause`; `Oil saturation` stays the legend's title, written
 last. The stamp's line hides once every file is in; the camera never read it.
 
 The stock app's first-run hint, `Double-tap a spot`, went with owner call 8, and the camera no longer
@@ -746,6 +835,12 @@ template ruled for 2.3; fonts and the data unchanged; the ZIP about 15.4 MB.
 `js/units.js` 7 225, `js/data.js` 6 387, `js/pane.js` 5 212), 470 B more than 2.3.1 for the compass,
 its keep-outs and the needle's removal from the instrument line, with three comments shortened to fit;
 the colors are `config.json`'s, not code. Fonts and the data unchanged.
+
+**As built, 2.5** (`node tools/check.mjs`; plan 0012 D18 to D20, with the review's fixes): app code
+299 880 B (`app.js` 163 265, `js/section.js` 43 228, `style.css` 40 733, `index.html` 22 141, `js/track.js`
+7 840, `js/units.js` 7 225, `js/data.js` 6 387, `js/pane.js` 5 212, `js/gesture.js` 3 849), 43 890 B more than
+2.4 for the zoom, the lock and the tall stop, over the 256 000 B the template ruled for 2.3: nothing was cut, and the cap is the
+template's to rule on. Fonts and the data unchanged; the ZIP about 15.4 MB.
 ---
 
 ## 7. The generated-page tells, answered

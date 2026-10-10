@@ -261,6 +261,41 @@ export function slot(cols, axis, list, l) {
   const i = list.findIndex((s) => (s.mid[0] - m[0]) * d[0] + (s.mid[1] - m[1]) * d[1] > 0);
   return i < 0 ? list.length : i;
 }
+/** A slice's path on the map from its pillars' middles (bx: the boundary index, from 0, to the sum of its
+ *  points' x and y and their count): through each boundary's mean, a gap bridged straight, from its west end;
+ *  sAt the distance along it at each point, L its length. sliceSection and slicePaths share it. */
+function slicePath(bx) {
+  const bs = [...bx.keys()].sort((p, q) => p - q), j0 = bs[0] ?? 0, j1 = bs[bs.length - 1] ?? 0, path = [];
+  for (let j = j0; j <= j1; j++) {
+    if (bx.has(j)) { const v = bx.get(j); path.push([v[0] / v[2], v[1] / v[2]]); continue; }
+    const lo = bs.filter((q) => q < j).pop(), hi = bs.find((q) => q > j), A = bx.get(lo), B = bx.get(hi), t = (j - lo) / (hi - lo);
+    path.push([A[0] / A[2] + (B[0] / B[2] - A[0] / A[2]) * t, A[1] / A[2] + (B[1] / B[2] - A[1] / A[2]) * t]);
+  }
+  if (!path.length) path.push([0, 0], [1, 0]);
+  const flip = path[path.length - 1][0] < path[0][0];
+  if (flip) path.reverse();
+  const sAt = [0];
+  for (let i = 1; i < path.length; i++) sAt.push(sAt[i - 1] + Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]));
+  return { path, sAt, L: sAt[sAt.length - 1] || 1, flip, j0, j1 };
+}
+/** Every slice of one family's path, in one pass over the cells (the axes' lock, plan 0012 D19): a Map from
+ *  each slice's k (from 1) to { p0, p1, L }, its path's two ends on the map and its length, the very path
+ *  sliceSection draws it along. */
+export function slicePaths(geom, NA, ijk, axis) {
+  const own = axis === 'I' ? 0 : 1, run = 1 - own, along = axis === 'I' ? 2 : 1, across = axis === 'I' ? 1 : 2, by = new Map();
+  const mid = (p, i, j, c) => (geom[p + i * 3 + c] + geom[p + j * 3 + c]) / 2;
+  for (let c = 0; c < NA; c++) {
+    const k = ijk[c * 3 + own] + 1, p = c * 24, j = ijk[c * 3 + run];
+    let bx = by.get(k);
+    if (!bx) by.set(k, (bx = new Map()));
+    for (const [b, x, y] of [[j, mid(p, 0, across, 0), mid(p, 0, across, 1)], [j + 1, mid(p, along, along | across, 0), mid(p, along, along | across, 1)]]) {
+      const v = bx.get(b) || [0, 0, 0]; v[0] += x; v[1] += y; v[2]++; bx.set(b, v);
+    }
+  }
+  const out = new Map();
+  for (const [k, bx] of by) { const q = slicePath(bx); out.set(k, { p0: q.path[0], p1: q.path[q.path.length - 1], L: q.L }); }
+  return out;
+}
 /**
  * One slice of the grid as a section (plan 0012 D14): the active cells of one column (axis 'I', one I) or
  * row ('J', one J), each drawn as the block it is, along the slice's own path rather than a straight line.
@@ -283,18 +318,7 @@ export function sliceSection(geom, NA, ijk, axis, k, tops) {
     add(j, mid(p, 0, across, 0), mid(p, 0, across, 1));
     add(j + 1, mid(p, along, along | across, 0), mid(p, along, along | across, 1));
   }
-  const bs = [...bx.keys()].sort((p, q) => p - q), j0 = bs[0] ?? 0, j1 = bs[bs.length - 1] ?? 0, path = [];
-  for (let j = j0; j <= j1; j++) {
-    if (bx.has(j)) { const v = bx.get(j); path.push([v[0] / v[2], v[1] / v[2]]); continue; }
-    const lo = bs.filter((q) => q < j).pop(), hi = bs.find((q) => q > j), A = bx.get(lo), B = bx.get(hi), t = (j - lo) / (hi - lo);
-    path.push([A[0] / A[2] + (B[0] / B[2] - A[0] / A[2]) * t, A[1] / A[2] + (B[1] / B[2] - A[1] / A[2]) * t]);
-  }
-  if (!path.length) path.push([0, 0], [1, 0]);
-  const flip = path[path.length - 1][0] < path[0][0];
-  if (flip) path.reverse();
-  const sAt = [0];
-  for (let i = 1; i < path.length; i++) sAt.push(sAt[i - 1] + Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]));
-  const L = sAt[sAt.length - 1] || 1, S = (j) => sAt[flip ? j1 - j : j - j0];
+  const { path, sAt, L, flip, j0, j1 } = slicePath(bx), S = (j) => sAt[flip ? j1 - j : j - j0];
   const cells = [], offs = [0], pts = [], topSeg = [];
   let z0 = Infinity, z1 = -Infinity;
   for (const c of ids) {
@@ -395,10 +419,125 @@ export const STRETCHES = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30,
  */
 export function ownExag(sec, box, exag, win) {
   if (!sec.n && !win) return exag;
-  const pad = Math.max(10, (sec.z1 - sec.z0) * 0.04), span = win ? win.bot - win.top : sec.z1 - sec.z0 + 2 * pad, fill = (box.h / span) / (box.w / sec.line.L);
+  const pad = Math.max(10, (sec.z1 - sec.z0) * 0.04);
+  return stretchFor(sec.line.L, win ? win.bot - win.top : sec.z1 - sec.z0 + 2 * pad, box, exag);
+}
+/** ownExag's rule for any window: L meters across, span meters deep (the field's window when the axes are
+ *  locked, D19). */
+export function stretchFor(L, span, box, exag) {
+  const fill = (box.h / span) / (box.w / L);
   let e = 0;
   for (const s of STRETCHES) if (s <= fill) e = s;
   return e >= exag * 1.2 ? e : exag;
+}
+/** The stretch of the field's window locked in the compact pane (D19), whose height the pane's cap may hold below
+ *  the window's need: the 3D view's (exag) where the window at it fills the plot's width, else the largest round
+ *  stretch under it at which it does, so the locked axes cover the plot across as well as down (1 at the least). */
+export function fillStretch(L, span, box, exag) {
+  const fill = (box.h / span) / (box.w / L);
+  if (fill >= exag) return exag;
+  let e = STRETCHES[0];
+  for (const s of STRETCHES) if (s <= fill) e = s;
+  return e;
+}
+
+/* ── the view (plan 0012 D18, D19): the section zoomed, panned, or held on the field's window ──
+ *
+ * A view is { sx, ex, sL, zT }: the scale across (CSS px a meter), the vertical stretch (so the scale down is
+ * sx * ex, and a zoom, which changes sx alone, keeps the stretch the pane states), and the window's top-left
+ * corner in meters: sL the distance at the plot's left edge, zT the depth (z) at its top. Unlocked the
+ * distance is the section's own, from A; locked it is the family's common distance (commonFrame), each
+ * section placed on it at { off, sgn }. sectionAxis's fit is one view among others (viewOfAxis). */
+
+/** The view an axis shows, in the box it was made for. */
+export function viewOfAxis(ax, box) {
+  return { sx: ax.sx, ex: ax.exag, sL: (box.x - ax.x0) / ax.sx, zT: ax.zTop - (ax.y0 - box.y) / ax.sz };
+}
+/** A window L meters across from 0 and from top to bot in z, fitted to the box as sectionAxis fits a section:
+ *  the larger scale at which both fit, centered across, its top at the box's. */
+export function fitWindow(L, top, bot, box, ex) {
+  const sx = Math.max(1e-6, Math.min(box.w / L, box.h / ((bot - top) * ex)));
+  return { sx, ex, sL: -(box.w - L * sx) / 2 / sx, zT: top };
+}
+/**
+ * The axis of a held view (zoomed, panned or locked), with sectionAxis's fields and meaning, so every layer
+ * draws on it unchanged: X and Y map the section's own (s, z), S and Z map back. place: where the section lies
+ * on the view's distance ({ off, sgn }: its s at off + sgn * s). lim: the ranges ticks may take, d0 to d1 in
+ * the view's distance and z0 to z1 in z (the data's own extent, so no tick names a place the data does not
+ * reach). Beyond sectionAxis's: held; box; xa and xb, A and A′ (x0 and x1 the lesser and the greater); zTop
+ * and zBot the window's top and foot; dX, a distance on the axis to x.
+ */
+export function viewAxis(sec, box, v, datum, place = { off: 0, sgn: 1 }, lim = {}) {
+  const { sx, ex } = v, sz = sx * ex, L = sec.line.L, { off, sgn } = place;
+  const X = (s) => box.x + (off + sgn * s - v.sL) * sx, Y = (z) => box.y + (z - v.zT) * sz, xa = X(0), xb = X(L);
+  return {
+    sx, sz, exag: ex, datum, L, zTop: v.zT, zBot: v.zT + box.h / sz, x0: Math.min(xa, xb), x1: Math.max(xa, xb), xa, xb, y0: box.y, y1: box.y + box.h,
+    X, Y, S: (x) => ((x - box.x) / sx + v.sL - off) / sgn, Z: (y) => v.zT + (y - box.y) / sz,
+    held: true, box, dX: (d) => box.x + (d - v.sL) * sx, dLo: lim.d0 ?? 0, dHi: lim.d1 ?? L, zLo: lim.z0 ?? -Infinity, zHi: lim.z1 ?? Infinity,
+  };
+}
+/** The view zoomed k times about the plot point (x, y), its scale kept within [lo, hi]: the meters under the
+ *  point stay under it. */
+export function zoomAt(v, k, x, y, box, lo, hi) {
+  const sx = Math.min(hi, Math.max(lo, v.sx * k)), s = v.sL + (x - box.x) / v.sx, z = v.zT + (y - box.y) / (v.sx * v.ex);
+  return { ...v, sx, sL: s - (x - box.x) / sx, zT: z - (y - box.y) / (sx * v.ex) };
+}
+/** The view moved with a finger by (dx, dy) px. */
+export function panBy(v, dx, dy) { return { ...v, sL: v.sL - dx / v.sx, zT: v.zT - dy / (v.sx * v.ex) }; }
+/** The view moved the least that keeps some of ext (the section's extent on the view's distance and in z,
+ *  { s0, s1, z0, z1 }) in the box: keep px of it each way, or all of it where it is smaller. */
+export function keepIn(v, box, ext, keep = 48) {
+  const sz = v.sx * v.ex, X0 = box.x + (ext.s0 - v.sL) * v.sx, X1 = box.x + (ext.s1 - v.sL) * v.sx, Y0 = box.y + (ext.z0 - v.zT) * sz, Y1 = box.y + (ext.z1 - v.zT) * sz;
+  const mx = Math.min(keep, X1 - X0, box.w), my = Math.min(keep, Y1 - Y0, box.h);
+  const dx = X1 < box.x + mx ? box.x + mx - X1 : X0 > box.x + box.w - mx ? box.x + box.w - mx - X0 : 0;
+  const dy = Y1 < box.y + my ? box.y + my - Y1 : Y0 > box.y + box.h - my ? box.y + box.h - my - Y0 : 0;
+  return dx || dy ? panBy(v, dx, dy) : v;
+}
+/** The view's stretch changed (the slider in the sheet): the scale across kept, and the depth at the box's
+ *  middle. */
+export function restretch(v, ex, box) {
+  const zm = v.zT + box.h / 2 / (v.sx * v.ex);
+  return { ...v, ex, zT: zm - box.h / 2 / (v.sx * ex) };
+}
+/** How far in a zoom may go: to where the field's thin cells read plainly, the 5th percentile of the active
+ *  cells' thickness (the mean of each cell's four upright edges) drawn px tall. Returns { t, sz }: that
+ *  thickness in meters and the scale down (CSS px a meter) that draws it so; the scale across is sz / ex. */
+export function readableScale(geom, NA, px = 24) {
+  const t = new Float32Array(NA);
+  for (let c = 0; c < NA; c++) { let h = 0; for (let k = 0; k < 4; k++) h += geom[c * 24 + (k + 4) * 3 + 2] - geom[c * 24 + k * 3 + 2]; t[c] = h / 4; }
+  t.sort();
+  const t05 = Math.max(0.1, t[Math.floor(0.05 * (NA - 1))]);
+  return { t: t05, sz: px / t05 };
+}
+/** The field's depths: every active cell, from the shallowest corner to the deepest, padded as sectionAxis
+ *  pads a section's ({ top, bot } in z), and unpadded (z0, z1), which the app widens for the seismic. */
+export function fieldDepths(geom, NA) {
+  let z0 = Infinity, z1 = -Infinity;
+  for (let i = 0; i < NA * 8; i++) { const z = geom[i * 3 + 2]; if (z < z0) z0 = z; if (z > z1) z1 = z; }
+  const pad = Math.max(10, (z1 - z0) * 0.04);
+  return { top: z0 - pad, bot: z1 + pad, z0, z1 };
+}
+/**
+ * One distance for every section of a family (plan 0012 D19), so a step through a sweep moves the data and
+ * never the scale. members: [{ key, p0, p1, L }], each section's line on the map (its start, its end, its
+ * length along itself); u: the family's direction (unit, from A toward A′). Each is placed along u from one
+ * baseline square to u, through the family's first end (the least of the members' ends along u): the end of it
+ * nearer that baseline at its own distance along u, its own distances running with u (sgn 1) or, for a section
+ * whose path runs the other way, against it (sgn -1, its end then the nearer). A straight line's distance is then
+ * exactly the distance along u; a slice's path, which bends, keeps its own length along itself, so its far end
+ * may lie a little past where it falls along u, never short of the baseline. Returns { L, at }: the family's
+ * length on the distance, and a Map from each key to { off, sgn }, where the section's own distance s lies at
+ * off + sgn * s.
+ */
+export function commonFrame(members, u) {
+  let lo = Infinity, hi = -Infinity;
+  const raw = [];
+  for (const m of members) {
+    const a0 = m.p0[0] * u[0] + m.p0[1] * u[1], a1 = m.p1[0] * u[0] + m.p1[1] * u[1], sgn = a1 < a0 ? -1 : 1, near = sgn > 0 ? a0 : a1;
+    raw.push([m.key, sgn > 0 ? near : near + m.L, sgn]);
+    lo = Math.min(lo, near); hi = Math.max(hi, near + m.L);
+  }
+  return { L: hi - lo, at: new Map(raw.map(([k, o, sgn]) => [k, { off: o - lo, sgn }])) };
 }
 
 /* ── the layers, bottom to top; each draws on ctx in CSS px (the caller scales for the DPR) ── */
@@ -544,14 +683,23 @@ export function cellAt(sec, ax, x, y) {
  *  axis's one title, along it, carries the unit and the datum (Volve: "Depth, m below mean sea level"). */
 export function depthTicks(ax, sys, n = 3) {
   const toSys = (z) => U.toSystem(z + ax.datum, 'm', sys), fromSys = (v) => v / U.toSystem(1, 'm', sys) - ax.datum;
-  const lo = toSys(ax.zTop), hi = toSys(ax.zBot), step = niceStep(hi - lo, n), out = [];
+  // a held view's ticks: the window's depths, within the data's own (zLo to zHi)
+  const lo = toSys(Math.max(ax.zTop, ax.zLo ?? -Infinity)), hi = toSys(Math.min(ax.zBot, ax.zHi ?? Infinity)), out = [];
+  if (!(hi > lo)) return out;
+  const step = niceStep(hi - lo, n);
   for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) out.push({ y: ax.Y(fromSys(v)), v, text: U.int(v) });
   return out;
 }
-/** Round distance ticks along the line from A, in meters (feet in US units), the unit on the last. */
+/** Round distance ticks along the line from A, in meters (feet in US units), the unit on the last. A held
+ *  view's (D18, D19): the ticks of the distance the plot shows from edge to edge, within dLo to dHi, chosen
+ *  afresh for each window. */
 export function distanceTicks(ax, sys, n = 3) {
-  const k = U.toSystem(1, 'm', sys), span = ax.L * k, step = niceStep(span, n), out = [];
-  for (let v = 0; v <= span + 1e-9; v += step) out.push({ x: ax.X(v / k), v, text: U.int(v) });
+  const k = U.toSystem(1, 'm', sys), at = ax.dX || ax.X, out = [];
+  let lo = (ax.dLo || 0) * k, hi = (ax.dHi ?? ax.L) * k;
+  if (ax.held) { const d = (x) => ((x - at(0)) / ax.sx) * k; lo = Math.max(lo, d(ax.box.x)); hi = Math.min(hi, d(ax.box.x + ax.box.w)); }
+  if (!(hi > lo)) return out;
+  const step = niceStep(hi - lo, n);
+  for (let v = Math.ceil(lo / step - 1e-9) * step + 0; v <= hi + 1e-9; v += step) out.push({ x: at(v / k), v, text: U.int(v) });
   if (out.length) out[out.length - 1].text = U.withUnit(out[out.length - 1].text, U.unitOf('m', sys));
   return out;
 }

@@ -3,11 +3,11 @@
 //   1. what the ZIP ships stays within Snuggery's limits (count, depth, largest, total, no symlinks);
 //   2. no http:// or https:// in any .html, .css or .js the app ships, not even in a comment;
 //   3. every import / src / href / url( / fetch( and data path is relative, inside the folder, present;
-//   4. data/ holds exactly the seven files, fonts/ the house face and OFL.txt, js/ the five modules
-//      (js/section.js added by plan 0012's package 3.4, js/pane.js by 3.4b);
+//   4. data/ holds exactly the seven files, fonts/ the house face and OFL.txt, js/ the six modules
+//      (js/section.js added by plan 0012's package 3.4, js/pane.js by 3.4b, js/gesture.js by 2.5's D18);
 //      the face's and OFL.txt's sha256 are the house's; NOTES.md and About credit the face;
 //   5. the data is untouched: each data file's sha256 is the one recorded before the pass;
-//   6. miniapp.json is valid, at version 2.4 (HOUSE 13; plan 0012's package 3.4b from 2.2, 2.3.1 the play clamp, 2.4 D16 and D17);
+//   6. miniapp.json is valid, at version 2.5 (HOUSE 13; plan 0012's package 3.4b from 2.2, 2.3.1 the play clamp, 2.4 D16 and D17, 2.5 D18 to D20);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
 //   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line, its
 //      first Sources and credits paragraph; no #credits and no other credit on the front (HOUSE 4.15);
@@ -104,7 +104,7 @@ const exactly = (dir, names) => {
 };
 exactly('data', ['ATTRIBUTION.txt', 'dynamic.bin', 'geometry.bin', 'ijk.bin', 'model.json', 'neighbours.bin', 'static.bin']);
 exactly('fonts', ['ysabeau-office-gw.woff2', 'OFL.txt']);
-exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js']);
+exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js', 'gesture.js']);
 {
   const FONT_SHA = 'fdf1a28c58fbcc7beb3c98cac4f01d4d1538d03581f1b1dd047a289274cdb262';
   const OFL_SHA = 'd1adfffd83f9e896bcc17e6067c7f57f6824083fdd8d6951acbfca5b29be6269';
@@ -137,7 +137,7 @@ exactly('js', ['units.js', 'data.js', 'track.js', 'section.js', 'pane.js']);
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Norne Reservoir' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.4',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '2.5',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -195,7 +195,7 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 // 10. SI notation in what the app writes; toFixed and toLocaleString only in js/units.js
 {
   const UNIT = /\d (bar|psi|m|ft|km|mi|mD|Sm³\/d|bbl\/d|Mscf\/d|%|px)(?![\w/])/;
-  const files = ['index.html', 'app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js'];
+  const files = ['index.html', 'app.js', 'js/units.js', 'js/data.js', 'js/track.js', 'js/section.js', 'js/pane.js', 'js/gesture.js'];
   const hits = [];
   for (const f of files) {
     const lits = f.endsWith('.html') ? [code(read(f), f).replace(/<[^>]+>/g, ' ')] : strings(read(f));
@@ -308,8 +308,8 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
   // The lead's ruling on the code budget for 2.3 (2026-10-07): 256 000 B, for D13's edge and D14's sweep,
   // which the owner asked for and Volve will copy (222 000 B for 2.2, plan 0012 3.4)
-  const CODE_CAP = 256000;
-  ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (budget ${fmt(CODE_CAP)}, the lead's ruling for 2.3 of 2026-10-07: D13's edge and D14's sweep; 222,000 for 2.2, plan 0012 3.4; 77,032 before plan 0011's pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+  const CODE_CAP = 300500;   // the lead's ruling, 2026-10-10: 299 880 B after 2.5's D18 to D20 (zoom, the lock, the tall stop); 256 000 for 2.3 and 2.4
+  ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (budget ${fmt(CODE_CAP)}, the lead's ruling for 2.5 of 2026-10-10: D18 to D20; 256,000 for 2.3 and 2.4 (D13's edge, D14's sweep); 222,000 for 2.2, plan 0012 3.4; 77,032 before plan 0011's pass): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
   const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
   ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000; 0 before the pass)`);
   const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

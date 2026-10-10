@@ -177,6 +177,64 @@ blue.
 **The sheet's Section group**: the three show words, *Seismic gain* (×0.125 to ×8, in quarter
 powers of two, its value printed `×1`), *Cells over it* (in Both only), and the ramp's two words.
 
+**Zoom in the section, the axes' lock and the tall stop (1.2).** Norne Reservoir 2.5's (its `ART.md`
+has the full account; the template's plan 0012, D18 to D20, the owner's words), with the seismic:
+
+- **Zoom.** A pinch zooms about the fingers and carries the point under them; one finger moves the
+  view once zoomed in and does nothing at the fit; a tap (8 px or less) still shows its cell at once;
+  a double tap (380 ms, 30 px) zooms in two times where it lands; a wheel or a trackpad zooms about the
+  pointer. Uniform, so the stretch the pane states is the one drawn. Out to the fit, in to where the
+  field's thin cells read plainly: the 5th percentile of the active cells' thickness (0.42 m) drawn
+  24 px tall, about 350 times the inline's compact fit at ×3 on a 390 px screen. There a trace spacing is some 475 px wide,
+  so the seismic shows its blend between two traces, which is all the survey holds there. A move keeps
+  48 px of the section in view.
+- **The seismic zooms with the cells** on the one axis. While a finger moves, the last full drawing is
+  laid on the newest view by distance and depth (the seismic's image, the cells, the gaps and the
+  outline), with the seismic's own samples (a column every 25 m, a row every 5 m) and the cells over the
+  whole view (the fit's, or locked, the field's window, and the view zoomed out four times about its
+  middle, drawn at rest after a zoomed drawing) under it wherever the drawing did not reach, so a pinch
+  out never leaves the plot empty; nothing is rendered in full. At rest (150 ms after the lift) the seismic is
+  rendered as before, a few columns a frame at the screen's own pixels, for exactly the part of the line
+  and the window the plot shows, and drawn 1:1. No new display.
+- **Everything follows**: cells, edges, gaps, outline, horizons, wells and names, the tapped cell, A and
+  A′ and their inline and crossline numbers where they lie (an end off the plot is left out, letter,
+  rule and numbers), and the scales, which stand at the plot's edges zoomed or locked and are re-chosen
+  for the depths and distances in view. Held, the numbers stand by the letters or not at all: the key
+  beside the plot (the fit's last resort) would move the plot, which a held view never does.
+- **The keys** in a strip at the plot's right, outside the data, as Norne's: `Lock the axes`
+  (`aria-pressed`, its shackle open when unlocked) over `Zoom the section in`, and `Fit the section` and
+  `Zoom the section out` only where they would change something, under them where the plot is 186 px
+  tall or more, else beside them while zoomed. The plot's box ends 6 px before the strip, and the ends'
+  numbers keep off it. Where the plot is under 89 px tall, or its box would be under 150 px wide (the
+  52 px plot a raised sheet leaves on the smallest phones, the tall stop with the section, the narrow pane
+  beside the model, a 320 px phone), the keys step aside: out of sight, still in the keyboard's order and to VoiceOver,
+  shown over the plot while they hold the keyboard, and `Axes locked` in the key under the pane says
+  when they are locked. Norne's rule exactly.
+- **Locked**, the window opens on the whole field: every active cell's corners, 2 797 to 3 549 m below
+  sea level, with 150 m of seismic above and below (2 647 to 3 699 m, inside the cube's 2 295 to
+  4 050 m), whatever the section shows, so switching Seismic, Model and Both never moves it; and the
+  full length of the line's family at one scale, at the 3D view's stretch, or where the pane's cap holds
+  the plot under the window's need, the largest round stretch under it that fills the plot's width (×2
+  on the inlines at 390 × 844 with the sheet closed), stated as the pane's own. The family's distance: the inlines (4 675 m) and the
+  crosslines (3 575 m) are straight and parallel and all start at the survey's edge, so each lies at
+  its own distance from it; Along's rows (4.60 km) and Across's columns (3.24 km) each from the end
+  nearer the family's first end, at its own distance along the line from a baseline square to it, and
+  keeping its own length along its path: 25 of Across's columns run against the line and are laid the
+  other way, A′ to the left of A. The zero names that end by the compass (`West end` on the inlines and
+  Along, `South end` on the crosslines, `North end` on Across); out of view, the unit's tick says
+  where it is measured from (`from the west end`). A line of one's own keeps its own length, from A. Nothing moves the window but
+  a hand: not a step, a family, a property, a date, the display or the pane's size.
+- **The tall stop**: above Explode's and the scrolled stop, the sheet rises to the grip and all of
+  Cells and view's rows (its five sliders, the two toggles and Show all cells, which since 1.2 shares the
+  toggles' row); the section's display and the heading scroll away under the grip. The 3D view keeps
+  104 px (its keys' row and 58 px of the model), 254 px with the section open (the strip and the pane at
+  150).
+  The grip's names: `Show more controls`, `Show all controls`, `Show Cells and view in full`, `Hide the
+  extra controls`. No fourth stop where the sheet is a column at the side, or where it would gain under
+  44 px. Measured (headless): all of Cells and view in view at each size, the sheet 311 px; the model
+  281 to 282 px at 390 × 844, 369 to 370 at 430 × 932, 104 to 105 at 375 × 667; with the section open,
+  the model 131 to 132 and the pane 150 at 390 × 844, 219 to 220 and 150 at 430 × 932.
+
 ## 3. Words
 
 The run's period is read from the dates (`periods()` in `js/data.js`), never assumed: the card says
@@ -201,7 +259,8 @@ Pause), `Show the controls` (the ghost key of a remembered focus mode, under `vo
 and the grip's three names. New names, none of which a camera reads: `Inline`, `Crossline`,
 `Previous inline` and `Next inline` (`crossline` likewise), `Seismic`, `Model`, `Both`,
 `Seismic gain`, `Cells over it`, `Gray`, `Red and blue`, `Back one report date` and `Forward one
-report date`.
+report date`; since 1.2, `Fit the section`, `Fit the field’s depth and length`, `Zoom the section
+in`, `Zoom the section out`, `Lock the axes` and the grip's `Show Cells and view in full`.
 
 ## 6. Budgets
 
@@ -219,6 +278,13 @@ speed, the same 1.1:** app code 321 958 B (`app.js` 183 615, `js/section.js` 36 
 13 044, `js/pane.js` 5 339, the rest as before), 9 974 B more for the drawing while the view moves, the
 render in slices, the exact cheaper fit and cut, and About's sentence; within the 322 500 B cap the lead ruled for 1.1, nothing cut. Fonts 40 075 B of 160 000. The ZIP is about 33.4 MB, of which
 the data, which the pipeline owns, is 33 234 794 B deflated (64.5 MB unpacked, 29 files).
+
+**As built, 1.2** (`node tools/check.mjs`; plan 0012 D18 to D20, with the review's fixes): app code 369 523 B
+(`app.js` 212 396, `js/section.js` 46 467, `style.css` 41 890, `index.html` 23 537, `js/seismic.js` 13 044,
+`js/track.js` 8 149, `js/units.js` 7 778, `js/data.js` 7 032, `js/pane.js` 5 339, `js/gesture.js` 3 891),
+47 565 B more than 1.1
+for the zoom, the lock and the tall stop, over the 322 500 B the template ruled for 1.1: nothing was cut, and
+the cap is the template's to rule on. The ZIP is about 33 420 700 B (its last bytes move with these notes), within its 33 600 000.
 
 ## 7. The generated-page tells, answered
 

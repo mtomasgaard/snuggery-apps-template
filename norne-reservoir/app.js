@@ -13,8 +13,9 @@
 import * as U from './js/units.js';
 import { buildZones, segmentOf, fillValues, cellValue, propRange, norm, denorm, gasMax, openEnds, cutSeries, cutFacts } from './js/data.js';
 import { createTrack, CUT_SCALE } from './js/track.js';
-import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, drawCells, drawTops, drawOutline, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag } from './js/section.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, gapLayer, drawCells, drawTops, drawOutline, cellAt, depthTicks, distanceTicks, surfaces, surfAt, rayToTop, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag, stretchFor, fillStretch, lineOf, slicePaths, commonFrame, fieldDepths, readableScale, fitWindow, viewOfAxis, viewAxis, zoomAt, panBy, keepIn, restretch } from './js/section.js';
 import { paneEdge } from './js/pane.js';
+import { plotGestures } from './js/gesture.js';
 
 const $ = (id) => document.getElementById(id);
 const LS_KEY = 'norne-viewer:v1';
@@ -39,7 +40,7 @@ const S = {                                   // the view, saved to localStorage
   cam: null, well: null,
   explode: { mode: 'formations', t: 0 },
   sheet: 0,                                   // the controls sheet: 0 the grip, 1 + explode and rates, 2 + cells and view
-  section: { on: false, line: 'along', a: null, b: null, at: null, size: 0 },   // the section A–A′: a line of the field's own, or one drawn (a, b in model meters); at: where the sweep took it (a column or row of the grid for the field's lines, a step for a drawn one; null, the line itself); size: the pane, 0 compact to 1 tall
+  section: { on: false, line: 'along', a: null, b: null, at: null, size: 0, lock: false },   // the section A–A′: a line of the field's own, or one drawn (a, b in model meters); at: where the sweep took it (a column or row of the grid for the field's lines, a step for a drawn one; null, the line itself); size: the pane, 0 compact to 1 tall; lock: the axes held on the field's window (D19)
 };
 const R = { faces: true, colors: true, draw: true, chart: true, labels: true, wells: true, step: true, legend: true, track: true, card: 0, section: false, secGeom: true };   // dirty; card: 1 check the card's place, 2 place it afresh
 let pick = -1, cardMode = null, playing = null, wanted = 0, shown = -1, units = 'SI', focus = false, track = null;
@@ -137,6 +138,8 @@ async function main() {
   G.lines = fieldLines(G.geom, NA, G.ijk, model.NI, model.NJ);
   G.cols = columns(G.geom, NA, G.ijk, model.NI, model.NJ);   // the sweep's slices: the grid's own columns and rows
   G.surf = surfaces(G.geom, NA);
+  G.secWin = fieldDepths(G.geom, NA);       // the axes' lock (D19): every active cell's depths
+  G.secRead = readableScale(G.geom, NA);    // the zoom's limit (D18): where the thin cells read plainly
   initGL();
   initCamera();
   initUI();
@@ -147,7 +150,8 @@ async function main() {
   new ResizeObserver(() => { R.chart = true; kick(); }).observe($('chart'));
   new ResizeObserver(() => { track.resize(); R.track = true; R.legend = true; kick(); }).observe($('slider'));
   new ResizeObserver(() => thinTicks()).observe($('legend-ticks'));   // the legend's width can change after it is written
-  document.fonts.addEventListener('loadingdone', () => { track.invalidate(); R.track = true; R.labels = true; G.labelW = null; kick(); });
+  document.fonts.addEventListener('loadingdone', () => { track.invalidate(); R.track = true; R.labels = true; G.labelW = null; applyStop(); kick(); });
+  applyStop();   // the sheet's rows at their final size: the tall stop measured again, the sheet scrolled to it
   // the legend's title is written last: the marketing camera waits for "Oil saturation" as the sign
   // that every file is in
   drawLegend();
@@ -160,14 +164,14 @@ function restore() {
     const s = JSON.parse(localStorage.getItem(STORE.state) || 'null');
     if (!s) return;
     for (const k of ['prop', 'frame', 'exag', 'wells', 'labels', 'edges', 'well']) if (k in s) S[k] = s[k];
-    if (Number.isFinite(s.sheet)) S.sheet = Math.max(0, Math.min(2, s.sheet | 0));
+    if (Number.isFinite(s.sheet)) S.sheet = Math.max(0, Math.min(3, s.sheet | 0));   // 3, the tall stop, since 2.5 (D20); an older 0 to 2 opens where it was
     if (s.cut) for (const k in S.cut) if (Number.isFinite(s.cut[k])) S.cut[k] = s.cut[k];
     if (Array.isArray(s.vf)) S.vf = s.vf;
     if (s.cam && Number.isFinite(s.cam.dist) && 'sx' in s.cam) S.cam = s.cam;   // a camera saved before the fit had no lens shift: the fit replaces it
     if (s.explode && ['formations', 'layers', 'segments'].includes(s.explode.mode) && Number.isFinite(s.explode.t)) S.explode = s.explode;
     if (s.section && typeof s.section === 'object') {
       const q = s.section, pt = (v) => Array.isArray(v) && v.length === 2 && v.every(Number.isFinite);
-      S.section = { on: !!q.on, line: ['along', 'across'].includes(q.line) ? q.line : null, a: pt(q.a) ? q.a : null, b: pt(q.b) ? q.b : null, at: Number.isInteger(q.at) ? q.at : null, size: Number.isFinite(q.size) ? Math.max(0, Math.min(1, q.size)) : 0 };
+      S.section = { on: !!q.on, line: ['along', 'across'].includes(q.line) ? q.line : null, a: pt(q.a) ? q.a : null, b: pt(q.b) ? q.b : null, at: Number.isInteger(q.at) ? q.at : null, size: Number.isFinite(q.size) ? Math.max(0, Math.min(1, q.size)) : 0, lock: q.lock === true };   // a state saved before 2.5 has no lock: unlocked
       if (!S.section.line && !(S.section.a && S.section.b)) S.section.line = 'along';
     }
     if (S.well && !model.wells.some((w) => w.name === S.well)) S.well = null;
@@ -604,7 +608,7 @@ function loop(now) {
   if (R.track) { track.draw(shown); R.track = false; }
   if (R.chart) { drawChart(); R.chart = false; }
   if (R.section || R.secGeom) drawSection();
-  if (G.secLog && S.section.on) { const c = $('sec-plot'), g = $('gl'), d = Math.min(window.devicePixelRatio || 1, 2); G.secLog.push({ t: now, v: +$('sec-sweep').value, at: S.section.at, drew: SEC.drawnAt, plot: [c.width, Math.round(c.clientWidth * d), c.height, Math.round(c.clientHeight * d)], gl: [g.width, Math.round(g.clientWidth * d), g.height, Math.round(g.clientHeight * d)], pane: $('section').getBoundingClientRect().height, size: S.section.size }); }
+  if (G.secLog && S.section.on) { const c = $('sec-plot'), g = $('gl'), d = Math.min(window.devicePixelRatio || 1, 2); G.secLog.push({ t: now, v: +$('sec-sweep').value, at: S.section.at, drew: SEC.drawnAt, plot: [c.width, Math.round(c.clientWidth * d), c.height, Math.round(c.clientHeight * d)], gl: [g.width, Math.round(g.clientWidth * d), g.height, Math.round(g.clientHeight * d)], pane: $('section').getBoundingClientRect().height, size: S.section.size, view: SEC.drawnView, cur: secViewKey(), previews: G.stats.secPreviews || 0, full: G.stats.secFull || 0 }); }
   if (flog && stepChanged) flog.push({ t: now, wanted, shown, tex: G.texStep, sec: S.section.on ? G.secStep : null, label: $('valid').textContent, now: +$('slider').getAttribute('aria-valuenow') });
   if (playing || G.anim || Object.values(R).some(Boolean)) kick();
 }
@@ -975,7 +979,7 @@ function writeAbout() {
   const cross = facts.cross ? ` From the month to ${U.date(facts.cross.iso)} the wells lift more water than oil in ${facts.stays === facts.of ? `all ${facts.of}` : `${facts.stays} of the ${facts.of}`} months left, and the last month is ${U.percent(facts.last.share)} water.` : '';
   $('ab-cut').textContent = `Each column on the player’s track is one report date: its width is the days since the date before, and its height is the liquid the field’s wells lifted per day in that month, at ${scaleWords} (the tick at the track’s left end is ${sc.label}). The oil is the solid ink at the foot and the water the paler ink stacked on it. The liquid peaks at ${U.liquid(facts.peak.liquid, units)} in the month to ${U.date(facts.peak.iso)}, ${U.percent(facts.peak.share)} of it water.${cross}`;
   const lenOf = (l) => U.length(Math.hypot(l.b[0] - l.a[0], l.b[1] - l.a[1]), units), us = units === 'US';
-  $('ab-section').textContent = `The section shows the model where a vertical plane along the line from A to A′ passes through it. Each cell the plane cuts is drawn as the block it cuts, in one color: the cell’s value on the scale under the picture at the report date in the player, unshaded and never blended with its neighbors, since a model cell holds one value. Depth is the model’s own true vertical depth (TVD) in ${us ? 'feet' : 'meters'}, stretched as the 3D view is (Vertical exaggeration, under More controls); a pane made taller than its section stretches it more, to the round figure that fills it, and says so under it. Distance runs from A in ${us ? 'feet' : 'meters'}. Lines mark the top of each formation. Hatching marks where the plane passes between active cells inside the model, where inactive cells hold no values. The wells that come within ${U.length(SEC_CORRIDOR, units)} of the plane are drawn on it, moved square onto it, as the 3D view draws them on that date. The explode, the cell ranges and the value range change the 3D view only. Along is the straight line through the field, ${lenOf(G.lines.along)} long, that passes over the most of its stacks of cells (each stack the cells of one I and one J); Across is the one square to it that passes over the most (${lenOf(G.lines.across)}). The slider sweeps them through the grid itself: Along through its columns (each the cells of one I), Across through its rows (one J). A column or row is shown as it is in the grid, not as a straight cut: its own cells, each the face midway across it, along the path through the middles of its pillars, with distance measured along that path, and the wells within ${U.length(SEC_CORRIDOR, units)} of it drawn at their nearest point on it. A line of your own is swept parallel to itself, one column’s or row’s width at a time.`;
+  $('ab-section').textContent = `The section shows the model where a vertical plane along the line from A to A′ passes through it. Each cell the plane cuts is drawn as the block it cuts, in one color: the cell’s value on the scale under the picture at the report date in the player, unshaded and never blended with its neighbors, since a model cell holds one value. Depth is the model’s own true vertical depth (TVD) in ${us ? 'feet' : 'meters'}, stretched as the 3D view is (Vertical exaggeration, under More controls); a pane made taller than its section stretches it more, to the round figure that fills it, and says so under it. Distance runs from A in ${us ? 'feet' : 'meters'}. Lines mark the top of each formation. Hatching marks where the plane passes between active cells inside the model, where inactive cells hold no values. The wells that come within ${U.length(SEC_CORRIDOR, units)} of the plane are drawn on it, moved square onto it, as the 3D view draws them on that date. The explode, the cell ranges and the value range change the 3D view only. Along is the straight line through the field, ${lenOf(G.lines.along)} long, that passes over the most of its stacks of cells (each stack the cells of one I and one J); Across is the one square to it that passes over the most (${lenOf(G.lines.across)}). The slider sweeps them through the grid itself: Along through its columns (each the cells of one I), Across through its rows (one J). A column or row is shown as it is in the grid, not as a straight cut: its own cells, each the face midway across it, along the path through the middles of its pillars, with distance measured along that path, and the wells within ${U.length(SEC_CORRIDOR, units)} of it drawn at their nearest point on it. A line of your own is swept parallel to itself, one column’s or row’s width at a time. Zoomed in, the scales stand at the pane’s edges and give the depths and distances in view; zooming goes in as far as the field’s thin cells (one cell in twenty is ${U.length(G.secRead.t, units)} thick or less) drawn 24 px tall, and keeps the stretch the pane states. With the axes locked, the window holds the field: the shallowest active cell to the deepest, and the whole length of the line with every column or row its slider goes through, at one scale, and only your hand moves it. On it every column or row is placed by where its start falls along the line, measured from a baseline square to the line through the family’s west end, and keeps its own length along its path, so a step of the slider moves the cells and never the scale; a line of your own keeps its own length, from A.`;
   $('about-source').textContent = model.source;
   const list = $('about-list'); list.replaceChildren();
   const rows = [
@@ -1009,23 +1013,49 @@ function closeAbout() {
 
 // ---------------------------------------------------------------- the controls sheet
 const GRIP = ['Show more controls', 'Show all controls', 'Hide the extra controls'];
-function applyStop() {
+const GRIP_TALL = 'Show Cells and view in full';   // the second stop's name where the tall stop follows it (D20)
+/** The stop shown (D20): the fourth, the tall one, only in the column, where it raises the sheet 44 px or more
+ *  past the second; elsewhere (the sheet a column at the side, which shows everything, or a screen too short)
+ *  a saved fourth stop shows as the second, and stays saved for the screen it was chosen on. */
+function shownStop() { return S.sheet === 3 && !G.tall ? 2 : S.sheet; }
+/** Whether the tall stop raises the sheet: the sheet's height at the second stop and at the tall one, laid out
+ *  and measured (the classes then put back by applyStop). */
+function measureTall() {
+  const sheet = $('sheet'), b = document.body, stop2 = document.querySelector('.stop2');
+  if (getComputedStyle(sheet).gridColumnStart !== 'auto') return false;   // the sheet is a column at the side
+  sheet.classList.remove('s0', 's1', 's3'); sheet.classList.add('s2'); b.classList.add('raised'); b.classList.remove('tall');
+  // Cells and view's rows, the first slider's top to Show all cells' foot: the tall stop shows them all, its heading
+  // scrolled up under the grip as the second stop scrolls Explode
+  const first = stop2.querySelector('.srow'), last = $('reset-cut');
+  sheet.style.setProperty('--cv-h', `${Math.ceil(last.getBoundingClientRect().bottom - first.getBoundingClientRect().top) + 2}px`);   // and the 2 px the scroll's rounding down (and its 1 px of room under the grip) may take
+  const h2 = sheet.getBoundingClientRect().height;
+  sheet.classList.replace('s2', 's3'); b.classList.add('tall');
+  return sheet.getBoundingClientRect().height - h2 >= 44;
+}
+/** The stop as chosen, laid out; smooth (where motion is welcome) only for a step by hand. */
+function applyStop(hand) {
   const sheet = $('sheet'), grip = $('grip');
-  sheet.classList.remove('s0', 's1', 's2');
-  sheet.classList.add('s' + S.sheet);
-  document.body.classList.toggle('raised', S.sheet > 0);   // the view keeps --view-min (style.css)
-  grip.setAttribute('aria-label', GRIP[S.sheet]);
+  G.tall = measureTall();
+  const n = shownStop(), top = n === 3 || (n === 2 && !G.tall);
+  sheet.classList.remove('s0', 's1', 's2', 's3');
+  sheet.classList.add('s' + n);
+  sheet.classList.toggle('top', top);   // the chevron turns down where the next step hides
+  document.body.classList.toggle('raised', n > 0);   // the view keeps --view-min (style.css)
+  document.body.classList.toggle('tall', n === 3);   // the tall stop: the view keeps its strip (--view-tall)
+  // each name says what the next step does: more, all, Cells and view in full, or hide
+  grip.setAttribute('aria-label', n === 2 && G.tall ? GRIP_TALL : GRIP[Math.min(n, 2)]);
   // the raised stops are one height (the view keeps its share), so the second stop shows what it adds:
-  // the sheet scrolls Cells and view up under the grip; the first stop and closed go back to the top
-  const head = document.querySelector('.stop2 .sheet-head');
-  const to = S.sheet === 2 && head ? sheet.scrollTop + head.getBoundingClientRect().top - sheet.getBoundingClientRect().top - sheet.clientTop - grip.offsetHeight : 0;
-  sheet.scrollTo({ top: Math.max(0, to), behavior: reduced.matches || !model ? 'auto' : 'smooth' });
+  // the sheet scrolls Cells and view up under the grip; the tall stop raises the sheet to show all of it
+  // there; the first stop and closed go back to the top
+  const head = n === 3 ? document.querySelector('.stop2 .srow') : document.querySelector('.stop2 .sheet-head');
+  const to = n >= 2 && head ? sheet.scrollTop + head.getBoundingClientRect().top - sheet.getBoundingClientRect().top - sheet.clientTop - grip.offsetHeight : 0;
+  sheet.scrollTo({ top: Math.max(0, Math.floor(to) - (n === 3 ? 1 : 0)), behavior: reduced.matches || !hand ? 'auto' : 'smooth' });
   R.draw = true; R.chart = true; R.labels = true; kick();
 }
 function setStop(n) {
-  n = Math.max(0, Math.min(2, Math.round(n)));
-  if (n === S.sheet) return;
-  S.sheet = n; applyStop(); save();
+  n = Math.max(0, Math.min(G.tall ? 3 : 2, Math.round(n)));
+  if (n === shownStop()) return;
+  S.sheet = n; applyStop(true); save();
 }
 // Drag the grip a stop at a time, or tap it to step through the stops.
 function initSheet() {
@@ -1039,21 +1069,28 @@ function initSheet() {
   });
   grip.addEventListener('pointermove', (e) => {
     if (!drag) return;
-    const dy = drag.y - e.clientY;
+    const dy = drag.y - e.clientY, n = shownStop();
     if (Math.abs(dy) > 5) drag.moved = true;
-    if (dy > 44 && S.sheet < 2) { setStop(S.sheet + 1); drag.y = e.clientY; }
-    else if (dy < -44 && S.sheet > 0) { setStop(S.sheet - 1); drag.y = e.clientY; }
+    if (dy > 44 && n < (G.tall ? 3 : 2)) { setStop(n + 1); drag.y = e.clientY; }
+    else if (dy < -44 && n > 0) { setStop(n - 1); drag.y = e.clientY; }
   });
   grip.addEventListener('pointerup', () => { if (drag && drag.moved) skipClick = true; drag = null; });
   grip.addEventListener('pointercancel', () => { drag = null; });
   grip.addEventListener('click', () => {
     if (skipClick) { skipClick = false; return; }
-    setStop((S.sheet + 1) % 3);
+    setStop((shownStop() + 1) % (G.tall ? 4 : 3));
   });
   grip.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowUp') { e.preventDefault(); setStop(S.sheet + 1); }
-    else if (e.key === 'ArrowDown') { e.preventDefault(); setStop(S.sheet - 1); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); setStop(shownStop() + 1); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); setStop(shownStop() - 1); }
   });
+  // a turn of the phone, a window resized, the section opened or closed: the tall stop is weighed again
+  let at = '';
+  const again = () => { const k = `${innerWidth} ${innerHeight} ${S.section.on}`; if (k !== at) { at = k; applyStop(); } };
+  addEventListener('resize', again);
+  new MutationObserver(again).observe(document.body, { attributeFilter: ['class'] });
+  // the rates chart's key fills in after the first frame and can take a second line: a raised stop stays on Cells and view
+  new ResizeObserver(() => { if (shownStop() >= 2) applyStop(); }).observe(document.querySelector('.stop1'));
   applyStop();
 }
 /** The keys: a column where the plate is tall enough for it (294 px with the 8 px inset); else a row along
@@ -1786,8 +1823,22 @@ function initChartSeek() {
 // ground, on the same axis (sectionAxis), and nothing else would change.
 const SEC_CORRIDOR = 150;                       // meters either side of the plane: the wells drawn on it
 const SEC_BOX = { l: 46, t: 15, r: 8, b: 15 };  // the plot's margins in the pane: depth words, A and A′, distances
+const SEC_MINW = 150;   // px: the least the data's box keeps beside the keys' strip (D18, D19)
+/** The keys' strip at the plot's right, outside the data's box (D18, D19), by the plot's size: 'col', the four keys
+ *  in one column (two plates of two 44 px keys, their hits 89 px, and the 8 px between); 'grid', one plate tall, one
+ *  column at the fit and two zoomed (the sweep's word keeps › clear of the second, style.css); else 'aside' (the
+ *  keys out of sight, still to the keyboard and VoiceOver). */
+function secStrip(W, H) {
+  const room = (c) => W - SEC_BOX.l - secR(c) >= SEC_MINW;
+  return H >= 186 && room(1) ? 'col' : H >= 89 && room(2) ? 'grid' : 'aside';
+}
+/** The plot's right margin with the strip's c columns (44 or 90 px of hits and 6 px to the data; 0: no strip). */
+function secR(c) { return c ? (c === 1 ? 44 : 90) + 6 : SEC_BOX.r; }
+/** The data box's width at the fit, and the least height the strip needs, for a plot W px wide (the compact pane's
+ *  need, the locked plot's). */
+function secFitW(W) { const strip = W - SEC_BOX.l - secR(2) >= SEC_MINW; return { bw: Math.max(40, W - SEC_BOX.l - secR(strip ? 1 : 0)), min: strip ? 94 : 70 }; }   // 94: two keys and the 6 px the sweep's keys reach up over the plot's foot
 const SEC_GRAB_MIN = 76;   // px: the model's shorter side on the plate below which its line's ends take no touch (80 px up: 22 % or less of its cells within an end's reach; 75 down: 21 to 70 %)
-const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null, cuts: new Map(), sweep: null, exag: 0 };
+const SEC = { geom: null, wells: [], ax: null, hatch: null, hatchKey: '', armed: false, drag: null, ends: null, cuts: new Map(), sweep: null, exag: 0, view: null, moving: false, snap: null, fam: null, lockedPx: null };   // view: null at the fit, else the held view (D18, D19; { pending } while a lock or Fit waits for the next frame); moving: a gesture lasts (the plot previews); lockedPx: the plot's height held while locked
 /** The line the section shows: the field's own or the drawn one, or where the sweep took it (plan 0012
  *  D14): one of the grid's own columns or rows, cut along its own path, or the drawn line moved parallel
  *  to itself. A slice's cut is kept (a few), so a sweep back and forth cuts each once. */
@@ -1814,6 +1865,9 @@ function secCut() {
   SEC.geom = l.sec || cutGrid(G.geom, G.NA, G.ijk, l.a, l.b, G.secTops);
   SEC.wells = l.sec ? l.sec.wells : wellsNear(model.wells.map((w) => w.path), SEC.geom.line, SEC_CORRIDOR);
   SEC.hatchKey = ''; SEC.cutAt = S.section.at;
+  // a section of its own (a sweep step, another line or family): unlocked, a zoom by hand gives way to the fit
+  const id = `${S.section.line}|${S.section.a}|${S.section.b}|${S.section.at}`;
+  if (id !== SEC.cutId) { SEC.cutId = id; if (!S.section.lock) SEC.view = null; }
   G.stats.secCuts = (G.stats.secCuts || 0) + 1; G.stats.secCutMs = (G.stats.secCutMs || 0) + SEC.geom.ms;
 }
 /** The sweep's places for the line as chosen, in order across the field: for a line of the field's own,
@@ -1847,6 +1901,7 @@ function sweepWords(w, at) {
 function setSection(on, byKey) {
   S.section.on = !!on;
   SEC.lockH = false;
+  if (on && !S.section.lock) SEC.view = null;   // opened again unlocked: at the fit
   if (!on) armDraw(false);
   applySection(); save();
   if (byKey) say(on ? `Section shown, ${secWords()}.` : 'Section hidden.');
@@ -1957,7 +2012,7 @@ function secStyle() {
   return { ink: css('--ink'), ink2: css('--ink-2'), ink3: css('--ink-3'), line: css('--line'), strong: css('--line-strong'), page: css('--plate'), halo: css('--plate-halo') };
 }
 /** The plot's height the section needs at this plot width (under the model), before --sec-h caps it. */
-function secNeed(bw) { return Math.max(70, Math.ceil(sectionAxis(SEC.geom, { x: 0, y: 0, w: bw, h: 1e9 }, S.exag, 0).y1) + SEC_BOX.t + SEC_BOX.b); }
+function secNeed(W) { const f = secFitW(W); return Math.max(f.min, Math.ceil(sectionAxis(SEC.geom, { x: 0, y: 0, w: f.bw, h: 1e9 }, S.exag, 0).y1) + SEC_BOX.t + SEC_BOX.b); }
 /** The section's cut and the pane's fit, before the 3D view draws: under the 3D view the compact pane is
  *  as tall as the section needs at this width, up to its cap (--sec-h), so a long, flat section leaves the
  *  rest to the model; held while a line is drawn or swept, and set in the frame that draws at it, so
@@ -1968,49 +2023,92 @@ function fitSection() {
   const cv = $('sec-plot'), under = getComputedStyle($('view')).flexDirection === 'column';
   $('sec-sweep').parentNode.classList.toggle('narrow', cv.clientWidth < 284);   // the sweep's row: ‹ › 88, the slider 140, the word 64, less its 8 px reach
   if (SEC.drag || SEC.lockH) return;
-  const want = under ? `${secNeed(Math.max(40, cv.clientWidth - SEC_BOX.l - SEC_BOX.r))}px` : '';
+  const fw = secFitW(cv.clientWidth);
+  // locked (D19), the field's window's need, set when the axes lock or Fit is pressed and held: no section, family
+  // or stretch changes the grid by itself
+  if (S.section.lock && under && SEC.lockedPx === null) { const f = secFamily(); SEC.lockedPx = Math.max(fw.min, Math.ceil((G.secWin.bot - G.secWin.top) * S.exag * fw.bw / f.L) + SEC_BOX.t + SEC_BOX.b); }
+  const want = under ? `${S.section.lock && SEC.lockedPx !== null ? SEC.lockedPx : secNeed(cv.clientWidth)}px` : '';
   if (cv.style.height !== want) { cv.style.height = want; R.draw = true; R.labels = true; R.card = Math.max(R.card, 1); }
 }
-/** The section, drawn: in the frame that draws the date, after the color pass. */
-function drawSection() {
-  R.section = false;
-  if (!S.section.on || !model) { R.secGeom = false; return; }
-  if (R.secGeom || !SEC.geom) fitSection();
-  const t0 = performance.now(), cv = $('sec-plot'), W = cv.clientWidth, H = cv.clientHeight;
-  if (!W || !H) return;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2), cw = Math.round(W * dpr), ch = Math.round(H * dpr);
-  if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
-  const sec = SEC.geom, st = secStyle(), x = cv.getContext('2d');
-  const bw = Math.max(40, W - SEC_BOX.l - SEC_BOX.r);
-  const box = { x: SEC_BOX.l, y: SEC_BOX.t, w: bw, h: Math.max(30, H - SEC_BOX.t - SEC_BOX.b) };
-  // a pane made taller than compact fills with the section, at a stretch of its own that it states (D13)
-  const ex = $('section').classList.contains('grown') ? ownExag(sec, box, S.exag) : S.exag;
-  if (ex !== SEC.exag) { SEC.exag = ex; writeSecWords(); }
-  const ax = SEC.ax = sectionAxis(sec, box, ex, model.center[2]);
-  const hk = [W, H, dpr, ex, sec.line.a, sec.line.b, sec.line.L, st.ink3, st.line].join('|');
-  if (SEC.hatchKey !== hk && !SEC.drag) { SEC.hatch = gapLayer(sec, ax, W, H, dpr, hexToRgb(st.ink3), mkCanvas); SEC.hatchKey = hk; }
-  x.setTransform(dpr, 0, 0, dpr, 0, 0);
-  x.clearRect(0, 0, W, H);
-  x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
-  if (!sec.n) {   // a line off the field cuts nothing: no axis to print, one line in the pane
-    $('sec-key-gap').hidden = true;
-    x.fillStyle = st.ink2; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '400 13.5px "Ysabeau Office", system-ui, sans-serif';
-    x.fillText('This line misses the field.', W / 2, H / 2);
-    G.secStep = G.texStep; return;
+/** The section's family on one distance, for the axes' lock (D19, commonFrame in js/section.js): the field's
+ *  line with every column or row its sweep goes through, each along its own path, its start placed on the
+ *  line's direction; or a drawn line, every step of whose sweep lies square to it, so its own length. Kept
+ *  per family. end: the words for the distance's zero, the family's first end. */
+function secFamily() {
+  const q = S.section, l = q.line ? G.lines[q.line] : { a: q.a, b: q.b }, key = `${q.line}|${l.a}|${l.b}`;
+  if (SEC.fam && SEC.fam.key === key) return SEC.fam;
+  const ln = lineOf(l.a, l.b), members = [{ key: null, p0: l.a, p1: l.b, L: ln.L }];
+  if (q.line) for (const [k, m] of slicePaths(G.geom, G.NA, G.ijk, sweepAxis(G.cols, l.a, l.b))) members.push({ key: k, ...m });
+  const back = (Math.atan2(-ln.ux, -ln.uy) * 180 / Math.PI + 360) % 360;   // the bearing from the family's middle to its first end
+  return (SEC.fam = { key, ...commonFrame(members, [ln.ux, ln.uy]), end: q.line ? `${COMPASS[Math.round(back / 45) % 8][0]} end` : null });
+}
+/** The section's axis in this frame (D13, D18, D19). Unlocked at the fit: today's, the whole section at the
+ *  pane's own stretch where the pane is grown (sectionAxis). Zoomed, or with the axes locked: the held view's
+ *  (viewAxis), which only a hand moves. Locking, and Fit while locked, open the field's window (every active
+ *  cell's depths, the family's length) at the stretch the pane would give it; a resize holds the scale and
+ *  the top-left corner; the stretch slider in the sheet keeps the scale and the depth at the middle. Keeps
+ *  what the gestures and the keys need: the box, the scale's limits, the section's extent, whether it is at
+ *  its fit. */
+function secAxis(sec, box, zbox = box) {
+  const grown = $('section').classList.contains('grown'), datum = model.center[2];
+  const fitEx = grown ? ownExag(sec, box, S.exag) : S.exag, fit = sectionAxis(sec, box, fitEx, datum);
+  let v = SEC.view, place = { off: 0, sgn: 1 }, lim, lo, home = null;
+  if (S.section.lock) {
+    const f = secFamily(), w = G.secWin, ex = grown ? stretchFor(f.L, w.bot - w.top, box, S.exag) : fillStretch(f.L, w.bot - w.top, box, S.exag);
+    home = fitWindow(f.L, w.top, w.bot, box, ex);
+    place = f.at.get(S.section.line ? S.section.at : null) || place;
+    lim = { d0: 0, d1: f.L, z0: w.top, z1: w.bot };
+    if (!v || v.pending || (v.base !== S.exag && secHome(v, SEC.home))) v = { ...home };   // locking, and Fit: the field's window
+    else if (v.base !== S.exag) v = restretch(v, ex, box);
+    lo = Math.min(home.sx, v.sx);
+  } else {
+    if (v && v.base !== S.exag) v = restretch(v, fitEx, box);
+    lim = { d0: 0, d1: sec.line.L, z0: fit.zTop, z1: fit.zBot };
+    lo = v ? Math.min(fit.sx, v.sx) : fit.sx;
   }
-  // the ground: depth guides across the plot, under everything
-  const dt = depthTicks(ax, units, H < 150 ? 2 : Math.max(3, Math.round(H / 75)));
-  x.strokeStyle = st.line; x.lineWidth = 1; x.beginPath();
-  for (const t of dt) { const y = Math.round(t.y) + 0.5; x.moveTo(ax.x0, y); x.lineTo(ax.x1, y); }
-  x.stroke();
-  // the gaps, the cells, the formation tops
-  if (SEC.hatch && SEC.hatchKey === hk) x.drawImage(SEC.hatch, 0, 0, W, H);
-  $('sec-key-gap').hidden = !(SEC.hatch && SEC.hatch.gapPx / (dpr * dpr) >= 150);   // the gap's key only where a gap shows: 150 CSS px² or more
+  if (v) SEC.view = v = { ...v, base: S.exag };
+  const ex = v ? v.ex : fitEx, L = sec.line.L;
+  SEC.atFit = !v || secHome(v, home);
+  // at the fit the data's box leaves the strip one column of keys; zoomed, what the strip then holds (zbox)
+  const b = SEC.atFit ? box : zbox;
+  Object.assign(SEC, { box: b, fbox: box, zbox, lo, hi: Math.max(lo, G.secRead.sz / ex), home, fitAx: fit, place, lim,
+    ext: { s0: place.off + Math.min(0, place.sgn * L), s1: place.off + Math.max(0, place.sgn * L), z0: sec.z0, z1: sec.z1 } });
+  return v ? viewAxis(sec, b, v, datum, place, lim) : fit;
+}
+/** Whether a locked view is the field's window as Fit opens it in this box (within half a pixel). */
+function secHome(v, h) { return !!h && Math.abs(v.sx - h.sx) / h.sx < 1e-6 && Math.abs((v.sL - h.sL) * v.sx) < 0.5 && Math.abs((v.zT - h.zT) * v.sx * v.ex) < 0.5 && v.ex === h.ex; }
+/** A zoom or a move by hand (D18): the gestures and the keys. k times about the plot point (x, y), then moved
+ *  by (dx, dy) px, within the scale's limits (out to the fit, in to where the thin cells read plainly) and
+ *  with some of the section in view; at the fit, a section unlocked is the fit itself again. */
+function secZoom(m) {
+  if (!SEC.ax || !SEC.geom || !SEC.geom.n || !SEC.box) return;
+  const box = SEC.box;
+  let v = SEC.view || { ...viewOfAxis(SEC.ax, box), base: S.exag };
+  if (m.k !== 1) v = zoomAt(v, m.k, m.x, m.y, box, SEC.lo, SEC.hi);
+  if (m.dx || m.dy) v = panBy(v, m.dx, m.dy);
+  v = keepIn(v, SEC.zbox || box, SEC.ext);
+  const out = v.sx <= SEC.lo * (1 + 1e-9);
+  if (out && !S.section.lock) v = null;   // out to the fit: today's pane
+  else if (out && SEC.home && SEC.home.sx >= v.sx) v = { ...SEC.home, base: S.exag };
+  SEC.view = v; R.section = true; kick();
+}
+/** Fit (the key, the lock): unlocked, the section's own fit; locked, the field's window, its plot height chosen
+ *  afresh. */
+function secFit() {
+  SEC.view = S.section.lock ? { pending: true } : null;
+  SEC.lockedPx = null; SEC.moving = false;
+  R.section = true; R.labels = true; kick();
+}
+/** The data's layers, drawn into the snapshot the gestures preview from (D18): the gaps, the cells, the
+ *  formation tops, the wells, the tapped cell. A held view draws them inside the plot's box. */
+function secLayers(x, ax, sec, st, box, hk) {
+  if (ax.held) { x.save(); x.beginPath(); x.rect(box.x, box.y, box.w, box.h); x.clip(); }
+  if (SEC.hatch && SEC.hatchKey === hk) x.drawImage(SEC.hatch, 0, 0, ax.W, ax.H);
+  else if (SEC.moving && SEC.hatch && SEC.hatchAx && SEC.hatchKey.replace(/\|[^|]*$/, '') === hk.replace(/\|[^|]*$/, '')) secRelay(x, SEC.hatch, SEC.hatchAx, ax);   // a gesture never waits on the gaps: the last layer, moved
   drawCells(x, ax, sec, G.colors, `rgba(${hexToRgb(st.ink)}, 0.28)`, st.strong);
   drawTops(x, ax, sec, st.ink);
   // the wells within the corridor, as drawn in the 3D view: a casing, the role's core, injectors dashed
   x.save(); x.beginPath(); x.rect(ax.x0, box.y, ax.x1 - ax.x0, box.h); x.clip();
-  const names = [];
   if (S.wells) for (const wn of SEC.wells) {
     const w = model.wells[wn.i], code = w.state[shown] || 0;
     if (!(w.firstOpen >= 0 && shown >= w.firstOpen)) continue;
@@ -2023,34 +2121,155 @@ function drawSection() {
       x.stroke();
     }
     x.setLineDash([]); x.globalAlpha = 1;
-    let top = null;
-    for (const part of wn.parts) for (let k = 0; k < part.length; k += 2) if (!top || part[k + 1] < top[1]) top = [part[k], part[k + 1]];
-    names.push({ name: w.name, x: ax.X(top[0]), ty: ax.Y(top[1]), y: Math.max(box.y + 11, ax.Y(top[1]) - 3) });
   }
   x.restore();
   // the tapped cell
   const pi = cardMode === 'cell' && pick >= 0 ? sec.cells.indexOf(pick) : -1;
   if (pi >= 0) drawOutline(x, ax, sec, pi, st.ink, st.halo);
-  // the frame: the section's ends, A and A′, depth and distance words, formation names, well names
+  if (ax.held) x.restore();
+}
+/** A layer drawn for an earlier view (p: where its s = 0, z = 0 fell, and its scales), laid on the view ax. */
+function secRelay(x, c, p, ax) { const a = ax.sx / p.sx, b = ax.sz / p.sz; x.drawImage(c, 0, 0, c.width, c.height, ax.X(0) - p.x * a, ax.Y(0) - p.y * b, ax.W * a, ax.H * b); }
+const secAt0 = (ax) => ({ x: ax.X(0), y: ax.Y(0), sx: ax.sx, sz: ax.sz, ex: ax.exag });
+/** The layers under a preview (D18), drawn at rest 250 ms after a zoomed full drawing: the whole view's (the fit's,
+ *  or locked, the field's window), unless the drawing at the fit already left it; and a wide one, the view zoomed
+ *  out four times about its middle (where that is still in from the fit), so a pinch out or a move past what the
+ *  last drawing covered shows the section at once, coarse until the lift, never an empty plot, and never the
+ *  fit's few pixels blown up where the hand has only just begun to zoom out. Their cells, tops, wells and tapped
+ *  cell; not the gaps, which only the full drawing makes. */
+function secBase() {
+  SEC.baseT = 0;
+  const cv = $('sec-plot'), sec = SEC.geom;
+  if (SEC.moving || document.hidden || !S.section.on || !sec || !sec.n || !SEC.fitAx || !SEC.fbox || !SEC.snap || SEC.snapFit) return;
+  const W = cv.clientWidth, H = cv.clientHeight, cw = SEC.snap.width, ch = SEC.snap.height, dpr = cw / W, st = secStyle(), datum = model.center[2];
+  const draw = (c, ax, box) => {
+    ax.W = W; ax.H = H;
+    if (!c || c.width !== cw || c.height !== ch) c = mkCanvas(cw, ch);
+    const b = c.getContext('2d');
+    b.setTransform(1, 0, 0, 1, 0, 0); b.clearRect(0, 0, cw, ch); b.setTransform(dpr, 0, 0, dpr, 0, 0);
+    secLayers(b, ax, sec, st, box, '');
+    return c;
+  };
+  if (SEC.baseKey !== SEC.snapKey) {
+    const fax = S.section.lock && SEC.home ? viewAxis(sec, SEC.fbox, SEC.home, datum, SEC.place, SEC.lim) : SEC.fitAx;
+    SEC.base = draw(SEC.base, fax, SEC.fbox); SEC.baseKey = SEC.snapKey; SEC.baseAx = secAt0(fax);
+    SEC.baseT = setTimeout(secBase, 16); return;   // the wide one in a task of its own: no task holds the page for both
+  }
+  const v = SEC.view, box = SEC.box, wk = `${SEC.snapKey} ${secViewKey()}`;
+  if (!v || v.pending || SEC.wideKey === wk) return;
+  const v4 = zoomAt(v, 0.25, box.x + box.w / 2, box.y + box.h / 2, box, 0, Infinity);
+  if (v4.sx <= SEC.lo * 1.5) { SEC.wideKey = ''; return; }   // as good as the whole view's
+  const wax = viewAxis(sec, { x: 0, y: 0, w: W, h: H }, { ...v4, sL: v4.sL - box.x / v4.sx, zT: v4.zT - box.y / (v4.sx * v4.ex) }, datum, SEC.place, SEC.lim);
+  SEC.wide = draw(SEC.wide, wax, { x: 0, y: 0, w: W, h: H }); SEC.wideKey = wk; SEC.wideDk = SEC.snapKey; SEC.wideAx = secAt0(wax);
+}
+/** The section, drawn: in the frame that draws the date, after the color pass. In full, or (while a pinch, a
+ *  move or a wheel lasts, D18) the last full drawing's data moved and scaled to the newest view under scales,
+ *  names and ends drawn for that view, so no gesture's frame waits on the gaps' or the cells' drawing; the
+ *  frame after the gesture draws in full. A preview is only ever of the same section, colors and month. */
+function drawSection() {
+  R.section = false;
+  if (!S.section.on || !model) { R.secGeom = false; return; }
+  if (R.secGeom || !SEC.geom) fitSection();
+  const t0 = performance.now(), cv = $('sec-plot'), W = cv.clientWidth, H = cv.clientHeight;
+  if (!W || !H) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), cw = Math.round(W * dpr), ch = Math.round(H * dpr);
+  if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
+  const sec = SEC.geom, st = secStyle(), x = cv.getContext('2d');
+  // the keys' strip at the plot's right (secStrip): the data's box ends before it, one column at the fit, what the
+  // strip holds zoomed
+  const strip = SEC.strip = secStrip(W, H), bh = Math.max(30, H - SEC_BOX.t - SEC_BOX.b);
+  const bx = (c) => ({ x: SEC_BOX.l, y: SEC_BOX.t, w: Math.max(40, W - SEC_BOX.l - secR(c)), h: bh });
+  const ax = SEC.ax = secAxis(sec, bx(strip === 'aside' ? 0 : 1), bx(strip === 'aside' ? 0 : strip === 'grid' ? 2 : 1)), box = SEC.box;
+  ax.W = W; ax.H = H;
+  // a pane made taller than compact fills with the section, at a stretch of its own that it states (D13)
+  if (ax.exag !== SEC.exag) { SEC.exag = ax.exag; writeSecWords(); }
+  const view = ax.held ? [ax.sx, ax.xa, ax.zTop].join(' ') : '';
+  const hk = [W, H, dpr, ax.exag, sec.line.a, sec.line.b, sec.line.L, st.ink3, st.line, view].join('|');
+  const dk = [hk.replace(/\|[^|]*$/, ''), G.texStep, G.texKey, S.wells, shown, cardMode === 'cell' ? pick : -1, cw, ch].join('|');
+  const preview = SEC.moving && SEC.snap && SEC.snapKey === dk && SEC.snapAx && SEC.snapAx.ex === ax.exag;
+  if (!preview && SEC.hatchKey !== hk && !SEC.drag && !SEC.moving) { SEC.hatch = gapLayer(sec, ax, W, H, dpr, hexToRgb(st.ink3), mkCanvas); SEC.hatchKey = hk; SEC.hatchAx = secAt0(ax); G.stats.secGaps = (G.stats.secGaps || 0) + 1; }
+  x.setTransform(dpr, 0, 0, dpr, 0, 0);
+  x.clearRect(0, 0, W, H);
+  x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
+  if (!sec.n) {   // a line off the field cuts nothing: no axis to print, one line in the pane
+    $('sec-key-gap').hidden = true;
+    x.fillStyle = st.ink2; x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '400 13.5px "Ysabeau Office", system-ui, sans-serif';
+    x.fillText('This line misses the field.', W / 2, H / 2);
+    G.secStep = G.texStep; writeSecKeys(); return;
+  }
+  const kb = secKeysBox();
+  // the ground: depth guides across the plot (held: across the box), under everything
+  const dt = depthTicks(ax, units, H < 150 ? 2 : Math.max(3, Math.round(H / 75)));
+  const gx0 = ax.held ? (S.section.lock ? box.x : Math.max(ax.x0, box.x)) : ax.x0, gx1 = ax.held ? (S.section.lock ? box.x + box.w : Math.min(ax.x1, box.x + box.w)) : ax.x1;
+  x.strokeStyle = st.line; x.lineWidth = 1; x.beginPath();
+  for (const t of dt) { const y = Math.round(t.y) + 0.5; x.moveTo(gx0, y); x.lineTo(gx1, y); }
+  x.stroke();
+  // the gaps, the cells, the formation tops, the wells, the tapped cell: drawn into the snapshot, then onto the
+  // plot; while a gesture lasts, the snapshot moved to the newest view
+  if (preview) {
+    // the whole view's layer under the last drawing, where that drawing was zoomed: a zoom out or a move shows the
+    // section beyond it at once (coarse until the lift), never an empty plot
+    x.save(); x.beginPath(); x.rect(box.x, box.y, box.w, box.h); x.clip();
+    if (!SEC.snapFit && SEC.base && SEC.baseKey === dk && SEC.baseAx.ex === ax.exag) { secRelay(x, SEC.base, SEC.baseAx, ax); G.stats.secUnder = (G.stats.secUnder || 0) + 1; }
+    if (!SEC.snapFit && SEC.wide && SEC.wideKey && SEC.wideDk === dk && SEC.wideAx.ex === ax.exag) secRelay(x, SEC.wide, SEC.wideAx, ax);
+    secRelay(x, SEC.snap, SEC.snapAx, ax);
+    x.restore();
+    G.stats.secPreviews = (G.stats.secPreviews || 0) + 1;
+  } else {
+    if (!SEC.snap || SEC.snap.width !== cw || SEC.snap.height !== ch) SEC.snap = mkCanvas(cw, ch);
+    const s = SEC.snap.getContext('2d');
+    s.setTransform(1, 0, 0, 1, 0, 0); s.clearRect(0, 0, cw, ch); s.setTransform(dpr, 0, 0, dpr, 0, 0);
+    secLayers(s, ax, sec, st, box, hk);
+    SEC.snapKey = dk; SEC.snapAx = secAt0(ax); SEC.snapFit = !!SEC.atFit;
+    x.setTransform(1, 0, 0, 1, 0, 0); x.drawImage(SEC.snap, 0, 0); x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // at the fit the drawing is the whole view's layer too (kept for the next gesture's previews); zoomed, that
+    // layer is drawn afresh at rest when the section, the month or the colors have changed since
+    if (SEC.atFit) {
+      if (!SEC.base || SEC.base.width !== cw || SEC.base.height !== ch) SEC.base = mkCanvas(cw, ch);
+      const b = SEC.base.getContext('2d'); b.setTransform(1, 0, 0, 1, 0, 0); b.clearRect(0, 0, cw, ch); b.drawImage(SEC.snap, 0, 0);
+      SEC.baseKey = dk; SEC.baseAx = SEC.snapAx;
+    } else { clearTimeout(SEC.baseT); SEC.baseT = setTimeout(secBase, 250); }   // 250 ms after the last: never inside a scrub or a play
+
+    $('sec-key-gap').hidden = !(SEC.hatch && SEC.hatch.gapPx / (dpr * dpr) >= 150);   // the gap's key only where a gap shows: 150 CSS px² or more
+  }
+  // the frame: the section's ends, A and A′, where they lie on the plot; depth and distance words (zoomed or
+  // locked, at the plot's edges); formation names, well names. An end off the plot is left out.
+  const inX = (e) => e >= box.x - 0.5 && e <= box.x + box.w + 0.5;
   x.strokeStyle = st.strong; x.lineWidth = 1; x.beginPath();
-  for (const e of [ax.x0, ax.x1]) { const xe = Math.round(e) + 0.5; x.moveTo(xe, box.y - 2); x.lineTo(xe, box.y + box.h); }
+  for (const e of [ax.x0, ax.x1]) if (!ax.held || inX(e)) { const xe = Math.round(e) + 0.5; x.moveTo(xe, box.y - 2); x.lineTo(xe, box.y + box.h); }
   x.stroke();
   const halo = (t, X, Y, align, font, col) => {
     x.font = font; x.textAlign = align; x.lineJoin = 'round'; x.lineWidth = 3; x.strokeStyle = st.halo; x.strokeText(t, X, Y); x.fillStyle = col; x.fillText(t, X, Y);
   };
   x.textBaseline = 'alphabetic';
-  halo('A', ax.x0, box.y - 3, 'left', '650 11.5px "Ysabeau Office", system-ui, sans-serif', st.ink);
-  halo('A′', ax.x1, box.y - 3, 'right', '650 11.5px "Ysabeau Office", system-ui, sans-serif', st.ink);
+  const AF = '650 11.5px "Ysabeau Office", system-ui, sans-serif', taken = kb ? [kb] : [], ends = [];
+  // A and A′ over their ends, A′ under the keys where they would cover it (the keys' plate at the plot's top right)
+  for (const [t, e, o] of [['A', ax.xa ?? ax.x0, ax.xb ?? ax.x1], ['A′', ax.xb ?? ax.x1, ax.xa ?? ax.x0]]) {
+    if (ax.held && !inX(e)) continue;
+    const r = e > o ? 'right' : 'left';
+    let y = box.y - 3;
+    const l = r === 'right' ? e - 14 : e - 2, rect = [l, y - 12, l + 16, y + 3];
+    if (kb && rect[0] < kb[2] && rect[2] > kb[0] && rect[1] < kb[3] && rect[3] > kb[1]) y = kb[3] + 13;
+    halo(t, e, y, r, AF, st.ink);
+    ends.push([l, y - 12, l + 16, y + 3]);
+  }
+  taken.push(...ends);
   x.fillStyle = st.ink2; x.textAlign = 'right'; x.textBaseline = 'middle'; x.font = '400 10.5px "Ysabeau Office", system-ui, sans-serif';
-  for (const t of dt) x.fillText(t.text, ax.x0 - 5, Math.round(t.y));   // beside the section, wherever it is centered
-  const xt = distanceTicks(ax, units, W < 300 ? 2 : Math.max(3, Math.round(W / 150))), yb = Math.min(H - 2, ax.y1 + 13);
+  const dx0 = ax.held ? box.x : ax.x0;
+  for (const t of dt) x.fillText(t.text, dx0 - 5, Math.round(t.y));   // beside the section, wherever it is centered (held: at the plot's edge)
+  const xt = distanceTicks(ax, units, W < 300 ? 2 : Math.max(3, Math.round(W / 150))), yb = ax.held ? Math.min(H - 2, box.y + box.h + 13) : Math.min(H - 2, ax.y1 + 13);
+  // locked on a family of the field's own (D19): its distance runs from its first end, which the zero says, or
+  // where the zero is off the plot, the unit's tick
+  const fam = S.section.lock && SEC.fam && SEC.fam.end;
+  if (fam && xt.length) { const z = xt.find((t) => t.v === 0); if (z) z.text = `${SEC.fam.end[0].toUpperCase()}${SEC.fam.end.slice(1)}`; else xt[xt.length - 1].text += ` from the ${SEC.fam.end}`; }
   x.textBaseline = 'alphabetic';
   // the last tick carries the unit, so it always stands; where the words would touch, every other one gives
   // way (every third, …), so the axis stays even, and a tick the last would touch gives way to it
   const laid = xt.map((t, i) => {
-    const wdt = x.measureText(t.text).width, al = i === 0 ? 'left' : i === xt.length - 1 ? 'right' : 'center';
-    const l = al === 'left' ? t.x : al === 'right' ? t.x - wdt : t.x - wdt / 2;
-    return { t, al, l, r: l + wdt };
+    const wdt = x.measureText(t.text).width;
+    let al = i === 0 ? 'left' : i === xt.length - 1 ? 'right' : 'center', l = al === 'left' ? t.x : al === 'right' ? t.x - wdt : t.x - wdt / 2;
+    if (ax.held) { l = Math.max(2, Math.min(W - wdt - 2, t.x - wdt / 2)); al = 'left'; }   // held: each under its tick, inside the pane
+    return { t, al, l, r: l + wdt, at: al === 'left' ? l : t.x };
   });
   let kept = [];
   for (let s = 1; laid.length && s <= Math.max(1, xt.length - 1); s++) {
@@ -2060,16 +2279,19 @@ function drawSection() {
     kept.push(last);
     if (kept.every((k, i) => i === 0 || k.l >= kept[i - 1].r + 8)) break;
   }
-  for (const k of kept) { x.textAlign = k.al; x.fillText(k.t.text, k.t.x, yb); }
+  for (const k of kept) { x.textAlign = k.al; x.fillText(k.t.text, k.at, yb); }
+  SEC.ticks = { depth: dt.map((t) => [Math.round(t.y * 10) / 10, t.text]), dist: kept.map((k) => [Math.round(k.t.x * 10) / 10, k.t.text]) };
   // names: the wells' over their paths, then the formations'. Each tries its places in turn; a name that
-  // would touch another, A or A′ tries the next. A well's name moved off its path's top gets a hairline
-  // to it; a well left with no place is named in the key under the pane, never dropped.
-  const taken = [[ax.x0 - 2, box.y - 15, ax.x0 + 12, box.y], [ax.x1 - 14, box.y - 15, ax.x1 + 2, box.y]];
+  // would touch another, A, A′ or the keys tries the next. A well's name moved off its path's top gets a
+  // hairline to it; a well left with no place is named in the key under the pane, never dropped. Zoomed or
+  // locked, a name stays on the part of the section in view, and a well wholly out of view is not named.
+  const vx0 = ax.held ? Math.max(ax.x0, box.x) : ax.x0, vx1 = ax.held ? Math.min(ax.x1, box.x + box.w) : ax.x1;
+  if (!ax.held) taken.unshift([ax.x0 - 2, box.y - 15, ax.x0 + 12, box.y], [ax.x1 - 14, box.y - 15, ax.x1 + 2, box.y]);
   const place = (t, font, spots, anchor) => {
     x.font = font;
     const w = x.measureText(t).width;
     for (const [l0, y] of spots) {
-      const l = Math.min(Math.max(ax.x0 + 2, l0), ax.x1 - w - 2), r = [l - 2, y - 11, l + w + 2, y + 3];
+      const l = Math.min(Math.max(vx0 + 2, l0), vx1 - w - 2), r = [l - 2, y - 11, l + w + 2, y + 3];
       if (y < box.y + 9 || y > box.y + box.h - 1) continue;
       if (taken.some((q) => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) continue;
       taken.push(r);
@@ -2083,14 +2305,20 @@ function drawSection() {
     return false;
   };
   const WF = '560 10.5px "Ysabeau Office", system-ui, sans-serif', FF = '560 11.5px "Ysabeau Office", system-ui, sans-serif';
-  const named = [], unnamed = [];
-  for (const n of names) {
+  const named = [], unnamed = [], seen = (X, Y) => !ax.held || (X >= box.x && X <= box.x + box.w && Y >= box.y && Y <= box.y + box.h);
+  if (S.wells) for (const wn of SEC.wells) {
+    const w = model.wells[wn.i];
+    if (!(w.firstOpen >= 0 && shown >= w.firstOpen)) continue;
+    let top = null;
+    for (const part of wn.parts) for (let k = 0; k < part.length; k += 2) if (seen(ax.X(part[k]), ax.Y(part[k + 1])) && (!top || part[k + 1] < top[1])) top = [part[k], part[k + 1]];
+    if (!top) continue;
+    const n = { name: w.name, x: ax.X(top[0]), ty: ax.Y(top[1]), y: Math.max(box.y + 11, ax.Y(top[1]) - 3) };
     x.font = WF;
-    const w = x.measureText(n.name).width, spots = [[n.x - w / 2, n.y]];
-    for (let k = 0; k < 4; k++) spots.push([n.x + 6, n.y + 13 * k], [n.x - 6 - w, n.y + 13 * k]);
+    const wd = x.measureText(n.name).width, spots = [[n.x - wd / 2, n.y]];
+    for (let k = 0; k < 4; k++) spots.push([n.x + 6, n.y + 13 * k], [n.x - 6 - wd, n.y + 13 * k]);
     (place(n.name, WF, spots, [n.x, Math.max(box.y, n.ty)]) ? named : unnamed).push(n.name);
   }
-  for (const f of secFormationLabels(sec, ax)) {
+  for (const f of secFormationLabels(sec, ax, ax.held ? [Math.min(ax.S(vx0), ax.S(vx1)), Math.max(ax.S(vx0), ax.S(vx1))] : null)) {
     x.font = FF;
     const w = x.measureText(f.name).width;
     place(f.name, FF, [[f.x + 4, f.y + 4], ...f.alt.map(([X, Y, k]) => [X - w * k - (k === 1 ? 4 : 0), Y + 4])]);
@@ -2098,12 +2326,44 @@ function drawSection() {
   SEC.named = named; SEC.unnamed = unnamed;
   const more = unnamed.length ? `, unlabeled: ${unnamed.join(', ')}` : '';
   if ($('sec-more').textContent !== more) $('sec-more').textContent = more;
-  G.secStep = G.texStep; SEC.drawnAt = SEC.cutAt;
+  G.secStep = G.texStep; SEC.drawnAt = SEC.cutAt; SEC.drawnView = secViewKey();
+  writeSecKeys();
   G.stats.secDraws = (G.stats.secDraws || 0) + 1; G.stats.secMs = (G.stats.secMs || 0) + performance.now() - t0;
+  if (!preview) { G.stats.secFull = (G.stats.secFull || 0) + 1; G.stats.secFullMs = (G.stats.secFullMs || 0) + performance.now() - t0; }
+}
+/** The view as a key (the test hook's, and the frame log's): '' at the fit. */
+function secViewKey() { const v = SEC.view; return v && !v.pending ? `${v.sx} ${v.sL} ${v.zT}` : ''; }
+/** The keys' plates where they stand over the plot, in the plot's CSS px [l, t, r, b] (the names keep off them), or
+ *  null: in their strip they are outside the data's box, and stepped aside they show over it only while they
+ *  hold the keyboard. */
+function secKeysBox() {
+  const k = $('sec-keys');
+  if (SEC.strip !== 'aside' || !k.matches(':focus-within')) return null;
+  const a = k.getBoundingClientRect(), b = $('sec-plot').getBoundingClientRect();
+  return [a.left - b.left - 2, a.top - b.top - 2, a.right - b.left + 2, a.bottom - b.top + 2];
+}
+/** The zoom keys and the lock as the view stands: Fit and Zoom out only where they would change something,
+ *  Zoom in until the thin cells read plainly; the lock pressed, Fit's name saying what it fits; the strip's
+ *  columns as drawSection left them room. Written only when something changed. */
+function writeSecKeys() {
+  const lock = S.section.lock, fit = !!SEC.atFit, n = !!(SEC.geom && SEC.geom.n), strip = SEC.strip || 'aside';
+  const top = !n || (SEC.view && SEC.view.sx >= SEC.hi * (1 - 1e-6)), at = `${lock} ${fit} ${n} ${strip} ${top}`;
+  if (at === SEC.keysAt) return;
+  SEC.keysAt = at;
+  const a = document.activeElement, k = $('sec-keys');
+  $('sec-fit').hidden = fit || !n; $('sec-out').hidden = fit || !n; $('sec-keys-more').hidden = fit || !n;
+  if ((a === $('sec-fit') || a === $('sec-out')) && a.hidden) $('sec-in').focus();   // a key that goes hands the keyboard to Zoom in
+  $('sec-in').disabled = top;
+  $('sec-lock').setAttribute('aria-pressed', String(lock));
+  $('sec-fit').setAttribute('aria-label', lock ? 'Fit the field’s depth and length' : 'Fit the section');
+  k.classList.toggle('aside', strip === 'aside'); k.classList.toggle('col', strip === 'col'); k.classList.toggle('c2', strip === 'grid' && !fit && n);
+  $('sec-locked').hidden = !(lock && strip === 'aside');   // the lock's state in sight where its key has stepped aside
 }
 /** Where each formation's name goes: at the section's left end where the formation shows, at the middle
- *  of its cells there; else (alt) at the middle, a quarter, three quarters or the right end of its run. */
-function secFormationLabels(sec, ax) {
+ *  of its cells there; else (alt) at the middle, a quarter, three quarters or the right end of its run.
+ *  vis: zoomed or locked, the distances in view [sa, sb]: the run in view, its depth there from the cells
+ *  that span it. */
+function secFormationLabels(sec, ax, vis) {
   const zones = cfg.zones || [], out = [];
   zones.forEach((z, zi) => {
     let s0 = Infinity;
@@ -2115,7 +2375,7 @@ function secFormationLabels(sec, ax) {
       if (G.zoneOfK[G.ijk[sec.cells[i] * 3 + 2] + 1] !== zi) continue;
       for (let k = sec.offs[i]; k < sec.offs[i + 1]; k++) if (sec.pts[k * 2] <= lim) { zs += sec.pts[k * 2 + 1]; n++; }
     }
-    if (!n) return;
+    if (!n && !vis) return;
     // the other places it may go: the formation's middle and its right end along the section
     let s1 = -Infinity;
     for (let i = 0; i < sec.n; i++) if (G.zoneOfK[G.ijk[sec.cells[i] * 3 + 2] + 1] === zi) for (let k = sec.offs[i]; k < sec.offs[i + 1]; k++) s1 = Math.max(s1, sec.pts[k * 2]);
@@ -2131,6 +2391,16 @@ function secFormationLabels(sec, ax) {
       }
       return m ? zz / m : NaN;
     };
+    if (vis) {   // the run in view
+      const a = Math.max(s0, vis[0]), b = Math.min(s1, vis[1]);
+      if (!(b > a)) return;
+      const sa = Math.min(b, a + 6 / ax.sx), za = at(sa);
+      if (za !== za) return;
+      s0 = a; s1 = b;
+      const alt = [0.5, 0.25, 0.75, 1].map((f) => { const sb = f === 1 ? Math.max(s0, s1 - 4 / ax.sx) : s0 + (s1 - s0) * f, zb = at(sb); return [ax.X(f === 1 ? s1 : sb), zb === zb ? ax.Y(zb) : -1e9, f === 1 ? 1 : 0.5]; });
+      out.push({ name: z.name, x: ax.X(sa), y: ax.Y(za), alt });
+      return;
+    }
     const alt = [0.5, 0.25, 0.75, 1].map((f) => { const sa = f === 1 ? Math.max(s0, s1 - Math.max(ax.L * 0.03, 4 / ax.sx)) : s0 + (s1 - s0) * f, za = at(sa); return [ax.X(f === 1 ? s1 : sa), za === za ? ax.Y(za) : -1e9, f === 1 ? 1 : 0.5]; });
     out.push({ name: z.name, x: ax.X(s0), y: ax.Y(zs / n), alt });
   });
@@ -2147,7 +2417,7 @@ function writeSecWords() {
   const sec = SEC.geom, d0 = sec.z0 + model.center[2], d1 = sec.z1 + model.center[2], p = propDef(S.prop);
   const wells = SEC.wells.map((w) => model.wells[w.i].name);
   if (!sec.n) { $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}: the line misses the field, so no cell is cut.`); return; }
-  $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}, ${sec.n} cells cut, from ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d0, units))} to ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d1, units))} deep, colored by ${p.label}, depth stretched ${U.tick(Math.round(ex * 10) / 10)} times${ex !== S.exag ? `, more than the 3D view’s ${U.tick(Math.round(S.exag * 10) / 10)}` : ''}. ${wells.length ? `Wells within ${U.spokenUnits(U.length(SEC_CORRIDOR, units))}: ${wells.join(', ')}.` : 'No well comes within ' + U.spokenUnits(U.length(SEC_CORRIDOR, units)) + '.'}`);
+  $('sec-plot').setAttribute('aria-label', `Section A to A prime, ${secWords()}, ${sec.n} cells cut, from ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d0, units))} to ${U.spokenUnits(U.valueWithUnit({ unit: 'm' }, d1, units))} deep, colored by ${p.label}, depth stretched ${U.tick(Math.round(ex * 10) / 10)} times${ex !== S.exag ? `, ${ex > S.exag ? 'more' : 'less'} than the 3D view’s ${U.tick(Math.round(S.exag * 10) / 10)}` : ''}. ${wells.length ? `Wells within ${U.spokenUnits(U.length(SEC_CORRIDOR, units))}: ${wells.join(', ')}.` : 'No well comes within ' + U.spokenUnits(U.length(SEC_CORRIDOR, units)) + '.'}`);
 }
 /** The sweep's slider, its value in words, and the keys either side of it. */
 function writeSweep() {
@@ -2179,19 +2449,35 @@ function initSection() {
   radioKeys($('sec-lines'));
   $('sec-draw').addEventListener('click', () => { armDraw(!SEC.armed); if (SEC.armed) say('Drag across the field to draw the section line.'); });
   const cv = $('sec-plot');
-  let down = null;
-  cv.addEventListener('pointerdown', (e) => { down = { x: e.offsetX, y: e.offsetY, t: performance.now() }; });
-  cv.addEventListener('pointerup', (e) => {
-    if (!down || Math.hypot(e.offsetX - down.x, e.offsetY - down.y) > 8 || !SEC.ax) { down = null; return; }
-    down = null;
-    const i = cellAt(SEC.geom, SEC.ax, e.offsetX, e.offsetY);
-    if (i < 0) { if (cardMode === 'cell') closeCard(); return; }
+  // a tap shows the cell at once; a pinch, a move once zoomed in, a double tap and a wheel zoom (D18, js/gesture.js)
+  const tapCell = (x, y) => {
+    if (!SEC.ax || !SEC.geom) return;
+    const i = cellAt(SEC.geom, SEC.ax, x, y);
+    if (i < 0 || (SEC.ax.held && (x < SEC.box.x || x > SEC.box.x + SEC.box.w || y < SEC.box.y || y > SEC.box.y + SEC.box.h))) { if (cardMode === 'cell') closeCard(); return; }
     pick = SEC.geom.cells[i]; cardMode = 'cell'; G.hl = -1; refreshCard(); placeCard();
     const p = propDef(S.prop);
     say(`${$('readout-where').textContent}. ${p.label} ${U.spokenUnits(cardFigure(p, pick))} on ${U.spokenDate(model.frames[shown])}.`);
     R.draw = true; R.section = true; kick();
+  };
+  plotGestures(cv, {
+    tap: tapCell,
+    double: (x, y) => secZoom({ k: 2, x, y, dx: 0, dy: 0 }),
+    move: secZoom,
+    free: () => !SEC.atFit,
+    start: () => { SEC.moving = true; },
+    end: () => { SEC.moving = false; R.section = true; if (cardMode) R.card = Math.max(R.card, 1); kick(); },
   });
   new ResizeObserver(() => { R.section = true; kick(); }).observe(cv);
+  // the keys over the plot (D18, D19): zoom about the plot's middle, the fit, and the axes' lock
+  const mid = (k) => { if (SEC.box) secZoom({ k, x: SEC.box.x + SEC.box.w / 2, y: SEC.box.y + SEC.box.h / 2, dx: 0, dy: 0 }); };
+  $('sec-in').addEventListener('click', () => mid(2));
+  $('sec-out').addEventListener('click', () => mid(0.5));
+  $('sec-fit').addEventListener('click', (e) => { secFit(); if (e.detail === 0) { $('sec-in').focus(); say(S.section.lock ? 'The field’s whole depth and length.' : 'The whole section.'); } });
+  $('sec-lock').addEventListener('click', (e) => {
+    S.section.lock = !S.section.lock;
+    secFit(); save();
+    if (e.detail === 0) say(S.section.lock ? 'Axes locked: the field’s whole depth and length, held while the section changes.' : 'Axes unlocked: each section fits the pane.');
+  });
   // the sweep (D14): the slider takes the newest place on every input, and the frame draws it, so a fast
   // scrub never queues a place already passed; the pane holds its height until the finger is off
   const sw = $('sec-sweep');
@@ -2232,10 +2518,15 @@ window.__norne = {
   resolveTap: (x, y) => resolveTap(x, y),
   ends: (key) => openEnds(D, propDef(key), G.gasMax),
   // the section: its state, a cell's middle on the pane (CSS px in the canvas), a model point on the plate
-  secFit: () => { const cv = $('sec-plot'); return SEC.geom ? { set: parseFloat(cv.style.height) || 0, need: secNeed(Math.max(40, cv.clientWidth - SEC_BOX.l - SEC_BOX.r)), h: cv.clientHeight, lock: !!SEC.lockH } : null; },
+  secFit: () => { const cv = $('sec-plot'); return SEC.geom ? { set: parseFloat(cv.style.height) || 0, need: secNeed(cv.clientWidth), h: cv.clientHeight, lock: !!SEC.lockH } : null; },
   section: () => (SEC.geom ? { on: S.section.on, line: S.section.line, a: [...SEC.geom.line.a], b: [...SEC.geom.line.b], L: SEC.geom.line.L, n: SEC.geom.n, cells: [...SEC.geom.cells], z: [SEC.geom.z0, SEC.geom.z1], wells: SEC.wells.map((w) => model.wells[w.i].name), named: SEC.named || [], unnamed: SEC.unnamed || [], step: G.secStep, at: S.section.at, drawnAt: SEC.drawnAt, sweep: sweepOf().at, axis: sweepOf().axis, size: S.section.size, exag: SEC.exag, gapPx: SEC.hatch ? SEC.hatch.gapPx : null, armed: SEC.armed, ends: SEC.ends, ax: SEC.ax && { x0: SEC.ax.x0, x1: SEC.ax.x1, y0: SEC.ax.y0, y1: SEC.ax.y1, sx: SEC.ax.sx, sz: SEC.ax.sz, zTop: SEC.ax.zTop } } : { on: S.section.on }),
   secCellPoint: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let s = 0, z = 0, n = 0; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { s += SEC.geom.pts[k * 2]; z += SEC.geom.pts[k * 2 + 1]; n++; } return [SEC.ax.X(s / n), SEC.ax.Y(z / n)]; },
   secCellBox: (a) => { if (!SEC.geom || !SEC.ax) return null; const i = SEC.geom.cells.indexOf(a); if (i < 0) return null; let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity; for (let k = SEC.geom.offs[i]; k < SEC.geom.offs[i + 1]; k++) { const X = SEC.ax.X(SEC.geom.pts[k * 2]), Y = SEC.ax.Y(SEC.geom.pts[k * 2 + 1]); x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y); } return [x0, y0, x1, y1]; },
+  // the zoom and the lock (D18, D19): the view held (null at the fit), its limits and box, the section's place on
+  // the family's distance, the ticks as last drawn, a point (s, z) on the plot and back
+  secView: () => ({ view: SEC.view && !SEC.view.pending ? { sx: SEC.view.sx, ex: SEC.view.ex, sL: SEC.view.sL, zT: SEC.view.zT } : null, atFit: !!SEC.atFit, lock: S.section.lock, moving: SEC.moving, lo: SEC.lo, hi: SEC.hi, read: G.secRead, win: G.secWin, box: SEC.box, place: SEC.place, fam: S.section.lock && SEC.fam ? { L: SEC.fam.L, end: SEC.fam.end } : null, ticks: SEC.ticks, drawn: SEC.drawnView, lockedPx: SEC.lockedPx, ax: SEC.ax && { xa: SEC.ax.xa ?? SEC.ax.x0, xb: SEC.ax.xb ?? SEC.ax.x1, sx: SEC.ax.sx, sz: SEC.ax.sz, exag: SEC.ax.exag, zTop: SEC.ax.zTop, zBot: SEC.ax.zBot, held: !!SEC.ax.held } }),
+  secPoint: (s, z) => (SEC.ax ? [SEC.ax.X(s), SEC.ax.Y(z)] : null),
+  secAt: (x, y) => (SEC.ax ? [SEC.ax.S(x), SEC.ax.Z(y)] : null),
   secCellAt: (x, y) => (SEC.geom && SEC.ax ? (cellAt(SEC.geom, SEC.ax, x, y) >= 0 ? SEC.geom.cells[cellAt(SEC.geom, SEC.ax, x, y)] : -1) : -1),
   mapScreen: (p) => project([p[0], p[1], topAt(p[0], p[1])]),
   mapPoint: (x, y) => mapPoint(x, y),

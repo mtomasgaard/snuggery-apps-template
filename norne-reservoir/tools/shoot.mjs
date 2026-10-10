@@ -36,7 +36,9 @@
 // Across, the units and the stretch, hidden, remembered, focus mode, gaps hatched. Since 2.4 (plan 0012
 // D16, D17): the section's and the legend's colors follow config.json's plasma and viridis as before; the
 // compass at rest in both themes, in every state the card is checked in, under the card, and turning with
-// the model. Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
+// the model. Since 2.5 (D18 to D20), in WebKit and Chromium: the section's pinch, move, double tap, tap,
+// wheel and keys, the unlocked re-fit, the lock through a sweep, the lock and the stop over a reload, the
+// frame times, and the tall stop at three sizes (the block at the end says how each engine is driven). Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png; never
 // screenshots/app.png, the README's composite.
 
 import http from 'node:http';
@@ -178,6 +180,8 @@ async function open(scheme, o = {}) {
 const ST8 = (A) => A.w(() => window.__norne.stats());
 const setFrame = async (A, f) => { await A.w((k) => window.__norne.setFrame(k), f); await A.frame(); };
 const setProp = async (A, k) => { await A.w((key) => window.__norne.setProp(key), k); await A.frame(); await A.frame(); };
+/** The sheet to stop n by taps on its grip (since 2.5 the column has four stops, D20; the side column three). */
+const toStop = async (A, n) => { for (let i = 0; i < 5 && (await A.w(() => [...document.getElementById('sheet').classList].find((c) => /^s\d$/.test(c)))) !== `s${n}`; i++) { await A.tapEl('#grip'); await A.page.waitForTimeout(150); } await A.frame(); };
 /** The Play key's marks as drawn: the hidden attribute and the computed display, never an expando. */
 const playMarks = (w) => w(() => ['ico-play', 'ico-pause'].map((id) => { const e = document.getElementById(id); return `${id} ${e.hasAttribute('hidden') ? 'hidden' : 'shown'} ${getComputedStyle(e).display}`; }).concat(document.getElementById('btn-play').getAttribute('aria-label')).join(', '));
 /** The x of report date k (fractional k interpolates) on the track, in page CSS px. */
@@ -473,11 +477,11 @@ for (const scheme of schemes) {
 
   // SI in every visible text node, with the sheet open to its last stop
   {
-    await A.tapEl('#grip'); await A.tapEl('#grip'); await A.frame(); await page.waitForTimeout(300);
+    await toStop(A, 3); await page.waitForTimeout(300);
     const si = await siOf(w);
     check(si.bad.length === 0, `SI: ${si.n} visible text nodes, no hyphen-minus before a digit, U+202F before every unit, thousands grouped${si.bad.length ? ': ' + si.bad.slice(0, 6).join(' | ') : ''}`);
     await A.shot(`sheet-${scheme}`);
-    await A.tapEl('#grip'); await A.frame();
+    await toStop(A, 0);
   }
   await setFrame(A, 80);
   await A.shot(`open-${scheme}`);
@@ -582,14 +586,14 @@ console.log('\n== once (light)');
   {
     await page.addStyleTag({ content: '.head { padding-top: 65px !important } .sheet { padding-bottom: 34px !important }' });
     const res = [];
-    for (let s = 0; s < 3; s++) {
+    for (let s = 0; s < 4; s++) {
       await A.frame(); await page.waitForTimeout(150);
       const r = await w(() => { const g = (id) => document.getElementById(id).getBoundingClientRect(); const L = g('legend'), H = g('head'), P = g('player'), V = g('valid'), Pl = g('plate'); const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom; return { overHead: hit(L, H), overPlayer: hit(L, P), overDate: hit(L, V), plate: Math.round(Pl.height), name: document.getElementById('grip').getAttribute('aria-label') }; });
       res.push(r);
       await A.tapEl('#grip');
     }
-    check(res.every((r) => !r.overHead && !r.overPlayer && !r.overDate && r.plate >= 200), `B1: the legend is clear of the header, the date and the player at every stop, with the insets: ${res.map((r, i) => `stop ${i} plate ${r.plate} px`).join(', ')}`);
-    check(res.map((r) => r.name).join('|') === 'Show more controls|Show all controls|Hide the extra controls', `the grip's names at its stops: ${res.map((r) => r.name).join(', ')}`);
+    check(res.every((r, i) => !r.overHead && !r.overPlayer && !r.overDate && r.plate >= (i === 3 ? 103.5 : 200)), `B1: the legend is clear of the header, the date and the player at every stop, with the insets (the plate 200 px or more, at the tall stop its 104 px strip): ${res.map((r, i) => `stop ${i} plate ${r.plate} px`).join(', ')}`);
+    check(res.map((r) => r.name).join('|') === 'Show more controls|Show all controls|Show Cells and view in full|Hide the extra controls', `the grip's names at its stops, each saying what the next step does (2.5's tall stop, D20): ${res.map((r) => r.name).join(', ')}`);
     await page.reload(); await page.waitForFunction(ready, null, { timeout: 180000 }); await A.frame();
   }
 
@@ -610,9 +614,9 @@ console.log('\n== once (light)');
   // hit targets, with the sheet closed and at its last stop
   {
     const h0 = await hitTargets(w);
-    await A.tapEl('#grip'); await A.tapEl('#grip'); await A.frame(); await page.waitForTimeout(200);
+    await toStop(A, 3); await page.waitForTimeout(200);
     const h2 = await hitTargets(w);
-    await A.tapEl('#grip'); await A.frame();
+    await toStop(A, 0);
     check(h0.bad.length === 0 && h2.bad.length === 0 && h0.small === 0, `hit targets: ${h0.n} controls with the sheet closed and ${h2.n} at its last stop, all at least 44 × 44; ${h0.labels} well names, each a 44 × 44 hit${h0.bad.concat(h2.bad).length ? ': ' + h0.bad.concat(h2.bad).join('; ') : ''}`);
   }
 
@@ -815,8 +819,7 @@ console.log('\n== once (light)');
   boxes.push(await fieldBox('closed'));
   await A.tapEl('#grip'); await A.page.waitForTimeout(400);
   boxes.push(await fieldBox('stop 1'));
-  await A.tapEl('#grip'); await A.page.waitForTimeout(400);
-  await A.tapEl('#grip'); await A.page.waitForTimeout(400);
+  await toStop(A, 0); await A.page.waitForTimeout(400);
   await A.tapEl('#focus-key'); await A.page.waitForTimeout(600);
   boxes.push(await fieldBox('focus mode'));
   await A.page.setViewportSize({ width: 844, height: 390 }); await A.page.waitForTimeout(600);
@@ -953,7 +956,7 @@ console.log('\n== once (light)');
   await A.shot('card-sheet', false);
   // every well the list offers, chosen there at the first stop with the section open: its head and its
   // name clear of the card
-  await A.tapEl('#grip'); await A.tapEl('#grip'); await A.page.waitForTimeout(400); await A.frame();
+  await toStop(A, 1); await A.page.waitForTimeout(400); await A.frame();
   const names = await A.w(() => [...document.getElementById('well-pick').options].map((o) => o.value).filter(Boolean));
   const wells = [];
   for (const name of names) {
@@ -992,7 +995,7 @@ console.log('\n== once (light)');
   }
   // a card carried across the stops: tapped with the sheet closed, then the sheet raised and lowered
   {
-    await A.tapEl('#grip'); await A.tapEl('#grip'); await A.page.waitForTimeout(400); await A.frame();   // the first stop to the second, then closed
+    await toStop(A, 0); await A.page.waitForTimeout(400); await A.frame();   // closed
     const pr = await A.rect('#plate');
     const pt = await A.w(([W, H]) => { for (let y = Math.round(H / 2); y < H - 20; y += 6) for (let x = 40; x < W - 80; x += 6) if (window.__norne.pick(x, y) >= 0 && window.__norne.resolveTap(x, y).cell !== undefined) return [x, y]; return null; }, [Math.round(pr.width), Math.round(pr.height)]);
     await A.tapAt(pr.left + pt[0], pr.top + pt[1]); await A.page.waitForTimeout(400); await A.frame();
@@ -1011,7 +1014,7 @@ console.log('\n== once (light)');
     // sweep row the section's compact pane is 44 px taller, and a 343 px plate takes the compact form too)
     check(seen.every((r, i) => r.open && r.ring && !r.overRing && !r.overKeys && r.inside && (i === 0 || r.compact)), `a card carried across the stops is placed again at each: ${seen.map((r, i) => `stop ${i} (plate ${r.h} px) ${r.compact ? 'compact' : 'full'}${r.ring && !r.overRing ? ', ring clear' : ', RING COVERED'}${r.overKeys ? ', OVER A KEY' : ''}${r.inside ? '' : ', PAST THE PLATE'}`).join('; ')}`);
     await A.shot('card-carried', false);
-    await A.tapEl('#readout-close'); await A.tapEl('#grip'); await A.page.waitForTimeout(400);
+    await A.tapEl('#readout-close'); await toStop(A, 0); await A.page.waitForTimeout(400);
   }
   // focus mode: the plate is tall again, the full card, clear of the ghost key
   await A.tapEl('#focus-key'); await A.page.waitForTimeout(500);
@@ -1069,7 +1072,7 @@ console.log('\n== once (light)');
   const rows = [];
   for (const sec of [false, true]) {
     if (sec) { await A.tapEl('#btn-section'); await A.page.waitForTimeout(500); await A.frame(); }
-    for (let s = 0; s < 3; s++) {
+    for (let s = 0; s < 4; s++) {
       await A.frame(); await A.page.waitForTimeout(300);
       rows.push({ sec, s, ...(await size()), at: await w(() => { const s = document.getElementById('sheet'), g = document.getElementById('grip').getBoundingClientRect(), h = document.querySelector('.stop2 .sheet-head').getBoundingClientRect(); return { top: s.scrollTop, head: Math.round(h.top - g.bottom), shows: h.bottom <= s.getBoundingClientRect().bottom && h.height > 0 }; }) });
       await A.tapEl('#grip'); await A.page.waitForTimeout(300);
@@ -1077,8 +1080,8 @@ console.log('\n== once (light)');
   }
   const H = 844, share = (r) => (r.plate + r.section) / H;
   const say = (r) => `${r.sec ? 'with the section' : 'the model alone'}, stop ${r.s}: ${Math.round(r.plate)}${r.sec ? ` + ${Math.round(r.section)}` : ''} px (${Math.round(share(r) * 100)} %), the sheet ${Math.round(r.sheet)}`;
-  check(rows.every((r) => share(r) >= 0.47 && r.plate >= 220 && (r.s === 0 || r.sheet >= 175)),
-    `the view keeps about half the screen at every stop (at least 47 %, the model at least 220 px; the raised sheet at least 175 px, scrolling inside itself): ${rows.map(say).join('; ')}`);
+  check(rows.filter((r) => r.s < 3).every((r) => share(r) >= 0.47 && r.plate >= 220 && (r.s === 0 || r.sheet >= 175)),
+    `the view keeps about half the screen at every stop but the tall one (at least 47 %, the model at least 220 px; the raised sheet at least 175 px, scrolling inside itself): ${rows.filter((r) => r.s < 3).map(say).join('; ')}`);
   const st2 = rows.filter((r) => r.s === 2), st1 = rows.filter((r) => r.s === 1);
   check(st2.every((r) => r.at.shows && Math.abs(r.at.head) <= 2) && st1.every((r) => r.at.top === 0),
     `the second stop shows what it adds: the sheet scrolls "Cells and view" up under the grip (${st2.map((r) => `${r.at.head} px below it, scrolled ${Math.round(r.at.top)} px`).join('; ')}); the first stop opens at the sheet's top (${st1.map((r) => r.at.top).join(', ')})`);
@@ -1086,7 +1089,7 @@ console.log('\n== once (light)');
   await A.tapEl('#grip'); await A.tapEl('#grip'); await A.page.waitForTimeout(300);
   const grip = await w(() => { const s = document.getElementById('sheet'); s.scrollTop = s.scrollHeight; return new Promise((res) => requestAnimationFrame(() => { const g = document.getElementById('grip').getBoundingClientRect(), r = s.getBoundingClientRect(); res([Math.round(g.top - r.top), s.scrollTop > 0, document.elementFromPoint(g.left + g.width / 2, g.top + 22) === document.getElementById('grip') || document.getElementById('grip').contains(document.elementFromPoint(g.left + g.width / 2, g.top + 22))]); })); });
   check(grip[1] && Math.abs(grip[0] - 1) <= 1 && grip[2], `the grip stays at the sheet's top while the sheet scrolls (${grip[0]} px from its top edge, reachable ${grip[2]})`);
-  await A.tapEl('#grip'); await A.page.waitForTimeout(300);
+  await toStop(A, 0); await A.page.waitForTimeout(300);
   const stamps = await w(() => {
     const home = document.getElementById('stamp-home'), st = document.getElementById('stamp'), was = [home.hidden, st.textContent], out = [];
     home.hidden = false;
@@ -1462,7 +1465,7 @@ async function nearEndDrag(A, pr) {
     await A.tapEl('#grip'); await page.waitForTimeout(700);
     for (const line of ['along', 'across']) { await A.tapEl(`#sec-lines [data-line="${line}"]`); await A.frame(); await A.frame(); rows.push(await w((l) => [l, document.getElementById('sec-plot').getBoundingClientRect().height, document.getElementById('plate').getBoundingClientRect().height], line)); }
     await A.shot('pane-raised-across-light', false);
-    await A.tapEl('#grip'); await page.waitForTimeout(300); await A.tapEl('#grip'); await page.waitForTimeout(700); await A.frame();
+    await toStop(A, 0); await page.waitForTimeout(700); await A.frame();
     check(rows.every((r) => r[1] >= 86 && r[2] >= 219.5), `at the raised sheet's first stop the compact pane takes what the model can give above its 220 px: ${rows.map((r) => `${r[0]} a ${Math.round(r[1])} px plot over a ${Math.round(r[2])} px model`).join(', ')}`);
   }
   // the edge, dragged by touch past tall and back: under the finger, both canvases sharp in every frame
@@ -1603,6 +1606,243 @@ async function nearEndDrag(A, pr) {
     }
     check(seen.length >= 10 && !seen.includes('UNDER 140'), `the sweep's track is 140 px or more wherever the pane is shown (${seen.length} states, px): ${seen.join('; ')}`);
   }
+}
+
+// ── 2.5 (plan 0012 D18, D19, D20) in WebKit and in Chromium: the zoom in the section, the axes' lock, the tall stop ──
+// At 390 × 844, DPR 2. Chromium by real touch through CDP (Input.dispatchTouchEvent; a pinch is two touch points).
+// WebKit: Playwright gives it one touch point and no touch drag, so a tap and a double tap there are real touch
+// (page.touchscreen.tap), and a pinch and a move are PointerEvents dispatched on the plot from the page with
+// pointerType 'touch', two pointer ids for the pinch, each move on a 16 ms cadence: the events the app's gestures
+// take (js/gesture.js), though not WebKit's own touch handling. Checked: a pinch anchored under the fingers; a
+// move; a double tap; a tap still showing its cell at once, at the fit and zoomed; the keys (hits, names, Fit and
+// Zoom out only where they change something); a step re-fitting an unlocked zoom; the lock through five sweep
+// steps with one scale and the data moving, and a zoomed window held through them; a wheel about the pointer;
+// the lock and the stop remembered over a reload; no full drawing while a finger moves and the newest view drawn
+// in full at rest; the main thread's time per frame while pinching and moving (95th percentile, every rAF
+// callback, input listener, ResizeObserver callback and timer timed in the page, as Volve's shoot.mjs does);
+// and the tall stop at 390 × 844, 375 × 667 and 430 × 932, with the 3D view's strip measured.
+// HEADLESS ON THIS MAC: the frame times are a trend, never phone evidence.
+const ZOOM_P95 = { webkit: 30, chromium: 45 };
+const instrument25 = () => {
+  const now = () => performance.now(), P = (window.__perf = { tasks: [], frames: [], on: false });
+  const time = (fn, kind) => function (...a) { const t = now(); try { return fn.apply(this, a); } finally { if (P.on) P.tasks.push([t, now() - t, kind]); } };
+  const raf = window.requestAnimationFrame.bind(window), st = window.setTimeout.bind(window), ael = EventTarget.prototype.addEventListener, done = new WeakMap();
+  window.requestAnimationFrame = (cb) => raf(time(cb, 'raf'));
+  window.setTimeout = (cb, ms, ...a) => st(typeof cb === 'function' ? time(cb, 'timer') : cb, ms, ...a);
+  EventTarget.prototype.addEventListener = function (type, fn, o) {
+    if (typeof fn !== 'function' || !/^(pointer|input|change|touch|click|scroll|wheel)/.test(type)) return ael.call(this, type, fn, o);
+    if (!done.has(fn)) done.set(fn, time(fn, type));
+    return ael.call(this, type, done.get(fn), o);
+  };
+  const RO = window.ResizeObserver;
+  window.ResizeObserver = class extends RO { constructor(cb) { super(time(cb, 'resize')); } };
+  const tick = (t) => { if (P.on) P.frames.push(now()); raf(tick); };
+  raf(tick);
+};
+for (const kind of ['webkit', 'chromium']) {
+  console.log(`\n== ${kind}: 2.5's zoom, lock and tall stop (D18, D19, D20)`);
+  const B = await (pw[kind] || pw.default[kind]).launch(kind === 'chromium' ? { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] } : {});
+  const ctx = await B.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: kind === 'chromium', colorScheme: 'light' });
+  await ctx.addInitScript(instrument25);
+  await ctx.addInitScript(() => { if (!sessionStorage.getItem('seeded')) { sessionStorage.setItem('seeded', '1'); localStorage.setItem('norne-viewer:v1', JSON.stringify({ sheet: 0, section: { on: true, line: 'along', a: null, b: null, at: null, size: 0 } })); } });
+  const page = await ctx.newPage(), errors = [];
+  page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !NOISE.test(m.text())) errors.push(`${m.type()}: ${m.text()}`); });
+  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  page.on('request', (r) => { if (!r.url().startsWith(origin) && !r.url().startsWith('data:') && !r.url().startsWith('blob:')) errors.push(`REQUEST OUTSIDE: ${r.url().slice(0, 80)}`); });
+  const w = (fn, a) => page.evaluate(fn, a), sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const frame = () => w(() => new Promise((res) => requestAnimationFrame(() => requestAnimationFrame(res))));
+  const rect = (s) => w((q) => document.querySelector(q).getBoundingClientRect().toJSON(), s);
+  const load = async () => { await page.goto(`${origin}index.html`); await page.waitForFunction(ready, null, { timeout: 180000 }); await sleep(400); await frame(); };
+  await load();
+  const cdp = kind === 'chromium' ? await ctx.newCDPSession(page) : null;
+  const A = { w, page, frame, tapEl: async (s) => { const r = await rect(s); await page.touchscreen.tap(r.left + r.width / 2, r.top + r.height / 2); await sleep(60); } };
+  // touch: Chromium's own (CDP); WebKit's taps by page.touchscreen, its moves by PointerEvents on the plot
+  const touch = async (type, pts) => {
+    if (cdp) return cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map((q, i) => ({ x: q[0], y: q[1], id: i + 1 })) });
+    return w(([type, pts]) => {
+      const el = document.getElementById('sec-plot'), name = { touchStart: 'pointerdown', touchMove: 'pointermove', touchEnd: 'pointerup' }[type];
+      pts.forEach((q, i) => el.dispatchEvent(new PointerEvent(name, { pointerId: 21 + i, pointerType: 'touch', isPrimary: i === 0, clientX: q[0], clientY: q[1], bubbles: true, cancelable: true, buttons: type === 'touchEnd' ? 0 : 1 })));
+    }, [type, pts]);
+  };
+  const tapAt = async (x, y) => { if (cdp) { await touch('touchStart', [[x, y]]); await touch('touchEnd', []); } else await page.touchscreen.tap(x, y); };
+  const gesture = async (seq) => {   // seq: frames of finger positions; returns the main thread's time per frame meanwhile
+    await w(() => { const P = window.__perf; P.tasks = []; P.frames = []; P.on = true; window.__norne.secLog(true); });
+    const s0 = await w(() => window.__norne.stats());
+    await touch('touchStart', seq[0]);
+    const sent = [];
+    for (let i = 1; i < seq.length; i++) { await sleep(16); sent.push(touch('touchMove', seq[i])); }
+    await Promise.all(sent); await sleep(16);
+    const s1 = await w(() => ({ s: window.__norne.stats(), moving: window.__norne.secView().moving }));
+    await touch('touchEnd', cdp ? [] : seq[seq.length - 1]);
+    const P = await w(() => { window.__perf.on = false; return window.__perf; });
+    const per = P.frames.slice(1).map((f, i) => P.tasks.filter((t) => t[0] >= P.frames[i] && t[0] < f).reduce((n, t) => n + t[1], 0));
+    await sleep(150); await frame(); await frame();
+    const s2 = await w(() => window.__norne.stats()), log = await w(() => window.__norne.secLog(false));
+    return { restMs: ((s2.secFullMs || 0) - (s1.s.secFullMs || 0)) / Math.max(1, (s2.secFull || 0) - (s1.s.secFull || 0)), stale: log.filter((e) => e.view !== e.cur).length, logged: log.length, p95: pctl(per, 0.95), p50: pctl(per, 0.5), frames: per.length, longest: Math.max(0, ...P.tasks.map((t) => t[1])), previews: (s1.s.secPreviews || 0) - (s0.secPreviews || 0), fullMoving: (s1.s.secFull || 0) - (s0.secFull || 0), fullAfter: (s2.secFull || 0) - (s1.s.secFull || 0), moving: s1.moving };
+  };
+  const view = () => w(() => window.__norne.secView());
+  const cv = await rect('#sec-plot'), P0 = (x, y) => [cv.left + x, cv.top + y];
+  const errs = [];
+  // the keys in their strip, never over the data's box (the review of 2.5's first build): the keys shown that
+  // overlap the box, and the strip's form
+  const overBox = () => w(() => { const v = window.__norne.secView(), b = v.box, c = document.getElementById('sec-plot').getBoundingClientRect(); const ks = [...document.querySelectorAll('#sec-keys button')].filter((k) => !k.hidden && k.getClientRects().length && k.offsetWidth > 2); return { cls: document.getElementById('sec-keys').className.replace('sec-keys', '').trim() || 'one column', n: ks.length, over: ks.filter((k) => { const r = k.getBoundingClientRect(), l = r.left - c.left, t = r.top - c.top; return l < b.x + b.w && l + r.width > b.x && t < b.y + b.h && t + r.height > b.y; }).map((k) => k.id) }; });
+  // how much of the data's box is drawn on (opaque px), read from a copy so the plot's canvas is never read back
+  const cover = () => w(() => { const v = window.__norne.secView(), b = v.box, c = document.getElementById('sec-plot'), d = c.width / c.clientWidth, k = document.createElement('canvas'); k.width = c.width; k.height = c.height; const x = k.getContext('2d', { willReadFrequently: true }); x.drawImage(c, 0, 0); const im = x.getImageData(Math.round(b.x * d), Math.round(b.y * d), Math.round(b.w * d), Math.round(b.h * d)).data; let n = 0; for (let i = 3; i < im.length; i += 4) if (im[i] > 200) n++; return n / (im.length / 4); });
+  const kFit = await overBox();
+  // a tap at the fit shows its cell at once
+  const sec0 = await w(() => window.__norne.section());
+  const cell = sec0.cells[Math.floor(sec0.cells.length / 2)], cp = await w((a) => window.__norne.secCellPoint(a), cell);
+  const atCell = await w(([x, y]) => window.__norne.secCellAt(x, y), cp);
+  await tapAt(...P0(...cp));
+  const card0 = await w(() => ({ open: !document.getElementById('readout').hidden, where: document.getElementById('readout-where').textContent }));
+  // a one-finger drag at the fit: nothing moves, the page does not scroll
+  const g0 = await gesture(Array.from({ length: 16 }, (_, i) => [P0(150 + i * 8, 50)]));
+  const v0 = await view(), scroll0 = await w(() => [scrollX, scrollY, document.scrollingElement.scrollTop]);
+  await A.tapEl('#readout-close');
+  // a pinch, its midpoint carried 30 px right and 8 px down: the meters under the fingers stay under them
+  const m = [200, 50], anchor = await w(([x, y]) => window.__norne.secAt(x, y), m), seqP = [];
+  for (let i = 0; i <= 30; i++) { const d = 20 + i * 4, cx = m[0] + i, cy = m[1] + i * 8 / 30; seqP.push([P0(cx - d, cy), P0(cx + d, cy)]); }
+  const gp = await gesture(seqP);
+  const vP = await view(), endMid = [m[0] + 30, m[1] + 8], under = await w((q) => window.__norne.secPoint(q[0], q[1]), anchor);
+  const pinchOff = Math.hypot(under[0] - endMid[0], under[1] - endMid[1]);
+  // a move with one finger, zoomed in: the meters under it go with it
+  const a2 = await w(([x, y]) => window.__norne.secAt(x, y), [220, 62]), seqM = [];   // clear of the keys over the plot's top right
+  for (let i = 0; i <= 30; i++) seqM.push([P0(220 - i * 4, 62 + i * 0.5)]);
+  const gm = await gesture(seqM);
+  const u2 = await w((q) => window.__norne.secPoint(q[0], q[1]), a2), moveOff = Math.hypot(u2[0] - (220 - 120), u2[1] - 77);
+  const vM = await view();
+  // a tap zoomed in still shows its cell at once
+  const secZ = await w(() => window.__norne.section()), box = vM.box, kr = await w(() => { const k = document.getElementById('sec-keys').getBoundingClientRect(), c = document.getElementById('sec-plot').getBoundingClientRect(); return [k.left - c.left - 26, k.top - c.top - 26, k.right - c.left + 26, k.bottom - c.top + 26]; });
+  let zc = -1, zp = null;
+  for (const a of secZ.cells) { const q = await w((c) => window.__norne.secCellPoint(c), a); if (q && q[0] > box.x + 20 && q[0] < box.x + box.w - 20 && q[1] > box.y + 10 && q[1] < box.y + box.h - 10 && !(q[0] > kr[0] && q[0] < kr[2] && q[1] > kr[1] && q[1] < kr[3]) && (await w(([x, y]) => window.__norne.secCellAt(x, y), q)) === a) { zc = a; zp = q; break; } }
+  if (zp) await tapAt(...P0(...zp));
+  const cardZ = await w(() => !document.getElementById('readout').hidden);
+  const outlined = zp ? await w(() => window.__norne.secView().drawn) : '';
+  if (zp) await A.tapEl('#readout-close');
+  // a double tap zooms in two times where it lands
+  const dt = [110, 60], dA = await w(([x, y]) => window.__norne.secAt(x, y), dt), sxD0 = (await view()).ax.sx;
+  await tapAt(...P0(...dt)); await sleep(120); await tapAt(...P0(...dt)); await sleep(150); await frame();
+  const vD = await view(), dU = await w((q) => window.__norne.secPoint(q[0], q[1]), dA);
+  const dbl = { k: vD.ax.sx / sxD0, off: Math.hypot(dU[0] - dt[0], dU[1] - dt[1]) };
+  if (!(await w(() => document.getElementById('readout').hidden))) await A.tapEl('#readout-close');
+  // a wheel about the pointer (a desktop browser)
+  const wp = [140, 60], wA = await w(([x, y]) => window.__norne.secAt(x, y), wp), sxW0 = (await view()).ax.sx;
+  await page.mouse.move(...P0(...wp)); await page.mouse.wheel(0, -120); await sleep(300); await frame();
+  const vW = await view(), wU = await w((q) => window.__norne.secPoint(q[0], q[1]), wA);
+  const wheel = { k: vW.ax.sx / sxW0, off: Math.hypot(wU[0] - wp[0], wU[1] - wp[1]) };
+  // a pinch out while zoomed in: the frames while the fingers move show the section where the last drawing did
+  // not reach (its whole view's layer under it), against the drawing at rest at the same view; and all the way
+  // back to the fit
+  const kZoom = await overBox();
+  for (let i = 0; i < 2; i++) { await A.tapEl('#sec-in'); await sleep(250); }
+  await sleep(400); await frame();
+  const bz = (await view()).box, pm = [bz.x + bz.w / 2, bz.y + bz.h / 2], pout = [];
+  for (let i = 0; i <= 20; i++) { const d = 80 - i * 2; pout.push([P0(pm[0] - d, pm[1]), P0(pm[0] + d, pm[1])]); }
+  await touch('touchStart', pout[0]);
+  for (let i = 1; i < pout.length; i++) { await sleep(16); await touch('touchMove', pout[i]); }
+  await sleep(60); await frame();
+  const pz = await view(), coverMid = await cover(), underN = (await w(() => window.__norne.stats())).secUnder || 0;
+  await page.screenshot({ path: path.join(OUT, `${kind}-25-pinchout-mid.png`) });
+  await touch('touchEnd', cdp ? [] : pout[pout.length - 1]);
+  await sleep(400); await frame(); await frame();
+  const coverRest = await cover(), pzR = await view();
+  const pinchOut = { k: pz.view ? pz.view.sx / pz.lo : 1, mid: coverMid, rest: coverRest, same: JSON.stringify(pz.view) === JSON.stringify(pzR.view), under: underN };
+  // the keys
+  const keys = await w(() => ['sec-fit', 'sec-out', 'sec-in', 'sec-lock'].map((id) => { const e = document.getElementById(id); return [id, e.hidden, e.getAttribute('aria-label'), e.getAttribute('aria-pressed')]; }));
+  const hits = (await hitTargets(w)).bad.filter((b) => /^sec-(fit|out|in|lock)/.test(b));
+  await A.tapEl('#sec-in'); await frame();   // in far enough that Zoom out has room to halve
+  const sxK = (await view()).ax.sx;
+  await A.tapEl('#sec-out'); await frame();
+  const sxOut = (await view()).ax.sx;
+  await A.tapEl('#sec-in'); await frame();
+  const sxIn = (await view()).ax.sx;
+  await A.tapEl('#sec-fit'); await frame();
+  const vF = await view(), keysF = await w(() => ['sec-fit', 'sec-out'].map((id) => document.getElementById(id).hidden));
+  // unlocked: a zoom holds until the section changes, then the section fits again
+  await A.tapEl('#sec-in'); await frame();
+  const zoomed = !(await view()).atFit;
+  await A.tapEl('#sec-next'); await sleep(200); await frame();
+  const vS = await view(), fitS = await w(() => window.__norne.section());
+  // locked: the field's window; five steps move the data and never the scale
+  await A.tapEl('#sec-lock'); await sleep(200); await frame();
+  const steps = [];
+  for (let i = 0; i < 6; i++) {
+    if (i) { await A.tapEl('#sec-next'); await sleep(200); await frame(); }
+    const v = await view(), s = await w(() => window.__norne.section());
+    steps.push({ sx: v.ax.sx, sz: v.ax.sz, zTop: v.ax.zTop, view: JSON.stringify(v.view), ticks: JSON.stringify(v.ticks), xa: v.ax.xa, at: s.at, first: s.cells.slice(0, 3).join(' ') });
+  }
+  const lockV = await view(), pressed = await w(() => document.getElementById('sec-lock').getAttribute('aria-pressed'));
+  const kLock = await overBox();
+  const oneScale = steps.every((q) => q.view === steps[0].view && q.ticks === steps[0].ticks), moved = new Set(steps.map((q) => q.first)).size === steps.length && new Set(steps.map((q) => q.at)).size === steps.length;
+  // locked, a fast scrub of the sweep (a finger in Chromium, the mouse in WebKit): the newest place drawn in
+  // every frame (D14), on the one window
+  const sr = await rect('#sec-sweep'), sy = sr.top + sr.height / 2;
+  const drag = cdp ? (t, x) => touch(t, t === 'touchEnd' ? [] : [[x, sy]]) : (t, x) => (t === 'touchStart' ? page.mouse.move(x, sy).then(() => page.mouse.down()) : t === 'touchEnd' ? page.mouse.up() : page.mouse.move(x, sy));
+  await w(() => window.__norne.secLog(true));
+  await drag('touchStart', sr.left + 7);
+  for (let i = 1; i <= 24; i++) { await sleep(16); await drag('touchMove', sr.left + 7 + ((sr.width - 14) * i) / 24); }
+  await drag('touchEnd'); await frame(); await frame();
+  const slog = await w(() => window.__norne.secLog(false)), sStale = slog.filter((e) => e.drew !== e.at), sViews = new Set(slog.map((e) => e.view)), sPlaces = new Set(slog.map((e) => e.at));
+  // locked and zoomed: the window held through three more steps
+  await A.tapEl('#sec-in'); await frame();
+  const lz0 = JSON.stringify((await view()).view);
+  for (let i = 0; i < 3; i++) { await A.tapEl('#sec-prev'); await sleep(150); }
+  await frame();
+  const lz1 = JSON.stringify((await view()).view);
+  await A.tapEl('#sec-fit'); await frame();
+  await page.screenshot({ path: path.join(OUT, `${kind}-25-locked.png`) });
+  // the tall stop, then a reload: the lock and the stop remembered
+  await toStop(A, 3); await sleep(400);
+  await page.reload(); await page.waitForFunction(ready, null, { timeout: 180000 }); await sleep(500); await frame();
+  const after = await w(() => ({ lock: window.__norne.secView().lock, pressed: document.getElementById('sec-lock').getAttribute('aria-pressed'), stop: document.getElementById('sheet').className, atFit: window.__norne.secView().atFit, ticks: window.__norne.secView().ticks }));
+  check(card0.open && atCell === cell && g0.previews === 0 && v0.view === null && scroll0.every((v) => v === 0),
+    `${kind}: a tap at the fit shows its cell at once (the card open as the tap returns, "${card0.where}"); a one-finger drag at the fit moves nothing and scrolls nothing (${g0.previews} previews, the page at ${scroll0.join(', ')})`);
+  check(pinchOff <= 1 && vP.ax.sx > sec0.ax.sx * 4 && gp.previews > 10 && gp.fullMoving === 0 && gp.fullAfter >= 1 && gp.moving && gp.stale === 0 && vP.drawn === `${vP.view.sx} ${vP.view.sL} ${vP.view.zT}`,
+    `${kind}: a pinch from 40 to 280 px apart, its midpoint carried 30 px across and 8 down, zooms ${(vP.ax.sx / sec0.ax.sx).toFixed(2)} times with the meters under the fingers ${pinchOff.toFixed(2)} px from them; ${gp.previews} frames previewed and no full drawing while the fingers moved (${gp.fullMoving}), drawn in full at rest (${gp.fullAfter}) at the newest view; in ${gp.logged} frames logged, ${gp.stale} drew a view other than the newest`);
+  check(moveOff <= 1 && gm.fullMoving === 0 && gm.previews > 10 && gm.stale === 0, `${kind}: one finger zoomed in moves the view with it (${moveOff.toFixed(2)} px off), previewed (${gm.previews} frames), no full drawing while it moved, no frame of ${gm.logged} drawing a view other than the newest (${gm.stale})`);
+  check(zp && cardZ, `${kind}: a tap zoomed in still shows its cell at once (cell ${zc} at ${zp ? zp.map(Math.round).join(', ') : 'none'})`);
+  check(Math.abs(dbl.k - 2) < 1e-6 && dbl.off <= 1, `${kind}: a double tap zooms in ${dbl.k.toFixed(3)} times where it lands (${dbl.off.toFixed(2)} px off)`);
+  check(wheel.k > 1.05 && wheel.off <= 1, `${kind}: a wheel turn zooms ${wheel.k.toFixed(3)} times about the pointer (${wheel.off.toFixed(2)} px off)`);
+  check(pinchOut.same && pinchOut.under > 0 && pinchOut.mid >= pinchOut.rest * 0.9 && pinchOut.rest > 0.3,
+    `${kind}: a pinch out from four times further in to ×${pinchOut.k.toFixed(2)}: while the fingers move the data covers ${(pinchOut.mid * 100).toFixed(1)} % of the plot's box against ${(pinchOut.rest * 100).toFixed(1)} % drawn in full at rest at the same view (the whole view's layer under the last drawing, ${pinchOut.under} frames), never an empty plot`);
+  check([kFit, kZoom, kLock].every((k) => k.over.length === 0 && k.n >= 2) && kFit.n === 2 && kZoom.n === 4,
+    `${kind}: the keys stand in their strip beside the data, never over it: at the fit ${kFit.n} keys (${kFit.cls}), zoomed ${kZoom.n} (${kZoom.cls}), locked ${kLock.n} (${kLock.cls}); over the data's box: ${[kFit, kZoom, kLock].map((k) => k.over.length).join(', ')}`);
+  check(keys.map((k) => `${k[0]} ${k[1] ? 'hidden' : 'shown'} "${k[2]}"${k[3] ? ` pressed ${k[3]}` : ''}`).join(', ') === 'sec-fit shown "Fit the section", sec-out shown "Zoom the section out", sec-in shown "Zoom the section in", sec-lock shown "Lock the axes" pressed false'
+    && hits.length === 0 && Math.abs(sxOut / sxK - 0.5) < 1e-6 && Math.abs(sxIn / sxOut - 2) < 1e-6 && vF.view === null && vF.atFit && keysF.every(Boolean),
+    `${kind}: the keys zoomed in: ${keys.map((k) => `${k[2]}${k[1] ? ' (hidden)' : ''}`).join(', ')}, every hit 44 × 44${hits.length ? ': ' + hits.join('; ') : ''}; Zoom out halves the scale (${(sxOut / sxK).toFixed(3)}), Zoom in doubles it (${(sxIn / sxOut).toFixed(3)}), Fit fits and then Fit and Zoom out go`);
+  check(zoomed && vS.view === null && vS.atFit && Math.abs(vS.ax.sx - vS.lo) < 1e-12 && fitS.at !== sec0.at, `${kind}: unlocked, a zoom gives way to the fit when the section changes (› to ${fitS.at}: at the fit, ${vS.ax.sx.toFixed(5)} px a meter)`);
+  check(pressed === 'true' && lockV.fam && oneScale && moved && /^Southwest end$/.test(JSON.parse(steps[0].ticks).dist[0][1]) && lz0 === lz1,
+    `${kind}: locked, the field's window (${Math.round(lockV.fam.L)} m from the ${lockV.fam.end}, ${JSON.parse(steps[0].ticks).dist.map((t) => t[1]).join(' | ')}; ${JSON.parse(steps[0].ticks).depth.map((t) => t[1]).join(' | ')}) through five steps (${steps.map((q) => q.at).join(', ')}): the view and every tick the same, the cells drawn different at each (A at ${steps.map((q) => q.xa.toFixed(1)).join(', ')} px); zoomed in, the window held through three steps back`);
+  check(slog.length > 8 && sPlaces.size > 5 && sStale.length === 0 && sViews.size === 1, `${kind}: locked, a fast scrub of the sweep: ${slog.length} frames over ${sPlaces.size} places, ${sStale.length} whose section is not the slider's place, the window one throughout (${sViews.size})`);
+  check(after.lock === true && after.pressed === 'true' && /\bs3\b/.test(after.stop) && after.atFit, `${kind}: over a reload the lock (pressed ${after.pressed}) and the tall stop (${after.stop}) are remembered, the window the field's`);
+  check(gp.p95 <= ZOOM_P95[kind] && gm.p95 <= ZOOM_P95[kind], `${kind}: the main thread's time per frame, within ${ZOOM_P95[kind]} ms at the 95th percentile: the pinch ${gp.p50.toFixed(1)} ms at the median, ${gp.p95.toFixed(1)} at the 95th percentile over ${gp.frames} frames (longest task ${gp.longest.toFixed(1)}); the move ${gm.p50.toFixed(1)} and ${gm.p95.toFixed(1)} over ${gm.frames} (longest ${gm.longest.toFixed(1)}); the full drawing at rest ${gp.restMs.toFixed(1)} and ${gm.restMs.toFixed(1)} ms (headless on this Mac: a trend)`);
+  errs.push(...errors);
+  await ctx.close();
+  // the tall stop at three sizes: all of Cells and view under the grip, the 3D view's strip measured and touchable
+  const tall = [];
+  for (const [W, H, sec] of [[390, 844, false], [375, 667, false], [430, 932, false], [390, 844, true], [430, 932, true]]) {
+    const c2 = await B.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 2, hasTouch: true, isMobile: kind === 'chromium', colorScheme: 'light' });
+    await c2.addInitScript((on) => { localStorage.setItem('norne-viewer:v1', JSON.stringify({ sheet: 3, section: { on, line: 'along', a: null, b: null, at: null, size: 0 } })); }, sec);
+    const p2 = await c2.newPage();
+    p2.on('pageerror', (e) => errs.push(`pageerror: ${e.message}`));
+    await p2.goto(`${origin}index.html`); await p2.waitForFunction(ready, null, { timeout: 180000 }); await sleep(700);
+    tall.push(await p2.evaluate(([W, H, sec]) => {
+      const g = (s) => document.querySelector(s).getBoundingClientRect(), sh = g('#sheet'), gr = g('#grip'), hd = g('.stop2 .srow'), rs = g('#reset-cut'), pl = g('#plate');
+      const t = document.elementFromPoint(pl.left + 30, pl.top + pl.height - 20);
+      // with the section open the plot is too short for the keys' strip: stepped aside, still reached by the keyboard
+      const k = document.getElementById('sec-keys'), aside = sec ? k.classList.contains('aside') : null;
+      let reach = null;
+      if (sec) { const b = document.getElementById('sec-in'); b.focus(); const r = b.getBoundingClientRect(); reach = document.activeElement === b && r.width >= 44 && r.height >= 44; b.blur(); }
+      return { W, H, sec, cls: document.getElementById('sheet').className, plate: Math.round(pl.height), pane: sec ? Math.round(g('#section').height) : 0, sheet: Math.round(sh.height), all: hd.top >= gr.bottom - 1 && rs.bottom <= sh.bottom + 1, short: Math.max(0, Math.round(rs.bottom - sh.bottom)), touch: !!t && (t.id === 'gl' || !!t.closest('#plate')), label: document.getElementById('grip').getAttribute('aria-label'), aside, reach };
+    }, [W, H, sec]));
+    if (W === 390 && !sec) await p2.screenshot({ path: path.join(OUT, `${kind}-25-tall.png`) });
+    await c2.close();
+  }
+  const say25 = (t) => `${t.W} × ${t.H}${t.sec ? ' with the section' : ''}: the model ${t.plate} px${t.sec ? ` and the pane ${t.pane}` : ''}, the sheet ${t.sheet} px, ${t.all ? 'all of Cells and view in view' : `Cells and view ${t.short} px short of whole`}`;
+  check(tall.every((t) => /\bs3\b/.test(t.cls) && t.plate >= 103.5 && t.touch && t.all && t.label === 'Hide the extra controls' && (!t.sec || (t.pane >= 149.5 && t.aside && t.reach))),
+    `${kind}: the tall stop: ${tall.map(say25).join('; ')}; every slider row, both toggles and Show all cells in view at each; the 3D view's strip 104 px or more and touchable at each; with the section the zoom keys stepped aside from its short plot, still reached by the keyboard as 44 × 44 keys; the grip then "Hide the extra controls"`);
+  check(errs.length === 0, `${kind}: 2.5's checks, no console error and no request outside the app${errs.length ? ': ' + errs.slice(0, 4).join(' | ') : ''}`);
+  await B.close();
 }
 
 await browser.close();

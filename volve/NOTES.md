@@ -13,9 +13,11 @@ What it does:
 - Shows a vertical section A–A′ under the model (beside it on a wide screen or a phone on its side), from the Section key: along an **inline** or a **crossline** of the seismic survey (its own traces, 25 m apart), **along** or **across** the field through the grid, or along a line **drawn** on the model. On it, the seismic at its own depths and the cells the plane cuts as blocks in the shown property and report date, with the Hugin Formation's top and base as interpreted, the wells within 150 m and the inactive gaps hatched, on one depth axis in meters below mean sea level. Under More controls, Section chooses what it shows (the seismic, the model or both), the seismic's gain and ramp (gray, or red and blue), and how strongly the cells cover the seismic.
 - Sweeps that line across the field with the slider under the section (‹ › one step at a time): through every inline or crossline of the survey, from Along or Across through the grid's rows or columns, or a drawn line parallel to itself; the line moves on the model, and the section follows the slider, the newest place first.
 - Makes the section taller (beside the model, wider) by dragging the pane's edge or double-tapping it; a taller pane stretches the section to fill it and says by how much (the stretch is held while the edge is dragged and set when it is let go).
+- Zooms the section: a pinch about the fingers, one finger to move it once zoomed in, a double tap to zoom in where it lands, a mouse wheel or trackpad about the pointer, and the keys in a strip beside the plot, never over the data (Zoom in, Zoom out, Fit; where the plot is under 89 px tall they step aside, still reached by the keyboard and VoiceOver); in as far as the field's thin cells drawn 24 px tall, at the stretch the pane states. The seismic and the cells zoom together on the one axis: while a finger moves, the last full drawing is laid on the newest view (the seismic's own samples and the whole view's cells under it where the drawing did not reach), and at rest the seismic is drawn in full for the part of the line in view. The scales stand at the plot's edges and follow the view. Unlocked, a zoom holds until the section changes. Lock the axes holds the window on the whole field (every active cell's depths with 150 m of seismic above and below, and the full length of the line's family, at one scale), so a step of the slider moves the section and never the scale; only a hand moves a locked window.
+- Under More controls, the grip's third raise shows all of Cells and view, its heading scrolled under the grip, the 3D view keeping a 104 px strip (254 px with the section open: the strip and the pane at 150).
 - Tap a cell or a well's name for its values on a card; double-tap a cell to fly to it; the zoom keys zoom without a pinch.
 - Switches every quantity between SI and US units with the key at the top right.
-- Hides its controls (focus mode; the model keeps its compass), remembers the view, date, property, units, the section and its display in `localStorage`, and has light and dark themes. Works from 320 px wide and on a phone on its side.
+- Hides its controls (focus mode; the model keeps its compass), remembers the view, date, property, units, the section (its line, where it was swept, the pane's size and the axes' lock), its display and the sheet's stop in `localStorage`, and has light and dark themes. Works from 320 px wide and on a phone on its side.
 
 ## The seismic, and how it is drawn
 
@@ -42,6 +44,7 @@ volve/
   js/section.js                   the section A–A′: the cut through the grid, the field's lines and top, the sweep, the axis
   js/seismic.js                   the seismic on the section: the survey's grid and lines, the interpolation, the ramps, the horizons
   js/pane.js                      the section pane's edge
+  js/gesture.js                   the section's gestures: tap, double tap, pinch, move and wheel
   fonts/                          Ysabeau Office (the house face, a subset) and its license
   config.json                     editable settings: properties, color scales per theme, well colors, explode distances,
                                   playback speed, the section's display defaults (re-read when the app comes back)
@@ -122,6 +125,7 @@ As Norne Reservoir's (its `NOTES.md`), with these differences:
 - The seismic layer (`seisJob()`, `seisStep()`, `seisWork()`): one image at the plot's own device pixels (the screen's, up to three a point: `secDpr()`) from `colPlan()` (bilinear across), `rowPlan()` (the windowed sinc in depth) and `renderCols()`, made at rest a few columns a frame (about 6 ms of each), drawn 1:1 and kept while the line, plot, gain and ramp stay; a new report date redraws only the cells over it.
 - While the view moves (`moving()`: the edge, the sweep, a line or its end), `drawSection()` never starts that render: it lays the last full image on the new plot by distance and depth (`relay()`), or on a new line draws `seisPreview()` (the seismic's own traces and 5 m samples, scaled by the canvas). The cells are drawn anew on a new line and laid on anew on the same one; the gaps and the outline are laid on anew on the same line and left off on a new one. The pane's stretch is held while its edge is dragged. 150 ms after the finger is up and nothing has changed (`SEC_REST`), everything is drawn in full again.
 - The depth window (`secWindow()`): with the seismic shown, the cut's depths and 150 m above and below; with the model alone, Norne's padding.
+- Zoom and the axes' lock (as Norne Reservoir 2.5's: `secAxis()`, `secZoom()`, `secFit()`, `secFamily()`, `writeSecKeys()`; the view's arithmetic `viewAxis()`, `zoomAt()`, `panBy()`, `keepIn()`, `fitWindow()`, `commonFrame()` in `js/section.js`; the gestures in `js/gesture.js`). A pinch, a move or a wheel counts as the view moving (`moving()`), so the 1.1 rule holds: the layers laid on anew, the seismic never rendered until rest. At rest the seismic's image covers only the part of the plot the line and the window show (`seisJob()`'s clip), at the screen's pixels as before. The locked window (`secLockWin()`): every active cell's corners and 150 m beyond, inside the cube, whatever the section shows. The family's common distance (`secFamily()`): every inline or crossline from the survey's edge, where they all start; Along's and Across's rows or columns each from its end nearer the family's first end, keeping its own length along its path, a slice whose path runs against the line laid the other way; a drawn line's own length. The tall stop (`measureTall()`, `shownStop()`, `applyStop()`): the sheet raised to the grip and Cells and view, its heading to Show all cells.
 - Color: `config.json`'s `colormaps` and `colormapsDark`, which `tools/art/palette.py` writes; pressure and the rock from matplotlib's plasma and viridis tables, the same stops in both themes.
 - The compass (`updateGauge()`, as Norne Reservoir 2.4's): north projected at the camera's target turns and shortens its needle, places its N and names the direction; the card and the well names keep off it.
 - The horizons (`horizonRuns()`, `horizonAt()`): bilinear on the interpretation's grid, broken where a node around has no pick.
@@ -133,13 +137,13 @@ As Norne Reservoir's (its `NOTES.md`), with these differences:
 ```
 node tools/check.mjs                                           # static: budgets, the ZIP, the face, the data's hashes, the terms, SI, US spelling, the camera's strings
 node tools/test_decode.mjs                                     # js/data.js and js/units.js against the test's own decode of data/
-node tools/test_section.mjs                                    # js/section.js and the survey's lines and horizons against data/
+node tools/test_section.mjs                                    # js/section.js and the survey's lines and horizons against data/, with the zoom's and the lock's arithmetic
 node tools/test_seismic_display.mjs                            # js/seismic.js measured: zero, the interpolation, aliasing, depths
-PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tools/shoot.mjs   # the app driven at 390 × 844 in both themes; WebKit and Chromium load and memory
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tools/shoot.mjs   # the app driven at 390 × 844 in both themes; WebKit and Chromium load, memory, the section's speed, zoom, lock and tall stop
 python3 volve/tools/art/palette.py [--json]                    # from Template/: every color and contrast in ART.md
 ```
 
-Budgets (`tools/check.mjs` prints the truth): app code at most 322 500 bytes (321 958 measured in 1.1), the ZIP at most 33 600 000 bytes (about 33.4 MB measured), fonts at most 160 000 bytes.
+Budgets (`tools/check.mjs` prints the truth): app code at most 322 500 bytes (321 958 measured in 1.1; 1.2 measures 369 523 with the zoom, the lock and the tall stop, over it, for the template's ruling), the ZIP at most 33 600 000 bytes (about 33.4 MB measured), fonts at most 160 000 bytes.
 
 ## Credits and license
 

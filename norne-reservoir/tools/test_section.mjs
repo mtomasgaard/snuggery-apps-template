@@ -21,12 +21,20 @@
 //     distances run from 0 to its length, A at its west end, the tops on the formations' first layers;
 //     a drawn line's steps are square to it, one slice wide; the wells near a slice's path lie within
 //     the corridor of it; and the own stretch: never under the 3D view's, a round figure, the section
-//     inside its box at it, and the 3D view's where the box has no more room.
+//     inside its box at it, and the 3D view's where the box has no more room;
+//  9. the zoom and the axes' lock (2.5, plan 0012 D18, D19): slicePaths the paths sliceSection draws; the
+//     common distance of a field line's family (from one baseline square to the line, the line's points at
+//     their distance along it exactly) and of a drawn line's (its own length); the field's window (every
+//     active cell's depths, padded) fitted to a box; a view (the fit as a view, a zoom keeping the meters
+//     under the fingers, a move, the limits, the section kept in view, the stretch slider); the ticks of a
+//     zoomed and of a locked axis, within the plot and the data, and five sweep steps locked on one scale
+//     with the data moving; the zoom's limit from the cells' thickness.
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cutGrid, wellsNear, fieldLines, sectionAxis, depthTicks, distanceTicks, lineOf, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag, STRETCHES } from '../js/section.js';
+import { cutGrid, wellsNear, fieldLines, sectionAxis, depthTicks, distanceTicks, lineOf, columns, sweepAxis, slices, slot, sliceSection, shifts, lineAt, wellsNearPath, ownExag, STRETCHES, slicePaths, commonFrame, fieldDepths, fitWindow, viewOfAxis, viewAxis, zoomAt, panBy, keepIn, restretch, fillStretch, readableScale } from '../js/section.js';
+import * as U from '../js/units.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fails = [];
@@ -244,8 +252,127 @@ ok(topBad === 0, `the formation tops: every segment inside its line, A to A′ (
   }
 }
 
+// 9. the zoom and the axes' lock (2.5, plan 0012 D18, D19): the window, the common distance and the ticks
+{
+  const datum = model.center[2], box = { x: 46, y: 15, w: 312, h: 64 }, cols = columns(geom, NA, ijk, model.NI, model.NJ);
+  // slicePaths: the very paths sliceSection draws, for every slice of both families, in one pass
+  {
+    let bad = 0, n = 0;
+    for (const axis of ['I', 'J']) for (const [k, m] of slicePaths(geom, NA, ijk, axis)) {
+      const ln = sliceSection(geom, NA, ijk, axis, k, null).line, P = ln.path;
+      n++;
+      if (Math.hypot(m.p0[0] - P[0][0], m.p0[1] - P[0][1]) > 1e-9 || Math.hypot(m.p1[0] - P[P.length - 1][0], m.p1[1] - P[P.length - 1][1]) > 1e-9 || Math.abs(m.L - ln.L) > 1e-9) bad++;
+    }
+    ok(bad === 0 && n === slices(cols, 'I').length + slices(cols, 'J').length, `slicePaths: ${n} slices' paths, ends and lengths those sliceSection draws (${bad} not)`);
+  }
+  // the common distance: a field line's family (the line and every slice its sweep goes through) from one
+  // baseline square to the line; a drawn line's (its steps all square to it) its own length
+  const frameOf = (l, axis) => {
+    const ln = lineOf(l.a, l.b), members = [{ key: null, p0: l.a, p1: l.b, L: ln.L }];
+    for (const [k, m] of slicePaths(geom, NA, ijk, axis)) members.push({ key: k, ...m });
+    return { ln, members, f: commonFrame(members, [ln.ux, ln.uy]) };
+  };
+  for (const name of ['along', 'across']) {
+    const l = lines[name], axis = sweepAxis(cols, l.a, l.b), { ln, members, f } = frameOf(l, axis);
+    let bad = 0, lo = Infinity, hi = -Infinity, base = Infinity;
+    for (const m of members) base = Math.min(base, m.p0[0] * ln.ux + m.p0[1] * ln.uy, m.p1[0] * ln.ux + m.p1[1] * ln.uy);
+    for (const m of members) {
+      const p = f.at.get(m.key), a = p.off, b = p.off + p.sgn * m.L;
+      lo = Math.min(lo, a, b); hi = Math.max(hi, a, b);
+      // the start placed at its own distance along the line's direction from the baseline
+      if (Math.abs(a - (m.p0[0] * ln.ux + m.p0[1] * ln.uy - base)) > 1e-6 || p.sgn !== 1) bad++;
+    }
+    // the line itself: any point s along it lies at exactly its distance along the direction from the baseline
+    const p = f.at.get(null);
+    for (let i = 0; i <= 10; i++) { const s = ln.L * i / 10, q = [l.a[0] + ln.ux * s, l.a[1] + ln.uy * s]; if (Math.abs(p.off + s - (q[0] * ln.ux + q[1] * ln.uy - base)) > 1e-6) bad++; }
+    ok(bad === 0 && Math.abs(lo) < 1e-9 && Math.abs(hi - f.L) < 1e-9 && f.L >= ln.L,
+      `the common distance, ${name[0].toUpperCase()}${name.slice(1)}'s family: ${members.length - 1} ${axis === 'I' ? 'columns' : 'rows'} and the line, each from one baseline square to the line through the family's first end, the line's points at their distance along it exactly, every member inside 0 to ${Math.round(f.L)} m (the line ${Math.round(ln.L)} m), all running with it (${bad} not)`);
+  }
+  {
+    const a = [-2000, -900], b = [1800, 1300], h = shifts(cols, a, b), ln = lineOf(a, b), members = [];
+    for (let j = h.lo; j <= h.hi; j++) { const d = j * h.step, A = [a[0] + h.nx * d, a[1] + h.ny * d], Bp = [b[0] + h.nx * d, b[1] + h.ny * d]; members.push({ key: j, p0: A, p1: Bp, L: Math.hypot(Bp[0] - A[0], Bp[1] - A[1]) }); }
+    const f = commonFrame(members, [ln.ux, ln.uy]);
+    ok(Math.abs(f.L - ln.L) < 1e-6 && members.every((m) => Math.abs(f.at.get(m.key).off) < 1e-6), `the common distance, a drawn line's ${members.length} steps: each at 0, the family's length its own ${Math.round(ln.L)} m (${Math.round(f.L)})`);
+  }
+  // the field's window: every active cell's depths, padded as a section's
+  const win = fieldDepths(geom, NA);
+  {
+    let z0 = Infinity, z1 = -Infinity;
+    for (let i = 0; i < NA * 8; i++) { z0 = Math.min(z0, geom[i * 3 + 2]); z1 = Math.max(z1, geom[i * 3 + 2]); }
+    const pad = Math.max(10, (z1 - z0) * 0.04), v = fitWindow(9000, win.top, win.bot, box, 5), ax = viewAxis({ line: { L: 9000 } }, box, v, datum);
+    ok(Math.abs(win.top - (z0 - pad)) < 1e-9 && Math.abs(win.bot - (z1 + pad)) < 1e-9 && Math.abs(ax.Y(win.top) - box.y) < 1e-9 && ax.Y(win.bot) <= box.y + box.h + 1e-9 && ax.dX(9000) <= box.x + box.w + 1e-9 && Math.abs((ax.dX(0) - box.x) - (box.x + box.w - ax.dX(9000))) < 1e-9 && (Math.abs(ax.dX(9000) - ax.dX(0) - box.w) < 1e-9 || Math.abs(ax.Y(win.bot) - box.y - box.h) < 1e-9),
+      `the field's window: ${U.int(z0 + datum)} to ${U.int(z1 + datum)} m, padded ${pad.toFixed(1)} m; fitted to ${box.w} × ${box.h} at ×5, the whole of it inside, centered across, filling one way`);
+  }
+  // a view: X and S invert, a zoom keeps the meters under the fingers, a move moves by the finger, the
+  // section kept in view, the stretch slider keeps the scale and the middle
+  {
+    const sec = cutGrid(geom, NA, ijk, lines.along.a, lines.along.b, tops), fit = sectionAxis(sec, box, 5, datum), v0 = viewOfAxis(fit, box), a0 = viewAxis(sec, box, v0, datum);
+    let bad = 0;
+    for (const s of [0, 1000, sec.line.L]) if (Math.abs(a0.X(s) - fit.X(s)) > 1e-9) bad++;
+    for (const z of [sec.z0, sec.z1]) if (Math.abs(a0.Y(z) - fit.Y(z)) > 1e-9) bad++;
+    const lo = fit.sx, hi = readableScale(geom, NA).sz / 5, x = 150, y = 40, before = [a0.S(x), a0.Z(y)];
+    const v1 = zoomAt(v0, 3.7, x, y, box, lo, hi), a1 = viewAxis(sec, box, v1, datum);
+    const anchor = Math.hypot(a1.X(before[0]) - x, a1.Y(before[1]) - y);
+    const v2 = panBy(v1, 25, -12), a2 = viewAxis(sec, box, v2, datum), moved = [a2.X(before[0]) - a1.X(before[0]), a2.Y(before[1]) - a1.Y(before[1])];
+    const v3 = zoomAt(v1, 1e6, x, y, box, lo, hi), v4 = zoomAt(v1, 1e-6, x, y, box, lo, hi);
+    const far = keepIn({ ...v1, sL: 1e6 }, box, { s0: 0, s1: sec.line.L, z0: sec.z0, z1: sec.z1 }), af = viewAxis(sec, box, far, datum);
+    const kept = Math.min(af.x1, box.x + box.w) - Math.max(af.x0, box.x);
+    const v5 = restretch(v1, 10, box), a5 = viewAxis(sec, box, v5, datum), zm = a1.Z(box.y + box.h / 2);
+    ok(bad === 0 && anchor < 1e-6 && Math.abs(moved[0] - 25) < 1e-6 && Math.abs(moved[1] + 12) < 1e-6 && Math.abs(v3.sx - hi) < 1e-12 && Math.abs(v4.sx - lo) < 1e-12 && kept >= 48 - 1e-6 && Math.abs(a1.sz / a1.sx - 5) < 1e-9 && v5.sx === v1.sx && Math.abs(a5.Y(zm) - (box.y + box.h / 2)) < 1e-6,
+      `a view: the fit as a view draws as the fit (${bad} not); zoomed ×3.7 the meters under (${x}, ${y}) stay there (${anchor.toExponential(1)} px off), a move moves them by the finger, the scale held within the fit and the limit, ${Math.round(kept)} px of the section kept in view when moved far off, the stretch ×5 through the zoom; the slider's ×10 keeps the scale and the depth at the middle`);
+  }
+  // the ticks of a zoomed axis and of a locked one, against the data
+  {
+    const sec = cutGrid(geom, NA, ijk, lines.along.a, lines.along.b, tops), fit = sectionAxis(sec, box, 5, datum), lim = { d0: 0, d1: sec.line.L, z0: fit.zTop, z1: fit.zBot };
+    const res = [];
+    let bad = 0;
+    for (const k of [1.5, 4, 12, 40]) {
+      const v = zoomAt(viewOfAxis(fit, box), k, 200, 40, box, fit.sx, 1e9), ax = viewAxis(sec, box, v, datum, undefined, lim);
+      const xt = distanceTicks(ax, 'SI', 3), dt = depthTicks(ax, 'SI', 2), s0 = ax.S(box.x), s1 = ax.S(box.x + box.w);
+      const steps = new Set(xt.slice(1).map((t, i) => Math.round((t.v - xt[i].v) * 1e6) / 1e6));
+      if (!xt.length || xt.some((t) => t.v < Math.max(0, s0) - 1e-6 || t.v > Math.min(sec.line.L, s1) + 1e-6 || t.x < box.x - 1e-6 || t.x > box.x + box.w + 1e-6) || steps.size > 1) bad++;
+      if (!dt.length || dt.some((t) => t.y < box.y - 1e-6 || t.y > box.y + box.h + 1e-6 || t.v < fit.zTop + datum - 1e-6 || t.v > fit.zBot + datum + 1e-6)) bad++;
+      if (!/ m$/.test(xt[xt.length - 1].text) || !/ m$/.test(dt[dt.length - 1].text)) bad++;
+      res.push(`×${k}: ${xt.map((t) => t.text).join(' | ')}; ${dt.map((t) => t.text).join(' | ')}`);
+    }
+    // locked: Along's family on its common distance, the window on the field
+    const l = lines.along, axis = sweepAxis(cols, l.a, l.b), { f } = frameOf(l, axis), w = fieldDepths(geom, NA), home = fitWindow(f.L, w.top, w.bot, box, 5), place = f.at.get(null);
+    const lax = viewAxis(sec, box, home, datum, place, { d0: 0, d1: f.L, z0: w.top, z1: w.bot }), lt = distanceTicks(lax, 'SI', 3), ld = depthTicks(lax, 'SI', 2);
+    const span = lt[lt.length - 1].v - lt[0].v;
+    if (lt[0].v !== 0 || lt.some((t) => t.v > f.L + 1e-6) || span < f.L * 0.7 || ld.some((t) => t.v < w.top + datum - 1e-6 || t.v > w.bot + datum + 1e-6) || Math.abs(lax.xa - lax.dX(place.off)) > 1e-9) bad++;
+    res.push(`locked on the field: ${lt.map((t) => t.text).join(' | ')}; ${ld.map((t) => t.text).join(' | ')}`);
+    // five steps of the sweep, locked: one scale; each section where it lies, so the data moves
+    const list = slices(cols, axis), i0 = slot(cols, axis, list, l), xs = [];
+    for (let j = 0; j < 5; j++) {
+      const k = list[i0 + j].k, sl = sliceSection(geom, NA, ijk, axis, k, tops), ax = viewAxis(sl, box, home, datum, f.at.get(k), { d0: 0, d1: f.L, z0: w.top, z1: w.bot });
+      xs.push([ax.sx, ax.sz, ax.xa, ax.xb, distanceTicks(ax, 'SI', 3).map((t) => t.text).join(' ')]);
+    }
+    const one = xs.every((q) => q[0] === xs[0][0] && q[1] === xs[0][1] && q[4] === xs[0][4]), moves = new Set(xs.map((q) => `${q[2].toFixed(2)} ${q[3].toFixed(2)}`)).size;
+    ok(bad === 0 && one && moves === 5, `the ticks: zoomed, each within the plot and within the data (the line's 0 to ${Math.round(sec.line.L)} m, its padded depths), one round step, chosen afresh, the unit on the last: ${res.join('; ')}; five sweep steps locked keep one scale and one set of ticks (${xs[0][4]}) and the data moves (A at ${xs.map((q) => q[2].toFixed(1)).join(', ')} px)`);
+  }
+  // how far in: the thin cells read plainly
+  {
+    const r = readableScale(geom, NA), t = [];
+    for (let c = 0; c < NA; c++) { let h = 0; for (let k = 0; k < 4; k++) h += geom[c * 24 + (k + 4) * 3 + 2] - geom[c * 24 + k * 3 + 2]; t.push(h / 4); }
+    t.sort((a, b) => a - b);
+    const p05 = t[Math.floor(0.05 * (NA - 1))], fit = sectionAxis(cutGrid(geom, NA, ijk, lines.along.a, lines.along.b, tops), box, 5, datum);
+    ok(Math.abs(r.t - p05) < 1e-4 && Math.abs(r.t * r.sz - 24) < 1e-9, `the zoom's limit: the 5th percentile of the active cells' thickness, ${r.t.toFixed(2)} m, drawn 24 px tall (${r.sz.toFixed(2)} px a meter down; at ×5 Along's fit zooms in ${Math.round(r.sz / 5 / fit.sx)} times)`);
+  }
+}
+
 // 7. the cost
 ok(true, `a cut takes ${(msSum / tests.length).toFixed(1)} ms on average over ${tests.length} lines (Node on this Mac: a trend, never phone evidence)`);
+
+// the locked window's stretch in a capped compact pane (D19, the review of 2.5): the 3D view's where the window fills
+// the plot's width at it; else the largest round stretch under it that does, so the axes cover the plot across
+{
+  const box = { x: 0, y: 0, w: 256, h: 123 }, cases = [[4675, 1052, 3], [8513, 651, 5], [4675, 1052, 1], [1000, 5000, 5]];
+  const got = cases.map(([L, span, ex]) => fillStretch(L, span, box, ex));
+  const fills = cases.map(([L, span], i) => { const e = got[i], sx = Math.min(box.w / L, box.h / (span * e)); return Math.abs(sx * L - box.w) < 1e-9; });
+  const roundUnder = cases.every(([L, span, ex], i) => got[i] <= ex && STRETCHES.includes(got[i]) && (got[i] === ex || !STRETCHES.some((s) => s > got[i] && s < ex && (box.h / span) / (box.w / L) >= s)));
+  ok(got.join() === '2,5,1,1' && fills.slice(0, 3).every(Boolean) && roundUnder,
+    `the locked stretch where the pane's cap holds the plot (fillStretch, a 256 × 123 px box): a 4 675 m family 1 052 m deep at ×3 takes ×${got[0]}, filling the width; 8 513 m and 651 m at ×5 keeps ×${got[1]}; at ×1 stays ×${got[2]}; a window too deep to fill it even at ×1 takes ×${got[3]}, the least; each a round stretch, the largest under the 3D view's that fills`);
+}
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }
 console.log('\nall checks pass');
