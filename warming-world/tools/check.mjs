@@ -7,23 +7,29 @@
 //   4. assets/ holds exactly world.json, places.json, about.json and climatology.json (plan 0012 3.3: the
 //      1951–1980 climatology for Absolute, ≤ 120,000 bytes, readable by js/measure.js); data/ only
 //      snapshot.json; fonts/ exactly archivo-ww.woff2 and OFL.txt;
-//   5. miniapp.json is valid, version 1.1 (plan 0012; HOUSE §13);
+//   5. miniapp.json is valid, version 1.2 (plan 0012 D21–D22; HOUSE §13);
 //   6. no AI vendor or model name in any shipped text file, DESIGN.md and ART.md included (US Quakes'
 //      list, stored ROT13; the snapshot's base64 maps are skipped, its strings are read);
 //   7. js/ramp.js: its stops equal ART.md's table; DESIGN §7.1's constraints (lightness symmetric within
 //      0.02 at every 0.1 °C to 4, falling from 0 to each end, chroma at 0 ≤ 0.02; under deutan and protan
 //      simulation (Machado 2009) ΔE(OKLab) ≥ 0.15 between −4 and +4, ≥ 0.08 between ±1 and 0, and the
 //      ends ≥ 0.08 from both hatch grays); the map scale ±4 and the stripes scale ±1.5; and Absolute's
-//      ramp (ART "The temperature ramp"): its stops equal ART's table, in sRGB's gamut, chroma ≥ 0.05
-//      everywhere, lightness rising at every 1 °C from −60 to +40 under normal, deutan, protan and tritan
-//      vision, its 10 °C steps within a factor 1.75 of each other, its ends ≥ 0.6 apart, and every value
-//      ≥ 0.07 from both hatch grays (≥ 0.03 under the simulations: the hatch is a pattern as well);
+//      ramp (plan 0012 D21, ART "The temperature ramp"): Global Weather's RAMPS.temp, light and dark, stop
+//      for stop (global-weather/js/ramps.js, or the hash recorded here where a copy has no Global
+//      Weather); the scale −50 … +50 °C with 0 °C, the slate stop, at the LUT's and the bar's middle; in
+//      gamut (8-bit sRGB stops, by construction now); in each theme and under normal, deutan, protan and
+//      tritan vision every 0.1 °C ≥ 0.10 from both hatch grays (≥ 0.02 under the simulations: the hatch is
+//      a pattern as well), every eighth of the legend a step of ΔE ≥ 0.02 and the ends ≥ 0.10 apart
+//      (Global Weather's own rules), and every value ≥ 0.05 from the theme's card (the limb's ring and the
+//      map's outline part the Earth from the card where a value comes near it). 3.3's "lightness rises at
+//      every 1 °C" and "10 °C steps within a factor 1.75" are dropped: the owner's ramp is centered on 0,
+//      pale (light) or dark (dark) at 0 °C, and not perceptually even, by design;
 //   7b. the credit (HOUSE §4.15, plan 0012 change list item 1): no credit line on the front
 //      (index.html has no legend-credit or credits element), the constant unchanged in js/readout.js,
 //      and About writes it as #about-credit-line;
 //   8. every chrome color token in style.css, both themes, has OKLCh chroma < 0.001; index.html's two
 //      theme-color metas are each theme's --page;
-//   9. app code (index.html, style.css, js/*.js) ≤ 223,000 bytes (the lead's ruling, plan 0012 3.3); data/snapshot.json ≤ 1,500,000;
+//   9. app code (index.html, style.css, js/*.js) ≤ 230,500 bytes (the lead's ruling, plan 0012 D21–D22; 223,000 for 1.1); data/snapshot.json ≤ 1,500,000;
 //      fonts/ ≤ 250,000;
 //  10. the ZIP, built exactly as build-zips.yml builds it, has index.html at its top and is ≤ 2,000,000
 //      bytes (every size printed).
@@ -34,7 +40,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { STOPS, rampLab, oklabToLinear, MAP_SCALE, STRIPES_SCALE, HATCH_GROUND, HATCH_LINE, ABS_STOPS, absLab, ABS_LO, ABS_HI } from '../js/ramp.js';
+import { createHash } from 'node:crypto';
+import { STOPS, rampLab, oklabToLinear, MAP_SCALE, STRIPES_SCALE, HATCH_GROUND, HATCH_LINE, ABS_STOPS, absRGB, buildAbsLut, ABS_LO, ABS_HI } from '../js/ramp.js';
 import { checkClim } from '../js/measure.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -104,7 +111,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Warming World' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
@@ -155,24 +162,35 @@ ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped 
     ok(ends >= 0.15 && n1 >= 0.08 && p1 >= 0.08 && hz >= 0.08, `ramp under ${name} vision: ΔE(−4, +4) ${ends.toFixed(3)} (≥ 0.15), ΔE(−1, 0) ${n1.toFixed(3)}, ΔE(+1, 0) ${p1.toFixed(3)} (≥ 0.08), ends to the hatch ${hz.toFixed(3)} (≥ 0.08)`);
   }
   ok(MAP_SCALE === 4 && STRIPES_SCALE === 1.5, `scales: the map ±${MAP_SCALE} °C, the stripes ±${STRIPES_SCALE} °C`);
-  // Absolute's ramp: ART's table, then its constraints
-  const esc = (t) => t.replace(/[()]/g, (c) => `\\${c}`);
-  const arow = (label) => ((read('ART.md').match(new RegExp(`^\\| ${esc(label)} \\|([^\\n]+)`, 'm')) || [, ''])[1]).split('|').map((x) => x.trim()).filter(Boolean)
-    .map((x) => Number(x.replace('−', '-').replace('+', '')));
-  const at = [arow('°C (Absolute)'), arow('L (Absolute)'), arow('C (Absolute)'), arow('h (Absolute)')];
-  ok(at[0].length === ABS_STOPS.length && ABS_STOPS.every((s, i) => s.every((v, j) => Math.abs(v - at[j][i]) < 1e-9)) && ABS_LO === -60 && ABS_HI === 40,
-    `js/ramp.js's ${ABS_STOPS.length} temperature stops equal ART.md's table (°C ${at[0].join(' ')}), the scale ${ABS_LO} to +${ABS_HI} °C`);
-  let gam = 0, minC = 9;
-  for (let v = ABS_LO; v <= ABS_HI + 1e-9; v += 0.1) { const l = absLab(v); minC = Math.min(minC, Math.hypot(l[1], l[2])); gam = Math.max(gam, ...oklabToLinear(...l).map((c) => Math.max(c - 1, -c))); }
-  ok(gam <= 1e-4 && minC >= 0.05, `temperature ramp: in sRGB's gamut (worst ${gam.toFixed(5)} outside), chroma at least ${minC.toFixed(4)} (≥ 0.05) at every 0.1 °C`);
-  for (const [name, m] of Object.entries({ ...CVD, tritan: [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.303900]] })) {
-    const s = (v) => sim(absLab(v), m);
-    let mono = true;
-    for (let v = ABS_LO + 1; v <= ABS_HI; v++) mono = mono && s(v)[0] > s(v - 1)[0];
-    const steps = []; for (let v = ABS_LO; v < ABS_HI; v += 10) steps.push(dE(s(v), s(v + 10)));
-    const hz = Math.min(...Array.from({ length: ABS_HI - ABS_LO + 1 }, (_, i) => Math.min(...hatch.map((h) => dE(s(ABS_LO + i), sim(h, m))))));
-    const ratio = Math.max(...steps) / Math.min(...steps), ends = dE(s(ABS_LO), s(ABS_HI));
-    ok(mono && ratio <= 1.75 && ends >= 0.6 && hz >= (m ? 0.03 : 0.07), `temperature ramp under ${name} vision: lightness rises at every 1 °C ${mono}; 10 °C steps ΔE ${Math.min(...steps).toFixed(3)}–${Math.max(...steps).toFixed(3)} (ratio ${ratio.toFixed(2)} ≤ 1.75); ends ${ends.toFixed(3)} (≥ 0.6); to the hatch ≥ ${hz.toFixed(3)} (≥ ${m ? 0.03 : 0.07})`);
+  // Absolute's ramp (plan 0012 D21): Global Weather's temperature colors, stop for stop, then its checks
+  const GW = path.join(APP, '..', 'global-weather', 'js', 'ramps.js');
+  const flat = (t) => JSON.stringify(['light', 'dark'].map((th) => t[th].map(([v, c]) => [v, c])));
+  const PIN = '99678e686e48fc80a3c4fdfcc3d5b61ceeb1b59d26484dca4941fd3af5f8bd18';   // sha256 of flat(RAMPS.temp), 2026-10-10
+  const mine = flat(ABS_STOPS), hash = createHash('sha256').update(mine).digest('hex');
+  if (fs.existsSync(GW)) {
+    const { RAMPS } = await import(GW);
+    ok(mine === flat(RAMPS.temp), `Absolute's stops are Global Weather's RAMPS.temp, light and dark, ${ABS_STOPS.light.length} stops each (−50 … +48 °C), stop for stop (sha256 ${hash.slice(0, 12)}…)`);
+  } else ok(hash === PIN, `Absolute's stops: no global-weather/ in this copy, so the hash recorded here: ${hash.slice(0, 12)}… (${hash === PIN ? 'equal' : 'differs'})`);
+  const lutL = buildAbsLut(false), lutD = buildAbsLut(true), at = (lut, i) => Array.from(lut.slice(i * 4, i * 4 + 3)).join();
+  ok(ABS_LO === -50 && ABS_HI === 50 && at(lutL, 500) === ABS_STOPS.light[16][1].join() && ABS_STOPS.light[16][0] === 0 && at(lutD, 500) === ABS_STOPS.dark[16][1].join()
+    && at(lutL, 0) === ABS_STOPS.light[0][1].join() && at(lutL, 1000) === ABS_STOPS.light[40][1].join() && at(lutD, 1000) === ABS_STOPS.dark[40][1].join(),
+    `Absolute's scale ${ABS_LO} … +${ABS_HI} °C, centered: the LUT's entry 500 of 0 … 1000 is 0 °C, Global Weather's slate (light ${at(lutL, 500)}, dark ${at(lutD, 500)}); −50 °C its coldest stop, +50 °C its warmest (+48)`);
+  const all = [...ABS_STOPS.light, ...ABS_STOPS.dark].flatMap((x) => x[1]);
+  ok(all.every((c) => Number.isInteger(c) && c >= 0 && c <= 255), `temperature ramp in sRGB's gamut: ${all.length / 3} stops of 8-bit sRGB, interpolated in sRGB (by construction since D21)`);
+  const card = { light: [190, 190, 190], dark: [48, 48, 48] };
+  const cssCard = [...read('style.css').matchAll(/--card:\s*(#[0-9a-f]{6})/gi)].map((m) => m[1].toLowerCase());
+  ok(cssCard.join() === '#bebebe,#303030', `the cards measured against are style.css's --card (${cssCard.join(', ')})`);
+  for (const th of ['light', 'dark']) {
+    for (const [name, m] of Object.entries({ ...CVD, tritan: [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.303900]] })) {
+      const s8 = (c) => { let l = c.map((v) => lin(v / 255)); if (m) l = m.map((r) => Math.min(1, Math.max(0, r[0] * l[0] + r[1] * l[1] + r[2] * l[2]))); return linToLab(l); };
+      const s = (v) => s8(absRGB(v, th === 'dark'));
+      let hz = 9, cd = [9, 0];
+      for (let t = -500; t <= 500; t++) { const c = s(t / 10); hz = Math.min(hz, ...[HATCH_GROUND, HATCH_LINE].map((h) => dE(c, s8(h)))); const d = dE(c, s8(card[th])); if (d < cd[0]) cd = [d, t / 10]; }
+      const eighths = Array.from({ length: 8 }, (_, k) => dE(s(-50 + k * 12.5), s(-50 + (k + 1) * 12.5))), ends = dE(s(-50), s(48));
+      const hzMin = m ? 0.02 : 0.10;
+      ok(hz >= hzMin && Math.min(...eighths) >= 0.02 && ends >= 0.10 && (m || cd[0] >= 0.05),
+        `temperature ramp, ${th}, ${name} vision: to the hatch ≥ ${hz.toFixed(3)} (≥ ${hzMin}); every eighth a step of ΔE ≥ ${Math.min(...eighths).toFixed(3)} (≥ 0.02); ends ${ends.toFixed(3)} apart (≥ 0.10); nearest the card ${cd[0].toFixed(3)} at ${cd[1]} °C${m ? ' (printed)' : ' (≥ 0.05)'}`);
+    }
   }
 }
 
@@ -217,7 +235,7 @@ ok(named.length === 0, `no AI vendor or product name in ${texts.length} shipped 
 }
 const codeFiles = code.filter((f) => f === 'index.html' || f === 'style.css' || /^js\/[^/]+\.js$/.test(f));
 const codeBytes = codeFiles.reduce((n, f) => n + fs.statSync(path.join(APP, f)).size, 0);
-ok(codeBytes <= 223000, `app code ${fmt(codeBytes)} bytes (budget 223,000, the lead's ruling on the measured figure, plan 0012 3.3; DESIGN's estimate 110,000): ${codeFiles.map((f) => `${f} ${fmt(fs.statSync(path.join(APP, f)).size)}`).join(', ')}`);
+ok(codeBytes <= 230500, `app code ${fmt(codeBytes)} bytes (budget 230,500, the lead's ruling for 1.2 of 2026-10-10 on the measured 229,889, plan 0012 D21–D22; 223,000 for 1.1; DESIGN's estimate 110,000): ${codeFiles.map((f) => `${f} ${fmt(fs.statSync(path.join(APP, f)).size)}`).join(', ')}`);
 const snapBytes = fs.statSync(path.join(APP, 'data/snapshot.json')).size;
 ok(snapBytes <= 1500000, `data/snapshot.json ${fmt(snapBytes)} bytes (cap 1,500,000)`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + fs.statSync(path.join(APP, f)).size, 0);

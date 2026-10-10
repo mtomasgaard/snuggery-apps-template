@@ -34,6 +34,10 @@ export function bezier(x1, y1, x2, y2) {
 export const easeTurn = bezier(0.45, 0, 0.2, 1);
 export const easeSettle = bezier(0.2, 0, 0, 1);
 
+/** The dark theme is on (Absolute's colors are Global Weather's per theme, plan 0012 D21). */
+export function darkOn() {
+  try { return window.matchMedia('(prefers-color-scheme: dark)').matches; } catch { return false; }
+}
 export function reducedMotion() {
   try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { return false; }
 }

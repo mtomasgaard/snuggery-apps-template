@@ -6,6 +6,10 @@ credit moved from the legend into About. `ART.md` items 26–30 and `NOTES.md` d
 this file says otherwise (§7.3's credit line, §10's legend hidden in focus mode, "an anomaly, never a
 temperature"), they are what the app does now. `tools/DECISIONS.md` holds the pass's reasons.
 
+**Plan 0012 D21 and D22 (2026-10-10).** Version 1.2: Absolute takes Global Weather's temperature colors on
+a −50 … +50 °C scale centered on 0 °C, and Base is set by four presets and a two-thumb slider. `ART.md`
+("The temperature ramp", items 27 and 28) and `NOTES.md` describe them.
+
 The brief is `docs/plans/0010-four-showcase-apps.md`, "Idea 2 — recommendation: Warming World
 (GISTEMP)", with the rules for all four apps under "Recommendation and order" (the art-direction
 stage, SI units, the focus mode, sharp scrubbing; decision log D11, D15, D18, D19, D20). The sources,

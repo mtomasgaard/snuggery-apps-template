@@ -230,3 +230,187 @@ sheet and the second LUT are the owner's three requests. `assets/climatology.jso
   Arctic winter), and About does not say so. It needs a sentence in `build_static.py`'s baseline
   section and a regenerated `about.json`, or a per-month baseline.
 
+
+## Plan 0012, D21 and D22 (2026-10-10): version 1.1 → 1.2
+
+The owner reviewed TestFlight 48 on 2026-10-10 and asked for two changes, which bind word for word:
+*"The warming world needs to afjust the color table for the absolutes"* (D21; from the board
+`docs/marketing/reference/0012-ww-absolute-board.png` the owner chose A, Global Weather's temperature
+colors), with the follow-up *"Both colortables should be centered around 0"*, *"Ie, absolute and
+diff"*; and *"also adjusting the base with arrows was not very user friendly"* (D22; presets and a
+slider chosen). The change list for this app was applied in 3.3 (1.1); this pass is D21, D22 and the
+bugs on record.
+
+**Bugs on record, read first.** Matrix rows 155 and 185 are "not run" (no phone result to fix);
+`docs/plans/0009-launch-1.1.md` item 5 names Norne, World Oil & Gas, Milky Way and Global Weather, not
+this app; nothing under `docs/review/` names it. One item was owed: 3.3's final (the lead's pass,
+above) left the partial year under a chosen baseline unexplained in About. Fixed here (D-13).
+
+### D-9. Absolute in Global Weather's temperature colors, by value (D21)
+
+- **The stops are Global Weather's `RAMPS.temp`**, 41 per theme from −50 to +48 °C, copied as hex
+  into `js/ramp.js` (`ABS_STOPS`) and interpolated in sRGB exactly as Global Weather's `rampAt`
+  (rounded to 8 bits for the LUT, as its `Uint8ClampedArray` does). A cell at a temperature takes
+  Global Weather's color for that temperature, as the board was drawn. `check.mjs` compares the stops
+  with `global-weather/js/ramps.js` stop for stop (or with their sha256, recorded in it, where a copy of
+  the template has no Global Weather); `test_decode.mjs` checks all 1 001 LUT entries per theme against
+  Global Weather's file interpolated in the test (0 differ).
+- **The dark theme takes Global Weather's dark variant** (decided, as the brief's family rule says: the
+  same color as Global Weather in each theme). The LUT is rebuilt when the color scheme changes, with the
+  legend. Measured against this app's own dark card (`#303030`), the nearest value is 0 °C at ΔE 0.070,
+  more than the light theme's nearest (0.055 at −2.7 °C against `#bebebe`); the limb's ring and the
+  map's outline part the Earth from the card there, as they do for the anomaly ramp's ends.
+- **Opaque, not Global Weather's 0.90** (owner call: taste). Global Weather lays its temperature layer at
+  0.90 opacity over its land and sea; this app has no basemap under the cells and fills each with the
+  stop itself, as the board did. On a phone the two will differ by that tenth of the ground; 1.0 here is
+  the board's look.
+- **The scale is −50 … +50 °C, centered on 0** (in place of −60 … +40, where 0 sat at 60 %): `ABS_LO`,
+  `ABS_HI`, the LUT (entry i is (i − 500) tenths; the shader clamps to 0 … 1000), the counts beyond
+  (`measure.js`, strictly beyond ±50.0), the card's "beyond the map's end" note, the legend and About.
+  −50 °C is Global Weather's coldest stop, so below it a cell takes that color (82 cells of the 2025
+  map, all Antarctic, counted in the legend as before); above +48 °C, its warmest stop, the warmest (no
+  cell of this data reaches +48).
+- **The legend's ticks** (owner call: taste): every 5 °C, long and labeled every 25 (`≤ −50`, `−25`,
+  `0`, `+25`, `≥ +50 °C`). Labels every 20 from −40, as 1.1 had them every 20 from −60, would put `−40`
+  20.85 px from `≤ −50` (one 10 °C step is 20.85 px at 2.085 px a degree), and the two labels are about
+  28 and 16 px wide, so they would collide; every 25 keeps 0 labeled and the labels evenly spaced.
+- **3.3's rule is overruled by the owner's choice** (ART's "sequential, never orange, yellow or signal
+  red; the warm end reads as sand, not as an alarm", D-1 above). ART's "The temperature ramp" now says
+  what is true, and "Never" keeps its no-alarm rule for the anomaly ramp only. The switch, the legend and
+  the caption say which map is on screen; Difference keeps its blue-white-red ramp.
+- **Difference does not change**, and is checked centered at 0 in both themes (`shoot.mjs`: the bar's
+  middle step is the ramp's white, 244,243,240, its ends −4 and +4; the card's chart is drawn on ±R with
+  its zero line at the plot's middle, by construction, `Y(0) = top + ph / 2`; the stripes and the card's
+  own stripes are the same ramp, white at 0). In Absolute the card's chart, its stripes and the track's
+  stripes stay the anomaly and its ramp: they show the change, not the temperature.
+- **check.mjs's assertions, changed** (the brief: keep what still means something). Kept: the gamut
+  (now true by construction: 8-bit sRGB stops interpolated in sRGB, asserted as such); the hatch, told
+  apart by measured ΔE at every 0.1 °C in each theme, ≥ 0.10 under normal vision (0.119 light, 0.127
+  dark) and ≥ 0.02 under the deutan, protan and tritan simulations (lowest 0.024, dark protan; 1.1's
+  floor was 0.03; the hatch is a pattern of 45° lines, so color is not its only cue); both cards, new
+  as an assertion, ≥ 0.05 under normal vision (0.055 light, 0.070 dark), printed under the simulations
+  (lowest 0.024, light tritan, near +12 °C). Added from Global Weather's own checks: every eighth of the
+  legend a step of ΔE ≥ 0.02 (lowest 0.024) and the ends ≥ 0.10 apart (0.156–0.215). Dropped, because the
+  owner's ramp is not meant to meet them: "lightness rises at every 1 °C" (the ramp is palest in light,
+  darkest in dark, at 0 °C, and its 1 °C steps go as low as ΔE 0.0002 in dark protan) and "10 °C steps
+  within a factor 1.75" (they run 0.019–0.130, Global Weather's ramp is not perceptually even). The
+  LUT's middle entry is asserted to be 0 °C's slate in both themes.
+
+### D-10. The baseline by presets and a slider (D22)
+
+- **Four presets, one tap each:** `1951–1980` (GISS's base and the default), `1961–1990`, `1981–2010`,
+  `1991–2020`, in the underline switch's dress (the app's own `.seg`, so the switches read alike), a
+  `radiogroup` named "Common baselines" whose buttons are `radio`s; the arrow keys move the choice as on
+  every switch here. The chosen one is underlined and `aria-checked`; when the span is none of them,
+  none is (and the first is the group's tab stop). VoiceOver names: "1951–1980, GISS's base" and
+  "1991–2020, the current climate normal" (the visible text first, so voice control finds them);
+  About names the World Meteorological Organization for the normal. The hit is the switch's own, 44 px
+  tall (`shoot.mjs`'s hit sampler).
+- **The two-thumb slider:** each thumb is an `input type=range` (`From`, `To`), the year as its value
+  and `aria-valuetext`, step 1, min and max following the other thumb so the two can meet but not cross:
+  VoiceOver's adjustable control and the arrow keys come with the native control, as Norne chose for its
+  sweep (Norne's DECISIONS, 2.3). The inputs are invisible 44 × 44 px boxes over the drawn dots and take
+  no pointer events; the slider's 44 px row takes the finger: a touch takes the nearer thumb, moves it
+  to the year under the finger at once, and drags it (pointer capture, `touch-action: none`, so the page
+  never scrolls). Where the thumbs meet, the first move's direction chooses (left From, right To). A touch
+  never focuses an input (a mouse does), so no iOS focus behavior can move the page (not seen, not
+  tested on a phone). The ends are labeled with the first and the last complete year in `--ink-3`.
+- **Live or at the release: at the release, by measurement.** A baseline over a span is a mean of every
+  cell over every year of it, then the counts, the legend's reserve and the stripes: `setSpan` took
+  15.6–25.4 ms in headless Chromium and 8–25 ms in headless WebKit on this Mac (`tools/.work` probe,
+  six spans each, the synchronous part only), more than a 16.7 ms frame here and more on a phone, so a
+  live map would make the thumb lag. While a thumb moves, the span, the presets and the note's rule
+  follow it (the note says what follows at the lift in the mode on screen, and is `aria-busy`, so
+  VoiceOver does not read each year); at the lift the map, the stripes' bracket, the year row, the
+  legend and the note's count follow in one go. The note's height is held at its longest form, so
+  nothing in the sheet moves while it is open (D-14). A key or VoiceOver step is applied at the next
+  frame (coalesced), and speaks through the control alone (D-14).
+- **"Back to GISS's base, 1951–1980" is gone** (decided): the `1951–1980` preset is that, one tap,
+  and is named GISS's base to VoiceOver. The live region still says "Baseline 1951–1980, GISS's own".
+- **Kept as it was:** the two-thirds rule and its note (`#base-note`, `aria-live`), single months against
+  1951–1980 and the sentence that says so, Absolute's base applying to the card's chart and the stripes
+  and not to the map's temperatures, the base key's words, and the stored span: `ww.base`, the same key
+  and shape, so a span stored by 1.1 opens as it was (`shoot.mjs` stores 1991–2019 and reloads).
+- **Fits:** at 375 × 667 in portrait, with its longest words (a span with cells lacking, in Last 24
+  months), the sheet is 257 px tall, 135–392 px, inside the panel above the legend (398), with nothing to
+  scroll; on its side (844 × 390) it is 166–382 px with nothing to scroll (with the note's reserve, D-14), and a
+  touch on a preset works.
+
+### D-11. About (the pipeline's words): a patch, as 3.3's
+
+`assets/about.json` is written by `Template/scripts/warming_world/build_static.py`, outside this folder.
+`tools/climatology/pipeline-0012-d21-d22.patch` (apply from `Template/` with `patch -p1`; a dry run
+applies cleanly) changes three things: Absolute's scale paragraph (−50 … +50 °C, centered on 0 °C,
+Global Weather's colors by value, Difference's own scale), the baseline section's first paragraph (the
+four presets, the slider, down to one year), and a new paragraph on the partial year under a chosen
+span (D-13); and `verify_static.py`'s list of numerals the prose may type (`50`, `0`, `1961`, `1981`,
+`1991`, `2020`; `60` and `40` leave with the old scale). Run on a scratch copy of the pipeline and the app
+(`WARMINGWORLD_APP`, the real cache, its own `.venv`): the unpatched pipeline first rebuilt the shipped
+`about.json`, `world.json`, `places.json` and `CREDITS.txt` byte for byte; the patched one wrote the
+`about.json` this app now ships, twice byte-identical, `CREDITS.txt` unchanged, and `verify_static.py`
+said "all checks passed". `data/` and `assets/climatology.json` are untouched (sha256 before and after).
+
+### D-12. The camera
+
+The marketing camera waits for `Arctic` and the end of the opening (`Touch to stop`) and taps `Annual`.
+None changed; nothing it reads moved.
+
+### D-13. The owed sentence (3.3's final)
+
+About's baseline section now says: "The partial year is its months so far minus the cell's mean over the
+span's whole years, not over the same months, because the app keeps no monthly maps for those years.
+Where the span's years departed from 1951–1980 more in some months than over the whole year, as the
+Arctic's winters did, the partial year's difference is off by that much." `shoot.mjs` checks it is in
+About. The per-month baseline (the other remedy) is not possible with 24 months of maps.
+
+### D-14. The review of 1.2, fixed (2026-10-10, the fixer)
+
+- **The sheet moved under the finger (must).** It is anchored at its foot, and the note grew from one
+  line (GISS's base) to three to six (a chosen span), so the first choice pushed the presets and the
+  slider up 27–41 px and the next tap where a preset was landed on the span figure. Now `noteReserve()`
+  sets `#base-note`'s `min-height` to the tallest of its forms at the current width, text size, time
+  list and measure (the drag note, a span over every complete year with every cell lacking, with none
+  lacking, GISS's base), measured by setting each and reading `offsetHeight` in one task, never
+  painted; it is measured again when the width, the text size, the list or the measure changes and when
+  a font face arrives. The old freeze while a finger was down is gone. Measured by real touch (CDP,
+  Chromium 390 × 844 DPR 2): the presets, the slider and the span figure at the same top before and after
+  taps on 1961–1990, 1981–2010 (at its box measured before the first tap) and 1951–1980, and the
+  slider's top 478 px before, during and after the first drag from GISS's base; the same at 375 × 667
+  (both lists) and 844 × 390. `shoot.mjs` checks both, in both themes.
+- **The drag note said "The map follows on release." where the map does not use the span.** In
+  Absolute it now says "The stripes and the card's chart follow on release."; in Last 24 months "The
+  years follow on release; single months stay against 1951–1980." In Absolute the settled note says the
+  lacking cells "have fewer, so they have no mean over the span", not "are drawn as no data": no cell
+  of the Absolute map is hatched for it.
+- **VoiceOver would have spoken three times a step.** A thumb's key or VoiceOver step no longer calls
+  `say()` (the native control speaks its year), and the note is `aria-live="off"` and `aria-busy` while
+  steps come; 600 ms after the last it is `polite` again and its text is set afresh, so it speaks once.
+  A pointer drag and a preset still say "Baseline …" once, then the note. `shoot.mjs` checks the
+  attributes and that `#live` is unchanged after a key step; the speech itself is a phone check (NOTES
+  1.2 (d)).
+- **Accepted, not changed (nits, the owner's call):** a finger moves a thumb 2.25 px a year at 390 px
+  wide, so a sighted touch user lands a single year only by the live span figure (VoiceOver and keys
+  step one at a time; a preset covers the common spans). At 320 × 568, and at 375 with Larger Text or
+  125 % page zoom, the sheet's words scroll inside it (33 px at 320 × 568) now that the note's height is
+  held; the brief's 375 × 667 fits with nothing to scroll in both lists.
+- **About's words (nit, taken):** "so a temperature takes the same color in both apps", not "looks the
+  same": Global Weather draws at 0.90 over a basemap and this app fills cells opaque (D-9). In the patch
+  and in `about.json`; the patched pipeline, run on a scratch copy, wrote the shipped `about.json`,
+  `world.json`, `places.json` and `CREDITS.txt` byte for byte and `verify_static.py` passed.
+
+### Owner calls (taste, each reversible)
+
+- Absolute opaque, not at Global Weather's 0.90 (D-9).
+- The legend's ticks every 5 °C, labeled every 25 (D-9).
+- The presets in the underline switch's dress, without words beside them; VoiceOver hears "GISS's
+  base" and "the current climate normal" (D-10).
+- The map at the release, not live (measured, D-10).
+- "Back to GISS's base" removed (D-10).
+- About names Global Weather (another app of the template) as the source of the colors.
+
+### Budgets (for the lead)
+
+App code is 229 889 B (`node tools/check.mjs`): 6 889 B over the 223 000 B the lead ruled for 1.1, and 7 762 B
+of growth over the measured 222 127 B that ruling was set on (5 720 B for D21 and D22 as first built, 2 042 B
+for the review's fixes, D-14). **The lead's ruling (2026-10-10): 230 500 B**, on the measured figure. Nothing was cut: the slider, the presets and the two per-theme stop
+lists (as hex, the most compact form that keeps them checkable) are the owner's two requests.

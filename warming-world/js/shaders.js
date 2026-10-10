@@ -27,10 +27,10 @@ uniform float uPanY;                  // the map's vertical pan, Equal Earth uni
 uniform float uDpr;                   // device px per CSS px (the hatch is laid out in CSS px)
 uniform vec3 uCard;                   // --card, the ground
 // plan 0012 3.3: a chosen baseline (each cell's mean over the span, tenths, −32768 for none) and the
-// Absolute mode (the 1951–1980 climatology in tenths, 14 layers; its own LUT, −60.0 … +40.0 °C)
+// Absolute mode (the 1951–1980 climatology in tenths, 14 layers; its own LUT, −50.0 … +50.0 °C)
 uniform highp isampler2D uBase;       // 180 × 90 R16I
 uniform highp isampler2DArray uClim;  // 180 × 90 × 14 R16I
-uniform sampler2D uLutAbs;            // 1024 × 1 RGBA8: entry i is (i − 600) tenths
+uniform sampler2D uLutAbs;            // 1024 × 1 RGBA8: entry i is (i − 500) tenths
 uniform int uBaseOn, uAbs, uClimLayer;
 out vec4 outColor;
 
@@ -86,7 +86,7 @@ void main() {
     float t = mod((gl_FragCoord.x - gl_FragCoord.y) / uDpr, 6.0);
     c = t < 2.1213203 ? HATCH_LINE : HATCH_GROUND;
   } else {
-    c = uAbs == 1 ? texelFetch(uLutAbs, ivec2(clamp(v + 600, 0, 1000), 0), 0).rgb : texelFetch(uLut, ivec2(clamp(v + 127, 0, 254), 0), 0).rgb;
+    c = uAbs == 1 ? texelFetch(uLutAbs, ivec2(clamp(v + 500, 0, 1000), 0), 0).rgb : texelFetch(uLut, ivec2(clamp(v + 127, 0, 254), 0), 0).rgb;
   }
   outColor = vec4(mix(uCard, c, inside), 1.0);
 }`;

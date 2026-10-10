@@ -273,8 +273,11 @@ EXPECTED_NUMBERS = {
     '1950',
     # plan 0012 3.3, Absolute and the baseline: the climatology's period (1990, 2019), WeatherBench 2's
     # 61-day window and the researcher's 1.3 °C residual on a test field (tools/DECISIONS.md), the 0.5 °C
-    # steps and GISS's ±0.5 °C, the fixed −60 … +40 °C scale, two thirds of 30 years (20)
-    '1990', '2019', '61', '1.3', '0.5', '60', '40', '20',
+    # steps and GISS's ±0.5 °C, two thirds of 30 years (20)
+    '1990', '2019', '61', '1.3', '0.5', '20',
+    # plan 0012 D21 and D22: Absolute's fixed −50 … +50 °C scale centered on 0 °C; the three presets beside GISS's base
+    # (1961–1990, 1981–2010, 1991–2020; 1990 and 2010 are listed above)
+    '50', '0', '1961', '1981', '1991', '2020',
 }
 
 

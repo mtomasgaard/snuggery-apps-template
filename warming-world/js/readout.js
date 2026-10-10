@@ -2,7 +2,7 @@
 // Every number here is the snapshot's: GISS's global mean, the coverage, the beyond-scale counts, the
 // release. Values are printed from integers (units.js) and cut from step to step: nothing counts up.
 
-import { $, cssVar, setText, richText, el } from './util.js';
+import { $, cssVar, setText, richText, el, darkOn } from './util.js';
 import { rampRGB, absRGB, css, HATCH_GROUND, HATCH_LINE, MAP_SCALE, ABS_LO, ABS_HI } from './ramp.js';
 import { hundredths, tenths, degC, percent, group, temp, MINUS, NNBSP, monthName, MONTH } from './units.js';
 
@@ -73,8 +73,9 @@ export function drawLegendBar(canvas, dpr, above, below, abs = false) {
   x.setTransform(dpr, 0, 0, dpr, 0, 0);
   x.clearRect(0, 0, w, h);
   const ink = cssVar('--card-ink'), ink2 = cssVar('--card-ink-2');
-  // the difference: 81 steps of 0.1 °C from −4 to +4; the temperature: 101 steps of 1 °C from −60 to +40
-  const lo = abs ? ABS_LO : -MAP_SCALE, hi = abs ? ABS_HI : MAP_SCALE, per = abs ? 1 : 10, rgb = abs ? absRGB : rampRGB;
+  // the difference: 81 steps of 0.1 °C from −4 to +4; the temperature: 101 steps of 1 °C from −50 to +50;
+  // both centered on 0, the bar's middle step
+  const dk = darkOn(), lo = abs ? ABS_LO : -MAP_SCALE, hi = abs ? ABS_HI : MAP_SCALE, per = abs ? 1 : 10, rgb = abs ? (v) => absRGB(v, dk) : rampRGB;
   const steps = (hi - lo) * per + 1, CW = abs ? 2.085 : 2.6, x0 = 16, y0 = 3, bh = 9, x1 = x0 + steps * CW;
   for (let k = 0; k < steps; k++) {
     x.fillStyle = css(rgb(lo + k / per));
@@ -84,7 +85,7 @@ export function drawLegendBar(canvas, dpr, above, below, abs = false) {
   x.fillStyle = css(rgb(hi)); x.beginPath(); x.moveTo(x1, y0); x.lineTo(x1 + 7, y0 + bh / 2); x.lineTo(x1, y0 + bh); x.fill();
   const tickX = (v) => Math.round((x0 + (v - lo) * per * CW + CW / 2) * dpr) / dpr + 0.5 / dpr;
   x.strokeStyle = ink; x.lineWidth = 1;
-  const tk = abs ? 10 : 0.5, big = abs ? 20 : 2;                   // ticks every 10 °C (0.5 °C), long every 20 (2)
+  const tk = abs ? 5 : 0.5, big = abs ? 25 : 2;                    // ticks every 5 °C (0.5 °C), long every 25 (2)
   for (let v = lo; v <= hi + 1e-9; v += tk) {
     const b = Math.abs(Math.round(v / big) * big - v) < 1e-9;
     x.globalAlpha = b ? 0.9 : 0.45;

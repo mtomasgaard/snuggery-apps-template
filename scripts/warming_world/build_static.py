@@ -293,9 +293,11 @@ ABOUT_SECTIONS = [
         'Over land and sea ice the value is air temperature throughout. Over open water GISS’s anomaly is the '
         'sea surface’s, standing in for the air’s, as GISS itself does: the value is an estimate of the air '
         'over the sea, not the temperature of the sea.',
-        f'The scale runs from {MINUS}60 to +40 °C and never changes; cells beyond it are drawn in the end '
-        'colors. It runs from violet through blue and teal to sand, a different scale from Difference’s, so '
-        'the two maps cannot be read for each other.',
+        f'The scale runs from {MINUS}50 to +50 °C, centered on 0 °C, and never changes; cells beyond it are '
+        'drawn in the end colors, and the legend counts them. Its colors are Global Weather’s temperature '
+        f'colors, by value: violet at {MINUS}50 °C, then blue, slate at 0 °C, green, ochre and red, so a '
+        'temperature takes the same color in both apps. Difference keeps its own blue-to-red scale; the switch and '
+        'the legend say which map is on screen.',
         'How sure it is: GISS puts the uncertainty of the world’s absolute average at about 0.5 °C, and '
         'different sources can disagree by several degrees in a mountain cell. So the card gives a cell’s '
         'temperature to the whole degree, and its chart shows the change, the anomaly, to 0.1 °C. The year '
@@ -305,13 +307,19 @@ ABOUT_SECTIONS = [
         'mean over the whole cap plus the mean anomaly of the cap’s cells with data.',
     ]),
     ('baseline', 'A baseline of your own', [
-        'In Difference, Base chooses the years each place is compared with: any span from {firstYear} to '
-        '{lastComplete}. GISS’s own base, 1951–1980, is where it starts.',
+        'In Difference, Base chooses the years each place is compared with. Four common spans take one tap: '
+        '1951–1980, GISS’s own base and where the app starts; 1961–1990; 1981–2010; and 1991–2020, the World '
+        'Meteorological Organization’s current climate normal. The slider’s two ends choose any other span '
+        'from {firstYear} to {lastComplete}, down to a single year where they meet.',
         'With another span, a cell’s value is its anomaly minus its own mean over those years, rounded to '
         '0.1 °C. A cell needs a value in at least two thirds of them, 20 of 30; one with fewer has no '
         'baseline and is drawn as no data, and the year row’s coverage counts only cells with both.',
         'The year row’s global mean and the stripes are GISS’s own global means minus their mean over the '
         'same years. The bracket under the stripes and every label name the span in use.',
+        'The partial year is its months so far minus the cell’s mean over the span’s whole years, not over '
+        'the same months, because the app keeps no monthly maps for those years. Where the span’s years '
+        'departed from 1951–1980 more in some months than over the whole year, as the Arctic’s winters did, '
+        'the partial year’s difference is off by that much.',
         'Single months stay against 1951–1980: the app holds GISS’s monthly maps for the last 24 months only, '
         'so it cannot average a month over other years. Absolute does not depend on the baseline; its card’s '
         'chart and the stripes do.',

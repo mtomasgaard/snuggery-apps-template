@@ -117,7 +117,7 @@ export function createMeasure() {
     if (!F || (R && !R[k])) return { above: 0, below: 0, area: I.area[k] };   // not decoded yet: no count to print
     const key = `${M.abs}|${M.text()}|${k}`;
     if (cache.has(key)) return cache.get(key);
-    const hi = M.abs ? 400 : 40, lo = M.abs ? -600 : -40;
+    const hi = M.abs ? 500 : 40, lo = M.abs ? -500 : -40;
     let above = 0, below = 0, w = 0, all = 0;
     for (let k2 = 0; k2 < CELLS; k2++) {
       const rw = ROW_W[(k2 / NX) | 0]; all += rw;

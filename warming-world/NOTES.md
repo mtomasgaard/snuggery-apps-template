@@ -23,7 +23,8 @@ evidence.
 - The year row prints the step's name, GISS's global mean (`Global mean so far +1.20 °C (7 months)`
   for the partial year) and the area the data cover, all from the snapshot.
 - The legend prints, under its row of Difference | Absolute and the Base key (plan 0012), the ±4 °C
-  bar (81 steps of 0.1 °C with pointed ends) or Absolute's −60 … +40 °C bar (101 steps of 1 °C), the
+  bar (81 steps of 0.1 °C with pointed ends) or Absolute's −50 … +50 °C bar (101 steps of 1 °C, in Global
+  Weather's temperature colors, 0 °C at its middle), the
   hatch key, the step's count of cells beyond the scale, and the caption on one line ("anomaly, not
   temperature", naming the baseline; or "Estimated temperature"). The credit is in About (plan 0012,
   HOUSE §4.15): About's first line under "Sources and citations". The data's newest month and a
@@ -119,23 +120,23 @@ server: it serves the folder over its own scheme, and the app only ever `fetch()
 
 | File | Bytes | Holds |
 | --- | --: | --- |
-| `index.html` | 10 143 | the page; every control is a `<button>` with a label; the card, About and the ghost key; `theme-color` per scheme |
-| `style.css` | 19 199 | ART's gray tokens (both themes), Archivo by `@font-face`, the grid, the switches, the legend, the card, About, focus mode, the pressed and hover plates |
-| `js/app.js` | 62 850 | boot, state, the scheduler, play, turns and the focus glide, the poles, the opening, focus mode, About's wiring, persistence, gestures and keys, the pressed class, failure, refresh, `window.__ww` |
+| `index.html` | 9 906 | the page; every control is a `<button>` with a label; the card, About and the ghost key; `theme-color` per scheme |
+| `style.css` | 20 389 | ART's gray tokens (both themes), Archivo by `@font-face`, the grid, the switches, the legend, the card, the Base sheet's presets and slider, About, focus mode, the pressed and hover plates |
+| `js/app.js` | 68 666 | boot, state, the scheduler, play, turns and the focus glide, the poles, the opening, focus mode, About's wiring, persistence, gestures and keys, the pressed class, failure, refresh, `window.__ww` |
 | `js/data.js` | 21 033 | validation (the first failure as a phrase), the indexes, inflate (native, else Global Weather's decoder), the decode queue, world.json, places.json, the polar cap's mean |
 | `js/measure.js` | 7 878 | plan 0012: Difference or Absolute and the chosen baseline, in integer tenths; the climatology's check and decode (no DOM: `test_decode.mjs` imports it) |
 | `js/card.js` | 20 230 | the tap card: place phrase, value, the chart drawing itself, the cell's stripes, the 24-month bars |
 | `js/overlay.js` | 14 283 | the Canvas 2D layer: graticule, borders, coasts and lakes, limb or outline, places, the selected cell's frame or ring, the crosshair |
 | `js/proj.js` | 12 818 | orthographic and Equal Earth forward and inverse, the view (with focus mode's glide offset), `attachGestures` (Earth's History's) |
-| `js/readout.js` | 10 245 | the year row and its rolling twin, the legend and its one-line credit (plan 0012: no credit; both measures), notices, the error sentence |
+| `js/readout.js` | 10 329 | the year row and its rolling twin, the legend and its one-line credit (plan 0012: no credit; both measures), notices, the error sentence |
 | `js/track.js` | 7 843 | the stripes track: the cached instrument, the thumb, the finger, hover and the keys, the opening's written stripes |
 | `js/about.js` | 9 063 | About from about.json with its placeholders filled; sources; "This copy"; the stamp's text |
 | `js/earth.js` | 8 269 | WebGL2: the program, the array texture, the LUT, the draw, context loss |
-| `js/util.js` | 4 708 | helpers, `richText` (proper names `translate="no"`), the `ww.*` localStorage wrapper, the two motion curves |
+| `js/util.js` | 4 932 | helpers, `richText` (proper names `translate="no"`), the `ww.*` localStorage wrapper, the two motion curves |
 | `js/shaders.js` | 4 947 | the GLSL: both inverses, the cell lookup, the hatch |
-| `js/ramp.js` | 4 872 | ART's nine stops, OKLab interpolation, the two scales, the LUT, the hatch grays |
+| `js/ramp.js` | 5 557 | ART's nine stops, OKLab interpolation, the two scales, the LUT, the hatch grays; Absolute's stops (Global Weather's, per theme, plan 0012 D21) and its LUT |
 | `js/units.js` | 3 746 | °C with U+2212 and U+202F, percentages, month names, cell bounds |
-| **app code** | **222 127** | `check.mjs`'s budget is 223 000, the lead's ruling on the measured figure (plan 0012 3.3; 200 000 under B-2 and 192 954 B before the pass; `tools/DECISIONS.md`); over DESIGN §13's 160 000 cap, which B-2 replaced |
+| **app code** | **229 889** | of `check.mjs`'s budget of 230 500, the lead's ruling for 1.2 (2026-10-10; 223 000 for 1.1); 1.2's presets, slider and per-theme stops (D21, D22) and the review's fixes (the sheet held still, the note's words per mode, one announcement per run of steps) add 7 762 B over 1.1's 222 127; 200 000 under B-2 and 192 954 B before 3.3 |
 
 Copied, not imported: `inflateRaw`/`unzlib`/`inflateNative` from Global Weather's `app.js`; the
 full-screen triangle, the orthographic formulas, `attachGestures` and the program helper from Earth's
@@ -360,13 +361,15 @@ What changed (the reasons are in `tools/DECISIONS.md`, which does not ship):
   average 2 m air temperature from ERA5 (`assets/climatology.json`, built by
   `tools/climatology/build_climatology.py` from WeatherBench 2's 1990–2019 climatology, moved to
   1951–1980 by GISTEMP's own anomalies) plus GISS's anomaly for the step: an estimate, printed to the
-  whole degree on the card, on a fixed −60 … +40 °C sequential scale with its own legend. The year
+  whole degree on the card, on a fixed scale with its own legend (since 1.2, −50 … +50 °C in Global
+  Weather's temperature colors; 1.1's was −60 … +40 °C, violet to sand). The year
   row gives the climatology's area mean plus GISS's global mean, with ±0.5 °C; the pole chip, the
   climatology's mean over the whole cap plus the cap's mean anomaly. The card's sentence adds GISS's
   own anomaly against 1951–1980, whatever Base says. A month uses its own month's average, the partial
   year the average of its months so far.
-- **Base** in Difference: a sheet of two years (`From ‹ › to ‹ ›`) from the first to the last complete
-  year, default GISS's 1951–1980. Each cell is re-expressed against its own mean over the span, where
+- **Base** in Difference: a sheet with the span from the first to the last complete year, default
+  GISS's 1951–1980 (since 1.2: four presets and a two-thumb slider; 1.1 had `From ‹ › to ‹ ›`).
+  Each cell is re-expressed against its own mean over the span, where
   it has a value in two thirds of the years (else no data); GISS's global means and the stripes follow;
   the bracket under the stripes moves and names the span; every difference on screen says
   `vs. <span>`. Single months stay against 1951–1980 (the app holds only the last 24 months), so in
@@ -405,10 +408,45 @@ Measured (2026-10-06, this Mac):
   no console errors. WebKit draws the integer textures (the same pixel as Chromium).
 
 Phone checks owed (plan 0012): the R16I textures and the integer shader on iOS 18 WebKit (a GPU path no
-earlier pass used); a scrub in Absolute and with a baseline at three speeds by a finger; the stepper
-held to repeat, and lifted after the sheet has grown under the finger; the Base sheet over the globe in
-landscape; Absolute's sand and violet ends on the phone's screen in both themes; memory after switching
-measures and spans for 5 minutes.
+earlier pass used); a scrub in Absolute and with a baseline at three speeds by a finger; the Base sheet
+over the globe in landscape; memory after switching measures and spans for 5 minutes; and since 1.2,
+the items in the section below.
+
+## Plan 0012 D21 and D22 (2026-10-10): version 1.2
+
+The owner reviewed TestFlight 48 and asked for two changes (the reasons are in `tools/DECISIONS.md`):
+
+- **Absolute takes Global Weather's temperature colors** (*"The warming world needs to afjust the color
+  table for the absolutes"*), by value, so a degree takes the same color in both apps, each theme with Global
+  Weather's own variant. Its scale is −50 … +50 °C, centered on 0 °C (*"Both colortables should be
+  centered around 0"*); Difference's ±4 °C already was. The LUT is 1 001 entries at 0.1 °C, 0 °C at
+  entry 500, rebuilt when the theme changes. About says so (`assets/about.json`, written by the
+  pipeline with `tools/climatology/pipeline-0012-d21-d22.patch`).
+- **The baseline by presets and a slider** (*"also adjusting the base with arrows was not very user
+  friendly"*): 1951–1980, 1961–1990, 1981–2010 and 1991–2020 by one tap, a radio group; a two-thumb
+  slider over the complete years for any other span, each thumb an `input type=range` (`From`, `To`)
+  that VoiceOver adjusts and the arrow keys step by a year. The span shows as a thumb moves; the map
+  follows at the release, because working out a baseline took 8 to 25 ms on this Mac (headless Chromium
+  and WebKit), more than a frame, and a phone is slower. A key or VoiceOver step applies at the next frame.
+  "Back to GISS's base" went: the 1951–1980 preset is that. The stored span (`ww.base`) is read as 1.1
+  stored it.
+- About's baseline section names the presets and the slider and, owed since 3.3, says how the partial
+  year is compared with a chosen span (its months so far minus the span's whole-year mean).
+
+Measured (2026-10-10, this Mac, `node tools/check.mjs`): the code map above gives each file; the app
+code is 229 889 B, within the 230 500 B the lead ruled for 1.2 on that figure.
+
+Phone checks owed (1.2), on an iPhone 16-class device and the iOS 18 floor, from the Pages ZIP: (a)
+Absolute in both themes beside Global Weather's temperature layer, the same degree the same color; (b)
+each preset by a tap; (c) both thumbs dragged by a finger, the thumbs met and parted, the page never
+scrolling; (d) VoiceOver: the presets as a radio group, each thumb adjusted by a swipe up and down a
+year at a time with the year spoken (WebKit's adjustable control on `input type=range`, which no
+headless run reaches); expected speech: each swipe speaks only the thumb's new year, and about 600 ms
+after the last swipe the note below speaks once (the span's rule and count), never once a swipe; a
+preset speaks "Baseline 1961–1990" and then the note; (e) the sheet on a 375 × 667 phone and on its side, and held still while open: a tap on 1961–1990,
+then at once on 1981–2010 where it was, chooses both, and the slider does not move across the first drag
+from GISS's base or its release; with Larger Text or 125 % page zoom the sheet's words scroll inside it; (f) a span stored by 1.1
+opening as it was after the update.
 
 ## Honesty caveats
 
@@ -421,8 +459,9 @@ measures and spans for 5 minutes.
   of its months). GISS publishes monthly maps only. The global means and the stripes are GISS's own.
 - The partial year is labeled partial in the year row, its stripe is open, and the legend's caption
   names its months.
-- The colors are fixed at ±4 °C (the map) and ±1.5 °C (the stripes) and printed; values beyond take the
-  end colors, and the legend counts the cells beyond for the step on screen.
+- The colors are fixed at ±4 °C (the map) and ±1.5 °C (the stripes), and Absolute's at −50 … +50 °C, and
+  printed; values beyond take the end colors, and the legend counts the cells beyond for the step on
+  screen.
 - The coverage is never printed as 100 % while a cell has no value (January 2025 reads 99.7 %).
 - The demo snapshot is a live build: GISS's September 2026 release (data to August 2026), read by a
   GitHub runner on 2026-10-01 with `build-warming-world.yml`, which rebuilds it every January and on

@@ -36,6 +36,14 @@
 // chosen baseline (pixels at the anomaly minus each cell's mean over the span, worked out here; cells
 // without one hatched; the year row, the caption and the key; the sheet by real touches; a month stays
 // against 1951–1980), the scale kept in focus mode, a reload keeping both, and a real-touch scrub in each.
+// Plan 0012 D21 and D22 (1.2) added: Absolute against the board in each theme (cells of known temperature, decoded
+// here, in Global Weather's light or dark color for that temperature, typed here again); both legend bars
+// centered on 0 °C; the counts beyond −50 and +50 °C; About's new words; the sheet's four presets by real
+// touch (one radio checked each time), both thumbs dragged by real touch through CDP (the span shown while the
+// finger moves, the map at the lift), the thumbs met and parted, the arrow keys, the two sliders and the radio
+// group in the accessibility tree, contrast and 44 px hits; 1.1's stored span over a reload; the sheet at
+// 375 × 667 with its longest words (nothing cut off) and on its side; and the same sheet in WebKit (taps by
+// page.touchscreen, drags by touch PointerEvents, WebKit's own arrow keys, the span over a reload).
 // The QA pass added: the selected cell's mark is hollow at 0°, 45°, 64° and 80° on the globe and the
 // map (the cell's ramp color at its centre, the overlay clear of it, the mark's ink on all four sides);
 // pressed, hover and focus on every kind of key, in grays, with a mouse in both themes and by a held
@@ -164,15 +172,19 @@ function absCapHere(k, north) {
 }
 const absCapText = (k, north) => { const m = absCapHere(k, north); return `Map mean ${north ? 'north of 64° N' : 'south of 64° S'}: ${m.d < 0 ? MINUS : ''}${Math.abs(m.d)}${NN}°C, estimated${Math.round(m.share * 10000) >= 10000 ? '' : `, data cover ${Math.round(m.share * 100)}${NN}% of it`}`; };
 const tempText = (t) => `${t < 0 ? MINUS : ''}${Math.floor(Math.abs(t) / 10)}.${Math.abs(t) % 10}`;
-const ABS = [[-60, 0.27, 0.08, 305], [-40, 0.4, 0.12, 280], [-20, 0.53, 0.12, 255], [0, 0.665, 0.085, 220], [10, 0.735, 0.07, 180], [20, 0.805, 0.07, 125], [30, 0.875, 0.075, 95], [40, 0.945, 0.05, 85]];
-function absHere(v) {
-  v = Math.max(-60, Math.min(40, v));
-  let i = 0; while (i < ABS.length - 2 && v > ABS[i + 1][0]) i++;
-  const [v0, L0, C0, h0] = ABS[i], [v1, L1, C1, h1] = ABS[i + 1], t = (v - v0) / (v1 - v0);
-  const a = C0 * Math.cos(h0 * D) + (C1 * Math.cos(h1 * D) - C0 * Math.cos(h0 * D)) * t, b = C0 * Math.sin(h0 * D) + (C1 * Math.sin(h1 * D) - C0 * Math.sin(h0 * D)) * t, Lr = L0 + (L1 - L0) * t;
-  const l = (Lr + 0.3963377774 * a + 0.2158037573 * b) ** 3, m = (Lr - 0.1055613458 * a - 0.0638541728 * b) ** 3, s2 = (Lr - 0.0894841775 * a - 1.291485548 * b) ** 3;
-  return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s2, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s2, -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s2]
-    .map((x) => { x = Math.min(1, Math.max(0, x)); return Math.round(255 * (x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055)); });
+// Absolute's colors (plan 0012 D21): the board's, Global Weather's temperature stops (global-weather/js/ramps.js,
+// RAMPS.temp), typed here again as hex per theme and interpolated in sRGB as Global Weather's rampAt does
+const GWV = [-50, -46.25, -42.5, -38.75, -35, -31.25, -27.5, -23.75, -20, -17, -14, -11, -8, -6, -4, -2, 0, 1.5, 3, 4.5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40.5, 43, 45.5, 48];
+const GWT = Object.fromEntries(Object.entries({
+  light: '8778d0837dd67f81db7a86e1748ae77291e86f98e96b9fea67a6ea6dade973b4e879bbe77fc3e68ec8e39dcce0acd1dcbad6d9b4d5cdadd4c2a7d2b6a1d1aaa6cc9baac78caec27cb2bc6cbbb560c3ac54caa446d09c36d49335d88b34db8233de7932dd743add6f42dc6948db644ed96256d7605dd45e64d25b6a',
+  dark: '8f80d8857fd87b7ed8717dd7677bd75c7ace5078c54475bd3673b42f6ea7276a991f658c17607f2059712653632a4c562d45482d4a452d4f402c543c2c5937395b30455e2750601c5b63076a63037663008263058d6405986307a56200b26002bf5d03c45d20ca5e30cf5e3dd55e48d65f54d8615ed96268db6371',
+}).map(([k, h]) => [k, GWV.map((v, i) => [v, [0, 2, 4].map((j) => parseInt(h.slice(6 * i + j, 6 * i + j + 2), 16))])]));
+function absHere(v, dark = false) {
+  const st = GWT[dark ? 'dark' : 'light'];
+  v = Math.max(-50, Math.min(50, v));
+  let k = 0; while (k < st.length - 2 && st[k + 1][0] <= v) k++;
+  const [v0, c0] = st[k], [v1, c1] = st[k + 1], f = Math.min(1, Math.max(0, (v - v0) / (v1 - v0)));
+  return c0.map((c, j) => Math.round(c + (c1[j] - c) * f));
 }
 /** A chosen baseline worked out here: each cell's mean over [y0, y1] in tenths where it has two thirds of the years. */
 function baseHere(y0, y1) {
@@ -198,6 +210,28 @@ async function sampleBy(ww, want, n = 12) {
       res[kind][0]++;
       if (kind === 'hatch') { if (!(px.every((c) => c === 152) || px.every((c) => c === 128))) res.hatch[1]++; }
       else { const d = Math.max(...q.w.map((c, j) => Math.abs(c - px[j]))); res.worst = Math.max(res.worst, d); if (d > 1) res.data[1]++; }
+    }
+  }
+  return res;
+}
+/** Absolute against the board (plan 0012 D21): cells of known temperature (the climatology plus the anomaly,
+ *  decoded here) in every 5 °C band they reach, under four globe views (the poles, the tropics, the north
+ *  Pacific), sampled on screen and compared with the board's colors in the theme. Restores no view. */
+async function absBoard(ww, setView, settle, k, dark) {
+  const res = { n: 0, bad: 0, worst: 0, bands: new Set(), lo: 99, hi: -99, below: 0, zero: null };
+  for (const v of [{ lon: -150, lat: 50 }, { lon: 0, lat: -72 }, { lon: 20, lat: 0 }, { lon: 100, lat: 72 }]) {
+    await setView(ww, { mode: 'globe', zoom: 1, ...v }); await settle();
+    const s = await S(ww), g = s.view.globe, R = s.view.radius, per = new Map();
+    for (let row = 0; row < 90; row++) for (let col = 0; col < 180; col++) {
+      const p = ortho(-179 + 2 * col, 89 - 2 * row, g.lon, g.lat), t = absT(k, row * 180 + col);
+      if (p[2] < 0.6 || t == null) continue;
+      const band = Math.floor(Math.max(-55, t / 10) / 5), list = per.get(band) || [];
+      if (list.length < 3 && (row * 180 + col) % 7 === 0) { list.push({ t, x: s.view.cx + R * p[0], y: s.view.cy - R * p[1] }); per.set(band, list); }
+    }
+    for (const [band, list] of per) for (const q of list) {
+      const px = await ww(([x, y]) => window.__ww.pixel(x, y), [q.x, q.y]), want = absHere(q.t / 10, dark), d = Math.max(...want.map((c, j) => Math.abs(c - px[j])));
+      res.n++; res.bands.add(band); res.worst = Math.max(res.worst, d); if (d > 1) res.bad++;
+      res.lo = Math.min(res.lo, q.t / 10); res.hi = Math.max(res.hi, q.t / 10); if (q.t < -500) res.below++;
     }
   }
   return res;
@@ -672,8 +706,14 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const k = lastComplete, cells = frames[k].reduce((n, b) => n + (b !== 255), 0);
     check(ab.text.includes('NASA does not endorse this app.') && ab.text.includes('Made with Natural Earth') && ab.text.includes('SIL Open Font License 1.1') && ab.text.includes(siSp(snap.source.attribution)) && !/\d (°C|km|%)/.test(ab.text)
       && ab.text.includes(`In ${ALL[k].year}, ${ALL[k].beyondScale.above} of the ${String(cells).replace(/\B(?=(\d{3})+(?!\d))/g, NN)} cells with a value lie above +4${NN}°C`)
-      && (snap.release.mode !== 'research' || ab.text.includes('Internet Archive')) && ab.text.includes('Version: 1.1'),
-    `About carries the credit line, NASA's non-endorsement, Natural Earth, Archivo's OFL, the ±4 °C count (${ALL[k].beyondScale.above} of ${cells} cells in ${ALL[k].year}), the research note and "Version: 1.1"`);
+      && (snap.release.mode !== 'research' || ab.text.includes('Internet Archive')) && ab.text.includes('Version: 1.2'),
+    `About carries the credit line, NASA's non-endorsement, Natural Earth, Archivo's OFL, the ±4 °C count (${ALL[k].beyondScale.above} of ${cells} cells in ${ALL[k].year}), the research note and "Version: 1.2"`);
+    // plan 0012 D21 and D22: About names Absolute's −50 … +50 °C scale and its colors, the presets and the slider,
+    // and the partial year under a chosen span (the bias 3.3's final left owed)
+    check(ab.text.includes(`The scale runs from ${MINUS}50 to +50${NN}°C, centered on 0${NN}°C`) && ab.text.includes('Global Weather’s temperature colors') && !/60 to \+40|sand/.test(ab.text)
+      && ab.text.includes('Four common spans take one tap') && ab.text.includes('1991–2020, the World Meteorological Organization’s current climate normal') && ab.text.includes('down to a single year')
+      && ab.text.includes('The partial year is its months so far minus the cell’s mean over the span’s whole years'),
+      'About: Absolute\'s scale "−50 to +50 °C, centered on 0 °C" in Global Weather\'s colors (no "−60 … +40", no "sand"); the four presets, the slider down to one year; the partial year under a chosen span');
     {
       // plan 0012: the credit constant is the first line under "Sources and citations", then the climatology's
       // attribution; its source block with every citation; About explains Absolute and the baseline
@@ -804,10 +844,21 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const est = absMeanHere(lastComplete);
     check(s.measure === 'abs' && s.mean === `Global mean ${tempText(est)}${NN}°C (±0.5${NN}°C)` && s.legendCaption === 'Estimated temperature: each place’s 1951–1980 average plus GISS’s anomaly.' && s.cover === cover(ALL[lastComplete].coverage.area) && (await ww(() => localStorage.getItem('ww.measure'))) === '"abs"',
       `Absolute, by a real tap: "${s.mean}" (this file: the climatology's ${(climMean[12] / 10).toFixed(3)} °C plus GISS's ${signed2(ALL[lastComplete].globalMean)}), "${s.legendCaption}", "${s.cover}"; stored`);
-    let px = await sampleBy(ww, (cell) => { const t = absT(lastComplete, cell); return t == null ? null : absHere(t / 10); });
+    let px = await sampleBy(ww, (cell) => { const t = absT(lastComplete, cell); return t == null ? null : absHere(t / 10, scheme === 'dark'); });
     check(px.data[1] === 0 && px.hatch[1] === 0 && px.data[0] >= 8, `Absolute ${y}: ${px.data[0]} cells drawn in this file's temperature ramp at the climatology plus the anomaly (worst channel off by ${px.worst}), ${px.hatch[0]} hatched, ${px.data[1] + px.hatch[1]} wrong`);
-    let above = 0, below = 0; for (let k = 0; k < 16200; k++) { const t = absT(lastComplete, k); if (t != null && t > 400) above++; if (t != null && t < -600) below++; }
-    check(s.stats.above === above && s.stats.below === below, `Absolute's counts beyond −60 and +40 °C: ${s.stats.below} below, ${s.stats.above} above (this file: ${below}, ${above})`);
+    { const b = await absBoard(ww, setView, A.settle, lastComplete, scheme === 'dark');
+      check(b.bad === 0 && b.n >= 40 && b.bands.size >= 14 && b.below > 0, `Absolute ${y}, ${scheme}, against the board: ${b.n} cells of known temperature, ${b.lo.toFixed(1)} to +${b.hi.toFixed(1)} °C in ${b.bands.size} bands of 5 °C (${b.below} below −50, drawn in the coldest stop), each in Global Weather's ${scheme} color for its temperature (worst channel off by ${b.worst}, ${b.bad} wrong)`);
+      await setView(ww, { mode: 'globe', lon: -150, lat: 50, zoom: 1 }); await A.settle(); }
+    // both scales centered on 0 (the owner's follow-up): the bar's middle step is 0 °C in each measure
+    { const mid = () => ww(() => { const c = document.getElementById('legend-bar'), d = c.width / c.clientWidth, abs = window.__ww.state().measure === 'abs', steps = abs ? 101 : 81, CW = abs ? 2.085 : 2.6, x = 16 + (steps * CW) / 2, k = document.createElement('canvas'); k.width = c.width; k.height = c.height; const g = k.getContext('2d', { willReadFrequently: true }); g.drawImage(c, 0, 0);
+        const at = (xx) => Array.from(g.getImageData(Math.round(xx * d), Math.round(7.5 * d), 1, 1).data.slice(0, 3)); return { mid: at(x), x, lo: at(16 + CW / 2), hi: at(16 + steps * CW - CW / 2) }; });
+      const ma = await mid(); await ww(() => window.__ww.measure('diff')); await A.settle();
+      const md = await mid(); await ww(() => window.__ww.measure('abs')); await A.settle();
+      const za = absHere(0, scheme === 'dark'), zd = rampHere(0), near = (a, b) => Math.max(...a.map((c, j) => Math.abs(c - b[j]))) <= 2;
+      check(near(ma.mid, za) && near(md.mid, zd) && near(ma.lo, absHere(-50, scheme === 'dark')) && near(ma.hi, absHere(50, scheme === 'dark')) && near(md.lo, rampHere(-4)) && near(md.hi, rampHere(4)),
+        `both legend bars centered on 0 °C, ${scheme}: Absolute's middle (x ${ma.x.toFixed(1)} px) ${ma.mid.join()} = Global Weather's 0 °C ${za.join()}, its ends −50 and +50 °C; Difference's middle ${md.mid.join()} = the ramp's white at 0 ${zd.join()}, its ends ±4 °C`); }
+    let above = 0, below = 0; for (let k = 0; k < 16200; k++) { const t = absT(lastComplete, k); if (t != null && t > 500) above++; if (t != null && t < -500) below++; }
+    check(s.stats.above === above && s.stats.below === below, `Absolute's counts beyond −50 and +50 °C: ${s.stats.below} below, ${s.stats.above} above (this file: ${below}, ${above})`);
     await ww(() => window.__ww.tap(-147.71, 64.84)); await A.settle();
     s = await S(ww);
     const fa = absT(lastComplete, 12 * 180 + 16), fw = rdiv(fa, 10);
@@ -829,7 +880,7 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const mk = L - 1;
     await goto(ww, ALL[mk].month); await A.settle();
     s = await S(ww);
-    px = await sampleBy(ww, (cell) => { const t = absT(mk, cell); return t == null ? null : absHere(t / 10); });
+    px = await sampleBy(ww, (cell) => { const t = absT(mk, cell); return t == null ? null : absHere(t / 10, scheme === 'dark'); });
     check(px.data[1] === 0 && px.hatch[1] === 0 && s.mean === `Global mean ${tempText(absMeanHere(mk))}${NN}°C (±0.5${NN}°C)`, `Absolute ${figure(mk)}: the month's own plane plus its anomaly, ${px.data[0]} cells right (worst ${px.worst}), ${px.data[1] + px.hatch[1]} wrong; "${s.mean}"`);
     await ww(() => window.__ww.mode('annual')); await goto(ww, y);
     { const c = await contrastOf(ww), h = await hitTargets(ww);
@@ -850,21 +901,100 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     check(s.mean === meanText(L - 1) && s.legendCaption.startsWith('Anomaly vs. each place’s 1951–1980 average') && s.baseKey === 'Base 1951–1980' && px.data[1] === 0 && px.hatch[1] === 0,
       `a month stays against 1951–1980 with a baseline chosen: "${s.mean}", the key "${s.baseKey}", ${px.data[0]} cells at GISS's own value, ${px.data[1] + px.hatch[1]} wrong`);
     await ww(() => window.__ww.mode('annual')); await goto(ww, y);
-    // the sheet, by real taps: the key opens it, ‹ on the last year moves it to 2019, the bracket and the map follow
+    // the sheet (plan 0012 D22), by real touch through CDP: the key opens it on the span in use; each preset by
+    // a tap; both thumbs dragged, the span shown as they move and the map following at the lift; the thumbs
+    // met (a one-year base) and parted again in the first move's direction; the arrow keys and the
+    // accessibility tree's two sliders
     await tapAt('base-key');
     s = await S(ww);
     const open1 = s.baseSheet;
-    await tapAt('b1-prev'); await A.settle();
-    s = await S(ww);
-    check(open1 && open1.b0 === '1991' && open1.b1 === '2020' && s.base.join() === '1991,2019' && s.baseSheet.b1 === '2019' && s.baseKey === 'Base 1991–2019' && s.legendCaption.includes('1991–2019'),
-      `the baseline's sheet by real taps: ${open1 && `${open1.b0}–${open1.b1}`}, then ‹ on the last year: ${s.base.join('–')}; the key "${s.baseKey}"; the note "${s.baseSheet.note.slice(0, 70)}…"`);
-    { const c = await contrastOf(ww), h = await hitTargets(ww);
-      check(c.worst[0] >= 4.5 && h.bad.length === 0, `the baseline's sheet: text contrast lowest ${c.worst[0].toFixed(2)}:1 (${c.worst[1]}); ${h.n} controls ≥ 44 × 44 px${h.bad.length ? '; too small: ' + h.bad.join('; ') : ''}`); }
+    check(open1 && open1.b0 === '1991' && open1.b1 === '2020' && open1.span === '1991–2020' && open1.preset === '1991–2020',
+      `the key opens the sheet on the span in use: thumbs ${open1 && `${open1.b0}–${open1.b1}`}, "${open1 && open1.span}", the preset "${open1 && open1.preset}" chosen`);
+    const presets = [];
+    for (const [y0, y1] of [[1961, 1990], [1981, 2010], [1991, 2020], [1951, 1980]]) {
+      const r = await ww((yy) => document.querySelector(`#base-presets [data-b="${yy}"]`).getBoundingClientRect().toJSON(), y0);
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: r.left + r.width / 2, y: r.top + r.height / 2 }] }); await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await page.waitForTimeout(120); await A.settle();
+      s = await S(ww);
+      const giss = y0 === 1951, Bp = giss ? null : baseHere(y0, y1), radios = await ww(() => [...document.querySelectorAll('#base-presets [role="radio"]')].map((b) => b.getAttribute('aria-checked')).join(''));
+      presets.push([`${y0}–${y1}`, (giss ? s.base === null && s.mean === meanText(lastComplete) : s.base.join() === `${y0},${y1}` && s.mean === meanText(lastComplete, `${y0}–${y1}`, Bp.h))
+        && s.baseKey === `Base ${y0}–${y1}` && s.baseSheet.preset === `${y0}–${y1}` && s.baseSheet.b0 === String(y0) && s.baseSheet.b1 === String(y1) && radios.split('true').length === 2]);
+    }
+    check(presets.every((x) => x[1]) && (await ww(() => localStorage.getItem('ww.base'))) === null,
+      `each preset by one real tap: ${presets.map((x) => `${x[0]} ${x[1] ? 'ok' : 'WRONG'}`).join(', ')}; one radio checked each time; 1951–1980 is GISS's own base again (nothing stored)`);
+    // the sheet holds still while open (review of 1.2): boxes measured once, before both taps, from GISS's base;
+    // the second tap lands where 1981–2010 was, and nothing in the sheet has moved
+    { const geo = () => ww(() => ['base-presets', 'b-slider', 'b-span'].map((i) => Math.round(document.getElementById(i).getBoundingClientRect().top * 10) / 10).join());
+      const g0 = await geo(), at = await ww(() => Object.fromEntries(['1961', '1981', '1951'].map((y) => { const r = document.querySelector(`#base-presets [data-b="${y}"]`).getBoundingClientRect(); return [y, [r.left + r.width / 2, r.top + r.height / 2]]; })));
+      const tapXY = async ([x, yy]) => { await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y: yy }] }); await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await page.waitForTimeout(120); await A.settle(); };
+      await tapXY(at['1961']); const g1 = await geo(), s1 = await S(ww);
+      await tapXY(at['1981']); const g2 = await geo(), s2 = await S(ww);
+      await tapXY(at['1951']); const g3 = await geo(), s3 = await S(ww);
+      check(s1.base && s1.base.join() === '1961,1990' && s2.base && s2.base.join() === '1981,2010' && s3.base === null && g1 === g0 && g2 === g0 && g3 === g0,
+        `the sheet holds still: 1961–1990, then 1981–2010 and 1951–1980 by taps at boxes measured once (${s1.baseKey}, ${s2.baseKey}, ${s3.baseKey}); the presets', slider's and span's tops ${g0} before, ${[g1, g2, g3].every((g) => g === g0) ? 'unchanged after each' : `then ${g1} | ${g2} | ${g3}`}`); }
+    // the thumbs: a finger from the To thumb (1980) to 2005, a move every 16 ms
+    const thumbX = (id) => ww((i) => { const r = document.getElementById(i).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, id);
+    const yearX = (yy) => ww((v) => { const r = document.getElementById('b-slider').getBoundingClientRect(), I = window.__ww.state(); const first = 1880, last = +document.getElementById('b-last').textContent; return r.left + 11 + ((v - first) / (last - first)) * (r.width - 22); }, yy);
+    const sTop = () => ww(() => Math.round(document.getElementById('b-slider').getBoundingClientRect().top * 10) / 10);
+    const drag = async (from, toX, steps = 12) => {
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: from[0], y: from[1] }] });
+      for (let i = 1; i <= steps; i++) { await page.waitForTimeout(16); await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: from[0] + ((toX - from[0]) * i) / steps, y: from[1] + 1 }] }); }
+      await page.waitForTimeout(60); const mid = await S(ww), midTop = await sTop();
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await page.waitForTimeout(120); await A.settle();
+      return { mid, midTop, end: await S(ww), endTop: await sTop() };
+    };
+    const top0 = await sTop();
+    let d1 = await drag(await thumbX('b1'), await yearX(2005));
+    check(d1.midTop === top0 && d1.endTop === top0, `the slider holds still through a drag and a release from GISS's base: its top ${top0} before, ${d1.midTop} during, ${d1.endTop} after`);
+    const B5 = baseHere(1951, 2005);
+    px = await sampleBy(ww, (cell) => { const b = frames[lastComplete][cell]; return b === 255 || B5.base[cell] == null ? null : rampHere((b - 127 - B5.base[cell]) / 10); });
+    check(d1.mid.baseSheet.span === '1951–2005' && d1.mid.baseSheet.preset === null && d1.mid.base === null && d1.end.base && d1.end.base.join() === '1951,2005' && d1.end.baseKey === 'Base 1951–2005' && d1.end.mean === meanText(lastComplete, '1951–2005', B5.h) && px.data[1] === 0 && px.hatch[1] === 0,
+      `the To thumb dragged by touch to 2005: "${d1.mid.baseSheet.span}" while the finger moves (no preset chosen, the map still on ${d1.mid.baseText}); at the lift "${d1.end.baseKey}", "${d1.end.mean}", ${px.data[0]} cells at the anomaly minus their 1951–2005 mean, ${px.data[1] + px.hatch[1]} wrong`);
+    // the From thumb to 1981, then on to meet To (2005): a one-year base
+    d1 = await drag(await thumbX('b0'), await yearX(1981));
+    const d2 = await drag(await thumbX('b0'), await yearX(2015));
+    check(d1.end.base.join() === '1981,2005' && d1.mid.baseSheet.span === '1981–2005' && d2.end.base.join() === '2005,2005' && d2.end.baseSheet.span === '2005' && d2.end.baseKey === 'Base 2005' && /this one year/.test(d2.end.baseSheet.note),
+      `the From thumb dragged to 1981 ("${d1.end.baseKey}"), then past To: it stops there, a one-year base "${d2.end.baseKey}"; the note "${d2.end.baseSheet.note.slice(0, 60)}…"`);
+    // the thumbs met: a finger on them takes the one its first move points to
+    const met = await thumbX('b1');
+    const r1 = await drag(met, await yearX(2012)), r0 = await drag(await thumbX('b0'), await yearX(1995));
+    check(r1.end.base.join() === '2005,2012' && r0.end.base.join() === '1995,2012',
+      `from where the thumbs meet, a move right takes To (${r1.end.base.join('–')}); then From moves left alone (${r0.end.base.join('–')})`);
+    // the arrow keys step a year, on each thumb; the step is applied at the next frame
+    await ww(() => document.getElementById('b0').focus());
+    await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowLeft'); await A.settle();
+    const k0 = await S(ww);
+    await ww(() => document.getElementById('b1').focus());
+    await page.keyboard.press('ArrowUp'); await A.settle();
+    const k1 = await S(ww), vt = await ww(() => ['b0', 'b1'].map((i) => [document.getElementById(i).getAttribute('aria-label'), document.getElementById(i).getAttribute('aria-valuetext'), document.getElementById(i).step]));
+    check(k0.base.join() === '1996,2012' && k1.base.join() === '1996,2013' && k1.baseKey === 'Base 1996–2013' && vt[0].join() === 'From,1996,1' && vt[1].join() === 'To,2013,1',
+      `the arrow keys: From → → ← steps to ${k0.base[0]}, To ↑ to ${k1.base[1]}; "${k1.baseKey}"; ${vt.map((v) => `"${v[0]}" ${v[1]} (step ${v[2]})`).join(', ')}`);
+    // a key or VoiceOver step speaks through the control alone: no "Baseline …" in #live, the note quiet
+    // (aria-live off, busy) while steps come, then polite again 600 ms after the last, so it speaks once
+    { const live0 = await ww(() => document.getElementById('live').textContent);
+      await page.keyboard.press('ArrowLeft');
+      const quiet = await ww(() => { const n = document.getElementById('base-note'); return [n.getAttribute('aria-live'), n.getAttribute('aria-busy')].join(); });
+      await page.waitForTimeout(800); await A.settle();
+      const back = await ww(() => { const n = document.getElementById('base-note'); return [n.getAttribute('aria-live'), n.getAttribute('aria-busy')].join(); });
+      const live1 = await ww(() => document.getElementById('live').textContent), sk = await S(ww);
+      check(quiet === 'off,true' && back === 'polite,false' && live1 === live0 && sk.base.join() === '1996,2012',
+        `a key step (To ← to ${sk.base[1]}): the note ${quiet} while stepping, ${back} after; #live unchanged ("${live1.slice(0, 40)}")`);
+      await page.keyboard.press('ArrowRight'); await page.waitForTimeout(800); await A.settle(); }
+    { const aria = await page.locator('#base-card').ariaSnapshot();
+      check(/slider "From"/.test(aria) && /slider "To"/.test(aria) && /radiogroup "Common baselines"/.test(aria) && /radio "1951–1980, GISS’s base"/.test(aria) && /radio "1991–2020, the current climate normal"/.test(aria),
+        `VoiceOver's controls in the accessibility tree: two sliders "From" and "To" (native input type=range, adjustable, the year as the value), the radio group of four presets: ${aria.replace(/\n\s*/g, ' | ').slice(0, 240)}`); }
+    { const c = await contrastOf(ww), h = await hitTargets(ww), th = await ww(() => [...document.querySelectorAll('.b-thumb')].map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }).concat([[Math.round(document.getElementById('b-slider').getBoundingClientRect().height), 0]]));
+      check(c.worst[0] >= 4.5 && h.bad.length === 0 && th[0][0] >= 44 && th[0][1] >= 44 && th[1][0] >= 44 && th[2][0] >= 44,
+        `the baseline's sheet: text contrast lowest ${c.worst[0].toFixed(2)}:1 (${c.worst[1]}); ${h.n} controls ≥ 44 × 44 px${h.bad.length ? '; too small: ' + h.bad.join('; ') : ''}; the thumbs' boxes ${th[0].join(' × ')} and ${th[1].join(' × ')} px, the slider's touch row ${th[2][0]} px tall`); }
+    await ww(() => window.__ww.base([1991, 2019])); await A.settle();
+    await ww(() => document.activeElement && document.activeElement.blur());
     await A.shot('baseline', true);
-    await tapAt('base-reset'); await A.settle();
+    { const r = await ww(() => document.querySelector('#base-presets [data-b="1951"]').getBoundingClientRect().toJSON());
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: r.left + r.width / 2, y: r.top + r.height / 2 }] }); await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await page.waitForTimeout(120); }
+    await A.settle();
     s = await S(ww);
-    check(s.base === null && s.baseKey === 'Base 1951–1980' && s.mean === meanText(lastComplete) && (await ww(() => localStorage.getItem('ww.base'))) === null,
-      `"Back to GISS’s base" returns to 1951–1980: "${s.mean}"`);
+    check(s.base === null && s.baseKey === 'Base 1951–1980' && s.mean === meanText(lastComplete) && (await ww(() => localStorage.getItem('ww.base'))) === null && !(await ww(() => !!document.getElementById('base-reset'))),
+      `the 1951–1980 preset returns to GISS's base ("${s.mean}"), so "Back to GISS’s base" is gone`);
     await page.keyboard.press('Escape'); await A.settle();
     s = await S(ww);
     check(!s.baseSheet, 'Escape closes the sheet');
@@ -1193,7 +1323,18 @@ console.log('\n== once (light)');
     s = await S(B.ww);
     check(s.measure === 'abs' && s.base && s.base.join() === '1961,1990' && s.baseKey === 'Base 1961–1990' && s.mean.startsWith('Global mean ') && s.mean.endsWith(`(±0.5${NN}°C)`),
       `a reload restores Absolute ("${s.mean}") and the baseline ${s.base && s.base.join('–')} ("${s.baseKey}")`);
-    await B.ww(() => window.__ww.measure('diff')); await B.ww(() => window.__ww.base(null));
+    await B.ww(() => window.__ww.measure('diff'));
+    // plan 0012 D22: a span stored by 1.1 (ww.base, the same key and shape) opens as it was, and the sheet
+    // shows it on the slider with no preset chosen
+    await B.ww(() => localStorage.setItem('ww.base', JSON.stringify([1991, 2019])));
+    await B.page.reload();
+    await B.page.waitForFunction(() => window.__ww && window.__ww.ready(), null, { timeout: 60000 });
+    await B.settle(); await B.page.waitForTimeout(300); await B.settle();
+    await B.ww(() => window.__ww.baseSheet(true)); await B.page.waitForTimeout(150);
+    s = await S(B.ww);
+    check(s.base && s.base.join() === '1991,2019' && s.baseKey === 'Base 1991–2019' && s.baseSheet.b0 === '1991' && s.baseSheet.b1 === '2019' && s.baseSheet.preset === null && s.baseSheet.span === '1991–2019',
+      `1.1's stored span 1991–2019 opens as it was: "${s.baseKey}", the thumbs at ${s.baseSheet.b0} and ${s.baseSheet.b1}, no preset chosen`);
+    await B.ww(() => window.__ww.baseSheet(false)); await B.ww(() => window.__ww.base(null));
     await B.ctx.close();
   }
 
@@ -1382,6 +1523,29 @@ console.log('\n== once (light)');
       check(fit.every(([h, b]) => h <= b), `${w} × ${h}: the legend inside its reserve: ${fit.map(([h, b]) => `${h} ≤ ${b}`).join(', ')} px (year, partial, month)`);
     }
     if (w === 844) await B.shot('landscape');
+    if (w === 375 || w === 844) {
+      // plan 0012 D22: the sheet at 375 × 667 in portrait with its longest words (a span with cells lacking, in
+      // Last 24 months, so the months' sentence too) has nothing cut off: no scroll inside it, every part
+      // inside it and inside the panel above the legend; on its side it works: the presets by a touch, the
+      // slider in view
+      const cdp = await B.ctx.newCDPSession(B.page);
+      if (w === 375) { await B.ww(() => window.__ww.mode('months')); await B.ww(() => window.__ww.base([1880, 1900])); }
+      await B.ww(() => window.__ww.baseSheet(true)); await B.page.waitForTimeout(250);
+      const g = await B.ww(() => { const c = document.getElementById('base-card'), r = c.getBoundingClientRect(), p = document.getElementById('panel').getBoundingClientRect(), lg = document.getElementById('legend').getBoundingClientRect();
+        const parts = ['base-title', 'base-close', 'base-presets', 'b-span', 'b-slider', 'b-last', 'base-note'].map((id) => { const e = document.getElementById(id).getBoundingClientRect(); return [id, e.top >= r.top - 0.5 && e.bottom <= r.bottom + 0.5 && e.left >= r.left - 0.5 && e.right <= r.right + 0.5]; });
+        return { top: r.top, bottom: r.bottom, h: r.height, scroll: c.scrollHeight - c.clientHeight, panelTop: p.top, legendTop: innerWidth >= 700 ? p.bottom : lg.top, parts, note: document.getElementById('base-note').textContent.length, sw: document.documentElement.scrollWidth, iw: innerWidth }; });
+      const inside = g.parts.every((x) => x[1]) && g.top >= g.panelTop && g.bottom <= g.legendTop + 0.5 && g.sw <= g.iw;
+      if (w === 375) check(inside && g.scroll <= 1 && B.errors.length === 0, `375 × 667, portrait: the baseline's sheet with its longest words (${g.note} characters of note) is ${g.h.toFixed(0)} px tall, ${g.top.toFixed(0)}–${g.bottom.toFixed(0)} inside the panel (${g.panelTop.toFixed(0)}) above the legend (${g.legendTop.toFixed(0)}), ${g.scroll} px to scroll, every part inside it: ${g.parts.filter((x) => !x[1]).map((x) => x[0]).join(', ') || 'all'}`);
+      else {
+        const r = await B.ww(() => document.querySelector('#base-presets [data-b="1981"]').getBoundingClientRect().toJSON());
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: r.left + r.width / 2, y: r.top + r.height / 2 }] }); await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        await B.page.waitForTimeout(150); await B.settle();
+        const s2 = await S(B.ww);
+        check(inside && s2.base && s2.base.join() === '1981,2010' && B.errors.length === 0, `844 × 390, on its side: the sheet ${g.top.toFixed(0)}–${g.bottom.toFixed(0)} px in the panel, ${g.scroll} px to scroll inside it, every part inside it: ${g.parts.filter((x) => !x[1]).map((x) => x[0]).join(', ') || 'all'}; a touch on 1981–2010 sets "${s2.baseKey}"`);
+      }
+      await B.shot(w === 375 ? 'baseline-375x667' : 'baseline-landscape');
+      await B.ww(() => window.__ww.baseSheet(false)); await B.ww(() => window.__ww.base(null)); await B.ww(() => window.__ww.mode('annual'));
+    }
     await B.ctx.close();
     if (w !== 844) continue;
     // the sensor housing (DESIGN §22 L-1): CDP's Emulation.setSafeAreaInsetsOverride gives env(safe-area-inset-*) the
@@ -1412,6 +1576,62 @@ console.log('\n== once (light)');
       await C.ctx.close();
     }
   }
+}
+
+// ── plan 0012 D22 in WebKit: the baseline's sheet at 390 × 844, DPR 2. Playwright gives WebKit one touch point and
+// no touch drag (Norne's shoot.mjs, 2.5), so a tap here is real touch (page.touchscreen.tap) and a drag is
+// PointerEvents with pointerType 'touch' dispatched on the slider every 16 ms: the events the slider takes,
+// though not WebKit's own touch handling. The arrow keys are WebKit's own, on its native input type=range.
+if (process.env.WEBKIT !== '0') {
+  console.log('\n== webkit (light): the baseline sheet');
+  const WB = await (pw.webkit || pw.default.webkit).launch();
+  const ctx = await WB.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, colorScheme: 'light' });
+  await ctx.addInitScript(() => { try { localStorage.setItem('ww.opened', 'true'); } catch { /* fine */ } });
+  const page = await ctx.newPage(), errors = [];
+  page.on('console', (m) => { if ((m.type() === 'error' || m.type() === 'warning') && !NOISE.test(m.text())) errors.push(`${m.type()}: ${m.text()}`); });
+  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  page.on('request', (r) => { if (!r.url().startsWith(origin)) errors.push(`REQUEST OUTSIDE: ${r.url().slice(0, 80)}`); });
+  const ww = (fn, a) => page.evaluate(fn, a), settle = () => ww(() => window.__ww.settled());
+  const load = async () => { await page.waitForFunction(() => window.__ww && window.__ww.ready() && window.__ww.state().decode && window.__ww.state().decode.ms != null, null, { timeout: 120000 }); await settle(); await page.waitForTimeout(200); };
+  await page.goto(`${origin}index.html`); await load();
+  const tap = async (sel) => { const r = await ww((q) => document.querySelector(q).getBoundingClientRect().toJSON(), sel); await page.touchscreen.tap(r.left + r.width / 2, r.top + r.height / 2); await page.waitForTimeout(150); await settle(); };
+  await tap('#base-key');
+  let s = await S(ww);
+  const opened = !!s.baseSheet && s.baseSheet.preset === '1951–1980';
+  const seen = [];
+  for (const [y0, y1] of [[1961, 1990], [1981, 2010], [1991, 2020], [1951, 1980]]) {
+    await tap(`#base-presets [data-b="${y0}"]`); s = await S(ww);
+    seen.push([`${y0}–${y1}`, (y0 === 1951 ? s.base === null : s.base && s.base.join() === `${y0},${y1}`) && s.baseSheet.preset === `${y0}–${y1}` && s.baseKey === `Base ${y0}–${y1}`]);
+  }
+  check(opened && seen.every((x) => x[1]), `WebKit: the key opens the sheet by a tap; each preset by a real tap: ${seen.map((x) => `${x[0]} ${x[1] ? 'ok' : 'WRONG'}`).join(', ')}`);
+  const thumb = (id) => ww((i) => { const r = document.getElementById(i).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }, id);
+  const yearX = (yy) => ww((v) => { const r = document.getElementById('b-slider').getBoundingClientRect(), last = +document.getElementById('b-last').textContent; return r.left + 11 + ((v - 1880) / (last - 1880)) * (r.width - 22); }, yy);
+  const drag = async (from, toX, steps = 12) => {
+    const send = (type, x, y) => ww(([t, xx, yy]) => document.getElementById('b-slider').dispatchEvent(new PointerEvent(t, { pointerId: 31, pointerType: 'touch', isPrimary: true, clientX: xx, clientY: yy, bubbles: true, cancelable: true, buttons: t === 'pointerup' ? 0 : 1 })), [type, x, y]);
+    await send('pointerdown', from[0], from[1]);
+    for (let i = 1; i <= steps; i++) { await page.waitForTimeout(16); await send('pointermove', from[0] + ((toX - from[0]) * i) / steps, from[1]); }
+    const mid = await S(ww);
+    await send('pointerup', toX, from[1]); await page.waitForTimeout(120); await settle();
+    return { mid, end: await S(ww) };
+  };
+  const a = await drag(await thumb('b1'), await yearX(2005)), b = await drag(await thumb('b0'), await yearX(1971));
+  const c = await drag(await thumb('b0'), await yearX(2020)), d = await drag(await thumb('b1'), await yearX(2010));
+  check(a.mid.baseSheet.span === '1951–2005' && a.mid.base === null && a.end.base.join() === '1951,2005' && b.end.base.join() === '1971,2005' && b.mid.baseSheet.span === '1971–2005'
+    && c.end.base.join() === '2005,2005' && c.end.baseKey === 'Base 2005' && d.end.base.join() === '2005,2010',
+    `WebKit, both thumbs dragged (touch PointerEvents): To to 2005 ("${a.mid.baseSheet.span}" while moving, the map at the lift), From to 1971 (${b.end.base.join('–')}), From past To: a one-year base "${c.end.baseKey}", then To from there to 2010 (${d.end.base.join('–')})`);
+  await ww(() => document.getElementById('b0').focus());
+  await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowLeft'); await settle(); await page.waitForTimeout(100); await settle();
+  s = await S(ww);
+  const vt = await ww(() => [document.getElementById('b0').getAttribute('aria-valuetext'), document.getElementById('b0').value]);
+  check(s.base && s.base.join() === '2004,2010' && vt.join() === '2004,2004', `WebKit's own arrow keys on the From thumb: → ← ← steps to ${s.base && s.base[0]} (aria-valuetext ${vt[0]}), "${s.baseKey}"`);
+  await page.screenshot({ path: path.join(out, 'baseline-webkit-light.png') }); console.log('  baseline-webkit-light.png');
+  // the stored span over a reload
+  await page.reload(); await load();
+  s = await S(ww);
+  check(s.base && s.base.join() === '2004,2010' && s.baseKey === 'Base 2004–2010', `WebKit: the span is stored and comes back over a reload ("${s.baseKey}")`);
+  await ww(() => window.__ww.base(null));
+  check(errors.length === 0, `WebKit: no console errors or warnings, page errors or outside requests${errors.length ? ': ' + errors.slice(0, 4).join(' | ') : ''}`);
+  await WB.close();
 }
 
 await browser.close();

@@ -66,35 +66,31 @@ export function buildLut() {
 }
 export const css = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
 
-/* ── Absolute mode (plan 0012 3.3; ART "The temperature ramp"): a sequential ramp, −60 to +40 °C,
-   lightness rising from the coldest to the warmest, the same in both themes. Its hues run violet,
-   indigo, blue, teal, sage, sand: never the anomaly ramp's red and white, so the two maps cannot be
-   read for each other. tools/check.mjs asserts the stops equal ART's table and the constraints. ── */
-export const ABS_STOPS = [
-  [-60, 0.270, 0.080, 305],
-  [-40, 0.400, 0.120, 280],
-  [-20, 0.530, 0.120, 255],
-  [0, 0.665, 0.085, 220],
-  [10, 0.735, 0.070, 180],
-  [20, 0.805, 0.070, 125],
-  [30, 0.875, 0.075, 95],
-  [40, 0.945, 0.050, 85],
-];
-export const ABS_LO = -60, ABS_HI = 40;
-const ALABS = ABS_STOPS.map(([v, L, C, h]) => [v, L, C * Math.cos((h * Math.PI) / 180), C * Math.sin((h * Math.PI) / 180)]);
-/** OKLab of the temperature ramp at v °C (clamped to −60 … +40). */
-export function absLab(v) {
-  v = Math.max(ABS_LO, Math.min(ABS_HI, v));
-  let i = 0;
-  while (i < ALABS.length - 2 && v > ALABS[i + 1][0]) i++;
-  const p = ALABS[i], n = ALABS[i + 1], t = (v - p[0]) / (n[0] - p[0]);
-  return [p[1] + (n[1] - p[1]) * t, p[2] + (n[2] - p[2]) * t, p[3] + (n[3] - p[3]) * t];
+/* ── Absolute mode (plan 0012 D21; ART "The temperature ramp"): Global Weather's temperature colors, by
+   value, so one °C reads as one color in both apps: its stops (global-weather/js/ramps.js, RAMPS.temp),
+   one set per theme, interpolated in sRGB as its rampAt does. Centered on 0 °C (slate) over −50 … +50;
+   below −50 the coldest stop, above +48 the warmest. tools/check.mjs pins the stops to that file. ── */
+const TV = [-50, -46.25, -42.5, -38.75, -35, -31.25, -27.5, -23.75, -20, -17, -14, -11, -8, -6, -4, -2, 0, 1.5, 3, 4.5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40.5, 43, 45.5, 48];
+const hexes = (s) => s.match(/.{6}/g).map((h, i) => [TV[i], [0, 2, 4].map((j) => parseInt(h.slice(j, j + 2), 16))]);
+/** [°C, [r, g, b]] per theme: Global Weather's RAMPS.temp.light and .dark. */
+export const ABS_STOPS = {
+  light: hexes('8778d0837dd67f81db7a86e1748ae77291e86f98e96b9fea67a6ea6dade973b4e879bbe77fc3e68ec8e39dcce0acd1dcbad6d9b4d5cdadd4c2a7d2b6a1d1aaa6cc9baac78caec27cb2bc6cbbb560c3ac54caa446d09c36d49335d88b34db8233de7932dd743add6f42dc6948db644ed96256d7605dd45e64d25b6a'),
+  dark: hexes('8f80d8857fd87b7ed8717dd7677bd75c7ace5078c54475bd3673b42f6ea7276a991f658c17607f2059712653632a4c562d45482d4a452d4f402c543c2c5937395b30455e2750601c5b63076a63037663008263058d6405986307a56200b26002bf5d03c45d20ca5e30cf5e3dd55e48d65f54d8615ed96268db6371'),
+};
+export const ABS_LO = -50, ABS_HI = 50;
+/** sRGB 0..255 of the temperature ramp at v °C in the theme (dark: true), unrounded. */
+export function absAt(v, dark = false) {
+  const s = ABS_STOPS[dark ? 'dark' : 'light'];
+  let k = 0;
+  while (k < s.length - 2 && s[k + 1][0] <= v) k++;
+  const [v0, c0] = s[k], [v1, c1] = s[k + 1], f = Math.max(0, Math.min(1, (v - v0) / (v1 - v0)));
+  return c0.map((c, j) => c + (c1[j] - c) * f);
 }
-export const absRGB = (v) => oklabToLinear(...absLab(v)).map(encode);
-/** 1024 × 1 RGBA: entry i is the ramp at (i − 600) tenths of a degree, so −60.0 … +40.0 °C at 0.1 °C
- *  (entries past 1000 repeat the warm end; the shader clamps first). */
-export function buildAbsLut() {
+export const absRGB = (v, dark = false) => absAt(v, dark).map(Math.round);
+/** 1024 × 1 RGBA for the theme: entry i is the ramp at (i − 500) tenths of a degree, so −50.0 … +50.0 °C
+ *  at 0.1 °C, 0 °C at entry 500 (entries past 1000 repeat the warm end; the shader clamps first). */
+export function buildAbsLut(dark = false) {
   const lut = new Uint8Array(1024 * 4);
-  for (let i = 0; i < 1024; i++) lut.set([...absRGB((Math.min(i, 1000) - 600) / 10), 255], i * 4);
+  for (let i = 0; i < 1024; i++) lut.set([...absRGB((Math.min(i, 1000) - 500) / 10, dark), 255], i * 4);
   return lut;
 }

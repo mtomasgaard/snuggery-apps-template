@@ -16,7 +16,11 @@
 //      of its months; js/measure.js's numbers against sums written here: Absolute (Fairbanks −4.5 +
 //      2.5 = −2.0 °C), a chosen baseline (each cell's mean over the span where it has two thirds of the
 //      years, GISS's global means re-expressed), 1951–1980 chosen again is GISS's own (no change), and
-//      a month is never re-expressed.
+//      a month is never re-expressed;
+//   8. plan 0012 D21 and D22: Absolute's LUT, per theme, against Global Weather's RAMPS.temp interpolated
+//      here in sRGB (0 °C at entry 500, the ends held), the counts beyond −50 and +50 °C against a count
+//      here, every preset span against sums here, a one-year span (the slider's thumbs met), and a span
+//      stored by 1.1 (1991–2019) read as it was.
 //
 //   node tools/test_decode.mjs
 
@@ -29,6 +33,7 @@ import { fill } from '../js/about.js';
 import { placePhrase } from '../js/card.js';
 import { tenths, percent, hundredths, cellBounds, group, roundDiv } from '../js/units.js';
 import { createMeasure, checkClim, decodeClim, NIL } from '../js/measure.js';
+import { buildAbsLut, ABS_LO, ABS_HI } from '../js/ramp.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const raw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
@@ -185,6 +190,41 @@ ok(wj.land.length === 1420 && w.land.n === ringsIn(wj.land) && wj.lakes.length =
   M.setSpan([1951, 1980]);
   const s25 = M.stats(k25);
   ok(!M.custom() && M.value(k25, F) === raw25 && s25.above === idx.above[k25] && s25.area === idx.area[k25], 'choosing 1951–1980 again is GISS\'s own base: the values and counts are the snapshot\'s');
+  // 8. plan 0012 D22: each preset, a one-year span, and a span stored by 1.1, against sums written here
+  const baseBy = (y0, y1) => { const j0 = idx.years.indexOf(y0), n = y1 - y0 + 1, need = Math.ceil((2 * n) / 3 - 1e-9); let bad = 0, lacking = 0;
+    for (let k = 0; k < CELLS; k++) { let sum = 0, c = 0; for (let i = j0; i < j0 + n; i++) { const b = frames[i * CELLS + k]; if (b !== NONE) { sum += idx.tenths[b]; c++; } } const want = c >= need ? roundDiv(sum, c) : NIL; if (want === NIL) lacking++; if (M.base[k] !== want) bad++; }
+    return { bad, lacking, need }; };
+  const seen = [];
+  for (const [y0, y1] of [[1961, 1990], [1981, 2010], [1991, 2020], [2021, 2021], [1991, 2019]]) {
+    M.setSpan([y0, y1]); const r = baseBy(y0, y1);
+    seen.push([`${y0}–${y1}`, M.custom() && r.bad === 0 && M.lacking === r.lacking && M.need === r.need && M.text() === (y0 === y1 ? String(y0) : `${y0}–${y1}`), r.lacking]);
+  }
+  ok(seen.every((x) => x[1]), `the presets 1961–1990, 1981–2010, 1991–2020, a one-year span (2021) and 1.1's stored 1991–2019: every cell's mean equals this file's sum; cells without one ${seen.map((x) => `${x[0]} ${x[2]}`).join(', ')}`);
+  // Absolute's counts beyond the new scale, −50 … +50 °C (D21)
+  M.setSpan(null); M.abs = true;
+  let above = 0, below = 0;
+  for (let k = 0; k < CELLS; k++) { const b = frames[k25 * CELLS + k]; if (b === NONE) continue; const t = C.t[12 * CELLS + k] + idx.tenths[b]; if (t > 500) above++; else if (t < -500) below++; }
+  const sa = M.stats(k25);
+  ok(sa.above === above && sa.below === below && ABS_LO === -50 && ABS_HI === 50, `Absolute 2025 beyond −50 … +50 °C: ${sa.below} cells below, ${sa.above} above (this file: ${below}, ${above})`);
+  M.abs = false;
+}
+// 8. Absolute's colors (D21): the LUT per theme against Global Weather's own stops, interpolated here
+{
+  const gw = path.join(APP, '..', 'global-weather', 'js', 'ramps.js');
+  if (!fs.existsSync(gw)) ok(true, 'Absolute\'s LUT: no global-weather/ in this copy (check.mjs pins the stops by hash)');
+  else {
+    const src = fs.readFileSync(gw, 'utf8'), T = JSON.parse(src.slice(src.indexOf('{'), src.lastIndexOf('}') + 1)).temp;
+    const here = (st, v) => { let k = 0; while (k < st.length - 2 && st[k + 1][0] <= v) k++; const [v0, c0] = st[k], [v1, c1] = st[k + 1], f = Math.min(1, Math.max(0, (v - v0) / (v1 - v0))); return c0.map((c, j) => Math.round(c + (c1[j] - c) * f)); };
+    const res = [];
+    for (const th of ['light', 'dark']) {
+      const lut = buildAbsLut(th === 'dark');
+      let bad = 0;
+      for (let i = 0; i <= 1000; i++) { const w = here(T[th], (i - 500) / 10); if (w.some((c, j) => c !== lut[i * 4 + j]) || lut[i * 4 + 3] !== 255) bad++; }
+      const mid = Array.from(lut.slice(2000, 2003)).join(), cold = Array.from(lut.slice(0, 3)).join(), warm = Array.from(lut.slice(4000, 4003)).join();
+      res.push([th, bad, mid, mid === T[th][16][1].join() && T[th][16][0] === 0 && cold === T[th][0][1].join() && warm === T[th][T[th].length - 1][1].join()]);
+    }
+    ok(res.every((r) => r[1] === 0 && r[3]), `Absolute's LUT equals Global Weather's temperature colors at every 0.1 °C from −50 to +50, by value (${res.map((r) => `${r[0]}: ${r[1]} of 1 001 differ, 0 °C at entry 500 is ${r[2]}`).join('; ')}); −50 °C the coldest stop, +50 °C the warmest`);
+  }
 }
 
 // 6. broken copies

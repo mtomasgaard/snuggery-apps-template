@@ -6,7 +6,7 @@
 // opening are the only things that keep frames coming; when all are idle nothing runs.
 // window.__ww is inert unless called: it is how tools/shoot.mjs drives and reads the app.
 
-import { $, store, clamp, cssVar, hexRGB, reducedMotion, setText, summary, isNum, easeTurn, wrap180 } from './util.js';
+import { $, store, clamp, cssVar, hexRGB, reducedMotion, darkOn, setText, summary, isNum, easeTurn, wrap180 } from './util.js';
 import { validate, index, createDecoder, decodeAll, decodeWorld, decodePlaces, cellOf, capMean, CELLS, NONE } from './data.js';
 import { createView, attachGestures, defaultLon } from './proj.js';
 import { createEarth } from './earth.js';
@@ -390,6 +390,7 @@ function layout() {
   if (track) { track.resize($('track').clientWidth, dpr2); if (st.idx) trackModel(); }
   if (card) card.setDpr(dpr2);
   segMark($('view-seg'), view.mode); segMark($('mode-seg'), st.mode); segMark($('measure-seg'), M.abs ? 'abs' : 'diff');
+  if (st.idx && !$('base-card').hidden) baseUi();     // the note's reserve follows the width
   dirtyAll();
   drawNow();
 }
@@ -572,8 +573,8 @@ function wireControls() {
   radios($('measure-seg'), 's', (m) => setMeasure(m === 'abs'));
   $('base-key').addEventListener('click', () => ($('base-card').hidden ? openBase() : closeBase()));
   $('base-close').addEventListener('click', () => closeBase());
-  $('base-reset').addEventListener('click', () => { setSpan(null); say('Baseline 1951–1980, GISS’s own'); $('base-close').focus(); });
-  for (const [id, end, d] of [['b0-prev', 0, -1], ['b0-next', 0, 1], ['b1-prev', 1, -1], ['b1-next', 1, 1]]) holdKey($(id), () => stepBase(end, d));
+  radios($('base-presets'), 'b', (y) => { const sp = PRESETS.find((p) => p[0] === +y); setSpan(sp[0] === 1951 ? null : sp); say(`Baseline ${M.text()}${sp[0] === 1951 ? ', GISS’s own' : ''}`); });
+  baseSlider();
   $('arctic').addEventListener('click', () => pole('n'));
   $('antarctic').addEventListener('click', () => pole('s'));
   // focus mode's two keys: focus follows them only when they were pressed from the keyboard (US Quakes §22)
@@ -650,8 +651,9 @@ function setSpan(span) {
   M.setSpan(span);
   measureChanged();
 }
-/* the baseline's sheet: two years, each with ‹ ›, held to repeat; the bracket on the stripes and the
-   map follow at once; a month is always against 1951–1980 (measure.js) */
+/* the baseline's sheet (plan 0012 D22): four presets, one tap each, and a two-thumb slider over the
+   complete years for any other span; a month is always against 1951–1980 (measure.js) */
+const PRESETS = [[1951, 1980], [1961, 1990], [1981, 2010], [1991, 2020]];
 function openBase() {
   if (!st.idx || st.failed || !st.decoderDone()) return;
   if (st.selection) clearSelection();
@@ -669,28 +671,112 @@ function closeBase(refocus = true) {
   if (refocus) $('base-key').focus({ focusVisible: false });
   dirty.overlay = true; requestRender();
 }
-function baseUi() {
-  const I = st.idx, sp = M.custom() ? M.span : I.base, first = I.years[0], last = I.years[I.lastComplete];
-  setText($('b0'), String(sp[0])); setText($('b1'), String(sp[1]));
-  $('b0-prev').disabled = sp[0] <= first; $('b0-next').disabled = sp[0] >= sp[1];
-  $('b1-prev').disabled = sp[1] <= sp[0]; $('b1-next').disabled = sp[1] >= last;
-  $('base-reset').disabled = !M.custom();                  // always there, so the keys never move under a finger
-  const n = sp[1] - sp[0] + 1, need = Math.ceil((2 * n) / 3 - 1e-9);
+function baseUi(sp = M.custom() ? M.span : st.idx.base) {
+  const I = st.idx, note = $('base-note');
+  sliderUi(sp);
+  noteReserve();
+  // while a thumb moves the map has not followed yet, so the note says the rule and waits (aria-busy) for
+  // the count; a key or VoiceOver step holds it busy until the steps stop, so it speaks once (stepped())
+  note.setAttribute('aria-busy', String(!!drag || !!stepT));
+  setText(note, noteText(sp, { moving: !!drag, custom: !!drag || M.custom() }));
+  setText($('b-first'), String(I.years[0])); setText($('b-last'), String(I.years[I.lastComplete]));
+}
+/** The note's words for a span: settled, or while a thumb moves (what follows at the lift, in this mode). */
+function noteText(sp, { moving = false, custom = M.custom(), lacking = M.lacking } = {}) {
+  const n = sp[1] - sp[0] + 1, need = Math.ceil((2 * n) / 3 - 1e-9), months = st.mode === 'months';
   const these = n === 1 ? `this one year, and needs a value in it` : `these ${n} years, and needs a value in ${need} of them`;
-  let t = M.custom()
-    ? `Each place is compared with its own mean over ${these}: ${M.lacking ? `${M.lacking.toLocaleString('en-US').replace(/,/g, NNBSP)} cells have ${n === 1 ? 'none' : 'fewer'} and are drawn as no data` : n === 1 ? 'every cell has one' : 'every cell has them'}. The global mean and the stripes use GISS’s global means over the same years.`
+  if (moving) return `Each place is compared with its own mean over ${these}. ${months ? 'The years follow on release; single months stay against 1951–1980.' : M.abs ? 'The stripes and the card’s chart follow on release.' : 'The map follows on release.'}`;
+  const fate = M.abs && !months ? ', so they have no mean over the span' : ' and are drawn as no data';
+  let t = custom
+    ? `Each place is compared with its own mean over ${these}: ${lacking ? `${lacking.toLocaleString('en-US').replace(/,/g, NNBSP)} cells have ${n === 1 ? 'none' : 'fewer'}${fate}` : n === 1 ? 'every cell has one' : 'every cell has them'}. The global mean and the stripes use GISS’s global means over the same years.`
     : `GISS’s own base: each place is compared with its 1951–1980 average.`;
-  if (st.mode === 'months') t += ' The span applies to years. Single months stay against 1951–1980: the app holds only the last 24 months, so it cannot average a month over other years.';
+  if (months) t += ' The span applies to years. Single months stay against 1951–1980: the app holds only the last 24 months, so it cannot average a month over other years.';
   else if (M.abs) t += ' In Absolute the map’s temperatures do not use it: it applies to the card’s chart and the stripes.';
-  setText($('base-note'), t);
+  return t;
 }
-function stepBase(end, d) {
-  const I = st.idx, sp = (M.custom() ? M.span : I.base).slice(), last = I.years[I.lastComplete];
-  sp[end] = clamp(sp[end] + d, end ? sp[0] : I.years[0], end ? last : sp[1]);
-  setSpan(sp);
-  say(`Baseline ${M.text()}`);
+/* The note's height is held at its longest form for this width, text size, list and measure (review of
+   1.2: the sheet is anchored at its foot, so a note that grew pushed the presets and the slider from
+   under the finger). Measured, never painted: the forms are set and replaced in the same task. */
+let noteKey = '';
+function noteReserve() {
+  const note = $('base-note'), I = st.idx;
+  const key = `${note.clientWidth}|${getComputedStyle(note).fontSize}|${st.mode}|${M.abs}`;
+  if (!note.clientWidth || key === noteKey) return;
+  noteKey = key;
+  const all = [I.years[0], I.years[I.lastComplete]], was = note.textContent;
+  note.style.minHeight = '';
+  let h = 0;
+  for (const t of [noteText(all, { moving: true }), noteText(all, { custom: true, lacking: CELLS }), noteText(all, { custom: true, lacking: 0 }), noteText(I.base, { custom: false })]) {
+    note.textContent = t; h = Math.max(h, note.offsetHeight);
+  }
+  note.textContent = was;
+  note.style.minHeight = `${h}px`;
 }
-
+/** The slider and the presets drawn for a span (also while a thumb moves, before the map follows). */
+function sliderUi(sp) {
+  const I = st.idx, first = I.years[0], last = I.years[I.lastComplete], sl = $('b-slider');
+  const p = (y) => ((y - first) / Math.max(1, last - first)).toFixed(4);
+  sl.style.setProperty('--p0', p(sp[0])); sl.style.setProperty('--p1', p(sp[1]));
+  const [b0, b1] = [$('b0'), $('b1')];
+  b0.min = first; b0.max = sp[1]; b0.value = sp[0]; b1.min = sp[0]; b1.max = last; b1.value = sp[1];
+  b0.setAttribute('aria-valuetext', String(sp[0])); b1.setAttribute('aria-valuetext', String(sp[1]));
+  setText($('b-span'), sp[0] === sp[1] ? String(sp[0]) : `${sp[0]}–${sp[1]}`);
+  const seg = $('base-presets'), on = PRESETS.findIndex((p) => p[0] === sp[0] && p[1] === sp[1]);
+  [...seg.querySelectorAll('button')].forEach((b, i) => { b.setAttribute('aria-checked', String(i === on)); b.tabIndex = i === on || (on < 0 && !i) ? 0 : -1; });
+  const b = seg.querySelectorAll('button')[on], mk = seg.querySelector('.mark');
+  mk.style.transform = b ? `translateX(${b.offsetLeft}px) scaleX(${b.offsetWidth})` : 'scaleX(0)';
+}
+/* The two thumbs: input type=range each (VoiceOver's adjustable control and the arrow keys come with it),
+   invisible 44 px boxes over the drawn dots. A finger anywhere on the slider takes the nearer thumb
+   (where they meet, the one its first move points to) and the span follows it; the map follows at the
+   lift, since a baseline is a mean over every year of the span (measured: 8–25 ms a span on this Mac,
+   more than a frame). A key or VoiceOver step is applied at the next frame. */
+let drag = null, keyT = 0, stepT = 0;
+function baseSlider() {
+  const sl = $('b-slider'), cur = () => [+$('b0').value, +$('b1').value];
+  const yearAt = (cx) => { const I = st.idx, r = sl.getBoundingClientRect(), first = I.years[0], last = I.years[I.lastComplete];
+    return clamp(Math.round(first + ((cx - r.left - 11) / Math.max(1, r.width - 22)) * (last - first)), first, last); };
+  const move = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const y = yearAt(e.clientX), sp = drag.sp.slice();
+    if (drag.end < 0) { if (y === sp[0]) return; drag.end = y < sp[0] ? 0 : 1; }
+    sp[drag.end] = drag.end ? Math.max(sp[0], y) : Math.min(sp[1], y);
+    drag.sp = sp; baseUi(sp);
+  };
+  sl.addEventListener('pointerdown', (e) => {
+    if (drag || !st.idx || e.button > 0) return;
+    e.preventDefault();
+    const sp = cur(), y = yearAt(e.clientX), d0 = Math.abs(y - sp[0]), d1 = Math.abs(y - sp[1]);
+    drag = { id: e.pointerId, sp, end: sp[0] === sp[1] && y === sp[0] ? -1 : y < sp[0] || d0 < d1 || (d0 === d1 && y < sp[0]) ? 0 : 1 };
+    try { sl.setPointerCapture(e.pointerId); } catch { /* fine */ }
+    if (e.pointerType === 'mouse') $(drag.end === 1 ? 'b1' : 'b0').focus({ focusVisible: false });   // a touch never focuses an input
+    move(e);
+  });
+  sl.addEventListener('pointermove', move);
+  const lift = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const sp = drag.sp, was = M.custom() ? M.span : st.idx.base; drag = null;
+    if (sp[0] === was[0] && sp[1] === was[1]) { baseUi(); return; }   // a touch that moved nothing
+    setSpan(sp); say(`Baseline ${M.text()}`);
+  };
+  for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) sl.addEventListener(ev, lift);
+  // a step speaks through the control's own value; the note is quiet until the steps stop, then speaks once
+  const stepped = () => {
+    const note = $('base-note');
+    note.setAttribute('aria-live', 'off'); note.setAttribute('aria-busy', 'true');
+    clearTimeout(stepT);
+    stepT = setTimeout(() => {
+      stepT = 0;
+      note.setAttribute('aria-live', 'polite'); note.setAttribute('aria-busy', String(!!drag));
+      const t = note.textContent; note.textContent = ''; note.textContent = t;
+    }, 600);
+  };
+  for (const id of ['b0', 'b1']) $(id).addEventListener('input', () => {
+    stepped();
+    const sp = cur(); sliderUi(sp);
+    cancelAnimationFrame(keyT); keyT = requestAnimationFrame(() => setSpan(cur()));
+  });
+}
 /* ── focus mode (§10): the Earth, the stripes track with its keys, and the step's name ── */
 const FOCUS_HIDE = ['top', 'strip', 'yearrow', 'mode-seg'];      // the legend stays (the owner, plan 0012: the scale stays); its first row goes
 function setFocus(on, { boot = false, kbd = false } = {}) {
@@ -835,7 +921,7 @@ function fail(sentence) {
 function loadFonts() {
   const done = () => { st.fontsReady = true; dirtyAll(); };
   try {
-    document.fonts.addEventListener('loadingdone', () => { if (track) track.invalidate(); if (overlay) overlay.invalidate(); layout(); });
+    document.fonts.addEventListener('loadingdone', () => { noteKey = ''; if (track) track.invalidate(); if (overlay) overlay.invalidate(); layout(); });
     const all = Promise.all(['400 12px Archivo', '600 12px Archivo', 'semi-condensed 400 12px Archivo'].map((f) => document.fonts.load(f)));
     return Promise.race([all, new Promise((r) => setTimeout(r, 3000))]).then(done, done);
   } catch { done(); return Promise.resolve(); }
@@ -895,7 +981,7 @@ async function boot() {
   }
   const I = st.idx;
   st.frames = new Uint8Array(I.L * CELLS);
-  if (earth.supported) { earth.setFrames(st.frames, I.L); earth.setLut(buildLut()); earth.setAbsLut(buildAbsLut()); if (M.clim) earth.setClim(M.clim.t); }
+  if (earth.supported) { earth.setFrames(st.frames, I.L); earth.setLut(buildLut()); earth.setAbsLut(buildAbsLut(darkOn())); if (M.clim) earth.setClim(M.clim.t); }
   else { showError('This view needs WebGL 2, which this device does not offer.'); $('legend').hidden = true; for (const b of document.querySelectorAll('.strip button')) b.disabled = true; }
   st.wanted = layerOf(st.mode, st.pos[st.mode]);
   st.decoder = createDecoder(snap, st.frames, {
@@ -924,7 +1010,7 @@ async function boot() {
   await fonts;
   new ResizeObserver(() => layout()).observe($('panel'));
   new ResizeObserver(() => layout()).observe($('track-row'));
-  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { ground = hexRGB(cssVar('--card')); track.invalidate(); overlay.invalidate(); dirtyAll(); }); } catch { /* old engines */ }
+  try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { ground = hexRGB(cssVar('--card')); if (earth.supported) earth.setAbsLut(buildAbsLut(darkOn())); layout(); track.invalidate(); overlay.invalidate(); dirtyAll(); }); } catch { /* old engines */ }
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') refresh();
     else { endOpening(); stopPlay(); finishMotion(); }       // hidden: nothing plays or moves (§5.6)
@@ -1043,7 +1129,7 @@ window.__ww = {
       resident: st.resident.reduce((a, b) => a + b, 0), layers: I ? I.L : 0, decode: st.decoder ? { ...st.decoder.queue(), ms: st.decoder.stats.t1 ? st.decoder.stats.t1 - st.decoder.stats.t0 : null, first: st.decoder.stats.order.slice(0, 3) } : null,
       fontsReady: st.fontsReady, fontAtFirstText: st.fontAtFirstText, fontNow: fontStatus(), firstDraw: st.firstDraw,
       notices: notices(), legendCaption: txt('legend-caption'), legendRow: !$('legend-row').inert && getComputedStyle($('legend-row')).display !== 'none',
-      measure: M.abs ? 'abs' : 'diff', base: M.custom() ? M.span.slice() : null, baseText: M.text(), baseKey: txt('base-key'), baseSheet: $('base-card').hidden ? null : { b0: txt('b0'), b1: txt('b1'), note: txt('base-note') },
+      measure: M.abs ? 'abs' : 'diff', base: M.custom() ? M.span.slice() : null, baseText: M.text(), baseKey: txt('base-key'), baseSheet: $('base-card').hidden ? null : { b0: $('b0').value, b1: $('b1').value, span: txt('b-span'), note: txt('base-note'), preset: ($('base-presets').querySelector('[aria-checked="true"]') || {}).textContent || null },
       stats: st.shown >= 0 ? M.stats(st.shown) : null, clim: M.clim ? Array.from(M.clim.gm, (g) => Math.round(g)) : null,
       track: track ? { pressed: track.pressed, centre: st.shown >= 0 ? track.centre(st.shown - base()) : null, n: count(), written: track.written } : null,
       webgl: earth ? earth.supported : null, gl: earth && earth.supported ? earth.stats() : null, dpr, dpr2, perf: st.perfOn ? txt('perf') : null,

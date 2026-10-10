@@ -66,12 +66,21 @@
           <svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 17l10 10M27 17L17 27"/></svg>
         </button>
       </div>
-      <div class="b-rows">
-        <div class="b-row"><span class="b-lab">From</span><button id="b0-prev" class="iconkey" type="button" aria-label="First year earlier"><svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M25 15l-7 7 7 7"/></svg></button><b id="b0">1951</b><button id="b0-next" class="iconkey" type="button" aria-label="First year later"><svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 15l7 7-7 7"/></svg></button></div>
-        <div class="b-row"><span class="b-lab">to</span><button id="b1-prev" class="iconkey" type="button" aria-label="Last year earlier"><svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M25 15l-7 7 7 7"/></svg></button><b id="b1">1980</b><button id="b1-next" class="iconkey" type="button" aria-label="Last year later"><svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 15l7 7-7 7"/></svg></button></div>
+      <div class="seg b-pre" id="base-presets" role="radiogroup" aria-label="Common baselines">
+        <button type="button" role="radio" aria-checked="true" data-b="1951" aria-label="1951–1980, GISS’s base">1951–1980</button>
+        <button type="button" role="radio" aria-checked="false" data-b="1961">1961–1990</button>
+        <button type="button" role="radio" aria-checked="false" data-b="1981">1981–2010</button>
+        <button type="button" role="radio" aria-checked="false" data-b="1991" aria-label="1991–2020, the current climate normal">1991–2020</button>
+        <span class="mark" aria-hidden="true"></span>
       </div>
+      <p class="b-span" id="b-span">1951–1980</p>
+      <div class="b-slider" id="b-slider">
+        <span class="b-run" aria-hidden="true"></span>
+        <input type="range" id="b0" class="b-thumb" aria-label="From" min="1880" max="1980" step="1" value="1951"><span class="b-dot" aria-hidden="true"></span>
+        <input type="range" id="b1" class="b-thumb" aria-label="To" min="1951" max="2025" step="1" value="1980"><span class="b-dot" aria-hidden="true"></span>
+      </div>
+      <p class="b-ends" aria-hidden="true"><span id="b-first"></span><span id="b-last"></span></p>
       <p class="c-foot" id="base-note" aria-live="polite"></p>
-      <button id="base-reset" class="textkey" type="button">Back to GISS’s base, 1951–1980</button>
     </div>
     <div class="tapcard" id="card" role="region" aria-label="The selected cell" hidden>
       <div class="c-head"><p id="c-place"></p>

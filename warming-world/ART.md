@@ -213,33 +213,43 @@ at severity 1.0, applied in linear sRGB; the citation is in the script.)
   same lightness. That is why the stripes track has a frame (below), and why the zero is never used
   for chrome.
 
-### The temperature ramp (Absolute, plan 0012)
+### The temperature ramp (Absolute, plan 0012 D21)
 
 Absolute shows each cell's 1951–1980 average 2 m air temperature (ERA5, `assets/climatology.json`)
-plus GISS's anomaly: an estimate, said so on the legend, in the year row and in About. It needs its
-own scale, because temperature runs about −64 to +38 °C cell by cell where the anomaly runs ±4, and
-it must never be read as the anomaly map. So it is **sequential, not diverging**: lightness rises
-from the coldest to the warmest, and the hues run violet, indigo, blue, teal, sage and sand. It never
-passes through the anomaly ramp's near-white zero or its brick red, and it uses no orange, yellow or
-signal red, so the warm end reads as sand, not as an alarm. Fixed at −60 … +40 °C, the same in both
-themes, printed in the legend with pointed ends and the count of cells beyond either end. The stops,
-in OKLCh, interpolated in OKLab (`js/ramp.js` `ABS_STOPS`; `tools/check.mjs` asserts this table):
+plus GISS's anomaly: an estimate, said so on the legend, in the year row and in About. Its colors are
+**Global Weather's temperature colors, by value** (the owner's choice, 2026-10-10), so the same degree
+reads as the same color in both apps: violet at −50 °C, blue, slate at 0 °C, green, ochre and red at
+the warm end. The stops are Global Weather's `RAMPS.temp` (`global-weather/js/ramps.js`, from its
+`tools/art/palette.py`), one set per theme, 41 stops from −50 to +48 °C, interpolated in sRGB as
+Global Weather's `rampAt` does (`js/ramp.js` `ABS_STOPS`; `tools/check.mjs` fails if they differ from
+Global Weather's file stop for stop). Global Weather's own table of them, in short:
 
-| °C (Absolute) | −60 | −40 | −20 | 0 | +10 | +20 | +30 | +40 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| L (Absolute) | 0.270 | 0.400 | 0.530 | 0.665 | 0.735 | 0.805 | 0.875 | 0.945 |
-| C (Absolute) | 0.080 | 0.120 | 0.120 | 0.085 | 0.070 | 0.070 | 0.075 | 0.050 |
-| h (Absolute) | 305 | 280 | 255 | 220 | 180 | 125 | 95 | 85 |
-| sRGB | `#301a45` | `#3d3c86` | `#376daf` | `#51a0b8` | `#77b8ab` | `#b5c896` | `#e5d69e` | `#fcebc7` |
+| Theme | −35 °C | −8 °C | 0 °C | +14 °C | +22 °C | +30 °C | +38 °C |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Light | `#748ae7` | `#7fc3e6` | `#bad6d9` | `#b2bc6c` | `#d09c36` | `#de7932` | `#db644e` |
+| Dark | `#677bd7` | `#17607f` | `#2d4548` | `#5b6307` | `#8d6405` | `#bf5d03` | `#d55e48` |
 
-`node tools/check.mjs` printed (2026-10-06): in sRGB's gamut (0.00000 outside), chroma at least
-0.0500 at every 0.1 °C; lightness rises at every 1 °C under normal, deutan, protan and tritan
-vision; the 10 °C steps' ΔE (OKLab) 0.070–0.095 normal (ratio 1.36), 0.065–0.096 deutan, 0.056–0.084
-protan, 0.065–0.104 tritan (all ≤ 1.75); the ends 0.674–0.694 apart; every value at least 0.076 from
-both hatch grays (0.036–0.099 under the simulations, where the hatch's pattern also tells them
-apart). The light card (`#bebebe`) sits nearest +17 °C (ΔE 0.066) and the dark card nearest
-−56 °C (0.086), so the limb's ring and the map's outline, not the fill, part the Earth from the card
-there, as they do for the anomaly ramp's ends.
+**The scale is −50 … +50 °C, centered on 0 °C**, like Difference's (both scales sit on 0: the owner,
+the same day). 0 °C, Global Weather's slate, is the legend bar's middle step. The bar is 101 steps of
+1 °C with the pointed ends, ticks every 5 °C and long ones every 25, labels `≤ −50`, `−25`, `0`,
+`+25`, `≥ +50 °C`, and the count of cells beyond either end. Below −50 °C a cell takes the coldest
+stop; above +48 °C, Global Weather's warmest stop, it takes that. Fixed and printed; it never re-fits.
+
+**Each theme takes Global Weather's own variant**, so a degree matches Global Weather in the light
+theme and in the dark one. Global Weather draws these colors at 0.90 opacity over its land and sea;
+here each cell is filled with the stop itself, as the board the owner chose from was drawn.
+
+**What it gives up, said plainly.** The ramp is not sequential: it is palest (light) or darkest (dark)
+at 0 °C and runs to violet and red at its ends, and its warm end is ochre, orange and red. The legend,
+the caption and the switch say which map is on screen; Difference keeps its own blue-white-red ramp at
+±4 °C, which reads differently at a glance (white at 0, not slate).
+
+`node tools/check.mjs` printed (2026-10-10), every 0.1 °C from −50 to +50 °C in each theme: at least
+0.119 (light) and 0.127 (dark) from both hatch grays in OKLab ΔE, and at least 0.024 under the
+deutan, protan and tritan simulations, where the hatch's pattern also tells them apart; every eighth
+of the legend a step of ΔE ≥ 0.024; the ends 0.156–0.215 apart. The nearest any value comes to the
+card is 0.055 (light, −2.7 °C against `#bebebe`) and 0.070 (dark, 0 °C against `#303030`), so the
+limb's ring and the map's outline part the Earth from the card there.
 
 **No data** stays DESIGN's hatch: ground `#989898` (L 0.68), lines `#808080` (L 0.60), 45°, a period
 of 6 CSS px, 1.5 px lines, fixed to the screen. On the gray card it reads as darker than the card,
@@ -453,9 +463,10 @@ for, not decoration (DESIGN §11).
 ## Never
 
 - **Never a color that reads as danger where it means an anomaly.** No orange, yellow or signal red
-  in the ramp. No red or amber for staleness, errors or "new data". No pulsing, flashing or
+  in the anomaly ramp (Absolute's temperatures take Global Weather's colors, ochre and red included,
+  the owner's choice). No red or amber for staleness, errors or "new data". No pulsing, flashing or
   "record!" treatment for a warm year. The newest year is drawn like every other.
-- **Never an exaggerated scale.** ±4 °C on the map, ±1.5 °C on the stripes and −60 … +40 °C in
+- **Never an exaggerated scale.** ±4 °C on the map, ±1.5 °C on the stripes and −50 … +50 °C in
   Absolute, fixed and printed. No re-fitting, no zoom into the color scale, no extra saturation for the recent years,
   and no "stretched" stripes poster mode.
 - **Never invented data over the gray.** The hatch is drawn on top of nothing. No interpolation
@@ -604,6 +615,9 @@ Each item names the DESIGN section it changes. DESIGN §19 lists them again as d
 
 ### Plan 0012 (2026-10-06): Absolute, a baseline of one's own, the scale in focus mode, the credit in About
 
+(Items 27 and 28 are as 1.2 has them: Absolute in Global Weather's temperature colors on −50 … +50 °C,
+and the baseline by presets and a slider, the owner's D21 and D22 of 2026-10-10.)
+
 The owner's brief: *"Allow option to show absolute temp rather than differences. On the difference
 mode, allow user to select base/starting point as an average range. Full screen should not remove
 scale"*, and the family's front rule (HOUSE §4.15). What is true of the app now, where it differs
@@ -613,9 +627,10 @@ from the sections above (`tools/DECISIONS.md` has the reasons):
     underline switch **Difference | Absolute** (remembered, `ww.measure`) at its left, and the text key
     **Base 1951–1980** (the span in use, `ww.base`) at its right. Below it the bar and the caption, as
     before. The legend measures about 88 px at 390 (65 before: its 36 px row in, the credit's 14 out).
-27. **Absolute's legend:** 101 graduated steps of 1 °C from −60 to +40 (2.085 px each), the same
-    pointed ends, ticks every 10 °C and long ones every 20, labels `≤ −60`, `−40`, `−20`, `0`, `+20`,
-    `≥ +40 °C`, the counts beyond either end; the caption `Estimated temperature: each place's
+27. **Absolute's legend:** 101 graduated steps of 1 °C from −50 to +50 (2.085 px each) in Global
+    Weather's temperature colors for the theme (1.2, "The temperature ramp" above), 0 °C at the middle,
+    the same pointed ends, ticks every 5 °C and long ones every 25, labels `≤ −50`, `−25`, `0`, `+25`,
+    `≥ +50 °C`, the counts beyond either end; the caption `Estimated temperature: each place's
     1951–1980 average plus GISS's anomaly.` The year row reads `Global mean 14.9 °C (±0.5 °C)`: the
     climatology's area mean plus GISS's global mean, never a mean of the map's cells. The card prints
     the cell's temperature to the whole degree (`−2 °C`) with "estimated: the cell's 1951–1980 average
@@ -625,12 +640,20 @@ from the sections above (`tools/DECISIONS.md` has the reasons):
     mean over the whole cap plus the cap's mean anomaly, so a cap with few cells (the Antarctic before
     1957) does not read colder or warmer for lack of data.
 28. **Base:** the key opens a sheet in the tap card's place and dress (`--sheet`, 1 px
-    `--line-strong` edge, 3 px radius): `From ‹ 1951 › to ‹ 1980 ›` in 20 px semibold figures with
-    44 px chevron keys that repeat when held, a sentence that says the rule and how many cells it
-    leaves without a baseline, and `Back to GISS's base, 1951–1980` once another span is chosen. As the
-    years move, the bracket under the stripes moves and is labeled with the span (`1991–2020 = 0`,
+    `--line-strong` edge, 3 px radius). Since 1.2 (D22): four presets in the underline switch's dress,
+    a radio group, one tap each: `1951–1980` (GISS's base, named so to VoiceOver), `1961–1990`,
+    `1981–2010` and `1991–2020` (named the current climate normal); the span in 20 px semibold figures;
+    and a two-thumb slider over the complete years (`1880` and the last complete year at its ends, in
+    `--ink-3`): a 2 px `--line-strong` rule, the span between the thumbs in 4 px `--ink`, each thumb an
+    18 px `--ink` dot in a 2 px `--sheet` ring over a 44 px hit, and the thumbs may meet on one year. A
+    preset that matches the span is underlined; none is when the span is another. Each thumb is an
+    `input type=range` named `From` or `To`, the year as its value, a year per arrow key. The span shows
+    as a thumb moves; the map, the stripes' bracket and every label follow at the release (a key step at
+    once). Then a sentence that says the rule and how many cells it leaves without a baseline, held at
+    the height of its longest form so nothing in the sheet moves while it is open. As the
+    span changes, the bracket under the stripes moves and is labeled with the span (`1991–2020 = 0`,
     placed first so no year label can hide it), the stripes, the map, the legend's caption and the
-    year row (`Global mean +0.58 °C vs. 1991–2020`) follow at once. Every difference names its
+    year row (`Global mean +0.58 °C vs. 1991–2020`) follow. Every difference names its
     baseline: the year row and the pole chip now end `vs. 1951–1980` by default too. The key names
     the base in use: in Last 24 months it reads `Base 1951–1980` whatever span is chosen (single months
     stay against GISS's base, and the sheet says the span applies to years); in Absolute its name and
