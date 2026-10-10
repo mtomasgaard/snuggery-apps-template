@@ -355,13 +355,12 @@ export const countryKey = (name) => { const k = fold(name); return COUNTRY_ALIAS
 /* ── fields ── */
 
 export function buildFields(f) {
-  const out = { raw: f, available: !!f.available, points: [], byRes: [], byId: new Map(), byCountry: new Map(),
+  const out = { raw: f, available: !!f.available, points: [], byId: new Map(), byCountry: new Map(),
                 companies: [], basins: [], skipped: 0,
                 factor: Number.isFinite(f.factor) && f.factor > 0 ? f.factor : 1000 };
   if (!f.available) return out;
   const points = out.points;
   const int = (v) => (Number.isInteger(v) ? v : null);
-  const pos = (v) => (Number.isFinite(v) && v >= 0 ? v : null);
   for (const x of f.fields) {
     if (!x || !Number.isFinite(x.lat) || !Number.isFinite(x.lon) || Math.abs(x.lat) > 90 || Math.abs(x.lon) > 180) {
       out.skipped++;
@@ -369,15 +368,13 @@ export function buildFields(f) {
     }
     const oil = Number.isFinite(x.oilBpd) ? x.oilBpd : null;
     const gas = Number.isFinite(x.gasBoepd) ? x.gasBoepd : null;
-    const rOil = pos(x.resOilMbbl), rGas = pos(x.resGasMboe);
     const fuel = String(x.fuel || '').toLowerCase().trim();
     const status = String(x.status || '').toLowerCase().trim();
     points.push({
       f: x,
       id: String(x.id ?? `${x.name}|${x.lat}|${x.lon}`),
       x: lonToX(x.lon), y: latToY(x.lat),
-      v: oil == null && gas == null ? null : (oil || 0) + (gas || 0),
-      rv: rOil == null && rGas == null ? null : (rOil || 0) + (rGas || 0),
+      oil, gas, v: oil == null && gas == null ? null : (oil || 0) + (gas || 0),
       fuel: fuel === 'oil' ? 'oil' : fuel === 'gas' ? 'gas' : fuel === 'oil and gas' ? 'both' : 'other',
       status, operating: status === 'operating',
       off: x.offshore === 1 ? 1 : x.offshore === 0 ? 0 : -1,
@@ -392,7 +389,6 @@ export function buildFields(f) {
   }
   // Biggest first, so the small ones are drawn last and stay tappable on top.
   points.sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
-  out.byRes = points.slice().sort((a, b) => (b.rv ?? -1) - (a.rv ?? -1));
   const comp = new Map(), bas = new Map();
   const add = (m, k, p) => { const a = m.get(k); if (a) a.push(p); else m.set(k, [p]); };
   for (const p of points) {
@@ -410,12 +406,12 @@ export function buildFields(f) {
 /* When each unit is on the map (appear) and filled (fill), as years:
  *   disc and start   → a ring from disc, filled from start;
  *   start only       → appears at start, filled;
- *   disc only        → a ring from disc; if it is operating and has a rate, filled from disc too
- *                      (the estimate's start); operating without a rate, filled from its prodYear,
- *                      or the newest year when later or missing;
- *   neither (B5)     → appears filled at its estimate's start, the year before its data year
- *                      (clamped to the years shown), or in the newest year when it has no data
- *                      year: never in every year, as the stock app drew them.
+ *   disc only        → a ring from disc; if it is operating and has a rate, filled from disc too;
+ *                      operating without a rate, filled from its prodYear, or the newest year
+ *                      when later or missing;
+ *   neither (B5)     → appears filled the year before its data year (clamped to the years shown),
+ *                      or in the newest year when it has no data year: never in every year, as the
+ *                      stock app drew them.
  * No end year exists, so mothballed or abandoned units stay as they were. */
 export function fieldYears(fields, Y0, Y1) {
   if (!fields || !fields.available) return;
@@ -429,58 +425,17 @@ export function fieldYears(fields, Y0, Y1) {
   }
 }
 
-/* ── field sizes through time (an estimate) ──────────────────────────────── *
- * The tracker gives ONE rate per unit, for its prodYear, and no series. From es = start ?? disc ??
- * prodYear − 1 on, rate(y) = latest × clamp(C(y) / C(prodYear), 0, 3), C being the field's country
- * series for the mode (the world's when the country is unmatched; before a series' first value it is
- * chained to its former state's or the world's; gaps hold the last value); C(prodYear) null or 0 → the
- * latest rate unchanged. Cumulative is Σ rate × 365 from es, in Mboe (prefix sums per field). */
-function refArr(prod, c, m, base) {
-  const { Y0 } = prod, n = prod.Y1 - Y0 + 1, a = new Float64Array(n);
-  let first = -1;
-  for (let i = 0; i < n; i++) {
-    const v = seriesAt(c, m, Y0 + i, tmp).v;
-    if (v != null) { a[i] = v; if (first < 0) first = i; } else if (first >= 0) a[i] = a[i - 1];
-  }
-  if (first < 0) return null;
-  if (base && base[first] > 0) for (let i = 0; i < first; i++) a[i] = base[i] * a[first] / base[first];
-  return a;
-}
-export function estimate(prod, fields, m) {
-  const { Y0, Y1 } = prod, world = prod.s.world;
-  const wa = world ? refArr(prod, world, m, null) : Float64Array.from(prod.sum[m]);
-  const byName = new Map(), arrs = new Map();
-  for (const c of prod.s.countries) byName.set(countryKey(c.name), c);
-  const arrOf = (c) => {
-    if (!arrs.has(c)) {
-      const fs = prod.byIso.get(FORMER_STATE[c.iso3]);
-      arrs.set(c, refArr(prod, c, m, fs ? refArr(prod, fs, m, wa) || wa : wa));
-    }
-    return arrs.get(c);
-  };
-  let n = 0;
-  for (const p of fields.points) {
-    p.es = null;
-    const es = p.undated ? p.fill : p.start ?? p.disc ?? (p.prodYear != null ? p.prodYear - 1 : null);
-    if (p.v == null || es == null) continue;
-    const c = isStr(p.f.country) ? byName.get(countryKey(p.f.country)) : null;
-    const py = clamp(p.prodYear ?? Y1, Y0, Y1);
-    const raw = c ? seriesAt(c, m, py, tmp).v : wa[py - Y0];
-    p.ca = c ? arrOf(c) : wa;
-    p.k = p.ca && raw > 0 ? 1 / raw : 0;
-    p.ref = c ? c.name : 'the world';
-    p.es = clamp(es, Y0, Y1 + 1);
-    const cum = p.cum = new Float32Array(Math.max(0, Y1 - p.es + 1));
-    let t = 0;
-    for (let y = p.es; y <= Y1; y++) cum[y - p.es] = t += p.v * ratioAt(prod, p, y) * 365e-6;
-    n++;
-  }
-  return { mode: m, prod, fields, n };
-}
-export const ratioAt = (prod, p, y) => (p.k ? clamp(p.ca[y - prod.Y0] * p.k, 0, 3) : 1);
-/** Estimated boe/d in year y, and Mboe produced up to y; 0 before es. */
-export const estRate = (prod, p, y) => (y < p.es ? 0 : p.v * ratioAt(prod, p, y));
-export const estCum = (prod, p, y) => (y < p.es ? 0 : p.cum[Math.min(y, prod.Y1) - p.es]);
+/* ── field sizes (plan 0012 D23, the owner's choice: fields as reported, no estimates) ─────────── *
+ * The tracker gives ONE output figure per unit, for its prodYear, and no series. So a field is sized only
+ * in Annual at the newest year, by that figure for the mode shown; in every other year, and in
+ * Cumulative, it is an unsized dot. Nothing here draws or prints a field figure for a year the tracker
+ * does not report it. */
+/** The unit's reported figure for mode m ('oil' | 'gas' | 'total'), boe/d, or null when it reports none. */
+export const fieldRate = (p, m) => (m === 'oil' ? p.oil : m === 'gas' ? p.gas : p.v);
+/** Whether discs are sized in year y: Annual, at the newest year Y1, only. */
+export const sizesShown = (cum, y, Y1) => !cum && y === Y1;
+/** The figure a field's disc is sized by in year y: a number (0 included), or null for an unsized dot. */
+export const sizeOf = (p, m, cum, y, Y1) => (sizesShown(cum, y, Y1) ? fieldRate(p, m) : null);
 
 /* ── the credit line: one short name per source, word for word as the stock app built it ── */
 export function shortSource(a) {

@@ -3,9 +3,9 @@
 Every country's oil and gas production from 1900 to the latest Energy Institute year, annual
 or cumulative, as a choropleth with a year player; under the map, the year's world output as
 shares (the Ledger, below); and 7 055 fields from Global Energy Monitor's Global Oil and Gas
-Extraction Tracker that follow the same player (a ring from discovery, filled from first
-production), sized by the reported rate, by an estimate that moves with the country's series, or
-by remaining reserves. Find fields, companies, basins and countries; light up a company's or a
+Extraction Tracker as the tracker records them: a ring from discovery, filled from first
+production, an unsized dot in every year, and sized only in Annual at the newest year, by the one
+output figure the tracker reports for each (below). Find fields, companies, basins and countries; light up a company's or a
 basin's fields; the tracker's own outlines appear at high zoom; a country's details list its
 units against the national figure.
 
@@ -55,7 +55,7 @@ data/shade/*.webp    the sea floor at 30 arc seconds, 17 tiles over seven    0.6
                      oil and gas regions; data/shade.json names them         (3 kB)
 data/fields.json     the tracker's units, production, reserves, outlines     2.5 MB    by hand, when a new tracker release is dropped in
 index.html, style.css, app.js   the page, the house look, the map, the Ledger and the player
-js/data.js           the data contract, the shape checks, the series, the Ledger's partition, the field years and estimate (pure)
+js/data.js           the data contract, the shape checks, the series, the Ledger's partition, the field years and the size rule (pure)
 js/units.js          every number, unit and date the app writes (pure)
 js/track.js          the year track, the app's own slider
 fonts/               the house face, ysabeau-office-gw.woff2, and its OFL.txt
@@ -91,12 +91,19 @@ owns the fields. `tools/test_decode.mjs` checks it against a partition written i
 - The country figures are energy-equivalent barrels (Energy Institute convention); the
   tracker's per-field barrels are volumes. The country details say the tracker's share is
   indicative for that reason, and it can exceed 100 % (Norway about 127 %).
-- The tracker gives one rate per field, for one data year, and no series. A field that moves
-  with the player is an **estimate**: the reported rate scaled by its country's series, summed
-  since first production in Cumulative. The card and the details say so and keep the reported
-  figure beside it.
+- **No field estimates** (the owner's choice, plan 0012 D23, 2026-10-10). The tracker gives one
+  output figure per field, for one data year (1975 to 2029 in the March 2026 release; 87 % of them
+  2020 or later), and no series; open data measures only about 7 % of the world's oil and gas field
+  by field, and the best estimate for the rest was still off by a factor of 1.8 for a typical
+  field. So the year player moves the countries only. A field is sized only in Annual at the newest
+  year, by its reported figure for the mode shown (`sizeOf()` in `js/data.js`); in every other year,
+  and in Cumulative, it is a dot of one size, and the app draws no field history and no field
+  total. The card gives the reported figure with its data year (`Reported for 2024: …`) whatever
+  year the player shows; a data year from the release's own year on (6 units in the 2026 release,
+  Wafra's 2028 among them) is a year not yet over when the figure was given, so its card says
+  `Given for 2028, a year not yet over at the tracker's 2026 release: …`, and About counts them. Shelf Atlas is the place for the North Sea's fields measured through time.
 - Fields with no discovery or start year (1 748; 1 628 of them operating) appear, filled, the
-  year before their data year, where the estimate starts (or in the newest year without one),
+  year before their data year (or in the newest year without one),
   never in every year; the layers' counts name them apart. 618 units with no coordinates are left
   out by the pipeline, and 1 021 are marked approximate by the tracker.
 - The dissolved states (USSR, Czechoslovakia, Yugoslavia) keep their series under codes of
@@ -133,12 +140,12 @@ remembered as `wog.focus`.
 
 ## Size
 
-Measured by `node tools/check.mjs`: the ZIP is about 2.46 MB (2 147 335 B before the shading,
+Measured by `node tools/check.mjs`: the ZIP is about 2.46 MB (2 457 404 B at 1.2, 2 147 335 B before the shading,
 2 068 029 B before the house pass, 1 670 512 B before the 1:10m coast), against its cap of
 2 622 870 B; the app parses 3.6 MB of JSON on open, and reads the shading only when Terrain or
 Depth shading is switched on, each image only for its own key: the whole-world level (32 MiB
 decoded for each key that is on), then, for Depth shading past its detail, the tiles in view, at most four tiles' worth (16 MiB each) decoded at once. App code (the HTML, the
-CSS, `app.js` and `js/`) is held to 207 000 B (the lead's ruling on the measured figure, plan 0012 3.2) and
+CSS, `app.js` and `js/`, 205 743 B at 1.3) is held to 207 000 B (the lead's ruling on the measured figure, plan 0012 3.2) and
 `app.js` alone to 150 000 B, both enforced by
 `tools/check.mjs`; `fields.json` (2.5 MB) to 2.6 MB and `world.json` (970 387 B) to 1.4 MB,
 enforced by the build, which fails rather than ship over budget.

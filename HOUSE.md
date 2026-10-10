@@ -1502,7 +1502,8 @@ figures into its `ART.md`.
 | Volve | 33 420 825 (1.2, plan 0012 D18–D20) | its own, 33 600 000 (the lead's ruling, 2026-10-07: the data is 33.2 MB of it) | 369 523 of 370 000 (the lead's ruling, plan 0012 D18–D20) | 40 075 |
 | Anatomy | 24 552 816 (after its pass and the family fixes of 2026-10-02) | 30 692 577 | 116 467 | 40 075 |
 | Shelf Atlas | 1 980 340 (after its pass, the data follow-up and the family fixes of 2026-10-02) | 2 413 130 | 184 002 of 200 000 (the lead's ruling, plan 0011 D15) | 40 075 |
-| World Oil & Gas | 2 147 335 (after its pass and the family fixes of 2026-10-02) | 2 622 870 | 199 975 of 200 000 (the house's cap, plan 0011 D17 standing; `app.js` 118 407 of its own 150 000) | 40 075 |
+| World Oil & Gas | 2 459 053 (1.3, plan 0012 D23: no field estimates; `ART.md`'s own size moves the last digits) | 2 622 870 | 205 743 of 207 000 (the lead's ruling, plan 0012 3.2; `app.js` 121 449 of its own 150 000) | 40 075 |
+| Warming World | 1 268 496 (1.2, plan 0012 D21–D22, with the demo snapshot; the Pages ZIP carries the live one) | its own, 2 000 000 | 229 889 of 230 500 (the lead's ruling, plan 0012 D21–D22) | 64 666 stored |
 | Snug Kart | 619 403 (after its pass and the family fixes of 2026-10-02) | 720 806 | 242 778 of 244 000 (the lead's ruling, plan 0011 D20; held at 220 070 before it) | 40 075 |
 | Running Dashboard | 1 081 046 (after its pass, the data follow-up, the family fixes and the owner's six and seventh of 2026-10-03) | 1 340 193 | 251 775 of 252 000 (the lead's rulings, plan 0011 D23–D24 and D32 for the owner's six; held at 236 521 before them) | 41 291 |
 | Finances | 133 546 (1.2, plan 0012 package 4) | 162 916 (the house rule for package 4: 130 333 before the pass × 1.25; 131 000 before it, plan 0011 D27) | 127 140 of 200 000 | 40 075 |

@@ -105,6 +105,22 @@ const SAY = {
 export const sayUnit = (u) => SAY[u] || u;
 export const fieldSpoken = (v, kind, sys, rate = true) => `${sig3(fieldValue(v, kind, sys), true)} ${sayUnit(fieldUnit(kind, sys, rate))}`;
 
+/* A field's one reported figure (plan 0012 D23) for mode m ('oil' | 'gas' | 'total') in system sys, with its
+ * data year, whatever year the player shows: { value, unit, line, spoken }. oil and gas are boe/d or null; the
+ * tracker publishes no other year's figure, so none is given. A data year from the tracker's release year on
+ * (release, a year or null) is a year not yet over when the figure was given, so it is never called reported. */
+const MODE_WORD = { oil: 'Oil', gas: 'Gas', total: 'Oil and gas' };
+export const aheadOf = (year, release) => year != null && release != null && year >= release;
+export function fieldReport(oil, gas, year, m, sys, release = null) {
+  const v = m === 'oil' ? oil : m === 'gas' ? gas : oil == null && gas == null ? null : (oil || 0) + (gas || 0), kind = m === 'total' ? 'oe' : m;
+  const given = [['oil', oil], ['gas', gas]].filter(([, x]) => x != null);
+  const parts = given.map(([k, x]) => `${field(x, k, sys)} of ${k}`), said = given.map(([k, x]) => `${k}, ${fieldSpoken(x, k, sys)}`);
+  const when = year == null ? 'Reported, with no data year' : aheadOf(year, release) ? `Given for ${year}, a year not yet over at the tracker\u2019s ${release} release` : `Reported for ${year}`;
+  const line = parts.length ? `${when}: ${parts.join(', ')}.` : '';
+  if (v == null) { const t = oil == null && gas == null ? 'No rate reported' : `No ${m} reported`; return { value: t, unit: '', line, spoken: said.length ? `${t}. ${when}: ${said.join(', ')}` : t }; }
+  return { value: sig3(fieldValue(v, kind, sys)), unit: `${NNBSP}${fieldUnit(kind, sys, true)}`, line, spoken: `${MODE_WORD[m]}, ${when.charAt(0).toLowerCase()}${when.slice(1)}: ${fieldSpoken(v, kind, sys)}` };
+}
+
 /* ── instants ── */
 export function clock(ms) { const d = new Date(ms); return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`; }
 export function dayMonth(ms) { const d = new Date(ms); return `${d.getDate()} ${MONS[d.getMonth()]}`; }

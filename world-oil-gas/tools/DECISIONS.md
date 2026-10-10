@@ -1137,3 +1137,212 @@ added): 0 console errors; 1970 Kazakhstan, Ukraine and Lithuania open The USSR; 
 - **Recorded rather than changed:** the brief's example readout "The USSR, 1985" cannot occur. Under the
   rule as built, the USSR is drawn only in years before Russia's own series, which begins in 1985.
 
+
+## Plan 0012 D23 (the builder, 2026-10-10): fields as reported, no estimates; version 1.2 → 1.3
+
+The brief: `docs/plans/0012-the-owners-brief-of-2026-10-06.md`, D23, its last bullet binding. The owner,
+2026-10-10, with screenshots of Ekofisk drawn far smaller than Troll: *"Ekofisk is relatively small in the
+worls view compared to troll. Something wrong?"*, then *"Neess to be handled properly globally!"*. The
+research (`tools/.work/research/`) found open per-field histories for about 7 % of the world's oil and gas,
+and the best estimate for the rest still off by a factor of 1.8 for a typical field (×5.4 at the 90th
+percentile). The owner: *"Maybe better to remove the functipnality then? Just focus on coutries etc?"*, and,
+offered three ways, chose **fields as reported**. The lead's ruling on measured sources and the national
+allocation is withdrawn: no `measured.json`, no BOEM fetch. The change list was applied in 3.2 (1.2); this
+pass is D23 alone. The data files did not change (`check.mjs`'s pins). Before pictures (1.2, Chromium,
+North Sea, Annual 2024 and 1985, Cumulative 2024, the cards) are in `tools/.work/d23/before-chromium/`.
+
+### What changed
+
+1. **No estimates anywhere.** `estimate()`, `estRate`, `estCum`, `ratioAt` and `refArr` left `js/data.js`;
+   every use left `app.js` (the disc sizes, the card's lines, the details' `Estimate` row and sentence, the
+   test hook's `estimate()`); their test left `test_decode.mjs`. A new `check.mjs` item fails if any shipped
+   `.html`, `.js` or `.md` holds the estimate's functions or words again.
+2. **The year player moves the countries only**: the shading, the Ledger and the world line, untouched.
+3. **Fields as the tracker records them.** `fieldYears()`'s rules unchanged (a ring from discovery, filled
+   from production start, the undated units the year before their data year); its comments no longer call
+   that year "the estimate's start". Every unsized field is a dot of one size, `DOT_R` 3 px: filled, pale
+   (no figure for the mode shown) or a ring (found, not yet producing). Zero and no figure stay apart: a
+   reported zero is the smallest disc (2 px) where sizes are drawn, no figure a pale dot.
+4. **The size rule** (`sizeOf()`, `sizesShown()`, `fieldRate()` in `js/data.js`): sized only in Annual at the
+   player's last year, by the one output figure the tracker reports, for the mode shown (oil, gas, or their
+   sum), on the stock rate scale (`sizeR()`, area by rate, 2 to 24 px); every other year and Cumulative,
+   dots. `buildFields()` keeps each unit's `oil` and `gas` for it.
+5. **The card** (`fieldReport()` in `js/units.js`, so the decode test can read its words): the reported figure
+   for the mode with its data year, whatever year the player shows (`11 000 Sm³ o.e./d`, `Reported for 2024:
+   9 730 Sm³/d of oil, 1.23 million Sm³/d of gas.`), `No rate reported` (or `No gas reported` in Gas for a
+   unit reporting oil only) with no line; rows Fuel, Status, Discovered, First production, Operator and the
+   reserves with their class and year (`Liquids remaining, 2023`, `Gas remaining, 2023`). Spoken: `Ekofisk
+   Oil and Gas Field (Norway), Norway, offshore. Oil and gas, reported for 2024: 11000 standard cubic meters
+   of oil equivalent a day.` A field's card no longer changes with the year (it said `Not yet found` and
+   `Not yet producing` before; the details' `On the map` row still says that, from the tracker's years).
+6. **Details**: the `Estimate` row and the estimate's sentence gone; the volumes note says the tracker
+   publishes no series, so the map sizes a field only in Annual at the newest year. The reserves rows and
+   `Years of reserves at the reported rate` (reserves over the reported rate, data over data) kept. A
+   country's `In the tracker` comparison (summed reported rates against the country's figure for their year)
+   kept: it never depended on the estimate.
+7. **The legend** (the field key in Map layers; the front is unchanged, the owner's front-text rule kept):
+   the three size samples only where sizes are drawn, in the mode's unit, with `Size: each field's reported
+   oil and gas, for its one data year.`; elsewhere one line, `Dots: fields where found or producing by 1985.
+   Sized only in Annual, 2024.`
+8. **About**: the fields paragraph rewritten. The year player moves the countries only; the dots as
+   recorded; then, worked out from `data/fields.json` at runtime (`fieldYearsSaid()`, so a new tracker
+   release stays true): `The tracker gives one output figure per field, for one data year: 5 677 units carry
+   one, for data years from 1975 to 2029 (4 949 of them, 87.4 %, for 2020 or later; 15 with no year). So a
+   field is sized only in Annual, in 2024, …; in every other year, and in Cumulative, every field is a dot of
+   one size. The map shows no field histories or totals: none are published for most of the world.`; Shelf
+   Atlas named for the North Sea's fields measured through time. Every sentence on the estimate gone, the
+   fields' `Changes:` line included.
+9. **Version 1.3** (HOUSE 13: a pass is a minor bump). `check.mjs` pins it.
+10. **Prose**: `NOTES.md` (the intro, the files list, the honesty notes: the owner's decision recorded, the
+    estimate's note removed), `ART.md` (the look, the signature's candidates, the fields' forms, the caption
+    line, the card, the details, Map layers, About, the budgets), `PROMPT.md` (its two sentences on the
+    estimate), `Template/README.md` (the entry no longer describes fields moving or growing through time; the
+    install heading untouched), `Template/HOUSE.md` 8 (the row, measured).
+
+### Measured (this Mac; headless figures are trends, never phone evidence)
+
+- `node tools/check.mjs`: 51 ok, all pass. App code **203 322 B** of 207 000 (1.2: 206 603; index.html 20 448,
+  style.css 25 061, app.js 119 619, js/data.js 24 167, track.js 5 938, units.js 8 089); app.js 119 619 of
+  150 000; fonts 40 075; ZIP **2 457 826 B** of 2 622 870 (1.2: 2 457 404), with `ART.md`'s figure converged.
+- `node tools/test_decode.mjs`: 25 ok, all pass. `python3 tools/art/palette.py`: ALL CHECKS PASS.
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: 138 ok, 0 FAIL, both themes; the scrub at 2, 8 and
+  20 years a second with 0 frames off the year drawn.
+- Driven by touch at 390 x 844, DPR 2, in Chromium (CDP touch) and WebKit (touchscreen taps), light and dark,
+  with `tools/.work/d23/drive.mjs`: the track's end and 1985 by a tap, Ekofisk and Troll tapped in Annual 2024,
+  Cumulative 2024 and 1985 (the same card each time), Map layers in 1985 and 2024, Troll's Details, Oil, focus
+  mode with play, About. No console error in any. Pictures in `tools/.work/d23/after-*/`, before in
+  `tools/.work/d23/before-chromium/`.
+
+### Taste calls this pass made (each reversible)
+
+1. **`Size fields by` (`Production`, `Reserves`) is gone**, and with it `wog.size` (retired like `wog.legend`
+   and `wog.rings`). The brief sizes a field *by the one output figure the tracker reports*; reserves sized in
+   every year would break "every other year, every field is a dot". The reserves stay on the card and in the
+   details. The alternative: keep `Reserves` under the same rule (Annual, newest year only).
+2. **"Fields follow the year" stays.** Off, every field that passes the filters is drawn whatever its dates;
+   the size rule is the same (sized only in Annual at the newest year).
+3. **Pale follows the mode**: in Oil a unit with no oil figure is pale, in Gas one with no gas figure, in
+   every year. Before, pale meant no figure at all; with sizes by mode, one rule for both is plainer.
+4. **One dot size, 3 px, at every zoom** (rings were 3.5 px, no-figure dots 2.5): the brief's "a dot of one
+   size". At the whole-world view of 2010 the Gulf is busy but legible (`tools/.work/d23/layers-key-world-2010.png`).
+5. **The card's line names each part the tracker reports** (`… of oil, … of gas`) after its data year, and
+   the big figure is the mode's; a field's card shows the same figure in every year.
+6. **About's data years are counted at runtime** from `data/fields.json` (1975 to 2029, 87.4 % for 2020 or
+   later), not written as fixed figures; `NOTES.md` carries the same figures for the March 2026 release.
+7. **The gas size samples** read `1.00 million`, `10.0 million`, `100 million Sm³/d` (the house's three
+   figures).
+
+### Checks changed
+
+`check.mjs`: miniapp version `1.3`; storage (`wog.size` retired; the count of keys read before is printed,
+15); new, item 15's D23 check (no estimate in the shipped code or text; discs sized by `sizeOf()`).
+`test_decode.mjs`: the estimate's check replaced by four: no estimate export remains; Annual 2024 sizes every
+unit by its reported figure in each mode (21 165 cases: 14 042 sized, 848 a reported zero, 6 275 no figure);
+every other year and Cumulative every field a dot (5 270 085 cases, 0 sized); Troll and Ekofisk 11.76 to 1 in
+oil and gas (Ekofisk the larger in Oil); the card's words for Troll (SI and barrels), Nuayyim (no figure) and
+Burgan in Gas (`No gas reported`). `shoot.mjs`: the rims' check reads `__wog.field(id).radius` in place of
+the removed `__wog.estimate(id).radius` (F8's rule: an assertion that read what this change deletes changes
+by the same rule); per theme, new: About's fields paragraph (the data years from the file, no word of an
+estimate); the North Sea in Cumulative 2024 (383 fields) and Annual 1985 (164) every field a 3 px dot,
+Ekofisk measured on the picture; Annual 2024 Troll 21.33 px (drawn 21.5) and Ekofisk 6.22 px (drawn 6.25),
+areas 11.76 to 1 as their reported figures; a real tap on Ekofisk in 1985 opens `Reported for 2024: …` and
+nothing for 1985, the same in 2024; the Layers size key in 2024 and its one line in 1985. The test hook's
+`state` gains `sizes`, its `field()` gains `radius`, `sizedBy` and `rate`.
+
+### Bugs on record
+
+Plan 0009 item 5 (*Cumulative blanks Sweden and Ireland after 2017*), fixed as B1: still fixed
+(`test_decode.mjs` B1 and `shoot.mjs` B1 pass). `docs/review/` names no World Oil & Gas bug. DEVICE_TEST_MATRIX
+rows 157, 163 and 184 are phone rows, not run here.
+
+### Camera strings
+
+None changed: `Updated` (the stamp), `Play`, `Pause`, the slider `Year`, `Show the controls`
+(`MarketingCameraCase.swift` `waitForWorldOilGas()`; `MarketingShotsUITests.swift` shot 22 and the README
+panes). The README pane after four seconds of play now shows the fields as dots.
+
+### Not verified here
+
+The phone (no device on this Mac): the look of 3 px dots at DPR 3, a tap on a 3 px dot among neighbors, the
+change of picture between the newest year and the year before it while playing, VoiceOver on a field's card.
+A DEVICE_TEST_MATRIX row is for the lead.
+
+## Plan 0012 D23, after QA and review (the fixer, 2026-10-10)
+
+QA passed with one should (the phone row, the lead's) and a process nit; the review passed with four
+shoulds and two nits. Every should is applied or handed to the lead below; both nits were free and taken.
+The data, the pipeline and the camera strings are unchanged.
+
+### Applied
+
+1. **Hit target for unsized dots** (review should 1). `fieldAt()` counts a tap within
+   `max(r, HIT_R) + 2` px, `HIT_R` 9, scoring by that same radius, so the 3 px dot is still drawn at 3 px
+   but is an 11 px target, as a 1.2 giant's estimated disc was. Inside a country under the outlines' zoom
+   (where the 14 px near-fallback is off) Samotlorskoye in 1985 now opens at +0, +6 and +9 px in Chromium
+   and WebKit by real touch (`tools/.work/fix/drive.mjs`); `shoot.mjs` gains the +6 px check, both themes.
+2. **No clamped disc at any zoom** (review should 2). The cap was 24 px at every zoom while `zoomF()`
+   reaches 2.2, so Troll was drawn 24.00 for 25.06 at Find's zoom and the barrels key's top sample 24 for
+   27.8. Now `rMax()` is `FIELD_RMAX × max(1, zoomF())`: 24 px up to the reference zoom (the world view
+   unchanged), growing with the zoom above it. Since radius and cap then grow together, a disc is clamped
+   only above about 3.6 million boe/d, and this release's largest figure is Burgan's 1.7 million: nothing
+   is clamped at any zoom. At Find's zoom (360 × 40) Troll is 25.06 px and Ekofisk 7.31 px, 11.76 to 1;
+   Burgan 36.28 px; the barrels key's `1.00 million boe/d` 27.83 px, 10 : 1 in area with `100 000`. For a
+   later release whose figure would be clamped, the key's note ends `; the largest are all drawn at one
+   capped size` (HOUSE 6.5's open end; not reachable with this data, so untested on screen). `shoot.mjs`
+   runs the Troll and Ekofisk ratio, Burgan's true radius and the key's top sample at Find's zoom.
+   Taste call: the reviewer's other way, capping `zoomF()` so the largest unit stays at 24 px, would have
+   shrunk every zoomed-in disc to about two thirds of 1.2's; this way the zoomed North Sea looks as it did.
+3. **Years still to come** (review should 3). Six units carry a figure for a data year from the release's
+   own year (2026) on: Wafra 2028, Khamilah 2029, Jinzhou 23-2, Epu and Dammam 2 2027, Halten Øst 2026.
+   `fieldReport()` takes the release year and words them `Given for 2028, a year not yet over at the
+   tracker's 2026 release: 47 700 Sm³/d of oil.` (spoken the same). The release year is read from
+   `source.release`, then the file name, then `generatedAt` (`releaseYear()`). About adds, counted at
+   runtime: `For 6 of them the data year was not yet over at the tracker's 2026 release; their cards say
+   "Given for", not "Reported for".` `test_decode.mjs` pins Wafra's line and spoken words, the count of six,
+   and that a release-less call is unchanged; `shoot.mjs` pins About's sentence. **Whether such units are
+   sized in 2024 is left for the lead or the owner**: they still are, by the figure the tracker gives.
+4. **Nit: About's fields paragraph split in two** (the dots, the rim and outlines; then the sizes, the data
+   years and Shelf Atlas), and `A pale dot: the tracker reports no figure for the fuel shown.`
+5. **Nit: the spoken card keeps the screen's line** when the mode has no figure: Burgan in Gas is heard as
+   `… No gas reported. Reported for 2023: oil, 270000 standard cubic meters a day.` (`test_decode.mjs`).
+
+### For the lead
+
+- **The DEVICE_TEST_MATRIX row for 1.3** (QA's should and the review's fourth; `docs/` is outside this
+  pass's writes). On an iPhone 16-class phone and the iOS 18 floor: 3 px dots legible at DPR 3; a tap on a
+  dot among close neighbors (Gulf, whole world 2010); a tap 6 px off Samotlorskoye in 1985 opens the field,
+  not Russia; the change from dots in 2023 to sized discs in 2024 while playing; VoiceOver on a field's
+  card (Ekofisk, Burgan in Gas, Wafra); Find `Ekofisk` in 2024: Troll and Ekofisk discs at Find's zoom
+  (Troll about 25 px) not overrunning the plate.
+- QA's process nit (one read-only `git diff --stat`) needs nothing.
+
+### Measured (this Mac; headless figures are trends, never phone evidence)
+
+- `node tools/check.mjs`: all pass. App code **205 296 B** of 207 000 (index.html 20 476, style.css 25 061,
+  app.js 121 014, js/data.js 24 167, track.js 5 938, units.js 8 640); ZIP **2 458 911 B** of 2 622 870.
+- `node tools/test_decode.mjs`: all pass. `python3 tools/art/palette.py`: ALL CHECKS PASS.
+- `PLAYWRIGHT_MODULE=… SCREENSHOTS=1 node tools/shoot.mjs`: all pass, both themes, the new checks among them.
+- `tools/.work/fix/drive.mjs` and `drive2.mjs` by real touch at 390 x 844, DPR 2, Chromium (CDP touch) and
+  WebKit (touchscreen), light and dark, 0 console errors: Find Wafra and its card; Burgan in Gas, heard;
+  Find Ekofisk, radii at Find's zoom; the Layers size key there in SI and in kboe/d; Samotlorskoye 1985 at
+  +0, +6, +9 px; About's fields paragraphs. Pictures in `tools/.work/fix/`.
+
+### Camera strings
+
+None changed (`Updated`, `Play`, `Pause`, `Year`, `Show the controls`).
+
+### The lead's changes after the final (2026-10-10)
+
+- **Taps: the countries first.** The fix pass's 9 px floor (a tap finds a field within max(r, 9) + 2 px) made
+  countries in field-dense places (Kuwait, the Netherlands, Texas) hard to tap at the world's zoom. The
+  floor now applies only off a country with a series, or from the outlines' zoom (16 px a degree) on; over
+  such a country at the world's zoom a field wins only within its drawn disc + 2 px. The owner's direction
+  for D23 was *"Just focus on coutries etc"*. shoot.mjs checks both sides at Samotlorskoye in 1985: the
+  country at 12 px a degree, the field at 20.
+- **No figure is never drawn larger than a figure.** In the one sized year a field without a figure for the
+  mode is drawn at the smallest disc (FIELD_RMIN, 2 px), not the 3 px dot, so it cannot look larger than a
+  field that reports output.
+- **The pale dot's key reads "no figure for the fuel shown"**, since a pale dot now means no figure for the
+  mode, not no figure at all.
+- App code 205 743 B of 207 000.
+

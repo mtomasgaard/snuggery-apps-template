@@ -25,11 +25,14 @@
 // after the final review (the details sheet scrolled by an upright swipe at 375 × 667 and 390 × 719, the
 // Ledger's three widest named every year with no country, the United States and Norway chosen, none of
 // their labels starting in its block's last pixels, a tap on a block and on a drawn name, the producers'
-// reach, the legend's 1 000 tick, plain land in the caption, the caption's "under 1 %" and estimate in
-// every year at 390, 320 and on its side, a snapshot with no world series) and the widths (B18). Plan 0012,
-// package 3.2: the former states drawn as one shape in their own color and opened by a tap (1970, Annual
-// and Cumulative; each successor by its own in 1995), the rims' key, and the shading (nothing read until
-// switched on, tiles only once zoomed in, the sea shaded and the land masked).
+// reach, the legend's 1 000 tick, plain land in the caption, the caption in every year at 390, 320 and on
+// its side, a snapshot with no world series) and the widths (B18). Plan 0012, package 3.2: the former
+// states drawn as one shape in their own color and opened by a tap (1970, Annual and Cumulative; each
+// successor by its own in 1995), the rims' key, and the shading (nothing read until switched on, tiles
+// only once zoomed in, the sea shaded and the land masked). Plan 0012 D23, per theme: the North Sea in
+// Cumulative 2024 and Annual 1985 with every field a dot of one size, Annual 2024 with Troll's and
+// Ekofisk's discs in the ratio of their reported figures, the card's "Reported for" line in every year,
+// and the Layers sheet's size key only where sizes are drawn.
 // Pictures: tools/.work/shots/, and with SCREENSHOTS=1 screenshots/*-{light,dark}.png;
 // never screenshots/app.png, the README's composite.
 
@@ -363,7 +366,106 @@ for (const scheme of schemes) {
   await A.tapEl('#stamp'); await page.waitForTimeout(300);
   { const ca = await contrastOf(w); check(ca.worst[0] >= 4.5, `text contrast in About: ${ca.n} text nodes, the lowest ${ca.worst[0]}:1 (${ca.worst[1]})`); }
   await A.shot(`about-${scheme}`, scheme === 'light');
+  {
+    // About's fields paragraph says what is drawn and why, with the data years measured from the file
+    const t = await text(A, 'about-body'), dated = fieldsFile.fields.filter((x) => (Number.isFinite(x.oilBpd) || Number.isFinite(x.gasBoepd)));
+    const ys = dated.map((x) => x.prodYear).filter(Number.isInteger).sort((a, b) => a - b);
+    const want = `for data years from ${ys[0]} to ${ys[ys.length - 1]}`, rel = +/\d{4}/.exec(fieldsFile.source.release)[0], ahead = ys.filter((y) => y >= rel).length;
+    const aheadSaid = `For ${ahead} of them the data year was not yet over at the tracker\u2019s ${rel} release`;
+    check(t.includes(want) && t.includes(aheadSaid) && t.includes(`So a field is sized only in Annual, in ${Y1}`) && t.includes('see Shelf Atlas') && !/estimat/i.test(t),
+      `About: "${want}", "${aheadSaid}" (this file: ${ys.length} dated figures of ${dated.length}), sized only in Annual, ${Y1}; Shelf Atlas named for the North Sea through time; no word of an estimate`);
+  }
   await page.keyboard.press('Escape');
+  // plan 0012 D23, the owner's choice: fields as reported, no estimates. The North Sea: Cumulative 2024 and
+  // Annual 1985 draw every field as a dot of one size; Annual 2024 sizes Troll and Ekofisk by their reported
+  // figures; a field's card gives its one reported figure with its data year, whatever year is shown
+  {
+    const troll = fieldsFile.fields.find((x) => x.name === 'Troll Oil and Gas Field (Norway)'), eko = fieldsFile.fields.find((x) => x.name === 'Ekofisk Oil and Gas Field (Norway)');
+    const sea = fieldsFile.fields.filter((x) => x.lon > -4 && x.lon < 12 && x.lat > 53 && x.lat < 64).map((x) => x.id);
+    await w(() => window.__wog.flyTo(3.2, 58.6, 360 * 20)); await A.frame();
+    const pl = await A.rect('#map-wrap'), green = hex(T.fuel.both);
+    const dots = () => w((ids) => { const s = window.__wog.state, rs = new Set(); let n = 0; for (const id of ids) { const f = window.__wog.field(id); if (f && f.visible && f.x >= 0 && f.x <= s.W && f.y >= 0 && f.y <= s.H) { n++; rs.add(f.radius); if (f.sizedBy !== null) rs.add('sized'); } } return [n, [...rs]]; }, sea);
+    // the drawn radius: along eight rays from the center, the last pixel of the fuel's color before its rim
+    // (a smaller neighbor drawn on top crosses some rays with its own rim; the clearest ray is the disc's)
+    const drawn = async (x) => { const [cx, cy] = await w(([a, b]) => window.__wog.project(a, b), [x.lon, x.lat]), img = await A.png(); let best = 0;
+      for (let a = 0; a < 8; a++) {
+        const dx = Math.cos((a * Math.PI) / 4), dy = Math.sin((a * Math.PI) / 4);
+        let last = -1;
+        for (let k = 0; k < 120; k++) {
+          const on = Math.max(...img.at(Math.round((pl.left + cx + (dx * k) / 4) * 2), Math.round((pl.top + cy + (dy * k) / 4) * 2)).map((v, i) => Math.abs(v - green[i]))) <= 40;
+          if (on) last = k; else if (last >= 0 && k - last > 3) break;
+        }
+        best = Math.max(best, (last + 1) / 4);
+      }
+      return best; };
+    await A.tapEl('#accum [data-accum="cumulative"]'); await setYear(A, Y1);
+    const c24 = await dots(), cE = await drawn(eko);
+    await A.shot(`d23-north-sea-cumulative-${Y1}-${scheme}`, false);
+    await A.tapEl('#accum [data-accum="annual"]'); await setYear(A, 1985);
+    const a85 = await dots(), aE = await drawn(eko);
+    await A.shot(`d23-north-sea-1985-${scheme}`, false);
+    check(c24[0] > 300 && c24[1].length === 1 && a85[0] > 100 && a85[1].length === 1 && c24[1][0] === a85[1][0] && Math.abs(cE - c24[1][0]) <= 1 && Math.abs(aE - a85[1][0]) <= 1,
+      `D23: the North Sea in Cumulative ${Y1} (${c24[0]} fields) and in Annual 1985 (${a85[0]}): every field a dot of one size (radius ${c24[1].join(', ')} and ${a85[1].join(', ')} px; Ekofisk drawn ${cE} and ${aE} px), none sized`);
+    // Ekofisk's card in 1985: its reported figure for 2024, never a figure for 1985
+    const [ex, ey] = await w(([a, b]) => window.__wog.project(a, b), [eko.lon, eko.lat]);
+    await A.tapAt(pl.left + ex, pl.top + ey); await A.frame(); await page.waitForTimeout(250);
+    const line = `Reported for ${eko.prodYear}: ${sig3(eko.oilBpd / 6.2898)}${NN}Sm³/d of oil, ${sig3(eko.gasBoepd * 159)}${NN}Sm³/d of gas.`;
+    const card85 = await w(() => [document.getElementById('card-name').textContent, document.getElementById('card-value').textContent + document.getElementById('card-unit').textContent, document.getElementById('card-sub').textContent, document.getElementById('card').textContent, document.getElementById('live').textContent]);
+    await A.shot(`d23-ekofisk-1985-${scheme}`, false);
+    await A.tapEl('#card-close'); await A.frame(); await page.waitForTimeout(330);
+    await setYear(A, Y1);
+    const a24 = await dots(), r = await w(([a, b]) => [window.__wog.field(a).radius, window.__wog.field(b).radius, window.__wog.field(a).sizedBy, window.__wog.field(b).sizedBy], [troll.id, eko.id]);
+    const dT = await drawn(troll), dE = await drawn(eko);
+    await A.shot(`d23-north-sea-${Y1}-${scheme}`, false);
+    const want = (troll.oilBpd + troll.gasBoepd) / (eko.oilBpd + eko.gasBoepd);
+    check(a24[1].includes('sized') && r[2] === troll.oilBpd + troll.gasBoepd && r[3] === eko.oilBpd + eko.gasBoepd && Math.abs((r[0] / r[1]) ** 2 - want) < 1e-6 && Math.abs(dT - r[0]) <= 1.25 && Math.abs(dE - r[1]) <= 1.25,
+      `D23: Annual ${Y1}, the North Sea sized: Troll's disc ${r[0].toFixed(2)} px (drawn ${dT}) and Ekofisk's ${r[1].toFixed(2)} px (drawn ${dE}), areas ${((r[0] / r[1]) ** 2).toFixed(2)} to 1, the ratio of their reported figures for 2024 (${want.toFixed(2)})`);
+    await A.tapAt(pl.left + ex, pl.top + ey); await A.frame(); await page.waitForTimeout(250);
+    const card24 = await w(() => [document.getElementById('card-name').textContent, document.getElementById('card-sub').textContent, [...document.querySelectorAll('#card-rows dt')].map((d) => d.textContent).join(', ')]);
+    await A.shot(`d23-ekofisk-${Y1}-${scheme}`, false);
+    check(card85[0] === eko.name && card85[1] === `${sig3((eko.oilBpd + eko.gasBoepd) / 6.2898)}${NN}Sm³ o.e./d` && card85[2] === line && !/1985|stimat/.test(card85[3]) && card24[1] === line
+      && card24[2] === `Fuel, Status, Discovered, First production, Operator, Liquids ${eko.resClass}, ${eko.resYear}, Gas ${eko.resClass}, ${eko.resYear}` && /^Ekofisk .*\. Oil and gas, reported for 2024: \d+ standard cubic meters of oil equivalent a day\.$/.test(card85[4]),
+      `D23: a tap on Ekofisk in 1985 opens its card with "${card85[1]}" and "${card85[2]}", nothing for 1985; the same line in ${Y1}; the rows ${card24[2]}; VoiceOver hears "${card85[4].slice(0, 90)}…"`);
+    // the Layers sheet: the size key only where sizes are drawn
+    await A.tapEl('#card-close'); await A.frame(); await page.waitForTimeout(330);
+    await A.tapEl('#btn-layers'); await A.frame();
+    const k24 = await w(() => [document.getElementById('sizes').hidden, document.getElementById('size-note').textContent, document.getElementById('szl2').textContent]);
+    await setYear(A, 1985);
+    const k85 = await w(() => [document.getElementById('sizes').hidden, document.getElementById('size-note').textContent]);
+    await A.shot(`d23-layers-1985-${scheme}`, false);
+    await A.tapEl('#layers-close'); await setYear(A, Y1);
+    // the review's two: at Find's zoom (360 × 40 px a degree) Troll and Ekofisk keep their true ratio, no
+    // disc clamped (Burgan, the largest figure, drawn at its true radius); and the lead's rule for taps
+    // (D23, the countries first): a tap 6 px off a 3 px dot on land (Samotlorskoye in 1985, inside Russia)
+    // opens the country under the outlines' zoom and the field from the outlines' zoom on
+    await w(() => window.__wog.flyTo(3.2, 58.6, 360 * 40)); await A.frame();
+    const burgan = fieldsFile.fields.find((x) => x.name === 'Burgan Oil and Gas Field (Kuwait)');
+    const zf = Math.min(2.2, Math.max(0.7, Math.pow(360 * 40 / 1500, 0.4)));
+    await A.shot(`d23-north-sea-fly-${Y1}-${scheme}`, false);
+    await A.tapEl('#btn-layers'); await A.frame();
+    const rF = await w(([a, b, c]) => [window.__wog.field(a).radius, window.__wog.field(b).radius, window.__wog.field(c).radius, document.getElementById('size-note').textContent, +document.querySelector('#sz2 circle').getAttribute('r')], [troll.id, eko.id, burgan.id]);
+    await A.shot(`d23-layers-fly-${Y1}-${scheme}`, false);
+    await A.tapEl('#layers-close'); await A.frame();
+    const trueR = (v) => 4 * Math.sqrt(v / 1e5) * zf;
+    check(Math.abs((rF[0] / rF[1]) ** 2 - want) < 1e-6 && Math.abs(rF[0] - trueR(troll.oilBpd + troll.gasBoepd)) < 1e-9 && rF[0] > 24 && Math.abs(rF[2] - trueR(burgan.oilBpd)) < 1e-9 && rF[3] === "Size: each field's reported oil and gas, for its one data year." && Math.abs(rF[4] - trueR(1e5 * 6.2898)) < 1e-6,
+      `D23 at Find's zoom: Troll ${rF[0].toFixed(2)} px and Ekofisk ${rF[1].toFixed(2)} px, areas ${((rF[0] / rF[1]) ** 2).toFixed(2)} to 1 (${want.toFixed(2)}); Burgan ${rF[2].toFixed(2)} px, its true radius; the key's top sample ${rF[4].toFixed(2)} px, its true radius, and no capped end: "${rF[3]}"`);
+    const sam = fieldsFile.fields.find((x) => /^Samotlorskoye Oil and Gas Field/.test(x.name));
+    const samTap = async (scale, tag) => {
+      await w((sc) => window.__wog.flyTo(76.666, 61.167, sc), scale); await setYear(A, 1985); await page.waitForTimeout(150);
+      const [sx, sy] = await w(([a, b]) => window.__wog.project(a, b), [sam.lon, sam.lat]), sr = await w((id) => window.__wog.field(id).radius, sam.id);
+      await A.tapAt(pl.left + sx + 6, pl.top + sy); await A.frame(); await page.waitForTimeout(250);
+      const card = await w(() => { const c = document.getElementById('card'), n = document.getElementById('card-name'); return c.hidden ? '' : n.hidden ? `country: ${document.getElementById('card-where').textContent.trim()}` : n.textContent; });
+      await A.shot(`d23-samotlor-1985-${tag}-${scheme}`, false);
+      if (card) { await A.tapEl('#card-close'); await A.frame(); await page.waitForTimeout(330); }
+      return [sr, card];
+    };
+    const [srW, cardW] = await samTap(360 * 12, 'world'), [srO, cardO] = await samTap(360 * 20, 'outlines');
+    check(srW === 3 && cardW === 'country: Russia' && srO === 3 && cardO === sam.name,
+      `D23: a tap 6 px off Samotlorskoye's ${srW} px dot in 1985, inside Russia, opens "${cardW}" at 12 px a degree (the country first) and "${cardO}" at 20 px a degree (the outlines' zoom)`);
+    await setYear(A, Y1); await w(() => window.__wog.home()); await A.frame();
+    check(!k24[0] && k24[1] === "Size: each field's reported oil and gas, for its one data year." && k24[2] === `100${NN}000${NN}Sm³ o.e./d` && k85[0] && k85[1] === `Dots: fields where found or producing by 1985. Sized only in Annual, ${Y1}.`,
+      `D23: the Layers sheet's size key in ${Y1} ("${k24[1]}", up to ${k24[2]}), none in 1985: "${k85[1]}"`);
+  }
   check(T.ledger && A.errors.length === 0, `no console error or warning, failed request or request outside the app${A.errors.length ? ': ' + A.errors.slice(0, 4).join(' | ') : ''}`);
   await A.ctx.close();
 }
@@ -606,7 +708,7 @@ console.log('\n== once (light)');
   {
     const ghawar = fieldsFile.fields.find((x) => x.name === 'Troll Oil and Gas Field (Norway)');
     await w(([lo, la]) => window.__wog.flyTo(lo, la, 360 * 40), [ghawar.lon, ghawar.lat]); await setYear(A, Y1); await A.frame();
-    const edge = async () => { const f = await w((id) => { const e = window.__wog.estimate(id); const p = window.__wog.field(id); return [p.x, p.y, e.radius]; }, ghawar.id); const plate = await A.rect('#map-wrap'), img = await A.png(); return img.at(Math.round((plate.left + f[0] + f[2]) * 2), Math.round((plate.top + f[1]) * 2)); };
+    const edge = async () => { const f = await w((id) => { const p = window.__wog.field(id); return [p.x, p.y, p.radius]; }, ghawar.id); const plate = await A.rect('#map-wrap'), img = await A.png(); return img.at(Math.round((plate.left + f[0] + f[2]) * 2), Math.round((plate.top + f[1]) * 2)); };
     const st0 = await w(() => [window.__wog.state.rim, getComputedStyle(document.querySelector('#field-key circle')).stroke]);
     const on = await edge();
     await A.tapEl('#btn-layers'); await A.frame();
@@ -986,8 +1088,7 @@ console.log('\n== once (light)');
   }
   check(A.errors.length === 0, `no console error after review${A.errors.length ? ': ' + A.errors.slice(0, 3).join(' | ') : ''}`);
   await A.ctx.close();
-  // the caption keeps the Ledger's number in every year: where a note leads (a former state's plain lands),
-  // the bar's "hatched, all under 1 %" follows it, and so does the estimate while the fields follow the year
+  // the caption keeps the Ledger's number in every year, with its key inside the fixed height
   for (const [wd, ht, upright] of [[390, 844, true], [320, 568, true], [844, 390, false]]) {
     const C = await open('light', { w: wd, h: ht });
     const rows = await C.w(async ([y0, y1]) => {

@@ -11,11 +11,13 @@
  * view moves; the Ledger is its own canvas, redrawn only when its year, mode, width, theme or chosen
  * country changes.
  *
- * FIELDS AND TIME. The tracker gives one rate per unit and no series. With "Fields follow the year"
- * on, a disc's size is an estimate (js/data.js estimate()); a unit appears at discovery as a ring and
- * fills at first production (fieldYears()). disc and start are resolved once per load into p.appear and
- * p.fill, the filters into p.pass and a company's or basin's highlight into p.hl, so a frame is
- * comparisons. Outlines are decoded on first need when zoomed in.
+ * FIELDS AND TIME. The tracker gives one output figure per unit, for one data year, and no series, so
+ * the year player moves the countries only. With "Fields follow the year" on, a unit appears at
+ * discovery as a ring and fills at first production (fieldYears()); a disc is sized only in Annual at
+ * the newest year, by its reported figure for the mode (js/data.js sizeOf()), and is an unsized dot in
+ * every other year and in Cumulative (plan 0012 D23). disc and start are resolved once per load into
+ * p.appear and p.fill, the filters into p.pass and a company's or basin's highlight into p.hl, so a
+ * frame is comparisons. Outlines are decoded on first need when zoomed in.
  *
  * THE FRAME. One requestAnimationFrame chain: play moves the wanted year on a clock, a held track sets
  * it to the year under the finger, and the frame takes the newest wanted year, sets `shown` and draws.
@@ -28,7 +30,7 @@
 import {
   clamp, isStr, decodePolyline, checkWorld, checkSnapshot, checkFields, lonToX, latToY, yToLat,
   buildProd, cumOf, seriesAt, valueAt, worldAt, seriesSpan, FORMER_STATE, LEAD, historicalLabels, shortName,
-  ledgerAt, fold, countryKey, buildFields, fieldYears, estimate, estRate, estCum, creditLine, formerUnions, MEMBERS,
+  ledgerAt, fold, countryKey, buildFields, fieldYears, fieldRate, sizeOf, sizesShown, creditLine, formerUnions, MEMBERS,
 } from './js/data.js';
 import * as U from './js/units.js';
 import { createTrack } from './js/track.js';
@@ -37,7 +39,7 @@ const STORE = {
   view: 'wog.view', units: 'wog.units', mode: 'wog.mode', year: 'wog.year', sel: 'wog.sel',
   fields: 'wog.fields', status: 'wog.status', labels: 'wog.labels',
   follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype',
-  size: 'wog.size', hl: 'wog.hl', depth: 'wog.depth', terrain: 'wog.terrain', focus: 'wog.focus', rim: 'wog.rim',
+  hl: 'wog.hl', depth: 'wog.depth', terrain: 'wog.terrain', focus: 'wog.focus', rim: 'wog.rim',
 };
 const FILES = { world: 'data/world.json', snapshot: 'data/snapshot.json', fields: 'data/fields.json' };
 const PATH_K = 4096;            // paths are built in world units × PATH_K
@@ -50,10 +52,11 @@ const ACCUM = { annual: 'Annual', cumulative: 'Cumulative' };
 const FIELD_VREF = 100000;      // boe/d that gets FIELD_RREF px
 const FIELD_RREF = 4;
 const FIELD_RMIN = 2;
-const FIELD_RMAX = 24;
-const RES_VREF = 1000;          // million boe of reserves that get the radius 100 000 boe/d gets
-const CUM_VREF = 2000;          // million boe to date that get it (Burgan's ~33 000 by 2024 matches its rate)
-const RING_R = 3.5;             // a not-yet-producing ring while sizes are estimated
+const FIELD_RMAX = 24;          // the largest disc at zoom factor 1 and below; above it the cap grows with the zoom, so ratios hold
+const HIT_R = 9;                // off a country with a series, or zoomed in to the outlines, a tap finds a field within max(its radius,
+                                // 9 px) + 2 px, so a 3 px dot is not a 3 px target; over such a country at the world's zoom only within
+                                // its drawn disc + 2 px, so the country under the finger stays tappable (D23: the countries first)
+const DOT_R = 3;                // every unsized field: a dot, a pale dot or a ring, all of one size
 const OUTLINE_SCALE = 360 * 16; // outlines only from 16 px a degree of longitude…
 const OUTLINE_MIN_PX = 12;      // …and each only once it is 12 px across on screen
 const FLY_SCALE = 360 * 40;     // how far a search result zooms in
@@ -128,7 +131,7 @@ let year = null;       // the year wanted: play, the keys and the track move it;
 let shown = null;      // the year last drawn; everything that carries a year reads it
 let sel = null;        // { kind: 'country', iso3, at? } | { kind: 'field', id }
 let showFields = true, showLabels = true, followYear = true;
-let statusFilter = 'operating', settingFilter = 'all', typeFilter = 'all', sizeBy = 'prod';
+let statusFilter = 'operating', settingFilter = 'all', typeFilter = 'all';
 let highlight = null;  // { kind: 'company' | 'basin', name }
 let depthPref = false, terrainPref = false, rimOn = true;
 let playing = false, focusMode = false, fontReady = false;
@@ -241,15 +244,9 @@ function colorsFor(y) {
   return hit;
 }
 
-/* The fields' estimate for the mode, rebuilt when the mode or a file changes. */
-let est = null;
-function buildEst() {
-  if (!prod || !fields || !fields.available) { est = null; return; }
-  if (est && est.mode === mode && est.prod === prod && est.fields === fields) return;
-  est = estimate(prod, fields, mode);
-}
 const followOn = () => followYear && shown != null;
-const estOn = () => followOn() && est != null && sizeBy !== 'res';
+/* Discs are sized only in Annual at the newest year (plan 0012 D23); everywhere else a field is a dot. */
+const sizesOn = () => !!prod && shown != null && !isCum() && shown === prod.Y1;
 const fieldsDrawn = () => showFields && !!fields && fields.available && fields.points.length > 0;
 const fieldVisible = (p) => p.pass === 1 && (!followOn() || p.appear <= shown);
 
@@ -434,19 +431,16 @@ function zoomF() {
   if (view.scale !== zfScale) { zfScale = view.scale; zfVal = clamp(Math.pow(view.scale / 1500, 0.4), 0.7, 2.2); }
   return zfVal;
 }
-const sizeR = (v, ref) => clamp(FIELD_RREF * Math.sqrt(v / ref) * zoomF(), FIELD_RMIN, FIELD_RMAX);
-/* While sizes are estimated: a small ring before production starts, the smallest dot in a year the
- * estimate is 0, else the estimate at its scale. */
+const rMax = () => FIELD_RMAX * Math.max(1, zoomF());
+const sizeR = (v) => clamp(FIELD_RREF * Math.sqrt(v / FIELD_VREF) * zoomF(), FIELD_RMIN, rMax());
+/* Annual at the newest year: area by the reported figure for the mode, the smallest disc for a reported
+ * zero or no figure, so a field without one never looks larger than one that reports (and a ring while not
+ * yet producing). Every other year and Cumulative: a dot. */
 function fieldRadius(p) {
-  let v = p.v, ref = FIELD_VREF;
-  if (sizeBy === 'res') { v = p.rv; ref = RES_VREF; }
-  else if (p.es != null && estOn()) {
-    if (p.fill > shown) return RING_R;
-    if (isCum()) { v = estCum(prod, p, shown); ref = CUM_VREF; } else v = estRate(prod, p, shown);
-    if (!(v > 0)) return FIELD_RMIN;
-  }
-  if (v == null || v <= 0) return FIELD_RMIN + 0.5;
-  return sizeR(v, ref);
+  if (followOn() && p.fill > shown) return DOT_R;
+  const v = prod ? sizeOf(p, mode, isCum(), shown, prod.Y1) : null;
+  if (v == null) return prod && sizesShown(isCum(), shown, prod.Y1) ? FIELD_RMIN : DOT_R;
+  return v > 0 ? sizeR(v) : FIELD_RMIN;
 }
 /* Of the discs under the finger, the one whose center is nearest relative to its size, so a tap on
  * the middle of a big field that a small one overlaps still finds the big one; failing that, with
@@ -456,8 +450,8 @@ function fieldAt(sx, sy, near0) {
   let hit = null, hitScore = Infinity, near = null, nearD = Infinity;
   for (const p of fields.points) {
     if (!fieldVisible(p)) continue;
-    const d = Math.hypot(worldToScreenX(p.x) - sx, worldToScreenY(p.y) - sy), r = fieldRadius(p);
-    if (d <= r + 2) { const score = d / (r + 2); if (score < hitScore) { hit = p; hitScore = score; } }
+    const d = Math.hypot(worldToScreenX(p.x) - sx, worldToScreenY(p.y) - sy), r = fieldRadius(p), hr = (near0 ? Math.max(r, HIT_R) : r) + 2;
+    if (d <= hr) { const score = d / hr; if (score < hitScore) { hit = p; hitScore = score; } }
     else if (near0 && d - r < 14 && d - r < nearD) { near = p; nearD = d - r; }
   }
   return hit || near;
@@ -472,7 +466,7 @@ function render() {
   drawSea();
   if (!geo) return;
   drawCountries();
-  if (fieldsDrawn()) { buildEst(); drawOutlines(); drawFields(); } else outlineStats.drawn = 0;
+  if (fieldsDrawn()) { drawOutlines(); drawFields(); } else outlineStats.drawn = 0;
   if (showLabels && fontReady) drawLabels(); else placedLabels = [];
   drawSelection();
 }
@@ -717,12 +711,12 @@ function drawOutlines() {
   });
 }
 /* Filled: producing. Ring: found, not yet producing in the year shown (only while the fields follow
- * the year). No figure: pale while following the year, an open ring otherwise. Every filled disc has
- * its rim (owner call 6) unless Map layers turns the rims off. With a highlight, the others go first at
- * 15 % and the highlighted on top. */
+ * the year). No figure for the mode: pale while following the year, an open ring otherwise. Every
+ * filled disc has its rim (owner call 6) unless Map layers turns the rims off. With a highlight, the
+ * others go first at 15 % and the highlighted on top. */
 function drawFields() {
   stats.fieldPasses++;
-  const res = sizeBy === 'res', pts = res ? fields.byRes : fields.points, fy = followOn(), dim = !!highlight;
+  const pts = fields.points, fy = followOn(), dim = !!highlight;
   for (let pass = dim ? 0 : 1; pass < 2; pass++) {
     const alpha = pass ? 1 : 0.15;
     ctx.globalAlpha = alpha;
@@ -734,7 +728,7 @@ function drawFields() {
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 2 * Math.PI);
       if (fy && p.fill > shown) { ctx.strokeStyle = col; ctx.lineWidth = 1.75; ctx.stroke(); }
-      else if ((res ? p.rv : p.v) == null) {
+      else if (fieldRate(p, mode) == null) {
         if (fy) { ctx.globalAlpha = alpha * P.paleAlpha; ctx.fillStyle = col; ctx.fill(); ctx.globalAlpha = alpha; }
         else { ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke(); }
       } else { ctx.fillStyle = col; ctx.fill(); if (rimOn) { ctx.strokeStyle = P.rimC; ctx.lineWidth = 1; ctx.stroke(); } }
@@ -1085,25 +1079,13 @@ function dlRow(dl, k, v) {
   dl.append(dd);
   return dd;
 }
-/* What a field's disc shows in the year: [value, unit, line under it, spoken]. */
-function fieldFigure(p) {
-  const sys = sysOf(), fy = followOn();
-  if (fy && p.appear > shown) return ['Not yet found', '', `First on the map in ${p.appear}.`, 'not yet found'];
-  if (fy && p.fill > shown && sizeBy !== 'res') return ['Not yet producing', '', `Found by ${shown}.`, 'found, not yet producing'];
-  let v, kind = 'oe', rate = true, line;
-  if (sizeBy === 'res') {
-    if (p.rv == null) return ['No reserves reported', '', '', 'no reserves reported'];
-    v = p.rv * 1e6; rate = false;
-    line = `Reserves${isStr(p.f.resClass) ? `, ${p.f.resClass}` : ''}${Number.isFinite(p.f.resYear) ? `, ${p.f.resYear}` : ''}.`;
-  } else if (estOn() && p.es != null) {
-    const py = p.prodYear ?? 'newest';
-    if (isCum()) { v = estCum(prod, p, shown) * 1e6; rate = false; line = `Estimated to ${shown} from the ${py} report.`; }
-    else { v = estRate(prod, p, shown); line = py === shown ? `Reported for ${py}.` : `Estimated for ${shown} from the ${py} report.`; }
-  } else {
-    if (p.v == null) return ['No rate reported', '', '', 'no rate reported'];
-    v = p.v; line = `Reported for ${p.prodYear ?? 'its newest data year'}.`;
+/* The tracker's reserves, with their class and year: [label, value] per kind, in one system or both. */
+function reserveRows(f, sys, both) {
+  const cls = isStr(f.resClass) ? f.resClass : 'reserves', ry = Number.isFinite(f.resYear) ? `, ${f.resYear}` : '', out = [];
+  for (const [k, x, label] of [['oil', f.resOilMbbl, 'Liquids'], ['gas', f.resGasMboe, 'Gas']]) {
+    if (Number.isFinite(x) && x >= 0) out.push([`${label} ${cls}${ry}`, (both ? U.fieldBoth : U.field)(x * 1e6, k, sys, false)]);
   }
-  return [U.sig3(U.fieldValue(v, kind, sys)), `${U.NNBSP}${U.fieldUnit(kind, sys, rate)}`, line, U.fieldSpoken(v, kind, sys, rate)];
+  return out;
 }
 function renderCard(announce) {
   const box = $('card'), rows = $('card-rows'), note = $('card-note');
@@ -1156,14 +1138,12 @@ function renderCard(announce) {
     dlRow(rows, 'Discovered', f.disc);
     dlRow(rows, 'First production', f.start);
     dlRow(rows, 'Operator', f.operator);
+    for (const [k, v] of reserveRows(f, sysOf(), false)) dlRow(rows, k, v);
     note.hidden = true;
-    cardDyn = () => {
-      const [v, u, line] = fieldFigure(p);
-      setText($('card-value'), v); setText($('card-unit'), u); setText($('card-sub'), line);
-    };
-    cardDyn();
-    const fig = fieldFigure(p);
-    sentence = `${f.name || 'Unnamed field'}, ${$('card-where').textContent}. ${fig[2] ? `${fig[2]} ` : ''}${fig[3][0].toUpperCase()}${fig[3].slice(1)}.`;
+    // the one reported figure for the mode, with its data year, whatever year the player shows (js/units.js)
+    const r = U.fieldReport(p.oil, p.gas, p.prodYear, mode, sysOf(), releaseYear());
+    setText($('card-value'), r.value); setText($('card-unit'), r.unit); setText($('card-sub'), r.line);
+    sentence = `${f.name || 'Unnamed field'}, ${$('card-where').textContent}. ${r.spoken}.`;
   }
   box.hidden = false;
   placeCard();
@@ -1357,7 +1337,7 @@ function fieldDetails(b) {
   row('Basin', f.basin); row('Operator', f.operator);
   if (Array.isArray(f.parents) && f.parents.length) row('Parents', f.parents.filter(isStr).join(', '));
   row('Discovered', f.disc); row('Investment decision', f.fid); row('Production start', f.start);
-  const onMap = followOn() ? row('On the map', '–') : null, estDd = estOn() && p.es != null ? row('Estimate', '–') : null;
+  const onMap = followOn() ? row('On the map', '–') : null;
   const oil = Number.isFinite(f.oilBpd) ? f.oilBpd : null, gas = Number.isFinite(f.gasBoepd) ? f.gasBoepd : null;
   const yr = Number.isFinite(f.prodYear) ? `, ${f.prodYear}` : '';
   if (oil == null && gas == null) row('Production', 'not reported');
@@ -1366,27 +1346,16 @@ function fieldDetails(b) {
     if (gas != null) row(`Gas${yr}`, U.fieldBoth(gas, 'gas', sys));
     if (oil != null && gas != null) row('Together', U.fieldBoth(oil + gas, 'oe', sys));
   }
-  const rOil = Number.isFinite(f.resOilMbbl) ? f.resOilMbbl : null, rGas = Number.isFinite(f.resGasMboe) ? f.resGasMboe : null;
-  if (rOil != null || rGas != null) {
-    const cls = isStr(f.resClass) ? f.resClass : 'reserves', ry = Number.isFinite(f.resYear) ? `, ${f.resYear}` : '';
-    if (rOil != null) row(`Liquids ${cls}${ry}`, U.fieldBoth(rOil * 1e6, 'oil', sys, false));
-    if (rGas != null) row(`Gas ${cls}${ry}`, U.fieldBoth(rGas * 1e6, 'gas', sys, false));
-    const rate = (oil || 0) + (gas || 0);
-    if (rate > 0) { const yrs = ((rOil || 0) + (rGas || 0)) * 1e6 / (rate * 365); row('Years of reserves at the reported rate', yrs > 500 ? 'over 500' : U.int(yrs)); }
-  }
+  for (const [k, v] of reserveRows(f, sys, true)) row(k, v);
+  const rOil = Number.isFinite(f.resOilMbbl) ? f.resOilMbbl : 0, rGas = Number.isFinite(f.resGasMboe) ? f.resGasMboe : 0, rate = (oil || 0) + (gas || 0);
+  if (rate > 0 && rOil + rGas > 0) { const yrs = (rOil + rGas) * 1e6 / (rate * 365); row('Years of reserves at the reported rate', yrs > 500 ? 'over 500' : U.int(yrs)); }
   if (f.approx === 1) row('Location', 'approximate (per the tracker)');
-  if (estDd) {
-    const from = p.undated ? 'the year before its data year' : p.start != null ? 'its production start' : p.disc != null ? 'its discovery (no start given)' : 'the year before its data year';
-    b.append(el('p', 'sheet-note', `Estimate, not reported: the reported rate × ${p.ref}'s ${MODES[mode].toLowerCase()} output that year ÷ its output in `
-      + `${clamp(p.prodYear ?? prod.Y1, prod.Y0, prod.Y1)}${p.k ? ' (at most 3×)' : ' (no figure then, so unscaled)'}, from ${from}, ${p.es}${isCum() ? ', summed year by year' : ''}.`));
-  }
   const wiki = fieldWiki(f);
   if (wiki) { const n = el('p', 'sheet-note', 'Tracker page: '); n.append(el('span', null, wiki)); b.append(n); }
-  b.append(el('p', 'sheet-note', `Field volumes are the tracker's own, for its newest data year: liquids (oil, condensate, NGL) in barrels a day, gas as barrels of oil equivalent a day at ${U.GAS_SM3}${U.NNBSP}Sm³ per boe. Reserves are the class the tracker gives. `
-    + (followOn() ? 'The tracker has one rate per unit, not a series, so the size through time is the estimate above.' : 'The tracker has one rate per unit, not a series, so the disc is this reported rate in every year.')));
+  b.append(el('p', 'sheet-note', `Field volumes are the tracker's own, for its one data year: liquids (oil, condensate, NGL) in barrels a day, gas as barrels of oil equivalent a day at ${U.GAS_SM3}${U.NNBSP}Sm³ per boe. Reserves are the class the tracker gives. `
+    + `The tracker publishes no series, so the map sizes a field only in Annual, ${prod ? prod.Y1 : 'the newest year'}, by this figure; in every other year, and in Cumulative, it is a dot.`));
   detailsDyn = () => {
     if (onMap) setText(onMap, p.appear > shown ? `not yet found in ${shown}` : p.fill > shown ? `found, not yet producing in ${shown}` : `producing in ${shown}${p.undated ? ' (no dates: from the year before its data year)' : ''}`);
-    if (estDd) setText(estDd, isCum() ? `${U.field(estCum(prod, p, shown) * 1e6, 'oe', sys, false)} to ${shown}` : `${U.field(estRate(prod, p, shown), 'oe', sys)} in ${shown}`);
   };
   detailsDyn();
 }
@@ -1398,7 +1367,7 @@ function syncLayers() {
   for (const b of document.querySelectorAll('#layers .lrow')) b.setAttribute('aria-pressed', String(!!LAYER[b.dataset.layer]()));
   const usable = !!fields && fields.available;
   $('field-opts').hidden = !usable || !showFields;
-  for (const [id, v] of [['status-seg', statusFilter], ['setting-seg', settingFilter], ['type-seg', typeFilter], ['size-seg', sizeBy]]) {
+  for (const [id, v] of [['status-seg', statusFilter], ['setting-seg', settingFilter], ['type-seg', typeFilter]]) {
     for (const b of $(id).children) { const on = b.dataset.v === v; b.setAttribute('aria-checked', String(on)); b.tabIndex = on ? 0 : -1; }
   }
   $('hl-clear').hidden = !highlight;
@@ -1410,19 +1379,21 @@ function syncLayers() {
     + (c.undated ? `, ${U.int(c.undated)} of them without dates (shown from their data year)` : '')
     + `; ${U.int(c.producing)} producing; ${U.int(c.pass)} of ${total} pass the filters` : `${U.int(c.drawn)} of ${total} shown`)
     + (fields.skipped ? `; ${U.int(fields.skipped)} without coordinates left out` : '') + `. ${src.name || 'GOGET'}${src.release ? `, ${src.release}` : ''}.`);
-  // three size samples at the current zoom, in the system shown
-  const res = sizeBy === 'res', cum = estOn() && isCum(), sys = sysOf(), vol = res || cum;
-  const base = sys === 'si' ? [1e3, 1e4, 1e5] : [1e4, 1e5, 1e6];               // Sm³ o.e./d, or boe/d
-  base.forEach((s, i) => {
-    const boe = sys === 'si' ? s * U.BBL : s, mboe = vol ? (sys === 'si' ? [10, 100, 1000][i] * U.BBL : [100, 1000, 10000][i]) : 0;
-    const r = sizeR(vol ? mboe : boe, res ? RES_VREF : cum ? CUM_VREF : FIELD_VREF), svg = $(`sz${i}`), d = Math.ceil(2 * r + 2);
+  // the size key only where sizes are drawn: three samples at the current zoom, in the system shown
+  const sized = sizesOn(), sys = sysOf(), kind = mode === 'total' ? 'oe' : mode;
+  $('sizes').hidden = !sized;
+  // Sm³/d of oil or o.e. (gas: a thousand times more, at 159 Sm³ a boe), or bbl/d and boe/d
+  if (sized) (sys === 'field' ? [1e4, 1e5, 1e6] : kind === 'gas' ? [1e6, 1e7, 1e8] : [1e3, 1e4, 1e5]).forEach((s, i) => {
+    const boe = sys === 'si' ? s / U.fieldValue(1, kind, 'si') : s, r = sizeR(boe), svg = $(`sz${i}`), d = Math.ceil(2 * r + 2);
     svg.setAttribute('width', d); svg.setAttribute('height', d); svg.setAttribute('viewBox', `0 0 ${d} ${d}`);
     const ci = svg.firstElementChild;
     ci.setAttribute('cx', d / 2); ci.setAttribute('cy', d / 2); ci.setAttribute('r', r);
-    setText($(`szl${i}`), vol ? U.field(mboe * 1e6, 'oe', sys, false) : U.field(boe, 'oe', sys));
+    setText($(`szl${i}`), U.field(boe, kind, sys));
   });
-  setText($('size-note'), res ? 'Size: remaining reserves.' : cum ? "Size: estimated production to date (the reported rate scaled by the country's series)."
-    : estOn() ? "Size: the reported rate scaled by the country's output that year (an estimate)." : 'Size: the reported rate.');
+  // an open top end whenever a field on the map is larger than the largest disc drawn
+  const capped = sized && fields.points.some((p) => { const v = fieldVisible(p) ? fieldRate(p, mode) : null; return v > 0 && FIELD_RREF * Math.sqrt(v / FIELD_VREF) * zoomF() > rMax(); });
+  setText($('size-note'), sized ? `Size: each field's reported ${mode === 'total' ? 'oil and gas' : mode}, for its one data year${capped ? '; the largest are all drawn at one capped size' : ''}.`
+    : `Dots: fields where found or producing${followOn() ? ` by ${shown}` : ''}. Sized only in Annual, ${prod ? prod.Y1 : 'the newest year'}.`);
 }
 
 /* ── Find and About: full-height panels, focus held inside, Escape closes ── */
@@ -1487,6 +1458,7 @@ function showAbout() {
     if (isStr(s.units.note)) row('Barrels', s.units.note);
   }
   if (fields && fields.available) row('Fields', `${U.int(fields.points.length)} units with coordinates; ${U.int(fields.points.filter((x) => x.operating).length)} operating`);
+  setText($('about-sizes'), fields && fields.available && prod ? fieldYearsSaid() : '');
   if (link) {
     const hist = historicalLabels(prod.s), withOutline = prod.s.countries.length - link.noPolygon.length - link.historical.length;
     more.append(el('h4', null, 'Matching countries to outlines'));
@@ -1522,11 +1494,28 @@ function showAbout() {
   if (fields && fields.available && fields.raw.source) {
     const s = fields.raw.source;
     src(s.name || 'Field points', [['Release', s.release], ['File', s.file], ['License', s.licence], ['Attribution', s.attribution], ['Address', s.url]],
-      "units placed by their coordinates, oil and gas rates added, outlines simplified and drawn only near their own unit; the sizes through time are this app's estimate, not the tracker's");
+      'units placed by their coordinates, oil and gas rates added, outlines simplified and drawn only near their own unit');
   } else src('Field points', [['Status', !fields ? 'data/fields.json could not be read' : `not available: ${isStr(fields.raw.reason) ? fields.raw.reason : 'no reason given'}`]]);
   openPanel('about');
   $('about-body').scrollTop = 0;
   $('about-close').focus({ preventScroll: true });
+}
+/* The tracker release's year: its "release", else the year in its file name, else the file's own date. */
+function releaseYear() {
+  const s = (fields && fields.raw && fields.raw.source) || {}, m = /\b(?:19|20)\d\d\b/.exec(`${s.release || ''} ${s.file || ''}`);
+  if (m) return +m[0];
+  const g = fields && fields.raw && Date.parse(fields.raw.generatedAt);
+  return Number.isFinite(g) ? new Date(g).getUTCFullYear() : null;
+}
+/* About's sentences on the fields' one data year, worked out from data/fields.json so they stay true when a
+ * new tracker release is dropped in. */
+function fieldYearsSaid() {
+  const rated = fields.points.filter((x) => x.v != null), ys = rated.map((x) => x.prodYear).filter((y) => y != null).sort((a, b) => a - b);
+  const recent = ys.filter((y) => y >= prod.Y1 - 4).length, none = rated.length - ys.length;
+  const spread = ys.length ? `: ${U.int(rated.length)} units carry one, for data years from ${ys[0]} to ${ys[ys.length - 1]} (${U.int(recent)} of them, ${U.pct((recent / ys.length) * 100)}, for ${prod.Y1 - 4} or later${none ? `; ${U.int(none)} with no year` : ''})` : '';
+  const rel = releaseYear(), ahead = rel == null ? 0 : ys.filter((y) => y >= rel).length;
+  const aheadSaid = ahead ? ` For ${U.int(ahead)} of them the data year was not yet over at the tracker\u2019s ${rel} release; their cards say \u201cGiven for\u201d, not \u201cReported for\u201d.` : '';
+  return `The tracker gives one output figure per field, for one data year${spread}.${aheadSaid} So a field is sized only in Annual, in ${prod.Y1}, by that figure for the fuel shown, its area by its rate; in every other year, and in Cumulative, every field is a dot of one size. The map shows no field histories or totals: none are published for most of the world. A field\u2019s card gives its figure with its data year.`;
 }
 /* Facts about this file that change how a year should be read, worked out from the data. */
 function dataNotes() {
@@ -1845,12 +1834,11 @@ function setFieldOpt(key, v) {
   if (key === 'status' && (v === 'all' || v === 'operating')) { statusFilter = v; store.set(STORE.status, v); }
   else if (key === 'setting' && ['all', 'onshore', 'offshore'].includes(v)) { settingFilter = v; store.set(STORE.setting, v); }
   else if (key === 'ftype' && ['all', 'conventional', 'unconventional'].includes(v)) { typeFilter = v; store.set(STORE.ftype, v); }
-  else if (key === 'size' && (v === 'prod' || v === 'res')) { sizeBy = v; store.set(STORE.size, v); }
   else if (key === 'follow') { followYear = !!v; store.set(STORE.follow, followYear ? '1' : '0'); }
   else return;
   onFields();
 }
-for (const [id, key] of [['status-seg', 'status'], ['setting-seg', 'setting'], ['type-seg', 'ftype'], ['size-seg', 'size']]) radios(id, 'v', (v) => setFieldOpt(key, v));
+for (const [id, key] of [['status-seg', 'status'], ['setting-seg', 'setting'], ['type-seg', 'ftype']]) radios(id, 'v', (v) => setFieldOpt(key, v));
 for (const b of document.querySelectorAll('#layers .lrow')) {
   b.addEventListener('click', () => {
     const k = b.dataset.layer;
@@ -1978,12 +1966,11 @@ async function loadAll() {
     }, (m) => setProblem('world', FILES.world, `${m} ${geo ? 'Showing the outlines as last read.' : 'No country outlines, so nothing can be colored.'}`));
     changed = take('snapshot', ts, checkSnapshot, 'a World Oil & Gas snapshot', (s) => {
       prod = buildProd(s);
-      colorCache.clear(); est = null;
+      colorCache.clear();
       setProblem('snapshot', FILES.snapshot, null);
     }, (m) => setProblem('snapshot', FILES.snapshot, `${m} ${prod ? 'Showing the figures as last read.' : 'The map shows outlines only; no production is drawn.'}`)) || changed;
     changed = take('fields', tf, checkFields, 'a fields file', (f) => {
       fields = buildFields(f);
-      est = null;
       setProblem('fields', FILES.fields, null);
     }, (m) => setProblem('fields', FILES.fields, `${m} ${fields ? 'Showing the fields as last read.' : 'Field points are not drawn; the country map is unaffected.'}`)) || changed;
     reading = false;
@@ -2059,7 +2046,6 @@ function resize() {
   const st = store.get(STORE.status); if (st === 'all' || st === 'operating') statusFilter = st;
   const se = store.get(STORE.setting); if (['all', 'onshore', 'offshore'].includes(se)) settingFilter = se;
   const ty = store.get(STORE.ftype); if (['all', 'conventional', 'unconventional'].includes(ty)) typeFilter = ty;
-  const sz = store.get(STORE.size); if (sz === 'prod' || sz === 'res') sizeBy = sz;
   depthPref = store.get(STORE.depth) === '1';
   terrainPref = store.get(STORE.terrain) === '1';
   rimOn = store.get(STORE.rim) !== '0';
@@ -2105,13 +2091,12 @@ window.__wog = {
   render() { const t0 = performance.now(); render(); return performance.now() - t0; },
   get state() {
     return { mode, accum, units, unitLabel: unitSpec().label, year, shown, sel, showFields, statusFilter, playing, focus: focusMode, view: { ...view },
-      followYear, settingFilter, typeFilter, sizeBy, highlight, W, H,
+      followYear, settingFilter, typeFilter, highlight, W, H, sizes: sizesOn(),
       countries: geo ? geo.countries.length : 0, series: prod ? prod.s.countries.length : 0,
       fields: fields ? { available: fields.available, points: fields.points.length } : null,
       fieldCounts: { ...countFields() }, outlines: { ...outlineStats },
       depth: depthOn(), terrain: terrainOn(), rim: rimOn,
       shade: { status: shade.status, builds: shade.builds, ms: Math.round(shade.ms * 10) / 10, tiles: shade.tiles.filter((t) => t.px).map((t) => t.file) },
-      estimate: est ? { mode: est.mode, fields: est.n, on: estOn() } : null,
       worldSum: prod && shown != null ? toUnit(worldAt(prod, mode, shown, isCum()).v) : null,
       problems: [...problems.values()] };
   },
@@ -2126,13 +2111,12 @@ window.__wog = {
   /** The Ledger as drawn: the shown year's blocks with their x on the strip (CSS px), and its rest. */
   ledger() { const L = prod && shown != null ? ledgerAt(prod, mode, isCum(), shown) : null; return L ? { world: L.world, rest: L.rest, listed: L.listed, blocks: ledgerBlocks.map((b) => ({ iso3: b.iso3, name: b.name, share: b.share, x0: b.x0, x1: b.x1 })) } : null; },
   focus: (on, kbd = false) => setFocus(!!on, { kbd }),
-  /* A field's estimate in year y for the current mode (by id or the start of its name). */
-  estimate(q, y = shown) {
-    buildEst();
-    const p = fields && (fields.byId.get(q) || fields.points.find((x) => x.norm.startsWith(fold(q))));
-    return p && p.es != null ? { id: p.id, es: p.es, ref: p.ref, rate: estRate(prod, p, y), cum: estCum(prod, p, y), latest: p.v, prodYear: p.prodYear, radius: fieldRadius(p), appear: p.appear, fill: p.fill } : null;
+  /** A field as drawn in the year shown: its years, where it is, its radius and the figure it is sized by (null: a dot). */
+  field(id) {
+    const p = fields && fields.byId.get(id);
+    return p ? { appear: p.appear, fill: p.fill, undated: p.undated, visible: fieldVisible(p), x: worldToScreenX(p.x), y: worldToScreenY(p.y),
+      radius: fieldRadius(p), sizedBy: prod ? sizeOf(p, mode, isCum(), shown, prod.Y1) : null, rate: fieldRate(p, mode) } : null;
   },
-  field(id) { const p = fields && fields.byId.get(id); return p ? { appear: p.appear, fill: p.fill, undated: p.undated, visible: fieldVisible(p), x: worldToScreenX(p.x), y: worldToScreenY(p.y) } : null; },
   lut(v) { const i = lutIndex(v); return { i, color: P.lut[i] }; },
   countryColor(iso3) {
     const i = geo ? geo.countries.findIndex((c) => c.iso3 === iso3) : -1;

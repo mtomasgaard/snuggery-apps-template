@@ -10,13 +10,13 @@
 //   5. the data is as recorded: the fields as before the pass, the snapshot but its Natural Earth source name
 //      (the bands left with the pass; About prints it), world.json and the shading
 //      as tools/build_shade.py writes them (plan 0012, package 3.2);
-//   6. miniapp.json is valid, its name unchanged, its version 1.2 (HOUSE.md 13);
+//   6. miniapp.json is valid, its name unchanged, its version 1.3 (HOUSE.md 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credit line: creditLine() over the sources gives the stock app's words, written first under
 //      About's Sources and credits; no credit on the front (HOUSE.md 4.15); the GEBCO attribution word for
 //      word in About and NOTES.md;
 //   9. the marketing camera's strings (HOUSE.md 7.4) with their roles; every localStorage key wog.*, the
-//      keys read before the pass still read but the two retired, wog.focus and wog.rim added;
+//      keys read before the pass still read but the three retired, wog.focus and wog.rim added;
 //  10. SI: no plain space between a digit and a unit in the strings the app writes; toFixed and
 //      toLocaleString only in js/units.js; no Intl (dates and numbers are built by hand);
 //  11. nothing that carries a year transitions;
@@ -29,7 +29,8 @@
 //      separator, no em dash in the app's own strings (B11), no →, ➤, ▸, ▾, ⓘ or "..." in shipped text;
 //      both theme-color metas; the @font-face rule; the page's language and viewport;
 //  15. the bugs on record stay fixed in the code: the Play key's marks toggled by attribute (B2), no
-//      hatch pattern (B4), the browser's search clear button switched off (HOUSE 4.8);
+//      hatch pattern (B4), the browser's search clear button switched off (HOUSE 4.8); and no field
+//      estimate anywhere in the shipped code or text (plan 0012 D23, the owner's choice);
 //  16. budgets: app code ≤ 200,000 bytes (the house's cap; the art pass's estimate was 203,000, owner
 //      call 1), app.js ≤ 150,000 (the app's own figure, which NOTES.md states), fonts/ ≤ 160,000, and the
 //      ZIP built exactly as build-zips.yml builds it ≤ 2,622,870 (2,068,029 × 1.25 + 37,834 for the face;
@@ -159,8 +160,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'World Oil & Gas' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.3',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2 before plan 0012 D23's pass, 1.1 before 3.2's), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)
@@ -199,12 +200,12 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
   const direct = [...app.matchAll(/localStorage\.(?:getItem|setItem|removeItem)\(\s*([^,)]+)/g)].map((m) => m[1].trim()).filter((d) => d !== 'k');
   const calls = [...app.matchAll(/\bstore\.(?:get|set)\(\s*([^,)]+)/g)].map((m) => m[1].trim());
   const before = { view: 'wog.view', units: 'wog.units', mode: 'wog.mode', year: 'wog.year', sel: 'wog.sel', fields: 'wog.fields', status: 'wog.status', labels: 'wog.labels',
-    follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype', size: 'wog.size', hl: 'wog.hl', depth: 'wog.depth', terrain: 'wog.terrain' };
+    follow: 'wog.follow', accum: 'wog.accum', setting: 'wog.setting', ftype: 'wog.ftype', hl: 'wog.hl', depth: 'wog.depth', terrain: 'wog.terrain' };
   const unread = Object.entries(before).filter(([n, k]) => store[n] !== k || !new RegExp(`store\\.get\\(STORE\\.${n}\\)`).test(app));
-  const retired = ['wog.legend', 'wog.rings'].filter((k) => keys.includes(k) || app.includes(`'${k}'`));
+  const retired = ['wog.legend', 'wog.rings', 'wog.size'].filter((k) => keys.includes(k) || app.includes(`'${k}'`));
   ok(keys.every((k) => k.startsWith('wog.')) && direct.length === 0 && calls.every((d) => /^STORE\.\w+$/.test(d)) && unread.length === 0 && store.focus === 'wog.focus'
     && /store\.get\(STORE\.focus\) === '1'/.test(app) && retired.length === 0 && store.rim === 'wog.rim' && /rimOn = store\.get\(STORE\.rim\) !== '0'/.test(app),
-  `storage: ${keys.length} keys, all wog.*; every call goes through STORE; the 16 read before the pass still read${unread.length ? ` (not: ${unread.map((u) => u[0]).join(', ')})` : ''}; wog.focus added; wog.rim added (plan 0012: the rims on by default, off only once turned off); wog.legend (the legend no longer folds) and wog.rings (the stock app's rings, retired by owner call 6) stay retired`);
+  `storage: ${keys.length} keys, all wog.*; every call goes through STORE; the ${Object.keys(before).length} read before the pass still read${unread.length ? ` (not: ${unread.map((u) => u[0]).join(', ')})` : ''}; wog.focus added; wog.rim added (plan 0012: the rims on by default, off only once turned off); wog.legend (the legend no longer folds) and wog.rings (the stock app's rings, retired by owner call 6) stay retired, and wog.size with Size fields by (plan 0012 D23: a field is sized by its reported output only)`);
 }
 
 // 10. SI notation in what the app writes; toFixed and toLocaleString only in js/units.js; no Intl
@@ -307,6 +308,12 @@ ok(/\$\('ico-play'\)\.toggleAttribute\('hidden', on\)/.test(app) && /\$\('ico-pa
   'B2: the Play key\'s two marks are toggled by the hidden attribute, never an SVG expando');
 ok(!/hatchPattern|hatchInk|createPattern/.test(app) && !/hatched (in every year|before their own|over)/i.test(app + html), 'B4: no hatch pattern on the map, and no sentence promising one');
 ok(/::-webkit-search-cancel-button \{ appearance: none; -webkit-appearance: none; \}/.test(css), "Find: the browser's search clear button switched off (HOUSE 4.8)");
+{
+  // plan 0012 D23: no estimate in the code, and no shipped word presenting a field figure as estimated
+  const said = shipped.filter((f) => /\.(html|js|md)$/.test(f)).filter((f) => /\b(estimate\(|estRate|estCum|ratioAt|refArr|buildEst|estOn)\b|\b[Ee]stimated (for|to) |sizes through time|size through time|[Ff]ield sizes are estimates/.test(read(f)));
+  ok(said.length === 0 && /export const sizeOf = /.test(data) && /sizeOf\(p, mode, isCum\(\), shown, prod\.Y1\)/.test(app),
+    `D23: no field estimate in the ${shipped.filter((f) => /\.(html|js|md)$/.test(f)).length} shipped .html, .js and .md files${said.length ? ': ' + said.join(', ') : ''}; discs are sized by sizeOf() (Annual at the newest year, by the reported figure) and nothing else`);
+}
 
 // 16. Budgets, and the ZIP exactly as .github/workflows/build-zips.yml builds it
 const codeFiles = ['index.html', 'style.css', 'app.js', ...shipped.filter((f) => /^js\/[^/]+\.js$/.test(f))];

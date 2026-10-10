@@ -3,8 +3,10 @@
 // this file (Google's polyline algorithm, the series, the Ledger's rule-B partition, the field years) and
 // js/data.js and js/units.js are compared with it, so a bug in the app cannot agree with itself. It also
 // pins the two data bugs this pass fixed: B1 (a cumulative total held past its series' end) and B5
-// (undated fields placed in their data year, never in every year), and plan 0012's former states on the
-// map (formerUnions: the USSR's color over its successors in 1970, each successor by its own in 1995).
+// (undated fields placed in their data year, never in every year), plan 0012's former states on the map
+// (formerUnions: the USSR's color over its successors in 1970, each successor by its own in 1995), and
+// plan 0012 D23's size rule (no estimates; a field sized only in Annual at the newest year, by its
+// reported figure) with the card's words for a field with a figure and one without.
 //
 //   node tools/test_decode.mjs
 
@@ -194,11 +196,62 @@ const YEARS = [1900, 1920, 1950, 1973, 1985, 1991, 2000, 2016, 2017, 2024];
     return p.appear === d && p.fill === (!p.operating ? Infinity : p.v != null ? d : Math.max(d, Math.min(p.prodYear ?? Y1, Y1)));
   });
   ok(rule.length === dated.length, `the ${dated.length} dated units follow the stock rules (a ring from discovery, filled from production start)`);
-  const E = D.estimate(prod, F, 'total');
-  const troll = F.points.find((p) => p.norm.startsWith('troll oil and gas'));
-  const ratio = (y) => Math.min(3, Math.max(0, at(by.get('NOR'), 'total', y) / at(by.get('NOR'), 'total', troll.prodYear)));
-  ok(E.n > 4000 && Math.abs(D.estRate(prod, troll, 2000) - troll.v * ratio(2000)) < 1e-6 && D.estRate(prod, troll, 1990) === 0,
-    `the estimate: ${E.n} units sized through time; Troll in 2000 = its reported ${troll.v} boe/d × Norway's 2000 / ${troll.prodYear} output (${ratio(2000).toFixed(3)}), and 0 before its start in ${troll.start}`);
+}
+
+/* ── plan 0012 D23, the owner's choice: no estimates; a field sized only in Annual at the newest year, by its
+ *    reported figure in each mode, and a dot everywhere else; the card's words for a field with and without one ── */
+{
+  const gone = ['estimate', 'estRate', 'estCum', 'ratioAt', 'refArr'].filter((k) => k in D);
+  ok(gone.length === 0, `no estimate remains in js/data.js (estimate, estRate, estCum, ratioAt and refArr gone)${gone.length ? ': ' + gone.join(', ') : ''}`);
+  const F = D.buildFields(fieldsFile);
+  D.fieldYears(F, Y0, Y1);
+  // the figure, written here again from the file: oil, gas, or their sum where either is reported
+  const fin = (v) => (Number.isFinite(v) ? v : null);
+  const mine = (x, m) => { const o = fin(x.oilBpd), g = fin(x.gasBoepd); return m === 'oil' ? o : m === 'gas' ? g : o == null && g == null ? null : (o || 0) + (g || 0); };
+  let n = 0, sized = 0, zero = 0, none = 0;
+  const bad = [];
+  for (const p of F.points) for (const m of ['oil', 'gas', 'total']) {
+    const want = mine(p.f, m), got = D.sizeOf(p, m, false, Y1, Y1);
+    n++;
+    if (got !== want) bad.push(`${p.f.name} ${m}: ${got} vs ${want}`);
+    if (want > 0) sized++; else if (want === 0) zero++; else none++;
+  }
+  ok(bad.length === 0 && n === 3 * F.points.length, `Annual ${Y1}: every unit's disc is sized by its reported figure in each mode (${n} cases: ${sized} sized, ${zero} a reported zero, ${none} with no figure, a dot)${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
+  let other = 0, cases = 0;
+  for (let y = Y0; y <= Y1; y++) for (const cum of [false, true]) {
+    if (!cum && y === Y1) continue;
+    for (const m of ['oil', 'gas', 'total']) for (const p of F.points) { cases++; if (D.sizeOf(p, m, cum, y, Y1) !== null) other++; }
+  }
+  ok(other === 0 && D.sizesShown(false, Y1, Y1) && !D.sizesShown(true, Y1, Y1) && !D.sizesShown(false, Y1 - 1, Y1),
+    `every other year, and Cumulative in every year, every field is a dot: ${cases} cases, ${other} sized (no field history, no field totals)`);
+  const troll = F.points.find((p) => p.f.name === 'Troll Oil and Gas Field (Norway)'), eko = F.points.find((p) => p.f.name === 'Ekofisk Oil and Gas Field (Norway)');
+  const rt = D.sizeOf(troll, 'total', false, Y1, Y1) / D.sizeOf(eko, 'total', false, Y1, Y1), want = (troll.f.oilBpd + troll.f.gasBoepd) / (eko.f.oilBpd + eko.f.gasBoepd);
+  ok(Math.abs(rt - want) < 1e-12 && troll.prodYear === 2024 && eko.prodYear === 2024 && D.sizeOf(eko, 'oil', false, Y1, Y1) > D.sizeOf(troll, 'oil', false, Y1, Y1),
+    `Troll and Ekofisk in ${Y1}, oil and gas: their discs' areas stand ${rt.toFixed(2)} to 1, as their reported figures for 2024 (${troll.f.oilBpd + troll.f.gasBoepd} and ${eko.f.oilBpd + eko.f.gasBoepd} boe/d); in Oil, Ekofisk's is the larger (${eko.f.oilBpd} against ${troll.f.oilBpd} bbl/d)`);
+  // the card's words (js/units.js fieldReport), in SI and in the tracker's barrels
+  const r1 = U.fieldReport(troll.oil, troll.gas, troll.prodYear, 'total', 'si'), r2 = U.fieldReport(troll.oil, troll.gas, troll.prodYear, 'oil', 'field');
+  const nu = F.points.find((p) => p.v == null && /^Nuayyim/.test(p.f.name)), r3 = U.fieldReport(nu.oil, nu.gas, nu.prodYear, 'total', 'si');
+  const oilOnly = F.points.find((p) => p.oil > 0 && p.gas == null && p.prodYear === 2023), r4 = U.fieldReport(oilOnly.oil, oilOnly.gas, oilOnly.prodYear, 'gas', 'si');
+  const rel = +/\d{4}/.exec(fieldsFile.source.release)[0], wafra = F.points.find((p) => /^Wafra Oil Field/.test(p.f.name)), rw = U.fieldReport(wafra.oil, wafra.gas, wafra.prodYear, 'oil', 'si', rel);
+  const ahead = F.points.filter((p) => p.v != null && U.aheadOf(p.prodYear, rel)).length;
+  const card = [
+    [r1.value, `129${NN}000`], [r1.unit, `${NN}Sm³ o.e./d`], [r1.line, `Reported for 2024: 9${NN}070${NN}Sm³/d of oil, 120 million${NN}Sm³/d of gas.`],
+    [r1.spoken, 'Oil and gas, reported for 2024: 129000 standard cubic meters of oil equivalent a day'],
+    [r2.value, `57${NN}000`], [r2.unit, `${NN}bbl/d`], [r2.line, `Reported for 2024: 57${NN}000${NN}bbl/d of oil, 754${NN}000${NN}boe/d of gas.`],
+    [r3.value, 'No rate reported'], [r3.unit, ''], [r3.line, ''], [r3.spoken, 'No rate reported'],
+    [r4.value, 'No gas reported'], [r4.line.startsWith('Reported for 2023: ') && r4.line.endsWith(' of oil.'), true],
+    [U.fieldReport(1000, null, null, 'oil', 'field').line, `Reported, with no data year: 1${NN}000${NN}bbl/d of oil.`],
+    // the screen's line is spoken too when the mode has no figure (the review's nit)
+    [r4.spoken.startsWith('No gas reported. Reported for 2023: ') && r4.spoken.endsWith(' standard cubic meters a day') && r4.spoken.includes(': oil, '), true],
+    // a data year from the release's year on is never called reported (Wafra, 2028, in the 2026 release)
+    [rw.line, `Given for 2028, a year not yet over at the tracker\u2019s 2026 release: 47${NN}700${NN}Sm³/d of oil.`],
+    [rw.spoken, 'Oil, given for 2028, a year not yet over at the tracker\u2019s 2026 release: 47700 standard cubic meters a day'],
+    [U.fieldReport(wafra.oil, wafra.gas, wafra.prodYear, 'oil', 'si').line.startsWith('Reported for 2028: '), true],
+    [U.fieldReport(troll.oil, troll.gas, troll.prodYear, 'total', 'si', rel).line, r1.line],
+    [ahead, 6],
+  ];
+  const cbad = card.filter(([a, b]) => a !== b);
+  ok(cbad.length === 0, `the card's words: Troll "${r1.value}${r1.unit}", "${r1.line}" (and in barrels "${r2.line}"); ${nu.f.name} "${r3.value}" with no line; ${oilOnly.f.name} in Gas "${r4.value}", "${r4.line}", spoken "${r4.spoken}"; ${wafra.f.name} "${rw.line}" (${ahead} units with a figure for ${rel} or later)${cbad.length ? ': ' + cbad.map(([a, b]) => `"${a}" ≠ "${b}"`).join(' | ') : ''}`);
 }
 
 /* ── js/units.js against a table ── */

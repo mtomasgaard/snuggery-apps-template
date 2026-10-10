@@ -32,8 +32,8 @@ It ships working. There is nothing to decide before the Shortcut row.
   REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
   ```
 - **Read `world-oil-gas/NOTES.md` first.** It carries the attribution strings
-  the app must print (all three sources are CC BY or public domain) and the
-  estimate the moving field circles rest on.
+  the app must print (all three sources are CC BY or public domain) and why
+  the fields are sized only in the newest year.
 
 ## Step 1: the clock
 
@@ -106,10 +106,12 @@ ships: the ZIP builder leaves it out.
 - **The color domains.** The log scale's ends per unit are the `dom` pairs
   in `COUNTRY` and `COUNTRY_CUM` in `js/units.js` (TWh/yr, kboe/d, PWh,
   Gboe); widen or narrow them if your interest is small producers.
-- **The estimate.** How a field's disc moves with the year is one function
-  (`estimate` in `js/data.js`): the reported rate scaled by its country's
-  series, the ratio held between 0 and 3. Switch "Fields follow the year" off
-  in Map layers to draw the tracker as it is, one rate per field.
+- **Field sizes.** The tracker reports one output figure per field, for one
+  data year, so the app sizes a field only in Annual at the newest year, by
+  that figure (`sizeOf` in `js/data.js`), and draws it as a dot everywhere
+  else: no field history, no field totals. Switch "Fields follow the year"
+  off in Map layers to draw every field that passes the filters, whatever its
+  dates.
 - **The Ledger.** The strip under the map is `ledgerAt` in `js/data.js`; its
   1 % floor is `LEDGER_FLOOR`, and its rule for former states (counted until
   their largest member has a figure of its own) is `counted`. The map draws a
