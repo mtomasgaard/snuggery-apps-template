@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-10T13:01:36Z",
+ "generatedAt": "2026-10-10T14:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/navi-pillays-nobel-peace-prize-is-a-vote-of-confidence-in-a-global-legal-order-under-fire-294118",
+     "published": "2026-10-10T13:19:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Frans Viljoen, Professor of International Human Rights Law, SARChI Chair in International Constitutional Law, University of Pretoria"
+    },
+    {
      "title": "Thabo Mbeki’s legacy in South Africa: stronger government but a blurred line between state and party",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Anthony Michael Butler, Professor of Political Studies, University of Cape Town"
-    },
-    {
-     "title": "La nouvelle Constitution de la Guinée-Bissau renforce les pouvoirs du président : ce que cela change pour l’équilibre politique",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/la-nouvelle-constitution-de-la-guinee-bissau-renforce-les-pouvoirs-du-president-ce-que-cela-change-pour-lequilibre-politique-290859",
-     "published": "2026-10-09T08:11:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "João Espírito Santo, enseignant-chercheur, Universidade de Lisboa"
     },
     {
      "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Thabo Mbeki’s legacy in South Africa: stronger government but a blurred line between state and party",
-   "published": "2026-10-09 13:07 UTC"
+   "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
+   "published": "2026-10-10 13:19 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "La nouvelle Constitution de la Guinée-Bissau renforce les pouvoirs du président : ce que cela change pour l’équilibre politique",
-   "published": "2026-10-09 08:11 UTC"
+   "title": "Thabo Mbeki’s legacy in South Africa: stronger government but a blurred line between state and party",
+   "published": "2026-10-09 13:07 UTC"
   },
   {
    "region": "Africa",
