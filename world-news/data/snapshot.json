@@ -1,21 +1,12 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-09T23:01:27Z",
+ "generatedAt": "2026-10-10T00:01:32Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
-    {
-     "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168564",
-     "published": "2026-10-09T12:00:00Z",
-     "summary": "Escalating violence and human rights violations in the four-year-old Russia-Ukraine war are in the spotlight in the Security Council on Friday following a spate of Russian attacks against civilian targets and…",
-     "stale": false
-    },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
      "source": "Global Voices",
@@ -33,6 +24,15 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168548",
      "published": "2026-10-07T12:00:00Z",
      "summary": "The UN Humanitarian Coordinator for Ukraine on Wednesday called for an end to attacks against civilians following further overnight strikes by Russian forces that reportedly killed at least 19 in the Chernihiv Region.",
+     "stale": false
+    },
+    {
+     "title": "‘No plague case’ in Siberia, Russia tells WHO as assessments continue",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168547",
+     "published": "2026-10-07T12:00:00Z",
+     "summary": "Health authorities in Russia say there is “no plague case” in Siberia following reports last week that a lab technician had died of pneumonia of an unknown origin in the region, World Health Organization (WHO) officials…",
      "stale": false
     },
     {
@@ -672,12 +672,6 @@
  "ask": [
   {
    "region": "Europe",
-   "source": "UN News",
-   "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
-   "published": "2026-10-09 12:00 UTC"
-  },
-  {
-   "region": "Europe",
    "source": "Global Voices",
    "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
    "published": "2026-10-09 06:15 UTC"
@@ -686,6 +680,12 @@
    "region": "Europe",
    "source": "UN News",
    "title": "Ukraine: UN condemns latest attacks and calls for civilian protection",
+   "published": "2026-10-07 12:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "UN News",
+   "title": "‘No plague case’ in Siberia, Russia tells WHO as assessments continue",
    "published": "2026-10-07 12:00 UTC"
   },
   {
