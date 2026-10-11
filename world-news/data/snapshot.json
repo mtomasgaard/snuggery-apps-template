@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-11T06:01:35Z",
+ "generatedAt": "2026-10-11T07:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
+     "title": "African genomics research is growing: what countries are doing to connect genetic data and healthcare",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/navi-pillays-nobel-peace-prize-is-a-vote-of-confidence-in-a-global-legal-order-under-fire-294118",
-     "published": "2026-10-10T13:19:03Z",
+     "link": "https://theconversation.com/african-genomics-research-is-growing-what-countries-are-doing-to-connect-genetic-data-and-healthcare-292717",
+     "published": "2026-10-11T06:00:04Z",
      "summary": "",
      "stale": false,
-     "author": "Frans Viljoen, Professor of International Human Rights Law, SARChI Chair in International Constitutional Law, University of Pretoria"
+     "author": "Mohamed Zahir Alimohamed, Lecturer in Human Genetics, Muhimbili University of Health and Allied Sciences"
     },
     {
-     "title": "Thabo Mbeki’s legacy in South Africa: stronger government but a blurred line between state and party",
+     "title": "Bambara groundnut: new maps show where southern African farmers can grow this drought-tolerant crop",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/thabo-mbekis-legacy-in-south-africa-stronger-government-but-a-blurred-line-between-state-and-party-292384",
-     "published": "2026-10-09T13:07:48Z",
+     "link": "https://theconversation.com/bambara-groundnut-new-maps-show-where-southern-african-farmers-can-grow-this-drought-tolerant-crop-292500",
+     "published": "2026-10-11T05:59:56Z",
      "summary": "",
      "stale": false,
-     "author": "Anthony Michael Butler, Professor of Political Studies, University of Cape Town"
+     "author": "Richard Kunz, Research Fellow in the Centre for Water Resources Research, University of KwaZulu-Natal"
     },
     {
      "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
-   "published": "2026-10-10 13:19 UTC"
+   "title": "African genomics research is growing: what countries are doing to connect genetic data and healthcare",
+   "published": "2026-10-11 06:00 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Thabo Mbeki’s legacy in South Africa: stronger government but a blurred line between state and party",
-   "published": "2026-10-09 13:07 UTC"
+   "title": "Bambara groundnut: new maps show where southern African farmers can grow this drought-tolerant crop",
+   "published": "2026-10-11 05:59 UTC"
   },
   {
    "region": "Africa",
