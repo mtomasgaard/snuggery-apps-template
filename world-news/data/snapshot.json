@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-11T15:01:43Z",
+ "generatedAt": "2026-10-11T16:03:53Z",
  "regions": [
   {
    "key": "europe",
@@ -14,7 +14,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168564",
      "published": "2026-10-09T12:00:00Z",
      "summary": "Escalating violence and human rights violations in the four-year-old Russia-Ukraine war are in the spotlight in the Security Council on Friday following a spate of Russian attacks against civilian targets and…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -23,7 +23,7 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -33,7 +33,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168548",
      "published": "2026-10-07T12:00:00Z",
      "summary": "The UN Humanitarian Coordinator for Ukraine on Wednesday called for an end to attacks against civilians following further overnight strikes by Russian forces that reportedly killed at least 19 in the Chernihiv Region.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
@@ -42,7 +42,7 @@
      "link": "https://globalvoices.org/2026/10/03/how-a-farmers-protest-in-bucharest-was-inflated-online-then-hijacked/",
      "published": "2026-10-03T18:40:44Z",
      "summary": "Over 1,180 Facebook posts and 100 TikTok videos analyzed showed how a genuine farmers’ protest was inflated by clusters of accounts sharing identical messages, then folded into anti-government, anti-EU and pro-Kremlin…",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
+     "stale": true,
      "author": "Sydney Allen"
     },
     {
@@ -99,7 +99,7 @@
      "link": "https://globalvoices.org/2026/10/10/how-ecuador-is-fighting-to-keep-industrial-trans-fats-off-the-food-shelf/",
      "published": "2026-10-10T04:00:43Z",
      "summary": "As health advocates push for tighter controls, Ecuador confronts the gap between regulating trans fats and enforcing those rules.",
-     "stale": false,
+     "stale": true,
      "author": "Carlos E. Flores"
     },
     {
@@ -119,7 +119,7 @@
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": false,
+     "stale": true,
      "author": "EngageMedia"
     },
     {
@@ -139,7 +139,7 @@
      "link": "https://globalvoices.org/2026/10/08/el-nino-speeds-climate-crisis-and-tests-latin-americas-food-security/",
      "published": "2026-10-08T05:00:54Z",
      "summary": "From droughts to floods and fires, El Niño is exposing vulnerabilities in Latin America’s food systems by putting farmers, food supplies and household budgets under growing pressure across the region.",
-     "stale": false,
+     "stale": true,
      "author": "Connectas"
     },
     {
@@ -212,7 +212,7 @@
      "link": "https://globalvoices.org/2026/10/07/africas-governments-already-treat-the-internet-as-protest-infrastructure-its-courts-have-not-caught-up/",
      "published": "2026-10-07T18:02:48Z",
      "summary": "In 2024 the African Commission itself adopted a resolution on internet shutdowns during elections. The resolution treats a shutdown as a harm to expression and access to information...",
-     "stale": false,
+     "stale": true,
      "author": "Ephraim Percy Kenyanito"
     },
     {
@@ -240,7 +240,7 @@
      "link": "https://globalvoices.org/2026/10/05/too-young-to-run-old-enough-to-protest-west-africas-unfinished-democratic-bargain/",
      "published": "2026-10-05T05:22:25Z",
      "summary": "Young people are old enough to vote and old enough to protest but are often told they need experience before they can hold political office.",
-     "stale": false,
+     "stale": true,
      "author": "Adesewa Olofinko"
     },
     {
@@ -250,7 +250,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
+     "stale": true,
      "author": "Sydney Allen"
     }
    ]
@@ -267,7 +267,7 @@
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": false,
+     "stale": true,
      "author": "EngageMedia"
     },
     {
@@ -295,7 +295,7 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -314,7 +314,7 @@
      "link": "https://globalvoices.org/2026/10/07/digital-hopes-real-power-from-connection-to-collective-action/",
      "published": "2026-10-07T06:20:55Z",
      "summary": "If the Arab Spring was defined by optimism about what the internet could do, the years since have been marked by a more sober understanding of what it takes to defend it",
-     "stale": false,
+     "stale": true,
      "author": "Jillian C. York"
     },
     {
@@ -333,7 +333,7 @@
      "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": false,
+     "stale": true,
      "author": "Civic Media Observatory"
     }
    ]
@@ -380,7 +380,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168551",
      "published": "2026-10-08T12:00:00Z",
      "summary": "Afghan women and girls are being arrested, detained and threatened with arrest by Taliban authorities, the UN warned on Thursday as record numbers of returnees struggle to rebuild their lives back home.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
@@ -389,7 +389,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168550",
      "published": "2026-10-08T12:00:00Z",
      "summary": "Years of conflict, displacement, economic disruption and climate shocks in Myanmar have led to the “simultaneous collapse” of shelter, healthcare, schooling and livelihoods affecting millions of people, the UN…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "The sound of resistance",
@@ -398,7 +398,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
+     "stale": true,
      "author": "Sydney Allen"
     },
     {
@@ -408,7 +408,7 @@
      "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": false,
+     "stale": true,
      "author": "Civic Media Observatory"
     },
     {
@@ -418,7 +418,7 @@
      "link": "https://globalvoices.org/2026/09/27/beyond-protest-mob-violence-and-the-struggle-for-institutional-response-in-bangladesh/",
      "published": "2026-09-27T22:36:38Z",
      "summary": "Mob violence is rising in Bangladesh as unchecked impunity, weak law enforcement, and social media instigations drive lethal crowd attacks, challenging institutional responses, justice delivery, and overall state…",
-     "stale": false,
+     "stale": true,
      "author": "Maksuda Akter"
     }
    ]
@@ -485,7 +485,7 @@
      "link": "https://globalvoices.org/2026/10/06/young-people-are-bridging-the-climate-divide-for-oceania-and-the-caribbean/",
      "published": "2026-10-06T08:05:24Z",
      "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
-     "stale": false,
+     "stale": true,
      "author": "Guest Contributor"
     },
     {
@@ -495,7 +495,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
+     "stale": true,
      "author": "Sydney Allen"
     },
     {
@@ -505,7 +505,7 @@
      "link": "https://globalvoices.org/2026/09/14/nest-flix-peregrine-falcons-become-streaming-stars-of-the-34th-floor-in-australia/",
      "published": "2026-09-14T18:56:04Z",
      "summary": "\"Get ready to watch as the chicks hatch and their parents raise them high above the hustle and bustle of Melbourne city life.\"",
-     "stale": false,
+     "stale": true,
      "author": "Kevin Rennie"
     }
    ]
@@ -544,25 +544,25 @@
    "id": "gv-eastern-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "un-europe",
    "source": "UN News",
    "region": "Europe",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 2,
+   "note": "TimeoutError: The read operation timed out; kept 2 cached"
   },
   {
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "HTTP 502; kept 3 cached"
   },
   {
    "id": "un-americas",
@@ -584,9 +584,9 @@
    "id": "gv-africa",
    "source": "Global Voices",
    "region": "Africa",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "un-africa",
@@ -608,9 +608,9 @@
    "id": "gv-west-asia",
    "source": "Global Voices",
    "region": "Middle East",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 4,
+   "note": "TimeoutError: The read operation timed out; kept 4 cached"
   },
   {
    "id": "un-middle-east",
@@ -632,25 +632,25 @@
    "id": "gv-south-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 2,
+   "note": "TimeoutError: The read operation timed out; kept 2 cached"
   },
   {
    "id": "gv-oceania",
    "source": "Global Voices",
    "region": "Oceania",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "tc-au",
