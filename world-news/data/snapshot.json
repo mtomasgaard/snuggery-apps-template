@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-11T19:02:06Z",
+ "generatedAt": "2026-10-11T20:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -277,7 +277,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
      "published": "2026-10-09T12:00:00Z",
      "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
@@ -286,7 +286,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168559",
      "published": "2026-10-09T12:00:00Z",
      "summary": "The Security Council met to discuss the crisis in Yemen Friday, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -305,7 +305,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168541",
      "published": "2026-10-07T12:00:00Z",
      "summary": "The World Health Organization (WHO) warned that significantly more resources are required to scale up its response in Yemen amid escalating conflict and rising needs.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Digital hopes, real power: From connection to collective action",
@@ -324,7 +324,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168539",
      "published": "2026-10-06T12:00:00Z",
      "summary": "Sixty-nine Palestinians – more than half of them children – were displaced on Tuesday after Israeli authorities green lit the demolition of their residential building in the At Tur area of East Jerusalem, the UN aid…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -380,7 +380,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168551",
      "published": "2026-10-08T12:00:00Z",
      "summary": "Afghan women and girls are being arrested, detained and threatened with arrest by Taliban authorities, the UN warned on Thursday as record numbers of returnees struggle to rebuild their lives back home.",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
@@ -389,7 +389,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168550",
      "published": "2026-10-08T12:00:00Z",
      "summary": "Years of conflict, displacement, economic disruption and climate shocks in Myanmar have led to the “simultaneous collapse” of shelter, healthcare, schooling and livelihoods affecting millions of people, the UN…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "The sound of resistance",
@@ -616,9 +616,9 @@
    "id": "un-middle-east",
    "source": "UN News",
    "region": "Middle East",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 4,
+   "note": "answer was not a feed; kept 4 cached"
   },
   {
    "id": "gv-east-asia",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": false,
-   "items": 2,
-   "note": "TimeoutError: The read operation timed out; kept 2 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-oceania",
