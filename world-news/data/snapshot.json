@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T22:01:28Z",
+ "generatedAt": "2026-10-12T23:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -207,6 +207,15 @@
      "author": "Lyal White, Director of the Porter Institute Africa Hub, Gordon Institute of Business Science, University of Pretoria"
     },
     {
+     "title": "Sudan: Drought and war push Darfur and Kordofan towards famine",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168577",
+     "published": "2026-10-12T12:00:00Z",
+     "summary": "The risk of famine is growing in parts of Sudan already torn apart by war, as a severe El Niño drought makes life even harder in Greater Darfur and Greater Kordofan, the UN-backed global hunger monitor warned on Monday.",
+     "stale": false
+    },
+    {
      "title": "When free speech has a price: Youth voices in Mozambique",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -232,15 +241,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168570",
      "published": "2026-10-10T12:00:00Z",
      "summary": "UN Secretary-General António Guterres has called for an immediate end to the renewed fighting in northern Ethiopia, saying he is deeply worried by reports that Eritrean forces are present in the country.",
-     "stale": false
-    },
-    {
-     "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168556",
-     "published": "2026-10-08T12:00:00Z",
-     "summary": "More than 700,000 displaced people in Tawila, in Sudan’s war-ravaged Darfur region, face severe shortages of healthcare, food, water and protection, the UN World Health Organization (WHO) warned on Thursday as it called…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/only-structural-change-will-fix-nzs-glaring-health-equity-gap-what-voters-should-know-292213",
+     "published": "2026-10-12T22:43:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ben Gray, Associate Professor of Primary Health Care and General Practice, University of Otago"
+    },
+    {
      "title": "Your say: week beginning October 12",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Cristóbal Castro Barrientos, PhD Candidate, NZ Policy Research Institute, Auckland University of Technology"
-    },
-    {
-     "title": "Donald Trump aligns with Vladimir Putin yet again, leaving Ukraine – and US relations with Europe – under pressure",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/donald-trump-aligns-with-vladimir-putin-yet-again-leaving-ukraine-and-us-relations-with-europe-under-pressure-294119",
-     "published": "2026-10-12T13:56:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stefan Wolff, Professor of International Security, University of Birmingham"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -786,6 +786,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan: Drought and war push Darfur and Kordofan towards famine",
+   "published": "2026-10-12 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "When free speech has a price: Youth voices in Mozambique",
    "published": "2026-10-11 18:00 UTC"
@@ -801,12 +807,6 @@
    "source": "UN News",
    "title": "UN chief ‘gravely concerned’ by renewed fighting in northern Ethiopia, warns against escalation",
    "published": "2026-10-10 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
-   "published": "2026-10-08 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
+   "published": "2026-10-12 22:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning October 12",
    "published": "2026-10-12 20:28 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
    "published": "2026-10-12 17:51 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Donald Trump aligns with Vladimir Putin yet again, leaving Ukraine – and US relations with Europe – under pressure",
-   "published": "2026-10-12 13:56 UTC"
   },
   {
    "region": "Oceania",
