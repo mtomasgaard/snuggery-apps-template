@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-11T23:02:46Z",
+ "generatedAt": "2026-10-12T00:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -14,7 +14,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168564",
      "published": "2026-10-09T12:00:00Z",
      "summary": "Escalating violence and human rights violations in the four-year-old Russia-Ukraine war are in the spotlight in the Security Council on Friday following a spate of Russian attacks against civilian targets and…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -33,7 +33,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168548",
      "published": "2026-10-07T12:00:00Z",
      "summary": "The UN Humanitarian Coordinator for Ukraine on Wednesday called for an end to attacks against civilians following further overnight strikes by Russian forces that reportedly killed at least 19 in the Chernihiv Region.",
-     "stale": true
+     "stale": false
     },
     {
      "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
@@ -149,7 +149,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168492",
      "published": "2026-10-04T12:00:00Z",
      "summary": "A documentary drawn from United Nations University research was screened at the COP30 climate conference and film festivals across Europe. Its most important journey, though, was the one back to the Mexico City canals…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "No more execution attempts on Christa Pike: UN rights chief",
@@ -158,7 +158,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168504",
      "published": "2026-10-01T12:00:00Z",
      "summary": "The UN human rights chief and nine independent rights experts on Thursday called on authorities in Tennessee not to pursue any further attempts to execute Christa Pike, saying her case highlights multiple concerns…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
@@ -167,7 +167,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168461",
      "published": "2026-09-26T12:00:00Z",
      "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
-     "stale": true
+     "stale": false
     }
    ]
   },
@@ -213,7 +213,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168556",
      "published": "2026-10-08T12:00:00Z",
      "summary": "More than 700,000 displaced people in Tawila, in Sudan’s war-ravaged Darfur region, face severe shortages of healthcare, food, water and protection, the UN World Health Organization (WHO) warned on Thursday as it called…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
@@ -232,7 +232,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168542",
      "published": "2026-10-07T12:00:00Z",
      "summary": "Kenya’s first Ebola death has triggered a race to trace everyone the victim came into contact with, as the United Nations and partners provide full support, the World Health Organization’s (WHO) top official in the…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "‘Ebola takes the people children depend on’: UNICEF",
@@ -241,7 +241,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168531",
      "published": "2026-10-06T12:00:00Z",
      "summary": "The Ebola outbreak in the eastern Democratic Republic of the Congo (DRC) is robbing children of their loved ones – with some succumbing to the deadly disease themselves – the UN Children’s Fund (UNICEF) reported on…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
@@ -277,7 +277,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
      "published": "2026-10-09T12:00:00Z",
      "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
@@ -286,7 +286,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168559",
      "published": "2026-10-09T12:00:00Z",
      "summary": "The Security Council met to discuss the crisis in Yemen Friday, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -305,7 +305,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168541",
      "published": "2026-10-07T12:00:00Z",
      "summary": "The World Health Organization (WHO) warned that significantly more resources are required to scale up its response in Yemen amid escalating conflict and rising needs.",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Digital hopes, real power: From connection to collective action",
@@ -324,7 +324,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168539",
      "published": "2026-10-06T12:00:00Z",
      "summary": "Sixty-nine Palestinians – more than half of them children – were displaced on Tuesday after Israeli authorities green lit the demolition of their residential building in the At Tur area of East Jerusalem, the UN aid…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -380,7 +380,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168551",
      "published": "2026-10-08T12:00:00Z",
      "summary": "Afghan women and girls are being arrested, detained and threatened with arrest by Taliban authorities, the UN warned on Thursday as record numbers of returnees struggle to rebuild their lives back home.",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
@@ -389,7 +389,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168550",
      "published": "2026-10-08T12:00:00Z",
      "summary": "Years of conflict, displacement, economic disruption and climate shocks in Myanmar have led to the “simultaneous collapse” of shelter, healthcare, schooling and livelihoods affecting millions of people, the UN…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "The sound of resistance",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/is-nzs-foreign-policy-realism-working-why-the-next-government-faces-a-real-choice-294041",
+     "published": "2026-10-11T23:47:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert G. Patman, Professor of International Relations, University of Otago"
+    },
+    {
+     "title": "Labor and the Greens improve in Newspoll and Resolve and One Nation drops",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/labor-and-the-greens-improve-in-newspoll-and-resolve-and-one-nation-drops-293931",
+     "published": "2026-10-11T22:57:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "The Greens have adopted confrontation and self-declared populism. Can they bring voters along with them?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Garritt C. Van Dyk, Senior Lecturer in History, University of Waikato"
-    },
-    {
-     "title": "Worried about your Year 12 exams? 3 ways to help anxiety",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/worried-about-your-year-12-exams-3-ways-to-help-anxiety-293538",
-     "published": "2026-10-11T18:25:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Viviana Wuthrich, Professor of Clinical Psychology, Macquarie University"
-    },
-    {
-     "title": "Invasive species do much more damage in Australia and NZ than elsewhere. But why?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/invasive-species-do-much-more-damage-in-australia-and-nz-than-elsewhere-but-why-286653",
-     "published": "2026-10-11T18:25:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mike Lee, Senior Research Scientist, South Australian Museum; Flinders University"
     },
     {
      "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
@@ -552,9 +552,9 @@
    "id": "un-europe",
    "source": "UN News",
    "region": "Europe",
-   "ok": false,
-   "items": 2,
-   "note": "TimeoutError: The read operation timed out; kept 2 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-latin-america",
@@ -568,9 +568,9 @@
    "id": "un-americas",
    "source": "UN News",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "tc-us",
@@ -592,9 +592,9 @@
    "id": "un-africa",
    "source": "UN News",
    "region": "Africa",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "tc-africa",
@@ -616,9 +616,9 @@
    "id": "un-middle-east",
    "source": "UN News",
    "region": "Middle East",
-   "ok": false,
-   "items": 4,
-   "note": "answer was not a feed; kept 4 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-east-asia",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": false,
-   "items": 2,
-   "note": "TimeoutError: The read operation timed out; kept 2 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-oceania",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
+   "published": "2026-10-11 23:47 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Labor and the Greens improve in Newspoll and Resolve and One Nation drops",
+   "published": "2026-10-11 22:57 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The Greens have adopted confrontation and self-declared populism. Can they bring voters along with them?",
    "published": "2026-10-11 18:29 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "Distant voices: how the revival of ta rē Moriori lets us hear the true history of Rēkohu",
    "published": "2026-10-11 18:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Worried about your Year 12 exams? 3 ways to help anxiety",
-   "published": "2026-10-11 18:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Invasive species do much more damage in Australia and NZ than elsewhere. But why?",
-   "published": "2026-10-11 18:25 UTC"
   },
   {
    "region": "Oceania",
