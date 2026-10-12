@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T18:01:38Z",
+ "generatedAt": "2026-10-12T19:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What colleges and universities need from donors to thrive",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-colleges-and-universities-need-from-donors-to-thrive-283427",
+     "published": "2026-10-12T18:24:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "William Blomquist, Professor Emeritus of Political Science, Indiana University"
+    },
+    {
      "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Tamir Sorek, Liberal Arts Professor of Middle East History, Penn State"
-    },
-    {
-     "title": "More than 119 million Brazilians voted in the Oct. 4 election – including about 21,000 Florida residents",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/more-than-119-million-brazilians-voted-in-the-oct-4-election-including-about-21-000-florida-residents-293494",
-     "published": "2026-10-12T12:21:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rafael R. Ioris, Professor of Modern Latin America History, University of Denver"
     },
     {
      "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-global-report-gives-nz-tertiary-education-a-pass-but-hides-another-side-of-the-story-293551",
+     "published": "2026-10-12T17:51:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cristóbal Castro Barrientos, PhD Candidate, NZ Policy Research Institute, Auckland University of Technology"
+    },
+    {
+     "title": "Donald Trump aligns with Vladimir Putin yet again, leaving Ukraine – and US relations with Europe – under pressure",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/donald-trump-aligns-with-vladimir-putin-yet-again-leaving-ukraine-and-us-relations-with-europe-under-pressure-294119",
+     "published": "2026-10-12T13:56:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Stefan Wolff, Professor of International Security, University of Birmingham"
+    },
+    {
+     "title": "Animals: Ben Affleck stars in this thriller about a politician who can’t hide his ugly side",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/animals-ben-affleck-stars-in-this-thriller-about-a-politician-who-cant-hide-his-ugly-side-293992",
+     "published": "2026-10-12T09:43:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Daniel O'Brien, Lecturer, Department of Literature Film and Theatre Studies, University of Essex"
+    },
+    {
      "title": "How a botched execution and proposed livestream of a firing squad fit in to the US’ death penalty history",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Sarah Diepstraten, Senior Research Officer, Blood Cells and Blood Cancer Division, WEHI (Walter and Eliza Hall Institute of Medical Research)"
-    },
-    {
-     "title": "What can free-living Indian street dogs teach us about how to care for pet dogs?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-can-free-living-indian-street-dogs-teach-us-about-how-to-care-for-pet-dogs-293553",
-     "published": "2026-10-12T04:45:37Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel Ramp, Associate Professor and Director, Centre for Compassionate Conservation, University of Technology Sydney"
-    },
-    {
-     "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/whats-in-a-name-enough-to-ensnare-australia-nz-and-png-in-a-legal-battle-over-the-rugby-team-name-chiefs-294045",
-     "published": "2026-10-12T03:16:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ray Nickson, Senior Lecturer, School of Law and Justice, University of Newcastle"
-    },
-    {
-     "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/can-building-more-roads-make-traffic-worse-heres-the-mathematics-behind-it-288837",
-     "published": "2026-10-12T02:59:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
-   "published": "2026-10-12 12:22 UTC"
+   "title": "What colleges and universities need from donors to thrive",
+   "published": "2026-10-12 18:24 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "More than 119 million Brazilians voted in the Oct. 4 election – including about 21,000 Florida residents",
-   "published": "2026-10-12 12:21 UTC"
+   "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
+   "published": "2026-10-12 12:22 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
+   "published": "2026-10-12 17:51 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Donald Trump aligns with Vladimir Putin yet again, leaving Ukraine – and US relations with Europe – under pressure",
+   "published": "2026-10-12 13:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Animals: Ben Affleck stars in this thriller about a politician who can’t hide his ugly side",
+   "published": "2026-10-12 09:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How a botched execution and proposed livestream of a firing squad fit in to the US’ death penalty history",
    "published": "2026-10-12 05:14 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "The pope has a lung nodule. What does this mean? And what’s the risk of cancer?",
    "published": "2026-10-12 04:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What can free-living Indian street dogs teach us about how to care for pet dogs?",
-   "published": "2026-10-12 04:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
-   "published": "2026-10-12 03:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
-   "published": "2026-10-12 02:59 UTC"
   },
   {
    "region": "Oceania",
