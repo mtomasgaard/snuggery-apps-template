@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T06:01:39Z",
+ "generatedAt": "2026-10-12T07:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
+     "published": "2026-10-12T06:39:35Z",
+     "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
+     "stale": false,
+     "author": "Maksuda Akter"
+    },
+    {
      "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -364,7 +374,7 @@
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
@@ -410,16 +420,6 @@
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
      "stale": false,
      "author": "Civic Media Observatory"
-    },
-    {
-     "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/27/beyond-protest-mob-violence-and-the-struggle-for-institutional-response-in-bangladesh/",
-     "published": "2026-09-27T22:36:38Z",
-     "summary": "Mob violence is rising in Bangladesh as unchecked impunity, weak law enforcement, and social media instigations drive lethal crowd attacks, challenging institutional responses, justice delivery, and overall state…",
-     "stale": false,
-     "author": "Maksuda Akter"
     }
    ]
   },
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
+   "published": "2026-10-12 06:39 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
    "published": "2026-10-10 12:00 UTC"
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "Equating protest with terrorism: A narrative against dissent",
    "published": "2026-09-29 00:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Beyond protest: Mob violence and the struggle for institutional response in Bangladesh",
-   "published": "2026-09-27 22:36 UTC"
   },
   {
    "region": "Oceania",
