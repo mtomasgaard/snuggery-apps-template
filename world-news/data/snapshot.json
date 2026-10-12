@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T16:02:15Z",
+ "generatedAt": "2026-10-12T17:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -23,7 +23,7 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -42,7 +42,7 @@
      "link": "https://globalvoices.org/2026/10/03/how-a-farmers-protest-in-bucharest-was-inflated-online-then-hijacked/",
      "published": "2026-10-03T18:40:44Z",
      "summary": "Over 1,180 Facebook posts and 100 TikTok videos analyzed showed how a genuine farmers’ protest was inflated by clusters of accounts sharing identical messages, then folded into anti-government, anti-EU and pro-Kremlin…",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": true,
+     "stale": false,
      "author": "Sydney Allen"
     },
     {
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": true,
+     "stale": false,
      "author": "Elmira Lyapina"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Omid Memarian"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
      "published": "2026-09-15T08:33:09Z",
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     }
    ]
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Who is Navi Pillay, the South African judge who won the Nobel prize? We asked her biographer",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/who-is-navi-pillay-the-south-african-judge-who-won-the-nobel-prize-we-asked-her-biographer-294121",
+     "published": "2026-10-12T16:07:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sam Naidu, Professor, Department of Literary Studies in English, Rhodes University"
+    },
+    {
      "title": "Radical economic policies in Argentina offer lessons – but not a blueprint – for South Africa",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Lyal White, Director of the Porter Institute Africa Hub, Gordon Institute of Business Science, University of Pretoria"
-    },
-    {
-     "title": "‘Lazy, weak, bewitched’ – how stigma stops Uganda’s children from getting help, and what schools can do about it",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/lazy-weak-bewitched-how-stigma-stops-ugandas-children-from-getting-help-and-what-schools-can-do-about-it-292539",
-     "published": "2026-10-12T13:19:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lydia Namatende-Sakwa, Associate Research Scientist, African Population and Health Research Center"
     },
     {
      "title": "When free speech has a price: Youth voices in Mozambique",
@@ -536,17 +536,17 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-europe",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Radical economic policies in Argentina offer lessons – but not a blueprint – for South Africa",
-   "published": "2026-10-12 13:30 UTC"
+   "title": "Who is Navi Pillay, the South African judge who won the Nobel prize? We asked her biographer",
+   "published": "2026-10-12 16:07 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "‘Lazy, weak, bewitched’ – how stigma stops Uganda’s children from getting help, and what schools can do about it",
-   "published": "2026-10-12 13:19 UTC"
+   "title": "Radical economic policies in Argentina offer lessons – but not a blueprint – for South Africa",
+   "published": "2026-10-12 13:30 UTC"
   },
   {
    "region": "Africa",
