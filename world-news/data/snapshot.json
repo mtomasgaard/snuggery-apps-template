@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T05:01:31Z",
+ "generatedAt": "2026-10-12T06:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -429,19 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "La Bola Negra is about the Spanish Civil War – but is unmistakably about our present moment",
+     "title": "How a botched execution and proposed livestream of a firing squad fit in to the US’ death penalty history",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/la-bola-negra-is-about-the-spanish-civil-war-but-is-unmistakably-about-our-present-moment-293834",
-     "published": "2026-10-12T04:15:52Z",
+     "link": "https://theconversation.com/how-a-botched-execution-and-proposed-livestream-of-a-firing-squad-fit-in-to-the-us-death-penalty-history-294052",
+     "published": "2026-10-12T05:14:06Z",
      "summary": "",
      "stale": false,
-     "author": "Nicholas Manganas, Head of School, School of Communication and Social Sciences, University of Technology Sydney"
+     "author": "Carolyn Strange, Professor of History, School of History, ANU, Australian National University"
+    },
+    {
+     "title": "The pope has a lung nodule. What does this mean? And what’s the risk of cancer?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-pope-has-a-lung-nodule-what-does-this-mean-and-whats-the-risk-of-cancer-294136",
+     "published": "2026-10-12T04:55:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sarah Diepstraten, Senior Research Officer, Blood Cells and Blood Cancer Division, WEHI (Walter and Eliza Hall Institute of Medical Research)"
+    },
+    {
+     "title": "What can free-living Indian street dogs teach us about how to care for pet dogs?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-can-free-living-indian-street-dogs-teach-us-about-how-to-care-for-pet-dogs-293553",
+     "published": "2026-10-12T04:45:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "Daniel Ramp, Associate Professor and Director, Centre for Compassionate Conservation, University of Technology Sydney"
     },
     {
      "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/whats-in-a-name-enough-to-ensnare-australia-nz-and-png-in-a-legal-battle-over-the-rugby-team-name-chiefs-294045",
      "published": "2026-10-12T03:16:50Z",
      "summary": "",
@@ -451,32 +471,12 @@
     {
      "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/can-building-more-roads-make-traffic-worse-heres-the-mathematics-behind-it-288837",
      "published": "2026-10-12T02:59:24Z",
      "summary": "",
      "stale": false,
      "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
-    },
-    {
-     "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/is-nzs-foreign-policy-realism-working-why-the-next-government-faces-a-real-choice-294041",
-     "published": "2026-10-11T23:47:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert G. Patman, Professor of International Relations, University of Otago"
-    },
-    {
-     "title": "Distant voices: how the revival of ta rē Moriori lets us hear the true history of Rēkohu",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/distant-voices-how-the-revival-of-ta-re-moriori-lets-us-hear-the-true-history-of-rekohu-291780",
-     "published": "2026-10-11T18:26:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Garritt C. Van Dyk, Senior Lecturer in History, University of Waikato"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,8 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "La Bola Negra is about the Spanish Civil War – but is unmistakably about our present moment",
-   "published": "2026-10-12 04:15 UTC"
+   "title": "How a botched execution and proposed livestream of a firing squad fit in to the US’ death penalty history",
+   "published": "2026-10-12 05:14 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The pope has a lung nodule. What does this mean? And what’s the risk of cancer?",
+   "published": "2026-10-12 04:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What can free-living Indian street dogs teach us about how to care for pet dogs?",
+   "published": "2026-10-12 04:45 UTC"
   },
   {
    "region": "Oceania",
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
    "published": "2026-10-12 02:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
-   "published": "2026-10-11 23:47 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Distant voices: how the revival of ta rē Moriori lets us hear the true history of Rēkohu",
-   "published": "2026-10-11 18:26 UTC"
   },
   {
    "region": "Oceania",
