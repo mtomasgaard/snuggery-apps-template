@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T04:01:36Z",
+ "generatedAt": "2026-10-12T05:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -133,6 +133,15 @@
      "author": "Manjot Kaur Sidhu, Assistant Extension Professor of Horticulture and Ornamental Horticulture Specialist, University of Maine"
     },
     {
+     "title": "Livestreaming US execution would breach prohibition of torture, UN rights office warns",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168565",
+     "published": "2026-10-09T12:00:00Z",
+     "summary": "The UN human rights office (OHCHR) on Friday warned that livestreaming a planned execution by firing squad in the United States would amount to a public execution and breach the absolute prohibition on torture.",
+     "stale": false
+    },
+    {
      "title": "El Niño speeds climate crisis and tests Latin America’s food security",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -158,15 +167,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168504",
      "published": "2026-10-01T12:00:00Z",
      "summary": "The UN human rights chief and nine independent rights experts on Thursday called on authorities in Tennessee not to pursue any further attempts to execute Christa Pike, saying her case highlights multiple concerns…",
-     "stale": false
-    },
-    {
-     "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/09/1168461",
-     "published": "2026-09-26T12:00:00Z",
-     "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
      "stale": false
     }
    ]
@@ -207,6 +207,24 @@
      "author": "Richard Kunz, Research Fellow in the Centre for Water Resources Research, University of KwaZulu-Natal"
     },
     {
+     "title": "Giving a dam: Cultivating peace in Côte d’Ivoire",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168568",
+     "published": "2026-10-10T12:00:00Z",
+     "summary": "Adam Ouattara and Makongo Traoré have four children and a home on the edge of Torla village in Côte d’Ivoire. He herds cattle. She grows vegetables on a small plot nearby. For years, the dry season pitted their two…",
+     "stale": false
+    },
+    {
+     "title": "UN chief ‘gravely concerned’ by renewed fighting in northern Ethiopia, warns against escalation",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168570",
+     "published": "2026-10-10T12:00:00Z",
+     "summary": "UN Secretary-General António Guterres has called for an immediate end to the renewed fighting in northern Ethiopia, saying he is deeply worried by reports that Eritrean forces are present in the country.",
+     "stale": false
+    },
+    {
      "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
      "source": "UN News",
      "feed": "un-africa",
@@ -226,24 +244,6 @@
      "author": "Ephraim Percy Kenyanito"
     },
     {
-     "title": "Kenya races to trace all contacts after first Ebola death, WHO official says",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168542",
-     "published": "2026-10-07T12:00:00Z",
-     "summary": "Kenya’s first Ebola death has triggered a race to trace everyone the victim came into contact with, as the United Nations and partners provide full support, the World Health Organization’s (WHO) top official in the…",
-     "stale": false
-    },
-    {
-     "title": "‘Ebola takes the people children depend on’: UNICEF",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168531",
-     "published": "2026-10-06T12:00:00Z",
-     "summary": "The Ebola outbreak in the eastern Democratic Republic of the Congo (DRC) is robbing children of their loved ones – with some succumbing to the deadly disease themselves – the UN Children’s Fund (UNICEF) reported on…",
-     "stale": false
-    },
-    {
      "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -261,6 +261,24 @@
    "stale": false,
    "items": [
     {
+     "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168573",
+     "published": "2026-10-11T12:00:00Z",
+     "summary": "At least 139 migrants have died after their boat capsized off Djibouti, with a further 84 people still missing, the UN migration agency (IOM) said on Sunday.",
+     "stale": false
+    },
+    {
+     "title": "Sustaining livelihoods amid crisis in Gaza",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168569",
+     "published": "2026-10-11T12:00:00Z",
+     "summary": "Nidaa, Hanaa and Hanin have different stories, but share a common thread: the determination to build something of their own and keep it going despite extraordinary challenges facing them in war-ravaged Gaza.",
+     "stale": false
+    },
+    {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -277,7 +295,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
      "published": "2026-10-09T12:00:00Z",
      "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
@@ -286,7 +304,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168559",
      "published": "2026-10-09T12:00:00Z",
      "summary": "The Security Council met to discuss the crisis in Yemen Friday, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -299,15 +317,6 @@
      "author": "Guest Contributor"
     },
     {
-     "title": "Critical funding gap threatens health response in Yemen",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168541",
-     "published": "2026-10-07T12:00:00Z",
-     "summary": "The World Health Organization (WHO) warned that significantly more resources are required to scale up its response in Yemen amid escalating conflict and rising needs.",
-     "stale": true
-    },
-    {
      "title": "Digital hopes, real power: From connection to collective action",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -316,15 +325,6 @@
      "summary": "If the Arab Spring was defined by optimism about what the internet could do, the years since have been marked by a more sober understanding of what it takes to defend it",
      "stale": false,
      "author": "Jillian C. York"
-    },
-    {
-     "title": "Israeli demolition in East Jerusalem displaces 69 Palestinians",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168539",
-     "published": "2026-10-06T12:00:00Z",
-     "summary": "Sixty-nine Palestinians – more than half of them children – were displaced on Tuesday after Israeli authorities green lit the demolition of their residential building in the At Tur area of East Jerusalem, the UN aid…",
-     "stale": true
     },
     {
      "title": "Equating protest with terrorism: A narrative against dissent",
@@ -343,6 +343,24 @@
    "name": "Asia",
    "stale": false,
    "items": [
+    {
+     "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168571",
+     "published": "2026-10-10T12:00:00Z",
+     "summary": "The UN human rights office (OHCHR) has voiced concern over reports of mass detentions in India of demonstrators, protest leaders, civil society members, lawyers and journalists, before and during large-scale protests in…",
+     "stale": false
+    },
+    {
+     "title": "In the Mekong Delta, a push to grow food with saltwater",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168545",
+     "published": "2026-10-10T12:00:00Z",
+     "summary": "For generations, farming in Viet Nam’s Mekong Delta has depended on a delicate bargain. The river flooded, retreated and flooded again, carrying freshwater and sediment across a flat landscape whose vast fields helped…",
+     "stale": false
+    },
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
@@ -372,24 +390,6 @@
      "summary": "DoD’s public document describes Alibaba as indirectly affiliated with China State Council's supervision body, and a “military-civil fusion contributor to the Chinese defense industrial base”.",
      "stale": false,
      "author": "Oiwan Lam"
-    },
-    {
-     "title": "Afghanistan: Women face fresh dress code arrests amid record refugee returns",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168551",
-     "published": "2026-10-08T12:00:00Z",
-     "summary": "Afghan women and girls are being arrested, detained and threatened with arrest by Taliban authorities, the UN warned on Thursday as record numbers of returnees struggle to rebuild their lives back home.",
-     "stale": false
-    },
-    {
-     "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168550",
-     "published": "2026-10-08T12:00:00Z",
-     "summary": "Years of conflict, displacement, economic disruption and climate shocks in Myanmar have led to the “simultaneous collapse” of shelter, healthcare, schooling and livelihoods affecting millions of people, the UN…",
-     "stale": false
     },
     {
      "title": "The sound of resistance",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "La Bola Negra is about the Spanish Civil War – but is unmistakably about our present moment",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/la-bola-negra-is-about-the-spanish-civil-war-but-is-unmistakably-about-our-present-moment-293834",
+     "published": "2026-10-12T04:15:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nicholas Manganas, Head of School, School of Communication and Social Sciences, University of Technology Sydney"
+    },
+    {
      "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
-    },
-    {
-     "title": "This economist believes the system is broken. Maybe she has a point",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/this-economist-believes-the-system-is-broken-maybe-she-has-a-point-292129",
-     "published": "2026-10-12T02:34:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
     },
     {
      "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
@@ -616,9 +616,9 @@
    "id": "un-middle-east",
    "source": "UN News",
    "region": "Middle East",
-   "ok": false,
-   "items": 4,
-   "note": "answer was not a feed; kept 4 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-east-asia",
@@ -744,6 +744,12 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "Livestreaming US execution would breach prohibition of torture, UN rights office warns",
+   "published": "2026-10-09 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "El Niño speeds climate crisis and tests Latin America’s food security",
    "published": "2026-10-08 05:00 UTC"
@@ -759,12 +765,6 @@
    "source": "UN News",
    "title": "No more execution attempts on Christa Pike: UN rights chief",
    "published": "2026-10-01 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
-   "published": "2026-09-26 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -787,6 +787,18 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Giving a dam: Cultivating peace in Côte d’Ivoire",
+   "published": "2026-10-10 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "UN chief ‘gravely concerned’ by renewed fighting in northern Ethiopia, warns against escalation",
+   "published": "2026-10-10 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Darfur: Healthcare needs outstrip resources as Security Council extends Sudan sanctions",
    "published": "2026-10-08 12:00 UTC"
   },
@@ -798,21 +810,21 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Kenya races to trace all contacts after first Ebola death, WHO official says",
-   "published": "2026-10-07 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘Ebola takes the people children depend on’: UNICEF",
-   "published": "2026-10-06 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
    "published": "2026-10-05 05:22 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
+   "published": "2026-10-11 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Sustaining livelihoods amid crisis in Gaza",
+   "published": "2026-10-11 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -840,27 +852,27 @@
   },
   {
    "region": "Middle East",
-   "source": "UN News",
-   "title": "Critical funding gap threatens health response in Yemen",
-   "published": "2026-10-07 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
    "source": "Global Voices",
    "title": "Digital hopes, real power: From connection to collective action",
    "published": "2026-10-07 06:20 UTC"
   },
   {
    "region": "Middle East",
-   "source": "UN News",
-   "title": "Israeli demolition in East Jerusalem displaces 69 Palestinians",
-   "published": "2026-10-06 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
    "source": "Global Voices",
    "title": "Equating protest with terrorism: A narrative against dissent",
    "published": "2026-09-29 00:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
+   "published": "2026-10-10 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "In the Mekong Delta, a push to grow food with saltwater",
+   "published": "2026-10-10 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -879,18 +891,6 @@
    "source": "Global Voices",
    "title": "Alibaba sues Pentagon to denounce being classified as a Chinese military affiliate",
    "published": "2026-10-08 18:31 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Afghanistan: Women face fresh dress code arrests amid record refugee returns",
-   "published": "2026-10-08 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Myanmar: Poverty deepens as families face multiple shocks with limited resources",
-   "published": "2026-10-08 12:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "La Bola Negra is about the Spanish Civil War – but is unmistakably about our present moment",
+   "published": "2026-10-12 04:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
    "published": "2026-10-12 03:16 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
    "published": "2026-10-12 02:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "This economist believes the system is broken. Maybe she has a point",
-   "published": "2026-10-12 02:34 UTC"
   },
   {
    "region": "Oceania",
