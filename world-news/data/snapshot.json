@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T12:03:10Z",
+ "generatedAt": "2026-10-12T13:02:09Z",
  "regions": [
   {
    "key": "europe",
@@ -23,7 +23,7 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -42,7 +42,7 @@
      "link": "https://globalvoices.org/2026/10/03/how-a-farmers-protest-in-bucharest-was-inflated-online-then-hijacked/",
      "published": "2026-10-03T18:40:44Z",
      "summary": "Over 1,180 Facebook posts and 100 TikTok videos analyzed showed how a genuine farmers’ protest was inflated by clusters of accounts sharing identical messages, then folded into anti-government, anti-EU and pro-Kremlin…",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -52,7 +52,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": true,
+     "stale": false,
      "author": "Sydney Allen"
     },
     {
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": true,
+     "stale": false,
      "author": "Elmira Lyapina"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Omid Memarian"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
      "published": "2026-09-15T08:33:09Z",
      "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     }
    ]
@@ -93,24 +93,34 @@
    "stale": false,
    "items": [
     {
+     "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/pardoning-of-israeli-soldier-evokes-a-long-history-of-clemency-for-those-who-kill-palestinians-293623",
+     "published": "2026-10-12T12:22:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tamir Sorek, Liberal Arts Professor of Middle East History, Penn State"
+    },
+    {
+     "title": "More than 119 million Brazilians voted in the Oct. 4 election – including about 21,000 Florida residents",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/more-than-119-million-brazilians-voted-in-the-oct-4-election-including-about-21-000-florida-residents-293494",
+     "published": "2026-10-12T12:21:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rafael R. Ioris, Professor of Modern Latin America History, University of Denver"
+    },
+    {
      "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
      "source": "Global Voices",
      "feed": "gv-latin-america",
      "link": "https://globalvoices.org/2026/10/10/how-ecuador-is-fighting-to-keep-industrial-trans-fats-off-the-food-shelf/",
      "published": "2026-10-10T04:00:43Z",
      "summary": "As health advocates push for tighter controls, Ecuador confronts the gap between regulating trans fats and enforcing those rules.",
-     "stale": true,
-     "author": "Carlos E. Flores"
-    },
-    {
-     "title": "Anne Carson’s Nobel-winning, genre-defying work bridges the gap between ancient Greek literature and modern life",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/anne-carsons-nobel-winning-genre-defying-work-bridges-the-gap-between-ancient-greek-literature-and-modern-life-294020",
-     "published": "2026-10-09T20:08:29Z",
-     "summary": "",
      "stale": false,
-     "author": "Amy Cannon, Associate Professor of Writing, USC Dornsife College of Letters, Arts and Sciences"
+     "author": "Carlos E. Flores"
     },
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
@@ -119,18 +129,8 @@
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": true,
-     "author": "EngageMedia"
-    },
-    {
-     "title": "Why fall yard care could start with doing less – but not nothing",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-fall-yard-care-could-start-with-doing-less-but-not-nothing-293924",
-     "published": "2026-10-09T18:41:58Z",
-     "summary": "",
      "stale": false,
-     "author": "Manjot Kaur Sidhu, Assistant Extension Professor of Horticulture and Ornamental Horticulture Specialist, University of Maine"
+     "author": "EngageMedia"
     },
     {
      "title": "Livestreaming US execution would breach prohibition of torture, UN rights office warns",
@@ -148,7 +148,7 @@
      "link": "https://globalvoices.org/2026/10/08/el-nino-speeds-climate-crisis-and-tests-latin-americas-food-security/",
      "published": "2026-10-08T05:00:54Z",
      "summary": "From droughts to floods and fires, El Niño is exposing vulnerabilities in Latin America’s food systems by putting farmers, food supplies and household budgets under growing pressure across the region.",
-     "stale": true,
+     "stale": false,
      "author": "Connectas"
     },
     {
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Sénégal : la bataille des mœurs est devenue un enjeu politique",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/senegal-la-bataille-des-moeurs-est-devenue-un-enjeu-politique-293027",
+     "published": "2026-10-12T12:16:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "Saliou Ngom, Université Cheikh Anta Diop de Dakar"
+    },
+    {
      "title": "When free speech has a price: Youth voices in Mozambique",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Mohamed Zahir Alimohamed, Lecturer in Human Genetics, Muhimbili University of Health and Allied Sciences"
-    },
-    {
-     "title": "Bambara groundnut: new maps show where southern African farmers can grow this drought-tolerant crop",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/bambara-groundnut-new-maps-show-where-southern-african-farmers-can-grow-this-drought-tolerant-crop-292500",
-     "published": "2026-10-11T05:59:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Richard Kunz, Research Fellow in the Centre for Water Resources Research, University of KwaZulu-Natal"
     },
     {
      "title": "Giving a dam: Cultivating peace in Côte d’Ivoire",
@@ -536,17 +536,17 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-europe",
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-americas",
@@ -720,27 +720,27 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
+   "published": "2026-10-12 12:22 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "More than 119 million Brazilians voted in the Oct. 4 election – including about 21,000 Florida residents",
+   "published": "2026-10-12 12:21 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
    "published": "2026-10-10 04:00 UTC"
   },
   {
    "region": "Americas",
-   "source": "The Conversation",
-   "title": "Anne Carson’s Nobel-winning, genre-defying work bridges the gap between ancient Greek literature and modern life",
-   "published": "2026-10-09 20:08 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Why fall yard care could start with doing less – but not nothing",
-   "published": "2026-10-09 18:41 UTC"
   },
   {
    "region": "Americas",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Sénégal : la bataille des mœurs est devenue un enjeu politique",
+   "published": "2026-10-12 12:16 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "When free speech has a price: Youth voices in Mozambique",
    "published": "2026-10-11 18:00 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "African genomics research is growing: what countries are doing to connect genetic data and healthcare",
    "published": "2026-10-11 06:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Bambara groundnut: new maps show where southern African farmers can grow this drought-tolerant crop",
-   "published": "2026-10-11 05:59 UTC"
   },
   {
    "region": "Africa",
