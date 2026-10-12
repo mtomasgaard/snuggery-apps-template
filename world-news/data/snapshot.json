@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T20:01:41Z",
+ "generatedAt": "2026-10-12T21:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What African elections can learn from the Borana Gadaa system",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/12/what-african-elections-can-learn-from-the-borana-gadaa-system/",
+     "published": "2026-10-12T20:34:34Z",
+     "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
+     "stale": false,
+     "author": "Peace News"
+    },
+    {
      "title": "Who is Navi Pillay, the South African judge who won the Nobel prize? We asked her biographer",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "In 2024 the African Commission itself adopted a resolution on internet shutdowns during elections. The resolution treats a shutdown as a harm to expression and access to information...",
      "stale": false,
      "author": "Ephraim Percy Kenyanito"
-    },
-    {
-     "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/05/too-young-to-run-old-enough-to-protest-west-africas-unfinished-democratic-bargain/",
-     "published": "2026-10-05T05:22:25Z",
-     "summary": "Young people are old enough to vote and old enough to protest but are often told they need experience before they can hold political office.",
-     "stale": false,
-     "author": "Adesewa Olofinko"
     }
    ]
   },
@@ -260,6 +260,16 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "What African elections can learn from the Borana Gadaa system",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/12/what-african-elections-can-learn-from-the-borana-gadaa-system/",
+     "published": "2026-10-12T20:34:34Z",
+     "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
+     "stale": false,
+     "author": "Peace News"
+    },
     {
      "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
      "source": "UN News",
@@ -325,16 +335,6 @@
      "summary": "If the Arab Spring was defined by optimism about what the internet could do, the years since have been marked by a more sober understanding of what it takes to defend it",
      "stale": false,
      "author": "Jillian C. York"
-    },
-    {
-     "title": "Equating protest with terrorism: A narrative against dissent",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
-     "published": "2026-09-29T00:00:00Z",
-     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": false,
-     "author": "Civic Media Observatory"
     }
    ]
   },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Your say: week beginning October 12",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-october-12-294135",
+     "published": "2026-10-12T20:28:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Judy Ingham, Newsletter Producer, The Conversation"
+    },
+    {
      "title": "Reading alone, together is all the rage at book doofs and reading parties. What makes it social?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Fiorella Ramirez Esquivel, Postdoctoral Fellow, School of Natural Sciences, Macquarie University"
-    },
-    {
-     "title": "Deadly fungi are harming Australia’s wild reptiles. This is how to stop the spread",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/deadly-fungi-are-harming-australias-wild-reptiles-this-is-how-to-stop-the-spread-293832",
-     "published": "2026-10-12T19:00:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Patrick Champagne, PhD Candidate in Biology, The University of Queensland"
     },
     {
      "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "What African elections can learn from the Borana Gadaa system",
+   "published": "2026-10-12 20:34 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Who is Navi Pillay, the South African judge who won the Nobel prize? We asked her biographer",
    "published": "2026-10-12 16:07 UTC"
@@ -809,10 +815,10 @@
    "published": "2026-10-07 18:02 UTC"
   },
   {
-   "region": "Africa",
+   "region": "Middle East",
    "source": "Global Voices",
-   "title": "Too young to run, old enough to protest: West Africa’s unfinished democratic bargain",
-   "published": "2026-10-05 05:22 UTC"
+   "title": "What African elections can learn from the Borana Gadaa system",
+   "published": "2026-10-12 20:34 UTC"
   },
   {
    "region": "Middle East",
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "Digital hopes, real power: From connection to collective action",
    "published": "2026-10-07 06:20 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "Equating protest with terrorism: A narrative against dissent",
-   "published": "2026-09-29 00:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Your say: week beginning October 12",
+   "published": "2026-10-12 20:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Reading alone, together is all the rage at book doofs and reading parties. What makes it social?",
    "published": "2026-10-12 19:02 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "How does a honeybee stinger actually pump venom? First-ever video shows it in action",
-   "published": "2026-10-12 19:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Deadly fungi are harming Australia’s wild reptiles. This is how to stop the spread",
    "published": "2026-10-12 19:00 UTC"
   },
   {
