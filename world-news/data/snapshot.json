@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T19:01:36Z",
+ "generatedAt": "2026-10-12T20:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "What colleges and universities need from donors to thrive",
+     "title": "California is taking a beating from an unusually destructive 2026 Pacific hurricane season",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/what-colleges-and-universities-need-from-donors-to-thrive-283427",
-     "published": "2026-10-12T18:24:43Z",
+     "link": "https://theconversation.com/california-is-taking-a-beating-from-an-unusually-destructive-2026-pacific-hurricane-season-294207",
+     "published": "2026-10-12T19:13:40Z",
      "summary": "",
      "stale": false,
-     "author": "William Blomquist, Professor Emeritus of Political Science, Indiana University"
+     "author": "Nicholas Grondin, Assistant Professor of Environmental Studies, University of Tampa"
     },
     {
-     "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
+     "title": "Hooked on tuna: People have been harvesting these ocean predators for 44,000 years",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/pardoning-of-israeli-soldier-evokes-a-long-history-of-clemency-for-those-who-kill-palestinians-293623",
-     "published": "2026-10-12T12:22:43Z",
+     "link": "https://theconversation.com/hooked-on-tuna-people-have-been-harvesting-these-ocean-predators-for-44-000-years-292428",
+     "published": "2026-10-12T19:00:44Z",
      "summary": "",
      "stale": false,
-     "author": "Tamir Sorek, Liberal Arts Professor of Middle East History, Penn State"
+     "author": "Emma Elliott Smith, Research Associate in Anthropology, National Museum of Natural History, Smithsonian Institution"
     },
     {
      "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
+     "title": "Reading alone, together is all the rage at book doofs and reading parties. What makes it social?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/reading-alone-together-is-all-the-rage-at-book-doofs-and-reading-parties-what-makes-it-social-292683",
+     "published": "2026-10-12T19:02:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shakiba Barghi, PhD Candidate in Publishing and Communications, The University of Melbourne"
+    },
+    {
+     "title": "How does a honeybee stinger actually pump venom? First-ever video shows it in action",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-does-a-honeybee-stinger-actually-pump-venom-first-ever-video-shows-it-in-action-292789",
+     "published": "2026-10-12T19:00:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fiorella Ramirez Esquivel, Postdoctoral Fellow, School of Natural Sciences, Macquarie University"
+    },
+    {
+     "title": "Deadly fungi are harming Australia’s wild reptiles. This is how to stop the spread",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/deadly-fungi-are-harming-australias-wild-reptiles-this-is-how-to-stop-the-spread-293832",
+     "published": "2026-10-12T19:00:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Patrick Champagne, PhD Candidate in Biology, The University of Queensland"
+    },
+    {
+     "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/a-global-report-gives-nz-tertiary-education-a-pass-but-hides-another-side-of-the-story-293551",
      "published": "2026-10-12T17:51:44Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Stefan Wolff, Professor of International Security, University of Birmingham"
-    },
-    {
-     "title": "Animals: Ben Affleck stars in this thriller about a politician who can’t hide his ugly side",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/animals-ben-affleck-stars-in-this-thriller-about-a-politician-who-cant-hide-his-ugly-side-293992",
-     "published": "2026-10-12T09:43:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel O'Brien, Lecturer, Department of Literature Film and Theatre Studies, University of Essex"
-    },
-    {
-     "title": "How a botched execution and proposed livestream of a firing squad fit in to the US’ death penalty history",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-a-botched-execution-and-proposed-livestream-of-a-firing-squad-fit-in-to-the-us-death-penalty-history-294052",
-     "published": "2026-10-12T05:14:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Carolyn Strange, Professor of History, School of History, ANU, Australian National University"
-    },
-    {
-     "title": "The pope has a lung nodule. What does this mean? And what’s the risk of cancer?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-pope-has-a-lung-nodule-what-does-this-mean-and-whats-the-risk-of-cancer-294136",
-     "published": "2026-10-12T04:55:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sarah Diepstraten, Senior Research Officer, Blood Cells and Blood Cancer Division, WEHI (Walter and Eliza Hall Institute of Medical Research)"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What colleges and universities need from donors to thrive",
-   "published": "2026-10-12 18:24 UTC"
+   "title": "California is taking a beating from an unusually destructive 2026 Pacific hurricane season",
+   "published": "2026-10-12 19:13 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Pardoning of Israeli soldier evokes a long history of clemency for those who kill Palestinians",
-   "published": "2026-10-12 12:22 UTC"
+   "title": "Hooked on tuna: People have been harvesting these ocean predators for 44,000 years",
+   "published": "2026-10-12 19:00 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Reading alone, together is all the rage at book doofs and reading parties. What makes it social?",
+   "published": "2026-10-12 19:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How does a honeybee stinger actually pump venom? First-ever video shows it in action",
+   "published": "2026-10-12 19:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Deadly fungi are harming Australia’s wild reptiles. This is how to stop the spread",
+   "published": "2026-10-12 19:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
    "published": "2026-10-12 17:51 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Donald Trump aligns with Vladimir Putin yet again, leaving Ukraine – and US relations with Europe – under pressure",
    "published": "2026-10-12 13:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Animals: Ben Affleck stars in this thriller about a politician who can’t hide his ugly side",
-   "published": "2026-10-12 09:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How a botched execution and proposed livestream of a firing squad fit in to the US’ death penalty history",
-   "published": "2026-10-12 05:14 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The pope has a lung nodule. What does this mean? And what’s the risk of cancer?",
-   "published": "2026-10-12 04:55 UTC"
   },
   {
    "region": "Oceania",
