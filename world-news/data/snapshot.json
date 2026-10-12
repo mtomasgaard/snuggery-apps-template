@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T01:01:28Z",
+ "generatedAt": "2026-10-12T02:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
+     "title": "Amanda Curtin imagines fragile acts of care among the homeless in Paris",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/amanda-curtin-imagines-fragile-acts-of-care-among-the-homeless-in-paris-291771",
+     "published": "2026-10-12T00:46:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
+    },
+    {
+     "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/is-nzs-foreign-policy-realism-working-why-the-next-government-faces-a-real-choice-294041",
      "published": "2026-10-11T23:47:43Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Garritt C. Van Dyk, Senior Lecturer in History, University of Waikato"
-    },
-    {
-     "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/navi-pillays-nobel-peace-prize-is-a-vote-of-confidence-in-a-global-legal-order-under-fire-294118",
-     "published": "2026-10-10T13:19:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Frans Viljoen, Professor of International Human Rights Law, SARChI Chair in International Constitutional Law, University of Pretoria"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Amanda Curtin imagines fragile acts of care among the homeless in Paris",
+   "published": "2026-10-12 00:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
    "published": "2026-10-11 23:47 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Distant voices: how the revival of ta rē Moriori lets us hear the true history of Rēkohu",
    "published": "2026-10-11 18:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Navi Pillay’s Nobel peace prize is a vote of confidence in a global legal order under fire",
-   "published": "2026-10-10 13:19 UTC"
   },
   {
    "region": "Oceania",
