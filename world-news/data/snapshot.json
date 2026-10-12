@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T11:05:12Z",
+ "generatedAt": "2026-10-12T12:03:10Z",
  "regions": [
   {
    "key": "europe",
@@ -183,7 +183,7 @@
      "link": "https://globalvoices.org/2026/10/11/when-free-speech-has-a-price-youth-voices-in-mozambique/",
      "published": "2026-10-11T18:00:47Z",
      "summary": "For Mozambican youth, freedom of expression exists in law, but speaking out can come with a cost. Music became a powerful space for criticism and resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Liam Anderson"
     },
     {
@@ -240,7 +240,7 @@
      "link": "https://globalvoices.org/2026/10/07/africas-governments-already-treat-the-internet-as-protest-infrastructure-its-courts-have-not-caught-up/",
      "published": "2026-10-07T18:02:48Z",
      "summary": "In 2024 the African Commission itself adopted a resolution on internet shutdowns during elections. The resolution treats a shutdown as a harm to expression and access to information...",
-     "stale": true,
+     "stale": false,
      "author": "Ephraim Percy Kenyanito"
     },
     {
@@ -250,7 +250,7 @@
      "link": "https://globalvoices.org/2026/10/05/too-young-to-run-old-enough-to-protest-west-africas-unfinished-democratic-bargain/",
      "published": "2026-10-05T05:22:25Z",
      "summary": "Young people are old enough to vote and old enough to protest but are often told they need experience before they can hold political office.",
-     "stale": true,
+     "stale": false,
      "author": "Adesewa Olofinko"
     }
    ]
@@ -285,7 +285,7 @@
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": true,
+     "stale": false,
      "author": "EngageMedia"
     },
     {
@@ -313,7 +313,7 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -323,7 +323,7 @@
      "link": "https://globalvoices.org/2026/10/07/digital-hopes-real-power-from-connection-to-collective-action/",
      "published": "2026-10-07T06:20:55Z",
      "summary": "If the Arab Spring was defined by optimism about what the internet could do, the years since have been marked by a more sober understanding of what it takes to defend it",
-     "stale": true,
+     "stale": false,
      "author": "Jillian C. York"
     },
     {
@@ -333,7 +333,7 @@
      "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": true,
+     "stale": false,
      "author": "Civic Media Observatory"
     }
    ]
@@ -350,7 +350,7 @@
      "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
      "published": "2026-10-12T06:39:35Z",
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
-     "stale": true,
+     "stale": false,
      "author": "Maksuda Akter"
     },
     {
@@ -378,7 +378,7 @@
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": true,
+     "stale": false,
      "author": "EngageMedia"
     },
     {
@@ -388,7 +388,7 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -398,7 +398,7 @@
      "link": "https://globalvoices.org/2026/10/08/alibaba-sues-pentagon-to-denounce-being-classified-as-a-chinese-military-affiliate/",
      "published": "2026-10-08T18:31:42Z",
      "summary": "DoD’s public document describes Alibaba as indirectly affiliated with China State Council's supervision body, and a “military-civil fusion contributor to the Chinese defense industrial base”.",
-     "stale": true,
+     "stale": false,
      "author": "Oiwan Lam"
     },
     {
@@ -408,7 +408,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": true,
+     "stale": false,
      "author": "Sydney Allen"
     },
     {
@@ -418,7 +418,7 @@
      "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": true,
+     "stale": false,
      "author": "Civic Media Observatory"
     }
    ]
@@ -584,9 +584,9 @@
    "id": "gv-africa",
    "source": "Global Voices",
    "region": "Africa",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-africa",
@@ -608,9 +608,9 @@
    "id": "gv-west-asia",
    "source": "Global Voices",
    "region": "Middle East",
-   "ok": false,
-   "items": 4,
-   "note": "URLError: <urlopen error timed out>; kept 4 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-middle-east",
@@ -624,17 +624,17 @@
    "id": "gv-east-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-south-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-asia-pacific",
