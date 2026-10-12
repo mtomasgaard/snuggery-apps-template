@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T03:01:54Z",
+ "generatedAt": "2026-10-12T04:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -149,7 +149,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168492",
      "published": "2026-10-04T12:00:00Z",
      "summary": "A documentary drawn from United Nations University research was screened at the COP30 climate conference and film festivals across Europe. Its most important journey, though, was the one back to the Mexico City canals…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "No more execution attempts on Christa Pike: UN rights chief",
@@ -158,7 +158,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168504",
      "published": "2026-10-01T12:00:00Z",
      "summary": "The UN human rights chief and nine independent rights experts on Thursday called on authorities in Tennessee not to pursue any further attempts to execute Christa Pike, saying her case highlights multiple concerns…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Canada urges stronger partnerships as global order faces ‘rupture’",
@@ -167,7 +167,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/09/1168461",
      "published": "2026-09-26T12:00:00Z",
      "summary": "Canada’s Foreign Minister Anita Anand warned the UN General Assembly on Saturday that the international order has entered an era of profound disruption, calling for stronger multilateral cooperation and new partnerships…",
-     "stale": true
+     "stale": false
     }
    ]
   },
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/whats-in-a-name-enough-to-ensnare-australia-nz-and-png-in-a-legal-battle-over-the-rugby-team-name-chiefs-294045",
+     "published": "2026-10-12T03:16:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ray Nickson, Senior Lecturer, School of Law and Justice, University of Newcastle"
+    },
+    {
+     "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/can-building-more-roads-make-traffic-worse-heres-the-mathematics-behind-it-288837",
+     "published": "2026-10-12T02:59:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
+    },
+    {
      "title": "This economist believes the system is broken. Maybe she has a point",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
-    },
-    {
-     "title": "Conservation parks don’t have to be vast – as one tiny grasshopper reminds us",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/conservation-parks-dont-have-to-be-vast-as-one-tiny-grasshopper-reminds-us-293110",
-     "published": "2026-10-12T01:38:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ary Hoffmann, Professor, School of BioSciences and Bio21 Institute, The University of Melbourne"
-    },
-    {
-     "title": "Amanda Curtin imagines fragile acts of care among the homeless in Paris",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/amanda-curtin-imagines-fragile-acts-of-care-among-the-homeless-in-paris-291771",
-     "published": "2026-10-12T00:46:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
     },
     {
      "title": "Is NZ’s foreign policy ‘realism’ working? Why the next government faces a real choice",
@@ -568,9 +568,9 @@
    "id": "un-americas",
    "source": "UN News",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "tc-us",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What’s in a name? Enough to ensnare Australia, NZ and PNG in a legal battle over the rugby team name ‘Chiefs’",
+   "published": "2026-10-12 03:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Can building more roads make traffic worse? Here’s the mathematics behind it",
+   "published": "2026-10-12 02:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "This economist believes the system is broken. Maybe she has a point",
    "published": "2026-10-12 02:34 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Conservation parks don’t have to be vast – as one tiny grasshopper reminds us",
-   "published": "2026-10-12 01:38 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Amanda Curtin imagines fragile acts of care among the homeless in Paris",
-   "published": "2026-10-12 00:46 UTC"
   },
   {
    "region": "Oceania",
