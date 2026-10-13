@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T12:48:01Z",
+ "generatedAt": "2026-10-13T13:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "California is taking a beating from an unusually destructive 2026 Pacific hurricane season",
+     "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/california-is-taking-a-beating-from-an-unusually-destructive-2026-pacific-hurricane-season-294207",
-     "published": "2026-10-12T19:13:40Z",
+     "link": "https://theconversation.com/more-rehab-centers-should-mean-fewer-overdoses-in-one-california-region-we-found-the-opposite-285569",
+     "published": "2026-10-13T12:52:39Z",
      "summary": "",
      "stale": false,
-     "author": "Nicholas Grondin, Assistant Professor of Environmental Studies, University of Tampa"
+     "author": "Ilan Shrira, Associate Teaching Professor of Psychology, Penn State"
     },
     {
-     "title": "Hooked on tuna: People have been harvesting these ocean predators for 44,000 years",
+     "title": "Americans are stressed about grocery prices, so why do they toss or overlook so much ‘misfit’ food?",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/hooked-on-tuna-people-have-been-harvesting-these-ocean-predators-for-44-000-years-292428",
-     "published": "2026-10-12T19:00:44Z",
+     "link": "https://theconversation.com/americans-are-stressed-about-grocery-prices-so-why-do-they-toss-or-overlook-so-much-misfit-food-293526",
+     "published": "2026-10-13T12:20:03Z",
      "summary": "",
      "stale": false,
-     "author": "Emma Elliott Smith, Research Associate in Anthropology, National Museum of Natural History, Smithsonian Institution"
+     "author": "Jintao Zhang, Assistant Professor of Marketing, Binghamton University, State University of New York"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "California is taking a beating from an unusually destructive 2026 Pacific hurricane season",
-   "published": "2026-10-12 19:13 UTC"
+   "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
+   "published": "2026-10-13 12:52 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Hooked on tuna: People have been harvesting these ocean predators for 44,000 years",
-   "published": "2026-10-12 19:00 UTC"
+   "title": "Americans are stressed about grocery prices, so why do they toss or overlook so much ‘misfit’ food?",
+   "published": "2026-10-13 12:20 UTC"
   },
   {
    "region": "Americas",
