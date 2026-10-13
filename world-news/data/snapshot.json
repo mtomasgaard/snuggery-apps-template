@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T17:01:40Z",
+ "generatedAt": "2026-10-13T18:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ’s health system suffers from chronic ailments only cross-party consensus can treat",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nzs-health-system-suffers-from-chronic-ailments-only-cross-party-consensus-can-treat-292668",
+     "published": "2026-10-13T17:47:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robin Gauld, Executive Dean, Bond Business School, Bond University"
+    },
+    {
      "title": "Extreme El Niños are coming. Reaching net zero sooner means facing fewer of them",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "The Pacific Islands are changing. What happens to cultural heritage when the people have to leave?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-pacific-islands-are-changing-what-happens-to-cultural-heritage-when-the-people-have-to-leave-293946",
-     "published": "2026-10-13T01:36:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Thomas Cooper-Johnson, Lecturer, Construction Management and Disaster Risk Reduction, University of Newcastle"
     },
     {
      "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s health system suffers from chronic ailments only cross-party consensus can treat",
+   "published": "2026-10-13 17:47 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Extreme El Niños are coming. Reaching net zero sooner means facing fewer of them",
    "published": "2026-10-13 09:00 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Jim Chalmers warns progressives not to ‘mock’ One Nation voters",
    "published": "2026-10-13 08:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Pacific Islands are changing. What happens to cultural heritage when the people have to leave?",
-   "published": "2026-10-13 01:36 UTC"
   },
   {
    "region": "Oceania",
