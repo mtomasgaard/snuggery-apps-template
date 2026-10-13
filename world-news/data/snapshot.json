@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T22:01:37Z",
+ "generatedAt": "2026-10-13T23:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/voters-want-stronger-action-on-ai-can-nz-afford-to-keep-taking-a-soft-approach-292978",
+     "published": "2026-10-13T22:47:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Lensen, Senior Lecturer in Artificial Intelligence, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
      "title": "Spawning coral release quintillions of eggs each year: new research",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Oscar Davis, Assistant Professor in Philosophy and History, Bond University"
-    },
-    {
-     "title": "How young people do democracy: pausing, questioning, creating and bringing others along with them",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-young-people-do-democracy-pausing-questioning-creating-and-bringing-others-along-with-them-294138",
-     "published": "2026-10-13T18:52:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sarah Austin, Senior Lecturer in Theatre, The University of Melbourne"
     },
     {
      "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
+   "published": "2026-10-13 22:47 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Spawning coral release quintillions of eggs each year: new research",
    "published": "2026-10-13 18:54 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "What is the Socratic method? Could it be used to test students in an age of AI?",
    "published": "2026-10-13 18:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How young people do democracy: pausing, questioning, creating and bringing others along with them",
-   "published": "2026-10-13 18:52 UTC"
   },
   {
    "region": "Oceania",
