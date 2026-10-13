@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T08:01:32Z",
+ "generatedAt": "2026-10-13T09:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Extreme El Niños are coming. Reaching net zero sooner means facing fewer of them",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/extreme-el-ninos-are-coming-reaching-net-zero-sooner-means-facing-fewer-of-them-292134",
+     "published": "2026-10-13T09:00:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Aditya Sengupta, PhD Candidate, School of Geography, Earth and Atmospheric Sciences, The University of Melbourne"
+    },
+    {
+     "title": "Jim Chalmers warns progressives not to ‘mock’ One Nation voters",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/jim-chalmers-warns-progressives-not-to-mock-one-nation-voters-293216",
+     "published": "2026-10-13T08:32:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "The Pacific Islands are changing. What happens to cultural heritage when the people have to leave?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Claire Timperley, Senior Lecturer in Political Science, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "From Melbourne to Madrid, housing is shaping modern politics. But who benefits?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/from-melbourne-to-madrid-housing-is-shaping-modern-politics-but-who-benefits-293817",
-     "published": "2026-10-13T00:51:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ameeta Jain, Associate Professor in Property and Real Estate, Deakin Business School, Deakin University"
-    },
-    {
-     "title": "Doing end-of-year exams? 5 foods that are good for brain health – and what to avoid",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/doing-end-of-year-exams-5-foods-that-are-good-for-brain-health-and-what-to-avoid-293221",
-     "published": "2026-10-13T00:43:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yasmine Probst, Professor, School of Medical, Indigenous and Health Sciences. Advanced Accredited Practising Dietitian, University of Wollongong"
     },
     {
      "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Extreme El Niños are coming. Reaching net zero sooner means facing fewer of them",
+   "published": "2026-10-13 09:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Jim Chalmers warns progressives not to ‘mock’ One Nation voters",
+   "published": "2026-10-13 08:32 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The Pacific Islands are changing. What happens to cultural heritage when the people have to leave?",
    "published": "2026-10-13 01:36 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
    "published": "2026-10-13 01:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "From Melbourne to Madrid, housing is shaping modern politics. But who benefits?",
-   "published": "2026-10-13 00:51 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Doing end-of-year exams? 5 foods that are good for brain health – and what to avoid",
-   "published": "2026-10-13 00:43 UTC"
   },
   {
    "region": "Oceania",
