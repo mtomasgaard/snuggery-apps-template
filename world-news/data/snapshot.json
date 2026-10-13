@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-12T23:01:32Z",
+ "generatedAt": "2026-10-13T00:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Emma Elliott Smith, Research Associate in Anthropology, National Museum of Natural History, Smithsonian Institution"
     },
     {
+     "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168580",
+     "published": "2026-10-12T12:00:00Z",
+     "summary": "Nearly 10 years after Colombia signed a historic peace agreement to end a decades-long insurgency, the deal is under strain from growing insecurity – and the UN’s top official in the country says it cannot be allowed to…",
+     "stale": false
+    },
+    {
      "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -158,15 +167,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168492",
      "published": "2026-10-04T12:00:00Z",
      "summary": "A documentary drawn from United Nations University research was screened at the COP30 climate conference and film festivals across Europe. Its most important journey, though, was the one back to the Mexico City canals…",
-     "stale": false
-    },
-    {
-     "title": "No more execution attempts on Christa Pike: UN rights chief",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168504",
-     "published": "2026-10-01T12:00:00Z",
-     "summary": "The UN human rights chief and nine independent rights experts on Thursday called on authorities in Tennessee not to pursue any further attempts to execute Christa Pike, saying her case highlights multiple concerns…",
      "stale": false
     }
    ]
@@ -271,6 +271,15 @@
      "author": "Peace News"
     },
     {
+     "title": "Security Council LIVE: Syria’s fragile transition – economic strain, Israeli incursions and progress towards elections",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168578",
+     "published": "2026-10-12T12:00:00Z",
+     "summary": "The Security Council is meeting on Syria as the country’s transition faces pressure on several fronts. Economic hardship is fuelling unrest, Israeli incursions continue in the south and sectarian tensions persist in…",
+     "stale": false
+    },
+    {
      "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
      "published": "2026-10-09T12:00:00Z",
      "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
-     "stale": false
-    },
-    {
-     "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168559",
-     "published": "2026-10-09T12:00:00Z",
-     "summary": "The Security Council met to discuss the crisis in Yemen Friday, where a Houthi offensive launched in September has sharply escalated the 12-year-long war for control of the country and spillover from the US-Iran war has…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Politics with Michelle Grattan: Josh Frydenberg plans to keep speaking out",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-josh-frydenberg-plans-to-keep-speaking-out-293219",
+     "published": "2026-10-12T22:53:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -439,6 +449,16 @@
      "author": "Ben Gray, Associate Professor of Primary Health Care and General Practice, University of Otago"
     },
     {
+     "title": "Possessed nuns and sexual deviance: the history behind Ken Russell’s highly-censored film The Devils",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/possessed-nuns-and-sexual-deviance-the-history-behind-ken-russells-highly-censored-film-the-devils-294049",
+     "published": "2026-10-12T22:32:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Philip C. Almond, Emeritus Professor in the History of Religious Thought, The University of Queensland"
+    },
+    {
      "title": "Your say: week beginning October 12",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Judy Ingham, Newsletter Producer, The Conversation"
-    },
-    {
-     "title": "Reading alone, together is all the rage at book doofs and reading parties. What makes it social?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/reading-alone-together-is-all-the-rage-at-book-doofs-and-reading-parties-what-makes-it-social-292683",
-     "published": "2026-10-12T19:02:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shakiba Barghi, PhD Candidate in Publishing and Communications, The University of Melbourne"
-    },
-    {
-     "title": "How does a honeybee stinger actually pump venom? First-ever video shows it in action",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-does-a-honeybee-stinger-actually-pump-venom-first-ever-video-shows-it-in-action-292789",
-     "published": "2026-10-12T19:00:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Fiorella Ramirez Esquivel, Postdoctoral Fellow, School of Natural Sciences, Macquarie University"
     },
     {
      "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
@@ -732,6 +732,12 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
+   "published": "2026-10-12 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
    "published": "2026-10-10 04:00 UTC"
@@ -759,12 +765,6 @@
    "source": "UN News",
    "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
    "published": "2026-10-04 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "No more execution attempts on Christa Pike: UN rights chief",
-   "published": "2026-10-01 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -823,6 +823,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Security Council LIVE: Syria’s fragile transition – economic strain, Israeli incursions and progress towards elections",
+   "published": "2026-10-12 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
    "published": "2026-10-11 12:00 UTC"
   },
@@ -842,12 +848,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "Amid heartache of Nepal flooding disaster, fear remains",
-   "published": "2026-10-09 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Security Council LIVE: Yemen has fallen back into full-scale war, warns UN envoy",
    "published": "2026-10-09 12:00 UTC"
   },
   {
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Politics with Michelle Grattan: Josh Frydenberg plans to keep speaking out",
+   "published": "2026-10-12 22:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
    "published": "2026-10-12 22:43 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Possessed nuns and sexual deviance: the history behind Ken Russell’s highly-censored film The Devils",
+   "published": "2026-10-12 22:32 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning October 12",
    "published": "2026-10-12 20:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Reading alone, together is all the rage at book doofs and reading parties. What makes it social?",
-   "published": "2026-10-12 19:02 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How does a honeybee stinger actually pump venom? First-ever video shows it in action",
-   "published": "2026-10-12 19:00 UTC"
   },
   {
    "region": "Oceania",
