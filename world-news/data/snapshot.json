@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T01:01:42Z",
+ "generatedAt": "2026-10-13T02:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "We can’t block a livestream, but Australia could ban execution footage from the US – to an extent",
+     "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/we-cant-block-a-livestream-but-australia-could-ban-execution-footage-from-the-us-to-an-extent-294141",
-     "published": "2026-10-13T00:17:28Z",
+     "link": "https://theconversation.com/just-politics-or-the-opposite-of-clever-the-risks-and-rewards-of-strategic-voting-293703",
+     "published": "2026-10-13T01:10:59Z",
      "summary": "",
      "stale": false,
-     "author": "Victoria Fielding, Senior Lecturer, School of Communication, Media and Journalism, Adelaide University"
+     "author": "Claire Timperley, Senior Lecturer in Political Science, Te Herenga Waka — Victoria University of Wellington"
     },
     {
-     "title": "Politics with Michelle Grattan: Josh Frydenberg plans to keep speaking out",
+     "title": "From Melbourne to Madrid, housing is shaping modern politics. But who benefits?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-josh-frydenberg-plans-to-keep-speaking-out-293219",
-     "published": "2026-10-12T22:53:31Z",
+     "link": "https://theconversation.com/from-melbourne-to-madrid-housing-is-shaping-modern-politics-but-who-benefits-293817",
+     "published": "2026-10-13T00:51:21Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Ameeta Jain, Associate Professor in Property and Real Estate, Deakin Business School, Deakin University"
+    },
+    {
+     "title": "Doing end-of-year exams? 5 foods that are good for brain health – and what to avoid",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/doing-end-of-year-exams-5-foods-that-are-good-for-brain-health-and-what-to-avoid-293221",
+     "published": "2026-10-13T00:43:08Z",
+     "summary": "",
+     "stale": false,
+     "author": "Yasmine Probst, Professor, School of Medical, Indigenous and Health Sciences. Advanced Accredited Practising Dietitian, University of Wollongong"
     },
     {
      "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Ben Gray, Associate Professor of Primary Health Care and General Practice, University of Otago"
-    },
-    {
-     "title": "Possessed nuns and sexual deviance: the history behind Ken Russell’s highly-censored film The Devils",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/possessed-nuns-and-sexual-deviance-the-history-behind-ken-russells-highly-censored-film-the-devils-294049",
-     "published": "2026-10-12T22:32:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Philip C. Almond, Emeritus Professor in the History of Religious Thought, The University of Queensland"
     },
     {
      "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "We can’t block a livestream, but Australia could ban execution footage from the US – to an extent",
-   "published": "2026-10-13 00:17 UTC"
+   "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
+   "published": "2026-10-13 01:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Josh Frydenberg plans to keep speaking out",
-   "published": "2026-10-12 22:53 UTC"
+   "title": "From Melbourne to Madrid, housing is shaping modern politics. But who benefits?",
+   "published": "2026-10-13 00:51 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Doing end-of-year exams? 5 foods that are good for brain health – and what to avoid",
+   "published": "2026-10-13 00:43 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
    "published": "2026-10-12 22:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Possessed nuns and sexual deviance: the history behind Ken Russell’s highly-censored film The Devils",
-   "published": "2026-10-12 22:32 UTC"
   },
   {
    "region": "Oceania",
