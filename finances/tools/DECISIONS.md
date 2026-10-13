@@ -824,3 +824,10 @@ App code **127 140 B** of 200 000 (`app.js` 87 534, `style.css` 16 268). ZIP **1
 ### The camera
 
 `Overview` and `Spending` untouched (`buildTabs()` unchanged); nothing the camera waits for moved.
+
+## 2026-10-13: the readout card keeps its corner (the press videos)
+
+A readout card dropped under its chart mid-slide when none of its three corners was clear of the finger
+(Running Dashboard had the same rule). `cardSpot` adds the fourth corner, keeps the card where it is while that
+stays clear, and otherwise takes the first clear corner. Under the chart is the last resort, as before: a card
+never covers what the finger reads. A chart's own `spots` keep their old rule. The owner: "fix all issues that surfaced".

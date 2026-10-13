@@ -569,6 +569,31 @@ function drawStatic(c) {
   }
 }
 
+/* What a pan or a pinch-out uncovers past the moved picture: the sea, the
+ * depth shading and the land of the whole data box, painted once per theme
+ * at 1024 px on its long side and stretched, so a gesture frame stays two
+ * copies and never shows the outside's gray inside the box. Soft when zoomed
+ * in, and only until the finger lifts. */
+let over = null;
+function overview() {
+  const key = [P.name, layerOn.bathy, !!bathy].join('|');
+  if (over && over.key === key && over.base === base) return over.canvas;
+  const bw = base.X1 - base.X0, bh = base.Y1 - base.Y0, s = 1024 / Math.max(bw, bh);
+  const cv = (over && over.canvas) || document.createElement('canvas');
+  cv.width = Math.ceil(bw * s); cv.height = Math.ceil(bh * s);
+  const c = cv.getContext('2d');
+  c.setTransform(s, 0, 0, s, -base.X0 * s, -base.Y0 * s);
+  c.fillStyle = P.sea;
+  c.fillRect(base.X0, base.Y0, bw, bh);
+  const bc = layerOn.bathy ? bathyCanvas() : null;
+  if (bc) c.drawImage(bc, bathy.X0, bathy.Y0, bathy.X1 - bathy.X0, bathy.Y1 - bathy.Y0);
+  else if (layerOn.bathy) { c.fillStyle = P.depth[2][1]; c.fill(base.bathy, 'evenodd'); }
+  c.fillStyle = P.land;
+  c.fill(base.land, 'evenodd');
+  over = { key, base, canvas: cv };
+  return cv;
+}
+
 let snapFrame = null;
 function takeSnapshot() {
   if (!snapFrame || snapFrame.canvas.width !== canvas.width || snapFrame.canvas.height !== canvas.height) {
@@ -596,6 +621,9 @@ function render() {
     c.setTransform(1, 0, 0, 1, 0, 0);
     c.fillStyle = P.outside;
     c.fillRect(0, 0, canvas.width, canvas.height);
+    worldTf(c);
+    c.imageSmoothingEnabled = true;
+    c.drawImage(overview(), base.X0, base.Y0, base.X1 - base.X0, base.Y1 - base.Y0);
     c.setTransform(sc, 0, 0, sc, (view.tx - sc * v0.tx) * dpr, (view.ty - sc * v0.ty) * dpr);
     c.drawImage(snapFrame.canvas, 0, 0);
     return;
@@ -1467,7 +1495,8 @@ function renderDetails() {
       const gv = cum ? (j >= 0 ? S.cg[Math.min(j, n - 1)] : 0) : inR ? S.gas[j] : 0;
       setText(keyL, `Liquids ${U.amount(lv, 'liq', sys, cum)}`);
       setText(keyG, `Gas ${U.amount(gv, 'gas', sys, cum)}`);
-      if (!keyL.firstChild || keyL.firstChild.nodeName !== 'I') { keyL.prepend(el('i')); keyG.prepend(el('i')); }
+      // each figure's swatch on its own: setText rewrites a key only when its text changes, so one can lose its swatch while the other keeps it
+      for (const k of [keyL, keyG]) if (!k.firstChild || k.firstChild.nodeName !== 'I') k.prepend(el('i'));
       cv.setAttribute('aria-label', `${cum ? 'Cumulative production' : 'Production history'} from ${monthYear(S.x0)} to ${monthYear(S.x1)}, liquids and gas as oil equivalent on one scale. ${U.monthLong(shown)}: ${keyL.textContent}, ${keyG.textContent}.`);
     }
     const cellOf = (F) => (cum ? cumAt(F, qty, shown) : monthly(F, qty, shown) / dd);

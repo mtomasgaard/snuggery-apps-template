@@ -311,8 +311,9 @@ ok(zsize <= 720806 && zsize < 3 * 2 ** 20, `ZIP size ${fmt(zsize)} bytes (cap 72
   ok(hits.length === 0, `US spelling in ${texts.length - 1} shipped text files${hits.length ? ': ' + hits.slice(0, 12).join(', ') : ''}`);
 }
 
-// 18. The README's picture
-ok(sha('screenshots/app.png') === '3d369cbeb93ec2ea3178edb3408c5b1f8f90fda49a939d2768dc53ee762d665e', 'screenshots/app.png (the README\'s picture, recomposed by the lead on 2026-10-02 from the camera\'s panes) unchanged');
+// 18. The README's picture (re-pinned 2026-10-13: commit d1f0c7b re-shot it with the family's pictures
+// on 2026-10-11 and left this pin on the 2026-10-02 file)
+ok(sha('screenshots/app.png') === '5c13426beeef8b3cf98955027127cc831054e4a9fee8c04f8772a59f04b09aa3', 'screenshots/app.png (the README\'s picture, re-shot by the lead on 2026-10-11 from the camera\'s panes) unchanged');
 
 if (fails.length) { console.log(`\n${fails.length} check(s) failed`); process.exit(1); }
 console.log('\nall checks pass');

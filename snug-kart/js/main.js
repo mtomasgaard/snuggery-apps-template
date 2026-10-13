@@ -140,13 +140,16 @@ function failLoad(msg) {
 // Track scenery (built once per track + quality; reused for "Race again")
 
 async function ensureScenery(trackId, quality) {
-  const key = `${trackId}:${quality}`;
-  G.track = G.tracks.find((t) => t.id === trackId);
-  if (G.scenery && G.sceneryKey === key) return;
+  const key = `${trackId}:${quality}`, track = G.tracks.find((t) => t.id === trackId);
+  if (G.scenery && G.sceneryKey === key) { G.track = track; return; }
   const b = $('building');
   const showing = G.screen !== 'loading';
+  // G.track changes only with the scenery: the frames awaited here still draw the old title race,
+  // and its karts' sample indices read on a shorter track gave a NaN road normal that each kart's
+  // smoothed up vector then kept, so no kart was drawn again (Pinewood Pass, then Harbour Loop).
   if (showing) { b.hidden = false; await nextFrame(); await nextFrame(); }
   if (G.scenery) G.scenery.dispose();
+  G.track = track;
   G.scenery = buildScenery(G.track, quality);
   G.sceneryKey = key;
   G.stats.buildMs = G.scenery.buildMs;

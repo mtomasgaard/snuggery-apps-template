@@ -2157,3 +2157,19 @@ good, but they pop up when scrolling up. I do not want them to pop up until we a
 - shoot.mjs: 60 px back up (at 140 px) the row is still out; at 24 px it is half back; a touch drag down
   that stops short of the top leaves it out; the top brings it back.
 - Version 1.2 to 1.2.1. The same change goes to the owner's private Training Load.
+
+## 2026-10-13: the trailing base and the readout card (the press videos)
+
+Two defects the press video's reviews found, fixed at the owner's word ("fix all issues that surfaced"):
+
+- **The four-week averages had a short base at the window's start.** Running's weekly volume, the ramp rate and
+  Load's four-week line took their base from inside the time window. A window starting mid-history began with a
+  one-week "average", which reshaped as the start thumb moved. `selected({ lead })` and `weekRows(acts, lead)` now
+  count the three weeks before the window, and the averages are cut back to it.
+- **A readout card dropped under its chart mid-slide** when none of its three corners was clear of the finger.
+  `cardSpot` adds the fourth corner, keeps the card where it is while that stays clear, and otherwise takes the
+  first clear corner. Under the chart is the last resort, as before, because a card never covers what the finger
+  reads (the suites check it). Finances has the
+  same rule.
+
+The code cap rises from 260 000 to 261 000 for them (259 822 with the base, 260 445 with the card).

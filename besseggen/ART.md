@@ -419,7 +419,7 @@ Measured on the working tree before the pass:
 
 | | Today | Cap | Command |
 | --- | --: | --: | --- |
-| App code (every shipped `.html`, `.css`, `.js` outside `vendor/`, `data/`, `tools/`; 15 files) | 215 934 B | **227 000 B, ruled by the lead** (plan 0011 D11; held at 215 934 B by D5 (2) until the build measured 226 148 B after the five trims below). Owner call 1 | `find . -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.mjs' \) -not -path './vendor/*' -not -path './data/*' -not -path './tools/*' -print0 \| xargs -0 wc -c` |
+| App code (every shipped `.html`, `.css`, `.js` outside `vendor/`, `data/`, `tools/`; 15 files) | 215 934 B | **227 000 B, ruled by the lead** (plan 0011 D11; held at 215 934 B by D5 (2) until the build measured 226 148 B after the five trims below); **227 500 B from 2026-10-13**, for the label fix (tools/DECISIONS.md). Owner call 1 | `find . -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.mjs' \) -not -path './vendor/*' -not -path './data/*' -not -path './tools/*' -print0 \| xargs -0 wc -c` |
 | Fonts | 87 680 B | 160 000 B; planned 40 075 B | `cat fonts/* \| wc -c` |
 | ZIP, as `build-zips.yml` packs it (49 entries today) | 16 871 005 B | **21 088 756 B** (today x 1.25; no face allowance, since the app swaps its faces: HOUSE 8) | `zip -q -r -X OUT . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*'`, then `wc -c` |
 

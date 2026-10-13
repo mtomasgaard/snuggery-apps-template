@@ -1000,3 +1000,28 @@ the data. Every other check passes.
     the NSTA fetch before the source.
 - ART.md's opening figures are dated (2026-10-02's data) rather than re-measured. test_decode now
   derives the opening month from the data, the fixer's change, so it no longer pins Jul 2026.
+
+## The gesture picture's gray band (2026-10-13)
+
+Found while filming the press video: during a pan or a pinch-out the newly uncovered part of the plate
+showed the outside's gray (`P.outside`, #dbdee0 light, #0c1012 dark) until the finger lifted, because
+the gesture frame painted that tone under the moved picture of the last full frame.
+
+- **The fix, in `render()`:** under the moved picture the gesture frame now stretches `overview()`, a
+  canvas of the whole data box (the sea, the depth shading as the layer stands, the land; no coast
+  stroke, borders, pipes or production) painted once per theme and layer state at 1 024 px on its
+  long side. A gesture frame stays two image copies and one fill, so the reason for the picture (no
+  full redraw under a finger, for phone speed) holds. Beyond the data box the outside's tone still
+  shows, as it does in a full frame. The uncovered part is soft when zoomed in, and only until the
+  lift redraws it whole.
+- **Not taken:** a picture with a margin beyond the plate costs a bigger full draw at every touch and
+  still runs out on a long pinch-out; the sea tone alone would paint sea over land near the coast.
+- **Checks:** `shoot.mjs` "the picture under a finger", light and dark at 390 x 844: a 150 px pan and
+  a pinch-out to half the zoom, read off the pixels with the finger down; the gesture frame may hold no
+  more of the outside's tone in the uncovered region than the full frame after the lift. Before the fix
+  it was every pixel of the region (83 941 of 83 941 in the pan's strip; 143 905 of 154 093 in the
+  pinch's ring); after it, none beyond the full frame's own.
+- **Phone check:** the gesture's frame time on an iPhone, by eye and by feel, against 1.2; the overview
+  is about 4 MB of canvas memory. Not measured here (headless Chromium is no phone evidence).
+- World Oil & Gas has no moved picture: it redraws in full on every gesture frame (10 renders for a
+  10-step pan, read from `__wog.stats().draws`), so it shows no band and is unchanged.

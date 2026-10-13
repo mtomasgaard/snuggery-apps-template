@@ -334,6 +334,13 @@ function cardOf(wrap) {
 }
 /** Show `card` in `wrap` 12 px clear of the point (ax, ay) or the column at ax: top-left, inset 8 px,
  *  else top-right, else bottom-left, else hung from the chart's foot (over its head if no room below). */
+// where a readout card goes: where it is while that stays clear of the finger, else the first of four clear corners,
+// else under the chart (it never covers what the finger reads); a corner kept, not traded, so it does not hop
+function cardSpot(k, spots, off, H, ch) {
+  if (ch + 16 > H) return (k.at = null, [8, H]);
+  const kept = k.at && spots.find(([x, y]) => x === k.at[0] && y === k.at[1] && off([x, y]));
+  return (k.at = kept || spots.find(off) || null) || [8, H];
+}
 function showCard(wrap, card, ax, ay) {
   const k = cardOf(wrap);
   k.place.textContent = card.place;
@@ -349,7 +356,7 @@ function showCard(wrap, card, ax, ay) {
   k.c.hidden = false;
   const W = wrap.clientWidth, H = wrap.clientHeight, cw = k.c.offsetWidth, ch = k.c.offsetHeight;
   const off = ([x, y]) => ax == null || ax < x - 12 || ax > x + cw + 12 || (ay != null && (ay < y - 12 || ay > y + ch + 12));
-  let [left, top] = (ch + 16 <= H && [[8, 8], [W - cw - 8, 8], [8, H - ch - 8]].find(off)) || [8, H];
+  let [left, top] = cardSpot(k, [[8, 8], [W - cw - 8, 8], [8, H - ch - 8], [W - cw - 8, H - ch - 8]], off, H, ch);
   if (top === H && wrap.getBoundingClientRect().bottom + ch > $('main').getBoundingClientRect().bottom) top = -ch - 8;
   k.c.style.left = `${left}px`;
   k.c.style.top = `${top}px`;
@@ -731,8 +738,9 @@ function sportMatch(a) {
 
 // Only the filters the current pane shows are applied, so a gear choice made
 // on Sessions cannot silently thin out the Plan pane.
-function selected({ sportFilter = true, gearFilter = true } = {}) {
-  const [start, end] = windowRange();
+function selected({ sportFilter = true, gearFilter = true, lead = 0 } = {}) {
+  let [start, end] = windowRange();
+  if (lead) start = state.weeks[Math.max(0, state.from - lead)];   // the weeks before the window, for a trailing base
   const f = PANE_FILTERS[state.tab] || [];
   const useSport = sportFilter && f.includes('sport');
   const useGear = gearFilter && f.includes('gear');
@@ -745,8 +753,8 @@ function selected({ sportFilter = true, gearFilter = true } = {}) {
 
 const trimp = (z) => z.reduce((sum, secs, i) => sum + (secs / 60) * (i + 1), 0);
 
-function weekRows(acts) {
-  const keys = state.weeks.slice(state.from, state.to + 1);
+function weekRows(acts, lead = 0) {
+  const keys = state.weeks.slice(Math.max(0, state.from - lead), state.to + 1);
   const map = new Map(keys.map((k) => [k, {
     key: k, runKm: 0, walkKm: 0, km: 0, min: 0, trimp: 0, zmin: 0, muscle: 0,
     z: [0, 0, 0, 0, 0], bySport: {}, bySportMin: {}, bySportMuscle: {}, bySportDur: {}, runs: 0, sessions: 0, longRun: 0, quality: 0, elev: 0,
@@ -2284,10 +2292,11 @@ function plannedRow(s, missed) {
 
 const weekPlace = (k) => `Week of ${date(k)}`;
 function paneRunning(main) {
-  const acts = selected().filter((a) => a.sport === 'run');
-  const rows = weekRows(acts);
+  // a four-week average counts the three weeks before the window too, so its first weeks have their full base
+  const all = weekRows(selected({ lead: 3 }).filter((a) => a.sport === 'run'), 3), cut = all.length - (state.to - state.from + 1);
+  const rows = all.slice(cut);
   const kms = rows.map((r) => r.runKm);
-  const avg4 = rolling(kms, 4);
+  const avg4 = rolling(all.map((r) => r.runKm), 4).slice(cut);
   const anyWalk = rows.some((r) => r.walkKm > 0.05);
 
   const c1 = card('Weekly running volume',
@@ -2374,12 +2383,12 @@ function paneRunning(main) {
 
 const statusWord = (s) => (s || '').replace(/_\d+$/, '').replace(/_/g, ' ').toLowerCase();
 function paneLoad(main) {
-  const acts = selected();
-  const rows = weekRows(acts);
+  const all = weekRows(selected({ lead: 3 }), 3), cut = all.length - (state.to - state.from + 1);   // the base, as on Running
+  const rows = all.slice(cut);
   const val = (r) => (isSport() ? r.min : isMuscle() ? r.muscle : isLoad() ? r.trimp : r.zmin);
   const bySport = (r) => (isSport() ? r.bySportDur : isMuscle() ? r.bySportMuscle : isLoad() ? r.bySport : r.bySportMin);
   const totals = rows.map(val);
-  const avg4 = rolling(totals, 4);
+  const avg4 = rolling(all.map(val), 4).slice(cut);
   const shown = SPORTS.filter((s) => state.sport === 'all' || s.key === state.sport);
   const unit = unitWord();
 

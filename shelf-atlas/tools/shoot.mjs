@@ -834,6 +834,60 @@ console.log('\n== once (light)');
   }
 }
 
+// the picture moved under a finger: what a pan or a pinch-out uncovers inside the data's box is the
+// map's own base, never the outside's gray. Read off the pixels with the finger still down, against
+// the full frame drawn after the lift: the gesture frame may hold no more of the outside's tone in
+// the uncovered region than the full frame there does (which is the keys' and the real outside's).
+{
+  console.log('\n== the picture under a finger');
+  const T = JSON.parse(fs.readFileSync(path.join(APP, 'app.js'), 'utf8').match(/^const THEMES = (.*);$/m)[1]);
+  const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  for (const scheme of ['light', 'dark']) {
+    const A = await open(scheme), want = hex(T[scheme].outside);
+    const plate = await A.rect('#map-wrap');
+    const cx = plate.left + plate.width / 2, cy = plate.top + plate.height / 2;
+    const send = (type, pts) => A.cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map(([x, y], id) => ({ x, y, id })) });
+    /** Pixels of the outside's tone in the region (page CSS px, inside the plate), one sample per CSS px. */
+    const gray = async (inRegion) => {
+      const img = await A.png();
+      let n = 0, hit = 0;
+      for (let y = Math.ceil(plate.top + 2); y < plate.bottom - 2; y += 1) for (let x = Math.ceil(plate.left + 2); x < plate.right - 2; x += 1) {
+        if (!inRegion(x - plate.left, y - plate.top)) continue;
+        const c = img.at(x * 2, y * 2); n++;
+        if (Math.abs(c[0] - want[0]) <= 2 && Math.abs(c[1] - want[1]) <= 2 && Math.abs(c[2] - want[2]) <= 2) hit++;
+      }
+      return { n, hit };
+    };
+    // a pan 150 px to the right at zoom 3 over the middle of the North Sea: a 150 px strip at the left
+    await A.w(() => window.__sa.zoomTo(3, 58, 3)); await A.frame(); await A.page.waitForTimeout(200);
+    const strip = (x) => x < 145;
+    await send('touchStart', [[cx, cy]]);
+    for (let i = 1; i <= 10; i++) { await send('touchMove', [[cx + 15 * i, cy]]); await new Promise((r) => setTimeout(r, 16)); }
+    await A.frame();
+    const panDown = await gray(strip);
+    await A.shot(`gesture-pan-${scheme}`, false);
+    await send('touchEnd', []); await A.frame(); await A.page.waitForTimeout(200);
+    const panUp = await gray(strip);
+    check(panDown.n > 1000 && panDown.hit <= panUp.hit + panDown.n * 0.002,
+      `${scheme}: a pan uncovers the base, not the outside's ${T[scheme].outside}: ${panDown.hit} of ${panDown.n} px of that tone in the uncovered strip with the finger down, ${panUp.hit} after the lift`);
+    // a pinch-out from 240 px apart to 120 at zoom 4: the picture halves, a ring a quarter of the plate wide is uncovered
+    await A.w(() => window.__sa.zoomTo(3, 58, 4)); await A.frame(); await A.page.waitForTimeout(200);
+    const ring = (x, y) => x < plate.width * 0.22 || x > plate.width * 0.78 || y < plate.height * 0.22 || y > plate.height * 0.78;
+    await send('touchStart', [[cx - 120, cy], [cx + 120, cy]]);
+    for (let i = 1; i <= 10; i++) { await send('touchMove', [[cx - 120 + 6 * i, cy], [cx + 120 - 6 * i, cy]]); await new Promise((r) => setTimeout(r, 16)); }
+    await A.frame();
+    const zoom = await A.w(() => window.__sa.state.zoom);
+    const pinchDown = await gray(ring);
+    await A.shot(`gesture-pinch-${scheme}`, false);
+    await send('touchEnd', []); await A.frame(); await A.page.waitForTimeout(200);
+    const pinchUp = await gray(ring);
+    check(pinchDown.n > 1000 && pinchDown.hit <= pinchUp.hit + pinchDown.n * 0.002,
+      `${scheme}: a pinch-out (zoom ${(+zoom).toFixed(2)} under the fingers) uncovers the base, not the outside's tone: ${pinchDown.hit} of ${pinchDown.n} px of it in the uncovered ring with the fingers down, ${pinchUp.hit} after the lift`);
+    check(A.errors.length === 0, `no console error under a finger in ${scheme}${A.errors.length ? ': ' + A.errors.slice(0, 3).join(' | ') : ''}`);
+    await A.ctx.close();
+  }
+}
+
 await browser.close();
 server.close();
 const after = hashOf(appPng);

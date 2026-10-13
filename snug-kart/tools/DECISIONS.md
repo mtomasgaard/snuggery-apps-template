@@ -767,3 +767,23 @@ none (plan 0009 item 5, `docs/review/`, the matrix's rows 152 and 164 are phone 
 **Taste call for the owner:** the title's bands on white (D6, as chosen); dark is unchanged.
 
 **Camera strings:** none changed (`Race`, the wait and the tap).
+
+## No karts after a track change on the title (2026-10-13)
+
+Found while filming the press video: change track on the title (Pinewood Pass, then Harbour Loop, or a
+swipe), tap Race, and no kart was drawn for the rest of the session, though `__sk.karts()` said every
+kart was shown and solid and the draw calls were made.
+
+- **Cause:** `ensureScenery` set `G.track` to the new track before awaiting two frames to show the
+  "building" plate. Those frames still drew the old title race's karts, so `Field.update` read their
+  sample indices (up to 1 259 on Pinewood Pass) on Harbour Loop's 1 028 samples: the road normal was
+  `undefined`, each kart's smoothed up vector became NaN and stayed NaN (a lerp from NaN is NaN), and
+  every kart and wheel matrix after it was NaN, drawn but nowhere on screen. It needed a longer track
+  before a shorter one; Harbour Loop to Pinewood Pass (the journey scene's path) never showed it.
+- **Fix:** `G.track` changes with the scenery, after the awaited frames, so a frame never pairs a race
+  with another track's samples.
+- **Check:** `shoot.mjs` scene `track-change`: Pinewood Pass then Harbour Loop by the real track words,
+  Race, past Go, then the near-black of the player's tires and chassis counted in the box under the
+  screen's middle (0.0 % before the fix; 9.9 % in the full run, where the journey left Otto chosen, and 21.7 % alone; the check needs over 5 %).
+- **Also:** `check.mjs` item 18 re-pinned to the README picture commit `d1f0c7b` committed on
+  2026-10-11 (its pin was still the 2026-10-02 file's, so the check failed before this fix).

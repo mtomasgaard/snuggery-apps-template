@@ -251,6 +251,8 @@ async function cardClear(A, rings) {
 async function innerYear(A) {
   const miss = [];
   let n = 0;
+  // the view at rest first: while it moves, a new name waits 3 frames for its place (js/labels.js)
+  await A.page.waitForFunction(() => new Promise((res) => { const d = window.__mw.state().dSun; requestAnimationFrame(() => requestAnimationFrame(() => res(window.__mw.state().dSun === d))); }), null, { timeout: 60000 });
   for (let d = 0; d < 365; d += 15) {
     const r = await A.w(async (dd) => {
       const m = window.__mw; if (m.__j0 == null) m.__j0 = m.S.jd;
@@ -560,6 +562,37 @@ console.log('\n== once (light)');
     check(clear, `390 × 844: the view shifts a globe flown to clear of its card: ${said}`);
     const [n, miss] = await innerYear(A);
     check(n > 60 && miss.length === 0, `390 × 844: the inner planets on the plate carry their labels through a year, every 15 days (${n} placements${miss.length ? '; UNLABELED: ' + miss.join(', ') : ''})`);
+  }
+
+  // no name for one frame, and no side for one frame, while the view turns (seen filming the press
+  // video, 2026-10-13: "Venus" dropped beside its dot for one frame): every label pass recorded as it
+  // lands, through a finger turning the view in 3 px steps and the damping after it
+  {
+    await w(() => window.__mw.goScale('solar')); await settle(page, 600);
+    await w(() => {
+      window.__lbl = [];
+      window.__lblObs = new MutationObserver(() => window.__lbl.push([...document.querySelectorAll('#labels .lbl:not([hidden])')].map((e) => [e.lastChild.textContent, /\b(left|bare)\b/.exec(e.className)?.[0] || 'right', e.style.transform])));
+      window.__lblObs.observe(document.getElementById('labels'), { subtree: true, attributes: true, childList: true });
+    });
+    const p = await rectOf('#plate'), cx = p.left + p.width / 2, cy = p.top + p.height / 2;
+    for (const [dx, dy, n] of [[3, 0, 50], [-3, 0, 60], [0, 2, 40], [3, -1, 50]]) {
+      await touch('touchStart', cx, cy);
+      for (let k = 1; k <= n; k++) { await touch('touchMove', cx + dx * k, cy + dy * k); await page.waitForTimeout(16); }
+      await touch('touchEnd'); await page.waitForTimeout(900);
+    }
+    const log = (await w(() => { window.__lblObs.disconnect(); return window.__lbl; })).map((f) => new Map(f.map(([t, side, tr]) => [t, [side, tr]])));
+    const flashes = [], sides = [];
+    let moving = 0;
+    for (let i = 1; i < log.length - 1; i++) {
+      const [a, b, c] = [log[i - 1], log[i], log[i + 1]];
+      if (![...b].some(([t, [, tr]]) => a.has(t) && a.get(t)[1] !== tr)) continue;
+      moving++;
+      for (const [t, [s]] of b) {
+        if (!a.has(t) && !c.has(t)) flashes.push(`${t} (pass ${i})`);
+        else if (a.has(t) && c.has(t) && a.get(t)[0] === c.get(t)[0] && s !== a.get(t)[0]) sides.push(`${t} ${s} (pass ${i})`);
+      }
+    }
+    check(moving >= 100 && flashes.length === 0 && sides.length === 0, `no name and no side for one frame while the view turns: ${log.length} label passes, ${moving} of them with the labels moving${flashes.length ? '; NAME FOR ONE FRAME: ' + flashes.join(', ') : ''}${sides.length ? '; SIDE FOR ONE FRAME: ' + sides.join(', ') : ''}`);
   }
 
   // focus mode (HOUSE.md section 4.10)

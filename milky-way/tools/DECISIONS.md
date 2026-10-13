@@ -39,7 +39,7 @@ after its changes: each run, with what it printed, is in section 8.
 
 | | Before the pass | After | Cap | Command |
 | --- | --: | --: | --: | --- |
-| App code (`.html`, `.css`, `.js` outside `vendor/`, `data/`, `tools/`) | 223 463 B | **241 813 B** after the follow-up (239 950 B after review, 239 674 B after QA, 239 566 B before) | **242 000 B**, the lead's second ruling below (240 000 B the first; 223 463 B held, plan 0011 D5) | `node tools/check.mjs` (item 16) |
+| App code (`.html`, `.css`, `.js` outside `vendor/`, `data/`, `tools/`) | 223 463 B | **241 813 B** after the follow-up (239 950 B after review, 239 674 B after QA, 239 566 B before) | **243 000 B** since 2026-10-13, for the label fix (below); **242 000 B**, the lead's second ruling below (240 000 B the first; 223 463 B held, plan 0011 D5) | `node tools/check.mjs` (item 16) |
 | Fonts | 87 680 B | 45 695 B | 160 000 B | `cat fonts/* \| wc -c` |
 | ZIP, as `build-zips.yml` packs it | 6 525 210 B | 6 520 687 B after the follow-up (6 517 000 B after QA) | 8 156 512 B | `node tools/check.mjs` prints it |
 
@@ -637,6 +637,18 @@ fix pass had declined for want of bytes: the Zoom in and Zoom out keys (owner ca
 and the keyboard could not zoom out, WCAG 2.5.1) and a view offset that keeps a globe flown to clear
 of the readout card at every size (owner call 16). Recorded in `tools/check.mjs` (item 16) and in
 ART.md §6. The follow-up spent it on those two and paid for the rest in place (section 9): 241 813 B.
+
+**2026-10-13: the cap is 243 000 B.** The owner's instruction, "fix all issues that surfaced", covers
+what the press video showed: while the view turned, the greedy label pass dropped "Venus" beside its
+dot for one frame and drew a name for the one frame it found a gap. `js/labels.js` now has Norne
+Reservoir's rule: while the view moves (app.js hands over the camera's position, axes and view
+shift), a name shown last frame sorts first and tries last frame's side first, and a new one needs
+room 3 updates running with a margin of 8 px plus twice its point's movement since the last update
+(the 3 frames alone left "Sirius" for one frame as it crossed the screen's left edge). While the
+camera holds still every name is placed at once, as before, the clock running or not; a camera that
+follows a body as the clock runs counts as moving. The fix costs 1 034 B; the
+code measures 242 809 B, 809 over the old cap, so the cap rose by that, rounded up to the next 500 B.
+`shoot.mjs`'s inner-year check now waits for the view to come to rest before its first sample.
 
 ---
 

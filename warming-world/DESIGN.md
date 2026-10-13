@@ -284,7 +284,10 @@ It is never drawn as a full year.
 
 ### 4.3 Play and step
 
-- **Annual: 8 years a second.** 1880 to 2025 takes 18.1 s. **Months: 4 months a second**, so 6 s
+- **Annual: 4 years a second (amended 2026-10-13; it was 8).** At 8 a second the stripes flashed 3–4 times a
+  second over large areas, past WCAG 2.3.1's three (measured on the press video's frames, `Tools/flash-check.py`);
+  at 4, 2. The opening and the held keys follow. The original text, kept for its reasoning:
+  **Annual: 8 years a second.** 1880 to 2025 takes 18.1 s. **Months: 4 months a second**, so 6 s
   for the 24. Fewer than 8 a second, because each month is its own picture and the swings are large
   (single months exceed ±4 °C in 8.42 % of the last 24 months' cells; RESEARCH §1.6).
 - Play shows **every step in order**. It never skips one to keep time, and it never cross-fades:

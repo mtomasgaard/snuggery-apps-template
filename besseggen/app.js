@@ -820,7 +820,7 @@ function textW(s, f) {
 }
 
 const LABEL_LIMIT = 26;
-let placedLabels = [];
+let placedLabels = [], labelRoom = new Map(), labelCam = '';
 function updateLabels() {
   if (!S.layers.labels) { if (labelBox.childElementCount) labelBox.textContent = ''; placedLabels = []; return; }
   const band = zoomBand();
@@ -844,8 +844,12 @@ function updateLabels() {
   }
   if (markerLine.visible) {
     const m = markerLine.userData;
-    items.push({ cls: 'mark', name: markName ? `${markName}, ${U.m(m.z)}` : U.m(m.z), sub: '', x: m.x, y: m.y, z: m.z + 90, pri: 2000, noOcclude: true });
+    items.push({ cls: 'mark', name: markName ? `${markName}, ${U.m(m.z)}` : U.m(m.z), sub: '', x: m.x, y: m.y, z: m.z + 90, pri: 1e5, noOcclude: true });
   }
+  // names keep their place while the view moves; a new one needs room, with a margin, 3 frames running
+  const old = labelRoom, room = labelRoom = new Map(), cam = camera.matrixWorld.elements.join(), moved = cam !== labelCam;
+  labelCam = cam;
+  for (const it of items) { it.k = it.cls + it.name; it.g = moved && !it.noOcclude && !(old.get(it.k) >= 3) ? 16 : 0; if (!it.g) it.pri += 1e4; }
   items.sort((a, b) => b.pri - a.pri);
 
   // Labels keep out of the card, the keys and the ghost key (HOUSE.md section 4.7; ART.md B1).
@@ -860,7 +864,8 @@ function updateLabels() {
     if (n >= LABEL_LIMIT || tested > 90) break;
     const p = projectScene(frame.sx(it.x), it.z, frame.sz(it.y));
     if (!p) continue;
-    if (p.x < 6 || p.y < 6 || p.x > r.width - 6 || p.y > r.height - 6) continue;
+    const e = 6 + it.g;
+    if (p.x < e || p.y < e || p.x > r.width - e || p.y > r.height - e) continue;
     const name = String(it.name || '');
     const w = Math.max(textW(name, it.cls), it.sub ? textW(it.sub, 'sub') : 0) + (it.cls === 'wp' ? 21 : 12);
     const h = it.sub ? 30 : 18;
@@ -868,10 +873,13 @@ function updateLabels() {
     if (w < r.width - 12) p.x = clamp(p.x, w / 2 + 4, r.width - w / 2 - 4);
     p.y = clamp(p.y, h + 4, r.height - 4);
     const box = { x: p.x, y: p.y - h / 2, w, h };
-    const hit = (q) => Math.abs(q.x - box.x) * 2 < q.w + w && Math.abs(q.y - box.y) * 2 < q.h + h;
+    const hit = (q) => Math.abs(q.x - box.x) * 2 < q.w + w + it.g && Math.abs(q.y - box.y) * 2 < q.h + h + it.g;
     if (placed.some(hit) || keep.some(hit)) continue;
     tested++;
     if (!it.noOcclude && !labelVisible(it.x, it.y, it.z)) continue;
+    const c = (old.get(it.k) || 0) + 1;
+    room.set(it.k, it.g && c < 3 ? c : 3);
+    if (room.get(it.k) < 3) continue;
     placed.push(box);
     n++;
     html += `<span class="lbl ${it.cls}" translate="no" style="transform:translate(${Math.round(p.x)}px,${Math.round(p.y)}px) translate(-50%,-100%)">`

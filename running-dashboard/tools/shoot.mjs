@@ -1,6 +1,6 @@
 // Drive Running Dashboard in headless Chromium at phone size (390 × 844 CSS px, DPR 2, real touch through
 // CDP), light and dark (HOUSE.md section 7.2 as a pane app allows: no player, no focus mode; ART.md
-// section 8, item 33). The clock is fixed at Thu 1 Oct 2026, 12:00 in Copenhagen, so the Block, the stamp
+// section 8, item 33). The clock is fixed at Thu 1 Oct 2026, 12:00 in New York, the demo runner's clock, so the Block, the stamp
 // and the pictures are the same on every run. Fails on any console error or warning, page error, failed
 // request, HTTP ≥ 400, or any request outside the local server. Every figure it asserts is worked out here
 // from data/snapshot.json with Node's own tools, never by importing js/.
@@ -55,7 +55,7 @@ const schemes = (process.env.SCHEMES || 'light,dark').split(',').filter((s) => s
 const appPng = path.join(SHOTS, 'app.png');
 const hashOf = (f) => (fs.existsSync(f) ? crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex') : null);
 const appPngHash = hashOf(appPng);
-const NOW = '2026-10-01T10:00:00Z', TZ = 'Europe/Copenhagen';   // 12:00 CEST, UTC+2 until 25 Oct
+const NOW = '2026-10-01T16:00:00Z', TZ = 'America/New_York';   // 12:00 EDT, UTC−4 until 1 Nov: where the demo's generator puts its runner (scripts/make_demo_running_dashboard.py, intraday())
 
 /* ── the data, decoded here (app.js's header comment is the contract) ── */
 const raw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
@@ -67,7 +67,7 @@ const monday = (s) => ymd(t(s) - ((new Date(t(s)).getUTCDay() + 6) % 7) * DAY);
 const running = (a) => (typeof a.runKm === 'number' ? a.runKm : a.km);
 const weekKm = (w) => snap.activities.filter((a) => a.sport === 'run' && monday(a.d) === w).reduce((s, a) => s + running(a), 0);
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const cest = (iso) => new Date(Date.parse(iso) + 2 * 3600e3);   // Copenhagen in Sep and Oct 2026
+const cest = (iso) => new Date(Date.parse(iso) - 4 * 3600e3);   // the runner's clock (New York) in Sep and Oct 2026
 const hm = (d) => `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
 const gen = cest(snap.pulledAt || snap.generatedAt);
 const lastDay = snap.dataThrough.split('-').map(Number);
@@ -701,7 +701,7 @@ console.log('\n== once');
     await page.waitForTimeout(600);
     const s = await w(() => ({ redrawn: !document.querySelector('#pane [data-old]'), stamp: document.getElementById('stamp').textContent, top: document.getElementById('main').scrollTop,
       open: [...document.querySelectorAll('#pane details[open]')].map((d) => d.firstChild.textContent) }));
-    check(s.redrawn && s.stamp.startsWith('Example data. Updated 30 Sep, 21:20') && JSON.stringify(s.open) === JSON.stringify(open) && Math.abs(s.top - 300) < 2,
+    check(s.redrawn && s.stamp.startsWith('Example data. Updated 30 Sep, 15:20') && JSON.stringify(s.open) === JSON.stringify(open) && Math.abs(s.top - 300) < 2,
       `back on screen with a changed file ("${s.stamp}"): the pane drawn again (${s.redrawn}), its ${s.open.length} open folds kept by their words (${s.open.map((x) => `"${x.slice(0, 18)}"`).join(', ')}) and its scroll (${s.top} px)`);
     override = {};
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
@@ -713,7 +713,7 @@ console.log('\n== once');
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
     await page.waitForTimeout(600);
     const s = await w(() => ({ notice: document.getElementById('notice').hidden ? '' : document.getElementById('notice').textContent, pane: document.getElementById('pane').children.length, tabs: !document.getElementById('tabs').hidden, scroll: document.getElementById('main').scrollTop }));
-    check(s.notice === 'The new data/snapshot.json is not valid JSON; it looks like a web page was written over it. Still showing the data from 30 Sep, 20:20.Close' && s.pane > 3 && s.tabs && Math.abs(s.scroll - 300) < 2,
+    check(s.notice === 'The new data/snapshot.json is not valid JSON; it looks like a web page was written over it. Still showing the data from 30 Sep, 14:20.Close' && s.pane > 3 && s.tabs && Math.abs(s.scroll - 300) < 2,
       `B3: a broken replacement while open: "${s.notice}"; the pane (${s.pane} sections), the tabs and the scroll kept`);
     await A.shot('broken-replacement-light', false);
     const kb = await A.rect('#notice .textkey');

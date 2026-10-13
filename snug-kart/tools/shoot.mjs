@@ -651,6 +651,28 @@ const scenes = {
     await page.waitForTimeout(400);
     await cdp.detach();
   },
+  // The karts are drawn after the track changes on the title, read off the pixels: the draw calls and
+  // __sk.karts() looked right while no kart was on screen (a NaN road normal left every kart's matrix
+  // NaN, from a long track's title race drawn over a shorter track's samples). Pinewood Pass, then
+  // Harbour Loop, then Race; past Go the chase camera sits behind the player, so the box under the
+  // screen's middle holds its kart, whose tires and chassis are the only near-black there (the road
+  // is about 90 of 255 a channel). Each channel under 50 counts.
+  'track-change': async () => {
+    await sk(() => window.__sk.showTitle());
+    await page.waitForTimeout(300);
+    for (const id of ['pinewood', 'harbour']) { await page.tap(`#tracks [data-id="${id}"]`); await page.waitForTimeout(600); }
+    const on = await sk(() => window.__sk.state().settings.track);
+    await page.getByRole('button', { name: 'Race', exact: true }).tap();
+    await page.waitForFunction(() => window.__sk.state().screen === 'race');
+    await sk(() => { window.__sk.freeze(true); window.__sk.setAutopilot(true); window.__sk.advance(4); });
+    const st = await sk(() => window.__sk.state());
+    await shot('track-change-race');
+    const img = decodePng(fs.readFileSync(path.join(out, 'track-change-race.png')));
+    let dark = 0, n = 0;
+    for (let y = 900; y < 1150; y += 2) for (let x = 260; x < 520; x += 2) { const c = img.at(x, y); n++; if (c[0] < 50 && c[1] < 50 && c[2] < 50) dark++; }
+    check(on === 'harbour' && st.phase === 'racing' && dark / n > 0.05, `the karts are drawn after Pinewood Pass then Harbour Loop on the title: ${(100 * dark / n).toFixed(1)} % near-black under the player (over 5 %), on "${on}", phase "${st.phase}"`);
+    await sk(() => window.__sk.showTitle());
+  },
   reload: async () => {
     await sk(() => {
       localStorage.removeItem('snugkart:v1:best:harbour');

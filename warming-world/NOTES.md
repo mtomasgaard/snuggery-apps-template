@@ -18,7 +18,7 @@ evidence.
 - The stripes track is the scrubber: GISS's global means on their own ±1.5 °C scale, framed, with
   decade graduations, the `1951–1980 = 0` bracket (the base period read from the snapshot), the labels,
   the partial year's open stripe and a reading index that steps and never glides. ‹ › step, and hold
-  to repeat at 8 a second after 400 ms. ▶ plays at 8 years a second, or 4 months a second, every step
+  to repeat at 8 a second after 400 ms. ▶ plays at 4 years a second (8 until 2026-10-13, when it was slowed for photosensitivity), or 4 months a second, every step
   in order. The year's digits roll during play only. Annual | Last 24 months switches the list.
 - The year row prints the step's name, GISS's global mean (`Global mean so far +1.20 °C (7 months)`
   for the partial year) and the area the data cover, all from the snapshot.

@@ -549,6 +549,34 @@ console.log('\n== once (light)');
     check(h0.bad.length === 0 && h0.n >= 12, `hit targets ≥ 44 × 44 px at the first stop: ${h0.n} controls${h0.bad.length ? '; too small: ' + h0.bad.join('; ') : ''}`);
   }
 
+  // no name for one frame while the view turns (seen filming the press video, 2026-10-13: "Sjoa",
+  // "Gjendesheim", "Rundhøe" and "Brurskardknappen" at the plate's edges): every label pass recorded
+  // as it lands, through a finger turning the view in 3 px steps and the damping after it
+  {
+    await A.tapEl('#btn-fit'); await page.waitForTimeout(600);
+    await w(() => {
+      const cam = () => { const c = window.__besseggen.camera(); return c.pos.concat(c.target).join(); };
+      window.__lbl = [];
+      window.__lblObs = new MutationObserver(() => window.__lbl.push({ cam: cam(), names: [...document.querySelectorAll('#labels .lbl')].map((e) => e.className + ' ' + e.firstChild.textContent) }));
+      window.__lblObs.observe(document.getElementById('labels'), { childList: true });
+    });
+    const p = await A.rect('#plate'), cx = p.left + p.width / 2, cy = p.top + p.height / 2;
+    for (const [dx, dy, n] of [[3, 0, 50], [-3, 0, 60], [0, 2, 40], [3, -1, 50]]) {
+      await touch('touchStart', cx, cy);
+      for (let k = 1; k <= n; k++) { await touch('touchMove', cx + dx * k, cy + dy * k); await page.waitForTimeout(16); }
+      await touch('touchEnd'); await page.waitForTimeout(900);
+    }
+    const log = await w(() => { window.__lblObs.disconnect(); return window.__lbl; });
+    const flashes = [];
+    let moving = 0;
+    for (let i = 1; i < log.length - 1; i++) {
+      if (log[i].cam === log[i - 1].cam) continue;
+      moving++;
+      for (const nm of log[i].names) if (!log[i - 1].names.includes(nm) && !log[i + 1].names.includes(nm)) flashes.push(`${nm.split(' ').slice(1).join(' ')} (pass ${i})`);
+    }
+    check(moving >= 100 && flashes.length === 0, `no name for one frame while the view turns: ${log.length} label passes, ${moving} of them with the camera moving${flashes.length ? '; FOR ONE FRAME: ' + flashes.join(', ') : ''}`);
+  }
+
   // focus mode (HOUSE.md section 4.10)
   {
     await A.tapEl('#focus-key'); await page.waitForTimeout(450);

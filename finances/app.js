@@ -354,6 +354,13 @@ function cardOf(wrap) {
 /** Show `card` in `wrap` 12 px clear of the point (ax, ay) or the column at ax: top-left, inset 8 px,
  *  else top-right, else bottom-left, else hung from the chart's foot (over its head if no room below).
  *  `spots`, when given, replaces the three corners (the Balance: beside the drawing, or none). */
+// where a readout card goes: where it is while that stays clear of the finger, else the first of four clear corners,
+// else under the chart (it never covers what the finger reads); a corner kept, not traded, so it does not hop
+function cardSpot(k, spots, off, H, ch) {
+  if (ch + 16 > H) return (k.at = null, [8, H]);
+  const kept = k.at && spots.find(([x, y]) => x === k.at[0] && y === k.at[1] && off([x, y]));
+  return (k.at = kept || spots.find(off) || null) || [8, H];
+}
 function showCard(wrap, card, ax, ay, spots) {
   const k = cardOf(wrap);
   k.place.textContent = card.place;
@@ -369,7 +376,7 @@ function showCard(wrap, card, ax, ay, spots) {
   k.c.hidden = false;
   const W = wrap.clientWidth, H = wrap.clientHeight, cw = k.c.offsetWidth, ch = k.c.offsetHeight;
   const off = ([x, y]) => ax == null || ax < x - 12 || ax > x + cw + 12 || (ay != null && (ay < y - 12 || ay > y + ch + 12));
-  let [left, top] = (spots ? spots.find(off) : ch + 16 <= H && [[8, 8], [W - cw - 8, 8], [8, H - ch - 8]].find(off)) || [8, H];
+  let [left, top] = spots ? (spots.find(off) || [8, H]) : cardSpot(k, [[8, 8], [W - cw - 8, 8], [8, H - ch - 8], [W - cw - 8, H - ch - 8]], off, H, ch);
   if (top === H && wrap.getBoundingClientRect().bottom + ch > $('main').getBoundingClientRect().bottom) top = -ch - 8;
   k.c.style.left = `${left}px`;
   k.c.style.top = `${top}px`;

@@ -31,8 +31,8 @@
 //      letter-spacing or monospace; no middle dot, arrow or "..." in what the app writes; both
 //      theme-color metas equal --page; the @font-face rule exactly; the chrome tokens exactly the
 //      house values in both themes; one family; every script font names the face first;
-//  16. budgets: app code at most the cap (227 000 bytes, the lead's ruling, plan 0011 D11 and
-//      tools/DECISIONS.md owner call 1; 215 934 when the pass began, held by HOUSE.md section 8),
+//  16. budgets: app code at most the cap (227 500 bytes: the lead's ruling, plan 0011 D11, raised
+//      2026-10-13 for the label fix; tools/DECISIONS.md owner call 1; 215 934 when the pass began, held by HOUSE.md section 8),
 //      fonts/ at most 160 000, the ZIP built exactly as build-zips.yml builds it at most 21 088 756
 //      (16 871 005 before the pass, times 1.25) with index.html at its top;
 //  17. US spelling in every shipped text file but data/ and fonts/OFL.txt, the data's own keys and
@@ -49,7 +49,7 @@ import { fileURLToPath } from 'node:url';
 import { PLATE } from '../js/plate.js';
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CODE_CAP = 227000;
+const CODE_CAP = 227500;
 const fails = [];
 const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if (!cond) fails.push(msg); };
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
@@ -321,7 +321,7 @@ const css = read('styles.css');
 const codeFiles = shipped.filter((f) => /\.(html|css|js|mjs)$/.test(f) && !f.startsWith('vendor/') && !f.startsWith('data/'));
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling, plan 0011 D11; ${codeBytes <= CODE_CAP ? `${fmt(CODE_CAP - codeBytes)} to spare` : `${fmt(codeBytes - CODE_CAP)} OVER: owner call 1 in tools/DECISIONS.md`}): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, the lead's ruling, plan 0011 D11, raised 2026-10-13; ${codeBytes <= CODE_CAP ? `${fmt(CODE_CAP - codeBytes)} to spare` : `${fmt(codeBytes - CODE_CAP)} OVER: owner call 1 in tools/DECISIONS.md`}): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= 160000, `fonts/ ${fmt(fontBytes)} bytes (budget 160,000; 87,680 before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

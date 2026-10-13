@@ -17,7 +17,7 @@ export function createFlow(canvasA, canvasB) {
   const ll = [0, 0], uv = [0, 0], pa = [0, 0, 0], pb = [0, 0, 0];
   let N = 0, nTarget = 0, P = new Float64Array(0), Q = new Float64Array(0), life = new Float32Array(0);
   let rand = M.mulberry32(0x5eed), probing = false, held = false;
-  let W = 0, H = 0, dpr = 1, sizeKey = '', themeKey = '', fieldKey = '', viewKey = '', lastMap = null;
+  let W = 0, H = 0, dpr = 1, sizeKey = '', themeKey = '', fieldKey = '', viewKey = '', lastMap = null, seedR = 0;
   let rung = 0, last = 0, clearedAt = [0, 0], shown = 0, wantPrewarm = true, wantRelease = false;
   let nScale = 1, single = false, half = false, parity = 0, carry = 0, goodSecs = 0, judgedAt = 0;
   let lastS = null, suppressed = null, stopped = true, used = { k0: -1, k1: -1, f: 0 }, turning = false, prevBase = true;
@@ -182,7 +182,7 @@ export function createFlow(canvasA, canvasB) {
       }
       let dt = Math.min(iv, 50) / 1000;
       let prewarmNow = wantPrewarm;
-      if (size(S)) { resizeTo(S, count(S)); reseedAll(S); prewarmNow = true; clearedAt = [now, now - STAGGER_MS]; }
+      if (size(S)) { resizeTo(S, count(S)); reseedAll(S); seedR = S.g ? S.g.r : 0; prewarmNow = true; clearedAt = [now, now - STAGGER_MS]; }
       else { const n = count(S); if (n !== N) resizeTo(S, n); }
       const r = M.pickRung(M.rateStar(M.pxPerMetre(S.tab, S.map, S.g)), rung);
       if (r !== rung) { rung = r; prewarmNow = true; }
@@ -203,7 +203,9 @@ export function createFlow(canvasA, canvasB) {
         // a turning globe is not a similarity of the screen, so no trail can be carried: while it turns
         // the flow is not drawn at all (one-frame dots would read as speckle), and the frame after it
         // stops prewarms the new view
-        if (!moving && turning) prewarmNow = true;
+        // and after a zoom by more than half again (the whole-world key out of a deep view), the particles are sown
+        // afresh: kept, they sat bunched over the old view for seconds (the press video's review, 2026-10-12)
+        if (!moving && turning) { prewarmNow = true; if (seedR && (S.g.r > seedR * 1.5 || S.g.r < seedR / 1.5)) { reseedAll(S); seedR = S.g.r; } }
         turning = moving;
       }
       // the pair: each cleared outright every 4 s, 2 s apart; the one cleared longer ago is shown

@@ -596,7 +596,7 @@ function gatherLabels(jd, dSun) {
     if (r.width) reserved.push([r.left - pr.left, r.top - pr.top, r.right - pr.left, r.bottom - pr.top]);
   }
   labels.selected = S.selected;
-  labels.update(L.labels ? candidates : candidates.filter((c) => c.id === S.selected), W, H, reserved);
+  labels.update(L.labels ? candidates : candidates.filter((c) => c.id === S.selected), W, H, reserved, [pose.pos, pose.fwd, pose.up, shiftX, shiftY].join());
 }
 
 function pick(x, y) {

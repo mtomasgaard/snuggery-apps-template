@@ -19,7 +19,7 @@ import { renderYearRow, stepText, drawLegendBar, renderLegendText, notice, notic
 import { tenths, hundredths, degC, percent, cellBounds, monthName, roundDiv, whole, MONTH, NNBSP, MINUS } from './units.js';
 import { createMeasure, checkClim, decodeClim } from './measure.js';
 
-const PERIOD = { annual: 125, months: 250 };           // 8 years and 4 months a second (§4.3, D-7)
+const PERIOD = { annual: 250, months: 250 };           // 4 years and 4 months a second: at 8 a second the stripes flashed 3–4 times a second, past WCAG 2.3.1's 3 (2026-10-13; D-7 amended)
 const STALE_MS = 75 * 86400000;                          // §12.4, D-16
 const POLE_LAT = 72, POLE_MS = 600, CARD_TURN_MS = 240, FOCUS_MS = 280;   // §6.4, §8, §10; ART "Motion"
 const CAP_ROWS = 13;                                     // the pole reading: 13 rows of 2° from each pole (to 64°)
@@ -510,7 +510,7 @@ function wireEarth() {
 
 /* ── controls ── */
 function step(d) { stopPlay(); setPos(st.pos[st.mode] + d, Math.sign(d)); settleSoon(400); }
-/** A key that acts once per press and, held, 8 times a second after 400 ms (§3.5). */
+/** A key that acts once per press and, held, 4 times a second after 400 ms (§3.5, amended for flashing). */
 function holdKey(b, act) {
   let hold = 0, rep = 0, viaPointer = false;
   const stopHold = () => { clearTimeout(hold); clearInterval(rep); hold = rep = 0; };
@@ -519,7 +519,7 @@ function holdKey(b, act) {
     stopHold();
     try { b.setPointerCapture(e.pointerId); } catch { /* fine */ }
     viaPointer = true; act();
-    hold = setTimeout(() => { rep = setInterval(() => (b.disabled ? stopHold() : act()), 125); }, 400);
+    hold = setTimeout(() => { rep = setInterval(() => (b.disabled ? stopHold() : act()), 250); }, 400);
   });
   for (const ev of ['pointerup', 'pointercancel', 'pointerleave']) b.addEventListener(ev, stopHold);
   // a lift anywhere ends the hold, even where the key moved out from under the finger
@@ -544,7 +544,7 @@ function wireControls() {
     onYear: (i, dir = 0) => { stopPlay(); if (st.mode !== 'annual') setMode('annual', false); setPos(i, dir); settleSoon(300); },
     onRedraw: () => { dirty.card = true; requestRender(); },
   });
-  // ‹ and ›: one step per press; held, 8 a second after 400 ms (§3.5)
+  // ‹ and ›: one step per press; held, 4 a second after 400 ms (§3.5)
   for (const [id, d] of [['prev', -1], ['next', 1]]) holdKey($(id), () => step(d));
   $('play').addEventListener('click', () => { if (st.playing) stopPlay(); else startPlay(); });
   // the pressed state (§20 Q-3): a class set by pointer events, so a touch shows the plate at once on
@@ -875,7 +875,7 @@ function wantOpening() {
 function startOpening() {
   const I = st.idx;
   track.setWritten(1);
-  notice('opening', `Playing ${I.years[0]} to ${I.years[I.lastComplete]}, one year every eighth of a second. Touch to stop.`);
+  notice('opening', `Playing ${I.years[0]} to ${I.years[I.lastComplete]}, one year every quarter of a second. Touch to stop.`);
   startPlay();
 }
 function endOpening() {

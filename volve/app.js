@@ -838,16 +838,21 @@ function placeLabels() {
       el.style.setProperty('--c', `rgb(${c.join(',')})`);
       el.classList.toggle('dash', code >= 2); el.classList.toggle('thin', code === 0);
     }
-    items.push({ el, i, x: p[0], y: p[1], sel: w.name === S.well ? 1 : 0 });
+    items.push({ el, i, x: p[0], y: p[1], sel: w.name === S.well ? 1 : 0, was: +!!G.labelsShown?.has(i) });
   });
-  items.sort((a, b) => (b.sel - a.sel) || (a.y - b.y));
+  items.sort((a, b) => (b.sel - a.sel) || (b.was - a.was) || (a.y - b.y));
+  const drawn = new Set(), room = G.labelRoom ||= new Map();
+  const cam = S.cam ? [S.cam.theta, S.cam.phi, S.cam.dist, S.cam.target].join() : '', moved = cam !== G.labelCam;
+  G.labelCam = cam;
   for (const it of items) {
     const wdt = G.labelW[it.i], hgt = 16, x = Math.round(it.x - 7);
     const taken = (y) => y < 2 || !clear(x, y, wdt, hgt) || (x + wdt / 2 - Math.max(44, wdt) / 2 < cR && y - 24 < cB) || placed.some((r) => x < r.x + r.w + 2 && x + wdt + 2 > r.x && y < r.y + r.h && y + hgt > r.y);
     let y = Math.round(it.y - hgt - 4), hit = taken(y);
     // the chosen well's name is always drawn: under its head when the card or the keys hold the place over it
     if (hit && it.sel && !taken(Math.round(it.y + 6))) { y = Math.round(it.y + 6); hit = false; }
-    if (hit && !it.sel) { it.el.style.display = 'none'; continue; }
+    if (hit && !it.sel) { room.set(it.i, 0); it.el.style.display = 'none'; continue; }
+    if (!it.was && !it.sel) { const c = (room.get(it.i) || 0) + 1; room.set(it.i, c); if (moved && c < 3) { it.el.style.display = 'none'; continue; } }
+    drawn.add(it.i);
     placed.push({ x, y, w: wdt, h: hgt });
     it.el.style.display = '';
     it.el.style.transform = `translate(${x}px, ${y}px)`;
@@ -857,6 +862,7 @@ function placeLabels() {
     const hw = Math.max(44, wdt), cx = x + wdt / 2;
     G.labelHits.push({ name: model.wells[it.i].name, x: cx - hw / 2, y: y + hgt + 4 - 44, w: hw, h: 44, ix: x - 2, iy: y - 4, iw: wdt + 4, ih: hgt + 8 });
   }
+  G.labelsShown = drawn;
 }
 /** The well whose label's hit holds a point on the plate, the nearest if several do: `inner` asks for
  *  the name's own padded text, otherwise its 44 x 44 box. */

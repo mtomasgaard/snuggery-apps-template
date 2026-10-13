@@ -1049,7 +1049,7 @@ console.log('\n== once (light)');
   const span = (log[log.length - 1].t - log[0].t) / 1000;
   check(r.bad === 0 && r.jumps === 0 && figure(r.steps[0]) === '1990' && figure(r.steps[r.steps.length - 1]) === '2000',
     `play 1990 → 2000: ${r.steps.length} steps drawn in order, each exactly one on (${r.jumps} jumps); the label equals the drawn step on all ${log.length} frames (${r.bad} differ) over ${span.toFixed(2)} s`);
-  // 3 s at 8 a second; meanwhile, no element animates a number's text but the rolling year twin (ART)
+  // 3 s at 4 a second (8 until 2026-10-13: it flashed past WCAG 2.3.1); meanwhile, no element animates a number's text but the rolling year twin (ART)
   await goto(ww, 1900);
   await ww(() => window.__ww.log(true));
   await ww(() => window.__ww.play(true));
@@ -1062,7 +1062,7 @@ console.log('\n== once (light)');
   log = await ww(() => window.__ww.log(false));
   r = analyse(log);
   const fps = log.length / ((log[log.length - 1].t - log[0].t) / 1000);
-  check(r.bad === 0 && r.jumps === 0 && Math.abs(r.steps.length - 1 - 24) <= 2, `play for 3 s: ${r.steps.length - 1} steps (24 ± 2 at 8 a second), ${r.jumps} skipped, ${r.bad} frames whose label is not the drawn step (${fps.toFixed(0)} frames a second)`);
+  check(r.bad === 0 && r.jumps === 0 && Math.abs(r.steps.length - 1 - 12) <= 2, `play for 3 s: ${r.steps.length - 1} steps (12 ± 2 at 4 a second), ${r.jumps} skipped, ${r.bad} frames whose label is not the drawn step (${fps.toFixed(0)} frames a second)`);
   const others = anims.flat().filter((a) => a !== 'roll'), rolls = anims.flat().length - others.length;
   check(others.length === 0 && rolls > 0, `during play only the year's rolling digits animate (${rolls} roll animations seen in 10 samples, ${others.length} others${others.length ? ': ' + [...new Set(others)].join(', ') : ''}); the mean and the coverage cut`);
   let perf = await ww(() => window.__ww.perf());
@@ -1239,7 +1239,7 @@ console.log('\n== once (light)');
   {
     const B = await open('light', { opening: true });
     let s = await S(B.ww);
-    const chip = `Playing ${ALL[0].year} to ${ALL[lastComplete].year}, one year every eighth of a second. Touch to stop.`;
+    const chip = `Playing ${ALL[0].year} to ${ALL[lastComplete].year}, one year every quarter of a second. Touch to stop.`;
     const storedAtStart = await B.ww(() => localStorage.getItem('ww.opened'));
     check(s.opening && s.playing && s.notices.includes(chip) && storedAtStart === 'true', `the first launch opens on ${s.label} and plays: "${s.notices.join('; ')}"; ww.opened stored before it starts (${storedAtStart})`);
     await B.page.waitForTimeout(1500);

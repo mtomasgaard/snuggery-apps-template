@@ -1273,7 +1273,8 @@ function countryDetails(b) {
     drawChart(cv, c);
     const spec = unitSpec(), part = (m) => { const v = val(c, m, shown).v; return v == null ? 'no figure' : U.withUnit(U.sig3(toUnit(v)), spec.label); };
     setText(ko, `Oil ${part('oil')}`); setText(kg, `Gas ${part('gas')}`);
-    if (!ko.firstChild || ko.firstChild.nodeName !== 'I') { ko.prepend(el('i')); kg.prepend(el('i')); }
+    // each figure's swatch on its own: setText rewrites a key only when its text changes, so one can lose its swatch while the other keeps it
+    for (const k of [ko, kg]) if (!k.firstChild || k.firstChild.nodeName !== 'I') k.prepend(el('i'));
     cv.setAttribute('aria-label', `${isCum() ? 'Oil and gas produced to date' : 'Oil and gas production'}, ${prod.Y0} to ${prod.Y1}, in ${spec.say}. ${shown}: ${ko.textContent}, ${kg.textContent}.`);
     notes.textContent = '';
     if (isCum()) notes.append(el('p', 'sheet-note', 'To date: every year from the first with data up to the one shown, added up; a year with no data adds nothing, and a series that has ended keeps its total.'));
