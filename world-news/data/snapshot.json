@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T07:01:29Z",
+ "generatedAt": "2026-10-13T08:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Poetry book promotes Chabacano, Asia’s only Spanish-based creole language",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/13/poetry-book-promotes-chabacano-asias-only-spanish-based-creole-language/",
+     "published": "2026-10-13T07:48:55Z",
+     "summary": "\"The project highlights not only the continued vitality of Chavacano as a language, but also the efforts of its speakers to create new literature and preserve the language through writing.”",
+     "stale": false,
+     "author": "Mong Palatino"
+    },
+    {
      "title": "UN aid operation underway in Nepal following fresh floods",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -355,7 +365,7 @@
     {
      "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
      "published": "2026-10-12T06:39:35Z",
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
@@ -374,7 +384,7 @@
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
-     "feed": "gv-south-asia",
+     "feed": "gv-east-asia",
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
@@ -390,16 +400,6 @@
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Alibaba sues Pentagon to denounce being classified as a Chinese military affiliate",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/08/alibaba-sues-pentagon-to-denounce-being-classified-as-a-chinese-military-affiliate/",
-     "published": "2026-10-08T18:31:42Z",
-     "summary": "DoD’s public document describes Alibaba as indirectly affiliated with China State Council's supervision body, and a “military-civil fusion contributor to the Chinese defense industrial base”.",
-     "stale": false,
-     "author": "Oiwan Lam"
     },
     {
      "title": "The sound of resistance",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Poetry book promotes Chabacano, Asia’s only Spanish-based creole language",
+   "published": "2026-10-13 07:48 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "UN aid operation underway in Nepal following fresh floods",
    "published": "2026-10-12 12:00 UTC"
@@ -891,12 +897,6 @@
    "source": "Global Voices",
    "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
    "published": "2026-10-09 06:15 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Alibaba sues Pentagon to denounce being classified as a Chinese military affiliate",
-   "published": "2026-10-08 18:31 UTC"
   },
   {
    "region": "Asia",
