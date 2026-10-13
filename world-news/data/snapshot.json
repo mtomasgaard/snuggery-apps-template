@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T19:01:38Z",
+ "generatedAt": "2026-10-13T20:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/social-security-benefits-are-rising-again-but-probably-not-enough-to-offset-healthcare-costs-293688",
+     "published": "2026-10-13T19:26:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Pankaj Agrrawal, Professor of Finance, University of Maine"
+    },
+    {
      "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Donald Heflin, Executive Director of the Edward R. Murrow Center and Senior Fellow of Diplomatic Practice, The Fletcher School, Tufts University"
-    },
-    {
-     "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/ive-been-studying-election-integrity-for-26-years-and-heres-why-i-expect-a-normal-election-this-november-instead-of-chaos-294094",
-     "published": "2026-10-13T14:28:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Justin Levitt, Professor of Law, Loyola Law School Los Angeles"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -459,24 +459,24 @@
      "author": "Sarah Austin, Senior Lecturer in Theatre, The University of Melbourne"
     },
     {
-     "title": "NZ’s health system suffers from chronic ailments only cross-party consensus can treat",
+     "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-health-system-suffers-from-chronic-ailments-only-cross-party-consensus-can-treat-292668",
-     "published": "2026-10-13T17:47:58Z",
+     "link": "https://theconversation.com/whos-paying-whom-the-circular-money-machine-behind-the-ai-boom-or-bubble-293938",
+     "published": "2026-10-13T18:51:45Z",
      "summary": "",
      "stale": false,
-     "author": "Robin Gauld, Executive Dean, Bond Business School, Bond University"
+     "author": "Ruipeng Liu, Senior Lecturer in finance, Deakin University"
     },
     {
-     "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
+     "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/just-politics-or-the-opposite-of-clever-the-risks-and-rewards-of-strategic-voting-293703",
-     "published": "2026-10-13T01:10:59Z",
+     "link": "https://theconversation.com/guilfoyle-resigns-as-ambassador-to-greece-adding-to-the-global-vacancies-sapping-us-embassies-294315",
+     "published": "2026-10-13T18:02:11Z",
      "summary": "",
      "stale": false,
-     "author": "Claire Timperley, Senior Lecturer in Political Science, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Donald Heflin, Executive Director of the Edward R. Murrow Center and Senior Fellow of Diplomatic Practice, The Fletcher School, Tufts University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
-   "published": "2026-10-13 18:02 UTC"
+   "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
+   "published": "2026-10-13 19:26 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
-   "published": "2026-10-13 14:28 UTC"
+   "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
+   "published": "2026-10-13 18:02 UTC"
   },
   {
    "region": "Americas",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NZ’s health system suffers from chronic ailments only cross-party consensus can treat",
-   "published": "2026-10-13 17:47 UTC"
+   "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
+   "published": "2026-10-13 18:51 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
-   "published": "2026-10-13 01:10 UTC"
+   "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
+   "published": "2026-10-13 18:02 UTC"
   },
   {
    "region": "Oceania",
