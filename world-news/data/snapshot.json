@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T00:01:30Z",
+ "generatedAt": "2026-10-13T01:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "We can’t block a livestream, but Australia could ban execution footage from the US – to an extent",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/we-cant-block-a-livestream-but-australia-could-ban-execution-footage-from-the-us-to-an-extent-294141",
+     "published": "2026-10-13T00:17:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Victoria Fielding, Senior Lecturer, School of Communication, Media and Journalism, Adelaide University"
+    },
+    {
      "title": "Politics with Michelle Grattan: Josh Frydenberg plans to keep speaking out",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Philip C. Almond, Emeritus Professor in the History of Religious Thought, The University of Queensland"
-    },
-    {
-     "title": "Your say: week beginning October 12",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-october-12-294135",
-     "published": "2026-10-12T20:28:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Judy Ingham, Newsletter Producer, The Conversation"
     },
     {
      "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "We can’t block a livestream, but Australia could ban execution footage from the US – to an extent",
+   "published": "2026-10-13 00:17 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Politics with Michelle Grattan: Josh Frydenberg plans to keep speaking out",
    "published": "2026-10-12 22:53 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Possessed nuns and sexual deviance: the history behind Ken Russell’s highly-censored film The Devils",
    "published": "2026-10-12 22:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning October 12",
-   "published": "2026-10-12 20:28 UTC"
   },
   {
    "region": "Oceania",
