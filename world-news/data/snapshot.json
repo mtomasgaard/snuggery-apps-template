@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T02:01:27Z",
+ "generatedAt": "2026-10-13T03:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
+     "title": "The Pacific Islands are changing. What happens to cultural heritage when the people have to leave?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/the-pacific-islands-are-changing-what-happens-to-cultural-heritage-when-the-people-have-to-leave-293946",
+     "published": "2026-10-13T01:36:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Thomas Cooper-Johnson, Lecturer, Construction Management and Disaster Risk Reduction, University of Newcastle"
+    },
+    {
+     "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/just-politics-or-the-opposite-of-clever-the-risks-and-rewards-of-strategic-voting-293703",
      "published": "2026-10-13T01:10:59Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ben Gray, Associate Professor of Primary Health Care and General Practice, University of Otago"
-    },
-    {
-     "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/a-global-report-gives-nz-tertiary-education-a-pass-but-hides-another-side-of-the-story-293551",
-     "published": "2026-10-12T17:51:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Cristóbal Castro Barrientos, PhD Candidate, NZ Policy Research Institute, Auckland University of Technology"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The Pacific Islands are changing. What happens to cultural heritage when the people have to leave?",
+   "published": "2026-10-13 01:36 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
    "published": "2026-10-13 01:10 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
    "published": "2026-10-12 22:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A global report gives NZ tertiary education a pass – but hides another side of the story",
-   "published": "2026-10-12 17:51 UTC"
   },
   {
    "region": "Oceania",
