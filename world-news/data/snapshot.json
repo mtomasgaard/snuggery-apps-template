@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T18:01:34Z",
+ "generatedAt": "2026-10-13T19:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/guilfoyle-resigns-as-ambassador-to-greece-adding-to-the-global-vacancies-sapping-us-embassies-294315",
+     "published": "2026-10-13T18:02:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Donald Heflin, Executive Director of the Edward R. Murrow Center and Senior Fellow of Diplomatic Practice, The Fletcher School, Tufts University"
+    },
+    {
      "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Justin Levitt, Professor of Law, Loyola Law School Los Angeles"
-    },
-    {
-     "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/more-rehab-centers-should-mean-fewer-overdoses-in-one-california-region-we-found-the-opposite-285569",
-     "published": "2026-10-13T12:52:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ilan Shrira, Associate Teaching Professor of Psychology, Penn State"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/10/13/after-flood-disasters-nepal-needs-clear-numbers-on-aid-and-a-reconstruction-plan/",
+     "published": "2026-10-13T18:21:20Z",
+     "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
+     "stale": false,
+     "author": "Susmita Aryal"
+    },
+    {
      "title": "Poetry book promotes Chabacano, Asia’s only Spanish-based creole language",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -365,7 +375,7 @@
     {
      "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
      "source": "Global Voices",
-     "feed": "gv-south-asia",
+     "feed": "gv-east-asia",
      "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
      "published": "2026-10-12T06:39:35Z",
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
@@ -384,7 +394,7 @@
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
@@ -410,16 +420,6 @@
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
      "stale": false,
      "author": "Sydney Allen"
-    },
-    {
-     "title": "Equating protest with terrorism: A narrative against dissent",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/09/29/equating-protest-with-terrorism-a-narrative-against-dissent/",
-     "published": "2026-09-29T00:00:00Z",
-     "summary": "In this month's edition, we dive deep into a narrative used by leaders in the United States and other countries to delegitimize protests.",
-     "stale": false,
-     "author": "Civic Media Observatory"
     }
    ]
   },
@@ -429,34 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s health system suffers from chronic ailments only cross-party consensus can treat",
+     "title": "Spawning coral release quintillions of eggs each year: new research",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/spawning-coral-release-quintillions-of-eggs-each-year-new-research-294058",
+     "published": "2026-10-13T18:54:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kate Marie Quigley, DECRA Research Fellow in molecular ecology, James Cook University"
+    },
+    {
+     "title": "What is the Socratic method? Could it be used to test students in an age of AI?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-is-the-socratic-method-could-it-be-used-to-test-students-in-an-age-of-ai-287498",
+     "published": "2026-10-13T18:53:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Oscar Davis, Assistant Professor in Philosophy and History, Bond University"
+    },
+    {
+     "title": "How young people do democracy: pausing, questioning, creating and bringing others along with them",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-young-people-do-democracy-pausing-questioning-creating-and-bringing-others-along-with-them-294138",
+     "published": "2026-10-13T18:52:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sarah Austin, Senior Lecturer in Theatre, The University of Melbourne"
+    },
+    {
+     "title": "NZ’s health system suffers from chronic ailments only cross-party consensus can treat",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-health-system-suffers-from-chronic-ailments-only-cross-party-consensus-can-treat-292668",
      "published": "2026-10-13T17:47:58Z",
      "summary": "",
      "stale": false,
      "author": "Robin Gauld, Executive Dean, Bond Business School, Bond University"
-    },
-    {
-     "title": "Extreme El Niños are coming. Reaching net zero sooner means facing fewer of them",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/extreme-el-ninos-are-coming-reaching-net-zero-sooner-means-facing-fewer-of-them-292134",
-     "published": "2026-10-13T09:00:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Aditya Sengupta, PhD Candidate, School of Geography, Earth and Atmospheric Sciences, The University of Melbourne"
-    },
-    {
-     "title": "Jim Chalmers warns progressives not to ‘mock’ One Nation voters",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/jim-chalmers-warns-progressives-not-to-mock-one-nation-voters-293216",
-     "published": "2026-10-13T08:32:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Claire Timperley, Senior Lecturer in Political Science, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/only-structural-change-will-fix-nzs-glaring-health-equity-gap-what-voters-should-know-292213",
-     "published": "2026-10-12T22:43:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ben Gray, Associate Professor of Primary Health Care and General Practice, University of Otago"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
-   "published": "2026-10-13 14:28 UTC"
+   "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
+   "published": "2026-10-13 18:02 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
-   "published": "2026-10-13 12:52 UTC"
+   "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
+   "published": "2026-10-13 14:28 UTC"
   },
   {
    "region": "Americas",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
+   "published": "2026-10-13 18:21 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "Poetry book promotes Chabacano, Asia’s only Spanish-based creole language",
    "published": "2026-10-13 07:48 UTC"
   },
@@ -905,10 +911,22 @@
    "published": "2026-10-01 20:45 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Equating protest with terrorism: A narrative against dissent",
-   "published": "2026-09-29 00:00 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Spawning coral release quintillions of eggs each year: new research",
+   "published": "2026-10-13 18:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What is the Socratic method? Could it be used to test students in an age of AI?",
+   "published": "2026-10-13 18:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How young people do democracy: pausing, questioning, creating and bringing others along with them",
+   "published": "2026-10-13 18:52 UTC"
   },
   {
    "region": "Oceania",
@@ -919,26 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Extreme El Niños are coming. Reaching net zero sooner means facing fewer of them",
-   "published": "2026-10-13 09:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Jim Chalmers warns progressives not to ‘mock’ One Nation voters",
-   "published": "2026-10-13 08:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Just politics or the ‘opposite of clever’? The risks and rewards of strategic voting",
    "published": "2026-10-13 01:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Only structural change will fix NZ’s glaring health equity gap – what voters should know",
-   "published": "2026-10-12 22:43 UTC"
   },
   {
    "region": "Oceania",
