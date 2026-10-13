@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T14:01:58Z",
+ "generatedAt": "2026-10-13T15:01:57Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/ive-been-studying-election-integrity-for-26-years-and-heres-why-i-expect-a-normal-election-this-november-instead-of-chaos-294094",
+     "published": "2026-10-13T14:28:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Justin Levitt, Professor of Law, Loyola Law School Los Angeles"
+    },
+    {
      "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Ilan Shrira, Associate Teaching Professor of Psychology, Penn State"
-    },
-    {
-     "title": "Americans are stressed about grocery prices, so why do they toss or overlook so much ‘misfit’ food?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/americans-are-stressed-about-grocery-prices-so-why-do-they-toss-or-overlook-so-much-misfit-food-293526",
-     "published": "2026-10-13T12:20:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jintao Zhang, Assistant Professor of Marketing, Binghamton University, State University of New York"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Study of 20,000 Nigerians explores the links between drug use, climate change and poverty",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/study-of-20-000-nigerians-explores-the-links-between-drug-use-climate-change-and-poverty-290534",
+     "published": "2026-10-13T14:45:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Abdullahi Abdulwahab Yakubu, Lecturer, Department of Psychiatry, Ahmadu Bello University"
+    },
+    {
      "title": "What African elections can learn from the Borana Gadaa system",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Sam Naidu, Professor, Department of Literary Studies in English, Rhodes University"
-    },
-    {
-     "title": "Radical economic policies in Argentina offer lessons – but not a blueprint – for South Africa",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/radical-economic-policies-in-argentina-offer-lessons-but-not-a-blueprint-for-south-africa-292915",
-     "published": "2026-10-12T13:30:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lyal White, Director of the Porter Institute Africa Hub, Gordon Institute of Business Science, University of Pretoria"
     },
     {
      "title": "Sudan: Drought and war push Darfur and Kordofan towards famine",
@@ -276,7 +276,7 @@
      "feed": "un-middle-east",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168578",
      "published": "2026-10-12T12:00:00Z",
-     "summary": "The Security Council is meeting on Syria as the country’s transition faces pressure on several fronts. Economic hardship is fuelling unrest, Israeli incursions continue in the south and sectarian tensions persist in…",
+     "summary": "The Security Council met to debate Syria's thorny transition Monday as it faces pressure on several fronts. Economic hardship is fuelling unrest, Israeli incursions continue in the south and sectarian tensions persist…",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
-   "published": "2026-10-13 12:52 UTC"
+   "title": "I’ve been studying election integrity for 26 years, and here’s why I expect a normal election this November instead of chaos",
+   "published": "2026-10-13 14:28 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Americans are stressed about grocery prices, so why do they toss or overlook so much ‘misfit’ food?",
-   "published": "2026-10-13 12:20 UTC"
+   "title": "More rehab centers should mean fewer overdoses. In one California region, we found the opposite",
+   "published": "2026-10-13 12:52 UTC"
   },
   {
    "region": "Americas",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Study of 20,000 Nigerians explores the links between drug use, climate change and poverty",
+   "published": "2026-10-13 14:45 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "Who is Navi Pillay, the South African judge who won the Nobel prize? We asked her biographer",
    "published": "2026-10-12 16:07 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Radical economic policies in Argentina offer lessons – but not a blueprint – for South Africa",
-   "published": "2026-10-12 13:30 UTC"
   },
   {
    "region": "Africa",
