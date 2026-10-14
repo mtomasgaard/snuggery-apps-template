@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T12:01:30Z",
+ "generatedAt": "2026-10-14T13:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Pope Leo XIV’s lung cancer highlights growing number of nonsmokers diagnosed with the disease – and younger people too",
+     "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/pope-leo-xivs-lung-cancer-highlights-growing-number-of-nonsmokers-diagnosed-with-the-disease-and-younger-people-too-294348",
-     "published": "2026-10-14T00:50:54Z",
+     "link": "https://theconversation.com/philly-voters-care-about-local-issues-but-election-integrity-fears-make-them-wonder-if-their-vote-matters-291019",
+     "published": "2026-10-14T12:23:43Z",
      "summary": "",
      "stale": false,
-     "author": "Estelamari Rodriguez, Associate Director of Community Outreach in Thoracic Oncology, University of Miami"
+     "author": "Heather LaMarre, Associate Professor of Media and Communication, Temple University"
     },
     {
-     "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
+     "title": "Republicans can confirm a Supreme Court justice if Democrats take the Senate, but at what cost?",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/social-security-benefits-are-rising-again-but-probably-not-enough-to-offset-healthcare-costs-293688",
-     "published": "2026-10-13T19:26:44Z",
+     "link": "https://theconversation.com/republicans-can-confirm-a-supreme-court-justice-if-democrats-take-the-senate-but-at-what-cost-293778",
+     "published": "2026-10-14T12:23:29Z",
      "summary": "",
      "stale": false,
-     "author": "Pankaj Agrrawal, Professor of Finance, University of Maine"
+     "author": "Paul M. Collins Jr., Professor of Legal Studies and Political Science, UMass Amherst"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168589",
+     "published": "2026-10-13T12:00:00Z",
+     "summary": "Yemen’s southwestern city of Taiz is facing a “devastating” humanitarian crisis as escalating tensions are dramatically driving up food prices and causing shortages of supplies, the UN Spokesperson said on Tuesday.",
+     "stale": false
+    },
+    {
      "title": "What African elections can learn from the Borana Gadaa system",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -306,15 +315,6 @@
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
-    },
-    {
-     "title": "Amid heartache of Nepal flooding disaster, fear remains",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
-     "published": "2026-10-09T12:00:00Z",
-     "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
-     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Pope Leo XIV’s lung cancer highlights growing number of nonsmokers diagnosed with the disease – and younger people too",
-   "published": "2026-10-14 00:50 UTC"
+   "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
+   "published": "2026-10-14 12:23 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
-   "published": "2026-10-13 19:26 UTC"
+   "title": "Republicans can confirm a Supreme Court justice if Democrats take the Senate, but at what cost?",
+   "published": "2026-10-14 12:23 UTC"
   },
   {
    "region": "Americas",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
+   "published": "2026-10-13 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Amid heartache of Nepal flooding disaster, fear remains",
-   "published": "2026-10-09 12:00 UTC"
   },
   {
    "region": "Middle East",
