@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T02:01:27Z",
+ "generatedAt": "2026-10-14T03:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "By making protests conditional on state approval, governments are eroding our democracy",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/by-making-protests-conditional-on-state-approval-governments-are-eroding-our-democracy-292894",
+     "published": "2026-10-14T01:49:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Maria O'Sullivan, Associate Professor of Law, Member of Deakin Cyber and the Centre for Law as Protection, Deakin University, Deakin University"
+    },
+    {
      "title": "Renters and home buyers are seeing AI-‘enhanced’ property photos. Now NSW is changing the rules",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Samuel Martin, Researcher, Sign on Screen Project, Australian National University"
-    },
-    {
-     "title": "Our detection dogs are helping protect one of Australia’s most imperiled lizards",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/our-detection-dogs-are-helping-protect-one-of-australias-most-imperiled-lizards-293701",
-     "published": "2026-10-13T23:30:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Naomi Hodgens, PhD Candidate, Lab of Evolutionary Genetics, Conservation and Sociality, Flinders University"
     },
     {
      "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "By making protests conditional on state approval, governments are eroding our democracy",
+   "published": "2026-10-14 01:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Renters and home buyers are seeing AI-‘enhanced’ property photos. Now NSW is changing the rules",
    "published": "2026-10-14 00:36 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
    "published": "2026-10-13 23:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Our detection dogs are helping protect one of Australia’s most imperiled lizards",
-   "published": "2026-10-13 23:30 UTC"
   },
   {
    "region": "Oceania",
