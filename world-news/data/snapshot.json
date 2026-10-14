@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T03:01:27Z",
+ "generatedAt": "2026-10-14T04:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Domestic violence is a national crisis in PNG. The Chiefs NRL team must do more to support women",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/domestic-violence-is-a-national-crisis-in-png-the-chiefs-nrl-team-must-do-more-to-support-women-290429",
+     "published": "2026-10-14T03:18:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle O'Shea, Senior Lecturer, School of Business, Western Sydney University"
+    },
+    {
+     "title": "Loops, flashbacks and fractured narratives: why filmmakers love to play with time",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/loops-flashbacks-and-fractured-narratives-why-filmmakers-love-to-play-with-time-291671",
+     "published": "2026-10-14T02:56:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ben McCann, Associate Professor of French Studies, Adelaide University"
+    },
+    {
      "title": "By making protests conditional on state approval, governments are eroding our democracy",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Maria O'Sullivan, Associate Professor of Law, Member of Deakin Cyber and the Centre for Law as Protection, Deakin University, Deakin University"
-    },
-    {
-     "title": "Renters and home buyers are seeing AI-‘enhanced’ property photos. Now NSW is changing the rules",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/renters-and-home-buyers-are-seeing-ai-enhanced-property-photos-now-nsw-is-changing-the-rules-293699",
-     "published": "2026-10-14T00:36:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Paul Harrison, Director, Master of Business Administration Program (MBA); Co-Director, Better Consumption Lab, Deakin University"
-    },
-    {
-     "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/manifesto-of-silences-reimagines-opera-from-a-deaf-perspective-as-a-space-to-process-trauma-communally-293835",
-     "published": "2026-10-13T23:43:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Samuel Martin, Researcher, Sign on Screen Project, Australian National University"
     },
     {
      "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Domestic violence is a national crisis in PNG. The Chiefs NRL team must do more to support women",
+   "published": "2026-10-14 03:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Loops, flashbacks and fractured narratives: why filmmakers love to play with time",
+   "published": "2026-10-14 02:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "By making protests conditional on state approval, governments are eroding our democracy",
    "published": "2026-10-14 01:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Renters and home buyers are seeing AI-‘enhanced’ property photos. Now NSW is changing the rules",
-   "published": "2026-10-14 00:36 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
-   "published": "2026-10-13 23:43 UTC"
   },
   {
    "region": "Oceania",
