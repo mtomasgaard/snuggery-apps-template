@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T13:01:33Z",
+ "generatedAt": "2026-10-14T14:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Violence numérique : le coût caché de l'engagement politique des femmes et des jeunes en Afrique australe",
+     "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/violence-numerique-le-cout-cache-de-lengagement-politique-des-femmes-et-des-jeunes-en-afrique-australe-290071",
-     "published": "2026-10-14T08:30:05Z",
+     "link": "https://theconversation.com/one-third-of-food-is-lost-or-wasted-how-to-help-farmers-cut-post-harvest-losses-293555",
+     "published": "2026-10-14T13:42:50Z",
      "summary": "",
      "stale": false,
-     "author": "Fabrice Lollia, Docteur en sciences de l'information et de la communication, chercheur associé laboratoire DICEN Ile de France, Université Gustave Eiffel"
+     "author": "Abeeb Babatunde Omotoso, Senior Lecturer at Oyo State College of Agriculture and Technology, Igboora, Nigeria and Extraordinary Senior Lecturer at Indigenous…"
     },
     {
-     "title": "Study of 20,000 Nigerians explores the links between drug use, climate change and poverty",
+     "title": "Uganda’s sugarcane boom leaves families hungry: what needs to change",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/study-of-20-000-nigerians-explores-the-links-between-drug-use-climate-change-and-poverty-290534",
-     "published": "2026-10-13T14:45:59Z",
+     "link": "https://theconversation.com/ugandas-sugarcane-boom-leaves-families-hungry-what-needs-to-change-292312",
+     "published": "2026-10-14T13:41:55Z",
      "summary": "",
      "stale": false,
-     "author": "Abdullahi Abdulwahab Yakubu, Lecturer, Department of Psychiatry, Ahmadu Bello University"
+     "author": "James Kintu, Postdoctoral Research Fellow, Centre for Governance and Sustainability, UMass Boston"
     },
     {
      "title": "What African elections can learn from the Borana Gadaa system",
@@ -261,15 +261,6 @@
    "stale": false,
    "items": [
     {
-     "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168589",
-     "published": "2026-10-13T12:00:00Z",
-     "summary": "Yemen’s southwestern city of Taiz is facing a “devastating” humanitarian crisis as escalating tensions are dramatically driving up food prices and causing shortages of supplies, the UN Spokesperson said on Tuesday.",
-     "stale": false
-    },
-    {
      "title": "What African elections can learn from the Borana Gadaa system",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -315,6 +306,15 @@
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
+    },
+    {
+     "title": "Amid heartache of Nepal flooding disaster, fear remains",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
+     "published": "2026-10-09T12:00:00Z",
+     "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
+     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Violence numérique : le coût caché de l'engagement politique des femmes et des jeunes en Afrique australe",
-   "published": "2026-10-14 08:30 UTC"
+   "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
+   "published": "2026-10-14 13:42 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Study of 20,000 Nigerians explores the links between drug use, climate change and poverty",
-   "published": "2026-10-13 14:45 UTC"
+   "title": "Uganda’s sugarcane boom leaves families hungry: what needs to change",
+   "published": "2026-10-14 13:41 UTC"
   },
   {
    "region": "Africa",
@@ -816,12 +816,6 @@
   },
   {
    "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
-   "published": "2026-10-13 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
@@ -849,6 +843,12 @@
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Amid heartache of Nepal flooding disaster, fear remains",
+   "published": "2026-10-09 12:00 UTC"
   },
   {
    "region": "Middle East",
