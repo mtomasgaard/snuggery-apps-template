@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T22:01:36Z",
+ "generatedAt": "2026-10-14T23:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,24 @@
      "author": "Laurent Bonnefoy, CNRS research fellow, Center for International Studies, Sciences Po"
     },
     {
+     "title": "Haiti sanctions renewed: Starving the gangs of bullets",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168598",
+     "published": "2026-10-14T12:00:00Z",
+     "summary": "Haiti is living through one of the world’s most acute security crises. Armed gangs control large parts of the capital, Port-au-Prince, and are pushing into rural areas, terrorising communities, killing people…",
+     "stale": false
+    },
+    {
+     "title": "Colombia: UN independent experts call for Ecopetrol to provide reparations to victims of armed conflict",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168597",
+     "published": "2026-10-14T12:00:00Z",
+     "summary": "UN independent experts welcomed on Wednesday a recent landmark corporate accountability ruling involving the Ecopetrol oil company by Colombia’s Special Jurisdiction for Peace, calling for reparations for victims.",
+     "stale": false
+    },
+    {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
      "source": "UN News",
      "feed": "un-americas",
@@ -142,15 +160,6 @@
      "author": "EngageMedia"
     },
     {
-     "title": "Livestreaming US execution would breach prohibition of torture, UN rights office warns",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168565",
-     "published": "2026-10-09T12:00:00Z",
-     "summary": "The UN human rights office (OHCHR) on Friday warned that livestreaming a planned execution by firing squad in the United States would amount to a public execution and breach the absolute prohibition on torture.",
-     "stale": false
-    },
-    {
      "title": "El Niño speeds climate crisis and tests Latin America’s food security",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -159,15 +168,6 @@
      "summary": "From droughts to floods and fires, El Niño is exposing vulnerabilities in Latin America’s food systems by putting farmers, food supplies and household budgets under growing pressure across the region.",
      "stale": false,
      "author": "Connectas"
-    },
-    {
-     "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168492",
-     "published": "2026-10-04T12:00:00Z",
-     "summary": "A documentary drawn from United Nations University research was screened at the COP30 climate conference and film festivals across Europe. Its most important journey, though, was the one back to the Mexico City canals…",
-     "stale": false
     }
    ]
   },
@@ -733,6 +733,18 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Haiti sanctions renewed: Starving the gangs of bullets",
+   "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
+   "title": "Colombia: UN independent experts call for Ecopetrol to provide reparations to victims of armed conflict",
+   "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
    "published": "2026-10-12 12:00 UTC"
   },
@@ -750,21 +762,9 @@
   },
   {
    "region": "Americas",
-   "source": "UN News",
-   "title": "Livestreaming US execution would breach prohibition of torture, UN rights office warns",
-   "published": "2026-10-09 12:00 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "Global Voices",
    "title": "El Niño speeds climate crisis and tests Latin America’s food security",
    "published": "2026-10-08 05:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "‘He felt heard’: How a film brought a UN report to life in Xochimilco",
-   "published": "2026-10-04 12:00 UTC"
   },
   {
    "region": "Africa",
