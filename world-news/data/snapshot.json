@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T01:01:35Z",
+ "generatedAt": "2026-10-14T02:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Renters and home buyers are seeing AI-‘enhanced’ property photos. Now NSW is changing the rules",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/renters-and-home-buyers-are-seeing-ai-enhanced-property-photos-now-nsw-is-changing-the-rules-293699",
+     "published": "2026-10-14T00:36:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Paul Harrison, Director, Master of Business Administration Program (MBA); Co-Director, Better Consumption Lab, Deakin University"
+    },
+    {
      "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Andrew Lensen, Senior Lecturer in Artificial Intelligence, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "Spawning coral release quintillions of eggs each year: new research",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/spawning-coral-release-quintillions-of-eggs-each-year-new-research-294058",
-     "published": "2026-10-13T18:54:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kate Marie Quigley, DECRA Research Fellow in molecular ecology, James Cook University"
     },
     {
      "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Renters and home buyers are seeing AI-‘enhanced’ property photos. Now NSW is changing the rules",
+   "published": "2026-10-14 00:36 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
    "published": "2026-10-13 23:43 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
    "published": "2026-10-13 22:47 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Spawning coral release quintillions of eggs each year: new research",
-   "published": "2026-10-13 18:54 UTC"
   },
   {
    "region": "Oceania",
