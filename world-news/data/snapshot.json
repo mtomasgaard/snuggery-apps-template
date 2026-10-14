@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T21:01:32Z",
+ "generatedAt": "2026-10-14T22:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "World’s oldest shipwreck discovered off coast of Turkey",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/worlds-oldest-shipwreck-discovered-off-coast-of-turkey-294248",
+     "published": "2026-10-14T20:27:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Karin Sowada, Senior Lecturer in Archaeology and Director of the Australian Centre for Egyptology, Macquarie University"
+    },
+    {
      "title": "What was Australia’s first novel?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,34 +459,24 @@
      "author": "Niraj Meisuria, PhD Candidate, Disease Ecology Lab and Global Ecology Lab, University of Sydney"
     },
     {
-     "title": "Hordes of yabbies are trashing rivers in Africa. How did this happen?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/hordes-of-yabbies-are-trashing-rivers-in-africa-how-did-this-happen-286853",
-     "published": "2026-10-14T18:57:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rachael King, Head of Research, South Australian Museum"
-    },
-    {
-     "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
+     "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/voters-want-stronger-action-on-ai-can-nz-afford-to-keep-taking-a-soft-approach-292978",
-     "published": "2026-10-13T22:47:38Z",
+     "link": "https://theconversation.com/naza-harrowing-documentary-shows-how-killing-in-gaza-became-just-another-days-work-293710",
+     "published": "2026-10-14T18:57:28Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Lensen, Senior Lecturer in Artificial Intelligence, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Ayesha Jehangir, Lecturer, Journalism and Communication, UNSW"
     },
     {
-     "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
+     "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/whos-paying-whom-the-circular-money-machine-behind-the-ai-boom-or-bubble-293938",
-     "published": "2026-10-13T18:51:45Z",
+     "link": "https://theconversation.com/yemens-houthis-are-bringing-their-war-to-saudi-arabia-and-reframing-the-narrative-of-being-an-iranian-proxy-294208",
+     "published": "2026-10-14T17:57:45Z",
      "summary": "",
      "stale": false,
-     "author": "Ruipeng Liu, Senior Lecturer in finance, Deakin University"
+     "author": "Laurent Bonnefoy, CNRS research fellow, Center for International Studies, Sciences Po"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "World’s oldest shipwreck discovered off coast of Turkey",
+   "published": "2026-10-14 20:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What was Australia’s first novel?",
    "published": "2026-10-14 18:58 UTC"
   },
@@ -925,20 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Hordes of yabbies are trashing rivers in Africa. How did this happen?",
+   "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
    "published": "2026-10-14 18:57 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
-   "published": "2026-10-13 22:47 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
-   "published": "2026-10-13 18:51 UTC"
+   "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
+   "published": "2026-10-14 17:57 UTC"
   },
   {
    "region": "Oceania",
