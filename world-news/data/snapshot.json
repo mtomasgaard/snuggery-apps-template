@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T09:01:29Z",
+ "generatedAt": "2026-10-14T10:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why are there so many plants? New research reveals two key phases in Earth’s past",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-are-there-so-many-plants-new-research-reveals-two-key-phases-in-earths-past-293347",
+     "published": "2026-10-14T09:11:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kale Sniderman, Honorary Research Fellow, The University of Melbourne"
+    },
+    {
      "title": "Senate throws out budget plan to remove health insurance top up for older people",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "DemosAU MRP poll has Labor winning clear majority of House seats on just 27% of primary vote",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/demosau-mrp-poll-has-labor-winning-clear-majority-of-house-seats-on-just-27-of-primary-vote-294231",
-     "published": "2026-10-14T05:10:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why are there so many plants? New research reveals two key phases in Earth’s past",
+   "published": "2026-10-14 09:11 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Senate throws out budget plan to remove health insurance top up for older people",
    "published": "2026-10-14 07:58 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: everyone is on the lookout for Albanese-Chalmers tension",
    "published": "2026-10-14 05:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "DemosAU MRP poll has Labor winning clear majority of House seats on just 27% of primary vote",
-   "published": "2026-10-14 05:10 UTC"
   },
   {
    "region": "Oceania",
