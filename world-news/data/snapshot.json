@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-13T23:01:26Z",
+ "generatedAt": "2026-10-14T00:01:51Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
+     "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/manifesto-of-silences-reimagines-opera-from-a-deaf-perspective-as-a-space-to-process-trauma-communally-293835",
+     "published": "2026-10-13T23:43:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Samuel Martin, Researcher, Sign on Screen Project, Australian National University"
+    },
+    {
+     "title": "Our detection dogs are helping protect one of Australia’s most imperiled lizards",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/our-detection-dogs-are-helping-protect-one-of-australias-most-imperiled-lizards-293701",
+     "published": "2026-10-13T23:30:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Naomi Hodgens, PhD Candidate, Lab of Evolutionary Genetics, Conservation and Sociality, Flinders University"
+    },
+    {
+     "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/voters-want-stronger-action-on-ai-can-nz-afford-to-keep-taking-a-soft-approach-292978",
      "published": "2026-10-13T22:47:38Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Kate Marie Quigley, DECRA Research Fellow in molecular ecology, James Cook University"
     },
     {
-     "title": "What is the Socratic method? Could it be used to test students in an age of AI?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-is-the-socratic-method-could-it-be-used-to-test-students-in-an-age-of-ai-287498",
-     "published": "2026-10-13T18:53:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Oscar Davis, Assistant Professor in Philosophy and History, Bond University"
-    },
-    {
      "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ruipeng Liu, Senior Lecturer in finance, Deakin University"
-    },
-    {
-     "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/guilfoyle-resigns-as-ambassador-to-greece-adding-to-the-global-vacancies-sapping-us-embassies-294315",
-     "published": "2026-10-13T18:02:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Donald Heflin, Executive Director of the Edward R. Murrow Center and Senior Fellow of Diplomatic Practice, The Fletcher School, Tufts University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Manifesto of Silences reimagines opera from a Deaf perspective, as a space to process trauma communally",
+   "published": "2026-10-13 23:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Our detection dogs are helping protect one of Australia’s most imperiled lizards",
+   "published": "2026-10-13 23:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
    "published": "2026-10-13 22:47 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What is the Socratic method? Could it be used to test students in an age of AI?",
-   "published": "2026-10-13 18:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Who’s paying whom? The circular money machine behind the AI boom (or bubble)",
    "published": "2026-10-13 18:51 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
-   "published": "2026-10-13 18:02 UTC"
   },
   {
    "region": "Oceania",
