@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T04:01:26Z",
+ "generatedAt": "2026-10-14T05:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How the ‘digital duty of care’ bill could undermine vital sex and drug education online",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-the-digital-duty-of-care-bill-could-undermine-vital-sex-and-drug-education-online-294244",
+     "published": "2026-10-14T03:43:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Isabelle Volpe, Research Fellow, National Drug Research Institute, Curtin University; UNSW"
+    },
+    {
      "title": "Domestic violence is a national crisis in PNG. The Chiefs NRL team must do more to support women",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ben McCann, Associate Professor of French Studies, Adelaide University"
-    },
-    {
-     "title": "By making protests conditional on state approval, governments are eroding our democracy",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/by-making-protests-conditional-on-state-approval-governments-are-eroding-our-democracy-292894",
-     "published": "2026-10-14T01:49:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Maria O'Sullivan, Associate Professor of Law, Member of Deakin Cyber and the Centre for Law as Protection, Deakin University, Deakin University"
     },
     {
      "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How the ‘digital duty of care’ bill could undermine vital sex and drug education online",
+   "published": "2026-10-14 03:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Domestic violence is a national crisis in PNG. The Chiefs NRL team must do more to support women",
    "published": "2026-10-14 03:18 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Loops, flashbacks and fractured narratives: why filmmakers love to play with time",
    "published": "2026-10-14 02:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "By making protests conditional on state approval, governments are eroding our democracy",
-   "published": "2026-10-14 01:49 UTC"
   },
   {
    "region": "Oceania",
