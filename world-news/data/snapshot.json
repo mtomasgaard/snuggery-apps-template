@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T14:01:38Z",
+ "generatedAt": "2026-10-14T16:02:17Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,33 @@
    "stale": false,
    "items": [
     {
+     "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168591",
+     "published": "2026-10-14T12:00:00Z",
+     "summary": "Intensifying fighting in Yemen has cut off life-saving assistance to 800,000 people as shifting frontlines, blocked roads and growing insecurity severely restrict access to the city of Taiz and other conflict zones, the…",
+     "stale": false
+    },
+    {
+     "title": "WHO calls for urgent health action across the Eastern Mediterranean",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168590",
+     "published": "2026-10-14T12:00:00Z",
+     "summary": "The head of the World Health Organization (WHO) has called for promoting, providing and protecting health in the Eastern Mediterranean region, home to some of the world’s top humanitarian crises such as Sudan, Yemen and…",
+     "stale": false
+    },
+    {
+     "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168589",
+     "published": "2026-10-13T12:00:00Z",
+     "summary": "Yemen’s southwestern city of Taiz is facing a “devastating” humanitarian crisis as escalating tensions are dramatically driving up food prices and causing shortages of supplies, the UN Spokesperson said on Tuesday.",
+     "stale": false
+    },
+    {
      "title": "What African elections can learn from the Borana Gadaa system",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -280,24 +307,6 @@
      "stale": false
     },
     {
-     "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168573",
-     "published": "2026-10-11T12:00:00Z",
-     "summary": "At least 139 migrants have died after their boat capsized off Djibouti, with a further 84 people still missing, the UN migration agency (IOM) said on Sunday.",
-     "stale": false
-    },
-    {
-     "title": "Sustaining livelihoods amid crisis in Gaza",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168569",
-     "published": "2026-10-11T12:00:00Z",
-     "summary": "Nidaa, Hanaa and Hanin have different stories, but share a common thread: the determination to build something of their own and keep it going despite extraordinary challenges facing them in war-ravaged Gaza.",
-     "stale": false
-    },
-    {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -306,15 +315,6 @@
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
-    },
-    {
-     "title": "Amid heartache of Nepal flooding disaster, fear remains",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168561",
-     "published": "2026-10-09T12:00:00Z",
-     "summary": "Six weeks after Nepal’s deadly flooding disaster, communities are still struggling to rebuild their lives, but they will need sustained help as global warming increases the risk of another Himalayan catastrophe, the UN…",
-     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -816,6 +816,24 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
+   "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "WHO calls for urgent health action across the Eastern Mediterranean",
+   "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
+   "published": "2026-10-13 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
@@ -828,27 +846,9 @@
   },
   {
    "region": "Middle East",
-   "source": "UN News",
-   "title": "Djibouti shipwreck: Death toll rises to 139 as 84 remain missing",
-   "published": "2026-10-11 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Sustaining livelihoods amid crisis in Gaza",
-   "published": "2026-10-11 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Amid heartache of Nepal flooding disaster, fear remains",
-   "published": "2026-10-09 12:00 UTC"
   },
   {
    "region": "Middle East",
