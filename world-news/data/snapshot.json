@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T18:01:30Z",
+ "generatedAt": "2026-10-14T19:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/yemens-houthis-are-bringing-their-war-to-saudi-arabia-and-reframing-the-narrative-of-being-an-iranian-proxy-294208",
+     "published": "2026-10-14T17:57:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Laurent Bonnefoy, CNRS research fellow, Center for International Studies, Sciences Po"
+    },
+    {
      "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Heather LaMarre, Associate Professor of Media and Communication, Temple University"
-    },
-    {
-     "title": "Republicans can confirm a Supreme Court justice if Democrats take the Senate, but at what cost?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/republicans-can-confirm-a-supreme-court-justice-if-democrats-take-the-senate-but-at-what-cost-293778",
-     "published": "2026-10-14T12:23:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Paul M. Collins Jr., Professor of Legal Studies and Political Science, UMass Amherst"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Norway’s Telenor telecom faces lawsuit for giving user data to Myanmar junta",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/14/norways-telenor-telecom-faces-lawsuit-for-giving-user-data-to-myanmars-junta/",
+     "published": "2026-10-14T18:22:53Z",
+     "summary": "\"We hope this will finally lead to accountability for the harms Telenor has caused Myanmar people through its conduct and its dangerous divestment.\"",
+     "stale": false,
+     "author": "Mong Palatino"
+    },
+    {
      "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -375,7 +385,7 @@
     {
      "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
      "published": "2026-10-12T06:39:35Z",
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
@@ -394,22 +404,12 @@
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
-     "feed": "gv-south-asia",
+     "feed": "gv-east-asia",
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
-    },
-    {
-     "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
-     "published": "2026-10-09T06:15:45Z",
-     "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": false,
-     "author": "Guest Contributor"
     },
     {
      "title": "The sound of resistance",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
-   "published": "2026-10-14 12:23 UTC"
+   "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
+   "published": "2026-10-14 17:57 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Republicans can confirm a Supreme Court justice if Democrats take the Senate, but at what cost?",
+   "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
    "published": "2026-10-14 12:23 UTC"
   },
   {
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Norway’s Telenor telecom faces lawsuit for giving user data to Myanmar junta",
+   "published": "2026-10-14 18:22 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
    "published": "2026-10-13 18:21 UTC"
   },
@@ -897,12 +903,6 @@
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
-   "published": "2026-10-09 06:15 UTC"
   },
   {
    "region": "Asia",
