@@ -131,7 +131,8 @@ def page(cards, repo):
   <strong>Open in {html.escape(SITE_NAME or "Snuggery")}</strong>. In Safari itself it downloads instead: open it
   from Downloads, then <strong>Share</strong>, then <strong>{html.escape(SITE_NAME or "Snuggery")}</strong>.</p>
   <p class="how">Or all at once: <a href="zips/more-examples.zip"><strong>Get them all</strong></a> (about 120 MB,
-  Snuggery 1.2 or later), every example Snuggery does not install itself, opening as one folder.</p>
+  Snuggery 1.2 or later), every example Snuggery does not install itself, opening as one folder. The
+  seven live examples come with the app: Create → <em>Install the live examples</em>.</p>
   <p class="lede">Every app in <a href="{source}">the repository</a>, running in the browser. Each shows the
   data last published here, and so does its ZIP. The big 3D apps download tens of megabytes on first
   open.{phone}</p>
