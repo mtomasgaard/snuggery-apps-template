@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T05:01:29Z",
+ "generatedAt": "2026-10-14T06:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "DemosAU MRP poll has Labor winning clear majority of House seats on just 27% of primary vote",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/demosau-mrp-poll-has-labor-winning-clear-majority-of-house-seats-on-just-27-of-primary-vote-294231",
+     "published": "2026-10-14T05:10:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "How the ‘digital duty of care’ bill could undermine vital sex and drug education online",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle O'Shea, Senior Lecturer, School of Business, Western Sydney University"
-    },
-    {
-     "title": "Loops, flashbacks and fractured narratives: why filmmakers love to play with time",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/loops-flashbacks-and-fractured-narratives-why-filmmakers-love-to-play-with-time-291671",
-     "published": "2026-10-14T02:56:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ben McCann, Associate Professor of French Studies, Adelaide University"
     },
     {
      "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "DemosAU MRP poll has Labor winning clear majority of House seats on just 27% of primary vote",
+   "published": "2026-10-14 05:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How the ‘digital duty of care’ bill could undermine vital sex and drug education online",
    "published": "2026-10-14 03:43 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Domestic violence is a national crisis in PNG. The Chiefs NRL team must do more to support women",
    "published": "2026-10-14 03:18 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Loops, flashbacks and fractured narratives: why filmmakers love to play with time",
-   "published": "2026-10-14 02:56 UTC"
   },
   {
    "region": "Oceania",
