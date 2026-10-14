@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T19:01:40Z",
+ "generatedAt": "2026-10-14T20:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Cystic fibrosis patients got their ‘miracle drug’ thanks to federal research funding – new Trump administration rules may cut future miracles short",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/cystic-fibrosis-patients-got-their-miracle-drug-thanks-to-federal-research-funding-new-trump-administration-rules-may-cut-future-miracles-short-293934",
+     "published": "2026-10-14T19:50:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fred D. Ledley, Director, Center for Integration of Science and Industry, Bentley University"
+    },
+    {
      "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Laurent Bonnefoy, CNRS research fellow, Center for International Studies, Sciences Po"
-    },
-    {
-     "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/philly-voters-care-about-local-issues-but-election-integrity-fears-make-them-wonder-if-their-vote-matters-291019",
-     "published": "2026-10-14T12:23:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Heather LaMarre, Associate Professor of Media and Communication, Temple University"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -197,6 +197,24 @@
      "author": "James Kintu, Postdoctoral Research Fellow, Centre for Governance and Sustainability, UMass Boston"
     },
     {
+     "title": "DR Congo: Cholera cases spike amid fight against Ebola",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168595",
+     "published": "2026-10-14T12:00:00Z",
+     "summary": "The cholera epidemic continues to spread in the Democratic Republic of Congo (DRC), where more than 125,000 suspected cases and 3,644 suspected deaths were recorded between January 2025 and the end of September 2026…",
+     "stale": false
+    },
+    {
+     "title": "Security Council LIVE: Libya in the spotlight amid ‘encouraging progress’",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168592",
+     "published": "2026-10-14T12:00:00Z",
+     "summary": "The Security Council will hear the latest developments in Libya on Wednesday as it takes stock of the current situation as the country grapples for stability following years of strife, with a top UN official…",
+     "stale": false
+    },
+    {
      "title": "What African elections can learn from the Borana Gadaa system",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -224,24 +242,6 @@
      "summary": "For Mozambican youth, freedom of expression exists in law, but speaking out can come with a cost. Music became a powerful space for criticism and resistance.",
      "stale": false,
      "author": "Liam Anderson"
-    },
-    {
-     "title": "Giving a dam: Cultivating peace in Côte d’Ivoire",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168568",
-     "published": "2026-10-10T12:00:00Z",
-     "summary": "Adam Ouattara and Makongo Traoré have four children and a home on the edge of Torla village in Côte d’Ivoire. He herds cattle. She grows vegetables on a small plot nearby. For years, the dry season pitted their two…",
-     "stale": false
-    },
-    {
-     "title": "UN chief ‘gravely concerned’ by renewed fighting in northern Ethiopia, warns against escalation",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168570",
-     "published": "2026-10-10T12:00:00Z",
-     "summary": "UN Secretary-General António Guterres has called for an immediate end to the renewed fighting in northern Ethiopia, saying he is deeply worried by reports that Eritrean forces are present in the country.",
-     "stale": false
     },
     {
      "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Why are there so many plants? New research reveals two key phases in Earth’s past",
+     "title": "What was Australia’s first novel?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-are-there-so-many-plants-new-research-reveals-two-key-phases-in-earths-past-293347",
-     "published": "2026-10-14T09:11:23Z",
+     "link": "https://theconversation.com/what-was-australias-first-novel-293206",
+     "published": "2026-10-14T18:58:17Z",
      "summary": "",
      "stale": false,
-     "author": "Kale Sniderman, Honorary Research Fellow, The University of Melbourne"
+     "author": "Maggie Nolan, Director of AustLit, Associate Professor in Digital Cultural Heritage, The University of Queensland"
     },
     {
-     "title": "Senate throws out budget plan to remove health insurance top up for older people",
+     "title": "Australian scavengers don’t just eat everything and slink away. They approach a carcass like a buffet",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/senate-throws-out-budget-plan-to-remove-health-insurance-top-up-for-older-people-293218",
-     "published": "2026-10-14T07:58:50Z",
+     "link": "https://theconversation.com/australian-scavengers-dont-just-eat-everything-and-slink-away-they-approach-a-carcass-like-a-buffet-292605",
+     "published": "2026-10-14T18:58:01Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Niraj Meisuria, PhD Candidate, Disease Ecology Lab and Global Ecology Lab, University of Sydney"
     },
     {
-     "title": "View from The Hill: everyone is on the lookout for Albanese-Chalmers tension",
+     "title": "Hordes of yabbies are trashing rivers in Africa. How did this happen?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-everyone-is-on-the-lookout-for-albanese-chalmers-tension-293217",
-     "published": "2026-10-14T05:30:02Z",
+     "link": "https://theconversation.com/hordes-of-yabbies-are-trashing-rivers-in-africa-how-did-this-happen-286853",
+     "published": "2026-10-14T18:57:43Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Rachael King, Head of Research, South Australian Museum"
     },
     {
      "title": "Voters want stronger action on AI. Can NZ afford to keep taking a soft approach?",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
-   "published": "2026-10-14 17:57 UTC"
+   "title": "Cystic fibrosis patients got their ‘miracle drug’ thanks to federal research funding – new Trump administration rules may cut future miracles short",
+   "published": "2026-10-14 19:50 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Philly voters care about local issues, but election integrity fears make them wonder if their vote matters",
-   "published": "2026-10-14 12:23 UTC"
+   "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
+   "published": "2026-10-14 17:57 UTC"
   },
   {
    "region": "Americas",
@@ -780,6 +780,18 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "DR Congo: Cholera cases spike amid fight against Ebola",
+   "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Security Council LIVE: Libya in the spotlight amid ‘encouraging progress’",
+   "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
@@ -795,18 +807,6 @@
    "source": "Global Voices",
    "title": "When free speech has a price: Youth voices in Mozambique",
    "published": "2026-10-11 18:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Giving a dam: Cultivating peace in Côte d’Ivoire",
-   "published": "2026-10-10 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "UN chief ‘gravely concerned’ by renewed fighting in northern Ethiopia, warns against escalation",
-   "published": "2026-10-10 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why are there so many plants? New research reveals two key phases in Earth’s past",
-   "published": "2026-10-14 09:11 UTC"
+   "title": "What was Australia’s first novel?",
+   "published": "2026-10-14 18:58 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Senate throws out budget plan to remove health insurance top up for older people",
-   "published": "2026-10-14 07:58 UTC"
+   "title": "Australian scavengers don’t just eat everything and slink away. They approach a carcass like a buffet",
+   "published": "2026-10-14 18:58 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: everyone is on the lookout for Albanese-Chalmers tension",
-   "published": "2026-10-14 05:30 UTC"
+   "title": "Hordes of yabbies are trashing rivers in Africa. How did this happen?",
+   "published": "2026-10-14 18:57 UTC"
   },
   {
    "region": "Oceania",
