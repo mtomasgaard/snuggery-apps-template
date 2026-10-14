@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T00:01:51Z",
+ "generatedAt": "2026-10-14T01:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pope Leo XIV’s lung cancer highlights growing number of nonsmokers diagnosed with the disease – and younger people too",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/pope-leo-xivs-lung-cancer-highlights-growing-number-of-nonsmokers-diagnosed-with-the-disease-and-younger-people-too-294348",
+     "published": "2026-10-14T00:50:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Estelamari Rodriguez, Associate Director of Community Outreach in Thoracic Oncology, University of Miami"
+    },
+    {
      "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Pankaj Agrrawal, Professor of Finance, University of Maine"
-    },
-    {
-     "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/guilfoyle-resigns-as-ambassador-to-greece-adding-to-the-global-vacancies-sapping-us-embassies-294315",
-     "published": "2026-10-13T18:02:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Donald Heflin, Executive Director of the Edward R. Murrow Center and Senior Fellow of Diplomatic Practice, The Fletcher School, Tufts University"
     },
     {
      "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
-   "published": "2026-10-13 19:26 UTC"
+   "title": "Pope Leo XIV’s lung cancer highlights growing number of nonsmokers diagnosed with the disease – and younger people too",
+   "published": "2026-10-14 00:50 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Guilfoyle resigns as ambassador to Greece – adding to the global vacancies sapping US embassies",
-   "published": "2026-10-13 18:02 UTC"
+   "title": "Social Security benefits are rising again, but probably not enough to offset healthcare costs",
+   "published": "2026-10-13 19:26 UTC"
   },
   {
    "region": "Americas",
