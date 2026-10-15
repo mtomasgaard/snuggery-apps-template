@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-14T23:01:33Z",
+ "generatedAt": "2026-10-15T00:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "World’s oldest shipwreck discovered off coast of Turkey",
+     "title": "How did early Māori society develop? New research reveals a clearer timeline",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/how-did-early-maori-society-develop-new-research-reveals-a-clearer-timeline-293207",
+     "published": "2026-10-14T23:57:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fiona Petchey, Associate Professor and Director, Radiocarbon Dating Laboratory, Te Aka Mātuatua-School of Science, University of Waikato"
+    },
+    {
+     "title": "‘Stress hormone’ cortisol is blamed for infertility, but major new study hints that could be wrong",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/stress-hormone-cortisol-is-blamed-for-infertility-but-major-new-study-hints-that-could-be-wrong-280805",
+     "published": "2026-10-14T23:05:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kerry Fanson, Head of Wildlife Conservation and Reproductive Endocrinology Lab, La Trobe University"
+    },
+    {
+     "title": "Prime ministers, billions in UAE investment: the Manchester City cheating scandal turns political",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/prime-ministers-billions-in-uae-investment-the-manchester-city-cheating-scandal-turns-political-294243",
+     "published": "2026-10-14T23:03:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
+    },
+    {
+     "title": "World’s oldest shipwreck discovered off coast of Turkey",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/worlds-oldest-shipwreck-discovered-off-coast-of-turkey-294248",
      "published": "2026-10-14T20:27:39Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Maggie Nolan, Director of AustLit, Associate Professor in Digital Cultural Heritage, The University of Queensland"
-    },
-    {
-     "title": "Australian scavengers don’t just eat everything and slink away. They approach a carcass like a buffet",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australian-scavengers-dont-just-eat-everything-and-slink-away-they-approach-a-carcass-like-a-buffet-292605",
-     "published": "2026-10-14T18:58:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Niraj Meisuria, PhD Candidate, Disease Ecology Lab and Global Ecology Lab, University of Sydney"
-    },
-    {
-     "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/naza-harrowing-documentary-shows-how-killing-in-gaza-became-just-another-days-work-293710",
-     "published": "2026-10-14T18:57:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ayesha Jehangir, Lecturer, Journalism and Communication, UNSW"
-    },
-    {
-     "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/yemens-houthis-are-bringing-their-war-to-saudi-arabia-and-reframing-the-narrative-of-being-an-iranian-proxy-294208",
-     "published": "2026-10-14T17:57:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Laurent Bonnefoy, CNRS research fellow, Center for International Studies, Sciences Po"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How did early Māori society develop? New research reveals a clearer timeline",
+   "published": "2026-10-14 23:57 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "‘Stress hormone’ cortisol is blamed for infertility, but major new study hints that could be wrong",
+   "published": "2026-10-14 23:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Prime ministers, billions in UAE investment: the Manchester City cheating scandal turns political",
+   "published": "2026-10-14 23:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "World’s oldest shipwreck discovered off coast of Turkey",
    "published": "2026-10-14 20:27 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "What was Australia’s first novel?",
    "published": "2026-10-14 18:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australian scavengers don’t just eat everything and slink away. They approach a carcass like a buffet",
-   "published": "2026-10-14 18:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
-   "published": "2026-10-14 18:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
-   "published": "2026-10-14 17:57 UTC"
   },
   {
    "region": "Oceania",
