@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T19:59:05Z",
+ "generatedAt": "2026-10-15T22:01:22Z",
  "zone": "NO2",
  "zoneName": "Norway south-west",
  "timezone": "Europe/Oslo",
@@ -16,409 +16,23 @@
  },
  "days": [
   {
-   "date": "2026-10-15",
-   "label": "Today",
-   "source": "fetched",
-   "intervals": 96,
-   "min": 96.16,
-   "max": 167.25,
-   "mean": 149.23
-  },
-  {
    "date": "2026-10-16",
-   "label": "Tomorrow",
+   "label": "Today",
    "source": "fetched",
    "intervals": 96,
    "min": 151.4,
    "max": 196.81,
    "mean": 170.87
+  },
+  {
+   "date": "2026-10-17",
+   "label": "Tomorrow",
+   "source": "pending",
+   "intervals": 0,
+   "note": "no prices published for 2026-10-17"
   }
  ],
  "hours": [
-  {
-   "start": "2026-10-15T00:00:00+02:00",
-   "price": 150.75
-  },
-  {
-   "start": "2026-10-15T00:15:00+02:00",
-   "price": 146.8
-  },
-  {
-   "start": "2026-10-15T00:30:00+02:00",
-   "price": 146.31
-  },
-  {
-   "start": "2026-10-15T00:45:00+02:00",
-   "price": 144.83
-  },
-  {
-   "start": "2026-10-15T01:00:00+02:00",
-   "price": 144.73
-  },
-  {
-   "start": "2026-10-15T01:15:00+02:00",
-   "price": 144.23
-  },
-  {
-   "start": "2026-10-15T01:30:00+02:00",
-   "price": 143.95
-  },
-  {
-   "start": "2026-10-15T01:45:00+02:00",
-   "price": 141.35
-  },
-  {
-   "start": "2026-10-15T02:00:00+02:00",
-   "price": 145.7
-  },
-  {
-   "start": "2026-10-15T02:15:00+02:00",
-   "price": 145.16
-  },
-  {
-   "start": "2026-10-15T02:30:00+02:00",
-   "price": 144.57
-  },
-  {
-   "start": "2026-10-15T02:45:00+02:00",
-   "price": 144.32
-  },
-  {
-   "start": "2026-10-15T03:00:00+02:00",
-   "price": 146.52
-  },
-  {
-   "start": "2026-10-15T03:15:00+02:00",
-   "price": 146.2
-  },
-  {
-   "start": "2026-10-15T03:30:00+02:00",
-   "price": 145.92
-  },
-  {
-   "start": "2026-10-15T03:45:00+02:00",
-   "price": 145.26
-  },
-  {
-   "start": "2026-10-15T04:00:00+02:00",
-   "price": 139.73
-  },
-  {
-   "start": "2026-10-15T04:15:00+02:00",
-   "price": 139.64
-  },
-  {
-   "start": "2026-10-15T04:30:00+02:00",
-   "price": 139.5
-  },
-  {
-   "start": "2026-10-15T04:45:00+02:00",
-   "price": 139.55
-  },
-  {
-   "start": "2026-10-15T05:00:00+02:00",
-   "price": 139.33
-  },
-  {
-   "start": "2026-10-15T05:15:00+02:00",
-   "price": 139.47
-  },
-  {
-   "start": "2026-10-15T05:30:00+02:00",
-   "price": 139.97
-  },
-  {
-   "start": "2026-10-15T05:45:00+02:00",
-   "price": 140.61
-  },
-  {
-   "start": "2026-10-15T06:00:00+02:00",
-   "price": 145.84
-  },
-  {
-   "start": "2026-10-15T06:15:00+02:00",
-   "price": 151.56
-  },
-  {
-   "start": "2026-10-15T06:30:00+02:00",
-   "price": 154.2
-  },
-  {
-   "start": "2026-10-15T06:45:00+02:00",
-   "price": 154.93
-  },
-  {
-   "start": "2026-10-15T07:00:00+02:00",
-   "price": 166.05
-  },
-  {
-   "start": "2026-10-15T07:15:00+02:00",
-   "price": 166.24
-  },
-  {
-   "start": "2026-10-15T07:30:00+02:00",
-   "price": 166.37
-  },
-  {
-   "start": "2026-10-15T07:45:00+02:00",
-   "price": 166.5
-  },
-  {
-   "start": "2026-10-15T08:00:00+02:00",
-   "price": 166.88
-  },
-  {
-   "start": "2026-10-15T08:15:00+02:00",
-   "price": 166.92
-  },
-  {
-   "start": "2026-10-15T08:30:00+02:00",
-   "price": 166.95
-  },
-  {
-   "start": "2026-10-15T08:45:00+02:00",
-   "price": 166.95
-  },
-  {
-   "start": "2026-10-15T09:00:00+02:00",
-   "price": 166.14
-  },
-  {
-   "start": "2026-10-15T09:15:00+02:00",
-   "price": 166.11
-  },
-  {
-   "start": "2026-10-15T09:30:00+02:00",
-   "price": 165.26
-  },
-  {
-   "start": "2026-10-15T09:45:00+02:00",
-   "price": 164.17
-  },
-  {
-   "start": "2026-10-15T10:00:00+02:00",
-   "price": 162.76
-  },
-  {
-   "start": "2026-10-15T10:15:00+02:00",
-   "price": 161.68
-  },
-  {
-   "start": "2026-10-15T10:30:00+02:00",
-   "price": 160.01
-  },
-  {
-   "start": "2026-10-15T10:45:00+02:00",
-   "price": 157.79
-  },
-  {
-   "start": "2026-10-15T11:00:00+02:00",
-   "price": 153.48
-  },
-  {
-   "start": "2026-10-15T11:15:00+02:00",
-   "price": 147.48
-  },
-  {
-   "start": "2026-10-15T11:30:00+02:00",
-   "price": 142.62
-  },
-  {
-   "start": "2026-10-15T11:45:00+02:00",
-   "price": 136.12
-  },
-  {
-   "start": "2026-10-15T12:00:00+02:00",
-   "price": 133.2
-  },
-  {
-   "start": "2026-10-15T12:15:00+02:00",
-   "price": 119.95
-  },
-  {
-   "start": "2026-10-15T12:30:00+02:00",
-   "price": 109.29
-  },
-  {
-   "start": "2026-10-15T12:45:00+02:00",
-   "price": 101.0
-  },
-  {
-   "start": "2026-10-15T13:00:00+02:00",
-   "price": 103.21
-  },
-  {
-   "start": "2026-10-15T13:15:00+02:00",
-   "price": 100.85
-  },
-  {
-   "start": "2026-10-15T13:30:00+02:00",
-   "price": 96.16
-  },
-  {
-   "start": "2026-10-15T13:45:00+02:00",
-   "price": 98.56
-  },
-  {
-   "start": "2026-10-15T14:00:00+02:00",
-   "price": 101.0
-  },
-  {
-   "start": "2026-10-15T14:15:00+02:00",
-   "price": 101.01
-  },
-  {
-   "start": "2026-10-15T14:30:00+02:00",
-   "price": 108.53
-  },
-  {
-   "start": "2026-10-15T14:45:00+02:00",
-   "price": 114.79
-  },
-  {
-   "start": "2026-10-15T15:00:00+02:00",
-   "price": 107.13
-  },
-  {
-   "start": "2026-10-15T15:15:00+02:00",
-   "price": 125.41
-  },
-  {
-   "start": "2026-10-15T15:30:00+02:00",
-   "price": 135.57
-  },
-  {
-   "start": "2026-10-15T15:45:00+02:00",
-   "price": 140.58
-  },
-  {
-   "start": "2026-10-15T16:00:00+02:00",
-   "price": 144.02
-  },
-  {
-   "start": "2026-10-15T16:15:00+02:00",
-   "price": 153.11
-  },
-  {
-   "start": "2026-10-15T16:30:00+02:00",
-   "price": 159.84
-  },
-  {
-   "start": "2026-10-15T16:45:00+02:00",
-   "price": 163.03
-  },
-  {
-   "start": "2026-10-15T17:00:00+02:00",
-   "price": 166.27
-  },
-  {
-   "start": "2026-10-15T17:15:00+02:00",
-   "price": 166.27
-  },
-  {
-   "start": "2026-10-15T17:30:00+02:00",
-   "price": 166.32
-  },
-  {
-   "start": "2026-10-15T17:45:00+02:00",
-   "price": 166.38
-  },
-  {
-   "start": "2026-10-15T18:00:00+02:00",
-   "price": 166.18
-  },
-  {
-   "start": "2026-10-15T18:15:00+02:00",
-   "price": 166.21
-  },
-  {
-   "start": "2026-10-15T18:30:00+02:00",
-   "price": 166.36
-  },
-  {
-   "start": "2026-10-15T18:45:00+02:00",
-   "price": 166.45
-  },
-  {
-   "start": "2026-10-15T19:00:00+02:00",
-   "price": 166.46
-  },
-  {
-   "start": "2026-10-15T19:15:00+02:00",
-   "price": 167.25
-  },
-  {
-   "start": "2026-10-15T19:30:00+02:00",
-   "price": 166.92
-  },
-  {
-   "start": "2026-10-15T19:45:00+02:00",
-   "price": 166.53
-  },
-  {
-   "start": "2026-10-15T20:00:00+02:00",
-   "price": 166.81
-  },
-  {
-   "start": "2026-10-15T20:15:00+02:00",
-   "price": 166.66
-  },
-  {
-   "start": "2026-10-15T20:30:00+02:00",
-   "price": 166.8
-  },
-  {
-   "start": "2026-10-15T20:45:00+02:00",
-   "price": 166.84
-  },
-  {
-   "start": "2026-10-15T21:00:00+02:00",
-   "price": 166.68
-  },
-  {
-   "start": "2026-10-15T21:15:00+02:00",
-   "price": 166.47
-  },
-  {
-   "start": "2026-10-15T21:30:00+02:00",
-   "price": 166.16
-  },
-  {
-   "start": "2026-10-15T21:45:00+02:00",
-   "price": 166.0
-  },
-  {
-   "start": "2026-10-15T22:00:00+02:00",
-   "price": 165.06
-  },
-  {
-   "start": "2026-10-15T22:15:00+02:00",
-   "price": 164.24
-  },
-  {
-   "start": "2026-10-15T22:30:00+02:00",
-   "price": 162.99
-  },
-  {
-   "start": "2026-10-15T22:45:00+02:00",
-   "price": 162.41
-  },
-  {
-   "start": "2026-10-15T23:00:00+02:00",
-   "price": 165.43
-  },
-  {
-   "start": "2026-10-15T23:15:00+02:00",
-   "price": 165.04
-  },
-  {
-   "start": "2026-10-15T23:30:00+02:00",
-   "price": 163.85
-  },
-  {
-   "start": "2026-10-15T23:45:00+02:00",
-   "price": 163.42
-  },
   {
    "start": "2026-10-16T00:00:00+02:00",
    "price": 170.0
@@ -809,368 +423,6 @@
   {
    "row": "hour",
    "day": "Today",
-   "date": "2026-10-15",
-   "time": "00:00",
-   "price": 147.17,
-   "unit": "EUR/MWh",
-   "rank": 11,
-   "ofHours": 24,
-   "vsMeanPct": -1
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "01:00",
-   "price": 143.56,
-   "unit": "EUR/MWh",
-   "rank": 7,
-   "ofHours": 24,
-   "vsMeanPct": -4
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "02:00",
-   "price": 144.94,
-   "unit": "EUR/MWh",
-   "rank": 9,
-   "ofHours": 24,
-   "vsMeanPct": -3
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "03:00",
-   "price": 145.97,
-   "unit": "EUR/MWh",
-   "rank": 10,
-   "ofHours": 24,
-   "vsMeanPct": -2
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "04:00",
-   "price": 139.6,
-   "unit": "EUR/MWh",
-   "rank": 5,
-   "ofHours": 24,
-   "vsMeanPct": -6
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "05:00",
-   "price": 139.84,
-   "unit": "EUR/MWh",
-   "rank": 6,
-   "ofHours": 24,
-   "vsMeanPct": -6
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "06:00",
-   "price": 151.63,
-   "unit": "EUR/MWh",
-   "rank": 12,
-   "ofHours": 24,
-   "vsMeanPct": 2
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "07:00",
-   "price": 166.29,
-   "unit": "EUR/MWh",
-   "rank": 18,
-   "ofHours": 24,
-   "vsMeanPct": 11
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "08:00",
-   "price": 166.92,
-   "unit": "EUR/MWh",
-   "rank": 24,
-   "ofHours": 24,
-   "vsMeanPct": 12
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "09:00",
-   "price": 165.42,
-   "unit": "EUR/MWh",
-   "rank": 17,
-   "ofHours": 24,
-   "vsMeanPct": 11
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "10:00",
-   "price": 160.56,
-   "unit": "EUR/MWh",
-   "rank": 14,
-   "ofHours": 24,
-   "vsMeanPct": 8
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "11:00",
-   "price": 144.93,
-   "unit": "EUR/MWh",
-   "rank": 8,
-   "ofHours": 24,
-   "vsMeanPct": -3
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "12:00",
-   "price": 115.86,
-   "unit": "EUR/MWh",
-   "rank": 3,
-   "ofHours": 24,
-   "vsMeanPct": -22
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "13:00",
-   "price": 99.69,
-   "unit": "EUR/MWh",
-   "rank": 1,
-   "ofHours": 24,
-   "vsMeanPct": -33
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "14:00",
-   "price": 106.33,
-   "unit": "EUR/MWh",
-   "rank": 2,
-   "ofHours": 24,
-   "vsMeanPct": -29
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "15:00",
-   "price": 127.17,
-   "unit": "EUR/MWh",
-   "rank": 4,
-   "ofHours": 24,
-   "vsMeanPct": -15
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "16:00",
-   "price": 155.0,
-   "unit": "EUR/MWh",
-   "rank": 13,
-   "ofHours": 24,
-   "vsMeanPct": 4
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "17:00",
-   "price": 166.31,
-   "unit": "EUR/MWh",
-   "rank": 20,
-   "ofHours": 24,
-   "vsMeanPct": 11
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "18:00",
-   "price": 166.3,
-   "unit": "EUR/MWh",
-   "rank": 19,
-   "ofHours": 24,
-   "vsMeanPct": 11
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "19:00",
-   "price": 166.79,
-   "unit": "EUR/MWh",
-   "rank": 23,
-   "ofHours": 24,
-   "vsMeanPct": 12
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "20:00",
-   "price": 166.78,
-   "unit": "EUR/MWh",
-   "rank": 22,
-   "ofHours": 24,
-   "vsMeanPct": 12
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "21:00",
-   "price": 166.33,
-   "unit": "EUR/MWh",
-   "rank": 21,
-   "ofHours": 24,
-   "vsMeanPct": 11
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "22:00",
-   "price": 163.68,
-   "unit": "EUR/MWh",
-   "rank": 15,
-   "ofHours": 24,
-   "vsMeanPct": 10
-  },
-  {
-   "row": "hour",
-   "day": "Today",
-   "date": "2026-10-15",
-   "time": "23:00",
-   "price": 164.44,
-   "unit": "EUR/MWh",
-   "rank": 16,
-   "ofHours": 24,
-   "vsMeanPct": 10
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Dishwasher",
-   "runHours": 2.0,
-   "windowScope": "whole day",
-   "cheapestStart": "12:45",
-   "cheapestEnd": "14:45",
-   "avgPrice": 101.29,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": 32
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Dishwasher",
-   "runHours": 2.0,
-   "windowScope": "from 21:45",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 164.06,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": -10
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Washing machine",
-   "runHours": 1.5,
-   "windowScope": "whole day",
-   "cheapestStart": "12:45",
-   "cheapestEnd": "14:15",
-   "avgPrice": 100.13,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": 33
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Washing machine",
-   "runHours": 1.5,
-   "windowScope": "from 21:45",
-   "cheapestStart": "22:30",
-   "cheapestEnd": "00:00",
-   "avgPrice": 163.86,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": -10
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Car charging",
-   "runHours": 4.0,
-   "windowScope": "whole day",
-   "cheapestStart": "11:45",
-   "cheapestEnd": "15:45",
-   "avgPrice": 111.99,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": 25
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Tumble dryer",
-   "runHours": 2.0,
-   "windowScope": "whole day",
-   "cheapestStart": "12:45",
-   "cheapestEnd": "14:45",
-   "avgPrice": 101.29,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": 32
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-10-15",
-   "appliance": "Tumble dryer",
-   "runHours": 2.0,
-   "windowScope": "from 21:45",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 164.06,
-   "dayMean": 149.23,
-   "unit": "EUR/MWh",
-   "savingPct": -10
-  },
-  {
-   "row": "hour",
-   "day": "Tomorrow",
    "date": "2026-10-16",
    "time": "00:00",
    "price": 169.43,
@@ -1181,7 +433,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "01:00",
    "price": 168.91,
@@ -1192,7 +444,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "02:00",
    "price": 168.68,
@@ -1203,7 +455,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "03:00",
    "price": 168.68,
@@ -1214,7 +466,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "04:00",
    "price": 169.19,
@@ -1225,7 +477,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "05:00",
    "price": 170.08,
@@ -1236,7 +488,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "06:00",
    "price": 172.12,
@@ -1247,7 +499,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "07:00",
    "price": 175.17,
@@ -1258,7 +510,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "08:00",
    "price": 177.19,
@@ -1269,7 +521,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "09:00",
    "price": 174.95,
@@ -1280,7 +532,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "10:00",
    "price": 182.99,
@@ -1291,7 +543,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "11:00",
    "price": 187.85,
@@ -1302,7 +554,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "12:00",
    "price": 167.51,
@@ -1313,7 +565,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "13:00",
    "price": 156.09,
@@ -1324,7 +576,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "14:00",
    "price": 158.99,
@@ -1335,7 +587,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "15:00",
    "price": 167.08,
@@ -1346,7 +598,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "16:00",
    "price": 172.26,
@@ -1357,7 +609,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "17:00",
    "price": 173.68,
@@ -1368,7 +620,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "18:00",
    "price": 173.44,
@@ -1379,7 +631,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "19:00",
    "price": 172.62,
@@ -1390,7 +642,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "20:00",
    "price": 169.81,
@@ -1401,7 +653,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "21:00",
    "price": 167.63,
@@ -1412,7 +664,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "22:00",
    "price": 166.63,
@@ -1423,7 +675,7 @@
   },
   {
    "row": "hour",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "time": "23:00",
    "price": 169.82,
@@ -1434,7 +686,7 @@
   },
   {
    "row": "appliance",
-   "day": "Tomorrow",
+   "day": "Today",
    "date": "2026-10-16",
    "appliance": "Dishwasher",
    "runHours": 2.0,
@@ -1448,7 +700,21 @@
   },
   {
    "row": "appliance",
-   "day": "Tomorrow",
+   "day": "Today",
+   "date": "2026-10-16",
+   "appliance": "Dishwasher",
+   "runHours": 2.0,
+   "windowScope": "from 00:00",
+   "cheapestStart": "12:45",
+   "cheapestEnd": "14:45",
+   "avgPrice": 157.29,
+   "dayMean": 170.87,
+   "unit": "EUR/MWh",
+   "savingPct": 8
+  },
+  {
+   "row": "appliance",
+   "day": "Today",
    "date": "2026-10-16",
    "appliance": "Washing machine",
    "runHours": 1.5,
@@ -1462,7 +728,21 @@
   },
   {
    "row": "appliance",
-   "day": "Tomorrow",
+   "day": "Today",
+   "date": "2026-10-16",
+   "appliance": "Washing machine",
+   "runHours": 1.5,
+   "windowScope": "from 00:00",
+   "cheapestStart": "13:15",
+   "cheapestEnd": "14:45",
+   "avgPrice": 155.96,
+   "dayMean": 170.87,
+   "unit": "EUR/MWh",
+   "savingPct": 9
+  },
+  {
+   "row": "appliance",
+   "day": "Today",
    "date": "2026-10-16",
    "appliance": "Car charging",
    "runHours": 4.0,
@@ -1476,11 +756,39 @@
   },
   {
    "row": "appliance",
-   "day": "Tomorrow",
+   "day": "Today",
+   "date": "2026-10-16",
+   "appliance": "Car charging",
+   "runHours": 4.0,
+   "windowScope": "from 00:00",
+   "cheapestStart": "12:15",
+   "cheapestEnd": "16:15",
+   "avgPrice": 162.18,
+   "dayMean": 170.87,
+   "unit": "EUR/MWh",
+   "savingPct": 5
+  },
+  {
+   "row": "appliance",
+   "day": "Today",
    "date": "2026-10-16",
    "appliance": "Tumble dryer",
    "runHours": 2.0,
    "windowScope": "whole day",
+   "cheapestStart": "12:45",
+   "cheapestEnd": "14:45",
+   "avgPrice": 157.29,
+   "dayMean": 170.87,
+   "unit": "EUR/MWh",
+   "savingPct": 8
+  },
+  {
+   "row": "appliance",
+   "day": "Today",
+   "date": "2026-10-16",
+   "appliance": "Tumble dryer",
+   "runHours": 2.0,
+   "windowScope": "from 00:00",
    "cheapestStart": "12:45",
    "cheapestEnd": "14:45",
    "avgPrice": 157.29,
