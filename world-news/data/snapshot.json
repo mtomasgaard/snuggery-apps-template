@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T00:01:42Z",
+ "generatedAt": "2026-10-15T01:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -431,7 +431,7 @@
     {
      "title": "How did early Māori society develop? New research reveals a clearer timeline",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/how-did-early-maori-society-develop-new-research-reveals-a-clearer-timeline-293207",
      "published": "2026-10-14T23:57:54Z",
      "summary": "",
@@ -469,14 +469,14 @@
      "author": "Karin Sowada, Senior Lecturer in Archaeology and Director of the Australian Centre for Egyptology, Macquarie University"
     },
     {
-     "title": "What was Australia’s first novel?",
+     "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
      "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-was-australias-first-novel-293206",
-     "published": "2026-10-14T18:58:17Z",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/naza-harrowing-documentary-shows-how-killing-in-gaza-became-just-another-days-work-293710",
+     "published": "2026-10-14T18:57:28Z",
      "summary": "",
      "stale": false,
-     "author": "Maggie Nolan, Director of AustLit, Associate Professor in Digital Cultural Heritage, The University of Queensland"
+     "author": "Ayesha Jehangir, Lecturer, Journalism and Communication, UNSW"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -937,8 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What was Australia’s first novel?",
-   "published": "2026-10-14 18:58 UTC"
+   "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
+   "published": "2026-10-14 18:57 UTC"
   },
   {
    "region": "Oceania",
