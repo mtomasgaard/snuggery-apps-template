@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T05:01:33Z",
+ "generatedAt": "2026-10-15T06:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Sally Rooney’s books are being withdrawn from sale in the UK, due to her support for Palestine Action",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/sally-rooneys-books-are-being-withdrawn-from-sale-in-the-uk-due-to-her-support-for-palestine-action-294458",
+     "published": "2026-10-15T05:33:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Julian Novitz, Senior Lecturer, Writing, Department of Media and Communication, Swinburne University of Technology"
+    },
+    {
      "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Fan Yang, Research Fellow at Melbourne Law School and ARC Centre of Excellence for Automated Decision-Making Society, The University of Melbourne"
-    },
-    {
-     "title": "Michelin came for the food. It found what makes South Australia special",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/michelin-came-for-the-food-it-found-what-makes-south-australia-special-294155",
-     "published": "2026-10-15T02:48:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anita Manfreda, Associate Professor, Blue Mountains International Hotel Management School, Torrens University Australia"
     },
     {
      "title": "How did early Māori society develop? New research reveals a clearer timeline",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Sally Rooney’s books are being withdrawn from sale in the UK, due to her support for Palestine Action",
+   "published": "2026-10-15 05:33 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
    "published": "2026-10-15 04:58 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
    "published": "2026-10-15 03:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Michelin came for the food. It found what makes South Australia special",
-   "published": "2026-10-15 02:48 UTC"
   },
   {
    "region": "Oceania",
