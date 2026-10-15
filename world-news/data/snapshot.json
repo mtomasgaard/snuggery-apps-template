@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T18:01:38Z",
+ "generatedAt": "2026-10-15T19:01:33Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Ukraine: Critical health supplies destroyed in ongoing Russian attacks",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168603",
+     "published": "2026-10-15T12:00:00Z",
+     "summary": "Ongoing and deadly Russian attacks across Ukraine are causing serious healthcare disruption, with more than $1.5 million-worth of medicines and supplies destroyed in four separate strikes on warehouses used by the UN…",
+     "stale": false
+    },
     {
      "title": "How authoritarian states are building an international market for digital surveillance",
      "source": "Global Voices",
@@ -35,15 +44,6 @@
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Ukraine: UN condemns latest attacks and calls for civilian protection",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168548",
-     "published": "2026-10-07T12:00:00Z",
-     "summary": "The UN Humanitarian Coordinator for Ukraine on Wednesday called for an end to attacks against civilians following further overnight strikes by Russian forces that reportedly killed at least 19 in the Chernihiv Region.",
-     "stale": false
     },
     {
      "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
@@ -92,6 +92,16 @@
    "name": "Americas",
    "stale": false,
    "items": [
+    {
+     "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/15/perus-indigenous-people-in-cutivireni-and-oviri-take-the-front-line-against-amazon-wildfires/",
+     "published": "2026-10-15T18:30:01Z",
+     "summary": "As El Niño worsens dry conditions, Peru’s indigenous people in Cutivireni and Oviri are taking action to protect their Amazon territory from wildfires.",
+     "stale": false,
+     "author": "Cool Earth"
+    },
     {
      "title": "Using light to control brain cells – neuroscientist Karl Deisseroth explains how he made his Nobel-winning discovery",
      "source": "The Conversation",
@@ -158,16 +168,6 @@
      "summary": "As health advocates push for tighter controls, Ecuador confronts the gap between regulating trans fats and enforcing those rules.",
      "stale": false,
      "author": "Carlos E. Flores"
-    },
-    {
-     "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
-     "published": "2026-10-09T19:22:38Z",
-     "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": false,
-     "author": "EngageMedia"
     }
    ]
   },
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Afghanistan faces record hunger levels amid rampant rights violations",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168605",
+     "published": "2026-10-15T12:00:00Z",
+     "summary": "Acute malnutrition and hunger in Afghanistan have reached the highest levels ever recorded, with 15.9 million people facing acute food insecurity and conditions set to worsen in the coming months, according to a global…",
+     "stale": false
+    },
+    {
      "title": "How authoritarian states are building an international market for digital surveillance",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -401,15 +410,6 @@
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
      "stale": false,
      "author": "Maksuda Akter"
-    },
-    {
-     "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168571",
-     "published": "2026-10-10T12:00:00Z",
-     "summary": "The UN human rights office (OHCHR) has voiced concern over reports of mass detentions in India of demonstrators, protest leaders, civil society members, lawyers and journalists, before and during large-scale protests in…",
-     "stale": false
     },
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Ukraine: Critical health supplies destroyed in ongoing Russian attacks",
+   "published": "2026-10-15 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
@@ -687,12 +693,6 @@
    "source": "Global Voices",
    "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
    "published": "2026-10-09 06:15 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Ukraine: UN condemns latest attacks and calls for civilian protection",
-   "published": "2026-10-07 12:00 UTC"
   },
   {
    "region": "Europe",
@@ -717,6 +717,12 @@
    "source": "Global Voices",
    "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
    "published": "2026-09-15 08:33 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "Global Voices",
+   "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
+   "published": "2026-10-15 18:30 UTC"
   },
   {
    "region": "Americas",
@@ -759,12 +765,6 @@
    "source": "Global Voices",
    "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
    "published": "2026-10-10 04:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
-   "published": "2026-10-09 19:22 UTC"
   },
   {
    "region": "Africa",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Afghanistan faces record hunger levels amid rampant rights violations",
+   "published": "2026-10-15 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
@@ -897,12 +903,6 @@
    "source": "Global Voices",
    "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
    "published": "2026-10-12 06:39 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
-   "published": "2026-10-10 12:00 UTC"
   },
   {
    "region": "Asia",
