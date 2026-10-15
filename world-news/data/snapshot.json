@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T06:01:26Z",
+ "generatedAt": "2026-10-15T07:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Australia’s ‘digital duty of care’ was just introduced to parliament. So what’s in the bill?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australias-digital-duty-of-care-was-just-introduced-to-parliament-so-whats-in-the-bill-294464",
+     "published": "2026-10-15T06:37:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kimberlee Weatherall, Professor of Law, University of Sydney"
+    },
+    {
      "title": "Sally Rooney’s books are being withdrawn from sale in the UK, due to her support for Palestine Action",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jeff Borland, Professor of Economics, The University of Melbourne"
-    },
-    {
-     "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-might-turning-off-the-algorithm-look-like-chinese-social-media-provides-some-hints-293339",
-     "published": "2026-10-15T03:20:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Fan Yang, Research Fellow at Melbourne Law School and ARC Centre of Excellence for Automated Decision-Making Society, The University of Melbourne"
     },
     {
      "title": "How did early Māori society develop? New research reveals a clearer timeline",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia’s ‘digital duty of care’ was just introduced to parliament. So what’s in the bill?",
+   "published": "2026-10-15 06:37 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Sally Rooney’s books are being withdrawn from sale in the UK, due to her support for Palestine Action",
    "published": "2026-10-15 05:33 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
    "published": "2026-10-15 04:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
-   "published": "2026-10-15 03:20 UTC"
   },
   {
    "region": "Oceania",
