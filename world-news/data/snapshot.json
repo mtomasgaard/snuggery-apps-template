@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T12:01:37Z",
+ "generatedAt": "2026-10-15T13:01:52Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Using light to control brain cells – neuroscientist Karl Deisseroth explains how he made his Nobel-winning discovery",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/using-light-to-control-brain-cells-neuroscientist-karl-deisseroth-explains-how-he-made-his-nobel-winning-discovery-293926",
+     "published": "2026-10-15T12:16:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Karl Deisseroth, D. H. Chen Professor, Professor of Bioengineering and of Psychiatry and Behavioral Sciences, Stanford University"
+    },
+    {
+     "title": "As AI takes on more tasks, what happens when people have to jump in to clean up after it?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/as-ai-takes-on-more-tasks-what-happens-when-people-have-to-jump-in-to-clean-up-after-it-292340",
+     "published": "2026-10-15T12:16:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Murugan Anandarajan, Professor of Decision Sciences and Management Information Systems, Drexel University"
+    },
+    {
      "title": "How authoritarian states are building an international market for digital surveillance",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -101,26 +121,6 @@
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Cystic fibrosis patients got their ‘miracle drug’ thanks to federal research funding – new Trump administration rules may cut future miracles short",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/cystic-fibrosis-patients-got-their-miracle-drug-thanks-to-federal-research-funding-new-trump-administration-rules-may-cut-future-miracles-short-293934",
-     "published": "2026-10-14T19:50:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Fred D. Ledley, Director, Center for Integration of Science and Industry, Bentley University"
-    },
-    {
-     "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/yemens-houthis-are-bringing-their-war-to-saudi-arabia-and-reframing-the-narrative-of-being-an-iranian-proxy-294208",
-     "published": "2026-10-14T17:57:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Laurent Bonnefoy, CNRS research fellow, Center for International Studies, Sciences Po"
     },
     {
      "title": "Haiti sanctions renewed: Starving the gangs of bullets",
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Using light to control brain cells – neuroscientist Karl Deisseroth explains how he made his Nobel-winning discovery",
+   "published": "2026-10-15 12:16 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "As AI takes on more tasks, what happens when people have to jump in to clean up after it?",
+   "published": "2026-10-15 12:16 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Cystic fibrosis patients got their ‘miracle drug’ thanks to federal research funding – new Trump administration rules may cut future miracles short",
-   "published": "2026-10-14 19:50 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Yemen’s Houthis are bringing their war to Saudi Arabia – and reframing the narrative of being an Iranian proxy",
-   "published": "2026-10-14 17:57 UTC"
   },
   {
    "region": "Americas",
