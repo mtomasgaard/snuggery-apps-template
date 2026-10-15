@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T21:01:28Z",
+ "generatedAt": "2026-10-15T22:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-plan-exists-for-a-fairer-and-healthier-food-system-which-party-policies-align-best-289698",
+     "published": "2026-10-15T21:21:08Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dianne J. Ma, Lecturer in Culinary Arts & Gastronomy, Auckland University of Technology"
+    },
+    {
      "title": "Some Australian research funding is now a lottery. And that’s actually good news",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Hayley Pring, Senior Associate in Grattan Institute's Energy and Climate Change program, Grattan Institute"
-    },
-    {
-     "title": "Companies that get hacked face stricter laws than firms unleashing rogue AI. We can fix that",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/companies-that-get-hacked-face-stricter-laws-than-firms-unleashing-rogue-ai-we-can-fix-that-294059",
-     "published": "2026-10-15T18:57:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rob Nicholls, Senior Research Associate in Media and Communications, University of Sydney"
     },
     {
      "title": "Israel soon heads to the polls, while Palestinian democracy remains on hold. Hamas looms over both",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
+   "published": "2026-10-15 21:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Some Australian research funding is now a lottery. And that’s actually good news",
    "published": "2026-10-15 18:58 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "The High Court looked at coal climate emissions overseas. But what about emissions at home?",
    "published": "2026-10-15 18:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Companies that get hacked face stricter laws than firms unleashing rogue AI. We can fix that",
-   "published": "2026-10-15 18:57 UTC"
   },
   {
    "region": "Oceania",
