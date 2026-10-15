@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T04:01:28Z",
+ "generatedAt": "2026-10-15T05:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/unemployment-in-australia-hits-a-five-year-high-of-4-7-making-a-rates-hike-less-likely-294463",
+     "published": "2026-10-15T04:58:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jeff Borland, Professor of Economics, The University of Melbourne"
+    },
+    {
      "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Anita Manfreda, Associate Professor, Blue Mountains International Hotel Management School, Torrens University Australia"
-    },
-    {
-     "title": "Can my health records be used for medical research?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/can-my-health-records-be-used-for-medical-research-294048",
-     "published": "2026-10-15T02:03:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Megan Prictor, Associate Professor in Health Technology Law, The University of Melbourne"
     },
     {
      "title": "How did early Māori society develop? New research reveals a clearer timeline",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
+   "published": "2026-10-15 04:58 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
    "published": "2026-10-15 03:20 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Michelin came for the food. It found what makes South Australia special",
    "published": "2026-10-15 02:48 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Can my health records be used for medical research?",
-   "published": "2026-10-15 02:03 UTC"
   },
   {
    "region": "Oceania",
