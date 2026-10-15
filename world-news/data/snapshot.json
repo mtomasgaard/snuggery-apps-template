@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T13:01:52Z",
+ "generatedAt": "2026-10-15T14:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "South Africa is going digital on VAT: what it can learn from the rest of Africa",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africa-is-going-digital-on-vat-what-it-can-learn-from-the-rest-of-africa-294238",
+     "published": "2026-10-15T13:54:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amina Ebrahim, Research Fellow, World Institute for Development Economics Research (UNU-WIDER), United Nations University"
+    },
+    {
      "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Drahmane Fondo, Chercheur associé (LIRCES, Université Côte d'Azur) et président du Réseau EnfanceAfrique.org, Université Côte d’Azur"
-    },
-    {
-     "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/one-third-of-food-is-lost-or-wasted-how-to-help-farmers-cut-post-harvest-losses-293555",
-     "published": "2026-10-14T13:42:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Abeeb Babatunde Omotoso, Senior Lecturer at Oyo State College of Agriculture and Technology, Igboora, Nigeria and Extraordinary Senior Lecturer at Indigenous…"
     },
     {
      "title": "DR Congo: Cholera cases spike amid fight against Ebola",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
-   "published": "2026-10-15 08:00 UTC"
+   "title": "South Africa is going digital on VAT: what it can learn from the rest of Africa",
+   "published": "2026-10-15 13:54 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
-   "published": "2026-10-14 13:42 UTC"
+   "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
+   "published": "2026-10-15 08:00 UTC"
   },
   {
    "region": "Africa",
