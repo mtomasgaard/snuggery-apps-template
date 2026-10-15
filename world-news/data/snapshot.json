@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T14:01:37Z",
+ "generatedAt": "2026-10-15T15:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "South Africa is going digital on VAT: what it can learn from the rest of Africa",
+     "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africa-is-going-digital-on-vat-what-it-can-learn-from-the-rest-of-africa-294238",
-     "published": "2026-10-15T13:54:35Z",
+     "link": "https://theconversation.com/lion-tracks-from-the-ice-age-how-two-ways-of-seeing-brought-ancient-animals-to-life-293281",
+     "published": "2026-10-15T14:04:53Z",
      "summary": "",
      "stale": false,
-     "author": "Amina Ebrahim, Research Fellow, World Institute for Development Economics Research (UNU-WIDER), United Nations University"
+     "author": "Charles Helm, Research Associate, African Centre for Coastal Palaeoscience, Nelson Mandela University"
     },
     {
-     "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
+     "title": "Good gut bacteria vs bad: what we learnt about antibiotic resistance from a community in Nairobi",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/lutte-contre-la-mendicite-au-mali-derriere-la-rue-six-parcours-denfants-a-cartographier-293130",
-     "published": "2026-10-15T08:00:32Z",
+     "link": "https://theconversation.com/good-gut-bacteria-vs-bad-what-we-learnt-about-antibiotic-resistance-from-a-community-in-nairobi-289108",
+     "published": "2026-10-15T14:04:38Z",
      "summary": "",
      "stale": false,
-     "author": "Drahmane Fondo, Chercheur associé (LIRCES, Université Côte d'Azur) et président du Réseau EnfanceAfrique.org, Université Côte d’Azur"
+     "author": "Eric Ng'eno, PhD Candidate, Department of Ecology and Evolutionary Biology and Biodiversity Institute, University of Kansas"
     },
     {
      "title": "DR Congo: Cholera cases spike amid fight against Ebola",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa is going digital on VAT: what it can learn from the rest of Africa",
-   "published": "2026-10-15 13:54 UTC"
+   "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
+   "published": "2026-10-15 14:04 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
-   "published": "2026-10-15 08:00 UTC"
+   "title": "Good gut bacteria vs bad: what we learnt about antibiotic resistance from a community in Nairobi",
+   "published": "2026-10-15 14:04 UTC"
   },
   {
    "region": "Africa",
