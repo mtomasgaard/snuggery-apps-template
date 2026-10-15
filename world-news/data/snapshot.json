@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T22:01:32Z",
+ "generatedAt": "2026-10-15T23:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
+     "title": "Does Australia have a problem with wrongful convictions? It’s time we got serious about finding out",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/does-australia-have-a-problem-with-wrongful-convictions-its-time-we-got-serious-about-finding-out-288803",
+     "published": "2026-10-15T22:51:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Stephen Cordner, Professor Emeritus, Dept of Forensic Medicine, Victorian Institute of Forensic Medicine; Monash University"
+    },
+    {
+     "title": "What can a century-old Kuomintang building tell us about Australia?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-can-a-century-old-kuomintang-building-tell-us-about-australia-293709",
+     "published": "2026-10-15T22:03:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mei-fen Kuo, Lecturer in Contemporary Chinese Culture and History, Macquarie University"
+    },
+    {
+     "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/a-plan-exists-for-a-fairer-and-healthier-food-system-which-party-policies-align-best-289698",
      "published": "2026-10-15T21:21:08Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Adrian Barnett, Professor of Statistics, Queensland University of Technology"
     },
     {
-     "title": "The High Court looked at coal climate emissions overseas. But what about emissions at home?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-high-court-looked-at-coal-climate-emissions-overseas-but-what-about-emissions-at-home-294235",
-     "published": "2026-10-15T18:58:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hayley Pring, Senior Associate in Grattan Institute's Energy and Climate Change program, Grattan Institute"
-    },
-    {
      "title": "Israel soon heads to the polls, while Palestinian democracy remains on hold. Hamas looms over both",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Benedict Moleta, PhD student, Department of International Relations, Australian National University"
-    },
-    {
-     "title": "Is the US limiting Starlink in Ukraine? The risks could be catastrophic",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/is-the-us-limiting-starlink-in-ukraine-the-risks-could-be-catastrophic-294496",
-     "published": "2026-10-15T14:18:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anthony King, Professor of War Studies, Director of the Strategy and Security Institute., University of Exeter"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Does Australia have a problem with wrongful convictions? It’s time we got serious about finding out",
+   "published": "2026-10-15 22:51 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What can a century-old Kuomintang building tell us about Australia?",
+   "published": "2026-10-15 22:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
    "published": "2026-10-15 21:21 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The High Court looked at coal climate emissions overseas. But what about emissions at home?",
-   "published": "2026-10-15 18:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Israel soon heads to the polls, while Palestinian democracy remains on hold. Hamas looms over both",
    "published": "2026-10-15 18:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Is the US limiting Starlink in Ukraine? The risks could be catastrophic",
-   "published": "2026-10-15 14:18 UTC"
   },
   {
    "region": "Oceania",
