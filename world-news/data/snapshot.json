@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T17:01:47Z",
+ "generatedAt": "2026-10-15T18:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Eric Ng'eno, PhD Candidate, Department of Ecology and Evolutionary Biology and Biodiversity Institute, University of Kansas"
     },
     {
+     "title": "WHO urges vigilance after Kenya confirms second Ebola case",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168602",
+     "published": "2026-10-15T12:00:00Z",
+     "summary": "The World Health Organization (WHO) continues to support Kenya’s efforts to contain Ebola after a second person tested positive for the Bundibugyo virus, the UN agency’s representative in the country said on Thursday.",
+     "stale": false
+    },
+    {
      "title": "DR Congo: Cholera cases spike amid fight against Ebola",
      "source": "UN News",
      "feed": "un-africa",
@@ -225,15 +234,6 @@
      "author": "Peace News"
     },
     {
-     "title": "Sudan: Drought and war push Darfur and Kordofan towards famine",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168577",
-     "published": "2026-10-12T12:00:00Z",
-     "summary": "The risk of famine is growing in parts of Sudan already torn apart by war, as a severe El Niño drought makes life even harder in Greater Darfur and Greater Kordofan, the UN-backed global hunger monitor warned on Monday.",
-     "stale": false
-    },
-    {
      "title": "When free speech has a price: Youth voices in Mozambique",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Security Council LIVE: Deaths, demolitions spike in Gaza, West Bank",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168599",
+     "published": "2026-10-15T12:00:00Z",
+     "summary": "Amid a rise in lethal Israeli strikes, demolitions and violence in Gaza and the West Bank, the Security Council is holding an open debate on Thursday focusing on the current situation in the Occupied Palestinian…",
+     "stale": false
+    },
     {
      "title": "How authoritarian states are building an international market for digital surveillance",
      "source": "Global Voices",
@@ -306,15 +315,6 @@
      "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
      "stale": false,
      "author": "Peace News"
-    },
-    {
-     "title": "Security Council LIVE: Syria’s fragile transition – economic strain, Israeli incursions and progress towards elections",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168578",
-     "published": "2026-10-12T12:00:00Z",
-     "summary": "The Security Council met to debate Syria's thorny transition Monday as it faces pressure on several fronts. Economic hardship is fuelling unrest, Israeli incursions continue in the south and sectarian tensions persist…",
-     "stale": false
     },
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "WHO urges vigilance after Kenya confirms second Ebola case",
+   "published": "2026-10-15 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "DR Congo: Cholera cases spike amid fight against Ebola",
    "published": "2026-10-14 12:00 UTC"
   },
@@ -798,12 +804,6 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan: Drought and war push Darfur and Kordofan towards famine",
-   "published": "2026-10-12 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "When free speech has a price: Youth voices in Mozambique",
    "published": "2026-10-11 18:00 UTC"
@@ -813,6 +813,12 @@
    "source": "Global Voices",
    "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
    "published": "2026-10-07 18:02 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Security Council LIVE: Deaths, demolitions spike in Gaza, West Bank",
+   "published": "2026-10-15 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Security Council LIVE: Syria’s fragile transition – economic strain, Israeli incursions and progress towards elections",
-   "published": "2026-10-12 12:00 UTC"
   },
   {
    "region": "Middle East",
