@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T03:01:32Z",
+ "generatedAt": "2026-10-15T04:01:28Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "How authoritarian states are building an international market for digital surveillance",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
+     "published": "2026-10-15T04:00:07Z",
+     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
      "source": "UN News",
@@ -46,16 +56,6 @@
      "author": "Guest Contributor"
     },
     {
-     "title": "The sound of resistance",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
-     "published": "2026-10-01T20:45:32Z",
-     "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
-     "author": "Sydney Allen"
-    },
-    {
      "title": "When the right to protest remains, but demonstrating comes at a price",
      "source": "Global Voices",
      "feed": "gv-western-europe",
@@ -92,6 +92,16 @@
    "name": "Americas",
    "stale": false,
    "items": [
+    {
+     "title": "How authoritarian states are building an international market for digital surveillance",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
+     "published": "2026-10-15T04:00:07Z",
+     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "Cystic fibrosis patients got their ‘miracle drug’ thanks to federal research funding – new Trump administration rules may cut future miracles short",
      "source": "The Conversation",
@@ -158,16 +168,6 @@
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
-    },
-    {
-     "title": "El Niño speeds climate crisis and tests Latin America’s food security",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/08/el-nino-speeds-climate-crisis-and-tests-latin-americas-food-security/",
-     "published": "2026-10-08T05:00:54Z",
-     "summary": "From droughts to floods and fires, El Niño is exposing vulnerabilities in Latin America’s food systems by putting farmers, food supplies and household budgets under growing pressure across the region.",
-     "stale": false,
-     "author": "Connectas"
     }
    ]
   },
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How authoritarian states are building an international market for digital surveillance",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
+     "published": "2026-10-15T04:00:07Z",
+     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
+    {
      "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Digital hopes, real power: From connection to collective action",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/07/digital-hopes-real-power-from-connection-to-collective-action/",
-     "published": "2026-10-07T06:20:55Z",
-     "summary": "If the Arab Spring was defined by optimism about what the internet could do, the years since have been marked by a more sober understanding of what it takes to defend it",
-     "stale": false,
-     "author": "Jillian C. York"
     }
    ]
   },
@@ -343,6 +343,16 @@
    "name": "Asia",
    "stale": false,
    "items": [
+    {
+     "title": "How authoritarian states are building an international market for digital surveillance",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
+     "published": "2026-10-15T04:00:07Z",
+     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "Norway’s Telenor telecom faces lawsuit for giving user data to Myanmar junta",
      "source": "Global Voices",
@@ -404,22 +414,12 @@
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
      "source": "Global Voices",
-     "feed": "gv-east-asia",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
      "published": "2026-10-09T19:22:38Z",
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
-    },
-    {
-     "title": "The sound of resistance",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
-     "published": "2026-10-01T20:45:32Z",
-     "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": false,
-     "author": "Sydney Allen"
     }
    ]
   },
@@ -428,6 +428,26 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-might-turning-off-the-algorithm-look-like-chinese-social-media-provides-some-hints-293339",
+     "published": "2026-10-15T03:20:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fan Yang, Research Fellow at Melbourne Law School and ARC Centre of Excellence for Automated Decision-Making Society, The University of Melbourne"
+    },
+    {
+     "title": "Michelin came for the food. It found what makes South Australia special",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/michelin-came-for-the-food-it-found-what-makes-south-australia-special-294155",
+     "published": "2026-10-15T02:48:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anita Manfreda, Associate Professor, Blue Mountains International Hotel Management School, Torrens University Australia"
+    },
     {
      "title": "Can my health records be used for medical research?",
      "source": "The Conversation",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Fiona Petchey, Associate Professor and Director, Radiocarbon Dating Laboratory, Te Aka Mātuatua-School of Science, University of Waikato"
-    },
-    {
-     "title": "‘Stress hormone’ cortisol is blamed for infertility, but major new study hints that could be wrong",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/stress-hormone-cortisol-is-blamed-for-infertility-but-major-new-study-hints-that-could-be-wrong-280805",
-     "published": "2026-10-14T23:05:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kerry Fanson, Head of Wildlife Conservation and Reproductive Endocrinology Lab, La Trobe University"
-    },
-    {
-     "title": "Prime ministers, billions in UAE investment: the Manchester City cheating scandal turns political",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/prime-ministers-billions-in-uae-investment-the-manchester-city-cheating-scandal-turns-political-294243",
-     "published": "2026-10-14T23:03:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
     },
     {
      "title": "World’s oldest shipwreck discovered off coast of Turkey",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "How authoritarian states are building an international market for digital surveillance",
+   "published": "2026-10-15 04:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
    "published": "2026-10-09 12:00 UTC"
@@ -697,12 +703,6 @@
   {
    "region": "Europe",
    "source": "Global Voices",
-   "title": "The sound of resistance",
-   "published": "2026-10-01 20:45 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
    "title": "When the right to protest remains, but demonstrating comes at a price",
    "published": "2026-09-29 00:00 UTC"
   },
@@ -717,6 +717,12 @@
    "source": "Global Voices",
    "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
    "published": "2026-09-15 08:33 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "Global Voices",
+   "title": "How authoritarian states are building an international market for digital surveillance",
+   "published": "2026-10-15 04:00 UTC"
   },
   {
    "region": "Americas",
@@ -759,12 +765,6 @@
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "El Niño speeds climate crisis and tests Latin America’s food security",
-   "published": "2026-10-08 05:00 UTC"
   },
   {
    "region": "Africa",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "How authoritarian states are building an international market for digital surveillance",
+   "published": "2026-10-15 04:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
    "published": "2026-10-14 12:00 UTC"
@@ -857,10 +863,10 @@
    "published": "2026-10-09 06:15 UTC"
   },
   {
-   "region": "Middle East",
+   "region": "Asia",
    "source": "Global Voices",
-   "title": "Digital hopes, real power: From connection to collective action",
-   "published": "2026-10-07 06:20 UTC"
+   "title": "How authoritarian states are building an international market for digital surveillance",
+   "published": "2026-10-15 04:00 UTC"
   },
   {
    "region": "Asia",
@@ -905,10 +911,16 @@
    "published": "2026-10-09 19:22 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "The sound of resistance",
-   "published": "2026-10-01 20:45 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What might turning off the algorithm look like? Chinese social media provides some hints",
+   "published": "2026-10-15 03:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Michelin came for the food. It found what makes South Australia special",
+   "published": "2026-10-15 02:48 UTC"
   },
   {
    "region": "Oceania",
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "How did early Māori society develop? New research reveals a clearer timeline",
    "published": "2026-10-14 23:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘Stress hormone’ cortisol is blamed for infertility, but major new study hints that could be wrong",
-   "published": "2026-10-14 23:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Prime ministers, billions in UAE investment: the Manchester City cheating scandal turns political",
-   "published": "2026-10-14 23:03 UTC"
   },
   {
    "region": "Oceania",
