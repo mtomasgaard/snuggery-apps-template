@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T02:01:32Z",
+ "generatedAt": "2026-10-15T03:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "How did early Māori society develop? New research reveals a clearer timeline",
+     "title": "Can my health records be used for medical research?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/can-my-health-records-be-used-for-medical-research-294048",
+     "published": "2026-10-15T02:03:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Megan Prictor, Associate Professor in Health Technology Law, The University of Melbourne"
+    },
+    {
+     "title": "How did early Māori society develop? New research reveals a clearer timeline",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/how-did-early-maori-society-develop-new-research-reveals-a-clearer-timeline-293207",
      "published": "2026-10-14T23:57:54Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Karin Sowada, Senior Lecturer in Archaeology and Director of the Australian Centre for Egyptology, Macquarie University"
-    },
-    {
-     "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/naza-harrowing-documentary-shows-how-killing-in-gaza-became-just-another-days-work-293710",
-     "published": "2026-10-14T18:57:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ayesha Jehangir, Lecturer, Journalism and Communication, UNSW"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Can my health records be used for medical research?",
+   "published": "2026-10-15 02:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How did early Māori society develop? New research reveals a clearer timeline",
    "published": "2026-10-14 23:57 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "World’s oldest shipwreck discovered off coast of Turkey",
    "published": "2026-10-14 20:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NAZA: harrowing documentary shows how killing in Gaza became just another day’s work",
-   "published": "2026-10-14 18:57 UTC"
   },
   {
    "region": "Oceania",
