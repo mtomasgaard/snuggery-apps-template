@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T08:01:29Z",
+ "generatedAt": "2026-10-15T09:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/lutte-contre-la-mendicite-au-mali-derriere-la-rue-six-parcours-denfants-a-cartographier-293130",
+     "published": "2026-10-15T08:00:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Drahmane Fondo, Chercheur associé (LIRCES, Université Côte d'Azur) et président du Réseau EnfanceAfrique.org, Université Côte d’Azur"
+    },
+    {
      "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Abeeb Babatunde Omotoso, Senior Lecturer at Oyo State College of Agriculture and Technology, Igboora, Nigeria and Extraordinary Senior Lecturer at Indigenous…"
-    },
-    {
-     "title": "Uganda’s sugarcane boom leaves families hungry: what needs to change",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/ugandas-sugarcane-boom-leaves-families-hungry-what-needs-to-change-292312",
-     "published": "2026-10-14T13:41:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "James Kintu, Postdoctoral Research Fellow, Centre for Governance and Sustainability, UMass Boston"
     },
     {
      "title": "DR Congo: Cholera cases spike amid fight against Ebola",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: Labor will need yet another budget backtrack to resurrect some of its health rebate cut",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-labor-will-need-yet-another-budget-backtrack-to-resurrect-some-of-its-health-rebate-cut-41508",
+     "published": "2026-10-15T07:40:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "Allegations of inappropriate behaviour against Greens Senator Steele-John to be investigated",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/allegations-of-inappropriate-behaviour-against-greens-senator-steele-john-to-be-investigated-26413",
+     "published": "2026-10-15T07:04:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australia’s ‘digital duty of care’ was just introduced to parliament. So what’s in the bill?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kimberlee Weatherall, Professor of Law, University of Sydney"
-    },
-    {
-     "title": "Sally Rooney’s books are being withdrawn from sale in the UK, due to her support for Palestine Action",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/sally-rooneys-books-are-being-withdrawn-from-sale-in-the-uk-due-to-her-support-for-palestine-action-294458",
-     "published": "2026-10-15T05:33:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "Julian Novitz, Senior Lecturer, Writing, Department of Media and Communication, Swinburne University of Technology"
-    },
-    {
-     "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/unemployment-in-australia-hits-a-five-year-high-of-4-7-making-a-rates-hike-less-likely-294463",
-     "published": "2026-10-15T04:58:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jeff Borland, Professor of Economics, The University of Melbourne"
     },
     {
      "title": "How did early Māori society develop? New research reveals a clearer timeline",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
-   "published": "2026-10-14 13:42 UTC"
+   "title": "Lutte contre la mendicité au Mali : derrière la rue, six parcours d'enfants à cartographier",
+   "published": "2026-10-15 08:00 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Uganda’s sugarcane boom leaves families hungry: what needs to change",
-   "published": "2026-10-14 13:41 UTC"
+   "title": "One third of food is lost or wasted: how to help farmers cut post-harvest losses",
+   "published": "2026-10-14 13:42 UTC"
   },
   {
    "region": "Africa",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: Labor will need yet another budget backtrack to resurrect some of its health rebate cut",
+   "published": "2026-10-15 07:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Allegations of inappropriate behaviour against Greens Senator Steele-John to be investigated",
+   "published": "2026-10-15 07:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia’s ‘digital duty of care’ was just introduced to parliament. So what’s in the bill?",
    "published": "2026-10-15 06:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Sally Rooney’s books are being withdrawn from sale in the UK, due to her support for Palestine Action",
-   "published": "2026-10-15 05:33 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Unemployment in Australia hits a five-year high of 4.7%, making a rates hike less likely",
-   "published": "2026-10-15 04:58 UTC"
   },
   {
    "region": "Oceania",
