@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T13:01:35Z",
+ "generatedAt": "2026-10-16T14:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/16/how-an-extremist-network-articulated-a-hoax-linking-brazils-president-lula-to-child-abuse-on-x/",
+     "published": "2026-10-16T13:10:39Z",
+     "summary": "Distortion in the meaning of a speech by Lula about prostate cancer exams went viral within hours and fed conspiracy theories amid a tight presidential race in Brazil.",
+     "stale": false,
+     "author": "Fernanda Canofre"
+    },
+    {
      "title": "Remote work made these colleagues more open with each other, not less",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -158,16 +168,6 @@
      "published": "2026-10-12T12:00:00Z",
      "summary": "Nearly 10 years after Colombia signed a historic peace agreement to end a decades-long insurgency, the deal is under strain from growing insecurity – and the UN’s top official in the country says it cannot be allowed to…",
      "stale": false
-    },
-    {
-     "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/10/how-ecuador-is-fighting-to-keep-industrial-trans-fats-off-the-food-shelf/",
-     "published": "2026-10-10T04:00:43Z",
-     "summary": "As health advocates push for tighter controls, Ecuador confronts the gap between regulating trans fats and enforcing those rules.",
-     "stale": false,
-     "author": "Carlos E. Flores"
     }
    ]
   },
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Gaza: 340 children killed despite ceasefire agreement - UNICEF",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168611",
+     "published": "2026-10-16T12:00:00Z",
+     "summary": "A little over one year since a ceasefire agreement was announced between Hamas fighters and Israel, more than 340 children have been reported killed and hundreds more injured, the UN Children’s Fund (UNICEF) said on…",
+     "stale": false
+    },
+    {
      "title": "Security Council LIVE: Deaths, demolitions spike in Gaza, West Bank",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168590",
      "published": "2026-10-14T12:00:00Z",
      "summary": "The head of the World Health Organization (WHO) has called for promoting, providing and protecting health in the Eastern Mediterranean region, home to some of the world’s top humanitarian crises such as Sudan, Yemen and…",
-     "stale": false
-    },
-    {
-     "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168589",
-     "published": "2026-10-13T12:00:00Z",
-     "summary": "Yemen’s southwestern city of Taiz is facing a “devastating” humanitarian crisis as escalating tensions are dramatically driving up food prices and causing shortages of supplies, the UN Spokesperson said on Tuesday.",
      "stale": false
     },
     {
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
+   "published": "2026-10-16 13:10 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Remote work made these colleagues more open with each other, not less",
    "published": "2026-10-16 12:24 UTC"
@@ -759,12 +765,6 @@
    "source": "UN News",
    "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
    "published": "2026-10-12 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "How Ecuador is fighting to keep industrial trans fats off the food shelf",
-   "published": "2026-10-10 04:00 UTC"
   },
   {
    "region": "Africa",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Gaza: 340 children killed despite ceasefire agreement - UNICEF",
+   "published": "2026-10-16 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Security Council LIVE: Deaths, demolitions spike in Gaza, West Bank",
    "published": "2026-10-15 12:00 UTC"
   },
@@ -837,12 +843,6 @@
    "source": "UN News",
    "title": "WHO calls for urgent health action across the Eastern Mediterranean",
    "published": "2026-10-14 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen: Houthi siege, cholera outbreak and aid cuts put civilians in the crosshairs",
-   "published": "2026-10-13 12:00 UTC"
   },
   {
    "region": "Middle East",
