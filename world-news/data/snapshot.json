@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T12:01:30Z",
+ "generatedAt": "2026-10-16T13:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Remote work made these colleagues more open with each other, not less",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/remote-work-made-these-colleagues-more-open-with-each-other-not-less-291728",
+     "published": "2026-10-16T12:24:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Vanessa M. Conzon, Assistant Professor of Management and Organizations, Boston College"
+    },
+    {
+     "title": "Belonging and belief: Why evangelical churches draw many migrants in the US",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/belonging-and-belief-why-evangelical-churches-draw-many-migrants-in-the-us-286504",
+     "published": "2026-10-16T12:24:15Z",
+     "summary": "",
+     "stale": false,
+     "author": "Johanna Bard Richlin, Associate Professor of Anthropology, University of Maine"
+    },
+    {
      "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -101,26 +121,6 @@
      "summary": "As El Niño worsens dry conditions, Peru’s indigenous people in Cutivireni and Oviri are taking action to protect their Amazon territory from wildfires.",
      "stale": false,
      "author": "Cool Earth"
-    },
-    {
-     "title": "Using light to control brain cells – neuroscientist Karl Deisseroth explains how he made his Nobel-winning discovery",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/using-light-to-control-brain-cells-neuroscientist-karl-deisseroth-explains-how-he-made-his-nobel-winning-discovery-293926",
-     "published": "2026-10-15T12:16:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Karl Deisseroth, D. H. Chen Professor, Professor of Bioengineering and of Psychiatry and Behavioral Sciences, Stanford University"
-    },
-    {
-     "title": "As AI takes on more tasks, what happens when people have to jump in to clean up after it?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/as-ai-takes-on-more-tasks-what-happens-when-people-have-to-jump-in-to-clean-up-after-it-292340",
-     "published": "2026-10-15T12:16:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Murugan Anandarajan, Professor of Decision Sciences and Management Information Systems, Drexel University"
     },
     {
      "title": "How authoritarian states are building an international market for digital surveillance",
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Remote work made these colleagues more open with each other, not less",
+   "published": "2026-10-16 12:24 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Belonging and belief: Why evangelical churches draw many migrants in the US",
+   "published": "2026-10-16 12:24 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
    "published": "2026-10-15 18:30 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Using light to control brain cells – neuroscientist Karl Deisseroth explains how he made his Nobel-winning discovery",
-   "published": "2026-10-15 12:16 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "As AI takes on more tasks, what happens when people have to jump in to clean up after it?",
-   "published": "2026-10-15 12:16 UTC"
   },
   {
    "region": "Americas",
