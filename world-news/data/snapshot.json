@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-15T23:01:33Z",
+ "generatedAt": "2026-10-16T00:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -266,7 +266,7 @@
      "feed": "un-middle-east",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168599",
      "published": "2026-10-15T12:00:00Z",
-     "summary": "Amid a rise in lethal Israeli strikes, demolitions and violence in Gaza and the West Bank, the Security Council is holding an open debate on Thursday focusing on the current situation in the Occupied Palestinian…",
+     "summary": "Amid a rise in lethal Israeli strikes, demolitions and violence in Gaza and the West Bank, the Security Council held an open debate on Thursday focusing on the current situation in the Occupied Palestinian Territory.",
      "stale": false
     },
     {
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Replacing just 10% of ultra-processed foods with whole foods linked to drop in bowel cancer rate",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/replacing-just-10-of-ultra-processed-foods-with-whole-foods-linked-to-drop-in-bowel-cancer-rate-294469",
+     "published": "2026-10-15T23:54:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Erikka Loftfield, Group Leader, QIMR Berghofer"
+    },
+    {
+     "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/winston-peters-says-diversity-is-disunity-what-does-the-evidence-tell-us-294456",
+     "published": "2026-10-15T23:35:08Z",
+     "summary": "",
+     "stale": false,
+     "author": "Paul Spoonley, Distinguished Professor, College of Humanities and Social Sciences, Te Kunenga ki Pūrehuroa – Massey University"
+    },
+    {
+     "title": "Earth’s oldest evidence of life is written in stone – but it’s at risk of disappearing",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/earths-oldest-evidence-of-life-is-written-in-stone-but-its-at-risk-of-disappearing-293101",
+     "published": "2026-10-15T23:22:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Heidi Jane Allen, Paleontologist, The University of Melbourne"
+    },
+    {
      "title": "Does Australia have a problem with wrongful convictions? It’s time we got serious about finding out",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,16 +469,6 @@
      "author": "Stephen Cordner, Professor Emeritus, Dept of Forensic Medicine, Victorian Institute of Forensic Medicine; Monash University"
     },
     {
-     "title": "What can a century-old Kuomintang building tell us about Australia?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-can-a-century-old-kuomintang-building-tell-us-about-australia-293709",
-     "published": "2026-10-15T22:03:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mei-fen Kuo, Lecturer in Contemporary Chinese Culture and History, Macquarie University"
-    },
-    {
      "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Dianne J. Ma, Lecturer in Culinary Arts & Gastronomy, Auckland University of Technology"
-    },
-    {
-     "title": "Some Australian research funding is now a lottery. And that’s actually good news",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/some-australian-research-funding-is-now-a-lottery-and-thats-actually-good-news-294057",
-     "published": "2026-10-15T18:58:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Barnett, Professor of Statistics, Queensland University of Technology"
-    },
-    {
-     "title": "Israel soon heads to the polls, while Palestinian democracy remains on hold. Hamas looms over both",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/israel-soon-heads-to-the-polls-while-palestinian-democracy-remains-on-hold-hamas-looms-over-both-294233",
-     "published": "2026-10-15T18:57:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Benedict Moleta, PhD student, Department of International Relations, Australian National University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Replacing just 10% of ultra-processed foods with whole foods linked to drop in bowel cancer rate",
+   "published": "2026-10-15 23:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
+   "published": "2026-10-15 23:35 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Earth’s oldest evidence of life is written in stone – but it’s at risk of disappearing",
+   "published": "2026-10-15 23:22 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Does Australia have a problem with wrongful convictions? It’s time we got serious about finding out",
    "published": "2026-10-15 22:51 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What can a century-old Kuomintang building tell us about Australia?",
-   "published": "2026-10-15 22:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
    "published": "2026-10-15 21:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Some Australian research funding is now a lottery. And that’s actually good news",
-   "published": "2026-10-15 18:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Israel soon heads to the polls, while Palestinian democracy remains on hold. Hamas looms over both",
-   "published": "2026-10-15 18:57 UTC"
   },
   {
    "region": "Oceania",
