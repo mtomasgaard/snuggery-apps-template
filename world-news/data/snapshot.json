@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T05:01:29Z",
+ "generatedAt": "2026-10-16T06:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Hong Kong police launch AI-powered national security platform for school pupils",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/16/hong-kong-police-launch-ai-powered-national-security-platform-for-school-pupils/",
+     "published": "2026-10-16T05:03:29Z",
+     "summary": "The tech allows students to generate personalized stories on China’s “holistic approach to national security” – a framework advocated by President Xi Jinping covering areas from politics and economy to ecology and…",
+     "stale": false,
+     "author": "Hong Kong Free Press"
+    },
+    {
      "title": "Afghanistan faces record hunger levels amid rampant rights violations",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -381,16 +391,6 @@
      "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
      "stale": false,
      "author": "Susmita Aryal"
-    },
-    {
-     "title": "Poetry book promotes Chabacano, Asia’s only Spanish-based creole language",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/13/poetry-book-promotes-chabacano-asias-only-spanish-based-creole-language/",
-     "published": "2026-10-13T07:48:55Z",
-     "summary": "\"The project highlights not only the continued vitality of Chavacano as a language, but also the efforts of its speakers to create new literature and preserve the language through writing.”",
-     "stale": false,
-     "author": "Mong Palatino"
     },
     {
      "title": "UN aid operation underway in Nepal following fresh floods",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Hong Kong police launch AI-powered national security platform for school pupils",
+   "published": "2026-10-16 05:03 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Afghanistan faces record hunger levels amid rampant rights violations",
    "published": "2026-10-15 12:00 UTC"
@@ -885,12 +891,6 @@
    "source": "Global Voices",
    "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
    "published": "2026-10-13 18:21 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Poetry book promotes Chabacano, Asia’s only Spanish-based creole language",
-   "published": "2026-10-13 07:48 UTC"
   },
   {
    "region": "Asia",
