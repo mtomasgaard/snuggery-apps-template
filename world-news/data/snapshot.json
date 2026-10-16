@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T20:01:27Z",
+ "generatedAt": "2026-10-16T21:01:28Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168614",
+     "published": "2026-10-16T12:00:00Z",
+     "summary": "Civilian casualties in Ukraine remain at record levels, with intensified Russian attacks in September continuing a pattern of harm in 2026 far exceeding previous years, UN human rights monitors in Ukraine said on Friday.",
+     "stale": false
+    },
     {
      "title": "Ukraine: Critical health supplies destroyed in ongoing Russian attacks",
      "source": "UN News",
@@ -25,15 +34,6 @@
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168564",
-     "published": "2026-10-09T12:00:00Z",
-     "summary": "Escalating violence and human rights violations in the four-year-old Russia-Ukraine war are in the spotlight in the Security Council on Friday following a spate of Russian attacks against civilian targets and…",
-     "stale": false
     },
     {
      "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "UN News",
+   "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
+   "published": "2026-10-16 12:00 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "UN News",
    "title": "Ukraine: Critical health supplies destroyed in ongoing Russian attacks",
    "published": "2026-10-15 12:00 UTC"
   },
@@ -681,12 +687,6 @@
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Security Council LIVE: Cycle of escalating attacks on civilians in Ukraine ‘must end now’",
-   "published": "2026-10-09 12:00 UTC"
   },
   {
    "region": "Europe",
