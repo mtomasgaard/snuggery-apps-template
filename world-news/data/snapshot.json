@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T08:01:29Z",
+ "generatedAt": "2026-10-16T09:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Comment la Cour de justice de la Cedeao renforce la protection des droits des femmes en Afrique de l’Ouest",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/comment-la-cour-de-justice-de-la-cedeao-renforce-la-protection-des-droits-des-femmes-en-afrique-de-louest-294271",
+     "published": "2026-10-16T08:22:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Maame Efua Addadzi-Koom, Senior Lecturer, Kwame Nkrumah University of Science and Technology (KNUST)"
+    },
+    {
      "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Charles Helm, Research Associate, African Centre for Coastal Palaeoscience, Nelson Mandela University"
-    },
-    {
-     "title": "Good gut bacteria vs bad: what we learnt about antibiotic resistance from a community in Nairobi",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/good-gut-bacteria-vs-bad-what-we-learnt-about-antibiotic-resistance-from-a-community-in-nairobi-289108",
-     "published": "2026-10-15T14:04:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Eric Ng'eno, PhD Candidate, Department of Ecology and Evolutionary Biology and Biodiversity Institute, University of Kansas"
     },
     {
      "title": "WHO urges vigilance after Kenya confirms second Ebola case",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
-   "published": "2026-10-15 14:04 UTC"
+   "title": "Comment la Cour de justice de la Cedeao renforce la protection des droits des femmes en Afrique de l’Ouest",
+   "published": "2026-10-16 08:22 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Good gut bacteria vs bad: what we learnt about antibiotic resistance from a community in Nairobi",
+   "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
    "published": "2026-10-15 14:04 UTC"
   },
   {
