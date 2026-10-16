@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T09:56:54Z",
+ "generatedAt": "2026-10-16T10:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -354,6 +354,15 @@
      "author": "Hong Kong Free Press"
     },
     {
+     "title": "Afghanistan faces record hunger levels amid rampant rights violations",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168605",
+     "published": "2026-10-15T12:00:00Z",
+     "summary": "Acute malnutrition and hunger in Afghanistan have reached the highest levels ever recorded, with 15.9 million people facing acute food insecurity and conditions set to worsen in the coming months, according to a global…",
+     "stale": false
+    },
+    {
      "title": "How authoritarian states are building an international market for digital surveillance",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -401,15 +410,6 @@
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
      "stale": false,
      "author": "Maksuda Akter"
-    },
-    {
-     "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168571",
-     "published": "2026-10-10T12:00:00Z",
-     "summary": "The UN human rights office (OHCHR) has voiced concern over reports of mass detentions in India of demonstrators, protest leaders, civil society members, lawyers and journalists, before and during large-scale protests in…",
-     "stale": false
     },
     {
      "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
@@ -870,6 +870,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Afghanistan faces record hunger levels amid rampant rights violations",
+   "published": "2026-10-15 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
@@ -897,12 +903,6 @@
    "source": "Global Voices",
    "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
    "published": "2026-10-12 06:39 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "India: UN rights office urges release of ‘arbitrarily detained’ protesters",
-   "published": "2026-10-10 12:00 UTC"
   },
   {
    "region": "Asia",
