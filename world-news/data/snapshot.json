@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T18:01:35Z",
+ "generatedAt": "2026-10-16T19:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Young voters fear mass shootings like the one in Oregon, but that fear divides them on gun control",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/young-voters-fear-mass-shootings-like-the-one-in-oregon-but-that-fear-divides-them-on-gun-control-294620",
+     "published": "2026-10-16T18:02:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jillian Turanovic, Professor of Sociology, University of Colorado Boulder"
+    },
+    {
      "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Vanessa M. Conzon, Assistant Professor of Management and Organizations, Boston College"
-    },
-    {
-     "title": "Belonging and belief: Why evangelical churches draw many migrants in the US",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/belonging-and-belief-why-evangelical-churches-draw-many-migrants-in-the-us-286504",
-     "published": "2026-10-16T12:24:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Johanna Bard Richlin, Associate Professor of Anthropology, University of Maine"
     },
     {
      "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Young voters fear mass shootings like the one in Oregon, but that fear divides them on gun control",
+   "published": "2026-10-16 18:02 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
    "published": "2026-10-16 13:10 UTC"
@@ -728,12 +734,6 @@
    "region": "Americas",
    "source": "The Conversation",
    "title": "Remote work made these colleagues more open with each other, not less",
-   "published": "2026-10-16 12:24 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Belonging and belief: Why evangelical churches draw many migrants in the US",
    "published": "2026-10-16 12:24 UTC"
   },
   {
