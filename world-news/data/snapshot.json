@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-16T03:01:35Z",
+ "generatedAt": "2026-10-16T04:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,14 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Replacing just 10% of ultra-processed foods with whole foods linked to drop in bowel cancer rate",
+     "title": "Why do I keep getting mouth ulcers?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/replacing-just-10-of-ultra-processed-foods-with-whole-foods-linked-to-drop-in-bowel-cancer-rate-294469",
-     "published": "2026-10-15T23:54:02Z",
+     "link": "https://theconversation.com/why-do-i-keep-getting-mouth-ulcers-289986",
+     "published": "2026-10-16T03:58:58Z",
      "summary": "",
      "stale": false,
-     "author": "Erikka Loftfield, Group Leader, QIMR Berghofer"
+     "author": "Amit Arora, Associate Professor in Public Health, Western Sydney University"
+    },
+    {
+     "title": "The government wants trusts to pay a minimum 30% tax. What’s behind the changes?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-government-wants-trusts-to-pay-a-minimum-30-tax-whats-behind-the-changes-294459",
+     "published": "2026-10-16T03:45:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert B Whait, Senior Lecturer in Taxation Law, Adelaide University"
+    },
+    {
+     "title": "Kids and teens are going to AI chatbots for advice. How can parents make sure this is safe?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/kids-and-teens-are-going-to-ai-chatbots-for-advice-how-can-parents-make-sure-this-is-safe-294145",
+     "published": "2026-10-16T03:26:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amy Dawel, Clinical Psychologist and Associate Professor, School of Medicine and Psychology, Australian National University"
     },
     {
      "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Paul Spoonley, Distinguished Professor, College of Humanities and Social Sciences, Te Kunenga ki Pūrehuroa – Massey University"
-    },
-    {
-     "title": "Earth’s oldest evidence of life is written in stone – but it’s at risk of disappearing",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/earths-oldest-evidence-of-life-is-written-in-stone-but-its-at-risk-of-disappearing-293101",
-     "published": "2026-10-15T23:22:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Heidi Jane Allen, Paleontologist, The University of Melbourne"
-    },
-    {
-     "title": "Does Australia have a problem with wrongful convictions? It’s time we got serious about finding out",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/does-australia-have-a-problem-with-wrongful-convictions-its-time-we-got-serious-about-finding-out-288803",
-     "published": "2026-10-15T22:51:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stephen Cordner, Professor Emeritus, Dept of Forensic Medicine, Victorian Institute of Forensic Medicine; Monash University"
     },
     {
      "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Replacing just 10% of ultra-processed foods with whole foods linked to drop in bowel cancer rate",
-   "published": "2026-10-15 23:54 UTC"
+   "title": "Why do I keep getting mouth ulcers?",
+   "published": "2026-10-16 03:58 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The government wants trusts to pay a minimum 30% tax. What’s behind the changes?",
+   "published": "2026-10-16 03:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Kids and teens are going to AI chatbots for advice. How can parents make sure this is safe?",
+   "published": "2026-10-16 03:26 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
    "published": "2026-10-15 23:35 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Earth’s oldest evidence of life is written in stone – but it’s at risk of disappearing",
-   "published": "2026-10-15 23:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Does Australia have a problem with wrongful convictions? It’s time we got serious about finding out",
-   "published": "2026-10-15 22:51 UTC"
   },
   {
    "region": "Oceania",
