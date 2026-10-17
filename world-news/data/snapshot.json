@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-17T18:01:36Z",
+ "generatedAt": "2026-10-17T19:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Flour sacks turned flood barriers: Gaza faces another winter without safe shelter",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168619",
+     "published": "2026-10-17T12:00:00Z",
+     "summary": "Like many people in the war-ravaged Gaza Strip, Ahmed Al-Omari is preparing for another winter of bitter cold and rain that threatens to cause flooding as families struggle to survive in tattered tents and damaged…",
+     "stale": false
+    },
+    {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168591",
      "published": "2026-10-14T12:00:00Z",
      "summary": "Intensifying fighting in Yemen has cut off life-saving assistance to 800,000 people as shifting frontlines, blocked roads and growing insecurity severely restrict access to the city of Taiz and other conflict zones, the…",
-     "stale": false
-    },
-    {
-     "title": "WHO calls for urgent health action across the Eastern Mediterranean",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168590",
-     "published": "2026-10-14T12:00:00Z",
-     "summary": "The head of the World Health Organization (WHO) has called for promoting, providing and protecting health in the Eastern Mediterranean region, home to some of the world’s top humanitarian crises such as Sudan, Yemen and…",
      "stale": false
     },
     {
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "Flour sacks turned flood barriers: Gaza faces another winter without safe shelter",
+   "published": "2026-10-17 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
@@ -842,12 +848,6 @@
    "region": "Middle East",
    "source": "UN News",
    "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
-   "published": "2026-10-14 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "WHO calls for urgent health action across the Eastern Mediterranean",
    "published": "2026-10-14 12:00 UTC"
   },
   {
