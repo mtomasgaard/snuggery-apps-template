@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-17T08:01:19Z",
+ "generatedAt": "2026-10-17T09:01:30Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
+     "published": "2026-10-17T08:07:27Z",
+     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
+     "stale": false,
+     "author": "Uncloseted MEdia"
+    },
     {
      "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
      "source": "UN News",
@@ -74,16 +84,6 @@
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
      "stale": false,
      "author": "Omid Memarian"
-    },
-    {
-     "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
-     "source": "Global Voices",
-     "feed": "gv-western-europe",
-     "link": "https://globalvoices.org/2026/09/15/what-indias-cockroach-protests-reveal-about-digital-authoritarianism/",
-     "published": "2026-09-15T08:33:09Z",
-     "summary": "“Democratic freedoms depend not only on protection from direct state violence but on citizens being able to organise without assuming their participation is permanently recorded.”",
-     "stale": false,
-     "author": "Guest Contributor"
     }
    ]
   },
@@ -92,6 +92,16 @@
    "name": "Americas",
    "stale": false,
    "items": [
+    {
+     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
+     "published": "2026-10-17T08:07:27Z",
+     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
+     "stale": false,
+     "author": "Uncloseted MEdia"
+    },
     {
      "title": "Young voters fear mass shootings like the one in Oregon, but that fear divides them on gun control",
      "source": "The Conversation",
@@ -133,16 +143,6 @@
      "author": "Cool Earth"
     },
     {
-     "title": "How authoritarian states are building an international market for digital surveillance",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
-     "published": "2026-10-15T04:00:07Z",
-     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
-     "stale": false,
-     "author": "Daria Dergacheva"
-    },
-    {
      "title": "Haiti sanctions renewed: Starving the gangs of bullets",
      "source": "UN News",
      "feed": "un-americas",
@@ -176,6 +176,16 @@
    "name": "Africa",
    "stale": false,
    "items": [
+    {
+     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
+     "published": "2026-10-17T08:07:27Z",
+     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
+     "stale": false,
+     "author": "Uncloseted MEdia"
+    },
     {
      "title": "Security Council LIVE: Sudan’s war spreads as drones and hunger take a deadly toll",
      "source": "UN News",
@@ -242,16 +252,6 @@
      "summary": "For Mozambican youth, freedom of expression exists in law, but speaking out can come with a cost. Music became a powerful space for criticism and resistance.",
      "stale": false,
      "author": "Liam Anderson"
-    },
-    {
-     "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/07/africas-governments-already-treat-the-internet-as-protest-infrastructure-its-courts-have-not-caught-up/",
-     "published": "2026-10-07T18:02:48Z",
-     "summary": "In 2024 the African Commission itself adopted a resolution on internet shutdowns during elections. The resolution treats a shutdown as a harm to expression and access to information...",
-     "stale": false,
-     "author": "Ephraim Percy Kenyanito"
     }
    ]
   },
@@ -260,6 +260,16 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
+     "published": "2026-10-17T08:07:27Z",
+     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
+     "stale": false,
+     "author": "Uncloseted MEdia"
+    },
     {
      "title": "Gaza: 340 children killed despite ceasefire agreement - UNICEF",
      "source": "UN News",
@@ -325,16 +335,6 @@
      "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
      "stale": false,
      "author": "EngageMedia"
-    },
-    {
-     "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
-     "published": "2026-10-09T06:15:45Z",
-     "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": false,
-     "author": "Guest Contributor"
     }
    ]
   },
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+   "published": "2026-10-17 08:07 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
    "published": "2026-10-16 12:00 UTC"
@@ -713,10 +719,10 @@
    "published": "2026-09-19 08:01 UTC"
   },
   {
-   "region": "Europe",
+   "region": "Americas",
    "source": "Global Voices",
-   "title": "What India’s ‘Cockroach’ protests reveal about digital authoritarianism",
-   "published": "2026-09-15 08:33 UTC"
+   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Americas",
@@ -744,12 +750,6 @@
   },
   {
    "region": "Americas",
-   "source": "Global Voices",
-   "title": "How authoritarian states are building an international market for digital surveillance",
-   "published": "2026-10-15 04:00 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "UN News",
    "title": "Haiti sanctions renewed: Starving the gangs of bullets",
    "published": "2026-10-14 12:00 UTC"
@@ -765,6 +765,12 @@
    "source": "UN News",
    "title": "Colombia peace deal must endure as insecurity grows, Security Council hears",
    "published": "2026-10-12 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Africa",
@@ -809,10 +815,10 @@
    "published": "2026-10-11 18:00 UTC"
   },
   {
-   "region": "Africa",
+   "region": "Middle East",
    "source": "Global Voices",
-   "title": "Africa’s governments already treat the internet as protest infrastructure. Its courts have not caught up",
-   "published": "2026-10-07 18:02 UTC"
+   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
+   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Middle East",
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
    "published": "2026-10-09 19:22 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
-   "published": "2026-10-09 06:15 UTC"
   },
   {
    "region": "Asia",
