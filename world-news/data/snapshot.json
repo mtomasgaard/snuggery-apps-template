@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-18T20:01:43Z",
+ "generatedAt": "2026-10-18T21:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Natural hazards don’t obey electoral cycles. The next government faces crucial choices",
+     "title": "Your say: week beginning October 19",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-october-19-294661",
+     "published": "2026-10-18T19:50:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Judy Ingham, Newsletter Producer, The Conversation"
+    },
+    {
+     "title": "Natural hazards don’t obey electoral cycles. The next government faces crucial choices",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/natural-hazards-dont-obey-electoral-cycles-the-next-government-faces-crucial-choices-293552",
      "published": "2026-10-18T19:13:49Z",
      "summary": "",
@@ -451,7 +461,7 @@
     {
      "title": "Video game film adaptations used to be huge flops. Now studios can’t get enough",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/video-game-film-adaptations-used-to-be-huge-flops-now-studios-cant-get-enough-294354",
      "published": "2026-10-18T19:12:53Z",
      "summary": "",
@@ -459,24 +469,14 @@
      "author": "Liam Burke, Associate Professor and Cinema and Screen Studies Discipline Leader, Swinburne University of Technology"
     },
     {
-     "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
+     "title": "A botanist weighs in on our love-hate relationship with crepe myrtles",
      "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/winston-peters-says-diversity-is-disunity-what-does-the-evidence-tell-us-294456",
-     "published": "2026-10-15T23:35:08Z",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-botanist-weighs-in-on-our-love-hate-relationship-with-crepe-myrtles-288925",
+     "published": "2026-10-18T19:12:40Z",
      "summary": "",
      "stale": false,
-     "author": "Paul Spoonley, Distinguished Professor, College of Humanities and Social Sciences, Te Kunenga ki Pūrehuroa – Massey University"
-    },
-    {
-     "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/a-plan-exists-for-a-fairer-and-healthier-food-system-which-party-policies-align-best-289698",
-     "published": "2026-10-15T21:21:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dianne J. Ma, Lecturer in Culinary Arts & Gastronomy, Auckland University of Technology"
+     "author": "Gregory Moore, Senior Research Associate, School of Agriculture, Food and Ecosystem Sciences, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Your say: week beginning October 19",
+   "published": "2026-10-18 19:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Natural hazards don’t obey electoral cycles. The next government faces crucial choices",
    "published": "2026-10-18 19:13 UTC"
   },
@@ -931,14 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
-   "published": "2026-10-15 23:35 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A plan exists for a fairer and healthier food system. Which party policies align best?",
-   "published": "2026-10-15 21:21 UTC"
+   "title": "A botanist weighs in on our love-hate relationship with crepe myrtles",
+   "published": "2026-10-18 19:12 UTC"
   },
   {
    "region": "Oceania",
