@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-18T19:01:21Z",
+ "generatedAt": "2026-10-18T20:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Why do I keep getting mouth ulcers?",
+     "title": "Natural hazards don’t obey electoral cycles. The next government faces crucial choices",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-do-i-keep-getting-mouth-ulcers-289986",
-     "published": "2026-10-16T03:58:58Z",
+     "link": "https://theconversation.com/natural-hazards-dont-obey-electoral-cycles-the-next-government-faces-crucial-choices-293552",
+     "published": "2026-10-18T19:13:49Z",
      "summary": "",
      "stale": false,
-     "author": "Amit Arora, Associate Professor in Public Health, Western Sydney University"
+     "author": "Iain White, Professor of Environmental Planning, University of Waikato"
     },
     {
-     "title": "The government wants trusts to pay a minimum 30% tax. What’s behind the changes?",
+     "title": "A poetic meditation on the tongue also explores violence and silence within families",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-government-wants-trusts-to-pay-a-minimum-30-tax-whats-behind-the-changes-294459",
-     "published": "2026-10-16T03:45:38Z",
+     "link": "https://theconversation.com/a-poetic-meditation-on-the-tongue-also-explores-violence-and-silence-within-families-290326",
+     "published": "2026-10-18T19:13:35Z",
      "summary": "",
      "stale": false,
-     "author": "Robert B Whait, Senior Lecturer in Taxation Law, Adelaide University"
+     "author": "Jen Webb, Distinguished Professor Emerita of Creative Practice, Faculty of Arts and Design, University of Canberra"
     },
     {
-     "title": "Kids and teens are going to AI chatbots for advice. How can parents make sure this is safe?",
+     "title": "Video game film adaptations used to be huge flops. Now studios can’t get enough",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/kids-and-teens-are-going-to-ai-chatbots-for-advice-how-can-parents-make-sure-this-is-safe-294145",
-     "published": "2026-10-16T03:26:33Z",
+     "link": "https://theconversation.com/video-game-film-adaptations-used-to-be-huge-flops-now-studios-cant-get-enough-294354",
+     "published": "2026-10-18T19:12:53Z",
      "summary": "",
      "stale": false,
-     "author": "Amy Dawel, Clinical Psychologist and Associate Professor, School of Medicine and Psychology, Australian National University"
+     "author": "Liam Burke, Associate Professor and Cinema and Screen Studies Discipline Leader, Swinburne University of Technology"
     },
     {
      "title": "Winston Peters says ‘diversity is disunity’ – what does the evidence tell us?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why do I keep getting mouth ulcers?",
-   "published": "2026-10-16 03:58 UTC"
+   "title": "Natural hazards don’t obey electoral cycles. The next government faces crucial choices",
+   "published": "2026-10-18 19:13 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The government wants trusts to pay a minimum 30% tax. What’s behind the changes?",
-   "published": "2026-10-16 03:45 UTC"
+   "title": "A poetic meditation on the tongue also explores violence and silence within families",
+   "published": "2026-10-18 19:13 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Kids and teens are going to AI chatbots for advice. How can parents make sure this is safe?",
-   "published": "2026-10-16 03:26 UTC"
+   "title": "Video game film adaptations used to be huge flops. Now studios can’t get enough",
+   "published": "2026-10-18 19:12 UTC"
   },
   {
    "region": "Oceania",
