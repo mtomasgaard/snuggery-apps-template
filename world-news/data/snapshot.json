@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-18T22:01:20Z",
+ "generatedAt": "2026-10-18T23:01:44Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/theres-a-hidden-bias-affecting-what-we-know-and-dont-know-about-nature-293815",
+     "published": "2026-10-18T22:15:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Pietro Pollo, Visiting Fellow, Evolution and Ecology Research Centre, UNSW"
+    },
+    {
      "title": "Your say: week beginning October 19",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Liam Burke, Associate Professor and Cinema and Screen Studies Discipline Leader, Swinburne University of Technology"
-    },
-    {
-     "title": "A botanist weighs in on our love-hate relationship with crepe myrtles",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-botanist-weighs-in-on-our-love-hate-relationship-with-crepe-myrtles-288925",
-     "published": "2026-10-18T19:12:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "Gregory Moore, Senior Research Associate, School of Agriculture, Food and Ecosystem Sciences, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
+   "published": "2026-10-18 22:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning October 19",
    "published": "2026-10-18 19:50 UTC"
   },
@@ -932,12 +938,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Video game film adaptations used to be huge flops. Now studios can’t get enough",
-   "published": "2026-10-18 19:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A botanist weighs in on our love-hate relationship with crepe myrtles",
    "published": "2026-10-18 19:12 UTC"
   },
   {
