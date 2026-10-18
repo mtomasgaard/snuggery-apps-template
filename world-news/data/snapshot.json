@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-18T08:01:24Z",
+ "generatedAt": "2026-10-18T09:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Activists push for Pakistan to recognise and support people with albinism",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/10/18/activists-push-pakistan-to-recognise-and-support-people-with-albinism/",
+     "published": "2026-10-18T08:36:42Z",
+     "summary": "Pakistan keeps no national data on people with albinism. Without a count, they lack tailored support in schools, healthcare, and jobs, while rising heat raises their health risks, experts say.",
+     "stale": false,
+     "author": "Mahpara Zulqadar"
+    },
+    {
      "title": "Hong Kong police launch AI-powered national security platform for school pupils",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -410,16 +420,6 @@
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
      "stale": false,
      "author": "Maksuda Akter"
-    },
-    {
-     "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
-     "published": "2026-10-09T19:22:38Z",
-     "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": false,
-     "author": "EngageMedia"
     }
    ]
   },
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Activists push for Pakistan to recognise and support people with albinism",
+   "published": "2026-10-18 08:36 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "Hong Kong police launch AI-powered national security platform for school pupils",
    "published": "2026-10-16 05:03 UTC"
   },
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
    "published": "2026-10-12 06:39 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
-   "published": "2026-10-09 19:22 UTC"
   },
   {
    "region": "Oceania",
