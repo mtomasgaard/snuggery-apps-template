@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-18T10:01:23Z",
+ "generatedAt": "2026-10-18T11:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/african-countries-could-save-billions-by-cutting-air-pollution-and-greenhouse-gases-at-the-same-time-291944",
+     "published": "2026-10-18T09:22:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Chris Malley, Research Fellow, Stockholm Environment Institute York Centre, University of York"
+    },
+    {
+     "title": "Blood pressure rising: over 50% of Nigerians we tested had hypertension and over 65% didn’t know it",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/blood-pressure-rising-over-50-of-nigerians-we-tested-had-hypertension-and-over-65-didnt-know-it-292931",
+     "published": "2026-10-18T09:21:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amam Mbawkem, Professor of Medicine, University of Lagos"
+    },
+    {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -194,26 +214,6 @@
      "published": "2026-10-16T12:00:00Z",
      "summary": "As drone strikes kill civilians from El Obeid to Blue Nile and famine risk spreads across Darfur and Kordofan, the Security Council meets on Sudan – the world’s largest hunger and displacement crisis. Ambassadors are…",
      "stale": false
-    },
-    {
-     "title": "Comment la Cour de justice de la Cedeao renforce la protection des droits des femmes en Afrique de l’Ouest",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/comment-la-cour-de-justice-de-la-cedeao-renforce-la-protection-des-droits-des-femmes-en-afrique-de-louest-294271",
-     "published": "2026-10-16T08:22:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Maame Efua Addadzi-Koom, Senior Lecturer, Kwame Nkrumah University of Science and Technology (KNUST)"
-    },
-    {
-     "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/lion-tracks-from-the-ice-age-how-two-ways-of-seeing-brought-ancient-animals-to-life-293281",
-     "published": "2026-10-15T14:04:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Charles Helm, Research Associate, African Centre for Coastal Palaeoscience, Nelson Mandela University"
     },
     {
      "title": "WHO urges vigilance after Kenya confirms second Ebola case",
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
+   "published": "2026-10-18 09:22 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Blood pressure rising: over 50% of Nigerians we tested had hypertension and over 65% didn’t know it",
+   "published": "2026-10-18 09:21 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
@@ -777,18 +789,6 @@
    "source": "UN News",
    "title": "Security Council LIVE: Sudan’s war spreads as drones and hunger take a deadly toll",
    "published": "2026-10-16 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Comment la Cour de justice de la Cedeao renforce la protection des droits des femmes en Afrique de l’Ouest",
-   "published": "2026-10-16 08:22 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Lion tracks from the ice age: how two ways of seeing brought ancient animals to life",
-   "published": "2026-10-15 14:04 UTC"
   },
   {
    "region": "Africa",
