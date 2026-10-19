@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T15:01:49Z",
+ "generatedAt": "2026-10-19T16:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Gaza: Funding cuts leave half a million without food assistance",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168622",
+     "published": "2026-10-19T12:00:00Z",
+     "summary": "Funding shortages have forced the World Food Programme (WFP) to slash assistance to hungry families in the Gaza Strip by roughly one third – a move that will affect some 500,000 people as winter approaches, the UN…",
+     "stale": false
+    },
+    {
      "title": "Flour sacks turned flood barriers: Gaza faces another winter without safe shelter",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -306,15 +315,6 @@
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168591",
-     "published": "2026-10-14T12:00:00Z",
-     "summary": "Intensifying fighting in Yemen has cut off life-saving assistance to 800,000 people as shifting frontlines, blocked roads and growing insecurity severely restrict access to the city of Taiz and other conflict zones, the…",
-     "stale": false
     },
     {
      "title": "What African elections can learn from the Borana Gadaa system",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Gaza: Funding cuts leave half a million without food assistance",
+   "published": "2026-10-19 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Flour sacks turned flood barriers: Gaza faces another winter without safe shelter",
    "published": "2026-10-17 12:00 UTC"
   },
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen: WFP warns of potential ‘humanitarian catastrophe’ as fighting blocks aid delivery",
-   "published": "2026-10-14 12:00 UTC"
   },
   {
    "region": "Middle East",
