@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T12:01:28Z",
+ "generatedAt": "2026-10-19T13:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/a-pregnant-mom-let-her-5-year-old-stay-outside-to-collect-goose-feathers-and-was-placed-on-the-child-abuse-and-neglect-registry-293189",
+     "published": "2026-10-19T12:36:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jennifer L. Brinkley, Assistant Professor of Law, University of Dayton"
+    },
+    {
+     "title": "The science and politics behind the panic over ultraprocessed foods",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/the-science-and-politics-behind-the-panic-over-ultraprocessed-foods-292661",
+     "published": "2026-10-19T12:36:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Garrett M. Broad, Professor of Communication Studies, Rowan University"
+    },
+    {
      "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
      "source": "UN News",
      "feed": "un-americas",
@@ -112,16 +132,6 @@
      "author": "Uncloseted MEdia"
     },
     {
-     "title": "Young voters fear mass shootings like the one in Oregon, but that fear divides them on gun control",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/young-voters-fear-mass-shootings-like-the-one-in-oregon-but-that-fear-divides-them-on-gun-control-294620",
-     "published": "2026-10-16T18:02:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jillian Turanovic, Professor of Sociology, University of Colorado Boulder"
-    },
-    {
      "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -130,16 +140,6 @@
      "summary": "Distortion in the meaning of a speech by Lula about prostate cancer exams went viral within hours and fed conspiracy theories amid a tight presidential race in Brazil.",
      "stale": false,
      "author": "Fernanda Canofre"
-    },
-    {
-     "title": "Remote work made these colleagues more open with each other, not less",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/remote-work-made-these-colleagues-more-open-with-each-other-not-less-291728",
-     "published": "2026-10-16T12:24:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Vanessa M. Conzon, Assistant Professor of Management and Organizations, Boston College"
     },
     {
      "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
@@ -720,6 +720,18 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
+   "published": "2026-10-19 12:36 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "The science and politics behind the panic over ultraprocessed foods",
+   "published": "2026-10-19 12:36 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "UN News",
    "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
    "published": "2026-10-18 12:00 UTC"
@@ -732,21 +744,9 @@
   },
   {
    "region": "Americas",
-   "source": "The Conversation",
-   "title": "Young voters fear mass shootings like the one in Oregon, but that fear divides them on gun control",
-   "published": "2026-10-16 18:02 UTC"
-  },
-  {
-   "region": "Americas",
    "source": "Global Voices",
    "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
    "published": "2026-10-16 13:10 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Remote work made these colleagues more open with each other, not less",
-   "published": "2026-10-16 12:24 UTC"
   },
   {
    "region": "Americas",
