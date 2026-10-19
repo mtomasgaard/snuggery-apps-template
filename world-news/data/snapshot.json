@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T18:01:27Z",
+ "generatedAt": "2026-10-19T19:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Federal spending on climate change before 2024 election boosted incumbents of both parties",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/federal-spending-on-climate-change-before-2024-election-boosted-incumbents-of-both-parties-293791",
+     "published": "2026-10-19T18:49:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kayla Morton, Assistant Professor of Blue Economy and Policy, University of Delaware"
+    },
+    {
      "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Jennifer L. Brinkley, Assistant Professor of Law, University of Dayton"
-    },
-    {
-     "title": "The science and politics behind the panic over ultraprocessed foods",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/the-science-and-politics-behind-the-panic-over-ultraprocessed-foods-292661",
-     "published": "2026-10-19T12:36:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Garrett M. Broad, Professor of Communication Studies, Rowan University"
     },
     {
      "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
-   "published": "2026-10-19 12:36 UTC"
+   "title": "Federal spending on climate change before 2024 election boosted incumbents of both parties",
+   "published": "2026-10-19 18:49 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "The science and politics behind the panic over ultraprocessed foods",
+   "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
    "published": "2026-10-19 12:36 UTC"
   },
   {
