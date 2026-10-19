@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T21:01:29Z",
+ "generatedAt": "2026-10-19T22:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Kayla Morton, Assistant Professor of Blue Economy and Policy, University of Delaware"
     },
     {
+     "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168626",
+     "published": "2026-10-19T12:00:00Z",
+     "summary": "Armed groups in Haiti are adapting to intensified security operations, stepping up reprisals against civilians and extending their reach into rural areas, the UN warned the Security Council on Monday.",
+     "stale": false
+    },
+    {
      "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
      "source": "UN News",
      "feed": "un-americas",
@@ -158,15 +167,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168598",
      "published": "2026-10-14T12:00:00Z",
      "summary": "Haiti is living through one of the world’s most acute security crises. Armed gangs control large parts of the capital, Port-au-Prince, and are pushing into rural areas, terrorising communities, killing people…",
-     "stale": false
-    },
-    {
-     "title": "Colombia: UN independent experts call for Ecopetrol to provide reparations to victims of armed conflict",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168597",
-     "published": "2026-10-14T12:00:00Z",
-     "summary": "UN independent experts welcomed on Wednesday a recent landmark corporate accountability ruling involving the Ecopetrol oil company by Colombia’s Special Jurisdiction for Peace, calling for reparations for victims.",
      "stale": false
     }
    ]
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Season of fear’: Escalating Israeli attacks on West Bank olive farmers, deadly strikes on Gaza",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168625",
+     "published": "2026-10-19T12:00:00Z",
+     "summary": "Israeli attacks on war-torn Gaza over the weekend killed at least six Palestinians, including children, despite a year-old ceasefire agreement. Meanwhile, in the occupied West Bank, settler violence continued through…",
+     "stale": false
+    },
+    {
      "title": "Gaza: Funding cuts leave half a million without food assistance",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -295,15 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168611",
      "published": "2026-10-16T12:00:00Z",
      "summary": "A little over one year since a ceasefire agreement was announced between Hamas fighters and Israel, more than 340 children have been reported killed and hundreds more injured, the UN Children’s Fund (UNICEF) said on…",
-     "stale": false
-    },
-    {
-     "title": "Security Council LIVE: Deaths, demolitions spike in Gaza, West Bank",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168599",
-     "published": "2026-10-15T12:00:00Z",
-     "summary": "Amid a rise in lethal Israeli strikes, demolitions and violence in Gaza and the West Bank, the Security Council held an open debate on Thursday focusing on the current situation in the Occupied Palestinian Territory.",
      "stale": false
     },
     {
@@ -733,6 +733,12 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
+   "published": "2026-10-19 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
    "published": "2026-10-18 12:00 UTC"
   },
@@ -758,12 +764,6 @@
    "region": "Americas",
    "source": "UN News",
    "title": "Haiti sanctions renewed: Starving the gangs of bullets",
-   "published": "2026-10-14 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Colombia: UN independent experts call for Ecopetrol to provide reparations to victims of armed conflict",
    "published": "2026-10-14 12:00 UTC"
   },
   {
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "‘Season of fear’: Escalating Israeli attacks on West Bank olive farmers, deadly strikes on Gaza",
+   "published": "2026-10-19 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "Gaza: Funding cuts leave half a million without food assistance",
    "published": "2026-10-19 12:00 UTC"
   },
@@ -837,12 +843,6 @@
    "source": "UN News",
    "title": "Gaza: 340 children killed despite ceasefire agreement - UNICEF",
    "published": "2026-10-16 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Security Council LIVE: Deaths, demolitions spike in Gaza, West Bank",
-   "published": "2026-10-15 12:00 UTC"
   },
   {
    "region": "Middle East",
