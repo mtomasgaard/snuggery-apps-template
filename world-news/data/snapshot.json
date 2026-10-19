@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T01:01:17Z",
+ "generatedAt": "2026-10-19T02:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
+     "title": "NZ’s climate in ‘uncharted territory’, with more extreme weather events ahead",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/nzs-climate-in-uncharted-territory-with-more-extreme-weather-events-ahead-294037",
+     "published": "2026-10-19T01:24:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "James Renwick, Professor of Physical Geography (Climate Science), Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
+     "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/verbatim-theatre-uses-the-real-words-of-real-people-but-can-an-edited-truth-ever-be-real-293943",
      "published": "2026-10-18T23:43:45Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/theres-a-hidden-bias-affecting-what-we-know-and-dont-know-about-nature-293815",
      "published": "2026-10-18T22:15:35Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Iain White, Professor of Environmental Planning, University of Waikato"
-    },
-    {
-     "title": "A poetic meditation on the tongue also explores violence and silence within families",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-poetic-meditation-on-the-tongue-also-explores-violence-and-silence-within-families-290326",
-     "published": "2026-10-18T19:13:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jen Webb, Distinguished Professor Emerita of Creative Practice, Faculty of Arts and Design, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s climate in ‘uncharted territory’, with more extreme weather events ahead",
+   "published": "2026-10-19 01:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
    "published": "2026-10-18 23:43 UTC"
   },
@@ -932,12 +938,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Natural hazards don’t obey electoral cycles. The next government faces crucial choices",
-   "published": "2026-10-18 19:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A poetic meditation on the tongue also explores violence and silence within families",
    "published": "2026-10-18 19:13 UTC"
   },
   {
