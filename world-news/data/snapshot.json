@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T22:01:26Z",
+ "generatedAt": "2026-10-19T23:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -207,6 +207,15 @@
      "author": "Charles Shey Wiysonge, Extraordinary Professor, Global Health, Stellenbosch University; South African Medical Research Council"
     },
     {
+     "title": "UN condemns deadly wave of drone strikes in war-torn Sudan",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168628",
+     "published": "2026-10-19T12:00:00Z",
+     "summary": "Drone strikes killed and injured dozens across Sudan on Monday as the ongoing war continues to cause soaring displacement and hunger.",
+     "stale": false
+    },
+    {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -232,15 +241,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168602",
      "published": "2026-10-15T12:00:00Z",
      "summary": "The World Health Organization (WHO) continues to support Kenya’s efforts to contain Ebola after a second person tested positive for the Bundibugyo virus, the UN agency’s representative in the country said on Thursday.",
-     "stale": false
-    },
-    {
-     "title": "DR Congo: Cholera cases spike amid fight against Ebola",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168595",
-     "published": "2026-10-14T12:00:00Z",
-     "summary": "The cholera epidemic continues to spread in the Democratic Republic of Congo (DRC), where more than 125,000 suspected cases and 3,644 suspected deaths were recorded between January 2025 and the end of September 2026…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Honey bee hives have ‘living immune systems’ which defend against disease",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/honey-bee-hives-have-living-immune-systems-which-defend-against-disease-289604",
+     "published": "2026-10-19T22:00:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kenya Fernandes, Research Fellow, Faculty of Science, University of Sydney"
+    },
+    {
      "title": "A new history of ‘blackbirding’ favours moral condemnation at the expense of complexity",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Tristan Kennedy, Deputy Vice-Chancellor (Indigenous) and Senior Vice-President, Monash University"
-    },
-    {
-     "title": "Feral – and threatened? Endangered camels, banteng and hog deer have found an unexpected refuge in Australia",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/feral-and-threatened-endangered-camels-banteng-and-hog-deer-have-found-an-unexpected-refuge-in-australia-287307",
-     "published": "2026-10-19T19:15:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel Ramp, Associate Professor and Director, Centre for Compassionate Conservation, University of Technology Sydney"
     },
     {
      "title": "New AI shopping agents promise better bargains. But who pays the price?",
@@ -786,6 +786,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "UN condemns deadly wave of drone strikes in war-torn Sudan",
+   "published": "2026-10-19 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
@@ -801,12 +807,6 @@
    "source": "UN News",
    "title": "WHO urges vigilance after Kenya confirms second Ebola case",
    "published": "2026-10-15 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo: Cholera cases spike amid fight against Ebola",
-   "published": "2026-10-14 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Honey bee hives have ‘living immune systems’ which defend against disease",
+   "published": "2026-10-19 22:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A new history of ‘blackbirding’ favours moral condemnation at the expense of complexity",
    "published": "2026-10-19 19:16 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Many Indigenous people now study and teach at Australian universities – but they are still excluded",
    "published": "2026-10-19 19:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Feral – and threatened? Endangered camels, banteng and hog deer have found an unexpected refuge in Australia",
-   "published": "2026-10-19 19:15 UTC"
   },
   {
    "region": "Oceania",
