@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T06:01:22Z",
+ "generatedAt": "2026-10-19T07:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: Shoebridge and his defiant senator at loggerheads over leave",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-shoebridge-and-his-defiant-senator-at-loggerheads-over-leave-33851",
+     "published": "2026-10-19T06:43:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "From comedy skits to podcast gaffes, what’s Anthony Albanese’s social media strategy?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Bruce Wolpe, Non-resident Senior Fellow, United States Study Centre, University of Sydney"
-    },
-    {
-     "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/as-french-protests-escalate-into-riots-they-may-prove-a-gift-for-marine-le-pens-right-wing-party-294673",
-     "published": "2026-10-19T03:02:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peter McPhee, Emeritus professor, History, The University of Melbourne"
     },
     {
      "title": "NZ’s climate in ‘uncharted territory’, with more extreme weather events ahead",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: Shoebridge and his defiant senator at loggerheads over leave",
+   "published": "2026-10-19 06:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "From comedy skits to podcast gaffes, what’s Anthony Albanese’s social media strategy?",
    "published": "2026-10-19 05:30 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "How gas prices became a lightning rod for voter anger ahead of the US midterms",
    "published": "2026-10-19 04:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
-   "published": "2026-10-19 03:02 UTC"
   },
   {
    "region": "Oceania",
