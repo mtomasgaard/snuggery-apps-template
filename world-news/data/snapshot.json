@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T09:02:40Z",
+ "generatedAt": "2026-10-19T10:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -108,7 +108,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted MEdia"
     },
     {
@@ -128,7 +128,7 @@
      "link": "https://globalvoices.org/2026/10/16/how-an-extremist-network-articulated-a-hoax-linking-brazils-president-lula-to-child-abuse-on-x/",
      "published": "2026-10-16T13:10:39Z",
      "summary": "Distortion in the meaning of a speech by Lula about prostate cancer exams went viral within hours and fed conspiracy theories amid a tight presidential race in Brazil.",
-     "stale": true,
+     "stale": false,
      "author": "Fernanda Canofre"
     },
     {
@@ -148,7 +148,7 @@
      "link": "https://globalvoices.org/2026/10/15/perus-indigenous-people-in-cutivireni-and-oviri-take-the-front-line-against-amazon-wildfires/",
      "published": "2026-10-15T18:30:01Z",
      "summary": "As El Niño worsens dry conditions, Peru’s indigenous people in Cutivireni and Oviri are taking action to protect their Amazon territory from wildfires.",
-     "stale": true,
+     "stale": false,
      "author": "Cool Earth"
     },
     {
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Une nouvelle étude met en lumière les dangers cachés des morsures de serpent",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/une-nouvelle-etude-met-en-lumiere-les-dangers-caches-des-morsures-de-serpent-294209",
+     "published": "2026-10-19T09:09:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dileepa Ediriweera, Health Data Scientist, Liverpool School of Tropical Medicine"
+    },
+    {
      "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -187,23 +197,13 @@
      "author": "Chris Malley, Research Fellow, Stockholm Environment Institute York Centre, University of York"
     },
     {
-     "title": "Blood pressure rising: over 50% of Nigerians we tested had hypertension and over 65% didn’t know it",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/blood-pressure-rising-over-50-of-nigerians-we-tested-had-hypertension-and-over-65-didnt-know-it-292931",
-     "published": "2026-10-18T09:21:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Amam Mbawkem, Professor of Medicine, University of Lagos"
-    },
-    {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
      "source": "Global Voices",
      "feed": "gv-africa",
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted MEdia"
     },
     {
@@ -240,7 +240,7 @@
      "link": "https://globalvoices.org/2026/10/12/what-african-elections-can-learn-from-the-borana-gadaa-system/",
      "published": "2026-10-12T20:34:34Z",
      "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
-     "stale": true,
+     "stale": false,
      "author": "Peace News"
     },
     {
@@ -250,7 +250,7 @@
      "link": "https://globalvoices.org/2026/10/11/when-free-speech-has-a-price-youth-voices-in-mozambique/",
      "published": "2026-10-11T18:00:47Z",
      "summary": "For Mozambican youth, freedom of expression exists in law, but speaking out can come with a cost. Music became a powerful space for criticism and resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Liam Anderson"
     }
    ]
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-americas",
@@ -584,9 +584,9 @@
    "id": "gv-africa",
    "source": "Global Voices",
    "region": "Africa",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-africa",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
-   "published": "2026-10-18 09:22 UTC"
+   "title": "Une nouvelle étude met en lumière les dangers cachés des morsures de serpent",
+   "published": "2026-10-19 09:09 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Blood pressure rising: over 50% of Nigerians we tested had hypertension and over 65% didn’t know it",
-   "published": "2026-10-18 09:21 UTC"
+   "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
+   "published": "2026-10-18 09:22 UTC"
   },
   {
    "region": "Africa",
