@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T14:01:27Z",
+ "generatedAt": "2026-10-19T15:01:49Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Une nouvelle étude met en lumière les dangers cachés des morsures de serpent",
+     "title": "Millions of children aren’t getting vaccinated: how mapping tools can help find them",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/une-nouvelle-etude-met-en-lumiere-les-dangers-caches-des-morsures-de-serpent-294209",
-     "published": "2026-10-19T09:09:39Z",
+     "link": "https://theconversation.com/millions-of-children-arent-getting-vaccinated-how-mapping-tools-can-help-find-them-290370",
+     "published": "2026-10-19T14:19:14Z",
      "summary": "",
      "stale": false,
-     "author": "Dileepa Ediriweera, Health Data Scientist, Liverpool School of Tropical Medicine"
+     "author": "Ann Muthoni Njogu, Doctoral researcher, Institute of Tropical Medicine Antwerp"
     },
     {
-     "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
+     "title": "Fridge-free vaccines could reach more people, but there are still practical challenges in African settings",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/african-countries-could-save-billions-by-cutting-air-pollution-and-greenhouse-gases-at-the-same-time-291944",
-     "published": "2026-10-18T09:22:22Z",
+     "link": "https://theconversation.com/fridge-free-vaccines-could-reach-more-people-but-there-are-still-practical-challenges-in-african-settings-293280",
+     "published": "2026-10-19T14:18:43Z",
      "summary": "",
      "stale": false,
-     "author": "Chris Malley, Research Fellow, Stockholm Environment Institute York Centre, University of York"
+     "author": "Charles Shey Wiysonge, Extraordinary Professor, Global Health, Stellenbosch University; South African Medical Research Council"
     },
     {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Une nouvelle étude met en lumière les dangers cachés des morsures de serpent",
-   "published": "2026-10-19 09:09 UTC"
+   "title": "Millions of children aren’t getting vaccinated: how mapping tools can help find them",
+   "published": "2026-10-19 14:19 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "African countries could save billions by cutting air pollution and greenhouse gases at the same time",
-   "published": "2026-10-18 09:22 UTC"
+   "title": "Fridge-free vaccines could reach more people, but there are still practical challenges in African settings",
+   "published": "2026-10-19 14:18 UTC"
   },
   {
    "region": "Africa",
