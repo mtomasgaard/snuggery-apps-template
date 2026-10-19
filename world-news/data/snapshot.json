@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T10:56:49Z",
+ "generatedAt": "2026-10-19T11:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Independent MP Helen Haines critically injured in attack, PM says counter-terrorism team activated, 43-year-old man arrested",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/independent-mp-helen-haines-critically-injured-in-attack-pm-says-counter-terrorism-team-activated-43-year-old-man-arrested-47823",
+     "published": "2026-10-19T10:13:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Former Labor attorney-general to be new head of the National Anti-Corruption Commission",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "From comedy skits to podcast gaffes, what’s Anthony Albanese’s social media strategy?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/from-comedy-skits-to-podcast-gaffes-whats-anthony-albaneses-social-media-strategy-294241",
-     "published": "2026-10-19T05:30:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Susan Grantham, Senior Lecturer in Communication, Griffith University"
     },
     {
      "title": "NZ’s climate in ‘uncharted territory’, with more extreme weather events ahead",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Independent MP Helen Haines critically injured in attack, PM says counter-terrorism team activated, 43-year-old man arrested",
+   "published": "2026-10-19 10:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Former Labor attorney-general to be new head of the National Anti-Corruption Commission",
    "published": "2026-10-19 08:43 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: Shoebridge and his defiant senator at loggerheads over leave",
    "published": "2026-10-19 06:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "From comedy skits to podcast gaffes, what’s Anthony Albanese’s social media strategy?",
-   "published": "2026-10-19 05:30 UTC"
   },
   {
    "region": "Oceania",
