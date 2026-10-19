@@ -2,7 +2,7 @@
 
 The datacenter (https://www.nlog.nl/datacenter/) is an Angular app; its bundle calls
 
-    POST https://www.nlog.nl/nlog-mapviewer/rest/prodfigures/field
+    POST https://www.nlog.nl/nlog-mapviewer-api/rest/prodfigures/field
     Content-Type: application/json
     {"yearStart": 2024, "yearEnd": 2024, "product": "Gas", "production": "Produced"}
 
@@ -25,7 +25,9 @@ import re
 
 from .common import BuildError, Cache, log, month_index, norm_name
 
-API = "https://www.nlog.nl/nlog-mapviewer/rest/prodfigures/field"
+# The bundle's URL_PREFIX was "/nlog-mapviewer" until October 2026 and is "/nlog-mapviewer-api" now; the old
+# path serves the map viewer's page instead, so a POST there gets nginx's 405 (the weekly run of 2026-10-19).
+API = "https://www.nlog.nl/nlog-mapviewer-api/rest/prodfigures/field"
 FIRST_YEAR = 2003
 NM3_TO_SM3 = 288.15 / 273.15
 MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
