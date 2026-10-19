@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T20:01:50Z",
+ "generatedAt": "2026-10-19T21:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Many vapes and e-cigarettes are now banned in Pennsylvania – here’s what Philly consumers and businesses need to know",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/many-vapes-and-e-cigarettes-are-now-banned-in-pennsylvania-heres-what-philly-consumers-and-businesses-need-to-know-294103",
+     "published": "2026-10-19T20:27:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ana Santos Rutschman, Professor of Law, Villanova University"
+    },
+    {
      "title": "Federal spending on climate change before 2024 election boosted incumbents of both parties",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Kayla Morton, Assistant Professor of Blue Economy and Policy, University of Delaware"
-    },
-    {
-     "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/a-pregnant-mom-let-her-5-year-old-stay-outside-to-collect-goose-feathers-and-was-placed-on-the-child-abuse-and-neglect-registry-293189",
-     "published": "2026-10-19T12:36:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jennifer L. Brinkley, Assistant Professor of Law, University of Dayton"
     },
     {
      "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/19/anthropic-exposes-ai-operation-that-drc-journalists-never-knew-existed/",
+     "published": "2026-10-19T20:11:30Z",
+     "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
+     "stale": false,
+     "author": "Laura"
+    },
+    {
      "title": "Millions of children aren’t getting vaccinated: how mapping tools can help find them",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
      "stale": false,
      "author": "Peace News"
-    },
-    {
-     "title": "When free speech has a price: Youth voices in Mozambique",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/11/when-free-speech-has-a-price-youth-voices-in-mozambique/",
-     "published": "2026-10-11T18:00:47Z",
-     "summary": "For Mozambican youth, freedom of expression exists in law, but speaking out can come with a cost. Music became a powerful space for criticism and resistance.",
-     "stale": false,
-     "author": "Liam Anderson"
     }
    ]
   },
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Federal spending on climate change before 2024 election boosted incumbents of both parties",
-   "published": "2026-10-19 18:49 UTC"
+   "title": "Many vapes and e-cigarettes are now banned in Pennsylvania – here’s what Philly consumers and businesses need to know",
+   "published": "2026-10-19 20:27 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "A pregnant mom let her 5-year-old stay outside to collect goose feathers – and was placed on the child abuse and neglect registry",
-   "published": "2026-10-19 12:36 UTC"
+   "title": "Federal spending on climate change before 2024 election boosted incumbents of both parties",
+   "published": "2026-10-19 18:49 UTC"
   },
   {
    "region": "Americas",
@@ -765,6 +765,12 @@
    "source": "UN News",
    "title": "Colombia: UN independent experts call for Ecopetrol to provide reparations to victims of armed conflict",
    "published": "2026-10-14 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
+   "published": "2026-10-19 20:11 UTC"
   },
   {
    "region": "Africa",
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "When free speech has a price: Youth voices in Mozambique",
-   "published": "2026-10-11 18:00 UTC"
   },
   {
    "region": "Middle East",
