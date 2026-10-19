@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T04:01:33Z",
+ "generatedAt": "2026-10-19T05:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How gas prices became a lightning rod for voter anger ahead of the US midterms",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-gas-prices-became-a-lightning-rod-for-voter-anger-ahead-of-the-us-midterms-294663",
+     "published": "2026-10-19T04:29:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bruce Wolpe, Non-resident Senior Fellow, United States Study Centre, University of Sydney"
+    },
+    {
      "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "David Simes, Teaching Assistant and Researcher, Te Whare Ngangahau – Theatre and Performance Studies, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/theres-a-hidden-bias-affecting-what-we-know-and-dont-know-about-nature-293815",
-     "published": "2026-10-18T22:15:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Pietro Pollo, Visiting Fellow, Evolution and Ecology Research Centre, UNSW"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How gas prices became a lightning rod for voter anger ahead of the US midterms",
+   "published": "2026-10-19 04:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
    "published": "2026-10-19 03:02 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
    "published": "2026-10-18 23:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
-   "published": "2026-10-18 22:15 UTC"
   },
   {
    "region": "Oceania",
