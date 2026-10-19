@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T03:01:34Z",
+ "generatedAt": "2026-10-19T04:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/as-french-protests-escalate-into-riots-they-may-prove-a-gift-for-marine-le-pens-right-wing-party-294673",
+     "published": "2026-10-19T03:02:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Peter McPhee, Emeritus professor, History, The University of Melbourne"
+    },
+    {
      "title": "Democrats remain clear favourites to gain control of Congress at midterms",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,7 +461,7 @@
     {
      "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/verbatim-theatre-uses-the-real-words-of-real-people-but-can-an-edited-truth-ever-be-real-293943",
      "published": "2026-10-18T23:43:45Z",
      "summary": "",
@@ -461,22 +471,12 @@
     {
      "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/theres-a-hidden-bias-affecting-what-we-know-and-dont-know-about-nature-293815",
      "published": "2026-10-18T22:15:35Z",
      "summary": "",
      "stale": false,
      "author": "Pietro Pollo, Visiting Fellow, Evolution and Ecology Research Centre, UNSW"
-    },
-    {
-     "title": "Your say: week beginning October 19",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-october-19-294661",
-     "published": "2026-10-18T19:50:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Judy Ingham, Newsletter Producer, The Conversation"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
+   "published": "2026-10-19 03:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Democrats remain clear favourites to gain control of Congress at midterms",
    "published": "2026-10-19 02:18 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
    "published": "2026-10-18 22:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning October 19",
-   "published": "2026-10-18 19:50 UTC"
   },
   {
    "region": "Oceania",
