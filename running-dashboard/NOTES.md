@@ -257,8 +257,8 @@ The app fetches `./data/snapshot.json`, `./data/streams/<id>.json` and
 `./data/tiles/<z>/<x>/<y>.png`, and nothing else. There is no external URL, font,
 script, image or tile anywhere in `index.html`, `app.js`, `js/` or `style.css`. Mini-apps in Snuggery cannot
 reach the network, and this one does not try. The pull happens outside, in the
-GitHub Action. A Shortcut carries the snapshot in, and the tiles and older
-session streams arrive with the ZIP.
+GitHub Action. Snuggery fetches the snapshot or a Shortcut carries it in, and
+the tiles and older session streams arrive with the ZIP.
 
 ## The look and the typeface
 

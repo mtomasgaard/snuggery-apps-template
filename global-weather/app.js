@@ -702,7 +702,7 @@ function validate(d) {
     }
     if (d.schema === 1) {
       return 'it is a schema 1 snapshot — that is Global Wind\u2019s file, which holds wind '
-           + 'and nothing else. This app\u2019s Shortcut row wants the data-global-weather '
+           + 'and nothing else. This app\u2019s data address wants the data-global-weather '
            + 'branch; Global Wind keeps its own';
     }
     return `unexpected schema ${JSON.stringify(d.schema ?? null)}, wanted 2`;

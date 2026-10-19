@@ -463,7 +463,7 @@ async function load() {
     if (raw === lastRaw && todayIso() === lastDay) { $('notice').hidden = true; stamp(); return; }
   } catch (err) {
     return fail(`could not be read (${err.message || err}).`, null,
-      'The app is installed but its data file is missing or unreadable. Run the Shortcut again.');
+      'The app is installed but its data file is missing or unreadable. Fetch it again with Get New Data under the refresh button, or run the Shortcut again.');
   }
   let parsed;
   try {

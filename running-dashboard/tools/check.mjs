@@ -7,8 +7,10 @@
 //   4. js/ holds the three modules, fonts/ the house face, its OFL.txt and the ₂ supplement at the
 //      sha256 HOUSE.md and NOTES.md pin; NOTES.md, TILES.md and About credit the face word for word;
 //   5. the data is pinned: each of the 37 data files' sha256 and their concatenation's, as the data follow-up
-//      rebuilt them (scripts/make_demo_running_dashboard.py --check rebuilds them byte for byte);
-//   6. miniapp.json is valid, its name unchanged, its version 1.2.1 (plan 0012 package 4's pass, then the owner's filters; HOUSE 13);
+//      rebuilt them, re-pinned to the publish-day demo of 2026-10-19 (scripts/make_demo_running_dashboard.py
+//      --check rebuilds them byte for byte);
+//   6. miniapp.json is valid, its name unchanged, its version 1.2.2 (plan 0012 package 4's pass, then the owner's filters,
+//      then About and the prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word, as About's first paragraph under Sources and credits; no band, caption or
 //      credit line on the front; OpenStreetMap's line under a map its data drew, and no other tile credit there
@@ -129,15 +131,18 @@ ok(read('NOTES.md').includes(FONT_CREDIT) && read('TILES.md').includes(FONT_CRED
 
 // 5. The data is pinned (the hashes as the data follow-up rebuilt it, tools/DECISIONS.md; ART.md section 6). Only the
 // snapshot changed then (the body battery as a change, the coaching text's words); the streams and tiles are as before the pass.
-const DATA_ALL = '871171cb856ae3da7ed869aa88a3cc335f7822ec01530fd47ae975d4eb13f0dc';
+// Re-pinned 2026-10-19 to the demo regenerated for that day's publish (ba94bd4; MANUAL_STEPS 32 regenerates it before every
+// publish, since the demo's calendar is the day the generator runs): the snapshot and six streams, demo-0243 in place of
+// demo-0247; the tiles unchanged. make_demo_running_dashboard.py --check and --verify passed on these bytes (/usr/bin/python3 3.9.6).
+const DATA_ALL = '224cc9e631243906c24b0b00db0f6dbeddc137ee643b89ecd1855c3ec980b1ff';
 const DATA_SHA = {
-  'data/snapshot.json': 'd47c5c1c41fbc0243d59ec9fcabc38ed3803e27c269c994bec614008bbb36434',
-  'data/streams/demo-0203.json': '4a07c044fd9238f53374f8d203ad32d3399441b562fab3393159d1b38ecb53b2',
-  'data/streams/demo-0221.json': '99bc1ad6ce5bfd45028c522e15a5dbd01ee7d50ee2ae1dbd9713e97a0f17ca90',
-  'data/streams/demo-0237.json': '614c9e8d2c34d311c54923ce6c01416067dae1859d7e7c0990a818536b67a5c1',
-  'data/streams/demo-0241.json': 'c0e9347438a631cee09d11518c11bb4cd99b75fdffb91fd1f3bf3147003125ec',
-  'data/streams/demo-0244.json': 'b5f68558121bdff4f61cecbe968ca27a2f51dd7366b8f6d056437bdb17c06ad0',
-  'data/streams/demo-0247.json': '5df0901a2dcac5decdaad453c537466ed67333b3b41ca9eb5ee5a32e32a32840',
+  'data/snapshot.json': 'ccfad718378ed321f5489dd8bfd18aa9cf9cfb6b8f9b4570043d605ff6daf56b',
+  'data/streams/demo-0203.json': '83d401a81a1d56cb98b4149e9ed636fd6037625beaa234c724a31dd19f8c7f48',
+  'data/streams/demo-0221.json': 'ce06b206fb498a3a763073b5c5863906303b0d57e74dbcee2acfaa362c707d41',
+  'data/streams/demo-0237.json': '01b4aa0e35249cd92a10430c2947327563ef6007f9de24a81ac69a1dec790c04',
+  'data/streams/demo-0241.json': '3ff158d5a2449afae6094088f3e5cee8403a2785259fc2e324843695e3ddc98d',
+  'data/streams/demo-0243.json': 'd7d5105f18f24e009f7d72a7099f303a96afcb1f4f7bc2d08d7b353561dcb6cf',
+  'data/streams/demo-0244.json': 'bfc25921df9fa5c24b72be5701b81535cb13d0ea9d0b97a8a51f92c33ca05eb4',
   'data/tiles/12/1049/1520.png': 'd8e54fc19ed86d58764c0d328ce0de91906df9f646543f151adaf89736808061',
   'data/tiles/12/1049/1521.png': '2972956d8b63c0d5f0e9e676d21a9cf7758aa752465872b9c0ebd746d4b0b5b2',
   'data/tiles/12/1049/1522.png': 'a86ccb268bf058079d4eef558fcf2c228ccc17dd95e3c9afe2f1ee98edc389d8',
@@ -182,8 +187,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Running Dashboard' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2.1',
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2.2',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2.1 before 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

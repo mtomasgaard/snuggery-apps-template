@@ -267,12 +267,13 @@ is `wind`, and simply do not draw if there is not one.)
 
 **Your own copy can turn all of them up.** `1.0°, hourly, five days` is the full
 resolution the source can give inside five days, and it is 25.98 MB — which is
-under the Shortcut's 32 MB ceiling, but not by much, and not at all if you add a
-sixth layer. That is a perfectly good private dashboard; be honest about what it
-costs:
+under Snuggery's 32 MiB ceiling for a data file, but not by much, and not at all
+if you add a sixth layer. That is a perfectly good private dashboard; be honest
+about what it costs:
 
-- The **phone** downloads all of it on every refresh, and the Shortcut refuses
-  anything over 32 MB.
+- The **phone** downloads all of it on every refresh, and Snuggery takes no data
+  file over 32 MiB, whether it fetches the file itself or a Shortcut hands it
+  over.
 - The app **unpacks every plane of every step** when it opens, and it yields to
   the page while it does, so nothing freezes. It is still that many megabytes of
   JSON to parse before the first frame; time it on your own phone before you
@@ -317,8 +318,10 @@ a mailbox, not a log: it only ever holds the newest snapshot, and nothing
 accumulates. `main` keeps the committed demo, which is what
 `zips/global-weather.zip` ships with.
 
-The only thing that changes for you is the branch name in the address your
-Shortcut fetches — the path is the same. `PROMPT.md` has both forms.
+The only thing that changes for you is the address the data comes from: the
+branch's copy, with the branch name where `main` would be and the path the same,
+or the Pages copy, which the site takes from the branch after every refresh.
+`PROMPT.md` has the forms, for Snuggery's fetch and for a Shortcut.
 
 If you would rather have everything on `main` like the other apps, turn the
 dials down first, or cut the layer list to the two or three you actually read.
@@ -412,8 +415,8 @@ script, image or map tile anywhere in `index.html`, `app.js`, `js/` or
 `style.css` (the face is in `fonts/`) —
 mini-apps in Snuggery cannot reach the network, and this one does not try. The
 coastlines, the city labels and the weather all travel inside the folder. The
-refresh happens outside, in the GitHub Action, and a Shortcut carries the file
-in.
+refresh happens outside, in the GitHub Action, and Snuggery fetches the file or
+a Shortcut carries it in.
 
 ## Size, and the checks
 

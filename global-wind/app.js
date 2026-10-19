@@ -556,7 +556,7 @@ function validate(d) {
     }
     if (d.schema === 2) {
       return 'it is a schema 2 snapshot — that is Global Weather’s file, which holds five '
-           + 'fields. This app’s Shortcut row wants the data-global-wind branch; Global '
+           + 'fields. This app’s data address wants the data-global-wind branch; Global '
            + 'Weather keeps its own';
     }
     return `unexpected schema ${JSON.stringify(d.schema ?? null)}, wanted 1`;

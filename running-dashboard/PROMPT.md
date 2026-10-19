@@ -139,12 +139,22 @@ with a token scoped to **Actions: Read and write** on this repository only, noth
    than the demo's (a data pull never rebuilds it): `gh workflow run build-zips.yml --repo "$REPO"`,
    then `gh run watch`. Open the raw address of `zips/running-dashboard.zip` in Safari → Share →
    Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `Running Dashboard`, value the raw address of
-   `running-dashboard/data/snapshot.json`. If the repository is private, the shortcut's fetch needs
-   headers `Authorization: Bearer <your read token>` and `Accept: application/vnd.github.raw`.
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the choice is yours, and the
+   root `README.md`, under *Getting the data to the phone: two ways*, has the trade-offs.
+   - **Snuggery fetches it.** In Snuggery, open Running Dashboard, then ⋯ → *Keep This Up To Date*,
+     and paste `https://api.github.com/repos/$REPO/contents/running-dashboard/data/snapshot.json`.
+     The first time, Snuggery asks you to sign in to GitHub, on GitHub's own page, and to choose this
+     repository. Never the Pages address for this app: a Pages site is public even when the
+     repository is private.
+   - **A Shortcut delivers it.** In your loop shortcut's Dictionary, add one row: key `Running
+     Dashboard`, value the raw address of `running-dashboard/data/snapshot.json`. If the repository
+     is private, the shortcut's fetch needs headers `Authorization: Bearer <your read token>` and
+     `Accept: application/vnd.github.raw`.
 3. In your rebuild shortcut's Dictionary, add the matching row: `job` =
    `https://api.github.com/repos/$REPO/actions/workflows/pull-running-dashboard.yml/dispatches`,
-   `data` = the same snapshot address as above.
+   `data` = the same snapshot address as above. Or, with Snuggery signed in to GitHub for this
+   repository, let *Rebuild Data* start the workflow itself: pick `pull-running-dashboard.yml` on
+   *Keep This Up To Date*, and no rebuild row is needed.
 
 ## Optional: the coaching text
 

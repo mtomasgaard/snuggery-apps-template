@@ -143,7 +143,7 @@ else. There is no external URL, script, image or tile anywhere in
 `index.html`, `app.js`, `style.css` or the three modules in `js/`; the one
 typeface is a file in `fonts/`. Mini-apps in Snuggery cannot reach the
 network, and this one does not try. The refresh happens outside, in the GitHub
-Action, and a Shortcut carries the file in.
+Action, and Snuggery fetches the file or a Shortcut carries it in.
 
 ## Credits
 

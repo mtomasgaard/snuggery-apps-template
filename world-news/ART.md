@@ -231,8 +231,8 @@ of headlines, so no focus mode (HOUSE 4.10). No time player: time is the Datelin
   (headlines, the publishers' own summary lines, bylines and links, nothing else copied; a tap on a
   story asks Snuggery to open it in Safari, on the publisher's own site); then `Type: ` and the face's
   credit; *How the data gets here*: a scheduled job in the repository reads the feeds once a day at
-  05:20 UTC and writes `data/snapshot.json`; a Shortcut carries it to the phone; the app re-reads it
-  when it returns to the screen and reaches no network.
+  05:20 UTC and writes `data/snapshot.json`; Snuggery fetches it or a Shortcut carries it to the phone;
+  the app re-reads it when it returns to the screen and reaches no network.
 - **Notices** (`role="alert"`, `--sheet`, 1 px `--line-strong` edge, 8 px radius, 13.5 px `--ink`, at
   most 300 px, centered) only for a file that cannot be used: `data/snapshot.json could not be read
   (HTTP 404).`; `… is not valid JSON; it looks like a web page or an error was written over it.`;

@@ -17,7 +17,8 @@ The data is fetched from Sodir, the NSTA, the Danish Energy Agency, GEUS and
 NLOG, none of which needs a key or an account.
 
 It ships working, with a real build in it. There is nothing to decide before
-the Shortcut row; the choices below are for making it yours.
+its data address, pasted into Snuggery or added as a row to your Shortcut; the
+choices below are for making it yours.
 
 ## Before you start
 
@@ -73,17 +74,30 @@ download cache).
 
 1. Open the raw address of `zips/shelf-atlas.zip` in Safari → Share →
    Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `Shelf Atlas`, value
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the
+   choice is yours, and the root `README.md`, under *Getting the data to the
+   phone: two ways*, has the trade-offs. The file's address is
    `https://raw.githubusercontent.com/OWNER/REPO/main/shelf-atlas/data/snapshot.json`
-   (`OWNER/REPO` is what `$REPO` printed; a private repository needs the
-   `Authorization` and `Accept` headers the README describes).
+   (`OWNER/REPO` is what `$REPO` printed).
+   - **Snuggery fetches it.** In Snuggery, open Shelf Atlas, then ⋯ →
+     *Keep This Up To Date*, and paste that address, or, with Pages on, its
+     Pages copy, `https://OWNER.github.io/REPO/shelf-atlas/data/snapshot.json`.
+     In a private repository paste
+     `https://api.github.com/repos/OWNER/REPO/contents/shelf-atlas/data/snapshot.json`
+     instead, and Snuggery asks you to sign in to GitHub the first time.
+   - **A Shortcut delivers it.** In your loop shortcut's Dictionary, add one
+     row: key `Shelf Atlas`, value that address (a private repository needs
+     the `Authorization` and `Accept` headers the README describes).
 3. In your rebuild shortcut's Dictionary, add the matching row:
    ```
    job  = https://api.github.com/repos/OWNER/REPO/actions/workflows/build-shelf-atlas.yml/dispatches
    data = the same data address as above
    ```
    Give its *Wait* step ten minutes rather than the usual minute and a half:
-   this build fetches from four regulators.
+   this build fetches from four regulators. Or, with Snuggery signed in to
+   GitHub for this repository, let *Rebuild Data* start the workflow itself:
+   pick `build-shelf-atlas.yml` on *Keep This Up To Date*, and no rebuild row
+   is needed.
 
 **The loop refreshes `data/snapshot.json` only**, which is the file with the
 figures. The outlines, pipelines and depth raster (`geo.json`, `bathy.png`)

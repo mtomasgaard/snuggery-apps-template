@@ -14,8 +14,9 @@ where its license allows one to be shortened. The feeds are the ones whose terms
 headline to be taken out of a feed and republished with credit: most large
 broadcasters', including the BBC's, do not, and `world-news/NOTES.md` quotes
 the sentence that rules each one out.
-A GitHub Action rebuilds `world-news/data/snapshot.json` once a day; your loop
-shortcut copies that file onto your phone; the app draws it.
+A GitHub Action rebuilds `world-news/data/snapshot.json` once a day; Snuggery
+fetches that file, or your loop shortcut copies it onto your phone; the app
+draws it.
 
 **Every headline is a link out.** A Snuggery mini-app cannot reach the network
 — it can read only the files inside its own folder — so tapping a headline
@@ -142,18 +143,32 @@ out the alternatives and what each costs.
 ## Step 4 — onto the phone
 
 1. Open the raw address of `zips/world-news.zip` in Safari, then Share, then Snuggery.
-2. In your **loop** shortcut's Dictionary, add one row:
-   key `World News`, value the raw address of
-   `world-news/data/snapshot.json`. If your repository is private, the fetch
-   needs headers `Authorization: Bearer <your read token>` and
-   `Accept: application/vnd.github.raw`.
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the
+   choice is yours, and the root `README.md`, under *Getting the data to the
+   phone: two ways*, has the trade-offs.
+   - **Snuggery fetches it.** In Snuggery, open World News, then Options, then
+     *Keep This Up To Date*, and paste the file's address: with Pages on,
+     `https://OWNER.github.io/REPO/world-news/data/snapshot.json`; with Pages
+     off,
+     `https://raw.githubusercontent.com/OWNER/REPO/main/world-news/data/snapshot.json`;
+     in a private repository,
+     `https://api.github.com/repos/OWNER/REPO/contents/world-news/data/snapshot.json`,
+     and Snuggery asks you to sign in to GitHub the first time.
+   - **A Shortcut delivers it.** In your **loop** shortcut's Dictionary, add
+     one row: key `World News`, value the raw address of
+     `world-news/data/snapshot.json`. If your repository is private, the fetch
+     needs headers `Authorization: Bearer <your read token>` and
+     `Accept: application/vnd.github.raw`.
 3. In your **rebuild** shortcut's Dictionary, add the matching row — key
    `World News`, value a Dictionary with:
    - `job` = `https://api.github.com/repos/OWNER/REPO/actions/workflows/refresh-world-news.yml/dispatches`
    - `data` = the same snapshot address as above.
 
-That second row is what makes Snuggery's ↻, then *Rebuild Data* work: one tap
-runs the job and pulls the result back.
+That rebuild row is what makes Snuggery's ↻, then *Rebuild Data* work: one tap
+runs the job and pulls the result back. Or, with Snuggery signed in to GitHub
+for this repository, let *Rebuild Data* start the workflow itself: pick
+`refresh-world-news.yml` on *Keep This Up To Date*, and no rebuild row is
+needed.
 
 ## Step 5 — asking about it
 

@@ -426,7 +426,7 @@ async function load() {
     if (raw === lastRaw && localIso(new Date()) === lastDay) { $('notice').hidden = true; stamp(); return; }
   } catch (err) {
     return fail(`could not be read (${err.message || err}).`, null,
-      'The app is installed but its data file is missing or unreadable. Run the Shortcut again.');
+      'The app is installed but its data file is missing or unreadable. Fetch it again with Get New Data under the refresh button, or run the Shortcut again.');
   }
   let json;
   try {
@@ -438,8 +438,8 @@ async function load() {
   const problems = validate(json);
   if (problems.length) {
     return fail('is not the shape this app expects:', raw,
-      'This is what a dead GitHub token looks like: 404 Not Found is valid JSON, and the Shortcut ' +
-      'writes it straight over the good data. Check the token before the address.', problems);
+      'When a Shortcut carries the data, this is what a dead GitHub token looks like: 404 Not Found is ' +
+      'valid JSON, and the Shortcut writes it straight over the good data. Check the token before the address.', problems);
   }
   DATA = json;
   lastRaw = raw;

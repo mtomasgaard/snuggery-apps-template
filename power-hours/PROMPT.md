@@ -16,8 +16,9 @@ is. The chosen appliance's run is drawn into the staircase as an ink level at
 its mean price, where the prices sit lowest; `ART.md` calls it the Landing.
 
 It ships working, pointed at **NO2** (southern Norway), with a real pull of
-public prices. If that is your zone, there is nothing to set up but the
-Shortcut row. If it is not, there is one line to change.
+public prices. If that is your zone, there is nothing to set up but its data
+address, pasted into Snuggery or added as a row to your Shortcut. If it is not,
+there is one line to change.
 
 ## Before you start
 
@@ -125,16 +126,31 @@ gh run watch
 
 1. Open the raw address of `zips/power-hours.zip` in Safari, then Share, then
    Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `Power Hours`, value
-   the raw address of `power-hours/data/snapshot.json`. If the repository is
-   private, the fetch needs headers `Authorization: Bearer <your read token>`
-   and `Accept: application/vnd.github.raw`.
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the
+   choice is yours, and the root `README.md`, under *Getting the data to the
+   phone: two ways*, has the trade-offs.
+   - **Snuggery fetches it.** In Snuggery, open Power Hours, then Options,
+     then *Keep This Up To Date*, and paste the file's address: with Pages on,
+     `https://OWNER.github.io/REPO/power-hours/data/snapshot.json`; with Pages
+     off,
+     `https://raw.githubusercontent.com/OWNER/REPO/main/power-hours/data/snapshot.json`;
+     in a private repository,
+     `https://api.github.com/repos/OWNER/REPO/contents/power-hours/data/snapshot.json`,
+     and Snuggery asks you to sign in to GitHub the first time.
+   - **A Shortcut delivers it.** In your loop shortcut's Dictionary, add one
+     row: key `Power Hours`, value the raw address of
+     `power-hours/data/snapshot.json`. If the repository is private, the fetch
+     needs headers `Authorization: Bearer <your read token>` and
+     `Accept: application/vnd.github.raw`.
 3. In your rebuild shortcut's Dictionary, add the matching row:
    ```
    job  = https://api.github.com/repos/OWNER/REPO/actions/workflows/refresh-power-hours.yml/dispatches
    data = the same snapshot address as above
    ```
-   (`OWNER/REPO` is what `$REPO` printed.)
+   (`OWNER/REPO` is what `$REPO` printed.) Or, with Snuggery signed in to
+   GitHub for this repository, let *Rebuild Data* start the workflow itself:
+   pick `refresh-power-hours.yml` on *Keep This Up To Date*, and no rebuild row
+   is needed.
 
 ## Making it yours
 

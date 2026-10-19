@@ -15,7 +15,8 @@ Energy Institute Statistical Review), fetched by a job with no key or account.
 The field data is a workbook that sits behind a form, so it is dropped in by
 hand; the March 2026 release ships with the app.
 
-It ships working. There is nothing to decide before the Shortcut row.
+It ships working. There is nothing to decide before its data address, pasted
+into Snuggery or added as a row to your Shortcut.
 
 ## Before you start
 
@@ -61,16 +62,29 @@ gh run watch
 
 1. Open the raw address of `zips/world-oil-gas.zip` in Safari, then Share, then
    Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `World Oil & Gas`,
-   value
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the
+   choice is yours, and the root `README.md`, under *Getting the data to the
+   phone: two ways*, has the trade-offs. The file's address is
    `https://raw.githubusercontent.com/OWNER/REPO/main/world-oil-gas/data/snapshot.json`
-   (`OWNER/REPO` is what `$REPO` printed; a private repository needs the
-   `Authorization` and `Accept` headers the README describes).
+   (`OWNER/REPO` is what `$REPO` printed).
+   - **Snuggery fetches it.** In Snuggery, open World Oil & Gas, then Options,
+     then *Keep This Up To Date*, and paste that address, or, with Pages on,
+     its Pages copy,
+     `https://OWNER.github.io/REPO/world-oil-gas/data/snapshot.json`. In a
+     private repository paste
+     `https://api.github.com/repos/OWNER/REPO/contents/world-oil-gas/data/snapshot.json`
+     instead, and Snuggery asks you to sign in to GitHub the first time.
+   - **A Shortcut delivers it.** In your loop shortcut's Dictionary, add one
+     row: key `World Oil & Gas`, value that address (a private repository
+     needs the `Authorization` and `Accept` headers the README describes).
 3. In your rebuild shortcut's Dictionary, add the matching row:
    ```
    job  = https://api.github.com/repos/OWNER/REPO/actions/workflows/build-world-oil-gas.yml/dispatches
    data = the same data address as above
    ```
+   Or, with Snuggery signed in to GitHub for this repository, let *Rebuild
+   Data* start the workflow itself: pick `build-world-oil-gas.yml` on *Keep
+   This Up To Date*, and no rebuild row is needed.
 
 **The loop refreshes `data/snapshot.json` only**: the country data, which is
 what changes once a year. The fields (`fields.json`), the basemap

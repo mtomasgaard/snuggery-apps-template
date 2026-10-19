@@ -16,8 +16,9 @@ layout is `tools/CONTRACT.md`, the pipeline is `tools/HANDOFF.md`.
   moves until the finger leaves, then the sheet lifts and, if the event is off the map, the view flies to
   it once), the largest
   event, the ten largest, per-box counts, the hollow note, the volcanoes above Normal, the sources.
-  When a Shortcut delivers a newer snapshot (or one arrived since the last launch) the new stems are
-  written, the new dots fade in, and the largest row reads "12 new since 16:51 UTC".
+  When a newer snapshot arrives, fetched by Snuggery or delivered by a Shortcut (or one arrived since
+  the last launch), the new stems are written, the new dots fade in, and the largest row reads "12 new
+  since 16:51 UTC".
 - **History**: 1900 to now with the stub before 1900; Month, Year, Decade or All; floors 2.5+ to 6+;
   Play leaves a faint trace; the label names exactly the window drawn and its count. **Seven stories**
   (Cascadia 1700 to Ridgecrest 2019) set the window, floor and view, select their anchor, annotate it

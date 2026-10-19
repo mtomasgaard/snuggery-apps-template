@@ -270,13 +270,23 @@ with a token scoped to **Actions: Read and write** on this repository only, noth
 ## Step 8 — onto the phone
 
 1. Open the raw address of `zips/finances.zip` in Safari, then tap Share, then Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `Finances`, value the raw address of
-   `finances/data/snapshot.json`. A private repository's fetch needs the headers
-   `Authorization: Bearer <your read token>` and `Accept: application/vnd.github.raw`.
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the choice is yours, and the
+   root `README.md`, under *Getting the data to the phone: two ways*, has the trade-offs.
+   - **Snuggery fetches it.** In Snuggery, open Finances, then Options, then *Keep This Up To
+     Date*, and paste
+     `https://api.github.com/repos/$REPO/contents/finances/data/snapshot.json`. The first time,
+     Snuggery asks you to sign in to GitHub, on GitHub's own page, and to choose this repository.
+     Never the Pages address for this app: a Pages site is public even when the repository is
+     private.
+   - **A Shortcut delivers it.** In your loop shortcut's Dictionary, add one row: key `Finances`,
+     value the raw address of `finances/data/snapshot.json`. A private repository's fetch needs the
+     headers `Authorization: Bearer <your read token>` and `Accept: application/vnd.github.raw`.
 3. In your rebuild shortcut's Dictionary, add the matching row: key `Finances`, value a Dictionary
    with `job` =
    `https://api.github.com/repos/$REPO/actions/workflows/refresh-finances.yml/dispatches`
-   and `data` = the same snapshot address as above.
+   and `data` = the same snapshot address as above. Or, with Snuggery signed in to GitHub for this
+   repository, let *Rebuild Data* start the workflow itself: pick `refresh-finances.yml` on *Keep
+   This Up To Date*, and no rebuild row is needed.
 
 ## Keeping it honest
 

@@ -8,7 +8,8 @@
 //      snapshot.sha256; fonts/ the one subset and OFL.txt, the subset's sha256 the one Global
 //      Weather's ART.md names;
 //   5. the data is untouched: data/snapshot.json's SHA-256 equals data/snapshot.sha256's line;
-//   6. miniapp.json is valid, its version digits and dots and above the 1.1 plan 0012's pass started from;
+//   6. miniapp.json is valid, its version digits and dots and above the 1.2 this pass started from (1.1 before
+//      plan 0012's pass; 1.2.1 says the data is fetched by Snuggery or carried in by a Shortcut, 2026-10-19);
 //   7. no AI vendor or model name in any shipped text file (Warming World's list, stored ROT13; the
 //      snapshot's planes skipped, its strings read);
 //   8. the three credits, verbatim, in the CREDITS constant, written into About's first credits paragraph
@@ -128,8 +129,8 @@ try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Global Wind' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
     && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && typeof mini.version === 'string'
-    && /^\d+(\.\d+){1,2}$/.test(mini.version) && newer(mini.version, '1.1'),
-  `miniapp.json: "${mini.name}" ${mini.version} (above the 1.1 this pass started from), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && /^\d+(\.\d+){1,2}$/.test(mini.version) && newer(mini.version, '1.2'),
+  `miniapp.json: "${mini.name}" ${mini.version} (above the 1.2 this pass started from), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Warming World's list, ROT13, model family names included)

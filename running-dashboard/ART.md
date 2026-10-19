@@ -815,8 +815,8 @@ wide.
    are derived from it.` (a license requirement; the stamp's `Example data.` keys on the same ids); then `Type:
    Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in
    fonts/ with its license.`
-5. **How the data gets here.** The scheduled pull, the Shortcut that carries the snapshot in, the app
-   reading it again whenever it comes back to the screen, the coaching routine that writes the
+5. **How the data gets here.** The scheduled pull, Snuggery's fetch or the Shortcut that carries the
+   snapshot in, the app reading it again whenever it comes back to the screen, the coaching routine that writes the
    evaluation, the plan, the race forecast and the session notes; and that the app itself reaches no
    network.
 

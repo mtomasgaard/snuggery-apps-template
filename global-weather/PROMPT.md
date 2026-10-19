@@ -16,7 +16,8 @@ gives all five numbers at that point. The data is NOAA's Global Forecast
 System, read from a public bucket that needs no key and no account.
 
 It ships working, with a real pull of a real forecast in it. If the default
-resolution suits you there is nothing to set up but the Shortcut row.
+resolution suits you there is nothing to set up but its data address, pasted
+into Snuggery or added as a row to your Shortcut.
 
 **Global Wind is still here and still runs.** This is a second app, not a
 replacement: its own folder, its own script, its own workflow, its own data
@@ -69,7 +70,7 @@ again. The full tables are in `NOTES.md`; the corners of it are:
 | --- | --- | --- |
 | `2.0°, 3 h, 5 days, 5 layers` | **2.9 MB** | what ships here — a convincing world, no local detail |
 | `1.5°, 3 h, 5 days, 5 layers` | 5.0 MB | noticeably sharper fronts and coastlines of weather |
-| `1.0°, 1 h, 5 days, 5 layers` | 26 MB | everything the source has inside five days, near the Shortcut's 32 MB ceiling |
+| `1.0°, 1 h, 5 days, 5 layers` | 26 MB | everything the source has inside five days, near Snuggery's 32 MiB ceiling for a data file |
 | `2.0°, 6 h, 3 days, 5 layers` | 1.0 MB | small enough to live on `main` (see step 3) |
 | `2.0°, 3 h, 5 days, wind + temp` | 1.6 MB | drop the three layers you never look at |
 
@@ -77,8 +78,9 @@ The demo here is deliberately at the small end, because a *template* is copied
 and the file travels with it. Your own copy is yours: turn the dials up if your
 phone and your patience allow. Three things to know before you do —
 
-- The **phone** downloads the whole file on every refresh, and the Shortcut
-  refuses anything over 32 MB. The app unpacks every plane of every step when it
+- The **phone** downloads the whole file on every refresh, and Snuggery takes
+  no data file over 32 MiB, whether it fetches the file itself or a Shortcut
+  hands it over. The app unpacks every plane of every step when it
   opens, yielding to the page as it goes — time it on your own phone before you
   settle on a setting rather than trusting a number from anybody's laptop.
 - The **pull** grows with the step count. Hourly for five days is 121 forecast
@@ -206,16 +208,31 @@ repository: each refresh job force-pushes only its own orphan branch.
 
 1. Open the raw address of `zips/global-weather.zip` in Safari → Share →
    Snuggery, to install it.
-2. In your loop shortcut's Dictionary, add one row: key `Global Weather`, value
-   the data address from step 3.
+2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the
+   choice is yours, and the root `README.md`, under *Getting the data to the
+   phone: two ways*, has the trade-offs.
+   - **Snuggery fetches it.** In Snuggery, open Global Weather, then ⋯ →
+     *Keep This Up To Date*, and paste its Pages address,
+     `https://OWNER.github.io/REPO/global-weather/data/snapshot.json`, with
+     Pages on: the site takes the newest file from `data-global-weather` after
+     every refresh. In a public repository the public address from step 3
+     works too. Step 3's private form, with its headers, is the Shortcut's;
+     for Snuggery use the Pages address, as the root README advises for this
+     app, whose data is public anyway.
+   - **A Shortcut delivers it.** In your loop shortcut's Dictionary, add one
+     row: key `Global Weather`, value the data address from step 3.
 3. In your rebuild shortcut's Dictionary, add the matching row:
    ```
    job  = https://api.github.com/repos/OWNER/REPO/actions/workflows/refresh-global-weather.yml/dispatches
    data = the same data address as above
    ```
-4. Global Wind, if you have it, keeps its own rows and its own ZIP. Leave them
-   alone — the two apps share nothing on the phone but the shortcut that
-   carries their files in.
+   Or, with Snuggery signed in to GitHub for this repository, let *Rebuild
+   Data* start the workflow itself: pick `refresh-global-weather.yml` on *Keep
+   This Up To Date*, and no rebuild row is needed.
+4. Global Wind, if you have it, keeps its own address, its own rows and its
+   own ZIP. Leave them alone — the two apps share nothing on the phone but,
+   when a Shortcut delivers their data, the shortcut that carries their files
+   in.
 
 The map is heavier than the other apps here: the file is three megabytes or
 more, and the phone unpacks every plane of every forecast step when the app
@@ -308,9 +325,10 @@ if the reply came from the code-hosting service it quotes its message back at
 you. Open the file in Snuggery (⋯ → App Files) and look at what is actually in
 it before changing any code.
 
-**`it is a schema 1 snapshot`** means this app's Shortcut row is pointed at
-Global Wind's branch, `data-global-wind`, which holds wind and nothing else.
-The two apps have one data address each; step 3 has this one's.
+**`it is a schema 1 snapshot`** means this app's data address, in Snuggery or
+in your Shortcut, is Global Wind's, from `data-global-wind`, which holds wind
+and nothing else. The two apps have one data address each; steps 3 and 4 have
+this one's.
 
 **`data/snapshot.json is not a Global Weather snapshot: unknown compression "…"`**
 means the file's `encoding.compression` is something other than `deflate` or

@@ -7,8 +7,9 @@
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and
 //      no supplement; NOTES.md and About credit the face word for word;
 //   5. the data is pinned: the four data files' sha256 as the data follow-up rebuilt them (2026-10-02);
-//   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25), its version 1.2
-//      (HOUSE 13: 1.1 when plan 0012's register pass started);
+//   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25), its version 1.2.1
+//      (HOUSE 13: 1.1 when plan 0012's register pass started, 1.2 after it; the patch for About and the
+//      prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut, 2026-10-19);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word: the two constants, one written into About's first Sources and credits
 //      paragraph; no caption band, and no credit anywhere on the front (HOUSE 4.15, 11.1 rule 1; plan 0012 F1, P1);
@@ -137,8 +138,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Finances' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash (B25)`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2.1',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass, 1.2 after it, 1.2.1 for 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash (B25)`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

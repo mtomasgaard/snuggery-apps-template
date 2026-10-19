@@ -319,9 +319,9 @@ centered column at most 760 px wide; no footer (HOUSE 4.15). No units key, key c
   `creativecommons.org/licenses/by/4.0` printed without a scheme, which 16 zones are CC BY and that
   the rest are private use (from `NOTES.md`, one sentence), then `Type: ` and the face's credit line;
   *How the data gets here*: in the template, a job refreshes the file after each day's auction (13:30
-  and 16:30 UTC), and a Shortcut carries it to the phone; the appliances are `data/appliances.json`, in
-  Snuggery, Options, then App Files, read again when the app comes back to the screen; nothing here goes
-  online; the stock's ask
+  and 16:30 UTC), and Snuggery fetches it or a Shortcut carries it to the phone; the appliances are
+  `data/appliances.json`, in Snuggery, Options, then App Files, read again when the app comes back to the
+  screen; the app itself never goes online; the stock's ask
   sentence (the table written when the prices were fetched carries the whole day and the stretch then
   ahead); `Day-ahead prices are set once a day, in an auction, for every interval of the following
   day.`
