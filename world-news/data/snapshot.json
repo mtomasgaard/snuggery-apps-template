@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-19T05:01:24Z",
+ "generatedAt": "2026-10-19T06:01:22Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Students air their frustrations anonymously online as emigration tempts many young people in North Macedonia",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/19/students-air-their-frustrations-anonymously-online-as-emigration-tempts-many-young-people-in-north-macedonia/",
+     "published": "2026-10-19T05:37:23Z",
+     "summary": "“Our idea is not simply to collect complaints, but to transform individual students’ experiences into evidence that can be used for advocacy and for creating change.”",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
      "source": "Global Voices",
@@ -52,16 +62,6 @@
      "link": "https://globalvoices.org/2026/10/09/subsea-cables-and-oil-pipelines-the-infrastructure-linking-ai-empire-and-occupation/",
      "published": "2026-10-09T06:15:45Z",
      "summary": "The growing importance of subsea cables in military and economic policy offers an entrypoint into understanding the corrosive, yet dependent, relationship between AI and oil infrastructure",
-     "stale": false,
-     "author": "Guest Contributor"
-    },
-    {
-     "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/03/how-a-farmers-protest-in-bucharest-was-inflated-online-then-hijacked/",
-     "published": "2026-10-03T18:40:44Z",
-     "summary": "Over 1,180 Facebook posts and 100 TikTok videos analyzed showed how a genuine farmers’ protest was inflated by clusters of accounts sharing identical messages, then folded into anti-government, anti-EU and pro-Kremlin…",
      "stale": false,
      "author": "Guest Contributor"
     },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From comedy skits to podcast gaffes, what’s Anthony Albanese’s social media strategy?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/from-comedy-skits-to-podcast-gaffes-whats-anthony-albaneses-social-media-strategy-294241",
+     "published": "2026-10-19T05:30:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Susan Grantham, Senior Lecturer in Communication, Griffith University"
+    },
+    {
      "title": "How gas prices became a lightning rod for voter anger ahead of the US midterms",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Peter McPhee, Emeritus professor, History, The University of Melbourne"
-    },
-    {
-     "title": "Democrats remain clear favourites to gain control of Congress at midterms",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/democrats-remain-clear-favourites-to-gain-control-of-congress-at-midterms-294465",
-     "published": "2026-10-19T02:18:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "NZ’s climate in ‘uncharted territory’, with more extreme weather events ahead",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Students air their frustrations anonymously online as emigration tempts many young people in North Macedonia",
+   "published": "2026-10-19 05:37 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
   },
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "Subsea cables and oil pipelines: The infrastructure linking AI, empire, and occupation",
    "published": "2026-10-09 06:15 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "How a farmers’ protest in Bucharest was inflated online, then hijacked",
-   "published": "2026-10-03 18:40 UTC"
   },
   {
    "region": "Europe",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "From comedy skits to podcast gaffes, what’s Anthony Albanese’s social media strategy?",
+   "published": "2026-10-19 05:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How gas prices became a lightning rod for voter anger ahead of the US midterms",
    "published": "2026-10-19 04:29 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
    "published": "2026-10-19 03:02 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Democrats remain clear favourites to gain control of Congress at midterms",
-   "published": "2026-10-19 02:18 UTC"
   },
   {
    "region": "Oceania",
