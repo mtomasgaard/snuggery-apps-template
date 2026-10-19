@@ -22,7 +22,7 @@ OUT.write_text(
             # can tell at a glance whether the loop is still running.
             "generatedAt": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
             "headline": now.strftime("%H:%M UTC"),
-            "caption": "Written by a GitHub Action, copied here by a Shortcut.",
+            "caption": "Written by a GitHub Action.",
             "runs": [
                 {"label": "Day of year", "value": now.strftime("%j")},
                 {"label": "Week", "value": now.strftime("%V")},

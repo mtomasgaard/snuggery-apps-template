@@ -8,7 +8,8 @@
 //   5. the data: data/snapshot.json's shape as the refresh job writes it (the job rewrites it about hourly, so a sha256
 //      pin failed on every fresh file; plan 0012 package 4), and the tests' fixed day, tools/fixtures/snapshot.json
 //      (the file the old pin named), pinned by sha256;
-//   6. miniapp.json is valid, its name unchanged, its version 2.1 (plan 0012 package 4; HOUSE 13);
+//   6. miniapp.json is valid, its name unchanged, its version 2.2 (2.1 in plan 0012 package 4; 2.2 with Release A's
+//      dataSource and About's two ways to the phone, 2026-10-19; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credit word for word as About's first Sources and credits paragraph (#about-credit-line) and in NOTES.md;
 //      no band, caption line or credit line on the front (HOUSE 4.15);
@@ -145,7 +146,9 @@ ok(read('NOTES.md').includes(FONT_CREDIT) && html.includes(`Type: ${FONT_CREDIT}
   }
   ok(why.length === 0, `data/snapshot.json: the shape app.js's header documents (made ${s && s.generatedAt}, headline "${s && s.headline}", ${s && Array.isArray(s.runs) ? s.runs.length : 0} rows, ${s && Array.isArray(s.ask) ? s.ask.length : 0} ask rows); any file the job writes passes${why.length ? ': ' + why.join('; ') : ''}`);
 }
-const DATA = { 'tools/fixtures/snapshot.json': 'db50d9add6f0d940671235ee12a3fbe7f2a4f7e90e9620e3f6899539f04333a8' };
+// The file of 1 Oct with the caption the job writes since 2026-10-14, "Written by a GitHub Action." (db50d9add6f0…
+// before, when it named the Shortcut).
+const DATA = { 'tools/fixtures/snapshot.json': 'c0f7402f8b5850d418933fa3914ca36f7fbda826d4ff9ec3dc98c3d2a9035d59' };
 for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is the file of 1 Oct, the tests' fixed day; it does not ship (${want.slice(0, 12)}…)`);
 
 // 6. miniapp.json
@@ -153,7 +156,7 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Hello Live' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '2.1',
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '2.2',
   `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
 }
 

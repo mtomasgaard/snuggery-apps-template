@@ -151,7 +151,7 @@ Siri*, the Action Button, or Shortcuts, then Automation, then Time of Day, then 
 is worth refreshing once or twice a day; it does not change by the minute, and neither should the
 app you look at.
 
-Snuggery's Options, then *Keep This Up To Date*, also has a *Run now* row that opens **one** rebuild shortcut
+Snuggery's Options, then *Keep This Up To Date*, also has a *Run it now* button that opens **one** rebuild shortcut
 by name, shared across all your apps, passing the app's name as its input. That shortcut's recipe
 starts by POSTing to a workflow, which this app does not have — so unless you are willing to put
 an *If* around that step, leave Outdoor Window out of it and run its own shortcut directly. The

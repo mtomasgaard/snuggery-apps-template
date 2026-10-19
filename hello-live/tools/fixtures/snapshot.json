@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-10-01T01:59:56Z",
   "headline": "01:59 UTC",
-  "caption": "Written by a GitHub Action, copied here by a Shortcut.",
+  "caption": "Written by a GitHub Action.",
   "runs": [
     {
       "label": "Day of year",

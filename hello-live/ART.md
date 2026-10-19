@@ -231,7 +231,7 @@ last item says why).
      becomes 34 at 650 and 0), `overflow-wrap: anywhere` so a long string can never widen the page;
      under it the lead in 13.5 px `--ink-2`, the same instant on the phone's clock: `03:59 on this
      phone’s clock`. Under them the file's `caption`, 12.5 px `--ink-2`, as the file gives it
-     (`Written by a GitHub Action, copied here by a Shortcut.`), left out when the file has none.
+     (`Written by a GitHub Action.`), left out when the file has none.
   2. **The Time Card** (section 1), under a 13.5 px 650 heading `Time card` and a hairline, and its key.
   3. **The rows**: a `dl` under a hairline, one row per entry of `runs[]`, the label 12.5 px `--ink-2`
      at the left and the value 15 px 600 `--ink` right-aligned and tabular, 28 px rows parted by `--line`

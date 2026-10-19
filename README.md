@@ -12,8 +12,11 @@ One repository of mini-apps: the ones whose data refreshes on a schedule, with t
 jobs that refresh them, and the ones that carry everything they need in the ZIP.
 
 For the ones that refresh, the loop once it is running: a GitHub Action rewrites
-a small JSON file here → a Shortcut on your phone copies that file into the app →
-you open the app and see today's numbers. Snuggery itself never goes online.
+a small JSON file here → the file reaches your phone → you open the app and see
+today's numbers. It reaches the phone one of two ways, and which is your choice:
+**Snuggery fetches it** from an address you gave it, or **a Shortcut delivers it**.
+[Getting the data to the phone](#getting-the-data-to-the-phone-two-ways) has the
+trade-offs. Either way, the apps themselves never go online.
 
 **Click *Use this template* to make your own copy, and make it private** if any
 app here will ever hold something personal. A repository is as private as its
@@ -72,7 +75,7 @@ seven live examples come with the app: Create → *Install the live examples*.
 | Earth's History | [**Install Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/zips/earth-history.zip) | 7 MB | nothing |
 | US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
 | Volve | [**Install Volve**](https://mtomasgaard.github.io/snuggery-apps-template/zips/volve.zip) | 33 MB | nothing |
-| Warming World | [**Install Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) | 1.2 MB | nothing (NASA's monthly release refreshes here) |
+| Warming World | [**Install Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) | 1.3 MB | nothing (NASA's monthly release refreshes here) |
 
 1. **On the iPhone, in Safari**, tap an app's **Install …** link in the table above (or its
    **Get the ZIP** link further down). If Safari asks whether to download it, tap **Download**.
@@ -93,14 +96,14 @@ latest numbers rather than those of its last code change. The repository's own `
 code build, rebuilt only when an app's code changes.
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
-Inside Snuggery, *Keep This Up To Date* → **More examples in the starter repository** brings you
+Inside Snuggery, *Keep This Up To Date* → **Every example, ready to download** brings you
 back to this page.
 
 ### Hello Live
 
 A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. Its drawing, the Time Card, is the loop itself: a week of days, one row each, with a punch at the minute each file was written and a tail to the minute this phone first read it.
 
-**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-live.zip) · It is the loop's proof, not a thing to personalize.
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-live.zip) · It is the loop's proof, not a thing to personalize. To let Snuggery fetch it, paste `https://mtomasgaard.github.io/snuggery-apps-template/hello-live/data/snapshot.json` on its *Keep This Up To Date* screen ([the two ways](#getting-the-data-to-the-phone-two-ways)). Its `miniapp.json` also suggests that address, so a Snuggery that fetches data asks once, the first time you open it, whether it may ([an app can suggest its address](#or-let-the-app-suggest-its-address)).
 
 ### Running Dashboard
 
@@ -194,13 +197,13 @@ The Earth at 90 moments from 750 million years ago to today, on a globe and on a
 
 ### US Quakes
 
-Every earthquake USGS has cataloged around the United States since 1638 — 394 890 of them, magnitude 2.5 and up from 1900 — on a map drawn like a seismograph's drum record, with the last 30 days of the USGS feed on top, refreshed hourly by this repository. Scrub a timeline from 1900 to now and play a decade; the plate boundaries draw themselves as a trace. Drag a line across Alaska and read a true-scale cross-section of the Cook Inlet slab down to 250 km. Seven stories (1700 Cascadia, 1811–12 New Madrid, 1906 San Francisco, 1964 Alaska, Oklahoma since 2009, 2018 Kīlauea, 2019 Ridgecrest), three of them playable; the Quaternary faults and USGS volcano alert levels as layers; a focus mode that leaves only the map and the record strip. Every sentence about the data is USGS's own, quoted, and "Not a warning service" stays on screen. **Live**, 6.4 MB; the history is rebuilt each January. USGS data is public domain; Natural Earth likewise.
+Every earthquake USGS has cataloged around the United States since 1638 — 394 890 of them, magnitude 2.5 and up from 1900 — on a map drawn like a seismograph's drum record, with the last 30 days of the USGS feed on top, refreshed hourly by this repository. Scrub a timeline from 1900 to now and play a decade; the plate boundaries draw themselves as a trace. Drag a line across Alaska and read a true-scale cross-section of the Cook Inlet slab down to 250 km. Seven stories (1700 Cascadia, 1811–12 New Madrid, 1906 San Francisco, 1964 Alaska, Oklahoma since 2009, 2018 Kīlauea, 2019 Ridgecrest), three of them playable; the Quaternary faults and USGS volcano alert levels as layers; a focus mode that leaves only the map and the record strip. Every sentence about the data is USGS's own, quoted, and "Not a warning service" stays on screen. **Live**, 6.8 MB; the history is rebuilt each January. USGS data is public domain; Natural Earth likewise.
 
 **Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-us-quakes` branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md)) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
 
 ### Warming World
 
-NASA's GISTEMP temperature record on a globe: every 2° cell's anomaly against its own 1951–1980 average, year by year from 1880 to now, with the last 24 months beside it. The year slider is the warming stripes themselves, drawn as an instrument with the base period bracketed; the globe sits on a gray card so the only color on screen is a departure from normal; tap any place and its own line draws itself from 1880 over the cell's stripes; turn to the Arctic and read the cap's mean. Every number comes from GISS's published grid and table, rounded to 0.1 °C by this app; anomalies are never called temperatures; cells with no data are hatched; the current year is marked partial; a copy's release and age are on screen. **Live**, 1.2 MB, refreshed monthly from NASA's release. GISTEMP is US Government work (public domain); Natural Earth likewise; Archivo under the OFL.
+NASA's GISTEMP temperature record on a globe: every 2° cell's anomaly against its own 1951–1980 average, year by year from 1880 to now, with the last 24 months beside it. The year slider is the warming stripes themselves, drawn as an instrument with the base period bracketed; the globe sits on a gray card so the only color on screen is a departure from normal; tap any place and its own line draws itself from 1880 over the cell's stripes; turn to the Arctic and read the cap's mean. Every number comes from GISS's published grid and table, rounded to 0.1 °C by this app; anomalies are never called temperatures; cells with no data are hatched; the current year is marked partial; a copy's release and age are on screen. **Live**, 1.3 MB, refreshed monthly from NASA's release. GISTEMP is US Government work (public domain); Natural Earth likewise; Archivo under the OFL.
 
 **Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) · Keep it current: one row in the *Keep This Up To Date* shortcut pointing at the `data-warming-world` branch (the address is in [`warming-world/tools/HANDOFF.md`](warming-world/tools/HANDOFF.md)) · Make it yours: [`warming-world/NOTES.md`](warming-world/NOTES.md) · The design and the look: [`warming-world/DESIGN.md`](warming-world/DESIGN.md), [`warming-world/ART.md`](warming-world/ART.md)
 
@@ -300,17 +303,20 @@ form of it: a pull script merges what is new into raw files, a build turns them 
 `data/snapshot.json`, and an optional agent session writes text back that the next build carries
 into the snapshot. Running Dashboard uses all of it; most apps skip the raw files and the agent
 and write the snapshot straight from the source. Two hops, deliberately separate: the **code hop**
-happens once (the ZIP, imported into Snuggery), the **data hop** happens on a schedule (one small
-JSON file, copied by a Shortcut).
+happens once (the ZIP, imported into Snuggery), the **data hop** happens again and again (one small
+JSON file, fetched by Snuggery or copied by a Shortcut). The picture draws the Shortcut.
 
 ![How the data flows](data-flow.svg)
 
 The same picture with the data moving along the lines: [`data-flow.html`](data-flow.html) — open it
 in a browser, or keep it in Snuggery beside the apps; it needs no script.
 
-What never happens: Snuggery itself makes no network request, and the mini-app cannot reach the
-network or start a shortcut by itself. Every fetch above runs inside GitHub or inside the Shortcuts
-app with your own accounts; the one thing Snuggery starts is the shortcut you named.
+What never happens: the mini-app cannot reach the network or start a shortcut by itself. The jobs
+run inside GitHub. On the phone, the fetch runs either inside the Shortcuts app with your own
+accounts, or inside Snuggery for a connection you set up and approved, and only to that address.
+Nothing goes to Snuggery's developer on either path. If you sign in to GitHub inside Snuggery,
+GitHub shows the owner of Snuggery's GitHub App (its developer) that your account installed it,
+and on which repositories; the developer keeps the App's key offline and never uses it.
 
 ## Setting up: once ever, then once per app
 
@@ -321,21 +327,143 @@ is genuinely one line.
 ### Once, ever
 
 1. **This repository** — *Use this template*, private.
-2. **A token**, if the repo is private — github.com/settings/personal-access-tokens →
-   fine-grained → this repository only → **Contents: Read-only**. Give it a long
-   expiry and write the date at the bottom of this file.
-3. **One shortcut** on your phone, holding a Dictionary of *app name → data
-   address* and a *Repeat with Each*. The recipe is below.
-4. **One automation** that runs it — Shortcuts → Automation → Time of Day →
-   Run Immediately.
+2. **Choose how data reaches your phone**: Snuggery fetches it, or a Shortcut delivers it
+   ([the two ways](#getting-the-data-to-the-phone-two-ways)). You can use both, for different apps.
+3. **If Snuggery fetches it** and the repository is private: in Snuggery, sign in to GitHub once
+   and install Snuggery's GitHub App on this repository only. Or paste a fine-grained token there
+   instead (this repository only, **Contents: Read-only**).
+4. **If a Shortcut delivers it**:
+   - **A token**, if the repo is private — github.com/settings/personal-access-tokens →
+     fine-grained → this repository only → **Contents: Read-only**. Give it a long
+     expiry and write the date at the bottom of this file.
+   - **One shortcut** on your phone, holding a Dictionary of *app name → data
+     address* and a *Repeat with Each*. The recipe is below.
+   - **One automation** that runs it — Shortcuts → Automation → Time of Day →
+     Run Immediately.
 
 ### Every new app
 
 1. **Ask an agent to build it**, in a session attached to this repository.
 2. **Install it once** — in Safari on the phone, open `github.com/<you>/<repo>/raw/main/zips/<app>.zip` (the raw address downloads; the normal page only shows it), then Share → Snuggery. That is the code build, with the data of the last code change; with Pages on, `https://<you>.github.io/<repo>/zips/<app>.zip` carries the newest data.
-3. **Add one row** to the Dictionary in your shortcut: display name → data address.
+3. **Connect its data, one line either way:**
+   - Snuggery fetches it: open the app → ⋯ → *Keep This Up To Date* → paste its data address and
+     approve it.
+   - A Shortcut delivers it: add one row to the Dictionary in your shortcut, display name → data
+     address.
 
 That is the whole per-app cost. Nothing else changes, ever.
+
+## Getting the data to the phone: two ways
+
+The job writes `data/snapshot.json` here. Something then has to bring that file to the phone, and
+there are two ways. Both put the same file in the same place, and the app is identical either way.
+Neither is the right one for everybody: pick by what you want, and plan it with your agent.
+
+| | **Snuggery fetches it** | **A Shortcut delivers it** |
+| --- | --- | --- |
+| **Setup** | Paste one address on the app's *Keep This Up To Date* screen and approve it once. A private repository also needs a GitHub sign-in in Snuggery, once | A shortcut, a Dictionary row per app, and an automation ([the recipe](#the-shortcut)). Two field traps catch everyone once |
+| **When it refreshes** | When you open the app, when you come back to it, and from ↻ → *Get New Data*. In the background only now and then, when iOS allows, and only if you turn that on for the app | At the times you set, for example 06:00 every day, whether or not you open the app. There is no hourly option |
+| **Seeing what happened** | The app's status line says when it last checked, and why a fetch failed | Nothing in Snuggery. A failed run shows in Shortcuts, if you look |
+| **A bad response** | Only a successful response is written, so a dead token never lands an error page over your data | Shortcuts cannot see a status code: a dead token's `404` page is written over your data ([Token expiry](#token-expiry)) |
+| **Where the key lives** | In Snuggery, in this iPhone's Keychain, bound to the repository you chose. Never in a backup or a shortcut | In the shortcut, outside Snuggery. Sharing the shortcut publishes the key with it |
+| **Who sees what** | The site at the address sees each time you open the app | The site sees each time the shortcut runs |
+| **Starting the job on demand** | Set up once with your GitHub sign-in, *Rebuild Data* starts your workflow, follows the run, and fetches when it completes | *Rebuild Data* opens a rebuild shortcut ([below](#the-shortcut)), which waits and pulls |
+
+**A middle way** if you want Snuggery to hold the key and also want an exact time: let Snuggery
+fetch, and add a Shortcuts automation that runs Snuggery's **Refresh a Snuggery App** action at
+that time. It takes only the app's name, carries no address and no token, and refreshes only an app
+whose background refresh you turned on.
+
+**Both at once is allowed**, for the same app. The newer write wins, and the app's status line says
+which one delivered last. A Shortcut copying from Pages can then put a copy up to ten minutes old
+over a fresher one Snuggery fetched, until Snuggery's next fetch.
+
+### Which address to paste, if Snuggery fetches it
+
+| Your repository | The address | Needs |
+| --- | --- | --- |
+| **Public, with Pages on** | `https://<you>.github.io/<repo>/<app-folder>/data/snapshot.json` | nothing. Pages can lag a new commit by up to about ten minutes |
+| **Public, Pages off** | `https://raw.githubusercontent.com/<you>/<repo>/main/<app-folder>/data/snapshot.json` | nothing. Up to about five minutes behind |
+| **Private** | `https://api.github.com/repos/<you>/<repo>/contents/<app-folder>/data/snapshot.json` | Snuggery signed in to GitHub with this repository chosen, or a fine-grained token with **Contents: Read-only** pasted into Snuggery. Snuggery asks GitHub for the raw file itself, so there is no `Accept` header to add. About a minute behind |
+
+**The private default, and why it is not Pages.** A Pages site is public even when the repository
+is private (except on Enterprise plans). In a private copy holding real data, such as Running
+Dashboard or Finances, use the contents address with a sign-in, and leave Pages off. Global Wind,
+Global Weather, US Quakes and Warming World keep their live data on a `data-<app>` branch, which
+the contents address above does not read: use their Pages address. Their data is public anyway.
+
+**Try it on Hello Live first.** The public template's own copy needs no account and no key:
+
+```
+https://mtomasgaard.github.io/snuggery-apps-template/hello-live/data/snapshot.json
+```
+
+Paste it on Hello Live's *Keep This Up To Date* screen. Its headline is the hour the job last ran,
+in UTC, so a new value about hourly proves the loop.
+
+### Or let the app suggest its address
+
+An app whose data is published at a **public** address can name it in its own `miniapp.json`, so
+nobody has to paste it:
+
+```json
+"dataSource": {
+  "url": "https://<you>.github.io/<repo>/<app-folder>/data/snapshot.json",
+  "file": "data/snapshot.json"
+}
+```
+
+The first time the app is opened, Snuggery shows its usual approval sheet: *"Hello Live wants to
+fetch its data from mtomasgaard.github.io. Allow?"* Nothing is fetched until you allow it. *Not
+Now* is remembered, and you can still allow it later on *Keep This Up To Date*. Hello Live carries
+one, as an example.
+
+- **For:** whoever installs the app, you or someone you send the ZIP to, gets live data with one
+  tap instead of an address to find and paste.
+- **Against:** the address travels inside the app to everyone who gets the ZIP.
+- **Only a public address works.** Snuggery ignores a suggestion that has a key, a password, a `?`
+  part, a private-network host, or anything besides `url` and `file`, and the app imports as if it
+  had none. `file` must be a `.json`, `.csv` or `.tsv` file already in the app. A **private**
+  repository is never suggested by an app: add it on *Keep This Up To Date* with your own sign-in.
+- **Your own choice wins.** An address you pasted or allowed is never changed by an app, including
+  when you replace the app with a new version.
+
+**What Snuggery does with a connection.** It goes online only for an address you set up and
+approved, sends the key only to the repository you chose, and writes only data files (`.json`,
+`.csv`, `.tsv`), never the app's code. *Disconnect* forgets the key on the phone. Revoking it for
+good is done at GitHub, and Snuggery links to the page. Snuggery never asks you to enter a code
+someone else sent you.
+
+### Notifications from the data, if something deserves one
+
+The job can ask for a notification by adding a top-level `snuggeryNotify` list to the data file it
+already writes. The app's own code does nothing for it: after each new copy of the file arrives,
+however it arrives, Snuggery reads the list and posts the notification itself.
+
+```json
+"snuggeryNotify": [
+  {"id": "rain-2027-01-15", "title": "Rain from 15:00", "body": "4 mm expected", "at": "2027-01-15T14:00:00Z"}
+]
+```
+
+- **Off until you turn it on**, per app: *Notifications*, on the app's *Keep This Up To Date*
+  screen. The first time, iOS asks whether Snuggery may show notifications. A restored backup turns
+  it off again.
+- **Each `id` is shown once.** Make it name the event (`rain-2027-01-15`), not the kind (`rain`),
+  or the second rain is never shown. Ids the file carried while it was off are not shown later.
+- **`at` is optional**: an ISO 8601 time with a zone. Without it, or up to 12 hours past, it shows
+  at once; up to 8 days ahead, it is scheduled; older or further ahead, it is skipped (a far one is
+  scheduled by a later copy, once it is within 8 days).
+- **Limits:** at most 10 entries read per file; `id` up to 64 characters, `title` 60, `body` 200;
+  plain text, no line breaks. At most 3 are shown per new copy and 6 per app a day; the rest are
+  dropped and counted in the app's Diagnostics. Each shows the app's name, and a tap opens the app.
+- **The trade-off:** a notification arrives only when new data does. An hourly job can be up to an
+  hour late, and background refresh runs only when iOS allows. For "tell me at exactly 07:00",
+  schedule the job, or a Shortcuts automation, for then.
+- **Nothing is sent anywhere.** These are local notifications, made on the phone from data already
+  there. There is no push server.
+
+Leave the key out when nothing in the data is worth interrupting someone for.
 
 ---
 
@@ -344,7 +472,8 @@ That is the whole per-app cost. Nothing else changes, ever.
 ```
 <app-folder>/            one folder per app, named however you like — may hold several files
   index.html             the whole app: inline CSS and JS, no build step
-  miniapp.json           display name and entry point
+  miniapp.json           display name and entry point; optionally its public data
+                         address (dataSource, above)
   data/snapshot.json     THE ONLY FILE THAT CHANGES ON THE PHONE
   screenshots/           pictures for this README; left out of the ZIP, so they
                          cost the phone nothing
@@ -361,7 +490,7 @@ zips/<app-folder>.zip    built automatically on every code change: the code buil
 ```
 
 Every app folder is a complete working example. Install Hello Live first and
-run your shortcut against it before building anything real — if it updates, your
+connect it, either way, before building anything real — if it updates, your
 loop works, and any later problem is in the new app rather than in the setup.
 Any folder can be deleted once you no longer need it as a reference, together
 with its scripts and its workflow.
@@ -390,7 +519,8 @@ the folders marked above as left out — still no build step.
   city with today's numbers, one per activity for the last two months — whatever a person
   would ask about in words.
 - **Keep `data/snapshot.json` small.** Hundreds of kilobytes is typical, a few megabytes is fine;
-  the Shortcut refuses over 32 MB, and a phone parses 20 MB of JSON in seconds on every open.
+  Snuggery refuses a data file over 32 MB however it arrives, and a phone parses 20 MB of JSON in
+  seconds on every open.
   Aggregate on the job side — a dashboard shows what a person can read, not everything measured.
 - **Fail loudly.** If the file is missing, unparseable, or the wrong shape, say
   so on screen. Never draw an empty chart as though it were data — a plausible
@@ -453,7 +583,7 @@ plan it with your agent.
 
 ## The shortcut
 
-One shortcut refreshes every app here.
+For the apps a Shortcut delivers. One shortcut refreshes every app here.
 
 1. **Dictionary** — one row per app: key = the app's display name, value = the
    raw address of its `data/snapshot.json`.
@@ -481,11 +611,12 @@ Two field traps, both of which everyone hits once:
 Shortcuts stops at the first action that fails, so a deleted app halts the rest
 of the chain.
 
-**Refreshing on demand.** Separate from the schedule, *Keep This Up To Date* in Snuggery ends with
-a **Run now** row: the name of **one rebuild shortcut** (suggested `Rebuild a Snuggery App`) and a
-button — and the app's ⋯ menu has **Rebuild Data Now**, the same thing one tap away; the dashboard
-reloads by itself when the new file lands. Snuggery opens it with the app's name as the shortcut's input — that is all Snuggery does; it
-never goes online. The shortcut is built once (Snuggery offers a ready-made one) and holds a
+**Refreshing on demand.** Separate from the schedule, *Keep This Up To Date* in Snuggery has,
+under *3 · Rebuild*, the name of **one rebuild shortcut** (suggested `Rebuild a Snuggery App`) and a
+**Run it now** button — and the app's refresh button (↻) has **Rebuild Data**, the same thing one tap away; the dashboard
+reloads by itself when the new file lands. Snuggery opens it with the app's name as the shortcut's input — on this path that is all Snuggery does,
+and it makes no request itself. (If you set up *Rebuild Data* on that screen — your GitHub workflow,
+with Snuggery signed in to GitHub — Snuggery starts the workflow itself instead, and no rebuild shortcut is needed.) The shortcut is built once (Snuggery offers a ready-made one) and holds a
 Dictionary with one row per app: key = the app's exact name; value = a Dictionary with `job` =
 `https://api.github.com/repos/OWNER/REPO/actions/workflows/<file>/dispatches` and `data` = the
 published data address. It runs the row it was named: **Get Contents of URL** as a POST to `job`
@@ -498,7 +629,7 @@ the input and *Text* = that contents. Adding an app is adding its row.
 nothing else. When an app's *code* changes, `zips/<app>.zip` is rebuilt automatically; to get it
 onto the phone, either open the ZIP's address in Safari → Share → Snuggery → **Replace the app**
 (it reloads in place, even while open), or keep a second, one-tap shortcut: **Get Contents of URL**
-(the ZIP's address, with the same header if the repo is private) → **Update a Mini-App** → pick the
+(the ZIP's address, with the same header if the repo is private) → **Replace a Snuggery App with a ZIP** → pick the
 app. Do not put that in the hourly loop — it would replace and restart the app every hour.
 
 ---
@@ -509,8 +640,11 @@ app. Do not put that in the hourly loop — it would replace and restart the app
 | --- | --- | --- |
 | _(name it here)_ | Contents: Read on this repo | _(write the date here)_ |
 
-When it lapses, every app in this repository takes a 404 body over its data on
-the same run. This table is the cheapest possible defence against that.
+When it lapses, every app a Shortcut delivers takes a 404 body over its data on
+the same run. This table is the cheapest possible defence against that. An app
+Snuggery fetches keeps its data, and its status line says the fetch failed; a GitHub
+sign-in in Snuggery renews itself until you revoke it at GitHub, or leave it
+unused for about six months.
 
 ---
 

@@ -85,8 +85,8 @@ def page(cards, repo):
     header = (f'  <p class="site"><a href="{html.escape(APP_STORE_URL)}">{html.escape(SITE_NAME)} on the App Store</a>'
               f' · <a href="{html.escape(SITE_URL)}">About {html.escape(SITE_NAME)}</a></p>\n') if branded else ""
     phone = (f" Only the phone version, <a href=\"{html.escape(APP_STORE_URL)}\">{html.escape(SITE_NAME)}</a>, has"
-             " your own files beside the apps, editing an app's data, Ask about a file, the Shortcut that"
-             " refreshes an app every morning, and a sandbox that runs it all offline.") if branded else ""
+             " your own files beside the apps, editing an app's data, Ask about your files, data that Snuggery"
+             " fetches itself or your own Shortcut delivers, and a sandbox that runs it all offline.") if branded else ""
     light, dark = PALETTE["light"], PALETTE["dark"]
     return f"""<!doctype html>
 <html lang="en">

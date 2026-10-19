@@ -61,8 +61,11 @@ Two things worth knowing before you build on it:
   old, the stamp at the top leads with *Stale.*, in words rather than a color.
 
 Nothing about this app passes through anybody else's server except Enable
-Banking's, which is the regulated party in the middle by design. Snuggery
-itself never goes online; it only ever reads the file the Shortcut wrote.
+Banking's, which is the regulated party in the middle by design. The app
+itself never goes online; it only ever reads the file that reached the phone,
+whether a Shortcut delivered it or Snuggery fetched it from your private
+repository with your GitHub sign-in. Never publish this app's data with Pages:
+a Pages site is public even when the repository is private.
 
 ## Fund prices, and the Yahoo endpoint in particular
 

@@ -3,5 +3,9 @@
   "name": "Hello Live",
   "entryPoint": "index.html",
   "description": "Proves the refresh loop end to end, before you build anything real",
-  "version": "2.1"
+  "version": "2.2",
+  "dataSource": {
+    "url": "https://mtomasgaard.github.io/snuggery-apps-template/hello-live/data/snapshot.json",
+    "file": "data/snapshot.json"
+  }
 }

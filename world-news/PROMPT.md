@@ -152,7 +152,7 @@ out the alternatives and what each costs.
    - `job` = `https://api.github.com/repos/OWNER/REPO/actions/workflows/refresh-world-news.yml/dispatches`
    - `data` = the same snapshot address as above.
 
-That second row is what makes Snuggery's Options, then *Rebuild Data Now* work: one tap
+That second row is what makes Snuggery's ↻, then *Rebuild Data* work: one tap
 runs the job and pulls the result back.
 
 ## Step 5 — asking about it
