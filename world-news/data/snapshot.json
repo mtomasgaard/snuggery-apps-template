@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-18T23:01:44Z",
+ "generatedAt": "2026-10-19T00:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
+     "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/verbatim-theatre-uses-the-real-words-of-real-people-but-can-an-edited-truth-ever-be-real-293943",
+     "published": "2026-10-18T23:43:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "David Simes, Teaching Assistant and Researcher, Te Whare Ngangahau – Theatre and Performance Studies, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
+     "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/theres-a-hidden-bias-affecting-what-we-know-and-dont-know-about-nature-293815",
      "published": "2026-10-18T22:15:35Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Jen Webb, Distinguished Professor Emerita of Creative Practice, Faculty of Arts and Design, University of Canberra"
-    },
-    {
-     "title": "Video game film adaptations used to be huge flops. Now studios can’t get enough",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/video-game-film-adaptations-used-to-be-huge-flops-now-studios-cant-get-enough-294354",
-     "published": "2026-10-18T19:12:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liam Burke, Associate Professor and Cinema and Screen Studies Discipline Leader, Swinburne University of Technology"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Verbatim theatre uses the real words of real people. But can an edited truth ever be real?",
+   "published": "2026-10-18 23:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "There’s a hidden bias affecting what we know – and don’t know – about nature",
    "published": "2026-10-18 22:15 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "A poetic meditation on the tongue also explores violence and silence within families",
    "published": "2026-10-18 19:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Video game film adaptations used to be huge flops. Now studios can’t get enough",
-   "published": "2026-10-18 19:12 UTC"
   },
   {
    "region": "Oceania",
