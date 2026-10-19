@@ -1,7 +1,12 @@
 // Drive Running Dashboard in headless Chromium at phone size (390 × 844 CSS px, DPR 2, real touch through
 // CDP), light and dark (HOUSE.md section 7.2 as a pane app allows: no player, no focus mode; ART.md
-// section 8, item 33). The clock is fixed at Thu 1 Oct 2026, 12:00 in New York, the demo runner's clock, so the Block, the stamp
-// and the pictures are the same on every run. Fails on any console error or warning, page error, failed
+// section 8, item 33). The clock is fixed at noon in New York, the demo runner's clock, on the day after the
+// snapshot's pull, so the Block, the stamp and the pictures are the same on every run of the same data. The
+// demo is regenerated on the day of every publish (scripts/make_demo_running_dashboard.py: that day in week
+// 12 of the block), so every clock, week, date and figure below is worked out from the snapshot's own pull
+// and numbers, never written in: any day's demo passes, a Monday's with nothing run yet that week included
+// (2026-10-19; the 1 October demo's were written in before, and on the 30 September demo every derived
+// clock equals the one written in then). Fails on any console error or warning, page error, failed
 // request, HTTP ≥ 400, or any request outside the local server. Every figure it asserts is worked out here
 // from data/snapshot.json with Node's own tools, never by importing js/.
 //
@@ -55,7 +60,7 @@ const schemes = (process.env.SCHEMES || 'light,dark').split(',').filter((s) => s
 const appPng = path.join(SHOTS, 'app.png');
 const hashOf = (f) => (fs.existsSync(f) ? crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex') : null);
 const appPngHash = hashOf(appPng);
-const NOW = '2026-10-01T16:00:00Z', TZ = 'America/New_York';   // 12:00 EDT, UTC−4 until 1 Nov: where the demo's generator puts its runner (scripts/make_demo_running_dashboard.py, intraday())
+const TZ = 'America/New_York';   // where the demo's generator puts its runner (scripts/make_demo_running_dashboard.py, intraday())
 
 /* ── the data, decoded here (app.js's header comment is the contract) ── */
 const raw = fs.readFileSync(path.join(APP, 'data/snapshot.json'), 'utf8');
@@ -63,15 +68,41 @@ const snap = JSON.parse(raw);
 const DAY = 86400000;
 const t = (s) => Date.parse(`${s}T00:00:00Z`);
 const ymd = (ms) => new Date(ms).toISOString().slice(0, 10);
+const plusDays = (s, n) => ymd(t(s) + n * DAY);
 const monday = (s) => ymd(t(s) - ((new Date(t(s)).getUTCDay() + 6) % 7) * DAY);
 const running = (a) => (typeof a.runKm === 'number' ? a.runKm : a.km);
-const weekKm = (w) => snap.activities.filter((a) => a.sport === 'run' && monday(a.d) === w).reduce((s, a) => s + running(a), 0);
+const weekRuns = (w) => snap.activities.filter((a) => a.sport === 'run' && monday(a.d) === w).map(running);
+const weekKm = (w) => weekRuns(w).reduce((s, v) => s + v, 0);
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const cest = (iso) => new Date(Date.parse(iso) - 4 * 3600e3);   // the runner's clock (New York) in Sep and Oct 2026
-const hm = (d) => `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
-const gen = cest(snap.pulledAt || snap.generatedAt);
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const dayMon = (s) => `${Number(s.slice(8))} ${MON[Number(s.slice(5, 7)) - 1]}`;   // "14 Sep"
+const dateWords = (s) => `${Number(s.slice(8))} ${MONTHS[Number(s.slice(5, 7)) - 1]} ${s.slice(0, 4)}`;   // "14 September 2026"
+const dowDate = (s) => `${DOW[new Date(t(s)).getUTCDay()]} ${dayMon(s)}`;   // "Mon 14 Sep", as the session list writes it
+/* The runner's clock (New York, EDT or EST as the day has it), read with Node's own Intl. */
+const NYF = new Intl.DateTimeFormat('en-US', { timeZone: TZ, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+const local = (ms) => { const p = Object.fromEntries(NYF.formatToParts(new Date(ms)).map((x) => [x.type, x.value])); return { day: `${p.year}-${p.month}-${p.day}`, hm: `${p.hour}:${p.minute}` }; };
+/** The instant of hh:00 on the runner's day s. */
+const nyAt = (s, hh) => { const want = t(s) + hh * 3600e3; let ms = want + 4 * 3600e3; for (let k = 0; k < 2; k++) { const l = local(ms); ms += want - Date.parse(`${l.day}T${l.hm}:00Z`); } return ms; };
+/* The pull, on the runner's clock. Once the phone is past it the app's day is the pull's (app.js, todayIso()): this week is its week. */
+const PULL = Date.parse(snap.pulledAt || snap.generatedAt), pull = local(PULL), PULL_DAY = pull.day, THIS_WEEK = monday(PULL_DAY);
+const gen = { day: Number(PULL_DAY.slice(8)), mon: MON[Number(PULL_DAY.slice(5, 7)) - 1], hm: pull.hm };
+const NOW = nyAt(plusDays(PULL_DAY, 1), 12);   // noon the day after the pull (1 Oct 2026, 16:00 UTC, on the 30 September demo)
+/* The other clocks, from the same pull: two days on, more than 48 hours (3 Oct 2026, 12:00 UTC on the 30 September demo); the
+   pull's own day, 40 minutes on (30 Sep, 19:00 UTC); three weeks on (21 Oct, 10:00 UTC). */
+const TWO_DAYS_ON = nyAt(plusDays(PULL_DAY, 3), 8), PULL_DAY_ON = PULL + 40 * 60e3, WEEKS_3_ON = nyAt(plusDays(PULL_DAY, 21), 6);
 const lastDay = snap.dataThrough.split('-').map(Number);
-const STAMP = `Updated ${gen.getUTCDate()} ${MON[gen.getUTCMonth()]}, ${hm(gen)}, last session ${lastDay[2]} ${MON[lastDay[1] - 1]}`;
+const STAMP = `Updated ${gen.day} ${gen.mon}, ${gen.hm}, last session ${lastDay[2]} ${MON[lastDay[1] - 1]}`;
+/** The week two before this one, whose card is tapped on the Block and on Plan (14 Sep on the 30 September demo). */
+const CARD_WEEK = plusDays(THIS_WEEK, -14);
+/* The session whose route Sessions shows: the newest with a route (a stream, outdoors) whose pace is steady, its 5th and
+   95th percentile under 45 s/km apart as worked out here, which the ramp's minimum span needs. That is Tuesday's easy run
+   once it is run, else the run that carries its route (Saturday's, on a Monday's demo): the newest run can be a long one
+   whose pace spreads wider, and it gets the whole ramp by design. */
+const streamOf = (id) => { if (snap.streams && snap.streams[id]) return snap.streams[id]; const f = path.join(APP, 'data', 'streams', `${id}.json`); return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null; };
+const pacesOf = (st) => st.p.map((x, i) => (st.lat[i] != null && st.lon[i] != null && x && x <= 8.5 ? x : null)).filter((x) => x != null).sort((p, q) => p - q);
+const steady = (v) => v.length > 0 && v[Math.floor(v.length * 0.95)] - v[Math.floor(v.length * 0.05)] < 0.75;
+const ROUTE = [...snap.activities].reverse().find((a) => { if (!a.stream || a.indoor) return false; const st = streamOf(a.id); return !!(st && st.p && st.lat && st.lon) && steady(pacesOf(st)); });
 // the template's sessions are the generator's own (every id demo-…), so the stamp leads with Example data. (HOUSE 11.1 rule 8)
 const EXAMPLE = snap.activities.every((a) => String(a.id).startsWith('demo-'));
 const CREDITS = 'Data: Garmin Connect. Coaching text: the coaching routine.';
@@ -231,21 +262,24 @@ const hitTargets = async (A) => {
   return { n: seen.size, bad: [...bad] };
 };
 /** Every visible text node the app wrote: a hyphen-minus before a digit, a plain space between a number and
- *  a unit, or four or more digits ungrouped (years, clock times, dates and the coaching text excepted). */
-const siOf = (w) => w(() => {
+ *  a unit, or four or more digits ungrouped (years, clock times, dates and the coaching text excepted). A
+ *  session's name is the data's own words wherever it is printed, as in the list (.said): the session pane's
+ *  heading too, where a Sunday's demo opens on its newest session, the generator's "15 km tune-up". */
+const NAMES = [...new Set(snap.activities.map((a) => a.name).filter(Boolean))];
+const siOf = (w) => w((names) => {
   const bad = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const UNIT = /\d[ \u00a0](km\/h|km|min|h|m|bpm|spm|rpm|kg|kJ\/kg|ms|W|%|°C|cm|d|kcal|\/km)(?![\w/])/;
   let n = 0;
   for (let t = walker.nextNode(); t; t = walker.nextNode()) {
     const e = t.parentElement;
-    if (!e || e.closest('[hidden]') || e.closest('script, style, .sr, .said, .s-main b, .notice-lines')) continue;
+    if (!e || e.closest('[hidden]') || e.closest('script, style, .sr, .said, .s-main b, .notice-lines') || names.includes(t.textContent.trim())) continue;
     const s = t.textContent;
     n++;
     const ungrouped = s.replace(/\b(19|20)\d\d\b/g, '').replace(/\d{1,2}:\d\d(:\d\d)?/g, '').match(/(?<![\d.\u202F])\d{4,}/);
     if (/(^|[^\w])-\d/.test(s) || UNIT.test(s) || ungrouped) bad.push(s.trim().slice(0, 50));
   }
   return { n, bad };
-});
+}, NAMES);
 
 const PANES = ['Now', 'Plan', 'Training', 'Health', 'Sessions'];
 /** The open card's ✕: its drawn mark inside its 44 × 44 button (the review found the route card's mark
@@ -317,7 +351,7 @@ for (const scheme of schemes) {
   {
     const B = await w(() => window.__rd.block());
     const cols = B.columns.map((c) => c.week);
-    const now = monday('2026-10-01');
+    const now = THIS_WEEK;
     const want = [];
     for (let k = 11; k >= 0; k--) want.push(ymd(t(now) - 7 * k * DAY));
     for (const h of snap.plan.horizon) if (h.w > now) want.push(h.w);
@@ -340,38 +374,45 @@ for (const scheme of schemes) {
     // the planned fill inside the outlines (HOUSE 11.1 rule 7): from each outline's top down to the runs, --ink-2 at
     // 14 % over the plate, light, and apart from the runs; this week's only above what was run
     const INKC = scheme === 'light' ? [0x45, 0x55, 0x5d] : [0xa3, 0xb1, 0xb6], tint = over(INKC, PLAN_FILL, SHEET), tints = [];
-    const BT = B.tints || [], okT = BT.length === B.outlines.length && BT.every(([x, y, wd, h], k) => { const o = B.outlines[k], i = B.columns.findIndex((c) => c.target != null) + k, ink = B.base - Math.round(sums[i] * B.scale); return x === o[0] && y === o[1] && wd === o[2] && h === Math.min(o[3], ink - o[1]); });
+    // one fill for each outline its week's runs do not reach: this week's is whole on a Monday's demo and gone once the
+    // week is run to its outline, as on a Sunday's
+    const tcols = B.columns.map((c, i) => (c.target != null ? i : -1)).filter((i) => i >= 0);
+    const wantT = B.outlines.map((o, k) => { const ink = B.base - Math.round(sums[tcols[k]] * B.scale); return ink > o[1] ? [o[0], o[1], o[2], Math.min(o[3], ink - o[1])] : null; }).filter(Boolean);
+    const BT = B.tints || [], okT = tcols.length === B.outlines.length && JSON.stringify(BT) === JSON.stringify(wantT);
     for (const [x, y, wd, h] of BT) for (let xx = x + 3; xx < x + wd - 3; xx += 2) for (let yy = y + 3; yy < y + h - 2; yy += 2) tints.push(img.at(Math.round((sv.left + xx) * 2), Math.round((sv.top + yy) * 2)));
     const atT = tints.filter((p) => near(p, tint)).length / (tints.length || 1);
     check(okT && atT >= 0.9 && contrast(tint, SHEET) >= 1.2 && contrast(tint, SHEET) < 2 && contrast(DONE, tint) >= 3,
-      `the Block's planned weeks: ${BT.length} fills from each outline's top down to the runs (this week's ${(BT.find((tn) => tn[0] === B.outlines[0][0]) || [])[3]} px above its ${sums[B.now].toFixed(1)} km); ${tints.length} samples inside them, ${(atT * 100).toFixed(1)} % at the fill rgb(${tint}) (the race's rule crosses one), ${contrast(tint, SHEET).toFixed(2)}:1 on the plate (HOUSE 11.2: ${scheme === 'light' ? '1.23' : '1.31'}), the runs ${contrast(DONE, tint).toFixed(2)}:1 against it`);
+      `the Block's planned weeks: ${BT.length} fills for ${B.outlines.length} outlines, from each outline's top down to the runs (this week's ${((t0) => (t0 ? `${t0[3]} px above its ${sums[B.now].toFixed(1)} km` : `none, its ${sums[B.now].toFixed(1)} km run to the outline`))(BT.find((tn) => tn[0] === B.outlines[0][0]))}); ${tints.length} samples inside them, ${(atT * 100).toFixed(1)} % at the fill rgb(${tint}) (the race's rule crosses one), ${contrast(tint, SHEET).toFixed(2)}:1 on the plate (HOUSE 11.2: ${scheme === 'light' ? '1.23' : '1.31'}), the runs ${contrast(DONE, tint).toFixed(2)}:1 against it`);
     const bk = await w(() => [...document.querySelectorAll('.blocksec .pkey span')].map((x) => [x.className, x.textContent]));
     check(JSON.stringify(bk) === JSON.stringify([['k-done', 'Run'], ['k-plan', `Planned week to ${snap.plan.goal.race.name}`]]) && !(await w(() => document.querySelector('.blocksec').textContent.includes('ink is a run'))),
       `the Block's key in place of its sentence: ${bk.map((x) => x[1]).join(', ')} (HOUSE 11.1 rule 6)`);
     const label = await w(() => document.querySelector('.blocksec svg').getAttribute('aria-label'));
-    check(label.includes(`the latest ${weekKm('2026-09-14').toFixed(1)}, ${weekKm('2026-09-21').toFixed(1)} and so far ${weekKm(now).toFixed(1)} kilometers`) && label.includes(snap.plan.goal.race.name),
+    check(label.includes(`the latest ${weekKm(plusDays(now, -14)).toFixed(1)}, ${weekKm(plusDays(now, -7)).toFixed(1)} and so far ${weekKm(now).toFixed(1)} kilometers`) && label.includes(snap.plan.goal.race.name),
       `the Block's label for VoiceOver: "${label.slice(0, 90)}…"`);
-    // a tap on the week of 14 Sep: the card, said once
-    const i = cols.indexOf('2026-09-14'), p = B.points[first(i)];
-    await w(() => { document.getElementById('live').textContent = ''; });
-    await A.tapAt(sv.left + p[0] + p[2] / 2, sv.top + B.base - 10);
-    await page.waitForTimeout(300);
-    const card = await w(() => ({ c: window.__rd.card(), live: document.getElementById('live').textContent, r: document.querySelector('.blocksec .readout').getBoundingClientRect().toJSON() }));
-    const want14 = weekKm('2026-09-14');
-    const xb = await xInside(w);
-    check(xb && xb.ok, `the Block's card: its ✕ drawn inside its button (mark at ${xb && xb.at}, button at ${xb && xb.btn})`);
-    const colR = await w(() => { const c = [...document.querySelectorAll('.blocksec svg rect')].find((r) => r.getAttribute('opacity') === '0.07'); return c && c.getBoundingClientRect().toJSON(); });
-    const clear = colR && !(card.r.left < colR.right && colR.left < card.r.right && card.r.top < colR.bottom && colR.top < card.r.bottom);
-    check(card.c && card.c.place === 'Week of 14 Sep 2026' && card.c.value === want14.toFixed(1) && card.live === `Week of 14 September 2026. ${want14.toFixed(1)} kilometers in 6 runs, longest 24.0 kilometers.` && clear,
-      `the Block's card: "${card.c && card.c.place}", ${card.c && card.c.value} km (this file ${want14.toFixed(1)}), clear of the tapped week (HOUSE 4.7; ${card.r.top >= sv.bottom - 1 ? 'hung from the chart\'s foot' : 'inside the chart'}), said once: "${card.live}"`);
-    await A.shot(`block-card-${scheme}`, false);
-    await A.tapAt(5, 300);
+    // a tap on the week two before this one (CARD_WEEK, a full week of running): the card, said once
+    const i = cols.indexOf(CARD_WEEK), p = i >= 0 ? B.points[first(i)] : null, runs14 = weekRuns(CARD_WEEK);
+    if (!p || runs14.length < 2) check(false, `the Block's card: a week of ${CARD_WEEK} with runs to tap (${runs14.length} in the data)`);
+    else {
+      await w(() => { document.getElementById('live').textContent = ''; });
+      await A.tapAt(sv.left + p[0] + p[2] / 2, sv.top + B.base - 10);
+      await page.waitForTimeout(300);
+      const card = await w(() => ({ c: window.__rd.card(), live: document.getElementById('live').textContent, r: document.querySelector('.blocksec .readout').getBoundingClientRect().toJSON() }));
+      const want14 = weekKm(CARD_WEEK), said14 = `Week of ${dateWords(CARD_WEEK)}. ${want14.toFixed(1)} kilometers in ${runs14.length} runs, longest ${Math.max(...runs14).toFixed(1)} kilometers.`;
+      const xb = await xInside(w);
+      check(xb && xb.ok, `the Block's card: its ✕ drawn inside its button (mark at ${xb && xb.at}, button at ${xb && xb.btn})`);
+      const colR = await w(() => { const c = [...document.querySelectorAll('.blocksec svg rect')].find((r) => r.getAttribute('opacity') === '0.07'); return c && c.getBoundingClientRect().toJSON(); });
+      const clear = colR && !(card.r.left < colR.right && colR.left < card.r.right && card.r.top < colR.bottom && colR.top < card.r.bottom);
+      check(card.c && card.c.place === `Week of ${dateOf(CARD_WEEK)}` && card.c.value === want14.toFixed(1) && card.live === said14 && clear,
+        `the Block's card: "${card.c && card.c.place}", ${card.c && card.c.value} km (this file ${want14.toFixed(1)}), clear of the tapped week (HOUSE 4.7; ${card.r.top >= sv.bottom - 1 ? 'hung from the chart\'s foot' : 'inside the chart'}), said once: "${card.live}"${card.live === said14 ? '' : ` (this file: "${said14}")`}`);
+      await A.shot(`block-card-${scheme}`, false);
+      await A.tapAt(5, 300);
+    }
   }
 
   // Now opens on the week (HOUSE 11.1 rule 2): its kilometers at 34 px against the plan, as this file sums them, a bar
   // and its key, the tone word in its color with the verdict under it; then the facts as tiles; then the Block
   {
-    const now = monday('2026-10-01'), h = snap.plan.horizon.find((x) => x.w === now), km = weekKm(now), a = snap.assessment;
+    const now = THIS_WEEK, h = snap.plan.horizon.find((x) => x.w === now), hk = h ? h.km : NaN, km = weekKm(now), a = snap.assessment;
     const n = await w(() => {
       const kids = [...document.querySelectorAll('#pane > *')].map((e) => e.className), hd = document.querySelector('#pane > .headline');
       const tone = hd.querySelector('.tone b'), bar = hd.querySelector('.pbar i'), t = document.querySelector('#pane > .tilesec > dl.tiles');
@@ -385,9 +426,9 @@ for (const scheme of schemes) {
     const pd = `${Number(snap.dataThrough.slice(8))} ${MON[Number(snap.dataThrough.slice(5, 7)) - 1]}`, d0 = ymd(t(snap.dataThrough) - 6 * DAY);
     const run7 = snap.activities.filter((x) => x.sport === 'run' && x.d >= d0 && x.d <= snap.dataThrough).reduce((q, x) => q + running(x), 0);
     const want = [`Run, 7 days to ${pd}`, `Run, 28 days to ${pd}`, 'Garmin status', 'VO₂ max', ...a.metrics.map((m) => siLabel(m.label))];
-    check(JSON.stringify(n.kids) === JSON.stringify(['sec headline', 'sec tilesec', 'sec blocksec']) && n.tag === 'H2' && n.what === `Week of 28 Sep, data to ${pd}` && n.fig === `${km.toFixed(1)}${NN}km` && n.figPx === '34px'
-      && n.lead === `of ${h.km}${NN}km planned` && Math.abs(n.bar - Math.min(1, km / h.km)) < 0.01 && n.barColor === rgbS(REG.done) && n.key.join() === 'Done,Planned',
-      `Now opens on the week: "${n.what}" (its label the pane's first heading), ${n.fig} at ${n.figPx} (this file ${km.toFixed(1)} km), "${n.lead}" (the plan's ${h.km}), a bar ${Math.round(n.bar * 100)} % in --done, its key ${n.key.join(', ')}; then the tiles, then the Block`);
+    check(JSON.stringify(n.kids) === JSON.stringify(['sec headline', 'sec tilesec', 'sec blocksec']) && n.tag === 'H2' && n.what === `Week of ${dayMon(now)}, data to ${pd}` && n.fig === `${km.toFixed(1)}${NN}km` && n.figPx === '34px'
+      && n.lead === `of ${hk}${NN}km planned` && Math.abs(n.bar - Math.min(1, km / hk)) < 0.01 && n.barColor === rgbS(REG.done) && n.key.join() === 'Done,Planned',
+      `Now opens on the week: "${n.what}" (its label the pane's first heading), ${n.fig} at ${n.figPx} (this file ${km.toFixed(1)} km), "${n.lead}" (the plan's ${hk}), a bar ${Math.round(n.bar * 100)} % in --done, its key ${n.key.join(', ')}; then the tiles, then the Block`);
     const inkC = await w(() => getComputedStyle(document.querySelector('h1')).color);
     check(n.tone === toneWord && n.toneColor === rgbS(toneTok) && n.rest === inkC && n.text === a.headline,
       `the tone under it: "${n.tone}" in ${toneTok} (HOUSE 11.3), the verdict's sentence after it in ink: "${(n.text || '').slice(0, 50)}…"`);
@@ -402,8 +443,8 @@ for (const scheme of schemes) {
     await A.tapAt(r.right - 12, r.top + r.height - 40);
     await page.waitForTimeout(250);
     const c = await w(() => ({ c: window.__rd.card(), r: document.querySelector('.sec .chartwrap .readout').getBoundingClientRect().toJSON() }));
-    const last = monday('2026-10-01');
-    check(c.c && c.c.place === `Week of ${Number(last.slice(8))} ${MON[Number(last.slice(5, 7)) - 1]} 2026` && c.c.value === weekKm(last).toFixed(1) && c.c.unit === 'km',
+    const last = monday(snap.dataThrough);   // the charts' weeks run to the newest session's (app.js, boot())
+    check(c.c && c.c.place === `Week of ${dateOf(last)}` && c.c.value === weekKm(last).toFixed(1) && c.c.unit === 'km',
       `Weekly running volume's card for the last bar: "${c.c && c.c.place}", ${c.c && c.c.value} km (this file ${weekKm(last).toFixed(1)})`);
     await A.tapAt(r.left + 46, r.top + r.height - 40);
     await page.waitForTimeout(250);
@@ -471,7 +512,7 @@ for (const scheme of schemes) {
     for (let k = 1; k <= 10; k++) { await A.touch('touchMove', th0.x - 6 * k, th0.y); await page.waitForTimeout(16); tops.push(await w(() => Math.round(document.getElementById('dual').getBoundingClientRect().top))); }
     await A.touch('touchEnd'); await page.waitForTimeout(300);
     const th1 = await w(() => ({ v: +document.getElementById('toRange').value, tf: document.getElementById('filters').style.transform }));
-    check(new Set(tops).size === 1 && th1.v < th0.v && th1.tf === `translateY(-${s0.row}px)`, `a finger dragging the window's end with the row tucked: the window moves (week ${th0.v} to ${th1.v}), the track holds still under it (at ${tops[0]} px on all ${tops.length} moves), the row stays tucked`);
+    check(new Set(tops).size === 1 && th1.v < th0.v && th1.tf === `translateY(-${s0.row}px)`, `a finger dragging the window's end with the row tucked: the window moves (week ${th0.v} to ${th1.v}), the track holds still under it (at ${[...new Set(tops)].join(' px, then ')} px over ${tops.length} moves), the row stays tucked${th1.tf === `translateY(-${s0.row}px)` ? '' : ` (its transform ${th1.tf || 'none'})`}`);
     await page.getByRole('button', { name: '1 year', exact: true }).click();
     await page.waitForTimeout(300);
     await to(140); const s2 = await at();
@@ -555,7 +596,7 @@ for (const scheme of schemes) {
     if (await key.count()) await key.click();
     await page.waitForTimeout(150);
     const rows = await w((T) => [...([...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T) || document.createElement('i')).querySelectorAll('.tableview tbody tr')].map((tr) => [...tr.children].map((td) => td.textContent)), RUN);
-    const now = monday('2026-10-01'), weeks = [];
+    const now = THIS_WEEK, weeks = [], h0 = snap.plan.horizon.find((x) => x.w === now), hk = h0 ? String(h0.km) : '(none)';
     for (let k = 11; k >= 0; k--) weeks.push(ymd(t(now) - 7 * k * DAY));
     for (const h of snap.plan.horizon) if (h.w > now) weeks.push(h.w);
     const bad = [];
@@ -565,29 +606,38 @@ for (const scheme of schemes) {
       else if (wk <= now) { const z = r.slice(2, 6).reduce((s, v) => s + Number(v), 0); if (r[1] !== weekKm(wk).toFixed(1) || Math.abs(z - weekKm(wk)) > 0.2) bad.push(`${wk}: ${r[1]} km, zones ${z.toFixed(1)} (this file ${weekKm(wk).toFixed(1)})`); }
       else if (r[1] !== '–' || r[6] !== String(h.km)) bad.push(`${wk}: ${r[1]}, plan ${r[6]}`);
     });
-    check(rows.length === weeks.length && bad.length === 0 && (rows[11] || [])[6] === '62',
-      `its table: ${rows.length} weeks, ${weeks[0]} to ${weeks[weeks.length - 1]}, each run week's kilometers as this file sums them and its four zones adding up to them, this week with its 62 km, the plan's weeks ${snap.plan.horizon.filter((h) => h.w > now).map((h) => h.km).join(', ')} km${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
-    // a tap on the week of 14 Sep: its card, the run kilometers and their zones
+    check(rows.length === weeks.length && bad.length === 0 && (rows[weeks.indexOf(now)] || [])[6] === hk,
+      `its table: ${rows.length} weeks, ${weeks[0]} to ${weeks[weeks.length - 1]}, each run week's kilometers as this file sums them and its four zones adding up to them, this week with its ${hk} km, the plan's weeks ${snap.plan.horizon.filter((h) => h.w > now).map((h) => h.km).join(', ')} km${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
+    // a tap on the week two before this one (CARD_WEEK): its card, the run kilometers and their zones
     await w((T) => ([...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T) || document.querySelector('#pane > .sec')).querySelector('svg').scrollIntoView({ block: 'center' }), RUN);
     await page.waitForTimeout(200);
     const sr = await w((T) => ([...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T) || document.querySelector('#pane > .sec')).querySelector('svg').getBoundingClientRect().toJSON(), RUN);
-    await A.tapAt(sr.left + 38 + (weeks.indexOf('2026-09-14') + 0.5) * (sr.width - 46) / weeks.length, sr.top + sr.height - 60);
+    await A.tapAt(sr.left + 38 + (weeks.indexOf(CARD_WEEK) + 0.5) * (sr.width - 46) / weeks.length, sr.top + sr.height - 60);
     await page.waitForTimeout(250);
     const c = await w(() => window.__rd.card());
     const zones = c ? c.rows.filter(([l]) => /^(Below Z1|Easy|Moderate|Hard)/.test(l)).map(([, v]) => parseFloat(v)) : [];
-    check(c && c.place === 'Week of 14 Sep 2026' && c.value === weekKm('2026-09-14').toFixed(1) && zones.length >= 3 && Math.abs(zones.reduce((s, v) => s + v, 0) - weekKm('2026-09-14')) <= 0.2,
-      `its card for 14 Sep: "${c && c.place}", ${c && c.value} km (this file ${weekKm('2026-09-14').toFixed(1)}), ${zones.length} zones adding up to ${zones.reduce((s, v) => s + v, 0).toFixed(1)}`);
+    check(c && c.place === `Week of ${dateOf(CARD_WEEK)}` && c.value === weekKm(CARD_WEEK).toFixed(1) && zones.length >= 3 && Math.abs(zones.reduce((s, v) => s + v, 0) - weekKm(CARD_WEEK)) <= 0.2,
+      `its card for ${dayMon(CARD_WEEK)}: "${c && c.place}", ${c && c.value} km (this file ${weekKm(CARD_WEEK).toFixed(1)}), ${zones.length} zones adding up to ${zones.reduce((s, v) => s + v, 0).toFixed(1)}`);
     await A.shot(`plan-running-${scheme}`, false);
     await A.tapAt(5, 300);
     // every chart on Plan: its tallest planned segment's inside is its own color at 20 % over the page, and the
     // done segment of the same color stands at 3:1 or more against it (done solid, planned tinted)
+    // a done segment is looked for where the data has one: the weekly charts reach back to weeks run; the day-by-day charts
+    // hold this week and next, where a Monday's demo has nothing run yet (its strength session counts as time in zone)
+    const doneDays = snap.activities.filter((x) => x.d >= THIS_WEEK && x.d <= PULL_DAY);
+    const doneIn = { [RUN]: true, 'Time in zone, past and planned': true, 'Day by day, planned and run': doneDays.some((x) => x.sport === 'run'),
+      'Day by day, as time in zone': doneDays.some((x) => Array.isArray(x.z) && x.z.some((v) => v > 0)) };
     for (const title of [RUN, 'Time in zone, past and planned', 'Day by day, planned and run', 'Day by day, as time in zone']) {
       const q = await w((T) => {
-        const s = [...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T), ts = s ? [...s.querySelectorAll('svg rect.tint')] : [].sort((a, b) => b.getBBox().height - a.getBBox().height), r = ts[0];
+        const s = [...document.querySelectorAll('#pane > .sec')].find((x) => (x.querySelector('h2, h3') || {}).textContent === T), ts = s ? [...s.querySelectorAll('svg rect.tint')] : [].sort((a, b) => b.getBBox().height - a.getBBox().height);
+        // the first planned segment, or else the first whose color a done segment also has (a week's first run may
+        // barely touch the plan's first zone)
+        const doneFill = (x) => [...s.querySelectorAll('svg rect:not(.tint)')].some((y) => y.getAttribute('fill') === x.getAttribute('fill') && y.getBBox().height > 2);
+        const r = ts[0] && doneFill(ts[0]) ? ts[0] : ts.find(doneFill) || ts[0];
         if (!r) return null;
         r.scrollIntoView({ block: 'center' });
         const b = r.getBoundingClientRect(), fill = getComputedStyle(r).fill.match(/\d+/g).map(Number);
-        const done = [...s.querySelectorAll('svg rect:not(.tint)')].some((x) => x.getAttribute('fill') === r.getAttribute('fill') && x.getBBox().height > 2);
+        const done = doneFill(r);
         return { b: [b.left, b.top, b.width, b.height], h: b.height, fill, done };
       }, title);
       if (!q) { check(false, `${title}: a planned segment to sample`); continue; }
@@ -595,8 +645,8 @@ for (const scheme of schemes) {
       // four points inside it, the best taken (a race's rule or an average's line may cross one)
       const img = await A.png(), want = over(q.fill, TINT, SHEET), [bx, by, bw, bh] = q.b;
       const px = [[0.3, 0.4], [0.7, 0.4], [0.3, 0.6], [0.7, 0.6]].map(([fx, fy]) => img.at(Math.round((bx + bw * fx) * 2), Math.round((by + bh * fy) * 2))).sort((m, k) => Math.max(...m.map((v, i) => Math.abs(v - want[i]))) - Math.max(...k.map((v, i) => Math.abs(v - want[i]))))[0];
-      const ok = near(px, want) && contrast(q.fill, px) >= 3 && q.done;
-      check(ok, `${title}: a planned segment ${Math.round(q.h)} px tall, inside rgb(${px}) for rgb(${want}) (its rgb(${q.fill}) at 20 % over its plate), ${contrast(px, SHEET).toFixed(2)}:1 on the plate; the done segment of its color ${contrast(q.fill, px).toFixed(2)}:1 against it`);
+      const ok = near(px, want) && contrast(q.fill, px) >= 3 && (q.done || !doneIn[title]);
+      check(ok, `${title}: a planned segment ${Math.round(q.h)} px tall, inside rgb(${px}) for rgb(${want}) (its rgb(${q.fill}) at 20 % over its plate), ${contrast(px, SHEET).toFixed(2)}:1 on the plate; ${doneIn[title] ? 'the done segment of its color' : 'its color, a done segment\'s,'} ${contrast(q.fill, px).toFixed(2)}:1 against it${doneIn[title] ? '' : ' (nothing run in its days yet, so none is drawn)'}`);
     }
     const zb = await w(() => { const s = document.querySelector('.zbar.plan span'), l = document.querySelector('.legend i.plan'); return [s && getComputedStyle(s).backgroundColor, l && getComputedStyle(l).backgroundColor]; });
     check(zb.every((c2) => c2 && /\/ 0\.2\)|, 0\.2\)$/.test(c2)), `the plan's zone bars in the week rows and the legend's planned swatch: their outline's color at 20 % inside (${zb.join('; ')})`);
@@ -617,7 +667,7 @@ for (const scheme of schemes) {
       return { found: !!dd, after: lg && lg.parentElement.previousElementSibling && lg.parentElement.previousElementSibling.matches('.blocksec'), inTab: tab.includes(label), n: tab.length,
         align: dd && getComputedStyle(dd).textAlign, lines: r ? Math.round(r.height / parseFloat(getComputedStyle(dd).lineHeight)) : 0, inside: r && r.right <= pr.right - 12 && r.left >= pr.left + 12 };
     }, LONG);
-    check(q.found && q.after && !q.inTab && q.n === 8 && q.align === 'left' && q.lines >= 2 && q.inside,
+    check(q.found && q.after && !q.inTab && q.n === 4 + snap.assessment.metrics.length && q.align === 'left' && q.lines >= 2 && q.inside,   // the four facts and the evaluation's metrics, as before
       `a long fact ("${LONG}…"): on its own plate after the Block, not a tile (still ${q.n} tiles), a label over ${q.lines} lines of left-aligned prose inside its plate's padding`);
     await L.shot(`now-long-fact-${scheme}`, false);
     override = {};
@@ -658,7 +708,7 @@ console.log('\n== once');
     const a = await w(() => ({ open: !document.getElementById('about').hidden, inert: ['head', 'main'].every((id) => document.getElementById(id).inert), focus: document.activeElement.id, credit: document.getElementById('about-credit-line').textContent,
       text: document.querySelector('.about-body').textContent.replace(/\s+/g, ' '), routes: !document.getElementById('about-routes').hidden && document.getElementById('about-routes').textContent.startsWith('Routes: © OpenStreetMap contributors, under the Open Database License 1.0'), list: [...document.querySelectorAll('#about-list dt')].map((d) => d.textContent) }));
     check(a.open && a.inert && a.focus === 'about-close' && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.')
-      && a.text.includes('Map services and data available from U.S. Geological Survey, National Geospatial Program.') && a.text.includes('as the coaching routine wrote it on 30 Sep 2026') && a.list.includes('Stale after:') && a.routes && a.credit === CREDITS,
+      && a.text.includes('Map services and data available from U.S. Geological Survey, National Geospatial Program.') && a.text.includes(`as the coaching routine wrote it on ${dateOf(snap.plan.updated)}`) && a.list.includes('Stale after:') && a.routes && a.credit === CREDITS,
       `About opens from the stamp, focus on Close, the rest inert; the credit "${a.credit}" first under Sources and credits; the font's, the tiles' and the demo routes' OpenStreetMap credits (the lead's ruling), the plan's date, This data (${a.list.length} lines)`);
     await A.shot('about-light');
     await page.keyboard.press('Escape');
@@ -696,12 +746,14 @@ console.log('\n== once');
       document.getElementById('main').scrollTop = 300;
       return want.map((d) => d.firstChild.textContent);
     });
-    override = { '/data/snapshot.json': { body: raw.replace('"generatedAt":"2026-09-30T18:20:00Z"', '"generatedAt":"2026-09-30T19:20:00Z"') } };
+    const key = snap.pulledAt ? 'pulledAt' : 'generatedAt', hourOn = local(PULL + 3600e3);
+    const changed = raw.replace(`"${key}":"${snap[key]}"`, `"${key}":"${new Date(PULL + 3600e3).toISOString().replace('.000Z', 'Z')}"`);
+    override = { '/data/snapshot.json': { body: changed } };
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
     await page.waitForTimeout(600);
     const s = await w(() => ({ redrawn: !document.querySelector('#pane [data-old]'), stamp: document.getElementById('stamp').textContent, top: document.getElementById('main').scrollTop,
       open: [...document.querySelectorAll('#pane details[open]')].map((d) => d.firstChild.textContent) }));
-    check(s.redrawn && s.stamp.startsWith('Example data. Updated 30 Sep, 15:20') && JSON.stringify(s.open) === JSON.stringify(open) && Math.abs(s.top - 300) < 2,
+    check(changed !== raw && s.redrawn && s.stamp.startsWith(`Example data. Updated ${dayMon(hourOn.day)}, ${hourOn.hm}`) && JSON.stringify(s.open) === JSON.stringify(open) && Math.abs(s.top - 300) < 2,
       `back on screen with a changed file ("${s.stamp}"): the pane drawn again (${s.redrawn}), its ${s.open.length} open folds kept by their words (${s.open.map((x) => `"${x.slice(0, 18)}"`).join(', ')}) and its scroll (${s.top} px)`);
     override = {};
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
@@ -713,7 +765,7 @@ console.log('\n== once');
     await w(() => document.dispatchEvent(new Event('visibilitychange')));
     await page.waitForTimeout(600);
     const s = await w(() => ({ notice: document.getElementById('notice').hidden ? '' : document.getElementById('notice').textContent, pane: document.getElementById('pane').children.length, tabs: !document.getElementById('tabs').hidden, scroll: document.getElementById('main').scrollTop }));
-    check(s.notice === 'The new data/snapshot.json is not valid JSON; it looks like a web page was written over it. Still showing the data from 30 Sep, 14:20.Close' && s.pane > 3 && s.tabs && Math.abs(s.scroll - 300) < 2,
+    check(s.notice === `The new data/snapshot.json is not valid JSON; it looks like a web page was written over it. Still showing the data from ${gen.day} ${gen.mon}, ${gen.hm}.Close` && s.pane > 3 && s.tabs && Math.abs(s.scroll - 300) < 2,
       `B3: a broken replacement while open: "${s.notice}"; the pane (${s.pane} sections), the tabs and the scroll kept`);
     await A.shot('broken-replacement-light', false);
     const kb = await A.rect('#notice .textkey');
@@ -725,10 +777,13 @@ console.log('\n== once');
     await page.waitForTimeout(600);
     check(await w(() => document.getElementById('notice').hidden), 'a good file again clears the notice');
   }
-  // the route map on Sessions: the newest session's route, its words, its legend's open ends, its card
-  {
+  // the route map on Sessions: the newest steady session's route (ROUTE), its words, its legend's open ends, its card
+  route: {
     await A.pane('Sessions');
-    await page.locator('.sess', { hasText: 'Easy run' }).first().click();   // the newest session with a route (Intervals has no record stream)
+    if (!ROUTE) { check(false, 'the route map: a session with a route and a steady pace in this snapshot (none found)'); break route; }
+    const row = page.locator('.sess').filter({ hasText: dowDate(ROUTE.d) }).filter({ hasText: ROUTE.name }), rows = await row.count();
+    check(rows === 1, `Sessions: the row of ${ROUTE.name} on ${dowDate(ROUTE.d)} (${ROUTE.id}), the newest session with a route and a steady pace (${rows} found)`);
+    await row.first().click();
     await page.waitForTimeout(900);
     const m = await w(() => {
       const sec = document.querySelector('.mapwrap').closest('.sec'), fold = sec.querySelector('.howto'), credit = sec.querySelector('.mapcredit');
@@ -737,7 +792,7 @@ console.log('\n== once');
         credit: credit && credit.textContent, after: credit && credit.previousElementSibling && credit.previousElementSibling.classList.contains('mapwrap'), creditPx: credit && getComputedStyle(credit).fontSize,
         creditH: credit && credit.getBoundingClientRect().height / parseFloat(getComputedStyle(credit).lineHeight), tiles: /Map tiles/.test(document.getElementById('pane').innerText) };
     });
-    const a = [...snap.activities].reverse().find((x) => x.name === 'Easy run');
+    const a = ROUTE;
     check(m.svg && m.words[0] === 'Heart-rate zone' && m.words.includes('Pace') && m.fig === `${running(a).toFixed(1)}${NN}km` && m.figPx === '34px' && m.cap.startsWith('Start is the filled dot')
       && m.credit === 'Route: © OpenStreetMap contributors, ODbL.' && m.after && m.creditPx === '10.5px' && m.creditH < 1.5 && !m.tiles,
       `the route: ${m.words.join(', ')}; the session's key number ${m.fig} at ${m.figPx} (this file ${running(a).toFixed(1)} km); How to read it holds "${m.cap.slice(0, 40)}…"; under the map one ${m.creditPx} line (${m.creditH.toFixed(2)} lines tall), "${m.credit}", and no Map tiles credit on the pane (HOUSE 4.15 exception 1)`);
@@ -746,13 +801,14 @@ console.log('\n== once');
     const r = await w(() => [...document.querySelectorAll('.ramp span')].map((s) => s.textContent));
     check(/^slower ≥ \d:\d\d\u202F\/km$/.test(r[0]) && /^faster ≤ \d:\d\d\u202F\/km$/.test(r[1]), `the pace legend prints its open ends: "${r[0]}" and "${r[1]}"`);
     // the ramp's minimum span: this steady run's 5th to 95th percentile of pace lie closer than 45 s/km, so its
-    // colors span 45 s/km around its median (worked out here from the stream) and 90 % of the route reads in at
-    // most three of the ramp's nine stops (the review saw nine colors for 12 s/km of noise)
+    // colors span 45 s/km around its median (worked out here from the stream) and 90 % of the route reads in no more
+    // of the ramp's nine stops than the eighths of those 45 s/km its own spread covers, one more for rounding, and
+    // never all nine (the review saw nine colors for 12 s/km of noise): at most four for a 12 s/km easy run, which
+    // draws three, and five for a 17 s/km steady run, which draws four
     {
-      const st = snap.streams[a.id];
-      const v = st.p.map((x, i) => (st.lat[i] != null && st.lon[i] != null && x && x <= 8.5 ? x : null)).filter((x) => x != null).sort((p, q) => p - q);
+      const v = pacesOf(streamOf(a.id));
       let lo = v[Math.floor(v.length * 0.05)], hi = v[Math.floor(v.length * 0.95)];
-      const spread = Math.round((hi - lo) * 60);
+      const spread = Math.round((hi - lo) * 60), most = Math.min(8, Math.ceil((8 * (hi - lo)) / 0.75) + 1);
       if (hi - lo < 0.75) { lo = v[Math.floor(v.length / 2)] - 0.375; hi = lo + 0.75; }
       const mmss = (m) => { let mm = Math.floor(m), s = Math.round((m - mm) * 60); if (s === 60) { mm++; s = 0; } return `${mm}:${String(s).padStart(2, '0')}`; };
       const g = await w(() => ({ stops: getComputedStyle(document.querySelector('.ramp i')).backgroundImage.match(/rgb\([^)]+\)/g).map((c) => c.match(/\d+/g).map(Number)),
@@ -772,8 +828,8 @@ console.log('\n== once');
       for (const [c, n] of g.segs) { const k = at(c); hist[k] += n; for (let j = 0; j < n; j++) list.push(k); }
       list.sort((p, q) => p - q);
       const span = list[Math.floor(list.length * 0.95)] - list[Math.floor(list.length * 0.05)] + 1;
-      check(g.stops.length === 9 && r[0] === `slower ≥ ${mmss(hi)}${NN}/km` && r[1] === `faster ≤ ${mmss(lo)}${NN}/km` && span <= 3 && g.cap.includes(`5th and 95th percentile, at least 45${NN}s/km apart,`),
-        `a steady run (5th to 95th percentile ${spread} s/km apart) is colored over 45 s/km around its median: the legend "${r[0]}", "${r[1]}" (this file ${mmss(hi)} and ${mmss(lo)}); 90 % of its ${list.length} segments in ${span} of the ramp's ${g.stops.length} stops (segments per stop ${hist.join(' ')}); the caption says so`);
+      check(g.stops.length === 9 && r[0] === `slower ≥ ${mmss(hi)}${NN}/km` && r[1] === `faster ≤ ${mmss(lo)}${NN}/km` && span <= most && g.cap.includes(`5th and 95th percentile, at least 45${NN}s/km apart,`),
+        `a steady run (5th to 95th percentile ${spread} s/km apart) is colored over 45 s/km around its median: the legend "${r[0]}", "${r[1]}" (this file ${mmss(hi)} and ${mmss(lo)}); 90 % of its ${list.length} segments in ${span} of the ramp's ${g.stops.length} stops, at most ${most} for its spread (segments per stop ${hist.join(' ')}); the caption says so`);
     }
     await w(() => document.querySelector('.mapwrap').scrollIntoView({ block: 'center' }));
     await page.waitForTimeout(200);
@@ -829,20 +885,20 @@ console.log('\n== once');
 // Stale. proven on a copy whose ids are a real pull's (demo- rewritten real-), two days on, a sentence in ink (B1);
 // each form on one line (HOUSE 7.2). The real copy's streams do not exist under their new ids, so no session is opened.
 {
-  const A = await open('light', { time: '2026-10-03T12:00:00Z' });
+  const A = await open('light', { time: TWO_DAYS_ON });
   const s = await A.w(() => { const e = document.querySelector('#stamp .stale'); return { text: document.getElementById('stamp').textContent, ink: e && getComputedStyle(e).color === getComputedStyle(document.querySelector('h1')).color }; });
   check(s.text === `Example data. ${STAMP}` && s.ink, `the example two days on: "${s.text}", Example data. in ink in place of Stale. (an example never refreshes)`);
   await stampCheck(A, 'the example, two days on');
   await closeOut(A, 'example, two days on');
   override = { '/data/snapshot.json': { body: realCopy() } };
-  const B = await open('light', { time: '2026-10-03T12:00:00Z' });
+  const B = await open('light', { time: TWO_DAYS_ON });
   const r = await B.w(() => { const e = document.querySelector('#stamp .stale'); return { text: document.getElementById('stamp').textContent, ink: e && getComputedStyle(e).color === getComputedStyle(document.querySelector('h1')).color }; });
   check(r.text === `Stale. ${STAMP}` && r.ink, `B1: a real pull's copy more than 48 hours on: "${r.text}", the word in ink`);
   await stampCheck(B, 'stale, a real copy');
   await closeOut(B, 'stale, a real copy');
-  const C = await open('light', { time: '2026-09-30T19:00:00Z' });
+  const C = await open('light', { time: PULL_DAY_ON });
   const f = await C.w(() => document.getElementById('stamp').textContent);
-  check(f === `Updated ${hm(gen)}, last session ${lastDay[2]} ${MON[lastDay[1] - 1]}`, `a real copy on the pull's own day: "${f}"`);
+  check(f === `Updated ${gen.hm}, last session ${lastDay[2]} ${MON[lastDay[1] - 1]}`, `a real copy on the pull's own day: "${f}"`);
   await stampCheck(C, 'fresh, a real copy');
   await closeOut(C, 'fresh, a real copy');
   override = { '/data/snapshot.json': { body: realCopy(), delay: 1500 } };
@@ -855,18 +911,18 @@ console.log('\n== once');
 }
 // three weeks after the pull: days the data never saw are not shown as days without running
 {
-  const A = await open('light', { time: '2026-10-21T10:00:00Z' });
+  const A = await open('light', { time: WEEKS_3_ON });
   const { w } = A;
-  const pullDay = ymd(gen.getTime()), d0 = ymd(t(pullDay) - 6 * DAY);
+  const pullDay = PULL_DAY, d0 = ymd(t(pullDay) - 6 * DAY);
   const run7 = snap.activities.filter((a) => a.sport === 'run' && a.d >= d0 && a.d <= pullDay).reduce((s, a) => s + running(a), 0);
   const n = await w(() => ({ fig: document.querySelector('.headline .hl-what').textContent, f1: document.querySelector('.tilesec .fact').textContent, B: window.__rd.block() }));
   const pd = `${Number(pullDay.slice(8))} ${MON[Number(pullDay.slice(5, 7)) - 1]}`;
   const later = n.B.columns.slice(n.B.now + 1).map((c) => c.week), plan = snap.plan.horizon.map((h) => h.w);
-  check(n.fig === `Week of 28 Sep, data to ${pd}` && n.f1.startsWith(`Run, 7 days to ${pd}${run7.toFixed(1)}`) && n.B.columns[n.B.now].week === monday(pullDay) && later.every((x) => plan.includes(x)) && n.B.columns.slice(0, n.B.now + 1).every((c) => c.target == null || c.week === monday(pullDay)),
+  check(n.fig === `Week of ${dayMon(monday(pullDay))}, data to ${pd}` && n.f1.startsWith(`Run, 7 days to ${pd}${run7.toFixed(1)}`) && n.B.columns[n.B.now].week === monday(pullDay) && later.every((x) => plan.includes(x)) && n.B.columns.slice(0, n.B.now + 1).every((c) => c.target == null || c.week === monday(pullDay)),
     `21 days on: "${n.fig}", "${n.f1.slice(0, 40)}" (this file ${run7.toFixed(1)} km), the Block's last ink in the pull's week (${n.B.columns[n.B.now].week}), every later column the plan's`);
   await A.pane('Plan');
   const p = await w(() => document.querySelector('.headline .hl').textContent);
-  const days = Math.round((t(snap.plan.goal.race.date) - t('2026-10-21')) / DAY);
+  const days = Math.round((t(snap.plan.goal.race.date) - t(local(WEEKS_3_ON).day)) / DAY);
   check(p.startsWith(`Race day${days} days`), `21 days on, race day still counts from the phone: "${p.slice(0, 20)}" (${days} days)`);
   await A.pane('Health');
   const h = await w(() => document.querySelector('.fact').textContent);

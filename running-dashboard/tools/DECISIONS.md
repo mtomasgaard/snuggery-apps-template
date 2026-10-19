@@ -2173,3 +2173,76 @@ Two defects the press video's reviews found, fixed at the owner's word ("fix all
   same rule.
 
 The code cap rises from 260 000 to 261 000 for them (259 822 with the base, 260 445 with the card).
+
+## 2026-10-19: the tests read the demo's own day
+
+The demo is regenerated on the day of every publish, and its calendar is that day's
+(`scripts/make_demo_running_dashboard.py`: the day in week 12 of the block, the race the Sunday of week 16).
+`tools/test_block.mjs` and `tools/shoot.mjs` still had the 1 October demo's dates and figures written in. On
+the 19 October demo, a Monday with nothing run yet that week, the block test failed 5 of 18 and the shoot
+crashed. Both now work everything out from the snapshot, and `check.mjs`'s data pin is the one thing a
+regeneration still asks to be redone.
+
+- **The day.** `test_block.mjs` reads the Block on the snapshot's own day, its `generatedAt` (the generator's
+  `committed_today()`). `shoot.mjs` fixes the clock at noon in New York on the day after the pull. It takes
+  its other clocks from the same pull: two days on, the pull's own day and three weeks on. They are read in
+  the runner's zone through `Intl`, so EST after 1 November reads right. The fixed UTC−4 before would have
+  expected 14:20 for a 13:20 pull. On the 30 September demo every derived clock equals the one written in.
+- **The figures.** This week's plan and the weeks after come from the plan's horizon. The tapped card's week
+  is two before this one (week 10, a full week of running), with its runs and longest run from the
+  activities. The label's dates, About's plan date, the stamp's and the notice's times, Training's last week,
+  the table's plan for this week and the tile count all come from the snapshot.
+- **What a day's data cannot show, the block test now builds.** A Monday's week has no ink. So the latest
+  week with runs is given a target under what it ran (no fill) and one over it (a fill down to the ink, and
+  its card's *So far*). The Block is also read three weeks back with the plan moved back too, so runs lie on
+  both sides of now. 20 checks, 18 before.
+- **Four expectations were one day's shape, not a rule.**
+  - *Every outline has a fill.* Not on a Sunday, when the week is run to its outline, so both tests now expect
+    a fill exactly where the ink stops short of it.
+  - *The day-by-day chart on Plan shows a done run.* Not on a Monday, so the shoot looks for one only when
+    the data has a run in those days.
+  - *That chart's first planned zone is one a done run also has.* Not on a Tuesday, when the week's one easy
+    run barely touches it, so the shoot samples the first planned segment whose color a done segment has.
+  - *No session's name carries a unit.* On a Sunday the newest session is the generator's "15 km tune-up",
+    the data's own words. The SI check exempted names in the list (`.said`) but not as the session pane's
+    heading, and now exempts a session's name wherever it is printed. Whether that heading should be marked
+    `.said` or have its number and unit joined (`si()`) is the app's call, left alone here.
+- **The route.** Sessions opens the newest session with a route whose pace is steady: its 5th and 95th
+  percentile under 45 s/km apart, worked out from its stream, which the ramp's minimum span needs. That is
+  Tuesday's easy run once it is run, else the run that carries its route (Saturday's on a Monday). The
+  newest run of a Monday's demo is Sunday's long run, 51 s/km apart, which gets the whole ramp by design.
+  The stops its colors may span are the eighths of the 45 s/km ramp its own spread covers, plus one for
+  rounding, and never all nine: at most four for a 12 s/km easy run, which draws three, and five for a
+  17 s/km steady one, which draws four. It was three, which only the easy run met. The legend's two ends
+  still pin the minimum span exactly.
+
+Nothing the app ships changed: `app.js`, `js/`, the data and the ZIP are as they were.
+
+**One failure left is the app's, and it is left open.** On some demos whose history crosses New Year (built
+from early January to mid-September; 2027-01-04 and 2027-07-01 of the days tried, not 2027-03-28) the shoot
+fails *a finger dragging the window's end with the row tucked* in both themes. The window's label beside the
+presets wraps at 390 px when it spans two years and its dates are long enough. "12 Oct 2026 to 20 Jun 2027"
+takes two lines (the row 61 px); "12 Oct 2026 to 4 Jul 2027" takes one (44 px). A drag that changes the label
+across that point moves the track 17 px under the finger, against "the track holds still under it" (the
+owner, 2026-10-08). A real pull's history usually spans two years, so a phone meets it too. The fix is the
+app's: keep the label on one line, or on a line of its own. That is a layout call and a version, not a test
+change. The check stays as it is, and its message now prints the positions the track took.
+- On these days the label keeps its line count all through the drag, and the shoot passes: the committed
+  demo, every weekday of 19–25 October 2026, 16 December 2026, 28 March 2027 and the 30 September demo.
+  Their histories lie within one year, or their two-year labels never cross the wrap point.
+
+### Verified (2026-10-19, from `Template/running-dashboard/` unless noted)
+
+- `node tools/check.mjs`: `all checks pass`. `node tools/test_block.mjs`: `all 20 pass`.
+  `python3 running-dashboard/tools/art/palette.py` (from `Template/`): `ALL CHECKS PASS`.
+- `PLAYWRIGHT_MODULE=… node tools/shoot.mjs`, both themes: `all checks pass`, 203 `ok`, 0 failed. On the
+  30 September demo it gives 203 `ok` too. The old script gave 202 there, before the session-row check was
+  added.
+- `python3 scripts/make_demo_running_dashboard.py --check` and `--verify` (from `Template/`): the committed
+  data is what the generator makes; `verify: ok`. The demos of other days were built in scratch copies
+  with `--out-root` and `--today`, so the committed data was never touched.
+- `test_block.mjs` passes on all of them. `check.mjs`, run on two of them (21 October and 4 January), fails
+  only its data pin, as it should (52 `ok`).
+- `js/block.js` mutated in a scratch copy, ten ways, on the Monday and the Wednesday demo: nine caught. The
+  one missed, "longest" skipping a week's first run, gives the same answer on this data, since the long run
+  is never the first.
