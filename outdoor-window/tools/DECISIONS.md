@@ -711,3 +711,11 @@ About and not the link. 56 `ok`, 0 failed, no console error.
 **Phone check this adds (not claimed here):** the link tapped at its lower half in Snuggery's web view on an iPhone
 with a home indicator and on one without (iPhone SE), on iOS 18 and iOS 26.
 
+
+## 2026-10-19: what leaves the phone, said true for 1.3 (1.2.1)
+
+`NOTES.md` said Snuggery "never makes a network request of any kind". Since 1.3 it fetches data for a
+connection the person sets up, so the sentence now says what holds for this app: on this path Snuggery itself
+makes no request, and only receives what the shortcut hands it. `PROMPT.md`'s line about the other apps now
+says Snuggery fetches their file or a shortcut copies it. Both files travel in the ZIP, so the version moves
+from 1.2 to 1.2.1 (HOUSE 13). `node tools/check.mjs`: `all checks pass`.

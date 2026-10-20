@@ -3,5 +3,9 @@
   "name": "US Quakes",
   "entryPoint": "index.html",
   "description": "USGS-cataloged earthquakes around the US since 1638 (M 2.5+ from 1900) and the last 30 days of the USGS feed, with depth cross-sections, seven stories and volcano status. Not a warning service.",
-  "version": "1.1"
+  "version": "1.2",
+  "dataSource": {
+    "url": "https://mtomasgaard.github.io/snuggery-apps-template/us-quakes/data/snapshot.json",
+    "file": "data/snapshot.json"
+  }
 }

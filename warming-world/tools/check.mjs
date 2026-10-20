@@ -7,7 +7,8 @@
 //   4. assets/ holds exactly world.json, places.json, about.json and climatology.json (plan 0012 3.3: the
 //      1951–1980 climatology for Absolute, ≤ 120,000 bytes, readable by js/measure.js); data/ only
 //      snapshot.json; fonts/ exactly archivo-ww.woff2 and OFL.txt;
-//   5. miniapp.json is valid, version 1.2 (plan 0012 D21–D22; HOUSE §13);
+//   5. miniapp.json is valid, version 1.3 (1.2 from plan 0012 D21–D22; 1.3 for the data address it proposes, its
+//      dataSource, and the missing file's sentence naming Snuggery's fetch, 2026-10-19; HOUSE §13);
 //   6. no AI vendor or model name in any shipped text file, DESIGN.md and ART.md included (US Quakes'
 //      list, stored ROT13; the snapshot's base64 maps are skipped, its strings are read);
 //   7. js/ramp.js: its stops equal ART.md's table; DESIGN §7.1's constraints (lightness symmetric within
@@ -107,12 +108,13 @@ exactly('data', ['snapshot.json']);
 exactly('fonts', ['archivo-ww.woff2', 'OFL.txt']);
 
 // 5. miniapp.json
+const dsOk = (d) => !!d && Object.keys(d).sort().join() === 'file,url' && /^https:\/\/[^/?#@]+\/[^?#]*$/.test(d.url) && !/\/\/api\.github\.com\//i.test(d.url) && d.file === 'data/snapshot.json';   // its proposed data address (README, Or let the app suggest its address): public, no query, never GitHub's API, into its own snapshot; a copy changes the url to its own Pages address
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Warming World' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.3' && dsOk(mini.dataSource),
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2 before it proposed its data address), proposing ${mini.dataSource ? mini.dataSource.url : 'nothing'}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 6. No AI vendor or model name in shipped text (US Quakes' list, ROT13, model family names included)

@@ -831,3 +831,21 @@ A readout card dropped under its chart mid-slide when none of its three corners 
 (Running Dashboard had the same rule). `cardSpot` adds the fourth corner, keeps the card where it is while that
 stays clear, and otherwise takes the first clear corner. Under the chart is the last resort, as before: a card
 never covers what the finger reads. A chart's own `spots` keep their old rule. The owner: "fix all issues that surfaced".
+
+## 2026-10-19: SSB's license is CC BY 4.0, not NLOD (1.2.2)
+
+An independent re-check found the home index credited under NLOD. Statistics Norway's own pages say otherwise:
+`ssb.no/en/diverse/lisens` (*"We use the licence Creative Commons Attribution 4.0 International (CC BY
+4.0)"*, with the credit as *Statistics Norway, SSB or Statistisk sentralbyrå*, a link to ssb.no if possible) and
+`ssb.no/en/api` (*"Like the rest of ssb.no, the APIs use the license CC BY 4.0"*), both read 2026-10-19. The
+address `NOTES.md` gave for SSB's statement, `ssb.no/en/informasjon/copyright`, answered 404 the same day.
+
+- **The credits**, both constants: `… Home index: Statistics Norway, table 07221 (CC BY 4.0).` (`app.js`,
+  `check.mjs`, `shoot.mjs`). Items 6 above and the pass's item 14 described NLOD; this entry supersedes them.
+- **About** names SSB with ssb.no, the table, the license by name and address
+  (`creativecommons.org/licenses/by/4.0`), the change (the home's value is the app's, a value set by hand
+  moved by the index) and the non-endorsement sentence. `shoot.mjs` looks for the license's address.
+- **`NOTES.md`** quotes CC BY 4.0's terms and links SSB's license page; the spelling check's one allowed
+  phrase, NLOD's proper name, is gone with it. `HOUSE.md`'s license table moves Finances to the CC BY 4.0
+  row; the generator's comment (`scripts/make_demo_finances.py`) follows. The data is unchanged.
+- Version 1.2.1 to 1.2.2 (a fix; HOUSE 13).

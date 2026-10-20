@@ -221,9 +221,10 @@ and the tabs start where the plates do.
   hours`); how the numbers are made (the index, the depreciation curve, the modeled loans, what Owned's
   chart counts, the accrued units, Spending's and Cash flow's windows, Repeating, shares still to vest);
   sources and credits (first the credit, one of two constants by `synthetic`: `Accounts, holdings and
-  loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).` or `Accounts:
-  your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).`; then
-  SSB's NLOD statement, the bank route, Norges Bank, fund prices, the type); how the data gets here.
+  loans: invented for this example. Home index: Statistics Norway, table 07221 (CC BY 4.0).` or `Accounts:
+  your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (CC BY 4.0).`;
+  then SSB's CC BY 4.0 statement, the bank route, Norges Bank, fund prices, the type); how the data gets
+  here.
   The front carries no credit; the home's basis line and Norges Bank beside its rate are the view's own
   text (HOUSE 4.15).
 - **Notices** (`role="alert"`) only for a file that cannot be read; a broken replacement keeps the

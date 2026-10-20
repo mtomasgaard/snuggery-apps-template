@@ -3,5 +3,9 @@
   "name": "World News",
   "entryPoint": "index.html",
   "description": "The latest headlines by region from newsrooms whose terms allow a credited headline and link, each linking out to its publisher",
-  "version": "1.2.1"
+  "version": "1.3",
+  "dataSource": {
+    "url": "https://mtomasgaard.github.io/snuggery-apps-template/world-news/data/snapshot.json",
+    "file": "data/snapshot.json"
+  }
 }

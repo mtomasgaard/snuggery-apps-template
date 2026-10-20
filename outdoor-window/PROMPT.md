@@ -21,8 +21,8 @@ picture is drawn and read is `ART.md`; a copy keeps it.
 
 ## What is different about this one
 
-Every other app here is refreshed by a GitHub Action: a job rewrites a file in the repository, a
-shortcut copies it to the phone. **This one has no job and no repository in the loop at all.** The
+Every other app here is refreshed by a GitHub Action: a job rewrites a file in the repository, and
+Snuggery fetches it or a shortcut copies it to the phone. **This one has no job and no repository in the loop at all.** The
 shortcut asks the phone where it is, asks the weather service for the forecast there, and hands
 the reply straight to Snuggery. Which means:
 

@@ -10,7 +10,8 @@
 //      About, NOTES.md and CREDITS.txt, and the faces this pass removed are gone, the data included;
 //   5. the data and vendor/ are untouched: each file's sha256 is its pin (nine data files as recorded
 //      before the pass, anatomy.json as the follow-up's data text pass rebuilt it; tools/DECISIONS.md);
-//   6. miniapp.json is valid, at 4.1 (plan 0012's text cut; 4.0 when it began, HOUSE.md section 13);
+//   6. miniapp.json is valid, at 4.1.1 (4.1 from plan 0012's text cut, 4.0 when it began; 4.1.1 for geometry.json's
+//      meters, 2026-10-19; HOUSE.md section 13);
 //   7. no AI vendor or model name in any shipped text file (the house list, stored ROT13);
 //   8. the credit line, word for word, in the CREDIT constant written to About's #about-credit-line,
 //      first under Sources and credits, and no #credits or other credit on the front (HOUSE 4.15); About prints the
@@ -121,7 +122,7 @@ const DATA = {
   'geometry-skin.bin': '2ab98a2df33507102948c936702ceca30f721ab91b63b42a91dff29c733b7762',
   'geometry-vein.bin': '775a78e2e1e24a512a4ecc38b25bd096edf06a547900a5cc1634153da4ef09df',
   'geometry.bin': 'bfcd6e579e4c4093c8b87cbbb4f6d7617ec7e7386304174f894f06b674023ce7',
-  'geometry.json': 'f71878ca9ce8d9d1f01289cb8cc5cae5507ad7e2a0fd1e7cd9efa59921122052',
+  'geometry.json': 'e6fbcbf9977938f5092d94fbdbcadb8ca69f8cbfb7a6b6d162b11c1cf098981e',   // re-pinned 2026-10-19: its format note says meters, not metres (4.1.1)
 };
 // Snug Kart's tools/check.mjs pins its own vendor/ to this folder's, so these never change by a byte.
 const VENDOR = {
@@ -150,10 +151,11 @@ const TYPE_LINE = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL O
 }
 
 // 5. The data and vendor/ are untouched (sha256 recorded on 2026-10-01, before the house pass; anatomy.json
-//    re-pinned on 2026-10-02, after the data text pass rebuilt it with only its prose changed)
+//    re-pinned on 2026-10-02, after the data text pass rebuilt it with only its prose changed; geometry.json
+//    re-pinned on 2026-10-19 for one word of its format note, metres to meters, 4.1.1)
 {
   const changed = Object.keys(DATA).filter((f) => sha(`data/${f}`) !== DATA[f]);
-  ok(changed.length === 0, `the ten data files are byte-identical to their pins (nine as before the pass, anatomy.json as the data text pass rebuilt it)${changed.length ? ': changed ' + changed.join(', ') : ''}`);
+  ok(changed.length === 0, `the ten data files are byte-identical to their pins (eight as before the pass, anatomy.json as the data text pass rebuilt it, geometry.json with meters)${changed.length ? ': changed ' + changed.join(', ') : ''}`);
   const vchanged = Object.keys(VENDOR).filter((f) => sha(`vendor/${f}`) !== VENDOR[f]);
   ok(vchanged.length === 0, `vendor/'s five files are byte-identical to the pins (Snug Kart pins its copy to these)${vchanged.length ? ': changed ' + vchanged.join(', ') : ''}`);
 }
@@ -163,9 +165,9 @@ const TYPE_LINE = 'Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL O
   let mini = null;
   try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
   if (mini) ok(mini.schemaVersion === 1 && mini.name === 'Anatomy' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '4.1'
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '4.1.1'
     && !/\d,\d{3}/.test(mini.description),
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters (at most 200), no comma grouping`);
+  `miniapp.json: "${mini.name}" ${mini.version} (4.1 before geometry.json said meters, 2026-10-19), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters (at most 200), no comma grouping`);
 }
 
 // 7. No AI vendor or model name in shipped text (the house list, ROT13, copied from Global Weather's check)

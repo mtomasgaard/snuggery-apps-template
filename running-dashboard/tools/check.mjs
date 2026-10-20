@@ -9,8 +9,9 @@
 //   5. the data is pinned: each of the 37 data files' sha256 and their concatenation's, as the data follow-up
 //      rebuilt them, re-pinned to the publish-day demo of 2026-10-19 (scripts/make_demo_running_dashboard.py
 //      --check rebuilds them byte for byte);
-//   6. miniapp.json is valid, its name unchanged, its version 1.2.2 (plan 0012 package 4's pass, then the owner's filters,
-//      then About and the prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut; HOUSE 13);
+//   6. miniapp.json is valid, its name unchanged, its version 1.2.3 (plan 0012 package 4's pass, then the owner's filters,
+//      then About and the prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut, then the
+//      window's words kept on one line; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word, as About's first paragraph under Sources and credits; no band, caption or
 //      credit line on the front; OpenStreetMap's line under a map its data drew, and no other tile credit there
@@ -30,7 +31,8 @@
 //      shipped text; both theme-color metas; the two @font-face rules; the page's language and viewport; the
 //      pane apps' type scale (HOUSE 11.1 rule 2);
 //  15. the bugs on record (ART.md B1 to B17) stay fixed in the code;
-//  16. budgets: app code at most 260,000 bytes (the lead's ruling of 2026-10-08 for plan 0012 package 4, on the
+//  16. budgets: app code at most 263,000 bytes (2026-10-19, the window's words kept on one line; 261,000 from
+//      2026-10-13; 260,000 before it, the lead's ruling of 2026-10-08 for plan 0012 package 4, on the
 //      measured 259,002; after plan 0011 D32's 252,000 for the owner's six, D24's 245,000, D23's 244,000 and
 //      the 236,521 held before the build, HOUSE.md 8 and D5), fonts/ at
 //      most 160,000, the ZIP built exactly as build-zips.yml builds it at most 1,351,307 (the house rule for plan
@@ -56,7 +58,7 @@ const ok = (cond, msg) => { console.log(`${cond ? 'ok  ' : 'FAIL'} ${msg}`); if 
 const EXCLUDE = new Set(['screenshots', 'tools', 'pipeline', 'scripts', 'dist', 'raw']);
 const fmt = (n) => n.toLocaleString('en-US');
 const read = (f) => fs.readFileSync(path.join(APP, f), 'utf8');
-const CODE_CAP = 261000, FONT_CAP = 160000, ZIP_CAP = 1351307; // ZIP_CAP: the lead's ruling for plan 0012 package 4, the house rule (1 081 046 B before the pass × 1.25, rounded down), above the app's own 1 340 193, so the cap rises to it (tools/DECISIONS.md). CODE_CAP: 261 000 from 2026-10-13 (the owner: "fix all issues that surfaced"; the trailing base and the readout card's corners, tools/DECISIONS.md); before it the lead's ruling of 2026-10-08 for plan 0012 package 4, 260 000 on the register's measured 259 002 (tools/DECISIONS.md); 252 000 before it, the lead's ruling for the owner's six (plan 0011 D32; tools/DECISIONS.md, "The owner's six"): the owner's features take precedence over the house budget, for exactly those six; 245 000 for the follow-up (D24), 244 000 after the build (D23), 236 521 held before it
+const CODE_CAP = 263000, FONT_CAP = 160000, ZIP_CAP = 1351307; // ZIP_CAP: the lead's ruling for plan 0012 package 4, the house rule (1 081 046 B before the pass × 1.25, rounded down), above the app's own 1 340 193, so the cap rises to it (tools/DECISIONS.md). CODE_CAP: 263 000 from 2026-10-19 (the window's words kept on one line, fitWords in app.js, on the measured 262 475; tools/DECISIONS.md); 261 000 from 2026-10-13 (the owner: "fix all issues that surfaced"; the trailing base and the readout card's corners, tools/DECISIONS.md); before it the lead's ruling of 2026-10-08 for plan 0012 package 4, 260 000 on the register's measured 259 002 (tools/DECISIONS.md); 252 000 before it, the lead's ruling for the owner's six (plan 0011 D32; tools/DECISIONS.md, "The owner's six"): the owner's features take precedence over the house budget, for exactly those six; 245 000 for the follow-up (D24), 244 000 after the build (D23), 236 521 held before it
 // Source with its comments removed (line and block comments, roughly; HTML comments).
 const code = (src, f) => (f.endsWith('.html') ? src.replace(/<!--[\s\S]*?-->/g, '')
   : src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/[^\n]*/g, '$1'));
@@ -187,8 +189,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Running Dashboard' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2.2',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.2.1 before 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2.3',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2.2 before the window's words were kept on one line, 1.2.1 before 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)
@@ -362,7 +364,7 @@ let PAL = null;
 const codeFiles = ['index.html', 'style.css', 'app.js', ...mods];
 const size = (f) => fs.statSync(path.join(APP, f)).size;
 const codeBytes = codeFiles.reduce((n, f) => n + size(f), 0);
-ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, 2026-10-13 for the press videos' two fixes; 260,000 the lead's ruling of 2026-10-08 for plan 0012 package 4 on the measured 259,002; 252,000 before it, plan 0011 D32): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
+ok(codeBytes <= CODE_CAP, `app code ${fmt(codeBytes)} bytes (cap ${fmt(CODE_CAP)}, 2026-10-19 for the window's words on one line; 261,000 on 2026-10-13 for the press videos' two fixes; 260,000 the lead's ruling of 2026-10-08 for plan 0012 package 4 on the measured 259,002; 252,000 before it, plan 0011 D32): ${codeFiles.map((f) => `${f} ${fmt(size(f))}`).join(', ')}`);
 const fontBytes = shipped.filter((f) => f.startsWith('fonts/')).reduce((n, f) => n + size(f), 0);
 ok(fontBytes <= FONT_CAP, `fonts/ ${fmt(fontBytes)} bytes (cap ${fmt(FONT_CAP)}; Geist's 74,128 before the pass)`);
 const work = path.join(APP, 'tools', '.work'); fs.mkdirSync(work, { recursive: true });

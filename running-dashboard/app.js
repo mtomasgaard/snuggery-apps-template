@@ -531,6 +531,9 @@ function boot() {
       if (!document.hidden) load();
     });
     darkMQ.addEventListener('change', () => render());
+    // fitWords again in the house face, and at a new width
+    document.fonts.ready.then(syncRanges);
+    addEventListener('resize', syncRanges);
   }
 }
 
@@ -679,9 +682,31 @@ function syncRanges() {
     if (b) b.setAttribute('aria-pressed', String(state.preset === key));
   }
   const [a, b] = windowRange();
-  $('winLabel').textContent = spanDates(a, b);
+  fitWords();
+  $('winLabel').textContent = wordsMode === 'months' && a.slice(0, 4) !== b.slice(0, 4) ? `${month(a)} to ${month(b)}` : spanDates(a, b);
   from.setAttribute('aria-valuetext', `Week of ${date(a)}`);
   to.setAttribute('aria-valuetext', `Week ending ${date(b)}`);
+}
+
+/* The window's words keep one line, so a drag never moves the track (the owner, 2026-10-08): where this
+   history's widest label would not fit beside the presets, a window across New Year is told in months
+   (HOUSE 6.2), and where even that would not, the words take their own line. Per width and history. */
+let wordsMode = 'full', wordsKey = '';
+function fitWords() {
+  const row = $('timeRow'), l = $('winLabel'), p = $('presets'), wk = state.weeks, ends = wk.map((d) => plusDays(d, 6));
+  const key = `${row.clientWidth} ${wk[0]} ${wk.length} ${document.fonts.status}`;
+  if (!row.clientWidth || key === wordsKey) return;
+  wordsKey = key;
+  const keep = l.textContent, r = document.createRange(), ps = getComputedStyle(p);
+  const wd = (s) => { l.textContent = s; r.selectNodeContents(l); return r.getBoundingClientRect().width; };
+  const most = (f, ds) => Math.max(...ds.map((d) => wd(f(d))));
+  const room = row.clientWidth - p.offsetWidth - parseFloat(ps.marginLeft) - parseFloat(ps.marginRight) - parseFloat(getComputedStyle(row).columnGap) - 1 - wd('1 to 1') + wd('11');
+  const y = (d) => d.slice(0, 4), y0 = y(wk[0]), y1 = y(ends[ends.length - 1]);
+  const a = wk.filter((d) => y(d) < y1), b = ends.filter((d) => y(d) > y0);   // the ends of a window across New Year
+  const fits = (f, g, s = wk, e = ends) => most(f, s) + most(g, e) <= room;
+  wordsMode = !fits(dayMon, date) ? 'line' : y0 === y1 || fits(date, date, a, b) ? 'full' : fits(month, month, a, b) ? 'months' : 'line';
+  row.classList.toggle('stack', wordsMode === 'line');
+  l.textContent = keep;
 }
 
 function syncFilterVisibility() {
@@ -693,6 +718,7 @@ function syncFilterVisibility() {
   $('sportSelect').hidden = !has('sport');
   $('gearSelect').hidden = !has('gear');
   $('picksRow').hidden = !(has('sport') || has('gear'));
+  if (has('time')) syncRanges();
 }
 
 // The filters stay under the tabs while the pane scrolls beneath them (the owner, 2026-10-03). The sport

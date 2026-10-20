@@ -5,24 +5,28 @@ repository does not cover them. Three are data sources the app depends on — an
 only one of the three states its terms at all. The fourth is an endpoint the app
 can be pointed at but is not licensed to use.
 
-## The house-price index: Statistics Norway table 07221 (NLOD)
+## The house-price index: Statistics Norway table 07221 (CC BY 4.0)
 
 The home's value is an anchor figure you set, moved by **Statistics Norway's
 price index for existing dwellings**, table **07221** — quarterly, back to 1992,
 fetched from SSB's open, unauthenticated API at `data.ssb.no`. No key, no
 registration, no rate limit worth worrying about.
 
-Statistics Norway publishes its statistics under the
-**Norwegian Licence for Open Government Data (NLOD)** (its proper name, in its
-own spelling): free to use, share and adapt, including
-commercially, provided the source is credited and it is not presented in a way
-that implies SSB endorses what you did with it. The terms are at
-[data.norge.no/nlod/en](https://data.norge.no/nlod/en/), and SSB's own
-statement of them is at
-[ssb.no](https://www.ssb.no/en/informasjon/copyright).
+Statistics Norway publishes its statistics, its API included, under
+**Creative Commons Attribution 4.0 International (CC BY 4.0)**: free to share
+and adapt for any purpose, including commercially, provided you credit
+*Statistics Norway*, *SSB* or *Statistisk sentralbyrå* (with a link to
+[ssb.no](https://www.ssb.no) where possible), link to the license, say whether
+you changed anything, and do not suggest that SSB endorses you or your use.
+SSB's own statement is its
+[license page](https://www.ssb.no/en/diverse/lisens) (checked 2026-10-19), and
+the license is at
+[creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0/).
 
-**The attribution the license asks for is printed by the app**, under the
-home's value on the Owned pane, as the basis line the refresh writes:
+**The attribution the license asks for is printed by the app**: About names
+SSB, the table, the license and its address, says that the home's value is the
+app's own, moved by the index, and says that SSB does not endorse the app; and
+under the home's value on the Owned pane the refresh writes the basis line:
 
 > SSB 07221 — Hele landet, Alle boligtyper, Prisindeks for brukte boliger, sesongjustert
 
@@ -111,9 +115,9 @@ share price, so the credit sits with the number it produced.
 **On the terms, the honest answer is that they are not published.** Norges
 Bank's exchange-rate pages and its open-data API documentation carry no license
 statement, no terms of use and no stated attribution requirement — unlike SSB
-above, which says NLOD plainly. So this app does not claim a license it cannot
-point at. It credits the source on screen regardless, which is what NLOD would
-have asked for and what any reasonable reading of reference data published for
+above, which states CC BY 4.0 plainly. So this app does not claim a license it
+cannot point at. It credits the source on screen regardless, which is what an
+attribution license would have asked for and what any reasonable reading of reference data published for
 public use asks for anyway, and it calls the endpoint the way a well-behaved
 caller should: once a day at most, with a User-Agent naming your repository. If
 you are doing anything beyond one person reading their own numbers, ask them.

@@ -8,9 +8,9 @@
 //   5. the data: data/snapshot.json's shape as scripts/power_hours.py writes it (the refresh rewrites it twice a day,
 //      so a sha256 pin failed on every fresh file; plan 0012 package 4), data/appliances.json pinned by sha256, and the
 //      tests' fixed day, tools/fixtures/snapshot.json (the file the old pin named), pinned by sha256;
-//   6. miniapp.json is valid, its name unchanged, its version 1.2.1 (1.2 from plan 0012 package 4; the patch for
+//   6. miniapp.json is valid, its name unchanged, its version 1.3 (1.2 from plan 0012 package 4; 1.2.1 for
 //      About and the prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut,
-//      2026-10-19; HOUSE 13);
+//      2026-10-19; 1.3 for the data address it proposes, its dataSource, 2026-10-19; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits: the static fallback word for word as About's first Sources and credits paragraph (#about-credit)
 //      and in app.js; the data's own words written by app.js, never typed into it; no band; the private-use line
@@ -156,12 +156,13 @@ const DATA = { 'tools/fixtures/snapshot.json': 'cd7b0f7da4b92fd7ecbc732afd6ab81d
 for (const [f, want] of Object.entries(DATA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 12)}… is ${f.startsWith('tools/') ? 'the file of 1 Oct, the tests\' fixed day (it does not ship)' : 'the file committed before the pass'} (${want.slice(0, 12)}…)`);
 
 // 6. miniapp.json
+const dsOk = (d) => !!d && Object.keys(d).sort().join() === 'file,url' && /^https:\/\/[^/?#@]+\/[^?#]*$/.test(d.url) && !/\/\/api\.github\.com\//i.test(d.url) && d.file === 'data/snapshot.json';   // its proposed data address (README, Or let the app suggest its address): public, no query, never GitHub's API, into its own snapshot; a copy changes the url to its own Pages address
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Power Hours' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2.1',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.2 before 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.3' && dsOk(mini.dataSource),
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2.1 before it proposed its data address, 1.2 before 1.3's two ways to the phone; HOUSE 13), proposing ${mini.dataSource ? mini.dataSource.url : 'nothing'}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

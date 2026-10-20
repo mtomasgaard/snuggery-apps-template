@@ -532,7 +532,7 @@ for (const scheme of schemes) {
   for (const q of stories.sources.filter((x) => /oklahoma/.test(x.id))) if (!ab.includes(q.quote)) abMiss.push(q.id);
   if (!ab.includes(about.software.fonts)) abMiss.push('fonts');
   if (!ab.includes(`to ${hj.cutoff}`) || !ab.includes(snap.feed.generated.replace('T', ' ').replace(/(:\d\d)?Z$/, ' UTC'))) abMiss.push('dates');
-  check(abMiss.length === 0 && /SI: km, m/.test(ab) && /Version 1\.1/.test(ab), `About: intro, ${about.notes.length} notes with their quotes, ${about.sources.length + snap.sources.length} sources with licence, attribution and address, the Oklahoma statement, the fonts, the data's dates, units, version${abMiss.length ? ' — missing: ' + abMiss.join(', ') : ''}`);
+  check(abMiss.length === 0 && /SI: km, m/.test(ab) && /Version 1\.2/.test(ab), `About: intro, ${about.notes.length} notes with their quotes, ${about.sources.length + snap.sources.length} sources with licence, attribution and address, the Oklahoma statement, the fonts, the data's dates, units, version${abMiss.length ? ' — missing: ' + abMiss.join(', ') : ''}`);
   await shot('about');
   await contrast('About');
   for (let k = 0; k < 5; k++) await page.click('#about .ver');

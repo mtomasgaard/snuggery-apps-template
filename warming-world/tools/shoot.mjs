@@ -706,8 +706,8 @@ for (const scheme of schemes.filter((x) => x !== 'none')) {
     const k = lastComplete, cells = frames[k].reduce((n, b) => n + (b !== 255), 0);
     check(ab.text.includes('NASA does not endorse this app.') && ab.text.includes('Made with Natural Earth') && ab.text.includes('SIL Open Font License 1.1') && ab.text.includes(siSp(snap.source.attribution)) && !/\d (°C|km|%)/.test(ab.text)
       && ab.text.includes(`In ${ALL[k].year}, ${ALL[k].beyondScale.above} of the ${String(cells).replace(/\B(?=(\d{3})+(?!\d))/g, NN)} cells with a value lie above +4${NN}°C`)
-      && (snap.release.mode !== 'research' || ab.text.includes('Internet Archive')) && ab.text.includes('Version: 1.2'),
-    `About carries the credit line, NASA's non-endorsement, Natural Earth, Archivo's OFL, the ±4 °C count (${ALL[k].beyondScale.above} of ${cells} cells in ${ALL[k].year}), the research note and "Version: 1.2"`);
+      && (snap.release.mode !== 'research' || ab.text.includes('Internet Archive')) && ab.text.includes('Version: 1.3'),
+    `About carries the credit line, NASA's non-endorsement, Natural Earth, Archivo's OFL, the ±4 °C count (${ALL[k].beyondScale.above} of ${cells} cells in ${ALL[k].year}), the research note and "Version: 1.3"`);
     // plan 0012 D21 and D22: About names Absolute's −50 … +50 °C scale and its colors, the presets and the slider,
     // and the partial year under a chosen span (the bias 3.3's final left owed)
     check(ab.text.includes(`The scale runs from ${MINUS}50 to +50${NN}°C, centered on 0${NN}°C`) && ab.text.includes('Global Weather’s temperature colors') && !/60 to \+40|sand/.test(ab.text)
@@ -1214,7 +1214,7 @@ console.log('\n== once (light)');
 
   // missing, broken and stale snapshots: the sentences (§3.7)
   for (const [name, ov, want] of [
-    ['missing', { status: 404 }, 'The data file data/snapshot.json is missing. It ships in the ZIP and the Shortcut replaces it; reinstall the app or run the Shortcut.'],
+    ['missing', { status: 404 }, 'The data file data/snapshot.json is missing. It ships in the ZIP, and a fetch by Snuggery or the Shortcut only replaces it, so reinstall the app to bring it back.'],
     ['an HTML body', { body: '<!doctype html><title>x</title>' }, 'The data file could not be read: it is not valid JSON.'],
     ['nx 181', { body: JSON.stringify({ ...snap, grid: { ...snap.grid, nx: 181 } }) }, 'The data file could not be read: the grid is 181 × 90 cells, expected 180 × 90.'],
   ]) {

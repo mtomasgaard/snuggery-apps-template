@@ -23,7 +23,7 @@ const PERIOD = { annual: 250, months: 250 };           // 4 years and 4 months a
 const STALE_MS = 75 * 86400000;                          // §12.4, D-16
 const POLE_LAT = 72, POLE_MS = 600, CARD_TURN_MS = 240, FOCUS_MS = 280;   // §6.4, §8, §10; ART "Motion"
 const CAP_ROWS = 13;                                     // the pole reading: 13 rows of 2° from each pole (to 64°)
-const MISSING = 'The data file data/snapshot.json is missing. It ships in the ZIP and the Shortcut replaces it; reinstall the app or run the Shortcut.';
+const MISSING = 'The data file data/snapshot.json is missing. It ships in the ZIP, and a fetch by Snuggery or the Shortcut only replaces it, so reinstall the app to bring it back.';
 
 const st = {
   snap: null, idx: null, frames: null, decoder: null, resident: new Uint8Array(0), places: null, about: null, version: null,

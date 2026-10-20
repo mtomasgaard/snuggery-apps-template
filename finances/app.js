@@ -258,8 +258,8 @@ const STALE_HOURS = 30;   // a daily job that has not run for 30 hours has misse
 // The credits, word for word (ART.md section 3; owner call 6): one constant for the example data, one for
 // a copy reading its own banks. tools/check.mjs compares both byte for byte.
 const CREDITS = {
-  example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).',
-  real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).',
+  example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (CC BY 4.0).',
+  real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (CC BY 4.0).',
 };
 // The text key every pane ends with (HOUSE 11.1 rule 1): the credits, the sources and the method are in About.
 const ABOUT_KEY = 'Sources, method and credits are in About.';
@@ -1197,7 +1197,7 @@ function paneOwned(main) {
       const sub = num(i.changeSinceAnchor) && i.anchorValue ? changeSub(i.changeSinceAnchor, i.anchorValue) : null;
       const r = row(i.name, meta(i.name, [KIND_LABEL[i.kind] || i.kind, i.anchorDate ? `set ${month(i.anchorDate)}` : null]), kr(i.value), sub);
       // The method is the caveat, so it is on screen rather than in a file; for the home it is also the
-      // index's attribution, which NLOD asks for (NOTES.md).
+      // index's attribution, which its CC BY 4.0 license asks for (NOTES.md).
       if (i.basis) r.append(el('div', 'basis data', i.basis));
       // Where the same thing can be valued more than one defensible way, the choice belongs to whoever is reading.
       if (Array.isArray(i.variants) && i.variants.length > 1) {

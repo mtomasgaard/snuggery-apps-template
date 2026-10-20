@@ -10,7 +10,8 @@
 //   5. the data is pinned: data/snapshot.json's sha256, the demo refreshed on 2026-10-08 (plan 0012 package 4, plan
 //      0011's owed item 1: Boston Common, fetched by scripts/outdoor_window.py --demo), and data/rules.json's,
 //      byte-identical to before the pass;
-//   6. miniapp.json is valid, its name unchanged, its version 1.2 (plan 0012 package 4; HOUSE 13);
+//   6. miniapp.json is valid, its name unchanged, its version 1.2.1 (1.2 in plan 0012 package 4; 1.2.1 for the NOTES
+//      and PROMPT fixes of 2026-10-19; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits: the footer holds Open-Meteo's link and its words alone; About's first Sources and credits
 //      paragraph is the whole credit, word for word, and the license's address is its anchor (HOUSE 4.15);
@@ -141,8 +142,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Outdoor Window' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2',
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2.1',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2.1: NOTES and PROMPT say Snuggery fetches the other apps' data or a shortcut carries it, 2026-10-19; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

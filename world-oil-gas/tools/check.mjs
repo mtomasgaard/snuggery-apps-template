@@ -10,7 +10,8 @@
 //   5. the data is as recorded: the fields as before the pass, the snapshot but its Natural Earth source name
 //      (the bands left with the pass; About prints it), world.json and the shading
 //      as tools/build_shade.py writes them (plan 0012, package 3.2);
-//   6. miniapp.json is valid, its name unchanged, its version 1.3 (HOUSE.md 13);
+//   6. miniapp.json is valid, its name unchanged, its version 1.4 (1.3 before it proposed its data address, its
+//      dataSource, 2026-10-19; HOUSE.md 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credit line: creditLine() over the sources gives the stock app's words, written first under
 //      About's Sources and credits; no credit on the front (HOUSE.md 4.15); the GEBCO attribution word for
@@ -156,12 +157,13 @@ for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha2
 }
 
 // 6. miniapp.json
+const dsOk = (d) => !!d && Object.keys(d).sort().join() === 'file,url' && /^https:\/\/[^/?#@]+\/[^?#]*$/.test(d.url) && !/\/\/api\.github\.com\//i.test(d.url) && d.file === 'data/snapshot.json';   // its proposed data address (README, Or let the app suggest its address): public, no query, never GitHub's API, into its own snapshot; a copy changes the url to its own Pages address
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'World Oil & Gas' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.3',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.2 before plan 0012 D23's pass, 1.1 before 3.2's), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.4' && dsOk(mini.dataSource),
+  `miniapp.json: "${mini.name}" ${mini.version} (1.3 before it proposed its data address, 1.2 before plan 0012 D23's pass, 1.1 before 3.2's), proposing ${mini.dataSource ? mini.dataSource.url : 'nothing'}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

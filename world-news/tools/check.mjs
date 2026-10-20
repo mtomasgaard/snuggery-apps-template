@@ -9,8 +9,9 @@
 //      (the data follow-up, owner call 2); any file the hourly refresh writes passes; the fixed day the tests read,
 //      tools/fixtures/snapshot.json, pinned by sha256;
 //   6. miniapp.json is valid, its name unchanged, its description neither "today's" (B13) nor an em dash, its
-//      version 1.2.1 (1.2 from plan 0012 package 4's pass, from 1.1; the patch for About and the prompt saying
-//      the data is fetched by Snuggery or carried to the phone by a Shortcut, 2026-10-19; HOUSE 13);
+//      version 1.3 (1.2 from plan 0012 package 4's pass, from 1.1; 1.2.1 for About and the prompt saying
+//      the data is fetched by Snuggery or carried to the phone by a Shortcut, 2026-10-19; 1.3 for the data
+//      address it proposes, its dataSource, 2026-10-19; HOUSE 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits: the constant words around the sources' names, written once into About's first paragraph under
 //      Sources and credits; no credit line on the front (HOUSE 4.15; plan 0012 F1, F8);
@@ -170,12 +171,13 @@ const snap = JSON.parse(read('data/snapshot.json'));
 }
 
 // 6. miniapp.json
+const dsOk = (d) => !!d && Object.keys(d).sort().join() === 'file,url' && /^https:\/\/[^/?#@]+\/[^?#]*$/.test(d.url) && !/\/\/api\.github\.com\//i.test(d.url) && d.file === 'data/snapshot.json';   // its proposed data address (README, Or let the app suggest its address): public, no query, never GitHub's API, into its own snapshot; a copy changes the url to its own Pages address
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'World News' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—|today/i.test(mini.description) && mini.version === '1.2.1',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.2 before 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, not "today's" (B13), no em dash`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—|today/i.test(mini.description) && mini.version === '1.3' && dsOk(mini.dataSource),
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2.1 before it proposed its data address, 1.2 before 1.3's two ways to the phone; HOUSE 13), proposing ${mini.dataSource ? mini.dataSource.url : 'nothing'}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, not "today's" (B13), no em dash`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

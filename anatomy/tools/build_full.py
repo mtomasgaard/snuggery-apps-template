@@ -163,5 +163,5 @@ if 'files' not in sk:
 else:
     files=sk['files'][:1]+so['files']; parts=[p for p in sk['parts'] if p['f']==0]+so['parts']
 tri=sum(p['i']//3 for p in parts)
-json.dump({'format':'uint16-quantized positions per part bbox; uint16/uint32 indices; metres, Y-up, +Z anterior, +X = body left','source':'BodyParts3D 3.0 (DBCLS), simplified','triangles':tri,'files':files,'parts':parts},open(os.path.join(DATA,'geometry.json'),'w'))
+json.dump({'format':'uint16-quantized positions per part bbox; uint16/uint32 indices; meters, Y-up, +Z anterior, +X = body left','source':'BodyParts3D 3.0 (DBCLS), simplified','triangles':tri,'files':files,'parts':parts},open(os.path.join(DATA,'geometry.json'),'w'))
 print('triangles',tri,'bytes',sum(f['bytes'] for f in files))

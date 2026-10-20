@@ -62,8 +62,8 @@ const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct
 const oslo = (iso) => new Date(Date.parse(iso) + 2 * 3600e3);   // Oslo in Sep 2026
 const hm = (d) => `${String(d.getUTCHours()).padStart(2, '0')}:${String(d.getUTCMinutes()).padStart(2, '0')}`;
 const STAMP = `Example data. Updated ${hm(oslo(snap.generatedAt))}`;
-const CREDITS = 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).';
-const CREDITS_REAL = 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).';
+const CREDITS = 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (CC BY 4.0).';
+const CREDITS_REAL = 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (CC BY 4.0).';
 // the Balance, by ART.md section 1's rule
 const ownItems = [
   ...snap.accounts.filter((a) => a.balance > 0).sort((a, b) => b.balance - a.balance).map((a) => [a.name, a.balance]),
@@ -616,7 +616,7 @@ console.log('\n== once');
       credit: document.getElementById('about-credit-line').textContent, example: document.getElementById('about-example').hidden ? '' : document.getElementById('about-example').textContent,
       text: document.querySelector('.about-body').textContent.replace(/[ \t\n]+/g, ' '), list: [...document.querySelectorAll('#about-list dt')].map((d) => d.textContent) }));
     check(a.open && a.inert && a.focus === 'about-close' && a.text.includes('Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.')
-      && a.text.includes(`50${NN}000${NN}kr a pixel here`) && a.text.includes('data.norge.no/nlod/en') && a.list.includes('Stale after:') && a.list.includes('Example data:') && a.list.includes('Updated:')
+      && a.text.includes(`50${NN}000${NN}kr a pixel here`) && a.text.includes('creativecommons.org/licenses/by/4.0') && a.list.includes('Stale after:') && a.list.includes('Example data:') && a.list.includes('Updated:')
       && a.credit === CREDITS && a.example === snap.notes.join(' '),
       `About opens from the stamp, focus on Close, the rest inert; the credit "${a.credit.slice(0, 40)}…" first in Sources and credits; This data opens on the example's sentence "${a.example.slice(0, 40)}…", then ${a.list.join(' ')}; the scale, the index's license, the font's credit`);
     await A.shot('about-light');

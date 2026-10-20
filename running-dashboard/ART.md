@@ -544,7 +544,11 @@ the tiles; the Block is the first scroll.
     under the block as it stands once tucked.
   - *The window*: `3 months`, `6 months`, `1 year`, `All` as words, `aria-pressed` buttons in a
     `role="group"` named `Time window`, 12.5 px, the tracer under the chosen, 44 px hits; at the row's
-    right, the window in words, `12 Jan to 4 Oct 2026` (12.5 px, `--ink`).
+    right, the window in words, `12 Jan to 4 Oct 2026` (12.5 px, `--ink`), always on one line, so a drag
+    never moves the track (1.2.3). Where this history's widest label would not fit beside the presets, a
+    window across New Year is told in months, `Oct 2026 to Jun 2027` (HOUSE 6.2), and where even that
+    would not fit (under about 375 px), the words take a line of their own for every window. `fitWords()`
+    decides it per width and history, never per window, so no drag changes it.
   - *The window's track*: two native range inputs (accessible for free) in the house's slider
     language: a 1 px `--line-strong` baseline, the chosen window in 2 px `--ink`, a tracer head at each
     end of it (an 8 px `--ink` disc with a 3 px ring of its ground, `--page` here and `--sheet` on a plate,

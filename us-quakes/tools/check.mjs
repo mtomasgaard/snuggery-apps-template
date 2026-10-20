@@ -5,7 +5,7 @@
 //      the folder and present (the relief files named by assets/geo.json included);
 //   4. assets/ holds exactly the contract's nine files, data/ only snapshot.json, fonts/ exactly the five
 //      WOFF2 files and OFL.txt;
-//   5. miniapp.json is valid;
+//   5. miniapp.json is valid, version 1.2 (1.1 before it proposed its data address, its dataSource, 2026-10-19);
 //   6. no AI vendor or product name in any shipped text file (the list is stored ROT13);
 //   7. js/ramp.js's stops equal ART.md's six, lightness falls at every stop and neighbouring stops stay
 //      ≥ 10 apart in ΔE2000 under normal vision and simulated protan, deutan and tritan (Machado 2009);
@@ -84,12 +84,13 @@ exactly('fonts', ['atkinson-hyperlegible-latin-400-normal.woff2', 'atkinson-hype
   'atkinson-hyperlegible-latin-ext-700-normal.woff2', 'red-hat-mono-latin-500-normal.woff2', 'OFL.txt']);
 
 // 5. miniapp.json
+const dsOk = (d) => !!d && Object.keys(d).sort().join() === 'file,url' && /^https:\/\/[^/?#@]+\/[^?#]*$/.test(d.url) && !/\/\/api\.github\.com\//i.test(d.url) && d.file === 'data/snapshot.json';   // its proposed data address (README, Or let the app suggest its address): public, no query, never GitHub's API, into its own snapshot; a copy changes the url to its own Pages address
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'US Quakes' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.1',
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2' && dsOk(mini.dataSource),
+  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before it proposed its data address), proposing ${mini.dataSource ? mini.dataSource.url : 'nothing'}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 6. No AI vendor or product name in shipped text (Earth's History's list, ROT13), model family names included

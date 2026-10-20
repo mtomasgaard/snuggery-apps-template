@@ -3,5 +3,9 @@
   "name": "Power Hours",
   "entryPoint": "index.html",
   "description": "Tomorrow's electricity prices, and the cheapest hours to run each appliance",
-  "version": "1.2.1"
+  "version": "1.3",
+  "dataSource": {
+    "url": "https://mtomasgaard.github.io/snuggery-apps-template/power-hours/data/snapshot.json",
+    "file": "data/snapshot.json"
+  }
 }

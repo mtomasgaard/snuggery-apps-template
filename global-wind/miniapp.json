@@ -3,5 +3,9 @@
   "name": "Global Wind",
   "entryPoint": "index.html",
   "description": "Five days of global wind, drawn as it moves, on a world map and a 3D globe, with a time player",
-  "version": "1.2.1"
+  "version": "1.3",
+  "dataSource": {
+    "url": "https://mtomasgaard.github.io/snuggery-apps-template/global-wind/data/snapshot.json",
+    "file": "data/snapshot.json"
+  }
 }

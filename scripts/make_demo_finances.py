@@ -367,10 +367,10 @@ def main():
 # deterministic. Trimmed to 2021 onwards, which is everything the demo's anchor
 # date and history reach back to.
 #
-# Statistics Norway publishes its statistics under the Norwegian Licence for
-# Open Government Data (NLOD) and asks to be credited as the source; the app's
-# NOTES.md carries the attribution, and the snapshot prints the table and cut
-# under the home's value on screen. Refresh these numbers with:
+# Statistics Norway publishes its statistics under Creative Commons Attribution
+# 4.0 International (CC BY 4.0, ssb.no/en/diverse/lisens) and asks to be credited
+# as the source; the app's NOTES.md and About carry the attribution, and the
+# snapshot prints the table and cut under the home's value on screen. Refresh these numbers with:
 #
 #     python3 scripts/finances.py --probe-assets
 #

@@ -7,9 +7,10 @@
 //   4. js/ holds the two modules, fonts/ the house face and its OFL.txt at the sha256 HOUSE.md pins, and
 //      no supplement; NOTES.md and About credit the face word for word;
 //   5. the data is pinned: the four data files' sha256 as the data follow-up rebuilt them (2026-10-02);
-//   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25), its version 1.2.1
+//   6. miniapp.json is valid, its name unchanged, its description without a spaced em dash (B25), its version 1.2.2
 //      (HOUSE 13: 1.1 when plan 0012's register pass started, 1.2 after it; the patch for About and the
-//      prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut, 2026-10-19);
+//      prompt saying the data is fetched by Snuggery or carried to the phone by a Shortcut, 2026-10-19, 1.2.1; SSB's
+//      license corrected from NLOD to CC BY 4.0, 2026-10-19, 1.2.2);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credits, word for word: the two constants, one written into About's first Sources and credits
 //      paragraph; no caption band, and no credit anywhere on the front (HOUSE 4.15, 11.1 rule 1; plan 0012 F1, P1);
@@ -138,8 +139,8 @@ let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Finances' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2.1',
-  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass, 1.2 after it, 1.2.1 for 1.3's two ways to the phone; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash (B25)`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && !/—/.test(mini.description) && mini.version === '1.2.2',
+  `miniapp.json: "${mini.name}" ${mini.version} (1.1 before plan 0012's pass, 1.2 after it, 1.2.1 for 1.3's two ways to the phone, 1.2.2 for SSB's CC BY 4.0; HOUSE 13), entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters, no em dash (B25)`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)
@@ -157,11 +158,11 @@ const texts = shipped.filter((f) => /\.(html|css|js|json|md|txt)$/.test(f));
 // the credit words are in the app's code only inside the two constants, and in index.html only inside About. The
 // view's own text stays (HOUSE 4.15): Norges Bank beside its rate, the SSB basis line the data writes under the home.
 const CREDITS = {
-  example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (NLOD).',
-  real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (NLOD).',
+  example: 'Accounts, holdings and loans: invented for this example. Home index: Statistics Norway, table 07221 (CC BY 4.0).',
+  real: 'Accounts: your banks, through Enable Banking (PSD2). Home index: Statistics Norway, table 07221 (CC BY 4.0).',
 };
 {
-  const front = code(html.slice(0, html.indexOf('<div class="about"')), 'x.html'), CREDIT_WORDS = /Statistics Norway|NLOD|Enable Banking|PSD2|invented for this example|Catharsis|Open Font License/;
+  const front = code(html.slice(0, html.indexOf('<div class="about"')), 'x.html'), CREDIT_WORDS = /Statistics Norway|CC BY|Enable Banking|PSD2|invented for this example|Catharsis|Open Font License/;
   const inCode = strings(app).filter((s) => CREDIT_WORDS.test(s));
   ok(app.includes(`  example: '${CREDITS.example}',\n  real: '${CREDITS.real}',`) && /\$\('about-credit-line'\)\.textContent = snap\.synthetic \? CREDITS\.example : CREDITS\.real;/.test(app)
     && (app.match(/\$\('about-credit-line'\)/g) || []).length === 1 && /<h3>Sources and credits<\/h3>\s*<p id="about-credit-line" translate="no"><\/p>/.test(html)
@@ -337,7 +338,7 @@ ok(zsize <= ZIP_CAP, `ZIP size ${fmt(zsize)} bytes (cap ${fmt(ZIP_CAP)}: 130,333
 {
   const BRIT = /\b(colour\w*|centre\w*|centred|(?:kilo|milli|centi)?metres?|behaviour\w*|recognis\w*|organis\w*|analys(?:ed|ing)|licences?|harbour\w*|honour\w*|neighbour\w*|defence|labelled|labelling|towards|grey\w*|favour\w*|catalogue\w*|programme\w*|travell\w*|modell\w*|whilst|amongst|judgement\w*|for ever|amortis\w*|authoris\w*|categoris\w*|instalments?|artefacts?)\b/gi;
   const ALLOW = {};   // by file, a word the data may keep; empty since the data follow-up
-  const PHRASES = { 'NOTES.md': ['Norwegian Licence for Open Government Data'] };   // a proper name
+  const PHRASES = {};   // by file, a proper name in another spelling; none since SSB's license was corrected to CC BY 4.0
   const hits = [];
   for (const f of texts.filter((x) => x !== 'fonts/OFL.txt')) {
     const allow = ALLOW[f] || [];

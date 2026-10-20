@@ -30,10 +30,11 @@ start private than to remember to switch before the wrong commit.
 Nineteen complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
-**Seven of them cost you nothing to run.** Hello Live, World News, Power Hours,
-Global Wind, Global Weather, US Quakes and Warming World are refreshed by this repository's own workflows,
-from sources that need no key and no account, so they work from the moment you install them
-and keep working whether or not you ever copy this template. **Outdoor Window**
+**Nine of them cost you nothing to run.** Hello Live, World News, Power Hours,
+Global Wind, Global Weather, US Quakes, Warming World, Shelf Atlas and World Oil & Gas are refreshed by
+this repository's own workflows, from sources that need no key and no account, so they install with the
+newest data, and once connected (the public address on *Keep This Up To Date*, or a shortcut row) keep
+refreshing whether or not you ever copy this template. **Outdoor Window**
 is free in the same way but cannot run on its own: the forecast is for wherever
 *you* are, so your own Shortcut asks the phone and fetches it. **Running
 Dashboard** and **Finances** are the two that need credentials — a Garmin
@@ -73,7 +74,7 @@ seven live examples come with the app: Create → *Install the live examples*.
 | World Oil & Gas | [**Install World Oil & Gas**](https://mtomasgaard.github.io/snuggery-apps-template/zips/world-oil-gas.zip) | 2.5 MB | nothing (GOGET by hand) |
 | Snug Kart | [**Install Snug Kart**](https://mtomasgaard.github.io/snuggery-apps-template/zips/snug-kart.zip) | 0.6 MB | nothing |
 | Earth's History | [**Install Earth's History**](https://mtomasgaard.github.io/snuggery-apps-template/zips/earth-history.zip) | 7 MB | nothing |
-| US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here hourly) |
+| US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here on an hourly schedule, which GitHub runs a few times a day) |
 | Volve | [**Install Volve**](https://mtomasgaard.github.io/snuggery-apps-template/zips/volve.zip) | 33 MB | nothing |
 | Warming World | [**Install Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) | 1.3 MB | nothing (NASA's monthly release refreshes here) |
 
@@ -96,12 +97,12 @@ latest numbers rather than those of its last code change. The repository's own `
 code build, rebuilt only when an app's code changes.
 
 The same works from a Mac or PC: download the ZIP, AirDrop it to the phone, share it to Snuggery.
-Inside Snuggery, *Keep This Up To Date* → **Every example, ready to download** brings you
-back to this page.
+Inside Snuggery, *Keep This Up To Date* → **Every example, ready to download** opens this
+repository's web index of every app, each with its Get the ZIP link.
 
 ### Hello Live
 
-A UTC clock and three numbers rewritten about hourly by a GitHub Action. Depends on no outside service, so it proves your loop before anything real is built. Its drawing, the Time Card, is the loop itself: a week of days, one row each, with a punch at the minute each file was written and a tail to the minute this phone first read it.
+A UTC clock and three numbers that a GitHub Action rewrites on an hourly schedule, which GitHub runs a few times a day. Depends on no outside service, so it proves your loop before anything real is built. Its drawing, the Time Card, is the loop itself: a week of days, one row each, with a punch at the minute each file was written and a tail to the minute this phone first read it. **Live**: refreshed here, with nothing outside to fetch.
 
 **Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-live.zip) · It is the loop's proof, not a thing to personalize. To let Snuggery fetch it, paste `https://mtomasgaard.github.io/snuggery-apps-template/hello-live/data/snapshot.json` on its *Keep This Up To Date* screen ([the two ways](#getting-the-data-to-the-phone-two-ways)). Its `miniapp.json` also suggests that address, so a Snuggery that fetches data asks once, the first time you open it, whether it may ([an app can suggest its address](#or-let-the-app-suggest-its-address)).
 
@@ -197,15 +198,15 @@ The Earth at 90 moments from 750 million years ago to today, on a globe and on a
 
 ### US Quakes
 
-Every earthquake USGS has cataloged around the United States since 1638 — 394 890 of them, magnitude 2.5 and up from 1900 — on a map drawn like a seismograph's drum record, with the last 30 days of the USGS feed on top, refreshed hourly by this repository. Scrub a timeline from 1900 to now and play a decade; the plate boundaries draw themselves as a trace. Drag a line across Alaska and read a true-scale cross-section of the Cook Inlet slab down to 250 km. Seven stories (1700 Cascadia, 1811–12 New Madrid, 1906 San Francisco, 1964 Alaska, Oklahoma since 2009, 2018 Kīlauea, 2019 Ridgecrest), three of them playable; the Quaternary faults and USGS volcano alert levels as layers; a focus mode that leaves only the map and the record strip. Every sentence about the data is USGS's own, quoted, and "Not a warning service" stays on screen. **Live**, 6.8 MB; the history is rebuilt each January. USGS data is public domain; Natural Earth likewise.
+Every earthquake USGS has cataloged around the United States since 1638 — 394,890 of them, magnitude 2.5 and up from 1900 — on a map drawn like a seismograph's drum record, with the last 30 days of the USGS feed on top, refreshed by this repository on an hourly schedule, which GitHub runs a few times a day. Scrub a timeline from 1900 to now and play a decade; the plate boundaries draw themselves as a trace. Drag a line across Alaska and read a true-scale cross-section of the Cook Inlet slab down to 250 km. Seven stories (1700 Cascadia, 1811–12 New Madrid, 1906 San Francisco, 1964 Alaska, Oklahoma since 2009, 2018 Kīlauea, 2019 Ridgecrest), three of them playable; the Quaternary faults and USGS volcano alert levels as layers; a focus mode that leaves only the map and the record strip. Every sentence about the data is USGS's own, quoted, and "Not a warning service" stays on screen. **Live**, 6.8 MB; the history is rebuilt each January. USGS data is public domain; Natural Earth likewise.
 
-**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) · Keep it current: let Snuggery fetch its Pages address, `https://<you>.github.io/<repo>/us-quakes/data/snapshot.json`, which the site takes from the `data-us-quakes` branch, or give your shortcut one row pointing at that branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md); [the two ways](#getting-the-data-to-the-phone-two-ways)) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) · Keep it current: let Snuggery fetch its Pages address, `https://<you>.github.io/<repo>/us-quakes/data/snapshot.json`, which the site takes from the `data-us-quakes` branch, or give your shortcut one row pointing at that branch (the address is in [`us-quakes/tools/HANDOFF.md`](us-quakes/tools/HANDOFF.md); [the two ways](#getting-the-data-to-the-phone-two-ways)). Its `miniapp.json` suggests this template's copy; in yours, [change the address](#or-let-the-app-suggest-its-address) · Make it yours: [`us-quakes/NOTES.md`](us-quakes/NOTES.md) · The design and the look: [`us-quakes/DESIGN.md`](us-quakes/DESIGN.md), [`us-quakes/ART.md`](us-quakes/ART.md)
 
 ### Warming World
 
 NASA's GISTEMP temperature record on a globe: every 2° cell's anomaly against its own 1951–1980 average, year by year from 1880 to now, with the last 24 months beside it. The year slider is the warming stripes themselves, drawn as an instrument with the base period bracketed; the globe sits on a gray card so the only color on screen is a departure from normal; tap any place and its own line draws itself from 1880 over the cell's stripes; turn to the Arctic and read the cap's mean. Every number comes from GISS's published grid and table, rounded to 0.1 °C by this app; anomalies are never called temperatures; cells with no data are hatched; the current year is marked partial; a copy's release and age are on screen. **Live**, 1.3 MB, refreshed monthly from NASA's release. GISTEMP is US Government work (public domain); Natural Earth likewise; Archivo under the OFL.
 
-**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) · Keep it current: let Snuggery fetch its Pages address, `https://<you>.github.io/<repo>/warming-world/data/snapshot.json`, which the site takes from the `data-warming-world` branch, or give your shortcut one row pointing at that branch (the address is in [`warming-world/tools/HANDOFF.md`](warming-world/tools/HANDOFF.md); [the two ways](#getting-the-data-to-the-phone-two-ways)) · Make it yours: [`warming-world/NOTES.md`](warming-world/NOTES.md) · The design and the look: [`warming-world/DESIGN.md`](warming-world/DESIGN.md), [`warming-world/ART.md`](warming-world/ART.md)
+**Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) · Keep it current: let Snuggery fetch its Pages address, `https://<you>.github.io/<repo>/warming-world/data/snapshot.json`, which the site takes from the `data-warming-world` branch, or give your shortcut one row pointing at that branch (the address is in [`warming-world/tools/HANDOFF.md`](warming-world/tools/HANDOFF.md); [the two ways](#getting-the-data-to-the-phone-two-ways)). Its `miniapp.json` suggests this template's copy; in yours, [change the address](#or-let-the-app-suggest-its-address) · Make it yours: [`warming-world/NOTES.md`](warming-world/NOTES.md) · The design and the look: [`warming-world/DESIGN.md`](warming-world/DESIGN.md), [`warming-world/ART.md`](warming-world/ART.md)
 
 ### Milky Way
 
@@ -235,7 +236,7 @@ The Solar System, the Sun's neighborhood and the Milky Way in one continuous 3D 
 
 Deleting an example is deleting its folder, its workflow in `.github/workflows/`
 and its scripts in `scripts/`, where it has them. Then take out its row, entry
-and picture on this page, and its carve-out in `LICENSE` and in the licence line
+and picture on this page, and its carve-out in `LICENSE` and in the license line
 at the foot of this page, if it has one, and any lines of its own in
 `.gitignore`. Global Wind and Global Weather also keep their data on a branch of
 their own (`data-global-wind`, `data-global-weather`), which goes too. The
@@ -399,7 +400,7 @@ https://mtomasgaard.github.io/snuggery-apps-template/hello-live/data/snapshot.js
 ```
 
 Paste it on Hello Live's *Keep This Up To Date* screen. Its headline is the hour the job last ran,
-in UTC, so a new value about hourly proves the loop.
+in UTC, so a new value within a few hours proves the loop.
 
 ### Or let the app suggest its address
 
@@ -415,8 +416,21 @@ nobody has to paste it:
 
 The first time the app is opened, Snuggery shows its usual approval sheet: *"Hello Live wants to
 fetch its data from mtomasgaard.github.io. Allow?"* Nothing is fetched until you allow it. *Not
-Now* is remembered, and you can still allow it later on *Keep This Up To Date*. Hello Live carries
-one, as an example.
+Now* is remembered, and you can still allow it later on *Keep This Up To Date*.
+
+Hello Live carries one, and so do the eight apps here whose data is public: World News, Power Hours,
+Global Wind, Global Weather, US Quakes, Warming World, Shelf Atlas and World Oil & Gas. Each names this
+template's own Pages copy of its `data/snapshot.json`. Finances, Running Dashboard and Outdoor Window
+carry none: in your copy the first two hold private data, and Outdoor Window's address carries the
+phone's location in a query, which a suggestion may not have.
+
+**In your own copy, change the address.** A copied app still names
+`https://mtomasgaard.github.io/snuggery-apps-template/…`, so it would offer this template's data, not
+yours. Set each `url` to your copy's Pages address,
+`https://<you>.github.io/<repo>/<app-folder>/data/snapshot.json`, or delete the `dataSource` of any
+app whose data is private, and add that one on *Keep This Up To Date* with your own sign-in. If you
+already allowed the template's address for an app, your new version does not change it (below): change
+it on *Keep This Up To Date*.
 
 - **For:** whoever installs the app, you or someone you send the ZIP to, gets live data with one
   tap instead of an address to find and paste.
@@ -532,7 +546,7 @@ the folders marked above as left out — still no build step.
 - **No network from the app.** A mini-app cannot reach the network, so
   everything it draws — map tiles, fonts, textures — travels inside its ZIP, and
   it fetches nothing but files in its own folder.
-- **A licence to fetch live is not a licence to redistribute.** A tile server or
+- **A license to fetch live is not a license to redistribute.** A tile server or
   feed that lets your copy fetch from it may still forbid shipping what it
   returned inside a downloadable archive, or republishing it in a public
   repository. Whatever travels under terms of its own is named as a carve-out in
@@ -556,8 +570,9 @@ the folders marked above as left out — still no build step.
 branch is inert however correct it is. Merge to `main` before expecting a run.
 
 **GitHub cron is best-effort.** Late by 5–20 minutes is normal, longer under
-load, and a newly added schedule often skips its first slot. Say "about hourly",
-never "at 7 past".
+load, a newly added schedule often skips its first slot, and an hourly schedule
+can run only a few times a day (below). Say "on an hourly schedule", never "at 7
+past", and promise hourly only with a clock of your own.
 
 **Triggering a workflow by hand proves the job, not the schedule.** They are
 different things, and a manual run is misleading precisely because it exercises

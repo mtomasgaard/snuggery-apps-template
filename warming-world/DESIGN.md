@@ -225,7 +225,7 @@ The NASA insignia, logotype and "meatball" never appear. The app is never called
 
 | Case | What shows | What still works |
 | --- | --- | --- |
-| `data/snapshot.json` missing | The panel: "The data file data/snapshot.json is missing. It ships in the ZIP and the Shortcut replaces it; reinstall the app or run the Shortcut." | About (static parts) |
+| `data/snapshot.json` missing | The panel: "The data file data/snapshot.json is missing. It ships in the ZIP, and a fetch by Snuggery or the Shortcut only replaces it, so reinstall the app to bring it back." (1.3; a fetch or the Shortcut writes over an existing file and never creates one) | About (static parts) |
 | Unparseable or the wrong shape | The panel: "The data file could not be read: <the first failed check, in words, e.g. 'step 1903 holds 16 199 cells, expected 16 200'>." | About (static parts) |
 | A replacement fails while open | The old data stay on screen. The notice reads "The new data file could not be read (<reason>); still showing the <month year> release." | everything |
 | No WebGL 2 | The panel: "This view needs WebGL 2, which this device does not offer." | the year row (global mean, coverage), the stripes, play, About; no tap card, since there is no Earth to tap |

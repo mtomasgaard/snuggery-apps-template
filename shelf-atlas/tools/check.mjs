@@ -7,7 +7,8 @@
 //   4. data/ holds exactly geo.json, snapshot.json, bathy.png; js/ the three modules; fonts/ the house
 //      face and OFL.txt, both at the sha256 HOUSE.md pins; NOTES.md credits the face;
 //   5. the data is the weekly build of 2026-10-05: each data file's sha256 is pinned below;
-//   6. miniapp.json is valid, its name unchanged, at 1.2 (plan 0012's text cut; 1.1 when it began, HOUSE.md 13);
+//   6. miniapp.json is valid, its name unchanged, at 1.3 (1.2 from plan 0012's text cut, 1.1 when it began; 1.3 for
+//      the data address it proposes, its dataSource, 2026-10-19; HOUSE.md 13);
 //   7. no AI vendor or model name in any shipped text file (Global Weather's list, stored ROT13);
 //   8. the credit line: built from the snapshot's sources by creditLine(), written to About's
 //      #about-credit-line, first under Sources and credits (HOUSE.md 4.15), and for the shipped snapshot
@@ -125,12 +126,13 @@ const DATA_SHA = {
 for (const [f, want] of Object.entries(DATA_SHA)) ok(sha(f) === want, `${f} sha256 ${sha(f).slice(0, 8)}… is the weekly build of 2026-10-05`);
 
 // 6. miniapp.json
+const dsOk = (d) => !!d && Object.keys(d).sort().join() === 'file,url' && /^https:\/\/[^/?#@]+\/[^?#]*$/.test(d.url) && !/\/\/api\.github\.com\//i.test(d.url) && d.file === 'data/snapshot.json';   // its proposed data address (README, Or let the app suggest its address): public, no query, never GitHub's API, into its own snapshot; a copy changes the url to its own Pages address
 let mini = null;
 try { mini = JSON.parse(read('miniapp.json')); } catch (e) { ok(false, `miniapp.json: ${e.message}`); }
 if (mini) {
   ok(mini.schemaVersion === 1 && mini.name === 'Shelf Atlas' && mini.entryPoint === 'index.html' && fs.existsSync(path.join(APP, mini.entryPoint))
-    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.2',
-  `miniapp.json: "${mini.name}" ${mini.version}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
+    && typeof mini.description === 'string' && mini.description.length > 0 && mini.description.length <= 200 && mini.version === '1.3' && dsOk(mini.dataSource),
+  `miniapp.json: "${mini.name}" ${mini.version} (1.2 before it proposed its data address), proposing ${mini.dataSource ? mini.dataSource.url : 'nothing'}, entry ${mini.entryPoint}, description ${mini.description ? mini.description.length : 0} characters`);
 }
 
 // 7. No AI vendor or model name in shipped text (Global Weather's list, ROT13, model family names included)

@@ -136,8 +136,8 @@ anyone scoring a swim or a paddle.
 
 One HTTPS request per refresh, from the phone to Open-Meteo, carrying a latitude and a longitude
 rounded to whatever precision the shortcut passes. Nothing goes to this repository — there is no
-workflow for this app — and nothing goes to Snuggery, which never makes a network request of any
-kind. If the coordinates themselves matter to you, note that Open-Meteo snaps them to its model
+workflow for this app — and on this path Snuggery itself makes no request: it only receives what
+your shortcut hands it. If the coordinates themselves matter to you, note that Open-Meteo snaps them to its model
 grid anyway (the reply's `latitude` and `longitude` are the grid point, not what you asked for),
 and that passing a deliberately rounded pair — two decimal places is about a kilometer — costs
 the forecast nothing.

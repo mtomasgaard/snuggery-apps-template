@@ -56,6 +56,8 @@ late. The full set today, with a sensible cadence for each:
 | `refresh-global-weather.yml/dispatches` | 04:40, 10:40, 16:40, 22:40 UTC | the same four cycles, ten minutes behind wind so the two do not pull from the bucket together |
 | `build-shelf-atlas.yml/dispatches` | daily | the regulators publish monthly; the job commits only when a figure changed |
 | `build-world-oil-gas.yml/dispatches` | weekly | a yearly file; the job stops early when nothing changed |
+| `refresh-us-quakes.yml/dispatches` | hourly | the feed's last 30 days change all day |
+| `refresh-warming-world.yml/dispatches` | the 15th and the 22nd of each month | after NASA's release, about the 10th; a run that finds the release already published writes nothing |
 
 Every job decides for itself whether there is anything new (the weather and wind jobs cost one
 HEAD request when the published GFS run is current), so dispatching more often than the table

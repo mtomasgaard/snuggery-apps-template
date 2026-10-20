@@ -3,5 +3,9 @@
   "name": "Global Weather",
   "entryPoint": "index.html",
   "description": "Five days of global wind, temperature, rain, cloud and pressure on a map and a 3D globe",
-  "version": "2.2.1"
+  "version": "2.3",
+  "dataSource": {
+    "url": "https://mtomasgaard.github.io/snuggery-apps-template/global-weather/data/snapshot.json",
+    "file": "data/snapshot.json"
+  }
 }

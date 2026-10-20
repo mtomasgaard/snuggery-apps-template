@@ -2246,3 +2246,36 @@ change. The check stays as it is, and its message now prints the positions the t
 - `js/block.js` mutated in a scratch copy, ten ways, on the Monday and the Wednesday demo: nine caught. The
   one missed, "longest" skipping a week's first run, gives the same answer on this data, since the long run
   is never the first.
+
+## 2026-10-19: the window's words keep one line (1.2.3)
+
+The defect left open above, fixed in the app as the lead's brief asked: at 390 px the window's label beside the
+presets wrapped onto a line of its own when a window across New Year had long dates, so a drag across that
+point moved the track 17 px under the finger, against "the track holds still under it" (the owner,
+2026-10-08).
+
+- **The rule.** The label never wraps (`white-space: nowrap`). `fitWords()` measures, in the house face, the
+  widest label this history can show against the room beside the presets: the widest start plus the widest
+  end, of the windows that could have them. Where a window across New Year does not fit, it is told in months,
+  `Apr 2026 to Jan 2027` (HOUSE 6.2's form for a longer span), and a window inside one year keeps
+  `20 Apr to 27 Dec 2026`. Where even that does not fit (under about 375 px), the words take their own line for
+  every window (`.frow.stack`). The choice is made per width and history, never per window, so no drag can
+  change it. It runs again when the house face has loaded and on a resize.
+- **What a reader sees.** At 402 px (an iPhone 16 Pro) every label of the demos tried keeps its dates. At 375
+  to 393 px a window across New Year reads in months; the thumbs' VoiceOver values keep the full dates. At
+  320 and 360 px the label sits under the presets on every window, as it already did at 320 px.
+- **Budget.** The app's code is 262 475 bytes, so `CODE_CAP` rises from 261 000 to 263 000, as it rose for the
+  last fixes. Version 1.2.2 to 1.2.3 (a fix; HOUSE 13). `ART.md` says the rule under *The window*.
+
+### Verified (2026-10-19)
+
+- On the committed demo: `node tools/check.mjs` `all checks pass`; `node tools/test_block.mjs` `all 20 pass`;
+  `shoot.mjs` in both themes 203 `ok`, 0 failed; `palette.py` `ALL CHECKS PASS`;
+  `make_demo_running_dashboard.py --check` and `--verify` pass.
+- Scratch demos built with `--out-root` and `--today` for 2027-01-04 and 2027-07-01: `test_block.mjs` 20 of 20
+  and `shoot.mjs` 203 `ok`, 0 failed on each. *A finger dragging the window's end with the row tucked* now
+  holds at 138 px over all ten moves; on the 4 January demo with 1.2.2 it read 155, then 138 px.
+- Every window of both scratch demos (741 each) at 320, 375, 390, 402 and 430 px, light and dark: one row
+  height at each width, the track at one place. With 1.2.2 at 390 px, 21 and 234 of the windows took the
+  taller row.
+- Pictures before and after, at 390 px in light and dark, went to the owner with the report (not committed).

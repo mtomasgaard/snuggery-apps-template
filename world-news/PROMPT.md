@@ -142,6 +142,11 @@ out the alternatives and what each costs.
 
 ## Step 4 — onto the phone
 
+Its `miniapp.json` suggests a data address, `dataSource`, and as copied it names the
+template's own copy. Before the ZIP is built, set its `url` to yours,
+`https://OWNER.github.io/REPO/world-news/data/snapshot.json`, or, in a private repository, delete
+`dataSource` and connect the data in item 2.
+
 1. Open the raw address of `zips/world-news.zip` in Safari, then Share, then Snuggery.
 2. Connect its data. Snuggery fetches it, or a Shortcut delivers it: the
    choice is yours, and the root `README.md`, under *Getting the data to the

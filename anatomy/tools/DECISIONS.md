@@ -988,3 +988,20 @@ side. App code 117 398 B of 200 000; ZIP 24 553 311 B.
 
 **Camera strings:** none changed (`Every layer is showing`, `Remove the…`, `Explode amount`, `Bring back
 the…` untouched).
+
+## 2026-10-19: meters in geometry.json (4.1.1)
+
+An independent re-check listed three British spellings in the data. One was ours and is fixed; two are not
+English and stay, as the spelling check (item 16) already rules:
+
+- **`data/geometry.json`'s format note** said `metres`. It now says `meters`, as `tools/build_skeleton.mjs`
+  already wrote; `tools/build_full.py`, which wrote `metres`, now writes `meters` too. Nothing reads the note.
+  Its sha256 is re-pinned in `check.mjs` (`e6fbcbf9…`); the other nine data files are untouched.
+- **`Oesophagus`** is the esophagus's `latin` name, Terminologia Anatomica's Latin term, which the app shows
+  as Latin (`lang="la"`). Latin keeps its own spelling; the English name and description already say
+  esophagus.
+- **`Set of oesophageal branches of thoracic aorta`** is FJ3431's `source`: BodyParts3D's own name, kept as
+  provenance and still found by search. The name the app shows is `Esophageal branches of thoracic aorta`.
+
+The data file travels in the ZIP, so the version moves from 4.1 to 4.1.1 (HOUSE 13). `node tools/check.mjs`
+and `node tools/test_decode.mjs`: `all checks pass`.
