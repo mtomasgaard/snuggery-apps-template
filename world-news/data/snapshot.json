@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T03:01:26Z",
+ "generatedAt": "2026-10-20T04:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
+     "title": "Haines loses leg; alleged attacker posted about environment and Gaza",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/haines-loses-leg-alleged-attacker-posted-about-environment-and-gaza-294364",
+     "published": "2026-10-20T03:29:12Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
+     "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-next-government-will-inherit-a-treaty-debate-that-is-far-from-resolved-292762",
      "published": "2026-10-20T02:31:50Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "New AI shopping agents promise better bargains. But who pays the price?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/new-ai-shopping-agents-promise-better-bargains-but-who-pays-the-price-294461",
-     "published": "2026-10-19T19:15:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lynnaire Sheridan, Associate Professor, Department of Management, University of Otago"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Haines loses leg; alleged attacker posted about environment and Gaza",
+   "published": "2026-10-20 03:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
    "published": "2026-10-20 02:31 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Politics with Michelle Grattan: Ed Husic urges brakes on data centres ‘swamping’ Australia",
    "published": "2026-10-20 01:02 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "New AI shopping agents promise better bargains. But who pays the price?",
-   "published": "2026-10-19 19:15 UTC"
   },
   {
    "region": "Oceania",
