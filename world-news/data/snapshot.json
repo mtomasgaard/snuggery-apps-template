@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T20:01:30Z",
+ "generatedAt": "2026-10-20T21:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Horror films exploit how human vision works to deliver movies’ best scares",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/horror-films-exploit-how-human-vision-works-to-deliver-movies-best-scares-291955",
+     "published": "2026-10-20T19:42:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Arryn Robbins, Assistant Professor of Psychology, University of Richmond"
+    },
+    {
      "title": "US inequality is getting worse in ways you might not expect",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Markus Schneider, Associate Professor of Economics, University of Denver"
-    },
-    {
-     "title": "How governments worldwide are shaping what AI can say about politics",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/how-governments-worldwide-are-shaping-what-ai-can-say-about-politics-294097",
-     "published": "2026-10-20T12:38:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jordi Calvet-Bademunt, Research Fellow and Visiting Scholar of Political Science, Vanderbilt University"
     },
     {
      "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/10/20/built-for-boats-adrift-on-land-bangladeshs-bede-community-struggles-with-a-fixed-address-system/",
+     "published": "2026-10-20T20:06:51Z",
+     "summary": "Bangladesh’s traditionally nomadic Bede community faces severe displacement from floods and eroding rivers. Lacking fixed addresses, they struggle to access citizenship documents, healthcare, and education as they…",
+     "stale": false,
+     "author": "Masudul Zarif"
+    },
+    {
      "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
      "stale": false,
      "author": "Susmita Aryal"
-    },
-    {
-     "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
-     "published": "2026-10-12T06:39:35Z",
-     "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
-     "stale": false,
-     "author": "Maksuda Akter"
     }
    ]
   },
@@ -428,6 +428,26 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nz-election-poll-watch-right-majority-possible-even-if-opportunity-enters-parliament-294692",
+     "published": "2026-10-20T20:54:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
+     "title": "One in six older people experience abuse in NZ, with psychological harm most common",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/one-in-six-older-people-experience-abuse-in-nz-with-psychological-harm-most-common-294142",
+     "published": "2026-10-20T20:21:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lisa Meehan, Director, NZ Policy Research Institute, Auckland University of Technology"
+    },
     {
      "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
      "source": "The Conversation",
@@ -449,16 +469,6 @@
      "author": "Alison Fogarty, Research Fellow, Lifespan Institute and School of Psychology, Deakin University, Deakin University"
     },
     {
-     "title": "Why the humble rabbit might be Australia’s worst introduced species",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-the-humble-rabbit-might-be-australias-worst-introduced-species-287167",
-     "published": "2026-10-20T19:03:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ina Smith, Senior Research Scientist, Team Leader Rabbit Biocontrol, CSIRO"
-    },
-    {
      "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Dominic O'Sullivan, Adjunct Professor, Stout Research Centre, Victoria University of Wellington and Auckland University of Technology, Professor of Political…"
-    },
-    {
-     "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/ai-reveals-how-a-warming-climate-will-intensify-nzs-most-extreme-downpours-294147",
-     "published": "2026-10-20T01:09:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Neelesh Rampal, Data Scientist, Earth Sciences New Zealand"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US inequality is getting worse in ways you might not expect",
-   "published": "2026-10-20 12:38 UTC"
+   "title": "Horror films exploit how human vision works to deliver movies’ best scares",
+   "published": "2026-10-20 19:42 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "How governments worldwide are shaping what AI can say about politics",
+   "title": "US inequality is getting worse in ways you might not expect",
    "published": "2026-10-20 12:38 UTC"
   },
   {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
+   "published": "2026-10-20 20:06 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
    "published": "2026-10-20 12:00 UTC"
@@ -905,10 +911,16 @@
    "published": "2026-10-13 18:21 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
-   "published": "2026-10-12 06:39 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
+   "published": "2026-10-20 20:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "One in six older people experience abuse in NZ, with psychological harm most common",
+   "published": "2026-10-20 20:21 UTC"
   },
   {
    "region": "Oceania",
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why the humble rabbit might be Australia’s worst introduced species",
-   "published": "2026-10-20 19:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
    "published": "2026-10-20 02:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
-   "published": "2026-10-20 01:09 UTC"
   },
   {
    "region": "Oceania",
