@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T02:01:30Z",
+ "generatedAt": "2026-10-20T03:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
+     "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/nzs-next-government-will-inherit-a-treaty-debate-that-is-far-from-resolved-292762",
+     "published": "2026-10-20T02:31:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dominic O'Sullivan, Adjunct Professor, Stout Research Centre, Victoria University of Wellington and Auckland University of Technology, Professor of Political…"
+    },
+    {
+     "title": "Anti-government violence is growing. The response needs to be more than just increased policing",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/anti-government-violence-is-growing-the-response-needs-to-be-more-than-just-increased-policing-294782",
+     "published": "2026-10-20T01:36:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kristina Murphy, Professor and former ARC Future Fellow, Griffith Criminology Institute, Griffith University"
+    },
+    {
+     "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/ai-reveals-how-a-warming-climate-will-intensify-nzs-most-extreme-downpours-294147",
      "published": "2026-10-20T01:09:17Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
-     "title": "Honey bee hives have ‘living immune systems’ which defend against disease",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/honey-bee-hives-have-living-immune-systems-which-defend-against-disease-289604",
-     "published": "2026-10-19T22:00:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kenya Fernandes, Research Fellow, Faculty of Science, University of Sydney"
-    },
-    {
      "title": "New AI shopping agents promise better bargains. But who pays the price?",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Lynnaire Sheridan, Associate Professor, Department of Management, University of Otago"
-    },
-    {
-     "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/as-french-protests-escalate-into-riots-they-may-prove-a-gift-for-marine-le-pens-right-wing-party-294673",
-     "published": "2026-10-19T03:02:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peter McPhee, Emeritus professor, History, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
+   "published": "2026-10-20 02:31 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Anti-government violence is growing. The response needs to be more than just increased policing",
+   "published": "2026-10-20 01:36 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
    "published": "2026-10-20 01:09 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Honey bee hives have ‘living immune systems’ which defend against disease",
-   "published": "2026-10-19 22:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "New AI shopping agents promise better bargains. But who pays the price?",
    "published": "2026-10-19 19:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "As French protests escalate into riots, they may prove a gift for Marine Le Pen’s right-wing party",
-   "published": "2026-10-19 03:02 UTC"
   },
   {
    "region": "Oceania",
