@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T14:01:38Z",
+ "generatedAt": "2026-10-20T15:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africas-schools-reflect-an-unequal-society-what-can-teachers-do-about-it-292924",
+     "published": "2026-10-20T14:01:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nhlanhla Mpofu, Researcher in TESOL & Language Literacy Education, University of Notre Dame Australia"
+    },
+    {
+     "title": "When tax officials visit: why softer tax outreach can build trust in some places and erode it in others",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/when-tax-officials-visit-why-softer-tax-outreach-can-build-trust-in-some-places-and-erode-it-in-others-292805",
+     "published": "2026-10-20T14:01:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christopher Hoy, McKenzie Research Fellow, The University of Melbourne"
+    },
+    {
      "title": "Yemen war continues to force families from homes amid hunger and disease",
      "source": "UN News",
      "feed": "un-africa",
@@ -194,26 +214,6 @@
      "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Millions of children aren’t getting vaccinated: how mapping tools can help find them",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/millions-of-children-arent-getting-vaccinated-how-mapping-tools-can-help-find-them-290370",
-     "published": "2026-10-19T14:19:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ann Muthoni Njogu, Doctoral researcher, Institute of Tropical Medicine Antwerp"
-    },
-    {
-     "title": "Fridge-free vaccines could reach more people, but there are still practical challenges in African settings",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/fridge-free-vaccines-could-reach-more-people-but-there-are-still-practical-challenges-in-african-settings-293280",
-     "published": "2026-10-19T14:18:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Charles Shey Wiysonge, Extraordinary Professor, Global Health, Stellenbosch University; South African Medical Research Council"
     },
     {
      "title": "UN condemns deadly wave of drone strikes in war-torn Sudan",
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
+   "published": "2026-10-20 14:01 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "When tax officials visit: why softer tax outreach can build trust in some places and erode it in others",
+   "published": "2026-10-20 14:01 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Yemen war continues to force families from homes amid hunger and disease",
    "published": "2026-10-20 12:00 UTC"
@@ -777,18 +789,6 @@
    "source": "Global Voices",
    "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
    "published": "2026-10-19 20:11 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Millions of children aren’t getting vaccinated: how mapping tools can help find them",
-   "published": "2026-10-19 14:19 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Fridge-free vaccines could reach more people, but there are still practical challenges in African settings",
-   "published": "2026-10-19 14:18 UTC"
   },
   {
    "region": "Africa",
