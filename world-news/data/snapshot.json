@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T09:01:33Z",
+ "generatedAt": "2026-10-20T10:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -439,10 +439,10 @@
      "author": "Joshua Black, Lecturer in Australian Political Studies, University of Canberra"
     },
     {
-     "title": "Haines loses leg; alleged attacker posted about environment and Gaza",
+     "title": "Haines loses leg; police charge alleged attacker",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/haines-loses-leg-alleged-attacker-posted-about-environment-and-gaza-294364",
+     "link": "https://theconversation.com/haines-loses-leg-police-charge-alleged-attacker-294364",
      "published": "2026-10-20T03:29:12Z",
      "summary": "",
      "stale": false,
@@ -919,7 +919,7 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Haines loses leg; alleged attacker posted about environment and Gaza",
+   "title": "Haines loses leg; police charge alleged attacker",
    "published": "2026-10-20 03:29 UTC"
   },
   {
