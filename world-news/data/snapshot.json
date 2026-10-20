@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T19:01:33Z",
+ "generatedAt": "2026-10-20T20:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Christopher Hoy, McKenzie Research Fellow, The University of Melbourne"
     },
     {
+     "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168630",
+     "published": "2026-10-20T12:00:00Z",
+     "summary": "The UN warned on Tuesday against a premature withdrawal of its peacekeepers as the war in Sudan spills over into the Central African Republic (CAR).",
+     "stale": false
+    },
+    {
      "title": "Yemen war continues to force families from homes amid hunger and disease",
      "source": "UN News",
      "feed": "un-africa",
@@ -233,15 +242,6 @@
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
      "author": "Uncloseted MEdia"
-    },
-    {
-     "title": "Security Council LIVE: Sudan’s war spreads as drones and hunger take a deadly toll",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168612",
-     "published": "2026-10-16T12:00:00Z",
-     "summary": "As drone strikes kill civilians from El Obeid to Blue Nile and famine risk spreads across Darfur and Kordofan, the Security Council meets on Sudan – the world’s largest hunger and displacement crisis. Ambassadors are…",
-     "stale": false
     },
     {
      "title": "What African elections can learn from the Borana Gadaa system",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
+     "published": "2026-10-20T12:00:00Z",
+     "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
+     "stale": false
+    },
+    {
      "title": "Activists push for Pakistan to recognise and support people with albinism",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -403,15 +412,6 @@
      "author": "Susmita Aryal"
     },
     {
-     "title": "UN aid operation underway in Nepal following fresh floods",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168576",
-     "published": "2026-10-12T12:00:00Z",
-     "summary": "The United Nations has rushed to assist Nepal following new flash floods in the central Gorkha district on Sunday that swept away homes and bridges just weeks after catastrophic flooding in the north.",
-     "stale": false
-    },
-    {
      "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Australian democracy is usually peaceful. But there’s a homegrown history with political violence that bears on the future",
+     "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/australian-democracy-is-usually-peaceful-but-theres-a-homegrown-history-with-political-violence-that-bears-on-the-future-294779",
-     "published": "2026-10-20T06:39:59Z",
+     "link": "https://theconversation.com/guide-to-the-classics-bemused-by-the-contemporary-world-the-red-and-the-black-might-be-just-the-friend-you-need-285137",
+     "published": "2026-10-20T19:04:39Z",
      "summary": "",
      "stale": false,
-     "author": "Joshua Black, Lecturer in Australian Political Studies, University of Canberra"
+     "author": "Jamie Q. Roberts, Lecturer in Politics and International Relations, University of Sydney"
     },
     {
-     "title": "Haines loses leg; police charge alleged attacker",
+     "title": "Not enjoying being a parent? You’re not alone. Here’s how to handle this complicated feeling",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/haines-loses-leg-police-charge-alleged-attacker-294364",
-     "published": "2026-10-20T03:29:12Z",
+     "link": "https://theconversation.com/not-enjoying-being-a-parent-youre-not-alone-heres-how-to-handle-this-complicated-feeling-294455",
+     "published": "2026-10-20T19:04:20Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Alison Fogarty, Research Fellow, Lifespan Institute and School of Psychology, Deakin University, Deakin University"
+    },
+    {
+     "title": "Why the humble rabbit might be Australia’s worst introduced species",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-the-humble-rabbit-might-be-australias-worst-introduced-species-287167",
+     "published": "2026-10-20T19:03:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ina Smith, Senior Research Scientist, Team Leader Rabbit Biocontrol, CSIRO"
     },
     {
      "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Dominic O'Sullivan, Adjunct Professor, Stout Research Centre, Victoria University of Wellington and Auckland University of Technology, Professor of Political…"
-    },
-    {
-     "title": "Anti-government violence is growing. The response needs to be more than just increased policing",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/anti-government-violence-is-growing-the-response-needs-to-be-more-than-just-increased-policing-294782",
-     "published": "2026-10-20T01:36:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kristina Murphy, Professor and former ARC Future Fellow, Griffith Criminology Institute, Griffith University"
     },
     {
      "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
+   "published": "2026-10-20 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Yemen war continues to force families from homes amid hunger and disease",
    "published": "2026-10-20 12:00 UTC"
   },
@@ -801,12 +807,6 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Security Council LIVE: Sudan’s war spreads as drones and hunger take a deadly toll",
-   "published": "2026-10-16 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
+   "published": "2026-10-20 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Activists push for Pakistan to recognise and support people with albinism",
    "published": "2026-10-18 08:36 UTC"
@@ -900,12 +906,6 @@
   },
   {
    "region": "Asia",
-   "source": "UN News",
-   "title": "UN aid operation underway in Nepal following fresh floods",
-   "published": "2026-10-12 12:00 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "Global Voices",
    "title": "Bangladesh-Malaysia recruitment reforms revive old questions over the cost of migration",
    "published": "2026-10-12 06:39 UTC"
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australian democracy is usually peaceful. But there’s a homegrown history with political violence that bears on the future",
-   "published": "2026-10-20 06:39 UTC"
+   "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
+   "published": "2026-10-20 19:04 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Haines loses leg; police charge alleged attacker",
-   "published": "2026-10-20 03:29 UTC"
+   "title": "Not enjoying being a parent? You’re not alone. Here’s how to handle this complicated feeling",
+   "published": "2026-10-20 19:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Why the humble rabbit might be Australia’s worst introduced species",
+   "published": "2026-10-20 19:03 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
    "published": "2026-10-20 02:31 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Anti-government violence is growing. The response needs to be more than just increased policing",
-   "published": "2026-10-20 01:36 UTC"
   },
   {
    "region": "Oceania",
