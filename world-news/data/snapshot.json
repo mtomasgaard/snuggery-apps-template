@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T01:01:28Z",
+ "generatedAt": "2026-10-20T02:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/ai-reveals-how-a-warming-climate-will-intensify-nzs-most-extreme-downpours-294147",
+     "published": "2026-10-20T01:09:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "Neelesh Rampal, Data Scientist, Earth Sciences New Zealand"
+    },
+    {
+     "title": "Politics with Michelle Grattan: Ed Husic urges brakes on data centres ‘swamping’ Australia",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-ed-husic-urges-brakes-on-data-centres-swamping-australia-294687",
+     "published": "2026-10-20T01:02:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Honey bee hives have ‘living immune systems’ which defend against disease",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kenya Fernandes, Research Fellow, Faculty of Science, University of Sydney"
-    },
-    {
-     "title": "A new history of ‘blackbirding’ favours moral condemnation at the expense of complexity",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-new-history-of-blackbirding-favours-moral-condemnation-at-the-expense-of-complexity-291169",
-     "published": "2026-10-19T19:16:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tim Rowse, Emeritus Professor, Institute for Culture and Society, Western Sydney University"
-    },
-    {
-     "title": "Many Indigenous people now study and teach at Australian universities – but they are still excluded",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/many-indigenous-people-now-study-and-teach-at-australian-universities-but-they-are-still-excluded-294240",
-     "published": "2026-10-19T19:16:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tristan Kennedy, Deputy Vice-Chancellor (Indigenous) and Senior Vice-President, Monash University"
     },
     {
      "title": "New AI shopping agents promise better bargains. But who pays the price?",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
+   "published": "2026-10-20 01:09 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Politics with Michelle Grattan: Ed Husic urges brakes on data centres ‘swamping’ Australia",
+   "published": "2026-10-20 01:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Honey bee hives have ‘living immune systems’ which defend against disease",
    "published": "2026-10-19 22:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A new history of ‘blackbirding’ favours moral condemnation at the expense of complexity",
-   "published": "2026-10-19 19:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Many Indigenous people now study and teach at Australian universities – but they are still excluded",
-   "published": "2026-10-19 19:16 UTC"
   },
   {
    "region": "Oceania",
