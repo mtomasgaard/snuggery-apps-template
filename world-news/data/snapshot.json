@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T00:03:29Z",
+ "generatedAt": "2026-10-20T01:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -24,7 +24,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted MEdia"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": true,
+     "stale": false,
      "author": "Elmira Lyapina"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
      "published": "2026-09-19T08:01:45Z",
      "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": true,
+     "stale": false,
      "author": "Omid Memarian"
     }
    ]
@@ -137,7 +137,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted MEdia"
     },
     {
@@ -147,7 +147,7 @@
      "link": "https://globalvoices.org/2026/10/16/how-an-extremist-network-articulated-a-hoax-linking-brazils-president-lula-to-child-abuse-on-x/",
      "published": "2026-10-16T13:10:39Z",
      "summary": "Distortion in the meaning of a speech by Lula about prostate cancer exams went viral within hours and fed conspiracy theories amid a tight presidential race in Brazil.",
-     "stale": true,
+     "stale": false,
      "author": "Fernanda Canofre"
     },
     {
@@ -157,7 +157,7 @@
      "link": "https://globalvoices.org/2026/10/15/perus-indigenous-people-in-cutivireni-and-oviri-take-the-front-line-against-amazon-wildfires/",
      "published": "2026-10-15T18:30:01Z",
      "summary": "As El Niño worsens dry conditions, Peru’s indigenous people in Cutivireni and Oviri are taking action to protect their Amazon territory from wildfires.",
-     "stale": true,
+     "stale": false,
      "author": "Cool Earth"
     },
     {
@@ -183,7 +183,7 @@
      "link": "https://globalvoices.org/2026/10/19/anthropic-exposes-ai-operation-that-drc-journalists-never-knew-existed/",
      "published": "2026-10-19T20:11:30Z",
      "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
-     "stale": true,
+     "stale": false,
      "author": "Laura"
     },
     {
@@ -222,7 +222,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted MEdia"
     },
     {
@@ -250,7 +250,7 @@
      "link": "https://globalvoices.org/2026/10/12/what-african-elections-can-learn-from-the-borana-gadaa-system/",
      "published": "2026-10-12T20:34:34Z",
      "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
-     "stale": true,
+     "stale": false,
      "author": "Peace News"
     }
    ]
@@ -350,7 +350,7 @@
      "link": "https://globalvoices.org/2026/10/18/activists-push-pakistan-to-recognise-and-support-people-with-albinism/",
      "published": "2026-10-18T08:36:42Z",
      "summary": "Pakistan keeps no national data on people with albinism. Without a count, they lack tailored support in schools, healthcare, and jobs, while rising heat raises their health risks, experts say.",
-     "stale": true,
+     "stale": false,
      "author": "Mahpara Zulqadar"
     },
     {
@@ -360,7 +360,7 @@
      "link": "https://globalvoices.org/2026/10/16/hong-kong-police-launch-ai-powered-national-security-platform-for-school-pupils/",
      "published": "2026-10-16T05:03:29Z",
      "summary": "The tech allows students to generate personalized stories on China’s “holistic approach to national security” – a framework advocated by President Xi Jinping covering areas from politics and economy to ecology and…",
-     "stale": true,
+     "stale": false,
      "author": "Hong Kong Free Press"
     },
     {
@@ -379,7 +379,7 @@
      "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
      "published": "2026-10-15T04:00:07Z",
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
-     "stale": true,
+     "stale": false,
      "author": "Daria Dergacheva"
     },
     {
@@ -389,7 +389,7 @@
      "link": "https://globalvoices.org/2026/10/14/norways-telenor-telecom-faces-lawsuit-for-giving-user-data-to-myanmars-junta/",
      "published": "2026-10-14T18:22:53Z",
      "summary": "\"We hope this will finally lead to accountability for the harms Telenor has caused Myanmar people through its conduct and its dangerous divestment.\"",
-     "stale": true,
+     "stale": false,
      "author": "Mong Palatino"
     },
     {
@@ -399,7 +399,7 @@
      "link": "https://globalvoices.org/2026/10/13/after-flood-disasters-nepal-needs-clear-numbers-on-aid-and-a-reconstruction-plan/",
      "published": "2026-10-13T18:21:20Z",
      "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
-     "stale": true,
+     "stale": false,
      "author": "Susmita Aryal"
     },
     {
@@ -418,7 +418,7 @@
      "link": "https://globalvoices.org/2026/10/12/bangladesh-malaysia-recruitment-reforms-revive-old-questions-over-the-cost-of-migration/",
      "published": "2026-10-12T06:39:35Z",
      "summary": "Bangladesh and Malaysia have made several government-level agreements for labour migration over the years, but problems such as syndication, excessive recruitment costs and human rights abuses remain unresolved.",
-     "stale": true,
+     "stale": false,
      "author": "Maksuda Akter"
     }
    ]
@@ -485,7 +485,7 @@
      "link": "https://globalvoices.org/2026/10/06/young-people-are-bridging-the-climate-divide-for-oceania-and-the-caribbean/",
      "published": "2026-10-06T08:05:24Z",
      "summary": "“The lack of strong and consistent climate policy means that every year, families lose loved ones, homes, and entire livelihoods because of climate-related disasters.”",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -495,7 +495,7 @@
      "link": "https://globalvoices.org/2026/10/01/the-sound-of-resistance/",
      "published": "2026-10-01T20:45:32Z",
      "summary": "As part of Global Voices’ September Spotlight, “Protest in Democracy,” members of our community will be sharing examples of protest music past and present from their communities in this collaborative article.",
-     "stale": true,
+     "stale": false,
      "author": "Sydney Allen"
     },
     {
@@ -505,7 +505,7 @@
      "link": "https://globalvoices.org/2026/09/14/nest-flix-peregrine-falcons-become-streaming-stars-of-the-34th-floor-in-australia/",
      "published": "2026-09-14T18:56:04Z",
      "summary": "\"Get ready to watch as the chicks hatch and their parents raise them high above the hustle and bustle of Melbourne city life.\"",
-     "stale": true,
+     "stale": false,
      "author": "Kevin Rennie"
     }
    ]
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
@@ -560,9 +560,9 @@
    "id": "gv-latin-america",
    "source": "Global Voices",
    "region": "Americas",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-americas",
@@ -584,9 +584,9 @@
    "id": "gv-africa",
    "source": "Global Voices",
    "region": "Africa",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-africa",
@@ -624,17 +624,17 @@
    "id": "gv-east-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-south-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-asia-pacific",
@@ -648,9 +648,9 @@
    "id": "gv-oceania",
    "source": "Global Voices",
    "region": "Oceania",
-   "ok": false,
-   "items": 3,
-   "note": "URLError: <urlopen error _ssl.c:993: The handshake operation timed out>; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "tc-au",
