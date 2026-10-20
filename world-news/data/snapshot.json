@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T06:01:25Z",
+ "generatedAt": "2026-10-20T07:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Australian democracy is usually peaceful. But there’s a homegrown history with political violence that bears on the future",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australian-democracy-is-usually-peaceful-but-theres-a-homegrown-history-with-political-violence-that-bears-on-the-future-294779",
+     "published": "2026-10-20T06:39:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joshua Black, Lecturer in Australian Political Studies, University of Canberra"
+    },
+    {
      "title": "Haines loses leg; alleged attacker posted about environment and Gaza",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Neelesh Rampal, Data Scientist, Earth Sciences New Zealand"
-    },
-    {
-     "title": "Politics with Michelle Grattan: Ed Husic urges brakes on data centres ‘swamping’ Australia",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-ed-husic-urges-brakes-on-data-centres-swamping-australia-294687",
-     "published": "2026-10-20T01:02:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australian democracy is usually peaceful. But there’s a homegrown history with political violence that bears on the future",
+   "published": "2026-10-20 06:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Haines loses leg; alleged attacker posted about environment and Gaza",
    "published": "2026-10-20 03:29 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "AI reveals how a warming climate will intensify NZ’s most extreme downpours",
    "published": "2026-10-20 01:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Ed Husic urges brakes on data centres ‘swamping’ Australia",
-   "published": "2026-10-20 01:02 UTC"
   },
   {
    "region": "Oceania",
