@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T21:01:28Z",
+ "generatedAt": "2026-10-20T22:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -431,7 +431,7 @@
     {
      "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nz-election-poll-watch-right-majority-possible-even-if-opportunity-enters-parliament-294692",
      "published": "2026-10-20T20:54:41Z",
      "summary": "",
@@ -441,7 +441,7 @@
     {
      "title": "One in six older people experience abuse in NZ, with psychological harm most common",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/one-in-six-older-people-experience-abuse-in-nz-with-psychological-harm-most-common-294142",
      "published": "2026-10-20T20:21:45Z",
      "summary": "",
