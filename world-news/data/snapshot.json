@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T10:19:11Z",
+ "generatedAt": "2026-10-21T11:01:48Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Les pays africains pourraient économiser des milliards en réduisant la pollution et les émissions de gaz à effet de serre",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/les-pays-africains-pourraient-economiser-des-milliards-en-reduisant-la-pollution-et-les-emissions-de-gaz-a-effet-de-serre-294702",
+     "published": "2026-10-21T09:55:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Chris Malley, Research Fellow, Stockholm Environment Institute York Centre, University of York"
+    },
+    {
      "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Nhlanhla Mpofu, Researcher in TESOL & Language Literacy Education, University of Notre Dame Australia"
-    },
-    {
-     "title": "When tax officials visit: why softer tax outreach can build trust in some places and erode it in others",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/when-tax-officials-visit-why-softer-tax-outreach-can-build-trust-in-some-places-and-erode-it-in-others-292805",
-     "published": "2026-10-20T14:01:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christopher Hoy, McKenzie Research Fellow, The University of Melbourne"
     },
     {
      "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
-   "published": "2026-10-20 14:01 UTC"
+   "title": "Les pays africains pourraient économiser des milliards en réduisant la pollution et les émissions de gaz à effet de serre",
+   "published": "2026-10-21 09:55 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "When tax officials visit: why softer tax outreach can build trust in some places and erode it in others",
+   "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
    "published": "2026-10-20 14:01 UTC"
   },
   {
