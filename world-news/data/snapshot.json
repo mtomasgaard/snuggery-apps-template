@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-20T23:01:31Z",
+ "generatedAt": "2026-10-21T00:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -197,15 +197,6 @@
      "author": "Christopher Hoy, McKenzie Research Fellow, The University of Melbourne"
     },
     {
-     "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168630",
-     "published": "2026-10-20T12:00:00Z",
-     "summary": "The UN warned on Tuesday against a premature withdrawal of its peacekeepers as the war in Sudan spills over into the Central African Republic (CAR).",
-     "stale": false
-    },
-    {
      "title": "Yemen war continues to force families from homes amid hunger and disease",
      "source": "UN News",
      "feed": "un-africa",
@@ -242,6 +233,15 @@
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
      "author": "Uncloseted MEdia"
+    },
+    {
+     "title": "Security Council LIVE: Sudan’s war spreads as drones and hunger take a deadly toll",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168612",
+     "published": "2026-10-16T12:00:00Z",
+     "summary": "As drone strikes kill civilians from El Obeid to Blue Nile and famine risk spreads across Darfur and Kordofan, the Security Council meets on Sudan – the world’s largest hunger and displacement crisis. Ambassadors are…",
+     "stale": false
     },
     {
      "title": "What African elections can learn from the Borana Gadaa system",
@@ -354,15 +354,6 @@
      "author": "Masudul Zarif"
     },
     {
-     "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
-     "published": "2026-10-20T12:00:00Z",
-     "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": false
-    },
-    {
      "title": "Activists push for Pakistan to recognise and support people with albinism",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -420,6 +411,15 @@
      "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
      "stale": false,
      "author": "Susmita Aryal"
+    },
+    {
+     "title": "UN aid operation underway in Nepal following fresh floods",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168576",
+     "published": "2026-10-12T12:00:00Z",
+     "summary": "The United Nations has rushed to assist Nepal following new flash floods in the central Gorkha district on Sunday that swept away homes and bridges just weeks after catastrophic flooding in the north.",
+     "stale": false
     }
    ]
   },
@@ -781,12 +781,6 @@
   {
    "region": "Africa",
    "source": "UN News",
-   "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
-   "published": "2026-10-20 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
    "title": "Yemen war continues to force families from homes amid hunger and disease",
    "published": "2026-10-20 12:00 UTC"
   },
@@ -807,6 +801,12 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Security Council LIVE: Sudan’s war spreads as drones and hunger take a deadly toll",
+   "published": "2026-10-16 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -870,12 +870,6 @@
   },
   {
    "region": "Asia",
-   "source": "UN News",
-   "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
-   "published": "2026-10-20 12:00 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "Global Voices",
    "title": "Activists push for Pakistan to recognise and support people with albinism",
    "published": "2026-10-18 08:36 UTC"
@@ -909,6 +903,12 @@
    "source": "Global Voices",
    "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
    "published": "2026-10-13 18:21 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
+   "title": "UN aid operation underway in Nepal following fresh floods",
+   "published": "2026-10-12 12:00 UTC"
   },
   {
    "region": "Oceania",
