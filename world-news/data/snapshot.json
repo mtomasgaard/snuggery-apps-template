@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T19:01:38Z",
+ "generatedAt": "2026-10-21T20:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -44,7 +44,7 @@
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
-     "author": "Uncloseted MEdia"
+     "author": "Uncloseted Media"
     },
     {
      "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
@@ -138,7 +138,7 @@
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
-     "author": "Uncloseted MEdia"
+     "author": "Uncloseted Media"
     },
     {
      "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
@@ -251,7 +251,7 @@
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
-     "author": "Uncloseted MEdia"
+     "author": "Uncloseted Media"
     }
    ]
   },
@@ -304,7 +304,7 @@
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
-     "author": "Uncloseted MEdia"
+     "author": "Uncloseted Media"
     },
     {
      "title": "How authoritarian states are building an international market for digital surveillance",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/governor-general-appeals-to-australians-to-exercise-our-muscle-of-decency-haines-husband-reveals-mp-has-lost-second-leg-294863",
-     "published": "2026-10-21T08:50:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "What is idiopathic transverse myelitis, the neurological condition Helen Haines’ alleged attacker has?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-is-idiopathic-transverse-myelitis-the-neurological-condition-helen-haines-alleged-attacker-has-294867",
-     "published": "2026-10-21T07:21:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sarah Hellewell, Senior Research Fellow, The Perron Institute for Neurological and Translational Science, and Faculty of Health Sciences, Curtin University"
-    },
-    {
-     "title": "View from The Hill: Mathias Cormann offers blunt advice on countering populism and reforming the economy",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-mathias-cormann-offers-blunt-advice-on-countering-populism-and-reforming-the-economy-294860",
-     "published": "2026-10-21T06:45:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
+     "title": "The government wants to reward better GP care. But what happens when targets take priority?",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-election-poll-watch-right-majority-possible-even-if-opportunity-enters-parliament-294692",
-     "published": "2026-10-20T20:54:41Z",
+     "link": "https://theconversation.com/the-government-wants-to-reward-better-gp-care-but-what-happens-when-targets-take-priority-293437",
+     "published": "2026-10-21T19:43:26Z",
      "summary": "",
      "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+     "author": "Felicity Goodyear-Smith, Professor of General Practice and Primary Health Care, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "One in six older people experience abuse in NZ, with psychological harm most common",
+     "title": "How does fake tan work, and why does it sometimes smell ‘biscuity’?",
      "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/one-in-six-older-people-experience-abuse-in-nz-with-psychological-harm-most-common-294142",
-     "published": "2026-10-20T20:21:45Z",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-does-fake-tan-work-and-why-does-it-sometimes-smell-biscuity-283685",
+     "published": "2026-10-21T19:12:52Z",
      "summary": "",
      "stale": false,
-     "author": "Lisa Meehan, Director, NZ Policy Research Institute, Auckland University of Technology"
+     "author": "Anna Wang, Associate Professor of Chemistry, UNSW"
+    },
+    {
+     "title": "Want to take leave or call in sick to play Grand Theft Auto 6? Here’s how not to break the law",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/want-to-take-leave-or-call-in-sick-to-play-grand-theft-auto-6-heres-how-not-to-break-the-law-294245",
+     "published": "2026-10-21T19:12:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shae McCrystal, Professor of Labour Law, University of Sydney"
+    },
+    {
+     "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/virginia-woolfs-orlando-the-ultimate-shapeshifter-is-now-a-madcap-graphic-novel-283698",
+     "published": "2026-10-21T19:12:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Yves Rees, Senior Lecturer in History, La Trobe University"
+    },
+    {
+     "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/could-thoughtful-ai-art-counter-the-rise-of-ai-slop-why-creatives-today-face-a-paradox-294117",
+     "published": "2026-10-21T19:12:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sara Oscar, Senior Lecturer, Visual Communication, School of Design, University of Technology Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
-   "published": "2026-10-21 08:50 UTC"
+   "title": "The government wants to reward better GP care. But what happens when targets take priority?",
+   "published": "2026-10-21 19:43 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What is idiopathic transverse myelitis, the neurological condition Helen Haines’ alleged attacker has?",
-   "published": "2026-10-21 07:21 UTC"
+   "title": "How does fake tan work, and why does it sometimes smell ‘biscuity’?",
+   "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: Mathias Cormann offers blunt advice on countering populism and reforming the economy",
-   "published": "2026-10-21 06:45 UTC"
+   "title": "Want to take leave or call in sick to play Grand Theft Auto 6? Here’s how not to break the law",
+   "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
-   "published": "2026-10-20 20:54 UTC"
+   "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
+   "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "One in six older people experience abuse in NZ, with psychological harm most common",
-   "published": "2026-10-20 20:21 UTC"
+   "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
+   "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
