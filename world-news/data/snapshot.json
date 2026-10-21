@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T07:01:43Z",
+ "generatedAt": "2026-10-21T08:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "What is idiopathic transverse myelitis, the neurological condition Helen Haines’ alleged attacker has?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-is-idiopathic-transverse-myelitis-the-neurological-condition-helen-haines-alleged-attacker-has-294867",
+     "published": "2026-10-21T07:21:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sarah Hellewell, Senior Research Fellow, The Perron Institute for Neurological and Translational Science, and Faculty of Health Sciences, Curtin University"
+    },
+    {
+     "title": "View from The Hill: Mathias Cormann offers blunt advice on countering populism and reforming the economy",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-mathias-cormann-offers-blunt-advice-on-countering-populism-and-reforming-the-economy-294860",
+     "published": "2026-10-21T06:45:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Josh Holloway, Senior Lecturer in Government, Flinders University"
-    },
-    {
-     "title": "How rage and frustration against authority figures tips over into conspiracy and violence – and what we can do about it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-rage-and-frustration-against-authority-figures-tips-over-into-conspiracy-and-violence-and-what-we-can-do-about-it-294778",
-     "published": "2026-10-21T00:38:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Josh Roose, Director of Research and Policy at The Dor Foundation and Associate Professor of Politics at Deakin University, Deakin University"
     },
     {
      "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Lisa Meehan, Director, NZ Policy Research Institute, Auckland University of Technology"
-    },
-    {
-     "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/guide-to-the-classics-bemused-by-the-contemporary-world-the-red-and-the-black-might-be-just-the-friend-you-need-285137",
-     "published": "2026-10-20T19:04:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jamie Q. Roberts, Lecturer in Politics and International Relations, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,14 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
-   "published": "2026-10-21 03:48 UTC"
+   "title": "What is idiopathic transverse myelitis, the neurological condition Helen Haines’ alleged attacker has?",
+   "published": "2026-10-21 07:21 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "How rage and frustration against authority figures tips over into conspiracy and violence – and what we can do about it",
-   "published": "2026-10-21 00:38 UTC"
+   "title": "View from The Hill: Mathias Cormann offers blunt advice on countering populism and reforming the economy",
+   "published": "2026-10-21 06:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
+   "published": "2026-10-21 03:48 UTC"
   },
   {
    "region": "Oceania",
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "One in six older people experience abuse in NZ, with psychological harm most common",
    "published": "2026-10-20 20:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
-   "published": "2026-10-20 19:04 UTC"
   },
   {
    "region": "Oceania",
