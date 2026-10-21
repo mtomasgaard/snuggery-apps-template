@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T01:01:25Z",
+ "generatedAt": "2026-10-21T02:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -354,6 +354,15 @@
      "author": "Masudul Zarif"
     },
     {
+     "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
+     "published": "2026-10-20T12:00:00Z",
+     "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
+     "stale": false
+    },
+    {
      "title": "Activists push for Pakistan to recognise and support people with albinism",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -411,15 +420,6 @@
      "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
      "stale": false,
      "author": "Susmita Aryal"
-    },
-    {
-     "title": "UN aid operation underway in Nepal following fresh floods",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168576",
-     "published": "2026-10-12T12:00:00Z",
-     "summary": "The United Nations has rushed to assist Nepal following new flash floods in the central Gorkha district on Sunday that swept away homes and bridges just weeks after catastrophic flooding in the north.",
-     "stale": false
     }
    ]
   },
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
+     "title": "How rage and frustration against authority figures tips over into conspiracy and violence – and what we can do about it",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/how-rage-and-frustration-against-authority-figures-tips-over-into-conspiracy-and-violence-and-what-we-can-do-about-it-294778",
+     "published": "2026-10-21T00:38:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Josh Roose, Director of Research and Policy at The Dor Foundation and Associate Professor of Politics at Deakin University, Deakin University"
+    },
+    {
+     "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-election-poll-watch-right-majority-possible-even-if-opportunity-enters-parliament-294692",
      "published": "2026-10-20T20:54:41Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "One in six older people experience abuse in NZ, with psychological harm most common",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/one-in-six-older-people-experience-abuse-in-nz-with-psychological-harm-most-common-294142",
      "published": "2026-10-20T20:21:45Z",
      "summary": "",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Jamie Q. Roberts, Lecturer in Politics and International Relations, University of Sydney"
-    },
-    {
-     "title": "Not enjoying being a parent? You’re not alone. Here’s how to handle this complicated feeling",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/not-enjoying-being-a-parent-youre-not-alone-heres-how-to-handle-this-complicated-feeling-294455",
-     "published": "2026-10-20T19:04:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alison Fogarty, Research Fellow, Lifespan Institute and School of Psychology, Deakin University, Deakin University"
     },
     {
      "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
@@ -870,6 +870,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
+   "published": "2026-10-20 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Activists push for Pakistan to recognise and support people with albinism",
    "published": "2026-10-18 08:36 UTC"
@@ -905,10 +911,10 @@
    "published": "2026-10-13 18:21 UTC"
   },
   {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "UN aid operation underway in Nepal following fresh floods",
-   "published": "2026-10-12 12:00 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How rage and frustration against authority figures tips over into conspiracy and violence – and what we can do about it",
+   "published": "2026-10-21 00:38 UTC"
   },
   {
    "region": "Oceania",
@@ -926,12 +932,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
-   "published": "2026-10-20 19:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Not enjoying being a parent? You’re not alone. Here’s how to handle this complicated feeling",
    "published": "2026-10-20 19:04 UTC"
   },
   {
