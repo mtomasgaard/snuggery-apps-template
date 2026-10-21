@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T18:01:38Z",
+ "generatedAt": "2026-10-21T19:01:38Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168642",
+     "published": "2026-10-21T12:00:00Z",
+     "summary": "The price tag for smuggling on European sea routes reached up to half a billion dollars last year, the UN Office on Drugs and Crime (UNODC) and the UN migration office, IOM, reported on Wednesday.",
+     "stale": false
+    },
     {
      "title": "How a civic tech platform is helping women in Serbia get home safely",
      "source": "Global Voices",
@@ -44,15 +53,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168614",
      "published": "2026-10-16T12:00:00Z",
      "summary": "Civilian casualties in Ukraine remain at record levels, with intensified Russian attacks in September continuing a pattern of harm in 2026 far exceeding previous years, UN human rights monitors in Ukraine said on Friday.",
-     "stale": false
-    },
-    {
-     "title": "Ukraine: Critical health supplies destroyed in ongoing Russian attacks",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168603",
-     "published": "2026-10-15T12:00:00Z",
-     "summary": "Ongoing and deadly Russian attacks across Ukraine are causing serious healthcare disruption, with more than $1.5 million-worth of medicines and supplies destroyed in four separate strikes on warehouses used by the UN…",
      "stale": false
     },
     {
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
+   "published": "2026-10-21 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "How a civic tech platform is helping women in Serbia get home safely",
    "published": "2026-10-20 15:10 UTC"
@@ -693,12 +699,6 @@
    "source": "UN News",
    "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
    "published": "2026-10-16 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Ukraine: Critical health supplies destroyed in ongoing Russian attacks",
-   "published": "2026-10-15 12:00 UTC"
   },
   {
    "region": "Europe",
