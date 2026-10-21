@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T13:01:42Z",
+ "generatedAt": "2026-10-21T14:01:47Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Horror films exploit how human vision works to deliver movies’ best scares",
+     "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/horror-films-exploit-how-human-vision-works-to-deliver-movies-best-scares-291955",
-     "published": "2026-10-20T19:42:48Z",
+     "link": "https://theconversation.com/an-ai-models-false-tip-to-philadelphia-police-reveals-how-digital-agents-can-do-as-theyre-told-and-still-cause-trouble-294228",
+     "published": "2026-10-21T12:48:18Z",
      "summary": "",
      "stale": false,
-     "author": "Arryn Robbins, Assistant Professor of Psychology, University of Richmond"
+     "author": "Anat Lior, Assistant Professor of Law, Drexel University"
     },
     {
-     "title": "US inequality is getting worse in ways you might not expect",
+     "title": "Offering cash for votes is quite common – but here’s why it doesn’t work",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/us-inequality-is-getting-worse-in-ways-you-might-not-expect-294075",
-     "published": "2026-10-20T12:38:27Z",
+     "link": "https://theconversation.com/offering-cash-for-votes-is-quite-common-but-heres-why-it-doesnt-work-293259",
+     "published": "2026-10-21T12:47:55Z",
      "summary": "",
      "stale": false,
-     "author": "Markus Schneider, Associate Professor of Economics, University of Denver"
+     "author": "Kenneth Greene, Professor of Government, The University of Texas at Austin"
     },
     {
      "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
@@ -177,24 +177,42 @@
    "stale": false,
    "items": [
     {
-     "title": "Les pays africains pourraient économiser des milliards en réduisant la pollution et les émissions de gaz à effet de serre",
+     "title": "Africa’s bats could survive climate change – if they can find somewhere to live",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/les-pays-africains-pourraient-economiser-des-milliards-en-reduisant-la-pollution-et-les-emissions-de-gaz-a-effet-de-serre-294702",
-     "published": "2026-10-21T09:55:39Z",
+     "link": "https://theconversation.com/africas-bats-could-survive-climate-change-if-they-can-find-somewhere-to-live-293184",
+     "published": "2026-10-21T13:27:45Z",
      "summary": "",
      "stale": false,
-     "author": "Chris Malley, Research Fellow, Stockholm Environment Institute York Centre, University of York"
+     "author": "Mariëtte van der Walt, Biodiversity Coordinator, Wilderness, University of the Witwatersrand"
     },
     {
-     "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
+     "title": "Africans reuse, repair, recycle and resell waste: what’s needed to build on the circular economy basics",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-schools-reflect-an-unequal-society-what-can-teachers-do-about-it-292924",
-     "published": "2026-10-20T14:01:51Z",
+     "link": "https://theconversation.com/africans-reuse-repair-recycle-and-resell-waste-whats-needed-to-build-on-the-circular-economy-basics-291851",
+     "published": "2026-10-21T13:27:25Z",
      "summary": "",
      "stale": false,
-     "author": "Nhlanhla Mpofu, Researcher in TESOL & Language Literacy Education, University of Notre Dame Australia"
+     "author": "Michael Odei Erdiaw-Kwasie, Senior Lecturer in Sustainability| Business and Accounting Discipline, Charles Darwin University"
+    },
+    {
+     "title": "Sudan conflict: Peace efforts resume to end ‘drone war’ fuelling humanitarian crisis",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168638",
+     "published": "2026-10-21T12:00:00Z",
+     "summary": "Talks to halt the fighting in Sudan and alleviate the humanitarian crisis there continued in Geneva on Wednesday, where nearly two dozen countries convened to discuss a pathway to a ceasefire and transition to peaceful…",
+     "stale": false
+    },
+    {
+     "title": "WHO supports Nigeria after first Ebola case confirmed",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168637",
+     "published": "2026-10-21T12:00:00Z",
+     "summary": "The World Health Organization (WHO) is assisting Nigeria following confirmation of the first case of Ebola Bundibugyo virus disease in the country.",
+     "stale": false
     },
     {
      "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
@@ -206,15 +224,6 @@
      "stale": false
     },
     {
-     "title": "Yemen war continues to force families from homes amid hunger and disease",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168629",
-     "published": "2026-10-20T12:00:00Z",
-     "summary": "More than 250,000 people have now fled renewed fighting in Yemen, the UN said on Tuesday, citing particular concern for those sheltering in the southwestern city of Taiz and the wider governorate, where access is…",
-     "stale": false
-    },
-    {
      "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -223,15 +232,6 @@
      "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "UN condemns deadly wave of drone strikes in war-torn Sudan",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168628",
-     "published": "2026-10-19T12:00:00Z",
-     "summary": "Drone strikes killed and injured dozens across Sudan on Monday as the ongoing war continues to cause soaring displacement and hunger.",
-     "stale": false
     },
     {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Horror films exploit how human vision works to deliver movies’ best scares",
-   "published": "2026-10-20 19:42 UTC"
+   "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
+   "published": "2026-10-21 12:48 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US inequality is getting worse in ways you might not expect",
-   "published": "2026-10-20 12:38 UTC"
+   "title": "Offering cash for votes is quite common – but here’s why it doesn’t work",
+   "published": "2026-10-21 12:47 UTC"
   },
   {
    "region": "Americas",
@@ -769,14 +769,26 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Les pays africains pourraient économiser des milliards en réduisant la pollution et les émissions de gaz à effet de serre",
-   "published": "2026-10-21 09:55 UTC"
+   "title": "Africa’s bats could survive climate change – if they can find somewhere to live",
+   "published": "2026-10-21 13:27 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africa’s schools reflect an unequal society: what can teachers do about it?",
-   "published": "2026-10-20 14:01 UTC"
+   "title": "Africans reuse, repair, recycle and resell waste: what’s needed to build on the circular economy basics",
+   "published": "2026-10-21 13:27 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan conflict: Peace efforts resume to end ‘drone war’ fuelling humanitarian crisis",
+   "published": "2026-10-21 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "WHO supports Nigeria after first Ebola case confirmed",
+   "published": "2026-10-21 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -786,21 +798,9 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "Yemen war continues to force families from homes amid hunger and disease",
-   "published": "2026-10-20 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
    "published": "2026-10-19 20:11 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "UN condemns deadly wave of drone strikes in war-torn Sudan",
-   "published": "2026-10-19 12:00 UTC"
   },
   {
    "region": "Africa",
