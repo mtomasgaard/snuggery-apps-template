@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T09:01:37Z",
+ "generatedAt": "2026-10-21T10:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/governor-general-appeals-to-australians-to-exercise-our-muscle-of-decency-haines-husband-reveals-mp-has-lost-second-leg-294863",
+     "published": "2026-10-21T08:50:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "What is idiopathic transverse myelitis, the neurological condition Helen Haines’ alleged attacker has?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australia-has-let-abuse-of-its-representatives-become-part-of-the-job-and-women-bear-the-brunt-294781",
-     "published": "2026-10-21T03:48:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Josh Holloway, Senior Lecturer in Government, Flinders University"
     },
     {
      "title": "NZ election poll watch: right majority possible even if Opportunity enters parliament",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
+   "published": "2026-10-21 08:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What is idiopathic transverse myelitis, the neurological condition Helen Haines’ alleged attacker has?",
    "published": "2026-10-21 07:21 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: Mathias Cormann offers blunt advice on countering populism and reforming the economy",
    "published": "2026-10-21 06:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
-   "published": "2026-10-21 03:48 UTC"
   },
   {
    "region": "Oceania",
