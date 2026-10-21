@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T04:01:32Z",
+ "generatedAt": "2026-10-21T05:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australia-has-let-abuse-of-its-representatives-become-part-of-the-job-and-women-bear-the-brunt-294781",
+     "published": "2026-10-21T03:48:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Josh Holloway, Senior Lecturer in Government, Flinders University"
+    },
+    {
      "title": "How rage and frustration against authority figures tips over into conspiracy and violence – and what we can do about it",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,7 +461,7 @@
     {
      "title": "One in six older people experience abuse in NZ, with psychological harm most common",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/one-in-six-older-people-experience-abuse-in-nz-with-psychological-harm-most-common-294142",
      "published": "2026-10-20T20:21:45Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Jamie Q. Roberts, Lecturer in Politics and International Relations, University of Sydney"
-    },
-    {
-     "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-next-government-will-inherit-a-treaty-debate-that-is-far-from-resolved-292762",
-     "published": "2026-10-20T02:31:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dominic O'Sullivan, Adjunct Professor, Stout Research Centre, Victoria University of Wellington and Auckland University of Technology, Professor of Political…"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia has let abuse of its representatives become ‘part of the job’ – and women bear the brunt",
+   "published": "2026-10-21 03:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How rage and frustration against authority figures tips over into conspiracy and violence – and what we can do about it",
    "published": "2026-10-21 00:38 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Guide to the classics: bemused by the contemporary world? The Red and the Black might be just the friend you need",
    "published": "2026-10-20 19:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ’s next government will inherit a Treaty debate that is far from resolved",
-   "published": "2026-10-20 02:31 UTC"
   },
   {
    "region": "Oceania",
