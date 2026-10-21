@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T15:01:53Z",
+ "generatedAt": "2026-10-21T16:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "When Big Tech becomes a tool of state control in Kenya",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/21/when-big-tech-becomes-a-tool-of-state-control-in-kenya/",
+     "published": "2026-10-21T15:31:05Z",
+     "summary": "Access Now's 2025 report found that at least 313 shutdowns were implemented globally, and that in Africa the Internet was shut down 30 times in 15 countries, with protests the leading trigger, followed by elections.",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "Africa’s bats could survive climate change – if they can find somewhere to live",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
      "author": "Uncloseted MEdia"
-    },
-    {
-     "title": "What African elections can learn from the Borana Gadaa system",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/12/what-african-elections-can-learn-from-the-borana-gadaa-system/",
-     "published": "2026-10-12T20:34:34Z",
-     "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
-     "stale": false,
-     "author": "Peace News"
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "When Big Tech becomes a tool of state control in Kenya",
+   "published": "2026-10-21 15:31 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Africa’s bats could survive climate change – if they can find somewhere to live",
    "published": "2026-10-21 13:27 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "What African elections can learn from the Borana Gadaa system",
-   "published": "2026-10-12 20:34 UTC"
   },
   {
    "region": "Middle East",
