@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T21:01:39Z",
+ "generatedAt": "2026-10-21T22:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Chiricahua is the nation’s newest national park – what does that mean?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/chiricahua-is-the-nations-newest-national-park-what-does-that-mean-293785",
+     "published": "2026-10-21T21:08:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Seth T. Kannarr, Visiting Honors Lecturer, Southern Illinois University Edwardsville"
+    },
+    {
      "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Anat Lior, Assistant Professor of Law, Drexel University"
-    },
-    {
-     "title": "Offering cash for votes is quite common – but here’s why it doesn’t work",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/offering-cash-for-votes-is-quite-common-but-heres-why-it-doesnt-work-293259",
-     "published": "2026-10-21T12:47:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kenneth Greene, Professor of Government, The University of Texas at Austin"
     },
     {
      "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
@@ -441,7 +441,7 @@
     {
      "title": "How does fake tan work, and why does it sometimes smell ‘biscuity’?",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/how-does-fake-tan-work-and-why-does-it-sometimes-smell-biscuity-283685",
      "published": "2026-10-21T19:12:52Z",
      "summary": "",
@@ -459,6 +459,16 @@
      "author": "Shae McCrystal, Professor of Labour Law, University of Sydney"
     },
     {
+     "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/virginia-woolfs-orlando-the-ultimate-shapeshifter-is-now-a-madcap-graphic-novel-283698",
+     "published": "2026-10-21T19:12:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Yves Rees, Senior Lecturer in History, La Trobe University"
+    },
+    {
      "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Sara Oscar, Senior Lecturer, Visual Communication, School of Design, University of Technology Sydney"
-    },
-    {
-     "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/governor-general-appeals-to-australians-to-exercise-our-muscle-of-decency-haines-husband-reveals-mp-has-lost-second-leg-294863",
-     "published": "2026-10-21T08:50:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
-   "published": "2026-10-21 12:48 UTC"
+   "title": "Chiricahua is the nation’s newest national park – what does that mean?",
+   "published": "2026-10-21 21:08 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Offering cash for votes is quite common – but here’s why it doesn’t work",
-   "published": "2026-10-21 12:47 UTC"
+   "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
+   "published": "2026-10-21 12:48 UTC"
   },
   {
    "region": "Americas",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
+   "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
    "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
-   "published": "2026-10-21 08:50 UTC"
+   "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
+   "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
