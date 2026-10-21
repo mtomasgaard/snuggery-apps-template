@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T20:01:38Z",
+ "generatedAt": "2026-10-21T21:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Palestine is already living under the Big Tech authoritarianism the world is being sold",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/21/palestine-is-already-living-under-the-big-tech-authoritarianism-the-world-is-being-sold/",
+     "published": "2026-10-21T20:19:57Z",
+     "summary": "Technologies developed, tested and refined under occupation do not stay there; they get exported to the rest of the world",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "Yemen war continues to force families from homes amid hunger and disease",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
      "stale": false,
      "author": "Peace News"
-    },
-    {
-     "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/09/trumps-agreements-on-reciprocal-trade-arts-threaten-equitable-access-to-the-internet-in-global-south/",
-     "published": "2026-10-09T19:22:38Z",
-     "summary": "The controversial reciprocal trade agreements (ARTs) gives the U.S. a great deal of power, which could adversely affect digital connectivity, increase digital divides, and reduce economic growth in signatory countries.",
-     "stale": false,
-     "author": "EngageMedia"
     }
    ]
   },
@@ -431,7 +431,7 @@
     {
      "title": "The government wants to reward better GP care. But what happens when targets take priority?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/the-government-wants-to-reward-better-gp-care-but-what-happens-when-targets-take-priority-293437",
      "published": "2026-10-21T19:43:26Z",
      "summary": "",
@@ -459,16 +459,6 @@
      "author": "Shae McCrystal, Professor of Labour Law, University of Sydney"
     },
     {
-     "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/virginia-woolfs-orlando-the-ultimate-shapeshifter-is-now-a-madcap-graphic-novel-283698",
-     "published": "2026-10-21T19:12:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yves Rees, Senior Lecturer in History, La Trobe University"
-    },
-    {
      "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -477,6 +467,16 @@
      "summary": "",
      "stale": false,
      "author": "Sara Oscar, Senior Lecturer, Visual Communication, School of Design, University of Technology Sydney"
+    },
+    {
+     "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/governor-general-appeals-to-australians-to-exercise-our-muscle-of-decency-haines-husband-reveals-mp-has-lost-second-leg-294863",
+     "published": "2026-10-21T08:50:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Palestine is already living under the Big Tech authoritarianism the world is being sold",
+   "published": "2026-10-21 20:19 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Yemen war continues to force families from homes amid hunger and disease",
    "published": "2026-10-20 12:00 UTC"
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "What African elections can learn from the Borana Gadaa system",
    "published": "2026-10-12 20:34 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "Trump’s ‘Agreements on Reciprocal Trade’ (ARTs) threaten equitable access to the internet in Global South",
-   "published": "2026-10-09 19:22 UTC"
   },
   {
    "region": "Asia",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
+   "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
    "published": "2026-10-21 19:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Could thoughtful ‘AI art’ counter the rise of ‘AI slop’? Why creatives today face a paradox",
-   "published": "2026-10-21 19:12 UTC"
+   "title": "Governor-general appeals to Australians to ‘exercise our muscle of decency’; Haines’ husband reveals MP has lost second leg",
+   "published": "2026-10-21 08:50 UTC"
   },
   {
    "region": "Oceania",
