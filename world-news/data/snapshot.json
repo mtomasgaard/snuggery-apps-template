@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-22T04:01:28Z",
+ "generatedAt": "2026-10-22T05:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Shares in this data centre company are down 40% as investors lose faith in the AI story",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/shares-in-this-data-centre-company-are-down-40-as-investors-lose-faith-in-the-ai-story-294871",
+     "published": "2026-10-22T04:35:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
+    },
+    {
      "title": "A critical flaw affecting 70% of all websites has the cybersecurity world panicked",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,7 +461,7 @@
     {
      "title": "How does fake tan work, and why does it sometimes smell ‘biscuity’?",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/how-does-fake-tan-work-and-why-does-it-sometimes-smell-biscuity-283685",
      "published": "2026-10-21T19:12:52Z",
      "summary": "",
@@ -461,22 +471,12 @@
     {
      "title": "Want to take leave or call in sick to play Grand Theft Auto 6? Here’s how not to break the law",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/want-to-take-leave-or-call-in-sick-to-play-grand-theft-auto-6-heres-how-not-to-break-the-law-294245",
      "published": "2026-10-21T19:12:38Z",
      "summary": "",
      "stale": false,
      "author": "Shae McCrystal, Professor of Labour Law, University of Sydney"
-    },
-    {
-     "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/virginia-woolfs-orlando-the-ultimate-shapeshifter-is-now-a-madcap-graphic-novel-283698",
-     "published": "2026-10-21T19:12:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yves Rees, Senior Lecturer in History, La Trobe University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Shares in this data centre company are down 40% as investors lose faith in the AI story",
+   "published": "2026-10-22 04:35 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A critical flaw affecting 70% of all websites has the cybersecurity world panicked",
    "published": "2026-10-22 00:43 UTC"
   },
@@ -932,12 +938,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Want to take leave or call in sick to play Grand Theft Auto 6? Here’s how not to break the law",
-   "published": "2026-10-21 19:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Virginia Woolf’s Orlando, the ultimate shapeshifter, is now a madcap graphic novel",
    "published": "2026-10-21 19:12 UTC"
   },
   {
