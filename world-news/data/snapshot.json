@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-21T23:01:34Z",
+ "generatedAt": "2026-10-22T00:01:34Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Protest as a pillar of democracy",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/21/protest-as-a-pillar-of-democracy/",
+     "published": "2026-10-21T23:56:56Z",
+     "summary": "This spotlight is, then, a form of protest in its own right: a way of reasserting that protest is legitimate, important for democracy, and everywhere.",
+     "stale": false,
+     "author": "Malka Older"
+    },
     {
      "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
      "source": "UN News",
@@ -54,16 +64,6 @@
      "published": "2026-10-16T12:00:00Z",
      "summary": "Civilian casualties in Ukraine remain at record levels, with intensified Russian attacks in September continuing a pattern of harm in 2026 far exceeding previous years, UN human rights monitors in Ukraine said on Friday.",
      "stale": false
-    },
-    {
-     "title": "How authoritarian states are building an international market for digital surveillance",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
-     "published": "2026-10-15T04:00:07Z",
-     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
-     "stale": false,
-     "author": "Daria Dergacheva"
     },
     {
      "title": "When the right to protest remains, but demonstrating comes at a price",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Protest as a pillar of democracy",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/21/protest-as-a-pillar-of-democracy/",
+     "published": "2026-10-21T23:56:56Z",
+     "summary": "This spotlight is, then, a form of protest in its own right: a way of reasserting that protest is legitimate, important for democracy, and everywhere.",
+     "stale": false,
+     "author": "Malka Older"
+    },
+    {
      "title": "Fate unknown of many returned to DPR Korea from China: UN independent experts",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -400,16 +410,6 @@
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Norway’s Telenor telecom faces lawsuit for giving user data to Myanmar junta",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/14/norways-telenor-telecom-faces-lawsuit-for-giving-user-data-to-myanmars-junta/",
-     "published": "2026-10-14T18:22:53Z",
-     "summary": "\"We hope this will finally lead to accountability for the harms Telenor has caused Myanmar people through its conduct and its dangerous divestment.\"",
-     "stale": false,
-     "author": "Mong Palatino"
     },
     {
      "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "Protest as a pillar of democracy",
+   "published": "2026-10-21 23:56 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
    "published": "2026-10-21 12:00 UTC"
@@ -699,12 +705,6 @@
    "source": "UN News",
    "title": "Ukraine: Civilian casualty rates among ‘deadliest’ in years, as energy attacks intensify",
    "published": "2026-10-16 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "How authoritarian states are building an international market for digital surveillance",
-   "published": "2026-10-15 04:00 UTC"
   },
   {
    "region": "Europe",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Protest as a pillar of democracy",
+   "published": "2026-10-21 23:56 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Fate unknown of many returned to DPR Korea from China: UN independent experts",
    "published": "2026-10-21 12:00 UTC"
@@ -897,12 +903,6 @@
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Norway’s Telenor telecom faces lawsuit for giving user data to Myanmar junta",
-   "published": "2026-10-14 18:22 UTC"
   },
   {
    "region": "Asia",
