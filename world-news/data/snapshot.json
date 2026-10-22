@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-22T07:01:27Z",
+ "generatedAt": "2026-10-22T08:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: Politics reflects society, and our society is in poor shape on many fronts",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-politics-reflects-society-and-our-society-is-in-poor-shape-on-many-fronts-294864",
+     "published": "2026-10-22T07:09:00Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Shares in this data centre company are down 40% as investors lose faith in the AI story",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Anna Wang, Associate Professor of Chemistry, UNSW"
-    },
-    {
-     "title": "Want to take leave or call in sick to play Grand Theft Auto 6? Here’s how not to break the law",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/want-to-take-leave-or-call-in-sick-to-play-grand-theft-auto-6-heres-how-not-to-break-the-law-294245",
-     "published": "2026-10-21T19:12:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shae McCrystal, Professor of Labour Law, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: Politics reflects society, and our society is in poor shape on many fronts",
+   "published": "2026-10-22 07:09 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Shares in this data centre company are down 40% as investors lose faith in the AI story",
    "published": "2026-10-22 04:35 UTC"
   },
@@ -932,12 +938,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "How does fake tan work, and why does it sometimes smell ‘biscuity’?",
-   "published": "2026-10-21 19:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Want to take leave or call in sick to play Grand Theft Auto 6? Here’s how not to break the law",
    "published": "2026-10-21 19:12 UTC"
   },
   {
