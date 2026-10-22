@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-22T14:01:43Z",
+ "generatedAt": "2026-10-22T15:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Indian Gen Z ‘cockroach’ protesters aim to upend assumptions about democracy – and populism – in Modi’s India",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/indian-gen-z-cockroach-protesters-aim-to-upend-assumptions-about-democracy-and-populism-in-modis-india-294730",
+     "published": "2026-10-22T14:16:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Amrita Basu, Professor of Political Science, and Sexuality, Women's and Gender Studies, Amherst College"
+    },
+    {
      "title": "What telecoms leave behind when they exit a country",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Seth T. Kannarr, Visiting Honors Lecturer, Southern Illinois University Edwardsville"
-    },
-    {
-     "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/an-ai-models-false-tip-to-philadelphia-police-reveals-how-digital-agents-can-do-as-theyre-told-and-still-cause-trouble-294228",
-     "published": "2026-10-21T12:48:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anat Lior, Assistant Professor of Law, Drexel University"
     },
     {
      "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Indian Gen Z ‘cockroach’ protesters aim to upend assumptions about democracy – and populism – in Modi’s India",
+   "published": "2026-10-22 14:16 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "What telecoms leave behind when they exit a country",
    "published": "2026-10-22 12:20 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Chiricahua is the nation’s newest national park – what does that mean?",
    "published": "2026-10-21 21:08 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "An AI model’s false tip to Philadelphia police reveals how digital agents can do as they’re told and still cause trouble",
-   "published": "2026-10-21 12:48 UTC"
   },
   {
    "region": "Americas",
