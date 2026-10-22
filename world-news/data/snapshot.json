@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-22T20:01:42Z",
+ "generatedAt": "2026-10-22T21:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Venezuela faces a deepening energy crisis as protests grow",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/22/venezuela-faces-a-deepening-energy-crisis-as-protests-grow/",
+     "published": "2026-10-22T20:06:56Z",
+     "summary": "Venezuela’s worsening electricity crisis is disrupting daily life, pushing frustrated residents into the streets as prolonged blackouts expose the fragility of the country’s power grid.",
+     "stale": false,
+     "author": "Gabriela Mesones Rojo"
+    },
+    {
      "title": "Surviving cancer starts at diagnosis and continues after treatment – earlier survivorship care can help patients feel better and live longer",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -149,16 +159,6 @@
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
      "author": "Uncloseted Media"
-    },
-    {
-     "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/16/how-an-extremist-network-articulated-a-hoax-linking-brazils-president-lula-to-child-abuse-on-x/",
-     "published": "2026-10-16T13:10:39Z",
-     "summary": "Distortion in the meaning of a speech by Lula about prostate cancer exams went viral within hours and fed conspiracy theories amid a tight presidential race in Brazil.",
-     "stale": false,
-     "author": "Fernanda Canofre"
     },
     {
      "title": "Haiti sanctions renewed: Starving the gangs of bullets",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Venezuela faces a deepening energy crisis as protests grow",
+   "published": "2026-10-22 20:06 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Surviving cancer starts at diagnosis and continues after treatment – earlier survivorship care can help patients feel better and live longer",
    "published": "2026-10-22 15:06 UTC"
@@ -753,12 +759,6 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
-   "published": "2026-10-16 13:10 UTC"
   },
   {
    "region": "Americas",
