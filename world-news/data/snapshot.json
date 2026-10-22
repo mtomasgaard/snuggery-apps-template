@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-22T12:01:42Z",
+ "generatedAt": "2026-10-22T13:01:41Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "What telecoms leave behind when they exit a country",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
+     "published": "2026-10-22T12:20:06Z",
+     "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
+     "stale": false,
+     "author": "Ranking Digital Rights"
+    },
     {
      "title": "Protest as a pillar of democracy",
      "source": "Global Voices",
@@ -74,16 +84,6 @@
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
      "stale": false,
      "author": "Elmira Lyapina"
-    },
-    {
-     "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
-     "source": "Global Voices",
-     "feed": "gv-western-europe",
-     "link": "https://globalvoices.org/2026/09/19/a-place-of-silence-contemplation-and-beauty-can-also-become-a-form-of-resistance-in-conversation-with-catalan-artist-jaume-amigo/",
-     "published": "2026-09-19T08:01:45Z",
-     "summary": "Painting is a way of taking a position, through the creation of another possible space: a place of silence and beauty that, precisely by contrast, become a form of resistance.",
-     "stale": false,
-     "author": "Omid Memarian"
     }
    ]
   },
@@ -92,6 +92,16 @@
    "name": "Americas",
    "stale": false,
    "items": [
+    {
+     "title": "What telecoms leave behind when they exit a country",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
+     "published": "2026-10-22T12:20:06Z",
+     "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
+     "stale": false,
+     "author": "Ranking Digital Rights"
+    },
     {
      "title": "Chiricahua is the nation’s newest national park – what does that mean?",
      "source": "The Conversation",
@@ -149,16 +159,6 @@
      "summary": "Distortion in the meaning of a speech by Lula about prostate cancer exams went viral within hours and fed conspiracy theories amid a tight presidential race in Brazil.",
      "stale": false,
      "author": "Fernanda Canofre"
-    },
-    {
-     "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/15/perus-indigenous-people-in-cutivireni-and-oviri-take-the-front-line-against-amazon-wildfires/",
-     "published": "2026-10-15T18:30:01Z",
-     "summary": "As El Niño worsens dry conditions, Peru’s indigenous people in Cutivireni and Oviri are taking action to protect their Amazon territory from wildfires.",
-     "stale": false,
-     "author": "Cool Earth"
     },
     {
      "title": "Haiti sanctions renewed: Starving the gangs of bullets",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What telecoms leave behind when they exit a country",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
+     "published": "2026-10-22T12:20:06Z",
+     "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
+     "stale": false,
+     "author": "Ranking Digital Rights"
+    },
+    {
      "title": "Palestine is already living under the Big Tech authoritarianism the world is being sold",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -325,16 +335,6 @@
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "What African elections can learn from the Borana Gadaa system",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/12/what-african-elections-can-learn-from-the-borana-gadaa-system/",
-     "published": "2026-10-12T20:34:34Z",
-     "summary": "Discover how the Borana Gadaa system can inspire African elections through peaceful power transitions, accountable leadership, inclusive governance, and traditional democratic practices that strengthen public trust and…",
-     "stale": false,
-     "author": "Peace News"
     }
    ]
   },
@@ -344,9 +344,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Protest as a pillar of democracy",
+     "title": "What telecoms leave behind when they exit a country",
      "source": "Global Voices",
      "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
+     "published": "2026-10-22T12:20:06Z",
+     "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
+     "stale": false,
+     "author": "Ranking Digital Rights"
+    },
+    {
+     "title": "Protest as a pillar of democracy",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/21/protest-as-a-pillar-of-democracy/",
      "published": "2026-10-21T23:56:56Z",
      "summary": "This spotlight is, then, a form of protest in its own right: a way of reasserting that protest is legitimate, important for democracy, and everywhere.",
@@ -410,16 +420,6 @@
      "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/13/after-flood-disasters-nepal-needs-clear-numbers-on-aid-and-a-reconstruction-plan/",
-     "published": "2026-10-13T18:21:20Z",
-     "summary": "Nepal’s flood-hit communities face a long road to recovery as damaged infrastructure, lost livelihoods, and questions over aid transparency complicate efforts to rebuild homes, restore services, and livelihoods.",
-     "stale": false,
-     "author": "Susmita Aryal"
     }
    ]
   },
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "What telecoms leave behind when they exit a country",
+   "published": "2026-10-22 12:20 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Protest as a pillar of democracy",
    "published": "2026-10-21 23:56 UTC"
   },
@@ -713,10 +719,10 @@
    "published": "2026-09-29 00:00 UTC"
   },
   {
-   "region": "Europe",
+   "region": "Americas",
    "source": "Global Voices",
-   "title": "‘A place of silence, contemplation, and beauty can also become a form of resistance,’ in conversation with Catalan artist Jaume Amigó",
-   "published": "2026-09-19 08:01 UTC"
+   "title": "What telecoms leave behind when they exit a country",
+   "published": "2026-10-22 12:20 UTC"
   },
   {
    "region": "Americas",
@@ -753,12 +759,6 @@
    "source": "Global Voices",
    "title": "How an extremist network articulated a hoax linking Brazil’s President Lula to child abuse on X",
    "published": "2026-10-16 13:10 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Peru’s Indigenous people in Cutivireni and Oviri take the front line against Amazon wildfires",
-   "published": "2026-10-15 18:30 UTC"
   },
   {
    "region": "Americas",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "Global Voices",
+   "title": "What telecoms leave behind when they exit a country",
+   "published": "2026-10-22 12:20 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "Global Voices",
    "title": "Palestine is already living under the Big Tech authoritarianism the world is being sold",
    "published": "2026-10-21 20:19 UTC"
   },
@@ -857,10 +863,10 @@
    "published": "2026-10-15 04:00 UTC"
   },
   {
-   "region": "Middle East",
+   "region": "Asia",
    "source": "Global Voices",
-   "title": "What African elections can learn from the Borana Gadaa system",
-   "published": "2026-10-12 20:34 UTC"
+   "title": "What telecoms leave behind when they exit a country",
+   "published": "2026-10-22 12:20 UTC"
   },
   {
    "region": "Asia",
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "How authoritarian states are building an international market for digital surveillance",
    "published": "2026-10-15 04:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "After flood disasters, Nepal needs clear numbers on aid and a reconstruction plan",
-   "published": "2026-10-13 18:21 UTC"
   },
   {
    "region": "Oceania",
