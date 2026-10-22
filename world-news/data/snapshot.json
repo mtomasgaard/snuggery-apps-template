@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-22T15:01:39Z",
+ "generatedAt": "2026-10-22T16:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Surviving cancer starts at diagnosis and continues after treatment – earlier survivorship care can help patients feel better and live longer",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/surviving-cancer-starts-at-diagnosis-and-continues-after-treatment-earlier-survivorship-care-can-help-patients-feel-better-and-live-longer-294431",
+     "published": "2026-10-22T15:06:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Marci Lee Nilsen, Professor of Otolaryngology, University of Pittsburgh"
+    },
+    {
      "title": "Indian Gen Z ‘cockroach’ protesters aim to upend assumptions about democracy – and populism – in Modi’s India",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -111,16 +121,6 @@
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
      "stale": false,
      "author": "Ranking Digital Rights"
-    },
-    {
-     "title": "Chiricahua is the nation’s newest national park – what does that mean?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/chiricahua-is-the-nations-newest-national-park-what-does-that-mean-293785",
-     "published": "2026-10-21T21:08:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Seth T. Kannarr, Visiting Honors Lecturer, Southern Illinois University Edwardsville"
     },
     {
      "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
@@ -177,6 +177,35 @@
    "stale": false,
    "items": [
     {
+     "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/health-progress-in-africa-leaves-more-people-living-with-disabilities-rehabilitation-is-the-next-challenge-291906",
+     "published": "2026-10-22T15:06:15Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ukachukwu Abaraogu, Senior Lecturer Public Health, Evidence Synthesis & Rehabilitation, University of the West of Scotland"
+    },
+    {
+     "title": "How K-dramas use Africa as a backdrop to boost South Korea’s image",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/how-k-dramas-use-africa-as-a-backdrop-to-boost-south-koreas-image-292171",
+     "published": "2026-10-22T15:05:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "Osarugue Otebele, Assistant Professor, Cinema Studies Institute, University of Toronto"
+    },
+    {
+     "title": "DR Congo: Ebola responders under pressure as outbreak expands",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168647",
+     "published": "2026-10-22T12:00:00Z",
+     "summary": "As the deadly Ebola disease outbreak reached an eighth province of the Democratic Republic of the Congo (DRC), investigators pursued all leads on Thursday to assess the risk of the disease spreading in Nigeria.",
+     "stale": false
+    },
+    {
      "title": "When Big Tech becomes a tool of state control in Kenya",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -185,26 +214,6 @@
      "summary": "Access Now's 2025 report found that at least 313 shutdowns were implemented globally, and that in Africa the Internet was shut down 30 times in 15 countries, with protests the leading trigger, followed by elections.",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Africa’s bats could survive climate change – if they can find somewhere to live",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/africas-bats-could-survive-climate-change-if-they-can-find-somewhere-to-live-293184",
-     "published": "2026-10-21T13:27:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mariëtte van der Walt, Biodiversity Coordinator, Wilderness, University of the Witwatersrand"
-    },
-    {
-     "title": "Africans reuse, repair, recycle and resell waste: what’s needed to build on the circular economy basics",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/africans-reuse-repair-recycle-and-resell-waste-whats-needed-to-build-on-the-circular-economy-basics-291851",
-     "published": "2026-10-21T13:27:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michael Odei Erdiaw-Kwasie, Senior Lecturer in Sustainability| Business and Accounting Discipline, Charles Darwin University"
     },
     {
      "title": "Sudan conflict: Peace efforts resume to end ‘drone war’ fuelling humanitarian crisis",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168637",
      "published": "2026-10-21T12:00:00Z",
      "summary": "The World Health Organization (WHO) is assisting Nigeria following confirmation of the first case of Ebola Bundibugyo virus disease in the country.",
-     "stale": false
-    },
-    {
-     "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168630",
-     "published": "2026-10-20T12:00:00Z",
-     "summary": "The UN warned on Tuesday against a premature withdrawal of its peacekeepers as the war in Sudan spills over into the Central African Republic (CAR).",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "America’s death penalty: why executions are rising again",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/americas-death-penalty-why-executions-are-rising-again-294709",
+     "published": "2026-10-22T15:03:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Grace Jennings-Edquist, Executive Producer, Podcasts, The Conversation"
+    },
+    {
      "title": "Grattan on Friday: Politics reflects society, and our society is in poor shape on many fronts",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -444,16 +454,6 @@
      "feed": "tc-au",
      "link": "https://theconversation.com/shares-in-this-data-centre-company-are-down-40-as-investors-lose-faith-in-the-ai-story-294871",
      "published": "2026-10-22T04:35:45Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
-    },
-    {
-     "title": "A critical flaw affecting 70% of all websites has the cybersecurity world panicked",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-critical-flaw-affecting-70-of-all-websites-has-the-cybersecurity-world-panicked-294941",
-     "published": "2026-10-22T00:43:33Z",
      "summary": "",
      "stale": false,
      "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
@@ -721,6 +721,12 @@
   {
    "region": "Americas",
    "source": "The Conversation",
+   "title": "Surviving cancer starts at diagnosis and continues after treatment – earlier survivorship care can help patients feel better and live longer",
+   "published": "2026-10-22 15:06 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
    "title": "Indian Gen Z ‘cockroach’ protesters aim to upend assumptions about democracy – and populism – in Modi’s India",
    "published": "2026-10-22 14:16 UTC"
   },
@@ -729,12 +735,6 @@
    "source": "Global Voices",
    "title": "What telecoms leave behind when they exit a country",
    "published": "2026-10-22 12:20 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Chiricahua is the nation’s newest national park – what does that mean?",
-   "published": "2026-10-21 21:08 UTC"
   },
   {
    "region": "Americas",
@@ -768,21 +768,27 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
+   "published": "2026-10-22 15:06 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "How K-dramas use Africa as a backdrop to boost South Korea’s image",
+   "published": "2026-10-22 15:05 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "DR Congo: Ebola responders under pressure as outbreak expands",
+   "published": "2026-10-22 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "When Big Tech becomes a tool of state control in Kenya",
    "published": "2026-10-21 15:31 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Africa’s bats could survive climate change – if they can find somewhere to live",
-   "published": "2026-10-21 13:27 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Africans reuse, repair, recycle and resell waste: what’s needed to build on the circular economy basics",
-   "published": "2026-10-21 13:27 UTC"
   },
   {
    "region": "Africa",
@@ -795,12 +801,6 @@
    "source": "UN News",
    "title": "WHO supports Nigeria after first Ebola case confirmed",
    "published": "2026-10-21 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "As Sudan war spills into Central African Republic, UN warns against early peacekeeper exit",
-   "published": "2026-10-20 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "America’s death penalty: why executions are rising again",
+   "published": "2026-10-22 15:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Grattan on Friday: Politics reflects society, and our society is in poor shape on many fronts",
    "published": "2026-10-22 07:09 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Shares in this data centre company are down 40% as investors lose faith in the AI story",
    "published": "2026-10-22 04:35 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A critical flaw affecting 70% of all websites has the cybersecurity world panicked",
-   "published": "2026-10-22 00:43 UTC"
   },
   {
    "region": "Oceania",
