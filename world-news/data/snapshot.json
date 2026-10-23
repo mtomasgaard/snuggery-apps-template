@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T20:01:32Z",
+ "generatedAt": "2026-10-23T21:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/ancestors-all-around-millions-of-dead-people-linger-in-americans-memories-292342",
+     "published": "2026-10-23T19:42:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Emily Smith-Greenaway, Dean's Professor of Sociology and Professor of Spatial Sciences, USC Dornsife College of Letters, Arts and Sciences"
+    },
+    {
      "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Mireille Rebeiz, Director of Dickinson Program in New Zealand, Dickinson College; University of Otago"
-    },
-    {
-     "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/php-is-in-the-foundation-of-70-of-websites-heres-what-it-is-and-why-a-flaw-in-the-software-is-a-major-hacking-threat-294999",
-     "published": "2026-10-23T17:43:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
     },
     {
      "title": "Venezuela faces a deepening energy crisis as protests grow",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
-   "published": "2026-10-23 18:45 UTC"
+   "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
+   "published": "2026-10-23 19:42 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
-   "published": "2026-10-23 17:43 UTC"
+   "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
+   "published": "2026-10-23 18:45 UTC"
   },
   {
    "region": "Americas",
