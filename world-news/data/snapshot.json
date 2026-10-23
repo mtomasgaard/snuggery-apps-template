@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T19:01:40Z",
+ "generatedAt": "2026-10-23T20:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/un-peacekeepers-prepare-to-exit-lebanon-after-70-years-leaving-behind-a-worrying-security-vacuum-293159",
+     "published": "2026-10-23T18:45:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mireille Rebeiz, Director of Dickinson Program in New Zealand, Dickinson College; University of Otago"
+    },
+    {
      "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
-    },
-    {
-     "title": "Why ultra-Orthodox parties hold so much sway in Israeli politics",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-ultra-orthodox-parties-hold-so-much-sway-in-israeli-politics-294218",
-     "published": "2026-10-23T14:52:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hannah Ridge, Assistant Professor of Political Science, Chapman University; Institute for Humane Studies"
     },
     {
      "title": "Venezuela faces a deepening energy crisis as protests grow",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168661",
+     "published": "2026-10-23T12:00:00Z",
+     "summary": "UN human rights chief Volker Türk on Friday strongly condemned an escalation in drone strikes across Sudan this month, which killed at least 306 people and injured hundreds more in the first three weeks of October alone.",
+     "stale": false
+    },
+    {
      "title": "Soil mapping aims to boost agricultural production in Kenya",
      "source": "UN News",
      "feed": "un-africa",
@@ -215,15 +224,6 @@
      "author": "Ukachukwu Abaraogu, Senior Lecturer Public Health, Evidence Synthesis & Rehabilitation, University of the West of Scotland"
     },
     {
-     "title": "DR Congo: Ebola responders under pressure as outbreak expands",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168647",
-     "published": "2026-10-22T12:00:00Z",
-     "summary": "As the deadly Ebola disease outbreak reached an eighth province of the Democratic Republic of the Congo (DRC), investigators pursued all leads on Thursday to assess the risk of the disease spreading in Nigeria.",
-     "stale": false
-    },
-    {
      "title": "When Big Tech becomes a tool of state control in Kenya",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "West Bank: Guterres alarmed as Israel imposes sweeping closures after deadly Hebron attack",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168660",
+     "published": "2026-10-23T12:00:00Z",
+     "summary": "The UN said on Friday it was “extremely alarmed” by intensifying violence in the occupied West Bank, as Israel moved to seal off the territory following a deadly attack on its soldiers in Hebron.",
+     "stale": false
+    },
     {
      "title": "Yemen: Deepening concerns for Taiz City as aid is blocked from entering",
      "source": "UN News",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168629",
      "published": "2026-10-20T12:00:00Z",
      "summary": "More than 250,000 people have now fled renewed fighting in Yemen, the UN said on Tuesday, citing particular concern for those sheltering in the southwestern city of Taiz and the wider governorate, where access is…",
-     "stale": false
-    },
-    {
-     "title": "‘Season of fear’: Escalating Israeli attacks on West Bank olive farmers, deadly strikes on Gaza",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168625",
-     "published": "2026-10-19T12:00:00Z",
-     "summary": "Israeli attacks on war-torn Gaza over the weekend killed at least six Palestinians, including children, despite a year-old ceasefire agreement. Meanwhile, in the occupied West Bank, settler violence continued through…",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
-   "published": "2026-10-23 17:43 UTC"
+   "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
+   "published": "2026-10-23 18:45 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why ultra-Orthodox parties hold so much sway in Israeli politics",
-   "published": "2026-10-23 14:52 UTC"
+   "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
+   "published": "2026-10-23 17:43 UTC"
   },
   {
    "region": "Americas",
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
+   "published": "2026-10-23 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Soil mapping aims to boost agricultural production in Kenya",
    "published": "2026-10-23 12:00 UTC"
   },
@@ -792,12 +798,6 @@
   },
   {
    "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo: Ebola responders under pressure as outbreak expands",
-   "published": "2026-10-22 12:00 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "When Big Tech becomes a tool of state control in Kenya",
    "published": "2026-10-21 15:31 UTC"
@@ -813,6 +813,12 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "West Bank: Guterres alarmed as Israel imposes sweeping closures after deadly Hebron attack",
+   "published": "2026-10-23 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -843,12 +849,6 @@
    "source": "UN News",
    "title": "Yemen war continues to force families from homes amid hunger and disease",
    "published": "2026-10-20 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "‘Season of fear’: Escalating Israeli attacks on West Bank olive farmers, deadly strikes on Gaza",
-   "published": "2026-10-19 12:00 UTC"
   },
   {
    "region": "Middle East",
