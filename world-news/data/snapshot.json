@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T22:01:30Z",
+ "generatedAt": "2026-10-23T23:01:33Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/23/in-bosnia-and-herzegovina-children-with-down-syndrome-are-using-a-video-game-to-safely-navigate-the-internet/",
+     "published": "2026-10-23T22:05:56Z",
+     "summary": "Being able to use the internet safely is also about being able to participate in everyday life.",
+     "stale": false,
+     "author": "Nurbek Bekmurzaev"
+    },
     {
      "title": "Complementary forces: Why activism needs art to drive action",
      "source": "Global Voices",
@@ -54,16 +64,6 @@
      "published": "2026-10-21T12:00:00Z",
      "summary": "The price tag for smuggling on European sea routes reached up to half a billion dollars last year, the UN Office on Drugs and Crime (UNODC) and the UN migration office, IOM, reported on Wednesday.",
      "stale": false
-    },
-    {
-     "title": "How a civic tech platform is helping women in Serbia get home safely",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/20/how-a-civic-tech-platform-is-helping-women-in-serbia-get-home-safely/",
-     "published": "2026-10-20T15:10:41Z",
-     "summary": "“Many incidents of harassment, intimidation, or discomfort in public spaces never become official complaints. Some women do not believe reporting will lead to change.”",
-     "stale": false,
-     "author": "Daria Dergacheva"
     },
     {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
+   "published": "2026-10-23 22:05 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Complementary forces: Why activism needs art to drive action",
    "published": "2026-10-23 08:51 UTC"
   },
@@ -699,12 +705,6 @@
    "source": "UN News",
    "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
    "published": "2026-10-21 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "How a civic tech platform is helping women in Serbia get home safely",
-   "published": "2026-10-20 15:10 UTC"
   },
   {
    "region": "Europe",
