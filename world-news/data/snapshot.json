@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T08:01:26Z",
+ "generatedAt": "2026-10-23T09:01:41Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Complementary forces: Why activism needs art to drive action",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/23/complementary-forces-why-activism-needs-art-to-drive-action/",
+     "published": "2026-10-23T08:51:01Z",
+     "summary": "\"Artistic activism uses the emotional experience of art as a prompt for action and directs that action towards change, turning a complex problem into a clear public message.\"",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
     {
      "title": "What telecoms leave behind when they exit a country",
      "source": "Global Voices",
@@ -43,16 +53,6 @@
      "link": "https://globalvoices.org/2026/10/20/how-a-civic-tech-platform-is-helping-women-in-serbia-get-home-safely/",
      "published": "2026-10-20T15:10:41Z",
      "summary": "“Many incidents of harassment, intimidation, or discomfort in public spaces never become official complaints. Some women do not believe reporting will lead to change.”",
-     "stale": false,
-     "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Students air their frustrations anonymously online as emigration tempts many young people in North Macedonia",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/19/students-air-their-frustrations-anonymously-online-as-emigration-tempts-many-young-people-in-north-macedonia/",
-     "published": "2026-10-19T05:37:23Z",
-     "summary": "“Our idea is not simply to collect complaints, but to transform individual students’ experiences into evidence that can be used for advocacy and for creating change.”",
      "stale": false,
      "author": "Daria Dergacheva"
     },
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Sénégal : une étude montre comment la sécurité foncière conditionne l’efficacité du crédit agricole",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/senegal-une-etude-montre-comment-la-securite-fonciere-conditionne-lefficacite-du-credit-agricole-294369",
+     "published": "2026-10-23T07:48:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Babacar Ndiaye, enseigant-chercheur, Université Amadou Mahtar MBOW de Dakar"
+    },
+    {
      "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Ukachukwu Abaraogu, Senior Lecturer Public Health, Evidence Synthesis & Rehabilitation, University of the West of Scotland"
-    },
-    {
-     "title": "How K-dramas use Africa as a backdrop to boost South Korea’s image",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/how-k-dramas-use-africa-as-a-backdrop-to-boost-south-koreas-image-292171",
-     "published": "2026-10-22T15:05:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Osarugue Otebele, Assistant Professor, Cinema Studies Institute, University of Toronto"
     },
     {
      "title": "DR Congo: Ebola responders under pressure as outbreak expands",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Complementary forces: Why activism needs art to drive action",
+   "published": "2026-10-23 08:51 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "What telecoms leave behind when they exit a country",
    "published": "2026-10-22 12:20 UTC"
   },
@@ -693,12 +699,6 @@
    "source": "Global Voices",
    "title": "How a civic tech platform is helping women in Serbia get home safely",
    "published": "2026-10-20 15:10 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Students air their frustrations anonymously online as emigration tempts many young people in North Macedonia",
-   "published": "2026-10-19 05:37 UTC"
   },
   {
    "region": "Europe",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
-   "published": "2026-10-22 15:06 UTC"
+   "title": "Sénégal : une étude montre comment la sécurité foncière conditionne l’efficacité du crédit agricole",
+   "published": "2026-10-23 07:48 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "How K-dramas use Africa as a backdrop to boost South Korea’s image",
-   "published": "2026-10-22 15:05 UTC"
+   "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
+   "published": "2026-10-22 15:06 UTC"
   },
   {
    "region": "Africa",
