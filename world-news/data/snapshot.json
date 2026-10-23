@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T02:01:31Z",
+ "generatedAt": "2026-10-23T03:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
+     "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/in-an-age-of-ai-wildwood-is-a-film-that-reminds-us-human-creativity-is-irreplaceable-294353",
+     "published": "2026-10-23T02:49:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ari Chand, Senior Lecturer in Illustration and Animation, Adelaide University ; University of Newcastle"
+    },
+    {
+     "title": "Snowy 2.0 was never going to be cheap. But it will be much cheaper than relying on batteries for storage",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/snowy-2-0-was-never-going-to-be-cheap-but-it-will-be-much-cheaper-than-relying-on-batteries-for-storage-294949",
+     "published": "2026-10-23T02:39:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Blakers, Professor of Engineering, Australian National University"
+    },
+    {
+     "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/ruling-out-opportunity-only-harms-luxons-election-chances-right-its-not-that-simple-295065",
      "published": "2026-10-23T01:06:31Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
     },
     {
-     "title": "Hughesy, Karl and co: what happens when celebrities turn political?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/hughesy-karl-and-co-what-happens-when-celebrities-turn-political-294566",
-     "published": "2026-10-22T23:16:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Susan Grantham, Senior Lecturer in Communication, Griffith University"
-    },
-    {
      "title": "The next government faces transport tests that new roads or cheap fares won’t solve",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Timothy Welch, Senior Lecturer in Urban Planning, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Friday essay: AI is devastating higher education, but the system was already broken",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/friday-essay-ai-is-devastating-higher-education-but-the-system-was-already-broken-292988",
-     "published": "2026-10-22T18:31:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jeff Sparrow, Senior Lecturer, Centre for Advancing Journalism, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
+   "published": "2026-10-23 02:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Snowy 2.0 was never going to be cheap. But it will be much cheaper than relying on batteries for storage",
+   "published": "2026-10-23 02:39 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
    "published": "2026-10-23 01:06 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Hughesy, Karl and co: what happens when celebrities turn political?",
-   "published": "2026-10-22 23:16 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "The next government faces transport tests that new roads or cheap fares won’t solve",
    "published": "2026-10-22 18:50 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Friday essay: AI is devastating higher education, but the system was already broken",
-   "published": "2026-10-22 18:31 UTC"
   },
   {
    "region": "Oceania",
