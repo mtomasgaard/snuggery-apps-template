@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T04:01:31Z",
+ "generatedAt": "2026-10-23T05:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why Snowy Hydro’s $25 billion cost blowout is a warning sign for other megaprojects",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-snowy-hydros-25-billion-cost-blowout-is-a-warning-sign-for-other-megaprojects-295057",
+     "published": "2026-10-23T04:47:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dominic D Ahiaga-Dagbui, Director of Deakin Megaprojects Research Group and Senior Lecturer of Construction and Project Management, Deakin University"
+    },
+    {
      "title": "Michelle Landry announces retirement, opening path for Matt Canavan to switch to lower house",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Ari Chand, Senior Lecturer in Illustration and Animation, Adelaide University ; University of Newcastle"
-    },
-    {
-     "title": "Snowy 2.0 was never going to be cheap. But it will be much cheaper than relying on batteries for storage",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/snowy-2-0-was-never-going-to-be-cheap-but-it-will-be-much-cheaper-than-relying-on-batteries-for-storage-294949",
-     "published": "2026-10-23T02:39:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andrew Blakers, Professor of Engineering, Australian National University"
     },
     {
      "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why Snowy Hydro’s $25 billion cost blowout is a warning sign for other megaprojects",
+   "published": "2026-10-23 04:47 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Michelle Landry announces retirement, opening path for Matt Canavan to switch to lower house",
    "published": "2026-10-23 03:54 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
    "published": "2026-10-23 02:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Snowy 2.0 was never going to be cheap. But it will be much cheaper than relying on batteries for storage",
-   "published": "2026-10-23 02:39 UTC"
   },
   {
    "region": "Oceania",
