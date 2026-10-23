@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T17:01:38Z",
+ "generatedAt": "2026-10-23T18:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/php-is-in-the-foundation-of-70-of-websites-heres-what-it-is-and-why-a-flaw-in-the-software-is-a-major-hacking-threat-294999",
+     "published": "2026-10-23T17:43:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Doug Jacobson, University Professor of Electrical and Computer Engineering, Iowa State University"
+    },
+    {
      "title": "Why ultra-Orthodox parties hold so much sway in Israeli politics",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Hannah Ridge, Assistant Professor of Political Science, Chapman University; Institute for Humane Studies"
-    },
-    {
-     "title": "Fear-based campaign ads can grab attention, but whether they win votes is less clear",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/fear-based-campaign-ads-can-grab-attention-but-whether-they-win-votes-is-less-clear-292574",
-     "published": "2026-10-23T11:38:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Monique Mitchell Turner, Professor of Communication, Michigan State University"
     },
     {
      "title": "Venezuela faces a deepening energy crisis as protests grow",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why ultra-Orthodox parties hold so much sway in Israeli politics",
-   "published": "2026-10-23 14:52 UTC"
+   "title": "PHP is in the foundation of 70% of websites – here’s what it is and why a flaw in the software is a major hacking threat",
+   "published": "2026-10-23 17:43 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Fear-based campaign ads can grab attention, but whether they win votes is less clear",
-   "published": "2026-10-23 11:38 UTC"
+   "title": "Why ultra-Orthodox parties hold so much sway in Israeli politics",
+   "published": "2026-10-23 14:52 UTC"
   },
   {
    "region": "Americas",
