@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T11:01:36Z",
+ "generatedAt": "2026-10-23T12:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Fear-based campaign ads can grab attention, but whether they win votes is less clear",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/fear-based-campaign-ads-can-grab-attention-but-whether-they-win-votes-is-less-clear-292574",
+     "published": "2026-10-23T11:38:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Monique Mitchell Turner, Professor of Communication, Michigan State University"
+    },
+    {
      "title": "Venezuela faces a deepening energy crisis as protests grow",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Marci Lee Nilsen, Professor of Otolaryngology, University of Pittsburgh"
-    },
-    {
-     "title": "Indian Gen Z ‘cockroach’ protesters aim to upend assumptions about democracy – and populism – in Modi’s India",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/indian-gen-z-cockroach-protesters-aim-to-upend-assumptions-about-democracy-and-populism-in-modis-india-294730",
-     "published": "2026-10-22T14:16:52Z",
-     "summary": "",
-     "stale": false,
-     "author": "Amrita Basu, Professor of Political Science, and Sexuality, Women's and Gender Studies, Amherst College"
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Fear-based campaign ads can grab attention, but whether they win votes is less clear",
+   "published": "2026-10-23 11:38 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Venezuela faces a deepening energy crisis as protests grow",
    "published": "2026-10-22 20:06 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Surviving cancer starts at diagnosis and continues after treatment – earlier survivorship care can help patients feel better and live longer",
    "published": "2026-10-22 15:06 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Indian Gen Z ‘cockroach’ protesters aim to upend assumptions about democracy – and populism – in Modi’s India",
-   "published": "2026-10-22 14:16 UTC"
   },
   {
    "region": "Americas",
