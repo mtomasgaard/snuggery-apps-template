@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T03:01:30Z",
+ "generatedAt": "2026-10-23T04:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Michelle Landry announces retirement, opening path for Matt Canavan to switch to lower house",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/michelle-landry-announces-retirement-opening-path-for-matt-canavan-to-switch-to-lower-house-295072",
+     "published": "2026-10-23T03:54:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Emma Cline is known for her troubled young women. In Switzy, she inhabits a man with dementia",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/emma-cline-is-known-for-her-troubled-young-women-in-switzy-she-inhabits-a-man-with-dementia-293346",
-     "published": "2026-10-23T00:20:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
     },
     {
      "title": "The next government faces transport tests that new roads or cheap fares won’t solve",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Michelle Landry announces retirement, opening path for Matt Canavan to switch to lower house",
+   "published": "2026-10-23 03:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
    "published": "2026-10-23 02:49 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
    "published": "2026-10-23 01:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Emma Cline is known for her troubled young women. In Switzy, she inhabits a man with dementia",
-   "published": "2026-10-23 00:20 UTC"
   },
   {
    "region": "Oceania",
