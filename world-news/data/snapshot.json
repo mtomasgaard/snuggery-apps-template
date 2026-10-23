@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T00:01:36Z",
+ "generatedAt": "2026-10-23T01:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Emma Cline is known for her troubled young women. In Switzy, she inhabits a man with dementia",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/emma-cline-is-known-for-her-troubled-young-women-in-switzy-she-inhabits-a-man-with-dementia-293346",
+     "published": "2026-10-23T00:20:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
+    },
+    {
      "title": "Hughesy, Karl and co: what happens when celebrities turn political?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -459,24 +469,14 @@
      "author": "Timothy Welch, Senior Lecturer in Urban Planning, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "Interned as ‘enemy aliens’ in Australia, these WWII refugees built their own universities",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/interned-as-enemy-aliens-in-australia-these-wwii-refugees-built-their-own-universities-293704",
-     "published": "2026-10-22T18:35:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Katherine Biber, Distinguished Professor of Law, University of Technology Sydney"
-    },
-    {
-     "title": "Youth protests across Europe: the overlapping crises facing Gen Z",
+     "title": "Friday essay: AI is devastating higher education, but the system was already broken",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/youth-protests-across-europe-the-overlapping-crises-facing-gen-z-294754",
-     "published": "2026-10-22T14:56:06Z",
+     "link": "https://theconversation.com/friday-essay-ai-is-devastating-higher-education-but-the-system-was-already-broken-292988",
+     "published": "2026-10-22T18:31:56Z",
      "summary": "",
      "stale": false,
-     "author": "Alina Cosma, Assistant Professor of Psychology, Trinity College Dublin"
+     "author": "Jeff Sparrow, Senior Lecturer, Centre for Advancing Journalism, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Emma Cline is known for her troubled young women. In Switzy, she inhabits a man with dementia",
+   "published": "2026-10-23 00:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Hughesy, Karl and co: what happens when celebrities turn political?",
    "published": "2026-10-22 23:16 UTC"
   },
@@ -931,14 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Interned as ‘enemy aliens’ in Australia, these WWII refugees built their own universities",
-   "published": "2026-10-22 18:35 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Youth protests across Europe: the overlapping crises facing Gen Z",
-   "published": "2026-10-22 14:56 UTC"
+   "title": "Friday essay: AI is devastating higher education, but the system was already broken",
+   "published": "2026-10-22 18:31 UTC"
   },
   {
    "region": "Oceania",
