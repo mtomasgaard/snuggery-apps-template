@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-23T16:01:32Z",
+ "generatedAt": "2026-10-23T17:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Soil mapping aims to boost agricultural production in Kenya",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168657",
+     "published": "2026-10-23T12:00:00Z",
+     "summary": "A new Kenyan initiative is helping farmers better understand their soils in a bid to improve crop yields amid intensifying climate shocks.",
+     "stale": false
+    },
+    {
      "title": "‘Burden and loss’ builds in DR Congo, as Kenya strengthens Ebola containment",
      "source": "UN News",
      "feed": "un-africa",
@@ -223,15 +232,6 @@
      "summary": "Access Now's 2025 report found that at least 313 shutdowns were implemented globally, and that in Africa the Internet was shut down 30 times in 15 countries, with protests the leading trigger, followed by elections.",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Sudan conflict: Peace efforts resume to end ‘drone war’ fuelling humanitarian crisis",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168638",
-     "published": "2026-10-21T12:00:00Z",
-     "summary": "Talks to halt the fighting in Sudan and alleviate the humanitarian crisis there continued in Geneva on Wednesday, where nearly two dozen countries convened to discuss a pathway to a ceasefire and transition to peaceful…",
-     "stale": false
     },
     {
      "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
@@ -370,7 +370,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168645",
      "published": "2026-10-21T12:00:00Z",
      "summary": "Three years on from the reported resumption of large-scale forcible returns of nationals of the Democratic People’s Republic of Korea (DPRK) from China, serious concerns persist about their fate, according to a group of…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
@@ -389,7 +389,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
      "published": "2026-10-20T12:00:00Z",
      "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Activists push for Pakistan to recognise and support people with albinism",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 2,
+   "note": "answered, but held no usable items; kept 2 cached"
   },
   {
    "id": "gv-oceania",
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Soil mapping aims to boost agricultural production in Kenya",
+   "published": "2026-10-23 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "‘Burden and loss’ builds in DR Congo, as Kenya strengthens Ebola containment",
    "published": "2026-10-23 12:00 UTC"
   },
@@ -795,12 +801,6 @@
    "source": "Global Voices",
    "title": "When Big Tech becomes a tool of state control in Kenya",
    "published": "2026-10-21 15:31 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan conflict: Peace efforts resume to end ‘drone war’ fuelling humanitarian crisis",
-   "published": "2026-10-21 12:00 UTC"
   },
   {
    "region": "Africa",
