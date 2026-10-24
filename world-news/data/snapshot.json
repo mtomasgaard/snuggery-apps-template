@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-24T18:01:33Z",
+ "generatedAt": "2026-10-24T19:01:34Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Big Tech and authoritarian states: Belarus",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/24/big-tech-and-authoritarian-states-belarus/",
+     "published": "2026-10-24T18:11:42Z",
+     "summary": "In the latest GV podcast, we discussed why Russia restricts access to many social media services, while Belarus does not impose comparable restrictions; censorship, surveillance, and digital authoritarianism…",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
      "source": "Global Voices",
@@ -45,16 +55,6 @@
      "published": "2026-10-22T12:00:00Z",
      "summary": "A patient in France has died after being infected with Shamonda virus, the first recorded human case of the disease.",
      "stale": false
-    },
-    {
-     "title": "Protest as a pillar of democracy",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/21/protest-as-a-pillar-of-democracy/",
-     "published": "2026-10-21T23:56:56Z",
-     "summary": "This spotlight is, then, a form of protest in its own right: a way of reasserting that protest is legitimate, important for democracy, and everywhere.",
-     "stale": false,
-     "author": "Malka Older"
     },
     {
      "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Big Tech and authoritarian states: Belarus",
+   "published": "2026-10-24 18:11 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
    "published": "2026-10-23 22:05 UTC"
   },
@@ -693,12 +699,6 @@
    "source": "UN News",
    "title": "First human case of Shamonda virus reported in France as patient dies",
    "published": "2026-10-22 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Protest as a pillar of democracy",
-   "published": "2026-10-21 23:56 UTC"
   },
   {
    "region": "Europe",
