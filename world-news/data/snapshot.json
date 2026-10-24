@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-24T12:02:05Z",
+ "generatedAt": "2026-10-24T13:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -34,7 +34,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": true,
+     "stale": false,
      "author": "Ranking Digital Rights"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted Media"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
      "published": "2026-09-29T00:00:00Z",
      "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": true,
+     "stale": false,
      "author": "Elmira Lyapina"
     }
    ]
@@ -230,7 +230,7 @@
      "link": "https://globalvoices.org/2026/10/21/when-big-tech-becomes-a-tool-of-state-control-in-kenya/",
      "published": "2026-10-21T15:31:05Z",
      "summary": "Access Now's 2025 report found that at least 313 shutdowns were implemented globally, and that in Africa the Internet was shut down 30 times in 15 countries, with protests the leading trigger, followed by elections.",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -240,7 +240,7 @@
      "link": "https://globalvoices.org/2026/10/19/anthropic-exposes-ai-operation-that-drc-journalists-never-knew-existed/",
      "published": "2026-10-19T20:11:30Z",
      "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
-     "stale": true,
+     "stale": false,
      "author": "Laura"
     },
     {
@@ -250,7 +250,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted Media"
     }
    ]
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
@@ -584,9 +584,9 @@
    "id": "gv-africa",
    "source": "Global Voices",
    "region": "Africa",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-africa",
