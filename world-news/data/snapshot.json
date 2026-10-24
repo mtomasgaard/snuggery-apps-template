@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-24T08:01:27Z",
+ "generatedAt": "2026-10-24T09:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "In Brazil’s elections, big techs’ transparency and cooperation policies translate as governance washing, according to this expert",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/24/in-brazils-elections-big-techs-transparency-and-cooperation-policies-translate-as-governance-washing-according-to-this-expert/",
+     "published": "2026-10-24T08:55:06Z",
+     "summary": "“Under normal conditions, this is already serious enough, because the platform rules over the information flow in a society, but when you apply it to an electoral dispute, it's even more serious.”",
+     "stale": false,
+     "author": "Fernanda Canofre"
+    },
+    {
      "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -149,16 +159,6 @@
      "published": "2026-10-18T12:00:00Z",
      "summary": "“I tell my kids I work in a time machine,” said Rhony Dostaly. In a basement beneath Lincoln Center, the media preservation engineer rescues moments from the past. “I go back in time, and I grab elements, and I make…",
      "stale": false
-    },
-    {
-     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
-     "published": "2026-10-17T08:07:27Z",
-     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": false,
-     "author": "Uncloseted Media"
     },
     {
      "title": "Haiti sanctions renewed: Starving the gangs of bullets",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "In Brazil’s elections, big techs’ transparency and cooperation policies translate as governance washing, according to this expert",
+   "published": "2026-10-24 08:55 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
    "published": "2026-10-23 23:59 UTC"
@@ -753,12 +759,6 @@
    "source": "UN News",
    "title": "Inside the New York ‘time machine’ racing to save a century of sound and film",
    "published": "2026-10-18 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Americas",
