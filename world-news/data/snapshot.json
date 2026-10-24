@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-24T00:01:28Z",
+ "generatedAt": "2026-10-24T01:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/boo-feeling-scared-on-halloween-can-be-fun-for-children-but-can-sometimes-push-their-limits-294433",
+     "published": "2026-10-23T23:59:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liz Rosenberg, Professor of English, General Literature and Rhetoric, Binghamton University, State University of New York"
+    },
+    {
      "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Emily Smith-Greenaway, Dean's Professor of Sociology and Professor of Spatial Sciences, USC Dornsife College of Letters, Arts and Sciences"
-    },
-    {
-     "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/un-peacekeepers-prepare-to-exit-lebanon-after-70-years-leaving-behind-a-worrying-security-vacuum-293159",
-     "published": "2026-10-23T18:45:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mireille Rebeiz, Director of Dickinson Program in New Zealand, Dickinson College; University of Otago"
     },
     {
      "title": "Venezuela faces a deepening energy crisis as protests grow",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
-   "published": "2026-10-23 19:42 UTC"
+   "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
+   "published": "2026-10-23 23:59 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "UN peacekeepers prepare to exit Lebanon after 70 years – leaving behind a worrying security vacuum",
-   "published": "2026-10-23 18:45 UTC"
+   "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
+   "published": "2026-10-23 19:42 UTC"
   },
   {
    "region": "Americas",
