@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-25T15:01:33Z",
+ "generatedAt": "2026-10-25T16:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/25/between-two-shores-the-monhes-nationality-and-a-sense-of-belonging-in-mozambique/",
+     "published": "2026-10-25T16:00:16Z",
+     "summary": "“Monhé” is not a nationality: a person of Indian origin can be completely Mozambican, foreign, or in some cases, stateless.",
+     "stale": false,
+     "author": "Liam Anderson"
+    },
+    {
      "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
-     "published": "2026-10-17T08:07:27Z",
-     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": false,
-     "author": "Uncloseted Media"
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
+   "published": "2026-10-25 16:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
    "published": "2026-10-25 06:10 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
    "published": "2026-10-19 20:11 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Middle East",
