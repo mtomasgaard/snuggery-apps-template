@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-25T06:01:23Z",
+ "generatedAt": "2026-10-25T07:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/zimbabwe-wants-digital-payments-to-build-trust-in-its-newest-currency-why-technology-alone-wont-be-enough-to-save-the-zig-294769",
+     "published": "2026-10-25T06:10:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jonathan Munemo, Professor of Economics, Salisbury University"
+    },
+    {
+     "title": "What gets fact-checked? How politics shapes the answer in four African countries",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/what-gets-fact-checked-how-politics-shapes-the-answer-in-four-african-countries-293964",
+     "published": "2026-10-25T06:10:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Chikezie E. Uzuegbunam, Senior Lecturer in Media and Digital Studies and Deputy Head of School, Rhodes University"
+    },
+    {
      "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
      "source": "UN News",
      "feed": "un-africa",
@@ -202,26 +222,6 @@
      "published": "2026-10-23T12:00:00Z",
      "summary": "As Ebola continues to spread in the Democratic Republic of the Congo (DRC), more resources are needed to fight the disease and feed patients and families, UN agencies said on Friday.",
      "stale": false
-    },
-    {
-     "title": "Sénégal : une étude montre comment la sécurité foncière conditionne l’efficacité du crédit agricole",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/senegal-une-etude-montre-comment-la-securite-fonciere-conditionne-lefficacite-du-credit-agricole-294369",
-     "published": "2026-10-23T07:48:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Babacar Ndiaye, enseigant-chercheur, Université Amadou Mahtar MBOW de Dakar"
-    },
-    {
-     "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/health-progress-in-africa-leaves-more-people-living-with-disabilities-rehabilitation-is-the-next-challenge-291906",
-     "published": "2026-10-22T15:06:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ukachukwu Abaraogu, Senior Lecturer Public Health, Evidence Synthesis & Rehabilitation, University of the West of Scotland"
     },
     {
      "title": "When Big Tech becomes a tool of state control in Kenya",
@@ -768,6 +768,18 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
+   "published": "2026-10-25 06:10 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "What gets fact-checked? How politics shapes the answer in four African countries",
+   "published": "2026-10-25 06:10 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
    "published": "2026-10-23 12:00 UTC"
@@ -783,18 +795,6 @@
    "source": "UN News",
    "title": "‘Burden and loss’ builds in DR Congo, as Kenya strengthens Ebola containment",
    "published": "2026-10-23 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Sénégal : une étude montre comment la sécurité foncière conditionne l’efficacité du crédit agricole",
-   "published": "2026-10-23 07:48 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Health progress in Africa leaves more people living with disabilities: rehabilitation is the next challenge",
-   "published": "2026-10-22 15:06 UTC"
   },
   {
    "region": "Africa",
