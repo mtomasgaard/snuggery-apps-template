@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-25T22:01:26Z",
+ "generatedAt": "2026-10-25T23:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
+     "title": "Your say: week beginning October 26",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/your-say-week-beginning-october-26-295147",
+     "published": "2026-10-25T22:47:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
+    },
+    {
+     "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-hidden-chronic-health-burden-is-even-bigger-than-we-thought-new-analysis-294047",
      "published": "2026-10-25T19:10:52Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Richard de Grijs, Professor of Astrophysics, Macquarie University"
-    },
-    {
-     "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/boo-feeling-scared-on-halloween-can-be-fun-for-children-but-can-sometimes-push-their-limits-294433",
-     "published": "2026-10-23T23:59:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liz Rosenberg, Professor of English, General Literature and Rhetoric, Binghamton University, State University of New York"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Your say: week beginning October 26",
+   "published": "2026-10-25 22:47 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
    "published": "2026-10-25 19:10 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
    "published": "2026-10-25 18:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
-   "published": "2026-10-23 23:59 UTC"
   },
   {
    "region": "Oceania",
