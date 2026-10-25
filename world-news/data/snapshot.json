@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-25T19:01:29Z",
+ "generatedAt": "2026-10-25T20:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "Why Snowy Hydro’s $25 billion cost blowout is a warning sign for other megaprojects",
+     "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-snowy-hydros-25-billion-cost-blowout-is-a-warning-sign-for-other-megaprojects-295057",
-     "published": "2026-10-23T04:47:16Z",
+     "link": "https://theconversation.com/nzs-hidden-chronic-health-burden-is-even-bigger-than-we-thought-new-analysis-294047",
+     "published": "2026-10-25T19:10:52Z",
      "summary": "",
      "stale": false,
-     "author": "Dominic D Ahiaga-Dagbui, Director of Deakin Megaprojects Research Group and Senior Lecturer of Construction and Project Management, Deakin University"
+     "author": "Katrina Poppe, Associate Professor of Health Data Science, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "Michelle Landry announces retirement, opening path for Matt Canavan to switch to lower house",
+     "title": "While some eucalypts are hard to kill, climate change may test the ability of others to survive",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/michelle-landry-announces-retirement-opening-path-for-matt-canavan-to-switch-to-lower-house-295072",
-     "published": "2026-10-23T03:54:34Z",
+     "link": "https://theconversation.com/while-some-eucalypts-are-hard-to-kill-climate-change-may-test-the-ability-of-others-to-survive-293533",
+     "published": "2026-10-25T18:32:44Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Eli R. Bendall, Postdoctoral Research Fellow, Plant Conservation and Climate Change Adaptation, Western Sydney University"
     },
     {
-     "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
+     "title": "Food insecurity is on the rise in Australia. We need more effective responses",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/in-an-age-of-ai-wildwood-is-a-film-that-reminds-us-human-creativity-is-irreplaceable-294353",
-     "published": "2026-10-23T02:49:02Z",
+     "link": "https://theconversation.com/food-insecurity-is-on-the-rise-in-australia-we-need-more-effective-responses-293942",
+     "published": "2026-10-25T18:32:30Z",
      "summary": "",
      "stale": false,
-     "author": "Ari Chand, Senior Lecturer in Illustration and Animation, Adelaide University ; University of Newcastle"
+     "author": "David A. Fleming-Muñoz, Professor of Agricultural and Resource Economics, La Trobe University"
     },
     {
-     "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
+     "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/ruling-out-opportunity-only-harms-luxons-election-chances-right-its-not-that-simple-295065",
-     "published": "2026-10-23T01:06:31Z",
+     "link": "https://theconversation.com/an-american-startup-wants-to-sell-sunlight-after-dark-who-gets-a-say-294681",
+     "published": "2026-10-25T18:32:17Z",
      "summary": "",
      "stale": false,
-     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
+     "author": "Richard de Grijs, Professor of Astrophysics, Macquarie University"
     },
     {
-     "title": "The next government faces transport tests that new roads or cheap fares won’t solve",
+     "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/the-next-government-faces-transport-tests-that-new-roads-or-cheap-fares-wont-solve-293790",
-     "published": "2026-10-22T18:50:10Z",
+     "link": "https://theconversation.com/boo-feeling-scared-on-halloween-can-be-fun-for-children-but-can-sometimes-push-their-limits-294433",
+     "published": "2026-10-23T23:59:07Z",
      "summary": "",
      "stale": false,
-     "author": "Timothy Welch, Senior Lecturer in Urban Planning, University of Auckland, Waipapa Taumata Rau"
+     "author": "Liz Rosenberg, Professor of English, General Literature and Rhetoric, Binghamton University, State University of New York"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why Snowy Hydro’s $25 billion cost blowout is a warning sign for other megaprojects",
-   "published": "2026-10-23 04:47 UTC"
+   "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
+   "published": "2026-10-25 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Michelle Landry announces retirement, opening path for Matt Canavan to switch to lower house",
-   "published": "2026-10-23 03:54 UTC"
+   "title": "While some eucalypts are hard to kill, climate change may test the ability of others to survive",
+   "published": "2026-10-25 18:32 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "In an age of AI, Wildwood is a film that reminds us human creativity is irreplaceable",
-   "published": "2026-10-23 02:49 UTC"
+   "title": "Food insecurity is on the rise in Australia. We need more effective responses",
+   "published": "2026-10-25 18:32 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Ruling out Opportunity only harms Luxon’s election chances, right? It’s not that simple",
-   "published": "2026-10-23 01:06 UTC"
+   "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
+   "published": "2026-10-25 18:32 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The next government faces transport tests that new roads or cheap fares won’t solve",
-   "published": "2026-10-22 18:50 UTC"
+   "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
+   "published": "2026-10-23 23:59 UTC"
   },
   {
    "region": "Oceania",
