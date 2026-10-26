@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T17:01:31Z",
+ "generatedAt": "2026-10-26T18:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "View from The Hill: Sombre and well-behaved House focuses on the unifying figure of Helen Haines",
+     "title": "Guide to the classics: Machiavelli’s ‘audaciously honest’ The Prince reveals how politics works",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-sombre-and-well-behaved-house-focuses-on-the-unifying-figure-of-helen-haines-295067",
-     "published": "2026-10-26T08:14:02Z",
+     "link": "https://theconversation.com/guide-to-the-classics-machiavellis-audaciously-honest-the-prince-reveals-how-politics-works-262726",
+     "published": "2026-10-26T17:23:16Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Intifar Chowdhury, Lecturer in Government, Jeff Bleich Centre for Democracy and Disruptive Technologies, Flinders University"
     },
     {
-     "title": "Can a ‘civility pledge’ really help lower the temperature of Australia’s political debate?",
+     "title": "Calling species ‘invasive’ – and culling them – isn’t done lightly. But it matters to Australia’s threatened species",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/can-a-civility-pledge-really-help-lower-the-temperature-of-australias-political-debate-295149",
-     "published": "2026-10-26T06:43:57Z",
+     "link": "https://theconversation.com/calling-species-invasive-and-culling-them-isnt-done-lightly-but-it-matters-to-australias-threatened-species-294672",
+     "published": "2026-10-26T17:23:00Z",
      "summary": "",
      "stale": false,
-     "author": "Claire Yorke, Senior Lecturer, Centre for Future Defence and National Security, Deakin University"
+     "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
     },
     {
-     "title": "Feminine desire is often ignored in sci-fi. Could that be changing?",
+     "title": "Peptide users don’t think of themselves as injecting drug users. 5 safety basics injectors need to know",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/feminine-desire-is-often-ignored-in-sci-fi-could-that-be-changing-294776",
-     "published": "2026-10-26T04:46:45Z",
+     "link": "https://theconversation.com/peptide-users-dont-think-of-themselves-as-injecting-drug-users-5-safety-basics-injectors-need-to-know-292002",
+     "published": "2026-10-26T17:22:42Z",
      "summary": "",
      "stale": false,
-     "author": "Heather Blakey, Literary Studies Scholar, The University of Western Australia"
+     "author": "Samuel Cornell, Research Fellow in Public Health, The University of Queensland"
     },
     {
      "title": "Lula wins a ‘miracle’ election in Brazil. Now comes the hard part: putting the country back on the right track",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: Sombre and well-behaved House focuses on the unifying figure of Helen Haines",
-   "published": "2026-10-26 08:14 UTC"
+   "title": "Guide to the classics: Machiavelli’s ‘audaciously honest’ The Prince reveals how politics works",
+   "published": "2026-10-26 17:23 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Can a ‘civility pledge’ really help lower the temperature of Australia’s political debate?",
-   "published": "2026-10-26 06:43 UTC"
+   "title": "Calling species ‘invasive’ – and culling them – isn’t done lightly. But it matters to Australia’s threatened species",
+   "published": "2026-10-26 17:23 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Feminine desire is often ignored in sci-fi. Could that be changing?",
-   "published": "2026-10-26 04:46 UTC"
+   "title": "Peptide users don’t think of themselves as injecting drug users. 5 safety basics injectors need to know",
+   "published": "2026-10-26 17:22 UTC"
   },
   {
    "region": "Oceania",
