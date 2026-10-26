@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T20:01:34Z",
+ "generatedAt": "2026-10-26T21:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/in-opting-for-lula-brazil-made-a-conservative-choice-to-elect-a-man-of-the-left-over-one-of-the-far-right-295217",
+     "published": "2026-10-26T19:55:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "João Gabriel de Lima, Jornalista, doutorando em Política Comparada, Universidade de Lisboa"
+    },
+    {
      "title": "The upside of untidiness: why a little mess can be good for your home",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Stephen Coleman, Emeritus Professor of Political Communication, University of Leeds"
-    },
-    {
-     "title": "Stanford prison experiment: why do controversial psychology studies still have such a hold on us?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/stanford-prison-experiment-why-do-controversial-psychology-studies-still-have-such-a-hold-on-us-294814",
-     "published": "2026-10-26T15:46:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Kaposi, Psychotherapist and Senior Lecturer in Psychology, The Open University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
+   "published": "2026-10-26 19:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The upside of untidiness: why a little mess can be good for your home",
    "published": "2026-10-26 18:33 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Andy Burnham has maintained the public’s approval through his first 100 days as the UK’s PM – that’s unheard of these days",
    "published": "2026-10-26 16:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Stanford prison experiment: why do controversial psychology studies still have such a hold on us?",
-   "published": "2026-10-26 15:46 UTC"
   },
   {
    "region": "Oceania",
