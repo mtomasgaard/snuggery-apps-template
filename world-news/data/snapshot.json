@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T08:01:29Z",
+ "generatedAt": "2026-10-26T09:01:44Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Vote young yet govern much later: West African youth’s struggle for power",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/26/vote-young-yet-govern-much-later-west-african-youths-struggle-for-power/",
+     "published": "2026-10-26T08:30:41Z",
+     "summary": "Young people are deemed mature enough to elect their leaders, yet not to replace them. They drive political movements forward by voting, advocating, campaigning, and protesting, yet cannot run for office themselves.",
+     "stale": false,
+     "author": "Laura"
+    },
+    {
      "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -242,16 +252,6 @@
      "summary": "Access Now's 2025 report found that at least 313 shutdowns were implemented globally, and that in Africa the Internet was shut down 30 times in 15 countries, with protests the leading trigger, followed by elections.",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/19/anthropic-exposes-ai-operation-that-drc-journalists-never-knew-existed/",
-     "published": "2026-10-19T20:11:30Z",
-     "summary": "70 AI-powered fake news sites have generated 318 articles on the eastern DRC conflict, relations with Rwanda, and contested mineral resources.",
-     "stale": false,
-     "author": "Laura"
     }
    ]
   },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: Sombre and well-behaved House focuses on the unifying figure of Helen Haines",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-sombre-and-well-behaved-house-focuses-on-the-unifying-figure-of-helen-haines-295067",
+     "published": "2026-10-26T08:14:02Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Can a ‘civility pledge’ really help lower the temperature of Australia’s political debate?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Heather Blakey, Literary Studies Scholar, The University of Western Australia"
-    },
-    {
-     "title": "What is ‘human composting’ – and how does it work?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-is-human-composting-and-how-does-it-work-294951",
-     "published": "2026-10-26T04:43:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Paola A. Magni, Associate Professor of Forensic Science, Murdoch University"
     },
     {
      "title": "Lula wins a ‘miracle’ election in Brazil. Now comes the hard part: putting the country back on the right track",
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "Global Voices",
+   "title": "Vote young yet govern much later: West African youth’s struggle for power",
+   "published": "2026-10-26 08:30 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
    "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
    "published": "2026-10-25 16:00 UTC"
   },
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "When Big Tech becomes a tool of state control in Kenya",
    "published": "2026-10-21 15:31 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Anthropic exposes AI operation that DRC journalists never knew existed",
-   "published": "2026-10-19 20:11 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: Sombre and well-behaved House focuses on the unifying figure of Helen Haines",
+   "published": "2026-10-26 08:14 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Can a ‘civility pledge’ really help lower the temperature of Australia’s political debate?",
    "published": "2026-10-26 06:43 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Feminine desire is often ignored in sci-fi. Could that be changing?",
    "published": "2026-10-26 04:46 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What is ‘human composting’ – and how does it work?",
-   "published": "2026-10-26 04:43 UTC"
   },
   {
    "region": "Oceania",
