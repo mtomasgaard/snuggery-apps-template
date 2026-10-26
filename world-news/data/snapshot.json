@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T12:01:29Z",
+ "generatedAt": "2026-10-26T13:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Why do people still get polio in some countries and not in others?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/why-do-people-still-get-polio-in-some-countries-and-not-in-others-294010",
+     "published": "2026-10-26T12:16:36Z",
+     "summary": "",
+     "stale": false,
+     "author": "Katrine L. Wallace, Assistant Professor of Epidemiology and Biostatistics, University of Illinois Chicago"
+    },
+    {
+     "title": "Nathaniel Hawthorne’s notebooks reveal the strange workings of his imagination",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/nathaniel-hawthornes-notebooks-reveal-the-strange-workings-of-his-imagination-294421",
+     "published": "2026-10-26T12:15:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert S. Levine, Distinguished University Professor of English, University of Maryland"
+    },
+    {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,26 +131,6 @@
      "summary": "“Under normal conditions, this is already serious enough, because the platform rules over the information flow in a society, but when you apply it to an electoral dispute, it's even more serious.”",
      "stale": false,
      "author": "Fernanda Canofre"
-    },
-    {
-     "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/boo-feeling-scared-on-halloween-can-be-fun-for-children-but-can-sometimes-push-their-limits-294433",
-     "published": "2026-10-23T23:59:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liz Rosenberg, Professor of English, General Literature and Rhetoric, Binghamton University, State University of New York"
-    },
-    {
-     "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/ancestors-all-around-millions-of-dead-people-linger-in-americans-memories-292342",
-     "published": "2026-10-23T19:42:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Emily Smith-Greenaway, Dean's Professor of Sociology and Professor of Spatial Sciences, USC Dornsife College of Letters, Arts and Sciences"
     },
     {
      "title": "Venezuela faces a deepening energy crisis as protests grow",
@@ -720,6 +720,18 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Why do people still get polio in some countries and not in others?",
+   "published": "2026-10-26 12:16 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Nathaniel Hawthorne’s notebooks reveal the strange workings of his imagination",
+   "published": "2026-10-26 12:15 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
    "published": "2026-10-25 09:23 UTC"
@@ -729,18 +741,6 @@
    "source": "Global Voices",
    "title": "In Brazil’s elections, big techs’ transparency and cooperation policies translate as governance washing, according to this expert",
    "published": "2026-10-24 08:55 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Boo! Feeling scared on Halloween can be fun for children but can sometimes push their limits",
-   "published": "2026-10-23 23:59 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Ancestors all around – millions of dead people linger in Americans’ memories",
-   "published": "2026-10-23 19:42 UTC"
   },
   {
    "region": "Americas",
