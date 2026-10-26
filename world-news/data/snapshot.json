@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T05:01:27Z",
+ "generatedAt": "2026-10-26T06:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Feminine desire is often ignored in sci-fi. Could that be changing?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/feminine-desire-is-often-ignored-in-sci-fi-could-that-be-changing-294776",
+     "published": "2026-10-26T04:46:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Heather Blakey, Literary Studies Scholar, The University of Western Australia"
+    },
+    {
+     "title": "What is ‘human composting’ – and how does it work?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-is-human-composting-and-how-does-it-work-294951",
+     "published": "2026-10-26T04:43:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Paola A. Magni, Associate Professor of Forensic Science, Murdoch University"
+    },
+    {
      "title": "Democrats remain clear favourites to gain control of Congress at midterms as Trump’s ratings slide again",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "The power of poo: why conservationists love animal scat",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-power-of-poo-why-conservationists-love-animal-scat-290147",
-     "published": "2026-10-26T02:53:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Elspeth McLennan, Postdoctoral Research Associate, Australasian Wildlife Genomics Group, University of Sydney"
-    },
-    {
-     "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/we-tracked-a-ship-in-north-koreas-shadow-fleet-this-is-how-it-stays-in-the-dark-288088",
-     "published": "2026-10-26T01:03:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Justin Hastings, Professor of International Relations and Comparative Politics, University of Sydney"
     },
     {
      "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Feminine desire is often ignored in sci-fi. Could that be changing?",
+   "published": "2026-10-26 04:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What is ‘human composting’ – and how does it work?",
+   "published": "2026-10-26 04:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Democrats remain clear favourites to gain control of Congress at midterms as Trump’s ratings slide again",
    "published": "2026-10-26 04:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The power of poo: why conservationists love animal scat",
-   "published": "2026-10-26 02:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
-   "published": "2026-10-26 01:03 UTC"
   },
   {
    "region": "Oceania",
