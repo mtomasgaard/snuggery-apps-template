@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-25T23:01:24Z",
+ "generatedAt": "2026-10-26T00:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Rage, lust and radical growth: 5 hot menopause novels",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/rage-lust-and-radical-growth-5-hot-menopause-novels-293349",
+     "published": "2026-10-25T23:05:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liz Evans, Adjunct Researcher, English and Writing, University of Tasmania"
+    },
+    {
      "title": "Your say: week beginning October 26",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Eli R. Bendall, Postdoctoral Research Fellow, Plant Conservation and Climate Change Adaptation, Western Sydney University"
-    },
-    {
-     "title": "Food insecurity is on the rise in Australia. We need more effective responses",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/food-insecurity-is-on-the-rise-in-australia-we-need-more-effective-responses-293942",
-     "published": "2026-10-25T18:32:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "David A. Fleming-Muñoz, Professor of Agricultural and Resource Economics, La Trobe University"
     },
     {
      "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Rage, lust and radical growth: 5 hot menopause novels",
+   "published": "2026-10-25 23:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning October 26",
    "published": "2026-10-25 22:47 UTC"
   },
@@ -926,12 +932,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "While some eucalypts are hard to kill, climate change may test the ability of others to survive",
-   "published": "2026-10-25 18:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Food insecurity is on the rise in Australia. We need more effective responses",
    "published": "2026-10-25 18:32 UTC"
   },
   {
