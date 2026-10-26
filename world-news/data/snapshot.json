@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T18:01:35Z",
+ "generatedAt": "2026-10-26T19:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Ghost stories don’t just scare us – they remind us of historical injustices",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/ghost-stories-dont-just-scare-us-they-remind-us-of-historical-injustices-293080",
+     "published": "2026-10-26T17:59:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Marcus Librizzi, Professor of English, University of Maine"
+    },
+    {
      "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Ali Ataya, Professor of Medicine, University of Florida"
-    },
-    {
-     "title": "Why do people still get polio in some countries and not in others?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-do-people-still-get-polio-in-some-countries-and-not-in-others-294010",
-     "published": "2026-10-26T12:16:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Katrine L. Wallace, Assistant Professor of Epidemiology and Biostatistics, University of Illinois Chicago"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The upside of untidiness: why a little mess can be good for your home",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-upside-of-untidiness-why-a-little-mess-can-be-good-for-your-home-294343",
+     "published": "2026-10-26T18:33:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jamal Abarashi, Lecturer, Marketing and International Business Department, Auckland University of Technology"
+    },
+    {
      "title": "Guide to the classics: Machiavelli’s ‘audaciously honest’ The Prince reveals how politics works",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,34 +459,24 @@
      "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
     },
     {
-     "title": "Peptide users don’t think of themselves as injecting drug users. 5 safety basics injectors need to know",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/peptide-users-dont-think-of-themselves-as-injecting-drug-users-5-safety-basics-injectors-need-to-know-292002",
-     "published": "2026-10-26T17:22:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Samuel Cornell, Research Fellow in Public Health, The University of Queensland"
-    },
-    {
-     "title": "Lula wins a ‘miracle’ election in Brazil. Now comes the hard part: putting the country back on the right track",
+     "title": "Andy Burnham has maintained the public’s approval through his first 100 days as the UK’s PM – that’s unheard of these days",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/lula-wins-a-miracle-election-in-brazil-now-comes-the-hard-part-putting-the-country-back-on-the-right-track-295157",
-     "published": "2026-10-26T03:55:20Z",
+     "link": "https://theconversation.com/andy-burnham-has-maintained-the-publics-approval-through-his-first-100-days-as-the-uks-pm-thats-unheard-of-these-days-295090",
+     "published": "2026-10-26T16:45:12Z",
      "summary": "",
      "stale": false,
-     "author": "Guilherme Casarões, Associate Professor of Brazilian Studies, Florida International University"
+     "author": "Stephen Coleman, Emeritus Professor of Political Communication, University of Leeds"
     },
     {
-     "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
+     "title": "Stanford prison experiment: why do controversial psychology studies still have such a hold on us?",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-hidden-chronic-health-burden-is-even-bigger-than-we-thought-new-analysis-294047",
-     "published": "2026-10-25T19:10:52Z",
+     "link": "https://theconversation.com/stanford-prison-experiment-why-do-controversial-psychology-studies-still-have-such-a-hold-on-us-294814",
+     "published": "2026-10-26T15:46:20Z",
      "summary": "",
      "stale": false,
-     "author": "Katrina Poppe, Associate Professor of Health Data Science, University of Auckland, Waipapa Taumata Rau"
+     "author": "David Kaposi, Psychotherapist and Senior Lecturer in Psychology, The Open University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
-   "published": "2026-10-26 12:50 UTC"
+   "title": "Ghost stories don’t just scare us – they remind us of historical injustices",
+   "published": "2026-10-26 17:59 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why do people still get polio in some countries and not in others?",
-   "published": "2026-10-26 12:16 UTC"
+   "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
+   "published": "2026-10-26 12:50 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The upside of untidiness: why a little mess can be good for your home",
+   "published": "2026-10-26 18:33 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Guide to the classics: Machiavelli’s ‘audaciously honest’ The Prince reveals how politics works",
    "published": "2026-10-26 17:23 UTC"
   },
@@ -925,20 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Peptide users don’t think of themselves as injecting drug users. 5 safety basics injectors need to know",
-   "published": "2026-10-26 17:22 UTC"
+   "title": "Andy Burnham has maintained the public’s approval through his first 100 days as the UK’s PM – that’s unheard of these days",
+   "published": "2026-10-26 16:45 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Lula wins a ‘miracle’ election in Brazil. Now comes the hard part: putting the country back on the right track",
-   "published": "2026-10-26 03:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
-   "published": "2026-10-25 19:10 UTC"
+   "title": "Stanford prison experiment: why do controversial psychology studies still have such a hold on us?",
+   "published": "2026-10-26 15:46 UTC"
   },
   {
    "region": "Oceania",
