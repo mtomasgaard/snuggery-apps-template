@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T19:01:40Z",
+ "generatedAt": "2026-10-26T20:01:34Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/26/volunteers-from-poland-remember-how-poles-opened-their-homes-to-ukrainian-refugees-in-2022/",
+     "published": "2026-10-26T19:45:17Z",
+     "summary": "Five years into the full-scale war, however, the border has also revealed the limits of that extraordinary solidarity.",
+     "stale": false,
+     "author": "Anna Romandash"
+    },
     {
      "title": "Big Tech and authoritarian states: Belarus",
      "source": "Global Voices",
@@ -26,16 +36,6 @@
      "summary": "Being able to use the internet safely is also about being able to participate in everyday life.",
      "stale": false,
      "author": "Nurbek Bekmurzaev"
-    },
-    {
-     "title": "Complementary forces: Why activism needs art to drive action",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/23/complementary-forces-why-activism-needs-art-to-drive-action/",
-     "published": "2026-10-23T08:51:01Z",
-     "summary": "\"Artistic activism uses the emotional experience of art as a prompt for action and directs that action towards change, turning a complex problem into a clear public message.\"",
-     "stale": false,
-     "author": "Guest Contributor"
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
+   "published": "2026-10-26 19:45 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Big Tech and authoritarian states: Belarus",
    "published": "2026-10-24 18:11 UTC"
   },
@@ -681,12 +687,6 @@
    "source": "Global Voices",
    "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
    "published": "2026-10-23 22:05 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Complementary forces: Why activism needs art to drive action",
-   "published": "2026-10-23 08:51 UTC"
   },
   {
    "region": "Europe",
