@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T09:01:44Z",
+ "generatedAt": "2026-10-26T10:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Impôts : quand la souplesse de l'administration fiscale rapproche… ou éloigne les citoyens",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/impots-quand-la-souplesse-de-ladministration-fiscale-rapproche-ou-eloigne-les-citoyens-294987",
+     "published": "2026-10-26T08:53:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christopher Hoy, McKenzie Research Fellow, The University of Melbourne"
+    },
+    {
      "title": "Vote young yet govern much later: West African youth’s struggle for power",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -205,16 +215,6 @@
      "summary": "",
      "stale": false,
      "author": "Jonathan Munemo, Professor of Economics, Salisbury University"
-    },
-    {
-     "title": "What gets fact-checked? How politics shapes the answer in four African countries",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/what-gets-fact-checked-how-politics-shapes-the-answer-in-four-african-countries-293964",
-     "published": "2026-10-25T06:10:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Chikezie E. Uzuegbunam, Senior Lecturer in Media and Digital Studies and Deputy Head of School, Rhodes University"
     },
     {
      "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Impôts : quand la souplesse de l'administration fiscale rapproche… ou éloigne les citoyens",
+   "published": "2026-10-26 08:53 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Vote young yet govern much later: West African youth’s struggle for power",
    "published": "2026-10-26 08:30 UTC"
@@ -782,12 +788,6 @@
    "region": "Africa",
    "source": "The Conversation",
    "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
-   "published": "2026-10-25 06:10 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "What gets fact-checked? How politics shapes the answer in four African countries",
    "published": "2026-10-25 06:10 UTC"
   },
   {
