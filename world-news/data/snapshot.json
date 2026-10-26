@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T13:01:36Z",
+ "generatedAt": "2026-10-26T14:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/if-philadelphia-eagles-quarterback-jalen-hurts-can-get-dangerous-blood-clots-so-can-you-heres-how-some-states-are-trying-to-reduce-the-risk-294850",
+     "published": "2026-10-26T12:50:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ali Ataya, Professor of Medicine, University of Florida"
+    },
+    {
      "title": "Why do people still get polio in some countries and not in others?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Katrine L. Wallace, Assistant Professor of Epidemiology and Biostatistics, University of Illinois Chicago"
-    },
-    {
-     "title": "Nathaniel Hawthorne’s notebooks reveal the strange workings of his imagination",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/nathaniel-hawthornes-notebooks-reveal-the-strange-workings-of-his-imagination-294421",
-     "published": "2026-10-26T12:15:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert S. Levine, Distinguished University Professor of English, University of Maryland"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -177,14 +177,33 @@
    "stale": false,
    "items": [
     {
-     "title": "Impôts : quand la souplesse de l'administration fiscale rapproche… ou éloigne les citoyens",
+     "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/impots-quand-la-souplesse-de-ladministration-fiscale-rapproche-ou-eloigne-les-citoyens-294987",
-     "published": "2026-10-26T08:53:59Z",
+     "link": "https://theconversation.com/south-africas-lion-petting-industry-we-spent-three-years-investigating-and-heres-what-we-found-293749",
+     "published": "2026-10-26T13:22:43Z",
      "summary": "",
      "stale": false,
-     "author": "Christopher Hoy, McKenzie Research Fellow, The University of Melbourne"
+     "author": "Stephanie-Emmy Klarmann, Research associate, University of Johannesburg"
+    },
+    {
+     "title": "Drought forces livestock farmers to make tough decisions: our model shows the impact on inequality",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/drought-forces-livestock-farmers-to-make-tough-decisions-our-model-shows-the-impact-on-inequality-293453",
+     "published": "2026-10-26T13:22:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Matt Clark, Postdoctoral Research Associate in Environmental Social Sciences, University of Sydney"
+    },
+    {
+     "title": "Ebola: UN officials condemn killing of nurse in DR Congo",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168667",
+     "published": "2026-10-26T12:00:00Z",
+     "summary": "The UN’s Ebola coordinator and the head of the World Health Organization (WHO) have deplored the killing of a nurse working to halt the spread of the disease in the Democratic Republic of the Congo (DRC).",
+     "stale": false
     },
     {
      "title": "Vote young yet govern much later: West African youth’s struggle for power",
@@ -207,16 +226,6 @@
      "author": "Liam Anderson"
     },
     {
-     "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/zimbabwe-wants-digital-payments-to-build-trust-in-its-newest-currency-why-technology-alone-wont-be-enough-to-save-the-zig-294769",
-     "published": "2026-10-25T06:10:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jonathan Munemo, Professor of Economics, Salisbury University"
-    },
-    {
      "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
      "source": "UN News",
      "feed": "un-africa",
@@ -232,15 +241,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168657",
      "published": "2026-10-23T12:00:00Z",
      "summary": "A new Kenyan initiative is helping farmers better understand their soils in a bid to improve crop yields amid intensifying climate shocks.",
-     "stale": false
-    },
-    {
-     "title": "‘Burden and loss’ builds in DR Congo, as Kenya strengthens Ebola containment",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168655",
-     "published": "2026-10-23T12:00:00Z",
-     "summary": "As Ebola continues to spread in the Democratic Republic of the Congo (DRC), more resources are needed to fight the disease and feed patients and families, UN agencies said on Friday.",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why do people still get polio in some countries and not in others?",
-   "published": "2026-10-26 12:16 UTC"
+   "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
+   "published": "2026-10-26 12:50 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Nathaniel Hawthorne’s notebooks reveal the strange workings of his imagination",
-   "published": "2026-10-26 12:15 UTC"
+   "title": "Why do people still get polio in some countries and not in others?",
+   "published": "2026-10-26 12:16 UTC"
   },
   {
    "region": "Americas",
@@ -769,8 +769,20 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Impôts : quand la souplesse de l'administration fiscale rapproche… ou éloigne les citoyens",
-   "published": "2026-10-26 08:53 UTC"
+   "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
+   "published": "2026-10-26 13:22 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Drought forces livestock farmers to make tough decisions: our model shows the impact on inequality",
+   "published": "2026-10-26 13:22 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Ebola: UN officials condemn killing of nurse in DR Congo",
+   "published": "2026-10-26 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -786,12 +798,6 @@
   },
   {
    "region": "Africa",
-   "source": "The Conversation",
-   "title": "Zimbabwe wants digital payments to build trust in its newest currency. Why technology alone won’t be enough to save the ZiG",
-   "published": "2026-10-25 06:10 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "UN News",
    "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
    "published": "2026-10-23 12:00 UTC"
@@ -800,12 +806,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "Soil mapping aims to boost agricultural production in Kenya",
-   "published": "2026-10-23 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘Burden and loss’ builds in DR Congo, as Kenya strengthens Ebola containment",
    "published": "2026-10-23 12:00 UTC"
   },
   {
