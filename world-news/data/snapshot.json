@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T04:01:30Z",
+ "generatedAt": "2026-10-26T05:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Democrats remain clear favourites to gain control of Congress at midterms as Trump’s ratings slide again",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/democrats-remain-clear-favourites-to-gain-control-of-congress-at-midterms-as-trumps-ratings-slide-again-295134",
+     "published": "2026-10-26T04:21:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "The power of poo: why conservationists love animal scat",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Justin Hastings, Professor of International Relations and Comparative Politics, University of Sydney"
-    },
-    {
-     "title": "Rage, lust and radical growth: 5 hot menopause novels",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/rage-lust-and-radical-growth-5-hot-menopause-novels-293349",
-     "published": "2026-10-25T23:05:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liz Evans, Adjunct Researcher, English and Writing, University of Tasmania"
     },
     {
      "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Democrats remain clear favourites to gain control of Congress at midterms as Trump’s ratings slide again",
+   "published": "2026-10-26 04:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The power of poo: why conservationists love animal scat",
    "published": "2026-10-26 02:53 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
    "published": "2026-10-26 01:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Rage, lust and radical growth: 5 hot menopause novels",
-   "published": "2026-10-25 23:05 UTC"
   },
   {
    "region": "Oceania",
