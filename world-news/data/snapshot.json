@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T01:01:31Z",
+ "generatedAt": "2026-10-26T02:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/we-tracked-a-ship-in-north-koreas-shadow-fleet-this-is-how-it-stays-in-the-dark-288088",
+     "published": "2026-10-26T01:03:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Justin Hastings, Professor of International Relations and Comparative Politics, University of Sydney"
+    },
+    {
      "title": "Rage, lust and radical growth: 5 hot menopause novels",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Katrina Poppe, Associate Professor of Health Data Science, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "While some eucalypts are hard to kill, climate change may test the ability of others to survive",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/while-some-eucalypts-are-hard-to-kill-climate-change-may-test-the-ability-of-others-to-survive-293533",
-     "published": "2026-10-25T18:32:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Eli R. Bendall, Postdoctoral Research Fellow, Plant Conservation and Climate Change Adaptation, Western Sydney University"
     },
     {
      "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
+   "published": "2026-10-26 01:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Rage, lust and radical growth: 5 hot menopause novels",
    "published": "2026-10-25 23:05 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
    "published": "2026-10-25 19:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "While some eucalypts are hard to kill, climate change may test the ability of others to survive",
-   "published": "2026-10-25 18:32 UTC"
   },
   {
    "region": "Oceania",
