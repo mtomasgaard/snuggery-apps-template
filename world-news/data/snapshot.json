@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T22:01:38Z",
+ "generatedAt": "2026-10-26T23:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -16,6 +16,15 @@
      "summary": "Five years into the full-scale war, however, the border has also revealed the limits of that extraordinary solidarity.",
      "stale": false,
      "author": "Anna Romandash"
+    },
+    {
+     "title": "Ukraine: Investigators find Russia committed war crimes by targeting civilians",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168670",
+     "published": "2026-10-26T12:00:00Z",
+     "summary": "Top human rights experts investigating Russia’s full-scale invasion of Ukraine said on Monday that the Russian authorities had committed war crimes and crimes against humanity by attacking civilians and vital energy…",
+     "stale": false
     },
     {
      "title": "Big Tech and authoritarian states: Belarus",
@@ -54,15 +63,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168652",
      "published": "2026-10-22T12:00:00Z",
      "summary": "A patient in France has died after being infected with Shamonda virus, the first recorded human case of the disease.",
-     "stale": false
-    },
-    {
-     "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168642",
-     "published": "2026-10-21T12:00:00Z",
-     "summary": "The price tag for smuggling on European sea routes reached up to half a billion dollars last year, the UN Office on Drugs and Crime (UNODC) and the UN migration office, IOM, reported on Wednesday.",
      "stale": false
     },
     {
@@ -678,6 +678,12 @@
   },
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Ukraine: Investigators find Russia committed war crimes by targeting civilians",
+   "published": "2026-10-26 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "Big Tech and authoritarian states: Belarus",
    "published": "2026-10-24 18:11 UTC"
@@ -699,12 +705,6 @@
    "source": "UN News",
    "title": "First human case of Shamonda virus reported in France as patient dies",
    "published": "2026-10-22 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Migrants paid up to $500 million in smuggling fees on European sea routes",
-   "published": "2026-10-21 12:00 UTC"
   },
   {
    "region": "Europe",
