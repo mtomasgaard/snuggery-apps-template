@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T07:01:34Z",
+ "generatedAt": "2026-10-26T08:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -459,6 +459,16 @@
      "author": "Paola A. Magni, Associate Professor of Forensic Science, Murdoch University"
     },
     {
+     "title": "Lula wins a ‘miracle’ election in Brazil. Now comes the hard part: putting the country back on the right track",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/lula-wins-a-miracle-election-in-brazil-now-comes-the-hard-part-putting-the-country-back-on-the-right-track-295157",
+     "published": "2026-10-26T03:55:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Guilherme Casarões, Associate Professor of Brazilian Studies, Florida International University"
+    },
+    {
      "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Katrina Poppe, Associate Professor of Health Data Science, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/an-american-startup-wants-to-sell-sunlight-after-dark-who-gets-a-say-294681",
-     "published": "2026-10-25T18:32:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Richard de Grijs, Professor of Astrophysics, Macquarie University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
-   "published": "2026-10-25 19:10 UTC"
+   "title": "Lula wins a ‘miracle’ election in Brazil. Now comes the hard part: putting the country back on the right track",
+   "published": "2026-10-26 03:55 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "An American startup wants to sell sunlight after dark. Who gets a say?",
-   "published": "2026-10-25 18:32 UTC"
+   "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
+   "published": "2026-10-25 19:10 UTC"
   },
   {
    "region": "Oceania",
