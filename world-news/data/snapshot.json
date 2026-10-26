@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T03:01:28Z",
+ "generatedAt": "2026-10-26T04:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The power of poo: why conservationists love animal scat",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-power-of-poo-why-conservationists-love-animal-scat-290147",
+     "published": "2026-10-26T02:53:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Elspeth McLennan, Postdoctoral Research Associate, Australasian Wildlife Genomics Group, University of Sydney"
+    },
+    {
      "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Liz Evans, Adjunct Researcher, English and Writing, University of Tasmania"
-    },
-    {
-     "title": "Your say: week beginning October 26",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-october-26-295147",
-     "published": "2026-10-25T22:47:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
     },
     {
      "title": "NZ’s hidden chronic health burden is even bigger than we thought – new analysis",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The power of poo: why conservationists love animal scat",
+   "published": "2026-10-26 02:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "We tracked a ship in North Korea’s shadow fleet. This is how it stays in the dark",
    "published": "2026-10-26 01:03 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Rage, lust and radical growth: 5 hot menopause novels",
    "published": "2026-10-25 23:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning October 26",
-   "published": "2026-10-25 22:47 UTC"
   },
   {
    "region": "Oceania",
