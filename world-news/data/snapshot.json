@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T08:01:29Z",
+ "generatedAt": "2026-10-27T09:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/27/fish-scarcity-tar-balls-and-displaced-dolphins-the-hidden-costs-of-offshore-platforms-in-cameroon-waters/",
+     "published": "2026-10-27T08:59:12Z",
+     "summary": "...oil and gas contributed FCFA 774.51 billion (USD 1.3 million) to the budget. However, these oil rigs threaten biodiversity and compromise the well-being of coastal and Indigenous communities.",
+     "stale": false,
+     "author": "Leocadia Bongben"
+    },
+    {
      "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "published": "2026-10-23T12:00:00Z",
      "summary": "A new Kenyan initiative is helping farmers better understand their soils in a bid to improve crop yields amid intensifying climate shocks.",
      "stale": false
-    },
-    {
-     "title": "When Big Tech becomes a tool of state control in Kenya",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/21/when-big-tech-becomes-a-tool-of-state-control-in-kenya/",
-     "published": "2026-10-21T15:31:05Z",
-     "summary": "Access Now's 2025 report found that at least 313 shutdowns were implemented globally, and that in Africa the Internet was shut down 30 times in 15 countries, with protests the leading trigger, followed by elections.",
-     "stale": false,
-     "author": "Guest Contributor"
     }
    ]
   },
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "West Bank: Hebron crackdown displaces thousands, Türk warns of ethnic cleansing",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168672",
+     "published": "2026-10-26T12:00:00Z",
+     "summary": "Israel’s “aggressive operation” in the West Bank city of Hebron raises serious concerns of ethnic cleansing, UN human rights chief Volker Türk warned on Monday, as the number of Palestinians forced from their homes…",
+     "stale": false
+    },
     {
      "title": "West Bank: Guterres alarmed as Israel imposes sweeping closures after deadly Hebron attack",
      "source": "UN News",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168644",
      "published": "2026-10-21T12:00:00Z",
      "summary": "The use of live ammunition, arson and the destruction of centuries-old olive trees have marked the opening weeks of this year’s harvest in the occupied West Bank.",
-     "stale": false
-    },
-    {
-     "title": "Yemen war continues to force families from homes amid hunger and disease",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168629",
-     "published": "2026-10-20T12:00:00Z",
-     "summary": "More than 250,000 people have now fled renewed fighting in Yemen, the UN said on Tuesday, citing particular concern for those sheltering in the southwestern city of Taiz and the wider governorate, where access is…",
      "stale": false
     },
     {
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: heat rises around Albanese, as Haines’ concern about golf club grant rumbles on",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-heat-rises-around-albanese-as-haines-concern-about-golf-club-grant-rumbles-on-294859",
+     "published": "2026-10-27T07:52:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Politics with Michelle Grattan: Joe Hockey on how Trump would handle defeat in the midterms",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Tammy Williams, Lecturer in Early Childhood Education, University of New England"
-    },
-    {
-     "title": "Bottom trawlers do huge damage to life on undersea mountains. Could an end finally be in sight?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/bottom-trawlers-do-huge-damage-to-life-on-undersea-mountains-could-an-end-finally-be-in-sight-295166",
-     "published": "2026-10-27T05:40:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Elin Angharad Thomas, Adjunct Research Fellow & Communications Manager, Deep-Ocean Stewardship Initiative, The University of Western Australia"
     },
     {
      "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
+   "published": "2026-10-27 08:59 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
    "published": "2026-10-26 13:22 UTC"
@@ -809,10 +815,10 @@
    "published": "2026-10-23 12:00 UTC"
   },
   {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "When Big Tech becomes a tool of state control in Kenya",
-   "published": "2026-10-21 15:31 UTC"
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "West Bank: Hebron crackdown displaces thousands, Türk warns of ethnic cleansing",
+   "published": "2026-10-26 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -843,12 +849,6 @@
    "source": "UN News",
    "title": "‘Ominous start’ to West Bank olive harvest amid settler attacks",
    "published": "2026-10-21 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen war continues to force families from homes amid hunger and disease",
-   "published": "2026-10-20 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: heat rises around Albanese, as Haines’ concern about golf club grant rumbles on",
+   "published": "2026-10-27 07:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Politics with Michelle Grattan: Joe Hockey on how Trump would handle defeat in the midterms",
    "published": "2026-10-27 06:44 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
    "published": "2026-10-27 05:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Bottom trawlers do huge damage to life on undersea mountains. Could an end finally be in sight?",
-   "published": "2026-10-27 05:40 UTC"
   },
   {
    "region": "Oceania",
