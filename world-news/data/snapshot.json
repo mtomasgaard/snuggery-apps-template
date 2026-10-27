@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T05:01:26Z",
+ "generatedAt": "2026-10-27T06:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -429,14 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "How is access to UTI treatment and the pill changing? And is the policy backed by evidence?",
+     "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/how-is-access-to-uti-treatment-and-the-pill-changing-and-is-the-policy-backed-by-evidence-295165",
-     "published": "2026-10-27T03:23:32Z",
+     "link": "https://theconversation.com/increasing-early-childhood-educators-is-important-for-childrens-safety-but-we-shouldnt-focus-on-numbers-alone-295150",
+     "published": "2026-10-27T05:53:25Z",
      "summary": "",
      "stale": false,
-     "author": "Lauren Cortis, Senior Lecturer in Pharmacy Practice, Adelaide University"
+     "author": "Tammy Williams, Lecturer in Early Childhood Education, University of New England"
+    },
+    {
+     "title": "Bottom trawlers do huge damage to life on undersea mountains. Could an end finally be in sight?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/bottom-trawlers-do-huge-damage-to-life-on-undersea-mountains-could-an-end-finally-be-in-sight-295166",
+     "published": "2026-10-27T05:40:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Elin Angharad Thomas, Adjunct Research Fellow & Communications Manager, Deep-Ocean Stewardship Initiative, The University of Western Australia"
+    },
+    {
+     "title": "What Lula’s stunning comeback means for the future of the far right in Brazil",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-lulas-stunning-comeback-means-for-the-future-of-the-far-right-in-brazil-295154",
+     "published": "2026-10-27T05:40:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Deborah Barros Leal Farias, Associate Professor in Politics and International Relations, UNSW"
     },
     {
      "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Janet Hoek, Professor in Public Health, University of Otago"
-    },
-    {
-     "title": "Milking it: 5 tricks from the supermarket playbook",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/milking-it-5-tricks-from-the-supermarket-playbook-278539",
-     "published": "2026-10-27T00:29:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Phillip Baker, ARC Future Fellow and Sydney Horizon Fellow, School of Public Health, University of Sydney, University of Sydney"
-    },
-    {
-     "title": "Australia has to pay millions to fly an astronaut to space. What do we stand to gain?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australia-has-to-pay-millions-to-fly-an-astronaut-to-space-what-do-we-stand-to-gain-295156",
-     "published": "2026-10-27T00:22:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sara Webb, Associate Dean of Innovation and Engagement, Swinburne University of Technology"
     },
     {
      "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "How is access to UTI treatment and the pill changing? And is the policy backed by evidence?",
-   "published": "2026-10-27 03:23 UTC"
+   "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
+   "published": "2026-10-27 05:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Bottom trawlers do huge damage to life on undersea mountains. Could an end finally be in sight?",
+   "published": "2026-10-27 05:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "What Lula’s stunning comeback means for the future of the far right in Brazil",
+   "published": "2026-10-27 05:40 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
    "published": "2026-10-27 02:59 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Milking it: 5 tricks from the supermarket playbook",
-   "published": "2026-10-27 00:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australia has to pay millions to fly an astronaut to space. What do we stand to gain?",
-   "published": "2026-10-27 00:22 UTC"
   },
   {
    "region": "Oceania",
