@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T09:01:33Z",
+ "generatedAt": "2026-10-27T10:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Les vaccins sans réfrigération pourraient élargir la couverture vaccinale en Afrique",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/les-vaccins-sans-refrigeration-pourraient-elargir-la-couverture-vaccinale-en-afrique-294757",
+     "published": "2026-10-27T09:17:20Z",
+     "summary": "",
+     "stale": false,
+     "author": "Charles Shey Wiysonge, Extraordinary Professor, Global Health, Stellenbosch University; South African Medical Research Council"
+    },
+    {
      "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Stephanie-Emmy Klarmann, Research associate, University of Johannesburg"
-    },
-    {
-     "title": "Drought forces livestock farmers to make tough decisions: our model shows the impact on inequality",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/drought-forces-livestock-farmers-to-make-tough-decisions-our-model-shows-the-impact-on-inequality-293453",
-     "published": "2026-10-26T13:22:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matt Clark, Postdoctoral Research Associate in Environmental Social Sciences, University of Sydney"
     },
     {
      "title": "Ebola: UN officials condemn killing of nurse in DR Congo",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Les vaccins sans réfrigération pourraient élargir la couverture vaccinale en Afrique",
+   "published": "2026-10-27 09:17 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
    "published": "2026-10-27 08:59 UTC"
@@ -776,12 +782,6 @@
    "region": "Africa",
    "source": "The Conversation",
    "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
-   "published": "2026-10-26 13:22 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Drought forces livestock farmers to make tough decisions: our model shows the impact on inequality",
    "published": "2026-10-26 13:22 UTC"
   },
   {
