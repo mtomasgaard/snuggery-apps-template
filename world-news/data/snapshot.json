@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-26T23:01:28Z",
+ "generatedAt": "2026-10-27T00:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Ghost stories don’t just scare us – they remind us of historical injustices",
+     "title": "What legal experts say about the Trump administration’s attempts to make a federal case out of state elections",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/ghost-stories-dont-just-scare-us-they-remind-us-of-historical-injustices-293080",
-     "published": "2026-10-26T17:59:20Z",
+     "link": "https://theconversation.com/what-legal-experts-say-about-the-trump-administrations-attempts-to-make-a-federal-case-out-of-state-elections-295212",
+     "published": "2026-10-26T22:41:39Z",
      "summary": "",
      "stale": false,
-     "author": "Marcus Librizzi, Professor of English, University of Maine"
+     "author": "Naomi Schalit, Politics and Legal Affairs Editor, The Conversation"
     },
     {
-     "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
+     "title": "How Lula turned the tables on the right in Brazil and the US with his comeback presidential victory",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/if-philadelphia-eagles-quarterback-jalen-hurts-can-get-dangerous-blood-clots-so-can-you-heres-how-some-states-are-trying-to-reduce-the-risk-294850",
-     "published": "2026-10-26T12:50:51Z",
+     "link": "https://theconversation.com/how-lula-turned-the-tables-on-the-right-in-brazil-and-the-us-with-his-comeback-presidential-victory-294810",
+     "published": "2026-10-26T22:15:19Z",
      "summary": "",
      "stale": false,
-     "author": "Ali Ataya, Professor of Medicine, University of Florida"
+     "author": "Anthony W. Pereira, Executive Director of the Stone Center for Latin American Studies, Tulane University; King's College London"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/parties-may-have-competing-tax-visions-but-paying-for-nzs-future-isnt-getting-cheaper-293789",
+     "published": "2026-10-26T23:43:08Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lisa Marriott, Professor of Taxation, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
      "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
-    },
-    {
-     "title": "Andy Burnham has maintained the public’s approval through his first 100 days as the UK’s PM – that’s unheard of these days",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/andy-burnham-has-maintained-the-publics-approval-through-his-first-100-days-as-the-uks-pm-thats-unheard-of-these-days-295090",
-     "published": "2026-10-26T16:45:12Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stephen Coleman, Emeritus Professor of Political Communication, University of Leeds"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Ghost stories don’t just scare us – they remind us of historical injustices",
-   "published": "2026-10-26 17:59 UTC"
+   "title": "What legal experts say about the Trump administration’s attempts to make a federal case out of state elections",
+   "published": "2026-10-26 22:41 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "If Philadelphia Eagles quarterback Jalen Hurts can get dangerous blood clots, so can you – here’s how some states are trying to reduce the risk",
-   "published": "2026-10-26 12:50 UTC"
+   "title": "How Lula turned the tables on the right in Brazil and the US with his comeback presidential victory",
+   "published": "2026-10-26 22:15 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
+   "published": "2026-10-26 23:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
    "published": "2026-10-26 19:55 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Calling species ‘invasive’ – and culling them – isn’t done lightly. But it matters to Australia’s threatened species",
    "published": "2026-10-26 17:23 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Andy Burnham has maintained the public’s approval through his first 100 days as the UK’s PM – that’s unheard of these days",
-   "published": "2026-10-26 16:45 UTC"
   },
   {
    "region": "Oceania",
