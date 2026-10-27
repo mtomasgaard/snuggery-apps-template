@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T02:01:28Z",
+ "generatedAt": "2026-10-27T03:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/cost-is-not-the-only-reason-people-buy-illicit-tobacco-for-some-its-an-act-of-defiance-294885",
+     "published": "2026-10-27T02:59:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Janet Hoek, Professor in Public Health, University of Otago"
+    },
+    {
      "title": "Milking it: 5 tricks from the supermarket playbook",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Sara Webb, Associate Dean of Innovation and Engagement, Swinburne University of Technology"
-    },
-    {
-     "title": "Should Australians be preparing for disaster? Some are – but don’t call them ‘preppers’",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/should-australians-be-preparing-for-disaster-some-are-but-dont-call-them-preppers-295155",
-     "published": "2026-10-27T00:03:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jordan McKenzie, Associate Professor in Sociology, University of Wollongong"
     },
     {
      "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
+   "published": "2026-10-27 02:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Milking it: 5 tricks from the supermarket playbook",
    "published": "2026-10-27 00:29 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Australia has to pay millions to fly an astronaut to space. What do we stand to gain?",
    "published": "2026-10-27 00:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Should Australians be preparing for disaster? Some are – but don’t call them ‘preppers’",
-   "published": "2026-10-27 00:03 UTC"
   },
   {
    "region": "Oceania",
