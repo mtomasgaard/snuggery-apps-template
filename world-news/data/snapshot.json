@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T00:01:32Z",
+ "generatedAt": "2026-10-27T01:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,36 @@
    "stale": false,
    "items": [
     {
+     "title": "Milking it: 5 tricks from the supermarket playbook",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/milking-it-5-tricks-from-the-supermarket-playbook-278539",
+     "published": "2026-10-27T00:29:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Phillip Baker, ARC Future Fellow and Sydney Horizon Fellow, School of Public Health, University of Sydney, University of Sydney"
+    },
+    {
+     "title": "Australia has to pay millions to fly an astronaut to space. What do we stand to gain?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australia-has-to-pay-millions-to-fly-an-astronaut-to-space-what-do-we-stand-to-gain-295156",
+     "published": "2026-10-27T00:22:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sara Webb, Associate Dean of Innovation and Engagement, Swinburne University of Technology"
+    },
+    {
+     "title": "Should Australians be preparing for disaster? Some are – but don’t call them ‘preppers’",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/should-australians-be-preparing-for-disaster-some-are-but-dont-call-them-preppers-295155",
+     "published": "2026-10-27T00:03:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jordan McKenzie, Associate Professor in Sociology, University of Wollongong"
+    },
+    {
      "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "João Gabriel de Lima, Jornalista, doutorando em Política Comparada, Universidade de Lisboa"
-    },
-    {
-     "title": "The upside of untidiness: why a little mess can be good for your home",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-upside-of-untidiness-why-a-little-mess-can-be-good-for-your-home-294343",
-     "published": "2026-10-26T18:33:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jamal Abarashi, Lecturer, Marketing and International Business Department, Auckland University of Technology"
-    },
-    {
-     "title": "Guide to the classics: Machiavelli’s ‘audaciously honest’ The Prince reveals how politics works",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/guide-to-the-classics-machiavellis-audaciously-honest-the-prince-reveals-how-politics-works-262726",
-     "published": "2026-10-26T17:23:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Intifar Chowdhury, Lecturer in Government, Jeff Bleich Centre for Democracy and Disruptive Technologies, Flinders University"
-    },
-    {
-     "title": "Calling species ‘invasive’ – and culling them – isn’t done lightly. But it matters to Australia’s threatened species",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/calling-species-invasive-and-culling-them-isnt-done-lightly-but-it-matters-to-australias-threatened-species-294672",
-     "published": "2026-10-26T17:23:00Z",
-     "summary": "",
-     "stale": false,
-     "author": "Euan Ritchie, Professor in Wildlife Ecology and Conservation, School of Life & Environmental Sciences, Deakin University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Milking it: 5 tricks from the supermarket playbook",
+   "published": "2026-10-27 00:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Australia has to pay millions to fly an astronaut to space. What do we stand to gain?",
+   "published": "2026-10-27 00:22 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Should Australians be preparing for disaster? Some are – but don’t call them ‘preppers’",
+   "published": "2026-10-27 00:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
    "published": "2026-10-26 23:43 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
    "published": "2026-10-26 19:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The upside of untidiness: why a little mess can be good for your home",
-   "published": "2026-10-26 18:33 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Guide to the classics: Machiavelli’s ‘audaciously honest’ The Prince reveals how politics works",
-   "published": "2026-10-26 17:23 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Calling species ‘invasive’ – and culling them – isn’t done lightly. But it matters to Australia’s threatened species",
-   "published": "2026-10-26 17:23 UTC"
   },
   {
    "region": "Oceania",
