@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T19:01:38Z",
+ "generatedAt": "2026-10-27T20:01:47Z",
  "regions": [
   {
    "key": "europe",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "View from The Hill: heat rises around Albanese, as Haines’ concern about golf club grant rumbles on",
+     "title": "The phantom lighthouse: new research explains one of Australia’s strangest illusions",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-heat-rises-around-albanese-as-haines-concern-about-golf-club-grant-rumbles-on-294859",
-     "published": "2026-10-27T07:52:13Z",
+     "link": "https://theconversation.com/the-phantom-lighthouse-new-research-explains-one-of-australias-strangest-illusions-294683",
+     "published": "2026-10-27T19:11:43Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Simon Cropper, Associate Professor, Complex Human Data Hub, Melbourne School of Psychological Sciences, The University of Melbourne"
     },
     {
-     "title": "Politics with Michelle Grattan: Joe Hockey on how Trump would handle defeat in the midterms",
+     "title": "Is Ali G racist?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-joe-hockey-on-how-trump-would-handle-defeat-in-the-midterms-295167",
-     "published": "2026-10-27T06:44:38Z",
+     "link": "https://theconversation.com/is-ali-g-racist-294693",
+     "published": "2026-10-27T19:10:49Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Aaron Teo, Lecturer in Curriculum and Pedagogy, University of Southern Queensland"
     },
     {
-     "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
+     "title": "What makes a winning environmental campaign? We studied six decades of activism to find out",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/increasing-early-childhood-educators-is-important-for-childrens-safety-but-we-shouldnt-focus-on-numbers-alone-295150",
-     "published": "2026-10-27T05:53:25Z",
+     "link": "https://theconversation.com/what-makes-a-winning-environmental-campaign-we-studied-six-decades-of-activism-to-find-out-294669",
+     "published": "2026-10-27T19:10:29Z",
      "summary": "",
      "stale": false,
-     "author": "Tammy Williams, Lecturer in Early Childhood Education, University of New England"
+     "author": "Robyn Gulliver, Casual Research Fellow, School of Education, Deakin University"
     },
     {
-     "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
+     "title": "Migraine remedies are everywhere on social media, but the evidence needs a closer look",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/cost-is-not-the-only-reason-people-buy-illicit-tobacco-for-some-its-an-act-of-defiance-294885",
-     "published": "2026-10-27T02:59:45Z",
+     "link": "https://theconversation.com/migraine-remedies-are-everywhere-on-social-media-but-the-evidence-needs-a-closer-look-294820",
+     "published": "2026-10-27T15:44:12Z",
      "summary": "",
      "stale": false,
-     "author": "Janet Hoek, Professor in Public Health, University of Otago"
+     "author": "Amanda Ellison, Professor of Neuroscience, Durham University"
     },
     {
-     "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
+     "title": "Anthropic’s record US$2 trillion stock market listing highlights the growing risks for all of us",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/parties-may-have-competing-tax-visions-but-paying-for-nzs-future-isnt-getting-cheaper-293789",
-     "published": "2026-10-26T23:43:08Z",
+     "link": "https://theconversation.com/anthropics-record-us-2-trillion-stock-market-listing-highlights-the-growing-risks-for-all-of-us-295243",
+     "published": "2026-10-27T05:26:46Z",
      "summary": "",
      "stale": false,
-     "author": "Lisa Marriott, Professor of Taxation, Te Herenga Waka — Victoria University of Wellington"
+     "author": "Marta Khomyn, Senior Lecturer, Finance and Data Analytics, Adelaide University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: heat rises around Albanese, as Haines’ concern about golf club grant rumbles on",
-   "published": "2026-10-27 07:52 UTC"
+   "title": "The phantom lighthouse: new research explains one of Australia’s strangest illusions",
+   "published": "2026-10-27 19:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Joe Hockey on how Trump would handle defeat in the midterms",
-   "published": "2026-10-27 06:44 UTC"
+   "title": "Is Ali G racist?",
+   "published": "2026-10-27 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
-   "published": "2026-10-27 05:53 UTC"
+   "title": "What makes a winning environmental campaign? We studied six decades of activism to find out",
+   "published": "2026-10-27 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
-   "published": "2026-10-27 02:59 UTC"
+   "title": "Migraine remedies are everywhere on social media, but the evidence needs a closer look",
+   "published": "2026-10-27 15:44 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
-   "published": "2026-10-26 23:43 UTC"
+   "title": "Anthropic’s record US$2 trillion stock market listing highlights the growing risks for all of us",
+   "published": "2026-10-27 05:26 UTC"
   },
   {
    "region": "Oceania",
