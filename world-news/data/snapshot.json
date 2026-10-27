@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T03:01:29Z",
+ "generatedAt": "2026-10-27T04:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
+     "title": "How is access to UTI treatment and the pill changing? And is the policy backed by evidence?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/how-is-access-to-uti-treatment-and-the-pill-changing-and-is-the-policy-backed-by-evidence-295165",
+     "published": "2026-10-27T03:23:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lauren Cortis, Senior Lecturer in Pharmacy Practice, Adelaide University"
+    },
+    {
+     "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/cost-is-not-the-only-reason-people-buy-illicit-tobacco-for-some-its-an-act-of-defiance-294885",
      "published": "2026-10-27T02:59:45Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Lisa Marriott, Professor of Taxation, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/in-opting-for-lula-brazil-made-a-conservative-choice-to-elect-a-man-of-the-left-over-one-of-the-far-right-295217",
-     "published": "2026-10-26T19:55:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "João Gabriel de Lima, Jornalista, doutorando em Política Comparada, Universidade de Lisboa"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How is access to UTI treatment and the pill changing? And is the policy backed by evidence?",
+   "published": "2026-10-27 03:23 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
    "published": "2026-10-27 02:59 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Parties may have competing tax visions, but paying for NZ’s future isn’t getting cheaper",
    "published": "2026-10-26 23:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "In opting for Lula, Brazil made a conservative choice to elect a man of the left over one of the far right",
-   "published": "2026-10-26 19:55 UTC"
   },
   {
    "region": "Oceania",
