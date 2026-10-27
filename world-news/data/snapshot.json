@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T18:01:43Z",
+ "generatedAt": "2026-10-27T19:01:38Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/earwax-is-both-slippery-and-sticky-this-weird-combo-might-lead-to-safer-insect-repellents-293324",
+     "published": "2026-10-27T18:12:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "David Hu, Professor of Mechanical Engineering and Biology, Adjunct Professor of Physics, Georgia Institute of Technology"
+    },
+    {
      "title": "School librarians are vanishing from Michigan schools just when they are needed most",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Shannon Oltmann, Associate Dean of Information Sciences, Wayne State University"
-    },
-    {
-     "title": "We studied 1,584 data centers – and found the buildings full of machines are tied to modest local job growth",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/we-studied-1-584-data-centers-and-found-the-buildings-full-of-machines-are-tied-to-modest-local-job-growth-293872",
-     "published": "2026-10-27T12:19:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Simon Buechler, Assistant Professor of Finance, Miami University"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "School librarians are vanishing from Michigan schools just when they are needed most",
-   "published": "2026-10-27 12:19 UTC"
+   "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
+   "published": "2026-10-27 18:12 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "We studied 1,584 data centers – and found the buildings full of machines are tied to modest local job growth",
+   "title": "School librarians are vanishing from Michigan schools just when they are needed most",
    "published": "2026-10-27 12:19 UTC"
   },
   {
