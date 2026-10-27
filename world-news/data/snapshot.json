@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T06:01:40Z",
+ "generatedAt": "2026-10-27T07:01:45Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Politics with Michelle Grattan: Joe Hockey on how Trump would handle defeat in the midterms",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-joe-hockey-on-how-trump-would-handle-defeat-in-the-midterms-295167",
+     "published": "2026-10-27T06:44:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Elin Angharad Thomas, Adjunct Research Fellow & Communications Manager, Deep-Ocean Stewardship Initiative, The University of Western Australia"
-    },
-    {
-     "title": "What Lula’s stunning comeback means for the future of the far right in Brazil",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-lulas-stunning-comeback-means-for-the-future-of-the-far-right-in-brazil-295154",
-     "published": "2026-10-27T05:40:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Deborah Barros Leal Farias, Associate Professor in Politics and International Relations, UNSW"
     },
     {
      "title": "Cost is not the only reason people buy illicit tobacco – for some, it’s an act of defiance",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Politics with Michelle Grattan: Joe Hockey on how Trump would handle defeat in the midterms",
+   "published": "2026-10-27 06:44 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Increasing early childhood educators is important for children’s safety. But we shouldn’t focus on numbers alone",
    "published": "2026-10-27 05:53 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Bottom trawlers do huge damage to life on undersea mountains. Could an end finally be in sight?",
-   "published": "2026-10-27 05:40 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What Lula’s stunning comeback means for the future of the far right in Brazil",
    "published": "2026-10-27 05:40 UTC"
   },
   {
