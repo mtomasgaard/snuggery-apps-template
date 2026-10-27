@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T21:01:32Z",
+ "generatedAt": "2026-10-27T22:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/10/27/warning-signals-venezuela-and-the-risk-of-ai-powered-chinese-digital-authoritarianism/",
+     "published": "2026-10-27T21:10:54Z",
+     "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
+     "stale": false,
+     "author": "ProBox"
+    },
+    {
      "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -131,16 +141,6 @@
      "summary": "“Under normal conditions, this is already serious enough, because the platform rules over the information flow in a society, but when you apply it to an electoral dispute, it's even more serious.”",
      "stale": false,
      "author": "Fernanda Canofre"
-    },
-    {
-     "title": "Venezuela faces a deepening energy crisis as protests grow",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/22/venezuela-faces-a-deepening-energy-crisis-as-protests-grow/",
-     "published": "2026-10-22T20:06:56Z",
-     "summary": "Venezuela’s worsening electricity crisis is disrupting daily life, pushing frustrated residents into the streets as prolonged blackouts expose the fragility of the country’s power grid.",
-     "stale": false,
-     "author": "Gabriela Mesones Rojo"
     },
     {
      "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/27/warning-signals-venezuela-and-the-risk-of-ai-powered-chinese-digital-authoritarianism/",
+     "published": "2026-10-27T21:10:54Z",
+     "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
+     "stale": false,
+     "author": "ProBox"
+    },
+    {
      "title": "What telecoms leave behind when they exit a country",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -370,7 +380,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168645",
      "published": "2026-10-21T12:00:00Z",
      "summary": "Three years on from the reported resumption of large-scale forcible returns of nationals of the Democratic People’s Republic of Korea (DPRK) from China, serious concerns persist about their fate, according to a group of…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
@@ -389,7 +399,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
      "published": "2026-10-20T12:00:00Z",
      "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Activists push for Pakistan to recognise and support people with albinism",
@@ -410,16 +420,6 @@
      "summary": "The tech allows students to generate personalized stories on China’s “holistic approach to national security” – a framework advocated by President Xi Jinping covering areas from politics and economy to ecology and…",
      "stale": false,
      "author": "Hong Kong Free Press"
-    },
-    {
-     "title": "How authoritarian states are building an international market for digital surveillance",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
-     "published": "2026-10-15T04:00:07Z",
-     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
-     "stale": false,
-     "author": "Daria Dergacheva"
     }
    ]
   },
@@ -428,6 +428,16 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/most-new-zealanders-worry-about-ais-risks-even-as-many-expect-to-use-it-new-survey-294573",
+     "published": "2026-10-27T21:13:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Kerr, Senior Research Fellow, Department of Public Health, University of Otago"
+    },
     {
      "title": "The phantom lighthouse: new research explains one of Australia’s strangest illusions",
      "source": "The Conversation",
@@ -449,14 +459,14 @@
      "author": "Aaron Teo, Lecturer in Curriculum and Pedagogy, University of Southern Queensland"
     },
     {
-     "title": "What makes a winning environmental campaign? We studied six decades of activism to find out",
+     "title": "Why Republicans are on the back foot ahead of US midterm elections",
      "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-makes-a-winning-environmental-campaign-we-studied-six-decades-of-activism-to-find-out-294669",
-     "published": "2026-10-27T19:10:29Z",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/why-republicans-are-on-the-back-foot-ahead-of-us-midterm-elections-294569",
+     "published": "2026-10-27T19:08:22Z",
      "summary": "",
      "stale": false,
-     "author": "Robyn Gulliver, Casual Research Fellow, School of Education, Deakin University"
+     "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
     },
     {
      "title": "Migraine remedies are everywhere on social media, but the evidence needs a closer look",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Amanda Ellison, Professor of Neuroscience, Durham University"
-    },
-    {
-     "title": "Anthropic’s record US$2 trillion stock market listing highlights the growing risks for all of us",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/anthropics-record-us-2-trillion-stock-market-listing-highlights-the-growing-risks-for-all-of-us-295243",
-     "published": "2026-10-27T05:26:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Marta Khomyn, Senior Lecturer, Finance and Data Analytics, Adelaide University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": false,
-   "items": 2,
-   "note": "answered, but held no usable items; kept 2 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-oceania",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
+   "published": "2026-10-27 21:10 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
    "published": "2026-10-27 18:12 UTC"
@@ -741,12 +747,6 @@
    "source": "Global Voices",
    "title": "In Brazil’s elections, big techs’ transparency and cooperation policies translate as governance washing, according to this expert",
    "published": "2026-10-24 08:55 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Venezuela faces a deepening energy crisis as protests grow",
-   "published": "2026-10-22 20:06 UTC"
   },
   {
    "region": "Americas",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
+   "published": "2026-10-27 21:10 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "What telecoms leave behind when they exit a country",
    "published": "2026-10-22 12:20 UTC"
   },
@@ -905,10 +911,10 @@
    "published": "2026-10-16 05:03 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "How authoritarian states are building an international market for digital surveillance",
-   "published": "2026-10-15 04:00 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
+   "published": "2026-10-27 21:13 UTC"
   },
   {
    "region": "Oceania",
@@ -925,20 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What makes a winning environmental campaign? We studied six decades of activism to find out",
-   "published": "2026-10-27 19:10 UTC"
+   "title": "Why Republicans are on the back foot ahead of US midterm elections",
+   "published": "2026-10-27 19:08 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Migraine remedies are everywhere on social media, but the evidence needs a closer look",
    "published": "2026-10-27 15:44 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Anthropic’s record US$2 trillion stock market listing highlights the growing risks for all of us",
-   "published": "2026-10-27 05:26 UTC"
   },
   {
    "region": "Oceania",
