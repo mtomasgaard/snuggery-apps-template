@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T10:01:29Z",
+ "generatedAt": "2026-10-27T10:42:09Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Kenya: 20 Ebola contacts released from quarantine",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168676",
+     "published": "2026-10-27T12:00:00Z",
+     "summary": "Twenty people associated with Kenya’s first case of Ebola Bundibugyo virus disease have been reunited with their families after being released from quarantine following completion of the mandatory 21-day monitoring…",
+     "stale": false
+    },
+    {
      "title": "Les vaccins sans réfrigération pourraient élargir la couverture vaccinale en Afrique",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -207,6 +216,15 @@
      "author": "Stephanie-Emmy Klarmann, Research associate, University of Johannesburg"
     },
     {
+     "title": "World News in Brief: Ethiopians flee to Kenya amidst renewed conflict, new head of UN’s food programme, UN mission in Somalia concludes",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168674",
+     "published": "2026-10-26T12:00:00Z",
+     "summary": "Around 36,600 people have fled into northern Kenya following an uptick in fighting on the Ethiopian side of the border.",
+     "stale": false
+    },
+    {
      "title": "Ebola: UN officials condemn killing of nurse in DR Congo",
      "source": "UN News",
      "feed": "un-africa",
@@ -234,24 +252,6 @@
      "summary": "“Monhé” is not a nationality: a person of Indian origin can be completely Mozambican, foreign, or in some cases, stateless.",
      "stale": false,
      "author": "Liam Anderson"
-    },
-    {
-     "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168661",
-     "published": "2026-10-23T12:00:00Z",
-     "summary": "UN human rights chief Volker Türk on Friday strongly condemned an escalation in drone strikes across Sudan this month, which killed at least 306 people and injured hundreds more in the first three weeks of October alone.",
-     "stale": false
-    },
-    {
-     "title": "Soil mapping aims to boost agricultural production in Kenya",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168657",
-     "published": "2026-10-23T12:00:00Z",
-     "summary": "A new Kenyan initiative is helping farmers better understand their soils in a bid to improve crop yields amid intensifying climate shocks.",
-     "stale": false
     }
    ]
   },
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Kenya: 20 Ebola contacts released from quarantine",
+   "published": "2026-10-27 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Les vaccins sans réfrigération pourraient élargir la couverture vaccinale en Afrique",
    "published": "2026-10-27 09:17 UTC"
@@ -787,6 +793,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "World News in Brief: Ethiopians flee to Kenya amidst renewed conflict, new head of UN’s food programme, UN mission in Somalia concludes",
+   "published": "2026-10-26 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Ebola: UN officials condemn killing of nurse in DR Congo",
    "published": "2026-10-26 12:00 UTC"
   },
@@ -801,18 +813,6 @@
    "source": "Global Voices",
    "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
    "published": "2026-10-25 16:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan: Drone strikes killed at least 306 people in three weeks",
-   "published": "2026-10-23 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Soil mapping aims to boost agricultural production in Kenya",
-   "published": "2026-10-23 12:00 UTC"
   },
   {
    "region": "Middle East",
