@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T22:01:28Z",
+ "generatedAt": "2026-10-27T23:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How religion collided with race and politics in Brazil’s presidential election",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/how-religion-collided-with-race-and-politics-in-brazils-presidential-election-294761",
+     "published": "2026-10-27T22:12:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Thomas III, Assistant Professor of Political Science, College of Charleston"
+    },
+    {
      "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "David Hu, Professor of Mechanical Engineering and Biology, Adjunct Professor of Physics, Georgia Institute of Technology"
-    },
-    {
-     "title": "School librarians are vanishing from Michigan schools just when they are needed most",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/school-librarians-are-vanishing-from-michigan-schools-just-when-they-are-needed-most-291339",
-     "published": "2026-10-27T12:19:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shannon Oltmann, Associate Dean of Information Sciences, Wayne State University"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "How religion collided with race and politics in Brazil’s presidential election",
+   "published": "2026-10-27 22:12 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
    "published": "2026-10-27 21:10 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
    "published": "2026-10-27 18:12 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "School librarians are vanishing from Michigan schools just when they are needed most",
-   "published": "2026-10-27 12:19 UTC"
   },
   {
    "region": "Americas",
