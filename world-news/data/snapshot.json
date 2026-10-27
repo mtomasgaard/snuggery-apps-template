@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T14:02:47Z",
+ "generatedAt": "2026-10-27T15:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -177,23 +177,33 @@
    "stale": false,
    "items": [
     {
+     "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/global-sexual-health-why-communal-knowledge-about-pleasure-and-wellbeing-matters-288416",
+     "published": "2026-10-27T14:20:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jessie V. Ford, Assistant Professor, Sociomedical Sciences, Columbia University"
+    },
+    {
+     "title": "Brambles are a problem weed in South Africa but researchers are closer to finding a natural enemy to manage them",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/brambles-are-a-problem-weed-in-south-africa-but-researchers-are-closer-to-finding-a-natural-enemy-to-manage-them-292637",
+     "published": "2026-10-27T14:20:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Grant Martin, Associate Professor; Deputy Director of the Centre for Biological Control, Rhodes University, Rhodes University"
+    },
+    {
      "title": "Kenya: 20 Ebola contacts released from quarantine",
      "source": "UN News",
      "feed": "un-africa",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168676",
      "published": "2026-10-27T12:00:00Z",
      "summary": "Twenty people associated with Kenya’s first case of Ebola Bundibugyo virus disease have been reunited with their families after being released from quarantine following completion of the mandatory 21-day monitoring…",
-     "stale": false
-    },
-    {
-     "title": "Les vaccins sans réfrigération pourraient élargir la couverture vaccinale en Afrique",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/les-vaccins-sans-refrigeration-pourraient-elargir-la-couverture-vaccinale-en-afrique-294757",
-     "published": "2026-10-27T09:17:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Charles Shey Wiysonge, Extraordinary Professor, Global Health, Stellenbosch University; South African Medical Research Council"
+     "stale": true
     },
     {
      "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
@@ -206,23 +216,13 @@
      "author": "Leocadia Bongben"
     },
     {
-     "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africas-lion-petting-industry-we-spent-three-years-investigating-and-heres-what-we-found-293749",
-     "published": "2026-10-26T13:22:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stephanie-Emmy Klarmann, Research associate, University of Johannesburg"
-    },
-    {
      "title": "World News in Brief: Ethiopians flee to Kenya amidst renewed conflict, new head of UN’s food programme, UN mission in Somalia concludes",
      "source": "UN News",
      "feed": "un-africa",
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168674",
      "published": "2026-10-26T12:00:00Z",
      "summary": "Around 36,600 people have fled into northern Kenya following an uptick in fighting on the Ethiopian side of the border.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Ebola: UN officials condemn killing of nurse in DR Congo",
@@ -231,7 +231,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168667",
      "published": "2026-10-26T12:00:00Z",
      "summary": "The UN’s Ebola coordinator and the head of the World Health Organization (WHO) have deplored the killing of a nurse working to halt the spread of the disease in the Democratic Republic of the Congo (DRC).",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Vote young yet govern much later: West African youth’s struggle for power",
@@ -592,9 +592,9 @@
    "id": "un-africa",
    "source": "UN News",
    "region": "Africa",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "answered, but held no usable items; kept 3 cached"
   },
   {
    "id": "tc-africa",
@@ -768,27 +768,27 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
+   "published": "2026-10-27 14:20 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Brambles are a problem weed in South Africa but researchers are closer to finding a natural enemy to manage them",
+   "published": "2026-10-27 14:20 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Kenya: 20 Ebola contacts released from quarantine",
    "published": "2026-10-27 12:00 UTC"
   },
   {
    "region": "Africa",
-   "source": "The Conversation",
-   "title": "Les vaccins sans réfrigération pourraient élargir la couverture vaccinale en Afrique",
-   "published": "2026-10-27 09:17 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "Global Voices",
    "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
    "published": "2026-10-27 08:59 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "South Africa’s lion petting industry: we spent three years investigating and here’s what we found",
-   "published": "2026-10-26 13:22 UTC"
   },
   {
    "region": "Africa",
