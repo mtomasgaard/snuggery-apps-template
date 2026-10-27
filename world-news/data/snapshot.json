@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T13:01:34Z",
+ "generatedAt": "2026-10-27T14:02:47Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Why your vote for local chief prosecutor will matter on Election Day",
+     "title": "School librarians are vanishing from Michigan schools just when they are needed most",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/why-your-vote-for-local-chief-prosecutor-will-matter-on-election-day-293420",
-     "published": "2026-10-27T12:16:10Z",
+     "link": "https://theconversation.com/school-librarians-are-vanishing-from-michigan-schools-just-when-they-are-needed-most-291339",
+     "published": "2026-10-27T12:19:38Z",
      "summary": "",
      "stale": false,
-     "author": "Ronald Wright, Professor of Criminal Law, Wake Forest University"
+     "author": "Shannon Oltmann, Associate Dean of Information Sciences, Wayne State University"
     },
     {
-     "title": "Putin hopes hardship will force Ukrainians to sue for peace – polling suggests it won’t work",
+     "title": "We studied 1,584 data centers – and found the buildings full of machines are tied to modest local job growth",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/putin-hopes-hardship-will-force-ukrainians-to-sue-for-peace-polling-suggests-it-wont-work-294619",
-     "published": "2026-10-27T12:15:22Z",
+     "link": "https://theconversation.com/we-studied-1-584-data-centers-and-found-the-buildings-full-of-machines-are-tied-to-modest-local-job-growth-293872",
+     "published": "2026-10-27T12:19:07Z",
      "summary": "",
      "stale": false,
-     "author": "John O’Loughlin, College Professor of Distinction in Geography and Fellow, Institute of Behavioral Science, University of Colorado Boulder"
+     "author": "Simon Buechler, Assistant Professor of Finance, Miami University"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why your vote for local chief prosecutor will matter on Election Day",
-   "published": "2026-10-27 12:16 UTC"
+   "title": "School librarians are vanishing from Michigan schools just when they are needed most",
+   "published": "2026-10-27 12:19 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Putin hopes hardship will force Ukrainians to sue for peace – polling suggests it won’t work",
-   "published": "2026-10-27 12:15 UTC"
+   "title": "We studied 1,584 data centers – and found the buildings full of machines are tied to modest local job growth",
+   "published": "2026-10-27 12:19 UTC"
   },
   {
    "region": "Americas",
