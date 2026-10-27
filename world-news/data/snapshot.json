@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-27T12:01:37Z",
+ "generatedAt": "2026-10-27T13:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "What legal experts say about the Trump administration’s attempts to make a federal case out of state elections",
+     "title": "Why your vote for local chief prosecutor will matter on Election Day",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/what-legal-experts-say-about-the-trump-administrations-attempts-to-make-a-federal-case-out-of-state-elections-295212",
-     "published": "2026-10-26T22:41:39Z",
+     "link": "https://theconversation.com/why-your-vote-for-local-chief-prosecutor-will-matter-on-election-day-293420",
+     "published": "2026-10-27T12:16:10Z",
      "summary": "",
      "stale": false,
-     "author": "Naomi Schalit, Politics and Legal Affairs Editor, The Conversation"
+     "author": "Ronald Wright, Professor of Criminal Law, Wake Forest University"
     },
     {
-     "title": "How Lula turned the tables on the right in Brazil and the US with his comeback presidential victory",
+     "title": "Putin hopes hardship will force Ukrainians to sue for peace – polling suggests it won’t work",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/how-lula-turned-the-tables-on-the-right-in-brazil-and-the-us-with-his-comeback-presidential-victory-294810",
-     "published": "2026-10-26T22:15:19Z",
+     "link": "https://theconversation.com/putin-hopes-hardship-will-force-ukrainians-to-sue-for-peace-polling-suggests-it-wont-work-294619",
+     "published": "2026-10-27T12:15:22Z",
      "summary": "",
      "stale": false,
-     "author": "Anthony W. Pereira, Executive Director of the Stone Center for Latin American Studies, Tulane University; King's College London"
+     "author": "John O’Loughlin, College Professor of Distinction in Geography and Fellow, Institute of Behavioral Science, University of Colorado Boulder"
     },
     {
      "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What legal experts say about the Trump administration’s attempts to make a federal case out of state elections",
-   "published": "2026-10-26 22:41 UTC"
+   "title": "Why your vote for local chief prosecutor will matter on Election Day",
+   "published": "2026-10-27 12:16 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "How Lula turned the tables on the right in Brazil and the US with his comeback presidential victory",
-   "published": "2026-10-26 22:15 UTC"
+   "title": "Putin hopes hardship will force Ukrainians to sue for peace – polling suggests it won’t work",
+   "published": "2026-10-27 12:15 UTC"
   },
   {
    "region": "Americas",
