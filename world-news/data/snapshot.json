@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T10:01:39Z",
+ "generatedAt": "2026-10-28T11:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The deep ocean’s protection against warming started to change in 2016. Nobody knows what happens now",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-deep-oceans-protection-against-warming-started-to-change-in-2016-nobody-knows-what-happens-now-293088",
+     "published": "2026-10-28T10:10:33Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bishakhdatta Gayen, ARC Future Fellow & Associate Professor, Mechanical Engineering, The University of Melbourne"
+    },
+    {
      "title": "David Hockney: the celebrated artist is bigger in this immersive digital spectacle, but not closer",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Daryl Higgins, Professor & Director, Institute of Child Protection Studies, Australian Catholic University"
-    },
-    {
-     "title": "Inflation jumps to 4.3%, adding to pressure for RBA rate rise next week",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/inflation-jumps-to-4-3-adding-to-pressure-for-rba-rate-rise-next-week-295162",
-     "published": "2026-10-28T04:24:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Isaac Gross, Lecturer in Economics, Monash University"
     },
     {
      "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The deep ocean’s protection against warming started to change in 2016. Nobody knows what happens now",
+   "published": "2026-10-28 10:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "David Hockney: the celebrated artist is bigger in this immersive digital spectacle, but not closer",
    "published": "2026-10-28 05:42 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
    "published": "2026-10-28 04:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Inflation jumps to 4.3%, adding to pressure for RBA rate rise next week",
-   "published": "2026-10-28 04:24 UTC"
   },
   {
    "region": "Oceania",
