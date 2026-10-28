@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T06:01:38Z",
+ "generatedAt": "2026-10-28T07:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -380,7 +380,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168645",
      "published": "2026-10-21T12:00:00Z",
      "summary": "Three years on from the reported resumption of large-scale forcible returns of nationals of the Democratic People’s Republic of Korea (DPRK) from China, serious concerns persist about their fate, according to a group of…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
@@ -399,7 +399,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
      "published": "2026-10-20T12:00:00Z",
      "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Activists push for Pakistan to recognise and support people with albinism",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "David Hockney: the celebrated artist is bigger in this immersive digital spectacle, but not closer",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/david-hockney-the-celebrated-artist-is-bigger-in-this-immersive-digital-spectacle-but-not-closer-295148",
+     "published": "2026-10-28T05:42:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mark Ledbury, Professor of Art History and Visual Culture, University of Sydney"
+    },
+    {
      "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Isaac Gross, Lecturer in Economics, Monash University"
-    },
-    {
-     "title": "Women with camel’s feet and ass’ teeth: Halloween costume inspiration from medieval England",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/women-with-camels-feet-and-ass-teeth-halloween-costume-inspiration-from-medieval-england-295171",
-     "published": "2026-10-28T04:03:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Emma Knowles, Lecturer, Western Civilisation Program, Australian Catholic University"
     },
     {
      "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 2,
+   "note": "answered, but held no usable items; kept 2 cached"
   },
   {
    "id": "gv-oceania",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "David Hockney: the celebrated artist is bigger in this immersive digital spectacle, but not closer",
+   "published": "2026-10-28 05:42 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
    "published": "2026-10-28 04:49 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Inflation jumps to 4.3%, adding to pressure for RBA rate rise next week",
    "published": "2026-10-28 04:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Women with camel’s feet and ass’ teeth: Halloween costume inspiration from medieval England",
-   "published": "2026-10-28 04:03 UTC"
   },
   {
    "region": "Oceania",
