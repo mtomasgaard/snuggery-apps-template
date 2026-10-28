@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T19:02:27Z",
+ "generatedAt": "2026-10-28T20:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "3 major issues that Republican Byron Donalds or Democrat David Jolly will need to address as Florida’s next governor",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/3-major-issues-that-republican-byron-donalds-or-democrat-david-jolly-will-need-to-address-as-floridas-next-governor-293784",
+     "published": "2026-10-28T18:40:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liv Coleman, Professor of Political Science and International Studies, University of Tampa"
+    },
+    {
      "title": "1 in 4 Pennsylvanians say they paid out of pocket for their annual checkup. Why isn’t insurance covering these preventive visits?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Sujeong Park, Assistant Professor of Health Policy and Addiction Studies, Penn State"
-    },
-    {
-     "title": "Some states are stepping up after federal childcare cuts – and now offer lessons for the future",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/some-states-are-stepping-up-after-federal-childcare-cuts-and-now-offer-lessons-for-the-future-293665",
-     "published": "2026-10-28T12:23:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Caitlyn Collins, Associate Professor of Sociology, Washington University in St. Louis"
     },
     {
      "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "The deep ocean’s protection against warming started to change in 2016. Nobody knows what happens now",
+     "title": "Why do we find certain things beautiful? A psychologist’s new book offers a bold answer",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-deep-oceans-protection-against-warming-started-to-change-in-2016-nobody-knows-what-happens-now-293088",
-     "published": "2026-10-28T10:10:33Z",
+     "link": "https://theconversation.com/why-do-we-find-certain-things-beautiful-a-psychologists-new-book-offers-a-bold-answer-294056",
+     "published": "2026-10-28T19:11:56Z",
      "summary": "",
      "stale": false,
-     "author": "Bishakhdatta Gayen, ARC Future Fellow & Associate Professor, Mechanical Engineering, The University of Melbourne"
+     "author": "Nick Haslam, Professor of Psychology, The University of Melbourne"
     },
     {
-     "title": "David Hockney: the celebrated artist is bigger in this immersive digital spectacle, but not closer",
+     "title": "Creative arts enrolments are dropping for Year 12. Here’s what parents and students should know",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/david-hockney-the-celebrated-artist-is-bigger-in-this-immersive-digital-spectacle-but-not-closer-295148",
-     "published": "2026-10-28T05:42:41Z",
+     "link": "https://theconversation.com/creative-arts-enrolments-are-dropping-for-year-12-heres-what-parents-and-students-should-know-295252",
+     "published": "2026-10-28T19:10:05Z",
      "summary": "",
      "stale": false,
-     "author": "Mark Ledbury, Professor of Art History and Visual Culture, University of Sydney"
+     "author": "David Roy, Lecturer in Education, University of Newcastle"
     },
     {
-     "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
+     "title": "You’re supposed to turn Bluetooth off when you don’t need it – how risky is it really?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/parents-have-one-of-australias-most-important-jobs-so-why-dont-we-have-policy-for-them-293334",
-     "published": "2026-10-28T04:49:43Z",
+     "link": "https://theconversation.com/youre-supposed-to-turn-bluetooth-off-when-you-dont-need-it-how-risky-is-it-really-293806",
+     "published": "2026-10-28T19:09:51Z",
      "summary": "",
      "stale": false,
-     "author": "Daryl Higgins, Professor & Director, Institute of Child Protection Studies, Australian Catholic University"
+     "author": "Meena Jha, Associate Professor, College of Information & Communication Technology, School of Engineering and Technology, CQUniversity Australia"
     },
     {
      "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "1 in 4 Pennsylvanians say they paid out of pocket for their annual checkup. Why isn’t insurance covering these preventive visits?",
-   "published": "2026-10-28 12:26 UTC"
+   "title": "3 major issues that Republican Byron Donalds or Democrat David Jolly will need to address as Florida’s next governor",
+   "published": "2026-10-28 18:40 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Some states are stepping up after federal childcare cuts – and now offer lessons for the future",
-   "published": "2026-10-28 12:23 UTC"
+   "title": "1 in 4 Pennsylvanians say they paid out of pocket for their annual checkup. Why isn’t insurance covering these preventive visits?",
+   "published": "2026-10-28 12:26 UTC"
   },
   {
    "region": "Americas",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The deep ocean’s protection against warming started to change in 2016. Nobody knows what happens now",
-   "published": "2026-10-28 10:10 UTC"
+   "title": "Why do we find certain things beautiful? A psychologist’s new book offers a bold answer",
+   "published": "2026-10-28 19:11 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "David Hockney: the celebrated artist is bigger in this immersive digital spectacle, but not closer",
-   "published": "2026-10-28 05:42 UTC"
+   "title": "Creative arts enrolments are dropping for Year 12. Here’s what parents and students should know",
+   "published": "2026-10-28 19:10 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
-   "published": "2026-10-28 04:49 UTC"
+   "title": "You’re supposed to turn Bluetooth off when you don’t need it – how risky is it really?",
+   "published": "2026-10-28 19:09 UTC"
   },
   {
    "region": "Oceania",
