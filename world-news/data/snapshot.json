@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T03:01:25Z",
+ "generatedAt": "2026-10-28T04:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/israel-has-voted-but-the-results-will-be-messy-heres-how-its-next-government-will-be-formed-295164",
+     "published": "2026-10-28T03:21:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
+    },
+    {
      "title": "Australia is cracking down on e-bikes and e-scooters. But is that what the public actually wants?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "John Kerr, Senior Research Fellow, Department of Public Health, University of Otago"
-    },
-    {
-     "title": "The phantom lighthouse: new research explains one of Australia’s strangest illusions",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-phantom-lighthouse-new-research-explains-one-of-australias-strangest-illusions-294683",
-     "published": "2026-10-27T19:11:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Simon Cropper, Associate Professor, Complex Human Data Hub, Melbourne School of Psychological Sciences, The University of Melbourne"
     },
     {
      "title": "Why Republicans are on the back foot ahead of US midterm elections",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
+   "published": "2026-10-28 03:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia is cracking down on e-bikes and e-scooters. But is that what the public actually wants?",
    "published": "2026-10-28 02:11 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
    "published": "2026-10-27 21:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The phantom lighthouse: new research explains one of Australia’s strangest illusions",
-   "published": "2026-10-27 19:11 UTC"
   },
   {
    "region": "Oceania",
