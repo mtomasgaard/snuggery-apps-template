@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T13:01:56Z",
+ "generatedAt": "2026-10-28T14:01:36Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Algérie–Niger : du rapprochement militaire à la recomposition régionale",
+     "title": "African countries face rising economic risks: six ways they can navigate global uncertainty",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/algerie-niger-du-rapprochement-militaire-a-la-recomposition-regionale-295261",
-     "published": "2026-10-28T07:53:34Z",
+     "link": "https://theconversation.com/african-countries-face-rising-economic-risks-six-ways-they-can-navigate-global-uncertainty-295141",
+     "published": "2026-10-28T13:33:24Z",
      "summary": "",
      "stale": false,
-     "author": "Lotfi Sour, enseignant-chercheur, Université Mustapha Stambouli de Mascara"
+     "author": "Danny Bradlow, Professor/Senior Research Fellow, Centre for Advancement and Senior Non-Resident Fellow, Global Development Policy Center, Boston University of…"
     },
     {
-     "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
+     "title": "Who gets the clean energy jobs and contracts? How Ghana and South Africa’s plans can do more for women",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/global-sexual-health-why-communal-knowledge-about-pleasure-and-wellbeing-matters-288416",
-     "published": "2026-10-27T14:20:42Z",
+     "link": "https://theconversation.com/who-gets-the-clean-energy-jobs-and-contracts-how-ghana-and-south-africas-plans-can-do-more-for-women-290663",
+     "published": "2026-10-28T13:33:03Z",
      "summary": "",
      "stale": false,
-     "author": "Jessie V. Ford, Assistant Professor, Sociomedical Sciences, Columbia University"
+     "author": "Elvis Korku Avenyo, Associate Professor of Development Economics, DSTI/NRF South African Research Chair in Industrial Development, University of Johannesburg"
     },
     {
      "title": "Kenya: 20 Ebola contacts released from quarantine",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Algérie–Niger : du rapprochement militaire à la recomposition régionale",
-   "published": "2026-10-28 07:53 UTC"
+   "title": "African countries face rising economic risks: six ways they can navigate global uncertainty",
+   "published": "2026-10-28 13:33 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
-   "published": "2026-10-27 14:20 UTC"
+   "title": "Who gets the clean energy jobs and contracts? How Ghana and South Africa’s plans can do more for women",
+   "published": "2026-10-28 13:33 UTC"
   },
   {
    "region": "Africa",
