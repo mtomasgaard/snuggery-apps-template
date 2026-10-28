@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T22:01:25Z",
+ "generatedAt": "2026-10-28T23:01:42Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/can-a-new-government-solve-nzs-local-council-crisis-why-a-royal-commission-could-help-293705",
+     "published": "2026-10-28T22:45:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Guy C. Charlton, Associate Professor, School of Law, University of New England"
+    },
+    {
      "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
-    },
-    {
-     "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/most-new-zealanders-worry-about-ais-risks-even-as-many-expect-to-use-it-new-survey-294573",
-     "published": "2026-10-27T21:13:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Kerr, Senior Research Fellow, Department of Public Health, University of Otago"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
+   "published": "2026-10-28 22:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
    "published": "2026-10-28 20:09 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
    "published": "2026-10-28 03:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
-   "published": "2026-10-27 21:13 UTC"
   },
   {
    "region": "Oceania",
