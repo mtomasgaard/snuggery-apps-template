@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T08:01:27Z",
+ "generatedAt": "2026-10-28T09:01:43Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Algérie–Niger : du rapprochement militaire à la recomposition régionale",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/algerie-niger-du-rapprochement-militaire-a-la-recomposition-regionale-295261",
+     "published": "2026-10-28T07:53:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lotfi Sour, enseignant-chercheur, Université Mustapha Stambouli de Mascara"
+    },
+    {
      "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Jessie V. Ford, Assistant Professor, Sociomedical Sciences, Columbia University"
-    },
-    {
-     "title": "Brambles are a problem weed in South Africa but researchers are closer to finding a natural enemy to manage them",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/brambles-are-a-problem-weed-in-south-africa-but-researchers-are-closer-to-finding-a-natural-enemy-to-manage-them-292637",
-     "published": "2026-10-27T14:20:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Grant Martin, Associate Professor; Deputy Director of the Centre for Biological Control, Rhodes University, Rhodes University"
     },
     {
      "title": "Kenya: 20 Ebola contacts released from quarantine",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
-   "published": "2026-10-27 14:20 UTC"
+   "title": "Algérie–Niger : du rapprochement militaire à la recomposition régionale",
+   "published": "2026-10-28 07:53 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Brambles are a problem weed in South Africa but researchers are closer to finding a natural enemy to manage them",
+   "title": "Global sexual health: why communal knowledge about pleasure and wellbeing matters",
    "published": "2026-10-27 14:20 UTC"
   },
   {
