@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T12:01:36Z",
+ "generatedAt": "2026-10-28T13:01:56Z",
  "regions": [
   {
    "key": "europe",
@@ -93,14 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "How religion collided with race and politics in Brazil’s presidential election",
+     "title": "1 in 4 Pennsylvanians say they paid out of pocket for their annual checkup. Why isn’t insurance covering these preventive visits?",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/how-religion-collided-with-race-and-politics-in-brazils-presidential-election-294761",
-     "published": "2026-10-27T22:12:22Z",
+     "link": "https://theconversation.com/1-in-4-pennsylvanians-say-they-paid-out-of-pocket-for-their-annual-checkup-why-isnt-insurance-covering-these-preventive-visits-293410",
+     "published": "2026-10-28T12:26:11Z",
      "summary": "",
      "stale": false,
-     "author": "John Thomas III, Assistant Professor of Political Science, College of Charleston"
+     "author": "Sujeong Park, Assistant Professor of Health Policy and Addiction Studies, Penn State"
+    },
+    {
+     "title": "Some states are stepping up after federal childcare cuts – and now offer lessons for the future",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/some-states-are-stepping-up-after-federal-childcare-cuts-and-now-offer-lessons-for-the-future-293665",
+     "published": "2026-10-28T12:23:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Caitlyn Collins, Associate Professor of Sociology, Washington University in St. Louis"
     },
     {
      "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
@@ -111,16 +121,6 @@
      "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
      "stale": false,
      "author": "ProBox"
-    },
-    {
-     "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/earwax-is-both-slippery-and-sticky-this-weird-combo-might-lead-to-safer-insect-repellents-293324",
-     "published": "2026-10-27T18:12:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Hu, Professor of Mechanical Engineering and Biology, Adjunct Professor of Physics, Georgia Institute of Technology"
     },
     {
      "title": "General Assembly weighs US embargo against Cuba ahead of 34th vote",
@@ -721,20 +721,20 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "How religion collided with race and politics in Brazil’s presidential election",
-   "published": "2026-10-27 22:12 UTC"
+   "title": "1 in 4 Pennsylvanians say they paid out of pocket for their annual checkup. Why isn’t insurance covering these preventive visits?",
+   "published": "2026-10-28 12:26 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Some states are stepping up after federal childcare cuts – and now offer lessons for the future",
+   "published": "2026-10-28 12:23 UTC"
   },
   {
    "region": "Americas",
    "source": "Global Voices",
    "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
    "published": "2026-10-27 21:10 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Earwax is both slippery and sticky – this weird combo might lead to safer insect repellents",
-   "published": "2026-10-27 18:12 UTC"
   },
   {
    "region": "Americas",
