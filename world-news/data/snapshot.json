@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T20:01:37Z",
+ "generatedAt": "2026-10-28T21:02:39Z",
  "regions": [
   {
    "key": "europe",
@@ -390,7 +390,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168645",
      "published": "2026-10-21T12:00:00Z",
      "summary": "Three years on from the reported resumption of large-scale forcible returns of nationals of the Democratic People’s Republic of Korea (DPRK) from China, serious concerns persist about their fate, according to a group of…",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
@@ -409,7 +409,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
      "published": "2026-10-20T12:00:00Z",
      "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": false
+     "stale": true
     },
     {
      "title": "Hong Kong police launch AI-powered national security platform for school pupils",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/climate-change-is-killing-the-plants-of-ulur-u-kata-tju-a-an-angu-traditional-owners-are-concerned-295240",
+     "published": "2026-10-28T20:09:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rita Okai, Aṉangu Engagement Officer, Indigenous Knowledge"
+    },
+    {
      "title": "Why do we find certain things beautiful? A psychologist’s new book offers a bold answer",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "David Roy, Lecturer in Education, University of Newcastle"
-    },
-    {
-     "title": "You’re supposed to turn Bluetooth off when you don’t need it – how risky is it really?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/youre-supposed-to-turn-bluetooth-off-when-you-dont-need-it-how-risky-is-it-really-293806",
-     "published": "2026-10-28T19:09:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Meena Jha, Associate Professor, College of Information & Communication Technology, School of Engineering and Technology, CQUniversity Australia"
     },
     {
      "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": true,
-   "items": 30,
-   "note": null
+   "ok": false,
+   "items": 2,
+   "note": "answered, but held no usable items; kept 2 cached"
   },
   {
    "id": "gv-oceania",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
+   "published": "2026-10-28 20:09 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Why do we find certain things beautiful? A psychologist’s new book offers a bold answer",
    "published": "2026-10-28 19:11 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Creative arts enrolments are dropping for Year 12. Here’s what parents and students should know",
    "published": "2026-10-28 19:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "You’re supposed to turn Bluetooth off when you don’t need it – how risky is it really?",
-   "published": "2026-10-28 19:09 UTC"
   },
   {
    "region": "Oceania",
