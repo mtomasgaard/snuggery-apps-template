@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T09:01:43Z",
+ "generatedAt": "2026-10-28T10:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Gaza: Families brace for fourth winter in tents as aid operations remain stymied",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168685",
+     "published": "2026-10-27T12:00:00Z",
+     "summary": "Families in Gaza are bracing for a fourth winter in tents and makeshift shelters as UN aid operations face mounting obstacles, with transport suspended on Tuesday due to Israel’s closure of the key Kerem Shalom crossing…",
+     "stale": false
+    },
+    {
      "title": "West Bank: Hebron crackdown displaces thousands, Türk warns of ethnic cleansing",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -306,15 +315,6 @@
      "summary": "Technologies developed, tested and refined under occupation do not stay there; they get exported to the rest of the world",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "‘Ominous start’ to West Bank olive harvest amid settler attacks",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168644",
-     "published": "2026-10-21T12:00:00Z",
-     "summary": "The use of live ammunition, arson and the destruction of centuries-old olive trees have marked the opening weeks of this year’s harvest in the occupied West Bank.",
-     "stale": false
     },
     {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
@@ -817,6 +817,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Gaza: Families brace for fourth winter in tents as aid operations remain stymied",
+   "published": "2026-10-27 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "West Bank: Hebron crackdown displaces thousands, Türk warns of ethnic cleansing",
    "published": "2026-10-26 12:00 UTC"
   },
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "Palestine is already living under the Big Tech authoritarianism the world is being sold",
    "published": "2026-10-21 20:19 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "‘Ominous start’ to West Bank olive harvest amid settler attacks",
-   "published": "2026-10-21 12:00 UTC"
   },
   {
    "region": "Middle East",
