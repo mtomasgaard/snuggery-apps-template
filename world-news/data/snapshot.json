@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T21:02:39Z",
+ "generatedAt": "2026-10-28T22:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -390,7 +390,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168645",
      "published": "2026-10-21T12:00:00Z",
      "summary": "Three years on from the reported resumption of large-scale forcible returns of nationals of the Democratic People’s Republic of Korea (DPRK) from China, serious concerns persist about their fate, according to a group of…",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
@@ -409,7 +409,7 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
      "published": "2026-10-20T12:00:00Z",
      "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": true
+     "stale": false
     },
     {
      "title": "Hong Kong police launch AI-powered national security platform for school pupils",
@@ -640,9 +640,9 @@
    "id": "un-asia-pacific",
    "source": "UN News",
    "region": "Asia",
-   "ok": false,
-   "items": 2,
-   "note": "answered, but held no usable items; kept 2 cached"
+   "ok": true,
+   "items": 30,
+   "note": null
   },
   {
    "id": "gv-oceania",
