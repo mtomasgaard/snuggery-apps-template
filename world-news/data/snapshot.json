@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T04:01:30Z",
+ "generatedAt": "2026-10-28T05:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
+     "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/parents-have-one-of-australias-most-important-jobs-so-why-dont-we-have-policy-for-them-293334",
+     "published": "2026-10-28T04:49:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Daryl Higgins, Professor & Director, Institute of Child Protection Studies, Australian Catholic University"
+    },
+    {
+     "title": "Inflation jumps to 4.3%, adding to pressure for RBA rate rise next week",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/inflation-jumps-to-4-3-adding-to-pressure-for-rba-rate-rise-next-week-295162",
+     "published": "2026-10-28T04:24:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Isaac Gross, Lecturer in Economics, Monash University"
+    },
+    {
+     "title": "Women with camel’s feet and ass’ teeth: Halloween costume inspiration from medieval England",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/women-with-camels-feet-and-ass-teeth-halloween-costume-inspiration-from-medieval-england-295171",
+     "published": "2026-10-28T04:03:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Emma Knowles, Lecturer, Western Civilisation Program, Australian Catholic University"
+    },
+    {
+     "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/israel-has-voted-but-the-results-will-be-messy-heres-how-its-next-government-will-be-formed-295164",
      "published": "2026-10-28T03:21:53Z",
      "summary": "",
      "stale": false,
      "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
-    },
-    {
-     "title": "Australia is cracking down on e-bikes and e-scooters. But is that what the public actually wants?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australia-is-cracking-down-on-e-bikes-and-e-scooters-but-is-that-what-the-public-actually-wants-293825",
-     "published": "2026-10-28T02:11:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Milad Haghani, Associate Professor and Principal Fellow in Urban Risk and Resilience, The University of Melbourne"
-    },
-    {
-     "title": "People are using AI to make expensive computer programs free. This could change everything",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/people-are-using-ai-to-make-expensive-computer-programs-free-this-could-change-everything-294956",
-     "published": "2026-10-28T01:17:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dana McKay, Associate Dean, Interaction, Technology and Information, RMIT University"
     },
     {
      "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "John Kerr, Senior Research Fellow, Department of Public Health, University of Otago"
-    },
-    {
-     "title": "Why Republicans are on the back foot ahead of US midterm elections",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/why-republicans-are-on-the-back-foot-ahead-of-us-midterm-elections-294569",
-     "published": "2026-10-27T19:08:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Parents have one of Australia’s most important jobs, so why don’t we have policy for them?",
+   "published": "2026-10-28 04:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Inflation jumps to 4.3%, adding to pressure for RBA rate rise next week",
+   "published": "2026-10-28 04:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Women with camel’s feet and ass’ teeth: Halloween costume inspiration from medieval England",
+   "published": "2026-10-28 04:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
    "published": "2026-10-28 03:21 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australia is cracking down on e-bikes and e-scooters. But is that what the public actually wants?",
-   "published": "2026-10-28 02:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "People are using AI to make expensive computer programs free. This could change everything",
-   "published": "2026-10-28 01:17 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Most New Zealanders worry about AI’s risks, even as many expect to use it – new survey",
    "published": "2026-10-27 21:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why Republicans are on the back foot ahead of US midterm elections",
-   "published": "2026-10-27 19:08 UTC"
   },
   {
    "region": "Oceania",
