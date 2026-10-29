@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T19:01:40Z",
+ "generatedAt": "2026-10-29T20:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "After three years of relentless reform, what lies beyond the election for education?",
+     "title": "A wise woman who turned fish eggs into beasts: meet an ancient witch from Mesopotamia",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/a-wise-woman-who-turned-fish-eggs-into-beasts-meet-an-ancient-witch-from-mesopotamia-294580",
+     "published": "2026-10-29T19:13:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Genevieve Le Ban, Casual Academic in the Discipline of History and Archaeology, Macquarie University"
+    },
+    {
+     "title": "Flying-foxes are turning up starving. Why are we still responding one crisis at a time?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/flying-foxes-are-turning-up-starving-why-are-we-still-responding-one-crisis-at-a-time-295339",
+     "published": "2026-10-29T19:12:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Justin A. Welbergen, Professor of Animal Ecology, Western Sydney University"
+    },
+    {
+     "title": "Halloween is typically a massive lolly fest for kids – but it doesn’t have to be",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/halloween-is-typically-a-massive-lolly-fest-for-kids-but-it-doesnt-have-to-be-295246",
+     "published": "2026-10-29T19:12:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
+    },
+    {
+     "title": "After three years of relentless reform, what lies beyond the election for education?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/after-three-years-of-relentless-reform-what-lies-beyond-the-election-for-education-293794",
      "published": "2026-10-29T17:26:26Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Andrew Payne, Senior Lecturer in Foreign Policy and Security, City St George's, University of London"
-    },
-    {
-     "title": "Grattan on Friday: an embattled government tells Australians the pain they feel won’t end any time soon",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-an-embattled-government-tells-australians-the-pain-they-feel-wont-end-any-time-soon-294862",
-     "published": "2026-10-29T06:55:54Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Is high-speed rail generally safe? What can Australia learn from Spain’s accident?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/is-high-speed-rail-generally-safe-what-can-australia-learn-from-spains-accident-295442",
-     "published": "2026-10-29T05:03:10Z",
-     "summary": "",
-     "stale": false,
-     "author": "Qing Wu, Principal Research Fellow, Centre for Railway Engineering, CQUniversity Australia"
-    },
-    {
-     "title": "Grok can launch a thousand ships – but this AI remake of the Odyssey can’t make us feel",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/grok-can-launch-a-thousand-ships-but-this-ai-remake-of-the-odyssey-cant-make-us-feel-295340",
-     "published": "2026-10-29T04:30:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Niusha Shafiabady, Professor in Computational Intelligence, Australian Catholic University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A wise woman who turned fish eggs into beasts: meet an ancient witch from Mesopotamia",
+   "published": "2026-10-29 19:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Flying-foxes are turning up starving. Why are we still responding one crisis at a time?",
+   "published": "2026-10-29 19:12 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Halloween is typically a massive lolly fest for kids – but it doesn’t have to be",
+   "published": "2026-10-29 19:12 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "After three years of relentless reform, what lies beyond the election for education?",
    "published": "2026-10-29 17:26 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "Why Donald Trump’s foreign policy could cost Republicans in the midterm elections",
    "published": "2026-10-29 13:18 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Grattan on Friday: an embattled government tells Australians the pain they feel won’t end any time soon",
-   "published": "2026-10-29 06:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Is high-speed rail generally safe? What can Australia learn from Spain’s accident?",
-   "published": "2026-10-29 05:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Grok can launch a thousand ships – but this AI remake of the Odyssey can’t make us feel",
-   "published": "2026-10-29 04:30 UTC"
   },
   {
    "region": "Oceania",
