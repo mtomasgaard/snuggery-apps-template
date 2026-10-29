@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T13:01:31Z",
+ "generatedAt": "2026-10-29T14:01:38Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "In Albania, rural youth are campaigning to solve local environmental problems",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/10/29/in-albania-rural-youth-are-campaigning-to-solve-local-environmental-problems/",
+     "published": "2026-10-29T13:40:53Z",
+     "summary": "Their phones and creativity are enough when they have a clear purpose and guidance.",
+     "stale": false,
+     "author": "Nurbek Bekmurzaev"
+    },
     {
      "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
      "source": "Global Voices",
@@ -35,16 +45,6 @@
      "summary": "In the latest GV podcast, we discussed why Russia restricts access to many social media services, while Belarus does not impose comparable restrictions; censorship, surveillance, and digital authoritarianism…",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/23/in-bosnia-and-herzegovina-children-with-down-syndrome-are-using-a-video-game-to-safely-navigate-the-internet/",
-     "published": "2026-10-23T22:05:56Z",
-     "summary": "Being able to use the internet safely is also about being able to participate in everyday life.",
-     "stale": false,
-     "author": "Nurbek Bekmurzaev"
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "In Albania, rural youth are campaigning to solve local environmental problems",
+   "published": "2026-10-29 13:40 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
    "published": "2026-10-26 19:45 UTC"
   },
@@ -687,12 +693,6 @@
    "source": "Global Voices",
    "title": "Big Tech and authoritarian states: Belarus",
    "published": "2026-10-24 18:11 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "In Bosnia and Herzegovina, children with Down syndrome are using a video game to safely navigate the internet",
-   "published": "2026-10-23 22:05 UTC"
   },
   {
    "region": "Europe",
