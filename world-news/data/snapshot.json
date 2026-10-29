@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T10:01:34Z",
+ "generatedAt": "2026-10-29T11:01:35Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Comment les séries coréennes utilisent l'Afrique pour redorer l'image de la Corée du Sud",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/comment-les-series-coreennes-utilisent-lafrique-pour-redorer-limage-de-la-coree-du-sud-295190",
+     "published": "2026-10-29T09:46:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Osarugue Otebele, Assistant Professor, Cinema Studies Institute, University of Toronto"
+    },
+    {
      "title": "Why the WHO must declare climate change a public health emergency",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Nicholas Brink, Director: International, Wits Planetary Health Research, University of the Witwatersrand"
-    },
-    {
-     "title": "African countries face rising economic risks: six ways they can navigate global uncertainty",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/african-countries-face-rising-economic-risks-six-ways-they-can-navigate-global-uncertainty-295141",
-     "published": "2026-10-28T13:33:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Danny Bradlow, Professor/Senior Research Fellow, Centre for Advancement and Senior Non-Resident Fellow, Global Development Policy Center, Boston University of…"
     },
     {
      "title": "Civilians in Sudan’s El Obeid trapped between drones and incarceration",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Why the WHO must declare climate change a public health emergency",
-   "published": "2026-10-28 15:48 UTC"
+   "title": "Comment les séries coréennes utilisent l'Afrique pour redorer l'image de la Corée du Sud",
+   "published": "2026-10-29 09:46 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "African countries face rising economic risks: six ways they can navigate global uncertainty",
-   "published": "2026-10-28 13:33 UTC"
+   "title": "Why the WHO must declare climate change a public health emergency",
+   "published": "2026-10-28 15:48 UTC"
   },
   {
    "region": "Africa",
