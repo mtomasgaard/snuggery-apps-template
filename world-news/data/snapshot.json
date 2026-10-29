@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-28T23:01:42Z",
+ "generatedAt": "2026-10-29T00:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "John A. Scott’s The Boy Who Loved Dolls is a surreal tale of figurative dismemberments",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/john-a-scotts-the-boy-who-loved-dolls-is-a-surreal-tale-of-figurative-dismemberments-291146",
+     "published": "2026-10-28T23:26:25Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robbie Moore, Senior Lecturer in English, University of Tasmania"
+    },
+    {
+     "title": "Victorian state election: what’s at stake for treaty and Indigenous self-determination?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/victorian-state-election-whats-at-stake-for-treaty-and-indigenous-self-determination-294873",
+     "published": "2026-10-28T23:03:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bartholomew Stanford, Senior Lecturer of Indigenous Studies, Indigenous Education and Research Centre, James Cook University"
+    },
+    {
      "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Rita Okai, Aṉangu Engagement Officer, Indigenous Knowledge"
-    },
-    {
-     "title": "Why do we find certain things beautiful? A psychologist’s new book offers a bold answer",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-do-we-find-certain-things-beautiful-a-psychologists-new-book-offers-a-bold-answer-294056",
-     "published": "2026-10-28T19:11:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nick Haslam, Professor of Psychology, The University of Melbourne"
-    },
-    {
-     "title": "Creative arts enrolments are dropping for Year 12. Here’s what parents and students should know",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/creative-arts-enrolments-are-dropping-for-year-12-heres-what-parents-and-students-should-know-295252",
-     "published": "2026-10-28T19:10:05Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Roy, Lecturer in Education, University of Newcastle"
     },
     {
      "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "John A. Scott’s The Boy Who Loved Dolls is a surreal tale of figurative dismemberments",
+   "published": "2026-10-28 23:26 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Victorian state election: what’s at stake for treaty and Indigenous self-determination?",
+   "published": "2026-10-28 23:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
    "published": "2026-10-28 22:45 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
    "published": "2026-10-28 20:09 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why do we find certain things beautiful? A psychologist’s new book offers a bold answer",
-   "published": "2026-10-28 19:11 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Creative arts enrolments are dropping for Year 12. Here’s what parents and students should know",
-   "published": "2026-10-28 19:10 UTC"
   },
   {
    "region": "Oceania",
