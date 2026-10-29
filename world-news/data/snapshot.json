@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T07:01:30Z",
+ "generatedAt": "2026-10-29T08:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: an embattled government tells Australians the pain they feel won’t end any time soon",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-an-embattled-government-tells-australians-the-pain-they-feel-wont-end-any-time-soon-294862",
+     "published": "2026-10-29T06:55:54Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Is high-speed rail generally safe? What can Australia learn from Spain’s accident?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Niusha Shafiabady, Professor in Computational Intelligence, Australian Catholic University"
-    },
-    {
-     "title": "Unlike anything I’ve seen: why this whale season has marine scientists puzzled",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/unlike-anything-ive-seen-why-this-whale-season-has-marine-scientists-puzzled-295074",
-     "published": "2026-10-29T04:04:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Olaf Meynecke, Research Fellow in Marine Science and Manager Whales & Climate Program, Griffith University"
     },
     {
      "title": "Israel election by the numbers: who might form the next government?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: an embattled government tells Australians the pain they feel won’t end any time soon",
+   "published": "2026-10-29 06:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Is high-speed rail generally safe? What can Australia learn from Spain’s accident?",
    "published": "2026-10-29 05:03 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Grok can launch a thousand ships – but this AI remake of the Odyssey can’t make us feel",
    "published": "2026-10-29 04:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Unlike anything I’ve seen: why this whale season has marine scientists puzzled",
-   "published": "2026-10-29 04:04 UTC"
   },
   {
    "region": "Oceania",
