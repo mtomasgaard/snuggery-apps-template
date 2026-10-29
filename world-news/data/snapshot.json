@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T05:01:28Z",
+ "generatedAt": "2026-10-29T06:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Liv Coleman, Professor of Political Science and International Studies, University of Tampa"
     },
     {
+     "title": "Higher Ground: How New York is raising a park to hold back the sea",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168679",
+     "published": "2026-10-28T12:00:00Z",
+     "summary": "On 29 October 2012, Hurricane Sandy slammed into New York City, unleashing a devastating storm surge that flooded homes, subways and tunnels, knocked out power and sparked deadly fires.",
+     "stale": false
+    },
+    {
      "title": "Backing for UN call to end Cuba embargo falls to 20-year low",
      "source": "UN News",
      "feed": "un-americas",
@@ -159,15 +168,6 @@
      "summary": "“Under normal conditions, this is already serious enough, because the platform rules over the information flow in a society, but when you apply it to an electoral dispute, it's even more serious.”",
      "stale": false,
      "author": "Fernanda Canofre"
-    },
-    {
-     "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168626",
-     "published": "2026-10-19T12:00:00Z",
-     "summary": "Armed groups in Haiti are adapting to intensified security operations, stepping up reprisals against civilians and extending their reach into rural areas, the UN warned the Security Council on Monday.",
-     "stale": false
     }
    ]
   },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Is high-speed rail generally safe? What can Australia learn from Spain’s accident?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/is-high-speed-rail-generally-safe-what-can-australia-learn-from-spains-accident-295442",
+     "published": "2026-10-29T05:03:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Qing Wu, Principal Research Fellow, Centre for Railway Engineering, CQUniversity Australia"
+    },
+    {
      "title": "Grok can launch a thousand ships – but this AI remake of the Odyssey can’t make us feel",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,7 +461,7 @@
     {
      "title": "Israel election by the numbers: who might form the next government?",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/israel-election-by-the-numbers-who-might-form-the-next-government-295439",
      "published": "2026-10-29T04:00:29Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Guy C. Charlton, Associate Professor, School of Law, University of New England"
-    },
-    {
-     "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/israel-has-voted-but-the-results-will-be-messy-heres-how-its-next-government-will-be-formed-295164",
-     "published": "2026-10-28T03:21:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ran Porat, Affiliate Researcher, The Australian Centre for Jewish Civilisation, Monash University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -733,6 +733,12 @@
   {
    "region": "Americas",
    "source": "UN News",
+   "title": "Higher Ground: How New York is raising a park to hold back the sea",
+   "published": "2026-10-28 12:00 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "UN News",
    "title": "Backing for UN call to end Cuba embargo falls to 20-year low",
    "published": "2026-10-28 12:00 UTC"
   },
@@ -759,12 +765,6 @@
    "source": "Global Voices",
    "title": "In Brazil’s elections, big techs’ transparency and cooperation policies translate as governance washing, according to this expert",
    "published": "2026-10-24 08:55 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "Haiti: Elections on hold as gangs adapt to security crackdown, Security Council hears",
-   "published": "2026-10-19 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Is high-speed rail generally safe? What can Australia learn from Spain’s accident?",
+   "published": "2026-10-29 05:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Grok can launch a thousand ships – but this AI remake of the Odyssey can’t make us feel",
    "published": "2026-10-29 04:30 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
    "published": "2026-10-28 22:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
-   "published": "2026-10-28 03:21 UTC"
   },
   {
    "region": "Oceania",
