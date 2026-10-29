@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T00:01:29Z",
+ "generatedAt": "2026-10-29T01:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What would happen if the internet went down?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-would-happen-if-the-internet-went-down-295249",
+     "published": "2026-10-28T23:56:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
+    },
+    {
      "title": "John A. Scott’s The Boy Who Loved Dolls is a surreal tale of figurative dismemberments",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Guy C. Charlton, Associate Professor, School of Law, University of New England"
-    },
-    {
-     "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/climate-change-is-killing-the-plants-of-ulur-u-kata-tju-a-an-angu-traditional-owners-are-concerned-295240",
-     "published": "2026-10-28T20:09:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rita Okai, Aṉangu Engagement Officer, Indigenous Knowledge"
     },
     {
      "title": "Israel has voted – but the results will be messy. Here’s how its next government will be formed",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What would happen if the internet went down?",
+   "published": "2026-10-28 23:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "John A. Scott’s The Boy Who Loved Dolls is a surreal tale of figurative dismemberments",
    "published": "2026-10-28 23:26 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
    "published": "2026-10-28 22:45 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Climate change is killing the plants of Uluṟu-Kata Tjuṯa. Aṉangu traditional owners are concerned",
-   "published": "2026-10-28 20:09 UTC"
   },
   {
    "region": "Oceania",
