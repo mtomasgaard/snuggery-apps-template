@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T03:01:43Z",
+ "generatedAt": "2026-10-29T04:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Israel election by the numbers: who might form the next government?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/israel-election-by-the-numbers-who-might-form-the-next-government-295439",
+     "published": "2026-10-29T04:00:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Digital Storytelling Team, The Conversation"
+    },
+    {
+     "title": "Mortgage holders aren’t alone in paying for rate hikes. Here’s how the RBA spreads the pain",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/mortgage-holders-arent-alone-in-paying-for-rate-hikes-heres-how-the-rba-spreads-the-pain-294684",
+     "published": "2026-10-29T03:24:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
+    },
+    {
      "title": "What would happen if the internet went down?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Mahmoud Elkhodr, Senior Lecturer in Information and Communication Technologies, CQUniversity Australia"
-    },
-    {
-     "title": "John A. Scott’s The Boy Who Loved Dolls is a surreal tale of figurative dismemberments",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/john-a-scotts-the-boy-who-loved-dolls-is-a-surreal-tale-of-figurative-dismemberments-291146",
-     "published": "2026-10-28T23:26:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robbie Moore, Senior Lecturer in English, University of Tasmania"
-    },
-    {
-     "title": "Victorian state election: what’s at stake for treaty and Indigenous self-determination?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/victorian-state-election-whats-at-stake-for-treaty-and-indigenous-self-determination-294873",
-     "published": "2026-10-28T23:03:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Bartholomew Stanford, Senior Lecturer of Indigenous Studies, Indigenous Education and Research Centre, James Cook University"
     },
     {
      "title": "Can a new government solve NZ’s local council crisis? Why a royal commission could help",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Israel election by the numbers: who might form the next government?",
+   "published": "2026-10-29 04:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Mortgage holders aren’t alone in paying for rate hikes. Here’s how the RBA spreads the pain",
+   "published": "2026-10-29 03:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What would happen if the internet went down?",
    "published": "2026-10-28 23:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "John A. Scott’s The Boy Who Loved Dolls is a surreal tale of figurative dismemberments",
-   "published": "2026-10-28 23:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Victorian state election: what’s at stake for treaty and Indigenous self-determination?",
-   "published": "2026-10-28 23:03 UTC"
   },
   {
    "region": "Oceania",
