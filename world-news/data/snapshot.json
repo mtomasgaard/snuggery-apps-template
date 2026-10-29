@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T12:01:35Z",
+ "generatedAt": "2026-10-29T13:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "King Charles’ visit to the Caribbean evokes specter of British slavery – and local demands for justice",
+     "title": "What is Sharia law, and why is it so controversial in the United States?",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/king-charles-visit-to-the-caribbean-evokes-specter-of-british-slavery-and-local-demands-for-justice-295276",
-     "published": "2026-10-29T07:52:31Z",
+     "link": "https://theconversation.com/what-is-sharia-law-and-why-is-it-so-controversial-in-the-united-states-294224",
+     "published": "2026-10-29T12:25:58Z",
      "summary": "",
      "stale": false,
-     "author": "Brooke N. Newman, Professor of History, Virginia Commonwealth University"
+     "author": "Asma Uddin, Assistant Professor of Law, Michigan State University; Institute for Humane Studies"
     },
     {
-     "title": "Israel has voted, but what comes next? Dissecting a messy ballot and coalition-building process",
+     "title": "Political information increasingly comes from pop culture, outside of partisan silos but where male creators – and sometimes misogyny – dominate",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/israel-has-voted-but-what-comes-next-dissecting-a-messy-ballot-and-coalition-building-process-295404",
-     "published": "2026-10-29T01:39:44Z",
+     "link": "https://theconversation.com/political-information-increasingly-comes-from-pop-culture-outside-of-partisan-silos-but-where-male-creators-and-sometimes-misogyny-dominate-294202",
+     "published": "2026-10-29T12:25:33Z",
      "summary": "",
      "stale": false,
-     "author": "Dov Waxman, Presidential Chair in Modern Jewish Studies, University of California, Los Angeles"
+     "author": "Karrin Vasby Anderson, Professor of Communication Studies, Colorado State University"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "King Charles’ visit to the Caribbean evokes specter of British slavery – and local demands for justice",
-   "published": "2026-10-29 07:52 UTC"
+   "title": "What is Sharia law, and why is it so controversial in the United States?",
+   "published": "2026-10-29 12:25 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Israel has voted, but what comes next? Dissecting a messy ballot and coalition-building process",
-   "published": "2026-10-29 01:39 UTC"
+   "title": "Political information increasingly comes from pop culture, outside of partisan silos but where male creators – and sometimes misogyny – dominate",
+   "published": "2026-10-29 12:25 UTC"
   },
   {
    "region": "Americas",
