@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T18:01:38Z",
+ "generatedAt": "2026-10-29T19:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A Myanmar journalist’s reflection: ‘When other people’s pain becomes part of you’",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/29/a-myanmar-journalists-reflection-when-other-peoples-pain-becomes-part-of-you/",
+     "published": "2026-10-29T18:13:03Z",
+     "summary": "\"Four years later, after witnessing so many painful stories, I have learned that telling other people’s stories also requires learning how to care for myself.\"",
+     "stale": false,
+     "author": "Exile Hub"
+    },
+    {
      "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -410,16 +420,6 @@
      "summary": "Bangladesh’s traditionally nomadic Bede community faces severe displacement from floods and eroding rivers. Lacking fixed addresses, they struggle to access citizenship documents, healthcare, and education as they…",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "Hong Kong police launch AI-powered national security platform for school pupils",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/16/hong-kong-police-launch-ai-powered-national-security-platform-for-school-pupils/",
-     "published": "2026-10-16T05:03:29Z",
-     "summary": "The tech allows students to generate personalized stories on China’s “holistic approach to national security” – a framework advocated by President Xi Jinping covering areas from politics and economy to ecology and…",
-     "stale": false,
-     "author": "Hong Kong Free Press"
     }
    ]
   },
@@ -431,7 +431,7 @@
     {
      "title": "After three years of relentless reform, what lies beyond the election for education?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/after-three-years-of-relentless-reform-what-lies-beyond-the-election-for-education-293794",
      "published": "2026-10-29T17:26:26Z",
      "summary": "",
@@ -471,7 +471,7 @@
     {
      "title": "Grok can launch a thousand ships – but this AI remake of the Odyssey can’t make us feel",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/grok-can-launch-a-thousand-ships-but-this-ai-remake-of-the-odyssey-cant-make-us-feel-295340",
      "published": "2026-10-29T04:30:29Z",
      "summary": "",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "A Myanmar journalist’s reflection: ‘When other people’s pain becomes part of you’",
+   "published": "2026-10-29 18:13 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
    "published": "2026-10-29 12:00 UTC"
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
    "published": "2026-10-20 20:06 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Hong Kong police launch AI-powered national security platform for school pupils",
-   "published": "2026-10-16 05:03 UTC"
   },
   {
    "region": "Oceania",
