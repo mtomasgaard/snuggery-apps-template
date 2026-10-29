@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T08:01:27Z",
+ "generatedAt": "2026-10-29T09:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "King Charles’ visit to the Caribbean evokes specter of British slavery – and local demands for justice",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/king-charles-visit-to-the-caribbean-evokes-specter-of-british-slavery-and-local-demands-for-justice-295276",
+     "published": "2026-10-29T07:52:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Brooke N. Newman, Professor of History, Virginia Commonwealth University"
+    },
+    {
      "title": "Israel has voted, but what comes next? Dissecting a messy ballot and coalition-building process",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Dov Waxman, Presidential Chair in Modern Jewish Studies, University of California, Los Angeles"
-    },
-    {
-     "title": "3 major issues that Republican Byron Donalds or Democrat David Jolly will need to address as Florida’s next governor",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/3-major-issues-that-republican-byron-donalds-or-democrat-david-jolly-will-need-to-address-as-floridas-next-governor-293784",
-     "published": "2026-10-28T18:40:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liv Coleman, Professor of Political Science and International Studies, University of Tampa"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168697",
+     "published": "2026-10-29T12:00:00Z",
+     "summary": "Opium production in Afghanistan has risen fivefold in a year. According to a UN survey released on Thursday, it’s the first significant increase since the Taliban banned poppy cultivation in 2022.",
+     "stale": false
+    },
+    {
      "title": "Bangladesh weighs tougher cyber law as AI-generated abuse targets women",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -401,15 +410,6 @@
      "summary": "Bangladesh’s traditionally nomadic Bede community faces severe displacement from floods and eroding rivers. Lacking fixed addresses, they struggle to access citizenship documents, healthcare, and education as they…",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168631",
-     "published": "2026-10-20T12:00:00Z",
-     "summary": "Following extreme hunger warnings, a bitter reality is unfolding across Afghanistan: food is available, but remains inaccessible for millions of people.",
-     "stale": false
     },
     {
      "title": "Hong Kong police launch AI-powered national security platform for school pupils",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Israel has voted, but what comes next? Dissecting a messy ballot and coalition-building process",
-   "published": "2026-10-29 01:39 UTC"
+   "title": "King Charles’ visit to the Caribbean evokes specter of British slavery – and local demands for justice",
+   "published": "2026-10-29 07:52 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "3 major issues that Republican Byron Donalds or Democrat David Jolly will need to address as Florida’s next governor",
-   "published": "2026-10-28 18:40 UTC"
+   "title": "Israel has voted, but what comes next? Dissecting a messy ballot and coalition-building process",
+   "published": "2026-10-29 01:39 UTC"
   },
   {
    "region": "Americas",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
+   "published": "2026-10-29 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Bangladesh weighs tougher cyber law as AI-generated abuse targets women",
    "published": "2026-10-28 07:51 UTC"
@@ -897,12 +903,6 @@
    "source": "Global Voices",
    "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
    "published": "2026-10-20 20:06 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "‘One step away from famine’: Inside Afghanistan’s hunger crisis",
-   "published": "2026-10-20 12:00 UTC"
   },
   {
    "region": "Asia",
