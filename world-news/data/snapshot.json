@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T01:01:24Z",
+ "generatedAt": "2026-10-30T02:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -354,6 +354,15 @@
      "author": "Exile Hub"
     },
     {
+     "title": "Myanmar’s illicit economy fuels escalating violence, with civilians bearing the brunt",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168705",
+     "published": "2026-10-29T12:00:00Z",
+     "summary": "Myanmar’s human rights situation is “catastrophic”, the UN independent expert on the country warned at a press briefing Thursday, as the war spirals with no end in sight.",
+     "stale": false
+    },
+    {
      "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -403,15 +412,6 @@
      "author": "Malka Older"
     },
     {
-     "title": "Fate unknown of many returned to DPR Korea from China: UN independent experts",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168645",
-     "published": "2026-10-21T12:00:00Z",
-     "summary": "Three years on from the reported resumption of large-scale forcible returns of nationals of the Democratic People’s Republic of Korea (DPRK) from China, serious concerns persist about their fate, according to a group of…",
-     "stale": false
-    },
-    {
      "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Buried cats, exorcisms and a sunken Colonel Sanders – the strange world of sporting curses",
+     "title": "‘Uncontrolled warrior culture’: Australia’s special forces under fire in new inquiry",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/buried-cats-exorcisms-and-a-sunken-colonel-sanders-the-strange-world-of-sporting-curses-288604",
-     "published": "2026-10-29T23:29:56Z",
+     "link": "https://theconversation.com/uncontrolled-warrior-culture-australias-special-forces-under-fire-in-new-inquiry-295438",
+     "published": "2026-10-30T01:24:46Z",
      "summary": "",
      "stale": false,
-     "author": "Vaughan Cruickshank, Senior Lecturer in Health and Physical Education, University of Tasmania"
+     "author": "Dean Aszkielowicz, Senior Lecturer in History and Politics, Murdoch University"
     },
     {
-     "title": "A wise woman who turned fish eggs into beasts: meet an ancient witch from Mesopotamia",
+     "title": "‘What we leave behind is not as important as how we’ve lived’: remembering actor Patrick Stewart",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/a-wise-woman-who-turned-fish-eggs-into-beasts-meet-an-ancient-witch-from-mesopotamia-294580",
-     "published": "2026-10-29T19:13:05Z",
+     "link": "https://theconversation.com/what-we-leave-behind-is-not-as-important-as-how-weve-lived-remembering-actor-patrick-stewart-295542",
+     "published": "2026-10-30T01:15:11Z",
      "summary": "",
      "stale": false,
-     "author": "Genevieve Le Ban, Casual Academic in the Discipline of History and Archaeology, Macquarie University"
+     "author": "Chris Comerford, Senior Lecturer in Communication and Media, University of Wollongong"
     },
     {
-     "title": "Flying-foxes are starving. Why are we still responding one crisis at a time?",
+     "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/flying-foxes-are-starving-why-are-we-still-responding-one-crisis-at-a-time-295339",
-     "published": "2026-10-29T19:12:29Z",
+     "link": "https://theconversation.com/mushroom-murderer-erin-patterson-has-lost-her-appeal-and-received-a-harsher-sentence-legal-experts-explain-why-291355",
+     "published": "2026-10-30T01:00:49Z",
      "summary": "",
      "stale": false,
-     "author": "Justin A. Welbergen, Professor of Animal Ecology, Western Sydney University"
+     "author": "Arlie Loughnan, Professor of Criminal Law, University of Sydney"
     },
     {
      "title": "After three years of relentless reform, what lies beyond the election for education?",
@@ -871,6 +871,12 @@
   {
    "region": "Asia",
    "source": "UN News",
+   "title": "Myanmar’s illicit economy fuels escalating violence, with civilians bearing the brunt",
+   "published": "2026-10-29 12:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "UN News",
    "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
    "published": "2026-10-29 12:00 UTC"
   },
@@ -900,12 +906,6 @@
   },
   {
    "region": "Asia",
-   "source": "UN News",
-   "title": "Fate unknown of many returned to DPR Korea from China: UN independent experts",
-   "published": "2026-10-21 12:00 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "Global Voices",
    "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
    "published": "2026-10-20 20:06 UTC"
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Buried cats, exorcisms and a sunken Colonel Sanders – the strange world of sporting curses",
-   "published": "2026-10-29 23:29 UTC"
+   "title": "‘Uncontrolled warrior culture’: Australia’s special forces under fire in new inquiry",
+   "published": "2026-10-30 01:24 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "A wise woman who turned fish eggs into beasts: meet an ancient witch from Mesopotamia",
-   "published": "2026-10-29 19:13 UTC"
+   "title": "‘What we leave behind is not as important as how we’ve lived’: remembering actor Patrick Stewart",
+   "published": "2026-10-30 01:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Flying-foxes are starving. Why are we still responding one crisis at a time?",
-   "published": "2026-10-29 19:12 UTC"
+   "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
+   "published": "2026-10-30 01:00 UTC"
   },
   {
    "region": "Oceania",
