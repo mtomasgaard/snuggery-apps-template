@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T03:01:31Z",
+ "generatedAt": "2026-10-30T04:01:39Z",
  "regions": [
   {
    "key": "europe",
@@ -451,7 +451,7 @@
     {
      "title": "‘What we leave behind is not as important as how we’ve lived’: remembering actor Patrick Stewart",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/what-we-leave-behind-is-not-as-important-as-how-weve-lived-remembering-actor-patrick-stewart-295542",
      "published": "2026-10-30T01:15:11Z",
      "summary": "",
@@ -459,24 +459,24 @@
      "author": "Chris Comerford, Senior Lecturer in Communication and Media, University of Wollongong"
     },
     {
-     "title": "After three years of relentless reform, what lies beyond the election for education?",
+     "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/after-three-years-of-relentless-reform-what-lies-beyond-the-election-for-education-293794",
-     "published": "2026-10-29T17:26:26Z",
+     "link": "https://theconversation.com/mushroom-murderer-erin-patterson-has-lost-her-appeal-and-received-a-harsher-sentence-legal-experts-explain-why-291355",
+     "published": "2026-10-30T01:00:49Z",
      "summary": "",
      "stale": false,
-     "author": "Adrian Schoone, Associate Professor, School of Education, Auckland University of Technology"
+     "author": "Arlie Loughnan, Professor of Criminal Law, University of Sydney"
     },
     {
-     "title": "Why Donald Trump’s foreign policy could cost Republicans in the midterm elections",
+     "title": "Josh Frydenberg’s autobiography might be one of the longest job applications in history",
      "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/why-donald-trumps-foreign-policy-could-cost-republicans-in-the-midterm-elections-295382",
-     "published": "2026-10-29T13:18:56Z",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/josh-frydenbergs-autobiography-might-be-one-of-the-longest-job-applications-in-history-294662",
+     "published": "2026-10-30T00:59:04Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Payne, Senior Lecturer in Foreign Policy and Security, City St George's, University of London"
+     "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "After three years of relentless reform, what lies beyond the election for education?",
-   "published": "2026-10-29 17:26 UTC"
+   "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
+   "published": "2026-10-30 01:00 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why Donald Trump’s foreign policy could cost Republicans in the midterm elections",
-   "published": "2026-10-29 13:18 UTC"
+   "title": "Josh Frydenberg’s autobiography might be one of the longest job applications in history",
+   "published": "2026-10-30 00:59 UTC"
   },
   {
    "region": "Oceania",
