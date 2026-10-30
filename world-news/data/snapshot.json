@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T06:01:31Z",
+ "generatedAt": "2026-10-30T07:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: Albanese puts cat among One Nation pigeons with staff offer",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-albanese-puts-cat-among-one-nation-pigeons-with-staff-offer-294861",
+     "published": "2026-10-30T05:40:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Looking for bats after dark can help science – and change how we see them",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Vanessa Campbell, Associate Lecturer in Public Relations, Western Sydney University"
-    },
-    {
-     "title": "‘Uncontrolled warrior culture’: Australia’s special forces under fire in new inquiry",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/uncontrolled-warrior-culture-australias-special-forces-under-fire-in-new-inquiry-295438",
-     "published": "2026-10-30T01:24:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dean Aszkielowicz, Senior Lecturer in History and Politics, Murdoch University"
     },
     {
      "title": "‘What we leave behind is not as important as how we’ve lived’: remembering actor Patrick Stewart",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: Albanese puts cat among One Nation pigeons with staff offer",
+   "published": "2026-10-30 05:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Looking for bats after dark can help science – and change how we see them",
    "published": "2026-10-30 05:00 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
    "published": "2026-10-30 02:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘Uncontrolled warrior culture’: Australia’s special forces under fire in new inquiry",
-   "published": "2026-10-30 01:24 UTC"
   },
   {
    "region": "Oceania",
