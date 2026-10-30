@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T14:01:32Z",
+ "generatedAt": "2026-10-30T15:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,24 @@
    "stale": false,
    "items": [
     {
+     "title": "UN rights office warns of deepening displacement ‘nightmare’ in Gaza",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168707",
+     "published": "2026-10-30T12:00:00Z",
+     "summary": "Israeli forces continue to push Palestinians into ever-smaller areas of the Gaza Strip while destroying civilian infrastructure and attacking displacement sites, the UN human rights office, OHCHR, warned on Friday amid…",
+     "stale": false
+    },
+    {
+     "title": "Yemen war makes reaching assistance too dangerous for many",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168706",
+     "published": "2026-10-30T12:00:00Z",
+     "summary": "More than 280,000 people have now been displaced by fighting in Yemen and many vulnerable people are unable to access lifesaving relief because it is too dangerous to do so, the UN refugee agency (UNHCR) said on Friday.",
+     "stale": false
+    },
+    {
      "title": "A digital publication sheds light on Turkey’s prison system",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -286,24 +304,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168672",
      "published": "2026-10-26T12:00:00Z",
      "summary": "Israel’s “aggressive operation” in the West Bank city of Hebron raises serious concerns of ethnic cleansing, UN human rights chief Volker Türk warned on Monday, as the number of Palestinians forced from their homes…",
-     "stale": false
-    },
-    {
-     "title": "West Bank: Guterres alarmed as Israel imposes sweeping closures after deadly Hebron attack",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168660",
-     "published": "2026-10-23T12:00:00Z",
-     "summary": "The UN said on Friday it was “extremely alarmed” by intensifying violence in the occupied West Bank, as Israel moved to seal off the territory following a deadly attack on its soldiers in Hebron.",
-     "stale": false
-    },
-    {
-     "title": "Yemen: Deepening concerns for Taiz City as aid is blocked from entering",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168654",
-     "published": "2026-10-23T12:00:00Z",
-     "summary": "Aid agencies warned on Friday of the fast-developing humanitarian emergency inside Taiz City in Yemen, which has been encircled by de facto Houthi forces fighting government troops along the country’s west coast.",
      "stale": false
     },
     {
@@ -816,6 +816,18 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "UN rights office warns of deepening displacement ‘nightmare’ in Gaza",
+   "published": "2026-10-30 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Yemen war makes reaching assistance too dangerous for many",
+   "published": "2026-10-30 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "A digital publication sheds light on Turkey’s prison system",
    "published": "2026-10-29 23:06 UTC"
@@ -831,18 +843,6 @@
    "source": "UN News",
    "title": "West Bank: Hebron crackdown displaces thousands, Türk warns of ethnic cleansing",
    "published": "2026-10-26 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "West Bank: Guterres alarmed as Israel imposes sweeping closures after deadly Hebron attack",
-   "published": "2026-10-23 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Yemen: Deepening concerns for Taiz City as aid is blocked from entering",
-   "published": "2026-10-23 12:00 UTC"
   },
   {
    "region": "Middle East",
