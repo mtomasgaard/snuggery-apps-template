@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-29T23:01:30Z",
+ "generatedAt": "2026-10-30T00:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A digital publication sheds light on Turkey’s prison system",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/10/29/a-digital-publication-sheds-light-on-turkeys-prison-system/",
+     "published": "2026-10-29T23:06:48Z",
+     "summary": "“For the relatives of people in prison, as well as for national and international human rights organizations and agencies, the information provided by the Prison Agenda publication can be vital.”",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
+    {
      "title": "Gaza: Families brace for fourth winter in tents as aid operations remain stymied",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
      "author": "Uncloseted Media"
-    },
-    {
-     "title": "How authoritarian states are building an international market for digital surveillance",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/15/how-authoritarian-states-are-building-an-international-market-for-digital-surveillance/",
-     "published": "2026-10-15T04:00:07Z",
-     "summary": "Digital authoritarianism is not developing in isolation, but through the international exchange of technologies, standards, and practices.",
-     "stale": false,
-     "author": "Daria Dergacheva"
     }
    ]
   },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Buried cats, exorcisms and a sunken Colonel Sanders – the strange world of sporting curses",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/buried-cats-exorcisms-and-a-sunken-colonel-sanders-the-strange-world-of-sporting-curses-288604",
+     "published": "2026-10-29T23:29:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Vaughan Cruickshank, Senior Lecturer in Health and Physical Education, University of Tasmania"
+    },
+    {
      "title": "A wise woman who turned fish eggs into beasts: meet an ancient witch from Mesopotamia",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Justin A. Welbergen, Professor of Animal Ecology, Western Sydney University"
-    },
-    {
-     "title": "Halloween is typically a massive lolly fest for kids – but it doesn’t have to be",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/halloween-is-typically-a-massive-lolly-fest-for-kids-but-it-doesnt-have-to-be-295246",
-     "published": "2026-10-29T19:12:14Z",
-     "summary": "",
-     "stale": false,
-     "author": "Margaret Murray, Senior Lecturer, Nutrition, Swinburne University of Technology"
     },
     {
      "title": "After three years of relentless reform, what lies beyond the election for education?",
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "A digital publication sheds light on Turkey’s prison system",
+   "published": "2026-10-29 23:06 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "Gaza: Families brace for fourth winter in tents as aid operations remain stymied",
    "published": "2026-10-27 12:00 UTC"
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "How authoritarian states are building an international market for digital surveillance",
-   "published": "2026-10-15 04:00 UTC"
   },
   {
    "region": "Asia",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Buried cats, exorcisms and a sunken Colonel Sanders – the strange world of sporting curses",
+   "published": "2026-10-29 23:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A wise woman who turned fish eggs into beasts: meet an ancient witch from Mesopotamia",
    "published": "2026-10-29 19:13 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Flying-foxes are turning up starving. Why are we still responding one crisis at a time?",
-   "published": "2026-10-29 19:12 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Halloween is typically a massive lolly fest for kids – but it doesn’t have to be",
    "published": "2026-10-29 19:12 UTC"
   },
   {
