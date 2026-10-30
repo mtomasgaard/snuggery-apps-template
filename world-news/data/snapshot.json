@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T02:01:22Z",
+ "generatedAt": "2026-10-30T03:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/knocking-on-strangers-doors-how-to-help-your-kids-have-a-safe-halloween-295356",
+     "published": "2026-10-30T02:13:30Z",
+     "summary": "",
+     "stale": false,
+     "author": "Vanessa Campbell, Associate Lecturer in Public Relations, Western Sydney University"
+    },
+    {
      "title": "‘Uncontrolled warrior culture’: Australia’s special forces under fire in new inquiry",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Chris Comerford, Senior Lecturer in Communication and Media, University of Wollongong"
-    },
-    {
-     "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/mushroom-murderer-erin-patterson-has-lost-her-appeal-and-received-a-harsher-sentence-legal-experts-explain-why-291355",
-     "published": "2026-10-30T01:00:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Arlie Loughnan, Professor of Criminal Law, University of Sydney"
     },
     {
      "title": "After three years of relentless reform, what lies beyond the election for education?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
+   "published": "2026-10-30 02:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "‘Uncontrolled warrior culture’: Australia’s special forces under fire in new inquiry",
    "published": "2026-10-30 01:24 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "‘What we leave behind is not as important as how we’ve lived’: remembering actor Patrick Stewart",
    "published": "2026-10-30 01:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
-   "published": "2026-10-30 01:00 UTC"
   },
   {
    "region": "Oceania",
