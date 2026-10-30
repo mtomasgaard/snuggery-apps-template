@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T13:01:33Z",
+ "generatedAt": "2026-10-30T14:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Philadelphia’s Academy of Natural Sciences just closed – a blow for budding young scientists like me",
+     "title": "Allegheny County is reassessing every property – here’s how your tax bill is calculated now",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/philadelphias-academy-of-natural-sciences-just-closed-a-blow-for-budding-young-scientists-like-me-293504",
-     "published": "2026-10-30T12:08:59Z",
+     "link": "https://theconversation.com/allegheny-county-is-reassessing-every-property-heres-how-your-tax-bill-is-calculated-now-291826",
+     "published": "2026-10-30T12:16:04Z",
      "summary": "",
      "stale": false,
-     "author": "Lili Mei Granda Argianas, Ph.D. Student in Physics, Washington University in St. Louis"
+     "author": "Elizabeth Jane Beckett-Camarata, Professor of Public Administration, Penn State"
     },
     {
-     "title": "What the Cornell 7 sexual assault allegations reveal about how parents talk to their kids about rape",
+     "title": "Why achieving your goals can leave you feeling so empty",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/what-the-cornell-7-sexual-assault-allegations-reveal-about-how-parents-talk-to-their-kids-about-rape-294629",
-     "published": "2026-10-30T12:08:32Z",
+     "link": "https://theconversation.com/why-achieving-your-goals-can-leave-you-feeling-so-empty-294825",
+     "published": "2026-10-30T12:15:21Z",
      "summary": "",
      "stale": false,
-     "author": "Kathleen J Fitzgerald, Teaching Associate Professor of Sociology, University of North Carolina at Chapel Hill"
+     "author": "Stacy Keltner, Chair of the Department of Interdisciplinary Studies and Professor of Philosophy, Kennesaw State University"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Philadelphia’s Academy of Natural Sciences just closed – a blow for budding young scientists like me",
-   "published": "2026-10-30 12:08 UTC"
+   "title": "Allegheny County is reassessing every property – here’s how your tax bill is calculated now",
+   "published": "2026-10-30 12:16 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What the Cornell 7 sexual assault allegations reveal about how parents talk to their kids about rape",
-   "published": "2026-10-30 12:08 UTC"
+   "title": "Why achieving your goals can leave you feeling so empty",
+   "published": "2026-10-30 12:15 UTC"
   },
   {
    "region": "Americas",
