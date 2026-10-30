@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T10:01:27Z",
+ "generatedAt": "2026-10-30T11:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Couper les réseaux sociaux pour éteindre les crises ou l’illusion d’une solution politique ?",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/couper-les-reseaux-sociaux-pour-eteindre-les-crises-ou-lillusion-dune-solution-politique-295188",
+     "published": "2026-10-30T10:18:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fabrice Lollia, Docteur en sciences de l'information et de la communication, chercheur associé laboratoire DICEN Ile de France, Université Gustave Eiffel"
+    },
+    {
      "title": "What animal bones in Malawi teach us about the social lives of people long ago",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Alex Bertacchi, Engineer in Mass Spectrometry and Stable Isotope Research, University of Kiel"
-    },
-    {
-     "title": "Corruption in South Africa’s police force is rife: why protecting whistleblowers is vital",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/corruption-in-south-africas-police-force-is-rife-why-protecting-whistleblowers-is-vital-295357",
-     "published": "2026-10-29T14:03:23Z",
-     "summary": "",
-     "stale": false,
-     "author": "Azwihangwisi Judith Mphidi, Adjunct Academic, University of South Africa"
     },
     {
      "title": "Civilians in Sudan’s El Obeid trapped between drones and incarceration",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "What animal bones in Malawi teach us about the social lives of people long ago",
-   "published": "2026-10-29 14:03 UTC"
+   "title": "Couper les réseaux sociaux pour éteindre les crises ou l’illusion d’une solution politique ?",
+   "published": "2026-10-30 10:18 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Corruption in South Africa’s police force is rife: why protecting whistleblowers is vital",
+   "title": "What animal bones in Malawi teach us about the social lives of people long ago",
    "published": "2026-10-29 14:03 UTC"
   },
   {
