@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T05:01:37Z",
+ "generatedAt": "2026-10-30T06:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Looking for bats after dark can help science – and change how we see them",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/looking-for-bats-after-dark-can-help-science-and-change-how-we-see-them-294468",
+     "published": "2026-10-30T05:00:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kelly Sheldrick, Bat Ecologist & PhD candidate, Murdoch University"
+    },
+    {
      "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Arlie Loughnan, Professor of Criminal Law, University of Sydney"
-    },
-    {
-     "title": "Josh Frydenberg’s autobiography might be one of the longest job applications in history",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/josh-frydenbergs-autobiography-might-be-one-of-the-longest-job-applications-in-history-294662",
-     "published": "2026-10-30T00:59:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Hawkins, Senior lecturer, Canberra School of Government, University of Canberra"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Looking for bats after dark can help science – and change how we see them",
+   "published": "2026-10-30 05:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
    "published": "2026-10-30 02:13 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Mushroom murderer Erin Patterson has lost her appeal and received a harsher sentence. Legal experts explain why",
    "published": "2026-10-30 01:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Josh Frydenberg’s autobiography might be one of the longest job applications in history",
-   "published": "2026-10-30 00:59 UTC"
   },
   {
    "region": "Oceania",
