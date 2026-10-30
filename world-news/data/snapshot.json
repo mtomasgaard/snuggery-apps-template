@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T17:01:34Z",
+ "generatedAt": "2026-10-30T18:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From 18th-century false ballots to the second JFK and double Dan Sullivans, a brief history of spoiler candidates and the unsuccessful legal challenges to them",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/from-18th-century-false-ballots-to-the-second-jfk-and-double-dan-sullivans-a-brief-history-of-spoiler-candidates-and-the-unsuccessful-legal-challenges-to-them-295504",
+     "published": "2026-10-30T17:14:04Z",
+     "summary": "",
+     "stale": false,
+     "author": "Drew Kurlowski, Associate Professor of Political Science, Coastal Carolina University"
+    },
+    {
      "title": "How the streets and a social media army led Lula to a historic win in Brazil",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Elizabeth Jane Beckett-Camarata, Professor of Public Administration, Penn State"
-    },
-    {
-     "title": "Why achieving your goals can leave you feeling so empty",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/why-achieving-your-goals-can-leave-you-feeling-so-empty-294825",
-     "published": "2026-10-30T12:15:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stacy Keltner, Chair of the Department of Interdisciplinary Studies and Professor of Philosophy, Kennesaw State University"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "From 18th-century false ballots to the second JFK and double Dan Sullivans, a brief history of spoiler candidates and the unsuccessful legal challenges to them",
+   "published": "2026-10-30 17:14 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "How the streets and a social media army led Lula to a historic win in Brazil",
    "published": "2026-10-30 16:37 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Allegheny County is reassessing every property – here’s how your tax bill is calculated now",
    "published": "2026-10-30 12:16 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Why achieving your goals can leave you feeling so empty",
-   "published": "2026-10-30 12:15 UTC"
   },
   {
    "region": "Americas",
