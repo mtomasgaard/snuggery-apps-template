@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T12:01:29Z",
+ "generatedAt": "2026-10-30T13:01:33Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "What is Sharia law, and why is it so controversial in the United States?",
+     "title": "Philadelphia’s Academy of Natural Sciences just closed – a blow for budding young scientists like me",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/what-is-sharia-law-and-why-is-it-so-controversial-in-the-united-states-294224",
-     "published": "2026-10-29T12:25:58Z",
+     "link": "https://theconversation.com/philadelphias-academy-of-natural-sciences-just-closed-a-blow-for-budding-young-scientists-like-me-293504",
+     "published": "2026-10-30T12:08:59Z",
      "summary": "",
      "stale": false,
-     "author": "Asma Uddin, Assistant Professor of Law, Michigan State University; Institute for Humane Studies"
+     "author": "Lili Mei Granda Argianas, Ph.D. Student in Physics, Washington University in St. Louis"
     },
     {
-     "title": "Political information increasingly comes from pop culture, outside of partisan silos but where male creators – and sometimes misogyny – dominate",
+     "title": "What the Cornell 7 sexual assault allegations reveal about how parents talk to their kids about rape",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/political-information-increasingly-comes-from-pop-culture-outside-of-partisan-silos-but-where-male-creators-and-sometimes-misogyny-dominate-294202",
-     "published": "2026-10-29T12:25:33Z",
+     "link": "https://theconversation.com/what-the-cornell-7-sexual-assault-allegations-reveal-about-how-parents-talk-to-their-kids-about-rape-294629",
+     "published": "2026-10-30T12:08:32Z",
      "summary": "",
      "stale": false,
-     "author": "Karrin Vasby Anderson, Professor of Communication Studies, Colorado State University"
+     "author": "Kathleen J Fitzgerald, Teaching Associate Professor of Sociology, University of North Carolina at Chapel Hill"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What is Sharia law, and why is it so controversial in the United States?",
-   "published": "2026-10-29 12:25 UTC"
+   "title": "Philadelphia’s Academy of Natural Sciences just closed – a blow for budding young scientists like me",
+   "published": "2026-10-30 12:08 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Political information increasingly comes from pop culture, outside of partisan silos but where male creators – and sometimes misogyny – dominate",
-   "published": "2026-10-29 12:25 UTC"
+   "title": "What the Cornell 7 sexual assault allegations reveal about how parents talk to their kids about rape",
+   "published": "2026-10-30 12:08 UTC"
   },
   {
    "region": "Americas",
