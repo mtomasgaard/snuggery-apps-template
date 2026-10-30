@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T19:01:39Z",
+ "generatedAt": "2026-10-30T20:01:30Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
+     "published": "2026-10-30T19:30:47Z",
+     "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
     {
      "title": "In Albania, rural youth are campaigning to solve local environmental problems",
      "source": "Global Voices",
@@ -74,16 +84,6 @@
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
      "stale": false,
      "author": "Uncloseted Media"
-    },
-    {
-     "title": "When the right to protest remains, but demonstrating comes at a price",
-     "source": "Global Voices",
-     "feed": "gv-western-europe",
-     "link": "https://globalvoices.org/2026/09/29/when-the-right-to-protest-remains-but-protesting-comes-at-a-price/",
-     "published": "2026-09-29T00:00:00Z",
-     "summary": "Since the 1950s, Europe’s democratic and human rights system has developed through the gradual strengthening of protections for political expression, assembly and dissent.",
-     "stale": false,
-     "author": "Elmira Lyapina"
     }
    ]
   },
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
+     "published": "2026-10-30T19:30:47Z",
+     "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
+     "stale": false,
+     "author": "Guest Contributor"
+    },
+    {
      "title": "A Myanmar journalist’s reflection: ‘When other people’s pain becomes part of you’",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -390,16 +400,6 @@
      "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
      "stale": false,
      "author": "ProBox"
-    },
-    {
-     "title": "What telecoms leave behind when they exit a country",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
-     "published": "2026-10-22T12:20:06Z",
-     "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": false,
-     "author": "Ranking Digital Rights"
     },
     {
      "title": "Protest as a pillar of democracy",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
+   "published": "2026-10-30 19:30 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "In Albania, rural youth are campaigning to solve local environmental problems",
    "published": "2026-10-29 13:40 UTC"
   },
@@ -711,12 +717,6 @@
    "source": "Global Voices",
    "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
    "published": "2026-10-17 08:07 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "When the right to protest remains, but demonstrating comes at a price",
-   "published": "2026-09-29 00:00 UTC"
   },
   {
    "region": "Americas",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
+   "published": "2026-10-30 19:30 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "A Myanmar journalist’s reflection: ‘When other people’s pain becomes part of you’",
    "published": "2026-10-29 18:13 UTC"
   },
@@ -891,12 +897,6 @@
    "source": "Global Voices",
    "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
    "published": "2026-10-27 21:10 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "What telecoms leave behind when they exit a country",
-   "published": "2026-10-22 12:20 UTC"
   },
   {
    "region": "Asia",
