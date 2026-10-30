@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T00:01:41Z",
+ "generatedAt": "2026-10-30T01:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -449,10 +449,10 @@
      "author": "Genevieve Le Ban, Casual Academic in the Discipline of History and Archaeology, Macquarie University"
     },
     {
-     "title": "Flying-foxes are turning up starving. Why are we still responding one crisis at a time?",
+     "title": "Flying-foxes are starving. Why are we still responding one crisis at a time?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/flying-foxes-are-turning-up-starving-why-are-we-still-responding-one-crisis-at-a-time-295339",
+     "link": "https://theconversation.com/flying-foxes-are-starving-why-are-we-still-responding-one-crisis-at-a-time-295339",
      "published": "2026-10-29T19:12:29Z",
      "summary": "",
      "stale": false,
@@ -925,7 +925,7 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Flying-foxes are turning up starving. Why are we still responding one crisis at a time?",
+   "title": "Flying-foxes are starving. Why are we still responding one crisis at a time?",
    "published": "2026-10-29 19:12 UTC"
   },
   {
