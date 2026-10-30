@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T20:01:30Z",
+ "generatedAt": "2026-10-30T21:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/zombies-are-real-just-ask-the-parasites-taking-over-the-bodies-and-brains-of-insects-and-rodents-leading-them-to-their-doom-292955",
+     "published": "2026-10-30T20:13:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tara Deans, Associate Professor of Biomedical Engineering, Georgia Institute of Technology"
+    },
+    {
      "title": "From 18th-century false ballots to the second JFK and double Dan Sullivans, a brief history of spoiler candidates and the unsuccessful legal challenges to them",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -111,16 +121,6 @@
      "summary": "After ending the first round 2.2 million votes behind his opponent, Flávio Bolsonaro, Lula won the election with a difference of 4 million votes, and will serve a fourth term as president",
      "stale": false,
      "author": "Global Voices Brazil"
-    },
-    {
-     "title": "Allegheny County is reassessing every property – here’s how your tax bill is calculated now",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/allegheny-county-is-reassessing-every-property-heres-how-your-tax-bill-is-calculated-now-291826",
-     "published": "2026-10-30T12:16:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Elizabeth Jane Beckett-Camarata, Professor of Public Administration, Penn State"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -721,6 +721,12 @@
   {
    "region": "Americas",
    "source": "The Conversation",
+   "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
+   "published": "2026-10-30 20:13 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
    "title": "From 18th-century false ballots to the second JFK and double Dan Sullivans, a brief history of spoiler candidates and the unsuccessful legal challenges to them",
    "published": "2026-10-30 17:14 UTC"
   },
@@ -729,12 +735,6 @@
    "source": "Global Voices",
    "title": "How the streets and a social media army led Lula to a historic win in Brazil",
    "published": "2026-10-30 16:37 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Allegheny County is reassessing every property – here’s how your tax bill is calculated now",
-   "published": "2026-10-30 12:16 UTC"
   },
   {
    "region": "Americas",
