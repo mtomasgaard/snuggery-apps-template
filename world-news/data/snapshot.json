@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-31T15:01:27Z",
+ "generatedAt": "2026-10-31T16:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "DPR Korea: Isolation deepens even as the country changes, says UN rights official",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168690",
+     "published": "2026-10-31T12:00:00Z",
+     "summary": "The Democratic People’s Republic of Korea (DPRK) is building factories and hospitals, rolling out smartphones and mobile banking, and passing new laws at an unprecedented rate. But its people are more cut off from the…",
+     "stale": false
+    },
+    {
      "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -370,15 +379,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168705",
      "published": "2026-10-29T12:00:00Z",
      "summary": "Myanmar’s human rights situation is “catastrophic”, the UN independent expert on the country warned at a press briefing Thursday, as the war spirals with no end in sight.",
-     "stale": false
-    },
-    {
-     "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168697",
-     "published": "2026-10-29T12:00:00Z",
-     "summary": "Opium production in Afghanistan has risen fivefold in a year. According to a UN survey released on Thursday, it’s the first significant increase since the Taliban banned poppy cultivation in 2022.",
      "stale": false
     },
     {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "DPR Korea: Isolation deepens even as the country changes, says UN rights official",
+   "published": "2026-10-31 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
    "published": "2026-10-30 19:30 UTC"
@@ -878,12 +884,6 @@
    "region": "Asia",
    "source": "UN News",
    "title": "Myanmar’s illicit economy fuels escalating violence, with civilians bearing the brunt",
-   "published": "2026-10-29 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "Afghanistan opium production jumps fivefold as farmers find ways round Taliban ban",
    "published": "2026-10-29 12:00 UTC"
   },
   {
