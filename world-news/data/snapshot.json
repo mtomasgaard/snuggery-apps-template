@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-31T05:01:28Z",
+ "generatedAt": "2026-10-31T06:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Somalia looks to the future as the UN's political mission closes",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168714",
+     "published": "2026-10-31T12:00:00Z",
+     "summary": "“The story of the UN's political engagement in Somalia has been one of persistence, partnership and adaptation,” Raisedon Zenenga, the UN Secretary-General's Deputy Special Representative for Somalia has said, as three…",
+     "stale": false
+    },
+    {
      "title": "South Sudan wants to hold elections in December: 3 major obstacles and some ways around them",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168696",
      "published": "2026-10-28T12:00:00Z",
      "summary": "Civilians in Sudan’s El Obeid live in constant fear of drone attacks by the Rapid Support Forces (RSF) and of a wave of arbitrary arrests by the Sudanese Armed Forces (SAF), UN-appointed independent investigators said…",
-     "stale": false
-    },
-    {
-     "title": "DR Congo: WHO urges sustained efforts as Ebola cases top 10,000",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168689",
-     "published": "2026-10-28T12:00:00Z",
-     "summary": "As Ebola cases in the Democratic Republic of the Congo (DRC) surpass the 10,000 mark, the World Health Organization (WHO) has underlined the need for continued efforts to contain spread of the disease.",
      "stale": false
     },
     {
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Somalia looks to the future as the UN's political mission closes",
+   "published": "2026-10-31 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "South Sudan wants to hold elections in December: 3 major obstacles and some ways around them",
    "published": "2026-10-30 16:36 UTC"
@@ -788,12 +794,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "Civilians in Sudan’s El Obeid trapped between drones and incarceration",
-   "published": "2026-10-28 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo: WHO urges sustained efforts as Ebola cases top 10,000",
    "published": "2026-10-28 12:00 UTC"
   },
   {
