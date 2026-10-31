@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-10-30T23:01:33Z",
+ "generatedAt": "2026-10-31T00:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -16,6 +16,15 @@
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
      "stale": false,
      "author": "Guest Contributor"
+    },
+    {
+     "title": "Ukraine: Oleshky ceasefire offers ‘hope’ for civilians as attacks on aid vehicles continue",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/10/1168712",
+     "published": "2026-10-30T12:00:00Z",
+     "summary": "Each day the ceasefire in Oleshky holds means hope for civilians in the city, the UN’s top humanitarian official said, stressing that those wishing to leave must be able to do so safely and voluntarily.",
+     "stale": false
     },
     {
      "title": "In Albania, rural youth are campaigning to solve local environmental problems",
@@ -65,15 +74,6 @@
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
      "stale": false,
      "author": "Ranking Digital Rights"
-    },
-    {
-     "title": "First human case of Shamonda virus reported in France as patient dies",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168652",
-     "published": "2026-10-22T12:00:00Z",
-     "summary": "A patient in France has died after being infected with Shamonda virus, the first recorded human case of the disease.",
-     "stale": false
     },
     {
      "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
@@ -678,6 +678,12 @@
   },
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Ukraine: Oleshky ceasefire offers ‘hope’ for civilians as attacks on aid vehicles continue",
+   "published": "2026-10-30 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "In Albania, rural youth are campaigning to solve local environmental problems",
    "published": "2026-10-29 13:40 UTC"
@@ -705,12 +711,6 @@
    "source": "Global Voices",
    "title": "What telecoms leave behind when they exit a country",
    "published": "2026-10-22 12:20 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "First human case of Shamonda virus reported in France as patient dies",
-   "published": "2026-10-22 12:00 UTC"
   },
   {
    "region": "Europe",
