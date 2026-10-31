@@ -1,0 +1,6 @@
+tools/.work/
+tools/.cache/
+tools/__pycache__/
+dist/
+.DS_Store
+screenshots/

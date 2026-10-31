@@ -27,7 +27,11 @@ import pathlib
 import shutil
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-NOT_APPS = {".github", "scripts", "zips", "scheduler"}
+# Folders with no browser copy. norway-3d is an app, held back on purpose: its browser copy would
+# send every visitor's height tiles to Kartverket's hoydedata.no, whose request rate Kartverket is
+# asked about first. It leaves this list once they have answered. Its ZIP is published either way
+# (publish-web.yml packs every app folder).
+NOT_APPS = {".github", "scripts", "zips", "scheduler", "norway-3d"}
 
 # ── The app this index belongs to ────────────────────────────────────────────
 # The index links the phone app these examples are made for, and borrows its

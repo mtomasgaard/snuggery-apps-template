@@ -116,15 +116,17 @@ jobs:
         if: steps.pages.outputs.on == 'true'
         run: python3 scripts/build_web.py --out _site
 
-      # One ZIP per app the site publishes, packed from the same folder the browser copy
-      # was copied from, with the same zip line as build-zips.yml (keep the two in step):
-      # so a ZIP here is the code ZIP with this run's data inside it, nothing added.
+      # One ZIP per app folder, packed from the same folder the browser copy was copied from,
+      # with the same folder rule and zip line as build-zips.yml (keep the two in step): so a ZIP
+      # here is the code ZIP with this run's data inside it, nothing added. An app that
+      # scripts/build_web.py holds back from the browser (its NOT_APPS) still gets its ZIP here.
       - name: Pack every app as a ZIP, with the data it was published with
         if: steps.pages.outputs.on == 'true'
         run: |
           mkdir -p _site/zips
-          for page in _site/*/index.html; do
-            name=$(basename "$(dirname "$page")")
+          for dir in */; do
+            name="${dir%/}"
+            case "$name" in .github|scripts|zips|_*) continue ;; esac   # _site/ (with its index.html) and _bundle/ are this job's own
             [ -f "$name/index.html" ] || continue
             (cd "$name" && zip -q -r -X "../_site/zips/$name.zip" . -x '.*' '*/.*' 'screenshots/*' 'tools/*' 'pipeline/*' 'scripts/*' 'dist/*' 'raw/*')
             echo "packed $name: $(wc -c < "_site/zips/$name.zip") bytes"
@@ -139,6 +141,12 @@ jobs:
       # - The members sit in one top folder, which names the Library folder they land in. Importing
       #   the next bundle into the same place then asks once about every app, and Replace keeps what
       #   each one saved, whatever the download was renamed to.
+      # - An online app (its miniapp.json lists network.resourceHosts) stays out as well, unless the
+      #   repository variable ONLINE_APPS_IN_BUNDLE is 'true'. Only a Snuggery that asks about an
+      #   app's sites shows its pictures; an earlier one imports the app and shows nothing where the
+      #   map should be. Set the variable once the Snuggery that runs online apps is the one on the
+      #   App Store: Settings → Secrets and variables → Actions → Variables, or
+      #   `gh variable set ONLINE_APPS_IN_BUNDLE --body true`. Its own ZIP is published either way.
       # - Stored, not compressed: each member is a ZIP already.
       # - Past the importer's bundle ceilings (64 apps; 20,000 files or 1 GiB unpacked, summed) the
       #   app would refuse it whole, so it is left out with a warning rather than failing the publish.
@@ -146,10 +154,34 @@ jobs:
         if: steps.pages.outputs.on == 'true'
         env:
           IN_APP: hello-live world-news power-hours global-wind outdoor-window running-dashboard finances
+          ONLINE_APPS_IN_BUNDLE: ${{ vars.ONLINE_APPS_IN_BUNDLE }}
         run: |
           rm -rf _bundle && mkdir -p "_bundle/More examples"
           for zip in _site/zips/*.zip; do
-            case " $IN_APP " in *" $(basename "$zip" .zip) "*) continue ;; esac
+            name=$(basename "$zip" .zip)
+            case " $IN_APP " in *" $name "*) continue ;; esac
+            # Online: miniapp.json lists a non-empty network.resourceHosts. A manifest that is there
+            # but cannot be read keeps its app out too: a doubt leaves an app out, never in.
+            kind=$(python3 -c 'import json, sys
+          try:
+              n = json.load(open(sys.argv[1], encoding="utf-8")).get("network")
+          except FileNotFoundError:
+              n = None
+          except Exception:
+              print("unreadable"); sys.exit()
+          print("online" if isinstance(n, dict) and n.get("resourceHosts") else "offline")' "$name/miniapp.json")
+            case "$kind" in
+              offline) ;;
+              online)
+                if [ "$ONLINE_APPS_IN_BUNDLE" != "true" ]; then
+                  echo "bundle: skipped $name, an online app (ONLINE_APPS_IN_BUNDLE is not 'true')"
+                  continue
+                fi
+                echo "bundle: included $name, an online app (ONLINE_APPS_IN_BUNDLE is 'true')" ;;
+              *)
+                echo "::warning::bundle: skipped $name, whose miniapp.json could not be read"
+                continue ;;
+            esac
             cp "$zip" "_bundle/More examples/"
           done
           fits=0

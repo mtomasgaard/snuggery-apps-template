@@ -1,0 +1,110 @@
+Norway in 3D: credits and licenses
+
+An online app. The map, the trails, the heights and the snow are read live, as pictures, from the
+five sites listed in miniapp.json; the cabins, the code, three.js and the font travel inside the
+app. Each license below was read at its source on 2026-10-16. The same credits are in the app's
+About.
+
+The credit line About prints first:
+Map, heights and trails: © Kartverket, CC BY 4.0; snow: seNorge, © NVE and MET Norway, NLOD; names and cabins: © OpenStreetMap contributors, ODbL 1.0
+
+
+MAP
+Topografisk norgeskart (WMTS layers topo, topograatone and toporaster), © Kartverket.
+Creative Commons BY 4.0 (https://creativecommons.org/licenses/by/4.0/); fees and access
+constraints: none. Read live from https://cache.kartverket.no/v1/wmts/1.0.0/ as 256 px Web Mercator
+tiles. Shown as served: composited over the plate where a tile is transparent, and in 3D draped over
+the terrain and lit by the sun the app computes.
+Kartverket's terms (https://www.kartverket.no/api-og-data/vilkar-for-bruk) ask that its name be shown
+wherever its products are used, as "© Kartverket", with a link where possible: the app's About does.
+
+HEIGHTS NEAR THE VIEW
+Nasjonal høydemodell, Digital terrengmodell DTM1 (1 m), © Kartverket.
+Open data: NLOD 2.0 (https://data.norge.no/nlod/no/2.0/) and Creative Commons BY 4.0
+(https://creativecommons.org/licenses/by/4.0/).
+Read live from the NHM_DTM_25833 ImageServer at https://hoydedata.no/arcgis/rest/services/, which
+resamples the model to Web Mercator tiles at zoom 12 to 15 (512 px; 1.14 m a pixel at zoom 15 and
+61.5° N) and, through a raster function the app sends with each request, packs each height into the
+color of a PNG. Adaptations: resampled by the service; unpacked by the app to the decimeter; where
+the model has no data, filled from the heights in the distance.
+
+HEIGHTS IN THE DISTANCE
+Terrain Tiles (Terrarium encoding), from the Mapzen terrain project, on the AWS Open Data registry,
+https://elevation-tiles-prod.s3.amazonaws.com/terrarium/. Over Norway the source is Kartverket's 10 m
+model. The attribution the project requires
+(https://github.com/tilezen/joerd/blob/master/docs/attribution.md), word for word for the parts
+this app shows (Norway, its neighbors and the sea around them):
+Mapzen; ArcticDEM terrain data DEM(s) were created from DigitalGlobe, Inc., imagery and funded under
+National Science Foundation awards 1043681, 1559691, and 1542736; Europe terrain data produced using
+Copernicus data and information funded by the European Union - EU-DEM layers; Global ETOPO1 terrain
+data U.S. National Oceanic and Atmospheric Administration; Norway terrain data © Kartverket; United
+States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological
+Survey.
+Adaptations: heights below the sea's surface drawn at the surface.
+
+TRAILS
+Turrutebasen (Tur- og friluftsruter), © Kartverket.
+Open data, no conditions apply to access and use
+(http://inspire.ec.europa.eu/metadata-codelist/ConditionsApplyingToAccessAndUse/noConditionsApply).
+Drawn live by Kartverket's WMS, https://wms.geonorge.no/skwms1/wms.friluftsruter2, layers Fotrute,
+Enkel_fotrute, Middels_fotrute, Krevende_fotrute and Ekspert_fotrute, in the service's own colors.
+Kartverket's own note on quality: "Åpne data. Datafangsten baserer seg stort sett på innmeldinger
+fra lag, foreninger og privatpersoner … Kvaliteten på turrutene avhenger av de målemetodene eller
+registreringsmetodene som er brukt for den enkelte turrute."
+
+SNOW
+seNorge, snow depth (layer sd), © NVE (Norges vassdrags- og energidirektorat) and MET Norway
+(Meteorologisk institutt). seNorge's terms (www.senorge.no, About, read 2026-10-16): "Data in the
+SeNorge are licensed under Norsk lisens for offentlige data (NLOD, https://data.norge.no/nlod/no/)
+which is compatible with CC Navngivelse 4.0 Norge (CC BY 4.0,
+https://creativecommons.org/licenses/by/4.0/ ). When you use data, you should refer to the licensee
+as much as possible. SeNorge maps should be shown together with the SeNorge logo, followed by a text
+describing that data has been retrieved from www.SeNorge.no." and "Errors and missing data may
+occur. NVE and SeNorge do not take responsibility for data that provides incorrect or misleading
+information. Note that real time data is not quality controlled."
+Read live from https://kart.nve.no/enterprise/services/seNorgeGrid_png/ImageServer/WMSServer, as
+pictures in the service's eight legend classes, read back by the app into how white the ground is
+drawn. While the snow is on, the app shows under the map: "Snow depth on <day>: seNorge, modeled
+by NVE and MET Norway on a 1 km grid, from www.senorge.no." The seNorge logo is not shown (the
+template carries no agency emblem); that is an open question for the owner.
+
+NAMES
+© OpenStreetMap contributors. Available under the Open Database License 1.0
+(https://opendatacommons.org/licenses/odbl/1-0/). data/labels.geojson is a derived database under
+the same license: the elements with a name tagged natural=peak, place=city, town or village,
+natural=glacier, and natural=water with water=lake or reservoir (bounding box at least 0.3 km²),
+inside Norway's border south of 71.5° N, retrieved through the Overpass API on 2026-10-16 (OSM base
+2026-10-16T14:22:18Z), reduced to name, kind, ele, population and box area. tools/build_labels.py
+rebuilds it. The credit "Names and cabins: © OpenStreetMap contributors, ODbL." stands under the
+map while either is on.
+
+ELEVATION COLORS
+batlow and oleron, from the Scientific colour maps by Fabio Crameri, through the cmcrameri package
+v1.9 (https://github.com/callumrollo/cmcrameri), MIT License; viridis, from matplotlib 3.9.2, by
+Stéfan van der Walt and Nathaniel Smith, CC0. Both texts are in vendor/ramps-LICENSE.txt. Cut to
+64 stops each by tools/build_ramps.py; oleron's land half only.
+
+CABINS
+© OpenStreetMap contributors. Available under the Open Database License 1.0
+(https://opendatacommons.org/licenses/odbl/1-0/); see https://www.openstreetmap.org/copyright.
+data/cabins.geojson is a derived database under the same license: the 980 elements tagged
+tourism=wilderness_hut or tourism=alpine_hut inside Norway's border, retrieved through the Overpass
+API (https://overpass-api.de/) on 2026-10-16 (OSM base 2026-10-16T12:23:05Z), reduced to their name,
+kind (dnt:classification, else the tourism tag), operator, network, capacity, ele, ut.no website and
+OSM id. tools/build_cabins.py in the template repository rebuilds it. The app shows the credit
+"Names and cabins: © OpenStreetMap contributors, ODbL." under the map while the cabins are on, as
+OpenStreetMap's attribution guidelines ask.
+
+RENDERING
+three.js r186, MIT License (vendor/three-LICENSE.txt). The copy in vendor/ is byte for byte the one
+vendored in the Besseggen and Anatomy mini-apps in this repository; nothing in it reaches the network.
+
+FONTS
+Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.
+The face carries its copyright in its license file, fonts/OFL.txt: "Copyright 2023 The Ysabeau
+Project Authors (https://github.com/CatharsisFonts/Ysabeau)". Both files are byte for byte the
+template's house copies (Global Weather's fonts/, cut from google/fonts commit
+9710da1eacb3be272583c3224dcb70f9da6eadbb); the face declares no Reserved Font Name.
+
+This is a planning and orientation tool. It has no position fix, no compass and no live weather,
+and it is not a navigation aid. Carry a map and a compass, and check the conditions before you go.

@@ -16,7 +16,7 @@ a small JSON file here → the file reaches your phone → you open the app and 
 today's numbers. It reaches the phone one of two ways, and which is your choice:
 **Snuggery fetches it** from an address you gave it, or **a Shortcut delivers it**.
 [Getting the data to the phone](#getting-the-data-to-the-phone-two-ways) has the
-trade-offs. Either way, the apps themselves never go online.
+trade-offs. Either way, the app itself fetches nothing: Snuggery or the Shortcut does.
 
 **Click *Use this template* to make your own copy, and make it private** if any
 app here will ever hold something personal. A repository is as private as its
@@ -27,7 +27,7 @@ start private than to remember to switch before the wrong commit.
 
 ## What is in here
 
-Nineteen complete apps. All are examples — none holds anybody's real data. Copy
+Twenty-one complete apps. All are examples — none holds anybody's real data. Copy
 one, delete them all, or ignore them.
 
 **Nine of them cost you nothing to run.** Hello Live, World News, Power Hours,
@@ -45,15 +45,17 @@ real copy, so its entry below and its own docs say so instead. **Anatomy** (25 M
 seismic), a mountain ridge and our galaxy, each in 3D. They need
 nothing at all, and they live here rather than in Snuggery's built-in starter
 pack precisely because of that size — install any of them the same way as every app on this page:
-three taps, just below.
+three taps, just below. **Norway in 3D** and **Hello Map** are the two online apps: their maps are pictures from the sites
+they list (five for Norway in 3D, heights included; one for Hello Map), which Snuggery shows only after
+you allow them ([online apps](#online-apps-maps-and-pictures-from-sites-you-allow)).
 
 ## Install any of them on your phone — three taps
 
 Open an app's **Install** link in Safari on the iPhone, then do the three steps under the table.
 
 **Or get them all at once:** [**Get them all**](https://mtomasgaard.github.io/snuggery-apps-template/zips/more-examples.zip)
-(about 120 MB) is every app below that Snuggery does not install itself, in one file that opens as
-one folder, *More examples*. It needs Snuggery 1.2 or later; 1.1 opens it as a folder of ZIPs. The
+(about 120 MB) is every app below that Snuggery does not install itself, except the two online ones, in
+one file that opens as one folder, *More examples*. Install Norway in 3D and Hello Map on their own. It needs Snuggery 1.2 or later; 1.1 opens it as a folder of ZIPs. The
 seven live examples come with the app: Create → *Install the live examples*.
 
 | App | Link | Size | Needs |
@@ -77,6 +79,8 @@ seven live examples come with the app: Create → *Install the live examples*.
 | US Quakes | [**Install US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/zips/us-quakes.zip) | 6.8 MB | nothing (the feed refreshes here on an hourly schedule, which GitHub runs a few times a day) |
 | Volve | [**Install Volve**](https://mtomasgaard.github.io/snuggery-apps-template/zips/volve.zip) | 33 MB | nothing |
 | Warming World | [**Install Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/zips/warming-world.zip) | 1.3 MB | nothing (NASA's monthly release refreshes here) |
+| Norway in 3D | [**Install Norway in 3D**](https://mtomasgaard.github.io/snuggery-apps-template/zips/norway-3d.zip) | 1.1 MB | your *Allow* for its five sites |
+| Hello Map | [**Install Hello Map**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-map.zip) | tiny | your *Allow* for its one site |
 
 1. **On the iPhone, in Safari**, tap an app's **Install …** link in the table above (or its
    **Get the ZIP** link further down). If Safari asks whether to download it, tap **Download**.
@@ -214,6 +218,18 @@ The Solar System, the Sun's neighborhood and the Milky Way in one continuous 3D 
 
 **Needs:** nothing · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/milky-way.zip) (6.5 MB) · Make it yours: [`milky-way/NOTES.md`](milky-way/NOTES.md)
 
+### Norway in 3D
+
+All of Norway from Kartverket's open data, in 2D and 3D: the topographic map, the marked foot routes graded by difficulty, 980 mountain cabins, the terrain at up to 1 m near the view, the real sun with the shadows the mountains cast, steepness, a day's modeled snow depth, a viewshed from any point and an elevation profile along any line. **Online**: the map and the heights are pictures from five sites it lists, which Snuggery shows only after you allow them; kept offline, it opens and says it cannot reach the map. Nothing of the map travels in the ZIP. Not a navigation tool: it has no position fix, no compass and no live weather.
+
+**Needs:** your *Allow* for its five sites · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/norway-3d.zip) · Make it yours: [`norway-3d/NOTES.md`](norway-3d/NOTES.md)
+
+### Hello Map
+
+The smallest online app: a live topographic map of the United States from the U.S. Geological Survey's The National Map, with a quadrangle's collar over it (ticks and degrees on the edges, small crosses inside), a scale bar, the coordinates of any point you tap, and one calm sentence when the map cannot load. **Online**: the map is pictures from one site, `basemap.nationalmap.gov`, which Snuggery shows only after you allow it; kept offline, it opens, draws its collar and scale, and says it cannot reach the map. It is to online apps what Hello Live is to live data: copy it, change the one site, and you have your own. Not a navigation tool: it does not know where you are.
+
+**Needs:** your *Allow* for its one site · [**Get the ZIP**](https://mtomasgaard.github.io/snuggery-apps-template/zips/hello-map.zip) · Make it yours: [`hello-map/NOTES.md`](hello-map/NOTES.md)
+
 
 ![Running Dashboard](running-dashboard/screenshots/app.png)
 ![Finances](finances/screenshots/app.png)
@@ -249,7 +265,7 @@ lists everything that belongs to it.
 
 ## Open them in a web browser
 
-Every app also runs straight in a browser: no phone, no Snuggery, nothing to install. It is the
+Every app but Norway in 3D also runs straight in a browser: no phone, no Snuggery, nothing to install. It is the
 same app from the same folder, and it shows the data last published here. Open the
 [**index of every app**](https://mtomasgaard.github.io/snuggery-apps-template/), or one directly:
 
@@ -274,6 +290,7 @@ same app from the same folder, and it shows the data last published here. Open t
 | US Quakes | [**Open US Quakes**](https://mtomasgaard.github.io/snuggery-apps-template/us-quakes/) |
 | Volve | [**Open Volve**](https://mtomasgaard.github.io/snuggery-apps-template/volve/) |
 | Warming World | [**Open Warming World**](https://mtomasgaard.github.io/snuggery-apps-template/warming-world/) |
+| Hello Map | [**Open Hello Map**](https://mtomasgaard.github.io/snuggery-apps-template/hello-map/) |
 
 The big 3D apps download their whole size on first open, just as the ZIP does. What only Snuggery
 has (*Ask*, editing an app's files, the Shortcut that refreshes Outdoor Window from where you are)
@@ -312,7 +329,10 @@ JSON file, fetched by Snuggery or copied by a Shortcut). The picture draws the S
 The same picture with the data moving along the lines: [`data-flow.html`](data-flow.html) — open it
 in a browser, or keep it in Snuggery beside the apps; it needs no script.
 
-What never happens: the mini-app cannot reach the network or start a shortcut by itself. The jobs
+What never happens: the mini-app fetches nothing, posts nothing and cannot start a shortcut by
+itself. An [online app](#online-apps-maps-and-pictures-from-sites-you-allow) is the one exception,
+and a narrow one: it can show pictures and fonts from the sites you allowed, and each of those sites
+sees what the app asks it for. The jobs
 run inside GitHub. On the phone, the fetch runs either inside the Shortcuts app with your own
 accounts, or inside Snuggery for a connection you set up and approved, and only to that address.
 Nothing goes to Snuggery's developer on either path. If you sign in to GitHub inside Snuggery,
@@ -479,15 +499,93 @@ however it arrives, Snuggery reads the list and posts the notification itself.
 
 Leave the key out when nothing in the data is worth interrupting someone for.
 
+## Online apps: maps and pictures from sites you allow
+
+An app can show map tiles, pictures and web fonts from a few named sites, and nothing else from the
+web. It lists them in its `miniapp.json`:
+
+```json
+{
+  "schemaVersion": 1,
+  "name": "My Map",
+  "entryPoint": "index.html",
+  "version": "1.0",
+  "network": { "resourceHosts": ["basemap.nationalmap.gov"] }
+}
+```
+
+Nothing loads from them until you allow it. When you import or first open the app, Snuggery lists
+every site and asks: **Allow** or **Keep Offline**. The app's ⋯ menu (*Sites This App Uses…*) and
+Settings → Connections change it later, and **Make Offline** there is never locked. A new version
+of the app with the same list keeps your answer; a different list asks again, with nothing allowed.
+A restored backup carries no approval, so each online app asks again.
+
+- **For:** a live map, or pictures that change, without carrying thousands of tiles in the ZIP.
+- **Against:** each site receives a request for every picture the app shows, with your IP address
+  and the time, and the app chooses what each request asks for, which can include what you type
+  into it or data that reached it. A site may also see a code that stays the same for that app.
+  Snuggery's developer sees none of it.
+- **Still impossible:** `fetch()`, XHR, WebSockets, posting a form, scripts, stylesheets, audio or
+  video from any site, frames from the web, and any site the app did not list. The app's data still
+  arrives through `data/`, [the two ways](#getting-the-data-to-the-phone-two-ways).
+
+**The list.** Host names only: no `https://`, no paths, no ports, no `*` wildcards, no IP addresses,
+no `xn--` names, at most eight. Anything else is ignored, and the app's Diagnostics says so; the
+import still succeeds. Snuggery also refuses sites that pass a request on to any address you name
+(image proxies, CORS proxies, archives) and storage that serves everyone's files under one name:
+use a bucket's own host (`elevation-tiles-prod.s3.amazonaws.com`), never `s3.amazonaws.com`.
+
+**No private data in an online app.** A data source with a key, a GitHub sign-in or an address on
+your own network, and sites from the web, never share an app, in either order: what the app holds
+could otherwise leave in a picture's address. Such an app stays offline. Keep a private dashboard
+and a live map as two apps.
+
+**Pick sites that allow it.** Use sites whose terms allow use from an app and that need no key, such
+as a public mapping agency's tiles, and credit each one in the app's About the way its terms ask.
+Never put a key or token in an app or in a picture's address: anyone with the ZIP can read it. Some
+tile servers ask every app to identify itself by name; a mini-app's requests name nobody, so leave
+those servers to apps that can. A license to show something live is not a license to put it in a
+ZIP (below).
+
+**What it costs the code.** Once online, the page runs under a strict content security policy:
+
+- every script in a `.js` file, loaded with `<script src="…">` or as a module; no inline
+  `<script>`, no `onclick="…"` or other `on…` attributes, no `javascript:` links, no inline import
+  map (use relative import paths);
+- no `eval`, no `new Function`, no strings passed to `setTimeout` or `setInterval`;
+- workers only from a `.js` file in the folder (`new Worker("worker.js")`, with
+  `{ type: "module" }` if you like), never from a `blob:` or `data:` address. If a library builds
+  its worker from a blob, use its separate-worker build;
+- to read a picture's pixels in a canvas (heights packed into a PNG, say), set
+  `img.crossOrigin = "anonymous"` before `src`. It works only with sites that send
+  `Access-Control-Allow-Origin`;
+- inline `<style>` and `style="…"` are fine.
+
+Snuggery never rewrites an app's pages. If one has scripts written into them, the Allow sheet and
+Diagnostics say so, and those scripts stop running once the app is online. Ask your agent to move
+them into `.js` files. Create's *Shows maps and images from the web* switch asks for all of this
+from the start.
+
+**Test it under the same rules.** Norway in 3D's [`tools/serve.mjs`](norway-3d/tools/serve.mjs)
+serves its folder with the header Snuggery sends an online app, so a browser enforces what the phone
+does. Copy it into a new app's `tools/`.
+
+**Design the offline face too.** Until the sites are allowed, or when the phone has no signal, say
+so in one calm sentence where the map would be, and keep the rest of the app working. Norway in 3D
+says *"No map tiles could be loaded. If this app is offline in Snuggery, allow its sites to see the
+map."* Never a grid of broken pictures, and never a spinner that waits forever.
+
 ---
 
 ## Layout
 
 ```
 <app-folder>/            one folder per app, named however you like — may hold several files
-  index.html             the whole app: inline CSS and JS, no build step
+  index.html             the whole app: CSS and JS inline or beside it, no build step;
+                         an online app keeps its JS in .js files
   miniapp.json           display name and entry point; optionally its public data
-                         address (dataSource, above)
+                         address (dataSource, above) and the sites it shows
+                         pictures from (network, above)
   data/snapshot.json     THE ONLY FILE THAT CHANGES ON THE PHONE
   screenshots/           pictures for this README; left out of the ZIP, so they
                          cost the phone nothing
@@ -510,7 +608,7 @@ Any folder can be deleted once you no longer need it as a reference, together
 with its scripts and its workflow.
 
 **An app is not always one file.** The smallest working app is a single `index.html` with its
-CSS and JS inline. Hello Live is `index.html` plus `style.css`, `app.js`, two modules in `js/` and the
+CSS and JS inline (an online app needs its JS in a file of its own). Hello Live is `index.html` plus `style.css`, `app.js`, two modules in `js/` and the
 house face in `fonts/`. Running Dashboard is `index.html` plus `app.js`, `style.css`, three modules in
 `js/`, the house face in `fonts/`, and a `data/` folder holding a snapshot, six session streams, and about a
 megabyte of map tiles. The ZIP takes the app's folder whole either way, less
@@ -543,9 +641,13 @@ the folders marked above as left out — still no build step.
   is what makes an app opened this morning show this morning's numbers. Snuggery fires the
   same event when new data lands while the app is open — so re-render in place, keeping the
   selected tab and scroll position, rather than rebuilding the page.
-- **No network from the app.** A mini-app cannot reach the network, so
-  everything it draws — map tiles, fonts, textures — travels inside its ZIP, and
-  it fetches nothing but files in its own folder.
+- **Offline unless it has to be online.** A mini-app that lists no sites
+  reaches nothing on the web, so everything it draws — map tiles, fonts,
+  textures — travels inside its ZIP, and it fetches nothing but files in its own
+  folder. Go online only for what cannot travel: a live map, pictures that
+  change, more tiles than a ZIP can hold. Then list those sites and no others
+  ([online apps](#online-apps-maps-and-pictures-from-sites-you-allow)), and keep
+  the app's own data in `data/` as before.
 - **A license to fetch live is not a license to redistribute.** A tile server or
   feed that lets your copy fetch from it may still forbid shipping what it
   returned inside a downloadable archive, or republishing it in a public

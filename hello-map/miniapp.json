@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "name": "Hello Map",
+  "entryPoint": "index.html",
+  "description": "The smallest online app: a live USGS topographic map of the United States from one site you allow, with a quadrangle's collar, a scale and a calm offline state.",
+  "version": "1.0",
+  "network": {
+    "resourceHosts": [
+      "basemap.nationalmap.gov"
+    ]
+  }
+}

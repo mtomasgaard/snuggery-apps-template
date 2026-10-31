@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "name": "Norway in 3D",
+  "entryPoint": "index.html",
+  "description": "All of Norway in 3D from Kartverket's 1 m heights and map: trails, cabins, the real sun and shadows, steepness, snow, viewsheds and profiles.",
+  "version": "1.2",
+  "network": {
+    "resourceHosts": [
+      "cache.kartverket.no",
+      "wms.geonorge.no",
+      "hoydedata.no",
+      "elevation-tiles-prod.s3.amazonaws.com",
+      "kart.nve.no"
+    ]
+  }
+}

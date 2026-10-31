@@ -1,0 +1,31 @@
+Hello Map: sources, licenses and credits. The same words are in About, inside the app.
+
+Map: USGS The National Map.
+
+The map is USGS The National Map's topographic base map (the USGSTopo service) and its imagery with
+the topographic map over it (the USGSImageryTopo service), shown as served, as 256 px pictures from
+basemap.nationalmap.gov. Nothing of it travels inside this folder.
+
+The acknowledgment USGS asks for, word for word:
+Map services and data available from U.S. Geological Survey, National Geospatial Program.
+
+USGS's terms, read at www.usgs.gov/faqs/what-are-terms-uselicensing-map-services-and-data-national-map
+on 19 Oct 2026: "Map services and data downloaded from The National Map are free and in the public
+domain. There are no restrictions; however, we request that the following acknowledgment statement
+of the originating agency be included in products and data derived from our map services when
+citing, copying, or reprinting: "Map services and data available from U.S. Geological Survey,
+National Geospatial Program.""
+
+The topographic map service names its sources as the National Boundaries Dataset, 3DEP Elevation
+Program, Geographic Names Information System, National Hydrography Dataset, National Land Cover
+Database, National Structures Dataset and National Transportation Dataset; USGS Global Ecosystems;
+U.S. Census Bureau TIGER/Line data; USFS Road data; Natural Earth Data; U.S. Department of State HIU;
+and NOAA National Centers for Environmental Information. The imagery service names The National
+Map's orthoimagery and US Topo.
+
+This app is not made or endorsed by the U.S. Geological Survey.
+
+The collar (the ticks, crosses and degree labels), the scale bar and the coordinates are this app's
+own, worked out from the view in Web Mercator.
+
+Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.

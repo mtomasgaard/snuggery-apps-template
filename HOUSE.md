@@ -1106,6 +1106,58 @@ apps' `NOTES.md` quote each source's own terms and win where they ask for more.
 | **Software licenses** (MIT, GPL) | three.js (Milky Way, Besseggen, Anatomy, Snug Kart), the tools behind some data | The notice ships with the software. | Unchanged: `vendor/` keeps the license files, About names the library. |
 | **No license, or not a license** | Garmin Connect and the coaching routine (Running Dashboard), the household's banks (Finances), Norges Bank's rates (Finances), the repository's own job (Hello Live) | Nothing the app can point at. | The words the band carried move to About word for word; Norges Bank stays beside its rate, as `NOTES.md` sets out. |
 
+### 4.16 An online app
+
+An app whose `miniapp.json` lists `network.resourceHosts` shows pictures, map tiles and fonts from
+those sites once the person allows them, and nothing else from the web (the README's *Online
+apps*). It is a house app like any other, with these rules added. Norway in 3D is the reference;
+a citation names its file.
+
+**Rules (must).**
+
+1. **The offline face.** The app opens and works when its sites are not allowed (before *Allow*,
+   after *Keep Offline* or *Make Offline*), when the phone has no signal, and on a network that
+   blocks them. Where the picture would be, one calm sentence on the notice plate (§4.9) says what
+   is missing and what to do about it, in the app's own words: Norway in 3D's
+   `No map tiles could be loaded. If this app is offline in Snuggery, allow its sites to see the map.`
+   (`norway-3d/app.js`, `status()`). Never a grid of broken pictures, never a blank view that
+   passes for data. Whatever works without the sites keeps working: the cabins, the names, the
+   sun, About.
+2. **Loading never stalls silently.** While pictures are in flight, the status line (§4.2, §4.15)
+   says so with a count (`Loading 12 tiles…`), and says when everything in view has arrived. A
+   picture counts as failed only after the app's own retries, with a timeout on each request so a
+   hung connection cannot hold a lane forever; then the sentence of rule 1 replaces the count, never
+   a spinner (`norway-3d/js/loader.js`: six requests in flight, two retries, 25 s each).
+3. **About lists every site.** *Sources and credits* names each host the app lists, what it
+   supplies and its license, in the words its terms ask for (§4.8, §4.15); *How the data gets
+   here* says the app is online, that Snuggery shows those sites only after the person allows
+   them, and that each picture's address says what is being looked at. The count of sites in About,
+   `NOTES.md` and the credits file equals the count in `miniapp.json`.
+4. **`tools/serve.mjs` serves the folder under the online policy**: every response carries the
+   Content-Security-Policy Snuggery sends an online app, built from `miniapp.json`'s hosts, so
+   `shoot.mjs` and a person testing in a browser meet the phone's rules
+   (`norway-3d/tools/serve.mjs`). The shoot runs the app online, then again with the hosts
+   withheld, and shoots the offline face in both themes. Norway in 3D's shoot does not do the
+   second run yet; its next pass adds it.
+5. **`tools/check.mjs` adds four checks** for an online app, and §7.1 item 2 is amended for it:
+   - **one set of hosts**: the hosts the code names (one constant, `js/sources.js`'s `HOSTS` in
+     Norway in 3D) equal `miniapp.json`'s `network.resourceHosts` as a set; every `https://`
+     address in shipped code names one of them, every one is used, and there is no `http://` at
+     all. That replaces item 2's "no address with a scheme" for these hosts only;
+   - **the hosts as Snuggery reads them**: at most eight, each a plain host name with no `xn--`
+     label, no IP address and no private-network name;
+   - **the policy, pinned**: the header `serve.mjs` sends equals a literal pinned in the check,
+     the same literal Snuggery's own tests pin, so a change to the online policy fails in both
+     places;
+   - **no inline code**: no shipped page has an inline `<script>`, an `on…=` attribute or a
+     `javascript:` address (an online app's inline scripts stop running).
+6. **No key, no private data.** No key or token anywhere in the folder or in an image address, and
+   no `dataSource` that needs one: Snuggery keeps such an app offline.
+
+**Should.** Ask for pictures at the size they are drawn, and only for what is in view or just
+ahead of it; drop what is no longer wanted before it is sent. A public service pays for every
+request, and the person's phone pays for every byte.
+
 ---
 
 ## 5. What a signature is
@@ -1290,7 +1342,8 @@ Every app's check asserts at least these (CHECK 1-31):
    for byte to their source instead. So are the links a source's own terms ask for, as static
    anchors in `index.html` and nowhere else (Outdoor Window's two: the Open-Meteo link in the footer,
    §4.15 exception 1, and the license link in About, §4.8), each pinned by its exact string and
-   counted once; nothing is ever fetched from them.
+   counted once; nothing is ever fetched from them. An online app's own hosts are the third
+   exception, checked as §4.16 rule 5 says.
 3. **Every reference is relative**, inside the folder, and present: `import`, `src`, `href`,
    `url(`, `fetch(` and every data path the code names (CHECK 74-89).
 4. **The folder contract**: `assets/`, `data/` and `fonts/` hold exactly the files the app lists;
@@ -1671,6 +1724,20 @@ what is.
 - [ ] The ground is §12's for this app; a white app's palette script ran with `#ffffff` and passes.
 - [ ] `miniapp.json`'s version is higher than the one the pass started from, by §13's rule.
 
+**An online app (§4.16), where `miniapp.json` lists `network.resourceHosts`**
+
+- [ ] `check.mjs` carries §4.16's four checks and they pass: one set of hosts, the hosts as
+  Snuggery reads them (at most eight), the pinned policy equal to Snuggery's, no inline code.
+- [ ] `tools/serve.mjs` sends the online policy, and the shoot ran under it with no CSP violation
+  and no request to a host outside the list.
+- [ ] The offline face, looked at in both themes with the hosts withheld: one sentence on the
+  plate saying what to do, no broken pictures, everything that needs no site still working.
+- [ ] The status line counts pictures in flight and settles; a failure becomes the sentence after
+  the retries, never a spinner.
+- [ ] About names every host, what it supplies and its license; the count of sites in About,
+  `NOTES.md` and the credits file equals `miniapp.json`'s.
+- [ ] No key or token in the folder or in any image address, and no keyed `dataSource`.
+
 **The camera (§7.4)**
 
 - [ ] Every string in the app's row of §7.4 is present, with its role, in both themes, or the lead's
@@ -1691,7 +1758,9 @@ what is.
 - [ ] Frame time while idle, playing and scrubbing; memory after five minutes; background and
   return; a delivery of new data while open; focus mode in Snuggery's full screen, with the ghost
   key and Snuggery's own exit control both reachable; VoiceOver on the track and on a tap; the phone
-  on its side. Each item names the device and the iOS version it needs.
+  on its side. An online app adds: *Allow*, then the pictures drawn; *Make Offline*, then the
+  offline face; first view on a mobile network. Each item names the device and the iOS version it
+  needs.
 
 ---
 

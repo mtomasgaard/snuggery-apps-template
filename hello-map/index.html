@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
+<title>Hello Map</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- An online app, as small as one can be: the map is pictures from the one site in miniapp.json,
+     loaded as they are needed; everything else travels inside the folder. No script is written into
+     this page, and no element carries an on…= handler: an online app runs under a strict policy that
+     runs neither (NOTES.md). The look is ART.md. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Hello Map</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Loading the map&hellip;</button></div>
+  <span class="sr" id="stamp-hint">Opens About this map.</span>
+  <div class="hkeys" id="hkeys">
+    <button class="textkey framed units" id="units" type="button" aria-label="Change units, now kilometers" translate="no">km</button>
+    <button class="textkey framed" id="btn-about" type="button" aria-haspopup="dialog">About</button>
+  </div>
+</header>
+
+<main class="plate" id="plate">
+  <canvas id="map" tabindex="0" role="application" aria-roledescription="map" aria-label="Map" aria-describedby="map-help"></canvas>
+  <canvas id="overlay" aria-hidden="true"></canvas>
+  <span class="sr" id="map-help">Drag to move the map, pinch to zoom, double-tap to zoom in, tap a place for its coordinates. With a keyboard, the arrow keys move it, plus and minus zoom, and Enter marks the middle.</span>
+
+  <!-- The layer switch: the one control the view needs, so it stays in focus mode. -->
+  <div class="viewkey" id="viewkey" role="radiogroup" aria-label="Map layer">
+    <button type="button" role="radio" id="layer-map" aria-checked="true" aria-describedby="layer-map-desc">Map</button>
+    <button type="button" role="radio" id="layer-imagery" aria-checked="false" aria-describedby="layer-imagery-desc">Imagery</button>
+  </div>
+  <span class="sr" id="layer-map-desc">The topographic map: contours, water, roads, trails and names.</span>
+  <span class="sr" id="layer-imagery-desc">Aerial imagery with the topographic map over it.</span>
+
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5v11M2.5 8h11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="btn-country" aria-label="Show the whole country"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.5 5V1.5H5M11 1.5h3.5V5M14.5 11v3.5H11M5 14.5H1.5V11"/><path d="M4.5 6.2h7M4.5 8h7M4.5 9.8h7"/><path d="M6.2 4.5v7M8 4.5v7M9.8 4.5v7"/></svg></button>
+    </div>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
+    </div>
+  </div>
+
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
+    </svg>
+  </button>
+
+  <section class="card" id="card" hidden aria-labelledby="card-place">
+    <div class="card-kind"><span id="card-place"></span><button class="card-close" id="card-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <p class="card-fig" id="card-fig"></p>
+    <dl id="card-rows"></dl>
+  </section>
+
+  <div class="notice" id="notice" role="alert" hidden></div>
+</main>
+
+<!-- The caption band: the scale bar and the caption line, which prints the collar's step. -->
+<section class="caption" id="caption" aria-label="Caption">
+  <div class="inst" id="inst">
+    <span id="scale-len"></span><span class="sbar" id="scale-bar" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="scale-sub"></span>
+  </div>
+  <div class="capbox"><p id="cap"></p></div>
+</section>
+
+<div class="dlg" id="about" hidden>
+  <div class="dlg-panel" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="dlg-head"><h2 id="about-title">About this map</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="dlg-body">
+      <p class="ab-lead"><b>Not a navigation tool.</b> It does not know where you are, and a map on a screen is no substitute for a paper map and a compass on the day.</p>
+      <section>
+        <h3>What the picture is</h3>
+        <p>The National Map's topographic base map from the U.S. Geological Survey, as the site serves it: contours, water, roads, trails, boundaries and names, at fourteen scales from the whole country to a few city blocks. Imagery shows aerial photographs with the same lines and names over them. Beyond the United States and its territories the site has only its whole-world picture, so there this app shows that picture enlarged and says so.</p>
+        <p>The ticks on the map's four edges, with the degrees and minutes at the left and at the foot, and the small crosses inside, are this app's own: the collar of a USGS quadrangle, drawn for the view on screen. They stand at every whole step of latitude and longitude, the smallest of 1&#8243;, 2&#8243;, 5&#8243;, 10&#8243;, 15&#8243;, 20&#8243;, 30&#8243;, 1&#8242;, 2&#8242;, 2.5&#8242;, 5&#8242;, 7.5&#8242;, 15&#8242;, 30&#8242;, 1°, 2°, 5°, 10° and 20° that keeps them at least 120&#8239;px apart, and the caption line names the step. The 7.5&#8242; and 2.5&#8242; steps are the quadrangle's own: a 1:24&#8239;000 quadrangle covers 7.5&#8242; of latitude and of longitude, and marks a cross every 2.5&#8242;.</p>
+        <p>The map is in Web Mercator, the projection its pictures are cut in, so its scale grows toward the poles. The scale bar is true along the latitude it names, the middle of the view; the ticks and crosses are true positions everywhere. A tapped point's coordinates are read from the same projection, to four decimal places, about 11&#8239;m.</p>
+        <p>The map keeps the site's colors in both of the phone's themes, and the collar keeps its one style over it; only the chrome around the map follows the theme. That is a display choice.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="ab-data"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p id="about-credit-line"></p>
+        <h4>Map</h4>
+        <p>Map services and data available from U.S. Geological Survey, National Geospatial Program.</p>
+        <p>Map services and data downloaded from The National Map are free and in the public domain. The topographic map service names its sources as the National Boundaries Dataset, 3DEP Elevation Program, Geographic Names Information System, National Hydrography Dataset, National Land Cover Database, National Structures Dataset and National Transportation Dataset; USGS Global Ecosystems; U.S. Census Bureau TIGER/Line data; USFS Road data; Natural Earth Data; U.S. Department of State HIU; and NOAA National Centers for Environmental Information. The imagery service names The National Map's orthoimagery and US Topo. Shown as served, as 256&#8239;px pictures from basemap.nationalmap.gov.</p>
+        <p>This app is not made or endorsed by the U.S. Geological Survey.</p>
+        <h4>Type</h4>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>This is an online app. Snuggery lets it show pictures from the one site it lists, basemap.nationalmap.gov, once you allow it, and nothing else: no other site, no scripts or styles from the web, and nothing sent. Each piece of the map is a picture 256&#8239;px square, asked for while you look, at most six at a time, and kept while the app is open. The site sees each request, with your IP address, and each address says which area and which scale is on screen.</p>
+        <p>If the site is not allowed, or the phone is offline, the map says so in one sentence; the collar, the scale and a tapped point's coordinates still work, because this app works them out itself. To see the map, allow the site in Snuggery: open the app's menu and choose Sites This App Uses.</p>
+        <p>Drag to move the map, pinch to zoom toward your fingers, and double-tap to zoom in on a place. Tap a place for its coordinates. With a keyboard, the arrow keys move the map, plus and minus zoom, and Enter marks the middle. The units key cycles the scale between kilometers and miles. The last key in the column, or the F key, hides the controls; the corner key that stays, or Escape, brings them back.</p>
+      </section>
+      <button type="button" class="textkey dlg-foot" data-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

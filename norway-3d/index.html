@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e8eef0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141d21" media="(prefers-color-scheme: dark)">
+<title>Norway in 3D</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- An online app: the map, the trails, the heights and the snow are pictures from the five sites
+     in miniapp.json, loaded as they are needed; everything else travels inside the folder. No script
+     is written into this page (the online policy runs none). The look is ART.md; the data, NOTES.md. -->
+
+<header class="head" id="head">
+  <h1 translate="no">Norway in 3D</h1>
+  <div class="stamp-home" id="stamp-home"><button class="stamp" id="stamp" type="button" aria-haspopup="dialog" aria-describedby="stamp-hint">Reading the map&hellip;</button></div>
+  <span class="sr" id="stamp-hint" hidden>Opens About this data.</span>
+  <div class="hkeys" id="hkeys"><button class="textkey framed" id="btn-about" type="button" aria-haspopup="dialog">About</button></div>
+  <div class="switcher" id="switcher">
+    <div class="layers" id="words" role="group" aria-label="Layers and tools">
+      <button type="button" id="w-trails" aria-pressed="true">Trails</button>
+      <button type="button" id="w-cabins" aria-pressed="true">Cabins</button>
+      <button type="button" id="w-sun" aria-pressed="true" aria-describedby="sun-desc">Sun</button>
+      <button type="button" id="w-names" aria-pressed="true" aria-describedby="names-desc">Names</button>
+      <button type="button" id="w-slope" aria-pressed="false" aria-describedby="slope-desc">Steepness</button>
+      <button type="button" id="w-snow" aria-pressed="false" aria-describedby="snow-desc">Snow</button>
+      <span class="divider" aria-hidden="true" id="tools-divider"></span>
+      <button type="button" id="w-viewshed" aria-pressed="false" aria-describedby="vs-desc">Viewshed</button>
+      <button type="button" id="w-profile" aria-pressed="false" aria-describedby="pr-desc">Profile</button>
+    </div>
+  </div>
+  <span class="sr" id="sun-desc">Lights the terrain by the real sun for the date and hour shown, with the shadows the mountains cast.</span>
+  <span class="sr" id="names-desc">Names of peaks, towns, lakes and glaciers standing over the terrain, from OpenStreetMap.</span>
+  <span class="sr" id="slope-desc">Colors the ground by its steepness, in the classes avalanche-terrain maps use. Not avalanche advice.</span>
+  <span class="sr" id="snow-desc">Draws the snow: seNorge's modeled snow depth for a day, or snow down to a height you set.</span>
+  <span class="sr" id="vs-desc">Then tap a point to see what can be seen from it.</span>
+  <span class="sr" id="pr-desc">Then tap points along a line to draw its elevation profile.</span>
+</header>
+
+<main class="plate" id="plate">
+  <div id="flabels" aria-label="Names"></div>
+  <canvas id="gl" role="img" aria-label="Norway in 3D. Drag to turn and tilt, pinch to zoom, drag two fingers to move, double-tap to fly to a place, tap a cabin or a place for its details."></canvas>
+
+  <!-- The view switch: one tap between the map and the landscape, the same place kept. It stays in
+       focus mode, the one control the view needs besides the player. -->
+  <div class="viewkey" id="viewkey" role="radiogroup" aria-label="View">
+    <button type="button" role="radio" id="view-2d" aria-checked="false" aria-label="2D map">2D</button>
+    <button type="button" role="radio" id="view-3d" aria-checked="true" aria-label="3D terrain">3D</button>
+  </div>
+
+  <div class="keys" id="keys">
+    <div class="keyplate">
+      <button type="button" id="zoom-in" aria-label="Zoom in"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5v11M2.5 8h11"/></svg></button>
+      <button type="button" id="zoom-out" aria-label="Zoom out"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 8h11"/></svg></button>
+      <button type="button" id="btn-norway" aria-label="Show all of Norway"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1.5 5V1.5H5M11 1.5h3.5V5M14.5 11v3.5H11M5 14.5H1.5V11"/><path d="M5.6 11.6c.4-1.3 1.6-1.6 1.9-2.9.3-1.2-.4-2 .5-3.1.8-1 2.1-1 2.6-2.4"/></svg></button>
+    </div>
+    <div class="keyplate">
+      <button type="button" id="btn-layers" aria-label="Map style and date" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2 14.5 5.5 8 9 1.5 5.5z"/><path d="M1.5 8.5 8 12l6.5-3.5"/></svg></button>
+    </div>
+    <div class="keyplate">
+      <button type="button" id="focus-key" aria-label="Hide the controls"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="1.5"/><path class="fill" d="M5.5 7.75 13.5 7.25a.75.75 0 0 1 0 1.5l-8-.5z"/><path d="M5.5 13.25h9"/><circle class="fill" cx="9" cy="13.25" r="1.5"/></svg></button>
+    </div>
+  </div>
+
+  <button type="button" class="ghost" id="focus-exit" aria-label="Show the controls" aria-keyshortcuts="Escape" hidden>
+    <svg viewBox="0 0 22 24" width="22" height="24" aria-hidden="true">
+      <g class="halo"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle cx="10" cy="16.25" r="1.5"/></g>
+      <g class="mark"><path d="M3.5 2.5h15"/><rect x="3.5" y="6" width="15" height="14" rx="1.5"/><path d="M6.5 10.5h8"/><path d="M6.5 16.25h9"/><circle class="fill" cx="10" cy="16.25" r="1.5"/></g>
+    </svg>
+  </button>
+
+  <section class="card" id="card" hidden aria-labelledby="card-kind">
+    <div class="card-kind"><span id="card-kind"></span><button class="card-close" id="card-close" type="button" aria-label="Close"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></div>
+    <p class="card-fig"><span id="card-num"></span><span class="unit" id="card-unit"></span></p>
+    <dl id="card-rows"></dl>
+    <svg id="card-chart" class="chart" hidden preserveAspectRatio="none" aria-hidden="true"></svg>
+    <p class="note" id="card-note"></p>
+    <a class="textkey link" id="card-link" hidden target="_blank" rel="noopener noreferrer"></a>
+  </section>
+
+  <div class="notice" id="notice" role="alert" hidden></div>
+</main>
+
+<!-- The caption under the plate: north and the scale, the keys of the layers that are on, and the
+     caption line. The cabins' credit stays beside the map while they are shown (OpenStreetMap's
+     terms, NOTES.md); every other credit is in About. -->
+<section class="caption" id="caption" aria-label="Caption">
+  <div class="inst" data-boot hidden>
+    <svg id="compass" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Compass"><g id="needle"><path class="fill" d="M12 5.5l2.2 6.5h-4.4z"/><path class="tail" d="M12 12v5"/></g><text id="cn" x="12" y="2.5">N</text></svg>
+    <span id="scale-len"></span><span class="sbar" id="scale-bar"></span><span id="scale-sub"></span>
+  </div>
+  <div id="legends">
+    <div class="keyrow" id="key-trails" hidden><span class="lt">Trails</span><span class="ki"><i class="ln" style="--c:#00984a"></i>Easy</span><span class="ki"><i class="ln" style="--c:#0063ff"></i>Medium</span><span class="ki"><i class="ln" style="--c:#ed1c24"></i>Demanding</span><span class="ki"><i class="ln" style="--c:#000000"></i>Expert</span><span class="ki"><i class="ln" style="--c:#ff7f7f"></i>Ungraded</span></div>
+    <div class="keyrow" id="key-cabins" hidden><span class="lt">Cabins</span><span class="ki"><svg class="hut" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path class="fill" d="M6 1.2 10.4 5.6V10.8H1.6V5.6z"/></svg>Staffed</span><span class="ki"><svg class="hut" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path class="fill" d="M6 1.2 10.4 5.6H1.6z"/><path d="M2.5 5.8v4.4h7V5.8"/></svg>Self-service</span><span class="ki"><svg class="hut" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M6 1.9 9.9 5.8v4.4H2.1V5.8z"/></svg>Other</span></div>
+    <div class="keyrow" id="key-slope" hidden><span class="lt">Steepness</span><span class="ki"><i class="sw" style="--c:#fff200"></i>27–30°</span><span class="ki"><i class="sw" style="--c:#f29a1f"></i>30–35°</span><span class="ki"><i class="sw" style="--c:#e0382d"></i>35–40°</span><span class="ki"><i class="sw" style="--c:#8a3d9e"></i>40–45°</span><span class="ki"><i class="sw" style="--c:#3a3a3a"></i>45°+</span></div>
+    <div class="legend" id="lg-elev" hidden><span class="lt">Elevation</span><div class="ls"><div class="lb" id="lb-elev"></div><div class="lk"><span class="first" id="elev-lo"></span><span class="last" id="elev-hi"></span></div></div></div>
+    <div class="keyrow" id="key-snow" hidden><span class="lt">Snow</span><span class="ki"><i class="sw snowsw" style="--a:0.5"></i>under 25</span><span class="ki"><i class="sw snowsw" style="--a:0.78"></i>25–50</span><span class="ki"><i class="sw snowsw" style="--a:1"></i>over 50&#8239;cm</span><span class="ki" id="snow-date-key"></span></div>
+    <div class="row snowrow" id="row-snowline" hidden><label for="snow-line" id="snow-line-label">Snow down to</label><input id="snow-line" type="range" min="0" max="2400" step="10" aria-label="Snow down to, meters above the sea"><output id="snow-line-out"></output></div>
+    <div class="legend" id="lg-view" hidden><span class="lt" id="lt-view">Viewshed</span><div class="ls"><div class="lb" id="lb-view"></div><div class="lk"><span style="left:25%">seen</span><span style="left:75%">hidden</span></div></div></div>
+  </div>
+  <div class="capbox"><p id="cap-tool"></p><p id="cap"></p></div>
+  <p class="osm" id="osm-credit" hidden>Names and cabins: © OpenStreetMap contributors, ODbL.</p>
+  <p class="osm" id="snow-credit" hidden></p>
+</section>
+
+<footer class="player" id="player">
+  <div class="time-row">
+    <p class="valid"><button type="button" class="datekey" id="t-date-key" aria-haspopup="dialog" aria-describedby="date-hint"><span id="t-date"></span><span class="zone" id="t-zone"></span></button></p>
+    <p class="lead"><span id="lead-a"></span><span class="wide" id="lead-b"></span></p>
+  </div>
+  <div class="controls">
+    <button type="button" class="tkey" id="t-prev" aria-label="Previous day"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M7.5 1 3 6l4.5 5"/></svg></button>
+    <button type="button" class="tkey play" id="t-play" aria-label="Play" aria-describedby="play-hint"><span class="shutter"><svg id="ico-play" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg><svg id="ico-pause" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" hidden><path d="M2.5 1.5h2.5v9H2.5zM7 1.5h2.5v9H7z"/></svg></span></button>
+    <button type="button" class="tkey" id="t-next" aria-label="Next day"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M4.5 1 9 6l-4.5 5"/></svg></button>
+    <div class="track" id="slider" role="slider" tabindex="0" aria-label="Time of day" aria-describedby="sky-desc" aria-valuemin="0" aria-valuemax="287" aria-valuenow="0"><canvas id="track" aria-hidden="true"></canvas></div>
+  </div>
+  <span class="sr" id="play-hint">Plays the day, one hour a second.</span><span class="sr" id="sky-desc"></span><span class="sr" id="date-hint">Opens the date.</span>
+</footer>
+
+<div class="dlg" id="about" hidden>
+  <div class="dlg-panel" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="dlg-head"><h2 id="about-title">About this data</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="dlg-body">
+      <p class="ab-lead"><b>Not a navigation tool.</b> The map and the heights are Kartverket's, read live from its services; the cabins and trails change, and a marked route on a screen is not a safe route on the day. Carry a map and a compass, and check the conditions before you go.</p>
+      <section>
+        <h3>What the picture is</h3>
+        <p>Kartverket's topographic map, draped over Kartverket's terrain model. In 3D the ground has its true shape: within a few kilometers of the view, the 1&#8239;m laser model (DTM1), read at up to 1.14&#8239;m a pixel; farther out, the 10&#8239;m model. Heights are not exaggerated, and the ground bends away with the earth.</p>
+        <p>With Sun on, every slope is lit by the real sun for the date and the time shown, computed for the middle of the view, and the shadows the mountains cast are swept over the heights the app holds around it: at 6 to 650&#8239;m a cell, finer the closer you look, with the earth's curvature. It is terrain shadow only: no cloud, haze, trees or buildings, and the sun is treated as a point.</p>
+        <p>The track under the picture is the signature of this app, the skyline. For the marker (the middle of the view, or a place you tapped) it draws the horizon the terrain makes in the direction of the sun at each minute of the day, 0.55&#8239;px for each degree above level, and over it the sun's path at the same scale. Where the sun's line clears the skyline, the marker is in direct sun. The horizon is read from the heights the app holds out to 60&#8239;km, with the earth's curvature and ordinary refraction; it is not a forecast of sunshine.</p>
+        <p>The surface is the map, a relief (the ground shaded from the heights alone, the water read from the map's own blue) or the ground colored by its height with one of three tables, Crameri's batlow and oleron or viridis, over the heights in view or over 0 to 2&#8239;500&#8239;m; the key under the picture prints the range. Kartverket publishes no topographic map without its names, so the relief and the elevation surfaces are the ones without draped names; the floating names come from OpenStreetMap.</p>
+        <p>Steepness colors the ground in the classes Norway's avalanche-terrain maps use, 27 to 30°, 30 to 35°, 35 to 40°, 40 to 45° and steeper, from the slope of the terrain model at up to 1&#8239;m near the view (coarser farther out, where it reads gentler than it is). It is not avalanche advice: it does not know the snow, the wind or the runout below a slope.</p>
+        <p>Snow is seNorge's modeled snow depth for the day shown (NVE and MET Norway, a 1&#8239;km grid, from the weather and a snow model, not from a satellite), drawn whiter the deeper it is and shed by walls; or a snow line you set, which this app draws lower on north faces and higher on south faces by up to 140&#8239;m, and never on faces steeper than about 55°.</p>
+        <p>The plate keeps one daylight look in both of the phone's themes; only the chrome around it follows the theme. That is a display choice, not data.</p>
+      </section>
+      <section>
+        <h3>This data</h3>
+        <dl id="ab-data"></dl>
+      </section>
+      <section>
+        <h3>Sources and credits</h3>
+        <p id="about-credit-line"></p>
+        <h4>Map</h4>
+        <p>Topografisk norgeskart (topo, topograatone, toporaster), © Kartverket, Creative Commons BY 4.0 (creativecommons.org/licenses/by/4.0/). Shown as served, as 256&#8239;px tiles from cache.kartverket.no.</p>
+        <h4>Heights near the view</h4>
+        <p>Nasjonal høydemodell, Digital terrengmodell DTM1 (1&#8239;m), © Kartverket. Open data: NLOD 2.0 (data.norge.no/nlod/no/2.0/) and Creative Commons BY 4.0. Read from the NHM_DTM_25833 image service at hoydedata.no, which resamples it to the map's grid and packs each height into the color of a PNG; this app unpacks it to the decimeter.</p>
+        <h4>Heights in the distance</h4>
+        <p>Terrain Tiles (Terrarium) on Amazon Web Services' open data registry, from the Mapzen terrain project. Over Norway the source is Kartverket's 10&#8239;m model. The attribution the project requires, word for word: Mapzen; ArcticDEM terrain data DEM(s) were created from DigitalGlobe, Inc., imagery and funded under National Science Foundation awards 1043681, 1559691, and 1542736; Europe terrain data produced using Copernicus data and information funded by the European Union - EU-DEM layers; Global ETOPO1 terrain data U.S. National Oceanic and Atmospheric Administration; Norway terrain data © Kartverket; United States 3DEP (formerly NED) and global GMTED2010 and SRTM terrain data courtesy of the U.S. Geological Survey.</p>
+        <h4>Trails</h4>
+        <p>Turrutebasen (Tur- og friluftsruter), © Kartverket. Open data, no conditions apply to access and use. Drawn by Kartverket's wms.friluftsruter2 service: every foot route, and over it the routes graded easy, medium, demanding and expert in the service's own colors. Kartverket notes that the routes are mostly reported by clubs, associations and individuals, and that their quality depends on how each was measured.</p>
+        <h4>Snow</h4>
+        <p>seNorge, snow depth (sd), © NVE (Norges vassdrags- og energidirektorat) and MET Norway. Data in seNorge are licensed under the Norwegian License for Open Government Data (NLOD, data.norge.no/nlod/no/), which is compatible with Creative Commons BY 4.0. Retrieved from www.senorge.no, through NVE's seNorgeGrid_png image service at kart.nve.no, as pictures in the service's own eight classes, which this app reads back. seNorge says that errors and missing data may occur and that real-time data is not quality controlled.</p>
+        <h4>Names</h4>
+        <p>© OpenStreetMap contributors, Open Database License 1.0. The peaks, towns, villages, lakes and glaciers with a name inside Norway, retrieved through the Overpass API on 16 Oct 2026, in data/labels.geojson in this app's folder, under the same license.</p>
+        <h4>Elevation colors</h4>
+        <p>batlow and oleron, Scientific colour maps by Fabio Crameri (MIT License, vendor/ramps-LICENSE.txt); viridis, by Stéfan van der Walt and Nathaniel Smith (CC0).</p>
+        <h4>Cabins</h4>
+        <p>© OpenStreetMap contributors. The cabin data is available under the Open Database License 1.0 (opendatacommons.org/licenses/odbl/1-0/). <span id="ab-cabins"></span> This app's extract is data/cabins.geojson, in this app's folder, under the same license; tools/build_cabins.py in the template repository rebuilds it.</p>
+        <h4>Rendering and type</h4>
+        <p>three.js r186, MIT License (vendor/three-LICENSE.txt).</p>
+        <p>Type: Ysabeau Office by Christian Thalmann (Catharsis Fonts), SIL Open Font License 1.1; a subset is in fonts/ with its license.</p>
+      </section>
+      <section>
+        <h3>How the data gets here</h3>
+        <p>This app is online: Snuggery lets it show pictures from the five sites it lists, once you allow them, and nothing else. The map, the trails, the heights and the snow arrive as pictures, at most six at a time, and the heights are read back out of their pixels; the cabins travel inside the app. Nothing you do is sent anywhere except the address of each picture, which says which piece of Norway is being looked at.</p>
+        <p>Solar position uses the NOAA Solar Calculator algorithm (Meeus, Astronomical Algorithms), written out in this app. Times are Norwegian, CET and CEST in summer, from the European rule, not from this phone's clock.</p>
+        <p>The 2D and 3D keys at the foot of the picture switch between the map and the terrain in one tap, keeping the place, its scale, the marker, a viewshed or a profile, and the layers. On the map, drag with one finger to move it, pinch to zoom toward your fingers, and double-tap to zoom in on a place. In 3D, drag with one finger to turn the view (sideways) and tilt it (up and down) around the ground in the middle of the picture; pinch to zoom toward your fingers; drag two fingers together to move across the land, which stays under them; double-tap to fly to a place, which becomes the new middle. A flick keeps the view moving for a moment. The camera stays above the ground, and the tilt stops before the horizon reaches the middle of the picture. Tap a cabin for its details, or the ground to put the marker there. The last key in the column, or the F key, hides the controls; the corner key that stays, or Escape, brings them back.</p>
+      </section>
+      <button type="button" class="textkey dlg-foot" data-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="dlg" id="layers" hidden>
+  <div class="dlg-panel" role="dialog" aria-modal="true" aria-labelledby="layers-title">
+    <div class="dlg-head"><h2 id="layers-title">Map style and date</h2><button type="button" class="textkey" data-close>Close</button></div>
+    <div class="dlg-body">
+      <section>
+        <h3>Surface</h3>
+        <div id="surface-rows" role="radiogroup" aria-label="Surface"></div>
+        <div id="elev-opts">
+          <h4>Elevation colors</h4>
+          <div class="words" id="ramp-words" role="radiogroup" aria-label="Elevation colors"></div>
+          <div class="words" id="range-words" role="radiogroup" aria-label="Elevation range"></div>
+        </div>
+      </section>
+      <section>
+        <h3>Snow</h3>
+        <div class="words" id="snow-words" role="radiogroup" aria-label="Snow source"></div>
+        <div class="row" id="row-snowdate"><label for="snow-d">Day</label><input id="snow-d" type="range" min="0" max="365" step="1" aria-label="Snow day, days before today"><output id="snow-d-out"></output></div>
+        <p class="note">seNorge's snow depth is modeled by NVE and MET Norway on a 1&#8239;km grid every day; it is not a satellite picture, and it is not avalanche advice. The snow line is drawn by this app from the height you set, lower on north faces, and shed by walls.</p>
+      </section>
+      <section>
+        <h3>Map style</h3>
+        <div id="style-rows" role="radiogroup" aria-label="Map style"></div>
+      </section>
+      <section id="date-section">
+        <h3>Date</h3>
+        <div class="row"><label for="date-d">Date</label><input id="date-d" type="range" min="1" max="365" step="1" aria-label="Date, day of year"><output id="date-out"></output></div>
+        <p class="note" id="sun-events"></p>
+        <div class="words"><button type="button" class="word" id="date-today">Today</button></div>
+      </section>
+      <section>
+        <h3>While moving</h3>
+        <div class="words"><button type="button" class="word" id="save-battery" role="switch" aria-checked="false">Save battery</button></div>
+        <p class="note">Off, the picture stays as sharp while you move it as when it stands still, and the land just beyond the view is loaded ahead. On, it is drawn at a lower resolution and with coarser terrain while it moves, the shadows wait until it stops, and nothing is loaded ahead: less power and data, a softer picture until the view rests.</p>
+      </section>
+      <button type="button" class="textkey dlg-foot" data-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
