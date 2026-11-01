@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-01T18:01:18Z",
+ "generatedAt": "2026-11-01T19:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -431,7 +431,7 @@
     {
      "title": "NZ’s resource management rules have been rewritten. What happens after the election?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nzs-resource-management-rules-have-been-rewritten-what-happens-after-the-election-294046",
      "published": "2026-11-01T17:39:36Z",
      "summary": "",
@@ -447,6 +447,16 @@
      "summary": "",
      "stale": false,
      "author": "Louis Bherer, Professor, Université de Montréal"
+    },
+    {
+     "title": "Not all antihistamines are the same – and some may affect your brain more than you think",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/not-all-antihistamines-are-the-same-and-some-may-affect-your-brain-more-than-you-think-294819",
+     "published": "2026-10-30T16:17:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Dipa Kamdar, Associate Professor in Pharmacy Practice, Kingston University"
     },
     {
      "title": "View from The Hill: Albanese puts cat among One Nation pigeons with staff offer",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Kelly Sheldrick, Bat Ecologist & PhD candidate, Murdoch University"
-    },
-    {
-     "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/knocking-on-strangers-doors-how-to-help-your-kids-have-a-safe-halloween-295356",
-     "published": "2026-10-30T02:13:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Vanessa Campbell, Associate Lecturer in Public Relations, Western Sydney University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -925,6 +925,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Not all antihistamines are the same – and some may affect your brain more than you think",
+   "published": "2026-10-30 16:17 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "View from The Hill: Albanese puts cat among One Nation pigeons with staff offer",
    "published": "2026-10-30 05:40 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Looking for bats after dark can help science – and change how we see them",
    "published": "2026-10-30 05:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Knocking on strangers’ doors? How to help your kids have a safe Halloween",
-   "published": "2026-10-30 02:13 UTC"
   },
   {
    "region": "Oceania",
