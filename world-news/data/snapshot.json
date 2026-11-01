@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-01T15:01:21Z",
+ "generatedAt": "2026-11-01T16:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Parents, let your kids eat as much candy as they want – less restriction could help reduce the urge to overeat",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/parents-let-your-kids-eat-as-much-candy-as-they-want-less-restriction-could-help-reduce-the-urge-to-overeat-294113",
+     "published": "2026-11-01T15:39:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bryn Beeder, Assistant Clinical Lecturer in Kinesiology, Nutrition, and Health, Miami University"
+    },
+    {
      "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Tara Deans, Associate Professor of Biomedical Engineering, Georgia Institute of Technology"
-    },
-    {
-     "title": "From 18th-century false ballots to the second JFK and double Dan Sullivans, a brief history of spoiler candidates and the unsuccessful legal challenges to them",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/from-18th-century-false-ballots-to-the-second-jfk-and-double-dan-sullivans-a-brief-history-of-spoiler-candidates-and-the-unsuccessful-legal-challenges-to-them-295504",
-     "published": "2026-10-30T17:14:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Drew Kurlowski, Associate Professor of Political Science, Coastal Carolina University"
     },
     {
      "title": "How the streets and a social media army led Lula to a historic win in Brazil",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168717",
+     "published": "2026-11-01T12:00:00Z",
+     "summary": "The UN remains committed to supporting a just, lasting and mutually acceptable political solution in Western Sahara that provides for the self-determination of its people, Secretary-General António Guterres said on…",
+     "stale": false
+    },
+    {
      "title": "Algeria is sending troops to Niger for the first time in decades – what’s at stake",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168708",
      "published": "2026-10-30T12:00:00Z",
      "summary": "More than 28 million people in the Democratic Republic of the Congo (DRC) are not getting enough to eat and the number is expected to tick up in the coming months, according to the latest alert from the IPC global food…",
-     "stale": false
-    },
-    {
-     "title": "Civilians in Sudan’s El Obeid trapped between drones and incarceration",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168696",
-     "published": "2026-10-28T12:00:00Z",
-     "summary": "Civilians in Sudan’s El Obeid live in constant fear of drone attacks by the Rapid Support Forces (RSF) and of a wave of arbitrary arrests by the Sudanese Armed Forces (SAF), UN-appointed independent investigators said…",
      "stale": false
     },
     {
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
-   "published": "2026-10-30 20:13 UTC"
+   "title": "Parents, let your kids eat as much candy as they want – less restriction could help reduce the urge to overeat",
+   "published": "2026-11-01 15:39 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "From 18th-century false ballots to the second JFK and double Dan Sullivans, a brief history of spoiler candidates and the unsuccessful legal challenges to them",
-   "published": "2026-10-30 17:14 UTC"
+   "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
+   "published": "2026-10-30 20:13 UTC"
   },
   {
    "region": "Americas",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
+   "published": "2026-11-01 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Algeria is sending troops to Niger for the first time in decades – what’s at stake",
    "published": "2026-11-01 09:12 UTC"
@@ -789,12 +795,6 @@
    "source": "UN News",
    "title": "DR Congo: Hunger deepens for millions amid conflict, Ebola and climate shocks",
    "published": "2026-10-30 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Civilians in Sudan’s El Obeid trapped between drones and incarceration",
-   "published": "2026-10-28 12:00 UTC"
   },
   {
    "region": "Africa",
