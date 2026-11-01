@@ -54,9 +54,10 @@ you allow them ([online apps](#online-apps-maps-and-pictures-from-sites-you-allo
 Open an app's **Install** link in Safari on the iPhone, then do the three steps under the table.
 
 **Or get them all at once:** [**Get them all**](https://mtomasgaard.github.io/snuggery-apps-template/zips/more-examples.zip)
-(about 120 MB) is every app below that Snuggery does not install itself, except the two online ones, in
-one file that opens as one folder, *More examples*. Install Norway in 3D and Hello Map on their own. It needs Snuggery 1.2 or later; 1.1 opens it as a folder of ZIPs. The
-seven live examples come with the app: Create → *Install the live examples*.
+(about 120 MB) is every app below that Snuggery does not install itself, in one file that opens as one
+folder, *More examples*. It needs Snuggery 1.2 or later, and 1.4 for the maps of the two online apps; 1.1
+opens it as a folder of ZIPs. The seven live examples come with the app: Create → *Install the live
+examples*.
 
 | App | Link | Size | Needs |
 | --- | --- | --- | --- |
