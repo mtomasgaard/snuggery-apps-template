@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-01T21:01:18Z",
+ "generatedAt": "2026-11-01T22:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ election poll watch: contrasting scenarios play out in different polls",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nz-election-poll-watch-contrasting-scenarios-play-out-in-different-polls-295629",
+     "published": "2026-11-01T21:01:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Your say: week beginning November 2",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Margaret Davidson, Senior Lecturer, Occupational Hygiene and Environmental Health, Western Sydney University"
-    },
-    {
-     "title": "Two new bandicoot species discovered after trawling through museum drawers",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/two-new-bandicoot-species-discovered-after-trawling-through-museum-drawers-295077",
-     "published": "2026-11-01T19:18:56Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kenny Travouillon, Curator of Mammals, Western Australian Museum; Curtin University"
     },
     {
      "title": "NZ’s resource management rules have been rewritten. What happens after the election?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ election poll watch: contrasting scenarios play out in different polls",
+   "published": "2026-11-01 21:01 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Your say: week beginning November 2",
    "published": "2026-11-01 20:23 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Worried you’re breathing unclean air? Here’s how to measure it",
    "published": "2026-11-01 19:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Two new bandicoot species discovered after trawling through museum drawers",
-   "published": "2026-11-01 19:18 UTC"
   },
   {
    "region": "Oceania",
