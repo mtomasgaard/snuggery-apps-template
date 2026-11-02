@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-01T23:01:26Z",
+ "generatedAt": "2026-11-02T00:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nz-has-retreated-from-global-cooperation-on-health-security-can-a-new-government-change-course-295324",
+     "published": "2026-11-01T23:20:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael Baker, Professor of Public Health, University of Otago"
+    },
+    {
      "title": "NZ election poll watch: contrasting scenarios play out in different polls",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Steve Urlich, Senior Lecturer in Environmental Management, Lincoln University, New Zealand"
-    },
-    {
-     "title": "A neuropsychologist explains the importance of exercise in fighting dementia",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/a-neuropsychologist-explains-the-importance-of-exercise-in-fighting-dementia-274391",
-     "published": "2026-11-01T13:28:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Louis Bherer, Professor, Université de Montréal"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
+   "published": "2026-11-01 23:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ election poll watch: contrasting scenarios play out in different polls",
    "published": "2026-11-01 21:01 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "NZ’s resource management rules have been rewritten. What happens after the election?",
    "published": "2026-11-01 17:39 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A neuropsychologist explains the importance of exercise in fighting dementia",
-   "published": "2026-11-01 13:28 UTC"
   },
   {
    "region": "Oceania",
