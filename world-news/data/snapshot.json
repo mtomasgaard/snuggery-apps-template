@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T08:01:31Z",
+ "generatedAt": "2026-11-02T09:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: Jim Chalmers has a lot of weight on his shoulders in the run-up to Christmas",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-jim-chalmers-has-a-lot-of-weight-on-his-shoulders-in-the-run-up-to-christmas-295657",
+     "published": "2026-11-02T07:34:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Could Trump interfere in the US midterms – and what checks and balances could stop him?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "AI translation sounds convincing, but it can be riddled with hidden errors",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/ai-translation-sounds-convincing-but-it-can-be-riddled-with-hidden-errors-294686",
-     "published": "2026-11-02T01:43:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alisa Tian, Associate Lecturer in Translation and Interpreting, School of Humanities & Languages, UNSW"
     },
     {
      "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: Jim Chalmers has a lot of weight on his shoulders in the run-up to Christmas",
+   "published": "2026-11-02 07:34 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Could Trump interfere in the US midterms – and what checks and balances could stop him?",
    "published": "2026-11-02 06:10 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
    "published": "2026-11-02 05:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "AI translation sounds convincing, but it can be riddled with hidden errors",
-   "published": "2026-11-02 01:43 UTC"
   },
   {
    "region": "Oceania",
