@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T18:01:30Z",
+ "generatedAt": "2026-11-02T19:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/11/02/brazilian-lefts-quest-to-tame-meta-a-narrative-of-denouncement-and-resistance/",
+     "published": "2026-11-02T18:08:55Z",
+     "summary": "In our October edition of Undertones, we examine a movement calling for accountability and coordinated online action to challenge Meta’s problematic content moderation policies and governance practices in Brazil.",
+     "stale": false,
+     "author": "Civic Media Observatory"
+    },
+    {
      "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -158,16 +168,6 @@
      "published": "2026-10-27T12:00:00Z",
      "summary": "The General Assembly opened its annual debate on the US economic embargo against Cuba on Tuesday. On Wednesday, 28 October, Member States will vote for the 34th time on a resolution calling for it to end.",
      "stale": false
-    },
-    {
-     "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/25/queer-mediums-of-the-cult-of-maria-lionza-are-redefining-the-gender-binary-in-venezuelas-sacred-mountain/",
-     "published": "2026-10-25T09:23:17Z",
-     "summary": "An ethnographic look at Venezuela's María Lionza cult, examining how LGBTQ+ mediums challenge traditional gender roles and face discrimination while channeling diverse spiritual entities",
-     "stale": false,
-     "author": "Freisy González"
     }
    ]
   },
@@ -197,6 +197,15 @@
      "author": "Anthony Kaziboni, Senior Researcher, Centre for Social Development in Africa (CSDA), University of Johannesburg"
     },
     {
+     "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168720",
+     "published": "2026-11-02T12:00:00Z",
+     "summary": "The head of the World Health Organization (WHO) called on Monday for greater protection for civilians caught in conflict in northern Ethiopia following deadly drone strikes this past weekend.",
+     "stale": false
+    },
+    {
      "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
      "source": "UN News",
      "feed": "un-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168714",
      "published": "2026-10-31T12:00:00Z",
      "summary": "“The story of the UN's political engagement in Somalia has been one of persistence, partnership and adaptation,” Raisedon Zenenga, the UN Secretary-General's Deputy Special Representative for Somalia has said, as three…",
-     "stale": false
-    },
-    {
-     "title": "DR Congo: Hunger deepens for millions amid conflict, Ebola and climate shocks",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168708",
-     "published": "2026-10-30T12:00:00Z",
-     "summary": "More than 28 million people in the Democratic Republic of the Congo (DRC) are not getting enough to eat and the number is expected to tick up in the coming months, according to the latest alert from the IPC global food…",
      "stale": false
     },
     {
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "View from The Hill: Jim Chalmers has a lot of weight on his shoulders in the run-up to Christmas",
+     "title": "Trust in democracy is in decline in NZ. Could citizens’ assemblies help restore it?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-jim-chalmers-has-a-lot-of-weight-on-his-shoulders-in-the-run-up-to-christmas-295657",
-     "published": "2026-11-02T07:34:31Z",
+     "link": "https://theconversation.com/trust-in-democracy-is-in-decline-in-nz-could-citizens-assemblies-help-restore-it-293792",
+     "published": "2026-11-02T18:28:01Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Anne Bardsley, Civic Engagement Lead, University of Auckland, Waipapa Taumata Rau"
     },
     {
-     "title": "Could Trump interfere in the US midterms – and what checks and balances could stop him?",
+     "title": "Why we give flowers to those in grief – or buy them for ourselves when we’re sad",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/could-trump-interfere-in-the-us-midterms-and-what-checks-and-balances-could-stop-him-295654",
-     "published": "2026-11-02T06:10:45Z",
+     "link": "https://theconversation.com/why-we-give-flowers-to-those-in-grief-or-buy-them-for-ourselves-when-were-sad-289892",
+     "published": "2026-11-02T18:27:48Z",
      "summary": "",
      "stale": false,
-     "author": "Jean-Nicolas Bordeleau, Research Fellow, Jeff Bleich Centre for Democracy and Disruptive Technologies, Flinders University"
+     "author": "Karen Anderson, Unit Coordinator, Lecturer and Clinical Supervisor, Counselling and Psychotherapy Courses, Edith Cowan University"
     },
     {
-     "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
+     "title": "Is this the weirdest, most beautiful cricket book ever written?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/one-nation-heavyweights-give-matt-canavan-clear-run-to-lower-house-295658",
-     "published": "2026-11-02T05:15:34Z",
+     "link": "https://theconversation.com/is-this-the-weirdest-most-beautiful-cricket-book-ever-written-291281",
+     "published": "2026-11-02T18:27:37Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Kevin John Brophy, Emeritus Professor of Creative Writing, The University of Melbourne"
     },
     {
      "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
+   "published": "2026-11-02 18:08 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
    "published": "2026-11-02 13:21 UTC"
@@ -761,12 +767,6 @@
    "published": "2026-10-27 12:00 UTC"
   },
   {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Queer mediums of the cult of María Lionza are redefining the gender binary in Venezuela’s sacred mountain",
-   "published": "2026-10-25 09:23 UTC"
-  },
-  {
    "region": "Africa",
    "source": "The Conversation",
    "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
+   "published": "2026-11-02 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
    "published": "2026-11-01 12:00 UTC"
   },
@@ -789,12 +795,6 @@
    "source": "UN News",
    "title": "Somalia looks to the future as the UN's political mission closes",
    "published": "2026-10-31 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "DR Congo: Hunger deepens for millions amid conflict, Ebola and climate shocks",
-   "published": "2026-10-30 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "View from The Hill: Jim Chalmers has a lot of weight on his shoulders in the run-up to Christmas",
-   "published": "2026-11-02 07:34 UTC"
+   "title": "Trust in democracy is in decline in NZ. Could citizens’ assemblies help restore it?",
+   "published": "2026-11-02 18:28 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Could Trump interfere in the US midterms – and what checks and balances could stop him?",
-   "published": "2026-11-02 06:10 UTC"
+   "title": "Why we give flowers to those in grief – or buy them for ourselves when we’re sad",
+   "published": "2026-11-02 18:27 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
-   "published": "2026-11-02 05:15 UTC"
+   "title": "Is this the weirdest, most beautiful cricket book ever written?",
+   "published": "2026-11-02 18:27 UTC"
   },
   {
    "region": "Oceania",
