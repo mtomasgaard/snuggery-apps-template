@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T06:01:16Z",
+ "generatedAt": "2026-11-02T07:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Could Trump interfere in the US midterms – and what checks and balances could stop him?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/could-trump-interfere-in-the-us-midterms-and-what-checks-and-balances-could-stop-him-295654",
+     "published": "2026-11-02T06:10:45Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jean-Nicolas Bordeleau, Research Fellow, Jeff Bleich Centre for Democracy and Disruptive Technologies, Flinders University"
+    },
+    {
      "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Alisa Tian, Associate Lecturer in Translation and Interpreting, School of Humanities & Languages, UNSW"
-    },
-    {
-     "title": "Labor returns to equal term low primary vote in Newspoll",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/labor-returns-to-equal-term-low-primary-vote-in-newspoll-295257",
-     "published": "2026-11-02T01:08:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Could Trump interfere in the US midterms – and what checks and balances could stop him?",
+   "published": "2026-11-02 06:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
    "published": "2026-11-02 05:15 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "AI translation sounds convincing, but it can be riddled with hidden errors",
    "published": "2026-11-02 01:43 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Labor returns to equal term low primary vote in Newspoll",
-   "published": "2026-11-02 01:08 UTC"
   },
   {
    "region": "Oceania",
