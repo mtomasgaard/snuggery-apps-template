@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T00:01:18Z",
+ "generatedAt": "2026-11-02T01:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -431,7 +431,7 @@
     {
      "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nz-has-retreated-from-global-cooperation-on-health-security-can-a-new-government-change-course-295324",
      "published": "2026-11-01T23:20:14Z",
      "summary": "",
@@ -441,7 +441,7 @@
     {
      "title": "NZ election poll watch: contrasting scenarios play out in different polls",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-election-poll-watch-contrasting-scenarios-play-out-in-different-polls-295629",
      "published": "2026-11-01T21:01:26Z",
      "summary": "",
