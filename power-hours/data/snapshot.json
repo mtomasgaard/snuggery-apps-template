@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-01T23:01:09Z",
+ "generatedAt": "2026-11-02T05:01:12Z",
  "zone": "NO2",
  "zoneName": "Norway south-west",
  "timezone": "Europe/Oslo",
@@ -704,13 +704,13 @@
    "date": "2026-11-02",
    "appliance": "Dishwasher",
    "runHours": 2.0,
-   "windowScope": "from 00:00",
-   "cheapestStart": "02:00",
-   "cheapestEnd": "04:00",
-   "avgPrice": 193.99,
+   "windowScope": "from 06:00",
+   "cheapestStart": "22:00",
+   "cheapestEnd": "00:00",
+   "avgPrice": 205.09,
    "dayMean": 208.02,
    "unit": "EUR/MWh",
-   "savingPct": 7
+   "savingPct": 1
   },
   {
    "row": "appliance",
@@ -732,13 +732,13 @@
    "date": "2026-11-02",
    "appliance": "Washing machine",
    "runHours": 1.5,
-   "windowScope": "from 00:00",
-   "cheapestStart": "02:00",
-   "cheapestEnd": "03:30",
-   "avgPrice": 193.96,
+   "windowScope": "from 06:00",
+   "cheapestStart": "22:30",
+   "cheapestEnd": "00:00",
+   "avgPrice": 203.9,
    "dayMean": 208.02,
    "unit": "EUR/MWh",
-   "savingPct": 7
+   "savingPct": 2
   },
   {
    "row": "appliance",
@@ -760,13 +760,13 @@
    "date": "2026-11-02",
    "appliance": "Car charging",
    "runHours": 4.0,
-   "windowScope": "from 00:00",
-   "cheapestStart": "01:00",
-   "cheapestEnd": "05:00",
-   "avgPrice": 194.48,
+   "windowScope": "from 06:00",
+   "cheapestStart": "20:00",
+   "cheapestEnd": "00:00",
+   "avgPrice": 207.73,
    "dayMean": 208.02,
    "unit": "EUR/MWh",
-   "savingPct": 7
+   "savingPct": 0
   },
   {
    "row": "appliance",
@@ -788,13 +788,13 @@
    "date": "2026-11-02",
    "appliance": "Tumble dryer",
    "runHours": 2.0,
-   "windowScope": "from 00:00",
-   "cheapestStart": "02:00",
-   "cheapestEnd": "04:00",
-   "avgPrice": 193.99,
+   "windowScope": "from 06:00",
+   "cheapestStart": "22:00",
+   "cheapestEnd": "00:00",
+   "avgPrice": 205.09,
    "dayMean": 208.02,
    "unit": "EUR/MWh",
-   "savingPct": 7
+   "savingPct": 1
   }
  ]
 }
