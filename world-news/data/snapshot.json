@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T21:01:22Z",
+ "generatedAt": "2026-11-02T22:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -431,7 +431,7 @@
     {
      "title": "How much could NZ raise from a higher top tax rate? We crunched the numbers",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/how-much-could-nz-raise-from-a-higher-top-tax-rate-we-crunched-the-numbers-295341",
      "published": "2026-11-02T20:50:13Z",
      "summary": "",
@@ -441,7 +441,7 @@
     {
      "title": "Traces of dinosaur blood found in world-first discovery",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/traces-of-dinosaur-blood-found-in-world-first-discovery-286450",
      "published": "2026-11-02T19:59:26Z",
      "summary": "",
