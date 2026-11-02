@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T17:01:16Z",
+ "generatedAt": "2026-11-02T22:23:38Z",
  "zone": "NO2",
  "zoneName": "Norway south-west",
  "timezone": "Europe/Oslo",
@@ -1088,20 +1088,6 @@
    "row": "appliance",
    "day": "Today",
    "date": "2026-11-02",
-   "appliance": "Dishwasher",
-   "runHours": 2.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 205.09,
-   "dayMean": 208.02,
-   "unit": "EUR/MWh",
-   "savingPct": 1
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-02",
    "appliance": "Washing machine",
    "runHours": 1.5,
    "windowScope": "whole day",
@@ -1111,20 +1097,6 @@
    "dayMean": 208.02,
    "unit": "EUR/MWh",
    "savingPct": 7
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-02",
-   "appliance": "Washing machine",
-   "runHours": 1.5,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:30",
-   "cheapestEnd": "00:00",
-   "avgPrice": 203.9,
-   "dayMean": 208.02,
-   "unit": "EUR/MWh",
-   "savingPct": 2
   },
   {
    "row": "appliance",
@@ -1144,20 +1116,6 @@
    "row": "appliance",
    "day": "Today",
    "date": "2026-11-02",
-   "appliance": "Car charging",
-   "runHours": 4.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "20:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 207.73,
-   "dayMean": 208.02,
-   "unit": "EUR/MWh",
-   "savingPct": 0
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-02",
    "appliance": "Tumble dryer",
    "runHours": 2.0,
    "windowScope": "whole day",
@@ -1167,20 +1125,6 @@
    "dayMean": 208.02,
    "unit": "EUR/MWh",
    "savingPct": 7
-  },
-  {
-   "row": "appliance",
-   "day": "Today",
-   "date": "2026-11-02",
-   "appliance": "Tumble dryer",
-   "runHours": 2.0,
-   "windowScope": "from 18:00",
-   "cheapestStart": "22:00",
-   "cheapestEnd": "00:00",
-   "avgPrice": 205.09,
-   "dayMean": 208.02,
-   "unit": "EUR/MWh",
-   "savingPct": 1
   },
   {
    "row": "hour",
