@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T20:01:22Z",
+ "generatedAt": "2026-11-02T21:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "How much could NZ raise from a higher top tax rate? We crunched the numbers",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/how-much-could-nz-raise-from-a-higher-top-tax-rate-we-crunched-the-numbers-295341",
+     "published": "2026-11-02T20:50:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Peer Ebbesen Skov, Associate Professor of Economics, Auckland University of Technology"
+    },
+    {
+     "title": "Traces of dinosaur blood found in world-first discovery",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/traces-of-dinosaur-blood-found-in-world-first-discovery-286450",
+     "published": "2026-11-02T19:59:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kliti Grice, Founding Director of WA-Organic & Isotope Geochemistry Centre, School of Earth and Planetary Sciences, Curtin University"
+    },
+    {
      "title": "Trust in democracy is in decline in NZ. Could citizens’ assemblies help restore it?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,34 +469,14 @@
      "author": "Karen Anderson, Unit Coordinator, Lecturer and Clinical Supervisor, Counselling and Psychotherapy Courses, Edith Cowan University"
     },
     {
-     "title": "Is this the weirdest, most beautiful cricket book ever written?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/is-this-the-weirdest-most-beautiful-cricket-book-ever-written-291281",
-     "published": "2026-11-02T18:27:37Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kevin John Brophy, Emeritus Professor of Creative Writing, The University of Melbourne"
-    },
-    {
-     "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
+     "title": "The US$6.3 billion Binance hack is the biggest heist ever – it should be a wake up call for cryptocurrency users",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-has-retreated-from-global-cooperation-on-health-security-can-a-new-government-change-course-295324",
-     "published": "2026-11-01T23:20:14Z",
+     "link": "https://theconversation.com/the-us-6-3-billion-binance-hack-is-the-biggest-heist-ever-it-should-be-a-wake-up-call-for-cryptocurrency-users-295623",
+     "published": "2026-11-02T16:19:51Z",
      "summary": "",
      "stale": false,
-     "author": "Michael Baker, Professor of Public Health, University of Otago"
-    },
-    {
-     "title": "NZ election poll watch: contrasting scenarios play out in different polls",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-election-poll-watch-contrasting-scenarios-play-out-in-different-polls-295629",
-     "published": "2026-11-01T21:01:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+     "author": "Iwa Salami, Professor of Law, University of East London"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How much could NZ raise from a higher top tax rate? We crunched the numbers",
+   "published": "2026-11-02 20:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Traces of dinosaur blood found in world-first discovery",
+   "published": "2026-11-02 19:59 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Trust in democracy is in decline in NZ. Could citizens’ assemblies help restore it?",
    "published": "2026-11-02 18:28 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Is this the weirdest, most beautiful cricket book ever written?",
-   "published": "2026-11-02 18:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
-   "published": "2026-11-01 23:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ election poll watch: contrasting scenarios play out in different polls",
-   "published": "2026-11-01 21:01 UTC"
+   "title": "The US$6.3 billion Binance hack is the biggest heist ever – it should be a wake up call for cryptocurrency users",
+   "published": "2026-11-02 16:19 UTC"
   },
   {
    "region": "Oceania",
