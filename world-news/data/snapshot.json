@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T01:01:22Z",
+ "generatedAt": "2026-11-02T02:01:15Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
+     "title": "Labor returns to equal term low primary vote in Newspoll",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/labor-returns-to-equal-term-low-primary-vote-in-newspoll-295257",
+     "published": "2026-11-02T01:08:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
+     "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-has-retreated-from-global-cooperation-on-health-security-can-a-new-government-change-course-295324",
      "published": "2026-11-01T23:20:14Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "NZ election poll watch: contrasting scenarios play out in different polls",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nz-election-poll-watch-contrasting-scenarios-play-out-in-different-polls-295629",
      "published": "2026-11-01T21:01:26Z",
      "summary": "",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Judy Ingham, Newsletter Producer, The Conversation"
-    },
-    {
-     "title": "Worried you’re breathing unclean air? Here’s how to measure it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/worried-youre-breathing-unclean-air-heres-how-to-measure-it-288713",
-     "published": "2026-11-01T19:19:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Margaret Davidson, Senior Lecturer, Occupational Hygiene and Environmental Health, Western Sydney University"
     },
     {
      "title": "NZ’s resource management rules have been rewritten. What happens after the election?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Labor returns to equal term low primary vote in Newspoll",
+   "published": "2026-11-02 01:08 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ has retreated from global cooperation on health security. Can a new government change course?",
    "published": "2026-11-01 23:20 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Your say: week beginning November 2",
    "published": "2026-11-01 20:23 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Worried you’re breathing unclean air? Here’s how to measure it",
-   "published": "2026-11-01 19:19 UTC"
   },
   {
    "region": "Oceania",
