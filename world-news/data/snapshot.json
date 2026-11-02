@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T13:39:28Z",
+ "generatedAt": "2026-11-02T14:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Parents, let your kids eat as much candy as they want – less restriction could help reduce the urge to overeat",
+     "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/parents-let-your-kids-eat-as-much-candy-as-they-want-less-restriction-could-help-reduce-the-urge-to-overeat-294113",
-     "published": "2026-11-01T15:39:51Z",
+     "link": "https://theconversation.com/not-in-a-fema-flood-zone-your-home-could-still-be-at-risk-and-you-could-suffer-more-than-your-neighbor-293658",
+     "published": "2026-11-02T13:21:38Z",
      "summary": "",
      "stale": false,
-     "author": "Bryn Beeder, Assistant Clinical Lecturer in Kinesiology, Nutrition, and Health, Miami University"
+     "author": "Yilei Yu, Senior Researcher and Postdoctoral Fellow in Geography, Rice University"
     },
     {
-     "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
+     "title": "Disaster aid has become a political lottery – libraries, schools and places of worship are stepping into the breach",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/zombies-are-real-just-ask-the-parasites-taking-over-the-bodies-and-brains-of-insects-and-rodents-leading-them-to-their-doom-292955",
-     "published": "2026-10-30T20:13:37Z",
+     "link": "https://theconversation.com/disaster-aid-has-become-a-political-lottery-libraries-schools-and-places-of-worship-are-stepping-into-the-breach-292948",
+     "published": "2026-11-02T13:05:20Z",
      "summary": "",
      "stale": false,
-     "author": "Tara Deans, Associate Professor of Biomedical Engineering, Georgia Institute of Technology"
+     "author": "Daniel P. Aldrich, Professor of Political Science, Public Policy and Urban Affairs, Northeastern University"
     },
     {
      "title": "How the streets and a social media army led Lula to a historic win in Brazil",
@@ -177,6 +177,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/forgotten-flint-tools-in-museum-boxes-reveal-how-egypts-early-farmers-paved-the-way-for-the-pharaohs-294501",
+     "published": "2026-11-02T13:54:41Z",
+     "summary": "",
+     "stale": false,
+     "author": "Giulio Lucarini, Senior Researcher, Institute of Heritage Science, National Research Council (CNR)"
+    },
+    {
+     "title": "South Africans living through water cuts blame corruption and neglect, not just broken pipes – study",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/south-africans-living-through-water-cuts-blame-corruption-and-neglect-not-just-broken-pipes-study-290385",
+     "published": "2026-11-02T13:54:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anthony Kaziboni, Senior Researcher, Centre for Social Development in Africa (CSDA), University of Johannesburg"
+    },
+    {
      "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
      "source": "UN News",
      "feed": "un-africa",
@@ -184,26 +204,6 @@
      "published": "2026-11-01T12:00:00Z",
      "summary": "The UN remains committed to supporting a just, lasting and mutually acceptable political solution in Western Sahara that provides for the self-determination of its people, Secretary-General António Guterres said on…",
      "stale": false
-    },
-    {
-     "title": "Algeria is sending troops to Niger for the first time in decades – what’s at stake",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/algeria-is-sending-troops-to-niger-for-the-first-time-in-decades-whats-at-stake-295358",
-     "published": "2026-11-01T09:12:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lotfi Sour, enseignant-chercheur, Université Mustapha Stambouli de Mascara"
-    },
-    {
-     "title": "China imports millions of donkey hides from Africa every year: new book traces the drivers and impact",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/china-imports-millions-of-donkey-hides-from-africa-every-year-new-book-traces-the-drivers-and-impact-295173",
-     "published": "2026-11-01T09:11:22Z",
-     "summary": "",
-     "stale": false,
-     "author": "Lauren Johnston, Associate Professor, China Studies Centre, University of Adelaide"
     },
     {
      "title": "Somalia looks to the future as the UN's political mission closes",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Parents, let your kids eat as much candy as they want – less restriction could help reduce the urge to overeat",
-   "published": "2026-11-01 15:39 UTC"
+   "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
+   "published": "2026-11-02 13:21 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Zombies are real – just ask the parasites taking over the bodies and brains of insects and rodents, leading them to their doom",
-   "published": "2026-10-30 20:13 UTC"
+   "title": "Disaster aid has become a political lottery – libraries, schools and places of worship are stepping into the breach",
+   "published": "2026-11-02 13:05 UTC"
   },
   {
    "region": "Americas",
@@ -768,21 +768,21 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
+   "published": "2026-11-02 13:54 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "South Africans living through water cuts blame corruption and neglect, not just broken pipes – study",
+   "published": "2026-11-02 13:54 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "UN News",
    "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
    "published": "2026-11-01 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Algeria is sending troops to Niger for the first time in decades – what’s at stake",
-   "published": "2026-11-01 09:12 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "China imports millions of donkey hides from Africa every year: new book traces the drivers and impact",
-   "published": "2026-11-01 09:11 UTC"
   },
   {
    "region": "Africa",
