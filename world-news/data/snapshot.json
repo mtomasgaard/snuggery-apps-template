@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T05:01:18Z",
+ "generatedAt": "2026-11-02T06:01:16Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/one-nation-heavyweights-give-matt-canavan-clear-run-to-lower-house-295658",
+     "published": "2026-11-02T05:15:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "AI translation sounds convincing, but it can be riddled with hidden errors",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Your say: week beginning November 2",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-november-2-295651",
-     "published": "2026-11-01T20:23:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Judy Ingham, Newsletter Producer, The Conversation"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "One Nation heavyweights give Matt Canavan clear run to lower house",
+   "published": "2026-11-02 05:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "AI translation sounds convincing, but it can be riddled with hidden errors",
    "published": "2026-11-02 01:43 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "NZ election poll watch: contrasting scenarios play out in different polls",
    "published": "2026-11-01 21:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning November 2",
-   "published": "2026-11-01 20:23 UTC"
   },
   {
    "region": "Oceania",
