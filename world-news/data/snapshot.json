@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T00:01:25Z",
+ "generatedAt": "2026-11-03T01:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
+     "title": "The midterms will change US politics. But NZ will keep feeling the Trump effect",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/the-midterms-will-change-us-politics-but-nz-will-keep-feeling-the-trump-effect-294656",
+     "published": "2026-11-03T00:10:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Timothy Fadgen, Senior Lecturer, Politics and International Relations, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/if-norfolk-island-is-an-australian-territory-why-is-doing-business-there-so-complicated-295543",
      "published": "2026-11-02T22:22:26Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "How much could NZ raise from a higher top tax rate? We crunched the numbers",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/how-much-could-nz-raise-from-a-higher-top-tax-rate-we-crunched-the-numbers-295341",
      "published": "2026-11-02T20:50:13Z",
      "summary": "",
@@ -451,7 +461,7 @@
     {
      "title": "Traces of dinosaur blood found in world-first discovery",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/traces-of-dinosaur-blood-found-in-world-first-discovery-286450",
      "published": "2026-11-02T19:59:26Z",
      "summary": "",
@@ -461,22 +471,12 @@
     {
      "title": "Trust in democracy is in decline in NZ. Could citizens’ assemblies help restore it?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/trust-in-democracy-is-in-decline-in-nz-could-citizens-assemblies-help-restore-it-293792",
      "published": "2026-11-02T18:28:01Z",
      "summary": "",
      "stale": false,
      "author": "Anne Bardsley, Civic Engagement Lead, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "Why we give flowers to those in grief – or buy them for ourselves when we’re sad",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-we-give-flowers-to-those-in-grief-or-buy-them-for-ourselves-when-were-sad-289892",
-     "published": "2026-11-02T18:27:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Karen Anderson, Unit Coordinator, Lecturer and Clinical Supervisor, Counselling and Psychotherapy Courses, Edith Cowan University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The midterms will change US politics. But NZ will keep feeling the Trump effect",
+   "published": "2026-11-03 00:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
    "published": "2026-11-02 22:22 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Trust in democracy is in decline in NZ. Could citizens’ assemblies help restore it?",
    "published": "2026-11-02 18:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why we give flowers to those in grief – or buy them for ourselves when we’re sad",
-   "published": "2026-11-02 18:27 UTC"
   },
   {
    "region": "Oceania",
