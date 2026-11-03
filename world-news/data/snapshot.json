@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T14:01:27Z",
+ "generatedAt": "2026-11-03T15:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Rwanda-RDC : les sanctions américaines, un instrument de pression à géométrie variable",
+     "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/rwanda-rdc-les-sanctions-americaines-un-instrument-de-pression-a-geometrie-variable-295603",
-     "published": "2026-11-03T08:35:18Z",
+     "link": "https://theconversation.com/north-africas-green-hydrogen-exports-to-europe-could-harm-water-supply-and-marine-life-study-294368",
+     "published": "2026-11-03T14:09:22Z",
      "summary": "",
      "stale": false,
-     "author": "Alène Ngarura Kaneza, doctorante en sciences politiques, Université Libre de Bruxelles (ULB)"
+     "author": "Akeem Adeyemi Oladipo, Associate Professor of Chemistry and Research Scientist in the Polymeric Materials Research Laboratory, Eastern Mediterranean University"
     },
     {
-     "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
+     "title": "Farming subsidies in Zimbabwe do help spread crop risk, but impact on income is limited – research",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/forgotten-flint-tools-in-museum-boxes-reveal-how-egypts-early-farmers-paved-the-way-for-the-pharaohs-294501",
-     "published": "2026-11-02T13:54:41Z",
+     "link": "https://theconversation.com/farming-subsidies-in-zimbabwe-do-help-spread-crop-risk-but-impact-on-income-is-limited-research-295477",
+     "published": "2026-11-03T14:09:04Z",
      "summary": "",
      "stale": false,
-     "author": "Giulio Lucarini, Senior Researcher, Institute of Heritage Science, National Research Council (CNR)"
+     "author": "Freddy Ruzhani, PhD Candidate, University of Fort Hare"
     },
     {
      "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Rwanda-RDC : les sanctions américaines, un instrument de pression à géométrie variable",
-   "published": "2026-11-03 08:35 UTC"
+   "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
+   "published": "2026-11-03 14:09 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
-   "published": "2026-11-02 13:54 UTC"
+   "title": "Farming subsidies in Zimbabwe do help spread crop risk, but impact on income is limited – research",
+   "published": "2026-11-03 14:09 UTC"
   },
   {
    "region": "Africa",
