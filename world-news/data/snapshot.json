@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T21:05:04Z",
+ "generatedAt": "2026-11-03T22:03:52Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nzs-next-government-must-look-beyond-todays-health-challenges-a-new-report-shows-why-295544",
+     "published": "2026-11-03T22:00:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michael Baker, Professor of Public Health, University of Otago"
+    },
+    {
      "title": "Australian poetry classics: Adam Lindsay Gordon’s The Sick Stockrider captured the nation’s frontier anxiety",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Digital Storytelling Team, The Conversation"
-    },
-    {
-     "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/rba-hikes-interest-rates-to-an-18-year-high-warning-inflation-will-hurt-for-another-year-294682",
-     "published": "2026-11-03T05:27:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
+   "published": "2026-11-03 22:00 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australian poetry classics: Adam Lindsay Gordon’s The Sick Stockrider captured the nation’s frontier anxiety",
    "published": "2026-11-03 18:54 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "US midterm elections: live results tracker",
    "published": "2026-11-03 18:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
-   "published": "2026-11-03 05:27 UTC"
   },
   {
    "region": "Oceania",
