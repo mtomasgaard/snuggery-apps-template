@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T09:01:23Z",
+ "generatedAt": "2026-11-03T10:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Rwanda-RDC : les sanctions américaines, un instrument de pression à géométrie variable",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/rwanda-rdc-les-sanctions-americaines-un-instrument-de-pression-a-geometrie-variable-295603",
+     "published": "2026-11-03T08:35:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alène Ngarura Kaneza, doctorante en sciences politiques, Université Libre de Bruxelles (ULB)"
+    },
+    {
      "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Giulio Lucarini, Senior Researcher, Institute of Heritage Science, National Research Council (CNR)"
-    },
-    {
-     "title": "South Africans living through water cuts blame corruption and neglect, not just broken pipes – study",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/south-africans-living-through-water-cuts-blame-corruption-and-neglect-not-just-broken-pipes-study-290385",
-     "published": "2026-11-02T13:54:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anthony Kaziboni, Senior Researcher, Centre for Social Development in Africa (CSDA), University of Johannesburg"
     },
     {
      "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
-   "published": "2026-11-02 13:54 UTC"
+   "title": "Rwanda-RDC : les sanctions américaines, un instrument de pression à géométrie variable",
+   "published": "2026-11-03 08:35 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "South Africans living through water cuts blame corruption and neglect, not just broken pipes – study",
+   "title": "Forgotten flint tools in museum boxes reveal how Egypt’s early farmers paved the way for the pharaohs",
    "published": "2026-11-02 13:54 UTC"
   },
   {
