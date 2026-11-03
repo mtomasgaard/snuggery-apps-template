@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T15:01:26Z",
+ "generatedAt": "2026-11-03T16:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Egypt’s crackdown on independent media reaches Mada Masr as editor faces trial",
+     "source": "Global Voices",
+     "feed": "gv-west-asia",
+     "link": "https://globalvoices.org/2026/11/03/egypts-crackdown-on-independent-media-reaches-mada-masr-as-editor-faces-trial/",
+     "published": "2026-11-03T15:56:04Z",
+     "summary": "Egypt has convicted Mada Masr’s editor in chief Lina Attalah and ordered the outlet closed, weeks after arresting the whole Matsada2sh newsroom.",
+     "stale": false,
+     "author": "Walid El Houri"
+    },
+    {
      "title": "‘They deserve to know the truth’: UN rights chief demands probe into staffer’s death in Houthi custody",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -325,16 +335,6 @@
      "summary": "Technologies developed, tested and refined under occupation do not stay there; they get exported to the rest of the world",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-     "source": "Global Voices",
-     "feed": "gv-west-asia",
-     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
-     "published": "2026-10-17T08:07:27Z",
-     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": false,
-     "author": "Uncloseted Media"
     }
    ]
   },
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "Global Voices",
+   "title": "Egypt’s crackdown on independent media reaches Mada Masr as editor faces trial",
+   "published": "2026-11-03 15:56 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "UN News",
    "title": "‘They deserve to know the truth’: UN rights chief demands probe into staffer’s death in Houthi custody",
    "published": "2026-10-31 12:00 UTC"
@@ -855,12 +861,6 @@
    "source": "Global Voices",
    "title": "Palestine is already living under the Big Tech authoritarianism the world is being sold",
    "published": "2026-10-21 20:19 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "Global Voices",
-   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Asia",
