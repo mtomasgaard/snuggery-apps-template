@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T22:03:52Z",
+ "generatedAt": "2026-11-03T23:01:49Z",
  "regions": [
   {
    "key": "europe",
@@ -431,7 +431,7 @@
     {
      "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nzs-next-government-must-look-beyond-todays-health-challenges-a-new-report-shows-why-295544",
      "published": "2026-11-03T22:00:28Z",
      "summary": "",
@@ -459,16 +459,6 @@
      "author": "Hazel Ellis, PhD Candidate, Centre for Transformative Media Technology, Swinburne University of Technology"
     },
     {
-     "title": "How to say ‘no’ to your child – and stick to it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-to-say-no-to-your-child-and-stick-to-it-295354",
-     "published": "2026-11-03T18:53:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Fiona Boylan, Associate Professor, School of Education, Edith Cowan University"
-    },
-    {
      "title": "US midterm elections: live results tracker",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -477,6 +467,16 @@
      "summary": "",
      "stale": false,
      "author": "Digital Storytelling Team, The Conversation"
+    },
+    {
+     "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/rba-hikes-interest-rates-to-an-18-year-high-warning-inflation-will-hurt-for-another-year-294682",
+     "published": "2026-11-03T05:27:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "How to say ‘no’ to your child – and stick to it",
-   "published": "2026-11-03 18:53 UTC"
+   "title": "US midterm elections: live results tracker",
+   "published": "2026-11-03 18:52 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "US midterm elections: live results tracker",
-   "published": "2026-11-03 18:52 UTC"
+   "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
+   "published": "2026-11-03 05:27 UTC"
   },
   {
    "region": "Oceania",
