@@ -1,12 +1,21 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T16:01:37Z",
+ "generatedAt": "2026-11-03T17:03:30Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168724",
+     "published": "2026-11-03T12:00:00Z",
+     "summary": "Ukraine has sustained almost 2,000 attacks on education since the full-scale Russian invasion in 2022, with some 270 this year alone, the UN Children’s Fund (UNICEF) said on Tuesday, a day after a strike at a school…",
+     "stale": false
+    },
     {
      "title": "In Kosovo, a new app makes reporting problems to the government fast and easy",
      "source": "Global Voices",
@@ -18,6 +27,15 @@
      "author": "Nurbek Bekmurzaev"
     },
     {
+     "title": "Ukraine: WFP provides hot meals to Oleshky evacuees as UN pushes to restore power before winter",
+     "source": "UN News",
+     "feed": "un-europe",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168722",
+     "published": "2026-11-02T12:00:00Z",
+     "summary": "The UN World Food Programme (WFP) is providing emergency food assistance to more than 400 people who were able to leave the Russian-occupied city of Oleshky, in Ukraine’s Kherson region, during a brief local ceasefire.",
+     "stale": false
+    },
+    {
      "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
      "source": "Global Voices",
      "feed": "gv-western-europe",
@@ -26,15 +44,6 @@
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
      "stale": false,
      "author": "Guest Contributor"
-    },
-    {
-     "title": "Ukraine: Oleshky ceasefire offers ‘hope’ for civilians as attacks on aid vehicles continue",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168712",
-     "published": "2026-10-30T12:00:00Z",
-     "summary": "Each day the ceasefire in Oleshky holds means hope for civilians in the city, the UN’s top humanitarian official said, stressing that those wishing to leave must be able to do so safely and voluntarily.",
-     "stale": false
     },
     {
      "title": "In Albania, rural youth are campaigning to solve local environmental problems",
@@ -55,15 +64,6 @@
      "summary": "Five years into the full-scale war, however, the border has also revealed the limits of that extraordinary solidarity.",
      "stale": false,
      "author": "Anna Romandash"
-    },
-    {
-     "title": "Ukraine: Investigators find Russia committed war crimes by targeting civilians",
-     "source": "UN News",
-     "feed": "un-europe",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168670",
-     "published": "2026-10-26T12:00:00Z",
-     "summary": "Top human rights experts investigating Russia’s full-scale invasion of Ukraine said on Monday that the Russian authorities had committed war crimes and crimes against humanity by attacking civilians and vital energy…",
-     "stale": false
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -93,10 +93,10 @@
    "stale": false,
    "items": [
     {
-     "title": "Meta’s $25B fine left out accountability for the Cambridge Analytica data privacy scandal",
+     "title": "Meta’s $25B fine left out accountability for harm from the Cambridge Analytica data privacy scandal",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/metas-25b-fine-left-out-accountability-for-the-cambridge-analytica-data-privacy-scandal-295620",
+     "link": "https://theconversation.com/metas-25b-fine-left-out-accountability-for-harm-from-the-cambridge-analytica-data-privacy-scandal-295620",
      "published": "2026-11-03T13:23:29Z",
      "summary": "",
      "stale": false,
@@ -672,21 +672,27 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "UN News",
+   "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
+   "published": "2026-11-03 12:00 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "Global Voices",
    "title": "In Kosovo, a new app makes reporting problems to the government fast and easy",
    "published": "2026-11-02 23:49 UTC"
   },
   {
    "region": "Europe",
-   "source": "Global Voices",
-   "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
-   "published": "2026-10-30 19:30 UTC"
+   "source": "UN News",
+   "title": "Ukraine: WFP provides hot meals to Oleshky evacuees as UN pushes to restore power before winter",
+   "published": "2026-11-02 12:00 UTC"
   },
   {
    "region": "Europe",
-   "source": "UN News",
-   "title": "Ukraine: Oleshky ceasefire offers ‘hope’ for civilians as attacks on aid vehicles continue",
-   "published": "2026-10-30 12:00 UTC"
+   "source": "Global Voices",
+   "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
+   "published": "2026-10-30 19:30 UTC"
   },
   {
    "region": "Europe",
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
    "published": "2026-10-26 19:45 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "UN News",
-   "title": "Ukraine: Investigators find Russia committed war crimes by targeting civilians",
-   "published": "2026-10-26 12:00 UTC"
   },
   {
    "region": "Europe",
@@ -721,7 +721,7 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Meta’s $25B fine left out accountability for the Cambridge Analytica data privacy scandal",
+   "title": "Meta’s $25B fine left out accountability for harm from the Cambridge Analytica data privacy scandal",
    "published": "2026-11-03 13:23 UTC"
   },
   {
