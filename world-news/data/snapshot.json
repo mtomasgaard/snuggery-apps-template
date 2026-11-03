@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T03:01:29Z",
+ "generatedAt": "2026-11-03T04:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Unpacking Hong Kong’s rule of law score according to the World Justice Project’s ranking",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/03/unpacking-hong-kongs-rule-of-law-score-according-to-the-world-justice-projects-ranking/",
+     "published": "2026-11-03T03:21:48Z",
+     "summary": "Institutional injustice, such as political nepotism, legal discrimination, and cronyism, is a far worse abusive use of power that creates systematic injustice.",
+     "stale": false,
+     "author": "Oiwan Lam"
+    },
+    {
      "title": "Samarkand: A ‘living museum’ on the Silk Road grapples with a tourism boom",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -390,16 +400,6 @@
      "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumours, defamation and disinformation could revive censorship and threaten online free expression, even as victims need…",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/10/27/warning-signals-venezuela-and-the-risk-of-ai-powered-chinese-digital-authoritarianism/",
-     "published": "2026-10-27T21:10:54Z",
-     "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
-     "stale": false,
-     "author": "ProBox"
     },
     {
      "title": "Protest as a pillar of democracy",
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "Global Voices",
+   "title": "Unpacking Hong Kong’s rule of law score according to the World Justice Project’s ranking",
+   "published": "2026-11-03 03:21 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "UN News",
    "title": "Samarkand: A ‘living museum’ on the Silk Road grapples with a tourism boom",
    "published": "2026-10-31 12:00 UTC"
@@ -891,12 +897,6 @@
    "source": "Global Voices",
    "title": "Bangladesh weighs tougher cyber law as AI-generated abuse targets women",
    "published": "2026-10-28 07:51 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
-   "published": "2026-10-27 21:10 UTC"
   },
   {
    "region": "Asia",
