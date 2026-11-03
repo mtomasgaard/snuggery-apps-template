@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T05:01:26Z",
+ "generatedAt": "2026-11-03T06:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Democrats likely to gain control of Congress in US midterm elections as Senate lead expands",
+     "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/rba-hikes-interest-rates-to-an-18-year-high-warning-inflation-will-hurt-for-another-year-294682",
+     "published": "2026-11-03T05:27:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
+    },
+    {
+     "title": "Democrats likely to gain control of Congress in US midterm elections as Senate lead expands",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/democrats-likely-to-gain-control-of-congress-in-us-midterm-elections-as-senate-lead-expands-295460",
      "published": "2026-11-03T02:00:04Z",
      "summary": "",
@@ -461,22 +471,12 @@
     {
      "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/if-norfolk-island-is-an-australian-territory-why-is-doing-business-there-so-complicated-295543",
      "published": "2026-11-02T22:22:26Z",
      "summary": "",
      "stale": false,
      "author": "Rod McNaughton, Professor of Entrepreneurship, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "How much could NZ raise from a higher top tax rate? We crunched the numbers",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/how-much-could-nz-raise-from-a-higher-top-tax-rate-we-crunched-the-numbers-295341",
-     "published": "2026-11-02T20:50:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peer Ebbesen Skov, Associate Professor of Economics, Auckland University of Technology"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
+   "published": "2026-11-03 05:27 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Democrats likely to gain control of Congress in US midterm elections as Senate lead expands",
    "published": "2026-11-03 02:00 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
    "published": "2026-11-02 22:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How much could NZ raise from a higher top tax rate? We crunched the numbers",
-   "published": "2026-11-02 20:50 UTC"
   },
   {
    "region": "Oceania",
