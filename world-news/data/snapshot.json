@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T13:01:19Z",
+ "generatedAt": "2026-11-03T14:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,14 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "US wildfire damage is on pace to triple by mid-century, but there are affordable ways to lower the risk",
+     "title": "Meta’s $25B fine left out accountability for the Cambridge Analytica data privacy scandal",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/us-wildfire-damage-is-on-pace-to-triple-by-mid-century-but-there-are-affordable-ways-to-lower-the-risk-287940",
-     "published": "2026-11-03T11:38:22Z",
+     "link": "https://theconversation.com/metas-25b-fine-left-out-accountability-for-the-cambridge-analytica-data-privacy-scandal-295620",
+     "published": "2026-11-03T13:23:29Z",
      "summary": "",
      "stale": false,
-     "author": "Virginia Iglesias, Earth Lab Director, University of Colorado Boulder"
+     "author": "Emma L. Briant, Visiting Associate Professor at the Lucy Family Institute for Data and Society, University of Notre Dame"
+    },
+    {
+     "title": "Pediatric palliative care addresses the unique needs of seriously ill children and their families",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/pediatric-palliative-care-addresses-the-unique-needs-of-seriously-ill-children-and-their-families-286905",
+     "published": "2026-11-03T13:04:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Khaliah Johnson, Associate Professor of Pediatrics, Emory University"
     },
     {
      "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
@@ -111,16 +121,6 @@
      "summary": "In our October edition of Undertones, we examine a movement calling for accountability and coordinated online action to challenge Meta’s problematic content moderation policies and governance practices in Brazil.",
      "stale": false,
      "author": "Civic Media Observatory"
-    },
-    {
-     "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/not-in-a-fema-flood-zone-your-home-could-still-be-at-risk-and-you-could-suffer-more-than-your-neighbor-293658",
-     "published": "2026-11-02T13:21:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Yilei Yu, Senior Researcher and Postdoctoral Fellow in Geography, Rice University"
     },
     {
      "title": "How the streets and a social media army led Lula to a historic win in Brazil",
@@ -721,20 +721,20 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US wildfire damage is on pace to triple by mid-century, but there are affordable ways to lower the risk",
-   "published": "2026-11-03 11:38 UTC"
+   "title": "Meta’s $25B fine left out accountability for the Cambridge Analytica data privacy scandal",
+   "published": "2026-11-03 13:23 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Pediatric palliative care addresses the unique needs of seriously ill children and their families",
+   "published": "2026-11-03 13:04 UTC"
   },
   {
    "region": "Americas",
    "source": "Global Voices",
    "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
    "published": "2026-11-02 18:08 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
-   "published": "2026-11-02 13:21 UTC"
   },
   {
    "region": "Americas",
