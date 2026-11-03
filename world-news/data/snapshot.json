@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T11:01:22Z",
+ "generatedAt": "2026-11-03T12:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "US wildfire damage is on pace to triple by mid-century, but there are affordable ways to lower the risk",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/us-wildfire-damage-is-on-pace-to-triple-by-mid-century-but-there-are-affordable-ways-to-lower-the-risk-287940",
+     "published": "2026-11-03T11:38:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Virginia Iglesias, Earth Lab Director, University of Colorado Boulder"
+    },
+    {
      "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Yilei Yu, Senior Researcher and Postdoctoral Fellow in Geography, Rice University"
-    },
-    {
-     "title": "Disaster aid has become a political lottery – libraries, schools and places of worship are stepping into the breach",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/disaster-aid-has-become-a-political-lottery-libraries-schools-and-places-of-worship-are-stepping-into-the-breach-292948",
-     "published": "2026-11-02T13:05:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel P. Aldrich, Professor of Political Science, Public Policy and Urban Affairs, Northeastern University"
     },
     {
      "title": "How the streets and a social media army led Lula to a historic win in Brazil",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "US wildfire damage is on pace to triple by mid-century, but there are affordable ways to lower the risk",
+   "published": "2026-11-03 11:38 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
    "published": "2026-11-02 18:08 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "Not in a FEMA flood zone? Your home could still be at risk – and you could suffer more than your neighbor",
    "published": "2026-11-02 13:21 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Disaster aid has become a political lottery – libraries, schools and places of worship are stepping into the breach",
-   "published": "2026-11-02 13:05 UTC"
   },
   {
    "region": "Americas",
