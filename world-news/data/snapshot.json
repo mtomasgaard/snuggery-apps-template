@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-03T19:03:51Z",
+ "generatedAt": "2026-11-03T20:01:46Z",
  "regions": [
   {
    "key": "europe",
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
+     "title": "Australian poetry classics: Adam Lindsay Gordon’s The Sick Stockrider captured the nation’s frontier anxiety",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/australian-poetry-classics-adam-lindsay-gordons-the-sick-stockrider-captured-the-nations-frontier-anxiety-287191",
+     "published": "2026-11-03T18:54:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Peter Kirkpatrick, Honorary Associate Professor, English and Writing, University of Sydney"
+    },
+    {
+     "title": "Your computer can’t read a floppy disk – so how do we save the history they hold?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/your-computer-cant-read-a-floppy-disk-so-how-do-we-save-the-history-they-hold-292900",
+     "published": "2026-11-03T18:53:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Hazel Ellis, PhD Candidate, Centre for Transformative Media Technology, Swinburne University of Technology"
+    },
+    {
+     "title": "How to say ‘no’ to your child – and stick to it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-to-say-no-to-your-child-and-stick-to-it-295354",
+     "published": "2026-11-03T18:53:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Fiona Boylan, Associate Professor, School of Education, Edith Cowan University"
+    },
+    {
+     "title": "US midterm elections: live results tracker",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/us-midterm-elections-live-results-tracker-295554",
+     "published": "2026-11-03T18:52:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Digital Storytelling Team, The Conversation"
+    },
+    {
+     "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/rba-hikes-interest-rates-to-an-18-year-high-warning-inflation-will-hurt-for-another-year-294682",
      "published": "2026-11-03T05:27:48Z",
      "summary": "",
      "stale": false,
      "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
-    },
-    {
-     "title": "Democrats likely to gain control of Congress in US midterm elections as Senate lead expands",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/democrats-likely-to-gain-control-of-congress-in-us-midterm-elections-as-senate-lead-expands-295460",
-     "published": "2026-11-03T02:00:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Sidney Nolan looms large over this exhibition of his early work, but his voice can’t always be trusted",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/sidney-nolan-looms-large-over-this-exhibition-of-his-early-work-but-his-voice-cant-always-be-trusted-295151",
-     "published": "2026-11-03T01:24:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Chris McAuliffe, Emeritus Professor, School of Art and Design, Australian National University"
-    },
-    {
-     "title": "The midterms will change US politics. But NZ will keep feeling the Trump effect",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-midterms-will-change-us-politics-but-nz-will-keep-feeling-the-trump-effect-294656",
-     "published": "2026-11-03T00:10:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Timothy Fadgen, Senior Lecturer, Politics and International Relations, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/if-norfolk-island-is-an-australian-territory-why-is-doing-business-there-so-complicated-295543",
-     "published": "2026-11-02T22:22:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rod McNaughton, Professor of Entrepreneurship, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australian poetry classics: Adam Lindsay Gordon’s The Sick Stockrider captured the nation’s frontier anxiety",
+   "published": "2026-11-03 18:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Your computer can’t read a floppy disk – so how do we save the history they hold?",
+   "published": "2026-11-03 18:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How to say ‘no’ to your child – and stick to it",
+   "published": "2026-11-03 18:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "US midterm elections: live results tracker",
+   "published": "2026-11-03 18:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
    "published": "2026-11-03 05:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Democrats likely to gain control of Congress in US midterm elections as Senate lead expands",
-   "published": "2026-11-03 02:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Sidney Nolan looms large over this exhibition of his early work, but his voice can’t always be trusted",
-   "published": "2026-11-03 01:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The midterms will change US politics. But NZ will keep feeling the Trump effect",
-   "published": "2026-11-03 00:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "If Norfolk Island is an Australian territory, why is doing business there so complicated?",
-   "published": "2026-11-02 22:22 UTC"
   },
   {
    "region": "Oceania",
