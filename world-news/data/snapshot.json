@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-02T23:01:24Z",
+ "generatedAt": "2026-11-03T00:01:25Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "In Kosovo, a new app makes reporting problems to the government fast and easy",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/11/02/in-kosovo-a-new-app-makes-reporting-problems-to-the-government-fast-and-easy/",
+     "published": "2026-11-02T23:49:55Z",
+     "summary": "Based on the type and location of the problem, the platform is designed to route the report to the appropriate department and allow the citizen to follow what happens afterwards.",
+     "stale": false,
+     "author": "Nurbek Bekmurzaev"
+    },
     {
      "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
      "source": "Global Voices",
@@ -54,16 +64,6 @@
      "published": "2026-10-26T12:00:00Z",
      "summary": "Top human rights experts investigating Russia’s full-scale invasion of Ukraine said on Monday that the Russian authorities had committed war crimes and crimes against humanity by attacking civilians and vital energy…",
      "stale": false
-    },
-    {
-     "title": "Big Tech and authoritarian states: Belarus",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/24/big-tech-and-authoritarian-states-belarus/",
-     "published": "2026-10-24T18:11:42Z",
-     "summary": "In the latest GV podcast, we discussed why Russia restricts access to many social media services, while Belarus does not impose comparable restrictions; censorship, surveillance, and digital authoritarianism…",
-     "stale": false,
-     "author": "Daria Dergacheva"
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "In Kosovo, a new app makes reporting problems to the government fast and easy",
+   "published": "2026-11-02 23:49 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "When chatbots become ‘answer engines’: AI, geopolitics and truth",
    "published": "2026-10-30 19:30 UTC"
   },
@@ -699,12 +705,6 @@
    "source": "UN News",
    "title": "Ukraine: Investigators find Russia committed war crimes by targeting civilians",
    "published": "2026-10-26 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Big Tech and authoritarian states: Belarus",
-   "published": "2026-10-24 18:11 UTC"
   },
   {
    "region": "Europe",
