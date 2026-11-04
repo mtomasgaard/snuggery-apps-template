@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T20:01:24Z",
+ "generatedAt": "2026-11-04T21:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/nasas-swift-telescope-has-burned-up-months-after-a-robot-sent-to-save-it-failed-heres-why-its-so-hard-to-boost-a-satellite-295538",
+     "published": "2026-11-04T20:09:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Wanjiku Chebet Kanjumba, Ph.D. Candidate in Aerospace Engineering, University of Florida"
+    },
+    {
      "title": "Pennsylvania Democrats now have power to push forward on election reform, marijuana legalization and minimum wage increases",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Daniel J. Mallinson, Associate Professor of Public Policy and Administration, Penn State"
-    },
-    {
-     "title": "Midterms are bad for incumbents – and even worse when energy prices are high",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/midterms-are-bad-for-incumbents-and-even-worse-when-energy-prices-are-high-295287",
-     "published": "2026-11-04T19:06:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michael A. Mische, Associate Professor of the Practice of Management and Organization, Marshall School of Business, University of Southern California"
     },
     {
      "title": "Haiti gang leader seeks UN talks as El Salvador sends 2,000 troops to hunt for missing soldiers",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Pennsylvania Democrats now have power to push forward on election reform, marijuana legalization and minimum wage increases",
-   "published": "2026-11-04 19:42 UTC"
+   "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
+   "published": "2026-11-04 20:09 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Midterms are bad for incumbents – and even worse when energy prices are high",
-   "published": "2026-11-04 19:06 UTC"
+   "title": "Pennsylvania Democrats now have power to push forward on election reform, marijuana legalization and minimum wage increases",
+   "published": "2026-11-04 19:42 UTC"
   },
   {
    "region": "Americas",
