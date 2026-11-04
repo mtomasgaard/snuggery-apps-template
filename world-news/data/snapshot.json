@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T17:01:45Z",
+ "generatedAt": "2026-11-04T18:01:41Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Afghan children face narrowing path to education, UN agencies report",
+     "source": "UN News",
+     "feed": "un-asia-pacific",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168732",
+     "published": "2026-11-04T12:00:00Z",
+     "summary": "More than half of Afghanistan’s children who should be in primary school remain outside formal learning and millions of girls can only dream of going to university.",
+     "stale": false
+    },
+    {
      "title": "Tracing the recruitment trap behind Russia’s war",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -370,15 +379,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/10/1168711",
      "published": "2026-10-31T12:00:00Z",
      "summary": "As the sun sets over Samarkand’s majestic Registan, its last rays glint across the turquoise mosaics. Dusk settles on the ancient square where great trade routes have crossed for centuries.",
-     "stale": false
-    },
-    {
-     "title": "DPR Korea: Isolation deepens even as the country changes, says UN rights official",
-     "source": "UN News",
-     "feed": "un-asia-pacific",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168690",
-     "published": "2026-10-31T12:00:00Z",
-     "summary": "The Democratic People’s Republic of Korea (DPRK) is building factories and hospitals, rolling out smartphones and mobile banking, and passing new laws at an unprecedented rate. But its people are more cut off from the…",
      "stale": false
     },
     {
@@ -864,6 +864,12 @@
   },
   {
    "region": "Asia",
+   "source": "UN News",
+   "title": "Afghan children face narrowing path to education, UN agencies report",
+   "published": "2026-11-04 12:00 UTC"
+  },
+  {
+   "region": "Asia",
    "source": "Global Voices",
    "title": "Tracing the recruitment trap behind Russia’s war",
    "published": "2026-11-04 05:26 UTC"
@@ -878,12 +884,6 @@
    "region": "Asia",
    "source": "UN News",
    "title": "Samarkand: A ‘living museum’ on the Silk Road grapples with a tourism boom",
-   "published": "2026-10-31 12:00 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "UN News",
-   "title": "DPR Korea: Isolation deepens even as the country changes, says UN rights official",
    "published": "2026-10-31 12:00 UTC"
   },
   {
