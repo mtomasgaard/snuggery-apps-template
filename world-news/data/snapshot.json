@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T05:01:19Z",
+ "generatedAt": "2026-11-04T06:01:31Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Tracing the recruitment trap behind Russia’s war",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/11/04/tracing-the-recruitment-trap-behind-russias-war/",
+     "published": "2026-11-04T05:26:29Z",
+     "summary": "Bangladeshi men paid agents for Russian jobs and ended up on the front lines. Families wait for bodies and answers, and they want the recruiters behind it in a courtroom.",
+     "stale": false,
+     "author": "Zulker Naeen"
+    },
     {
      "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
      "source": "UN News",
@@ -54,16 +64,6 @@
      "summary": "Their phones and creativity are enough when they have a clear purpose and guidance.",
      "stale": false,
      "author": "Nurbek Bekmurzaev"
-    },
-    {
-     "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/10/26/volunteers-from-poland-remember-how-poles-opened-their-homes-to-ukrainian-refugees-in-2022/",
-     "published": "2026-10-26T19:45:17Z",
-     "summary": "Five years into the full-scale war, however, the border has also revealed the limits of that extraordinary solidarity.",
-     "stale": false,
-     "author": "Anna Romandash"
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Tracing the recruitment trap behind Russia’s war",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/11/04/tracing-the-recruitment-trap-behind-russias-war/",
+     "published": "2026-11-04T05:26:29Z",
+     "summary": "Bangladeshi men paid agents for Russian jobs and ended up on the front lines. Families wait for bodies and answers, and they want the recruiters behind it in a courtroom.",
+     "stale": false,
+     "author": "Zulker Naeen"
+    },
+    {
      "title": "Unpacking Hong Kong’s rule of law score according to the World Justice Project’s ranking",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -410,16 +420,6 @@
      "summary": "This spotlight is, then, a form of protest in its own right: a way of reasserting that protest is legitimate, important for democracy, and everywhere.",
      "stale": false,
      "author": "Malka Older"
-    },
-    {
-     "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/20/built-for-boats-adrift-on-land-bangladeshs-bede-community-struggles-with-a-fixed-address-system/",
-     "published": "2026-10-20T20:06:51Z",
-     "summary": "Bangladesh’s traditionally nomadic Bede community faces severe displacement from floods and eroding rivers. Lacking fixed addresses, they struggle to access citizenship documents, healthcare, and education as they…",
-     "stale": false,
-     "author": "Masudul Zarif"
     }
    ]
   },
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "Tracing the recruitment trap behind Russia’s war",
+   "published": "2026-11-04 05:26 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
    "published": "2026-11-03 12:00 UTC"
@@ -699,12 +705,6 @@
    "source": "Global Voices",
    "title": "In Albania, rural youth are campaigning to solve local environmental problems",
    "published": "2026-10-29 13:40 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Volunteers from Poland remember how Poles opened their homes to Ukrainian refugees in 2022",
-   "published": "2026-10-26 19:45 UTC"
   },
   {
    "region": "Europe",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Tracing the recruitment trap behind Russia’s war",
+   "published": "2026-11-04 05:26 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "Unpacking Hong Kong’s rule of law score according to the World Justice Project’s ranking",
    "published": "2026-11-03 03:21 UTC"
   },
@@ -903,12 +909,6 @@
    "source": "Global Voices",
    "title": "Protest as a pillar of democracy",
    "published": "2026-10-21 23:56 UTC"
-  },
-  {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Built for boats, adrift on land: Bangladesh’s Bede community struggles with a fixed-address system",
-   "published": "2026-10-20 20:06 UTC"
   },
   {
    "region": "Oceania",
