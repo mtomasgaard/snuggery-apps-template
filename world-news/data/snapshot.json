@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T02:01:21Z",
+ "generatedAt": "2026-11-04T03:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Midterms proceeded without chaos, despite unprecedented Justice Department interference in recent days",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/midterms-proceeded-without-chaos-despite-unprecedented-justice-department-interference-in-recent-days-295622",
+     "published": "2026-11-04T02:20:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "John E. Jones III, President, Dickinson College"
+    },
+    {
      "title": "Meta’s $25B fine left out accountability for harm from the Cambridge Analytica data privacy scandal",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Emma L. Briant, Visiting Associate Professor at the Lucy Family Institute for Data and Society, University of Notre Dame"
-    },
-    {
-     "title": "Pediatric palliative care addresses the unique needs of seriously ill children and their families",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/pediatric-palliative-care-addresses-the-unique-needs-of-seriously-ill-children-and-their-families-286905",
-     "published": "2026-11-03T13:04:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Khaliah Johnson, Associate Professor of Pediatrics, Emory University"
     },
     {
      "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Meta’s $25B fine left out accountability for harm from the Cambridge Analytica data privacy scandal",
-   "published": "2026-11-03 13:23 UTC"
+   "title": "Midterms proceeded without chaos, despite unprecedented Justice Department interference in recent days",
+   "published": "2026-11-04 02:20 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Pediatric palliative care addresses the unique needs of seriously ill children and their families",
-   "published": "2026-11-03 13:04 UTC"
+   "title": "Meta’s $25B fine left out accountability for harm from the Cambridge Analytica data privacy scandal",
+   "published": "2026-11-03 13:23 UTC"
   },
   {
    "region": "Americas",
