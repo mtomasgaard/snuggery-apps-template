@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T21:01:17Z",
+ "generatedAt": "2026-11-04T22:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,16 @@
      "author": "Daniel J. Mallinson, Associate Professor of Public Policy and Administration, Penn State"
     },
     {
+     "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/11/04/the-scandals-and-suspects-surrounding-flavio-bolsonaro-according-to-the-brazilian-press/",
+     "published": "2026-11-04T17:38:28Z",
+     "summary": "The former president's eldest son, Flávio, had been linked to embezzlement charges in his own cabinet. During the campaign, however, his resume was exposed even further",
+     "stale": false,
+     "author": "Global Voices Brazil"
+    },
+    {
      "title": "Haiti gang leader seeks UN talks as El Salvador sends 2,000 troops to hunt for missing soldiers",
      "source": "UN News",
      "feed": "un-americas",
@@ -158,16 +168,6 @@
      "published": "2026-10-28T12:00:00Z",
      "summary": "The UN General Assembly on Wednesday called for the 34th time for an end to the US economic, commercial and financial embargo on Cuba – but with the weakest backing for the resolution in two decades.",
      "stale": false
-    },
-    {
-     "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/10/27/warning-signals-venezuela-and-the-risk-of-ai-powered-chinese-digital-authoritarianism/",
-     "published": "2026-10-27T21:10:54Z",
-     "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
-     "stale": false,
-     "author": "ProBox"
     }
    ]
   },
@@ -732,6 +732,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
+   "published": "2026-11-04 17:38 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "UN News",
    "title": "Haiti gang leader seeks UN talks as El Salvador sends 2,000 troops to hunt for missing soldiers",
    "published": "2026-11-03 12:00 UTC"
@@ -759,12 +765,6 @@
    "source": "UN News",
    "title": "Backing for UN call to end Cuba embargo falls to 20-year low",
    "published": "2026-10-28 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "Warning Signals: Venezuela and the Risk of AI-Powered Chinese Digital Authoritarianism",
-   "published": "2026-10-27 21:10 UTC"
   },
   {
    "region": "Africa",
