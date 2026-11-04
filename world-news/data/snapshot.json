@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T09:01:23Z",
+ "generatedAt": "2026-11-04T10:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pourquoi l'OMS doit déclarer le changement climatique « urgence de santé publique »",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/pourquoi-loms-doit-declarer-le-changement-climatique-urgence-de-sante-publique-295673",
+     "published": "2026-11-04T09:16:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nicholas Brink, Director: International, Wits Planetary Health Research, University of the Witwatersrand"
+    },
+    {
      "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Akeem Adeyemi Oladipo, Associate Professor of Chemistry and Research Scientist in the Polymeric Materials Research Laboratory, Eastern Mediterranean University"
-    },
-    {
-     "title": "Farming subsidies in Zimbabwe do help spread crop risk, but impact on income is limited – research",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/farming-subsidies-in-zimbabwe-do-help-spread-crop-risk-but-impact-on-income-is-limited-research-295477",
-     "published": "2026-11-03T14:09:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Freddy Ruzhani, PhD Candidate, University of Fort Hare"
     },
     {
      "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The Democrats’ ‘blue tsunami’ is a strong repudiation of Donald Trump. Now, they will look to replicate it in 2028",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-democrats-blue-tsunami-is-a-strong-repudiation-of-donald-trump-now-they-will-look-to-replicate-it-in-2028-295856",
+     "published": "2026-11-04T09:43:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "David Smith, Associate Professor in American Politics and Foreign Policy, US Studies Centre, University of Sydney"
+    },
+    {
      "title": "Australia is set to get a Wegovy pill. How does it compare with weight-loss injections?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Christina Chau, Senior Lecturer in Communications, Curtin University"
-    },
-    {
-     "title": "Millions of bogong moths are blanketing our cities and they are still endangered",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/millions-of-bogong-moths-are-blanketing-our-cities-and-they-are-still-endangered-294774",
-     "published": "2026-11-04T03:50:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Kate Umbers, Associate Professor, Zoology, Western Sydney University"
     },
     {
      "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
@@ -769,13 +769,13 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
-   "published": "2026-11-03 14:09 UTC"
+   "title": "Pourquoi l'OMS doit déclarer le changement climatique « urgence de santé publique »",
+   "published": "2026-11-04 09:16 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Farming subsidies in Zimbabwe do help spread crop risk, but impact on income is limited – research",
+   "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
    "published": "2026-11-03 14:09 UTC"
   },
   {
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "The Democrats’ ‘blue tsunami’ is a strong repudiation of Donald Trump. Now, they will look to replicate it in 2028",
+   "published": "2026-11-04 09:43 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia is set to get a Wegovy pill. How does it compare with weight-loss injections?",
    "published": "2026-11-04 04:37 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Bigger than bombs: Tim Burns exhibition explores the artist behind explosive art actions",
    "published": "2026-11-04 04:36 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Millions of bogong moths are blanketing our cities and they are still endangered",
-   "published": "2026-11-04 03:50 UTC"
   },
   {
    "region": "Oceania",
