@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T14:01:22Z",
+ "generatedAt": "2026-11-04T15:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Pourquoi l'OMS doit déclarer le changement climatique « urgence de santé publique »",
+     "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/pourquoi-loms-doit-declarer-le-changement-climatique-urgence-de-sante-publique-295673",
-     "published": "2026-11-04T09:16:18Z",
+     "link": "https://theconversation.com/ai-and-blockchain-are-coming-to-african-farms-4-things-must-happen-for-farmers-to-benefit-294739",
+     "published": "2026-11-04T13:49:10Z",
      "summary": "",
      "stale": false,
-     "author": "Nicholas Brink, Director: International, Wits Planetary Health Research, University of the Witwatersrand"
+     "author": "Olaoluwa Omoniyi Olarewaju, Honorary Research Fellow, University of KwaZulu-Natal"
     },
     {
-     "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
+     "title": "Mining, water and trust: how Namibia’s geoscientists see their role with communities",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/north-africas-green-hydrogen-exports-to-europe-could-harm-water-supply-and-marine-life-study-294368",
-     "published": "2026-11-03T14:09:22Z",
+     "link": "https://theconversation.com/mining-water-and-trust-how-namibias-geoscientists-see-their-role-with-communities-293387",
+     "published": "2026-11-04T13:48:55Z",
      "summary": "",
      "stale": false,
-     "author": "Akeem Adeyemi Oladipo, Associate Professor of Chemistry and Research Scientist in the Polymeric Materials Research Laboratory, Eastern Mediterranean University"
+     "author": "Marina Joubert, Science Communication Researcher, Stellenbosch University"
     },
     {
      "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
@@ -266,7 +266,7 @@
      "feed": "gv-west-asia",
      "link": "https://globalvoices.org/2026/11/03/egypts-crackdown-on-independent-media-reaches-mada-masr-as-editor-faces-trial/",
      "published": "2026-11-03T15:56:04Z",
-     "summary": "Egypt has convicted Mada Masr’s editor in chief Lina Attalah and ordered the outlet closed, weeks after arresting the whole Matsada2sh newsroom.",
+     "summary": "Egypt has convicted Mada Masr’s editor-in-chief Lina Attalah and ordered the outlet closed, weeks after arresting the whole Matsada2sh newsroom.",
      "stale": false,
      "author": "Walid El Houri"
     },
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Pourquoi l'OMS doit déclarer le changement climatique « urgence de santé publique »",
-   "published": "2026-11-04 09:16 UTC"
+   "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
+   "published": "2026-11-04 13:49 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
-   "published": "2026-11-03 14:09 UTC"
+   "title": "Mining, water and trust: how Namibia’s geoscientists see their role with communities",
+   "published": "2026-11-04 13:48 UTC"
   },
   {
    "region": "Africa",
