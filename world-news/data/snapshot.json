@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T10:01:29Z",
+ "generatedAt": "2026-11-04T11:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why are Australians so interested in the US midterms?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-are-australians-so-interested-in-the-us-midterms-295866",
+     "published": "2026-11-04T10:15:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Denis Muller, Senior Research Fellow, Centre for Advancing Journalism, The University of Melbourne"
+    },
+    {
      "title": "The Democrats’ ‘blue tsunami’ is a strong repudiation of Donald Trump. Now, they will look to replicate it in 2028",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Kimberley Akrigg, PhD Candidate, School of Public Health, The University of Queensland"
-    },
-    {
-     "title": "Bigger than bombs: Tim Burns exhibition explores the artist behind explosive art actions",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/bigger-than-bombs-tim-burns-exhibition-explores-the-artist-behind-explosive-art-actions-294367",
-     "published": "2026-11-04T04:36:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christina Chau, Senior Lecturer in Communications, Curtin University"
     },
     {
      "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Why are Australians so interested in the US midterms?",
+   "published": "2026-11-04 10:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "The Democrats’ ‘blue tsunami’ is a strong repudiation of Donald Trump. Now, they will look to replicate it in 2028",
    "published": "2026-11-04 09:43 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Australia is set to get a Wegovy pill. How does it compare with weight-loss injections?",
    "published": "2026-11-04 04:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Bigger than bombs: Tim Burns exhibition explores the artist behind explosive art actions",
-   "published": "2026-11-04 04:36 UTC"
   },
   {
    "region": "Oceania",
