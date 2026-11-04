@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T06:01:31Z",
+ "generatedAt": "2026-11-04T07:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "‘Epic’ blue wave helps Democrats take Congress in overwhelming rebuke to President Trump",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/epic-blue-wave-helps-democrats-take-congress-in-overwhelming-rebuke-to-president-trump-295830",
+     "published": "2026-11-04T05:48:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Charlie Hunt, Associate Professor of Political Science, Boise State University"
+    },
+    {
      "title": "Democrats in House poised to investigate the Trump Administration, taking up a long-standing power GOP-led Congress ignored for the past two years",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Drew Kurlowski, Associate Professor of Political Science, Coastal Carolina University"
-    },
-    {
-     "title": "Midterms proceeded without chaos, despite unprecedented Justice Department interference in recent days",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/midterms-proceeded-without-chaos-despite-unprecedented-justice-department-interference-in-recent-days-295622",
-     "published": "2026-11-04T02:20:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "John E. Jones III, President, Dickinson College"
     },
     {
      "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Democrats in House poised to investigate the Trump Administration, taking up a long-standing power GOP-led Congress ignored for the past two years",
-   "published": "2026-11-04 03:44 UTC"
+   "title": "‘Epic’ blue wave helps Democrats take Congress in overwhelming rebuke to President Trump",
+   "published": "2026-11-04 05:48 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Midterms proceeded without chaos, despite unprecedented Justice Department interference in recent days",
-   "published": "2026-11-04 02:20 UTC"
+   "title": "Democrats in House poised to investigate the Trump Administration, taking up a long-standing power GOP-led Congress ignored for the past two years",
+   "published": "2026-11-04 03:44 UTC"
   },
   {
    "region": "Americas",
