@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T00:01:29Z",
+ "generatedAt": "2026-11-04T01:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
+     "title": "Australia’s native bees have an unusual power that can fight antibiotic resistance",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/australias-native-bees-have-an-unusual-power-that-can-fight-antibiotic-resistance-295463",
+     "published": "2026-11-04T00:21:36Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kenya Fernandes, Research Fellow, Faculty of Science, University of Sydney"
+    },
+    {
+     "title": "How secure is postal voting in Victoria? We decided to find out",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-secure-is-postal-voting-in-victoria-we-decided-to-find-out-294360",
+     "published": "2026-11-04T00:18:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Katharina Kretschmer, PhD Candidate, School of Social Sciences, Adelaide University"
+    },
+    {
+     "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-next-government-must-look-beyond-todays-health-challenges-a-new-report-shows-why-295544",
      "published": "2026-11-03T22:00:28Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Peter Kirkpatrick, Honorary Associate Professor, English and Writing, University of Sydney"
     },
     {
-     "title": "Your computer can’t read a floppy disk – so how do we save the history they hold?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-computer-cant-read-a-floppy-disk-so-how-do-we-save-the-history-they-hold-292900",
-     "published": "2026-11-03T18:53:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hazel Ellis, PhD Candidate, Centre for Transformative Media Technology, Swinburne University of Technology"
-    },
-    {
      "title": "US midterm elections: live results tracker",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Digital Storytelling Team, The Conversation"
-    },
-    {
-     "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/rba-hikes-interest-rates-to-an-18-year-high-warning-inflation-will-hurt-for-another-year-294682",
-     "published": "2026-11-03T05:27:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stella Huangfu, Associate Professor, School of Economics, University of Sydney"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia’s native bees have an unusual power that can fight antibiotic resistance",
+   "published": "2026-11-04 00:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How secure is postal voting in Victoria? We decided to find out",
+   "published": "2026-11-04 00:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
    "published": "2026-11-03 22:00 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Your computer can’t read a floppy disk – so how do we save the history they hold?",
-   "published": "2026-11-03 18:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "US midterm elections: live results tracker",
    "published": "2026-11-03 18:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "RBA hikes interest rates to an 18-year high, warning inflation will hurt for another year",
-   "published": "2026-11-03 05:27 UTC"
   },
   {
    "region": "Oceania",
