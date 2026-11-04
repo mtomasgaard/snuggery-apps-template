@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T22:01:25Z",
+ "generatedAt": "2026-11-04T23:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Why one positive E. coli sample put a Pittsburgh-area community under a boil-water advisory",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/why-one-positive-e-coli-sample-put-a-pittsburgh-area-community-under-a-boil-water-advisory-295827",
+     "published": "2026-11-04T21:53:10Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sarah Fakhreddine, Assistant Professor of Civil and Environmental Engineering, Carnegie Mellon University"
+    },
+    {
      "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Wanjiku Chebet Kanjumba, Ph.D. Candidate in Aerospace Engineering, University of Florida"
-    },
-    {
-     "title": "Pennsylvania Democrats now have power to push forward on election reform, marijuana legalization and minimum wage increases",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/pennsylvania-democrats-now-have-power-to-push-forward-on-election-reform-marijuana-legalization-and-minimum-wage-increases-295731",
-     "published": "2026-11-04T19:42:28Z",
-     "summary": "",
-     "stale": false,
-     "author": "Daniel J. Mallinson, Associate Professor of Public Policy and Administration, Penn State"
     },
     {
      "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Polls on right track understated Democrat vote in landslide repudiation of Donald Trump",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/polls-on-right-track-understated-democrat-vote-in-landslide-repudiation-of-donald-trump-295860",
+     "published": "2026-11-04T22:49:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "Earth’s rocks have a missing layer spanning up to a billion years. We finally know where it went",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Benjamin Madden, Senior lecturer, School of Humanities, Adelaide University"
-    },
-    {
-     "title": "Climate change is undermining our health and the burden falls heaviest on women",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/climate-change-is-undermining-our-health-and-the-burden-falls-heaviest-on-women-295355",
-     "published": "2026-11-04T19:04:04Z",
-     "summary": "",
-     "stale": false,
-     "author": "Veronica Le Nevez, Co-Director, Impact and Engagement, The George Institute for Global Health, George Institute for Global Health"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
-   "published": "2026-11-04 20:09 UTC"
+   "title": "Why one positive E. coli sample put a Pittsburgh-area community under a boil-water advisory",
+   "published": "2026-11-04 21:53 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Pennsylvania Democrats now have power to push forward on election reform, marijuana legalization and minimum wage increases",
-   "published": "2026-11-04 19:42 UTC"
+   "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
+   "published": "2026-11-04 20:09 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Polls on right track understated Democrat vote in landslide repudiation of Donald Trump",
+   "published": "2026-11-04 22:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Earth’s rocks have a missing layer spanning up to a billion years. We finally know where it went",
    "published": "2026-11-04 19:04 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Plagiarism is a kind of theft, but it is also a question of honour",
-   "published": "2026-11-04 19:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Climate change is undermining our health and the burden falls heaviest on women",
    "published": "2026-11-04 19:04 UTC"
   },
   {
