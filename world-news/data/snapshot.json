@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T03:01:27Z",
+ "generatedAt": "2026-11-04T04:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Millions of bogong moths are blanketing our cities and they are still endangered",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/millions-of-bogong-moths-are-blanketing-our-cities-and-they-are-still-endangered-294774",
+     "published": "2026-11-04T03:50:27Z",
+     "summary": "",
+     "stale": false,
+     "author": "Kate Umbers, Associate Professor, Zoology, Western Sydney University"
+    },
+    {
      "title": "Australia’s native bees have an unusual power that can fight antibiotic resistance",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Michael Baker, Professor of Public Health, University of Otago"
-    },
-    {
-     "title": "Australian poetry classics: Adam Lindsay Gordon’s The Sick Stockrider captured the nation’s frontier anxiety",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australian-poetry-classics-adam-lindsay-gordons-the-sick-stockrider-captured-the-nations-frontier-anxiety-287191",
-     "published": "2026-11-03T18:54:11Z",
-     "summary": "",
-     "stale": false,
-     "author": "Peter Kirkpatrick, Honorary Associate Professor, English and Writing, University of Sydney"
     },
     {
      "title": "US midterm elections: live results tracker",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Millions of bogong moths are blanketing our cities and they are still endangered",
+   "published": "2026-11-04 03:50 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia’s native bees have an unusual power that can fight antibiotic resistance",
    "published": "2026-11-04 00:21 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "NZ’s next government must look beyond today’s health challenges – a new report shows why",
    "published": "2026-11-03 22:00 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Australian poetry classics: Adam Lindsay Gordon’s The Sick Stockrider captured the nation’s frontier anxiety",
-   "published": "2026-11-03 18:54 UTC"
   },
   {
    "region": "Oceania",
