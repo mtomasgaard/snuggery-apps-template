@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T08:01:21Z",
+ "generatedAt": "2026-11-04T09:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -113,6 +113,15 @@
      "author": "Drew Kurlowski, Associate Professor of Political Science, Coastal Carolina University"
     },
     {
+     "title": "Haiti gang leader seeks UN talks as El Salvador sends 2,000 troops to hunt for missing soldiers",
+     "source": "UN News",
+     "feed": "un-americas",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168728",
+     "published": "2026-11-03T12:00:00Z",
+     "summary": "A Haitian gang leader wanted by the United States has asked the UN to mediate, as El Salvador sends more than 2,000 troops into the country to search for four of its soldiers who went missing after a gang ambush.",
+     "stale": false
+    },
+    {
      "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -159,15 +168,6 @@
      "summary": "A report by the Australian think tank ASPI warns that Venezuela could integrate Chinese artificial intelligence into its surveillance system and expand its digital control capabilities.",
      "stale": false,
      "author": "ProBox"
-    },
-    {
-     "title": "General Assembly weighs US embargo against Cuba ahead of 34th vote",
-     "source": "UN News",
-     "feed": "un-americas",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168686",
-     "published": "2026-10-27T12:00:00Z",
-     "summary": "The General Assembly opened its annual debate on the US economic embargo against Cuba on Tuesday. On Wednesday, 28 October, Member States will vote for the 34th time on a resolution calling for it to end.",
-     "stale": false
     }
    ]
   },
@@ -197,6 +197,15 @@
      "author": "Freddy Ruzhani, PhD Candidate, University of Fort Hare"
     },
     {
+     "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168731",
+     "published": "2026-11-03T12:00:00Z",
+     "summary": "Intensifying drone attacks on civilian infrastructure across Sudan are disrupting electricity, water and fuel supplies, putting lives at risk and hampering the delivery of humanitarian aid, the UN’s top official in the…",
+     "stale": false
+    },
+    {
      "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
      "source": "UN News",
      "feed": "un-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168717",
      "published": "2026-11-01T12:00:00Z",
      "summary": "The UN remains committed to supporting a just, lasting and mutually acceptable political solution in Western Sahara that provides for the self-determination of its people, Secretary-General António Guterres said on…",
-     "stale": false
-    },
-    {
-     "title": "Somalia looks to the future as the UN's political mission closes",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168714",
-     "published": "2026-10-31T12:00:00Z",
-     "summary": "“The story of the UN's political engagement in Somalia has been one of persistence, partnership and adaptation,” Raisedon Zenenga, the UN Secretary-General's Deputy Special Representative for Somalia has said, as three…",
      "stale": false
     },
     {
@@ -271,6 +271,15 @@
      "author": "Walid El Houri"
     },
     {
+     "title": "Married off at 14: In Yemen’s war, women and girls suffer ‘devastating consequences’",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168730",
+     "published": "2026-11-03T12:00:00Z",
+     "summary": "Safa is 14. Her mother died earlier this year. She has no brothers or sisters. And a few weeks ago, as the crisis took hold, her father married her to an elderly man, afraid that if he were killed in the hostilities, no…",
+     "stale": false
+    },
+    {
      "title": "‘They deserve to know the truth’: UN rights chief demands probe into staffer’s death in Houthi custody",
      "source": "UN News",
      "feed": "un-middle-east",
@@ -306,15 +315,6 @@
      "summary": "“For the relatives of people in prison, as well as for national and international human rights organizations and agencies, the information provided by the Prison Agenda publication can be vital.”",
      "stale": false,
      "author": "Daria Dergacheva"
-    },
-    {
-     "title": "Gaza: Families brace for fourth winter in tents as aid operations remain stymied",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168685",
-     "published": "2026-10-27T12:00:00Z",
-     "summary": "Families in Gaza are bracing for a fourth winter in tents and makeshift shelters as UN aid operations face mounting obstacles, with transport suspended on Tuesday due to Israel’s closure of the key Kerem Shalom crossing…",
-     "stale": false
     },
     {
      "title": "What telecoms leave behind when they exit a country",
@@ -732,6 +732,12 @@
   },
   {
    "region": "Americas",
+   "source": "UN News",
+   "title": "Haiti gang leader seeks UN talks as El Salvador sends 2,000 troops to hunt for missing soldiers",
+   "published": "2026-11-03 12:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
    "published": "2026-11-02 18:08 UTC"
@@ -761,12 +767,6 @@
    "published": "2026-10-27 21:10 UTC"
   },
   {
-   "region": "Americas",
-   "source": "UN News",
-   "title": "General Assembly weighs US embargo against Cuba ahead of 34th vote",
-   "published": "2026-10-27 12:00 UTC"
-  },
-  {
    "region": "Africa",
    "source": "The Conversation",
    "title": "North Africa’s green hydrogen exports to Europe could harm water supply and marine life – study",
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
+   "published": "2026-11-03 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
    "published": "2026-11-02 12:00 UTC"
   },
@@ -789,12 +795,6 @@
    "source": "UN News",
    "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
    "published": "2026-11-01 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Somalia looks to the future as the UN's political mission closes",
-   "published": "2026-10-31 12:00 UTC"
   },
   {
    "region": "Africa",
@@ -823,6 +823,12 @@
   {
    "region": "Middle East",
    "source": "UN News",
+   "title": "Married off at 14: In Yemen’s war, women and girls suffer ‘devastating consequences’",
+   "published": "2026-11-03 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
+   "source": "UN News",
    "title": "‘They deserve to know the truth’: UN rights chief demands probe into staffer’s death in Houthi custody",
    "published": "2026-10-31 12:00 UTC"
   },
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "A digital publication sheds light on Turkey’s prison system",
    "published": "2026-10-29 23:06 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Gaza: Families brace for fourth winter in tents as aid operations remain stymied",
-   "published": "2026-10-27 12:00 UTC"
   },
   {
    "region": "Middle East",
