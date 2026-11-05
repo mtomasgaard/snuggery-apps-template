@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T04:01:15Z",
+ "generatedAt": "2026-11-05T05:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Godzilla Minus Zero is incredibly loud. Who decides on the cinema volume? And is it safe?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/godzilla-minus-zero-is-incredibly-loud-who-decides-on-the-cinema-volume-and-is-it-safe-295864",
+     "published": "2026-11-05T04:30:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alison Cole, Composer and Lecturer in Screen Composition, Sydney Conservatorium of Music, University of Sydney"
+    },
+    {
      "title": "Voters have sent a message to Trump on tariffs, but the White House still holds significant power",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Lurion De Mello, Senior Lecturer in Finance, Macquarie University"
-    },
-    {
-     "title": "Who’ll hold power in the Victorian upper house after the state election?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/wholl-hold-power-in-the-victorian-upper-house-after-the-state-election-294349",
-     "published": "2026-11-05T02:24:13Z",
-     "summary": "",
-     "stale": false,
-     "author": "Zareh Ghazarian, Associate Professor in Politics and International Relations, School of Social Sciences, Monash University"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Godzilla Minus Zero is incredibly loud. Who decides on the cinema volume? And is it safe?",
+   "published": "2026-11-05 04:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Voters have sent a message to Trump on tariffs, but the White House still holds significant power",
    "published": "2026-11-05 03:50 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "As diesel from the Gulf and Russia dried up, Australia had to find new suppliers – at a cost",
    "published": "2026-11-05 03:40 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Who’ll hold power in the Victorian upper house after the state election?",
-   "published": "2026-11-05 02:24 UTC"
   },
   {
    "region": "Oceania",
