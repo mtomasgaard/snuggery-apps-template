@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T02:01:27Z",
+ "generatedAt": "2026-11-05T03:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Who’ll hold power in the Victorian upper house after the state election?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/wholl-hold-power-in-the-victorian-upper-house-after-the-state-election-294349",
+     "published": "2026-11-05T02:24:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Zareh Ghazarian, Associate Professor in Politics and International Relations, School of Social Sciences, Monash University"
+    },
+    {
      "title": "Australia needs serious discussion on AUKUS. This inquiry didn’t deliver it",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Earth’s rocks have a missing layer spanning up to a billion years. We finally know where it went",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/earths-rocks-have-a-missing-layer-spanning-up-to-a-billion-years-we-finally-know-where-it-went-295462",
-     "published": "2026-11-04T19:04:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Santosh Dhungana, PhD Candidate, Environmental Futures, School of Science, University of Wollongong"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Who’ll hold power in the Victorian upper house after the state election?",
+   "published": "2026-11-05 02:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia needs serious discussion on AUKUS. This inquiry didn’t deliver it",
    "published": "2026-11-04 23:02 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Polls understated Democrat vote in landslide repudiation of Donald Trump",
    "published": "2026-11-04 22:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Earth’s rocks have a missing layer spanning up to a billion years. We finally know where it went",
-   "published": "2026-11-04 19:04 UTC"
   },
   {
    "region": "Oceania",
