@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T13:19:07Z",
+ "generatedAt": "2026-11-05T14:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "I study polling failures – this time, pollsters were mostly right, if not precise",
+     "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/i-study-polling-failures-this-time-pollsters-were-mostly-right-if-not-precise-295433",
-     "published": "2026-11-04T23:10:15Z",
+     "link": "https://theconversation.com/delayed-international-support-has-hampered-efforts-to-contain-and-treat-ebola-in-the-democratic-republic-of-congo-295610",
+     "published": "2026-11-05T13:36:16Z",
      "summary": "",
      "stale": false,
-     "author": "W Joseph Campbell, Professor Emeritus of Communication, American University School of Communication"
+     "author": "Olayinka Stephen Ilesanmi, Assistant Professor of Healthcare Administration, Fayetteville State University"
     },
     {
-     "title": "Florida just voted for lower property taxes – and that could mean cuts in government services and new housing construction",
+     "title": "Mammograms can do more than detect breast cancer – they also offer important clues on heart health",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/florida-just-voted-for-lower-property-taxes-and-that-could-mean-cuts-in-government-services-and-new-housing-construction-295716",
-     "published": "2026-11-04T22:48:26Z",
+     "link": "https://theconversation.com/mammograms-can-do-more-than-detect-breast-cancer-they-also-offer-important-clues-on-heart-health-294073",
+     "published": "2026-11-05T13:26:33Z",
      "summary": "",
      "stale": false,
-     "author": "Abigail Hall, Professor of Economics, University of Tampa"
+     "author": "Matthew Nudy, Assistant Professor of Medicine and Public Health Sciences, Penn State"
     },
     {
      "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "I study polling failures – this time, pollsters were mostly right, if not precise",
-   "published": "2026-11-04 23:10 UTC"
+   "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
+   "published": "2026-11-05 13:36 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Florida just voted for lower property taxes – and that could mean cuts in government services and new housing construction",
-   "published": "2026-11-04 22:48 UTC"
+   "title": "Mammograms can do more than detect breast cancer – they also offer important clues on heart health",
+   "published": "2026-11-05 13:26 UTC"
   },
   {
    "region": "Americas",
