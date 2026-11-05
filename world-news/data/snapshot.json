@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-04T23:01:18Z",
+ "generatedAt": "2026-11-05T00:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Why one positive E. coli sample put a Pittsburgh-area community under a boil-water advisory",
+     "title": "I study polling failures – this time, pollsters were mostly right, if not precise",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/why-one-positive-e-coli-sample-put-a-pittsburgh-area-community-under-a-boil-water-advisory-295827",
-     "published": "2026-11-04T21:53:10Z",
+     "link": "https://theconversation.com/i-study-polling-failures-this-time-pollsters-were-mostly-right-if-not-precise-295433",
+     "published": "2026-11-04T23:10:15Z",
      "summary": "",
      "stale": false,
-     "author": "Sarah Fakhreddine, Assistant Professor of Civil and Environmental Engineering, Carnegie Mellon University"
+     "author": "W Joseph Campbell, Professor Emeritus of Communication, American University School of Communication"
     },
     {
-     "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
+     "title": "Florida just voted for lower property taxes – and that could mean cuts in government services and new housing construction",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/nasas-swift-telescope-has-burned-up-months-after-a-robot-sent-to-save-it-failed-heres-why-its-so-hard-to-boost-a-satellite-295538",
-     "published": "2026-11-04T20:09:29Z",
+     "link": "https://theconversation.com/florida-just-voted-for-lower-property-taxes-and-that-could-mean-cuts-in-government-services-and-new-housing-construction-295716",
+     "published": "2026-11-04T22:48:26Z",
      "summary": "",
      "stale": false,
-     "author": "Wanjiku Chebet Kanjumba, Ph.D. Candidate in Aerospace Engineering, University of Florida"
+     "author": "Abigail Hall, Professor of Economics, University of Tampa"
     },
     {
      "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
@@ -429,10 +429,20 @@
    "stale": false,
    "items": [
     {
-     "title": "Polls on right track understated Democrat vote in landslide repudiation of Donald Trump",
+     "title": "Australia needs serious discussion on AUKUS. This inquiry didn’t deliver it",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/polls-on-right-track-understated-democrat-vote-in-landslide-repudiation-of-donald-trump-295860",
+     "link": "https://theconversation.com/australia-needs-serious-discussion-on-aukus-this-inquiry-didnt-deliver-it-295876",
+     "published": "2026-11-04T23:02:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jennifer Parker, Adjunct Professor, Defence and Security Institute, The University of Western Australia; UNSW"
+    },
+    {
+     "title": "Polls understated Democrat vote in landslide repudiation of Donald Trump",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/polls-understated-democrat-vote-in-landslide-repudiation-of-donald-trump-295860",
      "published": "2026-11-04T22:49:37Z",
      "summary": "",
      "stale": false,
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Santosh Dhungana, PhD Candidate, Environmental Futures, School of Science, University of Wollongong"
-    },
-    {
-     "title": "Plagiarism is a kind of theft, but it is also a question of honour",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/plagiarism-is-a-kind-of-theft-but-it-is-also-a-question-of-honour-281857",
-     "published": "2026-11-04T19:04:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Benjamin Madden, Senior lecturer, School of Humanities, Adelaide University"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Why one positive E. coli sample put a Pittsburgh-area community under a boil-water advisory",
-   "published": "2026-11-04 21:53 UTC"
+   "title": "I study polling failures – this time, pollsters were mostly right, if not precise",
+   "published": "2026-11-04 23:10 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "NASA’s Swift telescope has burned up, months after a robot sent to save it failed – here’s why it’s so hard to boost a satellite",
-   "published": "2026-11-04 20:09 UTC"
+   "title": "Florida just voted for lower property taxes – and that could mean cuts in government services and new housing construction",
+   "published": "2026-11-04 22:48 UTC"
   },
   {
    "region": "Americas",
@@ -913,19 +913,19 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Polls on right track understated Democrat vote in landslide repudiation of Donald Trump",
+   "title": "Australia needs serious discussion on AUKUS. This inquiry didn’t deliver it",
+   "published": "2026-11-04 23:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Polls understated Democrat vote in landslide repudiation of Donald Trump",
    "published": "2026-11-04 22:49 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Earth’s rocks have a missing layer spanning up to a billion years. We finally know where it went",
-   "published": "2026-11-04 19:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Plagiarism is a kind of theft, but it is also a question of honour",
    "published": "2026-11-04 19:04 UTC"
   },
   {
