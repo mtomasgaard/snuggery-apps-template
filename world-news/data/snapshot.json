@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T05:01:18Z",
+ "generatedAt": "2026-11-05T06:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Godzilla Minus Zero is incredibly loud. Who decides on the cinema volume? And is it safe?",
+     "title": "Australian classrooms are getting a ‘digital detox’ – what does this mean for schools and students?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/godzilla-minus-zero-is-incredibly-loud-who-decides-on-the-cinema-volume-and-is-it-safe-295864",
-     "published": "2026-11-05T04:30:40Z",
+     "link": "https://theconversation.com/australian-classrooms-are-getting-a-digital-detox-what-does-this-mean-for-schools-and-students-295951",
+     "published": "2026-11-05T05:19:05Z",
      "summary": "",
      "stale": false,
-     "author": "Alison Cole, Composer and Lecturer in Screen Composition, Sydney Conservatorium of Music, University of Sydney"
+     "author": "Jason M. Lodge, Director of the Learning, Instruction & Technology Lab and Professor of Educational Psychology, School of Education, The University of…"
     },
     {
-     "title": "Voters have sent a message to Trump on tariffs, but the White House still holds significant power",
+     "title": "David Jones falls into administration – and its outdated business model explains why",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/voters-have-sent-a-message-to-trump-on-tariffs-but-the-white-house-still-holds-significant-power-295346",
-     "published": "2026-11-05T03:50:44Z",
+     "link": "https://theconversation.com/david-jones-falls-into-administration-and-its-outdated-business-model-explains-why-295349",
+     "published": "2026-11-05T05:15:21Z",
      "summary": "",
      "stale": false,
-     "author": "Liz Mackie, Senior Research Fellow, Economic Security Program, University of Sydney"
+     "author": "Robert Crawford, Professor of Advertising, RMIT University"
     },
     {
-     "title": "As diesel from the Gulf and Russia dried up, Australia had to find new suppliers – at a cost",
+     "title": "With control of Congress, here’s how Democrats could stop Trump’s war in Iran",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/as-diesel-from-the-gulf-and-russia-dried-up-australia-had-to-find-new-suppliers-at-a-cost-295461",
-     "published": "2026-11-05T03:40:31Z",
+     "link": "https://theconversation.com/with-control-of-congress-heres-how-democrats-could-stop-trumps-war-in-iran-295954",
+     "published": "2026-11-05T05:12:50Z",
      "summary": "",
      "stale": false,
-     "author": "Lurion De Mello, Senior Lecturer in Finance, Macquarie University"
+     "author": "Markus Wagner, Professor of Law and Director of the UOW Transnational Law and Policy Centre, University of Wollongong"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Godzilla Minus Zero is incredibly loud. Who decides on the cinema volume? And is it safe?",
-   "published": "2026-11-05 04:30 UTC"
+   "title": "Australian classrooms are getting a ‘digital detox’ – what does this mean for schools and students?",
+   "published": "2026-11-05 05:19 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Voters have sent a message to Trump on tariffs, but the White House still holds significant power",
-   "published": "2026-11-05 03:50 UTC"
+   "title": "David Jones falls into administration – and its outdated business model explains why",
+   "published": "2026-11-05 05:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "As diesel from the Gulf and Russia dried up, Australia had to find new suppliers – at a cost",
-   "published": "2026-11-05 03:40 UTC"
+   "title": "With control of Congress, here’s how Democrats could stop Trump’s war in Iran",
+   "published": "2026-11-05 05:12 UTC"
   },
   {
    "region": "Oceania",
