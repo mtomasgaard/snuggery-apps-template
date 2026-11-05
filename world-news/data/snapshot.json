@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T22:01:19Z",
+ "generatedAt": "2026-11-05T23:01:51Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Humidity can make heatwaves more dangerous. It’s time to warn Australians about this threat",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/humidity-can-make-heatwaves-more-dangerous-its-time-to-warn-australians-about-this-threat-295453",
+     "published": "2026-11-05T22:18:19Z",
+     "summary": "",
+     "stale": false,
+     "author": "Alyson Wright, Adjunct Fellow in Public Health, Menzies School of Health Research"
+    },
+    {
+     "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/nz-election-eve-poll-watch-rights-lead-slipping-with-opportunity-still-the-wild-card-295736",
+     "published": "2026-11-05T22:10:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
      "title": "AI learns from the products of thinking, not thought itself. That’s a problem for machines – and for us",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,34 +469,14 @@
      "author": "Katie Barclay, ARC Future Fellow and Professor in History and Archaeology, Macquarie University"
     },
     {
-     "title": "Why chronic pain is often overlooked as part of disability – and what can help",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-chronic-pain-is-often-overlooked-as-part-of-disability-and-what-can-help-291360",
-     "published": "2026-11-05T18:57:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Manasi Murthy Mittinty, Senior Research Fellow, Disability and Health Unit, Department of Health Systems, Policy and Economics, Melbourne School of Public…"
-    },
-    {
-     "title": "A fractious campaign heralds a cliffhanger election: what to watch as NZ votes",
+     "title": "Devices aren’t lasting as long as they should. Here’s why",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/a-fractious-campaign-heralds-a-cliffhanger-election-what-to-watch-as-nz-votes-295734",
-     "published": "2026-11-05T18:15:53Z",
+     "link": "https://theconversation.com/devices-arent-lasting-as-long-as-they-should-heres-why-294674",
+     "published": "2026-11-05T18:52:29Z",
      "summary": "",
      "stale": false,
-     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "David Jones falls into administration – and its outdated business model explains why",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/david-jones-falls-into-administration-and-its-outdated-business-model-explains-why-295349",
-     "published": "2026-11-05T05:15:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert Crawford, Professor of Advertising, RMIT University"
+     "author": "Margherita Feleppa, Lecturer, School of Law, University of Wollongong"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Humidity can make heatwaves more dangerous. It’s time to warn Australians about this threat",
+   "published": "2026-11-05 22:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
+   "published": "2026-11-05 22:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "AI learns from the products of thinking, not thought itself. That’s a problem for machines – and for us",
    "published": "2026-11-05 18:57 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why chronic pain is often overlooked as part of disability – and what can help",
-   "published": "2026-11-05 18:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A fractious campaign heralds a cliffhanger election: what to watch as NZ votes",
-   "published": "2026-11-05 18:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "David Jones falls into administration – and its outdated business model explains why",
-   "published": "2026-11-05 05:15 UTC"
+   "title": "Devices aren’t lasting as long as they should. Here’s why",
+   "published": "2026-11-05 18:52 UTC"
   },
   {
    "region": "Oceania",
