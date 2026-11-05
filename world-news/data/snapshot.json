@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T21:01:19Z",
+ "generatedAt": "2026-11-05T22:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting block than some other Democratic candidates",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/black-michiganders-helped-push-abdul-el-sayed-to-victory-but-the-numbers-show-he-was-less-popular-with-this-key-voting-block-than-some-other-democratic-candidates-289777",
+     "published": "2026-11-05T20:56:31Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christine Slaughter, Assistant Professor of Political Science, Boston University"
+    },
+    {
      "title": "What comes after networked authoritarianism?",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Liv Coleman, Professor of Political Science and International Studies, University of Tampa"
-    },
-    {
-     "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/delayed-international-support-has-hampered-efforts-to-contain-and-treat-ebola-in-the-democratic-republic-of-congo-295610",
-     "published": "2026-11-05T13:36:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Olayinka Stephen Ilesanmi, Assistant Professor of Healthcare Administration, Fayetteville State University"
     },
     {
      "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting block than some other Democratic candidates",
+   "published": "2026-11-05 20:56 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
@@ -729,12 +735,6 @@
    "source": "The Conversation",
    "title": "How Amendment 3, vaccine mandates and school vouchers will shape Florida under the leadership of Byron Donalds",
    "published": "2026-11-05 14:26 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
-   "published": "2026-11-05 13:36 UTC"
   },
   {
    "region": "Americas",
