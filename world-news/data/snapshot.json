@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T11:01:18Z",
+ "generatedAt": "2026-11-05T12:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Un nouvel ouvrage dévoile les dessous du commerce de peaux d’âne entre l’Afrique et la Chine",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/un-nouvel-ouvrage-devoile-les-dessous-du-commerce-de-peaux-dane-entre-lafrique-et-la-chine-295903",
+     "published": "2026-11-05T10:29:13Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lauren Johnston, Associate Professor, China Studies Centre, Adelaide University"
+    },
+    {
      "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Olaoluwa Omoniyi Olarewaju, Honorary Research Fellow, University of KwaZulu-Natal"
-    },
-    {
-     "title": "Mining, water and trust: how Namibia’s geoscientists see their role with communities",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/mining-water-and-trust-how-namibias-geoscientists-see-their-role-with-communities-293387",
-     "published": "2026-11-04T13:48:55Z",
-     "summary": "",
-     "stale": false,
-     "author": "Marina Joubert, Science Communication Researcher, Stellenbosch University"
     },
     {
      "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
-   "published": "2026-11-04 13:49 UTC"
+   "title": "Un nouvel ouvrage dévoile les dessous du commerce de peaux d’âne entre l’Afrique et la Chine",
+   "published": "2026-11-05 10:29 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Mining, water and trust: how Namibia’s geoscientists see their role with communities",
-   "published": "2026-11-04 13:48 UTC"
+   "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
+   "published": "2026-11-04 13:49 UTC"
   },
   {
    "region": "Africa",
