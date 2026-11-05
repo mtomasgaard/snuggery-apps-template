@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T14:01:21Z",
+ "generatedAt": "2026-11-05T15:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "How Amendment 3, vaccine mandates and school vouchers will shape Florida under the leadership of Byron Donalds",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/how-amendment-3-vaccine-mandates-and-school-vouchers-will-shape-florida-under-the-leadership-of-byron-donalds-295720",
+     "published": "2026-11-05T14:26:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liv Coleman, Professor of Political Science and International Studies, University of Tampa"
+    },
+    {
      "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Olayinka Stephen Ilesanmi, Assistant Professor of Healthcare Administration, Fayetteville State University"
-    },
-    {
-     "title": "Mammograms can do more than detect breast cancer – they also offer important clues on heart health",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/mammograms-can-do-more-than-detect-breast-cancer-they-also-offer-important-clues-on-heart-health-294073",
-     "published": "2026-11-05T13:26:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Matthew Nudy, Assistant Professor of Medicine and Public Health Sciences, Penn State"
     },
     {
      "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Un nouvel ouvrage dévoile les dessous du commerce de peaux d’âne entre l’Afrique et la Chine",
+     "title": "How football, smartphones and mobile money drive youth sports betting in Africa",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/un-nouvel-ouvrage-devoile-les-dessous-du-commerce-de-peaux-dane-entre-lafrique-et-la-chine-295903",
-     "published": "2026-11-05T10:29:13Z",
+     "link": "https://theconversation.com/how-football-smartphones-and-mobile-money-drive-youth-sports-betting-in-africa-290999",
+     "published": "2026-11-05T14:24:08Z",
      "summary": "",
      "stale": false,
-     "author": "Lauren Johnston, Associate Professor, China Studies Centre, Adelaide University"
+     "author": "Franklin Glozah, Associate Professor of Behavioural Science in Health, University of Ghana"
     },
     {
-     "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
+     "title": "Donor aid models don’t determine food security in Zambia, but local farming practices do",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/ai-and-blockchain-are-coming-to-african-farms-4-things-must-happen-for-farmers-to-benefit-294739",
-     "published": "2026-11-04T13:49:10Z",
+     "link": "https://theconversation.com/donor-aid-models-dont-determine-food-security-in-zambia-but-local-farming-practices-do-295174",
+     "published": "2026-11-05T14:23:46Z",
      "summary": "",
      "stale": false,
-     "author": "Olaoluwa Omoniyi Olarewaju, Honorary Research Fellow, University of KwaZulu-Natal"
+     "author": "Bridget Bwalya, Associate Professor in Natural Resources Management, University of Zambia"
     },
     {
      "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
-   "published": "2026-11-05 13:36 UTC"
+   "title": "How Amendment 3, vaccine mandates and school vouchers will shape Florida under the leadership of Byron Donalds",
+   "published": "2026-11-05 14:26 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Mammograms can do more than detect breast cancer – they also offer important clues on heart health",
-   "published": "2026-11-05 13:26 UTC"
+   "title": "Delayed international support has hampered efforts to contain and treat Ebola in the Democratic Republic of Congo",
+   "published": "2026-11-05 13:36 UTC"
   },
   {
    "region": "Americas",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Un nouvel ouvrage dévoile les dessous du commerce de peaux d’âne entre l’Afrique et la Chine",
-   "published": "2026-11-05 10:29 UTC"
+   "title": "How football, smartphones and mobile money drive youth sports betting in Africa",
+   "published": "2026-11-05 14:24 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "AI and blockchain are coming to African farms: 4 things must happen for farmers to benefit",
-   "published": "2026-11-04 13:49 UTC"
+   "title": "Donor aid models don’t determine food security in Zambia, but local farming practices do",
+   "published": "2026-11-05 14:23 UTC"
   },
   {
    "region": "Africa",
