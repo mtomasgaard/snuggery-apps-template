@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T15:01:32Z",
+ "generatedAt": "2026-11-05T16:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Bridget Bwalya, Associate Professor in Natural Resources Management, University of Zambia"
     },
     {
+     "title": "Two new Ebola vaccines to join DR Congo clinical trial",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168742",
+     "published": "2026-11-05T12:00:00Z",
+     "summary": "Two new Ebola vaccine candidates will be added to a clinical trial in the Democratic Republic of the Congo (DRC) as the country continues to battle a deadly outbreak caused by the Bundibugyo species of the virus.",
+     "stale": false
+    },
+    {
      "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
      "source": "UN News",
      "feed": "un-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168720",
      "published": "2026-11-02T12:00:00Z",
      "summary": "The head of the World Health Organization (WHO) called on Monday for greater protection for civilians caught in conflict in northern Ethiopia following deadly drone strikes this past weekend.",
-     "stale": false
-    },
-    {
-     "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168717",
-     "published": "2026-11-01T12:00:00Z",
-     "summary": "The UN remains committed to supporting a just, lasting and mutually acceptable political solution in Western Sahara that provides for the self-determination of its people, Secretary-General António Guterres said on…",
      "stale": false
     },
     {
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Two new Ebola vaccines to join DR Congo clinical trial",
+   "published": "2026-11-05 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
    "published": "2026-11-03 12:00 UTC"
   },
@@ -789,12 +795,6 @@
    "source": "UN News",
    "title": "Ethiopia: Violence in the north is pushing health system to the brink, WHO chief warns",
    "published": "2026-11-02 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Western Sahara: UN ‘stands ready’ to keep supporting peace efforts as MINURSO mission ends",
-   "published": "2026-11-01 12:00 UTC"
   },
   {
    "region": "Africa",
