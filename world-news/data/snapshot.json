@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T07:01:21Z",
+ "generatedAt": "2026-11-05T08:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: are the Nationals on life support?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-are-the-nationals-on-life-support-295656",
+     "published": "2026-11-05T07:04:22Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Australian classrooms are getting a ‘digital detox’ – what does this mean for schools and students?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Robert Crawford, Professor of Advertising, RMIT University"
-    },
-    {
-     "title": "With control of Congress, here’s how Democrats could stop Trump’s war in Iran",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/with-control-of-congress-heres-how-democrats-could-stop-trumps-war-in-iran-295954",
-     "published": "2026-11-05T05:12:50Z",
-     "summary": "",
-     "stale": false,
-     "author": "Markus Wagner, Professor of Law and Director of the UOW Transnational Law and Policy Centre, University of Wollongong"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: are the Nationals on life support?",
+   "published": "2026-11-05 07:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australian classrooms are getting a ‘digital detox’ – what does this mean for schools and students?",
    "published": "2026-11-05 05:19 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "David Jones falls into administration – and its outdated business model explains why",
    "published": "2026-11-05 05:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "With control of Congress, here’s how Democrats could stop Trump’s war in Iran",
-   "published": "2026-11-05 05:12 UTC"
   },
   {
    "region": "Oceania",
