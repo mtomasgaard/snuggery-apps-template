@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T08:01:23Z",
+ "generatedAt": "2026-11-05T09:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -451,12 +451,22 @@
     {
      "title": "David Jones falls into administration – and its outdated business model explains why",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/david-jones-falls-into-administration-and-its-outdated-business-model-explains-why-295349",
      "published": "2026-11-05T05:15:21Z",
      "summary": "",
      "stale": false,
      "author": "Robert Crawford, Professor of Advertising, RMIT University"
+    },
+    {
+     "title": "With control of Congress, here’s how Democrats could stop Trump’s war in Iran",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/with-control-of-congress-heres-how-democrats-could-stop-trumps-war-in-iran-295954",
+     "published": "2026-11-05T05:12:50Z",
+     "summary": "",
+     "stale": false,
+     "author": "Markus Wagner, Professor of Law and Director of the UOW Transnational Law and Policy Centre, University of Wollongong"
     },
     {
      "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Guus Kroonen, Associate Professor, Scandinavian, Germanic and Indo-European Comparative Linguistics, Leiden University; University of Copenhagen"
-    },
-    {
-     "title": "US midterms: after two years of unchecked Trump we’ll now see if Congress can reassert its democratic role",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/us-midterms-after-two-years-of-unchecked-trump-well-now-see-if-congress-can-reassert-its-democratic-role-295892",
-     "published": "2026-11-04T14:49:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sarah Trott, Senior Lecturer in American Studies and History, York St John University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
-   "published": "2026-11-04 16:12 UTC"
+   "title": "With control of Congress, here’s how Democrats could stop Trump’s war in Iran",
+   "published": "2026-11-05 05:12 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "US midterms: after two years of unchecked Trump we’ll now see if Congress can reassert its democratic role",
-   "published": "2026-11-04 14:49 UTC"
+   "title": "We used ancient DNA to track the origins and spread of the Germanic and Celtic languages – new research",
+   "published": "2026-11-04 16:12 UTC"
   },
   {
    "region": "Oceania",
