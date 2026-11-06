@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T05:01:22Z",
+ "generatedAt": "2026-11-06T06:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Venezuela welcomes opposition leader María Corina Machado home",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/11/06/venezuela-welcomes-opposition-leader-maria-corina-machado-home/",
+     "published": "2026-11-06T06:00:36Z",
+     "summary": "Venezuela’s Nobel laureate María Corina Machado returned to Caracas in a massive celebration after months in hiding and exile, sparking deep hope and sharp questions about the country’s political future.",
+     "stale": false,
+     "author": "Óscar Calles"
+    },
+    {
      "title": "JD Vance singled out Iran War for midterm rout – he didn’t say what should happen next in conflict",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -131,16 +141,6 @@
      "summary": "The former president's eldest son, Flávio, had been linked to embezzlement charges in his own cabinet. During the campaign, however, his resume was exposed even further",
      "stale": false,
      "author": "Global Voices Brazil"
-    },
-    {
-     "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/11/02/brazilian-lefts-quest-to-tame-meta-a-narrative-of-denouncement-and-resistance/",
-     "published": "2026-11-02T18:08:55Z",
-     "summary": "In our October edition of Undertones, we examine a movement calling for accountability and coordinated online action to challenge Meta’s problematic content moderation policies and governance practices in Brazil.",
-     "stale": false,
-     "author": "Civic Media Observatory"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Venezuela welcomes opposition leader María Corina Machado home",
+   "published": "2026-11-06 06:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "JD Vance singled out Iran War for midterm rout – he didn’t say what should happen next in conflict",
    "published": "2026-11-06 00:31 UTC"
@@ -741,12 +747,6 @@
    "source": "Global Voices",
    "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
    "published": "2026-11-04 17:38 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "The Brazilian left’s quest to ‘tame’ Meta: A narrative of denouncement and resistance",
-   "published": "2026-11-02 18:08 UTC"
   },
   {
    "region": "Americas",
