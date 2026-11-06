@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T13:02:31Z",
+ "generatedAt": "2026-11-06T14:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/young-people-turned-out-in-near-record-numbers-for-the-2026-midterms-with-the-economy-top-of-their-minds-295947",
+     "published": "2026-11-06T13:14:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sara Suzuki, Senior Researcher and Research Assistant Professor at CIRCLE, Tufts University"
+    },
+    {
+     "title": "What C.S. Lewis said about Narnia’s most famous character: the Jesus-like lion Aslan",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-c-s-lewis-said-about-narnias-most-famous-character-the-jesus-like-lion-aslan-294140",
+     "published": "2026-11-06T13:13:51Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christopher A. Snyder, Professor of History, Mississippi State University"
+    },
+    {
      "title": "Venezuela welcomes opposition leader María Corina Machado home",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -101,26 +121,6 @@
      "summary": "Venezuela’s Nobel laureate María Corina Machado returned to Caracas in a massive celebration after months in hiding and exile, sparking deep hope and sharp questions about the country’s political future.",
      "stale": false,
      "author": "Óscar Calles"
-    },
-    {
-     "title": "JD Vance singled out Iran War for midterm rout – he didn’t say what should happen next in conflict",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/jd-vance-singled-out-iran-war-for-midterm-rout-he-didnt-say-what-should-happen-next-in-conflict-295938",
-     "published": "2026-11-06T00:31:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Javed Ali, Associate Professor of Practice of Public Policy, University of Michigan"
-    },
-    {
-     "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting bloc than some other Democratic candidates",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/black-michiganders-helped-push-abdul-el-sayed-to-victory-but-the-numbers-show-he-was-less-popular-with-this-key-voting-bloc-than-some-other-democratic-candidates-289777",
-     "published": "2026-11-05T20:56:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christine Slaughter, Assistant Professor of Political Science, Boston University"
     },
     {
      "title": "What comes after networked authoritarianism?",
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
+   "published": "2026-11-06 13:14 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "What C.S. Lewis said about Narnia’s most famous character: the Jesus-like lion Aslan",
+   "published": "2026-11-06 13:13 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Venezuela welcomes opposition leader María Corina Machado home",
    "published": "2026-11-06 06:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "JD Vance singled out Iran War for midterm rout – he didn’t say what should happen next in conflict",
-   "published": "2026-11-06 00:31 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting bloc than some other Democratic candidates",
-   "published": "2026-11-05 20:56 UTC"
   },
   {
    "region": "Americas",
