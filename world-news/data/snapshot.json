@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-05T23:01:51Z",
+ "generatedAt": "2026-11-06T00:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,10 +93,10 @@
    "stale": false,
    "items": [
     {
-     "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting block than some other Democratic candidates",
+     "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting bloc than some other Democratic candidates",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/black-michiganders-helped-push-abdul-el-sayed-to-victory-but-the-numbers-show-he-was-less-popular-with-this-key-voting-block-than-some-other-democratic-candidates-289777",
+     "link": "https://theconversation.com/black-michiganders-helped-push-abdul-el-sayed-to-victory-but-the-numbers-show-he-was-less-popular-with-this-key-voting-bloc-than-some-other-democratic-candidates-289777",
      "published": "2026-11-05T20:56:31Z",
      "summary": "",
      "stale": false,
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "5 fascinating Australian literary podcasts – from biographers’ tales to Luke Bateman",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/5-fascinating-australian-literary-podcasts-from-biographers-tales-to-luke-bateman-293345",
+     "published": "2026-11-05T23:46:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
+    },
+    {
+     "title": "Spot a baby bird on the ground? Don’t be tempted to bird-nap it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/spot-a-baby-bird-on-the-ground-dont-be-tempted-to-bird-nap-it-295459",
+     "published": "2026-11-05T23:29:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Holly Kirk, Associate Professor and ARC Industry Fellow, Urban Ecology, Curtin University"
+    },
+    {
      "title": "Humidity can make heatwaves more dangerous. It’s time to warn Australians about this threat",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,26 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "AI learns from the products of thinking, not thought itself. That’s a problem for machines – and for us",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/ai-learns-from-the-products-of-thinking-not-thought-itself-thats-a-problem-for-machines-and-for-us-293696",
-     "published": "2026-11-05T18:57:36Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michael Richardson, Professor, School of Psychological Sciences, Macquarie University"
-    },
-    {
-     "title": "Friday essay: when is a kiss a crime? Feminists have asked this question for more than 100 years",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/friday-essay-when-is-a-kiss-a-crime-feminists-have-asked-this-question-for-more-than-100-years-288936",
-     "published": "2026-11-05T18:57:20Z",
-     "summary": "",
-     "stale": false,
-     "author": "Katie Barclay, ARC Future Fellow and Professor in History and Archaeology, Macquarie University"
     },
     {
      "title": "Devices aren’t lasting as long as they should. Here’s why",
@@ -721,7 +721,7 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting block than some other Democratic candidates",
+   "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting bloc than some other Democratic candidates",
    "published": "2026-11-05 20:56 UTC"
   },
   {
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "5 fascinating Australian literary podcasts – from biographers’ tales to Luke Bateman",
+   "published": "2026-11-05 23:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Spot a baby bird on the ground? Don’t be tempted to bird-nap it",
+   "published": "2026-11-05 23:29 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Humidity can make heatwaves more dangerous. It’s time to warn Australians about this threat",
    "published": "2026-11-05 22:18 UTC"
   },
@@ -921,18 +933,6 @@
    "source": "The Conversation",
    "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
    "published": "2026-11-05 22:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "AI learns from the products of thinking, not thought itself. That’s a problem for machines – and for us",
-   "published": "2026-11-05 18:57 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Friday essay: when is a kiss a crime? Feminists have asked this question for more than 100 years",
-   "published": "2026-11-05 18:57 UTC"
   },
   {
    "region": "Oceania",
