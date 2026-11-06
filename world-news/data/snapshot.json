@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T06:01:18Z",
+ "generatedAt": "2026-11-06T07:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pauline Hanson’s High Court appeal will put freedom of speech to the test",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/pauline-hansons-high-court-appeal-will-put-freedom-of-speech-to-the-test-296046",
+     "published": "2026-11-06T06:02:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anne Twomey, Professor Emerita in Constitutional Law, University of Sydney"
+    },
+    {
      "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Jesse Whitehead, Senior Research Fellow, Te Ngira Institute for Population Research, University of Waikato"
-    },
-    {
-     "title": "Politics with Michelle Grattan: Business chief urges government to use more means testing",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-business-chief-urges-government-to-use-more-means-testing-295956",
-     "published": "2026-11-05T23:54:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Pauline Hanson’s High Court appeal will put freedom of speech to the test",
+   "published": "2026-11-06 06:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
    "published": "2026-11-06 03:41 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
    "published": "2026-11-06 00:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Business chief urges government to use more means testing",
-   "published": "2026-11-05 23:54 UTC"
   },
   {
    "region": "Oceania",
