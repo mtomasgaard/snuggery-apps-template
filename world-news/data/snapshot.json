@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T01:01:19Z",
+ "generatedAt": "2026-11-06T02:01:23Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/11/06/global-voices-condemns-the-attacks-on-albanian-fact-checking-service-faktoje/",
+     "published": "2026-11-06T01:38:56Z",
+     "summary": "We stand in solidarity with Faktoje following a series of coordinated attacks that have weaponized its transparent financial data to undermine its vital work exposing misinformation around local protests.",
+     "stale": false,
+     "author": "Global Voices"
+    },
     {
      "title": "What comes after networked authoritarianism?",
      "source": "Global Voices",
@@ -35,16 +45,6 @@
      "published": "2026-11-03T12:00:00Z",
      "summary": "Ukraine has sustained almost 2,000 attacks on education since the full-scale Russian invasion in 2022, with some 270 this year alone, the UN Children’s Fund (UNICEF) said on Tuesday, a day after a strike at a school…",
      "stale": false
-    },
-    {
-     "title": "In Kosovo, a new app makes reporting problems to the government fast and easy",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/11/02/in-kosovo-a-new-app-makes-reporting-problems-to-the-government-fast-and-easy/",
-     "published": "2026-11-02T23:49:55Z",
-     "summary": "Based on the type and location of the problem, the platform is designed to route the report to the appropriate department and allow the citizen to follow what happens afterwards.",
-     "stale": false,
-     "author": "Nurbek Bekmurzaev"
     },
     {
      "title": "Ukraine: WFP provides hot meals to Oleshky evacuees as UN pushes to restore power before winter",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "JD Vance singled out Iran War for midterm rout – he didn’t say what should happen next in conflict",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/jd-vance-singled-out-iran-war-for-midterm-rout-he-didnt-say-what-should-happen-next-in-conflict-295938",
+     "published": "2026-11-06T00:31:57Z",
+     "summary": "",
+     "stale": false,
+     "author": "Javed Ali, Associate Professor of Practice of Public Policy, University of Michigan"
+    },
+    {
      "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting bloc than some other Democratic candidates",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -111,16 +121,6 @@
      "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
      "stale": false,
      "author": "Rebecca MacKinnon"
-    },
-    {
-     "title": "How Amendment 3, vaccine mandates and school vouchers will shape Florida under the leadership of Byron Donalds",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/how-amendment-3-vaccine-mandates-and-school-vouchers-will-shape-florida-under-the-leadership-of-byron-donalds-295720",
-     "published": "2026-11-05T14:26:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liv Coleman, Professor of Political Science and International Studies, University of Tampa"
     },
     {
      "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
+   "published": "2026-11-06 01:38 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
   },
@@ -687,12 +693,6 @@
    "source": "UN News",
    "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
    "published": "2026-11-03 12:00 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "In Kosovo, a new app makes reporting problems to the government fast and easy",
-   "published": "2026-11-02 23:49 UTC"
   },
   {
    "region": "Europe",
@@ -721,6 +721,12 @@
   {
    "region": "Americas",
    "source": "The Conversation",
+   "title": "JD Vance singled out Iran War for midterm rout – he didn’t say what should happen next in conflict",
+   "published": "2026-11-06 00:31 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
    "title": "Black Michiganders helped push Abdul El-Sayed to victory – but the numbers show he was less popular with this key voting bloc than some other Democratic candidates",
    "published": "2026-11-05 20:56 UTC"
   },
@@ -729,12 +735,6 @@
    "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "How Amendment 3, vaccine mandates and school vouchers will shape Florida under the leadership of Byron Donalds",
-   "published": "2026-11-05 14:26 UTC"
   },
   {
    "region": "Americas",
