@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T03:01:24Z",
+ "generatedAt": "2026-11-06T04:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
+     "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/us-voters-lashed-out-at-data-centres-what-does-that-mean-for-australias-ai-ambitions-295979",
+     "published": "2026-11-06T03:41:52Z",
+     "summary": "",
+     "stale": false,
+     "author": "Johanna Lim, Research Associate, Strategic Technologies, University of Sydney"
+    },
+    {
+     "title": "Justice, accountability, more questions: what Russell Brand’s guilty verdict means for victim-survivors",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/justice-accountability-more-questions-what-russell-brands-guilty-verdict-means-for-victim-survivors-296042",
+     "published": "2026-11-06T03:15:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Anastasia Powell, Professor of Family and Sexual Violence, RMIT University"
+    },
+    {
+     "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/born-in-aussie-or-nz-playing-for-the-pacific-the-startling-demographics-of-the-rugby-league-world-cup-295966",
      "published": "2026-11-06T00:20:24Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
-     "title": "5 fascinating Australian literary podcasts – from biographers’ tales to Luke Bateman",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/5-fascinating-australian-literary-podcasts-from-biographers-tales-to-luke-bateman-293345",
-     "published": "2026-11-05T23:46:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
-    },
-    {
      "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "Devices aren’t lasting as long as they should. Here’s why",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/devices-arent-lasting-as-long-as-they-should-heres-why-294674",
-     "published": "2026-11-05T18:52:29Z",
-     "summary": "",
-     "stale": false,
-     "author": "Margherita Feleppa, Lecturer, School of Law, University of Wollongong"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
+   "published": "2026-11-06 03:41 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Justice, accountability, more questions: what Russell Brand’s guilty verdict means for victim-survivors",
+   "published": "2026-11-06 03:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
    "published": "2026-11-06 00:20 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "5 fascinating Australian literary podcasts – from biographers’ tales to Luke Bateman",
-   "published": "2026-11-05 23:46 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
    "published": "2026-11-05 22:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Devices aren’t lasting as long as they should. Here’s why",
-   "published": "2026-11-05 18:52 UTC"
   },
   {
    "region": "Oceania",
