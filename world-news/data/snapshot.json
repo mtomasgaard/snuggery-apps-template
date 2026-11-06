@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T10:01:24Z",
+ "generatedAt": "2026-11-06T11:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Prisonniers en Ukraine, les Africains recrutés par la Russie sont aussi abandonnés par leurs États",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/prisonniers-en-ukraine-les-africains-recrutes-par-la-russie-sont-aussi-abandonnes-par-leurs-etats-295920",
+     "published": "2026-11-06T09:39:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Thierry Vircoulon, Chercheur associé au Centre Afrique de l'Institut Français des Relations Internationales, membre du Groupe de Recherche sur l'Eugénisme et…"
+    },
+    {
      "title": "How football, smartphones and mobile money drive youth sports betting in Africa",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -185,16 +195,6 @@
      "summary": "",
      "stale": false,
      "author": "Franklin Glozah, Associate Professor of Behavioural Science in Health, University of Ghana"
-    },
-    {
-     "title": "Donor aid models don’t determine food security in Zambia, but local farming practices do",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/donor-aid-models-dont-determine-food-security-in-zambia-but-local-farming-practices-do-295174",
-     "published": "2026-11-05T14:23:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Bridget Bwalya, Associate Professor in Natural Resources Management, University of Zambia"
     },
     {
      "title": "Abyei: Deadly drone strikes mark ‘new and concerning’ threat, UN peacekeeping chief warns",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "How football, smartphones and mobile money drive youth sports betting in Africa",
-   "published": "2026-11-05 14:24 UTC"
+   "title": "Prisonniers en Ukraine, les Africains recrutés par la Russie sont aussi abandonnés par leurs États",
+   "published": "2026-11-06 09:39 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Donor aid models don’t determine food security in Zambia, but local farming practices do",
-   "published": "2026-11-05 14:23 UTC"
+   "title": "How football, smartphones and mobile money drive youth sports betting in Africa",
+   "published": "2026-11-05 14:24 UTC"
   },
   {
    "region": "Africa",
