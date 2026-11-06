@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T15:01:21Z",
+ "generatedAt": "2026-11-06T16:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -110,7 +110,7 @@
      "published": "2026-11-06T13:13:51Z",
      "summary": "",
      "stale": false,
-     "author": "Christopher A. Snyder, Professor of History, Mississippi State University"
+     "author": "Christopher A. Snyder, PhD, Professor of History, Mississippi State University"
     },
     {
      "title": "Venezuela welcomes opposition leader María Corina Machado home",
@@ -177,6 +177,15 @@
    "stale": false,
    "items": [
     {
+     "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168753",
+     "published": "2026-11-06T12:00:00Z",
+     "summary": "Aid teams working to help millions of people uprooted by the ongoing war in Sudan appealed on Friday for more international assistance amid desperate funding shortages, empty warehouses and overwhelming needs.",
+     "stale": false
+    },
+    {
      "title": "Prisonniers en Ukraine, les Africains recrutés par la Russie sont aussi abandonnés par leurs États",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168742",
      "published": "2026-11-05T12:00:00Z",
      "summary": "Two new Ebola vaccine candidates will be added to a clinical trial in the Democratic Republic of the Congo (DRC) as the country continues to battle a deadly outbreak caused by the Bundibugyo species of the virus.",
-     "stale": false
-    },
-    {
-     "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168731",
-     "published": "2026-11-03T12:00:00Z",
-     "summary": "Intensifying drone attacks on civilian infrastructure across Sudan are disrupting electricity, water and fuel supplies, putting lives at risk and hampering the delivery of humanitarian aid, the UN’s top official in the…",
      "stale": false
     },
     {
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
+   "published": "2026-11-06 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Prisonniers en Ukraine, les Africains recrutés par la Russie sont aussi abandonnés par leurs États",
    "published": "2026-11-06 09:39 UTC"
@@ -789,12 +795,6 @@
    "source": "UN News",
    "title": "Two new Ebola vaccines to join DR Congo clinical trial",
    "published": "2026-11-05 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "‘This is not about politics. This is about people’: UN warns of impact of deadly drone strikes in Sudan",
-   "published": "2026-11-03 12:00 UTC"
   },
   {
    "region": "Africa",
