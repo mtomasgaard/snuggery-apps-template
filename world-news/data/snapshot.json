@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T17:01:27Z",
+ "generatedAt": "2026-11-06T18:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Georgia Gov.-elect Keisha Lance Bottoms stands on the shoulders of Stacey Abrams, Charlotta Bass and countless other Black women who dreamed",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/georgia-gov-elect-keisha-lance-bottoms-stands-on-the-shoulders-of-stacey-abrams-charlotta-bass-and-countless-other-black-women-who-dreamed-296027",
+     "published": "2026-11-06T17:09:28Z",
+     "summary": "",
+     "stale": false,
+     "author": "Allissa V. Richardson, Associate Professor of Journalism, USC Annenberg School for Communication and Journalism"
+    },
+    {
      "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Sara Suzuki, Senior Researcher and Research Assistant Professor at CIRCLE, Tufts University"
-    },
-    {
-     "title": "What C.S. Lewis said about Narnia’s most famous character: the Jesus-like lion Aslan",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-c-s-lewis-said-about-narnias-most-famous-character-the-jesus-like-lion-aslan-294140",
-     "published": "2026-11-06T13:13:51Z",
-     "summary": "",
-     "stale": false,
-     "author": "Christopher A. Snyder, PhD, Professor of History, Mississippi State University"
     },
     {
      "title": "Venezuela welcomes opposition leader María Corina Machado home",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
-   "published": "2026-11-06 13:14 UTC"
+   "title": "Georgia Gov.-elect Keisha Lance Bottoms stands on the shoulders of Stacey Abrams, Charlotta Bass and countless other Black women who dreamed",
+   "published": "2026-11-06 17:09 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What C.S. Lewis said about Narnia’s most famous character: the Jesus-like lion Aslan",
-   "published": "2026-11-06 13:13 UTC"
+   "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
+   "published": "2026-11-06 13:14 UTC"
   },
   {
    "region": "Americas",
