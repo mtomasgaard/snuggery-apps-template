@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T00:01:21Z",
+ "generatedAt": "2026-11-06T01:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/born-in-aussie-or-nz-playing-for-the-pacific-the-startling-demographics-of-the-rugby-league-world-cup-295966",
+     "published": "2026-11-06T00:20:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jesse Whitehead, Senior Research Fellow, Te Ngira Institute for Population Research, University of Waikato"
+    },
+    {
+     "title": "Politics with Michelle Grattan: Business chief urges government to use more means testing",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/politics-with-michelle-grattan-business-chief-urges-government-to-use-more-means-testing-295956",
+     "published": "2026-11-05T23:54:29Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "5 fascinating Australian literary podcasts – from biographers’ tales to Luke Bateman",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Caitlin Macdonald, Researcher, School of Art, Communication and English, University of Sydney"
-    },
-    {
-     "title": "Spot a baby bird on the ground? Don’t be tempted to bird-nap it",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/spot-a-baby-bird-on-the-ground-dont-be-tempted-to-bird-nap-it-295459",
-     "published": "2026-11-05T23:29:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Holly Kirk, Associate Professor and ARC Industry Fellow, Urban Ecology, Curtin University"
-    },
-    {
-     "title": "Humidity can make heatwaves more dangerous. It’s time to warn Australians about this threat",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/humidity-can-make-heatwaves-more-dangerous-its-time-to-warn-australians-about-this-threat-295453",
-     "published": "2026-11-05T22:18:19Z",
-     "summary": "",
-     "stale": false,
-     "author": "Alyson Wright, Adjunct Fellow in Public Health, Menzies School of Health Research"
     },
     {
      "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
+   "published": "2026-11-06 00:20 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Politics with Michelle Grattan: Business chief urges government to use more means testing",
+   "published": "2026-11-05 23:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "5 fascinating Australian literary podcasts – from biographers’ tales to Luke Bateman",
    "published": "2026-11-05 23:46 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Spot a baby bird on the ground? Don’t be tempted to bird-nap it",
-   "published": "2026-11-05 23:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Humidity can make heatwaves more dangerous. It’s time to warn Australians about this threat",
-   "published": "2026-11-05 22:18 UTC"
   },
   {
    "region": "Oceania",
