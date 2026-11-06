@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T07:01:19Z",
+ "generatedAt": "2026-11-06T08:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: an over-committed Albanese is scrambling to keep his eyes on the main game",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-an-over-committed-albanese-is-scrambling-to-keep-his-eyes-on-the-main-game-295659",
+     "published": "2026-11-06T06:21:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Pauline Hanson’s High Court appeal will put freedom of speech to the test",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Johanna Lim, Research Associate, Strategic Technologies, University of Sydney"
-    },
-    {
-     "title": "Justice, accountability, more questions: what Russell Brand’s guilty verdict means for victim-survivors",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/justice-accountability-more-questions-what-russell-brands-guilty-verdict-means-for-victim-survivors-296042",
-     "published": "2026-11-06T03:15:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anastasia Powell, Professor of Family and Sexual Violence, RMIT University"
     },
     {
      "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: an over-committed Albanese is scrambling to keep his eyes on the main game",
+   "published": "2026-11-06 06:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Pauline Hanson’s High Court appeal will put freedom of speech to the test",
    "published": "2026-11-06 06:02 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
    "published": "2026-11-06 03:41 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Justice, accountability, more questions: what Russell Brand’s guilty verdict means for victim-survivors",
-   "published": "2026-11-06 03:15 UTC"
   },
   {
    "region": "Oceania",
