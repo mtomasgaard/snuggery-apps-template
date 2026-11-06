@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-06T19:01:24Z",
+ "generatedAt": "2026-11-06T20:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Pope Leo’s trip is a homecoming to Peru – where debate over liberation theology roiled the church during his early years as a priest",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/pope-leos-trip-is-a-homecoming-to-peru-where-debate-over-liberation-theology-roiled-the-church-during-his-early-years-as-a-priest-294299",
+     "published": "2026-11-06T18:52:07Z",
+     "summary": "",
+     "stale": false,
+     "author": "Eben Levey, Assistant Professor of History, Rochester Institute of Technology"
+    },
+    {
      "title": "Georgia Gov.-elect Keisha Lance Bottoms stands on the shoulders of Stacey Abrams, Charlotta Bass and countless other Black women who dreamed",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Allissa V. Richardson, Associate Professor of Journalism, USC Annenberg School for Communication and Journalism"
-    },
-    {
-     "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/young-people-turned-out-in-near-record-numbers-for-the-2026-midterms-with-the-economy-top-of-their-minds-295947",
-     "published": "2026-11-06T13:14:07Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sara Suzuki, Senior Researcher and Research Assistant Professor at CIRCLE, Tufts University"
     },
     {
      "title": "Venezuela welcomes opposition leader María Corina Machado home",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/06/big-tech-ai-and-the-quiet-expansion-of-digital-surveillance-in-nigeria/",
+     "published": "2026-11-06T20:01:09Z",
+     "summary": "...systems designed to maximise commercial value from information can create incentives to collect more data than people reasonably expect or understand.",
+     "stale": false,
+     "author": "Nshua Cali-Dibang"
+    },
+    {
      "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
      "source": "UN News",
      "feed": "un-africa",
@@ -242,16 +252,6 @@
      "summary": "Young people are deemed mature enough to elect their leaders, yet not to replace them. They drive political movements forward by voting, advocating, campaigning, and protesting, yet cannot run for office themselves.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/25/between-two-shores-the-monhes-nationality-and-a-sense-of-belonging-in-mozambique/",
-     "published": "2026-10-25T16:00:16Z",
-     "summary": "“Monhé” is not a nationality: a person of Indian origin can be completely Mozambican, foreign, or in some cases, stateless.",
-     "stale": false,
-     "author": "Liam Anderson"
     }
    ]
   },
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Georgia Gov.-elect Keisha Lance Bottoms stands on the shoulders of Stacey Abrams, Charlotta Bass and countless other Black women who dreamed",
-   "published": "2026-11-06 17:09 UTC"
+   "title": "Pope Leo’s trip is a homecoming to Peru – where debate over liberation theology roiled the church during his early years as a priest",
+   "published": "2026-11-06 18:52 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Young people turned out in near-record numbers for the 2026 midterms, with the economy top of their minds",
-   "published": "2026-11-06 13:14 UTC"
+   "title": "Georgia Gov.-elect Keisha Lance Bottoms stands on the shoulders of Stacey Abrams, Charlotta Bass and countless other Black women who dreamed",
+   "published": "2026-11-06 17:09 UTC"
   },
   {
    "region": "Americas",
@@ -765,6 +765,12 @@
    "source": "UN News",
    "title": "General Assembly weighs US embargo against Cuba ahead of 34th vote",
    "published": "2026-10-27 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
+   "published": "2026-11-06 20:01 UTC"
   },
   {
    "region": "Africa",
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Vote young yet govern much later: West African youth’s struggle for power",
    "published": "2026-10-26 08:30 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
-   "published": "2026-10-25 16:00 UTC"
   },
   {
    "region": "Middle East",
