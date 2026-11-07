@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-07T11:01:20Z",
+ "generatedAt": "2026-11-07T11:48:59Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/nzs-next-government-hangs-in-the-balance-2026-election-results-at-a-glance-295556",
+     "published": "2026-11-07T11:05:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Digital Storytelling Team, The Conversation"
+    },
+    {
+     "title": "A knife-edge result, 3 possible outcomes: what comes next after NZ’s election?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/a-knife-edge-result-3-possible-outcomes-what-comes-next-after-nzs-election-295557",
+     "published": "2026-11-07T11:03:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Richard Shaw, Professor of Politics, Te Kunenga ki Pūrehuroa – Massey University"
+    },
+    {
      "title": "View from The Hill: an over-committed Albanese is scrambling to keep his eyes on the main game",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -449,16 +469,6 @@
      "author": "Anne Twomey, Professor Emerita in Constitutional Law, University of Sydney"
     },
     {
-     "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/us-voters-lashed-out-at-data-centres-what-does-that-mean-for-australias-ai-ambitions-295979",
-     "published": "2026-11-06T03:41:52Z",
-     "summary": "",
-     "stale": false,
-     "author": "Johanna Lim, Research Associate, Strategic Technologies, University of Sydney"
-    },
-    {
      "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Jesse Whitehead, Senior Research Fellow, Te Ngira Institute for Population Research, University of Waikato"
-    },
-    {
-     "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-election-eve-poll-watch-rights-lead-slipping-with-opportunity-still-the-wild-card-295736",
-     "published": "2026-11-05T22:10:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
+   "published": "2026-11-07 11:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "A knife-edge result, 3 possible outcomes: what comes next after NZ’s election?",
+   "published": "2026-11-07 11:03 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "View from The Hill: an over-committed Albanese is scrambling to keep his eyes on the main game",
    "published": "2026-11-06 06:21 UTC"
   },
@@ -925,20 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "US voters lashed out at data centres. What does that mean for Australia’s AI ambitions?",
-   "published": "2026-11-06 03:41 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
    "published": "2026-11-06 00:20 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ election eve poll watch: right’s lead slipping with Opportunity still the wild card",
-   "published": "2026-11-05 22:10 UTC"
   },
   {
    "region": "Oceania",
