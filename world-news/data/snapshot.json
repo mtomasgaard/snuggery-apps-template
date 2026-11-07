@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-07T08:01:17Z",
+ "generatedAt": "2026-11-07T09:01:50Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "How people in Montenegro are making their country cleaner",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/11/07/how-people-in-montenegro-are-making-their-country-cleaner/",
+     "published": "2026-11-07T08:09:15Z",
+     "summary": "While Montenegro works to align its waste management with EU directives, ordinary citizens are taking practical steps to improve the situation now.",
+     "stale": false,
+     "author": "Daria Dergacheva"
+    },
     {
      "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
      "source": "Global Voices",
@@ -26,16 +36,6 @@
      "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
      "stale": false,
      "author": "Rebecca MacKinnon"
-    },
-    {
-     "title": "Tracing the recruitment trap behind Russia’s war",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/11/04/tracing-the-recruitment-trap-behind-russias-war/",
-     "published": "2026-11-04T05:26:29Z",
-     "summary": "Bangladeshi men paid agents for Russian jobs and ended up on the front lines. Families wait for bodies and answers, and they want the recruiters behind it in a courtroom.",
-     "stale": false,
-     "author": "Zulker Naeen"
     },
     {
      "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "How people in Montenegro are making their country cleaner",
+   "published": "2026-11-07 08:09 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Global Voices condemns the attacks on Albanian fact-checking service Faktoje",
    "published": "2026-11-06 01:38 UTC"
   },
@@ -681,12 +687,6 @@
    "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "Tracing the recruitment trap behind Russia’s war",
-   "published": "2026-11-04 05:26 UTC"
   },
   {
    "region": "Europe",
