@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T19:02:01Z",
+ "generatedAt": "2026-11-08T20:01:16Z",
  "regions": [
   {
    "key": "europe",
@@ -62,7 +62,7 @@
      "link": "https://globalvoices.org/2026/10/30/when-chatbots-become-answer-engines-ai-geopolitics-and-truth/",
      "published": "2026-10-30T19:30:47Z",
      "summary": "As AI chatbots become everyday sources of information, research from Kosovo raises questions about how these systems present and sometimes distort geopolitical narratives.",
-     "stale": true,
+     "stale": false,
      "author": "Guest Contributor"
     },
     {
@@ -72,7 +72,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": true,
+     "stale": false,
      "author": "Ranking Digital Rights"
     },
     {
@@ -82,7 +82,7 @@
      "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
      "published": "2026-10-17T08:07:27Z",
      "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": true,
+     "stale": false,
      "author": "Uncloseted Media"
     }
    ]
@@ -429,14 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Australians are paying ‘extreme’ specialist fees. Here’s how the government can rein in costs",
+     "title": "Why Jared Diamond’s leadership book on prophets, coaches and kings is flawed but fun",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/australians-are-paying-extreme-specialist-fees-heres-how-the-government-can-rein-in-costs-294362",
-     "published": "2026-11-08T10:01:39Z",
+     "link": "https://theconversation.com/why-jared-diamonds-leadership-book-on-prophets-coaches-and-kings-is-flawed-but-fun-291462",
+     "published": "2026-11-08T18:46:08Z",
      "summary": "",
      "stale": false,
-     "author": "Peter Breadon, Program Director, Health and Aged Care, Grattan Institute"
+     "author": "Claire Wright, Senior Lecturer and Business Historian, School of Management, University of Technology Sydney"
+    },
+    {
+     "title": "2.6 Seconds: new documentary explores the history, grief and looming questions of Kumanjayi Walker’s death",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/2-6-seconds-new-documentary-explores-the-history-grief-and-looming-questions-of-kumanjayi-walkers-death-293684",
+     "published": "2026-11-08T18:45:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Cally Jetta, Associate Professor; School of Education, Curtin University"
+    },
+    {
+     "title": "Does Australia need more national exams for school students?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/does-australia-need-more-national-exams-for-school-students-295562",
+     "published": "2026-11-08T18:45:14Z",
+     "summary": "",
+     "stale": false,
+     "author": "Steven Lewis, Associate Professor of Education Policy, Australian Catholic University"
     },
     {
      "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
@@ -451,32 +471,12 @@
     {
      "title": "NZ will have a caretaker government for weeks. What that means and how it works",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-will-have-a-caretaker-government-for-weeks-what-that-means-and-how-it-works-295750",
      "published": "2026-11-08T01:04:53Z",
      "summary": "",
      "stale": false,
      "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
-    },
-    {
-     "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nzs-next-government-hangs-in-the-balance-2026-election-results-at-a-glance-295556",
-     "published": "2026-11-07T11:05:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Digital Storytelling Team, The Conversation"
-    },
-    {
-     "title": "A knife-edge result, 3 possible outcomes: what comes next after NZ’s election?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-knife-edge-result-3-possible-outcomes-what-comes-next-after-nzs-election-295557",
-     "published": "2026-11-07T11:03:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Richard Shaw, Professor of Politics, Te Kunenga ki Pūrehuroa – Massey University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -536,9 +536,9 @@
    "id": "gv-western-europe",
    "source": "Global Voices",
    "region": "Europe",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "gv-eastern-europe",
@@ -913,8 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australians are paying ‘extreme’ specialist fees. Here’s how the government can rein in costs",
-   "published": "2026-11-08 10:01 UTC"
+   "title": "Why Jared Diamond’s leadership book on prophets, coaches and kings is flawed but fun",
+   "published": "2026-11-08 18:46 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "2.6 Seconds: new documentary explores the history, grief and looming questions of Kumanjayi Walker’s death",
+   "published": "2026-11-08 18:45 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Does Australia need more national exams for school students?",
+   "published": "2026-11-08 18:45 UTC"
   },
   {
    "region": "Oceania",
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "NZ will have a caretaker government for weeks. What that means and how it works",
    "published": "2026-11-08 01:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
-   "published": "2026-11-07 11:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A knife-edge result, 3 possible outcomes: what comes next after NZ’s election?",
-   "published": "2026-11-07 11:03 UTC"
   },
   {
    "region": "Oceania",
