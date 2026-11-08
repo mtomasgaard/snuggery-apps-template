@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T04:01:26Z",
+ "generatedAt": "2026-11-08T05:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -261,6 +261,15 @@
    "stale": false,
    "items": [
     {
+     "title": "‘For the first time I have my own chair’: Gaza siblings find new freedom",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168759",
+     "published": "2026-11-07T12:00:00Z",
+     "summary": "In Gaza, 10-year-old Anas is one of three siblings born without legs and with only two fingers on each of their hands. They struggle to move around and perform daily activities like eating and writing independently.",
+     "stale": false
+    },
+    {
      "title": "What comes after networked authoritarianism?",
      "source": "Global Voices",
      "feed": "gv-west-asia",
@@ -305,15 +314,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168730",
      "published": "2026-11-03T12:00:00Z",
      "summary": "Safa is 14. Her mother died earlier this year. She has no brothers or sisters. And a few weeks ago, as the crisis took hold, her father married her to an elderly man, afraid that if he were killed in the hostilities, no…",
-     "stale": false
-    },
-    {
-     "title": "‘They deserve to know the truth’: UN rights chief demands probe into staffer’s death in Houthi custody",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/10/1168716",
-     "published": "2026-10-31T12:00:00Z",
-     "summary": "The UN human rights chief on Saturday demanded an independent investigation into the death of a Yemeni colleague held by the Houthis for more than two years, whose family learned of his death only weeks after it…",
      "stale": false
     },
     {
@@ -816,6 +816,12 @@
   },
   {
    "region": "Middle East",
+   "source": "UN News",
+   "title": "‘For the first time I have my own chair’: Gaza siblings find new freedom",
+   "published": "2026-11-07 12:00 UTC"
+  },
+  {
+   "region": "Middle East",
    "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
@@ -843,12 +849,6 @@
    "source": "UN News",
    "title": "Married off at 14: In Yemen’s war, women and girls suffer ‘devastating consequences’",
    "published": "2026-11-03 12:00 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "‘They deserve to know the truth’: UN rights chief demands probe into staffer’s death in Houthi custody",
-   "published": "2026-10-31 12:00 UTC"
   },
   {
    "region": "Middle East",
