@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T01:01:16Z",
+ "generatedAt": "2026-11-08T02:01:16Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
+     "title": "NZ will have a caretaker government for weeks. What that means and how it works",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/nz-will-have-a-caretaker-government-for-weeks-what-that-means-and-how-it-works-295750",
+     "published": "2026-11-08T01:04:53Z",
+     "summary": "",
+     "stale": false,
+     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
+    },
+    {
+     "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nzs-next-government-hangs-in-the-balance-2026-election-results-at-a-glance-295556",
      "published": "2026-11-07T11:05:47Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "A knife-edge result, 3 possible outcomes: what comes next after NZ’s election?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/a-knife-edge-result-3-possible-outcomes-what-comes-next-after-nzs-election-295557",
      "published": "2026-11-07T11:03:32Z",
      "summary": "",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Pauline Hanson’s High Court appeal will put freedom of speech to the test",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/pauline-hansons-high-court-appeal-will-put-freedom-of-speech-to-the-test-296046",
-     "published": "2026-11-06T06:02:09Z",
-     "summary": "",
-     "stale": false,
-     "author": "Anne Twomey, Professor Emerita in Constitutional Law, University of Sydney"
     },
     {
      "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "NZ will have a caretaker government for weeks. What that means and how it works",
+   "published": "2026-11-08 01:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
    "published": "2026-11-07 11:05 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: an over-committed Albanese is scrambling to keep his eyes on the main game",
    "published": "2026-11-06 06:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Pauline Hanson’s High Court appeal will put freedom of speech to the test",
-   "published": "2026-11-06 06:02 UTC"
   },
   {
    "region": "Oceania",
