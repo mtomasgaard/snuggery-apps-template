@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T03:01:19Z",
+ "generatedAt": "2026-11-08T04:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ will have a caretaker government for weeks. What that means and how it works",
+     "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/pre-election-polls-understated-right-in-nz-with-overhang-skewing-preliminary-results-295738",
+     "published": "2026-11-08T02:55:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
+    },
+    {
+     "title": "NZ will have a caretaker government for weeks. What that means and how it works",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-will-have-a-caretaker-government-for-weeks-what-that-means-and-how-it-works-295750",
      "published": "2026-11-08T01:04:53Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "NZ’s next government hangs in the balance: 2026 election results at a glance",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nzs-next-government-hangs-in-the-balance-2026-election-results-at-a-glance-295556",
      "published": "2026-11-07T11:05:47Z",
      "summary": "",
@@ -451,7 +461,7 @@
     {
      "title": "A knife-edge result, 3 possible outcomes: what comes next after NZ’s election?",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/a-knife-edge-result-3-possible-outcomes-what-comes-next-after-nzs-election-295557",
      "published": "2026-11-07T11:03:32Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/born-in-aussie-or-nz-playing-for-the-pacific-the-startling-demographics-of-the-rugby-league-world-cup-295966",
-     "published": "2026-11-06T00:20:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jesse Whitehead, Senior Research Fellow, Te Ngira Institute for Population Research, University of Waikato"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
+   "published": "2026-11-08 02:55 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ will have a caretaker government for weeks. What that means and how it works",
    "published": "2026-11-08 01:04 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "View from The Hill: an over-committed Albanese is scrambling to keep his eyes on the main game",
    "published": "2026-11-06 06:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Born in Aussie or NZ, playing for the Pacific: the startling demographics of the Rugby League World Cup",
-   "published": "2026-11-06 00:20 UTC"
   },
   {
    "region": "Oceania",
