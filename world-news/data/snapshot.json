@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T14:01:20Z",
+ "generatedAt": "2026-11-08T15:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/11/08/beyond-the-beaches-the-dominican-republic-and-the-global-debate-over-deep-sea-mining/",
+     "published": "2026-11-08T14:12:02Z",
+     "summary": "The DR wanted science to keep advancing and the International Seabed Authority to finish building the regulatory framework that the UN Convention had mandated it to develop.",
+     "stale": false,
+     "author": "Carolina Pichardo"
+    },
+    {
      "title": "Pope Leo’s trip is a homecoming to Peru – where debate over liberation theology roiled the church during his early years as a priest",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -131,16 +141,6 @@
      "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
      "stale": false,
      "author": "Rebecca MacKinnon"
-    },
-    {
-     "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/11/04/the-scandals-and-suspects-surrounding-flavio-bolsonaro-according-to-the-brazilian-press/",
-     "published": "2026-11-04T17:38:28Z",
-     "summary": "The former president's eldest son, Flávio, had been linked to embezzlement charges in his own cabinet. During the campaign, however, his resume was exposed even further",
-     "stale": false,
-     "author": "Global Voices Brazil"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
+   "published": "2026-11-08 14:12 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Pope Leo’s trip is a homecoming to Peru – where debate over liberation theology roiled the church during his early years as a priest",
    "published": "2026-11-06 18:52 UTC"
@@ -741,12 +747,6 @@
    "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "The scandals and suspects surrounding Flávio Bolsonaro, according to the Brazilian press",
-   "published": "2026-11-04 17:38 UTC"
   },
   {
    "region": "Americas",
