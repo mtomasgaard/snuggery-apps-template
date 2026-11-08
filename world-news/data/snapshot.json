@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T08:01:27Z",
+ "generatedAt": "2026-11-08T09:01:40Z",
  "regions": [
   {
    "key": "europe",
@@ -276,7 +276,7 @@
      "link": "https://globalvoices.org/2026/11/05/what-comes-after-networked-authoritarianism/",
      "published": "2026-11-05T16:17:00Z",
      "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
-     "stale": false,
+     "stale": true,
      "author": "Rebecca MacKinnon"
     },
     {
@@ -304,7 +304,7 @@
      "link": "https://globalvoices.org/2026/11/03/egypts-crackdown-on-independent-media-reaches-mada-masr-as-editor-faces-trial/",
      "published": "2026-11-03T15:56:04Z",
      "summary": "Egypt has convicted Mada Masr’s editor-in-chief Lina Attalah and ordered the outlet closed, weeks after arresting the whole Matsada2sh newsroom.",
-     "stale": false,
+     "stale": true,
      "author": "Walid El Houri"
     },
     {
@@ -323,7 +323,7 @@
      "link": "https://globalvoices.org/2026/10/29/a-digital-publication-sheds-light-on-turkeys-prison-system/",
      "published": "2026-10-29T23:06:48Z",
      "summary": "“For the relatives of people in prison, as well as for national and international human rights organizations and agencies, the information provided by the Prison Agenda publication can be vital.”",
-     "stale": false,
+     "stale": true,
      "author": "Daria Dergacheva"
     },
     {
@@ -333,7 +333,7 @@
      "link": "https://globalvoices.org/2026/10/22/what-telecoms-leave-behind-when-they-exit-a-country/",
      "published": "2026-10-22T12:20:06Z",
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
-     "stale": false,
+     "stale": true,
      "author": "Ranking Digital Rights"
     }
    ]
@@ -608,9 +608,9 @@
    "id": "gv-west-asia",
    "source": "Global Voices",
    "region": "Middle East",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 4,
+   "note": "TimeoutError: The read operation timed out; kept 4 cached"
   },
   {
    "id": "un-middle-east",
