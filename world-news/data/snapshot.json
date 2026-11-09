@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T06:01:19Z",
+ "generatedAt": "2026-11-09T07:01:46Z",
  "regions": [
   {
    "key": "europe",
@@ -197,16 +197,6 @@
      "author": "Olasunkanmi Habeeb Okunola, Associate Academic Officer – Risk and Recovery Governance, United Nations University"
     },
     {
-     "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/11/06/big-tech-ai-and-the-quiet-expansion-of-digital-surveillance-in-nigeria/",
-     "published": "2026-11-06T20:01:09Z",
-     "summary": "...systems designed to maximise commercial value from information can create incentives to collect more data than people reasonably expect or understand.",
-     "stale": false,
-     "author": "Nshua Cali-Dibang"
-    },
-    {
      "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
      "source": "UN News",
      "feed": "un-africa",
@@ -234,7 +224,7 @@
      "stale": false
     },
     {
-     "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
+     "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon’s waters",
      "source": "Global Voices",
      "feed": "gv-africa",
      "link": "https://globalvoices.org/2026/10/27/fish-scarcity-tar-balls-and-displaced-dolphins-the-hidden-costs-of-offshore-platforms-in-cameroon-waters/",
@@ -252,6 +242,16 @@
      "summary": "Young people are deemed mature enough to elect their leaders, yet not to replace them. They drive political movements forward by voting, advocating, campaigning, and protesting, yet cannot run for office themselves.",
      "stale": false,
      "author": "Laura"
+    },
+    {
+     "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/10/25/between-two-shores-the-monhes-nationality-and-a-sense-of-belonging-in-mozambique/",
+     "published": "2026-10-25T16:00:16Z",
+     "summary": "“Monhé” is not a nationality: a person of Indian origin can be completely Mozambican, foreign, or in some cases, stateless.",
+     "stale": false,
+     "author": "Liam Anderson"
     }
    ]
   },
@@ -417,7 +417,7 @@
      "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/10/28/bangladesh-weighs-tougher-cyber-law-as-ai-generated-abuse-targets-women/",
      "published": "2026-10-28T07:51:42Z",
-     "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumours, defamation and disinformation could revive censorship and threaten online free expression, even as victims need…",
+     "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumors, defamation, and disinformation could revive censorship and threaten online free expression, even as victims need…",
      "stale": false,
      "author": "Masudul Zarif"
     }
@@ -780,12 +780,6 @@
   },
   {
    "region": "Africa",
-   "source": "Global Voices",
-   "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
-   "published": "2026-11-06 20:01 UTC"
-  },
-  {
-   "region": "Africa",
    "source": "UN News",
    "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
    "published": "2026-11-06 12:00 UTC"
@@ -805,7 +799,7 @@
   {
    "region": "Africa",
    "source": "Global Voices",
-   "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon waters",
+   "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon’s waters",
    "published": "2026-10-27 08:59 UTC"
   },
   {
@@ -813,6 +807,12 @@
    "source": "Global Voices",
    "title": "Vote young yet govern much later: West African youth’s struggle for power",
    "published": "2026-10-26 08:30 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "Global Voices",
+   "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
+   "published": "2026-10-25 16:00 UTC"
   },
   {
    "region": "Middle East",
