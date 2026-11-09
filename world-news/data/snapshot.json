@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T11:01:29Z",
+ "generatedAt": "2026-11-09T12:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Comment le football, les smartphones et les paiements mobiles stimulent les paris sportifs chez les jeunes en Afrique",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/comment-le-football-les-smartphones-et-les-paiements-mobiles-stimulent-les-paris-sportifs-chez-les-jeunes-en-afrique-296077",
+     "published": "2026-11-09T10:57:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Franklin Glozah, Associate Professor of Behavioural Science in Health, University of Ghana"
+    },
+    {
      "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Jaishree Raman, Principal Medical Scientist and Head of Laboratory for Antimalarial Resistance Monitoring and Malaria Operational Research, National Institute…"
-    },
-    {
-     "title": "COP 31: West Africa’s climate plans put a price on ruined roads and crops – how to add invisible losses",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/cop-31-west-africas-climate-plans-put-a-price-on-ruined-roads-and-crops-how-to-add-invisible-losses-294627",
-     "published": "2026-11-08T09:29:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Olasunkanmi Habeeb Okunola, Associate Academic Officer – Risk and Recovery Governance, United Nations University"
     },
     {
      "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Comment le football, les smartphones et les paiements mobiles stimulent les paris sportifs chez les jeunes en Afrique",
+   "published": "2026-11-09 10:57 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
    "published": "2026-11-09 07:34 UTC"
@@ -777,12 +783,6 @@
    "source": "The Conversation",
    "title": "Climate change and funding cuts threaten malaria targets: what SADC countries can do",
    "published": "2026-11-08 09:30 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "COP 31: West Africa’s climate plans put a price on ruined roads and crops – how to add invisible losses",
-   "published": "2026-11-08 09:29 UTC"
   },
   {
    "region": "Africa",
