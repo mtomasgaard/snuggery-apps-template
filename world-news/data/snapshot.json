@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T01:01:18Z",
+ "generatedAt": "2026-11-09T02:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
+     "title": "What is pubic hair actually for? And does it matter if you remove it?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/what-is-pubic-hair-actually-for-and-does-it-matter-if-you-remove-it-269607",
+     "published": "2026-11-09T01:10:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Brigitte Gerstl, Adjunct Senior Lecturer, School of Clinical Medicine, Discipline of Women's Health, UNSW"
+    },
+    {
+     "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/did-australias-cricket-leaders-sandpaper-over-the-truth-new-ball-tampering-revelations-suggest-so-296128",
      "published": "2026-11-09T00:12:56Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/nz-has-unique-stories-of-evolution-and-geology-is-it-time-for-a-natural-history-museum-292115",
      "published": "2026-11-08T23:46:44Z",
      "summary": "",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
-    },
-    {
-     "title": "Poor polls continue for both federal and Victorian Labor",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/poor-polls-continue-for-both-federal-and-victorian-labor-295756",
-     "published": "2026-11-08T22:26:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What is pubic hair actually for? And does it matter if you remove it?",
+   "published": "2026-11-09 01:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
    "published": "2026-11-09 00:12 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "Your say: week beginning November 9",
    "published": "2026-11-08 22:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Poor polls continue for both federal and Victorian Labor",
-   "published": "2026-11-08 22:26 UTC"
   },
   {
    "region": "Oceania",
