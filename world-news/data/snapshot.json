@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T04:01:18Z",
+ "generatedAt": "2026-11-09T05:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "The dreamer who wants the world to read Nepali literature",
+     "source": "Global Voices",
+     "feed": "gv-south-asia",
+     "link": "https://globalvoices.org/2026/11/09/the-dreamer-who-wants-the-world-to-read-nepali-literature/",
+     "published": "2026-11-09T05:00:27Z",
+     "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries, and connect readers across borders through cultural exchange.",
+     "stale": false,
+     "author": "Sangita Swechcha"
+    },
+    {
      "title": "What comes after networked authoritarianism?",
      "source": "Global Voices",
      "feed": "gv-east-asia",
@@ -410,16 +420,6 @@
      "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumours, defamation and disinformation could revive censorship and threaten online free expression, even as victims need…",
      "stale": false,
      "author": "Masudul Zarif"
-    },
-    {
-     "title": "Protest as a pillar of democracy",
-     "source": "Global Voices",
-     "feed": "gv-south-asia",
-     "link": "https://globalvoices.org/2026/10/21/protest-as-a-pillar-of-democracy/",
-     "published": "2026-10-21T23:56:56Z",
-     "summary": "This spotlight is, then, a form of protest in its own right: a way of reasserting that protest is legitimate, important for democracy, and everywhere.",
-     "stale": false,
-     "author": "Malka Older"
     }
    ]
   },
@@ -428,6 +428,16 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "Holocaust education will soon become compulsory in schools. Our research shows how it can be done well",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/holocaust-education-will-soon-become-compulsory-in-schools-our-research-shows-how-it-can-be-done-well-296138",
+     "published": "2026-11-09T04:25:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Lauren Chalk, Research Fellow, Australian Centre for Jewish Civilisation, Monash University"
+    },
     {
      "title": "When Tari was 16, a dictator became her neighbour. Then her parents were imprisoned",
      "source": "The Conversation",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Brian Long, Lecturer in Arts and Cultural Management, The University of Melbourne"
-    },
-    {
-     "title": "What is pubic hair actually for? And does it matter if you remove it?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/what-is-pubic-hair-actually-for-and-does-it-matter-if-you-remove-it-269607",
-     "published": "2026-11-09T01:10:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Brigitte Gerstl, Adjunct Senior Lecturer, School of Clinical Medicine, Discipline of Women's Health, UNSW"
     },
     {
      "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "The dreamer who wants the world to read Nepali literature",
+   "published": "2026-11-09 05:00 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "What comes after networked authoritarianism?",
    "published": "2026-11-05 16:17 UTC"
   },
@@ -905,10 +911,10 @@
    "published": "2026-10-28 07:51 UTC"
   },
   {
-   "region": "Asia",
-   "source": "Global Voices",
-   "title": "Protest as a pillar of democracy",
-   "published": "2026-10-21 23:56 UTC"
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Holocaust education will soon become compulsory in schools. Our research shows how it can be done well",
+   "published": "2026-11-09 04:25 UTC"
   },
   {
    "region": "Oceania",
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
    "published": "2026-11-09 02:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "What is pubic hair actually for? And does it matter if you remove it?",
-   "published": "2026-11-09 01:10 UTC"
   },
   {
    "region": "Oceania",
