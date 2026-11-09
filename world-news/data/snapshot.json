@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T17:01:31Z",
+ "generatedAt": "2026-11-09T18:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -13,7 +13,7 @@
      "feed": "un-europe",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168761",
      "published": "2026-11-09T12:00:00Z",
-     "summary": "The Security Council convenes at 10am in New York on Ukraine. Russian strikes on energy infrastructure are threatening millions with another cold, dark winter, and civilian deaths are climbing sharply. The meeting comes…",
+     "summary": "The Security Council is meeting in New York on Ukraine. Russian strikes on energy infrastructure are threatening millions with another cold, dark winter, and civilian deaths are climbing sharply. The meeting comes on…",
      "stale": false
     },
     {
