@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T22:01:22Z",
+ "generatedAt": "2026-11-09T23:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What really drove NZ’s election overhang and what can be done about it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/what-really-drove-nzs-election-overhang-and-what-can-be-done-about-it-296144",
+     "published": "2026-11-09T22:19:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jack Vowles, Professor of Political Science, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
      "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Nandini Ramesh, Senior Research Scientist, CSIRO"
-    },
-    {
-     "title": "1 in 3 births are induced. It can be life-saving but it’s also linked to more complications",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/1-in-3-births-are-induced-it-can-be-life-saving-but-its-also-linked-to-more-complications-295559",
-     "published": "2026-11-09T18:42:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hannah Dahlen, Professor of Midwifery, Associate Dean Research and HDR, Midwifery Discipline Leader, Western Sydney University"
     },
     {
      "title": "Could these bacteria-killing viruses help fight antibiotic resistance? A new discovery takes us closer",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What really drove NZ’s election overhang and what can be done about it",
+   "published": "2026-11-09 22:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
    "published": "2026-11-09 18:42 UTC"
   },
@@ -920,12 +926,6 @@
    "region": "Oceania",
    "source": "The Conversation",
    "title": "It’s possible to predict some El Niños a year in advance. Here’s why that matters",
-   "published": "2026-11-09 18:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "1 in 3 births are induced. It can be life-saving but it’s also linked to more complications",
    "published": "2026-11-09 18:42 UTC"
   },
   {
