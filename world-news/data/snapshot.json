@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-08T23:01:22Z",
+ "generatedAt": "2026-11-09T00:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Why Jared Diamond’s leadership book on prophets, coaches and kings is flawed but fun",
+     "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-jared-diamonds-leadership-book-on-prophets-coaches-and-kings-is-flawed-but-fun-291462",
-     "published": "2026-11-08T18:46:08Z",
+     "link": "https://theconversation.com/nz-has-unique-stories-of-evolution-and-geology-is-it-time-for-a-natural-history-museum-292115",
+     "published": "2026-11-08T23:46:44Z",
      "summary": "",
      "stale": false,
-     "author": "Claire Wright, Senior Lecturer and Business Historian, School of Management, University of Technology Sydney"
+     "author": "Nic Rawlence, Associate Professor in Ancient DNA, University of Otago"
     },
     {
-     "title": "2.6 Seconds: new documentary explores the history, grief and looming questions of Kumanjayi Walker’s death",
+     "title": "Your say: week beginning November 9",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/2-6-seconds-new-documentary-explores-the-history-grief-and-looming-questions-of-kumanjayi-walkers-death-293684",
-     "published": "2026-11-08T18:45:40Z",
+     "link": "https://theconversation.com/your-say-week-beginning-november-9-296140",
+     "published": "2026-11-08T22:27:44Z",
      "summary": "",
      "stale": false,
-     "author": "Cally Jetta, Associate Professor; School of Education, Curtin University"
+     "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
     },
     {
-     "title": "Does Australia need more national exams for school students?",
+     "title": "Poor polls continue for both federal and Victorian Labor",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/does-australia-need-more-national-exams-for-school-students-295562",
-     "published": "2026-11-08T18:45:14Z",
+     "link": "https://theconversation.com/poor-polls-continue-for-both-federal-and-victorian-labor-295756",
+     "published": "2026-11-08T22:26:25Z",
      "summary": "",
      "stale": false,
-     "author": "Steven Lewis, Associate Professor of Education Policy, Australian Catholic University"
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why Jared Diamond’s leadership book on prophets, coaches and kings is flawed but fun",
-   "published": "2026-11-08 18:46 UTC"
+   "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
+   "published": "2026-11-08 23:46 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "2.6 Seconds: new documentary explores the history, grief and looming questions of Kumanjayi Walker’s death",
-   "published": "2026-11-08 18:45 UTC"
+   "title": "Your say: week beginning November 9",
+   "published": "2026-11-08 22:27 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Does Australia need more national exams for school students?",
-   "published": "2026-11-08 18:45 UTC"
+   "title": "Poor polls continue for both federal and Victorian Labor",
+   "published": "2026-11-08 22:26 UTC"
   },
   {
    "region": "Oceania",
