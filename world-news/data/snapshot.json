@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T19:01:21Z",
+ "generatedAt": "2026-11-09T20:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-happens-after-a-midterm-tsunami-lessons-from-1974-and-1994-296034",
+     "published": "2026-11-09T19:56:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert A. Strong, Senior Fellow, Miller Center, University of Virginia"
+    },
+    {
      "title": "New blood test claims to detect 50-plus cancers before symptoms – but there’s no evidence it can reduce your risk of dying from cancer",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Andrew Wolf, Professor Emeritus of Medicine, University of Virginia"
-    },
-    {
-     "title": "Paraguay’s bank collapse brought down a president – and exposed as myth the nation’s status as a ‘Dubai of South America’",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/paraguays-bank-collapse-brought-down-a-president-and-exposed-as-myth-the-nations-status-as-a-dubai-of-south-america-296112",
-     "published": "2026-11-09T13:43:39Z",
-     "summary": "",
-     "stale": false,
-     "author": "Joel E. Correia, Associate Professor in Human Dimensions of Natural Resources, Colorado State University"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -721,13 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "New blood test claims to detect 50-plus cancers before symptoms – but there’s no evidence it can reduce your risk of dying from cancer",
-   "published": "2026-11-09 13:43 UTC"
+   "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
+   "published": "2026-11-09 19:56 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Paraguay’s bank collapse brought down a president – and exposed as myth the nation’s status as a ‘Dubai of South America’",
+   "title": "New blood test claims to detect 50-plus cancers before symptoms – but there’s no evidence it can reduce your risk of dying from cancer",
    "published": "2026-11-09 13:43 UTC"
   },
   {
