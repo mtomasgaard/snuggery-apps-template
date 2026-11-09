@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T18:01:31Z",
+ "generatedAt": "2026-11-09T19:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Michael Asiedu, Researcher, University of St.Gallen"
     },
     {
+     "title": "Families who fled Ethiopia for Kenya’s Moyale need food, water and shelter",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168762",
+     "published": "2026-11-09T12:00:00Z",
+     "summary": "The International Organization of Migration (IOM) and partners are calling for urgent funding to support tens of thousands of people who have escaped violent clashes in Ethiopia for the Moyale region in northern Kenya.",
+     "stale": false
+    },
+    {
      "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -222,15 +231,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168749",
      "published": "2026-11-05T12:00:00Z",
      "summary": "Drone strikes that killed at least 30 people in Abyei last month have added “a new and concerning dimension” to security in the disputed area, the UN’s peacekeeping chief told the Security Council on Thursday.",
-     "stale": false
-    },
-    {
-     "title": "Two new Ebola vaccines to join DR Congo clinical trial",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168742",
-     "published": "2026-11-05T12:00:00Z",
-     "summary": "Two new Ebola vaccine candidates will be added to a clinical trial in the Democratic Republic of the Congo (DRC) as the country continues to battle a deadly outbreak caused by the Bundibugyo species of the virus.",
      "stale": false
     },
     {
@@ -429,54 +429,54 @@
    "stale": false,
    "items": [
     {
-     "title": "Tiny crystals from volcanoes could reveal when they are about to erupt",
+     "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/tiny-crystals-from-volcanoes-could-reveal-when-they-are-about-to-erupt-294679",
-     "published": "2026-11-09T10:01:09Z",
+     "link": "https://theconversation.com/a-new-book-sheds-light-on-the-camps-of-colonial-australias-most-ruthless-killing-machine-291877",
+     "published": "2026-11-09T18:42:52Z",
      "summary": "",
      "stale": false,
-     "author": "Daniela Parra-Encalada, PhD Candidate, Geology, The University of Queensland"
+     "author": "Raymond Evans, Adjunct Professor, Griffith University, Griffith University"
     },
     {
-     "title": "Do AI agents have minds? A philosopher explains",
+     "title": "It’s possible to predict some El Niños a year in advance. Here’s why that matters",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/do-ai-agents-have-minds-a-philosopher-explains-296143",
-     "published": "2026-11-09T07:07:38Z",
+     "link": "https://theconversation.com/its-possible-to-predict-some-el-ninos-a-year-in-advance-heres-why-that-matters-295063",
+     "published": "2026-11-09T18:42:17Z",
      "summary": "",
      "stale": false,
-     "author": "Tom Cochrane, Senior Lecturer in Philosophy, Flinders University"
+     "author": "Nandini Ramesh, Senior Research Scientist, CSIRO"
     },
     {
-     "title": "Powerhouse Parramatta: a museum of science, design and technology supercharged by spectacular art",
+     "title": "1 in 3 births are induced. It can be life-saving but it’s also linked to more complications",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/powerhouse-parramatta-a-museum-of-science-design-and-technology-supercharged-by-spectacular-art-295745",
-     "published": "2026-11-09T05:14:44Z",
+     "link": "https://theconversation.com/1-in-3-births-are-induced-it-can-be-life-saving-but-its-also-linked-to-more-complications-295559",
+     "published": "2026-11-09T18:42:03Z",
      "summary": "",
      "stale": false,
-     "author": "Joanna Mendelssohn, Honorary Senior Fellow, School of Culture and Communication, The University of Melbourne"
+     "author": "Hannah Dahlen, Professor of Midwifery, Associate Dean Research and HDR, Midwifery Discipline Leader, Western Sydney University"
     },
     {
-     "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
+     "title": "Could these bacteria-killing viruses help fight antibiotic resistance? A new discovery takes us closer",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/did-australias-cricket-leaders-sandpaper-over-the-truth-new-ball-tampering-revelations-suggest-so-296128",
-     "published": "2026-11-09T00:12:56Z",
+     "link": "https://theconversation.com/could-these-bacteria-killing-viruses-help-fight-antibiotic-resistance-a-new-discovery-takes-us-closer-295748",
+     "published": "2026-11-09T18:37:17Z",
      "summary": "",
      "stale": false,
-     "author": "David Rowe, Emeritus Professor of Cultural Research, Institute for Culture and Society, Western Sydney University"
+     "author": "Manuela Fuchs, Postdoctoral Researcher, Department of Microbiology, University of Otago"
     },
     {
-     "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
+     "title": "5 ways countries stymie climate negotiations without actually saying ‘no’",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-has-unique-stories-of-evolution-and-geology-is-it-time-for-a-natural-history-museum-292115",
-     "published": "2026-11-08T23:46:44Z",
+     "link": "https://theconversation.com/5-ways-countries-stymie-climate-negotiations-without-actually-saying-no-295589",
+     "published": "2026-11-09T13:43:27Z",
      "summary": "",
      "stale": false,
-     "author": "Nic Rawlence, Associate Professor in Ancient DNA, University of Otago"
+     "author": "Shannon Gibson, Professor (Teaching) of Environmental Studies, Political Science and International Relations, USC Dornsife College of Letters, Arts and Sciences"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -780,6 +780,12 @@
   },
   {
    "region": "Africa",
+   "source": "UN News",
+   "title": "Families who fled Ethiopia for Kenya’s Moyale need food, water and shelter",
+   "published": "2026-11-09 12:00 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
    "published": "2026-11-09 07:34 UTC"
@@ -794,12 +800,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "Abyei: Deadly drone strikes mark ‘new and concerning’ threat, UN peacekeeping chief warns",
-   "published": "2026-11-05 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Two new Ebola vaccines to join DR Congo clinical trial",
    "published": "2026-11-05 12:00 UTC"
   },
   {
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Tiny crystals from volcanoes could reveal when they are about to erupt",
-   "published": "2026-11-09 10:01 UTC"
+   "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
+   "published": "2026-11-09 18:42 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Do AI agents have minds? A philosopher explains",
-   "published": "2026-11-09 07:07 UTC"
+   "title": "It’s possible to predict some El Niños a year in advance. Here’s why that matters",
+   "published": "2026-11-09 18:42 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Powerhouse Parramatta: a museum of science, design and technology supercharged by spectacular art",
-   "published": "2026-11-09 05:14 UTC"
+   "title": "1 in 3 births are induced. It can be life-saving but it’s also linked to more complications",
+   "published": "2026-11-09 18:42 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
-   "published": "2026-11-09 00:12 UTC"
+   "title": "Could these bacteria-killing viruses help fight antibiotic resistance? A new discovery takes us closer",
+   "published": "2026-11-09 18:37 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
-   "published": "2026-11-08 23:46 UTC"
+   "title": "5 ways countries stymie climate negotiations without actually saying ‘no’",
+   "published": "2026-11-09 13:43 UTC"
   },
   {
    "region": "Oceania",
