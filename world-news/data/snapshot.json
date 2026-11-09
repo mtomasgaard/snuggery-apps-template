@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T05:01:24Z",
+ "generatedAt": "2026-11-09T06:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Powerhouse Parramatta: a museum of science, design and technology supercharged by spectacular art",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/powerhouse-parramatta-a-museum-of-science-design-and-technology-supercharged-by-spectacular-art-295745",
+     "published": "2026-11-09T05:14:44Z",
+     "summary": "",
+     "stale": false,
+     "author": "Joanna Mendelssohn, Honorary Senior Fellow, School of Culture and Communication, The University of Melbourne"
+    },
+    {
      "title": "Holocaust education will soon become compulsory in schools. Our research shows how it can be done well",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Krishna Sen, Chair professor, The University of Western Australia"
-    },
-    {
-     "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/opera-australias-la-boheme-captures-the-romance-of-bohemian-paris-with-a-fresh-twist-293690",
-     "published": "2026-11-09T02:19:46Z",
-     "summary": "",
-     "stale": false,
-     "author": "Brian Long, Lecturer in Arts and Cultural Management, The University of Melbourne"
     },
     {
      "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Powerhouse Parramatta: a museum of science, design and technology supercharged by spectacular art",
+   "published": "2026-11-09 05:14 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Holocaust education will soon become compulsory in schools. Our research shows how it can be done well",
    "published": "2026-11-09 04:25 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "When Tari was 16, a dictator became her neighbour. Then her parents were imprisoned",
    "published": "2026-11-09 03:10 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
-   "published": "2026-11-09 02:19 UTC"
   },
   {
    "region": "Oceania",
