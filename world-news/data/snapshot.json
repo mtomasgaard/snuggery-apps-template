@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T00:01:22Z",
+ "generatedAt": "2026-11-09T01:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
+     "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/did-australias-cricket-leaders-sandpaper-over-the-truth-new-ball-tampering-revelations-suggest-so-296128",
+     "published": "2026-11-09T00:12:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "David Rowe, Emeritus Professor of Cultural Research, Institute for Culture and Society, Western Sydney University"
+    },
+    {
+     "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-has-unique-stories-of-evolution-and-geology-is-it-time-for-a-natural-history-museum-292115",
      "published": "2026-11-08T23:46:44Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "NZ will have a caretaker government for weeks. What that means and how it works",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/nz-will-have-a-caretaker-government-for-weeks-what-that-means-and-how-it-works-295750",
-     "published": "2026-11-08T01:04:53Z",
-     "summary": "",
-     "stale": false,
-     "author": "Grant Duncan, Research Associate, Public Policy Institute, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
+   "published": "2026-11-09 00:12 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
    "published": "2026-11-08 23:46 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
    "published": "2026-11-08 02:55 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "NZ will have a caretaker government for weeks. What that means and how it works",
-   "published": "2026-11-08 01:04 UTC"
   },
   {
    "region": "Oceania",
