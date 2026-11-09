@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T02:01:20Z",
+ "generatedAt": "2026-11-09T03:01:19Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/opera-australias-la-boheme-captures-the-romance-of-bohemian-paris-with-a-fresh-twist-293690",
+     "published": "2026-11-09T02:19:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Brian Long, Lecturer in Arts and Cultural Management, The University of Melbourne"
+    },
+    {
      "title": "What is pubic hair actually for? And does it matter if you remove it?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,7 +461,7 @@
     {
      "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/nz-has-unique-stories-of-evolution-and-geology-is-it-time-for-a-natural-history-museum-292115",
      "published": "2026-11-08T23:46:44Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
-    },
-    {
-     "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/pre-election-polls-understated-right-in-nz-with-overhang-skewing-preliminary-results-295738",
-     "published": "2026-11-08T02:55:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
+   "published": "2026-11-09 02:19 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What is pubic hair actually for? And does it matter if you remove it?",
    "published": "2026-11-09 01:10 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Your say: week beginning November 9",
    "published": "2026-11-08 22:27 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Pre-election polls understated right in NZ, with overhang skewing preliminary results",
-   "published": "2026-11-08 02:55 UTC"
   },
   {
    "region": "Oceania",
