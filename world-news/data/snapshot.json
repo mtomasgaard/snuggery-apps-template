@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T07:01:46Z",
+ "generatedAt": "2026-11-09T08:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/09/big-tech-ai-and-the-quiet-expansion-of-digital-surveillance-in-nigeria/",
+     "published": "2026-11-09T07:34:09Z",
+     "summary": "Systems designed to maximize commercial value from information can create incentives to collect more data than people reasonably expect or understand.",
+     "stale": false,
+     "author": "Nshua Cali-Dibang"
+    },
+    {
      "title": "Climate change and funding cuts threaten malaria targets: what SADC countries can do",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "Young people are deemed mature enough to elect their leaders, yet not to replace them. They drive political movements forward by voting, advocating, campaigning, and protesting, yet cannot run for office themselves.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/25/between-two-shores-the-monhes-nationality-and-a-sense-of-belonging-in-mozambique/",
-     "published": "2026-10-25T16:00:16Z",
-     "summary": "“Monhé” is not a nationality: a person of Indian origin can be completely Mozambican, foreign, or in some cases, stateless.",
-     "stale": false,
-     "author": "Liam Anderson"
     }
    ]
   },
@@ -349,7 +349,7 @@
      "feed": "gv-south-asia",
      "link": "https://globalvoices.org/2026/11/09/the-dreamer-who-wants-the-world-to-read-nepali-literature/",
      "published": "2026-11-09T05:00:27Z",
-     "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries, and connect readers across borders through cultural exchange.",
+     "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries and connect readers across borders through cultural exchange.",
      "stale": false,
      "author": "Sangita Swechcha"
     },
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Do AI agents have minds? A philosopher explains",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/do-ai-agents-have-minds-a-philosopher-explains-296143",
+     "published": "2026-11-09T07:07:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tom Cochrane, Senior Lecturer in Philosophy, Flinders University"
+    },
+    {
      "title": "Powerhouse Parramatta: a museum of science, design and technology supercharged by spectacular art",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Lauren Chalk, Research Fellow, Australian Centre for Jewish Civilisation, Monash University"
-    },
-    {
-     "title": "When Tari was 16, a dictator became her neighbour. Then her parents were imprisoned",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/when-tari-was-16-a-dictator-became-her-neighbour-then-her-parents-were-imprisoned-294572",
-     "published": "2026-11-09T03:10:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Krishna Sen, Chair professor, The University of Western Australia"
     },
     {
      "title": "Did Australia’s cricket leaders sandpaper over the truth? New ball tampering revelations suggest so",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
+   "published": "2026-11-09 07:34 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "Climate change and funding cuts threaten malaria targets: what SADC countries can do",
    "published": "2026-11-08 09:30 UTC"
@@ -807,12 +813,6 @@
    "source": "Global Voices",
    "title": "Vote young yet govern much later: West African youth’s struggle for power",
    "published": "2026-10-26 08:30 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Between two shores: The ‘Monhés,’ nationality, and a sense of belonging in Mozambique",
-   "published": "2026-10-25 16:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Do AI agents have minds? A philosopher explains",
+   "published": "2026-11-09 07:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Powerhouse Parramatta: a museum of science, design and technology supercharged by spectacular art",
    "published": "2026-11-09 05:14 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Holocaust education will soon become compulsory in schools. Our research shows how it can be done well",
    "published": "2026-11-09 04:25 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "When Tari was 16, a dictator became her neighbour. Then her parents were imprisoned",
-   "published": "2026-11-09 03:10 UTC"
   },
   {
    "region": "Oceania",
