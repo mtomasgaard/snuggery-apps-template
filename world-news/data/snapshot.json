@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T03:01:19Z",
+ "generatedAt": "2026-11-09T04:01:18Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "When Tari was 16, a dictator became her neighbour. Then her parents were imprisoned",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/when-tari-was-16-a-dictator-became-her-neighbour-then-her-parents-were-imprisoned-294572",
+     "published": "2026-11-09T03:10:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Krishna Sen, Chair professor, The University of Western Australia"
+    },
+    {
      "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Nic Rawlence, Associate Professor in Ancient DNA, University of Otago"
-    },
-    {
-     "title": "Your say: week beginning November 9",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/your-say-week-beginning-november-9-296140",
-     "published": "2026-11-08T22:27:44Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ashmitaa Thiruselvam, Social Media Cadet, The Conversation"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "When Tari was 16, a dictator became her neighbour. Then her parents were imprisoned",
+   "published": "2026-11-09 03:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Opera Australia’s La Bohème captures the romance of bohemian Paris with a fresh twist",
    "published": "2026-11-09 02:19 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "NZ has unique stories of evolution and geology. Is it time for a natural history museum?",
    "published": "2026-11-08 23:46 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Your say: week beginning November 9",
-   "published": "2026-11-08 22:27 UTC"
   },
   {
    "region": "Oceania",
