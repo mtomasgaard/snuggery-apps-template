@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-09T23:01:27Z",
+ "generatedAt": "2026-11-10T00:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -439,6 +439,16 @@
      "author": "Jack Vowles, Professor of Political Science, Te Herenga Waka — Victoria University of Wellington"
     },
     {
+     "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/what-happens-after-a-midterm-tsunami-lessons-from-1974-and-1994-296034",
+     "published": "2026-11-09T19:56:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert A. Strong, Senior Fellow, Miller Center, University of Virginia"
+    },
+    {
      "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -459,24 +469,14 @@
      "author": "Nandini Ramesh, Senior Research Scientist, CSIRO"
     },
     {
-     "title": "Could these bacteria-killing viruses help fight antibiotic resistance? A new discovery takes us closer",
+     "title": "Changes are coming to Airbnb. Here’s what travellers and hosts need to know",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/could-these-bacteria-killing-viruses-help-fight-antibiotic-resistance-a-new-discovery-takes-us-closer-295748",
-     "published": "2026-11-09T18:37:17Z",
+     "link": "https://theconversation.com/changes-are-coming-to-airbnb-heres-what-travellers-and-hosts-need-to-know-295560",
+     "published": "2026-11-09T18:41:33Z",
      "summary": "",
      "stale": false,
-     "author": "Manuela Fuchs, Postdoctoral Researcher, Department of Microbiology, University of Otago"
-    },
-    {
-     "title": "5 ways countries stymie climate negotiations without actually saying ‘no’",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/5-ways-countries-stymie-climate-negotiations-without-actually-saying-no-295589",
-     "published": "2026-11-09T13:43:27Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shannon Gibson, Professor (Teaching) of Environmental Studies, Political Science and International Relations, USC Dornsife College of Letters, Arts and Sciences"
+     "author": "Andreawan Honora, Lecturer in Marketing, The University of Western Australia"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -919,6 +919,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
+   "published": "2026-11-09 19:56 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
    "published": "2026-11-09 18:42 UTC"
   },
@@ -931,14 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Could these bacteria-killing viruses help fight antibiotic resistance? A new discovery takes us closer",
-   "published": "2026-11-09 18:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "5 ways countries stymie climate negotiations without actually saying ‘no’",
-   "published": "2026-11-09 13:43 UTC"
+   "title": "Changes are coming to Airbnb. Here’s what travellers and hosts need to know",
+   "published": "2026-11-09 18:41 UTC"
   },
   {
    "region": "Oceania",
