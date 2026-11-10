@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T03:01:28Z",
+ "generatedAt": "2026-11-10T04:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "I don’t want AI in my online search. What options do I have?",
+     "title": "Victoria will bring in a domestic violence disclosure scheme. Could it help protect women?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/i-dont-want-ai-in-my-online-search-what-options-do-i-have-295875",
-     "published": "2026-11-10T02:07:21Z",
+     "link": "https://theconversation.com/victoria-will-bring-in-a-domestic-violence-disclosure-scheme-could-it-help-protect-women-296246",
+     "published": "2026-11-10T03:38:24Z",
      "summary": "",
      "stale": false,
-     "author": "Damiano Spina, Senior Lecturer, School of Computing Technologies, RMIT University"
+     "author": "Anastasia Powell, Professor of Family and Sexual Violence, RMIT University"
     },
     {
-     "title": "Why do adults get shorter as they age? And how much height do they actually lose?",
+     "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/why-do-adults-get-shorter-as-they-age-and-how-much-height-do-they-actually-lose-291543",
-     "published": "2026-11-10T02:02:11Z",
+     "link": "https://theconversation.com/the-iranian-regime-is-executing-athlete-dissidents-why-and-what-can-be-done-295449",
+     "published": "2026-11-10T03:26:16Z",
      "summary": "",
      "stale": false,
-     "author": "Christopher Anderson, Learning Facilitator, Health Sciences, Torrens University Australia"
+     "author": "Catherine Ordway, Visiting Scholar, School of Business, CBR, UNSW"
+    },
+    {
+     "title": "The pet and skin trades pose little threat to reptile species: new research",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/the-pet-and-skin-trades-pose-little-threat-to-reptile-species-new-research-287964",
+     "published": "2026-11-10T03:13:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rick Shine, Professor in Evolutionary Biology, Macquarie University"
     },
     {
      "title": "Disproportional representation: what National wins and loses from the overhang",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Jack Vowles, Professor of Political Science, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/a-new-book-sheds-light-on-the-camps-of-colonial-australias-most-ruthless-killing-machine-291877",
-     "published": "2026-11-09T18:42:52Z",
-     "summary": "",
-     "stale": false,
-     "author": "Raymond Evans, Adjunct Professor, Griffith University, Griffith University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,14 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "I don’t want AI in my online search. What options do I have?",
-   "published": "2026-11-10 02:07 UTC"
+   "title": "Victoria will bring in a domestic violence disclosure scheme. Could it help protect women?",
+   "published": "2026-11-10 03:38 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Why do adults get shorter as they age? And how much height do they actually lose?",
-   "published": "2026-11-10 02:02 UTC"
+   "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
+   "published": "2026-11-10 03:26 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The pet and skin trades pose little threat to reptile species: new research",
+   "published": "2026-11-10 03:13 UTC"
   },
   {
    "region": "Oceania",
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "What really drove NZ’s election overhang and what can be done about it",
    "published": "2026-11-09 22:19 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
-   "published": "2026-11-09 18:42 UTC"
   },
   {
    "region": "Oceania",
