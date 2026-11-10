@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T02:01:22Z",
+ "generatedAt": "2026-11-10T03:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,29 @@
    "stale": false,
    "items": [
     {
-     "title": "Disproportional representation: what National wins and loses from the overhang",
+     "title": "I don’t want AI in my online search. What options do I have?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/i-dont-want-ai-in-my-online-search-what-options-do-i-have-295875",
+     "published": "2026-11-10T02:07:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Damiano Spina, Senior Lecturer, School of Computing Technologies, RMIT University"
+    },
+    {
+     "title": "Why do adults get shorter as they age? And how much height do they actually lose?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/why-do-adults-get-shorter-as-they-age-and-how-much-height-do-they-actually-lose-291543",
+     "published": "2026-11-10T02:02:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christopher Anderson, Learning Facilitator, Health Sciences, Torrens University Australia"
+    },
+    {
+     "title": "Disproportional representation: what National wins and loses from the overhang",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/disproportional-representation-what-national-wins-and-loses-from-the-overhang-296137",
      "published": "2026-11-10T01:30:26Z",
      "summary": "",
@@ -449,16 +469,6 @@
      "author": "Jack Vowles, Professor of Political Science, Te Herenga Waka — Victoria University of Wellington"
     },
     {
-     "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/what-happens-after-a-midterm-tsunami-lessons-from-1974-and-1994-296034",
-     "published": "2026-11-09T19:56:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert A. Strong, Senior Fellow, Miller Center, University of Virginia"
-    },
-    {
      "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Raymond Evans, Adjunct Professor, Griffith University, Griffith University"
-    },
-    {
-     "title": "It’s possible to predict some El Niños a year in advance. Here’s why that matters",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/its-possible-to-predict-some-el-ninos-a-year-in-advance-heres-why-that-matters-295063",
-     "published": "2026-11-09T18:42:17Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nandini Ramesh, Senior Research Scientist, CSIRO"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "I don’t want AI in my online search. What options do I have?",
+   "published": "2026-11-10 02:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Why do adults get shorter as they age? And how much height do they actually lose?",
+   "published": "2026-11-10 02:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Disproportional representation: what National wins and loses from the overhang",
    "published": "2026-11-10 01:30 UTC"
   },
@@ -925,19 +937,7 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
-   "published": "2026-11-09 19:56 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "A new book sheds light on the camps of colonial Australia’s ‘most ruthless killing machine’",
-   "published": "2026-11-09 18:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "It’s possible to predict some El Niños a year in advance. Here’s why that matters",
    "published": "2026-11-09 18:42 UTC"
   },
   {
