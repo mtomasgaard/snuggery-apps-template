@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T04:01:22Z",
+ "generatedAt": "2026-11-10T05:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Civics education in Australian schools isn’t up to scratch. 3 things could improve it",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/civics-education-in-australian-schools-isnt-up-to-scratch-3-things-could-improve-it-295983",
+     "published": "2026-11-10T04:15:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Murray Print, Professor of Education, University of Sydney"
+    },
+    {
      "title": "Victoria will bring in a domestic violence disclosure scheme. Could it help protect women?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Catherine Ordway, Visiting Scholar, School of Business, CBR, UNSW"
-    },
-    {
-     "title": "The pet and skin trades pose little threat to reptile species: new research",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/the-pet-and-skin-trades-pose-little-threat-to-reptile-species-new-research-287964",
-     "published": "2026-11-10T03:13:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rick Shine, Professor in Evolutionary Biology, Macquarie University"
     },
     {
      "title": "Disproportional representation: what National wins and loses from the overhang",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Civics education in Australian schools isn’t up to scratch. 3 things could improve it",
+   "published": "2026-11-10 04:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Victoria will bring in a domestic violence disclosure scheme. Could it help protect women?",
    "published": "2026-11-10 03:38 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
    "published": "2026-11-10 03:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The pet and skin trades pose little threat to reptile species: new research",
-   "published": "2026-11-10 03:13 UTC"
   },
   {
    "region": "Oceania",
