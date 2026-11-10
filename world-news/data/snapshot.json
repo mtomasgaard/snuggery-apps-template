@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T06:01:22Z",
+ "generatedAt": "2026-11-10T07:01:24Z",
  "regions": [
   {
    "key": "europe",
@@ -459,6 +459,16 @@
      "author": "Audrey Mitchell, PhD Candidate and Sessional Tutor/Lecturer in Film Studies, University of Sydney"
     },
     {
+     "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/the-iranian-regime-is-executing-athlete-dissidents-why-and-what-can-be-done-295449",
+     "published": "2026-11-10T03:26:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Catherine Ordway, Visiting Scholar, School of Business, CBR, UNSW"
+    },
+    {
      "title": "Disproportional representation: what National wins and loses from the overhang",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Richard Shaw, Professor of Politics, Te Kunenga ki Pūrehuroa – Massey University"
-    },
-    {
-     "title": "What really drove NZ’s election overhang and what can be done about it",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/what-really-drove-nzs-election-overhang-and-what-can-be-done-about-it-296144",
-     "published": "2026-11-09T22:19:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jack Vowles, Professor of Political Science, Te Herenga Waka — Victoria University of Wellington"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Disproportional representation: what National wins and loses from the overhang",
-   "published": "2026-11-10 01:30 UTC"
+   "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
+   "published": "2026-11-10 03:26 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "What really drove NZ’s election overhang and what can be done about it",
-   "published": "2026-11-09 22:19 UTC"
+   "title": "Disproportional representation: what National wins and loses from the overhang",
+   "published": "2026-11-10 01:30 UTC"
   },
   {
    "region": "Oceania",
