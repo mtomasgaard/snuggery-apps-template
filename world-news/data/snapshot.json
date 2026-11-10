@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T15:01:34Z",
+ "generatedAt": "2026-11-10T16:01:30Z",
  "regions": [
   {
    "key": "europe",
@@ -197,12 +197,30 @@
      "author": "Nicole Robiro, PhD Candidate in Economics at the Chair of Development Economics, Goethe University Frankfurt am Main"
     },
     {
-     "title": "Families who fled Ethiopia for Kenya’s Moyale need food, water and shelter",
+     "title": "Security Council LIVE: South Sudan’s first elections loom amid rising violence",
      "source": "UN News",
      "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168762",
-     "published": "2026-11-09T12:00:00Z",
-     "summary": "The International Organization of Migration (IOM) and partners are calling for urgent funding to support tens of thousands of people who have escaped violent clashes in Ethiopia for the Moyale region in northern Kenya.",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168774",
+     "published": "2026-11-10T12:00:00Z",
+     "summary": "With South Sudan just six weeks away from its first national elections since independence, the Security Council meets in New York Tuesday amid deepening political uncertainty and worsening violence. Ambassadors are…",
+     "stale": false
+    },
+    {
+     "title": "When deaths go uncounted: WHO flags dangerous blind spots in Africa’s health data",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168772",
+     "published": "2026-11-10T12:00:00Z",
+     "summary": "Quality health data can help authorities to identify emerging threats and take lifesaving action, but a new report reveals critical gaps in Africa’s health information systems.",
+     "stale": false
+    },
+    {
+     "title": "Sudan war: First suicide bombers, now long-range drone strikes are the norm",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168771",
+     "published": "2026-11-10T12:00:00Z",
+     "summary": "Drones and drought are “closing in” on Sudan, the UN Children’s Fund (UNICEF, said on Tuesday, describing unprecedented attacks on the country’s infrastructure including by drones travelling up to 1,500 kilometres…",
      "stale": false
     },
     {
@@ -214,24 +232,6 @@
      "summary": "Systems designed to maximize commercial value from information can create incentives to collect more data than people reasonably expect or understand.",
      "stale": false,
      "author": "Nshua Cali-Dibang"
-    },
-    {
-     "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168753",
-     "published": "2026-11-06T12:00:00Z",
-     "summary": "Aid teams working to help millions of people uprooted by the ongoing war in Sudan appealed on Friday for more international assistance amid desperate funding shortages, empty warehouses and overwhelming needs.",
-     "stale": false
-    },
-    {
-     "title": "Abyei: Deadly drone strikes mark ‘new and concerning’ threat, UN peacekeeping chief warns",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168749",
-     "published": "2026-11-05T12:00:00Z",
-     "summary": "Drone strikes that killed at least 30 people in Abyei last month have added “a new and concerning dimension” to security in the disputed area, the UN’s peacekeeping chief told the Security Council on Thursday.",
-     "stale": false
     },
     {
      "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon’s waters",
@@ -781,26 +781,26 @@
   {
    "region": "Africa",
    "source": "UN News",
-   "title": "Families who fled Ethiopia for Kenya’s Moyale need food, water and shelter",
-   "published": "2026-11-09 12:00 UTC"
+   "title": "Security Council LIVE: South Sudan’s first elections loom amid rising violence",
+   "published": "2026-11-10 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "When deaths go uncounted: WHO flags dangerous blind spots in Africa’s health data",
+   "published": "2026-11-10 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
+   "title": "Sudan war: First suicide bombers, now long-range drone strikes are the norm",
+   "published": "2026-11-10 12:00 UTC"
   },
   {
    "region": "Africa",
    "source": "Global Voices",
    "title": "Big Tech, AI, and the quiet expansion of digital surveillance in Nigeria",
    "published": "2026-11-09 07:34 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan’s suffering is plain for all to see say aid teams, as brutal war continues",
-   "published": "2026-11-06 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Abyei: Deadly drone strikes mark ‘new and concerning’ threat, UN peacekeeping chief warns",
-   "published": "2026-11-05 12:00 UTC"
   },
   {
    "region": "Africa",
