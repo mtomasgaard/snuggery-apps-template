@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T19:01:25Z",
+ "generatedAt": "2026-11-10T20:01:49Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "In Ukraine, youth are finding their voices in the digital democracy",
+     "source": "Global Voices",
+     "feed": "gv-eastern-europe",
+     "link": "https://globalvoices.org/2026/11/10/in-ukraine-youth-are-finding-their-voices-in-the-digital-democracy/",
+     "published": "2026-11-10T19:49:12Z",
+     "summary": "We saw a gap: young people were consuming information and even participating online, but without media literacy, digital security awareness, or confidence that their voice could shape anything.",
+     "stale": false,
+     "author": "Nurbek Bekmurzaev"
+    },
     {
      "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
      "source": "Global Voices",
@@ -47,16 +57,6 @@
      "author": "Global Voices"
     },
     {
-     "title": "What comes after networked authoritarianism?",
-     "source": "Global Voices",
-     "feed": "gv-eastern-europe",
-     "link": "https://globalvoices.org/2026/11/05/what-comes-after-networked-authoritarianism/",
-     "published": "2026-11-05T16:17:00Z",
-     "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
-     "stale": false,
-     "author": "Rebecca MacKinnon"
-    },
-    {
      "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
      "source": "UN News",
      "feed": "un-europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/after-midterm-rout-republicans-can-still-confirm-a-supreme-court-justice-but-at-what-cost-296347",
+     "published": "2026-11-10T18:45:09Z",
+     "summary": "",
+     "stale": false,
+     "author": "Paul M. Collins Jr., Professor of Legal Studies and Political Science, UMass Amherst"
+    },
+    {
      "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Hinckley Jones-Sanpei, Public Policy Researcher, University of Denver"
-    },
-    {
-     "title": "When a Walmart closes, what happens to nearby stores?",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/when-a-walmart-closes-what-happens-to-nearby-stores-294847",
-     "published": "2026-11-10T13:36:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Vivek Astvansh, Associate Professor of Quantitative Marketing and Computational Data Science, Binghamton University, State University of New York"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -360,7 +360,7 @@
      "link": "https://globalvoices.org/2026/11/09/the-dreamer-who-wants-the-world-to-read-nepali-literature/",
      "published": "2026-11-09T05:00:27Z",
      "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries and connect readers across borders through cultural exchange.",
-     "stale": false,
+     "stale": true,
      "author": "Sangita Swechcha"
     },
     {
@@ -399,7 +399,7 @@
      "link": "https://globalvoices.org/2026/11/04/tracing-the-recruitment-trap-behind-russias-war/",
      "published": "2026-11-04T05:26:29Z",
      "summary": "Bangladeshi men paid agents for Russian jobs and ended up on the front lines. Families wait for bodies and answers, and they want the recruiters behind it in a courtroom.",
-     "stale": false,
+     "stale": true,
      "author": "Zulker Naeen"
     },
     {
@@ -418,7 +418,7 @@
      "link": "https://globalvoices.org/2026/10/28/bangladesh-weighs-tougher-cyber-law-as-ai-generated-abuse-targets-women/",
      "published": "2026-10-28T07:51:42Z",
      "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumors, defamation, and disinformation could revive censorship and threaten online free expression, even as victims need…",
-     "stale": false,
+     "stale": true,
      "author": "Masudul Zarif"
     }
    ]
@@ -428,6 +428,26 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/how-aristotle-helps-us-unpack-the-art-of-deception-in-nathan-fielders-you-can-see-everything-295602",
+     "published": "2026-11-10T18:49:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "John Robert Hacker-Wright, Professor of Philosophy, University of Guelph"
+    },
+    {
+     "title": "The End of Everything by M. John Harrison wins the 2026 Booker prize – a wonder of weird fiction for our incomprehensible times",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/the-end-of-everything-by-m-john-harrison-wins-the-2026-booker-prize-a-wonder-of-weird-fiction-for-our-incomprehensible-times-296359",
+     "published": "2026-11-10T17:07:43Z",
+     "summary": "",
+     "stale": false,
+     "author": "Tim Jarvis, Senior Lecturer in Creative Writing, Anglia Ruskin University"
+    },
     {
      "title": "View from The Hill: Albanese says he wants Chalmers there for the long haul",
      "source": "The Conversation",
@@ -457,26 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-iranian-regime-is-executing-athlete-dissidents-why-and-what-can-be-done-295449",
-     "published": "2026-11-10T03:26:16Z",
-     "summary": "",
-     "stale": false,
-     "author": "Catherine Ordway, Visiting Scholar, School of Business, CBR, UNSW"
-    },
-    {
-     "title": "Disproportional representation: what National wins and loses from the overhang",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/disproportional-representation-what-national-wins-and-loses-from-the-overhang-296137",
-     "published": "2026-11-10T01:30:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Richard Shaw, Professor of Politics, Te Kunenga ki Pūrehuroa – Massey University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -632,9 +632,9 @@
    "id": "gv-south-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": true,
-   "items": 15,
-   "note": null
+   "ok": false,
+   "items": 3,
+   "note": "TimeoutError: The read operation timed out; kept 3 cached"
   },
   {
    "id": "un-asia-pacific",
@@ -673,6 +673,12 @@
   {
    "region": "Europe",
    "source": "Global Voices",
+   "title": "In Ukraine, youth are finding their voices in the digital democracy",
+   "published": "2026-11-10 19:49 UTC"
+  },
+  {
+   "region": "Europe",
+   "source": "Global Voices",
    "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
    "published": "2026-11-10 05:36 UTC"
   },
@@ -696,12 +702,6 @@
   },
   {
    "region": "Europe",
-   "source": "Global Voices",
-   "title": "What comes after networked authoritarianism?",
-   "published": "2026-11-05 16:17 UTC"
-  },
-  {
-   "region": "Europe",
    "source": "UN News",
    "title": "Air raid alerts and attacks on schools: the devastating face of education in Ukraine",
    "published": "2026-11-03 12:00 UTC"
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
-   "published": "2026-11-10 13:37 UTC"
+   "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
+   "published": "2026-11-10 18:45 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "When a Walmart closes, what happens to nearby stores?",
-   "published": "2026-11-10 13:36 UTC"
+   "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
+   "published": "2026-11-10 13:37 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
+   "published": "2026-11-10 18:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "The End of Everything by M. John Harrison wins the 2026 Booker prize – a wonder of weird fiction for our incomprehensible times",
+   "published": "2026-11-10 17:07 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "View from The Hill: Albanese says he wants Chalmers there for the long haul",
    "published": "2026-11-10 08:32 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Labor slumps to new lows in two Victorian polls",
    "published": "2026-11-10 05:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
-   "published": "2026-11-10 03:26 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Disproportional representation: what National wins and loses from the overhang",
-   "published": "2026-11-10 01:30 UTC"
   },
   {
    "region": "Oceania",
