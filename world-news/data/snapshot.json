@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T01:01:21Z",
+ "generatedAt": "2026-11-10T02:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "What really drove NZ’s election overhang and what can be done about it",
+     "title": "Disproportional representation: what National wins and loses from the overhang",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/disproportional-representation-what-national-wins-and-loses-from-the-overhang-296137",
+     "published": "2026-11-10T01:30:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Richard Shaw, Professor of Politics, Te Kunenga ki Pūrehuroa – Massey University"
+    },
+    {
+     "title": "What really drove NZ’s election overhang and what can be done about it",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/what-really-drove-nzs-election-overhang-and-what-can-be-done-about-it-296144",
      "published": "2026-11-09T22:19:24Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Nandini Ramesh, Senior Research Scientist, CSIRO"
-    },
-    {
-     "title": "Changes are coming to Airbnb. Here’s what travellers and hosts need to know",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/changes-are-coming-to-airbnb-heres-what-travellers-and-hosts-need-to-know-295560",
-     "published": "2026-11-09T18:41:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andreawan Honora, Lecturer in Marketing, The University of Western Australia"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Disproportional representation: what National wins and loses from the overhang",
+   "published": "2026-11-10 01:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "What really drove NZ’s election overhang and what can be done about it",
    "published": "2026-11-09 22:19 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "It’s possible to predict some El Niños a year in advance. Here’s why that matters",
    "published": "2026-11-09 18:42 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Changes are coming to Airbnb. Here’s what travellers and hosts need to know",
-   "published": "2026-11-09 18:41 UTC"
   },
   {
    "region": "Oceania",
