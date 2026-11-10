@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T22:01:25Z",
+ "generatedAt": "2026-11-10T23:01:27Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Democrats’ agenda will be set by their ability to organize and compromise — not by the socialist, progressive or centrist factions all claiming victory",
+     "title": "Pa. Gov. Josh Shapiro’s popularity and ‘get sh-t done’ attitude might not cut it in crowded 2028 Democratic field – but he has options",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/democrats-agenda-will-be-set-by-their-ability-to-organize-and-compromise-not-by-the-socialist-progressive-or-centrist-factions-all-claiming-victory-296014",
-     "published": "2026-11-10T19:52:39Z",
+     "link": "https://theconversation.com/pa-gov-josh-shapiros-popularity-and-get-sh-t-done-attitude-might-not-cut-it-in-crowded-2028-democratic-field-but-he-has-options-295841",
+     "published": "2026-11-10T22:21:08Z",
      "summary": "",
      "stale": false,
-     "author": "SoRelle Wyckoff Gaynor, Assistant Professor of Public Policy and Politics, University of Virginia"
+     "author": "Alison Dagnes, Professor of Political & Social Inquiry, Shippensburg University"
     },
     {
-     "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
+     "title": "Students creating documentaries with scientists deepens STEM belonging and public trust in science",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/after-midterm-rout-republicans-can-still-confirm-a-supreme-court-justice-but-at-what-cost-296347",
-     "published": "2026-11-10T18:45:09Z",
+     "link": "https://theconversation.com/students-creating-documentaries-with-scientists-deepens-stem-belonging-and-public-trust-in-science-293506",
+     "published": "2026-11-10T21:56:42Z",
      "summary": "",
      "stale": false,
-     "author": "Paul M. Collins Jr., Professor of Legal Studies and Political Science, UMass Amherst"
+     "author": "Dena K. Seidel, Science Communication Researcher and Science Filmmaker, Rutgers University"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Democrats’ agenda will be set by their ability to organize and compromise — not by the socialist, progressive or centrist factions all claiming victory",
-   "published": "2026-11-10 19:52 UTC"
+   "title": "Pa. Gov. Josh Shapiro’s popularity and ‘get sh-t done’ attitude might not cut it in crowded 2028 Democratic field – but he has options",
+   "published": "2026-11-10 22:21 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
-   "published": "2026-11-10 18:45 UTC"
+   "title": "Students creating documentaries with scientists deepens STEM belonging and public trust in science",
+   "published": "2026-11-10 21:56 UTC"
   },
   {
    "region": "Americas",
