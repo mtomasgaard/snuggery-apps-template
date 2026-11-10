@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T13:36:50Z",
+ "generatedAt": "2026-11-10T14:01:26Z",
  "regions": [
   {
    "key": "europe",
@@ -93,24 +93,24 @@
    "stale": false,
    "items": [
     {
-     "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
+     "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/what-happens-after-a-midterm-tsunami-lessons-from-1974-and-1994-296034",
-     "published": "2026-11-09T19:56:16Z",
+     "link": "https://theconversation.com/us-national-debt-keeps-rising-after-years-of-tax-cuts-and-this-will-make-policymaking-all-the-more-difficult-292099",
+     "published": "2026-11-10T13:37:08Z",
      "summary": "",
      "stale": false,
-     "author": "Robert A. Strong, Senior Fellow, Miller Center, University of Virginia"
+     "author": "Hinckley Jones-Sanpei, Public Policy Researcher, University of Denver"
     },
     {
-     "title": "New blood test claims to detect 50-plus cancers before symptoms – but there’s no evidence it can reduce your risk of dying from cancer",
+     "title": "When a Walmart closes, what happens to nearby stores?",
      "source": "The Conversation",
      "feed": "tc-us",
-     "link": "https://theconversation.com/new-blood-test-claims-to-detect-50-plus-cancers-before-symptoms-but-theres-no-evidence-it-can-reduce-your-risk-of-dying-from-cancer-293409",
-     "published": "2026-11-09T13:43:56Z",
+     "link": "https://theconversation.com/when-a-walmart-closes-what-happens-to-nearby-stores-294847",
+     "published": "2026-11-10T13:36:57Z",
      "summary": "",
      "stale": false,
-     "author": "Andrew Wolf, Professor Emeritus of Medicine, University of Virginia"
+     "author": "Vivek Astvansh, Associate Professor of Quantitative Marketing and Computational Data Science, Binghamton University, State University of New York"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What happens after a midterm tsunami? Lessons from 1974 and 1994",
-   "published": "2026-11-09 19:56 UTC"
+   "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
+   "published": "2026-11-10 13:37 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "New blood test claims to detect 50-plus cancers before symptoms – but there’s no evidence it can reduce your risk of dying from cancer",
-   "published": "2026-11-09 13:43 UTC"
+   "title": "When a Walmart closes, what happens to nearby stores?",
+   "published": "2026-11-10 13:36 UTC"
   },
   {
    "region": "Americas",
