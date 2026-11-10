@@ -1,12 +1,22 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T05:01:25Z",
+ "generatedAt": "2026-11-10T06:01:22Z",
  "regions": [
   {
    "key": "europe",
    "name": "Europe",
    "stale": false,
    "items": [
+    {
+     "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
+     "source": "Global Voices",
+     "feed": "gv-western-europe",
+     "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
+     "published": "2026-11-10T05:36:17Z",
+     "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
+     "stale": false,
+     "author": "Global Voices East Asia"
+    },
     {
      "title": "Security Council LIVE: Strikes on Ukraine’s power grid, as peace talks loom",
      "source": "UN News",
@@ -74,16 +84,6 @@
      "summary": "“While the network will continue to provide service to users, the transparency practices and internal procedures and protocols for data safeguards may change after a sale.”",
      "stale": false,
      "author": "Ranking Digital Rights"
-    },
-    {
-     "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-     "source": "Global Voices",
-     "feed": "gv-western-europe",
-     "link": "https://globalvoices.org/2026/10/17/at-the-un-plans-for-a-global-coalition-to-attack-lgbtq-and-reproductive-rights/",
-     "published": "2026-10-17T08:07:27Z",
-     "summary": "Far-right activists from the U.S. and Latin America are trying to leverage Trump’s anti-LGBTQ+ government to form a “pro-life, pro-family” counter to the U.N. LGBTI Core Group.",
-     "stale": false,
-     "author": "Uncloseted Media"
     }
    ]
   },
@@ -344,6 +344,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
+     "source": "Global Voices",
+     "feed": "gv-east-asia",
+     "link": "https://globalvoices.org/2026/11/10/ex-lawmaker-sentenced-to-12-5-years-in-prison-in-closed-door-trial-in-macau/",
+     "published": "2026-11-10T05:36:17Z",
+     "summary": "Macau recorded its first conviction under the city’s national security law on November 6, 2026, sentencing 69-year-old former lawmaker Au Kam San to 12.5 years in prison. Observers call it an “unfair” “sham trial”",
+     "stale": false,
+     "author": "Global Voices East Asia"
+    },
+    {
      "title": "The dreamer who wants the world to read Nepali literature",
      "source": "Global Voices",
      "feed": "gv-south-asia",
@@ -393,16 +403,6 @@
      "author": "Zulker Naeen"
     },
     {
-     "title": "Unpacking Hong Kong’s rule of law score according to the World Justice Project’s ranking",
-     "source": "Global Voices",
-     "feed": "gv-east-asia",
-     "link": "https://globalvoices.org/2026/11/03/unpacking-hong-kongs-rule-of-law-score-according-to-the-world-justice-projects-ranking/",
-     "published": "2026-11-03T03:21:48Z",
-     "summary": "Institutional injustice, such as political nepotism, legal discrimination, and cronyism, is a far worse abusive use of power that creates systematic injustice.",
-     "stale": false,
-     "author": "Oiwan Lam"
-    },
-    {
      "title": "Samarkand: A ‘living museum’ on the Silk Road grapples with a tourism boom",
      "source": "UN News",
      "feed": "un-asia-pacific",
@@ -429,34 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "Civics education in Australian schools isn’t up to scratch. 3 things could improve it",
+     "title": "Labor slumps to new lows in two Victorian polls",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/civics-education-in-australian-schools-isnt-up-to-scratch-3-things-could-improve-it-295983",
-     "published": "2026-11-10T04:15:18Z",
+     "link": "https://theconversation.com/labor-slumps-to-new-lows-in-two-victorian-polls-296132",
+     "published": "2026-11-10T05:15:26Z",
      "summary": "",
      "stale": false,
-     "author": "Murray Print, Professor of Education, University of Sydney"
+     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
-     "title": "Victoria will bring in a domestic violence disclosure scheme. Could it help protect women?",
+     "title": "New AI regulator announced, as government considers criminal law change to keep erring frontier companies in line",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/victoria-will-bring-in-a-domestic-violence-disclosure-scheme-could-it-help-protect-women-296246",
-     "published": "2026-11-10T03:38:24Z",
+     "link": "https://theconversation.com/new-ai-regulator-announced-as-government-considers-criminal-law-change-to-keep-erring-frontier-companies-in-line-296274",
+     "published": "2026-11-10T04:58:32Z",
      "summary": "",
      "stale": false,
-     "author": "Anastasia Powell, Professor of Family and Sexual Violence, RMIT University"
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
-     "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
+     "title": "Can you see everything? Nathan Fielder and Elizabeth Holmes face off in You Can See Everything",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/the-iranian-regime-is-executing-athlete-dissidents-why-and-what-can-be-done-295449",
-     "published": "2026-11-10T03:26:16Z",
+     "link": "https://theconversation.com/can-you-see-everything-nathan-fielder-and-elizabeth-holmes-face-off-in-you-can-see-everything-295458",
+     "published": "2026-11-10T04:39:48Z",
      "summary": "",
      "stale": false,
-     "author": "Catherine Ordway, Visiting Scholar, School of Business, CBR, UNSW"
+     "author": "Audrey Mitchell, PhD Candidate and Sessional Tutor/Lecturer in Film Studies, University of Sydney"
     },
     {
      "title": "Disproportional representation: what National wins and loses from the overhang",
@@ -672,6 +672,12 @@
  "ask": [
   {
    "region": "Europe",
+   "source": "Global Voices",
+   "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
+   "published": "2026-11-10 05:36 UTC"
+  },
+  {
+   "region": "Europe",
    "source": "UN News",
    "title": "Security Council LIVE: Strikes on Ukraine’s power grid, as peace talks loom",
    "published": "2026-11-09 12:00 UTC"
@@ -711,12 +717,6 @@
    "source": "Global Voices",
    "title": "What telecoms leave behind when they exit a country",
    "published": "2026-10-22 12:20 UTC"
-  },
-  {
-   "region": "Europe",
-   "source": "Global Voices",
-   "title": "At the UN, plans for a global coalition to attack LGBTQ+ and reproductive rights",
-   "published": "2026-10-17 08:07 UTC"
   },
   {
    "region": "Americas",
@@ -865,6 +865,12 @@
   {
    "region": "Asia",
    "source": "Global Voices",
+   "title": "Ex-lawmaker sentenced to 12.5 years in prison in closed-door trial in Macau",
+   "published": "2026-11-10 05:36 UTC"
+  },
+  {
+   "region": "Asia",
+   "source": "Global Voices",
    "title": "The dreamer who wants the world to read Nepali literature",
    "published": "2026-11-09 05:00 UTC"
   },
@@ -894,12 +900,6 @@
   },
   {
    "region": "Asia",
-   "source": "Global Voices",
-   "title": "Unpacking Hong Kong’s rule of law score according to the World Justice Project’s ranking",
-   "published": "2026-11-03 03:21 UTC"
-  },
-  {
-   "region": "Asia",
    "source": "UN News",
    "title": "Samarkand: A ‘living museum’ on the Silk Road grapples with a tourism boom",
    "published": "2026-10-31 12:00 UTC"
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Civics education in Australian schools isn’t up to scratch. 3 things could improve it",
-   "published": "2026-11-10 04:15 UTC"
+   "title": "Labor slumps to new lows in two Victorian polls",
+   "published": "2026-11-10 05:15 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Victoria will bring in a domestic violence disclosure scheme. Could it help protect women?",
-   "published": "2026-11-10 03:38 UTC"
+   "title": "New AI regulator announced, as government considers criminal law change to keep erring frontier companies in line",
+   "published": "2026-11-10 04:58 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
-   "published": "2026-11-10 03:26 UTC"
+   "title": "Can you see everything? Nathan Fielder and Elizabeth Holmes face off in You Can See Everything",
+   "published": "2026-11-10 04:39 UTC"
   },
   {
    "region": "Oceania",
