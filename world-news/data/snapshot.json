@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T08:01:27Z",
+ "generatedAt": "2026-11-10T09:01:32Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "View from The Hill: Albanese says he wants Chalmers there for the long haul",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/view-from-the-hill-albanese-says-he-wants-chalmers-there-for-the-long-haul-296268",
+     "published": "2026-11-10T08:32:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Why is Nvidia so powerful in the AI world, and what could Jensen Huang’s scandal really cost?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
-    },
-    {
-     "title": "New AI regulator announced, as government considers criminal law change to keep erring frontier companies in line",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/new-ai-regulator-announced-as-government-considers-criminal-law-change-to-keep-erring-frontier-companies-in-line-296274",
-     "published": "2026-11-10T04:58:32Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
     },
     {
      "title": "The Iranian regime is executing athlete dissidents. Why? And what can be done?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "View from The Hill: Albanese says he wants Chalmers there for the long haul",
+   "published": "2026-11-10 08:32 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Why is Nvidia so powerful in the AI world, and what could Jensen Huang’s scandal really cost?",
    "published": "2026-11-10 06:49 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Labor slumps to new lows in two Victorian polls",
    "published": "2026-11-10 05:15 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "New AI regulator announced, as government considers criminal law change to keep erring frontier companies in line",
-   "published": "2026-11-10 04:58 UTC"
   },
   {
    "region": "Oceania",
