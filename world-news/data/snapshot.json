@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T14:01:26Z",
+ "generatedAt": "2026-11-10T15:01:34Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Africa’s funding focus needs to change: the African Development Bank has plans to make that happen",
+     "title": "Science is getting closer to beating malaria, so what’s still in the way? 3 areas where action can make an impact",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/africas-funding-focus-needs-to-change-the-african-development-bank-has-plans-to-make-that-happen-295782",
-     "published": "2026-11-09T13:30:54Z",
+     "link": "https://theconversation.com/science-is-getting-closer-to-beating-malaria-so-whats-still-in-the-way-3-areas-where-action-can-make-an-impact-295761",
+     "published": "2026-11-10T14:04:35Z",
      "summary": "",
      "stale": false,
-     "author": "Chris Humphrey, Senior Research Associate Development and Public Finance, ODI Global"
+     "author": "Taneshka Kruger, UP ISMC: Project Manager and Coordinator, University of Pretoria"
     },
     {
-     "title": "When bad rulers go, do their families face justice and is there reform? Six African case studies",
+     "title": "We tracked 20 years of crop cycles and protests in Kenya – unrest follows a clear seasonal rhythm",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/when-bad-rulers-go-do-their-families-face-justice-and-is-there-reform-six-african-case-studies-295362",
-     "published": "2026-11-09T13:29:50Z",
+     "link": "https://theconversation.com/we-tracked-20-years-of-crop-cycles-and-protests-in-kenya-unrest-follows-a-clear-seasonal-rhythm-294381",
+     "published": "2026-11-10T14:04:20Z",
      "summary": "",
      "stale": false,
-     "author": "Michael Asiedu, Researcher, University of St.Gallen"
+     "author": "Nicole Robiro, PhD Candidate in Economics at the Chair of Development Economics, Goethe University Frankfurt am Main"
     },
     {
      "title": "Families who fled Ethiopia for Kenya’s Moyale need food, water and shelter",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Africa’s funding focus needs to change: the African Development Bank has plans to make that happen",
-   "published": "2026-11-09 13:30 UTC"
+   "title": "Science is getting closer to beating malaria, so what’s still in the way? 3 areas where action can make an impact",
+   "published": "2026-11-10 14:04 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "When bad rulers go, do their families face justice and is there reform? Six African case studies",
-   "published": "2026-11-09 13:29 UTC"
+   "title": "We tracked 20 years of crop cycles and protests in Kenya – unrest follows a clear seasonal rhythm",
+   "published": "2026-11-10 14:04 UTC"
   },
   {
    "region": "Africa",
