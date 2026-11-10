@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T20:01:49Z",
+ "generatedAt": "2026-11-10T21:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Democrats’ agenda will be set by their ability to organize and compromise — not by the socialist, progressive or centrist factions all claiming victory",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/democrats-agenda-will-be-set-by-their-ability-to-organize-and-compromise-not-by-the-socialist-progressive-or-centrist-factions-all-claiming-victory-296014",
+     "published": "2026-11-10T19:52:39Z",
+     "summary": "",
+     "stale": false,
+     "author": "SoRelle Wyckoff Gaynor, Assistant Professor of Public Policy and Politics, University of Virginia"
+    },
+    {
      "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Paul M. Collins Jr., Professor of Legal Studies and Political Science, UMass Amherst"
-    },
-    {
-     "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/us-national-debt-keeps-rising-after-years-of-tax-cuts-and-this-will-make-policymaking-all-the-more-difficult-292099",
-     "published": "2026-11-10T13:37:08Z",
-     "summary": "",
-     "stale": false,
-     "author": "Hinckley Jones-Sanpei, Public Policy Researcher, University of Denver"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -360,7 +360,7 @@
      "link": "https://globalvoices.org/2026/11/09/the-dreamer-who-wants-the-world-to-read-nepali-literature/",
      "published": "2026-11-09T05:00:27Z",
      "summary": "Rishi Ram Adhikari, founder of Kitab Yatra and Kitab Jatra Festival, discusses his mission to promote Nepali literature globally, build libraries and connect readers across borders through cultural exchange.",
-     "stale": true,
+     "stale": false,
      "author": "Sangita Swechcha"
     },
     {
@@ -399,7 +399,7 @@
      "link": "https://globalvoices.org/2026/11/04/tracing-the-recruitment-trap-behind-russias-war/",
      "published": "2026-11-04T05:26:29Z",
      "summary": "Bangladeshi men paid agents for Russian jobs and ended up on the front lines. Families wait for bodies and answers, and they want the recruiters behind it in a courtroom.",
-     "stale": true,
+     "stale": false,
      "author": "Zulker Naeen"
     },
     {
@@ -418,7 +418,7 @@
      "link": "https://globalvoices.org/2026/10/28/bangladesh-weighs-tougher-cyber-law-as-ai-generated-abuse-targets-women/",
      "published": "2026-10-28T07:51:42Z",
      "summary": "Bangladesh’s proposed cyber law targets AI-generated fakes, but critics warn broad provisions on rumors, defamation, and disinformation could revive censorship and threaten online free expression, even as victims need…",
-     "stale": true,
+     "stale": false,
      "author": "Masudul Zarif"
     }
    ]
@@ -428,6 +428,36 @@
    "name": "Oceania",
    "stale": false,
    "items": [
+    {
+     "title": "Overheating cattle: more and more dangerous heat is coming for northern Australia’s herds",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/overheating-cattle-more-and-more-dangerous-heat-is-coming-for-northern-australias-herds-295978",
+     "published": "2026-11-10T19:16:58Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rachel Taylor, Research Fellow in Climate Extremes and Adaptation, University of Southern Queensland"
+    },
+    {
+     "title": "‘I am wretchedly sad’: Bertha Monash’s letters and women on the first world war home front",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/i-am-wretchedly-sad-bertha-monashs-letters-and-women-on-the-first-world-war-home-front-295749",
+     "published": "2026-11-10T19:16:46Z",
+     "summary": "",
+     "stale": false,
+     "author": "Bessie Mikelsons, PhD Candidate, History, Deakin University"
+    },
+    {
+     "title": "Safe seats, shortchanged: why rural Australia bears the brunt of pork-barrelling",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/safe-seats-shortchanged-why-rural-australia-bears-the-brunt-of-pork-barrelling-295342",
+     "published": "2026-11-10T19:15:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "William Partlett, Associate Professor of Public Law, The University of Melbourne"
+    },
     {
      "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
      "source": "The Conversation",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Tim Jarvis, Senior Lecturer in Creative Writing, Anglia Ruskin University"
-    },
-    {
-     "title": "View from The Hill: Albanese says he wants Chalmers there for the long haul",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/view-from-the-hill-albanese-says-he-wants-chalmers-there-for-the-long-haul-296268",
-     "published": "2026-11-10T08:32:37Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Why is Nvidia so powerful in the AI world, and what could Jensen Huang’s scandal really cost?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/why-is-nvidia-so-powerful-in-the-ai-world-and-what-could-jensen-huangs-scandal-really-cost-296257",
-     "published": "2026-11-10T06:49:02Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andrew Cullen, Guest Research Fellow, School of Computing and Information Systems, The University of Melbourne"
-    },
-    {
-     "title": "Labor slumps to new lows in two Victorian polls",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/labor-slumps-to-new-lows-in-two-victorian-polls-296132",
-     "published": "2026-11-10T05:15:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Adrian Beaumont, Election Analyst (Psephologist) at The Conversation; and Honorary Associate, School of Mathematics and Statistics, The University of Melbourne"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -632,9 +632,9 @@
    "id": "gv-south-asia",
    "source": "Global Voices",
    "region": "Asia",
-   "ok": false,
-   "items": 3,
-   "note": "TimeoutError: The read operation timed out; kept 3 cached"
+   "ok": true,
+   "items": 15,
+   "note": null
   },
   {
    "id": "un-asia-pacific",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
-   "published": "2026-11-10 18:45 UTC"
+   "title": "Democrats’ agenda will be set by their ability to organize and compromise — not by the socialist, progressive or centrist factions all claiming victory",
+   "published": "2026-11-10 19:52 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "US national debt keeps rising after years of tax cuts – and this will make policymaking all the more difficult",
-   "published": "2026-11-10 13:37 UTC"
+   "title": "After midterm rout, Republicans can still confirm a Supreme Court justice, but at what cost?",
+   "published": "2026-11-10 18:45 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Overheating cattle: more and more dangerous heat is coming for northern Australia’s herds",
+   "published": "2026-11-10 19:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "‘I am wretchedly sad’: Bertha Monash’s letters and women on the first world war home front",
+   "published": "2026-11-10 19:16 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Safe seats, shortchanged: why rural Australia bears the brunt of pork-barrelling",
+   "published": "2026-11-10 19:15 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
    "published": "2026-11-10 18:49 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "The End of Everything by M. John Harrison wins the 2026 Booker prize – a wonder of weird fiction for our incomprehensible times",
    "published": "2026-11-10 17:07 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "View from The Hill: Albanese says he wants Chalmers there for the long haul",
-   "published": "2026-11-10 08:32 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Why is Nvidia so powerful in the AI world, and what could Jensen Huang’s scandal really cost?",
-   "published": "2026-11-10 06:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Labor slumps to new lows in two Victorian polls",
-   "published": "2026-11-10 05:15 UTC"
   },
   {
    "region": "Oceania",
