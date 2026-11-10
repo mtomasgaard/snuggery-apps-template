@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-10T21:01:25Z",
+ "generatedAt": "2026-11-10T22:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -197,6 +197,15 @@
      "author": "Nicole Robiro, PhD Candidate in Economics at the Chair of Development Economics, Goethe University Frankfurt am Main"
     },
     {
+     "title": "Nearly 64,000 flee Nigeria for Niger where a humanitarian crisis is deepening",
+     "source": "UN News",
+     "feed": "un-africa",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168779",
+     "published": "2026-11-10T12:00:00Z",
+     "summary": "Violence in northern Nigeria is fueling a growing humanitarian crisis across the whole region: 64,000 have fled to neighbouring Niger and several hundred have left for Benin since the start of the year, as host…",
+     "stale": false
+    },
+    {
      "title": "Security Council LIVE: South Sudan’s first elections loom amid rising violence",
      "source": "UN News",
      "feed": "un-africa",
@@ -212,15 +221,6 @@
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168772",
      "published": "2026-11-10T12:00:00Z",
      "summary": "Quality health data can help authorities to identify emerging threats and take lifesaving action, but a new report reveals critical gaps in Africa’s health information systems.",
-     "stale": false
-    },
-    {
-     "title": "Sudan war: First suicide bombers, now long-range drone strikes are the norm",
-     "source": "UN News",
-     "feed": "un-africa",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168771",
-     "published": "2026-11-10T12:00:00Z",
-     "summary": "Drones and drought are “closing in” on Sudan, the UN Children’s Fund (UNICEF), said on Tuesday, describing unprecedented attacks on the country’s infrastructure including by drones travelling up to 1,500 kilometres…",
      "stale": false
     },
     {
@@ -781,6 +781,12 @@
   {
    "region": "Africa",
    "source": "UN News",
+   "title": "Nearly 64,000 flee Nigeria for Niger where a humanitarian crisis is deepening",
+   "published": "2026-11-10 12:00 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "UN News",
    "title": "Security Council LIVE: South Sudan’s first elections loom amid rising violence",
    "published": "2026-11-10 12:00 UTC"
   },
@@ -788,12 +794,6 @@
    "region": "Africa",
    "source": "UN News",
    "title": "When deaths go uncounted: WHO flags dangerous blind spots in Africa’s health data",
-   "published": "2026-11-10 12:00 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "UN News",
-   "title": "Sudan war: First suicide bombers, now long-range drone strikes are the norm",
    "published": "2026-11-10 12:00 UTC"
   },
   {
