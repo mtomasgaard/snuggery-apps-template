@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T11:01:25Z",
+ "generatedAt": "2026-11-11T12:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -177,10 +177,10 @@
    "stale": false,
    "items": [
     {
-     "title": "COP31: what South Africa must do to deliver on its climate promises",
+     "title": "COP 31: what South Africa must do to deliver on its climate promises",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/cop31-what-south-africa-must-do-to-deliver-on-its-climate-promises-294222",
+     "link": "https://theconversation.com/cop-31-what-south-africa-must-do-to-deliver-on-its-climate-promises-294222",
      "published": "2026-11-11T09:38:05Z",
      "summary": "",
      "stale": false,
@@ -769,7 +769,7 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "COP31: what South Africa must do to deliver on its climate promises",
+   "title": "COP 31: what South Africa must do to deliver on its climate promises",
    "published": "2026-11-11 09:38 UTC"
   },
   {
