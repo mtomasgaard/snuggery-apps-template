@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T22:01:26Z",
+ "generatedAt": "2026-11-11T23:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "It’s possible to make great concrete without the huge emissions from cement. Why isn’t this common?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/its-possible-to-make-great-concrete-without-the-huge-emissions-from-cement-why-isnt-this-common-292236",
+     "published": "2026-11-11T22:24:01Z",
+     "summary": "",
+     "stale": false,
+     "author": "Mariam Darestani, Senior Lecturer in Mechanical Engineering, Western Sydney University"
+    },
+    {
      "title": "Nepal-Tibet floods showed the need for greater climate finance. Is the world listening?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Helen Hodgson, Professor Emerita, Curtin Law School and Curtin Business School, Curtin University"
-    },
-    {
-     "title": "Loved and scorned for his sincerity, ‘perpetual boy’ Tim Winton ages poetically in Songs from the Firefront",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/loved-and-scorned-for-his-sincerity-perpetual-boy-tim-winton-ages-poetically-in-songs-from-the-firefront-296129",
-     "published": "2026-11-11T17:28:57Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tony Hughes-d'Aeth, Professor, Chair of Australian Literature, The University of Western Australia"
     },
     {
      "title": "The state apologised to abuse-in-care survivors two years ago today. What has changed?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "It’s possible to make great concrete without the huge emissions from cement. Why isn’t this common?",
+   "published": "2026-11-11 22:24 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Nepal-Tibet floods showed the need for greater climate finance. Is the world listening?",
    "published": "2026-11-11 17:29 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Australia’s $4.8 trillion super system has become a political football. A new book explains why",
    "published": "2026-11-11 17:29 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Loved and scorned for his sincerity, ‘perpetual boy’ Tim Winton ages poetically in Songs from the Firefront",
-   "published": "2026-11-11 17:28 UTC"
   },
   {
    "region": "Oceania",
