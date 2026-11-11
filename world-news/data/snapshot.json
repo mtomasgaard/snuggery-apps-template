@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T04:01:17Z",
+ "generatedAt": "2026-11-11T05:01:31Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Rings of Power: season three promises a ‘fresh start’ but there’s no such thing in Tolkien’s Middle-earth",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/rings-of-power-season-three-promises-a-fresh-start-but-theres-no-such-thing-in-tolkiens-middle-earth-296057",
+     "published": "2026-11-11T04:30:38Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shakiba Barghi, PhD Candidate in Publishing and Communications, The University of Melbourne"
+    },
+    {
+     "title": "Who controls trespass footage? Here’s what the High Court’s answer means for animals – and press freedom",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/who-controls-trespass-footage-heres-what-the-high-courts-answer-means-for-animals-and-press-freedom-296149",
+     "published": "2026-11-11T04:18:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Liz Hicks, Lecturer in Law, The University of Melbourne"
+    },
+    {
      "title": "Hegseth has survived an attempt to oust him – for now. A much bigger fight looms",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -439,16 +459,6 @@
      "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
     },
     {
-     "title": "Australia will impose mandatory safety rules on AI. Are we focused on the right risks?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/australia-will-impose-mandatory-safety-rules-on-ai-are-we-focused-on-the-right-risks-296282",
-     "published": "2026-11-11T02:34:42Z",
-     "summary": "",
-     "stale": false,
-     "author": "Henry Fraser, Law Lecturer, Queensland University of Technology"
-    },
-    {
      "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Roger Dargaville, Assoc Prof. Renewable Energy, Monash University"
-    },
-    {
-     "title": "Nothing to see here? Cricket Australia’s next integrity test is its own investigation",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/nothing-to-see-here-cricket-australias-next-integrity-test-is-its-own-investigation-296395",
-     "published": "2026-11-11T01:58:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
     },
     {
      "title": "Time is running out to protect Franz Josef from its rising river. Stopbanks won’t work forever",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Rings of Power: season three promises a ‘fresh start’ but there’s no such thing in Tolkien’s Middle-earth",
+   "published": "2026-11-11 04:30 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Who controls trespass footage? Here’s what the High Court’s answer means for animals – and press freedom",
+   "published": "2026-11-11 04:18 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Hegseth has survived an attempt to oust him – for now. A much bigger fight looms",
    "published": "2026-11-11 03:33 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Australia will impose mandatory safety rules on AI. Are we focused on the right risks?",
-   "published": "2026-11-11 02:34 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
    "published": "2026-11-11 02:28 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Nothing to see here? Cricket Australia’s next integrity test is its own investigation",
-   "published": "2026-11-11 01:58 UTC"
   },
   {
    "region": "Oceania",
