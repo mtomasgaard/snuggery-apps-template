@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T14:01:32Z",
+ "generatedAt": "2026-11-11T15:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -177,24 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "COP 31: what South Africa must do to deliver on its climate promises",
+     "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/cop-31-what-south-africa-must-do-to-deliver-on-its-climate-promises-294222",
-     "published": "2026-11-11T09:38:05Z",
+     "link": "https://theconversation.com/east-africas-migration-story-is-not-just-about-europe-what-policymakers-get-wrong-294918",
+     "published": "2026-11-11T13:19:43Z",
      "summary": "",
      "stale": false,
-     "author": "Ademola Oluborode Jegede, Professor of Law, the SARChi Chair in Climate Change and the Rule of Law, and the Director of the Ismail Mahomed Centre for Human and…"
+     "author": "Girmachew Adugna, Advisory Board Member, Research Center for Forced Displacement and Migration Studies, Addis Ababa University"
     },
     {
-     "title": "La BAD prône une nouvelle architecture du financement du développement en Afrique",
+     "title": "Cabo Verde’s presidential election: the stakes in one of Africa’s most stable democracies",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/la-bad-prone-une-nouvelle-architecture-du-financement-du-developpement-en-afrique-296196",
-     "published": "2026-11-11T08:04:47Z",
+     "link": "https://theconversation.com/cabo-verdes-presidential-election-the-stakes-in-one-of-africas-most-stable-democracies-295763",
+     "published": "2026-11-11T13:19:33Z",
      "summary": "",
      "stale": false,
-     "author": "Chris Humphrey, Senior Research Associate Development and Public Finance, ODI Global"
+     "author": "José Santana Pereira, associate professor, researcher, Universidade de Lisboa"
     },
     {
      "title": "Restoring social media access comes at a cost in Gabon",
@@ -769,14 +769,14 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "COP 31: what South Africa must do to deliver on its climate promises",
-   "published": "2026-11-11 09:38 UTC"
+   "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
+   "published": "2026-11-11 13:19 UTC"
   },
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "La BAD prône une nouvelle architecture du financement du développement en Afrique",
-   "published": "2026-11-11 08:04 UTC"
+   "title": "Cabo Verde’s presidential election: the stakes in one of Africa’s most stable democracies",
+   "published": "2026-11-11 13:19 UTC"
   },
   {
    "region": "Africa",
