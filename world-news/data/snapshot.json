@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T01:01:18Z",
+ "generatedAt": "2026-11-11T02:01:29Z",
  "regions": [
   {
    "key": "europe",
@@ -429,24 +429,34 @@
    "stale": false,
    "items": [
     {
-     "title": "A chemical fingerprint in ancient rocks suggests plate tectonics began 2.5 billion years ago",
+     "title": "Nothing to see here? Cricket Australia’s next integrity test is its own investigation",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/a-chemical-fingerprint-in-ancient-rocks-suggests-plate-tectonics-began-2-5-billion-years-ago-294462",
-     "published": "2026-11-11T00:10:06Z",
+     "link": "https://theconversation.com/nothing-to-see-here-cricket-australias-next-integrity-test-is-its-own-investigation-296395",
+     "published": "2026-11-11T01:58:33Z",
      "summary": "",
      "stale": false,
-     "author": "Janne Liebmann, Research Fellow, Curtin University"
+     "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
     },
     {
-     "title": "Politics with Michelle Grattan: Kos Samaras & Richard Willingham on Victoria’s expected change of government",
+     "title": "When it comes to rape cases involving a celebrity, the media too often miss the point",
      "source": "The Conversation",
      "feed": "tc-au",
-     "link": "https://theconversation.com/politics-with-michelle-grattan-kos-samaras-and-richard-willingham-on-victorias-expected-change-of-government-296250",
-     "published": "2026-11-11T00:06:20Z",
+     "link": "https://theconversation.com/when-it-comes-to-rape-cases-involving-a-celebrity-the-media-too-often-miss-the-point-296256",
+     "published": "2026-11-11T01:49:41Z",
      "summary": "",
      "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+     "author": "Jane Gilmore, PhD candidate, Monash Gender and Family Violence Prevention Hub, Monash University"
+    },
+    {
+     "title": "Unfunny jokes, an unlikeable lead, an unconvincing plot: ABC’s Separated at Birth falls flat at every turn",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/unfunny-jokes-an-unlikeable-lead-an-unconvincing-plot-abcs-separated-at-birth-falls-flat-at-every-turn-294480",
+     "published": "2026-11-11T01:39:37Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
     },
     {
      "title": "Time is running out to protect Franz Josef from its rising river. Stopbanks won’t work forever",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Ian Christopher Fuller, Professor in Physical Geography, Te Kunenga ki Pūrehuroa – Massey University"
-    },
-    {
-     "title": "Overheating cattle: more and more dangerous heat is coming for northern Australia’s herds",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/overheating-cattle-more-and-more-dangerous-heat-is-coming-for-northern-australias-herds-295978",
-     "published": "2026-11-10T19:16:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Rachel Taylor, Research Fellow in Climate Extremes and Adaptation, University of Southern Queensland"
     },
     {
      "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
@@ -913,26 +913,26 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "A chemical fingerprint in ancient rocks suggests plate tectonics began 2.5 billion years ago",
-   "published": "2026-11-11 00:10 UTC"
+   "title": "Nothing to see here? Cricket Australia’s next integrity test is its own investigation",
+   "published": "2026-11-11 01:58 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Politics with Michelle Grattan: Kos Samaras & Richard Willingham on Victoria’s expected change of government",
-   "published": "2026-11-11 00:06 UTC"
+   "title": "When it comes to rape cases involving a celebrity, the media too often miss the point",
+   "published": "2026-11-11 01:49 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Unfunny jokes, an unlikeable lead, an unconvincing plot: ABC’s Separated at Birth falls flat at every turn",
+   "published": "2026-11-11 01:39 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
    "title": "Time is running out to protect Franz Josef from its rising river. Stopbanks won’t work forever",
    "published": "2026-11-10 23:14 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Overheating cattle: more and more dangerous heat is coming for northern Australia’s herds",
-   "published": "2026-11-10 19:16 UTC"
   },
   {
    "region": "Oceania",
