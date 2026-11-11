@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T06:01:20Z",
+ "generatedAt": "2026-11-11T07:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "One of the Beaconsfield miners has died. Here’s how his story hooked the nation for 20 years",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/one-of-the-beaconsfield-miners-has-died-heres-how-his-story-hooked-the-nation-for-20-years-296259",
+     "published": "2026-11-11T06:02:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jason Bainbridge, Dean of Curriculum and Quality, University of Southern Queensland"
+    },
+    {
      "title": "New home loans dropped by a record 15% as Australia’s housing market downturn deepens",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Jack Janetzki, Lecturer in Pharmacy and Pharmacology, Adelaide University"
-    },
-    {
-     "title": "Rings of Power: season three promises a ‘fresh start’ but there’s no such thing in Tolkien’s Middle-earth",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/rings-of-power-season-three-promises-a-fresh-start-but-theres-no-such-thing-in-tolkiens-middle-earth-296057",
-     "published": "2026-11-11T04:30:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Shakiba Barghi, PhD Candidate in Publishing and Communications, The University of Melbourne"
     },
     {
      "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "One of the Beaconsfield miners has died. Here’s how his story hooked the nation for 20 years",
+   "published": "2026-11-11 06:02 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "New home loans dropped by a record 15% as Australia’s housing market downturn deepens",
    "published": "2026-11-11 05:53 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Some antidepressants may work better than others long term – new study",
    "published": "2026-11-11 05:37 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Rings of Power: season three promises a ‘fresh start’ but there’s no such thing in Tolkien’s Middle-earth",
-   "published": "2026-11-11 04:30 UTC"
   },
   {
    "region": "Oceania",
