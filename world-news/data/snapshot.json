@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T10:01:18Z",
+ "generatedAt": "2026-11-11T11:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "COP31: what South Africa must do to deliver on its climate promises",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/cop31-what-south-africa-must-do-to-deliver-on-its-climate-promises-294222",
+     "published": "2026-11-11T09:38:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ademola Oluborode Jegede, Professor of Law, the SARChi Chair in Climate Change and the Rule of Law, and the Director of the Ismail Mahomed Centre for Human and…"
+    },
+    {
      "title": "La BAD prône une nouvelle architecture du financement du développement en Afrique",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -195,16 +205,6 @@
      "summary": "After more than eight months, Gabon has restored its social media access. But it has come at a cost.",
      "stale": false,
      "author": "Laura"
-    },
-    {
-     "title": "Science is getting closer to beating malaria, so what’s still in the way? 3 areas where action can make an impact",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/science-is-getting-closer-to-beating-malaria-so-whats-still-in-the-way-3-areas-where-action-can-make-an-impact-295761",
-     "published": "2026-11-10T14:04:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "Taneshka Kruger, UP ISMC: Project Manager and Coordinator, University of Pretoria"
     },
     {
      "title": "Nearly 64,000 flee Nigeria for Niger where a humanitarian crisis is deepening",
@@ -769,6 +769,12 @@
   {
    "region": "Africa",
    "source": "The Conversation",
+   "title": "COP31: what South Africa must do to deliver on its climate promises",
+   "published": "2026-11-11 09:38 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
    "title": "La BAD prône une nouvelle architecture du financement du développement en Afrique",
    "published": "2026-11-11 08:04 UTC"
   },
@@ -777,12 +783,6 @@
    "source": "Global Voices",
    "title": "Restoring social media access comes at a cost in Gabon",
    "published": "2026-11-11 00:14 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Science is getting closer to beating malaria, so what’s still in the way? 3 areas where action can make an impact",
-   "published": "2026-11-10 14:04 UTC"
   },
   {
    "region": "Africa",
