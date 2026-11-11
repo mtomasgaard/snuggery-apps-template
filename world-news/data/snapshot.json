@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T05:01:31Z",
+ "generatedAt": "2026-11-11T06:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "New home loans dropped by a record 15% as Australia’s housing market downturn deepens",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/new-home-loans-dropped-by-a-record-15-as-australias-housing-market-downturn-deepens-296156",
+     "published": "2026-11-11T05:53:05Z",
+     "summary": "",
+     "stale": false,
+     "author": "Christian A. Nygaard, Professor of Housing Economics, UNSW"
+    },
+    {
+     "title": "Some antidepressants may work better than others long term – new study",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/some-antidepressants-may-work-better-than-others-long-term-new-study-296151",
+     "published": "2026-11-11T05:37:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jack Janetzki, Lecturer in Pharmacy and Pharmacology, Adelaide University"
+    },
+    {
      "title": "Rings of Power: season three promises a ‘fresh start’ but there’s no such thing in Tolkien’s Middle-earth",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Shakiba Barghi, PhD Candidate in Publishing and Communications, The University of Melbourne"
-    },
-    {
-     "title": "Who controls trespass footage? Here’s what the High Court’s answer means for animals – and press freedom",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/who-controls-trespass-footage-heres-what-the-high-courts-answer-means-for-animals-and-press-freedom-296149",
-     "published": "2026-11-11T04:18:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Liz Hicks, Lecturer in Law, The University of Melbourne"
-    },
-    {
-     "title": "Hegseth has survived an attempt to oust him – for now. A much bigger fight looms",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/hegseth-has-survived-an-attempt-to-oust-him-for-now-a-much-bigger-fight-looms-296295",
-     "published": "2026-11-11T03:33:59Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
     },
     {
      "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "New home loans dropped by a record 15% as Australia’s housing market downturn deepens",
+   "published": "2026-11-11 05:53 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Some antidepressants may work better than others long term – new study",
+   "published": "2026-11-11 05:37 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Rings of Power: season three promises a ‘fresh start’ but there’s no such thing in Tolkien’s Middle-earth",
    "published": "2026-11-11 04:30 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Who controls trespass footage? Here’s what the High Court’s answer means for animals – and press freedom",
-   "published": "2026-11-11 04:18 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Hegseth has survived an attempt to oust him – for now. A much bigger fight looms",
-   "published": "2026-11-11 03:33 UTC"
   },
   {
    "region": "Oceania",
