@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T19:01:24Z",
+ "generatedAt": "2026-11-11T20:02:52Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/you-likely-have-genes-that-affect-how-well-your-medications-work-testing-for-them-could-improve-treatment-296352",
+     "published": "2026-11-11T19:00:24Z",
+     "summary": "",
+     "stale": false,
+     "author": "Philip Empey, Associate Professor, University of Pittsburgh School of Pharmacy, University of Pittsburgh"
+    },
+    {
      "title": "The ‘religious left’ may be rising – but Black Christian women have been there all along",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Dara Delgado, Assistant Professor of Religion, University of North Carolina Wilmington"
-    },
-    {
-     "title": "GLP-1 drugs carry risk of rare but serious eye condition – a physician studying these medicines explains the potential side effect",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/glp-1-drugs-carry-risk-of-rare-but-serious-eye-condition-a-physician-studying-these-medicines-explains-the-potential-side-effect-296237",
-     "published": "2026-11-10T23:07:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ziyad Al-Aly, Clinical Epidemiologist, Washington University in St. Louis"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "The ‘religious left’ may be rising – but Black Christian women have been there all along",
-   "published": "2026-11-11 17:47 UTC"
+   "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
+   "published": "2026-11-11 19:00 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "GLP-1 drugs carry risk of rare but serious eye condition – a physician studying these medicines explains the potential side effect",
-   "published": "2026-11-10 23:07 UTC"
+   "title": "The ‘religious left’ may be rising – but Black Christian women have been there all along",
+   "published": "2026-11-11 17:47 UTC"
   },
   {
    "region": "Americas",
