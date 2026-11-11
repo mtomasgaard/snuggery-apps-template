@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T03:01:17Z",
+ "generatedAt": "2026-11-11T04:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Hegseth has survived an attempt to oust him – for now. A much bigger fight looms",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/hegseth-has-survived-an-attempt-to-oust-him-for-now-a-much-bigger-fight-looms-296295",
+     "published": "2026-11-11T03:33:59Z",
+     "summary": "",
+     "stale": false,
+     "author": "Ava Kalinauskas, Senior Research Associate, United States Studies Centre, University of Sydney"
+    },
+    {
      "title": "Australia will impose mandatory safety rules on AI. Are we focused on the right risks?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -441,7 +451,7 @@
     {
      "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/global-carbon-emissions-may-have-peaked-in-2026-but-only-time-will-tell-296152",
      "published": "2026-11-11T02:28:16Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Ian Christopher Fuller, Professor in Physical Geography, Te Kunenga ki Pūrehuroa – Massey University"
-    },
-    {
-     "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/how-aristotle-helps-us-unpack-the-art-of-deception-in-nathan-fielders-you-can-see-everything-295602",
-     "published": "2026-11-10T18:49:35Z",
-     "summary": "",
-     "stale": false,
-     "author": "John Robert Hacker-Wright, Professor of Philosophy, University of Guelph"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Hegseth has survived an attempt to oust him – for now. A much bigger fight looms",
+   "published": "2026-11-11 03:33 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Australia will impose mandatory safety rules on AI. Are we focused on the right risks?",
    "published": "2026-11-11 02:34 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Time is running out to protect Franz Josef from its rising river. Stopbanks won’t work forever",
    "published": "2026-11-10 23:14 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "How Aristotle helps us unpack the art of deception in Nathan Fielder’s ‘You Can See Everything’",
-   "published": "2026-11-10 18:49 UTC"
   },
   {
    "region": "Oceania",
