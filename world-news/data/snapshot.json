@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-11T02:01:29Z",
+ "generatedAt": "2026-11-11T03:01:17Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Australia will impose mandatory safety rules on AI. Are we focused on the right risks?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/australia-will-impose-mandatory-safety-rules-on-ai-are-we-focused-on-the-right-risks-296282",
+     "published": "2026-11-11T02:34:42Z",
+     "summary": "",
+     "stale": false,
+     "author": "Henry Fraser, Law Lecturer, Queensland University of Technology"
+    },
+    {
+     "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/global-carbon-emissions-may-have-peaked-in-2026-but-only-time-will-tell-296152",
+     "published": "2026-11-11T02:28:16Z",
+     "summary": "",
+     "stale": false,
+     "author": "Roger Dargaville, Assoc Prof. Renewable Energy, Monash University"
+    },
+    {
      "title": "Nothing to see here? Cricket Australia’s next integrity test is its own investigation",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -437,26 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "James Skinner, Dean Newcastle Business School/Professor of Sport Business, University of Newcastle"
-    },
-    {
-     "title": "When it comes to rape cases involving a celebrity, the media too often miss the point",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/when-it-comes-to-rape-cases-involving-a-celebrity-the-media-too-often-miss-the-point-296256",
-     "published": "2026-11-11T01:49:41Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jane Gilmore, PhD candidate, Monash Gender and Family Violence Prevention Hub, Monash University"
-    },
-    {
-     "title": "Unfunny jokes, an unlikeable lead, an unconvincing plot: ABC’s Separated at Birth falls flat at every turn",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/unfunny-jokes-an-unlikeable-lead-an-unconvincing-plot-abcs-separated-at-birth-falls-flat-at-every-turn-294480",
-     "published": "2026-11-11T01:39:37Z",
-     "summary": "",
-     "stale": false,
-     "author": "Ari Mattes, Lecturer in Communications and Media, University of Notre Dame Australia"
     },
     {
      "title": "Time is running out to protect Franz Josef from its rising river. Stopbanks won’t work forever",
@@ -913,20 +913,20 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Australia will impose mandatory safety rules on AI. Are we focused on the right risks?",
+   "published": "2026-11-11 02:34 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Global carbon emissions may have peaked in 2026 – but only time will tell",
+   "published": "2026-11-11 02:28 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Nothing to see here? Cricket Australia’s next integrity test is its own investigation",
    "published": "2026-11-11 01:58 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "When it comes to rape cases involving a celebrity, the media too often miss the point",
-   "published": "2026-11-11 01:49 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Unfunny jokes, an unlikeable lead, an unconvincing plot: ABC’s Separated at Birth falls flat at every turn",
-   "published": "2026-11-11 01:39 UTC"
   },
   {
    "region": "Oceania",
