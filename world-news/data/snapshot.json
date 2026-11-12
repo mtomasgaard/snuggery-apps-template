@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T01:01:21Z",
+ "generatedAt": "2026-11-12T02:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
+     "title": "‘Nobody cared’: new research shows deepfakes are hurting regular people, not just celebrities",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/nobody-cared-new-research-shows-deepfakes-are-hurting-regular-people-not-just-celebrities-296154",
+     "published": "2026-11-12T00:40:40Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nicola Henry, Professor of Global & Language Studies, RMIT University"
+    },
+    {
+     "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/johnny-depp-returns-to-the-screen-as-scrooge-dickens-might-have-some-notes-295865",
      "published": "2026-11-11T23:53:31Z",
      "summary": "",
@@ -441,7 +451,7 @@
     {
      "title": "Flight of the Conchords return to NZ stages after 14 years away – but Wellington is still obviously home",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/flight-of-the-conchords-return-to-nz-stages-after-14-years-away-but-wellington-is-still-obviously-home-296280",
      "published": "2026-11-11T23:22:40Z",
      "summary": "",
@@ -457,16 +467,6 @@
      "summary": "",
      "stale": false,
      "author": "Mariam Darestani, Senior Lecturer in Mechanical Engineering, Western Sydney University"
-    },
-    {
-     "title": "Nepal-Tibet floods showed the need for greater climate finance. Is the world listening?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/nepal-tibet-floods-showed-the-need-for-greater-climate-finance-is-the-world-listening-294675",
-     "published": "2026-11-11T17:29:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Melanie Pill, Honorary Senior Lecturer, Australian National University"
     },
     {
      "title": "The state apologised to abuse-in-care survivors two years ago today. What has changed?",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "‘Nobody cared’: new research shows deepfakes are hurting regular people, not just celebrities",
+   "published": "2026-11-12 00:40 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
    "published": "2026-11-11 23:53 UTC"
   },
@@ -927,12 +933,6 @@
    "source": "The Conversation",
    "title": "It’s possible to make great concrete without the huge emissions from cement. Why isn’t this common?",
    "published": "2026-11-11 22:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Nepal-Tibet floods showed the need for greater climate finance. Is the world listening?",
-   "published": "2026-11-11 17:29 UTC"
   },
   {
    "region": "Oceania",
