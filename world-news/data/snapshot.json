@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T13:51:37Z",
+ "generatedAt": "2026-11-12T14:01:37Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Ecuadorian youth unite against neoliberal models and state violence",
+     "source": "Global Voices",
+     "feed": "gv-latin-america",
+     "link": "https://globalvoices.org/2026/11/12/ecuadorian-youth-unite-against-neoliberal-models-and-state-violence/",
+     "published": "2026-11-12T14:00:33Z",
+     "summary": "Thousands of Ecuadorian students have taken to the streets to reject President Noboa’s temporary job plans, demanding permanent solutions for public healthcare, education funding, and rising insecurity.",
+     "stale": false,
+     "author": "Gina Yauri"
+    },
+    {
      "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -140,16 +150,6 @@
      "summary": "Venezuela’s Nobel laureate María Corina Machado returned to Caracas in a massive celebration after months in hiding and exile, sparking deep hope and sharp questions about the country’s political future.",
      "stale": false,
      "author": "Óscar Calles"
-    },
-    {
-     "title": "What comes after networked authoritarianism?",
-     "source": "Global Voices",
-     "feed": "gv-latin-america",
-     "link": "https://globalvoices.org/2026/11/05/what-comes-after-networked-authoritarianism/",
-     "published": "2026-11-05T16:17:00Z",
-     "summary": "October’s spotlight on Big Tech and Authoritarianism explored a range of relationships between tech companies and political actors across the global majority.",
-     "stale": false,
-     "author": "Rebecca MacKinnon"
     },
     {
      "title": "Higher Ground: How New York is raising a park to hold back the sea",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "Global Voices",
+   "title": "Ecuadorian youth unite against neoliberal models and state violence",
+   "published": "2026-11-12 14:00 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "The Conversation",
    "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
    "published": "2026-11-12 13:42 UTC"
@@ -747,12 +753,6 @@
    "source": "Global Voices",
    "title": "Venezuela welcomes opposition leader María Corina Machado home",
    "published": "2026-11-06 06:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "Global Voices",
-   "title": "What comes after networked authoritarianism?",
-   "published": "2026-11-05 16:17 UTC"
   },
   {
    "region": "Americas",
