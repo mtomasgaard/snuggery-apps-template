@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T13:01:26Z",
+ "generatedAt": "2026-11-12T13:51:37Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/extreme-weather-risk-is-scaring-big-corporations-away-from-poorer-countries-that-hurts-the-companies-too-295591",
+     "published": "2026-11-12T13:42:26Z",
+     "summary": "",
+     "stale": false,
+     "author": "Jonas Gamso, Associate Professor of International Trade and Global Studies, Arizona State University"
+    },
+    {
+     "title": "Despite intense Islamophobia, Abdul El-Sayed and dozens of other Muslims elected representatives are breaking down barriers",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/despite-intense-islamophobia-abdul-el-sayed-and-dozens-of-other-muslims-elected-representatives-are-breaking-down-barriers-296035",
+     "published": "2026-11-12T13:42:15Z",
+     "summary": "",
+     "stale": false,
+     "author": "Nazita Lajevardi, Associate Professor of Political Science, University of Michigan"
+    },
+    {
      "title": "Haiti: More than 1,000 killed between July and September, UN report reveals",
      "source": "UN News",
      "feed": "un-americas",
@@ -100,26 +120,6 @@
      "published": "2026-11-12T12:00:00Z",
      "summary": "More than 1,000 people were killed in Haiti during the third quarter of this year, as armed gangs continue to terrorize the population in the capital Port-au-Prince and beyond, the UN team in the island nation, said in…",
      "stale": false
-    },
-    {
-     "title": "El Salvador is exporting the ‘Bukele model’ to Haiti – but the gang offensive is a gamble for both nations",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/el-salvador-is-exporting-the-bukele-model-to-haiti-but-the-gang-offensive-is-a-gamble-for-both-nations-296390",
-     "published": "2026-11-11T23:58:06Z",
-     "summary": "",
-     "stale": false,
-     "author": "Robert Muggah, Richard von Weizsäcker Fellow na Bosch Academy e Co-fundador, Instituto Igarapé; Princeton University"
-    },
-    {
-     "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/you-likely-have-genes-that-affect-how-well-your-medications-work-testing-for-them-could-improve-treatment-296352",
-     "published": "2026-11-11T19:00:24Z",
-     "summary": "",
-     "stale": false,
-     "author": "Philip Empey, Associate Professor, University of Pittsburgh School of Pharmacy, University of Pittsburgh"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -720,21 +720,21 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
+   "published": "2026-11-12 13:42 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "Despite intense Islamophobia, Abdul El-Sayed and dozens of other Muslims elected representatives are breaking down barriers",
+   "published": "2026-11-12 13:42 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "UN News",
    "title": "Haiti: More than 1,000 killed between July and September, UN report reveals",
    "published": "2026-11-12 12:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "El Salvador is exporting the ‘Bukele model’ to Haiti – but the gang offensive is a gamble for both nations",
-   "published": "2026-11-11 23:58 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
-   "published": "2026-11-11 19:00 UTC"
   },
   {
    "region": "Americas",
