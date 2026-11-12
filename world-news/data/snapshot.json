@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T20:01:20Z",
+ "generatedAt": "2026-11-12T21:01:23Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/rnzs-budget-crisis-threatens-its-core-purpose-but-theres-an-obvious-solution-296293",
+     "published": "2026-11-12T20:33:56Z",
+     "summary": "",
+     "stale": false,
+     "author": "Peter Thompson, Associate Professor in Media and Communication, Te Herenga Waka — Victoria University of Wellington"
+    },
+    {
      "title": "Rural Australian communities are hosting the clean energy boom. Are they getting a fair say?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -459,24 +469,14 @@
      "author": "Timothy McKenry, Professor of Music, Australian Catholic University"
     },
     {
-     "title": "Pasifika women are making rugby league history. But what about the next generation?",
+     "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
      "source": "The Conversation",
      "feed": "tc-nz",
-     "link": "https://theconversation.com/pasifika-women-are-making-rugby-league-history-but-what-about-the-next-generation-295741",
-     "published": "2026-11-12T18:21:47Z",
+     "link": "https://theconversation.com/friday-essay-to-tackle-the-dreadful-rise-in-antisemitism-we-must-speak-the-truth-about-israels-war-crimes-296263",
+     "published": "2026-11-12T19:03:45Z",
      "summary": "",
      "stale": false,
-     "author": "Sierra Keung, Lecturer in Sport and Recreation, Auckland University of Technology"
-    },
-    {
-     "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/a-dead-star-is-flashing-radio-waves-every-8-minutes-and-its-partner-looks-a-lot-like-the-sun-294665",
-     "published": "2026-11-12T10:06:18Z",
-     "summary": "",
-     "stale": false,
-     "author": "Natasha Hurley-Walker, Radio Astronomer, Curtin University"
+     "author": "Robert Manne, Emeritus Professor of Politics, La Trobe University"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
+   "published": "2026-11-12 20:33 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Rural Australian communities are hosting the clean energy boom. Are they getting a fair say?",
    "published": "2026-11-12 19:05 UTC"
   },
@@ -931,14 +937,8 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Pasifika women are making rugby league history. But what about the next generation?",
-   "published": "2026-11-12 18:21 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
-   "published": "2026-11-12 10:06 UTC"
+   "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
+   "published": "2026-11-12 19:03 UTC"
   },
   {
    "region": "Oceania",
