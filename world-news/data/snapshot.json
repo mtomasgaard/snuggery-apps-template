@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T03:01:23Z",
+ "generatedAt": "2026-11-12T04:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,26 @@
    "stale": false,
    "items": [
     {
+     "title": "Despite its sandpaper cheating bombshell, Usman Khawaja’s autobiography is strategic about its revelations",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/despite-its-sandpaper-cheating-bombshell-usman-khawajas-autobiography-is-strategic-about-its-revelations-296392",
+     "published": "2026-11-12T03:10:23Z",
+     "summary": "",
+     "stale": false,
+     "author": "Paul Giles, Professor of English, Institute for Humanities and Social Sciences, Australian Catholic University"
+    },
+    {
+     "title": "How the fog of war puts journalism in the frame",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/how-the-fog-of-war-puts-journalism-in-the-frame-295855",
+     "published": "2026-11-12T02:54:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Monica Attard, Co-Director, Centre For Media Transition, University of Technology Sydney"
+    },
+    {
      "title": "‘Nobody cared’: new research shows deepfakes are hurting regular people, not just celebrities",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -451,32 +471,12 @@
     {
      "title": "Flight of the Conchords return to NZ stages after 14 years away – but Wellington is still obviously home",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/flight-of-the-conchords-return-to-nz-stages-after-14-years-away-but-wellington-is-still-obviously-home-296280",
      "published": "2026-11-11T23:22:40Z",
      "summary": "",
      "stale": false,
      "author": "David Simes, Teaching Assistant and Researcher, Te Whare Ngangahau – Theatre and Performance Studies, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "It’s possible to make great concrete without the huge emissions from cement. Why isn’t this common?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/its-possible-to-make-great-concrete-without-the-huge-emissions-from-cement-why-isnt-this-common-292236",
-     "published": "2026-11-11T22:24:01Z",
-     "summary": "",
-     "stale": false,
-     "author": "Mariam Darestani, Senior Lecturer in Mechanical Engineering, Western Sydney University"
-    },
-    {
-     "title": "The state apologised to abuse-in-care survivors two years ago today. What has changed?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/the-state-apologised-to-abuse-in-care-survivors-two-years-ago-today-what-has-changed-296136",
-     "published": "2026-11-11T17:26:38Z",
-     "summary": "",
-     "stale": false,
-     "author": "Stephen Winter, Associate Professor in Political Theory, University of Auckland, Waipapa Taumata Rau"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,18 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Despite its sandpaper cheating bombshell, Usman Khawaja’s autobiography is strategic about its revelations",
+   "published": "2026-11-12 03:10 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "How the fog of war puts journalism in the frame",
+   "published": "2026-11-12 02:54 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "‘Nobody cared’: new research shows deepfakes are hurting regular people, not just celebrities",
    "published": "2026-11-12 00:40 UTC"
   },
@@ -927,18 +939,6 @@
    "source": "The Conversation",
    "title": "Flight of the Conchords return to NZ stages after 14 years away – but Wellington is still obviously home",
    "published": "2026-11-11 23:22 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "It’s possible to make great concrete without the huge emissions from cement. Why isn’t this common?",
-   "published": "2026-11-11 22:24 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "The state apologised to abuse-in-care survivors two years ago today. What has changed?",
-   "published": "2026-11-11 17:26 UTC"
   },
   {
    "region": "Oceania",
