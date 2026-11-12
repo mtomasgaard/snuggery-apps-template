@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T14:01:37Z",
+ "generatedAt": "2026-11-12T15:04:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "What is ‘food is medicine?’ – 2 experts explain this decades-old approach to healthcare that is taking on new life",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/what-is-food-is-medicine-2-experts-explain-this-decades-old-approach-to-healthcare-that-is-taking-on-new-life-293312",
+     "published": "2026-11-12T14:04:49Z",
+     "summary": "",
+     "stale": false,
+     "author": "Meagen Rosenthal, Associate Professor of Pharmacy Administration, University of Mississippi"
+    },
+    {
      "title": "Ecuadorian youth unite against neoliberal models and state violence",
      "source": "Global Voices",
      "feed": "gv-latin-america",
@@ -111,16 +121,6 @@
      "summary": "",
      "stale": false,
      "author": "Jonas Gamso, Associate Professor of International Trade and Global Studies, Arizona State University"
-    },
-    {
-     "title": "Despite intense Islamophobia, Abdul El-Sayed and dozens of other Muslims elected representatives are breaking down barriers",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/despite-intense-islamophobia-abdul-el-sayed-and-dozens-of-other-muslims-elected-representatives-are-breaking-down-barriers-296035",
-     "published": "2026-11-12T13:42:15Z",
-     "summary": "",
-     "stale": false,
-     "author": "Nazita Lajevardi, Associate Professor of Political Science, University of Michigan"
     },
     {
      "title": "Haiti: More than 1,000 killed between July and September, UN report reveals",
@@ -261,7 +261,7 @@
    "stale": false,
    "items": [
     {
-     "title": "Lebanon: After 48 years patrolling the Blue Line, UN peacekeepers prepare exit",
+     "title": "Lebanon: Devastation awaits returnees as UN peacekeepers prepare exit",
      "source": "UN News",
      "feed": "un-middle-east",
      "link": "https://news.un.org/feed/view/en/story/2026/11/1168784",
@@ -720,6 +720,12 @@
   },
   {
    "region": "Americas",
+   "source": "The Conversation",
+   "title": "What is ‘food is medicine?’ – 2 experts explain this decades-old approach to healthcare that is taking on new life",
+   "published": "2026-11-12 14:04 UTC"
+  },
+  {
+   "region": "Americas",
    "source": "Global Voices",
    "title": "Ecuadorian youth unite against neoliberal models and state violence",
    "published": "2026-11-12 14:00 UTC"
@@ -728,12 +734,6 @@
    "region": "Americas",
    "source": "The Conversation",
    "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
-   "published": "2026-11-12 13:42 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Despite intense Islamophobia, Abdul El-Sayed and dozens of other Muslims elected representatives are breaking down barriers",
    "published": "2026-11-12 13:42 UTC"
   },
   {
@@ -817,7 +817,7 @@
   {
    "region": "Middle East",
    "source": "UN News",
-   "title": "Lebanon: After 48 years patrolling the Blue Line, UN peacekeepers prepare exit",
+   "title": "Lebanon: Devastation awaits returnees as UN peacekeepers prepare exit",
    "published": "2026-11-11 12:00 UTC"
   },
   {
