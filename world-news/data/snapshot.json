@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T18:01:26Z",
+ "generatedAt": "2026-11-12T19:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -429,9 +429,19 @@
    "stale": false,
    "items": [
     {
-     "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
+     "title": "Pasifika women are making rugby league history. But what about the next generation?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/pasifika-women-are-making-rugby-league-history-but-what-about-the-next-generation-295741",
+     "published": "2026-11-12T18:21:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sierra Keung, Lecturer in Sport and Recreation, Auckland University of Technology"
+    },
+    {
+     "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/a-dead-star-is-flashing-radio-waves-every-8-minutes-and-its-partner-looks-a-lot-like-the-sun-294665",
      "published": "2026-11-12T10:06:18Z",
      "summary": "",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Grace Moore, Associate Professor of English, University of Otago"
-    },
-    {
-     "title": "Flight of the Conchords return to NZ stages after 14 years away – but Wellington is still obviously home",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/flight-of-the-conchords-return-to-nz-stages-after-14-years-away-but-wellington-is-still-obviously-home-296280",
-     "published": "2026-11-11T23:22:40Z",
-     "summary": "",
-     "stale": false,
-     "author": "David Simes, Teaching Assistant and Researcher, Te Whare Ngangahau – Theatre and Performance Studies, Te Herenga Waka — Victoria University of Wellington"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Pasifika women are making rugby league history. But what about the next generation?",
+   "published": "2026-11-12 18:21 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
    "published": "2026-11-12 10:06 UTC"
   },
@@ -933,12 +939,6 @@
    "source": "The Conversation",
    "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
    "published": "2026-11-11 23:53 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Flight of the Conchords return to NZ stages after 14 years away – but Wellington is still obviously home",
-   "published": "2026-11-11 23:22 UTC"
   },
   {
    "region": "Oceania",
