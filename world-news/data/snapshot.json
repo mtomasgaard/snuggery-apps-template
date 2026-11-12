@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T15:04:21Z",
+ "generatedAt": "2026-11-12T16:01:28Z",
  "regions": [
   {
    "key": "europe",
@@ -177,14 +177,24 @@
    "stale": false,
    "items": [
     {
-     "title": "Élection présidentielle au Cabo Verde : les enjeux dans l'une des démocraties les plus stables d'Afrique",
+     "title": "Does your culture shape how you look at art? What an eye-tracking study in Sudan revealed",
      "source": "The Conversation",
      "feed": "tc-africa",
-     "link": "https://theconversation.com/election-presidentielle-au-cabo-verde-les-enjeux-dans-lune-des-democraties-les-plus-stables-dafrique-296430",
-     "published": "2026-11-12T08:25:17Z",
+     "link": "https://theconversation.com/does-your-culture-shape-how-you-look-at-art-what-an-eye-tracking-study-in-sudan-revealed-293476",
+     "published": "2026-11-12T14:48:19Z",
      "summary": "",
      "stale": false,
-     "author": "José Santana Pereira, associate professor, researcher, Universidade de Lisboa"
+     "author": "Tomasz Michalik, Assistant Professor, University of Szczecin"
+    },
+    {
+     "title": "Black rhinos are mostly loners, but not always: why this matters for saving the species",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/black-rhinos-are-mostly-loners-but-not-always-why-this-matters-for-saving-the-species-294251",
+     "published": "2026-11-12T14:48:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Rachel M Stein, Post Doctoral Fellow, Université de Sherbrooke"
     },
     {
      "title": "Can regenerative school gardens strengthen food security in Cameroon?",
@@ -195,16 +205,6 @@
      "summary": "Students in Cameroon’s North West Region are managing school gardens and growing food using regenerative practices such as minimal tillage, composting, organic manure and fruit-tree grafting.",
      "stale": false,
      "author": "Sandra Tuombouh"
-    },
-    {
-     "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/east-africas-migration-story-is-not-just-about-europe-what-policymakers-get-wrong-294918",
-     "published": "2026-11-11T13:19:43Z",
-     "summary": "",
-     "stale": false,
-     "author": "Girmachew Adugna, Advisory Board Member, Research Center for Forced Displacement and Migration Studies, Addis Ababa University"
     },
     {
      "title": "Restoring social media access comes at a cost in Gabon",
@@ -769,20 +769,20 @@
   {
    "region": "Africa",
    "source": "The Conversation",
-   "title": "Élection présidentielle au Cabo Verde : les enjeux dans l'une des démocraties les plus stables d'Afrique",
-   "published": "2026-11-12 08:25 UTC"
+   "title": "Does your culture shape how you look at art? What an eye-tracking study in Sudan revealed",
+   "published": "2026-11-12 14:48 UTC"
+  },
+  {
+   "region": "Africa",
+   "source": "The Conversation",
+   "title": "Black rhinos are mostly loners, but not always: why this matters for saving the species",
+   "published": "2026-11-12 14:48 UTC"
   },
   {
    "region": "Africa",
    "source": "Global Voices",
    "title": "Can regenerative school gardens strengthen food security in Cameroon?",
    "published": "2026-11-12 07:27 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
-   "published": "2026-11-11 13:19 UTC"
   },
   {
    "region": "Africa",
