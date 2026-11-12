@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T19:01:20Z",
+ "generatedAt": "2026-11-12T20:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -93,7 +93,17 @@
    "stale": false,
    "items": [
     {
-     "title": "What is ‘food is medicine?’ – 2 experts explain this decades-old approach to healthcare that is taking on new life",
+     "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/far-from-farms-and-cities-dry-climates-are-boosting-river-nitrate-pollution-294558",
+     "published": "2026-11-12T19:04:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Li Li (李黎), Professor of Civil and Environmental Engineering, Penn State"
+    },
+    {
+     "title": "What is ‘food is medicine’? – 2 experts explain this decades-old approach to healthcare that is taking on new life",
      "source": "The Conversation",
      "feed": "tc-us",
      "link": "https://theconversation.com/what-is-food-is-medicine-2-experts-explain-this-decades-old-approach-to-healthcare-that-is-taking-on-new-life-293312",
@@ -111,16 +121,6 @@
      "summary": "Thousands of Ecuadorian students have taken to the streets to reject President Noboa’s temporary job plans, demanding permanent solutions for public healthcare, education funding, and rising insecurity.",
      "stale": false,
      "author": "Gina Yauri"
-    },
-    {
-     "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/extreme-weather-risk-is-scaring-big-corporations-away-from-poorer-countries-that-hurts-the-companies-too-295591",
-     "published": "2026-11-12T13:42:26Z",
-     "summary": "",
-     "stale": false,
-     "author": "Jonas Gamso, Associate Professor of International Trade and Global Studies, Arizona State University"
     },
     {
      "title": "Haiti: More than 1,000 killed between July and September, UN report reveals",
@@ -429,9 +429,39 @@
    "stale": false,
    "items": [
     {
-     "title": "Pasifika women are making rugby league history. But what about the next generation?",
+     "title": "Rural Australian communities are hosting the clean energy boom. Are they getting a fair say?",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/rural-australian-communities-are-hosting-the-clean-energy-boom-are-they-getting-a-fair-say-296254",
+     "published": "2026-11-12T19:05:21Z",
+     "summary": "",
+     "stale": false,
+     "author": "Simon Wright, Senior Research Fellow, Energy & Circularity, Gulbali Institute, Charles Sturt University"
+    },
+    {
+     "title": "Concrete and steel – or mangroves and forests? When it comes to climate adaptation, nature is much cheaper",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/concrete-and-steel-or-mangroves-and-forests-when-it-comes-to-climate-adaptation-nature-is-much-cheaper-292462",
+     "published": "2026-11-12T19:04:48Z",
+     "summary": "",
+     "stale": false,
+     "author": "Andrew Lowe, Director, Environment Institute, Adelaide University"
+    },
+    {
+     "title": "There’s a formula for writing a hit song. So why isn’t every song a hit?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/theres-a-formula-for-writing-a-hit-song-so-why-isnt-every-song-a-hit-283586",
+     "published": "2026-11-12T19:04:34Z",
+     "summary": "",
+     "stale": false,
+     "author": "Timothy McKenry, Professor of Music, Australian Catholic University"
+    },
+    {
+     "title": "Pasifika women are making rugby league history. But what about the next generation?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/pasifika-women-are-making-rugby-league-history-but-what-about-the-next-generation-295741",
      "published": "2026-11-12T18:21:47Z",
      "summary": "",
@@ -447,36 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Natasha Hurley-Walker, Radio Astronomer, Curtin University"
-    },
-    {
-     "title": "Grattan on Friday: Can Albanese regain political altitude for Labor – and himself?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/grattan-on-friday-can-albanese-regain-political-altitude-for-labor-and-himself-294365",
-     "published": "2026-11-12T07:13:03Z",
-     "summary": "",
-     "stale": false,
-     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
-    },
-    {
-     "title": "Businesses could lose $590 million in R&D tax breaks under changes before the Senate. What’s the plan?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/businesses-could-lose-590-million-in-randd-tax-breaks-under-changes-before-the-senate-whats-the-plan-296264",
-     "published": "2026-11-12T04:01:25Z",
-     "summary": "",
-     "stale": false,
-     "author": "Tamara Wilkinson, Senior Lecturer, Faculty of Law, Monash University"
-    },
-    {
-     "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/johnny-depp-returns-to-the-screen-as-scrooge-dickens-might-have-some-notes-295865",
-     "published": "2026-11-11T23:53:31Z",
-     "summary": "",
-     "stale": false,
-     "author": "Grace Moore, Associate Professor of English, University of Otago"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,7 +721,13 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What is ‘food is medicine?’ – 2 experts explain this decades-old approach to healthcare that is taking on new life",
+   "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
+   "published": "2026-11-12 19:04 UTC"
+  },
+  {
+   "region": "Americas",
+   "source": "The Conversation",
+   "title": "What is ‘food is medicine’? – 2 experts explain this decades-old approach to healthcare that is taking on new life",
    "published": "2026-11-12 14:04 UTC"
   },
   {
@@ -729,12 +735,6 @@
    "source": "Global Voices",
    "title": "Ecuadorian youth unite against neoliberal models and state violence",
    "published": "2026-11-12 14:00 UTC"
-  },
-  {
-   "region": "Americas",
-   "source": "The Conversation",
-   "title": "Extreme weather risk is scaring big corporations away from poorer countries – that hurts the companies, too",
-   "published": "2026-11-12 13:42 UTC"
   },
   {
    "region": "Americas",
@@ -913,6 +913,24 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Rural Australian communities are hosting the clean energy boom. Are they getting a fair say?",
+   "published": "2026-11-12 19:05 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Concrete and steel – or mangroves and forests? When it comes to climate adaptation, nature is much cheaper",
+   "published": "2026-11-12 19:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "There’s a formula for writing a hit song. So why isn’t every song a hit?",
+   "published": "2026-11-12 19:04 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Pasifika women are making rugby league history. But what about the next generation?",
    "published": "2026-11-12 18:21 UTC"
   },
@@ -921,24 +939,6 @@
    "source": "The Conversation",
    "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
    "published": "2026-11-12 10:06 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Grattan on Friday: Can Albanese regain political altitude for Labor – and himself?",
-   "published": "2026-11-12 07:13 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Businesses could lose $590 million in R&D tax breaks under changes before the Senate. What’s the plan?",
-   "published": "2026-11-12 04:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
-   "published": "2026-11-11 23:53 UTC"
   },
   {
    "region": "Oceania",
