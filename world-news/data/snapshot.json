@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T10:01:24Z",
+ "generatedAt": "2026-11-12T11:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/a-dead-star-is-flashing-radio-waves-every-8-minutes-and-its-partner-looks-a-lot-like-the-sun-294665",
+     "published": "2026-11-12T10:06:18Z",
+     "summary": "",
+     "stale": false,
+     "author": "Natasha Hurley-Walker, Radio Astronomer, Curtin University"
+    },
+    {
      "title": "Grattan on Friday: Can Albanese regain political altitude for Labor – and himself?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Tamara Wilkinson, Senior Lecturer, Faculty of Law, Monash University"
-    },
-    {
-     "title": "Victoria’s Year 12 exam website has been hacked – here are 3 ways students can handle academic stress",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/victorias-year-12-exam-website-has-been-hacked-here-are-3-ways-students-can-handle-academic-stress-296484",
-     "published": "2026-11-12T03:52:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Viviana Wuthrich, Professor of Clinical Psychology, Macquarie University"
     },
     {
      "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "A dead star is flashing radio waves every 8 minutes, and its partner looks a lot like the Sun",
+   "published": "2026-11-12 10:06 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Grattan on Friday: Can Albanese regain political altitude for Labor – and himself?",
    "published": "2026-11-12 07:13 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Businesses could lose $590 million in R&D tax breaks under changes before the Senate. What’s the plan?",
    "published": "2026-11-12 04:01 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Victoria’s Year 12 exam website has been hacked – here are 3 ways students can handle academic stress",
-   "published": "2026-11-12 03:52 UTC"
   },
   {
    "region": "Oceania",
