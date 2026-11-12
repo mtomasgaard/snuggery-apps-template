@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T08:01:20Z",
+ "generatedAt": "2026-11-12T09:01:25Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Élection présidentielle au Cabo Verde : les enjeux dans l'une des démocraties les plus stables d'Afrique",
+     "source": "The Conversation",
+     "feed": "tc-africa",
+     "link": "https://theconversation.com/election-presidentielle-au-cabo-verde-les-enjeux-dans-lune-des-democraties-les-plus-stables-dafrique-296430",
+     "published": "2026-11-12T08:25:17Z",
+     "summary": "",
+     "stale": false,
+     "author": "José Santana Pereira, associate professor, researcher, Universidade de Lisboa"
+    },
+    {
      "title": "Can regenerative school gardens strengthen food security in Cameroon?",
      "source": "Global Voices",
      "feed": "gv-africa",
@@ -195,16 +205,6 @@
      "summary": "",
      "stale": false,
      "author": "Girmachew Adugna, Advisory Board Member, Research Center for Forced Displacement and Migration Studies, Addis Ababa University"
-    },
-    {
-     "title": "Cabo Verde’s presidential election: the stakes in one of Africa’s most stable democracies",
-     "source": "The Conversation",
-     "feed": "tc-africa",
-     "link": "https://theconversation.com/cabo-verdes-presidential-election-the-stakes-in-one-of-africas-most-stable-democracies-295763",
-     "published": "2026-11-11T13:19:33Z",
-     "summary": "",
-     "stale": false,
-     "author": "José Santana Pereira, associate professor, researcher, Universidade de Lisboa"
     },
     {
      "title": "Restoring social media access comes at a cost in Gabon",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "The Conversation",
+   "title": "Élection présidentielle au Cabo Verde : les enjeux dans l'une des démocraties les plus stables d'Afrique",
+   "published": "2026-11-12 08:25 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "Global Voices",
    "title": "Can regenerative school gardens strengthen food security in Cameroon?",
    "published": "2026-11-12 07:27 UTC"
@@ -776,12 +782,6 @@
    "region": "Africa",
    "source": "The Conversation",
    "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
-   "published": "2026-11-11 13:19 UTC"
-  },
-  {
-   "region": "Africa",
-   "source": "The Conversation",
-   "title": "Cabo Verde’s presidential election: the stakes in one of Africa’s most stable democracies",
    "published": "2026-11-11 13:19 UTC"
   },
   {
