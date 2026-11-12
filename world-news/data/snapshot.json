@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T07:01:22Z",
+ "generatedAt": "2026-11-12T08:01:20Z",
  "regions": [
   {
    "key": "europe",
@@ -177,6 +177,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Can regenerative school gardens strengthen food security in Cameroon?",
+     "source": "Global Voices",
+     "feed": "gv-africa",
+     "link": "https://globalvoices.org/2026/11/12/can-regenerative-school-gardens-strengthen-food-security-in-cameroon/",
+     "published": "2026-11-12T07:27:40Z",
+     "summary": "Students in Cameroon’s North West Region are managing school gardens and growing food using regenerative practices such as minimal tillage, composting, organic manure and fruit-tree grafting.",
+     "stale": false,
+     "author": "Sandra Tuombouh"
+    },
+    {
      "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
      "source": "The Conversation",
      "feed": "tc-africa",
@@ -242,16 +252,6 @@
      "summary": "Systems designed to maximize commercial value from information can create incentives to collect more data than people reasonably expect or understand.",
      "stale": false,
      "author": "Nshua Cali-Dibang"
-    },
-    {
-     "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon’s waters",
-     "source": "Global Voices",
-     "feed": "gv-africa",
-     "link": "https://globalvoices.org/2026/10/27/fish-scarcity-tar-balls-and-displaced-dolphins-the-hidden-costs-of-offshore-platforms-in-cameroon-waters/",
-     "published": "2026-10-27T08:59:12Z",
-     "summary": "...oil and gas contributed FCFA 774.51 billion (USD 1.3 million) to the budget. However, these oil rigs threaten biodiversity and compromise the well-being of coastal and Indigenous communities.",
-     "stale": false,
-     "author": "Leocadia Bongben"
     }
    ]
   },
@@ -260,6 +260,15 @@
    "name": "Middle East",
    "stale": false,
    "items": [
+    {
+     "title": "Lebanon: After 48 years patrolling the Blue Line, UN peacekeepers prepare exit",
+     "source": "UN News",
+     "feed": "un-middle-east",
+     "link": "https://news.un.org/feed/view/en/story/2026/11/1168784",
+     "published": "2026-11-11T12:00:00Z",
+     "summary": "The situation in southern Lebanon remains volatile and extremely difficult for communities trying to rebuild their lives, UN peacekeepers based there report, despite a significant decrease in hostilities following an…",
+     "stale": false
+    },
     {
      "title": "‘For the first time I have my own chair’: Gaza siblings find new freedom",
      "source": "UN News",
@@ -306,15 +315,6 @@
      "summary": "Egypt has convicted Mada Masr’s editor-in-chief Lina Attalah and ordered the outlet closed, weeks after arresting the whole Matsada2sh newsroom.",
      "stale": false,
      "author": "Walid El Houri"
-    },
-    {
-     "title": "Married off at 14: In Yemen’s war, women and girls suffer ‘devastating consequences’",
-     "source": "UN News",
-     "feed": "un-middle-east",
-     "link": "https://news.un.org/feed/view/en/story/2026/11/1168730",
-     "published": "2026-11-03T12:00:00Z",
-     "summary": "Safa is 14. Her mother died earlier this year. She has no brothers or sisters. And a few weeks ago, as the crisis took hold, her father married her to an elderly man, afraid that if he were killed in the hostilities, no…",
-     "stale": false
     },
     {
      "title": "A digital publication sheds light on Turkey’s prison system",
@@ -429,6 +429,16 @@
    "stale": false,
    "items": [
     {
+     "title": "Grattan on Friday: Can Albanese regain political altitude for Labor – and himself?",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/grattan-on-friday-can-albanese-regain-political-altitude-for-labor-and-himself-294365",
+     "published": "2026-11-12T07:13:03Z",
+     "summary": "",
+     "stale": false,
+     "author": "Michelle Grattan, Professorial Fellow, University of Canberra"
+    },
+    {
      "title": "Businesses could lose $590 million in R&D tax breaks under changes before the Senate. What’s the plan?",
      "source": "The Conversation",
      "feed": "tc-au",
@@ -447,16 +457,6 @@
      "summary": "",
      "stale": false,
      "author": "Viviana Wuthrich, Professor of Clinical Psychology, Macquarie University"
-    },
-    {
-     "title": "‘Plenty of reasons for hope’: what 30 years of climate talks have achieved",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/plenty-of-reasons-for-hope-what-30-years-of-climate-talks-have-achieved-296398",
-     "published": "2026-11-12T03:43:58Z",
-     "summary": "",
-     "stale": false,
-     "author": "Grace Jennings-Edquist, Executive Producer, Podcasts, The Conversation"
     },
     {
      "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
@@ -768,6 +768,12 @@
   },
   {
    "region": "Africa",
+   "source": "Global Voices",
+   "title": "Can regenerative school gardens strengthen food security in Cameroon?",
+   "published": "2026-11-12 07:27 UTC"
+  },
+  {
+   "region": "Africa",
    "source": "The Conversation",
    "title": "East Africa’s migration story is not just about Europe – what policymakers get wrong",
    "published": "2026-11-11 13:19 UTC"
@@ -809,10 +815,10 @@
    "published": "2026-11-09 07:34 UTC"
   },
   {
-   "region": "Africa",
-   "source": "Global Voices",
-   "title": "Fish scarcity, tar balls, and stranded dolphins: The hidden costs of offshore platforms in Cameroon’s waters",
-   "published": "2026-10-27 08:59 UTC"
+   "region": "Middle East",
+   "source": "UN News",
+   "title": "Lebanon: After 48 years patrolling the Blue Line, UN peacekeepers prepare exit",
+   "published": "2026-11-11 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -843,12 +849,6 @@
    "source": "Global Voices",
    "title": "Egypt’s crackdown on independent media reaches Mada Masr as editor faces trial",
    "published": "2026-11-03 15:56 UTC"
-  },
-  {
-   "region": "Middle East",
-   "source": "UN News",
-   "title": "Married off at 14: In Yemen’s war, women and girls suffer ‘devastating consequences’",
-   "published": "2026-11-03 12:00 UTC"
   },
   {
    "region": "Middle East",
@@ -913,6 +913,12 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "Grattan on Friday: Can Albanese regain political altitude for Labor – and himself?",
+   "published": "2026-11-12 07:13 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "Businesses could lose $590 million in R&D tax breaks under changes before the Senate. What’s the plan?",
    "published": "2026-11-12 04:01 UTC"
   },
@@ -921,12 +927,6 @@
    "source": "The Conversation",
    "title": "Victoria’s Year 12 exam website has been hacked – here are 3 ways students can handle academic stress",
    "published": "2026-11-12 03:52 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "‘Plenty of reasons for hope’: what 30 years of climate talks have achieved",
-   "published": "2026-11-12 03:43 UTC"
   },
   {
    "region": "Oceania",
