@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T00:01:25Z",
+ "generatedAt": "2026-11-12T01:01:21Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "El Salvador is exporting the ‘Bukele model’ to Haiti – but the gang offensive is a gamble for both nations",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/el-salvador-is-exporting-the-bukele-model-to-haiti-but-the-gang-offensive-is-a-gamble-for-both-nations-296390",
+     "published": "2026-11-11T23:58:06Z",
+     "summary": "",
+     "stale": false,
+     "author": "Robert Muggah, Richard von Weizsäcker Fellow na Bosch Academy e Co-fundador, Instituto Igarapé; Princeton University"
+    },
+    {
      "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Philip Empey, Associate Professor, University of Pittsburgh School of Pharmacy, University of Pittsburgh"
-    },
-    {
-     "title": "The ‘religious left’ may be rising – but Black Christian women have been there all along",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/the-religious-left-may-be-rising-but-black-christian-women-have-been-there-all-along-296110",
-     "published": "2026-11-11T17:47:30Z",
-     "summary": "",
-     "stale": false,
-     "author": "Dara Delgado, Assistant Professor of Religion, University of North Carolina Wilmington"
     },
     {
      "title": "Beyond the beaches: The Dominican Republic and the global debate over deep-sea mining",
@@ -431,7 +431,7 @@
     {
      "title": "Johnny Depp returns to the screen as Scrooge – Dickens might have some notes",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/johnny-depp-returns-to-the-screen-as-scrooge-dickens-might-have-some-notes-295865",
      "published": "2026-11-11T23:53:31Z",
      "summary": "",
@@ -441,7 +441,7 @@
     {
      "title": "Flight of the Conchords return to NZ stages after 14 years away – but Wellington is still obviously home",
      "source": "The Conversation",
-     "feed": "tc-au",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/flight-of-the-conchords-return-to-nz-stages-after-14-years-away-but-wellington-is-still-obviously-home-296280",
      "published": "2026-11-11T23:22:40Z",
      "summary": "",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
-   "published": "2026-11-11 19:00 UTC"
+   "title": "El Salvador is exporting the ‘Bukele model’ to Haiti – but the gang offensive is a gamble for both nations",
+   "published": "2026-11-11 23:58 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "The ‘religious left’ may be rising – but Black Christian women have been there all along",
-   "published": "2026-11-11 17:47 UTC"
+   "title": "You likely have genes that affect how well your medications work – testing for them could improve treatment",
+   "published": "2026-11-11 19:00 UTC"
   },
   {
    "region": "Americas",
