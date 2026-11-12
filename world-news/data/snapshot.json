@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-12T21:01:23Z",
+ "generatedAt": "2026-11-12T22:01:22Z",
  "regions": [
   {
    "key": "europe",
@@ -93,6 +93,16 @@
    "stale": false,
    "items": [
     {
+     "title": "From ancient Asia to the AI age: Has China’s ‘beauty stratagem’ found a new victim in Nvidia’s Jensen Huang?",
+     "source": "The Conversation",
+     "feed": "tc-us",
+     "link": "https://theconversation.com/from-ancient-asia-to-the-ai-age-has-chinas-beauty-stratagem-found-a-new-victim-in-nvidias-jensen-huang-296393",
+     "published": "2026-11-12T20:25:32Z",
+     "summary": "",
+     "stale": false,
+     "author": "Linggong Kong, Ph.D. Candidate in Political Science, Auburn University"
+    },
+    {
      "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
      "source": "The Conversation",
      "feed": "tc-us",
@@ -101,16 +111,6 @@
      "summary": "",
      "stale": false,
      "author": "Li Li (李黎), Professor of Civil and Environmental Engineering, Penn State"
-    },
-    {
-     "title": "What is ‘food is medicine’? – 2 experts explain this decades-old approach to healthcare that is taking on new life",
-     "source": "The Conversation",
-     "feed": "tc-us",
-     "link": "https://theconversation.com/what-is-food-is-medicine-2-experts-explain-this-decades-old-approach-to-healthcare-that-is-taking-on-new-life-293312",
-     "published": "2026-11-12T14:04:49Z",
-     "summary": "",
-     "stale": false,
-     "author": "Meagen Rosenthal, Associate Professor of Pharmacy Administration, University of Mississippi"
     },
     {
      "title": "Ecuadorian youth unite against neoliberal models and state violence",
@@ -431,7 +431,7 @@
     {
      "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
      "source": "The Conversation",
-     "feed": "tc-nz",
+     "feed": "tc-au",
      "link": "https://theconversation.com/rnzs-budget-crisis-threatens-its-core-purpose-but-theres-an-obvious-solution-296293",
      "published": "2026-11-12T20:33:56Z",
      "summary": "",
@@ -459,16 +459,6 @@
      "author": "Andrew Lowe, Director, Environment Institute, Adelaide University"
     },
     {
-     "title": "There’s a formula for writing a hit song. So why isn’t every song a hit?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/theres-a-formula-for-writing-a-hit-song-so-why-isnt-every-song-a-hit-283586",
-     "published": "2026-11-12T19:04:34Z",
-     "summary": "",
-     "stale": false,
-     "author": "Timothy McKenry, Professor of Music, Australian Catholic University"
-    },
-    {
      "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
      "source": "The Conversation",
      "feed": "tc-nz",
@@ -477,6 +467,16 @@
      "summary": "",
      "stale": false,
      "author": "Robert Manne, Emeritus Professor of Politics, La Trobe University"
+    },
+    {
+     "title": "Pasifika women are making rugby league history. But what about the next generation?",
+     "source": "The Conversation",
+     "feed": "tc-nz",
+     "link": "https://theconversation.com/pasifika-women-are-making-rugby-league-history-but-what-about-the-next-generation-295741",
+     "published": "2026-11-12T18:21:47Z",
+     "summary": "",
+     "stale": false,
+     "author": "Sierra Keung, Lecturer in Sport and Recreation, Auckland University of Technology"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -721,14 +721,14 @@
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
-   "published": "2026-11-12 19:04 UTC"
+   "title": "From ancient Asia to the AI age: Has China’s ‘beauty stratagem’ found a new victim in Nvidia’s Jensen Huang?",
+   "published": "2026-11-12 20:25 UTC"
   },
   {
    "region": "Americas",
    "source": "The Conversation",
-   "title": "What is ‘food is medicine’? – 2 experts explain this decades-old approach to healthcare that is taking on new life",
-   "published": "2026-11-12 14:04 UTC"
+   "title": "Far from farms and cities, dry climates are boosting river nitrate pollution",
+   "published": "2026-11-12 19:04 UTC"
   },
   {
    "region": "Americas",
@@ -931,14 +931,14 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "There’s a formula for writing a hit song. So why isn’t every song a hit?",
-   "published": "2026-11-12 19:04 UTC"
+   "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
+   "published": "2026-11-12 19:03 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
-   "published": "2026-11-12 19:03 UTC"
+   "title": "Pasifika women are making rugby league history. But what about the next generation?",
+   "published": "2026-11-12 18:21 UTC"
   },
   {
    "region": "Oceania",
