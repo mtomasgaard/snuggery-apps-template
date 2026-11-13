@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generatedAt": "2026-11-13T00:01:21Z",
+ "generatedAt": "2026-11-13T01:01:49Z",
  "regions": [
   {
    "key": "europe",
@@ -429,34 +429,44 @@
    "stale": false,
    "items": [
     {
-     "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
+     "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
      "source": "The Conversation",
      "feed": "tc-au",
+     "link": "https://theconversation.com/a-clear-call-for-climate-action-bowen-defends-albanese-at-cop31-296545",
+     "published": "2026-11-13T00:32:35Z",
+     "summary": "",
+     "stale": false,
+     "author": "Miki Perkins, Environment & Energy Editor, The Conversation"
+    },
+    {
+     "title": "Becoming a Man has good advice – but as a manosphere expert, I wish it wasn’t so gendered",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/becoming-a-man-has-good-advice-but-as-a-manosphere-expert-i-wish-it-wasnt-so-gendered-294246",
+     "published": "2026-11-12T23:52:11Z",
+     "summary": "",
+     "stale": false,
+     "author": "Simon Copland, Honorary Fellow in Sociology, Australian National University"
+    },
+    {
+     "title": "Being Heumaan is no ‘inspirational cripple’ tale. It’s a story of ordinary people taking on impossible odds",
+     "source": "The Conversation",
+     "feed": "tc-au",
+     "link": "https://theconversation.com/being-heumaan-is-no-inspirational-cripple-tale-its-a-story-of-ordinary-people-taking-on-impossible-odds-295962",
+     "published": "2026-11-12T23:48:55Z",
+     "summary": "",
+     "stale": false,
+     "author": "Shane Clifton, Associate Professor and Director of the Centre for Disability Research and Policy, University of Sydney"
+    },
+    {
+     "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
+     "source": "The Conversation",
+     "feed": "tc-nz",
      "link": "https://theconversation.com/rnzs-budget-crisis-threatens-its-core-purpose-but-theres-an-obvious-solution-296293",
      "published": "2026-11-12T20:33:56Z",
      "summary": "",
      "stale": false,
      "author": "Peter Thompson, Associate Professor in Media and Communication, Te Herenga Waka — Victoria University of Wellington"
-    },
-    {
-     "title": "Rural Australian communities are hosting the clean energy boom. Are they getting a fair say?",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/rural-australian-communities-are-hosting-the-clean-energy-boom-are-they-getting-a-fair-say-296254",
-     "published": "2026-11-12T19:05:21Z",
-     "summary": "",
-     "stale": false,
-     "author": "Simon Wright, Senior Research Fellow, Energy & Circularity, Gulbali Institute, Charles Sturt University"
-    },
-    {
-     "title": "Concrete and steel – or mangroves and forests? When it comes to climate adaptation, nature is much cheaper",
-     "source": "The Conversation",
-     "feed": "tc-au",
-     "link": "https://theconversation.com/concrete-and-steel-or-mangroves-and-forests-when-it-comes-to-climate-adaptation-nature-is-much-cheaper-292462",
-     "published": "2026-11-12T19:04:48Z",
-     "summary": "",
-     "stale": false,
-     "author": "Andrew Lowe, Director, Environment Institute, Adelaide University"
     },
     {
      "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
@@ -467,16 +477,6 @@
      "summary": "",
      "stale": false,
      "author": "Robert Manne, Emeritus Professor of Politics, La Trobe University"
-    },
-    {
-     "title": "Pasifika women are making rugby league history. But what about the next generation?",
-     "source": "The Conversation",
-     "feed": "tc-nz",
-     "link": "https://theconversation.com/pasifika-women-are-making-rugby-league-history-but-what-about-the-next-generation-295741",
-     "published": "2026-11-12T18:21:47Z",
-     "summary": "",
-     "stale": false,
-     "author": "Sierra Keung, Lecturer in Sport and Recreation, Auckland University of Technology"
     },
     {
      "title": "Young people are bridging the climate divide for Oceania and the Caribbean",
@@ -913,32 +913,32 @@
   {
    "region": "Oceania",
    "source": "The Conversation",
+   "title": "‘A clear call for climate action’: Bowen defends Albanese at COP31",
+   "published": "2026-11-13 00:32 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Becoming a Man has good advice – but as a manosphere expert, I wish it wasn’t so gendered",
+   "published": "2026-11-12 23:52 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
+   "title": "Being Heumaan is no ‘inspirational cripple’ tale. It’s a story of ordinary people taking on impossible odds",
+   "published": "2026-11-12 23:48 UTC"
+  },
+  {
+   "region": "Oceania",
+   "source": "The Conversation",
    "title": "RNZ’s budget crisis threatens its core purpose. But there’s an obvious solution",
    "published": "2026-11-12 20:33 UTC"
   },
   {
    "region": "Oceania",
    "source": "The Conversation",
-   "title": "Rural Australian communities are hosting the clean energy boom. Are they getting a fair say?",
-   "published": "2026-11-12 19:05 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Concrete and steel – or mangroves and forests? When it comes to climate adaptation, nature is much cheaper",
-   "published": "2026-11-12 19:04 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
    "title": "Friday essay: to tackle the dreadful rise in antisemitism, we must speak the truth about Israel’s war crimes",
    "published": "2026-11-12 19:03 UTC"
-  },
-  {
-   "region": "Oceania",
-   "source": "The Conversation",
-   "title": "Pasifika women are making rugby league history. But what about the next generation?",
-   "published": "2026-11-12 18:21 UTC"
   },
   {
    "region": "Oceania",
